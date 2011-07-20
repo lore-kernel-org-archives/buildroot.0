@@ -1,89 +1,41 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Wed, 20 Jul 2011 04:53:31 +0000
-Subject: [Buildroot] [Patch] Allow file to be built against static libs.
-In-Reply-To: <87oc0q2ddu.fsf@macbook.be.48ers.dk>
-References: <F9C551623D2CBB4C9488801D14F864C6044668@ex-mb1.corp.adtran.com>
- <87sjq22f6n.fsf@macbook.be.48ers.dk> <87oc0q2ddu.fsf@macbook.be.48ers.dk>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C60448FD@ex-mb1.corp.adtran.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jul 2011 07:11:52 +0200
+Subject: [Buildroot] [PATCH 1/3] scons: new package
+In-Reply-To: <cover.1311138690.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1311138690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c7952f680aac3925e849199f2a644dcf0ed3851f.1311138690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> >>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
-> 
-> >>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
->  ANDY> If selected "prefer static libs", file fails to build
-> reporting:
->  ANDY> relocation R_X86_64_32S against `zcalloc' can not be used
-> when making
->  ANDY> a shared object; recompile with -fPIC
->  ANDY> The suggested -fPIC doesn't work.  The issue is that the
-> default
->  ANDY> configure has --enable-shared --enable-static.  This patch
-> modifies
->  ANDY> the configure to disable shared when "prefer static libs" is
-> selected.
-> 
->  ANDY> FILE_DEPENDENCIES = host-file zlib
->  ANDY> HOST_FILE_DEPENDENCIES = host-zlib
-> 
->  ANDY> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
->  ANDY> +FILE_CONF_OPT = --disable-shared --enable-static
->  ANDY> +HOST_FILE_CONF_OPT = --disable-shared --enable-static
-> 
->  Peter> We indeed force --enable-shared --disable-static for host
-> builds, but
->  Peter> that doesn't really matter. For target builds we use (see
->  Peter> package/Makefile.in) --enable-static --enable-shared when
->  Peter> PREFER_STATIC_LIB is enabled, so rather than something file
-> specific, I
->  Peter> think it would make more sense to set that to --enable-
-> static
->  Peter> --disable-shared instead.
-> 
-> Ehh, drop that, I remembered wrong - We're already doing --enable-
-> static --disable-shared.
+Only the host package is supported.
 
-Okay, well, sortta, but not really.  I believe this to be the culprit:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/scons/scons.mk |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+ create mode 100644 package/scons/scons.mk
 
-#############################################################
-#
-# zlib
-#
-#############################################################
-ZLIB_VERSION:=1.2.5
-ZLIB_SOURCE:=zlib-$(ZLIB_VERSION).tar.bz2
-ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
-ZLIB_INSTALL_STAGING=YES
-
-ifeq ($(BR2_PREFER_STATIC_LIB),y)
-ZLIB_PIC :=
-ZLIB_SHARED := --static
-else
-ZLIB_PIC := -fPIC
-ZLIB_SHARED := --shared
-endif
-
-
-I'm guessing this shouldn't be that way.  I don't, however, really
-know how to fix this one up.  I'm guessing that this needs to be
-something along the lines of:
-
-ifeq ($(BR2_PREFER_STATIC_LIBZ),y)
-ZLIB_CONF_ENV = "LDFLAGS+=--static"
-else
-ZLIB_CONF_ENV = "LDFLAGS+=-fPIC --shared"
-endif
-
-Or something like that.  It appears, however, that the current
-state of the build makes ONLY a static libz if PREFER_STATIC_LIB
-is set.
-
-So, file just happened to be the red herring.
-
-Somebody who is more awake than I show me how to fix that puppy,
-please.
-
-Andy
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+new file mode 100644
+index 0000000..f8fe84b
+--- /dev/null
++++ b/package/scons/scons.mk
+@@ -0,0 +1,13 @@
++SCONS_VERSION = 2.0.1
++SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
++SCONS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/scons
++
++define HOST_SCONS_BUILD_CMDS
++	(cd $(@D); python setup.py build)
++endef
++
++define HOST_SCONS_INSTALL_CMDS
++	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr)
++endef
++
++$(eval $(call GENTARGETS,package,scons,host))
+-- 
+1.7.4.1
