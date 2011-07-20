@@ -1,93 +1,100 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Wed, 20 Jul 2011 17:04:02 +0300
-Subject: [Buildroot] Building valgrind with ccache fails
-Message-ID: <CALR4fEJsNk60r1Q+kFMwne4_ZcDqu2CWfTMaxDgt1rsMUt1_Xg@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 20 Jul 2011 16:46:28 +0200
+Subject: [Buildroot] [PATCH] usbmount: bump to 0.0.21
+Message-ID: <4E26EA44.8080405@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/usbmount/usbmount-0.0.14.1.patch |   57 -------------------------------
+ package/usbmount/usbmount.mk             |    7 ++-
+ 2 files changed, 4 insertions(+), 60 deletions(-)
 
-I am using buildroot master, and when I enable ccache support, valgrind
-fails to build. I am able to reproduce this on i586 and arm (i586 using
-buildtool-ng, and arm using a code sourcery toolchain). Error is available
-at the end of this email.
-
-Can anyone reproduce?
-
-BTW: it seems like on my setup (omap3) valgrind returns a lot of errors deep
-inside glibc, and in fails to detect memory leaks. Can anyone reproduce
-this?
-
-
-../coregrind/link_tool_exe_linux 0x38000000
-/home/diego/src/buildroot/output/host/usr/bin/ccache
-/home/diego/src/buildroot/output/host/usr/bin/i586-unknown-linux-gnu-gcc
- -Wno-long-long -pipe -O2  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64 -Wno-pointer-sign -fno-stack-protector   -o
-memcheck-x86-linux -m32 -mpreferred-stack-boundary=2 -O2 -g -Wall
--Wmissing-prototypes -Wshadow -Wpointer-arith -Wstrict-prototypes
--Wmissing-declarations -Wno-format-zero-length -fno-strict-aliasing
--O2 -static -nodefaultlibs -nostartfiles -u _start -Wl,--build-id=none
--m32 memcheck_x86_linux-mc_leakcheck.o
-memcheck_x86_linux-mc_malloc_wrappers.o memcheck_x86_linux-mc_main.o
-memcheck_x86_linux-mc_translate.o memcheck_x86_linux-mc_machine.o
-memcheck_x86_linux-mc_errors.o ../coregrind/libcoregrind-x86-linux.a
-../VEX/libvex-x86-linux.a -lgcc
-cache directory                     /home/diego/.buildroot-ccache
-cache hit (direct)                 28821
-cache hit (preprocessed)            6503
-cache miss                         59026
-called for link                     5908
-compile failed                      5249
-preprocessor error                  2361
-bad compiler arguments              1168
-unsupported source language          162
-autoconf compile/link              20089
-unsupported compiler option         5290
-no input file                       6290
-files in cache                     79931
-cache size                         889.6 Mbytes
-max cache size                       1.0
-Gbytes*/home/diego/src/buildroot/output/host/usr/bin/ccache: invalid
-option -- 't'*
-Usage:
-    ccache [options]
-    ccache compiler [compiler options]
-    compiler [compiler options]          (via symbolic link)
-
-Options:
-    -c, --cleanup         delete old files and recalculate size counters
-                          (normally not needed as this is done automatically)
-    -C, --clear           clear the cache completely
-    -F, --max-files=N     set maximum number of files in cache to N (use 0 for
-                          no limit)
-    -M, --max-size=SIZE   set maximum size of cache to SIZE (use 0 for no
-                          limit; available suffixes: G, M and K; default
-                          suffix: G)
-    -s, --show-stats      show statistics summary
-    -z, --zero-stats      zero statistics counters
-
-    -h, --help            print this help text
-    -V, --version         print version and copyright information
-
-See also <http://ccache.samba.org>.
-make[4]: *** [memcheck-x86-linux] Error 1
-make[4]: Leaving directory
-`/home/diego/src/buildroot/output/build/valgrind-3.6.1/memcheck'
-make[3]: *** [all-recursive] Error 1
-make[3]: Leaving directory
-`/home/diego/src/buildroot/output/build/valgrind-3.6.1/memcheck'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/home/diego/src/buildroot/output/build/valgrind-3.6.1'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/home/diego/src/buildroot/output/build/valgrind-3.6.1'
-make: *** [/home/diego/src/buildroot/output/build/valgrind-3.6.1/.stamp_built]
-Error 2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110720/b58e59b0/attachment.html>
+Index: b/package/usbmount/usbmount.mk
+===================================================================
+--- a/package/usbmount/usbmount.mk
++++ b/package/usbmount/usbmount.mk
+@@ -3,13 +3,14 @@
+ # usbmount
+ #
+ #############################################################
+-USBMOUNT_VERSION=0.0.14.1
++USBMOUNT_VERSION=0.0.21
+ USBMOUNT_SOURCE:=usbmount_$(USBMOUNT_VERSION).tar.gz
+-USBMOUNT_SITE:=http://usbmount.alioth.debian.org/package/
++USBMOUNT_SITE:=http://ftp.de.debian.org/debian/pool/main/u/usbmount
+ USBMOUNT_DEPENDENCIES = udev lockfile-progs
+ 
+ define USBMOUNT_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/sbin/usbmount
++	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/usr/share/usbmount/usbmount
++	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d
+ 	@if [ ! -f $(TARGET_DIR)/etc/usbmount/usbmount.conf ]; then \
+ 	        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf; \
+ 	fi
+Index: b/package/usbmount/usbmount-0.0.14.1.patch
+===================================================================
+--- a/package/usbmount/usbmount-0.0.14.1.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-diff -ur usbmount-0.0.14.1/usbmount usbmount-0.0.14.1-patched/usbmount
+---- usbmount-0.0.14.1/usbmount	2007-01-27 05:22:14.000000000 -0600
+-+++ usbmount-0.0.14.1-patched/usbmount	2007-03-15 07:25:18.000000000 -0500
+-@@ -20,7 +20,7 @@
+- log()
+- {
+-     if test $1 != debug || expr "$VERBOSE" : "[yY]" > /dev/null; then
+--	logger -p user.$1 -t "usbmount[$$]" -- "$2"
+-+	echo "usbmount[$$] -- $2" >> $LOGFILE
+-     fi
+- }
+- 
+-@@ -57,11 +57,11 @@
+- if test "$1" = add; then
+- 
+-     # Acquire lock.
+--    log debug "trying to acquire lock /var/run/usbmount/.mount.lock"
+--    lockfile-create --retry 3 /var/run/usbmount/.mount || \
+--	{ log err "cannot acquire lock /var/run/usbmount/.mount.lock"; exit 1; }
+--    trap '( lockfile-remove /var/run/usbmount/.mount )' 0
+--    log debug "acquired lock /var/run/usbmount/.mount.lock"
+-+    log debug "trying to acquire lock /var/run/.usbmount.lock"
+-+    lockfile-create --retry 5 /var/run/.usbmount || \
+-+	{ log err "cannot acquire lock /var/run/.usbmount.lock"; exit 1; }
+-+    trap '( lockfile-remove /var/run/.usbmount )' 0
+-+    log debug "acquired lock /var/run/.usbmount.lock"
+- 
+-     # Try to read from the device.  Some devices need a few seconds
+-     # initialization time before they can be accessed.  Give up after
+-@@ -184,6 +184,7 @@
+- 		log info "executing command: run-parts /etc/usbmount/umount.d"
+- 		run-parts /etc/usbmount/umount.d || :
+- 	    fi
+-+	    lockfile-remove /var/run/.usbmount
+- 	    break
+- 	fi
+-     done < /proc/mounts
+-diff -ur usbmount-0.0.14.1/usbmount.conf usbmount-0.0.14.1-patched/usbmount.conf
+---- usbmount-0.0.14.1/usbmount.conf	2005-04-08 09:05:10.000000000 -0500
+-+++ usbmount-0.0.14.1-patched/usbmount.conf	2007-03-15 07:21:33.000000000 -0500
+-@@ -17,7 +17,7 @@
+- # sure all data is written to the medium before you remove it (e.g. run the #
+- # "sync" command in a terminal window).  Otherwise, you *WILL* lose data!   #
+- #############################################################################
+--FILESYSTEMS="ext2 ext3"
+-+FILESYSTEMS="ext2 ext3 msdos vfat"
+- 
+- # Mount options: Options passed to the mount command with the -o flag.
+- # WARNING!  Removing "sync" from the options is a very bad idea and
+-@@ -35,3 +35,7 @@
+- # If set to "yes", more information will be logged via the syslog
+- # facility.
+- VERBOSE="no"
+-+
+-+# Location of the log file when verbose is Yes
+-+LOGFILE="/var/log/usbmount.log"
+-+
