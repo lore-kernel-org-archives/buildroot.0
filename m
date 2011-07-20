@@ -1,102 +1,93 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 20 Jul 2011 15:38:14 +0200
-Subject: [Buildroot] linux: why is vmlinux only available for mips?
-In-Reply-To: <20110715143053.558a756a@skate>
-References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
- <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
- <20110715143053.558a756a@skate>
-Message-ID: <CAAXf6LUaOXizUnxjZVhbpoeiAxAiLeYyXajQKgOjKzY-vo0g2w@mail.gmail.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Wed, 20 Jul 2011 17:04:02 +0300
+Subject: [Buildroot] Building valgrind with ccache fails
+Message-ID: <CALR4fEJsNk60r1Q+kFMwne4_ZcDqu2CWfTMaxDgt1rsMUt1_Xg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi all,
 
-On Fri, Jul 15, 2011 at 2:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Fri, 15 Jul 2011 08:34:34 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> > The depend statement causes the vmlinux target only to be available
->> > for mips processors.
->> > For powerpc for example, only uImage and zImage are selectable.
->> >
->> > However, I'd like to have vmlinux in the output/images directory.
->> > First of all because I am directly loading this on target, rather than
->> > uImage or zImage.
->
-> If vmlinux is useful on powerpc platforms, then it should be added to
-> the list of architectures for which vmlinux is proposed.
->
->> In fact I have more problems with this version encoding in the output
->> build/linux-X directory:
->> * I need to get to the vmlinux file (mentioned above)
->
-> Just need to add "|| BR2_powerpc" as you suggested.
+I am using buildroot master, and when I enable ccache support, valgrind
+fails to build. I am able to reproduce this on i586 and arm (i586 using
+buildtool-ng, and arm using a code sourcery toolchain). Error is available
+at the end of this email.
 
-I'm not sure why you want to restrict this to specific architectures
-instead of allowing it for all.
-What is wrong with the following?
+Can anyone reproduce?
 
-diff --git a/linux/Config.in b/linux/Config.in
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -131,7 +131,6 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
-
- config BR2_LINUX_KERNEL_VMLINUX
- 	bool "vmlinux"
--	depends on BR2_mips || BR2_mipsel
-
- config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	bool "custom target"
+BTW: it seems like on my setup (omap3) valgrind returns a lot of errors deep
+inside glibc, and in fails to detect memory leaks. Can anyone reproduce
+this?
 
 
-It will be up to the user/developer to decide what kind of output he
-wants. The linux kernel Makefile will always generate vmlinux. Whether
-it is of direct use for a certain architecture is another question.
-Most developers will select e.g. uImage for use with U-boot, but some
-(like us) may want to do our own transformations on vmlinux to package
-it in another way (e.g. with a proprietary bootloader).
+../coregrind/link_tool_exe_linux 0x38000000
+/home/diego/src/buildroot/output/host/usr/bin/ccache
+/home/diego/src/buildroot/output/host/usr/bin/i586-unknown-linux-gnu-gcc
+ -Wno-long-long -pipe -O2  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64 -Wno-pointer-sign -fno-stack-protector   -o
+memcheck-x86-linux -m32 -mpreferred-stack-boundary=2 -O2 -g -Wall
+-Wmissing-prototypes -Wshadow -Wpointer-arith -Wstrict-prototypes
+-Wmissing-declarations -Wno-format-zero-length -fno-strict-aliasing
+-O2 -static -nodefaultlibs -nostartfiles -u _start -Wl,--build-id=none
+-m32 memcheck_x86_linux-mc_leakcheck.o
+memcheck_x86_linux-mc_malloc_wrappers.o memcheck_x86_linux-mc_main.o
+memcheck_x86_linux-mc_translate.o memcheck_x86_linux-mc_machine.o
+memcheck_x86_linux-mc_errors.o ../coregrind/libcoregrind-x86-linux.a
+../VEX/libvex-x86-linux.a -lgcc
+cache directory                     /home/diego/.buildroot-ccache
+cache hit (direct)                 28821
+cache hit (preprocessed)            6503
+cache miss                         59026
+called for link                     5908
+compile failed                      5249
+preprocessor error                  2361
+bad compiler arguments              1168
+unsupported source language          162
+autoconf compile/link              20089
+unsupported compiler option         5290
+no input file                       6290
+files in cache                     79931
+cache size                         889.6 Mbytes
+max cache size                       1.0
+Gbytes*/home/diego/src/buildroot/output/host/usr/bin/ccache: invalid
+option -- 't'*
+Usage:
+    ccache [options]
+    ccache compiler [compiler options]
+    compiler [compiler options]          (via symbolic link)
 
->
->> * I need to get to the dtc (device tree compiler) which resides in
->> <linux>/scripts/dtc/dtc
->
-> This tool looks like a useful host tool built by the kernel. Maybe we
-> should install it in $(HOST_DIR)/usr/bin ?
+Options:
+    -c, --cleanup         delete old files and recalculate size counters
+                          (normally not needed as this is done automatically)
+    -C, --clear           clear the cache completely
+    -F, --max-files=N     set maximum number of files in cache to N (use 0 for
+                          no limit)
+    -M, --max-size=SIZE   set maximum size of cache to SIZE (use 0 for no
+                          limit; available suffixes: G, M and K; default
+                          suffix: G)
+    -s, --show-stats      show statistics summary
+    -z, --zero-stats      zero statistics counters
 
-Yes, I agree. How do you do that?
+    -h, --help            print this help text
+    -V, --version         print version and copyright information
 
->
->> * I need to be able to compile external kernel modules, so in that
->> Makefile I need to point to the right kernel directory.
->
-> Ok. Those could be integrated as Buildroot packages, in which case
-> getting access to the Linux source directory is easy.
-
-Good point. I'll have to add Mercurial support in buildroot to get there though.
-
->
->> If you stick with one kernel version, then you can hardcode it in the
->> relevant scripts and Makefiles. However, when switching to another
->> version, you have to update all of these files.
->> One approach to solve all of this would be to create a symbolic link
->> output/build/linux, pointing to the output/build/linux-X directory
->> corresponding to the actually configured version.
->
-> I think I'd prefer something like :
->
-> $ make <pkg>-show-srcdir
->
-> which would be implemented at the package infrastructure, and which
-> would return the source directory of a particular package. This way,
-> you can easily ask where a given package source code has been extracted
-> by Buildroot.
-
-I like this as well. It's simple and generic.
-I'm not sure whether it still is needed after I include the .config though.
-
-Thanks,
-Thomas
+See also <http://ccache.samba.org>.
+make[4]: *** [memcheck-x86-linux] Error 1
+make[4]: Leaving directory
+`/home/diego/src/buildroot/output/build/valgrind-3.6.1/memcheck'
+make[3]: *** [all-recursive] Error 1
+make[3]: Leaving directory
+`/home/diego/src/buildroot/output/build/valgrind-3.6.1/memcheck'
+make[2]: *** [all-recursive] Error 1
+make[2]: Leaving directory
+`/home/diego/src/buildroot/output/build/valgrind-3.6.1'
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+`/home/diego/src/buildroot/output/build/valgrind-3.6.1'
+make: *** [/home/diego/src/buildroot/output/build/valgrind-3.6.1/.stamp_built]
+Error 2
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110720/b58e59b0/attachment.html>
