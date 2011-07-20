@@ -1,7 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 20 Jul 2011 15:20:24 +0200
-Subject: [Buildroot] linux.mk: custom tarball: re-download if tarball changed
-Message-ID: <CAAXf6LWpKhWVSWmxBHcp5gNmMRK0C9Z5Fw72bPXb7QJ1xmRGdQ@mail.gmail.com>
+Date: Wed, 20 Jul 2011 15:38:14 +0200
+Subject: [Buildroot] linux: why is vmlinux only available for mips?
+In-Reply-To: <20110715143053.558a756a@skate>
+References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
+ <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
+ <20110715143053.558a756a@skate>
+Message-ID: <CAAXf6LUaOXizUnxjZVhbpoeiAxAiLeYyXajQKgOjKzY-vo0g2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,56 +14,89 @@ To: buildroot@busybox.net
 
 Hi,
 
-If you use a vanilla kernel, and you upstep your kernel, buildroot
-automatically downloads and compiles the new version, because
-LINUX26_DIR changed, and the .stamp_downloaded file is not yet present
-in that new directory.
+On Fri, Jul 15, 2011 at 2:30 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Fri, 15 Jul 2011 08:34:34 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> > The depend statement causes the vmlinux target only to be available
+>> > for mips processors.
+>> > For powerpc for example, only uImage and zImage are selectable.
+>> >
+>> > However, I'd like to have vmlinux in the output/images directory.
+>> > First of all because I am directly loading this on target, rather than
+>> > uImage or zImage.
+>
+> If vmlinux is useful on powerpc platforms, then it should be added to
+> the list of architectures for which vmlinux is proposed.
+>
+>> In fact I have more problems with this version encoding in the output
+>> build/linux-X directory:
+>> * I need to get to the vmlinux file (mentioned above)
+>
+> Just need to add "|| BR2_powerpc" as you suggested.
 
-When you specify a LINUX26_TARBALL, the variable LINUX26_VERSION will
-be set to the fixed "custom". As a result, LINUX26_DIR remains the
-same even though you modified the .config file to specify a different
-tarball.  When re-running make, buildroot does not see the change, and
-you'll have to force building the new kernel.
+I'm not sure why you want to restrict this to specific architectures
+instead of allowing it for all.
+What is wrong with the following?
 
-How can we make sure that buildroot notices this change in configuration?
-One way would be to step away from the fixed 'custom' version string,
-and encode the tarball name in some way in LINUX26_DIR.
-Another possibility is to let the download step depend on the tarball.
-If the tarball changes, then make will initiate the download step.
+diff --git a/linux/Config.in b/linux/Config.in
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -131,7 +131,6 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
 
-In buildroot-2011.05, I applied the following (working) patch
-implementing the second alternative:
+ config BR2_LINUX_KERNEL_VMLINUX
+ 	bool "vmlinux"
+-	depends on BR2_mips || BR2_mipsel
 
-linux: depend on source archive so that updates to custom tarballs are picked up
-diff --git a/linux/linux.mk b/linux/linux.mk
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -75,9 +75,14 @@ endif
- endif # BR2_LINUX_KERNEL_VMLINUX
-
- # Download
--$(LINUX26_DIR)/.stamp_downloaded:
-+$(DL_DIR)/$(LINUX26_SOURCE):
- 	@$(call MESSAGE,"Downloading kernel")
- 	$(call DOWNLOAD,$(LINUX26_SITE),$(LINUX26_SOURCE))
-+
-+# Download patches
-+# Explicitly depend on linux download archive so that custom tarballs get
-+# redownloaded if the configured file changes.
-+$(LINUX26_DIR)/.stamp_downloaded: $(DL_DIR)/$(LINUX26_SOURCE)
- 	$(foreach patch,$(filter ftp://% http://%,$(LINUX26_PATCH)),\
- 		$(call DOWNLOAD,$(dir $(patch)),$(notdir $(patch)))$(sep))
- 	mkdir -p $(@D)
+ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+ 	bool "custom target"
 
 
-I wanted to submit this to the list, but just noticed that linux is
-now using the gentargets infrastructure. To address this problem we
-can
-a. adapt gentargets, so that the generic .stamp_downloaded rule also
-depends on the downloaded archive. Is there any reason why this would
-not be good?
-b. adapt the version string in linux.mk so that a custom tarball is
-automatically picked up.
+It will be up to the user/developer to decide what kind of output he
+wants. The linux kernel Makefile will always generate vmlinux. Whether
+it is of direct use for a certain architecture is another question.
+Most developers will select e.g. uImage for use with U-boot, but some
+(like us) may want to do our own transformations on vmlinux to package
+it in another way (e.g. with a proprietary bootloader).
 
-Comments are very welcome,
-Thanks, Thomas
+>
+>> * I need to get to the dtc (device tree compiler) which resides in
+>> <linux>/scripts/dtc/dtc
+>
+> This tool looks like a useful host tool built by the kernel. Maybe we
+> should install it in $(HOST_DIR)/usr/bin ?
+
+Yes, I agree. How do you do that?
+
+>
+>> * I need to be able to compile external kernel modules, so in that
+>> Makefile I need to point to the right kernel directory.
+>
+> Ok. Those could be integrated as Buildroot packages, in which case
+> getting access to the Linux source directory is easy.
+
+Good point. I'll have to add Mercurial support in buildroot to get there though.
+
+>
+>> If you stick with one kernel version, then you can hardcode it in the
+>> relevant scripts and Makefiles. However, when switching to another
+>> version, you have to update all of these files.
+>> One approach to solve all of this would be to create a symbolic link
+>> output/build/linux, pointing to the output/build/linux-X directory
+>> corresponding to the actually configured version.
+>
+> I think I'd prefer something like :
+>
+> $ make <pkg>-show-srcdir
+>
+> which would be implemented at the package infrastructure, and which
+> would return the source directory of a particular package. This way,
+> you can easily ask where a given package source code has been extracted
+> by Buildroot.
+
+I like this as well. It's simple and generic.
+I'm not sure whether it still is needed after I include the .config though.
+
+Thanks,
+Thomas
