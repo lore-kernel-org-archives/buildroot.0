@@ -1,38 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 20 Jul 2011 11:38:08 +0200
-Subject: [Buildroot] [PATCH 11/12] Add support for local packages
- through 'file://' pseudo-protocol
-In-Reply-To: <c596c1abebee351179d9d58734ce0c46a774b5f0.1311141088.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
- <c596c1abebee351179d9d58734ce0c46a774b5f0.1311141088.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWJnmYjFa8NkzBmO6=03ayOasffKkRkBd6imdB8QVfPxA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 20 Jul 2011 12:52:08 +0200
+Subject: [Buildroot] devtmpfs and initramfs
+In-Reply-To: <201107201057.48006.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 20 Jul 2011 10:57:47 +0200")
+References: <201107191222.19313.arnout@mind.be>
+ <87ei1l2wru.fsf@macbook.be.48ers.dk>
+ <CALR4fELkEBNtLS2WYXVkLkpttsMrzbHb04i+KZS+wfp3_TwMzQ@mail.gmail.com>
+ <201107201057.48006.arnout@mind.be>
+Message-ID: <874o2h2pif.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+
 Hi,
 
-On Wed, Jul 20, 2011 at 7:52 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> From: David Wagner <david.wagner@free-electrons.com>
->
-> This can be used this way :
->
-> <pkg>_VERSION = 42
-> <pkg>_SITE = file:///some/local/directory
-> <pkg>_SOURCE = mypkg-$(<pkg>_VERSION).tar.bz2
->
-> Can be useful to integrate a home-made project or for testing purposes.
-> The default command to retrieve files is 'cp' but 'rsync' could also be used.
-> Through sshfs, it should also be possible to get non-public remote files on a
-> ssh server.
->
-> [ Thomas Petazzoni: use $(PKG)_SITE and $(PKG)_SOURCE variables
-> ?instead of $(1) and $(2) ]
+ >> > #!/bin/sh
+ >> > # devtmpfs does not get automounted for initramfs'es
+ >> > /bin/mount -t devtmpfs devtmpfs /dev
+ >> > exec /sbin/init $*
+ >> > 
+ >> > Unless BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
+ >> 
+ >> Sorry, but this solution smells just like my socks. I think wk can find a
+ >> better one :)
 
-If you add support for file:// in BR2_PRIMARY_SITE (see my other
-patches), then you do need $(1) here instead of $(PKG)_SITE.
+ Arnout>  Yeah, I also would prefer not to proliferate the number of
+ Arnout> ways that the init process is influenced...
 
-Thomas
+I don't see what there is to dislike. With this, the non-standard
+behaviour of initramfs'es is nicely self contained within the initramfs
+support code, and nothing else needs to know about it. There's nothing
+to tweak, and it just works out of the box (tm), no matter what init
+implementation or custom inittab is used.
+
+You could argue that the shell overhead is a bit of a turn down, but
+this is no worse than a S01mountall init script.
+
+-- 
+Bye, Peter Korsgaard
