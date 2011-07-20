@@ -1,30 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Jul 2011 22:49:19 +0200
-Subject: [Buildroot] ccache directory
-In-Reply-To: <20110720181955.36911f14@skate> (Thomas Petazzoni's message of
- "Wed, 20 Jul 2011 18:19:55 +0200")
-References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
- <20110720181955.36911f14@skate>
-Message-ID: <87livs1xv4.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 20 Jul 2011 23:51:11 +0200
+Subject: [Buildroot] [Patch] Allow file to be built against static libs.
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C60448FD@ex-mb1.corp.adtran.com>
+ (ANDY KENNEDY's message of "Wed, 20 Jul 2011 04:53:31 +0000")
+References: <F9C551623D2CBB4C9488801D14F864C6044668@ex-mb1.corp.adtran.com>
+ <87sjq22f6n.fsf@macbook.be.48ers.dk>
+ <87oc0q2ddu.fsf@macbook.be.48ers.dk>
+ <F9C551623D2CBB4C9488801D14F864C60448FD@ex-mb1.corp.adtran.com>
+Message-ID: <87ei1k1v00.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
 
-Hi,
+ >> Ehh, drop that, I remembered wrong - We're already doing --enable-
+ >> static --disable-shared.
 
- >> Would you accept a patch that re-introduces BR2_CCACHE_DIR ?
+ ANDY> Okay, well, sortta, but not really.  I believe this to be the culprit:
 
- Thomas> I guess your use case is valid, so I would personally accept
- Thomas> such a patch. I don't like cluttering the "Build options" menu
- Thomas> with too many options, but I guess this option is a valid thing
- Thomas> to have when ccache support is enabled.
+ ANDY> #############################################################
+ ANDY> #
+ ANDY> # zlib
+ ANDY> #
+ ANDY> #############################################################
+ ANDY> ZLIB_VERSION:=1.2.5
+ ANDY> ZLIB_SOURCE:=zlib-$(ZLIB_VERSION).tar.bz2
+ ANDY> ZLIB_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
+ ANDY> ZLIB_INSTALL_STAGING=YES
 
-Or simply drop the custom ccache location and let people set CCACHE_DIR
-if they don't like the default (and hence expected) ~/.ccache location.
+ ANDY> ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ ANDY> ZLIB_PIC :=
+ ANDY> ZLIB_SHARED := --static
+ ANDY> else
+ ANDY> ZLIB_PIC := -fPIC
+ ANDY> ZLIB_SHARED := --shared
+ ANDY> endif
+
+Yes, this is all fine. The problem is just that we link host stuff
+dynamically, but zlib was building the host version in the same was as
+the target one (so static if BR2_PREFER_STATIC_LIB), which would then
+break host-file when it tried to dynamically link to zlib.
+
+I've fixed that now, thanks for reporting it.
 
 -- 
 Bye, Peter Korsgaard
