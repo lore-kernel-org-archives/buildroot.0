@@ -1,83 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 07:52:08 +0200
-Subject: [Buildroot] [PATCH 09/12] package: remove useless arguments from
-	CMAKETARGETS
+Date: Wed, 20 Jul 2011 07:52:02 +0200
+Subject: [Buildroot] [PATCH 03/12] package: add configuration option to
+	specify a local override file
 In-Reply-To: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <9f54dd77e0bf2346a3b7cf156562a0f05bbd2a4c.1311141088.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <804eb8923dadda1d63e4c26c9a90fd82fc8ad448.1311141087.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to the pkgdir and pkgname functions, we can rewrite the
-GENTARGETS macro in a way that avoids the need for each package to
-repeat its name and the directory in which it is present.
+The user can now create a custom local override file to override the
+source directory for various packages.
+
+An example override file:
+
+ ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+ STRACE_OVERRIDE_SRCDIR = /opt/strace-4.5.20
+
+would tell Buildroot to use the zlib and strace source code from the
+specified directories, instead of download, extracting and patching
+the code has done usually by Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.cmake.in                   |   10 ++++------
- package/cdrkit/cdrkit.mk                    |    4 ++--
- package/multimedia/libcuefile/libcuefile.mk |    2 +-
- package/yajl/yajl.mk                        |    2 +-
- 4 files changed, 8 insertions(+), 10 deletions(-)
+ Config.in |   10 ++++++++++
+ Makefile  |    7 +++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
-index 1263eb9..b48e09a 100644
---- a/package/Makefile.cmake.in
-+++ b/package/Makefile.cmake.in
-@@ -183,15 +183,13 @@ endef
- ################################################################################
- # CMAKETARGETS -- the target generator macro for CMake packages
- #
--# Argument 1 is the package directory prefix [mandatory]
--# Argument 2 is the lowercase package name   [mandatory]
--# Argument 3 is "target" or "host"           [optional, default: "target"]
-+# Argument 1 is "target" or "host"           [optional, default: "target"]
- ################################################################################
+diff --git a/Config.in b/Config.in
+index a67c08d..784f4ef 100644
+--- a/Config.in
++++ b/Config.in
+@@ -327,6 +327,16 @@ config BR2_HAVE_DEVFILES
+ 	  Install headers and static libraries in the
+ 	  target filesystem
  
- define CMAKETARGETS
--ifeq ($(3),host)
--$(call CMAKETARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
-+ifeq ($(1),host)
-+$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
- else
--$(call CMAKETARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
-+$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
++config BR2_PACKAGE_OVERRIDE_FILE
++	string "location of a package override file"
++	default "$(TOPDIR)/local.mk"
++	help
++	  A package override file is a short makefile that contains
++	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
++	  which allows to tell Buildroot to use an existing directory
++	  as the source directory for a particular package. See the
++	  Buildroot documentation for more details on this feature.
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+diff --git a/Makefile b/Makefile
+index 20dd707..e7b2729 100644
+--- a/Makefile
++++ b/Makefile
+@@ -308,6 +308,13 @@ else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
+ include toolchain/toolchain-crosstool-ng.mk
  endif
- endef
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index a57a8fd..9eebe6e 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -20,5 +20,5 @@ CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
- HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
- HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
  
--$(eval $(call CMAKETARGETS,package,cdrkit))
--$(eval $(call CMAKETARGETS,package,cdrkit,host))
-+$(eval $(call CMAKETARGETS))
-+$(eval $(call CMAKETARGETS,host))
-diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
-index 86ec070..a0c8054 100644
---- a/package/multimedia/libcuefile/libcuefile.mk
-+++ b/package/multimedia/libcuefile/libcuefile.mk
-@@ -20,4 +20,4 @@ endef
- LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
- LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
++# Include the package override file if one has been provided in the
++# configuration.
++PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
++ifneq ($(PACKAGE_OVERRIDE_FILE),)
++-include $(PACKAGE_OVERRIDE_FILE)
++endif
++
+ include package/*/*.mk
  
--$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
-+$(eval $(call CMAKETARGETS))
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-index e67a7da..723cce4 100644
---- a/package/yajl/yajl.mk
-+++ b/package/yajl/yajl.mk
-@@ -8,4 +8,4 @@ YAJL_VERSION = 2.0.2
- YAJL_SITE = git://github.com/lloyd/yajl.git
- YAJL_INSTALL_STAGING = YES
- 
--$(eval $(call CMAKETARGETS,package,yajl))
-+$(eval $(call CMAKETARGETS))
+ include boot/common.mk
 -- 
 1.7.4.1
