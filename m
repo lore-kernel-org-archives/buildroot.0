@@ -1,41 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 19 Jul 2011 23:11:57 +0200
-Subject: [Buildroot] [git commit] sdl: build alsa support if enabled
-Message-ID: <20110719211531.85EA58B346@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jul 2011 06:43:06 +0200
+Subject: [Buildroot] [pull request] Pull request for branch disko
+Message-ID: <cover.1311136895.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The following changes since commit ffe62f915dcbf62a840b40167f391127f0702aac:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8a6f23a42409a0784ffa38c262b50516516e56ef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  sysvinit: package name typo (2011-07-12 09:11:39 +0200)
 
-Ensure alsa-lib gets built before SDL if enabled, so the SDL configure
-script correctly detects alsa support.
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git disko
 
-Noticed by Ayla on IRC.
+Thomas Petazzoni (3):
+      scons: new package
+      disko: new package
+      disko-demos: new package
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sdl/sdl.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/multimedia/Config.in                       |    2 +
+ package/multimedia/disko-demos/Config.in           |    8 ++
+ .../disko-demos-1.8.0-fix-install-paths.patch      |   61 +++++++++++++++
+ package/multimedia/disko-demos/disko-demos.mk      |   27 +++++++
+ package/multimedia/disko/Config.in                 |   41 ++++++++++
+ .../disko/disko-1.8.0-directfb-fix-errors.patch    |   82 ++++++++++++++++++++
+ .../disko/disko-1.8.0-fixup-pkgconfig.patch        |   22 +++++
+ package/multimedia/disko/disko.mk                  |   57 ++++++++++++++
+ package/scons/scons.mk                             |   13 +++
+ 9 files changed, 313 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/disko-demos/Config.in
+ create mode 100644 package/multimedia/disko-demos/disko-demos-1.8.0-fix-install-paths.patch
+ create mode 100644 package/multimedia/disko-demos/disko-demos.mk
+ create mode 100644 package/multimedia/disko/Config.in
+ create mode 100644 package/multimedia/disko/disko-1.8.0-directfb-fix-errors.patch
+ create mode 100644 package/multimedia/disko/disko-1.8.0-fixup-pkgconfig.patch
+ create mode 100644 package/multimedia/disko/disko.mk
+ create mode 100644 package/scons/scons.mk
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 99488a6..af462c4 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -40,6 +40,10 @@ ifeq ($(BR2_PACKAGE_TSLIB),y)
- SDL_DEPENDENCIES += tslib
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+SDL_DEPENDENCIES += alsa-lib
-+endif
-+
- SDL_CONF_OPT += --enable-pulseaudio=no \
- 		--disable-arts \
- 		--disable-esd \
+Thanks,
 -- 
-1.7.3.4
+Thomas Petazzoni
