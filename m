@@ -1,55 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 07:52:03 +0200
-Subject: [Buildroot] [PATCH 04/12] package: add <pkg>-rebuild and
-	<pkg>-reconfigure
-In-Reply-To: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c2f2d67a5161a763ebd6738c28c27e470d0e0dbd.1311141087.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Jul 2011 07:13:36 +0200
+Subject: [Buildroot] [PATCH 2 of 3] Allow BR2_PRIMARY_SITE and
+ BR2_BACKUP_SITE to be a file:// URL
+In-Reply-To: <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
+References: <patchbomb.1300174025@localhost6.localdomain6>
+ <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
+Message-ID: <20110720071336.1958f634@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We are often asked "how can I restart the build of a package ?" or
-"how can I restart the build of package from the configure part
-?". Obviously, tweaking with stamp files is possible, but not very
-user friendly.
+Hello,
 
-Therefore this patch adds two new per-package targets: <pkg>-rebuild
-and <pkg>-reconfigure. They will remove the right stamp files and
-restart the complete build process (by using the 'all' target, so that
-not only the package is reconfigured, recompiled and reinstalled, but
-the root filesystem images are also regenerated).
+Le Tue, 15 Mar 2011 08:27:07 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Makefile.package.in |   13 +++++++++++++
- 1 files changed, 13 insertions(+), 0 deletions(-)
+>  define DOWNLOAD
+>  	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+> -		$(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
+> +		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
+> +			file) $(call $(DL_MODE)_FILE,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
+> +			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
+> +		esac ; \
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index c22c104..96ed9a7 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -555,6 +555,19 @@ $(1)-clean:		$(1)-uninstall \
- 
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- 
-+$(1)-clean-for-rebuild:
-+			rm -f $$($(2)_TARGET_BUILD)
-+			rm -f $$($(2)_TARGET_INSTALL_STAGING)
-+			rm -f $$($(2)_TARGET_INSTALL_TARGET)
-+			rm -f $$($(2)_TARGET_INSTALL_HOST)
-+
-+$(1)-rebuild:		$(1)-clean-for-rebuild all
-+
-+$(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
-+			rm -f $$($(2)_TARGET_CONFIGURE)
-+
-+$(1)-reconfigure:	$(1)-clean-for-reconfigure all
-+
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
- $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
+Does this bring any additional feature that using the existing
+BR2_DL_DIR option ?
+
+Thomas
 -- 
-1.7.4.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
