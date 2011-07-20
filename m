@@ -1,31 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 21:21:00 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: Add Linux Kernel extensions menu
-In-Reply-To: <CAHeZHmur1_YCf3VHevMbSHY9D92FOSfSsn3mfjcc1M=VSy5v-g@mail.gmail.com>
-References: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
- <1310572380-26403-2-git-send-email-benoit.mauduit@gmail.com>
- <CAAXf6LVOjw_pePUqiN3ikG0N=y_H=hGC8CXYMnUYk8rLURLJ0A@mail.gmail.com>
- <CAHeZHmur1_YCf3VHevMbSHY9D92FOSfSsn3mfjcc1M=VSy5v-g@mail.gmail.com>
-Message-ID: <20110720212100.058e6a2b@skate>
+Date: Wed, 20 Jul 2011 21:23:27 +0200
+Subject: [Buildroot] linux: why is vmlinux only available for mips?
+In-Reply-To: <1311178214.2189.68.camel@dublxciaranr1.verifone.com>
+References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
+ <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
+ <20110715143053.558a756a@skate>
+ <CAAXf6LUaOXizUnxjZVhbpoeiAxAiLeYyXajQKgOjKzY-vo0g2w@mail.gmail.com>
+ <1311178214.2189.68.camel@dublxciaranr1.verifone.com>
+Message-ID: <20110720212327.583a7b31@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 20 Jul 2011 10:10:36 +0200,
-Beno?t Mauduit <benoit.mauduit@gmail.com> a ?crit :
+Le Wed, 20 Jul 2011 17:10:12 +0100,
+Quotient Remainder <quotientvremainder@gmail.com> a ?crit :
 
-> You are right, this is a mistake.
-> I suggest to name all linux makefile extension like that :
-> "xenomai_ext.mk".
-> And include them with:
-> include linux/*_ext.mk
+> I may be misinterpreting, but does the above mean that you have a decent
+> generic external kernel module build structure going?  I have a terribly
+> hacky setup working here but it's completely incompatible with the
+> recent linux GENTARGETS approach.
+> Care to share your external module build stuff?
 
-Or maybe, it's linux/linux.mk's job to include linux/linux-*-ext.mk, or
-explicitly linux/linux-xenomai.mk ?
-
-Regards,
+Could you detail what problems you have, and give an example of an
+external kernel module for which the GENTARGETS approach is a problem ?
+The linux-fusion package in Buildroot is an external kernel module and
+seems to build fine.
 
 Thomas
 -- 
