@@ -1,44 +1,65 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Jul 2011 12:52:08 +0200
-Subject: [Buildroot] devtmpfs and initramfs
-In-Reply-To: <201107201057.48006.arnout@mind.be> (Arnout Vandecappelle's
- message of "Wed, 20 Jul 2011 10:57:47 +0200")
-References: <201107191222.19313.arnout@mind.be>
- <87ei1l2wru.fsf@macbook.be.48ers.dk>
- <CALR4fELkEBNtLS2WYXVkLkpttsMrzbHb04i+KZS+wfp3_TwMzQ@mail.gmail.com>
- <201107201057.48006.arnout@mind.be>
-Message-ID: <874o2h2pif.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 20 Jul 2011 15:20:24 +0200
+Subject: [Buildroot] linux.mk: custom tarball: re-download if tarball changed
+Message-ID: <CAAXf6LWpKhWVSWmxBHcp5gNmMRK0C9Z5Fw72bPXb7QJ1xmRGdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-
 Hi,
 
- >> > #!/bin/sh
- >> > # devtmpfs does not get automounted for initramfs'es
- >> > /bin/mount -t devtmpfs devtmpfs /dev
- >> > exec /sbin/init $*
- >> > 
- >> > Unless BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
- >> 
- >> Sorry, but this solution smells just like my socks. I think wk can find a
- >> better one :)
+If you use a vanilla kernel, and you upstep your kernel, buildroot
+automatically downloads and compiles the new version, because
+LINUX26_DIR changed, and the .stamp_downloaded file is not yet present
+in that new directory.
 
- Arnout>  Yeah, I also would prefer not to proliferate the number of
- Arnout> ways that the init process is influenced...
+When you specify a LINUX26_TARBALL, the variable LINUX26_VERSION will
+be set to the fixed "custom". As a result, LINUX26_DIR remains the
+same even though you modified the .config file to specify a different
+tarball.  When re-running make, buildroot does not see the change, and
+you'll have to force building the new kernel.
 
-I don't see what there is to dislike. With this, the non-standard
-behaviour of initramfs'es is nicely self contained within the initramfs
-support code, and nothing else needs to know about it. There's nothing
-to tweak, and it just works out of the box (tm), no matter what init
-implementation or custom inittab is used.
+How can we make sure that buildroot notices this change in configuration?
+One way would be to step away from the fixed 'custom' version string,
+and encode the tarball name in some way in LINUX26_DIR.
+Another possibility is to let the download step depend on the tarball.
+If the tarball changes, then make will initiate the download step.
 
-You could argue that the shell overhead is a bit of a turn down, but
-this is no worse than a S01mountall init script.
+In buildroot-2011.05, I applied the following (working) patch
+implementing the second alternative:
 
--- 
-Bye, Peter Korsgaard
+linux: depend on source archive so that updates to custom tarballs are picked up
+diff --git a/linux/linux.mk b/linux/linux.mk
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -75,9 +75,14 @@ endif
+ endif # BR2_LINUX_KERNEL_VMLINUX
+
+ # Download
+-$(LINUX26_DIR)/.stamp_downloaded:
++$(DL_DIR)/$(LINUX26_SOURCE):
+ 	@$(call MESSAGE,"Downloading kernel")
+ 	$(call DOWNLOAD,$(LINUX26_SITE),$(LINUX26_SOURCE))
++
++# Download patches
++# Explicitly depend on linux download archive so that custom tarballs get
++# redownloaded if the configured file changes.
++$(LINUX26_DIR)/.stamp_downloaded: $(DL_DIR)/$(LINUX26_SOURCE)
+ 	$(foreach patch,$(filter ftp://% http://%,$(LINUX26_PATCH)),\
+ 		$(call DOWNLOAD,$(dir $(patch)),$(notdir $(patch)))$(sep))
+ 	mkdir -p $(@D)
+
+
+I wanted to submit this to the list, but just noticed that linux is
+now using the gentargets infrastructure. To address this problem we
+can
+a. adapt gentargets, so that the generic .stamp_downloaded rule also
+depends on the downloaded archive. Is there any reason why this would
+not be good?
+b. adapt the version string in linux.mk so that a custom tarball is
+automatically picked up.
+
+Comments are very welcome,
+Thanks, Thomas
