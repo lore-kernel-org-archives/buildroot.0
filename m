@@ -1,877 +1,1280 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 07:52:09 +0200
-Subject: [Buildroot] [PATCH 10/12] Makefile.package.in: Pass non-prefixed
-	name as argument to GENTARGETS_INNER.
+Date: Wed, 20 Jul 2011 07:52:06 +0200
+Subject: [Buildroot] [PATCH 07/12] package: remove useless arguments from
+	GENTARGETS
 In-Reply-To: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1a95e4dffd7b68d2e9fbcb9d13516f086decab1c.1311141088.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ee01a1a82109297897febb179013892495e475ca.1311141087.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Quotient Remainder <quotientvremainder@gmail.com>
+Thanks to the pkgdir and pkgname functions, we can rewrite the
+GENTARGETS macro in a way that avoids the need for each package to
+repeat its name and the directory in which it is present.
 
-Instead of effectively running s/^host-// on the package name, just pass the
-non-prefixed name to GENTARGETS_INNER.  This removes the need to ban packages
-with names starting with "host-".
-
-Signed-off-by: Quotient Remainder <quotientvremainder@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.autotools.in |  119 ++++++++++----------
- package/Makefile.cmake.in     |   91 ++++++++-------
- package/Makefile.package.in   |  247 +++++++++++++++++++++--------------------
- 3 files changed, 233 insertions(+), 224 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk                |    2 +-
+ boot/at91dataflashboot/at91dataflashboot.mk        |    2 +-
+ boot/barebox/barebox.mk                            |    2 +-
+ boot/syslinux/syslinux.mk                          |    2 +-
+ boot/uboot/uboot.mk                                |    2 +-
+ boot/xloader/xloader.mk                            |    2 +-
+ linux/linux.mk                                     |    2 +-
+ package/Makefile.package.in                        |   10 ++++------
+ package/acpid/acpid.mk                             |    2 +-
+ package/axel/axel.mk                               |    2 +-
+ package/bsdiff/bsdiff.mk                           |    2 +-
+ package/busybox/busybox.mk                         |    2 +-
+ package/bzip2/bzip2.mk                             |    4 ++--
+ package/cgilua/cgilua.mk                           |    2 +-
+ package/cloop/cloop.mk                             |    4 ++--
+ package/cmake/cmake.mk                             |    4 ++--
+ package/copas/copas.mk                             |    2 +-
+ package/coxpcall/coxpcall.mk                       |    2 +-
+ package/cramfs/cramfs.mk                           |    4 ++--
+ package/dhcpdump/dhcpdump.mk                       |    2 +-
+ package/dhrystone/dhrystone.mk                     |    2 +-
+ package/dnsmasq/dnsmasq.mk                         |    2 +-
+ package/dosfstools/dosfstools.mk                   |    2 +-
+ package/dsp-tools/dsp-tools.mk                     |    2 +-
+ package/ebtables/ebtables.mk                       |    2 +-
+ package/eeprog/eeprog.mk                           |    2 +-
+ package/ezxml/ezxml.mk                             |    2 +-
+ package/fbgrab/fbgrab.mk                           |    2 +-
+ package/fbset/fbset.mk                             |    2 +-
+ package/fconfig/fconfig.mk                         |    2 +-
+ package/gadgetfs-test/gadgetfs-test.mk             |    2 +-
+ package/gdisk/gdisk.mk                             |    2 +-
+ package/genromfs/genromfs.mk                       |    4 ++--
+ package/hdparm/hdparm.mk                           |    2 +-
+ package/hwdata/hwdata.mk                           |    2 +-
+ package/i2c-tools/i2c-tools.mk                     |    2 +-
+ package/input-event-daemon/input-event-daemon.mk   |    2 +-
+ package/input-tools/input-tools.mk                 |    2 +-
+ package/iostat/iostat.mk                           |    2 +-
+ package/iproute2/iproute2.mk                       |    2 +-
+ package/irda-utils/irda-utils.mk                   |    2 +-
+ package/iw/iw.mk                                   |    2 +-
+ package/libaio/libaio.mk                           |    2 +-
+ package/libcap/libcap.mk                           |    4 ++--
+ package/liberation/liberation.mk                   |    2 +-
+ package/libnss/libnss.mk                           |    2 +-
+ package/libsvgtiny/libsvgtiny.mk                   |    2 +-
+ package/libv4l/libv4l.mk                           |    2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk   |    4 ++--
+ package/linux-fusion/linux-fusion.mk               |    2 +-
+ package/lm-sensors/lm-sensors.mk                   |    2 +-
+ package/lmbench/lmbench.mk                         |    2 +-
+ package/lockfile-progs/lockfile-progs.mk           |    2 +-
+ package/logrotate/logrotate.mk                     |    2 +-
+ package/lsof/lsof.mk                               |    2 +-
+ package/ltrace/ltrace.mk                           |    2 +-
+ package/lua/lua.mk                                 |    2 +-
+ package/luafilesystem/luafilesystem.mk             |    2 +-
+ package/luasocket/luasocket.mk                     |    2 +-
+ package/makedevs/makedevs.mk                       |    4 ++--
+ package/memstat/memstat.mk                         |    2 +-
+ package/memtester/memtester.mk                     |    2 +-
+ package/midori/midori.mk                           |    2 +-
+ package/mii-diag/mii-diag.mk                       |    2 +-
+ package/mrouted/mrouted.mk                         |    2 +-
+ package/mtd/mtd.mk                                 |    4 ++--
+ package/multimedia/gst-dsp/gst-dsp.mk              |    2 +-
+ package/multimedia/gst-omapfb/gst-omapfb.mk        |    2 +-
+ package/multimedia/live555/live555.mk              |    2 +-
+ package/multimedia/mplayer/mplayer.mk              |    2 +-
+ package/multimedia/python-mad/python-mad.mk        |    2 +-
+ .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    2 +-
+ package/mypkg/mypkg.mk                             |   14 ++++++++++++++
+ package/netplug/netplug.mk                         |    2 +-
+ package/nuttcp/nuttcp.mk                           |    2 +-
+ package/olsr/olsr.mk                               |    2 +-
+ package/openssl/openssl.mk                         |    2 +-
+ package/pciutils/pciutils.mk                       |    2 +-
+ package/portmap/portmap.mk                         |    2 +-
+ package/pppd/pppd.mk                               |    2 +-
+ package/pptp-linux/pptp-linux.mk                   |    2 +-
+ package/procps/procps.mk                           |    2 +-
+ package/python-serial/python-serial.mk             |    2 +-
+ package/qt/qt.mk                                   |    2 +-
+ package/rings/rings.mk                             |    2 +-
+ package/rsh-redone/rsh-redone.mk                   |    2 +-
+ package/slang/slang.mk                             |    2 +-
+ package/squashfs/squashfs.mk                       |    4 ++--
+ package/squashfs3/squashfs3.mk                     |    4 ++--
+ package/sredird/sredird.mk                         |    2 +-
+ package/sstrip/sstrip.mk                           |    4 ++--
+ package/statserial/statserial.mk                   |    2 +-
+ package/sysklogd/sysklogd.mk                       |    2 +-
+ package/sysvinit/sysvinit.mk                       |    2 +-
+ package/uboot-mkimage/uboot-mkimage.mk             |    4 ++--
+ package/udev/udev.mk                               |    2 +-
+ package/usb_modeswitch/usb_modeswitch.mk           |    2 +-
+ package/usbmount/usbmount.mk                       |    2 +-
+ package/vsftpd/vsftpd.mk                           |    2 +-
+ package/whetstone/whetstone.mk                     |    2 +-
+ package/wipe/wipe.mk                               |    2 +-
+ package/wireless_tools/wireless_tools.mk           |    2 +-
+ package/wsapi/wsapi.mk                             |    2 +-
+ package/xavante/xavante.mk                         |    2 +-
+ package/xl2tp/xl2tp.mk                             |    2 +-
+ package/zlib/zlib.mk                               |    4 ++--
+ 106 files changed, 136 insertions(+), 124 deletions(-)
+ create mode 100644 package/mypkg/mypkg.mk
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index b65caa2..1591f61 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -29,66 +29,69 @@
- # calls the generic package infrastructure to generate the necessary
- # make targets
- #
--#  argument 1 is the lowercase package name
--#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#  argument 1 is the lowercase package name, including an host- prefix
- #             for host packages
--#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#  argument 2 is the lowercase package name, without the host- prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 3 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 4 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 5 is the package directory prefix
-+#  argument 6 is the type (target or host)
- ################################################################################
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 871b0ff..a7a856c 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -29,7 +29,7 @@ define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
+ endef
  
- define AUTOTARGETS_INNER
+-$(eval $(call GENTARGETS,boot,at91bootstrap))
++$(eval $(call GENTARGETS))
  
- # define package-specific variables to default values
--ifndef $(2)_SUBDIR
-- ifdef $(3)_SUBDIR
--  $(2)_SUBDIR = $($(3)_SUBDIR)
-+ifndef $(3)_SUBDIR
-+ ifdef $(4)_SUBDIR
-+  $(3)_SUBDIR = $($(4)_SUBDIR)
-  else
--  $(2)_SUBDIR ?=
-+  $(3)_SUBDIR ?=
-  endif
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+ # we NEED a board name unless we're at make source
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 14fb8c5..6c0188a 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -19,4 +19,4 @@ define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).bin $(BINARIES_DIR)
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,at91dataflashboot))
++$(eval $(call GENTARGETS))
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 55e1ffd..d219112 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -51,7 +51,7 @@ define BAREBOX_INSTALL_TARGET_CMDS
+ endef
  endif
  
--ifndef $(2)_LIBTOOL_PATCH
-- ifdef $(3)_LIBTOOL_PATCH
--  $(2)_LIBTOOL_PATCH = $($(3)_LIBTOOL_PATCH)
-+ifndef $(3)_LIBTOOL_PATCH
-+ ifdef $(4)_LIBTOOL_PATCH
-+  $(3)_LIBTOOL_PATCH = $($(4)_LIBTOOL_PATCH)
-  else
--  $(2)_LIBTOOL_PATCH ?= YES
-+  $(3)_LIBTOOL_PATCH ?= YES
-  endif
- endif
+-$(eval $(call GENTARGETS,boot,barebox))
++$(eval $(call GENTARGETS))
  
--ifndef $(2)_MAKE
-- ifdef $(3)_MAKE
--  $(2)_MAKE = $($(3)_MAKE)
-+ifndef $(3)_MAKE
-+ ifdef $(4)_MAKE
-+  $(3)_MAKE = $($(4)_MAKE)
-  else
--  $(2)_MAKE ?= $(MAKE)
-+  $(3)_MAKE ?= $(MAKE)
-  endif
- endif
- 
--$(2)_CONF_ENV			?=
--$(2)_CONF_OPT			?=
--$(2)_MAKE_ENV			?=
--$(2)_MAKE_OPT			?=
--$(2)_AUTORECONF			?= NO
--$(2)_AUTORECONF_OPT		?=
--$(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
--$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
--$(2)_CLEAN_OPT			?= clean
--$(2)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
--$(2)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
-+$(3)_CONF_ENV			?=
-+$(3)_CONF_OPT			?=
-+$(3)_MAKE_ENV			?=
-+$(3)_MAKE_OPT			?=
-+$(3)_AUTORECONF			?= NO
-+$(3)_AUTORECONF_OPT		?=
-+$(3)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
-+$(3)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
-+$(3)_CLEAN_OPT			?= clean
-+$(3)_UNINSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) uninstall
-+$(3)_UNINSTALL_TARGET_OPT	?= DESTDIR=$$(TARGET_DIR)  uninstall
- 
--$(2)_SRCDIR                     = $$($(2)_DIR)/$($(2)_SUBDIR)
-+$(3)_SRCDIR                     = $$($(3)_DIR)/$($(3)_SUBDIR)
- 
- #
- # Configure step. Only define it if not already defined by the package
- # .mk file. And take care of the differences between host and target
- # packages.
- #
--ifndef $(2)_CONFIGURE_CMDS
--ifeq ($(5),target)
-+ifndef $(3)_CONFIGURE_CMDS
-+ifeq ($(6),target)
- 
- # Configure package for target
--define $(2)_CONFIGURE_CMDS
-+define $(3)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache && \
- 	$$(TARGET_CONFIGURE_OPTS) \
- 	$$(TARGET_CONFIGURE_ARGS) \
-@@ -111,7 +114,7 @@ endef
- else
- 
- # Configure package for host
--define $(2)_CONFIGURE_CMDS
-+define $(3)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
- 	        $$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$$(HOST_CFLAGS)" \
-@@ -138,7 +141,7 @@ define UPDATE_CONFIG_HOOK
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+ # we NEED a board defconfig file unless we're at make source
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 686124f..fa5af07 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -26,4 +26,4 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
  	done
  endef
  
--$(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
-+$(3)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
- 
- #
- # Hook to patch libtool to make it work properly for cross-compilation
-@@ -162,8 +165,8 @@ define LIBTOOL_PATCH_HOOK
+-$(eval $(call GENTARGETS,boot,syslinux))
++$(eval $(call GENTARGETS))
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index ec592e1..c933b17 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -107,7 +107,7 @@ define UBOOT_INSTALL_TARGET_CMDS
+ 	$(UBOOT_INSTALL_TARGET_ENV_UTILS)
  endef
  
- # default values are not evaluated yet, so don't rely on this defaulting to YES
--ifneq ($$($(2)_LIBTOOL_PATCH),NO)
--$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
-+ifneq ($$($(3)_LIBTOOL_PATCH),NO)
-+$(3)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
- endif
+-$(eval $(call GENTARGETS,boot,uboot))
++$(eval $(call GENTARGETS))
  
+ ifeq ($(BR2_TARGET_UBOOT),y)
+ # we NEED a board name unless we're at make source
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+index 8d8cce3..e8dd380 100644
+--- a/boot/xloader/xloader.mk
++++ b/boot/xloader/xloader.mk
+@@ -19,7 +19,7 @@ define XLOADER_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,xloader))
++$(eval $(call GENTARGETS))
+ 
+ #############################################################
  #
-@@ -186,22 +189,22 @@ define AUTORECONF_HOOK
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0679238..c72cee5 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -177,7 +177,7 @@ define LINUX_INSTALL_TARGET_CMDS
  	fi
  endef
  
--ifeq ($$($(2)_AUTORECONF),YES)
--$(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
--$(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
-+ifeq ($$($(3)_AUTORECONF),YES)
-+$(3)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
-+$(3)_DEPENDENCIES += host-automake host-autoconf host-libtool
- endif
+-$(eval $(call GENTARGETS,,linux))
++$(eval $(call GENTARGETS))
  
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
- #
--ifndef $(2)_BUILD_CMDS
--ifeq ($(5),target)
--define $(2)_BUILD_CMDS
-+ifndef $(4)_BUILD_CMDS
-+ifeq ($(6),target)
-+define $(3)_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- else
--define $(2)_BUILD_CMDS
-+define $(3)_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
-@@ -211,8 +214,8 @@ endif
- # Host installation step. Only define it if not already defined by the
- # package .mk file.
- #
--ifndef $(2)_INSTALL_CMDS
--define $(2)_INSTALL_CMDS
-+ifndef $(3)_INSTALL_CMDS
-+define $(3)_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
- endef
- endif
-@@ -221,8 +224,8 @@ endif
- # Staging installation step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_INSTALL_STAGING_CMDS
--define $(2)_INSTALL_STAGING_CMDS
-+ifndef $(3)_INSTALL_STAGING_CMDS
-+define $(3)_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
- 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
- 		cp -f $$$$i $$$$i~; \
-@@ -235,8 +238,8 @@ endif
- # Target installation step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_INSTALL_TARGET_CMDS
--define $(2)_INSTALL_TARGET_CMDS
-+ifndef $(3)_INSTALL_TARGET_CMDS
-+define $(3)_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
-@@ -245,8 +248,8 @@ endif
- # Clean step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_CLEAN_CMDS
--define $(2)_CLEAN_CMDS
-+ifndef $(3)_CLEAN_CMDS
-+define $(3)_CLEAN_CMDS
- 	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
-@@ -255,8 +258,8 @@ endif
- # Uninstall from staging step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_UNINSTALL_STAGING_CMDS
--define $(2)_UNINSTALL_STAGING_CMDS
-+ifndef $(3)_UNINSTALL_STAGING_CMDS
-+define $(3)_UNINSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
-@@ -265,15 +268,15 @@ endif
- # Uninstall from target step. Only define it if not already defined
- # by the package .mk file.
- #
--ifndef $(2)_UNINSTALL_TARGET_CMDS
--define $(2)_UNINSTALL_TARGET_CMDS
-+ifndef $(3)_UNINSTALL_TARGET_CMDS
-+define $(3)_UNINSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
- # Call the generic package infrastructure to generate the necessary
- # make targets
--$(call GENTARGETS_INNER,$(1),$(2),$(3),$(4),$(5))
-+$(call GENTARGETS_INNER,$(1),$(2),$(3),$(4),$(5),$(6))
- 
- endef
- 
-@@ -285,8 +288,8 @@ endef
- 
- define AUTOTARGETS
- ifeq ($(1),host)
--$(call AUTOTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
-+$(call AUTOTARGETS_INNER,$(1)-$(call pkgname),$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
- else
--$(call AUTOTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
-+$(call AUTOTARGETS_INNER,$(call pkgname),$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
- endif
- endef
-diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
-index b48e09a..30b0e76 100644
---- a/package/Makefile.cmake.in
-+++ b/package/Makefile.cmake.in
-@@ -26,49 +26,52 @@
- # tune the build process and calls the generic package infrastructure to
- # generate the necessary make targets
- #
--#  argument 1 is the lowercase package name
--#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#  argument 1 is the lowercase package name, including the host- prefix
- #             for host packages
--#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#  argument 2 is the lowercase package name, without the host- prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 3 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 4 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 5 is the package directory prefix
-+#  argument 6 is the type (target or host)
- ################################################################################
- 
- define CMAKETARGETS_INNER
- 
- # define package-specific variables to default values
--ifndef $(2)_SUBDIR
-- ifdef $(3)_SUBDIR
--  $(2)_SUBDIR = $($(3)_SUBDIR)
-+ifndef $(3)_SUBDIR
-+ ifdef $(4)_SUBDIR
-+  $(3)_SUBDIR = $($(4)_SUBDIR)
-  else
--  $(2)_SUBDIR ?=
-+  $(3)_SUBDIR ?=
-  endif
- endif
- 
--$(2)_CONF_ENV			?=
--$(2)_CONF_OPT			?=
--$(2)_MAKE			?= $(MAKE)
--$(2)_MAKE_ENV			?=
--$(2)_MAKE_OPT			?=
--$(2)_INSTALL_HOST_OPT		?= install
--$(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
--$(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR) install
--$(2)_CLEAN_OPT			?= clean
-+$(3)_CONF_ENV			?=
-+$(3)_CONF_OPT			?=
-+$(3)_MAKE			?= $(MAKE)
-+$(3)_MAKE_ENV			?=
-+$(3)_MAKE_OPT			?=
-+$(3)_INSTALL_HOST_OPT		?= install
-+$(3)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
-+$(3)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR) install
-+$(3)_CLEAN_OPT			?= clean
- 
--$(2)_SRCDIR			= $$($(2)_DIR)/$($(2)_SUBDIR)
--$(2)_BUILDDIR			= $$($(2)_SRCDIR)
-+$(3)_SRCDIR			= $$($(3)_DIR)/$($(3)_SUBDIR)
-+$(3)_BUILDDIR			= $$($(3)_SRCDIR)
- 
- #
- # Configure step. Only define it if not already defined by the package
- # .mk file. And take care of the differences between host and target
- # packages.
- #
--ifndef $(2)_CONFIGURE_CMDS
--ifeq ($(5),target)
-+ifndef $(3)_CONFIGURE_CMDS
-+ifeq ($(6),target)
- 
- # Configure package for target
--define $(2)_CONFIGURE_CMDS
-+define $(3)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-@@ -80,7 +83,7 @@ endef
- else
- 
- # Configure package for host
--define $(2)_CONFIGURE_CMDS
-+define $(3)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
-@@ -96,19 +99,19 @@ endef
- endif
- endif
- 
--$(2)_DEPENDENCIES += host-cmake
-+$(3)_DEPENDENCIES += host-cmake
- 
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
- #
--ifndef $(2)_BUILD_CMDS
--ifeq ($(5),target)
--define $(2)_BUILD_CMDS
-+ifndef $(3)_BUILD_CMDS
-+ifeq ($(6),target)
-+define $(3)_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
- else
--define $(2)_BUILD_CMDS
-+define $(3)_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
-@@ -118,8 +121,8 @@ endif
- # Host installation step. Only define it if not already defined by the
- # package .mk file.
- #
--ifndef $(2)_INSTALL_CMDS
--define $(2)_INSTALL_CMDS
-+ifndef $(3)_INSTALL_CMDS
-+define $(3)_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_HOST_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
-@@ -128,8 +131,8 @@ endif
- # Staging installation step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_INSTALL_STAGING_CMDS
--define $(2)_INSTALL_STAGING_CMDS
-+ifndef $(3)_INSTALL_STAGING_CMDS
-+define $(3)_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
-@@ -138,8 +141,8 @@ endif
- # Target installation step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_INSTALL_TARGET_CMDS
--define $(2)_INSTALL_TARGET_CMDS
-+ifndef $(3)_INSTALL_TARGET_CMDS
-+define $(3)_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
-@@ -148,8 +151,8 @@ endif
- # Clean step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_CLEAN_CMDS
--define $(2)_CLEAN_CMDS
-+ifndef $(3)_CLEAN_CMDS
-+define $(3)_CLEAN_CMDS
- 	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_BUILDDIR)
- endef
- endif
-@@ -158,8 +161,8 @@ endif
- # Uninstall from staging step. Only define it if not already defined by
- # the package .mk file.
- #
--ifndef $(2)_UNINSTALL_STAGING_CMDS
--define $(2)_UNINSTALL_STAGING_CMDS
-+ifndef $(3)_UNINSTALL_STAGING_CMDS
-+define $(3)_UNINSTALL_STAGING_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && sed "s:\(.*\):$$(STAGING_DIR)\1:" install_manifest.txt | xargs rm -f)
- endef
- endif
-@@ -168,15 +171,15 @@ endif
- # Uninstall from target step. Only define it if not already defined
- # by the package .mk file.
- #
--ifndef $(2)_UNINSTALL_TARGET_CMDS
--define $(2)_UNINSTALL_TARGET_CMDS
-+ifndef $(3)_UNINSTALL_TARGET_CMDS
-+define $(3)_UNINSTALL_TARGET_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && sed "s:\(.*\):$$(TARGET_DIR)\1:" install_manifest.txt | xargs rm -f)
- endef
- endif
- 
- # Call the generic package infrastructure to generate the necessary
- # make targets
--$(call GENTARGETS_INNER,$(1),$(2),$(3),$(4),$(5))
-+$(call GENTARGETS_INNER,$(1),$(2),$(3),$(4),$(5),$(6))
- 
- endef
- 
-@@ -188,8 +191,8 @@ endef
- 
- define CMAKETARGETS
- ifeq ($(1),host)
--$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
-+$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
- else
--$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
-+$(call CMAKETARGETS_INNER,$(call pkgname),$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
- endif
- endef
+ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index cfe4633..cc26cdc 100644
+index b1a2928..cfe4633 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -379,13 +379,16 @@ $(BUILD_DIR)/%/.stamp_dircleaned:
- # GENTARGETS_INNER -- generates the make targets needed to build a
- # generic package
+@@ -641,18 +641,16 @@ endef # GENTARGETS_INNER
+ ################################################################################
+ # GENTARGETS -- the target generator macro for generic packages
  #
--#  argument 1 is the lowercase package name
--#  argument 2 is the uppercase package name, including an HOST_ prefix
-+#  argument 1 is the lowercase package name, including an host- prefix
- #             for host packages
--#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#  argument 2 is the lowercase package name, without the host- prefix
- #             for host packages
--#  argument 4 is the package directory prefix
--#  argument 5 is the type (target or host)
-+#  argument 3 is the uppercase package name, including an HOST_ prefix
-+#             for host packages
-+#  argument 4 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 5 is the package directory prefix
-+#  argument 6 is the type (target or host)
+-# Argument 1 is the package directory prefix [mandatory]
+-# Argument 2 is the lowercase package name   [mandatory]
+-# Argument 3 is "target" or "host"           [optional, default: "target"]
++# Argument 1 is "target" or "host"           [optional, default: "target"]
  ################################################################################
  
- define GENTARGETS_INNER
-@@ -397,146 +400,146 @@ define GENTARGETS_INNER
- # these informations have only to be specified once, for both the
- # target and host packages of a given .mk file.
- 
--$(2)_TYPE                       =  $(5)
--$(2)_NAME			=  $(1)
-+$(3)_TYPE                       =  $(6)
-+$(3)_NAME			=  $(1)
- 
- # Keep the package version that may contain forward slashes in the _DL_VERSION
- # variable, then replace all forward slashes ('/') by underscores ('_') to
- # sanitize the package version that is used in paths, directory and file names.
- # Forward slashes may appear in the package's version when pointing to a
- # version control system branch or tag, for example remotes/origin/1_10_stable.
--$(2)_DL_VERSION	= $($(2)_VERSION)
--ifndef $(2)_VERSION
-- ifdef $(3)_VERSION
--  $(2)_VERSION = $($(3)_VERSION)
-+$(3)_DL_VERSION	= $($(3)_VERSION)
-+ifndef $(3)_VERSION
-+ ifdef $(4)_VERSION
-+  $(3)_VERSION = $($(4)_VERSION)
-  else
--  $(2)_VERSION = undefined
-+  $(3)_VERSION = undefined
-  endif
- else
-- $(2)_VERSION = $(subst /,_,$($(2)_VERSION))
-+ $(3)_VERSION = $(subst /,_,$($(3)_VERSION))
- endif
- 
--$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
--$(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
--$(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
-+$(3)_BASE_NAME	=  $(1)-$$($(3)_VERSION)
-+$(3)_DL_DIR	=  $$(DL_DIR)/$$($(3)_BASE_NAME)
-+$(3)_DIR	=  $$(BUILD_DIR)/$$($(3)_BASE_NAME)
- 
--ifneq ($$($(2)_OVERRIDE_SRCDIR),)
--$(2)_VERSION = custom
-+ifneq ($$($(3)_OVERRIDE_SRCDIR),)
-+$(3)_VERSION = custom
- endif
- 
--ifndef $(2)_SOURCE
-- ifdef $(3)_SOURCE
--  $(2)_SOURCE = $($(3)_SOURCE)
-+ifndef $(3)_SOURCE
-+ ifdef $(4)_SOURCE
-+  $(3)_SOURCE = $($(4)_SOURCE)
-  else
--  $(2)_SOURCE			?= $$($(2)_BASE_NAME).tar.gz
-+  $(3)_SOURCE			?= $$($(3)_BASE_NAME).tar.gz
-  endif
- endif
- 
--ifndef $(2)_PATCH
-- ifdef $(3)_PATCH
--  $(2)_PATCH = $($(3)_PATCH)
-+ifndef $(3)_PATCH
-+ ifdef $(4)_PATCH
-+  $(3)_PATCH = $($(4)_PATCH)
-  endif
- endif
- 
--ifndef $(2)_SITE
-- ifdef $(3)_SITE
--  $(2)_SITE = $($(3)_SITE)
-+ifndef $(3)_SITE
-+ ifdef $(4)_SITE
-+  $(3)_SITE = $($(4)_SITE)
-  else
--  $(2)_SITE			?= \
-+  $(3)_SITE			?= \
- 	http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/$(1)
-  endif
- endif
- 
--ifndef $(2)_SITE_METHOD
-- ifdef $(3)_SITE_METHOD
--  $(2)_SITE_METHOD = $($(3)_SITE_METHOD)
-+ifndef $(3)_SITE_METHOD
-+ ifdef $(4)_SITE_METHOD
-+  $(3)_SITE_METHOD = $($(4)_SITE_METHOD)
-  else
- 	# Try automatic detection using the scheme part of the URI
--	$(2)_SITE_METHOD = $(firstword $(subst ://, ,$(call qstrip,$($(2)_SITE))))
-+	$(3)_SITE_METHOD = $(firstword $(subst ://, ,$(call qstrip,$($(3)_SITE))))
-  endif
- endif
- 
--ifeq ($$($(2)_SITE_METHOD),local)
--ifeq ($$($(2)_OVERRIDE_SRCDIR),)
--$(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
-+ifeq ($$($(3)_SITE_METHOD),local)
-+ifeq ($$($(3)_OVERRIDE_SRCDIR),)
-+$(3)_OVERRIDE_SRCDIR = $($(4)_SITE)
- endif
- endif
- 
--$(2)_DEPENDENCIES		?=
--$(2)_INSTALL_STAGING		?= NO
--$(2)_INSTALL_IMAGES		?= NO
--$(2)_INSTALL_TARGET		?= YES
--$(2)_DIR_PREFIX			= $(if $(4),$(4),$(TOP_SRCDIR)/package)
-+$(3)_DEPENDENCIES		?=
-+$(3)_INSTALL_STAGING		?= NO
-+$(3)_INSTALL_IMAGES		?= NO
-+$(3)_INSTALL_TARGET		?= YES
-+$(3)_DIR_PREFIX			= $(if $(5),$(5),$(TOP_SRCDIR)/package)
- 
- # define sub-target stamps
--$(2)_TARGET_INSTALL_TARGET =	$$($(2)_DIR)/.stamp_target_installed
--$(2)_TARGET_INSTALL_STAGING =	$$($(2)_DIR)/.stamp_staging_installed
--$(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
--$(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
--$(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
--$(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
--$(2)_TARGET_SYMLINK =		$$($(2)_DIR)/.stamp_symlinked
--$(2)_TARGET_SYMLINK_SOURCE =    $$($(2)_DIR)/.stamp_symlink_sourced
--$(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
--$(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
--$(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
--$(2)_TARGET_UNINSTALL =		$$($(2)_DIR)/.stamp_uninstalled
--$(2)_TARGET_CLEAN =		$$($(2)_DIR)/.stamp_cleaned
--$(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
-+$(3)_TARGET_INSTALL_TARGET =	$$($(3)_DIR)/.stamp_target_installed
-+$(3)_TARGET_INSTALL_STAGING =	$$($(3)_DIR)/.stamp_staging_installed
-+$(3)_TARGET_INSTALL_IMAGES =	$$($(3)_DIR)/.stamp_images_installed
-+$(3)_TARGET_INSTALL_HOST =      $$($(3)_DIR)/.stamp_host_installed
-+$(3)_TARGET_BUILD =		$$($(3)_DIR)/.stamp_built
-+$(3)_TARGET_CONFIGURE =		$$($(3)_DIR)/.stamp_configured
-+$(3)_TARGET_SYMLINK =		$$($(3)_DIR)/.stamp_symlinked
-+$(3)_TARGET_SYMLINK_SOURCE =    $$($(3)_DIR)/.stamp_symlink_sourced
-+$(3)_TARGET_PATCH =		$$($(3)_DIR)/.stamp_patched
-+$(3)_TARGET_EXTRACT =		$$($(3)_DIR)/.stamp_extracted
-+$(3)_TARGET_SOURCE =		$$($(3)_DIR)/.stamp_downloaded
-+$(3)_TARGET_UNINSTALL =		$$($(3)_DIR)/.stamp_uninstalled
-+$(3)_TARGET_CLEAN =		$$($(3)_DIR)/.stamp_cleaned
-+$(3)_TARGET_DIRCLEAN =		$$($(3)_DIR)/.stamp_dircleaned
- 
- # default extract command
--$(2)_EXTRACT_CMDS ?= \
--	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
--	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-+$(3)_EXTRACT_CMDS ?= \
-+	$$(if $$($(3)_SOURCE),$$(INFLATE$$(suffix $$($(3)_SOURCE))) $(DL_DIR)/$$($(3)_SOURCE) | \
-+	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(3)_DIR) $(TAR_OPTIONS) -)
- 
- # post-steps hooks
--$(2)_POST_DOWNLOAD_HOOKS        ?=
--$(2)_POST_EXTRACT_HOOKS         ?=
--$(2)_POST_PATCH_HOOKS           ?=
--$(2)_PRE_CONFIGURE_HOOKS        ?=
--$(2)_POST_CONFIGURE_HOOKS       ?=
--$(2)_POST_BUILD_HOOKS           ?=
--$(2)_POST_INSTALL_HOOKS         ?=
--$(2)_POST_INSTALL_STAGING_HOOKS ?=
--$(2)_POST_INSTALL_TARGET_HOOKS  ?=
--$(2)_POST_INSTALL_IMAGES_HOOKS  ?=
-+$(3)_POST_DOWNLOAD_HOOKS        ?=
-+$(3)_POST_EXTRACT_HOOKS         ?=
-+$(3)_POST_PATCH_HOOKS           ?=
-+$(3)_PRE_CONFIGURE_HOOKS        ?=
-+$(3)_POST_CONFIGURE_HOOKS       ?=
-+$(3)_POST_BUILD_HOOKS           ?=
-+$(3)_POST_INSTALL_HOOKS         ?=
-+$(3)_POST_INSTALL_STAGING_HOOKS ?=
-+$(3)_POST_INSTALL_TARGET_HOOKS  ?=
-+$(3)_POST_INSTALL_IMAGES_HOOKS  ?=
- 
- # human-friendly targets and target sequencing
- $(1):			$(1)-install
- 
--ifeq ($$($(2)_TYPE),host)
-+ifeq ($$($(3)_TYPE),host)
- $(1)-install:	        $(1)-install-host
- else
- $(1)-install:		$(1)-install-staging $(1)-install-target $(1)-install-images
- endif
- 
--ifeq ($$($(2)_INSTALL_TARGET),YES)
-+ifeq ($$($(3)_INSTALL_TARGET),YES)
- $(1)-install-target:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_TARGET)
-+			$$($(3)_TARGET_INSTALL_TARGET)
- else
- $(1)-install-target:
- endif
- 
--ifeq ($$($(2)_INSTALL_STAGING),YES)
-+ifeq ($$($(3)_INSTALL_STAGING),YES)
- $(1)-install-staging:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_STAGING)
-+			$$($(3)_TARGET_INSTALL_STAGING)
- else
- $(1)-install-staging:
- endif
- 
--ifeq ($$($(2)_INSTALL_IMAGES),YES)
-+ifeq ($$($(3)_INSTALL_IMAGES),YES)
- $(1)-install-images:	$(1)-build \
--			$$($(2)_TARGET_INSTALL_IMAGES)
-+			$$($(3)_TARGET_INSTALL_IMAGES)
- else
- $(1)-install-images:
- endif
- 
--$(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
-+$(1)-install-host:      $(1)-build $$($(3)_TARGET_INSTALL_HOST)
- 
- $(1)-build:		$(1)-configure \
--			$$($(2)_TARGET_BUILD)
-+			$$($(3)_TARGET_BUILD)
- 
--ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+ifeq ($$($(3)_OVERRIDE_SRCDIR),)
- # In the normal case (no package override), the sequence of steps is
- #  source, by downloading
- #  depends
-@@ -544,98 +547,98 @@ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- #  patch
- #  configure
- $(1)-configure:		$(1)-patch \
--			$$($(2)_TARGET_CONFIGURE)
-+			$$($(3)_TARGET_CONFIGURE)
- 
--$(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
-+$(1)-patch:		$(1)-extract $$($(3)_TARGET_PATCH)
- 
- $(1)-extract:		$(1)-depends \
--			$$($(2)_TARGET_EXTRACT)
-+			$$($(3)_TARGET_EXTRACT)
- 
--$(1)-depends:		$(1)-source $$($(2)_DEPENDENCIES)
-+$(1)-depends:		$(1)-source $$($(3)_DEPENDENCIES)
- 
--$(1)-source:		$$($(2)_TARGET_SOURCE)
-+$(1)-source:		$$($(3)_TARGET_SOURCE)
- else
- # In the package override case, the sequence of steps
- #  source, by symlinking
- #  depends
- #  configure
- $(1)-configure:		$(1)-depends \
--			$$($(2)_TARGET_CONFIGURE)
-+			$$($(3)_TARGET_CONFIGURE)
- 
--$(1)-depends:		$(1)-symlink $$($(2)_DEPENDENCIES)
-+$(1)-depends:		$(1)-symlink $$($(3)_DEPENDENCIES)
- 
--$(1)-symlink:		$$($(2)_TARGET_SYMLINK)
-+$(1)-symlink:		$$($(3)_TARGET_SYMLINK)
- 
--$(1)-source:		$$($(2)_TARGET_SYMLINK_SOURCE)
-+$(1)-source:		$$($(3)_TARGET_SYMLINK_SOURCE)
- endif
- 
- $(1)-show-depends:
--			@echo $$($(2)_DEPENDENCIES)
-+			@echo $$($(3)_DEPENDENCIES)
- 
--$(1)-uninstall:		$(1)-configure $$($(2)_TARGET_UNINSTALL)
-+$(1)-uninstall:		$(1)-configure $$($(3)_TARGET_UNINSTALL)
- 
- $(1)-clean:		$(1)-uninstall \
--			$$($(2)_TARGET_CLEAN)
-+			$$($(3)_TARGET_CLEAN)
- 
--$(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
-+$(1)-dirclean:		$$($(3)_TARGET_DIRCLEAN)
- 
- $(1)-clean-for-rebuild:
--			rm -f $$($(2)_TARGET_BUILD)
--			rm -f $$($(2)_TARGET_INSTALL_STAGING)
--			rm -f $$($(2)_TARGET_INSTALL_TARGET)
--			rm -f $$($(2)_TARGET_INSTALL_HOST)
-+			rm -f $$($(3)_TARGET_BUILD)
-+			rm -f $$($(3)_TARGET_INSTALL_STAGING)
-+			rm -f $$($(3)_TARGET_INSTALL_TARGET)
-+			rm -f $$($(3)_TARGET_INSTALL_HOST)
- 
- $(1)-rebuild:		$(1)-clean-for-rebuild all
- 
- $(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
--			rm -f $$($(2)_TARGET_CONFIGURE)
-+			rm -f $$($(3)_TARGET_CONFIGURE)
- 
- $(1)-reconfigure:	$(1)-clean-for-reconfigure all
- 
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
--$$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
--$$($(2)_TARGET_INSTALL_STAGING):	PKG=$(2)
--$$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
--$$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
--$$($(2)_TARGET_BUILD):			PKG=$(2)
--$$($(2)_TARGET_CONFIGURE):		PKG=$(2)
--$$($(2)_TARGET_SYMLINK):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
--$$($(2)_TARGET_SYMLINK_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
--$$($(2)_TARGET_PATCH):			PKG=$(2)
--$$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
--$$($(2)_TARGET_EXTRACT):		PKG=$(2)
--$$($(2)_TARGET_SOURCE):			PKG=$(2)
--$$($(2)_TARGET_UNINSTALL):		PKG=$(2)
--$$($(2)_TARGET_CLEAN):			PKG=$(2)
--$$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
-+$$($(3)_TARGET_INSTALL_TARGET):		PKG=$(3)
-+$$($(3)_TARGET_INSTALL_STAGING):	PKG=$(3)
-+$$($(3)_TARGET_INSTALL_IMAGES):		PKG=$(3)
-+$$($(3)_TARGET_INSTALL_HOST):		PKG=$(3)
-+$$($(3)_TARGET_BUILD):			PKG=$(3)
-+$$($(3)_TARGET_CONFIGURE):		PKG=$(3)
-+$$($(3)_TARGET_SYMLINK):		SRCDIR=$$($(3)_OVERRIDE_SRCDIR)
-+$$($(3)_TARGET_SYMLINK_SOURCE):		SRCDIR=$$($(3)_OVERRIDE_SRCDIR)
-+$$($(3)_TARGET_PATCH):			PKG=$(3)
-+$$($(3)_TARGET_PATCH):			RAWNAME=$(2)
-+$$($(3)_TARGET_EXTRACT):		PKG=$(3)
-+$$($(3)_TARGET_SOURCE):			PKG=$(3)
-+$$($(3)_TARGET_UNINSTALL):		PKG=$(3)
-+$$($(3)_TARGET_CLEAN):			PKG=$(3)
-+$$($(3)_TARGET_DIRCLEAN):		PKG=$(3)
- 
- # Compute the name of the Kconfig option that correspond to the
- # package being enabled. We handle three cases: the special Linux
- # kernel case, the bootloaders case, and the normal packages case.
- ifeq ($(1),linux)
--$(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
--else ifeq ($(4),boot)
--$(2)_KCONFIG_VAR = BR2_TARGET_$(2)
-+$(3)_KCONFIG_VAR = BR2_LINUX_KERNEL
-+else ifeq ($(5),boot)
-+$(3)_KCONFIG_VAR = BR2_TARGET_$(3)
- else
--$(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
-+$(3)_KCONFIG_VAR = BR2_PACKAGE_$(3)
- endif
- 
- # add package to the general list of targets if requested by the buildroot
- # configuration
--ifeq ($$($$($(2)_KCONFIG_VAR)),y)
-+ifeq ($$($$($(3)_KCONFIG_VAR)),y)
- 
- TARGETS += $(1)
- 
--ifeq ($$($(2)_SITE_METHOD),svn)
-+ifeq ($$($(3)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
--else ifeq ($$($(2)_SITE_METHOD),git)
-+else ifeq ($$($(3)_SITE_METHOD),git)
- DL_TOOLS_DEPENDENCIES += git
--else ifeq ($$($(2)_SITE_METHOD),bzr)
-+else ifeq ($$($(3)_SITE_METHOD),bzr)
- DL_TOOLS_DEPENDENCIES += bzr
- endif # SITE_METHOD
- 
--endif # $(2)_KCONFIG_VAR
-+endif # $(3)_KCONFIG_VAR
- endef # GENTARGETS_INNER
- 
- ################################################################################
-@@ -647,10 +650,10 @@ endef # GENTARGETS_INNER
  define GENTARGETS
- ifeq ($(1),host)
+-ifeq ($(3),host)
++ifeq ($(1),host)
  # In the case of host packages, turn the package name "pkg" into "host-pkg"
--$(call GENTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
-+$(call GENTARGETS_INNER,$(1)-$(call pkgname),$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
+-$(call GENTARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
++$(call GENTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
  else
  # In the case of target packages, keep the package name "pkg"
--$(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
-+$(call GENTARGETS_INNER,$(call pkgname),$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
+-$(call GENTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
++$(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
  endif
  endef
  
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index d61ca41..c96512b 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -30,4 +30,4 @@ define ACPID_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,acpid))
++$(eval $(call GENTARGETS))
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 1bf4d81..91f6d1e 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -44,4 +44,4 @@ define AXEL_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,axel))
++$(eval $(call GENTARGETS))
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index 276c6be..66a7722 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
+@@ -28,4 +28,4 @@ define BSDIFF_CLEAN_CMDS
+ 	rm -f $(@D)/bsdiff $(@D)/bspatch
+ endef
+ 
+-$(eval $(call GENTARGETS,package,bsdiff))
++$(eval $(call GENTARGETS))
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 8998ca0..bc89bd8 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -176,7 +176,7 @@ define BUSYBOX_CLEAN_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,busybox))
++$(eval $(call GENTARGETS))
+ 
+ busybox-menuconfig: busybox-patch
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) menuconfig
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index 123e579..d3bb2b0 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -101,5 +101,5 @@ define HOST_BZIP2_INSTALL_CMDS
+ 	$(MAKE) PREFIX=$(HOST_DIR)/usr -C $(@D) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,bzip2))
+-$(eval $(call GENTARGETS,package,bzip2,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+\ No newline at end of file
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index 9d524cd..d46c2a6 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -17,4 +17,4 @@ define CGILUA_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/lua/cgilua.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cgilua))
++$(eval $(call GENTARGETS))
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index fa47a5f..52567dd 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -14,5 +14,5 @@ define HOST_CLOOP_INSTALL_CMDS
+ 	$(INSTALL) -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cloop))
+-$(eval $(call GENTARGETS,package,cloop,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index efff5a5..263c343 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -18,5 +18,5 @@ define HOST_CMAKE_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cmake))
+-$(eval $(call GENTARGETS,package,cmake,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+\ No newline at end of file
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index 1baed83..28b822c 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -17,4 +17,4 @@ define COPAS_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/lua/copas.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,copas))
++$(eval $(call GENTARGETS))
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index b947571..81125d7 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
+@@ -17,4 +17,4 @@ define COXPCALL_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/lua/coxpcall.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,coxpcall))
++$(eval $(call GENTARGETS))
+diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
+index 9073ae5..4a0ec1c 100644
+--- a/package/cramfs/cramfs.mk
++++ b/package/cramfs/cramfs.mk
+@@ -29,5 +29,5 @@ define HOST_CRAMFS_INSTALL_CMDS
+  install -D -m 755 $(@D)/cramfsck $(HOST_DIR)/usr/bin/cramfsck
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cramfs))
+-$(eval $(call GENTARGETS,package,cramfs,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index cca6749..dd454bf 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -18,4 +18,4 @@ define DHCPDUMP_INSTALL_TARGET_CMDS
+ 	install -m 0755 -D $(@D)/dhcpdump $(TARGET_DIR)/usr/bin/dhcpdump
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dhcpdump))
++$(eval $(call GENTARGETS))
+diff --git a/package/dhrystone/dhrystone.mk b/package/dhrystone/dhrystone.mk
+index a03beec..45eb91c 100644
+--- a/package/dhrystone/dhrystone.mk
++++ b/package/dhrystone/dhrystone.mk
+@@ -24,7 +24,7 @@ define DHRYSTONE_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/dhrystone
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dhrystone))
++$(eval $(call GENTARGETS))
+ 
+ $(BUILD_DIR)/dhrystone-$(DHRYSTONE_VERSION)/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index d8f4d77..5b7ec0d 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -64,4 +64,4 @@ define DNSMASQ_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/dnsmasq.8
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dnsmasq))
++$(eval $(call GENTARGETS))
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index c2d763d..e1b6a33 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -34,4 +34,4 @@ define DOSFSTOOLS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dosfstools))
++$(eval $(call GENTARGETS))
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
+index ab31afb..b9fed0b 100644
+--- a/package/dsp-tools/dsp-tools.mk
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -15,4 +15,4 @@ define DSP_TOOLS_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/dsp-, load probe test exec)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dsp-tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index 67c0d92..6cfdfdc 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -27,4 +27,4 @@ define EBTABLES_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/sbin/ebtables
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ebtables))
++$(eval $(call GENTARGETS))
+diff --git a/package/eeprog/eeprog.mk b/package/eeprog/eeprog.mk
+index e61aecb..40b059e 100644
+--- a/package/eeprog/eeprog.mk
++++ b/package/eeprog/eeprog.mk
+@@ -19,4 +19,4 @@ define EEPROG_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/eeprog
+ endef
+ 
+-$(eval $(call GENTARGETS,package,eeprog))
++$(eval $(call GENTARGETS))
+diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
+index 58d2624..321e466 100644
+--- a/package/ezxml/ezxml.mk
++++ b/package/ezxml/ezxml.mk
+@@ -37,4 +37,4 @@ define EZXML_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) -f GNUmakefile clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ezxml))
++$(eval $(call GENTARGETS))
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 37f82ea..892043e 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -15,4 +15,4 @@ define FBGRAB_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/fbgrab
+ endef
+ 
+-$(eval $(call GENTARGETS,package,fbgrab))
++$(eval $(call GENTARGETS))
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index b5b5ab8..95d8aa7 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -29,4 +29,4 @@ define FBSET_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,fbset))
++$(eval $(call GENTARGETS))
+diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
+index c595678..8144a16 100644
+--- a/package/fconfig/fconfig.mk
++++ b/package/fconfig/fconfig.mk
+@@ -25,4 +25,4 @@ define FCONFIG_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,fconfig))
++$(eval $(call GENTARGETS))
+diff --git a/package/gadgetfs-test/gadgetfs-test.mk b/package/gadgetfs-test/gadgetfs-test.mk
+index 1464ec1..46bfd24 100644
+--- a/package/gadgetfs-test/gadgetfs-test.mk
++++ b/package/gadgetfs-test/gadgetfs-test.mk
+@@ -29,4 +29,4 @@ define GADGETFS_TEST_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,gadgetfs-test))
++$(eval $(call GENTARGETS))
+diff --git a/package/gdisk/gdisk.mk b/package/gdisk/gdisk.mk
+index ef4627d..2400727 100644
+--- a/package/gdisk/gdisk.mk
++++ b/package/gdisk/gdisk.mk
+@@ -36,4 +36,4 @@ endef
+ 
+ endif
+ 
+-$(eval $(call GENTARGETS,package,gdisk))
++$(eval $(call GENTARGETS))
+diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
+index 10b8d7d..d6f4875 100644
+--- a/package/genromfs/genromfs.mk
++++ b/package/genromfs/genromfs.mk
+@@ -27,5 +27,5 @@ define HOST_GENROMFS_INSTALL_CMDS
+   $(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,genromfs))
+-$(eval $(call GENTARGETS,package,genromfs,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+\ No newline at end of file
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index 4e3cfe5..d19dff0 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -33,4 +33,4 @@ define HDPARM_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,hdparm))
++$(eval $(call GENTARGETS))
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 7a0cef8..e4f72a5 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -18,4 +18,4 @@ define HWDATA_UNINSTALL_TARGET_CMDS
+ 	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+ endef
+ 
+-$(eval $(call GENTARGETS,package,hwdata))
++$(eval $(call GENTARGETS))
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index d96bad3..8628eaf 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -19,4 +19,4 @@ define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,i2c-tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index c335be3..a938ae7 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -33,4 +33,4 @@ define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/etc/input-event-daemon.conf
+ endef
+ 
+-$(eval $(call GENTARGETS,package,input-event-daemon))
++$(eval $(call GENTARGETS))
+diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
+index daf0755..9dc4eee 100644
+--- a/package/input-tools/input-tools.mk
++++ b/package/input-tools/input-tools.mk
+@@ -45,4 +45,4 @@ define INPUT_TOOLS_CLEAN_CMDS
+ 	rm -f $(addprefix $(@D)/,$(INPUT_TOOLS_TARGETS_y))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,input-tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index de7e1ff..83eea07 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -28,4 +28,4 @@ define IOSTAT_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/iostat.8
+ endef
+ 
+-$(eval $(call GENTARGETS,package,iostat))                                                   
++$(eval $(call GENTARGETS))
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 630fab4..c97710e 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -55,4 +55,4 @@ define IPROUTE2_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/sbin/, $(IPROUTE2_TARGET_SBINS))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,iproute2))
++$(eval $(call GENTARGETS))
+diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
+index e1935c6..cbc6886 100644
+--- a/package/irda-utils/irda-utils.mk
++++ b/package/irda-utils/irda-utils.mk
+@@ -43,4 +43,4 @@ define IRDA_UTILS_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,$(IRDA_UTILS_SBINS-))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,irda-utils))
++$(eval $(call GENTARGETS))
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 0f5dd0e..4c66999 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -32,4 +32,4 @@ define IW_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/iw.8*
+ endef
+ 
+-$(eval $(call GENTARGETS,package,iw))
++$(eval $(call GENTARGETS))
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 6124e1a..3ffc49c 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -20,5 +20,5 @@ define LIBAIO_INSTALL_TARGET_CMDS
+   $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libaio))
++$(eval $(call GENTARGETS))
+ 
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 458f8e8..a7b33a0 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -34,5 +34,5 @@ define HOST_LIBCAP_INSTALL_CMDS
+ 		prefix=/usr lib=lib install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libcap))
+-$(eval $(call GENTARGETS,package,libcap,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 89987d6..3686d55 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -18,4 +18,4 @@ define LIBERATION_CLEAN_CMDS
+ 	rm -rf $(LIBERATION_TARGET_DIR)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,liberation))
++$(eval $(call GENTARGETS))
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 3f7642f..ea6a329 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -64,4 +64,4 @@ define LIBNSS_CLEAN_CMDS
+ 					BUILD_OPT=1
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libnss))
++$(eval $(call GENTARGETS))
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index d9ac41b..0b97723 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -39,4 +39,4 @@ define LIBSVGTINY_CLEAN_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libsvgtiny))
++$(eval $(call GENTARGETS))
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 1ea859a..4df64fc 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -38,5 +38,5 @@ define LIBV4L_INSTALL_TARGET_CMDS
+ 			DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install; done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libv4l))
++$(eval $(call GENTARGETS))
+ 
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 52d89d5..793f498 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -29,6 +29,6 @@ define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libxml-parser-perl))
+-$(eval $(call GENTARGETS,package,libxml-parser-perl,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+ 
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index 440b8b9..8776afc 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -48,4 +48,4 @@ define LINUX_FUSION_UNINSTALL_TARGET_CMDS
+ 	rm -f $(LINUX_FUSION_ETC_DIR)/40-fusion.rules
+ endef
+ 
+-$(eval $(call GENTARGETS,package,linux-fusion))
++$(eval $(call GENTARGETS))
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index eec969d..99a8e3b 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -42,4 +42,4 @@ define LM_SENSORS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lm-sensors))
++$(eval $(call GENTARGETS))
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index fefb34f..0c33651 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -27,4 +27,4 @@ define LMBENCH_CLEAN_CMDS
+ 	$(MAKE) -C $(@D)/src clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lmbench))
++$(eval $(call GENTARGETS))
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index 031712e..4a7f25c 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -30,4 +30,4 @@ define LOCKFILE_PROGS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lockfile-progs))
++$(eval $(call GENTARGETS))
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 0e41d6a..20317f1 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -33,4 +33,4 @@ define LOGROTATE_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,logrotate))
++$(eval $(call GENTARGETS))
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 167cb20..547382f 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -63,4 +63,4 @@ define LSOF_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lsof))
++$(eval $(call GENTARGETS))
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index e7947f1..23094c8 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -39,4 +39,4 @@ define LTRACE_INSTALL_TARGET_CMDS
+ 	$(LTRACE_INSTALL_DOCUMENTATION)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ltrace))
++$(eval $(call GENTARGETS))
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 598eea1..c95e18a 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -121,4 +121,4 @@ define LUA_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lua))
++$(eval $(call GENTARGETS))
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index 5f1119a..928e154 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -28,4 +28,4 @@ define LUAFILESYSTEM_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,luafilesystem))
++$(eval $(call GENTARGETS))
+diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
+index e0faf03..daca248 100644
+--- a/package/luasocket/luasocket.mk
++++ b/package/luasocket/luasocket.mk
+@@ -33,4 +33,4 @@ define LUASOCKET_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) -f makefile clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,luasocket))
++$(eval $(call GENTARGETS))
+diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+index b7c9343..31dc95d 100644
+--- a/package/makedevs/makedevs.mk
++++ b/package/makedevs/makedevs.mk
+@@ -31,5 +31,5 @@ define HOST_MAKEDEVS_INSTALL_CMDS
+ 	install -D -m 755 $(@D)/makedevs $(HOST_DIR)/usr/bin/makedevs
+ endef
+ 
+-$(eval $(call GENTARGETS,package,makedevs))
+-$(eval $(call GENTARGETS,package,makedevs,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
+index 0ad8eba..7d3f5b2 100644
+--- a/package/memstat/memstat.mk
++++ b/package/memstat/memstat.mk
+@@ -24,4 +24,4 @@ define MEMSTAT_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/memstat
+ endef
+ 
+-$(eval $(call GENTARGETS,package,memstat))
++$(eval $(call GENTARGETS))
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index a92c5d2..00e3124 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -26,4 +26,4 @@ define MEMTESTER_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,memtester))
++$(eval $(call GENTARGETS))
+diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+index 5f6315f..570a8c2 100644
+--- a/package/midori/midori.mk
++++ b/package/midori/midori.mk
+@@ -35,4 +35,4 @@ define MIDORI_INSTALL_TARGET_CMDS
+        (cd $(@D); ./waf --destdir=$(TARGET_DIR) install)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,midori))
++$(eval $(call GENTARGETS))
+diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
+index 01a8b5f..3fa2a58 100644
+--- a/package/mii-diag/mii-diag.mk
++++ b/package/mii-diag/mii-diag.mk
+@@ -32,4 +32,4 @@ define MII_DIAG_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,mii-diag))
++$(eval $(call GENTARGETS))
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 9ebb857..99b54bc 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -24,4 +24,4 @@ define MROUTED_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,mrouted))
++$(eval $(call GENTARGETS))
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 78ab765..adce4c4 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -98,5 +98,5 @@ define MTD_INSTALL_TARGET_CMDS
+  done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,mtd))
+-$(eval $(call GENTARGETS,package,mtd,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
+index f55f510..17eb189 100644
+--- a/package/multimedia/gst-dsp/gst-dsp.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
+@@ -16,4 +16,4 @@ endef
+ 
+ GST_DSP_DEPENDENCIES = gstreamer tidsp-binaries
+ 
+-$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
+index 726ef83..f3956bc 100644
+--- a/package/multimedia/gst-omapfb/gst-omapfb.mk
++++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
+@@ -16,4 +16,4 @@ endef
+ 
+ GST_OMAPFB_DEPENDENCIES = gstreamer
+ 
+-$(eval $(call GENTARGETS,package/multimedia,gst-omapfb))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/live555/live555.mk b/package/multimedia/live555/live555.mk
+index 45a0375..0051ea0 100644
+--- a/package/multimedia/live555/live555.mk
++++ b/package/multimedia/live555/live555.mk
+@@ -45,4 +45,4 @@ define LIVE555_UNINSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,live555))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index f735464..4c03440 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -145,4 +145,4 @@ define MPLAYER_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,mplayer))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/python-mad/python-mad.mk b/package/multimedia/python-mad/python-mad.mk
+index 52d13a6..7d898ed 100644
+--- a/package/multimedia/python-mad/python-mad.mk
++++ b/package/multimedia/python-mad/python-mad.mk
+@@ -38,4 +38,4 @@ define PYTHON_MAD_INSTALL_TARGET_CMDS
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,python-mad))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+index 102791f..0b64fb8 100644
+--- a/package/multimedia/tidsp-binaries/tidsp-binaries.mk
++++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+@@ -10,4 +10,4 @@ define TIDSP_BINARIES_UNINSTALL_TARGET_CMDS
+ 	$(RM) -r $(TARGET_DIR)/lib/dsp
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,tidsp-binaries))
++$(eval $(call GENTARGETS))
+diff --git a/package/mypkg/mypkg.mk b/package/mypkg/mypkg.mk
+new file mode 100644
+index 0000000..989ee3e
+--- /dev/null
++++ b/package/mypkg/mypkg.mk
+@@ -0,0 +1,14 @@
++
++MYPKG_SITE        = /tmp/mypkg
++MYPKG_SITE_METHOD = local
++
++define MYPKG_BUILD_CMDS
++	(cd $(@D) ; \
++		$(TARGET_CC) -o hello hello.c)
++endef
++
++define MYPKG_INSTALL_TARGET_CMDS
++	install -m 0755 -D $(@D)/hello $(TARGET_DIR)/usr/bin/hello
++endef
++
++$(eval $(call GENTARGETS))
+diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+index 98d1504..db76021 100644
+--- a/package/netplug/netplug.mk
++++ b/package/netplug/netplug.mk
+@@ -25,4 +25,4 @@ define NETPLUG_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,netplug))
++$(eval $(call GENTARGETS))
+diff --git a/package/nuttcp/nuttcp.mk b/package/nuttcp/nuttcp.mk
+index e3867ea..8c0203c 100644
+--- a/package/nuttcp/nuttcp.mk
++++ b/package/nuttcp/nuttcp.mk
+@@ -22,4 +22,4 @@ define NUTTCP_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/nuttcp
+ endef
+ 
+-$(eval $(call GENTARGETS,package,nuttcp))
++$(eval $(call GENTARGETS))
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 03a8a02..9ed4d5b 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -38,4 +38,4 @@ define OLSR_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,olsr))
++$(eval $(call GENTARGETS))
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 0163ef8..8080eea 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -120,4 +120,4 @@ define OPENSSL_UNINSTALL_CMDS
+ 	rm -rf $(addprefix $(STAGING_DIR)/usr/lib/,ssl engines libcrypto* libssl* pkgconfig/libcrypto.pc)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,openssl))
++$(eval $(call GENTARGETS))
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 782d348..52f5f67 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -45,4 +45,4 @@ define PCIUTILS_INSTALL_TARGET_CMDS
+ 		SHARED=$(PCIUTILS_SHARED) install-lib
+ endef
+ 
+-$(eval $(call GENTARGETS,package,pciutils))
++$(eval $(call GENTARGETS))
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index e996824..cb7c0e3 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -43,4 +43,4 @@ define PORTMAP_UNINSTALL_TARGET_CMDS
+ 		$(addsuffix .8,$(PORTMAP_SBINS)))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,portmap))
++$(eval $(call GENTARGETS))
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 05c1c32..2137f6a 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -102,4 +102,4 @@ define PPPD_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,pppd))
++$(eval $(call GENTARGETS))
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 605f30d..77ae34d 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -25,4 +25,4 @@ define PPTP_LINUX_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/pptp.8
+ endef
+ 
+-$(eval $(call GENTARGETS,package,pptp-linux))
++$(eval $(call GENTARGETS))
+diff --git a/package/procps/procps.mk b/package/procps/procps.mk
+index a279987..8228052 100644
+--- a/package/procps/procps.mk
++++ b/package/procps/procps.mk
+@@ -20,4 +20,4 @@ define PROCPS_INSTALL_TARGET_CMDS
+ 		ldconfig=true install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,procps))
++$(eval $(call GENTARGETS))
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index 048930b..4c8a891 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -18,4 +18,4 @@ define PYTHON_SERIAL_INSTALL_TARGET_CMDS
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,python-serial))
++$(eval $(call GENTARGETS))
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ff67058..a6c0f1d 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -637,4 +637,4 @@ define QT_UNINSTALL_TARGET_CMDS
+ 	-rm $(TARGET_DIR)/usr/lib/libphonon.so.*
+ endef
+ 
+-$(eval $(call GENTARGETS,package,qt))
++$(eval $(call GENTARGETS))
+diff --git a/package/rings/rings.mk b/package/rings/rings.mk
+index 36fe666..4862fad 100644
+--- a/package/rings/rings.mk
++++ b/package/rings/rings.mk
+@@ -26,4 +26,4 @@ define RINGS_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,rings))
++$(eval $(call GENTARGETS))
+diff --git a/package/rsh-redone/rsh-redone.mk b/package/rsh-redone/rsh-redone.mk
+index 6217cb1..0c2b838 100644
+--- a/package/rsh-redone/rsh-redone.mk
++++ b/package/rsh-redone/rsh-redone.mk
+@@ -33,4 +33,4 @@ define RSH_REDONE_UNINSTALL_TARGET_CMDS
+ 		$(addprefix $(TARGET_DIR)/usr/sbin/,$(rsh-redone-sbin-y))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,rsh-redone))
++$(eval $(call GENTARGETS))
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 0c604d9..2f5787c 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -51,4 +51,4 @@ define SLANG_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,slang))
++$(eval $(call GENTARGETS))
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 7aa8ca9..4d0ad51 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -72,5 +72,5 @@ define HOST_SQUASHFS_INSTALL_CMDS
+    -C $(@D)/squashfs-tools/ INSTALL_DIR=$(HOST_DIR)/usr/bin install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,squashfs))
+-$(eval $(call GENTARGETS,package,squashfs,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/squashfs3/squashfs3.mk b/package/squashfs3/squashfs3.mk
+index 69aab14..178543b 100644
+--- a/package/squashfs3/squashfs3.mk
++++ b/package/squashfs3/squashfs3.mk
+@@ -25,6 +25,6 @@ define HOST_SQUASHFS3_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/squashfs-tools/ INSTALL_DIR=$(HOST_DIR)/usr/bin install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,squashfs3))
+-$(eval $(call GENTARGETS,package,squashfs3,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+ 
+diff --git a/package/sredird/sredird.mk b/package/sredird/sredird.mk
+index ad91f6a..44fe16d 100644
+--- a/package/sredird/sredird.mk
++++ b/package/sredird/sredird.mk
+@@ -24,4 +24,4 @@ define SREDIRD_CLEAN_CMDS
+ 	rm -f $(@D)/sredird
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sredird))
++$(eval $(call GENTARGETS))
+diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
+index 2dc383d..9a5aede 100644
+--- a/package/sstrip/sstrip.mk
++++ b/package/sstrip/sstrip.mk
+@@ -41,5 +41,5 @@ define HOST_SSTRIP_UNINSTALL_CMDS
+ 	rm -f $(HOST_DIR)/usr/bin/$(HOST_SSTRIP_BINARY)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sstrip))
+-$(eval $(call GENTARGETS,package,sstrip,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/statserial/statserial.mk b/package/statserial/statserial.mk
+index b6a8a0f..8c39693 100644
+--- a/package/statserial/statserial.mk
++++ b/package/statserial/statserial.mk
+@@ -16,4 +16,4 @@ define STATSERIAL_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/statserial $(TARGET_DIR)/usr/bin/statserial
+ endef
+ 
+-$(eval $(call GENTARGETS,package,statserial))
++$(eval $(call GENTARGETS))
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 11aee2a..b28b827 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -52,4 +52,4 @@ define SYSKLOGD_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sysklogd))
++$(eval $(call GENTARGETS))
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index adcc1ad..40c6b5e 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -46,4 +46,4 @@ define SYSVINIT_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sysvinit))
++$(eval $(call GENTARGETS))
+diff --git a/package/uboot-mkimage/uboot-mkimage.mk b/package/uboot-mkimage/uboot-mkimage.mk
+index d8a8fbb..35316ae 100644
+--- a/package/uboot-mkimage/uboot-mkimage.mk
++++ b/package/uboot-mkimage/uboot-mkimage.mk
+@@ -27,5 +27,5 @@ define HOST_UBOOT_MKIMAGE_INSTALL_CMDS
+ 	install -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin
+ endef
+ 
+-$(eval $(call GENTARGETS,package,uboot-mkimage))
+-$(eval $(call GENTARGETS,package,uboot-mkimage,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index 4b61ce4..017237e 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -131,4 +131,4 @@ define UDEV_UNINSTALL_TARGET_CMDS
+ 	rm -rf $(TARGET_DIR)/lib/udev
+ endef
+ 
+-$(eval $(call GENTARGETS,package,udev))
++$(eval $(call GENTARGETS))
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 620c5d0..7b982d8 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -25,5 +25,5 @@ define USB_MODESWITCH_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
+ endef
+ 
+-$(eval $(call GENTARGETS,package,usb_modeswitch))
++$(eval $(call GENTARGETS))
+ 
+diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
+index 5925e5e..08feb13 100644
+--- a/package/usbmount/usbmount.mk
++++ b/package/usbmount/usbmount.mk
+@@ -19,4 +19,4 @@ define USBMOUNT_UNINSTALL_TARGET_CMDS
+ 	rm -rf $(TARGET_DIR)/etc/usbmount $(TARGET_DIR)/sbin/usbmount
+ endef
+ 
+-$(eval $(call GENTARGETS,package,usbmount))
++$(eval $(call GENTARGETS))
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 64a56cc..4490287 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -51,4 +51,4 @@ define VSFTPD_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,vsftpd))
++$(eval $(call GENTARGETS))
+diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
+index d47fbcd..48a3adf 100644
+--- a/package/whetstone/whetstone.mk
++++ b/package/whetstone/whetstone.mk
+@@ -24,7 +24,7 @@ define WHETSTONE_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/whetstone
+ endef
+ 
+-$(eval $(call GENTARGETS,package,whetstone))
++$(eval $(call GENTARGETS))
+ 
+ $(BUILD_DIR)/whetstone-$(WHETSTONE_VERSION)/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+diff --git a/package/wipe/wipe.mk b/package/wipe/wipe.mk
+index d227389..54283f9 100644
+--- a/package/wipe/wipe.mk
++++ b/package/wipe/wipe.mk
+@@ -33,4 +33,4 @@ define WIPE_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,wipe))
++$(eval $(call GENTARGETS))
+diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
+index d8358ba..b059839 100644
+--- a/package/wireless_tools/wireless_tools.mk
++++ b/package/wireless_tools/wireless_tools.mk
+@@ -42,4 +42,4 @@ define WIRELESS_TOOLS_UNINSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" uninstall
+ endef
+ 
+-$(eval $(call GENTARGETS,package,wireless_tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
+index c0f9c8b..f9ab334 100644
+--- a/package/wsapi/wsapi.mk
++++ b/package/wsapi/wsapi.mk
+@@ -18,4 +18,4 @@ define WSAPI_UNINSTALL_TARGET_CMDS
+ 	rm -rf "$(TARGET_DIR)/usr/share/lua/wsapi"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,wsapi))
++$(eval $(call GENTARGETS))
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
+index 525b09f..e6dd312 100644
+--- a/package/xavante/xavante.mk
++++ b/package/xavante/xavante.mk
+@@ -20,4 +20,4 @@ define XAVANTE_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/sajax.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,xavante))
++$(eval $(call GENTARGETS))
+diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+index bcaacf3..e44b75f 100644
+--- a/package/xl2tp/xl2tp.mk
++++ b/package/xl2tp/xl2tp.mk
+@@ -30,4 +30,4 @@ define XL2TP_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,xl2tp))
++$(eval $(call GENTARGETS))
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index dcd2548..4525bfc 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -75,5 +75,5 @@ define HOST_ZLIB_UNINSTALL_TARGET_CMDS
+ 	$(MAKE1) -C $(@D) uninstall
+ endef
+ 
+-$(eval $(call GENTARGETS,package,zlib))
+-$(eval $(call GENTARGETS,package,zlib,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
 -- 
 1.7.4.1
