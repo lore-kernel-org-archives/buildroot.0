@@ -1,62 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 07:52:05 +0200
-Subject: [Buildroot] [PATCH 06/12] package: add helper functions to get
-	package name and directory magically
+Date: Wed, 20 Jul 2011 07:52:08 +0200
+Subject: [Buildroot] [PATCH 09/12] package: remove useless arguments from
+	CMAKETARGETS
 In-Reply-To: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <960782363e92696f2a76b1f7ae2eb667a107da4c.1311141087.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9f54dd77e0bf2346a3b7cf156562a0f05bbd2a4c.1311141088.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds the functions "pkgname" and "pkgdir", which can then
-be used to automatically find the name of the package and the
-directory of the package which does the call to
-GENTARGETS/AUTOTARGETS/CMAKETARGETS. These functions use the
-$(MAKEFILE_LIST) variable, which make automatically makes available,
-and which contains the list of included Makefiles, with the current
-Makefile being last. Thanks to this variable and a little bit of
-string manipulation, we can easily find out automatically the package
-name and the directory it is part of.
-
-These functions are used in later commits to simplify the GENTARGETS,
-AUTOTARGETS and CMAKETARGETS calls.
+Thanks to the pkgdir and pkgname functions, we can rewrite the
+GENTARGETS macro in a way that avoids the need for each package to
+repeat its name and the directory in which it is present.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |   18 ++++++++++++++++++
- 1 files changed, 18 insertions(+), 0 deletions(-)
+ package/Makefile.cmake.in                   |   10 ++++------
+ package/cdrkit/cdrkit.mk                    |    4 ++--
+ package/multimedia/libcuefile/libcuefile.mk |    2 +-
+ package/yajl/yajl.mk                        |    2 +-
+ 4 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 37fc969..b1a2928 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -55,6 +55,24 @@ define KCONFIG_DISABLE_OPT
-        echo "# $(1) is not set" >> $(2)
- endef
+diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
+index 1263eb9..b48e09a 100644
+--- a/package/Makefile.cmake.in
++++ b/package/Makefile.cmake.in
+@@ -183,15 +183,13 @@ endef
+ ################################################################################
+ # CMAKETARGETS -- the target generator macro for CMake packages
+ #
+-# Argument 1 is the package directory prefix [mandatory]
+-# Argument 2 is the lowercase package name   [mandatory]
+-# Argument 3 is "target" or "host"           [optional, default: "target"]
++# Argument 1 is "target" or "host"           [optional, default: "target"]
+ ################################################################################
  
-+# Helper functions to determine the name of a package and its
-+# directory from its makefile path, using the $(MAKEFILE_LIST)
-+# variable provided by make. This is used by the *TARGETS macros to
-+# automagically find where the package is located. Note that the
-+# pkgdir macro is carefully written to handle the case of the Linux
-+# package, for which the package directory is an empty string.
-+define pkgmakefile
-+$(dir $(lastword $(MAKEFILE_LIST)))
-+endef
-+
-+define pkgname
-+$(lastword $(subst /, ,$(call pkgmakefile)))
-+endef
-+
-+define pkgdir
-+$(patsubst %$(call pkgname)/,%,$(call pkgmakefile))
-+endef
-+
- # Define extractors for different archive suffixes
- INFLATE.bz2  = $(BZCAT)
- INFLATE.gz   = $(ZCAT)
+ define CMAKETARGETS
+-ifeq ($(3),host)
+-$(call CMAKETARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
++ifeq ($(1),host)
++$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
+ else
+-$(call CMAKETARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
++$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
+ endif
+ endef
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index a57a8fd..9eebe6e 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -20,5 +20,5 @@ CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
+ HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
+ HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
+ 
+-$(eval $(call CMAKETARGETS,package,cdrkit))
+-$(eval $(call CMAKETARGETS,package,cdrkit,host))
++$(eval $(call CMAKETARGETS))
++$(eval $(call CMAKETARGETS,host))
+diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
+index 86ec070..a0c8054 100644
+--- a/package/multimedia/libcuefile/libcuefile.mk
++++ b/package/multimedia/libcuefile/libcuefile.mk
+@@ -20,4 +20,4 @@ endef
+ LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
+ LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
+ 
+-$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
++$(eval $(call CMAKETARGETS))
+diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
+index e67a7da..723cce4 100644
+--- a/package/yajl/yajl.mk
++++ b/package/yajl/yajl.mk
+@@ -8,4 +8,4 @@ YAJL_VERSION = 2.0.2
+ YAJL_SITE = git://github.com/lloyd/yajl.git
+ YAJL_INSTALL_STAGING = YES
+ 
+-$(eval $(call CMAKETARGETS,package,yajl))
++$(eval $(call CMAKETARGETS))
 -- 
 1.7.4.1
