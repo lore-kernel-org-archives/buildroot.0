@@ -1,36 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Jul 2011 07:13:36 +0200
-Subject: [Buildroot] [PATCH 2 of 3] Allow BR2_PRIMARY_SITE and
- BR2_BACKUP_SITE to be a file:// URL
-In-Reply-To: <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
-References: <patchbomb.1300174025@localhost6.localdomain6>
- <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
-Message-ID: <20110720071336.1958f634@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Jul 2011 13:00:38 +0200
+Subject: [Buildroot] devtmpfs and initramfs
+In-Reply-To: <874o2h2pif.fsf@macbook.be.48ers.dk>
+References: <201107191222.19313.arnout@mind.be>
+ <201107201057.48006.arnout@mind.be> <874o2h2pif.fsf@macbook.be.48ers.dk>
+Message-ID: <201107201300.39616.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-Le Tue, 15 Mar 2011 08:27:07 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+On Wednesday 20 July 2011 12:52:08, Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> Hi,
+> 
+>  >> > #!/bin/sh
+>  >> > # devtmpfs does not get automounted for initramfs'es
+>  >> > /bin/mount -t devtmpfs devtmpfs /dev
+>  >> > exec /sbin/init $*
+>  >> > 
+>  >> > Unless BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
+>  >> 
+>  >> Sorry, but this solution smells just like my socks. I think wk can find
+>  >> a better one :)
+> 
+>  Arnout>  Yeah, I also would prefer not to proliferate the number of
+>  Arnout> ways that the init process is influenced...
+> 
+> I don't see what there is to dislike. With this, the non-standard
+> behaviour of initramfs'es is nicely self contained within the initramfs
+> support code, and nothing else needs to know about it. There's nothing
+> to tweak, and it just works out of the box (tm), no matter what init
+> implementation or custom inittab is used.
 
->  define DOWNLOAD
->  	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-> -		$(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
-> +		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
-> +			file) $(call $(DL_MODE)_FILE,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
-> +			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
-> +		esac ; \
 
-Does this bring any additional feature that using the existing
-BR2_DL_DIR option ?
+ But next thing you know, some other piece of Makefile also wants to do 
+something with /init...
 
-Thomas
+ Since it potentially interacts with other parts of the build, I would argue 
+that it _should_not_ be self-contained.
+
+ That said, I'm not too enthousiastic about the rc.S solution either, since it 
+may also interact badly with alternative init procedures.
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
