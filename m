@@ -1,45 +1,42 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Thu, 21 Jul 2011 08:23:48 -0700
-Subject: [Buildroot] a special ramdisk
-In-Reply-To: <877h7b1x24.fsf@macbook.be.48ers.dk>
-References: <CALo-6+iK-jHqjFm4oy11BeQKDJd7LyjoOXgeixmrRGwDMd6ZBw@mail.gmail.com>
- <877h7b1x24.fsf@macbook.be.48ers.dk>
-Message-ID: <CALo-6+hPuBVwbnShd20vn2=7d-8TA5WSidBoMQnUGoW5U-31RQ@mail.gmail.com>
+From: =?UTF-8?Q?Beno=C3=AEt_Mauduit?= <benoit.mauduit@gmail.com>
+Date: Thu, 21 Jul 2011 13:35:30 +0200
+Subject: [Buildroot] [PATCH] busybox: Add busybox-xconfig and
+	busybox-gconfig rules
+In-Reply-To: <1305559544-4902-1-git-send-email-benoit.mauduit@gmail.com>
+References: <1305559544-4902-1-git-send-email-benoit.mauduit@gmail.com>
+Message-ID: <CAHeZHmtk=8R-COpWxqKL=2-t-EosaWNwzDsAqMc5qWsM682t4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Peter, this looks very promising.
-
-On Thu, Jul 21, 2011 at 8:18 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
+On Mon, May 16, 2011 at 5:25 PM,  <benoit.mauduit@gmail.com> wrote:
+> From: Benoit Mauduit <benoit.mauduit@openwide.fr>
 >
-> ?Charles> Gentlemen:
-> ?Charles> I'm looking for a little advice on a non-buildroot issue. An answer of
-> ?Charles> RTFM would be fine but a URL for the FM would help.
+> ---
+> ?package/busybox/busybox.mk | ? ?5 +++--
+> ?1 files changed, 3 insertions(+), 2 deletions(-)
 >
-> ?Charles> I need to use 2MByte of battery backed SRAM in my PPC8321 design
-> ?Charles> running Linux built with buildroot. The requirement is that this SRAM
-> ?Charles> have a file system on it so that programs can
-> ?Charles> open()/read(),write(),close(). The RAM is at a specific address and I
-> ?Charles> can map it into memory just above the main DDRRAM.
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 711d11b..b806cdb 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -165,8 +165,9 @@ endef
 >
-> ?Charles> So, the question is: ?"Is there a way to create a ramdisk at a
-> ?Charles> specific address, perhaps using /dev/mem, mmap and other utilities?"
+> ?$(eval $(call GENTARGETS,package,busybox))
 >
-> That sounds like pramfs:
->
-> http://pramfs.sourceforge.net/
->
-> Never used it though.
+> -busybox-menuconfig: busybox-patch
+> - ? ? ? $(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) menuconfig
+> +busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+> + ? ? ? $(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
+> + ? ? ? ? ? ? ? $(subst busybox-,,$@)
+> ? ? ? ?rm -f $(BUSYBOX_DIR)/.stamp_built
+> ? ? ? ?rm -f $(BUSYBOX_DIR)/.stamp_target_installed
 >
 > --
-> Bye, Peter Korsgaard
+> 1.7.5.1
+>
 >
 
-
-
--- 
-Charles Krinke
+ping ?
