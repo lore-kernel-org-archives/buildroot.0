@@ -1,30 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Jul 2011 07:58:19 +0200
-Subject: [Buildroot] ccache directory
-In-Reply-To: <87livs1xv4.fsf@macbook.be.48ers.dk>
-References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
- <20110720181955.36911f14@skate>
- <87livs1xv4.fsf@macbook.be.48ers.dk>
-Message-ID: <20110721075819.5a535238@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Jul 2011 09:53:49 +0200
+Subject: [Buildroot] asking for advice on improving our buildroot setup
+Message-ID: <201107210953.49838.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 20 Jul 2011 22:49:19 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+ [Late reply, but probably still relevant]
 
-> Or simply drop the custom ccache location and let people set CCACHE_DIR
-> if they don't like the default (and hence expected) ~/.ccache location.
+On Thursday 07 July 2011 12:09:20, Sven Neumann wrote:
+> As you can imagine this build consumes a lot of time and disk space.
+> Currently I can think of two ways to improve this:
+> 
+> (1) Add an initial step that builds a toolchain and then use that
+>     toolchain from the following steps. This would save the time
+>     to rebuild the toolchain for each of the steps.
+> 
+> (2) Combine all steps and build different rootfs from within the
+>     same buildroot tree. I read that this would be supported. But
+>     I would like to get advice from you first. Is there a chance
+>     that this will work for the described setup?
 
-That's another possibility, but I find it quite confusing to have some
-parameters set by environment variables, and some other by
-configuration options.
 
-Thomas
+ If your build host can be upgraded to a recent kernel with btrfs, you could 
+do the following:
+
+ * Create a basic buildroot configuration with the stuff that is relevant for 
+all builds.
+
+ * cp --reflink -a output output-specific-target
+
+ * make specific-target-config O=output-specific-target
+   => this will add the additional stuff to output-specific-target and (re) 
+create the images.
+
+ Because of the --reflink, no additional disk space will be used for the copy 
+of the toolchain etc.
+
+
+ Regards,
+ Arnout
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                        Senior Embedded Software Architect
+arnout dot vandecappelle at essensium com   +32-16-286540       +32-478-010353
+Essensium/Mind                              http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium         BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
