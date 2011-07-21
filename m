@@ -1,31 +1,26 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 21 Jul 2011 05:48:51 -0500
-Subject: [Buildroot] ccache directory
-In-Reply-To: <20110721075819.5a535238@skate>
-References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
- <87livs1xv4.fsf@macbook.be.48ers.dk> <20110721075819.5a535238@skate>
-Message-ID: <201107210548.53315.minimod@morethan.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 21 Jul 2011 11:25:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 3991] New Package: Adds support for open-vm-tools
+ (Vmware Tools)
+In-Reply-To: <bug-3991-163@https.bugs.busybox.net/>
+References: <bug-3991-163@https.bugs.busybox.net/>
+Message-ID: <20110721112514.A35288B3A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu July 21 2011, Thomas Petazzoni wrote:
-> Le Wed, 20 Jul 2011 22:49:19 +0200,
-> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
-> 
-> > Or simply drop the custom ccache location and let people set CCACHE_DIR
-> > if they don't like the default (and hence expected) ~/.ccache location.
-> 
-> That's another possibility, but I find it quite confusing to have some
-> parameters set by environment variables, and some other by
-> configuration options.
-> 
+https://bugs.busybox.net/show_bug.cgi?id=3991
 
-And if one of the purposes of having a programmed build system is to
-provide a reproducible build at some future time (or place or by someone else);
-setting an environment variable leaves no record in the stored build system.
+--- Comment #2 from Wallace Wadge <wwadge@gmail.com>  ---
+Created attachment 3493
+  --> https://bugs.busybox.net/attachment.cgi?id=3493
+Updated version
 
-Mike
-> Thomas
+This version uses a simpler patch + less stuff to build
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
