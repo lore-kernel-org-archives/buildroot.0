@@ -1,27 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 21 Jul 2011 18:11:02 +0200
-Subject: [Buildroot] ccache directory
-In-Reply-To: <201107210548.53315.minimod@morethan.org> (Michael S. Zick's
- message of "Thu, 21 Jul 2011 05:48:51 -0500")
-References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
- <87livs1xv4.fsf@macbook.be.48ers.dk> <20110721075819.5a535238@skate>
- <201107210548.53315.minimod@morethan.org>
-Message-ID: <8739hz1und.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 21 Jul 2011 14:54:23 -0300
+Subject: [Buildroot] [PATCH 3/4] iptables: bump to version 1.4.11.1
+In-Reply-To: <1311270864-5771-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1311270864-5771-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1311270864-5771-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iptables/iptables.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Michael> And if one of the purposes of having a programmed build system
- Michael> is to provide a reproducible build at some future time (or
- Michael> place or by someone else); setting an environment variable
- Michael> leaves no record in the stored build system.
-
-True, but the ccache directory (like BUILDROOT_DL_DIR) don't affect the
-output, they are only local build time optimizations.
-
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 8652de4..13d2ac3 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IPTABLES_VERSION = 1.4.10
++IPTABLES_VERSION = 1.4.11.1
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ IPTABLES_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
