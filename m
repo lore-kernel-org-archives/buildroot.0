@@ -1,80 +1,72 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Jul 2011 14:54:24 -0300
-Subject: [Buildroot] [PATCH 4/4] iproute2: bump to version 2.6.39
-In-Reply-To: <1311270864-5771-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1311270864-5771-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1311270864-5771-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 21 Jul 2011 16:49:57 -0300
+Subject: [Buildroot] [PATCH 2/2] ipset: new package
+In-Reply-To: <1311277797-20347-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1311277797-20347-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1311277797-20347-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add ipset support package.
+Note that this requires bleeding edge (>=2.6.39) kernel version or
+patches.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iproute2/iproute2-xt-v6.patch |   39 +++++++++++++++++++++++++++++++++
- package/iproute2/iproute2.mk          |    3 +-
- 2 files changed, 40 insertions(+), 2 deletions(-)
- create mode 100644 package/iproute2/iproute2-xt-v6.patch
+ package/Config.in       |    1 +
+ package/ipset/Config.in |    8 ++++++++
+ package/ipset/ipset.mk  |   13 +++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/ipset/Config.in
+ create mode 100644 package/ipset/ipset.mk
 
-diff --git a/package/iproute2/iproute2-xt-v6.patch b/package/iproute2/iproute2-xt-v6.patch
+diff --git a/package/Config.in b/package/Config.in
+index c993c31..5dc32a7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -408,6 +408,7 @@ source "package/ifplugd/Config.in"
+ source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
++source "package/ipset/Config.in"
+ source "package/iptables/Config.in"
+ source "package/iw/Config.in"
+ source "package/kismet/Config.in"
+diff --git a/package/ipset/Config.in b/package/ipset/Config.in
 new file mode 100644
-index 0000000..4856e36
+index 0000000..6951413
 --- /dev/null
-+++ b/package/iproute2/iproute2-xt-v6.patch
-@@ -0,0 +1,39 @@
-+From: Andreas Henriksson <andreas@fatal.se>
-+Forwarded: yes
-+Subject: [PATCH] iproute2: Fix building xt module against xtables version 6
++++ b/package/ipset/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_IPSET
++	bool "ipset"
++	select BR2_PACKAGE_LIBMNL
++	help
++	  Utility to manage IP sets in the linux kernel.
++	  Requires a patched kernel or version >=2.6.39.
 +
++	  http://ipset.netfilter.org/
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+new file mode 100644
+index 0000000..fafa201
+--- /dev/null
++++ b/package/ipset/ipset.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# ipset
++#
++#############################################################
 +
-+diff --git a/tc/m_xt.c b/tc/m_xt.c
-+index 651a59e..13bf19f 100644
-+--- a/tc/m_xt.c
-++++ b/tc/m_xt.c
-+@@ -160,9 +160,13 @@ static int parse_ipt(struct action_util *a,int *argc_p,
-+ 					return -1;
-+ 				}
-+ 				tcipt_globals.opts =
-+-				    xtables_merge_options(tcipt_globals.opts,
-+-				                          m->extra_opts,
-+-				                          &m->option_offset);
-++				    xtables_merge_options(
-++#if (XTABLES_VERSION_CODE >= 6)
-++				        tcipt_globals.orig_opts,
-++#endif
-++				        tcipt_globals.opts,
-++				        m->extra_opts,
-++				        &m->option_offset);
-+ 			} else {
-+ 				fprintf(stderr," failed to find target %s\n\n", optarg);
-+ 				return -1;
-+@@ -305,7 +309,11 @@ print_ipt(struct action_util *au,FILE * f, struct rtattr *arg)
-+ 			}
-+ 
-+ 			tcipt_globals.opts =
-+-			    xtables_merge_options(tcipt_globals.opts,
-++			    xtables_merge_options(
-++#if (XTABLES_VERSION_CODE >= 6)
-++				                  tcipt_globals.orig_opts,
-++#endif
-++				                  tcipt_globals.opts,
-+ 			                          m->extra_opts,
-+ 			                          &m->option_offset);
-+ 		} else {
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 630fab4..fd78b3c 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,8 +4,7 @@
- #
- #############################################################
- 
--IPROUTE2_VERSION = 2.6.38
--IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.bz2
-+IPROUTE2_VERSION = 2.6.39
- IPROUTE2_SITE = http://devresources.linuxfoundation.org/dev/iproute2/download
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
- 
++IPSET_VERSION = 6.8
++IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
++IPSET_SITE = http://ipset.netfilter.org
++IPSET_AUTORECONF = YES
++IPSET_DEPENDENCIES = libmnl
++
++$(eval $(call AUTOTARGETS,package,ipset))
 -- 
 1.7.3.4
