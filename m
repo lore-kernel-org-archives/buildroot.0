@@ -1,26 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 Jul 2011 11:25:14 +0000 (UTC)
-Subject: [Buildroot] [Bug 3991] New Package: Adds support for open-vm-tools
- (Vmware Tools)
-In-Reply-To: <bug-3991-163@https.bugs.busybox.net/>
-References: <bug-3991-163@https.bugs.busybox.net/>
-Message-ID: <20110721112514.A35288B3A8@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 21 Jul 2011 06:56:43 -0700
+Subject: [Buildroot] a special ramdisk
+Message-ID: <CALo-6+iK-jHqjFm4oy11BeQKDJd7LyjoOXgeixmrRGwDMd6ZBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3991
+Gentlemen:
 
---- Comment #2 from Wallace Wadge <wwadge@gmail.com>  ---
-Created attachment 3493
-  --> https://bugs.busybox.net/attachment.cgi?id=3493
-Updated version
+I'm looking for a little advice on a non-buildroot issue. An answer of
+RTFM would be fine but a URL for the FM would help.
 
-This version uses a simpler patch + less stuff to build
+I need to use 2MByte of battery backed SRAM in my PPC8321 design
+running Linux built with buildroot. The requirement is that this SRAM
+have a file system on it so that programs can
+open()/read(),write(),close(). The RAM is at a specific address and I
+can map it into memory just above the main DDRRAM.
+
+So, the question is:  "Is there a way to create a ramdisk at a
+specific address, perhaps using /dev/mem, mmap and other utilities?"
+
+If I had a couple of google search terms that lead to some clues where
+someone else has solved a similar problem, that would help.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Charles Krinke
