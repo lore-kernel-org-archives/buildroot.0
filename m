@@ -1,40 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 20 Jul 2011 23:51:17 +0200
-Subject: [Buildroot] [git commit] zlib: always build host version dynamically
-Message-ID: <20110720215406.E0C108B386@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Jul 2011 07:58:19 +0200
+Subject: [Buildroot] ccache directory
+In-Reply-To: <87livs1xv4.fsf@macbook.be.48ers.dk>
+References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
+ <20110720181955.36911f14@skate>
+ <87livs1xv4.fsf@macbook.be.48ers.dk>
+Message-ID: <20110721075819.5a535238@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Wed, 20 Jul 2011 22:49:19 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7dae68a0fa24dd733bf70d6dee9b20c70e1041fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Or simply drop the custom ccache location and let people set CCACHE_DIR
+> if they don't like the default (and hence expected) ~/.ccache location.
 
-Host libraries should always be built using dynamic linking, rather than
-static if BR2_PREFER_STATIC_LIB is enabled, as that then breaks dependent
-libraries expecting a shared library.
+That's another possibility, but I find it quite confusing to have some
+parameters set by environment variables, and some other by
+configuration options.
 
-Reported-by: Andy Kennedy <andy.kennedy@adtran.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/zlib/zlib.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
-
-diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
-index dcd2548..18e7068 100644
---- a/package/zlib/zlib.mk
-+++ b/package/zlib/zlib.mk
-@@ -31,9 +31,7 @@ define HOST_ZLIB_CONFIGURE_CMDS
- 	(cd $(@D); rm -rf config.cache; \
- 		$(HOST_CONFIGURE_ARGS) \
- 		$(HOST_CONFIGURE_OPTS) \
--		CFLAGS="$(ZLIB_PIC)" \
- 		./configure \
--		$(ZLIB_SHARED) \
- 		--prefix="$(HOST_DIR)/usr" \
- 		--sysconfdir="$(HOST_DIR)/etc" \
- 	)
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
