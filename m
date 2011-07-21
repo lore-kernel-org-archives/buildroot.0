@@ -1,35 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jul 2011 10:37:08 +0200
-Subject: [Buildroot] Buildroot ext3 filesystem
-In-Reply-To: <CAEYzJUFAEuYQJ_Q+tsBZR7hf2t27-M7k=FCAN-SeWBAvDD5etQ@mail.gmail.com>
-References: <CADfuMF6LHMTTVunskwU3hxcFgqa3nWi=V3rLUs1CSWcd9hdqhQ@mail.gmail.com>
- <CAEYzJUFAEuYQJ_Q+tsBZR7hf2t27-M7k=FCAN-SeWBAvDD5etQ@mail.gmail.com>
-Message-ID: <201107211037.09095.arnout@mind.be>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Thu, 21 Jul 2011 05:48:51 -0500
+Subject: [Buildroot] ccache directory
+In-Reply-To: <20110721075819.5a535238@skate>
+References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
+ <87livs1xv4.fsf@macbook.be.48ers.dk> <20110721075819.5a535238@skate>
+Message-ID: <201107210548.53315.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-On Friday 15 July 2011 11:20:59, Bj?rn Forsman wrote:
-> It is not possible at the moment. But it's easy to convert an ext2
-> filesystem to ext3 or ext4:
+On Thu July 21 2011, Thomas Petazzoni wrote:
+> Le Wed, 20 Jul 2011 22:49:19 +0200,
+> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 > 
-> # ext2 -> ext3
-> tune2fs -j image.ext2 && mv image.{ext2,ext3}
+> > Or simply drop the custom ccache location and let people set CCACHE_DIR
+> > if they don't like the default (and hence expected) ~/.ccache location.
+> 
+> That's another possibility, but I find it quite confusing to have some
+> parameters set by environment variables, and some other by
+> configuration options.
+> 
 
- This also requires and e2fsck, because genext2fs creates a type 0 filesystem 
-while journal is only supported in type 1.
+And if one of the purposes of having a programmed build system is to
+provide a reproducible build at some future time (or place or by someone else);
+setting an environment variable leaves no record in the stored build system.
 
-> # ext3 -> ext4
-> tune2fs -O extents,uninit_bg,dir_index image.ext3 && mv
-> image.{ext3,ext4} && e2fsck -fDC0 image.ext4
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Mike
+> Thomas
