@@ -1,55 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jul 2011 09:53:49 +0200
-Subject: [Buildroot] asking for advice on improving our buildroot setup
-Message-ID: <201107210953.49838.arnout@mind.be>
+Date: Thu, 21 Jul 2011 10:37:08 +0200
+Subject: [Buildroot] Buildroot ext3 filesystem
+In-Reply-To: <CAEYzJUFAEuYQJ_Q+tsBZR7hf2t27-M7k=FCAN-SeWBAvDD5etQ@mail.gmail.com>
+References: <CADfuMF6LHMTTVunskwU3hxcFgqa3nWi=V3rLUs1CSWcd9hdqhQ@mail.gmail.com>
+ <CAEYzJUFAEuYQJ_Q+tsBZR7hf2t27-M7k=FCAN-SeWBAvDD5etQ@mail.gmail.com>
+Message-ID: <201107211037.09095.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [Late reply, but probably still relevant]
 
-On Thursday 07 July 2011 12:09:20, Sven Neumann wrote:
-> As you can imagine this build consumes a lot of time and disk space.
-> Currently I can think of two ways to improve this:
+On Friday 15 July 2011 11:20:59, Bj?rn Forsman wrote:
+> It is not possible at the moment. But it's easy to convert an ext2
+> filesystem to ext3 or ext4:
 > 
-> (1) Add an initial step that builds a toolchain and then use that
->     toolchain from the following steps. This would save the time
->     to rebuild the toolchain for each of the steps.
-> 
-> (2) Combine all steps and build different rootfs from within the
->     same buildroot tree. I read that this would be supported. But
->     I would like to get advice from you first. Is there a chance
->     that this will work for the described setup?
+> # ext2 -> ext3
+> tune2fs -j image.ext2 && mv image.{ext2,ext3}
 
+ This also requires and e2fsck, because genext2fs creates a type 0 filesystem 
+while journal is only supported in type 1.
 
- If your build host can be upgraded to a recent kernel with btrfs, you could 
-do the following:
-
- * Create a basic buildroot configuration with the stuff that is relevant for 
-all builds.
-
- * cp --reflink -a output output-specific-target
-
- * make specific-target-config O=output-specific-target
-   => this will add the additional stuff to output-specific-target and (re) 
-create the images.
-
- Because of the --reflink, no additional disk space will be used for the copy 
-of the toolchain etc.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                        Senior Embedded Software Architect
-arnout dot vandecappelle at essensium com   +32-16-286540       +32-478-010353
-Essensium/Mind                              http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium         BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+> # ext3 -> ext4
+> tune2fs -O extents,uninit_bg,dir_index image.ext3 && mv
+> image.{ext3,ext4} && e2fsck -fDC0 image.ext4
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
