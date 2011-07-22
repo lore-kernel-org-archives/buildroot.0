@@ -1,37 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 22 Jul 2011 07:34:09 +0200
-Subject: [Buildroot] [git commit] iptables: largefile support not required
-	anymore
-Message-ID: <20110722053533.1400C8B3D7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 22 Jul 2011 09:03:47 +0200
+Subject: [Buildroot] [PATCH 1/2] libmnl: new package
+In-Reply-To: <1311277797-20347-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 21 Jul 2011 16:49:56 -0300")
+References: <1311277797-20347-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d3h2ztik.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c1ac6ce60e9d4bb0c611aeae604033228af15e68
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/iptables/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+It needs largefile, but I fixed that up - Committed, thanks.
 
-diff --git a/package/iptables/Config.in b/package/iptables/Config.in
-index da5a832..8c4e989 100644
---- a/package/iptables/Config.in
-+++ b/package/iptables/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_IPTABLES
- 	bool "iptables"
--	depends on BR2_LARGEFILE
- 	help
- 	  Linux kernel (2.4+) firewall, NAT, and packet mangling tools.
- 
- 	  http://www.iptables.org/
--
--comment "iptables requires a toolchain with LARGEFILE support"
--        depends on !BR2_LARGEFILE
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
