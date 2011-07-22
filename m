@@ -1,7 +1,7 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Fri, 22 Jul 2011 07:34:09 +0200
-Subject: [Buildroot] [git commit] usbmount: bump to 0.0.21
-Message-ID: <20110722053531.75C668B3D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iptables: bump to version 1.4.11.1
+Message-ID: <20110722053532.3C0CD8B3D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,129 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c74bce7de54ac631259982f8a78e4342a0ff637c
+commit: http://git.buildroot.net/buildroot/commit/?id=0279d9e327fba69481078fd3dbb275b8556ce8b7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix udev dep, use Debian mirrors, fix usbmount.rules install, uninstall]
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/usbmount/Config.in               |    3 +-
- package/usbmount/usbmount-0.0.14.1.patch |   57 ------------------------------
- package/usbmount/usbmount.mk             |   13 ++++---
- 3 files changed, 10 insertions(+), 63 deletions(-)
- delete mode 100644 package/usbmount/usbmount-0.0.14.1.patch
+ package/iptables/iptables.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/usbmount/Config.in b/package/usbmount/Config.in
-index 5cf15be..33e1f05 100644
---- a/package/usbmount/Config.in
-+++ b/package/usbmount/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_USBMOUNT
- 	bool "usbmount"
- 	select BR2_PACKAGE_UDEV
--	select BR2_PACKAGE_UDEV_VOLUME_ID
- 	select BR2_PACKAGE_LOCKFILE_PROGS
- 	help
- 	  The usbmount package automatically mounts USB mass storage devices
- 	  when they are plugged in, and unmounts them when they are removed.
-+
-+	  http://usbmount.alioth.debian.org/
-diff --git a/package/usbmount/usbmount-0.0.14.1.patch b/package/usbmount/usbmount-0.0.14.1.patch
-deleted file mode 100644
-index 22a5857..0000000
---- a/package/usbmount/usbmount-0.0.14.1.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--diff -ur usbmount-0.0.14.1/usbmount usbmount-0.0.14.1-patched/usbmount
----- usbmount-0.0.14.1/usbmount	2007-01-27 05:22:14.000000000 -0600
--+++ usbmount-0.0.14.1-patched/usbmount	2007-03-15 07:25:18.000000000 -0500
--@@ -20,7 +20,7 @@
-- log()
-- {
--     if test $1 != debug || expr "$VERBOSE" : "[yY]" > /dev/null; then
---	logger -p user.$1 -t "usbmount[$$]" -- "$2"
--+	echo "usbmount[$$] -- $2" >> $LOGFILE
--     fi
-- }
-- 
--@@ -57,11 +57,11 @@
-- if test "$1" = add; then
-- 
--     # Acquire lock.
---    log debug "trying to acquire lock /var/run/usbmount/.mount.lock"
---    lockfile-create --retry 3 /var/run/usbmount/.mount || \
---	{ log err "cannot acquire lock /var/run/usbmount/.mount.lock"; exit 1; }
---    trap '( lockfile-remove /var/run/usbmount/.mount )' 0
---    log debug "acquired lock /var/run/usbmount/.mount.lock"
--+    log debug "trying to acquire lock /var/run/.usbmount.lock"
--+    lockfile-create --retry 5 /var/run/.usbmount || \
--+	{ log err "cannot acquire lock /var/run/.usbmount.lock"; exit 1; }
--+    trap '( lockfile-remove /var/run/.usbmount )' 0
--+    log debug "acquired lock /var/run/.usbmount.lock"
-- 
--     # Try to read from the device.  Some devices need a few seconds
--     # initialization time before they can be accessed.  Give up after
--@@ -184,6 +184,7 @@
-- 		log info "executing command: run-parts /etc/usbmount/umount.d"
-- 		run-parts /etc/usbmount/umount.d || :
-- 	    fi
--+	    lockfile-remove /var/run/.usbmount
-- 	    break
-- 	fi
--     done < /proc/mounts
--diff -ur usbmount-0.0.14.1/usbmount.conf usbmount-0.0.14.1-patched/usbmount.conf
----- usbmount-0.0.14.1/usbmount.conf	2005-04-08 09:05:10.000000000 -0500
--+++ usbmount-0.0.14.1-patched/usbmount.conf	2007-03-15 07:21:33.000000000 -0500
--@@ -17,7 +17,7 @@
-- # sure all data is written to the medium before you remove it (e.g. run the #
-- # "sync" command in a terminal window).  Otherwise, you *WILL* lose data!   #
-- #############################################################################
---FILESYSTEMS="ext2 ext3"
--+FILESYSTEMS="ext2 ext3 msdos vfat"
-- 
-- # Mount options: Options passed to the mount command with the -o flag.
-- # WARNING!  Removing "sync" from the options is a very bad idea and
--@@ -35,3 +35,7 @@
-- # If set to "yes", more information will be logged via the syslog
-- # facility.
-- VERBOSE="no"
--+
--+# Location of the log file when verbose is Yes
--+LOGFILE="/var/log/usbmount.log"
--+
-diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
-index 5925e5e..abe349d 100644
---- a/package/usbmount/usbmount.mk
-+++ b/package/usbmount/usbmount.mk
-@@ -3,20 +3,23 @@
- # usbmount
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 8652de4..13d2ac3 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--USBMOUNT_VERSION=0.0.14.1
--USBMOUNT_SOURCE:=usbmount_$(USBMOUNT_VERSION).tar.gz
--USBMOUNT_SITE:=http://usbmount.alioth.debian.org/package/
-+USBMOUNT_VERSION = 0.0.21
-+USBMOUNT_SOURCE = usbmount_$(USBMOUNT_VERSION).tar.gz
-+USBMOUNT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/u/usbmount
- USBMOUNT_DEPENDENCIES = udev lockfile-progs
  
- define USBMOUNT_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/sbin/usbmount
-+	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/usr/share/usbmount/usbmount
-+	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d/usbmount.rules
- 	@if [ ! -f $(TARGET_DIR)/etc/usbmount/usbmount.conf ]; then \
- 	        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf; \
- 	fi
- endef
- 
- define USBMOUNT_UNINSTALL_TARGET_CMDS
--	rm -rf $(TARGET_DIR)/etc/usbmount $(TARGET_DIR)/sbin/usbmount
-+	rm -rf $(TARGET_DIR)/etc/usbmount \
-+	       $(TARGET_DIR)/usr/share/usbmount/usbmount \
-+	       $(TARGET_DIR)/lib/udev/rules.d/usbmount.rules
- endef
- 
- $(eval $(call GENTARGETS,package,usbmount))
+-IPTABLES_VERSION = 1.4.10
++IPTABLES_VERSION = 1.4.11.1
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ IPTABLES_INSTALL_STAGING = YES
 -- 
 1.7.3.4
