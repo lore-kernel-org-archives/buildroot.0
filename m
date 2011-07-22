@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 22 Jul 2011 09:08:36 +0200
-Subject: [Buildroot] [git commit] libmnl: new package
-Message-ID: <20110722071021.41EAB85758@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kernel-headers: add 3.0
+Message-ID: <20110722071021.B64A685758@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,66 +9,60 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bea473a4d4a949388826679abd53e3d43573a639
+commit: http://git.buildroot.net/buildroot/commit/?id=d58aab892ec95b9a4bdb48a15440212cd7f23d77
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: needs largefile support]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/libmnl/Config.in |   11 +++++++++++
- package/libmnl/libmnl.mk |   12 ++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/libmnl/Config.in
- create mode 100644 package/libmnl/libmnl.mk
+ toolchain/kernel-headers/Config.in         |    6 +++++-
+ toolchain/kernel-headers/kernel-headers.mk |    4 ++++
+ 2 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a01f8d2..981a633 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -324,6 +324,7 @@ source "package/libeXosip2/Config.in"
- source "package/libidn/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
-+source "package/libmnl/Config.in"
- source "package/libnl/Config.in"
- source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
-diff --git a/package/libmnl/Config.in b/package/libmnl/Config.in
-new file mode 100644
-index 0000000..87475df
---- /dev/null
-+++ b/package/libmnl/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBMNL
-+	bool "libmnl"
-+	depends on BR2_LARGEFILE
-+	help
-+	  libmnl is a minimalistic user-space library oriented
-+	  to Netlink developers.
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 774810f..bc8a024 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_2_6_39
++	default BR2_KERNEL_HEADERS_3_0
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -30,6 +30,9 @@ choice
+ 	config BR2_KERNEL_HEADERS_2_6_39
+ 		bool "Linux 2.6.39.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_3_0
++		bool "Linux 3.0.x kernel headers"
 +
-+	  http://netfilter.org/projects/libmnl/
-+
-+comment "libmnl requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
-new file mode 100644
-index 0000000..6749756
---- /dev/null
-+++ b/package/libmnl/libmnl.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# libmnl
-+#
-+#############################################################
-+
-+LIBMNL_VERSION = 1.0.1
-+LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
-+LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
-+LIBMNL_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS,package,libmnl))
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Linux 2.6 (manually specified version)"
+ 
+@@ -51,5 +54,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.3"	if BR2_KERNEL_HEADERS_2_6_39
++	default "3.0"		if BR2_KERNEL_HEADERS_3_0
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index 079497a..ce70cab 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -26,7 +26,11 @@ SUBLEVEL:=$(if $(SUBLEVEL),.$(SUBLEVEL),)
+ EXTRAVERSION:=$(if $(EXTRAVERSION),.$(EXTRAVERSION),)
+ 
+ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL)$(SUBLEVEL)$(EXTRAVERSION)
++ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
+ LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
++else
++LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v3.0/
++endif
+ LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
+ LINUX_HEADERS_CAT:=$(BZCAT)
+ LINUX_HEADERS_UNPACK_DIR:=$(TOOLCHAIN_DIR)/linux-$(LINUX_HEADERS_VERSION)
 -- 
 1.7.3.4
