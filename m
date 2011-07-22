@@ -1,7 +1,8 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Fri, 22 Jul 2011 07:34:09 +0200
-Subject: [Buildroot] [git commit] squid: bump to version 3.1.14
-Message-ID: <20110722053531.D9B7E8B3D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] busybox: busybox-1.18.x.config: enable
+	blkid applet
+Message-ID: <20110722053531.AFA498B3D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +10,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=301c17a35244bfa58df81d60ff6c9dcc90d55da0
+commit: http://git.buildroot.net/buildroot/commit/?id=4ec2e3bb53ec57e3b64b4b49918a5e8f53e1eb97
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Needed by usbmount.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/squid/squid.mk |    2 +-
+ package/busybox/busybox-1.18.x.config |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 9427a79..2184f1a 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQUID_VERSION = 3.1.12
-+SQUID_VERSION = 3.1.14
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
- SQUID_DEPENDENCIES = libcap host-libcap
- SQUID_AUTORECONF = YES
+diff --git a/package/busybox/busybox-1.18.x.config b/package/busybox/busybox-1.18.x.config
+index 4c43b7a..502048d 100644
+--- a/package/busybox/busybox-1.18.x.config
++++ b/package/busybox/busybox-1.18.x.config
+@@ -514,7 +514,7 @@ CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
+ # CONFIG_REV is not set
+ # CONFIG_ACPID is not set
+ # CONFIG_FEATURE_ACPID_COMPAT is not set
+-# CONFIG_BLKID is not set
++CONFIG_BLKID=y
+ CONFIG_DMESG=y
+ CONFIG_FEATURE_DMESG_PRETTY=y
+ # CONFIG_FBSET is not set
 -- 
 1.7.3.4
