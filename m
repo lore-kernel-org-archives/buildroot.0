@@ -1,29 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 22 Jul 2011 14:53:28 +0200
-Subject: [Buildroot] [PATCH] usbmount: bump to 0.0.21
-In-Reply-To: <CAGm1_ku5goU2pz+xNnRmHrQYVrg75f+KmZ3XmBLtTC62wBzmVg@mail.gmail.com>
- (Yegor Yefremov's message of "Fri, 22 Jul 2011 14:10:24 +0200")
-References: <4E26EA44.8080405@visionsystems.de>
- <87y5zrz7ut.fsf@macbook.be.48ers.dk>
- <CAGm1_kvayCdnok_hMrvAp-TaA9UwvgNoX39WxNM_SpvAokJnzg@mail.gmail.com>
- <CAGm1_ku5goU2pz+xNnRmHrQYVrg75f+KmZ3XmBLtTC62wBzmVg@mail.gmail.com>
-Message-ID: <87hb6exyrb.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 22 Jul 2011 16:45:26 +0200
+Subject: [Buildroot] [PATCH 0/3] bump udev and clean up
+Message-ID: <4E298D06.4050107@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+Following patches update udev to 172 and handle its dependencies. 
 
-Hi,
+Udev changed much compared with the current version in BR. Except eliminating obsolete patches, the startup script was also changed. There is no udevstart executable any more, udevadm manages communication with udevd instead. /dev/null is created either via devtmpfs of via device file, so no need to do it in the startup script.
 
- Yegor> I've found some issues with usbmount script and newest
- Yegor> util-linux blkid. Will try to fix them.
+usbmount 0.0.14.1 used vol_id executable, that was part of older udev version. vol_id was replaced by blkid, that is part of util-linux. So util-linux was also updated and usbmount selects both util-linux and blkid. blkid provided by BusyBox's blkid delivers not enough info about the block device, so util-linux is a must.
 
- Yegor> udev has also some issues, so I'll repost the patches next week.
+Futher usbmount issues were addressed:
 
-Ok, thanks.
+1. recent blkid show not only file system type, but also partition type:
 
--- 
-Bye, Peter Korsgaard
+/dev/sdb1: VERSION="0.0" TYPE="ext2" USAGE="filesystem" PART_ENTRY_SCHEME="dos"
+PART_ENTRY_TYPE="0xc" PART_ENTRY_FLAGS="0x80" PART_ENTRY_NUMBER="1"
+
+in this case parsing script took the value of partition type instead of file system type. Parsing was changed to search for " TYPE". It were very helpful, ff some one could provide better regular expression for this case.
+
+2. udev rules for usbmount should react at "usb" subsystem, however it is reported as "block", so rules were also patched.
+
+looking at device '/block/sdb/sdb1':
+    KERNEL=="sdb1"
+    SUBSYSTEM=="block"
+    DRIVER==""
+    ATTR{partition}=="1"
+    ATTR{start}=="32"
+    ATTR{size}=="31457248"
+    ATTR{ro}=="0"
+    ATTR{alignment_offset}=="0"
+    ATTR{discard_alignment}=="0"
+    ATTR{stat}=="     403      235     3184      470        1        0        2
+       0        0      450      460"
+    ATTR{inflight}=="       0        0" 
+
+Yegor
