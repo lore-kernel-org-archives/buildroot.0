@@ -1,42 +1,68 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Jul 2011 13:23:13 +0200
-Subject: [Buildroot] ccache directory
-In-Reply-To: <20110721075819.5a535238@skate>
-References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
- <20110720181955.36911f14@skate>
- <87livs1xv4.fsf@macbook.be.48ers.dk>
- <20110721075819.5a535238@skate>
-Message-ID: <CAAXf6LUHjWVv794Voi40DPOy+QAaZNpdVKp8Z-k=yFcRtxay-Q@mail.gmail.com>
+Date: Sun, 24 Jul 2011 13:36:45 +0200
+Subject: [Buildroot] linux: why is vmlinux only available for mips?
+In-Reply-To: <1311178214.2189.68.camel@dublxciaranr1.verifone.com>
+References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
+ <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
+ <20110715143053.558a756a@skate>
+ <CAAXf6LUaOXizUnxjZVhbpoeiAxAiLeYyXajQKgOjKzY-vo0g2w@mail.gmail.com>
+ <1311178214.2189.68.camel@dublxciaranr1.verifone.com>
+Message-ID: <CAAXf6LXV+7P5636KKv9TSKNPPT2zdXUJF=MP_A5r4fMHXXOyBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 21, 2011 at 7:58 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 20 Jul 2011 22:49:19 +0200,
-> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+On Wed, Jul 20, 2011 at 6:10 PM, Quotient Remainder
+<quotientvremainder@gmail.com> wrote:
+> Thomas,
 >
->> Or simply drop the custom ccache location and let people set CCACHE_DIR
->> if they don't like the default (and hence expected) ~/.ccache location.
+> On Wed, 2011-07-20 at 15:38 +0200, Thomas De Schampheleire wrote:
+>> >
+>> >> * I need to be able to compile external kernel modules, so in that
+>> >> Makefile I need to point to the right kernel directory.
+>> >
+>> > Ok. Those could be integrated as Buildroot packages, in which case
+>> > getting access to the Linux source directory is easy.
+>>
+>> Good point. I'll have to add Mercurial support in buildroot to get there though.
 >
-> That's another possibility, but I find it quite confusing to have some
-> parameters set by environment variables, and some other by
-> configuration options.
+> I may be misinterpreting, but does the above mean that you have a decent
+> generic external kernel module build structure going? ?I have a terribly
+> hacky setup working here but it's completely incompatible with the
+> recent linux GENTARGETS approach.
+> Care to share your external module build stuff?
 
-The disadvantage with this particular configuration variable, is that
-it requires a forced recompilation of host-ccache in order for changes
-to this variable to take effect.
+I wouldn't call it a 'generic build structure'. So far I have been
+using a simple Makefile, taking one command-line variable pointing to
+the buildroot 'output' directory. Based on this variable, the location
+of the kernel is inferred (currently based on a 'linux' symlink I
+added, as mentioned earlier), together with the compiler.
 
-Another solution is to remove the hardcoded cache directory, use the
-CCACHE_DIR environment variable, but let buildroot set that variable
-based on BR2_CCACHE_DIR (a configuration option). This addresses
-Thomas' point regarding mixing environment variables and configuration
-options, and my request of being able to change the cache directory
-and making sure these changes are automatically in effect.
+TARGETS=module1 module2
+OPTIONS= -C $(BUILDROOT_OUTPUT)/build/linux M=$(PWD) ARCH=powerpc
+CROSS_COMPILE=$(BUILDROOT_OUTPUT)/host/usr/bin/powerpc-linux-
+EXTRA_CFLAGS += -DDEBUG
 
-What do you think?
+OBJECTS=$(addsuffix .o, $(TARGETS))
+obj-m += $(OBJECTS)
 
-Thanks,
+all:
+        make $(OPTIONS) modules
+
+clean:
+        make $(OPTIONS) clean
+
+install:
+        make $(OPTIONS) INSTALL_MOD_PATH=$(BUILDROOT_OUTPUT)/target
+INSTALL_MOD_STRIP=1 modules_install
+
+
+
+After the suggestions in this thread, plus the intention to have as
+much of the project builds being coordinated from buildroot, I'm going
+to step away from this approach though. The linux-fusion Makefile that
+Thomas referred to seems like a good starting point for me.
+
 Thomas
