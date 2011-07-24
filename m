@@ -1,33 +1,43 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Jul 2011 13:48:18 +0200
-Subject: [Buildroot] [PATCH] Add support for packages stored in
- Mercurial (hg) repositories
-In-Reply-To: <CAEYzJUEPRoH0HPYnd4dqxa4ExbbM1JzwtsJBMwT+KEB2U+FwQQ@mail.gmail.com>
-References: <dcd0159a2716561b8ff1.1311174968@localhost6.localdomain6>
- <CAEYzJUEPRoH0HPYnd4dqxa4ExbbM1JzwtsJBMwT+KEB2U+FwQQ@mail.gmail.com>
-Message-ID: <CAAXf6LWwWASmBcUQd2D9uBj8u9dtk-4ez0ML4Enuzsr=YwgkEA@mail.gmail.com>
+Date: Sun, 24 Jul 2011 13:54:15 +0200
+Subject: [Buildroot] [PATCH 2 of 3] Allow BR2_PRIMARY_SITE and
+ BR2_BACKUP_SITE to be a file:// URL
+In-Reply-To: <20110720071336.1958f634@skate>
+References: <patchbomb.1300174025@localhost6.localdomain6>
+ <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
+ <20110720071336.1958f634@skate>
+Message-ID: <CAAXf6LXixYABXkp_LP+9kcUSp1cCMfcOKcYqBxMNzcu-dm2N=A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-2011/7/20 Bj?rn Forsman <bjorn.forsman@gmail.com>:
-> On 20 July 2011 17:16, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> ---
->> ?Config.in ? ? ? ? ? ? ? ? ? | ? 4 ++++
->> ?package/Makefile.package.in | ?31 ++++++++++++++++++++++++++++---
->> ?2 files changed, 32 insertions(+), 3 deletions(-)
+On Wed, Jul 20, 2011 at 7:13 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
 >
-> Could you also update the documentation? Look for LIBFOO_SITE_METHOD
-> in docs/buildroot.html.
+> Le Tue, 15 Mar 2011 08:27:07 +0100,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> ?define DOWNLOAD
+>> ? ? ? $(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+>> - ? ? ? ? ? ? $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
+>> + ? ? ? ? ? ? case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
+>> + ? ? ? ? ? ? ? ? ? ? file) $(call $(DL_MODE)_FILE,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
+>> + ? ? ? ? ? ? ? ? ? ? *) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
+>> + ? ? ? ? ? ? esac ; \
+>
+> Does this bring any additional feature that using the existing
+> BR2_DL_DIR option ?
 
-Will do. I'll try and send out an updated patch tomorrow...
+I don't think that BR2_DL_DIR and BR2_PRIMARY_SITE serve the same
+purpose. The former specifies where packages should be stored, which
+implies write permissions. The latter specifies where packages come
+from, which only implies read permissions. In a project with multiple
+developers, one wouldn't want the central 'DL_DIR' to become cluttered
+with packages from each individual developer's experiments.
 
-Thanks for reminding me,
-Thomas
+Moreover, the current uses of DL_DIR expect it to be a locally
+accessible directory. In order to support scp, we'd need to modify all
+the existing download rules.
