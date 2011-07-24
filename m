@@ -1,121 +1,72 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Jul 2011 17:03:28 +0200
-Subject: [Buildroot] [PATCH 02/12] package: enhance infrastructure to
- support source dir override
-In-Reply-To: <20110720201623.6093dff9@skate>
-References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
- <fed6cc77c0e18aa06a3fc1e3b9bfd9db70b98d23.1311141087.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LU0J60ycOfqtgUcy2K4ejVCk71oQiJ6YiWzOxfse8w__Q@mail.gmail.com>
- <20110720201623.6093dff9@skate>
-Message-ID: <CAAXf6LXjdvHPqrxCMR7kT2x3C4ymZK-f=aye_DRe5+yjoKm8yA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 Jul 2011 18:06:13 +0200
+Subject: [Buildroot] ccache directory
+In-Reply-To: <874o2byhax.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+ of "Sun, 24 Jul 2011 14:49:42 +0200")
+References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
+ <20110720181955.36911f14@skate> <87livs1xv4.fsf@macbook.be.48ers.dk>
+ <20110721075819.5a535238@skate>
+ <CAAXf6LUHjWVv794Voi40DPOy+QAaZNpdVKp8Z-k=yFcRtxay-Q@mail.gmail.com>
+ <874o2byhax.fsf@macbook.be.48ers.dk>
+Message-ID: <87zkk3wtmy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+
 Hi,
 
-On Wed, Jul 20, 2011 at 8:16 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello Thomas,
->
-> Thanks for the feedback!
->
-> Le Wed, 20 Jul 2011 08:42:36 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> In one project package .mk file I added, I added support for an
->> external source directory myself. The external source was under
->> revision control. Because originally the build was made in that source
->> directory, the 'status' command of the version control system would
->> show a bunch of files created by the build system. You'd have to
->> update the ignore file to add all these build objects (some of which
->> don't follow a pattern like *.o).
->> There was another problem with the in-tree building: you couldn't use
->> the same source dir from two buildroot trees, as the configuration may
->> be different and there would be continuous rebuilding necessary.
->>
->> When you say 'out-of-tree builds [..] wouldn't work well in a generic
->> way for GENTARGETS', you mean that not all packages support this? What
->> are the typical problems that arise?
->
-> Try with any random package that does not use autotools or CMake do not
-> out-of-tree build. Even a simple package such as zlib does not build
-> out-of-tree, even in native compilation. Basically, all packages that
-> are supported with the GENTARGETS infrastructure use some sort of
-> custom/home-made build system, and 99% of the time, this build system
-> does not support out-of-tree build.
->
->> I think it would be a very good improvement if we could decouple the
->> source from the build directory.
->
-> It would, but I don't see a good way of implementing this without
-> fighting with hundreds of upstream projects to get their build system
-> fixed.
->
->> One workaround is to copy the source directory to output/build and
->> do 'in-tree' building there. Ideally
->> this would only be done for packages that have problems with
->> out-of-tree building (and even more ideally these packages would be
->> fixed). The disadvantages of this are obviously the extra time that it
->> takes to make the copy, but also that it becomes more difficult to
->> detect any changes in the original sources: when do you have to
->> recopy?
->
-> Yes, I don't see this how this can work. The "source dir override"
-> feature is precisely here to help when Buildroot is used during
-> development, when you are hacking on your kernel, on a library or an
-> application. And in this case, you want a simple "make foobar-rebuild"
-> in Buildroot to rebuild the "foobar" package, without having to do
-> anything else.
->
->> This brings me to the following point: for non-local packages, the
->> whole package compilation process is restarted if a change in the
->> source is detected (i.e. when the tarball is newer than the stamp
->> files). How does this go about now?
->
-> Unless I missed something, I think the statement you are making is not
-> true. The dependencies between the various steps in the package build
-> process are expressed using phony targets, so I don't think changing
-> the tarball is going to re-trigger the build process of a particular
-> package.
+ Thomas> Another solution is to remove the hardcoded cache directory,
+ Thomas> use the CCACHE_DIR environment variable, but let buildroot set
+ Thomas> that variable based on BR2_CCACHE_DIR (a configuration
+ Thomas> option). This addresses Thomas' point regarding mixing
+ Thomas> environment variables and configuration options, and my request
+ Thomas> of being able to change the cache directory and making sure
+ Thomas> these changes are automatically in effect.
 
-Ok, so the current behavior for non-local package does not yet detect
-an updated tarball.
-I think it should, i.e. the steps that happen after downloading should
-depend on the downloaded archive, instead of on a stamp file.
+ Thomas> What do you think?
 
-This is part of the problem I have with Linux as well (in case of a
-custom tarball):
-http://lists.busybox.net/pipermail/buildroot/2011-July/044501.html
+ Peter> Yes, something like:
 
->
-> When it comes to packages whose source directory has been overridden by
-> this new feature, it's up to the user to do "make foobar-rebuild".
-> Buildroot cannot guess which packages have changed, and redoing the
-> make + make install steps for all packages just in case would be
-> horribly slow.
->
->> As far as I can see in the current patch, there is no such detection.
->> If the original sources are changed, the developer has to force
->> recompilation of the package (e.g. with the upcoming xxx-reconfigure
->> targets). Is that correct, or is there another way?
->
-> This is correct, and I don't see another way of doing this. We could of
-> course add a new variable like BR_FORCED_PACKAGES, in which you could
-> list the packages that you want to be rebuilt+reinstall at every make
-> invocation. But this has a really nasty semantic, and I'd prefer not to
-> implement something like this.
+ Peter> # use BR setting if not set in environment
+ Peter> ifndef CCACHE_DIR
+ Peter> CCACHE_DIR:=$(call qstrip,BR2_CCACHE_DIR)
+ Peter> endif
 
-I agree, it's not a nice way to solve this.
+ Peter> export CCACHE_DIR
 
-What if we make sure the infrastructure support out-of-tree building
-anyway, and have the package Makefile for local packages indicate if
-the package supports it or not. This way, we can benefit from
-out-of-tree building if the package supports it.
+ Peter> in the toplevel Makefile.
 
-How do you feel about such a variable?
+Except that doesn't work. The GENTARGETS stuff for ccache already
+creates a CCACHE_DIR variable for the ccache build directory, and the
+export line only gets evaluated just before the targets are executed :/
 
-Thanks,
-Thomas
+As variables are automatically reexported when they were set in the
+environment, this also means that we would always clutter the CCACHE_DIR
+environment setting.
+
+It's furthermore not easy to handle a BR_CCACHE_DIR variable containing
+shell variables (like $HOME) that should get expanded before make
+handles it.
+
+So that leaves either:
+
+- Keep things like they are
+
+- Add a BR2_CCACHE_DIR but tell people that they cannot use $VAR in it
+
+- Patch ccache to look for another environment variable
+
+- Rework GENTARGETS to not use <pkg>_DIR, but several packages would
+  need to be updated, and users might rely on it for local packages
+
+- Rename ccache package to something else, breaking existing .configs
+
+I think option two (defaulting to ~/.buildroot-ccache or perhaps
+~/.ccache) is probably the best option, followed by 1.
+
+-- 
+Bye, Peter Korsgaard
