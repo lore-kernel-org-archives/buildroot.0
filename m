@@ -1,7 +1,7 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 24 Jul 2011 23:11:17 +0200
-Subject: [Buildroot] [git commit] iptables: fixup multitarget binary links
-Message-ID: <20110724211847.299F08B487@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] scons: new package
+Message-ID: <20110724211847.C9E948AE9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,51 +9,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=332dd196cad4fa1a9b0257b08091b902efa5a7c2
+commit: http://git.buildroot.net/buildroot/commit/?id=cae6d2397bfb49cda38d5ba629e049a959eede8a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Newer vesions renamed iptables-multi to xtables-multi so fix
-the symlinks accordingly.
+Only the host package is supported.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/iptables/iptables.mk |   13 +++++++------
- 1 files changed, 7 insertions(+), 6 deletions(-)
+ package/scons/scons.mk |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
+ create mode 100644 package/scons/scons.mk
 
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 13d2ac3..c464e6b 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -14,15 +14,15 @@ IPTABLES_DEPENDENCIES = host-pkg-config
- IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
- 
- define IPTABLES_TARGET_SYMLINK_CREATE
--	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables
--	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-save
--	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-restore
-+	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables
-+	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables-save
-+	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables-restore
- endef
- 
- define IPTABLES_TARGET_IPV6_SYMLINK_CREATE
--	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables
--	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables-save
--	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables-restore
-+	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/ip6tables
-+	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/ip6tables-save
-+	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/ip6tables-restore
- endef
- 
- define IPTABLES_TARGET_IPV6_REMOVE
-@@ -40,6 +40,7 @@ endif
- define IPTABLES_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/iptables-xml
- 	rm -f $(TARGET_DIR)/usr/sbin/iptables* $(TARGET_DIR)/usr/sbin/ip6tables*
-+	rm -f $(TARGET_DIR)/usr/sbin/xtables-multi
- 	rm -rf $(TARGET_DIR)/usr/lib/xtables
- endef
- 
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+new file mode 100644
+index 0000000..f8fe84b
+--- /dev/null
++++ b/package/scons/scons.mk
+@@ -0,0 +1,13 @@
++SCONS_VERSION = 2.0.1
++SCONS_SOURCE = scons-$(SCONS_VERSION).tar.gz
++SCONS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/scons
++
++define HOST_SCONS_BUILD_CMDS
++	(cd $(@D); python setup.py build)
++endef
++
++define HOST_SCONS_INSTALL_CMDS
++	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr)
++endef
++
++$(eval $(call GENTARGETS,package,scons,host))
 -- 
 1.7.3.4
