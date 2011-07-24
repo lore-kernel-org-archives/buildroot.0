@@ -1,43 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Jul 2011 13:54:15 +0200
-Subject: [Buildroot] [PATCH 2 of 3] Allow BR2_PRIMARY_SITE and
- BR2_BACKUP_SITE to be a file:// URL
-In-Reply-To: <20110720071336.1958f634@skate>
-References: <patchbomb.1300174025@localhost6.localdomain6>
- <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
- <20110720071336.1958f634@skate>
-Message-ID: <CAAXf6LXixYABXkp_LP+9kcUSp1cCMfcOKcYqBxMNzcu-dm2N=A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Jul 2011 14:49:42 +0200
+Subject: [Buildroot] ccache directory
+In-Reply-To: <CAAXf6LUHjWVv794Voi40DPOy+QAaZNpdVKp8Z-k=yFcRtxay-Q@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Sun, 24 Jul 2011 13:23:13
+ +0200")
+References: <CAAXf6LUROj4Pg2TLKETfo5SNYuC=teuFbcHEyhELuvmmTNTwvw@mail.gmail.com>
+ <20110720181955.36911f14@skate> <87livs1xv4.fsf@macbook.be.48ers.dk>
+ <20110721075819.5a535238@skate>
+ <CAAXf6LUHjWVv794Voi40DPOy+QAaZNpdVKp8Z-k=yFcRtxay-Q@mail.gmail.com>
+Message-ID: <874o2byhax.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 20, 2011 at 7:13 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Le Tue, 15 Mar 2011 08:27:07 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> ?define DOWNLOAD
->> ? ? ? $(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
->> - ? ? ? ? ? ? $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
->> + ? ? ? ? ? ? case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
->> + ? ? ? ? ? ? ? ? ? ? file) $(call $(DL_MODE)_FILE,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
->> + ? ? ? ? ? ? ? ? ? ? *) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
->> + ? ? ? ? ? ? esac ; \
->
-> Does this bring any additional feature that using the existing
-> BR2_DL_DIR option ?
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-I don't think that BR2_DL_DIR and BR2_PRIMARY_SITE serve the same
-purpose. The former specifies where packages should be stored, which
-implies write permissions. The latter specifies where packages come
-from, which only implies read permissions. In a project with multiple
-developers, one wouldn't want the central 'DL_DIR' to become cluttered
-with packages from each individual developer's experiments.
 
-Moreover, the current uses of DL_DIR expect it to be a locally
-accessible directory. In order to support scp, we'd need to modify all
-the existing download rules.
+Hi,
+
+ >> That's another possibility, but I find it quite confusing to have some
+ >> parameters set by environment variables, and some other by
+ >> configuration options.
+
+ Thomas> The disadvantage with this particular configuration variable, is that
+ Thomas> it requires a forced recompilation of host-ccache in order for changes
+ Thomas> to this variable to take effect.
+
+ Thomas> Another solution is to remove the hardcoded cache directory, use the
+ Thomas> CCACHE_DIR environment variable, but let buildroot set that variable
+ Thomas> based on BR2_CCACHE_DIR (a configuration option). This addresses
+ Thomas> Thomas' point regarding mixing environment variables and configuration
+ Thomas> options, and my request of being able to change the cache directory
+ Thomas> and making sure these changes are automatically in effect.
+
+ Thomas> What do you think?
+
+Yes, something like:
+
+# use BR setting if not set in environment
+ifndef CCACHE_DIR
+CCACHE_DIR:=$(call qstrip,BR2_CCACHE_DIR)
+endif
+
+export CCACHE_DIR
+
+in the toplevel Makefile.
+
+-- 
+Bye, Peter Korsgaard
