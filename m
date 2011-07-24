@@ -1,34 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 24 Jul 2011 22:19:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 3781] crosstool-ng-1.11.3 fails to build
-In-Reply-To: <bug-3781-163@https.bugs.busybox.net/>
-References: <bug-3781-163@https.bugs.busybox.net/>
-Message-ID: <20110724221951.3C6888B495@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Jul 2011 00:26:09 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: Add missing dependency of
+	tst_uuid.o on uuid.h
+In-Reply-To: <1310991099-3829-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 18 Jul 2011 14:11:39 +0200")
+References: <1310991099-3829-1-git-send-email-arnout@mind.be>
+Message-ID: <8739hvuxha.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3781
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Yann E. MORIN <yann.morin.1998@anciens.enib.fr> changed:
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> The missing dependency used to break parallel builds.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+Thanks, committed.
 
---- Comment #5 from Yann E. MORIN <yann.morin.1998@anciens.enib.fr>  ---
-We believe this bug was solved as a side effect of:
-
-http://git.buildroot.org/buildroot/commit/?id=ea23f34e25839a9559c3bb61cc5d9f54c89e137b
-
-Please, give it a try, and re-open if it still fails for you.
-
-Thank you!
+I noticed it is still not in e2fsprogs git, please reping upstream.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
