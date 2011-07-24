@@ -1,43 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Jul 2011 14:02:25 +0200
-Subject: [Buildroot] [git commit] bind: fix intermittent build issues with
-	high BR2_JLEVEL
-Message-ID: <20110724135547.73F198B486@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 24 Jul 2011 16:50:50 +0200
+Subject: [Buildroot] [PATCH 05/12] package: implement a 'local' site
+	method
+In-Reply-To: <20110720201942.17ec130a@skate>
+References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
+ <867549f5fef1c44afbe437119feac731f6757833.1311141087.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LVGd8MQaLLjeEbz4e4gENwYV_gCN7SxS1N6ugjWvAdunw@mail.gmail.com>
+ <20110720201942.17ec130a@skate>
+Message-ID: <CAAXf6LUCODt7jvwhN7iFogCrH0F6isiszDJ=6710-Uu=kVz+sA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jul 20, 2011 at 8:19 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Le Wed, 20 Jul 2011 08:29:26 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> You could auto-detect the site-method if you add support for the
+>> file:// prefix in _SITE. Auto-detection currently already occurs for
+>> git, bzr, http, etc. so I think it makes sense to do it here as well.
+>
+> I think you are making a confusion here between the "local" site method
+> implemented in this patch and the "file" site method that you
+> implemented in the past, and which is part of this patch set, in a
+> different patch.
+>
+> The "file" site method simply allows to say that the package tarball is
+> present locally in the system. But except the download step, all the
+> other package construction steps are similar: extraction, patching, etc.
+>
+> The "local" site method tells Buildroot that the package source code is
+> already available is some *directory*. Using the "local" site method
+> completely skips the download, extraction and patching steps of the
+> package construction process, which directly starts by the
+> configuration step.
+>
+> So, "file" and "local" are two very different things.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa7a46d612654f7a03b19edacc9a8b1416012295
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ok, I was indeed confusing the two.
+If I understand correctly, the main difference is that the file method
+expects an archive, and the local method expects a prepared source
+tree.
+But this also means that you cannot properly use a 'local' package
+from two buildroot installations, since the compilation process
+happens in the local directory. Is that correct?
 
-Build sometimes breaks with:
-
-libtool: link: `unix/os.lo' is not a valid libtool object
-make[3]: *** [rndc-confgen] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[4]: Leaving directory `/scratch/peko/build/bind-9.6-ESV-R4/bin/rndc/unix'
-
-So disable parallel builds.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bind/bind.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 2df6ae8..0530934 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -6,6 +6,7 @@
- 
- BIND_VERSION = 9.6-ESV-R4
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
-+BIND_MAKE = $(MAKE1)
- BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
- BIND_TARGET_SBINS += named-compilezone rndc rndc-confgen dnssec-dsfromkey
- BIND_TARGET_SBINS += dnssec-keyfromlabel dnssec-keygen dnssec-signzone
--- 
-1.7.3.4
+Thomas
