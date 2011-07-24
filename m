@@ -1,53 +1,121 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Jul 2011 16:50:50 +0200
-Subject: [Buildroot] [PATCH 05/12] package: implement a 'local' site
-	method
-In-Reply-To: <20110720201942.17ec130a@skate>
+Date: Sun, 24 Jul 2011 17:03:28 +0200
+Subject: [Buildroot] [PATCH 02/12] package: enhance infrastructure to
+ support source dir override
+In-Reply-To: <20110720201623.6093dff9@skate>
 References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
- <867549f5fef1c44afbe437119feac731f6757833.1311141087.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LVGd8MQaLLjeEbz4e4gENwYV_gCN7SxS1N6ugjWvAdunw@mail.gmail.com>
- <20110720201942.17ec130a@skate>
-Message-ID: <CAAXf6LUCODt7jvwhN7iFogCrH0F6isiszDJ=6710-Uu=kVz+sA@mail.gmail.com>
+ <fed6cc77c0e18aa06a3fc1e3b9bfd9db70b98d23.1311141087.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LU0J60ycOfqtgUcy2K4ejVCk71oQiJ6YiWzOxfse8w__Q@mail.gmail.com>
+ <20110720201623.6093dff9@skate>
+Message-ID: <CAAXf6LXjdvHPqrxCMR7kT2x3C4ymZK-f=aye_DRe5+yjoKm8yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 20, 2011 at 8:19 PM, Thomas Petazzoni
+Hi,
+
+On Wed, Jul 20, 2011 at 8:16 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+> Hello Thomas,
 >
-> Le Wed, 20 Jul 2011 08:29:26 +0200,
+> Thanks for the feedback!
+>
+> Le Wed, 20 Jul 2011 08:42:36 +0200,
 > Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 >
->> You could auto-detect the site-method if you add support for the
->> file:// prefix in _SITE. Auto-detection currently already occurs for
->> git, bzr, http, etc. so I think it makes sense to do it here as well.
+>> In one project package .mk file I added, I added support for an
+>> external source directory myself. The external source was under
+>> revision control. Because originally the build was made in that source
+>> directory, the 'status' command of the version control system would
+>> show a bunch of files created by the build system. You'd have to
+>> update the ignore file to add all these build objects (some of which
+>> don't follow a pattern like *.o).
+>> There was another problem with the in-tree building: you couldn't use
+>> the same source dir from two buildroot trees, as the configuration may
+>> be different and there would be continuous rebuilding necessary.
+>>
+>> When you say 'out-of-tree builds [..] wouldn't work well in a generic
+>> way for GENTARGETS', you mean that not all packages support this? What
+>> are the typical problems that arise?
 >
-> I think you are making a confusion here between the "local" site method
-> implemented in this patch and the "file" site method that you
-> implemented in the past, and which is part of this patch set, in a
-> different patch.
+> Try with any random package that does not use autotools or CMake do not
+> out-of-tree build. Even a simple package such as zlib does not build
+> out-of-tree, even in native compilation. Basically, all packages that
+> are supported with the GENTARGETS infrastructure use some sort of
+> custom/home-made build system, and 99% of the time, this build system
+> does not support out-of-tree build.
 >
-> The "file" site method simply allows to say that the package tarball is
-> present locally in the system. But except the download step, all the
-> other package construction steps are similar: extraction, patching, etc.
+>> I think it would be a very good improvement if we could decouple the
+>> source from the build directory.
 >
-> The "local" site method tells Buildroot that the package source code is
-> already available is some *directory*. Using the "local" site method
-> completely skips the download, extraction and patching steps of the
-> package construction process, which directly starts by the
-> configuration step.
+> It would, but I don't see a good way of implementing this without
+> fighting with hundreds of upstream projects to get their build system
+> fixed.
 >
-> So, "file" and "local" are two very different things.
+>> One workaround is to copy the source directory to output/build and
+>> do 'in-tree' building there. Ideally
+>> this would only be done for packages that have problems with
+>> out-of-tree building (and even more ideally these packages would be
+>> fixed). The disadvantages of this are obviously the extra time that it
+>> takes to make the copy, but also that it becomes more difficult to
+>> detect any changes in the original sources: when do you have to
+>> recopy?
+>
+> Yes, I don't see this how this can work. The "source dir override"
+> feature is precisely here to help when Buildroot is used during
+> development, when you are hacking on your kernel, on a library or an
+> application. And in this case, you want a simple "make foobar-rebuild"
+> in Buildroot to rebuild the "foobar" package, without having to do
+> anything else.
+>
+>> This brings me to the following point: for non-local packages, the
+>> whole package compilation process is restarted if a change in the
+>> source is detected (i.e. when the tarball is newer than the stamp
+>> files). How does this go about now?
+>
+> Unless I missed something, I think the statement you are making is not
+> true. The dependencies between the various steps in the package build
+> process are expressed using phony targets, so I don't think changing
+> the tarball is going to re-trigger the build process of a particular
+> package.
 
-Ok, I was indeed confusing the two.
-If I understand correctly, the main difference is that the file method
-expects an archive, and the local method expects a prepared source
-tree.
-But this also means that you cannot properly use a 'local' package
-from two buildroot installations, since the compilation process
-happens in the local directory. Is that correct?
+Ok, so the current behavior for non-local package does not yet detect
+an updated tarball.
+I think it should, i.e. the steps that happen after downloading should
+depend on the downloaded archive, instead of on a stamp file.
 
+This is part of the problem I have with Linux as well (in case of a
+custom tarball):
+http://lists.busybox.net/pipermail/buildroot/2011-July/044501.html
+
+>
+> When it comes to packages whose source directory has been overridden by
+> this new feature, it's up to the user to do "make foobar-rebuild".
+> Buildroot cannot guess which packages have changed, and redoing the
+> make + make install steps for all packages just in case would be
+> horribly slow.
+>
+>> As far as I can see in the current patch, there is no such detection.
+>> If the original sources are changed, the developer has to force
+>> recompilation of the package (e.g. with the upcoming xxx-reconfigure
+>> targets). Is that correct, or is there another way?
+>
+> This is correct, and I don't see another way of doing this. We could of
+> course add a new variable like BR_FORCED_PACKAGES, in which you could
+> list the packages that you want to be rebuilt+reinstall at every make
+> invocation. But this has a really nasty semantic, and I'd prefer not to
+> implement something like this.
+
+I agree, it's not a nice way to solve this.
+
+What if we make sure the infrastructure support out-of-tree building
+anyway, and have the package Makefile for local packages indicate if
+the package supports it or not. This way, we can benefit from
+out-of-tree building if the package supports it.
+
+How do you feel about such a variable?
+
+Thanks,
 Thomas
