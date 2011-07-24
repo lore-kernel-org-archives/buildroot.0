@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Sun, 24 Jul 2011 23:11:17 +0200
-Subject: [Buildroot] [git commit] gst-plugins-ugly: fix dependencies for mad
-	MP3 decoder plug-in
-Message-ID: <20110724211848.43A078AE9D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iptables: fixup multitarget binary links
+Message-ID: <20110724211847.299F08B487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,46 +9,51 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d3b7283faceedf71797b4e53ac8dba0cda9b7e2
+commit: http://git.buildroot.net/buildroot/commit/?id=332dd196cad4fa1a9b0257b08091b902efa5a7c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mad plug-in depends on libid3tag. This dependency used to be
-implicit by selecting the id3tag plug-in. Now that this plug-in
-is not any longer part of gst-plugins-ugly we need an explicit
-dependency on libid3tag.
+Newer vesions renamed iptables-multi to xtables-multi so fix
+the symlinks accordingly.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/gst-plugins-ugly/Config.in      |    2 +-
- .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/iptables/iptables.mk |   13 +++++++------
+ 1 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-ugly/Config.in b/package/multimedia/gst-plugins-ugly/Config.in
-index e20426f..94e2b9d 100644
---- a/package/multimedia/gst-plugins-ugly/Config.in
-+++ b/package/multimedia/gst-plugins-ugly/Config.in
-@@ -40,7 +40,7 @@ comment "plugins with external dependencies (there may be more available)"
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 13d2ac3..c464e6b 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -14,15 +14,15 @@ IPTABLES_DEPENDENCIES = host-pkg-config
+ IPTABLES_CONF_OPT = --libexecdir=/usr/lib --with-kernel=$(LINUX_HEADERS_DIR)
  
- config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD
- 	bool "mad (*.mp3 audio)"
--	select BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ID3TAG
-+	select BR2_PACKAGE_LIBID3TAG
- 	select BR2_PACKAGE_LIBMAD
+ define IPTABLES_TARGET_SYMLINK_CREATE
+-	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables
+-	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-save
+-	ln -sf iptables-multi $(TARGET_DIR)/usr/sbin/iptables-restore
++	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables
++	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables-save
++	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/iptables-restore
+ endef
  
- config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEG2DEC
-diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-index da214a1..ab557a3 100644
---- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-+++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
-@@ -62,7 +62,7 @@ endif
+ define IPTABLES_TARGET_IPV6_SYMLINK_CREATE
+-	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables
+-	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables-save
+-	ln -sf ip6tables-multi $(TARGET_DIR)/usr/sbin/ip6tables-restore
++	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/ip6tables
++	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/ip6tables-save
++	ln -sf xtables-multi $(TARGET_DIR)/usr/sbin/ip6tables-restore
+ endef
  
- ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD),y)
- GST_PLUGINS_UGLY_CONF_OPT += --enable-mad
--GST_PLUGINS_UGLY_DEPENDENCIES += libmad
-+GST_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
- else
- GST_PLUGINS_UGLY_CONF_OPT += --disable-mad
- endif
+ define IPTABLES_TARGET_IPV6_REMOVE
+@@ -40,6 +40,7 @@ endif
+ define IPTABLES_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/iptables-xml
+ 	rm -f $(TARGET_DIR)/usr/sbin/iptables* $(TARGET_DIR)/usr/sbin/ip6tables*
++	rm -f $(TARGET_DIR)/usr/sbin/xtables-multi
+ 	rm -rf $(TARGET_DIR)/usr/lib/xtables
+ endef
+ 
 -- 
 1.7.3.4
