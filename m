@@ -1,38 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 Jul 2011 23:26:48 +0200
-Subject: [Buildroot] BR2_PREFER_STATIC_LIB and external toolchain
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6047CB6@ex-mb1.corp.adtran.com>
- (ANDY KENNEDY's message of "Mon, 25 Jul 2011 21:12:35 +0000")
-References: <F9C551623D2CBB4C9488801D14F864C6047C5D@ex-mb1.corp.adtran.com>
- <87r55e15gb.fsf@macbook.be.48ers.dk>
- <F9C551623D2CBB4C9488801D14F864C6047CB6@ex-mb1.corp.adtran.com>
-Message-ID: <87aac2127b.fsf@macbook.be.48ers.dk>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Mon, 25 Jul 2011 17:46:55 -0400
+Subject: [Buildroot] [PATCH] inotify-tools: Add new package
+Message-ID: <1311630415-633-1-git-send-email-mike@mikebwilliams.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
+Adds support for inotify-tools, which are useful for scripting the
+Linux inotify API.
 
- >> Yes, I noticed as well today. Unfortunately it isn't as simple as
- >> making
- >> copy_toolchain_lib_root a noop with static linking, as E.G. glibc
- >> afaik
- >> still needs libnss*.so* in the target rootfs when static linking is
- >> used.
+Signed-off-by: Mike Williams <mike@mikebwilliams.com>
+---
+ package/Config.in                      |    1 +
+ package/inotify-tools/Config.in        |   10 ++++++++++
+ package/inotify-tools/inotify-tools.mk |    8 ++++++++
+ 3 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/inotify-tools/Config.in
+ create mode 100644 package/inotify-tools/inotify-tools.mk
 
- ANDY> Really?  What are the libnss*-pic.a for then?
-
-I don't normally use glibc toolchains for embedded, but I believe you
-only have those if you built glibc with --enable-static-nss. By default
-glibc will dlopen libnss instead (to handle dynamic name resolution).
-
- ANDY> Also, another bone of contention is that I'm getting header files
- ANDY> in the target.  Where does that happen?
-
-Those should get removed at the end through the target-finalize step in
-the toplevel Makefile unless you have BR2_HAVE_DEVFILES enabled.
-
+diff --git a/package/Config.in b/package/Config.in
+index 40f523d..b3b93b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -474,6 +474,7 @@ source "package/dash/Config.in"
+ endif
+ source "package/dialog/Config.in"
+ source "package/file/Config.in"
++source "package/inotify-tools/Config.in"
+ source "package/lockfile-progs/Config.in"
+ source "package/logrotate/Config.in"
+ source "package/screen/Config.in"
+diff --git a/package/inotify-tools/Config.in b/package/inotify-tools/Config.in
+new file mode 100644
+index 0000000..8563f97
+--- /dev/null
++++ b/package/inotify-tools/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_INOTIFY_TOOLS
++	bool "inotify-tools"
++	help
++	  inotify-tools is a C library and a set of command-line
++	  programs for Linux providing a simple interface to inotify.
++	  These programs can be used to monitor and act upon
++	  filesystem events. Provides the 'inotifywait' and 'inotifywatch'
++		binaries.
++
++	  https://github.com/rvoicilas/inotify-tools
+diff --git a/package/inotify-tools/inotify-tools.mk b/package/inotify-tools/inotify-tools.mk
+new file mode 100644
+index 0000000..d6378bb
+--- /dev/null
++++ b/package/inotify-tools/inotify-tools.mk
+@@ -0,0 +1,8 @@
++#############################################################
++#
++# inotify-utils
++#
++#############################################################
++INOTIFY_TOOLS_VERSION = 3.14
++INOTIFY_TOOLS_SITE = http://github.com/downloads/rvoicilas/inotify-tools/
++$(eval $(call AUTOTARGETS,package,inotify-tools))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
