@@ -1,38 +1,38 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Mon, 25 Jul 2011 17:11:53 -0400
-Subject: [Buildroot] [PATCH] inotify-tools: Add new package
-In-Reply-To: <CANPyyuOjm8U6osYRJWZKwWpRFJFQ1GXGjMJEA4TgG3oYH9MZGg@mail.gmail.com>
-References: <1311626319-19243-1-git-send-email-mike@mikebwilliams.com>
- <87ei1e13pm.fsf@macbook.be.48ers.dk>
- <CANPyyuOjm8U6osYRJWZKwWpRFJFQ1GXGjMJEA4TgG3oYH9MZGg@mail.gmail.com>
-Message-ID: <CANPyyuOZNEDTvPnUKKDn7LJG_k=ycEFN2BfZG9aSZrHhse=U6A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Jul 2011 23:26:48 +0200
+Subject: [Buildroot] BR2_PREFER_STATIC_LIB and external toolchain
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C6047CB6@ex-mb1.corp.adtran.com>
+ (ANDY KENNEDY's message of "Mon, 25 Jul 2011 21:12:35 +0000")
+References: <F9C551623D2CBB4C9488801D14F864C6047C5D@ex-mb1.corp.adtran.com>
+ <87r55e15gb.fsf@macbook.be.48ers.dk>
+ <F9C551623D2CBB4C9488801D14F864C6047CB6@ex-mb1.corp.adtran.com>
+Message-ID: <87aac2127b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+>>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
 
-Thanks for taking the time to review this so quickly.
+ >> Yes, I noticed as well today. Unfortunately it isn't as simple as
+ >> making
+ >> copy_toolchain_lib_root a noop with static linking, as E.G. glibc
+ >> afaik
+ >> still needs libnss*.so* in the target rootfs when static linking is
+ >> used.
 
-> ?Mike> Adds support for inotify-tools, which are useful for scripting the
-> ?Mike> Linux inotify API.
->
-> Thanks, see below for a few comments.
->
-> First of all, are you aware of busybox's inotifyd? From a quick look it
-> seems to do more-or-less the same as these.
+ ANDY> Really?  What are the libnss*-pic.a for then?
 
-I was not (I did the lazy thing and searched through the buildroot
-package menus only). However, it doesn't mention automatically
-monitoring subdirectories that are created, which I need, so these
-tools appear to still be necessary.
+I don't normally use glibc toolchains for embedded, but I believe you
+only have those if you built glibc with --enable-static-nss. By default
+glibc will dlopen libnss instead (to handle dynamic name resolution).
 
+ ANDY> Also, another bone of contention is that I'm getting header files
+ ANDY> in the target.  Where does that happen?
 
-> Otherwise it looks good, thanks. Care to fix and resend?
+Those should get removed at the end through the target-finalize step in
+the toplevel Makefile unless you have BR2_HAVE_DEVFILES enabled.
 
-Sure, I'll try to get it done ASAP.
-
-Thanks,
-Mike
+-- 
+Bye, Peter Korsgaard
