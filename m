@@ -1,8 +1,9 @@
-From: Alexjan Carraturo <axjslack@gmail.com>
-Date: Mon, 25 Jul 2011 10:19:57 +0200
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Jul 2011 10:24:36 +0200
 Subject: [Buildroot] [git commit] e2fsprogs: Add missing dependency of
 	tst_uuid.o on uuid.h
-In-Reply-To: <878vrmu67e.fsf@macbook.be.48ers.dk>
+In-Reply-To: <CACR8Qs_Nm6QtjsHxSjkUzr+_GBDh_7QFMHxfmoMXVFtFg+RAww@mail.gmail.com>
+ (Alexjan Carraturo's message of "Mon, 25 Jul 2011 10:19:57 +0200")
 References: <20110724222706.574988B495@busybox.osuosl.org>
  <CACR8Qs_yv1OspsG_byHSTXm5pZ1UMgrMVj0GXf8Rvovk-4+Lpw@mail.gmail.com>
  <87pqkyu8gr.fsf@macbook.be.48ers.dk>
@@ -10,55 +11,35 @@ References: <20110724222706.574988B495@busybox.osuosl.org>
  <87d3gyu6x0.fsf@macbook.be.48ers.dk>
  <CACR8Qs-Ck_eSKgG2BxSAGaDWkBzLusoiGphaJnmmgUN=4CFfrg@mail.gmail.com>
  <878vrmu67e.fsf@macbook.be.48ers.dk>
-Message-ID: <CACR8Qs_Nm6QtjsHxSjkUzr+_GBDh_7QFMHxfmoMXVFtFg+RAww@mail.gmail.com>
+ <CACR8Qs_Nm6QtjsHxSjkUzr+_GBDh_7QFMHxfmoMXVFtFg+RAww@mail.gmail.com>
+Message-ID: <874o2au5rv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/7/25 Peter Korsgaard <jacmet@sunsite.dk>:
->>>>>> "Alexjan" == Alexjan Carraturo <axjslack@gmail.com> writes:
->
-> Hi,
->
-> ?Alexjan> make debug (with your patch)
->
-> ?Alexjan> package/Makefile.in:144: *** separatore ?assente. ?Stop.
->
->
-> ?Alexjan> Note: Separatore assente means "missing separator"
->
-> Then something probably went wrong with the patch - The @echo lines have
-> to be indented with a <tab>.
->
-> Care to try again?
->
+>>>>> "Alexjan" == Alexjan Carraturo <axjslack@gmail.com> writes:
 
-Ok... now I had the tab manually and seems working
+Hi,
 
-CFLAGS=-O2 -I/home/buildroot/buildroot-20110722/buildroot/output/host/include
--I/home/buildroot/buildroot-20110722/buildroot/output/host/usr/include
-CXXFLAGS=-I/home/buildroot/buildroot-20110722/buildroot/output/host/include
--I/home/buildroot/buildroot-20110722/buildroot/output/host/usr/include
-LDFLAGS=-L/home/buildroot/buildroot-20110722/buildroot/output/host/lib
--L/home/buildroot/buildroot-20110722/buildroot/output/host/usr/lib
--Wl,-rpath,/home/buildroot/buildroot-20110722/buildroot/output/host/usr/lib
+ Alexjan> Ok... now I had the tab manually and seems working
 
+ Alexjan> CFLAGS=-O2 -I/home/buildroot/buildroot-20110722/buildroot/output/host/include
+ Alexjan> -I/home/buildroot/buildroot-20110722/buildroot/output/host/usr/include
+ Alexjan> CXXFLAGS=-I/home/buildroot/buildroot-20110722/buildroot/output/host/include
+ Alexjan> -I/home/buildroot/buildroot-20110722/buildroot/output/host/usr/include
+ Alexjan> LDFLAGS=-L/home/buildroot/buildroot-20110722/buildroot/output/host/lib
+ Alexjan> -L/home/buildroot/buildroot-20110722/buildroot/output/host/usr/lib
+ Alexjan> -Wl,-rpath,/home/buildroot/buildroot-20110722/buildroot/output/host/usr/lib
 
-> --
-> Bye, Peter Korsgaard
->
+Ok, that looks good. So far so good, could you send me (in private) the
+output of the host-mtd build? E.G.
 
+rm -rf output/build/host-mtd-*
+make host-mtd >/tmp/log.txt 2>&1
 
+and send me /tmp/log.txt
 
 -- 
-Alexjan Carraturo
---
-Free Software User Group Italia administrator (http://www.fsugitalia.org)
-Fedora/OpenSUSE Ambassador
-member of FSFE Italian Team
-
-Twitter/Facebook/Identica: axjslack
-Blog: http://axjslack.wordpress.com
---
+Bye, Peter Korsgaard
