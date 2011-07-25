@@ -1,43 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 25 Jul 2011 10:24:07 +0300
-Subject: [Buildroot] [PATCH] toolchain: add user defined target LDFLAGS
-	options
-In-Reply-To: <87tyaau8xo.fsf@macbook.be.48ers.dk>
-References: <b4ad3d880f9c9e43b70d43bf527593487f3b1035.1308820722.git.baruch@tkos.co.il>
- <87y5zmuauq.fsf@macbook.be.48ers.dk>
- <20110725071001.GA13998@sapphire.tkos.co.il>
- <87tyaau8xo.fsf@macbook.be.48ers.dk>
-Message-ID: <20110725072406.GB13998@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 25 Jul 2011 09:20:26 +0200
+Subject: [Buildroot] [PATCH 05/12] package: implement a 'local' site
+	method
+In-Reply-To: <20110725091116.1655460c@skate>
+References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LUCODt7jvwhN7iFogCrH0F6isiszDJ=6710-Uu=kVz+sA@mail.gmail.com>
+ <20110725091116.1655460c@skate>
+Message-ID: <201107250920.26479.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Thomas*2, All,
 
-On Mon, Jul 25, 2011 at 09:16:19AM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On Monday 25 July 2011 091116 Thomas Petazzoni wrote:
+> Le Sun, 24 Jul 2011 16:50:50 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+> > But this also means that you cannot properly use a 'local' package
+> > from two buildroot installations, since the compilation process
+> > happens in the local directory. Is that correct?
 > 
->  >> What tree did you create this patch against? package/Makefile.in hasn't
->  >> looked like that since April, so I had to apply the patch manually.
+> Yes, this is unfortunately correct. The only other options would be :
 > 
->  Baruch> I mistakenly based this patch on version 2010.11.
+>  * Do the build out-of-tree, but this is already been discussed in
+>    another thread as being highly problematic for many packages ;
 > 
->  Baruch> Actually, since I use an external toolchain, the patch of
->  Baruch> Matias Garcia
->  Baruch> (http://lists.busybox.net/pipermail/buildroot/2011-July/043944.html,
->  Baruch> not merged yet) solves the -te500v2 problem for me without this
->  Baruch> patch, so I've dropped it locally.
+>  * Make a copy of the complete source tree. This is reasonable for
+>    small projects, but for example, for something like the kernel, it
+>    is largely unreasonable, and one of the packages for which the
+>    "source override" mechanism is the most interesting is the kernel
+>    package.
 > 
-> Ok. That patch still needs some work (E.G. it only works with a single
-> argument).
+> Do you see any other option ?
 
-I see. Any other issue with that patch?
+Fake an out-of-tree build with some unionfs tricks. There is a FUSE-based
+unionfs that works pretty well:
+    http://podgorny.cz/moin/UnionFsFuse
 
-baruch
+The trick is to lure the package by making it believe it's being built
+in-tree, while in fact the package dir is a unionfs mount with:
+  - the package source dir as the lowest-level, read-only branch
+  - the actual build dir as the highest-level, read-write branch
+
+Regards,
+Yann E. MORIN.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
