@@ -1,67 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 25 Jul 2011 10:41:46 +0200
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 25 Jul 2011 10:42:36 +0200
 Subject: [Buildroot] [PATCH 05/12] package: implement a 'local' site
 	method
-In-Reply-To: <CAAXf6LVZ8tBGYDJevSVKia5buFCFOeO6LUM0vO0P2cx=0nqsPQ@mail.gmail.com>
+In-Reply-To: <20110725091116.1655460c@skate>
 References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
- <201107250920.26479.yann.morin.1998@anciens.enib.fr>
- <CAAXf6LVZ8tBGYDJevSVKia5buFCFOeO6LUM0vO0P2cx=0nqsPQ@mail.gmail.com>
-Message-ID: <201107251041.46720.yann.morin.1998@anciens.enib.fr>
+ <867549f5fef1c44afbe437119feac731f6757833.1311141087.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LVGd8MQaLLjeEbz4e4gENwYV_gCN7SxS1N6ugjWvAdunw@mail.gmail.com>
+ <20110720201942.17ec130a@skate>
+ <CAAXf6LUCODt7jvwhN7iFogCrH0F6isiszDJ=6710-Uu=kVz+sA@mail.gmail.com>
+ <20110725091116.1655460c@skate>
+Message-ID: <CAAXf6LVq=6i-D6N2n1u0mAzEKufBMhXRaq5FaY=tSfa12jE0pA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On Monday 25 July 2011 103710 Thomas De Schampheleire wrote:
-> On Mon, Jul 25, 2011 at 9:20 AM, Yann E. MORIN
-> <yann.morin.1998@anciens.enib.fr> wrote:
-> > Thomas*2, All,
-> >
-> > On Monday 25 July 2011 091116 Thomas Petazzoni wrote:
-> >> Le Sun, 24 Jul 2011 16:50:50 +0200,
-> >> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
-> >> > But this also means that you cannot properly use a 'local' package
-> >> > from two buildroot installations, since the compilation process
-> >> > happens in the local directory. Is that correct?
-> >>
-> >> Yes, this is unfortunately correct. The only other options would be :
-> >>
-> >> ?* Do the build out-of-tree, but this is already been discussed in
-> >> ? ?another thread as being highly problematic for many packages ;
-> >>
-> >> ?* Make a copy of the complete source tree. This is reasonable for
-> >> ? ?small projects, but for example, for something like the kernel, it
-> >> ? ?is largely unreasonable, and one of the packages for which the
-> >> ? ?"source override" mechanism is the most interesting is the kernel
-> >> ? ?package.
-> >>
-> >> Do you see any other option ?
-> >
-> > Fake an out-of-tree build with some unionfs tricks. There is a FUSE-based
-> > unionfs that works pretty well:
-> > ? ?http://podgorny.cz/moin/UnionFsFuse
-> >
-> > The trick is to lure the package by making it believe it's being built
-> > in-tree, while in fact the package dir is a unionfs mount with:
-> > ?- the package source dir as the lowest-level, read-only branch
-> > ?- the actual build dir as the highest-level, read-write branch
-> 
-> But this creates a dependency on the host kernel, right? It needs to
-> have FUSE support.
+On Mon, Jul 25, 2011 at 9:11 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Sun, 24 Jul 2011 16:50:50 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> Ok, I was indeed confusing the two.
+>> If I understand correctly, the main difference is that the file method
+>> expects an archive, and the local method expects a prepared source
+>> tree.
+>
+> Right.
+>
+>> But this also means that you cannot properly use a 'local' package
+>> from two buildroot installations, since the compilation process
+>> happens in the local directory. Is that correct?
+>
+> Yes, this is unfortunately correct. The only other options would be :
+>
+> ?* Do the build out-of-tree, but this is already been discussed in
+> ? another thread as being highly problematic for many packages ;
+>
+> ?* Make a copy of the complete source tree. This is reasonable for
+> ? small projects, but for example, for something like the kernel, it
+> ? is largely unreasonable, and one of the packages for which the
+> ? "source override" mechanism is the most interesting is the kernel
+> ? package.
+>
+> Do you see any other option ?
 
-Indeed. But what (recent) distro does not have FUSE enabled by default ?
-Certainly, Debian has, so does Ubuntu.
+I agree that copying the source tree is out of the question.
 
-Regards,
-Yann E. MORIN.
+If the unionfs trick does indeed add a dependency to the host-kernel
+configuration (which is undesirable in my opinion), then using a
+per-package indication about whether it supports out-of-tree building
+could be helpful. I mentioned it in the other thread.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+For those packages that do not support it, too bad, compilation from
+multiple buildroot installations wouldn't work. If someone requires
+this, he'll have to make a copy of the local package himself, or make
+sure the package's out-of-tree building gets supported.
+
+Best regards,
+Thomas
