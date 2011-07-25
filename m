@@ -1,81 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2011 09:05:12 +0200
-Subject: [Buildroot] linux: why is vmlinux only available for mips?
-In-Reply-To: <CAAXf6LW0JhQM7i84d-MLK3kSZAcLHb3gkgNqJaXsUtR9HNgwUQ@mail.gmail.com>
-References: <CAAXf6LX2ApVsZ18tTuj4eqEYtAzKBHSXBMdhSJCPL+25YcJX8A@mail.gmail.com>
- <CAAXf6LUUFNFF+xCQJX2juonZTXh8V1HBVqDRjjSJ1VMJXUyQFg@mail.gmail.com>
- <20110715143053.558a756a@skate>
- <CAAXf6LUaOXizUnxjZVhbpoeiAxAiLeYyXajQKgOjKzY-vo0g2w@mail.gmail.com>
- <20110720181715.0267567a@skate>
- <CAAXf6LW0JhQM7i84d-MLK3kSZAcLHb3gkgNqJaXsUtR9HNgwUQ@mail.gmail.com>
-Message-ID: <20110725090512.627eca89@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 25 Jul 2011 10:10:01 +0300
+Subject: [Buildroot] [PATCH] toolchain: add user defined target LDFLAGS
+	options
+In-Reply-To: <87y5zmuauq.fsf@macbook.be.48ers.dk>
+References: <b4ad3d880f9c9e43b70d43bf527593487f3b1035.1308820722.git.baruch@tkos.co.il>
+ <87y5zmuauq.fsf@macbook.be.48ers.dk>
+Message-ID: <20110725071001.GA13998@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-Le Sun, 24 Jul 2011 13:46:40 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
-
-> > Which vmlinux are you using ? The one at the top directory of the
-> > kernel source tree, or the one in arch/<ARCH>/boot ?
+On Mon, Jul 25, 2011 at 08:34:53AM +0200, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>  Baruch> Allow the user to specify additional options for the target
+>  Baruch> LDFLAGS.  I use this to pass the -te500v2 option to the linker,
+>  Baruch> when using the CodeSourcery toolchain for PowerPC. This chooses
+>  Baruch> the correct CRT for e500 hard float. Otherwise I get errors
+>  Baruch> like
 > 
-> I am using vmlinux from the kernel top directory. In fact, this is
-> also where the linux.mk rules take it from:
+> Committed, thanks.
 > 
-> ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-> LINUX26_IMAGE_PATH=$(LINUX26_DIR)/$(LINUX26_IMAGE_NAME)
-> else
-> ifeq ($(KERNEL_ARCH),avr32)
-> LINUX26_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX26_IMAGE_NAME)
-> else
-> LINUX26_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/$(LINUX26_IMAGE_NAME)
-> endif
-> endif # BR2_LINUX_KERNEL_VMLINUX
+> What tree did you create this patch against? package/Makefile.in hasn't
+> looked like that since April, so I had to apply the patch manually.
+
+I mistakenly based this patch on version 2010.11.
+
+Actually, since I use an external toolchain, the patch of Matias Garcia 
+(http://lists.busybox.net/pipermail/buildroot/2011-July/043944.html, not 
+merged yet) solves the -te500v2 problem for me without this patch, so I've 
+dropped it locally.
+
+>  Baruch> ---
+>  Baruch>  package/Makefile.in           |    2 +-
+>  Baruch>  toolchain/toolchain-common.in |    5 +++++
+>  Baruch>  2 files changed, 6 insertions(+), 1 deletions(-)
 > 
-> If one would want to use vmlinux from arch/<arch>/boot, then he or she
-> could use BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM and
-> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME without a problem.
+>  Baruch> diff --git a/package/Makefile.in b/package/Makefile.in
+>  Baruch> index 2ca8c31..a6cee06 100644
+>  Baruch> --- a/package/Makefile.in
+>  Baruch> +++ b/package/Makefile.in
+>  Baruch> @@ -81,7 +81,7 @@ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+>  Baruch>  TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
+>  Baruch>  endif
+>  
+>  Baruch> -TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
+>  Baruch> +TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib $(BR2_TARGET_LDFLAGS)
 > 
-> As you mentioned, arch/<arch>/boot doesn't contain vmlinux for all
-> architectures, while the top kernel directory does. Since buildroot
-> already has a rule to get to this package, I simply wanted to remove
-> the architecture dependency from it.
+> You need to use qstrip as otherwise all the flags will be handled as a
+> single argument.
 
-Ok, but typically, the vmlinux in the top directory isn't a bootable
-image, as it is a pure ELF binary image. Are there
-architectures/bootloaders combinations for which this format makes
-sense ?
+Ah, something new learnt. Thanks for noticing and fixing, and thanks again for 
+your great work.
 
-> >> >> * I need to get to the dtc (device tree compiler) which resides in
-> >> >> <linux>/scripts/dtc/dtc
-> >> >
-> >> > This tool looks like a useful host tool built by the kernel. Maybe we
-> >> > should install it in $(HOST_DIR)/usr/bin ?
-> >>
-> >> Yes, I agree. How do you do that?
-> >
-> > You can hijack any of the installation steps of the kernel to install
-> > this tool to $(HOST_DIR)/usr/bin. But technically speaking, this
-> > wouldn't respect the convention of the package infrastructure: the
-> > "linux" package is a target package, and it is therefore not supposed
-> > to install anything in $(HOST_DIR).
-> 
-> What about making a separate dtc package? The official sources are
-> here, I think:
-> http://jdl.com/software/
+(Back to my cross Poco C++ build attempts)
 
-Ok, would indeed be nice to have a separate tarball for this. Is this
-kept in sync with the version inside the kernel ?
+baruch
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
