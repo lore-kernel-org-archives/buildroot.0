@@ -1,10 +1,10 @@
 From: andrew Parker <andparker01@hotmail.com>
-Date: Mon, 25 Jul 2011 20:02:59 +0200
+Date: Mon, 25 Jul 2011 20:05:58 +0200
 Subject: [Buildroot] dbg problem with threads
 In-Reply-To: <4E2D612C.3060805@in-2-technology.co.uk>
 References: <BAY148-W188B7918A758222B68A18DBA330@phx.gbl>,
  <4E2D612C.3060805@in-2-technology.co.uk>
-Message-ID: <BAY148-W24D5B4AB8ED0B7F1BAD1A4BA330@phx.gbl>
+Message-ID: <BAY148-W259D1487CFD0C39B71B190BA330@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -102,4 +102,4 @@ your help.
  		 	   		  
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110725/5ee0d62a/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110725/17674fae/attachment-0001.html>
