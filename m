@@ -1,45 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Jul 2011 10:24:36 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: Add missing dependency of
-	tst_uuid.o on uuid.h
-In-Reply-To: <CACR8Qs_Nm6QtjsHxSjkUzr+_GBDh_7QFMHxfmoMXVFtFg+RAww@mail.gmail.com>
- (Alexjan Carraturo's message of "Mon, 25 Jul 2011 10:19:57 +0200")
-References: <20110724222706.574988B495@busybox.osuosl.org>
- <CACR8Qs_yv1OspsG_byHSTXm5pZ1UMgrMVj0GXf8Rvovk-4+Lpw@mail.gmail.com>
- <87pqkyu8gr.fsf@macbook.be.48ers.dk>
- <CACR8Qs_+2UPkMi4PLx-0m6sBtrSOtKa4Qwp_kju9Hmu+SmBgnQ@mail.gmail.com>
- <87d3gyu6x0.fsf@macbook.be.48ers.dk>
- <CACR8Qs-Ck_eSKgG2BxSAGaDWkBzLusoiGphaJnmmgUN=4CFfrg@mail.gmail.com>
- <878vrmu67e.fsf@macbook.be.48ers.dk>
- <CACR8Qs_Nm6QtjsHxSjkUzr+_GBDh_7QFMHxfmoMXVFtFg+RAww@mail.gmail.com>
-Message-ID: <874o2au5rv.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 25 Jul 2011 10:30:06 +0200
+Subject: [Buildroot] [PATCH 2 of 3] Allow BR2_PRIMARY_SITE and
+ BR2_BACKUP_SITE to be a file:// URL
+In-Reply-To: <CAAXf6LXixYABXkp_LP+9kcUSp1cCMfcOKcYqBxMNzcu-dm2N=A@mail.gmail.com>
+References: <patchbomb.1300174025@localhost6.localdomain6>
+ <0aa192a871d0b6d66c57.1300174027@localhost6.localdomain6>
+ <20110720071336.1958f634@skate>
+ <CAAXf6LXixYABXkp_LP+9kcUSp1cCMfcOKcYqBxMNzcu-dm2N=A@mail.gmail.com>
+Message-ID: <20110725103006.38d4c164@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexjan" == Alexjan Carraturo <axjslack@gmail.com> writes:
+Le Sun, 24 Jul 2011 13:54:15 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Hi,
+> I don't think that BR2_DL_DIR and BR2_PRIMARY_SITE serve the same
+> purpose. The former specifies where packages should be stored, which
+> implies write permissions. The latter specifies where packages come
+> from, which only implies read permissions. In a project with multiple
+> developers, one wouldn't want the central 'DL_DIR' to become cluttered
+> with packages from each individual developer's experiments.
 
- Alexjan> Ok... now I had the tab manually and seems working
+Sounds like a good and convincing argumentation. I'll try to look at
+integrating the feature.
 
- Alexjan> CFLAGS=-O2 -I/home/buildroot/buildroot-20110722/buildroot/output/host/include
- Alexjan> -I/home/buildroot/buildroot-20110722/buildroot/output/host/usr/include
- Alexjan> CXXFLAGS=-I/home/buildroot/buildroot-20110722/buildroot/output/host/include
- Alexjan> -I/home/buildroot/buildroot-20110722/buildroot/output/host/usr/include
- Alexjan> LDFLAGS=-L/home/buildroot/buildroot-20110722/buildroot/output/host/lib
- Alexjan> -L/home/buildroot/buildroot-20110722/buildroot/output/host/usr/lib
- Alexjan> -Wl,-rpath,/home/buildroot/buildroot-20110722/buildroot/output/host/usr/lib
+Regards,
 
-Ok, that looks good. So far so good, could you send me (in private) the
-output of the host-mtd build? E.G.
-
-rm -rf output/build/host-mtd-*
-make host-mtd >/tmp/log.txt 2>&1
-
-and send me /tmp/log.txt
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
