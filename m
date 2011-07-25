@@ -1,52 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jul 2011 09:11:16 +0200
-Subject: [Buildroot] [PATCH 05/12] package: implement a 'local' site
- method
-In-Reply-To: <CAAXf6LUCODt7jvwhN7iFogCrH0F6isiszDJ=6710-Uu=kVz+sA@mail.gmail.com>
-References: <cover.1311141087.git.thomas.petazzoni@free-electrons.com>
- <867549f5fef1c44afbe437119feac731f6757833.1311141087.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LVGd8MQaLLjeEbz4e4gENwYV_gCN7SxS1N6ugjWvAdunw@mail.gmail.com>
- <20110720201942.17ec130a@skate>
- <CAAXf6LUCODt7jvwhN7iFogCrH0F6isiszDJ=6710-Uu=kVz+sA@mail.gmail.com>
-Message-ID: <20110725091116.1655460c@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Jul 2011 09:16:19 +0200
+Subject: [Buildroot] [PATCH] toolchain: add user defined target LDFLAGS
+	options
+In-Reply-To: <20110725071001.GA13998@sapphire.tkos.co.il> (Baruch Siach's
+ message of "Mon, 25 Jul 2011 10:10:01 +0300")
+References: <b4ad3d880f9c9e43b70d43bf527593487f3b1035.1308820722.git.baruch@tkos.co.il>
+ <87y5zmuauq.fsf@macbook.be.48ers.dk>
+ <20110725071001.GA13998@sapphire.tkos.co.il>
+Message-ID: <87tyaau8xo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 24 Jul 2011 16:50:50 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-> Ok, I was indeed confusing the two.
-> If I understand correctly, the main difference is that the file method
-> expects an archive, and the local method expects a prepared source
-> tree.
+ >> What tree did you create this patch against? package/Makefile.in hasn't
+ >> looked like that since April, so I had to apply the patch manually.
 
-Right.
+ Baruch> I mistakenly based this patch on version 2010.11.
 
-> But this also means that you cannot properly use a 'local' package
-> from two buildroot installations, since the compilation process
-> happens in the local directory. Is that correct?
+ Baruch> Actually, since I use an external toolchain, the patch of
+ Baruch> Matias Garcia
+ Baruch> (http://lists.busybox.net/pipermail/buildroot/2011-July/043944.html,
+ Baruch> not merged yet) solves the -te500v2 problem for me without this
+ Baruch> patch, so I've dropped it locally.
 
-Yes, this is unfortunately correct. The only other options would be :
+Ok. That patch still needs some work (E.G. it only works with a single
+argument).
 
- * Do the build out-of-tree, but this is already been discussed in
-   another thread as being highly problematic for many packages ;
-
- * Make a copy of the complete source tree. This is reasonable for
-   small projects, but for example, for something like the kernel, it
-   is largely unreasonable, and one of the packages for which the
-   "source override" mechanism is the most interesting is the kernel
-   package.
-
-Do you see any other option ?
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
