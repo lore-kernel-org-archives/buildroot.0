@@ -1,50 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 25 Jul 2011 08:34:53 +0200
-Subject: [Buildroot] [PATCH] toolchain: add user defined target LDFLAGS
-	options
-In-Reply-To: <b4ad3d880f9c9e43b70d43bf527593487f3b1035.1308820722.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 23 Jun 2011 12:21:21 +0300")
-References: <b4ad3d880f9c9e43b70d43bf527593487f3b1035.1308820722.git.baruch@tkos.co.il>
-Message-ID: <87y5zmuauq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Jul 2011 08:44:26 +0200
+Subject: [Buildroot] [git commit] xorg-xserver: configure needs pkg-config
+Message-ID: <20110725064529.C5F578B4A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=b96193a4b53e0c6661c722aa4e91e7cfb7608cef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Baruch> Allow the user to specify additional options for the target
- Baruch> LDFLAGS.  I use this to pass the -te500v2 option to the linker,
- Baruch> when using the CodeSourcery toolchain for PowerPC. This chooses
- Baruch> the correct CRT for e500 hard float. Otherwise I get errors
- Baruch> like
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
-What tree did you create this patch against? package/Makefile.in hasn't
-looked like that since April, so I had to apply the patch manually.
-
- Baruch> ---
- Baruch>  package/Makefile.in           |    2 +-
- Baruch>  toolchain/toolchain-common.in |    5 +++++
- Baruch>  2 files changed, 6 insertions(+), 1 deletions(-)
-
- Baruch> diff --git a/package/Makefile.in b/package/Makefile.in
- Baruch> index 2ca8c31..a6cee06 100644
- Baruch> --- a/package/Makefile.in
- Baruch> +++ b/package/Makefile.in
- Baruch> @@ -81,7 +81,7 @@ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
- Baruch>  TARGET_CFLAGS+=-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include
- Baruch>  endif
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 0311483..70ba8b2 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -54,7 +54,8 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xkeyboard-config		\
+ 	pixman 				\
+ 	openssl 			\
+-	mcookie
++	mcookie 			\
++	host-pkg-config
  
- Baruch> -TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib
- Baruch> +TARGET_LDFLAGS+=-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib $(BR2_TARGET_LDFLAGS)
-
-You need to use qstrip as otherwise all the flags will be handled as a
-single argument.
-
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
+ 		--disable-xnest --disable-xephyr --disable-xvfb \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
