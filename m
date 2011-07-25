@@ -1,27 +1,42 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Mon, 25 Jul 2011 21:12:35 +0000
-Subject: [Buildroot] BR2_PREFER_STATIC_LIB and external toolchain
-In-Reply-To: <87r55e15gb.fsf@macbook.be.48ers.dk>
-References: <F9C551623D2CBB4C9488801D14F864C6047C5D@ex-mb1.corp.adtran.com>
- <87r55e15gb.fsf@macbook.be.48ers.dk>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C6047CB6@ex-mb1.corp.adtran.com>
+From: Matias Garcia <mgarcia@rossvideo.com>
+Date: Mon, 25 Jul 2011 17:19:00 -0400
+Subject: [Buildroot] [PATCH] toolchain: add user defined target LDFLAGS
+ options
+In-Reply-To: <87tyaau8xo.fsf@macbook.be.48ers.dk>
+References: <b4ad3d880f9c9e43b70d43bf527593487f3b1035.1308820722.git.baruch@tkos.co.il>
+ <87y5zmuauq.fsf@macbook.be.48ers.dk>
+ <20110725071001.GA13998@sapphire.tkos.co.il>
+ <87tyaau8xo.fsf@macbook.be.48ers.dk>
+Message-ID: <1311628740.1973.20.camel@matias-lnx-host>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-> Yes, I noticed as well today. Unfortunately it isn't as simple as
-> making
-> copy_toolchain_lib_root a noop with static linking, as E.G. glibc
-> afaik
-> still needs libnss*.so* in the target rootfs when static linking is
-> used.
+On Mon, 2011-07-25 at 09:16 +0200, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  >> What tree did you create this patch against? package/Makefile.in hasn't
+>  >> looked like that since April, so I had to apply the patch manually.
+> 
+>  Baruch> I mistakenly based this patch on version 2010.11.
+> 
+>  Baruch> Actually, since I use an external toolchain, the patch of
+>  Baruch> Matias Garcia
+>  Baruch> (http://lists.busybox.net/pipermail/buildroot/2011-July/043944.html,
+>  Baruch> not merged yet) solves the -te500v2 problem for me without this
+>  Baruch> patch, so I've dropped it locally.
+> 
+> Ok. That patch still needs some work (E.G. it only works with a single
+> argument).
 
-Really?  What are the libnss*-pic.a for then?
+Ah, that's something I hadn't considered. Thanks for the feedback. I was
+assuming one could pass something like "-fee -fi -fo -fum" in the text
+block, and this would be passed on to the wrapper.
 
-Also, another bone of contention is that I'm getting header files
-in the target.  Where does that happen?
+I won't have time in the next while to work on it. Can you suggest a way
+to do it if/when I do? I'm not a make expert by any means.
 
-Andy
+Cheers,
+Matias
