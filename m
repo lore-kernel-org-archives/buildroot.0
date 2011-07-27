@@ -1,95 +1,49 @@
-From: Cory Fields <FOSS@AtlasTechnologiesInc.com>
-Date: Wed, 27 Jul 2011 06:09:17 +0000
-Subject: [Buildroot] [PATCH] fetch/git: Allow fetching from git using ssh
-In-Reply-To: <CAAXf6LUkFuFCoG-q-5XZYb813uGSQDbNJfspB8Mv=z3axdChhQ@mail.gmail.com>
-References: <CAApLimjwecWdVKWC1qMWc64_5Syn0QrjdA2SPUZXPxMvd+UtVQ@mail.gmail.com>
- <CAAXf6LUkFuFCoG-q-5XZYb813uGSQDbNJfspB8Mv=z3axdChhQ@mail.gmail.com>
-Message-ID: <CAApLimhPUHDv7HXx3H5GnkFddZrzA9971mmP=8nXRhNsa6sO=A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 27 Jul 2011 09:34:55 +0200
+Subject: [Buildroot] [PATCH 1/3] bump udev and clean up
+In-Reply-To: <CALR4fEK2r2pL6X09pVUG970PUHxY+a52dvNdjjfVaoGLRnn3Mw@mail.gmail.com>
+ (Diego Iastrubni's message of "Tue, 26 Jul 2011 19:00:50 +0300")
+References: <4E298D06.4050107@visionsystems.de>
+ <4E298E70.50200@visionsystems.de> <871uxe10hq.fsf@macbook.be.48ers.dk>
+ <4E2E67C8.7090208@visionsystems.de>
+ <CALR4fEK2r2pL6X09pVUG970PUHxY+a52dvNdjjfVaoGLRnn3Mw@mail.gmail.com>
+Message-ID: <871uxcuqg0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 27, 2011 at 5:58 AM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Cory,
->
-> On Tue, Jul 26, 2011 at 9:17 PM, Cory Fields
-> <FOSS@atlastechnologiesinc.com> wrote:
->> My apologies for not doing a proper git-send-email, my git install is
->> somewhat broken at the moment. See attached.
->>
->> The patch is against the 2011.02 branch, but it's very simple and
->> should be easy enough to apply to master.
->
-> Copying here for convenience:
->
->> [PATCH] fetch/git: Allow fetching from git using ssh://
->>
->> This is especially useful for private repositories. For example,
->> github allows fetching from ssh:// git:// and https://. However, for
->> private repos (due to the need to authenticate) only https and ssh are
->> allowed. The protocol is transparent as far as git is concerned. For
->> now, just assume any ssh:// URI is a git repository. Since we would
->> just fallback to wget anyway, this should be a safe assumption
->
-> I don't think this is a safe assumption. Also other version control
-> systems allow ssh URLs, at least Mercurial does. By hardcoding ssh ->
-> git, you break these other version control systems.
+>>>>> "Diego" == Diego Iastrubni <diegoiast@gmail.com> writes:
 
-Well, my logic was that ssh falls through to wget, it wouldn't make
-things worse for any others, only better for git.
+Hi,
 
->
-> But why do you need this patch at all?
-> If you explicitly specify <PACKAGE>_SITE_METHOD to git, you can pass
-> in an ssh url without problem.
->
-> Have you tried that?
+ Diego> My setup does not build now:
+ Diego> extras/input_id/input_id.c: In function 'test_key':
+ Diego> extras/input_id/input_id.c:173: error: 'BTN_TRIGGER_HAPPY' undeclared
+ Diego> (first use in this function)
+ Diego> extras/input_id/input_id.c:173: error: (Each undeclared identifier is
+ Diego> reported only once
+ Diego> extras/input_id/input_id.c:173: error: for each function it appears in.)
+ Diego> make[3]: *** [extras/input_id/input_id.o] Error 1
+ Diego> make[2]: *** [all-recursive] Error 1
+ Diego> make[1]: *** [all] Error 2
+ Diego> make[1]: Leaving directory `/home/diego/src/buildroot/output/build/udev-172'
+ Diego> make: *** [/home/diego/src/buildroot/output/build/udev-172/.stamp_built] Error 2
+ Diego> This new udev version needs a kernel>=2.6.33 and my toolchain (?)
 
-No I didn't, but it makes perfect sense now. This is clearly the
-correct answer. Perhaps some documentation would help, as it is
-becoming quite common to grab a release from a tagged repo rather than
-tarballs these days.
+Yes, BTN_TRIGGER_HAPPY was indeed only added in 2.6.34-rc1.
 
-Thank you for the help, and quick response. Disregard patch.
+Diego> comes with headers of 2.6.32. I am compiling for ARM using
+ Diego> codesourcery 2010q1 (I normally use a "custom" setup, but using the
+ Diego> one in buildroot fails). Using?2011.03 does work.
 
-Regards,
-Cory
+What exactly fails with the internal toolchain?
 
->
->>
->> Signed-off-by: Cory Fields <foss@atlastechnologiesinc.com>
->> ---
->> ?package/Makefile.package.in | ? ?4 +++-
->> ?1 files changed, 3 insertions(+), 1 deletions(-)
->>
->> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
->> index 92ce4e2..1936786 100644
->> --- a/package/Makefile.package.in
->> +++ b/package/Makefile.package.in
->> @@ -189,7 +189,7 @@ define DOWNLOAD
->> ? ? ? fi ; \
->> ? ? ? if test -n "$(1)" ; then \
->> ? ? ? ? ? ? ? case "$($(PKG)_SITE_METHOD)" in \
->> - ? ? ? ? ? ? ? ? ? ? git) $($(DL_MODE)_GIT) && exit ;; \
->> + ? ? ? ? ? ? ? ? ? ? git | ssh) $($(DL_MODE)_GIT) && exit ;; \
->> ? ? ? ? ? ? ? ? ? ? ? svn) $($(DL_MODE)_SVN) && exit ;; \
->> ? ? ? ? ? ? ? ? ? ? ? bzr) $($(DL_MODE)_BZR) && exit ;; \
->> ? ? ? ? ? ? ? ? ? ? ? *) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
->> @@ -511,6 +511,8 @@ ifeq ($$($(2)_SITE_METHOD),svn)
->> ?DL_TOOLS_DEPENDENCIES += svn
->> ?else ifeq ($$($(2)_SITE_METHOD),git)
->> ?DL_TOOLS_DEPENDENCIES += git
->> +else ifeq ($$($(2)_SITE_METHOD),ssh)
->> +DL_TOOLS_DEPENDENCIES += git
->> ?else ifeq ($$($(2)_SITE_METHOD),bzr)
->> ?DL_TOOLS_DEPENDENCIES += bzr
->> ?endif # SITE_METHOD
->> --
->> 1.7.3.4
->
-> Best regards,
-> Thomas
->
+ Diego> How do I convince the toolchain to use a newer kernel headers?
+
+You cannot, kernel headers are part of the toolchain. Consider moving to
+a newer toolchain and/or disable UDEV_EXTRAS.
+
+-- 
+Bye, Peter Korsgaard
