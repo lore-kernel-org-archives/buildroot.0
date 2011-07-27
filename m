@@ -1,49 +1,81 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Jul 2011 09:34:55 +0200
-Subject: [Buildroot] [PATCH 1/3] bump udev and clean up
-In-Reply-To: <CALR4fEK2r2pL6X09pVUG970PUHxY+a52dvNdjjfVaoGLRnn3Mw@mail.gmail.com>
- (Diego Iastrubni's message of "Tue, 26 Jul 2011 19:00:50 +0300")
+Date: Wed, 27 Jul 2011 09:43:07 +0200
+Subject: [Buildroot] [PATCH 2/3] util-linux: convert to autotarget and
+	bump to 2.19.1
+In-Reply-To: <4E298ED8.5000901@visionsystems.de> (Yegor Yefremov's message of
+ "Fri, 22 Jul 2011 16:53:12 +0200")
 References: <4E298D06.4050107@visionsystems.de>
- <4E298E70.50200@visionsystems.de> <871uxe10hq.fsf@macbook.be.48ers.dk>
- <4E2E67C8.7090208@visionsystems.de>
- <CALR4fEK2r2pL6X09pVUG970PUHxY+a52dvNdjjfVaoGLRnn3Mw@mail.gmail.com>
-Message-ID: <871uxcuqg0.fsf@macbook.be.48ers.dk>
+ <4E298E70.50200@visionsystems.de> <4E298ED8.5000901@visionsystems.de>
+Message-ID: <87wrf4tbhw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Diego" == Diego Iastrubni <diegoiast@gmail.com> writes:
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-Hi,
+Thanks, committed with some changes (see below).
 
- Diego> My setup does not build now:
- Diego> extras/input_id/input_id.c: In function 'test_key':
- Diego> extras/input_id/input_id.c:173: error: 'BTN_TRIGGER_HAPPY' undeclared
- Diego> (first use in this function)
- Diego> extras/input_id/input_id.c:173: error: (Each undeclared identifier is
- Diego> reported only once
- Diego> extras/input_id/input_id.c:173: error: for each function it appears in.)
- Diego> make[3]: *** [extras/input_id/input_id.o] Error 1
- Diego> make[2]: *** [all-recursive] Error 1
- Diego> make[1]: *** [all] Error 2
- Diego> make[1]: Leaving directory `/home/diego/src/buildroot/output/build/udev-172'
- Diego> make: *** [/home/diego/src/buildroot/output/build/udev-172/.stamp_built] Error 2
- Diego> This new udev version needs a kernel>=2.6.33 and my toolchain (?)
+ Yegor> Signed-off-by: Chih-Min Chao <cmchao@gmail.com>
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Yegor> ---
+ Yegor>  package/util-linux/Config.in                                            |  113 ++
+ Yegor>  package/util-linux/util-linux-2.13-pre17-hardcode-a-out-constants.patch |   41 
+ Yegor>  package/util-linux/util-linux-no-nls-fix.patch                          |   25 
+ Yegor>  package/util-linux/util-linux-susv3-legacy.patch                        |  429 ----------
+ Yegor>  package/util-linux/util-linux-uclibc-build-fix.patch                    |   16 
+ Yegor>  package/util-linux/util-linux-umount2-fix.patch                         |   20 
+ Yegor>  package/util-linux/util-linux.mk                                        |  180 ++--
+ Yegor>  7 files changed, 230 insertions(+), 594 deletions(-)
 
-Yes, BTN_TRIGGER_HAPPY was indeed only added in 2.6.34-rc1.
+ Yegor> Index: b/package/util-linux/Config.in
+ Yegor> ===================================================================
+ Yegor> --- a/package/util-linux/Config.in
+ Yegor> +++ b/package/util-linux/Config.in
+ Yegor> @@ -1,4 +1,4 @@
+ Yegor> -config BR2_PACKAGE_UTIL-LINUX
+ Yegor> +config BR2_PACKAGE_UTIL_LINUX
+ Yegor>  	bool "util-linux"
+ Yegor>  	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ Yegor>  	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
 
-Diego> comes with headers of 2.6.32. I am compiling for ARM using
- Diego> codesourcery 2010q1 (I normally use a "custom" setup, but using the
- Diego> one in buildroot fails). Using?2011.03 does work.
+After some tests I see that gettext/libintl/rpc aren't needed, but
+instead largefile+wchar+program_invocation are.
 
-What exactly fails with the internal toolchain?
+ Yegor> @@ -12,3 +12,114 @@
+ 
+ Yegor>  comment "util-linux requires a toolchain with RPC support"
+ Yegor>  	depends on !BR2_INET_RPC
+ Yegor> +
+ Yegor> +menu "util-linux tool support"
+ Yegor> +	depends on BR2_PACKAGE_UTIL_LINUX
 
- Diego> How do I convince the toolchain to use a newer kernel headers?
+I dislike all the sub menus, so I instead made all these suboptions to
+util-linux instead.
 
-You cannot, kernel headers are part of the toolchain. Consider moving to
-a newer toolchain and/or disable UDEV_EXTRAS.
+ Yegor> +++ b/package/util-linux/util-linux.mk
+
+ Yegor> +#############################################
+ Yegor> +#
+ Yegor> +# disable default utilities
+ Yegor> +#
+ Yegor> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_MOUNT),n)
+ Yegor> +UTIL_LINUX_CONF_OPT += --disable-mount
+ Yegor>  endif
+
+I've reworked these to the less verbose form:
+
+     $(if $(BR2_PACKAGE_UTIL_LINUX_blah),,--disable-blah)
+
+
+ Yegor> +ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),n)
+ Yegor> +UTIL_LINUX_CONF_OPT += --disable-libblkid
+ Yegor> +endif
+
+Typo.
+
+You seem to have forgotten unshare.
 
 -- 
 Bye, Peter Korsgaard
