@@ -1,45 +1,59 @@
-From: Avishay Orpaz <avishorp@gmail.com>
-Date: Thu, 28 Jul 2011 00:50:59 +0300
-Subject: [Buildroot] Getting Kconfig menu right
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C60486D4@ex-mb1.corp.adtran.com>
-References: <CAMkyJgDML5mip30tPA9962uOjHnzAWFVWTKRr8RZei3LG6W1ew@mail.gmail.com>
- <F9C551623D2CBB4C9488801D14F864C60486D4@ex-mb1.corp.adtran.com>
-Message-ID: <CAMkyJgBPsLbiAoTyuBDrcQeiFCN9qTyUK3qb1V7_pj=2QWPrAQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 28 Jul 2011 00:01:47 +0200
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20110727220214.6542E8B525@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-That's exactly what I did, but the item shows up below libfuse, not as its
-child.
 
+commit: http://git.buildroot.net/buildroot/commit/?id=a4a20acb2e7a4e050ead17097660ee0892fed172
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-2011/7/28 ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |   27 ++++++++++++++++-----------
+ 1 files changed, 16 insertions(+), 11 deletions(-)
 
-> > Hi
-> > I'm trying to add python-fuse to buildroot. I have the makefile
-> > working, but there is only one little problem left. I would like
-> > the option for python-fuse to show up as a sub-item of libfuse,
-> > only when libfuse is checked. It should be similar, for example, to
-> > lua - when selected, some relevant sub-options appear as sub-items
-> > in the xconfig menu. I looked very closely on the lua Config.in,
-> > but found nothing that tells Kconfig to show all the options as a
-> > sub-items.
-> > How can I do this?
->
-> depends on BR2_<lib fuse pkg name>
->
-> OR
->
-> if BR2_<lib fuse pkg name>
->
-> endif
->
-> Must be done in the same Config.in as the lib fuse, however.
->
-> Andy
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110728/4ff48d64/attachment.html>
+diff --git a/CHANGES b/CHANGES
+index 8396dce..cf01121 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -15,17 +15,22 @@
+ 	Make source/external-deps now also works for external
+ 	toolchains / crosstool-ng backend.
+ 
+-	Updated/fixed packages: berkeleydb, bmon, bridge-utils,
+-	busybox, cmake, dbus, dbus-glib, ethtool, ffmpeg,
+-	gst-plugins-bad, gst-plugins-base, gvfs, jpeg, lame,
+-	libarchive, libdnet, libgcrypt, libgtk2, libmpeg2, libpng,
+-	lighttpd, linux-fusion, lzo, mtd-utils, oprofile, proftpd, qt,
+-	ruby, shared-mime-info, sudo, sqlite, synergy, usbutils,
+-	valgrind, webkit, xz
+-
+-	New packages: acl, attr, ebtables, gnutls, libargtable2,
+-	libiqrf, libnspr, libnss, libroxml, libyaml, live555, mxml,
+-	rsyslog, sredird, statserial, stunnel, uboot-tools, yajl
++	Updated/fixed packages: berkeleydb, bind, binutils, bmon,
++	bridge-utils, busybox, cmake, dbus, dbus-glib, e2fsprogs,
++	ethtool, ffmpeg, gst-plugins-{bad,base,good,ugly}, gvfs,
++	hostapd, iproute2, iptables, jpeg, lame, libarchive, libdnet,
++	libdrm, libgcrypt, libgtk2, libmpeg2, libpng, lighttpd,
++	linux-fusion, lzo, mtd-utils, nfs-utils, oprofile, proftpd,
++	qt, ruby, sdl, shared-mime-info, sudo, sqlite, squid, synergy,
++	udev, usbmount, usbutils, util-linux, valgrind, webkit,
++	xorg-xserver, xz, zlib
++
++	New packages: acl, attr, ebtables, gnutls, inotify-tools,
++	ipset, libargtable2, libiqrf, libmnl, libnspr, libnss,
++	libroxml, libyaml, live555, mxml, orc, rsyslog, sredird,
++	statserial, stunnel, ti-utils, uboot-tools, yajl
++
++	Removed packages: hal
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
+-- 
+1.7.3.4
