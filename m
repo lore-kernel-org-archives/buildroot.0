@@ -1,23 +1,37 @@
-From: Vasanth Ragavendran <ragavendra.2007@gmail.com>
-Date: Wed, 27 Jul 2011 19:02:46 +0800
-Subject: [Buildroot] Disable mysql dbm during freeradius installation
-Message-ID: <CADfuMF5axey+wN2bufuAtjBvJjut98s9WMh1D0a9egeL08frfw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Jul 2011 14:52:57 +0200
+Subject: [Buildroot] Powerpc crosscompiling using buildroot
+In-Reply-To: <CAM6gFhrGuaGdUH=_SiAgFb23qBv9nNqvgEvJ09YKxoanjN7yYw@mail.gmail.com>
+ (Meher GARA's message of "Wed, 27 Jul 2011 13:48:46 +0100")
+References: <CAM6gFhrGuaGdUH=_SiAgFb23qBv9nNqvgEvJ09YKxoanjN7yYw@mail.gmail.com>
+Message-ID: <878vrjubpy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+>>>>> "Meher" == Meher GARA <meher.gara@gmail.com> writes:
 
-I am installing Freeradius and for my scenario i just need to authenticate
-from local files and there is no need for DBM or mysql or anything. how do i
-disable them during installation of freeradius. I tried using
---disable-rlm-dbm and similar but it din't work out. How do i disable them
-from installing? Awaiting any help!
+Hi,
 
-Thanks and regards
-R.Vasanth Ragavendran.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110727/273440c6/attachment.html>
+Please mail the buildroot list rather than directly to me, so other
+people can contribute as well.
+
+ Meher> This is so far my first project in embedded programming and I?m
+ Meher> trying to crosscompile powerPC c Code using buildroot but after
+ Meher> selecting the PowerPC architecture from the make menuconfig I?m
+ Meher> getting those errors during make
+
+ Meher> ?
+
+ Meher> ?
+
+ Meher> tar: powerpc-linux-gnu/bin/objcopy: Cannot hard link to `freescale-2010.09/bin/
+ Meher> powerpc-linux-gnu-objcopy': No such file or directory
+
+Please explain in more details what you are trying to do. What is your
+.config?
+
+-- 
+Bye, Peter Korsgaard
