@@ -1,82 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Jul 2011 21:54:49 +0200
-Subject: [Buildroot] [PATCH 3/3]  usbmount fixes
-In-Reply-To: <4E29900B.6040502@visionsystems.de> (Yegor Yefremov's message of
- "Fri, 22 Jul 2011 16:58:19 +0200")
-References: <4E298D06.4050107@visionsystems.de>
- <4E298E70.50200@visionsystems.de> <4E298ED8.5000901@visionsystems.de>
- <4E29900B.6040502@visionsystems.de>
-Message-ID: <87zkjzsdme.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Jul 2011 21:10:13 +0200
+Subject: [Buildroot] [git commit] busybox: BR2_PACKAGE_BUSYBOX_SHOW_OTHER:
+	remove conditional check
+Message-ID: <20110727195458.C46728B51B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
- Yegor> - create mounting points
- Yegor> - fix dependencies
- Yegor> - fix udev rules
- Yegor> - fix fs type detection
+commit: http://git.buildroot.net/buildroot/commit/?id=4e3ae5ccaba22b6db443a768c8c6a5f2b14d01af
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks, committed with some fixes (see below).
+It is already within an 'if BR2_PACKAGE_BUSYBOX' section.
 
- Yegor> Index: b/package/usbmount/Config.in
- Yegor> ===================================================================
- Yegor> --- a/package/usbmount/Config.in
- Yegor> +++ b/package/usbmount/Config.in
- Yegor> @@ -2,6 +2,8 @@
- Yegor>  	bool "usbmount"
- Yegor>  	select BR2_PACKAGE_UDEV
- Yegor>  	select BR2_PACKAGE_LOCKFILE_PROGS
- Yegor> +	select BR2_PACKAGE_UTIL_LINUX
- Yegor> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-util-linux needs wchar + largefile, and is only visible if
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, so those needs to be selected (and a
-comment shown if wchar/largefile isn't available).
-
- Yegor> +++ b/package/usbmount/usbmount.mk
- Yegor> @@ -6,20 +6,36 @@
- Yegor>  USBMOUNT_VERSION = 0.0.21
- Yegor>  USBMOUNT_SOURCE = usbmount_$(USBMOUNT_VERSION).tar.gz
- Yegor>  USBMOUNT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/u/usbmount
- Yegor> -USBMOUNT_DEPENDENCIES = udev lockfile-progs
- Yegor> +USBMOUNT_DEPENDENCIES = udev lockfile-progs util-linux
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 283e59f..488b124 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -56,7 +56,7 @@ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	  Most people will just use the default BusyBox configuration file.
  
- Yegor>  define USBMOUNT_INSTALL_TARGET_CMDS
- Yegor>  	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/usr/share/usbmount/usbmount
- Yegor> +
- Yegor> +	$(INSTALL) -m 0755 -D $(@D)/00_create_model_symlink 	\
- Yegor> +		$(TARGET_DIR)/etc/usbmount/usbmount.d/00_create_model_symlink
- Yegor> +	$(INSTALL) -m 0755 -D $(@D)/00_remove_model_symlink 	\
- Yegor> +		$(TARGET_DIR)/etc/usbmount/usbmount.d/00_remove_model_symlink
- Yegor> +
- Yegor>  	$(INSTALL) -m 0644 -D $(@D)/usbmount.rules $(TARGET_DIR)/lib/udev/rules.d/usbmount.rules
- Yegor>  	@if [ ! -f $(TARGET_DIR)/etc/usbmount/usbmount.conf ]; then \
- Yegor>  	        $(INSTALL) -m 0644 -D $(@D)/usbmount.conf $(TARGET_DIR)/etc/usbmount/usbmount.conf; \
- Yegor>  	fi
- Yegor> +
- Yegor> +	mkdir -p $(TARGET_DIR)/media
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb0
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb1
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb2
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb3
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb4
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb5
- Yegor> +	mkdir -p $(TARGET_DIR)/media/usb6
-
-usbmount handles /media/usb[0-7], so you forgot usb7.
- 
- Yegor> Index: b/package/usbmount/usbmount-rules-fix.patch
- Yegor> ===================================================================
- Yegor> --- /dev/null
- Yegor> +++ b/package/usbmount/usbmount-rules-fix.patch
- Yegor> @@ -0,0 +1,19 @@
- Yegor> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Please provide a proper description of what patches do in the future.
-
+ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	bool "Show packages that are also provided by busybox" if BR2_PACKAGE_BUSYBOX
++	bool "Show packages that are also provided by busybox"
+ 	help
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
