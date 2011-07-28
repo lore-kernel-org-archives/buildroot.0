@@ -1,41 +1,43 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 28 Jul 2011 09:08:19 +0200
-Subject: [Buildroot] [PATCH 3/3] usbmount fixes
-In-Reply-To: <87zkjzsdme.fsf@macbook.be.48ers.dk>
-References: <4E298D06.4050107@visionsystems.de>
- <4E298E70.50200@visionsystems.de>
- <4E298ED8.5000901@visionsystems.de> <4E29900B.6040502@visionsystems.de>
- <87zkjzsdme.fsf@macbook.be.48ers.dk>
-Message-ID: <CAGm1_ks6+ust-8O4wg0CHuWMphEwkxEDCECXKeprcupYxtkeKg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 28 Jul 2011 09:21:07 +0200
+Subject: [Buildroot] [git commit] util-linux: fix sub option typos
+Message-ID: <20110728072518.437848B556@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 27, 2011 at 9:54 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
->
-> ?Yegor> - create mounting points
-> ?Yegor> - fix dependencies
-> ?Yegor> - fix udev rules
-> ?Yegor> - fix fs type detection
->
-> Thanks, committed with some fixes (see below).
-........
-> Please provide a proper description of what patches do in the future.
 
-1. fix file system type detection due to multiple entries with keyword
-TYPE (already submitted)
-2. automatic mounting points generation. Patch exists
-(http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=361693), but has to
-be adapted to the latest usbmount version
-3. udev rules: SUBSYSTEMS=="usb" trigger is not working, after
-searching the mailingslist I found some links, as suggestion how to
-fix/substitue usbmount:
-http://lists.busybox.net/pipermail/buildroot/2011-April/042455.html
+commit: http://git.buildroot.net/buildroot/commit/?id=49086f19fe49c976a4d925de838007281e7e8588
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It would be great, if we could fix all these issues before next
-usbmount release.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Yegor
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index c0e15e7..5d95466 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -93,7 +93,7 @@ config BR2_PACKAGE_UTIL_LINUX_LAST
+ 	default n
+ 
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+-	bool "build \"kill\""
++	bool "build \"mesg\""
+ 	default n
+ 
+ config BR2_PACKAGE_UTIL_LINUX_PARTX
+@@ -113,7 +113,7 @@ config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+ 	default n
+ 
+ config BR2_PACKAGE_UTIL_LINUX_WRITE
+-	bool "build \"addpart, delpart, partx\""
++	bool "build \"write\""
+ 	default n
+ 
+ endif
+-- 
+1.7.3.4
