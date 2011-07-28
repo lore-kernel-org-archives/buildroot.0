@@ -1,31 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Jul 2011 18:26:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
-	`__GI___errno_location'
-In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
-References: <bug-4021-163@https.bugs.busybox.net/>
-Message-ID: <20110728182631.31C3E8B2EE@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 28 Jul 2011 17:14:01 -0300
+Subject: [Buildroot] [PATCH 1/3] iptables: bump to version 1.4.12
+Message-ID: <1311884043-2473-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4021
+Bump iptables to version 1.4.12 for linux kernel 3.0 support
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iptables/iptables.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-(In reply to comment #1)
-> Version 2011.02 build properly
-
-And latest git? I'm almost ready to release 2011.08-rc1.
-
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index c464e6b..1ee8828 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IPTABLES_VERSION = 1.4.11.1
++IPTABLES_VERSION = 1.4.12
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ IPTABLES_INSTALL_STAGING = YES
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
