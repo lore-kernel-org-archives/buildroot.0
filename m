@@ -1,59 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 Jul 2011 00:01:47 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20110727220214.6542E8B525@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Jul 2011 08:48:50 +0200
+Subject: [Buildroot] Getting Kconfig menu right
+In-Reply-To: <CAMkyJgDML5mip30tPA9962uOjHnzAWFVWTKRr8RZei3LG6W1ew@mail.gmail.com>
+References: <CAMkyJgDML5mip30tPA9962uOjHnzAWFVWTKRr8RZei3LG6W1ew@mail.gmail.com>
+Message-ID: <20110728084850.180f50a3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Thu, 28 Jul 2011 00:30:22 +0300,
+Avishay Orpaz <avishorp@gmail.com> a ?crit :
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4a20acb2e7a4e050ead17097660ee0892fed172
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> I'm trying to add python-fuse to buildroot. I have the makefile
+> working, but there is only one little problem left. I would like the
+> option for python-fuse to show up as a sub-item of libfuse, only when
+> libfuse is checked. It should be similar, for example, to lua - when
+> selected, some relevant sub-options appear as sub-items in the
+> xconfig menu. I looked very closely on the lua Config.in, but found
+> nothing that tells Kconfig to show all the options as a sub-items.
+> How can I do this?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   27 ++++++++++++++++-----------
- 1 files changed, 16 insertions(+), 11 deletions(-)
+If python-fuse is a separate package of libfuse, then there is no way
+python-fuse can be a suboption of libfuse. You can only make
+python-fuse not visible when libfuse is disabled and make it visible
+when libfuse is visible. You'd need a package/python-fuse/Config.in
+file that looks like this :
 
-diff --git a/CHANGES b/CHANGES
-index 8396dce..cf01121 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -15,17 +15,22 @@
- 	Make source/external-deps now also works for external
- 	toolchains / crosstool-ng backend.
- 
--	Updated/fixed packages: berkeleydb, bmon, bridge-utils,
--	busybox, cmake, dbus, dbus-glib, ethtool, ffmpeg,
--	gst-plugins-bad, gst-plugins-base, gvfs, jpeg, lame,
--	libarchive, libdnet, libgcrypt, libgtk2, libmpeg2, libpng,
--	lighttpd, linux-fusion, lzo, mtd-utils, oprofile, proftpd, qt,
--	ruby, shared-mime-info, sudo, sqlite, synergy, usbutils,
--	valgrind, webkit, xz
--
--	New packages: acl, attr, ebtables, gnutls, libargtable2,
--	libiqrf, libnspr, libnss, libroxml, libyaml, live555, mxml,
--	rsyslog, sredird, statserial, stunnel, uboot-tools, yajl
-+	Updated/fixed packages: berkeleydb, bind, binutils, bmon,
-+	bridge-utils, busybox, cmake, dbus, dbus-glib, e2fsprogs,
-+	ethtool, ffmpeg, gst-plugins-{bad,base,good,ugly}, gvfs,
-+	hostapd, iproute2, iptables, jpeg, lame, libarchive, libdnet,
-+	libdrm, libgcrypt, libgtk2, libmpeg2, libpng, lighttpd,
-+	linux-fusion, lzo, mtd-utils, nfs-utils, oprofile, proftpd,
-+	qt, ruby, sdl, shared-mime-info, sudo, sqlite, squid, synergy,
-+	udev, usbmount, usbutils, util-linux, valgrind, webkit,
-+	xorg-xserver, xz, zlib
-+
-+	New packages: acl, attr, ebtables, gnutls, inotify-tools,
-+	ipset, libargtable2, libiqrf, libmnl, libnspr, libnss,
-+	libroxml, libyaml, live555, mxml, orc, rsyslog, sredird,
-+	statserial, stunnel, ti-utils, uboot-tools, yajl
-+
-+	Removed packages: hal
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+config BR2_PACKAGE_PYTHON_FUSE
+	bool "python-fuse"
+	depends on BR2_PACKAGE_LIBFUSE
+	depends on BR2_PACKAGE_PYTHON
+	help
+	  This is python-fuse blabla.
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
