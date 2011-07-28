@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 28 Jul 2011 15:35:55 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: add options for
-	debugfs/e2image/resize2fs utilities
-Message-ID: <20110728133942.F252A8B532@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] e2fsprogs: simplify Config.in
+Message-ID: <20110728133942.798528B532@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,65 +9,120 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d7cac5eb28742cc6156aa902349918879add8a8
+commit: http://git.buildroot.net/buildroot/commit/?id=bf102241678a7993cce7b028125400962e1974e8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+No need for 'depends on' for all individual options when they already
+are in a conditional section.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/e2fsprogs/Config.in    |    9 +++++++++
- package/e2fsprogs/e2fsprogs.mk |    6 +++---
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ package/e2fsprogs/Config.in |   18 ------------------
+ 1 files changed, 0 insertions(+), 18 deletions(-)
 
 diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index 3060719..2410fef 100644
+index 2bb92d9..3060719 100644
 --- a/package/e2fsprogs/Config.in
 +++ b/package/e2fsprogs/Config.in
-@@ -26,6 +26,9 @@ config BR2_PACKAGE_E2FSPROGS_CHATTR
+@@ -16,79 +16,64 @@ if BR2_PACKAGE_E2FSPROGS_UTILS
+ config BR2_PACKAGE_E2FSPROGS_BADBLOCKS
+ 	bool "badblocks"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 
+ config BR2_PACKAGE_E2FSPROGS_BLKID
+ 	bool "blkid"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBBLKID
+ 
+ config BR2_PACKAGE_E2FSPROGS_CHATTR
  	bool "chattr"
  	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
  
-+config BR2_PACKAGE_E2FSPROGS_DEBUGFS
-+	bool "debugfs"
-+
  config BR2_PACKAGE_E2FSPROGS_DUMPE2FS
  	bool "dumpe2fs"
  	default y
-@@ -40,6 +43,9 @@ config BR2_PACKAGE_E2FSPROGS_E2FSCK
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBUUID
+ 
+ config BR2_PACKAGE_E2FSPROGS_E2FREEFRAG
+ 	bool "e2freefrag"
  	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+-
+ 
+ config BR2_PACKAGE_E2FSPROGS_E2FSCK
+ 	bool "e2fsck"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
  	select BR2_PACKAGE_E2FSPROGS_LIBBLKID
  
-+config BR2_PACKAGE_E2FSPROGS_E2IMAGE
-+	bool "e2image"
-+
  config BR2_PACKAGE_E2FSPROGS_E2LABEL
  	bool "e2label"
  	default y
-@@ -81,6 +87,9 @@ config BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND
- 	default y
- 	depends on BR2_PACKAGE_E2FSPROGS
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBBLKID
  
-+config BR2_PACKAGE_E2FSPROGS_RESIZE2FS
-+	bool "resize2fs"
-+
+ config BR2_PACKAGE_E2FSPROGS_E2UNDO
+ 	bool "e2undo"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 
+ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+ 	bool "filefrag"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 
+ config BR2_PACKAGE_E2FSPROGS_FINDFS
+ 	bool "findfs"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_E2LABEL
+ 
+ config BR2_PACKAGE_E2FSPROGS_FSCK
+ 	bool "fsck"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBBLKID
+ 
+ config BR2_PACKAGE_E2FSPROGS_LOGSAVE
+ 	bool "logsave"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 
+ config BR2_PACKAGE_E2FSPROGS_LSATTR
+ 	bool "lsattr"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 
+ config BR2_PACKAGE_E2FSPROGS_MKE2FS
+ 	bool "mke2fs"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBBLKID
+ 
+ config BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND
+@@ -99,19 +84,16 @@ config BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND
  config BR2_PACKAGE_E2FSPROGS_TUNE2FS
  	bool "tune2fs"
  	default y
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 8a7edb4..6381d05 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -11,9 +11,9 @@ E2FSPROGS_INSTALL_STAGING = YES
- E2FSPROGS_CONF_OPT = \
- 	--disable-tls \
- 	--enable-elf-shlibs \
--	--disable-debugfs \
--	--disable-imager \
--	--disable-resizer \
-+	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
-+	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
-+	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_UUIDD),,--disable-uuidd) \
- 	--enable-fsck \
- 	--disable-e2initrd-helper \
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_E2LABEL
+ 
+ config BR2_PACKAGE_E2FSPROGS_UUIDGEN
+ 	bool "uuidgen"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBUUID
+ 
+ config BR2_PACKAGE_E2FSPROGS_UUIDD
+ 	bool "uuidd"
+ 	default y
+-	depends on BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_E2FSPROGS_LIBUUID
+ 	help
+ 	  The uuidd daemon from the e2fsprogs suite
 -- 
 1.7.3.4
