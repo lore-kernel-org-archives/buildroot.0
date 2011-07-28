@@ -1,8 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 Jul 2011 23:26:29 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: ensure util-linux is built
-	before e2fsprogs
-Message-ID: <20110728215655.DDE4D8B553@busybox.osuosl.org>
+From: Tilman Glotzner <tilmanglotzner@hotmail.com>
+Date: Thu, 28 Jul 2011 22:41:13 +0000
+Subject: [Buildroot] adding nut to buildroot
+Message-ID: <BAY160-W42BE42946C7EB9032C7376CF340@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +9,49 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1af183e95b0b61cb122ea8417aa2254930b73ecb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For libblkid.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/e2fsprogs/e2fsprogs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 42bdd2c..21e65d1 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -20,7 +20,7 @@ E2FSPROGS_CONF_OPT = \
- 	--disable-e2initrd-helper \
- 	--disable-testio-debug
+Hello 
  
--E2FSPROGS_DEPENDENCIES = host-pkg-config
-+E2FSPROGS_DEPENDENCIES = host-pkg-config util-linux
+I try to add nut to a buildroot distribution. It downloads, compiles, and builds. The executables installed in the image are prefixed by the cross compiler, e.g. apcsmart becomes arm-linux-apcsmart (in the image as well as in output/target/usr/bin). How can I avoid this ?
  
- E2FSPROGS_MAKE_OPT = \
- 	LDCONFIG=true
--- 
-1.7.3.4
+In /buildroot/package/nut, I added 2 files:
+ 
+Config.in
+========
+config BR2_PACKAGE_NUT
+        bool "nut"
+        help
+          The primary goal of the Network UPS Tools (NUT) project is to provide           support for Power Devices, such as Uninterruptible Power Supplies,
+          Power Distribution Units and Solar Controllers.
+          http://www.networkupstools.org
+ 
+ 
+ 
+nut.mk
+=====
+ 
+#############################################################
+#
+# nut
+#
+#############################################################
+NUT_VERSION = 2.6.1
+NUT_SOURCE = nut-$(NUT_VERSION).tar.gz
+NUT_SITE = http://www.networkupstools.org/source/2.6/
+NUT_INSTALL_STAGING = NO
+NUT_INSTALL_TARGET = YES
+NUT_LIBTOOL_PATCH = NO
+ 
+$(eval $(call AUTOTARGETS,package,nut))
+ 
+Can you kindly advise how to debug or fix it ?
+ 
+Thanks
+Tilman
+
+ 
+ 
+ 
+  		 	   		  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110728/7706b63f/attachment.html>
