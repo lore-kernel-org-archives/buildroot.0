@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 29 Jul 2011 09:09:44 +0200
-Subject: [Buildroot] [git commit] toolchain/helpers.mk: unbreak check_glibc
-	after PROGRAM_INVOCATION removal
-Message-ID: <20110729071057.71B8E8B557@busybox.osuosl.org>
+Date: Fri, 29 Jul 2011 09:52:59 +0200
+Subject: [Buildroot] [git commit] libroxml: drop -Werror from CFLAGS
+Message-ID: <20110729075358.AC7608B4F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +9,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70db1984dc003452dae7a9b449843c4e13620e00
+commit: http://git.buildroot.net/buildroot/commit/?id=8d657be342788bf5dd7d9690061787580b571f6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As noticed by Thomas Petazzoni on IRC.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/helpers.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libroxml/libroxml-2.1.0-werror.patch |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/libroxml/libroxml-2.1.0-werror.patch
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 123720b..4d90d15 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -147,7 +147,7 @@ check_glibc = \
- 	$(call check_glibc_feature,BR2_INET_RPC,RPC support) ;\
- 	$(call check_glibc_feature,BR2_ENABLE_LOCALE,Locale support) ;\
- 	$(call check_glibc_feature,BR2_USE_MMU,MMU support) ;\
--	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support) ;\
-+	$(call check_glibc_feature,BR2_USE_WCHAR,Wide char support)
- 
- #
- # Check the conformity of Buildroot configuration with regard to the
+diff --git a/package/libroxml/libroxml-2.1.0-werror.patch b/package/libroxml/libroxml-2.1.0-werror.patch
+new file mode 100644
+index 0000000..a72f2a7
+--- /dev/null
++++ b/package/libroxml/libroxml-2.1.0-werror.patch
+@@ -0,0 +1,22 @@
++[PATCH] remove -Werror from CFLAGS
++
++-Werror should only be used during development, not in released SW.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ Makefile |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: libroxml-2.1.0/Makefile
++===================================================================
++--- libroxml-2.1.0.orig/Makefile
+++++ libroxml-2.1.0/Makefile
++@@ -41,7 +41,7 @@
++ 
++ # options
++ override CPPFLAGS += -Iinc/
++-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
+++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
++ override LDFLAGS += 
++ 
++ ifeq ("$(OS)", "Darwin")
 -- 
 1.7.3.4
