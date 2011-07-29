@@ -1,28 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 29 Jul 2011 07:53:56 +0000 (UTC)
-Subject: [Buildroot] [Bug 3997] bump libroxml to v2.1.0
-In-Reply-To: <bug-3997-163@https.bugs.busybox.net/>
-References: <bug-3997-163@https.bugs.busybox.net/>
-Message-ID: <20110729075356.B692A8B4F3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 29 Jul 2011 13:38:49 +0200
+Subject: [Buildroot] [git commit] util-linux: add option for libmount
+Message-ID: <20110729114227.119B88B568@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3997
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=55cea3b5ef3bd5464420fd610c73e150443d0e67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/Config.in     |    4 ++++
+ package/util-linux/util-linux.mk |    1 +
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Committed, thanks
-
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index f4be2b7..816130d 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -24,6 +24,10 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	bool "build \"fsck\""
+ 
++config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	bool "build libmount"
++
+ config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	bool "build libuuid and uuid utilities"
+ 	default y
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 72dabaf..570a1d1 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -33,6 +33,7 @@ endif
+ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MOUNT),,--disable-mount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),,--disable-fsck) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),,--disable-libmount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),,--disable-libuuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UUID),,--disable-uuid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),,--disable-libblkid) \
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
