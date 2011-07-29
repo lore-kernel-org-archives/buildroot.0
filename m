@@ -1,39 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jul 2011 00:00:37 +0200
-Subject: [Buildroot] [PATCH 1/1] external toolchains: fix SuperH toolchain
-	configuration
-In-Reply-To: <cover.1311976829.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1311976829.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <8b3041e165e35a881d948ad262b919c973f8a549.1311976829.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Jul 2011 00:00:36 +0200
+Subject: [Buildroot] [pull request] Pull request for branch sh-fix
+Message-ID: <cover.1311976829.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CodeSourcery toolchain for SH2-A platforms provide largefile
-support, inet RPC, wide char and threads, so adjust the configuration
-accordingly.
+The following changes since commit 55cea3b5ef3bd5464420fd610c73e150443d0e67:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
+  util-linux: add option for libmount (2011-07-29 13:38:49 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git sh-fix
+
+Thomas Petazzoni (1):
+      external toolchains: fix SuperH toolchain configuration
+
  toolchain/toolchain-external/Config.in |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index bedbb53..0253d83 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -156,6 +156,10 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	bool "CodeSoucery SH 2010.09"
- 	depends on BR2_sh2a
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_LARGEFILE
-+	select BR2_INET_RPC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Toolchain for the SuperH architecture, from CodeSourcery. It
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
