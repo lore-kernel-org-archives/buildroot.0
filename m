@@ -1,36 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 29 Jul 2011 13:38:49 +0200
-Subject: [Buildroot] [git commit] util-linux: mount/fsck needs libblkid
-Message-ID: <20110729114226.DD5B88B55A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Fri, 29 Jul 2011 20:17:33 +0200
+Subject: [Buildroot] adding nut to buildroot
+In-Reply-To: <BAY160-W42BE42946C7EB9032C7376CF340@phx.gbl>
+References: <BAY160-W42BE42946C7EB9032C7376CF340@phx.gbl>
+Message-ID: <201107292017.33978.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Tilman, All,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1050bf67c7f4fd10c31ab7fa687b5609094681a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Friday 29 July 2011 00:41:13 Tilman Glotzner wrote:
+> The executables installed in the image are prefixed by the cross
+> compiler, e.g. apcsmart becomes arm-linux-apcsmart
+[--SNIP--]
+> nut.mk
+> =====
+>  
+> #############################################################
+> #
+> # nut
+> #
+> #############################################################
+> NUT_VERSION = 2.6.1
+> NUT_SOURCE = nut-$(NUT_VERSION).tar.gz
+> NUT_SITE = http://www.networkupstools.org/source/2.6/
+> NUT_INSTALL_STAGING = NO
+> NUT_INSTALL_TARGET = YES
+> NUT_LIBTOOL_PATCH = NO
+>  
+> $(eval $(call AUTOTARGETS,package,nut))
+>  
+> Can you kindly advise how to debug or fix it ?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/util-linux/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Try adding:
+  NUT_CONF_OPT = --program-prefix=''
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 45b0a82..f4be2b7 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -18,8 +18,10 @@ if BR2_PACKAGE_UTIL_LINUX
- 
- config BR2_PACKAGE_UTIL_LINUX_MOUNT
- 	bool "build mount utilties"
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 
- config BR2_PACKAGE_UTIL_LINUX_FSCK
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	bool "build \"fsck\""
- 
- config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+If that does not work, you may try with:
+  NUT_CONF_OPT = --program-transform-name='s/$(GNU_TARGET_NAME)-//;'
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.3.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
