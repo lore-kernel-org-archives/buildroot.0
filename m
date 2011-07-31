@@ -1,77 +1,43 @@
-From: Tilman Glotzner <tilmanglotzner@hotmail.com>
-Date: Sat, 30 Jul 2011 14:42:29 +0000
-Subject: [Buildroot] adding nut to buildroot
-In-Reply-To: <201107292017.33978.yann.morin.1998@anciens.enib.fr>
-References: <BAY160-W42BE42946C7EB9032C7376CF340@phx.gbl>,
- <201107292017.33978.yann.morin.1998@anciens.enib.fr>
-Message-ID: <BAY160-W318E3045C78C2DBD2C9905CF360@phx.gbl>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Sun, 31 Jul 2011 10:16:00 +0200
+Subject: [Buildroot] [PATCH 2/2] gst-plugins-base: depend on orc if it
+	is enabled
+In-Reply-To: <87fwlvuzdm.fsf@macbook.be.48ers.dk>
+References: <1310628760-4172-1-git-send-email-s.neumann@raumfeld.com>
+ <1310628760-4172-3-git-send-email-s.neumann@raumfeld.com>
+ <87fwlvuzdm.fsf@macbook.be.48ers.dk>
+Message-ID: <1312100161.687.1.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, 2011-07-24 at 23:45 +0200, Peter Korsgaard wrote:
+> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+> 
+>  Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+>  Sven> ---
+>  Sven>  .../gst-plugins-base/gst-plugins-base.mk           |    4 ++++
+>  Sven>  1 files changed, 4 insertions(+), 0 deletions(-)
+> 
+>  Sven> diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+>  Sven> index 79ced30..09e0729 100644
+>  Sven> --- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+>  Sven> +++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+>  Sven> @@ -26,6 +26,10 @@ GST_PLUGINS_BASE_CONF_OPT = \
+>  
+>  Sven>  GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
+>  
+>  Sven> +ifeq ($(BR2_PACKAGE_ORC),y)
+>  Sven> +GST_PLUGINS_BASE_DEPENDENCIES += orc
+>  Sven> +endif
+> 
+> What does this buy us? Extra functionality or higher performance?
+
+Higher performance. It is highly recommended by the GStreamer developers
+to enable this for production systems.
 
 
- Hello Yann
+Sven
  
-> If that does not work, you may try with:
-> NUT_CONF_OPT = --program-transform-name='s/$(GNU_TARGET_NAME)-//;'
-Using this option, it worked. Many thanks for that hint. 
- 
-Can sombody explain me the building process or point me to some documentation ?
-1) I understand that a package is build in /output/build/
-2) once all packages is compiled, everything seems to end  up in output/image/rootfs.arm.tar somehow.
-What are the intermediate steps ?
- 
-I would like to change the config file coming with nut and replace them with my own. How do I do that ?
- 
-Thanks
- 
-Tilman
- 
-> Tilman, All,
-> 
-> On Friday 29 July 2011 00:41:13 Tilman Glotzner wrote:
-> > The executables installed in the image are prefixed by the cross
-> > compiler, e.g. apcsmart becomes arm-linux-apcsmart
-> [--SNIP--]
-> > nut.mk
-> > =====
-> > 
-> > #############################################################
-> > #
-> > # nut
-> > #
-> > #############################################################
-> > NUT_VERSION = 2.6.1
-> > NUT_SOURCE = nut-$(NUT_VERSION).tar.gz
-> > NUT_SITE = http://www.networkupstools.org/source/2.6/
-> > NUT_INSTALL_STAGING = NO
-> > NUT_INSTALL_TARGET = YES
-> > NUT_LIBTOOL_PATCH = NO
-> > 
-> > $(eval $(call AUTOTARGETS,package,nut))
-> > 
-> > Can you kindly advise how to debug or fix it ?
-> 
-> Try adding:
-> NUT_CONF_OPT = --program-prefix=''
-> 
-> If that does not work, you may try with:
-> NUT_CONF_OPT = --program-transform-name='s/$(GNU_TARGET_NAME)-//;'
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> | Yann E. MORIN | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software Designer | \ / CAMPAIGN | ___ |
-> | +33 223 225 172 `------------.-------: X AGAINST | \e/ There is no |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL | v conspiracy. |
-> '------------------------------^-------^------------------^--------------------'
- 		 	   		  
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110730/4e45259c/attachment.html>
