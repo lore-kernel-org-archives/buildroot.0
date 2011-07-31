@@ -1,41 +1,26 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Sun, 31 Jul 2011 10:19:27 +0200
-Subject: [Buildroot] [PATCH 1/2] orc: new package
-In-Reply-To: <87k4b7uzey.fsf@macbook.be.48ers.dk>
-References: <1310628760-4172-1-git-send-email-s.neumann@raumfeld.com>
- <1310628760-4172-2-git-send-email-s.neumann@raumfeld.com>
- <87k4b7uzey.fsf@macbook.be.48ers.dk>
-Message-ID: <1312100368.687.4.camel@bender>
+Date: Sun, 31 Jul 2011 20:41:45 +0200
+Subject: [Buildroot] [PATCH 3/3] samba: bump to version 3.3.15
+In-Reply-To: <1311884043-2473-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1311884043-2473-1-git-send-email-gustavo@zacarias.com.ar>
+ <1311884043-2473-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1312137706.7121.2.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2011-07-24 at 23:44 +0200, Peter Korsgaard wrote:
-> >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+On Thu, 2011-07-28 at 17:14 -0300, Gustavo Zacarias wrote:
+> Bump samba to version 3.3.15 and add security patches for CVE-2011-2522
+> and CVE-2011-2694.
 > 
->  Sven> Orc - the Oil Runtime Compiler - is the successor of liboil.
->  Sven> There's a runtime library that is installed in staging and target
->  Sven> and there's a host version that can be built if orcc, the ORC
->  Sven> compiler is needed at build time.
-> 
-> So presumably we should remove liboil? The only thing using it is
-> swfdec, which afaik is long dead upstream.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Agreed.
-
-> Should usr/bin/orcc get removed if !BR2_HAVE_DEVFILES or is it needed
-> for anything?
-
-Yes, that makes sense. There's also /usr/bin/orc-bugreport which should
-probably be removed as well.
-
-> I've committed with those changes (except for orcc, please advice) -
-> Thanks.
-
-I won't find time to do the proposed changes before next week as I am
-currently on vacation.
+Why does buildroot still stick to such an old version of samba? We are
+sucessfully using 3.5.9 in our branch (and could, and should, update to
+3.5.10 easily). Would you like me to submit a patch to update samba to
+version 3.5.x ?
 
 
 Sven
