@@ -1,9 +1,9 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon,  1 Aug 2011 23:46:14 +0200
+Date: Mon,  1 Aug 2011 23:52:44 +0200
 Subject: [Buildroot] [PATCH 1/3] samba: bump to version 3.5.10
 In-Reply-To: <1312235176-31058-1-git-send-email-s.neumann@raumfeld.com>
 References: <1312235176-31058-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1312235176-31058-2-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1312235564-31307-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
