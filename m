@@ -1,36 +1,26 @@
 From: Mike Williams <mike@mikebwilliams.com>
-Date: Mon, 1 Aug 2011 10:47:52 -0400
-Subject: [Buildroot] [PATCH 3/3] samba: bump to version 3.3.15
-In-Reply-To: <1312137706.7121.2.camel@bender>
-References: <1311884043-2473-1-git-send-email-gustavo@zacarias.com.ar>
- <1311884043-2473-3-git-send-email-gustavo@zacarias.com.ar>
- <1312137706.7121.2.camel@bender>
-Message-ID: <CANPyyuO6nbVNzGtb3P_Eajdr8--9qaybTwi251EjAaDqsxZzAg@mail.gmail.com>
+Date: Mon, 1 Aug 2011 17:12:50 -0400
+Subject: [Buildroot] broken socat
+Message-ID: <CANPyyuOwmztPhQMg876Tvzw2nKqSVzJDDpc0TUkCqdRU2U8uXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 31, 2011 at 2:41 PM, Sven Neumann <s.neumann@raumfeld.com> wrote:
-> On Thu, 2011-07-28 at 17:14 -0300, Gustavo Zacarias wrote:
->> Bump samba to version 3.3.15 and add security patches for CVE-2011-2522
->> and CVE-2011-2694.
->>
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->
-> Why does buildroot still stick to such an old version of samba? We are
-> sucessfully using 3.5.9 in our branch (and could, and should, update to
-> 3.5.10 easily). Would you like me to submit a patch to update samba to
-> version 3.5.x ?
->
->
-> Sven
+Has anyone else noticed a broken socat on PPC or other big-endian
+systems? The termios options specified manually in the .mk file appear
+to be wrong, as socat asserts when run because they aren't equal to
+the platform's definition. It appears these options are determined
+during configuration by compiling small programs and testing them, as
+they must be manually set when cross compiling. I know nothing about
+termios, but is it possible that we could just define them based on
+architecture in the .mk file and be done with it?
 
-Please post your patch. I just started using 3.5.10, and have been
-working through problems with the codepages and determining which
-patches are still relevant. I can at least confirm it builds on
-powerpc-glibc with no patches and minor samba.mk fixes.
+Additionally, it appears that 2.0.0-b4 has a problem with a UDP-RECV
+source, that 1.7.1.3 does not. Perhaps it would be wise to revert to
+the stable version until the next release is out of beta, along with
+whatever changes fixing the termios problem requires?
 
 Thanks,
 Mike
