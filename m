@@ -1,26 +1,57 @@
-From: Mike Williams <mike@mikebwilliams.com>
-Date: Mon, 1 Aug 2011 17:12:50 -0400
-Subject: [Buildroot] broken socat
-Message-ID: <CANPyyuOwmztPhQMg876Tvzw2nKqSVzJDDpc0TUkCqdRU2U8uXA@mail.gmail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon,  1 Aug 2011 23:46:16 +0200
+Subject: [Buildroot] [PATCH 3/3] samba: make installation of smbd
+	configurable
+In-Reply-To: <1312235176-31058-1-git-send-email-s.neumann@raumfeld.com>
+References: <1312235176-31058-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1312235176-31058-4-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Has anyone else noticed a broken socat on PPC or other big-endian
-systems? The termios options specified manually in the .mk file appear
-to be wrong, as socat asserts when run because they aren't equal to
-the platform's definition. It appears these options are determined
-during configuration by compiling small programs and testing them, as
-they must be manually set when cross compiling. I know nothing about
-termios, but is it possible that we could just define them based on
-architecture in the .mk file and be done with it?
+It may be desirable to compile samba but not actually install
+the smbd binary. This is the case if you need libsmbclient but
+don't want to run a samba server.
 
-Additionally, it appears that 2.0.0-b4 has a problem with a UDP-RECV
-source, that 1.7.1.3 does not. Perhaps it would be wise to revert to
-the stable version until the next release is out of beta, along with
-whatever changes fixing the termios problem requires?
+Make this possible by allowing to disable installation of smbd.
 
-Thanks,
-Mike
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/samba/Config.in |    7 +++++++
+ package/samba/samba.mk  |    1 +
+ 2 files changed, 8 insertions(+), 0 deletions(-)
+
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index 58a84f3..c4fb456 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -122,6 +122,13 @@ config BR2_PACKAGE_SAMBA_SMBCQUOTAS
+ 	help
+ 	  Set or get QUOTAs of NTFS 5 shares
+ 
++config BR2_PACKAGE_SAMBA_SMBD
++	bool "smbd"
++	default y
++	depends on BR2_PACKAGE_SAMBA
++	help
++	  The server daemon that provides filesharing and printing services,
++
+ config BR2_PACKAGE_SAMBA_SMBGET
+ 	bool "smbget"
+ 	default y
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index b3fbd4b..2bb0530 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -110,6 +110,7 @@ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCACLS) += usr/bin/smbcacls
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCLIENT) += usr/bin/smbclient
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCONTROL) += usr/bin/smbcontrol
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCQUOTAS) += usr/bin/smbcquotas
++SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBD) += usr/sbin/smbd
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBGET) += usr/bin/smbget
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbadd
+ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbdel
+-- 
+1.7.4.1
