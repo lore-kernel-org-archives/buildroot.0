@@ -1,42 +1,19 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 02 Aug 2011 10:00:16 +0200
-Subject: [Buildroot] [PATCH] udev: bump to 173
-Message-ID: <4E37AE90.2080008@visionsystems.de>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 02 Aug 2011 10:24:57 +0200
+Subject: [Buildroot] samba: bump to version 3.5.10
+In-Reply-To: <1312235176-31058-1-git-send-email-s.neumann@raumfeld.com>
+References: <1312235176-31058-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1312273497.32334.13.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/udev/udev.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-Index: b/package/udev/udev.mk
-===================================================================
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -3,7 +3,7 @@
- # udev
- #
- #############################################################
--UDEV_VERSION = 172
-+UDEV_VERSION = 173
- UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
- UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
- 
-@@ -19,11 +19,11 @@
- UDEV_DEPENDENCIES += libusb libusb-compat acl usbutils hwdata libglib2
- UDEV_CONF_OPT +=							\
- 	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
--	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids
-+	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
-+	--enable-udev_acl
- else
- UDEV_CONF_OPT +=		\
- 	--disable-hwdb		\
--	--disable-udev_acl	\
- 	--disable-gudev
- endif
- 
+did patch 1/3 ever show up on the list? I sent it twice and never
+received a copy of it.
+
+
+Sven
