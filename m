@@ -1,54 +1,94 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 02 Aug 2011 20:33:19 +0200
-Subject: [Buildroot] [PATCH 5 of 5] toolchain-external: use host-tar instead
- of tar to unpack toolchains
-In-Reply-To: <patchbomb.1312309994@localhost6.localdomain6>
-References: <patchbomb.1312309994@localhost6.localdomain6>
-Message-ID: <fe06b4e821ed5f799078.1312309999@localhost6.localdomain6>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Aug 2011 20:44:12 +0200
+Subject: [Buildroot] [PATCH] Adding Fluxbox window manager
+In-Reply-To: <20110802191004.66ae3ee3@gmail.com>
+References: <20110802191004.66ae3ee3@gmail.com>
+Message-ID: <20110802204412.4be907e7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using the system tar with --strip-components causes problems when its version is too old (<1.17). Even recent releases of RedHat/CentOS still ship with tar 1.15. To avoid such problems, always use host-tar instead of tar to unpack toolchains.
+Hello,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Le Tue, 2 Aug 2011 19:10:04 +0200,
+Frederic Bassaler <frederic.bassaler@gmail.com> a ?crit :
 
----
-To be honest, I'm not sure what the best way is to handle this. The same problems with tar could occur in other places than just external toolchains. So maybe we should use host-tar in more places.
-On the other hand, most users have a recent, working, tar version on there system. It may thus make more sense to detect the system tar version and only use host-tar if it's too old.
+> Hope this is ok, sorry I'm a git-newbie
+> 
+> (if it's not good, can somebody tell me the proper git commands?
+> thanks)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -155,7 +155,7 @@
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
--TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
-+TOOLCHAIN_EXTERNAL_DEPENDENCIES = host-tar $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
- else
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
- endif
-@@ -227,9 +227,9 @@
- $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2)
- 	mkdir -p $(@D)
- 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_1))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
-+		$(HOST_TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
- 	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE_2))) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2) | \
--		$(TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
-+		$(HOST_TAR) $(TAR_STRIP_COMPONENTS)=3 --hard-dereference -C $(@D) $(TAR_OPTIONS) -
- ifeq ($(TOOLCHAIN_EXTERNAL_PREFIX),bfin-uclinux)
- 	rm -rf $(TOOLCHAIN_EXTERNAL_DIR)/bfin-linux-uclibc
- 	mv $(TOOLCHAIN_EXTERNAL_DIR)/bfin-uclinux $(TOOLCHAIN_EXTERNAL_DIR)/tmp
-@@ -249,7 +249,7 @@
- 
- $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
- 	mkdir -p $(@D)
--	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(HOST_TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
- 	$(Q)touch $@
- endif
- 
+This should be a proper patch description, as it will end up in the
+commit log. You must also add a Signed-off-by line.
+
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_FLUXBOX
+> +	bool "fluxbox"
+> +        depends on BR2_PACKAGE_XORG7
+> +        depends on BR2_INSTALL_LIBSTDCPP
+> +        select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> +        select BR2_PACKAGE_XLIB_LIBX11
+> +  	help
+> +	  The Fluxbox lightweight window manager for X
+> +
+> +	  http://fluxbox.org
+> +
+> +comment "fluxbox requires a toolchain with C++ support enabled"
+> +        depends on BR2_PACKAGE_XORG7 && !BR2_INSTALL_LIBSTDCPP
+
+"bool", "depends on", "select" must be prefixed by a tab, not spaces.
+The help text must be indented with one tab + 2 spaces.
+
+> diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
+> new file mode 100644
+> index 0000000..726a133
+> --- /dev/null
+> +++ b/package/fluxbox/fluxbox.mk
+> @@ -0,0 +1,23 @@
+> +#############################################################
+> +#
+> +# FLUXBOX
+> +#
+> +#############################################################
+> +
+> +FLUXBOX_VERSION:=1.3.1
+> +FLUXBOX_SOURCE:=fluxbox-$(FLUXBOX_VERSION).tar.bz2
+> +FLUXBOX_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fluxbox/
+
+Please use = instead of :=.
+
+> +FLUXBOX_AUTORECONF:=NO
+> +FLUXBOX_INSTALL_STAGING:=NO
+> +FLUXBOX_INSTALL_TARGET:=YES
+
+Not needed, those are the default values.
+
+> +FLUXBOX_CONF_OPT:=--x-includes=$(STAGING_DIR)/usr/include/X11 \
+> +		--x-libraries=$(STAGING_DIR)/usr/lib
+> +
+> +FLUXBOX_DEPENDENCIES = xlib_libX11
+
+This doesn't really match the dependencies expressed in the Config.in
+file, but it's true that our dependencies on X.org stuff are a bit
+broken today (all client applications depend on the server, which is
+not correct from a build point of view).
+
+For the time being, I guess this will be fine, until we find the time
+to clean up those dependencies.
+
+> +ifneq ($(BR2_ENABLE_LOCALE),y)
+> +FLUXBOX_DEPENDENCIES += libiconv
+> +endif
+> +
+> +$(eval $(call AUTOTARGETS,package,fluxbox))
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
