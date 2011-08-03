@@ -1,30 +1,110 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 03 Aug 2011 09:05:46 +0200
-Subject: [Buildroot] broken socat
-In-Reply-To: <CANPyyuOwmztPhQMg876Tvzw2nKqSVzJDDpc0TUkCqdRU2U8uXA@mail.gmail.com>
-References: <CANPyyuOwmztPhQMg876Tvzw2nKqSVzJDDpc0TUkCqdRU2U8uXA@mail.gmail.com>
-Message-ID: <4E38F34A.4020407@visionsystems.de>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 3 Aug 2011 09:46:16 +0200
+Subject: [Buildroot] [PATCH] Adding Fluxbox window manager
+In-Reply-To: <20110802204412.4be907e7@skate>
+References: <20110802191004.66ae3ee3@gmail.com> <20110802204412.4be907e7@skate>
+Message-ID: <CAAXf6LWyzvEKG_us4XJtM5T_CgCPHkUM9oSBMyf7KWXVqO3NYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 01.08.2011 23:12, schrieb Mike Williams:
-> Has anyone else noticed a broken socat on PPC or other big-endian
-> systems? The termios options specified manually in the .mk file appear
-> to be wrong, as socat asserts when run because they aren't equal to
-> the platform's definition. It appears these options are determined
-> during configuration by compiling small programs and testing them, as
-> they must be manually set when cross compiling. I know nothing about
-> termios, but is it possible that we could just define them based on
-> architecture in the .mk file and be done with it?
-> 
-> Additionally, it appears that 2.0.0-b4 has a problem with a UDP-RECV
-> source, that 1.7.1.3 does not. Perhaps it would be wise to revert to
-> the stable version until the next release is out of beta, along with
-> whatever changes fixing the termios problem requires?
+Hi,
 
-Have you reported these issues to socat maintainer?
+On Tue, Aug 2, 2011 at 8:44 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Le Tue, 2 Aug 2011 19:10:04 +0200,
+> Frederic Bassaler <frederic.bassaler@gmail.com> a ?crit :
+>
+>> Hope this is ok, sorry I'm a git-newbie
+>>
+>> (if it's not good, can somebody tell me the proper git commands?
+>> thanks)
+>
+> This should be a proper patch description, as it will end up in the
+> commit log. You must also add a Signed-off-by line.
+>
+>> @@ -0,0 +1,13 @@
+>> +config BR2_PACKAGE_FLUXBOX
+>> + ? ? bool "fluxbox"
+>> + ? ? ? ?depends on BR2_PACKAGE_XORG7
+>> + ? ? ? ?depends on BR2_INSTALL_LIBSTDCPP
+>> + ? ? ? ?select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>> + ? ? ? ?select BR2_PACKAGE_XLIB_LIBX11
+>> + ? ? help
+>> + ? ? ? The Fluxbox lightweight window manager for X
+>> +
+>> + ? ? ? http://fluxbox.org
+>> +
+>> +comment "fluxbox requires a toolchain with C++ support enabled"
+>> + ? ? ? ?depends on BR2_PACKAGE_XORG7 && !BR2_INSTALL_LIBSTDCPP
+>
+> "bool", "depends on", "select" must be prefixed by a tab, not spaces.
+> The help text must be indented with one tab + 2 spaces.
+>
+>> diff --git a/package/fluxbox/fluxbox.mk b/package/fluxbox/fluxbox.mk
+>> new file mode 100644
+>> index 0000000..726a133
+>> --- /dev/null
+>> +++ b/package/fluxbox/fluxbox.mk
+>> @@ -0,0 +1,23 @@
+>> +#############################################################
+>> +#
+>> +# FLUXBOX
+>> +#
+>> +#############################################################
+>> +
+>> +FLUXBOX_VERSION:=1.3.1
+>> +FLUXBOX_SOURCE:=fluxbox-$(FLUXBOX_VERSION).tar.bz2
+>> +FLUXBOX_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fluxbox/
+>
+> Please use = instead of :=.
 
-Yegor
+Just curious: why do you recommend against := ?
+For example in the case of FLUXBOX_SOURCE, using := would avoid
+unnecessary expansions of $(FLUXBOX_VERSION), each time FLUXBOX_SOURCE
+is used.
+For FLUXBOX_SITE it depends on whether BR2_SOURCEFORGE_MIRROR is
+already defined or not, but I think it has, right?
+
+>
+>> +FLUXBOX_AUTORECONF:=NO
+>> +FLUXBOX_INSTALL_STAGING:=NO
+>> +FLUXBOX_INSTALL_TARGET:=YES
+>
+> Not needed, those are the default values.
+>
+>> +FLUXBOX_CONF_OPT:=--x-includes=$(STAGING_DIR)/usr/include/X11 \
+>> + ? ? ? ? ? ? --x-libraries=$(STAGING_DIR)/usr/lib
+>> +
+>> +FLUXBOX_DEPENDENCIES = xlib_libX11
+>
+> This doesn't really match the dependencies expressed in the Config.in
+> file, but it's true that our dependencies on X.org stuff are a bit
+> broken today (all client applications depend on the server, which is
+> not correct from a build point of view).
+>
+> For the time being, I guess this will be fine, until we find the time
+> to clean up those dependencies.
+>
+>> +ifneq ($(BR2_ENABLE_LOCALE),y)
+>> +FLUXBOX_DEPENDENCIES += libiconv
+>> +endif
+>> +
+>> +$(eval $(call AUTOTARGETS,package,fluxbox))
+>
+> Regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
