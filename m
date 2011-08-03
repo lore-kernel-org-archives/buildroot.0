@@ -1,20 +1,18 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 03 Aug 2011 13:23:56 -0300
-Subject: [Buildroot] [PATCH] openvpn: bump to 2.2.1
-In-Reply-To: <4E39125B.6050302@visionsystems.de>
-References: <4E39125B.6050302@visionsystems.de>
-Message-ID: <94e0ab8e5c41846d7f01a409589e0247@zacarias.com.ar>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
+Date: Wed, 3 Aug 2011 18:24:33 +0200
+Subject: [Buildroot] [Bug] alsamixer: can't load library 'libform.so.5'
+Message-ID: <20110803182433.3dda34b1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 03 Aug 2011 11:18:19 +0200, Yegor Yefremov wrote:
+Hi, noticed this little bug right now :
 
-> tmpdir issue was already fixed in 2.2.1 version, so
-> remove the patch
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+alsamixer (from alsa-utils) complains that there's a missing library on
+the generated system : 'libform.so.5', which is normally part of
+ncurses.
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+the lib is generated in output/build/ncurses-5.7/lib/, but is
+apparently not copied in output/target/usr/lib
