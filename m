@@ -1,34 +1,53 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 03 Aug 2011 14:07:52 +0200
-Subject: [Buildroot] openssl build failure
-In-Reply-To: <20110803132700.0622fe7b@skate>
-References: <4E3914FB.8050202@visionsystems.de> <20110803132700.0622fe7b@skate>
-Message-ID: <4E393A18.6020802@visionsystems.de>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Wed, 3 Aug 2011 15:37:20 +0300
+Subject: [Buildroot] [PATCH 1/3] bump udev and clean up
+In-Reply-To: <CALR4fEL2EY3sU74wXUUW=c3z5MOrYNHfMki-VEKgFCn_7yZGvg@mail.gmail.com>
+References: <4E298D06.4050107@visionsystems.de>
+ <4E298E70.50200@visionsystems.de>
+ <871uxe10hq.fsf@macbook.be.48ers.dk> <4E2E67C8.7090208@visionsystems.de>
+ <CALR4fEK2r2pL6X09pVUG970PUHxY+a52dvNdjjfVaoGLRnn3Mw@mail.gmail.com>
+ <871uxcuqg0.fsf@macbook.be.48ers.dk>
+ <CALR4fEKGFH5tq-25=j3DW-CVD5Uc-QxUeLoec-JLwSxNUhQw-w@mail.gmail.com>
+ <87sjpst92p.fsf@macbook.be.48ers.dk>
+ <CALR4fEKxDB+xH1_X+0xY9KWQXAz_g6zbrQHqzOB81J2jpOcnOg@mail.gmail.com>
+ <CALR4fEL2EY3sU74wXUUW=c3z5MOrYNHfMki-VEKgFCn_7yZGvg@mail.gmail.com>
+Message-ID: <CALR4fEJ7ymSGNW39VeaY5iWQ7zTCLMFm0eAApkFi4PyJaBpAhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 03.08.2011 13:27, schrieb Thomas Petazzoni:
-> Le Wed, 03 Aug 2011 11:29:31 +0200,
-> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+With the update of 173... lets bring this up again...
+
+I am having problems in my setup: I see the /dev/ directory quite
+empty. I found out that you removed the call to udevstart in S10udev,
+calling it manually fixed the "emptiness problem" and /dev/ is filled
+up as I expect.
+
+Is the problem caused by my side (I am using tmpfs, and not udevfs,
+and my kernel is *way* old). What is the equivalent of udevstart in
+udev?
+
+
+On Wed, Jul 27, 2011 at 3:53 PM, Diego Iastrubni <diegoiast@gmail.com> wrote:
+> On Wed, Jul 27, 2011 at 1:19 PM, Diego Iastrubni <diegoiast@gmail.com> wrote:
+>> You are probably right, qouting from
+>> http://www.spinics.net/lists/hotplug/msg04998.html :
+>>
+>> It's generally not a good idea to build new low-level tools against
+>> outdated kernels or run new low-level tools against them. Things can
+>> easily go wrong. We usually only test the other way around: new
+>> kernels on old userspace. That should work fine for quite a while.
+>>
+>> So, this patch demands:
+>>
+>> 1) newer toolchains
+>> 2) kernel 2.6.33 and above.
+>>
+>> (2) is bad, since 2.6.32 is still maintained. For (1), I have a patch
+>> in the works, I will test and report.
 >
->> I've tried to compile OpenSSL for ARM and got following error:
->>
->> arm-unknown-linux-uclibcgnueabi-gcc -DMONOLITH -I.. -I../include
->> -fPIC -DOPENSSL_PIC -DZLIB_SHARED -DZLIB -DOPENSSL_THREADS
->> -D_REENTRANT -DDSO_DLFCN -DHAVE_DLFCN_H -DTERMIO -pipe -Os
->> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
->> -Wall -DOPENSSL_BN_ASM_MONT -DSHA1_ASM -DSHA256_ASM -DSHA512_ASM
->> -DAES_ASM   -c -o pkeyparam.o pkeyparam.c {standard input}: Assembler
->> messages: {standard input}:284: Error: can't resolve
->> `.LC4' {.rodata.str1.1 section} - `.LPIC5' {*UND* section}
->>
->> Any idea? About two or three month ago I had no problem compiling
->> this library.
-> http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48308
-
-Thanks. Should we make a comment or dependency on particular GCC version?
-
-Yegor
+> See patch attached. Just put it inside packages/udev and rebuild.
+> Works for me, and should not break other things, at least I hope.
+>
