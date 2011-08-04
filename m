@@ -1,33 +1,35 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Thu, 4 Aug 2011 21:02:44 +0200
-Subject: [Buildroot] [PATCH] midori: bump to 0.3.6
-Message-ID: <20110804210244.16e688b8@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Aug 2011 21:16:48 +0200
+Subject: [Buildroot] [PATCH 1/2] orc: new package
+In-Reply-To: <1312100368.687.4.camel@bender> (Sven Neumann's message of "Sun, 
+ 31 Jul 2011 10:19:27 +0200")
+References: <1310628760-4172-1-git-send-email-s.neumann@raumfeld.com>
+ <1310628760-4172-2-git-send-email-s.neumann@raumfeld.com>
+ <87k4b7uzey.fsf@macbook.be.48ers.dk> <1312100368.687.4.camel@bender>
+Message-ID: <87wretng0v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-midori 0.4.0 is out, but requires an additionnal dependency : vala
-(maybe a more experienced person could add it?)
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
----
- package/midori/midori.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hi,
 
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index 5f6315f..0bf431b 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--MIDORI_VERSION = 0.3.2
-+MIDORI_VERSION = 0.3.6
- MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
- MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.3/
- MIDORI_INSTALL_TARGET = YES
+ >> Should usr/bin/orcc get removed if !BR2_HAVE_DEVFILES or is it needed
+ >> for anything?
+
+ Sven> Yes, that makes sense. There's also /usr/bin/orc-bugreport which should
+ Sven> probably be removed as well.
+
+ >> I've committed with those changes (except for orcc, please advice) -
+ >> Thanks.
+
+ Sven> I won't find time to do the proposed changes before next week as I am
+ Sven> currently on vacation.
+
+No problem, I've fixed it now.
+
 -- 
-1.7.2.3
+Bye, Peter Korsgaard
