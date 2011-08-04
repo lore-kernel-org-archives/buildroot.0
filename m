@@ -1,269 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  4 Aug 2011 23:23:22 +0200
-Subject: [Buildroot] [PATCH 4/5] remove Glibc_vs_uClibc document
+Date: Thu,  4 Aug 2011 23:23:20 +0200
+Subject: [Buildroot] [PATCH 2/5] manual: provide make targets to build the
+	documentation
 In-Reply-To: <cover.1312492948.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1312492948.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <af06a1da53136c201155c15d0c0ea9dc97384b86.1312492948.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ab98242259a83d1329c12ef548b33d0c2ce41200.1312492948.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This document has nothing to do with Buildroot, and is probably a
-leftover from the uClibc documentation.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/Glibc_vs_uClibc.html |  240 ---------------------------------------------
- 1 files changed, 0 insertions(+), 240 deletions(-)
- delete mode 100644 docs/Glibc_vs_uClibc.html
+ Makefile |   40 +++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 39 insertions(+), 1 deletions(-)
 
-diff --git a/docs/Glibc_vs_uClibc.html b/docs/Glibc_vs_uClibc.html
-deleted file mode 100644
-index c14eb8c..0000000
---- a/docs/Glibc_vs_uClibc.html
-+++ /dev/null
-@@ -1,240 +0,0 @@
--<!--#include file="header.html" -->
--
--<h2>uClibc vs. glibc</h2>
--
--<p>
--  uClibc and Glibc are not the same -- there are a number of differences which
--  may or may not cause you problems.  This document attempts to list these 
--  differences and, when completed, will contain a full list of all relevant 
--  differences. 
--  <br><br></p>
-- <ol>
--  <li>uClibc is smaller than glibc.  We attempt to maintain a glibc compatible
--  interface, allowing applications that compile with glibc to easily compile with
--  uClibc.  However, we do not include _everything_ that glibc includes, and
--  therefore some applications may not compile.  If this happens to you, please
--  report the failure to the uclibc mailing list, with detailed error messages.
--  </li><br>
--  <li>uClibc is much more configurable then glibc.  This means that a developer
--  may have compiled uClibc in such a way that significant amounts of
--  functionality have been omitted.
--  </li><br>
--  <li>uClibc does not even attempt to ensure binary compatibility across releases.
--  When a new version of uClibc is released, you may or may not need to recompile
--  all your binaries.
--  </li><br>
--  <li><ul><li> malloc(0) in glibc returns a valid pointer to something(!?!?) while in
--  uClibc calling malloc(0) returns a NULL.  The behavior of malloc(0) is listed
--  as implementation-defined by SuSv3, so both libraries are equally correct.
--  This difference also applies to realloc(NULL, 0).  I personally feel glibc's
--  behavior is not particularly safe.  To enable glibc behavior, one has to
--  explicitly enable the MALLOC_GLIBC_COMPAT option.
--  </li><br><li>
--  glibc's malloc() implementation has behavior that is tunable via the
--  MALLOC_CHECK_ environment variable.  This is primarily used to provide extra
--  malloc debugging features.  These extended malloc debugging features are not
--  available within uClibc.  There are many good malloc debugging libraries
--  available for Linux (dmalloc, electric fence, valgrind, etc) that work much
--  better than the glibc extended malloc debugging.  So our omitting this
--  functionality from uClibc is not a great loss.
--  </li><br>
--  </ul></li>
--  <li>uClibc does not provide a database library (libdb).
--  </li><br>
--  <li>uClibc does not support NSS (/lib/libnss_*), which allows glibc to easily
--  support various methods of authentication and DNS resolution.  uClibc only
--  supports flat password files and shadow password files for storing
--  authentication information.  If you need something more complex than this,
--  you can compile and install pam.
--  </li><br>
--  <li>uClibc's libresolv is only a stub.  Some, but not all of the functionality
--  provided by glibc's libresolv is provided internal to uClibc.  Other functions
--  are not at all implemented.
--  </li><br>
--  <li>libnsl provides support for Network Information Service (NIS) which was
--  originally called "Yellow Pages" or "YP", which is an extension of RPC invented
--  by Sun to share Unix password files over the network.  I personally think NIS
--  is an evil abomination and should not be used.  These days, using ldap is much
--  more effective mechanism for doing the same thing.  uClibc provides a stub
--  libnsl, but has no actual support for Network Information Service (NIS).
--  We therefore, also do not provide any of the headers files provided by glibc
--  under /usr/include/rpcsvc.
--  </li><br>
--  <li>uClibc's locale support is not 100% complete yet.  We are working on it.
--  </li><br>
--  <li>uClibc's math library only supports long double as inlines, and even
--  then the long double support is quite limited.  Also, very few of the
--  float math functions are implemented.  Stick with double and you should
--  be just fine.
--  </li><br>
--  <li>uClibc's libcrypt does not support the reentrant crypt_r, setkey_r and
--  encrypt_r, since these are not required by SuSv3.
--  </li><br>
--  <li>uClibc directly uses kernel types to define most opaque data types.
--  </li><br>
--  <li>uClibc directly uses the linux kernel's arch specific 'stuct stat'.
--  </li><br>
--  <li>uClibc's librt library currently lacks all aio routines, all clock
--    routines, and all shm routines (only the timer routines and the mq
--    routines are implemented). 
--   </li><br>
--</ol> 
--<hr>
--<h3>Manuel's Notes</h3>
--
--  Some general comments...<br>
--  <p>
--  The intended target for all my uClibc code is ANSI/ISO C99 and SUSv3
--  compliance.  While some glibc extensions are present, many will eventually
--  be configurable.  Also, even when present, the glibc-like extensions may
--  differ slightly or be more restrictive than the native glibc counterparts.
--  They are primarily meant to be porting _aides_ and not necessarily
--  drop-in replacements.
--  </p><br>
--Now for some details...<br><br>
--
--<u>time functions</u><br>
--<ol>
--<li>Leap seconds are not supported.</li><br>
--<li>/etc/timezone and the whole zoneinfo directory tree are not supported.
--   To set the timezone, set the TZ environment variable as specified in
--   http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap08.html
--   or you may also create an /etc/TZ file of a single line, ending with a
--   newline, containing the TZ setting.  For example
--   echo CST6CDT > /etc/TZ
--</li><br>
--<li>Currently, locale specific eras and alternate digits are not supported.
--   They are on my TODO list.
--</li>
--</ol><br>
--<u>wide char support</u><br>
--<ol>
--<li>The only multibyte encoding currently supported is UTF-8.  The various
--   ISO-8859-* encodings are (optionally) supported.  The internal
--   representation of wchar's is assumed to be 31 bit unicode values in
--   native endian representation.  Also, the underlying char encoding is
--   assumed to match ASCII in the range 0-0x7f.
--</li>
--<li>In the next iteration of locale support, I plan to add support for
--   (at least some) other multibyte encodings.
--</li>
--</ol>
--<u>locale support</u><br>
--<ol>
--<li>The target for support is SUSv3 locale functionality.  While nl_langinfo
--   has been extended, similar to glibc, it only returns values for related
--   locale entries.
--</li>
--<li>Currently, all SUSv3 libc locale functionality should be implemented
--   except for wcsftime and collating item support in regex.
--</li>
--</ol>
--<u>stdio</u><br>
--<ol>
--<li>Conversion of large magnitude floating-point values by printf suffers a loss
--   of precision due to the algorithm used.
--</li><br>
--<li>uClibc's printf is much stricter than glibcs, especially regarding positional
--   args.  The entire format string is parsed first and an error is returned if
--   a problem is detected.  In locales other than C, the format string is checked
--   to be a valid multibyte sequence as well.  Also, currently at most 10 positional
--   args are allowed (although this is configurable).
--</li><br>
--<li>BUFSIZ is configurable, but no attempt is made at automatic tuning of internal
--   buffer sizes for stdio streams.  In fact, the stdio code in general sacrifices
--   sophistication/performace for minimal size.
--</li><br>
--<li>uClibc allows glibc-like custom printf functions.  However, while not
--   currently checked, the specifier must be <= 0x7f.
--</li><br>
--<li>uClibc allows glibc-like custom streams.  However, no in-buffer seeking is
--   done.
--</li><br>
--<li>The functions fcloseall() and __fpending() can behave differently than their
--   glibc counterparts.
--</li><br>
--<li>uClibc's setvbuf is more restrictive about when it can be called than glibc's
--   is.  The standards specify that setvbuf must occur before any other operations
--   take place on the stream.
--</li><br>
--<li>Right now, %m is not handled properly by printf when the format uses positional
--   args.
--</li><br>
--<li>The FILEs created by glibc's fmemopen(), open_memstream(), and fopencookie()
--   are not capable of wide orientation.  The corresponding uClibc routines do
--   not have this limitation.
--</li><br>
--<li>For scanf, the C99 standard states "The fscanf function returns the value of
--    the macro EOF if an input failure occurs before any conversion."  But glibc's
--    scanf does not respect conversions for which assignment was surpressed, even
--    though the standard states that the value is converted but not stored.
--</li></ol><br>
--<hr><h3>Glibc bugs</h3><br>
--glibc bugs that Ulrich Drepper has refused to acknowledge or comment on
--  ( <a href="http://sources.redhat.com/ml/libc-alpha/2003-09/">http://sources.redhat.com/ml/libc-alpha/2003-09/</a> )
--<br>
--<ol>
--<li>The C99 standard says that for printf, a %s conversion makes no special
--   provisions for multibyte characters.  SUSv3 is even more clear, stating
--   that bytes are written and a specified precision is in bytes.  Yet glibc
--   treats the arg as a multibyte string when a precision is specified and
--   not otherwise.
--</li><br>
--<li>Both C99 and C89 state that the %c conversion for scanf reads the exact
--   number of bytes specified by the optional field width (or 1 if not specified).
--   uClibc complies with the standard.  There is an argument that perhaps the
--   specified width should be treated as an upper bound, based on some historical
--   use.  However, such behavior should be mentioned in the Conformance document.
--</li><br>
--<li>glibc's scanf is broken regarding some numeric patterns.  Some invalid
--   strings are accepted as valid ("0x.p", "1e", digit grouped strings).
--   In spite of my posting examples clearly illustrating the bugs, they remain
--   unacknowledged by the glibc developers.
--</li><br>
--<li>glibc's scanf seems to require a 'p' exponent for hexadecimal float strings.
--   According to the standard, this is optional.
--</li><br>
--<li>C99 requires that once an EOF is encountered, the stream should be treated
--   as if at end-of-file even if more data becomes available.  Further reading
--   can be attempted by clearing the EOF flag though, via clearerr() or a file
--   positioning function.  For details concerning the original change, see
--   Defect Report #141.  glibc is currently non-compliant, and the developers
--   did not comment when I asked for their official position on this issue.
--</li><br>
--<li>glibc's collation routines and/or localedef are broken regarding implicit
--   and explicit UNDEFINED rules.
--</li><br></ol>
--More to follow as I think of it...
--<br><br><hr>
--<h3>Profiling:</h3>
--<p>
--uClibc no longer supports 'gcc -fprofile-arcs  -pg' style profiling, which
--causes your application to generate a 'gmon.out' file that can then be analyzed
--by 'gprof'.  Not only does this require explicit extra support in uClibc, it
--requires that you rebuild everything with profiling support.  There is both a
--size and performance penalty to profiling your applications this way, as well
--as Heisenberg effects, where the act of measuring changes what is measured.
--</p>
--<p>
--There exist a number of less invasive alternatives that do not require you to
--specially instrument your application, and recompile and relink everything.
--</p><p>
--The OProfile system-wide profiler is an excellent alternative:
--      <a href="http://oprofile.sourceforge.net/">http://oprofile.sourceforge.net/</a>
--</p><p>
--Many people have had good results using the combination of Valgrind
--to generate profiling information and KCachegrind for analysis:
--      <a href="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</a>
--      <a href="http://kcachegrind.sourceforge.net/">http://kcachegrind.sourceforge.net/</a>
--</p><p>
--Prospect is another alternative based on OProfile:
--      <a href="http://prospect.sourceforge.net/">http://prospect.sourceforge.net/</a>
--</p><p>
--And the Linux Trace Toolkit (LTT) is also a fine tool:
--    <a href="http://www.opersys.com/LTT/">http://www.opersys.com/LTT/</a>
--</p><p>
--FunctionCheck:
--	<a href="http://www710.univ-lyon1.fr/~yperret/fnccheck/">http://www710.univ-lyon1.fr/~yperret/fnccheck/</a>
--</p>
--
--<!--#include file="footer.html" -->
+diff --git a/Makefile b/Makefile
+index 02a1659..5face9f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -660,10 +660,18 @@ ifeq ($(BR2_TOOLCHAIN_CTNG),y)
+ 	@echo '  ctng-menuconfig        - Run crosstool-NG menuconfig'
+ endif
+ 	@echo
++	@echo 'Documentation:'
++	@echo '  manual                 - build manual in HTML, splitted HTML, PDF and txt'
++	@echo '  manual-html            - build manual in HTML'
++	@echo '  manual-splitted-html   - build manual in splitted HTML'
++	@echo '  manual-pdf             - build manual in PDF'
++	@echo '  manual-txt             - build manual in txt'
++	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  source-check           - check all packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
++	@echo '  manual			- build the Buildroot manual'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+@@ -671,7 +679,7 @@ endif
+ 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+ 	@echo
+-	@echo 'See docs/README and docs/buildroot.html for further details'
++	@echo 'See docs/README and the Buildroot manual for further details'
+ 	@echo
+ 
+ release: OUT=buildroot-$(BR2_VERSION)
+@@ -679,5 +687,35 @@ release: OUT=buildroot-$(BR2_VERSION)
+ release:
+ 	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
+ 
++manual: manual-html manual-splitted-html manual-pdf manual-txt
++
++manual-html:
++	@echo "HTML manual..."
++	@(cd docs/manual; 				\
++		cp ../images/logo.png .; 		\
++		asciidoc -b xhtml11 -d book manual.txt; \
++		rm logo.png)
++
++manual-splitted-html:
++	@echo "Splited HTML manual..."
++	@(cd docs/manual; 				\
++		cp ../images/logo.png .; 		\
++		a2x -f chunked -d book -L manual.txt; 	\
++		rm logo.png)
++
++manual-pdf:
++	@echo "PDF manual..."
++	@(cd docs/manual; 				\
++		cp ../images/logo.png .; 		\
++		a2x --dblatex-opts "-P latex.output.revhistory=0" -f pdf -d book -L manual.txt ; \
++		rm logo.png)
++
++manual-txt:
++	@echo "Text manual..."
++	@(cd docs/manual; 				\
++		cp ../images/logo.png .; 		\
++		a2x -f text -d book -L manual.txt; 	\
++		rm logo.png)
++
+ .PHONY: $(noconfig_targets)
+ 
 -- 
 1.7.4.1
