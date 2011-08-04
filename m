@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Thu, 4 Aug 2011 21:56:33 +0200
-Subject: [Buildroot] [git commit] initramfs/init: make sure that 0, 1,
-	2 fds are available
-Message-ID: <20110804195757.AA0208B756@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: fix <pkg>_DL_VERSION value
+Message-ID: <20110804195757.7EE078B756@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,47 +9,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10a130f91e5b947e2d2558443ff09b1686eac273
+commit: http://git.buildroot.net/buildroot/commit/?id=f940d7602ca0810da0432638d2ce8441d6486991
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As the kernel doesn't automatically mount devtmpfs when an initramfs
-is used, commit 424888e47431db738f5f9b3c6392435bfce7a842 has
-introduced a small wrapper script that mounts devtmpfs before starting
-the real init.
+993e51bc22f508fbaf39c5c49fd0595fc5c56013 introduced a <pkg>_DL_VERSION
+in addition to <pkg>_VERSION. This variable, purely internal to the
+package infrastructure, allows to store the *raw* version name, as
+defined in the package .mk file. However, as this version string can
+contain slashes, it is not appropriate to be part of the build
+directory name of the package. This is why <pkg>_VERSION is defined to
+be the same thing as <pkg>_DL_VERSION, except that slashes are
+replaced by underscores.
 
-Unfortunately, the problem is that in this case, the init process runs
-without any 0, 1 and 2 file descriptors, so none of the
-messages/errors printed by the various initialization scripts can be
-seen. This is due to the fact the init process relies on 0, 1 and 2
-being opened by the kernel before init is started. However, as
-/dev/console isn't present on the filesystem at the time the kernel
-tries to open the console to create the 0, 1 and 2 file descriptors,
-the kernel fails on this and prints the famous "Warning: unable to
-open an initial console".
+However, the initial implementation didn't take into account the case
+of host packages. So 763822e874fd8d39b591feaa9639f76183897fb7 was
+committed to fix this. But unfortunately, this commit got it wrong
+again: it forgot the case where <pkg>_VERSION is set, but not
+HOST_<pkg>_VERSION. In this case, HOST_<pkg>_DL_VERSION remained
+empty. This can be seen for example by building host-sstrip.
 
-The proposed workaround is to actually open 0, 1 and 2 to /dev/console
-in the wrapper script, right after mounting the devtmpfs filesystem,
-and before starting the real init. The "Warning" from the kernel is
-still shown, but at least the messages from the init scripts are
-visible.
+This problem has been noticed by Julien Boibessot
+<julien.boibessot@free.fr>, who also helped in fixing the
+issue. Thanks!
+
+The fix is simply to ensure that <pkg>_DL_VERSION is properly set in
+all cases: when HOST_<pkg>_VERSION is defined, when only <pkg>_VERSION
+is defined, and when no version is defined.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- fs/initramfs/init |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/Makefile.package.in |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/fs/initramfs/init b/fs/initramfs/init
-index 751cb27..a275482 100755
---- a/fs/initramfs/init
-+++ b/fs/initramfs/init
-@@ -1,4 +1,7 @@
- #!/bin/sh
- # devtmpfs does not get automounted for initramfs
- /bin/mount -t devtmpfs devtmpfs /dev
-+exec 0</dev/console
-+exec 1>/dev/console
-+exec 2>/dev/console
- exec /sbin/init $*
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 90530dc..868bf28 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -366,15 +366,17 @@ $(2)_NAME			=  $(1)
+ # sanitize the package version that is used in paths, directory and file names.
+ # Forward slashes may appear in the package's version when pointing to a
+ # version control system branch or tag, for example remotes/origin/1_10_stable.
+-$(2)_DL_VERSION	= $($(2)_VERSION)
+ ifndef $(2)_VERSION
+  ifdef $(3)_VERSION
+-  $(2)_VERSION = $($(3)_VERSION)
++  $(2)_DL_VERSION = $($(3)_VERSION)
++  $(2)_VERSION = $(subst /,_,$($(3)_VERSION))
+  else
+   $(2)_VERSION = undefined
++  $(2)_DL_VERSION = undefined
+  endif
+ else
+- $(2)_VERSION = $(subst /,_,$($(2)_VERSION))
++  $(2)_DL_VERSION = $($(2)_VERSION)
++  $(2)_VERSION = $(subst /,_,$($(2)_VERSION))
+ endif
+ 
+ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
 -- 
 1.7.3.4
