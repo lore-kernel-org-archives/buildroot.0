@@ -1,166 +1,130 @@
-From: Ivan Kuten <ivan.kuten@promwad.com>
-Date: Fri, 5 Aug 2011 00:02:41 +0300
-Subject: [Buildroot] [PATCH] add QWT library: Qt Widgets for Technical
-	Applications
-Message-ID: <1312491761-15130-1-git-send-email-ivan.kuten@promwad.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  4 Aug 2011 23:23:18 +0200
+Subject: [Buildroot] [RFC] Using AsciiDoc for the Buildroot manual
+Message-ID: <cover.1312492948.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, please consider adding QWT package to Buildroot.
+Hello,
 
-Signed-off-by: Ivan Kuten <ivan.kuten@promwad.com>
----
- package/Config.in                                |    1 +
- package/qwt/Config.in                            |   10 ++++
- package/qwt/qwt-6.0.0-disable-svg-designer.patch |   40 ++++++++++++++
- package/qwt/qwt.mk                               |   60 ++++++++++++++++++++++
- 4 files changed, 111 insertions(+), 0 deletions(-)
- create mode 100644 package/qwt/Config.in
- create mode 100644 package/qwt/qwt-6.0.0-disable-svg-designer.patch
- create mode 100644 package/qwt/qwt.mk
+The Buildroot documentation was started by myself in December 2004
+(see commit 32fcf718f82c241e890af8c7ccc10ef6c438331a), and at that
+time the amount of documentation was relatively light, so the single
+HTML file was seen as an appropriate solution to write the
+documentation.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7112e05..6f9a671 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -117,6 +117,7 @@ source "package/sdl_gfx/Config.in"
- 
- comment "other GUIs"
- source "package/qt/Config.in"
-+source "package/qwt/Config.in"
- source "package/x11r7/Config.in"
- 
- comment "X libraries and helper libraries"
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-new file mode 100644
-index 0000000..5c53152
---- /dev/null
-+++ b/package/qwt/Config.in
-@@ -0,0 +1,10 @@
-+comment "Qwt requires Qt to be installed"
-+	depends on !BR2_PACKAGE_QT
-+
-+menuconfig BR2_PACKAGE_QWT
-+	bool "Qwt"
-+	depends on BR2_PACKAGE_QT
-+	help
-+	  Qt Widgets for Technical Applications
-+
-+	  http://qwt.sourceforge.net/
-diff --git a/package/qwt/qwt-6.0.0-disable-svg-designer.patch b/package/qwt/qwt-6.0.0-disable-svg-designer.patch
-new file mode 100644
-index 0000000..54515e0
---- /dev/null
-+++ b/package/qwt/qwt-6.0.0-disable-svg-designer.patch
-@@ -0,0 +1,40 @@
-+diff -urN qwt-6.0.0/qwtconfig.pri qwt-6.0.0_new/qwtconfig.pri
-+--- qwt-6.0.0/qwtconfig.pri	2011-04-15 13:51:11.000000000 +0300
-++++ qwt-6.0.0_new/qwtconfig.pri	2011-07-26 16:33:44.063285248 +0300
-+@@ -79,7 +79,7 @@
-+ # export a plot to a SVG document
-+ ######################################################################
-+ 
-+-QWT_CONFIG     += QwtSvg
-++QWT_CONFIG     -= QwtSvg
-+ 
-+ ######################################################################
-+ # You can use the MathML renderer of the Qt solutions package to 
-+@@ -98,7 +98,7 @@
-+ # Otherwise you have to build it from the designer directory.
-+ ######################################################################
-+ 
-+-QWT_CONFIG     += QwtDesigner
-++QWT_CONFIG     -= QwtDesigner
-+ 
-+ ######################################################################
-+ # If you want to auto build the examples, enable the line below
-+diff -urN qwt-6.0.0/src/src.pro qwt-6.0.0_new/src/src.pro
-+--- qwt-6.0.0/src/src.pro	2011-04-15 13:51:11.000000000 +0300
-++++ qwt-6.0.0_new/src/src.pro	2011-07-26 16:33:44.019285248 +0300
-+@@ -214,13 +214,13 @@
-+ 
-+ # Install directives
-+ 
-+-target.path    = $${QWT_INSTALL_LIBS}
-++target.path    = /usr/lib/
-+ 
-+ doc.files      = $${QWT_ROOT}/doc/html 
-+ unix:doc.files += $${QWT_ROOT}/doc/man
-+ doc.path       = $${QWT_INSTALL_DOCS}
-+ 
-+-INSTALLS       = target doc
-++INSTALLS       = target
-+ 
-+ CONFIG(lib_bundle) {
-+ 
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-new file mode 100644
-index 0000000..2ac038d
---- /dev/null
-+++ b/package/qwt/qwt.mk
-@@ -0,0 +1,60 @@
-+######################################################################
-+#
-+# QWT
-+#
-+######################################################################
-+
-+QWT_VERSION:=6.0.0
-+QWT_SOURCE:=qwt-$(QWT_VERSION).zip
-+QWT_SITE:=https://sourceforge.net/projects/qwt/files/qwt/$(QWT_VERSION)
-+QWT_UNZIP:=unzip
-+QWT_TARGET_DIR:=$(BUILD_DIR)/qwt-$(QWT_VERSION)
-+QWT_CONFIG_FILE:=qwt.pro
-+QMAKE_DIR:=$(HOST_DIR)/usr
-+
-+$(DL_DIR)/$(QWT_SOURCE):
-+	$(call DOWNLOAD,$(QWT_SITE),$(QWT_SOURCE))
-+
-+qwt-source: $(DL_DIR)/$(QWT_SOURCE)
-+
-+$(QWT_TARGET_DIR)/.unpacked: $(DL_DIR)/$(QWT_SOURCE)
-+	$(QWT_UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(QWT_SOURCE)
-+	toolchain/patch-kernel.sh $(QWT_TARGET_DIR) package/qwt/ \
-+		qwt-$(QWT_VERSION)-\*.patch \
-+		qwt-$(QWT_VERSION)-\*.patch.$(ARCH)
-+	touch $@
-+
-+$(QWT_TARGET_DIR)/.configured: $(QWT_TARGET_DIR)/.unpacked
-+	-[ -f $(QWT_TARGET_DIR)/Makefile ] && $(MAKE) -C $(QWT_TARGET_DIR) distclean
-+	$(QMAKE_DIR)/bin/qmake $(QWT_TARGET_DIR)/$(QWT_CONFIG_FILE)
-+	touch $@
-+
-+$(QWT_TARGET_DIR)/.compiled: $(QWT_TARGET_DIR)/.configured
-+	$(MAKE) -C $(QWT_TARGET_DIR)
-+	touch $@
-+
-+$(STAGING_DIR)/usr/lib/libqwt.so: $(QWT_TARGET_DIR)/.compiled
-+	(export INSTALL_ROOT=$(STAGING_DIR); $(MAKE) -C $(QWT_TARGET_DIR) install)
-+
-+$(TARGET_DIR)/usr/lib/libqwt.so: $(STAGING_DIR)/usr/lib/libqwt.so
-+	cp -dpf $(STAGING_DIR)/usr/lib/libqwt.so* $(TARGET_DIR)/usr/lib/
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libqwt.so*
-+
-+qwt: qt $(TARGET_DIR)/usr/lib/libqwt.so
-+
-+qwt-clean:
-+	-$(MAKE) -C $(QWT_TARGET_DIR) clean
-+	-rm $(TARGET_DIR)/usr/lib/libqwt.so.*
-+	-rm $(STAGING_DIR)/usr/lib/libqwt.so.*
-+
-+qwt-dirclean:
-+	rm -rf $(QWT_TARGET_DIR)
-+
-+#############################################################
-+#
-+# Toplevel Makefile options
-+#
-+#############################################################
-+ifeq ($(BR2_PACKAGE_QWT),y)
-+TARGETS+=qwt
-+endif
+Since then, the documentation has expanded quite a bit, and I intend
+to do some more important additions to the documentation in the near
+future, but I feel like the hand-written HTML format is a bit
+annoying.
+
+Therefore, this set of patches proposes to switch the documentation
+over to the AsciiDoc format [1]. It is a very simple text-baseda
+format, from which you can generate HTML (single page or splitted),
+PDF, text, and more.
+
+I have done an initial conversion of the Buildroot documentation to
+AsciiDoc and the result can be seen at :
+
+ * http://free-electrons.com/~thomas/buildroot/manual/manual.pdf for
+   the PDF version
+
+ * http://free-electrons.com/~thomas/buildroot/manual/manual.text for
+   the text version
+
+ * http://free-electrons.com/~thomas/buildroot/manual/manual.html for
+   the single page HTML version
+
+ * http://free-electrons.com/~thomas/buildroot/manual/html/ for
+   the multiple pages HTML version
+
+Some more improvements can quite certainly be made to the converted
+document. However, I'd prefer not to maintain it for a too long time
+together with the current documentation, so if the solution of
+AsciiDoc gets the attention of the Buildroot community, it'd be nice
+to have this merged relatively soon, or at least to not do too many
+changes to the current documentation.
+
+Best regards,
+
+Thomas
+
+[1] http://www.methods.co.nz/asciidoc/
+
+The following changes since commit 55cea3b5ef3bd5464420fd610c73e150443d0e67:
+
+  util-linux: add option for libmount (2011-07-29 13:38:49 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git asciidoc-manual
+
+Thomas Petazzoni (5):
+      manual: convert existing documentation to the asciidoc format
+      manual: provide make targets to build the documentation
+      remove the old buildroot.html documentation
+      remove Glibc_vs_uClibc document
+      manual: ignore generated files
+
+ Makefile                                     |   40 +-
+ docs/Glibc_vs_uClibc.html                    |  240 ----
+ docs/buildroot.html                          | 1819 --------------------------
+ docs/manual/.gitignore                       |    4 +
+ docs/manual/adding-packages-autotargets.txt  |  167 +++
+ docs/manual/adding-packages-cmaketargets.txt |  140 ++
+ docs/manual/adding-packages-conclusion.txt   |   10 +
+ docs/manual/adding-packages-directory.txt    |   76 ++
+ docs/manual/adding-packages-gentargets.txt   |  303 +++++
+ docs/manual/adding-packages-gettext.txt      |   44 +
+ docs/manual/adding-packages-handwritten.txt  |  165 +++
+ docs/manual/adding-packages.txt              |   21 +
+ docs/manual/board-support.txt                |   35 +
+ docs/manual/ccache-support.txt               |   21 +
+ docs/manual/customize-busybox-config.txt     |   24 +
+ docs/manual/customize-kernel-config.txt      |   12 +
+ docs/manual/customize-rootfs.txt             |   36 +
+ docs/manual/customize-uclibc-config.txt      |   32 +
+ docs/manual/customize.txt                    |   10 +
+ docs/manual/download-location.txt            |   26 +
+ docs/manual/external-toolchain.txt           |   84 ++
+ docs/manual/getting.txt                      |   23 +
+ docs/manual/how-buildroot-works.txt          |   59 +
+ docs/manual/introduction.txt                 |   69 +
+ docs/manual/manual.txt                       |   32 +
+ docs/manual/rebuilding-packages.txt          |   62 +
+ docs/manual/using-buildroot-toolchain.txt    |   20 +
+ docs/manual/using.txt                        |  183 +++
+ 28 files changed, 1697 insertions(+), 2060 deletions(-)
+ delete mode 100644 docs/Glibc_vs_uClibc.html
+ delete mode 100644 docs/buildroot.html
+ create mode 100644 docs/manual/.gitignore
+ create mode 100644 docs/manual/adding-packages-autotargets.txt
+ create mode 100644 docs/manual/adding-packages-cmaketargets.txt
+ create mode 100644 docs/manual/adding-packages-conclusion.txt
+ create mode 100644 docs/manual/adding-packages-directory.txt
+ create mode 100644 docs/manual/adding-packages-gentargets.txt
+ create mode 100644 docs/manual/adding-packages-gettext.txt
+ create mode 100644 docs/manual/adding-packages-handwritten.txt
+ create mode 100644 docs/manual/adding-packages.txt
+ create mode 100644 docs/manual/board-support.txt
+ create mode 100644 docs/manual/ccache-support.txt
+ create mode 100644 docs/manual/customize-busybox-config.txt
+ create mode 100644 docs/manual/customize-kernel-config.txt
+ create mode 100644 docs/manual/customize-rootfs.txt
+ create mode 100644 docs/manual/customize-uclibc-config.txt
+ create mode 100644 docs/manual/customize.txt
+ create mode 100644 docs/manual/download-location.txt
+ create mode 100644 docs/manual/external-toolchain.txt
+ create mode 100644 docs/manual/getting.txt
+ create mode 100644 docs/manual/how-buildroot-works.txt
+ create mode 100644 docs/manual/introduction.txt
+ create mode 100644 docs/manual/manual.txt
+ create mode 100644 docs/manual/rebuilding-packages.txt
+ create mode 100644 docs/manual/using-buildroot-toolchain.txt
+ create mode 100644 docs/manual/using.txt
+
+Thanks,
 -- 
-1.7.2.5
+Thomas Petazzoni
