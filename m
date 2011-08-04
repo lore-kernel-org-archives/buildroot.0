@@ -1,12 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Aug 2011 21:16:48 +0200
-Subject: [Buildroot] [PATCH 1/2] orc: new package
-In-Reply-To: <1312100368.687.4.camel@bender> (Sven Neumann's message of "Sun, 
- 31 Jul 2011 10:19:27 +0200")
-References: <1310628760-4172-1-git-send-email-s.neumann@raumfeld.com>
- <1310628760-4172-2-git-send-email-s.neumann@raumfeld.com>
- <87k4b7uzey.fsf@macbook.be.48ers.dk> <1312100368.687.4.camel@bender>
-Message-ID: <87wretng0v.fsf@macbook.be.48ers.dk>
+Date: Thu, 04 Aug 2011 21:28:38 +0200
+Subject: [Buildroot] [PATCH] libsoup: add patch to fix CVE-2011-2054
+In-Reply-To: <1312143519-5030-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Sun, 31 Jul 2011 22:18:39 +0200")
+References: <1312143519-5030-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87sjphnfh5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Hi,
+ Sven> Fixes a security hole that caused some SoupServer users to
+ Sven> unintentionally allow accessing the entire local filesystem when
+ Sven> they thought they were only providing access to a single directory.
 
- >> Should usr/bin/orcc get removed if !BR2_HAVE_DEVFILES or is it needed
- >> for anything?
+ Sven> This is the change from libsoup-2.34.3 backported to 2.32.2. It
+ Sven> doesn't include the changes to the test suite though.
 
- Sven> Yes, that makes sense. There's also /usr/bin/orc-bugreport which should
- Sven> probably be removed as well.
-
- >> I've committed with those changes (except for orcc, please advice) -
- >> Thanks.
-
- Sven> I won't find time to do the proposed changes before next week as I am
- Sven> currently on vacation.
-
-No problem, I've fixed it now.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
