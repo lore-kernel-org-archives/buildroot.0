@@ -1,7 +1,7 @@
 From: Yegor Yefremov <yegor_sub1@visionsystems.de>
 Date: Thu, 4 Aug 2011 21:22:19 +0200
-Subject: [Buildroot] [git commit] udev: bump to 173
-Message-ID: <20110804192913.333418B73C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openvpn: bump to 2.2.1
+Message-ID: <20110804192913.9985E8B73C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,41 +9,78 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db185234b4ce7687868ac662fc2a14098f90dcf8
+commit: http://git.buildroot.net/buildroot/commit/?id=b760d12553149a35f9c8451a750b4e88b81c9652
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+tmpdir issue was already fixed in 2.2.1 version, so
+remove the patch
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/udev/udev.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn-fix-tmpdir.patch |   39 ------------------------------
+ package/openvpn/openvpn.mk               |    2 +-
+ 2 files changed, 1 insertions(+), 40 deletions(-)
+ delete mode 100644 package/openvpn/openvpn-fix-tmpdir.patch
 
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index 6d87ad3..567bbfb 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -3,7 +3,7 @@
- # udev
+diff --git a/package/openvpn/openvpn-fix-tmpdir.patch b/package/openvpn/openvpn-fix-tmpdir.patch
+deleted file mode 100644
+index 919d49b..0000000
+--- a/package/openvpn/openvpn-fix-tmpdir.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From b70d99fb617350b252c8bde2f1f2d81d3f5b7955 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 27 Apr 2011 18:43:50 +0200
+-Subject: [PATCH] Fix compile issues when using --enable-small and --disable-ssl/--disable-crypto
+-
+-The tmp_dir string is required in the options struct regardless of options
+-so spin it out of #if conditionals.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Acked-by: David Sommerseth <dazo@users.sourceforge.net>
+-Signed-off-by: David Sommerseth <dazo@users.sourceforge.net>
+----
+- options.h |    3 ++-
+- 1 files changed, 2 insertions(+), 1 deletions(-)
+-
+-diff --git a/options.h b/options.h
+-index a9c6a94..8a51502 100644
+---- a/options.h
+-+++ b/options.h
+-@@ -369,6 +369,8 @@ struct options
+-   struct plugin_option_list *plugin_list;
+- #endif
+- 
+-+  const char *tmp_dir;
+-+
+- #if P2MP
+- 
+- #if P2MP_SERVER
+-@@ -409,7 +411,6 @@ struct options
+-   const char *client_connect_script;
+-   const char *client_disconnect_script;
+-   const char *learn_address_script;
+--  const char *tmp_dir;
+-   const char *client_config_dir;
+-   bool ccd_exclusive;
+-   bool disable;
+--- 
+-1.7.0.1
+-
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 27a9a55..b7587fd 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--UDEV_VERSION = 172
-+UDEV_VERSION = 173
- UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
- UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
  
-@@ -19,11 +19,11 @@ ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
- UDEV_DEPENDENCIES += libusb libusb-compat acl usbutils hwdata libglib2
- UDEV_CONF_OPT +=							\
- 	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
--	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids
-+	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
-+	--enable-udev_acl
- else
- UDEV_CONF_OPT +=		\
- 	--disable-hwdb		\
--	--disable-udev_acl	\
- 	--disable-gudev
- endif
+-OPENVPN_VERSION = 2.2.0
++OPENVPN_VERSION = 2.2.1
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_CONF_OPT = --enable-small --disable-plugins
  
 -- 
 1.7.3.4
