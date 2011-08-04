@@ -1,47 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2011 00:34:19 +0200
-Subject: [Buildroot] libssp still missing from target
-In-Reply-To: <j1eiv7$irk$1@dough.gmane.org>
-References: <j1eiv7$irk$1@dough.gmane.org>
-Message-ID: <20110805003419.4934e4bf@skate>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 4 Aug 2011 22:56:24 +0000 (UTC)
+Subject: [Buildroot] [RFC] Using AsciiDoc for the Buildroot manual
+References: <cover.1312492948.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <j1f82o$qh9$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2011-08-04, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Le Thu, 4 Aug 2011 16:56:07 +0000 (UTC),
-Grant Edwards <grant.b.edwards@gmail.com> a ?crit :
+> The Buildroot documentation was started by myself in December 2004
+> (see commit 32fcf718f82c241e890af8c7ccc10ef6c438331a), and at that
+> time the amount of documentation was relatively light, so the single
+> HTML file was seen as an appropriate solution to write the
+> documentation.
+>
+> Since then, the documentation has expanded quite a bit, and I intend
+> to do some more important additions to the documentation in the near
+> future, but I feel like the hand-written HTML format is a bit
+> annoying.
+>
+> Therefore, this set of patches proposes to switch the documentation
+> over to the AsciiDoc format [1]. It is a very simple text-baseda
+> format, from which you can generate HTML (single page or splitted),
+> PDF, text, and more.
 
-> This has come up before, and IIRC, I ended up tweaking ext-tool.mk to
-> work around it.
-> 
-> I've just upgraded to Buildroot 2011.05, and it seems ext-tool.mk
-> still isn't copying libssp to the target. It's need by (among other
-> things) ssh:
-> 
->   Starting network...
->   ip: RTNETLINK answers: File exists
->   Generating ECDSA Key...
->   THIS CAN TAKE A MINUTE OR TWO DEPENDING ON YOUR PROCESSOR!
-> 
->   /usr/bin/ssh-keygen: can't load library 'libssp.so.0'
->   Starting sshd: /usr/sbin/sshd: can't load library 'libssp.so.0'
-> 
-> Is there some configuration option I've missed?
+Sounds like a great idea to me.
 
-I guess libssp only exists on toolchains that have stack protection
-support enabled. None of my CodeSourcery or Buildroot-built toolchains
-have a libssp. I guess I'll have to build a CT-NG toolchain with libssp
-support.
+I use asciidoc for the internal user's manual for the platform which
+runs the results of my buildroot use.  That document weighs in at
+about 90 pages (in USLetter PDF format).  I find asciidoc very easy to
+work with, and it's a lot less work than hand-coded HTML or using
+something like OpenOffice/LibreOffice.
 
-Regards,
+FWIW, I prefer the PDF produced by the fop backend over that produced
+by dblatex, but that's a matter of taste (I usually use the HTML
+version of my document).
 
-Thomas
+I also agree 100% with the decision to keep the option of a
+single-HTML-page document. Splitting up documents in to dozens or even
+hundreds of separate HTML pages makes them almost impossible to
+search.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! Pardon me, but do you
+                                  at               know what it means to be
+                              gmail.com            TRULY ONE with your BOOTH!
