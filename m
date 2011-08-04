@@ -1,8 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 4 Aug 2011 21:22:19 +0200
-Subject: [Buildroot] [git commit] external toolchains: fix SuperH toolchain
-	configuration
-Message-ID: <20110804192913.C2B708B73C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] kernel-headers: bump 2.6.35.x / 2.6.39.x
+	stable versions
+Message-ID: <20110804192913.5E9AD8B73C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d63a817f55a8591893431257657da44bb6c1103b
+commit: http://git.buildroot.net/buildroot/commit/?id=411543ae80171f9555725421b390c922ae8d6375
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The CodeSourcery toolchain for SH2-A platforms provide largefile
-support, inet RPC, wide char and threads, so adjust the configuration
-accordingly.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...types-for-headers-exported-to-user-space.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-2.6.35.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch => linux-2.6.35.14-scsi-use-__uX-types-for-headers-exported-to-user-space.patch} (100%)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index bedbb53..0253d83 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -156,6 +156,10 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	bool "CodeSoucery SH 2010.09"
- 	depends on BR2_sh2a
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_LARGEFILE
-+	select BR2_INET_RPC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Toolchain for the SuperH architecture, from CodeSourcery. It
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index bc8a024..d0ec9d5 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -49,11 +49,11 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "2.6.35.13"	if BR2_KERNEL_HEADERS_2_6_35
++	default "2.6.35.14"	if BR2_KERNEL_HEADERS_2_6_35
+ 	default "2.6.36.4"	if BR2_KERNEL_HEADERS_2_6_36
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+-	default "2.6.39.3"	if BR2_KERNEL_HEADERS_2_6_39
++	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0"		if BR2_KERNEL_HEADERS_3_0
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-2.6.35.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch b/toolchain/kernel-headers/linux-2.6.35.14-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-2.6.35.13-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
+rename to toolchain/kernel-headers/linux-2.6.35.14-scsi-use-__uX-types-for-headers-exported-to-user-space.patch
 -- 
 1.7.3.4
