@@ -1,26 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Aug 2011 21:28:38 +0200
-Subject: [Buildroot] [PATCH] libsoup: add patch to fix CVE-2011-2054
-In-Reply-To: <1312143519-5030-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Sun, 31 Jul 2011 22:18:39 +0200")
-References: <1312143519-5030-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87sjphnfh5.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 4 Aug 2011 21:22:19 +0200
+Subject: [Buildroot] [git commit] udev: bump to 173
+Message-ID: <20110804192913.333418B73C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> Fixes a security hole that caused some SoupServer users to
- Sven> unintentionally allow accessing the entire local filesystem when
- Sven> they thought they were only providing access to a single directory.
+commit: http://git.buildroot.net/buildroot/commit/?id=db185234b4ce7687868ac662fc2a14098f90dcf8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> This is the change from libsoup-2.34.3 backported to 2.32.2. It
- Sven> doesn't include the changes to the test suite though.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/udev/udev.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index 6d87ad3..567bbfb 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -3,7 +3,7 @@
+ # udev
+ #
+ #############################################################
+-UDEV_VERSION = 172
++UDEV_VERSION = 173
+ UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
+ UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+ 
+@@ -19,11 +19,11 @@ ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
+ UDEV_DEPENDENCIES += libusb libusb-compat acl usbutils hwdata libglib2
+ UDEV_CONF_OPT +=							\
+ 	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
+-	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids
++	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
++	--enable-udev_acl
+ else
+ UDEV_CONF_OPT +=		\
+ 	--disable-hwdb		\
+-	--disable-udev_acl	\
+ 	--disable-gudev
+ endif
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
