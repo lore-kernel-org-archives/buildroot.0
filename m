@@ -1,29 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Aug 2011 20:59:28 +0200
-Subject: [Buildroot] Disable mysql dbm during freeradius installation
-In-Reply-To: <CADfuMF5axey+wN2bufuAtjBvJjut98s9WMh1D0a9egeL08frfw@mail.gmail.com>
- (Vasanth Ragavendran's message of "Wed, 27 Jul 2011 19:02:46 +0800")
-References: <CADfuMF5axey+wN2bufuAtjBvJjut98s9WMh1D0a9egeL08frfw@mail.gmail.com>
-Message-ID: <8762mdove7.fsf@macbook.be.48ers.dk>
+Date: Thu, 04 Aug 2011 21:01:05 +0200
+Subject: [Buildroot] [PATCH 1/1] external toolchains: fix SuperH
+	toolchain configuration
+In-Reply-To: <8b3041e165e35a881d948ad262b919c973f8a549.1311976829.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 30 Jul 2011 00:00:37 +0200")
+References: <cover.1311976829.git.thomas.petazzoni@free-electrons.com>
+ <cover.1311976829.git.thomas.petazzoni@free-electrons.com>
+ <8b3041e165e35a881d948ad262b919c973f8a549.1311976829.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <871ux1ovbi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vasanth" == Vasanth Ragavendran <ragavendra.2007@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Vasanth> Hi
+ Thomas> The CodeSourcery toolchain for SH2-A platforms provide largefile
+ Thomas> support, inet RPC, wide char and threads, so adjust the configuration
+ Thomas> accordingly.
 
- Vasanth> I am installing Freeradius and for my scenario i just need to
- Vasanth> authenticate from local files and there is no need for DBM or
- Vasanth> mysql or anything. how do i disable them during installation
- Vasanth> of freeradius. I tried using --disable-rlm-dbm and similar but
- Vasanth> it din't work out. How do i disable them from installing?
- Vasanth> Awaiting any help!
-
-What freeradius package is that? We don't have a freeradius package in
-Buildroot.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
