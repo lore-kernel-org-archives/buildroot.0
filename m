@@ -1,28 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 04 Aug 2011 21:48:23 +0200
-Subject: [Buildroot] [PATCH] package: fix <pkg>_DL_VERSION value
-In-Reply-To: <1312486464-29590-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 4 Aug 2011 21:34:24 +0200")
-References: <1312486464-29590-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8739hhnek8.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Aug 2011 21:49:23 +0200
+Subject: [Buildroot] Arm build: asm error in libffi?
+In-Reply-To: <CAFzH18j2mFTzSOrf1S9ChgaJ3cGyoxTOOTtCOuX8prUt5rXLzQ@mail.gmail.com>
+References: <CAFzH18j2mFTzSOrf1S9ChgaJ3cGyoxTOOTtCOuX8prUt5rXLzQ@mail.gmail.com>
+Message-ID: <20110804214923.37cc66df@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Thu, 4 Aug 2011 12:40:53 +0300,
+Dimitri Kaparis <kaparis.dimitri@gmail.com> a ?crit :
 
- Thomas> 993e51bc22f508fbaf39c5c49fd0595fc5c56013 introduced a <pkg>_DL_VERSION
- Thomas> in addition to <pkg>_VERSION. This variable, purely internal to the
- Thomas> package infrastructure, allows to store the *raw* version name, as
- Thomas> defined in the package .mk file. However, as this version string can
- Thomas> contain slashes, it is not appropriate to be part of the build
- Thomas> directory name of the package. This is why <pkg>_VERSION is defined to
- Thomas> be the same thing as <pkg>_DL_VERSION, except that slashes are
- Thomas> replaced by underscores.
+> I'm doing a build for arm using a crosstool-ng generated toolchain
+> (gcc 4.4.6, uclibc 0.9.30.3).
+> With buildroot-2011.05 I'm getting this:
 
-Committed, thanks.
+I guess it's a problem with the toolchain, because here libffi builds
+just fine with an ARM CodeSourcery toolchain.
 
+Which binutils version does your toolchain has ?
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
