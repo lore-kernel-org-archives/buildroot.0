@@ -1,30 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Aug 2011 21:47:08 +0200
-Subject: [Buildroot] [PATCH 3 of 5] toolchain-external: fix some typos
- CodeSoucery -> CodeSourcery
-In-Reply-To: <f0d4cd743effaa2d65aa.1312309997@localhost6.localdomain6>
-References: <patchbomb.1312309994@localhost6.localdomain6>
- <f0d4cd743effaa2d65aa.1312309997@localhost6.localdomain6>
-Message-ID: <20110804214708.720abddf@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 04 Aug 2011 21:48:23 +0200
+Subject: [Buildroot] [PATCH] package: fix <pkg>_DL_VERSION value
+In-Reply-To: <1312486464-29590-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 4 Aug 2011 21:34:24 +0200")
+References: <1312486464-29590-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8739hhnek8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 02 Aug 2011 20:33:17 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ Thomas> 993e51bc22f508fbaf39c5c49fd0595fc5c56013 introduced a <pkg>_DL_VERSION
+ Thomas> in addition to <pkg>_VERSION. This variable, purely internal to the
+ Thomas> package infrastructure, allows to store the *raw* version name, as
+ Thomas> defined in the package .mk file. However, as this version string can
+ Thomas> contain slashes, it is not appropriate to be part of the build
+ Thomas> directory name of the package. This is why <pkg>_VERSION is defined to
+ Thomas> be the same thing as <pkg>_DL_VERSION, except that slashes are
+ Thomas> replaced by underscores.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Committed, thanks.
 
-Peter: this one should go in 2011.08, it's just fixes. The other
-patches need discussion, so I'd prefer to handle them post 2011.08.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
