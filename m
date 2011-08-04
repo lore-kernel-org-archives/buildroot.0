@@ -1,39 +1,67 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 4 Aug 2011 09:28:31 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Aug 2011 09:45:57 +0200
 Subject: [Buildroot] Adding package that builds Kernel Module (*.ko) to
  Buildroot environment
-In-Reply-To: <4E396681.4000807@rt-rk.com>
-References: <4E396681.4000807@rt-rk.com>
-Message-ID: <CAAXf6LVsTZJ0X_2oGYx43ctO2FEX81RqdfJwmBmHtgAiF_a1zA@mail.gmail.com>
+In-Reply-To: <4E3A3C7D.8030801@rt-rk.com>
+References: <4E3A3C7D.8030801@rt-rk.com>
+Message-ID: <20110804094557.4464b69b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Aleksandar,
+Hello,
 
-On Wed, Aug 3, 2011 at 5:17 PM, Aleksandar Zivkovic
-<Aleksandar.Zivkovic@rt-rk.com> wrote:
->
-> Hi all,
->
-> I would like to add additional package to Buildroot that will build Linux kernel driver.
+Le Thu, 04 Aug 2011 08:30:21 +0200,
+Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com> a ?crit :
+
+> I would like to add additional package to Buildroot that will build 
+> Linux kernel driver.
 > For that I need:
-> - dependency: build of this package mustn't be started before kernel source is available
-> - kernel source directory: currently, the best I know is: $(BASE_DIR)/build/linux-$(BR2_LINUX_KERNEL_VERSION)
->
-> I started with package approach but bumped to stated dependency problem. Next what I tried is to edit linux/linux.mk to include my driver source download, extract. build and install but not so familiar with Buildroot scripting...
->
->
-> Did somebody already done something similar? What is best approach? Examples are welcomed...
+> - dependency: build of this package mustn't be started before kernel 
+> source is available
+> - kernel source directory: currently, the best I know is: 
+> $(BASE_DIR)/build/linux-$(BR2_LINUX_KERNEL_VERSION)
+> 
+> I started with package approach but bumped to stated dependency
+> problem. Next what I tried is to edit linux/linux.mk to include my
+> driver source download, extract. build and install but not so
+> familiar with Buildroot scripting...
+> 
+> Did somebody already done something similar? What is best approach? 
+> Examples are welcomed...
 
-The following mail shows the approach I am using.
-http://lists.busybox.net/pipermail/buildroot/2011-July/044690.html
+Attached, you will find :
 
-In my case, the kernel sources come from a Mercurial repository, but
-these settings are easily changeable as the Makefile uses the generic
-package infrastructure.
+ * mykmod-1.0.tar.bz2, the source code of an hello world like kernel
+   module ;
+
+ * kmod-example.patch, which adds support for compiling this kernel
+   module into the Buildroot package infrastructure
+
+Do not hesitate to get back to the mailing list if you have any issues
+getting this to work or need additional details.
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mykmod-1.0.tar.bz2
+Type: application/x-bzip
+Size: 370 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110804/3a02ba98/attachment.bz>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: kmod-example.patch
+Type: text/x-patch
+Size: 1372 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110804/3a02ba98/attachment.bin>
