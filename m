@@ -1,41 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Aug 2011 16:56:26 +0200
-Subject: [Buildroot] Suggestion for easier bumping of Xorg packages
-In-Reply-To: <20110805145820.3bbf8170@gmail.com>
-References: <20110805145820.3bbf8170@gmail.com>
-Message-ID: <20110805165626.26bd3b02@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 05 Aug 2011 16:54:32 +0200
+Subject: [Buildroot] [PATCH] Fix sorting-related issue when using make 3.82
+Message-ID: <b48283f33363fb03ff99.1312556072@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 5 Aug 2011 14:58:20 +0200,
-Frederic Bassaler <frederic.bassaler@gmail.com> a ?crit :
+In make 3.82, wildcards are no longer sorted. This impacts lines like:
+	include package/*/*.mk
 
-> What about reorganizing the package/x11r7 subdir?
-> 
-> ie. instead of having everything in the same directory :
-> 
-> xapp_xxx
-> ...
-> xdriver_xxxx
-> ...
-> xfont_xxx
-> 
-> maybe it could be clearer to have the same subdirs as the
-> http://xorg.freedesktop.org/releases/individual/ tree
+A specific scenario under which this fails: if the .mk file of an autotools-based package with FOO_AUTORECONF set to yes, happens to be included before the autoconf/autoconf.mk file, the $(AUTORECONF) variable is not yet set and autoreconfiguration fails with the following message:
 
-Yeah, why not, but...
+>>> host-module-init-tools 3.12 Autoreconfiguring
+cd /repo/tdescham/reborn/buildroot-dummy/output/build/host-module-init-tools-3.12/ &&
+/bin/sh: -c: line 1: syntax error: unexpected end of file
+make: *** [/repo/tdescham/reborn/buildroot-dummy/output/build/host-module-init-tools-3.12/.stamp_configured] Error 2
 
-> so that we can bump up versions easier? (one subdirectory after
-> another since there are many packages)
+caused by the following statement in package/Makefile.autotools.in:
+	$(Q)cd $$($$(PKG)_SRCDIR) && $(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
 
-... what does this change to the problem of bumping the packages?
+This patch adds explicit sorting to the include statement in Makefile, fixing this scenario for make-3.82.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+---
+
+Note that I don't understand the mechanics of this failure completely: I had expected that a package named 'aaa' would still fail to autoreconfigure, even with this patch applied. However, this is not true: this patch does fix the problem with make-3.82.
+
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -309,7 +309,7 @@
+ include toolchain/toolchain-crosstool-ng.mk
+ endif
+ 
+-include package/*/*.mk
++include $(sort $(wildcard package/*/*.mk))
+ 
+ include boot/common.mk
+ include target/Makefile.in
