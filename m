@@ -1,40 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 6 Aug 2011 12:06:41 +0200
-Subject: [Buildroot] [git commit] xfont_font-misc-misc: remove mapfiles
-	workaround
-Message-ID: <20110806100732.D1E388B7F3@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Sat, 6 Aug 2011 02:38:37 -0700
+Subject: [Buildroot] libssp still missing from target
+In-Reply-To: <20110805003419.4934e4bf@skate>
+References: <j1eiv7$irk$1@dough.gmane.org> <20110805003419.4934e4bf@skate>
+Message-ID: <CAJaTeTp2NQsFuaispx_U79GuYzdNMoPbaRJJdijZC-XL7Rwfow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Aug 4, 2011 at 15:34, Thomas Petazzoni wrote:
+> I guess libssp only exists on toolchains that have stack protection
+> support enabled. None of my CodeSourcery or Buildroot-built toolchains
+> have a libssp. I guess I'll have to build a CT-NG toolchain with libssp
+> support.
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c85cb9308ed907a8a8e487be8c7ab971a1fb126
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+not exactly.  libssp is a configure option when gcc is built.  you can
+either force gcc to build/use a dedicated libssp.so, but this is
+redundant when using glibc or uClibc which includes the required
+symbols in its libc/ldso.
 
-Not needed anymore after the recent pkg-config mapfiles fix.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
-
-diff --git a/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk b/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
-index 64e14d2..f6a5564 100644
---- a/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
-+++ b/package/x11r7/xfont_font-misc-misc/xfont_font-misc-misc.mk
-@@ -12,11 +12,5 @@ XFONT_FONT_MISC_MISC_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) MKFONTSCALE=$(
- XFONT_FONT_MISC_MISC_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) MKFONTSCALE=$(HOST_DIR)/usr/bin/mkfontscale MKFONTDIR=$(HOST_DIR)/usr/bin/mkfontdir install-data
- XFONT_FONT_MISC_MISC_DEPENDENCIES = xfont_font-util host-xfont_font-util host-xapp_mkfontscale host-xapp_mkfontdir host-xapp_bdftopcf
- 
--define XFONT_FONT_MISC_MISC_MAPFILES_PATH_FIX
--	$(SED) 's|UTIL_DIR = |UTIL_DIR = $(STAGING_DIR)|' $(@D)/Makefile
--endef
--
--XFONT_FONT_MISC_MISC_POST_CONFIGURE_HOOKS += XFONT_FONT_MISC_MISC_MAPFILES_PATH_FIX
--
- $(eval $(call AUTOTARGETS,package/x11r7,xfont_font-misc-misc))
- 
--- 
-1.7.3.4
+so any code in buildroot would need to detect if libssp is available
+and only copy it over if so.
+-mike
