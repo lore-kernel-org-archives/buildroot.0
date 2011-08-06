@@ -1,26 +1,52 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Sat, 6 Aug 2011 02:38:37 -0700
-Subject: [Buildroot] libssp still missing from target
-In-Reply-To: <20110805003419.4934e4bf@skate>
-References: <j1eiv7$irk$1@dough.gmane.org> <20110805003419.4934e4bf@skate>
-Message-ID: <CAJaTeTp2NQsFuaispx_U79GuYzdNMoPbaRJJdijZC-XL7Rwfow@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Aug 2011 08:58:14 +0200
+Subject: [Buildroot] [PATCH v2] add QWT library: Qt Widgets for
+ Technical Applications
+In-Reply-To: <1312591577-30383-1-git-send-email-ivan.kuten@promwad.com>
+References: <4E3C283A.7070406@promwad.com>
+ <1312591577-30383-1-git-send-email-ivan.kuten@promwad.com>
+Message-ID: <20110806085814.71636ff4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Aug 4, 2011 at 15:34, Thomas Petazzoni wrote:
-> I guess libssp only exists on toolchains that have stack protection
-> support enabled. None of my CodeSourcery or Buildroot-built toolchains
-> have a libssp. I guess I'll have to build a CT-NG toolchain with libssp
-> support.
+Hello Ivan,
 
-not exactly.  libssp is a configure option when gcc is built.  you can
-either force gcc to build/use a dedicated libssp.so, but this is
-redundant when using glibc or uClibc which includes the required
-symbols in its libc/ldso.
+Looks a lot better. A few comments remain though (sorry if I didn't
+catch them at the first review).
 
-so any code in buildroot would need to detect if libssp is available
-and only copy it over if so.
--mike
+Le Sat, 6 Aug 2011 03:46:17 +0300,
+Ivan Kuten <ivan.kuten@promwad.com> a ?crit :
+
+> +menuconfig BR2_PACKAGE_QWT
+
+This should be:
+
+config BR2_PACKAGE_QWT
+
+menuconfig is here to define a submenu, which is not the case for qwt.
+
+> +define QWT_INSTALL_STAGING_CMDS
+> +     (export INSTALL_ROOT=$(STAGING_DIR); $(MAKE) -C $(@D) install)
+> +endef
+> +
+> +define QWT_INSTALL_TARGET_CMDS
+> +     cp -dpf $(STAGING_DIR)/usr/local/qwt-$(QWT_VERSION)/lib/libqwt.so* $(TARGET_DIR)/usr/lib
+> +endef
+
+This installation path of the library
+($(STAGING_DIR)/usr/local/qwt-xxxx/lib/) is not a standard path, and
+will make a lot of things fail in Buildroot. Can you arrange to install
+the library in $(STAGING_DIR)/usr/lib and the headers files in
+$(STAGING_DIR)/usr/include (i.e, define a prefix of $(STAGING_DIR)/usr).
+
+Otherwise, looks good.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
