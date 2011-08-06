@@ -1,58 +1,39 @@
-From: Sam Nazarko <samnazarko@stmteam.com>
-Date: Sat, 6 Aug 2011 01:51:57 +0100
-Subject: [Buildroot] Still cannot get a booting system
-Message-ID: <000501cc53d3$0ae00480$20a00d80$@com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 6 Aug 2011 08:18:19 +0200
+Subject: [Buildroot] [git commit] libsoup: bump to 2.32.2
+Message-ID: <20110806062301.1112F8B775@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I don't get what is necessary to just get a basic system booting on an i386
-machine. Seems like it's not possible. I had success with ucLibc on 2011.02,
-but can't get anything to work on 2011.05. Even when using the default
-kernel in 2011.02, no dice. I've looked at everything, like building the
-kernel from 2011.02 release and combining with the tarFS of a 2011.05 gcLibc
-build (using same kernel headers of course) but no dice. It hangs on the
-initialisation of USB:
 
+commit: http://git.buildroot.net/buildroot/commit/?id=59377dd2b5873012eb2470b284735cb6bf6e5ce7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Buildroot should use a stable release, not use an unstable development
+version. Updating to the current stable branch (2.34) is not trivial,
+so at least use the latest release from the stable 2.32 branch.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libsoup/libsoup.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 6ec0882..11bfadd 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-
-Initializing random number generator... done.
-
-Starting network...
-
-                ip used greatest stack depth: 6088 bytes left
-
-                usb 1-1: new full speed USB device using ohci_hcd and
-address 2
-
-                usb 1-1: New USB device found, idVendor=80ee, idProduct=0021
-
-                usb 1-1: New USB device strings: Mfr=1, Product=3,
-SerialNumber=0
-
-                usb 1-1: Product: USB Tablet
-
-                usb 1-1: Manufacturer: VirtualBox
-
-                input: VirtualBox USB Tablet as
-/devices/pci0000:00/0000:00:06.0/usb1-1/1-1:1.0/input/input4
-
-                generic usb 003:80EE:0021.001: input, hidraw0, USB HID
-V1.1.0 Mouse [VirtualBox USB Tablet} on usb-0000:00:06.0-1/input0
-
- 
-
-Although for all I know it's something happening after this. I can't seem to
-resolve this issue. It exists outside of Virtualbox too, and will just give
-me the same message. Tried both 2011.02 and 2011.05 default kernels with an
-i386 defconfig to no joy. Suggestions?
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110806/a95a4a43/attachment-0001.html>
+-LIBSOUP_MAJOR_VERSION:=2.31
++LIBSOUP_MAJOR_VERSION:=2.32
+ LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
+ LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
+ LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
+-- 
+1.7.3.4
