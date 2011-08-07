@@ -1,289 +1,308 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Aug 2011 09:36:41 +0200
-Subject: [Buildroot] [PATCH v2] add QWT library: Qt Widgets for
-	Technical Applications
-In-Reply-To: <1312591577-30383-1-git-send-email-ivan.kuten@promwad.com> (Ivan
- Kuten's message of "Sat, 6 Aug 2011 03:46:17 +0300")
-References: <4E3C283A.7070406@promwad.com>
- <1312591577-30383-1-git-send-email-ivan.kuten@promwad.com>
-Message-ID: <8762m9n052.fsf@macbook.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  7 Aug 2011 12:31:59 +0300
+Subject: [Buildroot] [PATCH] package: add the poco C++ libraries collection
+Message-ID: <b1b51130f28900dc88f541653bfffcc7b7afe5e0.1312709400.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ivan" == Ivan Kuten <ivan.kuten@promwad.com> writes:
+Add the C++ Portable Components libraries.
 
-Hi,
+The Data/ODBC components because its dependency (unixODBC) is not in Buildroot.
 
- Ivan> Signed-off-by: Ivan Kuten <ivan.kuten@promwad.com>
- Ivan> ---
- Ivan> :100644 100644 7112e05... e442e09... M	package/Config.in
- Ivan> :000000 100644 0000000... c927a7b... A	package/qwt/Config.in
- Ivan> :000000 100644 0000000... 2f25cc4... A	package/qwt/qwt.mk
- Ivan>  package/Config.in     |    1 +
- Ivan>  package/qwt/Config.in |   10 ++++++++++
- Ivan>  package/qwt/qwt.mk    |   44 ++++++++++++++++++++++++++++++++++++++++++++
- Ivan>  3 files changed, 55 insertions(+), 0 deletions(-)
+The Data/MySQL component is only build tested. It probably requires an
+additional RPATH to actually run, because libmysqlclient resides in a
+non-standard location under /usr/lib/mysql.
 
- Ivan> diff --git a/package/Config.in b/package/Config.in
- Ivan> index 7112e05..e442e09 100644
- Ivan> --- a/package/Config.in
- Ivan> +++ b/package/Config.in
- Ivan> @@ -293,6 +293,7 @@ source "package/libsvgtiny/Config.in"
- Ivan>  source "package/libungif/Config.in"
- Ivan>  source "package/pango/Config.in"
- Ivan>  source "package/pixman/Config.in"
- Ivan> +source "package/qwt/Config.in"
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/Config.in                                  |    1 +
+ package/poco/Config.in                             |   56 +++++++++++++
+ .../poco/poco-1.4.1p1-add-cross-build-config.patch |   82 ++++++++++++++++++++
+ .../poco-1.4.1p1-add-staging-search-path.patch     |   22 +++++
+ .../poco/poco-1.4.1p1-dont-build-debug-libs.patch  |   19 +++++
+ package/poco/poco.mk                               |   52 ++++++++++++
+ 6 files changed, 232 insertions(+), 0 deletions(-)
+ create mode 100644 package/poco/Config.in
+ create mode 100644 package/poco/poco-1.4.1p1-add-cross-build-config.patch
+ create mode 100644 package/poco/poco-1.4.1p1-add-staging-search-path.patch
+ create mode 100644 package/poco/poco-1.4.1p1-dont-build-debug-libs.patch
+ create mode 100644 package/poco/poco.mk
 
-Sorry, I didn't got to reply on Thomas' mail before you reposted, but I
-prefer to keep this together with qt as it is very qt dependent (just
-like we do for all the xorg stuff).
-
- Ivan>  source "package/tiff/Config.in"
- Ivan>  source "package/webkit/Config.in"
- Ivan>  endmenu
- Ivan> diff --git a/package/qwt/Config.in b/package/qwt/Config.in
- Ivan> new file mode 100644
- Ivan> index 0000000..c927a7b
- Ivan> --- /dev/null
- Ivan> +++ b/package/qwt/Config.in
- Ivan> @@ -0,0 +1,10 @@
- Ivan> +comment "Qwt requires Qt to be installed"
- Ivan> +	depends on !BR2_PACKAGE_QT
- Ivan> +
-
-If you put it right after qt you can drop this.
-
-
- Ivan> +menuconfig BR2_PACKAGE_QWT
-
-should be config.
-
- Ivan> +	bool "qwt"
- Ivan> +	depends on BR2_PACKAGE_QT
- Ivan> +	help
- Ivan> +	  Qt Widgets for Technical Applications
- Ivan> +
- Ivan> +	  http://qwt.sourceforge.net/
-
-I don't know anything about qwt, but a colleague of mine did a qwt
-package some time ago, which I haven't had time to cleanup and commit
-yet, but he had options plot, widgets, svgitem and mathml. Some of these
-require specific qt options to be enabled (like QT_SVG).
-
- Ivan> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
- Ivan> new file mode 100644
- Ivan> index 0000000..2f25cc4
- Ivan> --- /dev/null
- Ivan> +++ b/package/qwt/qwt.mk
- Ivan> @@ -0,0 +1,44 @@
- Ivan> +#############################################################
- Ivan> +#
- Ivan> +# QWT
- Ivan> +#
- Ivan> +#############################################################
- Ivan> +QWT_VERSION = 6.0.0
- Ivan> +QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- Ivan> +QWT_SITE = https://sourceforge.net/projects/qwt/files/qwt/$(QWT_VERSION)/
- Ivan> +QWT_INSTALL_STAGING = YES
- Ivan> +QWT_DEPENDENCIES = qt
- Ivan> +QWT_CONFIG_FILE = qwt.pro
-
-It seems you only use this variable once, so just drop it.
-
- Ivan> +
- Ivan> +define QWT_CONFIGURE_CMDS
- Ivan> +     $(QT_QMAKE) $(@D)/$(QWT_CONFIG_FILE)
- Ivan> +     $(SED) 's/+= QwtSvg/-= QwtSvg/' $(@D)/qwtconfig.pri
- Ivan> +     $(SED) 's/+= QwtDesigner/-= QwtDesigner/' $(@D)/qwtconfig.pri
- Ivan> +     $(SED) 's/+= QwtMathML/-= QwtMathML/' $(@D)/qwtconfig.pri
- Ivan> +endef
-
-The other patch would also use the debug/shared library options of Qt to
-build with/without debug / shared library.
-
-FYI, here's his patch:
-
-diff -urpN buildroot/package/qwt/Config.in buildroot-work/package/qwt/Config.in
---- buildroot/package/qwt/Config.in	1970-01-01 01:00:00.000000000 +0100
-+++ buildroot-work/package/qwt/Config.in	2010-08-23 16:34:18.000000000 +0200
-@@ -0,0 +1,65 @@
-+menuconfig BR2_PACKAGE_QWT
-+	bool "Qwt"
-+	depends on BR2_PACKAGE_QT
+diff --git a/package/Config.in b/package/Config.in
+index 3e4b34d..4a86063 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -337,6 +337,7 @@ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/liboil/Config.in"
+ source "package/libsigc/Config.in"
++source "package/poco/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
+ 
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+new file mode 100644
+index 0000000..9de5328
+--- /dev/null
++++ b/package/poco/Config.in
+@@ -0,0 +1,56 @@
++config BR2_PACKAGE_POCO
++	bool "poco"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_PCRE
++	depends on BR2_LARGEFILE
 +	help
-+	  Qt widgets for technical applications
++	  The C++ Portable Components Libraries
 +
-+	  http://qwt.sourceforge.net/
++	  http://pocoproject.org
 +
-+if BR2_PACKAGE_QWT
++comment "poco requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
 +
-+config BR2_PACKAGE_QWT_DEBUG
-+	bool "Compile with debug support"
-+	help
-+	  If unsure, say N.
++if BR2_PACKAGE_POCO
 +
-+choice
-+	prompt "Library type"
-+	default BR2_PACKAGE_QWT_STATIC if BR2_PACKAGE_QT_STATIC
-+	default BR2_PACKAGE_QWT_SHARED if BR2_PACKAGE_QT_SHARED
-+	help
-+	  Selects the library type: Shared or Static
++comment "poco components"
 +
-+config BR2_PACKAGE_QWT_SHARED
-+	bool "Shared library"
-+	help
-+	  Create and use shared Qwt libraries.
-+	  If you have multiple programs that depend on Qwt or intend to use
-+	  plugins, say Y.
++config BR2_PACKAGE_POCO_XML
++	bool "xml"
++	select BR2_PACKAGE_EXPAT
 +
-+config BR2_PACKAGE_QWT_STATIC
-+	bool "Static Library"
-+	help
-+	  Create and use static Qwt libraries.
-+	  If you don't have multiple programs on the target that depends on
-+	  Qt, then this will save you quite some of storage space.
-+	  If unsure, say Y.
++config BR2_PACKAGE_POCO_UTIL
++	bool "util"
++	select BR2_PACKAGE_POCO_XML
 +
-+endchoice
++config BR2_PACKAGE_POCO_NET
++	bool "net"
 +
-+config BR2_PACKAGE_QWT_PLOT
-+	bool "Plots"
-+	help
-+	  Includes all kinds of graph and plotting widgets.
++config BR2_PACKAGE_POCO_CRYPTO
++	bool "crypto"
++	select BR2_PACKAGE_OPENSSL
 +
-+config BR2_PACKAGE_QWT_WIDGETS
-+	bool "Widgets"
-+	help
-+	  Includes all kinds of add-on widgets such as dials, compasses,
-+	  knobs, wheels, sliders, thermos, ...
++config BR2_PACKAGE_POCO_NETSSL_OPENSSL
++	bool "netssl_openssl"
++	select BR2_PACKAGE_POCO_NET
++	select BR2_PACKAGE_POCO_CRYPTO
++	select BR2_PACKAGE_POCO_UTIL
++	select BR2_PACKAGE_OPENSSL
 +
-+config BR2_PACKAGE_QWT_SVGITEM
-+	bool "SVG Item"
-+	select BR2_PACKAGE_QWT_PLOT
-+	select BR2_PACKAGE_QT_XML
-+	select BR2_PACKAGE_QT_SVG
-+	help
-+	  Add support to display svg images on the plot canvas.
++config BR2_PACKAGE_POCO_ZIP
++	bool "zip"
 +
-+config BR2_PACKAGE_QWT_MATHML
-+	bool "Math ML support"
-+	select BR2_PACKAGE_QWT_PLOT
-+	help
-+	  Add support for MathML in Qwt.
++config BR2_PACKAGE_POCO_DATA
++	bool
 +
-+endif # BR2_PACKAGE_QWT
-diff -urpN buildroot/package/qwt/qwt.mk buildroot-work/package/qwt/qwt.mk
---- buildroot/package/qwt/qwt.mk	1970-01-01 01:00:00.000000000 +0100
-+++ buildroot-work/package/qwt/qwt.mk	2010-08-23 12:01:23.000000000 +0200
-@@ -0,0 +1,105 @@
-+######################################################################
-+#
-+# Qwt - Qt Widgets for Technical Application
-+# http://qwt.sourceforge.net/
-+######################################################################
++config BR2_PACKAGE_POCO_DATA_SQLITE
++	bool "sqlite"
++	select BR2_PACKAGE_POCO_DATA
++	select BR2_PACKAGE_SQLITE
 +
-+QWT_VERSION:=5.2.1
-+QWT_SOURCE:=qwt-$(QWT_VERSION).tar.bz2
-+QWT_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)/
-+QWT_CAT:=$(BZCAT)
-+QWT_TARGET_DIR:=$(BUILD_DIR)/qwt-$(QWT_VERSION)/src
++config BR2_PACKAGE_POCO_DATA_MYSQL
++	bool "mysql"
++	select BR2_PACKAGE_POCO_DATA
++	select BR2_PACKAGE_MYSQL_CLIENT
 +
-+QWT_CONFIGURE:=#empty
++endif # BR2_PACKAGE_POCO
+diff --git a/package/poco/poco-1.4.1p1-add-cross-build-config.patch b/package/poco/poco-1.4.1p1-add-cross-build-config.patch
+new file mode 100644
+index 0000000..a087838
+--- /dev/null
++++ b/package/poco/poco-1.4.1p1-add-cross-build-config.patch
+@@ -0,0 +1,82 @@
++From: Baruch Siach <baruch@tkos.co.il>
++Subject: [PATCH] poco: add Linux configuration file for generic cross build
 +
++This patch adds the Linux-CrossEnv config file to poco. This file is identical
++to the Linux one, except the added CROSSENV variable that allows setting of
++the toolchain prefix.
 +
-+# Configuration options
-+ifeq ($(BR2_PACKAGE_QWT_DEBUG),y)
-+QWT_CONFIGURE+= CONFIG+=debug
-+endif
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -Nuar poco-1.4.1p1-dist/build/config/Linux-CrossEnv poco-1.4.1p1/build/config/Linux-CrossEnv
++--- poco-1.4.1p1-dist/build/config/Linux-CrossEnv	1970-01-01 02:00:00.000000000 +0200
+++++ poco-1.4.1p1/build/config/Linux-CrossEnv	2011-08-02 18:51:03.682047719 +0300
++@@ -0,0 +1,69 @@
+++#
+++# Linux
+++#
+++# Make settings for cross compiled Linux
+++#
+++#
+++
+++#
+++# General Settings
+++#
+++LINKMODE ?= SHARED
+++
+++#
+++# Define Tools
+++#
+++CC      = $(CROSSENV)gcc
+++CXX     = $(CROSSENV)g++
+++LINK    = $(CXX)
+++LIB     = $(CROSSENV)ar -cr
+++RANLIB  = $(CROSSENV)ranlib
+++SHLIB   = $(CXX) -shared -Wl,-soname,$(notdir $@) -o $@
+++SHLIBLN = $(POCO_BASE)/build/script/shlibln
+++STRIP   = $(CROSSENV)strip
+++DEP     = $(POCO_BASE)/build/script/makedepend.gcc 
+++SHELL   = sh
+++RM      = rm -rf
+++CP      = cp
+++MKDIR   = mkdir -p
+++
+++#
+++# Extension for Shared Libraries
+++#
+++SHAREDLIBEXT     = .so.$(target_version)
+++SHAREDLIBLINKEXT = .so
+++
+++#
+++# Compiler and Linker Flags
+++#
+++CFLAGS          = 
+++CFLAGS32        =
+++CFLAGS64        =
+++CXXFLAGS        = -Wall -Wno-sign-compare
+++CXXFLAGS32      =
+++CXXFLAGS64      =
+++LINKFLAGS       =
+++LINKFLAGS32     =
+++LINKFLAGS64     =
+++STATICOPT_CC    =
+++STATICOPT_CXX   =
+++STATICOPT_LINK  = -static
+++SHAREDOPT_CC    = -fPIC
+++SHAREDOPT_CXX   = -fPIC
+++SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)
+++DEBUGOPT_CC     = -g -D_DEBUG
+++DEBUGOPT_CXX    = -g -D_DEBUG
+++DEBUGOPT_LINK   = -g
+++RELEASEOPT_CC   = -O2 -DNDEBUG
+++RELEASEOPT_CXX  = -O2 -DNDEBUG
+++RELEASEOPT_LINK = -O2
+++
+++#
+++# System Specific Flags
+++#
+++SYSFLAGS = -D_XOPEN_SOURCE=500 -D_REENTRANT -D_THREAD_SAFE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -DPOCO_HAVE_FD_EPOLL
+++
+++#
+++# System Specific Libraries
+++#
+++SYSLIBS  = -lpthread -ldl -lrt
+diff --git a/package/poco/poco-1.4.1p1-add-staging-search-path.patch b/package/poco/poco-1.4.1p1-add-staging-search-path.patch
+new file mode 100644
+index 0000000..18ee076
+--- /dev/null
++++ b/package/poco/poco-1.4.1p1-add-staging-search-path.patch
+@@ -0,0 +1,22 @@
++From: Baruch Siach <baruch@tkos.co.il>
++Subject: [PATCH] poco: add the staging path to search path
 +
-+ifeq ($(BR2_PACKAGE_QWT_SHARED),y)
-+QWT_CONFIGURE+= CONFIG+=QwtDll
-+endif
++Add the mysql headers and client libraries to the search path of the
++preprocessor and the linker. The $MYSQL_LIBDIR variable must be set from the
++make command line.
 +
-+ifeq ($(BR2_PACKAGE_QWT_PLOT),y)
-+QWT_CONFIGURE += CONFIG+=QwtPlot
-+endif
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++--- 
++--- poco-1.4.1p1-all-dist/Data/MySQL/Makefile	2011-02-09 11:13:00.000000000 +0200
+++++ poco-1.4.1p1-all/Data/MySQL/Makefile	2011-08-07 09:03:37.106161274 +0300
++@@ -8,8 +8,8 @@
++ 
++ include $(POCO_BASE)/build/rules/global
++ 
++-SYSLIBS += -L/usr/local/lib/mysql -L/usr/lib/mysql -L/usr/mysql/lib/mysql -L/usr/local/mysql/lib -lmysqlclient
++-INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql -I/usr/mysql/include/mysql -I/usr/local/mysql/include
+++SYSLIBS += -L$(MYSQL_LIBDIR) -L/usr/local/lib/mysql -L/usr/lib/mysql -L/usr/mysql/lib/mysql -L/usr/local/mysql/lib -lmysqlclient
+++INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql -I/usr/mysql/include/mysql -I/usr/local/mysql/include -I=/mysql
++ SYSFLAGS += -DTHREADSAFE -DNO_TCL
++ 
++ objects = Binder Extractor SessionImpl Connector \
+diff --git a/package/poco/poco-1.4.1p1-dont-build-debug-libs.patch b/package/poco/poco-1.4.1p1-dont-build-debug-libs.patch
+new file mode 100644
+index 0000000..7480963
+--- /dev/null
++++ b/package/poco/poco-1.4.1p1-dont-build-debug-libs.patch
+@@ -0,0 +1,19 @@
++From: Baruch Siach <baruch@tkos.co.il>
++Subject: [PATCH] poco: don't build debug libraries
 +
-+ifeq ($(BR2_PACKAGE_QWT_WIDGETS),y)
-+QWT_CONFIGURE += CONFIG+=QwtWidgets
-+endif
++Remove the debug libraries build dependency from the default target.
 +
-+ifeq ($(BR2_PACKAGE_QWT_SVGITEM),y)
-+QWT_CONFIGURE += CONFIG+=QwtSVGItem
-+endif
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
 +
-+ifeq ($(BR2_PACKAGE_QWT_MATHML),y)
-+QWT_CONFIGURE += CONFIG+=QwtMathML
-+endif
-+
-+
-+QWT_PROJECT_FILE:=$(QWT_TARGET_DIR)/src.pro
-+QWT_QMAKE_SPEC:=$(QT_TARGET_DIR)/mkspecs/qws/linux-$(BR2_PACKAGE_QT_EMB_PLATFORM)-g++
-+
-+# Variable for other Qt applications to use
-+QWT_QMAKE:=$(STAGING_DIR)/usr/bin/qmake
-+
-+
-+$(DL_DIR)/$(QWT_SOURCE):
-+	$(call DOWNLOAD,$(QWT_SITE),$(QWT_SOURCE))
-+
-+qwt-source: $(DL_DIR)/$(QWT_SOURCE)
-+
-+$(QWT_TARGET_DIR)/.unpacked: $(DL_DIR)/$(QWT_SOURCE)
-+	$(QWT_CAT) $(DL_DIR)/$(QWT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-+	touch $@
-+
-+$(QWT_TARGET_DIR)/.configured: $(QWT_TARGET_DIR)/.unpacked
-+	$(QWT_QMAKE) $(QWT_PROJECT_FILE) -spec $(QWT_QMAKE_SPEC) -r $(QWT_CONFIGURE) -o $(QWT_TARGET_DIR)/Makefile
-+	touch $@
-+
-+$(QWT_TARGET_DIR)/.compiled: $(QWT_TARGET_DIR)/.configured
-+	$(MAKE) -C $(QWT_TARGET_DIR)
-+	touch $@
-+
-+$(QWT_TARGET_DIR)/.installed: $(QWT_TARGET_DIR)/.compiled
-+	mkdir -p $(STAGING_DIR)/usr/include/qwt
-+	cp -dpf $(QWT_TARGET_DIR)/*.h $(STAGING_DIR)/usr/include/qwt
-+	touch $@
-+
-+$(STAGING_DIR)/usr/lib/libqwt.a: $(QWT_TARGET_DIR)/.installed
-+	cp -dpf $(QWT_TARGET_DIR)/../lib/libqwt.a $(STAGING_DIR)/usr/lib
-+
-+$(TARGET_DIR)/usr/lib/libqwt.so: $(QWT_TARGET_DIR)/.installed
-+	cp -dpf $(QWT_TARGET_DIR)/../lib/libqwt.so* $(STAGING_DIR)/usr/lib/
-+	cp -dpf $(QWT_TARGET_DIR)/../lib/libqwt.so* $(TARGET_DIR)/usr/lib/
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libqwt.so.*
-+
-+
-+ifeq ($(BR2_PACKAGE_QWT_SHARED),y)
-+qwt: $(TARGET_DIR)/usr/lib/libqwt.so
-+else
-+qwt: $(STAGING_DIR)/usr/lib/libqwt.a
-+endif
-+
-+
-+qwt-clean:
-+	-$(MAKE) -C $(QWT_TARGET_DIR) clean
-+	-rm -rf $(STAGING_DIR)/usr/include/qwt
-+	-rm $(TARGET_DIR)/usr/lib/libqwt.so.*
-+ifeq ($(BR2_PACKAGE_QWT_SHARED),y)
-+	-rm $(TARGET_DIR)/usr/lib/libqwt.so.*
-+endif
-+
-+qwt-dirclean:
-+	rm -rf $(QWT_TARGET_DIR)
-+
++--- poco-1.4.1p1-dist/build/rules/compile	2011-02-09 11:12:24.000000000 +0200
+++++ poco-1.4.1p1/build/rules/compile	2011-08-03 07:51:42.946044176 +0300
++@@ -14,7 +14,7 @@
++ 
++ all: $(DEFAULT_TARGET)
++ all_static: static_debug static_release
++-all_shared: shared_debug shared_release
+++all_shared: shared_release
++ all_debug: static_debug shared_debug
++ all_release: static_release shared_release
++ 
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+new file mode 100644
+index 0000000..74d886d
+--- /dev/null
++++ b/package/poco/poco.mk
+@@ -0,0 +1,52 @@
 +#############################################################
 +#
-+# Toplevel Makefile options
++# poco
 +#
 +#############################################################
-+ifeq ($(BR2_PACKAGE_QWT),y)
-+TARGETS+=qwt
-+endif
-
++POCO_VERSION = 1.4.1p1
++POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
++POCO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/poco
++POCO_INSTALL_STAGING = YES
++
++POCO_DEPENDENCIES = zlib pcre					\
++	$(if $(BR2_PACKAGE_POCO_XML),expat)			\
++	$(if $(BR2_PACKAGE_POCO_CRYPTO),openssl)		\
++	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),openssl)	\
++	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite)		\
++	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql_client)
++
++POCO_OMIT = Data/ODBC PageCompiler					\
++	$(if $(BR2_PACKAGE_POCO_XML),,XML)				\
++	$(if $(BR2_PACKAGE_POCO_UTIL),,Util)				\
++	$(if $(BR2_PACKAGE_POCO_NET),,Net)				\
++	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),,NetSSL_OpenSSL)	\
++	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto)			\
++	$(if $(BR2_PACKAGE_POCO_ZIP),,Zip)				\
++	$(if $(BR2_PACKAGE_POCO_DATA),,Data)				\
++	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL)		\
++	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite)
++
++define POCO_CONFIGURE_CMDS
++	(cd $(@D); ./configure \
++		--config=Linux-CrossEnv	\
++		--prefix=/usr		\
++		--omit="$(POCO_OMIT)"	\
++		--unbundled		\
++		--no-tests		\
++		--no-samples)
++endef
++
++define POCO_BUILD_CMDS
++	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSSENV=$(TARGET_CROSS) \
++		MYSQL_LIBDIR=$(TARGET_DIR)/usr/lib/mysql -C $(@D)
++endef
++
++define POCO_INSTALL_STAGING_CMDS
++	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) install -C $(@D)
++endef
++
++define POCO_INSTALL_TARGET_CMDS
++	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) install -C $(@D)
++endef
++
++$(eval $(call GENTARGETS,package,poco))
 -- 
-Bye, Peter Korsgaard
+1.7.5.4
