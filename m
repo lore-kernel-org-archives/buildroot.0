@@ -1,35 +1,22 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Aug 2011 23:04:25 +0200
-Subject: [Buildroot] Adding libev to buildroot
-In-Reply-To: <4E3E72BF.9040302@roth-itk.de>
-References: <4E3E72BF.9040302@roth-itk.de>
-Message-ID: <CAGm1_ktR=-TywrmxLORcmG3Hch1=RsqDusL9y+UmJKt6=gT30A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 7 Aug 2011 23:17:49 +0200
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: update bundled
+	config files
+Message-ID: <20110807211902.081C28B828@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernhard,
 
-On Sun, Aug 7, 2011 at 1:10 PM, Bernhard Roth <broth@roth-itk.de> wrote:
-> Hello all,
->
-> I am using buildroot for a while now and I always have to add the libev
-> library for my projects. Libev is a lightweight and powerful alternative to
-> livevent.
-> Maybe it's possible to add libev support to the next official version of
-> buildroot.
->
-> Attached I send you the package config files for libev which I use (based on
-> libevent files)
-> Please put them into package/libev.
->
-> Finally following line has to be added to package/Config.in just after
-> libevent
->
-> source "package/libev/Config.in"
+commit: http://git.buildroot.net/buildroot/commit/?id=c72a9bd4c80febbc19b26927d0eadc84afef1ba7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please send a proper patch using git or quilt and add your Signed-off-by string.
+Update the crosstool-NG libc-specific config files to match the
+new set of options coming with the updated crosstool-NG.
 
-Yegor
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+Patch is too large, so refusing to show it
