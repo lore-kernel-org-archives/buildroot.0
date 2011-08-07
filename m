@@ -1,45 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 7 Aug 2011 21:36:17 +0200
-Subject: [Buildroot] [PATCH 1/2] toochain/crosstool-NG: bump version
-In-Reply-To: <87sjpdkonq.fsf@macbook.be.48ers.dk>
-References: <1312744789-21603-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- <1312744789-21603-2-git-send-email-yann.morin.1998@anciens.enib.fr>
- <87sjpdkonq.fsf@macbook.be.48ers.dk>
-Message-ID: <201108072136.17710.yann.morin.1998@anciens.enib.fr>
+Date: Sun,  7 Aug 2011 22:37:56 +0200
+Subject: [Buildroot] [PATCH 0/2] toolchain: update the crosstool-NG backend,
+	v2
+Message-ID: <1312749478-10361-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello All!
 
-On Sunday 07 August 2011 21:27:37 Peter Korsgaard wrote:
->  Yann> +-ifneq ($(MAKELEVEL),0)
->  Yann> ++ifneq ($(MAKELEVEL),2)
-> 
-> Doesn't this then break for in-tree builds? 
+This patchset updates the crosstool-NG backend to the newly released 1.12.0.
+Existing patches were applied upstream, and are no longer needed. A new patch
+is added because it works around a limitation specific to buildroot; it will
+not go upstream as-is, a better fix will have to be found.
 
-D'oh...
-/me slaps own cheek
+Changes since v1:
+- simply get rid of the recursion test, it can't happen (Peter)
 
-> How about just removing these 3 lines instead?
+    [PATCH 1/2] toochain/crosstool-NG: bump version
+    [PATCH 2/2] toolchain/crosstool-NG: update bundled config files
 
-Well, the installation of crosstool-NG as the toolchain backend never
-requires manualy running, hence autocompletion should never ever be
-attempted, so we should not have to protect ourselves against this, indeed.
-
-I'll repush shortly...
-
-Thanks for pointing this out.
+ .../crosstool-ng-000-makefile-recursion.patch      |   39 ++++
+ package/crosstool-ng/crosstool-ng-001-no-cvs.patch |   15 --
+ ...-break-on-existing-symlinks-and-build.log.patch |   76 -------
+ .../crosstool-ng-003-autostuf-compat.patch         |   10 -
+ package/crosstool-ng/crosstool-ng.mk               |    2 +-
+ .../crosstool-ng.config-eglibc                     |  227 ++++++-------------
+ .../crosstool-ng.config-glibc                      |  234 ++++++--------------
+ .../crosstool-ng.config-uClibc                     |  192 ++++------------
+ toolchain/toolchain-crosstool-ng/crosstool-ng.mk   |    2 +-
+ 9 files changed, 221 insertions(+), 576 deletions(-)
 
 Regards,
 Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
