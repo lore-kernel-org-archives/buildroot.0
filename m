@@ -1,31 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 07 Aug 2011 23:19:03 +0200
-Subject: [Buildroot] [PATCH 0/2] toolchain: update the crosstool-NG
-	backend, v2
-In-Reply-To: <1312749478-10361-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- (Yann E. MORIN's message of "Sun, 7 Aug 2011 22:37:56 +0200")
-References: <1312749478-10361-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87oc00ly2g.fsf@macbook.be.48ers.dk>
+From: Sam Nazarko <samnazarko@stmteam.com>
+Date: Mon, 8 Aug 2011 05:03:39 +0100
+Subject: [Buildroot] Still can't boot 2011.05 system
+Message-ID: <000501cc5580$27ba08e0$772e1aa0$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+Hello,
 
- Yann> Hello All!
+ 
 
- Yann> This patchset updates the crosstool-NG backend to the newly
- Yann> released 1.12.0.  Existing patches were applied upstream, and are
- Yann> no longer needed. A new patch is added because it works around a
- Yann> limitation specific to buildroot; it will not go upstream as-is,
- Yann> a better fix will have to be found.
+I am unable to reply to my existing message because my notifications were
+not set correctly with the mailing list, so I cannot reply to an unsent
+message. A user suggested that my hang (which indeed does occur briefly
+after Starting network..) was a Serial Port issue. I am not sure how to
+resolve this. I have it set to the default of ttyS0 and I even set the
+baudrate to "kernel default" but this did not resolve the problem. I looked
+at innitab and saw this line:
 
- Yann> Changes since v1:
- Yann> - simply get rid of the recursion test, it can't happen (Peter)
+ 
 
-Committed, thanks.
+ttyS0::respawn:/sbin/getty -L ttys0 0 vt100 #GENERIC_SERIAL
 
--- 
-Bye, Peter Korsgaard
+ 
+
+After commenting it out, the problem still persists. VirtualBox booting
+brings:
+
+ 
+
+Initializing random number generator... done.
+
+Starting network...
+
+                ip used greatest stack depth: 6088 bytes left
+
+                usb 1-1: new full speed USB device using ohci_hcd and
+address 2
+
+                usb 1-1: New USB device found, idVendor=80ee, idProduct=0021
+
+                usb 1-1: New USB device strings: Mfr=1, Product=3,
+SerialNumber=0
+
+                usb 1-1: Product: USB Tablet
+
+                usb 1-1: Manufacturer: VirtualBox
+
+                input: VirtualBox USB Tablet as
+/devices/pci0000:00/0000:00:06.0/usb1-1/1-1:1.0/input/input4
+
+                generic usb 003:80EE:0021.001: input, hidraw0, USB HID
+V1.1.0 Mouse [VirtualBox USB Tablet} on usb-0000:00:06.0-1/input0
+
+ 
+
+ 
+
+Thank you
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110808/90e07104/attachment.html>
