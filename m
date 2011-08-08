@@ -1,60 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 08 Aug 2011 21:16:37 +0200
-Subject: [Buildroot] util-linux compile problems
-In-Reply-To: <87fwlblqxr.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
- of "Mon, 08 Aug 2011 20:05:20 +0200")
-References: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com>
- <87fwlblqxr.fsf@macbook.be.48ers.dk>
-Message-ID: <87y5z3k92i.fsf@macbook.be.48ers.dk>
+From: Heiko Helmle <helman@gmx.net>
+Date: Mon, 08 Aug 2011 21:18:27 +0200
+Subject: [Buildroot] Problems with udev buildroot
+Message-ID: <20110808191827.101280@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+Hello
 
-Hi,
+Hit the send button too early :)
 
- Peter> We already pass --disable-nls unless you have locales enabled,
- Peter> so perhaps it needs similar handling as libglib2 for uClibc
- Peter> (select LIBINTIL if BR2_NEEDS_GETTEXT). Thomas also mentioned
- Peter> something about that, but I haven't done a locale build lately
- Peter> to test. Will do so now.
+it seems like /dev/null is missing and the generated image isn't able to mount anything...
 
-It seems to work fine here with:
-
-BR2_arm=y
-BR2_arm926t=y
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_PACKAGE_UTIL_LINUX=y
-BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-BR2_PACKAGE_UTIL_LINUX_FSCK=y
-BR2_PACKAGE_UTIL_LINUX_LIBMOUNT=y
-BR2_PACKAGE_UTIL_LINUX_UUIDD=y
-BR2_PACKAGE_UTIL_LINUX_AGETTY=y
-BR2_PACKAGE_UTIL_LINUX_CRAMFS=y
-BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT=y
-BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT=y
-BR2_PACKAGE_UTIL_LINUX_FALLOCATE=y
-BR2_PACKAGE_UTIL_LINUX_UNSHARE=y
-BR2_PACKAGE_UTIL_LINUX_RENAME=y
-BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS=y
-BR2_PACKAGE_UTIL_LINUX_WALL=y
-BR2_PACKAGE_UTIL_LINUX_ARCH=y
-BR2_PACKAGE_UTIL_LINUX_INIT=y
-BR2_PACKAGE_UTIL_LINUX_KILL=y
-BR2_PACKAGE_UTIL_LINUX_LAST=y
-BR2_PACKAGE_UTIL_LINUX_MESG=y
-BR2_PACKAGE_UTIL_LINUX_PARTX=y
-BR2_PACKAGE_UTIL_LINUX_RAW=y
-BR2_PACKAGE_UTIL_LINUX_RESET=y
-BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
-BR2_PACKAGE_UTIL_LINUX_WRITE=y
-
-E.G. locale support and all util-linux options enabled, but no
-gettext/libintl.
-
--- 
-Bye, Peter Korsgaard
+> ----- Urspr?ngliche Nachricht -----
+> Von: Heiko Helmle
+> Gesendet: 08.08.11 21:15 Uhr
+> An: buildroot at busybox.net
+> Betreff: [Buildroot] Problems with udev buildroot
+> 
+> Hello List,
+> 
+> I'm a bit new and I'm trying to build a small x86 buildroot with udev.
+> 
+> So far I just enabled building a pretty default .config (just enabled a kernel with i386 defconfig and set udev for /dev management).
+> 
+> Unfortunately on 2011.8rc1 and the latest git this doesn't work right:
+> 
+> ---
+> unable to access '/sys//devices/platform/i8042/serio1/input/input2
+> /sbin/modprobe: invalid option -- b
+> --
+> then comes the busybox help for modprobe 
+> --
+> unable to access 'sys//devices/platform/i8042/serio1/input/input2/mouse0
+> unable to access 'sys//devices/platform/i8042/serio1/input/input2/event2
+> can't open /dev/tty1: No such file or directory
+> can't open /dev/tty1: No such file or directory
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
