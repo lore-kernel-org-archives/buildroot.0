@@ -1,41 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 08 Aug 2011 20:05:20 +0200
-Subject: [Buildroot] util-linux compile problems
-In-Reply-To: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Mon, 8 Aug 2011 13:58:08 +0200")
-References: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87fwlblqxr.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 8 Aug 2011 20:05:51 +0200
+Subject: [Buildroot] [git commit] util-linux: fix
+	BR2_PACKAGE_UTIL_LINUX_UUIDD option
+Message-ID: <20110808180722.0161E8B840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> Hi,
- Sven> after updating buildroot we are getting compile errors from building
- Sven> util-linux. First the linker was complaining that it couldn't find
- Sven> libintl_gettext and related symbols. I was able to fix that by
- Sven> passing --disable-nls to the configure script (patch follows).
- Sven> Now I am getting errors all over the place because
- Sven> program_invocation_short_name is not defined. This is correct
- Sven> and there's a configure check to test for this. Based on this check
- Sven> a fallback is provided by include/c.h. However this file is not
- Sven> included from all places that use program_invocation_short_name.
+commit: http://git.buildroot.net/buildroot/commit/?id=01281da4573a2452bb17e3f968aa4f6a110180ad
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> Now I wonder if this would best be fixed by patching all affected
- Sven> source files in util-linux or if UCLIBC_HAS_PROGRAM_INVOCATION_NAME
- Sven> should be selected when util-linux is selected.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/util-linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-We got rid of the BR2_PROGRAM_INVOCATION option back on the 27/7, as the
-dependencies got quite messy and it only adds ~100 bytes to uClibc, so
-check your uclibc .config.
-
-We already pass --disable-nls unless you have locales enabled, so
-perhaps it needs similar handling as libglib2 for uClibc (select
-LIBINTIL if BR2_NEEDS_GETTEXT). Thomas also mentioned something about
-that, but I haven't done a locale build lately to test. Will do so now.
-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 570a1d1..d34759b 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -35,7 +35,7 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),,--disable-fsck) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),,--disable-libmount) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBUUID),,--disable-libuuid) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_UUID),,--disable-uuid) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_UUIDD),,--disable-uuidd) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),,--disable-libblkid) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_AGETTY),,--disable-agetty) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_CRAMFS),,--disable-cramfs) \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
