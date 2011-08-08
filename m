@@ -1,39 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 8 Aug 2011 18:56:47 +0200
-Subject: [Buildroot] [git commit] binutils: default to 2.21 on mips(el)
-Message-ID: <20110808170325.8355B8B856@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 08 Aug 2011 20:05:20 +0200
+Subject: [Buildroot] util-linux compile problems
+In-Reply-To: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Mon, 8 Aug 2011 13:58:08 +0200")
+References: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87fwlblqxr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92496e0ef01fbf697483f061f933b303bd8fa408
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Sven> Hi,
+ Sven> after updating buildroot we are getting compile errors from building
+ Sven> util-linux. First the linker was complaining that it couldn't find
+ Sven> libintl_gettext and related symbols. I was able to fix that by
+ Sven> passing --disable-nls to the configure script (patch follows).
+ Sven> Now I am getting errors all over the place because
+ Sven> program_invocation_short_name is not defined. This is correct
+ Sven> and there's a configure check to test for this. Based on this check
+ Sven> a fallback is provided by include/c.h. However this file is not
+ Sven> included from all places that use program_invocation_short_name.
 
-uClibc currently doesn't build on mips(el) with 2.21.1.
+ Sven> Now I wonder if this would best be fixed by patching all affected
+ Sven> source files in util-linux or if UCLIBC_HAS_PROGRAM_INVOCATION_NAME
+ Sven> should be selected when util-linux is selected.
 
-For details, see:
+We got rid of the BR2_PROGRAM_INVOCATION option back on the 27/7, as the
+dependencies got quite messy and it only adds ~100 bytes to uClibc, so
+check your uclibc .config.
 
-http://lists.uclibc.org/pipermail/uclibc/2011-March/045026.html
+We already pass --disable-nls unless you have locales enabled, so
+perhaps it needs similar handling as libglib2 for uClibc (select
+LIBINTIL if BR2_NEEDS_GETTEXT). Thomas also mentioned something about
+that, but I haven't done a locale build lately to test. Will do so now.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/binutils/Config.in.host |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index a867b18..f6e34ce 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,6 +2,7 @@ comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
-+	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel)
- 	default BR2_BINUTILS_VERSION_2_21_1
- 	help
- 	  Select the version of binutils you wish to use.
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
