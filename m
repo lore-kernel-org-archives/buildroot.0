@@ -1,36 +1,86 @@
-From: Dwi Sasongko Supriyadi <ruckuus@gmail.com>
-Date: Mon, 8 Aug 2011 11:06:30 +0700
-Subject: [Buildroot] Still can't boot 2011.05 system
-In-Reply-To: <000501cc5580$27ba08e0$772e1aa0$@com>
-References: <000501cc5580$27ba08e0$772e1aa0$@com>
-Message-ID: <CAG7bwALyLNoyGQzTqoA+vR1kBBTS+pkyLTc+UxaG4QhNK_cpEw@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Mon, 08 Aug 2011 09:10:29 +0200
+Subject: [Buildroot] [PATCH] ti-utils: bump version and clean up
+Message-ID: <4E3F8BE5.1030607@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 8, 2011 at 11:03 AM, Sam Nazarko <samnazarko@stmteam.com> wrote:
-> Hello,
->
->
->
-> I am unable to reply to my existing message because my notifications were
-> not set correctly with the mailing list, so I cannot reply to an unsent
-> message. A user suggested that my hang (which indeed does occur briefly
-> after Starting network..) was a Serial Port issue. I am not sure how to
-> resolve this. I have it set to the default of ttyS0 and I even set the
-> baudrate to ?kernel default? but this did not resolve the problem. I looked
-> at innitab and saw this line:
->
->
->
-> ttyS0::respawn:/sbin/getty -L ttys0 0 vt100 #GENERIC_SERIAL
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/ti-utils/ti-utils.mk |   54 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 40 insertions(+), 14 deletions(-)
 
-Should this be ttyS0 instead of ttys0 ?
-
-Have you tried with tty1 - ttyNN for example?
-
-
--- 
-Dwi Sasongko S
+Index: b/package/ti-utils/ti-utils.mk
+===================================================================
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -4,26 +4,52 @@
+ #
+ #############################################################
+ 
+-TI_UTILS_VERSION = fbceab8f228cff80fd29b830bb85a188c69def08
++TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
+ TI_UTILS_SITE = git://github.com/gxk/ti-utils.git
+ TI_UTILS_DEPENDENCIES = libnl
+-
++
+ define TI_UTILS_BUILD_CMDS
+-	$(MAKE1) NFSROOT="$(STAGING_DIR)" CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+-		-C $(@D) all
++ 	$(MAKE1) NFSROOT="$(STAGING_DIR)"	\
++ 	CC="$(TARGET_CC) $(TARGET_CFLAGS)	\
++ 	$(TARGET_LDFLAGS)" -C $(@D) all
+ endef
+-
++
+ define TI_UTILS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 $(@D)/calibrator \
+-		$(TARGET_DIR)/usr/bin/calibrator
+-	$(INSTALL) -m 0755 $(@D)/scripts/go.sh \
+-		$(TARGET_DIR)/usr/bin/go.sh
++ 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/
++ 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/scripts
++ 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/ini_files
++ 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/ini_files/127x
++ 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/ini_files/128x
++
++ 	$(INSTALL) -m 0755 $(@D)/calibrator					\
++ 		$(TARGET_DIR)/usr/bin/calibrator
++ 	$(INSTALL) -m 0755 $(@D)/scripts/go.sh					\
++		$(TARGET_DIR)/usr/share/ti-utils/scripts/go.sh
++
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/RFMD_S_3.5.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/RFMD_S_3.5.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_D_1.0.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_D_1.0.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_D_1.7.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_D_1.7.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_S_2.5.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_S_2.5.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_S_2.6.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_S_2.6.ini
++
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/RFMD_S_3.5.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/RFMD_S_3.5.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/TQS_D_1.0.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/TQS_D_1.0.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/TQS_D_1.7.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/TQS_D_1.7.ini
++ 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/TQS_S_2.6.ini			\
++ 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/TQS_S_2.6.ini
+ endef
+-
++
+ define TI_UTILS_UNINSTALL_TARGET_CMDS
+-	rm -f $(TARGET_DIR)/usr/bin/calibrator
+-	rm -f $(TARGET_DIR)/usr/bin/go.sh
++ 	rm -f $(TARGET_DIR)/usr/bin/calibrator
++ 	rm -fr $(TARGET_DIR)/usr/share/ti-utils
+ endef
+-
++
+ $(eval $(call GENTARGETS,package,ti-utils))
+-
