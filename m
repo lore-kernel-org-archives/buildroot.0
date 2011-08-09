@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:41 +0200
-Subject: [Buildroot] [PATCH 08/22] sdl_sound: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:48 +0200
+Subject: [Buildroot] [PATCH 15/22] gamin: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-8-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-15-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/sdl_sound/sdl_sound.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/gamin/gamin.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index 8f51e05..0a0fe5b 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -31,8 +31,7 @@ SDL_SOUND_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
--	--enable-static \
--	--program-prefix=''
-+	--enable-static
+diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
+index d691f60..326fd62 100644
+--- a/package/gamin/gamin.mk
++++ b/package/gamin/gamin.mk
+@@ -9,7 +9,7 @@ GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
+ GAMIN_AUTORECONF = YES
+ GAMIN_INSTALL_STAGING = YES
  
- # enable mmx for newer x86's
- ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
+-GAMIN_CONF_OPT = --program-prefix="" --disable-debug
++GAMIN_CONF_OPT = --disable-debug
+ 
+ # python support broken
+ GAMIN_CONF_OPT += --without-python
 -- 
 1.7.2.5
