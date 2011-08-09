@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:51 +0200
-Subject: [Buildroot] [PATCH 18/22] fuse: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:50 +0200
+Subject: [Buildroot] [PATCH 17/22] libargtable2: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-18-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-17-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/fuse/libfuse.mk |    3 +--
+ package/libargtable2/libargtable2.mk |    3 +--
  1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
-index 13a5194..45fb2f3 100644
---- a/package/fuse/libfuse.mk
-+++ b/package/fuse/libfuse.mk
-@@ -9,8 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
+diff --git a/package/libargtable2/libargtable2.mk b/package/libargtable2/libargtable2.mk
+index 5f388f9..4241e73 100644
+--- a/package/libargtable2/libargtable2.mk
++++ b/package/libargtable2/libargtable2.mk
+@@ -9,8 +9,7 @@ LIBARGTABLE2_SOURCE = argtable2-$(LIBARGTABLE2_VERSION).tar.gz
+ LIBARGTABLE2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/argtable/
  
- LIBFUSE_INSTALL_STAGING = YES
--LIBFUSE_CONF_OPT= --program-prefix="" \
--		--disable-nls \
-+LIBFUSE_CONF_OPT= --disable-nls \
- 		--disable-example \
+ LIBARGTABLE2_INSTALL_STAGING = YES
+-LIBARGTABLE2_CONF_OPT= --program-prefix="" \
+-		--disable-example \
++LIBARGTABLE2_CONF_OPT= --disable-example \
  		--disable-kernel-module \
  		--enable-lib \
+ 		--enable-util
 -- 
 1.7.2.5
