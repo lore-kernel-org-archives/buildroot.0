@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:46 +0200
-Subject: [Buildroot] [PATCH 13/22] ntfsprogs: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:42 +0200
+Subject: [Buildroot] [PATCH 09/22] lzop: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-13-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-9-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/ntfsprogs/ntfsprogs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/lzop/lzop.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/ntfsprogs/ntfsprogs.mk b/package/ntfsprogs/ntfsprogs.mk
-index 4557747..ea8a2a4 100644
---- a/package/ntfsprogs/ntfsprogs.mk
-+++ b/package/ntfsprogs/ntfsprogs.mk
-@@ -6,7 +6,7 @@
- NTFSPROGS_VERSION:=2.0.0
- NTFSPROGS_SOURCE:=ntfsprogs-$(NTFSPROGS_VERSION).tar.gz
- NTFSPROGS_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/linux-ntfs/
--NTFSPROGS_CONF_OPT:=--disable-gnome-vfs --program-prefix="" --disable-crypto
-+NTFSPROGS_CONF_OPT:=--disable-gnome-vfs --disable-crypto
- NTFSPROGS_INSTALL_STAGING:=yes
+diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
+index 796686a..e55c105 100644
+--- a/package/lzop/lzop.mk
++++ b/package/lzop/lzop.mk
+@@ -6,7 +6,6 @@
+ LZOP_VERSION:=1.02rc1
+ LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
+ LZOP_SITE:=http://www.lzop.org/download/
+-LZOP_CONF_OPT:=--program-prefix=""
+ LZOP_DEPENDENCIES:=lzo
  
- NTFSPROGS_BIN:=ntfscat ntfscluster ntfscmp ntfsfix ntfsinfo ntfsls
+ $(eval $(call AUTOTARGETS,package,lzop))
 -- 
 1.7.2.5
