@@ -1,35 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Aug 2011 17:02:09 +0200
-Subject: [Buildroot] [RFC] Using AsciiDoc for the Buildroot manual
-In-Reply-To: <8739hblq7q.fsf@macbook.be.48ers.dk>
-References: <cover.1312492948.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LV1MwAqHAYWPC3-W5-FN6MwgWwQmsUjmzLFUWV-mkwXmA@mail.gmail.com>
- <20110805083926.257f81bc@skate>
- <87ipqcmhf7.fsf@macbook.be.48ers.dk>
- <20110805102251.7a293244@skate>
- <87wrepkp28.fsf@macbook.be.48ers.dk>
- <8739hblq7q.fsf@macbook.be.48ers.dk>
-Message-ID: <20110809170209.6cb31763@skate>
+From: Pedro Sanchez <psanchez@fosstel.com>
+Date: Tue, 09 Aug 2011 10:05:45 -0400
+Subject: [Buildroot] linphone package
+Message-ID: <4E413EB9.6040504@fosstel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 08 Aug 2011 20:20:57 +0200,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+Hello,
 
-> Thomas, have you done any changes since you posted the patches? If so,
-> please repost.
+I'd like to get linphone-nox (console mode) packaged for buildroot. So 
+before I start working on it, is there some previous packaging work that 
+I could refer to? or is someone else already working on it?
 
-No, I haven't done any changes since I posted the patches.
+Thanks,
 
-N.B: I am on holidays, with an intermittent access to an Internet
-connection.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Pedro
