@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:40 +0200
-Subject: [Buildroot] [PATCH 07/22] sylpheed: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:51 +0200
+Subject: [Buildroot] [PATCH 18/22] fuse: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-7-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-18-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/sylpheed/sylpheed.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/fuse/libfuse.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index dbd2408..371341f 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -9,7 +9,7 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
- SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
- SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
+index 13a5194..45fb2f3 100644
+--- a/package/fuse/libfuse.mk
++++ b/package/fuse/libfuse.mk
+@@ -9,8 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
  
--SYLPHEED_CONF_OPT = --disable-gtkspell --program-prefix="" \
-+SYLPHEED_CONF_OPT = --disable-gtkspell \
-                     --includedir=$(STAGING_DIR)/usr/include
- 
- SYLPHEED_DEPENDENCIES = host-pkg-config libgtk2
+ LIBFUSE_INSTALL_STAGING = YES
+-LIBFUSE_CONF_OPT= --program-prefix="" \
+-		--disable-nls \
++LIBFUSE_CONF_OPT= --disable-nls \
+ 		--disable-example \
+ 		--disable-kernel-module \
+ 		--enable-lib \
 -- 
 1.7.2.5
