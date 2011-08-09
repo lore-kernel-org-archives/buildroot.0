@@ -1,39 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 9 Aug 2011 16:17:16 +0200
-Subject: [Buildroot] [git commit] util-linux: fix libintl linking if present
-Message-ID: <20110809141734.73A9B8B864@busybox.osuosl.org>
+Date: Tue, 09 Aug 2011 16:18:36 +0200
+Subject: [Buildroot] util-linux compile problems
+In-Reply-To: <1312883451.1593.3.camel@sven> (Sven Neumann's message of "Tue,
+ 09 Aug 2011 11:50:49 +0200")
+References: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com>
+ <87fwlblqxr.fsf@macbook.be.48ers.dk>
+ <87y5z3k92i.fsf@macbook.be.48ers.dk> <1312883451.1593.3.camel@sven>
+Message-ID: <87hb5qk6rn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8273c4272b1b8661a03c7cabdf4c8d710607049
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-The configure script correctly detects presence of libintl, but it forgets
-to link against it, breaking the build.
+ Sven> Well, it works for me in that configuration as well. But it
+ Sven> doesn't work for the configuration that has locale support
+ Sven> enabled and gettext/libintl:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/util-linux/util-linux.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ Sven> BR2_ENABLE_LOCALE=y
+ Sven> BR2_NEEDS_GETTEXT=y
+ Sven> BR2_NEEDS_GETTEXT_IF_LOCALE=y
+ Sven> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+ Sven> BR2_PACKAGE_GETTEXT=y
+ Sven> BR2_PACKAGE_LIBINTL=y
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index d34759b..dd6ee5c 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -25,6 +25,10 @@ else
- UTIL_LINUX_CONF_OPT += --without-ncurses
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBINTL),y)
-+UTIL_LINUX_DEPENDENCIES += libintl
-+UTIL_LINUX_MAKE_OPT += LIBS=-lintl
-+endif
- 
- #############################################
- #
+ Sven> I've tried the following patch, but it doesn't seem to help:
+
+Ahh, ok - That's easy to fix, similar to how we do it E.G. with
+avahi. I've committed a fix doing that.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
