@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:48 +0200
-Subject: [Buildroot] [PATCH 15/22] gamin: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:47 +0200
+Subject: [Buildroot] [PATCH 14/22] lighttpd: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-15-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-14-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/gamin/gamin.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/lighttpd/lighttpd.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
-index d691f60..326fd62 100644
---- a/package/gamin/gamin.mk
-+++ b/package/gamin/gamin.mk
-@@ -9,7 +9,7 @@ GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
- GAMIN_AUTORECONF = YES
- GAMIN_INSTALL_STAGING = YES
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 45941eb..ba5f5cf 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -11,7 +11,6 @@ LIGHTTPD_CONF_OPT = \
+ 	--libdir=/usr/lib/lighttpd \
+ 	--libexecdir=/usr/lib \
+ 	--localstatedir=/var \
+-	--program-prefix="" \
+ 	$(if $(BR2_LARGEFILE),,--disable-lfs)
  
--GAMIN_CONF_OPT = --program-prefix="" --disable-debug
-+GAMIN_CONF_OPT = --disable-debug
- 
- # python support broken
- GAMIN_CONF_OPT += --without-python
+ ifeq ($(BR2_PACKAGE_LIGHTTPD_OPENSSL),y)
 -- 
 1.7.2.5
