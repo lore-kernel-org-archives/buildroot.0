@@ -1,7 +1,7 @@
 From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Tue,  9 Aug 2011 17:08:17 +0200
+Date: Tue,  9 Aug 2011 17:10:19 +0200
 Subject: [Buildroot] [PATCH] barebox: bump version
-Message-ID: <1312902497-8807-1-git-send-email-plagnioj@jcrosoft.com>
+Message-ID: <1312902619-9074-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,7 +22,7 @@ index f3e769f..e88f577 100644
  #############################################################
  
 -BAREBOX_VERSION:=2011.05.0
-+BAREBOX_VERSION:=2011.07.0
++BAREBOX_VERSION:=2011.08.0
  BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
  BAREBOX_SITE:=http://www.barebox.org/download/
  BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
