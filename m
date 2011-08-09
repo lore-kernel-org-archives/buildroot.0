@@ -1,24 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 09 Aug 2011 17:21:51 +0200
-Subject: [Buildroot] linphone package
-In-Reply-To: <4E413EB9.6040504@fosstel.com> (Pedro Sanchez's message of "Tue, 
- 09 Aug 2011 10:05:45 -0400")
-References: <4E413EB9.6040504@fosstel.com>
-Message-ID: <878vr2k3u8.fsf@macbook.be.48ers.dk>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Tue,  9 Aug 2011 17:08:17 +0200
+Subject: [Buildroot] [PATCH] barebox: bump version
+Message-ID: <1312902497-8807-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pedro" == Pedro Sanchez <psanchez@fosstel.com> writes:
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+---
+ boot/barebox/barebox.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Pedro> Hello,
- Pedro> I'd like to get linphone-nox (console mode) packaged for buildroot. So
- Pedro> before I start working on it, is there some previous packaging work
- Pedro> that I could refer to? or is someone else already working on it?
-
-Not that I'm aware of.
-
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index f3e769f..e88f577 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BAREBOX_VERSION:=2011.05.0
++BAREBOX_VERSION:=2011.07.0
+ BAREBOX_SOURCE:=barebox-$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE:=http://www.barebox.org/download/
+ BAREBOX_DIR:=$(BUILD_DIR)/barebox-$(BAREBOX_VERSION)
 -- 
-Bye, Peter Korsgaard
+1.7.5.4
