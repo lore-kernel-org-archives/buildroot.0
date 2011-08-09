@@ -1,105 +1,89 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 09 Aug 2011 11:50:49 +0200
-Subject: [Buildroot] util-linux compile problems
-In-Reply-To: <87y5z3k92i.fsf@macbook.be.48ers.dk>
-References: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com>
- <87fwlblqxr.fsf@macbook.be.48ers.dk> <87y5z3k92i.fsf@macbook.be.48ers.dk>
-Message-ID: <1312883451.1593.3.camel@sven>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 09 Aug 2011 13:28:54 +0200
+Subject: [Buildroot] [PATCH] ti-utils: bump version and clean up
+In-Reply-To: <4E3F8BE5.1030607@visionsystems.de> (Yegor Yefremov's message of
+ "Mon, 08 Aug 2011 09:10:29 +0200")
+References: <4E3F8BE5.1030607@visionsystems.de>
+Message-ID: <87liv2kemh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-On Mon, 2011-08-08 at 21:16 +0200, Peter Korsgaard wrote:
-> >>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
-> 
-> Hi,
-> 
->  Peter> We already pass --disable-nls unless you have locales enabled,
->  Peter> so perhaps it needs similar handling as libglib2 for uClibc
->  Peter> (select LIBINTIL if BR2_NEEDS_GETTEXT). Thomas also mentioned
->  Peter> something about that, but I haven't done a locale build lately
->  Peter> to test. Will do so now.
-> 
-> It seems to work fine here with:
-> 
-> BR2_arm=y
-> BR2_arm926t=y
-> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-> BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-> BR2_PACKAGE_UTIL_LINUX=y
-> BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-> BR2_PACKAGE_UTIL_LINUX_FSCK=y
-> BR2_PACKAGE_UTIL_LINUX_LIBMOUNT=y
-> BR2_PACKAGE_UTIL_LINUX_UUIDD=y
-> BR2_PACKAGE_UTIL_LINUX_AGETTY=y
-> BR2_PACKAGE_UTIL_LINUX_CRAMFS=y
-> BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT=y
-> BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT=y
-> BR2_PACKAGE_UTIL_LINUX_FALLOCATE=y
-> BR2_PACKAGE_UTIL_LINUX_UNSHARE=y
-> BR2_PACKAGE_UTIL_LINUX_RENAME=y
-> BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS=y
-> BR2_PACKAGE_UTIL_LINUX_WALL=y
-> BR2_PACKAGE_UTIL_LINUX_ARCH=y
-> BR2_PACKAGE_UTIL_LINUX_INIT=y
-> BR2_PACKAGE_UTIL_LINUX_KILL=y
-> BR2_PACKAGE_UTIL_LINUX_LAST=y
-> BR2_PACKAGE_UTIL_LINUX_MESG=y
-> BR2_PACKAGE_UTIL_LINUX_PARTX=y
-> BR2_PACKAGE_UTIL_LINUX_RAW=y
-> BR2_PACKAGE_UTIL_LINUX_RESET=y
-> BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
-> BR2_PACKAGE_UTIL_LINUX_WRITE=y
-> 
-> E.G. locale support and all util-linux options enabled, but no
-> gettext/libintl.
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Well, it works for me in that configuration as well. But it doesn't work
-for the configuration that has locale support enabled and
-gettext/libintl:
+Thanks, committed with some fixes (see below)
 
+ Yegor> -TI_UTILS_VERSION = fbceab8f228cff80fd29b830bb85a188c69def08
+ Yegor> +TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
+ Yegor>  TI_UTILS_SITE = git://github.com/gxk/ti-utils.git
+ Yegor>  TI_UTILS_DEPENDENCIES = libnl
+ Yegor> -
+ Yegor> +
 
-BR2_ENABLE_LOCALE=y
-BR2_NEEDS_GETTEXT=y
-BR2_NEEDS_GETTEXT_IF_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_PACKAGE_GETTEXT=y
-BR2_PACKAGE_LIBINTL=y
+You have a lot of whitespace damage where you have added a space at the
+beginning of each line.
 
+ Yegor>  define TI_UTILS_BUILD_CMDS
+ Yegor> -	$(MAKE1) NFSROOT="$(STAGING_DIR)" CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+ Yegor> -		-C $(@D) all
+ Yegor> + 	$(MAKE1) NFSROOT="$(STAGING_DIR)"	\
+ Yegor> + 	CC="$(TARGET_CC) $(TARGET_CFLAGS)	\
+ Yegor> + 	$(TARGET_LDFLAGS)" -C $(@D) all
 
-I've tried the following patch, but it doesn't seem to help:
+I prefer to indent the followup lines (like you do below) to make it
+clear that it is part of the previous statement.
 
+ Yegor>  endef
+ Yegor> -
+ Yegor> +
+ Yegor>  define TI_UTILS_INSTALL_TARGET_CMDS
+ Yegor> -	$(INSTALL) -m 0755 $(@D)/calibrator \
+ Yegor> -		$(TARGET_DIR)/usr/bin/calibrator
+ Yegor> -	$(INSTALL) -m 0755 $(@D)/scripts/go.sh \
+ Yegor> -		$(TARGET_DIR)/usr/bin/go.sh
+ Yegor> + 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/
+ Yegor> + 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/scripts
+ Yegor> + 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/ini_files
+ Yegor> + 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/ini_files/127x
+ Yegor> + 	mkdir -p $(TARGET_DIR)/usr/share/ti-utils/ini_files/128x
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 816130d..ed0ba8b 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_UTIL_LINUX
-        bool "util-linux"
-+       select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+       select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
-        depends on BR2_LARGEFILE
-        depends on BR2_USE_WCHAR
-        help
-diff --git a/package/util-linux/util-linux.mk
-b/package/util-linux/util-linux.mk
-index d34759b..c124256 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -9,7 +9,7 @@ UTIL_LINUX_SOURCE =
-util-linux-$(UTIL_LINUX_VERSION).tar.bz2
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v
-$(UTIL_LINUX_VER
- UTIL_LINUX_AUTORECONF = YES
- UTIL_LINUX_INSTALL_STAGING = YES
--UTIL_LINUX_DEPENDENCIES = host-pkg-config
-+UTIL_LINUX_DEPENDENCIES = host-pkg-config $(if
-$(BR2_NEEDS_GETTEXT_IF_LOCALE),g
- 
- UTIL_LINUX_CONF_OPT += --disable-rpath --disable-makeinstall-chown
- 
+You can use install -D instead of these explicit mkdirs.
+
+ Yegor> +
+ Yegor> + 	$(INSTALL) -m 0755 $(@D)/calibrator					\
+ Yegor> + 		$(TARGET_DIR)/usr/bin/calibrator
+ Yegor> + 	$(INSTALL) -m 0755 $(@D)/scripts/go.sh					\
+ Yegor> +		$(TARGET_DIR)/usr/share/ti-utils/scripts/go.sh
+ Yegor> +
+
+Please keep lines < 80 chars.
+
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/RFMD_S_3.5.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/RFMD_S_3.5.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_D_1.0.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_D_1.0.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_D_1.7.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_D_1.7.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_S_2.5.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_S_2.5.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/127x/TQS_S_2.6.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/127x/TQS_S_2.6.ini
+ Yegor> +
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/RFMD_S_3.5.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/RFMD_S_3.5.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/TQS_D_1.0.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/TQS_D_1.0.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/TQS_D_1.7.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/TQS_D_1.7.ini
+ Yegor> + 	$(INSTALL) -m 0644 $(@D)/ini_files/128x/TQS_S_2.6.ini			\
+ Yegor> + 		$(TARGET_DIR)/usr/share/ti-utils/ini_files/128x/TQS_S_2.6.ini
+
+Instead of all this we can just do:
+        cp -r $(@D)/ini_files $(TARGET_DIR)/usr/share/ti-utils
+
+-- 
+Bye, Peter Korsgaard
