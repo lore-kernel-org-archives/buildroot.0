@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:49 +0200
-Subject: [Buildroot] [PATCH 16/22] ntfs-3g: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:52 +0200
+Subject: [Buildroot] [PATCH 19/22] dbus: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-16-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-19-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/ntfs-3g/ntfs-3g.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/dbus/dbus.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 796e269..baabff2 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -7,7 +7,7 @@
- NTFS_3G_VERSION = 2010.10.2
- NTFS_3G_SOURCE = ntfs-3g-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
--NTFS_3G_CONF_OPT = --disable-ldconfig --program-prefix=""
-+NTFS_3G_CONF_OPT = --disable-ldconfig
- NTFS_3G_INSTALL_STAGING = YES
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 7c2bddd..d693039 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -12,8 +12,7 @@ DBUS_INSTALL_TARGET = YES
+ DBUS_DEPENDENCIES = host-pkg-config
  
- $(eval $(call AUTOTARGETS,package,ntfs-3g))
+ DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+-DBUS_CONF_OPT = --program-prefix="" \
+-		--with-dbus-user=dbus \
++DBUS_CONF_OPT = --with-dbus-user=dbus \
+ 		--disable-tests \
+ 		--disable-asserts \
+ 		--enable-abstract-sockets \
 -- 
 1.7.2.5
