@@ -1,145 +1,186 @@
 From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Tue,  9 Aug 2011 19:39:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package: add libftdi support
-Message-ID: <1312911561-23942-1-git-send-email-plagnioj@jcrosoft.com>
+Date: Tue,  9 Aug 2011 19:39:21 +0200
+Subject: [Buildroot] [PATCH 2/2] package: add openocd support
+In-Reply-To: <1312911561-23942-1-git-send-email-plagnioj@jcrosoft.com>
+References: <1312911561-23942-1-git-send-email-plagnioj@jcrosoft.com>
+Message-ID: <1312911561-23942-2-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-needed by openocd
+with only the following Adapters
+ - FTDI FT2xxx/FT4xxx
+ - J-Link (Segger and Atmel SAM-ICE)
+ - Versaloon-Link JTAG Adapter
 
 Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
 Cc: Nicolas Ferre <nicolas.ferre@atmel.com>
 Cc: Patrice Vilchez <patrice.vilchez@atmel.com>
 ---
  package/Config.in                                  |    1 +
- package/libftdi/Config.in                          |   18 ++++++++
- .../libftdi/libftdi-0.19-01_pkgconfig_libusb.patch |   47 ++++++++++++++++++++
- package/libftdi/libftdi.mk                         |   23 ++++++++++
- 4 files changed, 89 insertions(+), 0 deletions(-)
- create mode 100644 package/libftdi/Config.in
- create mode 100644 package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
- create mode 100644 package/libftdi/libftdi.mk
+ package/openocd/Config.in                          |   29 +++++++++++++++++
+ ...s-compilation-host-libsub-was-used-before.patch |   33 ++++++++++++++++++++
+ package/openocd/openocd-force_jimtcl_static.patch  |   22 +++++++++++++
+ package/openocd/openocd.mk                         |   32 +++++++++++++++++++
+ 5 files changed, 117 insertions(+), 0 deletions(-)
+ create mode 100644 package/openocd/Config.in
+ create mode 100644 package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+ create mode 100644 package/openocd/openocd-force_jimtcl_static.patch
+ create mode 100644 package/openocd/openocd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7112e05..1747620 100644
+index 1747620..299c004 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -301,6 +301,7 @@ menu "Hardware handling"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
-+source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
- source "package/libusb/Config.in"
-diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+@@ -190,6 +190,7 @@ source "package/memtester/Config.in"
+ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
++source "package/openocd/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/rng-tools/Config.in"
+ source "package/sdparm/Config.in"
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
 new file mode 100644
-index 0000000..6cedc34
+index 0000000..bf92819
 --- /dev/null
-+++ b/package/libftdi/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBFTDI
-+	bool "libftdi"
++++ b/package/openocd/Config.in
+@@ -0,0 +1,29 @@
++menuconfig BR2_PACKAGE_OPENOCD
++	bool "OpenOCD"
 +	select BR2_PACKAGE_LIBUSB
 +	select BR2_PACKAGE_LIBUSB_COMPAT
 +	help
-+	  Userspace access to FTDI USB interface chips
++	  OpenOCD - Open On-Chip Debugger
 +
-+	  http://www.intra2net.com/en/developer/libftdi/index.php
++	  http://openocd.berlios.de/web/
 +
-+if BR2_PACKAGE_LIBFTDI
++if BR2_PACKAGE_OPENOCD
 +
-+config BR2_PACKAGE_LIBTFDI_CPP
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	bool "C++ Binding"
++comment "Adapters"
++
++config BR2_PACKAGE_OPENOCD_FT2XXX
++	bool "FT2xxx/FT4xxx Based JTAG Programmer"
++	select BR2_PACKAGE_LIBFTDI
 +	help
-+	  C++ Binding
++	  Enable building support for FT2232 based devices
++	  using the libftdi driver, opensource alternate of FTD2XX
 +
-+endif # BR2_PACKAGE_LIBFTDI
-diff --git a/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch b/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
++config BR2_PACKAGE_OPENOCD_JLINK
++	bool "Segger J-Link JTAG Programmer"
++	help
++	  Segger J-Link JTAG Programmer and clone such as Atmel SAM-ICE
++
++config BR2_PACKAGE_OPENOCD_VSLLINK
++	bool "Versaloon-Link JTAG Programmr"
++
++endif # BR2_PACKAGE_OPENOCD
+diff --git a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch b/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
 new file mode 100644
-index 0000000..389291d
+index 0000000..99ff04e
 --- /dev/null
-+++ b/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
-@@ -0,0 +1,47 @@
-+---
-+ configure.in |   35 +++++++++++------------------------
-+ 1 file changed, 11 insertions(+), 24 deletions(-)
++++ b/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+@@ -0,0 +1,33 @@
++From 3728c4af7f6303ccedab56ec220797f8f290580e Mon Sep 17 00:00:00 2001
++From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
++Date: Wed, 10 Aug 2011 00:17:29 +0800
++Subject: [PATCH] fix cross compilation: host libsub was used before
 +
++tested in buildroot
++
++Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
++---
++ configure.in |    7 +++++--
++ 1 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/configure.in b/configure.in
++index dfa1e8f..cfe2218 100644
 +--- a/configure.in
 ++++ b/configure.in
-+@@ -8,30 +8,17 @@
-+ AM_PROG_LIBTOOL
-+ AC_PROG_CXX
++@@ -1046,8 +1046,11 @@ build_usb=no
++ if test $build_jlink = yes -o $build_vsllink = yes -o $build_usbprog = yes -o \
++   $build_rlink = yes -o $build_ulink = yes -o $build_armjtagew = yes
++ then
++-  AC_CHECK_HEADERS([usb.h],[],
++-  [AC_MSG_ERROR([usb.h is required to build some OpenOCD driver(s)])])
+++  dnl check for libusb
+++  PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
+++  CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+++  LDFLAGS="$LFFLAGS $LIBUSB_LDFLAGS"
+++  LIBS="$LIBS $LIBUSB_LIBS"
++   build_usb=yes
++ fi
 + 
-+-dnl check for libusb-config
-+-AC_CHECK_TOOL(HAVELIBUSB, libusb-config)
-+-
-+-if test ! -z "$HAVELIBUSB"; then
-+-   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
-+-   LIBUSB_LIBS=`$HAVELIBUSB --libs`
-+-
-+-   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-+-   LIBS="$LIBS $LIBUSB_LIBS"
-+-else
-+-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation.])
-+-fi
-+-
-+-dnl check for version of libusb
-+-AC_MSG_CHECKING([if libusb version is >= 0.1.7])
-+-libusb_version_needed="1007"
-+-libusb_version=`$HAVELIBUSB --version | sed -e "s/libusb //" | awk 'BEGIN { FS = "."; } { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
-++dnl check for libusb
-++PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
-++CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-++LIBS="$LIBS $LIBUSB_LIBS"
-+ 
-+-if test $libusb_version -lt $libusb_version_needed; then
-+-   AC_MSG_RESULT(no)
-+-   AC_MSG_ERROR([*** libusb is too old ($libusb_version). You need a libusb installation newer or equal to 0.1.7.])
-+-else
-+-   AC_MSG_RESULT(yes)
-+-fi
-++dnl Check for recent pkg-config which supports Requires.private
-++case `$PKG_CONFIG --version` in
-++0.?|0.1[0-7]) PKGCONFIG_REQUIRES="Requires"; ;;
-++*) PKGCONFIG_REQUIRES="Requires.private"; ;;
-++esac
-++AC_SUBST(PKGCONFIG_REQUIRES)
-+ 
-+ ENABLE_ASYNC_MODE=0
-+ AC_ARG_WITH(async-mode,
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
++-- 
++1.7.5.4
++
+diff --git a/package/openocd/openocd-force_jimtcl_static.patch b/package/openocd/openocd-force_jimtcl_static.patch
 new file mode 100644
-index 0000000..315fe16
+index 0000000..80446c8
 --- /dev/null
-+++ b/package/libftdi/libftdi.mk
-@@ -0,0 +1,23 @@
++++ b/package/openocd/openocd-force_jimtcl_static.patch
+@@ -0,0 +1,22 @@
++---
++ jimtcl/auto.def |    5 -----
++ 1 file changed, 5 deletions(-)
++
++Index: b/jimtcl/auto.def
++===================================================================
++--- a/jimtcl/auto.def
+++++ b/jimtcl/auto.def
++@@ -148,13 +148,8 @@ if {[opt-bool references]} {
++     msg-result "Enabling references"
++     define JIM_REFERENCES
++ }
++-if {[opt-bool shared with-jim-shared]} {
++-    msg-result "Building shared library"
++-    define JIM_LIBTYPE shared
++-} else {
++     msg-result "Building static library"
++     define JIM_LIBTYPE static
++-}
++ if {[opt-bool install-jim]} {
++     define install_jim 1
++ } else {
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+new file mode 100644
+index 0000000..74585d3
+--- /dev/null
++++ b/package/openocd/openocd.mk
+@@ -0,0 +1,32 @@
 +#############################################################
 +#
-+# libftdi
++# openocd
 +#
 +#############################################################
-+LIBFTDI_VERSION = 0.19
-+LIBFTDI_SOURCE = libftdi-$(LIBFTDI_VERSION).tar.gz
-+LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download/
-+LIBFTDI_DEPENDENCIES = libusb-compat libusb
-+LIBFTDI_INSTALL_STAGING = YES
++OPENOCD_VERSION:=0.5.0
++OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
++OPENOCD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/openocd/openocd/$(OPENOCD_VERSION)
 +
-+LIBFTDI_AUTORECONF = YES
++OPENOCD_AUTORECONF = YES
++OPENOCD_CONF_OPT = \
++	--oldincludedir=$(STAGING_DIR)/usr/include \
++	--includedir=$(STAGING_DIR)/usr/include \
++	--disable-doxygen-html \
++	--enable-dummy
 +
-+LIBFDTI_CONF_OPT = --without-examples
++OPENOCD_DEPENDENCIES = libusb-compat
 +
-+# configure detect it automaticaly so we need to force it
-+ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
-+LIBFDTI_CONF_OPT += --enable-libftdipp
-+else
-+LIBFDTI_CONF_OPT += --disable-libftdipp
++# Adapters
++ifeq ($(BR2_PACKAGE_OPENOCD_FT2XXX),y)
++OPENOCD_CONF_OPT += --enable-ft2232_libftdi
 +endif
 +
-+$(eval $(call AUTOTARGETS,package,libftdi))
++ifeq ($(BR2_PACKAGE_OPENOCD_JLINK),y)
++OPENOCD_CONF_OPT += --enable-jlink
++endif
++
++ifeq ($(BR2_PACKAGE_OPENOCD_VSLLINK),y)
++OPENOCD_CONF_OPT += --enable-vsllink
++endif
++
++$(eval $(call AUTOTARGETS,package,openocd))
 -- 
 1.7.5.4
