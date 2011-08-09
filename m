@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 10 Aug 2011 00:12:45 +0200
-Subject: [Buildroot] [PATCH 12/22] mysql_client: remove --program-prefix
+Date: Wed, 10 Aug 2011 00:12:41 +0200
+Subject: [Buildroot] [PATCH 08/22] sdl_sound: remove --program-prefix
 In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1312927975-15543-12-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1312927975-15543-8-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- package/mysql_client/mysql_client.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/sdl_sound/sdl_sound.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index 9cd088c..49a7033 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -21,7 +21,6 @@ MYSQL_CLIENT_CONF_ENV = \
- 	mysql_cv_new_rl_interface=yes
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 8f51e05..0a0fe5b 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -31,8 +31,7 @@ SDL_SOUND_CONF_OPT = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
+ 	--disable-sdltest \
+-	--enable-static \
+-	--program-prefix=''
++	--enable-static
  
- MYSQL_CLIENT_CONF_OPT = \
--	--program-prefix="" \
- 	--without-ndb-binlog \
- 	--without-server \
- 	--without-docs \
+ # enable mmx for newer x86's
+ ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
 -- 
 1.7.2.5
