@@ -1,31 +1,31 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Wed, 10 Aug 2011 19:25:20 +0200
-Subject: [Buildroot] BUG: no https support with midori
-Message-ID: <20110810192520.7524c2ab@gmail.com>
+From: Heiko Helmle <helman@gmx.net>
+Date: Wed, 10 Aug 2011 21:18:29 +0200
+Subject: [Buildroot] host-libxml-parser-perl 2.36 won't install
+Message-ID: <20110810191829.101270@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Midori needs libsoup to be compiled with SSL support, otherwise no
-https support.
+Hello List,
 
-libsoup 2.32.2 needs libgnutls and libgcrypt, I have enabled them in
-my .config, but libsoup refuses to compile :
+another little problem: host-libxml-parser-perl compiles okay but won't install correctly:
 
-checking pkg-config is at least version 0.16... yes
-checking for GLIB - version >= 2.21.3... yes (version 2.28.6)
-checking for XML... yes
-checking for Win32... no
-checking for gmtime_r... yes
-checking for mmap... yes
-checking for socket... yes
-checking for LIBGNUTLS... yes
-checking for libgcrypt-config... no
-checking for LIBGCRYPT - version >= 1.2.0... no
-configure: error: Could not configure SSL support.
-Pass "--disable-ssl" if you really want to build without SSL support
-make: ***
-[/home/fred/buildroot/output/build/libsoup-2.32.2/.stamp_configured]
-Erreur 1
+---
+>>> host-libxml-parser-perl 2.36 Installing to host directory
+PATH=/home/hel/buildroot/git/xtest/host/bin:/home/hel/buildroot/git/xtest/host/usr/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/home/hel/bin LD_LIBRARY_PATH="/home/hel/buildroot/git/xtest/host/usr/lib:" PKG_CONFIG="/home/hel/buildroot/git/xtest/host/usr/bin/pkg-config" PKG_CONFIG_LIBDIR="/home/hel/buildroot/git/xtest/host/usr/lib/pkgconfig" PERLLIB="/home/hel/buildroot/git/xtest/host/usr/lib/perl" /usr/bin/make -j5 -C /home/hel/buildroot/git/xtest/build/host-libxml-parser-perl-2.36 install
+Appending installation info to /home/hel/buildroot/git/xtest/host/usr/lib64/perl5/perllocal.pod
+Files found in blib/arch: installing files in blib/lib into architecture dependent library tree
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ERROR: Can't create '/usr/local/lib64/perl5/XML'
+mkdir /usr/local/lib64/perl5/XML: Keine Berechtigung at /usr/share/perl5/ExtUtils/Install.pm line 483
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ at -e line 1
+make[2]: *** [pure_site_install] Fehler 13
+make[1]: *** [/home/hel/buildroot/git/xtest/build/host-libxml-parser-perl-2.36/.stamp_host_installed] Fehler 2
+make: *** [all] Fehler 2
+---
+
+The problem seems to be in the generated Makefile. it sets:
