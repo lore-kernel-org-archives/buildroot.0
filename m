@@ -1,80 +1,58 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Wed, 10 Aug 2011 23:30:55 +0200
-Subject: [Buildroot] BUG: no https support with midori
-In-Reply-To: <1313004810.8441.3.camel@bender>
-References: <20110810192520.7524c2ab@gmail.com>
- <1313004810.8441.3.camel@bender>
-Message-ID: <20110810233055.596f53cb@gmail.com>
+From: Dominic Newton <dominic.newton@in-2-technology.co.uk>
+Date: Wed, 10 Aug 2011 22:48:27 +0100
+Subject: [Buildroot] Python standard library problems
+In-Reply-To: <4E42D99C.7080806@fosstel.com>
+References: <4E42D99C.7080806@fosstel.com>
+Message-ID: <4E42FCAB.2070609@in-2-technology.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sven,
+Hi,
 
-Sorry I forgot to tell, but I did remove the --disable-ssl configuration
-directive in libsoup.mk
+What version of gcc are you using and what is your target? I have python 
+fully functional on x86 and arm platforms with latest buildroot and use 
+all 3 modules you are having problems with.
 
-As shown below, configure fails to find the libgcrypt library...
+One thing that can help is the setup.py file in the python build 
+directory manages the build of the compiled modules like _socket, and 
+the output from this file may give a clue on any missing dependencies or 
+include files.
 
-Does it work for you? (Maybe I have to delete my output directory and
-rebuild again from scratch)
+Regards
 
-Thanks
+Dominic Newton
+In 2 Technology Ltd.
 
-
-Le Wed, 10 Aug 2011 21:33:29 +0200,
-Sven Neumann <s.neumann@raumfeld.com> a ?crit :
-
-> On Wed, 2011-08-10 at 19:25 +0200, Frederic Bassaler wrote:
-> > Midori needs libsoup to be compiled with SSL support, otherwise no
-> > https support.
-> > 
-> > libsoup 2.32.2 needs libgnutls and libgcrypt, I have enabled them in
-> > my .config, but libsoup refuses to compile :
-> > 
-> > checking pkg-config is at least version 0.16... yes
-> > checking for GLIB - version >= 2.21.3... yes (version 2.28.6)
-> > checking for XML... yes
-> > checking for Win32... no
-> > checking for gmtime_r... yes
-> > checking for mmap... yes
-> > checking for socket... yes
-> > checking for LIBGNUTLS... yes
-> > checking for libgcrypt-config... no
-> > checking for LIBGCRYPT - version >= 1.2.0... no
-> > configure: error: Could not configure SSL support.
-> > Pass "--disable-ssl" if you really want to build without SSL support
-> > make: ***
-> > [/home/fred/buildroot/output/build/libsoup-2.32.2/.stamp_configured]
-> > Erreur 1
-> 
-> I've submitted a patch a while ago that adds optional SSL support to
-> libsoup (SSL support is enabled if gnutls is available). Here's the
-> patch again for you to try:
-> 
-> diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-> index 6ec0882..697f426 100644
-> --- a/package/libsoup/libsoup.mk
-> +++ b/package/libsoup/libsoup.mk
-> @@ -19,9 +19,15 @@ endif
->  LIBSOUP_CONF_OPT = \
->         --disable-explicit-deps \
->         --disable-glibtest      \
-> -       --disable-ssl           \
->         --without-gnome
->  
->  LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext
-> libintl) host-pkg-config host-libglib2 libglib2 libxml2
->  
-> +ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> +LIBSOUP_DEPENDENCIES += gnutls
-> +LIBSOUP_CONF_OPT += --enable-ssl
-> +else
-> +LIBSOUP_CONF_OPT += --disable-ssl
-> +endif
-> +
->  $(eval $(call AUTOTARGETS,package,libsoup))
-> 
-> 
+On 10/08/2011 20:18, Pedro Sanchez wrote:
+> Hello,
+>
+> I'm testing Python 2.7.1 as available in current BR and I find that I
+> can't load several standard modules that otherwise seem to be present.
+>
+> # python
+> Python 2.7.1 (r271:86832, Aug 4 2011, 16:19:27)
+> [GCC 4.5.2] on linux2
+> Type "help", "copyright", "credits" or "license" for more information.
+>  >>> import socket
+> Traceback (most recent call last):
+> File "<stdin>", line 1, in <module>
+> File "/usr/lib/python2.7/socket.py", line 47, in <module>
+> ImportError: No module named _socket
+>
+>  >>> import fcntl
+> Traceback (most recent call last):
+> File "<stdin>", line 1, in <module>
+> ImportError: No module named fcntl
+>
+>  >>> from subprocess import Popen, PIPE
+> Traceback (most recent call last):
+> File "<stdin>", line 1, in <module>
+> File "/usr/lib/python2.7/subprocess.py", line 428, in <module>
+> ImportError: No module named select
+>
+>
+> Any ideas what's going on? This is on BR from git.
+>
