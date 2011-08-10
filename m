@@ -1,51 +1,83 @@
-From: =?ISO-8859-1?Q?Thiago_A=2E_Corr=EAa?= <thiago.correa@gmail.com>
-Date: Tue, 9 Aug 2011 22:39:19 -0300
-Subject: [Buildroot] Out of tree kernel sources?
-In-Reply-To: <4E419F65.8060604@netscape.net>
-References: <4E419F65.8060604@netscape.net>
-Message-ID: <CAExDhvZHSpLzM42vHAxoZkGpP44StxmS2aOitHAyzERWiO5fAw@mail.gmail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 10 Aug 2011 10:41:06 +0200
+Subject: [Buildroot] [PATCH 2/3] new package: gupnp
+In-Reply-To: <1312965667-15157-1-git-send-email-s.neumann@raumfeld.com>
+References: <1312965667-15157-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1312965667-15157-2-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ulrich,
+GUPnP implements the UPnP specification.
 
-     If I'm not mistaken, you are looking for O=/some/folder argument.
-     I've only tried it once, so forgive me if I'm not remembering it
-correctly. I'm almost sure make help will tell you. Could try it to be
-sure if I wasn't on the road with such a slow notebook :(
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/Config.in       |    1 +
+ package/gupnp/Config.in |   17 +++++++++++++++++
+ package/gupnp/gupnp.mk  |   17 +++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100755 package/gupnp/Config.in
+ create mode 100755 package/gupnp/gupnp.mk
 
-Kind Regards,
-     Thiago A. Correa
-
-On Tue, Aug 9, 2011 at 5:58 PM, Ulrich Prinz <uprinz2@netscape.net> wrote:
-> Hello to the list!
->
-> Im the new guy here, restarting into buildroot again after a few years
-> pause.
->
-> Congrats for the big improvements that where done. Started a simple
-> trial for a AT91SAM9 device and it worked out of the box. Great!
->
-> But I have a question for out of tree source code for the kernel.
->
-> I know that you can call the kernels make by passing SRC1DIR= and
-> SRC2DIR= arguments to prefer these source code directories above the
-> kernels own ones. This is very comfortable as you can simply copy the to
-> be modified kernel code there and do whatever you want. So all your
-> changes collect there and you do not have to search for what you did
-> yesterday. And you don't have to have a clean kernel copy for diff or to
-> mess with gis/svn/cvs.
->
-> But I cannot find any hint if this is an option in buildroot. Have I
-> missed it?
->
-> Thanks in advance and best regards
-> Ulrich
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/Config.in b/package/Config.in
+index 5d6b402..c168cf0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -317,6 +317,7 @@ endif
+ 
+ menu "Networking"
+ source "package/gssdp/Config.in"
++source "package/gupnp/Config.in"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+diff --git a/package/gupnp/Config.in b/package/gupnp/Config.in
+new file mode 100755
+index 0000000..ddf010b
+--- /dev/null
++++ b/package/gupnp/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_GUPNP
++	bool "gupnp"
++	select BR2_PACKAGE_GSSDP
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR
++	help
++	  GUPnP implements the UPnP specification: resource announcement
++	  and discovery, description, control, event notification, and
++	  presentation.
++
++	  http://www.gupnp.org/
++
++comment "gupnp requires a toolchain with LARGEFILE + WCHAR support"
++	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+new file mode 100755
+index 0000000..ca72dac
+--- /dev/null
++++ b/package/gupnp/gupnp.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# gupnp
++#
++#############################################################
++
++GUPNP_VERSION = 0.14.1
++GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.gz
++GUPNP_SITE = http://www.gupnp.org/sites/all/files/sources
++GUPNP_INSTALL_STAGING = YES
++
++GUPNP_CONF_ENV = \
++	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
++
++GUPNP_DEPENDENCIES = host-pkg-config host-libglib2 libxml2 gssdp util-linux
++
++$(eval $(call AUTOTARGETS,package,gupnp))
+-- 
+1.7.4.1
