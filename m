@@ -1,50 +1,79 @@
-From: Pedro Sanchez <psanchez@fosstel.com>
-Date: Thu, 11 Aug 2011 14:23:33 -0400
-Subject: [Buildroot] Python standard library problems
-In-Reply-To: <4E43F72C.4060005@in-2-technology.co.uk>
-References: <4E42D99C.7080806@fosstel.com>
- <4E42FCAB.2070609@in-2-technology.co.uk> <4E43D5B4.2090106@fosstel.com>
- <4E43F72C.4060005@in-2-technology.co.uk>
-Message-ID: <4E441E25.4010600@fosstel.com>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
+Date: Thu, 11 Aug 2011 20:35:41 +0200
+Subject: [Buildroot] Trying to package imlib2
+Message-ID: <20110811203541.3b238665@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, I'm not trying to build specific Python modules. I'm just 
-selecting the Python interpreter from BR's config menu, that's all. I 
-was expecting to get a full interpreter with support for the Python 
-standard library.
+I'm trying to package the imlib2, which I need as a dependency for wbar
+(a small dock app launcher for X)
 
-I'm trying to build BR now using the crosstool-ng toolchain ... If I run 
-into similar problems then I'll see how to hook up into setup.py's 
-output to see what's going on.
-
--- 
-Pedro
+here's my imlib2.mk :
 
 
-On 08/11/2011 11:37 AM, Dominic Newton wrote:
-> Hi
->
-> Yes I'm using the native toolchain. One thing to check might be any
-> dependencies the modules you are trying to build - for example have you
-> got appropriate libraries being built before python for networking which
-> will get _socket built.
->
-> The easiest way to look at the setup.py output is to redirect the stdout
-> to a file and then inspect it, any messages regarding module builds will
-> be there. If python cannot build a module it won't stop, but just sends
-> some output to the console. It is possible to edit setup.py to output
-> results direct to a log file, but this can take a while to sort out.
->
-> Not sure if this is much help as this has (so far) always worked for me
-> out of the box for a number of targets.
->
-> Dominic Newton
-> In 2 Technology Ltd.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+#############################################################
+#
+# IMLIB2
+#
+#############################################################
+IMLIB2_VERSION = 1.4.4
+IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
+IMLIB2_SITE =
+http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)/
+IMLIB2_INSTALL_STAGING = YES IMLIB2_INSTALL_TARGET = YES
+IMLIB2_DEPENDENCIES = host-pkg-config xlib_libX11 libpng jpeg freetype
+
+$(eval $(call AUTOTARGETS,package,imlib2))
+
+
+
+but building fails (at the linking stage apparently) :
+
+...
+
+>>> imlib2 1.4.4 Building
+PATH="/home/fred/buildroot/output/host/bin:/home/fred/buildroot/output/host/usr/bin:/home/fred/buildroot/output/host/usr/sbin/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+PERLLIB="/home/fred/buildroot/output/host/usr/lib/perl"  /usr/bin/make
+-j2  -C /home/fred/buildroot/output/build/imlib2-1.4.4/ make[1]:
+entrant dans le r?pertoire
+? /home/fred/buildroot/output/build/imlib2-1.4.4 ? /usr/bin/make
+all-recursive make[2]: entrant dans le r?pertoire
+? /home/fred/buildroot/output/build/imlib2-1.4.4 ? Making all in src
+make[3]: entrant dans le r?pertoire
+? /home/fred/buildroot/output/build/imlib2-1.4.4/src ? Making all in
+lib make[4]: entrant dans le r?pertoire
+? /home/fred/buildroot/output/build/imlib2-1.4.4/src/lib ? make[4]:
+Rien ? faire pour ? all ?. make[4]: quittant le r?pertoire
+? /home/fred/buildroot/output/build/imlib2-1.4.4/src/lib ? Making all
+in bin make[4]: entrant dans le r?pertoire
+? /home/fred/buildroot/output/build/imlib2-1.4.4/src/bin ? CCLD
+imlib2_conv CCLD
+imlib2_show /home/fred/buildroot/output/host/usr/lib/gcc/i686-unknown-linux-uclibc/4.3.6/../../../../i686-unknown-linux-uclibc/bin/ld:
+warning: libc.so.6, needed
+by /home/fred/buildroot/output/host/usr/lib/libfreetype.so, not found
+(try using -rpath or
+-rpath-link) /home/fred/buildroot/output/host/usr/lib/gcc/i686-unknown-linux-uclibc/4.3.6/../../../../i686-unknown-linux-uclibc/bin/ld:
+warning: libdl.so.2, needed
+by /home/fred/buildroot/output/host/usr/lib/libX11.so, not found (try
+using -rpath or
+-rpath-link) /home/fred/buildroot/output/host/usr/lib/libfreetype.so:
+undefined reference to
+`realloc at GLIBC_2.0' /home/fred/buildroot/output/host/usr/lib/libX11.so:
+undefined reference to
+`pthread_cond_wait at GLIBC_2.3.2' /home/fred/buildroot/output/host/usr/lib/libX11.so:
+undefined reference to
+`fgets at GLIBC_2.0' /home/fred/buildroot/output/host/usr/lib/libX11.so:
+undefined reference to
+`inet_pton at GLIBC_2.0' /home/fred/buildroot/output/host/usr/lib/libX11.so:
+undefined reference to
+`getresuid at GLIBC_2.0' /home/fred/buildroot/output/host/usr/lib/libX11.so:
+undefined reference to `pthread_mutex_init at GLIBC_2.0'
+
+...
+
+
+If a seasoned packager could help :)
+Thanks!
