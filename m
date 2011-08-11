@@ -1,60 +1,30 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 11 Aug 2011 11:57:41 +0200
-Subject: [Buildroot] [PATCH] libsoup: add option to enable HTTPS (SSL)
-	support
-Message-ID: <1313056661-6090-1-git-send-email-s.neumann@raumfeld.com>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
+Date: Thu, 11 Aug 2011 12:38:33 +0200
+Subject: [Buildroot] [PATCH] leafpad: bump to 0.8.18
+Message-ID: <20110811123833.0e98502a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By selecting BR2_PACKAGE_LIBSOUP_SSL the gnutls package is selected
-and libsoup will be compiled with SSL support.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 ---
- package/libsoup/Config.in  |    7 +++++++
- package/libsoup/libsoup.mk |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+ package/leafpad/leafpad.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 2264b63..347687c 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -12,5 +12,12 @@ config BR2_PACKAGE_LIBSOUP
- 
- 	  http://live.gnome.org/LibSoup
- 
-+config BR2_PACKAGE_LIBSOUP_SSL
-+	bool "https support"
-+	select BR2_PACKAGE_GNUTLS
-+	depends on BR2_PACKAGE_LIBSOUP
-+	help
-+	  Enable HTTPS (SSL) support.
-+
- comment "libsoup requires a toolchain with WCHAR support"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 11bfadd..02db60a 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -19,9 +19,15 @@ endif
- LIBSOUP_CONF_OPT = \
- 	--disable-explicit-deps \
- 	--disable-glibtest	\
--	--disable-ssl		\
- 	--without-gnome
- 
- LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config host-libglib2 libglib2 libxml2
- 
-+ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
-+LIBSOUP_DEPENDENCIES += gnutls
-+LIBSOUP_CONF_OPT += --enable-ssl --without-libgcrypt-prefix
-+else
-+LIBSOUP_CONF_OPT += --disable-ssl
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libsoup))
+diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
+index 9964409..bc04249 100644
+--- a/package/leafpad/leafpad.mk
++++ b/package/leafpad/leafpad.mk
+@@ -3,7 +3,7 @@
+ # leafpad
+ #
+ #############################################################
+-LEAFPAD_VERSION = 0.8.14
++LEAFPAD_VERSION = 0.8.18
+ LEAFPAD_SOURCE = leafpad-$(LEAFPAD_VERSION).tar.gz
+ LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
+ LEAFPAD_AUTORECONF = NO
 -- 
-1.7.4.1
+1.7.2.3
