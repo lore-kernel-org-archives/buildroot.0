@@ -1,32 +1,33 @@
 From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Thu, 11 Aug 2011 12:56:59 +0200
-Subject: [Buildroot] [PATCH] xterm: bump to v271
-Message-ID: <20110811125659.0150b551@gmail.com>
+Date: Thu, 11 Aug 2011 15:11:03 +0200
+Subject: [Buildroot] [PATCH] freetype: bump to 2.4.6
+Message-ID: <20110811151103.20c552cb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
+Security update.
 
 Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 ---
- package/xterm/xterm.mk |    2 +-
+ package/freetype/freetype.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index d5d193d..92ddd1e 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index ad4292f..90ba373 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -3,7 +3,7 @@
+ # freetype
  #
  #############################################################
- 
--XTERM_VERSION = 267
-+XTERM_VERSION = 271
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = ftp://invisible-island.net/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw
+-FREETYPE_VERSION = 2.4.4
++FREETYPE_VERSION = 2.4.6
+ FREETYPE_SITE =
+http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+FREETYPE_INSTALL_STAGING = YES
 -- 
 1.7.2.3
