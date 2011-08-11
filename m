@@ -1,53 +1,60 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Thu, 11 Aug 2011 11:36:10 +0200
-Subject: [Buildroot] BUG: no https support with midori
-In-Reply-To: <1313047041.16546.2.camel@sven>
-References: <20110810192520.7524c2ab@gmail.com>
- <1313004810.8441.3.camel@bender>
- <20110810233055.596f53cb@gmail.com> <1313047041.16546.2.camel@sven>
-Message-ID: <20110811113610.70f629df@gmail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Thu, 11 Aug 2011 11:57:41 +0200
+Subject: [Buildroot] [PATCH] libsoup: add option to enable HTTPS (SSL)
+	support
+Message-ID: <1313056661-6090-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It works indeed!
-Problem solved.
+By selecting BR2_PACKAGE_LIBSOUP_SSL the gnutls package is selected
+and libsoup will be compiled with SSL support.
 
-Thanks
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/libsoup/Config.in  |    7 +++++++
+ package/libsoup/libsoup.mk |    8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
-
-Le Thu, 11 Aug 2011 09:17:20 +0200,
-Sven Neumann <s.neumann@raumfeld.com> a ?crit :
-
-> Hi,
-> 
-> On Wed, 2011-08-10 at 23:30 +0200, Frederic Bassaler wrote:
-> 
-> > Sorry I forgot to tell, but I did remove the --disable-ssl
-> > configuration directive in libsoup.mk
-> > 
-> > As shown below, configure fails to find the libgcrypt library...
-> > 
-> > Does it work for you? (Maybe I have to delete my output directory
-> > and rebuild again from scratch)
-> 
-> It works for me. But I've just checked and it appears that we have the
-> following in libsoup.mk:
-> 
-> ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> LIBSOUP_DEPENDENCIES += gnutls
-> LIBSOUP_CONF_OPT += --enable-ssl \
-> 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
-> else
-> LIBSOUP_CONF_OPT += --disable-ssl
-> endif
-> 
-> You might also try "--without-libgcrypt-prefix". I heard rumours that
-> this would work as well.
-> 
-> 
-> Sven
-> 
-> 
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 2264b63..347687c 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -12,5 +12,12 @@ config BR2_PACKAGE_LIBSOUP
+ 
+ 	  http://live.gnome.org/LibSoup
+ 
++config BR2_PACKAGE_LIBSOUP_SSL
++	bool "https support"
++	select BR2_PACKAGE_GNUTLS
++	depends on BR2_PACKAGE_LIBSOUP
++	help
++	  Enable HTTPS (SSL) support.
++
+ comment "libsoup requires a toolchain with WCHAR support"
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 11bfadd..02db60a 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -19,9 +19,15 @@ endif
+ LIBSOUP_CONF_OPT = \
+ 	--disable-explicit-deps \
+ 	--disable-glibtest	\
+-	--disable-ssl		\
+ 	--without-gnome
+ 
+ LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config host-libglib2 libglib2 libxml2
+ 
++ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
++LIBSOUP_DEPENDENCIES += gnutls
++LIBSOUP_CONF_OPT += --enable-ssl --without-libgcrypt-prefix
++else
++LIBSOUP_CONF_OPT += --disable-ssl
++endif
++
+ $(eval $(call AUTOTARGETS,package,libsoup))
+-- 
+1.7.4.1
