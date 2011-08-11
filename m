@@ -1,31 +1,31 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Thu, 11 Aug 2011 15:19:58 +0000
-Subject: [Buildroot] [PATCH] Don't run target-generic-getty* if none selected
-Message-ID: <F9C551623D2CBB4C9488801D14F864C605023C@ex-mb1.corp.adtran.com>
+From: Dominic Newton <dominic.newton@in-2-technology.co.uk>
+Date: Thu, 11 Aug 2011 16:37:16 +0100
+Subject: [Buildroot] Python standard library problems
+In-Reply-To: <4E43D5B4.2090106@fosstel.com>
+References: <4E42D99C.7080806@fosstel.com>
+ <4E42FCAB.2070609@in-2-technology.co.uk> <4E43D5B4.2090106@fosstel.com>
+Message-ID: <4E43F72C.4060005@in-2-technology.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If the string text is "" for the default getty, don't run that target.
+Hi
 
-Signed-off-by: Andy Kennedy <Andy.Kennedy@Adtran.com>
----
-diff -Naur -x output a/target/generic/Makefile.in b/target/generic/Makefile.in
---- a/target/generic/Makefile.in	2011-07-29 06:38:49.000000000 -0500
-+++ b/target/generic/Makefile.in	2011-08-11 10:13:23.000000000 -0500
-@@ -40,11 +40,13 @@
- endif
+Yes I'm using the native toolchain. One thing to check might be any 
+dependencies the modules you are trying to build - for example have you 
+got appropriate libraries being built before python for networking which 
+will get _socket built.
 
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
-+ifneq ($(BR2_TARGET_GENERIC_GETTY_PORT),"")
- ifeq ($(BR2_PACKAGE_SYSVINIT),y)
- TARGETS += target-generic-getty-sysvinit
- else
- TARGETS += target-generic-getty-busybox
- endif
-+endif
- ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
- TARGETS += target-generic-do-remount-rw
- else
+The easiest way to look at the setup.py output is to redirect the stdout 
+to a file and then inspect it, any messages regarding module builds will 
+be there. If python cannot build a module it won't stop, but just sends 
+some output to the console. It is possible to edit setup.py to output 
+results direct to a log file, but this can take a while to sort out.
+
+Not sure if this is much help as this has (so far) always worked for me 
+out of the box for a number of targets.
+
+Dominic Newton
+In 2 Technology Ltd.
