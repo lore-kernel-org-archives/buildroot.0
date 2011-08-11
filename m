@@ -1,31 +1,53 @@
-From: Dominic Newton <dominic.newton@in-2-technology.co.uk>
-Date: Thu, 11 Aug 2011 16:37:16 +0100
-Subject: [Buildroot] Python standard library problems
-In-Reply-To: <4E43D5B4.2090106@fosstel.com>
-References: <4E42D99C.7080806@fosstel.com>
- <4E42FCAB.2070609@in-2-technology.co.uk> <4E43D5B4.2090106@fosstel.com>
-Message-ID: <4E43F72C.4060005@in-2-technology.co.uk>
+From: Fei, Yiyang <YiYang.Fei@barco.com>
+Date: Thu, 11 Aug 2011 12:51:32 -0400
+Subject: [Buildroot]  [PATCH] directfb: bump to version 1.4.13
+In-Reply-To: <mailman.15.1313064002.17111.buildroot@busybox.net>
+Message-ID: <C2A5D1386C6DB94198F2A5C8368EAE6C143B59F0@DULMEX02.barco.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+The newest release of directfb is actually 1.5.3.  Is there a specific
+reason you need to stick with 1.4.x?  V1.5.3 also has build issues due
+to ARM v6 instructions which are not supported on my processor.  I'm
+working with directfb to resolve it.
 
-Yes I'm using the native toolchain. One thing to check might be any 
-dependencies the modules you are trying to build - for example have you 
-got appropriate libraries being built before python for networking which 
-will get _socket built.
+Best,
+Yiyang
 
-The easiest way to look at the setup.py output is to redirect the stdout 
-to a file and then inspect it, any messages regarding module builds will 
-be there. If python cannot build a module it won't stop, but just sends 
-some output to the console. It is possible to edit setup.py to output 
-results direct to a log file, but this can take a while to sort out.
 
-Not sure if this is much help as this has (so far) always worked for me 
-out of the box for a number of targets.
+Message: 7
+Date: Thu, 11 Aug 2011 12:44:07 +0200
+From: Sven Neumann <s.neumann@raumfeld.com>
+To: buildroot at busybox.net
+Subject: [Buildroot] [PATCH] directfb: bump to version 1.4.13
+Message-ID: <1313059447-17209-1-git-send-email-s.neumann@raumfeld.com>
 
-Dominic Newton
-In 2 Technology Ltd.
+There's an even newer stable release available (1.4.14), but it
+has problems with cross-compilation that we are still resolving
+on the directfb-dev mailing-list.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/directfb/directfb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 5af65d7..c32fcdb 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ DIRECTFB_VERSION_MAJOR = 1.4
+-DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).11
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).13
+ DIRECTFB_SITE =
+http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR
+)
+ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = YES
+-- 
+1.7.4.1
