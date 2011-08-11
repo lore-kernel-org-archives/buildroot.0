@@ -1,34 +1,32 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 11 Aug 2011 12:44:07 +0200
-Subject: [Buildroot] [PATCH] directfb: bump to version 1.4.13
-Message-ID: <1313059447-17209-1-git-send-email-s.neumann@raumfeld.com>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
+Date: Thu, 11 Aug 2011 12:56:59 +0200
+Subject: [Buildroot] [PATCH] xterm: bump to v271
+Message-ID: <20110811125659.0150b551@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's an even newer stable release available (1.4.14), but it
-has problems with cross-compilation that we are still resolving
-on the directfb-dev mailing-list.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+
+Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 ---
- package/directfb/directfb.mk |    2 +-
+ package/xterm/xterm.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 5af65d7..c32fcdb 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index d5d193d..92ddd1e 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
- DIRECTFB_VERSION_MAJOR = 1.4
--DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).11
-+DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).13
- DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_AUTORECONF = YES
+ 
+-XTERM_VERSION = 267
++XTERM_VERSION = 271
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = ftp://invisible-island.net/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw
 -- 
-1.7.4.1
+1.7.2.3
