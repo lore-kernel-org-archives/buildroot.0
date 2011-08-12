@@ -1,29 +1,45 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 12 Aug 2011 10:29:56 +0200
-Subject: [Buildroot] /run/udev missing ?
-Message-ID: <1313137798.1017.5.camel@sven>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 12 Aug 2011 09:45:50 +0200
+Subject: [Buildroot] [git commit] util-linux: fix install when locales are
+	enabled
+Message-ID: <20110812081517.EE16E8C57B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-after updating to latest buildroot, udevd has problems starting:
+commit: http://git.buildroot.net/buildroot/commit/?id=71f279f9a2bd3f086f3d31fa5a669d3f638bee99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-udevd[1114]: error: runtime directory '/run/udev' not writable, for now
-falling back to '/dev/.udev'
-udevd[1114]: failed to create queue file: No such file or directory
-udevd[1114]: error creating queue file
+util-linux uses mkinstalldirs to install .po files when locales are
+enabled, but the definition of MKINSTALLDIRS comes from a tweaked
+nls.m4 (based on the one from gettext).
 
-It looks like udevd is not running or not working properly then as it
-fails to load the firmware for the Wifi chip.
+When we autoreconf the package, we end up using the system (staging)
+version of nls.m4, so MKINSTALLDIRS doesn't get defined.
 
-This is a configuration with static device management.
+Fix it by passing a definition of MKINSTALLDIRS to make during the
+install steps.
 
-Any ideas? Should /run/udev exist or is the fallback OK and supposed to
-work?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/util-linux.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-
-Sven
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index dd6ee5c..9d2f9be 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -68,3 +68,8 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write)
+ 
+ $(eval $(call AUTOTARGETS,package,util-linux))
++
++# MKINSTALLDIRS comes from tweaked m4/nls.m4, but autoreconf uses staging
++# one, so it disappears
++UTIL_LINUX_INSTALL_STAGING_OPT += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
++UTIL_LINUX_INSTALL_TARGET_OPT += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+-- 
+1.7.3.4
