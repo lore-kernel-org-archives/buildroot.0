@@ -1,33 +1,46 @@
-From: Heiko Helmle <helman@gmx.net>
-Date: Fri, 12 Aug 2011 21:14:28 +0200
-Subject: [Buildroot] [PATCH] libxml-parser-perl: fix install bug
-Message-ID: <20110812191428.101290@gmx.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 12 Aug 2011 19:58:16 +0200
+Subject: [Buildroot] [git commit] directfb: bump to version 1.4.13
+Message-ID: <20110812193535.B33A58C57B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello List,
 
-This patch makes libxml-parser-perl behave on my system - though it looks like it isn't necessary on all host OSses (on gentoo and opensuse it works without, but on ubuntu lucid and Scientific 6 it fails without the patch).
+commit: http://git.buildroot.net/buildroot/commit/?id=e35921b3a0d148098f08d2f0533b238a65ff3e86
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Heiko Helmle <helman@gmx.net>
+There's an even newer stable release available (1.4.14), but it
+has problems with cross-compilation that we are still resolving
+on the directfb-dev mailing-list.
+
+[Peter: rename ppc patch to match]
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libxml-parser-perl/libxml-parser-perl.mk | ? ?1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ ...patch => directfb-1.4.13-ppc-compile-fix.patch} |    0
+ package/directfb/directfb.mk                       |    2 +-
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ rename package/directfb/{directfb-1.4.11-ppc-compile-fix.patch => directfb-1.4.13-ppc-compile-fix.patch} (100%)
 
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-index 52d89d5..9f80cf9 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.mk
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -18,6 +18,7 @@ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
- ? ? ? ? EXPATINCPATH=$(HOST_DIR)/usr/include \
- ? ? ? ? INSTALLDIRS=site \
- ? ? ? ? INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
-+ ? ? ? ?INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
- ?)
- endef
- 
+diff --git a/package/directfb/directfb-1.4.11-ppc-compile-fix.patch b/package/directfb/directfb-1.4.13-ppc-compile-fix.patch
+similarity index 100%
+rename from package/directfb/directfb-1.4.11-ppc-compile-fix.patch
+rename to package/directfb/directfb-1.4.13-ppc-compile-fix.patch
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 5af65d7..c32fcdb 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ DIRECTFB_VERSION_MAJOR = 1.4
+-DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).11
++DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).13
+ DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
+ DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
+ DIRECTFB_AUTORECONF = YES
 -- 
-1.7.1
+1.7.3.4
