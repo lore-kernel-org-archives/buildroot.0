@@ -1,46 +1,37 @@
-From: raymond zhao <raymond.zhao.ml@gmail.com>
-Date: Fri, 12 Aug 2011 10:51:03 -0400
-Subject: [Buildroot] about TARGET_CROSS
-Message-ID: <CAAa76NR2f4jkSem4vx1_-K5OjK-v567kU98zDP8skN+=eX-zGA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 12 Aug 2011 10:28:35 +0200
+Subject: [Buildroot] util-linux compile problems
+In-Reply-To: <1313049366.16546.4.camel@sven> (Sven Neumann's message of "Thu, 
+ 11 Aug 2011 09:56:05 +0200")
+References: <1312804690-21977-1-git-send-email-s.neumann@raumfeld.com>
+ <87fwlblqxr.fsf@macbook.be.48ers.dk>
+ <87y5z3k92i.fsf@macbook.be.48ers.dk> <1312883451.1593.3.camel@sven>
+ <87hb5qk6rn.fsf@macbook.be.48ers.dk> <1313049366.16546.4.camel@sven>
+Message-ID: <877h6jhw3w.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-There is a variable named TARGET_CROSS in the Makefile.in under
-buildroot/package directory. It is used for lots of package build
-command. The problem is that it end with "-". Some packages add that
-"-" itself in their own building system. These kind of packages will
-complain that it can not find the compiler, for instance,
-powerpc-unknown-linux-gnu--gcc. Please note that there are two "-"
-before gcc. Use makefile string functions to strip out the last "-" is
-not easy. So I suggest we add another variable named
-TARGET_CROSS_STRIP, which is another version of TARGET_CROSS without
-the last "-".
-Here is the modification. I did not use patch format since it is very
-simple modification.
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-original one:
-ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
-TARGET_CROSS=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
-else
-TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call
-qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
-endif
+ Sven> That fix seems to do the trick. But now the build fails when it tries to
+ Sven> install the translations:
 
-change to:
-ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
-TARGET_CROSS_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)
-else
-TARGET_CROSS_STRIP=$(HOST_DIR)/usr/bin/$(call
-qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
-endif
-TARGET_CROSS=$(TARGET_CROSS_STRIP)-
+ Sven> Making install in po
+ Sven> make[2]: Entering directory
+ Sven> `/home/sven/git/buildroot/output/build/util-linux-2.19.1/po'
+ Sven> /bin/sh
+ Sven> @MKINSTALLDIRS@ /home/sven/git/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/share
+ Sven> /bin/sh: Can't open @MKINSTALLDIRS@
+ Sven> make[2]: *** [install-data-yes] Error 127
 
-I wonder could we add it into the official buildroot release.
+Ahh, see it now. I've fixed it in git. The problem is that util-linux
+use mkinstalldirs to install .po files, and it gets the definition of it
+from a custom nls.m4 (based on the one from gettext). If you have
+gettext enabled, then we end up using that one instead when we
+autoreconf util-linux.
 
-thanks,
-
-Raymond
+-- 
+Bye, Peter Korsgaard
