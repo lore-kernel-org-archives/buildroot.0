@@ -1,58 +1,46 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri, 12 Aug 2011 14:22:56 +0200
-Subject: [Buildroot] [PATCH] Fix the Python build when running Linux 3.*
-Message-ID: <1313151776-26401-1-git-send-email-maxime.ripard@free-electrons.com>
+From: raymond zhao <raymond.zhao.ml@gmail.com>
+Date: Fri, 12 Aug 2011 10:51:03 -0400
+Subject: [Buildroot] about TARGET_CROSS
+Message-ID: <CAAa76NR2f4jkSem4vx1_-K5OjK-v567kU98zDP8skN+=eX-zGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling Python on a host running Linux 3.0, the sys.platform
-constant is set at "linux3". A lot of code (inside the interpreter
-itself, its build system and third party apps and libraries) relies on
-it to be linux2 on a Linux system.
+Hi,
+There is a variable named TARGET_CROSS in the Makefile.in under
+buildroot/package directory. It is used for lots of package build
+command. The problem is that it end with "-". Some packages add that
+"-" itself in their own building system. These kind of packages will
+complain that it can not find the compiler, for instance,
+powerpc-unknown-linux-gnu--gcc. Please note that there are two "-"
+before gcc. Use makefile string functions to strip out the last "-" is
+not easy. So I suggest we add another variable named
+TARGET_CROSS_STRIP, which is another version of TARGET_CROSS without
+the last "-".
+Here is the modification. I did not use patch format since it is very
+simple modification.
 
-This leads to the build of the target python package to break.
+original one:
+ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+TARGET_CROSS=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-
+else
+TARGET_CROSS=$(HOST_DIR)/usr/bin/$(call
+qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))-
+endif
 
-This behaviour has been reported on the Python bugtracker but is not
-fixed yet.
+change to:
+ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_CTNG),y)
+TARGET_CROSS_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)
+else
+TARGET_CROSS_STRIP=$(HOST_DIR)/usr/bin/$(call
+qstrip,$(BR2_TOOLCHAIN_EXTERNAL_PREFIX))
+endif
+TARGET_CROSS=$(TARGET_CROSS_STRIP)-
 
-http://bugs.python.org/issue12326
+I wonder could we add it into the official buildroot release.
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- .../python-2.7-013-fix-linux-3-compilation.patch   |   22 ++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/python/python-2.7-013-fix-linux-3-compilation.patch
+thanks,
 
-diff --git a/package/python/python-2.7-013-fix-linux-3-compilation.patch b/package/python/python-2.7-013-fix-linux-3-compilation.patch
-new file mode 100644
-index 0000000..a43ec7e
---- /dev/null
-+++ b/package/python/python-2.7-013-fix-linux-3-compilation.patch
-@@ -0,0 +1,22 @@
-+diff -r 683202530137 configure
-+--- a/configure	Fri Aug 12 11:40:39 2011 +0300
-++++ b/configure	Fri Aug 12 14:02:18 2011 +0200
-+@@ -3055,6 +3055,7 @@ then
-+ 	cygwin*) MACHDEP="cygwin";;
-+ 	darwin*) MACHDEP="darwin";;
-+         irix646) MACHDEP="irix6";;
-++        linux*) MACHDEP="linux2";;
-+ 	'')	MACHDEP="unknown";;
-+ 	esac
-+ fi
-+diff -r 683202530137 configure.in
-+--- a/configure.in	Fri Aug 12 11:40:39 2011 +0300
-++++ b/configure.in	Fri Aug 12 14:02:18 2011 +0200
-+@@ -307,6 +307,7 @@ then
-+ 	cygwin*) MACHDEP="cygwin";;
-+ 	darwin*) MACHDEP="darwin";;
-+         irix646) MACHDEP="irix6";;
-++        linux*) MACHDEP="linux2";;
-+ 	'')	MACHDEP="unknown";;
-+ 	esac
-+ fi
--- 
-1.7.4.1
+Raymond
