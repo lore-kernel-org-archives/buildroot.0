@@ -1,25 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 14 Aug 2011 10:04:56 +0200
-Subject: [Buildroot] [PATCH] libxml-parser-perl: fix install bug
-In-Reply-To: <20110812191428.101290@gmx.net> (Heiko Helmle's message of "Fri, 
- 12 Aug 2011 21:14:28 +0200")
-References: <20110812191428.101290@gmx.net>
-Message-ID: <87hb5kh107.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 14 Aug 2011 10:03:18 +0200
+Subject: [Buildroot] [git commit] libxml-parser-perl: fix install bug
+Message-ID: <20110814090740.C17428C98A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Helmle <helman@gmx.net> writes:
 
- Heiko> Hello List,
- Heiko> This patch makes libxml-parser-perl behave on my system - though it looks like it isn't necessary on all host OSses (on gentoo and opensuse it works without, but on ubuntu lucid and Scientific 6 it fails without the patch).
+commit: http://git.buildroot.net/buildroot/commit/?id=323dcc076a03acdd407f6d254fe8c9c2fcd464b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks. Your (web) mailer had screwed up whitespace in the
-patch though, so I had to make the change manually.
+This patch makes libxml-parser-perl behave on my system - though it looks
+like it isn't necessary on all host OSses (on gentoo and opensuse it works
+without, but on ubuntu lucid and Scientific 6 it fails without the patch).
 
-Please consider using git send-email in the future.
+Signed-off-by: Heiko Helmle <helman@gmx.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libxml-parser-perl/libxml-parser-perl.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 52d89d5..9f80cf9 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -18,6 +18,7 @@ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+         EXPATINCPATH=$(HOST_DIR)/usr/include \
+         INSTALLDIRS=site \
+         INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
++        INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
+  )
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
