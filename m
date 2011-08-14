@@ -1,63 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 14 Aug 2011 08:52:13 +0200
-Subject: [Buildroot] [git commit] Fix the Python build when running Linux 3.*
-Message-ID: <20110814065337.96BAE8C974@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 14 Aug 2011 08:59:17 +0200
+Subject: [Buildroot] about TARGET_CROSS
+In-Reply-To: <CAAa76NR2f4jkSem4vx1_-K5OjK-v567kU98zDP8skN+=eX-zGA@mail.gmail.com>
+ (raymond zhao's message of "Fri, 12 Aug 2011 10:51:03 -0400")
+References: <CAAa76NR2f4jkSem4vx1_-K5OjK-v567kU98zDP8skN+=eX-zGA@mail.gmail.com>
+Message-ID: <87liuwh41m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "raymond" == raymond zhao <raymond.zhao.ml@gmail.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad891ac44aa826ebed7fa35be4912116255f5da6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ raymond> Hi,
+ raymond> There is a variable named TARGET_CROSS in the Makefile.in under
+ raymond> buildroot/package directory. It is used for lots of package build
+ raymond> command. The problem is that it end with "-". Some packages add that
+ raymond> "-" itself in their own building system. These kind of packages will
+ raymond> complain that it can not find the compiler, for instance,
+ raymond> powerpc-unknown-linux-gnu--gcc. Please note that there are two "-"
+ raymond> before gcc. Use makefile string functions to strip out the last "-" is
+ raymond> not easy. So I suggest we add another variable named
+ raymond> TARGET_CROSS_STRIP, which is another version of TARGET_CROSS without
+ raymond> the last "-".
+ raymond> Here is the modification. I did not use patch format since it is very
+ raymond> simple modification.
 
-When compiling Python on a host running Linux 3.0, the sys.platform
-constant is set at "linux3". A lot of code (inside the interpreter
-itself, its build system and third party apps and libraries) relies on
-it to be linux2 on a Linux system.
+I have no problem with that, but what packages are we talking about?
 
-This leads to the build of the target python package to break.
+Please submit this change together with the package(s) which needs it.
 
-This behaviour has been reported on the Python bugtracker but is not
-fixed yet.
-
-http://bugs.python.org/issue12326
-
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../python-2.7-013-fix-linux-3-compilation.patch   |   22 ++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/python/python-2.7-013-fix-linux-3-compilation.patch
-
-diff --git a/package/python/python-2.7-013-fix-linux-3-compilation.patch b/package/python/python-2.7-013-fix-linux-3-compilation.patch
-new file mode 100644
-index 0000000..a43ec7e
---- /dev/null
-+++ b/package/python/python-2.7-013-fix-linux-3-compilation.patch
-@@ -0,0 +1,22 @@
-+diff -r 683202530137 configure
-+--- a/configure	Fri Aug 12 11:40:39 2011 +0300
-++++ b/configure	Fri Aug 12 14:02:18 2011 +0200
-+@@ -3055,6 +3055,7 @@ then
-+ 	cygwin*) MACHDEP="cygwin";;
-+ 	darwin*) MACHDEP="darwin";;
-+         irix646) MACHDEP="irix6";;
-++        linux*) MACHDEP="linux2";;
-+ 	'')	MACHDEP="unknown";;
-+ 	esac
-+ fi
-+diff -r 683202530137 configure.in
-+--- a/configure.in	Fri Aug 12 11:40:39 2011 +0300
-++++ b/configure.in	Fri Aug 12 14:02:18 2011 +0200
-+@@ -307,6 +307,7 @@ then
-+ 	cygwin*) MACHDEP="cygwin";;
-+ 	darwin*) MACHDEP="darwin";;
-+         irix646) MACHDEP="irix6";;
-++        linux*) MACHDEP="linux2";;
-+ 	'')	MACHDEP="unknown";;
-+ 	esac
-+ fi
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
