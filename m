@@ -1,46 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Aug 2011 14:09:57 +0200
-Subject: [Buildroot] [git commit] udev: ensure /dev mgmt option is in sync
-Message-ID: <20110815121044.3E9CC8C8E3@busybox.osuosl.org>
+From: raymond zhao <raymond.zhao.ml@gmail.com>
+Date: Mon, 15 Aug 2011 09:25:45 -0400
+Subject: [Buildroot] about TARGET_CROSS
+In-Reply-To: <87liuwh41m.fsf@macbook.be.48ers.dk>
+References: <CAAa76NR2f4jkSem4vx1_-K5OjK-v567kU98zDP8skN+=eX-zGA@mail.gmail.com>
+ <87liuwh41m.fsf@macbook.be.48ers.dk>
+Message-ID: <CAAa76NSiUdAeRQEA+M1gmUfEoOuh3SOynVbb_Ly1D0V6U0KudA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-commit: http://git.buildroot.net/buildroot/commit/?id=1add7c592bff56c5115997ab9b42e0fd9a5947ca
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-These options should be in sync, both for consistency and because udev
-needs devtmpfs enabled in the kernel.
-
-We unfortunately cannot just select BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-here, as that one selects udev - leading to recursion erors, so instead
-we use depends on.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/udev/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index 67fd413..391c718 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_UDEV
- 	bool "udev"
-+	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	help
- 	  Userspace device daemon.
- 
-@@ -25,3 +26,6 @@ comment "udev extras requires a toolchain with LARGEFILE + WCHAR support"
- 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
- 
- endif
-+
-+comment "udev requires /dev mgmnt set to udev under System configuration"
-+	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
--- 
-1.7.3.4
+On Sun, Aug 14, 2011 at 2:59 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "raymond" == raymond zhao <raymond.zhao.ml@gmail.com> writes:
+>
+> ?raymond> Hi,
+> ?raymond> There is a variable named TARGET_CROSS in the Makefile.in under
+> ?raymond> buildroot/package directory. It is used for lots of package build
+> ?raymond> command. The problem is that it end with "-". Some packages add that
+> ?raymond> "-" itself in their own building system. These kind of packages will
+> ?raymond> complain that it can not find the compiler, for instance,
+> ?raymond> powerpc-unknown-linux-gnu--gcc. Please note that there are two "-"
+> ?raymond> before gcc. Use makefile string functions to strip out the last "-" is
+> ?raymond> not easy. So I suggest we add another variable named
+> ?raymond> TARGET_CROSS_STRIP, which is another version of TARGET_CROSS without
+> ?raymond> the last "-".
+> ?raymond> Here is the modification. I did not use patch format since it is very
+> ?raymond> simple modification.
+>
+> I have no problem with that, but what packages are we talking about?
+>
+> Please submit this change together with the package(s) which needs it.
+>
+> --
+> Bye, Peter Korsgaard
+>
+I can not submit the package. It is eXtremDB, it is not an free package.
