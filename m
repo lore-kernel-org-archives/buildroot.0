@@ -1,44 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 15 Aug 2011 14:09:57 +0200
-Subject: [Buildroot] [git commit] usbmount: depend on udev rather than
-	selecting it
-Message-ID: <20110815121044.054CD8C8E3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 15 Aug 2011 14:10:39 +0200
+Subject: [Buildroot] /run/udev missing ?
+In-Reply-To: <1313400852.26653.4.camel@sven> (Sven Neumann's message of "Mon, 
+ 15 Aug 2011 11:34:11 +0200")
+References: <1313137798.1017.5.camel@sven>
+ <87ty9kh4sh.fsf@macbook.be.48ers.dk> <1313396462.31752.3.camel@sven>
+ <878vqvgi3g.fsf@macbook.be.48ers.dk> <1313400852.26653.4.camel@sven>
+Message-ID: <874o1iho3k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c1009d38d20885e7543da7e9af45a8265051311
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-udev is much more than a library, so we shouldn't use select to silently
-enable it.
+ >> Compared to udev, devtmpfs is very lightweight. I would recommend
+ >> pure devtmpfs (no mdev/udev) to people using static /dev today.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/usbmount/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Sven> Well, we need udev to load the firmware of our Wifi module. Of
+ Sven> course I can try to switch to dynamic device management, but I
+ Sven> thought I'd rather point out that a setup broke that the
+ Sven> buildroot configuration allows and that used to work.
 
-diff --git a/package/usbmount/Config.in b/package/usbmount/Config.in
-index 6980c8c..30c7b5a 100644
---- a/package/usbmount/Config.in
-+++ b/package/usbmount/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_USBMOUNT
- 	bool "usbmount"
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
--	select BR2_PACKAGE_UDEV
-+	depends on BR2_PACKAGE_UDEV
- 	select BR2_PACKAGE_LOCKFILE_PROGS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_USBMOUNT
- 	  http://usbmount.alioth.debian.org/
- 
- comment "usbmount requires a toolchain with LARGEFILE + WCHAR support"
--	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR) && BR2_PACKAGE_UDEV
+ Sven> If this is not supposed to work, then it should probably be
+ Sven> disallowed in the buildroot configuration. In other words, if
+ Sven> udev is selected, static device management should not be
+ Sven> selectable.
+
+Ahh yes, good idea - Fixed in git.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
