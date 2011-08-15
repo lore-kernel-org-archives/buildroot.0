@@ -1,29 +1,32 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Mon, 15 Aug 2011 16:18:40 +0200
-Subject: [Buildroot] /run/udev missing ?
-In-Reply-To: <1313416862.29966.2.camel@sven>
-References: <1313137798.1017.5.camel@sven> <87ty9kh4sh.fsf@macbook.be.48ers.dk>
- <1313396462.31752.3.camel@sven>
- <878vqvgi3g.fsf@macbook.be.48ers.dk>
- <1313400852.26653.4.camel@sven>
- <874o1iho3k.fsf@macbook.be.48ers.dk>
- <1313416862.29966.2.camel@sven>
-Message-ID: <CACTFLAP++2iZOJHkzpqrOuU6RtxAAEWiZ_tC7EbKeOotywwXUA@mail.gmail.com>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
+Date: Mon, 15 Aug 2011 16:23:21 +0200
+Subject: [Buildroot] [PATCH] package: add Fluxbox 1.3.1 window manager
+In-Reply-To: <4E49213F.2040401@visionsystems.de>
+References: <20110803192301.4d5c4462@gmail.com>
+ <4E49213F.2040401@visionsystems.de>
+Message-ID: <20110815162321.268fd413@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 15, 2011 at 4:01 PM, Sven Neumann <s.neumann@raumfeld.com> wrote:
-> Still I wonder why udevd is looking for "/run/udev". Shouldn't this
-> be /var/run/udev ? Looks to me like udevd is configured with a wrong
-> prefix for the run directory.
+Le Mon, 15 Aug 2011 15:38:07 +0200,
+Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
 
-/run was introduced recently by systemd and udev, considering the fact
-that /var might be mounted on partitions that are not yet available
-when systemd starts. So this sounds like the new standard, and It's
-likely that buildroot needs to be amended in this case.
+> 
+> I've tried the patch and after installing xdm I can start the window
+> manager. What is basic buildroot configuration to get keboard and
+> mouse working?
+> 
+> Yegor 
 
 
-Daniel
+I use X.Org (not TinyX), with the following drivers for input :
+
+xf86-input-evdev
+xf86-input-keyboard
+xf86-input-mouse
+xf86-input-synaptics (optional, if you have a touchpad)
+
+I guess you might need udev support too.
