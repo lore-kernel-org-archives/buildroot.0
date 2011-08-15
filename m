@@ -1,36 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 15 Aug 2011 14:10:39 +0200
-Subject: [Buildroot] /run/udev missing ?
-In-Reply-To: <1313400852.26653.4.camel@sven> (Sven Neumann's message of "Mon, 
- 15 Aug 2011 11:34:11 +0200")
-References: <1313137798.1017.5.camel@sven>
- <87ty9kh4sh.fsf@macbook.be.48ers.dk> <1313396462.31752.3.camel@sven>
- <878vqvgi3g.fsf@macbook.be.48ers.dk> <1313400852.26653.4.camel@sven>
-Message-ID: <874o1iho3k.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 15 Aug 2011 14:09:57 +0200
+Subject: [Buildroot] [git commit] udev: ensure /dev mgmt option is in sync
+Message-ID: <20110815121044.3E9CC8C8E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=1add7c592bff56c5115997ab9b42e0fd9a5947ca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> Compared to udev, devtmpfs is very lightweight. I would recommend
- >> pure devtmpfs (no mdev/udev) to people using static /dev today.
+These options should be in sync, both for consistency and because udev
+needs devtmpfs enabled in the kernel.
 
- Sven> Well, we need udev to load the firmware of our Wifi module. Of
- Sven> course I can try to switch to dynamic device management, but I
- Sven> thought I'd rather point out that a setup broke that the
- Sven> buildroot configuration allows and that used to work.
+We unfortunately cannot just select BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+here, as that one selects udev - leading to recursion erors, so instead
+we use depends on.
 
- Sven> If this is not supposed to work, then it should probably be
- Sven> disallowed in the buildroot configuration. In other words, if
- Sven> udev is selected, static device management should not be
- Sven> selectable.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/udev/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Ahh yes, good idea - Fixed in git.
-
+diff --git a/package/udev/Config.in b/package/udev/Config.in
+index 67fd413..391c718 100644
+--- a/package/udev/Config.in
++++ b/package/udev/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_UDEV
+ 	bool "udev"
++	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ 	help
+ 	  Userspace device daemon.
+ 
+@@ -25,3 +26,6 @@ comment "udev extras requires a toolchain with LARGEFILE + WCHAR support"
+ 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+ 
+ endif
++
++comment "udev requires /dev mgmnt set to udev under System configuration"
++	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
