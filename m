@@ -1,68 +1,72 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Mon, 15 Aug 2011 17:47:27 +0200
-Subject: [Buildroot] Trying to package vala (needed to build midori 0.4.0)
-Message-ID: <20110815174727.680d45f7@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 15 Aug 2011 18:03:02 +0200
+Subject: [Buildroot] Call For Participation: buildroot + crosstool-NG
+	Developpers' Day
+Message-ID: <201108151803.02636.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all
+Hello All!
 
-I'm trying to package vala (latest version), which is needed to build
-midori 0.4.0
+As was the case the two previous years, Buildroot developpers will be
+meetting again for a full day, the day after ELC-E. This year however,
+the developers' day extends to crosstool-NG developpers as well.
 
-my vala.mk :
+This will be the fifth Buildroot Developpers Day (two at ELC-E, and two
+at FOSDEM). All previous editions were really interesting, and meeting IRL
+really helped find interesting solutions to the many problems buildroot
+addresses. Hopefully, this one will be as good as the previous ones, and
+will be beneficial to both projects!
 
-#############################################################
-#
-# vala
-#
-#############################################################
-VALA_VERSION_MAJOR = 0.13
-VALA_VERSION_MINOR = 1
-VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
-VALA_SOURCE = vala-$(VALA_VERSION).tar.bz2
-VALA_SITE =
-http://ftp.gnome.org/pub/GNOME/sources/vala/$(VALA_VERSION_MAJOR)
-VALA_INSTALL_STAGING = NO VALA_INSTALL_TARGET = NO
-VALA_CONF_OPT = --prefix=$(HOST_DIR)/usr
-VALA_DEPENDENCIES = host-pkg-config
+The meeting will take place in Prague, Czech Republic, October the 29th,
+2011, the day after ELC-E 2011. The exact location is as yet unknown, but
+we'll be sure to keep you informed when it is.
 
-$(eval $(call AUTOTARGETS,package,vala,host))
+Here is a preliminary planning for the day (all local time):
 
+- Morning: shared session, both projects together
+  - 09:00 - 09:30
+    - waking coffee
+  - 09:30 - 12:00                                                                                                               
+    - tentative time-line to finalise the crosstool-NG backend                                                                  
+      integration in buildroot: what's in, what's left.
+    - the shared problems: patchsets...
+  - 12:00 - 13:00
+    - lunch break
 
-It compiles OK, but midori complains about the valac version :
+- Afternoon: separate sessions, each projects on their own;
+  if needed, interaction is welcome nonetheless! :-)
 
-Checking for program gcc or
-cc           : /home/fred/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-gcc
-Checking for program
-ar                  : /home/fred/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-ar
-Checking for program
-ranlib              : /home/fred/buildroot/output/host/usr/bin/i686-unknown-linux-uclibc-ranlib
-Checking for gcc                         : ok Checking for program
-valac               : /home/fred/buildroot/output/host/usr/bin/valac
-Checking for gobject-2.0                 : yes Checking for
-gthread-2.0                 : yes 
-Checking for program version valac >= 0.1.6 : not
-found /home/fred/buildroot/output/build/midori-0.4.0/wscript:91: error:
-valac version too old to be used with this tool make: ***
-[/home/fred/buildroot/output/build/midori-0.4.0/.stamp_configured]
-Erreur 1
+  buildroot:
+  - 13:00 - ..:..
+    - the planning for the buildroot afternoon session will be
+      sent at a later time
 
+  crosstool-NG:
+  - 13:00 - ..:..
+    - state of the project
+      - administrativa, ressources, code...
+    - planning forward:
+      - canadian rewrite, companion libraries, infrastructure...
 
-I found that 
+- Evening: both projects reunited again, dinner, party! :-)
 
-$ output/host/usr/bin/valac --version
+This will be an opportunity for the two communities to keep (and get) in
+touch, share our experiences, know each others, and improve ourselves.
 
-returns :
+We are looking forward to meeting you in Prague for this developers' day!
 
-Vala 0.13.0-dirty
+Peter KORSGAARD, buildroot
+Thomas PETAZZONI, buildroot
+Yann E. MORIN, crosstool-NG
 
-I guess the "-dirty" is added by my buildroot installation when
-compiling vala, and that's why midori's build script complains...
-
-How do I correct this, so that midori detects valac's version correctly?
-
-Thanks
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
