@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 16 Aug 2011 08:36:01 +0200
-Subject: [Buildroot] [git commit] uClibc: disallow 0.9.32 on avr32
-Message-ID: <20110816063719.503FC8C980@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] binutils: default to 2.21 on sh
+Message-ID: <20110816063719.8908E8C980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,35 +9,29 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3037dba2f11f5576dfbe3152f8e1e2bf7b1e6c21
+commit: http://git.buildroot.net/buildroot/commit/?id=57fb63e34d7816d82d7f8947dfde2edc9e739e50
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build breaks during gcc-intermediate step with 0.9.32.
+uClibc currently doesn't build on sh with 2.21.1, similar to the mips
+issue (92496e0).
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/uClibc/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/binutils/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/uClibc/Config.in b/toolchain/uClibc/Config.in
-index 16b2be4..9f3c7b3 100644
---- a/toolchain/uClibc/Config.in
-+++ b/toolchain/uClibc/Config.in
-@@ -5,6 +5,7 @@ comment "uClibc Options"
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index f6e34ce..7de59f0 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -2,7 +2,7 @@ comment "Binutils Options"
  
  choice
- 	prompt "uClibc C library Version"
-+	default BR2_UCLIBC_VERSION_0_9_31 if BR2_avr32 # 0.9.32 broken
- 	default BR2_UCLIBC_VERSION_0_9_32
+ 	prompt "Binutils Version"
+-	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel)
++	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+ 	default BR2_BINUTILS_VERSION_2_21_1
  	help
- 	  Select the version of uClibc you wish to use.
-@@ -18,6 +19,7 @@ choice
- 
- 	config BR2_UCLIBC_VERSION_0_9_32
- 		bool "uClibc 0.9.32.x"
-+		depends on !BR2_avr32
- 
- 	config BR2_UCLIBC_VERSION_SNAPSHOT
- 		bool "daily snapshot"
+ 	  Select the version of binutils you wish to use.
 -- 
 1.7.3.4
