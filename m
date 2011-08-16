@@ -1,20 +1,28 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Tue, 16 Aug 2011 16:08:14 +0200
-Subject: [Buildroot] Trying to package vala (needed to build midori
- 0.4.0)
-In-Reply-To: <20110815174727.680d45f7@gmail.com>
-Message-ID: <20110816160814.66748dc7@gmail.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Tue, 16 Aug 2011 11:07:43 -0700
+Subject: [Buildroot] A question about busybox .config
+Message-ID: <CALo-6+jFkNi6Z6cKPdoGBy0Ma-OzTPWjVaMJ5NLL0-0sCU_f0Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok I found out :
+Can someone give me a few clues about busybox .config and buildroot, please?
 
-I needed to commit my changes in my git.
+I am trying to understand the flow and am a tiny bit, er, Makefile and
+environment variable challenged in trying to work out how it works.
 
-Otherwise "-dirty" was automatically appended to the program's version
-at compile time.
+I see the "configured:" target in the top level Makefile and a
+reference to busybox-config, but how do we:
 
-midori 0.4.0 compiles fine, I'll try to produce a correct patch.
+1. Find our default busybox/.config. I am trying to get it into our
+svn so different developers can tune busybox options and check into
+our svn.
+2. Get access to all the packages in buildroot's xconfig (or can we)?
+If not, the reason I am searching for how the default busybox .config
+gets set is so that I can run busybox-menuconfig and not get bolloxed
+up on the fact that output/target doesnt exist in an svn checkout.
+
+-- 
+Charles Krinke
