@@ -1,31 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 16 Aug 2011 21:16:08 +0200
-Subject: [Buildroot] [git commit] usbmount: depend on udev rather than
-	selecting it
-In-Reply-To: <20110815143204.GC22429@sapphire.tkos.co.il> (Baruch Siach's
- message of "Mon, 15 Aug 2011 17:32:04 +0300")
-References: <20110815121044.054CD8C8E3@busybox.osuosl.org>
- <20110815143204.GC22429@sapphire.tkos.co.il>
-Message-ID: <87sjp1f9qf.fsf@macbook.be.48ers.dk>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 16 Aug 2011 19:27:50 +0000
+Subject: [Buildroot] busybox .config
+In-Reply-To: <CALo-6+gPAV892XX=cuDiEiH3WrwORvtFMSh99FObQKV8ZWLn-w@mail.gmail.com>
+References: <CALo-6+gPAV892XX=cuDiEiH3WrwORvtFMSh99FObQKV8ZWLn-w@mail.gmail.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C60529D4@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> Ok, it seems that Mr.Murphy demands I embarrass myself in public
+> once
+> a week to allow me to see how things work a little bit.
 
- >> comment "usbmount requires a toolchain with LARGEFILE + WCHAR support"
- >> -	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
- >> +	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR) && BR2_PACKAGE_UDEV
+Know that feeling.
 
- Baruch> Shouldn't the comment text be updated to indicate the udev dependency?
+> 
+> I can see in buildroot/package/busybox/busybox-1.18.x.config which
+> I
+> believe is the default .config for busybox. Is that correct?
+> 
+> So, I can go "make busybox-menuconfig" and manipulate the .config
+> and
+> then copy my "tuned" .config to
+> buildroot/package/busybox/busybox-1.18.x.config and capture the
+> changes back in svn and sidestep the fact that clean removes the
+> output directories?
+> 
+> Is this the right path for keeping track of a busybox    .config ??
 
-Well, we could - but we normally only show those comment lines for
-toolchain dependencies  - E.G. you don't see 100s of comments for each
-X11-related package if you haven't enabled Xorg.
+What I do is to use the BR2_PACKAGE_BUSYBOX_CONFIG set to an absolute
+path (using some form of $(TOP_DIR) as the basename), then copy any
+changes from busybox config to that file.  This works well even if you
+update busybox.
 
-udev is just above usbmount as well.
-
--- 
-Bye, Peter Korsgaard
+Andy
