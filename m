@@ -1,34 +1,34 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Tue, 16 Aug 2011 14:16:18 +0200
-Subject: [Buildroot] [PATCH 1/2] package/udev: move pkgconfig files to
-	staging dir after install
-Message-ID: <1313496979-1565-1-git-send-email-zonque@gmail.com>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Tue, 16 Aug 2011 07:44:44 -0500
+Subject: [Buildroot] /run/udev missing ?
+In-Reply-To: <CALR4fELxZAaArCZ9c7SyJzOusP4V6ZBDEtcDhna1yUFFQH7E1A@mail.gmail.com>
+References: <1313137798.1017.5.camel@sven> <1313484062.2127.13.camel@sven>
+ <CALR4fELxZAaArCZ9c7SyJzOusP4V6ZBDEtcDhna1yUFFQH7E1A@mail.gmail.com>
+Message-ID: <201108160744.47656.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is unfortunately no way to tell udev's configure process about the
-install location of its pkgconfig files. However, they should clearly
-end up in the staging area and not in the target.
+On Tue August 16 2011, Diego Iastrubni wrote:
+> On Tue, Aug 16, 2011 at 11:40 AM, Sven Neumann <s.neumann@raumfeld.com>wrote:
+> 
+> >
+> > Do you have a suggestion on how to use udev with a kernel that does not
+> > yet have this option? We are stuck with 2.6.31 on one of our platforms
+> > and I haven't been able to get udev working with recent buildroot on
+> > this platform.
+> >
+> >
+> This init.d file woks for me on 2.6.32. I am using tmpfs for mounting udev.
+>
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
----
- package/udev/udev.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Isn't: mount -t ramfs
+A ram disk on the older kernels rather than a tmpfs (-t tmpfs) ?
 
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index 567bbfb..f5bd893 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -29,6 +29,7 @@ endif
- 
- define UDEV_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 package/udev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-+	mv $(TARGET_DIR)/usr/lib/pkgconfig/*udev* $(STAGING_DIR)/usr/lib/pkgconfig/
- endef
- 
- UDEV_POST_INSTALL_TARGET_HOOKS += UDEV_INSTALL_INITSCRIPT
--- 
-1.7.6
+Mike
+> 
+> Note that for udev 173 you will also need  a patch to compile with older
+> toolchains (look for in in the ML or the bugzilla).
+> 
