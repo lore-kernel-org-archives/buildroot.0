@@ -1,30 +1,36 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Tue, 16 Aug 2011 13:31:07 +0200
-Subject: [Buildroot] [PATCH] wirless-tools: install header files to staging
-	dir
-Message-ID: <1313494267-23656-1-git-send-email-zonque@gmail.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Tue, 16 Aug 2011 14:59:57 +0300
+Subject: [Buildroot] /run/udev missing ?
+In-Reply-To: <1313484062.2127.13.camel@sven>
+References: <1313137798.1017.5.camel@sven> <87ty9kh4sh.fsf@macbook.be.48ers.dk>
+ <1313484062.2127.13.camel@sven>
+Message-ID: <CALR4fELxZAaArCZ9c7SyJzOusP4V6ZBDEtcDhna1yUFFQH7E1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
----
- package/wireless_tools/wireless_tools.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+On Tue, Aug 16, 2011 at 11:40 AM, Sven Neumann <s.neumann@raumfeld.com>wrote:
 
-diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-index d8358ba..3e73b51 100644
---- a/package/wireless_tools/wireless_tools.mk
-+++ b/package/wireless_tools/wireless_tools.mk
-@@ -36,6 +36,7 @@ endef
- define WIRELESS_TOOLS_INSTALL_TARGET_CMDS
- 	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" $(WIRELESS_TOOLS_INSTALL_TARGETS)
- 	$(MAKE) -C $(@D) INSTALL_MAN="$(TARGET_DIR)/usr/share/man" install-man
-+	$(MAKE) -C $(@D) INSTALL_INC="$(STAGING_DIR)/usr/include/" install-hdr
- endef
- 
- define WIRELESS_TOOLS_UNINSTALL_TARGET_CMDS
--- 
-1.7.6
+>
+> Do you have a suggestion on how to use udev with a kernel that does not
+> yet have this option? We are stuck with 2.6.31 on one of our platforms
+> and I haven't been able to get udev working with recent buildroot on
+> this platform.
+>
+>
+This init.d file woks for me on 2.6.32. I am using tmpfs for mounting udev.
+
+Note that for udev 173 you will also need  a patch to compile with older
+toolchains (look for in in the ML or the bugzilla).
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110816/371d7630/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: S10udev
+Type: application/octet-stream
+Size: 1788 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110816/371d7630/attachment.obj>
