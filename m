@@ -1,28 +1,19 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Tue, 16 Aug 2011 23:43:06 +0200
-Subject: [Buildroot] busybox .config
-In-Reply-To: <CALo-6+gPAV892XX=cuDiEiH3WrwORvtFMSh99FObQKV8ZWLn-w@mail.gmail.com>
-References: <CALo-6+gPAV892XX=cuDiEiH3WrwORvtFMSh99FObQKV8ZWLn-w@mail.gmail.com>
-Message-ID: <CAEYzJUGV6mOaq4RLeMrc-V4koRgM=uDGAoRQa+Ux=a+M7Hov3Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 17 Aug 2011 00:24:41 -0300
+Subject: [Buildroot] [PATCH] freetype: bump to 2.4.6
+In-Reply-To: <20110811151103.20c552cb@gmail.com>
+References: <20110811151103.20c552cb@gmail.com>
+Message-ID: <22f874faa95a9af797df651ff68fb3c5@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 August 2011 20:22, Charles Krinke <charles.krinke@gmail.com> wrote:
-> I can see in buildroot/package/busybox/busybox-1.18.x.config which I
-> believe is the default .config for busybox. Is that correct?
->
-> So, I can go "make busybox-menuconfig" and manipulate the .config and
-> then copy my "tuned" .config to
-> buildroot/package/busybox/busybox-1.18.x.config and capture the
-> changes back in svn and sidestep the fact that clean removes the
-> output directories?
->
-> Is this the right path for keeping track of a busybox ? ?.config ??
+On Thu, 11 Aug 2011 15:11:03 +0200, Frederic Bassaler wrote:
 
-I too do it that way. It's easy and it works.
+> Security update.
+>
+> Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 
-Best regards,
-Bj?rn Forsman
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
