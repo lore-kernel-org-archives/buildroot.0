@@ -1,68 +1,46 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 22 Aug 2011 16:58:59 +0200
-Subject: [Buildroot] [PATCH] build: add option to exclude executables from
-	being stripped
-Message-ID: <1314025139-7087-1-git-send-email-s.neumann@raumfeld.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Mon, 22 Aug 2011 21:28:47 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: add linux/linux26-savedefconfig
+	support
+Message-ID: <1314041328-9552-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes it may be desirable to keep debug symbols for
-some binaries and libraries on the target. This commit
-introduces the config option BR2_STRIP_EXCLUDES which is
-interpreted as a list of such binaries and libraries.
-It is passed to the find command in the target-finalize step.
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
 ---
- Config.in |    8 ++++++++
- Makefile  |    6 +++++-
- 2 files changed, 13 insertions(+), 1 deletions(-)
+ Makefile       |    1 +
+ linux/linux.mk |    4 ++++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 2fce9d7..f6d10d7 100644
---- a/Config.in
-+++ b/Config.in
-@@ -243,6 +243,14 @@ config BR2_STRIP_none
- 	  none    do not strip (only for debugging!)
- endchoice
- 
-+config BR2_STRIP_EXCLUDES
-+	string "executables that should not be stripped"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a list of binaries and libraries here that
-+	  should not be stripped on the target.
-+
- choice
- 	prompt "gcc optimization level"
- 	default BR2_OPTIMIZE_S
 diff --git a/Makefile b/Makefile
-index 24f0cb2..138ecd1 100644
+index 24f0cb2..7e7e25f 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -286,6 +286,9 @@ HOSTCC  := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
+@@ -652,6 +652,7 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
  endif
+ ifeq ($(BR2_LINUX_KERNEL),y)
+ 	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
++	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+ endif
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ 	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e6cf01a..6662f7b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -184,6 +184,10 @@ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig li
+ 		$(subst linux-,,$(subst linux26-,,$@))
+ 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
  
-+# executables that should not be stripped in target-finalize
-+DONT_STRIP:=$(patsubst %,-not -name '%',$(call qstrip,$(BR2_STRIP_EXCLUDES)))
++linux-savedefconfig linux26-savedefconfig: dirs $(LINUX_DIR)/.stamp_configured
++	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
++		$(subst linux-,,$(subst linux26-,,$@))
 +
- include toolchain/Makefile.in
- include package/Makefile.in
- 
-@@ -447,7 +450,8 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
--	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
-+	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' \
-+		$(DONT_STRIP) | \
- 		xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD) || true
+ # Support for rebuilding the kernel after the initramfs file list has
+ # been generated in $(BINARIES_DIR)/rootfs.initramfs.
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.initramfs
 -- 
-1.7.4.1
+1.7.5.4
