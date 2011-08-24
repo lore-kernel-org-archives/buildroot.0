@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 24 Aug 2011 15:01:18 +0200
-Subject: [Buildroot] [git commit] configs: remove arm toolchain defconfigs
-Message-ID: <20110824130214.877F88CA86@busybox.osuosl.org>
+Date: Wed, 24 Aug 2011 15:07:41 +0200
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20110824130911.EF0F78C5D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,63 +9,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=480a6c3b01319afb641237da28b40983e1530cbe
+commit: http://git.buildroot.net/buildroot/commit/?id=e0a6bcd8268602fe3d2780c23cf5f7be47441ae6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-nptl is default nowadays, and configurations were pretty much random
-anyway.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/arm_nptl_toolchain_defconfig |   17 -----------------
- configs/arm_toolchain_defconfig      |   15 ---------------
- 2 files changed, 0 insertions(+), 32 deletions(-)
- delete mode 100644 configs/arm_nptl_toolchain_defconfig
- delete mode 100644 configs/arm_toolchain_defconfig
+ CHANGES |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/configs/arm_nptl_toolchain_defconfig b/configs/arm_nptl_toolchain_defconfig
-deleted file mode 100644
-index 8100073..0000000
---- a/configs/arm_nptl_toolchain_defconfig
-+++ /dev/null
-@@ -1,17 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm926t=y
--
--# Toolchain options
--BR2_LARGEFILE=y
--BR2_INET_IPV6=y
--BR2_INET_RPC=y
--BR2_ENABLE_LOCALE=y
--BR2_USE_WCHAR=y
--BR2_PTHREADS_NATIVE=y
--BR2_INSTALL_LIBSTDCPP=y
--
--# No package
--# BR2_PACKAGE_BUSYBOX is not set
--
--# No filesystem (toolchain only)
-diff --git a/configs/arm_toolchain_defconfig b/configs/arm_toolchain_defconfig
-deleted file mode 100644
-index 8bc97c9..0000000
---- a/configs/arm_toolchain_defconfig
-+++ /dev/null
-@@ -1,15 +0,0 @@
--# Architecture
--BR2_arm=y
--
--# Common Toolchain Options
--BR2_LARGEFILE=y
--BR2_INET_IPV6=y
--BR2_INET_RPC=y
--BR2_ENABLE_LOCALE=y
--BR2_USE_WCHAR=y
--BR2_INSTALL_LIBSTDCPP=y
--
--# No package
--# BR2_PACKAGE_BUSYBOX is not set
--
--# No filesystem (toolchain only)
+diff --git a/CHANGES b/CHANGES
+index a6f368b..1e5ea4e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,15 @@
++2011.08, Not yet released:
++
++	Fixes all over the tree.
++
++	Toolchain: crosstool-NG 1.12.0, use binutils 2.21 of
++	mips/sh/older uClibc, disallow uClibc 0.9.32 on avr32/sh
++	(broken).
++
++	Updated/fixed packages: barebox, directfb, libsoup,
++	libxml-parser-perl, mtd, python, ti-utils, udev, usbmount,
++	util-linux, xfont_font-misc-misc
++
+ 2011.08-rc1, Released August 4th, 2011:
+ 
+ 	Fixes all over the tree and new features.
 -- 
 1.7.3.4
