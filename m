@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 24 Aug 2011 22:47:08 +0200
+Date: Wed, 24 Aug 2011 22:48:24 +0200
 Subject: [Buildroot] License for patches
-In-Reply-To: <201108241313.13007.vapier@gentoo.org> (Mike Frysinger's message
- of "Wed, 24 Aug 2011 13:13:12 -0400")
+In-Reply-To: <201108241855.53895.yann.morin.1998@anciens.enib.fr> (Yann
+ E. MORIN's message of "Wed, 24 Aug 2011 18:55:53 +0200")
 References: <4E5517E0.30003@finalbit.de>
  <201108241205.23310.vapier@gentoo.org> <j33814$hoj$1@dough.gmane.org>
- <201108241313.13007.vapier@gentoo.org>
-Message-ID: <87ty96r0z7.fsf@macbook.be.48ers.dk>
+ <201108241855.53895.yann.morin.1998@anciens.enib.fr>
+Message-ID: <87pqjur0x3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
 Hi,
 
- >> Seems pretty clear to me: the patches are under the GPL.
+ Yann> In my opinion, for what it's worth, is that the same should apply to
+ Yann> buildroot:
+ Yann>  - buildroot by itself (Makefiles, and so on...) is GPLv2+
+ Yann>  - patches are available under the same license as the project they apply to
+ Yann>  - and so...
 
- Mike> pretty sure that wasnt generally the intention.  the patches to
- Mike> packages should be under the same license as the packages they
- Mike> patch.
+Indeed. That's the only sensible option.
 
- Mike> the build system itself (the set of makefiles and such) are under
- Mike> the GPL.
+ Yann> This would indeed need clarification from the buildroot developpers.
 
-That was certainly my intention as well.
+I'm fine with it for one.
 
 -- 
 Bye, Peter Korsgaard
