@@ -1,42 +1,32 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Wed, 24 Aug 2011 13:13:12 -0400
-Subject: [Buildroot] License for patches
-In-Reply-To: <j33814$hoj$1@dough.gmane.org>
-References: <4E5517E0.30003@finalbit.de>
- <201108241205.23310.vapier@gentoo.org> <j33814$hoj$1@dough.gmane.org>
-Message-ID: <201108241313.13007.vapier@gentoo.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Wed, 24 Aug 2011 10:13:24 -0700
+Subject: [Buildroot] Howto add "single" to busybox command line.
+Message-ID: <CALo-6+ise3H=_VaHC=xfZ886A8a=Ebox94gwhFS6gK-k=njEjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday, August 24, 2011 12:14:28 Grant Edwards wrote:
-> On 2011-08-24, Mike Frysinger <vapier@gentoo.org> wrote:
-> > On Wednesday, August 24, 2011 11:25:20 Lars Reemts wrote:
-> >> Which license is relevant for the package specific patches distributed
-> >> by buildroot? Formally it must be the GPL.
-> > 
-> > says who ?  i dont see the logic here.
-> 
-> According to http://buildroot.uclibc.org/:
-> 
->   Buildroot is a set of Makefiles and patches [....]
-> 
->   Buildroot is [...] licensed under the GNU GENERAL PUBLIC LICENSE V2
->   (Or later).
-> 
-> Seems pretty clear to me: the patches are under the GPL.
+I have another "howto" question, if I may. I need to be able to boot a
+MPC8321 embedded system into single user mode for maintenance
+occaisionally.
 
-pretty sure that wasnt generally the intention.  the patches to packages 
-should be under the same license as the packages they patch.
+I know that if I add "single" to the kernel command line in u-boot, I
+get a root prompt with no login, so it appears that busybox is
+processing a single-user mode request.
 
-the build system itself (the set of makefiles and such) are under the GPL.
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110824/02420a05/attachment.asc>
+But, ... I dont know how to change the kernel command line on the fly
+from a button press during boot from u-boot. The requirement is that
+pressing Ctrl-C causes single-user mode.
+
+So, .... is it possible to change the kernel command line in u-boot
+from a button press? All my research indicates button presses in
+u-boot just stop the bootcmd processing, but I am hoping I am missing
+a detail here.
+
+An answer of the form "RTFM" is just fine, but it would be useful if
+accompanied by a URL.
+
+-- 
+Charles Krinke
