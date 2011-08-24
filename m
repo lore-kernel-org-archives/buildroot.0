@@ -1,44 +1,63 @@
-From: Robin Holt <holt@sgi.com>
-Date: Wed, 24 Aug 2011 11:21:56 -0500
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 24 Aug 2011 18:55:53 +0200
 Subject: [Buildroot] License for patches
-In-Reply-To: <201108241205.23310.vapier@gentoo.org>
-References: <4E5517E0.30003@finalbit.de> <201108241205.23310.vapier@gentoo.org>
-Message-ID: <20110824162156.GF4926@sgi.com>
+In-Reply-To: <j33814$hoj$1@dough.gmane.org>
+References: <4E5517E0.30003@finalbit.de>
+ <201108241205.23310.vapier@gentoo.org> <j33814$hoj$1@dough.gmane.org>
+Message-ID: <201108241855.53895.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 24, 2011 at 12:05:22PM -0400, Mike Frysinger wrote:
-> On Wednesday, August 24, 2011 11:25:20 Lars Reemts wrote:
-> > Which license is relevant for the package specific patches distributed
-> > by buildroot? Formally it must be the GPL.
+Lars, Grant, All,
+
+On Wednesday 24 August 2011 18:14:28 Grant Edwards wrote:
+> On 2011-08-24, Mike Frysinger <vapier@gentoo.org> wrote:
+> > On Wednesday, August 24, 2011 11:25:20 Lars Reemts wrote:
 > 
-> says who ?  i dont see the logic here.
+> >> Which license is relevant for the package specific patches distributed
+> >> by buildroot? Formally it must be the GPL.
+> >
+> > says who ?  i dont see the logic here.
+> 
+> According to http://buildroot.uclibc.org/:
+> 
+>   Buildroot is a set of Makefiles and patches [....]
+>   
+>   Buildroot is [...] licensed under the GNU GENERAL PUBLIC LICENSE V2
+>   (Or later).
+> 
+> Seems pretty clear to me: the patches are under the GPL.
+> 
+> The question is what happens when you combine GPL'd source (the
+> patches) with original source that's not under GPL.  It seems like a
+> very legitimate question.
 
-Let me preface with, I am neither a lawyer nor a judge and until there
-is established precedence in your juristiction, there is no final answer,
-but...
+The stance I take with crosstool-NG regarding this, is:
+ - crosstool-NG by itself is licensed under the GPLv2
+ - the documentation is licensed under CC-BY-SAv2.5
+ - patches are available under the same license as the project they apply to
+ - a few other licenses here and there (kconfig as GLPv2, etc...)
+ - the above does not apply to any file with an associated license (embedded
+   in the file, or in an accompanying file)
 
-Our company lawyers gave us a different read many years ago.  The
-modifications to a source base which become part of a final executable
-bit of code or machine readable blob (specifically, they were addressing
-C# and java code here) must be compatible with the license for the
-body of the work into which they were included and, in that use,
-are licensed under either that license or a less restrictive license,
-as the author/owner sees fit.  The size of changes with respect to the
-"operating" part of the code was important in that reading as something
-which significantly modifies the "operating" part of the code has more
-ability to amend the license terms, whereas a minor patch really does
-not carry enough weight to amend a license at all.
+In my opinion, for what it's worth, is that the same should apply to
+buildroot:
+ - buildroot by itself (Makefiles, and so on...) is GPLv2+
+ - patches are available under the same license as the project they apply to
+ - and so...
 
-With that interpretation, the patch's license, despite being distributed
-with the buildroot "tool" would probably follow the license of the
-package it is changing and the two together would be considered the
-derivative work.  buildroot is merely the tool which allows you to put the
-patch together with the source and would not factor into the discussion
-beyond that.
+This would indeed need clarification from the buildroot developpers.
 
-Good Luck,
-Robin Holt
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
