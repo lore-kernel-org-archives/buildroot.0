@@ -1,39 +1,37 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 24 Aug 2011 14:31:11 +0000 (UTC)
-Subject: [Buildroot] external buildroot toolchain: LD_LIBRARY_PATH needed
-References: <CAAXf6LV8wL4wAp1eETK7mtwqCFCgoJWFBScnhGzhERZMs2R+Ww@mail.gmail.com>
-Message-ID: <j331vf$6s0$1@dough.gmane.org>
+From: Lars Reemts <lars.reemts@finalbit.de>
+Date: Wed, 24 Aug 2011 17:25:20 +0200
+Subject: [Buildroot] License for patches
+Message-ID: <4E5517E0.30003@finalbit.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2011-08-24, Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
+Hi there,
 
-> If I build a buildroot toolchain on machine A, package the
-> output/host/usr directory and use that as an external toolchain on
-> machine B, I get errors that cc1 cannot find libmpfr.so.4. The
-> location of that library is hardcoded in some compiler tools, and
-> since we are on another machine, the original location does not
-> exist.
->
-> I can work around this by specifying
-> LD_LIBRARY_PATH=<buildroot>/output/host/opt/ext-toolchain/lib in the
-> environment, but this is an annoying and not so clean solution.
->
-> How is this supposed to work?
+we are using Buildroot in an embedded Linux project for one of our
+customers. Discussing with the customer's lawyer the steps required by
+the customer in order to conform to the various open-source licenses
+involved, the following issue came up:
 
-Generally, when you run a gcc from somewhere othern than the location
-for which it was originally compled you use the --sysroot option on
-the compiler command line to tell it where it's now installed.
+Buildroot is licensed under the GPL. The packages buildroot builds are
+licensed under different licenses. Some of these liceses are
+incompatible with the GPL (e.g. the BSD style license of openssl or the
+LGPL license of uClibc).
 
-I don't know if the buildroot toolchain has that enabled or not.  I
-had a lot of problems trying to use a buildroot-generated toolchain as
-an external toolchain (this was a year or two back) and switched to
-using crosstool-ng to build my toolchains.
+Which license is relevant for the package specific patches distributed
+by buildroot? Formally it must be the GPL. But if the patches are
+distributed under the GPL, this would result in an unresolvable license
+collision for some packages (e.g. openssl). All other patched packages
+would be infected by the GPL which would forbid dynamic linking of a
+proprietary software with e.g. uClibc.
 
--- 
-Grant Edwards               grant.b.edwards        Yow! I wonder if there's
-                                  at               anything GOOD on tonight?
-                              gmail.com            
+I'm sure there must be a resolution but I have been unable to convince
+the lawyer so far. What can I tell him to make him happy again?
+
+Any ideas?
+
+Best regards
+
+Lars Reemts
