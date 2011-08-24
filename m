@@ -1,69 +1,48 @@
-From: raymond zhao <raymond.zhao.ml@gmail.com>
-Date: Tue, 23 Aug 2011 16:30:29 -0400
-Subject: [Buildroot] how BR download the linux kernel now
-In-Reply-To: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
-References: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
-Message-ID: <CAAa76NQpfMaN-EQ6pBx6y6V-yJ3QUk+w0sQrD=iktdJ=qgHKgA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Aug 2011 09:53:22 +0200
+Subject: [Buildroot] [git commit] initramfs: fix boot with dynamic /dev
+In-Reply-To: <20110720150418.E95188B391@busybox.osuosl.org>
+References: <20110720150418.E95188B391@busybox.osuosl.org>
+Message-ID: <201108240953.23168.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 13, 2011 at 9:31 AM, raymond zhao <raymond.zhao.ml@gmail.com> wrote:
->>> The linux kernel is a special "package". Lots of embedded projects
->
->>> (if not all of them) will start from a certain version of the kernel
->
->>> and hack the kernel from there, such as add device drivers etc. Then,
->
->>> put the source code into a local git server to do version control.
->
->>> Some people argued to use original tarball plus the patch, but it
->
->>> makes the development procedure very painful. In the old approach, it
->
->>> is very easy to hack the linux.mk to checkout the kernel source code
->
->>> directly into the output directory. But, in the new one. Looks it
->>
->>> becomes more complex. The kernel is very big. Check out with the git,
->>
->>> archive it to a tarball, and then extract it to the output directory
->>
->>> for building will waste lots of time. Is there a official solution
->>
->>> (or suggestion) for my situation?
->>
->>Yes, I am currently working on extending the package infrastructure so
->>
->>that any package (not only the Linux kernel, but any package) can be
->>
->>sourced from an existing directory, instead of being downloaded through
->>
->>git/svn/http.
->>
->>I have already published preliminary versions of this work (see "[RFC]
->>
->>Override source directories", posted May, 18th 2011), and I intend to
->>
->>continue. The basic mechanism is working, I still have issues
->>
->>implementing "make source" and "make external-deps" with this mechanism.
->>
->>It'd be really nice if you could have a look at what I did to see if it
->>
->>would solve your use case as well.
->
-> That's great. I will definitely check it. If we solved this problem. I
-> believe BR will be #1 choice for most embedded linux projects.
->
-> thanks,
-> raymond
->
 
-BR 2011.08 rc was released and I did not see this feature in there? Is
-it still going to happened in 2011.08 release?
-Please add this feature if possible, it is really useful.
-thanks,
-raymond
+On Wednesday 20 July 2011 16:30:14, Peter Korsgaard wrote:
+> Devtmpfs (which is used by devtmpfs/mdev/udev options) doesn't get
+> automounted by the kernel when an initramfs is used, causing boot
+> failures when a dynamic /dev is used.
+
+ [Reviving an old issue]
+
+ I now switched to a cpio that I use as an initrd and of course I encounter 
+the same issue...  So we can do the same thing for cpio archives.  Then I have 
+two issues:
+
+ - Are cpio archives used for something else than initrd?  In that case, we 
+shouldn't use this /init.  OTOH, /init is never used if it's not an initrd so 
+it shouldn't really make a difference.
+
+ - Clearly this should be refactored so we don't duplicate the same stuff in 
+initramfs.mk and cpio.mk.
+
+ Given that /init is only used in initramfs situations, why don't we create it 
+unconditionally as part of the .root skeleton?  OK, it adds 4K to the ext2fs 
+but that shouldn't be the issue, right?
+
+
+ Regards,
+ Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110824/7aff7e70/attachment.html>
