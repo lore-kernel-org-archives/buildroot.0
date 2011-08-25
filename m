@@ -1,32 +1,50 @@
-From: Niall Parker <stuff@pender.dnsalias.net>
-Date: Thu, 25 Aug 2011 12:14:14 -0700
-Subject: [Buildroot] bash instead of busybox
-In-Reply-To: <CALo-6+iKroWCcD1a45F1w2YbPbEv+M-4ioncrsafzrKamGu=rg@mail.gmail.com>
-References: <CALo-6+g4dksK0EaCbwsmNu+L53GuveFFJkheggnbePWf-PNHZg@mail.gmail.com>
- <20110825181736.GI4926@sgi.com>
- <CALo-6+iKroWCcD1a45F1w2YbPbEv+M-4ioncrsafzrKamGu=rg@mail.gmail.com>
-Message-ID: <4E569F06.1030802@pender.dnsalias.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 25 Aug 2011 20:51:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 4093] New: Grub fails to install bz2 patch after
+ conversion to AUTOTARGETS
+Message-ID: <bug-4093-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11-08-25 11:32 AM, Charles Krinke wrote:
-> Dear Robin:
->
-> I considered that, but am caught in one of the old "the customer says
-> he doesnt want busybox", so I am trying to find the various packages.
-> I have gotten some working and am now at the point where the sysvinit
-> package needs getty. I also havent figured out how to get the
-> fileutils package into buildroot so I can get things like "ls", but as
-> I find packages that seem appropriate to buildroot, I can add them and
-> still boot the rootfilesystem albeit with erros of "cannot execute"
-> here and there.
->
-As you have found, the buildroot rfs is conventionally used with busybox 
-for most of the common utilities, you may want to push back on the 
-customer requirement of "no busybox" and get clarification on whether 
-they truly want it completely purged or just wanted bash for their shell.
+https://bugs.busybox.net/show_bug.cgi?id=4093
 
-             ... Niall
+             Build: buildroot-20110725
+           Summary: Grub fails to install bz2 patch after conversion to
+                    AUTOTARGETS
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: cloak at theblackroom.ca
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+After the patch :
+   grub: convert to AUTOTARGETS 
+committed on 
+   2011-07-10 13:28:23 (GMT)
+
+the grub package no longer applies all the patches in boot/grub, specifially
+the grub.400-nic_update2.patch.bz2.
+
+The following line was removed from grub.mk: 
+toolchain/patch-kernel.sh $(GRUB_DIR) boot/grub grub.\*.patch{,.bz2}
+
+This handled application of the bz2 patch, and the new autotargets conversion
+calls toolchain/patch-kernel.sh with grub*.patch grub*.patch.{ARCH} as the
+script parameters. There is no ability for autotargets to use compressed patch
+files.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
