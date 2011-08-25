@@ -1,37 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 25 Aug 2011 17:29:40 +0200
-Subject: [Buildroot] [git commit] mini2440_defconfig: fix getty config
-Message-ID: <20110825153023.09D608CA67@busybox.osuosl.org>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 25 Aug 2011 09:56:38 -0700
+Subject: [Buildroot] bash instead of busybox
+Message-ID: <CALo-6+g4dksK0EaCbwsmNu+L53GuveFFJkheggnbePWf-PNHZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Gentlemen:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d881a14f9b7e7367bc664105bd98166015eaefaf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I have a request to build a rootfs.jffs2 for an MPC8323 with bash
+instead of busybox. So, ... I unset busybox in buildroot's make
+xconfig and set bash. Then do a "make clean && make". At the end of
+this, I see the two lines from makedevs. And, of course, to make it
+worse, after I load it into the flash and boot from it, I do get a
+shell of the form "sh-4.1#", so at least the file system boots. I
+*think* at this point that a number of packages need to be added
+starting with say, "ls" which I *think* is in the fileutils package.
 
-BR2_TARGET_GENERIC_GETTY_TTYSAC0 is no more.
+I dont see fileutils as a package option in the buildroot xconfig.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/mini2440_defconfig |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Can someone offer a suggestion or two to a naive programmer to help
+find some of the essential packages that are now missing?
 
-diff --git a/configs/mini2440_defconfig b/configs/mini2440_defconfig
-index d1be8e1..ac6d0cf 100644
---- a/configs/mini2440_defconfig
-+++ b/configs/mini2440_defconfig
-@@ -3,7 +3,8 @@ BR2_arm=y
- BR2_arm920t=y
- 
- # Serial port
--BR2_TARGET_GENERIC_GETTY_TTYSAC0=y
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttySAC0"
- 
- # Filesystem
- BR2_TARGET_ROOTFS_JFFS2=y
+
+>>>   Generating root filesystem image rootfs.jffs2
+...table='target/generic/device_table.txt'
+makedevs: line 42: regular file
+'/home/ckrinke/asvn/trunk/buildroot-glibc/output/target/bin/busybox'
+does not exist: No such file or directory
+makedevs: line 49: regular file
+'/home/ckrinke/asvn/trunk/buildroot-glibc/output/target/usr/share/udhcpc/default.script'
+does not exist: No such file or directory
+
+
 -- 
-1.7.3.4
+Charles Krinke
