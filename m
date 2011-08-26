@@ -1,35 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 26 Aug 2011 15:03:52 +0200
-Subject: [Buildroot] [git commit] ncurses: remove explicit STRIPCMD
-Message-ID: <20110826130551.5B5678D1C7@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Aug 2011 13:06:17 +0000 (UTC)
+Subject: [Buildroot] [Bug 3685] ncurses installation hangs due to old
+	version of tic
+In-Reply-To: <bug-3685-163@https.bugs.busybox.net/>
+References: <bug-3685-163@https.bugs.busybox.net/>
+Message-ID: <20110826130617.A035F8D1CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=3685
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d43a90032c4016a7583c3c8a88948e6bf3d24271
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Stripping is done globally in target-finalize these days.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ncurses/ncurses.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Thanks, committed part 2 with minor changes. I prefer to not do part 1 this
+close to the release.
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 0d42528..ac4c12b 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -117,7 +117,6 @@ define NCURSES_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
- 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
- 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
- 	$(NCURSES_INSTALL_TARGET_DEVFILES)
- endef # NCURSES_INSTALL_TARGET_CMDS
- 
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
