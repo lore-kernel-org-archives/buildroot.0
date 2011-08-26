@@ -1,51 +1,39 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Fri, 26 Aug 2011 06:05:08 +0000
-Subject: [Buildroot] package/Makefile.in  STRIP in target config options.
-Message-ID: <F9C551623D2CBB4C9488801D14F864C605660F@ex-mb1.corp.adtran.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 26 Aug 2011 07:29:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 3817] Failed to compile binutils-2.21
+In-Reply-To: <bug-3817-163@https.bugs.busybox.net/>
+References: <bug-3817-163@https.bugs.busybox.net/>
+Message-ID: <20110826072943.3C7418D1D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Below is a snippet from Makefile.in in the package dir.  While looking
-through the file to determine how best to write a configure script that
-would work well with BuildRoot, I came across this strangeness.  If
-this is by design, I would wonder why we take the time to make the
-variable STRIPCMD.  Note that in the TARGET_CONFIGURE_OPTS we set STRIP
-to only $(TARGET_STRIP).
+https://bugs.busybox.net/show_bug.cgi?id=3817
 
-I'm thinking this is an oops in the assignment of
-STRIP=$(TARGET_STRIP) or perhaps there was an intent to reassign
-TARGET_STRIP after the STRIPCMD was created.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Please advise.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Andy
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+(In reply to comment #0)
+> /bin/sh: error while loading shared libraries: /usr/lib/libc.so: invalid ELF
+> header
 
+> I could work around this problem by doing the following:
+> $cd /usr/lib
+> $rm libc.so
+> $ln -s /lib/libc.so.6 libc.so
+> 
+> But this is not the best way, because ASCII file /usr/lib/libc.so's missing
+> incurs other problems, fox example "make menuconfig" fails to launch
 
-ifeq ($(BR2_STRIP_strip),y)
-STRIP_DISCARD_ALL:=--discard-all
-STRIP_STRIP_UNNEEDED:=--strip-unneeded
-STRIP_STRIP_ALL:=--strip-all
-TARGET_STRIP=$(TARGET_CROSS)strip
-STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
-KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-endif
-ifeq ($(BR2_STRIP_sstrip),y)
-STRIP_DISCARD_ALL:=
-STRIP_STRIP_UNNEEDED:=
-STRIP_STRIP_ALL:=
-TARGET_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
-STRIPCMD=$(TARGET_STRIP)
-KSTRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note --strip-unneeded
-endif
-ifeq ($(BR2_STRIP_none),y)
-TARGET_STRIP=true
-STRIPCMD=$(TARGET_STRIP)
-KSTRIPCMD=$(TARGET_STRIP)
-endif
-<snip>
-TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
-<snip>
-                STRIP="$(TARGET_STRIP)" \
+Huh, is your system libc corrupt? Are you building as root?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
