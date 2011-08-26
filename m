@@ -1,31 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Aug 2011 05:18:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 4093] Grub fails to install bz2 patch after
- conversion to AUTOTARGETS
-In-Reply-To: <bug-4093-163@https.bugs.busybox.net/>
-References: <bug-4093-163@https.bugs.busybox.net/>
-Message-ID: <20110826051828.225EA8CA41@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 26 Aug 2011 07:16:23 +0200
+Subject: [Buildroot] [git commit] grub: fix patch handling after AUTOTARGETS
+	conversion
+Message-ID: <20110826051840.67A448CA41@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4093
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+commit: http://git.buildroot.net/buildroot/commit/?id=cb6c2c427838a0ba5dc7bb404734574c9ed6b102
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Closes #4093
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Thanks, fixed in git by expanding the 400 patch and getting rid of the 500 like
-you suggested as well. We're very close to the 2011.08 release, so I don't want
-to add compressed patch support to ATOTARGETS atm.
+AUTOTARGETS doesn't handle compressed patches, so the '400' patch did
+not get applied.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Fix it by extracting the patch. With this, the '500' patch is no longer
+needed.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+
+Patch is too large, so refusing to show it
