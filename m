@@ -1,30 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 Aug 2011 21:08:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 4093] Grub fails to install bz2 patch after
- conversion to AUTOTARGETS
-In-Reply-To: <bug-4093-163@https.bugs.busybox.net/>
-References: <bug-4093-163@https.bugs.busybox.net/>
-Message-ID: <20110825210835.A78D38CA67@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 25 Aug 2011 23:15:16 -0300
+Subject: [Buildroot] bash instead of busybox
+In-Reply-To: <CALo-6+g4dksK0EaCbwsmNu+L53GuveFFJkheggnbePWf-PNHZg@mail.gmail.com>
+References: <CALo-6+g4dksK0EaCbwsmNu+L53GuveFFJkheggnbePWf-PNHZg@mail.gmail.com>
+Message-ID: <31d55143f83795e34d61b003c1defe37@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4093
+On Thu, 25 Aug 2011 09:56:38 -0700, Charles Krinke wrote:
 
---- Comment #1 from Chris <cloak@theblackroom.ca>  ---
-After a proper patch of boot/grub/grub.400-nic_update2.patch.bz2,
-boot/grub/grub.500-build-fix.patch is not needed.
+> Gentlemen:
+>
+> I have a request to build a rootfs.jffs2 for an MPC8323 with bash
+> instead of busybox. So, ... I unset busybox in buildroot's make
+> xconfig and set bash. Then do a "make clean && make". At the end of
+> this, I see the two lines from makedevs. And, of course, to make it
+> worse, after I load it into the flash and boot from it, I do get a
+> shell of the form "sh-4.1#", so at least the file system boots. I
+> *think* at this point that a number of packages need to be added
+> starting with say, "ls" which I *think* is in the fileutils package.
+>
+> I dont see fileutils as a package option in the buildroot xconfig.
+>
+> Can someone offer a suggestion or two to a naive programmer to help
+> find some of the essential packages that are now missing?
 
-I submitted this as a bug as I don't know the best way to fix it, but as a work
-around, I just bunzip2'd grub.400-nic_update2.patch.bz2 and autotargets picked
-up the patch as expected. 
-
-I imagine the proper fix will be to have the autotargets infrastructure be able
-to use compressed patches.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+You want coreutils for ls & friends.
+Probably also util-linux for mount and other friends.
+Sysvinit for some nice init otherwise you'll have a hard time too.
+There are other packages you might want too, like some dev manager now 
+that you'll lack mdev, udev maybe? Or a static /dev tree.
+You see, if they really don't want busybox the filesystem footprint 
+will grow considerably, maybe that's not an issue.
+If it's a license thing, well, good luck, most of the other tools 
+busybox replaces are GPL too.
+Regards.
