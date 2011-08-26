@@ -1,12 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 26 Aug 2011 14:02:09 +0200
-Subject: [Buildroot] [PATCH 14/28] grub: convert to AUTOTARGETS
-In-Reply-To: <4E4F7CCD.8030407@gmail.com> (Darius Augulis's message of "Sat,
- 20 Aug 2011 12:22:21 +0300")
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
- <20a318776db62b41f3bb365d2417e6251fc2d8ea.1309895466.git.thomas.petazzoni@free-electrons.com>
- <4E4F7CCD.8030407@gmail.com>
-Message-ID: <87aaawqt32.fsf@macbook.be.48ers.dk>
+Date: Fri, 26 Aug 2011 15:03:52 +0200
+Subject: [Buildroot] [git commit] ncurses: remove explicit STRIPCMD
+Message-ID: <20110826130551.5B5678D1C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
+commit: http://git.buildroot.net/buildroot/commit/?id=d43a90032c4016a7583c3c8a88948e6bf3d24271
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Stripping is done globally in target-finalize these days.
 
->>>>> "Darius" == Darius Augulis <augulis.darius@gmail.com> writes:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ncurses/ncurses.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
- Darius> Hi Thomas,
-
- Darius> with these changes grub is not installed to staging dir.
- Darius> grub.mk has label:
-
- Darius> define GRUB_INSTALL_STAGING_CMDS
- Darius>         install -m 0755 -D $(@D)/grub/grub $(STAGING_DIR)/sbin/grub
- Darius> endef
-
- Darius> but when building it's installed only to target dir, but not to
- Darius> staging.
-
-Ahh yes. What is the use case for installing grub into staging? Does it
-make any sense to do so?
-
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 0d42528..ac4c12b 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -117,7 +117,6 @@ define NCURSES_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/a/ansi $(TARGET_DIR)/usr/share/terminfo/a
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/l
+ 	cp -dpf $(STAGING_DIR)/usr/share/terminfo/l/linux $(TARGET_DIR)/usr/share/terminfo/l
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libncurses.so*
+ 	$(NCURSES_INSTALL_TARGET_DEVFILES)
+ endef # NCURSES_INSTALL_TARGET_CMDS
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
