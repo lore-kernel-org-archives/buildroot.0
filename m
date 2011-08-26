@@ -1,39 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 26 Aug 2011 07:29:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 3817] Failed to compile binutils-2.21
-In-Reply-To: <bug-3817-163@https.bugs.busybox.net/>
-References: <bug-3817-163@https.bugs.busybox.net/>
-Message-ID: <20110826072943.3C7418D1D7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 26 Aug 2011 14:02:09 +0200
+Subject: [Buildroot] [PATCH 14/28] grub: convert to AUTOTARGETS
+In-Reply-To: <4E4F7CCD.8030407@gmail.com> (Darius Augulis's message of "Sat,
+ 20 Aug 2011 12:22:21 +0300")
+References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <20a318776db62b41f3bb365d2417e6251fc2d8ea.1309895466.git.thomas.petazzoni@free-electrons.com>
+ <4E4F7CCD.8030407@gmail.com>
+Message-ID: <87aaawqt32.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3817
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-(In reply to comment #0)
-> /bin/sh: error while loading shared libraries: /usr/lib/libc.so: invalid ELF
-> header
+>>>>> "Darius" == Darius Augulis <augulis.darius@gmail.com> writes:
 
-> I could work around this problem by doing the following:
-> $cd /usr/lib
-> $rm libc.so
-> $ln -s /lib/libc.so.6 libc.so
-> 
-> But this is not the best way, because ASCII file /usr/lib/libc.so's missing
-> incurs other problems, fox example "make menuconfig" fails to launch
+ Darius> Hi Thomas,
 
-Huh, is your system libc corrupt? Are you building as root?
+ Darius> with these changes grub is not installed to staging dir.
+ Darius> grub.mk has label:
+
+ Darius> define GRUB_INSTALL_STAGING_CMDS
+ Darius>         install -m 0755 -D $(@D)/grub/grub $(STAGING_DIR)/sbin/grub
+ Darius> endef
+
+ Darius> but when building it's installed only to target dir, but not to
+ Darius> staging.
+
+Ahh yes. What is the use case for installing grub into staging? Does it
+make any sense to do so?
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
