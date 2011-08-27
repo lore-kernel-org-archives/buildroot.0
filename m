@@ -1,22 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 27 Aug 2011 10:13:38 -0300
-Subject: [Buildroot] [PATCH] mdev: Add auto-mounting support for USB and
- SD card
-In-Reply-To: <1314419182-21753-1-git-send-email-plagnioj@jcrosoft.com>
-References: <1314419182-21753-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <28cd2ef34f796e8e58e96bd6a8dd681b@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Sat, 27 Aug 2011 23:07:43 +0200
+Subject: [Buildroot] [PATCH 2/2] package/crosstool-NG: update version to
+	1.12.1
+In-Reply-To: <1314479263-8979-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+References: <1314479263-8979-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1314479263-8979-3-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 27 Aug 2011 06:26:22 +0200, Jean-Christophe PLAGNIOL-VILLARD 
-wrote:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+---
+ package/crosstool-ng/crosstool-ng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> this will mount the device in /media as
-> /media/${MDEV}
-
-I'd make it an option, there are many scenarios where you don't want 
-devices automounting media.
-Regards.
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index 2bbf631..076be28 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -1,4 +1,4 @@
+-CROSSTOOL_NG_VERSION           = 1.12.0
++CROSSTOOL_NG_VERSION           = 1.12.1
+ CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
+ CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
+ CROSSTOOL_NG_INSTALL_STAGING   = NO
+-- 
+1.7.2.5
