@@ -1,33 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 28 Aug 2011 09:43:33 +0200
-Subject: [Buildroot] [git commit] package/crosstool-NG: update version to
-	1.12.1
-Message-ID: <20110828084402.5D8A88D252@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 28 Aug 2011 10:45:16 +0200
+Subject: [Buildroot] [PATCH] mdev: Add auto-mounting support for USB and
+	SD card
+In-Reply-To: <28cd2ef34f796e8e58e96bd6a8dd681b@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Sat, 27 Aug 2011 10:13:38 -0300")
+References: <1314419182-21753-1-git-send-email-plagnioj@jcrosoft.com>
+ <28cd2ef34f796e8e58e96bd6a8dd681b@zacarias.com.ar>
+Message-ID: <87fwklq603.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a2cc4ab22282c98a776f9c913509a37bc2bc6c8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Gustavo> On Sat, 27 Aug 2011 06:26:22 +0200, Jean-Christophe PLAGNIOL-VILLARD
+ Gustavo> wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/crosstool-ng/crosstool-ng.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ >> this will mount the device in /media as
+ >> /media/${MDEV}
 
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
-index 2bbf631..076be28 100644
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -1,4 +1,4 @@
--CROSSTOOL_NG_VERSION           = 1.12.0
-+CROSSTOOL_NG_VERSION           = 1.12.1
- CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
- CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
- CROSSTOOL_NG_INSTALL_STAGING   = NO
+ Gustavo> I'd make it an option, there are many scenarios where you don't want
+ Gustavo> devices automounting media.
+ Gustavo> Regards.
+
+Agreed, something like the usbmount package we have for udev.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
