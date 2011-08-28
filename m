@@ -1,35 +1,99 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 28 Aug 2011 10:43:43 +0200
-Subject: [Buildroot] [PATCH 0/2] Update crostool-NG backend
-In-Reply-To: <1314479263-8979-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- (Yann E. MORIN's message of "Sat, 27 Aug 2011 23:07:41 +0200")
-References: <1314479263-8979-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <87k49yori8.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 28 Aug 2011 09:43:33 +0200
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: fix bundled config
+	files
+Message-ID: <20110828084402.30E538D252@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yann> Hello All!
- Yann> This short patch series updates the crosstool-NG backend in two ways:
- Yann>  - patch 2 is the simple one, and  updates to 1.12.1, which has a few
- Yann>    fixes since 1.12.0
+commit: http://git.buildroot.net/buildroot/commit/?id=f30928c1b19801127b6e8b1b27878e39a04ba5d8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann>  - patch 1 is in itself quite simple, but the reasoning behind it is a
- Yann>    bit more complex, and gave me a headache for a few evenings before I
- Yann>    could pin-point the issue. More explanation in the patch description.
+Bundled config files have architecture-specific values in them,
+which may break if buildroot is configured with another architecture
+that does not forcibly set these option.
 
- Yann>    Of course, this would require much more love to properly fix, but not
- Yann>    that close to a release. Hopefully, we can use the dev day in Prague
- Yann>    to disguss the issue.
+For example, the bundled config files are for x86_64, and define:
+    CT_ARCH_TUNE="generic"
 
- Yann>    [PATCH 1/2] toolchain/crosstool-NG: fix bundled config files
- Yann>    [PATCH 2/2] package/crosstool-NG: update version to 1.12.1
+This comes from the BR2_GCC_TARGET_TUNE config option (in buildroot) that
+is set accordingly to the selected (arch,sub-arch).
 
-Committed both, thanks!
+But if someone configures buildroot for, say, generic ARM, then the
+BR2_GCC_TARGET_TUNE config option is not set, and the crosstool-NG backend
+Makefile believes it should not be pushed down to the crosstool-NG config
+file.
 
+BUT...
+
+The crosstool-NG backend Makefile can not forcibly push BR2_GCC_TARGET_TUNE
+down to the CT-NG config file. If BR2_GCC_TARGET_TUNE is empty, the user can
+still set CT_ARCH_TUNE by running ctng-menuconfig.
+
+The backend Makefile already passes such values only if they are set.
+
+In the end, we can't push options as-is to the crosstool-NG config, but we
+MUST provide sane bundled config files, which this patch does.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../crosstool-ng.config-eglibc                     |    2 +-
+ .../crosstool-ng.config-glibc                      |    4 ++--
+ .../crosstool-ng.config-uClibc                     |    2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+index 3b6a2e2..66744bc 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+@@ -97,7 +97,7 @@ CT_ARCH_SUPPORT_TUNE=y
+ CT_ARCH_DEFAULT_32=y
+ CT_ARCH_ARCH=""
+ CT_ARCH_CPU=""
+-CT_ARCH_TUNE="generic"
++CT_ARCH_TUNE=""
+ # CT_ARCH_32 is not set
+ CT_ARCH_64=y
+ CT_ARCH_BITNESS=64
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index cadbb0b..9513432 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -97,7 +97,7 @@ CT_ARCH_SUPPORT_TUNE=y
+ CT_ARCH_DEFAULT_32=y
+ CT_ARCH_ARCH=""
+ CT_ARCH_CPU=""
+-CT_ARCH_TUNE="generic"
++CT_ARCH_TUNE=""
+ # CT_ARCH_32 is not set
+ CT_ARCH_64=y
+ CT_ARCH_BITNESS=64
+@@ -137,7 +137,7 @@ CT_TOOLCHAIN_BUGURL=""
+ #
+ CT_TARGET_VENDOR="unknown"
+ CT_TARGET_ALIAS_SED_EXPR=""
+-CT_TARGET_ALIAS="x86_64-linux"
++CT_TARGET_ALIAS=""
+ 
+ #
+ # Toolchain type
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+index 7d90e40..5296923 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+@@ -97,7 +97,7 @@ CT_ARCH_SUPPORT_TUNE=y
+ CT_ARCH_DEFAULT_32=y
+ CT_ARCH_ARCH=""
+ CT_ARCH_CPU=""
+-CT_ARCH_TUNE="generic"
++CT_ARCH_TUNE=""
+ # CT_ARCH_32 is not set
+ CT_ARCH_64=y
+ CT_ARCH_BITNESS=64
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
