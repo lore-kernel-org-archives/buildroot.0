@@ -1,44 +1,70 @@
-From: Darius Augulis <augulis.darius@gmail.com>
-Date: Mon, 29 Aug 2011 20:22:54 +0300
-Subject: [Buildroot] [PATCH 14/28] grub: convert to AUTOTARGETS
-In-Reply-To: <87aaawqt32.fsf@macbook.be.48ers.dk>
-References: <cover.1309895466.git.thomas.petazzoni@free-electrons.com>	<20a318776db62b41f3bb365d2417e6251fc2d8ea.1309895466.git.thomas.petazzoni@free-electrons.com>	<4E4F7CCD.8030407@gmail.com>
- <87aaawqt32.fsf@macbook.be.48ers.dk>
-Message-ID: <4E5BCAEE.9030302@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 30 Aug 2011 10:20:20 +0200
+Subject: [Buildroot] [PATCH] git fetcher: do not remove the tree after
+ initial clone
+In-Reply-To: <CALB96N=tS1DKyTgLs8WF6Gh_UYPjWUbiRFGx+FkTauCiDw7OmQ@mail.gmail.com>
+References: <1314538324-24679-1-git-send-email-n-dechesne@ti.com>
+ <4E5B445F.5050603@lucaceresoli.net> <20110829142344.2edcfd12@skate>
+ <CALB96N=tS1DKyTgLs8WF6Gh_UYPjWUbiRFGx+FkTauCiDw7OmQ@mail.gmail.com>
+Message-ID: <4E5C9D44.6060704@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-Hi,
-
-it's not necessary with my grub patches "grub: build for host" and 
-"grub: fix ext2 segfaults".
-Please find these on mailing list and review if you can.
-Grub binary is useful on host system when cross compiling for x86 to 
-install bootloader into CF, for example.
-
-BR,
-Darius
-
-
-On 08/26/2011 03:02 PM, Peter Korsgaard wrote:
->>>>>> "Darius" == Darius Augulis<augulis.darius@gmail.com>  writes:
->   Darius>  Hi Thomas,
+Dechesne, Nicolas wrote:
+> Lucas, Thomas,
 >
->   Darius>  with these changes grub is not installed to staging dir.
->   Darius>  grub.mk has label:
+> On Mon, Aug 29, 2011 at 2:23 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com
+> <mailto:thomas.petazzoni@free-electrons.com>> wrote:
 >
->   Darius>  define GRUB_INSTALL_STAGING_CMDS
->   Darius>          install -m 0755 -D $(@D)/grub/grub $(STAGING_DIR)/sbin/grub
->   Darius>  endef
+>      > Using BR for development has not been completely neglected anyway.
+>      > Recently, Thomas Petazzoni submitted a patch that would allow to
+>     use a
+>      > local directory to build the package. This is much different from
+>     using
+>      > git fetches, but is expected to serve the "use BR for
+>     development" use
+>      > case effectively.
+>      > You might want to test it and comment to the author. Here it is:
+>      > http://lists.busybox.net/pipermail/buildroot/2011-July/044479.html
 >
->   Darius>  but when building it's installed only to target dir, but not to
->   Darius>  staging.
+>     I still think that this local directory mechanism is a better solution.
 >
-> Ahh yes. What is the use case for installing grub into staging? Does it
-> make any sense to do so?
+>     I have a new version of my patch set, which I hope to submit soon, at
+>     least when the 2011.11 development process will open (by the end of the
+>     month, so should be in the next few days).
 >
+>
+> i like the 'local directory' method as well, really much. but i still
+> believe that the 2 things are complementary..
+
+Thomas' local directory mechanism has an advantage: it works also for
+non-git (and even non-versioned) packages.
+
+You could somehow use this method for your needs too: git clone in a
+local directory once, then git pull before each BR rebuild. Not as
+straightforward as you would like, but maybe a good compromise.
+
+>
+> i happen to use BR in a project using large git tree which are not close
+> to me, so I care about git fetch vs git clone.
+> on top of that there are many users that regularly make rebuild.
+>
+> the way i see what i propose is *just* an optimization of how BR will
+> use git, not a new workflow.
+
+Still it has the disadvantage of using a lot of disk space, and it needs
+to connect to the server at every build only to discover if there are
+new commits.
+
+This would hurt people not having your needs.
+
+If you would add an option to choose between the always-clone git
+downloader and the clone-once-fetch-many version, your work would become
+more interesting.
+But this is only my opinion.
+
+Luca
