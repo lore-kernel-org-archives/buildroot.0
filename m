@@ -1,9 +1,10 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Aug 2011 20:33:21 +0200
-Subject: [Buildroot] [PATCH 1/2] syslinux: bump version and fix build
-In-Reply-To: <1314721730-8241-1-git-send-email-arnout@mind.be>
-References: <1314721730-8241-1-git-send-email-arnout@mind.be>
-Message-ID: <201108302033.21764.arnout@mind.be>
+From: Heiko Helmle <helman@gmx.net>
+Date: Tue, 30 Aug 2011 21:45:21 +0200
+Subject: [Buildroot] Linux kernel hangs after boot without any error!
+In-Reply-To: <201108300545.59774.minimod@morethan.org>
+References: <CADfuMF78u9we4HXSKZfnWYu4xwMX3vrKoVtbx+-c1L563KDOvw@mail.gmail.com>
+ <201108300545.59774.minimod@morethan.org>
+Message-ID: <DEB91A26-9E37-4C94-99DF-72B324C6A23B@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,24 +12,22 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Tuesday 30 August 2011 18:28:49, Arnout Vandecappelle (Essensium/Mind) 
-wrote:
-> From: arnout <arnout@cab5c6b8-da64-4be1-9ed2-3136eea3ef10>
+Am 30.08.2011 um 12:45 schrieb Michael S. Zick:
 
- Sorry for the commit message screw-up...  This comes through a git-svn 
-repository, and svn has lousy author tracking :-)
+> On Thu August 18 2011, Vasanth Ragavendran wrote:
+>> #
+>> # File systems
+>> #
+>> # CONFIG_EXT2_FS is not set
+>> 
+> 
+> That is the reason your kernel does not support ext2.
+> 
+> The reason your kernel appears to hang is most
+> likely answered in the FAQ link previously posted.
 
- Do I need to resend?
 
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110830/62fadb16/attachment.html>
+Just a thought - would it hurt much to start a getty on tty1 by default? at least on x86? Maybe even just to catch this really really frequent mistake. I know it's in the FAQ/Readme but it's still easy to miss...
+
+Best Regards
+	Heiko
