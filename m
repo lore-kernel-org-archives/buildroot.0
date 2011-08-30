@@ -1,26 +1,74 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 30 Aug 2011 15:39:41 +0200
-Subject: [Buildroot] [PATCH] New package: bluez-utils
-In-Reply-To: <20110829143314.517ae5ad@skate>
-References: <4E54B7CB.500@visionsystems.de> <20110829143314.517ae5ad@skate>
-Message-ID: <4E5CE81D.7000809@visionsystems.de>
+From: Pedro Sanchez <psanchez@fosstel.com>
+Date: Tue, 30 Aug 2011 10:36:18 -0400
+Subject: [Buildroot] Python standard library problems
+In-Reply-To: <4E5BB725.9030408@free-electrons.com>
+References: <4E42D99C.7080806@fosstel.com>
+ <4E42FCAB.2070609@in-2-technology.co.uk> <4E43D5B4.2090106@fosstel.com>
+ <4E43F72C.4060005@in-2-technology.co.uk> <4E441E25.4010600@fosstel.com>
+ <4E444173.3090509@fosstel.com> <4E44FA0A.1000902@free-electrons.com>
+ <4E454A63.6030401@free-electrons.com> <4E45673C.4010903@fosstel.com>
+ <4E4A28C1.1070509@free-electrons.com> <4E5BB725.9030408@free-electrons.com>
+Message-ID: <4E5CF562.6070800@fosstel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 29.08.2011 14:33, schrieb Thomas Petazzoni:
-> Le Wed, 24 Aug 2011 10:35:23 +0200,
-> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+Thanks for the patch. I think it's been tested since I see it's 
+committed already. But I'll give a try anyway and will let you know.
+
+Thanks!,
+
+-- 
+Pedro
+On 08/29/2011 11:58 AM, Maxime Ripard wrote:
+> Hi Pedro,
 >
->> +BLUEZ_UTILS_CONF_OPT = --enable-hidd --enable-test --enable-alsa
-> If it uses alsa, then maybe some dependency on alsa-lib is needed, no?
+> I've just sent a patch for this issue, could you test it ?
 >
-> Thomas
+> Maxime
+>
+> On 16/08/2011 10:22, Maxime Ripard wrote:
+>> Hi,
+>>
+>> On 12/08/2011 19:47, Pedro Sanchez wrote:
+>>> Thanks Maxime for looking at this. Indeed, my workstation is running
+>>> Linux 64 bits. I'm glad to know that cross-compiling Python goes well on
+>>> a 32-bit OS. I'll have to fire up a VM just to run BR :-|
+>>
+>> Or maybe we can just fix this bug :)
+>>
+>>> On the specific problem we have, I don't have any insight yet. All I can
+>>> tell you is that I did the exercise of building BR w/Python using three
+>>> different toolchains (CodeSourcery, Crosstool-ng, and uClibC) and I got
+>>> exactly the same disappointing results**.
+>>
+>> Neither am I. I don't get why a cross-toolchain which runs fine could
+>> fail to build a specific module. After all, on 32 and 64 bits, we use
+>> the exact same toolchains (at least for the Code Sourcery one.).
+>>
+>> After all, the host-python should be compiled for 64 bits using the
+>> native toolchain, and the target one compiled (in our case at least) for
+>> 32 bits, with the cross-toolchain. There shouldn't be any 64-to-32 bits
+>> compilation at all.
+>>
+>>> Maybe this can help?
+>>>
+>>> http://blog.devork.be/2009/02/compiling-32-bit-python-on-amd64.html
+>>
+>> Yep, I ran into that trick last week too. I'm not sure this is a good
+>> one though. This is a good quick fix, but I wonder what will happen if
+>> your target is a 64bits architecture ? Moreover, this adds the
+>> dependency to gcc-multilib.
+>>
+>> Peter, what do you think of it ?
+>>
+>> Maxime
+>>
+>
+>
 
-You're right. I've added this and other dependencies.
 
-Though I specify --enable-test, I still don't know and how it will be installed. Any idea?
-
-Yegor
+-- 
+Pedro
