@@ -1,29 +1,22 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 30 Aug 2011 17:34:23 +0200
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.0.x stable version
-Message-ID: <1314718463-8855-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 30 Aug 2011 14:23:24 +0200
+Subject: [Buildroot] [PATCH] ipset: fixup kernel checks
+In-Reply-To: <1313609257-25479-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 17 Aug 2011 16:27:37 -0300")
+References: <1313609257-25479-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87liubnl4z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 161a647..b827ec5 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -54,6 +54,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.3"		if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.4"		if BR2_KERNEL_HEADERS_3_0
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ Gustavo> Add patch to kill kernel checks since we don't build the modules for
+ Gustavo> older kernel versions anyway.
+
+Committed with a slightly tweaked commit message, thanks.
+
 -- 
-1.7.4.1
+Bye, Peter Korsgaard
