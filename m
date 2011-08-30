@@ -1,36 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 30 Aug 2011 14:46:00 +0200
-Subject: [Buildroot] [git commit] news.html: add 2011.08-rc2 announcement
-	link
-Message-ID: <20110830124659.EFB4E8D333@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 30 Aug 2011 15:34:23 +0200
+Subject: [Buildroot] no core dumps
+In-Reply-To: <1314692362.2640.144.camel@jr-ThinkCentre-A57>
+References: <1314692362.2640.144.camel@jr-ThinkCentre-A57>
+Message-ID: <20110830153423.2dce09c8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b131d4c366050a57be000552648d9f3ca2238483
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Tue, 30 Aug 2011 10:19:22 +0200,
+J?rg Rebenstorf <Joerg.Rebenstorf@GiN.de> a ?crit :
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+> I am using buildroot-2009.11.
+> 
+> I'd like to know how to enable the linux core dump feature in
+> buildroot. I have written a program that intentionally makes a
+> segfault but still I get no core dump file. Is there something
+> special with buildroot here? Do I need to activate a specific build
+> option? As you can see below I already enabled core dumps with the
+> 'ulimit' command.
 
-diff --git a/docs/news.html b/docs/news.html
-index d957497..582a72a 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -9,7 +9,8 @@
- 
-     <p>RC2 is out with more bugfixes. See the <a
-     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.08_rc2">CHANGES</a>
--    file for details.
-+    file for details, and read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2011-August/045211.html">announcement</a>.
- 
-     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2011.08-rc2.tar.bz2">2011.08-rc2
+Do you have ELF core dumps enabled in your kernel configuration?
+
+Regards,
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
