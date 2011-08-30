@@ -1,92 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 30 Aug 2011 19:50:37 +0200
-Subject: [Buildroot] [PATCH v2 3/3] netsnmp: allow not to install MIB
-	files
-In-Reply-To: <1308238033-20127-4-git-send-email-luca@lucaceresoli.net>
-References: <1308152878-14593-1-git-send-email-luca@lucaceresoli.net>
- <1308238033-20127-1-git-send-email-luca@lucaceresoli.net>
- <1308238033-20127-4-git-send-email-luca@lucaceresoli.net>
-Message-ID: <201108301950.37244.yann.morin.1998@anciens.enib.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 30 Aug 2011 18:13:53 +0200
+Subject: [Buildroot] SVN, sources out of tree / VPATH... How?
+In-Reply-To: <4E4EED59.30009@netscape.net>
+References: <4E4EED59.30009@netscape.net>
+Message-ID: <201108301813.55929.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
 
-On Thursday 16 June 2011 17:27:13 Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
-> Changes in v2:
->  - MIB installation is forcibly enabled with the MIB loading code; otherwise
->    net-snmp would loudly flood the console for missing MIBs.
-> 
->  package/netsnmp/Config.in  |    8 ++++++++
->  package/netsnmp/netsnmp.mk |    4 ++++
->  2 files changed, 12 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-> index 6f88b03..a6a768c 100644
-> --- a/package/netsnmp/Config.in
-> +++ b/package/netsnmp/Config.in
-> @@ -10,6 +10,14 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIB_LOADING
->  	bool "Enable MIB loading code"
->  	default y
->  	depends on BR2_PACKAGE_NETSNMP
-> +	select BR2_PACKAGE_NETSNMP_INSTALL_MIBS
+On Saturday 20 August 2011 01:10:17, Ulrich Prinz wrote:
+> I want to do some development for a new platform with buildroot. But I
+> work with SVN. The first steps with a plain buildroot look good, but now
+> I want to make changes to some existing code in buildroot (u-boot,
+> kernel). And I want to checkin these changes into my SVN.
 
-Well, I'd do the other way around: if MIB files are to be installed, then
-we need to be able to load them, so I'd do either:
+ There are patches on the mailing list to support local directories as the 
+source of a package.  With those patches, you can extract the package source 
+somewhere outside the buildroot tree (under version control), and use this as 
+the source instead of a downloaded tar.
 
-    config BR2_PACKAGE_NETSNMP_INSTALL_MIBS
-        depends on BR2_PACKAGE_NETSNMP_ENABLE_MIB_LOADING
 
-Or:
+> The trick is, that you replicate the original mainline kernel paths in
+> the other two sources and then make follows the priority of user/linux
+> then bsp/kernel-x.y.z and then kernel-x.y.z/
 
-    config BR2_PACKAGE_NETSNMP_INSTALL_MIBS
-        depends on BR2_PACKAGE_NETSNMP
-        select BR2_PACKAGE_NETSNMP_ENABLE_MIB_LOADING
+ That's actually an overlay.  I think OpenEmbedded uses something like that.  
+Buildroot prefers to work with patches.
 
-After all, maybe the user wants to be able to load MIBs, but will provide
-its own set, and not the bundled ones, so we should have the possibility
-to enable MIB loading, and not install the bundled ones. But if we install
-those, we need to be able to load them.
+ As an approximation of an overlay, you can write a script that automatically 
+generates patches out of your revision control system and dumps them in the 
+package directory.  The package infrastructure will apply all patches that are 
+named <package>-<version><description>.patch.
 
->  	help
->  	  Include code that parses and manipulates the mib files.
->  
-> +config BR2_PACKAGE_NETSNMP_INSTALL_MIBS
-> +	bool "Install MIB files on target"
-> +	default y
-> +	depends on BR2_PACKAGE_NETSNMP
-> +	help
-> +	  The net-snmp package contains a selection of MIB files.
-> +	  Say yes if you want those MIB files installed on the target.
-> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> index c0e631b..09111bf 100644
-> --- a/package/netsnmp/netsnmp.mk
-> +++ b/package/netsnmp/netsnmp.mk
-> @@ -47,6 +47,10 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_MIB_LOADING),y)
->  	NETSNMP_CONF_OPT += --disable-mib-loading
->  endif
->  
-> +ifneq ($(BR2_PACKAGE_NETSNMP_INSTALL_MIBS),y)
-> +	NETSNMP_CONF_OPT += --disable-mibs
-> +endif
-> +
->  # Remove IPv6 MIBs if there's no IPv6
->  ifneq ($(BR2_INET_IPV6),y)
->  define NETSNMP_REMOVE_MIBS_IPV6
-> 
+ quilt is a tool that helps to work with this approach.  It's not trivial to 
+use, but not much more difficult than any other VCS.
 
-Regards,
-Yann E. MORIN.
+ 
+ Regards,
+ Arnout
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110830/fc6b727e/attachment.html>
