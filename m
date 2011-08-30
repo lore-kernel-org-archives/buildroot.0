@@ -1,55 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Aug 2011 18:13:53 +0200
-Subject: [Buildroot] SVN, sources out of tree / VPATH... How?
-In-Reply-To: <4E4EED59.30009@netscape.net>
-References: <4E4EED59.30009@netscape.net>
-Message-ID: <201108301813.55929.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 30 Aug 2011 18:28:49 +0200
+Subject: [Buildroot] [PATCH 1/2] syslinux: bump version and fix build
+Message-ID: <1314721730-8241-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: arnout <arnout@cab5c6b8-da64-4be1-9ed2-3136eea3ef10>
 
-On Saturday 20 August 2011 01:10:17, Ulrich Prinz wrote:
-> I want to do some development for a new platform with buildroot. But I
-> work with SVN. The first steps with a plain buildroot look good, but now
-> I want to make changes to some existing code in buildroot (u-boot,
-> kernel). And I want to checkin these changes into my SVN.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ boot/syslinux/syslinux-3.85-makefile.patch |   17 -----------------
+ boot/syslinux/syslinux.mk                  |   12 ++++++++++--
+ 2 files changed, 10 insertions(+), 19 deletions(-)
+ delete mode 100644 boot/syslinux/syslinux-3.85-makefile.patch
 
- There are patches on the mailing list to support local directories as the 
-source of a package.  With those patches, you can extract the package source 
-somewhere outside the buildroot tree (under version control), and use this as 
-the source instead of a downloaded tar.
-
-
-> The trick is, that you replicate the original mainline kernel paths in
-> the other two sources and then make follows the priority of user/linux
-> then bsp/kernel-x.y.z and then kernel-x.y.z/
-
- That's actually an overlay.  I think OpenEmbedded uses something like that.  
-Buildroot prefers to work with patches.
-
- As an approximation of an overlay, you can write a script that automatically 
-generates patches out of your revision control system and dumps them in the 
-package directory.  The package infrastructure will apply all patches that are 
-named <package>-<version><description>.patch.
-
- quilt is a tool that helps to work with this approach.  It's not trivial to 
-use, but not much more difficult than any other VCS.
-
+diff --git a/boot/syslinux/syslinux-3.85-makefile.patch b/boot/syslinux/syslinux-3.85-makefile.patch
+deleted file mode 100644
+index ff85b8d..0000000
+--- a/boot/syslinux/syslinux-3.85-makefile.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+----
+- Makefile |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: syslinux-3.85/Makefile
+-===================================================================
+---- syslinux-3.85.orig/Makefile
+-+++ syslinux-3.85/Makefile
+-@@ -43,7 +43,7 @@
+- 	mbr/mbr_c.bin mbr/altmbr_c.bin mbr/gptmbr_c.bin \
+- 	mbr/mbr_f.bin mbr/altmbr_f.bin mbr/gptmbr_f.bin \
+- 	core/pxelinux.0 core/isolinux.bin core/isolinux-debug.bin \
+--	gpxe/gpxelinux.0 dos/syslinux.com win32/syslinux.exe \
+-+	gpxe/gpxelinux.0 dos/syslinux.com \
+- 	dosutil/*.com dosutil/*.sys \
+- 	$(MODULES)
+- 
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 686124f..125960f 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -4,15 +4,23 @@
+ #
+ #############################################################
  
- Regards,
- Arnout
-
-
+-SYSLINUX_VERSION = 3.85
++SYSLINUX_VERSION = 4.04
+ SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
+-SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/3.xx/
++SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
+ 
+ SYSLINUX_INSTALL_TARGET = NO
+ SYSLINUX_INSTALL_IMAGES = YES
+ 
+ SYSLINUX_DEPENDENCIES = host-nasm
+ 
++# syslinux-4.04 comes with a bundles mk-lba-img executable which
++# may not work in our host environment.
++define SYSLINUX_RM_MK_LBA_IMG
++	$(RM) $(@D)/diag/geodsp/mk-lba-img
++endef
++
++SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
++
+ define SYSLINUX_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC)" AR="$(HOSTAR)" -C $(@D)
+ endef
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110830/fc6b727e/attachment.html>
+1.7.5.4
