@@ -1,33 +1,36 @@
-From: Heiko Helmle <helman@gmx.net>
-Date: Tue, 30 Aug 2011 21:45:21 +0200
-Subject: [Buildroot] Linux kernel hangs after boot without any error!
-In-Reply-To: <201108300545.59774.minimod@morethan.org>
-References: <CADfuMF78u9we4HXSKZfnWYu4xwMX3vrKoVtbx+-c1L563KDOvw@mail.gmail.com>
- <201108300545.59774.minimod@morethan.org>
-Message-ID: <DEB91A26-9E37-4C94-99DF-72B324C6A23B@gmx.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 30 Aug 2011 23:09:40 +0200
+Subject: [Buildroot] [PATCH 1/2] syslinux: bump version and fix build
+In-Reply-To: <201108302033.21764.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 30 Aug 2011 20:33:21 +0200")
+References: <1314721730-8241-1-git-send-email-arnout@mind.be>
+ <201108302033.21764.arnout@mind.be>
+Message-ID: <87hb4yobcb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Am 30.08.2011 um 12:45 schrieb Michael S. Zick:
+ Arnout> On Tuesday 30 August 2011 18:28:49, Arnout Vandecappelle (Essensium/Mind)
+ Arnout> wrote:
 
-> On Thu August 18 2011, Vasanth Ragavendran wrote:
->> #
->> # File systems
->> #
->> # CONFIG_EXT2_FS is not set
->> 
-> 
-> That is the reason your kernel does not support ext2.
-> 
-> The reason your kernel appears to hang is most
-> likely answered in the FAQ link previously posted.
+ >> From: arnout <arnout@cab5c6b8-da64-4be1-9ed2-3136eea3ef10>
 
 
-Just a thought - would it hurt much to start a getty on tty1 by default? at least on x86? Maybe even just to catch this really really frequent mistake. I know it's in the FAQ/Readme but it's still easy to miss...
+ Arnout> Sorry for the commit message screw-up... This comes through a git-svn
+ Arnout> repository, and svn has lousy author tracking :-)
 
-Best Regards
-	Heiko
+You can afaik handle it with ~/.git-svn-authors.
+
+Your commit message mentions 'fix build' - Is this something needed for
+2011.08, E.G. does the current syslinux version not build for you?
+
+ Arnout> Do I need to resend?
+
+Preferably yes.
+
+-- 
+Bye, Peter Korsgaard
