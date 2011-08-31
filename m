@@ -1,242 +1,322 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:34:59 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/misc-cleanups
-Message-ID: <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Aug 2011 23:35:00 +0200
+Subject: [Buildroot] [PATCH 1/7] scripts: remove old, unmaintained,
+	unused scripts
+In-Reply-To: <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2c29376c534de6f276c05cb1dab3e34095a3f77c.1314826483.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-This set of patches basically creates a new support/ directory, which
-is used to group various files needed for the operation of Buildroot
-which didn't fit properly in other directories :
-
- * The various scripts in the scripts/ directory (after removing the
-   unused, unmaintained ones)
-
- * The libtool related patches
-
- * The patch-kernel.sh script, after renaming it to a more sensible
-   name.
-
- * The kconfig stuff
-
- * The gnuconfig stuff (config.guess and config.sub)
-
-Best regards,
-
-Thomas
-
-The following changes since commit d1dd9588ae76d8c9b79a39af182a45e54ac356dd:
-
-  news.html: fix 2011.08 release date (2011-08-31 14:23:26 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/misc-cleanups
-
-Thomas Petazzoni (7):
-      scripts: remove old, unmaintained, unused scripts
-      scripts/mkmakefile: fix typo
-      support: move scripts/ to a new support/ directory
-      support: move libtool patches in support/libtool
-      support: move patch-kernel.sh and rename it
-      support: move kconfig stuff from package/config to support/kconfig
-      support: move package/gnuconfig to support/gnuconfig
-
- Makefile                                           |   10 +-
- boot/uboot/uboot.mk                                |    2 +-
- linux/linux.mk                                     |    6 +-
- package/Makefile.autotools.in                      |   36 ++++--
- package/Makefile.package.in                        |    8 +-
- package/argus/argus.mk                             |    2 +-
- package/cups/cups.mk                               |    4 +-
- package/cvs/cvs.mk                                 |    2 +-
- package/fis/fis.mk                                 |    2 +-
- package/gettext/gettext.mk                         |    5 +-
- package/gnuconfig/README.buildroot                 |   20 ----
- package/gnuconfig/gnuconfig.mk                     |    3 -
- package/input-tools/input-tools.mk                 |    2 +-
- package/libeXosip2/libeXosip2.mk                   |    2 +-
- package/libgtk2/libgtk2.mk                         |    2 +-
- package/libosip2/libosip2.mk                       |    2 +-
- package/lmbench/lmbench.mk                         |    2 +-
- package/mii-diag/mii-diag.mk                       |    2 +-
- package/mutt/mutt.mk                               |    2 +-
- package/netkitbase/netkitbase.mk                   |    2 +-
- package/netkittelnet/netkittelnet.mk               |    2 +-
- package/setserial/setserial.mk                     |    2 +-
- package/sfdisk/sfdisk.mk                           |    2 +-
- package/sysklogd/sysklogd.mk                       |    2 +-
- package/sysvinit/sysvinit.mk                       |    2 +-
- package/thttpd/thttpd.mk                           |    2 +-
- package/tinyhttpd/tinyhttpd.mk                     |    2 +-
- package/ttcp/ttcp.mk                               |    2 +-
- package/uemacs/uemacs.mk                           |    2 +-
- package/vpnc/vpnc.mk                               |    2 +-
- package/xfsprogs/xfsprogs.mk                       |    2 +-
- scripts/add_new_package.wizard                     |  120 --------------------
- scripts/create_ipkgs                               |   82 -------------
- scripts/get_linux_config.sh                        |   77 -------------
- {package => support}/gnuconfig/.cvsignore          |    0
- support/gnuconfig/README.buildroot                 |   25 ++++
- {package => support}/gnuconfig/config.guess        |    0
- {package => support}/gnuconfig/config.sub          |    0
- .../gnuconfig/patches/config.guess.uclibc.patch    |    0
- .../gnuconfig/patches/config.sub.ps2.patch         |    0
- {package/config => support/kconfig}/.gitignore     |    0
- {package/config => support/kconfig}/Makefile       |    0
- {package/config => support/kconfig}/Makefile.br    |    0
- {package/config => support/kconfig}/POTFILES.in    |    0
- .../config => support/kconfig}/README.buildroot2   |   10 +-
- {package/config => support/kconfig}/check.sh       |    0
- {package/config => support/kconfig}/conf.c         |    0
- {package/config => support/kconfig}/confdata.c     |    0
- {package/config => support/kconfig}/expr.c         |    0
- {package/config => support/kconfig}/expr.h         |    0
- {package/config => support/kconfig}/foo.h          |    0
- {package/config => support/kconfig}/gconf.c        |    2 +-
- {package/config => support/kconfig}/gconf.glade    |    0
- {package/config => support/kconfig}/images.c       |    0
- {package/config => support/kconfig}/kconfig_load.c |    0
- {package/config => support/kconfig}/kxgettext.c    |    0
- .../config => support/kconfig}/lex.zconf.c_shipped |    0
- {package/config => support/kconfig}/lkc.h          |    0
- {package/config => support/kconfig}/lkc_proto.h    |    0
- .../config => support/kconfig}/lxdialog/.gitignore |    0
- .../kconfig}/lxdialog/BIG.FAT.WARNING              |    0
- .../kconfig}/lxdialog/check-lxdialog.sh            |    0
- .../kconfig}/lxdialog/checklist.c                  |    0
- .../config => support/kconfig}/lxdialog/dialog.h   |    0
- .../config => support/kconfig}/lxdialog/inputbox.c |    0
- .../config => support/kconfig}/lxdialog/menubox.c  |    0
- .../config => support/kconfig}/lxdialog/textbox.c  |    0
- .../config => support/kconfig}/lxdialog/util.c     |    0
- .../config => support/kconfig}/lxdialog/yesno.c    |    0
- {package/config => support/kconfig}/mconf.c        |    0
- {package/config => support/kconfig}/menu.c         |    0
- {package/config => support/kconfig}/nconf.c        |    0
- {package/config => support/kconfig}/nconf.gui.c    |    0
- {package/config => support/kconfig}/nconf.h        |    0
- .../patches/01-kconfig-kernel-to-buildroot.patch   |    0
- .../patches/02-cpp-comments-to-c-comments.patch    |    0
- .../patches/03-change-config-option-prefix.patch   |    0
- .../patches/05-really-clean-everything.patch       |    0
- .../patches/06-br-build-system-integration.patch   |    0
- .../kconfig}/patches/08-make-write-deps.patch      |    8 +-
- .../patches/09-implement-kconfig-probability.patch |    0
- .../kconfig}/patches/10-br-build-system.patch      |    0
- .../patches/11-use-mktemp-for-lxdialog.patch       |    0
- .../kconfig}/patches/12-fix-glade-file-path.patch  |    8 +-
- .../patches/14-support-out-of-tree-config.patch    |    0
- {package/config => support/kconfig}/patches/series |    0
- {package/config => support/kconfig}/qconf.cc       |    0
- {package/config => support/kconfig}/qconf.h        |    0
- .../kconfig}/streamline_config.pl                  |    0
- {package/config => support/kconfig}/symbol.c       |    0
- {package/config => support/kconfig}/util.c         |    2 +-
- {package/config => support/kconfig}/zconf.gperf    |    0
- .../kconfig}/zconf.hash.c_shipped                  |    0
- {package/config => support/kconfig}/zconf.l        |    0
- .../config => support/kconfig}/zconf.tab.c_shipped |    0
- {package/config => support/kconfig}/zconf.y        |    0
- .../libtool}/buildroot-libtool-v1.5.patch          |    0
- .../libtool}/buildroot-libtool-v2.2.patch          |    0
- .../libtool}/buildroot-libtool-v2.4.patch          |    0
- .../scripts/apply-patches.sh                       |    0
- {scripts => support/scripts}/build-ext3-img        |    0
- {scripts => support/scripts}/copy.sh               |    0
- {scripts => support/scripts}/graph-depends         |    0
- {scripts => support/scripts}/mkmakefile            |    2 +-
- {scripts => support/scripts}/pkg-stats             |    1 -
- {scripts => support/scripts}/setlocalversion       |    0
- toolchain/elf2flt/elf2flt.mk                       |    2 +-
- toolchain/gcc/gcc-uclibc-4.x.mk                    |    6 +-
- toolchain/gdb/gdb.mk                               |    4 +-
- toolchain/kernel-headers/kernel-headers.mk         |    4 +-
- toolchain/uClibc/uclibc.mk                         |    4 +-
- 111 files changed, 115 insertions(+), 380 deletions(-)
- delete mode 100644 package/gnuconfig/README.buildroot
- delete mode 100644 package/gnuconfig/gnuconfig.mk
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ scripts/add_new_package.wizard |  120 ----------------------------------------
+ scripts/create_ipkgs           |   82 ---------------------------
+ scripts/get_linux_config.sh    |   77 -------------------------
+ 3 files changed, 0 insertions(+), 279 deletions(-)
  delete mode 100755 scripts/add_new_package.wizard
  delete mode 100755 scripts/create_ipkgs
  delete mode 100755 scripts/get_linux_config.sh
- rename {package => support}/gnuconfig/.cvsignore (100%)
- create mode 100644 support/gnuconfig/README.buildroot
- rename {package => support}/gnuconfig/config.guess (100%)
- rename {package => support}/gnuconfig/config.sub (100%)
- rename {package => support}/gnuconfig/patches/config.guess.uclibc.patch (100%)
- rename {package => support}/gnuconfig/patches/config.sub.ps2.patch (100%)
- rename {package/config => support/kconfig}/.gitignore (100%)
- rename {package/config => support/kconfig}/Makefile (100%)
- rename {package/config => support/kconfig}/Makefile.br (100%)
- rename {package/config => support/kconfig}/POTFILES.in (100%)
- rename {package/config => support/kconfig}/README.buildroot2 (58%)
- rename {package/config => support/kconfig}/check.sh (100%)
- rename {package/config => support/kconfig}/conf.c (100%)
- rename {package/config => support/kconfig}/confdata.c (100%)
- rename {package/config => support/kconfig}/expr.c (100%)
- rename {package/config => support/kconfig}/expr.h (100%)
- rename {package/config => support/kconfig}/foo.h (100%)
- rename {package/config => support/kconfig}/gconf.c (99%)
- rename {package/config => support/kconfig}/gconf.glade (100%)
- rename {package/config => support/kconfig}/images.c (100%)
- rename {package/config => support/kconfig}/kconfig_load.c (100%)
- rename {package/config => support/kconfig}/kxgettext.c (100%)
- rename {package/config => support/kconfig}/lex.zconf.c_shipped (100%)
- rename {package/config => support/kconfig}/lkc.h (100%)
- rename {package/config => support/kconfig}/lkc_proto.h (100%)
- rename {package/config => support/kconfig}/lxdialog/.gitignore (100%)
- rename {package/config => support/kconfig}/lxdialog/BIG.FAT.WARNING (100%)
- rename {package/config => support/kconfig}/lxdialog/check-lxdialog.sh (100%)
- rename {package/config => support/kconfig}/lxdialog/checklist.c (100%)
- rename {package/config => support/kconfig}/lxdialog/dialog.h (100%)
- rename {package/config => support/kconfig}/lxdialog/inputbox.c (100%)
- rename {package/config => support/kconfig}/lxdialog/menubox.c (100%)
- rename {package/config => support/kconfig}/lxdialog/textbox.c (100%)
- rename {package/config => support/kconfig}/lxdialog/util.c (100%)
- rename {package/config => support/kconfig}/lxdialog/yesno.c (100%)
- rename {package/config => support/kconfig}/mconf.c (100%)
- rename {package/config => support/kconfig}/menu.c (100%)
- rename {package/config => support/kconfig}/nconf.c (100%)
- rename {package/config => support/kconfig}/nconf.gui.c (100%)
- rename {package/config => support/kconfig}/nconf.h (100%)
- rename {package/config => support/kconfig}/patches/01-kconfig-kernel-to-buildroot.patch (100%)
- rename {package/config => support/kconfig}/patches/02-cpp-comments-to-c-comments.patch (100%)
- rename {package/config => support/kconfig}/patches/03-change-config-option-prefix.patch (100%)
- rename {package/config => support/kconfig}/patches/05-really-clean-everything.patch (100%)
- rename {package/config => support/kconfig}/patches/06-br-build-system-integration.patch (100%)
- rename {package/config => support/kconfig}/patches/08-make-write-deps.patch (96%)
- rename {package/config => support/kconfig}/patches/09-implement-kconfig-probability.patch (100%)
- rename {package/config => support/kconfig}/patches/10-br-build-system.patch (100%)
- rename {package/config => support/kconfig}/patches/11-use-mktemp-for-lxdialog.patch (100%)
- rename {package/config => support/kconfig}/patches/12-fix-glade-file-path.patch (73%)
- rename {package/config => support/kconfig}/patches/14-support-out-of-tree-config.patch (100%)
- rename {package/config => support/kconfig}/patches/series (100%)
- rename {package/config => support/kconfig}/qconf.cc (100%)
- rename {package/config => support/kconfig}/qconf.h (100%)
- rename {package/config => support/kconfig}/streamline_config.pl (100%)
- rename {package/config => support/kconfig}/symbol.c (100%)
- rename {package/config => support/kconfig}/util.c (99%)
- rename {package/config => support/kconfig}/zconf.gperf (100%)
- rename {package/config => support/kconfig}/zconf.hash.c_shipped (100%)
- rename {package/config => support/kconfig}/zconf.l (100%)
- rename {package/config => support/kconfig}/zconf.tab.c_shipped (100%)
- rename {package/config => support/kconfig}/zconf.y (100%)
- rename {package => support/libtool}/buildroot-libtool-v1.5.patch (100%)
- rename {package => support/libtool}/buildroot-libtool-v2.2.patch (100%)
- rename {package => support/libtool}/buildroot-libtool-v2.4.patch (100%)
- rename toolchain/patch-kernel.sh => support/scripts/apply-patches.sh (100%)
- rename {scripts => support/scripts}/build-ext3-img (100%)
- rename {scripts => support/scripts}/copy.sh (100%)
- rename {scripts => support/scripts}/graph-depends (100%)
- rename {scripts => support/scripts}/mkmakefile (93%)
- rename {scripts => support/scripts}/pkg-stats (99%)
- rename {scripts => support/scripts}/setlocalversion (100%)
 
-Thanks,
+diff --git a/scripts/add_new_package.wizard b/scripts/add_new_package.wizard
+deleted file mode 100755
+index 4ee02df..0000000
+--- a/scripts/add_new_package.wizard
++++ /dev/null
+@@ -1,120 +0,0 @@
+-#!/bin/sh
+-
+-echo "**** Autotools Add New Package Wizard ****"
+-echo " This script will generate files to add a"
+-echo " new package to buildroot."
+-echo
+-
+-echo "What is the name of the package?"
+-read PACKAGE_NAME
+-
+-echo "What is the version number?"
+-read VERSION_NUM
+-
+-echo "What is the web address of the tarball?"
+-read DOWNLOAD_LOC
+-
+-echo "Enter any known dependencies, separated"
+-echo "by spaces, or just press enter."
+-read EXTRA_DEPS
+-
+-echo "Enter a description of the package."
+-read DESCRIPTION
+-
+-echo "Does autoreconf need to be run first? (y/n)"
+-read ANSWER
+-
+-if [ "$ANSWER" = "y" ]; then
+-	RECONF="YES"
+-else
+-	RECONF="NO"
+-fi
+-
+-echo "Does it need to be installed to the staging dir?"
+-echo "Say yes, if other packages depend on it."
+-echo "(If not sure, just say yes. It will only use more"
+-echo "space on your hard drive.)"
+-read ANSWER
+-
+-if [ "$ANSWER" = "y" ]; then
+-	STAGING="YES"
+-else
+-	STAGING="NO"
+-fi
+-
+-echo "Enter an additional subdirectory below package/"
+-echo "as category, or just press enter."
+-read SUB_DIR
+-
+-if [ -z "$SUB_DIR" ]; then
+-	CATEGORY_DIR=package
+-else
+-	CATEGORY_DIR=package/${SUB_DIR}
+-fi
+-
+-echo "Enter any configure script options."
+-read CONFIG_OPTIONS
+-
+-URL=${DOWNLOAD_LOC%/*}
+-TARBALL=${DOWNLOAD_LOC##*/}
+-EXTENSION=${TARBALL##*.tar.}
+-NAME_UPPER=`echo ${PACKAGE_NAME} | tr a-z- A-Z_`
+-PACKAGE_DIR=`dirname $0`/../${CATEGORY_DIR}/${PACKAGE_NAME}
+-
+-mkdir -p ${PACKAGE_DIR}
+-
+-sed -e 's/ *$//g' > ${PACKAGE_DIR}/${PACKAGE_NAME}.mk <<EOF
+-#############################################################
+-#
+-# ${PACKAGE_NAME}
+-#
+-#############################################################
+-${NAME_UPPER}_VERSION = ${VERSION_NUM}
+-${NAME_UPPER}_SOURCE = ${PACKAGE_NAME}-\$(${NAME_UPPER}_VERSION).tar.${EXTENSION}
+-${NAME_UPPER}_SITE = ${URL}
+-${NAME_UPPER}_AUTORECONF = ${RECONF}
+-${NAME_UPPER}_INSTALL_STAGING = ${STAGING}
+-${NAME_UPPER}_INSTALL_TARGET = YES
+-
+-${NAME_UPPER}_CONF_OPT = ${CONFIG_OPTIONS}
+-
+-${NAME_UPPER}_DEPENDENCIES = uclibc ${EXTRA_DEPS}
+-
+-\$(eval \$(call AUTOTARGETS,${CATEGORY_DIR},${PACKAGE_NAME}))
+-EOF
+-
+-cat > ${PACKAGE_DIR}/Config.in <<EOF
+-config BR2_PACKAGE_${NAME_UPPER}
+-	bool "${PACKAGE_NAME}"
+-	help
+-	  ${DESCRIPTION}
+-
+-	  ${URL}
+-EOF
+-
+-echo
+-echo "**** Manual steps to integrate your new package ****"
+-echo
+-
+-echo "Add the following line to ${CATEGORY_DIR}/Config.in"
+-echo "in an appropriate location:"
+-echo "source \"${CATEGORY_DIR}/${PACKAGE_NAME}/Config.in\""
+-
+-if [ -n "$SUB_DIR" ]; then
+-	echo
+-	echo "Additionally add the following line to package/Config.in"
+-	echo "in an appropriate location:"
+-	echo "source \"${CATEGORY_DIR}/Config.in\""
+-fi
+-
+-if [ -n "$EXTRA_DEPS" ]; then
+-	echo
+-	echo "You need to add \"depends on\" and/or \"select\" lines"
+-	echo "to ${CATEGORY_DIR}/${PACKAGE_NAME}/Config.in"
+-	echo "corresponding to the \"${NAME_UPPER}_DEPENDENCIES\" line"
+-	echo "in ${CATEGORY_DIR}/${PACKAGE_NAME}/${PACKAGE_NAME}.mk"
+-fi
+-
+-echo
+-echo "After that run \"make menuconfig\", select your new package"
+-echo "and run \"make\" to build \"${PACKAGE_NAME}\"."
+diff --git a/scripts/create_ipkgs b/scripts/create_ipkgs
+deleted file mode 100755
+index 3b9b8af..0000000
+--- a/scripts/create_ipkgs
++++ /dev/null
+@@ -1,82 +0,0 @@
+-#!/bin/sh
+-
+-# this script is very *alpha* so be gentle...
+-
+-# change these lines to your arch and maintainer name
+-ARCH="avr32"
+-PACK_MAINTAINER="John Voltz <john.voltz@gmail.com>"
+-
+-BUILDROOT_DIR=`pwd`
+-
+-echo "Creating ipkgs from your build directory..."
+-echo "Please be patient, as this can take a long time.
+-			"
+-
+-# create the ipkg directories
+-mkdir -p ${BUILDROOT_DIR}/ipkg-temp
+-mkdir -p ${BUILDROOT_DIR}/ipkg-out
+-
+-for PACKAGE in `ls -d ./build_*/*`; do
+-	
+-	# extract some info
+-	NAME_WITHOUT_VER=${PACKAGE%-*}
+-	VERSION=${PACKAGE#${NAME_WITHOUT_VER}-}
+-	NAME_WITHOUT_DIR=${NAME_WITHOUT_VER#*/*/}
+-	CLEAN_NAME=${NAME_WITHOUT_DIR//_/-}
+-
+-	# clean out the temp directory
+-	rm -rf ${BUILDROOT_DIR}/ipkg-temp/*
+-
+-	# install the package to temp directory
+-	cd ${PACKAGE}
+-	echo "Installing ${NAME_WITHOUT_DIR} to ./ipkg-temp"
+-	make DESTDIR=${BUILDROOT_DIR}/ipkg-temp DSTROOT=${BUILDROOT_DIR}/ipkg-temp install &> /dev/null 
+-
+-	# create the control file
+-	cd ${BUILDROOT_DIR}
+-	mkdir ${BUILDROOT_DIR}/ipkg-temp/CONTROL
+-
+-	# find it's corresponding buildroot package directory 
+-	PACK_NAME=`find ./package -path './package/config' -prune -o -name ${NAME_WITHOUT_DIR}`
+-	PACK_NAME=${PACK_NAME%./package/config}
+-	PACK_NAME=${PACK_NAME#./package/config}
+-	PACK_NAME=`echo -n ${PACK_NAME}`
+-
+-	# there must be an better way to extract the description and 
+-	# dependencies from the Config.in and *.mk file. 
+-	# Haven't figured it out just yet.
+-	CONF_FILE=`cat ${PACK_NAME}/Config.in`
+-	#MAKE_FILE=`cat ${PACK_NAME}/*.mk`
+-	HELP_STR=${CONF_FILE#*help}
+-	HELP_STR=${HELP_STR%%comment*}
+-	HELP_STR=${HELP_STR%%choice*}
+-	HELP_STR=${HELP_STR%%depends*}
+-	HELP_STR=${HELP_STR%%http*}
+-	HELP_STR=`echo -n ${HELP_STR}`
+-
+-	echo ${HELP_STR}
+-
+-	if [ "${PACK_NAME}" != "" ]; then
+-		echo "Creating ipkg of: ${PACKAGE}"
+-
+-cat > ${BUILDROOT_DIR}/ipkg-temp/CONTROL/control <<EOF
+-Package: ${CLEAN_NAME}
+-Priority: optional
+-Version: ${VERSION}
+-Architecture: ${ARCH}
+-Maintainer: ${PACK_MAINTAINER}
+-Depends: uclibc
+-Description: ${HELP_STR}
+-EOF
+-
+-		# build the package
+-		package/ipkg/ipkg-build ${BUILDROOT_DIR}/ipkg-temp ${BUILDROOT_DIR}/ipkg-out
+-
+-	fi
+-
+-	echo "Complete.
+-					"
+-
+-done
+-
+-echo "ipkg builds are finished."
+diff --git a/scripts/get_linux_config.sh b/scripts/get_linux_config.sh
+deleted file mode 100755
+index 6c00036..0000000
+--- a/scripts/get_linux_config.sh
++++ /dev/null
+@@ -1,77 +0,0 @@
+-#!/bin/bash
+-#######################################################################
+-#
+-# Copy successively all configs from the BSP directory (par #1)
+-# to the Linux directory (par #2)
+-# Do not copy config files for later linux versions than the current
+-# A well-behaved filename is 
+-# "<name>-linux-2.6.<major>.<minor>.config" or
+-# "<name>-linux-2.6.<major>.config"
+-#
+-#######################################################################
+-
+-TOPDIR=`pwd`
+-DEBUG=0
+-# parameter #1	BOARD_PATH
+-# parameter #2  LINUX26_DIR
+-
+-CONFIGS=`ls -X $1/*linux-2.6.*.config | sed s/[.]config// - | sort`
+-LINUX26_DIR=`basename $2`
+-LINUX26_CONFIG=${2}/.config
+-LINUX_MAJOR_VERSION=${LINUX26_DIR:10:2}
+-LINUX_MINOR_VERSION=${LINUX26_DIR:13}
+-
+-function DBG_PRINT
+-{
+-	if [ ${DEBUG} = 1 ] ; then
+-		echo $1
+-	fi
+-}
+-
+-function linux_version()
+-{
+-	local KCONFIG
+-	KCONFIG=`basename $1`
+-	KERNEL=`echo ${KCONFIG} | sed s/.*linux-2.6./linux-2.6./g -`
+-	THIS_MAJOR=${KERNEL:10:2}
+-	THIS_MINOR=${KERNEL:13}
+-	THIS_MINOR=${THIS_MINOR:=0}
+-}
+-
+-# Try to be careful...
+-DBG_PRINT MAJOR=\"${LINUX_MAJOR_VERSION}\"
+-DBG_PRINT MINOR=\"${LINUX_MINOR_VERSION}\"
+-
+-for i in ${CONFIGS} ; do
+-    DBG_PRINT FILE=$i
+-    linux_version $i
+-    DBG_PRINT KERNEL=${KERNEL}
+-    if [ ${THIS_MAJOR} -lt ${LINUX_MAJOR_VERSION} ] ; then
+-	    echo Copying `basename $i`.config ...
+-	    cp $i.config ${LINUX26_CONFIG}
+-    elif [ ${THIS_MAJOR} -eq ${LINUX_MAJOR_VERSION} ] ; then
+-	if [ "${LINUX_MINOR_VERSION}X" = "X" ] ; then
+-		if [ "${THIS_MINOR}X" = "X" ] ; then
+-		    echo Copying `basename $i`.config ...
+-		    cp $i.config ${LINUX26_CONFIG}
+-		else		
+-			return
+-		fi
+-	elif [ ${THIS_MINOR} -le ${LINUX_MINOR_VERSION} ] ; then
+-	    echo Copying `basename $i`.config ...
+-	    cp $i.config ${LINUX26_CONFIG}
+-	fi
+-    else		
+-	return
+-    fi
+-done
+-
+-# Did not work... - be promisceous
+-
+-if [ ! -f "${LINUX26_CONFIG}" ] ; then \
+-	for i in `ls $1/*linux*.config` ; do
+-		echo Copying `basename $i` ...
+-		cp $i ${LINUX26_CONFIG}
+-	done
+-fi
+-
 -- 
-Thomas Petazzoni
+1.7.4.1
