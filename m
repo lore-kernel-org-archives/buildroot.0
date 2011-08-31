@@ -1,132 +1,269 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:54:18 +0200
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.11/asciidoc-manual
-Message-ID: <cover.1314827583.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Aug 2011 23:54:22 +0200
+Subject: [Buildroot] [PATCH 4/4] remove Glibc_vs_uClibc document
+In-Reply-To: <cover.1314827583.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1314827583.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <de5beba4b0d3fe652fe8c9ed51282126ca4aae90.1314827583.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This document has nothing to do with Buildroot, and is probably a
+leftover from the uClibc documentation.
 
-The Buildroot documentation was started by myself in December 2004
-(see commit 32fcf718f82c241e890af8c7ccc10ef6c438331a), and at that
-time the amount of documentation was relatively light, so the single
-HTML file was seen as an appropriate solution to write the
-documentation.
-
-Since then, the documentation has expanded quite a bit, and I intend
-to do some more important additions to the documentation in the near
-future, but I feel like the hand-written HTML format is a bit
-annoying.
-
-Therefore, this set of patches proposes to switch the documentation
-over to the AsciiDoc format [1]. It is a very simple text-based
-format, from which you can generate HTML (single page or splitted),
-PDF, text, and more.
-
-I have done an initial conversion of the Buildroot documentation to
-AsciiDoc and the result can be seen at :
-
- * http://free-electrons.com/~thomas/buildroot/manual/manual.pdf for
-   the PDF version
-
- * http://free-electrons.com/~thomas/buildroot/manual/manual.text for
-   the text version
-
- * http://free-electrons.com/~thomas/buildroot/manual/manual.html for
-   the single page HTML version
-
- * http://free-electrons.com/~thomas/buildroot/manual/html/ for
-   the multiple pages HTML version
-
-Some more improvements can quite certainly be made to the converted
-document. However, I'd prefer not to maintain it for a too long time
-together with the current documentation, so if the solution of
-AsciiDoc gets the attention of the Buildroot community, it'd be nice
-to have this merged relatively soon, or at least to not do too many
-changes to the current documentation.
-
-Changes since v1:
- * Rework of the build system so that the manual is generated in the
-   output directory, as per the suggestion of Yann E. Morin.
-
-Best regards,
-
-Thomas
-
-[1] http://www.methods.co.nz/asciidoc/
-
-The following changes since commit d1dd9588ae76d8c9b79a39af182a45e54ac356dd:
-
-  news.html: fix 2011.08 release date (2011-08-31 14:23:26 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/asciidoc-manual
-
-Thomas Petazzoni (4):
-      manual: convert existing documentation to the asciidoc format
-      manual: provide make targets to build the documentation
-      remove the old buildroot.html documentation
-      remove Glibc_vs_uClibc document
-
- Makefile                                     |   39 +-
- docs/Glibc_vs_uClibc.html                    |  240 ----
- docs/buildroot.html                          | 1819 --------------------------
- docs/manual/adding-packages-autotargets.txt  |  167 +++
- docs/manual/adding-packages-cmaketargets.txt |  140 ++
- docs/manual/adding-packages-conclusion.txt   |   10 +
- docs/manual/adding-packages-directory.txt    |   76 ++
- docs/manual/adding-packages-gentargets.txt   |  303 +++++
- docs/manual/adding-packages-gettext.txt      |   44 +
- docs/manual/adding-packages-handwritten.txt  |  165 +++
- docs/manual/adding-packages.txt              |   21 +
- docs/manual/board-support.txt                |   35 +
- docs/manual/ccache-support.txt               |   21 +
- docs/manual/customize-busybox-config.txt     |   24 +
- docs/manual/customize-kernel-config.txt      |   12 +
- docs/manual/customize-rootfs.txt             |   36 +
- docs/manual/customize-uclibc-config.txt      |   32 +
- docs/manual/customize.txt                    |   10 +
- docs/manual/download-location.txt            |   26 +
- docs/manual/external-toolchain.txt           |   84 ++
- docs/manual/getting.txt                      |   23 +
- docs/manual/how-buildroot-works.txt          |   59 +
- docs/manual/introduction.txt                 |   69 +
- docs/manual/manual.txt                       |   32 +
- docs/manual/rebuilding-packages.txt          |   62 +
- docs/manual/using-buildroot-toolchain.txt    |   20 +
- docs/manual/using.txt                        |  183 +++
- 27 files changed, 1692 insertions(+), 2060 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/Glibc_vs_uClibc.html |  240 ---------------------------------------------
+ 1 files changed, 0 insertions(+), 240 deletions(-)
  delete mode 100644 docs/Glibc_vs_uClibc.html
- delete mode 100644 docs/buildroot.html
- create mode 100644 docs/manual/adding-packages-autotargets.txt
- create mode 100644 docs/manual/adding-packages-cmaketargets.txt
- create mode 100644 docs/manual/adding-packages-conclusion.txt
- create mode 100644 docs/manual/adding-packages-directory.txt
- create mode 100644 docs/manual/adding-packages-gentargets.txt
- create mode 100644 docs/manual/adding-packages-gettext.txt
- create mode 100644 docs/manual/adding-packages-handwritten.txt
- create mode 100644 docs/manual/adding-packages.txt
- create mode 100644 docs/manual/board-support.txt
- create mode 100644 docs/manual/ccache-support.txt
- create mode 100644 docs/manual/customize-busybox-config.txt
- create mode 100644 docs/manual/customize-kernel-config.txt
- create mode 100644 docs/manual/customize-rootfs.txt
- create mode 100644 docs/manual/customize-uclibc-config.txt
- create mode 100644 docs/manual/customize.txt
- create mode 100644 docs/manual/download-location.txt
- create mode 100644 docs/manual/external-toolchain.txt
- create mode 100644 docs/manual/getting.txt
- create mode 100644 docs/manual/how-buildroot-works.txt
- create mode 100644 docs/manual/introduction.txt
- create mode 100644 docs/manual/manual.txt
- create mode 100644 docs/manual/rebuilding-packages.txt
- create mode 100644 docs/manual/using-buildroot-toolchain.txt
- create mode 100644 docs/manual/using.txt
 
-Thanks,
+diff --git a/docs/Glibc_vs_uClibc.html b/docs/Glibc_vs_uClibc.html
+deleted file mode 100644
+index c14eb8c..0000000
+--- a/docs/Glibc_vs_uClibc.html
++++ /dev/null
+@@ -1,240 +0,0 @@
+-<!--#include file="header.html" -->
+-
+-<h2>uClibc vs. glibc</h2>
+-
+-<p>
+-  uClibc and Glibc are not the same -- there are a number of differences which
+-  may or may not cause you problems.  This document attempts to list these 
+-  differences and, when completed, will contain a full list of all relevant 
+-  differences. 
+-  <br><br></p>
+- <ol>
+-  <li>uClibc is smaller than glibc.  We attempt to maintain a glibc compatible
+-  interface, allowing applications that compile with glibc to easily compile with
+-  uClibc.  However, we do not include _everything_ that glibc includes, and
+-  therefore some applications may not compile.  If this happens to you, please
+-  report the failure to the uclibc mailing list, with detailed error messages.
+-  </li><br>
+-  <li>uClibc is much more configurable then glibc.  This means that a developer
+-  may have compiled uClibc in such a way that significant amounts of
+-  functionality have been omitted.
+-  </li><br>
+-  <li>uClibc does not even attempt to ensure binary compatibility across releases.
+-  When a new version of uClibc is released, you may or may not need to recompile
+-  all your binaries.
+-  </li><br>
+-  <li><ul><li> malloc(0) in glibc returns a valid pointer to something(!?!?) while in
+-  uClibc calling malloc(0) returns a NULL.  The behavior of malloc(0) is listed
+-  as implementation-defined by SuSv3, so both libraries are equally correct.
+-  This difference also applies to realloc(NULL, 0).  I personally feel glibc's
+-  behavior is not particularly safe.  To enable glibc behavior, one has to
+-  explicitly enable the MALLOC_GLIBC_COMPAT option.
+-  </li><br><li>
+-  glibc's malloc() implementation has behavior that is tunable via the
+-  MALLOC_CHECK_ environment variable.  This is primarily used to provide extra
+-  malloc debugging features.  These extended malloc debugging features are not
+-  available within uClibc.  There are many good malloc debugging libraries
+-  available for Linux (dmalloc, electric fence, valgrind, etc) that work much
+-  better than the glibc extended malloc debugging.  So our omitting this
+-  functionality from uClibc is not a great loss.
+-  </li><br>
+-  </ul></li>
+-  <li>uClibc does not provide a database library (libdb).
+-  </li><br>
+-  <li>uClibc does not support NSS (/lib/libnss_*), which allows glibc to easily
+-  support various methods of authentication and DNS resolution.  uClibc only
+-  supports flat password files and shadow password files for storing
+-  authentication information.  If you need something more complex than this,
+-  you can compile and install pam.
+-  </li><br>
+-  <li>uClibc's libresolv is only a stub.  Some, but not all of the functionality
+-  provided by glibc's libresolv is provided internal to uClibc.  Other functions
+-  are not at all implemented.
+-  </li><br>
+-  <li>libnsl provides support for Network Information Service (NIS) which was
+-  originally called "Yellow Pages" or "YP", which is an extension of RPC invented
+-  by Sun to share Unix password files over the network.  I personally think NIS
+-  is an evil abomination and should not be used.  These days, using ldap is much
+-  more effective mechanism for doing the same thing.  uClibc provides a stub
+-  libnsl, but has no actual support for Network Information Service (NIS).
+-  We therefore, also do not provide any of the headers files provided by glibc
+-  under /usr/include/rpcsvc.
+-  </li><br>
+-  <li>uClibc's locale support is not 100% complete yet.  We are working on it.
+-  </li><br>
+-  <li>uClibc's math library only supports long double as inlines, and even
+-  then the long double support is quite limited.  Also, very few of the
+-  float math functions are implemented.  Stick with double and you should
+-  be just fine.
+-  </li><br>
+-  <li>uClibc's libcrypt does not support the reentrant crypt_r, setkey_r and
+-  encrypt_r, since these are not required by SuSv3.
+-  </li><br>
+-  <li>uClibc directly uses kernel types to define most opaque data types.
+-  </li><br>
+-  <li>uClibc directly uses the linux kernel's arch specific 'stuct stat'.
+-  </li><br>
+-  <li>uClibc's librt library currently lacks all aio routines, all clock
+-    routines, and all shm routines (only the timer routines and the mq
+-    routines are implemented). 
+-   </li><br>
+-</ol> 
+-<hr>
+-<h3>Manuel's Notes</h3>
+-
+-  Some general comments...<br>
+-  <p>
+-  The intended target for all my uClibc code is ANSI/ISO C99 and SUSv3
+-  compliance.  While some glibc extensions are present, many will eventually
+-  be configurable.  Also, even when present, the glibc-like extensions may
+-  differ slightly or be more restrictive than the native glibc counterparts.
+-  They are primarily meant to be porting _aides_ and not necessarily
+-  drop-in replacements.
+-  </p><br>
+-Now for some details...<br><br>
+-
+-<u>time functions</u><br>
+-<ol>
+-<li>Leap seconds are not supported.</li><br>
+-<li>/etc/timezone and the whole zoneinfo directory tree are not supported.
+-   To set the timezone, set the TZ environment variable as specified in
+-   http://www.opengroup.org/onlinepubs/007904975/basedefs/xbd_chap08.html
+-   or you may also create an /etc/TZ file of a single line, ending with a
+-   newline, containing the TZ setting.  For example
+-   echo CST6CDT > /etc/TZ
+-</li><br>
+-<li>Currently, locale specific eras and alternate digits are not supported.
+-   They are on my TODO list.
+-</li>
+-</ol><br>
+-<u>wide char support</u><br>
+-<ol>
+-<li>The only multibyte encoding currently supported is UTF-8.  The various
+-   ISO-8859-* encodings are (optionally) supported.  The internal
+-   representation of wchar's is assumed to be 31 bit unicode values in
+-   native endian representation.  Also, the underlying char encoding is
+-   assumed to match ASCII in the range 0-0x7f.
+-</li>
+-<li>In the next iteration of locale support, I plan to add support for
+-   (at least some) other multibyte encodings.
+-</li>
+-</ol>
+-<u>locale support</u><br>
+-<ol>
+-<li>The target for support is SUSv3 locale functionality.  While nl_langinfo
+-   has been extended, similar to glibc, it only returns values for related
+-   locale entries.
+-</li>
+-<li>Currently, all SUSv3 libc locale functionality should be implemented
+-   except for wcsftime and collating item support in regex.
+-</li>
+-</ol>
+-<u>stdio</u><br>
+-<ol>
+-<li>Conversion of large magnitude floating-point values by printf suffers a loss
+-   of precision due to the algorithm used.
+-</li><br>
+-<li>uClibc's printf is much stricter than glibcs, especially regarding positional
+-   args.  The entire format string is parsed first and an error is returned if
+-   a problem is detected.  In locales other than C, the format string is checked
+-   to be a valid multibyte sequence as well.  Also, currently at most 10 positional
+-   args are allowed (although this is configurable).
+-</li><br>
+-<li>BUFSIZ is configurable, but no attempt is made at automatic tuning of internal
+-   buffer sizes for stdio streams.  In fact, the stdio code in general sacrifices
+-   sophistication/performace for minimal size.
+-</li><br>
+-<li>uClibc allows glibc-like custom printf functions.  However, while not
+-   currently checked, the specifier must be <= 0x7f.
+-</li><br>
+-<li>uClibc allows glibc-like custom streams.  However, no in-buffer seeking is
+-   done.
+-</li><br>
+-<li>The functions fcloseall() and __fpending() can behave differently than their
+-   glibc counterparts.
+-</li><br>
+-<li>uClibc's setvbuf is more restrictive about when it can be called than glibc's
+-   is.  The standards specify that setvbuf must occur before any other operations
+-   take place on the stream.
+-</li><br>
+-<li>Right now, %m is not handled properly by printf when the format uses positional
+-   args.
+-</li><br>
+-<li>The FILEs created by glibc's fmemopen(), open_memstream(), and fopencookie()
+-   are not capable of wide orientation.  The corresponding uClibc routines do
+-   not have this limitation.
+-</li><br>
+-<li>For scanf, the C99 standard states "The fscanf function returns the value of
+-    the macro EOF if an input failure occurs before any conversion."  But glibc's
+-    scanf does not respect conversions for which assignment was surpressed, even
+-    though the standard states that the value is converted but not stored.
+-</li></ol><br>
+-<hr><h3>Glibc bugs</h3><br>
+-glibc bugs that Ulrich Drepper has refused to acknowledge or comment on
+-  ( <a href="http://sources.redhat.com/ml/libc-alpha/2003-09/">http://sources.redhat.com/ml/libc-alpha/2003-09/</a> )
+-<br>
+-<ol>
+-<li>The C99 standard says that for printf, a %s conversion makes no special
+-   provisions for multibyte characters.  SUSv3 is even more clear, stating
+-   that bytes are written and a specified precision is in bytes.  Yet glibc
+-   treats the arg as a multibyte string when a precision is specified and
+-   not otherwise.
+-</li><br>
+-<li>Both C99 and C89 state that the %c conversion for scanf reads the exact
+-   number of bytes specified by the optional field width (or 1 if not specified).
+-   uClibc complies with the standard.  There is an argument that perhaps the
+-   specified width should be treated as an upper bound, based on some historical
+-   use.  However, such behavior should be mentioned in the Conformance document.
+-</li><br>
+-<li>glibc's scanf is broken regarding some numeric patterns.  Some invalid
+-   strings are accepted as valid ("0x.p", "1e", digit grouped strings).
+-   In spite of my posting examples clearly illustrating the bugs, they remain
+-   unacknowledged by the glibc developers.
+-</li><br>
+-<li>glibc's scanf seems to require a 'p' exponent for hexadecimal float strings.
+-   According to the standard, this is optional.
+-</li><br>
+-<li>C99 requires that once an EOF is encountered, the stream should be treated
+-   as if at end-of-file even if more data becomes available.  Further reading
+-   can be attempted by clearing the EOF flag though, via clearerr() or a file
+-   positioning function.  For details concerning the original change, see
+-   Defect Report #141.  glibc is currently non-compliant, and the developers
+-   did not comment when I asked for their official position on this issue.
+-</li><br>
+-<li>glibc's collation routines and/or localedef are broken regarding implicit
+-   and explicit UNDEFINED rules.
+-</li><br></ol>
+-More to follow as I think of it...
+-<br><br><hr>
+-<h3>Profiling:</h3>
+-<p>
+-uClibc no longer supports 'gcc -fprofile-arcs  -pg' style profiling, which
+-causes your application to generate a 'gmon.out' file that can then be analyzed
+-by 'gprof'.  Not only does this require explicit extra support in uClibc, it
+-requires that you rebuild everything with profiling support.  There is both a
+-size and performance penalty to profiling your applications this way, as well
+-as Heisenberg effects, where the act of measuring changes what is measured.
+-</p>
+-<p>
+-There exist a number of less invasive alternatives that do not require you to
+-specially instrument your application, and recompile and relink everything.
+-</p><p>
+-The OProfile system-wide profiler is an excellent alternative:
+-      <a href="http://oprofile.sourceforge.net/">http://oprofile.sourceforge.net/</a>
+-</p><p>
+-Many people have had good results using the combination of Valgrind
+-to generate profiling information and KCachegrind for analysis:
+-      <a href="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</a>
+-      <a href="http://kcachegrind.sourceforge.net/">http://kcachegrind.sourceforge.net/</a>
+-</p><p>
+-Prospect is another alternative based on OProfile:
+-      <a href="http://prospect.sourceforge.net/">http://prospect.sourceforge.net/</a>
+-</p><p>
+-And the Linux Trace Toolkit (LTT) is also a fine tool:
+-    <a href="http://www.opersys.com/LTT/">http://www.opersys.com/LTT/</a>
+-</p><p>
+-FunctionCheck:
+-	<a href="http://www710.univ-lyon1.fr/~yperret/fnccheck/">http://www710.univ-lyon1.fr/~yperret/fnccheck/</a>
+-</p>
+-
+-<!--#include file="footer.html" -->
 -- 
-Thomas Petazzoni
+1.7.4.1
