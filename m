@@ -1,60 +1,76 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 31 Aug 2011 20:37:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 4117] New: 2011.08: default config with qt + ssl.
-	Linking fails
-Message-ID: <bug-4117-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 31 Aug 2011 22:38:10 +0200
+Subject: [Buildroot] [PATCH v3 2/2] netsnmp: allow to disable MIB files
+	installation and MIB loading code
+In-Reply-To: <1314819999-9099-2-git-send-email-luca@lucaceresoli.net>
+References: <1308238033-20127-1-git-send-email-luca@lucaceresoli.net>
+ <1314819999-9099-1-git-send-email-luca@lucaceresoli.net>
+ <1314819999-9099-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <201108312238.10282.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4117
+On Wednesday 31 August 2011 21:46:39 Luca Ceresoli wrote:
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-           Summary: 2011.08: default config with qt + ssl. Linking fails
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: thomas at zicada.no
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-
-Trying to link custom software (same code links on 2011.05 with same config).
-Output:
-
-
-/home/zicada/buildroot-2011.08/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/libgcc_eh.a(unwind-arm.o):
-In function `__aeabi_unwind_cpp_pr0':
-/home/zicada/buildroot-2011.08/output/toolchain/gcc-4.3.6/libgcc/../gcc/config/arm/unwind-arm.c:1251:
-multiple definition of `__aeabi_unwind_cpp_pr0'
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/librt.a(aeabi_unwind_cpp_pr1.os):aeabi_unwind_cpp_pr1.c:(.text+0x0):
-first defined here
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(sigprocmask.os):
-In function `sigprocmask':
-sigprocmask.c:(.text+0x0): multiple definition of `sigprocmask'
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libpthread.a(pt-sigprocmask.os):pt-sigprocmask.c:(.text+0x0):
-first defined here
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(sigaction.os):
-In function `__libc_sigaction':
-sigaction.c:(.text+0x0): multiple definition of `__libc_sigaction'
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libpthread.a(pt-sigaction.os):pt-sigaction.c:(.text+0x0):
-first defined here
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libc.a(sigaction.os):
-In function `sigaction':
-sigaction.c:(.text+0x84): multiple definition of `__sigaction'
-/home/zicada/buildroot-2011.08/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libpthread.a(pt-sigaction.os):pt-sigaction.c:(.text+0x84):
-first defined here
-collect2: ld returned 1 exit status
-make: *** [target/dist/jottaembedded] Error 1
+> ---
+> Changes in v2:
+>  - MIB installation is forcibly enabled with the MIB loading code; otherwise
+>    net-snmp would loudly flood the console for missing MIBs.
+> 
+> Changes in v3:
+>  - Join in a unique option the choice of not installing MIB files and not
+>    enabling MIB loading code. The mixed cases were either problematical or
+>    unlikely to be useful. This is per the discussion in
+>    http://lists.busybox.net/pipermail/buildroot/2011-August/045256.html
+> 
+>  package/netsnmp/Config.in  |    8 ++++++++
+>  package/netsnmp/netsnmp.mk |    5 +++++
+>  2 files changed, 13 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+> index 5a3e9aa..431be2d 100644
+> --- a/package/netsnmp/Config.in
+> +++ b/package/netsnmp/Config.in
+> @@ -6,3 +6,11 @@ config BR2_PACKAGE_NETSNMP
+>  
+>  	  http://net-snmp.sourceforge.net/
+>  
+> +config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+> +	bool "Install MIB files on target and enable MIB loading code"
+> +	default y
+> +	depends on BR2_PACKAGE_NETSNMP
+> +	help
+> +	  The net-snmp package contains a selection of MIB files.
+> +	  Say yes if you want those MIB files installed on the target
+> +	  and enable the code that parses the MIB files.
+> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+> index 5704327..cef6583 100644
+> --- a/package/netsnmp/netsnmp.mk
+> +++ b/package/netsnmp/netsnmp.mk
+> @@ -43,6 +43,11 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+>  	NETSNMP_CONF_OPT += --disable-manuals
+>  endif
+>  
+> +ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_MIBS),y)
+> +	NETSNMP_CONF_OPT += --disable-mib-loading
+> +	NETSNMP_CONF_OPT += --disable-mibs
+> +endif
+> +
+>  # Remove IPv6 MIBs if there's no IPv6
+>  ifneq ($(BR2_INET_IPV6),y)
+>  define NETSNMP_REMOVE_MIBS_IPV6
+> 
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
