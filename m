@@ -1,56 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:29:23 +0200
-Subject: [Buildroot] [PATCH 15/16] mcookie: convert to the GENTARGETS
-	infrastructure
-In-Reply-To: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2b67aaeba3e3b1d12b9fcd5ccedc5cc52d97de16.1314826051.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Aug 2011 23:31:13 +0200
+Subject: [Buildroot] [PATCH 05/15] package: implement a 'local' site method
+In-Reply-To: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ce42237e617ced0e7fd8ebb84d2adec456fda6a1.1314826231.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The new override source directory mechanism allows to tell Buildroot
+to use a particular directory as the source directory for a
+package. However, this mechanism works with a local override makefile
+and not directly within the package recipe itself.
+
+For some use cases, it might be desirable to write a package recipe
+which always refers to a local source directory (and not a http, git,
+svn or bazaar download). This commit makes this possible by adding the
+'local' site method. It allows to write package recipes as follows:
+
+MYPKG_SITE = /tmp/mypkg-source-code
+MYPKG_SITE_METHOD = local
+
+[...]
+
+$(eval $(call GENTARGETS,package,mypkg))
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/mcookie/mcookie.mk |   24 +++++++++++++-----------
- 1 files changed, 13 insertions(+), 11 deletions(-)
+ package/Makefile.package.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/mcookie/mcookie.mk b/package/x11r7/mcookie/mcookie.mk
-index 12ef475..d1c4354 100644
---- a/package/x11r7/mcookie/mcookie.mk
-+++ b/package/x11r7/mcookie/mcookie.mk
-@@ -4,17 +4,19 @@
- #
- #############################################################
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 7af689d..fdec8e1 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -438,6 +438,12 @@ ifndef $(2)_SITE_METHOD
+  endif
+ endif
  
--$(TARGET_DIR)/usr/bin/mcookie: package/x11r7/mcookie/mcookie.c
--	$(TARGET_CC) -Wall -Os -s package/x11r7/mcookie/mcookie.c -o $(TARGET_DIR)/usr/bin/mcookie
-+# Source included in Buildroot
-+MCOOKIE_SOURCE =
- 
-+define MCOOKIE_EXTRACT_CMDS
-+	cp package/x11r7/mcookie/mcookie.c $(@D)/
-+endef
- 
--mcookie: $(TARGET_DIR)/usr/bin/mcookie
-+define MCOOKIE_BUILD_CMDS
-+	(cd $(@D); $(TARGET_CC) -Wall -Os -s mcookie.c -o mcookie)
-+endef
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_MCOOKIE),y)
--TARGETS+=mcookie
--endif
-+define MCOOKIE_TARGET_INSTALL_CMDS
-+	install -m 0755 -D $(@D)/mcookie $(TARGET_DIR)/usr/bin/mcookie
-+endef
++ifeq ($$($(2)_SITE_METHOD),local)
++ifeq ($$($(2)_OVERRIDE_SRCDIR),)
++$(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
++endif
++endif
 +
-+$(eval $(call GENTARGETS))
-\ No newline at end of file
+ $(2)_DEPENDENCIES		?=
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
 -- 
 1.7.4.1
