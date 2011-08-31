@@ -1,53 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:31:13 +0200
-Subject: [Buildroot] [PATCH 05/15] package: implement a 'local' site method
+Date: Wed, 31 Aug 2011 23:31:17 +0200
+Subject: [Buildroot] [PATCH 09/15] package: remove useless arguments from
+	CMAKETARGETS
 In-Reply-To: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ce42237e617ced0e7fd8ebb84d2adec456fda6a1.1314826231.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0404bdd5595ddd3d4771464f09dcc30265ce123f.1314826232.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The new override source directory mechanism allows to tell Buildroot
-to use a particular directory as the source directory for a
-package. However, this mechanism works with a local override makefile
-and not directly within the package recipe itself.
-
-For some use cases, it might be desirable to write a package recipe
-which always refers to a local source directory (and not a http, git,
-svn or bazaar download). This commit makes this possible by adding the
-'local' site method. It allows to write package recipes as follows:
-
-MYPKG_SITE = /tmp/mypkg-source-code
-MYPKG_SITE_METHOD = local
-
-[...]
-
-$(eval $(call GENTARGETS,package,mypkg))
+Thanks to the pkgdir and pkgname functions, we can rewrite the
+GENTARGETS macro in a way that avoids the need for each package to
+repeat its name and the directory in which it is present.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/Makefile.cmake.in                   |   10 ++++------
+ package/cdrkit/cdrkit.mk                    |    4 ++--
+ package/multimedia/libcuefile/libcuefile.mk |    2 +-
+ package/yajl/yajl.mk                        |    2 +-
+ 4 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 7af689d..fdec8e1 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -438,6 +438,12 @@ ifndef $(2)_SITE_METHOD
-  endif
- endif
+diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
+index 1263eb9..b48e09a 100644
+--- a/package/Makefile.cmake.in
++++ b/package/Makefile.cmake.in
+@@ -183,15 +183,13 @@ endef
+ ################################################################################
+ # CMAKETARGETS -- the target generator macro for CMake packages
+ #
+-# Argument 1 is the package directory prefix [mandatory]
+-# Argument 2 is the lowercase package name   [mandatory]
+-# Argument 3 is "target" or "host"           [optional, default: "target"]
++# Argument 1 is "target" or "host"           [optional, default: "target"]
+ ################################################################################
  
-+ifeq ($$($(2)_SITE_METHOD),local)
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+$(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
-+endif
-+endif
-+
- $(2)_DEPENDENCIES		?=
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
+ define CMAKETARGETS
+-ifeq ($(3),host)
+-$(call CMAKETARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
++ifeq ($(1),host)
++$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
+ else
+-$(call CMAKETARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
++$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
+ endif
+ endef
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index a57a8fd..9eebe6e 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -20,5 +20,5 @@ CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
+ HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
+ HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
+ 
+-$(eval $(call CMAKETARGETS,package,cdrkit))
+-$(eval $(call CMAKETARGETS,package,cdrkit,host))
++$(eval $(call CMAKETARGETS))
++$(eval $(call CMAKETARGETS,host))
+diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
+index 86ec070..a0c8054 100644
+--- a/package/multimedia/libcuefile/libcuefile.mk
++++ b/package/multimedia/libcuefile/libcuefile.mk
+@@ -20,4 +20,4 @@ endef
+ LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
+ LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
+ 
+-$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
++$(eval $(call CMAKETARGETS))
+diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
+index e67a7da..723cce4 100644
+--- a/package/yajl/yajl.mk
++++ b/package/yajl/yajl.mk
+@@ -8,4 +8,4 @@ YAJL_VERSION = 2.0.2
+ YAJL_SITE = git://github.com/lloyd/yajl.git
+ YAJL_INSTALL_STAGING = YES
+ 
+-$(eval $(call CMAKETARGETS,package,yajl))
++$(eval $(call CMAKETARGETS))
 -- 
 1.7.4.1
