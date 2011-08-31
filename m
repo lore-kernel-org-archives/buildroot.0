@@ -1,17 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 31 Aug 2011 13:44:55 +0200
-Subject: [Buildroot] [git tag 2011.08] Update for 2011.08
-Message-ID: <20110831114652.B1BFC8D343@busybox.osuosl.org>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Wed, 31 Aug 2011 07:04:11 -0500
+Subject: [Buildroot] [git commit] Update for 2011.08
+In-Reply-To: <20110831114543.E35268D343@busybox.osuosl.org>
+References: <20110831114543.E35268D343@busybox.osuosl.org>
+Message-ID: <201108310704.13604.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed August 31 2011, Peter Korsgaard wrote:
+> diff --git a/docs/news.html b/docs/news.html
+> index 582a72a..dbcc7c9 100644
+> --- a/docs/news.html
+> +++ b/docs/news.html
+> @@ -5,6 +5,14 @@
+> ?<p>
+> ?
+> ?<ul>
+> + ?<li><b>32 August 2011 -- 2011.08 released</b>
+> 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=abe7c80630ec0a0bfcbe56e0cc50daad29955d82
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/tags/2011.08
+What calendar is used by the Buildroot project?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-
-this is a tag, so no patch shown
+Mike
