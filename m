@@ -1,115 +1,137 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:31:19 +0200
-Subject: [Buildroot] [PATCH 11/15] Add support for local packages through
-	'file://' pseudo-protocol
+Date: Wed, 31 Aug 2011 23:31:10 +0200
+Subject: [Buildroot] [PATCH 02/15] package: enhance infrastructure to
+	support source dir override
 In-Reply-To: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c9238beae1509b3bcf0bfcc4d05904b801b9c5b6.1314826232.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ad6a9779e87399fbd8f70dbafa666006d8c846d1.1314826231.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: David Wagner <david.wagner@free-electrons.com>
+When a variable <pkg>_OVERRIDE_SRCDIR is defined, then Buildroot will
+no longer try to download, extract and patch the package. It will
+simply use the value of this variable as the source directory for the
+package. The contents of the package sources will be rsynced to the
+package build directory in $(O)/build/pkg-version/.
 
-This can be used this way :
+This can be used to tell Buildroot that the sources for a given
+package are inside some directory that you control, and which can be
+versioned in Git/SVN, or handled in whichever way you want.
 
-<pkg>_VERSION = 42
-<pkg>_SITE = file:///some/local/directory
-<pkg>_SOURCE = mypkg-$(<pkg>_VERSION).tar.bz2
+Those <pkg>_OVERRIDE_SRCDIR variables will be defined by a local
+makefile included by Buildroot, which will be handled in a later
+commit.
 
-Can be useful to integrate a home-made project or for testing purposes.
-The default command to retrieve files is 'cp' but 'rsync' could also be used.
-Through sshfs, it should also be possible to get non-public remote files on a
-ssh server.
-
-[ Thomas Petazzoni: use $(PKG)_SITE and $(PKG)_SOURCE variables
-  instead of $(1) and $(2) ]
-
-Signed-off-by: David Wagner <david.wagner@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in                   |    4 ++++
- package/Makefile.package.in |   21 ++++++++++++++++++---
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ package/Makefile.package.in |   54 +++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 52 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 3aa3ad8..0cf4d49 100644
---- a/Config.in
-+++ b/Config.in
-@@ -32,6 +32,10 @@ config BR2_GIT
- 	string "Git command"
- 	default "git"
- 
-+config BR2_LOCALFILES
-+	string "Local files retrieval command"
-+	default "cp"
-+
- config BR2_ZCAT
- 	string "zcat command"
- 	default "gzip -d -c"
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 3911471..57b3498 100644
+index 6dae8f7..1de2838 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -92,6 +92,7 @@ WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
- SVN:=$(call qstrip,$(BR2_SVN)) $(QUIET)
- BZR:=$(call qstrip,$(BR2_BZR)) $(QUIET)
- GIT:=$(call qstrip,$(BR2_GIT)) $(QUIET)
-+LOCALFILES:=$(call qstrip,$(BR2_LOCALFILES)) $(QUIET)
+@@ -251,6 +251,25 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)touch $@
  
- # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
- # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
-@@ -104,18 +105,18 @@ DL_DIR:=$(TOPDIR)/dl
- endif
- 
- ################################################################################
--# The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a
-+# The DOWNLOAD_{GIT,SVN,BZR,LOCALFILES} helpers are in charge of getting a
- # working copy of the source repository for their corresponding SCM,
- # checking out the requested version / commit / tag, and create an
- # archive out of it. DOWNLOAD_WGET is the normal wget-based download
- # mechanism.
++# Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
++# used.
++$(BUILD_DIR)/%/.stamp_rsynced:
++	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
++	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
++	rsync -au $(SRCDIR)/ $(@D)
++	$(Q)touch $@
++
++# Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
++# packages
++$(BUILD_DIR)/%/.stamp_rsync_sourced:
++ifeq ($(DL_MODE),SOURCE_CHECK)
++	test -d $(SRCDIR)
++else ifeq ($(DL_MODE),SHOW_EXTERNAL_DEPS)
++	echo "file://$(SRCDIR)"
++else
++	@true # Nothing to do to source a local package
++endif
++
+ # Patch
  #
--# The SOURCE_CHECK_{GIT,SVN,BZR,WGET} helpers are in charge of simply
-+# The SOURCE_CHECK_{GIT,SVN,BZR,WGET,LOCALFILES} helpers are in charge of simply
- # checking that the source is available for download. This can be used
- # to make sure one will be able to get all the sources needed for
- # one's build configuration.
- #
--# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET} helpers simply output to
-+# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET,LOCALFILES} helpers simply output to
- # the console the names of the files that will be downloaded, or path
- # and revision of the source repositories, producing a list of all the
- # "external dependencies" of a given build configuration.
-@@ -189,6 +190,19 @@ define SHOW_EXTERNAL_DEPS_WGET
-   echo $(1)/$(2)
- endef
+ # The RAWNAME variable is the lowercased package name, which allows to
+@@ -383,6 +402,10 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
  
-+define DOWNLOAD_LOCALFILES
-+	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-+		$(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
-+endef
++ifneq ($$($(2)_OVERRIDE_SRCDIR),)
++$(2)_VERSION = custom
++endif
 +
-+define SOURCE_CHECK_LOCALFILES
-+  test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
-+endef
+ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $($(3)_SOURCE)
+@@ -428,6 +451,8 @@ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
+ $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
+ $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
+ $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
++$(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
++$(2)_TARGET_RSYNC_SOURCE =      $$($(2)_DIR)/.stamp_rsync_sourced
+ $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+ $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
+ $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
+@@ -487,6 +512,13 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
+ $(1)-build:		$(1)-configure \
+ 			$$($(2)_TARGET_BUILD)
+ 
++ifeq ($$($(2)_OVERRIDE_SRCDIR),)
++# In the normal case (no package override), the sequence of steps is
++#  source, by downloading
++#  depends
++#  extract
++#  patch
++#  configure
+ $(1)-configure:		$(1)-patch \
+ 			$$($(2)_TARGET_CONFIGURE)
+ 
+@@ -497,11 +529,25 @@ $(1)-extract:		$(1)-depends \
+ 
+ $(1)-depends:		$(1)-source $$($(2)_DEPENDENCIES)
+ 
++$(1)-source:		$$($(2)_TARGET_SOURCE)
++else
++# In the package override case, the sequence of steps
++#  source, by rsyncing
++#  depends
++#  configure
++$(1)-configure:		$(1)-depends \
++			$$($(2)_TARGET_CONFIGURE)
 +
-+define SHOW_EXTERNAL_DEPS_LOCALFILES
-+  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
-+endef
++$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
 +
- ################################################################################
- # DOWNLOAD -- Download helper. Will try to download source from:
- # 1) BR2_PRIMARY_SITE if enabled
-@@ -211,6 +225,7 @@ define DOWNLOAD
- 			git) $($(DL_MODE)_GIT) && exit ;; \
- 			svn) $($(DL_MODE)_SVN) && exit ;; \
- 			bzr) $($(DL_MODE)_BZR) && exit ;; \
-+			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
- 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
++$(1)-rsync:		$$($(2)_TARGET_RSYNC)
++
++$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
++endif
++
+ $(1)-show-depends:
+ 			@echo $$($(2)_DEPENDENCIES)
+ 
+-$(1)-source:		$$($(2)_TARGET_SOURCE)
+-
+ $(1)-uninstall:		$(1)-configure $$($(2)_TARGET_UNINSTALL)
+ 
+ $(1)-clean:		$(1)-uninstall \
+@@ -517,6 +563,10 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
+ $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
+ $$($(2)_TARGET_BUILD):			PKG=$(2)
+ $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
++$$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
++$$($(2)_TARGET_RSYNC):                  PKG=$(2)
++$$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
++$$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
+ $$($(2)_TARGET_PATCH):			PKG=$(2)
+ $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
+ $$($(2)_TARGET_EXTRACT):		PKG=$(2)
 -- 
 1.7.4.1
