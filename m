@@ -1,86 +1,45 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Rebenstorf <Joerg.Rebenstorf@GiN.de>
-Date: Wed, 31 Aug 2011 07:58:33 +0200
-Subject: [Buildroot] no core dumps
-In-Reply-To: <20110830153423.2dce09c8@skate>
-References: <1314692362.2640.144.camel@jr-ThinkCentre-A57>
- <20110830153423.2dce09c8@skate>
-Message-ID: <1314770313.2303.3.camel@jr-ThinkCentre-A57>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 31 Aug 2011 09:02:47 +0200
+Subject: [Buildroot] [PATCH 1/2] syslinux: bump version and fix build
+In-Reply-To: <87hb4yobcb.fsf@macbook.be.48ers.dk>
+References: <1314721730-8241-1-git-send-email-arnout@mind.be>
+ <201108302033.21764.arnout@mind.be> <87hb4yobcb.fsf@macbook.be.48ers.dk>
+Message-ID: <201108310902.49418.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
 
-no, 'ELF core dumps' hasn't been activated. That you for pointing it
-out.
 
-General Setup --->
-   Configure standard kernel features --->
-      Enable ELF core dumps
+On Tuesday 30 August 2011 23:09:40, Peter Korsgaard wrote:
+> Your commit message mentions 'fix build' - Is this something needed for
+> 2011.08, E.G. does the current syslinux version not build for you?
 
-I enabled it and now it works as expected.
+ No, it's a build problem of syslinux 4.04.  I've clarified that in the commit 
+message.  There's a comment in the patch explaining the problem: 
 
-Cheers,
-Crayor
+# syslinux-4.04 comes with a bundled mk-lba-img executable which
+# may not work in our host environment.
 
-On Tue, 2011-08-30 at 15:34 +0200, Thomas Petazzoni wrote:
-> Hello,
+ [Actually, now I look at it again, it's a bit of a coincidence that it works 
+for the other bundled executables.  Perhaps we should do a make clean before 
+building instead...]
+
+>  Arnout> Do I need to resend?
 > 
-> Le Tue, 30 Aug 2011 10:19:22 +0200,
-> J?rg Rebenstorf <Joerg.Rebenstorf@GiN.de> a ?crit :
-> 
-> > I am using buildroot-2009.11.
-> > 
-> > I'd like to know how to enable the linux core dump feature in
-> > buildroot. I have written a program that intentionally makes a
-> > segfault but still I get no core dump file. Is there something
-> > special with buildroot here? Do I need to activate a specific build
-> > option? As you can see below I already enabled core dumps with the
-> > 'ulimit' command.
-> 
-> Do you have ELF core dumps enabled in your kernel configuration?
-> 
-> Regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Preferably yes.
+
+ Coming up...
+
+ Regards,
+ Arnout
 
 -- 
-G.i.N. Gesellschaft f?r industrielle Netzwerke GmbH
-Dipl.-Inform. J?rg Rebenstorf
-Raiffeisenstr. 15
-D-64347 Griesheim
-Telefon: +49 6155 - 8259 - 0
-Telefax: +49 6155 - 8259 - 11
-E-Mail:   joerg.rebenstorf at gin.de
-Internet: http://www.gin.de
-Sitz: Griesheim
-Registergericht: Amtsgericht Darmstadt, HRB 5068
-Gerichtsstand: Darmstadt
-USt.-ID-Nr. DE 111633284
-WEEE-Reg.-Nr. DE 20824942
-Gesch?ftsf?hrer:
-Dipl.-Ing. Wolfgang Bassenauer
-Dipl.-Inform. Andreas Schoenberg
-
-IMPORTANT NOTICE:
-This message is intended only for the use of the individual or entity to which it is addressed, and may contain information that is privileged, confidential and exempt from disclosure under applicable law. If the reader of this message is not the intended recipient, or the employee or agent responsible for delivering the message to the intended recipient, you are hereby notified that any dissemination, distribution or copying of this communication is strictly prohibited. If you have received this communication in error, please notify the sender immediately by email.
-The above information is automatically added to this e-mail. This addition does not constitute a representation that the content of this e-mail is legally relevant and/or is intended to be legally binding upon G.i.N. mbH.
-Thank you.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: This is a digitally signed message part
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110831/945c27fb/attachment.asc>
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
