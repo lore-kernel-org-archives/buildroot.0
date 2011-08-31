@@ -1,32 +1,36 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Wed, 31 Aug 2011 13:53:43 -0500
-Subject: [Buildroot] [PATCH] Fix fw_env bug for multi-sector
-	environments on NOR flash
-In-Reply-To: <1314812053-17452-1-git-send-email-yiyang.fei@barco.com>
-References: <1314812053-17452-1-git-send-email-yiyang.fei@barco.com>
-Message-ID: <201108311353.48450.minimod@morethan.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 31 Aug 2011 21:19:48 +0200
+Subject: [Buildroot] [git commit] news.html: fix 2011.08 release date
+In-Reply-To: <201108311118.08630.minimod@morethan.org> (Michael S. Zick's
+ message of "Wed, 31 Aug 2011 11:18:06 -0500")
+References: <20110831122408.2C3D38D367@busybox.osuosl.org>
+ <201108311118.08630.minimod@morethan.org>
+Message-ID: <87vctdmlrf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed August 31 2011, Yiyang Fei wrote:
-> DISCLAIMER:
-> Unless indicated otherwise, the information contained in this message is 
-> privileged and confidential, and is intended only for the use of the 
-> addressee(s) named above and others who have been specifically authorized 
-> to receive it. If you are not the intended recipient, you are hereby 
-> notified that any dissemination, distribution or copying of this message 
-> and/or attachments is strictly prohibited. The company accepts no 
-> liability for any damage caused by any virus transmitted by this email. 
-> Furthermore, the company does not warrant a proper and complete 
-> transmission of this information, nor does it accept liability for any 
-> delays. If you have received this message in error, please contact the 
-> sender and delete the message. Thank you.
-> 
+>>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
 
-How can your patch be included in this open source package with these
-restrictions attached?
+ Michael> On Wed August 31 2011, Peter Korsgaard wrote:
+ >> 
+ >> commit: http://git.buildroot.net/buildroot/commit/?id=d1dd9588ae76d8c9b79a39af182a45e54ac356dd
+ >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> 
+ >> Thanks to Michael S. Zick for noticing.
 
-Mike
+ Michael> You are welcome.
+
+ Michael> Things are probably a bit rushed when on the last
+ Michael> day for a new release.
+
+Yeah, trying to do too many things at once ..
+
+ Michael> I am lucky if I can type when I am not rushed. ;-)
+
+;)
+
+-- 
+Bye, Peter Korsgaard
