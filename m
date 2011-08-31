@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:31:16 +0200
-Subject: [Buildroot] [PATCH 08/15] package: remove useless arguments from
+Date: Wed, 31 Aug 2011 23:29:16 +0200
+Subject: [Buildroot] [PATCH 08/16] package: remove useless arguments from
 	AUTOTARGETS
-In-Reply-To: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4c5d5efafbb287dcf231d5abed7ab0095ee6f94c.1314826231.git.thomas.petazzoni@free-electrons.com>
+In-Reply-To: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4c5d5efafbb287dcf231d5abed7ab0095ee6f94c.1314826051.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
