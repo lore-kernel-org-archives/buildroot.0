@@ -1,47 +1,64 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 31 Aug 2011 21:46:38 +0200
-Subject: [Buildroot] [PATCH v3 1/2] netsnmp: fix stop and restart actions in
-	init script
-In-Reply-To: <1308238033-20127-1-git-send-email-luca@lucaceresoli.net>
+Date: Wed, 31 Aug 2011 21:46:39 +0200
+Subject: [Buildroot] [PATCH v3 2/2] netsnmp: allow to disable MIB files
+	installation and MIB loading code
+In-Reply-To: <1314819999-9099-1-git-send-email-luca@lucaceresoli.net>
 References: <1308238033-20127-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1314819999-9099-1-git-send-email-luca@lucaceresoli.net>
+ <1314819999-9099-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1314819999-9099-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/etc/init.d/S59snmpd stop (and restart) currently fail if either snmpd or
-snmptrapd are not running.
-This is because start-stop-daemon -K returns nonzero if the process to be
-killed is not running, and this causes the whole script to fail because it runs
-under 'set -e'.
-
-This may not be noticed if only the last start-stop-daemon fails, but this is
-in general wrong. It would also cause a failure in other scripts that execute
-S59snmpd and check the return value.
-
-Adding the --oknodo (-o) option to start-stop-daemon fixes this.
-
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-Changes in v2: none.
-Changes in v3: none.
+Changes in v2:
+ - MIB installation is forcibly enabled with the MIB loading code; otherwise
+   net-snmp would loudly flood the console for missing MIBs.
 
- package/netsnmp/S59snmpd |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Changes in v3:
+ - Join in a unique option the choice of not installing MIB files and not
+   enabling MIB loading code. The mixed cases were either problematical or
+   unlikely to be useful. This is per the discussion in
+   http://lists.busybox.net/pipermail/buildroot/2011-August/045256.html
 
-diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
-index f65317a..5df4b85 100755
---- a/package/netsnmp/S59snmpd
-+++ b/package/netsnmp/S59snmpd
-@@ -29,7 +29,6 @@ TRAPDOPTS='-Lsd -p /var/run/snmptrapd.pid'
- [ -r /etc/default/snmpd ] && . /etc/default/snmpd
+ package/netsnmp/Config.in  |    8 ++++++++
+ package/netsnmp/netsnmp.mk |    5 +++++
+ 2 files changed, 13 insertions(+), 0 deletions(-)
+
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 5a3e9aa..431be2d 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -6,3 +6,11 @@ config BR2_PACKAGE_NETSNMP
  
- ssd_oknodo="-o"
--ssd_oknodo=""
+ 	  http://net-snmp.sourceforge.net/
  
- # Cd to / before starting any daemons.
- cd /
++config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
++	bool "Install MIB files on target and enable MIB loading code"
++	default y
++	depends on BR2_PACKAGE_NETSNMP
++	help
++	  The net-snmp package contains a selection of MIB files.
++	  Say yes if you want those MIB files installed on the target
++	  and enable the code that parses the MIB files.
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 5704327..cef6583 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -43,6 +43,11 @@ ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+ 	NETSNMP_CONF_OPT += --disable-manuals
+ endif
+ 
++ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_MIBS),y)
++	NETSNMP_CONF_OPT += --disable-mib-loading
++	NETSNMP_CONF_OPT += --disable-mibs
++endif
++
+ # Remove IPv6 MIBs if there's no IPv6
+ ifneq ($(BR2_INET_IPV6),y)
+ define NETSNMP_REMOVE_MIBS_IPV6
 -- 
 1.7.4.1
