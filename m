@@ -1,137 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:31:10 +0200
-Subject: [Buildroot] [PATCH 02/15] package: enhance infrastructure to
-	support source dir override
-In-Reply-To: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ad6a9779e87399fbd8f70dbafa666006d8c846d1.1314826231.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Aug 2011 23:29:12 +0200
+Subject: [Buildroot] [PATCH 04/16] package: add <pkg>-rebuild and
+	<pkg>-reconfigure
+In-Reply-To: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <550d3ba3c9db7d0a9df78aa52e09da9af93e20d8.1314826051.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a variable <pkg>_OVERRIDE_SRCDIR is defined, then Buildroot will
-no longer try to download, extract and patch the package. It will
-simply use the value of this variable as the source directory for the
-package. The contents of the package sources will be rsynced to the
-package build directory in $(O)/build/pkg-version/.
+We are often asked "how can I restart the build of a package ?" or
+"how can I restart the build of package from the configure part
+?". Obviously, tweaking with stamp files is possible, but not very
+user friendly.
 
-This can be used to tell Buildroot that the sources for a given
-package are inside some directory that you control, and which can be
-versioned in Git/SVN, or handled in whichever way you want.
-
-Those <pkg>_OVERRIDE_SRCDIR variables will be defined by a local
-makefile included by Buildroot, which will be handled in a later
-commit.
+Therefore this patch adds two new per-package targets: <pkg>-rebuild
+and <pkg>-reconfigure. They will remove the right stamp files and
+restart the complete build process (by using the 'all' target, so that
+not only the package is reconfigured, recompiled and reinstalled, but
+the root filesystem images are also regenerated).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |   54 +++++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 52 insertions(+), 2 deletions(-)
+ package/Makefile.package.in |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 6dae8f7..1de2838 100644
+index 1de2838..7af689d 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -251,6 +251,25 @@ $(BUILD_DIR)/%/.stamp_extracted:
- 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
+@@ -555,6 +555,22 @@ $(1)-clean:		$(1)-uninstall \
  
-+# Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
-+# used.
-+$(BUILD_DIR)/%/.stamp_rsynced:
-+	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
-+	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
-+	rsync -au $(SRCDIR)/ $(@D)
-+	$(Q)touch $@
-+
-+# Handle the SOURCE_CHECK and SHOW_EXTERNAL_DEPS cases for rsynced
-+# packages
-+$(BUILD_DIR)/%/.stamp_rsync_sourced:
-+ifeq ($(DL_MODE),SOURCE_CHECK)
-+	test -d $(SRCDIR)
-+else ifeq ($(DL_MODE),SHOW_EXTERNAL_DEPS)
-+	echo "file://$(SRCDIR)"
-+else
-+	@true # Nothing to do to source a local package
-+endif
-+
- # Patch
- #
- # The RAWNAME variable is the lowercased package name, which allows to
-@@ -383,6 +402,10 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
- $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
- $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
  
++$(1)-clean-for-rebuild:
 +ifneq ($$($(2)_OVERRIDE_SRCDIR),)
-+$(2)_VERSION = custom
++			rm -f $$($(2)_TARGET_RSYNC)
 +endif
++			rm -f $$($(2)_TARGET_BUILD)
++			rm -f $$($(2)_TARGET_INSTALL_STAGING)
++			rm -f $$($(2)_TARGET_INSTALL_TARGET)
++			rm -f $$($(2)_TARGET_INSTALL_HOST)
 +
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $($(3)_SOURCE)
-@@ -428,6 +451,8 @@ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_DIR)/.stamp_images_installed
- $(2)_TARGET_INSTALL_HOST =      $$($(2)_DIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_DIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_DIR)/.stamp_configured
-+$(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
-+$(2)_TARGET_RSYNC_SOURCE =      $$($(2)_DIR)/.stamp_rsync_sourced
- $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
- $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
- $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-@@ -487,6 +512,13 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
- $(1)-build:		$(1)-configure \
- 			$$($(2)_TARGET_BUILD)
- 
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+# In the normal case (no package override), the sequence of steps is
-+#  source, by downloading
-+#  depends
-+#  extract
-+#  patch
-+#  configure
- $(1)-configure:		$(1)-patch \
- 			$$($(2)_TARGET_CONFIGURE)
- 
-@@ -497,11 +529,25 @@ $(1)-extract:		$(1)-depends \
- 
- $(1)-depends:		$(1)-source $$($(2)_DEPENDENCIES)
- 
-+$(1)-source:		$$($(2)_TARGET_SOURCE)
-+else
-+# In the package override case, the sequence of steps
-+#  source, by rsyncing
-+#  depends
-+#  configure
-+$(1)-configure:		$(1)-depends \
-+			$$($(2)_TARGET_CONFIGURE)
++$(1)-rebuild:		$(1)-clean-for-rebuild all
 +
-+$(1)-depends:		$(1)-rsync $$($(2)_DEPENDENCIES)
++$(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
++			rm -f $$($(2)_TARGET_CONFIGURE)
 +
-+$(1)-rsync:		$$($(2)_TARGET_RSYNC)
++$(1)-reconfigure:	$(1)-clean-for-reconfigure all
 +
-+$(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
-+endif
-+
- $(1)-show-depends:
- 			@echo $$($(2)_DEPENDENCIES)
- 
--$(1)-source:		$$($(2)_TARGET_SOURCE)
--
- $(1)-uninstall:		$(1)-configure $$($(2)_TARGET_UNINSTALL)
- 
- $(1)-clean:		$(1)-uninstall \
-@@ -517,6 +563,10 @@ $$($(2)_TARGET_INSTALL_IMAGES):		PKG=$(2)
- $$($(2)_TARGET_INSTALL_HOST):           PKG=$(2)
- $$($(2)_TARGET_BUILD):			PKG=$(2)
- $$($(2)_TARGET_CONFIGURE):		PKG=$(2)
-+$$($(2)_TARGET_RSYNC):                  SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
-+$$($(2)_TARGET_RSYNC):                  PKG=$(2)
-+$$($(2)_TARGET_RSYNC_SOURCE):		SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
-+$$($(2)_TARGET_RSYNC_SOURCE):		PKG=$(2)
- $$($(2)_TARGET_PATCH):			PKG=$(2)
- $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
- $$($(2)_TARGET_EXTRACT):		PKG=$(2)
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
 -- 
 1.7.4.1
