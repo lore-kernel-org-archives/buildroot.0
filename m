@@ -1,45 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:29:22 +0200
-Subject: [Buildroot] [PATCH 14/16] whetstone: use the <pkg>_EXTRACT_CMDS
-	mechanism
+Date: Wed, 31 Aug 2011 23:29:11 +0200
+Subject: [Buildroot] [PATCH 03/16] package: add configuration option to
+	specify a local override file
 In-Reply-To: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1f38b41446416dfd17db5a4d6eb0df943016cc2b.1314826051.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <6efa5955ba09b0928e04704af3b3296d77c7acf8.1314826051.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The user can now create a custom local override file to override the
+source directory for various packages.
+
+An example override file:
+
+ ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+ STRACE_OVERRIDE_SRCDIR = /opt/strace-4.5.20
+
+would tell Buildroot to use the zlib and strace source code from the
+specified directories, instead of download, extracting and patching
+the code has done usually by Buildroot.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/whetstone/whetstone.mk |   10 ++++------
- 1 files changed, 4 insertions(+), 6 deletions(-)
+ Config.in |   10 ++++++++++
+ Makefile  |    7 +++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
-index 48a3adf..048f4de 100644
---- a/package/whetstone/whetstone.mk
-+++ b/package/whetstone/whetstone.mk
-@@ -8,6 +8,10 @@ WHETSTONE_VERSION = 1.2
- WHETSTONE_SOURCE = whetstone.c
- WHETSTONE_SITE = http://www.netlib.org/benchmark/
+diff --git a/Config.in b/Config.in
+index 2fce9d7..3aa3ad8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -334,6 +334,16 @@ config BR2_HAVE_DEVFILES
+ 	  Install headers and static libraries in the
+ 	  target filesystem
  
-+define WHETSTONE_EXTRACT_CMDS
-+	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
-+endef
++config BR2_PACKAGE_OVERRIDE_FILE
++	string "location of a package override file"
++	default "$(TOPDIR)/local.mk"
++	help
++	  A package override file is a short makefile that contains
++	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
++	  which allows to tell Buildroot to use an existing directory
++	  as the source directory for a particular package. See the
++	  Buildroot documentation for more details on this feature.
 +
- define WHETSTONE_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) LDLIBS="-lm" -C $(@D) whetstone
- endef
-@@ -25,9 +29,3 @@ define WHETSTONE_UNINSTALL_TARGET_CMDS
- endef
+ endmenu
  
- $(eval $(call GENTARGETS))
--
--$(BUILD_DIR)/whetstone-$(WHETSTONE_VERSION)/.stamp_extracted:
--	@$(call MESSAGE,"Extracting")
--	$(Q)mkdir -p $(@D)
--	$(Q)cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
--	$(Q)touch $@
+ source "toolchain/Config.in"
+diff --git a/Makefile b/Makefile
+index 9ed46fc..45119ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -309,6 +309,13 @@ else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
+ include toolchain/toolchain-crosstool-ng.mk
+ endif
+ 
++# Include the package override file if one has been provided in the
++# configuration.
++PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
++ifneq ($(PACKAGE_OVERRIDE_FILE),)
++-include $(PACKAGE_OVERRIDE_FILE)
++endif
++
+ include package/*/*.mk
+ 
+ include boot/common.mk
 -- 
 1.7.4.1
