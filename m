@@ -1,467 +1,282 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:35:05 +0200
-Subject: [Buildroot] [PATCH 6/7] support: move kconfig stuff from
-	package/config to support/kconfig
+Date: Wed, 31 Aug 2011 23:35:06 +0200
+Subject: [Buildroot] [PATCH 7/7] support: move package/gnuconfig to
+	support/gnuconfig
 In-Reply-To: <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e4a6ee2472da24931466231c158189ff676cdcb0.1314826483.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <2072e42d074f370769f62ccaacf34b84900da8e3.1314826483.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The CONFIG_UPDATE macro is no longer defined in
+package/gnuconfig/gnuconfig.mk, but instead in
+package/Makefile.autotools.in. It it also changed a little bit to take
+the directory of the package sources as argument, and the AUTOTARGETS
+infrastructure is updated to use this macro.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  Makefile                                           |    2 +-
- {package/config => support/kconfig}/.gitignore     |    0
- {package/config => support/kconfig}/Makefile       |    0
- {package/config => support/kconfig}/Makefile.br    |    0
- {package/config => support/kconfig}/POTFILES.in    |    0
- .../config => support/kconfig}/README.buildroot2   |   10 +++++-----
- {package/config => support/kconfig}/check.sh       |    0
- {package/config => support/kconfig}/conf.c         |    0
- {package/config => support/kconfig}/confdata.c     |    0
- {package/config => support/kconfig}/expr.c         |    0
- {package/config => support/kconfig}/expr.h         |    0
- {package/config => support/kconfig}/foo.h          |    0
- {package/config => support/kconfig}/gconf.c        |    2 +-
- {package/config => support/kconfig}/gconf.glade    |    0
- {package/config => support/kconfig}/images.c       |    0
- {package/config => support/kconfig}/kconfig_load.c |    0
- {package/config => support/kconfig}/kxgettext.c    |    0
- .../config => support/kconfig}/lex.zconf.c_shipped |    0
- {package/config => support/kconfig}/lkc.h          |    0
- {package/config => support/kconfig}/lkc_proto.h    |    0
- .../config => support/kconfig}/lxdialog/.gitignore |    0
- .../kconfig}/lxdialog/BIG.FAT.WARNING              |    0
- .../kconfig}/lxdialog/check-lxdialog.sh            |    0
- .../kconfig}/lxdialog/checklist.c                  |    0
- .../config => support/kconfig}/lxdialog/dialog.h   |    0
- .../config => support/kconfig}/lxdialog/inputbox.c |    0
- .../config => support/kconfig}/lxdialog/menubox.c  |    0
- .../config => support/kconfig}/lxdialog/textbox.c  |    0
- .../config => support/kconfig}/lxdialog/util.c     |    0
- .../config => support/kconfig}/lxdialog/yesno.c    |    0
- {package/config => support/kconfig}/mconf.c        |    0
- {package/config => support/kconfig}/menu.c         |    0
- {package/config => support/kconfig}/nconf.c        |    0
- {package/config => support/kconfig}/nconf.gui.c    |    0
- {package/config => support/kconfig}/nconf.h        |    0
- .../patches/01-kconfig-kernel-to-buildroot.patch   |    0
- .../patches/02-cpp-comments-to-c-comments.patch    |    0
- .../patches/03-change-config-option-prefix.patch   |    0
- .../patches/05-really-clean-everything.patch       |    0
- .../patches/06-br-build-system-integration.patch   |    0
- .../kconfig}/patches/08-make-write-deps.patch      |    8 ++++----
- .../patches/09-implement-kconfig-probability.patch |    0
- .../kconfig}/patches/10-br-build-system.patch      |    0
- .../patches/11-use-mktemp-for-lxdialog.patch       |    0
- .../kconfig}/patches/12-fix-glade-file-path.patch  |    8 ++++----
- .../patches/14-support-out-of-tree-config.patch    |    0
- {package/config => support/kconfig}/patches/series |    0
- {package/config => support/kconfig}/qconf.cc       |    0
- {package/config => support/kconfig}/qconf.h        |    0
- .../kconfig}/streamline_config.pl                  |    0
- {package/config => support/kconfig}/symbol.c       |    0
- {package/config => support/kconfig}/util.c         |    2 +-
- {package/config => support/kconfig}/zconf.gperf    |    0
- .../kconfig}/zconf.hash.c_shipped                  |    0
- {package/config => support/kconfig}/zconf.l        |    0
- .../config => support/kconfig}/zconf.tab.c_shipped |    0
- {package/config => support/kconfig}/zconf.y        |    0
- 57 files changed, 16 insertions(+), 16 deletions(-)
- rename {package/config => support/kconfig}/.gitignore (100%)
- rename {package/config => support/kconfig}/Makefile (100%)
- rename {package/config => support/kconfig}/Makefile.br (100%)
- rename {package/config => support/kconfig}/POTFILES.in (100%)
- rename {package/config => support/kconfig}/README.buildroot2 (58%)
- rename {package/config => support/kconfig}/check.sh (100%)
- rename {package/config => support/kconfig}/conf.c (100%)
- rename {package/config => support/kconfig}/confdata.c (100%)
- rename {package/config => support/kconfig}/expr.c (100%)
- rename {package/config => support/kconfig}/expr.h (100%)
- rename {package/config => support/kconfig}/foo.h (100%)
- rename {package/config => support/kconfig}/gconf.c (99%)
- rename {package/config => support/kconfig}/gconf.glade (100%)
- rename {package/config => support/kconfig}/images.c (100%)
- rename {package/config => support/kconfig}/kconfig_load.c (100%)
- rename {package/config => support/kconfig}/kxgettext.c (100%)
- rename {package/config => support/kconfig}/lex.zconf.c_shipped (100%)
- rename {package/config => support/kconfig}/lkc.h (100%)
- rename {package/config => support/kconfig}/lkc_proto.h (100%)
- rename {package/config => support/kconfig}/lxdialog/.gitignore (100%)
- rename {package/config => support/kconfig}/lxdialog/BIG.FAT.WARNING (100%)
- rename {package/config => support/kconfig}/lxdialog/check-lxdialog.sh (100%)
- rename {package/config => support/kconfig}/lxdialog/checklist.c (100%)
- rename {package/config => support/kconfig}/lxdialog/dialog.h (100%)
- rename {package/config => support/kconfig}/lxdialog/inputbox.c (100%)
- rename {package/config => support/kconfig}/lxdialog/menubox.c (100%)
- rename {package/config => support/kconfig}/lxdialog/textbox.c (100%)
- rename {package/config => support/kconfig}/lxdialog/util.c (100%)
- rename {package/config => support/kconfig}/lxdialog/yesno.c (100%)
- rename {package/config => support/kconfig}/mconf.c (100%)
- rename {package/config => support/kconfig}/menu.c (100%)
- rename {package/config => support/kconfig}/nconf.c (100%)
- rename {package/config => support/kconfig}/nconf.gui.c (100%)
- rename {package/config => support/kconfig}/nconf.h (100%)
- rename {package/config => support/kconfig}/patches/01-kconfig-kernel-to-buildroot.patch (100%)
- rename {package/config => support/kconfig}/patches/02-cpp-comments-to-c-comments.patch (100%)
- rename {package/config => support/kconfig}/patches/03-change-config-option-prefix.patch (100%)
- rename {package/config => support/kconfig}/patches/05-really-clean-everything.patch (100%)
- rename {package/config => support/kconfig}/patches/06-br-build-system-integration.patch (100%)
- rename {package/config => support/kconfig}/patches/08-make-write-deps.patch (96%)
- rename {package/config => support/kconfig}/patches/09-implement-kconfig-probability.patch (100%)
- rename {package/config => support/kconfig}/patches/10-br-build-system.patch (100%)
- rename {package/config => support/kconfig}/patches/11-use-mktemp-for-lxdialog.patch (100%)
- rename {package/config => support/kconfig}/patches/12-fix-glade-file-path.patch (73%)
- rename {package/config => support/kconfig}/patches/14-support-out-of-tree-config.patch (100%)
- rename {package/config => support/kconfig}/patches/series (100%)
- rename {package/config => support/kconfig}/qconf.cc (100%)
- rename {package/config => support/kconfig}/qconf.h (100%)
- rename {package/config => support/kconfig}/streamline_config.pl (100%)
- rename {package/config => support/kconfig}/symbol.c (100%)
- rename {package/config => support/kconfig}/util.c (99%)
- rename {package/config => support/kconfig}/zconf.gperf (100%)
- rename {package/config => support/kconfig}/zconf.hash.c_shipped (100%)
- rename {package/config => support/kconfig}/zconf.l (100%)
- rename {package/config => support/kconfig}/zconf.tab.c_shipped (100%)
- rename {package/config => support/kconfig}/zconf.y (100%)
+ package/Makefile.autotools.in                      |   24 +++++++++++++++----
+ package/cups/cups.mk                               |    2 +-
+ package/gettext/gettext.mk                         |    3 +-
+ package/gnuconfig/README.buildroot                 |   20 ----------------
+ package/gnuconfig/gnuconfig.mk                     |    3 --
+ package/lmbench/lmbench.mk                         |    2 +-
+ {package => support}/gnuconfig/.cvsignore          |    0
+ support/gnuconfig/README.buildroot                 |   25 ++++++++++++++++++++
+ {package => support}/gnuconfig/config.guess        |    0
+ {package => support}/gnuconfig/config.sub          |    0
+ .../gnuconfig/patches/config.guess.uclibc.patch    |    0
+ .../gnuconfig/patches/config.sub.ps2.patch         |    0
+ support/scripts/pkg-stats                          |    1 -
+ toolchain/elf2flt/elf2flt.mk                       |    2 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk                    |    2 +-
+ toolchain/gdb/gdb.mk                               |    2 +-
+ 17 files changed, 51 insertions(+), 37 deletions(-)
+ delete mode 100644 package/gnuconfig/README.buildroot
+ delete mode 100644 package/gnuconfig/gnuconfig.mk
+ rename {package => support}/gnuconfig/.cvsignore (100%)
+ create mode 100644 support/gnuconfig/README.buildroot
+ rename {package => support}/gnuconfig/config.guess (100%)
+ rename {package => support}/gnuconfig/config.sub (100%)
+ rename {package => support}/gnuconfig/patches/config.guess.uclibc.patch (100%)
+ rename {package => support}/gnuconfig/patches/config.sub.ps2.patch (100%)
 
 diff --git a/Makefile b/Makefile
-index f29295f..8dbee7c 100644
+index 8dbee7c..b3e1986 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -32,7 +32,7 @@ export BR2_VERSION:=2011.08
- # absolute path
- TOPDIR:=$(shell pwd)
- CONFIG_CONFIG_IN=Config.in
--CONFIG=package/config
-+CONFIG=support/kconfig
- DATE:=$(shell date +%Y%m%d)
+@@ -193,7 +193,7 @@ unexport CFLAGS
+ unexport CXXFLAGS
+ unexport GREP_OPTIONS
  
- # Compute the full local version string so packages can use it as-is
-diff --git a/package/config/.gitignore b/support/kconfig/.gitignore
-similarity index 100%
-rename from package/config/.gitignore
-rename to support/kconfig/.gitignore
-diff --git a/package/config/Makefile b/support/kconfig/Makefile
-similarity index 100%
-rename from package/config/Makefile
-rename to support/kconfig/Makefile
-diff --git a/package/config/Makefile.br b/support/kconfig/Makefile.br
-similarity index 100%
-rename from package/config/Makefile.br
-rename to support/kconfig/Makefile.br
-diff --git a/package/config/POTFILES.in b/support/kconfig/POTFILES.in
-similarity index 100%
-rename from package/config/POTFILES.in
-rename to support/kconfig/POTFILES.in
-diff --git a/package/config/README.buildroot2 b/support/kconfig/README.buildroot2
-similarity index 58%
-rename from package/config/README.buildroot2
-rename to support/kconfig/README.buildroot2
-index 8ff0d09..b92ec14 100644
---- a/package/config/README.buildroot2
-+++ b/support/kconfig/README.buildroot2
-@@ -1,15 +1,15 @@
--This is a copy of the kconfig code in the kernel (currently 2.6.36-rc1) tweaked
-+This is a copy of the kconfig code in the kernel (currently 2.6.37-rc1) tweaked
- to suit Buildroot.
+-GNU_HOST_NAME:=$(shell package/gnuconfig/config.guess)
++GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
  
- To update:
--	cp -r /usr/src/linux/scripts/kconfig package/config.new
--	cd package/config.new
--	cp -a ../config/patches ../config/README.buildroot2 .
-+	cp -r /usr/src/linux/scripts/kconfig support/kconfig.new
-+	cd support/config.new
-+	cp -a ../kconfig/patches ../kconfig/README.buildroot2 .
- 	quilt push -a
- 	# Fix any conflict
- 	cd ..
- 	rm -rf config
--	mv config.new config
-+	mv kconfig.new kconfig
+ #############################################################
+ #
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 95e38ef..8efc129 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -22,6 +22,23 @@
+ #
+ ################################################################################
  
- Then verify the toplevel targets work:
- 	config
-diff --git a/package/config/check.sh b/support/kconfig/check.sh
-similarity index 100%
-rename from package/config/check.sh
-rename to support/kconfig/check.sh
-diff --git a/package/config/conf.c b/support/kconfig/conf.c
-similarity index 100%
-rename from package/config/conf.c
-rename to support/kconfig/conf.c
-diff --git a/package/config/confdata.c b/support/kconfig/confdata.c
-similarity index 100%
-rename from package/config/confdata.c
-rename to support/kconfig/confdata.c
-diff --git a/package/config/expr.c b/support/kconfig/expr.c
-similarity index 100%
-rename from package/config/expr.c
-rename to support/kconfig/expr.c
-diff --git a/package/config/expr.h b/support/kconfig/expr.h
-similarity index 100%
-rename from package/config/expr.h
-rename to support/kconfig/expr.h
-diff --git a/package/config/foo.h b/support/kconfig/foo.h
-similarity index 100%
-rename from package/config/foo.h
-rename to support/kconfig/foo.h
-diff --git a/package/config/gconf.c b/support/kconfig/gconf.c
-similarity index 99%
-rename from package/config/gconf.c
-rename to support/kconfig/gconf.c
-index 21185a0..f9daf98 100644
---- a/package/config/gconf.c
-+++ b/support/kconfig/gconf.c
-@@ -1521,7 +1521,7 @@ int main(int ac, char *av[])
- 	/* Determine GUI path */
- 	env = getenv(SRCTREE);
- 	if (env)
--		glade_file = g_strconcat(env, "/package/config/gconf.glade", NULL);
-+		glade_file = g_strconcat(env, "/support/kconfig/gconf.glade", NULL);
- 	else if (av[0][0] == '/')
- 		glade_file = g_strconcat(av[0], ".glade", NULL);
- 	else
-diff --git a/package/config/gconf.glade b/support/kconfig/gconf.glade
-similarity index 100%
-rename from package/config/gconf.glade
-rename to support/kconfig/gconf.glade
-diff --git a/package/config/images.c b/support/kconfig/images.c
-similarity index 100%
-rename from package/config/images.c
-rename to support/kconfig/images.c
-diff --git a/package/config/kconfig_load.c b/support/kconfig/kconfig_load.c
-similarity index 100%
-rename from package/config/kconfig_load.c
-rename to support/kconfig/kconfig_load.c
-diff --git a/package/config/kxgettext.c b/support/kconfig/kxgettext.c
-similarity index 100%
-rename from package/config/kxgettext.c
-rename to support/kconfig/kxgettext.c
-diff --git a/package/config/lex.zconf.c_shipped b/support/kconfig/lex.zconf.c_shipped
-similarity index 100%
-rename from package/config/lex.zconf.c_shipped
-rename to support/kconfig/lex.zconf.c_shipped
-diff --git a/package/config/lkc.h b/support/kconfig/lkc.h
-similarity index 100%
-rename from package/config/lkc.h
-rename to support/kconfig/lkc.h
-diff --git a/package/config/lkc_proto.h b/support/kconfig/lkc_proto.h
-similarity index 100%
-rename from package/config/lkc_proto.h
-rename to support/kconfig/lkc_proto.h
-diff --git a/package/config/lxdialog/.gitignore b/support/kconfig/lxdialog/.gitignore
-similarity index 100%
-rename from package/config/lxdialog/.gitignore
-rename to support/kconfig/lxdialog/.gitignore
-diff --git a/package/config/lxdialog/BIG.FAT.WARNING b/support/kconfig/lxdialog/BIG.FAT.WARNING
-similarity index 100%
-rename from package/config/lxdialog/BIG.FAT.WARNING
-rename to support/kconfig/lxdialog/BIG.FAT.WARNING
-diff --git a/package/config/lxdialog/check-lxdialog.sh b/support/kconfig/lxdialog/check-lxdialog.sh
-similarity index 100%
-rename from package/config/lxdialog/check-lxdialog.sh
-rename to support/kconfig/lxdialog/check-lxdialog.sh
-diff --git a/package/config/lxdialog/checklist.c b/support/kconfig/lxdialog/checklist.c
-similarity index 100%
-rename from package/config/lxdialog/checklist.c
-rename to support/kconfig/lxdialog/checklist.c
-diff --git a/package/config/lxdialog/dialog.h b/support/kconfig/lxdialog/dialog.h
-similarity index 100%
-rename from package/config/lxdialog/dialog.h
-rename to support/kconfig/lxdialog/dialog.h
-diff --git a/package/config/lxdialog/inputbox.c b/support/kconfig/lxdialog/inputbox.c
-similarity index 100%
-rename from package/config/lxdialog/inputbox.c
-rename to support/kconfig/lxdialog/inputbox.c
-diff --git a/package/config/lxdialog/menubox.c b/support/kconfig/lxdialog/menubox.c
-similarity index 100%
-rename from package/config/lxdialog/menubox.c
-rename to support/kconfig/lxdialog/menubox.c
-diff --git a/package/config/lxdialog/textbox.c b/support/kconfig/lxdialog/textbox.c
-similarity index 100%
-rename from package/config/lxdialog/textbox.c
-rename to support/kconfig/lxdialog/textbox.c
-diff --git a/package/config/lxdialog/util.c b/support/kconfig/lxdialog/util.c
-similarity index 100%
-rename from package/config/lxdialog/util.c
-rename to support/kconfig/lxdialog/util.c
-diff --git a/package/config/lxdialog/yesno.c b/support/kconfig/lxdialog/yesno.c
-similarity index 100%
-rename from package/config/lxdialog/yesno.c
-rename to support/kconfig/lxdialog/yesno.c
-diff --git a/package/config/mconf.c b/support/kconfig/mconf.c
-similarity index 100%
-rename from package/config/mconf.c
-rename to support/kconfig/mconf.c
-diff --git a/package/config/menu.c b/support/kconfig/menu.c
-similarity index 100%
-rename from package/config/menu.c
-rename to support/kconfig/menu.c
-diff --git a/package/config/nconf.c b/support/kconfig/nconf.c
-similarity index 100%
-rename from package/config/nconf.c
-rename to support/kconfig/nconf.c
-diff --git a/package/config/nconf.gui.c b/support/kconfig/nconf.gui.c
-similarity index 100%
-rename from package/config/nconf.gui.c
-rename to support/kconfig/nconf.gui.c
-diff --git a/package/config/nconf.h b/support/kconfig/nconf.h
-similarity index 100%
-rename from package/config/nconf.h
-rename to support/kconfig/nconf.h
-diff --git a/package/config/patches/01-kconfig-kernel-to-buildroot.patch b/support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
-similarity index 100%
-rename from package/config/patches/01-kconfig-kernel-to-buildroot.patch
-rename to support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch
-diff --git a/package/config/patches/02-cpp-comments-to-c-comments.patch b/support/kconfig/patches/02-cpp-comments-to-c-comments.patch
-similarity index 100%
-rename from package/config/patches/02-cpp-comments-to-c-comments.patch
-rename to support/kconfig/patches/02-cpp-comments-to-c-comments.patch
-diff --git a/package/config/patches/03-change-config-option-prefix.patch b/support/kconfig/patches/03-change-config-option-prefix.patch
-similarity index 100%
-rename from package/config/patches/03-change-config-option-prefix.patch
-rename to support/kconfig/patches/03-change-config-option-prefix.patch
-diff --git a/package/config/patches/05-really-clean-everything.patch b/support/kconfig/patches/05-really-clean-everything.patch
-similarity index 100%
-rename from package/config/patches/05-really-clean-everything.patch
-rename to support/kconfig/patches/05-really-clean-everything.patch
-diff --git a/package/config/patches/06-br-build-system-integration.patch b/support/kconfig/patches/06-br-build-system-integration.patch
-similarity index 100%
-rename from package/config/patches/06-br-build-system-integration.patch
-rename to support/kconfig/patches/06-br-build-system-integration.patch
-diff --git a/package/config/patches/08-make-write-deps.patch b/support/kconfig/patches/08-make-write-deps.patch
-similarity index 96%
-rename from package/config/patches/08-make-write-deps.patch
-rename to support/kconfig/patches/08-make-write-deps.patch
-index b69daad..e5a21c3 100644
---- a/package/config/patches/08-make-write-deps.patch
-+++ b/support/kconfig/patches/08-make-write-deps.patch
-@@ -2,10 +2,10 @@
-  util.c |  117 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
-  1 file changed, 116 insertions(+), 1 deletion(-)
++
++#
++# Utility function to upgrade config.sub and config.guess files
++#
++# argument 1 : directory into which config.guess and config.sub need
++# to be updated. Note that config.sub and config.guess are searched
++# recursively in this directory.
++#
++define CONFIG_UPDATE
++       echo $(1)
++	for file in config.guess config.sub; do \
++		for i in $$(find $(1) -name $$file); do \
++			cp support/gnuconfig/$$file $$i; \
++		done; \
++	done
++endef
++
+ ################################################################################
+ # AUTOTARGETS_INNER -- defines how the configuration, compilation and
+ # installation of an autotools package should be done, implements a
+@@ -131,11 +148,8 @@ endif
+ # Hook to update config.sub and config.guess if needed
+ #
+ define UPDATE_CONFIG_HOOK
+-	for file in config.guess config.sub; do \
+-		for i in $$$$(find $$(@D) -name $$$$file); do \
+-			cp package/gnuconfig/$$$$file $$$$i; \
+-		done; \
+-	done
++       @$$(call MESSAGE, "Updating config.sub and config.guess")
++       $$(call CONFIG_UPDATE,$$(@D))
+ endef
  
--Index: config/util.c
-+Index: kconfig/util.c
- ===================================================================
----- config.orig/util.c
--+++ config/util.c
-+--- kconfig.orig/util.c
-++++ kconfig/util.c
- @@ -29,6 +29,121 @@
-  	return file;
-  }
-@@ -60,7 +60,7 @@ Index: config/util.c
- +	if (!out)
- +		return 1;
- +	fprintf(out, "# ATTENTION! This does not handle 'depends', just 'select'! \n"
--+		"# See package/config/util.c write_make_deps()\n#\n");
-++		"# See support/kconfig/util.c write_make_deps()\n#\n");
- +	menu = &rootmenu;//rootmenu.list;
- +	while (menu) {
- +		sym = menu->sym;
-diff --git a/package/config/patches/09-implement-kconfig-probability.patch b/support/kconfig/patches/09-implement-kconfig-probability.patch
-similarity index 100%
-rename from package/config/patches/09-implement-kconfig-probability.patch
-rename to support/kconfig/patches/09-implement-kconfig-probability.patch
-diff --git a/package/config/patches/10-br-build-system.patch b/support/kconfig/patches/10-br-build-system.patch
-similarity index 100%
-rename from package/config/patches/10-br-build-system.patch
-rename to support/kconfig/patches/10-br-build-system.patch
-diff --git a/package/config/patches/11-use-mktemp-for-lxdialog.patch b/support/kconfig/patches/11-use-mktemp-for-lxdialog.patch
-similarity index 100%
-rename from package/config/patches/11-use-mktemp-for-lxdialog.patch
-rename to support/kconfig/patches/11-use-mktemp-for-lxdialog.patch
-diff --git a/package/config/patches/12-fix-glade-file-path.patch b/support/kconfig/patches/12-fix-glade-file-path.patch
-similarity index 73%
-rename from package/config/patches/12-fix-glade-file-path.patch
-rename to support/kconfig/patches/12-fix-glade-file-path.patch
-index 5b080c9..681dce1 100644
---- a/package/config/patches/12-fix-glade-file-path.patch
-+++ b/support/kconfig/patches/12-fix-glade-file-path.patch
-@@ -2,16 +2,16 @@
-  gconf.c |    2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+ $(2)_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 3b9f2e0..4e8db71 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -70,7 +70,7 @@ $(DL_DIR)/$(CUPS_SOURCE):
+ $(CUPS_DIR)/.unpacked: $(DL_DIR)/$(CUPS_SOURCE)
+ 	$(CUPS_CAT) $(DL_DIR)/$(CUPS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	support/scripts/apply-patches.sh $(CUPS_DIR) package/cups/ \*.patch
+-	$(CONFIG_UPDATE) $(CUPS_DIR)
++	$(call CONFIG_UPDATE,$(CUPS_DIR))
+ 	touch $@
  
--Index: config/gconf.c
-+Index: kconfig/gconf.c
- ===================================================================
----- config.orig/gconf.c
--+++ config/gconf.c
-+--- kconfig.orig/gconf.c
-++++ kconfig/gconf.c
- @@ -1521,7 +1521,7 @@
-  	/* Determine GUI path */
-  	env = getenv(SRCTREE);
-  	if (env)
- -		glade_file = g_strconcat(env, "/scripts/kconfig/gconf.glade", NULL);
--+		glade_file = g_strconcat(env, "/package/config/gconf.glade", NULL);
-++		glade_file = g_strconcat(env, "/support/kconfig/gconf.glade", NULL);
-  	else if (av[0][0] == '/')
-  		glade_file = g_strconcat(av[0], ".glade", NULL);
-  	else
-diff --git a/package/config/patches/14-support-out-of-tree-config.patch b/support/kconfig/patches/14-support-out-of-tree-config.patch
+ $(CUPS_DIR)/.configured: $(CUPS_DIR)/.unpacked
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 332a2ca..f4c8c76 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -25,8 +25,7 @@ gettext-source: $(DL_DIR)/$(GETTEXT_SOURCE)
+ $(GETTEXT_DIR)/.unpacked: $(DL_DIR)/$(GETTEXT_SOURCE)
+ 	$(GETTEXT_CAT) $(DL_DIR)/$(GETTEXT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+ 	support/scripts/apply-patches.sh $(GETTEXT_DIR) package/gettext/ gettext\*.patch
+-	$(CONFIG_UPDATE) $(@D)
+-	$(CONFIG_UPDATE) $(GETTEXT_DIR)/build-aux
++	$(call CONFIG_UPDATE,$(@D))
+ 	touch $@
+ 
+ ifneq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+diff --git a/package/gnuconfig/README.buildroot b/package/gnuconfig/README.buildroot
+deleted file mode 100644
+index fd43a68..0000000
+--- a/package/gnuconfig/README.buildroot
++++ /dev/null
+@@ -1,20 +0,0 @@
+---- ABOUT ---
+-This isnt a real package, it just exists to easily update the
+-config.sub / config.guess files in packages to the latest version
+-(since many bundled ones don't support the latest possible targets)
+-
+---- HOWTO ---
+-To use, just add this to your unpack rule in the package.mk:
+-$(CONFIG_UPDATE) $(PACKAGE_DIR)/
+-
+---- UPDATE ---
+-GNU config is now managed in git, so to update:
+-
+-# git clone git://git.savannah.gnu.org/config.git
+-# cp config/config.* .
+-# for p in $(ls patches/*.patch); do patch -p0 < $p; done
+-# rm -rf config
+-
+-A few local customizations are used to support uClibc so you may
+-have to make sure they're still needed.  The patches are broken 
+-out in the patches/ dir to keep things simple.
+diff --git a/package/gnuconfig/gnuconfig.mk b/package/gnuconfig/gnuconfig.mk
+deleted file mode 100644
+index b6aa5fc..0000000
+--- a/package/gnuconfig/gnuconfig.mk
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# See README.buildroot
+-gnuconfig-source:
+-CONFIG_UPDATE = cp -f package/gnuconfig/config.sub package/gnuconfig/config.guess
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index fefb34f..535fc8c 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -8,7 +8,7 @@ LMBENCH_SOURCE:=lmbench-$(LMBENCH_VERSION).tgz
+ LMBENCH_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lmbench/development/lmbench-3.0-a9/
+ 
+ define LMBENCH_CONFIGURE_CMDS
+-	$(CONFIG_UPDATE) $(@D)
++	$(call CONFIG_UPDATE,$(@D))
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
+ 	sed -i '/cd .*doc/d' $(@D)/src/Makefile
+ 	sed -i '/include/d' $(@D)/src/Makefile
+diff --git a/package/gnuconfig/.cvsignore b/support/gnuconfig/.cvsignore
 similarity index 100%
-rename from package/config/patches/14-support-out-of-tree-config.patch
-rename to support/kconfig/patches/14-support-out-of-tree-config.patch
-diff --git a/package/config/patches/series b/support/kconfig/patches/series
+rename from package/gnuconfig/.cvsignore
+rename to support/gnuconfig/.cvsignore
+diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
+new file mode 100644
+index 0000000..fe54354
+--- /dev/null
++++ b/support/gnuconfig/README.buildroot
+@@ -0,0 +1,25 @@
++--- HOWTO ---
++If your package uses config.guess and/or config.sub, then it probably
++relies on the autotools as its build system. In this case, you should
++use the AUTOTARGETS infrastructure, which will take care of updating
++the config.guess and/or config.sub files appropriately. See the
++Buildroot documentation for details about the AUTOTARGETS
++infrastructure.
++
++If for some reason your package does not use the AUTOTARGETS
++infrastructure, you can request the config.guess and/or config.sub
++files of your package to be updated by using:
++
++      $(call CONFIG_UPDATE,directory-of-your-package-sources)
++
++--- UPDATE ---
++GNU config is now managed in git, so to update:
++
++# git clone git://git.savannah.gnu.org/config.git
++# cp config/config.* .
++# for p in $(ls patches/*.patch); do patch -p0 < $p; done
++# rm -rf config
++
++A few local customizations are used to support uClibc so you may
++have to make sure they're still needed.  The patches are broken 
++out in the patches/ dir to keep things simple.
+diff --git a/package/gnuconfig/config.guess b/support/gnuconfig/config.guess
 similarity index 100%
-rename from package/config/patches/series
-rename to support/kconfig/patches/series
-diff --git a/package/config/qconf.cc b/support/kconfig/qconf.cc
+rename from package/gnuconfig/config.guess
+rename to support/gnuconfig/config.guess
+diff --git a/package/gnuconfig/config.sub b/support/gnuconfig/config.sub
 similarity index 100%
-rename from package/config/qconf.cc
-rename to support/kconfig/qconf.cc
-diff --git a/package/config/qconf.h b/support/kconfig/qconf.h
+rename from package/gnuconfig/config.sub
+rename to support/gnuconfig/config.sub
+diff --git a/package/gnuconfig/patches/config.guess.uclibc.patch b/support/gnuconfig/patches/config.guess.uclibc.patch
 similarity index 100%
-rename from package/config/qconf.h
-rename to support/kconfig/qconf.h
-diff --git a/package/config/streamline_config.pl b/support/kconfig/streamline_config.pl
+rename from package/gnuconfig/patches/config.guess.uclibc.patch
+rename to support/gnuconfig/patches/config.guess.uclibc.patch
+diff --git a/package/gnuconfig/patches/config.sub.ps2.patch b/support/gnuconfig/patches/config.sub.ps2.patch
 similarity index 100%
-rename from package/config/streamline_config.pl
-rename to support/kconfig/streamline_config.pl
-diff --git a/package/config/symbol.c b/support/kconfig/symbol.c
-similarity index 100%
-rename from package/config/symbol.c
-rename to support/kconfig/symbol.c
-diff --git a/package/config/util.c b/support/kconfig/util.c
-similarity index 99%
-rename from package/config/util.c
-rename to support/kconfig/util.c
-index f962cef..8a5efaa 100644
---- a/package/config/util.c
-+++ b/support/kconfig/util.c
-@@ -79,7 +79,7 @@ static int write_make_deps(const char *name)
- 	if (!out)
- 		return 1;
- 	fprintf(out, "# ATTENTION! This does not handle 'depends', just 'select'! \n"
--		"# See package/config/util.c write_make_deps()\n#\n");
-+		"# See support/kconfig/util.c write_make_deps()\n#\n");
- 	menu = &rootmenu;//rootmenu.list;
- 	while (menu) {
- 		sym = menu->sym;
-diff --git a/package/config/zconf.gperf b/support/kconfig/zconf.gperf
-similarity index 100%
-rename from package/config/zconf.gperf
-rename to support/kconfig/zconf.gperf
-diff --git a/package/config/zconf.hash.c_shipped b/support/kconfig/zconf.hash.c_shipped
-similarity index 100%
-rename from package/config/zconf.hash.c_shipped
-rename to support/kconfig/zconf.hash.c_shipped
-diff --git a/package/config/zconf.l b/support/kconfig/zconf.l
-similarity index 100%
-rename from package/config/zconf.l
-rename to support/kconfig/zconf.l
-diff --git a/package/config/zconf.tab.c_shipped b/support/kconfig/zconf.tab.c_shipped
-similarity index 100%
-rename from package/config/zconf.tab.c_shipped
-rename to support/kconfig/zconf.tab.c_shipped
-diff --git a/package/config/zconf.y b/support/kconfig/zconf.y
-similarity index 100%
-rename from package/config/zconf.y
-rename to support/kconfig/zconf.y
+rename from package/gnuconfig/patches/config.sub.ps2.patch
+rename to support/gnuconfig/patches/config.sub.ps2.patch
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 7bb2928..bb1c27d 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -81,7 +81,6 @@ for i in $(find package/ -name '*.mk') ; do
+ 	$i = "package/games/games.mk" -o \
+ 	$i = "package/multimedia/multimedia.mk" -o \
+ 	$i = "package/customize/customize.mk" -o \
+-	$i = "package/gnuconfig/gnuconfig.mk" -o \
+ 	$i = "package/matchbox/matchbox.mk" -o \
+ 	$i = "package/x11r7/x11r7.mk" ; then
+ 	echo "skipping $i" 1>&2
+diff --git a/toolchain/elf2flt/elf2flt.mk b/toolchain/elf2flt/elf2flt.mk
+index 7fecf3e..e74a655 100644
+--- a/toolchain/elf2flt/elf2flt.mk
++++ b/toolchain/elf2flt/elf2flt.mk
+@@ -14,7 +14,7 @@ $(ELF2FLT_DIR)/.unpacked:
+ 	touch $@
+ 
+ $(ELF2FLT_DIR)/.patched: $(ELF2FLT_DIR)/.unpacked
+-	$(CONFIG_UPDATE) $(@D)
++	$(call CONFIG_UPDATE,$(@D))
+ 	touch $@
+ 
+ $(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 9232290..a2253c9 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -200,7 +200,7 @@ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+ 	mkdir -p $(TOOLCHAIN_DIR)
+ 	rm -rf $(GCC_DIR)
+ 	$(GCC_CAT) $(DL_DIR)/$(GCC_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
+-	$(CONFIG_UPDATE) $(@D)
++	$(call CONFIG_UPDATE,$(@D))
+ 	touch $@
+ 
+ gcc-patched: $(GCC_DIR)/.patched
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index db46b12..4622616 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -38,7 +38,7 @@ endif
+ ifneq ($(wildcard $(GDB_PATCH_DIR)),)
+ 	support/scripts/apply-patches.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch $(GDB_PATCH_EXTRA)
+ endif
+-	$(CONFIG_UPDATE) $(@D)
++	$(call CONFIG_UPDATE,$(@D))
+ 	touch $@
+ 
+ gdb-patched: $(GDB_DIR)/.unpacked
 -- 
 1.7.4.1
