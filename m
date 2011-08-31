@@ -1,47 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:29:21 +0200
-Subject: [Buildroot] [PATCH 13/16] dhrystone: use the <pkg>_EXTRACT_CMDS
-	mechanism
-In-Reply-To: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ddb997a16db9a337b3590dfe33f0690e41bcd241.1314826051.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 31 Aug 2011 23:31:12 +0200
+Subject: [Buildroot] [PATCH 04/15] package: add <pkg>-rebuild and
+	<pkg>-reconfigure
+In-Reply-To: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <550d3ba3c9db7d0a9df78aa52e09da9af93e20d8.1314826231.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We are often asked "how can I restart the build of a package ?" or
+"how can I restart the build of package from the configure part
+?". Obviously, tweaking with stamp files is possible, but not very
+user friendly.
+
+Therefore this patch adds two new per-package targets: <pkg>-rebuild
+and <pkg>-reconfigure. They will remove the right stamp files and
+restart the complete build process (by using the 'all' target, so that
+not only the package is reconfigured, recompiled and reinstalled, but
+the root filesystem images are also regenerated).
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhrystone/dhrystone.mk |   12 +++++-------
- 1 files changed, 5 insertions(+), 7 deletions(-)
+ package/Makefile.package.in |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/dhrystone/dhrystone.mk b/package/dhrystone/dhrystone.mk
-index 45eb91c..098b9f1 100644
---- a/package/dhrystone/dhrystone.mk
-+++ b/package/dhrystone/dhrystone.mk
-@@ -8,6 +8,11 @@ DHRYSTONE_VERSION = 2
- DHRYSTONE_SOURCE = dhry-c
- DHRYSTONE_SITE = http://www.netlib.org/benchmark/
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 1de2838..7af689d 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -555,6 +555,22 @@ $(1)-clean:		$(1)-uninstall \
  
-+define DHRYSTONE_EXTRACT_CMDS
-+	(cd $(@D) && $(SHELL) $(DL_DIR)/$($(PKG)_SOURCE))
-+	$(Q)cp $($(PKG)_DIR_PREFIX)/dhrystone/Makefile $(@D)/
-+endef
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
+ 
++$(1)-clean-for-rebuild:
++ifneq ($$($(2)_OVERRIDE_SRCDIR),)
++			rm -f $$($(2)_TARGET_RSYNC)
++endif
++			rm -f $$($(2)_TARGET_BUILD)
++			rm -f $$($(2)_TARGET_INSTALL_STAGING)
++			rm -f $$($(2)_TARGET_INSTALL_TARGET)
++			rm -f $$($(2)_TARGET_INSTALL_HOST)
 +
- define DHRYSTONE_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
-@@ -25,10 +30,3 @@ define DHRYSTONE_UNINSTALL_TARGET_CMDS
- endef
- 
- $(eval $(call GENTARGETS))
--
--$(BUILD_DIR)/dhrystone-$(DHRYSTONE_VERSION)/.stamp_extracted:
--	@$(call MESSAGE,"Extracting")
--	$(Q)mkdir -p $(@D)
--	$(Q)cd $(@D) && $(SHELL) $(DL_DIR)/$($(PKG)_SOURCE)
--	$(Q)cp $($(PKG)_DIR_PREFIX)/dhrystone/Makefile $(@D)/
--	$(Q)touch $@
++$(1)-rebuild:		$(1)-clean-for-rebuild all
++
++$(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
++			rm -f $$($(2)_TARGET_CONFIGURE)
++
++$(1)-reconfigure:	$(1)-clean-for-reconfigure all
++
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
 -- 
 1.7.4.1
