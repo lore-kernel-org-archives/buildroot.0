@@ -1,90 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 31 Aug 2011 23:54:20 +0200
-Subject: [Buildroot] [PATCH 2/4] manual: provide make targets to build the
-	documentation
-In-Reply-To: <cover.1314827583.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1314827583.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2e6fc9dfc010ecdd3b3c4f541d5175a7bbf540a8.1314827583.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Sep 2011 09:12:13 +0200
+Subject: [Buildroot] how BR download the linux kernel now
+In-Reply-To: <CAAa76NQpfMaN-EQ6pBx6y6V-yJ3QUk+w0sQrD=iktdJ=qgHKgA@mail.gmail.com>
+References: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
+ <CAAa76NQpfMaN-EQ6pBx6y6V-yJ3QUk+w0sQrD=iktdJ=qgHKgA@mail.gmail.com>
+Message-ID: <20110901091213.775dcab8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Special thanks for Yann E. Morin for giving input and suggestions to
-implement this.
+Hello Raymond,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile |   39 ++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 38 insertions(+), 1 deletions(-)
+Le Tue, 23 Aug 2011 16:30:29 -0400,
+raymond zhao <raymond.zhao.ml@gmail.com> a ?crit :
 
-diff --git a/Makefile b/Makefile
-index 9ed46fc..c1329b3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -665,10 +665,18 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
- 	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
- endif
- 	@echo
-+	@echo 'Documentation:'
-+	@echo '  manual                 - build manual in HTML, splitted HTML, PDF and txt'
-+	@echo '  manual-html            - build manual in HTML'
-+	@echo '  manual-splitted-html   - build manual in splitted HTML'
-+	@echo '  manual-pdf             - build manual in PDF'
-+	@echo '  manual-txt             - build manual in txt'
-+	@echo
- 	@echo 'Miscellaneous:'
- 	@echo '  source                 - download all sources needed for offline-build'
- 	@echo '  source-check           - check all packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
-+	@echo '  manual			- build the Buildroot manual'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
-@@ -676,7 +684,7 @@ endif
- 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
- 	@echo
--	@echo 'See docs/README and docs/buildroot.html for further details'
-+	@echo 'See docs/README and the Buildroot manual for further details'
- 	@echo
- 
- release: OUT=buildroot-$(BR2_VERSION)
-@@ -684,5 +692,34 @@ release: OUT=buildroot-$(BR2_VERSION)
- release:
- 	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
- 
-+MANUAL_SOURCES = $(wildcard docs/manual/*.txt)
-+
-+manual: manual-html manual-splitted-html manual-pdf manual-txt
-+
-+manual-html: $(MANUAL_SOURCES)
-+	@echo "HTML manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)cp -f docs/images/logo.png $(O)/docs/manual/
-+	$(Q)asciidoc -b xhtml11 -d book -o $(O)/docs/manual/manual.html \
-+		docs/manual/manual.txt
-+
-+manual-splitted-html: $(MANUAL_SOURCES)
-+	@echo "Splited HTML manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x -f chunked -d book -L docs/manual/manual.txt -r docs/images \
-+		-D $(O)/docs/manual/
-+
-+manual-pdf: $(MANUAL_SOURCES)
-+	@echo "PDF manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x --dblatex-opts "-P latex.output.revhistory=0" -f pdf -d book -L docs/manual/manual.txt \
-+		-D $(O)/docs/manual/
-+
-+manual-txt: $(MANUAL_SOURCES)
-+	@echo "Text manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x -f text -d book -L docs/manual/manual.txt \
-+		-D $(O)/docs/manual
-+
- .PHONY: $(noconfig_targets)
- 
+> BR 2011.08 rc was released and I did not see this feature in there? Is
+> it still going to happened in 2011.08 release?
+> Please add this feature if possible, it is really useful.
+
+The feature that allows to override the source directory for a package
+hasn't been integrated in 2011.08 because it was too late in the
+development cycle to integrate it.
+
+However, I was posted yesterday a new version of the patches and I hope
+to get them merged for the 2011.11. At least this time I am not late: I
+posted the patches the exact day 2011.08 was released, so I couldn't do
+earlier than that in the development cycle :-)
+
+If you have the opportunity to test those patches, it would be great.
+
+Regards,
+
+Thomas
 -- 
-1.7.4.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
