@@ -1,37 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Sep 2011 09:12:13 +0200
-Subject: [Buildroot] how BR download the linux kernel now
-In-Reply-To: <CAAa76NQpfMaN-EQ6pBx6y6V-yJ3QUk+w0sQrD=iktdJ=qgHKgA@mail.gmail.com>
-References: <CAAa76NTwjrB-6jbenSbGDpN0evxnV-TVx36DvdNcvWnVQEfr4w@mail.gmail.com>
- <CAAa76NQpfMaN-EQ6pBx6y6V-yJ3QUk+w0sQrD=iktdJ=qgHKgA@mail.gmail.com>
-Message-ID: <20110901091213.775dcab8@skate>
+Date: Thu, 1 Sep 2011 09:18:42 +0200
+Subject: [Buildroot] [git commit] initramfs: fix boot with dynamic /dev
+In-Reply-To: <201108240953.23168.arnout@mind.be>
+References: <20110720150418.E95188B391@busybox.osuosl.org>
+ <201108240953.23168.arnout@mind.be>
+Message-ID: <20110901091842.784dbcf3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Raymond,
+Hello,
 
-Le Tue, 23 Aug 2011 16:30:29 -0400,
-raymond zhao <raymond.zhao.ml@gmail.com> a ?crit :
+Le Wed, 24 Aug 2011 09:53:22 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> BR 2011.08 rc was released and I did not see this feature in there? Is
-> it still going to happened in 2011.08 release?
-> Please add this feature if possible, it is really useful.
+>  I now switched to a cpio that I use as an initrd and of course I
+> encounter the same issue...
 
-The feature that allows to override the source directory for a package
-hasn't been integrated in 2011.08 because it was too late in the
-development cycle to integrate it.
+Ah, yes, of course.
 
-However, I was posted yesterday a new version of the patches and I hope
-to get them merged for the 2011.11. At least this time I am not late: I
-posted the patches the exact day 2011.08 was released, so I couldn't do
-earlier than that in the development cycle :-)
+>  So we can do the same thing for cpio archives.  Then I have two
+> issues:
+> 
+>  - Are cpio archives used for something else than initrd?
 
-If you have the opportunity to test those patches, it would be great.
+I don't think so. I would say that we can assume that cpio archives are
+always used for initramfs.
 
-Regards,
+>  - Clearly this should be refactored so we don't duplicate the same
+> stuff in initramfs.mk and cpio.mk.
+
+In fact I think the initramfs.mk and cpio.mk should be merged. Instead
+of having initramfs.mk generating the "initramfs file list", we could
+just have cpio.mk generate the cpio archive and then have the kernel
+configuration tuned to include this cpio archive as an initramfs. I
+haven't thought too much about the details of this but I remember we
+already discussed this in the past and it's probably doable.
+
+>  Given that /init is only used in initramfs situations, why don't we
+> create it unconditionally as part of the .root skeleton?  OK, it adds
+> 4K to the ext2fs but that shouldn't be the issue, right?
+
+Well, I'd prefer to keep it for the initramfs situation only. Not
+because of the size, just for the sake of cleanliness and clarity.
 
 Thomas
 -- 
