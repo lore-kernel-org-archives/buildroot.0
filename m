@@ -1,65 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Sep 2011 09:50:40 +0200
-Subject: [Buildroot] Python standard library problems
-In-Reply-To: <4E5E4273.7070201@fosstel.com>
-References: <4E42D99C.7080806@fosstel.com>
- <4E42FCAB.2070609@in-2-technology.co.uk>
- <4E43D5B4.2090106@fosstel.com>
- <4E43F72C.4060005@in-2-technology.co.uk>
- <4E441E25.4010600@fosstel.com> <4E444173.3090509@fosstel.com>
- <4E44FA0A.1000902@free-electrons.com>
- <4E454A63.6030401@free-electrons.com>
- <4E45673C.4010903@fosstel.com>
- <4E4A28C1.1070509@free-electrons.com>
- <4E5BB725.9030408@free-electrons.com>
- <4E5CF562.6070800@fosstel.com> <4E5E4273.7070201@fosstel.com>
-Message-ID: <20110901095040.75c91843@skate>
+From: Mohamed Mohamed Nour El-Din Hassib <eng.mohamed.nour.eldin@gmail.com>
+Date: Thu, 1 Sep 2011 09:54:48 +0200
+Subject: [Buildroot] Incorrect selection of the C library
+Message-ID: <CAL7CV-cF7QedAikQ35GoJ_FBpAkzhYVwyBbz-6bu7BPu0pwJqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 31 Aug 2011 10:17:23 -0400,
-Pedro Sanchez <psanchez@fosstel.com> a ?crit :
+Hi,
 
-> Tested loading the Python modules of my application. Only one module 
-> fails to load now.
-> 
-> $ python
-> Python 2.7.1 (r271:86832, Aug 31 2011, 09:38:18)
-> [GCC 4.5.2] on linux2
-> Type "help", "copyright", "credits" or "license" for more information.
-> 
->  >>> import fcntl
->  >>> import os
->  >>> import sys
->  >>> import signal
->  >>> import socket
->  >>> import time
->  >>> import datetime
->  >>> from collections import deque
->  >>> from subprocess import Popen, PIPE
-> Traceback (most recent call last):
->    File "<stdin>", line 1, in <module>
->    File "/usr/lib/python2.7/subprocess.py", line 432, in <module>
->    File "/usr/lib/python2.7/pickle.py", line 1266, in <module>
-> ImportError: No module named binascii
+I'm trying to build a filesystem & I'm using an external toolchain,
 
-Strange, I've built Python for ARM with the latest git, and importing
-subprocess just works fine.
+This toolchain was made using ELDK with glibc as the C library, so in the
+toolchain config, I specify the external toolchain's path & select "glibc"
+for the C library field,
 
-Could you post the complete build log somewhere (not to the list but on
-some pastebin site) :
+When trying "make", I get:
+*Checking external toolchain settings*
+*Incorrect selection of the C library*
+*
+*
+So can you help me with this?
 
-make clean
-make 2>&1 | tee logfile
-
-and then post logfile.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thanks,
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110901/3c83117b/attachment.html>
