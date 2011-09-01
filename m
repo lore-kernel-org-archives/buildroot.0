@@ -1,115 +1,34 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Thu, 01 Sep 2011 07:47:49 -0700
-Subject: [Buildroot] [PATCH] libconfuse: bump to version 2.7 take 5
-In-Reply-To: <4E5207B1.7000409@ethertek.ca>
-References: <4E4DA5E3.9060707@ethertek.ca> <4E4DEB3A.3030402@ethertek.ca>
- <20110819110643.600032d6@skate> <4E4E7D62.2060008@ethertek.ca>
- <4E5207B1.7000409@ethertek.ca>
-Message-ID: <4E5F9B15.6030905@ethertek.ca>
+From: Scott Dudley <scott@telesoft.com>
+Date: Thu, 01 Sep 2011 16:02:56 -0700
+Subject: [Buildroot] buildroot-2011.08, crosstool-ng-1.12.1, and Samba
+Message-ID: <4E600F20.7010606@telesoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Old libconfuse version 2.6 is from year 2007 so bump to version 2.7
-Updated download URL in libconfuse.mk
-Updated download URL in Config.in
-Removed libconfuse-2.6-dont-use-werror.patch
-Changed := to just =
 
-Signed-off-by: Dan Pattison <dan.pattison@ethertek.ca>
----
-  package/libconfuse/Config.in                       |    2 +-
-  .../libconfuse-2.6-dont-use-werror.patch           |   34 
---------------------
-  package/libconfuse/libconfuse.mk                   |   16 +++++----
-  3 files changed, 10 insertions(+), 42 deletions(-)
-  delete mode 100644 
-package/libconfuse/libconfuse-2.6-dont-use-werror.patch
+I've been using buildroot + crosstool-ng targeted for i486 and glibc 
+successfully for some time.
 
-diff --git a/package/libconfuse/Config.in b/package/libconfuse/Config.in
-index e123dab..be18cbb 100644
---- a/package/libconfuse/Config.in
-+++ b/package/libconfuse/Config.in
-@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBCONFUSE
-        environment variable expansion, functions and nested include
-        statements.
+I was asked today to include Samba in my target build.  Simple enough.  
+Compiled without issue however both nmbd and smbd segfault on 
+execution.  If I run them interactively via the -i flag, I see much of 
+the following:
 
-- http://www.nongnu.org/confuse/
-+ http://savannah.nongnu.org/download/confuse/
-diff --git a/package/libconfuse/libconfuse-2.6-dont-use-werror.patch 
-b/package/libconfuse/libconfuse-2.6-dont-use-werror.patch
-deleted file mode 100644
-index 50d0733..0000000
---- a/package/libconfuse/libconfuse-2.6-dont-use-werror.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--confuse: don't compile with -Werror
--
--Werror isn't really a robust setting for !development.
-----
-- src/Makefile.am |    2 +-
-- src/Makefile.in |    2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--Index: confuse-2.6/src/Makefile.am
--===================================================================
----- confuse-2.6.orig/src/Makefile.am
--+++ confuse-2.6/src/Makefile.am
--@@ -10,7 +10,7 @@
-- DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
--
-- if cc_is_gcc
---AM_CFLAGS=-Wall -Werror
--+AM_CFLAGS=-Wall
-- endif
--
-- LIBS = @LIBS@
--Index: confuse-2.6/src/Makefile.in
--===================================================================
----- confuse-2.6.orig/src/Makefile.in
--+++ confuse-2.6/src/Makefile.in
--@@ -196,7 +196,7 @@
-- libconfuse_la_SOURCES = confuse.c lexer.l
-- libconfuse_la_LIBADD = $(LTLIBINTL)
-- include_HEADERS = confuse.h
--- at cc_is_gcc_TRUE@AM_CFLAGS = -Wall -Werror
--+ at cc_is_gcc_TRUE@AM_CFLAGS = -Wall
-- CLEANFILES = *~ \#*\#
-- AM_LFLAGS = -Pcfg_yy -olex.yy.c
-- all: all-am
-diff --git a/package/libconfuse/libconfuse.mk 
-b/package/libconfuse/libconfuse.mk
-index 03aa0bc..f37c76d 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -3,13 +3,15 @@
-  # libconfuse
-  #
-  #############################################################
--LIBCONFUSE_VERSION:=2.6
--LIBCONFUSE_SOURCE:=confuse-$(LIBCONFUSE_VERSION).tar.gz
--LIBCONFUSE_SITE:=http://bzero.se/confuse/
--LIBCONFUSE_AUTORECONF:=NO
--LIBCONFUSE_INSTALL_STAGING:=YES
--LIBCONFUSE_INSTALL_TARGET:=YES
-+LIBCONFUSE_VERSION = 2.7
-+LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
-+LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
-+LIBCONFUSE_AUTORECONF = NO
-+LIBCONFUSE_INSTALL_STAGING = YES
-+LIBCONFUSE_INSTALL_TARGET = YES
+init_iconv: Conversion from UTF-16LE to CP850 not supported
+init_iconv: Attempting to replace with conversion from UTF-16LE to ASCII
+init_iconv: Conversion from UTF-8 to CP850 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from ANSI_X3.4-1968 to CP850 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+init_iconv: Conversion from CP850 to UTF-16LE not supported
+init_iconv: Attempting to replace with conversion from ASCII to UTF-16LE
+init_iconv: Conversion from CP850 to UTF-8 not supported
+init_iconv: Attempting to replace with conversion from ASCII to ASCII
+...
 
--LIBCONFUSE_CONF_OPT:=--disable-rpath
-+LIBCONFUSE_CONF_OPT = --disable-rpath
-+
-+LIBCONFUSE_DEPENDENCIES = uclibc
+I see no option in buildroot to build libiconv.
 
-  $(eval $(call AUTOTARGETS,package,libconfuse))
--- 
-1.6.3.3
-
-
-Dan Pattison
-Ethertek Circuits
+Any guidance/assistance is very much appreciated.
