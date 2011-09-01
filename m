@@ -1,36 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Sep 2011 09:26:21 +0200
-Subject: [Buildroot] [PATCH] libconfuse: bump to version 2.7 take 4
-In-Reply-To: <4E5207B1.7000409@ethertek.ca>
-References: <4E4DA5E3.9060707@ethertek.ca> <4E4DEB3A.3030402@ethertek.ca>
- <20110819110643.600032d6@skate> <4E4E7D62.2060008@ethertek.ca>
- <4E5207B1.7000409@ethertek.ca>
-Message-ID: <20110901092621.4a77e73c@skate>
+Date: Thu, 1 Sep 2011 09:50:40 +0200
+Subject: [Buildroot] Python standard library problems
+In-Reply-To: <4E5E4273.7070201@fosstel.com>
+References: <4E42D99C.7080806@fosstel.com>
+ <4E42FCAB.2070609@in-2-technology.co.uk>
+ <4E43D5B4.2090106@fosstel.com>
+ <4E43F72C.4060005@in-2-technology.co.uk>
+ <4E441E25.4010600@fosstel.com> <4E444173.3090509@fosstel.com>
+ <4E44FA0A.1000902@free-electrons.com>
+ <4E454A63.6030401@free-electrons.com>
+ <4E45673C.4010903@fosstel.com>
+ <4E4A28C1.1070509@free-electrons.com>
+ <4E5BB725.9030408@free-electrons.com>
+ <4E5CF562.6070800@fosstel.com> <4E5E4273.7070201@fosstel.com>
+Message-ID: <20110901095040.75c91843@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dan,
+Le Wed, 31 Aug 2011 10:17:23 -0400,
+Pedro Sanchez <psanchez@fosstel.com> a ?crit :
 
-Le Mon, 22 Aug 2011 00:39:29 -0700,
-Dan Pattison <dan.pattison@ethertek.ca> a ?crit :
+> Tested loading the Python modules of my application. Only one module 
+> fails to load now.
+> 
+> $ python
+> Python 2.7.1 (r271:86832, Aug 31 2011, 09:38:18)
+> [GCC 4.5.2] on linux2
+> Type "help", "copyright", "credits" or "license" for more information.
+> 
+>  >>> import fcntl
+>  >>> import os
+>  >>> import sys
+>  >>> import signal
+>  >>> import socket
+>  >>> import time
+>  >>> import datetime
+>  >>> from collections import deque
+>  >>> from subprocess import Popen, PIPE
+> Traceback (most recent call last):
+>    File "<stdin>", line 1, in <module>
+>    File "/usr/lib/python2.7/subprocess.py", line 432, in <module>
+>    File "/usr/lib/python2.7/pickle.py", line 1266, in <module>
+> ImportError: No module named binascii
 
-> Sorry for multiple patch submissions. I think I got it right this time.
+Strange, I've built Python for ARM with the latest git, and importing
+subprocess just works fine.
 
-It is almost right, except for this sentence. Basically, in your email,
-everything that is above the --- marker (just below your Signed-off-by
-line) becomes the commit log that gets stored for the eternity in the
-project history. Therefore, we typically don't include "personal"
-messages such as this one.
+Could you post the complete build log somewhere (not to the list but on
+some pastebin site) :
 
-If you really want to add a personal message, put it between the ---
-marker and the beginning of the patch itself.
+make clean
+make 2>&1 | tee logfile
 
-Could you repost a new version with this fixed ?
-
-Thanks!
+and then post logfile.
 
 Thomas
 -- 
