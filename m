@@ -1,75 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Sep 2011 09:07:39 +0200
-Subject: [Buildroot] buildroot-2011.08, crosstool-ng-1.12.1, and Samba
-In-Reply-To: <4E600F20.7010606@telesoft.com>
-References: <4E600F20.7010606@telesoft.com>
-Message-ID: <20110902090739.373ab82f@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 1 Sep 2011 18:18:51 +0200
+Subject: [Buildroot] [git commit] initramfs: fix boot with dynamic /dev
+In-Reply-To: <20110901091842.784dbcf3@skate>
+References: <20110720150418.E95188B391@busybox.osuosl.org>
+ <201108240953.23168.arnout@mind.be> <20110901091842.784dbcf3@skate>
+Message-ID: <201109011818.52413.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Scott,
 
-Thanks for your report!
-
-Le Thu, 01 Sep 2011 16:02:56 -0700,
-Scott Dudley <scott@telesoft.com> a ?crit :
-
-> I've been using buildroot + crosstool-ng targeted for i486 and glibc 
-> successfully for some time.
+On Thursday 01 September 2011 09:18:42, Thomas Petazzoni wrote:
+> >  - Clearly this should be refactored so we don't duplicate the same
+> >
+> > stuff in initramfs.mk and cpio.mk.
 > 
-> I was asked today to include Samba in my target build.  Simple
-> enough. Compiled without issue however both nmbd and smbd segfault on 
-> execution.  If I run them interactively via the -i flag, I see much
-> of the following:
-> 
-> init_iconv: Conversion from UTF-16LE to CP850 not supported
-> init_iconv: Attempting to replace with conversion from UTF-16LE to
-> ASCII init_iconv: Conversion from UTF-8 to CP850 not supported
-> init_iconv: Attempting to replace with conversion from ASCII to ASCII
-> init_iconv: Conversion from ANSI_X3.4-1968 to CP850 not supported
-> init_iconv: Attempting to replace with conversion from ASCII to ASCII
-> init_iconv: Conversion from CP850 to UTF-16LE not supported
-> init_iconv: Attempting to replace with conversion from ASCII to
-> UTF-16LE init_iconv: Conversion from CP850 to UTF-8 not supported
-> init_iconv: Attempting to replace with conversion from ASCII to ASCII
-> ...
-> 
-> I see no option in buildroot to build libiconv.
+> In fact I think the initramfs.mk and cpio.mk should be merged. Instead
+> of having initramfs.mk generating the "initramfs file list", we could
+> just have cpio.mk generate the cpio archive and then have the kernel
+> configuration tuned to include this cpio archive as an initramfs. I
+> haven't thought too much about the details of this but I remember we
+> already discussed this in the past and it's probably doable.
 
-I guess your system lacks the gconv libraries. For example, in the
-CodeSourcery toolchains, there are :
+ That actually sounds simpler than the way it's done now :-)
 
-thomas at skate:~/x-tools/arm-2011.03$ find . | grep gconv
-[...]
-./arm-none-linux-gnueabi/libc/usr/include/gconv.h
-./arm-none-linux-gnueabi/libc/usr/lib/gconv
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/IBM939.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/CP1257.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/ISO8859-13.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/GBK.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/EBCDIC-DK-NO.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/ISO8859-6.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/CP1258.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/MAC-UK.so
-./arm-none-linux-gnueabi/libc/usr/lib/gconv/LATIN-GREEK-1.so
-[...]
+ If I find the time, I'll take a look at it.
 
-And Buildroot does not copy those files to the target automatically.
-Maybe we need to extend the toolchain mechanism a bit to provide an
-option to copy those files. Copying them all unconditionally is
-unfortunately not really an option: the complete gconv directory
-contains ~9 MB of libraries.
 
-Which toolchain are you using ?
+ Regards,
+ Arnout
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
