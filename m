@@ -1,76 +1,115 @@
-From: Pedro Sanchez <psanchez@fosstel.com>
-Date: Thu, 01 Sep 2011 10:18:11 -0400
-Subject: [Buildroot] Python standard library problems
-In-Reply-To: <20110901095040.75c91843@skate>
-References: <4E42D99C.7080806@fosstel.com>	<4E42FCAB.2070609@in-2-technology.co.uk>	<4E43D5B4.2090106@fosstel.com>	<4E43F72C.4060005@in-2-technology.co.uk>	<4E441E25.4010600@fosstel.com>	<4E444173.3090509@fosstel.com>	<4E44FA0A.1000902@free-electrons.com>	<4E454A63.6030401@free-electrons.com>	<4E45673C.4010903@fosstel.com>	<4E4A28C1.1070509@free-electrons.com>	<4E5BB725.9030408@free-electrons.com>	<4E5CF562.6070800@fosstel.com>	<4E5E4273.7070201@fosstel.com>
- <20110901095040.75c91843@skate>
-Message-ID: <4E5F9423.40000@fosstel.com>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Thu, 01 Sep 2011 07:47:49 -0700
+Subject: [Buildroot] [PATCH] libconfuse: bump to version 2.7 take 5
+In-Reply-To: <4E5207B1.7000409@ethertek.ca>
+References: <4E4DA5E3.9060707@ethertek.ca> <4E4DEB3A.3030402@ethertek.ca>
+ <20110819110643.600032d6@skate> <4E4E7D62.2060008@ethertek.ca>
+ <4E5207B1.7000409@ethertek.ca>
+Message-ID: <4E5F9B15.6030905@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/01/2011 03:50 AM, Thomas Petazzoni wrote:
-> Le Wed, 31 Aug 2011 10:17:23 -0400,
-> Pedro Sanchez<psanchez@fosstel.com>  a ?crit :
->
->> Tested loading the Python modules of my application. Only one module
->> fails to load now.
->>
->> $ python
->> Python 2.7.1 (r271:86832, Aug 31 2011, 09:38:18)
->> [GCC 4.5.2] on linux2
->> Type "help", "copyright", "credits" or "license" for more information.
->>
->>   >>>  import fcntl
->>   >>>  import os
->>   >>>  import sys
->>   >>>  import signal
->>   >>>  import socket
->>   >>>  import time
->>   >>>  import datetime
->>   >>>  from collections import deque
->>   >>>  from subprocess import Popen, PIPE
->> Traceback (most recent call last):
->>     File "<stdin>", line 1, in<module>
->>     File "/usr/lib/python2.7/subprocess.py", line 432, in<module>
->>     File "/usr/lib/python2.7/pickle.py", line 1266, in<module>
->> ImportError: No module named binascii
->
-> Strange, I've built Python for ARM with the latest git, and importing
-> subprocess just works fine.
->
-> Could you post the complete build log somewhere (not to the list but on
-> some pastebin site) :
->
-> make clean
-> make 2>&1 | tee logfile
->
-> and then post logfile.
->
-> Thomas
+Old libconfuse version 2.6 is from year 2007 so bump to version 2.7
+Updated download URL in libconfuse.mk
+Updated download URL in Config.in
+Removed libconfuse-2.6-dont-use-werror.patch
+Changed := to just =
 
-Hi,
+Signed-off-by: Dan Pattison <dan.pattison@ethertek.ca>
+---
+  package/libconfuse/Config.in                       |    2 +-
+  .../libconfuse-2.6-dont-use-werror.patch           |   34 
+--------------------
+  package/libconfuse/libconfuse.mk                   |   16 +++++----
+  3 files changed, 10 insertions(+), 42 deletions(-)
+  delete mode 100644 
+package/libconfuse/libconfuse-2.6-dont-use-werror.patch
 
-The log says:
+diff --git a/package/libconfuse/Config.in b/package/libconfuse/Config.in
+index e123dab..be18cbb 100644
+--- a/package/libconfuse/Config.in
++++ b/package/libconfuse/Config.in
+@@ -8,4 +8,4 @@ config BR2_PACKAGE_LIBCONFUSE
+        environment variable expansion, functions and nested include
+        statements.
 
-Failed to build these modules:
-binascii           readline
+- http://www.nongnu.org/confuse/
++ http://savannah.nongnu.org/download/confuse/
+diff --git a/package/libconfuse/libconfuse-2.6-dont-use-werror.patch 
+b/package/libconfuse/libconfuse-2.6-dont-use-werror.patch
+deleted file mode 100644
+index 50d0733..0000000
+--- a/package/libconfuse/libconfuse-2.6-dont-use-werror.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-confuse: don't compile with -Werror
+-
+-Werror isn't really a robust setting for !development.
+----
+- src/Makefile.am |    2 +-
+- src/Makefile.in |    2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-Index: confuse-2.6/src/Makefile.am
+-===================================================================
+---- confuse-2.6.orig/src/Makefile.am
+-+++ confuse-2.6/src/Makefile.am
+-@@ -10,7 +10,7 @@
+- DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
+-
+- if cc_is_gcc
+--AM_CFLAGS=-Wall -Werror
+-+AM_CFLAGS=-Wall
+- endif
+-
+- LIBS = @LIBS@
+-Index: confuse-2.6/src/Makefile.in
+-===================================================================
+---- confuse-2.6.orig/src/Makefile.in
+-+++ confuse-2.6/src/Makefile.in
+-@@ -196,7 +196,7 @@
+- libconfuse_la_SOURCES = confuse.c lexer.l
+- libconfuse_la_LIBADD = $(LTLIBINTL)
+- include_HEADERS = confuse.h
+-- at cc_is_gcc_TRUE@AM_CFLAGS = -Wall -Werror
+-+ at cc_is_gcc_TRUE@AM_CFLAGS = -Wall
+- CLEANFILES = *~ \#*\#
+- AM_LFLAGS = -Pcfg_yy -olex.yy.c
+- all: all-am
+diff --git a/package/libconfuse/libconfuse.mk 
+b/package/libconfuse/libconfuse.mk
+index 03aa0bc..f37c76d 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -3,13 +3,15 @@
+  # libconfuse
+  #
+  #############################################################
+-LIBCONFUSE_VERSION:=2.6
+-LIBCONFUSE_SOURCE:=confuse-$(LIBCONFUSE_VERSION).tar.gz
+-LIBCONFUSE_SITE:=http://bzero.se/confuse/
+-LIBCONFUSE_AUTORECONF:=NO
+-LIBCONFUSE_INSTALL_STAGING:=YES
+-LIBCONFUSE_INSTALL_TARGET:=YES
++LIBCONFUSE_VERSION = 2.7
++LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
++LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
++LIBCONFUSE_AUTORECONF = NO
++LIBCONFUSE_INSTALL_STAGING = YES
++LIBCONFUSE_INSTALL_TARGET = YES
 
-And when building binascii it says:
+-LIBCONFUSE_CONF_OPT:=--disable-rpath
++LIBCONFUSE_CONF_OPT = --disable-rpath
++
++LIBCONFUSE_DEPENDENCIES = uclibc
 
-Include/pyport.h:849:2: error: #error "LONG_BIT definition appears wrong 
-for platform (bad gcc/glibc config?)."
-
-
-The fact that also readline fails to build explains why I can't use the 
-cursor keys when using the Python interpreter on my ARM board.
-
-The full log is here (copy and paste to a local file):
-
-http://pastebin.me/746c47fed3b257dbced48473b01ab27c
-
-
+  $(eval $(call AUTOTARGETS,package,libconfuse))
 -- 
-Pedro
+1.6.3.3
+
+
+Dan Pattison
+Ethertek Circuits
