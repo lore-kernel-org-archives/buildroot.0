@@ -1,55 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Sep 2011 10:08:00 +0200
-Subject: [Buildroot] add pam to busybox
-In-Reply-To: <32325731.post@talk.nabble.com>
-References: <32325731.post@talk.nabble.com>
-Message-ID: <20110901100800.357eb581@skate>
+From: Mohamed Mohamed Nour El-Din Hassib <eng.mohamed.nour.eldin@gmail.com>
+Date: Thu, 1 Sep 2011 10:25:24 +0200
+Subject: [Buildroot] Incorrect selection of the C library
+In-Reply-To: <20110901080041.GA17843@sapphire.tkos.co.il>
+References: <CAL7CV-cF7QedAikQ35GoJ_FBpAkzhYVwyBbz-6bu7BPu0pwJqA@mail.gmail.com>
+ <20110901080041.GA17843@sapphire.tkos.co.il>
+Message-ID: <CAL7CV-dJ8+228WjUvOY2k_FP85HMgJ651tqSqfqfJaY4RZJB3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Oh! ok, thanks a lot Baruch,
 
-Le Sun, 28 Aug 2011 22:34:09 -0700 (PDT),
-brro1 <rotembr@gmail.com> a ?crit :
+On Thu, Sep 1, 2011 at 10:00 AM, Baruch Siach <baruch@tkos.co.il> wrote:
 
-> hi all
-> i tryed to add pam tp busybox. 
-> i make pam with build=i386-linux --host=arm-none-linux-gnueabi  and enable
-> pam at busybox config file
-> when i build the busybox i see this error
-> 
-> LINK    busybox_unstripped
-> 
-> Trying libraries: crypt m pam pam_misc
-> Failed: -Wl,--start-group -lcrypt -lm -lpam -lpam_misc -Wl,--end-group
-> .....
-> skipping incompatible /Linux-PAM-0.80/libpam/libpam.a when searching for
-> -lpam
-> /CodeSourcery/Sourcery_G++_Lite/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/./../../../arm-none-linux-gnueabi/bin/ld:
-> cannot find -lpam
-> skipping incompatible /Linux-PAM-0.80/libpam/libpam.so when searching for
-> -lpam
-> /CodeSourcery/Sourcery_G++_Lite/bin/../lib/gcc/arm-none-linux-gnueabi/4.3.3/./../../../arm-none-linux-gnueabi/bin/ld:
-> cannot find -lpam
-> collect2: ld returned 1 exit status
-> make[1]: *** [busybox_unstripped] Error 1
-> make[1]: Leaving directory
-> 
-> how can i fixed this error?
-
-I guess your pam is improperly configured, compiled or installed.
-
-I would recommend to add the necessary pam packages to the Buildroot
-packages and then make Busybox depend on it.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Hi Mohamed,
+>
+> On Thu, Sep 01, 2011 at 09:54:48AM +0200, Mohamed Mohamed Nour El-Din
+> Hassib wrote:
+> > I'm trying to build a filesystem & I'm using an external toolchain,
+> >
+> > This toolchain was made using ELDK with glibc as the C library, so in the
+> > toolchain config, I specify the external toolchain's path & select
+> "glibc"
+> > for the C library field,
+> >
+> > When trying "make", I get:
+> > *Checking external toolchain settings*
+> > *Incorrect selection of the C library*
+> > *
+> > *
+> > So can you help me with this?
+>
+> Buildroot does not support ELDK toolchains. See
+> http://buildroot.uclibc.org/downloads/buildroot.html#external_toolchain.
+>
+> baruch
+>
+> --
+>                                                     ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110901/10733655/attachment.html>
