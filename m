@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  2 Sep 2011 04:19:19 +0000 (UTC)
+Date: Fri,  2 Sep 2011 04:24:52 +0000 (UTC)
 Subject: [Buildroot] [Bug 3271] netperf-2.4.5 fails to compile
 In-Reply-To: <bug-3271-163@https.bugs.busybox.net/>
 References: <bug-3271-163@https.bugs.busybox.net/>
-Message-ID: <20110902041920.0331E8D3BD@busybox.osuosl.org>
+Message-ID: <20110902042452.720028D399@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,53 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=3271
 
---- Comment #3 from Kelvin Cheung <keguang.zhang@gmail.com>  ---
-(In reply to comment #2)
-> I downloaded the file from the following address. Switch to the chroot, compile
-> netperf-2.4.5 failed. The following error:
-> ?http://uclibc.org/downloads/binaries/0.9.30.1/system-image-i686.tar.bz2?
-> 
-> make[3]: Leaving directory `/tmp/netperf-2.4.5/src/missing'
-> make[3]: Entering directory `/tmp/netperf-2.4.5/src'
-> if gcc -DHAVE_CONFIG_H -I. -I. -I..     -g -O2 -MT netslot_linux.o -MD -MP -MF
-> ".deps/netslot_linux.Tpo" \
->           -c -o netslot_linux.o `test -f 'netslot_linux.c' || echo
-> './'`netslot_linux.c; \
->         then mv -f ".deps/netslot_linux.Tpo" ".deps/netslot_linux.Po"; \
->         else rm -f ".deps/netslot_linux.Tpo"; exit 1; \
->         fi
-> netslot_linux.c:2:17: error: ftw.h: No such file or directory
-> netslot_linux.c:13: warning: 'struct FTW' declared inside parameter list
-> netslot_linux.c:13: warning: its scope is only this definition or declaration,
-> which is probably not what you want
-> netslot_linux.c:13: warning: 'struct stat' declared inside parameter list
-> netslot_linux.c: In function 'find_slot':
-> netslot_linux.c:24: error: dereferencing pointer to incomplete type
-> netslot_linux.c: At top level:
-> netslot_linux.c:68: warning: 'struct FTW' declared inside parameter list
-> netslot_linux.c:68: warning: 'struct stat' declared inside parameter list
-> netslot_linux.c: In function 'find_interface':
-> netslot_linux.c:73: error: dereferencing pointer to incomplete type
-> netslot_linux.c: In function 'find_interface_slot':
-> netslot_linux.c:100: error: 'FTW_PHYS' undeclared (first use in this function)
-> netslot_linux.c:100: error: (Each undeclared identifier is reported only once
-> netslot_linux.c:100: error: for each function it appears in.)
-> make[3]: *** [netslot_linux.o] Error 1
-> make[3]: Leaving directory `/tmp/netperf-2.4.5/src'
-> make[2]: *** [all-recursive] Error 1
-> make[2]: Leaving directory `/tmp/netperf-2.4.5/src'
-> make[1]: *** [all-recursive] Error 1
-> make[1]: Leaving directory `/tmp/netperf-2.4.5'
-> make: *** [all] Error 2
+--- Comment #4 from ??? <xiaxiaojin@safefw.com>  ---
+I downloaded the file from the following address. Switch to the chroot, compile
+http://uclibc.org/downloads/binaries/0.9.30.1/system-image-i686.tar.bz2?
 
-What toolchain did you use?
-Crosstool-NG?
+# tar xjf system-image-i686.tar.bz2
+# tar xjf netperf-2.4.5.tar.bz2 -C rootfs/tmp
+# chroot rootfs
+# cd /tmp/netperf-2.4.5
+
+/tmp/netperf-2.4.5 # gcc -v
+Invoked as gcc
+Reference path: /bin/..
+arg[ 0] = rawgcc
+arg[ 1] = -U__nptl__
+arg[ 2] = -v
+Using built-in specs.
+Target: i686-unknown-linux
+Configured with:
+/home/landley/firmware-0.9.6/build/temp-i686/gcc-core/configure
+--prefix=/home/landley/firmware-0.9.6/build/mini-native-i686/usr
+--disable-multilib --build=x86_64-walrus-linux --host=i686-unknown-linux
+--target=i686-unknown-linux --enable-long-long --enable-c99 --enable-shared
+--enable-threads=posix --enable-__cxa_atexit --disable-nls
+--enable-languages=c,c++ --disable-libstdcxx-pch --enable-sjlj-exceptions
+--program-prefix=
+Thread model: posix
+gcc version 4.1.2
+/tmp/netperf-2.4.5 # ls /lib/libc*
+/lib/libc.a                /lib/libcares.so.2         /lib/libcrypt.so.0       
+ /lib/libcurl.so
+/lib/libc.so               /lib/libcares.so.2.0.0     /lib/libcrypto.a         
+ /lib/libcurl.so.4
+/lib/libc.so.0             /lib/libcom_err.a          /lib/libcrypto.so        
+ /lib/libcurl.so.4.2.0
+/lib/libcares.a            /lib/libcrypt-0.9.30.1.so  /lib/libcrypto.so.0.9.8  
+ /lib/libcurses.a
+/lib/libcares.la           /lib/libcrypt.a            /lib/libcurl.a           
+ /lib/libcurses.so
+/lib/libcares.so           /lib/libcrypt.so           /lib/libcurl.la
+
+/tmp/netperf-2.4.5 # ls /lib/ld-uClibc*
+/lib/ld-uClibc-0.9.30.1.so  /lib/ld-uClibc.so.0
+/tmp/netperf-2.4.5 # 
+
+
+CPU? Intel(R) Pentium(R) 4 CPU 2.40GHz
+MEM? 512MB
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
