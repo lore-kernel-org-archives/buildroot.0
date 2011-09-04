@@ -1,93 +1,88 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Sun, 04 Sep 2011 22:25:38 +0200
-Subject: [Buildroot] [PATCH 2/3] new package: transmission
-In-Reply-To: <20110904120835.3974.93412.stgit@darius-desktop>
-References: <20110904120835.3974.93412.stgit@darius-desktop>
-Message-ID: <4E63DEC2.7000906@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 4 Sep 2011 23:36:43 +0200
+Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
+In-Reply-To: <4aaac08b6012188f28e05ee700f9be550b40dde4.1314965303.git.maxime.ripard@free-electrons.com>
+References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
+ <4aaac08b6012188f28e05ee700f9be550b40dde4.1314965303.git.maxime.ripard@free-electrons.com>
+Message-ID: <201109042336.44526.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-There is already in the bug tracker an opened bug with a patch to add 
-transmission :
+On Friday 02 September 2011 14:08:59, Maxime Ripard wrote:
+> Add a way for packages to declare files they need instead of relying
+> only on device tables, which creates files no matter if the package is
+> indeed enabled, as we can see for busybox.
 
-https://bugs.busybox.net/show_bug.cgi?id=743
+ Good idea!  This will also make it possible to create setuid executables.
 
-Even though the version is quite outdated and the patch needs a little 
-refresh, it could be a good idea to base your patch on this work. 
-Moreover, this patch seems a lot more complete than yours with regard to 
-the options available, the init script, the dependencies, etc.
-
-Regards,
-Maxime
-
-Le 04/09/2011 14:08, Darius Augulis a ?crit :
-> Add support for new bittorrent client - transmission.
-> Currently only cli and web interfaces (no GUI) are
-> supported in buildroot.
->
-> Signed-off-by: Darius Augulis<augulis.darius@gmail.com>
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 > ---
->   package/Config.in                    |    1 +
->   package/transmission/Config.in       |    4 ++++
->   package/transmission/transmission.mk |   19 +++++++++++++++++++
->   3 files changed, 24 insertions(+), 0 deletions(-)
->   create mode 100644 package/transmission/Config.in
->   create mode 100644 package/transmission/transmission.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 7112e05..c058f52 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -394,6 +394,7 @@ source "package/bridge-utils/Config.in"
->   source "package/bwm-ng/Config.in"
->   source "package/can-utils/Config.in"
->   source "package/ctorrent/Config.in"
-> +source "package/transmission/Config.in"
->   source "package/cups/Config.in"
->   if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->   source "package/dhcp/Config.in"
-> diff --git a/package/transmission/Config.in b/package/transmission/Config.in
-> new file mode 100644
-> index 0000000..30ceef4
-> --- /dev/null
-> +++ b/package/transmission/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_TRANSMISSION
-> +	bool "transmission"
-> +	help
-> +	  Bittorrent client
-> diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-> new file mode 100644
-> index 0000000..488cf07
-> --- /dev/null
-> +++ b/package/transmission/transmission.mk
-> @@ -0,0 +1,19 @@
-> +#############################################################
-> +#
-> +# transmission
-> +#
-> +#############################################################
-> +TRANSMISSION_VERSION = 2.33
-> +TRANSMISSION_SOURCE = transmission-${TRANSMISSION_VERSION}.tar.bz2
-> +TRANSMISSION_SITE = http://download.m0k.org/transmission/files/
+>  Makefile                    |    4 ++++
+>  fs/common.mk                |    1 +
+>  package/Makefile.package.in |    1 +
+>  3 files changed, 6 insertions(+), 0 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 9ed46fc..b293d2f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -52,6 +52,10 @@ qstrip=$(strip $(subst ",,$(1)))
+>  comma:=,
+>  empty:=
+>  space:=$(empty) $(empty)
+> +define newline
 > +
-> +TRANSMISSION_CONF_OPT = \
-> +	--disable-gtk \
-> +	--disable-libappindicator \
-> +	--disable-libcanberra \
-> +	--disable-libnotify \
-> +	--enable-lightweight \
-> +	--enable-cli \
-> +	--enable-daemon
 > +
-> +$(eval $(call AUTOTARGETS,package,transmission))
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +endef
+> 
+>  ifneq ("$(origin O)", "command line")
+>  O:=output
+> diff --git a/fs/common.mk b/fs/common.mk
+> index f793ff9..46d191b 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -50,6 +50,7 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
+>  	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+>  ifneq ($(ROOTFS_DEVICE_TABLES),)
+>  	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+> +	echo -e '$(subst $(newline),\n,$(PACKAGES_DEVICE_TABLE))' >>
+> $(FULL_DEVICE_TABLE) echo "$(HOST_DIR)/usr/bin/makedevs -d
+> $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT) endif
+>  	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> index 868bf28..d8d435e 100644
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -541,6 +541,7 @@ endif
+>  ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+> 
+>  TARGETS += $(1)
+> +PACKAGES_DEVICE_TABLE += $$($(2)_DEVICES)$$(newline)
+
+ Since it anyway will be echo -e'd, why not just use the following?
+
++PACKAGES_DEVICE_TABLE += \n$$($(2)_DEVICES)
+
+(I haven't tried it, but I expect the terminating space and the initial empty 
+line are not a problem.)
+
+
+ Regards,
+ Arnout
+
+
+> 
+>  ifeq ($$($(2)_SITE_METHOD),svn)
+>  DL_TOOLS_DEPENDENCIES += svn
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
