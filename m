@@ -1,53 +1,70 @@
-From: Scott Dudley <scott@telesoft.com>
-Date: Fri, 02 Sep 2011 08:30:08 -0700
-Subject: [Buildroot] buildroot-2011.08, crosstool-ng-1.12.1, and Samba
-In-Reply-To: <20110902090739.373ab82f@skate>
-References: <4E600F20.7010606@telesoft.com> <20110902090739.373ab82f@skate>
-Message-ID: <4E60F680.4040401@telesoft.com>
+From: Darius Augulis <augulis.darius@gmail.com>
+Date: Sun, 04 Sep 2011 15:08:35 +0300
+Subject: [Buildroot] [PATCH 2/3] new package: transmission
+Message-ID: <20110904120835.3974.93412.stgit@darius-desktop>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add support for new bittorrent client - transmission.
+Currently only cli and web interfaces (no GUI) are
+supported in buildroot.
 
+Signed-off-by: Darius Augulis <augulis.darius@gmail.com>
+---
+ package/Config.in                    |    1 +
+ package/transmission/Config.in       |    4 ++++
+ package/transmission/transmission.mk |   19 +++++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/transmission/Config.in
+ create mode 100644 package/transmission/transmission.mk
 
-On 09/02/2011 12:07 AM, Thomas Petazzoni wrote:
->
-> Hello Scott,
->
-> Thanks for your report!
->
-> [...]
->
-> And Buildroot does not copy those files to the target automatically.
-> Maybe we need to extend the toolchain mechanism a bit to provide an
-> option to copy those files. Copying them all unconditionally is
-> unfortunately not really an option: the complete gconv directory
-> contains ~9 MB of libraries.
->
-> Which toolchain are you using ?
-  crosstool-ng v1.12.1
-> Regards,
->
-> Thomas
-
--- 
-Scott Dudley
-Senior Developer
-
-Telesoft Corp. | 1661 E. Camelback Rd., Suite 300 | Phoenix, AZ, 85016
-
-*o:* (602) 308-1115**| *f:* (602) 308-1300 | *w:* www.telesoft.com 
-<http://www.telesoft.com>
-
-*TEM Edge Blog <http://www.telesoft.com/blog> *|*Twitter 
-<http://www.twitter.com/_Telesoft> *|*Facebook
-
-<http://www.facebook.com/pages/Telesoft-Corp/76397971661>Join us at 
-Telesoft Connections 2011. Learn more now! 
-<http://www.telesoftconference.com>*
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110902/4258d04c/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 7112e05..c058f52 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -394,6 +394,7 @@ source "package/bridge-utils/Config.in"
+ source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/ctorrent/Config.in"
++source "package/transmission/Config.in"
+ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+new file mode 100644
+index 0000000..30ceef4
+--- /dev/null
++++ b/package/transmission/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_TRANSMISSION
++	bool "transmission"
++	help
++	  Bittorrent client
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+new file mode 100644
+index 0000000..488cf07
+--- /dev/null
++++ b/package/transmission/transmission.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# transmission
++#
++#############################################################
++TRANSMISSION_VERSION = 2.33
++TRANSMISSION_SOURCE = transmission-${TRANSMISSION_VERSION}.tar.bz2
++TRANSMISSION_SITE = http://download.m0k.org/transmission/files/
++
++TRANSMISSION_CONF_OPT = \
++	--disable-gtk \
++	--disable-libappindicator \
++	--disable-libcanberra \
++	--disable-libnotify \
++	--enable-lightweight \
++	--enable-cli \
++	--enable-daemon
++
++$(eval $(call AUTOTARGETS,package,transmission))
