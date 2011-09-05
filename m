@@ -1,42 +1,45 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 05 Sep 2011 18:15:14 +0200
-Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
-In-Reply-To: <20110905085210.705e63a0@skate>
-References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
- <4aaac08b6012188f28e05ee700f9be550b40dde4.1314965303.git.maxime.ripard@free-electrons.com>
- <201109042336.44526.arnout@mind.be> <20110905085210.705e63a0@skate>
-Message-ID: <4E64F592.8080209@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 5 Sep 2011 22:16:03 +0200
+Subject: [Buildroot] [git commit] kickoff 2011.11 development cycle
+Message-ID: <20110905201638.944428D3F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-On 05/09/2011 08:52, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Le Sun, 4 Sep 2011 23:36:43 +0200,
-> Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> 
->>  Good idea!  This will also make it possible to create setuid
->> executables.
-> 
-> Yes, exactly. However, I don't really like the name <pkg>_DEVICE_TABLE
-> because, it might be for other purposes as well (setting setuid bit,
-> giving specific owner/group or permissions, etc.). Does anyone has an
-> idea for a better name?
+commit: http://git.buildroot.net/buildroot/commit/?id=5427c506bd652e0d0a6c59d14791018195c59525
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I agree, I don't like it neither, but I have no idea on what could be
-better...
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES  |    2 ++
+ Makefile |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-Files, maybe, but I find it way too generic.
-
-Maxime
-
+diff --git a/CHANGES b/CHANGES
+index 99cd79b..288d575 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,5 @@
++2011.11, Not released yet:
++
+ 2011.08, Released August 31th, 2011:
+ 
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 9ed46fc..8779d3f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2011.08
++export BR2_VERSION:=2011.11-git
+ 
+ # This top-level Makefile can *not* be executed in parallel
+ .NOTPARALLEL:
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
