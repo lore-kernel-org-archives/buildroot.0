@@ -1,38 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2011 17:19:13 +0200
-Subject: [Buildroot] [PATCH 2/4] manual: provide make targets to build
- the documentation
-In-Reply-To: <201109050919.38009.arnout@mind.be>
-References: <cover.1314827583.git.thomas.petazzoni@free-electrons.com>
- <2e6fc9dfc010ecdd3b3c4f541d5175a7bbf540a8.1314827583.git.thomas.petazzoni@free-electrons.com>
- <201109050919.38009.arnout@mind.be>
-Message-ID: <20110905171913.35a866ff@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 05 Sep 2011 18:15:14 +0200
+Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
+In-Reply-To: <20110905085210.705e63a0@skate>
+References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
+ <4aaac08b6012188f28e05ee700f9be550b40dde4.1314965303.git.maxime.ripard@free-electrons.com>
+ <201109042336.44526.arnout@mind.be> <20110905085210.705e63a0@skate>
+Message-ID: <4E64F592.8080209@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hi,
 
-Le Mon, 5 Sep 2011 09:19:36 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
-
-> On Wednesday 31 August 2011 23:54:20, Thomas Petazzoni wrote:
-> > +manual-splitted-html: $(MANUAL_SOURCES)
-> > +       @echo "Splited HTML manual..."
+On 05/09/2011 08:52, Thomas Petazzoni wrote:
+> Hello,
 > 
->  I don't think 'splitted' is proper English; it should be 'split'.
+> Le Sun, 4 Sep 2011 23:36:43 +0200,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> 
+>>  Good idea!  This will also make it possible to create setuid
+>> executables.
+> 
+> Yes, exactly. However, I don't really like the name <pkg>_DEVICE_TABLE
+> because, it might be for other purposes as well (setting setuid bit,
+> giving specific owner/group or permissions, etc.). Does anyone has an
+> idea for a better name?
 
-This is very possible. I have fixed the Makefile, and also added
-support to generate the documentation in the epub format. I've pushed
-this new version at the same location.
+I agree, I don't like it neither, but I have no idea on what could be
+better...
 
-Thanks!
+Files, maybe, but I find it way too generic.
 
-Thomas
+Maxime
+
 -- 
-Thomas Petazzoni, Free Electrons
+Maxime Ripard, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
