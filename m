@@ -1,29 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2011 08:52:10 +0200
-Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
-In-Reply-To: <201109042336.44526.arnout@mind.be>
-References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
- <4aaac08b6012188f28e05ee700f9be550b40dde4.1314965303.git.maxime.ripard@free-electrons.com>
- <201109042336.44526.arnout@mind.be>
-Message-ID: <20110905085210.705e63a0@skate>
+Date: Mon, 5 Sep 2011 08:54:22 +0200
+Subject: [Buildroot] buildroot-2011.08, crosstool-ng-1.12.1, and Samba
+In-Reply-To: <4E60F680.4040401@telesoft.com>
+References: <4E600F20.7010606@telesoft.com> <20110902090739.373ab82f@skate>
+ <4E60F680.4040401@telesoft.com>
+Message-ID: <20110905085422.1677d8f1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Fri, 02 Sep 2011 08:30:08 -0700,
+Scott Dudley <scott@telesoft.com> a ?crit :
 
-Le Sun, 4 Sep 2011 23:36:43 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>   crosstool-ng v1.12.1
 
->  Good idea!  This will also make it possible to create setuid
-> executables.
+Ok. So the problem is the one I highlighted. Can you try to copy
+$(O)/staging/usr/lib/gconv to $(O)/target/usr/lib/gconv and see if
+Samba works better ?
 
-Yes, exactly. However, I don't really like the name <pkg>_DEVICE_TABLE
-because, it might be for other purposes as well (setting setuid bit,
-giving specific owner/group or permissions, etc.). Does anyone has an
-idea for a better name?
+Regards,
 
 Thomas
 -- 
