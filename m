@@ -1,38 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Sep 2011 08:48:12 +0200
-Subject: [Buildroot] [PATCH 04/16] package: add <pkg>-rebuild and
- <pkg>-reconfigure
-In-Reply-To: <20110904172950.GA677@game.jcrosoft.org>
-References: <cover.1314826051.git.thomas.petazzoni@free-electrons.com>
- <550d3ba3c9db7d0a9df78aa52e09da9af93e20d8.1314826051.git.thomas.petazzoni@free-electrons.com>
- <20110904172950.GA677@game.jcrosoft.org>
-Message-ID: <20110905084812.33d18c00@skate>
+Date: Mon, 5 Sep 2011 08:50:53 +0200
+Subject: [Buildroot] [PATCH 12/13] busybox: add 1.19.x branch and remove
+ deprecated
+In-Reply-To: <1314972301-5067-14-git-send-email-gustavo@zacarias.com.ar>
+References: <1314972301-5067-1-git-send-email-gustavo@zacarias.com.ar>
+ <1314972301-5067-14-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20110905085053.72a5c581@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 4 Sep 2011 19:45:08 +0200,
-Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
+Hello,
 
-> > Therefore this patch adds two new per-package targets: <pkg>-rebuild
-> > and <pkg>-reconfigure. They will remove the right stamp files and
-> > restart the complete build process (by using the 'all' target, so
-> > that not only the package is reconfigured, recompiled and
-> > reinstalled, but the root filesystem images are also regenerated).
-> 
-> It will be good to have a doc of all this command and the description
+Le Fri,  2 Sep 2011 11:05:00 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Yes, definitely. However, I have posted a separate set of patches that
-convert the documentation to the asciidoc format. I'd prefer to know if
-those patches get merged before making the effort of updating the
-documentation.
+>  config BR2_BUSYBOX_VERSION
+>  	string
+> -	default "1.15.3"	if BR2_BUSYBOX_VERSION_1_15_X
+>  	default "1.16.2"	if BR2_BUSYBOX_VERSION_1_16_X
+>  	default "1.17.4"	if BR2_BUSYBOX_VERSION_1_17_X
+>  	default "1.18.5"	if BR2_BUSYBOX_VERSION_1_18_X
+> +	default "1.19.0"	if BR2_BUSYBOX_VERSION_1_19_X
 
-If those features get merged without being documented within the next
-weeks, do not hesitate to remind me, this is indeed very important.
-
-Regards,
+I guess we could also set 1.16.x and 1.17.x as deprecated. For Busybox,
+there really isn't much reason to support 4-5 different versions.
+Supporting the last two ones seems sufficient to me.
 
 Thomas
 -- 
