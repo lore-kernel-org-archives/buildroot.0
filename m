@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 5 Sep 2011 22:16:03 +0200
-Subject: [Buildroot] [git commit] kickoff 2011.11 development cycle
-Message-ID: <20110905201638.944428D3F6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] util-linux: bump version
+Message-ID: <20110905201638.DE7BA8D3F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,37 +9,66 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5427c506bd652e0d0a6c59d14791018195c59525
+commit: http://git.buildroot.net/buildroot/commit/?id=8a124c78edea6e4c5d80f739575c71af4fe9abce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES  |    2 ++
- Makefile |    2 +-
- 2 files changed, 3 insertions(+), 1 deletions(-)
+ package/util-linux/util-linux-script-libintl.patch |   30 ++++++++++++++++++++
+ package/util-linux/util-linux.mk                   |    4 +-
+ 2 files changed, 32 insertions(+), 2 deletions(-)
+ create mode 100644 package/util-linux/util-linux-script-libintl.patch
 
-diff --git a/CHANGES b/CHANGES
-index 99cd79b..288d575 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,5 @@
-+2011.11, Not released yet:
+diff --git a/package/util-linux/util-linux-script-libintl.patch b/package/util-linux/util-linux-script-libintl.patch
+new file mode 100644
+index 0000000..0700aa4
+--- /dev/null
++++ b/package/util-linux/util-linux-script-libintl.patch
+@@ -0,0 +1,30 @@
++From 075f251b19509f588d828a81d91b40f47e63e3de Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Mon, 5 Sep 2011 21:46:25 +0200
++Subject: [PATCH] script.c: drop libintl.h include
 +
- 2011.08, Released August 31th, 2011:
- 
- 	Fixes all over the tree.
-diff --git a/Makefile b/Makefile
-index 9ed46fc..8779d3f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2011.08
-+export BR2_VERSION:=2011.11-git
- 
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
++Commit 8fb810ff26 (script: include-what-you-use header check) added a
++<libintl.h> #include, which isn't needed as nls.h includes it (if
++enabled) - But worse, breaks the build for systems without libintl.h
++(like some uClibc configurations).
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ term-utils/script.c |    1 -
++ 1 files changed, 0 insertions(+), 1 deletions(-)
++
++diff --git a/term-utils/script.c b/term-utils/script.c
++index d96ca2f..f708e91 100644
++--- a/term-utils/script.c
+++++ b/term-utils/script.c
++@@ -55,7 +55,6 @@
++ #include <getopt.h>
++ #include <unistd.h>
++ #include <fcntl.h>
++-#include <libintl.h>
++ #include <limits.h>
++ #include <locale.h>
++ #include <stddef.h>
++-- 
++1.7.5.4
++
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 9d2f9be..49c528a 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -3,8 +3,8 @@
+ # util-linux
+ #
+ #############################################################
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+-UTIL_LINUX_VERSION_MAJOR = 2.19
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
++UTIL_LINUX_VERSION_MAJOR = 2.20
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.bz2
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_AUTORECONF = YES
 -- 
 1.7.3.4
