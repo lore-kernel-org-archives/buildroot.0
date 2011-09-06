@@ -1,39 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Sep 2011 21:59:42 +0200
-Subject: [Buildroot] [PATCH] libpng: bump to 1.5.4
-In-Reply-To: <20110906204818.64b8b537@gmail.com> (Frederic Bassaler's message
- of "Tue, 6 Sep 2011 20:48:18 +0200")
-References: <20110811153707.2d035b09@gmail.com>
- <87zkii7yfg.fsf@macbook.be.48ers.dk>
- <20110906204818.64b8b537@gmail.com>
-Message-ID: <87ehztl9w1.fsf@macbook.be.48ers.dk>
+From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
+Date: Tue, 6 Sep 2011 20:40:21 +0000
+Subject: [Buildroot] package/Makefile.in STRIP in target config options.
+In-Reply-To: <F9C551623D2CBB4C9488801D14F864C605660F@ex-mb1.corp.adtran.com>
+References: <F9C551623D2CBB4C9488801D14F864C605660F@ex-mb1.corp.adtran.com>
+Message-ID: <F9C551623D2CBB4C9488801D14F864C605C25F@ex-mb1.corp.adtran.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com> writes:
+Bump.
 
- >> Thanks, unfortunately there's a few issues with the patch, so I cannot
- >> apply it:
- >> 
- >> - Your mailer has word/line wrapped the patch, please consider using
- >> git send-email in the future
- >> 
- >> - What packages have you tried to build? A quick test shows that
- >> atleast directfb and libsdl-image aren't compatible with this libpng
- >> version
-
- Frederic> Hi Peter
-
- Frederic> I think I was trying to build imlib2
-
- Frederic> http://lists.busybox.net/pipermail/buildroot/2011-August/045025.html
-
-Ok, but libpng is used by lots of packages, and (unfortunately) stuff
-relatively often breaks with new libpng versions, so it needs quite some
-testing before we can upgrade.
-
--- 
-Bye, Peter Korsgaard
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] On Behalf Of ANDY KENNEDY
+> Sent: Friday, August 26, 2011 1:05 AM
+> To: buildroot at busybox.net
+> Subject: [Buildroot] package/Makefile.in STRIP in target config
+> options.
+> 
+> Below is a snippet from Makefile.in in the package dir.  While
+> looking
+> through the file to determine how best to write a configure script
+> that
+> would work well with BuildRoot, I came across this strangeness.  If
+> this is by design, I would wonder why we take the time to make the
+> variable STRIPCMD.  Note that in the TARGET_CONFIGURE_OPTS we set
+> STRIP
+> to only $(TARGET_STRIP).
+> 
+> I'm thinking this is an oops in the assignment of
+> STRIP=$(TARGET_STRIP) or perhaps there was an intent to reassign
+> TARGET_STRIP after the STRIPCMD was created.
+> 
+> Please advise.
+> 
+> Andy
+> 
+> 
+> ifeq ($(BR2_STRIP_strip),y)
+> STRIP_DISCARD_ALL:=--discard-all
+> STRIP_STRIP_UNNEEDED:=--strip-unneeded
+> STRIP_STRIP_ALL:=--strip-all
+> TARGET_STRIP=$(TARGET_CROSS)strip
+> STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-
+> section=.note
+> KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+> endif
+> ifeq ($(BR2_STRIP_sstrip),y)
+> STRIP_DISCARD_ALL:=
+> STRIP_STRIP_UNNEEDED:=
+> STRIP_STRIP_ALL:=
+> TARGET_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
+> STRIPCMD=$(TARGET_STRIP)
+> KSTRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-
+> section=.note --strip-unneeded
+> endif
+> ifeq ($(BR2_STRIP_none),y)
+> TARGET_STRIP=true
+> STRIPCMD=$(TARGET_STRIP)
+> KSTRIPCMD=$(TARGET_STRIP)
+> endif
+> <snip>
+> TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
+> <snip>
+>                 STRIP="$(TARGET_STRIP)" \
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
