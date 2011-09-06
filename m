@@ -1,72 +1,52 @@
-From: ANDY KENNEDY <ANDY.KENNEDY@adtran.com>
-Date: Tue, 6 Sep 2011 20:40:21 +0000
-Subject: [Buildroot] package/Makefile.in STRIP in target config options.
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C605660F@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C605660F@ex-mb1.corp.adtran.com>
-Message-ID: <F9C551623D2CBB4C9488801D14F864C605C25F@ex-mb1.corp.adtran.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 6 Sep 2011 18:03:05 +0200
+Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
+In-Reply-To: <4E64F592.8080209@free-electrons.com>
+References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
+ <20110905085210.705e63a0@skate> <4E64F592.8080209@free-electrons.com>
+Message-ID: <201109061803.05970.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump.
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-
-> bounces at busybox.net] On Behalf Of ANDY KENNEDY
-> Sent: Friday, August 26, 2011 1:05 AM
-> To: buildroot at busybox.net
-> Subject: [Buildroot] package/Makefile.in STRIP in target config
-> options.
+On Monday 05 September 2011 18:15:14, Maxime Ripard wrote:
+> Hi,
 > 
-> Below is a snippet from Makefile.in in the package dir.  While
-> looking
-> through the file to determine how best to write a configure script
-> that
-> would work well with BuildRoot, I came across this strangeness.  If
-> this is by design, I would wonder why we take the time to make the
-> variable STRIPCMD.  Note that in the TARGET_CONFIGURE_OPTS we set
-> STRIP
-> to only $(TARGET_STRIP).
+> On 05/09/2011 08:52, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > Le Sun, 4 Sep 2011 23:36:43 +0200,
+> > 
+> > Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> >>  Good idea!  This will also make it possible to create setuid
+> >> executables.
+> > 
+> > Yes, exactly. However, I don't really like the name <pkg>_DEVICE_TABLE
+> > because, it might be for other purposes as well (setting setuid bit,
+> > giving specific owner/group or permissions, etc.). Does anyone has an
+> > idea for a better name?
 > 
-> I'm thinking this is an oops in the assignment of
-> STRIP=$(TARGET_STRIP) or perhaps there was an intent to reassign
-> TARGET_STRIP after the STRIPCMD was created.
+> I agree, I don't like it neither, but I have no idea on what could be
+> better...
 > 
-> Please advise.
-> 
-> Andy
-> 
-> 
-> ifeq ($(BR2_STRIP_strip),y)
-> STRIP_DISCARD_ALL:=--discard-all
-> STRIP_STRIP_UNNEEDED:=--strip-unneeded
-> STRIP_STRIP_ALL:=--strip-all
-> TARGET_STRIP=$(TARGET_CROSS)strip
-> STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-
-> section=.note
-> KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-> endif
-> ifeq ($(BR2_STRIP_sstrip),y)
-> STRIP_DISCARD_ALL:=
-> STRIP_STRIP_UNNEEDED:=
-> STRIP_STRIP_ALL:=
-> TARGET_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
-> STRIPCMD=$(TARGET_STRIP)
-> KSTRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-
-> section=.note --strip-unneeded
-> endif
-> ifeq ($(BR2_STRIP_none),y)
-> TARGET_STRIP=true
-> STRIPCMD=$(TARGET_STRIP)
-> KSTRIPCMD=$(TARGET_STRIP)
-> endif
-> <snip>
-> TARGET_CONFIGURE_OPTS=PATH=$(TARGET_PATH) \
-> <snip>
->                 STRIP="$(TARGET_STRIP)" \
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Files, maybe, but I find it way too generic.
+
+ How about _FILE_MOD_TABLE (cfr. chmod)?
+
+ BTW, BR2_ROOTFS_DEVICE_TABLE the device_table.txt files should change in the 
+same way.
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
