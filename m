@@ -1,39 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Sep 2011 12:09:50 +0200
-Subject: [Buildroot] [PATCH] libsoup: add option to enable HTTPS (SSL)
-	support
-In-Reply-To: <1313056661-6090-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Thu, 11 Aug 2011 11:57:41 +0200")
-References: <1313056661-6090-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <874o0q9e35.fsf@macbook.be.48ers.dk>
+Date: Tue, 06 Sep 2011 12:33:23 +0200
+Subject: [Buildroot] [PATCH] libpng: bump to 1.5.4
+In-Reply-To: <20110811153707.2d035b09@gmail.com> (Frederic Bassaler's message
+ of "Thu, 11 Aug 2011 15:37:07 +0200")
+References: <20110811153707.2d035b09@gmail.com>
+Message-ID: <87zkii7yfg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com> writes:
 
- Sven> By selecting BR2_PACKAGE_LIBSOUP_SSL the gnutls package is selected
- Sven> and libsoup will be compiled with SSL support.
+ Frederic> Security update.
+ Frederic> Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
+ Frederic> ---
+ Frederic>  package/libpng/libpng.mk |    4 ++--
+ Frederic>  1 files changed, 2 insertions(+), 2 deletions(-)
 
- Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
- Sven> ---
- Sven>  package/libsoup/Config.in  |    7 +++++++
- Sven>  package/libsoup/libsoup.mk |    8 +++++++-
- Sven>  2 files changed, 14 insertions(+), 1 deletions(-)
+Thanks, unfortunately there's a few issues with the patch, so I cannot
+apply it:
 
- Sven> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
- 
- Sven> +ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
- Sven> +LIBSOUP_DEPENDENCIES += gnutls
- Sven> +LIBSOUP_CONF_OPT += --enable-ssl --without-libgcrypt-prefix
+- Your mailer has word/line wrapped the patch, please consider using git
+  send-email in the future
 
-Why --without? It seems I need to pass
---with-libgrcypt-prefix=$(STAGING_DIR)/usr for configure to find
-libgcrypt-config in staging.
-
-Committed with that change, thanks.
+- What packages have you tried to build? A quick test shows that atleast
+  directfb and libsdl-image aren't compatible with this libpng version
 
 -- 
 Bye, Peter Korsgaard
