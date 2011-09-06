@@ -1,21 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Sep 2011 17:05:19 +0200
-Subject: [Buildroot] [PATCH] leafpad: bump to 0.8.18
-In-Reply-To: <20110811123833.0e98502a@gmail.com> (Frederic Bassaler's message
- of "Thu, 11 Aug 2011 12:38:33 +0200")
-References: <20110811123833.0e98502a@gmail.com>
-Message-ID: <87mxehlnio.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 6 Sep 2011 15:19:57 +0200
+Subject: [Buildroot] [git commit] leafpad: bump to 0.8.18
+Message-ID: <20110906152206.895DE8D421@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com> writes:
 
- Frederic> Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=5f150dc6d86b949876f350f96e8a92f7fdcb0765
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/leafpad/leafpad.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
+diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
+index 9964409..bc04249 100644
+--- a/package/leafpad/leafpad.mk
++++ b/package/leafpad/leafpad.mk
+@@ -3,7 +3,7 @@
+ # leafpad
+ #
+ #############################################################
+-LEAFPAD_VERSION = 0.8.14
++LEAFPAD_VERSION = 0.8.18
+ LEAFPAD_SOURCE = leafpad-$(LEAFPAD_VERSION).tar.gz
+ LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
+ LEAFPAD_AUTORECONF = NO
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
