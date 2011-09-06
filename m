@@ -1,7 +1,7 @@
 From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 06 Sep 2011 11:42:22 +0200
-Subject: [Buildroot] [PATCH] lzo: bump to 2.06
-Message-ID: <4E65EAFE.4090708@visionsystems.de>
+Date: Tue, 06 Sep 2011 11:46:21 +0200
+Subject: [Buildroot] [PATCH] lzop : bump to 1.03
+Message-ID: <4E65EBED.3090009@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,19 +10,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/lzo/lzo.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lzop/lzop.mk |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Index: b/package/lzo/lzo.mk
+Index: b/package/lzop/lzop.mk
 ===================================================================
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -3,7 +3,7 @@
- # lzo
+--- a/package/lzop/lzop.mk
++++ b/package/lzop/lzop.mk
+@@ -3,10 +3,10 @@
+ # lzop
  #
  #############################################################
--LZO_VERSION = 2.05
-+LZO_VERSION = 2.06
- LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
- LZO_INSTALL_STAGING = YES
+-LZOP_VERSION:=1.02rc1
+-LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
+-LZOP_SITE:=http://www.lzop.org/download/
+-LZOP_CONF_OPT:=--program-prefix=""
+-LZOP_DEPENDENCIES:=lzo
++LZOP_VERSION = 1.03
++LZOP_SOURCE = lzop-$(LZOP_VERSION).tar.gz
++LZOP_SITE = http://www.lzop.org/download/
++LZOP_CONF_OPT = --program-prefix=""
++LZOP_DEPENDENCIES = lzo
  
+ $(eval $(call AUTOTARGETS,package,lzop))
