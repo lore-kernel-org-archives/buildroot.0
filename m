@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2011 23:22:28 +0200
-Subject: [Buildroot] [PATCH] new package: ngrep
-In-Reply-To: <20110906190842.GA29907@berrier.lan>
-References: <20110906190842.GA29907@berrier.lan>
-Message-ID: <20110906232228.09821bf0@skate>
+Date: Tue, 6 Sep 2011 23:24:16 +0200
+Subject: [Buildroot] [PATCH] intltool: use built host libexpat during
+ configure
+In-Reply-To: <20110906191020.GA29969@berrier.lan>
+References: <20110906191020.GA29969@berrier.lan>
+Message-ID: <20110906232416.077d2091@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +13,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this contribution!
-
-Le Tue, 6 Sep 2011 13:08:46 -0600,
+Le Tue, 6 Sep 2011 13:10:23 -0600,
 Wade Berrier <wberrier@gmail.com> a ?crit :
 
-> Here's a nice lightweight alternative to tcpdump (not as feature full, but smaller)
-> 
-> Wade
+>  HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
+>  HOST_INTLTOOL_CONF_OPT = \
+> -  PERLLIB=$(HOST_DIR)/usr/lib/perl
+> +  PERLLIB=$(HOST_DIR)/usr/lib/perl \
+> +  LD_LIBRARY_PATH=$(HOST_DIR)/usr/lib
 
-This part of your message will be kept in the commit log. So it
-shouldn't be formulated this way. Just keep the subject "[PATCH] new
-package: ngrep" and just be your Signed-off-by line below.
+Could you give some more details about the problem you're having?
 
-> diff --git a/package/ngrep/ngrep-1.45-make-objs.patch b/package/ngrep/ngrep-1.45-make-objs.patch
-> new file mode 100644
-> index 0000000..cf316d5
-> --- /dev/null
-> +++ b/package/ngrep/ngrep-1.45-make-objs.patch
-> @@ -0,0 +1,19 @@
+There may well be a problem, but I don't really like the
+LD_LIBRARY_PATH solution, because the solution we have chosen to allow
+binaries installed in $(HOST_DIR) to find their libraries is to use the
+rpath mechanism, not to use LD_LIBRARY_PATH. I'd prefer to stick to
+this mechanism.
 
-Each patch must start with a description of what it does, and a
-Signed-off-by line.
+So we just need to figure out which host binary has been compiled
+without the correct rpath.
 
-> +++ b/package/ngrep/ngrep-1.45-pcre-header.patch
-> @@ -0,0 +1,12 @@
-
-Same here.
-
-> +++ b/package/ngrep/ngrep.mk
-
-This must come from a very old version of Buildroot. Can you check the
-current Buildroot documentation?
-
-See comments below.
-
-> @@ -0,0 +1,29 @@
-> +#############################################################
-> +#
-> +# ngrep
-> +#
-> +#############################################################
-> +
-> +NGREP_VERSION:=1.45
-
-Please use '=' instead of ':='.
-
-> +NGREP_SOURCE:=ngrep-$(NGREP_VERSION).tar.bz2
-> +NGREP_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ngrep/ngrep/$(NGREP_VERSION)
-> +# no install-strip/install-exec
-> +NGREP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" install
-
-Not needed anymore, the 'install' target is always used.
-
-> +NGREP_DEPENDENCIES:=libpcap pcre
-> +
-> +$(eval $(call AUTOTARGETS,package,ngrep))
-> +
-> +$(NGREP_HOOK_POST_INSTALL): $(NGREP_TARGET_INSTALL_TARGET)
-> +	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/ngrep
-> +	touch $@
-
-Please remove this post install hook:
- 1) it is no longer the right way of writing post install hooks
- 2) stripping in each package is no longer needed, it is done globally
-    by the Buildroot infrastructure
-
-Regards,
+Thanks!
 
 Thomas
 -- 
