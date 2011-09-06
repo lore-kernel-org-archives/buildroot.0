@@ -1,66 +1,50 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 6 Sep 2011 15:19:57 +0200
-Subject: [Buildroot] [git commit] libsoup: add option to enable HTTPS (SSL)
-	support
-Message-ID: <20110906152206.40BD08D421@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Sep 2011 17:24:25 +0200
+Subject: [Buildroot] external buildroot toolchain: LD_LIBRARY_PATH needed
+In-Reply-To: <CAAXf6LUndmNrEU108f1_7h7fC3bsrAAu1Uvf5aOjH+=BJsZCZg@mail.gmail.com>
+References: <CAAXf6LV8wL4wAp1eETK7mtwqCFCgoJWFBScnhGzhERZMs2R+Ww@mail.gmail.com>
+ <j331vf$6s0$1@dough.gmane.org>
+ <CAAXf6LUndmNrEU108f1_7h7fC3bsrAAu1Uvf5aOjH+=BJsZCZg@mail.gmail.com>
+Message-ID: <20110906172425.0fc541eb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bd387486ad871164e4fbe86eb6570775086acfbe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Thu, 25 Aug 2011 11:07:31 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-By selecting BR2_PACKAGE_LIBSOUP_SSL the gnutls package is selected
-and libsoup will be compiled with SSL support.
+> However, the missing library does not seem part of sysroot. It is
+> located at output/host/opt/ext-toolchain/lib
+> where libgmp, libmpfr, libexpat etc. reside.
 
-[Peter: pass --with-libgcrypt-prefix so configure finds it]
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libsoup/Config.in  |    7 +++++++
- package/libsoup/libsoup.mk |    8 +++++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+Those libraries are libraries for the host, and they are used by gcc
+and binutils.
 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 2264b63..347687c 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -12,5 +12,12 @@ config BR2_PACKAGE_LIBSOUP
- 
- 	  http://live.gnome.org/LibSoup
- 
-+config BR2_PACKAGE_LIBSOUP_SSL
-+	bool "https support"
-+	select BR2_PACKAGE_GNUTLS
-+	depends on BR2_PACKAGE_LIBSOUP
-+	help
-+	  Enable HTTPS (SSL) support.
-+
- comment "libsoup requires a toolchain with WCHAR support"
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 11bfadd..79a8d55 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -19,9 +19,15 @@ endif
- LIBSOUP_CONF_OPT = \
- 	--disable-explicit-deps \
- 	--disable-glibtest	\
--	--disable-ssl		\
- 	--without-gnome
- 
- LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config host-libglib2 libglib2 libxml2
- 
-+ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
-+LIBSOUP_DEPENDENCIES += gnutls
-+LIBSOUP_CONF_OPT += --enable-ssl --with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+else
-+LIBSOUP_CONF_OPT += --disable-ssl
-+endif
-+
- $(eval $(call AUTOTARGETS,package,libsoup))
+> Maybe this wrapper should be adapted as to include the proper
+> LD_LIBRARY_PATH?
+
+No, I don't think it's the right solution. I think there are two
+solutions:
+
+ * Link the toolchain binaries statically against those libraries so
+   that the toolchain binaries only rely on the C libraries but not on
+   gmp, mpfr, etc.
+
+ * Link the toolchain binaries with a proper rpath.
+
+> How does crosstool-ng handle this fixed-path problem?
+
+From what I can see, using static linking against those libraries.
+
+Regards,
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
