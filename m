@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Sep 2011 18:03:05 +0200
-Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
-In-Reply-To: <4E64F592.8080209@free-electrons.com>
-References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
- <20110905085210.705e63a0@skate> <4E64F592.8080209@free-electrons.com>
-Message-ID: <201109061803.05970.arnout@mind.be>
+Date: Tue, 6 Sep 2011 18:16:29 +0200
+Subject: [Buildroot] [PATCH 1/2] grub: build for host
+In-Reply-To: <20110905085731.60859d50@skate>
+References: <20110821165154.25078.86917.stgit@darius-desktop>
+ <20110905085731.60859d50@skate>
+Message-ID: <201109061816.30410.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Monday 05 September 2011 18:15:14, Maxime Ripard wrote:
-> Hi,
+On Monday 05 September 2011 08:57:31, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On 05/09/2011 08:52, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > Le Sun, 4 Sep 2011 23:36:43 +0200,
-> > 
-> > Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> >>  Good idea!  This will also make it possible to create setuid
-> >> executables.
-> > 
-> > Yes, exactly. However, I don't really like the name <pkg>_DEVICE_TABLE
-> > because, it might be for other purposes as well (setting setuid bit,
-> > giving specific owner/group or permissions, etc.). Does anyone has an
-> > idea for a better name?
+> Le Sun, 21 Aug 2011 19:51:54 +0300,
 > 
-> I agree, I don't like it neither, but I have no idea on what could be
-> better...
+> Darius Augulis <augulis.darius@gmail.com> a ?crit :
+> > +GRUB_DEPENDENCIES = host-grub
 > 
-> Files, maybe, but I find it way too generic.
+> This raises a question similar to the one I asked for syslinux, but in
+> the opposite side. I don't think host-grub is a build dependency of the
+> target grub (i.e the target grub *can* be compiled without host-grub
+> being compiled), even though host-grub might be useful when grub is
+> enabled.
 
- How about _FILE_MOD_TABLE (cfr. chmod)?
+ In the case of grub, the dependency is in fact the inverse: you need staging-
+grub to have properly cross-compiled stageXXX files.  (Well, actually, that 
+didn't work for me at all so I just installed grub-legacy on my build machine; 
+but I hope that is fixed with Darius' patches.)
 
- BTW, BR2_ROOTFS_DEVICE_TABLE the device_table.txt files should change in the 
-same way.
+> 
+> What should we do in this case? At least we should have a consistent
+> decision between syslinux (patches by Arnout) and grub (patches by
+> Darius).
+
+ Actually it's a bit similar to host-gdb: it's not used by buildroot itself, 
+it's supposed to be used by the developer.  So it probably should be a 
+configuration option to build host-bootloader-installers.
+
+> I think we should create in the documentation a "Package specific
+> comments" part, in which we could detail some subtleties of various
+> packages.
+
+ Yep.  After the asciidoc conversion :-)
 
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
