@@ -1,50 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2011 17:24:25 +0200
-Subject: [Buildroot] external buildroot toolchain: LD_LIBRARY_PATH needed
-In-Reply-To: <CAAXf6LUndmNrEU108f1_7h7fC3bsrAAu1Uvf5aOjH+=BJsZCZg@mail.gmail.com>
-References: <CAAXf6LV8wL4wAp1eETK7mtwqCFCgoJWFBScnhGzhERZMs2R+Ww@mail.gmail.com>
- <j331vf$6s0$1@dough.gmane.org>
- <CAAXf6LUndmNrEU108f1_7h7fC3bsrAAu1Uvf5aOjH+=BJsZCZg@mail.gmail.com>
-Message-ID: <20110906172425.0fc541eb@skate>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
+Date: Tue, 6 Sep 2011 20:48:18 +0200
+Subject: [Buildroot] [PATCH] libpng: bump to 1.5.4
+In-Reply-To: <87zkii7yfg.fsf@macbook.be.48ers.dk>
+References: <20110811153707.2d035b09@gmail.com>
+ <87zkii7yfg.fsf@macbook.be.48ers.dk>
+Message-ID: <20110906204818.64b8b537@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Tue, 06 Sep 2011 12:33:23 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Le Thu, 25 Aug 2011 11:07:31 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+> >>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com>
+> >>>>> writes:
+> 
+>  Frederic> Security update.
+>  Frederic> Signed-off-by: Frederic Bassaler
+>  Frederic> <frederic.bassaler@gmail.com> ---
+>  Frederic>  package/libpng/libpng.mk |    4 ++--
+>  Frederic>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> Thanks, unfortunately there's a few issues with the patch, so I cannot
+> apply it:
+> 
+> - Your mailer has word/line wrapped the patch, please consider using
+> git send-email in the future
+> 
+> - What packages have you tried to build? A quick test shows that
+> atleast directfb and libsdl-image aren't compatible with this libpng
+> version
+> 
 
-> However, the missing library does not seem part of sysroot. It is
-> located at output/host/opt/ext-toolchain/lib
-> where libgmp, libmpfr, libexpat etc. reside.
+Hi Peter
 
-Those libraries are libraries for the host, and they are used by gcc
-and binutils.
+I think I was trying to build imlib2
 
-> Maybe this wrapper should be adapted as to include the proper
-> LD_LIBRARY_PATH?
-
-No, I don't think it's the right solution. I think there are two
-solutions:
-
- * Link the toolchain binaries statically against those libraries so
-   that the toolchain binaries only rely on the C libraries but not on
-   gmp, mpfr, etc.
-
- * Link the toolchain binaries with a proper rpath.
-
-> How does crosstool-ng handle this fixed-path problem?
-
-From what I can see, using static linking against those libraries.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+http://lists.busybox.net/pipermail/buildroot/2011-August/045025.html
