@@ -1,23 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Sep 2011 21:57:33 +0200
-Subject: [Buildroot] [PATCH] busybox: add 1.19.x branch and cleanup
-In-Reply-To: <1315316213-3488-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 6 Sep 2011 10:36:53 -0300")
-References: <1315316213-3488-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ipp5l9zm.fsf@macbook.be.48ers.dk>
+Date: Tue, 06 Sep 2011 21:59:42 +0200
+Subject: [Buildroot] [PATCH] libpng: bump to 1.5.4
+In-Reply-To: <20110906204818.64b8b537@gmail.com> (Frederic Bassaler's message
+ of "Tue, 6 Sep 2011 20:48:18 +0200")
+References: <20110811153707.2d035b09@gmail.com>
+ <87zkii7yfg.fsf@macbook.be.48ers.dk>
+ <20110906204818.64b8b537@gmail.com>
+Message-ID: <87ehztl9w1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com> writes:
 
- Gustavo> Add busybox version 1.19.2 for the 1.19.x branch.
- Gustavo> Remove deprecated 1.15.x branch.
- Gustavo> Mark 1.16.x and 1.17.x branches deprecated as suggested by Thomas.
+ >> Thanks, unfortunately there's a few issues with the patch, so I cannot
+ >> apply it:
+ >> 
+ >> - Your mailer has word/line wrapped the patch, please consider using
+ >> git send-email in the future
+ >> 
+ >> - What packages have you tried to build? A quick test shows that
+ >> atleast directfb and libsdl-image aren't compatible with this libpng
+ >> version
 
-Committed, thanks.
+ Frederic> Hi Peter
+
+ Frederic> I think I was trying to build imlib2
+
+ Frederic> http://lists.busybox.net/pipermail/buildroot/2011-August/045025.html
+
+Ok, but libpng is used by lots of packages, and (unfortunately) stuff
+relatively often breaks with new libpng versions, so it needs quite some
+testing before we can upgrade.
 
 -- 
 Bye, Peter Korsgaard
