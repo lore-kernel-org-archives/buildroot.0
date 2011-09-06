@@ -1,60 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Sep 2011 18:16:29 +0200
-Subject: [Buildroot] [PATCH 1/2] grub: build for host
-In-Reply-To: <20110905085731.60859d50@skate>
-References: <20110821165154.25078.86917.stgit@darius-desktop>
- <20110905085731.60859d50@skate>
-Message-ID: <201109061816.30410.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  6 Sep 2011 23:16:08 +0200
+Subject: [Buildroot] [PATCH 1/2] cpio: fix boot with dynamic /dev
+Message-ID: <1315343769-530-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-On Monday 05 September 2011 08:57:31, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Le Sun, 21 Aug 2011 19:51:54 +0300,
-> 
-> Darius Augulis <augulis.darius@gmail.com> a ?crit :
-> > +GRUB_DEPENDENCIES = host-grub
-> 
-> This raises a question similar to the one I asked for syslinux, but in
-> the opposite side. I don't think host-grub is a build dependency of the
-> target grub (i.e the target grub *can* be compiled without host-grub
-> being compiled), even though host-grub might be useful when grub is
-> enabled.
+Devtmpfs doesn't get automounted by the kernel when an initramfs is used.
+Since cpio archives are used almost exclusively as an initramfs, the same
+fix should be applied to it as for the initramfs.
 
- In the case of grub, the dependency is in fact the inverse: you need staging-
-grub to have properly cross-compiled stageXXX files.  (Well, actually, that 
-didn't work for me at all so I just installed grub-legacy on my build machine; 
-but I hope that is fixed with Darius' patches.)
+Cfr. commit 424888e47431db738f5f9b3c6392435bfce7a842 and
+10a130f91e5b947e2d2558443ff09b1686eac273.
 
-> 
-> What should we do in this case? At least we should have a consistent
-> decision between syslinux (patches by Arnout) and grub (patches by
-> Darius).
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ fs/cpio/cpio.mk |   24 +++++++++++++++++++-----
+ fs/cpio/init    |    7 +++++++
+ 2 files changed, 26 insertions(+), 5 deletions(-)
+ create mode 100755 fs/cpio/init
 
- Actually it's a bit similar to host-gdb: it's not used by buildroot itself, 
-it's supposed to be used by the developer.  So it probably should be a 
-configuration option to build host-bootloader-installers.
-
-> I think we should create in the documentation a "Package specific
-> comments" part, in which we could detail some subtleties of various
-> packages.
-
- Yep.  After the asciidoc conversion :-)
-
-
- Regards,
- Arnout
-
-
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index ab7d546..aa20b41 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -4,15 +4,29 @@
+ #
+ #############################################################
+ 
+-define ROOTFS_CPIO_INIT_SYMLINK
+-	rm -f $(TARGET_DIR)/init
+-	ln -s sbin/init $(TARGET_DIR)/init
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
++
++define ROOTFS_CPIO_ADD_INIT
++        if [ ! -e $(TARGET_DIR)/init ]; then \
++                ln -sf sbin/init $(TARGET_DIR)/init; \
++        fi
++endef
++
++else
++# devtmpfs does not get automounted when initramfs is used.
++# Add a pre-init script to mount it before running init
++define ROOTFS_CPIO_ADD_INIT
++        if [ ! -e $(TARGET_DIR)/init ]; then \
++                $(INSTALL) -m 0755 fs/cpio/init $(TARGET_DIR)/init; \
++        fi
+ endef
+ 
+-ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_INIT_SYMLINK
++endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
++
++ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+ 
+ define ROOTFS_CPIO_CMD
+ 	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $$@
+ endef
+ 
+-$(eval $(call ROOTFS_TARGET,cpio))
+\ No newline at end of file
++$(eval $(call ROOTFS_TARGET,cpio))
+diff --git a/fs/cpio/init b/fs/cpio/init
+new file mode 100755
+index 0000000..a275482
+--- /dev/null
++++ b/fs/cpio/init
+@@ -0,0 +1,7 @@
++#!/bin/sh
++# devtmpfs does not get automounted for initramfs
++/bin/mount -t devtmpfs devtmpfs /dev
++exec 0</dev/console
++exec 1>/dev/console
++exec 2>/dev/console
++exec /sbin/init $*
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+1.7.5.4
