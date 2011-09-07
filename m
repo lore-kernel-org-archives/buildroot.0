@@ -1,43 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Sep 2011 23:24:16 +0200
-Subject: [Buildroot] [PATCH] intltool: use built host libexpat during
- configure
-In-Reply-To: <20110906191020.GA29969@berrier.lan>
-References: <20110906191020.GA29969@berrier.lan>
-Message-ID: <20110906232416.077d2091@skate>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 07 Sep 2011 10:51:47 +0200
+Subject: [Buildroot] [PATCH] openssl: bump to 1.0.0e
+Message-ID: <4E6730A3.6010504@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/openssl/openssl.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Le Tue, 6 Sep 2011 13:10:23 -0600,
-Wade Berrier <wberrier@gmail.com> a ?crit :
-
->  HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
->  HOST_INTLTOOL_CONF_OPT = \
-> -  PERLLIB=$(HOST_DIR)/usr/lib/perl
-> +  PERLLIB=$(HOST_DIR)/usr/lib/perl \
-> +  LD_LIBRARY_PATH=$(HOST_DIR)/usr/lib
-
-Could you give some more details about the problem you're having?
-
-There may well be a problem, but I don't really like the
-LD_LIBRARY_PATH solution, because the solution we have chosen to allow
-binaries installed in $(HOST_DIR) to find their libraries is to use the
-rpath mechanism, not to use LD_LIBRARY_PATH. I'd prefer to stick to
-this mechanism.
-
-So we just need to figure out which host binary has been compiled
-without the correct rpath.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Index: b/package/openssl/openssl.mk
+===================================================================
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-OPENSSL_VERSION = 1.0.0d
++OPENSSL_VERSION = 1.0.0e
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
