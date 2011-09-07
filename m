@@ -1,62 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 7 Sep 2011 12:37:06 +0200
-Subject: [Buildroot] external buildroot toolchain: LD_LIBRARY_PATH needed
-In-Reply-To: <20110906172425.0fc541eb@skate>
-References: <CAAXf6LV8wL4wAp1eETK7mtwqCFCgoJWFBScnhGzhERZMs2R+Ww@mail.gmail.com>
- <j331vf$6s0$1@dough.gmane.org>
- <CAAXf6LUndmNrEU108f1_7h7fC3bsrAAu1Uvf5aOjH+=BJsZCZg@mail.gmail.com>
- <20110906172425.0fc541eb@skate>
-Message-ID: <CAAXf6LUSOmgQfC3aRgQ17922D=mDBNRKF7t0UrnqGoCy8yThtw@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 07 Sep 2011 14:25:02 +0200
+Subject: [Buildroot] [PATCH v2] openssl: bump to 1.0.0e
+Message-ID: <4E67629E.10809@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Changes between 1.0.0d and 1.0.0e [6 Sep 2011]
 
-On Tue, Sep 6, 2011 at 5:24 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Le Thu, 25 Aug 2011 11:07:31 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> However, the missing library does not seem part of sysroot. It is
->> located at output/host/opt/ext-toolchain/lib
->> where libgmp, libmpfr, libexpat etc. reside.
->
-> Those libraries are libraries for the host, and they are used by gcc
-> and binutils.
->
->> Maybe this wrapper should be adapted as to include the proper
->> LD_LIBRARY_PATH?
->
-> No, I don't think it's the right solution. I think there are two
-> solutions:
->
-> ?* Link the toolchain binaries statically against those libraries so
-> ? that the toolchain binaries only rely on the C libraries but not on
-> ? gmp, mpfr, etc.
->
-> ?* Link the toolchain binaries with a proper rpath.
+  *) Fix bug where CRLs with nextUpdate in the past are sometimes accepted
+     by initialising X509_STORE_CTX properly. (CVE-2011-3207)
+     [Kaspar Brand <ossl@velox.ch>]
 
-When using the rpath solution, we should of course make sure that
-these paths are relative to the executable (as it may move). According
-to the following link, $ORIGIN can be used for that purpose:
-http://groups.google.com/group/gnu.gcc.help/browse_thread/thread/1b713af28905247b?pli=1
+  *) Fix SSL memory handling for (EC)DH ciphersuites, in particular
+     for multi-threaded use of ECDH. (CVE-2011-3210)
+     [Adam Langley (Google)]
 
-I couldn't say which one is better.
+  *) Fix x509_name_ex_d2i memory leak on bad inputs.
+     [Bodo Moeller]
 
-How will we handle this? I'm willing to test any possible solution,
-but to be honest I have little experience with creating toolchains so
-I doubt that I can provide patches for this.
+  *) Remove hard coded ecdsaWithSHA1 signature tests in ssl code and check
+     signature public key algorithm by using OID xref utilities instead.
+     Before this you could only use some ECC ciphersuites with SHA1 only.
+     [Steve Henson]
 
->
->> How does crosstool-ng handle this fixed-path problem?
->
-> From what I can see, using static linking against those libraries.
->
+  *) Add protection against ECDSA timing attacks as mentioned in the paper
+     by Billy Bob Brumley and Nicola Tuveri, see:
 
-Thanks,
-Thomas
+	http://eprint.iacr.org/2011/232.pdf
+
+     [Billy Bob Brumley and Nicola Tuveri]
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+v2: added changes between 1.0.0d and 1.0.0e
+
+ package/openssl/openssl.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: b/package/openssl/openssl.mk
+===================================================================
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-OPENSSL_VERSION = 1.0.0d
++OPENSSL_VERSION = 1.0.0e
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
