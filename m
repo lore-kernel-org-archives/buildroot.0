@@ -1,27 +1,28 @@
-From: Frederic Bassaler <frederic.bassaler@gmail.com>
-Date: Wed, 7 Sep 2011 21:44:39 +0200
-Subject: [Buildroot] [PATCH] freetype: bump to 2.4.6
-In-Reply-To: <87r53sjgdy.fsf@macbook.be.48ers.dk>
-References: <20110811151103.20c552cb@gmail.com>
- <87r53sjgdy.fsf@macbook.be.48ers.dk>
-Message-ID: <20110907214439.1a099cb4@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Sep 2011 21:48:27 +0200
+Subject: [Buildroot] [PATCH 1/3] new package: gssdp
+In-Reply-To: <1312965667-15157-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Wed, 10 Aug 2011 10:41:05 +0200")
+References: <1312965667-15157-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87mxegjfqs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 07 Sep 2011 21:34:33 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-> >>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com>
-> >>>>> writes:
-> 
->  Frederic> Security update.
->  Frederic> Signed-off-by: Frederic Bassaler
->  Frederic> <frederic.bassaler@gmail.com>
-> 
-> Committed (manually as your mailer corrupted the patch), thanks.
-> 
+ Sven> GSSDP implements resource discovery and announcement over SSDP.
 
-Thanks. Sorry, I'll use git send mail next time!
+Thanks, but it doesn't build on uClibc with default configs:
+
+gssdp-client.c:45:21: error: ifaddrs.h: No such file or directory
+
+ifaddrs.h is only provided if CONFIG_SUPPORT_AI_ADDRCONFIG is enabled,
+which it isn't by default. We'll probably need to add something like
+BR2_USE_WCHAR, but I'll do a test build to see what the performance
+impact is.
+
+-- 
+Bye, Peter Korsgaard
