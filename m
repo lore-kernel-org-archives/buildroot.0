@@ -1,24 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Sep 2011 21:32:36 +0200
-Subject: [Buildroot] [PATCH] package/DBus: bump version to 1.4.14
-In-Reply-To: <1313489298-25107-1-git-send-email-zonque@gmail.com> (Daniel
- Mack's message of "Tue, 16 Aug 2011 12:08:18 +0200")
-References: <1313489298-25107-1-git-send-email-zonque@gmail.com>
-Message-ID: <87vct4jgh7.fsf@macbook.be.48ers.dk>
+Date: Wed, 07 Sep 2011 21:34:33 +0200
+Subject: [Buildroot] [PATCH] freetype: bump to 2.4.6
+In-Reply-To: <20110811151103.20c552cb@gmail.com> (Frederic Bassaler's message
+ of "Thu, 11 Aug 2011 15:11:03 +0200")
+References: <20110811151103.20c552cb@gmail.com>
+Message-ID: <87r53sjgdy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
+>>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com> writes:
 
- Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
- Daniel> ---
- Daniel>  package/dbus/dbus.mk |    2 +-
- Daniel>  1 files changed, 1 insertions(+), 1 deletions(-)
+ Frederic> Security update.
+ Frederic> Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 
-Committed, thanks.
+Committed (manually as your mailer corrupted the patch), thanks.
 
 -- 
 Bye, Peter Korsgaard
