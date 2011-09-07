@@ -1,33 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Sep 2011 16:11:21 +0200
-Subject: [Buildroot] [PATCH] intltool: use built host libexpat during
- configure
-In-Reply-To: <j47s9g$n6q$1@dough.gmane.org>
-References: <20110906191020.GA29969@berrier.lan>
- <20110906232416.077d2091@skate> <j47s9g$n6q$1@dough.gmane.org>
-Message-ID: <20110907161121.41b2a43b@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Sep 2011 21:32:36 +0200
+Subject: [Buildroot] [PATCH] package/DBus: bump version to 1.4.14
+In-Reply-To: <1313489298-25107-1-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Tue, 16 Aug 2011 12:08:18 +0200")
+References: <1313489298-25107-1-git-send-email-zonque@gmail.com>
+Message-ID: <87vct4jgh7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 07 Sep 2011 07:41:03 -0600,
-Wade Berrier <wberrier@gmail.com> a ?crit :
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-> So, am I correct when guessing the culprit is Expat.so? (missing rpath
-> to libexpat.so.1)
+ Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
+ Daniel> ---
+ Daniel>  package/dbus/dbus.mk |    2 +-
+ Daniel>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-Well, here Expat.so has a correct rpath:
+Committed, thanks.
 
-$ readelf -d output/host/usr/lib/perl/auto/XML/Parser/Expat/Expat.so | grep RPATH
- 0x000000000000000f (RPATH)              Library rpath: [/home/thomas/projets/buildroot/output/host/usr/lib]
-
-Can you check the output of the same command for Expat.so ?
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
