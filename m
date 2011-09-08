@@ -1,44 +1,77 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 08 Sep 2011 10:16:50 +0200
-Subject: [Buildroot] [git commit] busybox: add 1.19.x branch and cleanup
-In-Reply-To: <20110906195720.696858D447@busybox.osuosl.org>
-References: <20110906195720.696858D447@busybox.osuosl.org>
-Message-ID: <1315469814.4333.2.camel@sven>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Thu, 08 Sep 2011 10:18:14 +0200
+Subject: [Buildroot] [PATCH 1/2] Add support for package-declared devices
+In-Reply-To: <201109071822.51608.arnout@mind.be>
+References: <cover.1314965303.git.maxime.ripard@free-electrons.com>
+ <201109061803.05970.arnout@mind.be> <4E673792.5040001@free-electrons.com>
+ <201109071822.51608.arnout@mind.be>
+Message-ID: <4E687A46.1000705@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2011-09-06 at 21:53 +0200, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=3f346b7b858447ebee57842a409eb6376acd93ff
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/09/2011 18:22, Arnout Vandecappelle wrote:
 > 
-> Add busybox version 1.19.2 for the 1.19.x branch.
-> Remove deprecated 1.15.x branch.
-> Mark 1.16.x and 1.17.x branches deprecated as suggested by Thomas.
+> On Wednesday 07 September 2011 11:21:22, Maxime Ripard wrote:
+>> On 06/09/2011 18:03, Arnout Vandecappelle wrote:
+>>> On Monday 05 September 2011 18:15:14, Maxime Ripard wrote:
+>>>> On 05/09/2011 08:52, Thomas Petazzoni wrote:
+>>>>> Yes, exactly. However, I don't really like the name <pkg>_DEVICE_TABLE
+>>>>> because, it might be for other purposes as well (setting setuid bit,
+>>>>> giving specific owner/group or permissions, etc.). Does anyone has an
+>>>>> idea for a better name?
+>>>>
+>>>> I agree, I don't like it neither, but I have no idea on what could be
+>>>> better...
+>>>>
+>>>> Files, maybe, but I find it way too generic.
+>>>
+>>>
+>>>  How about _FILE_MOD_TABLE (cfr. chmod)?
+>>
+>> Hmm, I'm not quite sure, it is more than just mod. Maybe reuse the
+>> "skeleton" term already in use in buildroot.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+>  AFAICS it does three things:
+> - make device nodes (mknod)
+> - change permissions (chmod)
+> - set ownership (chown)
 > 
-> Patch is too large, so refusing to show it
+>  So skeleton is not really the right term, as it only refers to the mknod 
+> function again.  (Although not-yet-existing files and directories are created, 
+> that's not usually the main purpose for files and directories.)
 
-I've updated buildroot from git today and changed the config to use
-busybox 1.19.2. Now compilation fails with the following error:
+In device_table.txt, it also creates the whole basic filesystem
+hierarchy, with folders (such as /dev) and files (such as /etc/shadow).
+So you will have to add mkdir and touch to your list. That is why is was
+going for skeleton,
 
-In file included from miscutils/ubi_tools.c:63:
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:329: error: conflicting types for ?__packed?
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:313: error: previous declaration of ?__packed? was here
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:371: error: conflicting types for ?__packed?
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:313: error: previous declaration of ?__packed? was here
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:386: error: conflicting types for ?__packed?
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:313: error: previous declaration of ?__packed? was here
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:398: error: conflicting types for ?__packed?
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:313: error: previous declaration of ?__packed? was here
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:412: error: conflicting types for ?__packed?
-/home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:313: error: previous declaration of ?__packed? was here
-make[2]: *** [miscutils/ubi_tools.o] Error 1
-make[1]: *** [miscutils] Error 2
+>  FILE is also not a good idea since it also applies to directories and device 
+> nodes which are not really files.
+
+Heresy! :)
+More seriously, I was speaking about files with the Unix meaning in
+mind, but it is true it can cause confusion.
+
+>  A complete name would be _NOD_MOD_OWN_TABLE, but that's too long and too 
+> cryptic :-)  Plus, we might want to add things like setting the utimes etc. in 
+> the future.
+
+I agree.
+
+>  The functionality is in fact comparable to install - copy files and set 
+> attributes (except for the copy part).  So we could use _ATTRIBUTE_TABLE. 
+> Unfortunately, 'attributes' could also refer to the e2fs file attributes, 
+> which are a different thing entirely (cfr. man chattr).  Or 
+> _FILE_INSTALL_TABLE.
+
+This one seems good to me. Peter ?
 
 
-Sven
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
