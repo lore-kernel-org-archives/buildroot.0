@@ -1,27 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 08 Sep 2011 17:43:52 +0200
-Subject: [Buildroot] [git commit] busybox: add 1.19.x branch and cleanup
-In-Reply-To: <1315469814.4333.2.camel@sven> (Sven Neumann's message of "Thu,
- 08 Sep 2011 10:16:50 +0200")
-References: <20110906195720.696858D447@busybox.osuosl.org>
- <1315469814.4333.2.camel@sven>
-Message-ID: <878vpzjayv.fsf@macbook.be.48ers.dk>
+From: Heiko Helmle <helman@gmx.net>
+Date: Thu, 8 Sep 2011 19:56:37 +0200
+Subject: [Buildroot] Keyboard trouble with TinyX
+Message-ID: <20110908195637.2f48d694@verflixtsl6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+Hello,
 
- Sven> I've updated buildroot from git today and changed the config to use
- Sven> busybox 1.19.2. Now compilation fails with the following error:
+I'm trying to build a X-enabled buildroot system. I built tinyX on x86.
+It starts fine and querys a login via XDMCP - but the keyboard isn't
+working.
 
- Sven> In file included from miscutils/ubi_tools.c:63:
- Sven> /home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:329: error: conflicting types for ?__packed?
+When using this line: 
+Xfbdev -query xhost :1 -mouse mouse -keybd keyboard
 
-That's a problem with kernel-headers 3.0 rather than a busybox 1.19
-issue. I'm looking into fixing it with upstream.
+mouse works, but the keyboard doesn't respond at all (vt switch isn't
+working either - I have to switch back via 'chvt' run from a background
+script).
 
--- 
-Bye, Peter Korsgaard
+The console shows this:
+"driver Linux console keyboard wanted to post scancode 30 outside of
+[0, 0]!"
+
+I'm not really sure if this is a tinyX bug or a configuration error.
+Documentation on tinyX/kdrive is hard to find. Does anyone on this list
+have a little experience with this?
+
+Best Regards
+	Heiko
