@@ -1,24 +1,29 @@
-From: Harshavardhan <harshavardhan.bokil@gmail.com>
-Date: Fri, 9 Sep 2011 09:51:43 -0700
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Fri, 09 Sep 2011 19:18:52 +0200
 Subject: [Buildroot] gstreamer and plugins build error - gettext
-Message-ID: <CADt=iJ3B=Hsq2co3VG2eZiL2MKLa-bdHjOyc9TqURvZLCC4G8A@mail.gmail.com>
+In-Reply-To: <CADt=iJ3B=Hsq2co3VG2eZiL2MKLa-bdHjOyc9TqURvZLCC4G8A@mail.gmail.com>
+References: <CADt=iJ3B=Hsq2co3VG2eZiL2MKLa-bdHjOyc9TqURvZLCC4G8A@mail.gmail.com>
+Message-ID: <1315588733.21292.1.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Hi,
 
-I get following error when I try to build gstreamer and its plugins:
+On Fri, 2011-09-09 at 09:51 -0700, Harshavardhan wrote:
 
-error: gettext infrastructure mismatch: using a Makefile.in.in from
-gettext version 0.17 but the autoconf macros are from gettext version
-@GETTEXT_MACRO_VERSION at .
+> I get following error when I try to build gstreamer and its plugins:
+> 
+> error: gettext infrastructure mismatch: using a Makefile.in.in from
+> gettext version 0.17 but the autoconf macros are from gettext version
+> @GETTEXT_MACRO_VERSION at .
+> 
+> I am on Ubuntu 10.04 64 bit and buildroot-2010.02.
 
-I am on Ubuntu 10.04 64 bit and buildroot-2010.02.
+Can you try a more recent buildroot release (2011.08) and report back?
 
-Any fixes??
 
-Thanks,
-Harsh B
+Regards,
+Sven
