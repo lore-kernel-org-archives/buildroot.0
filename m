@@ -1,66 +1,64 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri,  9 Sep 2011 16:05:06 +0200
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.11/pkg-device
-Message-ID: <cover.1315577080.git.maxime.ripard@free-electrons.com>
+Date: Fri,  9 Sep 2011 16:05:09 +0200
+Subject: [Buildroot] [PATCH 3/4] Add support for package-declared devices
+In-Reply-To: <cover.1315577080.git.maxime.ripard@free-electrons.com>
+References: <cover.1315577080.git.maxime.ripard@free-electrons.com>
+Message-ID: <27c148fb963fc098010e2c4bc37c3d8558313799.1315577080.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add a way for packages to declare files they need instead of relying
+only on device tables, which creates files no matter if the package is
+indeed enabled, as we can see for busybox.
 
-Here is a minor set of improvement on how the devices are
-declared in buildroot. For now, All the devices to be created
-were in two files generic to every compilation. This was fine
-for most usage, but was a bit problematic when packages needed
-to create files or use specific permissions.
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+ Makefile                    |    4 ++++
+ fs/common.mk                |    1 +
+ package/Makefile.package.in |    1 +
+ 3 files changed, 6 insertions(+), 0 deletions(-)
 
-This set of patches are addressing this issue by creating a
-new $(PKG)_FILES variable, containing the package specific
-devices, using the makedevs syntax.
-
-Changes since v1:
-  * Rename the device tables and all mentions of devices to a more exact term
-  * Cramfs was still passing a hardcoded device table. Remove it.
-
-The following changes since commit facd602dcad54df769ac759886f48f248b61e692:
-
-  Update for 2011.08 (2011-08-31 13:44:55 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~maxime/git/buildroot.git for-2011.11/pkg-device
-
-Maxime Ripard (4):
-      Cleanup cramfs package declaration.
-      Rename the device table in the code base
-      Add support for package-declared devices
-      Convert busybox to the device declaration method
-
- Makefile                                           |    4 +
- fs/common.mk                                       |   15 +-
- fs/cramfs/cramfs.mk                                |    6 +-
- package/Makefile.package.in                        |    1 +
- package/busybox/busybox.mk                         |    5 +
- package/cramfs/cramfs-01-devtable.patch            | 1269 --------------------
- ...amfs-02-endian.patch => cramfs-01-endian.patch} |   68 +-
- package/cramfs/cramfs-02-cygwin_IO.patch           |   15 +
- package/cramfs/cramfs-03-cygwin_IO.patch           |   13 -
- .../{device_table.txt => file_install_table.txt}   |    0
- target/generic/Config.in                           |    6 +-
- .../{device_table.txt => file_install_table.txt}   |    2 -
- ...evice_table_dev.txt => static_device_table.txt} |    0
- target/xtensa/defconfig                            |    2 +-
- 14 files changed, 74 insertions(+), 1332 deletions(-)
- delete mode 100644 package/cramfs/cramfs-01-devtable.patch
- rename package/cramfs/{cramfs-02-endian.patch => cramfs-01-endian.patch} (86%)
- create mode 100644 package/cramfs/cramfs-02-cygwin_IO.patch
- delete mode 100644 package/cramfs/cramfs-03-cygwin_IO.patch
- rename target/device/xtensa/{device_table.txt => file_install_table.txt} (100%)
- rename target/generic/{device_table.txt => file_install_table.txt} (90%)
- rename target/generic/{device_table_dev.txt => static_device_table.txt} (100%)
-
-Thanks,
+diff --git a/Makefile b/Makefile
+index 9ed46fc..b293d2f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -52,6 +52,10 @@ qstrip=$(strip $(subst ",,$(1)))
+ comma:=,
+ empty:=
+ space:=$(empty) $(empty)
++define newline
++
++
++endef
+ 
+ ifneq ("$(origin O)", "command line")
+ O:=output
+diff --git a/fs/common.mk b/fs/common.mk
+index 2ee318a..ae4f83c 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -50,6 +50,7 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_FILE_INSTALL_TABLES),)
+ 	cat $(ROOTFS_FILE_INSTALL_TABLES) > $(FULL_FILE_INSTALL_TABLE)
++	echo -e '$(subst $(newline),\n,$(PACKAGES_FILE_INSTALL_TABLE))' >> $(FULL_FILE_INSTALL_TABLE)
+ 	echo "$(HOST_DIR)/usr/bin/makedevs -d $(FULL_FILE_INSTALL_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ endif
+ 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 868bf28..26ae56c 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -541,6 +541,7 @@ endif
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+ 
+ TARGETS += $(1)
++PACKAGES_FILE_INSTALL_TABLE += $$($(2)_FILES)$$(newline)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
-Maxime Ripard
+1.7.4.1
