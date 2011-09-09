@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  9 Sep 2011 23:14:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 4165] New: lrzsz-fix-symlink-at-rebuild.patch
-Message-ID: <bug-4165-163@https.bugs.busybox.net/>
+Date: Fri,  9 Sep 2011 23:17:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 4171] New: makedevs-unused-but-set-variable.patch
+Message-ID: <bug-4171-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4165
+https://bugs.busybox.net/show_bug.cgi?id=4171
 
-           Summary: lrzsz-fix-symlink-at-rebuild.patch
+           Summary: makedevs-unused-but-set-variable.patch
            Product: buildroot
            Version: 2010.11
           Platform: PC
@@ -27,28 +27,26 @@ https://bugs.busybox.net/show_bug.cgi?id=4165
 
 Hello,
 
-  When rebuilding buildroot, `ln' fails to rebuild because symlinks are already
-in place. The following patch attempts to fix this issue:
+  makedevs package in buildroot fails to build when `-Wunused-but-set-variable'
+is set in the compiler. The following patch attempts to fix this issue:
 
-Index: buildroot-2010.11/package/lrzsz/lrzsz.mk
+
+Index: buildroot-2010.11/package/makedevs/makedevs.c
 ===================================================================
---- buildroot-2010.11.orig/package/lrzsz/lrzsz.mk       2011-09-09
-21:12:53.780126913 +0100
-+++ buildroot-2010.11/package/lrzsz/lrzsz.mk    2011-09-09 21:14:37.908127216
-+0100
-@@ -38,8 +38,8 @@
- define LRZSZ_INSTALL_TARGET_CMDS
-        cp $(@D)/src/lrz $(TARGET_DIR)/usr/bin/rz
-        cp $(@D)/src/lsz $(TARGET_DIR)/usr/bin/sz
--       ln -s rz $(TARGET_DIR)/usr/bin/lrz
--       ln -s sz $(TARGET_DIR)/usr/bin/lsz
-+       test -h $(TARGET_DIR)/usr/bin/lrz || ln -s rz $(TARGET_DIR)/usr/bin/lrz
-+       test -h $(TARGET_DIR)/usr/bin/lsz || ln -s sz $(TARGET_DIR)/usr/bin/lsz
- endef
+--- buildroot-2010.11.orig/package/makedevs/makedevs.c  2011-09-09
+22:33:32.948124813 +0100
++++ buildroot-2010.11/package/makedevs/makedevs.c       2011-09-09
+22:33:55.044124824 +0100
+@@ -531,5 +531,5 @@
+        if (system("/bin/sync"))
+                bb_error_msg("sync failed, continuing anyway");
 
- define LRZSZ_CLEAN_CMDS
+-       return 0;
++       return ret;
+ }
 
-Kind regards,
+
+Best regards,
   -- Hector Oron
 
 -- 
