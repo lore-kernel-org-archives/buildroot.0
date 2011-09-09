@@ -1,39 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 Sep 2011 11:54:14 +0200
-Subject: [Buildroot] [PATCH] package: add Fluxbox 1.3.1 window manager
-In-Reply-To: <4E4A460F.8060501@visionsystems.de> (Yegor Yefremov's message of
- "Tue, 16 Aug 2011 12:27:27 +0200")
-References: <20110803192301.4d5c4462@gmail.com>
- <4E49213F.2040401@visionsystems.de>
- <20110815162321.268fd413@gmail.com>
- <4E4A460F.8060501@visionsystems.de>
-Message-ID: <8739g6jb21.fsf@macbook.be.48ers.dk>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Fri,  9 Sep 2011 16:05:06 +0200
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	for-2011.11/pkg-device
+Message-ID: <cover.1315577080.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+Hello,
 
-Hi,
+Here is a minor set of improvement on how the devices are
+declared in buildroot. For now, All the devices to be created
+were in two files generic to every compilation. This was fine
+for most usage, but was a bit problematic when packages needed
+to create files or use specific permissions.
 
- >> I use X.Org (not TinyX), with the following drivers for input :
- >> 
- >> xf86-input-evdev
- >> xf86-input-keyboard
- >> xf86-input-mouse
- >> xf86-input-synaptics (optional, if you have a touchpad)
- >> 
- >> I guess you might need udev support too.
+This set of patches are addressing this issue by creating a
+new $(PKG)_FILES variable, containing the package specific
+devices, using the makedevs syntax.
 
- Yegor> Thanks. That worked. But I had to compile explicit mice support
- Yegor> into kernel. Under Debian it was sufficient to have
- Yegor> /dev/input/eventX devices and corresponding links in
- Yegor> /dev/input/by-path.
+Changes since v1:
+  * Rename the device tables and all mentions of devices to a more exact term
+  * Cramfs was still passing a hardcoded device table. Remove it.
 
-Those should be handled by xf86-input-evdev, instead of the legacy
-keyboard/mouse.
+The following changes since commit facd602dcad54df769ac759886f48f248b61e692:
 
+  Update for 2011.08 (2011-08-31 13:44:55 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~maxime/git/buildroot.git for-2011.11/pkg-device
+
+Maxime Ripard (4):
+      Cleanup cramfs package declaration.
+      Rename the device table in the code base
+      Add support for package-declared devices
+      Convert busybox to the device declaration method
+
+ Makefile                                           |    4 +
+ fs/common.mk                                       |   15 +-
+ fs/cramfs/cramfs.mk                                |    6 +-
+ package/Makefile.package.in                        |    1 +
+ package/busybox/busybox.mk                         |    5 +
+ package/cramfs/cramfs-01-devtable.patch            | 1269 --------------------
+ ...amfs-02-endian.patch => cramfs-01-endian.patch} |   68 +-
+ package/cramfs/cramfs-02-cygwin_IO.patch           |   15 +
+ package/cramfs/cramfs-03-cygwin_IO.patch           |   13 -
+ .../{device_table.txt => file_install_table.txt}   |    0
+ target/generic/Config.in                           |    6 +-
+ .../{device_table.txt => file_install_table.txt}   |    2 -
+ ...evice_table_dev.txt => static_device_table.txt} |    0
+ target/xtensa/defconfig                            |    2 +-
+ 14 files changed, 74 insertions(+), 1332 deletions(-)
+ delete mode 100644 package/cramfs/cramfs-01-devtable.patch
+ rename package/cramfs/{cramfs-02-endian.patch => cramfs-01-endian.patch} (86%)
+ create mode 100644 package/cramfs/cramfs-02-cygwin_IO.patch
+ delete mode 100644 package/cramfs/cramfs-03-cygwin_IO.patch
+ rename target/device/xtensa/{device_table.txt => file_install_table.txt} (100%)
+ rename target/generic/{device_table.txt => file_install_table.txt} (90%)
+ rename target/generic/{device_table_dev.txt => static_device_table.txt} (100%)
+
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Maxime Ripard
