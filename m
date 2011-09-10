@@ -1,94 +1,42 @@
-From: Wade Berrier <wberrier@gmail.com>
-Date: Sat, 10 Sep 2011 13:02:54 -0600
-Subject: [Buildroot] [PATCH] new package: ngrep
-In-Reply-To: <20110906232228.09821bf0@skate>
-References: <20110906190842.GA29907@berrier.lan>
- <20110906232228.09821bf0@skate>
-Message-ID: <j4gc8v$8rb$1@dough.gmane.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 10 Sep 2011 23:27:29 +0200
+Subject: [Buildroot] Adding libev to buildroot
+In-Reply-To: <87ipp0ig5t.fsf@macbook.be.48ers.dk>
+References: <4E3E72BF.9040302@roth-itk.de>
+ <CAGm1_ktR=-TywrmxLORcmG3Hch1=RsqDusL9y+UmJKt6=gT30A@mail.gmail.com>
+ <4E3F79CF.40608@roth-itk.de>
+ <CAGm1_ktqDGmoRtbWuN8uDM3qiL00K+kS-VbyVcDV3p9sqav9Jg@mail.gmail.com>
+ <4E3FE254.7030004@roth-itk.de> <4E3FF8DD.6070507@visionsystems.de>
+ <87ipp0ig5t.fsf@macbook.be.48ers.dk>
+Message-ID: <CAGm1_kta6RNTeRhJESiJgCv15wHQpDAPb_6hjuY_N7wyOb31PQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Sat, Sep 10, 2011 at 5:13 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+>
+> ?Yegor> Hello Bernhard,
+> ?>> I did a patch according to Linus' description.
+> ?>> I hope this works and describes clearly the changes I did.
+> ?>>
+> ?>> Just today I was recompiling a new root filesystem and libev works just like a charm!
+> ?>> Keep your good work going, thank you!
+>
+> ?Yegor> Thank you for the patch. Some remarks below:
+>
+> ?Yegor> 1. the patches should be sent "inline", so it is easier to comment on them
+> ?Yegor> 2. your' Signed-off-by is still missing (see other patches on the list)
+> ?Yegor> 3. don't use :=, use = instead
+> ?Yegor> 4. this is autotools based package, so following template should be used http://buildroot.uclibc.org/buildroot.html#autotools-tutorial
+>
+> ?Yegor> I've reworked your patch. So please execute "make clean" or remove all files installed by installation of libev and test it with reworked patch.
+>
+> Thanks, committed. I took the liberty to add both your signed-off-by's,
+> hope that's ok.
 
-An updated patch has been sent to the mailing list.  Thanks for the 
-feedback.
+Thanks for committing.
 
-Wade
-
-P.S. The buildroot documentation looks great, by the way.
-
-On 09/06/2011 03:22 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> Thanks for this contribution!
->
-> Le Tue, 6 Sep 2011 13:08:46 -0600,
-> Wade Berrier<wberrier@gmail.com>  a ?crit :
->
->> Here's a nice lightweight alternative to tcpdump (not as feature full, but smaller)
->>
->> Wade
->
-> This part of your message will be kept in the commit log. So it
-> shouldn't be formulated this way. Just keep the subject "[PATCH] new
-> package: ngrep" and just be your Signed-off-by line below.
->
->> diff --git a/package/ngrep/ngrep-1.45-make-objs.patch b/package/ngrep/ngrep-1.45-make-objs.patch
->> new file mode 100644
->> index 0000000..cf316d5
->> --- /dev/null
->> +++ b/package/ngrep/ngrep-1.45-make-objs.patch
->> @@ -0,0 +1,19 @@
->
-> Each patch must start with a description of what it does, and a
-> Signed-off-by line.
->
->> +++ b/package/ngrep/ngrep-1.45-pcre-header.patch
->> @@ -0,0 +1,12 @@
->
-> Same here.
->
->> +++ b/package/ngrep/ngrep.mk
->
-> This must come from a very old version of Buildroot. Can you check the
-> current Buildroot documentation?
->
-> See comments below.
->
->> @@ -0,0 +1,29 @@
->> +#############################################################
->> +#
->> +# ngrep
->> +#
->> +#############################################################
->> +
->> +NGREP_VERSION:=1.45
->
-> Please use '=' instead of ':='.
->
->> +NGREP_SOURCE:=ngrep-$(NGREP_VERSION).tar.bz2
->> +NGREP_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ngrep/ngrep/$(NGREP_VERSION)
->> +# no install-strip/install-exec
->> +NGREP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" install
->
-> Not needed anymore, the 'install' target is always used.
->
->> +NGREP_DEPENDENCIES:=libpcap pcre
->> +
->> +$(eval $(call AUTOTARGETS,package,ngrep))
->> +
->> +$(NGREP_HOOK_POST_INSTALL): $(NGREP_TARGET_INSTALL_TARGET)
->> +	$(STRIPCMD) $(STRIP_STRIP_ALL) $(TARGET_DIR)/usr/bin/ngrep
->> +	touch $@
->
-> Please remove this post install hook:
->   1) it is no longer the right way of writing post install hooks
->   2) stripping in each package is no longer needed, it is done globally
->      by the Buildroot infrastructure
->
-> Regards,
->
-> Thomas
+Yegor
