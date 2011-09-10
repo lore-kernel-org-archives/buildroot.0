@@ -1,42 +1,68 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 10 Sep 2011 23:27:29 +0200
-Subject: [Buildroot] Adding libev to buildroot
-In-Reply-To: <87ipp0ig5t.fsf@macbook.be.48ers.dk>
-References: <4E3E72BF.9040302@roth-itk.de>
- <CAGm1_ktR=-TywrmxLORcmG3Hch1=RsqDusL9y+UmJKt6=gT30A@mail.gmail.com>
- <4E3F79CF.40608@roth-itk.de>
- <CAGm1_ktqDGmoRtbWuN8uDM3qiL00K+kS-VbyVcDV3p9sqav9Jg@mail.gmail.com>
- <4E3FE254.7030004@roth-itk.de> <4E3FF8DD.6070507@visionsystems.de>
- <87ipp0ig5t.fsf@macbook.be.48ers.dk>
-Message-ID: <CAGm1_kta6RNTeRhJESiJgCv15wHQpDAPb_6hjuY_N7wyOb31PQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 10 Sep 2011 17:14:17 +0200
+Subject: [Buildroot] [git commit] package: add libev
+Message-ID: <20110910214434.8DADC8D520@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Sep 10, 2011 at 5:13 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
->
-> ?Yegor> Hello Bernhard,
-> ?>> I did a patch according to Linus' description.
-> ?>> I hope this works and describes clearly the changes I did.
-> ?>>
-> ?>> Just today I was recompiling a new root filesystem and libev works just like a charm!
-> ?>> Keep your good work going, thank you!
->
-> ?Yegor> Thank you for the patch. Some remarks below:
->
-> ?Yegor> 1. the patches should be sent "inline", so it is easier to comment on them
-> ?Yegor> 2. your' Signed-off-by is still missing (see other patches on the list)
-> ?Yegor> 3. don't use :=, use = instead
-> ?Yegor> 4. this is autotools based package, so following template should be used http://buildroot.uclibc.org/buildroot.html#autotools-tutorial
->
-> ?Yegor> I've reworked your patch. So please execute "make clean" or remove all files installed by installation of libev and test it with reworked patch.
->
-> Thanks, committed. I took the liberty to add both your signed-off-by's,
-> hope that's ok.
 
-Thanks for committing.
+commit: http://git.buildroot.net/buildroot/commit/?id=e73cf2d5f3152ca46b730c69677ae54e3b7217bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yegor
+Signed-off-by: Bernhard Roth <broth@roth-itk.de>
+Signed-off-by: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in       |    1 +
+ package/libev/Config.in |    6 ++++++
+ package/libev/libev.mk  |   11 +++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
+ create mode 100644 package/libev/Config.in
+ create mode 100644 package/libev/libev.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index c4cecfa..bcdf421 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -342,6 +342,7 @@ source "package/libcap/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
++source "package/libev/Config.in"
+ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libnspr/Config.in"
+diff --git a/package/libev/Config.in b/package/libev/Config.in
+new file mode 100644
+index 0000000..71abe77
+--- /dev/null
++++ b/package/libev/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBEV
++	bool "libev"
++	help
++	  Userspace library for handling asynchronous notifications
++
++	  http://software.schmorp.de/pkg/libev.html
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+new file mode 100644
+index 0000000..b0db123
+--- /dev/null
++++ b/package/libev/libev.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# libev
++#
++#############################################################
++LIBEV_VERSION = 4.04
++LIBEV_SOURCE = libev-$(LIBEV_VERSION).tar.gz
++LIBEV_SITE = http://dist.schmorp.de/libev/
++LIBEV_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS,package,libev))
+-- 
+1.7.3.4
