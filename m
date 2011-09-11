@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] dbus: remove --program-prefix
-Message-ID: <20110912052635.DC37C8D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fuse: remove --program-prefix
+Message-ID: <20110912052635.A24CC8D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cfbfd488fecc933d7501d671af19d17cd531b852
+commit: http://git.buildroot.net/buildroot/commit/?id=dc32ba990a9f72579f34d24a742ba744ae4d5a58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 --program-prefix is now set in the auto-target infrastructure.
@@ -17,22 +17,22 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dbus/dbus.mk |    3 +--
+ package/fuse/libfuse.mk |    3 +--
  1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index d276b72..9db8ea6 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -12,8 +12,7 @@ DBUS_INSTALL_TARGET = YES
- DBUS_DEPENDENCIES = host-pkg-config
+diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
+index 13a5194..45fb2f3 100644
+--- a/package/fuse/libfuse.mk
++++ b/package/fuse/libfuse.mk
+@@ -9,8 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
  
- DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
--DBUS_CONF_OPT = --program-prefix="" \
--		--with-dbus-user=dbus \
-+DBUS_CONF_OPT = --with-dbus-user=dbus \
- 		--disable-tests \
- 		--disable-asserts \
- 		--enable-abstract-sockets \
+ LIBFUSE_INSTALL_STAGING = YES
+-LIBFUSE_CONF_OPT= --program-prefix="" \
+-		--disable-nls \
++LIBFUSE_CONF_OPT= --disable-nls \
+ 		--disable-example \
+ 		--disable-kernel-module \
+ 		--enable-lib \
 -- 
 1.7.3.4
