@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] sdl_sound: remove --program-prefix
-Message-ID: <20110912052633.718078D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] dbus: remove --program-prefix
+Message-ID: <20110912052635.DC37C8D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=617169d1d05a1732bd9d7090b684028e43d199bc
+commit: http://git.buildroot.net/buildroot/commit/?id=cfbfd488fecc933d7501d671af19d17cd531b852
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 --program-prefix is now set in the auto-target infrastructure.
@@ -17,22 +17,22 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sdl_sound/sdl_sound.mk |    3 +--
+ package/dbus/dbus.mk |    3 +--
  1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index 8f51e05..0a0fe5b 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -31,8 +31,7 @@ SDL_SOUND_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--with-sdl-exec-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
--	--enable-static \
--	--program-prefix=''
-+	--enable-static
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index d276b72..9db8ea6 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -12,8 +12,7 @@ DBUS_INSTALL_TARGET = YES
+ DBUS_DEPENDENCIES = host-pkg-config
  
- # enable mmx for newer x86's
- ifeq ($(BR2_i386)$(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
+ DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+-DBUS_CONF_OPT = --program-prefix="" \
+-		--with-dbus-user=dbus \
++DBUS_CONF_OPT = --with-dbus-user=dbus \
+ 		--disable-tests \
+ 		--disable-asserts \
+ 		--enable-abstract-sockets \
 -- 
 1.7.3.4
