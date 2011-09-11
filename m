@@ -1,7 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] mpg123: remove --program-prefix
-Message-ID: <20110912052632.2081D8D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libao: bump to version 1.1.0
+Message-ID: <20110912052629.112998D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,29 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9268aff0e6cfa74b3946b947d258c33d2751242a
+commit: http://git.buildroot.net/buildroot/commit/?id=0cc80d1e60327909c87aa2d97ef99ef071a7a5a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---program-prefix is now set in the auto-target infrastructure.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpg123/mpg123.mk |    2 +-
+ package/multimedia/libao/libao.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index 8eeb56d..43f631c 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -32,7 +32,7 @@ ifeq ($(BR2_x86_64),y)
- MPG123_CPU = x86-64
- endif
+diff --git a/package/multimedia/libao/libao.mk b/package/multimedia/libao/libao.mk
+index ee02d18..83d3154 100644
+--- a/package/multimedia/libao/libao.mk
++++ b/package/multimedia/libao/libao.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
--MPG123_CONF_OPT += --program-prefix='' --with-cpu=$(MPG123_CPU)
-+MPG123_CONF_OPT += --with-cpu=$(MPG123_CPU)
- 
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
+-LIBAO_VERSION = 1.0.0
++LIBAO_VERSION = 1.1.0
+ LIBAO_SITE = http://downloads.xiph.org/releases/ao
+ LIBAO_DEPENDENCIES = host-pkg-config
+ LIBAO_INSTALL_STAGING = YES
 -- 
 1.7.3.4
