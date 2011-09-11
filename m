@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Sep 2011 22:31:34 +0200
-Subject: [Buildroot] [PATCH 09/13] musepack: bump to r475
-In-Reply-To: <1314972301-5067-11-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 2 Sep 2011 11:04:57 -0300")
+Date: Sun, 11 Sep 2011 22:34:06 +0200
+Subject: [Buildroot] [PATCH 10/13] mpd: bump to version 0.16.3
+In-Reply-To: <1314972301-5067-12-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 2 Sep 2011 11:04:58 -0300")
 References: <1314972301-5067-1-git-send-email-gustavo@zacarias.com.ar>
- <1314972301-5067-11-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k49eg6s9.fsf@macbook.be.48ers.dk>
+ <1314972301-5067-12-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87fwk2g6o1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,7 +16,7 @@ To: buildroot@busybox.net
 
  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed, thanks - Notice that 0.16.4 is out though.
 
 -- 
 Bye, Peter Korsgaard
