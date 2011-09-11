@@ -1,8 +1,8 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] samba: make installation of smbd
-	configurable
-Message-ID: <20110912052631.1840E8D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] netsnmp: fix stop and restart actions in
+	init script
+Message-ID: <20110912052631.4779B8D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +10,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ede8ca0019974fc999c6e9f20dfbedfeb9649c60
+commit: http://git.buildroot.net/buildroot/commit/?id=77cc11d533f79d13e9a440823d6f5e100cbdd202
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It may be desirable to compile samba but not actually install
-the smbd binary. This is the case if you need libsmbclient but
-don't want to run a samba server.
+/etc/init.d/S59snmpd stop (and restart) currently fail if either snmpd or
+snmptrapd are not running.
+This is because start-stop-daemon -K returns nonzero if the process to be
+killed is not running, and this causes the whole script to fail because it runs
+under 'set -e'.
 
-Make this possible by allowing to disable installation of smbd.
+This may not be noticed if only the last start-stop-daemon fails, but this is
+in general wrong. It would also cause a failure in other scripts that execute
+S59snmpd and check the return value.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Adding the --oknodo (-o) option to start-stop-daemon fixes this.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/samba/Config.in |    7 +++++++
- package/samba/samba.mk  |    1 +
- 2 files changed, 8 insertions(+), 0 deletions(-)
+ package/netsnmp/S59snmpd |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 58a84f3..3a77776 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -122,6 +122,13 @@ config BR2_PACKAGE_SAMBA_SMBCQUOTAS
- 	help
- 	  Set or get QUOTAs of NTFS 5 shares
+diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
+index f65317a..5df4b85 100755
+--- a/package/netsnmp/S59snmpd
++++ b/package/netsnmp/S59snmpd
+@@ -29,7 +29,6 @@ TRAPDOPTS='-Lsd -p /var/run/snmptrapd.pid'
+ [ -r /etc/default/snmpd ] && . /etc/default/snmpd
  
-+config BR2_PACKAGE_SAMBA_SMBD
-+	bool "smbd"
-+	default y
-+	depends on BR2_PACKAGE_SAMBA
-+	help
-+	  The server daemon that provides filesharing and printing services
-+
- config BR2_PACKAGE_SAMBA_SMBGET
- 	bool "smbget"
- 	default y
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index dfc7636..621d13c 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -111,6 +111,7 @@ SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCACLS) += usr/bin/smbcacls
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCLIENT) += usr/bin/smbclient
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCONTROL) += usr/bin/smbcontrol
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCQUOTAS) += usr/bin/smbcquotas
-+SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBD) += usr/sbin/smbd
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBGET) += usr/bin/smbget
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbadd
- SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbdel
+ ssd_oknodo="-o"
+-ssd_oknodo=""
+ 
+ # Cd to / before starting any daemons.
+ cd /
 -- 
 1.7.3.4
