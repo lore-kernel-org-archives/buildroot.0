@@ -1,21 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Sep 2011 00:02:06 +0200
-Subject: [Buildroot] [PATCH] tar: bump to 1.26
-In-Reply-To: <4E43E379.3090201@visionsystems.de> (Yegor Yefremov's message of
- "Thu, 11 Aug 2011 16:13:13 +0200")
-References: <4E43E379.3090201@visionsystems.de>
-Message-ID: <87obyqd9gh.fsf@macbook.be.48ers.dk>
+Date: Mon, 12 Sep 2011 00:13:02 +0200
+Subject: [Buildroot] [PATCH 01/22] Makefile: auto-target automatically
+	pass --program-prefix=""
+In-Reply-To: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+ (Yann E. MORIN's message of "Wed, 10 Aug 2011 00:12:34 +0200")
+References: <1312927975-15543-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87k49ed8y9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
- Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Yann> When cross-compiled, some packages incorrectly prefix their executables
+ Yann> with the target tuple.
 
-Committed, thanks.
+ Yann> Fix that by forcing the program prefix to the empty string when calling
+ Yann> ./configure, but only when compiling for target, not for host.
+
+Committed entire series, thanks!
 
 -- 
 Bye, Peter Korsgaard
