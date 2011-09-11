@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] gamin: remove --program-prefix
-Message-ID: <20110912052634.E5D758D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] ntfs-3g: remove --program-prefix
+Message-ID: <20110912052635.271EB8D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed8619dafa809dff6d5ef1e5c3365016fd96d305
+commit: http://git.buildroot.net/buildroot/commit/?id=8e837d5dfe6c40ed3e3cdf0d7c9db163b0c8c305
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 --program-prefix is now set in the auto-target infrastructure.
@@ -17,21 +17,21 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gamin/gamin.mk |    2 +-
+ package/ntfs-3g/ntfs-3g.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
-index d691f60..326fd62 100644
---- a/package/gamin/gamin.mk
-+++ b/package/gamin/gamin.mk
-@@ -9,7 +9,7 @@ GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
- GAMIN_AUTORECONF = YES
- GAMIN_INSTALL_STAGING = YES
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 796e269..baabff2 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -7,7 +7,7 @@
+ NTFS_3G_VERSION = 2010.10.2
+ NTFS_3G_SOURCE = ntfs-3g-$(NTFS_3G_VERSION).tgz
+ NTFS_3G_SITE = http://tuxera.com/opensource
+-NTFS_3G_CONF_OPT = --disable-ldconfig --program-prefix=""
++NTFS_3G_CONF_OPT = --disable-ldconfig
+ NTFS_3G_INSTALL_STAGING = YES
  
--GAMIN_CONF_OPT = --program-prefix="" --disable-debug
-+GAMIN_CONF_OPT = --disable-debug
- 
- # python support broken
- GAMIN_CONF_OPT += --without-python
+ $(eval $(call AUTOTARGETS,package,ntfs-3g))
 -- 
 1.7.3.4
