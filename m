@@ -1,7 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Frederic Bassaler <frederic.bassaler@gmail.com>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] radvd: remove --program-prefix
-Message-ID: <20110912052636.6918B8D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xterm: bump to v271
+Message-ID: <20110912052631.9B98B8D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,28 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc1b29e9bca1218dc1bda67880dfc442e803bca1
+commit: http://git.buildroot.net/buildroot/commit/?id=0e85b480ca131bbe5e152c281ffb312fc4ee4d65
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---program-prefix is now set in the auto-target infrastructure.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/radvd/radvd.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/xterm/xterm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index fe8be5d..6b7468a 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -7,7 +7,6 @@ RADVD_VERSION:=1.6
- RADVD_SOURCE:=radvd-$(RADVD_VERSION).tar.gz
- RADVD_SITE:=http://www.litech.org/radvd/dist/
- RADVD_DEPENDENCIES:=flex host-flex
--RADVD_CONF_OPT:= --program-prefix=''
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index d5d193d..92ddd1e 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- define RADVD_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
+-XTERM_VERSION = 267
++XTERM_VERSION = 271
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = ftp://invisible-island.net/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw
 -- 
 1.7.3.4
