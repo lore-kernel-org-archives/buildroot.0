@@ -1,8 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] Makefile: auto-target automatically pass
-	--program-prefix=""
-Message-ID: <20110912052631.EF0D08D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fakeroot: remove --program-prefix
+Message-ID: <20110912052632.BB0F48D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +9,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8d6e2cc70e1532efea7aba791625a8cb68a10e4
+commit: http://git.buildroot.net/buildroot/commit/?id=cc2597d0fcd96bdaaf0b98e75a9570b84c55df65
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When cross-compiled, some packages incorrectly prefix their executables
-with the target tuple.
-
-Fix that by forcing the program prefix to the empty string when calling
-./configure, but only when compiling for target, not for host.
+--program-prefix is now set in the auto-target infrastructure.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.autotools.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/fakeroot/fakeroot.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 46ab861..7f04c36 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -100,6 +100,7 @@ define $(2)_CONFIGURE_CMDS
- 		--prefix=/usr \
- 		--exec-prefix=/usr \
- 		--sysconfdir=/etc \
-+		--program-prefix="" \
- 		$$(DISABLE_DOCUMENTATION) \
- 		$$(DISABLE_NLS) \
- 		$$(DISABLE_LARGEFILE) \
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 29e9e5b..1271e7c 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -6,7 +6,6 @@
+ FAKEROOT_VERSION:=1.9.5
+ FAKEROOT_SOURCE:=fakeroot_$(FAKEROOT_VERSION).tar.gz
+ FAKEROOT_SITE:=http://snapshot.debian.org/archive/debian/20080427T000000Z/pool/main/f/fakeroot/
+-FAKEROOT_CONF_OPT = --program-prefix=''
+ 
+ define FAKEROOT_PATCH_FAKEROOT_IN
+ 	# If using busybox getopt, make it be quiet.
 -- 
 1.7.3.4
