@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] lzop: remove --program-prefix
-Message-ID: <20110912052633.9F2EE8D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fbdump: remove --program-prefix
+Message-ID: <20110912052634.2849B8D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2caafe6be7bc61569317a35b4b36880c7c6761b0
+commit: http://git.buildroot.net/buildroot/commit/?id=9bbc3f76330b4b97dc3f01d69a71695da66febb4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 --program-prefix is now set in the auto-target infrastructure.
@@ -17,20 +17,20 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lzop/lzop.mk |    1 -
+ package/fbdump/fbdump.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
-index 796686a..e55c105 100644
---- a/package/lzop/lzop.mk
-+++ b/package/lzop/lzop.mk
-@@ -6,7 +6,6 @@
- LZOP_VERSION:=1.02rc1
- LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
- LZOP_SITE:=http://www.lzop.org/download/
--LZOP_CONF_OPT:=--program-prefix=""
- LZOP_DEPENDENCIES:=lzo
+diff --git a/package/fbdump/fbdump.mk b/package/fbdump/fbdump.mk
+index eb74d8b..521b0fd 100644
+--- a/package/fbdump/fbdump.mk
++++ b/package/fbdump/fbdump.mk
+@@ -7,7 +7,6 @@ FBDUMP_VERSION:=0.4.2
+ FBDUMP_SOURCE:=fbdump-$(FBDUMP_VERSION).tar.gz
+ FBDUMP_SITE:=http://www.rcdrummond.net/fbdump
+ FBDUMP_AUTORECONF = NO
+-FBDUMP_CONF_OPT = --program-prefix=''
  
- $(eval $(call AUTOTARGETS,package,lzop))
+ $(eval $(call AUTOTARGETS,package,fbdump))
+ 
 -- 
 1.7.3.4
