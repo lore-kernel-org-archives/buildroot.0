@@ -1,7 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Murat Demirten <mdemirten@yh.com.tr>
 Date: Sun, 11 Sep 2011 10:50:30 +0200
-Subject: [Buildroot] [git commit] package: add libftdi support
-Message-ID: <20110911091803.941888D515@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] New package: libgeotiff
+Message-ID: <20110911091803.4011C8D515@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,142 +9,65 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe7a4b524b72bcb448f7e723873d8244620cb2f1
+commit: http://git.buildroot.net/buildroot/commit/?id=d5368064c2556a5df9e04538c485453f53936342
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-needed by openocd
+Libgeotiff is an open source library normally hosted on top of
+libtiff for reading, and writing GeoTIFF information tags.
 
-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Cc: Nicolas Ferre <nicolas.ferre@atmel.com>
-Cc: Patrice Vilchez <patrice.vilchez@atmel.com>
+Signed-off-by: Murat Demirten <mdemirten@yh.com.tr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    1 +
- package/libftdi/Config.in                          |   18 ++++++++
- .../libftdi/libftdi-0.19-01_pkgconfig_libusb.patch |   47 ++++++++++++++++++++
- package/libftdi/libftdi.mk                         |   23 ++++++++++
- 4 files changed, 89 insertions(+), 0 deletions(-)
- create mode 100644 package/libftdi/Config.in
- create mode 100644 package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
- create mode 100644 package/libftdi/libftdi.mk
+ package/Config.in                |    1 +
+ package/libgeotiff/Config.in     |    8 ++++++++
+ package/libgeotiff/libgeotiff.mk |   12 ++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/libgeotiff/Config.in
+ create mode 100644 package/libgeotiff/libgeotiff.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f56384d..d95e7b5 100644
+index bcdf421..f56384d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -303,6 +303,7 @@ menu "Hardware handling"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
-+source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
- source "package/libusb/Config.in"
-diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+@@ -284,6 +284,7 @@ source "package/libart/Config.in"
+ source "package/libdrm/Config.in"
+ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
++source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
+ source "package/gdk-pixbuf/Config.in"
+ source "package/libgtk2/Config.in"
+diff --git a/package/libgeotiff/Config.in b/package/libgeotiff/Config.in
 new file mode 100644
-index 0000000..e334d14
+index 0000000..7489a47
 --- /dev/null
-+++ b/package/libftdi/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBFTDI
-+	bool "libftdi"
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	help
-+	  Userspace access to FTDI USB interface chips
++++ b/package/libgeotiff/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBGEOTIFF
++       bool "libgeotiff"
++       select BR2_PACKAGE_TIFF
++       help
++         Libgeotiff is an open source library normally hosted on top of
++         libtiff for reading, and writing GeoTIFF information tags.
 +
-+	  http://www.intra2net.com/en/developer/libftdi/index.php
-+
-+if BR2_PACKAGE_LIBFTDI
-+
-+config BR2_PACKAGE_LIBTFDI_CPP
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	bool "C++ bindings"
-+	help
-+	  C++ bindings for libftdi
-+
-+endif # BR2_PACKAGE_LIBFTDI
-diff --git a/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch b/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
++         http://geotiff.osgeo.org
+diff --git a/package/libgeotiff/libgeotiff.mk b/package/libgeotiff/libgeotiff.mk
 new file mode 100644
-index 0000000..389291d
+index 0000000..f159eba
 --- /dev/null
-+++ b/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
-@@ -0,0 +1,47 @@
-+---
-+ configure.in |   35 +++++++++++------------------------
-+ 1 file changed, 11 insertions(+), 24 deletions(-)
-+
-+--- a/configure.in
-++++ b/configure.in
-+@@ -8,30 +8,17 @@
-+ AM_PROG_LIBTOOL
-+ AC_PROG_CXX
-+ 
-+-dnl check for libusb-config
-+-AC_CHECK_TOOL(HAVELIBUSB, libusb-config)
-+-
-+-if test ! -z "$HAVELIBUSB"; then
-+-   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
-+-   LIBUSB_LIBS=`$HAVELIBUSB --libs`
-+-
-+-   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-+-   LIBS="$LIBS $LIBUSB_LIBS"
-+-else
-+-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation.])
-+-fi
-+-
-+-dnl check for version of libusb
-+-AC_MSG_CHECKING([if libusb version is >= 0.1.7])
-+-libusb_version_needed="1007"
-+-libusb_version=`$HAVELIBUSB --version | sed -e "s/libusb //" | awk 'BEGIN { FS = "."; } { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
-++dnl check for libusb
-++PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
-++CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
-++LIBS="$LIBS $LIBUSB_LIBS"
-+ 
-+-if test $libusb_version -lt $libusb_version_needed; then
-+-   AC_MSG_RESULT(no)
-+-   AC_MSG_ERROR([*** libusb is too old ($libusb_version). You need a libusb installation newer or equal to 0.1.7.])
-+-else
-+-   AC_MSG_RESULT(yes)
-+-fi
-++dnl Check for recent pkg-config which supports Requires.private
-++case `$PKG_CONFIG --version` in
-++0.?|0.1[0-7]) PKGCONFIG_REQUIRES="Requires"; ;;
-++*) PKGCONFIG_REQUIRES="Requires.private"; ;;
-++esac
-++AC_SUBST(PKGCONFIG_REQUIRES)
-+ 
-+ ENABLE_ASYNC_MODE=0
-+ AC_ARG_WITH(async-mode,
-diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
-new file mode 100644
-index 0000000..315fe16
---- /dev/null
-+++ b/package/libftdi/libftdi.mk
-@@ -0,0 +1,23 @@
++++ b/package/libgeotiff/libgeotiff.mk
+@@ -0,0 +1,12 @@
 +#############################################################
 +#
-+# libftdi
++# libgeotiff
 +#
 +#############################################################
-+LIBFTDI_VERSION = 0.19
-+LIBFTDI_SOURCE = libftdi-$(LIBFTDI_VERSION).tar.gz
-+LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download/
-+LIBFTDI_DEPENDENCIES = libusb-compat libusb
-+LIBFTDI_INSTALL_STAGING = YES
++LIBGEOTIFF_VERSION = 1.3.0
++LIBGEOTIFF_SOURCE = libgeotiff-$(LIBGEOTIFF_VERSION).tar.gz
++LIBGEOTIFF_SITE = http://download.osgeo.org/geotiff/libgeotiff
++LIBGEOTIFF_DEPENDENCIES = tiff
++LIBGEOTIFF_INSTALL_STAGING = YES
 +
-+LIBFTDI_AUTORECONF = YES
-+
-+LIBFDTI_CONF_OPT = --without-examples
-+
-+# configure detect it automaticaly so we need to force it
-+ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
-+LIBFDTI_CONF_OPT += --enable-libftdipp
-+else
-+LIBFDTI_CONF_OPT += --disable-libftdipp
-+endif
-+
-+$(eval $(call AUTOTARGETS,package,libftdi))
++$(eval $(call AUTOTARGETS,package,libgeotiff))
 -- 
 1.7.3.4
