@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] dbus-glib: remove --program-prefix
-Message-ID: <20110912052632.836C18D58C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sylpheed: remove --program-prefix
+Message-ID: <20110912052633.353D18D58C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63dfeb295fa4b0a515f1fcd188e9902db3d27070
+commit: http://git.buildroot.net/buildroot/commit/?id=6c0ea9684d74440ccd2ef964ef385c81309d21fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 --program-prefix is now set in the auto-target infrastructure.
@@ -17,20 +17,21 @@ branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dbus-glib/dbus-glib.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/sylpheed/sylpheed.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index 6058b23..7c4e65b 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -13,7 +13,6 @@ DBUS_GLIB_CONF_ENV = ac_cv_have_abstract_sockets=yes \
- 		have_abstract_sockets=yes
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index dbd2408..371341f 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -9,7 +9,7 @@ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).$(SYLPHEED_VERSION_MINOR)
+ SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
  
- DBUS_GLIB_CONF_OPT = --localstatedir=/var \
--		--program-prefix="" \
- 		--disable-tests \
- 		--disable-xml-docs \
- 		--with-introspect-xml=$(DBUS_HOST_INTROSPECT) \
+-SYLPHEED_CONF_OPT = --disable-gtkspell --program-prefix="" \
++SYLPHEED_CONF_OPT = --disable-gtkspell \
+                     --includedir=$(STAGING_DIR)/usr/include
+ 
+ SYLPHEED_DEPENDENCIES = host-pkg-config libgtk2
 -- 
 1.7.3.4
