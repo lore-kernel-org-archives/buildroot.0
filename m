@@ -1,56 +1,150 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Sep 2011 11:17:37 +0200
-Subject: [Buildroot] [PATCH 2/2] package: add openocd support
-In-Reply-To: <1312911561-23942-2-git-send-email-plagnioj@jcrosoft.com>
- (Jean-Christophe PLAGNIOL-VILLARD's message of "Tue, 9 Aug 2011
- 19:39:21 +0200")
-References: <1312911561-23942-1-git-send-email-plagnioj@jcrosoft.com>
- <1312911561-23942-2-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <87vcszh1zi.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 11 Sep 2011 10:50:30 +0200
+Subject: [Buildroot] [git commit] package: add libftdi support
+Message-ID: <20110911091803.941888D515@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "JC" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
- JC> with only the following Adapters
- JC>  - FTDI FT2xxx/FT4xxx
- JC>  - J-Link (Segger and Atmel SAM-ICE)
- JC>  - Versaloon-Link JTAG Adapter
+commit: http://git.buildroot.net/buildroot/commit/?id=fe7a4b524b72bcb448f7e723873d8244620cb2f1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Doesn't seem to build here:
+needed by openocd
 
-grep OPENOCD .config
-BR2_PACKAGE_OPENOCD=y
-# BR2_PACKAGE_OPENOCD_FT2XXX is not set
-# BR2_PACKAGE_OPENOCD_JLINK is not set
-# BR2_PACKAGE_OPENOCD_VSLLINK is not set
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Cc: Nicolas Ferre <nicolas.ferre@atmel.com>
+Cc: Patrice Vilchez <patrice.vilchez@atmel.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                                  |    1 +
+ package/libftdi/Config.in                          |   18 ++++++++
+ .../libftdi/libftdi-0.19-01_pkgconfig_libusb.patch |   47 ++++++++++++++++++++
+ package/libftdi/libftdi.mk                         |   23 ++++++++++
+ 4 files changed, 89 insertions(+), 0 deletions(-)
+ create mode 100644 package/libftdi/Config.in
+ create mode 100644 package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
+ create mode 100644 package/libftdi/libftdi.mk
 
-/home/peko/source/buildroot/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I../../.. -I../../../src -I../../../src -DPKGDATADIR=\"/usr/share/openocd\" -DPKGLIBDIR=\"/usr/lib/openocd\" -I../../../jimtcl -I../../../jimtcl -pipe -Os -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include -Wall -Wstrict-prototypes -Wformat-security -Wshadow -Wextra -Wno-unused-parameter -Wbad-function-cast -Wcast-align -Wredundant-decls -Werror -MT bitbang.lo -MD -MP -MF .deps/bitbang.Tpo -c bitbang.c  -fPIC -DPIC -o .libs/bitbang.o
-In file included from ../../../src/jtag/jtag.h:26,
-                 from driver.c:34:
-../../../src/helper/binarybuffer.h: In function 'buf_set_u32':
-../../../src/helper/binarybuffer.h:52: error: 'for' loop initial declaration used outside C99 mode
-../../../src/helper/binarybuffer.h: In function 'buf_get_u32':
-../../../src/helper/binarybuffer.h:82: error: 'for' loop initial declaration used outside C99 mode
-In file included from ../../../src/jtag/jtag.h:26,
-                 from ../../../src/jtag/interface.h:29,
-                 from bitbang.c:28:
-../../../src/helper/binarybuffer.h: In function 'buf_set_u32':
-../../../src/helper/binarybuffer.h:52: error: 'for' loop initial declaration used outside C99 mode
-../../../src/helper/binarybuffer.h: In function 'buf_get_u32':
-../../../src/helper/binarybuffer.h:82: error: 'for' loop initial declaration used outside C99 mode
-driver.c: In function 'interface_jtag_add_ir_scan':
-driver.c:100: error: 'for' loop initial declaration used outside C99 mode
-driver.c: In function 'interface_jtag_add_dr_scan':
-driver.c:142: error: 'for' loop initial declaration used outside C99 mode
-driver.c:167: error: redefinition of 'tap'
-driver.c:142: error: previous definition of 'tap' was here
-
-Any idea? If it isn't supposed to build if none of the drivers are
-enabled, then we need to ensure this cannot happen in Kconfig.
-
+diff --git a/package/Config.in b/package/Config.in
+index f56384d..d95e7b5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -303,6 +303,7 @@ menu "Hardware handling"
+ source "package/libaio/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
++source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libusb/Config.in"
+diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+new file mode 100644
+index 0000000..e334d14
+--- /dev/null
++++ b/package/libftdi/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBFTDI
++	bool "libftdi"
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	help
++	  Userspace access to FTDI USB interface chips
++
++	  http://www.intra2net.com/en/developer/libftdi/index.php
++
++if BR2_PACKAGE_LIBFTDI
++
++config BR2_PACKAGE_LIBTFDI_CPP
++	depends on BR2_INSTALL_LIBSTDCPP
++	bool "C++ bindings"
++	help
++	  C++ bindings for libftdi
++
++endif # BR2_PACKAGE_LIBFTDI
+diff --git a/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch b/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
+new file mode 100644
+index 0000000..389291d
+--- /dev/null
++++ b/package/libftdi/libftdi-0.19-01_pkgconfig_libusb.patch
+@@ -0,0 +1,47 @@
++---
++ configure.in |   35 +++++++++++------------------------
++ 1 file changed, 11 insertions(+), 24 deletions(-)
++
++--- a/configure.in
+++++ b/configure.in
++@@ -8,30 +8,17 @@
++ AM_PROG_LIBTOOL
++ AC_PROG_CXX
++ 
++-dnl check for libusb-config
++-AC_CHECK_TOOL(HAVELIBUSB, libusb-config)
++-
++-if test ! -z "$HAVELIBUSB"; then
++-   LIBUSB_CFLAGS=`$HAVELIBUSB --cflags`
++-   LIBUSB_LIBS=`$HAVELIBUSB --libs`
++-
++-   CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
++-   LIBS="$LIBS $LIBUSB_LIBS"
++-else
++-   AC_MSG_ERROR([*** libusb-config not found. You need a working libusb installation.])
++-fi
++-
++-dnl check for version of libusb
++-AC_MSG_CHECKING([if libusb version is >= 0.1.7])
++-libusb_version_needed="1007"
++-libusb_version=`$HAVELIBUSB --version | sed -e "s/libusb //" | awk 'BEGIN { FS = "."; } { printf "%d", ($''1 * 1000 + $''2) * 1000 + $''3;}'`
+++dnl check for libusb
+++PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
+++CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+++LIBS="$LIBS $LIBUSB_LIBS"
++ 
++-if test $libusb_version -lt $libusb_version_needed; then
++-   AC_MSG_RESULT(no)
++-   AC_MSG_ERROR([*** libusb is too old ($libusb_version). You need a libusb installation newer or equal to 0.1.7.])
++-else
++-   AC_MSG_RESULT(yes)
++-fi
+++dnl Check for recent pkg-config which supports Requires.private
+++case `$PKG_CONFIG --version` in
+++0.?|0.1[0-7]) PKGCONFIG_REQUIRES="Requires"; ;;
+++*) PKGCONFIG_REQUIRES="Requires.private"; ;;
+++esac
+++AC_SUBST(PKGCONFIG_REQUIRES)
++ 
++ ENABLE_ASYNC_MODE=0
++ AC_ARG_WITH(async-mode,
+diff --git a/package/libftdi/libftdi.mk b/package/libftdi/libftdi.mk
+new file mode 100644
+index 0000000..315fe16
+--- /dev/null
++++ b/package/libftdi/libftdi.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# libftdi
++#
++#############################################################
++LIBFTDI_VERSION = 0.19
++LIBFTDI_SOURCE = libftdi-$(LIBFTDI_VERSION).tar.gz
++LIBFTDI_SITE = http://www.intra2net.com/en/developer/libftdi/download/
++LIBFTDI_DEPENDENCIES = libusb-compat libusb
++LIBFTDI_INSTALL_STAGING = YES
++
++LIBFTDI_AUTORECONF = YES
++
++LIBFDTI_CONF_OPT = --without-examples
++
++# configure detect it automaticaly so we need to force it
++ifeq ($(BR2_PACKAGE_LIBTFDI_CPP),y)
++LIBFDTI_CONF_OPT += --enable-libftdipp
++else
++LIBFDTI_CONF_OPT += --disable-libftdipp
++endif
++
++$(eval $(call AUTOTARGETS,package,libftdi))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
