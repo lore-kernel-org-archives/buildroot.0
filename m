@@ -1,7 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
 Date: Tue, 13 Sep 2011 00:46:06 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20110912224631.057208D58F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openssl: bump to 1.0.0e
+Message-ID: <20110912224630.C773F8D58F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,43 +9,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=227eebae0053363aa30353472cea5f7160cd3938
+commit: http://git.buildroot.net/buildroot/commit/?id=a50f6ef29e72b4725b0e53dbf28922c798eacf06
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Changes between 1.0.0d and 1.0.0e [6 Sep 2011]
+
+  *) Fix bug where CRLs with nextUpdate in the past are sometimes accepted
+     by initialising X509_STORE_CTX properly. (CVE-2011-3207)
+     [Kaspar Brand <ossl@velox.ch>]
+
+  *) Fix SSL memory handling for (EC)DH ciphersuites, in particular
+     for multi-threaded use of ECDH. (CVE-2011-3210)
+     [Adam Langley (Google)]
+
+  *) Fix x509_name_ex_d2i memory leak on bad inputs.
+     [Bodo Moeller]
+
+  *) Remove hard coded ecdsaWithSHA1 signature tests in ssl code and check
+     signature public key algorithm by using OID xref utilities instead.
+     Before this you could only use some ECC ciphersuites with SHA1 only.
+     [Steve Henson]
+
+  *) Add protection against ECDSA timing attacks as mentioned in the paper
+     by Billy Bob Brumley and Nicola Tuveri, see:
+
+	http://eprint.iacr.org/2011/232.pdf
+
+     [Billy Bob Brumley and Nicola Tuveri]
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   20 ++++++++++++++++++++
- 1 files changed, 20 insertions(+), 0 deletions(-)
+ package/openssl/openssl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 288d575..5a44e72 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,5 +1,25 @@
- 2011.11, Not released yet:
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 0163ef8..82a4fc4 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-+	Fixes all over the tree and new features.
-+
-+	Update external codesourcery toolchain download URLs after
-+	Codesourcery got bought by Mentor.
-+
-+	Updated/fixed packages: busybox, dbus, dbus-glib, directfb,
-+	dnsmasq, e2fsprogs, ethtool, fakeroot, fbdump, freetype, fuse,
-+	gamin, jpeg, leafpad, libargtable2, libao, libconfuse,
-+	libcuefile, libcurl, libreplaygain, libsamplerate, libsndfile,
-+	libsoup, libsvgtiny, lighttpd, lzo, lzop, mpd, mpg123,
-+	musepack, mysql_client, netcat, netsnmp, ntfs-3g, ntfsprogs,
-+	openssl, radvd, samba, sdl_sound, sqlite, squid, sylpheed,
-+	taglib, tar, tcpreplay, util-linux, xterm
-+
-+	New packages: fluxbox, libev, libftdi, libgeotiff, portaudio
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#4183: Codesourcery toolchain download site has changed
-+
- 2011.08, Released August 31th, 2011:
- 
- 	Fixes all over the tree.
+-OPENSSL_VERSION = 1.0.0d
++OPENSSL_VERSION = 1.0.0e
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
 -- 
 1.7.3.4
