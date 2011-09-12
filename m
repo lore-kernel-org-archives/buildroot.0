@@ -1,36 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Sep 2011 22:02:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 4183] Codesourcery toolchain download site has
-	changed
-In-Reply-To: <bug-4183-163@https.bugs.busybox.net/>
-References: <bug-4183-163@https.bugs.busybox.net/>
-Message-ID: <20110912220247.9CB3A8D598@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Sep 2011 19:03:25 -0300
+Subject: [Buildroot] [PATCH 3/6] gdb: make it a proper package
+In-Reply-To: <1315851029.32089.5.camel@dublxciaranr1.verifone.com>
+References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
+ <1293795546-19674-6-git-send-email-gustavo@zacarias.com.ar>
+ <87hbdrc6ar.fsf@macbook.be.48ers.dk> <87aajidiw4.fsf@macbook.be.48ers.dk>
+ <1315851029.32089.5.camel@dublxciaranr1.verifone.com>
+Message-ID: <4c502c1470d79c270f8dea2aa647e91e@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4183
+On Mon, 12 Sep 2011 19:10:21 +0100, Quotient Remainder wrote:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+> (Top-posting for clarity)
+> Five of the six patches from Gustavo's patch-set containing the one
+> below from way back in January was applied; this one wasn't applied.
+> Has there been any progress on making GDB and friends a generic 
+> target
+> since?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Thanks for the heads up, committed the patch.
-Normally buildroot should still work when upstream URLs change as we have a
-backup mirror (http://sources.buildroot.net), but mentor.com unfortunately
-redirects the old tarball URLs to their new front page instead of generating a
-404.
-
-I have mailed the mentor webmaster to get them to fix this, but chances are
-that they won't do it.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+There were a couple of issues, OTOH with Kconfig and multiple 
+selections in different places which was solved with Yann's help later 
+on.
+And a couple of build issues, nothing big that i recall.
+I can give it a respin if no one else is interested in doing so.
+Regards.
