@@ -1,35 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2011 21:53:23 +0200
-Subject: [Buildroot] [PATCH 3/6] gdb: make it a proper package
-In-Reply-To: <1315851029.32089.5.camel@dublxciaranr1.verifone.com>
-References: <1293795546-19674-1-git-send-email-gustavo@zacarias.com.ar>
- <1293795546-19674-6-git-send-email-gustavo@zacarias.com.ar>
- <87hbdrc6ar.fsf@macbook.be.48ers.dk>
- <87aajidiw4.fsf@macbook.be.48ers.dk>
- <1315851029.32089.5.camel@dublxciaranr1.verifone.com>
-Message-ID: <20110912215323.32bc85a8@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Sep 2011 20:21:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 4183] New: Codesourcery toolchain download site
+	has changed
+Message-ID: <bug-4183-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=4183
 
-Le Mon, 12 Sep 2011 19:10:21 +0100,
-Quotient Remainder <quotientvremainder@gmail.com> a ?crit :
+           Summary: Codesourcery toolchain download site has changed
+           Product: buildroot
+           Version: 2010.08
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: subramaniam.ca at ti.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> (Top-posting for clarity)
-> Five of the six patches from Gustavo's patch-set containing the one
-> below from way back in January was applied; this one wasn't applied.
-> Has there been any progress on making GDB and friends a generic target
-> since?
 
-Not as far as I know, but a renewed effort would be very interesting.
+Since the website has changed from codesourcery to sourcery.mentor, the
+downalod of the ext toolchain fails.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
