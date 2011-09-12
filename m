@@ -1,47 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 12 Sep 2011 18:56:21 -0300
-Subject: [Buildroot] [PATCH v2] openssl: bump to 1.0.0e
-In-Reply-To: <4E67629E.10809@visionsystems.de>
-References: <4E67629E.10809@visionsystems.de>
-Message-ID: <c27c7362b68628f7b2dc90bcc2cb3c4b@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 13 Sep 2011 00:00:14 +0200
+Subject: [Buildroot] [PATCH] ext-toolchain: fix download url
+In-Reply-To: <CAPCu-pSkmTLjiRQc2XD24NcairMHeAAj_w-VkpgXR5AFcCTpCA@mail.gmail.com>
+ (C. A.'s message of "Mon, 12 Sep 2011 16:01:17 -0500")
+References: <CAPCu-pSkmTLjiRQc2XD24NcairMHeAAj_w-VkpgXR5AFcCTpCA@mail.gmail.com>
+Message-ID: <87ipox5slt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 07 Sep 2011 14:25:02 +0200, Yegor Yefremov wrote:
+>>>>> "C" == C A, Subramaniam <subramaniam.ca@ti.com> writes:
 
-> Changes between 1.0.0d and 1.0.0e [6 Sep 2011]
->
->   *) Fix bug where CRLs with nextUpdate in the past are sometimes 
-> accepted
->      by initialising X509_STORE_CTX properly. (CVE-2011-3207)
->      [Kaspar Brand <ossl@velox.ch>]
->
->   *) Fix SSL memory handling for (EC)DH ciphersuites, in particular
->      for multi-threaded use of ECDH. (CVE-2011-3210)
->      [Adam Langley (Google)]
->
->   *) Fix x509_name_ex_d2i memory leak on bad inputs.
->      [Bodo Moeller]
->
->   *) Remove hard coded ecdsaWithSHA1 signature tests in ssl code and 
-> check
->      signature public key algorithm by using OID xref utilities 
-> instead.
->      Before this you could only use some ECC ciphersuites with SHA1 
-> only.
->      [Steve Henson]
->
->   *) Add protection against ECDSA timing attacks as mentioned in the 
-> paper
->      by Billy Bob Brumley and Nicola Tuveri, see:
->
-> 	http://eprint.iacr.org/2011/232.pdf
->
->      [Billy Bob Brumley and Nicola Tuveri]
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ >> From a260d781f4c82a3ce2c56f23f1e30a42307fc454 Mon Sep 17 00:00:00 2001
+ C> From: Subramaniam C.A <subramaniam.ca@ti.com>
+ C> Date: Mon, 12 Sep 2011 15:59:20 -0500
+ C> Subject: [PATCH] ext-toolchain: fix download url
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ C> The website for downloading the toolchain has changed
+ C> from http://www.codesourcery.com to http://sourcery.mentor.com
+
+Thanks, committed. Notice that your mailer had corrupted whitespace /
+wordwrapped the patch so I had to fix it up manually. Please consider
+using git send-email in the future.
+
+-- 
+Bye, Peter Korsgaard
