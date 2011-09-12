@@ -1,40 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Sep 2011 08:52:16 +0200
-Subject: [Buildroot] [PATCH] intltool: use built host libexpat during
- configure
-In-Reply-To: <j4dc25$juq$1@dough.gmane.org>
-References: <20110906191020.GA29969@berrier.lan>
- <20110906232416.077d2091@skate> <j47s9g$n6q$1@dough.gmane.org>
- <20110907161121.41b2a43b@skate> <j4dc25$juq$1@dough.gmane.org>
-Message-ID: <20110912085216.5cbe6142@skate>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 12 Sep 2011 10:11:01 +0200
+Subject: [Buildroot] [PATCH 2/2] samba: fix linking of smbd with avahi
+	support
+In-Reply-To: <1315815061-9225-1-git-send-email-s.neumann@raumfeld.com>
+References: <8739g2g667.fsf@macbook.be.48ers.dk>
+ <1315815061-9225-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1315815061-9225-3-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Wade,
+Expliticly link with -lpthread if smbd is compiled with
+avahi support. Otherwise the binary will fail to run.
 
-Le Fri, 09 Sep 2011 09:40:51 -0600,
-Wade Berrier <wberrier@gmail.com> a ?crit :
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/samba/samba-fix-smbd-libs-avahi.patch |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+ create mode 100644 package/samba/samba-fix-smbd-libs-avahi.patch
 
-> Running this command on my older (2010.02) version of buildroot
-> doesn't have an rpath.  So it looks like it was already fixed.  Sorry
-> for the noise :(
-
-The logic that makes sure that an rpath is added to host binaries has
-been added in 4fdecac9d692b8d6f071ba6ad938b6ad68b675fd in July 2010.
-
-It would be great if you could try with a newer version on RHEL5,
-because I'm not sure many of us test this distribution, even though it
-is a quite common one in corporate environments. So we're definitely
-interested in bug reports, but of course on modern Buildroot versions.
-
-Regards,
-
-Thomas
+diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba-fix-smbd-libs-avahi.patch
+new file mode 100644
+index 0000000..d6423de
+--- /dev/null
++++ b/package/samba/samba-fix-smbd-libs-avahi.patch
+@@ -0,0 +1,15 @@
++Expliticly link with -lpthread if smbd is compiled with
++avahi support. Otherwise the binary will fail to run.
++
++Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
++--- samba-3.5.6-orig/source3/Makefile.in	2010-10-07 18:41:16.000000000 +0200
+++++ samba-3.5.6/source3/Makefile.in	2010-10-27 14:52:40.000000000 +0200
++@@ -1552,7 +1552,7 @@
++ 		$(KRB5LIBS) $(DYNEXP) $(PRINT_LIBS) $(AUTH_LIBS) \
++ 		$(ACL_LIBS) $(PASSDB_LIBS) $(LIBS) $(DNSSD_LIBS) $(AVAHI_LIBS) \
++ 		$(POPT_LIBS) @SMBD_LIBS@ $(LIBTALLOC_LIBS) $(LIBTDB_LIBS) \
++-		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS)
+++		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS) $(PTHREAD_LDFLAGS)
++ 
++ bin/nmbd at EXEEXT@: $(BINARY_PREREQS) $(NMBD_OBJ) @BUILD_POPT@ $(LIBTALLOC) $(LIBTDB) $(LIBWBCLIENT)
++ 	@echo Linking $@
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.4.1
