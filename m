@@ -1,38 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 12 Sep 2011 00:08:17 +0200
-Subject: [Buildroot] [git commit] fuse: remove --program-prefix
-Message-ID: <20110912052635.A24CC8D58C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Sep 2011 08:52:16 +0200
+Subject: [Buildroot] [PATCH] intltool: use built host libexpat during
+ configure
+In-Reply-To: <j4dc25$juq$1@dough.gmane.org>
+References: <20110906191020.GA29969@berrier.lan>
+ <20110906232416.077d2091@skate> <j47s9g$n6q$1@dough.gmane.org>
+ <20110907161121.41b2a43b@skate> <j4dc25$juq$1@dough.gmane.org>
+Message-ID: <20110912085216.5cbe6142@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Wade,
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc32ba990a9f72579f34d24a742ba744ae4d5a58
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Fri, 09 Sep 2011 09:40:51 -0600,
+Wade Berrier <wberrier@gmail.com> a ?crit :
 
---program-prefix is now set in the auto-target infrastructure.
+> Running this command on my older (2010.02) version of buildroot
+> doesn't have an rpath.  So it looks like it was already fixed.  Sorry
+> for the noise :(
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/fuse/libfuse.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+The logic that makes sure that an rpath is added to host binaries has
+been added in 4fdecac9d692b8d6f071ba6ad938b6ad68b675fd in July 2010.
 
-diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
-index 13a5194..45fb2f3 100644
---- a/package/fuse/libfuse.mk
-+++ b/package/fuse/libfuse.mk
-@@ -9,8 +9,7 @@ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
- LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
- 
- LIBFUSE_INSTALL_STAGING = YES
--LIBFUSE_CONF_OPT= --program-prefix="" \
--		--disable-nls \
-+LIBFUSE_CONF_OPT= --disable-nls \
- 		--disable-example \
- 		--disable-kernel-module \
- 		--enable-lib \
+It would be great if you could try with a newer version on RHEL5,
+because I'm not sure many of us test this distribution, even though it
+is a quite common one in corporate environments. So we're definitely
+interested in bug reports, but of course on modern Buildroot versions.
+
+Regards,
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
