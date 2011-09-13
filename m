@@ -1,49 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 13 Sep 2011 13:31:49 +0200
-Subject: [Buildroot] CodeSourcery moved to Mentor Graphics
-In-Reply-To: <201109131251.21570.yann.morin.1998@anciens.enib.fr> (Yann
- E. MORIN's message of "Tue, 13 Sep 2011 12:51:21 +0200")
-References: <4E6F323A.1080605@xor-gate.org>
- <201109131251.21570.yann.morin.1998@anciens.enib.fr>
-Message-ID: <87fwk04r16.fsf@macbook.be.48ers.dk>
+From: C.A, Subramaniam <subramaniam.ca@ti.com>
+Date: Tue, 13 Sep 2011 07:42:02 -0500
+Subject: [Buildroot] codesourcery redirects
+In-Reply-To: <87litt3p2a.fsf@macbook.be.48ers.dk>
+References: <B0CC2865821E4240BD3CD76FBFB30B757C65E826@NA-MBX-02.mgc.mentorg.com>
+ <E5FF2D8C45F99B48AC82FB63E04FD4CC5C479C5E@NA-MBX-02.mgc.mentorg.com>
+ <7DFC7A8D985FA140A27ACD33B583EF5B5C434FDA@NA-MBX-02.mgc.mentorg.com>
+ <87litt3p2a.fsf@macbook.be.48ers.dk>
+Message-ID: <CAPCu-pTYPB5WuGCN6j4xpE_NmwcJEk7emNs3=E=M0zXMuOe8Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
+On Tue, Sep 13, 2011 at 1:59 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+>>>>>> "Rob" == Pilic, Robert <Robert_Pilic@mentor.com> writes:
+>
+> FYI,
+>
+> Mentor Graphics have fixed the codesourcery download URLs, so 2011.08
+> (and previous releases) should work with the external codesourcery
+> toolchains again.
+Thats good! We should probably revert the patch then!
+>
+> Thanks!
+>
+> ?Rob> Hello Peter,
+>
+> ?Rob> These links will now redirect with status code 301 to
+> ?Rob> https://sourcery.mentor.com with the URL path remaining intact. In
+> ?Rob> addition, URLs for files that do not exist will return a
+> ?Rob> 404. Thanks for bringing this issue to our attention, and please
+> ?Rob> notify me directly if you encounter any other issues. ?Regards,
+>
+> ?Rob> Rob Pilic
+> ?Rob> Web Services Team
+> ?Rob> Mentor Graphics
+>
+> --
+> Bye, Peter Korsgaard
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
- Yann> Jerry, All,
- Yann> On Tuesday 13 September 2011 12:36:42 Jerry Jacobs wrote:
- >> I tried to create a new configuration for the Ledato NanosG20 
- >> (AT91SAM9G20) with the codesourcery toolchain. But it was not able to 
- >> download the toolchain (Using latest buildroot from GIT).
 
- Yann> The issue has been reported to Mentor Graphics by Peter, and it seems they
- Yann> have fixed the issue, as reported by Peter:
- Yann>   http://lists.busybox.net/pipermail/buildroot/2011-September/045580.html
-
- Yann> I'll check here, but if it still breaks for you, just say so.
-
-Indeed, it should be fixed now (also for older Buildroot releases), so
-please try again:
-
---2011-09-13 13:30:29--  http://www.codesourcery.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-Resolving www.codesourcery.com (www.codesourcery.com)... 174.129.20.178
-Connecting to www.codesourcery.com (www.codesourcery.com)|174.129.20.178|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: https://sourcery.mentor.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 [following]
---2011-09-13 13:30:29--  https://sourcery.mentor.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-Resolving sourcery.mentor.com (sourcery.mentor.com)... 107.20.212.105
-Connecting to sourcery.mentor.com (sourcery.mentor.com)|107.20.212.105|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 [following]
---2011-09-13 13:30:35--  https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-Connecting to sourcery.mentor.com (sourcery.mentor.com)|107.20.212.105|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 82460512 (79M) [application/x-bzip2]
-Saving to: `/var/lib/downloads/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2'
 
 -- 
-Bye, Peter Korsgaard
+
+Thank you and Regards
+Subbu
