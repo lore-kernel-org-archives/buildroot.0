@@ -1,35 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 13 Sep 2011 12:51:21 +0200
-Subject: [Buildroot] CodeSourcery moved to Mentor Graphics
-In-Reply-To: <4E6F323A.1080605@xor-gate.org>
-References: <4E6F323A.1080605@xor-gate.org>
-Message-ID: <201109131251.21570.yann.morin.1998@anciens.enib.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Sep 2011 13:27:04 +0200
+Subject: [Buildroot] Download external toolchain with make source
+In-Reply-To: <CA+Xn3W0HLmRRChgWznXWUZ-5NeQRNU1LF6KOKxmfvHj-w-LNVg@mail.gmail.com>
+References: <CA+Xn3W1gTygZ03eu15dafntc2Nynn6X=cNgzKsW2RmRh9oPh2A@mail.gmail.com>
+ <87ei20yiab.fsf@macbook.be.48ers.dk>
+ <201107082316.38408.yann.morin.1998@anciens.enib.fr>
+ <CA+Xn3W0HLmRRChgWznXWUZ-5NeQRNU1LF6KOKxmfvHj-w-LNVg@mail.gmail.com>
+Message-ID: <20110913132704.140a1a89@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerry, All,
+Le Tue, 13 Sep 2011 11:49:30 +0200,
+"Fache, Herve" <h-fache@ti.com> a ?crit :
 
-On Tuesday 13 September 2011 12:36:42 Jerry Jacobs wrote:
-> I tried to create a new configuration for the Ledato NanosG20 
-> (AT91SAM9G20) with the codesourcery toolchain. But it was not able to 
-> download the toolchain (Using latest buildroot from GIT).
+> I can't see this in the latest release, or am I looking in the wrong
+> place?
 
-The issue has been reported to Mentor Graphics by Peter, and it seems they
-have fixed the issue, as reported by Peter:
-  http://lists.busybox.net/pipermail/buildroot/2011-September/045580.html
+See b51b664727458235460ed3c5429b8d44215b9446, the commit log even say
+that is was based on your patch.
 
-I'll check here, but if it still breaks for you, just say so.
+If it doesn't work for you, do not hesitate to report back to the list.
 
 Regards,
-Yann E. MORIN.
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
