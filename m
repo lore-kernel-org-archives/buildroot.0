@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 13 Sep 2011 23:44:47 +0200
-Subject: [Buildroot] [PATCH] openssh: bump to 5.9p1
-In-Reply-To: <4E6625A1.2010105@visionsystems.de> (Yegor Yefremov's message of
- "Tue, 06 Sep 2011 15:52:33 +0200")
-References: <4E6625A1.2010105@visionsystems.de>
-Message-ID: <871uvkung0.fsf@macbook.be.48ers.dk>
+Date: Tue, 13 Sep 2011 23:45:11 +0200
+Subject: [Buildroot] [PATCH] iw: bump to 3.1
+In-Reply-To: <4E6730DC.7090103@visionsystems.de> (Yegor Yefremov's message of
+ "Wed, 07 Sep 2011 10:52:44 +0200")
+References: <4E6730DC.7090103@visionsystems.de>
+Message-ID: <87wrdct8uw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
