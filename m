@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 13 Sep 2011 23:44:59 +0200
-Subject: [Buildroot] [git commit] iw: bump to 3.1
-Message-ID: <20110913214743.1465A8D5A4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] lzop : bump to 1.03
+Message-ID: <20110913214742.A888A8D59E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +9,32 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e849ff5d33c37b149152729541ecc403c1dfb90d
+commit: http://git.buildroot.net/buildroot/commit/?id=307c006695f24621a8e515f85d0cbbe4374afd89
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/iw/iw.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/lzop/lzop.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index be3edc2..5fcdc72 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
+index e55c105..b278e59 100644
+--- a/package/lzop/lzop.mk
++++ b/package/lzop/lzop.mk
+@@ -3,9 +3,9 @@
+ # lzop
  #
  #############################################################
+-LZOP_VERSION:=1.02rc1
+-LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
+-LZOP_SITE:=http://www.lzop.org/download/
+-LZOP_DEPENDENCIES:=lzo
++LZOP_VERSION = 1.03
++LZOP_SOURCE = lzop-$(LZOP_VERSION).tar.gz
++LZOP_SITE = http://www.lzop.org/download/
++LZOP_DEPENDENCIES = lzo
  
--IW_VERSION = 3.0
-+IW_VERSION = 3.1
- IW_SOURCE = iw-$(IW_VERSION).tar.bz2
- IW_SITE = http://wireless.kernel.org/download/iw
- IW_DEPENDENCIES = host-pkg-config libnl
+ $(eval $(call AUTOTARGETS,package,lzop))
 -- 
 1.7.3.4
