@@ -1,25 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 13 Sep 2011 23:29:20 +0200
-Subject: [Buildroot] [PATCH 2/2] samba: fix linking of smbd with avahi
-	support
-In-Reply-To: <1315903328-20842-3-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Tue, 13 Sep 2011 10:42:08 +0200")
-References: <87zki95urn.fsf@macbook.be.48ers.dk>
- <1315903328-20842-1-git-send-email-s.neumann@raumfeld.com>
- <1315903328-20842-3-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87ipowuo5r.fsf@macbook.be.48ers.dk>
+Date: Tue, 13 Sep 2011 23:35:30 +0200
+Subject: [Buildroot] [PATCH 1/7] ipsec-tools: bump to version 0.8.0
+In-Reply-To: <1315932017-20307-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 13 Sep 2011 13:40:11 -0300")
+References: <1315932017-20307-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ehzkunvh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Sven> Expliticly link with -lpthread if smbd is compiled with
- Sven> avahi support. Otherwise the binary will fail to run.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed all 7, thanks.
 
 -- 
 Bye, Peter Korsgaard
