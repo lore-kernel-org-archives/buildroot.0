@@ -1,7 +1,7 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Tue, 13 Sep 2011 23:44:59 +0200
-Subject: [Buildroot] [git commit] lzop : bump to 1.03
-Message-ID: <20110913214742.A888A8D59E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] openssh: bump to 5.9p1
+Message-ID: <20110913214742.D2A368D59E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,32 +9,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-commit: http://git.buildroot.net/buildroot/commit/?id=307c006695f24621a8e515f85d0cbbe4374afd89
+commit: http://git.buildroot.net/buildroot/commit/?id=ab9a76efff3e1cffb572dd748ffaa532f5da0107
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lzop/lzop.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/openssh/openssh.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
-index e55c105..b278e59 100644
---- a/package/lzop/lzop.mk
-+++ b/package/lzop/lzop.mk
-@@ -3,9 +3,9 @@
- # lzop
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 7a6cc90..02a23e1 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--LZOP_VERSION:=1.02rc1
--LZOP_SOURCE:=lzop-$(LZOP_VERSION).tar.gz
--LZOP_SITE:=http://www.lzop.org/download/
--LZOP_DEPENDENCIES:=lzo
-+LZOP_VERSION = 1.03
-+LZOP_SOURCE = lzop-$(LZOP_VERSION).tar.gz
-+LZOP_SITE = http://www.lzop.org/download/
-+LZOP_DEPENDENCIES = lzo
  
- $(eval $(call AUTOTARGETS,package,lzop))
+-OPENSSH_VERSION = 5.8p2
++OPENSSH_VERSION = 5.9p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
 -- 
 1.7.3.4
