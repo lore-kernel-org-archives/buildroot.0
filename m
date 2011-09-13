@@ -1,26 +1,46 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 13 Sep 2011 10:42:06 +0200
-Subject: [Buildroot] samba: bump to 3.5.11
-In-Reply-To: <87zki95urn.fsf@macbook.be.48ers.dk>
+Date: Tue, 13 Sep 2011 10:42:08 +0200
+Subject: [Buildroot] [PATCH 2/2] samba: fix linking of smbd with avahi
+	support
+In-Reply-To: <1315903328-20842-1-git-send-email-s.neumann@raumfeld.com>
 References: <87zki95urn.fsf@macbook.be.48ers.dk>
-Message-ID: <1315903328-20842-1-git-send-email-s.neumann@raumfeld.com>
+ <1315903328-20842-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1315903328-20842-3-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Expliticly link with -lpthread if smbd is compiled with
+avahi support. Otherwise the binary will fail to run.
 
-Hi,
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/samba/samba-fix-smbd-libs-avahi.patch |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+ create mode 100644 package/samba/samba-fix-smbd-libs-avahi.patch
 
-here's another patch-set for the samba update. This time we
-bump to 3.5.11 and I have reintroduced a patch that fixes
-the mount.cifs compile issue by hardcoding the /etc/fstab path
-instead of pulling it from the (non-existant) fstab.h header.
-
-This time I have successfully compiled this with all Samba
-tools enabled.
-
-
-Regards,
-Sven
+diff --git a/package/samba/samba-fix-smbd-libs-avahi.patch b/package/samba/samba-fix-smbd-libs-avahi.patch
+new file mode 100644
+index 0000000..d6423de
+--- /dev/null
++++ b/package/samba/samba-fix-smbd-libs-avahi.patch
+@@ -0,0 +1,15 @@
++Expliticly link with -lpthread if smbd is compiled with
++avahi support. Otherwise the binary will fail to run.
++
++Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
++--- samba-3.5.6-orig/source3/Makefile.in	2010-10-07 18:41:16.000000000 +0200
+++++ samba-3.5.6/source3/Makefile.in	2010-10-27 14:52:40.000000000 +0200
++@@ -1552,7 +1552,7 @@
++ 		$(KRB5LIBS) $(DYNEXP) $(PRINT_LIBS) $(AUTH_LIBS) \
++ 		$(ACL_LIBS) $(PASSDB_LIBS) $(LIBS) $(DNSSD_LIBS) $(AVAHI_LIBS) \
++ 		$(POPT_LIBS) @SMBD_LIBS@ $(LIBTALLOC_LIBS) $(LIBTDB_LIBS) \
++-		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS)
+++		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS) $(PTHREAD_LDFLAGS)
++ 
++ bin/nmbd at EXEEXT@: $(BINARY_PREREQS) $(NMBD_OBJ) @BUILD_POPT@ $(LIBTALLOC) $(LIBTDB) $(LIBWBCLIENT)
++ 	@echo Linking $@
+-- 
+1.7.4.1
