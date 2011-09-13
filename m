@@ -1,61 +1,39 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 13 Sep 2011 00:46:06 +0200
-Subject: [Buildroot] [git commit] openssl: bump to 1.0.0e
-Message-ID: <20110912224630.C773F8D58F@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 13 Sep 2011 08:59:41 +0200
+Subject: [Buildroot] codesourcery redirects
+In-Reply-To: <7DFC7A8D985FA140A27ACD33B583EF5B5C434FDA@NA-MBX-02.mgc.mentorg.com>
+ (Robert Pilic's message of "Mon, 12 Sep 2011 23:16:46 +0000")
+References: <B0CC2865821E4240BD3CD76FBFB30B757C65E826@NA-MBX-02.mgc.mentorg.com>
+ <E5FF2D8C45F99B48AC82FB63E04FD4CC5C479C5E@NA-MBX-02.mgc.mentorg.com>
+ <7DFC7A8D985FA140A27ACD33B583EF5B5C434FDA@NA-MBX-02.mgc.mentorg.com>
+Message-ID: <87litt3p2a.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Rob" == Pilic, Robert <Robert_Pilic@mentor.com> writes:
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a50f6ef29e72b4725b0e53dbf28922c798eacf06
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+FYI,
 
-Changes between 1.0.0d and 1.0.0e [6 Sep 2011]
+Mentor Graphics have fixed the codesourcery download URLs, so 2011.08
+(and previous releases) should work with the external codesourcery
+toolchains again.
 
-  *) Fix bug where CRLs with nextUpdate in the past are sometimes accepted
-     by initialising X509_STORE_CTX properly. (CVE-2011-3207)
-     [Kaspar Brand <ossl@velox.ch>]
+Thanks!
 
-  *) Fix SSL memory handling for (EC)DH ciphersuites, in particular
-     for multi-threaded use of ECDH. (CVE-2011-3210)
-     [Adam Langley (Google)]
+ Rob> Hello Peter,
 
-  *) Fix x509_name_ex_d2i memory leak on bad inputs.
-     [Bodo Moeller]
+ Rob> These links will now redirect with status code 301 to
+ Rob> https://sourcery.mentor.com with the URL path remaining intact. In
+ Rob> addition, URLs for files that do not exist will return a
+ Rob> 404. Thanks for bringing this issue to our attention, and please
+ Rob> notify me directly if you encounter any other issues.  Regards,
 
-  *) Remove hard coded ecdsaWithSHA1 signature tests in ssl code and check
-     signature public key algorithm by using OID xref utilities instead.
-     Before this you could only use some ECC ciphersuites with SHA1 only.
-     [Steve Henson]
+ Rob> Rob Pilic
+ Rob> Web Services Team
+ Rob> Mentor Graphics
 
-  *) Add protection against ECDSA timing attacks as mentioned in the paper
-     by Billy Bob Brumley and Nicola Tuveri, see:
-
-	http://eprint.iacr.org/2011/232.pdf
-
-     [Billy Bob Brumley and Nicola Tuveri]
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 0163ef8..82a4fc4 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--OPENSSL_VERSION = 1.0.0d
-+OPENSSL_VERSION = 1.0.0e
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
