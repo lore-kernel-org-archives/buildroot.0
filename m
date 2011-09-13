@@ -1,34 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 13 Sep 2011 08:54:39 +0200
-Subject: [Buildroot] [git commit] barebox: bump version
-Message-ID: <20110913065957.1CF058D592@busybox.osuosl.org>
+From: =?UTF-8?Q?Beno=C3=AEt_Mauduit?= <benoit.mauduit@gmail.com>
+Date: Tue, 13 Sep 2011 09:38:44 +0200
+Subject: [Buildroot] [PATCH 0/2] Add Xenomai real-time framework
+In-Reply-To: <20110912215245.3b7b0a0b@skate>
+References: <1310572380-26403-1-git-send-email-benoit.mauduit@gmail.com>
+ <20110713182346.0ec83ec6@skate>
+ <CAAXf6LVM1FaAV_J5Qjvg=sNW_44=9eZYjFKR62KBXwu2oaabeg@mail.gmail.com>
+ <20110912215245.3b7b0a0b@skate>
+Message-ID: <CAHeZHmvLFtv6tCsQCs__qCpLs0HpDN2FjuGsq6uOEMMX0WJ-NA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Mon, Sep 12, 2011 at 9:52 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Mon, 12 Sep 2011 21:24:40 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> What is the current status of this? I haven't seen any recent updated
+>> patches for xenomai in buildroot.
+>>
+>> Benoit, do you have the time to submit a new patch based on the
+>> feedback you received?
+>> Thomas (P.), are there more comments you wanted to add?
+>
+> I haven't had the time to do a more careful review process yet, but
+> it's on my TODO-list: my colleague Maxime Ripard can testify that I did
+> talk to him today about those Xenomai patches.
+>
+> Regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e4d029219f0a4b48c428cf59ba6b220aeedf132
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- boot/barebox/barebox.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I am sorry but i am very busy this last weeks. (new job, etc...)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index d3143e6..0dfcff3 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BAREBOX_VERSION = 2011.08.0
-+BAREBOX_VERSION = 2011.09.0
- BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
- BAREBOX_SITE = http://www.barebox.org/download/
- 
+But, it is on my TODO-list and I think i will resend patches for the
+next week-end.
+
+Thanks for the reminder :)
+
+Regards,
+
+Ps: D?sol? Thomas pour le fail :)
+
 -- 
-1.7.3.4
+Benoit Mauduit
