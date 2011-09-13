@@ -1,41 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 13 Sep 2011 15:14:06 -0300
-Subject: [Buildroot] [PATCH 2/2] u-boot: build signed image for OMAP
- processors
-In-Reply-To: <1315934373-16561-2-git-send-email-luca@lucaceresoli.net>
-References: <1315934373-16561-1-git-send-email-luca@lucaceresoli.net>
- <1315934373-16561-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <0ff71aac702ca25e3bc08f5749fd98e3@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 13 Sep 2011 23:29:09 +0200
+Subject: [Buildroot] [PATCH 1/2] samba: bump to 3.5.11
+In-Reply-To: <1315903328-20842-2-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Tue, 13 Sep 2011 10:42:07 +0200")
+References: <87zki95urn.fsf@macbook.be.48ers.dk>
+ <1315903328-20842-1-git-send-email-s.neumann@raumfeld.com>
+ <1315903328-20842-2-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87mxe8uo62.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 13 Sep 2011 19:19:33 +0200, Luca Ceresoli wrote:
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  boot/uboot/Config.in |   15 +++++++++++++++
->  boot/uboot/uboot.mk  |   24 ++++++++++++++++++++++++
->  2 files changed, 39 insertions(+), 0 deletions(-)
->
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index a0b2bfc..5a8af98 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -91,6 +91,21 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
->
->  endchoice
->
-> +config BR2_TARGET_UBOOT_OMAP_IFT
-> +	depends on BR2_TARGET_UBOOT_FORMAT_BIN
-> +	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
-> +	bool "produce a .ift signed image (OMAP)"
-> +	help
-> +	  Use gpsign to produce an image of u-boot.bin signed with
-> +	  a Configuration Header for booting on OMAP processors.
+ Sven> Bump to version 3.5.11 and also update the download location.
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
-Maybe make it depend on BR2_ARCH = arm || armeb to avoid pointless 
-options for other architectures?
-Regards.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
