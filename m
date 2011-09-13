@@ -1,51 +1,129 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 13 Sep 2011 23:57:29 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain/gdb: strip tarball component when
-	extracting
+Date: Tue, 13 Sep 2011 23:57:30 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain/gdb: fixup version strings
 In-Reply-To: <1315951050-19272-1-git-send-email-yann.morin.1998@anciens.enib.fr>
 References: <1315951050-19272-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <1315951050-19272-2-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <1315951050-19272-3-git-send-email-yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some tarballs of gdb (see next patch), the extracted directory is
-*not* named after the version string (eg. gdb-6.6a extract into gdb-6.6/)
+The gdb tarballs have been re-released after a GPL compliance
+issue was found:
+  http://sourceware.org/ml/gdb/2011-09/msg00030.html
 
-Create the appropriate directory first, then use --strip-{components,path}
-when extracting gdb (the same way it is done for the generic package
-infrastructure).
+So all versions were re-packaged.
 
-At the same time, get rid of the snapshot special case, because:
- 1- it's no longer available in the menu
- 2- it would be handled by the above change
+In the process, an 'a' was appended to the version strings, and
+unlike the binutils people, the gdb folks are not inclined in
+providing legacy symlinks:
+  http://sourceware.org/ml/gdb/2011-09/msg00036.html
+
+
+So, this patch fixes the issue by renaming version strings. It is to be
+noted that, although the versions got bumped to include an 'a' at the end,
+the directory contained in the tarball is still named after the version
+string without the 'a'. For example:
+ - old version      : 6.6
+ - new version      : 6.6a
+ - tarball name     : gdb-6.6a.tar.bz2
+ - directory name   : gdb-6.6/
+
+In fact, it does not pose any problem for buildroot, as the extract process
+explicitly mkdirs the directory to extract into, *and* strips the first level
+of the tree extracted from the tarball.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/gdb/gdb.mk |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ toolchain/gdb/{6.6 => 6.6a}/100-uclibc-conf.patch  |    0
+ .../600-fix-compile-flag-mismatch.patch            |    0
+ .../gdb/{6.6 => 6.6a}/gdb-6.6-bfin-gdbserver.patch |    0
+ .../600-fix-compile-flag-mismatch.patch            |    0
+ .../600-fix-compile-flag-mismatch.patch            |    0
+ toolchain/gdb/Config.in                            |   30 ++++++++++----------
+ 6 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index caf3e36..190c01b 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -28,13 +28,8 @@ $(DL_DIR)/$(GDB_SOURCE):
+diff --git a/toolchain/gdb/6.6/100-uclibc-conf.patch b/toolchain/gdb/6.6a/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gdb/6.6/100-uclibc-conf.patch
+rename to toolchain/gdb/6.6a/100-uclibc-conf.patch
+diff --git a/toolchain/gdb/6.6/600-fix-compile-flag-mismatch.patch b/toolchain/gdb/6.6a/600-fix-compile-flag-mismatch.patch
+similarity index 100%
+rename from toolchain/gdb/6.6/600-fix-compile-flag-mismatch.patch
+rename to toolchain/gdb/6.6a/600-fix-compile-flag-mismatch.patch
+diff --git a/toolchain/gdb/6.6/gdb-6.6-bfin-gdbserver.patch b/toolchain/gdb/6.6a/gdb-6.6-bfin-gdbserver.patch
+similarity index 100%
+rename from toolchain/gdb/6.6/gdb-6.6-bfin-gdbserver.patch
+rename to toolchain/gdb/6.6a/gdb-6.6-bfin-gdbserver.patch
+diff --git a/toolchain/gdb/6.7.1/600-fix-compile-flag-mismatch.patch b/toolchain/gdb/6.7.1a/600-fix-compile-flag-mismatch.patch
+similarity index 100%
+rename from toolchain/gdb/6.7.1/600-fix-compile-flag-mismatch.patch
+rename to toolchain/gdb/6.7.1a/600-fix-compile-flag-mismatch.patch
+diff --git a/toolchain/gdb/6.8/600-fix-compile-flag-mismatch.patch b/toolchain/gdb/6.8a/600-fix-compile-flag-mismatch.patch
+similarity index 100%
+rename from toolchain/gdb/6.8/600-fix-compile-flag-mismatch.patch
+rename to toolchain/gdb/6.8a/600-fix-compile-flag-mismatch.patch
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index 8295f79..23e9624 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -32,30 +32,30 @@ choice
+ 	help
+ 	  Select the version of gdb you wish to use.
  
- gdb-unpacked: $(GDB_DIR)/.unpacked
- $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
--	mkdir -p $(TOOLCHAIN_DIR)
--	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
--ifeq ($(GDB_VERSION),snapshot)
--	GDB_REAL_DIR=$(shell \
--		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
--	ln -sf $(TOOLCHAIN_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1) $(GDB_DIR)
--endif
-+	mkdir -p $(GDB_DIR)
-+	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(GDB_DIR) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
- ifneq ($(wildcard $(GDB_PATCH_DIR)),)
- 	toolchain/patch-kernel.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch $(GDB_PATCH_EXTRA)
- endif
+-	config BR2_GDB_VERSION_6_6
+-		bool "gdb 6.6"
++	config BR2_GDB_VERSION_6_6a
++		bool "gdb 6.6a"
+ 		depends on !BR2_avr32
+ 		depends on BR2_DEPRECATED || BR2_bfin
+ 
+-	config BR2_GDB_VERSION_6_7_1
++	config BR2_GDB_VERSION_6_7_1a
+ 		depends on !(BR2_avr32 || BR2_bfin)
+-		bool "gdb 6.7.1"
++		bool "gdb 6.7.1a"
+ 
+ 	config BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
+ 		depends on BR2_avr32
+ 		bool "gdb 6.7.1-avr32-2.1.5"
+ 
+-	config BR2_GDB_VERSION_6_8
+-		bool "gdb 6.8"
++	config BR2_GDB_VERSION_6_8a
++		bool "gdb 6.8a"
+ 		depends on !(BR2_avr32 || BR2_bfin)
+ 
+-	config BR2_GDB_VERSION_7_0_1
+-		bool "gdb 7.0.1"
++	config BR2_GDB_VERSION_7_0_1a
++		bool "gdb 7.0.1a"
+ 		depends on !BR2_bfin
+ 		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+ 
+-	config BR2_GDB_VERSION_7_1
+-		bool "gdb 7.1"
++	config BR2_GDB_VERSION_7_1a
++		bool "gdb 7.1a"
+ 		depends on !BR2_bfin
+ 		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+ 
+@@ -63,9 +63,9 @@ endchoice
+ 
+ config BR2_GDB_VERSION
+ 	string
+-	default "6.6"      if BR2_GDB_VERSION_6_6
+-	default "6.7.1"    if BR2_GDB_VERSION_6_7_1
++	default "6.6a"     if BR2_GDB_VERSION_6_6a
++	default "6.7.1a"   if BR2_GDB_VERSION_6_7_1a
+ 	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5
+-	default "6.8"      if BR2_GDB_VERSION_6_8
+-	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
+-	default "7.1"      if BR2_GDB_VERSION_7_1
++	default "6.8a"     if BR2_GDB_VERSION_6_8a
++	default "7.0.1a"   if BR2_GDB_VERSION_7_0_1a
++	default "7.1a"     if BR2_GDB_VERSION_7_1a
 -- 
 1.7.2.5
