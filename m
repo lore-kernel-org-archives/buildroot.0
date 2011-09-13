@@ -1,48 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Sep 2011 19:44:46 +0200
-Subject: [Buildroot] [PATCH 1/2] omap-u-boot-utils: add new package
-In-Reply-To: <1315934373-16561-1-git-send-email-luca@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 13 Sep 2011 15:14:06 -0300
+Subject: [Buildroot] [PATCH 2/2] u-boot: build signed image for OMAP
+ processors
+In-Reply-To: <1315934373-16561-2-git-send-email-luca@lucaceresoli.net>
 References: <1315934373-16561-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20110913194446.0ebab8c5@skate>
+ <1315934373-16561-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <0ff71aac702ca25e3bc08f5749fd98e3@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 13 Sep 2011 19:19:32 +0200,
-Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
+On Tue, 13 Sep 2011 19:19:33 +0200, Luca Ceresoli wrote:
 
-> +++ b/boot/omap-u-boot-utils/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
-> +	bool "omap-u-boot-utils"
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  boot/uboot/Config.in |   15 +++++++++++++++
+>  boot/uboot/uboot.mk  |   24 ++++++++++++++++++++++++
+>  2 files changed, 39 insertions(+), 0 deletions(-)
+>
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index a0b2bfc..5a8af98 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -91,6 +91,21 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
+>
+>  endchoice
+>
+> +config BR2_TARGET_UBOOT_OMAP_IFT
+> +	depends on BR2_TARGET_UBOOT_FORMAT_BIN
+> +	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
+> +	bool "produce a .ift signed image (OMAP)"
 > +	help
-> +	  U-Boot Utilities for Texas Instrument's OMAP platforms.
-> +	  Say Y if you want these utilities on the development host.
-> +
-> +	  https://github.com/nmenon/omap-u-boot-utils
+> +	  Use gpsign to produce an image of u-boot.bin signed with
+> +	  a Configuration Header for booting on OMAP processors.
 
-This is a pure host package, so it shouldn't be present in any
-Config.in file. See package/fakeroot as an example.
-
-And even if it also was a target package, the Config.in should be in
-the package directory, not in boot/.
-
-> +OMAP_U_BOOT_UTILS_VERSION = d086cb5c0
-> +OMAP_U_BOOT_UTILS_SOURCE = omap-u-boot-utils-$(OMAP_U_BOOT_UTILS_VERSION).tar.gz
-
-xxx_SOURCE is useless with the git download method.
-
-> +OMAP_U_BOOT_UTILS_TARGETS = gpsign pserial tagger ucmd ukermit
-
-Used only once, just hardcode.
-
-Otherwise looks good!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Maybe make it depend on BR2_ARCH = arm || armeb to avoid pointless 
+options for other architectures?
+Regards.
