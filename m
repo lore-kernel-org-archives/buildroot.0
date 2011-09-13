@@ -1,34 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Sep 2011 13:27:04 +0200
-Subject: [Buildroot] Download external toolchain with make source
-In-Reply-To: <CA+Xn3W0HLmRRChgWznXWUZ-5NeQRNU1LF6KOKxmfvHj-w-LNVg@mail.gmail.com>
-References: <CA+Xn3W1gTygZ03eu15dafntc2Nynn6X=cNgzKsW2RmRh9oPh2A@mail.gmail.com>
- <87ei20yiab.fsf@macbook.be.48ers.dk>
- <201107082316.38408.yann.morin.1998@anciens.enib.fr>
- <CA+Xn3W0HLmRRChgWznXWUZ-5NeQRNU1LF6KOKxmfvHj-w-LNVg@mail.gmail.com>
-Message-ID: <20110913132704.140a1a89@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 13 Sep 2011 13:31:49 +0200
+Subject: [Buildroot] CodeSourcery moved to Mentor Graphics
+In-Reply-To: <201109131251.21570.yann.morin.1998@anciens.enib.fr> (Yann
+ E. MORIN's message of "Tue, 13 Sep 2011 12:51:21 +0200")
+References: <4E6F323A.1080605@xor-gate.org>
+ <201109131251.21570.yann.morin.1998@anciens.enib.fr>
+Message-ID: <87fwk04r16.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 13 Sep 2011 11:49:30 +0200,
-"Fache, Herve" <h-fache@ti.com> a ?crit :
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-> I can't see this in the latest release, or am I looking in the wrong
-> place?
+ Yann> Jerry, All,
+ Yann> On Tuesday 13 September 2011 12:36:42 Jerry Jacobs wrote:
+ >> I tried to create a new configuration for the Ledato NanosG20 
+ >> (AT91SAM9G20) with the codesourcery toolchain. But it was not able to 
+ >> download the toolchain (Using latest buildroot from GIT).
 
-See b51b664727458235460ed3c5429b8d44215b9446, the commit log even say
-that is was based on your patch.
+ Yann> The issue has been reported to Mentor Graphics by Peter, and it seems they
+ Yann> have fixed the issue, as reported by Peter:
+ Yann>   http://lists.busybox.net/pipermail/buildroot/2011-September/045580.html
 
-If it doesn't work for you, do not hesitate to report back to the list.
+ Yann> I'll check here, but if it still breaks for you, just say so.
 
-Regards,
+Indeed, it should be fixed now (also for older Buildroot releases), so
+please try again:
 
-Thomas
+--2011-09-13 13:30:29--  http://www.codesourcery.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+Resolving www.codesourcery.com (www.codesourcery.com)... 174.129.20.178
+Connecting to www.codesourcery.com (www.codesourcery.com)|174.129.20.178|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://sourcery.mentor.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 [following]
+--2011-09-13 13:30:29--  https://sourcery.mentor.com/sgpp/lite/arm/portal/package6488/public/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+Resolving sourcery.mentor.com (sourcery.mentor.com)... 107.20.212.105
+Connecting to sourcery.mentor.com (sourcery.mentor.com)|107.20.212.105|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2 [following]
+--2011-09-13 13:30:35--  https://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi//arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+Connecting to sourcery.mentor.com (sourcery.mentor.com)|107.20.212.105|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 82460512 (79M) [application/x-bzip2]
+Saving to: `/var/lib/downloads/arm-2010q1-202-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2'
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
