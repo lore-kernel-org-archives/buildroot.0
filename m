@@ -1,12 +1,26 @@
-From: Marc Leclerc <marc-leclerc@signaturealpha.com>
-Date: Wed, 14 Sep 2011 16:40:50 -0400
-Subject: [Buildroot] Deamon segfault in busybox
-Message-ID: <4E711152.70603@signaturealpha.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 14 Sep 2011 22:42:57 +0200
+Subject: [Buildroot] [git commit] iw: bump to 3.1
+In-Reply-To: <1316008211.8685.9.camel@sven> (Sven Neumann's message of "Wed,
+ 14 Sep 2011 15:49:55 +0200")
+References: <20110913214743.1465A8D5A4@busybox.osuosl.org>
+ <1316001130.5304.4.camel@sven> <87sjnztfty.fsf@macbook.be.48ers.dk>
+ <1316008211.8685.9.camel@sven>
+Message-ID: <87obymua7i.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110914/e9c2d5af/attachment-0001.html>
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+
+ Sven> You also might want to add usbutils. I found a copy at a kernel.org
+ Sven> mirror:
+
+ Sven> http://ftp.halifax.rwth-aachen.de/pub/linux/utils/usb/usbutils/usbutils-004.tar.gz
+
+Yes, I missed it at first, but I've added it in the mean time.
+
+-- 
+Bye, Peter Korsgaard
