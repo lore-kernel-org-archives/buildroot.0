@@ -1,28 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Sep 2011 13:49:00 +0200
-Subject: [Buildroot] linux.mk: custom tarball: re-download if tarball
- changed
-In-Reply-To: <CAAXf6LVeSpEph0Lkdyxx2YdyBF5cNK4DJq0PnjW8A84BBXtnHw@mail.gmail.com>
-References: <CAAXf6LWpKhWVSWmxBHcp5gNmMRK0C9Z5Fw72bPXb7QJ1xmRGdQ@mail.gmail.com>
- <CAAXf6LVeSpEph0Lkdyxx2YdyBF5cNK4DJq0PnjW8A84BBXtnHw@mail.gmail.com>
-Message-ID: <20110914134900.308755f9@skate>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 14 Sep 2011 13:52:08 +0200
+Subject: [Buildroot] [git commit] iw: bump to 3.1
+In-Reply-To: <20110913214743.1465A8D5A4@busybox.osuosl.org>
+References: <20110913214743.1465A8D5A4@busybox.osuosl.org>
+Message-ID: <1316001130.5304.4.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Sep 2011 12:16:47 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Hi,
 
-> Bump...
+On Tue, 2011-09-13 at 23:44 +0200, Peter Korsgaard wrote:
 
-Well, this patch clearly no longer applies on current git, since the
-Linux build stuff has been converted to GENTARGETS.
+> -IW_VERSION = 3.0
+> +IW_VERSION = 3.1
+>  IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+>  IW_SITE = http://wireless.kernel.org/download/iw
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Does anyone happen to know an alternative download location for
+iw-3.0.1.tar.bz2 ?
+
+As you probably know kernel.org is down for maintainance and
+sources.buildroot.net does not seem to provide this release (yet).
+
+
+Thanks,
+Sven
