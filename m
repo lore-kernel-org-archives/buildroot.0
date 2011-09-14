@@ -1,82 +1,60 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 14 Sep 2011 10:58:01 +0200
-Subject: [Buildroot] [PATCH 1/2] omap-u-boot-utils: add new package
-In-Reply-To: <20110913194446.0ebab8c5@skate>
-References: <1315934373-16561-1-git-send-email-luca@lucaceresoli.net>
- <20110913194446.0ebab8c5@skate>
-Message-ID: <4E706C99.1090206@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 14 Sep 2011 10:45:26 +0200
+Subject: [Buildroot] [PATCH v4] syslinux: add support for host-install
+In-Reply-To: <1314962143-12093-1-git-send-email-arnout@mind.be>
+References: <1314962143-12093-1-git-send-email-arnout@mind.be>
+Message-ID: <201109141045.28252.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-thanks for the review.
+ Ping!
 
-Thomas Petazzoni wrote:
-> Le Tue, 13 Sep 2011 19:19:32 +0200,
-> Luca Ceresoli<luca@lucaceresoli.net>  a ?crit :
->
->> +++ b/boot/omap-u-boot-utils/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
->> +	bool "omap-u-boot-utils"
->> +	help
->> +	  U-Boot Utilities for Texas Instrument's OMAP platforms.
->> +	  Say Y if you want these utilities on the development host.
->> +
->> +	  https://github.com/nmenon/omap-u-boot-utils
->
-> This is a pure host package, so it shouldn't be present in any
-> Config.in file. See package/fakeroot as an example.
->
-> And even if it also was a target package, the Config.in should be in
-> the package directory, not in boot/.
+On Friday 02 September 2011 13:15:43, Arnout Vandecappelle (Essensium/Mind) wrote:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> Changes in v4: The dependency on host-nasm has to be specified again
+> for the host package.
+> 
+>  boot/syslinux/syslinux.mk |   18 ++++++++++++++++++
+>  1 files changed, 18 insertions(+), 0 deletions(-)
+> 
+> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+> index 118807a..3f4236c 100644
+> --- a/boot/syslinux/syslinux.mk
+> +++ b/boot/syslinux/syslinux.mk
+> @@ -34,4 +34,22 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
+>  	done
+>  endef
+> 
+> +
+> +HOST_SYSLINUX_DEPENDENCIES = host-nasm
+> +HOST_SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
+> +
+> +define HOST_SYSLINUX_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define HOST_SYSLINUX_INSTALL_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
+> +endef
+> +
+> +define HOST_SYSLINUX_CLEAN_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
+> +endef
+> +
+>  $(eval $(call GENTARGETS,boot,syslinux))
+> +$(eval $(call GENTARGETS,boot,syslinux,host))
+> +
 
-If I understand correctly your point, you would make omap-u-boot-utils
-automatically compile if BR2_TARGET_UBOOT_OMAP_IFT (patch 2/2) is on,
-without any user-visible option.
-
-But this would reduce flexibility.
-
-To understand why, consider this package is a set of utilities, loosely
-related to each other.
-
-gpsign is absolutely OMAP-specific, and it's what I use in patch 2/2 in
-order to build a .ift image from a .bin image.
-
-OTOH, ucmd "sends a command and expects a provided matching response
-from target", and is aimed at creating automated scripts to interact
-with a commandline program over a serial line. This can be used in any
-architecture. I have board-specific scripts that use it to write
-bootloader + kernel + rootfs onto a new (or bricked) board from files in
-output/images.
-
-So, while omap-u-boot-utils is a requirement for building a signed
-image, I think it should be also available as a user option in
-menuconfig.
-I'm not sure boot/omap-u-boot-utils/Config.in is the correct place
-anyway, I'm open to suggestions on a better location.
-
-
-Oh, and to be complete, this might be a target package too; I did not
-implement that because cross-compilation is a bit tricky and the use
-case is possibly not interesting to anybody.
-
->
->> +OMAP_U_BOOT_UTILS_VERSION = d086cb5c0
->> +OMAP_U_BOOT_UTILS_SOURCE = omap-u-boot-utils-$(OMAP_U_BOOT_UTILS_VERSION).tar.gz
->
-> xxx_SOURCE is useless with the git download method.
-
-Right. Will fix.
-
->
->> +OMAP_U_BOOT_UTILS_TARGETS = gpsign pserial tagger ucmd ukermit
->
-> Used only once, just hardcode.
-
-Well, ok. Will do.
-
-Luca
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
