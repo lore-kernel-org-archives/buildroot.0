@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 15 Sep 2011 07:44:46 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v2] Add Xenomai real-time framework
-In-Reply-To: <patchbomb.1316004973@localhost6.localdomain6>
-References: <patchbomb.1316004973@localhost6.localdomain6>
-Message-ID: <201109150744.47121.arnout@mind.be>
+Date: Wed, 14 Sep 2011 18:19:59 +0200
+Subject: [Buildroot] Questions related to "Incorrect selection of the C
+	library" error
+In-Reply-To: <20110914115217.5a64e8d0@skate>
+References: <CAOPDcRz+PpksWoMJBh5mzk8+E7YcdKj=httB1nxajGanmKTNow@mail.gmail.com>
+ <20110914115217.5a64e8d0@skate>
+Message-ID: <201109141820.00295.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +13,33 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Wednesday 14 September 2011 14:56:13, Thomas De Schampheleire wrote:
-> Xenomai comes with a Linux Kernel and user-space part.
-> I added a Linux extensions sub-menu (The first patch) which handles
-> the kernel modification provided by Adeos/Xenomai. The advantage of
-> this way is for maintenance purpose. (Xenomai do not provide a full
-> kernel patch, but use a script called "prepare-kernel.sh")
-> Also, this split the user-space from the kernel in a nice way instead
-> of adding a serie of patches.
+On Wednesday 14 September 2011 11:52:17, Thomas Petazzoni wrote:
+> > The following lib (ld*-uClibc.so.*) is missing in my lib dir.
+> > Where does this lib come from?
+> 
+> From the external toolchain.
+> 
+> > In my .config, I have selected BR2_TOOLCHAIN_EXTERNAL=y
+> > and I have set the path for my toolchain, and the prefix.
+> >
+> > 
+> >
+> > But where can I set the path for my installed uClibc directory?
+> > ( /usr/<arch>-linux-uclibc )
+> 
+> In the toolchain menu:
+>  * Select "External toolchain" as Toolchain type
+>  * Select "Custom toolchain" as Toolchain
+>  * Put the path of your toolchain in Toolchain path
 
- I don't agree with this split.  When you're configuring Xenomai, I think you 
-want the Adeos patch and the other Xenomai configuration in a single place, 
-not spread over two separate menu items.  And the same reasoning goes for 
-maintaining the buildroot parts of Xenomai.  
+ What Thomas means is: you have to install uClibc in the same place as the 
+cross compiler.  
 
- There is only one advantage to this approach: the Adeos patch and the kernel 
-version are intimately related, so if you change one you also want to change 
-the other.  The same reasoning however goes for the relationship between 
-kernel headers and kernel itself, which are currently miles apart in 
-buildroot.
-
+Cross-compiler and libc (and various other things like dynamic library loader 
+and debugger) are intimately linked. Together they are called the toolchain.  
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
