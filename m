@@ -1,41 +1,33 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 14 Sep 2011 15:39:38 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v2] Add Xenomai real-time framework
-In-Reply-To: <patchbomb.1316004973@localhost6.localdomain6>
-References: <patchbomb.1316004973@localhost6.localdomain6>
-Message-ID: <1316007581.8685.6.camel@sven>
+Date: Wed, 14 Sep 2011 15:48:10 +0200
+Subject: [Buildroot] [git commit] iw: bump to 3.1
+In-Reply-To: <1316001130.5304.4.camel@sven>
+References: <20110913214743.1465A8D5A4@busybox.osuosl.org>
+ <1316001130.5304.4.camel@sven>
+Message-ID: <1316008090.8685.7.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2011-09-14 at 14:56 +0200, Thomas De Schampheleire wrote:
-> These two patches are an initial add for Xenomai in buildroot.
+On Wed, 2011-09-14 at 13:52 +0200, Sven Neumann wrote:
+> Hi,
 > 
-> "Xenomai is a real-time development framework cooperating with the
-> Linux kernel, in order to provide a pervasive, interface-agnostic,
-> hard real-time support to user-space applications, seamlessly
-> integrated into the GNU/Linux environment."
-> [http://www.xenomai.org]
+> On Tue, 2011-09-13 at 23:44 +0200, Peter Korsgaard wrote:
+> 
+> > -IW_VERSION = 3.0
+> > +IW_VERSION = 3.1
+> >  IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+> >  IW_SITE = http://wireless.kernel.org/download/iw
+> 
+> Does anyone happen to know an alternative download location for
+> iw-3.0.1.tar.bz2 ?
+> 
+> As you probably know kernel.org is down for maintainance and
+> sources.buildroot.net does not seem to provide this release (yet).
 
-Can we also add the RT-PREEMPT kernel patch as such a kernel extension?
-I have successfully tried the 3.0.1-rt patch in buildroot a while ago
-and as far as I can see there is now a patch for 3.0.4 (3.0.4-rt13). It
-should be available from here (if kernel.org wasn't down):
-
- http://www.kernel.org/pub/linux/kernel/projects/rt/
-
-It would probably make sense to include the option to download and use
-this patch in the new menu. There are some changes to the kernel
-configuration necessary as well, as explained here:
-
- http://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO
-
-Would there be interest to add this? We are not actually using this, so
-I am not sure if I could find the time to prepare the necessary changes.
-But having this available in buildroot might make it easier for us and
-other to experiment with the RT-PREEMPT kernel.
+I've found it at http://linuxwireless.org/download/iw/iw-3.1.tar.bz2
 
 
 Regards,
