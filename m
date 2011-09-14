@@ -1,31 +1,62 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Sep 2011 14:56:13 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v2] Add Xenomai real-time framework
-Message-ID: <patchbomb.1316004973@localhost6.localdomain6>
+Date: Wed, 14 Sep 2011 14:56:14 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v2] linux: Add Linux Kernel extensions
+	menu
+In-Reply-To: <patchbomb.1316004973@localhost6.localdomain6>
+References: <patchbomb.1316004973@localhost6.localdomain6>
+Message-ID: <5b4cf688a9f447364de6.1316004974@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These two patches are an initial add for Xenomai in buildroot.
+Add a kernel sub-menu (called "Linux Kernel Extensions"), which makes
+possible to patch it or tweak the kernel build step.
 
-"Xenomai is a real-time development framework cooperating with the
-Linux kernel, in order to provide a pervasive, interface-agnostic,
-hard real-time support to user-space applications, seamlessly
-integrated into the GNU/Linux environment."
-[http://www.xenomai.org]
+ * All linux/linux-ext-*.mk files will be read by the make process.
+ * The menu can be customized in "linux/Config.ext.in".
 
-Xenomai comes with a Linux Kernel and user-space part.
-I added a Linux extensions sub-menu (The first patch) which handles
-the kernel modification provided by Adeos/Xenomai. The advantage of
-this way is for maintenance purpose. (Xenomai do not provide a full
-kernel patch, but use a script called "prepare-kernel.sh")
-Also, this split the user-space from the kernel in a nice way instead
-of adding a serie of patches.
+Signed-off-by: Benoit Mauduit <benoit.mauduit@openwide.fr>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ linux/Config.ext.in |  3 +++
+ linux/Config.in     |  4 ++++
+ linux/linux.mk      |  2 ++
+ 3 files changed, 9 insertions(+), 0 deletions(-)
+ create mode 100644 linux/Config.ext.in
 
-The Xenomai user-space part can be built separately with an external
-real-time Kernel.
-
-v1: original patch by Beno?t Mauduit
-v2: slight modifications, mainly to support other architectures and SMP.
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+new file mode 100644
+--- /dev/null
++++ b/linux/Config.ext.in
+@@ -0,0 +1,3 @@
++menu "Linux Kernel Extensions"
++
++endmenu
+diff --git a/linux/Config.in b/linux/Config.in
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -176,6 +176,10 @@
+ 	  /boot in the target root filesystem, as is typically done on
+ 	  x86/x86_64 systems.
+ 
++
++# Linux extensions (Xenomai)
++source "linux/Config.ext.in"
++
+ endif # BR2_LINUX_KERNEL
+ 
+ endmenu
+diff --git a/linux/linux.mk b/linux/linux.mk
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -177,6 +177,8 @@
+ 	fi
+ endef
+ 
++include linux/linux-ext-*.mk
++
+ $(eval $(call GENTARGETS,,linux))
+ 
+ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
