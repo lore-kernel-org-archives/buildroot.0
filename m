@@ -1,78 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 14 Sep 2011 12:06:40 +0200
-Subject: [Buildroot] [PATH 0/1] package/ncurses: disable use of the GPM
-	library
-In-Reply-To: <20110914092105.78c61a10@skate>
-References: <1315958717-9861-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- <20110914092105.78c61a10@skate>
-Message-ID: <201109141206.40645.yann.morin.1998@anciens.enib.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 14 Sep 2011 12:16:47 +0200
+Subject: [Buildroot] linux.mk: custom tarball: re-download if tarball
+	changed
+In-Reply-To: <CAAXf6LWpKhWVSWmxBHcp5gNmMRK0C9Z5Fw72bPXb7QJ1xmRGdQ@mail.gmail.com>
+References: <CAAXf6LWpKhWVSWmxBHcp5gNmMRK0C9Z5Fw72bPXb7QJ1xmRGdQ@mail.gmail.com>
+Message-ID: <CAAXf6LVeSpEph0Lkdyxx2YdyBF5cNK4DJq0PnjW8A84BBXtnHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 14 September 2011 09:21:05 Thomas Petazzoni wrote:
-> Le Wed, 14 Sep 2011 02:05:16 +0200,
-> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
-> 
-> > That host-ldd is then installed as $(HOST_DIR)/usr/bin/ldd, which is
-> > first in the PATH.
-> 
-> When you build uClibc for ARM, uClibc installs an host-ldd ?
+On Wed, Jul 20, 2011 at 3:20 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi,
+>
+> If you use a vanilla kernel, and you upstep your kernel, buildroot
+> automatically downloads and compiles the new version, because
+> LINUX26_DIR changed, and the .stamp_downloaded file is not yet present
+> in that new directory.
+>
+> When you specify a LINUX26_TARBALL, the variable LINUX26_VERSION will
+> be set to the fixed "custom". As a result, LINUX26_DIR remains the
+> same even though you modified the .config file to specify a different
+> tarball. ?When re-running make, buildroot does not see the change, and
+> you'll have to force building the new kernel.
+>
+> How can we make sure that buildroot notices this change in configuration?
+> One way would be to step away from the fixed 'custom' version string,
+> and encode the tarball name in some way in LINUX26_DIR.
+> Another possibility is to let the download step depend on the tarball.
+> If the tarball changes, then make will initiate the download step.
+>
+> In buildroot-2011.05, I applied the following (working) patch
+> implementing the second alternative:
+>
+> linux: depend on source archive so that updates to custom tarballs are picked up
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -75,9 +75,14 @@ endif
+> ?endif # BR2_LINUX_KERNEL_VMLINUX
+>
+> ?# Download
+> -$(LINUX26_DIR)/.stamp_downloaded:
+> +$(DL_DIR)/$(LINUX26_SOURCE):
+> ? ? ? ?@$(call MESSAGE,"Downloading kernel")
+> ? ? ? ?$(call DOWNLOAD,$(LINUX26_SITE),$(LINUX26_SOURCE))
+> +
+> +# Download patches
+> +# Explicitly depend on linux download archive so that custom tarballs get
+> +# redownloaded if the configured file changes.
+> +$(LINUX26_DIR)/.stamp_downloaded: $(DL_DIR)/$(LINUX26_SOURCE)
+> ? ? ? ?$(foreach patch,$(filter ftp://% http://%,$(LINUX26_PATCH)),\
+> ? ? ? ? ? ? ? ?$(call DOWNLOAD,$(dir $(patch)),$(notdir $(patch)))$(sep))
+> ? ? ? ?mkdir -p $(@D)
+>
+>
+> I wanted to submit this to the list, but just noticed that linux is
+> now using the gentargets infrastructure. To address this problem we
+> can
+> a. adapt gentargets, so that the generic .stamp_downloaded rule also
+> depends on the downloaded archive. Is there any reason why this would
+> not be good?
+> b. adapt the version string in linux.mk so that a custom tarball is
+> automatically picked up.
 
-Well, this time it was for MIPS. 
-
-> Why is this ldd necessary ?
-
-Probably not `necessay' for buildroot, but this host-ldd tries to be the
-Holy Grail of cross-compilation: an ldd that can interpret the target
-ELF files, and behaves the same as if it was run on the target.
-
-> I don't criticize the --without-gpm fix,
-
-Well, it's not a fix per-se, I prefer to view it as a workaround that is
-also beneficial by explicitly stating that we do not need gpm just to
-build tic.
-
-> but I'm just wondering if that
-> ldd in $(HOST_DIR) could create other problems with other packages.
-
-Well, I'm surprised to be the first to notice and report this issue.
-Probably not many people have the libgpm-dev package installed. So, I
-can understand that _this_ error went unnoticed for years.
-
-But with the number of packages in buildroot, I can hardly think that a
-similarly broken combination did not appear yet.
-
-But you're right. The proper way to fix this is to decide whether that
-host-ldd is usefull or not.
-
-Well, I can tell it could be usefull for at least one situation: when we
-build the ncurses for the target, which happens every time we want gdb on
-the target. But, as we do not package the GPM library in buildroot, we do
-not currently benefit from this host-ldd.
-
-To be noted, ncurses would still be broken, as it uses plain 'ldd' to do
-the check, and does not even try with 'tuple-ldd'. It's hardcoded (all on
-one line initially):
-
-    cf_cv_gpm_soname=`ldd conftest$ac_exeext 2>/dev/null    \
-                      | sed -e 's,^.*/,,' -e 's, .*$,,'     \
-                      | fgrep libgpm.`
-
-To be noted also, crosstool-NG also provides a kind of host-ldd (calls it
-the cross-ldd), but only installs it tuple-prefixed; and it is consistent
-with the glibc's ldd in terms of output (or it is a bug), so should not be
-an issue for host packages.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bump...
