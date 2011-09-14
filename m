@@ -1,60 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2011 10:45:26 +0200
-Subject: [Buildroot] [PATCH v4] syslinux: add support for host-install
-In-Reply-To: <1314962143-12093-1-git-send-email-arnout@mind.be>
-References: <1314962143-12093-1-git-send-email-arnout@mind.be>
-Message-ID: <201109141045.28252.arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Sep 2011 11:52:17 +0200
+Subject: [Buildroot] Questions related to "Incorrect selection of the C
+ library" error
+In-Reply-To: <CAOPDcRz+PpksWoMJBh5mzk8+E7YcdKj=httB1nxajGanmKTNow@mail.gmail.com>
+References: <CAOPDcRz+PpksWoMJBh5mzk8+E7YcdKj=httB1nxajGanmKTNow@mail.gmail.com>
+Message-ID: <20110914115217.5a64e8d0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Ping!
+Le Wed, 14 Sep 2011 10:16:19 +0200,
+stl <st.lambert02@gmail.com> a ?crit :
 
-On Friday 02 September 2011 13:15:43, Arnout Vandecappelle (Essensium/Mind) wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> I am trying to port Buildroot for a new architecture and I am facing
+> the following error when I build it:
 > 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Changes in v4: The dependency on host-nasm has to be specified again
-> for the host package.
+> Checking external toolchain settings
+> Incorrect selection of the C library
 > 
->  boot/syslinux/syslinux.mk |   18 ++++++++++++++++++
->  1 files changed, 18 insertions(+), 0 deletions(-)
-> 
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index 118807a..3f4236c 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -34,4 +34,22 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
->  	done
->  endef
-> 
-> +
-> +HOST_SYSLINUX_DEPENDENCIES = host-nasm
-> +HOST_SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
-> +
-> +define HOST_SYSLINUX_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define HOST_SYSLINUX_INSTALL_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-> +endef
-> +
-> +define HOST_SYSLINUX_CLEAN_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
-> +endef
-> +
->  $(eval $(call GENTARGETS,boot,syslinux))
-> +$(eval $(call GENTARGETS,boot,syslinux,host))
-> +
+> The following lib (ld*-uClibc.so.*) is missing in my /lib/ dir.
+> Where does this lib come from?
 
+From the external toolchain.
+
+> In my .config, I have selected BR2_TOOLCHAIN_EXTERNAL=y
+> and I have set the path for my toolchain, and the prefix.
+> 
+> But where can I set the path for my installed uClibc directory?
+> ( /usr/<arch>-linux-uclibc )
+
+In the toolchain menu:
+ * Select "External toolchain" as Toolchain type
+ * Select "Custom toolchain" as Toolchain
+ * Put the path of your toolchain in Toolchain path
+
+Regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
