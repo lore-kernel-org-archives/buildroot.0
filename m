@@ -1,31 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Sep 2011 09:21:05 +0200
-Subject: [Buildroot] [PATH 0/1] package/ncurses: disable use of the GPM
- library
-In-Reply-To: <1315958717-9861-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-References: <1315958717-9861-1-git-send-email-yann.morin.1998@anciens.enib.fr>
-Message-ID: <20110914092105.78c61a10@skate>
+From: stl <st.lambert02@gmail.com>
+Date: Wed, 14 Sep 2011 10:16:19 +0200
+Subject: [Buildroot] Questions related to "Incorrect selection of the C
+	library" error
+Message-ID: <CAOPDcRz+PpksWoMJBh5mzk8+E7YcdKj=httB1nxajGanmKTNow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Sep 2011 02:05:16 +0200,
-"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
+Hello all,
 
-> That host-ldd is then installed as $(HOST_DIR)/usr/bin/ldd, which is
-> first in the PATH.
+I am trying to port Buildroot for a new architecture and I am facing
+the following error when I build it:
 
-When you build uClibc for ARM, uClibc installs an host-ldd ? Why is
-this ldd necessary ?
+Checking external toolchain settings
+Incorrect selection of the C library
 
-I don't criticize the --without-gpm fix, but I'm just wondering if that
-ldd in $(HOST_DIR) could create other problems with other packages.
+The following lib (ld*-uClibc.so.*) is missing in my /lib/ dir.
+Where does this lib come from?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+In my .config, I have selected BR2_TOOLCHAIN_EXTERNAL=y
+and I have set the path for my toolchain, and the prefix.
+
+But where can I set the path for my installed uClibc directory?
+( /usr/<arch>-linux-uclibc )
+
+Thanks in advance for your help.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110914/89471556/attachment.html>
