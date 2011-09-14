@@ -1,40 +1,31 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Sep 2011 13:59:36 +0200
-Subject: [Buildroot] linux.mk: custom tarball: re-download if tarball
-	changed
-In-Reply-To: <20110914134900.308755f9@skate>
-References: <CAAXf6LWpKhWVSWmxBHcp5gNmMRK0C9Z5Fw72bPXb7QJ1xmRGdQ@mail.gmail.com>
- <CAAXf6LVeSpEph0Lkdyxx2YdyBF5cNK4DJq0PnjW8A84BBXtnHw@mail.gmail.com>
- <20110914134900.308755f9@skate>
-Message-ID: <CAAXf6LV=e0QTws58sFjFU0nfx1aT+PLRScwQysyZsyX8U5sOsQ@mail.gmail.com>
+Date: Wed, 14 Sep 2011 14:56:13 +0200
+Subject: [Buildroot] [PATCH 0 of 2 v2] Add Xenomai real-time framework
+Message-ID: <patchbomb.1316004973@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+These two patches are an initial add for Xenomai in buildroot.
 
-On Wed, Sep 14, 2011 at 1:49 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 14 Sep 2011 12:16:47 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> Bump...
->
-> Well, this patch clearly no longer applies on current git, since the
-> Linux build stuff has been converted to GENTARGETS.
+"Xenomai is a real-time development framework cooperating with the
+Linux kernel, in order to provide a pervasive, interface-agnostic,
+hard real-time support to user-space applications, seamlessly
+integrated into the GNU/Linux environment."
+[http://www.xenomai.org]
 
-Yes, I realized that, quote:
+Xenomai comes with a Linux Kernel and user-space part.
+I added a Linux extensions sub-menu (The first patch) which handles
+the kernel modification provided by Adeos/Xenomai. The advantage of
+this way is for maintenance purpose. (Xenomai do not provide a full
+kernel patch, but use a script called "prepare-kernel.sh")
+Also, this split the user-space from the kernel in a nice way instead
+of adding a serie of patches.
 
-"I wanted to submit this to the list, but just noticed that linux is
-now using the gentargets infrastructure. To address this problem we
-can
-a. adapt gentargets, so that the generic .stamp_downloaded rule also
-depends on the downloaded archive. Is there any reason why this would
-not be good?
-b. adapt the version string in linux.mk so that a custom tarball is
-automatically picked up."
+The Xenomai user-space part can be built separately with an external
+real-time Kernel.
 
-Best regards,
-Thomas
+v1: original patch by Beno?t Mauduit
+v2: slight modifications, mainly to support other architectures and SMP.
