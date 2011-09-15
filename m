@@ -1,48 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Sep 2011 11:41:54 +0200
-Subject: [Buildroot] Questions related to "Incorrect selection of the C
- library" error
-In-Reply-To: <CAOPDcRwGMUaA0SuGc09XiQoweF9aMwbSeYKqoD4wj_NwY+i9Rw@mail.gmail.com>
-References: <CAOPDcRz+PpksWoMJBh5mzk8+E7YcdKj=httB1nxajGanmKTNow@mail.gmail.com>
- <20110914115217.5a64e8d0@skate> <201109141820.00295.arnout@mind.be>
- <CAOPDcRwGMUaA0SuGc09XiQoweF9aMwbSeYKqoD4wj_NwY+i9Rw@mail.gmail.com>
-Message-ID: <20110915114154.5a738a61@skate>
+From: Mark Jackson <mpfj-list@mimc.co.uk>
+Date: Thu, 15 Sep 2011 11:03:12 +0100
+Subject: [Buildroot] Host / Target system types
+Message-ID: <4E71CD60.1010609@mimc.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 15 Sep 2011 11:20:44 +0200,
-stl <st.lambert02@gmail.com> a ?crit :
+I have just cloned the latest git master and successfully compiled buildroot for my AVR32 target.
 
-> Effectively, my port of uClibc is not installed in the same directory
-> than my toolchain.
-> Because, the version of the toolchain I use is compiled with newlib
-> as C library, instead of uClibc.
-> 
-> And my problem with the ld-uclibc.so.* comes from I have not done
-> anything yet that deals with
-> dynamic linker in my port of uClibc.
-> 
-> It seems that some work remains to be done...
+But I have noticed a slight (annoying) change ... the "target system type" used to be "avr32-linux-"
+and it's now changed to "avr32-unknown-linux-".
 
-With a bit tuning, Buildroot can work with a toolchain that does not
-support shared libraries (so you can postpone the work on the dynamic
-linker later on). But it needs to be a real toolchain, not a bare-metal
-compiler on one side and the C library on the other side.
+This has the effect of changing the gcc compiler from "avr32-linux-g++" to
+"avr32-unknown-linux-g++", and so all my makefiles no longer work.
 
-So before diving into the dynamic linking stuff and shared libraries, I
-would recommend you to work on getting a proper toolchain built, either
-with Buildroot or Crosstool-NG (I would suggest the latter). If you
-have a working binutils/gcc/uClibc port, integrating the support for
-your arch in Crosstool-NG should not be very complicated.
+I *could* change my makefiles, but I'd rather fix the problem.
 
-Regards,
+I also noticed that the host target types are also listed as "unknown", so we have:-
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+checking build system type... x86_64-unknown-linux-gnu
+checking host system type... x86_64-unknown-linux-gnu
+checking target system type... x86_64-unknown-linux-gnu
+
+BTW this is on 64bit Ubuntu 11.04.
+
+Can anyone help ?
+
+Regards
+Mark Jackson
