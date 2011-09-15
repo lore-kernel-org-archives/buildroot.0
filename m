@@ -1,58 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Sep 2011 18:16:09 +0200
-Subject: [Buildroot] [PATH 0/1] package/ncurses: disable use of the GPM
-	library
-In-Reply-To: <201109141206.40645.yann.morin.1998@anciens.enib.fr>
-References: <1315958717-9861-1-git-send-email-yann.morin.1998@anciens.enib.fr>
- <20110914092105.78c61a10@skate>
- <201109141206.40645.yann.morin.1998@anciens.enib.fr>
-Message-ID: <201109141816.10815.arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Sep 2011 09:13:19 +0200
+Subject: [Buildroot] [PATCH 0 of 2 v2] Add Xenomai real-time framework
+In-Reply-To: <201109150744.47121.arnout@mind.be>
+References: <patchbomb.1316004973@localhost6.localdomain6>
+ <201109150744.47121.arnout@mind.be>
+Message-ID: <20110915091319.22f2a11b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Thu, 15 Sep 2011 07:44:46 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-On Wednesday 14 September 2011 12:06:40, Yann E. MORIN wrote:
-> On Wednesday 14 September 2011 09:21:05 Thomas Petazzoni wrote:
-> > Le Wed, 14 Sep 2011 02:05:16 +0200,
-> > 
-> > "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
-> > > That host-ldd is then installed as $(HOST_DIR)/usr/bin/ldd, which is
-> > > first in the PATH.
-> > 
-> > When you build uClibc for ARM, uClibc installs an host-ldd ?
+> > Xenomai comes with a Linux Kernel and user-space part.
+> > I added a Linux extensions sub-menu (The first patch) which handles
+> > the kernel modification provided by Adeos/Xenomai. The advantage of
+> > this way is for maintenance purpose. (Xenomai do not provide a full
+> > kernel patch, but use a script called "prepare-kernel.sh")
+> > Also, this split the user-space from the kernel in a nice way
+> > instead of adding a serie of patches.
 > 
-> Well, this time it was for MIPS.
-> 
-> > Why is this ldd necessary ?
-> 
-> Probably not `necessay' for buildroot, but this host-ldd tries to be the
-> Holy Grail of cross-compilation: an ldd that can interpret the target
-> ELF files, and behaves the same as if it was run on the target.
+>  I don't agree with this split.  When you're configuring Xenomai, I
+> think you want the Adeos patch and the other Xenomai configuration in
+> a single place, not spread over two separate menu items.  And the
+> same reasoning goes for maintaining the buildroot parts of Xenomai.  
 
- It should then be called <arch-tuple>-ldd, like the crosstool-ng one, right?
+Yes, but the Buildroot infrastructure makes it a lot easier to
+integrate the Xenomai userspace libraries separately from the
+kernel-side patching integration. Moreover, as detailed in the
+documentation, there are people who do not use Buildroot to build their
+kernel, but only to build their root filesystem.
 
-[snip]
-> But you're right. The proper way to fix this is to decide whether that
-> host-ldd is usefull or not.
+Or maybe I missed your point ?
 
- It's useful in the same way that cross-gdb is useful.
-
- However, there sure is something broken about it: it should use the staging 
-directory as sysroot, not /.  This would also fix the ncurses case.  
-(Actually, also the cross-gdb could benefit from this; now you always have to 
-do a 'set solib-absolute-prefix ...' for remote debugging.)
-
-
- Regards,
- Arnout
-
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
