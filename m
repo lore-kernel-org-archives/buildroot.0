@@ -1,26 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Sep 2011 15:03:59 +0200
-Subject: [Buildroot] Q
-In-Reply-To: <481531316090323@web55.yandex.ru>
-References: <481531316090323@web55.yandex.ru>
-Message-ID: <20110915150359.5d374965@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 15 Sep 2011 15:34:19 +0200
+Subject: [Buildroot] [git commit] fuse: bump version
+Message-ID: <20110915155036.319518D5E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 15 Sep 2011 16:38:43 +0400,
-????????? <sitesv@narod.ru> a ?crit :
 
-> What i do wrong?
+commit: http://git.buildroot.net/buildroot/commit/?id=25c117fa2a6c0f8e58d5786e4ea9e1e00893d2dd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-You mistakenly removed the value of the BR2_GNU_MIRROR configuration
-option, so Buildroot has no idea where to download GNU packages.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/fuse/libfuse.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
+diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
+index 45fb2f3..86e57ff 100644
+--- a/package/fuse/libfuse.mk
++++ b/package/fuse/libfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBFUSE_VERSION = 2.8.5
++LIBFUSE_VERSION = 2.8.6
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
