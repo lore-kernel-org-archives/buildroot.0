@@ -1,928 +1,415 @@
-From: Marc Leclerc <marc-leclerc@signaturealpha.com>
-Date: Thu, 15 Sep 2011 16:57:14 -0400
-Subject: [Buildroot] Toolchain generate invalid executable format
-Message-ID: <4E7266AA.1000103@signaturealpha.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 16 Sep 2011 00:58:49 +0200
+Subject: [Buildroot] [PATCH 2 of 2 v2] Add xenomai real-time Framework
+	to buildroot
+In-Reply-To: <5dda8d37e2dd82f821ee.1316004975@localhost6.localdomain6>
+References: <patchbomb.1316004973@localhost6.localdomain6>
+ <5dda8d37e2dd82f821ee.1316004975@localhost6.localdomain6>
+Message-ID: <201109160058.52668.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-Finally got a working environment after going back to the version of 
-tools I had on my previous setup beside the kernel (now 3.0.4)
-
-One big problem though when I compile my application from my workstation 
-using the buildroot toolchain it no longer runs on my target leaving an 
-illegal instruction message. gdb (6.8) say the file format is not 
-recognized. if i take the same app compiled with my previous setup it 
-runs fine (no changes have been made to the source, only had to change 
-the PATH (to the compiler) since it changed from the buildroot version I 
-was using.
-
-Here is my buildroot .config, hopefully this is only caused by a change 
-in default configuration
-
-Thanks
-
-#
-# Automatically generated make config: don't edit
-# Buildroot 2011.08 Configuration
-# Thu Sep 15 14:57:25 2011
-#
-BR2_HAVE_DOT_CONFIG=y
-# BR2_arm is not set
-# BR2_armeb is not set
-# BR2_avr32 is not set
-# BR2_bfin is not set
-BR2_i386=y
-# BR2_mips is not set
-# BR2_mipsel is not set
-# BR2_powerpc is not set
-# BR2_sh is not set
-# BR2_sh64 is not set
-# BR2_sparc is not set
-# BR2_x86_64 is not set
-# BR2_xtensa is not set
-# BR2_x86_i386 is not set
-BR2_x86_i486=y
-# BR2_x86_i586 is not set
-# BR2_x86_i686 is not set
-# BR2_x86_pentiumpro is not set
-# BR2_x86_pentium_mmx is not set
-# BR2_x86_pentium_m is not set
-# BR2_x86_pentium2 is not set
-# BR2_x86_pentium3 is not set
-# BR2_x86_pentium4 is not set
-# BR2_x86_prescott is not set
-# BR2_x86_nocona is not set
-# BR2_x86_core2 is not set
-# BR2_x86_k6 is not set
-# BR2_x86_k6_2 is not set
-# BR2_x86_athlon is not set
-# BR2_x86_athlon_4 is not set
-# BR2_x86_opteron is not set
-# BR2_x86_opteron_sse3 is not set
-# BR2_x86_barcelona is not set
-# BR2_x86_geode is not set
-# BR2_x86_c3 is not set
-# BR2_x86_c32 is not set
-# BR2_x86_winchip_c6 is not set
-# BR2_x86_winchip2 is not set
-BR2_ARCH="i486"
-BR2_ENDIAN="LITTLE"
-BR2_GCC_TARGET_TUNE="i486"
-BR2_GCC_TARGET_ARCH="i486"
-
-#
-# Build options
-#
-
-#
-# Commands
-#
-BR2_WGET="wget --passive-ftp -nd -t 3"
-BR2_SVN="svn"
-BR2_BZR="bzr"
-BR2_GIT="git"
-BR2_ZCAT="gzip -d -c"
-BR2_BZCAT="bzcat"
-BR2_XZCAT="xzcat"
-BR2_TAR_OPTIONS=""
-BR2_DL_DIR="$(TOPDIR)/dl"
-BR2_HOST_DIR="$(BASE_DIR)/host"
-
-#
-# Mirrors and Download locations
-#
-BR2_PRIMARY_SITE=""
-BR2_BACKUP_SITE="http://sources.buildroot.net/"
-BR2_SOURCEFORGE_MIRROR="kent"
-BR2_KERNEL_MIRROR="http://www.kernel.org/pub/"
-BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
-BR2_DEBIAN_MIRROR="http://ftp.debian.org"
-BR2_JLEVEL=2
-# BR2_CCACHE is not set
-# BR2_DEPRECATED is not set
-# BR2_ENABLE_DEBUG is not set
-BR2_STRIP_strip=y
-# BR2_STRIP_sstrip is not set
-# BR2_STRIP_none is not set
-# BR2_OPTIMIZE_0 is not set
-# BR2_OPTIMIZE_1 is not set
-# BR2_OPTIMIZE_2 is not set
-# BR2_OPTIMIZE_3 is not set
-BR2_OPTIMIZE_S=y
-# BR2_PREFER_STATIC_LIB is not set
-# BR2_HAVE_DOCUMENTATION is not set
-# BR2_HAVE_DEVFILES is not set
-
-#
-# Toolchain
-#
-BR2_TOOLCHAIN_BUILDROOT=y
-# BR2_TOOLCHAIN_EXTERNAL is not set
-# BR2_TOOLCHAIN_CTNG is not set
-
-#
-# Kernel Header Options
-#
-# BR2_KERNEL_HEADERS_2_6_35 is not set
-# BR2_KERNEL_HEADERS_2_6_36 is not set
-# BR2_KERNEL_HEADERS_2_6_37 is not set
-# BR2_KERNEL_HEADERS_2_6_38 is not set
-# BR2_KERNEL_HEADERS_2_6_39 is not set
-BR2_KERNEL_HEADERS_3_0=y
-# BR2_KERNEL_HEADERS_VERSION is not set
-# BR2_KERNEL_HEADERS_SNAP is not set
-BR2_DEFAULT_KERNEL_HEADERS="3.0.4"
-
-#
-# uClibc Options
-#
-# BR2_UCLIBC_VERSION_0_9_31 is not set
-BR2_UCLIBC_VERSION_0_9_32=y
-# BR2_UCLIBC_VERSION_SNAPSHOT is not set
-BR2_UCLIBC_VERSION_STRING="0.9.32"
-BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.32.config"
-# BR2_PTHREAD_DEBUG is not set
-# BR2_UCLIBC_INSTALL_TEST_SUITE is not set
-
-#
-# Binutils Options
-#
-# BR2_BINUTILS_VERSION_2_20 is not set
-BR2_BINUTILS_VERSION_2_20_1=y
-# BR2_BINUTILS_VERSION_2_21 is not set
-# BR2_BINUTILS_VERSION_2_21_1 is not set
-BR2_BINUTILS_VERSION="2.20.1"
-BR2_BINUTILS_EXTRA_CONFIG_OPTIONS=""
-
-#
-# GCC Options
-#
-# BR2_GCC_VERSION_4_2_4 is not set
-BR2_GCC_VERSION_4_3_X=y
-# BR2_GCC_VERSION_4_4_X is not set
-# BR2_GCC_VERSION_4_5_X is not set
-# BR2_GCC_VERSION_4_6_X is not set
-# BR2_GCC_VERSION_SNAP is not set
-BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE=y
-BR2_GCC_VERSION="4.3.6"
-BR2_EXTRA_GCC_CONFIG_OPTIONS=""
-# BR2_INSTALL_OBJC is not set
-# BR2_INSTALL_FORTRAN is not set
-# BR2_GCC_SHARED_LIBGCC is not set
-# BR2_GCC_ENABLE_OPENMP is not set
-
-#
-# Gdb Options
-#
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_GDB_SERVER=y
-# BR2_PACKAGE_GDB_HOST is not set
-# BR2_GDB_VERSION_6_7_1 is not set
-BR2_GDB_VERSION_6_8=y
-# BR2_GDB_VERSION_7_0_1 is not set
-# BR2_GDB_VERSION_7_1 is not set
-BR2_GDB_VERSION="6.8"
-BR2_LARGEFILE=y
-BR2_INET_IPV6=y
-BR2_INET_RPC=y
-BR2_USE_WCHAR=y
-BR2_ENABLE_LOCALE=y
-BR2_TOOLCHAIN_HAS_THREADS=y
-BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS=y
-# BR2_ENABLE_LOCALE_PURGE is not set
-BR2_NEEDS_GETTEXT=y
-BR2_NEEDS_GETTEXT_IF_LOCALE=y
-BR2_USE_MMU=y
-BR2_TARGET_OPTIMIZATION="-pipe"
-BR2_TARGET_LDFLAGS=""
-
-#
-# Toolchain Options
-#
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-# BR2_TOOLCHAIN_BUILDROOT_CXX is not set
-# BR2_TOOLCHAIN_BUILDROOT_USE_SSP is not set
-# BR2_PTHREADS_NONE is not set
-# BR2_PTHREADS is not set
-BR2_PTHREADS_OLD=y
-# BR2_PTHREADS_NATIVE is not set
-
-#
-# System configuration
-#
-BR2_TARGET_GENERIC_HOSTNAME="buildroot"
-BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot"
-BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS is not set
-# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is not set
-# BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV is not set
-BR2_ROOTFS_DEVICE_TABLE="target/generic/device_table.txt"
-BR2_ROOTFS_STATIC_DEVICE_TABLE="target/generic/device_table_dev.txt"
-BR2_ROOTFS_SKELETON_DEFAULT=y
-# BR2_ROOTFS_SKELETON_CUSTOM is not set
-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_KEEP is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_19200 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_38400 is not set
-# BR2_TARGET_GENERIC_GETTY_BAUDRATE_57600 is not set
-BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-BR2_TARGET_GENERIC_GETTY_BAUDRATE="115200"
-BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
-BR2_ROOTFS_POST_BUILD_SCRIPT="custom/copy_etc.sh"
-
-#
-# Package Selection for the target
-#
-BR2_PACKAGE_BUSYBOX=y
-# BR2_BUSYBOX_VERSION_1_16_X is not set
-# BR2_BUSYBOX_VERSION_1_17_X is not set
-BR2_BUSYBOX_VERSION_1_18_X=y
-# BR2_PACKAGE_BUSYBOX_SNAPSHOT is not set
-BR2_BUSYBOX_VERSION="1.18.5"
-BR2_PACKAGE_BUSYBOX_CONFIG="vortex86/busybox.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-# BR2_PACKAGE_CUSTOMIZE is not set
-
-#
-# Audio and video libraries and applications
-#
-# BR2_PACKAGE_ALSA_LIB is not set
-# BR2_PACKAGE_ALSA_UTILS is not set
-# BR2_PACKAGE_AUMIX is not set
-# BR2_PACKAGE_FAAD2 is not set
-# BR2_PACKAGE_FLAC is not set
-# BR2_PACKAGE_FFMPEG is not set
-# BR2_PACKAGE_GSTREAMER is not set
-# BR2_PACKAGE_LAME is not set
-# BR2_PACKAGE_LIBAO is not set
-# BR2_PACKAGE_LIBCDAUDIO is not set
-# BR2_PACKAGE_LIBCUE is not set
-# BR2_PACKAGE_LIBCUEFILE is not set
-# BR2_PACKAGE_LIBDVDREAD is not set
-# BR2_PACKAGE_LIBDVDNAV is not set
-# BR2_PACKAGE_LIBID3TAG is not set
-# BR2_PACKAGE_LIBMAD is not set
-# BR2_PACKAGE_LIBMMS is not set
-# BR2_PACKAGE_LIBMPD is not set
-# BR2_PACKAGE_LIBMPEG2 is not set
-# BR2_PACKAGE_LIBOGG is not set
-# BR2_PACKAGE_LIBREPLAYGAIN is not set
-# BR2_PACKAGE_LIBSAMPLERATE is not set
-# BR2_PACKAGE_LIBSNDFILE is not set
-# BR2_PACKAGE_LIBTHEORA is not set
-# BR2_PACKAGE_LIBVORBIS is not set
-
-#
-# Live555 needs C++ compiler
-#
-# BR2_PACKAGE_MADPLAY is not set
-
-#
-# mpd requires a toolchain with C++ and WCHAR support
-#
-# BR2_PACKAGE_MPG123 is not set
-# BR2_PACKAGE_MPLAYER is not set
-# BR2_PACKAGE_MUSEPACK is not set
-# BR2_PACKAGE_SPEEX is not set
-
-#
-# swfdec requires a toolchain with WCHAR and C++ support
-#
-
-#
-# taglib requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_TREMOR is not set
-# BR2_PACKAGE_VORBIS_TOOLS is not set
-# BR2_PACKAGE_WAVPACK is not set
-
-#
-# Compressors and decompressors
-#
-# BR2_PACKAGE_BZIP2 is not set
-# BR2_PACKAGE_GZIP is not set
-# BR2_PACKAGE_LZOP is not set
-# BR2_PACKAGE_XZ is not set
-
-#
-# Debugging, profiling and benchmark
-#
-
-#
-# bonnie++ requires a toolchain with C++ support enabled
-#
-BR2_PACKAGE_DHRYSTONE=y
-# BR2_PACKAGE_DMALLOC is not set
-# BR2_PACKAGE_KEXEC is not set
-BR2_PACKAGE_LMBENCH=y
-BR2_PACKAGE_LSOF=y
-# BR2_PACKAGE_LTP_TESTSUITE is not set
-BR2_PACKAGE_LTRACE=y
-BR2_PACKAGE_MEMSTAT=y
-# BR2_PACKAGE_NETPERF is not set
-
-#
-# oprofile requires a toolchain with C++ support enabled
-#
-BR2_PACKAGE_STRACE=y
-# BR2_PACKAGE_WHETSTONE is not set
-# BR2_PACKAGE_VALGRIND is not set
-
-#
-# Development tools
-#
-# BR2_PACKAGE_AUTOCONF is not set
-# BR2_PACKAGE_AUTOMAKE is not set
-# BR2_PACKAGE_BINUTILS is not set
-# BR2_PACKAGE_BISON is not set
-# BR2_PACKAGE_BSDIFF is not set
-# BR2_PACKAGE_CCACHE is not set
-# BR2_PACKAGE_COREUTILS is not set
-# BR2_PACKAGE_CVS is not set
-# BR2_PACKAGE_DIFFUTILS is not set
-# BR2_PACKAGE_DISTCC is not set
-# BR2_PACKAGE_FINDUTILS is not set
-# BR2_PACKAGE_FLEX is not set
-# BR2_PACKAGE_GAWK is not set
-
-#
-# gcc needs development files in target filesystem
-#
-# BR2_PACKAGE_GETTEXT is not set
-# BR2_PACKAGE_LIBINTL is not set
-# BR2_PACKAGE_GMP is not set
-
-#
-# gperf requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_GREP is not set
-# BR2_PACKAGE_MAKE is not set
-# BR2_PACKAGE_MPC is not set
-# BR2_PACKAGE_MPFR is not set
-# BR2_PACKAGE_LIBTOOL is not set
-# BR2_PACKAGE_M4 is not set
-# BR2_PACKAGE_PATCH is not set
-# BR2_PACKAGE_PKG_CONFIG is not set
-# BR2_PACKAGE_SED is not set
-# BR2_PACKAGE_SSTRIP is not set
-# BR2_PACKAGE_TAR is not set
-
-#
-# Games
-#
-# BR2_PACKAGE_GNUCHESS is not set
-# BR2_PACKAGE_PRBOOM is not set
-
-#
-# Graphic libraries and applications (graphic/text)
-#
-
-#
-# Graphic applications
-#
-# BR2_PACKAGE_RRDTOOL is not set
-
-#
-# graphic libraries
-#
-# BR2_PACKAGE_DIRECTFB is not set
-# BR2_PACKAGE_FBDUMP is not set
-# BR2_PACKAGE_FBGRAB is not set
-# BR2_PACKAGE_FBSET is not set
-# BR2_PACKAGE_FBV is not set
-# BR2_PACKAGE_IMAGEMAGICK is not set
-# BR2_PACKAGE_LINUX_FUSION is not set
-# BR2_PACKAGE_SDL is not set
-
-#
-# other GUIs
-#
-
-#
-# qt requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_XORG7 is not set
-
-#
-# X libraries and helper libraries
-#
-# BR2_PACKAGE_LIBERATION is not set
-
-#
-# X Window managers
-#
-
-#
-# X applications
-#
-# BR2_PACKAGE_GOB2 is not set
-
-#
-# midori requires C++, WCHAR in toolchain and libgtk2
-#
-
-#
-# Hardware handling
-#
-# BR2_PACKAGE_ACPID is not set
-# BR2_PACKAGE_CDRKIT is not set
-# BR2_PACKAGE_CRAMFS is not set
-
-#
-# dbus not available (need expat or libxml2)
-#
-# BR2_PACKAGE_DMRAID is not set
-# BR2_PACKAGE_DOSFSTOOLS is not set
-BR2_PACKAGE_E2FSPROGS=y
-BR2_PACKAGE_E2FSPROGS_BADBLOCKS=y
-BR2_PACKAGE_E2FSPROGS_CHATTR=y
-# BR2_PACKAGE_E2FSPROGS_DEBUGFS is not set
-BR2_PACKAGE_E2FSPROGS_DUMPE2FS=y
-BR2_PACKAGE_E2FSPROGS_E2FREEFRAG=y
-BR2_PACKAGE_E2FSPROGS_E2FSCK=y
-# BR2_PACKAGE_E2FSPROGS_E2IMAGE is not set
-BR2_PACKAGE_E2FSPROGS_E2LABEL=y
-BR2_PACKAGE_E2FSPROGS_E2UNDO=y
-BR2_PACKAGE_E2FSPROGS_FILEFRAG=y
-BR2_PACKAGE_E2FSPROGS_FINDFS=y
-BR2_PACKAGE_E2FSPROGS_FSCK=y
-BR2_PACKAGE_E2FSPROGS_LOGSAVE=y
-BR2_PACKAGE_E2FSPROGS_LSATTR=y
-BR2_PACKAGE_E2FSPROGS_MKE2FS=y
-BR2_PACKAGE_E2FSPROGS_MKLOSTFOUND=y
-# BR2_PACKAGE_E2FSPROGS_RESIZE2FS is not set
-BR2_PACKAGE_E2FSPROGS_TUNE2FS=y
-BR2_PACKAGE_E2FSPROGS_UUIDGEN=y
-BR2_PACKAGE_E2FSPROGS_UUIDD=y
-# BR2_PACKAGE_EEPROG is not set
-# BR2_PACKAGE_FCONFIG is not set
-# BR2_PACKAGE_FIS is not set
-# BR2_PACKAGE_GADGETFS_TEST is not set
-
-#
-# gdisk requires a toolchain with LARGEFILE/WCHAR/C++ support enabled
-#
-# BR2_PACKAGE_GENEXT2FS is not set
-# BR2_PACKAGE_GENROMFS is not set
-# BR2_PACKAGE_GPSD is not set
-# BR2_PACKAGE_GVFS is not set
-# BR2_PACKAGE_HDPARM is not set
-# BR2_PACKAGE_HWDATA is not set
-# BR2_PACKAGE_I2C_TOOLS is not set
-# BR2_PACKAGE_INPUT_EVENT_DAEMON is not set
-# BR2_PACKAGE_INPUT_TOOLS is not set
-BR2_PACKAGE_IOSTAT=y
-# BR2_PACKAGE_IRDA_UTILS is not set
-# BR2_PACKAGE_KBD is not set
-# BR2_PACKAGE_LIBV4L is not set
-# BR2_PACKAGE_LM_SENSORS is not set
-# BR2_PACKAGE_LSUIO is not set
-# BR2_PACKAGE_LVM2 is not set
-BR2_PACKAGE_MAKEDEVS=y
-# BR2_PACKAGE_MDADM is not set
-# BR2_PACKAGE_MEMTESTER is not set
-# BR2_PACKAGE_MTD is not set
-# BR2_PACKAGE_NTFS_3G is not set
-# BR2_PACKAGE_NTFSPROGS is not set
-BR2_PACKAGE_PCIUTILS=y
-# BR2_PACKAGE_RNG_TOOLS is not set
-# BR2_PACKAGE_SDPARM is not set
-BR2_PACKAGE_SETSERIAL=y
-
-#
-# smartmontools requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_SQUASHFS is not set
-# BR2_PACKAGE_SREDIRD is not set
-# BR2_PACKAGE_SSHFS is not set
-BR2_PACKAGE_STATSERIAL=y
-# BR2_PACKAGE_SYSSTAT is not set
-# BR2_PACKAGE_TI_UTILS is not set
-# BR2_PACKAGE_UBOOT_TOOLS is not set
-
-#
-# udev requires /dev mgmnt set to udev under System configuration
-#
-# BR2_PACKAGE_USB_MODESWITCH is not set
-# BR2_PACKAGE_USBUTILS is not set
-# BR2_PACKAGE_WIPE is not set
-# BR2_PACKAGE_XFSPROGS is not set
-
-#
-# Interpreter languages and scripting
-#
-# BR2_PACKAGE_HASERL is not set
-# BR2_PACKAGE_LUA is not set
-# BR2_PACKAGE_MICROPERL is not set
-# BR2_PACKAGE_PHP is not set
-# BR2_PACKAGE_PYTHON is not set
-# BR2_PACKAGE_RUBY is not set
-# BR2_PACKAGE_TCL is not set
-
-#
-# Libraries
-#
-
-#
-# Compression and decompression
-#
-# BR2_PACKAGE_LIBARCHIVE is not set
-# BR2_PACKAGE_LZO is not set
-BR2_PACKAGE_ZLIB=y
-
-#
-# Crypto
-#
-# BR2_PACKAGE_BEECRYPT is not set
-# BR2_PACKAGE_GNUTLS is not set
-# BR2_PACKAGE_LIBGCRYPT is not set
-# BR2_PACKAGE_LIBGPG_ERROR is not set
-# BR2_PACKAGE_LIBNSS is not set
-# BR2_PACKAGE_OPENSSL is not set
-
-#
-# Database
-#
-# BR2_PACKAGE_BERKELEYDB is not set
-
-#
-# Mysql client requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_SQLITE is not set
-
-#
-# Filesystem
-#
-# BR2_PACKAGE_GAMIN is not set
-# BR2_PACKAGE_LIBCONFIG is not set
-# BR2_PACKAGE_LIBCONFUSE is not set
-# BR2_PACKAGE_LIBFUSE is not set
-# BR2_PACKAGE_LIBLOCKFILE is not set
-# BR2_PACKAGE_LIBSYSFS is not set
-
-#
-# Graphics
-#
-# BR2_PACKAGE_ATK is not set
-# BR2_PACKAGE_CAIRO is not set
-# BR2_PACKAGE_FONTCONFIG is not set
-# BR2_PACKAGE_FREETYPE is not set
-# BR2_PACKAGE_JPEG is not set
-# BR2_PACKAGE_LIBART is not set
-# BR2_PACKAGE_LIBEXIF is not set
-# BR2_PACKAGE_GDK_PIXBUF is not set
-
-#
-# libgtk2 requires a toolchain with WCHAR and C++ support
-#
-# BR2_PACKAGE_LIBPNG is not set
-
-#
-# libraw requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_LIBSVGTINY is not set
-# BR2_PACKAGE_LIBUNGIF is not set
-
-#
-# pango requires a toolchain with WCHAR and C++ support
-#
-# BR2_PACKAGE_PIXMAN is not set
-# BR2_PACKAGE_TIFF is not set
-
-#
-# webkit requires C++, WCHAR in toolchain and libgtk2
-#
-
-#
-# Hardware handling
-#
-# BR2_PACKAGE_LIBAIO is not set
-# BR2_PACKAGE_LIBRAW1394 is not set
-# BR2_PACKAGE_TSLIB is not set
-# BR2_PACKAGE_LIBHID is not set
-# BR2_PACKAGE_LIBIQRF is not set
-# BR2_PACKAGE_LIBUSB is not set
-
-#
-# Networking
-#
-# BR2_PACKAGE_LIBCGI is not set
-
-#
-# libcgicc requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_LIBCURL is not set
-# BR2_PACKAGE_LIBDNET is not set
-# BR2_PACKAGE_LIBEXOSIP2 is not set
-# BR2_PACKAGE_LIBIDN is not set
-# BR2_PACKAGE_LIBMICROHTTPD is not set
-# BR2_PACKAGE_NEON is not set
-# BR2_PACKAGE_LIBMNL is not set
-# BR2_PACKAGE_LIBNL is not set
-# BR2_PACKAGE_LIBPCAP is not set
-# BR2_PACKAGE_LIBOSIP2 is not set
-# BR2_PACKAGE_LIBRSYNC is not set
-# BR2_PACKAGE_LIBSOUP is not set
-# BR2_PACKAGE_LIBUPNP is not set
-
-#
-# Other
-#
-# BR2_PACKAGE_LIBARGTABLE2 is not set
-# BR2_PACKAGE_ARGP_STANDALONE is not set
-# BR2_PACKAGE_LIBATOMIC_OPS is not set
-# BR2_PACKAGE_LIBCAP is not set
-# BR2_PACKAGE_LIBDAEMON is not set
-BR2_PACKAGE_LIBELF=y
-# BR2_PACKAGE_LIBEVENT is not set
-# BR2_PACKAGE_LIBFFI is not set
-# BR2_PACKAGE_LIBGLIB2 is not set
-# BR2_PACKAGE_LIBNSPR is not set
-
-#
-# libsigc++ requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_ORC is not set
-
-#
-# Text and terminal handling
-#
-
-#
-# enchant requires a toolchain with C++ and WCHAR support enabled
-#
-
-#
-# icu requires a toolchain with C++ support and WCHAR enabled
-#
-BR2_PACKAGE_NCURSES=y
-# BR2_PACKAGE_NCURSES_TARGET_PANEL is not set
-# BR2_PACKAGE_NCURSES_TARGET_FORM is not set
-# BR2_PACKAGE_NCURSES_TARGET_MENU is not set
-# BR2_PACKAGE_NEWT is not set
-# BR2_PACKAGE_PCRE is not set
-# BR2_PACKAGE_POPT is not set
-# BR2_PACKAGE_READLINE is not set
-# BR2_PACKAGE_SLANG is not set
-
-#
-# JSON/XML
-#
-# BR2_PACKAGE_EXPAT is not set
-# BR2_PACKAGE_EZXML is not set
-# BR2_PACKAGE_LIBROXML is not set
-# BR2_PACKAGE_LIBXML2 is not set
-# BR2_PACKAGE_LIBXSLT is not set
-# BR2_PACKAGE_LIBYAML is not set
-# BR2_PACKAGE_MXML is not set
-
-#
-# xerces-c++ requires a toolchain with C++ and WCHAR support enabled
-#
-# BR2_PACKAGE_YAJL is not set
-
-#
-# Miscellaneous
-#
-# BR2_PACKAGE_SHARED_MIME_INFO is not set
-
-#
-# Networking applications
-#
-# BR2_PACKAGE_ARGUS is not set
-# BR2_PACKAGE_AVAHI is not set
-# BR2_PACKAGE_AXEL is not set
-# BR2_PACKAGE_BOA is not set
-# BR2_PACKAGE_BIND is not set
-# BR2_PACKAGE_BMON is not set
-# BR2_PACKAGE_BRIDGE is not set
-# BR2_PACKAGE_BWM_NG is not set
-# BR2_PACKAGE_CAN_UTILS is not set
-
-#
-# ctorrent requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_CUPS is not set
-# BR2_PACKAGE_DHCP is not set
-# BR2_PACKAGE_DHCPDUMP is not set
-# BR2_PACKAGE_DNSMASQ is not set
-BR2_PACKAGE_DROPBEAR=y
-# BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS is not set
-# BR2_PACKAGE_DROPBEAR_SMALL is not set
-# BR2_PACKAGE_EBTABLES is not set
-# BR2_PACKAGE_ETHTOOL is not set
-# BR2_PACKAGE_HOSTAPD is not set
-# BR2_PACKAGE_IFPLUGD is not set
-
-#
-# iperf requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_IPROUTE2 is not set
-# BR2_PACKAGE_IPSEC_TOOLS is not set
-# BR2_PACKAGE_IPSET is not set
-# BR2_PACKAGE_IPTABLES is not set
-# BR2_PACKAGE_IW is not set
-
-#
-# Kismet requires a toolchain with C++ support enabled
-#
-# BR2_PACKAGE_XL2TP is not set
-# BR2_PACKAGE_LIGHTTPD is not set
-# BR2_PACKAGE_LINKS is not set
-# BR2_PACKAGE_LRZSZ is not set
-# BR2_PACKAGE_MII_DIAG is not set
-# BR2_PACKAGE_MROUTED is not set
-# BR2_PACKAGE_MUTT is not set
-# BR2_PACKAGE_NBD is not set
-# BR2_PACKAGE_NCFTP is not set
-# BR2_PACKAGE_NETCAT is not set
-# BR2_PACKAGE_NETKITBASE is not set
-# BR2_PACKAGE_NETKITTELNET is not set
-# BR2_PACKAGE_NETPLUG is not set
-# BR2_PACKAGE_NETSNMP is not set
-# BR2_PACKAGE_NETSTAT_NAT is not set
-# BR2_PACKAGE_NFS_UTILS is not set
-# BR2_PACKAGE_NGIRCD is not set
-BR2_PACKAGE_NTP=y
-# BR2_PACKAGE_NTP_SNTP is not set
-# BR2_PACKAGE_NTP_NTP_KEYGEN is not set
-BR2_PACKAGE_NTP_NTPD=y
-BR2_PACKAGE_NTP_NTPDATE=y
-# BR2_PACKAGE_NTP_NTPDC is not set
-BR2_PACKAGE_NTP_NTPQ=y
-BR2_PACKAGE_NTP_TICKADJ=y
-# BR2_PACKAGE_NUTTCP is not set
-# BR2_PACKAGE_OLSR is not set
-# BR2_PACKAGE_OPENNTPD is not set
-# BR2_PACKAGE_OPENSSH is not set
-# BR2_PACKAGE_OPENVPN is not set
-# BR2_PACKAGE_PORTMAP is not set
-# BR2_PACKAGE_PPPD is not set
-# BR2_PACKAGE_RADVD is not set
-# BR2_PACKAGE_PPTP_LINUX is not set
-# BR2_PACKAGE_PROFTPD is not set
-# BR2_PACKAGE_QUAGGA is not set
-# BR2_PACKAGE_RSH_REDONE is not set
-# BR2_PACKAGE_RSYNC is not set
-# BR2_PACKAGE_SAMBA is not set
-# BR2_PACKAGE_SER2NET is not set
-# BR2_PACKAGE_SOCAT is not set
-# BR2_PACKAGE_SPAWN_FCGI is not set
-
-#
-# Squid requires a toolchain with C++ and IPv6 support enabled
-#
-# BR2_PACKAGE_STUNNEL is not set
-# BR2_PACKAGE_TCPDUMP is not set
-# BR2_PACKAGE_TCPREPLAY is not set
-# BR2_PACKAGE_TFTPD is not set
-# BR2_PACKAGE_THTTPD is not set
-# BR2_PACKAGE_TINYHTTPD is not set
-# BR2_PACKAGE_TN5250 is not set
-# BR2_PACKAGE_TTCP is not set
-# BR2_PACKAGE_UDPCAST is not set
-# BR2_PACKAGE_VPNC is not set
-BR2_PACKAGE_VSFTPD=y
-# BR2_PACKAGE_VTUN is not set
-# BR2_PACKAGE_WGET is not set
-# BR2_PACKAGE_WIRELESS_TOOLS is not set
-# BR2_PACKAGE_WPA_SUPPLICANT is not set
-
-#
-# Package managers
-#
-# BR2_PACKAGE_IPKG is not set
-
-#
-# rpm requires libneon with SSL, XML and ZLIB support
-#
-
-#
-# xz payload support requires a toolchain with c++ support
-#
-
-#
-# Shell and utilities
-#
-# BR2_PACKAGE_AT is not set
-# BR2_PACKAGE_BASH is not set
-# BR2_PACKAGE_DASH is not set
-# BR2_PACKAGE_DIALOG is not set
-# BR2_PACKAGE_FILE is not set
-# BR2_PACKAGE_INOTIFY_TOOLS is not set
-# BR2_PACKAGE_LOCKFILE_PROGS is not set
-# BR2_PACKAGE_LOGROTATE is not set
-# BR2_PACKAGE_SCREEN is not set
-# BR2_PACKAGE_SUDO is not set
-# BR2_PACKAGE_WHICH is not set
-# BR2_PACKAGE_XMLSTARLET is not set
-
-#
-# System tools
-#
-# BR2_PACKAGE_ACL is not set
-# BR2_PACKAGE_ATTR is not set
-# BR2_PACKAGE_BOOTUTILS is not set
-# BR2_PACKAGE_HTOP is not set
-# BR2_PACKAGE_MODULE_INIT_TOOLS is not set
-# BR2_PACKAGE_PROCPS is not set
-# BR2_PACKAGE_PSMISC is not set
-# BR2_PACKAGE_RSYSLOG is not set
-# BR2_PACKAGE_SYSKLOGD is not set
-# BR2_PACKAGE_SYSVINIT is not set
-BR2_PACKAGE_UTIL_LINUX=y
-BR2_PACKAGE_UTIL_LINUX_MOUNT=y
-BR2_PACKAGE_UTIL_LINUX_FSCK=y
-# BR2_PACKAGE_UTIL_LINUX_LIBMOUNT is not set
-BR2_PACKAGE_UTIL_LINUX_LIBUUID=y
-# BR2_PACKAGE_UTIL_LINUX_UUIDD is not set
-BR2_PACKAGE_UTIL_LINUX_LIBBLKID=y
-# BR2_PACKAGE_UTIL_LINUX_AGETTY is not set
-# BR2_PACKAGE_UTIL_LINUX_CRAMFS is not set
-# BR2_PACKAGE_UTIL_LINUX_SWITCH_ROOT is not set
-# BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT is not set
-# BR2_PACKAGE_UTIL_LINUX_FALLOCATE is not set
-# BR2_PACKAGE_UTIL_LINUX_UNSHARE is not set
-# BR2_PACKAGE_UTIL_LINUX_RENAME is not set
-# BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS is not set
-# BR2_PACKAGE_UTIL_LINUX_WALL is not set
-# BR2_PACKAGE_UTIL_LINUX_ARCH is not set
-# BR2_PACKAGE_UTIL_LINUX_INIT is not set
-# BR2_PACKAGE_UTIL_LINUX_KILL is not set
-# BR2_PACKAGE_UTIL_LINUX_LAST is not set
-# BR2_PACKAGE_UTIL_LINUX_MESG is not set
-# BR2_PACKAGE_UTIL_LINUX_PARTX is not set
-# BR2_PACKAGE_UTIL_LINUX_RAW is not set
-# BR2_PACKAGE_UTIL_LINUX_RESET is not set
-# BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS is not set
-# BR2_PACKAGE_UTIL_LINUX_WRITE is not set
-
-#
-# Text editors and viewers
-#
-# BR2_PACKAGE_ED is not set
-# BR2_PACKAGE_LESS is not set
-BR2_PACKAGE_NANO=y
-# BR2_PACKAGE_UEMACS is not set
-# BR2_PACKAGE_VIM is not set
-
-#
-# Filesystem images
-#
-# BR2_TARGET_ROOTFS_CRAMFS is not set
-# BR2_TARGET_ROOTFS_CLOOP is not set
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_BLOCKS=0
-BR2_TARGET_ROOTFS_EXT2_INODES=0
-BR2_TARGET_ROOTFS_EXT2_RESBLKS=0
-BR2_TARGET_ROOTFS_EXT2_NONE=y
-# BR2_TARGET_ROOTFS_EXT2_GZIP is not set
-# BR2_TARGET_ROOTFS_EXT2_BZIP2 is not set
-# BR2_TARGET_ROOTFS_EXT2_LZMA is not set
-# BR2_TARGET_ROOTFS_JFFS2 is not set
-# BR2_TARGET_ROOTFS_UBIFS is not set
-# BR2_TARGET_ROOTFS_SQUASHFS is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-# BR2_TARGET_ROOTFS_CPIO is not set
-# BR2_TARGET_ROOTFS_ISO9660 is not set
-# BR2_TARGET_ROOTFS_INITRAMFS is not set
-# BR2_TARGET_ROOTFS_ROMFS is not set
-
-#
-# Bootloaders
-#
-# BR2_TARGET_BAREBOX is not set
-# BR2_TARGET_GRUB is not set
-BR2_TARGET_SYSLINUX=y
-# BR2_TARGET_SYSLINUX_ISOLINUX is not set
-# BR2_TARGET_SYSLINUX_PXELINUX is not set
-# BR2_TARGET_UBOOT is not set
-
-#
-# Kernel
-#
-BR2_LINUX_KERNEL=y
-# BR2_LINUX_KERNEL_2_6_39 is not set
-# BR2_LINUX_KERNEL_SAME_AS_HEADERS is not set
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-# BR2_LINUX_KERNEL_CUSTOM_TARBALL is not set
-# BR2_LINUX_KERNEL_CUSTOM_GIT is not set
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0.4"
-BR2_LINUX_KERNEL_VERSION="3.0.4"
-BR2_LINUX_KERNEL_PATCH=""
-# BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/marc/linux-3.0.4/.config"
-BR2_LINUX_KERNEL_BZIMAGE=y
-# BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
-BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+On Wednesday 14 September 2011 14:56:15, Thomas De Schampheleire wrote:
+[snip]
+
+> diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+> new file mode 100644
+> --- /dev/null
+> +++ b/linux/linux-ext-xenomai.mk
+> @@ -0,0 +1,29 @@
+> +##################################################
+> +# Linux Adeos/Xenomai extensions
+> +#
+> +# Patch the linux kernel with xenomai extension
+> +##################################################
+> +
+> +ifeq ($(BR2_LINUX_KERNEL_EXT_XENOMAI),y)
+> +# Add dependency to xenomai (user-space) which provide ksrc part
+> +LINUX_DEPENDENCIES += xenomai
+> +
+> +# Adeos patch version
+> +XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
+> +ifeq ($(XENOMAI_ADEOS_PATCH),)
+> +XENOMAI_ADEOS_OPT = --default
+> +else
+> +XENOMAI_ADEOS_OPT = --adeos=$(XENOMAI_ADEOS_PATCH)
+> +endif
+> +
+> +# Prepare kernel patch
+> +define XENOMAI_PREPARE_KERNEL
+> +	$(XENOMAI_DIR)/scripts/prepare-kernel.sh \
+> +		--linux=$(LINUX_DIR) \
+> +		--arch=$(BR2_ARCH) \
+> +		$(XENOMAI_ADEOS_OPT)
+> +endef
+> +
+> +LINUX_POST_EXTRACT_HOOKS += XENOMAI_PREPARE_KERNEL
+> +
+> +endif #BR2_LINUX_EXT_XENOMAI
+
+ Don't we usually limit the ifeq() block to the LINUX_DEPENDENCIES and 
+LINUX_POST_EXTRACT_HOOKS lines?
+
+ Shouldn't it be _POST_PATCH_HOOKS rather than _POST_EXTRACT_HOOKS?  Not
+that it matters much in the case of the kernel, but it's more consistent.
+
+> diff --git a/package/Config.in b/package/Config.in
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -487,6 +487,10 @@
+>  endif
+>  endmenu
+>  
+> +menu "Real-Time"
+> +source "package/xenomai/Config.in"
+> +endmenu
+> +
+>  menu "Shell and utilities"
+>  source "package/at/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/xenomai/Config.in
+> @@ -0,0 +1,78 @@
+> +config BR2_PACKAGE_XENOMAI
+> +	bool "Xenomai Userspace"
+> +	help
+> +	  Real-Time Framework for Linux
+> +	  http://www.xenomai.org
+
+ I think most of the README should be put here rather than as a README.
+
+ People only look at a package's README if they're modifying the buildroot
+integration of that package.
+
+ At the very least, the help text should refer to the README.
+
+> +
+> +config BR2_PACKAGE_XENOMAI_VERSION
+> +	depends on BR2_PACKAGE_XENOMAI
+> +	string "Custom Xenomai version"
+> +	help
+> +	  Manualy select Xenomai Version.
+> +	  Take care of compatibility with the Linux kernel.
+
+ I think this could be improved as follows:
+
+  Manually select Xenomai version.  If left empty, the default version 
+  will be used.
+
+  Make sure that the selected version has a patch for your selected Linux
+  kernel.  If it does not, download and select a patch manually with
+  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the
+  Linux Kernel -> Linux Kernel Extensions menu.
+
+[I don't mention which version is the default so we don't have to update
+the version number in two places.  Actually, contrary to what PeterK has
+suggested, I would put a default in the config and nothing in the makefile.]
+
+[BTW here's a nice example why I prefer the patch and the Xenomai
+userspace to sit close to each other in the config.  Referring to a
+completely different menu in this way is not nice IMHO.]
+
+> +
+> +# Manually select CPU (use it if not detected)
+
+ Comment is redundant
+
+> +config BR2_PACKAGE_XENOMAI_CPU_TYPE_MANUAL
+> +	bool "Manually Select Xenomai CPU"
+> +	depends on (BR2_PACKAGE_XENOMAI && BR2_arm)
+> +	help
+> +	  This option allows you to select Xenomai CPU in a list. Use it only
+> +	  if CPU is not auto-detected by Buildroot ! (i.e. your board is not
+> +	  described)
+
+ If this config is not set, it defaults to generic.  Also this config isn't used
+in the makefile.  Doesn't it make more sense to remove this config and just
+put generic as the default in the following choice?
+
+> +
+> +choice
+> +	prompt "Xenomai ARM CPU type"
+> +	depends on BR2_PACKAGE_XENOMAI_CPU_TYPE_MANUAL
+> +	help
+> +	  Manually select CPU type for Xenomai.
+
+ Improved help text:
+
+  On this architecture, Xenomai needs to be configured for a specific
+sub-architecture.  Select the appropriate sub-architecture from the list.
+
+[I don't know what this auto-detection mentioned in the _MANUAL
+config means...]
+
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_AT91RM9200
+> +		bool "Atmel AT91RM9200"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_AT91SAM926X
+> +		bool "Atmel AT91SAM926X"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_INTEGRATOR
+> +		bool "ARM Ltd. Integrator"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_IXP4XX
+> +		bool "Intel IXP4XX (XScale)"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_IMX
+> +		bool "Freescale i.MX (MX1/MXL)"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_IMX21
+> +		bool "Freescale i.MX21"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_MX2
+> +		bool "Freescale MXC/MX2"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_MX3
+> +		bool "Freescale MXC/MX3"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_SA1100
+> +		bool "StrongARM SA1100"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_S3C2410
+> +		bool "S3C2410"
+> +
+> +	config BR2_PACKAGE_XENOMAI_CPU_GENERIC_ARM
+> +		bool "Generic ARM"
+> +
+> +endchoice
+> +
+> +# Now set CPU type. We force manually selected type even if detected in case
+> +# user takes the risk.
+> +config BR2_PACKAGE_XENOMAI_CPU_TYPE
+> +	string
+> +	depends on BR2_PACKAGE_XENOMAI && BR2_arm
+> +	default "at91rm9200"  if BR2_PACKAGE_XENOMAI_CPU_AT91RM9200
+> +	default "at91sam926x" if BR2_PACKAGE_XENOMAI_CPU_AT91SAM926X
+> +	default "integrator"  if BR2_PACKAGE_XENOMAI_CPU_INTEGRATOR
+> +	default "ixp4xx"      if BR2_PACKAGE_XENOMAI_CPU_IXP4XX
+> +	default "generic"     if BR2_PACKAGE_XENOMAI_CPU_GENERIC_ARM
+> +	default "imx"         if BR2_PACKAGE_XENOMAI_CPU_IMX
+> +	default "imx21"       if BR2_PACKAGE_XENOMAI_CPU_IMX21
+> +	default "mx2"         if BR2_PACKAGE_XENOMAI_CPU_MX2
+> +	default "mx3"         if BR2_PACKAGE_XENOMAI_CPU_MX3
+> +	default "s3c2410"     if BR2_PACKAGE_XENOMAI_CPU_S3C2410
+> diff --git a/package/xenomai/README b/package/xenomai/README
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/xenomai/README
+> @@ -0,0 +1,48 @@
+> +****************
+> +* Xenomai      *
+> +****************
+> +
+> +Xenomai comes with 2 parts : Kernel Part and User-space part.
+> +Kernel part patch Linux with ADEOS(i-pipe)
+> +(http://home.gna.org/adeos/) and some Xenomai kernel space stuff.
+> +
+> +From Adeos main site :
+> +"The purpose of Adeos is to provide a flexible environment for sharing
+> +hardware resources among multiple operating systems, or among multiple
+> +instances of a single OS."
+> +
+> +From Xenomai main site :
+> +"Xenomai is a real-time development framework cooperating with the
+> +Linux kernel, in order to provide a pervasive, interface-agnostic,
+> +hard real-time support to user-space applications, seamlessly
+> +integrated into the GNU/Linux environment."
+> +
+> +****************
+> +* Installation *
+> +****************
+> +
+> +* Buildroot Kernel: *
+> +  - Check that your version of Linux Kernel is supported by the
+> +    version of xenomai you choose.
+> +  - Download Adeos patch at
+> +    http://download.gna.org/adeos/patches/v2.6/$(ARCH)/, or if your
+> +    are sure, let the Xenomai 'prepare-kernel.sh' script do the work.
+> +  - Check the Xenomai Kernel option in Buildroot :
+> +     -> Kernel
+> +       -> Linux Kernel (BR2_LINUX_KERNEL [=y])
+> +         -> Linux Kernel Extensions
+> +            -> [*] Adeos/Xenomai Real-time patch
+> +     ..And add the path to Adeos patch. (or leave it empty if you let
+> +     xenomai script do the work)
+> +
+> +* Non-Buildroot Kernel AND Buildroot Kernel *
+> +  - Make sure your Kernel is patched with Xenomai
+> +  - Check the option in Buildroot menu :
+> +    -> Package Selection for the target
+> +       -> Real-time
+> +          -> [*] Xenomai Userspace
+> +  - You can download a custom version of Xenomai that fit with your
+> +  Kernel.
+> +  - If you use static /dev and the default device_table, Uncomment
+> +  Xenomai part in 'target/generic/device_table_dev.txt'. (rtheap,
+> +  rtscope and rtp[0-31])
+> diff --git a/package/xenomai/xenomai-do-not-install-devices.patch b/package/xenomai/xenomai-do-not-install-devices.patch
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/xenomai/xenomai-do-not-install-devices.patch
+> @@ -0,0 +1,11 @@
+> +--- a/Makefile.in	2011-06-24 16:11:23.591449817 +0200
+> ++++ b/Makefile.in	2011-06-24 16:20:29.638129633 +0200
+> +@@ -719,7 +719,7 @@
+> + 	  $$sudo mknod -m 666 $(DESTDIR)/dev/rtheap c 10 254 ; \
+> + 	fi
+> + 
+> +-install-exec-local: devices
+> ++install-exec-local:
+> + 
+> + install-user:
+> + 	$(MAKE) SUDO=false install
+
+ I used a patch which solves the underlying issue (at some point, sudo is 
+called instead of $SUDO) and I use
+XENOMAI_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-user
+XENOMAI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-user
+
+> diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/xenomai/xenomai.mk
+> @@ -0,0 +1,88 @@
+> +#############################################################
+> +# Xenomai
+> +# URL  : http://xenomai.org
+> +# NOTE : Real-Time Framework for Linux
+> +#
+> +#############################################################
+> +
+> +XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+> +ifeq ($(XENOMAI_VERSION),)
+> +XENOMAI_VERSION = 2.5.6
+> +endif
+> +
+> +XENOMAI_SITE = http://download.gna.org/xenomai/stable/
+> +XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
+> +
+> +XENOMAI_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_arm),y)
+> +XENOMAI_CPU_TYPE = $(call qstrip,$(BR2_PACKAGE_XENOMAI_CPU_TYPE))
+> +# Set "generic" if not defined
+> +ifeq ($(XENOMAI_CPU_TYPE),)
+> +XENOMAI_CPU_TYPE = generic
+> +endif
+> +XENOMAI_EXTRA_CONFIGURE_OPTS += "--enable-$(BR2_ARCH)-mach=$(XENOMAI_CPU_TYPE)"
+> +endif #BR2_arm
+> +
+> +define XENOMAI_CONFIGURE_CMDS
+> +	(cd $(@D); rm -rf config.cache; \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		$(TARGET_CONFIGURE_ARGS) \
+> +		CCFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
+> +		./configure \
+> +		$(XENOMAI_EXTRA_CONFIGURE_OPTS) \
+> +		--host=$(BR2_ARCH)-linux \
+> +		$(if $(shell grep "^CONFIG_SMP*=*y" \
+> +			$(LINUX_DIR)/.config ),--enable-smp,) \
+> +	)
+> +endef
+> +
+> +define XENOMAI_INSTALL_STAGING_CMDS
+> +	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) install
+> +endef
+> +
+> +define XENOMAI_INSTALL_TARGET_CMDS
+> +	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+> +	rm -rf $(TARGET_DIR)/usr/xenomai/share/doc
+> +	rm -rf $(TARGET_DIR)/usr/xenomai/include
+> +	# Make sure /etc/ld.so.conf exists
+> +	touch $(TARGET_DIR)/etc/ld.so.conf
+> +	# Add /usr/xenomai/lib only if it is not yet present
+> +	(grep "/usr/xenomai/lib" $(TARGET_DIR)/etc/ld.so.conf \
+> +		&>/dev/null) || (echo "/usr/xenomai/lib" >> $(TARGET_DIR)/etc/ld.so.conf)
+> +endef
+> +
+> +# If you use static /dev creation don't forget to update your
+> +#  device_table_dev.txt
+
+ No need for this if we can apply the pkg-device patches that were posted by
+Maxime a week ago.
+
+> +ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
+> +XENOMAI_DEPENDENCIES += udev
+> +
+> +define XENOMAI_UDEV_HOOKS
+> +	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
+> +		for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
+> +			cp $$f $(TARGET_DIR)/etc/udev/rules.d/ ; \
+> +		done ; \
+> +	fi;
+> +endef
+> +
+> +XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_UDEV_HOOKS
+> +endif # udev
+
+ Call me crazy, but I would make this:
+
+UDEV_POST_INSTALL_TARGET_HOOKS += XENOMAI_UDEV_HOOKS
+
+without the condition or the dependency on udev.  I always considered this
+the main power of the hooks setup.
+
+> +
+> +define XENOMAI_CLEAN_CMDS
+> +	-$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) clean
+> +endef
+> +
+> +define XENOMAI_UNINSTALL_TARGET_CMDS
+> +	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
+> +		for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
+> +			rm -f $(TARGET_DIR)/etc/udev/rules.d/$$f ; \
+> +		done ; \
+> +	fi;
+> +	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
+> +endef
+> +
+> +define XENOMAI_UNINSTALL_STAGING_CMDS
+> +	$(MAKE) DESTDIR=$(STAGING_DIR) -C $(@D) uninstall
+> +endef
+> +
+> +$(eval $(call GENTARGETS,package,xenomai))
+
+ AUTOTARGETS works fine for me.  You just need to override the configure.
+Perhaps it's even possible to override the default prefix in the
+XENOMAI_CONF_OPT variable, but I never tried that.
+
+> diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
+> --- a/target/generic/device_table_dev.txt
+> +++ b/target/generic/device_table_dev.txt
+> @@ -141,3 +141,8 @@
+>  
+>  # I2C device nodes
+>  /dev/i2c-	c	666	0	0	89	0	0	1	4
+> +
+> +# Xenomai
+> +#/dev/rtheap     c       666     0       0       10      254     0       0       -
+> +#/dev/rtscope    c       666     0       0       10      253     0       0       -
+> +#/dev/rtp        c       666     0       0       150     0       0       1       32
+
+ As I mentioned, unnecessary with Maxime's patch.
+
+
+ Regardless of all my comments, this patch set is in a much better shape
+than the hacks I am using at the moment!
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
