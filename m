@@ -1,96 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2011 22:22:56 +0200
-Subject: [Buildroot] [PATCH 6/8] xenomai: add support to keep or remove skins
+Date: Sat, 17 Sep 2011 22:22:51 +0200
+Subject: [Buildroot] [PATCH 1/8] linux: Add Linux Kernel extensions menu
 In-Reply-To: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <84dc08856919e6431347886d30464c89cf61d692.1316290714.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ce82814ab1e4373f4328e235305f9d331066886a.1316290714.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xenomai/Config.in  |   37 +++++++++++++++++++++++++++++++++++++
- package/xenomai/xenomai.mk |   19 +++++++++++++++++++
- 2 files changed, 56 insertions(+), 0 deletions(-)
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 3749a60..cfeaa04 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -119,4 +119,41 @@ config BR2_PACKAGE_XENOMAI_ANALOGY
-          This option allows to install the Xenomai Analogy utilities
-          and libraries
+Add a kernel sub-menu (called "Linux Kernel Extensions"), which makes
+possible to patch it or tweak the kernel build step.
+
+ * All linux/linux-ext-*.mk files will be read by the make process.
+ * The menu can be customized in "linux/Config.ext.in".
+
+Signed-off-by: Benoit Mauduit <benoit.mauduit@openwide.fr>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ linux/Config.ext.in |    3 +++
+ linux/Config.in     |    4 ++++
+ linux/linux.mk      |    2 ++
+ 3 files changed, 9 insertions(+), 0 deletions(-)
+ create mode 100644 linux/Config.ext.in
+
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+new file mode 100644
+index 0000000..50e801d
+--- /dev/null
++++ b/linux/Config.ext.in
+@@ -0,0 +1,3 @@
++menu "Linux Kernel Extensions"
++
++endmenu
+diff --git a/linux/Config.in b/linux/Config.in
+index 537cb54..7852408 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -176,6 +176,10 @@ config BR2_LINUX_KERNEL_INSTALL_TARGET
+ 	  /boot in the target root filesystem, as is typically done on
+ 	  x86/x86_64 systems.
  
-+config BR2_PACKAGE_XENOMAI_NATIVE_SKIN
-+       bool "Native skin library"
-+       default y
-+       help
-+	 This option allows to install the Native Xenomai skin
 +
-+config BR2_PACKAGE_XENOMAI_POSIX_SKIN
-+       bool "POSIX skin library"
-+       default y
-+       help
-+	 This option allows to install the POSIX Xenomai skin
++# Linux extensions (Xenomai)
++source "linux/Config.ext.in"
 +
-+config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
-+       bool "VX-Works skin library"
-+       help
-+	 This option allows to install the VX-Works Xenomai skin
-+
-+config BR2_PACKAGE_XENOMAI_PSOS_SKIN
-+       bool "PSOS skin library"
-+       help
-+	 This option allows to install the PSOS Xenomai skin
-+
-+config BR2_PACKAGE_XENOMAI_RTAI_SKIN
-+       bool "RTAI skin library"
-+       help
-+	 This option allows to install the RTAI Xenomai skin
-+
-+config BR2_PACKAGE_XENOMAI_UITRON_SKIN
-+       bool "uiTron skin library"
-+       help
-+	 This option allows to install the uiTron Xenomai skin
-+
-+config BR2_PACKAGE_XENOMAI_VRTX_SKIN
-+       bool "VRTX skin library"
-+       help
-+	 This option allows to install the VRTX Xenomai skin
-+
- endif
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index fff2c5d..52e0b4e 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -103,6 +103,25 @@ endef
- XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_ANALOGY
- endif
+ endif # BR2_LINUX_KERNEL
  
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,native)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
-+XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
+ endmenu
+diff --git a/linux/linux.mk b/linux/linux.mk
+index d289b28..f249d96 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -177,6 +177,8 @@ define LINUX_INSTALL_TARGET_CMDS
+ 	fi
+ endef
+ 
++include linux/linux-ext-*.mk
 +
-+define XENOMAI_REMOVE_SKINS
-+	for i in $(XENOMAI_REMOVE_SKIN_LIST) ; do \
-+		rm -f $(TARGET_DIR)/usr/xenomai/lib/lib$$i.* ; \
-+		if [ $$i == "posix" ] ; then \
-+			rm -f $(TARGET_DIR)/usr/xenomai/lib/posix.wrappers ; \
-+		fi ; \
-+	done
-+endef
-+
-+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS
-+
- define XENOMAI_ADD_LD_SO_CONF
- 	# Add /usr/xenomai/lib in the library search path
- 	grep -q "^/usr/xenomai/lib" $(TARGET_DIR)/etc/ld.so.conf || \
+ $(eval $(call GENTARGETS,,linux))
+ 
+ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
 -- 
 1.7.4.1
