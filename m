@@ -1,49 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2011 09:11:36 +0200
-Subject: [Buildroot] [PATCH 08/15] package: remove useless arguments
- from AUTOTARGETS
-In-Reply-To: <87vcsrwu8u.fsf@macbook.be.48ers.dk>
+Date: Sat, 17 Sep 2011 09:13:33 +0200
+Subject: [Buildroot] [PATCH 01/15] package: show complete URL for
+ external-deps
+In-Reply-To: <87zki3wuhj.fsf@macbook.be.48ers.dk>
 References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
  <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
- <4c5d5efafbb287dcf231d5abed7ab0095ee6f94c.1314826231.git.thomas.petazzoni@free-electrons.com>
- <87vcsrwu8u.fsf@macbook.be.48ers.dk>
-Message-ID: <20110917091136.4a05f81d@skate>
+ <9a55925fbd5588fb01890a48d15a46b06c93fed4.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <87zki3wuhj.fsf@macbook.be.48ers.dk>
+Message-ID: <20110917091333.6d80760b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 17 Sep 2011 08:36:17 +0200,
+Le Sat, 17 Sep 2011 08:31:04 +0200,
 Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> Does those functions do the right thing here or do we need to rename
-> the directory to libfuse?
+> Hmm, the uses case for external-deps were:
+> 
+>  - What files from the dl/ dir do I need to copy over to new machine
+> to be able to build this config without internet connectivity?
+> 
+>  - What files do I need to archive (next to buildroot) to ensure I can
+>    rebuild this config in years to come?
+> 
+> - What files do I need to provide to customers in addition to
+> buildroot for GPL compliance?
+> 
+> For all of those the upstream URL isn't really interesting
 
-Good catch: those functions make the assumption that the directory is
-named after the name of the package. Actually, the name of the .mk is
-not important to these macros, it is the directory name that is
-important:
+Ok. To me this sounds like a strange behaviour for something called
+"external-deps", I would have expected to see the *external*
+dependencies, i.e what I need from the Internet, besides Buildroot, to
+be able to build my system.
 
-+define pkgmakefile
-+$(dir $(lastword $(MAKEFILE_LIST)))
-+endef
+> - Perhaps we should fix the svn/bzr/git helpers instead?
 
-For package/fuse/libfuse.mk, the output of this macro is package/fuse/.
-In fact, I think we could rename this macro "pkgmakefiledir" or
-something like that.
+What should they show ? The name of the local tarball that has been
+created after the svn checkout / git clone ?
 
-+define pkgname
-+$(lastword $(subst /, ,$(call pkgmakefile)))
-+endef
+And what should we display in the case of a local package (as added by
+this patchset) ?
 
-And therefore the output of this if "fuse". So you're correct that the
-fuse package need to be changed.
-
-Should I rebase my changes on master (to include new packages) and fix
-those issues ?
-
-Thanks,
+Regards,
 
 Thomas
 -- 
