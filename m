@@ -1,34 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Sep 2011 13:30:03 +0200
-Subject: [Buildroot] [PATCH 1/1] external toolchain: slightly optimize
-	the copy of the toolchain sysroot
-In-Reply-To: <bf913e756e822eac217406309f3e423ca5dca580.1314826575.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 31 Aug 2011 23:36:21 +0200")
-References: <cover.1314826575.git.thomas.petazzoni@free-electrons.com>
- <cover.1314826575.git.thomas.petazzoni@free-electrons.com>
- <bf913e756e822eac217406309f3e423ca5dca580.1314826575.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87iporwgn8.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 17 Sep 2011 14:03:33 +0200
+Subject: [Buildroot] [git commit] tslib: drop redundant configure options
+Message-ID: <20110917121852.875578D517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cbdb0a09224400c97632fa58e1a33d5901ff8f69
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> The sysroot of an ARM CodeSourcery toolchain takes about 1.4 GB of
- Thomas> space, but 1.1+ GB of this space consists in locale-related
- Thomas> information which Buildroot doesn't use. By skipping the copy of those
- Thomas> unused files, we save quite a bit of time while importing the
- Thomas> toolchain sysroot.
+And cleanup while we're at it.
 
-Looks good, except:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/tslib/tslib.mk |    9 ++-------
+ 1 files changed, 2 insertions(+), 7 deletions(-)
 
- Thomas> -			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
- Thomas> +			rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
-
-We don't currently check for rsync in dependencies.sh - Please add that
-as well (same for the local package stuff).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 23c1f5b..a65e72e 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -3,15 +3,10 @@
+ # tslib
+ #
+ #############################################################
+-TSLIB_VERSION:=412d99d8b92c
+-TSLIB_SITE:=git://github.com/kergoth/tslib.git
++TSLIB_VERSION = 412d99d8b92c
++TSLIB_SITE = git://github.com/kergoth/tslib.git
+ TSLIB_AUTORECONF = YES
+ TSLIB_INSTALL_STAGING = YES
+-TSLIB_INSTALL_TARGET = YES
+ TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ 
+-TSLIB_CONF_OPT = \
+-	--prefix=/usr	\
+-	--sysconfdir=/etc
+-
+ $(eval $(call AUTOTARGETS,package,tslib))
