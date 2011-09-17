@@ -1,26 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2011 09:02:44 +0200
-Subject: [Buildroot] [PATCH 7/7] support: move package/gnuconfig to
- support/gnuconfig
-In-Reply-To: <878vpny9f0.fsf@macbook.be.48ers.dk>
-References: <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
- <cover.1314826483.git.thomas.petazzoni@free-electrons.com>
- <2072e42d074f370769f62ccaacf34b84900da8e3.1314826483.git.thomas.petazzoni@free-electrons.com>
- <878vpny9f0.fsf@macbook.be.48ers.dk>
-Message-ID: <20110917090244.016f2e48@skate>
+Date: Sat, 17 Sep 2011 09:11:36 +0200
+Subject: [Buildroot] [PATCH 08/15] package: remove useless arguments
+ from AUTOTARGETS
+In-Reply-To: <87vcsrwu8u.fsf@macbook.be.48ers.dk>
+References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <4c5d5efafbb287dcf231d5abed7ab0095ee6f94c.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <87vcsrwu8u.fsf@macbook.be.48ers.dk>
+Message-ID: <20110917091136.4a05f81d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 17 Sep 2011 08:23:15 +0200,
+Le Sat, 17 Sep 2011 08:36:17 +0200,
 Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> I've dropped the echo with wrong indentation, otherwise it looks good
+> Does those functions do the right thing here or do we need to rename
+> the directory to libfuse?
 
-Indeed, it was a leftover from the debugging session. Sorry for this
-and thanks for fixing it.
+Good catch: those functions make the assumption that the directory is
+named after the name of the package. Actually, the name of the .mk is
+not important to these macros, it is the directory name that is
+important:
+
++define pkgmakefile
++$(dir $(lastword $(MAKEFILE_LIST)))
++endef
+
+For package/fuse/libfuse.mk, the output of this macro is package/fuse/.
+In fact, I think we could rename this macro "pkgmakefiledir" or
+something like that.
+
++define pkgname
++$(lastword $(subst /, ,$(call pkgmakefile)))
++endef
+
+And therefore the output of this if "fuse". So you're correct that the
+fuse package need to be changed.
+
+Should I rebase my changes on master (to include new packages) and fix
+those issues ?
+
+Thanks,
 
 Thomas
 -- 
