@@ -1,35 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2011 10:28:32 +0200
-Subject: [Buildroot] xattr fs for raw flash
-In-Reply-To: <CAH3pVZN04aTj-xj8_qbC+ZxCeq03WAr+1aRZ_Sf4f-g5xUw4sw@mail.gmail.com>
-References: <CAH3pVZN04aTj-xj8_qbC+ZxCeq03WAr+1aRZ_Sf4f-g5xUw4sw@mail.gmail.com>
-Message-ID: <20110917102832.34fe40ea@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 17 Sep 2011 10:53:23 +0200
+Subject: [Buildroot] [PATCH 01/15] package: show complete URL for
+	external-deps
+In-Reply-To: <20110917091333.6d80760b@skate> (Thomas Petazzoni's message of
+ "Sat, 17 Sep 2011 09:13:33 +0200")
+References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <9a55925fbd5588fb01890a48d15a46b06c93fed4.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <87zki3wuhj.fsf@macbook.be.48ers.dk> <20110917091333.6d80760b@skate>
+Message-ID: <87mxe3wnwc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 17 Sep 2011 11:59:15 +0400,
-Sergey Naumov <sknaumov@gmail.com> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Does anybody know raw-flash filesystems with xattr support?
-> I know that jffs2 has but it has problems with mount time and memory
-> consumption.
-> I am interested in logFS but can't find any information about xattrs
-> support.
+ >> For all of those the upstream URL isn't really interesting
 
-UBIFS apparently has xattr support, even though I've never used it:
+ Thomas> Ok. To me this sounds like a strange behaviour for something called
+ Thomas> "external-deps", I would have expected to see the *external*
+ Thomas> dependencies, i.e what I need from the Internet, besides Buildroot, to
+ Thomas> be able to build my system.
 
-config UBIFS_FS_XATTR
-        bool "Extended attributes support"
-        depends on UBIFS_FS
-        help
-          This option enables support of extended attributes.
+Well, that's what they show, just the downloaded version of it. It is
+mainly useful if you use a shared download dir as it will contain a
+bunch of unrelated stuff.
 
-Thomas
+I'm not sure if a show-me-what-make-source-would-do target
+(E.G. something showing the upstream URLs) would be useful enough to be
+worth adding.
+
+ >> - Perhaps we should fix the svn/bzr/git helpers instead?
+
+ Thomas> What should they show ? The name of the local tarball that has been
+ Thomas> created after the svn checkout / git clone ?
+
+Yes.
+
+ Thomas> And what should we display in the case of a local package (as added by
+ Thomas> this patchset) ?
+
+That's a good question - The path to the directory perhaps?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
