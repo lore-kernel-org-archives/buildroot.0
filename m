@@ -1,39 +1,58 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Sep 2011 08:36:17 +0200
-Subject: [Buildroot] [PATCH 08/15] package: remove useless arguments
-	from AUTOTARGETS
-In-Reply-To: <4c5d5efafbb287dcf231d5abed7ab0095ee6f94c.1314826231.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 31 Aug 2011 23:31:16 +0200")
-References: <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
- <cover.1314826231.git.thomas.petazzoni@free-electrons.com>
- <4c5d5efafbb287dcf231d5abed7ab0095ee6f94c.1314826231.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vcsrwu8u.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 17 Sep 2011 08:22:12 +0200
+Subject: [Buildroot] [git commit] qt: bump version
+Message-ID: <20110917063642.239518D728@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Thanks to the pkgdir and pkgname functions, we can rewrite the
- Thomas> AUTOTARGETS macro in a way that avoids the need for each package to
- Thomas> repeat its name and the directory in which it is present.
+commit: http://git.buildroot.net/buildroot/commit/?id=27b58e3972e287374259532e09a0ef4761b4270f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ....3-configure.patch => qt-4.7.4-configure.patch} |    0
+ ..._np.patch => qt-4.7.4-pthread_getattr_np.patch} |    0
+ ...ch => qt-4.7.4-pthread_getattr_np_webkit.patch} |    0
+ ...i.patch => qt-4.7.4-script-qtdbus-no-gui.patch} |    0
+ package/qt/qt.mk                                   |    2 +-
+ 5 files changed, 1 insertions(+), 1 deletions(-)
+ rename package/qt/{qt-4.7.3-configure.patch => qt-4.7.4-configure.patch} (100%)
+ rename package/qt/{qt-4.7.3-pthread_getattr_np.patch => qt-4.7.4-pthread_getattr_np.patch} (100%)
+ rename package/qt/{qt-4.7.3-pthread_getattr_np_webkit.patch => qt-4.7.4-pthread_getattr_np_webkit.patch} (100%)
+ rename package/qt/{qt-4.7.3-script-qtdbus-no-gui.patch => qt-4.7.4-script-qtdbus-no-gui.patch} (100%)
 
- Thomas> diff --git a/package/fuse/libfuse.mk b/package/fuse/libfuse.mk
- Thomas> index 13a5194..6c71682 100644
- Thomas> --- a/package/fuse/libfuse.mk
- Thomas> +++ b/package/fuse/libfuse.mk
- Thomas> @@ -27,4 +27,4 @@ define LIBFUSE_CLEAN_CMDS
- Thomas>  	rm -f $(TARGET_DIR)/usr/bin/fusermount $(TARGET_DIR)/usr/lib/libfuse.so*
- Thomas>  endef
+diff --git a/package/qt/qt-4.7.3-configure.patch b/package/qt/qt-4.7.4-configure.patch
+similarity index 100%
+rename from package/qt/qt-4.7.3-configure.patch
+rename to package/qt/qt-4.7.4-configure.patch
+diff --git a/package/qt/qt-4.7.3-pthread_getattr_np.patch b/package/qt/qt-4.7.4-pthread_getattr_np.patch
+similarity index 100%
+rename from package/qt/qt-4.7.3-pthread_getattr_np.patch
+rename to package/qt/qt-4.7.4-pthread_getattr_np.patch
+diff --git a/package/qt/qt-4.7.3-pthread_getattr_np_webkit.patch b/package/qt/qt-4.7.4-pthread_getattr_np_webkit.patch
+similarity index 100%
+rename from package/qt/qt-4.7.3-pthread_getattr_np_webkit.patch
+rename to package/qt/qt-4.7.4-pthread_getattr_np_webkit.patch
+diff --git a/package/qt/qt-4.7.3-script-qtdbus-no-gui.patch b/package/qt/qt-4.7.4-script-qtdbus-no-gui.patch
+similarity index 100%
+rename from package/qt/qt-4.7.3-script-qtdbus-no-gui.patch
+rename to package/qt/qt-4.7.4-script-qtdbus-no-gui.patch
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ff67058..ed95b2c 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -12,7 +12,7 @@
+ #
+ ######################################################################
  
- Thomas> -$(eval $(call AUTOTARGETS,package,libfuse))
- Thomas> +$(eval $(call AUTOTARGETS))
-
-Does those functions do the right thing here or do we need to rename the
-directory to libfuse?
-
+-QT_VERSION = 4.7.3
++QT_VERSION = 4.7.4
+ QT_SOURCE  = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
+ QT_SITE    = http://get.qt.nokia.com/qt/source
+ 
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
