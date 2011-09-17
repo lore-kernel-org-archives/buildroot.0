@@ -1,75 +1,143 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 Sep 2011 22:22:50 +0200
-Subject: [Buildroot] =?utf-8?q?=5Bpull_request=5D_Pull_request_for_branch_?=
-	=?utf-8?q?xenomai-rtai?=
-Message-ID: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 Sep 2011 22:22:58 +0200
+Subject: [Buildroot] [PATCH 8/8] Add support for the RTAI real-time extension
+In-Reply-To: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7866cdfadfff98de581f66937b224319f83bc681.1316290714.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Here is a patch set that adds the Xenomai and RTAI real-time
-extensions of the Linux kernel. The Xenomai patches come from Thomas
-de Schampheleire, who himself took them from Beno?t Mauduit. Those
-patches have been improved further, taking into account comments from
-Arnout, and adding some more features (ability to remove test
-programs, RT-CAN programs, Analogy programs, and select which skins
-should be installed).
-
-The RTAI real-time extension is also added. It is not well supported
-on architectures others than x86/x86-64, but can be useful on those
-architectures. However, its integration required a small change in the
-package infrastructure, described in detail in its commit log.
-
-Regards,
-
-Thomas
-
-The following changes since commit 16d6e9b3420e78a89960b8b68202ea46a618810d:
-
-  Makefile.autotools.in: fix autoreconf libtool patching after libtool move (2011-09-17 14:16:42 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git xenomai-rtai
-
-Thomas De Schampheleire (2):
-      linux: Add Linux Kernel extensions menu
-      Add xenomai real-time Framework to buildroot
-
-Thomas Petazzoni (6):
-      xenomai: add support to keep or remove testsuite programs
-      xenomai: add support to keep or remove RT-CAN utilities
-      xenomai: add support to keep or remove Analogy utilities and libs
-      xenomai: add support to keep or remove skins
-      package: change ordering of steps
-      Add support for the RTAI real-time extension
-
- linux/Config.ext.in                                |   31 ++++
- linux/Config.in                                    |    4 +
- linux/linux-ext-rtai.mk                            |   47 ++++++
- linux/linux-ext-xenomai.mk                         |   30 ++++
- linux/linux.mk                                     |    2 +
- package/Config.in                                  |    5 +
- package/Makefile.package.in                        |    6 +-
- package/rtai/Config.in                             |    2 +
- package/rtai/rtai.mk                               |   16 ++
- package/xenomai/Config.in                          |  159 ++++++++++++++++++++
- .../xenomai/xenomai-do-not-install-devices.patch   |   11 ++
- package/xenomai/xenomai.mk                         |  159 ++++++++++++++++++++
- target/generic/device_table_dev.txt                |    5 +
- 13 files changed, 474 insertions(+), 3 deletions(-)
- create mode 100644 linux/Config.ext.in
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.ext.in     |   13 +++++++++++++
+ linux/linux-ext-rtai.mk |   47 +++++++++++++++++++++++++++++++++++++++++++++++
+ package/Config.in       |    1 +
+ package/rtai/Config.in  |    2 ++
+ package/rtai/rtai.mk    |   16 ++++++++++++++++
+ 5 files changed, 79 insertions(+), 0 deletions(-)
  create mode 100644 linux/linux-ext-rtai.mk
- create mode 100644 linux/linux-ext-xenomai.mk
  create mode 100644 package/rtai/Config.in
  create mode 100644 package/rtai/rtai.mk
- create mode 100644 package/xenomai/Config.in
- create mode 100644 package/xenomai/xenomai-do-not-install-devices.patch
- create mode 100644 package/xenomai/xenomai.mk
 
-Thanks,
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index fc37d23..bbbe612 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -15,4 +15,17 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+ 	  Download it at http://download.gna.org/adeos/patches/v2.6/$(ARCH)/
+ 	  and verify that your kernel version in buildroot matches.
+ 
++# RTAI
++config BR2_LINUX_KERNEL_EXT_RTAI
++       bool "RTAI Real-time patch"
++       select BR2_PACKAGE_RTAI
++       help
++         RTAI Kernel part.
++
++config BR2_LINUX_KERNEL_EXT_RTAI_PATCH
++       depends on BR2_LINUX_KERNEL_EXT_RTAI
++       string "Path for RTAI patch file"
++       help
++         Optionally, explicitly specify the RTAI patch to use.
++
+ endmenu
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+new file mode 100644
+index 0000000..a54230d
+--- /dev/null
++++ b/linux/linux-ext-rtai.mk
+@@ -0,0 +1,47 @@
++##################################################
++# Linux RTAI extensions
++#
++# Patch the linux kernel with RTAI extension
++##################################################
++
++ifeq ($(BR2_LINUX_KERNEL_EXT_RTAI),y)
++# Add dependency to RTAI (user-space) which provide kernel patches
++LINUX_DEPENDENCIES += rtai-patch
++
++RTAI_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_RTAI_PATCH))
++
++ifeq ($(KERNEL_ARCH),i386)
++RTAI_ARCH = x86
++else ifeq ($(KERNEL_ARCH),x86_64)
++RTAI_ARCH = x86
++else ifeq ($(KERNEL_ARCH),powerpc)
++RTAI_ARCH = ppc
++else
++RTAI_ARCH = $(KERNEL_ARCH)
++endif
++
++# Prepare kernel patch
++ifeq ($(RTAI_PATCH),)
++define RTAI_PREPARE_KERNEL
++	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
++	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
++		support/script/apply-patches.sh $(LINUX_DIR) 		\
++			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
++			hal-linux-$${kver}-*patch ; \
++	else \
++		echo "No RTAI patch for your kernel version" ; \
++		exit 1 ; \
++	fi
++endef
++else
++define RTAI_PREPARE_KERNEL
++	support/script/apply-patches.sh 	\
++		$(LINUX_DIR)			\
++		$(dir $(RTAI_PATCH))		\
++		$(notdir $(RTAI_PATCH))
++endef
++endif
++
++LINUX_POST_PATCH_HOOKS += RTAI_PREPARE_KERNEL
++
++endif #BR2_LINUX_EXT_RTAI
+diff --git a/package/Config.in b/package/Config.in
+index efb266a..451b271 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -489,6 +489,7 @@ endmenu
+ 
+ menu "Real-Time"
+ source "package/xenomai/Config.in"
++source "package/rtai/Config.in"
+ endmenu
+ 
+ menu "Shell and utilities"
+diff --git a/package/rtai/Config.in b/package/rtai/Config.in
+new file mode 100644
+index 0000000..d08e4cb
+--- /dev/null
++++ b/package/rtai/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_RTAI
++        bool "rtai"
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+new file mode 100644
+index 0000000..2f67cc0
+--- /dev/null
++++ b/package/rtai/rtai.mk
+@@ -0,0 +1,16 @@
++RTAI_VERSION = 3.8.1
++RTAI_SOURCE  = rtai-$(RTAI_VERSION).tar.bz2
++RTAI_SITE    = http://www.rtai.org/RTAI/
++
++RTAI_DEPENDENCIES = linux
++
++RTAI_CONF_OPT = \
++	--with-linux-dir=$(LINUX_DIR) 	\
++	--disable-leds		      	\
++	--disable-rtailab		\
++	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/kernel/rtai
++
++RTAI_MAKE = $(MAKE1)
++
++$(eval $(call AUTOTARGETS,package,rtai))
++
 -- 
-Thomas Petazzoni
+1.7.4.1
