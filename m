@@ -1,42 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 17 Sep 2011 14:03:33 +0200
-Subject: [Buildroot] [git commit] tslib: drop redundant configure options
-Message-ID: <20110917121852.875578D517@busybox.osuosl.org>
+Date: Sat, 17 Sep 2011 14:16:42 +0200
+Subject: [Buildroot] [git commit] Makefile.autotools.in: fix autoreconf
+	libtool patching after libtool move
+Message-ID: <20110917121852.BAD768D517@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbdb0a09224400c97632fa58e1a33d5901ff8f69
+commit: http://git.buildroot.net/buildroot/commit/?id=16d6e9b3420e78a89960b8b68202ea46a618810d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And cleanup while we're at it.
+Commit 20f8a7dec6fc (support: move libtool patches in support/libtool)
+missed the autoreconf variant of the libtool patching, breaking the build
+for packages needing both autoreconf and libtool patching.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tslib/tslib.mk |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ package/Makefile.autotools.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 23c1f5b..a65e72e 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -3,15 +3,10 @@
- # tslib
- #
- #############################################################
--TSLIB_VERSION:=412d99d8b92c
--TSLIB_SITE:=git://github.com/kergoth/tslib.git
-+TSLIB_VERSION = 412d99d8b92c
-+TSLIB_SITE = git://github.com/kergoth/tslib.git
- TSLIB_AUTORECONF = YES
- TSLIB_INSTALL_STAGING = YES
--TSLIB_INSTALL_TARGET = YES
- TSLIB_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
- 
--TSLIB_CONF_OPT = \
--	--prefix=/usr	\
--	--sysconfdir=/etc
--
- $(eval $(call AUTOTARGETS,package,tslib))
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 1394787..4cd63a3 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -190,11 +190,11 @@ define AUTORECONF_HOOK
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
+ 			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | sed 's/\([0-9].[0-9]*\).*/\1/'`; \
+ 			if test $$$${ltmain_version} = "1.5"; then \
+-				support/scripts/apply-patches.sh $$$${i%/*} package buildroot-libtool-v1.5.patch; \
++				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+ 			elif test $$$${ltmain_version} = "2.2"; then\
+-				support/scripts/apply-patches.sh $$$${i%/*} package buildroot-libtool-v2.2.patch; \
++				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+ 			elif test $$$${ltmain_version} = "2.4"; then\
+-				support/scripts/apply-patches.sh $$$${i%/*} package buildroot-libtool-v2.4.patch; \
++				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+ 			fi \
+ 		done \
+ 	fi
