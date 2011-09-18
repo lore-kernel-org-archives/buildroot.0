@@ -1,42 +1,121 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Sep 2011 22:54:53 +0200
-Subject: [Buildroot] [PATCH 8/8] Add support for the RTAI real-time
-	extension
-In-Reply-To: <7866cdfadfff98de581f66937b224319f83bc681.1316290714.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 17 Sep 2011 22:22:58 +0200")
-References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
- <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
- <7866cdfadfff98de581f66937b224319f83bc681.1316290714.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87zki1606a.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 18 Sep 2011 22:06:51 +0200
+Subject: [Buildroot] [git commit] barebox: add support for custom version,
+	tarball, git and patch dir
+Message-ID: <20110918210214.1541B8D5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=661c18bffdb0899bea9f30eade49199d16c72538
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  linux/Config.ext.in     |   13 +++++++++++++
- Thomas>  linux/linux-ext-rtai.mk |   47 +++++++++++++++++++++++++++++++++++++++++++++++
- Thomas>  package/Config.in       |    1 +
- Thomas>  package/rtai/Config.in  |    2 ++
- Thomas>  package/rtai/rtai.mk    |   16 ++++++++++++++++
- Thomas>  5 files changed, 79 insertions(+), 0 deletions(-)
- Thomas>  create mode 100644 linux/linux-ext-rtai.mk
- Thomas>  create mode 100644 package/rtai/Config.in
- Thomas>  create mode 100644 package/rtai/rtai.mk
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/barebox/Config.in  |   53 +++++++++++++++++++++++++++++++++++++++++++++++
+ boot/barebox/barebox.mk |   23 +++++++++++++++++++-
+ 2 files changed, 75 insertions(+), 1 deletions(-)
 
- Thomas> +++ b/package/rtai/Config.in
- Thomas> @@ -0,0 +1,2 @@
- Thomas> +config BR2_PACKAGE_RTAI
- Thomas> +        bool "rtai"
-
-Wrong indentation, no help text and should depend on
-BR2_LINUX_KERNEL_EXT_RTAI.
-
-I've fixed that and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index a821c45..87bf39b 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -6,6 +6,59 @@ menuconfig BR2_TARGET_BAREBOX
+ 	  http://www.barebox.org
+ 
+ if BR2_TARGET_BAREBOX
++choice
++	prompt "version"
++	default BR2_TARGET_BAREBOX_2011_09
++	help
++	  Select the specific Barebox version you want to use
++
++config BR2_TARGET_BAREBOX_2011_08
++	bool "2011.08"
++
++config BR2_TARGET_BAREBOX_2011_09
++	bool "2011.09"
++
++config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
++	bool "Custom tarball"
++
++config BR2_TARGET_BAREBOX_CUSTOM_GIT
++	bool "Custom Git repository"
++
++endchoice
++
++if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
++
++config BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION
++	string "URL of custom Barebox tarball"
++
++endif
++
++config BR2_TARGET_BAREBOX_VERSION
++	string
++	default "2011.08.0"	if BR2_TARGET_BAREBOX_2011_08
++	default "2011.09.0"	if BR2_TARGET_BAREBOX_2011_09
++	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
++	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
++
++config BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR
++	string "custom patch dir"
++	help
++	  If your board requires custom patches, add the path to the
++	  directory containing the patches here. The patches must be
++	  named barebox-<version>-<something>.patch.
++
++	  Most users may leave this empty
++
++if BR2_TARGET_BAREBOX_CUSTOM_GIT
++
++config BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL
++	string "URL of custom Git repository"
++
++config BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION
++	string "Custom Git version"
++
++endif
++
+ config BR2_TARGET_BAREBOX_BOARD_DEFCONFIG
+ 	string "board defconfig"
+ 	help
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 0dfcff3..8826ef9 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -4,9 +4,30 @@
+ #
+ #############################################################
+ 
+-BAREBOX_VERSION = 2011.09.0
++BAREBOX_VERSION    = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
++
++ifeq ($(BAREBOX_VERSION),custom)
++# Handle custom Barebox tarballs as specified by the configuration
++BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
++BAREBOX_SITE    = $(dir $(BAREBOX_TARBALL))
++BAREBOX_SOURCE  = $(notdir $(BAREBOX_TARBALL))
++else ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
++BAREBOX_SITE        = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
++BAREBOX_SITE_METHOD = git
++else
++# Handle stable official Barebox versions
+ BAREBOX_SOURCE = barebox-$(BAREBOX_VERSION).tar.bz2
+ BAREBOX_SITE = http://www.barebox.org/download/
++endif
++
++ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
++define BAREBOX_APPLY_CUSTOM_PATCHES
++	toolchain/patch-kernel.sh $(@D) $(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
++		barebox-$(BAREBOX_VERSION)-\*.patch
++endef
++
++BAREBOX_POST_PATCH_HOOKS += BAREBOX_APPLY_CUSTOM_PATCHES
++endif
+ 
+ BAREBOX_INSTALL_IMAGES = YES
+ ifneq ($(BR2_TARGET_BAREBOX_BAREBOXENV),y)
