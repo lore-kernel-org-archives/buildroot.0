@@ -1,202 +1,380 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Sep 2011 21:05:01 +0200
-Subject: [Buildroot] [git commit] python: fix build by adding some more
-	patches
-Message-ID: <20110918210213.6DACF8D5CD@busybox.osuosl.org>
+Date: Sun, 18 Sep 2011 22:59:44 +0200
+Subject: [Buildroot] [git commit] Add xenomai real-time Framework to
+	buildroot
+Message-ID: <20110918210214.D4A1A8D5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a21642c7eb06eeffe621e7eaef1a85cb9b4589f8
+commit: http://git.buildroot.net/buildroot/commit/?id=956d4ab0f501c44f977297d8faac95afa43f3082
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The removal of -L flags from TARGET_LDFLAGS in
-7e3e8ec040b06d6e2fb69e55c004f1ebc02c76d0 has trigerred some more
-issues with Python, requiring some more hacky fixes.
+[Fixes by Thomas, including comments from Arnout:
+  * Use AUTOTARGETS instead of GENTARGETS
 
+  * Use $(KERNEL_ARCH) instead of $(BR2_ARCH) as argument to the
+    prepare-kernel.sh script. This allows the arch name to be fixed
+    with the usual sed expressions and the quotes to be stripped.
+
+  * Add the --verbose option to prepare-kernel.sh. This allows to get
+    some clear error message when no Xenomai patch has been found for
+    the current kernel version.
+
+  * Improve the help texts as suggested by Arnout, and remove the
+    now useless README file.
+
+  * Add a BR2_PACKAGE_XENOMAI_SMP option, instead of poking inside the
+    kernel configuration to find out whether SMP is enabled or
+    not. This cannot work because: 1) the kernel might be built
+    outside of Buildroot and 2) if the kernel is built inside
+    Buildroot, it is built *after* Xenomai, so the kernel
+    configuration file is typically not yet present.
+
+  * Simplify the ARM subarchitecture selection as suggested by Arnout.
+
+  * Remove the documentation and development files according to
+    Buildroot standards (using BR2_HAVE_DOCUMENTATION and
+    BR2_HAVE_DEVFILES).
+
+  * Simplify the /etc/ld.so.conf modification logic.
+]
+
+[Peter: whitespace fixes]
+Signed-off-by: Benoit Mauduit <benoit.mauduit@openwide.fr>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../python-2.7-004-no-host-headers-libs.patch      |   22 ++++-
- .../python-2.7-014-verbose-module-build.patch      |   19 +++++
- ...7-015-distutils-cross-compilation-support.patch |   84 ++++++++++++++++++++
- 3 files changed, 120 insertions(+), 5 deletions(-)
+ linux/Config.ext.in                                |   15 +++
+ linux/linux-ext-xenomai.mk                         |   30 ++++++
+ package/Config.in                                  |    4 +
+ package/xenomai/Config.in                          |  106 ++++++++++++++++++++
+ .../xenomai/xenomai-do-not-install-devices.patch   |   11 ++
+ package/xenomai/xenomai.mk                         |   99 ++++++++++++++++++
+ target/generic/device_table_dev.txt                |    5 +
+ 7 files changed, 270 insertions(+), 0 deletions(-)
 
-diff --git a/package/python/python-2.7-004-no-host-headers-libs.patch b/package/python/python-2.7-004-no-host-headers-libs.patch
-index 033776d..aed8de6 100644
---- a/package/python/python-2.7-004-no-host-headers-libs.patch
-+++ b/package/python/python-2.7-004-no-host-headers-libs.patch
-@@ -26,7 +26,19 @@ Index: Python-2.7.1/setup.py
-  
-          # Add paths specified in the environment variables LDFLAGS and
-          # CPPFLAGS for header and library files.
--@@ -388,17 +389,6 @@
-+@@ -360,10 +361,7 @@
-+         # directly since an inconsistently reproducible issue comes up where
-+         # the environment variable is not set even though the value were passed
-+         # into configure and stored in the Makefile (issue found on OS X 10.3).
-+-        for env_var, arg_name, dir_list in (
-+-                ('LDFLAGS', '-R', self.compiler.runtime_library_dirs),
-+-                ('LDFLAGS', '-L', self.compiler.library_dirs),
-+-                ('CPPFLAGS', '-I', self.compiler.include_dirs)):
-++        for env_var, arg_name, dir_list in ():
-+             env_val = sysconfig.get_config_var(env_var)
-+             if env_val:
-+                 # To prevent optparse from raising an exception about any
-+@@ -388,17 +386,6 @@
-                      for directory in reversed(options.dirs):
-                          add_dir_to_list(dir_list, directory)
-  
-@@ -44,7 +56,7 @@ Index: Python-2.7.1/setup.py
-          try:
-              have_unicode = unicode
-          except NameError:
--@@ -407,11 +397,16 @@
-+@@ -407,11 +394,16 @@
-          # lib_dirs and inc_dirs are used to search for files;
-          # if a file is found in one of those directories, it can
-          # be assumed that no additional -I,-L directives are needed.
-@@ -66,7 +78,7 @@ Index: Python-2.7.1/setup.py
-          exts = []
-          missing = []
-  
--@@ -844,6 +839,9 @@
-+@@ -844,6 +836,9 @@
-              db_inc_paths.append('/pkg/db-3.%d/include' % x)
-              db_inc_paths.append('/opt/db-3.%d/include' % x)
-  
-@@ -76,7 +88,7 @@ Index: Python-2.7.1/setup.py
-          # Add some common subdirectories for Sleepycat DB to the list,
-          # based on the standard include directories. This way DB3/4 gets
-          # picked up when it is installed in a non-standard prefix and
--@@ -996,6 +994,9 @@
-+@@ -996,6 +991,9 @@
-          MIN_SQLITE_VERSION = ".".join([str(x)
-                                      for x in MIN_SQLITE_VERSION_NUMBER])
-  
-@@ -86,7 +98,7 @@ Index: Python-2.7.1/setup.py
-          # Scan the default include directories before the SQLite specific
-          # ones. This allows one to override the copy of sqlite on OSX,
-          # where /usr/include contains an old version of sqlite.
--@@ -1095,6 +1096,8 @@
-+@@ -1095,6 +1093,8 @@
-          # the more recent berkeleydb's db.h file first in the include path
-          # when attempting to compile and it will fail.
-          f = "/usr/include/db.h"
-diff --git a/package/python/python-2.7-014-verbose-module-build.patch b/package/python/python-2.7-014-verbose-module-build.patch
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 50e801d..893edb5 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -1,3 +1,18 @@
+ menu "Linux Kernel Extensions"
+ 
++# Xenomai
++config BR2_LINUX_KERNEL_EXT_XENOMAI
++	bool "Adeos/Xenomai Real-time patch"
++	select BR2_PACKAGE_XENOMAI
++	help
++	  Xenomai Kernel part.
++
++config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
++	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
++	string "Path for Adeos patch file"
++	help
++	  Optionally, explicitly specify the Adeos patch to use.
++	  Download it at http://download.gna.org/adeos/patches/v2.6/$(ARCH)/
++	  and verify that your kernel version in buildroot matches.
++
+ endmenu
+diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
 new file mode 100644
-index 0000000..a5be60f
+index 0000000..e855ded
 --- /dev/null
-+++ b/package/python/python-2.7-014-verbose-module-build.patch
-@@ -0,0 +1,19 @@
-+Enables verbose output when building modules
++++ b/linux/linux-ext-xenomai.mk
+@@ -0,0 +1,30 @@
++##################################################
++# Linux Adeos/Xenomai extensions
++#
++# Patch the linux kernel with xenomai extension
++##################################################
 +
-+Patch borrowed from OpenBricks.
++ifeq ($(BR2_LINUX_KERNEL_EXT_XENOMAI),y)
++# Add dependency to xenomai (user-space) which provide ksrc part
++LINUX_DEPENDENCIES += xenomai
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++# Adeos patch version
++XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
++ifeq ($(XENOMAI_ADEOS_PATCH),)
++XENOMAI_ADEOS_OPT = --default
++else
++XENOMAI_ADEOS_OPT = --adeos=$(XENOMAI_ADEOS_PATCH)
++endif
 +
-+Index: Python-2.7.1/Makefile.pre.in
-+===================================================================
-+--- Python-2.7.1.orig/Makefile.pre.in
-++++ Python-2.7.1/Makefile.pre.in
-+@@ -408,7 +408,7 @@
-+ # Build the shared modules
-+ sharedmods: $(BUILDPYTHON)
-+ 	@case $$MAKEFLAGS in \
-+-	*s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' CROSS_COMPILING=@CROSS_COMPILING@ DISABLED_EXTENSIONS="$(DISABLED_EXTENSIONS)" CONFIG_ARGS="$(CONFIG_ARGS)" $(PYTHON_FOR_BUILD) -E $(srcdir)/setup.py -q build;; \
-++	*s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' CROSS_COMPILING=@CROSS_COMPILING@ DISABLED_EXTENSIONS="$(DISABLED_EXTENSIONS)" CONFIG_ARGS="$(CONFIG_ARGS)" $(PYTHON_FOR_BUILD) -E $(srcdir)/setup.py build;; \
-+ 	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' CROSS_COMPILING=@CROSS_COMPILING@ DISABLED_EXTENSIONS="$(DISABLED_EXTENSIONS)" CONFIG_ARGS="$(CONFIG_ARGS)" $(PYTHON_FOR_BUILD) -E $(srcdir)/setup.py build;; \
-+ 	esac
-+ 
-diff --git a/package/python/python-2.7-015-distutils-cross-compilation-support.patch b/package/python/python-2.7-015-distutils-cross-compilation-support.patch
++# Prepare kernel patch
++define XENOMAI_PREPARE_KERNEL
++	$(XENOMAI_DIR)/scripts/prepare-kernel.sh \
++		--linux=$(LINUX_DIR) \
++		--arch=$(KERNEL_ARCH) \
++		$(XENOMAI_ADEOS_OPT) \
++		--verbose
++endef
++
++LINUX_POST_EXTRACT_HOOKS += XENOMAI_PREPARE_KERNEL
++
++endif #BR2_LINUX_EXT_XENOMAI
+diff --git a/package/Config.in b/package/Config.in
+index d95e7b5..efb266a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -487,6 +487,10 @@ source "package/rpm/Config.in"
+ endif
+ endmenu
+ 
++menu "Real-Time"
++source "package/xenomai/Config.in"
++endmenu
++
+ menu "Shell and utilities"
+ source "package/at/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
 new file mode 100644
-index 0000000..16cfd7f
+index 0000000..b5737b8
 --- /dev/null
-+++ b/package/python/python-2.7-015-distutils-cross-compilation-support.patch
-@@ -0,0 +1,84 @@
-+Add some cross-compilation fixes to distutils
++++ b/package/xenomai/Config.in
+@@ -0,0 +1,106 @@
++config BR2_PACKAGE_XENOMAI
++	bool "Xenomai Userspace"
++	help
++	  Real-Time Framework for Linux
++	  http://www.xenomai.org
 +
-+Inspired by work done by Marc Kleine-Budde <mkl@pengutronix.de> in
-+PTXdist.
++	  Xenomai is split in two parts: a kernel part and an
++	  userspace part.
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Lib/distutils/sysconfig.py |    7 ++++---
-+ 1 files changed, 4 insertions(+), 3 deletions(-)
++	  This package contains the userspace part, which consists
++	  mainly in libraries to write userspace real-time programs
++	  that interact with the in-kernel Xenomai real-time core.
 +
-+Index: Python-2.7.1/Lib/distutils/sysconfig.py
-+===================================================================
-+--- Python-2.7.1.orig/Lib/distutils/sysconfig.py
-++++ Python-2.7.1/Lib/distutils/sysconfig.py
-+@@ -19,13 +19,22 @@
-+ from distutils.errors import DistutilsPlatformError
++	  For those libraries to work, you need a Xenomai-enabled
++	  kernel. This is possible in two ways:
++	   - if you compile your kernel with Buildroot, you need to go
++	     to Linux Kernel -> Linux Kernel Extensions to enable the
++	     Xenomai extension.
++	   - if you compile your kernel outside of Buildroot, you need
++	     to make sure that it is Xenomai-enabled.
++
++	  Finally, if you are using a static /dev, make sure to
++	  uncomment the Xenomai entries listed in
++	  target/generic/device_table_dev.txt.
++
++if BR2_PACKAGE_XENOMAI
++
++config BR2_PACKAGE_XENOMAI_VERSION
++	string "Custom Xenomai version"
++	help
++	  Manually select Xenomai version.  If left empty, the default
++	  version will be used.
++
++	  Make sure that the selected version has a patch for your
++	  selected Linux kernel. If it does not, download and select
++	  a patch manually with
++	  BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH, in the Linux
++	  Kernel -> Linux Kernel Extensions menu.
++
++config BR2_PACKAGE_XENOMAI_SMP
++	bool "Enable SMP support"
++	help
++	  This option allows to enable or disable SMP support. It has
++	  to match your kernel configuration.
++
++choice
++	prompt "Xenomai ARM CPU type"
++	depends on BR2_arm
++	default BR2_PACKAGE_XENOMAI_CPU_GENERIC_ARM
++	help
++	  On the ARM architecture, Xenomai needs to be configured for
++	  a specific sub-architecture.  Select the appropriate
++	  sub-architecture from the list.
++
++	config BR2_PACKAGE_XENOMAI_CPU_AT91RM9200
++		bool "Atmel AT91RM9200"
++
++	config BR2_PACKAGE_XENOMAI_CPU_AT91SAM926X
++		bool "Atmel AT91SAM926X"
++
++	config BR2_PACKAGE_XENOMAI_CPU_INTEGRATOR
++		bool "ARM Ltd. Integrator"
++
++	config BR2_PACKAGE_XENOMAI_CPU_IXP4XX
++		bool "Intel IXP4XX (XScale)"
++
++	config BR2_PACKAGE_XENOMAI_CPU_IMX
++		bool "Freescale i.MX (MX1/MXL)"
++
++	config BR2_PACKAGE_XENOMAI_CPU_IMX21
++		bool "Freescale i.MX21"
++
++	config BR2_PACKAGE_XENOMAI_CPU_MX2
++		bool "Freescale MXC/MX2"
++
++	config BR2_PACKAGE_XENOMAI_CPU_MX3
++		bool "Freescale MXC/MX3"
++
++	config BR2_PACKAGE_XENOMAI_CPU_SA1100
++		bool "StrongARM SA1100"
++
++	config BR2_PACKAGE_XENOMAI_CPU_S3C2410
++		bool "S3C2410"
++
++	config BR2_PACKAGE_XENOMAI_CPU_GENERIC_ARM
++		bool "Generic ARM"
++
++endchoice
++
++# Now set CPU type. We force manually selected type even if detected in case
++# user takes the risk.
++config BR2_PACKAGE_XENOMAI_CPU_TYPE
++	string
++	depends on BR2_PACKAGE_XENOMAI && BR2_arm
++	default "at91rm9200"  if BR2_PACKAGE_XENOMAI_CPU_AT91RM9200
++	default "at91sam926x" if BR2_PACKAGE_XENOMAI_CPU_AT91SAM926X
++	default "integrator"  if BR2_PACKAGE_XENOMAI_CPU_INTEGRATOR
++	default "ixp4xx"      if BR2_PACKAGE_XENOMAI_CPU_IXP4XX
++	default "generic"     if BR2_PACKAGE_XENOMAI_CPU_GENERIC_ARM
++	default "imx"         if BR2_PACKAGE_XENOMAI_CPU_IMX
++	default "imx21"       if BR2_PACKAGE_XENOMAI_CPU_IMX21
++	default "mx2"         if BR2_PACKAGE_XENOMAI_CPU_MX2
++	default "mx3"         if BR2_PACKAGE_XENOMAI_CPU_MX3
++	default "s3c2410"     if BR2_PACKAGE_XENOMAI_CPU_S3C2410
++
++endif
+diff --git a/package/xenomai/xenomai-do-not-install-devices.patch b/package/xenomai/xenomai-do-not-install-devices.patch
+new file mode 100644
+index 0000000..348abee
+--- /dev/null
++++ b/package/xenomai/xenomai-do-not-install-devices.patch
+@@ -0,0 +1,11 @@
++--- a/Makefile.in	2011-06-24 16:11:23.591449817 +0200
+++++ b/Makefile.in	2011-06-24 16:20:29.638129633 +0200
++@@ -719,7 +719,7 @@
++ 	  $$sudo mknod -m 666 $(DESTDIR)/dev/rtheap c 10 254 ; \
++ 	fi
 + 
-+ # These are needed in a couple of spots, so just compute them once.
-+-PREFIX = os.path.normpath(sys.prefix)
-+-EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
-++EXECUTABLE_DIRNAME = os.path.dirname(os.path.realpath(sys.executable))
-++if os.environ.get('CROSS_COMPILING') == 'yes':
-++    _sysroot=os.environ.get('_python_sysroot')
-++    PREFIX = os.path.normpath(_sysroot + os.environ.get('_python_prefix'))
-++    EXEC_PREFIX = os.path.normpath(_sysroot + os.environ.get('_python_exec_prefix'))
-++    if '_python_srcdir' in os.environ:
-++        EXECUTABLE_DIRNAME = os.path.normpath(os.environ['_python_srcdir'])
-++else:
-++    PREFIX = os.path.normpath(sys.prefix)
-++    EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
-++
++-install-exec-local: devices
+++install-exec-local:
 + 
-+ # Path to the base directory of the project. On Windows the binary may
-+ # live in project/PCBuild9.  If we're dealing with an x64 Windows build,
-+ # it'll live in project/PCbuild/amd64.
-+-project_base = os.path.dirname(os.path.abspath(sys.executable))
-++project_base = EXECUTABLE_DIRNAME
-+ if os.name == "nt" and "pcbuild" in project_base[-8:].lower():
-+     project_base = os.path.abspath(os.path.join(project_base, os.path.pardir))
-+ # PC/VS7.1
-+@@ -74,7 +83,7 @@
-+ 
-+     if os.name == "posix":
-+         if python_build:
-+-            buildir = os.path.dirname(sys.executable)
-++            buildir = EXECUTABLE_DIRNAME
-+             if plat_specific:
-+                 # python.h is located in the buildir
-+                 inc_dir = buildir
-+@@ -206,7 +215,7 @@
-+ def get_makefile_filename():
-+     """Return full pathname of installed Makefile from the Python build."""
-+     if python_build:
-+-        return os.path.join(os.path.dirname(sys.executable), "Makefile")
-++        return os.path.join(EXECUTABLE_DIRNAME, "Makefile")
-+     lib_dir = get_python_lib(plat_specific=1, standard_lib=1)
-+     return os.path.join(lib_dir, "config", "Makefile")
-+ 
-+Index: Python-2.7.1/configure.in
-+===================================================================
-+--- Python-2.7.1.orig/configure.in
-++++ Python-2.7.1/configure.in
-+@@ -4424,6 +4424,21 @@
-+ CROSS_COMPILING=$cross_compiling
-+ AC_SUBST(CROSS_COMPILING)
-+ 
-++#
-++# Cross compiling
-++#
-++# special RUNSHARED
-++if test "$cross_compiling" = "yes"; then
-++    RUNSHARED="\
-++               CROSS_COMPILING=yes \
-++               _python_cross_host=${ac_cv_host} \
-++               _python_sysroot=\"\$(sysroot)\" \
-++               _python_srcdir=\"\$(srcdir)\" \
-++               _python_prefix=\"\$(prefix)\" \
-++               _python_exec_prefix=\"\$(exec_prefix)\""
-++fi
-++
-++
-+ # generate output files
-+ AC_CONFIG_FILES(Makefile.pre Modules/Setup.config Misc/python.pc)
-+ AC_CONFIG_FILES([Modules/ld_so_aix], [chmod +x Modules/ld_so_aix])
++ install-user:
++ 	$(MAKE) SUDO=false install
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+new file mode 100644
+index 0000000..8f78333
+--- /dev/null
++++ b/package/xenomai/xenomai.mk
+@@ -0,0 +1,99 @@
++#############################################################
++# Xenomai
++# URL  : http://xenomai.org
++# NOTE : Real-Time Framework for Linux
++#
++#############################################################
++
++XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
++ifeq ($(XENOMAI_VERSION),)
++XENOMAI_VERSION = 2.5.6
++endif
++
++XENOMAI_SITE = http://download.gna.org/xenomai/stable/
++XENOMAI_SOURCE = xenomai-$(XENOMAI_VERSION).tar.bz2
++
++XENOMAI_INSTALL_STAGING = YES
++
++ifeq ($(BR2_arm),y)
++XENOMAI_CPU_TYPE = $(call qstrip,$(BR2_PACKAGE_XENOMAI_CPU_TYPE))
++# Set "generic" if not defined
++ifeq ($(XENOMAI_CPU_TYPE),)
++XENOMAI_CPU_TYPE = generic
++endif
++XENOMAI_CONF_OPT += --enable-arm-mach=$(XENOMAI_CPU_TYPE)
++endif #BR2_arm
++
++ifeq ($(BR2_PACKAGE_XENOMAI_SMP),y)
++XENOMAI_CONF_OPT += --enable-smp
++endif
++
++# The configure step needs to be overloaded, because Xenomai doesn't
++# support --prefix=/usr and the autotargets infrastructure enforces
++# this.
++define XENOMAI_CONFIGURE_CMDS
++	(cd $(@D); rm -rf config.cache; \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++		CCFLAGS_FOR_BUILD="$(HOST_CFLAGS)" \
++		./configure \
++		$(XENOMAI_CONF_OPT) \
++		--host=$(GNU_TARGET_NAME) \
++	)
++endef
++
++ifeq ($(BR2_HAVE_DOCUMENTATION),)
++define XENOMAI_REMOVE_DOCUMENTATION
++	rm -rf $(TARGET_DIR)/usr/xenomai/share/doc
++	rm -rf $(TARGET_DIR)/usr/xenomai/share/man
++endef
++
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DOCUMENTATION
++endif
++
++ifeq ($(BR2_HAVE_DEVFILES),)
++define XENOMAI_REMOVE_DEVFILES
++	rm -rf $(TARGET_DIR)/usr/xenomai/include
++	for i in xeno-config xeno-info wrap-link.sh ; do \
++		rm -f $(TARGET_DIR)/usr/xenomai/bin/$$i ; \
++	done
++endef
++
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_DEVFILES
++endif
++
++define XENOMAI_ADD_LD_SO_CONF
++	# Add /usr/xenomai/lib in the library search path
++	grep -q "^/usr/xenomai/lib" $(TARGET_DIR)/etc/ld.so.conf || \
++		echo "/usr/xenomai/lib" >> $(TARGET_DIR)/etc/ld.so.conf
++endef
++
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_ADD_LD_SO_CONF
++
++# If you use static /dev creation don't forget to update your
++#  device_table_dev.txt
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
++XENOMAI_DEPENDENCIES += udev
++
++define XENOMAI_INSTALL_UDEV_RULES
++	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
++		for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
++			cp $$f $(TARGET_DIR)/etc/udev/rules.d/ ; \
++		done ; \
++	fi;
++endef
++
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_INSTALL_UDEV_RULES
++endif # udev
++
++define XENOMAI_REMOVE_UDEV_RULES
++	if test -d $(TARGET_DIR)/etc/udev/rules.d ; then \
++		for f in $(@D)/ksrc/nucleus/udev/*.rules ; do \
++			rm -f $(TARGET_DIR)/etc/udev/rules.d/$$f ; \
++		done ; \
++	fi;
++endef
++
++XENOMAI_POST_UNINSTALL_TARGET_HOOKS += XENOMAI_REMOVE_UDEV_RULES
++
++$(eval $(call AUTOTARGETS,package,xenomai))
+diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
+index a3d53d4..71cd083 100644
+--- a/target/generic/device_table_dev.txt
++++ b/target/generic/device_table_dev.txt
+@@ -141,3 +141,8 @@
+ 
+ # I2C device nodes
+ /dev/i2c-	c	666	0	0	89	0	0	1	4
++
++# Xenomai
++#/dev/rtheap     c       666     0       0       10      254     0       0       -
++#/dev/rtscope    c       666     0       0       10      253     0       0       -
++#/dev/rtp        c       666     0       0       150     0       0       1       32
