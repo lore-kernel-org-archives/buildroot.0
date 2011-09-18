@@ -1,23 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Sep 2011 22:06:55 +0200
-Subject: [Buildroot] [PATCH] barebox: add support for custom version,
-	tarball, git and patch dir
-In-Reply-To: <1316290988-25108-1-git-send-email-plagnioj@jcrosoft.com>
- (Jean-Christophe PLAGNIOL-VILLARD's message of "Sat, 17 Sep 2011
- 22:23:08 +0200")
-References: <1316290988-25108-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <878vpl8vj4.fsf@macbook.be.48ers.dk>
+Date: Sun, 18 Sep 2011 22:32:12 +0200
+Subject: [Buildroot] [PATCH 1/8] linux: Add Linux Kernel extensions menu
+In-Reply-To: <ce82814ab1e4373f4328e235305f9d331066886a.1316290714.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 17 Sep 2011 22:22:51 +0200")
+References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
+ <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
+ <ce82814ab1e4373f4328e235305f9d331066886a.1316290714.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ty897fsj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "JC" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- JC> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+ Thomas> From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+ Thomas> Add a kernel sub-menu (called "Linux Kernel Extensions"), which makes
+ Thomas> possible to patch it or tweak the kernel build step.
 
-Committed, thanks.
+ Thomas>  * All linux/linux-ext-*.mk files will be read by the make process.
+ Thomas>  * The menu can be customized in "linux/Config.ext.in".
+
+ Thomas> +# Linux extensions (Xenomai)
+ Thomas> +source "linux/Config.ext.in"
+
+That comments doesn't belong here if we want it to be a generic
+extension support.
+
+Other than that it looks good - Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
