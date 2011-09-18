@@ -1,56 +1,96 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Sun, 18 Sep 2011 23:00:07 +0200
 Subject: [Buildroot] [git commit] xenomai: add support to keep or remove
-	RT-CAN utilities
-Message-ID: <20110918210215.6FBED8D5CD@busybox.osuosl.org>
+	skins
+Message-ID: <20110918210216.250FF8D5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=832ff5c9c06e993d7ffdb24b1635e58332d56cf3
+commit: http://git.buildroot.net/buildroot/commit/?id=4b78a5008995d459399a38692d436eceb7c2278d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xenomai/Config.in  |    5 +++++
- package/xenomai/xenomai.mk |   11 +++++++++++
- 2 files changed, 16 insertions(+), 0 deletions(-)
+ package/xenomai/Config.in  |   37 +++++++++++++++++++++++++++++++++++++
+ package/xenomai/xenomai.mk |   19 +++++++++++++++++++
+ 2 files changed, 56 insertions(+), 0 deletions(-)
 
 diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 26c6b51..6ba9f8b 100644
+index 3749a60..cfeaa04 100644
 --- a/package/xenomai/Config.in
 +++ b/package/xenomai/Config.in
-@@ -108,4 +108,9 @@ config BR2_PACKAGE_XENOMAI_TESTSUITE
-        help
-          This option allows to install the Xenomai test programs.
+@@ -119,4 +119,41 @@ config BR2_PACKAGE_XENOMAI_ANALOGY
+          This option allows to install the Xenomai Analogy utilities
+          and libraries
  
-+config BR2_PACKAGE_XENOMAI_RTCAN
-+       bool "RTCan utilities"
++config BR2_PACKAGE_XENOMAI_NATIVE_SKIN
++       bool "Native skin library"
++       default y
 +       help
-+         This option allows to install the Xenomai RT-CAN utilities.
++	 This option allows to install the Native Xenomai skin
++
++config BR2_PACKAGE_XENOMAI_POSIX_SKIN
++       bool "POSIX skin library"
++       default y
++       help
++	 This option allows to install the POSIX Xenomai skin
++
++config BR2_PACKAGE_XENOMAI_VXWORKS_SKIN
++       bool "VX-Works skin library"
++       help
++	 This option allows to install the VX-Works Xenomai skin
++
++config BR2_PACKAGE_XENOMAI_PSOS_SKIN
++       bool "PSOS skin library"
++       help
++	 This option allows to install the PSOS Xenomai skin
++
++config BR2_PACKAGE_XENOMAI_RTAI_SKIN
++       bool "RTAI skin library"
++       help
++	 This option allows to install the RTAI Xenomai skin
++
++config BR2_PACKAGE_XENOMAI_UITRON_SKIN
++       bool "uiTron skin library"
++       help
++	 This option allows to install the uiTron Xenomai skin
++
++config BR2_PACKAGE_XENOMAI_VRTX_SKIN
++       bool "VRTX skin library"
++       help
++	 This option allows to install the VRTX Xenomai skin
 +
  endif
 diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index cb73740..36e2e44 100644
+index fff2c5d..52e0b4e 100644
 --- a/package/xenomai/xenomai.mk
 +++ b/package/xenomai/xenomai.mk
-@@ -79,6 +79,17 @@ endef
- XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_TESTSUITE
+@@ -103,6 +103,25 @@ endef
+ XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_ANALOGY
  endif
  
-+ifeq ($(BR2_PACKAGE_XENOMAI_RTCAN),)
-+define XENOMAI_REMOVE_RTCAN_PROGS
-+	for i in rtcanrecv rtcansend ; do \
-+		rm -f $(TARGET_DIR)/usr/xenomai/bin/$$i ; \
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_NATIVE_SKIN),,native)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_POSIX_SKIN),,posix)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VXWORKS_SKIN),,vxworks)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_PSOS_SKIN),,psos)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_RTAI_SKIN),,rtai)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_UITRON_SKIN),,uitron)
++XENOMAI_REMOVE_SKIN_LIST += $(if $(BR2_PACKAGE_XENOMAI_VRTX_SKIN),,vrtx)
++
++define XENOMAI_REMOVE_SKINS
++	for i in $(XENOMAI_REMOVE_SKIN_LIST) ; do \
++		rm -f $(TARGET_DIR)/usr/xenomai/lib/lib$$i.* ; \
++		if [ $$i == "posix" ] ; then \
++			rm -f $(TARGET_DIR)/usr/xenomai/lib/posix.wrappers ; \
++		fi ; \
 +	done
-+	rm -f $(TARGET_DIR)/usr/xenomai/sbin/rtcanconfig
 +endef
 +
-+XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_RTCAN_PROGS
-+endif
++XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS
 +
  define XENOMAI_ADD_LD_SO_CONF
  	# Add /usr/xenomai/lib in the library search path
