@@ -1,30 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 18 Sep 2011 14:13:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 529] util-linux doesn't find headers and include
-	libs correctly
-In-Reply-To: <bug-529-163@https.bugs.busybox.net/>
-References: <bug-529-163@https.bugs.busybox.net/>
-Message-ID: <20110918141322.7B63B8D4FA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Sep 2011 16:28:42 +0200
+Subject: [Buildroot] mdev problem in 2011.08 ?
+In-Reply-To: <4E75EBBF.9080203@openwide.fr>
+References: <4E75EBBF.9080203@openwide.fr>
+Message-ID: <20110918162842.02150727@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=529
+Hello Pierre,
 
-Bug 529 depends on bug 531, which changed state.
+Le Sun, 18 Sep 2011 15:01:51 +0200,
+Pierre Ficheux <pierre.ficheux@openwide.fr> a ?crit :
 
-Bug 531 Summary: let e2fsprogs package to export headers to staging dir if needed
-https://bugs.busybox.net/show_bug.cgi?id=531
+> May be I'm wrong but it seems there is a problem when using mdev for
+> /dev management:
 
-           What    |Old Value                   |New Value
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |FIXED
+For our mdev and udev support, we assume that the kernel is compiled
+with CONFIG_DEVTMPFS and CONFIG_DEVTMPFS_MOUNT. For kernels built by
+Buildroot, this is ensured by :
 
+        $(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+                $(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+
+in linux/linux.mk.
+
+For kernels built outside of Buildroot, it's up to the user to enable
+those options. In your case, I guess your kernel lacks devtmpfs support
+and/or the option to have devtmpfs mounted automatically at boot time,
+and this explains why the /dev/null device is missing.
+
+Regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
