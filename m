@@ -1,79 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Sep 2011 23:01:33 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20110918210217.4F0F58D5CD@busybox.osuosl.org>
+Date: Sun, 18 Sep 2011 23:00:07 +0200
+Subject: [Buildroot] [git commit] package: change ordering of steps
+Message-ID: <20110918210216.599A88D5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=358601f851c001fc9505efb4866436afc030a170
+commit: http://git.buildroot.net/buildroot/commit/?id=a473a616d27e46951a23d90249a31b08006098bf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Currently, the dependency chain is :
+
+ configure -> patch
+ patch -> extract
+ extract -> depends
+ depends -> source + dependencies ready
+
+This is a problem for RTAI, as :
+
+ * In linux/linux-ext-rtai.mk, we need the RTAI source code to be
+   extracted/patched by the RTAI package, so we need to have a
+   dependency on RTAI.
+
+ * The RTAI package cannot have its configure step executed before the
+   Linux kernel is built, because it needs the kernel source code to
+   be extracted and configured.
+
+Therefore, we have a sort of circular dependency. We solve this
+circular dependency by having the RTAI kernel part depending on
+rtai-patch, and having the RTAI userspace part depending on the linux
+package. However, for this to work, we have to modify the dependency
+chain to:
+
+ configure -> patch + depends
+ patch -> extract
+ extract -> source
+ depends -> dependencies ready
+
+Which means that dependencies are guaranteed to be built not when the
+package is extracted, but when the package is configured. Which is
+technically more correct that what we were doing in the past.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   44 ++++++++++++++++++++++++++++++++++----------
- 1 files changed, 34 insertions(+), 10 deletions(-)
+ package/Makefile.package.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 5a44e72..0453749 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -2,22 +2,46 @@
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 0751144..66be0a2 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -487,15 +487,15 @@ $(1)-install-host:      $(1)-build $$($(2)_TARGET_INSTALL_HOST)
+ $(1)-build:		$(1)-configure \
+ 			$$($(2)_TARGET_BUILD)
  
- 	Fixes all over the tree and new features.
+-$(1)-configure:		$(1)-patch \
++$(1)-configure:		$(1)-patch $(1)-depends \
+ 			$$($(2)_TARGET_CONFIGURE)
  
--	Update external codesourcery toolchain download URLs after
--	Codesourcery got bought by Mentor.
-+	Move misc scripts and support stuff to support/. Rename
-+	patch-kernel.sh to support/scripts/apply-patches.sh.
-+
-+	Bootloaders: Add support for custom git tree / tarballs for
-+	barebox, similar to how it's handled for u-boot. Clean up
-+	menuconfig options.
-+
-+	Toolchain: Update external codesourcery toolchain download
-+	URLs after Codesourcery got bought by Mentor. Fix uClibc
-+	0.9.32 builds for e500 PPC.
-+
-+	Linux: Kernel extensions infrastructure support, Xenomai +
-+	RTAI support.
+ $(1)-patch:		$(1)-extract $$($(2)_TARGET_PATCH)
  
- 	Updated/fixed packages: busybox, dbus, dbus-glib, directfb,
- 	dnsmasq, e2fsprogs, ethtool, fakeroot, fbdump, freetype, fuse,
--	gamin, jpeg, leafpad, libargtable2, libao, libconfuse,
--	libcuefile, libcurl, libreplaygain, libsamplerate, libsndfile,
--	libsoup, libsvgtiny, lighttpd, lzo, lzop, mpd, mpg123,
--	musepack, mysql_client, netcat, netsnmp, ntfs-3g, ntfsprogs,
--	openssl, radvd, samba, sdl_sound, sqlite, squid, sylpheed,
--	taglib, tar, tcpreplay, util-linux, xterm
--
--	New packages: fluxbox, libev, libftdi, libgeotiff, portaudio
-+	gamin, gmp, jpeg, ipsec-tools, ipset, iptables, iw, leafpad,
-+	libargtable2, libao, libconfuse, libcuefile, libcurl,
-+	libevent, libreplaygain, libsamplerate, libsndfile, libsoup,
-+	libsvgtiny, lighttpd, lzo, lzop, mpd, mpfr, mpg123, musepack,
-+	mysql_client, netcat, netsnmp, ntfs-3g, ntfsprogs, openssh,
-+	openssl, python, qt, radvd, samba, sdl_sound, sqlite, squid,
-+	sylpheed, taglib, tar, tcpreplay, tslib, usbutils, util-linux,
-+	xterm
-+
-+	New packages: fluxbox, libev, libftdi, libgeotiff, portaudio,
-+	rtai, xenomai.
+-$(1)-extract:		$(1)-depends \
++$(1)-extract:		$(1)-source \
+ 			$$($(2)_TARGET_EXTRACT)
  
- 	Issues resolved (http://bugs.uclibc.org):
+-$(1)-depends:		$(1)-source $$($(2)_DEPENDENCIES)
++$(1)-depends:		$$($(2)_DEPENDENCIES)
  
-+	#505:  live555: new package
-+	#531:  let e2fsprogs package to export headers to staging dir if needed
-+	#1171: Linuxthreads new cannot find sysdep.h
-+	#2107: New package: input-event-daemon
-+	#2599: New package: orc (Oil Runtime Compiler)
-+	#2605: gstreamer: Update to 0.10.30
-+	#2677: introducing util-linux-ng as replacement for util-linux
-+	#2917: Qt: Add declarative module
-+	#3145: jffs2 image generation fails
-+	#3271: netperf-2.4.5 fails to compile
- 	#4183: Codesourcery toolchain download site has changed
- 
- 2011.08, Released August 31th, 2011:
+ $(1)-show-depends:
+ 			@echo $$($(2)_DEPENDENCIES)
