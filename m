@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:10:53 +0200
-Subject: [Buildroot] [PATCH 2/5] rtai, xenomai: use the pre patch hook point
+Date: Mon, 19 Sep 2011 22:10:54 +0200
+Subject: [Buildroot] [PATCH 3/5] rtai: fix path to apply-patches
 In-Reply-To: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <40ab53037f455a50bfbd5430bed946fccd0298ea.1316463052.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <df4ea3f388dc7aacc16eb1866fbd0be62c4e6705.1316463052.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The post extract hook point is not really correct as what RTAI and
-Xenomai extensions are doing is patching the kernel.
-
-The post patch hook point doesn't work, because RTAI and Xenomai
-patches would be applied *after* all other patches, while it sounds
-more logical to apply them first, and *then* allow the user to apply
-some platform/board specific patches if needed.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux-ext-rtai.mk    |    2 +-
- linux/linux-ext-xenomai.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/linux-ext-rtai.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-index a54230d..150f9e8 100644
+index 150f9e8..78488af 100644
 --- a/linux/linux-ext-rtai.mk
 +++ b/linux/linux-ext-rtai.mk
-@@ -42,6 +42,6 @@ define RTAI_PREPARE_KERNEL
+@@ -25,7 +25,7 @@ ifeq ($(RTAI_PATCH),)
+ define RTAI_PREPARE_KERNEL
+ 	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
+ 	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
+-		support/script/apply-patches.sh $(LINUX_DIR) 		\
++		support/scripts/apply-patches.sh $(LINUX_DIR) 		\
+ 			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
+ 			hal-linux-$${kver}-*patch ; \
+ 	else \
+@@ -35,7 +35,7 @@ define RTAI_PREPARE_KERNEL
  endef
- endif
- 
--LINUX_POST_PATCH_HOOKS += RTAI_PREPARE_KERNEL
-+LINUX_PRE_PATCH_HOOKS += RTAI_PREPARE_KERNEL
- 
- endif #BR2_LINUX_EXT_RTAI
-diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-index e855ded..9b6772e 100644
---- a/linux/linux-ext-xenomai.mk
-+++ b/linux/linux-ext-xenomai.mk
-@@ -25,6 +25,6 @@ define XENOMAI_PREPARE_KERNEL
- 		--verbose
- endef
- 
--LINUX_POST_EXTRACT_HOOKS += XENOMAI_PREPARE_KERNEL
-+LINUX_PRE_PATCH_HOOKS += XENOMAI_PREPARE_KERNEL
- 
- endif #BR2_LINUX_EXT_XENOMAI
+ else
+ define RTAI_PREPARE_KERNEL
+-	support/script/apply-patches.sh 	\
++	support/scripts/apply-patches.sh 	\
+ 		$(LINUX_DIR)			\
+ 		$(dir $(RTAI_PATCH))		\
+ 		$(notdir $(RTAI_PATCH))
 -- 
 1.7.4.1
