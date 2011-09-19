@@ -1,41 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:10:54 +0200
-Subject: [Buildroot] [PATCH 3/5] rtai: fix path to apply-patches
-In-Reply-To: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <df4ea3f388dc7aacc16eb1866fbd0be62c4e6705.1316463052.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Sep 2011 22:10:51 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/xeno-rtai-fixes
+Message-ID: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- linux/linux-ext-rtai.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+The following changes since commit dcb43a0eb0c09ffb84c6c7b4c169a2874cb24cc9:
 
-diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-index 150f9e8..78488af 100644
---- a/linux/linux-ext-rtai.mk
-+++ b/linux/linux-ext-rtai.mk
-@@ -25,7 +25,7 @@ ifeq ($(RTAI_PATCH),)
- define RTAI_PREPARE_KERNEL
- 	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
- 	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
--		support/script/apply-patches.sh $(LINUX_DIR) 		\
-+		support/scripts/apply-patches.sh $(LINUX_DIR) 		\
- 			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
- 			hal-linux-$${kver}-*patch ; \
- 	else \
-@@ -35,7 +35,7 @@ define RTAI_PREPARE_KERNEL
- endef
- else
- define RTAI_PREPARE_KERNEL
--	support/script/apply-patches.sh 	\
-+	support/scripts/apply-patches.sh 	\
- 		$(LINUX_DIR)			\
- 		$(dir $(RTAI_PATCH))		\
- 		$(notdir $(RTAI_PATCH))
+  barebox: patch-kernel.sh is no more (2011-09-19 10:13:37 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/xeno-rtai-fixes
+
+Thomas Petazzoni (5):
+      package: add a PRE_PATCH_HOOKS hook point
+      rtai, xenomai: use the pre patch hook point
+      rtai: fix path to apply-patches
+      rtai: Install modules in /lib/modules/<version>/rtai
+      xenomai: install in /usr
+
+ linux/linux-ext-rtai.mk     |    6 ++--
+ linux/linux-ext-xenomai.mk  |    2 +-
+ package/Makefile.package.in |    2 +
+ package/rtai/rtai.mk        |    2 +-
+ package/xenomai/xenomai.mk  |   54 ++++++++----------------------------------
+ 5 files changed, 18 insertions(+), 48 deletions(-)
+
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
