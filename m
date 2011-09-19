@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 08:46:06 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Sep 2011 08:54:29 +0200
 Subject: [Buildroot] [git commit] boot: get rid of toplevel submenus
-In-Reply-To: <20110918210214.501348D5CD@busybox.osuosl.org>
+In-Reply-To: <20110919084606.7ff12ec8@skate> (Thomas Petazzoni's message of
+ "Mon, 19 Sep 2011 08:46:06 +0200")
 References: <20110918210214.501348D5CD@busybox.osuosl.org>
-Message-ID: <20110919084606.7ff12ec8@skate>
+ <20110919084606.7ff12ec8@skate>
+Message-ID: <87vcsp58ey.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Le Sun, 18 Sep 2011 22:09:42 +0200,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+Hi,
 
-> Sub options are indented anyway, so no need for empty menus / force
-> people to enter sub menus to see configuration options.
+ >> Sub options are indented anyway, so no need for empty menus / force
+ >> people to enter sub menus to see configuration options.
 
-My preference was the old way. Even if suboptions are indented,  I
-think it's a mess in menuconfig to have the U-Boot suboptions in the
-middle of the bootloader list.
+ Thomas> My preference was the old way. Even if suboptions are indented,  I
+ Thomas> think it's a mess in menuconfig to have the U-Boot suboptions in the
+ Thomas> middle of the bootloader list.
 
-Thomas
+I find the empty submenus when E.G. u-boot isn't enabled pretty ugly,
+and use of a normal config is by far the most used option - E.G:
+
+git grep '^menuconfig '|wc -l
+10
+
+Out of ~700 packages, bootloaders, filesystems, ..
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
