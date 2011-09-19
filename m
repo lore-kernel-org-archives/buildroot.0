@@ -1,72 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:53:09 +0200
-Subject: [Buildroot] [PATCH 06/21] package: add configuration option to
-	specify a local override file
+Date: Mon, 19 Sep 2011 22:53:10 +0200
+Subject: [Buildroot] [PATCH 07/21] package: add <pkg>-rebuild and
+	<pkg>-reconfigure
 In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b45b4f098a174b4ed14211cef942daf57020262b.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <465368fc23503967354706b706c539e87cb64cd7.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The user can now create a custom local override file to override the
-source directory for various packages.
+We are often asked "how can I restart the build of a package ?" or
+"how can I restart the build of package from the configure part
+?". Obviously, tweaking with stamp files is possible, but not very
+user friendly.
 
-An example override file:
-
- ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
- STRACE_OVERRIDE_SRCDIR = /opt/strace-4.5.20
-
-would tell Buildroot to use the zlib and strace source code from the
-specified directories, instead of download, extracting and patching
-the code has done usually by Buildroot.
+Therefore this patch adds two new per-package targets: <pkg>-rebuild
+and <pkg>-reconfigure. They will remove the right stamp files and
+restart the complete build process (by using the 'all' target, so that
+not only the package is reconfigured, recompiled and reinstalled, but
+the root filesystem images are also regenerated).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in |   10 ++++++++++
- Makefile  |    7 +++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+ package/Makefile.package.in |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 2fce9d7..3aa3ad8 100644
---- a/Config.in
-+++ b/Config.in
-@@ -334,6 +334,16 @@ config BR2_HAVE_DEVFILES
- 	  Install headers and static libraries in the
- 	  target filesystem
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 2455694..318c506 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -555,6 +555,22 @@ $(1)-clean:		$(1)-uninstall \
  
-+config BR2_PACKAGE_OVERRIDE_FILE
-+	string "location of a package override file"
-+	default "$(TOPDIR)/local.mk"
-+	help
-+	  A package override file is a short makefile that contains
-+	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
-+	  which allows to tell Buildroot to use an existing directory
-+	  as the source directory for a particular package. See the
-+	  Buildroot documentation for more details on this feature.
-+
- endmenu
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
  
- source "toolchain/Config.in"
-diff --git a/Makefile b/Makefile
-index a20d3e2..8525b7d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -309,6 +309,13 @@ else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
- include toolchain/toolchain-crosstool-ng.mk
- endif
- 
-+# Include the package override file if one has been provided in the
-+# configuration.
-+PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
-+ifneq ($(PACKAGE_OVERRIDE_FILE),)
-+-include $(PACKAGE_OVERRIDE_FILE)
++$(1)-clean-for-rebuild:
++ifneq ($$($(2)_OVERRIDE_SRCDIR),)
++			rm -f $$($(2)_TARGET_RSYNC)
 +endif
++			rm -f $$($(2)_TARGET_BUILD)
++			rm -f $$($(2)_TARGET_INSTALL_STAGING)
++			rm -f $$($(2)_TARGET_INSTALL_TARGET)
++			rm -f $$($(2)_TARGET_INSTALL_HOST)
 +
- include package/*/*.mk
- 
- include boot/common.mk
++$(1)-rebuild:		$(1)-clean-for-rebuild all
++
++$(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
++			rm -f $$($(2)_TARGET_CONFIGURE)
++
++$(1)-reconfigure:	$(1)-clean-for-reconfigure all
++
+ # define the PKG variable for all targets, containing the
+ # uppercase package variable prefix
+ $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
 -- 
 1.7.4.1
