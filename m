@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:53:05 +0200
-Subject: [Buildroot] [PATCH 02/21] sdl_net: normalize package to sdl_net
+Date: Mon, 19 Sep 2011 22:53:06 +0200
+Subject: [Buildroot] [PATCH 03/21] gtk2-themes: normalize package name and
+	directory
 In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d3e1c8c331b7a52c22018569beacd3c180e30d7d.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <234d0748afaaceec52b490697920b8716f063d76.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +13,55 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/games/prboom/prboom.mk |    2 +-
- package/sdl_net/sdl_net.mk     |    4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ package/gtk2-themes/Config.in                      |    3 +--
+ package/gtk2-themes/gtk2-theme-hicolor/Config.in   |    2 ++
+ .../gtk2-theme-hicolor.mk}                         |    2 +-
+ package/gtk2-themes/gtk2-themes.mk                 |    1 +
+ 4 files changed, 5 insertions(+), 3 deletions(-)
+ create mode 100644 package/gtk2-themes/gtk2-theme-hicolor/Config.in
+ rename package/gtk2-themes/{gtk2_themes.mk => gtk2-theme-hicolor/gtk2-theme-hicolor.mk} (92%)
+ create mode 100644 package/gtk2-themes/gtk2-themes.mk
 
-diff --git a/package/games/prboom/prboom.mk b/package/games/prboom/prboom.mk
-index 3a50fd5..dd749dc 100644
---- a/package/games/prboom/prboom.mk
-+++ b/package/games/prboom/prboom.mk
-@@ -5,7 +5,7 @@
- #############################################################
- PRBOOM_VERSION = 2.5.0
- PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
--PRBOOM_DEPENDENCIES = sdl SDL_net sdl_mixer
-+PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
+diff --git a/package/gtk2-themes/Config.in b/package/gtk2-themes/Config.in
+index 351b602..ac212b8 100644
+--- a/package/gtk2-themes/Config.in
++++ b/package/gtk2-themes/Config.in
+@@ -1,7 +1,6 @@
+ menu "GTK Themes"
+ depends on BR2_PACKAGE_LIBGTK2
  
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- PRBOOM_DEPENDENCIES += libpng
-diff --git a/package/sdl_net/sdl_net.mk b/package/sdl_net/sdl_net.mk
-index f01a04c..7b7e12a 100644
---- a/package/sdl_net/sdl_net.mk
-+++ b/package/sdl_net/sdl_net.mk
-@@ -14,6 +14,4 @@ SDL_NET_INSTALL_STAGING = YES
+-config BR2_PACKAGE_GTK2_THEME_HICOLOR
+-	bool "hicolor (default theme)"
++source "package/gtk2-themes/gtk2-theme-hicolor/Config.in"
  
- SDL_NET_DEPENDENCIES = sdl
+ endmenu
+diff --git a/package/gtk2-themes/gtk2-theme-hicolor/Config.in b/package/gtk2-themes/gtk2-theme-hicolor/Config.in
+new file mode 100644
+index 0000000..144f1d8
+--- /dev/null
++++ b/package/gtk2-themes/gtk2-theme-hicolor/Config.in
+@@ -0,0 +1,2 @@
++config BR2_PACKAGE_GTK2_THEME_HICOLOR
++	bool "hicolor (default theme)"
+diff --git a/package/gtk2-themes/gtk2_themes.mk b/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
+similarity index 92%
+rename from package/gtk2-themes/gtk2_themes.mk
+rename to package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
+index 8dc8af4..ff3648b 100644
+--- a/package/gtk2-themes/gtk2_themes.mk
++++ b/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
+@@ -15,4 +15,4 @@ GTK2_THEME_HICOLOR_CONF_OPT = --target=$(GNU_TARGET_NAME) --host=$(GNU_TARGET_NA
  
--$(eval $(call AUTOTARGETS,package,SDL_net))
--
--sdl_net: SDL_net
-+$(eval $(call AUTOTARGETS,package,sdl_net))
+ GTK2_THEME_HICOLOR_DEPENDENCIES = libgtk2
+ 
+-$(eval $(call AUTOTARGETS,package,gtk2_theme_hicolor))
++$(eval $(call AUTOTARGETS,package,gtk2-theme-hicolor))
+diff --git a/package/gtk2-themes/gtk2-themes.mk b/package/gtk2-themes/gtk2-themes.mk
+new file mode 100644
+index 0000000..6f31c6d
+--- /dev/null
++++ b/package/gtk2-themes/gtk2-themes.mk
+@@ -0,0 +1 @@
++include package/gtk2-themes/*/*.mk
 -- 
 1.7.4.1
