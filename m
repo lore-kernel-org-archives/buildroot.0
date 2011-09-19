@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:57:38 +0200
-Subject: [Buildroot] [PATCH 2/5] x11r7: make package globally visible
+Date: Mon, 19 Sep 2011 22:57:39 +0200
+Subject: [Buildroot] [PATCH 3/5] mesa3d: add patch to fix build on !locale
+	toolchains
 In-Reply-To: <cover.1316465857.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316465857.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c909524d6b4a5f5d13cbb577d124a0aa456fd123.1316465857.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f08b73124ef8e797878851102a0f915e06dc4fd1.1316465857.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All x11r7 .mk files were only included into the global chain of
-makefile includes if the BR2_PACKAGE_XORG7 option was enabled. This is
-not the standard way to do things in Buildroot, and it even breaks
-things like running "make <pkg>-*" for a x11r7 package even if X.org
-is not selected.
+Fixes bug #3313.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/x11r7.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ .../x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch  |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
+ create mode 100644 package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch
 
-diff --git a/package/x11r7/x11r7.mk b/package/x11r7/x11r7.mk
-index 7c7ae69..ea0363f 100644
---- a/package/x11r7/x11r7.mk
-+++ b/package/x11r7/x11r7.mk
-@@ -1,3 +1 @@
--ifeq ($(BR2_PACKAGE_XORG7),y)
- include package/x11r7/*/*.mk
--endif
+diff --git a/package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch b/package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch
+new file mode 100644
+index 0000000..6b481d2
+--- /dev/null
++++ b/package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch
+@@ -0,0 +1,14 @@
++Index: Mesa-7.6.1/src/mesa/main/imports.c
++===================================================================
++--- Mesa-7.6.1.orig/src/mesa/main/imports.c
+++++ Mesa-7.6.1/src/mesa/main/imports.c
++@@ -915,7 +915,8 @@
++ double
++ _mesa_strtod( const char *s, char **end )
++ {
++-#ifdef _GNU_SOURCE
+++  /* We need either a glibc/eglibc library, or uClibc with locales */
+++#if defined(_GNU_SOURCE) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_LOCALE__))
++    static locale_t loc = NULL;
++    if (!loc) {
++       loc = newlocale(LC_CTYPE_MASK, "C", NULL);
 -- 
 1.7.4.1
