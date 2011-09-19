@@ -1,94 +1,115 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:53:15 +0200
-Subject: [Buildroot] [PATCH 12/21] package: remove useless arguments from
-	CMAKETARGETS
+Date: Mon, 19 Sep 2011 22:53:17 +0200
+Subject: [Buildroot] [PATCH 14/21] Add support for local packages through
+	'file://' pseudo-protocol
 In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e97563d699fdf184ac6a9fe5abb62b8a22900b66.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <12bd8708a4d5296e1703a3943ea87f3ba5fccfde.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks to the pkgdir and pkgname functions, we can rewrite the
-GENTARGETS macro in a way that avoids the need for each package to
-repeat its name and the directory in which it is present.
+From: David Wagner <david.wagner@free-electrons.com>
 
+This can be used this way :
+
+<pkg>_VERSION = 42
+<pkg>_SITE = file:///some/local/directory
+<pkg>_SOURCE = mypkg-$(<pkg>_VERSION).tar.bz2
+
+Can be useful to integrate a home-made project or for testing purposes.
+The default command to retrieve files is 'cp' but 'rsync' could also be used.
+Through sshfs, it should also be possible to get non-public remote files on a
+ssh server.
+
+[ Thomas Petazzoni: use $(PKG)_SITE and $(PKG)_SOURCE variables
+  instead of $(1) and $(2) ]
+
+Signed-off-by: David Wagner <david.wagner@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.cmake.in                   |   10 ++++------
- package/cdrkit/cdrkit.mk                    |    4 ++--
- package/multimedia/libcuefile/libcuefile.mk |    2 +-
- package/multimedia/musepack/musepack.mk     |    2 +-
- package/yajl/yajl.mk                        |    2 +-
- 5 files changed, 9 insertions(+), 11 deletions(-)
+ Config.in                   |    4 ++++
+ package/Makefile.package.in |   21 ++++++++++++++++++---
+ 2 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
-index 1263eb9..b48e09a 100644
---- a/package/Makefile.cmake.in
-+++ b/package/Makefile.cmake.in
-@@ -183,15 +183,13 @@ endef
- ################################################################################
- # CMAKETARGETS -- the target generator macro for CMake packages
- #
--# Argument 1 is the package directory prefix [mandatory]
--# Argument 2 is the lowercase package name   [mandatory]
--# Argument 3 is "target" or "host"           [optional, default: "target"]
-+# Argument 1 is "target" or "host"           [optional, default: "target"]
- ################################################################################
+diff --git a/Config.in b/Config.in
+index 3aa3ad8..0cf4d49 100644
+--- a/Config.in
++++ b/Config.in
+@@ -32,6 +32,10 @@ config BR2_GIT
+ 	string "Git command"
+ 	default "git"
  
- define CMAKETARGETS
--ifeq ($(3),host)
--$(call CMAKETARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
-+ifeq ($(1),host)
-+$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),host)
- else
--$(call CMAKETARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
-+$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgdir),target)
++config BR2_LOCALFILES
++	string "Local files retrieval command"
++	default "cp"
++
+ config BR2_ZCAT
+ 	string "zcat command"
+ 	default "gzip -d -c"
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index b6ae34b..f1c76d0 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -92,6 +92,7 @@ WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
+ SVN:=$(call qstrip,$(BR2_SVN)) $(QUIET)
+ BZR:=$(call qstrip,$(BR2_BZR)) $(QUIET)
+ GIT:=$(call qstrip,$(BR2_GIT)) $(QUIET)
++LOCALFILES:=$(call qstrip,$(BR2_LOCALFILES)) $(QUIET)
+ 
+ # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+ # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+@@ -104,18 +105,18 @@ DL_DIR:=$(TOPDIR)/dl
  endif
+ 
+ ################################################################################
+-# The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a
++# The DOWNLOAD_{GIT,SVN,BZR,LOCALFILES} helpers are in charge of getting a
+ # working copy of the source repository for their corresponding SCM,
+ # checking out the requested version / commit / tag, and create an
+ # archive out of it. DOWNLOAD_WGET is the normal wget-based download
+ # mechanism.
+ #
+-# The SOURCE_CHECK_{GIT,SVN,BZR,WGET} helpers are in charge of simply
++# The SOURCE_CHECK_{GIT,SVN,BZR,WGET,LOCALFILES} helpers are in charge of simply
+ # checking that the source is available for download. This can be used
+ # to make sure one will be able to get all the sources needed for
+ # one's build configuration.
+ #
+-# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET} helpers simply output to
++# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET,LOCALFILES} helpers simply output to
+ # the console the names of the files that will be downloaded, or path
+ # and revision of the source repositories, producing a list of all the
+ # "external dependencies" of a given build configuration.
+@@ -189,6 +190,19 @@ define SHOW_EXTERNAL_DEPS_WGET
+   echo $(2)
  endef
-diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
-index a57a8fd..9eebe6e 100644
---- a/package/cdrkit/cdrkit.mk
-+++ b/package/cdrkit/cdrkit.mk
-@@ -20,5 +20,5 @@ CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(TARGET_LDFLAGS)"
- HOST_CDRKIT_CONF_OPT += -DCMAKE_C_FLAGS="-I$(HOST_DIR)/usr/include"
- HOST_CDRKIT_CONF_OPT += -DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)"
  
--$(eval $(call CMAKETARGETS,package,cdrkit))
--$(eval $(call CMAKETARGETS,package,cdrkit,host))
-+$(eval $(call CMAKETARGETS))
-+$(eval $(call CMAKETARGETS,host))
-diff --git a/package/multimedia/libcuefile/libcuefile.mk b/package/multimedia/libcuefile/libcuefile.mk
-index 765c5a2..7e1c843 100644
---- a/package/multimedia/libcuefile/libcuefile.mk
-+++ b/package/multimedia/libcuefile/libcuefile.mk
-@@ -20,4 +20,4 @@ endef
- LIBCUEFILE_POST_INSTALL_STAGING_HOOKS += LIBCUEFILE_INSTALL_STAGING_INCLUDES
- LIBCUEFILE_POST_INSTALL_TARGET_HOOKS += LIBCUEFILE_INSTALL_TARGET_INCLUDES
- 
--$(eval $(call CMAKETARGETS,package/multimedia,libcuefile))
-+$(eval $(call CMAKETARGETS))
-diff --git a/package/multimedia/musepack/musepack.mk b/package/multimedia/musepack/musepack.mk
-index 1e5ebcf..ac3660f 100644
---- a/package/multimedia/musepack/musepack.mk
-+++ b/package/multimedia/musepack/musepack.mk
-@@ -11,4 +11,4 @@ MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
- MUSEPACK_INSTALL_STAGING = YES
- MUSEPACK_MAKE = $(MAKE1)
- 
--$(eval $(call CMAKETARGETS,package/multimedia,musepack))
-+$(eval $(call CMAKETARGETS))
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-index e67a7da..723cce4 100644
---- a/package/yajl/yajl.mk
-+++ b/package/yajl/yajl.mk
-@@ -8,4 +8,4 @@ YAJL_VERSION = 2.0.2
- YAJL_SITE = git://github.com/lloyd/yajl.git
- YAJL_INSTALL_STAGING = YES
- 
--$(eval $(call CMAKETARGETS,package,yajl))
-+$(eval $(call CMAKETARGETS))
++define DOWNLOAD_LOCALFILES
++	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
++		$(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
++endef
++
++define SOURCE_CHECK_LOCALFILES
++  test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
++endef
++
++define SHOW_EXTERNAL_DEPS_LOCALFILES
++  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
++endef
++
+ ################################################################################
+ # DOWNLOAD -- Download helper. Will try to download source from:
+ # 1) BR2_PRIMARY_SITE if enabled
+@@ -211,6 +225,7 @@ define DOWNLOAD
+ 			git) $($(DL_MODE)_GIT) && exit ;; \
+ 			svn) $($(DL_MODE)_SVN) && exit ;; \
+ 			bzr) $($(DL_MODE)_BZR) && exit ;; \
++			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
+ 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
+ 		esac ; \
+ 	fi ; \
 -- 
 1.7.4.1
