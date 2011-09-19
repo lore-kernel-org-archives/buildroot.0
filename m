@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:57:39 +0200
-Subject: [Buildroot] [PATCH 3/5] mesa3d: add patch to fix build on !locale
-	toolchains
-In-Reply-To: <cover.1316465857.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1316465857.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f08b73124ef8e797878851102a0f915e06dc4fd1.1316465857.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Sep 2011 22:53:18 +0200
+Subject: [Buildroot] [PATCH 15/21] fakeroot: remove target package
+In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <59370fd5d68939ea717ffe673b91d5c9d810b5dd.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes bug #3313.
+As explained in the comment, the fakeroot target package was only here
+to workaround deficiencies in the package infrastructure regarding the
+patching procedure. Those issues have been fixed in
+7a41cbf938d6a189109b8b15dc2cef8638c5a0c2, so clean things up in
+fakeroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch  |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
- create mode 100644 package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch
+ package/fakeroot/fakeroot.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch b/package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch
-new file mode 100644
-index 0000000..6b481d2
---- /dev/null
-+++ b/package/x11r7/mesa3d/mesa3d-7.6.1-fix-no-locale.patch
-@@ -0,0 +1,14 @@
-+Index: Mesa-7.6.1/src/mesa/main/imports.c
-+===================================================================
-+--- Mesa-7.6.1.orig/src/mesa/main/imports.c
-++++ Mesa-7.6.1/src/mesa/main/imports.c
-+@@ -915,7 +915,8 @@
-+ double
-+ _mesa_strtod( const char *s, char **end )
-+ {
-+-#ifdef _GNU_SOURCE
-++  /* We need either a glibc/eglibc library, or uClibc with locales */
-++#if defined(_GNU_SOURCE) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_LOCALE__))
-+    static locale_t loc = NULL;
-+    if (!loc) {
-+       loc = newlocale(LC_CTYPE_MASK, "C", NULL);
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index c69f31e..e47d8ba 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -15,8 +15,4 @@ endef
+ 
+ FAKEROOT_POST_PATCH_HOOKS += FAKEROOT_PATCH_FAKEROOT_IN
+ 
+-# The package for the target cannot be selected (build problems when
+-# largefile is enabled), but is needed for the host package to work
+-# due to deficiencies in the package infrastructure.
+-$(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
 -- 
 1.7.4.1
