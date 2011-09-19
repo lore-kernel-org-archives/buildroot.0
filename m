@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:10:51 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/xeno-rtai-fixes
-Message-ID: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Sep 2011 22:10:55 +0200
+Subject: [Buildroot] [PATCH 4/5] rtai: Install modules in
+	/lib/modules/<version>/rtai
+In-Reply-To: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <77d33c8251975ea21d09773b6d8ce61c8bf45ff3.1316463052.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit dcb43a0eb0c09ffb84c6c7b4c169a2874cb24cc9:
+The /lib/modules/<version>/kernel/ is completely rewritten by the
+kernel module installation, so third party modules should be outside
+of this directory.
 
-  barebox: patch-kernel.sh is no more (2011-09-19 10:13:37 +0200)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rtai/rtai.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/xeno-rtai-fixes
-
-Thomas Petazzoni (5):
-      package: add a PRE_PATCH_HOOKS hook point
-      rtai, xenomai: use the pre patch hook point
-      rtai: fix path to apply-patches
-      rtai: Install modules in /lib/modules/<version>/rtai
-      xenomai: install in /usr
-
- linux/linux-ext-rtai.mk     |    6 ++--
- linux/linux-ext-xenomai.mk  |    2 +-
- package/Makefile.package.in |    2 +
- package/rtai/rtai.mk        |    2 +-
- package/xenomai/xenomai.mk  |   54 ++++++++----------------------------------
- 5 files changed, 18 insertions(+), 48 deletions(-)
-
-Thanks,
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+index abba614..a4a69f9 100644
+--- a/package/rtai/rtai.mk
++++ b/package/rtai/rtai.mk
+@@ -8,7 +8,7 @@ RTAI_CONF_OPT = \
+ 	--with-linux-dir=$(LINUX_DIR) 	\
+ 	--disable-leds		      	\
+ 	--disable-rtailab		\
+-	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/kernel/rtai
++	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/rtai
+ 
+ RTAI_MAKE = $(MAKE1)
+ 
 -- 
-Thomas Petazzoni
+1.7.4.1
