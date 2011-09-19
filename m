@@ -1,56 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:53:21 +0200
-Subject: [Buildroot] [PATCH 18/21] mcookie: convert to the GENTARGETS
-	infrastructure
+Date: Mon, 19 Sep 2011 22:53:23 +0200
+Subject: [Buildroot] [PATCH 20/21] dependencies: add rsync as a required
+	dependency
 In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c166f4ea216d3f51ab2aff628f75cbf0207ffc9b.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <44c7b2b75d887d124e3cc22704723e09bf1fda71.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+rsync can now be used for overriden package, and will also be used for
+other purposes in the future (optimization of toolchain copy time,
+etc.).
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/mcookie/mcookie.mk |   24 +++++++++++++-----------
- 1 files changed, 13 insertions(+), 11 deletions(-)
+ toolchain/dependencies/dependencies.sh |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/mcookie/mcookie.mk b/package/x11r7/mcookie/mcookie.mk
-index 12ef475..b3530de 100644
---- a/package/x11r7/mcookie/mcookie.mk
-+++ b/package/x11r7/mcookie/mcookie.mk
-@@ -4,17 +4,19 @@
- #
- #############################################################
+diff --git a/toolchain/dependencies/dependencies.sh b/toolchain/dependencies/dependencies.sh
+index 74ab213..410f663 100755
+--- a/toolchain/dependencies/dependencies.sh
++++ b/toolchain/dependencies/dependencies.sh
+@@ -123,7 +123,7 @@ if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
+ fi;
  
--$(TARGET_DIR)/usr/bin/mcookie: package/x11r7/mcookie/mcookie.c
--	$(TARGET_CC) -Wall -Os -s package/x11r7/mcookie/mcookie.c -o $(TARGET_DIR)/usr/bin/mcookie
-+# Source included in Buildroot
-+MCOOKIE_SOURCE =
- 
-+define MCOOKIE_EXTRACT_CMDS
-+	cp package/x11r7/mcookie/mcookie.c $(@D)/
-+endef
- 
--mcookie: $(TARGET_DIR)/usr/bin/mcookie
-+define MCOOKIE_BUILD_CMDS
-+	(cd $(@D); $(TARGET_CC) -Wall -Os -s mcookie.c -o mcookie)
-+endef
- 
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_MCOOKIE),y)
--TARGETS+=mcookie
--endif
-+define MCOOKIE_INSTALL_TARGET_CMDS
-+	install -m 0755 -D $(@D)/mcookie $(TARGET_DIR)/usr/bin/mcookie
-+endef
-+
-+$(eval $(call GENTARGETS))
-\ No newline at end of file
+ # Check that a few mandatory programs are installed
+-for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio python unzip ${DL_TOOLS} ; do
++for prog in awk bison flex msgfmt makeinfo patch gzip bzip2 perl tar wget cpio python unzip rsync ${DL_TOOLS} ; do
+     if ! which $prog > /dev/null ; then
+ 	/bin/echo -e "\nYou must install '$prog' on your build machine";
+ 	if test $prog = "makeinfo" ; then
 -- 
 1.7.4.1
