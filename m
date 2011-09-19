@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:53:20 +0200
-Subject: [Buildroot] [PATCH 17/21] whetstone: use the <pkg>_EXTRACT_CMDS
-	mechanism
+Date: Mon, 19 Sep 2011 22:53:21 +0200
+Subject: [Buildroot] [PATCH 18/21] mcookie: convert to the GENTARGETS
+	infrastructure
 In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7ac0cd3f95c114a85fb40478646be687626baad3.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c166f4ea216d3f51ab2aff628f75cbf0207ffc9b.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/whetstone/whetstone.mk |   10 ++++------
- 1 files changed, 4 insertions(+), 6 deletions(-)
+ package/x11r7/mcookie/mcookie.mk |   24 +++++++++++++-----------
+ 1 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
-index 48a3adf..048f4de 100644
---- a/package/whetstone/whetstone.mk
-+++ b/package/whetstone/whetstone.mk
-@@ -8,6 +8,10 @@ WHETSTONE_VERSION = 1.2
- WHETSTONE_SOURCE = whetstone.c
- WHETSTONE_SITE = http://www.netlib.org/benchmark/
+diff --git a/package/x11r7/mcookie/mcookie.mk b/package/x11r7/mcookie/mcookie.mk
+index 12ef475..b3530de 100644
+--- a/package/x11r7/mcookie/mcookie.mk
++++ b/package/x11r7/mcookie/mcookie.mk
+@@ -4,17 +4,19 @@
+ #
+ #############################################################
  
-+define WHETSTONE_EXTRACT_CMDS
-+	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
+-$(TARGET_DIR)/usr/bin/mcookie: package/x11r7/mcookie/mcookie.c
+-	$(TARGET_CC) -Wall -Os -s package/x11r7/mcookie/mcookie.c -o $(TARGET_DIR)/usr/bin/mcookie
++# Source included in Buildroot
++MCOOKIE_SOURCE =
+ 
++define MCOOKIE_EXTRACT_CMDS
++	cp package/x11r7/mcookie/mcookie.c $(@D)/
++endef
+ 
+-mcookie: $(TARGET_DIR)/usr/bin/mcookie
++define MCOOKIE_BUILD_CMDS
++	(cd $(@D); $(TARGET_CC) -Wall -Os -s mcookie.c -o mcookie)
++endef
+ 
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_MCOOKIE),y)
+-TARGETS+=mcookie
+-endif
++define MCOOKIE_INSTALL_TARGET_CMDS
++	install -m 0755 -D $(@D)/mcookie $(TARGET_DIR)/usr/bin/mcookie
 +endef
 +
- define WHETSTONE_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) LDLIBS="-lm" -C $(@D) whetstone
- endef
-@@ -25,9 +29,3 @@ define WHETSTONE_UNINSTALL_TARGET_CMDS
- endef
- 
- $(eval $(call GENTARGETS))
--
--$(BUILD_DIR)/whetstone-$(WHETSTONE_VERSION)/.stamp_extracted:
--	@$(call MESSAGE,"Extracting")
--	$(Q)mkdir -p $(@D)
--	$(Q)cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
--	$(Q)touch $@
++$(eval $(call GENTARGETS))
+\ No newline at end of file
 -- 
 1.7.4.1
