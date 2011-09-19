@@ -1,87 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Sep 2011 22:53:07 +0200
-Subject: [Buildroot] [PATCH 04/21] bridge-utils: normalize package name
+Date: Mon, 19 Sep 2011 22:53:11 +0200
+Subject: [Buildroot] [PATCH 08/21] package: implement a 'local' site method
 In-Reply-To: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <c62a44df3293cf275bf0f781ca924a56ffc3f546.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <da9a9250d1e98c0c1c9fb710309c833a1df0d8ec.1316464690.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The new override source directory mechanism allows to tell Buildroot
+to use a particular directory as the source directory for a
+package. However, this mechanism works with a local override makefile
+and not directly within the package recipe itself.
+
+For some use cases, it might be desirable to write a package recipe
+which always refers to a local source directory (and not a http, git,
+svn or bazaar download). This commit makes this possible by adding the
+'local' site method. It allows to write package recipes as follows:
+
+MYPKG_SITE = /tmp/mypkg-source-code
+MYPKG_SITE_METHOD = local
+
+[...]
+
+$(eval $(call GENTARGETS,package,mypkg))
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bridge-utils/Config.in                     |    2 +-
- package/bridge-utils/bridge-utils.mk               |   18 ++++++++++++++++++
- .../{bridge.patch => bridge-utils.patch}           |    0
- package/bridge-utils/bridge.mk                     |   18 ------------------
- 4 files changed, 19 insertions(+), 19 deletions(-)
- create mode 100644 package/bridge-utils/bridge-utils.mk
- rename package/bridge-utils/{bridge.patch => bridge-utils.patch} (100%)
- delete mode 100644 package/bridge-utils/bridge.mk
+ package/Makefile.package.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/bridge-utils/Config.in b/package/bridge-utils/Config.in
-index c2e8ca0..537eb1f 100644
---- a/package/bridge-utils/Config.in
-+++ b/package/bridge-utils/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_BRIDGE
-+config BR2_PACKAGE_BRIDGE_UTILS
- 	bool "bridge-utils"
- 	help
- 	  Manage ethernet bridging; a way to connect networks together to
-diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
-new file mode 100644
-index 0000000..6807493
---- /dev/null
-+++ b/package/bridge-utils/bridge-utils.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# bridge-utils
-+#
-+#############################################################
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 318c506..caa6d6a 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -438,6 +438,12 @@ ifndef $(2)_SITE_METHOD
+  endif
+ endif
+ 
++ifeq ($$($(2)_SITE_METHOD),local)
++ifeq ($$($(2)_OVERRIDE_SRCDIR),)
++$(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
++endif
++endif
 +
-+BRIDGE_UTILS_VERSION = 1.5
-+BRIDGE_UTILS_SOURCE = bridge-utils-$(BRIDGE_UTILS_VERSION).tar.gz
-+BRIDGE_UTILS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge
-+BRIDGE_UTILS_AUTORECONF = YES
-+BRIDGE_UTILS_CONF_OPT = --with-linux-headers=$(LINUX_HEADERS_DIR)
-+
-+define BRIDGE_UTILS_UNINSTALL_TARGET_CMDS
-+	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
-+		include/libbridge.h share/man/man8/brctl.8 sbin/brctl)
-+endef
-+
-+$(eval $(call AUTOTARGETS,package,bridge-utils))
-diff --git a/package/bridge-utils/bridge.patch b/package/bridge-utils/bridge-utils.patch
-similarity index 100%
-rename from package/bridge-utils/bridge.patch
-rename to package/bridge-utils/bridge-utils.patch
-diff --git a/package/bridge-utils/bridge.mk b/package/bridge-utils/bridge.mk
-deleted file mode 100644
-index 8f3f741..0000000
---- a/package/bridge-utils/bridge.mk
-+++ /dev/null
-@@ -1,18 +0,0 @@
--#############################################################
--#
--# bridge-utils
--#
--#############################################################
--
--BRIDGE_VERSION = 1.5
--BRIDGE_SOURCE = bridge-utils-$(BRIDGE_VERSION).tar.gz
--BRIDGE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/bridge
--BRIDGE_AUTORECONF = YES
--BRIDGE_CONF_OPT = --with-linux-headers=$(LINUX_HEADERS_DIR)
--
--define BRIDGE_UNINSTALL_TARGET_CMDS
--	rm -f $(addprefix $(TARGET_DIR)/usr/,lib/libbridge.a \
--		include/libbridge.h share/man/man8/brctl.8 sbin/brctl)
--endef
--
--$(eval $(call AUTOTARGETS,package,bridge))
+ $(2)_DEPENDENCIES		?=
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
 -- 
 1.7.4.1
