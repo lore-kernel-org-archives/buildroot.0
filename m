@@ -1,38 +1,36 @@
-From: Milton Soares Filho <milton.soares.filho@gmail.com>
-Date: Sun, 18 Sep 2011 23:46:05 -0400
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Sep 2011 08:44:01 +0200
 Subject: [Buildroot] [PATCH 1/1] external toolchain: slightly optimize
  the copy of the toolchain sysroot
-In-Reply-To: <bf913e756e822eac217406309f3e423ca5dca580.1314826575.git.thomas.petazzoni@free-electrons.com>
+In-Reply-To: <CAPNngRNmyeCyFB_siN77pjAJwhuLWgYXuS-znGO8RQ9RORW3pg@mail.gmail.com>
 References: <cover.1314826575.git.thomas.petazzoni@free-electrons.com>
  <bf913e756e822eac217406309f3e423ca5dca580.1314826575.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAPNngRNmyeCyFB_siN77pjAJwhuLWgYXuS-znGO8RQ9RORW3pg@mail.gmail.com>
+ <CAPNngRNmyeCyFB_siN77pjAJwhuLWgYXuS-znGO8RQ9RORW3pg@mail.gmail.com>
+Message-ID: <20110919084401.3da42c86@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31 August 2011 17:36, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The sysroot of an ARM CodeSourcery toolchain takes about 1.4 GB of
-> space, but 1.1+ GB of this space consists in locale-related
-> information which Buildroot doesn't use. By skipping the copy of those
-> unused files, we save quite a bit of time while importing the
-> toolchain sysroot.
-> @@ -89,7 +92,7 @@ copy_toolchain_sysroot = \
-> ? ? ? ?ARCH_SUBDIR="$(strip $3)"; \
-> ? ? ? ?for i in etc lib sbin usr ; do \
-> ? ? ? ? ? ? ? ?if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
-> - ? ? ? ? ? ? ? ? ? ? ? cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
-> + ? ? ? ? ? ? ? ? ? ? ? rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
-> ? ? ? ? ? ? ? ?fi ; \
-> ? ? ? ?done ; \
+Le Sun, 18 Sep 2011 23:46:05 -0400,
+Milton Soares Filho <milton.soares.filho@gmail.com> a ?crit :
 
-I've been doing a similar thing to avoid copying unneeded stuff from a
-"non-pure" toolchain (STLinux toolchain), but by using a blacklist
-file and rsync's --exclude-from option.
+> I've been doing a similar thing to avoid copying unneeded stuff from a
+> "non-pure" toolchain (STLinux toolchain), but by using a blacklist
+> file and rsync's --exclude-from option.
+> 
+> Would it be interesting to anyone else (besides me) to have this
+> generic approach? It'd be a simple addition to this patch.
 
-Would it be interesting to anyone else (besides me) to have this
-generic approach? It'd be a simple addition to this patch.
+I am at least interested in seeing what you have done, to see what
+could be integrated in Buildroot.
 
-[]s, milton
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
