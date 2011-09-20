@@ -1,29 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2011 14:01:43 +0200
-Subject: [Buildroot] [git commit] support: move patch-kernel.sh and
- rename it
-In-Reply-To: <4E786515.6090603@atmel.com>
-References: <20110917063643.361CC8D728@busybox.osuosl.org>
- <4E77351C.6000302@atmel.com> <20110919224751.1d7ea3f3@skate>
- <4E786515.6090603@atmel.com>
-Message-ID: <20110920140143.52e3a99c@skate>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Tue, 20 Sep 2011 13:18:30 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] package: add openocd support
+In-Reply-To: <87y5xmun3h.fsf@macbook.be.48ers.dk>
+References: <1312911561-23942-2-git-send-email-plagnioj@jcrosoft.com>
+ <1316289171-21296-1-git-send-email-plagnioj@jcrosoft.com>
+ <8739fuw60t.fsf@macbook.be.48ers.dk>
+ <20110918102209.GE16141@game.jcrosoft.org>
+ <87y5xmun3h.fsf@macbook.be.48ers.dk>
+Message-ID: <20110920111830.GB24966@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 20 Sep 2011 12:04:05 +0200,
-Ludovic Desroches <ludovic.desroches@atmel.com> a ?crit :
+On 13:05 Sun 18 Sep     , Peter Korsgaard wrote:
+> >>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+> 
+>  >> This is with a trivial defconfig:
+>  >> 
+>  >> BR2_arm=y
+>  >> BR2_arm926t=y
+>  >> BR2_PACKAGE_OPENOCD=y
+>  >> 
+>  >> E.G. to reproduce stick those 3 lines in .config and run
+> 
+>  Jean-Christophe> which version of gcc do you use?
+> 
+> Like the config says, the default version (4.3.6).
+I've found the issue on the codesourcery toolchains and pc too no need to
+specify we use gnu99 standard
 
-> No problem for the delay if the patch is still into the pipe. I was 
-> afraid it was a totally stupid patch since I had no answer :)
+but with buildroot gcc we need so I update it
 
-No, not at all, the feature provided by this patch is definitely useful.
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best Regards,
+J.
