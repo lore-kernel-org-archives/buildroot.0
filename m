@@ -1,32 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Sep 2011 22:20:43 +0200
-Subject: [Buildroot] [PATCH 5/5] xenomai: install in /usr
-In-Reply-To: <eee4c1d4898af5dd12bc695b5a151fd0b7dbeae5.1316463052.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 19 Sep 2011 22:10:56 +0200")
-References: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
- <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
- <eee4c1d4898af5dd12bc695b5a151fd0b7dbeae5.1316463052.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87mxdz2cf8.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Sep 2011 22:18:14 +0200
+Subject: [Buildroot] [git commit] package: add a PRE_PATCH_HOOKS hook point
+Message-ID: <20110920202237.A479C8D723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=33518020ba93b739252f6d7f82bc48e6cbf3100a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> By default, Xenomai installs everything with --prefix=/usr/xenomai,
- Thomas> and passing --prefix=/usr doesn't work because installing Xenomai
- Thomas> headers in /usr/include creates conflicts with other headers. However,
- Thomas> passing --prefix=/usr and --includedir=/usr/include/xenomai just works
- Thomas> fine. This allows to use the default configure command of the
- Thomas> AUTOTARGETS infrastructure, and allows to install the Xenomai headers
- Thomas> and libraries into more usual locations. Furthermore, it allows to
- Thomas> remove the documentation/headers removal hooks, as well as the
- Thomas> ld.so.conf hook since now everything is installed in standard
- Thomas> locations.
+This will be useful to integrate Xenomai and RTAI into Buildroot, so
+that they can patch the kernel before the normal patching process
+starts.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.package.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 66be0a2..e2d0e28 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -259,6 +259,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
+ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
++	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+ 	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
+ 	$(Q)( \
+ 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+@@ -443,6 +444,7 @@ $(2)_EXTRACT_CMDS ?= \
+ # post-steps hooks
+ $(2)_POST_DOWNLOAD_HOOKS        ?=
+ $(2)_POST_EXTRACT_HOOKS         ?=
++$(2)_PRE_PATCH_HOOKS            ?=
+ $(2)_POST_PATCH_HOOKS           ?=
+ $(2)_PRE_CONFIGURE_HOOKS        ?=
+ $(2)_POST_CONFIGURE_HOOKS       ?=
