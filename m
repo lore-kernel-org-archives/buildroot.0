@@ -1,37 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Sep 2011 22:19:13 +0200
-Subject: [Buildroot] [git commit] rtai: Install modules in
-	/lib/modules/<version>/rtai
-Message-ID: <20110920202238.89B918D723@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 Sep 2011 22:42:28 +0200
+Subject: [Buildroot] [PATCH 01/21] libfuse: rename fuse to libfuse
+In-Reply-To: <a460227dbc2f05ad7c2e9f4703c54cb7d15ade2e.1316464690.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 19 Sep 2011 22:53:04 +0200")
+References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
+ <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
+ <a460227dbc2f05ad7c2e9f4703c54cb7d15ade2e.1316464690.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ipon2bez.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d9979692334c917bc8c807e93d78a47849c1e06
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The /lib/modules/<version>/kernel/ is completely rewritten by the
-kernel module installation, so third party modules should be outside
-of this directory.
+ Thomas> We rename the package/fuse directory to package/libfuse to be
+ Thomas> consistent with the package name. This is needed for a future commit
+ Thomas> that will simplify the AUTOTARGETS macro by making assumptions on the
+ Thomas> directory name.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/rtai/rtai.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-index abba614..a4a69f9 100644
---- a/package/rtai/rtai.mk
-+++ b/package/rtai/rtai.mk
-@@ -8,7 +8,7 @@ RTAI_CONF_OPT = \
- 	--with-linux-dir=$(LINUX_DIR) 	\
- 	--disable-leds		      	\
- 	--disable-rtailab		\
--	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/kernel/rtai
-+	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/rtai
- 
- RTAI_MAKE = $(MAKE1)
- 
+-- 
+Bye, Peter Korsgaard
