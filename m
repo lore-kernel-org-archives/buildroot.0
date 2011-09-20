@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Sep 2011 22:19:24 +0200
-Subject: [Buildroot] [PATCH 4/5] rtai: Install modules in
-	/lib/modules/<version>/rtai
-In-Reply-To: <77d33c8251975ea21d09773b6d8ce61c8bf45ff3.1316463052.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 19 Sep 2011 22:10:55 +0200")
+Date: Tue, 20 Sep 2011 22:20:43 +0200
+Subject: [Buildroot] [PATCH 5/5] xenomai: install in /usr
+In-Reply-To: <eee4c1d4898af5dd12bc695b5a151fd0b7dbeae5.1316463052.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 19 Sep 2011 22:10:56 +0200")
 References: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
  <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
- <77d33c8251975ea21d09773b6d8ce61c8bf45ff3.1316463052.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r53b2chf.fsf@macbook.be.48ers.dk>
+ <eee4c1d4898af5dd12bc695b5a151fd0b7dbeae5.1316463052.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87mxdz2cf8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,9 +15,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The /lib/modules/<version>/kernel/ is completely rewritten by the
- Thomas> kernel module installation, so third party modules should be outside
- Thomas> of this directory.
+ Thomas> By default, Xenomai installs everything with --prefix=/usr/xenomai,
+ Thomas> and passing --prefix=/usr doesn't work because installing Xenomai
+ Thomas> headers in /usr/include creates conflicts with other headers. However,
+ Thomas> passing --prefix=/usr and --includedir=/usr/include/xenomai just works
+ Thomas> fine. This allows to use the default configure command of the
+ Thomas> AUTOTARGETS infrastructure, and allows to install the Xenomai headers
+ Thomas> and libraries into more usual locations. Furthermore, it allows to
+ Thomas> remove the documentation/headers removal hooks, as well as the
+ Thomas> ld.so.conf hook since now everything is installed in standard
+ Thomas> locations.
 
 Committed, thanks.
 
