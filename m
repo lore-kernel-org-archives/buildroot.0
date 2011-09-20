@@ -1,69 +1,30 @@
-From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
-Date: Tue, 20 Sep 2011 17:01:28 +0800
-Subject: [Buildroot]  [PATCH 3/3] mplayer: Enable live and tv options
-In-Reply-To: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
-References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
+From: Guillaume Dargaud <dargaud@lpsc.in2p3.fr>
+Date: Tue, 20 Sep 2011 11:14:07 +0200
+Subject: [Buildroot] df returns nothing
+Message-ID: <201109201114.07295.dargaud@lpsc.in2p3.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Kelvin Cheung <keguang.zhang@gmail.com>
+Hello all,
+it's not really a problem as my buildroot system is working fine, but df returns nothing. I'm using a cpio ramdisk 
+embedded in the kernel, so that's probably the reason, still I'm curious as to why I can't get an answer:
 
-1.Enable TV interface.
-2.Enable LIVE555 Streaming Media if live555 is available.
+# df
+Filesystem                Size      Used Available Use% Mounted on
 
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
----
- package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
- 1 files changed, 18 insertions(+), 4 deletions(-)
+# df /
+Filesystem                Size      Used Available Use% Mounted on
+df: /: can't find mount point
 
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index f735464..416572c 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -75,6 +75,22 @@ else
- MPLAYER_CONF_OPTS += --disable-mad
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIVE555),y)
-+MPLAYER_DEPENDENCIES += live555
-+MPLAYER_CONF_OPTS += --enable-live
-+MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
-+MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
-+MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
-+MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
-+MPLAYER_LIVE555_LDFLAGS += -lliveMedia
-+MPLAYER_LIVE555_LDFLAGS += -lgroupsock
-+MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
-+MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
-+MPLAYER_LIVE555_LDFLAGS += -lstdc++
-+else
-+MPLAYER_CONF_OPTS += --disable-live
-+endif
-+
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-@@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
- 		--cc="$(TARGET_CC)" \
- 		--as="$(TARGET_AS)" \
- 		--charset=UTF-8 \
--		--extra-cflags="$(TARGET_CFLAGS)" \
--		--extra-ldflags="$(TARGET_LDFLAGS)" \
-+		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
-+		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
- 		--enable-mad \
- 		--enable-fbdev \
- 		$(MPLAYER_CONF_OPTS) \
- 		--enable-cross-compile \
- 		--disable-ivtv \
--		--disable-tv \
--		--disable-live \
- 		--enable-dynamic-plugins \
- 	)
- endef
+# mount
+rootfs on / type rootfs (rw,relatime)
+proc on /proc type proc (rw,relatime)
+devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620)
+sysfs on /sys type sysfs (rw,relatime)
+
 -- 
-1.7.1
+Guillaume Dargaud
+http://www.gdargaud.net/
