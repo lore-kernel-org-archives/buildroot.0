@@ -1,48 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Sep 2011 20:35:30 +0200
-Subject: [Buildroot] Xtensa support
-In-Reply-To: <4D87C0B5.1090503@tensilica.com>
-References: <1D6034426110564DA0DEA9EE9793B3835815AE17BF@NBE-MBX01.americas.swk.pri>
- <20110315180743.5e34890b@surf>
- <1D6034426110564DA0DEA9EE9793B3835815AE19D2@NBE-MBX01.americas.swk.pri>
- <20110315192211.3c59f861@surf>
- <1D6034426110564DA0DEA9EE9793B3835815AE1A1F@NBE-MBX01.americas.swk.pri>
- <20110315210538.1973f87f@surf>
- <779935.72384.qm@web161802.mail.bf1.yahoo.com>
- <4D81FB3E.7060307@carallon.com> <20110318165939.651bf88b@surf>
- <4D87C0B5.1090503@tensilica.com>
-Message-ID: <20110920203530.2cc44bee@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Sep 2011 21:43:46 +0200
+Subject: [Buildroot] [git commit] busybox: add 1.19.x branch and cleanup
+In-Reply-To: <878vpzjayv.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+ of "Thu, 08 Sep 2011 17:43:52 +0200")
+References: <20110906195720.696858D447@busybox.osuosl.org>
+ <1315469814.4333.2.camel@sven> <878vpzjayv.fsf@macbook.be.48ers.dk>
+Message-ID: <878vpj3sp9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Piet,
+>>>>> "Peter" == Peter Korsgaard <jacmet@sunsite.dk> writes:
 
-Le Mon, 21 Mar 2011 14:18:45 -0700,
-Piet Delaney <pdelaney@tensilica.com> a ?crit :
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+ Sven> I've updated buildroot from git today and changed the config to use
+ Sven> busybox 1.19.2. Now compilation fails with the following error:
 
-> In summary, we are just getting back to getting buildroot up-to-date
-> and would appropriate your support when trying to pull this off.
+ Sven> In file included from miscutils/ubi_tools.c:63:
+ Sven> /home/sven/git/buildroot/output/toolchain/linux/include/mtd/ubi-user.h:329: error: conflicting types for ?__packed?
 
-Do you have any news about the Xtensa support in Buildroot ? Are you
-still interested in having this support in the mainline Buildroot ?
+ Peter> That's a problem with kernel-headers 3.0 rather than a busybox 1.19
+ Peter> issue. I'm looking into fixing it with upstream.
 
-I am remain concerned by the fact that we carry some special stuff to
-support Xtensa, but he Xtensa architecture support has never been
-updated since it was merged in Buildroot. Of course, it is our goal to
-support configurable architectures such as Xtensa, but the support for
-those architectures needs to be actively maintained in Buildroot
-upstream. Unfortunately, none of the main Buildroot developers have
-Xtensa-capable hardware, so it's a bit hard to contribute to this
-effort.
+Sorry, took longer than planned, but I've just pushed a fix for it.
 
-Best regards,
+For details, see the lkml discussion here:
 
-Thomas
+https://lkml.org/lkml/2011/6/22/25
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
