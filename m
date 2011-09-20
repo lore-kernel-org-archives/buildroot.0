@@ -1,142 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 20 Sep 2011 09:52:14 +0200
-Subject: [Buildroot] [PATCH 14/21] Add support for local packages
- through 'file://' pseudo-protocol
-In-Reply-To: <12bd8708a4d5296e1703a3943ea87f3ba5fccfde.1316464690.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1316464690.git.thomas.petazzoni@free-electrons.com>
- <12bd8708a4d5296e1703a3943ea87f3ba5fccfde.1316464690.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWgE-0Dyq04dfqdoDSEJq_Gw8cTDBb_JGUsS5QR41k5Hw@mail.gmail.com>
+From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
+Date: Tue, 20 Sep 2011 17:01:26 +0800
+Subject: [Buildroot] [PATCH 1/3] Add vmlinuz support in Kernel binary format
+	for MIPS.
+Message-ID: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-On Mon, Sep 19, 2011 at 10:53 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> From: David Wagner <david.wagner@free-electrons.com>
->
-> This can be used this way :
->
-> <pkg>_VERSION = 42
-> <pkg>_SITE = file:///some/local/directory
-> <pkg>_SOURCE = mypkg-$(<pkg>_VERSION).tar.bz2
->
-> Can be useful to integrate a home-made project or for testing purposes.
-> The default command to retrieve files is 'cp' but 'rsync' could also be used.
-> Through sshfs, it should also be possible to get non-public remote files on a
-> ssh server.
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+ linux/Config.in |    4 ++++
+ linux/linux.mk  |    4 ++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
 
-I don't think the commands below support remote methods as sshfs or
-non-local rsync, see below.
-
->
-> [ Thomas Petazzoni: use $(PKG)_SITE and $(PKG)_SOURCE variables
-> ?instead of $(1) and $(2) ]
->
-> Signed-off-by: David Wagner <david.wagner@free-electrons.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?Config.in ? ? ? ? ? ? ? ? ? | ? ?4 ++++
-> ?package/Makefile.package.in | ? 21 ++++++++++++++++++---
-> ?2 files changed, 22 insertions(+), 3 deletions(-)
->
-> diff --git a/Config.in b/Config.in
-> index 3aa3ad8..0cf4d49 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -32,6 +32,10 @@ config BR2_GIT
-> ? ? ? ?string "Git command"
-> ? ? ? ?default "git"
->
-> +config BR2_LOCALFILES
-> + ? ? ? string "Local files retrieval command"
-> + ? ? ? default "cp"
-> +
-> ?config BR2_ZCAT
-> ? ? ? ?string "zcat command"
-> ? ? ? ?default "gzip -d -c"
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index b6ae34b..f1c76d0 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -92,6 +92,7 @@ WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
-> ?SVN:=$(call qstrip,$(BR2_SVN)) $(QUIET)
-> ?BZR:=$(call qstrip,$(BR2_BZR)) $(QUIET)
-> ?GIT:=$(call qstrip,$(BR2_GIT)) $(QUIET)
-> +LOCALFILES:=$(call qstrip,$(BR2_LOCALFILES)) $(QUIET)
->
-> ?# Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
-> ?# used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
-> @@ -104,18 +105,18 @@ DL_DIR:=$(TOPDIR)/dl
-> ?endif
->
-> ?################################################################################
-> -# The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a
-> +# The DOWNLOAD_{GIT,SVN,BZR,LOCALFILES} helpers are in charge of getting a
-> ?# working copy of the source repository for their corresponding SCM,
-> ?# checking out the requested version / commit / tag, and create an
-> ?# archive out of it. DOWNLOAD_WGET is the normal wget-based download
-> ?# mechanism.
-
-This comment is not correct. The localfiles method does not get a
-working copy of a repository, but rather downloads a plain tarball
-such as wget.
-
-> ?#
-> -# The SOURCE_CHECK_{GIT,SVN,BZR,WGET} helpers are in charge of simply
-> +# The SOURCE_CHECK_{GIT,SVN,BZR,WGET,LOCALFILES} helpers are in charge of simply
-> ?# checking that the source is available for download. This can be used
-> ?# to make sure one will be able to get all the sources needed for
-> ?# one's build configuration.
-> ?#
-> -# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET} helpers simply output to
-> +# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET,LOCALFILES} helpers simply output to
-> ?# the console the names of the files that will be downloaded, or path
-> ?# and revision of the source repositories, producing a list of all the
-> ?# "external dependencies" of a given build configuration.
-> @@ -189,6 +190,19 @@ define SHOW_EXTERNAL_DEPS_WGET
-> ? echo $(2)
-> ?endef
->
-> +define DOWNLOAD_LOCALFILES
-> + ? ? ? test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> + ? ? ? ? ? ? ? $(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
-> +endef
-> +
-> +define SOURCE_CHECK_LOCALFILES
-> + ?test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
-> +endef
-
-This will only work for files directly accessible on the filesystem.
-So, if rsync is used as method, this command only makes sense when it
-is a local rsync on the same local filesystem. If the rsync server is
-remote, 'test -e' will fail.
-The same holds for any other remote source, such as those available through ssh.
-
-For rsync, wouldn't it make more sense to support a separate rsync:// prefix?
-
-> +
-> +define SHOW_EXTERNAL_DEPS_LOCALFILES
-> + ?echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
-> +endef
-> +
-> ?################################################################################
-> ?# DOWNLOAD -- Download helper. Will try to download source from:
-> ?# 1) BR2_PRIMARY_SITE if enabled
-> @@ -211,6 +225,7 @@ define DOWNLOAD
-> ? ? ? ? ? ? ? ? ? ? ? ?git) $($(DL_MODE)_GIT) && exit ;; \
-> ? ? ? ? ? ? ? ? ? ? ? ?svn) $($(DL_MODE)_SVN) && exit ;; \
-> ? ? ? ? ? ? ? ? ? ? ? ?bzr) $($(DL_MODE)_BZR) && exit ;; \
-> + ? ? ? ? ? ? ? ? ? ? ? file) $($(DL_MODE)_LOCALFILES) && exit ;; \
-> ? ? ? ? ? ? ? ? ? ? ? ?*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
-> ? ? ? ? ? ? ? ?esac ; \
-> ? ? ? ?fi ; \
-> --
-> 1.7.4.1
-
-
-Best regards,
-Thomas
+diff --git a/linux/Config.in b/linux/Config.in
+index 5655286..09e5685 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -148,6 +148,10 @@ config BR2_LINUX_KERNEL_VMLINUX
+ 	bool "vmlinux"
+ 	depends on BR2_mips || BR2_mipsel
+ 
++config BR2_LINUX_KERNEL_VMLINUZ
++	bool "vmlinuz"
++	depends on BR2_mips || BR2_mipsel
++
+ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+ 	bool "custom target"
+ 	help
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f249d96..32b588c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -63,6 +63,8 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+ LINUX_IMAGE_NAME=vmlinux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+ LINUX_IMAGE_NAME=vmlinux
++else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
++LINUX_IMAGE_NAME=vmlinuz
+ endif
+ endif
+ 
+@@ -80,6 +82,8 @@ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+ LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
++else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
++LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+ else
+ ifeq ($(KERNEL_ARCH),avr32)
+ LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+-- 
+1.7.1
