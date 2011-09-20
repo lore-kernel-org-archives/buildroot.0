@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Sep 2011 22:17:05 +0200
-Subject: [Buildroot] [PATCH 1/5] package: add a PRE_PATCH_HOOKS hook
-	point
-In-Reply-To: <f804a151f0c35fbc3ce7b02be95203a253a15913.1316463052.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 19 Sep 2011 22:10:52 +0200")
+Date: Tue, 20 Sep 2011 22:18:42 +0200
+Subject: [Buildroot] [PATCH 2/5] rtai,
+	xenomai: use the pre patch hook point
+In-Reply-To: <40ab53037f455a50bfbd5430bed946fccd0298ea.1316463052.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 19 Sep 2011 22:10:53 +0200")
 References: <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
  <cover.1316463052.git.thomas.petazzoni@free-electrons.com>
- <f804a151f0c35fbc3ce7b02be95203a253a15913.1316463052.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <874o073r5q.fsf@macbook.be.48ers.dk>
+ <40ab53037f455a50bfbd5430bed946fccd0298ea.1316463052.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87zkhz2cil.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,12 +16,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> This will be useful to integrate Xenomai and RTAI into Buildroot, so
- Thomas> that they can patch the kernel before the normal patching process
- Thomas> starts.
+ Thomas> The post extract hook point is not really correct as what RTAI and
+ Thomas> Xenomai extensions are doing is patching the kernel.
 
-They could presumably use the post-extract hook, but ok - committed,
-thanks.
+ Thomas> The post patch hook point doesn't work, because RTAI and Xenomai
+ Thomas> patches would be applied *after* all other patches, while it sounds
+ Thomas> more logical to apply them first, and *then* allow the user to apply
+ Thomas> some platform/board specific patches if needed.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
