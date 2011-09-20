@@ -1,43 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Sep 2011 22:18:14 +0200
-Subject: [Buildroot] [git commit] package: add a PRE_PATCH_HOOKS hook point
-Message-ID: <20110920202237.A479C8D723@busybox.osuosl.org>
+Date: Tue, 20 Sep 2011 22:18:16 +0200
+Subject: [Buildroot] [git commit] rtai, xenomai: use the pre patch hook point
+Message-ID: <20110920202238.138A88D723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33518020ba93b739252f6d7f82bc48e6cbf3100a
+commit: http://git.buildroot.net/buildroot/commit/?id=be27a7933f12af29346eb7e73e0a0ca9ae7f947d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This will be useful to integrate Xenomai and RTAI into Buildroot, so
-that they can patch the kernel before the normal patching process
-starts.
+The post extract hook point is not really correct as what RTAI and
+Xenomai extensions are doing is patching the kernel.
+
+The post patch hook point doesn't work, because RTAI and Xenomai
+patches would be applied *after* all other patches, while it sounds
+more logical to apply them first, and *then* allow the user to apply
+some platform/board specific patches if needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.package.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ linux/linux-ext-rtai.mk    |    2 +-
+ linux/linux-ext-xenomai.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 66be0a2..e2d0e28 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -259,6 +259,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- $(BUILD_DIR)/%/.stamp_patched: NAMEVER = $(RAWNAME)-$($(PKG)_VERSION)
- $(BUILD_DIR)/%/.stamp_patched:
- 	@$(call MESSAGE,"Patching $($(PKG)_DIR_PREFIX)/$(RAWNAME)")
-+	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
- 	$(if $($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $($(PKG)_PATCH))
- 	$(Q)( \
- 	if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
-@@ -443,6 +444,7 @@ $(2)_EXTRACT_CMDS ?= \
- # post-steps hooks
- $(2)_POST_DOWNLOAD_HOOKS        ?=
- $(2)_POST_EXTRACT_HOOKS         ?=
-+$(2)_PRE_PATCH_HOOKS            ?=
- $(2)_POST_PATCH_HOOKS           ?=
- $(2)_PRE_CONFIGURE_HOOKS        ?=
- $(2)_POST_CONFIGURE_HOOKS       ?=
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index a54230d..150f9e8 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -42,6 +42,6 @@ define RTAI_PREPARE_KERNEL
+ endef
+ endif
+ 
+-LINUX_POST_PATCH_HOOKS += RTAI_PREPARE_KERNEL
++LINUX_PRE_PATCH_HOOKS += RTAI_PREPARE_KERNEL
+ 
+ endif #BR2_LINUX_EXT_RTAI
+diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+index e855ded..9b6772e 100644
+--- a/linux/linux-ext-xenomai.mk
++++ b/linux/linux-ext-xenomai.mk
+@@ -25,6 +25,6 @@ define XENOMAI_PREPARE_KERNEL
+ 		--verbose
+ endef
+ 
+-LINUX_POST_EXTRACT_HOOKS += XENOMAI_PREPARE_KERNEL
++LINUX_PRE_PATCH_HOOKS += XENOMAI_PREPARE_KERNEL
+ 
+ endif #BR2_LINUX_EXT_XENOMAI
