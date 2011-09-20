@@ -1,29 +1,72 @@
-From: Ahmed Soliman Badr <asolimanbadr@gmail.com>
-Date: Mon, 19 Sep 2011 21:59:42 +0000 (UTC)
-Subject: [Buildroot] Invitation to connect on LinkedIn
-Message-ID: <552425620.15260339.1316469582930.JavaMail.app@ela4-app0130.prod>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Sep 2011 08:43:02 +0200
+Subject: [Buildroot] [PATCH 1/5] mesa: build statically because of DRI
+ drivers
+In-Reply-To: <3747c70f962d5b96288372a2ca369965c62a6bd2.1316465857.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1316465857.git.thomas.petazzoni@free-electrons.com>
+ <3747c70f962d5b96288372a2ca369965c62a6bd2.1316465857.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20110920084302.771febcf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'd like to add you to my professional network on LinkedIn.
+Hello,
 
-- Ahmed
+Of course, the title should be "mesa: don't build statically because of
+DRI drivers". I will send an updated version once others will have
+reviewed the patchset.
 
-Ahmed Soliman Badr
-System Engineer at Connect-Systems
-Egypt
+Regards,
 
-Confirm that you know Ahmed Soliman Badr:
-https://www.linkedin.com/e/-lyatji-gsrzzz9t-62/isd/4272314318/3LA0UMsE/?hs=false&tok=3CJB8k-a2DOQU1
+Thomas
 
---
-You are receiving Invitation to Connect emails. Click to unsubscribe:
-http://www.linkedin.com/e/-lyatji-gsrzzz9t-62/v4riARYfhkIhARweXslb2rrK7kKkjKks/goo/buildroot%40uclibc%2Eorg/20061/I1477437890_1/?hs=false&tok=1o9pyPYhiDOQU1
+Le Mon, 19 Sep 2011 22:57:37 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-(c) 2011 LinkedIn Corporation. 2029 Stierlin Ct, Mountain View, CA 94043, USA.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110919/241880e2/attachment.html>
+> The autotargets infrastructure now passes --enable-static to all
+> packages. This works for most of them, except for Mesa:
+> 
+> configure: error: Can't use static libraries for DRI drivers
+> make[1]: *** [/home/test/outputs/mesa/build/mesa3d-7.6.1/.stamp_configured] Error 1
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/x11r7/mesa3d/mesa3d.mk |   15 ++++++++++++++-
+>  1 files changed, 14 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk
+> index cb0690d..21fc4cc 100644
+> --- a/package/x11r7/mesa3d/mesa3d.mk
+> +++ b/package/x11r7/mesa3d/mesa3d.mk
+> @@ -8,7 +8,20 @@ MESA3D_SOURCE:=MesaLib-$(MESA3D_VERSION).tar.gz
+>  MESA3D_SITE:=ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+>  
+>  MESA3D_AUTORECONF = NO
+> -MESA3D_CONF_OPT = --disable-egl --disable-glu --disable-glw --disable-glut --disable-gallium --with-driver=dri --with-dri-drivers=swrast
+> +
+> +# Mesa DRI drivers cannot be built statically, so we must force
+> +# --disable-static even if the package infrastructure globally passes
+> +# --enable-static.
+> +MESA3D_CONF_OPT = 			\
+> +	--disable-egl			\
+> +	--disable-glu			\
+> +	--disable-glw			\
+> +	--disable-glut 			\
+> +	--disable-gallium 		\
+> +	--with-driver=dri 		\
+> +	--with-dri-drivers=swrast	\
+> +	--disable-static
+> +
+>  MESA3D_INSTALL_STAGING = YES
+>  
+>  MESA3D_DEPENDENCIES = xproto_glproto xlib_libXxf86vm xlib_libXdamage xlib_libXfixes xproto_dri2proto libdrm expat
+
+
+
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
