@@ -1,9 +1,9 @@
 From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
-Date: Tue, 20 Sep 2011 17:01:27 +0800
-Subject: [Buildroot]  [PATCH 2/3] live555: install to staging
+Date: Tue, 20 Sep 2011 17:01:28 +0800
+Subject: [Buildroot]  [PATCH 3/3] mplayer: Enable live and tv options
 In-Reply-To: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
 References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <1316509288-31106-2-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,58 @@ To: buildroot@busybox.net
 
 From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-Install live555 library to staging for mplayer.
+1.Enable TV interface.
+2.Enable LIVE555 Streaming Media if live555 is available.
 
 Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 ---
- package/multimedia/live555/live555.mk |   28 ++++++++++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
+ 1 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/multimedia/live555/live555.mk b/package/multimedia/live555/live555.mk
-index 45a0375..47d6085 100644
---- a/package/multimedia/live555/live555.mk
-+++ b/package/multimedia/live555/live555.mk
-@@ -7,6 +7,7 @@
- LIVE555_VERSION = 2011.06.16
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public/
-+LIVE555_INSTALL_STAGING=YES
- LIVE555_INSTALL_TARGET = YES
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index f735464..416572c 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -75,6 +75,22 @@ else
+ MPLAYER_CONF_OPTS += --disable-mad
+ endif
  
- define LIVE555_CONFIGURE_CMDS
-@@ -26,6 +27,16 @@ define LIVE555_CLEAN_CMDS
- 	$(MAKE) -C $(@D) clean
++ifeq ($(BR2_PACKAGE_LIVE555),y)
++MPLAYER_DEPENDENCIES += live555
++MPLAYER_CONF_OPTS += --enable-live
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
++MPLAYER_LIVE555_LDFLAGS += -lliveMedia
++MPLAYER_LIVE555_LDFLAGS += -lgroupsock
++MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
++MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
++MPLAYER_LIVE555_LDFLAGS += -lstdc++
++else
++MPLAYER_CONF_OPTS += --disable-live
++endif
++
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
+@@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
+ 		--cc="$(TARGET_CC)" \
+ 		--as="$(TARGET_AS)" \
+ 		--charset=UTF-8 \
+-		--extra-cflags="$(TARGET_CFLAGS)" \
+-		--extra-ldflags="$(TARGET_LDFLAGS)" \
++		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
++		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
+ 		--enable-mad \
+ 		--enable-fbdev \
+ 		$(MPLAYER_CONF_OPTS) \
+ 		--enable-cross-compile \
+ 		--disable-ivtv \
+-		--disable-tv \
+-		--disable-live \
+ 		--enable-dynamic-plugins \
+ 	)
  endef
- 
-+LIVE555_HEADERS_TO_INSTALL += liveMedia/include
-+LIVE555_HEADERS_TO_INSTALL += groupsock/include
-+LIVE555_HEADERS_TO_INSTALL += UsageEnvironment/include
-+LIVE555_HEADERS_TO_INSTALL += BasicUsageEnvironment/include
-+
-+LIVE555_LIBS_TO_INSTALL += liveMedia/libliveMedia.a
-+LIVE555_LIBS_TO_INSTALL += groupsock/libgroupsock.a
-+LIVE555_LIBS_TO_INSTALL += UsageEnvironment/libUsageEnvironment.a
-+LIVE555_LIBS_TO_INSTALL += BasicUsageEnvironment/libBasicUsageEnvironment.a
-+
- LIVE555_FILES_TO_INSTALL- =
- LIVE555_FILES_TO_INSTALL-y =
- LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) += testProgs/openRTSP
-@@ -33,12 +44,29 @@ LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) += mediaServer/live5
- LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) += testProgs/MPEG2TransportStreamIndexer
- LIVE555_FILES_TO_INSTALL- += $(LIVE555_FILES_TO_INSTALL-y)
- 
-+define LIVE555_INSTALL_STAGING_CMDS
-+	for i in $(LIVE555_HEADERS_TO_INSTALL); do \
-+		mkdir -p $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
-+		cp -a $(@D)/$$i/* $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
-+	done; \
-+	for i in $(LIVE555_LIBS_TO_INSTALL); do \
-+		$(INSTALL) -D -m 0755 $(@D)/$$i $(STAGING_DIR)/usr/lib/`basename $$i`; \
-+	done
-+endef
-+
- define LIVE555_INSTALL_TARGET_CMDS
- 	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
- 		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i`; \
- 	done
- endef
- 
-+define LIVE555_UNINSTALL_STAGING_CMDS
-+	[ -d $(STAGING_DIR)/usr/include/live ] && rm -rf $(STAGING_DIR)/usr/include/live; \
-+	for i in $(LIVE555_LIBS_TO_INSTALL); do \
-+		rm -f $(addprefix $(STAGING_DIR)/usr/lib/, `basename $$i`); \
-+	done
-+endef
-+
- define LIVE555_UNINSTALL_TARGET_CMDS
- 	for i in $(LIVE555_FILES_TO_INSTALL-); do \
- 		rm -f $(addprefix $(TARGET_DIR)/usr/bin/, `basename $$i`); \
 -- 
 1.7.1
