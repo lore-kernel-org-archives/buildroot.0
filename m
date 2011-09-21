@@ -1,132 +1,81 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 21 Sep 2011 08:42:12 +0200
-Subject: [Buildroot] [PATCH 1 of 3] GENTARGETS: add support for scp://
-In-Reply-To: <patchbomb.1316587331@localhost6.localdomain6>
-References: <patchbomb.1316587331@localhost6.localdomain6>
-Message-ID: <8549a902c5c7070219ec.1316587332@localhost6.localdomain6>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Sep 2011 08:52:45 +0200
+Subject: [Buildroot] Xtensa support
+In-Reply-To: <522C1DF17AF50042AD8AE87F7887BD3D020C5F4943@exch.hq.tensilica.com>
+References: <1D6034426110564DA0DEA9EE9793B3835815AE17BF@NBE-MBX01.americas.swk.pri>
+ <20110315180743.5e34890b@surf>
+ <1D6034426110564DA0DEA9EE9793B3835815AE19D2@NBE-MBX01.americas.swk.pri>
+ <20110315192211.3c59f861@surf>
+ <1D6034426110564DA0DEA9EE9793B3835815AE1A1F@NBE-MBX01.americas.swk.pri>
+ <20110315210538.1973f87f@surf>
+ <779935.72384.qm@web161802.mail.bf1.yahoo.com>
+ <4D81FB3E.7060307@carallon.com> <20110318165939.651bf88b@surf>
+ <4D87C0B5.1090503@tensilica.com> <20110920203530.2cc44bee@skate>
+ <522C1DF17AF50042AD8AE87F7887BD3D020C5F4943@exch.hq.tensilica.com>
+Message-ID: <20110921085245.149d3c03@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for scp:// both for use in the package Makefiles, as for
-the BR2_PRIMARY_SITE variable.
+Hello Marc,
 
-This patch was based on the work of Richard Guy Briggs
-(see https://bugs.busybox.net/show_bug.cgi?id=3343).
+Le Tue, 20 Sep 2011 21:01:35 -0700,
+Marc Gauthier <marc@tensilica.com> a ?crit :
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> If you're curious, some of it is here, but far from cleaned up!!:
+> 
+> http://git.linux-xtensa.org/cgi-bin/git.cgi?p=buildroot/buildroot-new.git;a=shortlog;h=Xtensa-Patches
 
----
- Config.in                   |   8 ++++++++
- package/Makefile.package.in |  34 +++++++++++++++++++++++++++++-----
- 2 files changed, 37 insertions(+), 5 deletions(-)
+Sounds like most of those patches are patches against uClibc, binutils
+or gdb. It'd be better to have those patches merged in their respective
+upstreams rather than integrating those patches into Buildroot.
 
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -32,6 +32,14 @@
- 	string "Git command"
- 	default "git"
- 
-+config BR2_SCP
-+	string "Secure copy (scp) command"
-+	default "scp"
-+
-+config BR2_SSH
-+	string "Secure shell (ssh) command"
-+	default "ssh"
-+
- config BR2_ZCAT
- 	string "zcat command"
- 	default "gzip -d -c"
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -74,6 +74,8 @@
- SVN:=$(call qstrip,$(BR2_SVN)) $(QUIET)
- BZR:=$(call qstrip,$(BR2_BZR)) $(QUIET)
- GIT:=$(call qstrip,$(BR2_GIT)) $(QUIET)
-+SCP:=$(call qstrip,$(BR2_SCP)) $(QUIET)
-+SSH:=$(call qstrip,$(BR2_SSH)) $(QUIET)
- 
- # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
- # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
-@@ -85,19 +87,24 @@
- DL_DIR:=$(TOPDIR)/dl
- endif
- 
-+# URI scheme helper functions
-+geturischeme=$(firstword $(subst ://, ,$(call qstrip,$(1))))
-+stripurischeme=$(lastword $(subst ://, ,$(call qstrip,$(1))))
-+
- ################################################################################
- # The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a
- # working copy of the source repository for their corresponding SCM,
- # checking out the requested version / commit / tag, and create an
--# archive out of it. DOWNLOAD_WGET is the normal wget-based download
-+# archive out of it. DOWNLOAD_SCP uses scp to obtain a remote file with
-+# ssh authentication. DOWNLOAD_WGET is the normal wget-based download
- # mechanism.
- #
--# The SOURCE_CHECK_{GIT,SVN,BZR,WGET} helpers are in charge of simply
-+# The SOURCE_CHECK_{GIT,SVN,BZR,SCP,WGET} helpers are in charge of simply
- # checking that the source is available for download. This can be used
- # to make sure one will be able to get all the sources needed for
- # one's build configuration.
- #
--# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,WGET} helpers simply output to
-+# The SHOW_EXTERNAL_DEPS_{GIT,SVN,BZR,SCP,WGET} helpers simply output to
- # the console the names of the files that will be downloaded, or path
- # and revision of the source repositories, producing a list of all the
- # "external dependencies" of a given build configuration.
-@@ -158,6 +165,20 @@
- endef
- 
- 
-+define DOWNLOAD_SCP
-+	test -e $(DL_DIR)/$(2) || \
-+	$(SCP) $(call stripurischeme,$(call qstrip,$(1)))/$(2) $(DL_DIR)
-+endef
-+
-+define SOURCE_CHECK_SCP
-+	$(SSH) $(call stripurischeme,`echo "$(call qstrip,$(1))" | cut -d/ -f1`) ls /`echo "$(call qstrip,$(1))/$(2)" | cut -d/ -f2-` > /dev/null
-+endef
-+
-+define SHOW_EXTERNAL_DEPS_SCP
-+	echo "$($(PKG)_SITE) [scp: $($(PKG)_DL_VERSION)]"
-+endef
-+
-+
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
- 	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
-@@ -186,13 +207,17 @@
- 
- define DOWNLOAD
- 	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
--		$(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
-+		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
-+			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
-+			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
-+		esac ; \
- 	fi ; \
- 	if test -n "$(1)" ; then \
- 		case "$($(PKG)_SITE_METHOD)" in \
- 			git) $($(DL_MODE)_GIT) && exit ;; \
- 			svn) $($(DL_MODE)_SVN) && exit ;; \
- 			bzr) $($(DL_MODE)_BZR) && exit ;; \
-+			scp) $($(DL_MODE)_SCP) && exit ;; \
- 			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
-@@ -548,6 +573,8 @@
- DL_TOOLS_DEPENDENCIES += git
- else ifeq ($$($(2)_SITE_METHOD),bzr)
- DL_TOOLS_DEPENDENCIES += bzr
-+else ifeq ($$($(2)_SITE_METHOD),scp)
-+DL_TOOLS_DEPENDENCIES += scp ssh
- endif # SITE_METHOD
- 
- endif # $(2)_KCONFIG_VAR
+> > I am remain concerned by the fact that we carry some special stuff
+> > to support Xtensa, but he Xtensa architecture support has never been
+> > updated since it was merged in Buildroot. Of course, it is our goal
+> > to support configurable architectures such as Xtensa, but the
+> > support for those architectures needs to be actively maintained in
+> > Buildroot upstream.
+> 
+> Yes.  For example, some of the xtensa files under /target/ need to be
+> moved and/or refactored.  And a defconfig added in /configs/.
+> (Hopefully you now take pull requests?  easier than patches)
+
+We do take pull requests, but we like when patches are posted on the
+mailing list as well. This is easy to do with a combination of git
+pull-request + git send-email. I can share my little script to do that
+if you're interested.
+
+> > Unfortunately, none of the main Buildroot developers have
+> > Xtensa-capable hardware, so it's a bit hard to contribute to this
+> > effort.
+> 
+> Do I hear volunteers? :-)  We've discussed sending out boards in the
+> past, but that turned out to be a bit more sideline effort than hoped.
+> Looks like an easier approach is to use an instruction set simulator.
+> It can boot Linux, so should be fine.  If you're interested I'll be
+> very happy to share the details.  Helping hands are most appreciated.
+
+Having a working emulator setup would definitely be nice. However, to
+get volunteers working on something freely, one needs to put some
+incentive on the table. And usually, in the embedded space, this
+incentive is a nice hardware platform, that the open-source developer
+is so happy to receive that he will be interested in contributing. The
+charm of having a real hardware platform is a lot higher than the charm
+of the emulator, as is the incentive to contribute things :-)
+
+Of course, regardless of whether boards are made available or not, we
+will gladly take patches, review them, comment them, and help you
+merging as much as possible of the Xtensa support into the mainline
+Buildroot.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
