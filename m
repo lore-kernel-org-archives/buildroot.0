@@ -1,54 +1,83 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 21 Sep 2011 08:55:31 +0200
-Subject: [Buildroot] [PATCH 1 of 5] Support URI schemes in DOWNLOAD function,
- when not using gentargets
+Date: Wed, 21 Sep 2011 08:55:32 +0200
+Subject: [Buildroot] [PATCH 2 of 5] toolchain-external: allow downloading a
+ custom toolchain
 In-Reply-To: <patchbomb.1316588130@localhost6.localdomain6>
 References: <patchbomb.1316588130@localhost6.localdomain6>
-Message-ID: <073328f576445d4e02ea.1316588131@localhost6.localdomain6>
+Message-ID: <d181fc061658f56665ec.1316588132@localhost6.localdomain6>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using the gentargets/autotools/cmake infrastructure, the DOWNLOAD function
-uses an appropriate download method based on $(PKG)_SITE_METHOD, which is
-autodetected based on the URI if none was explicitly set.
-When the DOWNLOAD function is called directly, when not using gentargets, the
-SITE_METHOD is not autodetected, and thus the download defaults to wget.
-
-This patch adds URI scheme detection directly to the DOWNLOAD method, in case
-no SITE_METHOD was detected yet.
+Custom external toolchains currently already have to be extracted by the user.
+This patch adds support for downloading a custom toolchain in the form of a
+tarball, which will be extracted by buildroot.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/Makefile.package.in |  10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -85,6 +85,9 @@
- DL_DIR:=$(TOPDIR)/dl
+ toolchain/toolchain-external/Config.in   |  13 ++++++++++++-
+ toolchain/toolchain-external/ext-tool.mk |   9 +++++++++
+ 2 files changed, 21 insertions(+), 1 deletions(-)
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -193,12 +193,23 @@
+ config BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
+ 	bool "Download toolchain automatically"
+ 	default y
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 	help
+ 	  When enabled, Buildroot will automatically download and
+ 	  install the selected external toolchain. When disabled,
+ 	  Buildroot will use a pre-installed toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_SITE
++	string "Toolchain download site"
++	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM && BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
++	help
++	  Base URL at which the custom toolchain can be downloaded.
++
++config BR2_TOOLCHAIN_EXTERNAL_SOURCE
++	string "Toolchain filename"
++	depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM && BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD
++	help
++	  Filename of the toolchain package to download.
++
+ config BR2_TOOLCHAIN_EXTERNAL_PATH
+ 	string "Toolchain path"
+ 	default "/path/to/toolchain/usr"
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -160,6 +160,10 @@
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
  endif
  
-+# URI scheme helper function
-+geturischeme=$(firstword $(subst ://, ,$(call qstrip,$(1))))
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM),y)
++TOOLCHAIN_EXTERNAL_DEPENDENCIES += $(STAMP_DIR)/ext-toolchain-checked
++endif
 +
- ################################################################################
- # The DOWNLOAD_{GIT,SVN,BZR} helpers are in charge of getting a
- # working copy of the source repository for their corresponding SCM,
-@@ -189,7 +192,12 @@
- 		$(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
- 	fi ; \
- 	if test -n "$(1)" ; then \
--		case "$($(PKG)_SITE_METHOD)" in \
-+		if test -z "$($(PKG)_SITE_METHOD)" ; then \
-+			scheme="$(call geturischeme,$(1))" ; \
-+		else \
-+			scheme="$($(PKG)_SITE_METHOD)" ; \
-+		fi ; \
-+		case "$$scheme" in \
- 			git) $($(DL_MODE)_GIT) && exit ;; \
- 			svn) $($(DL_MODE)_SVN) && exit ;; \
- 			bzr) $($(DL_MODE)_BZR) && exit ;; \
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/
+ TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+@@ -197,11 +201,16 @@
+ TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2010R1-RC4.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
+ else
++# Custom toolchain
++TOOLCHAIN_EXTERNAL_SITE=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_SITE))
++TOOLCHAIN_EXTERNAL_SOURCE=$(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_SOURCE))
+ # A value must be set (even if unused), otherwise the
+ # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
+ # $(DL_DIR) rule
++ifeq (,$(TOOLCHAIN_EXTERNAL_SOURCE))
+ TOOLCHAIN_EXTERNAL_SOURCE=none
+ endif
++endif
+ 
+ # Special handling for Blackfin toolchain, because of the split in two
+ # tarballs, and the organization of tarball contents. The tarballs
