@@ -1,44 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Sep 2011 13:39:56 +0200
-Subject: [Buildroot] [PATCH 2 of 5] toolchain-external: allow
- downloading a custom toolchain
-In-Reply-To: <CAAXf6LX6M11OQSFbPH-hfsPPGdFgX-bq09SDhrdkVM9RhtrLkQ@mail.gmail.com>
-References: <patchbomb.1316588130@localhost6.localdomain6>
- <d181fc061658f56665ec.1316588132@localhost6.localdomain6>
- <20110921095843.453ca812@skate>
- <CAAXf6LX5Fxme9tHcKVmk92Z2E4cptuGCQ7wyGUZO3PbZQeoZXw@mail.gmail.com>
- <CAAXf6LX6M11OQSFbPH-hfsPPGdFgX-bq09SDhrdkVM9RhtrLkQ@mail.gmail.com>
-Message-ID: <20110921133956.74a14f13@skate>
+From: Vincent BENOIT <sinseman44@gmail.com>
+Date: Wed, 21 Sep 2011 13:57:45 +0200
+Subject: [Buildroot] Patches to use buildroot kernel version in crosstool-ng
+Message-ID: <CACdd115iK5hJd8q9ie_VMDzyYgHKUzG+JLOpXrVnyBinbS7QSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Sep 2011 10:23:39 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Hi all,
 
-> By the way, the reason that I made the SITE / SOURCE distinction is
-> that this is how the CodeSourcery toolchains are handled. If we are to
-> merge SITE and SOURCE into one, I think we should do it for the
-> CodeSourcery toolchains as well...
+I create patches to use the current kernel version chosen in buildroot in
+crosstool-ng
+with a new parameter (boolean) in buildroot (BR2_TOOLCHAIN_CTNG_BUILDROOT_
+KERNEL), the user can choose if he wants to use the same kernel version in
+crosstool-ng
+the makefile of package crosstool-ng is changed to download the kernel and
+apply patches before compile crosstool-ng.
 
-For the CodeSourcery toolchain, the SITE/SOURCE distinction is only
-inside the .mk file, i.e it is not visible to the user. My comment was
-strictly about what we present to the user in terms of configuration
-options, and for this, I'd like to see a single "URL" option rather
-than separate SITE/SOURCE.
+4 patches for buildroot :
 
-Now, whether we should have separate SITE/SOURCE or a single URL for
-the hardcoded CodeSourcery toolchains, I don't really care. Maybe
-having a single URL is simpler, and the URL just gets split in
-site/source when calling the download helper.
+crosstool_ng_add_new_param.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.1&disp=safe&realattid=f_gsu4z6f90&zw>
+makefile_crosstool_ng_package.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.2&disp=safe&realattid=f_gsu54dgi1&zw>
+makefile_download_kernel.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.3&disp=safe&realattid=f_gsu54lcf2&zw>
+makefile_toolchain_crosstool_ng.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.4&disp=safe&realattid=f_gsu54q1h3&zw>
 
-Regards,
+2 patches for crosstool-ng (add them in directory package/crosstool-ng/) :
+create a sym link (linux-custom) and install kernel headers
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+crosstool-ng-001-makefile-buildroot-kernel-version.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6ed82b16d8f&attid=0.5&disp=safe&realattid=f_gsu57n3h4&zw>
+crosstool-ng-002-config-buildroot-kernel-version.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6ed82b16d8f&attid=0.6&disp=safe&realattid=f_gsu57zhp5&zw>
+
+It's the first time for me sending patches and i don't know if it's the best
+way to send them by email
+
+Sincerely
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: crosstool_ng_add_new_param.patch
+Type: text/x-diff
+Size: 428 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0006.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: makefile_crosstool_ng_package.patch
+Type: text/x-diff
+Size: 721 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0007.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: makefile_download_kernel.patch
+Type: text/x-diff
+Size: 553 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0008.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: makefile_toolchain_crosstool_ng.patch
+Type: text/x-diff
+Size: 707 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0009.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: crosstool-ng-001-makefile-buildroot-kernel-version.patch
+Type: text/x-diff
+Size: 2248 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0010.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: crosstool-ng-002-config-buildroot-kernel-version.patch
+Type: text/x-diff
+Size: 812 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0011.bin>
