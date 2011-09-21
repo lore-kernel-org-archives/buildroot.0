@@ -1,82 +1,127 @@
-From: Vincent BENOIT <sinseman44@gmail.com>
-Date: Wed, 21 Sep 2011 13:57:45 +0200
-Subject: [Buildroot] Patches to use buildroot kernel version in crosstool-ng
-Message-ID: <CACdd115iK5hJd8q9ie_VMDzyYgHKUzG+JLOpXrVnyBinbS7QSQ@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 21 Sep 2011 14:16:53 +0200
+Subject: [Buildroot] [PATCH 5 of 5] toolchain-external: use host-tar
+ instead of tar to unpack toolchains
+In-Reply-To: <201109210554.57701.minimod@morethan.org>
+References: <patchbomb.1316588130@localhost6.localdomain6>
+ <20110921100243.1e55b429@skate>
+ <CAAXf6LWQj65KCeCEzb-ETyFpUPqgjtxK0MZnbAfHayBx6GXE_Q@mail.gmail.com>
+ <201109210554.57701.minimod@morethan.org>
+Message-ID: <CAAXf6LXMq4oBuo38kDNv5oUow7rn_RGwKJiozXmG4e8N+Jq1TA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi,
 
-I create patches to use the current kernel version chosen in buildroot in
-crosstool-ng
-with a new parameter (boolean) in buildroot (BR2_TOOLCHAIN_CTNG_BUILDROOT_
-KERNEL), the user can choose if he wants to use the same kernel version in
-crosstool-ng
-the makefile of package crosstool-ng is changed to download the kernel and
-apply patches before compile crosstool-ng.
+On Wed, Sep 21, 2011 at 12:54 PM, Michael S. Zick <minimod@morethan.org> wrote:
+> On Wed September 21 2011, Thomas De Schampheleire wrote:
+>> Hi,
+>>
+>> On Wed, Sep 21, 2011 at 10:02 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > Hello,
+>> >
+>> > Le Wed, 21 Sep 2011 08:55:35 +0200,
+>> > Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>> >
+>> >> Some toolchains, like the one built with buildroot itself, use hardlinks (for
+>> >> example to link between the c++ and g++ binary). Unpacking such a toolchain
+>> >> with the --strip-components options does not work correctly if the system tar
+>> >> is too old (<1.17). Even recent releases of RedHat/CentOS still ship with
+>> >> tar 1.15.
+>> >> To avoid such problems, always use host-tar instead of tar to unpack
+>> >> toolchains.
+>> >
+>> > I'm sorry but we need to find a better solution for this. I really
+>> > don't want all users to pay the price of building tar to extract
+>> > the external toolchain just because some crappy distribution has an old
+>> > version of tar. Can we make this conditional on the version of tar ?
+>> > I'd also like some comment in the code suggesting to remove this crap 1
+>> > or 2 years from now, once those RedHat/CentOS distributions will have
+>> > been upgraded.
+>> >
+>> > Also, this proposal only takes care of using the compiled host tar for
+>> > toolchain extraction. Why don't we also use it to extract all other
+>> > packages (except tar itself, of course...) ?
+>>
+>> I agree with both your points.
+>>
+>
+> A suggestion here -
+> In that build system dependencies code/file, the one recently extended
+> to also list rsync...
+>
+> Perhaps extend that with a bit of infrastructure that can check not
+> only if present (with which) but also the version?
+>
+> That should help keep the build environment sane, with a message
+> to the user if something is too old;
+> And should relieve the maintainers of the task of remembering to
+> "re-correct" the build system someday in the future.
 
-4 patches for buildroot :
+Thanks for the hint! I will definitely look into that dependencies file..
 
-crosstool_ng_add_new_param.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.1&disp=safe&realattid=f_gsu4z6f90&zw>
-makefile_crosstool_ng_package.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.2&disp=safe&realattid=f_gsu54dgi1&zw>
-makefile_download_kernel.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.3&disp=safe&realattid=f_gsu54lcf2&zw>
-makefile_toolchain_crosstool_ng.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6c9aef47abb&attid=0.4&disp=safe&realattid=f_gsu54q1h3&zw>
-
-2 patches for crosstool-ng (add them in directory package/crosstool-ng/) :
-create a sym link (linux-custom) and install kernel headers
-
-crosstool-ng-001-makefile-buildroot-kernel-version.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6ed82b16d8f&attid=0.5&disp=safe&realattid=f_gsu57n3h4&zw>
-crosstool-ng-002-config-buildroot-kernel-version.patch<http:///?ui=2&ik=374619ac2b&view=att&th=1328b6ed82b16d8f&attid=0.6&disp=safe&realattid=f_gsu57zhp5&zw>
-
-It's the first time for me sending patches and i don't know if it's the best
-way to send them by email
-
-Sincerely
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: crosstool_ng_add_new_param.patch
-Type: text/x-diff
-Size: 428 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0006.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: makefile_crosstool_ng_package.patch
-Type: text/x-diff
-Size: 721 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0007.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: makefile_download_kernel.patch
-Type: text/x-diff
-Size: 553 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0008.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: makefile_toolchain_crosstool_ng.patch
-Type: text/x-diff
-Size: 707 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0009.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: crosstool-ng-001-makefile-buildroot-kernel-version.patch
-Type: text/x-diff
-Size: 2248 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0010.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: crosstool-ng-002-config-buildroot-kernel-version.patch
-Type: text/x-diff
-Size: 812 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110921/27ca7a7a/attachment-0011.bin>
+>
+> Mike
+>> In fact, I raised the same doubts in my
+>> original patches:
+>> http://lists.busybox.net/pipermail/buildroot/2011-August/044784.html
+>> ----
+>> To be honest, I'm not sure what the best way is to handle this. The
+>> same problems with tar could occur in other places than just external
+>> toolchains. So maybe we should use host-tar in more places.
+>> On the other hand, most users have a recent, working, tar version on
+>> there system. It may thus make more sense to detect the system tar
+>> version and only use host-tar if it's too old.
+>> ----
+>>
+>>
+>> Regarding deprecating this change after some time: I'm not sure
+>> whether this is still necessary if we make this conditional on the
+>> system tar version. A user that is still on some old corporate system
+>> with RedHat 5, may still need this patch in two or three years.
+>>
+>> I'll see if I can update this patch with an automatic detection.
+>>
+>> How would you go about to use the host-tar for all packages? I need to
+>> add an extra autotargets call to package/tar/tar.mk, but I also need
+>> to redefine TAR somewhere (currently it's defined in
+>> package/Makefile.package.in). But TAR_STRIP_COMPONENTS uses TAR with a
+>> := dependency, and package/tar/tar.mk is only included after
+>> package/Makefile.package.in, so I would need to add the conditional
+>> check in two places.
+>> Unless I move the check to a new file that is included from both
+>> tar.mk and Makefile.package.in. In this case, where will I place the
+>> file?
+>> How do you see this?
+>>
+>> Thanks for your comments,
+>> Thomas
+>>
+>> >
+>> > Thomas
+>> > --
+>> > Thomas Petazzoni, Free Electrons
+>> > Kernel, drivers, real-time and embedded Linux
+>> > development, consulting, training and support.
+>> > http://free-electrons.com
+>> > _______________________________________________
+>> > buildroot mailing list
+>> > buildroot at busybox.net
+>> > http://lists.busybox.net/mailman/listinfo/buildroot
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
