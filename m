@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Sep 2011 19:13:55 +0200
-Subject: [Buildroot] [pull request] Pull request for branch xenomai-rtai
-In-Reply-To: <CAHeZHmvz_b36CPSBYR52eS0Q6vH3AZ2sPZNjfEbqwF-iQdq+jQ@mail.gmail.com>
-References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
- <CAHeZHmvz_b36CPSBYR52eS0Q6vH3AZ2sPZNjfEbqwF-iQdq+jQ@mail.gmail.com>
-Message-ID: <201109221913.56045.arnout@mind.be>
+Date: Thu, 22 Sep 2011 19:20:36 +0200
+Subject: [Buildroot] [PATCH] barebox: add support for custom version,
+	tarball, git and patch dir
+In-Reply-To: <1316290988-25108-1-git-send-email-plagnioj@jcrosoft.com>
+References: <1316290988-25108-1-git-send-email-plagnioj@jcrosoft.com>
+Message-ID: <201109221920.37170.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,24 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Sunday 18 September 2011 14:19:45, Beno?t Mauduit wrote:
-> Just one little point concerning ld.so.conf management :
-> We can use for further developpement a conf.d mechanism :
-> '/etc/ld.so.conf' which include "/etc/ld.so.conf.d/*.conf"
+On Saturday 17 September 2011 22:23:08, Jean-Christophe PLAGNIOL-VILLARD 
+wrote:
+> +config BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR
+> +       string "custom patch dir"
+> +       help
+> +         If your board requires custom patches, add the path to the
+> +         directory containing the patches here. The patches must be
+> +         named barebox-<version>-<something>.patch.
+> +
+> +         Most users may leave this empty
 
- I didn't know uClibc supported that.
+ Do people often use buildroot this way?  I always make a project-specific 
+branch of the buildroot tree and drop any patches directly in there.
+
+ Not that it hurts to have the option of course :-)
+
+ But if many people use buildroot this way, it would make total sense to try 
+to implement overlays like openembedded does.
 
  Regards,
  Arnout
