@@ -1,36 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Sep 2011 22:02:36 +0200
-Subject: [Buildroot] [PATCH 5 of 5] toolchain-external: use host-tar
-	instead of tar to unpack toolchains
-In-Reply-To: <201109210554.57701.minimod@morethan.org>
-References: <patchbomb.1316588130@localhost6.localdomain6>
- <CAAXf6LWQj65KCeCEzb-ETyFpUPqgjtxK0MZnbAfHayBx6GXE_Q@mail.gmail.com>
- <201109210554.57701.minimod@morethan.org>
-Message-ID: <201109222202.37083.arnout@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 22 Sep 2011 22:15:03 +0200
+Subject: [Buildroot] User-enabled host packages?
+In-Reply-To: <20110921153133.2d816865@skate>
+References: <4E79E001.7010409@lucaceresoli.net> <20110921153133.2d816865@skate>
+Message-ID: <4E7B9747.4080303@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas Petazzoni wrote:
+> Le Wed, 21 Sep 2011 15:00:49 +0200,
+> Luca Ceresoli<luca@lucaceresoli.net>  a ?crit :
+>
+>> All of these examples are about tools that could generally be
+>> downloaded, built and installed by each developer on their own
+>> machine. Nevertheless any developer may benefit from having them
+>> built inside buildroot: it would be more handy and quick to build
+>> them, and also guarantee that the version used in buildroot is
+>> somehow tested by other buildroot users.
+>>
+>> Moreover, some packages (such as omap-u-boot-utils for which I posted
+>> a patch) have their own right of being inside buildroot because they
+>> also contribute to building the BR images. Having a user option to
+>> build them, even if they are not required for image generation, would
+>> require little effort.
+>>
+>> So the big question is: do we want some host packages to be enabled
+>> vie a user option?
+>>
+>> Where do we want these user options?
+>> How about a newly created "Host tools" menu at top level?
+>>
+>> Does anybody have additional examples in favor or against?
+>
+> And also:
+>
+> If we decide to show /some/ host tools (but not all) in menuconfig, what
+> is the boundary between host tools visible in menuconfig and those not
+> visible in menuconfig ?
 
-On Wednesday 21 September 2011 12:54:55, Michael S. Zick wrote:
-> That should help keep the build environment sane, with a message
-> to the user if something is too old;
-> And should relieve the maintainers of the task of remembering to
-> "re-correct" the build system someday in the future.
+My opinion is that this would be based on user needs.
 
- How does that help the users who are stuck on RH5?  Buildroot would still not 
-work for them (although with a clearer explanation why not), so they'd have to 
-implement Thomas's patches after all.
+Whenever a BR user feels the need of adding a host tool here, he would
+propose a patch to do so. If nobody will feel the need for host-foo,
+then nobody will write a patch to add it.
 
- Regards,
- Arnout
+That's what happens with regular packages, ain't that true?
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Luca
