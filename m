@@ -1,52 +1,67 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 22 Sep 2011 22:15:03 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 22 Sep 2011 22:53:42 +0200
 Subject: [Buildroot] User-enabled host packages?
 In-Reply-To: <20110921153133.2d816865@skate>
 References: <4E79E001.7010409@lucaceresoli.net> <20110921153133.2d816865@skate>
-Message-ID: <4E7B9747.4080303@lucaceresoli.net>
+Message-ID: <201109222253.42536.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Le Wed, 21 Sep 2011 15:00:49 +0200,
-> Luca Ceresoli<luca@lucaceresoli.net>  a ?crit :
->
->> All of these examples are about tools that could generally be
->> downloaded, built and installed by each developer on their own
->> machine. Nevertheless any developer may benefit from having them
->> built inside buildroot: it would be more handy and quick to build
->> them, and also guarantee that the version used in buildroot is
->> somehow tested by other buildroot users.
->>
->> Moreover, some packages (such as omap-u-boot-utils for which I posted
->> a patch) have their own right of being inside buildroot because they
->> also contribute to building the BR images. Having a user option to
->> build them, even if they are not required for image generation, would
->> require little effort.
->>
->> So the big question is: do we want some host packages to be enabled
->> vie a user option?
->>
->> Where do we want these user options?
->> How about a newly created "Host tools" menu at top level?
->>
->> Does anybody have additional examples in favor or against?
->
+
+On Wednesday 21 September 2011 15:31:33, Thomas Petazzoni wrote:
+> > So the big question is: do we want some host packages to be enabled
+> > vie a user option?
+
+ We already have one: BR2_PACKAGE_GDB_HOST.
+
+ Other possible candidates are the installers for boot loaders (grub, 
+syslinux), target image manipulation programs (parted, fdisk, e2fsprogs, 
+uboot-tools), tools to communicate with the target (openocd, tftpd), and maybe 
+even scripting languages for running test suites (expect, python).
+
+ However, I'm not sure of the value of having these in the .config.  If I need 
+them, it's anyway for use in build scripts that run on top of buildroot, and 
+then I can just run a "make world host-e2fsprogs".  The paths to the host 
+tools are anyway so long that even when you need them in your shell, typing an 
+additional make host-xxx first is really no effort.
+
+
+> > Where do we want these user options?
+> > How about a newly created "Host tools" menu at top level?
+
+ That would mean they don't sit in their package's Config.in.  Still, it would 
+be the most logical place.  Anyway there normally is no impact on the 
+package's makefile since the config option is taken care of by GENTARGETS.
+
+
+> > Does anybody have additional examples in favor or against?
+
+ I don't have anything against it.  But no real driving reason for it either.
+
+
 > And also:
->
-> If we decide to show /some/ host tools (but not all) in menuconfig, what
+> 
+> If we decide to show some host tools (but not all) in menuconfig, what
 > is the boundary between host tools visible in menuconfig and those not
 > visible in menuconfig ?
 
-My opinion is that this would be based on user needs.
+ Similar as for the boundary between when to have a configuration option for 
+different versions of a package.  Depends on what users need.
 
-Whenever a BR user feels the need of adding a host tool here, he would
-propose a patch to do so. If nobody will feel the need for host-foo,
-then nobody will write a patch to add it.
 
-That's what happens with regular packages, ain't that true?
+ Can someone summarize the arguments that were used when this discussion took 
+place a few years ago?
 
-Luca
+
+ Regards,
+ Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
