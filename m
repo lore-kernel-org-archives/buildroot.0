@@ -1,38 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 Sep 2011 21:55:27 +0200
-Subject: [Buildroot] [PATCH] barebox: add support for custom version,
-	tarball, git and patch dir
-In-Reply-To: <201109221920.37170.arnout@mind.be> (Arnout Vandecappelle's
- message of "Thu, 22 Sep 2011 19:20:36 +0200")
-References: <1316290988-25108-1-git-send-email-plagnioj@jcrosoft.com>
- <201109221920.37170.arnout@mind.be>
-Message-ID: <87d3es1he8.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Sep 2011 21:58:17 +0200
+Subject: [Buildroot] [PATCH] linux custom tarball: automatically detect
+ a change in tarball configuration
+In-Reply-To: <7ee0d57e0b0bbf8917e2.1316595354@localhost6.localdomain6>
+References: <7ee0d57e0b0bbf8917e2.1316595354@localhost6.localdomain6>
+Message-ID: <20110922215817.1bba4c82@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Le Wed, 21 Sep 2011 10:55:54 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
- Arnout> On Saturday 17 September 2011 22:23:08, Jean-Christophe PLAGNIOL-VILLARD 
- Arnout> wrote:
- >> +config BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR
- >> +       string "custom patch dir"
- >> +       help
- >> +         If your board requires custom patches, add the path to the
- >> +         directory containing the patches here. The patches must be
- >> +         named barebox-<version>-<something>.patch.
- >> +
- >> +         Most users may leave this empty
+> When you specify a LINUX_TARBALL, the variable LINUX_VERSION will be set to
+> the fixed "custom". As a result, LINUX_DIR remains the same even though you
+> modified the .config file to specify a different tarball.  When re-running
+> make, buildroot does not see the change because the stamp files still look
+> up-to-date, and you'll have to force building the new kernel in some way.
+> 
+> This patch overwrites LINUX_VERSION to include the LINUX_TARBALL string, If a
+> new custom tarball is configured, LINUX_DIR will be different, the old stamp
+> files will not matter, and buildroot will correctly start the build process for
+> the new kernel.
 
- Arnout>  Do people often use buildroot this way?  I always make a
- Arnout> project-specific branch of the buildroot tree and drop any
- Arnout> patches directly in there.
+Sorry, but LINUX_TARBALL can be something like
+http://foobar.com/blah/blek/linux-3.11.0.tar.bz2, and I don't think
+it's a good idea to create a directory named
+linux-custom-http://foobar.com/blah/blek/linux-3.11.0.tar.bz2
 
-I need to support a bunch of projects at work, so I keep them all in a
-seperate repo (which gets synced with mainline buildroot ever so
-often. Bootloader and kernel are likewise in (shared) local repos.
+You could do something like:
 
+LINUX_VERSION = $(LINUX_SOURCE), in which case the directory would be:
+
+linux-linux-3.11.0.tar.bz2/ in the case highlighted above, which is not
+very nice either.
+
+Or:
+
+LINUX_VERSION = $(firstword $(shell echo $(LINUX_TARBALL) | md5sum)
+
+which would create a hash from the LINUX_TARBALL URL, and that hash
+would change when the LINUX_TARBALL URL is changed. I don't know if
+it's nicer.
+
+I agree that their is a minor inconvenience in having the directory
+always named linux-custom/, but I don't have a good solution in mind.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
