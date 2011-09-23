@@ -1,32 +1,25 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Fri, 23 Sep 2011 11:17:23 +0200
-Subject: [Buildroot] [PATCH] dbus: bump to 1.4.16
-Message-ID: <4E7C4EA3.6010404@visionsystems.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 23 Sep 2011 09:20:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 2611] New package: lame (LAME MP3 Encoder)
+In-Reply-To: <bug-2611-163@https.bugs.busybox.net/>
+References: <bug-2611-163@https.bugs.busybox.net/>
+Message-ID: <20110923092059.DDC9A8DA03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/dbus/dbus.mk |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=2611
 
-Index: b/package/dbus/dbus.mk
-===================================================================
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -3,11 +3,10 @@
- # dbus
- #
- #############################################################
--DBUS_VERSION = 1.4.14
-+DBUS_VERSION = 1.4.16
- DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
- DBUS_INSTALL_STAGING = YES
--DBUS_INSTALL_TARGET = YES
- 
- DBUS_DEPENDENCIES = host-pkg-config
- 
+Maxime Ripard <maxime.ripard@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|thomas.petazzoni at free-elect |maxime.ripard at free-electron
+                   |rons.com                    |s.com
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
