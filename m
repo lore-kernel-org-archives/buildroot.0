@@ -1,86 +1,85 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Fri, 23 Sep 2011 09:49:41 +0800
-Subject: [Buildroot] [PATCH 3/3] mplayer: Enable live and tv options
-In-Reply-To: <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
-References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
- <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <CAJhJPsXQsF6yAoL9ZFaV4J8A-Jg=O9gGTwodvbyBVumWQ4NWSA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 23 Sep 2011 08:16:09 +0200
+Subject: [Buildroot] [PATCH] linux custom tarball: automatically detect
+ a change in tarball configuration
+In-Reply-To: <20110922215817.1bba4c82@skate>
+References: <7ee0d57e0b0bbf8917e2.1316595354@localhost6.localdomain6>
+ <20110922215817.1bba4c82@skate>
+Message-ID: <CAAXf6LWbsf0WP-A_n3DkV2mdRn54CiL=3AWFckDeuF=L2-Y31A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter and Thomas,
+Hi Thomas,
 
-What about these patches?
-Any suggestions?
-
-2011/9/20, keguang.zhang at gmail.com <keguang.zhang@gmail.com>:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
+On Thu, Sep 22, 2011 at 9:58 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Wed, 21 Sep 2011 10:55:54 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 >
-> 1.Enable TV interface.
-> 2.Enable LIVE555 Streaming Media if live555 is available.
+>> When you specify a LINUX_TARBALL, the variable LINUX_VERSION will be set to
+>> the fixed "custom". As a result, LINUX_DIR remains the same even though you
+>> modified the .config file to specify a different tarball. ?When re-running
+>> make, buildroot does not see the change because the stamp files still look
+>> up-to-date, and you'll have to force building the new kernel in some way.
+>>
+>> This patch overwrites LINUX_VERSION to include the LINUX_TARBALL string, If a
+>> new custom tarball is configured, LINUX_DIR will be different, the old stamp
+>> files will not matter, and buildroot will correctly start the build process for
+>> the new kernel.
 >
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> ---
->  package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
->  1 files changed, 18 insertions(+), 4 deletions(-)
->
-> diff --git a/package/multimedia/mplayer/mplayer.mk
-> b/package/multimedia/mplayer/mplayer.mk
-> index f735464..416572c 100644
-> --- a/package/multimedia/mplayer/mplayer.mk
-> +++ b/package/multimedia/mplayer/mplayer.mk
-> @@ -75,6 +75,22 @@ else
->  MPLAYER_CONF_OPTS += --disable-mad
->  endif
->
-> +ifeq ($(BR2_PACKAGE_LIVE555),y)
-> +MPLAYER_DEPENDENCIES += live555
-> +MPLAYER_CONF_OPTS += --enable-live
-> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
-> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
-> +MPLAYER_LIVE555_CFLAGS +=
-> -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
-> +MPLAYER_LIVE555_CFLAGS +=
-> -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lliveMedia
-> +MPLAYER_LIVE555_LDFLAGS += -lgroupsock
-> +MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lstdc++
-> +else
-> +MPLAYER_CONF_OPTS += --disable-live
-> +endif
-> +
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-> @@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
->  		--cc="$(TARGET_CC)" \
->  		--as="$(TARGET_AS)" \
->  		--charset=UTF-8 \
-> -		--extra-cflags="$(TARGET_CFLAGS)" \
-> -		--extra-ldflags="$(TARGET_LDFLAGS)" \
-> +		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
-> +		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
->  		--enable-mad \
->  		--enable-fbdev \
->  		$(MPLAYER_CONF_OPTS) \
->  		--enable-cross-compile \
->  		--disable-ivtv \
-> -		--disable-tv \
-> -		--disable-live \
->  		--enable-dynamic-plugins \
->  	)
->  endef
-> --
-> 1.7.1
->
+> Sorry, but LINUX_TARBALL can be something like
+> http://foobar.com/blah/blek/linux-3.11.0.tar.bz2, and I don't think
+> it's a good idea to create a directory named
+> linux-custom-http://foobar.com/blah/blek/linux-3.11.0.tar.bz2
 >
 
+Ai, I didn't think of that. In my case, I'm relying on the
+BR2_PRIMARY_SITE to know where the tarball is at.
+The directory that's created in that case would be:
+linux-custom-linux-2.XXX-myproject.tar.bz2
 
--- 
-Best Regards!
-Kelvin
+> You could do something like:
+>
+> LINUX_VERSION = $(LINUX_SOURCE), in which case the directory would be:
+>
+> linux-linux-3.11.0.tar.bz2/ in the case highlighted above, which is not
+> very nice either.
+
+I agree that these directory names do not look very good. But they do
+uniquely map a custom tarball on a directory, and cause the build
+process to detect a change in tarball.
+Personally, I don't mind having such a funny-looking directory in output/build.
+
+>
+> Or:
+>
+> LINUX_VERSION = $(firstword $(shell echo $(LINUX_TARBALL) | md5sum)
+>
+> which would create a hash from the LINUX_TARBALL URL, and that hash
+> would change when the LINUX_TARBALL URL is changed. I don't know if
+> it's nicer.
+
+This would also do the trick, but has the downside of not being
+user-readable. If a user changes from tarball, he will have two linux
+directories in output/build, and no direct way of knowing which is the
+old and new one (except for looking at the timestamp or calculating
+the md5sum himself).
+
+>
+> I agree that their is a minor inconvenience in having the directory
+> always named linux-custom/, but I don't have a good solution in mind.
+
+The other solution that I implemented in buildroot-2010.11 is to make
+the download step depend on the tarball, instead of on a stamp file.
+Since linux now uses gentargets, this would require a change in the
+whole of gentargets as well.
+Essentially, the .stamp_downloaded file would be no longer needed, and
+the tarball would serve as stamp file.
+
+Would you prefer such a solution?
+
+Best regards,
+Thomas
