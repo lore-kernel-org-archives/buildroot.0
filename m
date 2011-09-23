@@ -1,95 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Sep 2011 09:46:36 +0200
-Subject: [Buildroot] User-enabled host packages?
-In-Reply-To: <201109222253.42536.arnout@mind.be>
-References: <4E79E001.7010409@lucaceresoli.net> <20110921153133.2d816865@skate>
- <201109222253.42536.arnout@mind.be>
-Message-ID: <20110923094636.030653fe@skate>
+Date: Fri, 23 Sep 2011 09:49:14 +0200
+Subject: [Buildroot] [PATCH] barebox: add support for custom version,
+ tarball, git and patch dir
+In-Reply-To: <201109222145.19265.arnout@mind.be>
+References: <1316290988-25108-1-git-send-email-plagnioj@jcrosoft.com>
+ <201109221920.37170.arnout@mind.be> <20110922205759.01de08f3@skate>
+ <201109222145.19265.arnout@mind.be>
+Message-ID: <20110923094914.5c13b978@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Le Thu, 22 Sep 2011 22:53:42 +0200,
+Le Thu, 22 Sep 2011 21:45:19 +0200,
 Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> On Wednesday 21 September 2011 15:31:33, Thomas Petazzoni wrote:
-> > > So the big question is: do we want some host packages to be enabled
-> > > vie a user option?
-> 
->  We already have one: BR2_PACKAGE_GDB_HOST.
+>  Since I have a separate branch or even repository per project, yes I put them 
+> directly into the package directories.  But I realize this is not necessarily 
+> the best way to work.
 
-Right. And also binutils uses the package infrastructure, and its host
-variant is visible in menuconfig. But we can argue that binutils/gdb
-being part of the toolchain, those are "special".
+I don't think there "a best way" to work, but I think that for highly
+hardware-dependent packages such as bootloaders and kernel, it makes
+sense to offer some options to apply additional patches.
 
->  Other possible candidates are the installers for boot loaders (grub, 
-> syslinux), target image manipulation programs (parted, fdisk, e2fsprogs, 
-> uboot-tools), tools to communicate with the target (openocd, tftpd), and maybe 
-> even scripting languages for running test suites (expect, python).
+Note that this option not only supports a local directory, but also the
+URL of a patch, or the URL of a tarball containing patches. This can be
+very useful for hardware manufacturers who want to ship a Buildroot
+environment with a proper configuration. They can just do a config that
+says:
 
-Right.
-
->  However, I'm not sure of the value of having these in the .config.  If I need 
-> them, it's anyway for use in build scripts that run on top of buildroot, and 
-> then I can just run a "make world host-e2fsprogs".  The paths to the host 
-> tools are anyway so long that even when you need them in your shell, typing an 
-> additional make host-xxx first is really no effort.
-
-Well, I guess it's slightly more convenient. I regularly ship
-customized Buildroot configurations as development environment for
-embedded projects, and it would definitely be nice to be able to keep
-the simple :
-
-	make blabla_defconfig
-	make
-
-documentation, and allow the user to have all needed host tools in
-$(HOST_DIR), including tools to reflash the firmware on the device, or
-other utilities as you mentioned. Of course, I can document to run
-"make world host-foobar", but that sounds less integrated. But I have
-no strong opinion here.
-
->  That would mean they don't sit in their package's Config.in.  Still, it would 
-> be the most logical place.  Anyway there normally is no impact on the 
-> package's makefile since the config option is taken care of by GENTARGETS.
-
-For those packages, we could have a separate Config.in.host in the
-package directory, which would be included by the top-level
-package/Config.in to make the host package appear in this new "Host
-tools" menu.
-
-> > And also:
-> > 
-> > If we decide to show some host tools (but not all) in menuconfig, what
-> > is the boundary between host tools visible in menuconfig and those not
-> > visible in menuconfig ?
-> 
->  Similar as for the boundary between when to have a configuration option for 
-> different versions of a package.  Depends on what users need.
-
-Ok, but I'd for example like to avoid having the myriad of X11
-libraries that we need to build for the host visible in the menuconfig.
-
->  Can someone summarize the arguments that were used when this discussion took 
-> place a few years ago?
-
-As far as I remember, host utilities have almost never been visible
-into menuconfig, besides a few exceptions (fakeroot comes to mind). At
-the time, there was only the AUTOTARGETS infrastructure (non-autotools
-packages were handled by hand-written makefiles) and the AUTOTARGETS
-infrastructure did support only target packages (host autotools
-packages were handled by hand-written makefiles). When we started
-to support host packages into the package infrastructure, we clearly
-stated that those would not be visible, as they were only necessary as
-mere dependencies for the rest of the build process, and that for this
-reason, the user had no need to see them, because he wouldn't
-use/interact with them directly.
-
-Regards,
+ * Use Linux 3.0
+ * Use Linux patches available at
+   http://foobar.com/linux-3.0-my-patches.tar.bz2
+ * Use U-Boot 2011.09
+ * Use U-Boot patches available at
+   http://foobar.com/u-boot-2001.09-my-patches.tar.bz2
 
 Thomas
 -- 
