@@ -1,12 +1,17 @@
-From: MARCEL JANSSEN <korgull@home.nl>
-Date: Sun, 25 Sep 2011 06:40:03 +0200
-Subject: [Buildroot] Antw: Antw:Re:  libgcc build fails on Fedora15
-Message-ID: <7340d14feedea.4e7eccc3@home.nl>
+From: Allan W. Nielsen <a@awn.dk>
+Date: Sun, 25 Sep 2011 08:40:23 +0200
+Subject: [Buildroot] Boost 1.47, agian
+Message-ID: <1316932824-18950-1-git-send-email-a@awn.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110925/c9c5e2c8/attachment.html>
+Hi,
+
+Thanks for the comments, the package is updated with all the
+suggestions.
+
+Best regards
+Allan W. Nielsen
