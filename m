@@ -1,36 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Sep 2011 07:26:35 +0200
-Subject: [Buildroot] [PATCH] dbus: bump to 1.4.16
-In-Reply-To: <4E7C4EA3.6010404@visionsystems.de> (Yegor Yefremov's message of
- "Fri, 23 Sep 2011 11:17:23 +0200")
-References: <4E7C4EA3.6010404@visionsystems.de>
-Message-ID: <87ipofyius.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 25 Sep 2011 20:48:46 +0200
+Subject: [Buildroot] [git commit] acpid: bump to 2.0.11
+Message-ID: <20110926052650.68EDC8DA8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=da9ebfbe9c12711d9dc8561bd11c0f3ae615c61d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- Yegor> ---
- Yegor>  package/dbus/dbus.mk |    3 +--
- Yegor>  1 file changed, 1 insertion(+), 2 deletions(-)
+acpid 2.0.6 does not compile? So bump to 2.0.11
 
- Yegor> Index: b/package/dbus/dbus.mk
- Yegor> ===================================================================
- Yegor> --- a/package/dbus/dbus.mk
- Yegor> +++ b/package/dbus/dbus.mk
- Yegor> @@ -3,11 +3,10 @@
- Yegor>  # dbus
- Yegor>  #
- Yegor>  #############################################################
- Yegor> -DBUS_VERSION = 1.4.14
- Yegor> +DBUS_VERSION = 1.4.16
+Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/acpid/acpid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index d61ca41..cc4e45b 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -3,7 +3,7 @@
+ # acpid
+ #
+ #############################################################
+-ACPID_VERSION = 2.0.6
++ACPID_VERSION = 2.0.11
+ ACPID_SOURCE = acpid_$(ACPID_VERSION).orig.tar.gz
+ ACPID_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/a/acpid
+ 
