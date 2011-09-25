@@ -1,30 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 25 Sep 2011 20:36:52 +0200
-Subject: [Buildroot] [git commit] taglib: bump to 1.7
-Message-ID: <20110925184625.89A458D4BF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 Sep 2011 20:48:56 +0200
+Subject: [Buildroot] [PATCH] acpid: bump to 2.0.11
+In-Reply-To: <20110814160808.53d3acb6@gmail.com> (Frederic Bassaler's message
+ of "Sun, 14 Aug 2011 16:08:08 +0200")
+References: <20110814160808.53d3acb6@gmail.com>
+Message-ID: <878vpczcdj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=945b5356faae24b6d474d370e16e543090ce2a44
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Frederic" == Frederic Bassaler <frederic.bassaler@gmail.com> writes:
 
-Bump the version of taglib to 1.7. This version does not any longer
-ship with a configure script so convert the package from autotargets
-to cmaketargets.
+ Frederic> acpid 2.0.6 does not compile? So bump to 2.0.11
+ Frederic> Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
 
-The 1.7 version offers optional support for MP4 and WMA files.
-Expose these options in buildroot.
+Committedd, thanks.
 
-[Peter: drop unneded dependencies, keep target install, fix Config.in indent]
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/taglib/Config.in                |    9 +
- package/multimedia/taglib/taglib-1.5-libtool.patch | 4084 --------------------
- package/multimedia/taglib/taglib.mk                |   16 +-
- 3 files changed, 17 insertions(+), 4092 deletions(-)
-
-Patch is too large, so refusing to show it
+-- 
+Bye, Peter Korsgaard
