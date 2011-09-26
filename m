@@ -1,32 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 Sep 2011 08:46:24 +0200
-Subject: [Buildroot] Antw: Antw:Re:  libgcc build fails on Fedora15
-In-Reply-To: <7340d14feedea.4e7eccc3@home.nl>
-References: <7340d14feedea.4e7eccc3@home.nl>
-Message-ID: <20110926084624.0851437a@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 26 Sep 2011 09:46:43 +0300
+Subject: [Buildroot] [PATCH] toolchain: fix build with empty
+	BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS
+Message-ID: <6a4325eb6bbe6622b6a8b7d1bc3a7279866e6716.1317019552.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 25 Sep 2011 06:40:03 +0200,
-"MARCEL JANSSEN" <korgull@home.nl> a ?crit :
+The "" string is not equal to the empty string.
 
-> The log doesn't show the error, but it's printed in the terminal :
-> /bin/sh: error while loading shared
-> libraries: /admesy/arm/buildroot/output/toolchain/gcc-4.4.6-intermediate/./gcc/libgcc_s.so.1:
-> ELF file OS ABI invalid
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ toolchain/toolchain-external/ext-tool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-You're building for the OABI ARM ABI, which almost nobody uses, and
-indeed breaks in the configuration you gave. Unless you have strong
-reasons to keep working with OABI (legacy binaries that you can't
-recompile), I would strongly suggest to use EABI. This is what
-everybody uses these days.
-
-Thomas
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index a357cb9..3c4ef45 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -131,7 +131,7 @@ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+ 
+ # march/mtune/floating point mode needs to be passed to the external toolchain
+ # to select the right multilib variant
+-ifneq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS),)
++ifneq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS),"")
+ TOOLCHAIN_EXTERNAL_CFLAGS += $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS)
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_OPT='$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS)'
+ endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.6.3
