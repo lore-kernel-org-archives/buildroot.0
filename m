@@ -1,67 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Sep 2011 21:35:12 +0200
-Subject: [Buildroot] [git commit] busybox: add 1.19.2 tail fix
-Message-ID: <20110926204530.248158DA7B@busybox.osuosl.org>
+Date: Mon, 26 Sep 2011 22:16:08 +0200
+Subject: [Buildroot] [git commit] kexec: fix compilation with gcc 4.6
+Message-ID: <20110926204530.BE0E48DA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f83cacf3b5e3f8b32a16f7557b29241f5a2da246
+commit: http://git.buildroot.net/buildroot/commit/?id=b766ed21e8b5499dd2237d80358229de04ddab9a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+gcc 4.6 has stricter checks for invalid command-line options.
+Fix compilation by passing linker options with -Wl,
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../busybox-1.19.2/busybox-1.19.2-tail.patch       |   43 ++++++++++++++++++++
- 1 files changed, 43 insertions(+), 0 deletions(-)
+ package/kexec/kexec-fix-linker-options.patch |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/busybox/busybox-1.19.2/busybox-1.19.2-tail.patch b/package/busybox/busybox-1.19.2/busybox-1.19.2-tail.patch
+diff --git a/package/kexec/kexec-fix-linker-options.patch b/package/kexec/kexec-fix-linker-options.patch
 new file mode 100644
-index 0000000..f3cc798
+index 0000000..7bd5f1d
 --- /dev/null
-+++ b/package/busybox/busybox-1.19.2/busybox-1.19.2-tail.patch
-@@ -0,0 +1,43 @@
-+--- busybox-1.19.2/coreutils/tail.c
-++++ busybox-1.19.2-tail/coreutils/tail.c
-+@@ -203,7 +203,7 @@ int tail_main(int argc, char **argv)
-+ 		int fd = fds[i];
++++ b/package/kexec/kexec-fix-linker-options.patch
+@@ -0,0 +1,15 @@
++Fix compilation with gcc 4.6 by correcting the way that linker options
++are passed to gcc.
++
++Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
++--- kexec-2.0.2/purgatory/Makefile.orig	2011-09-26 14:16:44.256595912 +0200
+++++ kexec-2.0.2/purgatory/Makefile	2011-09-26 14:17:01.606621357 +0200
++@@ -56,7 +56,7 @@
++ 			-I$(srcdir)/include \
++ 			-I$(shell $(CC) -print-file-name=include)
++ $(PURGATORY): LDFLAGS=$($(ARCH)_PURGATORY_EXTRA_CFLAGS)\
++-			--no-undefined -nostartfiles -nostdlib -nodefaultlibs \
+++			-Wl,-no-undefined -nostartfiles -nostdlib -nodefaultlibs \
++ 			-e purgatory_start -r
 + 
-+ 		if (ENABLE_FEATURE_FANCY_TAIL && fd < 0)
-+-			continue; /* may happen with -E */
-++			continue; /* may happen with -F */
-+ 
-+ 		if (nfiles > header_threshhold) {
-+ 			tail_xprint_header(fmt, argv[i]);
-+@@ -252,14 +252,14 @@ int tail_main(int argc, char **argv)
-+ 		 * Used only by +N code ("start from Nth", 1-based): */
-+ 		seen = 1;
-+ 		newlines_seen = 0;
-+-		while ((nread = tail_read(fd, buf, tailbufsize-taillen)) > 0) {
-++		while ((nread = tail_read(fd, buf, tailbufsize - taillen)) > 0) {
-+ 			if (G.from_top) {
-+ 				int nwrite = nread;
-+ 				if (seen < count) {
-+ 					/* We need to skip a few more bytes/lines */
-+ 					if (COUNT_BYTES) {
-+ 						nwrite -= (count - seen);
-+-						seen = count;
-++						seen += nread;
-+ 					} else {
-+ 						char *s = buf;
-+ 						do {
-+--- busybox-1.19.2/testsuite/tail.tests
-++++ busybox-1.19.2-tail/testsuite/tail.tests
-+@@ -14,4 +14,12 @@ testing "tail: +N with N > file length" 
-+ 	"0\n" \
-+ 	"" "qw"
-+ 
-++testing "tail: -c +N with largish N" \
-++	"
-++	dd if=/dev/zero bs=16k count=1 2>/dev/null | tail -c +8200 | wc -c;
-++	dd if=/dev/zero bs=16k count=1 2>/dev/null | tail -c +8208 | wc -c;
-++	" \
-++	"8185\n8177\n" \
-++	"" ""
-++
-+ exit $FAILCOUNT
++ $(PURGATORY): $(PURGATORY_OBJS)
