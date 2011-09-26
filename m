@@ -1,54 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 26 Sep 2011 14:47:06 +0300
-Subject: [Buildroot] [PATCH 1/2] valgrind: fix build on Linux kernel 3.x
-Message-ID: <a0e42495d61b96627650851ccde32672b8cedc7d.1317037531.git.baruch@tkos.co.il>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 26 Sep 2011 14:31:17 +0200
+Subject: [Buildroot] [PATCH] kexec: fix compilation with gcc 4.6
+Message-ID: <1317040277-1183-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../valgrind-3.6.1-configure-support-linux-3.patch |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
+gcc 4.6 has stricter checks for invalid command-line options.
+Fix compilation by passing linker options with -Wl,
 
-diff --git a/package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch b/package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/kexec/kexec-fix-linker-options.patch |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
+ create mode 100644 package/kexec/kexec-fix-linker-options.patch
+
+diff --git a/package/kexec/kexec-fix-linker-options.patch b/package/kexec/kexec-fix-linker-options.patch
 new file mode 100644
-index 0000000..a3b2482
+index 0000000..7bd5f1d
 --- /dev/null
-+++ b/package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
-@@ -0,0 +1,30 @@
-+Add support for kernel 3.x. From upstream r11796 (via Debian).
++++ b/package/kexec/kexec-fix-linker-options.patch
+@@ -0,0 +1,15 @@
++Fix compilation with gcc 4.6 by correcting the way that linker options
++are passed to gcc.
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+Index: valgrind-3.6.1/configure.in
-+===================================================================
-+--- valgrind-3.6.1.orig/configure.in	2011-02-15 18:31:17.000000000 +0100
-++++ valgrind-3.6.1/configure.in	2011-07-08 22:36:36.051563848 +0200
-+@@ -220,7 +220,7 @@
-+         kernel=`uname -r`
++Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
++--- kexec-2.0.2/purgatory/Makefile.orig	2011-09-26 14:16:44.256595912 +0200
+++++ kexec-2.0.2/purgatory/Makefile	2011-09-26 14:17:01.606621357 +0200
++@@ -56,7 +56,7 @@
++ 			-I$(srcdir)/include \
++ 			-I$(shell $(CC) -print-file-name=include)
++ $(PURGATORY): LDFLAGS=$($(ARCH)_PURGATORY_EXTRA_CFLAGS)\
++-			--no-undefined -nostartfiles -nostdlib -nodefaultlibs \
+++			-Wl,-no-undefined -nostartfiles -nostdlib -nodefaultlibs \
++ 			-e purgatory_start -r
 + 
-+         case "${kernel}" in
-+-             2.6.*) 
-++             2.6.*|3.*) 
-+         	    AC_MSG_RESULT([2.6 family (${kernel})])
-+         	    AC_DEFINE([KERNEL_2_6], 1, [Define to 1 if you're using Linux 2.6.x])
-+         	    ;;
-+Index: valgrind-3.6.1/configure
-+===================================================================
-+--- valgrind-3.6.1.orig/configure	2011-07-08 22:37:18.911240743 +0200
-++++ valgrind-3.6.1/configure	2011-07-08 22:37:44.847045178 +0200
-+@@ -5348,7 +5348,7 @@
-+         kernel=`uname -r`
-+ 
-+         case "${kernel}" in
-+-             2.6.*)
-++             2.6.*|3.*)
-+         	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: 2.6 family (${kernel})" >&5
-+ $as_echo "2.6 family (${kernel})" >&6; }
-+ 
++ $(PURGATORY): $(PURGATORY_OBJS)
 -- 
-1.7.6.3
+1.7.5.4
