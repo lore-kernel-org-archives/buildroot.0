@@ -1,54 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 Sep 2011 22:36:46 +0200
-Subject: [Buildroot] [PATCH 1/1] cifs-utils: new package
-In-Reply-To: <515aeaac2f96b302ad89abf28796ab86f1b940d7.1316468572.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 19 Sep 2011 23:42:57 +0200")
-References: <cover.1316468572.git.thomas.petazzoni@free-electrons.com>
- <cover.1316468572.git.thomas.petazzoni@free-electrons.com>
- <515aeaac2f96b302ad89abf28796ab86f1b940d7.1316468572.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87litbvy5d.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 26 Sep 2011 22:17:12 +0200
+Subject: [Buildroot] [git commit] kexec: tweak zlib option name
+Message-ID: <20110926204530.F369A8DA9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=62fc4c0f77a4c042704468c1ecd40d7776f9a0bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To match other _ZLIB options.
 
-Thanks, committed with minor fixes (see below):
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/kexec/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> new file mode 100644
- Thomas> index 0000000..861aaeb
- Thomas> --- /dev/null
- Thomas> +++ b/package/cifs-utils/Config.in
- Thomas> @@ -0,0 +1,13 @@
- Thomas> +config BR2_PACKAGE_CIFS_UTILS
- Thomas> +        bool "cifs-utils"
-
-Wrong indentation.
-
- Thomas> +	help
- Thomas> +	  The in-kernel CIFS filesystem is generally the preferred
- Thomas> +	  method for mounting SMB/CIFS shares on Linux. The in-kernel
- Thomas> +	  CIFS filesystem relies on a set of user-space tools. That
- Thomas> +	  package of tools is called cifs-utils. Although not really
- Thomas> +	  part of Samba proper, these tools were originally part of
- Thomas> +	  the Samba package. For several reasons, shipping these tools
- Thomas> +	  as part of Samba was problematic and it was deemed better to
- Thomas> +	  split them off into their own package.
- Thomas> +
- Thomas> +	  http://wiki.samba.org/index.php/LinuxCIFS_utils
- Thomas> \ No newline at end of file
-
-..
-
- Thomas> diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
- Thomas> +$(eval $(call AUTOTARGETS,package,cifs-utils))
- Thomas> \ No newline at end of file
-
-You forgot the newlines again ;)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kexec/Config.in b/package/kexec/Config.in
+index f028480..6f10b89 100644
+--- a/package/kexec/Config.in
++++ b/package/kexec/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_KEXEC
+ 	  http://www.kernel.org/pub/linux/kernel/people/horms/kexec-tools/
+ 
+ config BR2_PACKAGE_KEXEC_ZLIB
+-	bool "Kexec with zlib support"
++	bool "zlib support"
+ 	depends on BR2_PACKAGE_KEXEC
+ 	select BR2_PACKAGE_ZLIB
+ 	help
