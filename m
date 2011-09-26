@@ -1,10 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 26 Sep 2011 14:47:07 +0300
-Subject: [Buildroot] [PATCH 2/2] valgrind: workaround for segmentation fault
-	on PowerPC
-In-Reply-To: <a0e42495d61b96627650851ccde32672b8cedc7d.1317037531.git.baruch@tkos.co.il>
-References: <a0e42495d61b96627650851ccde32672b8cedc7d.1317037531.git.baruch@tkos.co.il>
-Message-ID: <0ddd686c50244a971cd6618a9487bef5ea31ce7b.1317037531.git.baruch@tkos.co.il>
+Date: Mon, 26 Sep 2011 14:47:06 +0300
+Subject: [Buildroot] [PATCH 1/2] valgrind: fix build on Linux kernel 3.x
+Message-ID: <a0e42495d61b96627650851ccde32672b8cedc7d.1317037531.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +10,45 @@ To: buildroot@busybox.net
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch |   28 ++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
- create mode 100644 package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch
+ .../valgrind-3.6.1-configure-support-linux-3.patch |   30 ++++++++++++++++++++
+ 1 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
 
-diff --git a/package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch b/package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch
+diff --git a/package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch b/package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
 new file mode 100644
-index 0000000..a788511
+index 0000000..a3b2482
 --- /dev/null
-+++ b/package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch
-@@ -0,0 +1,28 @@
-+From db894abcaa12555f60880a15840010f81d354806 Mon Sep 17 00:00:00 2001
-+From: Pierre Habouzit <madcoder@debian.org>
-+Date: Tue, 10 May 2011 23:11:45 +0200
-+Subject: [PATCH] workaround SIGSEGV on PPC.
++++ b/package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
+@@ -0,0 +1,30 @@
++Add support for kernel 3.x. From upstream r11796 (via Debian).
 +
-+Signed-off-by: Pierre Habouzit <madcoder@debian.org>
-+---
-+ coregrind/m_machine.c |    4 ++++
-+ 1 files changed, 4 insertions(+), 0 deletions(-)
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +
-+diff --git a/coregrind/m_machine.c b/coregrind/m_machine.c
-+index 8dc3e17..7921502 100644
-+--- a/coregrind/m_machine.c
-++++ b/coregrind/m_machine.c
-+@@ -28,6 +28,10 @@
-+    The GNU General Public License is contained in the file COPYING.
-+ */
++Index: valgrind-3.6.1/configure.in
++===================================================================
++--- valgrind-3.6.1.orig/configure.in	2011-02-15 18:31:17.000000000 +0100
+++++ valgrind-3.6.1/configure.in	2011-07-08 22:36:36.051563848 +0200
++@@ -220,7 +220,7 @@
++         kernel=`uname -r`
 + 
-++#ifdef __powerpc__
-++#  pragma GCC optimize ("-O0")
-++#endif
-++
-+ #include "pub_core_basics.h"
-+ #include "pub_core_vki.h"
-+ #include "pub_core_threadstate.h"
-+-- 
-+1.7.5.1.290.g2095dc
-+
++         case "${kernel}" in
++-             2.6.*) 
+++             2.6.*|3.*) 
++         	    AC_MSG_RESULT([2.6 family (${kernel})])
++         	    AC_DEFINE([KERNEL_2_6], 1, [Define to 1 if you're using Linux 2.6.x])
++         	    ;;
++Index: valgrind-3.6.1/configure
++===================================================================
++--- valgrind-3.6.1.orig/configure	2011-07-08 22:37:18.911240743 +0200
+++++ valgrind-3.6.1/configure	2011-07-08 22:37:44.847045178 +0200
++@@ -5348,7 +5348,7 @@
++         kernel=`uname -r`
++ 
++         case "${kernel}" in
++-             2.6.*)
+++             2.6.*|3.*)
++         	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: 2.6 family (${kernel})" >&5
++ $as_echo "2.6 family (${kernel})" >&6; }
++ 
 -- 
 1.7.6.3
