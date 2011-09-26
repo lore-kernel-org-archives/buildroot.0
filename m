@@ -1,54 +1,64 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Sep 2011 22:24:18 +0200
-Subject: [Buildroot] [git commit] valgrind: workaround for segmentation
-	fault on PowerPC
-Message-ID: <20110926204531.6E44C8DA7B@busybox.osuosl.org>
+Date: Mon, 26 Sep 2011 22:36:56 +0200
+Subject: [Buildroot] [git commit] cifs-utils: new package
+Message-ID: <20110926204531.B405C8DA7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6bad62cb7806bbbc1b6a2ebecda4298868a1a4e6
+commit: http://git.buildroot.net/buildroot/commit/?id=c20ab0fecada71f12b1e7f49a10c03b4250267a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: fix Config.in]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch |   28 ++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ package/Config.in                |    1 +
+ package/cifs-utils/Config.in     |   13 +++++++++++++
+ package/cifs-utils/cifs-utils.mk |    5 +++++
+ 3 files changed, 19 insertions(+), 0 deletions(-)
 
-diff --git a/package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch b/package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch
+diff --git a/package/Config.in b/package/Config.in
+index 790ed3a..5f9af59 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -399,6 +399,7 @@ source "package/bridge-utils/Config.in"
+ source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
+ source "package/ctorrent/Config.in"
++source "package/cifs-utils/Config.in"
+ source "package/cups/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/dhcp/Config.in"
+diff --git a/package/cifs-utils/Config.in b/package/cifs-utils/Config.in
 new file mode 100644
-index 0000000..a788511
+index 0000000..4331986
 --- /dev/null
-+++ b/package/valgrind/valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch
-@@ -0,0 +1,28 @@
-+From db894abcaa12555f60880a15840010f81d354806 Mon Sep 17 00:00:00 2001
-+From: Pierre Habouzit <madcoder@debian.org>
-+Date: Tue, 10 May 2011 23:11:45 +0200
-+Subject: [PATCH] workaround SIGSEGV on PPC.
++++ b/package/cifs-utils/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_CIFS_UTILS
++	bool "cifs-utils"
++	help
++	  The in-kernel CIFS filesystem is generally the preferred
++	  method for mounting SMB/CIFS shares on Linux. The in-kernel
++	  CIFS filesystem relies on a set of user-space tools. That
++	  package of tools is called cifs-utils. Although not really
++	  part of Samba proper, these tools were originally part of
++	  the Samba package. For several reasons, shipping these tools
++	  as part of Samba was problematic and it was deemed better to
++	  split them off into their own package.
 +
-+Signed-off-by: Pierre Habouzit <madcoder@debian.org>
-+---
-+ coregrind/m_machine.c |    4 ++++
-+ 1 files changed, 4 insertions(+), 0 deletions(-)
++	  http://wiki.samba.org/index.php/LinuxCIFS_utils
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+new file mode 100644
+index 0000000..dfb853a
+--- /dev/null
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -0,0 +1,5 @@
++CIFS_UTILS_VERSION = 5.0
++CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
++CIFS_UTILS_SITE    = ftp://ftp.samba.org/pub/linux-cifs/cifs-utils/
 +
-+diff --git a/coregrind/m_machine.c b/coregrind/m_machine.c
-+index 8dc3e17..7921502 100644
-+--- a/coregrind/m_machine.c
-++++ b/coregrind/m_machine.c
-+@@ -28,6 +28,10 @@
-+    The GNU General Public License is contained in the file COPYING.
-+ */
-+ 
-++#ifdef __powerpc__
-++#  pragma GCC optimize ("-O0")
-++#endif
-++
-+ #include "pub_core_basics.h"
-+ #include "pub_core_vki.h"
-+ #include "pub_core_threadstate.h"
-+-- 
-+1.7.5.1.290.g2095dc
-+
++$(eval $(call AUTOTARGETS,package,cifs-utils))
