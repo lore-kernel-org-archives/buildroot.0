@@ -1,33 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Sep 2011 22:17:12 +0200
-Subject: [Buildroot] [git commit] kexec: tweak zlib option name
-Message-ID: <20110926204530.F369A8DA9F@busybox.osuosl.org>
+Date: Mon, 26 Sep 2011 21:59:59 +0200
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.7.8
+Message-ID: <20110926204530.57DBB8DA9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62fc4c0f77a4c042704468c1ecd40d7776f9a0bf
+commit: http://git.buildroot.net/buildroot/commit/?id=fd68d696eacbb7b8363be1948365957a641041a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To match other _ZLIB options.
-
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/kexec/Config.in |    2 +-
+ package/sqlite/sqlite.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/kexec/Config.in b/package/kexec/Config.in
-index f028480..6f10b89 100644
---- a/package/kexec/Config.in
-+++ b/package/kexec/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_KEXEC
- 	  http://www.kernel.org/pub/linux/kernel/people/horms/kexec-tools/
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index db9c53e..4579eaa 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- config BR2_PACKAGE_KEXEC_ZLIB
--	bool "Kexec with zlib support"
-+	bool "zlib support"
- 	depends on BR2_PACKAGE_KEXEC
- 	select BR2_PACKAGE_ZLIB
- 	help
+-SQLITE_VERSION = 3070701
++SQLITE_VERSION = 3070800
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_INSTALL_STAGING = YES
