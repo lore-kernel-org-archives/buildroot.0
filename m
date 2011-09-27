@@ -1,30 +1,33 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 27 Sep 2011 11:48:05 +0200
-Subject: [Buildroot] [PATCH] libglib2: bump to 2.28.8
-Message-ID: <1317116885-938-1-git-send-email-s.neumann@raumfeld.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 27 Sep 2011 12:17:43 +0200
+Subject: [Buildroot] [PATCH] rsync: bump to 3.0.9
+Message-ID: <4E81A2C7.6000206@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libglib2/libglib2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rsync/rsync.mk |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index cf2665e..cb66a32 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,7 +4,7 @@
+Index: b/package/rsync/rsync.mk
+===================================================================
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -4,10 +4,9 @@
  #
  #############################################################
- LIBGLIB2_VERSION_MAJOR = 2.28
--LIBGLIB2_VERSION_MINOR = 6
-+LIBGLIB2_VERSION_MINOR = 8
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
--- 
-1.7.4.1
+ 
+-RSYNC_VERSION := 3.0.8
+-RSYNC_SOURCE := rsync-$(RSYNC_VERSION).tar.gz
+-RSYNC_SITE := http://rsync.samba.org/ftp/rsync/src
+-RSYNC_INSTALL_STAGING = NO
++RSYNC_VERSION = 3.0.9
++RSYNC_SOURCE = rsync-$(RSYNC_VERSION).tar.gz
++RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+ RSYNC_CONF_OPT = --with-included-popt
+ 
