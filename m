@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Sep 2011 20:34:56 +0200
-Subject: [Buildroot] [git commit] libglib2: bump to 2.28.8
-Message-ID: <20110927212736.CC1388D9FD@busybox.osuosl.org>
+Date: Tue, 27 Sep 2011 20:52:12 +0200
+Subject: [Buildroot] [git commit] rsync: bump to 3.0.9
+Message-ID: <20110927212737.2E4CD8D9FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2aa09fd4605a2a0717b683a1e8af455d1d893cef
+commit: http://git.buildroot.net/buildroot/commit/?id=0a775837fb869ff6ac0996a08b8a3c9ead8fdbf0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libglib2/libglib2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/rsync/rsync.mk |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index cf2665e..cb66a32 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index 5030fae..e99b650 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
+@@ -4,10 +4,9 @@
  #
  #############################################################
- LIBGLIB2_VERSION_MAJOR = 2.28
--LIBGLIB2_VERSION_MINOR = 6
-+LIBGLIB2_VERSION_MINOR = 8
- LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).$(LIBGLIB2_VERSION_MINOR)
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.bz2
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ 
+-RSYNC_VERSION := 3.0.8
+-RSYNC_SOURCE := rsync-$(RSYNC_VERSION).tar.gz
+-RSYNC_SITE := http://rsync.samba.org/ftp/rsync/src
+-RSYNC_INSTALL_STAGING = NO
++RSYNC_VERSION = 3.0.9
++RSYNC_SOURCE = rsync-$(RSYNC_VERSION).tar.gz
++RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+ RSYNC_CONF_OPT = --with-included-popt
+ 
