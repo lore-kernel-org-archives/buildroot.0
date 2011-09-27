@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Sep 2011 23:35:06 +0200
+Date: Tue, 27 Sep 2011 23:36:38 +0200
 Subject: [Buildroot] Segmentation faults after gcc update
 In-Reply-To: <1317110841.20688.12.camel@sven>
 References: <1317110841.20688.12.camel@sven>
-Message-ID: <20110927233506.55cb52a2@skate>
+Message-ID: <20110927233638.303328c9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,18 @@ To: buildroot@busybox.net
 Le Tue, 27 Sep 2011 10:04:12 +0200,
 Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
-> we are using buildroot successfully for quite a while now and after
-> I've recently managed to bring our buildroot environment up-to-date
-> with current git, I've changed the gcc version from 4.3.6 to 4.6.1.
-> That was the only change to the config. The resulting image boots and
-> some services (syslogd, klogd, udevd, sshd) are up and running. I can
-> log into the system and the busybox tools I tried to far seem to work
-> fine. However lots of applications that used to run fine now
-> immidiately die with a segmentation fault:
-> 
-> # dbus-daemon 
-> Segmentation fault
-> 
-> # uuidgen
-> Segmentation fault
-> 
-> # sqlite3
-> Segmentation fault
-> 
-> # iperf
-> Segmentation fault
-> 
 > What could possibly be wrong here? Is there anything else I need to
 > change when changing the version of gcc?
 
-Hum, odd. Some questions:
+Other questions:
 
- * Do you have the same version of uClibc in both cases ?
+ * Is your CPU-specific compiler flags properly set ? Maybe they were
+   slightly wrong but working with gcc 4.3, and they no longer generate
+   appropriate code for your CPU with gcc 4.6. What is your CPU ? What
+   CPU-specific compiler flags are you using ?
 
- * Is your Busybox (which works) statically linked or dynamically
-   linked ? If statically linked, is the problem that all dynamically
-   linked binaries are non working (which would indicate a bug in the
-   dynamic linker) ? If not, is there anything common between all the
-   non-working binaries ?
-
- * What does a gdb session says for the execution of one of those
-   binaries ?
-
-Regards,
+ * Did you try to do 'ulimit -c unlimited' before running one of those
+   binaries, and then inspect the resulting core file ?
 
 Thomas
 -- 
