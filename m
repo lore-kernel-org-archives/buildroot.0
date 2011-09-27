@@ -1,49 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 27 Sep 2011 08:18:36 +0200
-Subject: [Buildroot] [PATCH] linux custom tarball: automatically detect
-	a change in tarball configuration
-In-Reply-To: <CAAXf6LWbsf0WP-A_n3DkV2mdRn54CiL=3AWFckDeuF=L2-Y31A@mail.gmail.com>
-References: <7ee0d57e0b0bbf8917e2.1316595354@localhost6.localdomain6>
- <20110922215817.1bba4c82@skate>
- <CAAXf6LWbsf0WP-A_n3DkV2mdRn54CiL=3AWFckDeuF=L2-Y31A@mail.gmail.com>
-Message-ID: <201109270818.37828.arnout@mind.be>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 27 Sep 2011 10:04:12 +0200
+Subject: [Buildroot] Segmentation faults after gcc update
+Message-ID: <1317110841.20688.12.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-On Friday 23 September 2011 08:16:09, Thomas De Schampheleire wrote:
-> > I agree that their is a minor inconvenience in having the directory
-> > always named linux-custom/, but I don't have a good solution in mind.
-> 
-> The other solution that I implemented in buildroot-2010.11 is to make
-> the download step depend on the tarball, instead of on a stamp file.
-> Since linux now uses gentargets, this would require a change in the
-> whole of gentargets as well.
-> Essentially, the .stamp_downloaded file would be no longer needed, and
-> the tarball would serve as stamp file.
-> 
-> Would you prefer such a solution?
+we are using buildroot successfully for quite a while now and after I've
+recently managed to bring our buildroot environment up-to-date with
+current git, I've changed the gcc version from 4.3.6 to 4.6.1. That was
+the only change to the config. The resulting image boots and some
+services (syslogd, klogd, udevd, sshd) are up and running. I can log
+into the system and the busybox tools I tried to far seem to work fine.
+However lots of applications that used to run fine now immidiately die
+with a segmentation fault:
 
- I certainly would.
+# dbus-daemon 
+Segmentation fault
 
- I never really understood why the dependencies are between the phony targets 
-instead of the stamp files.  Otherwise, I could just touch a stamp file to 
-force all subsequent build steps to run.  However, I guess the buildroot 
-masters must have their reasons :-)
+# uuidgen
+Segmentation fault
 
- Regards,
- Arnout
+# sqlite3
+Segmentation fault
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110927/54579cfd/attachment-0001.html>
+# iperf
+Segmentation fault
+
+What could possibly be wrong here? Is there anything else I need to
+change when changing the version of gcc?
+
+
+Sven
