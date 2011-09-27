@@ -1,55 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Sep 2011 23:20:53 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20110926212104.4BAD78DA8C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 27 Sep 2011 08:18:36 +0200
+Subject: [Buildroot] [PATCH] linux custom tarball: automatically detect
+	a change in tarball configuration
+In-Reply-To: <CAAXf6LWbsf0WP-A_n3DkV2mdRn54CiL=3AWFckDeuF=L2-Y31A@mail.gmail.com>
+References: <7ee0d57e0b0bbf8917e2.1316595354@localhost6.localdomain6>
+ <20110922215817.1bba4c82@skate>
+ <CAAXf6LWbsf0WP-A_n3DkV2mdRn54CiL=3AWFckDeuF=L2-Y31A@mail.gmail.com>
+Message-ID: <201109270818.37828.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a404b4443b69e21d0594dc531317fd62ea3865da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   26 +++++++++++++-------------
- 1 files changed, 13 insertions(+), 13 deletions(-)
+On Friday 23 September 2011 08:16:09, Thomas De Schampheleire wrote:
+> > I agree that their is a minor inconvenience in having the directory
+> > always named linux-custom/, but I don't have a good solution in mind.
+> 
+> The other solution that I implemented in buildroot-2010.11 is to make
+> the download step depend on the tarball, instead of on a stamp file.
+> Since linux now uses gentargets, this would require a change in the
+> whole of gentargets as well.
+> Essentially, the .stamp_downloaded file would be no longer needed, and
+> the tarball would serve as stamp file.
+> 
+> Would you prefer such a solution?
 
-diff --git a/CHANGES b/CHANGES
-index 0453749..2643641 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -16,19 +16,19 @@
- 	Linux: Kernel extensions infrastructure support, Xenomai +
- 	RTAI support.
- 
--	Updated/fixed packages: busybox, dbus, dbus-glib, directfb,
--	dnsmasq, e2fsprogs, ethtool, fakeroot, fbdump, freetype, fuse,
--	gamin, gmp, jpeg, ipsec-tools, ipset, iptables, iw, leafpad,
--	libargtable2, libao, libconfuse, libcuefile, libcurl,
--	libevent, libreplaygain, libsamplerate, libsndfile, libsoup,
--	libsvgtiny, lighttpd, lzo, lzop, mpd, mpfr, mpg123, musepack,
--	mysql_client, netcat, netsnmp, ntfs-3g, ntfsprogs, openssh,
--	openssl, python, qt, radvd, samba, sdl_sound, sqlite, squid,
--	sylpheed, taglib, tar, tcpreplay, tslib, usbutils, util-linux,
--	xterm
--
--	New packages: fluxbox, libev, libftdi, libgeotiff, portaudio,
--	rtai, xenomai.
-+	Updated/fixed packages: acpid, busybox, dbus, dbus-glib,
-+	directfb, dnsmasq, e2fsprogs, ethtool, fakeroot, fbdump,
-+	freetype, fuse, gamin, gmp, jpeg, ipsec-tools, ipset,
-+	iptables, iw, kexec, leafpad, libargtable2, libao, libconfuse,
-+	libcuefile, libcurl, libevent, libreplaygain, libsamplerate,
-+	libsndfile, libsoup, libsvgtiny, lighttpd, lzo, lzop, mpd,
-+	mpfr, mpg123, musepack, mysql_client, netcat, netsnmp,
-+	ntfs-3g, ntfsprogs, openssh, openssl, python, qt, radvd,
-+	samba, sdl_sound, sqlite, squid, sylpheed, taglib, tar,
-+	tcpreplay, tslib, usbutils, util-linux, valgrind, xterm
-+
-+	New packages: bluez-utils, cifs-utils, fluxbox, libev,
-+	libftdi, libgeotiff, ngrep, openocd, portaudio, rtai, xenomai.
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+ I certainly would.
+
+ I never really understood why the dependencies are between the phony targets 
+instead of the stamp files.  Otherwise, I could just touch a stamp file to 
+force all subsequent build steps to run.  However, I guess the buildroot 
+masters must have their reasons :-)
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110927/54579cfd/attachment-0001.html>
