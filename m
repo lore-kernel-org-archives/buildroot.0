@@ -1,36 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Sep 2011 23:32:28 +0200
-Subject: [Buildroot] [git commit] libroxml: bump version
-Message-ID: <20110927213337.045DE8D9E7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Sep 2011 23:35:06 +0200
+Subject: [Buildroot] Segmentation faults after gcc update
+In-Reply-To: <1317110841.20688.12.camel@sven>
+References: <1317110841.20688.12.camel@sven>
+Message-ID: <20110927233506.55cb52a2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6fe0f1ee7246649c04370bf126c6d766f6e0f19
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Tue, 27 Sep 2011 10:04:12 +0200,
+Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ....0-werror.patch => libroxml-2.1.1-werror.patch} |    0
- package/libroxml/libroxml.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+> we are using buildroot successfully for quite a while now and after
+> I've recently managed to bring our buildroot environment up-to-date
+> with current git, I've changed the gcc version from 4.3.6 to 4.6.1.
+> That was the only change to the config. The resulting image boots and
+> some services (syslogd, klogd, udevd, sshd) are up and running. I can
+> log into the system and the busybox tools I tried to far seem to work
+> fine. However lots of applications that used to run fine now
+> immidiately die with a segmentation fault:
+> 
+> # dbus-daemon 
+> Segmentation fault
+> 
+> # uuidgen
+> Segmentation fault
+> 
+> # sqlite3
+> Segmentation fault
+> 
+> # iperf
+> Segmentation fault
+> 
+> What could possibly be wrong here? Is there anything else I need to
+> change when changing the version of gcc?
 
-diff --git a/package/libroxml/libroxml-2.1.0-werror.patch b/package/libroxml/libroxml-2.1.1-werror.patch
-similarity index 100%
-rename from package/libroxml/libroxml-2.1.0-werror.patch
-rename to package/libroxml/libroxml-2.1.1-werror.patch
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index 88d3e66..ccaf492 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
-@@ -2,7 +2,7 @@
- # libroxml
- #
- 
--LIBROXML_VERSION = 2.1.0
-+LIBROXML_VERSION = 2.1.1
- LIBROXML_SITE = http://libroxml.googlecode.com/files
- LIBROXML_INSTALL_STAGING = YES
- 
+Hum, odd. Some questions:
+
+ * Do you have the same version of uClibc in both cases ?
+
+ * Is your Busybox (which works) statically linked or dynamically
+   linked ? If statically linked, is the problem that all dynamically
+   linked binaries are non working (which would indicate a bug in the
+   dynamic linker) ? If not, is there anything common between all the
+   non-working binaries ?
+
+ * What does a gdb session says for the execution of one of those
+   binaries ?
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
