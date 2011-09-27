@@ -1,34 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 27 Sep 2011 21:21:11 +0200
-Subject: [Buildroot] [PATCH 3 of 3] uclibc: rename uclibc-update to
-	uclibc-update-config
-In-Reply-To: <patchbomb.1317151268@localhost6.localdomain6>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Sep 2011 22:46:03 +0200
+Subject: [Buildroot] [PATCH 1 of 3] linux: add linux-update-config and
+ linux-update-defconfig targets
+In-Reply-To: <81756817dc47990f5c42.1317151269@localhost6.localdomain6>
 References: <patchbomb.1317151268@localhost6.localdomain6>
-Message-ID: <a164f8ac3c32fb24936b.1317151271@localhost6.localdomain6>
+ <81756817dc47990f5c42.1317151269@localhost6.localdomain6>
+Message-ID: <20110927224603.02a7e0b1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original name uclibc-update is confusing as it only updates a
-configuration file.
+Le Tue, 27 Sep 2011 21:21:09 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> In analogy to build targets uclibc-update and busybox-update, add
+> extra targets to copy the current configuration to the custom
+> configuration file set in buildroot. These targets facilitate the
+> work of developers adding support for a specific board.
+> 
+> linux-update-config copies .config directly.
+> linux-update-defconfig first creates a defconfig and copies that.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
----
- toolchain/uClibc/uclibc.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -500,7 +500,7 @@
- 
- uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
- 
--uclibc-update: uclibc-config
-+uclibc-update-config: uclibc-config
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
- uclibc-configured: gcc_initial kernel-headers $(UCLIBC_DIR)/.configured
+As further improvements, I am wondering :
+
+ * Whether linux-update-*config should display a warning/error when
+   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE is not used, instead of being
+   silent.
+
+ * Whether this configuration update shouldn't be done automatically
+   when one does "make linux-menuconfig" or "make linux-xconfig".
+   People have often found strange to loose their configuration changes
+   in Linux/Busybox/uClibc when they do a make clean.
+
+But regardless of this discussion, I think your patch should be merged
+as is.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
