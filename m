@@ -1,60 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Sep 2011 16:28:07 +0200
-Subject: [Buildroot] [PATCH 7/8] package: change ordering of steps
-In-Reply-To: <CAAXf6LUszDVY6zf4dLx6SPknjzQEeXR-yP=zAuBw3FSWaaNkww@mail.gmail.com>
-References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
- <5a8e557f8f35394252c05dd5176e143b38a3469f.1316290714.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LUszDVY6zf4dLx6SPknjzQEeXR-yP=zAuBw3FSWaaNkww@mail.gmail.com>
-Message-ID: <20110928162807.10dcbaef@skate>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 28 Sep 2011 15:29:55 +0100
+Subject: [Buildroot] [PATCH] dmalloc: Fix install path for headers and info
+	files.
+Message-ID: <CAFbHwiTEqX1MbtADiOYvcJe7NfLv4H1-m_OdDcLFK7q+79LPCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 28 Sep 2011 16:13:00 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+---
+ package/dmalloc/dmalloc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> I'm experiencing a problem now with Xenomai:
-> * First of all, there was no dependencies to linux anymore in the
-> Xenomai .mk file, which caused incorrect ordering of builds. To
-> address this, I copied the approach of RTAI that Thomas added (add a
-> linux dependency to xenomai-patch and add a xenomai dependency to
-> linux).
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index dca0488..a4c8f83 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -37,7 +37,7 @@ define DMALLOC_INSTALL_STAGING_CMDS
+ 		bindir="$(STAGING_DIR)/usr/bin" \
+ 		libdir="$(STAGING_DIR)/usr/lib" \
+ 		shlibdir="$(STAGING_DIR)/usr/lib" \
+-		includedir="$(STAGING_DIR)/usr/share/info/" \
++		infodir="$(STAGING_DIR)/usr/share/info/" \
+ 		-C $(@D) install
+ endef
 
-Normally, the Xenomai package in package/xenomai/ does not depend on
-Linux being extracted/configured/compiled. It's the opposite: the Linux
-build process depends on the Xenomai package to be extracted, so that
-the package can be applied.
-
-The case of RTAI is different, because the kernel modules of RTAI are
-built by package/rtai/, so RTAI depends on Linux.
-
-Could you expand on which problem you have when the Xenomai package in
-package/xenomai does not depend on Linux ?
-
-> * after this, I stumbled upon another problem: if I removed both the
-> linux and the xenomai output directories, and ran make, then linux was
-> the first to come into play. After extraction of linux, the PRE_PATCH
-> hook of xenomai is executed, but Xenomai is not yet extracted! Indeed,
-> the current dependency tree does not enforce this.
-> I can fix my scenario by changing the order of -patch and -depends :
-> 
-> -$(1)-configure:                $(1)-patch $(1)-depends \
-> +$(1)-configure:                $(1)-depends $(1)-patch \
-> 
-> but I'm not sure whether this breaks other cases...
-> What do you think?
-
-Aaaah, yes, dammit. Technically speaking, it's a bit ugly that the
-patch step of one package depends on the dependencies being available.
-This needs some more thought I guess...
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-dmalloc-Fix-install-path-for-headers-and-info-files.patch
+Type: text/x-diff
+Size: 837 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110928/27f71aad/attachment.bin>
