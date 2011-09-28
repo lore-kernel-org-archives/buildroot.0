@@ -1,66 +1,60 @@
-From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Wed, 28 Sep 2011 16:13:20 +0200
-Subject: [Buildroot] [PATCH] add libfcgi to buildroot it will have compiling
-	errors as long as -lm isnt added to the buildsystem of libfcgi
-In-Reply-To: <add fcgi-2.4.0 package to buildroot>
-References: <add fcgi-2.4.0 package to buildroot>
-Message-ID: <1317219200-4655-1-git-send-email-bachmann@tofwerk.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Sep 2011 16:28:07 +0200
+Subject: [Buildroot] [PATCH 7/8] package: change ordering of steps
+In-Reply-To: <CAAXf6LUszDVY6zf4dLx6SPknjzQEeXR-yP=zAuBw3FSWaaNkww@mail.gmail.com>
+References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
+ <5a8e557f8f35394252c05dd5176e143b38a3469f.1316290714.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LUszDVY6zf4dLx6SPknjzQEeXR-yP=zAuBw3FSWaaNkww@mail.gmail.com>
+Message-ID: <20110928162807.10dcbaef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
----
- package/Config.in          |    1 +
- package/libfcgi/Config.in  |    5 +++++
- package/libfcgi/libfcgi.mk |   13 +++++++++++++
- 3 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100755 package/libfcgi/Config.in
- create mode 100755 package/libfcgi/libfcgi.mk
+Le Wed, 28 Sep 2011 16:13:00 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-diff --git a/package/Config.in b/package/Config.in
-index 3d04056..56bb992 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -325,6 +325,7 @@ source "package/libcgicc/Config.in"
- source "package/libcurl/Config.in"
- source "package/libdnet/Config.in"
- source "package/libeXosip2/Config.in"
-+source "package/libfcgi/Config.in"
- source "package/libidn/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
-diff --git a/package/libfcgi/Config.in b/package/libfcgi/Config.in
-new file mode 100755
-index 0000000..169c6f2
---- /dev/null
-+++ b/package/libfcgi/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_LIBFCGI
-+    bool "libfcgi"
-+    help
-+        fastcgi developerslibrary
-+        http://www.fastcgi.com/
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-new file mode 100755
-index 0000000..e338f29
---- /dev/null
-+++ b/package/libfcgi/libfcgi.mk
-@@ -0,0 +1,13 @@
-+##############################################################################
-+#
-+# libfcgi
-+#
-+##############################################################################
-+LIBFCGI_VERSION = 2.4.0
-+LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
-+LIBFCGI_SITE = http://www.fastcgi.com/dist
-+LIBFCGI_INSTALL_STAGING = YES
-+LIBFCGI_INSTALL_TARGET = YES
-+LIBFCGI_CONF_OPT = --enable-shared
-+
-+$(eval $(call AUTOTARGETS,package,libfcgi))
+> I'm experiencing a problem now with Xenomai:
+> * First of all, there was no dependencies to linux anymore in the
+> Xenomai .mk file, which caused incorrect ordering of builds. To
+> address this, I copied the approach of RTAI that Thomas added (add a
+> linux dependency to xenomai-patch and add a xenomai dependency to
+> linux).
+
+Normally, the Xenomai package in package/xenomai/ does not depend on
+Linux being extracted/configured/compiled. It's the opposite: the Linux
+build process depends on the Xenomai package to be extracted, so that
+the package can be applied.
+
+The case of RTAI is different, because the kernel modules of RTAI are
+built by package/rtai/, so RTAI depends on Linux.
+
+Could you expand on which problem you have when the Xenomai package in
+package/xenomai does not depend on Linux ?
+
+> * after this, I stumbled upon another problem: if I removed both the
+> linux and the xenomai output directories, and ran make, then linux was
+> the first to come into play. After extraction of linux, the PRE_PATCH
+> hook of xenomai is executed, but Xenomai is not yet extracted! Indeed,
+> the current dependency tree does not enforce this.
+> I can fix my scenario by changing the order of -patch and -depends :
+> 
+> -$(1)-configure:                $(1)-patch $(1)-depends \
+> +$(1)-configure:                $(1)-depends $(1)-patch \
+> 
+> but I'm not sure whether this breaks other cases...
+> What do you think?
+
+Aaaah, yes, dammit. Technically speaking, it's a bit ugly that the
+patch step of one package depends on the dependencies being available.
+This needs some more thought I guess...
+
+Regards,
+
+Thomas
 -- 
-1.7.2.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
