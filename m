@@ -1,69 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Sep 2011 00:04:50 +0200
-Subject: [Buildroot] Kernel config and recommended books
-In-Reply-To: <CAHvj1qY9ZzmuTzcE0W4V4dpErO-0FT4dXphAjA2VC6AFgT3oVw@mail.gmail.com>
-References: <CAHvj1qY9ZzmuTzcE0W4V4dpErO-0FT4dXphAjA2VC6AFgT3oVw@mail.gmail.com>
-Message-ID: <20110928000450.2d3a2f6b@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 28 Sep 2011 08:08:12 +0200
+Subject: [Buildroot] [PATCH 1 of 3] linux: add linux-update-config and
+ linux-update-defconfig targets
+In-Reply-To: <20110927224603.02a7e0b1@skate>
+References: <patchbomb.1317151268@localhost6.localdomain6>
+ <81756817dc47990f5c42.1317151269@localhost6.localdomain6>
+ <20110927224603.02a7e0b1@skate>
+Message-ID: <CAAXf6LV-4mRjrR58E2RJ2pEEocH5b08n_9YdEi8pp8U9fqjjRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 22 Sep 2011 22:29:45 +0100,
-bruce bushby <bruce.bushby@gmail.com> a ?crit :
+On Tue, Sep 27, 2011 at 10:46 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Tue, 27 Sep 2011 21:21:09 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> In analogy to build targets uclibc-update and busybox-update, add
+>> extra targets to copy the current configuration to the custom
+>> configuration file set in buildroot. These targets facilitate the
+>> work of developers adding support for a specific board.
+>>
+>> linux-update-config copies .config directly.
+>> linux-update-defconfig first creates a defconfig and copies that.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+> As further improvements, I am wondering :
+>
+> ?* Whether linux-update-*config should display a warning/error when
+> ? BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE is not used, instead of being
+> ? silent.
 
-> I wanted to ask how I retain a kernel config ".config"?  I'm trying to
-> build a kernel for an OMAP3 Beagleboard .....so I run "make
-> menuconfig" and select the bare basic but I change my login terminal
-> to ttyS2 and for a "defconfig" I enter "omap2plus".
+Ok, that's fine.
 
-     ^^^^^ must be ttyO2 on OMAP platforms if you use a relatively
-     recent kernel (I don't remember if it's > 2.6.35 or > 2.6.37)
+>
+> ?* Whether this configuration update shouldn't be done automatically
+> ? when one does "make linux-menuconfig" or "make linux-xconfig".
+> ? People have often found strange to loose their configuration changes
+> ? in Linux/Busybox/uClibc when they do a make clean.
 
-> console=ttyS2,115200n8
+Such a feature would be good indeed. But, some remarks:
+* hooking it to menuconfig/xconfig wouldn't cover the case where the
+.config is manually changed. This different behavior may be confusing
+as well.
+What if we execute the automatic saving just before the build step?
+This of course requires to start building; you cannot just change the
+config and hope that it is copied automatically. In that last case, a
+manual linux-update-config would be necessary.
+Is this acceptable?
 
-          ttyO2
+* previously you raised the point of busybox-update / uclibc-update
+potentially overwriting the standard buildroot files. If we do not
+want this and we want automatic saving of custom configs, then we need
+to be able to differentiate between custom and default configuration
+files.
+On the other hand, if there are users that purposefully put their
+project's configuration in the default files (overwriting them), then
+they would not be able to benefit from the automatic saving, and
+possibly not from -update-config either. But I'm not sure if we ought
+to support such practice...
 
-> So my question relates to the kernel ".config" .... before running
-> make I don't have a kernel ".config" ... after running make I have:
-> ./output/build/linux-3.0.4/.config
-> 
-> and I think it's this file I need to change:
-> 
-> [root at dlxarm01 buildroot-2011.08]# grep tty ./output/build/linux-3.0.4/.config
-> CONFIG_CMDLINE="root=/dev/mmcblk0p2 rootwait console=ttyO2,115200"
-> [root at dlxarm01 buildroot-2011.08]#
-> 
-> that should be ttyS2....from what I've read on the net. So I take a
+>
+> But regardless of this discussion, I think your patch should be merged
+> as is.
 
-No, ttyO2 is correct. The "net" is outdated.
+Thanks for your ack, also on the other patches.
 
-> copy of this file and I run a "make clean" .....but I can't put it
-> back because the directory "./output/build/linux-3.0.4/"  no longer
-> exists.
+We'll implement the outcome of the newly raised discussion in a
+separate patch then...
 
-Run 'make linux-menuconfig' will automatically open the kernel
-menuconfig. Then, if you want to save your kernel configuration:
-
- * Copy the output/build/linux-x.y.z/.config file somewhere
-
- * Edit your Buildroot configuration, and instead of using the
-   omap2plus defconfig, tell Buildroot to use your own kernel
-   configuration.
-
-> and lastly, what is considered the "defacto" book with regards to
-> embedded linux kernels?
-
-There is no defacto book, but for the configuration/compilation process
-of the kernel, you might want to have a look at
-http://www.kroah.com/lkn/.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+~Thomas
