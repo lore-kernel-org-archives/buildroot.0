@@ -1,68 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 28 Sep 2011 23:34:34 +0200
-Subject: [Buildroot] [git commit] package: add fftw library
-Message-ID: <20110928213517.8F80C8D9CF@busybox.osuosl.org>
+From: Tristan Lelong <blunderer@blunderer.org>
+Date: Wed, 28 Sep 2011 23:48:01 +0200
+Subject: [Buildroot] [git commit] libroxml: bump version
+In-Reply-To: <20110927213337.045DE8D9E7@busybox.osuosl.org>
+References: <20110927213337.045DE8D9E7@busybox.osuosl.org>
+Message-ID: <CAJb9USVpC8B6sNmc5O1=EnbVkoUe=JyHFNAyTf6J_u=-PXTZ4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d6aaaa6ffa519ab601896063b66d7dd6760db25
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-fftw is a library for fast fourier transforms.
+thank you for the version bump. I was wondering what is the best: send
+a patch whenever I release a new version or wait for some "big"
+changes or fixes to be done?
+As I do not have a strict release cycle, there can be sometimes 2
+release in a month, and nothing for 3 months after that.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in      |    1 +
- package/fftw/Config.in |   11 +++++++++++
- package/fftw/fftw.mk   |   11 +++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+Regards
 
-diff --git a/package/Config.in b/package/Config.in
-index a849266..8b9c816 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -338,6 +338,7 @@ source "package/libupnp/Config.in"
- endmenu
- 
- menu "Other"
-+source "package/fftw/Config.in"
- source "package/libargtable2/Config.in"
- source "package/argp-standalone/Config.in"
- source "package/libatomic_ops/Config.in"
-diff --git a/package/fftw/Config.in b/package/fftw/Config.in
-new file mode 100644
-index 0000000..36f849f
---- /dev/null
-+++ b/package/fftw/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_FFTW
-+	bool "fftw"
-+	help
-+	  Library for computing Fast Fourier Transforms.
-+
-+	  This library computes Fast Fourier Transforms (FFT) in one
-+	  or more dimensions.  It is extremely fast. This package
-+	  contains the shared library version of the fftw libraries in
-+	  double precision.
-+
-+	  http://www.fftw.org
-diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
-new file mode 100644
-index 0000000..a5b3588
---- /dev/null
-+++ b/package/fftw/fftw.mk
-@@ -0,0 +1,11 @@
-+################################################################################
-+#
-+# fftw
-+#
-+################################################################################
-+
-+FFTW_VERSION = 3.3
-+FFTW_SITE = http://www.fftw.org
-+FFTW_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS,package,fftw))
+
+2011/9/27 Peter Korsgaard <jacmet@sunsite.dk>:
+> commit: http://git.buildroot.net/buildroot/commit/?id=c6fe0f1ee7246649c04370bf126c6d766f6e0f19
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+> ?....0-werror.patch => libroxml-2.1.1-werror.patch} | ? ?0
+> ?package/libroxml/libroxml.mk ? ? ? ? ? ? ? ? ? ? ? | ? ?2 +-
+> ?2 files changed, 1 insertions(+), 1 deletions(-)
+>
+> diff --git a/package/libroxml/libroxml-2.1.0-werror.patch b/package/libroxml/libroxml-2.1.1-werror.patch
+> similarity index 100%
+> rename from package/libroxml/libroxml-2.1.0-werror.patch
+> rename to package/libroxml/libroxml-2.1.1-werror.patch
+> diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+> index 88d3e66..ccaf492 100644
+> --- a/package/libroxml/libroxml.mk
+> +++ b/package/libroxml/libroxml.mk
+> @@ -2,7 +2,7 @@
+> ?# libroxml
+> ?#
+>
+> -LIBROXML_VERSION = 2.1.0
+> +LIBROXML_VERSION = 2.1.1
+> ?LIBROXML_SITE = http://libroxml.googlecode.com/files
+> ?LIBROXML_INSTALL_STAGING = YES
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
+
+-- 
+618FE3EF
