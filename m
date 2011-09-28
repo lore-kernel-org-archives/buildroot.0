@@ -1,65 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 28 Sep 2011 16:44:46 +0200
-Subject: [Buildroot] [PATCH 7/8] package: change ordering of steps
-In-Reply-To: <20110928162807.10dcbaef@skate>
-References: <cover.1316290714.git.thomas.petazzoni@free-electrons.com>
- <5a8e557f8f35394252c05dd5176e143b38a3469f.1316290714.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LUszDVY6zf4dLx6SPknjzQEeXR-yP=zAuBw3FSWaaNkww@mail.gmail.com>
- <20110928162807.10dcbaef@skate>
-Message-ID: <CAAXf6LUzxwPwbTZ1xK7eUXuCWqzdsJcLMtq=c5nfgFJW8kZnsw@mail.gmail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 28 Sep 2011 16:44:32 +0200
+Subject: [Buildroot] Segmentation faults after gcc update
+In-Reply-To: <20110927233506.55cb52a2@skate>
+References: <1317110841.20688.12.camel@sven> <20110927233506.55cb52a2@skate>
+Message-ID: <1317221262.8481.4.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Sep 28, 2011 at 4:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 28 Sep 2011 16:13:00 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> I'm experiencing a problem now with Xenomai:
->> * First of all, there was no dependencies to linux anymore in the
->> Xenomai .mk file, which caused incorrect ordering of builds. To
->> address this, I copied the approach of RTAI that Thomas added (add a
->> linux dependency to xenomai-patch and add a xenomai dependency to
->> linux).
->
-> Normally, the Xenomai package in package/xenomai/ does not depend on
-> Linux being extracted/configured/compiled. It's the opposite: the Linux
-> build process depends on the Xenomai package to be extracted, so that
-> the package can be applied.
->
-> The case of RTAI is different, because the kernel modules of RTAI are
-> built by package/rtai/, so RTAI depends on Linux.
->
-> Could you expand on which problem you have when the Xenomai package in
-> package/xenomai does not depend on Linux ?
+Hi,
 
-On second thought, you're right. I was still thinking too much in
-terms of my old xenomai.mk file where kernel and userspace were
-combined.
+On Tue, 2011-09-27 at 23:35 +0200, Thomas Petazzoni wrote:
 
->
->> * after this, I stumbled upon another problem: if I removed both the
->> linux and the xenomai output directories, and ran make, then linux was
->> the first to come into play. After extraction of linux, the PRE_PATCH
->> hook of xenomai is executed, but Xenomai is not yet extracted! Indeed,
->> the current dependency tree does not enforce this.
->> I can fix my scenario by changing the order of -patch and -depends :
->>
->> -$(1)-configure: ? ? ? ? ? ? ? ?$(1)-patch $(1)-depends \
->> +$(1)-configure: ? ? ? ? ? ? ? ?$(1)-depends $(1)-patch \
->>
->> but I'm not sure whether this breaks other cases...
->> What do you think?
->
-> Aaaah, yes, dammit. Technically speaking, it's a bit ugly that the
-> patch step of one package depends on the dependencies being available.
-> This needs some more thought I guess...
+>  * What does a gdb session says for the execution of one of those
+>    binaries ?
 
-Ok.
-One solution would be to first extract all packages, and then do all
-the rest, but I guess you don't think this is cleaner...
+OK, so I had to compile a gdb for the target first. Here's the result:
 
-~Thomas
+# gdb dbus-daemon 
+GNU gdb (GDB) 7.1
+Copyright (C) 2010 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "arm-unknown-linux-uclibcgnueabi".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /usr/bin/dbus-daemon...(no debugging symbols found)...done.
+(gdb) r
+Starting program: /usr/bin/dbus-daemon 
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+
+Program received signal SIGSEGV, Segmentation fault.
+0x40086254 in _dl_get_tls_static_info () from /lib/ld-uClibc.so.0
+(gdb) bt
+#0  0x40086254 in _dl_get_tls_static_info () from /lib/ld-uClibc.so.0
+#1  0x40087064 in _dl_update_slotinfo () from /lib/ld-uClibc.so.0
+#2  0x401584a0 in sched_get_priority_max () from /lib/libc.so.0
+#3  0x4015f040 in hasmntopt () from /lib/libc.so.0
+#4  0x4015f040 in hasmntopt () from /lib/libc.so.0
+Backtrace stopped: previous frame identical to this frame (corrupt stack?)
+(gdb) 
+
+
+I don't quite understand why libthread_db is not found as I did enable
+BR2_PTHREAD_DEBUG for this build and recompiled everything. Anyway, I
+tried gdb on a different (crashing) binary and it crashes in
+_dl_get_tls_static_info() as well.
+
+
+Regards,
+Sven
