@@ -1,85 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Sep 2011 14:11:03 +0200
-Subject: [Buildroot] [PATCH 2/4] Add Transmission package
-In-Reply-To: <079c05b563d87b82246539f8a185740a2755075c.1317210509.git.maxime.ripard@free-electrons.com>
-References: <cover.1317210509.git.maxime.ripard@free-electrons.com>
- <079c05b563d87b82246539f8a185740a2755075c.1317210509.git.maxime.ripard@free-electrons.com>
-Message-ID: <20110928141103.1e2f4bea@skate>
+Date: Wed, 28 Sep 2011 14:16:24 +0200
+Subject: [Buildroot] add fcgi-2.4.0 package to buildroot
+In-Reply-To: <op.v2ij9pax705kjs@rico>
+References: <000301cc7486$0778f8f0$166aead0$@com>
+ <20110916184409.2b4f53ae@skate>
+ <001601cc76d6$7c3d1ac0$74b75040$@com>
+ <20110919224628.173080cd@skate> <op.v15jbakh705kjs@rico>
+ <op.v2ij9pax705kjs@rico>
+Message-ID: <20110928141624.2136b1e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 28 Sep 2011 13:48:32 +0200,
-Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
+Le Wed, 28 Sep 2011 12:18:51 +0200,
+"Rico Bachmann" <bachmann@tofwerk.com> a ?crit :
 
-> --- /dev/null
-> +++ b/package/transmission/Config.in
-> @@ -0,0 +1,35 @@
-> +config BR2_PACKAGE_TRANSMISSION
-> +	bool "transmission"
-> +	depends on BR2_INET_IPV6
-> +	select BR2_PACKAGE_ZLIB
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_LIBEVENT
-> +	help
-> +	  Transmission is a cross-platform BitTorrent client.
-> +
-> +comment "Transmission requires a toolchain with IPv6 support"
-> +	depends on !BR2_INET_IPV6
-> +
-> +config BR2_PACKAGE_TRANSMISSION_UTP
-> +	bool "Transmission uTP support"
-> +	depends on BR2_PACKAGE_TRANSMISSION
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  Install support for uTorrent Transport Protocol
-> +
-> +comment "uTP requires a toolchain with C++ support"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
+> Is there a good tutorial to use git send-email, at the moment i have
+> a patch
+> that allows me to build my rootfs with the libfcgi.
+> I attached the patches without git send-email. I hope it's not
+> totaly screwed up.
 
-		&& BR2_PACKAGE_TRANSMISSION
-
-otherwise this comment will be visible even when transmission is not
-enabled.
-
-Or better, enclose all config options (except the main one) in a "if
-BR2_PACKAGE_TRANSMISSION ... endif" clause, so you can remove all
-depends on BR2_PACKAGE_TRANSMISSION.
-
-> diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-> new file mode 100644
-> index 0000000..71b0ca6
-> --- /dev/null
-> +++ b/package/transmission/S92transmission
-> @@ -0,0 +1,169 @@
-> +#!/bin/sh
-> +### BEGIN INIT INFO
-> +# Provides:          transmission-daemon
-> +# Required-Start:    networking
-> +# Required-Stop:     networking
-> +# Default-Start:     2 3 5
-> +# Default-Stop:      0 1 6
-> +# Short-Description: Start the transmission BitTorrent daemon client.
-
-I guess this is for some specific version of init, we don't usually
-include this in Buildroot init scripts.
-
-> +ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
-> +	TRANSMISSION_CONF_OPT += --enable-remote
-> +else
-> +	TRANSMISSION_CONF_OPT += --disable-remote
-> +define TRANSMISSION_INIT_SCRIPT_INSTALL
-> +	$(INSTALL) -m 0755 -D package/transmission/S92transmission \
-> +		$(TARGET_DIR)/etc/init.d/S92transmission
-> +endef
-> +	TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_INIT_SCRIPT_INSTALL
-> +endif
-
-To improve readability, probably you could put
-TRANSMISSION_INIT_SCRIPT_INSTALL outside the ifeq..else..endif.
+You can read
+http://lists.busybox.net/pipermail/buildroot/2010-December/039181.html
+for a very basic introduction on how to contribute to Buildroot using
+git.
 
 Regards,
 
