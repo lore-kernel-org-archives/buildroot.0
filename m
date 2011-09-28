@@ -1,61 +1,84 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 28 Sep 2011 16:44:32 +0200
-Subject: [Buildroot] Segmentation faults after gcc update
-In-Reply-To: <20110927233506.55cb52a2@skate>
-References: <1317110841.20688.12.camel@sven> <20110927233506.55cb52a2@skate>
-Message-ID: <1317221262.8481.4.camel@sven>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Wed, 28 Sep 2011 17:02:21 +0200
+Subject: [Buildroot] [PATCH] add libfcgi to buildroot it will have
+	compiling errors as long as -lm isnt added to the buildsystem
+	of libfcgi
+In-Reply-To: <20110928163020.6350cc9b@skate>
+References: <add fcgi-2.4.0 package to buildroot>
+ <1317219200-4655-1-git-send-email-bachmann@tofwerk.com>
+ <20110928163020.6350cc9b@skate>
+Message-ID: <000001cc7def$9ff6a920$dfe3fb60$@com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+> -----Urspr?ngliche Nachricht-----
+> Von: buildroot-bounces at busybox.net [mailto:buildroot-
+> bounces at busybox.net] Im Auftrag von Thomas Petazzoni
+> Gesendet: Mittwoch, 28. September 2011 16:30
+> An: buildroot at busybox.net
+> Betreff: Re: [Buildroot] [PATCH] add libfcgi to buildroot it will have
+> compiling errors as long as -lm isnt added to the buildsystem of
+> libfcgi
+> 
+> Hello,
+> 
+> Good for the usage of git send-email!
+> 
+> The patch title is too long. There should be one first line of < 80
+> characters, and then if you need to put some other details: one blank
+> line, and then some other paragraphs.
 
-On Tue, 2011-09-27 at 23:35 +0200, Thomas Petazzoni wrote:
+that wasn't planed ^^ i didn't know that all my comments get i to the subject.
+next time i will use the blank line. Did i have to commit the patch a second time, because of the long subject?
 
->  * What does a gdb session says for the execution of one of those
->    binaries ?
+> 
+> And the -lm problem should be fixed rather than explained in the commit
+> log :-)
+> 
 
-OK, so I had to compile a gdb for the target first. Here's the result:
+i have 2 patches that fix that problem, but i don't know how to add patches to buildroot for files that are created in the build/fcgi-2.4.0/ when fcgi-2.4.0.tar.gz is unpacked
 
-# gdb dbus-daemon 
-GNU gdb (GDB) 7.1
-Copyright (C) 2010 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "arm-unknown-linux-uclibcgnueabi".
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>...
-Reading symbols from /usr/bin/dbus-daemon...(no debugging symbols found)...done.
-(gdb) r
-Starting program: /usr/bin/dbus-daemon 
-warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
-warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
-warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
-warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
-warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
-warning: Unable to find libthread_db matching inferior's thread library, thread debugging will not be available.
+http://lists.busybox.net/pipermail/buildroot/2011-September/046084.html
 
-Program received signal SIGSEGV, Segmentation fault.
-0x40086254 in _dl_get_tls_static_info () from /lib/ld-uClibc.so.0
-(gdb) bt
-#0  0x40086254 in _dl_get_tls_static_info () from /lib/ld-uClibc.so.0
-#1  0x40087064 in _dl_update_slotinfo () from /lib/ld-uClibc.so.0
-#2  0x401584a0 in sched_get_priority_max () from /lib/libc.so.0
-#3  0x4015f040 in hasmntopt () from /lib/libc.so.0
-#4  0x4015f040 in hasmntopt () from /lib/libc.so.0
-Backtrace stopped: previous frame identical to this frame (corrupt stack?)
-(gdb) 
+in this link you can see the patches for 2 makefiles (they're attached to the mail). It is the solution to the -lm problem, but i don't know how to add that to buildroot.
 
-
-I don't quite understand why libthread_db is not found as I did enable
-BR2_PTHREAD_DEBUG for this build and recompiled everything. Anyway, I
-tried gdb on a different (crashing) binary and it crashes in
-_dl_get_tls_static_info() as well.
-
-
-Regards,
-Sven
+> Le Wed, 28 Sep 2011 16:13:20 +0200,
+> Rico Bachmann <bachmann@tofwerk.com> a ?crit :
+> 
+> >
+> +######################################################################
+> ########
+> > +#
+> > +# libfcgi
+> > +#
+> >
+> +######################################################################
+> ########
+> > +LIBFCGI_VERSION = 2.4.0
+> > +LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
+> > +LIBFCGI_SITE = http://www.fastcgi.com/dist
+> > +LIBFCGI_INSTALL_STAGING = YES
+> > +LIBFCGI_INSTALL_TARGET = YES
+> 
+> Line not needed, this is the default.
+> 
+> > +LIBFCGI_CONF_OPT = --enable-shared
+> 
+> Line not needed, this is already part of the default configuration
+> options.
+> 
+> Regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
