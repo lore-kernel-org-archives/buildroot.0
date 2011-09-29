@@ -1,30 +1,22 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Thu, 29 Sep 2011 12:42:33 +0200
-Subject: [Buildroot] [PATCH] gnutls: bump to version 2.10.5
-Message-ID: <1317292953-6329-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 29 Sep 2011 16:38:54 +0200
+Subject: [Buildroot] [PATCH] gst-plugins-good: sort plug-ins
+	alphabetically
+In-Reply-To: <1317126427-14633-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Tue, 27 Sep 2011 14:27:07 +0200")
+References: <1317126427-14633-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <8762kbpg5d.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index db5d583..44a21b2 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--GNUTLS_VERSION = 2.10.3
-+GNUTLS_VERSION = 2.10.5
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
- GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls/
- GNUTLS_DEPENDENCIES = libgcrypt
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+
+Committed, thanks.
+
 -- 
-1.7.4.1
+Bye, Peter Korsgaard
