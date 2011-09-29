@@ -1,100 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Sep 2011 22:05:57 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/asciidoc-manual
-Message-ID: <cover.1317326629.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Sep 2011 22:05:59 +0200
+Subject: [Buildroot] [PATCH 2/4] manual: provide make targets to build the
+	documentation
+In-Reply-To: <cover.1317326629.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317326629.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <41d440a0142e3bb0e20ad8524aeca52fe94e8404.1317326629.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Special thanks for Yann E. Morin for giving input and suggestions to
+implement this.
 
-The initial proposal and discussion for this took place early August
-(initial RFC sent on August 4th), and a pull request has been sent on
-August 31th, 10 hours after the release of 2011.08.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |   46 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 45 insertions(+), 1 deletions(-)
 
-A lot of updates to the documentation are needed, but at this point,
-contributors don't know if they should post patches on top of this
-AsciiDoc documentation, or on top of the existing HTML documentation.
-
-Would it be possible to make some progress on this ? The progress
-might also be: this is too complicated, and keeping an HTML format is
-in the end simpler.
-
-Regards,
-
-Thomas
-
-The following changes since commit 30f416cc86c115c34984b0499b76a00c8482abeb:
-
-  gst-plugins-bad: bump version (2011-09-29 21:02:14 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/asciidoc-manual
-
-Thomas Petazzoni (4):
-      manual: convert existing documentation to the asciidoc format
-      manual: provide make targets to build the documentation
-      remove the old buildroot.html documentation
-      remove Glibc_vs_uClibc document
-
- Makefile                                     |   46 +-
- docs/Glibc_vs_uClibc.html                    |  240 ----
- docs/buildroot.html                          | 1819 --------------------------
- docs/manual/adding-packages-autotargets.txt  |  167 +++
- docs/manual/adding-packages-cmaketargets.txt |  140 ++
- docs/manual/adding-packages-conclusion.txt   |   10 +
- docs/manual/adding-packages-directory.txt    |   76 ++
- docs/manual/adding-packages-gentargets.txt   |  303 +++++
- docs/manual/adding-packages-gettext.txt      |   44 +
- docs/manual/adding-packages-handwritten.txt  |  165 +++
- docs/manual/adding-packages.txt              |   21 +
- docs/manual/board-support.txt                |   35 +
- docs/manual/ccache-support.txt               |   21 +
- docs/manual/customize-busybox-config.txt     |   24 +
- docs/manual/customize-kernel-config.txt      |   12 +
- docs/manual/customize-rootfs.txt             |   36 +
- docs/manual/customize-uclibc-config.txt      |   32 +
- docs/manual/customize.txt                    |   10 +
- docs/manual/download-location.txt            |   26 +
- docs/manual/external-toolchain.txt           |   84 ++
- docs/manual/getting.txt                      |   23 +
- docs/manual/how-buildroot-works.txt          |   59 +
- docs/manual/introduction.txt                 |   69 +
- docs/manual/manual.txt                       |   32 +
- docs/manual/rebuilding-packages.txt          |   62 +
- docs/manual/using-buildroot-toolchain.txt    |   20 +
- docs/manual/using.txt                        |  183 +++
- 27 files changed, 1699 insertions(+), 2060 deletions(-)
- delete mode 100644 docs/Glibc_vs_uClibc.html
- delete mode 100644 docs/buildroot.html
- create mode 100644 docs/manual/adding-packages-autotargets.txt
- create mode 100644 docs/manual/adding-packages-cmaketargets.txt
- create mode 100644 docs/manual/adding-packages-conclusion.txt
- create mode 100644 docs/manual/adding-packages-directory.txt
- create mode 100644 docs/manual/adding-packages-gentargets.txt
- create mode 100644 docs/manual/adding-packages-gettext.txt
- create mode 100644 docs/manual/adding-packages-handwritten.txt
- create mode 100644 docs/manual/adding-packages.txt
- create mode 100644 docs/manual/board-support.txt
- create mode 100644 docs/manual/ccache-support.txt
- create mode 100644 docs/manual/customize-busybox-config.txt
- create mode 100644 docs/manual/customize-kernel-config.txt
- create mode 100644 docs/manual/customize-rootfs.txt
- create mode 100644 docs/manual/customize-uclibc-config.txt
- create mode 100644 docs/manual/customize.txt
- create mode 100644 docs/manual/download-location.txt
- create mode 100644 docs/manual/external-toolchain.txt
- create mode 100644 docs/manual/getting.txt
- create mode 100644 docs/manual/how-buildroot-works.txt
- create mode 100644 docs/manual/introduction.txt
- create mode 100644 docs/manual/manual.txt
- create mode 100644 docs/manual/rebuilding-packages.txt
- create mode 100644 docs/manual/using-buildroot-toolchain.txt
- create mode 100644 docs/manual/using.txt
-
-Thanks,
+diff --git a/Makefile b/Makefile
+index a20d3e2..278a3a0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -665,10 +665,18 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
+ 	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+ endif
+ 	@echo
++	@echo 'Documentation:'
++	@echo '  manual                 - build manual in HTML, split HTML, PDF and txt'
++	@echo '  manual-html            - build manual in HTML'
++	@echo '  manual-split-html      - build manual in split HTML'
++	@echo '  manual-pdf             - build manual in PDF'
++	@echo '  manual-txt             - build manual in txt'
++	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  source-check           - check all packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
++	@echo '  manual			- build the Buildroot manual'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+@@ -676,7 +684,7 @@ endif
+ 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+ 	@echo
+-	@echo 'See docs/README and docs/buildroot.html for further details'
++	@echo 'See docs/README and the Buildroot manual for further details'
+ 	@echo
+ 
+ release: OUT=buildroot-$(BR2_VERSION)
+@@ -684,5 +692,41 @@ release: OUT=buildroot-$(BR2_VERSION)
+ release:
+ 	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
+ 
++MANUAL_SOURCES = $(wildcard docs/manual/*.txt)
++
++manual: manual-html manual-split-html manual-pdf manual-txt manual-epub
++
++manual-html: $(MANUAL_SOURCES)
++	@echo "HTML manual..."
++	$(Q)mkdir -p $(O)/docs/manual
++	$(Q)cp -f docs/images/logo.png $(O)/docs/manual/
++	$(Q)asciidoc -b xhtml11 -d book -o $(O)/docs/manual/manual.html \
++		docs/manual/manual.txt
++
++manual-split-html: $(MANUAL_SOURCES)
++	@echo "Split HTML manual..."
++	$(Q)mkdir -p $(O)/docs/manual
++	$(Q)a2x -f chunked -d book -L docs/manual/manual.txt -r docs/images \
++		-D $(O)/docs/manual/
++
++manual-pdf: $(MANUAL_SOURCES)
++	@echo "PDF manual..."
++	$(Q)mkdir -p $(O)/docs/manual
++	$(Q)a2x --dblatex-opts "-P latex.output.revhistory=0" -f pdf -d book -L docs/manual/manual.txt \
++		-D $(O)/docs/manual/
++
++manual-txt: $(MANUAL_SOURCES)
++	@echo "Text manual..."
++	$(Q)mkdir -p $(O)/docs/manual
++	$(Q)a2x -f text -d book -L docs/manual/manual.txt \
++		-D $(O)/docs/manual
++
++manual-epub: $(MANUAL_SOURCES)
++	@echo "EPUB manual..."
++	$(Q)mkdir -p $(O)/docs/manual
++	$(Q)a2x -f epub -d book -L docs/manual/manual.txt \
++		-r docs/images/	\
++		-D $(O)/docs/manual
++
+ .PHONY: $(noconfig_targets)
+ 
 -- 
-Thomas Petazzoni
+1.7.4.1
