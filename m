@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 29 Sep 2011 23:53:49 +0200
-Subject: [Buildroot] [PATCH 2/4] manual: provide make targets to build
-	the documentation
-In-Reply-To: <41d440a0142e3bb0e20ad8524aeca52fe94e8404.1317326629.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Sep 2011 23:57:50 +0200
+Subject: [Buildroot] [PATCH 1/4] manual: convert existing documentation
+	to the asciidoc format
+In-Reply-To: <d871cc9dcec1de13aa412736a1f5f1e6108b8b62.1317326629.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1317326629.git.thomas.petazzoni@free-electrons.com>
- <41d440a0142e3bb0e20ad8524aeca52fe94e8404.1317326629.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201109292353.50188.yann.morin.1998@anciens.enib.fr>
+ <d871cc9dcec1de13aa412736a1f5f1e6108b8b62.1317326629.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201109292357.50814.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,134 +14,74 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Thursday 29 September 2011 22:05:59 Thomas Petazzoni wrote:
-> Special thanks for Yann E. Morin for giving input and suggestions to
-> implement this.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  Makefile |   46 +++++++++++++++++++++++++++++++++++++++++++++-
->  1 files changed, 45 insertions(+), 1 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index a20d3e2..278a3a0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -665,10 +665,18 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
->  	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
->  endif
->  	@echo
-> +	@echo 'Documentation:'
-> +	@echo '  manual                 - build manual in HTML, split HTML, PDF and txt'
-> +	@echo '  manual-html            - build manual in HTML'
-> +	@echo '  manual-split-html      - build manual in split HTML'
-> +	@echo '  manual-pdf             - build manual in PDF'
-> +	@echo '  manual-txt             - build manual in txt'
+On Thursday 29 September 2011 22:05:58 Thomas Petazzoni wrote:
+[--SNIP--]
+> diff --git a/docs/manual/external-toolchain.txt b/docs/manual/external-toolchain.txt
+> new file mode 100644
+> index 0000000..3a5b011
+> --- /dev/null
+> +++ b/docs/manual/external-toolchain.txt
+> @@ -0,0 +1,84 @@
+> +Using an external toolchain
+> +===========================
+[--SNIP--]
+> +* Use a completely custom external toolchain. This is particularly
+> +  useful for toolchains generated using Crosstool-NG. To do this,
 
-manual-epub missing. Fixed after IRC discussion.
+Nit-picking, but crosstool-NG does not take a inital capital.
 
-> +	@echo
->  	@echo 'Miscellaneous:'
->  	@echo '  source                 - download all sources needed for offline-build'
->  	@echo '  source-check           - check all packages for valid download URLs'
->  	@echo '  external-deps          - list external packages used'
-> +	@echo '  manual			- build the Buildroot manual'
-
-Tabs are used after 'manual', which yields an improperly-aligned line.
-After IRC discussion, a tab remains just after 'manual'.
-
->  	@echo
->  	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
->  	@echo '  make O=dir             - Locate all output files in "dir", including .config'
-> @@ -676,7 +684,7 @@ endif
->  	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
->  	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
->  	@echo
-> -	@echo 'See docs/README and docs/buildroot.html for further details'
-> +	@echo 'See docs/README and the Buildroot manual for further details'
-
-Where is the "Buildroot manual"? Yes, I know, that the purpose of this
-patch, but it is confusing. What about something like:
-
-  See docs/README, or generate the Buildroot manual for further details
-
->  	@echo
->  
->  release: OUT=buildroot-$(BR2_VERSION)
-> @@ -684,5 +692,41 @@ release: OUT=buildroot-$(BR2_VERSION)
->  release:
->  	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
->  
-> +MANUAL_SOURCES = $(wildcard docs/manual/*.txt)
+> +  select the +Custom toolchain+ solution in the +Toolchain+ list. You
+> +  need to fill the +Toolchain path+, +Toolchain prefix+ and +External
+> +  toolchain C library+ options. Then, you have to tell Buildroot what
+> +  your external toolchain supports. If your external toolchain uses
+> +  the 'glibc' library, you only have to tell whether your toolchain
+> +  supports C++ or not. If your external toolchain uses the 'uclibc'
+> +  library, then you have to tell Buildroot if it supports largefile,
+> +  IPv6, RPC, wide-char, locale, program invocation, threads and
+> +  C++. At the beginning of the execution, Buildroot will tell you if
+> +  the selected options do not match the toolchain configuration.
 > +
-> +manual: manual-html manual-split-html manual-pdf manual-txt manual-epub
 > +
-> +manual-html: $(MANUAL_SOURCES)
-> +	@echo "HTML manual..."
-> +	$(Q)mkdir -p $(O)/docs/manual
-> +	$(Q)cp -f docs/images/logo.png $(O)/docs/manual/
-> +	$(Q)asciidoc -b xhtml11 -d book -o $(O)/docs/manual/manual.html \
-> +		docs/manual/manual.txt
+> +Our external toolchain support has been tested with toolchains from
+> +CodeSourcery, toolchains generated by
+> +http://ymorin.is-a-geek.org/dokuwiki/projects/crosstool[Crosstool-NG],
 
-man asciidoc (8.5.2) says:
-  The _book_ document type is only supported by the _docbook_ backend.
+http://crosstool-ng.org[crosstool-NG]
 
-But here, you are using the _xhmtl11_ backend.
-
-Also, I would also use a2x instead of asciidoc. I find the output better.
-For one, it has the table of content, which the output by asciidoc lacks.
-
-    $(Q)a2x -f xhtml -d book -L -r docs/images -D $(O)/docs/manual/ \
-            docs/manual/manual.txt
-
-Then, if you use a2x, there's no need to manually copy the logo.png.
-Much cleaner, IMHO.
-
+> +and toolchains generated by Buildroot itself. In general, all
+> +toolchains that support the 'sysroot' feature should work. If not, do
+> +not hesitate to contact the developers.
 > +
-> +manual-split-html: $(MANUAL_SOURCES)
-> +	@echo "Split HTML manual..."
-> +	$(Q)mkdir -p $(O)/docs/manual
-> +	$(Q)a2x -f chunked -d book -L docs/manual/manual.txt -r docs/images \
-> +		-D $(O)/docs/manual/
-
-I was very confused as to what the argument to -L was. -L does not take any
-argument, so the ordering above is confusing.
-
-Would it be feasible to reorder the arguments, so that the input is last in
-the line:
-
-    $(Q)a2x -f chunked -d book -L -r docs/images -D $(O)/docs/manual/ \
-	docs/manual/manual.txt
-
-And ditto for the following calls?
-
+> +We do not support toolchains from the
+> +http://www.denx.de/wiki/DULG/ELDK[ELDK] of Denx, for two reasons:
 > +
-> +manual-pdf: $(MANUAL_SOURCES)
-> +	@echo "PDF manual..."
-> +	$(Q)mkdir -p $(O)/docs/manual
-> +	$(Q)a2x --dblatex-opts "-P latex.output.revhistory=0" -f pdf -d book -L docs/manual/manual.txt \
-> +		-D $(O)/docs/manual/
+> +* The ELDK does not contain a pure toolchain (i.e just the compiler,
+> +  binutils, the C and C++ libraries), but a toolchain that comes with
+> +  a very large set of pre-compiled libraries and programs. Therefore,
+> +  Buildroot cannot import the 'sysroot' of the toolchain, as it would
+> +  contain hundreds of megabytes of pre-compiled libraries that are
+> +  normally built by Buildroot.
 > +
-> +manual-txt: $(MANUAL_SOURCES)
-> +	@echo "Text manual..."
-> +	$(Q)mkdir -p $(O)/docs/manual
-> +	$(Q)a2x -f text -d book -L docs/manual/manual.txt \
-> +		-D $(O)/docs/manual
+> +* The ELDK toolchains have a completely non-standard custom mechanism
+> +  to handle multiple library variants. Instead of using the standard
+> +  GCC 'multilib' mechanism, the ARM ELDK uses different symbolic links
+> +  to the compiler to differentiate between library variants (for ARM
+> +  soft-float and ARM VFP), and the PowerPC ELDK compiler uses a
+> +  +CROSS_COMPILE+ environment variable. This non-standard behaviour
+> +  makes it difficult to support ELDK in Buildroot.
 > +
-> +manual-epub: $(MANUAL_SOURCES)
-> +	@echo "EPUB manual..."
-> +	$(Q)mkdir -p $(O)/docs/manual
-> +	$(Q)a2x -f epub -d book -L docs/manual/manual.txt \
-> +		-r docs/images/	\
-> +		-D $(O)/docs/manual
-> +
->  .PHONY: $(noconfig_targets)
+> +We also do not support using the distribution toolchain (i.e the
+> +gcc/binutils/C library installed by your distribution) as the
+> +toolchain to build software for the target. This is because your
+> +distribution toolchain is not a "pure" toolchain (i.e only with the
+> +C/C++ library), so we cannot import it properly into the Buildroot
+> +build environment. So even if you are building a system for a x86 or
+> +x86_64 target, you have to generate a cross-compilation toolchain with
+> +Buildroot or Crosstool-NG.
 
-Otherwise, looks good! :-)
+crosstool-NG
 
-If you fix the above, you can add my:
-  Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-  Tested-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
 Regards,
 Yann E. MORIN.
