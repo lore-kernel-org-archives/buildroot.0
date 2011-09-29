@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 29 Sep 2011 23:59:00 +0200
-Subject: [Buildroot] [PATCH 3/4] remove the old buildroot.html
-	documentation
-In-Reply-To: <cb234ca43b2b1af29829c9d67498e647305217ee.1317326629.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Sep 2011 23:59:45 +0200
+Subject: [Buildroot] [PATCH 4/4] remove Glibc_vs_uClibc document
+In-Reply-To: <9885772ad2c02ec4f7b7094aaeda669f33f688f6.1317326629.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1317326629.git.thomas.petazzoni@free-electrons.com>
- <cb234ca43b2b1af29829c9d67498e647305217ee.1317326629.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201109292359.00224.yann.morin.1998@anciens.enib.fr>
+ <9885772ad2c02ec4f7b7094aaeda669f33f688f6.1317326629.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201109292359.45305.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +13,14 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Thursday 29 September 2011 22:06:00 Thomas Petazzoni wrote:
+On Thursday 29 September 2011 22:06:01 Thomas Petazzoni wrote:
+> This document has nothing to do with Buildroot, and is probably a
+> leftover from the uClibc documentation.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 For what it's worth:
   Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-
-;-)
 
 Regards,
 Yann E. MORIN.
