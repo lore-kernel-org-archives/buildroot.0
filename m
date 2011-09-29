@@ -1,36 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Sep 2011 21:38:09 +0200
-Subject: [Buildroot] [git commit] gst-plugins-bad: bump version
-In-Reply-To: <1317323512.31793.3.camel@bender> (Sven Neumann's message of
- "Thu, 29 Sep 2011 21:11:52 +0200")
-References: <20110929190334.639708DAC7@busybox.osuosl.org>
- <1317323512.31793.3.camel@bender>
-Message-ID: <871uuzp2am.fsf@macbook.be.48ers.dk>
+Date: Thu, 29 Sep 2011 21:38:56 +0200
+Subject: [Buildroot] [git commit] gst-plugins-bad: audioparsers plugin is
+	moved to -good
+Message-ID: <20110929193944.D6D328DBD3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5ebe28cce6fe5218058aa6b610325f142e930386
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> Hi Peter,
- Sven> the audioparsers plug-in has moved to gst-plugins-good. You already
- Sven> added the option there, but as far as I can see, you did not remove it
- Sven> in gst-plugins-bad.
+Thanks to Sven for noticing.
 
-Ups, no - I'll fix that now.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/gst-plugins-bad/Config.in       |    3 ---
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    6 ------
+ 2 files changed, 0 insertions(+), 9 deletions(-)
 
- Sven> Actually I also started to work on this update and I think there are
- Sven> some more changes to the options needed to give enough control over what
- Sven> plug-ins are built. Do you have other gstreamer related changes in the
- Sven> queue or should I have a look and send patches?
-
-Not besides that fix, no. Long term I would like to add a makefile macro
-to make the --enable-foo / --disable-foo a bit less verbose, but that
-can wait.
-
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
+index cd9249a..cfd9b70 100644
+--- a/package/multimedia/gst-plugins-bad/Config.in
++++ b/package/multimedia/gst-plugins-bad/Config.in
+@@ -24,9 +24,6 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFF
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX
+ 	bool "asfmux"
+ 
+-config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUDIOPARSERS
+-	bool "audioparsers"
+-
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT
+ 	bool "autoconvert"
+ 
+diff --git a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+index dee440a..9b2a738 100644
+--- a/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
++++ b/package/multimedia/gst-plugins-bad/gst-plugins-bad.mk
+@@ -40,12 +40,6 @@ else
+ GST_PLUGINS_BAD_CONF_OPT += --disable-asfmux
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUDIOPARSERS),y)
+-GST_PLUGINS_BAD_CONF_OPT += --enable-audioparsers
+-else
+-GST_PLUGINS_BAD_CONF_OPT += --disable-audioparsers
+-endif
+-
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT),y)
+ GST_PLUGINS_BAD_CONF_OPT += --enable-autoconvert
+ else
