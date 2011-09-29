@@ -1,72 +1,785 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Sep 2011 21:57:38 +0200
-Subject: [Buildroot] [PATCH 02/15] package: add configuration option to
-	specify a local override file
-In-Reply-To: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e24366f129d37b9cf8b5be12ff5e6dd2eacffc16.1317325743.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Sep 2011 21:57:36 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/pkg-infra
+Message-ID: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The user can now create a custom local override file to override the
-source directory for various packages.
+Hello,
 
-An example override file:
+This is yet another posting of my pkg-infra branch. I have to say that
+I am a bit annoyed by how this patchset has been handled.
 
- ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
- STRACE_OVERRIDE_SRCDIR = /opt/strace-4.5.20
+It has originally been posted on July, 20th, during the 2011.08
+cycle. That was of course too late for the 2011.08 release, but early
+enough to get some review and feedback to see it integrated in 2011.11.
 
-would tell Buildroot to use the zlib and strace source code from the
-specified directories, instead of download, extracting and patching
-the code has done usually by Buildroot.
+I therefore posted a new version on August 31th, only *ten* hours
+after the release of 2011.08. So we cannot say that I wasn't early in
+the release cycle. Another version has been posted no September, 19th
+as well.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in |   10 ++++++++++
- Makefile  |    7 +++++++
- 2 files changed, 17 insertions(+), 0 deletions(-)
+This the beginning of the 2011.11 release cycle, a lot of new
+packages, package bumps have been merged, but the core of this
+patchset has been mostly ignored. This is sad because everything
+should be done the other way around: first tackle the patchsets that
+touch the core infrastructure (which are likely the one to require the
+most extensive review, and the longest testing period), and only
+*then* tackle the relatively trivial changes on individual packages
+themselves (most of those can be merged until the last day before the
+release without too much risk).
 
-diff --git a/Config.in b/Config.in
-index 2fce9d7..3aa3ad8 100644
---- a/Config.in
-+++ b/Config.in
-@@ -334,6 +334,16 @@ config BR2_HAVE_DEVFILES
- 	  Install headers and static libraries in the
- 	  target filesystem
- 
-+config BR2_PACKAGE_OVERRIDE_FILE
-+	string "location of a package override file"
-+	default "$(TOPDIR)/local.mk"
-+	help
-+	  A package override file is a short makefile that contains
-+	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
-+	  which allows to tell Buildroot to use an existing directory
-+	  as the source directory for a particular package. See the
-+	  Buildroot documentation for more details on this feature.
-+
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/Makefile b/Makefile
-index a20d3e2..8525b7d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -309,6 +309,13 @@ else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
- include toolchain/toolchain-crosstool-ng.mk
- endif
- 
-+# Include the package override file if one has been provided in the
-+# configuration.
-+PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
-+ifneq ($(PACKAGE_OVERRIDE_FILE),)
-+-include $(PACKAGE_OVERRIDE_FILE)
-+endif
-+
- include package/*/*.mk
- 
- include boot/common.mk
+Maintaining this patchset (which touches *every* single package in the
+tree) while packages continue to be updated is a pain.
+
+Therefore, if there is no serious review and consideration of this
+patchset, this will be the last posting of it. Of course, this
+patchset being a bit complicated and sensitive, I will definitely
+understand if there are review comments and I am ready to make the
+necessary changes. However, if it keeps being ignored, then I'll just
+give up on it at this point.
+
+Regards,
+
+Thomas
+
+The following changes since commit 30f416cc86c115c34984b0499b76a00c8482abeb:
+
+  gst-plugins-bad: bump version (2011-09-29 21:02:14 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/pkg-infra
+
+David Wagner (1):
+      Add support for local packages through 'file://' pseudo-protocol
+
+Quotient Remainder (1):
+      Makefile.package.in: Pass non-prefixed name as argument to GENTARGETS_INNER.
+
+Thomas Petazzoni (13):
+      package: enhance infrastructure to support source dir override
+      package: add configuration option to specify a local override file
+      package: add <pkg>-rebuild and <pkg>-reconfigure
+      package: implement a 'local' site method
+      package: add helper functions to get package name and directory magically
+      package: remove useless arguments from GENTARGETS
+      package: remove useless arguments from AUTOTARGETS
+      package: remove useless arguments from CMAKETARGETS
+      fakeroot: remove target package
+      dhrystone: use the <pkg>_EXTRACT_CMDS mechanism
+      whetstone: use the <pkg>_EXTRACT_CMDS mechanism
+      mcookie: convert to the GENTARGETS infrastructure
+      package: normalize output of 'make external-deps'
+
+ Config.in                                          |   14 +
+ Makefile                                           |    7 +
+ boot/at91bootstrap/at91bootstrap.mk                |    2 +-
+ boot/at91dataflashboot/at91dataflashboot.mk        |    2 +-
+ boot/barebox/barebox.mk                            |    2 +-
+ boot/grub/grub.mk                                  |    2 +-
+ boot/syslinux/syslinux.mk                          |    2 +-
+ boot/uboot/uboot.mk                                |    2 +-
+ boot/xloader/xloader.mk                            |    2 +-
+ linux/linux.mk                                     |    2 +-
+ package/Makefile.autotools.in                      |  125 ++++----
+ package/Makefile.cmake.in                          |   97 +++---
+ package/Makefile.package.in                        |  342 +++++++++++++-------
+ package/acl/acl.mk                                 |    2 +-
+ package/acpid/acpid.mk                             |    2 +-
+ package/alsamixergui/alsamixergui.mk               |    2 +-
+ package/argp-standalone/argp-standalone.mk         |    2 +-
+ package/argus/argus.mk                             |    2 +-
+ package/at/at.mk                                   |    2 +-
+ package/atk/atk.mk                                 |    4 +-
+ package/attr/attr.mk                               |    2 +-
+ package/autoconf/autoconf.mk                       |    4 +-
+ package/automake/automake.mk                       |    4 +-
+ package/avahi/avahi.mk                             |    2 +-
+ package/axel/axel.mk                               |    2 +-
+ package/bash/bash.mk                               |    2 +-
+ package/beecrypt/beecrypt.mk                       |    2 +-
+ package/berkeleydb/berkeleydb.mk                   |    2 +-
+ package/bind/bind.mk                               |    2 +-
+ package/binutils/binutils.mk                       |    4 +-
+ package/bison/bison.mk                             |    4 +-
+ package/blackbox/blackbox.mk                       |    2 +-
+ package/bluez_utils/bluez_utils.mk                 |    2 +-
+ package/bmon/bmon.mk                               |    2 +-
+ package/boa/boa.mk                                 |    2 +-
+ package/bonnie/bonnie.mk                           |    2 +-
+ package/bootutils/bootutils.mk                     |    2 +-
+ package/bridge-utils/bridge-utils.mk               |    2 +-
+ package/bsdiff/bsdiff.mk                           |    2 +-
+ package/busybox/busybox.mk                         |    2 +-
+ package/bwm-ng/bwm-ng.mk                           |    2 +-
+ package/bzip2/bzip2.mk                             |    4 +-
+ package/cairo/cairo.mk                             |    2 +-
+ package/can-utils/can-utils.mk                     |    2 +-
+ package/ccache/ccache.mk                           |    4 +-
+ package/cdrkit/cdrkit.mk                           |    4 +-
+ package/cgilua/cgilua.mk                           |    2 +-
+ package/cifs-utils/cifs-utils.mk                   |    2 +-
+ package/cloop/cloop.mk                             |    4 +-
+ package/cmake/cmake.mk                             |    4 +-
+ package/copas/copas.mk                             |    2 +-
+ package/coreutils/coreutils.mk                     |    2 +-
+ package/coxpcall/coxpcall.mk                       |    2 +-
+ package/cramfs/cramfs.mk                           |    4 +-
+ package/crosstool-ng/crosstool-ng.mk               |    2 +-
+ package/ctorrent/ctorrent.mk                       |    2 +-
+ package/cvs/cvs.mk                                 |    2 +-
+ package/dash/dash.mk                               |    2 +-
+ package/dbus-glib/dbus-glib.mk                     |    4 +-
+ package/dbus-python/dbus-python.mk                 |    2 +-
+ package/dbus/dbus.mk                               |    4 +-
+ package/dhcp/dhcp.mk                               |    2 +-
+ package/dhcpdump/dhcpdump.mk                       |    2 +-
+ package/dhrystone/dhrystone.mk                     |   14 +-
+ package/dialog/dialog.mk                           |    2 +-
+ package/diffutils/diffutils.mk                     |    2 +-
+ package/directfb-examples/directfb-examples.mk     |    2 +-
+ package/directfb/directfb.mk                       |    4 +-
+ package/distcc/distcc.mk                           |    2 +-
+ package/divine/divine.mk                           |    2 +-
+ package/dmalloc/dmalloc.mk                         |    2 +-
+ package/dmraid/dmraid.mk                           |    2 +-
+ package/dnsmasq/dnsmasq.mk                         |    2 +-
+ package/docker/docker.mk                           |    2 +-
+ package/dosfstools/dosfstools.mk                   |    2 +-
+ package/dropbear/dropbear.mk                       |    2 +-
+ package/dsp-tools/dsp-tools.mk                     |    2 +-
+ package/e2fsprogs/e2fsprogs.mk                     |    4 +-
+ package/ebtables/ebtables.mk                       |    2 +-
+ package/ed/ed.mk                                   |    2 +-
+ package/eeprog/eeprog.mk                           |    2 +-
+ package/enchant/enchant.mk                         |    2 +-
+ package/ethtool/ethtool.mk                         |    2 +-
+ package/expat/expat.mk                             |    4 +-
+ package/ezxml/ezxml.mk                             |    2 +-
+ package/fakeroot/fakeroot.mk                       |    6 +-
+ package/fbdump/fbdump.mk                           |    2 +-
+ package/fbgrab/fbgrab.mk                           |    2 +-
+ package/fbset/fbset.mk                             |    2 +-
+ package/fbv/fbv.mk                                 |    2 +-
+ package/fconfig/fconfig.mk                         |    2 +-
+ package/fftw/fftw.mk                               |    2 +-
+ package/file/file.mk                               |    4 +-
+ package/findutils/findutils.mk                     |    2 +-
+ package/flex/flex.mk                               |    4 +-
+ package/fltk/fltk.mk                               |    2 +-
+ package/fluxbox/fluxbox.mk                         |    2 +-
+ package/fontconfig/fontconfig.mk                   |    4 +-
+ package/freetype/freetype.mk                       |    4 +-
+ package/gadgetfs-test/gadgetfs-test.mk             |    2 +-
+ package/games/gnuchess/gnuchess.mk                 |    2 +-
+ package/games/prboom/prboom.mk                     |    2 +-
+ package/games/rubix/rubix.mk                       |    2 +-
+ package/gamin/gamin.mk                             |    2 +-
+ package/gawk/gawk.mk                               |    4 +-
+ package/gdisk/gdisk.mk                             |    2 +-
+ package/gdk-pixbuf/gdk-pixbuf.mk                   |    4 +-
+ package/genext2fs/genext2fs.mk                     |    4 +-
+ package/genromfs/genromfs.mk                       |    4 +-
+ package/gmp/gmp.mk                                 |    4 +-
+ package/gmpc/gmpc.mk                               |    2 +-
+ package/gnutls/gnutls.mk                           |    2 +-
+ package/gob2/gob2.mk                               |    4 +-
+ package/gperf/gperf.mk                             |    4 +-
+ package/gpsd/gpsd.mk                               |    2 +-
+ package/gqview/gqview.mk                           |    2 +-
+ package/grep/grep.mk                               |    2 +-
+ package/gtk2-engines/gtk2-engines.mk               |    2 +-
+ .../gtk2-theme-hicolor/gtk2-theme-hicolor.mk       |    2 +-
+ package/gtkperf/gtkperf.mk                         |    2 +-
+ package/gvfs/gvfs.mk                               |    2 +-
+ package/gzip/gzip.mk                               |    2 +-
+ package/haserl/haserl.mk                           |    2 +-
+ package/hdparm/hdparm.mk                           |    2 +-
+ package/hostapd/hostapd.mk                         |    2 +-
+ package/htop/htop.mk                               |    2 +-
+ package/hwdata/hwdata.mk                           |    2 +-
+ package/i2c-tools/i2c-tools.mk                     |    2 +-
+ package/icu/icu.mk                                 |    4 +-
+ package/ifplugd/ifplugd.mk                         |    2 +-
+ package/imagemagick/imagemagick.mk                 |    2 +-
+ package/inotify-tools/inotify-tools.mk             |    2 +-
+ package/input-event-daemon/input-event-daemon.mk   |    2 +-
+ package/input-tools/input-tools.mk                 |    2 +-
+ package/intltool/intltool.mk                       |    4 +-
+ package/iostat/iostat.mk                           |    2 +-
+ package/iperf/iperf.mk                             |    2 +-
+ package/ipkg/ipkg.mk                               |    2 +-
+ package/iproute2/iproute2.mk                       |    2 +-
+ package/ipsec-tools/ipsec-tools.mk                 |    2 +-
+ package/ipset/ipset.mk                             |    2 +-
+ package/iptables/iptables.mk                       |    2 +-
+ package/irda-utils/irda-utils.mk                   |    2 +-
+ package/iw/iw.mk                                   |    2 +-
+ package/java/classpath/classpath.mk                |    2 +-
+ package/java/jamvm/jamvm.mk                        |    2 +-
+ package/jpeg/jpeg.mk                               |    2 +-
+ package/json-c/json-c.mk                           |    2 +-
+ package/kbd/kbd.mk                                 |    2 +-
+ package/kexec/kexec.mk                             |    2 +-
+ package/kismet/kismet.mk                           |    2 +-
+ package/leafpad/leafpad.mk                         |    2 +-
+ package/less/less.mk                               |    2 +-
+ package/libaio/libaio.mk                           |    2 +-
+ package/libarchive/libarchive.mk                   |    2 +-
+ package/libargtable2/libargtable2.mk               |    2 +-
+ package/libart/libart.mk                           |    2 +-
+ package/libatomic_ops/libatomic_ops.mk             |    2 +-
+ package/libcap/libcap.mk                           |    4 +-
+ package/libcgi/libcgi.mk                           |    2 +-
+ package/libcgicc/libcgicc.mk                       |    2 +-
+ package/libconfig/libconfig.mk                     |    2 +-
+ package/libconfuse/libconfuse.mk                   |    2 +-
+ package/libcurl/libcurl.mk                         |    2 +-
+ package/libdaemon/libdaemon.mk                     |    2 +-
+ package/libdnet/libdnet.mk                         |    2 +-
+ package/libdrm/libdrm.mk                           |    2 +-
+ package/libeXosip2/libeXosip2.mk                   |    2 +-
+ package/libelf/libelf.mk                           |    2 +-
+ package/liberation/liberation.mk                   |    2 +-
+ package/libev/libev.mk                             |    2 +-
+ package/libevent/libevent.mk                       |    2 +-
+ package/libexif/libexif.mk                         |    2 +-
+ package/libffi/libffi.mk                           |    2 +-
+ package/libftdi/libftdi.mk                         |    2 +-
+ package/libfuse/libfuse.mk                         |    2 +-
+ package/libgail/libgail.mk                         |    2 +-
+ package/libgcrypt/libgcrypt.mk                     |    2 +-
+ package/libgeotiff/libgeotiff.mk                   |    2 +-
+ package/libglade/libglade.mk                       |    2 +-
+ package/libglib2/libglib2.mk                       |    4 +-
+ package/libgpg-error/libgpg-error.mk               |    2 +-
+ package/libgtk2/libgtk2.mk                         |    4 +-
+ package/libhid/libhid.mk                           |    2 +-
+ package/libiconv/libiconv.mk                       |    2 +-
+ package/libidn/libidn.mk                           |    2 +-
+ package/libiqrf/libiqrf.mk                         |    2 +-
+ package/liblockfile/liblockfile.mk                 |    2 +-
+ package/libmicrohttpd/libmicrohttpd.mk             |    2 +-
+ package/libmnl/libmnl.mk                           |    2 +-
+ package/libnl/libnl.mk                             |    2 +-
+ package/libnspr/libnspr.mk                         |    2 +-
+ package/libnss/libnss.mk                           |    2 +-
+ package/liboil/liboil.mk                           |    2 +-
+ package/libosip2/libosip2.mk                       |    2 +-
+ package/libpcap/libpcap.mk                         |    2 +-
+ package/libpng/libpng.mk                           |    4 +-
+ package/libraw/libraw.mk                           |    2 +-
+ package/libraw1394/libraw1394.mk                   |    2 +-
+ package/libroxml/libroxml.mk                       |    2 +-
+ package/librsvg/librsvg.mk                         |    2 +-
+ package/librsync/librsync.mk                       |    2 +-
+ package/libsexy/libsexy.mk                         |    2 +-
+ package/libsigc/libsigc.mk                         |    2 +-
+ package/libsoup/libsoup.mk                         |    2 +-
+ package/libsvgtiny/libsvgtiny.mk                   |    2 +-
+ package/libsysfs/libsysfs.mk                       |    2 +-
+ package/libtool/libtool.mk                         |    4 +-
+ package/libungif/libungif.mk                       |    2 +-
+ package/libupnp/libupnp.mk                         |    2 +-
+ package/libusb-compat/libusb-compat.mk             |    2 +-
+ package/libusb/libusb.mk                           |    2 +-
+ package/libv4l/libv4l.mk                           |    2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk   |    4 +-
+ package/libxml2/libxml2.mk                         |    4 +-
+ package/libxslt/libxslt.mk                         |    4 +-
+ package/libyaml/libyaml.mk                         |    2 +-
+ package/lighttpd/lighttpd.mk                       |    2 +-
+ package/links/links.mk                             |    2 +-
+ package/linux-fusion/linux-fusion.mk               |    2 +-
+ package/lite/lite.mk                               |    2 +-
+ package/lm-sensors/lm-sensors.mk                   |    2 +-
+ package/lmbench/lmbench.mk                         |    2 +-
+ package/lockfile-progs/lockfile-progs.mk           |    2 +-
+ package/logrotate/logrotate.mk                     |    2 +-
+ package/lrzsz/lrzsz.mk                             |    2 +-
+ package/lsof/lsof.mk                               |    2 +-
+ package/lsuio/lsuio.mk                             |    2 +-
+ package/ltp-testsuite/ltp-testsuite.mk             |    2 +-
+ package/ltrace/ltrace.mk                           |    2 +-
+ package/lua/lua.mk                                 |    2 +-
+ package/luafilesystem/luafilesystem.mk             |    2 +-
+ package/luasocket/luasocket.mk                     |    2 +-
+ package/lvm2/lvm2.mk                               |    2 +-
+ package/lzma/lzma.mk                               |    4 +-
+ package/lzo/lzo.mk                                 |    4 +-
+ package/lzop/lzop.mk                               |    2 +-
+ package/m4/m4.mk                                   |    4 +-
+ package/make/make.mk                               |    2 +-
+ package/makedevs/makedevs.mk                       |    4 +-
+ .../matchbox/matchbox-common/matchbox-common.mk    |    2 +-
+ .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    2 +-
+ .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |    2 +-
+ .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
+ package/matchbox/matchbox-lib/matchbox-lib.mk      |    2 +-
+ package/matchbox/matchbox-panel/matchbox-panel.mk  |    2 +-
+ .../matchbox-startup-monitor.mk                    |    2 +-
+ package/matchbox/matchbox-wm/matchbox-wm.mk        |    2 +-
+ package/mdadm/mdadm.mk                             |    2 +-
+ package/memstat/memstat.mk                         |    2 +-
+ package/memtester/memtester.mk                     |    2 +-
+ package/metacity/metacity.mk                       |    2 +-
+ package/midori/midori.mk                           |    2 +-
+ package/mii-diag/mii-diag.mk                       |    2 +-
+ package/module-init-tools/module-init-tools.mk     |    4 +-
+ package/mpc/mpc.mk                                 |    4 +-
+ package/mpfr/mpfr.mk                               |    4 +-
+ package/mrouted/mrouted.mk                         |    2 +-
+ package/mtd/mtd.mk                                 |    4 +-
+ package/multimedia/alsa-lib/alsa-lib.mk            |    2 +-
+ package/multimedia/alsa-utils/alsa-utils.mk        |    2 +-
+ package/multimedia/aumix/aumix.mk                  |    2 +-
+ package/multimedia/faad2/faad2.mk                  |    2 +-
+ package/multimedia/ffmpeg/ffmpeg.mk                |    2 +-
+ package/multimedia/flac/flac.mk                    |    2 +-
+ package/multimedia/gst-dsp/gst-dsp.mk              |    2 +-
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk        |    2 +-
+ package/multimedia/gst-omapfb/gst-omapfb.mk        |    2 +-
+ .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 +-
+ .../gst-plugins-base/gst-plugins-base.mk           |    2 +-
+ .../gst-plugins-good/gst-plugins-good.mk           |    2 +-
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 +-
+ package/multimedia/gstreamer/gstreamer.mk          |    2 +-
+ package/multimedia/lame/lame.mk                    |    2 +-
+ package/multimedia/libao/libao.mk                  |    2 +-
+ package/multimedia/libcdaudio/libcdaudio.mk        |    2 +-
+ package/multimedia/libcue/libcue.mk                |    2 +-
+ package/multimedia/libcuefile/libcuefile.mk        |    2 +-
+ package/multimedia/libdvdnav/libdvdnav.mk          |    2 +-
+ package/multimedia/libdvdread/libdvdread.mk        |    2 +-
+ package/multimedia/libid3tag/libid3tag.mk          |    2 +-
+ package/multimedia/libmad/libmad.mk                |    2 +-
+ package/multimedia/libmms/libmms.mk                |    2 +-
+ package/multimedia/libmpd/libmpd.mk                |    2 +-
+ package/multimedia/libmpeg2/libmpeg2.mk            |    2 +-
+ package/multimedia/libogg/libogg.mk                |    2 +-
+ package/multimedia/libreplaygain/libreplaygain.mk  |    2 +-
+ package/multimedia/libsamplerate/libsamplerate.mk  |    2 +-
+ package/multimedia/libsndfile/libsndfile.mk        |    2 +-
+ package/multimedia/libtheora/libtheora.mk          |    2 +-
+ package/multimedia/libvorbis/libvorbis.mk          |    2 +-
+ package/multimedia/live555/live555.mk              |    2 +-
+ package/multimedia/madplay/madplay.mk              |    2 +-
+ package/multimedia/mpd/mpd.mk                      |    2 +-
+ package/multimedia/mpg123/mpg123.mk                |    2 +-
+ package/multimedia/mplayer/mplayer.mk              |    2 +-
+ package/multimedia/musepack/musepack.mk            |    2 +-
+ package/multimedia/portaudio/portaudio.mk          |    2 +-
+ package/multimedia/python-mad/python-mad.mk        |    2 +-
+ package/multimedia/speex/speex.mk                  |    2 +-
+ package/multimedia/swfdec/swfdec.mk                |    2 +-
+ package/multimedia/taglib/taglib.mk                |    2 +-
+ .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    2 +-
+ package/multimedia/tremor/tremor.mk                |    2 +-
+ package/multimedia/vorbis-tools/vorbis-tools.mk    |    2 +-
+ package/multimedia/wavpack/wavpack.mk              |    2 +-
+ package/mutt/mutt.mk                               |    2 +-
+ package/mxml/mxml.mk                               |    2 +-
+ package/mysql_client/mysql_client.mk               |    2 +-
+ package/nano/nano.mk                               |    2 +-
+ package/nasm/nasm.mk                               |    4 +-
+ package/nbd/nbd.mk                                 |    2 +-
+ package/ncftp/ncftp.mk                             |    2 +-
+ package/ncurses/ncurses.mk                         |    4 +-
+ package/neon/neon.mk                               |    2 +-
+ package/netcat/netcat.mk                           |    2 +-
+ package/netperf/netperf.mk                         |    2 +-
+ package/netplug/netplug.mk                         |    2 +-
+ package/netsnmp/netsnmp.mk                         |    2 +-
+ package/netstat-nat/netstat-nat.mk                 |    2 +-
+ package/nfs-utils/nfs-utils.mk                     |    2 +-
+ package/ngircd/ngircd.mk                           |    2 +-
+ package/ngrep/ngrep.mk                             |    2 +-
+ package/ntfs-3g/ntfs-3g.mk                         |    2 +-
+ package/ntfsprogs/ntfsprogs.mk                     |    2 +-
+ package/ntp/ntp.mk                                 |    2 +-
+ package/nuttcp/nuttcp.mk                           |    2 +-
+ package/olsr/olsr.mk                               |    2 +-
+ package/openntpd/openntpd.mk                       |    2 +-
+ package/openocd/openocd.mk                         |    2 +-
+ package/openssh/openssh.mk                         |    2 +-
+ package/openssl/openssl.mk                         |    2 +-
+ package/openvpn/openvpn.mk                         |    2 +-
+ package/oprofile/oprofile.mk                       |    2 +-
+ package/orc/orc.mk                                 |    2 +-
+ package/pango/pango.mk                             |    2 +-
+ package/patch/patch.mk                             |    2 +-
+ package/pciutils/pciutils.mk                       |    2 +-
+ package/pcmanfm/pcmanfm.mk                         |    2 +-
+ package/pcre/pcre.mk                               |    2 +-
+ package/php/php.mk                                 |    2 +-
+ package/pixman/pixman.mk                           |    4 +-
+ package/pkg-config/pkg-config.mk                   |    4 +-
+ package/popt/popt.mk                               |    2 +-
+ package/portmap/portmap.mk                         |    2 +-
+ package/pppd/pppd.mk                               |    2 +-
+ package/pptp-linux/pptp-linux.mk                   |    2 +-
+ package/procps/procps.mk                           |    2 +-
+ package/proftpd/proftpd.mk                         |    2 +-
+ package/psmisc/psmisc.mk                           |    2 +-
+ package/python-serial/python-serial.mk             |    2 +-
+ package/python/python.mk                           |    4 +-
+ package/qt/qt.mk                                   |    2 +-
+ package/quagga/quagga.mk                           |    2 +-
+ package/radvd/radvd.mk                             |    2 +-
+ package/rdesktop/rdesktop.mk                       |    2 +-
+ package/readline/readline.mk                       |    2 +-
+ package/rings/rings.mk                             |    2 +-
+ package/rng-tools/rng-tools.mk                     |    2 +-
+ package/rp-pppoe/rp-pppoe.mk                       |    2 +-
+ package/rpm/rpm.mk                                 |    2 +-
+ package/rrdtool/rrdtool.mk                         |    2 +-
+ package/rsh-redone/rsh-redone.mk                   |    2 +-
+ package/rsync/rsync.mk                             |    2 +-
+ package/rsyslog/rsyslog.mk                         |    2 +-
+ package/rtai/rtai.mk                               |    2 +-
+ package/ruby/ruby.mk                               |    4 +-
+ package/samba/samba.mk                             |    2 +-
+ package/sawman/sawman.mk                           |    2 +-
+ package/scons/scons.mk                             |    2 +-
+ package/screen/screen.mk                           |    2 +-
+ package/sdl/sdl.mk                                 |    2 +-
+ package/sdl_gfx/sdl_gfx.mk                         |    2 +-
+ package/sdl_image/sdl_image.mk                     |    2 +-
+ package/sdl_mixer/sdl_mixer.mk                     |    2 +-
+ package/sdl_net/sdl_net.mk                         |    2 +-
+ package/sdl_sound/sdl_sound.mk                     |    2 +-
+ package/sdl_ttf/sdl_ttf.mk                         |    2 +-
+ package/sdparm/sdparm.mk                           |    2 +-
+ package/sed/sed.mk                                 |    2 +-
+ package/ser2net/ser2net.mk                         |    2 +-
+ package/setserial/setserial.mk                     |    2 +-
+ package/shared-mime-info/shared-mime-info.mk       |    4 +-
+ package/slang/slang.mk                             |    2 +-
+ package/smartmontools/smartmontools.mk             |    2 +-
+ package/socat/socat.mk                             |    2 +-
+ package/spawn-fcgi/spawn-fcgi.mk                   |    2 +-
+ package/sqlite/sqlite.mk                           |    2 +-
+ package/squashfs/squashfs.mk                       |    4 +-
+ package/squashfs3/squashfs3.mk                     |    4 +-
+ package/squid/squid.mk                             |    2 +-
+ package/sredird/sredird.mk                         |    2 +-
+ package/sshfs/sshfs.mk                             |    2 +-
+ package/sstrip/sstrip.mk                           |    4 +-
+ .../startup-notification/startup-notification.mk   |    2 +-
+ package/statserial/statserial.mk                   |    2 +-
+ package/strace/strace.mk                           |    2 +-
+ package/stunnel/stunnel.mk                         |    2 +-
+ package/sudo/sudo.mk                               |    2 +-
+ package/sylpheed/sylpheed.mk                       |    2 +-
+ package/synergy/synergy.mk                         |    2 +-
+ package/sysklogd/sysklogd.mk                       |    2 +-
+ package/sysstat/sysstat.mk                         |    2 +-
+ package/sysvinit/sysvinit.mk                       |    2 +-
+ package/tar/tar.mk                                 |    2 +-
+ package/tcl/tcl.mk                                 |    2 +-
+ package/tcpdump/tcpdump.mk                         |    2 +-
+ package/tcpreplay/tcpreplay.mk                     |    2 +-
+ package/tftpd/tftpd.mk                             |    2 +-
+ package/thttpd/thttpd.mk                           |    2 +-
+ package/ti-utils/ti-utils.mk                       |    2 +-
+ package/tiff/tiff.mk                               |    2 +-
+ package/tn5250/tn5250.mk                           |    2 +-
+ package/torsmo/torsmo.mk                           |    2 +-
+ package/tslib/tslib.mk                             |    2 +-
+ package/uboot-tools/uboot-tools.mk                 |    4 +-
+ package/udev/udev.mk                               |    2 +-
+ package/udpcast/udpcast.mk                         |    2 +-
+ package/usb_modeswitch/usb_modeswitch.mk           |    2 +-
+ package/usbmount/usbmount.mk                       |    2 +-
+ package/usbutils/usbutils.mk                       |    2 +-
+ package/util-linux/util-linux.mk                   |    2 +-
+ package/valgrind/valgrind.mk                       |    2 +-
+ package/vim/vim.mk                                 |    2 +-
+ package/vsftpd/vsftpd.mk                           |    2 +-
+ package/vtun/vtun.mk                               |    2 +-
+ package/webkit/webkit.mk                           |    2 +-
+ package/wget/wget.mk                               |    2 +-
+ package/whetstone/whetstone.mk                     |   12 +-
+ package/which/which.mk                             |    2 +-
+ package/wipe/wipe.mk                               |    2 +-
+ package/wireless_tools/wireless_tools.mk           |    2 +-
+ package/wpa_supplicant/wpa_supplicant.mk           |    2 +-
+ package/wsapi/wsapi.mk                             |    2 +-
+ package/x11r7/libxcb/libxcb.mk                     |    4 +-
+ package/x11r7/mcookie/mcookie.mk                   |   24 +-
+ package/x11r7/mesa3d/mesa3d.mk                     |    2 +-
+ package/x11r7/pthread-stubs/pthread-stubs.mk       |    4 +-
+ package/x11r7/xapp_appres/xapp_appres.mk           |    2 +-
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk       |    4 +-
+ package/x11r7/xapp_beforelight/xapp_beforelight.mk |    2 +-
+ package/x11r7/xapp_bitmap/xapp_bitmap.mk           |    2 +-
+ package/x11r7/xapp_editres/xapp_editres.mk         |    2 +-
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |    2 +-
+ package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk     |    2 +-
+ package/x11r7/xapp_fstobdf/xapp_fstobdf.mk         |    2 +-
+ package/x11r7/xapp_iceauth/xapp_iceauth.mk         |    2 +-
+ package/x11r7/xapp_ico/xapp_ico.mk                 |    2 +-
+ package/x11r7/xapp_listres/xapp_listres.mk         |    2 +-
+ package/x11r7/xapp_luit/xapp_luit.mk               |    2 +-
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk     |    4 +-
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    4 +-
+ package/x11r7/xapp_oclock/xapp_oclock.mk           |    2 +-
+ package/x11r7/xapp_rgb/xapp_rgb.mk                 |    2 +-
+ package/x11r7/xapp_rstart/xapp_rstart.mk           |    2 +-
+ package/x11r7/xapp_scripts/xapp_scripts.mk         |    2 +-
+ package/x11r7/xapp_sessreg/xapp_sessreg.mk         |    2 +-
+ package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk     |    2 +-
+ package/x11r7/xapp_showfont/xapp_showfont.mk       |    2 +-
+ package/x11r7/xapp_smproxy/xapp_smproxy.mk         |    2 +-
+ package/x11r7/xapp_twm/xapp_twm.mk                 |    2 +-
+ package/x11r7/xapp_viewres/xapp_viewres.mk         |    2 +-
+ package/x11r7/xapp_x11perf/xapp_x11perf.mk         |    2 +-
+ package/x11r7/xapp_xauth/xapp_xauth.mk             |    2 +-
+ package/x11r7/xapp_xbacklight/xapp_xbacklight.mk   |    2 +-
+ package/x11r7/xapp_xbiff/xapp_xbiff.mk             |    2 +-
+ package/x11r7/xapp_xcalc/xapp_xcalc.mk             |    2 +-
+ package/x11r7/xapp_xclipboard/xapp_xclipboard.mk   |    2 +-
+ package/x11r7/xapp_xclock/xapp_xclock.mk           |    2 +-
+ package/x11r7/xapp_xcmsdb/xapp_xcmsdb.mk           |    2 +-
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   |    2 +-
+ package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk     |    2 +-
+ package/x11r7/xapp_xditview/xapp_xditview.mk       |    2 +-
+ package/x11r7/xapp_xdm/xapp_xdm.mk                 |    2 +-
+ package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk       |    2 +-
+ package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk       |    2 +-
+ package/x11r7/xapp_xedit/xapp_xedit.mk             |    2 +-
+ package/x11r7/xapp_xev/xapp_xev.mk                 |    2 +-
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk             |    2 +-
+ package/x11r7/xapp_xf86dga/xapp_xf86dga.mk         |    2 +-
+ package/x11r7/xapp_xfd/xapp_xfd.mk                 |    2 +-
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.mk       |    2 +-
+ package/x11r7/xapp_xfs/xapp_xfs.mk                 |    2 +-
+ package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk         |    2 +-
+ package/x11r7/xapp_xgamma/xapp_xgamma.mk           |    2 +-
+ package/x11r7/xapp_xgc/xapp_xgc.mk                 |    2 +-
+ package/x11r7/xapp_xhost/xapp_xhost.mk             |    2 +-
+ package/x11r7/xapp_xinit/xapp_xinit.mk             |    2 +-
+ package/x11r7/xapp_xinput/xapp_xinput.mk           |    2 +-
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    4 +-
+ package/x11r7/xapp_xkbevd/xapp_xkbevd.mk           |    2 +-
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.mk       |    2 +-
+ package/x11r7/xapp_xkbutils/xapp_xkbutils.mk       |    2 +-
+ package/x11r7/xapp_xkill/xapp_xkill.mk             |    2 +-
+ package/x11r7/xapp_xload/xapp_xload.mk             |    2 +-
+ package/x11r7/xapp_xlogo/xapp_xlogo.mk             |    2 +-
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk       |    2 +-
+ package/x11r7/xapp_xlsclients/xapp_xlsclients.mk   |    2 +-
+ package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk       |    2 +-
+ package/x11r7/xapp_xmag/xapp_xmag.mk               |    2 +-
+ package/x11r7/xapp_xman/xapp_xman.mk               |    2 +-
+ package/x11r7/xapp_xmessage/xapp_xmessage.mk       |    2 +-
+ package/x11r7/xapp_xmh/xapp_xmh.mk                 |    2 +-
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.mk         |    2 +-
+ package/x11r7/xapp_xmore/xapp_xmore.mk             |    2 +-
+ .../x11r7/xapp_xplsprinters/xapp_xplsprinters.mk   |    2 +-
+ package/x11r7/xapp_xpr/xapp_xpr.mk                 |    2 +-
+ .../xapp_xprehashprinterlist.mk                    |    2 +-
+ package/x11r7/xapp_xprop/xapp_xprop.mk             |    2 +-
+ package/x11r7/xapp_xrandr/xapp_xrandr.mk           |    2 +-
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk               |    2 +-
+ package/x11r7/xapp_xrefresh/xapp_xrefresh.mk       |    2 +-
+ package/x11r7/xapp_xset/xapp_xset.mk               |    2 +-
+ package/x11r7/xapp_xsetmode/xapp_xsetmode.mk       |    2 +-
+ package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk |    2 +-
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.mk       |    2 +-
+ package/x11r7/xapp_xsm/xapp_xsm.mk                 |    2 +-
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk       |    2 +-
+ package/x11r7/xapp_xvidtune/xapp_xvidtune.mk       |    2 +-
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.mk           |    2 +-
+ package/x11r7/xapp_xwd/xapp_xwd.mk                 |    2 +-
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.mk       |    2 +-
+ package/x11r7/xapp_xwud/xapp_xwud.mk               |    2 +-
+ package/x11r7/xcb-proto/xcb-proto.mk               |    4 +-
+ package/x11r7/xcb-util/xcb-util.mk                 |    2 +-
+ package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk     |    2 +-
+ .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    2 +-
+ .../xdriver_xf86-input-acecad.mk                   |    2 +-
+ .../xdriver_xf86-input-aiptek.mk                   |    2 +-
+ .../xdriver_xf86-input-evdev.mk                    |    2 +-
+ .../xdriver_xf86-input-joystick.mk                 |    2 +-
+ .../xdriver_xf86-input-keyboard.mk                 |    2 +-
+ .../xdriver_xf86-input-mouse.mk                    |    2 +-
+ .../xdriver_xf86-input-synaptics.mk                |    2 +-
+ .../xdriver_xf86-input-vmmouse.mk                  |    2 +-
+ .../xdriver_xf86-input-void.mk                     |    2 +-
+ .../xdriver_xf86-video-apm.mk                      |    2 +-
+ .../xdriver_xf86-video-ark.mk                      |    2 +-
+ .../xdriver_xf86-video-ast.mk                      |    2 +-
+ .../xdriver_xf86-video-ati.mk                      |    2 +-
+ .../xdriver_xf86-video-chips.mk                    |    2 +-
+ .../xdriver_xf86-video-cirrus.mk                   |    2 +-
+ .../xdriver_xf86-video-dummy.mk                    |    2 +-
+ .../xdriver_xf86-video-fbdev.mk                    |    2 +-
+ .../xdriver_xf86-video-geode.mk                    |    2 +-
+ .../xdriver_xf86-video-glide.mk                    |    2 +-
+ .../xdriver_xf86-video-glint.mk                    |    2 +-
+ .../xdriver_xf86-video-i128.mk                     |    2 +-
+ .../xdriver_xf86-video-i740.mk                     |    2 +-
+ .../xdriver_xf86-video-intel.mk                    |    2 +-
+ .../xdriver_xf86-video-mach64.mk                   |    2 +-
+ .../xdriver_xf86-video-mga.mk                      |    2 +-
+ .../xdriver_xf86-video-neomagic.mk                 |    2 +-
+ .../xdriver_xf86-video-newport.mk                  |    2 +-
+ .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |    2 +-
+ .../xdriver_xf86-video-openchrome.mk               |    2 +-
+ .../xdriver_xf86-video-r128.mk                     |    2 +-
+ .../xdriver_xf86-video-rendition.mk                |    2 +-
+ .../xdriver_xf86-video-s3/xdriver_xf86-video-s3.mk |    2 +-
+ .../xdriver_xf86-video-s3virge.mk                  |    2 +-
+ .../xdriver_xf86-video-savage.mk                   |    2 +-
+ .../xdriver_xf86-video-siliconmotion.mk            |    2 +-
+ .../xdriver_xf86-video-sis.mk                      |    2 +-
+ .../xdriver_xf86-video-sisusb.mk                   |    2 +-
+ .../xdriver_xf86-video-suncg14.mk                  |    2 +-
+ .../xdriver_xf86-video-suncg3.mk                   |    2 +-
+ .../xdriver_xf86-video-suncg6.mk                   |    2 +-
+ .../xdriver_xf86-video-sunffb.mk                   |    2 +-
+ .../xdriver_xf86-video-sunleo.mk                   |    2 +-
+ .../xdriver_xf86-video-suntcx.mk                   |    2 +-
+ .../xdriver_xf86-video-tdfx.mk                     |    2 +-
+ .../xdriver_xf86-video-tga.mk                      |    2 +-
+ .../xdriver_xf86-video-trident.mk                  |    2 +-
+ .../xdriver_xf86-video-tseng.mk                    |    2 +-
+ .../xdriver_xf86-video-v4l.mk                      |    2 +-
+ .../xdriver_xf86-video-vesa.mk                     |    2 +-
+ .../xdriver_xf86-video-vmware.mk                   |    2 +-
+ .../xdriver_xf86-video-voodoo.mk                   |    2 +-
+ .../xdriver_xf86-video-wsfb.mk                     |    2 +-
+ .../xdriver_xf86-video-xgi.mk                      |    2 +-
+ .../xdriver_xf86-video-xgixp.mk                    |    2 +-
+ package/x11r7/xfont_encodings/xfont_encodings.mk   |    4 +-
+ .../xfont_font-adobe-100dpi.mk                     |    2 +-
+ .../xfont_font-adobe-75dpi.mk                      |    2 +-
+ .../xfont_font-adobe-utopia-100dpi.mk              |    2 +-
+ .../xfont_font-adobe-utopia-75dpi.mk               |    2 +-
+ .../xfont_font-adobe-utopia-type1.mk               |    2 +-
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk |    2 +-
+ .../xfont_font-arabic-misc.mk                      |    2 +-
+ .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |    2 +-
+ .../xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk     |    2 +-
+ .../xfont_font-bh-lucidatypewriter-100dpi.mk       |    2 +-
+ .../xfont_font-bh-lucidatypewriter-75dpi.mk        |    2 +-
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |    2 +-
+ .../xfont_font-bh-type1/xfont_font-bh-type1.mk     |    2 +-
+ .../xfont_font-bitstream-100dpi.mk                 |    2 +-
+ .../xfont_font-bitstream-75dpi.mk                  |    2 +-
+ .../xfont_font-bitstream-speedo.mk                 |    2 +-
+ .../xfont_font-bitstream-type1.mk                  |    2 +-
+ .../xfont_font-cronyx-cyrillic.mk                  |    2 +-
+ .../xfont_font-cursor-misc.mk                      |    2 +-
+ .../xfont_font-daewoo-misc.mk                      |    2 +-
+ .../xfont_font-dec-misc/xfont_font-dec-misc.mk     |    2 +-
+ .../xfont_font-ibm-type1/xfont_font-ibm-type1.mk   |    2 +-
+ .../xfont_font-isas-misc/xfont_font-isas-misc.mk   |    2 +-
+ .../xfont_font-jis-misc/xfont_font-jis-misc.mk     |    2 +-
+ .../xfont_font-micro-misc/xfont_font-micro-misc.mk |    2 +-
+ .../xfont_font-misc-cyrillic.mk                    |    2 +-
+ .../xfont_font-misc-ethiopic.mk                    |    2 +-
+ .../xfont_font-misc-meltho.mk                      |    2 +-
+ .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |    3 +-
+ .../xfont_font-mutt-misc/xfont_font-mutt-misc.mk   |    2 +-
+ .../xfont_font-schumacher-misc.mk                  |    2 +-
+ .../xfont_font-screen-cyrillic.mk                  |    2 +-
+ .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |    2 +-
+ .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |    2 +-
+ package/x11r7/xfont_font-util/xfont_font-util.mk   |    4 +-
+ .../xfont_font-winitzki-cyrillic.mk                |    2 +-
+ .../xfont_font-xfree86-type1.mk                    |    2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
+ package/x11r7/xlib_libFS/xlib_libFS.mk             |    2 +-
+ package/x11r7/xlib_libICE/xlib_libICE.mk           |    2 +-
+ package/x11r7/xlib_libSM/xlib_libSM.mk             |    2 +-
+ package/x11r7/xlib_libX11/xlib_libX11.mk           |    4 +-
+ .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |    2 +-
+ package/x11r7/xlib_libXau/xlib_libXau.mk           |    4 +-
+ package/x11r7/xlib_libXaw/xlib_libXaw.mk           |    2 +-
+ .../x11r7/xlib_libXcomposite/xlib_libXcomposite.mk |    2 +-
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |    2 +-
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   |    2 +-
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    4 +-
+ package/x11r7/xlib_libXext/xlib_libXext.mk         |    2 +-
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.mk     |    2 +-
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    4 +-
+ .../x11r7/xlib_libXfontcache/xlib_libXfontcache.mk |    2 +-
+ package/x11r7/xlib_libXft/xlib_libXft.mk           |    2 +-
+ package/x11r7/xlib_libXi/xlib_libXi.mk             |    2 +-
+ package/x11r7/xlib_libXinerama/xlib_libXinerama.mk |    2 +-
+ package/x11r7/xlib_libXmu/xlib_libXmu.mk           |    2 +-
+ package/x11r7/xlib_libXp/xlib_libXp.mk             |    2 +-
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    2 +-
+ .../xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk |    2 +-
+ .../x11r7/xlib_libXprintUtil/xlib_libXprintUtil.mk |    2 +-
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk     |    2 +-
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   |    2 +-
+ package/x11r7/xlib_libXres/xlib_libXres.mk         |    2 +-
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
+ package/x11r7/xlib_libXtst/xlib_libXtst.mk         |    2 +-
+ package/x11r7/xlib_libXv/xlib_libXv.mk             |    2 +-
+ package/x11r7/xlib_libXvMC/xlib_libXvMC.mk         |    2 +-
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |    2 +-
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |    2 +-
+ package/x11r7/xlib_libdmx/xlib_libdmx.mk           |    2 +-
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    4 +-
+ package/x11r7/xlib_liboldX/xlib_liboldX.mk         |    2 +-
+ .../x11r7/xlib_libpciaccess/xlib_libpciaccess.mk   |    2 +-
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    4 +-
+ package/x11r7/xlib_libxkbui/xlib_libxkbui.mk       |    2 +-
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk           |    4 +-
+ .../xproto_applewmproto/xproto_applewmproto.mk     |    2 +-
+ .../xproto_bigreqsproto/xproto_bigreqsproto.mk     |    2 +-
+ .../xproto_compositeproto/xproto_compositeproto.mk |    2 +-
+ .../x11r7/xproto_damageproto/xproto_damageproto.mk |    2 +-
+ package/x11r7/xproto_dmxproto/xproto_dmxproto.mk   |    2 +-
+ package/x11r7/xproto_dri2proto/xproto_dri2proto.mk |    2 +-
+ .../x11r7/xproto_fixesproto/xproto_fixesproto.mk   |    2 +-
+ .../xproto_fontcacheproto/xproto_fontcacheproto.mk |    4 +-
+ .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    4 +-
+ package/x11r7/xproto_glproto/xproto_glproto.mk     |    2 +-
+ .../x11r7/xproto_inputproto/xproto_inputproto.mk   |    4 +-
+ package/x11r7/xproto_kbproto/xproto_kbproto.mk     |    4 +-
+ .../x11r7/xproto_printproto/xproto_printproto.mk   |    2 +-
+ .../x11r7/xproto_randrproto/xproto_randrproto.mk   |    2 +-
+ .../x11r7/xproto_recordproto/xproto_recordproto.mk |    2 +-
+ .../x11r7/xproto_renderproto/xproto_renderproto.mk |    2 +-
+ .../xproto_resourceproto/xproto_resourceproto.mk   |    2 +-
+ .../xproto_scrnsaverproto/xproto_scrnsaverproto.mk |    2 +-
+ .../x11r7/xproto_videoproto/xproto_videoproto.mk   |    2 +-
+ .../xproto_windowswmproto/xproto_windowswmproto.mk |    2 +-
+ .../x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |    4 +-
+ package/x11r7/xproto_xextproto/xproto_xextproto.mk |    4 +-
+ .../xproto_xf86bigfontproto.mk                     |    4 +-
+ .../xproto_xf86dgaproto/xproto_xf86dgaproto.mk     |    2 +-
+ .../xproto_xf86driproto/xproto_xf86driproto.mk     |    2 +-
+ .../xproto_xf86rushproto/xproto_xf86rushproto.mk   |    2 +-
+ .../xproto_xf86vidmodeproto.mk                     |    2 +-
+ .../xproto_xineramaproto/xproto_xineramaproto.mk   |    2 +-
+ package/x11r7/xproto_xproto/xproto_xproto.mk       |    4 +-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk |    4 +-
+ .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    4 +-
+ package/x11vnc/x11vnc.mk                           |    2 +-
+ package/xavante/xavante.mk                         |    2 +-
+ package/xenomai/xenomai.mk                         |    2 +-
+ package/xerces/xerces.mk                           |    2 +-
+ package/xl2tp/xl2tp.mk                             |    2 +-
+ package/xmlstarlet/xmlstarlet.mk                   |    2 +-
+ package/xstroke/xstroke.mk                         |    2 +-
+ package/xterm/xterm.mk                             |    2 +-
+ package/xvkbd/xvkbd.mk                             |    2 +-
+ package/xz/xz.mk                                   |    4 +-
+ package/yajl/yajl.mk                               |    2 +-
+ package/zlib/zlib.mk                               |    4 +-
+ 703 files changed, 1160 insertions(+), 1038 deletions(-)
+
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
