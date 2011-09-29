@@ -1,38 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 Sep 2011 21:56:23 +0200
-Subject: [Buildroot] [git commit] gst-plugins-bad: bump version
-In-Reply-To: <20110929214852.73e8f8a9@skate> (Thomas Petazzoni's message of
- "Thu, 29 Sep 2011 21:48:52 +0200")
-References: <20110929190334.639708DAC7@busybox.osuosl.org>
- <1317323512.31793.3.camel@bender> <871uuzp2am.fsf@macbook.be.48ers.dk>
- <20110929214852.73e8f8a9@skate>
-Message-ID: <87wrcrnmvs.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Sep 2011 21:57:38 +0200
+Subject: [Buildroot] [PATCH 02/15] package: add configuration option to
+	specify a local override file
+In-Reply-To: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <e24366f129d37b9cf8b5be12ff5e6dd2eacffc16.1317325743.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+The user can now create a custom local override file to override the
+source directory for various packages.
 
- Thomas> Le Thu, 29 Sep 2011 21:38:09 +0200,
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+An example override file:
 
- Sven> Actually I also started to work on this update and I think there are
- Sven> some more changes to the options needed to give enough control over what
- Sven> plug-ins are built. Do you have other gstreamer related changes in the
- Sven> queue or should I have a look and send patches?
- >> 
- >> Not besides that fix, no. Long term I would like to add a makefile macro
- >> to make the --enable-foo / --disable-foo a bit less verbose, but that
- >> can wait.
+ ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+ STRACE_OVERRIDE_SRCDIR = /opt/strace-4.5.20
 
- Thomas> Almost one year ago, proposed by Mike Frysinger:
- Thomas> http://lists.busybox.net/pipermail/buildroot/2010-November/038874.html
+would tell Buildroot to use the zlib and strace source code from the
+specified directories, instead of download, extracting and patching
+the code has done usually by Buildroot.
 
-Indeed. For the options with dependencies it would be good with an
-optional 3rd argument which gets added to <PKG>_DEPENDENCIES if enable,
-but yes - Something like that.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in |   10 ++++++++++
+ Makefile  |    7 +++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index 2fce9d7..3aa3ad8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -334,6 +334,16 @@ config BR2_HAVE_DEVFILES
+ 	  Install headers and static libraries in the
+ 	  target filesystem
+ 
++config BR2_PACKAGE_OVERRIDE_FILE
++	string "location of a package override file"
++	default "$(TOPDIR)/local.mk"
++	help
++	  A package override file is a short makefile that contains
++	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
++	  which allows to tell Buildroot to use an existing directory
++	  as the source directory for a particular package. See the
++	  Buildroot documentation for more details on this feature.
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+diff --git a/Makefile b/Makefile
+index a20d3e2..8525b7d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -309,6 +309,13 @@ else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
+ include toolchain/toolchain-crosstool-ng.mk
+ endif
+ 
++# Include the package override file if one has been provided in the
++# configuration.
++PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
++ifneq ($(PACKAGE_OVERRIDE_FILE),)
++-include $(PACKAGE_OVERRIDE_FILE)
++endif
++
+ include package/*/*.mk
+ 
+ include boot/common.mk
 -- 
-Bye, Peter Korsgaard
+1.7.4.1
