@@ -1,612 +1,1280 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Sep 2011 23:12:27 +0200
+Date: Thu, 29 Sep 2011 23:09:58 +0200
 Subject: [Buildroot] [git commit] package: remove useless arguments from
-	AUTOTARGETS
-Message-ID: <20110930063211.1CFE08DC07@busybox.osuosl.org>
+	GENTARGETS
+Message-ID: <20110930063210.0BA8B8DC07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=300f9c9c9dcf2b47ea89c45d5b1ea05e7305bd49
+commit: http://git.buildroot.net/buildroot/commit/?id=0849e8193ef429f29945b8c2a54eafc8635e0969
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Thanks to the pkgparentdir and pkgname functions, we can rewrite the
-AUTOTARGETS macro in a way that avoids the need for each package to
+GENTARGETS macro in a way that avoids the need for each package to
 repeat its name and the directory in which it is present.
 
 [Peter: pkgdir->pkgparentdir]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/grub/grub.mk                                  |    2 +-
- package/Makefile.autotools.in                      |   10 ++++------
- package/acl/acl.mk                                 |    2 +-
- package/alsamixergui/alsamixergui.mk               |    2 +-
- package/argp-standalone/argp-standalone.mk         |    2 +-
- package/argus/argus.mk                             |    2 +-
- package/at/at.mk                                   |    2 +-
- package/atk/atk.mk                                 |    4 ++--
- package/attr/attr.mk                               |    2 +-
- package/autoconf/autoconf.mk                       |    4 ++--
- package/automake/automake.mk                       |    4 ++--
- package/avahi/avahi.mk                             |    2 +-
- package/bash/bash.mk                               |    2 +-
- package/beecrypt/beecrypt.mk                       |    2 +-
- package/berkeleydb/berkeleydb.mk                   |    2 +-
- package/bind/bind.mk                               |    2 +-
- package/binutils/binutils.mk                       |    4 ++--
- package/bison/bison.mk                             |    4 ++--
- package/blackbox/blackbox.mk                       |    2 +-
- package/bluez_utils/bluez_utils.mk                 |    2 +-
- package/bmon/bmon.mk                               |    2 +-
- package/boa/boa.mk                                 |    2 +-
- package/bonnie/bonnie.mk                           |    2 +-
- package/bootutils/bootutils.mk                     |    2 +-
- package/bridge-utils/bridge-utils.mk               |    2 +-
- package/bwm-ng/bwm-ng.mk                           |    2 +-
- package/cairo/cairo.mk                             |    2 +-
- package/can-utils/can-utils.mk                     |    2 +-
- package/ccache/ccache.mk                           |    4 ++--
- package/cifs-utils/cifs-utils.mk                   |    2 +-
- package/coreutils/coreutils.mk                     |    2 +-
- package/crosstool-ng/crosstool-ng.mk               |    2 +-
- package/ctorrent/ctorrent.mk                       |    2 +-
- package/cvs/cvs.mk                                 |    2 +-
- package/dash/dash.mk                               |    2 +-
- package/dbus-glib/dbus-glib.mk                     |    4 ++--
- package/dbus-python/dbus-python.mk                 |    2 +-
- package/dbus/dbus.mk                               |    4 ++--
- package/dhcp/dhcp.mk                               |    2 +-
- package/dialog/dialog.mk                           |    2 +-
- package/diffutils/diffutils.mk                     |    2 +-
- package/directfb-examples/directfb-examples.mk     |    2 +-
- package/directfb/directfb.mk                       |    4 ++--
- package/distcc/distcc.mk                           |    2 +-
- package/divine/divine.mk                           |    2 +-
- package/dmalloc/dmalloc.mk                         |    2 +-
- package/dmraid/dmraid.mk                           |    2 +-
- package/docker/docker.mk                           |    2 +-
- package/dropbear/dropbear.mk                       |    2 +-
- package/e2fsprogs/e2fsprogs.mk                     |    4 ++--
- package/ed/ed.mk                                   |    2 +-
- package/enchant/enchant.mk                         |    2 +-
- package/ethtool/ethtool.mk                         |    2 +-
- package/expat/expat.mk                             |    4 ++--
- package/fakeroot/fakeroot.mk                       |    4 ++--
- package/fbdump/fbdump.mk                           |    2 +-
- package/fbv/fbv.mk                                 |    2 +-
- package/fftw/fftw.mk                               |    2 +-
- package/file/file.mk                               |    4 ++--
- package/findutils/findutils.mk                     |    2 +-
- package/flex/flex.mk                               |    4 ++--
- package/fltk/fltk.mk                               |    2 +-
- package/fluxbox/fluxbox.mk                         |    2 +-
- package/fontconfig/fontconfig.mk                   |    4 ++--
- package/freetype/freetype.mk                       |    4 ++--
- package/games/gnuchess/gnuchess.mk                 |    2 +-
- package/games/prboom/prboom.mk                     |    2 +-
- package/games/rubix/rubix.mk                       |    2 +-
- package/gamin/gamin.mk                             |    2 +-
- package/gawk/gawk.mk                               |    4 ++--
- package/gdk-pixbuf/gdk-pixbuf.mk                   |    4 ++--
- package/genext2fs/genext2fs.mk                     |    4 ++--
- package/gmp/gmp.mk                                 |    4 ++--
- package/gmpc/gmpc.mk                               |    2 +-
- package/gnutls/gnutls.mk                           |    2 +-
- package/gob2/gob2.mk                               |    4 ++--
- package/gperf/gperf.mk                             |    4 ++--
- package/gpsd/gpsd.mk                               |    2 +-
- package/gqview/gqview.mk                           |    2 +-
- package/grep/grep.mk                               |    2 +-
- package/gtk2-engines/gtk2-engines.mk               |    2 +-
- .../gtk2-theme-hicolor/gtk2-theme-hicolor.mk       |    2 +-
- package/gtkperf/gtkperf.mk                         |    2 +-
- package/gvfs/gvfs.mk                               |    2 +-
- package/gzip/gzip.mk                               |    2 +-
- package/haserl/haserl.mk                           |    2 +-
- package/hostapd/hostapd.mk                         |    2 +-
- package/htop/htop.mk                               |    2 +-
- package/icu/icu.mk                                 |    4 ++--
- package/ifplugd/ifplugd.mk                         |    2 +-
- package/imagemagick/imagemagick.mk                 |    2 +-
- package/inotify-tools/inotify-tools.mk             |    2 +-
- package/intltool/intltool.mk                       |    4 ++--
- package/iperf/iperf.mk                             |    2 +-
- package/ipkg/ipkg.mk                               |    2 +-
- package/ipsec-tools/ipsec-tools.mk                 |    2 +-
- package/ipset/ipset.mk                             |    2 +-
- package/iptables/iptables.mk                       |    2 +-
- package/java/classpath/classpath.mk                |    2 +-
- package/java/jamvm/jamvm.mk                        |    2 +-
- package/jpeg/jpeg.mk                               |    2 +-
- package/json-c/json-c.mk                           |    2 +-
- package/kbd/kbd.mk                                 |    2 +-
- package/kexec/kexec.mk                             |    2 +-
- package/kismet/kismet.mk                           |    2 +-
- package/leafpad/leafpad.mk                         |    2 +-
- package/less/less.mk                               |    2 +-
- package/libarchive/libarchive.mk                   |    2 +-
- package/libargtable2/libargtable2.mk               |    2 +-
- package/libart/libart.mk                           |    2 +-
- package/libatomic_ops/libatomic_ops.mk             |    2 +-
- package/libcgi/libcgi.mk                           |    2 +-
- package/libcgicc/libcgicc.mk                       |    2 +-
- package/libconfig/libconfig.mk                     |    2 +-
- package/libconfuse/libconfuse.mk                   |    2 +-
- package/libcurl/libcurl.mk                         |    2 +-
- package/libdaemon/libdaemon.mk                     |    2 +-
- package/libdnet/libdnet.mk                         |    2 +-
- package/libdrm/libdrm.mk                           |    2 +-
- package/libeXosip2/libeXosip2.mk                   |    2 +-
- package/libelf/libelf.mk                           |    2 +-
- package/libev/libev.mk                             |    2 +-
- package/libevent/libevent.mk                       |    2 +-
- package/libexif/libexif.mk                         |    2 +-
- package/libffi/libffi.mk                           |    2 +-
- package/libftdi/libftdi.mk                         |    2 +-
- package/libfuse/libfuse.mk                         |    2 +-
- package/libgail/libgail.mk                         |    2 +-
- package/libgcrypt/libgcrypt.mk                     |    2 +-
- package/libgeotiff/libgeotiff.mk                   |    2 +-
- package/libglade/libglade.mk                       |    2 +-
- package/libglib2/libglib2.mk                       |    4 ++--
- package/libgpg-error/libgpg-error.mk               |    2 +-
- package/libgtk2/libgtk2.mk                         |    4 ++--
- package/libhid/libhid.mk                           |    2 +-
- package/libiconv/libiconv.mk                       |    2 +-
- package/libidn/libidn.mk                           |    2 +-
- package/libiqrf/libiqrf.mk                         |    2 +-
- package/liblockfile/liblockfile.mk                 |    2 +-
- package/libmicrohttpd/libmicrohttpd.mk             |    2 +-
- package/libmnl/libmnl.mk                           |    2 +-
- package/libnl/libnl.mk                             |    2 +-
- package/libnspr/libnspr.mk                         |    2 +-
- package/liboil/liboil.mk                           |    2 +-
- package/libosip2/libosip2.mk                       |    2 +-
- package/libpcap/libpcap.mk                         |    2 +-
- package/libpng/libpng.mk                           |    4 ++--
- package/libraw/libraw.mk                           |    2 +-
- package/libraw1394/libraw1394.mk                   |    2 +-
- package/librsvg/librsvg.mk                         |    2 +-
- package/librsync/librsync.mk                       |    2 +-
- package/libsexy/libsexy.mk                         |    2 +-
- package/libsigc/libsigc.mk                         |    2 +-
- package/libsoup/libsoup.mk                         |    2 +-
- package/libsysfs/libsysfs.mk                       |    2 +-
- package/libtool/libtool.mk                         |    4 ++--
- package/libungif/libungif.mk                       |    2 +-
- package/libupnp/libupnp.mk                         |    2 +-
- package/libusb-compat/libusb-compat.mk             |    2 +-
- package/libusb/libusb.mk                           |    2 +-
- package/libxml2/libxml2.mk                         |    4 ++--
- package/libxslt/libxslt.mk                         |    4 ++--
- package/libyaml/libyaml.mk                         |    2 +-
- package/lighttpd/lighttpd.mk                       |    2 +-
- package/links/links.mk                             |    2 +-
- package/lite/lite.mk                               |    2 +-
- package/lrzsz/lrzsz.mk                             |    2 +-
- package/lsuio/lsuio.mk                             |    2 +-
- package/ltp-testsuite/ltp-testsuite.mk             |    2 +-
- package/lvm2/lvm2.mk                               |    2 +-
- package/lzma/lzma.mk                               |    4 ++--
- package/lzo/lzo.mk                                 |    4 ++--
- package/lzop/lzop.mk                               |    2 +-
- package/m4/m4.mk                                   |    4 ++--
- package/make/make.mk                               |    2 +-
- .../matchbox/matchbox-common/matchbox-common.mk    |    2 +-
- .../matchbox/matchbox-desktop/matchbox-desktop.mk  |    2 +-
- .../matchbox/matchbox-fakekey/matchbox-fakekey.mk  |    2 +-
- .../matchbox-keyboard/matchbox-keyboard.mk         |    2 +-
- package/matchbox/matchbox-lib/matchbox-lib.mk      |    2 +-
- package/matchbox/matchbox-panel/matchbox-panel.mk  |    2 +-
- .../matchbox-startup-monitor.mk                    |    2 +-
- package/matchbox/matchbox-wm/matchbox-wm.mk        |    2 +-
- package/mdadm/mdadm.mk                             |    2 +-
- package/metacity/metacity.mk                       |    2 +-
- package/module-init-tools/module-init-tools.mk     |    4 ++--
- package/mpc/mpc.mk                                 |    4 ++--
- package/mpfr/mpfr.mk                               |    4 ++--
- package/multimedia/alsa-lib/alsa-lib.mk            |    2 +-
- package/multimedia/alsa-utils/alsa-utils.mk        |    2 +-
- package/multimedia/aumix/aumix.mk                  |    2 +-
- package/multimedia/faad2/faad2.mk                  |    2 +-
- package/multimedia/ffmpeg/ffmpeg.mk                |    2 +-
- package/multimedia/flac/flac.mk                    |    2 +-
- package/multimedia/gst-ffmpeg/gst-ffmpeg.mk        |    2 +-
- .../multimedia/gst-plugins-bad/gst-plugins-bad.mk  |    2 +-
- .../gst-plugins-base/gst-plugins-base.mk           |    2 +-
- .../gst-plugins-good/gst-plugins-good.mk           |    2 +-
- .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 +-
- package/multimedia/gstreamer/gstreamer.mk          |    2 +-
- package/multimedia/lame/lame.mk                    |    2 +-
- package/multimedia/libao/libao.mk                  |    2 +-
- package/multimedia/libcdaudio/libcdaudio.mk        |    2 +-
- package/multimedia/libcue/libcue.mk                |    2 +-
- package/multimedia/libdvdnav/libdvdnav.mk          |    2 +-
- package/multimedia/libdvdread/libdvdread.mk        |    2 +-
- package/multimedia/libid3tag/libid3tag.mk          |    2 +-
- package/multimedia/libmad/libmad.mk                |    2 +-
- package/multimedia/libmms/libmms.mk                |    2 +-
- package/multimedia/libmpd/libmpd.mk                |    2 +-
- package/multimedia/libmpeg2/libmpeg2.mk            |    2 +-
- package/multimedia/libogg/libogg.mk                |    2 +-
- package/multimedia/libreplaygain/libreplaygain.mk  |    2 +-
- package/multimedia/libsamplerate/libsamplerate.mk  |    2 +-
- package/multimedia/libsndfile/libsndfile.mk        |    2 +-
- package/multimedia/libtheora/libtheora.mk          |    2 +-
- package/multimedia/libvorbis/libvorbis.mk          |    2 +-
- package/multimedia/madplay/madplay.mk              |    2 +-
- package/multimedia/mpd/mpd.mk                      |    2 +-
- package/multimedia/mpg123/mpg123.mk                |    2 +-
- package/multimedia/portaudio/portaudio.mk          |    2 +-
- package/multimedia/speex/speex.mk                  |    2 +-
- package/multimedia/swfdec/swfdec.mk                |    2 +-
- package/multimedia/tremor/tremor.mk                |    2 +-
- package/multimedia/vorbis-tools/vorbis-tools.mk    |    2 +-
- package/multimedia/wavpack/wavpack.mk              |    2 +-
- package/mutt/mutt.mk                               |    2 +-
- package/mxml/mxml.mk                               |    2 +-
- package/mysql_client/mysql_client.mk               |    2 +-
- package/nano/nano.mk                               |    2 +-
- package/nasm/nasm.mk                               |    4 ++--
- package/nbd/nbd.mk                                 |    2 +-
- package/ncftp/ncftp.mk                             |    2 +-
- package/ncurses/ncurses.mk                         |    4 ++--
- package/neon/neon.mk                               |    2 +-
- package/netcat/netcat.mk                           |    2 +-
- package/netperf/netperf.mk                         |    2 +-
- package/netsnmp/netsnmp.mk                         |    2 +-
- package/netstat-nat/netstat-nat.mk                 |    2 +-
- package/nfs-utils/nfs-utils.mk                     |    2 +-
- package/ngircd/ngircd.mk                           |    2 +-
- package/ngrep/ngrep.mk                             |    2 +-
- package/ntfs-3g/ntfs-3g.mk                         |    2 +-
- package/ntfsprogs/ntfsprogs.mk                     |    2 +-
- package/ntp/ntp.mk                                 |    2 +-
- package/openntpd/openntpd.mk                       |    2 +-
- package/openocd/openocd.mk                         |    2 +-
- package/openssh/openssh.mk                         |    2 +-
- package/openvpn/openvpn.mk                         |    2 +-
- package/oprofile/oprofile.mk                       |    2 +-
- package/orc/orc.mk                                 |    2 +-
- package/pango/pango.mk                             |    2 +-
- package/patch/patch.mk                             |    2 +-
- package/pcmanfm/pcmanfm.mk                         |    2 +-
- package/pcre/pcre.mk                               |    2 +-
- package/php/php.mk                                 |    2 +-
- package/pixman/pixman.mk                           |    4 ++--
- package/pkg-config/pkg-config.mk                   |    4 ++--
- package/popt/popt.mk                               |    2 +-
- package/proftpd/proftpd.mk                         |    2 +-
- package/psmisc/psmisc.mk                           |    2 +-
- package/python/python.mk                           |    4 ++--
- package/quagga/quagga.mk                           |    2 +-
- package/radvd/radvd.mk                             |    2 +-
- package/rdesktop/rdesktop.mk                       |    2 +-
- package/readline/readline.mk                       |    2 +-
- package/rng-tools/rng-tools.mk                     |    2 +-
- package/rp-pppoe/rp-pppoe.mk                       |    2 +-
- package/rpm/rpm.mk                                 |    2 +-
- package/rrdtool/rrdtool.mk                         |    2 +-
- package/rsync/rsync.mk                             |    2 +-
- package/rsyslog/rsyslog.mk                         |    2 +-
- package/rtai/rtai.mk                               |    2 +-
- package/ruby/ruby.mk                               |    4 ++--
- package/samba/samba.mk                             |    2 +-
- package/sawman/sawman.mk                           |    2 +-
- package/screen/screen.mk                           |    2 +-
- package/sdl/sdl.mk                                 |    2 +-
- package/sdl_gfx/sdl_gfx.mk                         |    2 +-
- package/sdl_image/sdl_image.mk                     |    2 +-
- package/sdl_mixer/sdl_mixer.mk                     |    2 +-
- package/sdl_net/sdl_net.mk                         |    2 +-
- package/sdl_sound/sdl_sound.mk                     |    2 +-
- package/sdl_ttf/sdl_ttf.mk                         |    2 +-
- package/sdparm/sdparm.mk                           |    2 +-
- package/sed/sed.mk                                 |    2 +-
- package/ser2net/ser2net.mk                         |    2 +-
- package/setserial/setserial.mk                     |    2 +-
- package/shared-mime-info/shared-mime-info.mk       |    4 ++--
- package/smartmontools/smartmontools.mk             |    2 +-
- package/socat/socat.mk                             |    2 +-
- package/spawn-fcgi/spawn-fcgi.mk                   |    2 +-
- package/sqlite/sqlite.mk                           |    2 +-
- package/squid/squid.mk                             |    2 +-
- package/sshfs/sshfs.mk                             |    2 +-
- .../startup-notification/startup-notification.mk   |    2 +-
- package/strace/strace.mk                           |    2 +-
- package/stunnel/stunnel.mk                         |    2 +-
- package/sudo/sudo.mk                               |    2 +-
- package/sylpheed/sylpheed.mk                       |    2 +-
- package/synergy/synergy.mk                         |    2 +-
- package/sysstat/sysstat.mk                         |    2 +-
- package/tar/tar.mk                                 |    2 +-
- package/tcl/tcl.mk                                 |    2 +-
- package/tcpdump/tcpdump.mk                         |    2 +-
- package/tcpreplay/tcpreplay.mk                     |    2 +-
- package/tftpd/tftpd.mk                             |    2 +-
- package/thttpd/thttpd.mk                           |    2 +-
- package/tiff/tiff.mk                               |    2 +-
- package/tn5250/tn5250.mk                           |    2 +-
- package/torsmo/torsmo.mk                           |    2 +-
- package/tslib/tslib.mk                             |    2 +-
- package/udev/udev.mk                               |    2 +-
- package/udpcast/udpcast.mk                         |    2 +-
- package/usbutils/usbutils.mk                       |    2 +-
- package/util-linux/util-linux.mk                   |    2 +-
- package/valgrind/valgrind.mk                       |    2 +-
- package/vim/vim.mk                                 |    2 +-
- package/vtun/vtun.mk                               |    2 +-
- package/webkit/webkit.mk                           |    2 +-
- package/wget/wget.mk                               |    2 +-
- package/which/which.mk                             |    2 +-
- package/wpa_supplicant/wpa_supplicant.mk           |    2 +-
- package/x11r7/libxcb/libxcb.mk                     |    4 ++--
- package/x11r7/mesa3d/mesa3d.mk                     |    2 +-
- package/x11r7/pthread-stubs/pthread-stubs.mk       |    4 ++--
- package/x11r7/xapp_appres/xapp_appres.mk           |    2 +-
- package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk       |    4 ++--
- package/x11r7/xapp_beforelight/xapp_beforelight.mk |    2 +-
- package/x11r7/xapp_bitmap/xapp_bitmap.mk           |    2 +-
- package/x11r7/xapp_editres/xapp_editres.mk         |    2 +-
- package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |    2 +-
- package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk     |    2 +-
- package/x11r7/xapp_fstobdf/xapp_fstobdf.mk         |    2 +-
- package/x11r7/xapp_iceauth/xapp_iceauth.mk         |    2 +-
- package/x11r7/xapp_ico/xapp_ico.mk                 |    2 +-
- package/x11r7/xapp_listres/xapp_listres.mk         |    2 +-
- package/x11r7/xapp_luit/xapp_luit.mk               |    2 +-
- package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk     |    4 ++--
- package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    4 ++--
- package/x11r7/xapp_oclock/xapp_oclock.mk           |    2 +-
- package/x11r7/xapp_rgb/xapp_rgb.mk                 |    2 +-
- package/x11r7/xapp_rstart/xapp_rstart.mk           |    2 +-
- package/x11r7/xapp_scripts/xapp_scripts.mk         |    2 +-
- package/x11r7/xapp_sessreg/xapp_sessreg.mk         |    2 +-
- package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk     |    2 +-
- package/x11r7/xapp_showfont/xapp_showfont.mk       |    2 +-
- package/x11r7/xapp_smproxy/xapp_smproxy.mk         |    2 +-
- package/x11r7/xapp_twm/xapp_twm.mk                 |    2 +-
- package/x11r7/xapp_viewres/xapp_viewres.mk         |    2 +-
- package/x11r7/xapp_x11perf/xapp_x11perf.mk         |    2 +-
- package/x11r7/xapp_xauth/xapp_xauth.mk             |    2 +-
- package/x11r7/xapp_xbacklight/xapp_xbacklight.mk   |    2 +-
- package/x11r7/xapp_xbiff/xapp_xbiff.mk             |    2 +-
- package/x11r7/xapp_xcalc/xapp_xcalc.mk             |    2 +-
- package/x11r7/xapp_xclipboard/xapp_xclipboard.mk   |    2 +-
- package/x11r7/xapp_xclock/xapp_xclock.mk           |    2 +-
- package/x11r7/xapp_xcmsdb/xapp_xcmsdb.mk           |    2 +-
- package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   |    2 +-
- package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk     |    2 +-
- package/x11r7/xapp_xditview/xapp_xditview.mk       |    2 +-
- package/x11r7/xapp_xdm/xapp_xdm.mk                 |    2 +-
- package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk       |    2 +-
- package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk       |    2 +-
- package/x11r7/xapp_xedit/xapp_xedit.mk             |    2 +-
- package/x11r7/xapp_xev/xapp_xev.mk                 |    2 +-
- package/x11r7/xapp_xeyes/xapp_xeyes.mk             |    2 +-
- package/x11r7/xapp_xf86dga/xapp_xf86dga.mk         |    2 +-
- package/x11r7/xapp_xfd/xapp_xfd.mk                 |    2 +-
- package/x11r7/xapp_xfontsel/xapp_xfontsel.mk       |    2 +-
- package/x11r7/xapp_xfs/xapp_xfs.mk                 |    2 +-
- package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk         |    2 +-
- package/x11r7/xapp_xgamma/xapp_xgamma.mk           |    2 +-
- package/x11r7/xapp_xgc/xapp_xgc.mk                 |    2 +-
- package/x11r7/xapp_xhost/xapp_xhost.mk             |    2 +-
- package/x11r7/xapp_xinit/xapp_xinit.mk             |    2 +-
- package/x11r7/xapp_xinput/xapp_xinput.mk           |    2 +-
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    4 ++--
- package/x11r7/xapp_xkbevd/xapp_xkbevd.mk           |    2 +-
- package/x11r7/xapp_xkbprint/xapp_xkbprint.mk       |    2 +-
- package/x11r7/xapp_xkbutils/xapp_xkbutils.mk       |    2 +-
- package/x11r7/xapp_xkill/xapp_xkill.mk             |    2 +-
- package/x11r7/xapp_xload/xapp_xload.mk             |    2 +-
- package/x11r7/xapp_xlogo/xapp_xlogo.mk             |    2 +-
- package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk       |    2 +-
- package/x11r7/xapp_xlsclients/xapp_xlsclients.mk   |    2 +-
- package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk       |    2 +-
- package/x11r7/xapp_xmag/xapp_xmag.mk               |    2 +-
- package/x11r7/xapp_xman/xapp_xman.mk               |    2 +-
- package/x11r7/xapp_xmessage/xapp_xmessage.mk       |    2 +-
- package/x11r7/xapp_xmh/xapp_xmh.mk                 |    2 +-
- package/x11r7/xapp_xmodmap/xapp_xmodmap.mk         |    2 +-
- package/x11r7/xapp_xmore/xapp_xmore.mk             |    2 +-
- .../x11r7/xapp_xplsprinters/xapp_xplsprinters.mk   |    2 +-
- package/x11r7/xapp_xpr/xapp_xpr.mk                 |    2 +-
- .../xapp_xprehashprinterlist.mk                    |    2 +-
- package/x11r7/xapp_xprop/xapp_xprop.mk             |    2 +-
- package/x11r7/xapp_xrandr/xapp_xrandr.mk           |    2 +-
- package/x11r7/xapp_xrdb/xapp_xrdb.mk               |    2 +-
- package/x11r7/xapp_xrefresh/xapp_xrefresh.mk       |    2 +-
- package/x11r7/xapp_xset/xapp_xset.mk               |    2 +-
- package/x11r7/xapp_xsetmode/xapp_xsetmode.mk       |    2 +-
- package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk |    2 +-
- package/x11r7/xapp_xsetroot/xapp_xsetroot.mk       |    2 +-
- package/x11r7/xapp_xsm/xapp_xsm.mk                 |    2 +-
- package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk       |    2 +-
- package/x11r7/xapp_xvidtune/xapp_xvidtune.mk       |    2 +-
- package/x11r7/xapp_xvinfo/xapp_xvinfo.mk           |    2 +-
- package/x11r7/xapp_xwd/xapp_xwd.mk                 |    2 +-
- package/x11r7/xapp_xwininfo/xapp_xwininfo.mk       |    2 +-
- package/x11r7/xapp_xwud/xapp_xwud.mk               |    2 +-
- package/x11r7/xcb-proto/xcb-proto.mk               |    4 ++--
- package/x11r7/xcb-util/xcb-util.mk                 |    2 +-
- package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk     |    2 +-
- .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    2 +-
- .../xdriver_xf86-input-acecad.mk                   |    2 +-
- .../xdriver_xf86-input-aiptek.mk                   |    2 +-
- .../xdriver_xf86-input-evdev.mk                    |    2 +-
- .../xdriver_xf86-input-joystick.mk                 |    2 +-
- .../xdriver_xf86-input-keyboard.mk                 |    2 +-
- .../xdriver_xf86-input-mouse.mk                    |    2 +-
- .../xdriver_xf86-input-synaptics.mk                |    2 +-
- .../xdriver_xf86-input-vmmouse.mk                  |    2 +-
- .../xdriver_xf86-input-void.mk                     |    2 +-
- .../xdriver_xf86-video-apm.mk                      |    2 +-
- .../xdriver_xf86-video-ark.mk                      |    2 +-
- .../xdriver_xf86-video-ast.mk                      |    2 +-
- .../xdriver_xf86-video-ati.mk                      |    2 +-
- .../xdriver_xf86-video-chips.mk                    |    2 +-
- .../xdriver_xf86-video-cirrus.mk                   |    2 +-
- .../xdriver_xf86-video-dummy.mk                    |    2 +-
- .../xdriver_xf86-video-fbdev.mk                    |    2 +-
- .../xdriver_xf86-video-geode.mk                    |    2 +-
- .../xdriver_xf86-video-glide.mk                    |    2 +-
- .../xdriver_xf86-video-glint.mk                    |    2 +-
- .../xdriver_xf86-video-i128.mk                     |    2 +-
- .../xdriver_xf86-video-i740.mk                     |    2 +-
- .../xdriver_xf86-video-intel.mk                    |    2 +-
- .../xdriver_xf86-video-mach64.mk                   |    2 +-
- .../xdriver_xf86-video-mga.mk                      |    2 +-
- .../xdriver_xf86-video-neomagic.mk                 |    2 +-
- .../xdriver_xf86-video-newport.mk                  |    2 +-
- .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |    2 +-
- .../xdriver_xf86-video-openchrome.mk               |    2 +-
- .../xdriver_xf86-video-r128.mk                     |    2 +-
- .../xdriver_xf86-video-rendition.mk                |    2 +-
- .../xdriver_xf86-video-s3/xdriver_xf86-video-s3.mk |    2 +-
- .../xdriver_xf86-video-s3virge.mk                  |    2 +-
- .../xdriver_xf86-video-savage.mk                   |    2 +-
- .../xdriver_xf86-video-siliconmotion.mk            |    2 +-
- .../xdriver_xf86-video-sis.mk                      |    2 +-
- .../xdriver_xf86-video-sisusb.mk                   |    2 +-
- .../xdriver_xf86-video-suncg14.mk                  |    2 +-
- .../xdriver_xf86-video-suncg3.mk                   |    2 +-
- .../xdriver_xf86-video-suncg6.mk                   |    2 +-
- .../xdriver_xf86-video-sunffb.mk                   |    2 +-
- .../xdriver_xf86-video-sunleo.mk                   |    2 +-
- .../xdriver_xf86-video-suntcx.mk                   |    2 +-
- .../xdriver_xf86-video-tdfx.mk                     |    2 +-
- .../xdriver_xf86-video-tga.mk                      |    2 +-
- .../xdriver_xf86-video-trident.mk                  |    2 +-
- .../xdriver_xf86-video-tseng.mk                    |    2 +-
- .../xdriver_xf86-video-v4l.mk                      |    2 +-
- .../xdriver_xf86-video-vesa.mk                     |    2 +-
- .../xdriver_xf86-video-vmware.mk                   |    2 +-
- .../xdriver_xf86-video-voodoo.mk                   |    2 +-
- .../xdriver_xf86-video-wsfb.mk                     |    2 +-
- .../xdriver_xf86-video-xgi.mk                      |    2 +-
- .../xdriver_xf86-video-xgixp.mk                    |    2 +-
- package/x11r7/xfont_encodings/xfont_encodings.mk   |    4 ++--
- .../xfont_font-adobe-100dpi.mk                     |    2 +-
- .../xfont_font-adobe-75dpi.mk                      |    2 +-
- .../xfont_font-adobe-utopia-100dpi.mk              |    2 +-
- .../xfont_font-adobe-utopia-75dpi.mk               |    2 +-
- .../xfont_font-adobe-utopia-type1.mk               |    2 +-
- package/x11r7/xfont_font-alias/xfont_font-alias.mk |    2 +-
- .../xfont_font-arabic-misc.mk                      |    2 +-
- .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |    2 +-
- .../xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk     |    2 +-
- .../xfont_font-bh-lucidatypewriter-100dpi.mk       |    2 +-
- .../xfont_font-bh-lucidatypewriter-75dpi.mk        |    2 +-
- .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |    2 +-
- .../xfont_font-bh-type1/xfont_font-bh-type1.mk     |    2 +-
- .../xfont_font-bitstream-100dpi.mk                 |    2 +-
- .../xfont_font-bitstream-75dpi.mk                  |    2 +-
- .../xfont_font-bitstream-speedo.mk                 |    2 +-
- .../xfont_font-bitstream-type1.mk                  |    2 +-
- .../xfont_font-cronyx-cyrillic.mk                  |    2 +-
- .../xfont_font-cursor-misc.mk                      |    2 +-
- .../xfont_font-daewoo-misc.mk                      |    2 +-
- .../xfont_font-dec-misc/xfont_font-dec-misc.mk     |    2 +-
- .../xfont_font-ibm-type1/xfont_font-ibm-type1.mk   |    2 +-
- .../xfont_font-isas-misc/xfont_font-isas-misc.mk   |    2 +-
- .../xfont_font-jis-misc/xfont_font-jis-misc.mk     |    2 +-
- .../xfont_font-micro-misc/xfont_font-micro-misc.mk |    2 +-
- .../xfont_font-misc-cyrillic.mk                    |    2 +-
- .../xfont_font-misc-ethiopic.mk                    |    2 +-
- .../xfont_font-misc-meltho.mk                      |    2 +-
- .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |    3 +--
- .../xfont_font-mutt-misc/xfont_font-mutt-misc.mk   |    2 +-
- .../xfont_font-schumacher-misc.mk                  |    2 +-
- .../xfont_font-screen-cyrillic.mk                  |    2 +-
- .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |    2 +-
- .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |    2 +-
- package/x11r7/xfont_font-util/xfont_font-util.mk   |    4 ++--
- .../xfont_font-winitzki-cyrillic.mk                |    2 +-
- .../xfont_font-xfree86-type1.mk                    |    2 +-
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
- package/x11r7/xlib_libFS/xlib_libFS.mk             |    2 +-
- package/x11r7/xlib_libICE/xlib_libICE.mk           |    2 +-
- package/x11r7/xlib_libSM/xlib_libSM.mk             |    2 +-
- package/x11r7/xlib_libX11/xlib_libX11.mk           |    4 ++--
- .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |    2 +-
- package/x11r7/xlib_libXau/xlib_libXau.mk           |    4 ++--
- package/x11r7/xlib_libXaw/xlib_libXaw.mk           |    2 +-
- .../x11r7/xlib_libXcomposite/xlib_libXcomposite.mk |    2 +-
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |    2 +-
- package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   |    2 +-
- package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    4 ++--
- package/x11r7/xlib_libXext/xlib_libXext.mk         |    2 +-
- package/x11r7/xlib_libXfixes/xlib_libXfixes.mk     |    2 +-
- package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    4 ++--
- .../x11r7/xlib_libXfontcache/xlib_libXfontcache.mk |    2 +-
- package/x11r7/xlib_libXft/xlib_libXft.mk           |    2 +-
- package/x11r7/xlib_libXi/xlib_libXi.mk             |    2 +-
- package/x11r7/xlib_libXinerama/xlib_libXinerama.mk |    2 +-
- package/x11r7/xlib_libXmu/xlib_libXmu.mk           |    2 +-
- package/x11r7/xlib_libXp/xlib_libXp.mk             |    2 +-
- package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    2 +-
- .../xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk |    2 +-
- .../x11r7/xlib_libXprintUtil/xlib_libXprintUtil.mk |    2 +-
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk     |    2 +-
- package/x11r7/xlib_libXrender/xlib_libXrender.mk   |    2 +-
- package/x11r7/xlib_libXres/xlib_libXres.mk         |    2 +-
- package/x11r7/xlib_libXt/xlib_libXt.mk             |    2 +-
- package/x11r7/xlib_libXtst/xlib_libXtst.mk         |    2 +-
- package/x11r7/xlib_libXv/xlib_libXv.mk             |    2 +-
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk         |    2 +-
- package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |    2 +-
- package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |    2 +-
- package/x11r7/xlib_libdmx/xlib_libdmx.mk           |    2 +-
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    4 ++--
- package/x11r7/xlib_liboldX/xlib_liboldX.mk         |    2 +-
- .../x11r7/xlib_libpciaccess/xlib_libpciaccess.mk   |    2 +-
- package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    4 ++--
- package/x11r7/xlib_libxkbui/xlib_libxkbui.mk       |    2 +-
- package/x11r7/xlib_xtrans/xlib_xtrans.mk           |    4 ++--
- .../xproto_applewmproto/xproto_applewmproto.mk     |    2 +-
- .../xproto_bigreqsproto/xproto_bigreqsproto.mk     |    2 +-
- .../xproto_compositeproto/xproto_compositeproto.mk |    2 +-
- .../x11r7/xproto_damageproto/xproto_damageproto.mk |    2 +-
- package/x11r7/xproto_dmxproto/xproto_dmxproto.mk   |    2 +-
- package/x11r7/xproto_dri2proto/xproto_dri2proto.mk |    2 +-
- .../x11r7/xproto_fixesproto/xproto_fixesproto.mk   |    2 +-
- .../xproto_fontcacheproto/xproto_fontcacheproto.mk |    4 ++--
- .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    4 ++--
- package/x11r7/xproto_glproto/xproto_glproto.mk     |    2 +-
- .../x11r7/xproto_inputproto/xproto_inputproto.mk   |    4 ++--
- package/x11r7/xproto_kbproto/xproto_kbproto.mk     |    4 ++--
- .../x11r7/xproto_printproto/xproto_printproto.mk   |    2 +-
- .../x11r7/xproto_randrproto/xproto_randrproto.mk   |    2 +-
- .../x11r7/xproto_recordproto/xproto_recordproto.mk |    2 +-
- .../x11r7/xproto_renderproto/xproto_renderproto.mk |    2 +-
- .../xproto_resourceproto/xproto_resourceproto.mk   |    2 +-
- .../xproto_scrnsaverproto/xproto_scrnsaverproto.mk |    2 +-
- .../x11r7/xproto_videoproto/xproto_videoproto.mk   |    2 +-
- .../xproto_windowswmproto/xproto_windowswmproto.mk |    2 +-
- .../x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |    4 ++--
- package/x11r7/xproto_xextproto/xproto_xextproto.mk |    4 ++--
- .../xproto_xf86bigfontproto.mk                     |    4 ++--
- .../xproto_xf86dgaproto/xproto_xf86dgaproto.mk     |    2 +-
- .../xproto_xf86driproto/xproto_xf86driproto.mk     |    2 +-
- .../xproto_xf86rushproto/xproto_xf86rushproto.mk   |    2 +-
- .../xproto_xf86vidmodeproto.mk                     |    2 +-
- .../xproto_xineramaproto/xproto_xineramaproto.mk   |    2 +-
- package/x11r7/xproto_xproto/xproto_xproto.mk       |    4 ++--
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- package/x11r7/xutil_makedepend/xutil_makedepend.mk |    4 ++--
- .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    4 ++--
- package/x11vnc/x11vnc.mk                           |    2 +-
- package/xenomai/xenomai.mk                         |    2 +-
- package/xerces/xerces.mk                           |    2 +-
- package/xmlstarlet/xmlstarlet.mk                   |    2 +-
- package/xstroke/xstroke.mk                         |    2 +-
- package/xterm/xterm.mk                             |    2 +-
- package/xvkbd/xvkbd.mk                             |    2 +-
- package/xz/xz.mk                                   |    4 ++--
- 587 files changed, 660 insertions(+), 663 deletions(-)
+ boot/at91bootstrap/at91bootstrap.mk                |    2 +-
+ boot/at91dataflashboot/at91dataflashboot.mk        |    2 +-
+ boot/barebox/barebox.mk                            |    2 +-
+ boot/syslinux/syslinux.mk                          |    2 +-
+ boot/uboot/uboot.mk                                |    2 +-
+ boot/xloader/xloader.mk                            |    2 +-
+ linux/linux.mk                                     |    2 +-
+ package/Makefile.package.in                        |   10 ++++------
+ package/acpid/acpid.mk                             |    2 +-
+ package/axel/axel.mk                               |    2 +-
+ package/bsdiff/bsdiff.mk                           |    2 +-
+ package/busybox/busybox.mk                         |    2 +-
+ package/bzip2/bzip2.mk                             |    4 ++--
+ package/cgilua/cgilua.mk                           |    2 +-
+ package/cloop/cloop.mk                             |    4 ++--
+ package/cmake/cmake.mk                             |    4 ++--
+ package/copas/copas.mk                             |    2 +-
+ package/coxpcall/coxpcall.mk                       |    2 +-
+ package/cramfs/cramfs.mk                           |    4 ++--
+ package/dhcpdump/dhcpdump.mk                       |    2 +-
+ package/dhrystone/dhrystone.mk                     |    2 +-
+ package/dnsmasq/dnsmasq.mk                         |    2 +-
+ package/dosfstools/dosfstools.mk                   |    2 +-
+ package/dsp-tools/dsp-tools.mk                     |    2 +-
+ package/ebtables/ebtables.mk                       |    2 +-
+ package/eeprog/eeprog.mk                           |    2 +-
+ package/ezxml/ezxml.mk                             |    2 +-
+ package/fbgrab/fbgrab.mk                           |    2 +-
+ package/fbset/fbset.mk                             |    2 +-
+ package/fconfig/fconfig.mk                         |    2 +-
+ package/gadgetfs-test/gadgetfs-test.mk             |    2 +-
+ package/gdisk/gdisk.mk                             |    2 +-
+ package/genromfs/genromfs.mk                       |    4 ++--
+ package/hdparm/hdparm.mk                           |    2 +-
+ package/hwdata/hwdata.mk                           |    2 +-
+ package/i2c-tools/i2c-tools.mk                     |    2 +-
+ package/input-event-daemon/input-event-daemon.mk   |    2 +-
+ package/input-tools/input-tools.mk                 |    2 +-
+ package/iostat/iostat.mk                           |    2 +-
+ package/iproute2/iproute2.mk                       |    2 +-
+ package/irda-utils/irda-utils.mk                   |    2 +-
+ package/iw/iw.mk                                   |    2 +-
+ package/libaio/libaio.mk                           |    2 +-
+ package/libcap/libcap.mk                           |    4 ++--
+ package/liberation/liberation.mk                   |    2 +-
+ package/libnss/libnss.mk                           |    2 +-
+ package/libroxml/libroxml.mk                       |    2 +-
+ package/libsvgtiny/libsvgtiny.mk                   |    2 +-
+ package/libv4l/libv4l.mk                           |    2 +-
+ package/libxml-parser-perl/libxml-parser-perl.mk   |    4 ++--
+ package/linux-fusion/linux-fusion.mk               |    2 +-
+ package/lm-sensors/lm-sensors.mk                   |    2 +-
+ package/lmbench/lmbench.mk                         |    2 +-
+ package/lockfile-progs/lockfile-progs.mk           |    2 +-
+ package/logrotate/logrotate.mk                     |    2 +-
+ package/lsof/lsof.mk                               |    2 +-
+ package/ltrace/ltrace.mk                           |    2 +-
+ package/lua/lua.mk                                 |    2 +-
+ package/luafilesystem/luafilesystem.mk             |    2 +-
+ package/luasocket/luasocket.mk                     |    2 +-
+ package/makedevs/makedevs.mk                       |    4 ++--
+ package/memstat/memstat.mk                         |    2 +-
+ package/memtester/memtester.mk                     |    2 +-
+ package/midori/midori.mk                           |    2 +-
+ package/mii-diag/mii-diag.mk                       |    2 +-
+ package/mrouted/mrouted.mk                         |    2 +-
+ package/mtd/mtd.mk                                 |    4 ++--
+ package/multimedia/gst-dsp/gst-dsp.mk              |    2 +-
+ package/multimedia/gst-omapfb/gst-omapfb.mk        |    2 +-
+ package/multimedia/live555/live555.mk              |    2 +-
+ package/multimedia/mplayer/mplayer.mk              |    2 +-
+ package/multimedia/python-mad/python-mad.mk        |    2 +-
+ .../multimedia/tidsp-binaries/tidsp-binaries.mk    |    2 +-
+ package/netplug/netplug.mk                         |    2 +-
+ package/nuttcp/nuttcp.mk                           |    2 +-
+ package/olsr/olsr.mk                               |    2 +-
+ package/openssl/openssl.mk                         |    2 +-
+ package/pciutils/pciutils.mk                       |    2 +-
+ package/portmap/portmap.mk                         |    2 +-
+ package/pppd/pppd.mk                               |    2 +-
+ package/pptp-linux/pptp-linux.mk                   |    2 +-
+ package/procps/procps.mk                           |    2 +-
+ package/python-serial/python-serial.mk             |    2 +-
+ package/qt/qt.mk                                   |    2 +-
+ package/rings/rings.mk                             |    2 +-
+ package/rsh-redone/rsh-redone.mk                   |    2 +-
+ package/scons/scons.mk                             |    2 +-
+ package/slang/slang.mk                             |    2 +-
+ package/squashfs/squashfs.mk                       |    4 ++--
+ package/squashfs3/squashfs3.mk                     |    4 ++--
+ package/sredird/sredird.mk                         |    2 +-
+ package/sstrip/sstrip.mk                           |    4 ++--
+ package/statserial/statserial.mk                   |    2 +-
+ package/sysklogd/sysklogd.mk                       |    2 +-
+ package/sysvinit/sysvinit.mk                       |    2 +-
+ package/ti-utils/ti-utils.mk                       |    2 +-
+ package/uboot-tools/uboot-tools.mk                 |    4 ++--
+ package/usb_modeswitch/usb_modeswitch.mk           |    2 +-
+ package/usbmount/usbmount.mk                       |    2 +-
+ package/vsftpd/vsftpd.mk                           |    2 +-
+ package/whetstone/whetstone.mk                     |    2 +-
+ package/wipe/wipe.mk                               |    2 +-
+ package/wireless_tools/wireless_tools.mk           |    2 +-
+ package/wsapi/wsapi.mk                             |    2 +-
+ package/xavante/xavante.mk                         |    2 +-
+ package/xl2tp/xl2tp.mk                             |    2 +-
+ package/zlib/zlib.mk                               |    4 ++--
+ 107 files changed, 124 insertions(+), 126 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index 871b0ff..a7a856c 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -29,7 +29,7 @@ define AT91BOOTSTRAP_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/$(AT91BOOTSTRAP_BINARY) $(BINARIES_DIR)
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,at91bootstrap))
++$(eval $(call GENTARGETS))
+ 
+ ifeq ($(BR2_TARGET_AT91BOOTSTRAP),y)
+ # we NEED a board name unless we're at make source
+diff --git a/boot/at91dataflashboot/at91dataflashboot.mk b/boot/at91dataflashboot/at91dataflashboot.mk
+index 14fb8c5..6c0188a 100644
+--- a/boot/at91dataflashboot/at91dataflashboot.mk
++++ b/boot/at91dataflashboot/at91dataflashboot.mk
+@@ -19,4 +19,4 @@ define AT91DATAFLASHBOOT_INSTALL_IMAGES_CMDS
+ 	cp $(@D)/DataflashBoot-$(AT91DATAFLASHBOOT_VERSION).bin $(BINARIES_DIR)
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,at91dataflashboot))
++$(eval $(call GENTARGETS))
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index c3510fd..0cbe641 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -72,7 +72,7 @@ define BAREBOX_INSTALL_TARGET_CMDS
+ endef
+ endif
+ 
+-$(eval $(call GENTARGETS,boot,barebox))
++$(eval $(call GENTARGETS))
+ 
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+ # we NEED a board defconfig file unless we're at make source
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 686124f..fa5af07 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -26,4 +26,4 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,syslinux))
++$(eval $(call GENTARGETS))
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 202995a..cf22312 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -88,7 +88,7 @@ define UBOOT_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,uboot))
++$(eval $(call GENTARGETS))
+ 
+ ifeq ($(BR2_TARGET_UBOOT),y)
+ # we NEED a board name unless we're at make source
+diff --git a/boot/xloader/xloader.mk b/boot/xloader/xloader.mk
+index 8d8cce3..e8dd380 100644
+--- a/boot/xloader/xloader.mk
++++ b/boot/xloader/xloader.mk
+@@ -19,7 +19,7 @@ define XLOADER_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/MLO $(BINARIES_DIR)/
+ endef
+ 
+-$(eval $(call GENTARGETS,boot,xloader))
++$(eval $(call GENTARGETS))
+ 
+ #############################################################
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 600b14d..99f4649 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -179,7 +179,7 @@ endef
+ 
+ include linux/linux-ext-*.mk
+ 
+-$(eval $(call GENTARGETS,,linux))
++$(eval $(call GENTARGETS))
+ 
+ linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index afa8d0e..069a868 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -648,18 +648,16 @@ endef # GENTARGETS_INNER
+ ################################################################################
+ # GENTARGETS -- the target generator macro for generic packages
+ #
+-# Argument 1 is the package directory prefix [mandatory]
+-# Argument 2 is the lowercase package name   [mandatory]
+-# Argument 3 is "target" or "host"           [optional, default: "target"]
++# Argument 1 is "target" or "host"           [optional, default: "target"]
+ ################################################################################
+ 
+ define GENTARGETS
+-ifeq ($(3),host)
++ifeq ($(1),host)
+ # In the case of host packages, turn the package name "pkg" into "host-pkg"
+-$(call GENTARGETS_INNER,$(3)-$(2),$(call UPPERCASE,$(3)-$(2)),$(call UPPERCASE,$(2)),$(1),host)
++$(call GENTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+ else
+ # In the case of target packages, keep the package name "pkg"
+-$(call GENTARGETS_INNER,$(2),$(call UPPERCASE,$(2)),$(call UPPERCASE,$(2)),$(1),target)
++$(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+ endif
+ endef
+ 
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index cc4e45b..317cb16 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -30,4 +30,4 @@ define ACPID_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,acpid))
++$(eval $(call GENTARGETS))
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 1bf4d81..91f6d1e 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -44,4 +44,4 @@ define AXEL_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,axel))
++$(eval $(call GENTARGETS))
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index 276c6be..66a7722 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
+@@ -28,4 +28,4 @@ define BSDIFF_CLEAN_CMDS
+ 	rm -f $(@D)/bsdiff $(@D)/bspatch
+ endef
+ 
+-$(eval $(call GENTARGETS,package,bsdiff))
++$(eval $(call GENTARGETS))
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 1782a73..0751f6a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -176,7 +176,7 @@ define BUSYBOX_CLEAN_CMDS
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,busybox))
++$(eval $(call GENTARGETS))
+ 
+ busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
+ 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index 123e579..d3bb2b0 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -101,5 +101,5 @@ define HOST_BZIP2_INSTALL_CMDS
+ 	$(MAKE) PREFIX=$(HOST_DIR)/usr -C $(@D) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,bzip2))
+-$(eval $(call GENTARGETS,package,bzip2,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+\ No newline at end of file
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index 9d524cd..d46c2a6 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -17,4 +17,4 @@ define CGILUA_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/lua/cgilua.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cgilua))
++$(eval $(call GENTARGETS))
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index fa47a5f..52567dd 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -14,5 +14,5 @@ define HOST_CLOOP_INSTALL_CMDS
+ 	$(INSTALL) -m 755 $(@D)/extract_compressed_fs $(HOST_DIR)/usr/bin
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cloop))
+-$(eval $(call GENTARGETS,package,cloop,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 1b458c2..af88eea 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -17,5 +17,5 @@ define HOST_CMAKE_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cmake))
+-$(eval $(call GENTARGETS,package,cmake,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index 1baed83..28b822c 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -17,4 +17,4 @@ define COPAS_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/lua/copas.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,copas))
++$(eval $(call GENTARGETS))
+diff --git a/package/coxpcall/coxpcall.mk b/package/coxpcall/coxpcall.mk
+index b947571..81125d7 100644
+--- a/package/coxpcall/coxpcall.mk
++++ b/package/coxpcall/coxpcall.mk
+@@ -17,4 +17,4 @@ define COXPCALL_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/lua/coxpcall.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,coxpcall))
++$(eval $(call GENTARGETS))
+diff --git a/package/cramfs/cramfs.mk b/package/cramfs/cramfs.mk
+index 9073ae5..4a0ec1c 100644
+--- a/package/cramfs/cramfs.mk
++++ b/package/cramfs/cramfs.mk
+@@ -29,5 +29,5 @@ define HOST_CRAMFS_INSTALL_CMDS
+  install -D -m 755 $(@D)/cramfsck $(HOST_DIR)/usr/bin/cramfsck
+ endef
+ 
+-$(eval $(call GENTARGETS,package,cramfs))
+-$(eval $(call GENTARGETS,package,cramfs,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/dhcpdump/dhcpdump.mk b/package/dhcpdump/dhcpdump.mk
+index cca6749..dd454bf 100644
+--- a/package/dhcpdump/dhcpdump.mk
++++ b/package/dhcpdump/dhcpdump.mk
+@@ -18,4 +18,4 @@ define DHCPDUMP_INSTALL_TARGET_CMDS
+ 	install -m 0755 -D $(@D)/dhcpdump $(TARGET_DIR)/usr/bin/dhcpdump
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dhcpdump))
++$(eval $(call GENTARGETS))
+diff --git a/package/dhrystone/dhrystone.mk b/package/dhrystone/dhrystone.mk
+index a03beec..45eb91c 100644
+--- a/package/dhrystone/dhrystone.mk
++++ b/package/dhrystone/dhrystone.mk
+@@ -24,7 +24,7 @@ define DHRYSTONE_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/dhrystone
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dhrystone))
++$(eval $(call GENTARGETS))
+ 
+ $(BUILD_DIR)/dhrystone-$(DHRYSTONE_VERSION)/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index f62ec21..1b2b95b 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -64,4 +64,4 @@ define DNSMASQ_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/dnsmasq.8
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dnsmasq))
++$(eval $(call GENTARGETS))
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index c2d763d..e1b6a33 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -34,4 +34,4 @@ define DOSFSTOOLS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dosfstools))
++$(eval $(call GENTARGETS))
+diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
+index ab31afb..b9fed0b 100644
+--- a/package/dsp-tools/dsp-tools.mk
++++ b/package/dsp-tools/dsp-tools.mk
+@@ -15,4 +15,4 @@ define DSP_TOOLS_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/dsp-, load probe test exec)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,dsp-tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index 67c0d92..6cfdfdc 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -27,4 +27,4 @@ define EBTABLES_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/sbin/ebtables
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ebtables))
++$(eval $(call GENTARGETS))
+diff --git a/package/eeprog/eeprog.mk b/package/eeprog/eeprog.mk
+index e61aecb..40b059e 100644
+--- a/package/eeprog/eeprog.mk
++++ b/package/eeprog/eeprog.mk
+@@ -19,4 +19,4 @@ define EEPROG_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/eeprog
+ endef
+ 
+-$(eval $(call GENTARGETS,package,eeprog))
++$(eval $(call GENTARGETS))
+diff --git a/package/ezxml/ezxml.mk b/package/ezxml/ezxml.mk
+index 58d2624..321e466 100644
+--- a/package/ezxml/ezxml.mk
++++ b/package/ezxml/ezxml.mk
+@@ -37,4 +37,4 @@ define EZXML_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) -f GNUmakefile clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ezxml))
++$(eval $(call GENTARGETS))
+diff --git a/package/fbgrab/fbgrab.mk b/package/fbgrab/fbgrab.mk
+index 37f82ea..892043e 100644
+--- a/package/fbgrab/fbgrab.mk
++++ b/package/fbgrab/fbgrab.mk
+@@ -15,4 +15,4 @@ define FBGRAB_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/fbgrab
+ endef
+ 
+-$(eval $(call GENTARGETS,package,fbgrab))
++$(eval $(call GENTARGETS))
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index b5b5ab8..95d8aa7 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -29,4 +29,4 @@ define FBSET_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,fbset))
++$(eval $(call GENTARGETS))
+diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
+index c595678..8144a16 100644
+--- a/package/fconfig/fconfig.mk
++++ b/package/fconfig/fconfig.mk
+@@ -25,4 +25,4 @@ define FCONFIG_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,fconfig))
++$(eval $(call GENTARGETS))
+diff --git a/package/gadgetfs-test/gadgetfs-test.mk b/package/gadgetfs-test/gadgetfs-test.mk
+index 1464ec1..46bfd24 100644
+--- a/package/gadgetfs-test/gadgetfs-test.mk
++++ b/package/gadgetfs-test/gadgetfs-test.mk
+@@ -29,4 +29,4 @@ define GADGETFS_TEST_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) $(GADGETFS_TEST_MAKEOPTS) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,gadgetfs-test))
++$(eval $(call GENTARGETS))
+diff --git a/package/gdisk/gdisk.mk b/package/gdisk/gdisk.mk
+index bc7bc32..a53ee83 100644
+--- a/package/gdisk/gdisk.mk
++++ b/package/gdisk/gdisk.mk
+@@ -36,4 +36,4 @@ endef
+ 
+ endif
+ 
+-$(eval $(call GENTARGETS,package,gdisk))
++$(eval $(call GENTARGETS))
+diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
+index 10b8d7d..d6f4875 100644
+--- a/package/genromfs/genromfs.mk
++++ b/package/genromfs/genromfs.mk
+@@ -27,5 +27,5 @@ define HOST_GENROMFS_INSTALL_CMDS
+   $(HOST_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,genromfs))
+-$(eval $(call GENTARGETS,package,genromfs,host))
+\ No newline at end of file
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+\ No newline at end of file
+diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+index 4e3cfe5..d19dff0 100644
+--- a/package/hdparm/hdparm.mk
++++ b/package/hdparm/hdparm.mk
+@@ -33,4 +33,4 @@ define HDPARM_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,hdparm))
++$(eval $(call GENTARGETS))
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 7a0cef8..e4f72a5 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -18,4 +18,4 @@ define HWDATA_UNINSTALL_TARGET_CMDS
+ 	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share
+ endef
+ 
+-$(eval $(call GENTARGETS,package,hwdata))
++$(eval $(call GENTARGETS))
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index d96bad3..8628eaf 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -19,4 +19,4 @@ define I2C_TOOLS_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,i2c-tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/input-event-daemon/input-event-daemon.mk b/package/input-event-daemon/input-event-daemon.mk
+index c335be3..a938ae7 100644
+--- a/package/input-event-daemon/input-event-daemon.mk
++++ b/package/input-event-daemon/input-event-daemon.mk
+@@ -33,4 +33,4 @@ define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/etc/input-event-daemon.conf
+ endef
+ 
+-$(eval $(call GENTARGETS,package,input-event-daemon))
++$(eval $(call GENTARGETS))
+diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
+index 0c5b523..38db2ea 100644
+--- a/package/input-tools/input-tools.mk
++++ b/package/input-tools/input-tools.mk
+@@ -45,4 +45,4 @@ define INPUT_TOOLS_CLEAN_CMDS
+ 	rm -f $(addprefix $(@D)/,$(INPUT_TOOLS_TARGETS_y))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,input-tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index de7e1ff..83eea07 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -28,4 +28,4 @@ define IOSTAT_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/iostat.8
+ endef
+ 
+-$(eval $(call GENTARGETS,package,iostat))                                                   
++$(eval $(call GENTARGETS))
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 0e6a431..dd2506c 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -54,4 +54,4 @@ define IPROUTE2_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/sbin/, $(IPROUTE2_TARGET_SBINS))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,iproute2))
++$(eval $(call GENTARGETS))
+diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
+index e1935c6..cbc6886 100644
+--- a/package/irda-utils/irda-utils.mk
++++ b/package/irda-utils/irda-utils.mk
+@@ -43,4 +43,4 @@ define IRDA_UTILS_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,$(IRDA_UTILS_SBINS-))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,irda-utils))
++$(eval $(call GENTARGETS))
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 5fcdc72..9f1d65f 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -32,4 +32,4 @@ define IW_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/iw.8*
+ endef
+ 
+-$(eval $(call GENTARGETS,package,iw))
++$(eval $(call GENTARGETS))
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 6124e1a..3ffc49c 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -20,5 +20,5 @@ define LIBAIO_INSTALL_TARGET_CMDS
+   $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libaio))
++$(eval $(call GENTARGETS))
+ 
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 458f8e8..a7b33a0 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -34,5 +34,5 @@ define HOST_LIBCAP_INSTALL_CMDS
+ 		prefix=/usr lib=lib install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libcap))
+-$(eval $(call GENTARGETS,package,libcap,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 89987d6..3686d55 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -18,4 +18,4 @@ define LIBERATION_CLEAN_CMDS
+ 	rm -rf $(LIBERATION_TARGET_DIR)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,liberation))
++$(eval $(call GENTARGETS))
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 3f7642f..ea6a329 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -64,4 +64,4 @@ define LIBNSS_CLEAN_CMDS
+ 					BUILD_OPT=1
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libnss))
++$(eval $(call GENTARGETS))
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index ccaf492..f494348 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -30,4 +30,4 @@ define LIBROXML_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libroxml))
++$(eval $(call GENTARGETS))
+diff --git a/package/libsvgtiny/libsvgtiny.mk b/package/libsvgtiny/libsvgtiny.mk
+index 1a7ce37..275ae74 100644
+--- a/package/libsvgtiny/libsvgtiny.mk
++++ b/package/libsvgtiny/libsvgtiny.mk
+@@ -39,4 +39,4 @@ define LIBSVGTINY_CLEAN_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libsvgtiny))
++$(eval $(call GENTARGETS))
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 1ea859a..4df64fc 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -38,5 +38,5 @@ define LIBV4L_INSTALL_TARGET_CMDS
+ 			DESTDIR=$(TARGET_DIR) $(LIBV4L_MAKE_OPTS) install; done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libv4l))
++$(eval $(call GENTARGETS))
+ 
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 9f80cf9..ecc2cc9 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -30,6 +30,6 @@ define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,libxml-parser-perl))
+-$(eval $(call GENTARGETS,package,libxml-parser-perl,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+ 
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index be1cc71..4dba98f 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -48,4 +48,4 @@ define LINUX_FUSION_UNINSTALL_TARGET_CMDS
+ 	rm -f $(LINUX_FUSION_ETC_DIR)/40-fusion.rules
+ endef
+ 
+-$(eval $(call GENTARGETS,package,linux-fusion))
++$(eval $(call GENTARGETS))
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index eec969d..99a8e3b 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -42,4 +42,4 @@ define LM_SENSORS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lm-sensors))
++$(eval $(call GENTARGETS))
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index 535fc8c..bb4abf9 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -27,4 +27,4 @@ define LMBENCH_CLEAN_CMDS
+ 	$(MAKE) -C $(@D)/src clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lmbench))
++$(eval $(call GENTARGETS))
+diff --git a/package/lockfile-progs/lockfile-progs.mk b/package/lockfile-progs/lockfile-progs.mk
+index 031712e..4a7f25c 100644
+--- a/package/lockfile-progs/lockfile-progs.mk
++++ b/package/lockfile-progs/lockfile-progs.mk
+@@ -30,4 +30,4 @@ define LOCKFILE_PROGS_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lockfile-progs))
++$(eval $(call GENTARGETS))
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 0e41d6a..20317f1 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -33,4 +33,4 @@ define LOGROTATE_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,logrotate))
++$(eval $(call GENTARGETS))
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 167cb20..547382f 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -63,4 +63,4 @@ define LSOF_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lsof))
++$(eval $(call GENTARGETS))
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index e7947f1..23094c8 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -39,4 +39,4 @@ define LTRACE_INSTALL_TARGET_CMDS
+ 	$(LTRACE_INSTALL_DOCUMENTATION)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ltrace))
++$(eval $(call GENTARGETS))
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 598eea1..c95e18a 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -121,4 +121,4 @@ define LUA_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,lua))
++$(eval $(call GENTARGETS))
+diff --git a/package/luafilesystem/luafilesystem.mk b/package/luafilesystem/luafilesystem.mk
+index 5f1119a..928e154 100644
+--- a/package/luafilesystem/luafilesystem.mk
++++ b/package/luafilesystem/luafilesystem.mk
+@@ -28,4 +28,4 @@ define LUAFILESYSTEM_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,luafilesystem))
++$(eval $(call GENTARGETS))
+diff --git a/package/luasocket/luasocket.mk b/package/luasocket/luasocket.mk
+index e0faf03..daca248 100644
+--- a/package/luasocket/luasocket.mk
++++ b/package/luasocket/luasocket.mk
+@@ -33,4 +33,4 @@ define LUASOCKET_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) -f makefile clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,luasocket))
++$(eval $(call GENTARGETS))
+diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+index b7c9343..31dc95d 100644
+--- a/package/makedevs/makedevs.mk
++++ b/package/makedevs/makedevs.mk
+@@ -31,5 +31,5 @@ define HOST_MAKEDEVS_INSTALL_CMDS
+ 	install -D -m 755 $(@D)/makedevs $(HOST_DIR)/usr/bin/makedevs
+ endef
+ 
+-$(eval $(call GENTARGETS,package,makedevs))
+-$(eval $(call GENTARGETS,package,makedevs,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
+index 0ad8eba..7d3f5b2 100644
+--- a/package/memstat/memstat.mk
++++ b/package/memstat/memstat.mk
+@@ -24,4 +24,4 @@ define MEMSTAT_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/memstat
+ endef
+ 
+-$(eval $(call GENTARGETS,package,memstat))
++$(eval $(call GENTARGETS))
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index a92c5d2..00e3124 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -26,4 +26,4 @@ define MEMTESTER_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,memtester))
++$(eval $(call GENTARGETS))
+diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+index 0bf431b..99b5a48 100644
+--- a/package/midori/midori.mk
++++ b/package/midori/midori.mk
+@@ -35,4 +35,4 @@ define MIDORI_INSTALL_TARGET_CMDS
+        (cd $(@D); ./waf --destdir=$(TARGET_DIR) install)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,midori))
++$(eval $(call GENTARGETS))
+diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
+index 6d3743a..0731bf7 100644
+--- a/package/mii-diag/mii-diag.mk
++++ b/package/mii-diag/mii-diag.mk
+@@ -32,4 +32,4 @@ define MII_DIAG_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,mii-diag))
++$(eval $(call GENTARGETS))
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 9ebb857..99b54bc 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -24,4 +24,4 @@ define MROUTED_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,mrouted))
++$(eval $(call GENTARGETS))
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 58b5ce1..ef876e2 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -98,5 +98,5 @@ define MTD_INSTALL_TARGET_CMDS
+  done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,mtd))
+-$(eval $(call GENTARGETS,package,mtd,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
+index f55f510..17eb189 100644
+--- a/package/multimedia/gst-dsp/gst-dsp.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
+@@ -16,4 +16,4 @@ endef
+ 
+ GST_DSP_DEPENDENCIES = gstreamer tidsp-binaries
+ 
+-$(eval $(call GENTARGETS,package/multimedia,gst-dsp))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/gst-omapfb/gst-omapfb.mk b/package/multimedia/gst-omapfb/gst-omapfb.mk
+index 726ef83..f3956bc 100644
+--- a/package/multimedia/gst-omapfb/gst-omapfb.mk
++++ b/package/multimedia/gst-omapfb/gst-omapfb.mk
+@@ -16,4 +16,4 @@ endef
+ 
+ GST_OMAPFB_DEPENDENCIES = gstreamer
+ 
+-$(eval $(call GENTARGETS,package/multimedia,gst-omapfb))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/live555/live555.mk b/package/multimedia/live555/live555.mk
+index 45a0375..0051ea0 100644
+--- a/package/multimedia/live555/live555.mk
++++ b/package/multimedia/live555/live555.mk
+@@ -45,4 +45,4 @@ define LIVE555_UNINSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,live555))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index f735464..4c03440 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -145,4 +145,4 @@ define MPLAYER_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,mplayer))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/python-mad/python-mad.mk b/package/multimedia/python-mad/python-mad.mk
+index 52d13a6..7d898ed 100644
+--- a/package/multimedia/python-mad/python-mad.mk
++++ b/package/multimedia/python-mad/python-mad.mk
+@@ -38,4 +38,4 @@ define PYTHON_MAD_INSTALL_TARGET_CMDS
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,python-mad))
++$(eval $(call GENTARGETS))
+diff --git a/package/multimedia/tidsp-binaries/tidsp-binaries.mk b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+index 102791f..0b64fb8 100644
+--- a/package/multimedia/tidsp-binaries/tidsp-binaries.mk
++++ b/package/multimedia/tidsp-binaries/tidsp-binaries.mk
+@@ -10,4 +10,4 @@ define TIDSP_BINARIES_UNINSTALL_TARGET_CMDS
+ 	$(RM) -r $(TARGET_DIR)/lib/dsp
+ endef
+ 
+-$(eval $(call GENTARGETS,package/multimedia,tidsp-binaries))
++$(eval $(call GENTARGETS))
+diff --git a/package/netplug/netplug.mk b/package/netplug/netplug.mk
+index 98d1504..db76021 100644
+--- a/package/netplug/netplug.mk
++++ b/package/netplug/netplug.mk
+@@ -25,4 +25,4 @@ define NETPLUG_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,netplug))
++$(eval $(call GENTARGETS))
+diff --git a/package/nuttcp/nuttcp.mk b/package/nuttcp/nuttcp.mk
+index e3867ea..8c0203c 100644
+--- a/package/nuttcp/nuttcp.mk
++++ b/package/nuttcp/nuttcp.mk
+@@ -22,4 +22,4 @@ define NUTTCP_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/nuttcp
+ endef
+ 
+-$(eval $(call GENTARGETS,package,nuttcp))
++$(eval $(call GENTARGETS))
+diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
+index 03a8a02..9ed4d5b 100644
+--- a/package/olsr/olsr.mk
++++ b/package/olsr/olsr.mk
+@@ -38,4 +38,4 @@ define OLSR_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,olsr))
++$(eval $(call GENTARGETS))
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 82a4fc4..51a00dd 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -120,4 +120,4 @@ define OPENSSL_UNINSTALL_CMDS
+ 	rm -rf $(addprefix $(STAGING_DIR)/usr/lib/,ssl engines libcrypto* libssl* pkgconfig/libcrypto.pc)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,openssl))
++$(eval $(call GENTARGETS))
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 782d348..52f5f67 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -45,4 +45,4 @@ define PCIUTILS_INSTALL_TARGET_CMDS
+ 		SHARED=$(PCIUTILS_SHARED) install-lib
+ endef
+ 
+-$(eval $(call GENTARGETS,package,pciutils))
++$(eval $(call GENTARGETS))
+diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
+index e996824..cb7c0e3 100644
+--- a/package/portmap/portmap.mk
++++ b/package/portmap/portmap.mk
+@@ -43,4 +43,4 @@ define PORTMAP_UNINSTALL_TARGET_CMDS
+ 		$(addsuffix .8,$(PORTMAP_SBINS)))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,portmap))
++$(eval $(call GENTARGETS))
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 05c1c32..2137f6a 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -102,4 +102,4 @@ define PPPD_INSTALL_TARGET_CMDS
+ 	done
+ endef
+ 
+-$(eval $(call GENTARGETS,package,pppd))
++$(eval $(call GENTARGETS))
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 605f30d..77ae34d 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -25,4 +25,4 @@ define PPTP_LINUX_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man8/pptp.8
+ endef
+ 
+-$(eval $(call GENTARGETS,package,pptp-linux))
++$(eval $(call GENTARGETS))
+diff --git a/package/procps/procps.mk b/package/procps/procps.mk
+index a279987..8228052 100644
+--- a/package/procps/procps.mk
++++ b/package/procps/procps.mk
+@@ -20,4 +20,4 @@ define PROCPS_INSTALL_TARGET_CMDS
+ 		ldconfig=true install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,procps))
++$(eval $(call GENTARGETS))
+diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
+index 048930b..4c8a891 100644
+--- a/package/python-serial/python-serial.mk
++++ b/package/python-serial/python-serial.mk
+@@ -18,4 +18,4 @@ define PYTHON_SERIAL_INSTALL_TARGET_CMDS
+ 	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,python-serial))
++$(eval $(call GENTARGETS))
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index ed95b2c..cc035bf 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -637,4 +637,4 @@ define QT_UNINSTALL_TARGET_CMDS
+ 	-rm $(TARGET_DIR)/usr/lib/libphonon.so.*
+ endef
+ 
+-$(eval $(call GENTARGETS,package,qt))
++$(eval $(call GENTARGETS))
+diff --git a/package/rings/rings.mk b/package/rings/rings.mk
+index 36fe666..4862fad 100644
+--- a/package/rings/rings.mk
++++ b/package/rings/rings.mk
+@@ -26,4 +26,4 @@ define RINGS_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,rings))
++$(eval $(call GENTARGETS))
+diff --git a/package/rsh-redone/rsh-redone.mk b/package/rsh-redone/rsh-redone.mk
+index 6217cb1..0c2b838 100644
+--- a/package/rsh-redone/rsh-redone.mk
++++ b/package/rsh-redone/rsh-redone.mk
+@@ -33,4 +33,4 @@ define RSH_REDONE_UNINSTALL_TARGET_CMDS
+ 		$(addprefix $(TARGET_DIR)/usr/sbin/,$(rsh-redone-sbin-y))
+ endef
+ 
+-$(eval $(call GENTARGETS,package,rsh-redone))
++$(eval $(call GENTARGETS))
+diff --git a/package/scons/scons.mk b/package/scons/scons.mk
+index f8fe84b..73c68ed 100644
+--- a/package/scons/scons.mk
++++ b/package/scons/scons.mk
+@@ -10,4 +10,4 @@ define HOST_SCONS_INSTALL_CMDS
+ 	(cd $(@D); python setup.py install --prefix=$(HOST_DIR)/usr)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,scons,host))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 0c604d9..2f5787c 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -51,4 +51,4 @@ define SLANG_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,slang))
++$(eval $(call GENTARGETS))
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index 7aa8ca9..4d0ad51 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -72,5 +72,5 @@ define HOST_SQUASHFS_INSTALL_CMDS
+    -C $(@D)/squashfs-tools/ INSTALL_DIR=$(HOST_DIR)/usr/bin install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,squashfs))
+-$(eval $(call GENTARGETS,package,squashfs,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/squashfs3/squashfs3.mk b/package/squashfs3/squashfs3.mk
+index 69aab14..178543b 100644
+--- a/package/squashfs3/squashfs3.mk
++++ b/package/squashfs3/squashfs3.mk
+@@ -25,6 +25,6 @@ define HOST_SQUASHFS3_INSTALL_CMDS
+  $(HOST_MAKE_ENV) $(MAKE) -C $(@D)/squashfs-tools/ INSTALL_DIR=$(HOST_DIR)/usr/bin install
+ endef
+ 
+-$(eval $(call GENTARGETS,package,squashfs3))
+-$(eval $(call GENTARGETS,package,squashfs3,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+ 
+diff --git a/package/sredird/sredird.mk b/package/sredird/sredird.mk
+index ad91f6a..44fe16d 100644
+--- a/package/sredird/sredird.mk
++++ b/package/sredird/sredird.mk
+@@ -24,4 +24,4 @@ define SREDIRD_CLEAN_CMDS
+ 	rm -f $(@D)/sredird
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sredird))
++$(eval $(call GENTARGETS))
+diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
+index 2dc383d..9a5aede 100644
+--- a/package/sstrip/sstrip.mk
++++ b/package/sstrip/sstrip.mk
+@@ -41,5 +41,5 @@ define HOST_SSTRIP_UNINSTALL_CMDS
+ 	rm -f $(HOST_DIR)/usr/bin/$(HOST_SSTRIP_BINARY)
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sstrip))
+-$(eval $(call GENTARGETS,package,sstrip,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/statserial/statserial.mk b/package/statserial/statserial.mk
+index b6a8a0f..8c39693 100644
+--- a/package/statserial/statserial.mk
++++ b/package/statserial/statserial.mk
+@@ -16,4 +16,4 @@ define STATSERIAL_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/statserial $(TARGET_DIR)/usr/bin/statserial
+ endef
+ 
+-$(eval $(call GENTARGETS,package,statserial))
++$(eval $(call GENTARGETS))
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index e08f048..a5dedf2 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -52,4 +52,4 @@ define SYSKLOGD_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sysklogd))
++$(eval $(call GENTARGETS))
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index af5ec42..0d65c43 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -46,4 +46,4 @@ define SYSVINIT_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,sysvinit))
++$(eval $(call GENTARGETS))
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index 037e0c9..15e620c 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -28,4 +28,4 @@ define TI_UTILS_UNINSTALL_TARGET_CMDS
+ 	rm -fr $(TARGET_DIR)/usr/share/ti-utils
+ endef
+ 
+-$(eval $(call GENTARGETS,package,ti-utils))
++$(eval $(call GENTARGETS))
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index b9e0f21..e20560a 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -51,5 +51,5 @@ define HOST_UBOOT_TOOLS_INSTALL_CMDS
+ 	install -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin
+ endef
+ 
+-$(eval $(call GENTARGETS,package,uboot-tools))
+-$(eval $(call GENTARGETS,package,uboot-tools,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 620c5d0..7b982d8 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -25,5 +25,5 @@ define USB_MODESWITCH_CLEAN_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
+ endef
+ 
+-$(eval $(call GENTARGETS,package,usb_modeswitch))
++$(eval $(call GENTARGETS))
+ 
+diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
+index 0f93e5b..8434570 100644
+--- a/package/usbmount/usbmount.mk
++++ b/package/usbmount/usbmount.mk
+@@ -31,4 +31,4 @@ define USBMOUNT_UNINSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/media/usb?
+ endef
+ 
+-$(eval $(call GENTARGETS,package,usbmount))
++$(eval $(call GENTARGETS))
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 64a56cc..4490287 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -51,4 +51,4 @@ define VSFTPD_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,vsftpd))
++$(eval $(call GENTARGETS))
+diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
+index d47fbcd..48a3adf 100644
+--- a/package/whetstone/whetstone.mk
++++ b/package/whetstone/whetstone.mk
+@@ -24,7 +24,7 @@ define WHETSTONE_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/whetstone
+ endef
+ 
+-$(eval $(call GENTARGETS,package,whetstone))
++$(eval $(call GENTARGETS))
+ 
+ $(BUILD_DIR)/whetstone-$(WHETSTONE_VERSION)/.stamp_extracted:
+ 	@$(call MESSAGE,"Extracting")
+diff --git a/package/wipe/wipe.mk b/package/wipe/wipe.mk
+index d227389..54283f9 100644
+--- a/package/wipe/wipe.mk
++++ b/package/wipe/wipe.mk
+@@ -33,4 +33,4 @@ define WIPE_CLEAN_CMDS
+ 	$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,wipe))
++$(eval $(call GENTARGETS))
+diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
+index d8358ba..b059839 100644
+--- a/package/wireless_tools/wireless_tools.mk
++++ b/package/wireless_tools/wireless_tools.mk
+@@ -42,4 +42,4 @@ define WIRELESS_TOOLS_UNINSTALL_TARGET_CMDS
+ 	$(MAKE) -C $(@D) PREFIX="$(TARGET_DIR)" uninstall
+ endef
+ 
+-$(eval $(call GENTARGETS,package,wireless_tools))
++$(eval $(call GENTARGETS))
+diff --git a/package/wsapi/wsapi.mk b/package/wsapi/wsapi.mk
+index c0f9c8b..f9ab334 100644
+--- a/package/wsapi/wsapi.mk
++++ b/package/wsapi/wsapi.mk
+@@ -18,4 +18,4 @@ define WSAPI_UNINSTALL_TARGET_CMDS
+ 	rm -rf "$(TARGET_DIR)/usr/share/lua/wsapi"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,wsapi))
++$(eval $(call GENTARGETS))
+diff --git a/package/xavante/xavante.mk b/package/xavante/xavante.mk
+index 525b09f..e6dd312 100644
+--- a/package/xavante/xavante.mk
++++ b/package/xavante/xavante.mk
+@@ -20,4 +20,4 @@ define XAVANTE_UNINSTALL_TARGET_CMDS
+ 	rm -f "$(TARGET_DIR)/usr/share/sajax.lua"
+ endef
+ 
+-$(eval $(call GENTARGETS,package,xavante))
++$(eval $(call GENTARGETS))
+diff --git a/package/xl2tp/xl2tp.mk b/package/xl2tp/xl2tp.mk
+index bcaacf3..e44b75f 100644
+--- a/package/xl2tp/xl2tp.mk
++++ b/package/xl2tp/xl2tp.mk
+@@ -30,4 +30,4 @@ define XL2TP_CLEAN_CMDS
+ 	-$(MAKE) -C $(@D) clean
+ endef
+ 
+-$(eval $(call GENTARGETS,package,xl2tp))
++$(eval $(call GENTARGETS))
+diff --git a/package/zlib/zlib.mk b/package/zlib/zlib.mk
+index 18e7068..fbe923e 100644
+--- a/package/zlib/zlib.mk
++++ b/package/zlib/zlib.mk
+@@ -73,5 +73,5 @@ define HOST_ZLIB_UNINSTALL_TARGET_CMDS
+ 	$(MAKE1) -C $(@D) uninstall
+ endef
+ 
+-$(eval $(call GENTARGETS,package,zlib))
+-$(eval $(call GENTARGETS,package,zlib,host))
++$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
