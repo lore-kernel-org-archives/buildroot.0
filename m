@@ -1,53 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Sep 2011 22:32:14 +0200
-Subject: [Buildroot] [git commit] package: implement a 'local' site method
-Message-ID: <20110930063209.4B0548DC07@busybox.osuosl.org>
+Date: Thu, 29 Sep 2011 22:19:08 +0200
+Subject: [Buildroot] [git commit] package: add configuration option to
+	specify a local override file
+Message-ID: <20110930063208.A16338DC07@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=793a2ea5174e5352ec18ca32f7914c7071bf3108
+commit: http://git.buildroot.net/buildroot/commit/?id=ee0246e1e1d83f41985489c85dfef07098a2026d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The new override source directory mechanism allows to tell Buildroot
-to use a particular directory as the source directory for a
-package. However, this mechanism works with a local override makefile
-and not directly within the package recipe itself.
+The user can now create a custom local override file to override the
+source directory for various packages.
 
-For some use cases, it might be desirable to write a package recipe
-which always refers to a local source directory (and not a http, git,
-svn or bazaar download). This commit makes this possible by adding the
-'local' site method. It allows to write package recipes as follows:
+An example override file:
 
-MYPKG_SITE = /tmp/mypkg-source-code
-MYPKG_SITE_METHOD = local
+ ZLIB_OVERRIDE_SRCDIR = /tmp/zlib
+ STRACE_OVERRIDE_SRCDIR = /opt/strace-4.5.20
 
-[...]
-
-$(eval $(call GENTARGETS,package,mypkg))
+would tell Buildroot to use the zlib and strace source code from the
+specified directories, instead of download, extracting and patching
+the code has done usually by Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.package.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Config.in |   10 ++++++++++
+ Makefile  |    7 +++++++
+ 2 files changed, 17 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 53cc8eb..5987d38 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -439,6 +439,12 @@ ifndef $(2)_SITE_METHOD
-  endif
+diff --git a/Config.in b/Config.in
+index 2fce9d7..3aa3ad8 100644
+--- a/Config.in
++++ b/Config.in
+@@ -334,6 +334,16 @@ config BR2_HAVE_DEVFILES
+ 	  Install headers and static libraries in the
+ 	  target filesystem
+ 
++config BR2_PACKAGE_OVERRIDE_FILE
++	string "location of a package override file"
++	default "$(TOPDIR)/local.mk"
++	help
++	  A package override file is a short makefile that contains
++	  variable definitions of the form <pkg>_OVERRIDE_SRCDIR,
++	  which allows to tell Buildroot to use an existing directory
++	  as the source directory for a particular package. See the
++	  Buildroot documentation for more details on this feature.
++
+ endmenu
+ 
+ source "toolchain/Config.in"
+diff --git a/Makefile b/Makefile
+index a20d3e2..8525b7d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -309,6 +309,13 @@ else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
+ include toolchain/toolchain-crosstool-ng.mk
  endif
  
-+ifeq ($$($(2)_SITE_METHOD),local)
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+$(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
-+endif
++# Include the package override file if one has been provided in the
++# configuration.
++PACKAGE_OVERRIDE_FILE=$(call qstrip,$(BR2_PACKAGE_OVERRIDE_FILE))
++ifneq ($(PACKAGE_OVERRIDE_FILE),)
++-include $(PACKAGE_OVERRIDE_FILE)
 +endif
 +
- $(2)_DEPENDENCIES		?=
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
+ include package/*/*.mk
+ 
+ include boot/common.mk
