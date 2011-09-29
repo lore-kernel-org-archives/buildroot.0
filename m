@@ -1,58 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Sep 2011 21:57:39 +0200
-Subject: [Buildroot] [PATCH 03/15] package: add <pkg>-rebuild and
-	<pkg>-reconfigure
+Date: Thu, 29 Sep 2011 21:57:41 +0200
+Subject: [Buildroot] [PATCH 05/15] package: add helper functions to get
+	package name and directory magically
 In-Reply-To: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f9d6285995e6502cc35a1968eced7e8a469f26ef.1317325743.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8d3f0fb45858fde60d1118e35aa91944fe7ab368.1317325743.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We are often asked "how can I restart the build of a package ?" or
-"how can I restart the build of package from the configure part
-?". Obviously, tweaking with stamp files is possible, but not very
-user friendly.
+This commit adds the functions "pkgname" and "pkgdir", which can then
+be used to automatically find the name of the package and the
+directory of the package which does the call to
+GENTARGETS/AUTOTARGETS/CMAKETARGETS. These functions use the
+$(MAKEFILE_LIST) variable, which make automatically makes available,
+and which contains the list of included Makefiles, with the current
+Makefile being last. Thanks to this variable and a little bit of
+string manipulation, we can easily find out automatically the package
+name and the directory it is part of.
 
-Therefore this patch adds two new per-package targets: <pkg>-rebuild
-and <pkg>-reconfigure. They will remove the right stamp files and
-restart the complete build process (by using the 'all' target, so that
-not only the package is reconfigured, recompiled and reinstalled, but
-the root filesystem images are also regenerated).
+These functions are used in later commits to simplify the GENTARGETS,
+AUTOTARGETS and CMAKETARGETS calls.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.package.in |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
+ package/Makefile.package.in |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
 diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 15fc085..53cc8eb 100644
+index 5987d38..46765c1 100644
 --- a/package/Makefile.package.in
 +++ b/package/Makefile.package.in
-@@ -557,6 +557,22 @@ $(1)-clean:		$(1)-uninstall \
+@@ -55,6 +55,24 @@ define KCONFIG_DISABLE_OPT
+        echo "# $(1) is not set" >> $(2)
+ endef
  
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- 
-+$(1)-clean-for-rebuild:
-+ifneq ($$($(2)_OVERRIDE_SRCDIR),)
-+			rm -f $$($(2)_TARGET_RSYNC)
-+endif
-+			rm -f $$($(2)_TARGET_BUILD)
-+			rm -f $$($(2)_TARGET_INSTALL_STAGING)
-+			rm -f $$($(2)_TARGET_INSTALL_TARGET)
-+			rm -f $$($(2)_TARGET_INSTALL_HOST)
++# Helper functions to determine the name of a package and its
++# directory from its makefile path, using the $(MAKEFILE_LIST)
++# variable provided by make. This is used by the *TARGETS macros to
++# automagically find where the package is located. Note that the
++# pkgdir macro is carefully written to handle the case of the Linux
++# package, for which the package directory is an empty string.
++define pkgmakefile
++$(dir $(lastword $(MAKEFILE_LIST)))
++endef
 +
-+$(1)-rebuild:		$(1)-clean-for-rebuild all
++define pkgname
++$(lastword $(subst /, ,$(call pkgmakefile)))
++endef
 +
-+$(1)-clean-for-reconfigure: $(1)-clean-for-rebuild
-+			rm -f $$($(2)_TARGET_CONFIGURE)
++define pkgdir
++$(patsubst %$(call pkgname)/,%,$(call pkgmakefile))
++endef
 +
-+$(1)-reconfigure:	$(1)-clean-for-reconfigure all
-+
- # define the PKG variable for all targets, containing the
- # uppercase package variable prefix
- $$($(2)_TARGET_INSTALL_TARGET):		PKG=$(2)
+ # Define extractors for different archive suffixes
+ INFLATE.bz2  = $(BZCAT)
+ INFLATE.gz   = $(ZCAT)
 -- 
 1.7.4.1
