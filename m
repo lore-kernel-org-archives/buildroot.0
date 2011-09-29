@@ -1,9 +1,9 @@
 From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Thu, 29 Sep 2011 10:45:17 +0200
+Date: Thu, 29 Sep 2011 11:30:52 +0200
 Subject: [Buildroot] [PATCH 2/2] add libfcgi to buildroot
 In-Reply-To: <add libfcgi to buildroot>
 References: <add libfcgi to buildroot>
-Message-ID: <1317285917-2134-1-git-send-email-bachmann@tofwerk.com>
+Message-ID: <1317288652-1872-1-git-send-email-bachmann@tofwerk.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
