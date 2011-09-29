@@ -1,38 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Sep 2011 21:57:47 +0200
-Subject: [Buildroot] [PATCH 11/15] fakeroot: remove target package
+Date: Thu, 29 Sep 2011 21:57:49 +0200
+Subject: [Buildroot] [PATCH 13/15] whetstone: use the <pkg>_EXTRACT_CMDS
+	mechanism
 In-Reply-To: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <581f2ce901c20b5bfb734e8d0bdb64f4fbad34f4.1317325743.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <aaa277751d952e1184021da2f22bd6c2d4288039.1317325743.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As explained in the comment, the fakeroot target package was only here
-to workaround deficiencies in the package infrastructure regarding the
-patching procedure. Those issues have been fixed in
-7a41cbf938d6a189109b8b15dc2cef8638c5a0c2, so clean things up in
-fakeroot.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/fakeroot/fakeroot.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/whetstone/whetstone.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index c69f31e..e47d8ba 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -15,8 +15,4 @@ endef
+diff --git a/package/whetstone/whetstone.mk b/package/whetstone/whetstone.mk
+index 48a3adf..048f4de 100644
+--- a/package/whetstone/whetstone.mk
++++ b/package/whetstone/whetstone.mk
+@@ -8,6 +8,10 @@ WHETSTONE_VERSION = 1.2
+ WHETSTONE_SOURCE = whetstone.c
+ WHETSTONE_SITE = http://www.netlib.org/benchmark/
  
- FAKEROOT_POST_PATCH_HOOKS += FAKEROOT_PATCH_FAKEROOT_IN
++define WHETSTONE_EXTRACT_CMDS
++	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
++endef
++
+ define WHETSTONE_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) LDLIBS="-lm" -C $(@D) whetstone
+ endef
+@@ -25,9 +29,3 @@ define WHETSTONE_UNINSTALL_TARGET_CMDS
+ endef
  
--# The package for the target cannot be selected (build problems when
--# largefile is enabled), but is needed for the host package to work
--# due to deficiencies in the package infrastructure.
--$(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
+ $(eval $(call GENTARGETS))
+-
+-$(BUILD_DIR)/whetstone-$(WHETSTONE_VERSION)/.stamp_extracted:
+-	@$(call MESSAGE,"Extracting")
+-	$(Q)mkdir -p $(@D)
+-	$(Q)cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
+-	$(Q)touch $@
 -- 
 1.7.4.1
