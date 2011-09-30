@@ -1,72 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 22:26:06 +0200
-Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
-In-Reply-To: <4E856673.8020205@visionsystems.de>
-References: <4E856673.8020205@visionsystems.de>
-Message-ID: <20110930222606.2ed76af5@skate>
+Date: Fri, 30 Sep 2011 22:35:26 +0200
+Subject: [Buildroot] Segmentation faults after gcc update
+In-Reply-To: <20110930215915.3d7fad80@skate>
+References: <1317110841.20688.12.camel@sven> <20110927233506.55cb52a2@skate>
+ <1317221262.8481.4.camel@sven> <1317373796.20520.3.camel@sven>
+ <20110930215915.3d7fad80@skate>
+Message-ID: <20110930223526.6aa05012@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yegor,
+Le Fri, 30 Sep 2011 21:59:15 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Can you send a patch with a proper description, so that it can be
-applied with git am ?
+> Maybe you should raise the issue on the uClibc mailing list?
 
-By proper description I mean :
+A quick data point: I tested a build with gcc 4.6.1, uClibc 0.9.32,
+NPTL, and both iperf and dbus-daemon start fine for me:
 
- * Don't forget that everything before the --- is kept in the commit
-   log, so don't put "personal" explanations.
+# iperf 
+Usage: iperf [-s|-c host] [options]
+Try `iperf --help' for more information.
+# dbus-daemon 
+No configuration file specified.
+dbus-daemon [--version] [--session] [--system] [--config-file=FILE] [--print-address[=DESCRIPTOR]] [--print-pid[=DESCRIPTOR]] [--fork] [--nofork] [--introspect] [--address=ADDRESS] [--systemd-activation]
+# uname -a
+Linux buildroot 2.6.38.8 #1 Fri Sep 30 20:24:38 UTC 2011 armv5tejl
+GNU/Linux
 
- * Don't put a line full of "-------------------------".
+My target optimization options is:
 
-Thanks!
+BR2_GCC_TARGET_TUNE="arm926ej-s"
+BR2_GCC_TARGET_ARCH="armv5te"
+BR2_GCC_TARGET_ABI="aapcs-linux"
+
+Therefore, I guess that the problem might be iwmmxt related. Can you
+try with "lower" optimization options ?
 
 Thomas
-
-Le Fri, 30 Sep 2011 08:49:23 +0200,
-Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
-
-> On my old build system (openSUSE 10.3) I had problems compiling GDB saying something like my glibc is too old. So I tried the latest version and could compile without a problem. See the patch below.
-> 
-> Yegor 
-> --------------------------------------------------------------
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  toolchain/gdb/Config.in |    6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> Index: b/toolchain/gdb/Config.in
-> ===================================================================
-> --- a/toolchain/gdb/Config.in
-> +++ b/toolchain/gdb/Config.in
-> @@ -59,6 +59,11 @@
->  		depends on !BR2_bfin
->  		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
->  
-> +	config BR2_GDB_VERSION_7_3_1
-> +		bool "gdb 7.3.1"
-> +		depends on !BR2_bfin
-> +		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
-> +
->  endchoice
->  
->  config BR2_GDB_VERSION
-> @@ -69,3 +74,4 @@
->  	default "6.8"      if BR2_GDB_VERSION_6_8
->  	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
->  	default "7.1"      if BR2_GDB_VERSION_7_1
-> +	default "7.3.1"    if BR2_GDB_VERSION_7_3_1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
