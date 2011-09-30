@@ -1,39 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 08:38:41 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Sep 2011 08:41:10 +0200
 Subject: [Buildroot] [pull request] Pull request for branch
- for-2011.11/asciidoc-manual
-In-Reply-To: <877h4qo7ta.fsf@macbook.be.48ers.dk>
-References: <cover.1317326629.git.thomas.petazzoni@free-electrons.com>
- <877h4qo7ta.fsf@macbook.be.48ers.dk>
-Message-ID: <20110930083841.77634bdd@skate>
+	for-2011.11/pkg-infra
+In-Reply-To: <20110930083350.541d2ce8@skate> (Thomas Petazzoni's message of
+ "Fri, 30 Sep 2011 08:33:50 +0200")
+References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
+ <87sjnfni6h.fsf@macbook.be.48ers.dk> <20110930065130.142d51bd@skate>
+ <87fwjeo84d.fsf@macbook.be.48ers.dk> <20110930083350.541d2ce8@skate>
+Message-ID: <8739feo7ll.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 30 Sep 2011 08:36:33 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> I thought we've agreed that asciidoc was the way to go, but that we just
-> need to sort out the practical issues with the osuosl.org guys regarding
-> website-from-git and 'make release'.
-> 
->  Thomas> Would it be possible to make some progress on this ? The progress
->  Thomas> might also be: this is too complicated, and keeping an HTML format is
->  Thomas> in the end simpler.
-> 
-> No, I like the asciidoc stuff, just need to get the details sorted
-> out. I'll try to get it finalized this weekend.
+Hi,
 
-Ok, then I'll fix Yann comments and I'll start building on top of the
-asciidoc version to update the documentation where needed.
+ Thomas> Yes, I did test the whole patchset, maybe I missed something. The
+ Thomas> reason why there is no Signed-off-by is because I always forget to use
+ Thomas> git am -s. The patch has even been heavily modified by me since it was
+ Thomas> written by "Quotient Remainder".
 
-Thanks,
+ >> With this dropped I had to remove the fakeroot patch as well.
 
-Thomas
+ Thomas> Ok, I will rework patch 9 and 15 in a separate branch, do some more
+ Thomas> testing and repost.
+
+ Thomas> Thanks, and sorry for the mess (I told you there would be some
+ Thomas> breakage!).
+
+No problem - Thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
