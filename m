@@ -1,29 +1,31 @@
-From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Fri, 30 Sep 2011 16:21:02 -0500
-Subject: [Buildroot] Question: Multiple versions of a package.
-Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DC568EC@AUSP01VMBX24.collaborationhost.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 30 Sep 2011 10:15:27 +0200
+Subject: [Buildroot] [git commit] mpd: ffmpeg needs ipv6,
+	so add proper dependencies
+Message-ID: <20110930214747.3DFB18DC0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Can a package/*/*.mk file be setup to handle two different versions
-of a package or should two separate package/* directories be created?
+commit: http://git.buildroot.net/buildroot/commit/?id=b2a6615b11281b503227a3d18cffa617ee850147
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm trying to add the ParaGUI package to buildroot.  This is a widget
-toolkit library that uses SDL.  It also needs libsigc++, which is
-available in packages/, but it's an incompatible version.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mpd/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-The version of libsigc++ in buildroot is 2.2.8.  ParaGUI needs
-libsigc++1.2 >= 1.2.5.  It appears that even though these libraries
-do the same thing they have very different API's.
-
-A similar issue occurs with the new version of SDL.  It has not been
-offically released yet but SDL1.2 and SDL1.3 (2.0?) use completely
-different APIs.
-
-What's that bast way to handle this situation?
-
-Regards,
-Hartley
+diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
+index a6ded13..6de1e5b 100644
+--- a/package/multimedia/mpd/Config.in
++++ b/package/multimedia/mpd/Config.in
+@@ -60,6 +60,7 @@ config BR2_PACKAGE_MPD_FFMPEG
+ 	bool "ffmpeg"
+ 	select BR2_PACKAGE_FFMPEG
+ 	depends on BR2_LARGEFILE
++	depends on BR2_INET_IPV6
+ 	help
+ 	  Enable ffmpeg input support.
+ 	  Select this if you want to play back files supported by ffmpeg.
