@@ -1,34 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 30 Sep 2011 23:12:52 +0200
-Subject: [Buildroot] Status of valgrind on powerpc
-In-Reply-To: <20110930214150.770f09e1@skate>
-References: <CAAXf6LUVQc9JRgoOiKy84BnsiRLqXOxHbd6k+1RzQMpRQA4T0w@mail.gmail.com>
- <20110929121549.4bb68988@skate> <20110930214150.770f09e1@skate>
-Message-ID: <CAAXf6LUKtv1Cs-gEfGj4Aq9wLe3N0tiKHDxniv39dW+RwoQOjw@mail.gmail.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Fri, 30 Sep 2011 16:21:02 -0500
+Subject: [Buildroot] Question: Multiple versions of a package.
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DC568EC@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Sep 30, 2011 at 9:41 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Thu, 29 Sep 2011 12:15:49 +0200,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
->
->> I think I did the compile test with a CodeSourcery glibc based
->> toolchain for PowerPC. Maybe I have missed build problems with uClibc.
->
-> I confirm that it builds fine with the freescale-4.4 PowerPC toolchain
-> of CodeSourcery.
+Can a package/*/*.mk file be setup to handle two different versions
+of a package or should two separate package/* directories be created?
 
-An eglibc toolchain built with crosstool-ng, also works (both
-compilation as running on target).
+I'm trying to add the ParaGUI package to buildroot.  This is a widget
+toolkit library that uses SDL.  It also needs libsigc++, which is
+available in packages/, but it's an incompatible version.
 
-To run properly, though, valgrind needs an unstripped ld.so
-I worked around this by adding ld.so as an exception to the strip
-command in target-finalize (but am hoping for inclusion of Sven
-Neumann's 'exclude-from-strip' patch)
+The version of libsigc++ in buildroot is 2.2.8.  ParaGUI needs
+libsigc++1.2 >= 1.2.5.  It appears that even though these libraries
+do the same thing they have very different API's.
 
-Best regards,
-Thomas
+A similar issue occurs with the new version of SDL.  It has not been
+offically released yet but SDL1.2 and SDL1.3 (2.0?) use completely
+different APIs.
+
+What's that bast way to handle this situation?
+
+Regards,
+Hartley
