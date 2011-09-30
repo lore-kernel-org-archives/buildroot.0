@@ -1,35 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 20:45:55 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/pkg-infra-urgent
-Message-ID: <cover.1317408294.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Sep 2011 21:41:50 +0200
+Subject: [Buildroot] Status of valgrind on powerpc
+In-Reply-To: <20110929121549.4bb68988@skate>
+References: <CAAXf6LUVQc9JRgoOiKy84BnsiRLqXOxHbd6k+1RzQMpRQA4T0w@mail.gmail.com>
+ <20110929121549.4bb68988@skate>
+Message-ID: <20110930214150.770f09e1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Thu, 29 Sep 2011 12:15:49 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Here is an urgent fix that follows the changes in the package
-infrastructure. Unfortunately, those changes break the build of
-bootloaders (they are ignored by the build process).
+> I think I did the compile test with a CodeSourcery glibc based
+> toolchain for PowerPC. Maybe I have missed build problems with uClibc.
+
+I confirm that it builds fine with the freescale-4.4 PowerPC toolchain
+of CodeSourcery.
 
 Thomas
-
-The following changes since commit 8511728696a298ccdb8b902b60ab398d8f67e745:
-
-  gnutls: bump to version 2.10.5 (2011-09-30 08:26:08 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/pkg-infra-urgent
-
-Thomas Petazzoni (1):
-      package: fix bootloader building
-
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-Thanks,
 -- 
-Thomas Petazzoni
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
