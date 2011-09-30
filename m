@@ -1,34 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 22:21:38 +0200
-Subject: [Buildroot] [PATCH 2/4] util-linux: disable installing binaries
- by default
-In-Reply-To: <1317412052-28859-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1317412052-28859-1-git-send-email-gustavo@zacarias.com.ar>
- <1317412052-28859-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20110930222138.2c80696e@skate>
+Date: Fri, 30 Sep 2011 22:26:06 +0200
+Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
+In-Reply-To: <4E856673.8020205@visionsystems.de>
+References: <4E856673.8020205@visionsystems.de>
+Message-ID: <20110930222606.2ed76af5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 30 Sep 2011 16:47:30 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Yegor,
 
-> +config BR2_PACKAGE_UTIL_LINUX_BASIC
-> +	bool "install basic utilities"
-> +	help
-> +	  Install the basic util-linux binaries.
-> +
+Can you send a patch with a proper description, so that it can be
+applied with git am ?
 
-I don't see where this new option is being used.
+By proper description I mean :
 
-> +define UTIL_LINUX_INSTALL_TARGET_CMDS
-> +	$(UTIL_LINUX_INSTALL_BASIC)
+ * Don't forget that everything before the --- is kept in the commit
+   log, so don't put "personal" explanations.
 
-And where this variable is defined.
+ * Don't put a line full of "-------------------------".
+
+Thanks!
 
 Thomas
+
+Le Fri, 30 Sep 2011 08:49:23 +0200,
+Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+
+> On my old build system (openSUSE 10.3) I had problems compiling GDB saying something like my glibc is too old. So I tried the latest version and could compile without a problem. See the patch below.
+> 
+> Yegor 
+> --------------------------------------------------------------
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  toolchain/gdb/Config.in |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> Index: b/toolchain/gdb/Config.in
+> ===================================================================
+> --- a/toolchain/gdb/Config.in
+> +++ b/toolchain/gdb/Config.in
+> @@ -59,6 +59,11 @@
+>  		depends on !BR2_bfin
+>  		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+>  
+> +	config BR2_GDB_VERSION_7_3_1
+> +		bool "gdb 7.3.1"
+> +		depends on !BR2_bfin
+> +		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+> +
+>  endchoice
+>  
+>  config BR2_GDB_VERSION
+> @@ -69,3 +74,4 @@
+>  	default "6.8"      if BR2_GDB_VERSION_6_8
+>  	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
+>  	default "7.1"      if BR2_GDB_VERSION_7_1
+> +	default "7.3.1"    if BR2_GDB_VERSION_7_3_1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
