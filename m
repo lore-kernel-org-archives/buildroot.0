@@ -1,61 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 16:04:15 +0200
-Subject: [Buildroot] User-enabled host packages?
-In-Reply-To: <4E79E001.7010409@lucaceresoli.net>
-References: <4E79E001.7010409@lucaceresoli.net>
-Message-ID: <20110930160415.69616a8d@skate>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Fri, 30 Sep 2011 16:17:22 +0200
+Subject: [Buildroot] [PATCH 1/2] gst-ffmpeg: change back to use the included
+	version of ffmpeg
+Message-ID: <1317392243-27154-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Upstream buildroot uses the system-wide installed copy of ffmpeg.
+Since we only need ffmpeg for the gstreamer plug-in, go back to
+using the included version.
 
-In this e-mail, I'll try to summarize what I understand to be the
-consensus on this issue and also what I, as a Buildroot contributor,
-consider acceptable for integration :
+Also had to disable iwmmxt optimizations, we might want to review
+this later...
+---
+ package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |   32 +++++++++++++++++++++++++-
+ 1 files changed, 30 insertions(+), 2 deletions(-)
 
- * It is desirable to have *some* host packages visible in the
-   menuconfig interface, but *most* host packages should remain
-   invisible as they are today, when those are solely used as build
-   dependencies.
-
-   The criteria on deciding whether an host package should be made
-   visible or not depends on whether this host package contains
-   utilities that are directly useful for development. Things like
-   image generators, debugging or flashing utilities that run on the
-   host but interact with a target, etc. are the typical types of
-   host packages that are expected to be visible.
-
- * From a .mk file perspective, exposing some host packages requires no
-   change to the existing infrastructure. All host packages must be
-   stored in the package/ subdirectory, just like any other package. So
-   even the omap-u-boot-utils proposed by Luca should be in
-   package/omap-u-boot-utils, just like package/uboot-tools.
-
- * From a Config.in perspective, the host packages that need to be
-   visible should implement a package/<foo>/Config.in.host file
-   describing the configuration options. Those configuration options
-   should have the BR2_HOST_PACKAGE_* prefix. All these Config.in.host
-   files are included in a single "Packages -> Host utitities" submenu,
-   from package/Config.in. There is no need to create subsections in
-   this menu at the moment, since the number of utilities shown here is
-   suspected to remain limited.
-
- * The package infrastructure is modified so that when a
-   BR2_HOST_PACKAGE_<foo> option is enabled, then host-foo is added to
-   the global TARGETS variable.
-
-What do others think of this proposal? Peter, what is your feeling
-about the general idea and this proposal? Can we go ahead and implement
-something like proposed in this e-mail?
-
-Regards,
-
-Thomas
+diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+index 41a7f3b..3a8b78f 100644
+--- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
++++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
+@@ -8,8 +8,36 @@ GST_FFMPEG_VERSION = 0.10.11
+ GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
+ GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
+ GST_FFMPEG_INSTALL_STAGING = YES
+-GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
+-GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
++GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base
++
++GST_FFMPEG_CONF_OPT = \
++	--with-ffmpeg-extra-configure="--target-os=linux \
++				       --disable-ffmpeg \
++                                       --disable-ffplay \
++                                       --disable-ffserver \
++                                       --disable-avfilter \
++                                       --disable-swscale \
++                                       --enable-gpl \
++                                       --enable-nonfree \
++                                       --enable-postproc \
++                                       --enable-pthreads \
++                                       --enable-zlib \
++                                       --disable-avfilter \
++                                       --enable-postproc \
++                                       --enable-swscale \
++                                       --prefix=$(STAGING_DIR)/usr \
++                                       --enable-cross-compile \
++                                       --sysroot=$(STAGING_DIR) \
++                                       --host-cc=$(TARGET_CC) \
++                                       --cc=$(TARGET_CC) \
++                                       --arch=$(BR2_ARCH) \
++                                       --enable-cross-compile \
++                                       --cross-prefix=$(TARGET_CROSS) \
++                                       --disable-shared \
++                                       --enable-static \
++                                       --disable-encoders \
++                                       --disable-muxers \
++				       --disable-iwmmxt"
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ GST_FFMPEG_DEPENDENCIES += bzip2
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.4.1
