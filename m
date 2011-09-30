@@ -1,47 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 22:35:26 +0200
-Subject: [Buildroot] Segmentation faults after gcc update
-In-Reply-To: <20110930215915.3d7fad80@skate>
-References: <1317110841.20688.12.camel@sven> <20110927233506.55cb52a2@skate>
- <1317221262.8481.4.camel@sven> <1317373796.20520.3.camel@sven>
- <20110930215915.3d7fad80@skate>
-Message-ID: <20110930223526.6aa05012@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 30 Sep 2011 17:50:26 -0300
+Subject: [Buildroot] [PATCHv2] util-linux: disable installing binaries by
+	default
+Message-ID: <1317415826-29347-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 30 Sep 2011 21:59:15 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Disable installing binaries by default based on a new "install basic
+utilities" option.
+This is to avoid installing unnecessary bloat when we just need
+libblkid/libuuid for e2fsprogs for example.
 
-> Maybe you should raise the issue on the uClibc mailing list?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/util-linux/Config.in     |    5 +++++
+ package/util-linux/util-linux.mk |   36 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 0 deletions(-)
 
-A quick data point: I tested a build with gcc 4.6.1, uClibc 0.9.32,
-NPTL, and both iperf and dbus-daemon start fine for me:
-
-# iperf 
-Usage: iperf [-s|-c host] [options]
-Try `iperf --help' for more information.
-# dbus-daemon 
-No configuration file specified.
-dbus-daemon [--version] [--session] [--system] [--config-file=FILE] [--print-address[=DESCRIPTOR]] [--print-pid[=DESCRIPTOR]] [--fork] [--nofork] [--introspect] [--address=ADDRESS] [--systemd-activation]
-# uname -a
-Linux buildroot 2.6.38.8 #1 Fri Sep 30 20:24:38 UTC 2011 armv5tejl
-GNU/Linux
-
-My target optimization options is:
-
-BR2_GCC_TARGET_TUNE="arm926ej-s"
-BR2_GCC_TARGET_ARCH="armv5te"
-BR2_GCC_TARGET_ABI="aapcs-linux"
-
-Therefore, I guess that the problem might be iwmmxt related. Can you
-try with "lower" optimization options ?
-
-Thomas
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 816130d..4cacfca 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -16,6 +16,11 @@ if BR2_PACKAGE_UTIL_LINUX
+ #  --disable-foo
+ #
+ 
++config BR2_PACKAGE_UTIL_LINUX_BASIC
++	bool "install basic utilities"
++	help
++	  Install the basic util-linux binaries.
++
+ config BR2_PACKAGE_UTIL_LINUX_MOUNT
+ 	bool "build mount utilties"
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index b77e326..023622b 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -3,6 +3,7 @@
+ # util-linux
+ #
+ #############################################################
++
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_VERSION_MAJOR = 2.20
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.bz2
+@@ -67,6 +68,41 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-login-utils) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write)
+ 
++# Avoid the basic utilities if we just want the libraries
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_BASIC),y)
++define UTIL_LINUX_INSTALL_BASIC
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
++define UTIL_LINUX_INSTALL_LIBBLKID
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libblkid \
++		DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
++define UTIL_LINUX_INSTALL_LIBMOUNT
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libmount \
++		DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++define UTIL_LINUX_INSTALL_LIBUUID
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libuuid \
++		DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++define UTIL_LINUX_INSTALL_TARGET_CMDS
++	$(UTIL_LINUX_INSTALL_BASIC)
++	$(UTIL_LINUX_INSTALL_LIBBLKID)
++	$(UTIL_LINUX_INSTALL_LIBMOUNT)
++	$(UTIL_LINUX_INSTALL_LIBUUID)
++endef
++
+ $(eval $(call AUTOTARGETS))
+ 
+ # MKINSTALLDIRS comes from tweaked m4/nls.m4, but autoreconf uses staging
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
