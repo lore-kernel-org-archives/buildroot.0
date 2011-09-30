@@ -1,38 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Sep 2011 21:46:14 +0200
-Subject: [Buildroot] [PATCH 1/4] Add the picocom package
-In-Reply-To: <a43c69b7a1a524be05e8b42d86404b6f116a6a3e.1317210509.git.maxime.ripard@free-electrons.com>
-References: <cover.1317210509.git.maxime.ripard@free-electrons.com>
- <a43c69b7a1a524be05e8b42d86404b6f116a6a3e.1317210509.git.maxime.ripard@free-electrons.com>
-Message-ID: <20110930214614.1d844b95@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 30 Sep 2011 16:47:29 -0300
+Subject: [Buildroot] [PATCH 1/4] mpg123: bump to version 1.13.4
+Message-ID: <1317412052-28859-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 28 Sep 2011 13:48:31 +0200,
-Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
+Bump mpg123 to version 1.13.4, fixes for very long files (endless
+streams).
 
-> +	   http://code.google.com/p/picocom/
-> \ No newline at end of file
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/multimedia/mpg123/mpg123.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Peter would like to see a newline here.
-
-> +define PICOCOM_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(MAKE) -C $(@D)
-
-Nitpicking: it probably can be on one single line.
-
-> +$(eval $(call GENTARGETS,package,picocom))
-> \ No newline at end of file
-
-newline needed here.
-
-Thomas
+diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
+index 17d398e..53b7b39 100644
+--- a/package/multimedia/mpg123/mpg123.mk
++++ b/package/multimedia/mpg123/mpg123.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-MPG123_VERSION = 1.13.3
++MPG123_VERSION = 1.13.4
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mpg123
+ MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
