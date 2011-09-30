@@ -1,89 +1,111 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 30 Sep 2011 14:21:36 +0200
-Subject: [Buildroot] [git commit] gst-plugins-base: bump version
-In-Reply-To: <1317383828.15482.1.camel@sven>
-References: <20110929190333.7F3E78DBD5@busybox.osuosl.org>
- <1317383828.15482.1.camel@sven>
-Message-ID: <1317385486.15482.3.camel@sven>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 30 Sep 2011 14:50:03 +0200
+Subject: [Buildroot] User-enabled host packages?
+In-Reply-To: <20110923094636.030653fe@skate>
+References: <4E79E001.7010409@lucaceresoli.net> <20110921153133.2d816865@skate>
+ <201109222253.42536.arnout@mind.be> <20110923094636.030653fe@skate>
+Message-ID: <CAAXf6LXg7yo9n3fjhE4Qx6ve1Oh9_JcqFZ4HTrCfubFEg7nhZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 2011-09-30 at 13:53 +0200, Sven Neumann wrote:
-> On Thu, 2011-09-29 at 16:42 +0200, Peter Korsgaard wrote:
-> > commit: http://git.buildroot.net/buildroot/commit/?id=def45ab622f942c9639ebe1ede79ac4dd590d8fb
-> > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> > 
-> > Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> > ---
-> >  .../gst-plugins-base/gst-plugins-base.mk           |    2 +-
-> >  1 files changed, 1 insertions(+), 1 deletions(-)
-> > 
-> > diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-> > index 79ced30..a260f89 100644
-> > --- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-> > +++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-> > @@ -3,7 +3,7 @@
-> >  # gst-plugins-base
-> >  #
-> >  #############################################################
-> > -GST_PLUGINS_BASE_VERSION = 0.10.32
-> > +GST_PLUGINS_BASE_VERSION = 0.10.35
-> 
-> After this update gst-plugins-base does not any longer compile for me.
-> It bails out when trying to link testchannels:
-> 
-> Making all in audio
-> make[5]: Entering directory `/home/sven/git/buildroot/output/build/gst-plugins-base-0.10.35/gst-libs/gst/audio'
->   GEN    audio-enumtypes.c
->   GEN    audio-enumtypes.h
-> /usr/bin/make  all-am
-> make[6]: Entering directory `/home/sven/git/buildroot/output/build/gst-plugins-base-0.10.35/gst-libs/gst/audio'
->   CC     libgstaudio_0.10_la-audio.lo
->   CC     libgstaudio_0.10_la-gstringbuffer.lo
->   CC     libgstaudio_0.10_la-gstaudioclock.lo
->   CC     libgstaudio_0.10_la-mixerutils.lo
->   CC     libgstaudio_0.10_la-multichannel.lo
->   CC     libgstaudio_0.10_la-gstbaseaudiosink.lo
-> gstbaseaudiosink.c: In function 'gst_base_audio_sink_get_alignment':
-> gstbaseaudiosink.c:1358: warning: unused variable 'diff_s'
->   CC     libgstaudio_0.10_la-gstbaseaudiosrc.lo
->   CC     libgstaudio_0.10_la-gstaudiofilter.lo
->   CC     libgstaudio_0.10_la-gstaudiosink.lo
->   CC     libgstaudio_0.10_la-gstaudiosrc.lo
->   CC     libgstaudio_0.10_la-audio-enumtypes.lo
->   CCLD   libgstaudio-0.10.la
->   CC     testchannels-testchannels.o
->   CCLD   testchannels
-> /home/sven/git/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libglib-2.0.so: warning: the use of OBSOLESCENT `utime' is discouraged, use `utimes'
-> /home/sven/git/buildroot/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld: warning: libgstinterfaces-0.10.so.0, needed by ./.libs/libgstaudio-0.10.so, not found (try using -rpath or -rpath-link)
-> ./.libs/libgstaudio-0.10.so: undefined reference to `gst_property_probe_get_type'
-> ./.libs/libgstaudio-0.10.so: undefined reference to `gst_mixer_list_tracks'
-> ./.libs/libgstaudio-0.10.so: undefined reference to `gst_property_probe_get_property'
-> ./.libs/libgstaudio-0.10.so: undefined reference to `gst_mixer_get_type'
-> ./.libs/libgstaudio-0.10.so: undefined reference to `gst_property_probe_probe_and_get_values'
-> collect2: ld returned 1 exit status
+Hi,
 
-The following change and a call to autoreconf seems to fix the problem:
+On Fri, Sep 23, 2011 at 9:46 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Le Thu, 22 Sep 2011 22:53:42 +0200,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>> On Wednesday 21 September 2011 15:31:33, Thomas Petazzoni wrote:
+>> > > So the big question is: do we want some host packages to be enabled
+>> > > vie a user option?
+>>
+>> ?We already have one: BR2_PACKAGE_GDB_HOST.
+>
+> Right. And also binutils uses the package infrastructure, and its host
+> variant is visible in menuconfig. But we can argue that binutils/gdb
+> being part of the toolchain, those are "special".
+>
+>> ?Other possible candidates are the installers for boot loaders (grub,
+>> syslinux), target image manipulation programs (parted, fdisk, e2fsprogs,
+>> uboot-tools), tools to communicate with the target (openocd, tftpd), and maybe
+>> even scripting languages for running test suites (expect, python).
+>
+> Right.
+>
+>> ?However, I'm not sure of the value of having these in the .config. ?If I need
+>> them, it's anyway for use in build scripts that run on top of buildroot, and
+>> then I can just run a "make world host-e2fsprogs". ?The paths to the host
+>> tools are anyway so long that even when you need them in your shell, typing an
+>> additional make host-xxx first is really no effort.
+>
+> Well, I guess it's slightly more convenient. I regularly ship
+> customized Buildroot configurations as development environment for
+> embedded projects, and it would definitely be nice to be able to keep
+> the simple :
+>
+> ? ? ? ?make blabla_defconfig
+> ? ? ? ?make
+>
+> documentation, and allow the user to have all needed host tools in
+> $(HOST_DIR), including tools to reflash the firmware on the device, or
+> other utilities as you mentioned. Of course, I can document to run
+> "make world host-foobar", but that sounds less integrated. But I have
+> no strong opinion here.
 
---- gst-libs/gst/audio/Makefile.am~	2011-06-14 15:18:56.000000000 +0200
-+++ gst-libs/gst/audio/Makefile.am	2011-09-30 14:16:39.000000000 +0200
-@@ -53,7 +53,7 @@
- noinst_PROGRAMS = testchannels
- testchannels_SOURCES = testchannels.c
- testchannels_CFLAGS = $(GST_PLUGINS_BASE_CFLAGS) $(GST_CFLAGS)
--testchannels_LDADD =  $(builddir)/libgstaudio-$(GST_MAJORMINOR).la $(GST_LIBS)
-+testchannels_LDADD =  $(builddir)/libgstaudio-$(GST_MAJORMINOR).la $(builddir)/../interfaces/libgstinterfaces-$(GST_MAJORMINOR).la $(GST_LIBS)
- 
- include $(top_srcdir)/common/gst-glib-gen.mak
- 
+I also prefer this simple approach. If for a certain project, host
+tool X is needed, putting that dependency in the defconfig file:
+* makes the build steps easy and short
+* avoids putting too much knowledge in the build scripts that sit on
+top of buildroot
 
-Not sure though if this is the best way to fix it. If we have to touch
-the Makefile.am we could as well remove the build of testchannels
-completely.
+>
+>> ?That would mean they don't sit in their package's Config.in. ?Still, it would
+>> be the most logical place. ?Anyway there normally is no impact on the
+>> package's makefile since the config option is taken care of by GENTARGETS.
+>
+> For those packages, we could have a separate Config.in.host in the
+> package directory, which would be included by the top-level
+> package/Config.in to make the host package appear in this new "Host
+> tools" menu.
 
+I'm currently in need of the dtc compiler, which is only really
+relevant to the host. I followed the approach suggested above of a
+Config.in.host file that includes the appropriate dtc/dtc.mk file.
+Config.in.host is then included from the top-level Config.in.
+I can submit a patch with this if you like.
 
-Regards,
-Sven
+>
+>> > And also:
+>> >
+>> > If we decide to show some host tools (but not all) in menuconfig, what
+>> > is the boundary between host tools visible in menuconfig and those not
+>> > visible in menuconfig ?
+>>
+>> ?Similar as for the boundary between when to have a configuration option for
+>> different versions of a package. ?Depends on what users need.
+>
+> Ok, but I'd for example like to avoid having the myriad of X11
+> libraries that we need to build for the host visible in the menuconfig.
+>
+>> ?Can someone summarize the arguments that were used when this discussion took
+>> place a few years ago?
+>
+> As far as I remember, host utilities have almost never been visible
+> into menuconfig, besides a few exceptions (fakeroot comes to mind). At
+> the time, there was only the AUTOTARGETS infrastructure (non-autotools
+> packages were handled by hand-written makefiles) and the AUTOTARGETS
+> infrastructure did support only target packages (host autotools
+> packages were handled by hand-written makefiles). When we started
+> to support host packages into the package infrastructure, we clearly
+> stated that those would not be visible, as they were only necessary as
+> mere dependencies for the rest of the build process, and that for this
+> reason, the user had no need to see them, because he wouldn't
+> use/interact with them directly.
+
+Best regards,
+Thomas
