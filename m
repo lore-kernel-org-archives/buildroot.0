@@ -1,37 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 Sep 2011 08:41:10 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/pkg-infra
-In-Reply-To: <20110930083350.541d2ce8@skate> (Thomas Petazzoni's message of
- "Fri, 30 Sep 2011 08:33:50 +0200")
-References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
- <87sjnfni6h.fsf@macbook.be.48ers.dk> <20110930065130.142d51bd@skate>
- <87fwjeo84d.fsf@macbook.be.48ers.dk> <20110930083350.541d2ce8@skate>
-Message-ID: <8739feo7ll.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 30 Sep 2011 08:49:23 +0200
+Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
+Message-ID: <4E856673.8020205@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On my old build system (openSUSE 10.3) I had problems compiling GDB saying something like my glibc is too old. So I tried the latest version and could compile without a problem. See the patch below.
 
-Hi,
+Yegor 
+--------------------------------------------------------------
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ toolchain/gdb/Config.in |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
- Thomas> Yes, I did test the whole patchset, maybe I missed something. The
- Thomas> reason why there is no Signed-off-by is because I always forget to use
- Thomas> git am -s. The patch has even been heavily modified by me since it was
- Thomas> written by "Quotient Remainder".
-
- >> With this dropped I had to remove the fakeroot patch as well.
-
- Thomas> Ok, I will rework patch 9 and 15 in a separate branch, do some more
- Thomas> testing and repost.
-
- Thomas> Thanks, and sorry for the mess (I told you there would be some
- Thomas> breakage!).
-
-No problem - Thanks.
-
--- 
-Bye, Peter Korsgaard
+Index: b/toolchain/gdb/Config.in
+===================================================================
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -59,6 +59,11 @@
+ 		depends on !BR2_bfin
+ 		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
+ 
++	config BR2_GDB_VERSION_7_3_1
++		bool "gdb 7.3.1"
++		depends on !BR2_bfin
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
+ endchoice
+ 
+ config BR2_GDB_VERSION
+@@ -69,3 +74,4 @@
+ 	default "6.8"      if BR2_GDB_VERSION_6_8
+ 	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
+ 	default "7.1"      if BR2_GDB_VERSION_7_1
++	default "7.3.1"    if BR2_GDB_VERSION_7_3_1
