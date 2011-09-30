@@ -1,66 +1,35 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 30 Sep 2011 16:17:22 +0200
-Subject: [Buildroot] [PATCH 1/2] gst-ffmpeg: change back to use the included
-	version of ffmpeg
-Message-ID: <1317392243-27154-1-git-send-email-s.neumann@raumfeld.com>
+Date: Fri, 30 Sep 2011 16:17:23 +0200
+Subject: [Buildroot] [PATCH 2/2] gst-plugins-base: disable parallel build
+In-Reply-To: <1317392243-27154-1-git-send-email-s.neumann@raumfeld.com>
+References: <1317392243-27154-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1317392243-27154-2-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream buildroot uses the system-wide installed copy of ffmpeg.
-Since we only need ffmpeg for the gstreamer plug-in, go back to
-using the included version.
+Parallel builds sometimes break when audio/testchannels is
+compiled before the gstinterfaces library.
 
-Also had to disable iwmmxt optimizations, we might want to review
-this later...
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |   32 +++++++++++++++++++++++++-
- 1 files changed, 30 insertions(+), 2 deletions(-)
+ .../gst-plugins-base/gst-plugins-base.mk           |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-index 41a7f3b..3a8b78f 100644
---- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-@@ -8,8 +8,36 @@ GST_FFMPEG_VERSION = 0.10.11
- GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
- GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
- GST_FFMPEG_INSTALL_STAGING = YES
--GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
--GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
-+GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base
-+
-+GST_FFMPEG_CONF_OPT = \
-+	--with-ffmpeg-extra-configure="--target-os=linux \
-+				       --disable-ffmpeg \
-+                                       --disable-ffplay \
-+                                       --disable-ffserver \
-+                                       --disable-avfilter \
-+                                       --disable-swscale \
-+                                       --enable-gpl \
-+                                       --enable-nonfree \
-+                                       --enable-postproc \
-+                                       --enable-pthreads \
-+                                       --enable-zlib \
-+                                       --disable-avfilter \
-+                                       --enable-postproc \
-+                                       --enable-swscale \
-+                                       --prefix=$(STAGING_DIR)/usr \
-+                                       --enable-cross-compile \
-+                                       --sysroot=$(STAGING_DIR) \
-+                                       --host-cc=$(TARGET_CC) \
-+                                       --cc=$(TARGET_CC) \
-+                                       --arch=$(BR2_ARCH) \
-+                                       --enable-cross-compile \
-+                                       --cross-prefix=$(TARGET_CROSS) \
-+                                       --disable-shared \
-+                                       --enable-static \
-+                                       --disable-encoders \
-+                                       --disable-muxers \
-+				       --disable-iwmmxt"
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index 3b21c27..78144d9 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -8,6 +8,8 @@ GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.bz2
+ GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST_PLUGINS_BASE_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_BZIP2),y)
- GST_FFMPEG_DEPENDENCIES += bzip2
++GST_PLUGINS_BASE_MAKE = $(MAKE1)
++
+ # freetype is only used by examples, but if it is not found
+ # and the host has a freetype-config script, then the host
+ # include dirs are added to the search path causing trouble
 -- 
 1.7.4.1
