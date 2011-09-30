@@ -1,36 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 30 Sep 2011 15:50:07 +0200
-Subject: [Buildroot] User-enabled host packages?
-In-Reply-To: <CAAXf6LXg7yo9n3fjhE4Qx6ve1Oh9_JcqFZ4HTrCfubFEg7nhZg@mail.gmail.com>
-References: <4E79E001.7010409@lucaceresoli.net> <20110923094636.030653fe@skate>
- <CAAXf6LXg7yo9n3fjhE4Qx6ve1Oh9_JcqFZ4HTrCfubFEg7nhZg@mail.gmail.com>
-Message-ID: <201109301550.08708.arnout@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 30 Sep 2011 15:53:16 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/pkg-infra
+In-Reply-To: <201109301003.25147.yann.morin.1998@anciens.enib.fr>
+References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LU6daQM2sFioskBF56wf7uKbyStJgPjuk6-VUR5faRfFQ@mail.gmail.com>
+ <201109301003.25147.yann.morin.1998@anciens.enib.fr>
+Message-ID: <CAAXf6LWsZjyUGf42ma0_+O=L-mT8x7auAuS9Wc+Ca8Ns1dxy8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yann,
 
-On Friday 30 September 2011 14:50:03, Thomas De Schampheleire wrote:
-> I'm currently in need of the dtc compiler, which is only really
-> relevant to the host. I followed the approach suggested above of a
-> Config.in.host file that includes the appropriate dtc/dtc.mk file.
-> Config.in.host is then included from the top-level Config.in.
-> I can submit a patch with this if you like.
+On Fri, Sep 30, 2011 at 10:03 AM, Yann E. MORIN
+<yann.morin.1998@anciens.enib.fr> wrote:
+> Thomas, All,
+>
+> On Friday 30 September 2011 094839 Thomas De Schampheleire wrote:
+>> Now that we're discussing contribution, what is the best approach to
+>> get patches in once they were posted but forgotten?
+>
+> I wrote a mail once with a few details as to how patch contribution
+> happens, and what to do to get them reviewed/applied. This is not a
+> definitive guide, and does not 100% guaantee that it will work, but
+> it's a generic description of what to do, what can happen, and how
+> to behave, when sending patches:
+>
+> ? ?http://lists.busybox.net/pipermail/buildroot/2010-December/040300.html
+>
+> Also look at the other posts in the thread, there are a few other comments.
 
- I like!
+Thanks! Interesting thread indeed...
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20110930/71b6c749/attachment.html>
+~Thomas
