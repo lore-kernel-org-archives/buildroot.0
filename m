@@ -1,40 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Fri, 30 Sep 2011 10:03:25 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/pkg-infra
-In-Reply-To: <CAAXf6LU6daQM2sFioskBF56wf7uKbyStJgPjuk6-VUR5faRfFQ@mail.gmail.com>
-References: <cover.1317325743.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LU6daQM2sFioskBF56wf7uKbyStJgPjuk6-VUR5faRfFQ@mail.gmail.com>
-Message-ID: <201109301003.25147.yann.morin.1998@anciens.enib.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 30 Sep 2011 11:39:27 +0200
+Subject: [Buildroot] Status of valgrind on powerpc
+In-Reply-To: <20110929121549.4bb68988@skate>
+References: <CAAXf6LUVQc9JRgoOiKy84BnsiRLqXOxHbd6k+1RzQMpRQA4T0w@mail.gmail.com>
+ <20110929121549.4bb68988@skate>
+Message-ID: <CAAXf6LVPsz68F7dj8ifQezy=OXKh=KgLEB6_H=5BR9MOXS4zDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On Friday 30 September 2011 094839 Thomas De Schampheleire wrote:
-> Now that we're discussing contribution, what is the best approach to
-> get patches in once they were posted but forgotten?
+On Thu, Sep 29, 2011 at 12:15 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Thu, 29 Sep 2011 11:50:14 +0200,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> Hence my question: is it supposed to work now? If yes, what am I
+>> missing? (This is buildroot-2011.05 with the latest valgrind changes).
+>> I will try buildroot-2011.08 to see if it works better.
+>
+> I think I did the compile test with a CodeSourcery glibc based
+> toolchain for PowerPC. Maybe I have missed build problems with uClibc.
 
-I wrote a mail once with a few details as to how patch contribution
-happens, and what to do to get them reviewed/applied. This is not a
-definitive guide, and does not 100% guaantee that it will work, but
-it's a generic description of what to do, what can happen, and how
-to behave, when sending patches:
+Ok, thanks. I am currently building a crosstool-ng eglibc toolchain,
+and will try enabling valgrind on top of that.
 
-    http://lists.busybox.net/pipermail/buildroot/2010-December/040300.html
-
-Also look at the other posts in the thread, there are a few other comments.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+~Thomas
