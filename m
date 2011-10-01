@@ -1,64 +1,12 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  1 Oct 2011 17:00:23 +0200
-Subject: [Buildroot] [PATCH 6/6] openocd: add as host utility
-In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f0018849b3e0872e4f555ade37a96f9b5305ead6.1317481137.git.thomas.petazzoni@free-electrons.com>
+From: MARCEL JANSSEN <korgull@home.nl>
+Date: Sat, 01 Oct 2011 18:48:38 +0200
+Subject: [Buildroot] at91bootstrap 1.16 - fixed while posting.
+Message-ID: <7230e79a2ed358.4e876086@home.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in.host         |    1 +
- package/openocd/Config.in.host |    6 ++++++
- package/openocd/openocd.mk     |   10 ++++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/openocd/Config.in.host
-
-diff --git a/package/Config.in.host b/package/Config.in.host
-index b8f8aab..6499eb5 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
- source "package/uboot-tools/Config.in.host"
-+source "package/openocd/Config.in.host"
- 
- endmenu
-diff --git a/package/openocd/Config.in.host b/package/openocd/Config.in.host
-new file mode 100644
-index 0000000..2380942
---- /dev/null
-+++ b/package/openocd/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_OPENOCD
-+	bool "host openocd"
-+	help
-+	  OpenOCD - Open On-Chip Debugger
-+
-+	  http://openocd.berlios.de/web/
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 5f61367..d79b33b 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -29,4 +29,14 @@ ifeq ($(BR2_PACKAGE_OPENOCD_VSLLINK),y)
- OPENOCD_CONF_OPT += --enable-vsllink
- endif
- 
-+HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
-+
-+HOST_OPENOCD_CONF_OPT = 	\
-+	--disable-doxygen-html 	\
-+	--enable-dummy 		\
-+	--enable-ft2232_libftdi \
-+	--enable-jlink 		\
-+	--enable-vsllink
-+
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
--- 
-1.7.4.1
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111001/319405c9/attachment.html>
