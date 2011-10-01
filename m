@@ -1,55 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  1 Oct 2011 17:00:18 +0200
-Subject: [Buildroot] [PATCH 1/6] Add basic config infrastructure for host
-	utilities
-In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <62a2ee837d283e2460ee7aaa87efec412c85e3b2.1317481137.git.thomas.petazzoni@free-electrons.com>
+Date: Sat,  1 Oct 2011 17:00:17 +0200
+Subject: [Buildroot] [RFC] Request for comments on branch
+	for-2011.11/host-tools
+Message-ID: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Most of the host packages don't have to be exposed to the user as they
-are only used as build dependencies of target packages.
+Hello,
 
-However, some host utilities, such as flashing utilities, image
-creation programs, specific debuggers, might be useful and should be
-presented to the user.
+Here is a small set of patches implementing the recent discussion we
+had about exposing host utilities. It exposes host-uboot-tools and
+host-openocd into a new "Host utilities" main menu.
 
-Therefore, we had a new global menu, which lists those host
-utilities. These utilities are described in package/*/Config.in.host
-files, which will be sourced by package/Config.in.host.
+This is just to see if this looks like something that matches what we
+discussed, and something that Peter would accept.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in              |    2 ++
- package/Config.in.host |    3 +++
- 2 files changed, 5 insertions(+), 0 deletions(-)
+Regards,
+
+Thomas
+
+The following changes since commit 8511728696a298ccdb8b902b60ab398d8f67e745:
+
+  gnutls: bump to version 2.10.5 (2011-09-30 08:26:08 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/host-tools
+
+Thomas Petazzoni (6):
+      Add basic config infrastructure for host utilities
+      uboot-tools: expose host package in menuconfig
+      libftdi: add host variant
+      libusb-compat: add host variant
+      libusb: add host variant
+      openocd: add as host utility
+
+ Config.in                              |    2 ++
+ package/Config.in.host                 |    6 ++++++
+ package/libftdi/libftdi.mk             |    3 +++
+ package/libusb-compat/libusb-compat.mk |    4 ++++
+ package/libusb/libusb.mk               |    3 +++
+ package/openocd/Config.in.host         |    6 ++++++
+ package/openocd/openocd.mk             |   10 ++++++++++
+ package/uboot-tools/Config.in.host     |    6 ++++++
+ 8 files changed, 40 insertions(+), 0 deletions(-)
  create mode 100644 package/Config.in.host
+ create mode 100644 package/openocd/Config.in.host
+ create mode 100644 package/uboot-tools/Config.in.host
 
-diff --git a/Config.in b/Config.in
-index 0cf4d49..fa4b42a 100644
---- a/Config.in
-+++ b/Config.in
-@@ -356,6 +356,8 @@ source "target/generic/Config.in"
- 
- source "package/Config.in"
- 
-+source "package/Config.in.host"
-+
- source "fs/Config.in"
- 
- source "boot/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-new file mode 100644
-index 0000000..54f6a59
---- /dev/null
-+++ b/package/Config.in.host
-@@ -0,0 +1,3 @@
-+menu "Host utilities"
-+
-+endmenu
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
