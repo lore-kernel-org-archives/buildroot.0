@@ -1,36 +1,41 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun,  2 Oct 2011 00:32:37 +0200
-Subject: [Buildroot] [PATCH] rtai: hide the config option.
-Message-ID: <1317508357-9989-1-git-send-email-arnout@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 2 Oct 2011 00:35:03 +0200
+Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
+In-Reply-To: <201110012324.54139.arnout@mind.be>
+References: <4E856673.8020205@visionsystems.de> <20110930222606.2ed76af5@skate>
+ <201110012324.54139.arnout@mind.be>
+Message-ID: <CAGm1_ktCdcObbXCYQryUOU5h=Sxpe+aE598NuLXU4HCQ9jCxrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnout Vandecappelle <arnout@mind.be>
+On Sat, Oct 1, 2011 at 11:24 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> On Friday 30 September 2011 22:26:06, Thomas Petazzoni wrote:
+>> Yegor,
+>>
+>> Can you send a patch with a proper description, so that it can be
+>> applied with git am ?
+>>
+>> By proper description I mean :
+>>
+>> ?* Don't forget that everything before the --- is kept in the commit
+>> ? ?log, so don't put "personal" explanations.
+>
+> ?Actually, you can put "personal" explanations after the ---. ?So the
+> following would work:
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> On my old build system (openSUSE 10.3) I had problems compiling GDB saying
+> something like my glibc is too old. So I tried the latest version and could
+> compile without a problem. See the patch below.
 
-The package is always selected by the RTAI kernel extension and it
-also depends on it, so there is no point in allowing the user to
-configure it.
+Thanks for comments. I'll rework the patch next week. By the way
+shouldn't we get rid of 6.8 due to this issue:
+http://comments.gmane.org/gmane.comp.gdb.devel/30648. That was the
+reason for trying 7.x version.
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/rtai/Config.in |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
-
-diff --git a/package/rtai/Config.in b/package/rtai/Config.in
-index ecbff38..68c06d4 100644
---- a/package/rtai/Config.in
-+++ b/package/rtai/Config.in
-@@ -1,7 +1,3 @@
- config BR2_PACKAGE_RTAI
--	bool "rtai"
-+	bool
- 	depends on BR2_LINUX_KERNEL_EXT_RTAI
--	help
--	  RTAI - the RealTime Application Interface for Linux.
--
--	  http://www.rtai.org
--- 
-1.7.6.3
+Yegor
