@@ -1,23 +1,39 @@
-From: D M <d_mo1234@yahoo.com>
-Date: Mon, 31 Oct 2011 19:02:37 -0700 (PDT)
-Subject: [Buildroot] Make sure that dest dir exists before installing mtd
-	files
-Message-ID: <1320112957.28322.YahooMailNeo@web161421.mail.bf1.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 1 Oct 2011 11:39:02 +0200
+Subject: [Buildroot] Status of valgrind on powerpc
+In-Reply-To: <CAAXf6LUKtv1Cs-gEfGj4Aq9wLe3N0tiKHDxniv39dW+RwoQOjw@mail.gmail.com>
+References: <CAAXf6LUVQc9JRgoOiKy84BnsiRLqXOxHbd6k+1RzQMpRQA4T0w@mail.gmail.com>
+ <20110929121549.4bb68988@skate> <20110930214150.770f09e1@skate>
+ <CAAXf6LUKtv1Cs-gEfGj4Aq9wLe3N0tiKHDxniv39dW+RwoQOjw@mail.gmail.com>
+Message-ID: <20111001113902.2aeff98d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I ran into a situation where a custom target skeleton did not have a /usr/sbin
-- it relied on something else to make it (busybox?).  So when mtd.mk tried to
-install things to it, install bombed out.  (I think that we were probably using
-the new version of "make", which no longer sorts wildcards in alphabetical
-order - so mtd might have been compiled before busybox.) I have attached a patch to add -D to the install commands. 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: add_mtd_install_dir_fix.patch
-Type: application/octet-stream
-Size: 884 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111031/61ce0deb/attachment-0001.obj>
+Le Fri, 30 Sep 2011 23:12:52 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+
+> An eglibc toolchain built with crosstool-ng, also works (both
+> compilation as running on target).
+
+Ok. It would be good to identify whether Valgrind can be built with
+uClibc with additional configuration options, or if glibc/eglibc is
+really needed. In the former case, additional documentation in the
+Config.in help would be good. In the latter case, some additional
+"depends on" to hide valgrind when uClibc is used would be nice.
+
+> To run properly, though, valgrind needs an unstripped ld.so
+> I worked around this by adding ld.so as an exception to the strip
+> command in target-finalize (but am hoping for inclusion of Sven
+> Neumann's 'exclude-from-strip' patch)
+
+Ok.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
