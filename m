@@ -1,55 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  1 Oct 2011 17:00:17 +0200
-Subject: [Buildroot] [RFC] Request for comments on branch
-	for-2011.11/host-tools
-Message-ID: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+Date: Sat,  1 Oct 2011 17:00:19 +0200
+Subject: [Buildroot] [PATCH 2/6] uboot-tools: expose host package in
+	menuconfig
+In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f81f9b565273a0c959eb99b581e1286663c69809.1317481137.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Here is a small set of patches implementing the recent discussion we
-had about exposing host utilities. It exposes host-uboot-tools and
-host-openocd into a new "Host utilities" main menu.
-
-This is just to see if this looks like something that matches what we
-discussed, and something that Peter would accept.
-
-Regards,
-
-Thomas
-
-The following changes since commit 8511728696a298ccdb8b902b60ab398d8f67e745:
-
-  gnutls: bump to version 2.10.5 (2011-09-30 08:26:08 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/host-tools
-
-Thomas Petazzoni (6):
-      Add basic config infrastructure for host utilities
-      uboot-tools: expose host package in menuconfig
-      libftdi: add host variant
-      libusb-compat: add host variant
-      libusb: add host variant
-      openocd: add as host utility
-
- Config.in                              |    2 ++
- package/Config.in.host                 |    6 ++++++
- package/libftdi/libftdi.mk             |    3 +++
- package/libusb-compat/libusb-compat.mk |    4 ++++
- package/libusb/libusb.mk               |    3 +++
- package/openocd/Config.in.host         |    6 ++++++
- package/openocd/openocd.mk             |   10 ++++++++++
- package/uboot-tools/Config.in.host     |    6 ++++++
- 8 files changed, 40 insertions(+), 0 deletions(-)
- create mode 100644 package/Config.in.host
- create mode 100644 package/openocd/Config.in.host
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in.host             |    2 ++
+ package/uboot-tools/Config.in.host |    6 ++++++
+ 2 files changed, 8 insertions(+), 0 deletions(-)
  create mode 100644 package/uboot-tools/Config.in.host
 
-Thanks,
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 54f6a59..b8f8aab 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,3 +1,5 @@
+ menu "Host utilities"
+ 
++source "package/uboot-tools/Config.in.host"
++
+ endmenu
+diff --git a/package/uboot-tools/Config.in.host b/package/uboot-tools/Config.in.host
+new file mode 100644
+index 0000000..7a844e9
+--- /dev/null
++++ b/package/uboot-tools/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_UBOOT_TOOLS
++	bool "host u-boot tools"
++	help
++	  Companion tools for Das U-Boot bootloader.
++
++	  http://www.denx.de/wiki/U-Boot/WebHome
 -- 
-Thomas Petazzoni
+1.7.4.1
