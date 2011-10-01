@@ -1,40 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 01 Oct 2011 14:21:30 +0200
-Subject: [Buildroot] [git commit] gst-plugins-base: bump version
-In-Reply-To: <1317385486.15482.3.camel@sven> (Sven Neumann's message of "Fri, 
- 30 Sep 2011 14:21:36 +0200")
-References: <20110929190333.7F3E78DBD5@busybox.osuosl.org>
- <1317383828.15482.1.camel@sven> <1317385486.15482.3.camel@sven>
-Message-ID: <87lit4nbqt.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  1 Oct 2011 17:00:18 +0200
+Subject: [Buildroot] [PATCH 1/6] Add basic config infrastructure for host
+	utilities
+In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <62a2ee837d283e2460ee7aaa87efec412c85e3b2.1317481137.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+Most of the host packages don't have to be exposed to the user as they
+are only used as build dependencies of target packages.
 
-Hi,
+However, some host utilities, such as flashing utilities, image
+creation programs, specific debuggers, might be useful and should be
+presented to the user.
 
- Sven> The following change and a call to autoreconf seems to fix the problem:
+Therefore, we had a new global menu, which lists those host
+utilities. These utilities are described in package/*/Config.in.host
+files, which will be sourced by package/Config.in.host.
 
- Sven> --- gst-libs/gst/audio/Makefile.am~	2011-06-14 15:18:56.000000000 +0200
- Sven> +++ gst-libs/gst/audio/Makefile.am	2011-09-30 14:16:39.000000000 +0200
- Sven> @@ -53,7 +53,7 @@
- Sven>  noinst_PROGRAMS = testchannels
- Sven>  testchannels_SOURCES = testchannels.c
- Sven>  testchannels_CFLAGS = $(GST_PLUGINS_BASE_CFLAGS) $(GST_CFLAGS)
- Sven> -testchannels_LDADD =  $(builddir)/libgstaudio-$(GST_MAJORMINOR).la $(GST_LIBS)
- Sven> +testchannels_LDADD =  $(builddir)/libgstaudio-$(GST_MAJORMINOR).la $(builddir)/../interfaces/libgstinterfaces-$(GST_MAJORMINOR).la $(GST_LIBS)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in              |    2 ++
+ package/Config.in.host |    3 +++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
+ create mode 100644 package/Config.in.host
+
+diff --git a/Config.in b/Config.in
+index 0cf4d49..fa4b42a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -356,6 +356,8 @@ source "target/generic/Config.in"
  
- Sven>  include $(top_srcdir)/common/gst-glib-gen.mak
+ source "package/Config.in"
  
- Sven> Not sure though if this is the best way to fix it. If we have to touch
- Sven> the Makefile.am we could as well remove the build of testchannels
- Sven> completely.
-
-Indeed - I think the easiest fix is just to add an #if 0 / #endif in
-testchannels.c, then we don't have to autoreconf.
-
++source "package/Config.in.host"
++
+ source "fs/Config.in"
+ 
+ source "boot/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+new file mode 100644
+index 0000000..54f6a59
+--- /dev/null
++++ b/package/Config.in.host
+@@ -0,0 +1,3 @@
++menu "Host utilities"
++
++endmenu
 -- 
-Bye, Peter Korsgaard
+1.7.4.1
