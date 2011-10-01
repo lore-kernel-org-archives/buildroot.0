@@ -1,50 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 1 Oct 2011 22:11:10 +0200
-Subject: [Buildroot] User-enabled host packages?
-In-Reply-To: <20110930195805.0677ff0b@skate>
-References: <4E79E001.7010409@lucaceresoli.net>
- <CAAXf6LUvj5gJxmLa1gL1WssYJUs9fvWa30cAEBFpscQF_QXMoA@mail.gmail.com>
- <20110930195805.0677ff0b@skate>
-Message-ID: <201110012211.12448.arnout@mind.be>
+Date: Sat, 1 Oct 2011 22:59:08 +0200
+Subject: [Buildroot] [PATCH 2/2] add libfcgi to buildroot
+In-Reply-To: <20110929115849.73cbefaa@skate>
+References: <add libfcgi to buildroot>
+ <1317285917-2134-1-git-send-email-bachmann@tofwerk.com>
+ <20110929115849.73cbefaa@skate>
+Message-ID: <201110012259.10267.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-On Friday 30 September 2011 19:58:05, Thomas Petazzoni wrote:
-> > > All these Config.in.host
-> > >   files are included in a single "Packages -> Host utitities"
-> > > submenu, from package/Config.in. There is no need to create
-> > > subsections in this menu at the moment, since the number of
-> > > utilities shown here is suspected to remain limited.
-> >
-> > 
-> >
-> > If you want to add the new menu under Packages, then the description
-> > of that menu should change. Currently it is:
-> > "Package Selection for the target"
-> > A proposal is simply:
-> > "Package selection"
-> >
-> > 
-> >
-> > The alternative is as proposed earlier: to put the menu at top-level.
+[I put Rico back in CC]
+On Thursday 29 September 2011 11:58:49, Thomas Petazzoni wrote:
+> Le Thu, 29 Sep 2011 10:45:17 +0200,
 > 
-> No strong opinion here. Perhaps a new top-level menu is better, I don't
-> know.
+> Rico Bachmann <bachmann@tofwerk.com> a ?crit :
+> > added the patches, still not working
+> > could be a problem with the filepath in the patch?
+[snip]
+> Also:
+> 
+>  * Your two patches link_math_cgifcgi.patch and link_math_example.patch
+>    should be just one patch.
 
- I also prefer a new top-level menu.
+ You typically generate the patch like this:
 
- However, what do we do with the bootloader installers (i.e. host-grub and 
-friends)?  It would feel a little strange to move them out of the bootloader 
-menu...
+1. Make a copy of the unmodified source tree:
+cp -a output/build/fcgi-2.4.0 output/build/fcgi-2.4.0.orig
+
+2. Hack away in output/build/fcgi-2.4.0 until it works.
+
+3. Create the patch relative to the build directory:
+cd output/build
+diff -rup fcgi-2.4.0.orig fcgi-2.4.0 > \
+  ../../package/fcgi/fcgi-2.4.0-add-lm.patch
+
+4. Verify that it works by doing a clean build:
+make fcgi-dirclean; make fcgi
+
+5.
+>  * This patch should have a description and a Signed-off-by line.
+
+ Edit package/fcgi/fcgi-2.4.0-add-lm.patch to add these things.
+
+ The description goes in the beginning of the patch, before the first 'diff', 
+and explains why the patch is necessary.
+
+ The Signed-off-by line comes at the end of this patch comment.  It shows that 
+you are the author of the patch and that you agree to distribute it under GPL.  
+See http://kerneltrap.org/files/Jeremy/DCO.txt
+
+ Terminate the description with a line containing three dashes: ---
+
+ And look at some of the existing patches for inspiration :-)
+
+>  * Patching the Makefiles in an autotools-based package is really
+>    wrong, it's the Makefile.am that should be patched. I think your
+>    LDFLAGS = -lm is more a workaround than a correct fix.
+
+ The Makefile will be overwritten next time you configure the package.  You'll 
+notice that in step 4 :-).  Instead, you have to modify Makefile.am.  
+Autotools uses Makefile.am to generate Makefile.in, and configure uses 
+Makefile.in to generate Makefile.  However, buildroot normally doesn't run 
+autotools but uses the distributed Makefile.in instead.  So, you should patch 
+both Makefile.am and Makefile.in.
 
 
+ 6. Send your patch to the upstream project.  And be prepared to get 
+completely different feedback from them than what you got here :-)
+
+
+ Good luck!
+ 
  Regards,
  Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
@@ -52,6 +83,3 @@ Essensium/Mind                                     http://www.mind.be
 G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111001/77812ddc/attachment.html>
