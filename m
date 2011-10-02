@@ -1,45 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 2 Oct 2011 19:12:27 +0200
-Subject: [Buildroot] [PATCH] Remove / after $(PKG)_DIR_PREFIX
-In-Reply-To: <1317512626-30779-1-git-send-email-arnout@mind.be>
-References: <1317512626-30779-1-git-send-email-arnout@mind.be>
-Message-ID: <20111002191227.0c1e65cb@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Oct 2011 20:56:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package: fix bootloader building
+In-Reply-To: <7c448d52bb6e84eef5ac068b6e02b5607f6f2f9d.1317408294.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 30 Sep 2011 20:45:56 +0200")
+References: <cover.1317408294.git.thomas.petazzoni@free-electrons.com>
+ <cover.1317408294.git.thomas.petazzoni@free-electrons.com>
+ <7c448d52bb6e84eef5ac068b6e02b5607f6f2f9d.1317408294.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87hb3rmddm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Le Sun,  2 Oct 2011 01:43:46 +0200,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+ Thomas> The changes in e055aea216cff4d12cf55eab2e35ca1459edaa91 and
+ Thomas> 0849e8193ef429f29945b8c2a54eafc8635e0969 have broken the bootloader
+ Thomas> support.
 
-> With the automatic derivation of the package directory, the $(PKG)_DIR_PREFIX
-> variable already contains a final /.  Therefore there is no need to have an
-> additional / after the uses of this variable.
+ Thomas> This is because the 'pkgparentdir' macro returns the string 'boot/'
+ Thomas> for bootloaders, while the GENTARGETS_INNER macro was testing this
+ Thomas> against 'boot' to know if the configuration option to check for this
+ Thomas> package is BR2_PACKAGE_* or BR2_TARGET_*.
 
-For the "package: fix bootloader building" patch I posted a few days
-ago, I hesitated between :
+ Thomas> So, instead of testing against 'boot', we test against 'boot/'.
 
- * Ensuring that pkgparentdir returns a string with no final /
+Committed, thanks.
 
-or
-
- * Changing the test for bootloaders from "boot" to "boot/".
-
-The latter was the simplest solution, so it's the one I did. But seeing
-your patch, I think the former solution would be better, because I
-don't really like the fact of not having a / between
-$($(PKG)_DIR_PREFIX) and the rest of the path.
-
-I'll rework my pkg-infra-urgent branch to take this into account.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
