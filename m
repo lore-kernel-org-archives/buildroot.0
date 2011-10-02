@@ -1,43 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  2 Oct 2011 21:20:17 +0200
-Subject: [Buildroot] [PATCH 9/9] toolchain: speed up sysroot lib copying
-In-Reply-To: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2627a069c9566d25191f4cb179cb66af1526d0bc.1317583191.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 02 Oct 2011 21:25:23 +0200
+Subject: [Buildroot] [PATCH] Remove / after $(PKG)_DIR_PREFIX
+In-Reply-To: <20111002191227.0c1e65cb@skate> (Thomas Petazzoni's message of
+ "Sun, 2 Oct 2011 19:12:27 +0200")
+References: <1317512626-30779-1-git-send-email-arnout@mind.be>
+ <20111002191227.0c1e65cb@skate>
+Message-ID: <87sjnbkxgc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mike Frysinger <vapier@gentoo.org>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The copy_toolchain_lib_root helper searches the entire sysroot, but is
-only interested in files in certain subdirs.  So rather than waste time
-in walking the entire tree, walk the few subdirs at the depth level we
-are actually going to be poaching files from.
+Hi,
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
- toolchain/helpers.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ Thomas> The latter was the simplest solution, so it's the one I
+ Thomas> did. But seeing your patch, I think the former solution would
+ Thomas> be better, because I don't really like the fact of not having a
+ Thomas> / between $($(PKG)_DIR_PREFIX) and the rest of the path.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 7f3efaa..1a72ae5 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -22,9 +22,9 @@ copy_toolchain_lib_root = \
- 	DESTDIR="$(strip $3)" ; \
-  \
- 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
--		find -L . -path "./lib/$${LIB}.*"     -o \
--			  -path "./usr/lib/$${LIB}.*" -o \
--			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
-+		find -L \
-+			$(for d in lib* usr/lib* usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*; do test -e "$d" && echo $d) \
-+			-maxdepth 1 -name "$${LIB}.*" \
- 		)` ; \
- 	for FILE in $${LIBS} ; do \
- 		LIB=`basename $${FILE}`; \
+FYI, I agree with Thomas.
+
 -- 
-1.7.4.1
+Bye, Peter Korsgaard
