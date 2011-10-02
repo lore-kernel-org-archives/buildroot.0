@@ -1,53 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 2 Oct 2011 21:13:57 +0200
-Subject: [Buildroot] [git commit] gst-plugins-base: fix build by disabling
-	testchannels example
-Message-ID: <20111002191515.2B1DE8E04A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  2 Oct 2011 21:20:09 +0200
+Subject: [Buildroot] [PATCH 1/9] external toolchain: slightly optimize the
+	copy of the toolchain sysroot
+In-Reply-To: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <35c39a8aacdfbda80f0dc58d3bcab3d29ba7a86d.1317583191.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c20b39cf31bff85a8cf35e3bb2d8a9bbf436b16
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The sysroot of an ARM CodeSourcery toolchain takes about 1.4 GB of
+space, but 1.1+ GB of this space consists in locale-related
+information which Buildroot doesn't use. By skipping the copy of those
+unused files, we save quite a bit of time while importing the
+toolchain sysroot.
 
-Testchannels doesn't build because it forgets to link with libgstinterfaces.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...base-0.10.35-disable-testchannels-example.patch |   26 ++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
+ toolchain/helpers.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-disable-testchannels-example.patch b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-disable-testchannels-example.patch
-new file mode 100644
-index 0000000..e991c4e
---- /dev/null
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-disable-testchannels-example.patch
-@@ -0,0 +1,26 @@
-+[PATCH] disable testchannels example
-+
-+The testchannels example doesn't build because it forgets to link with
-+libgstinterfaces. Unfortunately testchannels gets built even though
-+--disable-examples is used, so instead disable it in Makefile.in
-+(package doesn't autoreconf cleanly, so don't edit Makefile.am)
-+
-+Problem is fixed upstream in 0.11 branch (940291dd38be66fa).
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ gst-libs/gst/audio/Makefile.in |    1 -
-+ 1 file changed, 1 deletion(-)
-+
-+Index: gst-plugins-base-0.10.35/gst-libs/gst/audio/Makefile.in
-+===================================================================
-+--- gst-plugins-base-0.10.35.orig/gst-libs/gst/audio/Makefile.in
-++++ gst-plugins-base-0.10.35/gst-libs/gst/audio/Makefile.in
-+@@ -45,7 +45,6 @@
-+ POST_UNINSTALL = :
-+ build_triplet = @build@
-+ host_triplet = @host@
-+-noinst_PROGRAMS = testchannels$(EXEEXT)
-+ DIST_COMMON = $(libgstaudio_ at GST_MAJORMINOR@include_HEADERS) \
-+ 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-+ 	$(top_srcdir)/common/gst-glib-gen.mak TODO
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 4d90d15..7f3efaa 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -79,6 +79,9 @@ copy_toolchain_lib_root = \
+ #    non-default architecture variant is used. Without this, the
+ #    compiler fails to find libraries and headers.
+ #
++# Note that the 'locale' directories are not copied. They are huge
++# (400+MB) in CodeSourcery toolchains, and they are not really useful.
++#
+ # $1: main sysroot directory of the toolchain
+ # $2: arch specific sysroot directory of the toolchain
+ # $3: arch specific subdirectory in the sysroot
+@@ -89,7 +92,7 @@ copy_toolchain_sysroot = \
+ 	ARCH_SUBDIR="$(strip $3)"; \
+ 	for i in etc lib sbin usr ; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++			rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
+ 		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+-- 
+1.7.4.1
