@@ -1,27 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Oct 2011 21:25:23 +0200
-Subject: [Buildroot] [PATCH] Remove / after $(PKG)_DIR_PREFIX
-In-Reply-To: <20111002191227.0c1e65cb@skate> (Thomas Petazzoni's message of
- "Sun, 2 Oct 2011 19:12:27 +0200")
-References: <1317512626-30779-1-git-send-email-arnout@mind.be>
- <20111002191227.0c1e65cb@skate>
-Message-ID: <87sjnbkxgc.fsf@macbook.be.48ers.dk>
+From: Luca Ceresoli <list@lucaceresoli.net>
+Date: Sun, 02 Oct 2011 22:19:05 +0200
+Subject: [Buildroot] [RFC] Request for comments on
+	branch	for-2011.11/host-tools
+In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4E88C739.2050807@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thomas Petazzoni wrote:
 
-Hi,
+> Hello,
+>
+> Here is a small set of patches implementing the recent discussion we
+> had about exposing host utilities. It exposes host-uboot-tools and
+> host-openocd into a new "Host utilities" main menu.
+>
+> This is just to see if this looks like something that matches what we
+> discussed, and something that Peter would accept.
+I like it. It looks very clean, no hach nor code reorganization was required.
+BTW, this means BR is well structured, so congratulations to it authors!
 
- Thomas> The latter was the simplest solution, so it's the one I
- Thomas> did. But seeing your patch, I think the former solution would
- Thomas> be better, because I don't really like the fact of not having a
- Thomas> / between $($(PKG)_DIR_PREFIX) and the rest of the path.
+I'm sending a few notes in reply to the patches, but I ack the general
+structure.
 
-FYI, I agree with Thomas.
-
--- 
-Bye, Peter Korsgaard
+Luca
