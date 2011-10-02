@@ -1,10 +1,11 @@
 From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Sun, 02 Oct 2011 22:19:05 +0200
-Subject: [Buildroot] [RFC] Request for comments on
-	branch	for-2011.11/host-tools
-In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 02 Oct 2011 22:20:45 +0200
+Subject: [Buildroot] [PATCH 1/6] Add basic config infrastructure for
+ host utilities
+In-Reply-To: <62a2ee837d283e2460ee7aaa87efec412c85e3b2.1317481137.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4E88C739.2050807@lucaceresoli.net>
+ <62a2ee837d283e2460ee7aaa87efec412c85e3b2.1317481137.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4E88C79D.6000503@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,20 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Thomas Petazzoni wrote:
-
-> Hello,
+> Most of the host packages don't have to be exposed to the user as they
+> are only used as build dependencies of target packages.
 >
-> Here is a small set of patches implementing the recent discussion we
-> had about exposing host utilities. It exposes host-uboot-tools and
-> host-openocd into a new "Host utilities" main menu.
+> However, some host utilities, such as flashing utilities, image
+> creation programs, specific debuggers, might be useful and should be
+> presented to the user.
 >
-> This is just to see if this looks like something that matches what we
-> discussed, and something that Peter would accept.
-I like it. It looks very clean, no hach nor code reorganization was required.
-BTW, this means BR is well structured, so congratulations to it authors!
+> Therefore, we had a new global menu, which lists those host
 
-I'm sending a few notes in reply to the patches, but I ack the general
-structure.
+s/had/have/
+
+> utilities. These utilities are described in package/*/Config.in.host
+> files, which will be sourced by package/Config.in.host.
+>
+...
 
 Luca
