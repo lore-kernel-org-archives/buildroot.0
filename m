@@ -1,49 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 2 Oct 2011 23:45:08 +0200
-Subject: [Buildroot] [PATCH 2/9] toolchain-external: allow specifying
-	extra external libraries
-In-Reply-To: <59099791edd7c503508d17a882d0b97ead12fcf7.1317583191.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Oct 2011 23:50:02 +0200
+Subject: [Buildroot] [PATCH 3/9] ext-toolchain: Add CodeSourcery SH
+	uClinux 2011.03
+In-Reply-To: <7df62abce8712a5f72cccb2cc77f44c99b96c251.1317583191.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
- <59099791edd7c503508d17a882d0b97ead12fcf7.1317583191.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201110022345.08800.yann.morin.1998@anciens.enib.fr>
+ <7df62abce8712a5f72cccb2cc77f44c99b96c251.1317583191.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201110022350.03213.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+Thomas, All,
 
-On Sunday 02 October 2011 21:20:10 Thomas Petazzoni wrote:
-> From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+On Sunday 02 October 2011 21:20:11 Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+
+> ---
+>  toolchain/toolchain-external/Config.in   |   17 +++++++++++++++++
+>  toolchain/toolchain-external/ext-tool.mk |    3 +++
+>  2 files changed, 20 insertions(+), 0 deletions(-)
 > 
-> Custom toolchains may provide extra libraries that need to be copied to the
-> target. This patch adds a configuration option for this.
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index b6fa9bd..ac712ba 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -152,6 +152,22 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+>              - SH4A, uClibc, little endian
+>              - SH4A, uClibc, big endian
+>  
+> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+> +	bool "CodeSourcery SH 2011.03"
+> +	depends on BR2_sh2a
+> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> +	select BR2_LARGEFILE
+> +	select BR2_INET_RPC
+> +	select BR2_USE_WCHAR
+> +	select BR2_TOOLCHAIN_HAS_THREADS
+> +	select BR2_INSTALL_LIBSTDCPP
+> +	help
+> +	  Toolchain for the SuperH architecture, from CodeSourcery. It
+> +	  uses gcc 4.5.2, binutils 2.20, uClibc 0.9.30, gdb 7.2.50 and
+> +	  kernel headers 2.6.38. It has support for the following variants:
 
-What kind of libraries are we talking about here? Things such as libz.so,
-or like libnss_*.so ?
+Nit-picking: no need to line-break above, the line is still les than
+80-char wide.
 
-There are a few cases I can think of:
-
- - the library/ies are available as standard buildroot package/s
-   (eg. libz.so)
-   --> then that's a no-no, or there would be conflicts with buildroot's
-       own builds
-
- - the library/ies is/are not part of buildroot, and but is/are used by
-   a buildroot package (eg. libwhatever.so)
-   --> then we should also copy the headers
-
- - the library/ies is/are system libs from the toolchain (eg. libnss_*.so)
-   --> the library/ies should be copied by a generic toolchain hook, which
-       works for all kind of toolchain backends (internal, external, or
-       ct-ng)
-
-So, I'm not really sure we should allow that without further explanations.
-(and there was no more in Thomas' original post on the suject...)
-
-Regards,
-Yann E. MORIN.
+> +            - SH2A, uClibc, big endian
+> +
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+>  	bool "CodeSourcery SH 2010.09"
+>  	depends on BR2_sh2a
+> @@ -223,6 +239,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>  	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+>  	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+>  	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+> +	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+>  	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
+>  	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
+>  	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index bac39cf..48c11eb 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -191,6 +191,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009),y)
+>  TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7859/public/sh-uclinux/
+>  TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103),y)
+> +TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package8749/public/sh-uclinux/
+> +TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-36-sh-uclinux-i686-pc-linux-gnu.tar.bz2
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
+>  TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
+>  TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
