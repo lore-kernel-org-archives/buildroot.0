@@ -1,35 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Oct 2011 20:59:40 +0200
-Subject: [Buildroot] [PATCHv2] package: add the poco C++ libraries
-	collection
-In-Reply-To: <20111002064107.GB14908@tarshish> (Baruch Siach's message of
- "Sun, 2 Oct 2011 08:41:07 +0200")
-References: <bc337c3bfe93b6d50d40f042d53480f38a8dd0b8.1314792605.git.baruch@tkos.co.il>
- <87mxdsxpe8.fsf@macbook.be.48ers.dk>
- <20110926064459.GB28996@sapphire.tkos.co.il>
- <87pqinvyci.fsf@macbook.be.48ers.dk>
- <20110927162627.GB5437@sapphire.tkos.co.il>
- <87sjnhvlne.fsf@macbook.be.48ers.dk> <20111002064107.GB14908@tarshish>
-Message-ID: <87zkhjkyn7.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 2 Oct 2011 20:55:55 +0200
+Subject: [Buildroot] [git commit] package: fix bootloader building
+Message-ID: <20111002191513.D82438E04A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=31960961497ebc1059978c54c7d65a08a8b7e821
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
- >> POCO_CONF_OPT += --no-fpenvironment
- >> endif
+The changes in e055aea216cff4d12cf55eab2e35ca1459edaa91 and
+0849e8193ef429f29945b8c2a54eafc8635e0969 have broken the bootloader
+support.
 
- Baruch> Can't we just use $(LIBC) that is set in package/Makefile.in? Hence:
+This is because the 'pkgparentdir' macro returns the string 'boot/'
+for bootloaders, while the GENTARGETS_INNER macro was testing this
+against 'boot' to know if the configuration option to check for this
+package is BR2_PACKAGE_* or BR2_TARGET_*.
 
- Baruch> ifeq ($(LIBC),uclibc)
- Baruch> POCO_CONF_OPT += --no-fpenvironment
- Baruch> endif
+So, instead of testing against 'boot', we test against 'boot/'.
 
-Yes, that's fine as well - That one handles the 3 variants.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.package.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 353ba72..b5ef57b 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -637,7 +637,7 @@ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+ # kernel case, the bootloaders case, and the normal packages case.
+ ifeq ($(1),linux)
+ $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+-else ifeq ($(4),boot)
++else ifeq ($(4),boot/)
+ $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
+ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
