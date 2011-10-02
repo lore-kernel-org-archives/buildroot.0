@@ -1,23 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 02 Oct 2011 20:58:28 +0200
-Subject: [Buildroot] [PATCH 3/4] mpd: fixup sample config
-In-Reply-To: <1317412052-28859-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 30 Sep 2011 16:47:31 -0300")
-References: <1317412052-28859-1-git-send-email-gustavo@zacarias.com.ar>
- <1317412052-28859-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nzrmd9n.fsf@macbook.be.48ers.dk>
+Date: Sun, 02 Oct 2011 20:59:40 +0200
+Subject: [Buildroot] [PATCHv2] package: add the poco C++ libraries
+	collection
+In-Reply-To: <20111002064107.GB14908@tarshish> (Baruch Siach's message of
+ "Sun, 2 Oct 2011 08:41:07 +0200")
+References: <bc337c3bfe93b6d50d40f042d53480f38a8dd0b8.1314792605.git.baruch@tkos.co.il>
+ <87mxdsxpe8.fsf@macbook.be.48ers.dk>
+ <20110926064459.GB28996@sapphire.tkos.co.il>
+ <87pqinvyci.fsf@macbook.be.48ers.dk>
+ <20110927162627.GB5437@sapphire.tkos.co.il>
+ <87sjnhvlne.fsf@macbook.be.48ers.dk> <20111002064107.GB14908@tarshish>
+Message-ID: <87zkhjkyn7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- Gustavo> Fix sample mpd.conf so that the playlists directory lives
- Gustavo> inside the main mpd data directory.
+ >> ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
+ >> POCO_CONF_OPT += --no-fpenvironment
+ >> endif
 
-Committed, thanks.
+ Baruch> Can't we just use $(LIBC) that is set in package/Makefile.in? Hence:
+
+ Baruch> ifeq ($(LIBC),uclibc)
+ Baruch> POCO_CONF_OPT += --no-fpenvironment
+ Baruch> endif
+
+Yes, that's fine as well - That one handles the 3 variants.
 
 -- 
 Bye, Peter Korsgaard
