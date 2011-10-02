@@ -1,65 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 2 Oct 2011 08:50:23 +0200
-Subject: [Buildroot] [PATCHv2] toolchain: fix build with empty
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS
-In-Reply-To: <20111002062258.GA14908@tarshish>
-References: <0056cd290aa1be1559ccdd6b3877927fe51ecbe0.1317023087.git.baruch@tkos.co.il>
- <20111002062258.GA14908@tarshish>
-Message-ID: <20111002065023.GA24034@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 2 Oct 2011 19:12:27 +0200
+Subject: [Buildroot] [PATCH] Remove / after $(PKG)_DIR_PREFIX
+In-Reply-To: <1317512626-30779-1-git-send-email-arnout@mind.be>
+References: <1317512626-30779-1-git-send-email-arnout@mind.be>
+Message-ID: <20111002191227.0c1e65cb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+Hello,
 
-On Sun, Oct 02, 2011 at 08:22:58AM +0200, Baruch Siach wrote:
-> On Mon, Sep 26, 2011 at 10:48:57AM +0300, Baruch Siach wrote:
-> > The "" string is not equal to the empty string. This fixes build
-> > errors like:
-> > 
-> > arm-none-linux-gnueabi-gcc: : No such file or directory
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Ping?
-> This fixes a real build breakage of the combination of external toolchain and 
-> empty BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS.
+Le Sun,  2 Oct 2011 01:43:46 +0200,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-Forget it. This patch is against some local modifications for mine (a patch 
-that has been posted here a few months ago, but never applied).
+> With the automatic derivation of the package directory, the $(PKG)_DIR_PREFIX
+> variable already contains a final /.  Therefore there is no need to have an
+> additional / after the uses of this variable.
 
-Sorry for the noise.
+For the "package: fix bootloader building" patch I posted a few days
+ago, I hesitated between :
 
-baruch
+ * Ensuring that pkgparentdir returns a string with no final /
 
-> > ---
-> > Changes v1 -> v2:
-> > 	* Use qstrip as suggested by Thomas Petazzoni
-> > 	* Add build failure example to commit log for future reference
-> > 
-> >  toolchain/toolchain-external/ext-tool.mk |    3 ++-
-> >  1 files changed, 2 insertions(+), 1 deletions(-)
-> > 
-> > diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> > index a357cb9..bf59983 100644
-> > --- a/toolchain/toolchain-external/ext-tool.mk
-> > +++ b/toolchain/toolchain-external/ext-tool.mk
-> > @@ -131,7 +131,8 @@ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
-> >  
-> >  # march/mtune/floating point mode needs to be passed to the external toolchain
-> >  # to select the right multilib variant
-> > -ifneq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS),)
-> > +TOOLCHAIN_EXTERNAL_CUSTOM_ARGS = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS))
-> > +ifneq ($(TOOLCHAIN_EXTERNAL_CUSTOM_ARGS),)
-> >  TOOLCHAIN_EXTERNAL_CFLAGS += $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS)
-> >  TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_OPT='$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS)'
-> >  endif
-> > -- 
-> > 1.7.6.3
+or
 
+ * Changing the test for bootloaders from "boot" to "boot/".
+
+The latter was the simplest solution, so it's the one I did. But seeing
+your patch, I think the former solution would be better, because I
+don't really like the fact of not having a / between
+$($(PKG)_DIR_PREFIX) and the rest of the path.
+
+I'll rework my pkg-infra-urgent branch to take this into account.
+
+Regards,
+
+Thomas
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
