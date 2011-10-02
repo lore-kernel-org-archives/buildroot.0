@@ -1,51 +1,63 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 2 Oct 2011 08:41:07 +0200
-Subject: [Buildroot] [PATCHv2] package: add the poco C++ libraries
-	collection
-In-Reply-To: <87sjnhvlne.fsf@macbook.be.48ers.dk>
-References: <bc337c3bfe93b6d50d40f042d53480f38a8dd0b8.1314792605.git.baruch@tkos.co.il>
- <87mxdsxpe8.fsf@macbook.be.48ers.dk>
- <20110926064459.GB28996@sapphire.tkos.co.il>
- <87pqinvyci.fsf@macbook.be.48ers.dk>
- <20110927162627.GB5437@sapphire.tkos.co.il>
- <87sjnhvlne.fsf@macbook.be.48ers.dk>
-Message-ID: <20111002064107.GB14908@tarshish>
+Date: Sun, 2 Oct 2011 08:50:23 +0200
+Subject: [Buildroot] [PATCHv2] toolchain: fix build with empty
+ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS
+In-Reply-To: <20111002062258.GA14908@tarshish>
+References: <0056cd290aa1be1559ccdd6b3877927fe51ecbe0.1317023087.git.baruch@tkos.co.il>
+ <20111002062258.GA14908@tarshish>
+Message-ID: <20111002065023.GA24034@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Buildroot list,
 
-On Tue, Sep 27, 2011 at 09:19:01PM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
->  Baruch> Well, it seems that the Poco configure script can do just that
->  Baruch> when told to.  The --no-fpenvironment option replaces
->  Baruch> FPEnvironment_C99.h with FPEnvironment_DUMMY.h. You can even
->  Baruch> pass --no-wstring to disable std::wstring support. So the
->  Baruch> question is, is there a way to detect the 'defined(__UCLIBC__)
->  Baruch> && !defined (__UCLIBC_HAS_FENV__)' condition at configuration
->  Baruch> time? This seems to be much cleaner than patching the code for
->  Baruch> build time detection.
+On Sun, Oct 02, 2011 at 08:22:58AM +0200, Baruch Siach wrote:
+> On Mon, Sep 26, 2011 at 10:48:57AM +0300, Baruch Siach wrote:
+> > The "" string is not equal to the empty string. This fixes build
+> > errors like:
+> > 
+> > arm-none-linux-gnueabi-gcc: : No such file or directory
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > 
-> Ahh ok, good. As far as I can see, the uClibc fenv support is not really
-> extensive enough to ever work, so simply detecting uClibc should be
-> enough. Remember we can use uClibc through
-> internal/external/crosstool-ng toolchains, so you'll need to do
-> something like
-> 
-> ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
-> POCO_CONF_OPT += --no-fpenvironment
-> endif
+> Ping?
+> This fixes a real build breakage of the combination of external toolchain and 
+> empty BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS.
 
-Can't we just use $(LIBC) that is set in package/Makefile.in? Hence:
+Forget it. This patch is against some local modifications for mine (a patch 
+that has been posted here a few months ago, but never applied).
 
-ifeq ($(LIBC),uclibc)
-POCO_CONF_OPT += --no-fpenvironment
-endif
+Sorry for the noise.
 
 baruch
+
+> > ---
+> > Changes v1 -> v2:
+> > 	* Use qstrip as suggested by Thomas Petazzoni
+> > 	* Add build failure example to commit log for future reference
+> > 
+> >  toolchain/toolchain-external/ext-tool.mk |    3 ++-
+> >  1 files changed, 2 insertions(+), 1 deletions(-)
+> > 
+> > diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> > index a357cb9..bf59983 100644
+> > --- a/toolchain/toolchain-external/ext-tool.mk
+> > +++ b/toolchain/toolchain-external/ext-tool.mk
+> > @@ -131,7 +131,8 @@ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+> >  
+> >  # march/mtune/floating point mode needs to be passed to the external toolchain
+> >  # to select the right multilib variant
+> > -ifneq ($(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS),)
+> > +TOOLCHAIN_EXTERNAL_CUSTOM_ARGS = $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS))
+> > +ifneq ($(TOOLCHAIN_EXTERNAL_CUSTOM_ARGS),)
+> >  TOOLCHAIN_EXTERNAL_CFLAGS += $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS)
+> >  TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_OPT='$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_ARGS)'
+> >  endif
+> > -- 
+> > 1.7.6.3
 
 -- 
                                                      ~. .~   Tk Open Systems
