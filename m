@@ -1,9 +1,9 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon,  3 Oct 2011 12:10:31 +0200
-Subject: [Buildroot] [PATCH 1/4] Add the picocom package
+Date: Mon,  3 Oct 2011 12:10:33 +0200
+Subject: [Buildroot] [PATCH 3/4] Add lame support in gstreamer
 In-Reply-To: <cover.1317636624.git.maxime.ripard@free-electrons.com>
 References: <cover.1317636624.git.maxime.ripard@free-electrons.com>
-Message-ID: <b1bcdc61348588f371f00063e571c4d78cd8f4ae.1317636624.git.maxime.ripard@free-electrons.com>
+Message-ID: <e2016538064470f088a919a8dd8d30925317c24c.1317636624.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,64 +14,42 @@ From: Maxime Ripard <maxime@free-electrons.com>
 
 Signed-off-by: Maxime Ripard <maxime@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/picocom/Config.in  |    9 +++++++++
- package/picocom/picocom.mk |   19 +++++++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
- create mode 100644 package/picocom/Config.in
- create mode 100644 package/picocom/picocom.mk
+ package/multimedia/gst-plugins-ugly/Config.in      |    4 ++++
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    7 +++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d95e7b5..6065773 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -192,6 +192,7 @@ source "package/mtd/Config.in"
- source "package/ntfs-3g/Config.in"
- source "package/ntfsprogs/Config.in"
- source "package/pciutils/Config.in"
-+source "package/picocom/Config.in"
- source "package/rng-tools/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
-diff --git a/package/picocom/Config.in b/package/picocom/Config.in
-new file mode 100644
-index 0000000..11c7d7a
---- /dev/null
-+++ b/package/picocom/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PICOCOM
-+	bool "picocom"
-+	help
-+	   picocom is a minimal dumb-terminal emulation program. It
-+	   is, in principle, very much like minicom, only it's pico
-+	   instead of mini!
+diff --git a/package/multimedia/gst-plugins-ugly/Config.in b/package/multimedia/gst-plugins-ugly/Config.in
+index 94e2b9d..c0046e4 100644
+--- a/package/multimedia/gst-plugins-ugly/Config.in
++++ b/package/multimedia/gst-plugins-ugly/Config.in
+@@ -38,6 +38,10 @@ config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_SYNAESTHESIA
+ 
+ comment "plugins with external dependencies (there may be more available)"
+ 
++config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_LAME
++	bool "lame (*.mp3 audio encoder)"
++	select BR2_PACKAGE_LAME
 +
-+	   http://code.google.com/p/picocom/
+ config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD
+ 	bool "mad (*.mp3 audio)"
+ 	select BR2_PACKAGE_LIBID3TAG
+diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+index ab557a3..7acf0da 100644
+--- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
++++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+@@ -60,6 +60,13 @@ else
+ GST_PLUGINS_UGLY_CONF_OPT += --disable-synaesthesia
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_LAME),y)
++GST_PLUGINS_UGLY_CONF_OPT += --enable-lame
++GST_PLUGINS_UGLY_DEPENDENCIES += lame
++else
++GST_PLUGINS_UGLY_CONF_OPT += --disable-lame
++endif
 +
-diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
-new file mode 100644
-index 0000000..b797381
---- /dev/null
-+++ b/package/picocom/picocom.mk
-@@ -0,0 +1,19 @@
-+#############################################################
-+#
-+# picocom
-+#
-+#############################################################
-+
-+PICOCOM_VERSION = 1.6
-+PICOCOM_SITE    = http://picocom.googlecode.com/files/
-+
-+define PICOCOM_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define PICOCOM_INSTALL_TARGET_CMDS
-+	install -D -m 0755 $(@D)/picocom $(TARGET_DIR)/usr/bin/picocom
-+endef
-+
-+$(eval $(call GENTARGETS,package,picocom))
-+
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD),y)
+ GST_PLUGINS_UGLY_CONF_OPT += --enable-mad
+ GST_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
 -- 
 1.7.4.1
