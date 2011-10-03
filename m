@@ -1,71 +1,106 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 3 Oct 2011 09:21:59 +0200
-Subject: [Buildroot] [PATCH 2/9] toolchain-external: allow specifying
- extra external libraries
-In-Reply-To: <201110022345.08800.yann.morin.1998@anciens.enib.fr>
+From: phil.edworthy at renesas.com <phil.edworthy@renesas.com>
+Date: Mon, 03 Oct 2011 09:44:09 +0100
+Subject: [Buildroot] [PATCH 5/9] ext-toolchain: Add CodeSourcery
+	SH	GNU/Linux 2011.03
+In-Reply-To: <201110030028.37488.yann.morin.1998@anciens.enib.fr>
 References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
- <59099791edd7c503508d17a882d0b97ead12fcf7.1317583191.git.thomas.petazzoni@free-electrons.com>
- <201110022345.08800.yann.morin.1998@anciens.enib.fr>
-Message-ID: <CAAXf6LXA6zU1Y7vXEwh1_h=x_jRz1q0f_nA+21u6H9JcVWhJoQ@mail.gmail.com>
+ <3d4f1d5cfa5a643be95d5f5ffb8d0e235ca3ff8c.1317583191.git.thomas.petazzoni@free-electrons.com>
+ <201110030028.37488.yann.morin.1998@anciens.enib.fr>
+Message-ID: <OF520B29D1.28D19F8F-ON8025791E.002EFEB7-8025791E.002FFF72@eu.necel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-(now properly to the list)
 Hi Yann,
 
-On Sun, Oct 2, 2011 at 11:45 PM, Yann E. MORIN
-<yann.morin.1998@anciens.enib.fr> wrote:
-> Thomas?, All,
->
-> On Sunday 02 October 2011 21:20:10 Thomas Petazzoni wrote:
->> From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
->>
->> Custom toolchains may provide extra libraries that need to be copied to the
->> target. This patch adds a configuration option for this.
->
-> What kind of libraries are we talking about here? Things such as libz.so,
-> or like libnss_*.so ?
->
-> There are a few cases I can think of:
->
-> ?- the library/ies are available as standard buildroot package/s
-> ? (eg. libz.so)
-> ? --> then that's a no-no, or there would be conflicts with buildroot's
-> ? ? ? own builds
->
-> ?- the library/ies is/are not part of buildroot, and but is/are used by
-> ? a buildroot package (eg. libwhatever.so)
-> ? --> then we should also copy the headers
->
-> ?- the library/ies is/are system libs from the toolchain (eg. libnss_*.so)
-> ? --> the library/ies should be copied by a generic toolchain hook, which
-> ? ? ? works for all kind of toolchain backends (internal, external, or
-> ? ? ? ct-ng)
->
-> So, I'm not really sure we should allow that without further explanations.
-> (and there was no more in Thomas' original post on the suject...)
+> From: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+> To: buildroot at busybox.net
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>, 
+buildroot at uclibc.org
+> Date: 02/10/2011 23:45
+> Subject: Re: [Buildroot] [PATCH 5/9] ext-toolchain: Add CodeSourcery SH 
+GNU/Linux 2011.03
+> Sent by: buildroot-bounces at busybox.net
+> 
+> Thomas, All,
+> 
+> On Sunday 02 October 2011 21:20:13 Thomas Petazzoni wrote:
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+> But see below...
+> 
+> > ---
+> >  toolchain/toolchain-external/Config.in   |   16 ++++++++++++++++
+> >  toolchain/toolchain-external/ext-tool.mk |    3 +++
+> >  2 files changed, 19 insertions(+), 0 deletions(-)
+> > 
+> > diff --git a/toolchain/toolchain-external/Config.in 
+b/toolchain/toolchain-external/Config.in
+> > index ac712ba..c50acc8 100644
+> > --- a/toolchain/toolchain-external/Config.in
+> > +++ b/toolchain/toolchain-external/Config.in
+> > @@ -137,6 +137,21 @@ config 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+> >              - e500mc glibc, 32 bits
+> >              - 970 glibc hard-float, 64 bits
+> > 
+> > +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+> > +   bool "CodeSourcery SH 2011.03"
+> > +   depends on BR2_sh4a || BR2_sh4aeb
+> > +   select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> > +   select BR2_INSTALL_LIBSTDCPP
+> > +   help
+> > +     Toolchain for the SuperH architecture, from CodeSourcery. It
+> > +     uses gcc 4.5.2, binutils 2.20, glibc 2.13, uClibc 0.9.30,
+> > +     gdb 7.2.50 and kernel headers 2.6.38. It has support for
+> > +     the following variants:
+> > +            - SH4A, glibc, little endian
+> > +            - SH4A, glibc, big endian
+> > +            - SH4A, uClibc, little endian
+> > +            - SH4A, uClibc, big endian
+> > +
+> >  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+> >     bool "CodeSourcery SH 2010.09"
+> >     depends on BR2_sh4a || BR2_sh4aeb
+> > @@ -238,6 +253,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+> >     default "mips-linux-gnu"         if 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+> >     default "powerpc-linux-gnu"      if 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+> >     default "sh-linux-gnu"           if 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+> > +   default "sh-linux-gnu"           if 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+> >     default "sh-uclinux"             if 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+> >     default "sh-uclinux"             if 
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+> 
 
-I should have been more verbose.
+> There is inconsistency in the SH? namings:
+>  - sh4a: _SH201009
+>  - sh2a: _SH2A_201009
+> 
+> Notice for sh2a we have an underscore between variant and version, but 
+not
+> sh4a. Also, for sh2a, we have the full variant name, not for sh4a.
+> 
+> That's what caused my confusion earlier. Maybe we could clean this up
+> in a separate patch?
 
-uClibc supports the 'backtrace' functionality. I'm not sure whether it
-already is in 0.9.32, but it certainly is in the repository. When you
-enable the functionality in the uClibc configuration, a library
-libubacktrace.so is generated. Application code that uses the
-backtrace() or backtrace_symbols() functions, need to link with this
-library and thus it needs to be copied from the toolchain.
+The SH2A toolchain is just for SH2A uclibc, but the other SH toolchains 
+should work for all other SH architectures.
 
-The appropriate header is located next to the other toolchain headers,
-which are already copied by default:
-usr/powerpc-linux/sysroot/usr/include/execinfo.h
+All SH toolchains other than SH2A should probably be like this:
+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+    bool "CodeSourcery SH 2010.09"
+    depends on !BR2_sh2a
 
-Depending on the uClibc configuration, less or more libraries may need
-to be copied. I can imagine that a similar thing is needed for other C
-libraries. Hence this generic option I added.
+However, I don't think anything other than SH2A and SH4A have been used 
+with Buildroot for a long while.
 
-Given this background information, how do you feel about this patch?
-
-Thanks,
-Thomas
+Thanks
+Phil
