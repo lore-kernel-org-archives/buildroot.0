@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon,  3 Oct 2011 23:20:42 +0200
-Subject: [Buildroot] [PATCH 06/22] libxml-parser-perl: removed redundant
+Date: Mon,  3 Oct 2011 23:20:45 +0200
+Subject: [Buildroot] [PATCH 09/22] squashfs3: removed redundant
 	HOST_FOO_DEPENDENCIES
 In-Reply-To: <1317676858-3407-1-git-send-email-arnout@mind.be>
 References: <201110032133.44496.arnout@mind.be>
  <1317676858-3407-1-git-send-email-arnout@mind.be>
-Message-ID: <1317676858-3407-7-git-send-email-arnout@mind.be>
+Message-ID: <1317676858-3407-10-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,20 +16,20 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libxml-parser-perl/libxml-parser-perl.mk |    1 -
+ package/squashfs3/squashfs3.mk |    1 -
  1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
-index ecc2cc9..9e6f2ec 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.mk
-+++ b/package/libxml-parser-perl/libxml-parser-perl.mk
-@@ -8,7 +8,6 @@ LIBXML_PARSER_PERL_SOURCE:=XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
- LIBXML_PARSER_PERL_SITE:=http://www.cpan.org/modules/by-module/XML/
+diff --git a/package/squashfs3/squashfs3.mk b/package/squashfs3/squashfs3.mk
+index 178543b..81cdf79 100644
+--- a/package/squashfs3/squashfs3.mk
++++ b/package/squashfs3/squashfs3.mk
+@@ -3,7 +3,6 @@ SQUASHFS3_SOURCE=squashfs$(SQUASHFS3_VERSION).tar.gz
+ SQUASHFS3_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/squashfs
  
- LIBXML_PARSER_PERL_DEPENDENCIES = expat
--HOST_LIBXML_PARSER_PERL_DEPENDENCIES = host-expat
+ SQUASHFS3_DEPENDENCIES = zlib
+-HOST_SQUASHFS3_DEPENDENCIES = host-zlib
  
- define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
-  (cd $(@D) ; \
+ define SQUASHFS3_BUILD_CMDS
+  $(TARGET_MAKE_ENV) $(MAKE)    \
 -- 
 1.7.6.3
