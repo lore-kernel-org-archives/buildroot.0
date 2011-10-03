@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon,  3 Oct 2011 23:20:47 +0200
-Subject: [Buildroot] [PATCH 11/22] xapp_bdftopcf: removed redundant
+Date: Mon,  3 Oct 2011 23:20:58 +0200
+Subject: [Buildroot] [PATCH 22/22] xlib_libxkbfile: removed redundant
 	HOST_FOO_DEPENDENCIES
 In-Reply-To: <1317676858-3407-1-git-send-email-arnout@mind.be>
 References: <201110032133.44496.arnout@mind.be>
  <1317676858-3407-1-git-send-email-arnout@mind.be>
-Message-ID: <1317676858-3407-12-git-send-email-arnout@mind.be>
+Message-ID: <1317676858-3407-23-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,19 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
-index c2f5896..d7a2cf6 100644
---- a/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
-+++ b/package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk
-@@ -9,7 +9,6 @@ XAPP_BDFTOPCF_SOURCE = bdftopcf-$(XAPP_BDFTOPCF_VERSION).tar.bz2
- XAPP_BDFTOPCF_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_BDFTOPCF_AUTORECONF = NO
- XAPP_BDFTOPCF_DEPENDENCIES = xlib_libXfont
--HOST_XAPP_BDFTOPCF_DEPENDENCIES = host-xlib_libXfont
+diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+index 35b6171..3748dae 100644
+--- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
++++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+@@ -11,7 +11,5 @@ XLIB_LIBXKBFILE_AUTORECONF = NO
+ XLIB_LIBXKBFILE_INSTALL_STAGING = YES
+ XLIB_LIBXKBFILE_DEPENDENCIES = xlib_libX11 xproto_kbproto
  
+-HOST_XLIB_LIBXKBFILE_DEPENDENCIES = host-xlib_libX11 host-xproto_kbproto
+-
  $(eval $(call AUTOTARGETS))
  $(eval $(call AUTOTARGETS,host))
 -- 
