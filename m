@@ -1,327 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  3 Oct 2011 08:00:00 +0200
-Subject: [Buildroot] [PATCHv3] package: add the poco C++ libraries collection
-Message-ID: <9fad6da52d37fa71e8612f9ef612c45a5d950394.1317621436.git.baruch@tkos.co.il>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 3 Oct 2011 09:07:24 +0200
+Subject: [Buildroot] [RFC] Request for comments on branch
+	for-2011.11/host-tools
+In-Reply-To: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1317481137.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LV_-tuVzOc=dTGqFvtTctiexC_Ge-syha94g2FTMH3YRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the C++ Portable Components libraries.
+Hi Thomas,
 
-The Data/ODBC components is disabled because its dependency (unixODBC) is not
-in Buildroot.
+On Sat, Oct 1, 2011 at 5:00 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Here is a small set of patches implementing the recent discussion we
+> had about exposing host utilities. It exposes host-uboot-tools and
+> host-openocd into a new "Host utilities" main menu.
+>
+> This is just to see if this looks like something that matches what we
+> discussed, and something that Peter would accept.
+>
+> Regards,
+>
+> Thomas
+>
+> The following changes since commit 8511728696a298ccdb8b902b60ab398d8f67e745:
+>
+> ?gnutls: bump to version 2.10.5 (2011-09-30 08:26:08 +0200)
+>
+> are available in the git repository at:
+> ?http://free-electrons.com/~thomas/buildroot.git for-2011.11/host-tools
+>
+> Thomas Petazzoni (6):
+> ? ? ?Add basic config infrastructure for host utilities
+> ? ? ?uboot-tools: expose host package in menuconfig
+> ? ? ?libftdi: add host variant
+> ? ? ?libusb-compat: add host variant
+> ? ? ?libusb: add host variant
+> ? ? ?openocd: add as host utility
+>
+> ?Config.in ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?| ? ?2 ++
+> ?package/Config.in.host ? ? ? ? ? ? ? ? | ? ?6 ++++++
+> ?package/libftdi/libftdi.mk ? ? ? ? ? ? | ? ?3 +++
+> ?package/libusb-compat/libusb-compat.mk | ? ?4 ++++
+> ?package/libusb/libusb.mk ? ? ? ? ? ? ? | ? ?3 +++
+> ?package/openocd/Config.in.host ? ? ? ? | ? ?6 ++++++
+> ?package/openocd/openocd.mk ? ? ? ? ? ? | ? 10 ++++++++++
+> ?package/uboot-tools/Config.in.host ? ? | ? ?6 ++++++
+> ?8 files changed, 40 insertions(+), 0 deletions(-)
+> ?create mode 100644 package/Config.in.host
+> ?create mode 100644 package/openocd/Config.in.host
+> ?create mode 100644 package/uboot-tools/Config.in.host
 
-The Data/MySQL component is build tested only. It probably requires an
-additional RPATH to actually run, because libmysqlclient resides in a
-non-standard location under /usr/lib/mysql.
+No comments on these patches, I support them fully. Good work!
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-Changes from v2:
-	Add dependency on WCHAR and C++
-	Move the toolchain requirement comment to the end of Config.in
-	Update to version 1.4.2p1
-	Disable FPENVIRONEMENT and std::wstring when linking against uClibc
-
-Changes from v1:
-	Rebase on version 2011.08
-	Update to version 1.4.2
-	Fix the changelog text
-
- package/Config.in                                  |    1 +
- package/poco/Config.in                             |   58 ++++++++++++++
- .../poco/poco-1.4.2p1-add-cross-build-config.patch |   82 ++++++++++++++++++++
- .../poco-1.4.2p1-add-staging-search-path.patch     |   22 +++++
- .../poco/poco-1.4.2p1-dont-build-debug-libs.patch  |   19 +++++
- package/poco/poco.mk                               |   57 ++++++++++++++
- 6 files changed, 239 insertions(+), 0 deletions(-)
- create mode 100644 package/poco/Config.in
- create mode 100644 package/poco/poco-1.4.2p1-add-cross-build-config.patch
- create mode 100644 package/poco/poco-1.4.2p1-add-staging-search-path.patch
- create mode 100644 package/poco/poco-1.4.2p1-dont-build-debug-libs.patch
- create mode 100644 package/poco/poco.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 8b9c816..fd920c3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -353,6 +353,7 @@ source "package/libnspr/Config.in"
- source "package/liboil/Config.in"
- source "package/libsigc/Config.in"
- source "package/orc/Config.in"
-+source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
- endmenu
- 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-new file mode 100644
-index 0000000..f340f40
---- /dev/null
-+++ b/package/poco/Config.in
-@@ -0,0 +1,58 @@
-+config BR2_PACKAGE_POCO
-+	bool "poco"
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_PCRE
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_USE_WCHAR
-+	depends on BR2_LARGEFILE
-+	help
-+	  The C++ Portable Components Libraries
-+
-+	  http://pocoproject.org
-+
-+if BR2_PACKAGE_POCO
-+
-+comment "poco components"
-+
-+config BR2_PACKAGE_POCO_XML
-+	bool "xml"
-+	select BR2_PACKAGE_EXPAT
-+
-+config BR2_PACKAGE_POCO_UTIL
-+	bool "util"
-+	select BR2_PACKAGE_POCO_XML
-+
-+config BR2_PACKAGE_POCO_NET
-+	bool "net"
-+
-+config BR2_PACKAGE_POCO_CRYPTO
-+	bool "crypto"
-+	select BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_POCO_NETSSL_OPENSSL
-+	bool "netssl_openssl"
-+	select BR2_PACKAGE_POCO_NET
-+	select BR2_PACKAGE_POCO_CRYPTO
-+	select BR2_PACKAGE_POCO_UTIL
-+	select BR2_PACKAGE_OPENSSL
-+
-+config BR2_PACKAGE_POCO_ZIP
-+	bool "zip"
-+
-+config BR2_PACKAGE_POCO_DATA
-+	bool
-+
-+config BR2_PACKAGE_POCO_DATA_SQLITE
-+	bool "sqlite"
-+	select BR2_PACKAGE_POCO_DATA
-+	select BR2_PACKAGE_SQLITE
-+
-+config BR2_PACKAGE_POCO_DATA_MYSQL
-+	bool "mysql"
-+	select BR2_PACKAGE_POCO_DATA
-+	select BR2_PACKAGE_MYSQL_CLIENT
-+
-+endif # BR2_PACKAGE_POCO
-+
-+comment "poco requires a toolchain with LARGEFILE, WCHAR and C++ support"
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/poco/poco-1.4.2p1-add-cross-build-config.patch b/package/poco/poco-1.4.2p1-add-cross-build-config.patch
-new file mode 100644
-index 0000000..a087838
---- /dev/null
-+++ b/package/poco/poco-1.4.2p1-add-cross-build-config.patch
-@@ -0,0 +1,82 @@
-+From: Baruch Siach <baruch@tkos.co.il>
-+Subject: [PATCH] poco: add Linux configuration file for generic cross build
-+
-+This patch adds the Linux-CrossEnv config file to poco. This file is identical
-+to the Linux one, except the added CROSSENV variable that allows setting of
-+the toolchain prefix.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+diff -Nuar poco-1.4.1p1-dist/build/config/Linux-CrossEnv poco-1.4.1p1/build/config/Linux-CrossEnv
-+--- poco-1.4.1p1-dist/build/config/Linux-CrossEnv	1970-01-01 02:00:00.000000000 +0200
-++++ poco-1.4.1p1/build/config/Linux-CrossEnv	2011-08-02 18:51:03.682047719 +0300
-+@@ -0,0 +1,69 @@
-++#
-++# Linux
-++#
-++# Make settings for cross compiled Linux
-++#
-++#
-++
-++#
-++# General Settings
-++#
-++LINKMODE ?= SHARED
-++
-++#
-++# Define Tools
-++#
-++CC      = $(CROSSENV)gcc
-++CXX     = $(CROSSENV)g++
-++LINK    = $(CXX)
-++LIB     = $(CROSSENV)ar -cr
-++RANLIB  = $(CROSSENV)ranlib
-++SHLIB   = $(CXX) -shared -Wl,-soname,$(notdir $@) -o $@
-++SHLIBLN = $(POCO_BASE)/build/script/shlibln
-++STRIP   = $(CROSSENV)strip
-++DEP     = $(POCO_BASE)/build/script/makedepend.gcc 
-++SHELL   = sh
-++RM      = rm -rf
-++CP      = cp
-++MKDIR   = mkdir -p
-++
-++#
-++# Extension for Shared Libraries
-++#
-++SHAREDLIBEXT     = .so.$(target_version)
-++SHAREDLIBLINKEXT = .so
-++
-++#
-++# Compiler and Linker Flags
-++#
-++CFLAGS          = 
-++CFLAGS32        =
-++CFLAGS64        =
-++CXXFLAGS        = -Wall -Wno-sign-compare
-++CXXFLAGS32      =
-++CXXFLAGS64      =
-++LINKFLAGS       =
-++LINKFLAGS32     =
-++LINKFLAGS64     =
-++STATICOPT_CC    =
-++STATICOPT_CXX   =
-++STATICOPT_LINK  = -static
-++SHAREDOPT_CC    = -fPIC
-++SHAREDOPT_CXX   = -fPIC
-++SHAREDOPT_LINK  = -Wl,-rpath,$(LIBPATH)
-++DEBUGOPT_CC     = -g -D_DEBUG
-++DEBUGOPT_CXX    = -g -D_DEBUG
-++DEBUGOPT_LINK   = -g
-++RELEASEOPT_CC   = -O2 -DNDEBUG
-++RELEASEOPT_CXX  = -O2 -DNDEBUG
-++RELEASEOPT_LINK = -O2
-++
-++#
-++# System Specific Flags
-++#
-++SYSFLAGS = -D_XOPEN_SOURCE=500 -D_REENTRANT -D_THREAD_SAFE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -DPOCO_HAVE_FD_EPOLL
-++
-++#
-++# System Specific Libraries
-++#
-++SYSLIBS  = -lpthread -ldl -lrt
-diff --git a/package/poco/poco-1.4.2p1-add-staging-search-path.patch b/package/poco/poco-1.4.2p1-add-staging-search-path.patch
-new file mode 100644
-index 0000000..18ee076
---- /dev/null
-+++ b/package/poco/poco-1.4.2p1-add-staging-search-path.patch
-@@ -0,0 +1,22 @@
-+From: Baruch Siach <baruch@tkos.co.il>
-+Subject: [PATCH] poco: add the staging path to search path
-+
-+Add the mysql headers and client libraries to the search path of the
-+preprocessor and the linker. The $MYSQL_LIBDIR variable must be set from the
-+make command line.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+--- 
-+--- poco-1.4.1p1-all-dist/Data/MySQL/Makefile	2011-02-09 11:13:00.000000000 +0200
-++++ poco-1.4.1p1-all/Data/MySQL/Makefile	2011-08-07 09:03:37.106161274 +0300
-+@@ -8,8 +8,8 @@
-+ 
-+ include $(POCO_BASE)/build/rules/global
-+ 
-+-SYSLIBS += -L/usr/local/lib/mysql -L/usr/lib/mysql -L/usr/mysql/lib/mysql -L/usr/local/mysql/lib -lmysqlclient
-+-INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql -I/usr/mysql/include/mysql -I/usr/local/mysql/include
-++SYSLIBS += -L$(MYSQL_LIBDIR) -L/usr/local/lib/mysql -L/usr/lib/mysql -L/usr/mysql/lib/mysql -L/usr/local/mysql/lib -lmysqlclient
-++INCLUDE += -I/usr/local/include/mysql/ -I/usr/include/mysql -I/usr/mysql/include/mysql -I/usr/local/mysql/include -I=/mysql
-+ SYSFLAGS += -DTHREADSAFE -DNO_TCL
-+ 
-+ objects = Binder Extractor SessionImpl Connector \
-diff --git a/package/poco/poco-1.4.2p1-dont-build-debug-libs.patch b/package/poco/poco-1.4.2p1-dont-build-debug-libs.patch
-new file mode 100644
-index 0000000..7480963
---- /dev/null
-+++ b/package/poco/poco-1.4.2p1-dont-build-debug-libs.patch
-@@ -0,0 +1,19 @@
-+From: Baruch Siach <baruch@tkos.co.il>
-+Subject: [PATCH] poco: don't build debug libraries
-+
-+Remove the debug libraries build dependency from the default target.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+
-+--- poco-1.4.1p1-dist/build/rules/compile	2011-02-09 11:12:24.000000000 +0200
-++++ poco-1.4.1p1/build/rules/compile	2011-08-03 07:51:42.946044176 +0300
-+@@ -14,7 +14,7 @@
-+ 
-+ all: $(DEFAULT_TARGET)
-+ all_static: static_debug static_release
-+-all_shared: shared_debug shared_release
-++all_shared: shared_release
-+ all_debug: static_debug shared_debug
-+ all_release: static_release shared_release
-+ 
-diff --git a/package/poco/poco.mk b/package/poco/poco.mk
-new file mode 100644
-index 0000000..87d6313
---- /dev/null
-+++ b/package/poco/poco.mk
-@@ -0,0 +1,57 @@
-+#############################################################
-+#
-+# poco
-+#
-+#############################################################
-+POCO_VERSION = 1.4.2p1
-+POCO_SOURCE = poco-$(POCO_VERSION)-all.tar.gz
-+POCO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/poco
-+POCO_INSTALL_STAGING = YES
-+
-+POCO_DEPENDENCIES = zlib pcre					\
-+	$(if $(BR2_PACKAGE_POCO_XML),expat)			\
-+	$(if $(BR2_PACKAGE_POCO_CRYPTO),openssl)		\
-+	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),openssl)	\
-+	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),sqlite)		\
-+	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),mysql_client)
-+
-+POCO_OMIT = Data/ODBC PageCompiler					\
-+	$(if $(BR2_PACKAGE_POCO_XML),,XML)				\
-+	$(if $(BR2_PACKAGE_POCO_UTIL),,Util)				\
-+	$(if $(BR2_PACKAGE_POCO_NET),,Net)				\
-+	$(if $(BR2_PACKAGE_POCO_NETSSL_OPENSSL),,NetSSL_OpenSSL)	\
-+	$(if $(BR2_PACKAGE_POCO_CRYPTO),,Crypto)			\
-+	$(if $(BR2_PACKAGE_POCO_ZIP),,Zip)				\
-+	$(if $(BR2_PACKAGE_POCO_DATA),,Data)				\
-+	$(if $(BR2_PACKAGE_POCO_DATA_MYSQL),,Data/MySQL)		\
-+	$(if $(BR2_PACKAGE_POCO_DATA_SQLITE),,Data/SQLite)
-+
-+ifeq ($(LIBC),uclibc)
-+POCO_CONF_OPT += --no-fpenvironment --no-wstring
-+endif
-+
-+define POCO_CONFIGURE_CMDS
-+	(cd $(@D); ./configure \
-+		--config=Linux-CrossEnv	\
-+		--prefix=/usr		\
-+		--omit="$(POCO_OMIT)"	\
-+		$(POCO_CONF_OPT)	\
-+		--unbundled		\
-+		--no-tests		\
-+		--no-samples)
-+endef
-+
-+define POCO_BUILD_CMDS
-+	$(MAKE) POCO_TARGET_OSARCH=$(ARCH) CROSSENV=$(TARGET_CROSS) \
-+		MYSQL_LIBDIR=$(TARGET_DIR)/usr/lib/mysql -C $(@D)
-+endef
-+
-+define POCO_INSTALL_STAGING_CMDS
-+	$(MAKE) DESTDIR=$(STAGING_DIR) POCO_TARGET_OSARCH=$(ARCH) install -C $(@D)
-+endef
-+
-+define POCO_INSTALL_TARGET_CMDS
-+	$(MAKE) DESTDIR=$(TARGET_DIR) POCO_TARGET_OSARCH=$(ARCH) install -C $(@D)
-+endef
-+
-+$(eval $(call GENTARGETS,package,poco))
--- 
-1.7.6.3
+Best regards,
+Thomas
