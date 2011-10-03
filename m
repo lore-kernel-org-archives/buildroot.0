@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon,  3 Oct 2011 23:20:57 +0200
-Subject: [Buildroot] [PATCH 21/22] xlib_libfontenc: removed redundant
+Date: Mon,  3 Oct 2011 23:20:48 +0200
+Subject: [Buildroot] [PATCH 12/22] xapp_mkfontdir: removed redundant
 	HOST_FOO_DEPENDENCIES
 In-Reply-To: <1317676858-3407-1-git-send-email-arnout@mind.be>
 References: <201110032133.44496.arnout@mind.be>
  <1317676858-3407-1-git-send-email-arnout@mind.be>
-Message-ID: <1317676858-3407-22-git-send-email-arnout@mind.be>
+Message-ID: <1317676858-3407-13-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,19 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xlib_libfontenc/xlib_libfontenc.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-index 20cfc8d..cc5d1f0 100644
---- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-+++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
-@@ -11,7 +11,5 @@ XLIB_LIBFONTENC_AUTORECONF = NO
- XLIB_LIBFONTENC_INSTALL_STAGING = YES
- XLIB_LIBFONTENC_DEPENDENCIES = zlib xproto_xproto
+diff --git a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
+index ece5dd3..b7eb4dc 100644
+--- a/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
++++ b/package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk
+@@ -9,7 +9,6 @@ XAPP_MKFONTDIR_SOURCE = mkfontdir-$(XAPP_MKFONTDIR_VERSION).tar.bz2
+ XAPP_MKFONTDIR_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTDIR_AUTORECONF = NO
+ XAPP_MKFONTDIR_DEPENDENCIES = xapp_mkfontscale
+-HOST_XAPP_MKFONTDIR_DEPENDENCIES = host-xapp_mkfontscale
  
--HOST_XLIB_LIBFONTENC_DEPENDENCIES = host-zlib host-xproto_xproto
--
  $(eval $(call AUTOTARGETS))
  $(eval $(call AUTOTARGETS,host))
 -- 
