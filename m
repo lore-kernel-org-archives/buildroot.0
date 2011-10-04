@@ -1,43 +1,48 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  4 Oct 2011 11:05:47 +0200
-Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
-Message-ID: <1317719147-19210-1-git-send-email-yegorslists@googlemail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 04 Oct 2011 11:20:47 +0200
+Subject: [Buildroot] Segmentation faults after gcc update
+In-Reply-To: <20110930215915.3d7fad80@skate>
+References: <1317110841.20688.12.camel@sven> <20110927233506.55cb52a2@skate>
+ <1317221262.8481.4.camel@sven> <1317373796.20520.3.camel@sven>
+ <20110930215915.3d7fad80@skate>
+Message-ID: <1317720237.2409.0.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, 2011-09-30 at 21:59 +0200, Thomas Petazzoni wrote:
+> Le Fri, 30 Sep 2011 11:06:46 +0200,
+> Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+> 
+> > > I don't quite understand why libthread_db is not found as I did enable
+> > > BR2_PTHREAD_DEBUG for this build and recompiled everything. Anyway, I
+> > > tried gdb on a different (crashing) binary and it crashes in
+> > > _dl_get_tls_static_info() as well.
+> > 
+> > I have now added some debug output to _dl_get_tls_static_info() and
+> > related functions and from that I can tell that gdb is wrong here. The
+> > code does definitely not crash in _dl_get_tls_static_info() and not in
+> > _dl_update_slotinfo() either.
+> > 
+> > Now I am somewhat stuck. Any further ideas on how I could tackle this
+> > problem?
+> 
+> I guess the whole stack trace is stupid, because I don't see how
+> hasmntopt() can end up calling sched_get_priority_max():
+> 
+> char *hasmntopt(const struct mntent *mnt, const char *opt)
+> {
+>         return strstr(mnt->mnt_opts, opt);
+> }
+> 
+> Maybe you should raise the issue on the uClibc mailing list?
 
-this version fixes compilation issue on some old build systems like
-openSUSE 10.3 saying some host libraries were too old
+I've opened https://bugs.busybox.net/show_bug.cgi?id=4291 for it and
+will also ask on the mailing list in case that the bug report won't get
+any attention.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- toolchain/gdb/Config.in |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 8295f79..2da965e 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -59,6 +59,11 @@ choice
- 		depends on !BR2_bfin
- 		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
- 
-+	config BR2_GDB_VERSION_7_3_1
-+		bool "gdb 7.3.1"
-+		depends on !BR2_bfin
-+		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
-+
- endchoice
- 
- config BR2_GDB_VERSION
-@@ -69,3 +74,4 @@ config BR2_GDB_VERSION
- 	default "6.8"      if BR2_GDB_VERSION_6_8
- 	default "7.0.1"    if BR2_GDB_VERSION_7_0_1
- 	default "7.1"      if BR2_GDB_VERSION_7_1
-+	default "7.3.1"    if BR2_GDB_VERSION_7_3_1
--- 
-1.7.5.4
+Thanks,
+Sven
