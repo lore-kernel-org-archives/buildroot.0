@@ -1,46 +1,64 @@
 From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 4 Oct 2011 18:05:04 -0500
-Subject: [Buildroot] Bug in pkg-stats?
-In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F39DC56F52@AUSP01VMBX24.collaborationhost.net>
-References: <ADE657CA350FB648AAC2C43247A983F001F39DC56F52@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DCFE6AE@AUSP01VMBX24.collaborationhost.net>
+Date: Tue, 4 Oct 2011 18:10:40 -0500
+Subject: [Buildroot] [PATCH] pkg-stats: update grep tests for package type
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DCFE6AF@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, October 04, 2011 3:36 PM, H Hartley Sweeten wrote:
->
-> Hello all,
->
-> The output of pkg-stats shows almost every package with the following status:
->
-> AUTOTARGETS GENTARGETS  CMAKETARGETS   manual
-> target host target host target host  target              Actions
->   NO    NO    NO    NO    NO    NO     NO   YES  * convert to generic target
->
-> I don't think this output is correct but I can't figure out what's wrong
-> with the script.
+Update the grep tests used to determine the package type.
 
-Thomas,
+The package name and directory are now worked out magically due to:
 
-I think the problem with pkg-stats is due to your patches:
-
- package: remove useless arguments from CMAKETARGETS
- package: remove useless arguments from AUTOTARGETS
- package: remove useless arguments from GENTARGETS
  package: add helper functions to get package name and directory magically
 
-The grep tests are still looking for the package name and directory to
-determine the package type.
+Because of this the extra arguments were removed by patches:
 
-I'll post a patch shortly.
+ package: remove useless arguments from GENTARGETS
+ package: remove useless arguments from AUTOTARGETS
+ package: remove useless arguments from CMAKETARGETS
 
-One other thing with pkg-stats.
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
-Can you think of any way to pull the _VERSION of the packages out of the *.mk
-files and show that information in the output html file?
+---
 
-Regards,
-Hartley
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index bb1c27d..8602b0f 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -98,27 +98,27 @@ for i in $(find package/ -name '*.mk') ; do
+     is_manual_target=0
+     is_manual_host=0
+ 
+-    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
++    if grep -E "\(call AUTOTARGETS,host\)" $i > /dev/null ; then
+ 	is_auto_host=1
+     fi
+ 
+-    if grep -E "\(call AUTOTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++    if grep -E "\(call AUTOTARGETS\)" $i > /dev/null ; then
+ 	is_auto_target=1
+     fi
+ 
+-    if grep -E "\(call GENTARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
++    if grep -E "\(call GENTARGETS,host\)" $i > /dev/null ; then
+ 	is_pkg_host=1
+     fi
+ 
+-    if grep -E "\(call GENTARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++    if grep -E "\(call GENTARGETS\)" $i > /dev/null ; then
+ 	is_pkg_target=1
+     fi
+ 
+-    if grep -E "\(call CMAKETARGETS,[^,]*,[^,]*,host\)" $i > /dev/null ; then
++    if grep -E "\(call CMAKETARGETS,host\)" $i > /dev/null ; then
+ 	is_cmake_host=1
+     fi
+ 
+-    if grep -E "\(call CMAKETARGETS,[^,]*,[^,]*(,target|)\)" $i > /dev/null ; then
++    if grep -E "\(call CMAKETARGETS\)" $i > /dev/null ; then
+ 	is_cmake_target=1
+     fi
+ 
