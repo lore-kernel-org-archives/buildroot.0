@@ -1,48 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 4 Oct 2011 07:25:45 +0200
-Subject: [Buildroot] Question: Multiple versions of a package.
-In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F39DC56C6E@AUSP01VMBX24.collaborationhost.net>
-References: <ADE657CA350FB648AAC2C43247A983F001F39DC568EC@AUSP01VMBX24.collaborationhost.net>
- <20111001131940.08aa053b@skate>
- <ADE657CA350FB648AAC2C43247A983F001F39DC56C6E@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <20111004072545.101560c4@skate>
+Date: Tue, 4 Oct 2011 07:34:43 +0200
+Subject: [Buildroot] Derive HOST_FOO_DEPENDENCIES automatically
+In-Reply-To: <201110032335.06739.arnout@mind.be>
+References: <201110032133.44496.arnout@mind.be>
+ <1317676858-3407-1-git-send-email-arnout@mind.be>
+ <201110032335.06739.arnout@mind.be>
+Message-ID: <20111004073443.24b1da67@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Mon, 3 Oct 2011 23:35:05 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Le Mon, 3 Oct 2011 19:12:48 -0500,
-H Hartley Sweeten <hartleys@visionengravers.com> a ?crit :
+>  By the way, there is a disappointingly large number of packages that
+> have a difference between FOO_DEPENDENCIES and HOST_FOO_DEPENDENCIES:
 
-> Using your suggestion (2) I was able to add both libsigc++ packages
-> and finally get the ParaGUI package to compile.
-> 
-> I have already submitted a patch to move package/libsigc to
-> package/libsigc2.
+Not necessarily a problem. For example, for:
 
-Yes, I have seen that, but it does not rename the config option to
-_LIBSGIC2, so there is an inconsistency between the package directory,
-the package name and the config option, which, with the latest
-developments in Buildroot Git, will probably break.
+> package/libgtk2/libgtk2.mk
 
-> If that one looks ok I'll submit the patches to add
-> libsigc++1.2 and ParaGUI for review.
-
-Yes, sure.
-
-> Two issues I found with the ParaGUI package.
-> 
-> 1) There is an error in one of the source files that breaks the build.
-> 2) There is a bug in the configure script that breaks the sdl library
-> linkage.
-> 
-> I have patches for both of these as part of the package/paragui
-> patch.  Is this normally how something like this would be handled?
-
-Yes exactly.
+It is expected, because we don't need a full blown host libgtk2 version
+to build the target libgtk2.
 
 Thomas
 -- 
