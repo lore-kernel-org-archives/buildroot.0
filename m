@@ -1,36 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 4 Oct 2011 23:37:38 +0200
-Subject: [Buildroot] [PATCH 2/9] toolchain-external: allow specifying
-	extra external libraries
-In-Reply-To: <59099791edd7c503508d17a882d0b97ead12fcf7.1317583191.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
- <59099791edd7c503508d17a882d0b97ead12fcf7.1317583191.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201110042337.38688.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 5 Oct 2011 00:15:47 +0200
+Subject: [Buildroot] [git commit] imagemagick: add optional fftw support
+Message-ID: <20111004222039.D2C5A8E10D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas and Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=d1c54ade86e8cae6f0aa1bf1709941c70cea1af7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sunday 02 October 2011 21:20:10 Thomas Petazzoni wrote:
-> From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-> 
-> Custom toolchains may provide extra libraries that need to be copied to the
-> target. This patch adds a configuration option for this.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/imagemagick/imagemagick.mk |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 0bb76f3..b2a65e1 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -80,6 +80,15 @@ else
+ IMAGEMAGICK_CONF_OPT += --without-tiff
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FFTW),y)
++# configure script misdetects these leading to build errors
++IMAGEMAGICK_CONF_ENV += ac_cv_func_creal=yes ac_cv_func_cimag=yes
++IMAGEMAGICK_CONF_OPT += --with-fftw
++IMAGEMAGICK_DEPENDENCIES += fftw
++else
++IMAGEMAGICK_CONF_OPT += --without-fftw
++endif
++
+ define IMAGEMAGICK_REMOVE_CONFIG_SCRIPTS
+ 	$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,	\
+ 		   $(addsuffix -config,			\
