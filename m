@@ -1,54 +1,82 @@
 From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Tue, 4 Oct 2011 11:34:23 -0500
-Subject: [Buildroot] Question: Multiple versions of a package.
-In-Reply-To: <20111004072545.101560c4@skate>
-References: <ADE657CA350FB648AAC2C43247A983F001F39DC568EC@AUSP01VMBX24.collaborationhost.net>
- <20111001131940.08aa053b@skate>
- <ADE657CA350FB648AAC2C43247A983F001F39DC56C6E@AUSP01VMBX24.collaborationhost.net>
- <20111004072545.101560c4@skate>
-Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DC56DC3@AUSP01VMBX24.collaborationhost.net>
+Date: Tue, 4 Oct 2011 11:47:52 -0500
+Subject: [Buildroot] [PATCH v2] Rename package/libsigc to
+	package/libsigc2
+In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F39DC56AC8@AUSP01VMBX24.collaborationhost.net>
+References: <ADE657CA350FB648AAC2C43247A983F001F39DC56AC8@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DC56DCC@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, October 03, 2011 10:26 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Le Mon, 3 Oct 2011 19:12:48 -0500,
-> H Hartley Sweeten <hartleys@visionengravers.com> a ?crit :
-> 
->> Using your suggestion (2) I was able to add both libsigc++ packages
->> and finally get the ParaGUI package to compile.
->> 
->> I have already submitted a patch to move package/libsigc to
->> package/libsigc2.
-> 
-> Yes, I have seen that, but it does not rename the config option to
-> _LIBSGIC2, so there is an inconsistency between the package directory,
-> the package name and the config option, which, with the latest
-> developments in Buildroot Git, will probably break.
+Rename the libsigc package to libsigc2 so that the older 1.2 version
+of libsigc++ can also be added to packages/.
 
-Ah, missed that, sorry.  I'll post an updated patch shortly.
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
->> If that one looks ok I'll submit the patches to add
->> libsigc++1.2 and ParaGUI for review.
->
-> Yes, sure.
->
->> Two issues I found with the ParaGUI package.
->> 
->> 1) There is an error in one of the source files that breaks the build.
->> 2) There is a bug in the configure script that breaks the sdl library
->> linkage.
->> 
->> I have patches for both of these as part of the package/paragui
->> patch.  Is this normally how something like this would be handled?
->
-> Yes exactly.
+---
 
-OK. Thanks!
-
-Regards,
-Hartley
+diff --git a/package/Config.in b/package/Config.in
+index 8b9c816..d77c29f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -351,7 +351,7 @@ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/liboil/Config.in"
+-source "package/libsigc/Config.in"
++source "package/libsigc2/Config.in"
+ source "package/orc/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
+diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+deleted file mode 100644
+index 4c443eb..0000000
+--- a/package/libsigc/libsigc.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#############################################################
+-#
+-# libsigc++
+-#
+-#############################################################
+-LIBSIGC_VERSION = 2.2.8
+-LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.bz2
+-LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
+-LIBSIGC_INSTALL_STAGING = YES
+-
+-$(eval $(call AUTOTARGETS))
+diff --git a/package/libsigc/Config.in b/package/libsigc2/Config.in
+similarity index 89%
+rename from package/libsigc/Config.in
+rename to package/libsigc2/Config.in
+index 93fa3f4..433d0b7 100644
+--- a/package/libsigc/Config.in
++++ b/package/libsigc2/Config.in
+@@ -1,5 +1,5 @@
+-config BR2_PACKAGE_LIBSIGC
+-	bool "libsigc++"
++config BR2_PACKAGE_LIBSIGC2
++	bool "libsigc++ 2.2"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libsigc++ implements a typesafe callback system for standard C++.
+diff --git a/package/libsigc2/libsigc2.mk b/package/libsigc2/libsigc2.mk
+new file mode 100644
+index 0000000..036ac6a
+--- /dev/null
++++ b/package/libsigc2/libsigc2.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# libsigc++ 2.2
++#
++#############################################################
++LIBSIGC2_VERSION = 2.2.8
++LIBSIGC2_SOURCE = libsigc++-$(LIBSIGC2_VERSION).tar.bz2
++LIBSIGC2_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/2.2
++LIBSIGC2_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS))
