@@ -1,36 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 5 Oct 2011 08:45:50 +0200
-Subject: [Buildroot] How to create package that build with scons
-In-Reply-To: <201110041820.16324.arnout@mind.be>
-References: <CANc=jjo0e1tvgSm2KTiFaxBd3pPW4zJs=pZ8HVsyFCYGhyLqnw@mail.gmail.com>
- <20111004105449.GB22823@sapphire.tkos.co.il>
- <201110041820.16324.arnout@mind.be>
-Message-ID: <20111005084550.39f499ab@skate>
+Date: Wed, 5 Oct 2011 09:04:28 +0200
+Subject: [Buildroot] Question: := vs = in package *.mk files
+In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F39DCFE6DB@AUSP01VMBX24.collaborationhost.net>
+References: <ADE657CA350FB648AAC2C43247A983F001F39DCFE6DB@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <20111005090428.34c8f565@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 4 Oct 2011 18:20:16 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Le Tue, 4 Oct 2011 19:55:48 -0500,
+H Hartley Sweeten <hartleys@visionengravers.com> a ?crit :
 
->  'make host-scons' works for me...
-> 
->  There is currently no package that depends on scons, but I guess
-> that it was used by some private package of Thomas (or one of his
-> customers).
+> The Buildroot documentation shows using '=' when setting variables
+> in the package *.mk file.  Some of the existing packages use ':='
+> instead.  What's the difference?  Should the existing packages be
+> updated?
 
-Not for a private package. I submitted as part of a patchset that
-included packages for the disko multimedia framework and its demo
-programs. However, Peter had some comments of my disko/disko-demos
-packages, and he did merge only the scons package. I haven't (yet)
-found the time to adjust the disko/disko-demos packages and to submit
-them. This explains why there is a host-scons package that isn't used
-by any package in the tree.
+The difference is explained in the make documentation:
 
-But at least, with this host-scons package, I was able to build fine
-other packages relying on the Scons build system.
+
+"""
+
+   The first flavor of variable is a "recursively expanded" variable.
+Variables of this sort are defined by lines using `=' (*note Setting
+Variables: Setting.) or by the `define' directive (*note Defining
+Variables Verbatim: Defining.).  The value you specify is installed
+verbatim; if it contains references to other variables, these
+references are expanded whenever this variable is substituted (in the
+course of expanding some other string).
+
+[...]
+
+"Simply expanded variables" are defined by lines using `:=' (*note
+Setting Variables: Setting.).  The value of a simply expanded variable
+is scanned once and for all, expanding any references to other
+variables and functions, when the variable is defined.  The actual
+value of the simply expanded variable is the result of expanding the
+text that you write.  It does not contain any references to other
+variables; it contains their values _as of the time this variable was
+defined_. 
+
+"""
+
+See http://www.gnu.org/software/make/manual/make.html#Flavors
+
+In package definition, Peter has said that he preferred the usage of
+'=' except when it would create a noticeable performance problem. So
+for all package definitions such as _SITE, _VERSION, _SOURCE,
+_AUTORECONF, _INSTALL_STAGING, etc. the '=' sign is the one to choose.
+
+Of course, a lot of packages do not comply with this rule, but this
+will be fixed progressively over time as we update packages.
 
 Regards,
 
