@@ -1,32 +1,49 @@
 From: H Hartley Sweeten <hartleys@visionengravers.com>
-Date: Wed, 5 Oct 2011 11:47:54 -0500
-Subject: [Buildroot] [PATCH] pkg-stats: cnt should start with 0
-Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DCFE857@AUSP01VMBX24.collaborationhost.net>
+Date: Wed, 5 Oct 2011 12:09:41 -0500
+Subject: [Buildroot] Bug in pkg-stats?
+In-Reply-To: <20111005084340.204661fb@skate>
+References: <ADE657CA350FB648AAC2C43247A983F001F39DC56F52@AUSP01VMBX24.collaborationhost.net>
+ <ADE657CA350FB648AAC2C43247A983F001F39DCFE6AE@AUSP01VMBX24.collaborationhost.net>
+ <20111005084340.204661fb@skate>
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DCFE877@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package count, cnt, should start with an initial value of 0.  It
-is incremented as each package *.mk file is checked.  Starting with a
-value of 1 makes the first ID = 2 and results in the TOTAL being off
-by 1.
+On Tuesday, October 04, 2011 11:44 PM, Thomas Petazzoni wrote:
+> Le Tue, 4 Oct 2011 18:05:04 -0500,
+> H Hartley Sweeten <hartleys@visionengravers.com> a ?crit :
+>
+>> One other thing with pkg-stats.
+>> 
+>> Can you think of any way to pull the _VERSION of the packages out of
+>> the *.mk files and show that information in the output html file?
+>
+> Yes, shouldn't be too difficult. Why would this be useful ?
 
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+It seems convenient.  Having the script output the package version would
+be nicer than having to look at the various *.mk files be hand to see what
+version is actually being used by Buildroot.
 
----
+I have something "kind" of working right now but its output isn't very
+nice for a lot of the packages.  I'm doing this in the script:
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 8602b0f..3e89bd1 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -73,7 +73,7 @@ convert_to_generic_target=0
- convert_to_generic_host=0
- convert_to_autotools=0
- total_patch_count=0
--cnt=1
-+cnt=0
- for i in $(find package/ -name '*.mk') ; do
- 
-     if test \
+    version=""
+
+    if grep -m1 "_VERSION" $i > /dev/null ; then
+	version=`grep -m1 "_VERSION" $i | awk '{ print $NF }'`
+    else
+	version="unknown"
+    fi
+
+This works fine for the packages that have _VERSION defined like:
+
+FOO_VERSION = x.y.z
+
+But it ends up with the whole line when the spaces are missing around the
+'='.  Oh well...
+
+Regards,
+Hartley
