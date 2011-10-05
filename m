@@ -1,24 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Oct 2011 19:10:38 +0200
-Subject: [Buildroot] [PATCH] pkg-stats: cnt should start with 0
-In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F39DCFE857@AUSP01VMBX24.collaborationhost.net>
- (H. Hartley Sweeten's message of "Wed, 5 Oct 2011 11:47:54 -0500")
-References: <ADE657CA350FB648AAC2C43247A983F001F39DCFE857@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <87ipo3pdo1.fsf@macbook.be.48ers.dk>
+Date: Wed, 05 Oct 2011 19:12:22 +0200
+Subject: [Buildroot] [PATCH 1/5] mesa: build statically because of DRI
+	drivers
+In-Reply-To: <20110920084302.771febcf@skate> (Thomas Petazzoni's message of
+ "Tue, 20 Sep 2011 08:43:02 +0200")
+References: <cover.1316465857.git.thomas.petazzoni@free-electrons.com>
+ <3747c70f962d5b96288372a2ca369965c62a6bd2.1316465857.git.thomas.petazzoni@free-electrons.com>
+ <20110920084302.771febcf@skate>
+Message-ID: <87ehyrpdl5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- H> The package count, cnt, should start with an initial value of 0.  It
- H> is incremented as each package *.mk file is checked.  Starting with a
- H> value of 1 makes the first ID = 2 and results in the TOTAL being off
- H> by 1.
+ Thomas> Hello,
+ Thomas> Of course, the title should be "mesa: don't build statically because of
+ Thomas> DRI drivers". I will send an updated version once others will have
+ Thomas> reviewed the patchset.
 
-Committed, thanks.
+Thanks, please do so - The patch looks sensible.
 
 -- 
 Bye, Peter Korsgaard
