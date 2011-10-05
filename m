@@ -1,32 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  5 Oct 2011 17:23:38 -0300
-Subject: [Buildroot] [PATCH] gmp: work around ARM thumb build breakage
-Message-ID: <1317846218-3890-1-git-send-email-gustavo@zacarias.com.ar>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Wed, 5 Oct 2011 15:34:59 -0500
+Subject: [Buildroot] [PATCH] pkg-stats: use correct variable names for
+ convert_to_*autotools
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DCFE980@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gmp/gmp.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+The variable convert_to_autotools is not used in the script.  The correct
+variables are convert_to_target_autotools and convert_to_host_autotools.
 
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 5eb6ecc..2222465 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -9,5 +9,10 @@ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
- GMP_INSTALL_STAGING = YES
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
+
+---
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 3e89bd1..30a21f2 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -71,7 +71,8 @@ tr.correct td {
  
-+# Bad ARM assembly breaks on pure thumb
-+ifeq ($(ARCH),arm)
-+GMP_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
--- 
-1.7.3.4
+ convert_to_generic_target=0
+ convert_to_generic_host=0
+-convert_to_autotools=0
++convert_to_target_autotools=0
++convert_to_host_autotools=0
+ total_patch_count=0
+ cnt=0
+ for i in $(find package/ -name '*.mk') ; do
