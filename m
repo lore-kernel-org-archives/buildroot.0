@@ -1,109 +1,250 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Oct 2011 20:20:53 +0200
-Subject: [Buildroot] [git commit] xdata_xcursor-themes: add dependency on
-	host xapp_xcursorgen
-Message-ID: <20111005183705.8FAF18E226@busybox.osuosl.org>
+Date: Wed, 5 Oct 2011 20:23:33 +0200
+Subject: [Buildroot] [git commit] x11r7: AUTORECONF=NO is the default, remove
+Message-ID: <20111005183706.4D4828E23C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aeaa5e9422955c53b7c904a987a475ca0ec04369
+commit: http://git.buildroot.net/buildroot/commit/?id=42a28105f12e006e8b01579d0004c8cb3edc0acb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As reported in bug #3331, xdata_xcursor_themes needs the xcursorgen
-application installed on the host. This commit adds this dependency,
-together with the needed host libraries required for xapp_cursorgen to
-build properly.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   |    3 +++
- .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    2 +-
- package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |    3 +++
- package/x11r7/xlib_libXfixes/xlib_libXfixes.mk     |    3 +++
- package/x11r7/xlib_libXrender/xlib_libXrender.mk   |    3 +++
- .../x11r7/xproto_fixesproto/xproto_fixesproto.mk   |    1 +
- .../x11r7/xproto_renderproto/xproto_renderproto.mk |    1 +
- 7 files changed, 15 insertions(+), 1 deletions(-)
+ package/x11r7/libxcb/libxcb.mk                     |    1 -
+ package/x11r7/mesa3d/mesa3d.mk                     |    1 -
+ package/x11r7/xapp_appres/xapp_appres.mk           |    1 -
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk       |    1 -
+ package/x11r7/xapp_beforelight/xapp_beforelight.mk |    1 -
+ package/x11r7/xapp_bitmap/xapp_bitmap.mk           |    1 -
+ package/x11r7/xapp_editres/xapp_editres.mk         |    1 -
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   |    1 -
+ package/x11r7/xapp_fslsfonts/xapp_fslsfonts.mk     |    1 -
+ package/x11r7/xapp_fstobdf/xapp_fstobdf.mk         |    1 -
+ package/x11r7/xapp_iceauth/xapp_iceauth.mk         |    1 -
+ package/x11r7/xapp_ico/xapp_ico.mk                 |    1 -
+ package/x11r7/xapp_listres/xapp_listres.mk         |    1 -
+ package/x11r7/xapp_luit/xapp_luit.mk               |    1 -
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk     |    1 -
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    1 -
+ package/x11r7/xapp_oclock/xapp_oclock.mk           |    1 -
+ package/x11r7/xapp_rgb/xapp_rgb.mk                 |    1 -
+ package/x11r7/xapp_rstart/xapp_rstart.mk           |    1 -
+ package/x11r7/xapp_scripts/xapp_scripts.mk         |    1 -
+ package/x11r7/xapp_sessreg/xapp_sessreg.mk         |    1 -
+ package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk     |    1 -
+ package/x11r7/xapp_showfont/xapp_showfont.mk       |    1 -
+ package/x11r7/xapp_smproxy/xapp_smproxy.mk         |    1 -
+ package/x11r7/xapp_twm/xapp_twm.mk                 |    1 -
+ package/x11r7/xapp_viewres/xapp_viewres.mk         |    1 -
+ package/x11r7/xapp_x11perf/xapp_x11perf.mk         |    1 -
+ package/x11r7/xapp_xauth/xapp_xauth.mk             |    1 -
+ package/x11r7/xapp_xbacklight/xapp_xbacklight.mk   |    1 -
+ package/x11r7/xapp_xbiff/xapp_xbiff.mk             |    1 -
+ package/x11r7/xapp_xcalc/xapp_xcalc.mk             |    1 -
+ package/x11r7/xapp_xclipboard/xapp_xclipboard.mk   |    1 -
+ package/x11r7/xapp_xclock/xapp_xclock.mk           |    1 -
+ package/x11r7/xapp_xcmsdb/xapp_xcmsdb.mk           |    1 -
+ package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk   |    1 -
+ package/x11r7/xapp_xdbedizzy/xapp_xdbedizzy.mk     |    1 -
+ package/x11r7/xapp_xditview/xapp_xditview.mk       |    1 -
+ package/x11r7/xapp_xdm/xapp_xdm.mk                 |    1 -
+ package/x11r7/xapp_xdpyinfo/xapp_xdpyinfo.mk       |    1 -
+ package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk       |    1 -
+ package/x11r7/xapp_xedit/xapp_xedit.mk             |    1 -
+ package/x11r7/xapp_xev/xapp_xev.mk                 |    1 -
+ package/x11r7/xapp_xeyes/xapp_xeyes.mk             |    1 -
+ package/x11r7/xapp_xf86dga/xapp_xf86dga.mk         |    1 -
+ package/x11r7/xapp_xfd/xapp_xfd.mk                 |    1 -
+ package/x11r7/xapp_xfontsel/xapp_xfontsel.mk       |    1 -
+ package/x11r7/xapp_xfs/xapp_xfs.mk                 |    1 -
+ package/x11r7/xapp_xfsinfo/xapp_xfsinfo.mk         |    1 -
+ package/x11r7/xapp_xgamma/xapp_xgamma.mk           |    1 -
+ package/x11r7/xapp_xgc/xapp_xgc.mk                 |    1 -
+ package/x11r7/xapp_xhost/xapp_xhost.mk             |    1 -
+ package/x11r7/xapp_xinput/xapp_xinput.mk           |    1 -
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    1 -
+ package/x11r7/xapp_xkbevd/xapp_xkbevd.mk           |    1 -
+ package/x11r7/xapp_xkbprint/xapp_xkbprint.mk       |    1 -
+ package/x11r7/xapp_xkbutils/xapp_xkbutils.mk       |    1 -
+ package/x11r7/xapp_xkill/xapp_xkill.mk             |    1 -
+ package/x11r7/xapp_xload/xapp_xload.mk             |    1 -
+ package/x11r7/xapp_xlogo/xapp_xlogo.mk             |    1 -
+ package/x11r7/xapp_xlsatoms/xapp_xlsatoms.mk       |    1 -
+ package/x11r7/xapp_xlsclients/xapp_xlsclients.mk   |    1 -
+ package/x11r7/xapp_xlsfonts/xapp_xlsfonts.mk       |    1 -
+ package/x11r7/xapp_xmag/xapp_xmag.mk               |    1 -
+ package/x11r7/xapp_xman/xapp_xman.mk               |    1 -
+ package/x11r7/xapp_xmessage/xapp_xmessage.mk       |    1 -
+ package/x11r7/xapp_xmh/xapp_xmh.mk                 |    1 -
+ package/x11r7/xapp_xmodmap/xapp_xmodmap.mk         |    1 -
+ package/x11r7/xapp_xmore/xapp_xmore.mk             |    1 -
+ .../x11r7/xapp_xplsprinters/xapp_xplsprinters.mk   |    1 -
+ package/x11r7/xapp_xpr/xapp_xpr.mk                 |    1 -
+ .../xapp_xprehashprinterlist.mk                    |    1 -
+ package/x11r7/xapp_xprop/xapp_xprop.mk             |    1 -
+ package/x11r7/xapp_xrandr/xapp_xrandr.mk           |    1 -
+ package/x11r7/xapp_xrdb/xapp_xrdb.mk               |    1 -
+ package/x11r7/xapp_xrefresh/xapp_xrefresh.mk       |    1 -
+ package/x11r7/xapp_xset/xapp_xset.mk               |    1 -
+ package/x11r7/xapp_xsetmode/xapp_xsetmode.mk       |    1 -
+ package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk |    1 -
+ package/x11r7/xapp_xsetroot/xapp_xsetroot.mk       |    1 -
+ package/x11r7/xapp_xsm/xapp_xsm.mk                 |    1 -
+ package/x11r7/xapp_xstdcmap/xapp_xstdcmap.mk       |    1 -
+ package/x11r7/xapp_xvidtune/xapp_xvidtune.mk       |    1 -
+ package/x11r7/xapp_xvinfo/xapp_xvinfo.mk           |    1 -
+ package/x11r7/xapp_xwd/xapp_xwd.mk                 |    1 -
+ package/x11r7/xapp_xwininfo/xapp_xwininfo.mk       |    1 -
+ package/x11r7/xapp_xwud/xapp_xwud.mk               |    1 -
+ package/x11r7/xdata_xbitmaps/xdata_xbitmaps.mk     |    1 -
+ .../xdata_xcursor-themes/xdata_xcursor-themes.mk   |    1 -
+ .../xdriver_xf86-input-acecad.mk                   |    1 -
+ .../xdriver_xf86-input-aiptek.mk                   |    1 -
+ .../xdriver_xf86-input-evdev.mk                    |    1 -
+ .../xdriver_xf86-input-joystick.mk                 |    1 -
+ .../xdriver_xf86-input-keyboard.mk                 |    1 -
+ .../xdriver_xf86-input-mouse.mk                    |    1 -
+ .../xdriver_xf86-input-synaptics.mk                |    1 -
+ .../xdriver_xf86-input-vmmouse.mk                  |    1 -
+ .../xdriver_xf86-input-void.mk                     |    1 -
+ .../xdriver_xf86-video-apm.mk                      |    1 -
+ .../xdriver_xf86-video-ark.mk                      |    1 -
+ .../xdriver_xf86-video-ast.mk                      |    1 -
+ .../xdriver_xf86-video-chips.mk                    |    1 -
+ .../xdriver_xf86-video-cirrus.mk                   |    1 -
+ .../xdriver_xf86-video-dummy.mk                    |    1 -
+ .../xdriver_xf86-video-fbdev.mk                    |    1 -
+ .../xdriver_xf86-video-geode.mk                    |    1 -
+ .../xdriver_xf86-video-glide.mk                    |    1 -
+ .../xdriver_xf86-video-i128.mk                     |    1 -
+ .../xdriver_xf86-video-i740.mk                     |    1 -
+ .../xdriver_xf86-video-neomagic.mk                 |    1 -
+ .../xdriver_xf86-video-newport.mk                  |    1 -
+ .../xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk |    1 -
+ .../xdriver_xf86-video-rendition.mk                |    1 -
+ .../xdriver_xf86-video-s3/xdriver_xf86-video-s3.mk |    1 -
+ .../xdriver_xf86-video-s3virge.mk                  |    1 -
+ .../xdriver_xf86-video-siliconmotion.mk            |    1 -
+ .../xdriver_xf86-video-sisusb.mk                   |    1 -
+ .../xdriver_xf86-video-suncg14.mk                  |    1 -
+ .../xdriver_xf86-video-suncg3.mk                   |    1 -
+ .../xdriver_xf86-video-suncg6.mk                   |    1 -
+ .../xdriver_xf86-video-sunffb.mk                   |    1 -
+ .../xdriver_xf86-video-sunleo.mk                   |    1 -
+ .../xdriver_xf86-video-suntcx.mk                   |    1 -
+ .../xdriver_xf86-video-tga.mk                      |    1 -
+ .../xdriver_xf86-video-trident.mk                  |    1 -
+ .../xdriver_xf86-video-tseng.mk                    |    1 -
+ .../xdriver_xf86-video-v4l.mk                      |    1 -
+ .../xdriver_xf86-video-vmware.mk                   |    1 -
+ .../xdriver_xf86-video-voodoo.mk                   |    1 -
+ .../xdriver_xf86-video-wsfb.mk                     |    1 -
+ package/x11r7/xfont_encodings/xfont_encodings.mk   |    1 -
+ .../xfont_font-adobe-100dpi.mk                     |    1 -
+ .../xfont_font-adobe-75dpi.mk                      |    1 -
+ .../xfont_font-adobe-utopia-100dpi.mk              |    1 -
+ .../xfont_font-adobe-utopia-75dpi.mk               |    1 -
+ .../xfont_font-adobe-utopia-type1.mk               |    1 -
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk |    1 -
+ .../xfont_font-arabic-misc.mk                      |    1 -
+ .../xfont_font-bh-100dpi/xfont_font-bh-100dpi.mk   |    1 -
+ .../xfont_font-bh-75dpi/xfont_font-bh-75dpi.mk     |    1 -
+ .../xfont_font-bh-lucidatypewriter-100dpi.mk       |    1 -
+ .../xfont_font-bh-lucidatypewriter-75dpi.mk        |    1 -
+ .../x11r7/xfont_font-bh-ttf/xfont_font-bh-ttf.mk   |    1 -
+ .../xfont_font-bh-type1/xfont_font-bh-type1.mk     |    1 -
+ .../xfont_font-bitstream-100dpi.mk                 |    1 -
+ .../xfont_font-bitstream-75dpi.mk                  |    1 -
+ .../xfont_font-bitstream-speedo.mk                 |    1 -
+ .../xfont_font-bitstream-type1.mk                  |    1 -
+ .../xfont_font-cronyx-cyrillic.mk                  |    1 -
+ .../xfont_font-cursor-misc.mk                      |    1 -
+ .../xfont_font-daewoo-misc.mk                      |    1 -
+ .../xfont_font-dec-misc/xfont_font-dec-misc.mk     |    1 -
+ .../xfont_font-ibm-type1/xfont_font-ibm-type1.mk   |    1 -
+ .../xfont_font-isas-misc/xfont_font-isas-misc.mk   |    1 -
+ .../xfont_font-jis-misc/xfont_font-jis-misc.mk     |    1 -
+ .../xfont_font-micro-misc/xfont_font-micro-misc.mk |    1 -
+ .../xfont_font-misc-cyrillic.mk                    |    1 -
+ .../xfont_font-misc-ethiopic.mk                    |    1 -
+ .../xfont_font-misc-meltho.mk                      |    1 -
+ .../xfont_font-misc-misc/xfont_font-misc-misc.mk   |    1 -
+ .../xfont_font-mutt-misc/xfont_font-mutt-misc.mk   |    1 -
+ .../xfont_font-schumacher-misc.mk                  |    1 -
+ .../xfont_font-screen-cyrillic.mk                  |    1 -
+ .../xfont_font-sony-misc/xfont_font-sony-misc.mk   |    1 -
+ .../xfont_font-sun-misc/xfont_font-sun-misc.mk     |    1 -
+ .../xfont_font-winitzki-cyrillic.mk                |    1 -
+ .../xfont_font-xfree86-type1.mk                    |    1 -
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk |    1 -
+ package/x11r7/xlib_libFS/xlib_libFS.mk             |    1 -
+ package/x11r7/xlib_libICE/xlib_libICE.mk           |    1 -
+ package/x11r7/xlib_libSM/xlib_libSM.mk             |    1 -
+ .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |    1 -
+ package/x11r7/xlib_libXau/xlib_libXau.mk           |    1 -
+ .../x11r7/xlib_libXcomposite/xlib_libXcomposite.mk |    1 -
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |    1 -
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   |    1 -
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    1 -
+ package/x11r7/xlib_libXext/xlib_libXext.mk         |    1 -
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.mk     |    1 -
+ .../x11r7/xlib_libXfontcache/xlib_libXfontcache.mk |    1 -
+ package/x11r7/xlib_libXi/xlib_libXi.mk             |    1 -
+ package/x11r7/xlib_libXinerama/xlib_libXinerama.mk |    1 -
+ package/x11r7/xlib_libXmu/xlib_libXmu.mk           |    1 -
+ package/x11r7/xlib_libXp/xlib_libXp.mk             |    1 -
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    1 -
+ .../xlib_libXprintAppUtil/xlib_libXprintAppUtil.mk |    1 -
+ .../x11r7/xlib_libXprintUtil/xlib_libXprintUtil.mk |    1 -
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk     |    1 -
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   |    1 -
+ package/x11r7/xlib_libXres/xlib_libXres.mk         |    1 -
+ package/x11r7/xlib_libXv/xlib_libXv.mk             |    1 -
+ package/x11r7/xlib_libXvMC/xlib_libXvMC.mk         |    1 -
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |    1 -
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |    1 -
+ package/x11r7/xlib_libdmx/xlib_libdmx.mk           |    1 -
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    1 -
+ package/x11r7/xlib_liboldX/xlib_liboldX.mk         |    1 -
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    1 -
+ package/x11r7/xlib_libxkbui/xlib_libxkbui.mk       |    1 -
+ package/x11r7/xlib_xtrans/xlib_xtrans.mk           |    1 -
+ .../xproto_applewmproto/xproto_applewmproto.mk     |    1 -
+ .../xproto_bigreqsproto/xproto_bigreqsproto.mk     |    1 -
+ .../xproto_compositeproto/xproto_compositeproto.mk |    1 -
+ .../x11r7/xproto_damageproto/xproto_damageproto.mk |    1 -
+ package/x11r7/xproto_dmxproto/xproto_dmxproto.mk   |    1 -
+ package/x11r7/xproto_dri2proto/xproto_dri2proto.mk |    1 -
+ .../x11r7/xproto_fixesproto/xproto_fixesproto.mk   |    1 -
+ .../xproto_fontcacheproto/xproto_fontcacheproto.mk |    1 -
+ .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    1 -
+ package/x11r7/xproto_glproto/xproto_glproto.mk     |    1 -
+ .../x11r7/xproto_inputproto/xproto_inputproto.mk   |    1 -
+ package/x11r7/xproto_kbproto/xproto_kbproto.mk     |    1 -
+ .../x11r7/xproto_printproto/xproto_printproto.mk   |    1 -
+ .../x11r7/xproto_randrproto/xproto_randrproto.mk   |    1 -
+ .../x11r7/xproto_recordproto/xproto_recordproto.mk |    1 -
+ .../x11r7/xproto_renderproto/xproto_renderproto.mk |    1 -
+ .../xproto_resourceproto/xproto_resourceproto.mk   |    1 -
+ .../xproto_scrnsaverproto/xproto_scrnsaverproto.mk |    1 -
+ .../x11r7/xproto_videoproto/xproto_videoproto.mk   |    1 -
+ .../xproto_windowswmproto/xproto_windowswmproto.mk |    1 -
+ .../x11r7/xproto_xcmiscproto/xproto_xcmiscproto.mk |    1 -
+ package/x11r7/xproto_xextproto/xproto_xextproto.mk |    1 -
+ .../xproto_xf86bigfontproto.mk                     |    1 -
+ .../xproto_xf86dgaproto/xproto_xf86dgaproto.mk     |    1 -
+ .../xproto_xf86driproto/xproto_xf86driproto.mk     |    1 -
+ .../xproto_xf86rushproto/xproto_xf86rushproto.mk   |    1 -
+ .../xproto_xf86vidmodeproto.mk                     |    1 -
+ .../xproto_xineramaproto/xproto_xineramaproto.mk   |    1 -
+ package/x11r7/xproto_xproto/xproto_xproto.mk       |    1 -
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    1 -
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk |    1 -
+ .../x11r7/xutil_util-macros/xutil_util-macros.mk   |    1 -
+ 231 files changed, 0 insertions(+), 231 deletions(-)
 
-diff --git a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
-index 55ddcdc..75c1135 100644
---- a/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
-+++ b/package/x11r7/xapp_xcursorgen/xapp_xcursorgen.mk
-@@ -10,4 +10,7 @@ XAPP_XCURSORGEN_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XCURSORGEN_AUTORECONF = NO
- XAPP_XCURSORGEN_DEPENDENCIES = libpng xlib_libX11 xlib_libXcursor
- 
-+HOST_XAPP_XCURSORGEN_DEPENDENCIES = host-libpng host-xlib_libX11 host-xlib_libXcursor
-+
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
-diff --git a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-index fe5c0da..b62b51c 100644
---- a/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-+++ b/package/x11r7/xdata_xcursor-themes/xdata_xcursor-themes.mk
-@@ -9,6 +9,6 @@ XDATA_XCURSOR_THEMES_SITE = http://xorg.freedesktop.org/releases/individual/data
- XDATA_XCURSOR_THEMES_AUTORECONF = NO
- XDATA_XCURSOR_THEMES_INSTALL_STAGING = YES
- XDATA_XCURSOR_THEMES_INSTALL_TARGET = YES
--XDATA_XCURSOR_THEMES_DEPENDENCIES = xlib_libXcursor
-+XDATA_XCURSOR_THEMES_DEPENDENCIES = xlib_libXcursor host-xapp_xcursorgen
- 
- $(eval $(call AUTOTARGETS))
-diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-index ffe1b4d..6f3a776 100644
---- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-+++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
-@@ -11,4 +11,7 @@ XLIB_LIBXCURSOR_AUTORECONF = NO
- XLIB_LIBXCURSOR_INSTALL_STAGING = YES
- XLIB_LIBXCURSOR_DEPENDENCIES = xlib_libX11 xlib_libXfixes xlib_libXrender xproto_xproto
- 
-+HOST_XLIB_LIBXCURSOR_DEPENDENCIES = host-xlib_libX11 host-xlib_libXfixes host-xlib_libXrender host-xproto_xproto
-+
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
-diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-index 2450bce..72cd848 100644
---- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-+++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
-@@ -11,4 +11,7 @@ XLIB_LIBXFIXES_AUTORECONF = NO
- XLIB_LIBXFIXES_INSTALL_STAGING = YES
- XLIB_LIBXFIXES_DEPENDENCIES = xproto_fixesproto xlib_libX11 xproto_xextproto xproto_xproto
- 
-+HOST_XLIB_LIBXFIXES_DEPENDENCIES = host-xproto_fixesproto host-xlib_libX11 host-xproto_xextproto host-xproto_xproto
-+
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
-diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-index 3649503..5778135 100644
---- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-+++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-@@ -12,4 +12,7 @@ XLIB_LIBXRENDER_INSTALL_STAGING = YES
- XLIB_LIBXRENDER_DEPENDENCIES = xlib_libX11 xproto_renderproto xproto_xproto
- XLIB_LIBXRENDER_CONF_OPT = --disable-malloc0returnsnull
- 
-+HOST_XLIB_LIBXRENDER_DEPENDENCIES = host-xlib_libX11 host-xproto_renderproto host-xproto_xproto
-+
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
-diff --git a/package/x11r7/xproto_fixesproto/xproto_fixesproto.mk b/package/x11r7/xproto_fixesproto/xproto_fixesproto.mk
-index d569de8..a91e6cb 100644
---- a/package/x11r7/xproto_fixesproto/xproto_fixesproto.mk
-+++ b/package/x11r7/xproto_fixesproto/xproto_fixesproto.mk
-@@ -12,3 +12,4 @@ XPROTO_FIXESPROTO_INSTALL_STAGING = YES
- XPROTO_FIXESPROTO_INSTALL_TARGET = NO
- 
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
-diff --git a/package/x11r7/xproto_renderproto/xproto_renderproto.mk b/package/x11r7/xproto_renderproto/xproto_renderproto.mk
-index 7960517..dac3424 100644
---- a/package/x11r7/xproto_renderproto/xproto_renderproto.mk
-+++ b/package/x11r7/xproto_renderproto/xproto_renderproto.mk
-@@ -12,3 +12,4 @@ XPROTO_RENDERPROTO_INSTALL_STAGING = YES
- XPROTO_RENDERPROTO_INSTALL_TARGET = NO
- 
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
+Patch is too large, so refusing to show it
