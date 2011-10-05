@@ -1,51 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Oct 2011 16:46:50 +0200
-Subject: [Buildroot] [git commit] toolchain/gdb: strip tarball component
-	when extracting
-Message-ID: <20111005150454.877F58DEC9@busybox.osuosl.org>
+Date: Wed, 5 Oct 2011 16:58:55 +0200
+Subject: [Buildroot] [git commit] gdb: add 7.2a version
+Message-ID: <20111005150455.167AC8DEC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c5da6f9553ac82fefbefb655ac0207bc58615ae4
+commit: http://git.buildroot.net/buildroot/commit/?id=228bde4dbe81254785ffa9986c81c79f5567c241
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For some tarballs of gdb (see next patch), the extracted directory is
-*not* named after the version string (eg. gdb-6.6a extract into gdb-6.6/)
-
-Create the appropriate directory first, then use --strip-{components,path}
-when extracting gdb (the same way it is done for the generic package
-infrastructure).
-
-At the same time, get rid of the snapshot special case, because:
- 1- it's no longer available in the menu
- 2- it would be handled by the above change
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/gdb.mk |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ toolchain/gdb/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index 4622616..85b892f 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -28,13 +28,8 @@ $(DL_DIR)/$(GDB_SOURCE):
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index a5dc71c..e593698 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -57,6 +57,11 @@ choice
+ 		depends on !BR2_bfin
+ 		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
  
- gdb-unpacked: $(GDB_DIR)/.unpacked
- $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
--	mkdir -p $(TOOLCHAIN_DIR)
--	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(TOOLCHAIN_DIR) $(TAR_OPTIONS) -
--ifeq ($(GDB_VERSION),snapshot)
--	GDB_REAL_DIR=$(shell \
--		tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1)
--	ln -sf $(TOOLCHAIN_DIR)/$(shell tar jtf $(DL_DIR)/$(GDB_SOURCE) | head -1 | cut -d"/" -f1) $(GDB_DIR)
--endif
-+	mkdir -p $(GDB_DIR)
-+	$(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(GDB_DIR) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
- ifneq ($(wildcard $(GDB_PATCH_DIR)),)
- 	support/scripts/apply-patches.sh $(GDB_DIR) $(GDB_PATCH_DIR) \*.patch $(GDB_PATCH_EXTRA)
- endif
++	config BR2_GDB_VERSION_7_2
++		bool "gdb 7.2.x"
++		depends on !BR2_bfin
++		select BR2_PTHREAD_DEBUG if !BR2_PTHREADS_NONE
++
+ 	config BR2_GDB_VERSION_7_3
+ 		bool "gdb 7.3.x"
+ 		depends on !BR2_bfin
+@@ -71,4 +76,5 @@ config BR2_GDB_VERSION
+ 	default "6.8a"     if BR2_GDB_VERSION_6_8
+ 	default "7.0.1a"   if BR2_GDB_VERSION_7_0_1
+ 	default "7.1a"     if BR2_GDB_VERSION_7_1
++	default "7.2a"     if BR2_GDB_VERSION_7_2
+ 	default "7.3.1"    if BR2_GDB_VERSION_7_3
