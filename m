@@ -1,36 +1,25 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 05 Oct 2011 15:31:29 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 05 Oct 2011 16:07:24 +0200
 Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
-In-Reply-To: <878vozr32n.fsf@macbook.be.48ers.dk>
-References: <4E856673.8020205@visionsystems.de>
- <20110930222606.2ed76af5@skate> <201110012324.54139.arnout@mind.be>
- <CAGm1_ktCdcObbXCYQryUOU5h=Sxpe+aE598NuLXU4HCQ9jCxrQ@mail.gmail.com>
- <878vozr32n.fsf@macbook.be.48ers.dk>
-Message-ID: <4E8C5C31.5040703@visionsystems.de>
+In-Reply-To: <1317719147-19210-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Tue, 4 Oct 2011 11:05:47
+ +0200")
+References: <1317719147-19210-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <874nznr0pv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 05.10.2011 15:16, schrieb Peter Korsgaard:
->>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
-> 
->  Yegor> Thanks for comments. I'll rework the patch next week. By the way
->  Yegor> shouldn't we get rid of 6.8 due to this issue:
->  Yegor> http://comments.gmane.org/gmane.comp.gdb.devel/30648. That was the
->  Yegor> reason for trying 7.x version.
-> 
-> Yes, probably. It seems we'll need to keep 6.6 around for bfin though.
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-I've sent a proper patch using git (there is still plenty to learn about). 
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> this version fixes compilation issue on some old build systems like
+ yegorslists> openSUSE 10.3 saying some host libraries were too old
 
-Have you looked at http://www.gnu.org/s/gdb/ 7.3 release notes?
+Thanks, committed. I dumped the minor version so it's 7.3 similar to how
+we're doing it for the kernel headers or busybox.
 
-" ia64 HP-UX (native) and Blackfin (target) support
-  GDBserver support for PowerPC LynxOS, i686 LynxOS, and Blackfin Linux "
-
-Can some one with blackfin test this? If it is working, we could remove the dependence on !blfn.
-
-Best regards,
-Yegor
+-- 
+Bye, Peter Korsgaard
