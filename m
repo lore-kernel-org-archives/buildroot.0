@@ -1,45 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Oct 2011 20:36:34 +0200
-Subject: [Buildroot] Bug in pkg-stats?
-In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F39DCFE877@AUSP01VMBX24.collaborationhost.net>
- (H. Hartley Sweeten's message of "Wed, 5 Oct 2011 12:09:41 -0500")
-References: <ADE657CA350FB648AAC2C43247A983F001F39DC56F52@AUSP01VMBX24.collaborationhost.net>
- <ADE657CA350FB648AAC2C43247A983F001F39DCFE6AE@AUSP01VMBX24.collaborationhost.net>
- <20111005084340.204661fb@skate>
- <ADE657CA350FB648AAC2C43247A983F001F39DCFE877@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <87sjn7nv4d.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 5 Oct 2011 19:13:13 +0200
+Subject: [Buildroot] [git commit] x11r7: make package globally visible
+Message-ID: <20111005183705.1B5728E226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "H" == H Hartley Sweeten <hartleys@visionengravers.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9bc7b1d4ae694b818f941410d1ff59316a2bba6e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+All x11r7 .mk files were only included into the global chain of
+makefile includes if the BR2_PACKAGE_XORG7 option was enabled. This is
+not the standard way to do things in Buildroot, and it even breaks
+things like running "make <pkg>-*" for a x11r7 package even if X.org
+is not selected.
 
- H>     version=""
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/x11r7.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
- H>     if grep -m1 "_VERSION" $i > /dev/null ; then
- H> 	version=`grep -m1 "_VERSION" $i | awk '{ print $NF }'`
- H>     else
- H> 	version="unknown"
- H>     fi
-
- H> This works fine for the packages that have _VERSION defined like:
-
- H> FOO_VERSION = x.y.z
-
- H> But it ends up with the whole line when the spaces are missing around the
- H> '='.  Oh well...
-
-You could simply do it awk:
-
-version=$(awk -F'=| ' '/_VERSION/ { print $NF } END { print "unknown" } ' \
-          $i | head -n 1)
-
-But it naturally still doesn't work for packages with multiple versions
-(like busybox) or where version is major.minor (like glib2).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/x11r7.mk b/package/x11r7/x11r7.mk
+index 7c7ae69..ea0363f 100644
+--- a/package/x11r7/x11r7.mk
++++ b/package/x11r7/x11r7.mk
+@@ -1,3 +1 @@
+-ifeq ($(BR2_PACKAGE_XORG7),y)
+ include package/x11r7/*/*.mk
+-endif
