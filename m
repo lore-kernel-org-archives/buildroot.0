@@ -1,37 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 5 Oct 2011 21:36:34 +0200
-Subject: [Buildroot] [git commit] libiconv: bump to 1.14
-Message-ID: <20111005202140.A0C048E226@busybox.osuosl.org>
+Date: Wed, 5 Oct 2011 22:02:16 +0200
+Subject: [Buildroot] [git commit] Add lame support in gstreamer
+Message-ID: <20111005202141.531D98E226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=efb5aefbfe5221a3e49702c02ec80428311dc17a
+commit: http://git.buildroot.net/buildroot/commit/?id=63b7450072c72a1b2f4af6c893e70dd9658e9fb3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Maxime Ripard <maxime@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libiconv/libiconv.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ package/multimedia/gst-plugins-ugly/Config.in      |    4 ++++
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    7 +++++++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
-index 9d02a4a..48a380f 100644
---- a/package/libiconv/libiconv.mk
-+++ b/package/libiconv/libiconv.mk
-@@ -3,12 +3,10 @@
- # libiconv
- #
- #############################################################
--LIBICONV_VERSION = 1.12
-+LIBICONV_VERSION = 1.14
- LIBICONV_SOURCE = libiconv-$(LIBICONV_VERSION).tar.gz
- LIBICONV_SITE = $(BR2_GNU_MIRROR)/libiconv
--LIBICONV_AUTORECONF = NO
- LIBICONV_INSTALL_STAGING = YES
--LIBICONV_INSTALL_TARGET = YES
+diff --git a/package/multimedia/gst-plugins-ugly/Config.in b/package/multimedia/gst-plugins-ugly/Config.in
+index 94e2b9d..c0046e4 100644
+--- a/package/multimedia/gst-plugins-ugly/Config.in
++++ b/package/multimedia/gst-plugins-ugly/Config.in
+@@ -38,6 +38,10 @@ config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_SYNAESTHESIA
  
- # Remove not used preloadable libiconv.so
- define LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
+ comment "plugins with external dependencies (there may be more available)"
+ 
++config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_LAME
++	bool "lame (*.mp3 audio encoder)"
++	select BR2_PACKAGE_LAME
++
+ config BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD
+ 	bool "mad (*.mp3 audio)"
+ 	select BR2_PACKAGE_LIBID3TAG
+diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+index 5237bc9..e46b515 100644
+--- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
++++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+@@ -60,6 +60,13 @@ else
+ GST_PLUGINS_UGLY_CONF_OPT += --disable-synaesthesia
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_LAME),y)
++GST_PLUGINS_UGLY_CONF_OPT += --enable-lame
++GST_PLUGINS_UGLY_DEPENDENCIES += lame
++else
++GST_PLUGINS_UGLY_CONF_OPT += --disable-lame
++endif
++
+ ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD),y)
+ GST_PLUGINS_UGLY_CONF_OPT += --enable-mad
+ GST_PLUGINS_UGLY_DEPENDENCIES += libid3tag libmad
