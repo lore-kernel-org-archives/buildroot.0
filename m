@@ -1,33 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 05 Oct 2011 16:28:35 +0200
-Subject: [Buildroot] [PATCH] gdb: bump to 7.3.1
-In-Reply-To: <4E8C5C31.5040703@visionsystems.de> (Yegor Yefremov's message of
- "Wed, 05 Oct 2011 15:31:29 +0200")
-References: <4E856673.8020205@visionsystems.de>
- <20110930222606.2ed76af5@skate> <201110012324.54139.arnout@mind.be>
- <CAGm1_ktCdcObbXCYQryUOU5h=Sxpe+aE598NuLXU4HCQ9jCxrQ@mail.gmail.com>
- <878vozr32n.fsf@macbook.be.48ers.dk>
- <4E8C5C31.5040703@visionsystems.de>
-Message-ID: <87zkhfpl64.fsf@macbook.be.48ers.dk>
+Date: Wed, 05 Oct 2011 16:47:08 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain/gdb: strip tarball component
+	when extracting
+In-Reply-To: <1315951050-19272-2-git-send-email-yann.morin.1998@anciens.enib.fr>
+ (Yann E. MORIN's message of "Tue, 13 Sep 2011 23:57:29 +0200")
+References: <1315951050-19272-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+ <1315951050-19272-2-git-send-email-yann.morin.1998@anciens.enib.fr>
+Message-ID: <87vcs3pkb7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@anciens.enib.fr> writes:
 
-Hi,
+ Yann> For some tarballs of gdb (see next patch), the extracted directory is
+ Yann> *not* named after the version string (eg. gdb-6.6a extract into gdb-6.6/)
 
- Yegor> Have you looked at http://www.gnu.org/s/gdb/ 7.3 release notes?
+ Yann> Create the appropriate directory first, then use --strip-{components,path}
+ Yann> when extracting gdb (the same way it is done for the generic package
+ Yann> infrastructure).
 
- Yegor> " ia64 HP-UX (native) and Blackfin (target) support
- Yegor>   GDBserver support for PowerPC LynxOS, i686 LynxOS, and Blackfin Linux "
+ Yann> At the same time, get rid of the snapshot special case, because:
+ Yann>  1- it's no longer available in the menu
+ Yann>  2- it would be handled by the above change
 
- Yegor> Can some one with blackfin test this? If it is working, we could
- Yegor> remove the dependence on !blfn.
-
-Yes, I noticed as well. Bfin users, please speak up.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
