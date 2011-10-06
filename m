@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 6 Oct 2011 09:52:33 +0200
-Subject: [Buildroot] Bug in pkg-stats?
-In-Reply-To: <87obxvntns.fsf@macbook.be.48ers.dk>
-References: <ADE657CA350FB648AAC2C43247A983F001F39DC56F52@AUSP01VMBX24.collaborationhost.net>
- <ADE657CA350FB648AAC2C43247A983F001F39DCFE6AE@AUSP01VMBX24.collaborationhost.net>
- <20111005084340.204661fb@skate>
- <ADE657CA350FB648AAC2C43247A983F001F39DCFE877@AUSP01VMBX24.collaborationhost.net>
- <87sjn7nv4d.fsf@macbook.be.48ers.dk>
- <ADE657CA350FB648AAC2C43247A983F001F39DCFE910@AUSP01VMBX24.collaborationhost.net>
- <87obxvntns.fsf@macbook.be.48ers.dk>
-Message-ID: <20111006095233.200f977e@skate>
+Date: Thu, 6 Oct 2011 10:16:34 +0200
+Subject: [Buildroot] [PATCH] package: add the duma memory debugging
+ library
+In-Reply-To: <201110051935.41682.yann.morin.1998@anciens.enib.fr>
+References: <b290fe079ce824d7574c1ad5f41987e21becc92e.1317795453.git.baruch@tkos.co.il>
+ <201110051935.41682.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20111006101634.601b9e9f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 05 Oct 2011 21:08:07 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Le Wed, 5 Oct 2011 19:35:41 +0200,
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
 
-> Well, I think the info in useful, but as buildroot already knows the
-> version (except for unconfigured packages), wouldn't it make more
-> sense to add a <pkg>-version target to GENTARGETS and use that
-> instead?
+> > +	$(MAKE1) CC=$(TARGET_CC) CXX=$(TARGET_CXX) AR=$(TARGET_AR) \
+> > +		RANLIB=$(TARGET_RANLIB) DUMA_OPTIONS=$(strip $(DUMA_OPTIONS)) \
+> > +		$(DUMA_CPP) -C $(@D)
+> 
+> You forgot to pass HOSTCC, introduced in duma-2_5_15-cross-compile.patch
 
-I agree here. Grepping/seding/awking into the .mk file sounds horrible
-and does not work for package that do:
+Probably something like:
 
-pkg_VERSION = $(pkg_VERSION_MAJOR).5
+	$(MAKE1) $(TARGET_CONFIGURE_OPTS) DUMA_OPTIONS=... -C $(@D)
 
-So, yes, if you want to do this, please add a <pkg>-show-version in
-GENTARGETS, just as we have <pkg>-show-depends. Of course, this will
-slow down quite a bit the pkg-stats script, but we don't really need
-this script to be fast.
-
-Regards,
+would be even better. But then, the duma-2_5_15-cross-compile.patch
+would have to use CC_FOR_BUILD instead of HOSTCC to find the location
+of the native host compiler.
 
 Thomas
 -- 
