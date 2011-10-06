@@ -1,28 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Oct 2011 21:36:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 4117] 2011.08: default config with qt + ssl.
-	Linking fails
-In-Reply-To: <bug-4117-163@https.bugs.busybox.net/>
-References: <bug-4117-163@https.bugs.busybox.net/>
-Message-ID: <20111006213641.0E29F8E1A3@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 6 Oct 2011 23:51:16 +0200
+Subject: [Buildroot] [PATCHv2] package: add the duma memory debugging
+ library
+In-Reply-To: <201110062317.49455.yann.morin.1998@anciens.enib.fr>
+References: <0531bbe91bfb489fd29c9fe994fb11d7b802eeb6.1317891858.git.baruch@tkos.co.il>
+ <201110062317.49455.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20111006215116.GG24034@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4117
+Hi Yann,
 
-Yann E. MORIN <yann.morin.1998@anciens.enib.fr> changed:
+On Thu, Oct 06, 2011 at 11:17:49PM +0200, Yann E. MORIN wrote:
+> On Thursday 06 October 2011 11:15:46 Baruch Siach wrote:
+> > Acked-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+> 
+> Where did you see that I acked that patch? "looks good" does not mean
+> "acked-by". Besides, I made a comment on your v1, so I definitely did
+> not Ack it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |bachmann at tofwerk.com
+I misread your comment, sorry.
 
---- Comment #5 from Yann E. MORIN <yann.morin.1998@anciens.enib.fr>  ---
-*** Bug 4249 has been marked as a duplicate of this bug. ***
+> But, now, you can add my:
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+
+Thanks.
+baruch
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
