@@ -1,24 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  6 Oct 2011 12:39:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 4117] 2011.08: default config with qt + ssl.
-	Linking fails
-In-Reply-To: <bug-4117-163@https.bugs.busybox.net/>
-References: <bug-4117-163@https.bugs.busybox.net/>
-Message-ID: <20111006123921.898288E263@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 06 Oct 2011 14:46:38 +0200
+Subject: [Buildroot] [PATCH] picocom: remove useless arguments from
+	GENTARGETS
+In-Reply-To: <1317904752-21507-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Thu, 6 Oct 2011 14:39:12 +0200")
+References: <1317904752-21507-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87ipo2479t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4117
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
---- Comment #3 from AWa. <awa_wp@wp.pl>  ---
-Created attachment 3619
-  --> https://bugs.busybox.net/attachment.cgi?id=3619
-Buildroot configuration file.
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
