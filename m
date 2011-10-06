@@ -1,58 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Oct 2011 10:47:36 +0200
-Subject: [Buildroot] [PATCH 4/4] Add the libplayer package
-In-Reply-To: <20111006101928.294b6580@skate> (Thomas Petazzoni's message of
- "Thu, 6 Oct 2011 10:19:28 +0200")
-References: <cover.1317636624.git.maxime.ripard@free-electrons.com>
- <cover.1317636624.git.maxime.ripard@free-electrons.com>
- <d0ce7b4624a0a4fc886c8fcbc9c6730e7a931981.1317636624.git.maxime.ripard@free-electrons.com>
- <871uurnqhp.fsf@macbook.be.48ers.dk> <20111006101928.294b6580@skate>
-Message-ID: <87r52q4ic7.fsf@macbook.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 6 Oct 2011 10:49:37 +0200
+Subject: [Buildroot] [PATCH] package: add the duma memory debugging
+ library
+In-Reply-To: <20111006101634.601b9e9f@skate>
+References: <b290fe079ce824d7574c1ad5f41987e21becc92e.1317795453.git.baruch@tkos.co.il>
+ <201110051935.41682.yann.morin.1998@anciens.enib.fr>
+ <20111006101634.601b9e9f@skate>
+Message-ID: <20111006084936.GB1494@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas, Yann,
 
-Hi,
+On Thu, Oct 06, 2011 at 10:16:34AM +0200, Thomas Petazzoni wrote:
+> Le Wed, 5 Oct 2011 19:35:41 +0200,
+> "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
+> 
+> > > +	$(MAKE1) CC=$(TARGET_CC) CXX=$(TARGET_CXX) AR=$(TARGET_AR) \
+> > > +		RANLIB=$(TARGET_RANLIB) DUMA_OPTIONS=$(strip $(DUMA_OPTIONS)) \
+> > > +		$(DUMA_CPP) -C $(@D)
+> > 
+> > You forgot to pass HOSTCC, introduced in duma-2_5_15-cross-compile.patch
 
- Maxime> +comment "Libplayer requires a toolchain with LARGEFILE support"
- Maxime> +	depends on !BR2_LARGEFILE
- Maxime> +
- >> 
- >> This should go under the 'if BR2_PACKAGE_LIBPLAYER' conditional.
+Well, HOSTCC is set in the top Makefile.
 
- Thomas> Hu ? We want this comment to be shown when libplayer is *not* enabled,
- Thomas> to let the user know that if (s)he doesn't see libplayer, it's because
- Thomas> largefile is not enabled. So definitely, we don't want this comment to
- Thomas> depend on BR2_PACKAGE_LIBPLAYER. Or am I missing something here ?
+> Probably something like:
+> 
+> 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) DUMA_OPTIONS=... -C $(@D)
+> 
+> would be even better. But then, the duma-2_5_15-cross-compile.patch
+> would have to use CC_FOR_BUILD instead of HOSTCC to find the location
+> of the native host compiler.
 
-No, just me not thinking. Nothing to see here, move along .. ;)
+Looks better. I'll update the patch. Thanks.
 
- >> Does libplayer do anything sensible with both backends disabled or do we
- >> need to depend on BR2_PACKAGE_MPLAYER || BR2_PACKAGE_GSTREAMER?
-
- Thomas> I did ask the same question to Maxime, and libplayer builds fine with
- Thomas> neither backends enabled. It probably doesn't do anything useful, but I
- Thomas> would say that it's the user responsibility here.
-
-Ok.
-
- >> So it seems you need to depend on BR2_LARGEFILE.
-
- Thomas> Which it does:
-
- Maxime> +config BR2_PACKAGE_LIBPLAYER
- Maxime> +	depends on BR2_LARGEFILE
-
-Argh, you're right. I need some more sleep it seems (or atleast stop
-trying to do 5 things at once). When testing, I didn't run menuconfig
-but just 'make libplayer' and my toolchain didn't have largefile
-support.
-
-Sorry about the noise, will commit now - Thanks both.
+baruch
 
 -- 
-Bye, Peter Korsgaard
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
