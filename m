@@ -1,29 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Oct 2011 14:48:15 +0200
-Subject: [Buildroot] [git commit] libplayer: remove unneeded extra
-	AUTOTARGETS parameters
-Message-ID: <20111006124854.7D2048E25C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 06 Oct 2011 14:49:21 +0200
+Subject: [Buildroot] [PATCH] pkg-stats: update script location in usage
+	instructions
+In-Reply-To: <1317904647-21410-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Thu, 6 Oct 2011 14:37:27 +0200")
+References: <1317904647-21410-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87ehyq475a.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=77ffba834f81a1fb6a9d499c004eb9a8cd82085a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/libplayer/libplayer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
-diff --git a/package/multimedia/libplayer/libplayer.mk b/package/multimedia/libplayer/libplayer.mk
-index 1552431..093821e 100644
---- a/package/multimedia/libplayer/libplayer.mk
-+++ b/package/multimedia/libplayer/libplayer.mk
-@@ -41,4 +41,4 @@ ifeq ($(BR2_PACKAGE_LIBPLAYER_PYTHON),y)
- 	LIBPLAYER_CONF_OPT += --enable-binding-python
- endif
- 
--$(eval $(call AUTOTARGETS,package,libplayer))
-+$(eval $(call AUTOTARGETS))
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
