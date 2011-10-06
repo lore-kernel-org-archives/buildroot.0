@@ -1,26 +1,32 @@
-From: Otavio Augusto <otavioti@gmail.com>
-Date: Thu, 6 Oct 2011 14:20:51 -0300
-Subject: [Buildroot] PHP not loading modules
-Message-ID: <CAJ20prh7tA=To9yyg+T2fMSY+TAohd0vqcZgW5pz3a6Vz63FXA@mail.gmail.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Thu, 6 Oct 2011 15:35:32 -0500
+Subject: [Buildroot] [PATCH] libevent: bump version to 2.0.14
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F39DCFEC78@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I install the php package e compile my own module wiht the tool chain
-of buildroot.
-The module is not loading by php
-How do to active load dynamic module in php ?
+Released 2011-08-31.  Mostly bugfixes.
 
+Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 
-php 5.2.17
-buildroot 2011.08
-.
-Tank 's
+---
 
--- 
-Otavio Augusto
----------------------
-Consultor de TI
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index 31122fe..76fb627 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -3,9 +3,9 @@
+ # libevent
+ #
+ #############################################################
+-LIBEVENT_VERSION = 2.0.13
++LIBEVENT_VERSION = 2.0.14
+ LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+-LIBEVENT_SITE = http://monkey.org/~provos/
++LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
+ 
+ LIBEVENT_AUTORECONF = NO
+ LIBEVENT_INSTALL_STAGING = YES
