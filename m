@@ -1,31 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Oct 2011 07:20:51 +0200
-Subject: [Buildroot] [git commit] pkg-stats: update list of .mk to ignore
-Message-ID: <20111006064504.75B438E256@busybox.osuosl.org>
+Date: Thu, 6 Oct 2011 07:20:07 +0200
+Subject: [Buildroot] [git commit] less: bump version to 444
+Message-ID: <20111006064504.19A6F8E256@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b706e4d0e46a047d84554fe03bf4c2f2c5d1cf66
+commit: http://git.buildroot.net/buildroot/commit/?id=b426e34dbc6908774e311023e6b2e0e4c6817f84
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+less-444 was released on 9 Jun 2011.
 
 Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- support/scripts/pkg-stats |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/less/less.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 30a21f2..0a030c1 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -80,6 +80,7 @@ for i in $(find package/ -name '*.mk') ; do
-     if test \
- 	$i = "package/java/java.mk" -o \
- 	$i = "package/games/games.mk" -o \
-+	$i = "package/gtk2-themes/gtk2-themes.mk" -o \
- 	$i = "package/multimedia/multimedia.mk" -o \
- 	$i = "package/customize/customize.mk" -o \
- 	$i = "package/matchbox/matchbox.mk" -o \
+diff --git a/package/less/less.mk b/package/less/less.mk
+index d20c232..5f74f5c 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LESS_VERSION = 443
++LESS_VERSION = 444
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_DEPENDENCIES = ncurses
+ 
