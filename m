@@ -1,60 +1,120 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 06 Oct 2011 11:08:59 +0200
-Subject: [Buildroot] [PATCH 4/4] Add the libplayer package
-In-Reply-To: <d0ce7b4624a0a4fc886c8fcbc9c6730e7a931981.1317636624.git.maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Mon, 3 Oct 2011 12:10:34 +0200")
-References: <cover.1317636624.git.maxime.ripard@free-electrons.com>
- <cover.1317636624.git.maxime.ripard@free-electrons.com>
- <d0ce7b4624a0a4fc886c8fcbc9c6730e7a931981.1317636624.git.maxime.ripard@free-electrons.com>
-Message-ID: <87mxde4hck.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 6 Oct 2011 11:13:31 +0200
+Subject: [Buildroot] [git commit] Add the libplayer package
+Message-ID: <20111006091346.64CEA8E189@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ddb3e10707eb5da80d0a9d57d251fbf626127178
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> From: Maxime Ripard <maxime@free-electrons.com>
- Maxime> Signed-off-by: Maxime Ripard <maxime@free-electrons.com>
+[Peter: use select instead of depends for mplayer/gstreamer, small tweaks]
+Signed-off-by: Maxime Ripard <maxime@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/Config.in              |    1 +
+ package/multimedia/libplayer/Config.in    |   30 +++++++++++++++++++
+ package/multimedia/libplayer/libplayer.mk |   44 +++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+), 0 deletions(-)
 
-Committed with minor changes, thanks.
-
- Maxime> diff --git a/package/multimedia/libplayer/Config.in b/package/multimedia/libplayer/Config.in
- Maxime> new file mode 100644
- Maxime> index 0000000..38315ec
- Maxime> --- /dev/null
- Maxime> +++ b/package/multimedia/libplayer/Config.in
- Maxime> @@ -0,0 +1,27 @@
- Maxime> +config BR2_PACKAGE_LIBPLAYER
- Maxime> +	depends on BR2_LARGEFILE
- Maxime> +	bool "libplayer"
- Maxime> +	help
- Maxime> +	  libplayer provides a generic A/V API that relies on various multimedia
- Maxime> +	  player for Linux systems. It currently supports MPlayer, xine VLC and
- Maxime> +	  GStreamer only
- Maxime> +
- Maxime> +	  http://libplayer.geexbox.org/
- Maxime> +
- Maxime> +comment "Libplayer requires a toolchain with LARGEFILE support"
- Maxime> +	depends on !BR2_LARGEFILE
- Maxime> +
-
-This should be at the bottom of the file (after the sub options),
-otherwise those don't get indented under BR2_PACKAGE_LIBPLAYER
-
- Maxime> +if BR2_PACKAGE_LIBPLAYER
- Maxime> +config BR2_PACKAGE_LIBPLAYER_MPLAYER
- Maxime> +	depends on BR2_PACKAGE_MPLAYER
- Maxime> +	bool "Libplayer mplayer backend"
-
-It's not really clear for people who don't know the libplayer
-implementation that they need to go and enable mplayer/gstreamer to get
-libplayer to do anything useful, so I've changed these 'depends on' to
-select like we normally do for libraries (yes, mplayer isn't really a
-library, but here it is used as one).
-
-At the same time I tweaked the option names a bit.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 40760b7..7b63c14 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -26,6 +26,7 @@ source "package/multimedia/libmms/Config.in"
+ source "package/multimedia/libmpd/Config.in"
+ source "package/multimedia/libmpeg2/Config.in"
+ source "package/multimedia/libogg/Config.in"
++source "package/multimedia/libplayer/Config.in"
+ source "package/multimedia/libreplaygain/Config.in"
+ source "package/multimedia/libsamplerate/Config.in"
+ source "package/multimedia/libsndfile/Config.in"
+diff --git a/package/multimedia/libplayer/Config.in b/package/multimedia/libplayer/Config.in
+new file mode 100644
+index 0000000..c9add53
+--- /dev/null
++++ b/package/multimedia/libplayer/Config.in
+@@ -0,0 +1,30 @@
++config BR2_PACKAGE_LIBPLAYER
++	depends on BR2_LARGEFILE
++	bool "libplayer"
++	help
++	  libplayer provides a generic A/V API that relies on various multimedia
++	  player for Linux systems. It currently supports MPlayer, xine VLC and
++	  GStreamer only
++
++	  http://libplayer.geexbox.org/
++
++if BR2_PACKAGE_LIBPLAYER
++config BR2_PACKAGE_LIBPLAYER_MPLAYER
++	bool "mplayer backend"
++	select BR2_PACKAGE_MPLAYER
++
++config BR2_PACKAGE_LIBPLAYER_GSTREAMER
++	bool "gstreamer backend"
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_GSTREAMER
++
++comment "gstreamer backend requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
++
++config BR2_PACKAGE_LIBPLAYER_PYTHON
++	depends on BR2_PACKAGE_PYTHON
++	bool "Libplayer python bindings"
++endif
++
++comment "libplayer requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/multimedia/libplayer/libplayer.mk b/package/multimedia/libplayer/libplayer.mk
+new file mode 100644
+index 0000000..1552431
+--- /dev/null
++++ b/package/multimedia/libplayer/libplayer.mk
+@@ -0,0 +1,44 @@
++#############################################################
++#
++# libplayer
++#
++#############################################################
++LIBPLAYER_VERSION = 2.0.1
++LIBPLAYER_SITE = http://libplayer.geexbox.org/releases/
++LIBPLAYER_SOURCE = libplayer-$(LIBPLAYER_VERSION).tar.bz2
++
++# When passing the standard buildroot configure arguments, the configure script
++# breaks on --target and --host options. Thus we need to define a configure cmd
++# ourselves.
++define LIBPLAYER_CONFIGURE_CMDS
++	(cd $(@D) && rm -rf config.cache && \
++	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_ARGS) \
++	./configure \
++		--prefix=/usr \
++		--cross-compile \
++		$(SHARED_STATIC_LIBS_OPTS) \
++		$(QUIET) $(LIBPLAYER_CONF_OPT) \
++	)
++endef
++
++ifeq ($(BR2_PACKAGE_LIBPLAYER_MPLAYER),y)
++	LIBPLAYER_DEPENDENCIES += mplayer
++	LIBPLAYER_CONF_OPT += --enable-mplayer
++else
++	LIBPLAYER_CONF_OPT += --disable-mplayer
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPLAYER_GSTREAMER),y)
++	LIBPLAYER_DEPENDENCIES += gstreamer
++	LIBPLAYER_CONF_OPT += --enable-gstreamer
++else
++	LIBPLAYER_CONF_OPT += --disable-gstreamer
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPLAYER_PYTHON),y)
++	LIBPLAYER_DEPENDENCIES += python
++	LIBPLAYER_CONF_OPT += --enable-binding-python
++endif
++
++$(eval $(call AUTOTARGETS,package,libplayer))
