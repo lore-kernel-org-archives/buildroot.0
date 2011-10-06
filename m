@@ -1,120 +1,179 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 6 Oct 2011 11:13:31 +0200
-Subject: [Buildroot] [git commit] Add the libplayer package
-Message-ID: <20111006091346.64CEA8E189@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  6 Oct 2011 11:15:46 +0200
+Subject: [Buildroot] [PATCHv2] package: add the duma memory debugging library
+Message-ID: <0531bbe91bfb489fd29c9fe994fb11d7b802eeb6.1317891858.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ddb3e10707eb5da80d0a9d57d251fbf626127178
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Peter: use select instead of depends for mplayer/gstreamer, small tweaks]
-Signed-off-by: Maxime Ripard <maxime@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Acked-by: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/multimedia/Config.in              |    1 +
- package/multimedia/libplayer/Config.in    |   30 +++++++++++++++++++
- package/multimedia/libplayer/libplayer.mk |   44 +++++++++++++++++++++++++++++
- 3 files changed, 75 insertions(+), 0 deletions(-)
+Changes from v1:
+	When no C++ support disable it in the library itself
+	Add '/usr' to the install prefix
+	Use the standard TARGET_CONFIGURE_OPTS instead of open coding
+	Adapt the cross compile patch to use CC_FOR_BUILD
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 40760b7..7b63c14 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -26,6 +26,7 @@ source "package/multimedia/libmms/Config.in"
- source "package/multimedia/libmpd/Config.in"
- source "package/multimedia/libmpeg2/Config.in"
- source "package/multimedia/libogg/Config.in"
-+source "package/multimedia/libplayer/Config.in"
- source "package/multimedia/libreplaygain/Config.in"
- source "package/multimedia/libsamplerate/Config.in"
- source "package/multimedia/libsndfile/Config.in"
-diff --git a/package/multimedia/libplayer/Config.in b/package/multimedia/libplayer/Config.in
+ package/Config.in                            |    1 +
+ package/duma/Config.in                       |   15 ++++++++++
+ package/duma/duma-2_5_15-cross-compile.patch |   36 +++++++++++++++++++++++++
+ package/duma/duma-2_5_15-separate-cpp.patch  |   23 ++++++++++++++++
+ package/duma/duma.mk                         |   37 ++++++++++++++++++++++++++
+ 5 files changed, 112 insertions(+), 0 deletions(-)
+ create mode 100644 package/duma/Config.in
+ create mode 100644 package/duma/duma-2_5_15-cross-compile.patch
+ create mode 100644 package/duma/duma-2_5_15-separate-cpp.patch
+ create mode 100644 package/duma/duma.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 173e19d..de7d353 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -20,6 +20,7 @@ menu "Debugging, profiling and benchmark"
+ source "package/bonnie/Config.in"
+ source "package/dhrystone/Config.in"
+ source "package/dmalloc/Config.in"
++source "package/duma/Config.in"
+ source "package/kexec/Config.in"
+ source "package/lmbench/Config.in"
+ source "package/lsof/Config.in"
+diff --git a/package/duma/Config.in b/package/duma/Config.in
 new file mode 100644
-index 0000000..c9add53
+index 0000000..7f7a765
 --- /dev/null
-+++ b/package/multimedia/libplayer/Config.in
-@@ -0,0 +1,30 @@
-+config BR2_PACKAGE_LIBPLAYER
-+	depends on BR2_LARGEFILE
-+	bool "libplayer"
++++ b/package/duma/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_DUMA
++	bool "duma"
 +	help
-+	  libplayer provides a generic A/V API that relies on various multimedia
-+	  player for Linux systems. It currently supports MPlayer, xine VLC and
-+	  GStreamer only
++	  D.U.M.A. - Detect Unintended Memory Access. A fork of the Electric
++	  Fence library. Detects buffer overflow and underflow, and also memory
++	  leaks.
 +
-+	  http://libplayer.geexbox.org/
++	  http://duma.sourceforge.net
 +
-+if BR2_PACKAGE_LIBPLAYER
-+config BR2_PACKAGE_LIBPLAYER_MPLAYER
-+	bool "mplayer backend"
-+	select BR2_PACKAGE_MPLAYER
++if BR2_PACKAGE_DUMA
 +
-+config BR2_PACKAGE_LIBPLAYER_GSTREAMER
-+	bool "gstreamer backend"
-+	depends on BR2_USE_WCHAR # glib2
-+	select BR2_PACKAGE_GSTREAMER
++config BR2_PACKAGE_DUMA_NO_LEAKDETECTION
++	bool "disable memory leak detection"
 +
-+comment "gstreamer backend requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
++endif # BR2_PACKAGE_DUMA
+diff --git a/package/duma/duma-2_5_15-cross-compile.patch b/package/duma/duma-2_5_15-cross-compile.patch
+new file mode 100644
+index 0000000..9c44c7f
+--- /dev/null
++++ b/package/duma/duma-2_5_15-cross-compile.patch
+@@ -0,0 +1,36 @@
++Allow cross compilation. Adapted from crosstool-ng.
 +
-+config BR2_PACKAGE_LIBPLAYER_PYTHON
-+	depends on BR2_PACKAGE_PYTHON
-+	bool "Libplayer python bindings"
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -durN duma_2_5_15.orig/GNUmakefile duma_2_5_15/GNUmakefile
++--- duma_2_5_15.orig/GNUmakefile	2008-08-03 21:22:38.000000000 +0200
+++++ duma_2_5_15/GNUmakefile	2009-06-19 15:32:23.000000000 +0200
++@@ -93,10 +93,6 @@
++ # also define 'WIN32'
++ 
++ # some defaults:
++-CC=gcc
++-CXX=g++
++-AR=ar
++-RANLIB=ranlib
++ INSTALL=install
++ RM=rm
++ RMFORCE=rm -f
++@@ -471,7 +467,7 @@
++ 
++ createconf$(EXEPOSTFIX): createconf.o
++ 	- $(RMFORCE) createconf$(EXEPOSTFIX)
++-	$(CC) $(CFLAGS) $(DUMA_OPTIONS) createconf.o -o createconf$(EXEPOSTFIX)
+++	$(CC_FOR_BUILD) $(HOSTCFLAGS) $(DUMA_OPTIONS) createconf.o -o createconf$(EXEPOSTFIX)
++ 
++ tstheap$(EXEPOSTFIX): libduma.a tstheap.o
++ 	- $(RMFORCE) tstheap$(EXEPOSTFIX)
++@@ -532,7 +528,7 @@
++ # define rules how to build objects for createconf
++ #
++ createconf.o:
++-	$(CC) $(CFLAGS) $(DUMA_OPTIONS) -c createconf.c -o $@
+++	$(CC_FOR_BUILD) $(HOSTCFLAGS) $(DUMA_OPTIONS) -c createconf.c -o $@
++ 
++ 
++ #
+diff --git a/package/duma/duma-2_5_15-separate-cpp.patch b/package/duma/duma-2_5_15-separate-cpp.patch
+new file mode 100644
+index 0000000..ad10882
+--- /dev/null
++++ b/package/duma/duma-2_5_15-separate-cpp.patch
+@@ -0,0 +1,23 @@
++Allow build without C++ support. Taken from crosstool-ng.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++diff -durN duma_2_5_15.orig/GNUmakefile duma_2_5_15/GNUmakefile
++--- duma_2_5_15.orig/GNUmakefile	2009-06-19 16:41:53.000000000 +0200
+++++ duma_2_5_15/GNUmakefile	2009-06-19 16:43:53.000000000 +0200
++@@ -289,9 +289,13 @@
++ 	dumatest.c tstheap.c thread-test.c testmt.c dumatestpp.cpp testoperators.cpp \
++ 	createconf.c
++ 
++-OBJECTS=dumapp.o duma.o sem_inc.o print.o
+++OBJECTS = duma.o sem_inc.o print.o
+++SO_OBJECTS = duma_so.o sem_inc_so.o print_so.o
++ 
++-SO_OBJECTS=dumapp_so.o duma_so.o sem_inc_so.o print_so.o
+++ifeq ($(DUMA_CPP),1)
+++OBJECTS += dumapp.o
+++SO_OBJECTS += dumapp_so.o
+++endif
++ 
++ # Make all the top-level targets the makefile knows about.
++ all:	libduma.a tstheap$(EXEPOSTFIX) dumatest$(EXEPOSTFIX) thread-test$(EXEPOSTFIX) testmt$(EXEPOSTFIX) dumatestpp$(EXEPOSTFIX) testoperators$(EXEPOSTFIX) $(DUMA_DYN_DEPS)
+diff --git a/package/duma/duma.mk b/package/duma/duma.mk
+new file mode 100644
+index 0000000..1748e60
+--- /dev/null
++++ b/package/duma/duma.mk
+@@ -0,0 +1,37 @@
++#############################################################
++#
++# duma
++#
++#############################################################
++DUMA_VERSION = 2_5_15
++DUMA_SOURCE = duma_$(DUMA_VERSION).tar.gz
++DUMA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/duma
++DUMA_INSTALL_STAGING = YES
++
++DUMA_OPTIONS = $(if $(BR2_PACKAGE_DUMA_NO_LEAKDETECTION), \
++			-DDUMA_LIB_NO_LEAKDETECTION)
++
++ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
++DUMA_CPP = DUMA_CPP=1
++else
++DUMA_CPP =
++DUMA_OPTIONS += -DDUMA_SO_NO_CPP_SUPPORT -DDUMA_LIB_NO_CPP_SUPPORT
 +endif
 +
-+comment "libplayer requires a toolchain with LARGEFILE support"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/multimedia/libplayer/libplayer.mk b/package/multimedia/libplayer/libplayer.mk
-new file mode 100644
-index 0000000..1552431
---- /dev/null
-+++ b/package/multimedia/libplayer/libplayer.mk
-@@ -0,0 +1,44 @@
-+#############################################################
-+#
-+# libplayer
-+#
-+#############################################################
-+LIBPLAYER_VERSION = 2.0.1
-+LIBPLAYER_SITE = http://libplayer.geexbox.org/releases/
-+LIBPLAYER_SOURCE = libplayer-$(LIBPLAYER_VERSION).tar.bz2
-+
-+# When passing the standard buildroot configure arguments, the configure script
-+# breaks on --target and --host options. Thus we need to define a configure cmd
-+# ourselves.
-+define LIBPLAYER_CONFIGURE_CMDS
-+	(cd $(@D) && rm -rf config.cache && \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(TARGET_CONFIGURE_ARGS) \
-+	./configure \
-+		--prefix=/usr \
-+		--cross-compile \
-+		$(SHARED_STATIC_LIBS_OPTS) \
-+		$(QUIET) $(LIBPLAYER_CONF_OPT) \
-+	)
++# The dependency of some source files in duma_config.h, which is generated at 
++# build time, is not specified in the Makefile. Force non-parallel build.
++define DUMA_BUILD_CMDS
++	$(MAKE1) $(TARGET_CONFIGURE_OPTS)		\
++		DUMA_OPTIONS=$(strip $(DUMA_OPTIONS))	\
++		$(DUMA_CPP) -C $(@D)
 +endef
 +
-+ifeq ($(BR2_PACKAGE_LIBPLAYER_MPLAYER),y)
-+	LIBPLAYER_DEPENDENCIES += mplayer
-+	LIBPLAYER_CONF_OPT += --enable-mplayer
-+else
-+	LIBPLAYER_CONF_OPT += --disable-mplayer
-+endif
++define DUMA_INSTALL_STAGING_CMDS
++	$(MAKE) prefix=$(STAGING_DIR)/usr install -C $(@D)
++endef
 +
-+ifeq ($(BR2_PACKAGE_LIBPLAYER_GSTREAMER),y)
-+	LIBPLAYER_DEPENDENCIES += gstreamer
-+	LIBPLAYER_CONF_OPT += --enable-gstreamer
-+else
-+	LIBPLAYER_CONF_OPT += --disable-gstreamer
-+endif
++define DUMA_INSTALL_TARGET_CMDS
++	$(MAKE) prefix=$(TARGET_DIR)/usr install -C $(@D)
++endef
 +
-+ifeq ($(BR2_PACKAGE_LIBPLAYER_PYTHON),y)
-+	LIBPLAYER_DEPENDENCIES += python
-+	LIBPLAYER_CONF_OPT += --enable-binding-python
-+endif
-+
-+$(eval $(call AUTOTARGETS,package,libplayer))
++$(eval $(call GENTARGETS))
+-- 
+1.7.6.3
