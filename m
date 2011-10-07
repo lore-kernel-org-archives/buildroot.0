@@ -1,49 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 07 Oct 2011 16:51:48 +0200
-Subject: [Buildroot] [PATCH] crosstool-ng: add dependency to host-lzma if no
-	lzma found
-Message-ID: <5ce1be6b920b684e152c.1317999108@localhost6.localdomain6>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  7 Oct 2011 12:25:21 -0300
+Subject: [Buildroot] [PATCH] lsof: bump to version 4.85
+Message-ID: <1318001121-2747-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Crosstool compilation fails when lzma is not present. If not present on the host
-system, we should compile one ourselves.
-
-This patch uses the already existing but seemingly unused check-host-lzma.sh
-script in toolchain/dependencies.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
+ ....84-makefile.patch => lsof-4.85-makefile.patch} |    0
+ ...4-noportmap.patch => lsof-4.85-noportmap.patch} |    0
+ ...flags.patch => lsof-4.85-override-cflags.patch} |    0
+ ...tch => lsof-4.85-remove-susvlegacy-funcs.patch} |    0
+ package/lsof/lsof.mk                               |    3 ++-
+ 5 files changed, 2 insertions(+), 1 deletions(-)
+ rename package/lsof/{lsof-4.84-makefile.patch => lsof-4.85-makefile.patch} (100%)
+ rename package/lsof/{lsof-4.84-noportmap.patch => lsof-4.85-noportmap.patch} (100%)
+ rename package/lsof/{lsof-4.84-override-cflags.patch => lsof-4.85-override-cflags.patch} (100%)
+ rename package/lsof/{lsof-4.84-remove-susvlegacy-funcs.patch => lsof-4.85-remove-susvlegacy-funcs.patch} (100%)
 
-I think the concept of first checking the host system, and only add a host-foo
-dependency if needed is a common one. Therefore, I think we should consider
-creating a function for it, something used like:
-
-$(if $(call is-host-package-adequate,foo),,host-foo)
-
-This function would return the path to the existing host package, if any, or
-the empty string otherwise. The name for such a function is open for discussion
-:-)
-
-This mechanism could then be used to check for a recent-enough tar version
-(recall from a previous patch series, old tar versions can cause problems when
-unpacking archives containing hard-links, if the --strip-components option is
-used).
-
-Comments/suggestions are welcome...
-
-diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
---- a/package/crosstool-ng/crosstool-ng.mk
-+++ b/package/crosstool-ng/crosstool-ng.mk
-@@ -4,6 +4,6 @@
- CROSSTOOL_NG_INSTALL_STAGING   = NO
- CROSSTOOL_NG_INSTALL_TARGET    = NO
- CROSSTOOL_NG_MAKE              = $(MAKE1)
--HOST_CROSSTOOL_NG_DEPENDENCIES = host-gawk host-automake $(if $(BR2_CCACHE),host-ccache)
-+HOST_CROSSTOOL_NG_DEPENDENCIES = host-gawk host-automake $(if $(BR2_CCACHE),host-ccache) $(if $(shell toolchain/dependencies/check-host-lzma.sh),,host-lzma)
+diff --git a/package/lsof/lsof-4.84-makefile.patch b/package/lsof/lsof-4.85-makefile.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-makefile.patch
+rename to package/lsof/lsof-4.85-makefile.patch
+diff --git a/package/lsof/lsof-4.84-noportmap.patch b/package/lsof/lsof-4.85-noportmap.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-noportmap.patch
+rename to package/lsof/lsof-4.85-noportmap.patch
+diff --git a/package/lsof/lsof-4.84-override-cflags.patch b/package/lsof/lsof-4.85-override-cflags.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-override-cflags.patch
+rename to package/lsof/lsof-4.85-override-cflags.patch
+diff --git a/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch b/package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
+rename to package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 547382f..ff76f92 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -3,7 +3,8 @@
+ # lsof
+ #
+ #############################################################
+-LSOF_VERSION = 4.84
++
++LSOF_VERSION = 4.85
+ LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
+ LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
  
- $(eval $(call AUTOTARGETS,package,crosstool-ng,host))
+-- 
+1.7.3.4
