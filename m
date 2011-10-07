@@ -1,21 +1,53 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Oct 2011 13:47:14 +0200
-Subject: [Buildroot] [PATCH 1/2] busybox: add 1.19.2 tftp fix
-In-Reply-To: <1318019342-32624-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 7 Oct 2011 17:29:01 -0300")
-References: <1318019342-32624-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fwj3g0xp.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 7 Oct 2011 21:29:51 +0200
+Subject: [Buildroot] [git commit] lsof: bump to version 4.85
+Message-ID: <20111008114726.F0B278E29C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=faf408f4affa448a042448d905b2dbe2402fbd02
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ....84-makefile.patch => lsof-4.85-makefile.patch} |    0
+ ...4-noportmap.patch => lsof-4.85-noportmap.patch} |    0
+ ...flags.patch => lsof-4.85-override-cflags.patch} |    0
+ ...tch => lsof-4.85-remove-susvlegacy-funcs.patch} |    0
+ package/lsof/lsof.mk                               |    3 ++-
+ 5 files changed, 2 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lsof/lsof-4.84-makefile.patch b/package/lsof/lsof-4.85-makefile.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-makefile.patch
+rename to package/lsof/lsof-4.85-makefile.patch
+diff --git a/package/lsof/lsof-4.84-noportmap.patch b/package/lsof/lsof-4.85-noportmap.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-noportmap.patch
+rename to package/lsof/lsof-4.85-noportmap.patch
+diff --git a/package/lsof/lsof-4.84-override-cflags.patch b/package/lsof/lsof-4.85-override-cflags.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-override-cflags.patch
+rename to package/lsof/lsof-4.85-override-cflags.patch
+diff --git a/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch b/package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
+similarity index 100%
+rename from package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
+rename to package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index 547382f..ff76f92 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -3,7 +3,8 @@
+ # lsof
+ #
+ #############################################################
+-LSOF_VERSION = 4.84
++
++LSOF_VERSION = 4.85
+ LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
+ LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+ 
