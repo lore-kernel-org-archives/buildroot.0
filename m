@@ -1,53 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 7 Oct 2011 21:29:51 +0200
-Subject: [Buildroot] [git commit] lsof: bump to version 4.85
-Message-ID: <20111008114726.F0B278E29C@busybox.osuosl.org>
+Date: Fri, 7 Oct 2011 21:31:40 +0200
+Subject: [Buildroot] [git commit] lsof: no longer needs rpc support in
+	toolchain
+Message-ID: <20111008114727.434498E29C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=faf408f4affa448a042448d905b2dbe2402fbd02
+commit: http://git.buildroot.net/buildroot/commit/?id=21f91bbba5dda53625e14f20e6f551f9cc268aed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ....84-makefile.patch => lsof-4.85-makefile.patch} |    0
- ...4-noportmap.patch => lsof-4.85-noportmap.patch} |    0
- ...flags.patch => lsof-4.85-override-cflags.patch} |    0
- ...tch => lsof-4.85-remove-susvlegacy-funcs.patch} |    0
- package/lsof/lsof.mk                               |    3 ++-
- 5 files changed, 2 insertions(+), 1 deletions(-)
+ package/lsof/Config.in |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/package/lsof/lsof-4.84-makefile.patch b/package/lsof/lsof-4.85-makefile.patch
-similarity index 100%
-rename from package/lsof/lsof-4.84-makefile.patch
-rename to package/lsof/lsof-4.85-makefile.patch
-diff --git a/package/lsof/lsof-4.84-noportmap.patch b/package/lsof/lsof-4.85-noportmap.patch
-similarity index 100%
-rename from package/lsof/lsof-4.84-noportmap.patch
-rename to package/lsof/lsof-4.85-noportmap.patch
-diff --git a/package/lsof/lsof-4.84-override-cflags.patch b/package/lsof/lsof-4.85-override-cflags.patch
-similarity index 100%
-rename from package/lsof/lsof-4.84-override-cflags.patch
-rename to package/lsof/lsof-4.85-override-cflags.patch
-diff --git a/package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch b/package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
-similarity index 100%
-rename from package/lsof/lsof-4.84-remove-susvlegacy-funcs.patch
-rename to package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index 547382f..ff76f92 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -3,7 +3,8 @@
- # lsof
- #
- #############################################################
--LSOF_VERSION = 4.84
-+
-+LSOF_VERSION = 4.85
- LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
- LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+diff --git a/package/lsof/Config.in b/package/lsof/Config.in
+index 22b7f5e..cc7512c 100644
+--- a/package/lsof/Config.in
++++ b/package/lsof/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_LSOF
+ 	bool "lsof"
+-	depends on BR2_INET_RPC
+ 	help
+ 	  lsof (LiSt Open Files)
+ 	  The lsof tool lists information about files opened by
+ 	  processes.
  
+ 	  ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+-
+-comment "lsof requires a toolchain with RPC support"
+-	depends on !BR2_INET_RPC
