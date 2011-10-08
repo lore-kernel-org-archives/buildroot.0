@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Oct 2011 13:45:04 +0200
-Subject: [Buildroot] [PATCH] lsof: bump to version 4.85
-In-Reply-To: <1318001121-2747-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 7 Oct 2011 12:25:21 -0300")
-References: <1318001121-2747-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k48fg11b.fsf@macbook.be.48ers.dk>
+Date: Sat, 08 Oct 2011 13:47:14 +0200
+Subject: [Buildroot] [PATCH 1/2] busybox: add 1.19.2 tftp fix
+In-Reply-To: <1318019342-32624-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 7 Oct 2011 17:29:01 -0300")
+References: <1318019342-32624-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87fwj3g0xp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
