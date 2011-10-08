@@ -1,70 +1,82 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Oct 2011 21:35:13 +0200
-Subject: [Buildroot] [git commit] ext-toolchain: Add CodeSoucery x86
-	GNU/Linux 2010.09
-Message-ID: <20111009201004.704648E2C4@busybox.osuosl.org>
+Date: Sat, 8 Oct 2011 23:22:50 +0200
+Subject: [Buildroot] [git commit] noip: new package
+Message-ID: <20111009201001.47BD38E185@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1459fc24c58edb589c4baf99c88b53af3b558f52
+commit: http://git.buildroot.net/buildroot/commit/?id=cec7128dc1a30880523011a115ff52d7a27c403d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+[Peter: use install -D / proper permissions]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |   16 ++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 19 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/noip/Config.in |    6 ++++++
+ package/noip/noip.mk   |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index c50acc8..9fbc224 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -199,6 +199,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	  the following variants:
-             - SH2A, uClibc, big endian
- 
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009
-+	bool "CodeSourcery x86/x86_64 2010.09"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
+diff --git a/package/Config.in b/package/Config.in
+index 904ebb6..7dc8887 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -443,6 +443,7 @@ endif
+ source "package/netplug/Config.in"
+ source "package/netsnmp/Config.in"
+ source "package/netstat-nat/Config.in"
++source "package/noip/Config.in"
+ source "package/nfs-utils/Config.in"
+ source "package/ngircd/Config.in"
+ source "package/ngrep/Config.in"
+diff --git a/package/noip/Config.in b/package/noip/Config.in
+new file mode 100644
+index 0000000..02039dd
+--- /dev/null
++++ b/package/noip/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_NOIP
++	bool "noip"
 +	help
-+	  Toolchain for the x86/x86_64 architectures, from
-+	  CodeSourcery. It uses gcc 4.5.1, binutils 2.20, glibc 2.11,
-+	  gdb 7.2.50 and kernel headers 2.6.35.2. It has support for
-+	  the following variants:
-+	    - Intel Pentium 4, glibc, 32 bits
-+            - Intel Atom, glibc, 32 bits
-+            - Intel Xeon, glibc, 64 bits
-+            - Intel Core 2, glibc, 64 bits
++	  Dynamic DNS update client for no-ip.com
 +
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
- 	bool "Blackfin.uclinux.org 2010RC1"
- 	depends on BR2_bfin
-@@ -256,6 +271,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
-+	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
- 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 2662520..6e34e05 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -197,6 +197,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package8749/public/sh-uclinux/
- TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-36-sh-uclinux-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/sgpp/lite/ia32/portal/package7682/public/i686-pc-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=ia32-2010.09-44-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
- TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
- TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
++	  http://www.no-ip.com/downloads.php
+diff --git a/package/noip/noip.mk b/package/noip/noip.mk
+new file mode 100644
+index 0000000..0fe427a
+--- /dev/null
++++ b/package/noip/noip.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# noip
++#
++#############################################################
++
++NOIP_VERSION = 2.1.9
++NOIP_SITE = http://www.no-ip.com/client/linux
++NOIP_SOURCE = noip-duc-linux.tar.gz
++
++define NOIP_BUILD_CMDS
++	sed -i -e "s:\(#define CONFIG_FILENAME\).*:\1 \"/etc/no-ip2.conf\":" \
++		$(@D)/noip2.c
++	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		PREFIX=/usr CONFDIR=/etc
++endef
++
++define NOIP_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/noip2 $(TARGET_DIR)/usr/sbin/noip2
++endef
++
++define NOIP_UNINSTALL_TARGET_CMDS
++	rm -f "$(TARGET_DIR)/usr/sbin/noip2"
++endef
++
++define NOIP_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++$(eval $(call GENTARGETS))
