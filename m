@@ -1,36 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 7 Oct 2011 21:31:40 +0200
-Subject: [Buildroot] [git commit] lsof: no longer needs rpc support in
-	toolchain
-Message-ID: <20111008114727.434498E29C@busybox.osuosl.org>
+Date: Sat, 8 Oct 2011 13:45:57 +0200
+Subject: [Buildroot] [git commit] busybox: add 1.19.2 tftp fix
+Message-ID: <20111008114727.899188E29C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=21f91bbba5dda53625e14f20e6f551f9cc268aed
+commit: http://git.buildroot.net/buildroot/commit/?id=41ea5c9ff3f317a6eacc9266ddc79899c1f90d1f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lsof/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ .../busybox-1.19.2/busybox-1.19.2-tftp.patch       |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/lsof/Config.in b/package/lsof/Config.in
-index 22b7f5e..cc7512c 100644
---- a/package/lsof/Config.in
-+++ b/package/lsof/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_LSOF
- 	bool "lsof"
--	depends on BR2_INET_RPC
- 	help
- 	  lsof (LiSt Open Files)
- 	  The lsof tool lists information about files opened by
- 	  processes.
- 
- 	  ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
--
--comment "lsof requires a toolchain with RPC support"
--	depends on !BR2_INET_RPC
+diff --git a/package/busybox/busybox-1.19.2/busybox-1.19.2-tftp.patch b/package/busybox/busybox-1.19.2/busybox-1.19.2-tftp.patch
+new file mode 100644
+index 0000000..15dc9e1
+--- /dev/null
++++ b/package/busybox/busybox-1.19.2/busybox-1.19.2-tftp.patch
+@@ -0,0 +1,12 @@
++--- busybox-1.19.2/networking/tftp.c
+++++ busybox-1.19.2-tftp/networking/tftp.c
++@@ -813,7 +813,8 @@ int tftpd_main(int argc UNUSED_PARAM, ch
++ 		goto err;
++ 	}
++ 	mode = local_file + strlen(local_file) + 1;
++-	if (mode >= block_buf + result || strcmp(mode, "octet") != 0) {
+++	/* RFC 1350 says mode string is case independent */
+++	if (mode >= block_buf + result || strcasecmp(mode, "octet") != 0) {
++ 		goto err;
++ 	}
++ # if ENABLE_FEATURE_TFTP_BLOCKSIZE
