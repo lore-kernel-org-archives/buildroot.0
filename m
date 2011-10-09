@@ -1,41 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Oct 2011 19:44:31 +0200
-Subject: [Buildroot] [PATCH 8/9] external-toolchain: Slightly optimize
-	toolchain extraction
+Date: Sun,  9 Oct 2011 19:44:24 +0200
+Subject: [Buildroot] [PATCH 1/9] external toolchain: slightly optimize the
+	copy of the toolchain sysroot
 In-Reply-To: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <55714318d85fc16e3fa0e34144df2ccffe24c1a2.1318182187.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <98f060c40fdcc7c9d5464838a21d2ee7bc44971a.1318182187.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some CodeSourcery toolchains contain a huge number of locales that are
-not useful, even though they account for 70-80% of the total toolchain
-size. By skipping the extraction of those useless locales, we make the
-toolchain extraction process slightly faster, and also make the output
-directory size a lot smaller (host/opt/ is 213 MB instead of 1.5 GB
-with a 2010.09 ARM CodeSourcery toolchain).
+The sysroot of an ARM CodeSourcery toolchain takes about 1.4 GB of
+space, but 1.1+ GB of this space consists in locale-related
+information which Buildroot doesn't use. By skipping the copy of those
+unused files, we save quite a bit of time while importing the
+toolchain sysroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 ---
- toolchain/toolchain-external/ext-tool.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ toolchain/helpers.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 6e34e05..8287916 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -250,7 +250,8 @@ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
- 
- $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
- 	mkdir -p $(@D)
--	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-+	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | \
-+		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(@D) $(TAR_OPTIONS) -
- 	$(Q)touch $@
- endif
- 
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 4d90d15..7f3efaa 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -79,6 +79,9 @@ copy_toolchain_lib_root = \
+ #    non-default architecture variant is used. Without this, the
+ #    compiler fails to find libraries and headers.
+ #
++# Note that the 'locale' directories are not copied. They are huge
++# (400+MB) in CodeSourcery toolchains, and they are not really useful.
++#
+ # $1: main sysroot directory of the toolchain
+ # $2: arch specific sysroot directory of the toolchain
+ # $3: arch specific subdirectory in the sysroot
+@@ -89,7 +92,7 @@ copy_toolchain_sysroot = \
+ 	ARCH_SUBDIR="$(strip $3)"; \
+ 	for i in etc lib sbin usr ; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++			rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
+ 		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
 -- 
 1.7.4.1
