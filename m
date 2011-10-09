@@ -1,56 +1,289 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Oct 2011 21:30:44 +0200
-Subject: [Buildroot] [git commit] toolchain-external: allow specifying extra
-	external libraries
-Message-ID: <20111009201002.4FF538E2C4@busybox.osuosl.org>
+Date: Sun, 9 Oct 2011 21:36:22 +0200
+Subject: [Buildroot] [git commit] ext-toolchain: Take into account Mentor
+	Graphics acquisition of CodeSoucery
+Message-ID: <20111009201004.E82578E2EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c72f54bba491a76e353c44c678258ac8029e2bdf
+commit: http://git.buildroot.net/buildroot/commit/?id=3a7149347c6290e1ab7045dd4f70e06d9426b716
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Custom toolchains may provide extra libraries that need to be copied to the
-target. This patch adds a configuration option for this.
+Now that CodeSourcery has been bought by Mentor Graphics, the
+toolchains are named "Sourcery CodeBench". We rename the config short
+description and adjust the help text, but we keep the option name in
+order not to break existing configurations.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/Config.in   |    8 ++++++++
- toolchain/toolchain-external/ext-tool.mk |    1 +
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in |  130 ++++++++++++++++----------------
+ 1 files changed, 65 insertions(+), 65 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ff7e8db..b6fa9bd 100644
+index 9fbc224..0a4b922 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -322,6 +322,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
- 	  support. If you don't know, leave the default value,
- 	  Buildroot will tell you if it's correct or not.
+@@ -4,85 +4,85 @@ choice
+ 	prompt "Toolchain"
  
-+config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
-+	string "Extra toolchain libraries to be copied to target"
-+	help
-+	  If your external toolchain provides extra libraries that
-+	  need to be copied to the target filesystem, enter them
-+	  here, separated by spaces. They will be copied to the
-+	  target's /lib directory.
-+
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+-	bool "CodeSourcery ARM 2011.03"
++	bool "Sourcery CodeBench ARM 2011.03"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the ARM architecture, from CodeSourcery. It
+-	  uses gcc 4.5.2, binutils 2.20.51, glibc 2.13 and gdb 7.2.50,
+-	  kernel headers 2.6.38. It has support for the following
+-	  variants:
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
++	  2.13 and gdb 7.2.50, kernel headers 2.6.38. It has support
++	  for the following variants:
+             - ARMv5TE, little endian, soft-float, glibc
+             - ARMv4T, little endian, soft-float, glibc
+             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
  
- endif # BR2_TOOLCHAIN_EXTERNAL
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b9d932f..bac39cf 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -51,6 +51,7 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+-	bool "CodeSourcery ARM 2010.09"
++	bool "Sourcery CodeBench ARM 2010.09"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the ARM architecture, from CodeSourcery. It
+-	  uses gcc 4.5.1, binutils 2.20, glibc 2.11 and gdb 7.2.50,
+-	  kernel headers 2.6.35.2. It has support for the following
+-	  variants:
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.5.1, binutils 2.20, glibc
++	  2.11 and gdb 7.2.50, kernel headers 2.6.35.2. It has support
++	  for the following variants:
+             - ARMv5TE, little endian, soft-float, glibc
+             - ARMv4T, little endian, soft-float, glibc
+             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
  
- LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
-+LIB_EXTERNAL_LIBS+=$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
- LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
- endif
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+-	bool "CodeSourcery ARM 2010q1"
++	bool "Sourcery CodeBench ARM 2010q1"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the ARM architecture, from CodeSourcery. It
+-	  uses gcc 4.4.1, binutils 2.19, glibc 2.11, gdb 7.0.50 and
+-	  kernel headers 2.6.32. It has support for the following
+-	  variants:
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
++	  2.11, gdb 7.0.50 and kernel headers 2.6.32. It has support
++	  for the following variants:
+              - ARMv5T, little endian, soft-float, glibc
+              - ARMv4T, little endian, soft-float, glibc
+              - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
+-	bool "CodeSourcery ARM 2009q3"
++	bool "Sourcery CodeBench ARM 2009q3"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the ARM architecture, from CodeSourcery. It
+-	  uses gcc 4.4.1, binutils 2.19, glibc 2.10 and gdb 6.8 and
+-	  kernel headers 2.6.30. It has support for the following
+-	  variants:
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
++	  2.10 and gdb 6.8 and kernel headers 2.6.30. It has support
++	  for the following variants:
+             - ARMv5T, little endian, soft-float, glibc
+             - ARMv4T, little endian, soft-float, glibc
+             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
+-	bool "CodeSourcery ARM 2009q1"
++	bool "Sourcery CodeBench ARM 2009q1"
+ 	depends on BR2_arm
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the ARM architecture, from CodeSourcery. It
+-	  uses gcc 4.3.3, binutils 2.19, glibc 2.8 and gdb 6.8 and
+-	  kernel headers 2.6.30. It has support for the following
+-	  variants:
++	  Sourcery CodeBench toolchain for the ARM architecture, from
++	  Mentor Graphics. It uses gcc 4.3.3, binutils 2.19, glibc 2.8
++	  and gdb 6.8 and kernel headers 2.6.30. It has support for
++	  the following variants:
+             - ARMv5T, little endian, soft-float, glibc
+             - ARMv4T, little endian, soft-float, glibc
+             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+-	bool "CodeSourcery MIPS 2011.03"
++	bool "Sourcery CodeBench MIPS 2011.03"
+ 	depends on BR2_mips || BR2_mipsel
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the MIPS architecture, from CodeSourcery. It
+-	  uses gcc 4.5.2, binutils 2.20.51, glibc 2.13, uClibc 0.9.30
+-	  and gdb 7.2.50, kernel headers 2.6.38. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the MIPS architecture, from
++	  Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51, glibc
++	  2.13, uClibc 0.9.30 and gdb 7.2.50, kernel headers
++	  2.6.38. It has support for the following variants:
+             - MIPS32 O32 big endian glibc
+             - MIPS32 O32 little endian glibc
+             - MIPS32 big endian soft float glibc
+@@ -97,15 +97,15 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+             - MIPS32 little endian soft float uclibc
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+-	bool "CodeSourcery MIPS 4.4"
++	bool "Sourcery CodeBench MIPS 4.4"
+ 	depends on BR2_mips || BR2_mipsel
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the MIPS architecture, from CodeSourcery. It
+-	  uses gcc 4.4.1, binutils 2.19, glibc 2.11, uClibc 0.9.30 and
+-	  gdb 7.0, kernel headers 2.6.32. It has support for the
+-	  following variants:
++	  Sourcery CodeBench toolchain for the MIPS architecture, from
++	  Mentor Graphics. It uses gcc 4.4.1, binutils 2.19, glibc
++	  2.11, uClibc 0.9.30 and gdb 7.0, kernel headers 2.6.32. It
++	  has support for the following variants:
+             - MIPS32 O32 big endian glibc
+             - MIPS32 O32 little endian glibc
+             - MIPS32 big endian soft float glibc
+@@ -120,15 +120,15 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+             - MIPS32 little endian soft float uclibc
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+-	bool "CodeSourcery PowerPC 2010.09"
++	bool "Sourcery CodeBench PowerPC 2010.09"
+ 	depends on BR2_powerpc
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the PowerPC architecture, from
+-	  CodeSourcery. It uses gcc 4.5.1, binutils 2.20, glibc 2.11,
+-	  gdb 7.2.50 and kernel headers 2.6.35.2. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the PowerPC architecture,
++	  from Sourcery CodeBench. It uses gcc 4.5.1, binutils 2.20,
++	  glibc 2.11, gdb 7.2.50 and kernel headers 2.6.35.2. It has
++	  support for the following variants:
+             - 603 glibc, 32 bits
+             - 603 soft float glibc, 32 bits
+             - e600 altivec glibc, 32 bits
+@@ -138,37 +138,37 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+             - 970 glibc hard-float, 64 bits
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+-	bool "CodeSourcery SH 2011.03"
++	bool "Sourcery CodeBench SH 2011.03"
+ 	depends on BR2_sh4a || BR2_sh4aeb
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the SuperH architecture, from CodeSourcery. It
+-	  uses gcc 4.5.2, binutils 2.20, glibc 2.13, uClibc 0.9.30,
+-	  gdb 7.2.50 and kernel headers 2.6.38. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the SuperH architecture,
++	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
++	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
++	  2.6.38. It has support for the following variants:
+             - SH4A, glibc, little endian
+             - SH4A, glibc, big endian
+             - SH4A, uClibc, little endian
+             - SH4A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+-	bool "CodeSourcery SH 2010.09"
++	bool "Sourcery CodeBench SH 2010.09"
+ 	depends on BR2_sh4a || BR2_sh4aeb
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the SuperH architecture, from CodeSourcery. It
+-	  uses gcc 4.5.1, binutils 2.20, glibc 2.11, uClibc 0.9.30,
+-	  gdb 7.2.50 and kernel headers 2.6.35.2. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the SuperH architecture,
++	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
++	  glibc 2.11, uClibc 0.9.30, gdb 7.2.50 and kernel headers
++	  2.6.35.2. It has support for the following variants:
+             - SH4A, glibc, little endian
+             - SH4A, glibc, big endian
+             - SH4A, uClibc, little endian
+             - SH4A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+-	bool "CodeSourcery SH 2011.03"
++	bool "Sourcery CodeBench SH 2011.03"
+ 	depends on BR2_sh2a
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_LARGEFILE
+@@ -177,14 +177,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the SuperH architecture, from CodeSourcery. It
+-	  uses gcc 4.5.2, binutils 2.20, uClibc 0.9.30, gdb 7.2.50 and
+-	  kernel headers 2.6.38. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the SuperH architecture,
++	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
++	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.38. It has
++	  support for the following variants:
+             - SH2A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+-	bool "CodeSourcery SH 2010.09"
++	bool "Sourcery CodeBench SH 2010.09"
+ 	depends on BR2_sh2a
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+ 	select BR2_LARGEFILE
+@@ -193,22 +193,22 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the SuperH architecture, from CodeSourcery. It
+-	  uses gcc 4.5.1, binutils 2.20, uClibc 0.9.30, gdb 7.2.50 and
+-	  kernel headers 2.6.35.2. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the SuperH architecture,
++	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
++	  uClibc 0.9.30, gdb 7.2.50 and kernel headers 2.6.35.2. It
++	  has support for the following variants:
+             - SH2A, uClibc, big endian
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009
+-	bool "CodeSourcery x86/x86_64 2010.09"
++	bool "Sourcery CodeBench x86/x86_64 2010.09"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+-	  Toolchain for the x86/x86_64 architectures, from
+-	  CodeSourcery. It uses gcc 4.5.1, binutils 2.20, glibc 2.11,
+-	  gdb 7.2.50 and kernel headers 2.6.35.2. It has support for
+-	  the following variants:
++	  Sourcery CodeBench toolchain for the x86/x86_64
++	  architectures, from Mentor Graphics. It uses gcc 4.5.1,
++	  binutils 2.20, glibc 2.11, gdb 7.2.50 and kernel headers
++	  2.6.35.2. It has support for the following variants:
+ 	    - Intel Pentium 4, glibc, 32 bits
+             - Intel Atom, glibc, 32 bits
+             - Intel Xeon, glibc, 64 bits
