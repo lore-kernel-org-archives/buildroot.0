@@ -1,36 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Oct 2011 21:32:53 +0200
-Subject: [Buildroot] [git commit] ext-toolchain: Bump version of
-	CodeSourcery MIPS 2011.03
-Message-ID: <20111009201003.2EFAF8E2C4@busybox.osuosl.org>
+Date: Sun, 9 Oct 2011 21:30:44 +0200
+Subject: [Buildroot] [git commit] toolchain-external: allow specifying extra
+	external libraries
+Message-ID: <20111009201002.4FF538E2C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=062288f17338251e28a84b7ae37bd8a31e8988d1
+commit: http://git.buildroot.net/buildroot/commit/?id=c72f54bba491a76e353c44c678258ac8029e2bdf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Custom toolchains may provide extra libraries that need to be copied to the
+target. This patch adds a configuration option for this.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/toolchain-external/ext-tool.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-external/Config.in   |    8 ++++++++
+ toolchain/toolchain-external/ext-tool.mk |    1 +
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index ff7e8db..b6fa9bd 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -322,6 +322,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
+ 
++config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
++	string "Extra toolchain libraries to be copied to target"
++	help
++	  If your external toolchain provides extra libraries that
++	  need to be copied to the target filesystem, enter them
++	  here, separated by spaces. They will be copied to the
++	  target's /lib directory.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+ endif # BR2_TOOLCHAIN_EXTERNAL
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 48c11eb..c8a214d 100644
+index b9d932f..bac39cf 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -180,8 +180,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package8715/public/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-53-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package9055/public/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-93-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -51,6 +51,7 @@
+ #  of Buildroot is handled identical for the 2 toolchain types.
+ 
+ LIB_EXTERNAL_LIBS=ld*.so libc.so libcrypt.so libdl.so libgcc_s.so libm.so libnsl.so libresolv.so librt.so libutil.so
++LIB_EXTERNAL_LIBS+=$(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
+ LIB_EXTERNAL_LIBS+=libnss_files.so libnss_dns.so
+ endif
