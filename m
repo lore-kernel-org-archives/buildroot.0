@@ -1,47 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  9 Oct 2011 19:44:32 +0200
-Subject: [Buildroot] [PATCH 9/9] toolchain: speed up sysroot lib copying
-In-Reply-To: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <00e260122ba4b08d9809dd9eaa00dc3a25f84dbd.1318182187.git.thomas.petazzoni@free-electrons.com>
+Date: Sun,  9 Oct 2011 19:44:23 +0200
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	for-2011.11/ext-toolchain-updates
+Message-ID: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Mike Frysinger <vapier@gentoo.org>
+Hello,
 
-The copy_toolchain_lib_root helper searches the entire sysroot, but is
-only interested in files in certain subdirs.  So rather than waste time
-in walking the entire tree, walk the few subdirs at the depth level we
-are actually going to be poaching files from.
+Changes since the last posting:
 
-Some simplification suggested by Yann E. MORIN
-<yann.morin.1998@anciens.enib.fr> and Arnout Vandecappelle
-<arnout@mind.be>, added by Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>.
+ * Add Acked-by and Reviewed-by tags as given by Yann E. Morin (thanks!)
 
-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
----
- toolchain/helpers.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ * Include comments made by Yann and Arnout on patches 8/9 and 9/9.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 7f3efaa..5585f45 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -22,9 +22,8 @@ copy_toolchain_lib_root = \
- 	DESTDIR="$(strip $3)" ; \
-  \
- 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
--		find -L . -path "./lib/$${LIB}.*"     -o \
--			  -path "./usr/lib/$${LIB}.*" -o \
--			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
-+		find -L lib* usr/lib* usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib* \
-+			-maxdepth 1 -name "$${LIB}.*" 2>/dev/null \
- 		)` ; \
- 	for FILE in $${LIBS} ; do \
- 		LIB=`basename $${FILE}`; \
+Thomas
+
+The following changes since commit ddb8c639c312fd9f65dbb123837c100281495d50:
+
+  libplayer: mark python bindings as broken (2011-10-08 22:39:29 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/ext-toolchain-updates
+
+Mike Frysinger (1):
+      toolchain: speed up sysroot lib copying
+
+Thomas De Schampheleire (1):
+      toolchain-external: allow specifying extra external libraries
+
+Thomas Petazzoni (7):
+      external toolchain: slightly optimize the copy of the toolchain sysroot
+      ext-toolchain: Add CodeSourcery SH uClinux 2011.03
+      ext-toolchain: Bump version of CodeSourcery MIPS 2011.03
+      ext-toolchain: Add CodeSourcery SH GNU/Linux 2011.03
+      ext-toolchain: Add CodeSoucery x86 GNU/Linux 2010.09
+      ext-toolchain: Take into account Mentor Graphics acquisition of CodeSoucery
+      external-toolchain: Slightly optimize toolchain extraction
+
+ toolchain/helpers.mk                     |   10 +-
+ toolchain/toolchain-external/Config.in   |  157 ++++++++++++++++++++----------
+ toolchain/toolchain-external/ext-tool.mk |   17 +++-
+ 3 files changed, 127 insertions(+), 57 deletions(-)
+
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
