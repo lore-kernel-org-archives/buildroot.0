@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  9 Oct 2011 20:45:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 3391] Add support for specifying an external
-	kernel tree
-In-Reply-To: <bug-3391-163@https.bugs.busybox.net/>
-References: <bug-3391-163@https.bugs.busybox.net/>
-Message-ID: <20111009204512.A1D208E2F4@busybox.osuosl.org>
+Date: Sun,  9 Oct 2011 20:50:51 +0000 (UTC)
+Subject: [Buildroot] [Bug 4045] Add support for downloading i386 toolchains
+ from codesourcery
+In-Reply-To: <bug-4045-163@https.bugs.busybox.net/>
+References: <bug-4045-163@https.bugs.busybox.net/>
+Message-ID: <20111009205051.1FB888E2F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=3391
+https://bugs.busybox.net/show_bug.cgi?id=4045
 
 Peter Korsgaard <jacmet@uclibc.org> changed:
 
@@ -20,8 +20,8 @@ Peter Korsgaard <jacmet@uclibc.org> changed:
              Status|NEW                         |RESOLVED
          Resolution|                            |FIXED
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org>  ---
-Fixed in git by Thomas/David (2690e76aa2)
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org>  ---
+Fixed in git by Thomas (1459fc24c)
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
