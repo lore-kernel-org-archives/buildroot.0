@@ -1,73 +1,63 @@
-From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
-Date: Sun,  9 Oct 2011 13:15:30 +0200
-Subject: [Buildroot] [PATCH v2] dejavu-fonts: add new package
-In-Reply-To: <1318069406-21518-1-git-send-email-schwarzkopf@sensortherm.de>
-References: <1318069406-21518-1-git-send-email-schwarzkopf@sensortherm.de>
-Message-ID: <1318158930-19100-1-git-send-email-schwarzkopf@sensortherm.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  9 Oct 2011 18:17:26 +0200
+Subject: [Buildroot] [RFC] Build time graph generation
+Message-ID: <cover.1318176666.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new package dejavu-fonts. The DejaVu fonts are a font family
-based on the Vera Fonts. http://dejavu-fonts.org/wiki/Main_Page
+Hello,
 
-Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
----
- package/Config.in                    |    1 +
- package/dejavu-fonts/Config.in       |    7 +++++++
- package/dejavu-fonts/dejavu-fonts.mk |   16 ++++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/dejavu-fonts/Config.in
- create mode 100644 package/dejavu-fonts/dejavu-fonts.mk
+Here are two patches that implement a simple modification of the
+package infrastructure to output some timing data about the duration
+taken by each step for each package, and then a small Python script
+that generates graphs from those informations.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7112e05..3dac85c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -276,6 +276,7 @@ source "package/cairo/Config.in"
- source "package/fltk/Config.in"
- source "package/fontconfig/Config.in"
- source "package/freetype/Config.in"
-+source "package/dejavu-fonts/Config.in"
- source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/jpeg/Config.in"
-diff --git a/package/dejavu-fonts/Config.in b/package/dejavu-fonts/Config.in
-new file mode 100644
-index 0000000..63ef5e2
---- /dev/null
-+++ b/package/dejavu-fonts/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_DEJAVU_FONTS
-+	bool "dejavu fonts"
-+	help
-+	  The DejaVu fonts are a font family 
-+	  based on the Vera Fonts.
-+
-+	  http://dejavu-fonts.org/wiki/Main_Page
-diff --git a/package/dejavu-fonts/dejavu-fonts.mk b/package/dejavu-fonts/dejavu-fonts.mk
-new file mode 100644
-index 0000000..e0c79f3
---- /dev/null
-+++ b/package/dejavu-fonts/dejavu-fonts.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# dejavu fonts
-+#
-+#############################################################
-+
-+DEJAVU_FONTS_VERSION = 2.33
-+DEJAVU_FONTS_SOURCE = dejavu-fonts-ttf-$(DEJAVU_FONTS_VERSION).tar.bz2
-+DEJAVU_FONTS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/dejavu/dejavu/$(DEJAVU_FONTS_VERSION)/
-+
-+define DEJAVU_FONTS_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/usr/lib/fonts
-+	cp -a $(@D)/ttf/*.ttf $(TARGET_DIR)/usr/lib/fonts
-+endef
-+
-+$(eval $(call GENTARGETS))
+I am not sure that there is any useful usage of those graphs, but it's
+fun and there are nice to look at.
+
+Here are some sample graphs, first on a moderately large package set:
+
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/histogram-build-order.pdf
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/histogram-duration-order.pdf
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/pie-packages.pdf
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/pie-steps.pdf
+
+and then on a smaller package set:
+
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/histogram-build-order.pdf
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/histogram-duration-order.pdf
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/pie-packages.pdf
+ http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/pie-steps.pdf
+
+I don't think the modification to the package infrastructure is ready
+for merging (there are many cases not handled, like when the timing
+data should be cleaned up, the case of overriden packages not being
+handled, etc.) and I am not even sure it is useful to complicate the
+package infrastructure with such a not-so-useful feature.
+
+Regards,
+
+Thomas
+
+The following changes since commit ddb8c639c312fd9f65dbb123837c100281495d50:
+
+  libplayer: mark python bindings as broken (2011-10-08 22:39:29 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/graph-build-time
+
+Thomas Petazzoni (2):
+      package: instrument to gather timing data
+      graph-build-time: generate graphs based on timing data
+
+ package/Makefile.package.in      |   28 ++++
+ support/scripts/graph-build-time |  252 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 280 insertions(+), 0 deletions(-)
+ create mode 100755 support/scripts/graph-build-time
+
+Thanks,
 -- 
-1.7.0.4
+Thomas Petazzoni
