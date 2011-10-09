@@ -1,34 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Oct 2011 00:00:56 +0200
-Subject: [Buildroot] [PATCH 1/9] external toolchain: slightly optimize
-	the copy of the toolchain sysroot
-In-Reply-To: <98f060c40fdcc7c9d5464838a21d2ee7bc44971a.1318182187.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 9 Oct 2011 19:44:24 +0200")
-References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
- <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
- <98f060c40fdcc7c9d5464838a21d2ee7bc44971a.1318182187.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehylesfb.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 9 Oct 2011 23:26:39 +0200
+Subject: [Buildroot] [git commit] makedevs: remove compiler warning about
+	used-but-set
+Message-ID: <20111009221637.8518B8E2EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=95af4fbfa56977d7c93ef6339c37829a47275f77
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Closes #4171
 
- Thomas> @@ -89,7 +92,7 @@ copy_toolchain_sysroot = \
- Thomas>  	ARCH_SUBDIR="$(strip $3)"; \
- Thomas>  	for i in etc lib sbin usr ; do \
- Thomas>  		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
- Thomas> -			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
- Thomas> +			rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
+Based on patch by Hector Oron <hector.oron@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES                     |    1 +
+ package/makedevs/makedevs.c |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-FYI, this breaks on readonly source directories unless you have the new
-rsync 3.0.9, which most people don't. I haven't figured out a good fix
-for older rsync versions yet.
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 70d4a79..6dc8789 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -60,6 +60,7 @@
+ 	#3631: Error while compiling with Xorg
+ 	#3925: midori not getting compile
+ 	#4045: Add support for downloading i386 toolchains from codesourcery
++	#4171: makedevs-unused-but-set-variable.patch
+ 	#4183: Codesourcery toolchain download site has changed
+ 
+ 2011.08, Released August 31th, 2011:
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index 95c079a..5d5668d 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -536,5 +536,5 @@ loop:
+ 	}
+ 	fclose(table);
+ 
+-	return 0;
++	return ret;
+ }
