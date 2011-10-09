@@ -1,25 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 09 Oct 2011 21:40:23 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Oct 2011 22:05:09 +0200
 Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/ext-toolchain-updates
-In-Reply-To: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 2 Oct 2011 21:20:08 +0200")
+ for-2011.11/ext-toolchain-updates
+In-Reply-To: <87y5wudkd4.fsf@macbook.be.48ers.dk>
 References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y5wudkd4.fsf@macbook.be.48ers.dk>
+ <87y5wudkd4.fsf@macbook.be.48ers.dk>
+Message-ID: <20111009220509.6fa75788@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Sun, 09 Oct 2011 21:40:23 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- Thomas> The following changes since commit 8511728696a298ccdb8b902b60ab398d8f67e745:
- Thomas>   gnutls: bump to version 2.10.5 (2011-09-30 08:26:08 +0200)
+> Thanks everyone, committed patches 1..7 (remaining 2 has open comments).
+> 
+> Thomas, care to fixup and resend patch 8+9?
 
-Thanks everyone, committed patches 1..7 (remaining 2 has open comments).
+Yes, sure. I had rebased the whole series and fixed patches 8 and 9,
+and was about to send them, but I have apparently some e-mails issues,
+as I'm no longer receiving messages from the list. I'll try to fix
+those problems tomorrow.
 
-Thomas, care to fixup and resend patch 8+9?
+Regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
