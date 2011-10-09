@@ -1,32 +1,70 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 9 Oct 2011 22:02:51 +0200
-Subject: [Buildroot] [git commit] openocd: libusb patch: append rather than
-	override LDFLAGS
-Message-ID: <20111009201006.0D9078E2C4@busybox.osuosl.org>
+Date: Sun, 9 Oct 2011 21:33:57 +0200
+Subject: [Buildroot] [git commit] ext-toolchain: Add CodeSourcery SH
+	GNU/Linux 2011.03
+Message-ID: <20111009201003.BFA8F8E2C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=839ee761878b3e242f4fe4b4a95dfbf161b6b82a
+commit: http://git.buildroot.net/buildroot/commit/?id=42c0fb4dc36ef2568fd89949c9699c4f3bf44048
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...s-compilation-host-libsub-was-used-before.patch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-external/Config.in   |   16 ++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
-diff --git a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch b/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
-index 99ff04e..caf1a8b 100644
---- a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
-+++ b/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
-@@ -23,7 +23,7 @@ index dfa1e8f..cfe2218 100644
- +  dnl check for libusb
- +  PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
- +  CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
--+  LDFLAGS="$LFFLAGS $LIBUSB_LDFLAGS"
-++  LDFLAGS="$LDFLAGS $LIBUSB_LDFLAGS"
- +  LIBS="$LIBS $LIBUSB_LIBS"
-    build_usb=yes
-  fi
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index ac712ba..c50acc8 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -137,6 +137,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+             - e500mc glibc, 32 bits
+             - 970 glibc hard-float, 64 bits
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
++	bool "CodeSourcery SH 2011.03"
++	depends on BR2_sh4a || BR2_sh4aeb
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Toolchain for the SuperH architecture, from CodeSourcery. It
++	  uses gcc 4.5.2, binutils 2.20, glibc 2.13, uClibc 0.9.30,
++	  gdb 7.2.50 and kernel headers 2.6.38. It has support for
++	  the following variants:
++            - SH4A, glibc, little endian
++            - SH4A, glibc, big endian
++            - SH4A, uClibc, little endian
++            - SH4A, uClibc, big endian
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	bool "CodeSourcery SH 2010.09"
+ 	depends on BR2_sh4a || BR2_sh4aeb
+@@ -238,6 +253,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
++	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index c8a214d..2662520 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -188,6 +188,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-g
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103),y)
++TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/sgpp/lite/superh/portal/package8759/public/sh-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7859/public/sh-uclinux/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz2
