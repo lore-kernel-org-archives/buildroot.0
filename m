@@ -1,32 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 08 Oct 2011 23:55:50 +0200
-Subject: [Buildroot] error building kernel with initramfs
-In-Reply-To: <1318027748.4647.3.camel@bender> (Sven Neumann's message of "Sat, 
- 08 Oct 2011 00:49:08 +0200")
-References: <1318027748.4647.3.camel@bender>
-Message-ID: <877h4ff8rd.fsf@macbook.be.48ers.dk>
+From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+Date: Sun,  9 Oct 2011 13:15:30 +0200
+Subject: [Buildroot] [PATCH v2] dejavu-fonts: add new package
+In-Reply-To: <1318069406-21518-1-git-send-email-schwarzkopf@sensortherm.de>
+References: <1318069406-21518-1-git-send-email-schwarzkopf@sensortherm.de>
+Message-ID: <1318158930-19100-1-git-send-email-schwarzkopf@sensortherm.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+Add new package dejavu-fonts. The DejaVu fonts are a font family
+based on the Vera Fonts. http://dejavu-fonts.org/wiki/Main_Page
 
- Sven> Hi,
- Sven> if you select gzip compression for the rootfs.cpio file
- Sven> (BR2_TARGET_ROOTFS_CPIO_GZIP), then the rebuild of the kernel with
- Sven> initramfs is going to fail:
+Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+---
+ package/Config.in                    |    1 +
+ package/dejavu-fonts/Config.in       |    7 +++++++
+ package/dejavu-fonts/dejavu-fonts.mk |   16 ++++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/dejavu-fonts/Config.in
+ create mode 100644 package/dejavu-fonts/dejavu-fonts.mk
 
-Odd, that's not what I'm seeing here.
-
-in fs/common.mk the compression stuff is handled by creating the
-compressed variant IN ADDITION to the uncompressed file, E.G.:
-
-gzip -9 -c /home/peko/source/buildroot/test/images/rootfs.cpio > \
-     /home/peko/source/buildroot/test/images/rootfs.cpio.gz
-
-So output/images/rootfs.cpio still exists when the kernel is rebuilt.
-
+diff --git a/package/Config.in b/package/Config.in
+index 7112e05..3dac85c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -276,6 +276,7 @@ source "package/cairo/Config.in"
+ source "package/fltk/Config.in"
+ source "package/fontconfig/Config.in"
+ source "package/freetype/Config.in"
++source "package/dejavu-fonts/Config.in"
+ source "package/gtk2-engines/Config.in"
+ source "package/gtk2-themes/Config.in"
+ source "package/jpeg/Config.in"
+diff --git a/package/dejavu-fonts/Config.in b/package/dejavu-fonts/Config.in
+new file mode 100644
+index 0000000..63ef5e2
+--- /dev/null
++++ b/package/dejavu-fonts/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DEJAVU_FONTS
++	bool "dejavu fonts"
++	help
++	  The DejaVu fonts are a font family 
++	  based on the Vera Fonts.
++
++	  http://dejavu-fonts.org/wiki/Main_Page
+diff --git a/package/dejavu-fonts/dejavu-fonts.mk b/package/dejavu-fonts/dejavu-fonts.mk
+new file mode 100644
+index 0000000..e0c79f3
+--- /dev/null
++++ b/package/dejavu-fonts/dejavu-fonts.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# dejavu fonts
++#
++#############################################################
++
++DEJAVU_FONTS_VERSION = 2.33
++DEJAVU_FONTS_SOURCE = dejavu-fonts-ttf-$(DEJAVU_FONTS_VERSION).tar.bz2
++DEJAVU_FONTS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/dejavu/dejavu/$(DEJAVU_FONTS_VERSION)/
++
++define DEJAVU_FONTS_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/usr/lib/fonts
++	cp -a $(@D)/ttf/*.ttf $(TARGET_DIR)/usr/lib/fonts
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-Bye, Peter Korsgaard
+1.7.0.4
