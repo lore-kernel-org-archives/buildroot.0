@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 9 Oct 2011 23:42:36 +0200
-Subject: [Buildroot] [PATCH 8/9] external-toolchain: Slightly optimize
-	toolchain extraction
-In-Reply-To: <55714318d85fc16e3fa0e34144df2ccffe24c1a2.1318182187.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 9 Oct 2011 23:46:21 +0200
+Subject: [Buildroot] [PATCH 9/9] toolchain: speed up sysroot lib copying
+In-Reply-To: <00e260122ba4b08d9809dd9eaa00dc3a25f84dbd.1318182187.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
- <55714318d85fc16e3fa0e34144df2ccffe24c1a2.1318182187.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201110092342.36933.yann.morin.1998@anciens.enib.fr>
+ <00e260122ba4b08d9809dd9eaa00dc3a25f84dbd.1318182187.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201110092346.22169.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +13,49 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Sunday 09 October 2011 19:44:31 Thomas Petazzoni wrote:
-> Some CodeSourcery toolchains contain a huge number of locales that are
-> not useful, even though they account for 70-80% of the total toolchain
-> size. By skipping the extraction of those useless locales, we make the
-> toolchain extraction process slightly faster, and also make the output
-> directory size a lot smaller (host/opt/ is 213 MB instead of 1.5 GB
-> with a 2010.09 ARM CodeSourcery toolchain).
+On Sunday 09 October 2011 19:44:32 Thomas Petazzoni wrote:
+> From: Mike Frysinger <vapier@gentoo.org>
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> The copy_toolchain_lib_root helper searches the entire sysroot, but is
+> only interested in files in certain subdirs.  So rather than waste time
+> in walking the entire tree, walk the few subdirs at the depth level we
+> are actually going to be poaching files from.
+> 
+> Some simplification suggested by Yann E. MORIN
+> <yann.morin.1998@anciens.enib.fr> and Arnout Vandecappelle
+> <arnout@mind.be>, added by Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>.
+> 
+> Signed-off-by: Mike Frysinger <vapier@gentoo.org>
 
-Rewviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+
+BTW, what's the policy when replying: should I also CC: Mike, as he's
+the original author, or just the person that submitted the patch?
+
+Regards,
+Yann E. MORIN.
 
 > ---
->  toolchain/toolchain-external/ext-tool.mk |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
+>  toolchain/helpers.mk |    5 ++---
+>  1 files changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> index 6e34e05..8287916 100644
-> --- a/toolchain/toolchain-external/ext-tool.mk
-> +++ b/toolchain/toolchain-external/ext-tool.mk
-> @@ -250,7 +250,8 @@ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
->  
->  $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
->  	mkdir -p $(@D)
-> -	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
-> +	$(INFLATE$(suffix $(TOOLCHAIN_EXTERNAL_SOURCE))) $^ | \
-> +		$(TAR) $(TAR_STRIP_COMPONENTS)=1 --exclude='usr/lib/locale/*' -C $(@D) $(TAR_OPTIONS) -
->  	$(Q)touch $@
->  endif
->  
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 7f3efaa..5585f45 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -22,9 +22,8 @@ copy_toolchain_lib_root = \
+>  	DESTDIR="$(strip $3)" ; \
+>   \
+>  	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
+> -		find -L . -path "./lib/$${LIB}.*"     -o \
+> -			  -path "./usr/lib/$${LIB}.*" -o \
+> -			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
+> +		find -L lib* usr/lib* usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib* \
+> +			-maxdepth 1 -name "$${LIB}.*" 2>/dev/null \
+>  		)` ; \
+>  	for FILE in $${LIBS} ; do \
+>  		LIB=`basename $${FILE}`; \
 > 
 
 -- 
