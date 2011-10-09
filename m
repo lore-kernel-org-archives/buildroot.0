@@ -1,34 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 9 Oct 2011 22:05:09 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
- for-2011.11/ext-toolchain-updates
-In-Reply-To: <87y5wudkd4.fsf@macbook.be.48ers.dk>
-References: <cover.1317583191.git.thomas.petazzoni@free-electrons.com>
- <87y5wudkd4.fsf@macbook.be.48ers.dk>
-Message-ID: <20111009220509.6fa75788@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 9 Oct 2011 21:24:58 +0200
+Subject: [Buildroot] [git commit] external toolchain: slightly optimize the
+	copy of the toolchain sysroot
+Message-ID: <20111009201001.AEE9D8E2C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 09 Oct 2011 21:40:23 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=2c23e937660f43131f68f6cbf2ff3fe3d0417032
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Thanks everyone, committed patches 1..7 (remaining 2 has open comments).
-> 
-> Thomas, care to fixup and resend patch 8+9?
+The sysroot of an ARM CodeSourcery toolchain takes about 1.4 GB of
+space, but 1.1+ GB of this space consists in locale-related
+information which Buildroot doesn't use. By skipping the copy of those
+unused files, we save quite a bit of time while importing the
+toolchain sysroot.
 
-Yes, sure. I had rebased the whole series and fixed patches 8 and 9,
-and was about to send them, but I have apparently some e-mails issues,
-as I'm no longer receiving messages from the list. I'll try to fix
-those problems tomorrow.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/helpers.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 4d90d15..7f3efaa 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -79,6 +79,9 @@ copy_toolchain_lib_root = \
+ #    non-default architecture variant is used. Without this, the
+ #    compiler fails to find libraries and headers.
+ #
++# Note that the 'locale' directories are not copied. They are huge
++# (400+MB) in CodeSourcery toolchains, and they are not really useful.
++#
+ # $1: main sysroot directory of the toolchain
+ # $2: arch specific sysroot directory of the toolchain
+ # $3: arch specific subdirectory in the sysroot
+@@ -89,7 +92,7 @@ copy_toolchain_sysroot = \
+ 	ARCH_SUBDIR="$(strip $3)"; \
+ 	for i in etc lib sbin usr ; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			cp -a $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++			rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
+ 		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
