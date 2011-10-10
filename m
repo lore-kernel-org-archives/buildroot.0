@@ -1,5941 +1,1850 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Oct 2011 11:38:27 -0300
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/6=5D_webif=3A_remove_deprecated?=
-Message-ID: <1318343912-5480-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 10 Oct 2011 11:03:30 +0200
+Subject: [Buildroot] [PATCH 3/4] remove the old buildroot.html
+	documentation
+In-Reply-To: <07cfbfa627a5c210205bfe3fccb2953bc0296878.1318236261.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1318236261.git.thomas.petazzoni@free-electrons.com>
+ <07cfbfa627a5c210205bfe3fccb2953bc0296878.1318236261.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LXLKsbHYK_62DaizKO7vAgsn=uew2FaeJmh8Dp+VwMQpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                                  |    1 -
- package/webif/Config.in                            |   28 --
- package/webif/files/etc/httpd.conf                 |    8 -
- package/webif/files/usr/lib/webif/apply.sh         |   76 ----
- package/webif/files/usr/lib/webif/categories.awk   |   27 --
- package/webif/files/usr/lib/webif/common.awk       |   38 --
- package/webif/files/usr/lib/webif/form.awk         |  100 -----
- .../webif/files/usr/lib/webif/lang/ca/common.txt   |  226 ----------
- .../webif/files/usr/lib/webif/lang/cz/common.txt   |  225 ----------
- .../webif/files/usr/lib/webif/lang/de/common.txt   |  228 ----------
- .../webif/files/usr/lib/webif/lang/dk/common.txt   |  231 ----------
- .../webif/files/usr/lib/webif/lang/ee/common.txt   |  230 ----------
- .../webif/files/usr/lib/webif/lang/es/common.txt   |  227 ----------
- .../webif/files/usr/lib/webif/lang/fr/common.txt   |  238 ----------
- .../webif/files/usr/lib/webif/lang/hr/common.txt   |  199 ---------
- .../webif/files/usr/lib/webif/lang/hu/common.txt   |  227 ----------
- .../webif/files/usr/lib/webif/lang/it/common.txt   |  226 ----------
- .../webif/files/usr/lib/webif/lang/nl/common.txt   |  224 ----------
- .../webif/files/usr/lib/webif/lang/no/common.txt   |  230 ----------
- .../webif/files/usr/lib/webif/lang/pl/common.txt   |  228 ----------
- .../webif/files/usr/lib/webif/lang/pt/common.txt   |  454 --------------------
- .../webif/files/usr/lib/webif/lang/ru/common.txt   |  223 ----------
- .../webif/files/usr/lib/webif/lang/se/common.txt   |  223 ----------
- package/webif/files/usr/lib/webif/languages.awk    |   12 -
- .../webif/files/usr/lib/webif/subcategories.awk    |   12 -
- package/webif/files/usr/lib/webif/validate.awk     |  151 -------
- package/webif/files/usr/lib/webif/webif.sh         |  286 ------------
- package/webif/files/www/cgi-bin/webif.sh           |    2 -
- package/webif/files/www/cgi-bin/webif/.categories  |    2 -
- package/webif/files/www/cgi-bin/webif/about.sh     |   31 --
- package/webif/files/www/cgi-bin/webif/config.sh    |   46 --
- package/webif/files/www/cgi-bin/webif/index.sh     |    8 -
- package/webif/files/www/cgi-bin/webif/info.sh      |   44 --
- package/webif/files/www/cgi-bin/webif/ipkg.sh      |    2 -
- .../files/www/cgi-bin/webif/status-connection.sh   |   29 --
- .../webif/files/www/cgi-bin/webif/status-dhcp.sh   |   38 --
- .../files/www/cgi-bin/webif/status-wireless.sh     |   12 -
- package/webif/files/www/index.html                 |   16 -
- package/webif/files/www/webif.css                  |  296 -------------
- package/webif/files/www/webif.js                   |   33 --
- package/webif/src/bstrip.c                         |   75 ----
- package/webif/src/webif-page.c                     |  289 -------------
- package/webif/webif.mk                             |   71 ---
- 43 files changed, 0 insertions(+), 5572 deletions(-)
- delete mode 100644 package/webif/Config.in
- delete mode 100644 package/webif/files/etc/httpd.conf
- delete mode 100755 package/webif/files/usr/lib/webif/apply.sh
- delete mode 100644 package/webif/files/usr/lib/webif/categories.awk
- delete mode 100644 package/webif/files/usr/lib/webif/common.awk
- delete mode 100644 package/webif/files/usr/lib/webif/form.awk
- delete mode 100644 package/webif/files/usr/lib/webif/lang/ca/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/cz/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/de/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/dk/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/ee/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/es/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/fr/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/hr/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/hu/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/it/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/nl/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/no/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/pl/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/pt/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/ru/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/lang/se/common.txt
- delete mode 100644 package/webif/files/usr/lib/webif/languages.awk
- delete mode 100644 package/webif/files/usr/lib/webif/subcategories.awk
- delete mode 100644 package/webif/files/usr/lib/webif/validate.awk
- delete mode 100755 package/webif/files/usr/lib/webif/webif.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif.sh
- delete mode 100644 package/webif/files/www/cgi-bin/webif/.categories
- delete mode 100755 package/webif/files/www/cgi-bin/webif/about.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/config.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/index.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/info.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/ipkg.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/status-connection.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/status-dhcp.sh
- delete mode 100755 package/webif/files/www/cgi-bin/webif/status-wireless.sh
- delete mode 100644 package/webif/files/www/index.html
- delete mode 100644 package/webif/files/www/webif.css
- delete mode 100644 package/webif/files/www/webif.js
- delete mode 100644 package/webif/src/bstrip.c
- delete mode 100644 package/webif/src/webif-page.c
- delete mode 100644 package/webif/webif.mk
+On Mon, Oct 10, 2011 at 10:46 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+> ---
+> ?docs/buildroot.html | 1819 ---------------------------------------------------
+> ?1 files changed, 0 insertions(+), 1819 deletions(-)
+> ?delete mode 100644 docs/buildroot.html
+>
+> diff --git a/docs/buildroot.html b/docs/buildroot.html
+> deleted file mode 100644
+> index 2314d10..0000000
+> --- a/docs/buildroot.html
+> +++ /dev/null
+> @@ -1,1819 +0,0 @@
+> -<!DOCTYPE html>
+> -<html lang="en">
+> -
+> -<head>
+> - ?<title>Buildroot - Usage and documentation</title>
+> - ?<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+> - ?<link rel="stylesheet" href="stylesheet.css">
+> -</head>
+> -
+> -<body>
+> - ?<div class="main">
+> - ? ?<div class="titre">
+> - ? ? ?<h1>Buildroot</h1>
+> - ? ?</div>
+> -
+> - ? ?<p><a href="http://buildroot.net/">Buildroot</a> usage and documentation
+> - ? ?by Thomas Petazzoni. Contributions from Karsten Kruse, Ned Ludd, Martin
+> - ? ?Herren and others.</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><a href="#about">About Buildroot</a></li>
+> - ? ? ?<li><a href="#download">Obtaining Buildroot</a></li>
+> - ? ? ?<li><a href="#using">Using Buildroot</a></li>
+> - ? ? ?<li><a href="#custom_targetfs">Customizing the generated target filesystem</a></li>
+> - ? ? ?<li><a href="#custom_busybox">Customizing the Busybox configuration</a></li>
+> - ? ? ?<li><a href="#custom_uclibc">Customizing the uClibc configuration</a></li>
+> - ? ? ?<li><a href="#custom_linux26">Customizing the Linux kernel configuration</a></li>
+> - ? ? ?<li><a href="#rebuilding_packages">Understanding how to rebuild packages</a></li>
+> - ? ? ?<li><a href="#buildroot_innards">How Buildroot works</a></li>
+> - ? ? ?<li><a href="#using_toolchain">Using the uClibc toolchain outside Buildroot</a></li>
+> - ? ? ?<li><a href="#external_toolchain">Use an external toolchain</a></li>
+> - ? ? ?<li><a href="#ccache-support">Using <code>ccache</code> in Buildroot</li>
+> - ? ? ?<li><a href="#downloaded_packages">Location of downloaded packages</a></li>
+> - ? ? ?<li><a href="#add_packages">Adding new packages to Buildroot</a></li>
+> - ? ? ?<li><a href="#board_support">Creating your own board support</a></li>
+> - ? ? ?<li><a href="#faq">Frequently asked questions</a></li>
+> - ? ? ?<li><a href="#links">Resources</a></li>
+> - ? ?</ul>
+> -
+> - ? ?<h2 id="about">About Buildroot</h2>
+> -
+> - ? ?<p>Buildroot is a set of Makefiles and patches that allows you to easily
+> - ? ?generate a cross-compilation toolchain, a root filesystem and a Linux
+> - ? ?kernel image for your target. Buildroot can be used for one, two or all
+> - ? ?of these options, independently.</p>
+> -
+> - ? ?<p>Buildroot is useful mainly for people working with embedded systems.
+> - ? ?Embedded systems often use processors that are not the regular x86
+> - ? ?processors everyone is used to having in his PC. They can be PowerPC
+> - ? ?processors, MIPS processors, ARM processors, etc.</p>
+> -
+> - ? ?<p>A compilation toolchain is the set of tools that allows you to
+> - ? ?compile code for your system. It consists of a compiler (in our case,
+> - ? ?<code>gcc</code>), binary utils like assembler and linker (in our case,
+> - ? ?<code>binutils</code>) and a C standard library (for example
+> - ? ?<a href="http://www.gnu.org/software/libc/libc.html">GNU Libc</a>,
+> - ? ?<a href="http://www.uclibc.org/">uClibc</a> or
+> - ? ?<a href="http://www.fefe.de/dietlibc/">dietlibc</a>). The system installed
+> - ? ?on your development station certainly already has a compilation
+> - ? ?toolchain that you can use to compile an application that runs on your
+> - ? ?system. If you're using a PC, your compilation toolchain runs on an x86
+> - ? ?processor and generates code for an x86 processor. Under most Linux
+> - ? ?systems, the compilation toolchain uses the GNU libc (glibc) as the C
+> - ? ?standard library. ?This compilation toolchain is called the &quot;host
+> - ? ?compilation toolchain&quot;. The machine on which it is running, and on
+> - ? ?which you're working, is called the &quot;host system&quot;. The
+> - ? ?compilation toolchain is provided by your distribution, and Buildroot
+> - ? ?has nothing to do with it (other than using it to build a
+> - ? ?cross-compilation toolchain and other tools that are run on the
+> - ? ?development host).</p>
+> -
+> - ? ?<p>As said above, the compilation toolchain that comes with your system
+> - ? ?runs on and generates code for the processor in your host system. As
+> - ? ?your embedded system has a different processor, you need a
+> - ? ?cross-compilation toolchain &mdash; a compilation toolchain that runs on
+> - ? ?your host system but generates code for your target system (and target
+> - ? ?processor). For example, if your host system uses x86 and your target
+> - ? ?system uses ARM, the regular compilation toolchain on your host runs on
+> - ? ?x86 and generates code for x86, while the cross-compilation toolchain
+> - ? ?runs on x86 and generates code for ARM.</p>
+> -
+> - ? ?<p>Even if your embedded system uses an x86 processor, you might be
+> - ? ?interested in Buildroot for two reasons:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li>The compilation toolchain on your host certainly uses the GNU Libc
+> - ? ? ?which is a complete but huge C standard library. Instead of using GNU
+> - ? ? ?Libc on your target system, you can use uClibc which is a tiny C
+> - ? ? ?standard library. If you want to use this C library, then you need a
+> - ? ? ?compilation toolchain to generate binaries linked with it. Buildroot
+> - ? ? ?can do that for you.</li>
+> -
+> - ? ? ?<li>Buildroot automates the building of a root filesystem with all needed
+> - ? ? ?tools like busybox. That makes it much easier than doing it by hand.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>You might wonder why such a tool is needed when you can compile
+> - ? ?<code>gcc</code>, <code>binutils</code>, <code>uClibc</code> and all
+> - ? ?the other tools by hand. Of course doing so is possible but, dealing with
+> - ? ?all of the configure options and problems of every <code>gcc</code> or
+> - ? ?<code>binutils</code> version is very time-consuming and uninteresting.
+> - ? ?Buildroot automates this process through the use of Makefiles and has a
+> - ? ?collection of patches for each <code>gcc</code> and <code>binutils</code>
+> - ? ?version to make them work on most architectures.</p>
+> -
+> - ? ?<p>Moreover, Buildroot provides an infrastructure for reproducing
+> - ? ?the build process of your kernel, cross-toolchain, and embedded root
+> - ? ?filesystem. Being able to reproduce the build process will be useful when a
+> - ? ?component needs to be patched or updated or when another person is supposed
+> - ? ?to take over the project.</p>
+> -
+> - ? ?<h2 id="download">Obtaining Buildroot</h2>
+> -
+> - ? ?<p>Buildroot releases are made approximately every 3
+> - ? ?months. Direct Git access and daily snapshots are also
+> - ? ?available, if you want more bleeding edge.</p>
+> -
+> - ? ?<p>Releases are available at
+> - ? ?<a href="http://buildroot.net/downloads/">http://buildroot.net/downloads/</a>.</p>
+> -
+> - ? ?<p>The latest snapshot is always available at
+> - ? ?<a href="http://buildroot.net/downloads/snapshots/buildroot-snapshot.tar.bz2">http://buildroot.net/downloads/snapshots/buildroot-snapshot.tar.bz2</a>,
+> - ? ?and previous snapshots are also available at
+> - ? ?<a href="http://buildroot.net/downloads/snapshots/">http://buildroot.net/downloads/snapshots/</a>.</p>
+> -
+> - ? ?<p>To download Buildroot using Git, you can simply follow
+> - ? ?the rules described on the &quot;Accessing Git&quot; page
+> - ? ?(<a href= "http://buildroot.net/git.html">http://buildroot.net/git.html</a>)
+> - ? ?of the Buildroot website
+> - ? ?(<a href="http://buildroot.net">http://buildroot.net</a>).
+> - ? ?For the impatient, here's a quick recipe:</p>
+> -
+> -<pre>
+> - $ git clone git://git.buildroot.net/buildroot
+> -</pre>
+> -
+> - ? ?<h2 id="using">Using Buildroot</h2>
+> -
+> - ? ?<p>Buildroot has a nice configuration tool similar to the one you can find
+> - ? ?in the Linux kernel
+> - ? ?(<a href="http://www.kernel.org/">http://www.kernel.org/</a>) or in Busybox
+> - ? ?(<a href="http://www.busybox.org/">http://www.busybox.org/</a>). Note that
+> - ? ?you can (and should) build everything as a normal user. There is no need to
+> - ? ?be root to configure and use Buildroot. The first step is to run the
+> - ? ?configuration assistant:</p>
+> -
+> -<pre>
+> - $ make menuconfig
+> -</pre>
+> -
+> - ? ?<p>to run the curses-based configurator, or</p>
+> -
+> -<pre>
+> - $ make xconfig
+> -</pre>
+> -
+> - ? ?<p>or</p>
+> -
+> -<pre>
+> - $ make gconfig
+> -</pre>
+> -
+> - ? ?<p>to run the Qt or GTK-based configurators.</p>
+> -
+> - ? ?<p>All of these "make" commands will need to build a configuration
+> - ? ?utility, so you may need to install "development" packages for relevant
+> - ? ?libraries used by the configuration utilities. On Debian-like systems,
+> - ? ?the <code>libncurses5-dev</code> package is required to use the <i>
+> - ? ?menuconfig</i> interface, <code>libqt4-dev</code> is required to use
+> - ? ?the <i>xconfig</i> interface, and <code>libglib2.0-dev, libgtk2.0-dev
+> - ? ?and libglade2-dev</code> are needed to use the <i>gconfig</i> interface.</p>
+> -
+> - ? ?<p>For each menu entry in the configuration tool, you can find associated
+> - ? ?help that describes the purpose of the entry.</p>
+> -
+> - ? ?<p>Once everything is configured, the configuration tool generates a
+> - ? ?<code>.config</code> file that contains the description of your
+> - ? ?configuration. It will be used by the Makefiles to do what's needed.</p>
+> -
+> -
+> - ? ?<p>Let's go:</p>
+> -
+> -<pre>
+> - $ make
+> -</pre>
+> -
+> - ? ?<p>You <b>should never</b> use <code>make -jN</code> with
+> - ? ?Buildroot: it does not support <i>top-level parallel
+> - ? ?make</i>. Instead, use the <code>BR2_JLEVEL</code> option to tell
+> - ? ?Buildroot to run each package compilation with <code>make
+> - ? ?-jN</code>.</p>
+> -
+> - ? ?<p>This command will generally perform the following steps:</p>
+> - ? ?<ul>
+> - ? ? ?<li>Download source files (as required)</li>
+> - ? ? ?<li>Configure, build and install the cross-compiling toolchain
+> - ? ? ?if an internal toolchain is used, or import a toolchain if an
+> - ? ? ?external toolchain is used</li>
+> - ? ? ?<li>Build/install selected target packages</li>
+> - ? ? ?<li>Build a kernel image, if selected</li>
+> - ? ? ?<li>Build a bootloader image, if selected</li>
+> - ? ? ?<li>Create a root filesystem in selected formats</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>Buildroot output is stored in a single directory, <code>output/</code>.
+> - ? ?This directory contains several subdirectories:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>images/</code> where all the images (kernel image,
+> - ? ? ?bootloader and root filesystem images) are stored.</li>
+> -
+> - ? ? ?<li><code>build/</code> where all the components except for the
+> - ? ? ?cross-compilation toolchain are built (this includes tools needed to
+> - ? ? ?run Buildroot on the host and packages compiled for the target). The
+> - ? ? ?<code>build/</code> directory contains one subdirectory for each of
+> - ? ? ?these components.</li>
+> -
+> - ? ? ?<li><code>staging/</code> which contains a hierarchy similar to a root
+> - ? ? ?filesystem hierarchy. This directory contains the installation of the
+> - ? ? ?cross-compilation toolchain and all the userspace packages selected
+> - ? ? ?for the target. However, this directory is <i>not</i> intended to be
+> - ? ? ?the root filesystem for the target: it contains a lot of development
+> - ? ? ?files, unstripped binaries and libraries that make it far too big for
+> - ? ? ?an embedded system. These development files are used to compile
+> - ? ? ?libraries and applications for the target that depend on other
+> - ? ? ?libraries.</li>
+> -
+> - ? ? ?<li><code>target/</code> which contains <i>almost</i> the complete
+> - ? ? ?root filesystem for the target: everything needed is present except
+> - ? ? ?the device files in <code>/dev/</code> (Buildroot can't create them
+> - ? ? ?because Buildroot doesn't run as root and doesn't want to run as
+> - ? ? ?root). Therefore, this directory <b>should not be used on your target</b>.
+> - ? ? ?Instead, you should use one of the images built in the
+> - ? ? ?<code>images/</code> directory. If you need an extracted image of the
+> - ? ? ?root filesystem for booting over NFS, then use the tarball image
+> - ? ? ?generated in <code>images/</code> and extract it as root.<br/>Compared
+> - ? ? ?to <code>staging/</code>, <code>target/</code> contains only the
+> - ? ? ?files and libraries needed to run the selected target applications:
+> - ? ? ?the development files (headers, etc.) are not present, unless the
+> - ? ? ?<code>development files in target filesystem</code> option is selected.
+> - ? ? ?</li>
+> -
+> - ? ? ?<li><code>host/</code> contains the installation of tools compiled for
+> - ? ? ?the host that are needed for the proper execution of Buildroot,
+> - ? ? ?including the cross-compilation toolchain.</li>
+> -
+> - ? ? ?<li><code>toolchain/</code> contains the build directories for the
+> - ? ? ?various components of the cross-compilation toolchain.</li>
+> - ? ?</ul>
+> -
+> - ? ?<h3 id="offline_builds">Offline builds</h3>
+> -
+> - ? ?<p>If you intend to do an offline build and just want to download
+> - ? ?all sources that you previously selected in the configurator
+> - ? ?(<i>menuconfig</i>, <i>xconfig</i> or <i>gconfig</i>), then issue:</p>
+> -
+> -<pre>
+> - $ make source
+> -</pre>
+> -
+> - ? ?<p>You can now disconnect or copy the content of your <code>dl</code>
+> - ? ?directory to the build-host.</p>
+> -
+> - ? ?<h3 id="building_out_of_tree">Building out-of-tree</h3>
+> -
+> - ? ?<p>Buildroot supports building out of tree with a syntax similar to the
+> - ? ?Linux kernel. To use it, add O=&lt;directory&gt; to the make command
+> - ? ?line:</p>
+> -
+> -<pre>
+> - $ make O=/tmp/build
+> -</pre>
+> -
+> - ? ?<p>Or:</p>
+> -
+> -<pre>
+> - $ cd /tmp/build; make O=$PWD -C path/to/buildroot
+> -</pre>
+> -
+> - ? ?<p>All the output files will be located under <code>/tmp/build</code>.</p>
+> -
+> - ? ?<p>When using out-of-tree builds, the Buildroot <code>.config</code> and
+> - ? ?temporary files are also stored in the output directory. This means that
+> - ? ?you can safely run multiple builds in parallel using the same source
+> - ? ?tree as long as they use unique output directories.</p>
+> -
+> - ? ?<p>For ease of use, Buildroot generates a Makefile wrapper in the output
+> - ? ?directory - So after the first run, you no longer need to pass
+> - ? ?<code>O=..</code> and <code>-C ..</code>, simply run (in the output
+> - ? ?directory):</p>
+> -
+> -<pre>
+> - $ make &lt;target&gt;
+> -</pre>
+> -
+> - ? ?<h3 id="environment_variables">Environment variables</h3>
+> -
+> - ? ?<p>Buildroot also honors some environment variables, when they are passed
+> - ? ?to <code>make</code> or set in the environment:</p>
+> - ? ?<ul>
+> - ? ? ?<li><code>HOSTCXX</code>, the host C++ compiler to use</li>
+> - ? ? ?<li><code>HOSTCC</code>, the host C compiler to use</li>
+> - ? ? ?<li><code>UCLIBC_CONFIG_FILE=&lt;path/to/.config&gt;</code>, path to
+> - ? ? ?the uClibc configuration file, used to compile uClibc, if an
+> - ? ? ?internal toolchain is being built</li>
+> - ? ? ?<li><code>BUSYBOX_CONFIG_FILE=&lt;path/to/.config&gt;</code>, path to
+> - ? ? ?the Busybox configuration file</li>
+> - ? ? ?<li><code>BUILDROOT_DL_DIR</code> to override the directory in which
+> - ? ? ?Buildroot stores/retrieves downloaded files</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>An example that uses config files located in the toplevel directory and
+> - ? ?in your $HOME:</p>
+> -
+> -<pre>
+> - $ make UCLIBC_CONFIG_FILE=uClibc.config BUSYBOX_CONFIG_FILE=$HOME/bb.config
+> -</pre>
+> -
+> - ? ?<p>If you want to use a compiler other than the default <code>gcc</code>
+> - ? ?or <code>g++</code> for building helper-binaries on your host, then do</p>
+> -
+> -<pre>
+> - $ make HOSTCXX=g++-4.3-HEAD HOSTCC=gcc-4.3-HEAD
+> -</pre>
+> -
+> - ? ? ? <h2 id="custom_targetfs">Customizing the generated target filesystem</h2>
+> -
+> - ? ?<p>There are a few ways to customize the resulting target filesystem:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li>Customize the target filesystem directly and rebuild the image.
+> - ? ? ?The target filesystem is available under <code>output/target/</code>.
+> - ? ? ?You can simply make your changes here and run make afterwards &mdash;
+> - ? ? ?this will rebuild the target filesystem image. This method allows you
+> - ? ? ?to do anything to the target filesystem, but if you decide to
+> - ? ? ?completely rebuild your toolchain and tools, these changes will be
+> - ? ? ?lost.</li>
+> -
+> - ? ? ?<li>Create your own <i>target skeleton</i>. You can start with
+> - ? ? ?the default skeleton available under <code>fs/skeleton</code>
+> - ? ? ?and then customize it to suit your
+> - ? ? ?needs. The <code>BR2_ROOTFS_SKELETON_CUSTOM</code>
+> - ? ? ?and <code>BR2_ROOTFS_SKELETON_CUSTOM_PATH</code> will allow you
+> - ? ? ?to specify the location of your custom skeleton. At build time,
+> - ? ? ?the contents of the skeleton are copied to output/target before
+> - ? ? ?any package installation.</li>
+> -
+> - ? ? ?<li>In the Buildroot configuration, you can specify the path to a
+> - ? ? ?post-build script, that gets called <i>after</i> Buildroot builds all
+> - ? ? ?the selected software, but <i>before</i> the rootfs packages are
+> - ? ? ?assembled. The destination root filesystem folder is given as the
+> - ? ? ?first argument to this script, and this script can then be used to
+> - ? ? ?copy programs, static data or any other needed file to your target
+> - ? ? ?filesystem.<br/>You should, however, use this feature with care.
+> - ? ? ?Whenever you find that a certain package generates wrong or unneeded
+> - ? ? ?files, you should fix that package rather than work around it with a
+> - ? ? ?post-build cleanup script.</li>
+> -
+> - ? ? ?<li>A special package, <i>customize</i>, stored in
+> - ? ? ?<code>package/customize</code> can be used. You can put all the
+> - ? ? ?files that you want to see in the final target root filesystem
+> - ? ? ?in <code>package/customize/source</code>, and then enable this
+> - ? ? ?special package in the configuration system.</li>
+> - ? ?</ul>
+> -
+> - ? ?<h2 id="custom_busybox">Customizing the Busybox configuration</h2>
+> -
+> - ? ?<p><a href="http://www.busybox.net/">Busybox</a> is very configurable,
+> - ? ?and you may want to customize it. You can follow these simple steps to
+> - ? ?do so. This method isn't optimal, but it's simple, and it works:</p>
+> -
+> - ? ?<ol>
+> - ? ? ?<li>Do an initial compilation of Buildroot, with busybox, without
+> - ? ? ?trying to customize it.</li>
+> -
+> - ? ? ?<li>Invoke <code>make busybox-menuconfig</code>.
+> - ? ? ?The nice configuration tool appears, and you can
+> - ? ? ?customize everything.</li>
+> -
+> - ? ? ?<li>Run the compilation of Buildroot again.</li>
+> - ? ?</ol>
+> -
+> - ? ?<p>Otherwise, you can simply change the
+> - ? ?<code>package/busybox/busybox-&lt;version&gt;.config</code> file, if you
+> - ? ?know the options you want to change, without using the configuration tool.
+> - ? ?</p>
+> -
+> - ? ?<p>If you want to use an existing config file for busybox, then see
+> - ? ?section <a href="#environment_variables">environment variables</a>.</p>
+> -
+> - ? ?<h2 id="custom_uclibc">Customizing the uClibc configuration</h2>
+> -
+> - ? ?<p>Just like <a href="#custom_busybox">BusyBox</a>,
+> - ? ?<a href="http://www.uclibc.org/">uClibc</a> offers a lot of
+> - ? ?configuration options. They allow you to select various
+> - ? ?functionalities depending on your needs and limitations.</p>
+> -
+> - ? ?<p>The easiest way to modify the configuration of uClibc is to
+> - ? ?follow these steps:</p>
+> -
+> - ? ?<ol>
+> - ? ? ?<li>Do an initial compilation of Buildroot without trying to
+> - ? ? ?customize uClibc.</li>
+> -
+> - ? ? ?<li>Invoke <code>make uclibc-menuconfig</code>.
+> - ? ? ?The nice configuration assistant, similar to
+> - ? ? ?the one used in the Linux kernel or Buildroot, appears. Make
+> - ? ? ?your configuration changes as appropriate.</li>
+> -
+> - ? ? ?<li>Copy the <code>$(O)/toolchain/uclibc-VERSION/.config</code>
+> - ? ? ?file to a different place
+> - ? ? ?(like <code>toolchain/uClibc/uClibc-myconfig.config</code>,
+> - ? ? ?or <code>board/mymanufacturer/myboard/uClibc.config</code>) and
+> - ? ? ?adjust the uClibc configuration (configuration
+> - ? ? ?option <code>BR2_UCLIBC_CONFIG</code>) to use this configuration
+> - ? ? ?instead of the default one.</li>
+> -
+> - ? ? ?<li>Run the compilation of Buildroot again.</li>
+> - ? ?</ol>
+> -
+> - ? ?<p>Otherwise, you can simply change
+> - ? ?<code>toolchain/uClibc/uClibc.config</code>, without running the
+> - ? ?configuration assistant.</p>
+> -
+> - ? ?<p>If you want to use an existing config file for uclibc, then see
+> - ? ?section <a href="#environment_variables">environment variables</a>.</p>
+> -
+> - ? ?<h2 id="custom_linux26">Customizing the Linux kernel configuration</h2>
+> -
+> - ? ?<p>The Linux kernel configuration can be customized just like
+> - ? ?<a href="#custom_busybox">BusyBox</a> and
+> - ? ?<a href="#custom_uclibc">uClibc</a> using <code>make linux-menuconfig
+> - ? ?</code>. Make sure you have enabled the kernel build in <code>make
+> - ? ?menuconfig</code> first. Once done, run <code>make</code> to (re)build
+> - ? ?everything.</p>
+> -
+> - ? ?<p>If you want to use an existing config file for Linux, then see
+> - ? ?section <a href="#environment_variables">environment variables</a>.</p>
+> -
+> - ? ?<h2 id="rebuilding_packages">Understanding how to rebuild packages</h2>
+> -
+> - ? ?<p>One of the most common questions asked by Buildroot
+> - ? ?users is how to rebuild a given package or how to
+> - ? ?remove a package without rebuilding everything from scratch.</p>
+> -
+> - ? ?<p>Removing a package is currently unsupported by Buildroot
+> - ? ?without rebuilding from scratch. This is because Buildroot doesn't
+> - ? ?keep track of which package installs what files in the
+> - ? ?<code>output/staging</code> and <code>output/target</code>
+> - ? ?directories. However, implementing clean package removal is on the
+> - ? ?TODO-list of Buildroot developers.</p>
+> -
+> - ? ?<p>The easiest way to rebuild a single package from scratch is to
+> - ? ?remove its build directory in <code>output/build</code>. Buildroot
+> - ? ?will then re-extract, re-configure, re-compile and re-install this
+> - ? ?package from scratch.</p>
+> -
+> - ? ?<p>However, if you don't want to rebuild the package completely
+> - ? ?from scratch, a better understanding of the Buildroot internals is
+> - ? ?needed. Internally, to keep track of which steps have been done
+> - ? ?and which steps remain to be done, Buildroot maintains stamp
+> - ? ?files (empty files that just tell whether this or that action
+> - ? ?has been done). The problem is that these stamp files are not
+> - ? ?uniformly named and handled by the different packages, so some
+> - ? ?understanding of the particular package is needed.</p>
+> -
+> - ? ?<p>For packages relying on Buildroot packages infrastructures (see
+> - ? ?<a href="#add_packages">this section</a> for details), the
+> - ? ?following stamp files are relevant:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>output/build/packagename-version/.stamp_configured</code>. If
+> - ? ? ?removed, Buildroot will trigger the recompilation of the package
+> - ? ? ?from the configuration step (execution of
+> - ? ? ?<code>./configure</code>).</li>
+> -
+> - ? ? ?<li><code>output/build/packagename-version/.stamp_built</code>. If
+> - ? ? ?removed, Buildroot will trigger the recompilation of the package
+> - ? ? ?from the compilation step (execution of <code>make</code>).</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>For other packages, an analysis of the specific <i>package.mk</i>
+> - ? ?file is needed. For example, the zlib Makefile used to look like this
+> - ? ?(before it was converted to the generic package infrastructure):</p>
+> -
+> -<pre>
+> -$(ZLIB_DIR)/.configured: $(ZLIB_DIR)/.patched
+> - ? ? ? (cd $(ZLIB_DIR); rm -rf config.cache; \
+> - ? ? ? ? ? ? ? [...]
+> - ? ? ? )
+> - ? ? ? touch $@
+> -
+> -$(ZLIB_DIR)/libz.a: $(ZLIB_DIR)/.configured
+> - ? ? ? $(MAKE) -C $(ZLIB_DIR) all libz.a
+> - ? ? ? touch -c $@
+> -</pre>
+> -
+> - ? ?<p>If you want to trigger the reconfiguration, you need to
+> - ? ?remove <code>output/build/zlib-version/.configured</code>. If
+> - ? ?you want to trigger only the recompilation, you need to remove
+> - ? ?<code>output/build/zlib-version/libz.a</code>.</p>
+> -
+> - ? ?<p>Note that most packages, if not all, will progressively be
+> - ? ?ported over to the generic or autotools infrastructure, making it
+> - ? ?much easier to rebuild individual packages.</p>
+> -
+> - ? ?<h2 id="buildroot_innards">How Buildroot works</h2>
+> -
+> - ? ?<p>As mentioned above, Buildroot is basically a set of Makefiles that
+> - ? ?download, configure, and compile software with the correct options. It
+> - ? ?also includes patches for various software packages &mdash; ?mainly the
+> - ? ?ones involved in the cross-compilation tool chain (<code>gcc</code>,
+> - ? ?<code>binutils</code> and <code>uClibc</code>).</p>
+> -
+> - ? ?<p>There is basically one Makefile per software package, and they are
+> - ? ?named with the <code>.mk</code> extension. Makefiles are split into
+> - ? ?three main sections:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><b>toolchain</b> (in the <code>toolchain/</code> directory) contains
+> - ? ? ?the Makefiles and associated files for all software related to the
+> - ? ? ?cross-compilation toolchain: <code>binutils</code>, <code>gcc</code>,
+> - ? ? ?<code>gdb</code>, <code>kernel-headers</code> and <code>uClibc</code>.</li>
+> -
+> - ? ? ?<li><b>package</b> (in the <code>package/</code> directory) contains the
+> - ? ? ?Makefiles and associated files for all user-space tools that Buildroot
+> - ? ? ?can compile and add to the target root filesystem. There is one
+> - ? ? ?sub-directory per tool.</li>
+> -
+> - ? ? ?<li><b>target</b> (in the <code>target</code> directory) contains the
+> - ? ? ?Makefiles and associated files for software related to the generation of
+> - ? ? ?the target root filesystem image. Four types of filesystems are supported:
+> - ? ? ?ext2, jffs2, cramfs and squashfs. For each of them there is a
+> - ? ? ?sub-directory with the required files. There is also a
+> - ? ? ?<code>default/</code> directory that contains the target filesystem
+> - ? ? ?skeleton.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>Each directory contains at least 2 files:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>something.mk</code> is the Makefile that downloads, configures,
+> - ? ? ?compiles and installs the package <code>something</code>.</li>
+> -
+> - ? ? ?<li><code>Config.in</code> is a part of the configuration tool
+> - ? ? ?description file. It describes the options related to the
+> - ? ? ?package.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>The main Makefile performs the following steps (once the
+> - ? ?configuration is done):</p>
+> -
+> - ? ?<ol>
+> - ? ? ?<li>Create all the output directories: <code>staging</code>,
+> - ? ? ?<code>target</code>, <code>build</code>, <code>stamps</code>,
+> - ? ? ?etc. in the output directory (<code>output/</code> by default,
+> - ? ? ?another value can be specified using <code>O=</code>)</li>
+> -
+> - ? ? ?<li>Generate all the targets listed in the
+> - ? ? ?<code>BASE_TARGETS</code> variable. When an internal toolchain
+> - ? ? ?is used, this means generating the cross-compilation
+> - ? ? ?toolchain. When an external toolchain is used, this means checking
+> - ? ? ?the features of the external toolchain and importing it into the
+> - ? ? ?Buildroot environment.</li>
+> -
+> - ? ? ?<li>Generate all the targets listed in the <code>TARGETS</code>
+> - ? ? ?variable. This variable is filled by all the individual
+> - ? ? ?components' Makefiles. Generating these targets will
+> - ? ? ?trigger the compilation of the userspace packages (libraries,
+> - ? ? ?programs), the kernel, the bootloader and the generation of the
+> - ? ? ?root filesystem images, depending on the configuration.</li>
+> - ? ?</ol>
+> -
+> - ? ?<h2 id="board_support"> Creating your own board support</h2>
+> -
+> - ? ?<p>Creating your own board support in Buildroot allows users of a
+> - ? ?particular hardware platform to easily build a system that is
+> - ? ?known to work.</p>
+> -
+> - ? ?<p>To do so, you need to create a normal Buildroot configuration
+> - ? ?that builds a basic system for the hardware: toolchain, kernel,
+> - ? ?bootloader, filesystem and a simple Busybox-only userspace. No
+> - ? ?specific package should be selected: the configuration should be
+> - ? ?as minimal as possible, and should only build a working basic
+> - ? ?Busybox system for the target platform. You can of course use more
+> - ? ?complicated configurations for your internal projects, but the
+> - ? ?Buildroot project will only integrate basic board
+> - ? ?configurations. This is because package selections are highly
+> - ? ?application-specific.</p>
+> -
+> - ? ?<p>Once you have a known working configuration, run <code>make
+> - ? ?savedefconfig</code>. This will generate a
+> - ? ?minimal <code>defconfig</code> file at the root of the Buildroot
+> - ? ?source tree. Move this file into the <code>configs/</code>
+> - ? ?directory, and rename it <code>MYBOARD_defconfig</code>.</p>
+> -
+> - ? ?<p>It is recommended to use as much as possible upstream versions
+> - ? ?of the Linux kernel and bootloaders, and to use as much as
+> - ? ?possible default kernel and bootloader configurations. If they are
+> - ? ?incorrect for your platform, we encourage you to send fixes to the
+> - ? ?corresponding upstream projects.</p>
+> -
+> - ? ?<p>However, in the mean time, you may want to store kernel or
+> - ? ?bootloader configuration or patches specific to your target
+> - ? ?platform. To do so, create a
+> - ? ?directory <code>board/MANUFACTURER</code> and a
+> - ? ?subdirectory <code>board/MANUFACTURER/BOARDNAME</code> (after
+> - ? ?replacing, of course, MANUFACTURER and BOARDNAME with the
+> - ? ?appropriate values, in lower case letters). You can then store
+> - ? ?your patches and configurations in these directories, and
+> - ? ?reference them from the main Buildroot configuration.</p>
+> -
+> - ? ?<h2 id="using_toolchain">Using the generated toolchain outside Buildroot</h2>
+> -
+> - ? ?<p>You may want to compile, for your target, your own programs or other
+> - ? ?software that are not packaged in Buildroot. In order to do this you can
+> - ? ?use the toolchain that was generated by Buildroot.</p>
+> -
+> - ? ?<p>The toolchain generated by Buildroot is located by default in
+> - ? ?<code>output/host/</code>. The simplest way to use it is to add
+> - ? ?<code>output/host/usr/bin/</code> to your PATH environment variable and
+> - ? ?then to use <code>ARCH-linux-gcc</code>, <code>ARCH-linux-objdump</code>,
+> - ? ?<code>ARCH-linux-ld</code>, etc.</p>
+> -
+> - ? ?<p>It is possible to relocate the toolchain &mdash; but
+> - ? ?then <code>--sysroot</code> must be passed every time the compiler
+> - ? ?is called to tell where the libraries and header files are.</p>
+> -
+> - ? ?<p>It is also possible to generate the Buildroot toolchain in a
+> - ? ?directory other than <code>output/host</code> by using the <code>
+> - ? ?Build options -&gt; Host dir</code> option.
+> - ? ?This could be useful if the toolchain must be shared with other users.</p>
+> -
+> - ? ?<h2 id="ccache-support">Using <code>ccache</code> in Buildroot</h2>
+> -
+> - ? ?<p><a href="http://ccache.samba.org">ccache</a> is a compiler
+> - ? ?cache. It stores the object files resulting from each compilation
+> - ? ?process, and is able to skip future compilation of the same source
+> - ? ?file (with same compiler and same arguments) by using the
+> - ? ?pre-existing object files. When doing almost identical builds from
+> - ? ?scratch a number of times, it can nicely speed up the build
+> - ? ?process.</p>
+> -
+> - ? ?<p><code>ccache</code> support is integrated in Buildroot. You
+> - ? ?just have to enable <code>Enable compiler cache</code>
+> - ? ?in <code>Build options</code>. This will automatically build
+> - ? ?<code>ccache</code> and use it for every host and target
+> - ? ?compilation.</p>
+> -
+> - ? ?<p>The cache is located
+> - ? ?in <code>$HOME/.buildroot-ccache</code>. It is stored outside of
+> - ? ?Buildroot output directory so that it can be shared by separate
+> - ? ?Buildroot builds. If you want to get rid of the cache, simply
+> - ? ?remove this directory.</p>
+> -
+> - ? ?<p>You can get statistics on the cache (its size, number of hits,
+> - ? ?misses, etc.) by running <code>make ccache-stats</code>.</p>
+> -
+> - ? ?<h2 id="downloaded_packages">Location of downloaded packages</h2>
+> -
+> - ? ?<p>It might be useful to know that the various tarballs that are
+> - ? ?downloaded by the Makefiles are all stored in the <code>DL_DIR</code>
+> - ? ?which by default is the <code>dl</code> directory. It's useful, for
+> - ? ?example, if you want to keep a complete version of Buildroot which is
+> - ? ?known to be working with the associated tarballs. This will allow you to
+> - ? ?regenerate the toolchain and the target filesystem with exactly the same
+> - ? ?versions.</p>
+> -
+> - ? ?<p>If you maintain several Buildroot trees, it might be better to have a
+> - ? ?shared download location. This can be accessed by creating a symbolic
+> - ? ?link from the <code>dl</code> directory to the shared download location:</p>
+> -
+> -<pre>
+> - $ ln -s &lt;shared download location&gt; dl
+> -</pre>
+> -
+> - ? ?<p>Another way of accessing a shared download location is to
+> - ? ?create the <code>BUILDROOT_DL_DIR</code> environment variable.
+> - ? ?If this is set, then the value of DL_DIR in the project is
+> - ? ?overridden. The following line should be added to
+> - ? ?<code>&quot;~/.bashrc&quot;</code>.</p>
+> -
+> -<pre>
+> - $ export BUILDROOT_DL_DIR &lt;shared download location&gt;
+> -</pre>
+> -
+> - ? ?<h2 id="external_toolchain">Using an external toolchain</h2>
+> -
+> - ? ?<p>Using an already existing toolchain is useful for different
+> - ? ?reasons:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li>you already have a toolchain that is known to work for your
+> - ? ? ? specific CPU</li>
+> - ? ? ?<li>you want to speed up the Buildroot build process by skipping
+> - ? ? ?the long toolchain build part</li>
+> - ? ? ?<li>the toolchain generation feature of Buildroot is not
+> - ? ? ? sufficiently flexible for you (for example if you need to
+> - ? ? ? generate a system with <i>glibc</i> instead of
+> - ? ? ? <i>uClibc</i>)</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>Buildroot supports using existing toolchains through a
+> - ? ?mechanism called <i>external toolchain</i>. The external toolchain
+> - ? ?mechanism is enabled in the <code>Toolchain</code> menu, by
+> - ? ?selecting <code>External toolchain</code> in <code>Toolchain
+> - ? ?type</code>.</p>
+> -
+> - ? ?<p>Then, you have three solutions to use an external
+> - ? ?toolchain:</p>
+> -
+> - ? ?<ul>
+> -
+> - ? ? ?<li>Use a predefined external toolchain profile, and let
+> - ? ? ?Buildroot download, extract and install the toolchain. Buildroot
+> - ? ? ?already knows about a few CodeSourcery toolchains for ARM,
+> - ? ? ?PowerPC, MIPS and SuperH. Just select the toolchain profile
+> - ? ? ?in <code>Toolchain</code> through the available ones. This is
+> - ? ? ?definitely the easiest solution.</li>
+> -
+> - ? ? ?<li>Use a predefined external toolchain profile, but instead of
+> - ? ? ?having Buildroot download and extract the toolchain, you can
+> - ? ? ?tell Buildroot where your toolchain is already installed on your
+> - ? ? ?system. Just select the toolchain profile
+> - ? ? ?in <code>Toolchain</code> through the available ones,
+> - ? ? ?unselect <code>Download toolchain automatically</code>, and fill
+> - ? ? ?the <code>Toolchain path</code> text entry with the path to your
+> - ? ? ?cross-compiling toolchain.</li>
+> -
+> - ? ? ?<li>Use a completely custom external toolchain. This is
+> - ? ? ?particularly useful for toolchains generated using
+> - ? ? ?Crosstool-NG. To do this, select the <code>Custom
+> - ? ? ?toolchain</code> solution in the <code>Toolchain</code>
+> - ? ? ?list. You need to fill the <code>Toolchain
+> - ? ? ?path</code>, <code>Toolchain prefix</code> and <code>External
+> - ? ? ?toolchain C library</code> options. Then, you have to tell
+> - ? ? ?Buildroot what your external toolchain supports. If your
+> - ? ? ?external toolchain uses the <i>glibc</i> library, you only have
+> - ? ? ?to tell whether your toolchain supports C++ or not. If your
+> - ? ? ?external toolchain uses the <i>uclibc</i> library, then you have
+> - ? ? ?to tell Buildroot if it supports largefile, IPv6, RPC,
+> - ? ? ?wide-char, locale, program invocation, threads and C++. At the
+> - ? ? ?beginning of the execution, Buildroot will tell you if the
+> - ? ? ?selected options do not match the toolchain configuration.</li>
+> -
+> - ? ?</ul>
+> -
+> - ? ?<p>Our external toolchain support has been tested with toolchains
+> - ? ?from CodeSourcery, toolchains generated
+> - ? ?by <a href="http://ymorin.is-a-geek.org/dokuwiki/projects/crosstool">Crosstool-NG</a>,
+> - ? ?and toolchains generated by Buildroot itself. In general, all
+> - ? ?toolchains that support the <i>sysroot</i> feature should
+> - ? ?work. If not, do not hesitate to contact the developers.</p>
+> -
+> - ? ?<p>We do not support toolchains from
+> - ? ?the <a href="http://www.denx.de/wiki/DULG/ELDK">ELDK of Denx</a>,
+> - ? ?for two reasons:</p>
+> -
+> - ? ?<ul>
+> -
+> - ? ? ?<li>The ELDK does not contain a pure toolchain (i.e just the
+> - ? ? ?compiler, binutils, the C and C++ libraries), but a toolchain
+> - ? ? ?that comes with a very large set of pre-compiled libraries and
+> - ? ? ?programs. Therefore, Buildroot cannot import the <i>sysroot</i>
+> - ? ? ?of the toolchain, as it would contain hundreds of megabytes of
+> - ? ? ?pre-compiled libraries that are normally built by
+> - ? ? ?Buildroot.</li>
+> -
+> - ? ? ?<li>The ELDK toolchains have a completely non-standard custom
+> - ? ? ?mechanism to handle multiple library variants. Instead of using
+> - ? ? ?the standard GCC <i>multilib</i> mechanism, the ARM ELDK uses
+> - ? ? ?different symbolic links to the compiler to differentiate
+> - ? ? ?between library variants (for ARM soft-float and ARM VFP), and
+> - ? ? ?the PowerPC ELDK compiler uses a <code>CROSS_COMPILE</code>
+> - ? ? ?environment variable. This non-standard behaviour makes it
+> - ? ? ?difficult to support ELDK in Buildroot.</li>
+> -
+> - ? ?</ul>
+> -
+> - ? ?<p>We also do not support using the distribution toolchain (i.e
+> - ? ?the gcc/binutils/C library installed by your distribution) as the
+> - ? ?toolchain to build software for the target. This is because your
+> - ? ?distribution toolchain is not a "pure" toolchain (i.e only with
+> - ? ?the C/C++ library), so we cannot import it properly into the
+> - ? ?Buildroot build environment. So even if you are building a system
+> - ? ?for a x86 or x86_64 target, you have to generate a
+> - ? ?cross-compilation toolchain with Buildroot or Crosstool-NG.</p>
+> -
+> - ? ?<h2 id="add_packages">Adding new packages to Buildroot</h2>
+> -
+> - ? ?<p>This section covers how new packages (userspace libraries or
+> - ? ?applications) can be integrated into Buildroot. It also shows how existing
+> - ? ?packages are integrated, which is needed for fixing issues or tuning their
+> - ? ?configuration.</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><a href="#package-directory">Package directory</a></li>
+> - ? ? ?<li><a href="#config-in-file"><code>Config.in</code> file</a></li>
+> - ? ? ?<li><a href="#mk-file">The <code>.mk</code> file</a>
+> - ? ? ? ?<ul>
+> - ? ? ? ? ?<li><a href="#generic-tutorial">Makefile for generic packages : tutorial</a></li>
+> - ? ? ? ? ?<li><a href="#generic-reference">Makefile for generic packages : reference</a></li>
+> - ? ? ? ? ?<li><a href="#autotools-tutorial">Makefile for autotools-based packages : tutorial</a></li>
+> - ? ? ? ? ?<li><a href="#autotools-reference">Makefile for autotools-based packages : reference</a></li>
+> - ? ? ? ? ?<li><a href="#cmake-tutorial">Makefile for CMake-based packages : tutorial</a></li>
+> - ? ? ? ? ?<li><a href="#cmake-reference">Makefile for CMake-based packages : reference</a></li>
+> - ? ? ? ? ?<li><a href="#manual-tutorial">Manual Makefile : tutorial</a></li>
+> - ? ? ? ?</ul>
+> - ? ? ?</li>
+> - ? ? ?<li><a href="#gettext-integration">Gettext integration and interaction with packages</a></li>
+> - ? ?</ul>
+> -
+> - ? ?<h3 id="package-directory">Package directory</h3>
+> -
+> - ? ?<p>First of all, create a directory under the <code>package</code>
+> - ? ?directory for your software, for example <code>libfoo</code>.</p>
+> -
+> - ? ?<p>Some packages have been grouped by topic in a sub-directory:
+> - ? ?<code>multimedia</code>, <code>java</code>, <code>x11r7</code>, and
+> - ? ?<code>games</code>. If your package fits in one of these
+> - ? ?categories, then create your package directory in these.</p>
+> -
+> - ? ?<h3 id="config-in-file"><code>Config.in</code> file</h3>
+> -
+> - ? ?<p>Then, create a file named <code>Config.in</code>. This file
+> - ? ?will contain the option descriptions related to our
+> - ? ?<code>libfoo</code> software that will be used and displayed in the
+> - ? ?configuration tool. It should basically contain :</p>
+> -
+> -<pre>
+> -config BR2_PACKAGE_LIBFOO
+> - ? ? ? bool "libfoo"
+> - ? ? ? help
+> - ? ? ? ? This is a comment that explains what libfoo is.
+> -
+> - ? ? ? ? http://foosoftware.org/libfoo/
+> -</pre>
+> -
+> - ? ?<p>Of course, you can add other options to configure particular
+> - ? ?things in your software. You can look at examples in other
+> - ? ?packages. The syntax of the Config.in file is the same as the one
+> - ? ?for the kernel Kconfig file. The documentation for this syntax is
+> - ? ?available at
+> - ? ?<a href="http://lxr.free-electrons.com/source/Documentation/kbuild/kconfig-language.txt">http://lxr.free-electrons.com/source/Documentation/kbuild/kconfig-language.txt</a>
+> - ? ?</p>
+> -
+> - ? ?<p>Finally you have to add your new <code>libfoo/Config.in</code> to
+> - ? ?<code>package/Config.in</code> (or in a category subdirectory if
+> - ? ?you decided to put your package in one of the existing
+> - ? ?categories). The files included there are <em>sorted
+> - ? ?alphabetically</em> per category and are <em>NOT</em> supposed to
+> - ? ?contain anything but the <em>bare</em> name of the package.</p>
+> -
+> -<pre>
+> -source "package/libfoo/Config.in"
+> -</pre>
+> -
+> - ? ?<h3 id="mk-file">The <code>.mk</code> file</h3>
+> -
+> - ? ?<p>Finally, here's the hardest part. Create a file named
+> - ? ?<code>libfoo.mk</code>. It describes how the package should be
+> - ? ?downloaded, configured, built, installed, etc.</p>
+> -
+> - ? ?<p>Depending on the package type, the <code>.mk</code> file must be
+> - ? ?written in a different way, using different infrastructures:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><b>Makefiles for generic packages</b> (not using autotools): These
+> - ? ? ?are based on an infrastructure similar to the one used for
+> - ? ? ?autotools-based packages, but requires a little more work from the
+> - ? ? ?developer. They specify what should be done for the configuration,
+> - ? ? ?compilation, installation and cleanup of the package. This
+> - ? ? ?infrastructure must be used for all packages that do not use the
+> - ? ? ?autotools as their build system. In the future, other specialized
+> - ? ? ?infrastructures might be written for other build systems.<br/>We cover
+> - ? ? ?them through a <a href="#generic-tutorial">tutorial</a> and a
+> - ? ? ?<a href="#generic-reference">reference</a>.</li>
+> -
+> - ? ? ?<li><b>Makefiles for autotools-based software</b> (autoconf, automake,
+> - ? ? ?etc.): We provide a dedicated infrastructure for such packages, since
+> - ? ? ?autotools is a very common build system. This infrastructure <i>must
+> - ? ? ?</i> be used for new packages that rely on the autotools as their
+> - ? ? ?build system.<br/>We cover them through a
+> - ? ? ?<a href="#autotools-tutorial">tutorial</a> and a
+> - ? ? ?<a href="#autotools-reference">reference</a>.</li>
+> -
+> - ? ? ?<li><b>Manual Makefiles:</b> These are currently obsolete, and no new
+> - ? ? ?manual Makefiles should be added. However, since there are still many
+> - ? ? ?of them in the tree, we keep them documented in a
+> - ? ? ?<a href="#manual-tutorial">tutorial</a>.</li>
+> - ? ?</ul>
+> -
+> - ? ?<h4 id="generic-tutorial">Makefile for generic packages : tutorial</h4>
+> -
+> -<pre>
+> -<span style="color: #000000">01:</span><span style="font-style: italic; color: #9A1900"> #############################################################</span>
+> -<span style="color: #000000">02:</span><span style="font-style: italic; color: #9A1900"> #</span>
+> -<span style="color: #000000">03:</span><span style="font-style: italic; color: #9A1900"> # libfoo</span>
+> -<span style="color: #000000">04:</span><span style="font-style: italic; color: #9A1900"> #</span>
+> -<span style="color: #000000">05:</span><span style="font-style: italic; color: #9A1900"> #############################################################</span>
+> -<span style="color: #000000">06:</span><span style="color: #009900"> LIBFOO_VERSION</span> = 1.0
+> -<span style="color: #000000">07:</span><span style="color: #009900"> LIBFOO_SOURCE</span> = libfoo-<span style="color: #009900">$(LIBFOO_VERSION)</span>.tar.gz
+> -<span style="color: #000000">08:</span><span style="color: #009900"> LIBFOO_SITE</span> = http://www.foosoftware.org/download
+> -<span style="color: #000000">09:</span><span style="color: #009900"> LIBFOO_INSTALL_STAGING</span> = YES
+> -<span style="color: #000000">10:</span><span style="color: #009900"> LIBFOO_DEPENDENCIES</span> = host-libaaa libbbb
+> -<span style="color: #000000">11:</span>
+> -<span style="color: #000000">12:</span> define LIBFOO_BUILD_CMDS
+> -<span style="color: #000000">13:</span> ? ? ? ?<span style="color: #009900">$(MAKE)</span> CC=<span style="color: #009900">$(TARGET_CC)</span> LD=<span style="color: #009900">$(TARGET_LD)</span> -C <span style="color: #009900">$(@D)</span> all
+> -<span style="color: #000000">14:</span> endef
+> -<span style="color: #000000">15:</span>
+> -<span style="color: #000000">16:</span> define LIBFOO_INSTALL_STAGING_CMDS
+> -<span style="color: #000000">17:</span> ? ? ? ?<span style="color: #009900">$(INSTALL)</span> -D -m 0755 <span style="color: #009900">$(@D)</span>/libfoo.a <span style="color: #009900">$(STAGING_DIR)</span>/usr/lib/libfoo.a
+> -<span style="color: #000000">18:</span> ? ? ? ?<span style="color: #009900">$(INSTALL)</span> -D -m 0644 <span style="color: #009900">$(@D)</span>/foo.h <span style="color: #009900">$(STAGING_DIR)</span>/usr/include/foo.h
+> -<span style="color: #000000">19:</span> ? ? ? ?<span style="color: #009900">$(INSTALL)</span> -D -m 0755 <span style="color: #009900">$(@D)</span>/libfoo.so* <span style="color: #009900">$(STAGING_DIR)</span>/usr/lib
+> -<span style="color: #000000">20:</span> endef
+> -<span style="color: #000000">21:</span>
+> -<span style="color: #000000">22:</span> define LIBFOO_INSTALL_TARGET_CMDS
+> -<span style="color: #000000">23:</span> ? ? ? ?<span style="color: #009900">$(INSTALL)</span> -D -m 0755 <span style="color: #009900">$(@D)</span>/libfoo.so* <span style="color: #009900">$(TARGET_DIR)</span>/usr/lib
+> -<span style="color: #000000">24:</span> ? ? ? ?<span style="color: #009900">$(INSTALL)</span> -d -m 0755 <span style="color: #009900">$(TARGET_DIR)</span>/etc/foo.d
+> -<span style="color: #000000">25:</span> endef
+> -<span style="color: #000000">26:</span>
+> -<span style="color: #000000">27:</span><span style="color: #009900"> $(eval $(call GENTARGETS,package,libfoo))</span>
+> -</pre>
+> -
+> - ? ?<p>The Makefile begins on line 6 to 8 with metadata information: the
+> - ? ?version of the package (<code>LIBFOO_VERSION</code>), the name of the
+> - ? ?tarball containing the package (<code>LIBFOO_SOURCE</code>) and the
+> - ? ?Internet location at which the tarball can be downloaded
+> - ? ?(<code>LIBFOO_SITE</code>). All variables must start with the same prefix,
+> - ? ?<code>LIBFOO_</code> in this case. This prefix is always the uppercased
+> - ? ?version of the package name (see below to understand where the package
+> - ? ?name is defined).</p>
+> -
+> - ? ?<p>On line 9, we specify that this package wants to install something to
+> - ? ?the staging space. This is often needed for libraries, since they must
+> - ? ?install header files and other development files in the staging space.
+> - ? ?This will ensure that the commands listed in the
+> - ? ?<code>LIBFOO_INSTALL_STAGING_CMDS</code> variable will be executed.</p>
+> -
+> - ? ?<p>On line 10, we specify the list of dependencies this package relies
+> - ? ?on. These dependencies are listed in terms of lower-case package names,
+> - ? ?which can be packages for the target (without the <code>host-</code>
+> - ? ?prefix) or packages for the host (with the <code>host-</code>) prefix).
+> - ? ?Buildroot will ensure that all these packages are built and installed
+> - ? ?<i>before</i> the current package starts its configuration.</p>
+> -
+> - ? ?<p>The rest of the Makefile defines what should be done at the different
+> - ? ?steps of the package configuration, compilation and installation.
+> - ? ?<code>LIBFOO_BUILD_CMDS</code> tells what steps should be performed to
+> - ? ?build the package. <code>LIBFOO_INSTALL_STAGING_CMDS</code> tells what
+> - ? ?steps should be performed to install the package in the staging space.
+> - ? ?<code>LIBFOO_INSTALL_TARGET_CMDS</code> tells what steps should be
+> - ? ?performed to install the package in the target space.</p>
+> -
+> - ? ?<p>All these steps rely on the <code>$(@D)</code> variable, which
+> - ? ?contains the directory where the source code of the package has been
+> - ? ?extracted.</p>
+> -
+> - ? ?<p>Finally, on line 27, we call the <code>GENTARGETS</code> which
+> - ? ?generates, according to the variables defined previously, all the
+> - ? ?Makefile code necessary to make your package working.</p>
+> -
+> - ? ?<h4 id="generic-reference">Makefile for generic packages : reference</h4>
+> -
+> - ? ?<p>The <code>GENTARGETS</code> macro takes three arguments:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li>The first argument is the package directory prefix. If your
+> - ? ? ?package is in <code>package/libfoo</code>, then the directory prefix
+> - ? ? ?is <code>package</code>. If your package is in
+> - ? ? ?<code>package/editors/foo</code>, then the directory prefix must be
+> - ? ? ?<code>package/editors</code>.</li>
+> -
+> - ? ? ?<li>The second argument is the lower-cased package name. It must match
+> - ? ? ?the prefix of the variables in the <code>.mk</code> file and must
+> - ? ? ?match the configuration option name in the <code>Config.in</code>
+> - ? ? ?file. For example, if the package name is <code>libfoo</code>, then the
+> - ? ? ?variables in the <code>.mk</code> file must start with
+> - ? ? ?<code>LIBFOO_</code> and the configuration option in the
+> - ? ? ?<code>Config.in</code> file must be <code>BR2_PACKAGE_LIBFOO</code>.</li>
+> -
+> - ? ? ?<li>The third argument is optional. It can be used to tell if the
+> - ? ? ?package is a target package (cross-compiled for the target) or a host
+> - ? ? ?package (natively compiled for the host). If unspecified, it is
+> - ? ? ?assumed that it is a target package. See below for details.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>For a given package, in a single <code>.mk</code> file, it is
+> - ? ?possible to call GENTARGETS twice, once to create the rules to generate
+> - ? ?a target package and once to create the rules to generate a host package:
+> - ? ?</p>
+> -
+> -<pre>
+> -$(eval $(call GENTARGETS,package,libfoo))
+> -$(eval $(call GENTARGETS,package,libfoo,host))
+> -</pre>
+> -
+> - ? ?<p>This might be useful if the compilation of the target package
+> - ? ?requires some tools to be installed on the host. If the package name is
+> - ? ?<code>libfoo</code>, then the name of the package for the target is also
+> - ? ?<code>libfoo</code>, while the name of the package for the host is
+> - ? ?<code>host-libfoo</code>. These names should be used in the DEPENDENCIES
+> - ? ?variables of other packages, if they depend on <code>libfoo</code> or
+> - ? ?<code>host-libfoo</code>.</p>
+> -
+> - ? ?<p>The call to the <code>GENTARGETS</code> macro <b>must</b> be at the
+> - ? ?end of the <code>.mk</code> file, after all variable definitions.</p>
+> -
+> - ? ?<p>For the target package, the <code>GENTARGETS</code> uses the
+> - ? ?variables defined by the .mk file and prefixed by the uppercased package
+> - ? ?name: <code>LIBFOO_*</code>. For the host package, it uses the
+> - ? ?<code>HOST_LIBFOO_*</code>. For <i>some</i> variables, if the
+> - ? ?<code>HOST_LIBFOO_</code> prefixed variable doesn't exist, the package
+> - ? ?infrastructure uses the corresponding variable prefixed by
+> - ? ?<code>LIBFOO_</code>. This is done for variables that are likely to have
+> - ? ?the same value for both the target and host packages. See below for
+> - ? ?details.</p>
+> -
+> - ? ?<p>The list of variables that can be set in a <code>.mk</code> file to
+> - ? ?give metadata information is (assuming the package name is
+> - ? ?<code>libfoo</code>) :</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>LIBFOO_VERSION</code>, mandatory, must contain the
+> - ? ? ?version of the package. Note that
+> - ? ? ?if <code>HOST_LIBFOO_VERSION</code> doesn't exist, it is assumed
+> - ? ? ?to be the same as <code>LIBFOO_VERSION</code>. It can also be a
+> - ? ? ?Subversion or Git branch or tag, for packages that are fetched
+> - ? ? ?directly from their revision control system.<br/>
+> - ? ? ?Example: <code>LIBFOO_VERSION = 0.1.2</code></li>
+> -
+> - ? ? ?<li><code>LIBFOO_SOURCE</code> may contain the name of the tarball of
+> - ? ? ?the package. If <code>HOST_LIBFOO_SOURCE</code> is not specified, it
+> - ? ? ?defaults to <code>LIBFOO_VERSION</code>. If none are specified, then
+> - ? ? ?the value is assumed to be
+> - ? ? ?<code>packagename-$(LIBFOO_VERSION).tar.gz</code>.<br/>Example:
+> - ? ? ?<code>LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2</code></li>
+> -
+> - ? ? ?<li><code>LIBFOO_PATCH</code> may contain the name of a patch, that
+> - ? ? ?will be downloaded from the same location as the tarball indicated in
+> - ? ? ?<code>LIBFOO_SOURCE</code>. If <code>HOST_LIBFOO_PATCH</code> is not
+> - ? ? ?specified, it defaults to <code>LIBFOO_PATCH</code>. Also note that
+> - ? ? ?another mechanism is available to patch a package: all files of the
+> - ? ? ?form <code>packagename-packageversion-description.patch</code> present
+> - ? ? ?in the package directory inside Buildroot will be applied to the
+> - ? ? ?package after extraction.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_SITE</code> may contain the Internet location
+> - ? ? ?of the package. It can either be the HTTP or FTP location of a
+> - ? ? ?tarball, or the URL of a Git or Subversion repository
+> - ? ? ?(see <code>LIBFOO_SITE_METHOD</code>
+> - ? ? ?below). If <code>HOST_LIBFOO_SITE</code> is not specified, it
+> - ? ? ?defaults to <code>LIBFOO_SITE</code>. If none are specified,
+> - ? ? ?then the location is assumed to be
+> - ? ? ?<code>http://$$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/packagename</code>.
+> - ? ? ?<br/>Examples:<br/>
+> - ? ? ?<code>LIBFOO_SITE=http://www.libfoosoftware.org/libfoo</code><br/>
+> - ? ? ?<code>LIBFOO_SITE=http://svn.xiph.org/trunk/Tremor/</code></li>
+> -
+> - ? ? ?<li><code>LIBFOO_SITE_METHOD</code> may contain the method to
+> - ? ? ?fetch the package source code. It can either
+> - ? ? ?be <code>wget</code> (for normal FTP/HTTP downloads of
+> - ? ? ?tarballs), <code>svn</code>, <code>git</code> or <code>bzr</code>.
+> - ? ? ?When not specified, it is guessed from the URL given
+> - ? ? ?in <code>LIBFOO_SITE</code>: <code>svn://</code>, <code>git://</code>
+> - ? ? ?and <code>bzr://</code> URLs will use the <code>svn</code>,
+> - ? ? ?<code>git</code> and <code>bzr</code> methods respectively. All other
+> - ? ? ?URL-types will use the <code>wget</code> method. So for example, in the
+> - ? ? ?case of a package whose source code is available through
+> - ? ? ?Subversion repository on HTTP, one <i>must</i>
+> - ? ? ?specifiy <code>LIBFOO_SITE_METHOD=svn</code>. For <code>svn</code>
+> - ? ? ?and <code>git</code> methods, what Buildroot does is a
+> - ? ? ?checkout/clone of the repository which is then tarballed and
+> - ? ? ?stored into the download cache. Next builds will not
+> - ? ? ?checkout/clone again, but will use the tarball
+> - ? ? ?directly. When <code>HOST_LIBFOO_SITE_METHOD</code> is not
+> - ? ? ?specified, it defaults to the value
+> - ? ? ?of <code>LIBFOO_SITE_METHOD</code>. See <code>package/multimedia/tremor/</code>
+> - ? ? ?for an example.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_DEPENDENCIES</code> lists the dependencies (in terms
+> - ? ? ?of package name) that are required for the current target package to
+> - ? ? ?compile. These dependencies are guaranteed to be compiled and
+> - ? ? ?installed before the configuration of the current package starts. In a
+> - ? ? ?similar way, <code>HOST_LIBFOO_DEPENDENCIES</code> lists the
+> - ? ? ?dependency for the current host package.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_STAGING</code> can be set to <code>YES</code>
+> - ? ? ?or <code>NO</code> (default). If set to <code>YES</code>, then the
+> - ? ? ?commands in the <code>LIBFOO_INSTALL_STAGING_CMDS</code> variables are
+> - ? ? ?executed to install the package into the staging directory.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_TARGET</code> can be set to <code>YES</code>
+> - ? ? ?(default) or <code>NO</code>. If set to <code>YES</code>, then the
+> - ? ? ?commands in the <code>LIBFOO_INSTALL_TARGET_CMDS</code> variables are
+> - ? ? ?executed to install the package into the target directory.</li> </ul>
+> -
+> - ? ?<p>The recommended way to define these variables is to use the following
+> - ? ?syntax:</p>
+> -
+> -<pre>
+> -LIBFOO_VERSION = 2.32
+> -</pre>
+> -
+> - ? ?<p>Now, the variables that define what should be performed at the
+> - ? ?different steps of the build process.</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>LIBFOO_CONFIGURE_CMDS</code>, used to list the actions to be
+> - ? ? ?performed to configure the package before its compilation</li>
+> -
+> - ? ? ?<li><code>LIBFOO_BUILD_CMDS</code>, used to list the actions to be
+> - ? ? ?performed to compile the package</li>
+> -
+> - ? ? ?<li><code>HOST_LIBFOO_INSTALL_CMDS</code>, used to list the actions to
+> - ? ? ?be performed to install the package, when the package is a host
+> - ? ? ?package. The package must install its files to the directory given by
+> - ? ? ?<code>$(HOST_DIR)</code>. All files, including development files such
+> - ? ? ?as headers should be installed, since other packages might be compiled
+> - ? ? ?on top of this package.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_TARGET_CMDS</code>, used to list the actions
+> - ? ? ?to be performed to install the package to the target directory, when
+> - ? ? ?the package is a target package. The package must install its files to
+> - ? ? ?the directory given by <code>$(TARGET_DIR)</code>. Only the files
+> - ? ? ?required for <i>documentation</i> and <i>execution</i> of the package
+> - ? ? ?should be installed. Header files should not be installed, they will
+> - ? ? ?be copied to the target, if the
+> - ? ? ?<code>development files in target filesystem</code> option is selected.
+> - ? ? ?</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_STAGING_CMDS</code>, used to list the actions
+> - ? ? ?to be performed to install the package to the staging directory, when
+> - ? ? ?the package is a target package. The package must install its files to
+> - ? ? ?the directory given by <code>$(STAGING_DIR)</code>. All development
+> - ? ? ?files should be installed, since they might be needed to compile other
+> - ? ? ?packages.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CLEAN_CMDS</code>, used to list the actions to
+> - ? ? ?perform to clean up the build directory of the package.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_UNINSTALL_TARGET_CMDS</code>, used to list the actions
+> - ? ? ?to uninstall the package from the target directory
+> - ? ? ?<code>$(TARGET_DIR)</code></li>
+> -
+> - ? ? ?<li><code>LIBFOO_UNINSTALL_STAGING_CMDS</code>, used to list the
+> - ? ? ?actions to uninstall the package from the staging directory
+> - ? ? ?<code>$(STAGING_DIR)</code>.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>The preferred way to define these variables is:</p>
+> -
+> -<pre>
+> -define LIBFOO_CONFIGURE_CMDS
+> - ? ? ? action 1
+> - ? ? ? action 2
+> - ? ? ? action 3
+> -endef
+> -</pre>
+> -
+> - ? ?<p>In the action definitions, you can use the following variables:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>$(@D)</code>, which contains the directory in which the
+> - ? ? ?package source code has been uncompressed.</li>
+> -
+> - ? ? ?<li><code>$(TARGET_CC)</code>, <code>$(TARGET_LD)</code>, etc. to get
+> - ? ? ?the target cross-compilation utilities</li>
+> -
+> - ? ? ?<li><code>$(TARGET_CROSS)</code> to get the cross-compilation
+> - ? ? ?toolchain prefix</li>
+> -
+> - ? ? ?<li>Of course the <code>$(HOST_DIR)</code>, <code>$(STAGING_DIR)</code>
+> - ? ? ?and <code>$(TARGET_DIR)</code> variables to install the packages
+> - ? ? ?properly.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>The last feature of the generic infrastructure is the ability to add
+> - ? ?hooks. These define further actions to perform after existing steps.
+> - ? ?Most hooks aren't really useful for generic packages, since the
+> - ? ?<code>.mk</code> file already has full control over the actions
+> - ? ?performed in each step of the package construction. The hooks are more
+> - ? ?useful for packages using the autotools infrastructure described below.
+> - ? ?However, since they are provided by the generic infrastructure, they are
+> - ? ?documented here. The exception is <code>LIBFOO_POST_PATCH_HOOKS</code>.
+> - ? ?Patching the package is not user definable, so
+> - ? ?<code>LIBFOO_POST_PATCH_HOOKS</code> will be userful for generic packages.
+> - ? ?</p>
+> -
+> - ? ?<p>The following hook points are available:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>LIBFOO_POST_PATCH_HOOKS</code></li>
+> - ? ? ?<li><code>LIBFOO_PRE_CONFIGURE_HOOKS</code></li>
+> - ? ? ?<li><code>LIBFOO_POST_CONFIGURE_HOOKS</code></li>
+> - ? ? ?<li><code>LIBFOO_POST_BUILD_HOOKS</code></li>
+> - ? ? ?<li><code>LIBFOO_POST_INSTALL_HOOKS</code> (for host packages only)</li>
+> - ? ? ?<li><code>LIBFOO_POST_INSTALL_STAGING_HOOKS</code> (for target packages only)</li>
+> - ? ? ?<li><code>LIBFOO_POST_INSTALL_TARGET_HOOKS</code> (for target packages only)</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>These variables are <i>lists</i> of variable names containing actions
+> - ? ?to be performed at this hook point. This allows several hooks to be
+> - ? ?registered at a given hook point. Here is an example:</p>
+> -
+> -<pre>
+> -define LIBFOO_POST_PATCH_FIXUP
+> - ? ? ? action1
+> - ? ? ? action2
+> -endef
+> -
+> -LIBFOO_POST_PATCH_HOOKS += LIBFOO_POST_PATCH_FIXUP
+> -</pre>
+> -
+> - ? <h4 id="autotools-tutorial">Makefile for autotools-based packages : tutorial</h4>
+> -
+> - ? <p>First, let's see how to write a <code>.mk</code> file for an
+> - ? autotools-based package, with an example :</p>
+> -
+> -<pre>
+> -<span style="color: #000000">01:</span><span style="font-style: italic; color: #9A1900"> #############################################################</span>
+> -<span style="color: #000000">02:</span><span style="font-style: italic; color: #9A1900"> #</span>
+> -<span style="color: #000000">03:</span><span style="font-style: italic; color: #9A1900"> # libfoo</span>
+> -<span style="color: #000000">04:</span><span style="font-style: italic; color: #9A1900"> #</span>
+> -<span style="color: #000000">05:</span><span style="font-style: italic; color: #9A1900"> #############################################################</span>
+> -<span style="color: #000000">06:</span><span style="color: #009900"> LIBFOO_VERSION</span> = 1.0
+> -<span style="color: #000000">07:</span><span style="color: #009900"> LIBFOO_SOURCE</span> = libfoo-<span style="color: #009900">$(LIBFOO_VERSION)</span>.tar.gz
+> -<span style="color: #000000">08:</span><span style="color: #009900"> LIBFOO_SITE</span> = http://www.foosoftware.org/download
+> -<span style="color: #000000">09:</span><span style="color: #009900"> LIBFOO_INSTALL_STAGING</span> = YES
+> -<span style="color: #000000">10:</span><span style="color: #009900"> LIBFOO_INSTALL_TARGET</span> = YES
+> -<span style="color: #000000">11:</span><span style="color: #009900"> LIBFOO_CONF_OPT</span> = --enable-shared
+> -<span style="color: #000000">12:</span><span style="color: #009900"> LIBFOO_DEPENDENCIES</span> = libglib2 host-pkg-config
+> -<span style="color: #000000">13:</span>
+> -<span style="color: #000000">14:</span><span style="color: #009900"> $(eval $(call AUTOTARGETS,package,libfoo))</span>
+> -</pre>
+> -
+> - ? ?<p>On line 6, we declare the version of the package.</p>
+> -
+> - ? ?<p>On line 7 and 8, we declare the name of the tarball and the location
+> - ? ?of the tarball on the Web. Buildroot will automatically download the
+> - ? ?tarball from this location.</p>
+> -
+> - ? ?<p>On line 9, we tell Buildroot to install the package to the staging
+> - ? ?directory. The staging directory, located in <code>output/staging/</code>
+> - ? ?is the directory where all the packages are installed, including their
+> - ? ?development files, etc. By default, packages are not installed to the
+> - ? ?staging directory, since usually, only libraries need to be installed in
+> - ? ?the staging directory: their development files are needed to compile
+> - ? ?other libraries or applications depending on them. Also by default, when
+> - ? ?staging installation is enabled, packages are installed in this location
+> - ? ?using the <code>make install</code> command.</p>
+> -
+> - ? ?<p>On line 10, we tell Buildroot to also install the package to the
+> - ? ?target directory. This directory contains what will become the root
+> - ? ?filesystem running on the target. Usually, we try not to install header
+> - ? ?files and to install stripped versions of the binary. By default, target
+> - ? ?installation is enabled, so in fact, this line is not strictly
+> - ? ?necessary. Also by default, packages are installed in this location
+> - ? ?using the <code>make install</code> command.</p>
+> -
+> - ? ?<p>On line 11, we tell Buildroot to pass a custom configure option, that
+> - ? ?will be passed to the <code>./configure</code> script before configuring
+> - ? ?and building the package.</p>
+> -
+> - ? ?<p>On line 12, we declare our dependencies, so that they are built
+> - ? ?before the build process of our package starts.</p>
+> -
+> - ? ?<p>Finally, on line line 14, we invoke the <code>AUTOTARGETS</code>
+> - ? ?macro that generates all the Makefile rules that actually allows the
+> - ? ?package to be built.</p>
+> -
+> - ? ?<h4 id="autotools-reference">Makefile for autotools packages : reference</h4>
+> -
+> - ? ?<p>The main macro of the autotools package infrastructure is
+> - ? ?<code>AUTOTARGETS</code>. It has the same number of arguments and the
+> - ? ?same semantic as the <code>GENTARGETS</code> macro, which is the main
+> - ? ?macro of the generic package infrastructure. For autotools packages, the
+> - ? ?ability to have target and host packages is also available (and is
+> - ? ?actually widely used).</p>
+> -
+> - ? ?<p>Just like the generic infrastructure, the autotools infrastructure
+> - ? ?works by defining a number of variables before calling the
+> - ? ?<code>AUTOTARGETS</code> macro.</p>
+> -
+> - ? ?<p>First, all the package metadata information variables that exist in the
+> - ? ?generic infrastructure also exist in the autotools infrastructure:
+> - ? ?<code>LIBFOO_VERSION</code>, <code>LIBFOO_SOURCE</code>,
+> - ? ?<code>LIBFOO_PATCH</code>, <code>LIBFOO_SITE</code>,
+> - ? ?<code>LIBFOO_SUBDIR</code>, <code>LIBFOO_DEPENDENCIES</code>,
+> - ? ?<code>LIBFOO_INSTALL_STAGING</code>, <code>LIBFOO_INSTALL_TARGET</code>.</p>
+> -
+> - ? ?<p>A few additional variables, specific to the autotools infrastructure,
+> - ? ?can also be defined. Many of them are only useful in very specific
+> - ? ?cases, typical packages will therefore only use a few of them.</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>LIBFOO_SUBDIR</code> may contain the name of a subdirectory
+> - ? ? ?inside the package that contains the configure script. This is useful,
+> - ? ? ?if for example, the main configure script is not at the root of the
+> - ? ? ?tree extracted by the tarball. If <code>HOST_LIBFOO_SUBDIR</code> is
+> - ? ? ?not specified, it defaults to <code>LIBFOO_SUBDIR</code>.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CONF_ENV</code>, to specify additional environment
+> - ? ? ?variables to pass to the configure script. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CONF_OPT</code>, to specify additional configure
+> - ? ? ?options to pass to the configure script. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_MAKE</code>, to specify an alternate <code>make</code>
+> - ? ? ?command. This is typically useful when parallel make is enabled in
+> - ? ? ?the configuration (using <code>BR2_JLEVEL</code>) but that this
+> - ? ? ?feature should be disabled for the given package, for one reason or
+> - ? ? ?another. By default, set to <code>$(MAKE)</code>. If parallel building
+> - ? ? ?is not supported by the package, then it should be set to
+> - ? ? ?<code>LIBFOO_MAKE=$(MAKE1)</code>.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_MAKE_ENV</code>, to specify additional environment
+> - ? ? ?variables to pass to make in the build step. These are passed before
+> - ? ? ?the <code>make</code> command. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_MAKE_OPT</code>, to specify additional variables to
+> - ? ? ?pass to make in the build step. These are passed after the
+> - ? ? ?<code>make</code> command. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_AUTORECONF</code>, tells whether the package should
+> - ? ? ?be autoreconfigured or not (i.e, if the configure script and
+> - ? ? ?Makefile.in files should be re-generated by re-running autoconf,
+> - ? ? ?automake, libtool, etc.). Valid values are <code>YES</code> and
+> - ? ? ?<code>NO</code>. By default, the value is <code>NO</code></li>
+> -
+> - ? ? ?<li><code>LIBFOO_AUTORECONF_OPT</code> to specify additional options
+> - ? ? ?passed to the <i>autoreconf</i> program if
+> - ? ? ?<code>LIBFOO_AUTORECONF=YES</code>. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_LIBTOOL_PATCH</code> tells whether the Buildroot
+> - ? ? ?patch to fix libtool cross-compilation issues should be applied or
+> - ? ? ?not. Valid values are <code>YES</code> and <code>NO</code>. By
+> - ? ? ?default, the value is <code>YES</code></li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_STAGING_OPT</code> contains the make options
+> - ? ? ?used to install the package to the staging directory. By default, the
+> - ? ? ?value is <code>DESTDIR=$$(STAGING_DIR) install</code>, which is
+> - ? ? ?correct for most autotools packages. It is still possible to override
+> - ? ? ?it.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_TARGET_OPT</code> contains the make options
+> - ? ? ?used to install the package to the target directory. By default, the
+> - ? ? ?value is <code>DESTDIR=$$(TARGET_DIR) install</code>. The default
+> - ? ? ?value is correct for most autotools packages, but it is still possible
+> - ? ? ?to override it if needed.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CLEAN_OPT</code> contains the make options used to
+> - ? ? ?clean the package. By default, the value is <code>clean</code>.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_UNINSTALL_STAGING_OPT</code>, contains the make
+> - ? ? ?options used to uninstall the package from the staging directory. By
+> - ? ? ?default, the value is <code>DESTDIR=$$(STAGING_DIR) uninstall</code>.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_UNINSTALL_TARGET_OPT</code>, contains the make
+> - ? ? ?options used to uninstall the package from the target directory. By
+> - ? ? ?default, the value is <code>DESTDIR=$$(TARGET_DIR) uninstall</code>.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>With the autotools infrastructure, all the steps required to build
+> - ? ?and install the packages are already defined, and they generally work
+> - ? ?well for most autotools-based packages. However, when required, it is
+> - ? ?still possible to customize what is done in any particular step:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li>By adding a post-operation hook (after extract, patch, configure,
+> - ? ? ?build or install). See the reference documentation of the generic
+> - ? ? ?infrastructure for details.</li>
+> -
+> - ? ? ?<li>By overriding one of the steps. For example, even if the autotools
+> - ? ? ?infrastructure is used, if the package <code>.mk</code> file defines its
+> - ? ? ?own <code>LIBFOO_CONFIGURE_CMDS</code> variable, it will be used
+> - ? ? ?instead of the default autotools one. However, using this method
+> - ? ? ?should be restricted to very specific cases. Do not use it in the
+> - ? ? ?general case.</li>
+> - ? ?</ul>
+> -
+> - ? ?<h4 id="cmake-tutorial">Makefile for CMake-based packages : tutorial</h4>
+> -
+> - ? ?<p>First, let's see how to write a <code>.mk</code> file for a CMake-based
+> - ? ?package, with an example :</p>
+> -
+> -<pre>
+> -<span style="color: #000000">01:</span><span style="font-style: italic; color: #9A1900"> #############################################################</span>
+> -<span style="color: #000000">02:</span><span style="font-style: italic; color: #9A1900"> #</span>
+> -<span style="color: #000000">03:</span><span style="font-style: italic; color: #9A1900"> # libfoo</span>
+> -<span style="color: #000000">04:</span><span style="font-style: italic; color: #9A1900"> #</span>
+> -<span style="color: #000000">05:</span><span style="font-style: italic; color: #9A1900"> #############################################################</span>
+> -<span style="color: #000000">06:</span><span style="color: #009900"> LIBFOO_VERSION</span> = 1.0
+> -<span style="color: #000000">07:</span><span style="color: #009900"> LIBFOO_SOURCE</span> = libfoo-<span style="color: #009900">$(LIBFOO_VERSION)</span>.tar.gz
+> -<span style="color: #000000">08:</span><span style="color: #009900"> LIBFOO_SITE</span> = http://www.foosoftware.org/download
+> -<span style="color: #000000">09:</span><span style="color: #009900"> LIBFOO_INSTALL_STAGING</span> = YES
+> -<span style="color: #000000">10:</span><span style="color: #009900"> LIBFOO_INSTALL_TARGET</span> = YES
+> -<span style="color: #000000">11:</span><span style="color: #009900"> LIBFOO_CONF_OPT</span> = -DBUILD_DEMOS=ON
+> -<span style="color: #000000">12:</span><span style="color: #009900"> LIBFOO_DEPENDENCIES</span> = libglib2 host-pkg-config
+> -<span style="color: #000000">13:</span>
+> -<span style="color: #000000">14:</span><span style="color: #009900"> $(eval $(call CMAKETARGETS,package,libfoo))</span>
+> -</pre>
+> -
+> - ? ?<p>On line 6, we declare the version of the package.</p>
+> -
+> - ? ?<p>On line 7 and 8, we declare the name of the tarball and the location
+> - ? ?of the tarball on the Web. Buildroot will automatically download the
+> - ? ?tarball from this location.</p>
+> -
+> - ? ?<p>On line 9, we tell Buildroot to install the package to the staging
+> - ? ?directory. The staging directory, located in <code>output/staging/</code>
+> - ? ?is the directory where all the packages are installed, including their
+> - ? ?development files, etc. By default, packages are not installed to the
+> - ? ?staging directory, since usually, only libraries need to be installed in
+> - ? ?the staging directory: their development files are needed to compile
+> - ? ?other libraries or applications depending on them. Also by default, when
+> - ? ?staging installation is enabled, packages are installed in this location
+> - ? ?using the <code>make install</code> command.</p>
+> -
+> - ? ?<p>On line 10, we tell Buildroot to also install the package to the
+> - ? ?target directory. This directory contains what will become the root
+> - ? ?filesystem running on the target. Usually, we try not to install header
+> - ? ?files and to install stripped versions of the binary. By default, target
+> - ? ?installation is enabled, so in fact, this line is not strictly
+> - ? ?necessary. Also by default, packages are installed in this location
+> - ? ?using the <code>make install</code> command.</p>
+> -
+> - ? ?<p>On line 11, we tell Buildroot to pass custom options to CMake when it is
+> - ? ?configuring the package.</p>
+> -
+> - ? ?<p>On line 12, we declare our dependencies, so that they are built
+> - ? ?before the build process of our package starts.</p>
+> -
+> - ? ?<p>Finally, on line line 14, we invoke the <code>CMAKETARGETS</code>
+> - ? ?macro that generates all the Makefile rules that actually allows the
+> - ? ?package to be built.</p>
+> -
+> - ? ?<h4 id="cmake-reference">Makefile for CMake packages : reference</h4>
+> -
+> - ? ?<p>The main macro of the CMake package infrastructure is
+> - ? ?<code>CMAKETARGETS</code>. It has the same number of arguments and the
+> - ? ?same semantic as the <code>GENTARGETS</code> macro, which is the main
+> - ? ?macro of the generic package infrastructure. For CMake packages, the
+> - ? ?ability to have target and host packages is also available.</p>
+> -
+> - ? ?<p>Just like the generic infrastructure, the CMake infrastructure
+> - ? ?works by defining a number of variables before calling the
+> - ? ?<code>CMAKETARGETS</code> macro.</p>
+> -
+> - ? ?<p>First, all the package metadata information variables that exist in the
+> - ? ?generic infrastructure also exist in the CMake infrastructure:
+> - ? ?<code>LIBFOO_VERSION</code>, <code>LIBFOO_SOURCE</code>,
+> - ? ?<code>LIBFOO_PATCH</code>, <code>LIBFOO_SITE</code>,
+> - ? ?<code>LIBFOO_SUBDIR</code>, <code>LIBFOO_DEPENDENCIES</code>,
+> - ? ?<code>LIBFOO_INSTALL_STAGING</code>, <code>LIBFOO_INSTALL_TARGET</code>.</p>
+> -
+> - ? ?<p>A few additional variables, specific to the CMake infrastructure,
+> - ? ?can also be defined. Many of them are only useful in very specific
+> - ? ?cases, typical packages will therefore only use a few of them.</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>LIBFOO_SUBDIR</code> may contain the name of a subdirectory
+> - ? ? ?inside the package that contains the main CMakeLists.txt file. This is
+> - ? ? ?useful, if for example, the main CMakeLists.txt file is not at the root
+> - ? ? ?of the tree extracted by the tarball. If <code>HOST_LIBFOO_SUBDIR</code>
+> - ? ? ?is not specified, it defaults to <code>LIBFOO_SUBDIR</code>.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CONF_ENV</code>, to specify additional environment
+> - ? ? ?variables to pass to CMake. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CONF_OPT</code>, to specify additional configure
+> - ? ? ?options to pass to CMake. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_MAKE</code>, to specify an alternate <code>make</code>
+> - ? ? ?command. This is typically useful when parallel make is enabled in
+> - ? ? ?the configuration (using <code>BR2_JLEVEL</code>) but that this
+> - ? ? ?feature should be disabled for the given package, for one reason or
+> - ? ? ?another. By default, set to <code>$(MAKE)</code>. If parallel building
+> - ? ? ?is not supported by the package, then it should be set to
+> - ? ? ?<code>LIBFOO_MAKE=$(MAKE1)</code>.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_MAKE_ENV</code>, to specify additional environment
+> - ? ? ?variables to pass to make in the build step. These are passed before
+> - ? ? ?the <code>make</code> command. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_MAKE_OPT</code>, to specify additional variables to
+> - ? ? ?pass to make in the build step. These are passed after the
+> - ? ? ?<code>make</code> command. By default, empty.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_STAGING_OPT</code> contains the make options
+> - ? ? ?used to install the package to the staging directory. By default, the
+> - ? ? ?value is <code>DESTDIR=$$(STAGING_DIR) install</code>, which is
+> - ? ? ?correct for most CMake packages. It is still possible to override
+> - ? ? ?it.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_INSTALL_TARGET_OPT</code> contains the make options
+> - ? ? ?used to install the package to the target directory. By default, the
+> - ? ? ?value is <code>DESTDIR=$$(TARGET_DIR) install</code>. The default
+> - ? ? ?value is correct for most CMake packages, but it is still possible
+> - ? ? ?to override it if needed.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_CLEAN_OPT</code> contains the make options used to
+> - ? ? ?clean the package. By default, the value is <code>clean</code>.</li>
+> - ? ?</ul>
+> -
+> - ? ?<p>With the CMake infrastructure, all the steps required to build
+> - ? ?and install the packages are already defined, and they generally work
+> - ? ?well for most CMake-based packages. However, when required, it is
+> - ? ?still possible to customize what is done in any particular step:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li>By adding a post-operation hook (after extract, patch, configure,
+> - ? ? ?build or install). See the reference documentation of the generic
+> - ? ? ?infrastructure for details.</li>
+> -
+> - ? ? ?<li>By overriding one of the steps. For example, even if the CMake
+> - ? ? ?infrastructure is used, if the package <code>.mk</code> file defines its
+> - ? ? ?own <code>LIBFOO_CONFIGURE_CMDS</code> variable, it will be used
+> - ? ? ?instead of the default CMake one. However, using this method
+> - ? ? ?should be restricted to very specific cases. Do not use it in the
+> - ? ? ?general case.</li>
+> - ? ?</ul>
+> -
+> - ? ?<h4 id ="manual-tutorial">Manual Makefile : tutorial</h4>
+> -
+> - ? ?<p><b>NOTE: new manual makefiles should not be created, and existing
+> - ? ?manual makefiles should be converted either to the generic, autotools
+> - ? ?or cmake infrastructure. This section is only kept to document the existing
+> - ? ?manual makefiles and to help understand how they work.</b></p>
+> -
+> -<pre>
+> -01: #############################################################
+> -02: #
+> -03: # libfoo
+> -04: #
+> -05: #############################################################
+> -<span id="ex2line6">06: LIBFOO_VERSION:=1.0</span>
+> -07: LIBFOO_SOURCE:=libfoo-$(LIBFOO_VERSION).tar.gz
+> -08: LIBFOO_SITE:=http://www.foosoftware.org/downloads
+> -09: LIBFOO_DIR:=$(BUILD_DIR)/foo-$(FOO_VERSION)
+> -10: LIBFOO_BINARY:=foo
+> -11: LIBFOO_TARGET_BINARY:=usr/bin/foo
+> -12:
+> -<span id="ex2line13">13: $(DL_DIR)/$(LIBFOO_SOURCE):</span>
+> -14: ? ?$(call DOWNLOAD,$(LIBFOO_SITE),$(LIBFOO_SOURCE))
+> -15:
+> -<span id="ex2line16">16: $(LIBFOO_DIR)/.source: $(DL_DIR)/$(LIBFOO_SOURCE)</span>
+> -17: ? ?$(ZCAT) $(DL_DIR)/$(LIBFOO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+> -18: ? ?touch $@
+> -19:
+> -<span id="ex2line20">20: $(LIBFOO_DIR)/.configured: $(LIBFOO_DIR)/.source</span>
+> -21: ? ?(cd $(LIBFOO_DIR); rm -rf config.cache; \
+> -22: ? ? ? ? ? ?$(TARGET_CONFIGURE_OPTS) \
+> -23: ? ? ? ? ? ?$(TARGET_CONFIGURE_ARGS) \
+> -24: ? ? ? ? ? ?./configure \
+> -25: ? ? ? ? ? ?--target=$(GNU_TARGET_NAME) \
+> -26: ? ? ? ? ? ?--host=$(GNU_TARGET_NAME) \
+> -27: ? ? ? ? ? ?--build=$(GNU_HOST_NAME) \
+> -28: ? ? ? ? ? ?--prefix=/usr \
+> -29: ? ? ? ? ? ?--sysconfdir=/etc \
+> -30: ? ?)
+> -31: ? ?touch $@
+> -32:
+> -<span id="ex2line33">33: $(LIBFOO_DIR)/$(LIBFOO_BINARY): $(LIBFOO_DIR)/.configured</span>
+> -34: ? ?$(MAKE) CC=$(TARGET_CC) -C $(LIBFOO_DIR)
+> -35:
+> -<span id="ex2line36">36: $(TARGET_DIR)/$(LIBFOO_TARGET_BINARY): $(LIBFOO_DIR)/$(LIBFOO_BINARY)</span>
+> -37: ? ?$(MAKE) DESTDIR=$(TARGET_DIR) -C $(LIBFOO_DIR) install-strip
+> -38: ? ?rm -Rf $(TARGET_DIR)/usr/man
+> -39:
+> -<span id="ex2line40">40: libfoo: uclibc ncurses $(TARGET_DIR)/$(LIBFOO_TARGET_BINARY)</span>
+> -41:
+> -<span id="ex2line42">42: libfoo-source: $(DL_DIR)/$(LIBFOO_SOURCE)</span>
+> -43:
+> -<span id="ex2line44">44: libfoo-clean:</span>
+> -45: ? ?$(MAKE) prefix=$(TARGET_DIR)/usr -C $(LIBFOO_DIR) uninstall
+> -46: ? ?-$(MAKE) -C $(LIBFOO_DIR) clean
+> -47:
+> -<span id="ex2line48">48: libfoo-dirclean:</span>
+> -49: ? ?rm -rf $(LIBFOO_DIR)
+> -50:
+> -<span id="ex2line51">51: #############################################################</span>
+> -52: #
+> -53: # Toplevel Makefile options
+> -54: #
+> -55: #############################################################
+> -56: ifeq ($(BR2_PACKAGE_LIBFOO),y)
+> -57: TARGETS+=libfoo
+> -58: endif
+> -</pre>
+> -
+> - ? ?<p>First of all, this Makefile example works for a package which
+> - ? ?comprises a single binary executable. For other software, such as
+> - ? ?libraries or more complex stuff with multiple binaries, it must be
+> - ? ?adapted. For examples look at the other <code>*.mk</code> files in the
+> - ? ?<code>package</code> directory.</p>
+> -
+> - ? ?<p>At lines <a href="#ex2line6">6-11</a>, a couple of useful variables are
+> - ? ?defined:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>LIBFOO_VERSION</code>: The version of <i>libfoo</i> that
+> - ? ? ?should be downloaded.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_SOURCE</code>: The name of the tarball of <i>libfoo</i>
+> - ? ? ?on the download website or FTP site. As you can see
+> - ? ? ?<code>LIBFOO_VERSION</code> is used.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_SITE</code>: The HTTP or FTP site from which
+> - ? ? ?<i>libfoo</i> archive is downloaded. It must include the complete path to
+> - ? ? ?the directory where <code>LIBFOO_SOURCE</code> can be found.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_DIR</code>: The directory into which the software will
+> - ? ? ?be configured and compiled. Basically, it's a subdirectory of
+> - ? ? ?<code>BUILD_DIR</code> which is created upon decompression of the tarball.
+> - ? ? ?</li>
+> -
+> - ? ? ?<li><code>LIBFOO_BINARY</code>: Software binary name. As said previously,
+> - ? ? ?this is an example for a package with a single binary.</li>
+> -
+> - ? ? ?<li><code>LIBFOO_TARGET_BINARY</code>: The full path of the binary inside
+> - ? ? ?the target filesystem.</li> </ul>
+> -
+> - ? ?<p>Lines <a href="#ex2line13">13-14</a> define a target that downloads
+> - ? ?the tarball from the remote site to the download directory
+> - ? ?(<code>DL_DIR</code>).</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line16">16-18</a> define a target and associated
+> - ? ?rules that uncompress the downloaded tarball. As you can see, this
+> - ? ?target depends on the tarball file so that the previous target (lines
+> - ? ?<a href="#ex2line13">13-14</a>) is called before executing the rules of
+> - ? ?the current target. Uncompressing is followed by <i>touching</i> a
+> - ? ?hidden file to mark the software as having been uncompressed. This trick
+> - ? ?is used everywhere in a Buildroot Makefile to split steps (download,
+> - ? ?uncompress, configure, compile, install) while still having correct
+> - ? ?dependencies.</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line20">20-31</a> define a target and associated
+> - ? ?rules that configure the software. It depends on the previous target
+> - ? ?(the hidden <code>.source</code> file) so that we are sure the software
+> - ? ?has been uncompressed. In order to configure the package, it basically
+> - ? ?runs the well-known <code>./configure</code> script. As we may be doing
+> - ? ?cross-compilation, <code>target</code>, <code>host</code> and
+> - ? ?<code>build</code> arguments are given. The prefix is also set to
+> - ? ?<code>/usr</code>, not because the software will be installed in
+> - ? ?<code>/usr</code> on your host system, but because the software will be
+> - ? ?installed in <code> /usr</code> on the target filesystem. Finally it
+> - ? ?creates a <code>.configured</code> file to mark the software as
+> - ? ?configured.</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line33">33-34</a> define a target and a rule that
+> - ? ?compile the software. This target will create the binary file in the
+> - ? ?compilation directory and depends on the software being already
+> - ? ?configured (hence the reference to the <code>.configured</code> file).
+> - ? ?It basically runs <code>make</code> inside the source directory.</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line36">36-38</a> define a target and associated
+> - ? ?rules that install the software inside the target filesystem. They
+> - ? ?depend on the binary file in the source directory to make sure the
+> - ? ?software has been compiled. They use the <code>install-strip</code>
+> - ? ?target of the software <code>Makefile</code> by passing a
+> - ? ?<code>DESTDIR</code> argument so that the <code>Makefile</code> doesn't
+> - ? ?try to install the software in the host <code>/usr</code> but rather in
+> - ? ?the target <code>/usr</code>. After the installation, the
+> - ? ?<code>/usr/man </code> directory inside the target filesystem is removed
+> - ? ?to save space. </p>
+> -
+> - ? ?<p>Line <a href="#ex2line40">40</a> defines the main target of the
+> - ? ?software &mdash; the one that will eventually be used by the top level
+> - ? ?<code>Makefile</code> to download, compile, and then install this
+> - ? ?package. This target should first of all depend on all needed
+> - ? ?dependencies of the software (in our example, <i>uclibc</i> and
+> - ? ?<i>ncurses</i>) and also depend on the final binary. This last dependency
+> - ? ?will call all previous dependencies in the correct order.</p>
+> -
+> - ? ?<p>Line <a href="#ex2line42">42</a> defines a simple target that only
+> - ? ?downloads the code source. This is not used during normal operation of
+> - ? ?Buildroot, but is needed if you intend to download all required sources
+> - ? ?at once for later offline build. Note that if you add a new package,
+> - ? ?providing a <code>libfoo-source</code> target is <i>mandatory</i> to
+> - ? ?support users that wish to do offline-builds. Furthermore, it eases
+> - ? ?checking if all package-sources are downloadable.</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line44">44-46</a> define a simple target to clean
+> - ? ?the software build by calling the Makefile with the appropriate options.
+> - ? ?The <code>-clean</code> target should run <code>make clean</code> on
+> - ? ?$(BUILD_DIR)/package-version and MUST uninstall all files of the package
+> - ? ?from $(STAGING_DIR) and from $(TARGET_DIR).</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line48">48-49</a> define a simple target to
+> - ? ?completely remove the directory in which the software was uncompressed,
+> - ? ?configured and compiled. The <code>-dirclean</code> target MUST
+> - ? ?completely rm $(BUILD_DIR)/ package-version.</p>
+> -
+> - ? ?<p>Lines <a href="#ex2line51">51-58</a> add the target <code>libfoo</code>
+> - ? ?to the list of targets to be compiled by Buildroot, by first checking if
+> - ? ?the configuration option for this package has been enabled using the
+> - ? ?configuration tool. If so, it then &quot;subscribes&quot; this package
+> - ? ?to be compiled by adding the package to the TARGETS global variable.
+> - ? ?The name added to the TARGETS global variable is the name of this
+> - ? ?package's target, as defined on line <a href="#ex2line40">40</a>, which
+> - ? ?is used by Buildroot to download, compile, and then install this package.
+> - ? ?</p>
+> -
+> - ? ?<h3 id="gettext-integration">Gettext integration and interaction with packages</h3>
+> -
+> - ? ?<p>Many packages that support internationalization use the gettext
+> - ? ?library. Dependencies for this library are fairly complicated and therefore,
+> - ? ?deserves some explanation.</p>
+> -
+> - ? ?<p>The <i>uClibc</i> C library doesn't implement gettext functionality,
+> - ? ?therefore with this C library, a separate gettext must be compiled. On
+> - ? ?the other hand, the <i>glibc</i> C library does integrate its own
+> - ? ?gettext, and in this case, the separate gettext library should not be
+> - ? ?compiled, because it creates various kinds of build failures.</p>
+> -
+> - ? ?<p>Additionally, some packages (such as libglib2) do require gettext
+> - ? ?unconditionally, while other packages (those who support
+> - ? ?<code>--disable-nls</code> in general) only require gettext when locale
+> - ? ?support is enabled.</p>
+> -
+> - ? ?<p>Therefore, Buildroot defines two configuration options:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><code>BR2_NEEDS_GETTEXT</code>, which is true as soon as the
+> - ? ? ?toolchain doesn't provide its own gettext implementation</li>
+> -
+> - ? ? ?<li><code>BR2_NEEDS_GETTEXT_IF_LOCALE</code>, which is true if the
+> - ? ? ?toolchain doesn't provide its own gettext implementation and if locale
+> - ? ? ?support is enabled</li> </ul>
+> -
+> - ? ?<p>Therefore, packages that unconditionally need gettext should:</p>
+> -
+> - ? ?<ol>
+> - ? ? ?<li>Use <code>select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT</code>
+> - ? ? ?and possibly <code>select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT</code>,
+> - ? ? ?if libintl is also needed</li>
+> -
+> - ? ? ?<li>Use <code>$(if $(BR2_NEEDS_GETTEXT),gettext)</code> in the package
+> - ? ? ?<code>DEPENDENCIES</code> variable</li>
+> - ? ?</ol>
+> -
+> - ? ?<p>Packages that need gettext only when locale support is enabled should:
+> - ? ?</p>
+> -
+> - ? ?<ol>
+> - ? ? ?<li>Use
+> - ? ? ?<code>select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE</code>
+> - ? ? ?and possibly
+> - ? ? ?<code>select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE</code>,
+> - ? ? ?if libintl is also needed</li>
+> -
+> - ? ? ?<li>Use <code>$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)</code> in
+> - ? ? ?the package <code>DEPENDENCIES</code> variable</li>
+> - ? ?</ol>
+> -
+> - ? ?<h3>Conclusion</h3>
+> -
+> - ? ?<p>As you can see, adding a software package to Buildroot is simply a
+> - ? ?matter of writing a Makefile using an ?existing example and modifying it
+> - ? ?according to the compilation process required by the package.</p>
+> -
+> - ? ?<p>If you package software that might be useful for other people, don't
+> - ? ?forget to send a patch to Buildroot developers!</p>
+> -
+> - ? ?<h2 id="faq">Frequently asked questions</h2>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><a href="#faq-boot-hangs">The boot hangs
+> - ? ? ?after <code>Starting network...</code></a></li>
+> - ? ? ?<li><a href="#module-init-tools-doesnt-build">module-init-tools
+> - ? ? ?fails to build with <code>cannot find -lc</code></a></li>
+> - ? ?</ul>
+> -
+> - ? ?<h3 id="faq-boot-hangs">The boot hangs after <code>Starting
+> - ? ?network...</code></h3>
+> -
+> - ? ?<p>If the boot process seems to hang after the following messages
+> - ? ?(messages not necessarly exactly similar, depending on the list of
+> - ? ?packages selected):</p>
+> -
+> - ? ?<pre>Freeing init memory: 3972K
+> -Initializing random number generator... done.
+> -Starting network...
+> -Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
+> -
+> - ? ?<p>then it means that your system is running, but didn't start a
+> - ? ?shell on the serial console. In order to have the system start a
+> - ? ?shell on your serial console, you have to go in the Buildroot
+> - ? ?configuration, <code>Target options</code>, enable <code>Generic
+> - ? ?serial port config</code>, and select the serial port and speed
+> - ? ?you would like to use for the shell. This will automatically tune
+> - ? ?the <code>/etc/inittab</code> file of the generated system so that
+> - ? ?a shell starts on the correct serial port.</p>
+> -
+> - ? ?<h3 id="module-init-tools-doesnt-build">module-init-tools
+> - ? ? ?fails to build with <code>cannot find -lc</code></h3>
+> -
+> - ? ?<p>If the build of <i>module-init-tools</i> for the host fails
+> - ? ?with:</p>
+> -
+> - ? ?<pre>/usr/bin/ld: cannot find -lc </pre>
+> -
+> - ? ?<p>then probably you are running a Fedora (or similar)
+> - ? ?distribution, and you should install the <code>glibc-static</code>
+> - ? ?package. This is because the <i>module-init-tools</i> build
+> - ? ?process wants to link statically against the C library.</p>
+> -
+> - ? ?<h2 id="links">Resources</h2>
+> -
+> - ? ?<p>To learn more about Buildroot you can visit these websites:</p>
+> -
+> - ? ?<ul>
+> - ? ? ?<li><a href="http://www.uclibc.org/">http://www.uclibc.org/</a></li>
+> - ? ? ?<li><a href="http://www.busybox.net/">http://www.busybox.net/</a></li>
+> - ? ?</ul>
+> - ?</div>
+> -</body>
+> -</html>
 
-diff --git a/package/Config.in b/package/Config.in
-index 9e27ff8..7176041 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -484,7 +484,6 @@ source "package/udpcast/Config.in"
- source "package/vpnc/Config.in"
- source "package/vsftpd/Config.in"
- source "package/vtun/Config.in"
--source "package/webif/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/wget/Config.in"
- endif
-diff --git a/package/webif/Config.in b/package/webif/Config.in
-deleted file mode 100644
-index 2ecbf36..0000000
---- a/package/webif/Config.in
-+++ /dev/null
-@@ -1,28 +0,0 @@
--config BR2_PACKAGE_WEBIF
--	bool "webif - Status Console"
--	depends on BR2_PACKAGE_BUSYBOX # httpd
--	depends on BR2_DEPRECATED
--	select BR2_PACKAGE_HASERL
--	help
--	  A web interface for showing different network status. This package
--	  requires awk support on the system, either the one provided by
--	  Busybox or gawk.
--
--	  The default login on the status web pages are root/root and
--	  admin/admin. This can be changed in the etc/httpd.conf file.
--
--config BR2_PACKAGE_WEBIF_INSTALL_INDEX_HTML
--	bool "instal index.html in /www which redirects to webif"
--	depends on BR2_PACKAGE_WEBIF
--	help
--	  Installs a /www/index.html which redirects to the status console cgi
--	  scripts.
--
--config BR2_PACKAGE_WEBIF_LANGUAGES
--	bool "install language support"
--	depends on BR2_PACKAGE_WEBIF
--	help
--	  This option installs support for other languages than english.
--
--	  Supported languages: ca, cz, de, dk, ee, es, fr, hr, hu, it, nl, no,
--	                       pl, pt, ru and se.
-diff --git a/package/webif/files/etc/httpd.conf b/package/webif/files/etc/httpd.conf
-deleted file mode 100644
-index 9e125da..0000000
---- a/package/webif/files/etc/httpd.conf
-+++ /dev/null
-@@ -1,8 +0,0 @@
--.asp:text/html
--/cgi-bin/webif:root:root
--/cgi-bin/webif:admin:admin
--.svg:image/svg+xml
--.png:image/png
--.gif:image/gif
--.jpg:image/jpg
--
-diff --git a/package/webif/files/usr/lib/webif/apply.sh b/package/webif/files/usr/lib/webif/apply.sh
-deleted file mode 100755
-index 9cbadf4..0000000
---- a/package/webif/files/usr/lib/webif/apply.sh
-+++ /dev/null
-@@ -1,76 +0,0 @@
--#!/bin/ash
--#
--# Default handlers for config files
--#
--HANDLERS_config='
--	wireless) reload_wireless;;
--	network) reload_network;;
--	system) reload_system;;
--'
--HANDLERS_file='
--	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
--	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
--	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S45firewall;;
--'
--
--# for some reason a for loop with "." doesn't work
--eval "$(cat /usr/lib/webif/apply-*.sh 2>&-)"
--
--reload_network() {
--	echo '@TR<<Reloading>> @TR<<networking settings>> ...'
--	grep '^wan_' config-network >&- 2>&- && {
--		ifdown wan
--		ifup wan
--		killall -HUP dnsmasq
--	}
--	
--	grep '^lan_' config-network >&- 2>&- && {
--		ifdown lan
--		ifup lan
--		killall dnsmasq
--		/etc/init.d/S??dnsmasq
--	}
--}
--
--reload_wireless() {
--	echo '@TR<<Reloading>> @TR<<wireless settings>> ...'
--	killall nas >&- 2>&- && sleep 2
--	(
--		/sbin/wifi
--		[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
--	) >&- 2>&- <&-
--}
--
--reload_system() {
--	echo '@TR<<Applying>> @TR<<system settings>> ...'
--	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
--}
--
--cd /tmp/.webif
--
--# file-* 		other config files
--for config in $(ls file-* 2>&-); do
--	name=${config#file-}
--	echo "@TR<<Processing>> @TR<<config file>>: $name"
--	eval 'case "$name" in
--		'"$HANDLERS_file"'
--	esac'
--done
--
--# config-*		simple config files
--(
--	cd /proc/self
--	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
--		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
--		echo "@TR<<Committing>> NVRAM ..."
--		nvram commit
--	}
--)
--for config in $(ls config-* 2>&-); do 
--	name=${config#config-}
--	eval 'case "$name" in
--		'"$HANDLERS_config"'
--	esac'
--done
--sleep 2
--rm -f config-*
-diff --git a/package/webif/files/usr/lib/webif/categories.awk b/package/webif/files/usr/lib/webif/categories.awk
-deleted file mode 100644
-index 00312c9..0000000
---- a/package/webif/files/usr/lib/webif/categories.awk
-+++ /dev/null
-@@ -1,27 +0,0 @@
--BEGIN {
--	n = 0
--	sel = 0
--	FS=":"
--}
--($3 == "category") && (categories !~ /:$4:/) {
--	categories = categories ":" $4 ":";
-- 	n++
--	if ($4 ~ "^" selected "$") sel = n
--	c[n] = $4
--	if (f[$4] == "") f[$4] = rootdir "/" indexpage "?cat=" $4
--}
--($3 == "name") && ((p[$4] == 0) || (p[$4] > int($5))) {
--	gsub(/^.*\//, "", $1);
--	p[$4] = int($5) + 1
--	f[$4] = rootdir "/" $1
--}
--END {
--	print "<div id=\"mainmenu\"><h3><strong>@TR<<Categories>>:</strong></h3><ul>"
--	
--	for (i = 1; i <= n; i++) {
--		if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&raquo;@TR<<" c[i] ">>&laquo;</a></li>"
--		else print "<li><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";
--	}
--  
--	print "</ul></div>"
--}
-diff --git a/package/webif/files/usr/lib/webif/common.awk b/package/webif/files/usr/lib/webif/common.awk
-deleted file mode 100644
-index de3483e..0000000
---- a/package/webif/files/usr/lib/webif/common.awk
-+++ /dev/null
-@@ -1,38 +0,0 @@
--function start_form(title, field_opts, field_opts2) {
--	print "<div class=\"settings\"" field_opts ">"
--	if (title != "") print "<div class=\"settings-title\"><h3><strong>" title "</strong></h3></div>"
--	print "<div class=\"settings-content\"" field_opts2 ">"
--}
--
--function end_form(form_help, form_help_link) {
--	print "</div>"
--	if (form_help != "") form_help = "<dl>" form_help "</dl>"
--	print "<div class=\"settings-help\"><blockquote><h3><strong>@TR<<Short help>>:</strong></h3>" form_help form_help_link "</blockquote></div>"
--	print "<div style=\"clear: both\">&nbsp;</div></div>"
--}
--
--function textinput(name, value) {
--	return "<input type=\"text\" name=\"" name "\" value=\"" value "\" />"
--}
--
--function hidden(name, value) {
--	return "<input type=\"hidden\" name=\"" name "\" value=\"" value "\" />"
--}
--
--function button(name, caption) {
--	return "<input type=\"submit\" name=\"" name "\" value=\"@TR<<" caption ">>\" />"
--}
--
--function helpitem(name) { 
--	return "<dt>@TR<<" name ">>: </dt>"
--}
--
--function helptext(short, name) { 
--	return "<dd>@TR<<" short "|" name ">>: </dd>"
--}
--
--function sel_option(name, caption, default, sel) {
--	if (default == name) sel = " selected=\"selected\""
--	else sel = ""
--	return "<option value=\"" name "\"" sel ">@TR<<" caption ">></option>"
--}
-diff --git a/package/webif/files/usr/lib/webif/form.awk b/package/webif/files/usr/lib/webif/form.awk
-deleted file mode 100644
-index 808b99e..0000000
---- a/package/webif/files/usr/lib/webif/form.awk
-+++ /dev/null
-@@ -1,100 +0,0 @@
--# $1 = type
--# $2 = form variable name
--# $3 = form variable value
--# $4 = (radio button) value of button
--# $5 = string to append
--# $6 = additional attributes 
--
--BEGIN {
--	FS="|"
--}
--
--# trim leading whitespaces 
--{
--	gsub(/^[ \t]+/,"",$1)
--}
--
--$1 ~ /^onchange/ {
--	onchange = $2
--}
--
--($1 != "") && ($1 !~ /^option/) && (select_open == 1) {
--	select_open = 0
--	printf "</select>"
--}
--$1 ~ /^start_form/ {
--	if ($3 != "") field_opts=" id=\"" $3 "\""
--	else field_opts=""
--	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
--	start_form($2, field_opts);
--	print "<table width=\"100%\" summary=\"Settings\">"
--	form_help = ""
--	form_help_link = ""
--}
--$1 ~ /^field/ {
--	if (field_open == 1) print "</td></tr>"
--	if ($3 != "") field_opts=" id=\"" $3 "\""
--	else field_opts=""
--	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
--	print "<tr" field_opts ">"
--	if ($2 != "") print "<td width=\"50%\">" $2 "</td><td width=\"50%\">"
--	else print "<td colspan=\"2\">"
--
--	field_open=1
--}
--$1 ~ /^checkbox/ {
--	if ($3==$4) opts="checked=\"checked\" "
--	else opts=""
--	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
--	print "<input id=\"" $2 "_" $4 "\" type=\"checkbox\" name=\"" $2 "\" value=\"" $4 "\" " opts " />"
--}
--$1 ~ /^radio/ {
--	if ($3==$4) opts="checked=\"checked\" "
--	else opts=""
--	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
--	print "<input id=\"" $2 "_" $4 "\" type=\"radio\" name=\"" $2 "\" value=\"" $4 "\" " opts " />"
--}
--$1 ~ /^select/ {
--	opts = ""
--	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
--	print "<select id=\"" $2 "\" name=\"" $2 "\"" opts ">"
--	select_id = $2
--	select_open = 1
--	select_default = $3
--}
--($1 ~ /^option/) && (select_open == 1) {
--	if ($2 == select_default) option_selected=" selected=\"selected\""
--	else option_selected=""
--	if ($3 != "") option_title = $3
--	else option_title = $2
--	print "<option id=\"" select_id "_" $2 "\"" option_selected " value=\"" $2 "\">" option_title "&nbsp;&nbsp;</option>"
--}
--($1 ~ /^listedit/) {
--	n = split($4 " ", items, " ")
--	for (i = 1; i <= n; i++) {
--		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 $2 "remove=" items[i] "\">@TR<<Remove>></a></td></tr>"
--	}
--	print "<tr><td width=\"100%\" colspan=\"2\"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"@TR<<Add>>\" /></td></tr>"
--}
--$1 ~ /^caption/ { print "<b>" $2 "</b>" }
--$1 ~ /^string/ { print $2 }
--$1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
--$1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
--$1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
--$1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
--$1 ~ /^helpitem/ { form_help = form_help "<dt>@TR<<" $2 ">>: </dt>" }
--$1 ~ /^helptext/ { form_help = form_help "<dd>@TR<<" $2 ">> </dd>" }
--$1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">@TR<<more...>></a></div>" }
--
--($1 ~ /^checkbox/) || ($1 ~ /^radio/) {
--	print $5
--}
--
--$1 ~ /^end_form/ {
--	if (field_open == 1) print "</td></tr>"
--	field_open = 0
--	print "</table>"
--	end_form(form_help, form_help_link);
--	form_help = ""
--	form_help_link = ""
--}
-diff --git a/package/webif/files/usr/lib/webif/lang/ca/common.txt b/package/webif/files/usr/lib/webif/lang/ca/common.txt
-deleted file mode 100644
-index 3d19974..0000000
---- a/package/webif/files/usr/lib/webif/lang/ca/common.txt
-+++ /dev/null
-@@ -1,226 +0,0 @@
--lang => Catal?
--# Common
--Settings saved => Canvis desats
--Settings not saved => No s'han pogut desar els canvis
--Save Changes => Desar canvis
--Apply Changes => Aplicar canvis
--Clear Changes => Desfer canvis
--Review Changes => Comprovar canvis
--Host Name => Nom de l'equip
--Uptime => Uptime
--Load => C?rrega del sistema
--Version => Versi?
--Categories => Categories
--Subcategories => Subcategories
--more... => m?s...
--Add => Afegir
--Remove => Eliminar
--Warning => Atenci?
--Password_warning => No heu establert una clau d'acc?s pel router (acc?s web i ssh). Per favor, elegiu-ne una ara (el nom d'usuari ser? 'root')
--
--# Categories
--Info => Info
--About => Quant a
--Router Info => Informaci? del router
--
--Status => Estat
--Connections => Connexions
--DHCP => DHCP
--Wireless => Wi-Fi
--
--System => Sistema
--Password => Clau
--Settings => Configuraci?
--Installed Software => Programes instal?lats
--Firmware Upgrade => Actualitzar Firmware
--
--Network => Xarxa
--LAN => LAN
--WAN => Internet
--Wireless => Wi-Fi
--Advanced Wireless => Wi-Fi (avan?at)
--Hosts => Configuraci? de hosts
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Aquest programa ?s programari lliure; podeu redistribuir-lo i/o <br />modificar-lo baix els termes de la General Public License<br /> tal i com est? publicada per la Free Sofware Foundation; b? la versi? 2 d'aquesta Llic?ncia o b? (segons la seva elecci?) de qualsevol posterior.
--Contributions by => Contribuidors
--Layout based on => Aspecte basat en
--by => realitzat per
--
--
--No config change. => No hi ha hagut canvis a la configuraci?.
--Config discarded. => Els canvis no s'han acceptat.
--Config changes: => Configuraci? actual:
--Updating config... => Actualitzant la configuraci?...
--
--
--# 'Router Info' page
--Firmware Version => Versi? del firmware
--Kernel Version => Versi? del Kernel
--Current Date/Time => Data/Hora
--MAC Address => Adre?a MAC
--
--
--# 'Connections' page
--Connection Status => Estat de les connexions
--Physical Connections => Connexions f?siques
--Router Connections => Connexions del router
--
--
--# 'DHCP' page
--DHCP leases => Pr?stecs DHCP
--IP Address => Adre?a IP
--Name => Nom
--Expires in => Caduca d'ara a
--
--
--# 'Wireless Status' page
--Wireless Status => Estat del Wi-Fi
--
--# 'Password' page
--Password Change => Canvi de la clau
--New Password => Nova clau
--Confirm Password => Confirmeu la clau
--
--# 'System Settings' page
--System Settings => Par?metres del sistema
--Host Name => Nom de l'host
--Language => Idioma
--
--# 'Installed Software' page
--Installed Packages => Paquets instal?lats
--Update package lists => Actualitzaci? de la llista de paquets
--Uninstall => Desinstal?lar
--Install => Instal?lar
--
--
--# 'Firmware Upgrade' page
--Firmware format => Format del firmware
--Error => Error
--done => fet
--Invalid_formt => Format del firmware inv?lid
--Erase_JFFS2 => Esborrar la partici? JFFS2
--Options => Opcions
--Firmware_image => Fitxer del firmware
--Upgrade => Actualitzar
--Upgrading... => Actualitzant...
--
--# 'LAN Settings' page
--LAN Settings => Opcions LAN
--LAN Configuration => Configuraci? LAN
--Netmask => M?scara de subxarxa
--Default Gateway => Porta d'enlla? (gateway)
--DNS Servers => Servidor DNS
--DNS Address => Adre?a IP del DNS
--
--Note => Nota
--
--# 'WAN Settings' page
--WAN Settings => Opcions d'Internet
--WAN Configuration => Configuraci? d'Internet
--PPTP Server IP => Adre?a IP del servidor PPTP
--Connection Type => Tipus de connexi?
--No WAN => Sense configuraci? d'Internet
--DHCP => DHCP
--Static IP => IP est?tica
--IP Settings => Opcions IP
--PPP Settings => Opcions PPP
--Redial Policy => Pol?tica de reconnexi?
--Connect on Demand => Baix demanda
--Keep Alive => Connexi? permanent
--Maximum Idle Time => Temps m?xim d'inactivitat
--Redial Timeout => Temps de reconnexi?
--MTU => MTU (mida dels paquets)
--Username => Nom d'usuari
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Configuraci? Wi-Fi
--Wireless Interface => Interf?cie Wi-Fi
--WEP Key => Clau WEP
--Selected WEP Key => Clau WEP seleccionada
--WPA PSK => WPA-PSK
--ESSID => ESSID
--Channel => Canal
--RADIUS IP Address => Adre?a IP del servidor RADIUS
--RADIUS Server Key => Secret RADIUS
--Enabled => Actiu
--Disabled => Inactiu
--ESSID Broadcast => Difusi? del SSID
--Show => Mostrar
--Hide => Ocultar
--WLAN Mode => Mode Wi-Fi
--Access Point => Punt d'acc?s
--Client => Client
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Operation mode => Mode de funcionament
--Encryption Settings => Par?metres d'enriptaci?
--Encryption Type => Tipus d'encriptaci?
--PSK => PSK
--WPA Mode => Mode WPA
--WPA Algorithms => Algoritmes WPA
--WEP Keys => Clau WEP
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Configuraci? Wi-Fi avan?ada
--WDS Connections => Connexions WDS
--MAC Filter List => Filtrat per adre?a MAC
--Filter Mode => Mode de filtrat
--Allow => Autoritzar
--Deny => Denegar
--Set => Establir
--Settings => Par?metres
--Automatic WDS => WDS autom?tic
--
--# "Hosts" page
--
--MAC Address => Adre?a MAC
--Configured Hosts => Equips configurats
--DHCP Static => Entrades DHCP est?tiques
--Host Names => Nom dels equips
--
--Up => Pujar
--Down => Baixar
--Edit => Editar
--Delete => Esborrar
--Save => Desar
--Cancel => Rebutjar
--
--Forward => Redirigir
--Accept => Acceptar
--Drop => Rebutjar
--
--Firewall => Firewall
--Firewall Rules => Regles del Firewall
--Firewall Configuration => Configuraci? del Firewall
--
--New Rule => Nova regla
--Match => Filtrar
--Target => Acci?
--Port => Port
--
--Protocol => Protocol
--Source IP => IP origen
--Destination IP => IP dest?
--Source Ports => Ports origen
--Destination Ports => Ports dest?
--
--Forward to => Redirigir a
--Port => Port
--
--Helptext ESSID => SSID
--Helptext DNS save => ?s recomanable desar els canvis abans d'afegir o eliminar servidors DNS a la llista
--
--Helptext Operation mode => Estableix el mode d'operaci? de la xarxa inal?mbrica (Wi-Fi) 'Client (bridge)' no canviar? la configuraci? de la interf?cie de xarxa. Simplement afegir? uns par?metres que permetran que la interf?cie wireless actui en certa mida com un bridge.
--Helptext Encryption Type => 'WPA (RADIUS)' nom?s pot emprar-se en mode Punt d'Acc?s.<br /> 'WPA (PSK)' no funciona en mode Ad-Hoc.
--Helptext IP Settings => Les opcions IP s?n opcionals per a DHCP y PPTP. Si les elegiu, s'empraran per defecte en cas de que la configuraci? autom?tica falli.
--Helptext Idle Time => Nombre de segons sense activitat amb Internet que ha d'esperar el router abans de desconectar-se. (Nom?s pel mode Baix Demanda).
--Helptext Redial Timeout => Nombre de segons sense rebre resposta del servidor que ha d'esperar el router per a tornar a connectar-se.
--
--# untranslated:
--Available packages => Paquets disponibles
--
-diff --git a/package/webif/files/usr/lib/webif/lang/cz/common.txt b/package/webif/files/usr/lib/webif/lang/cz/common.txt
-deleted file mode 100644
-index 773e9d9..0000000
---- a/package/webif/files/usr/lib/webif/lang/cz/common.txt
-+++ /dev/null
-@@ -1,225 +0,0 @@
--lang => &#268;esky
--# Common
--Settings saved => Nastaven&#237; ulo&#382;eno
--Settings not saved => Nastaven&#237; nebylo ulo&#382;eno
--Save Changes => Ulo&#382;it zm&#277;ny
--Apply Changes => Prov&#233;st zm&#277;ny
--Clear Changes => Vymazat zm&#277;ny
--Review Changes => Prohl&#233;dnout zm&#277;ny
--Host Name => Hostname
--Uptime => Uptime
--Load => Zat&#237;&#382;en&#237;
--Version => Verze
--Categories => Kategorie
--Subcategories => Podkategorie
--more... => v&#237;ce...
--Add => P&#345;idat
--Remove => Odebrat
--Warning => Varov&#225;n&#237;
--Password_warning => nen&#237; nastaveno &#382;&#225;dn&#233; heslo pro p&#345;&#237;stup do webov&#233; administrace a p&#345;es SSH.<br />Nastavte jej pros&#237;m nyn&#237; (Login ve webu pou&#382;&#237;vejte: 'root').
--
--# Categories
--Info => Info
--About => Projekt
--Router Info => Router
--
--Status => Stav
--Connections => P&#345;ipojen&#237;
--DHCP => DHCP
--Wireless => WLAN
--
--System => Syst&#233;m
--Password => Heslo
--Settings => Nastaven&#237;
--Installed Software => Nainstalovan&#253; software
--Firmware Upgrade => Flashnut&#237; firmware
--
--Network => S&#237;&#357;
--LAN => LAN
--WAN => WAN port
--Wireless => WLAN
--Advanced Wireless => WLAN (podrobn&#233;)
--Hosts => Stanice (hosts)
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Tento program pat&#345;&#237; mezi voln&#253; software, m&#367;&#382;ete jej distribuovat a/nebo m&#277;nit pod podm&#237;nkami uveden&#253;mi <br /> v licenci GNU GPL (General Public License) vydan&#253;mi Nadac&#237; pro svobodn&#253; software (Free Software Foundation), <br /> jej&#237; druh&#233; verze, p&#345;&#237;padn&#277; pozd&#277;j&#353;&#237;ch verz&#237;.
--Contributions by => S p&#345;isp&#277;n&#237;m
--Layout based on => Layout postaven na
--by => od
--
--
--No config change. => Nebyly provedeny &#382;&#225;dn&#233; zm&#277;ny konfigurace.
--Config discarded. => Va&#353;e nastaven&#237; byla zahozena.
--Config changes: => Aktu&#225;ln&#237; zm&#277;ny konfigurace:
--Updating config... => Aktualizuji konfiguraci...
--
--
--# 'Router Info' page
--Firmware Version => Verze firmware
--Kernel Version => Verze j&#225;dra
--Current Date/Time => Aktu&#225;ln&#237; datum/&#269;as
--MAC Address => MAC adresa
--
--
--# 'Connections' page
--Connection Status => Stav spojen&#237;
--Physical Connections => Obsah ARP cache - aktivn&#237; MAC/IP adresy
--Router Connections => Spojen&#237; na router
--
--
--# 'DHCP' page
--DHCP leases => DHCP v&#253;p&#367;j&#269;ky
--IP Address => IP adresa
--Name => Jm&#233;no
--Expires in => Vypr&#353;&#237;
--
--
--# 'Wireless Status' page
--Wireless Status => Stav wifi
--
--# 'Password' page
--Password Change => Zm&#277;na hesla
--New Password => Nov&#233; heslo
--Confirm Password => Nov&#233; heslo (potvrzen&#237;)
--
--# 'System Settings' page
--System Settings => Syst&#233;mov&#225; nastaven&#237;
--Host Name => Hostname
--Language => Jazyk
--
--# 'Installed Software' page
--Installed Packages => Nainstalovan&#233; bal&#237;&#269;ky
--Available packages => Dostupn&#233; bal&#237;&#269;ky
--Update package lists => Aktualizovat seznam bal&#237;&#269;k&#367;
--Uninstall => Odinstalovat
--Install => Nainstalovat
--
--
--# 'Firmware Upgrade' page
--Firmware format => Form&#225;t firmware
--Error => Chyba
--done => hotovo
--Invalid_format => Form&#225;t firmware je nezn&#225;m&#253;
--Erase_JFFS2 => Smazat JFFS2 oblast
--Options => Mo&#382;nosti
--Firmware_image => Soubor firmware:
--Upgrade => Flashnout
--Upgrading... => Flashuji...
--
--# 'LAN Settings' page
--LAN Settings => Nastaven&#237; LAN
--LAN Configuration => Konfigurace LAN
--Netmask => Maska
--Default Gateway => Br&#225;na
--DNS Servers => DNS servery
--DNS Address => Adresa DNS serveru
--
--Note => Pozn&#225;mka
--
--
--# 'WAN Settings' page
--WAN Settings => Nastaven&#237; WAN portu
--WAN Configuration => Konfigurace
--PPTP Server IP => Adresa PPTP serveru
--Connection Type => Typ p&#345;ipojen&#237;
--No WAN => Odpojeno
--DHCP => DHCP
--Static IP => Pevn&#225; IP
--IP Settings => Nastaven&#237; IP
--PPP Settings => Nastaven&#237; PPP
--Redial Policy =>  Nav&#225;z&#225;n&#237; spojen&#237;
--Connect on Demand => Na vy&#382;&#225;d&#225;n&#237; (Connect on Demand)
--Keep Alive => St&#225;le p&#345;ipojen (Keep Alive)
--Maximum Idle Time => Maxim&#225;ln&#237; &#269;as bez aktivity (Maximum Idle Time)
--Redial Timeout => Prodleva znovunav&#225;z&#225;n&#237; spojen&#237; po jeho ztr&#225;t&#277; (Redial Timeout)
--MTU => Maxim&#225;ln&#237; velikost paketu (MTU)
--Username => U&#382;ivatelsk&#233; jm&#233;no
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Konfigurace wifi
--Wireless Interface => Wifi rozhran&#237;
--WEP Key => WEP kl&#237;&#269;
--Selected WEP Key => Vybran&#253; WEP kl&#237;&#269;
--WPA PSK => WPA kl&#237;&#269;
--ESSID => ESSID
--Channel => Kan&#225;l
--RADIUS IP Address => Adresa RADIUS serveru
--RADIUS Server Key => Heslo RADIUS serveru
--Enabled => Zapnuto
--Disabled => Vypnuto
--ESSID Broadcast => Skryt&#237; ESSID (ESSID-Broadcast) 
--Show => Zobrazeno
--Hide => Skryto
--WLAN Mode => Opera&#269;n&#237; m&#243;d
--Access Point => Access Point
--Client => Klient
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Encryption Settings => &#352;ifrov&#225;n&#237; p&#345;enosu
--Encryption Type => Typ &#353;ifrov&#225;n&#237;
--PSK => WPA PSK
--WPA Mode => M&#243;d WPA
--WPA Algorithms => WPA algoritmus
--WEP Keys => WEP kl&#237;&#269;e
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Roz&#353;&#237;&#345;en&#233; nastaven&#237; wifi
--WDS Connections => WDS spojen&#237;
--MAC Filter List => Seznam MAC filtru
--Filter Mode => M&#243;d MAC filtru
--Allow => Povolit MAC v seznamu
--Deny => Zak&#225;zat MAC s seznamu
--Set => Nastavit
--Settings => Nastaven&#237;
--Automatic WDS => Automatick&#233; WDS spojen&#237; (LazyWDS)
--
--# "Hosts" page
--
--MAC Address => MAC adresa
--Configured Hosts => Konfigurace stanic (hosts)
--DHCP Static => Pevn&#233; p&#345;id&#277;len&#237; IP podle MAC (DHCP)
--Host Names => Jm&#233;na stanic (hosts)
--
--
--Up => Nahoru
--Down => Dol&#367;
--Edit => Editovat
--Delete => Smazat
--Save => Ulo&#382;it
--Cancel => Storno
--
--Forward => Forward
--Accept => Accept
--Drop => Drop
--
--Firewall => Firewall
--Firewall Rules => Pravidla firewallu
--Firewall Configuration => Konfigurace firewallu
--
--New Rule => Nov&#233; pravidlo
--Match => Filtr
--Target => C&#237;l
--Port => Port
--
--Protocol => Protokol
--Source IP => Zdrojov&#225; IP
--Destination IP => C&#237;lov&#225; IP
--Source Ports => Zdrojov&#253; port
--Destination Ports => C&#237;lov&#253; port
--
--Forward to => Forward na
--Port => Port
--
--Helptext ESSID => N&#225;zev Va&#353;&#237; bezdr&#225;tov&#233; s&#237;t&#277;
--Helptext DNS save => P&#345;ed &#250;pravou nastaven&#237; DNS server&#367; ulo&#382;te ostatn&#237; zm&#277;ny na t&#233;to str&#225;nce.
--
--Helptext Operation mode => Toto nastaven&#237; m&#277;n&#237; m&#243;d bezdr&#225;tov&#233; s&#237;t&#277;. Volbou Klient (bridge) se nezm&#277;n&#237; nastaven&#237; s&#237;&#357;ov&#253;ch rozhran&#237;, pouze se nastav&#237; n&#277;kter&#233; parametry ovlada&#269;e wifi, kter&#233; umo&#382;n&#237; funk&#269;n&#277; omezenou mo&#382;nost vytvo&#345;en&#237; bridge nad rozhran&#237;mi.
--Helptext Encryption Type => 'WPA (RADIUS)' lze pou&#382;&#237;t pouze v m&#243;du Access Point. <br /> 'WPA (PSK)' nelze pou&#382;&#237;t v Ad-Hoc m&#243;du. 
--Helptext IP Settings => Nastaven&#237; IP je pro mo&#382;nost DHCP a PPTP voliteln&#233;. Zadan&#225; adresa se pou&#382;ije v p&#345;&#237;pad&#277;, &#382;e nen&#237; DHCP server dostupn&#253;.
--Helptext Idle Time => &#268;as v sekund&#225;ch, po kter&#253; kdy&#382; nedojde k &#382;&#225;dn&#233; aktivit&#277;, je spojen&#237; do Internetu uzav&#345;eno. (pouze pro volbu Connect on Demand)
--Helptext Redial Timeout => &#268;as po odpojen&#237;, po kter&#253; router &#269;ek&#225;, ne&#382; se pokus&#237; znovu nav&#225;zat spojen&#237;.
-diff --git a/package/webif/files/usr/lib/webif/lang/de/common.txt b/package/webif/files/usr/lib/webif/lang/de/common.txt
-deleted file mode 100644
-index f8ab28d..0000000
---- a/package/webif/files/usr/lib/webif/lang/de/common.txt
-+++ /dev/null
-@@ -1,228 +0,0 @@
--lang => Deutsch
--# Common
--Settings saved => Einstellungen gespeichert
--Settings not saved => Einstellungen nicht gespeichert
--Save Changes => Speichern
--Apply Changes => &Uuml;bernehmen
--Clear Changes => Verwerfen
--Review Changes => Anzeigen
--Host Name => Hostname
--Uptime => Uptime
--Load => Systemlast
--Version => Version
--Categories => Kategorien
--Subcategories => Unterkategorien
--more... => Weitere Informationen...
--Add => Hinzuf&uuml;gen
--Remove => Entfernen
--Warning => Warnung
--Password_warning => es wurde noch kein Passwort f&uuml;r Web-Administration und SSH gesetzt.<br />Bitte geben Sie jetzt ein neues Passwort ein (Benutzername im Browser: 'root').
--
--# Categories
--Info => Info
--About => &Uuml;ber
--Router Info => Routerinformationen
--
--Status => Status
--Connections => Netzwerkverbindungen
--DHCP => DHCP
--Wireless => WLAN
--
--System => System
--Password => Passwort
--Settings => Einstellungen
--Installed Software => Installierte Software
--Firmware Upgrade => Firmware aktualisieren
--
--Network => Netzwerk
--LAN => LAN
--WAN => Internet
--Wireless => WLAN
--Advanced Wireless => WLAN (erweitert)
--Hosts => Host-Konfiguration
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Dieses Programm ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License,<br /> wie von der Free Software Foundation ver&ouml;ffentlicht, weitergeben und/oder modifizieren,<br /> entweder gem&auml;&szlig; Version 2 der Lizenz oder (nach Ihrer Option) jeder sp&auml;teren Version.
--Contributions by => Mit Beitr&auml;gen von
--Layout based on => Layout basiert auf
--by => von
--
--
--No config change. => Es wurden keine Konfigurations&auml;nderungen vorgenommen.
--Config discarded. => Ihre Konfigurations&auml;nderungen wurden verworfen.
--Config changes: => Aktuelle Konfigurations&auml;nderungen:
--Updating config... => Aktualisiere die Konfiguration...
--
--
--# 'Router Info' page
--Firmware Version => Firmwareversion
--Kernel Version => Kernelversion
--Current Date/Time => Datum/Uhrzeit
--MAC Address => MAC-Adresse
--
--
--# 'Connections' page
--Connection Status => Verbindungsstatus
--Physical Connections => Netzwerkschnittstellen
--Router Connections => Netzwerkverbindungen auf dem Router
--
--
--# 'DHCP' page
--DHCP leases => DHCP-Leases
--IP Address => IP-Adresse
--Name => Name
--Expires in => G&uuml;ltigkeitsdauer
--
--
--# 'Wireless Status' page
--Wireless Status => WLAN-Status
--
--# 'Password' page
--Password Change => Passwort &auml;ndern
--New Password => Neues Passwort
--Confirm Password => Passwort best&auml;tigen
--
--# 'System Settings' page
--System Settings => Systemeinstellungen
--Host Name => Hostname
--Language => Sprache
--
--# 'Installed Software' page
--Installed Packages => Installierte Pakete
--Update package lists => Paketlisten aktualisieren
--Uninstall => Deinstallieren
--Install => Installieren
--
--
--# 'Firmware Upgrade' page
--Firmware format => Firmware-Format
--Error => Fehler
--done => fertig
--Invalid_format => Das Dateiformat der Firmware ist ung&uuml;ltig
--Erase_JFFS2 => JFFS2-Partition l&ouml;schen
--Options => Optionen
--Firmware_image => Firmware-Datei:
--Upgrade => Aktualisieren
--Upgrading... => Aktualisiere...
--
--# 'LAN Settings' page
--LAN Settings => Netzwerkeinstellungen
--LAN Configuration => Netzwerkkonfiguration
--Netmask => Subnetzmaske
--Default Gateway => Standardgateway
--DNS Servers => DNS-Server
--DNS Address => DNS-Serveradresse
--
--Note => Hinweis
--
--
--# 'WAN Settings' page
--WAN Settings => Internet-Einstellungen
--WAN Configuration => Internet-Konfiguration
--PPTP Server IP => PPTP-Serveradresse
--Connection Type => Verbindungsart
--No WAN => Keine Verbindung
--DHCP => DHCP
--Static IP => Statische Konfiguration
--IP Settings => IP-Konfiguration
--PPP Settings => PPP-Einstellungen
--Redial Policy => Verbindungsaufbau
--Connect on Demand => Bei Bedarf
--Keep Alive => Verbindung aufrechterhalten
--Maximum Idle Time => Wartezeit bei Inaktivit&auml;t
--Redial Timeout => Wartezeit bei unterbrochener Verbindung
--MTU => Maximale Paketgr&ouml;&szlig;e
--Username => Benutzername
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => WLAN-Konfiguration
--Wireless Interface => WLAN-Interface
--WEP Key => WEP-Schl&uuml;ssel
--Selected WEP Key => Ausgew&auml;hlter WEP Schl&uuml;ssel
--WPA PSK => WPA-Schl&uuml;ssel
--ESSID => ESSID
--Channel => Kanal
--RADIUS IP Address => RADIUS-Serveradresse
--RADIUS Server Key => RADIUS-Serverpasswort
--Enabled => Aktiviert
--Disabled => Deaktiviert
--ESSID Broadcast => ESSID-Broadcast 
--Show => Anzeigen
--Hide => Verstecken
--WLAN Mode => Betriebsmodus
--Access Point => Access Point
--Client => Client
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Encryption Settings => Verschl&uuml;sselungseinstellungen
--Encryption Type => Verschl&uuml;sselungsart
--PSK => Passwort
--WPA Mode => WPA-Modus
--WPA Algorithms => WPA-Verschl&uuml;sselungsalgorithmen
--WEP Keys => WEP-Schl&uuml;ssel
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => WLAN-Konfiguration (erweitert)
--WDS Connections => WDS-Verbindungen
--MAC Filter List => Zugriffsbeschr&auml;nkung (MAC-Adresse)
--Filter Mode => Filtermodus
--Allow => Erlauben
--Deny => Verweigern
--Set => Setzen
--Settings => Einstellungen
--Automatic WDS => Automatische WDS-Verbindung
--
--# "Hosts" page
--
--MAC Address => MAC-Adresse
--Configured Hosts => Konfigurierte Hosts
--DHCP Static => Statische DHCP-Eintr&auml;ge
--Host Names => Host-Eintr&auml;ge
--
--
--Up => Hoch
--Down => Runter
--Edit => Bearbeiten
--Delete => L&ouml;schen
--Save => Speichern
--Cancel => Abbrechen
--
--Forward => Weiterleiten
--Accept => Zulassen
--Drop => Verweigern
--
--Firewall => Firewall
--Firewall Rules => Firewall-Regeln
--Firewall Configuration => Firewall-Konfiguration
--
--New Rule => Neue Regel
--Match => Filter
--Target => Ziel
--Port => Port
--
--Protocol => Protokoll
--Source IP => Quell-IP
--Destination IP => Ziel-IP
--Source Ports => Quell-Ports
--Destination Ports => Ziel-Ports
--
--Forward to => Weiterleiten an
--Port => Port
--
--Helptext ESSID => Name des Funknetzwerks
--Helptext DNS save => Sie m&uuml;ssen Ihre &Auml;nderungen an dieser Seite speichern, bevor Sie DNS-Server hinzuf&uuml;gen oder entfernen
--
--Helptext Operation mode => Setzt den Betriebsmodus f&uuml;r das  WLAN-Interface. Die Einstellung 'Client (Bridge)' &auml;ndert nichts an den eigentlichen Netzwerkeinstellungen, es &auml;ndert lediglich einige Parameter im WLAN-Treiber, damit man das Interface eingeschr&auml;nkt in einer Bridge verwenden kann.
--Helptext Encryption Type => 'WPA (RADIUS)' wird nur im Access-Point-Modus unterst?tzt. <br /> 'WPA (PSK)' funktioniert nicht im Ad-Hoc-Modus. 
--Helptext IP Settings => IP-Einstellungen sind optional f?r DHCP und PPTP. Wenn sie gesetzt sind, werden sie als Standardwerte verwendet, falls kein DHCP-Server erreichbar ist. 
--Helptext Idle Time => Wartezeit in Sekunden, nach der bei Inaktivit?t die Internetverbindung getrennt wird.
--Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provider warten soll, bevor die Verbindung neu aufgebaut wird.
--
--# untranslated:
--Available packages => Verf&uuml;gbare Pakete
--
-diff --git a/package/webif/files/usr/lib/webif/lang/dk/common.txt b/package/webif/files/usr/lib/webif/lang/dk/common.txt
-deleted file mode 100644
-index bd8f867..0000000
---- a/package/webif/files/usr/lib/webif/lang/dk/common.txt
-+++ /dev/null
-@@ -1,231 +0,0 @@
--lang => Dansk
--# Common
--Settings saved => Indstillingerne er gemt
--Settings not saved => Indstillinger er ikke gemt
--Save Changes => Gem &aelig;ndringerne
--Apply Changes => Aktiver &aelig;ndringer
--Clear Changes => Glem &aelig;ndringerne
--Review Changes => Se &aelig;ndringer
--Host Name => V&aelig;rtsnavn
--Uptime => Oppetid
--Load => Systembelastning
--Version => Version
--Categories => Kategorier
--Subcategories => Underkategorier
--more... => mere...
--Add => Tilf&oslash;je
--Remove => Fjern
--Warning => Advarsel
--Password_warning => Der er ikke sat noget kodeord eller l&oslash;sen p&aring; hverken Webadministration eller SSH.<br />V&aelig;r venlig at v&aelig;lge og/eller indtaste dit kodeord (Brugernavn er 'root' med sm&aring; bogstaver).
--
--# Categories
--Info => Info
--About => Om
--Router Info => Routerinformation
--
--Status => Status
--Connections => Netv&aelig;rksforbindelser
--DHCP => DHCP
--Wireless => Tr&aring;dl&oslash;s
--
--System => System
--Password => Kodeord
--Settings => Indstillinger
--Installed Software => Installeret programmel
--Firmware Upgrade => Firmware opgradering
--
--Network => Netv&aelig;rk
--LAN => Lokalnet
--WAN => Internet
--Wireless => Tr&aring;dl&oslash;s
--Advanced Wireless => Avanceret tr&aring;dl&oslash;s
--Hosts => V&aelig;rtsnavne
--
--
--# 'About' page
--Copyright => Ophavsret
--
--GPL_Text => Dette program er fri software.  De m&aring; bruge, &aelig;ndre og videredistribuere det under betingelserne for "GNU General Public License",<br /> som offentliggjort af "Free Software Foundation" (Den frie softwarebev&aelig;gelse), enten i version 2 af licensen eller (efter deres valg), en hvilkensomhelst senere version.
--
--Contributions by => Bidrag fra
--Layout based on => Layoutet er baseret p&aring;
--by => af
--
--
--No config change. => Ingen konfigurations&aelig;ndring foretaget
--Config discarded. => Konfigurations&aelig;ndringerne blev kasseret
--Config changes: => Forel&oslash;bige &aelig;ndringer
--Updating config... => S&aelig;tter &aelig;ndringerne i kraft
--
--# 'Router Info' page
--Firmware Version => Firmwareversion
--Kernel Version => Kerneversion
--Current Date/Time => Aktuel dato/tid
--MAC Address => MAC adresse
--
--
--# 'Connections' page
--Connection Status => Forbindelsesstatus
--Physical Connections => Fysiske forbindelser
--Router Connections => Routerens forbindelser
--
--
--# 'DHCP' page
--DHCP leases => DHCP leasinger
--IP Address => IP adresse
--Name => Navn
--Expires in => Udl&oslash;bstid
--
--
--# 'Wireless Status' page
--Wireless Status => Tr&aring;dl&oslash;s status
--
--# 'Password' page
--Password Change => &AElig;ndre kodeord
--New Password => Nyt kodeord
--Confirm Password => Nyt kodeord igen
--
--# 'System Settings' page
--System Settings => Systemindstillinger
--Host Name => V&aelig;rtsnavn
--Language => Sprog
--
--# 'Installed Software' page
--Installed Packages => Installerede pakker
--Update package lists => Opdater pakkelisten
--Uninstall => Afindstaller
--Install => Installer
--
--
--# 'Firmware Upgrade' page
--Firmware format => Firmwareformat
--Error => Fejl
--done => f&aelig;rdig
--Invalid_format => Ubrugelig_format
--Erase_JFFS2 => Slet JFFS2 partitionen
--Options => Tilvalg
--Firmware_image => Firmwarefil:
--Upgrade => Opgradere
--Upgrading... => Opgraderer...
--
--# 'LAN Settings' page
--LAN Settings => Lokale netindstillinger
--LAN Configuration => Lokal netv&aelig;rkskonfiguration
--Netmask => Undernetmaske
--Default Gateway => Standard gateway
--DNS Servers => DNS-Server
--DNS Address => DNS-Serveradresse
--
--Note => Bem&aelig;rk
--
--
--# 'WAN Settings' page
--WAN Settings => Internet indstillinger
--WAN Configuration => Internetkonfiguration
--PPTP Server IP => PPTP-serveradresse
--Connection Type => Forbindelsestype
--No WAN => Ingen Internetops&aelig;tning
--DHCP => DHCP
--Static IP => Statisk IP
--IP Settings => IP indstillinger
--PPP Settings => PPP indstillinger
--Redial Policy => Genopkaldspolitik
--Connect on Demand => Forbind n&aring;r behovet er der
--Keep Alive => Hold forbindelsen i live (keep alive)
--Maximum Idle Time => Maksimal tid i tomgang (max idle)
--Redial Timeout => Opkaldstimeout
--MTU => Maksimal pakkest&oslash;relse (MTU)
--Username => Brugernavn
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Tr&aring;dl&oslash;s konfiguration
--Wireless Interface => Tr&aring;dl&oslash;s netkort
--WEP Key => WEP n&oslash;gle
--Selected WEP Key => Valgt WEP n&oslash;gle
--WPA PSK => WPA n&oslash;gle
--ESSID => ESSID
--Channel => Kanal
--RADIUS IP Address => IP adressen p&aring; RADIUS server
--RADIUS Server Key => Kodeord til RADIUS server
--Enabled => Aktiveret
--Disabled => Deaktiveret
--ESSID Broadcast => ESSID-Broadcast 
--Show => Vis
--Hide => Skjul
--WLAN Mode => Tr&aring;dl&oslash;s tilstand
--Access Point => Access Point
--Client => Klient
--Bridge => bro
--Ad-Hoc => Ad-Hoc
--Encryption Settings => Krypteringsindstillinger
--Encryption Type => Krypteringstype
--PSK => PSK kode
--WPA Mode => WPA tilstand
--WPA Algorithms => WPA krypteringsalgoritme
--WEP Keys => WEP n&oslash;gler
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Avanceret ops&aelig;tning af tr&aring;dl&oslash;s
--WDS Connections => WDS forbindelser (WDS repeater)
--MAC Filter List => Filteringsliste (MAC-numre)
--Filter Mode => Filtreingstilstand
--Allow => Tillad
--Deny => Forbyd
--Set => S&aelig;t
--Settings => Indstillinger
--Automatic WDS => Automatisk WDS forbindelse
--
--# "Hosts" page
--
--MAC Address => MAC adresse
--Configured Hosts => V&aelig;rtsnavne
--DHCP Static => Statiske IP adresser til DHCP
--Host Names => V&aelig;rtsnavne
--
--
--Up => Op
--Down => Ned
--Edit => Rette
--Delete => Slette
--Save => Gemme
--Cancel => Annullere
--
--Forward => Forward (videresend)
--Accept => Accept (tillad)
--Drop => Drop (smid v&aelig;k)
--
--Firewall => Firewall
--Firewall Rules => Firewall regler
--Firewall Configuration => Firewallkonfiguration
--
--New Rule => Ny regel
--Match => Match (sammenlign)
--Target => Target (G&aring; til)
--Port => Port
--
--Protocol => Protokol
--Source IP => Afsenders IP
--Destination IP => Modtagers IP
--Source Ports => Afsender porte
--Destination Ports => Modtager porte
--
--Forward to => Send videre til
--Port => Port
--
--Helptext ESSID => Navn p&aring; tr&aring;dl&oslash;s netv&aelig;rk
--Helptext DNS save => Gem &aelig;ndringer p&aring; denne side f&oslash;r du tilf&oslash;jer eller fjerner DNS servere. (Hvis ikke du vil miste dem.)
--
--Helptext Operation mode => S&aelig;tter driftstilstanden for den tr&aring;dl&oslash;se del af routeren.  'Klient' og 'Klient (bro)' bruges til at forbinde 2 tr&aring;dl&oslash;se routere.  I mange tilf&aelig;lde er WDS en bedre (men mere avanceret) l&oslash;sning.  'Klient' udnytter dog b&aring;ndbredden bedst, hvis du vitterlig kun har en maskine tilsluttet.  <br /> Indstillingen 'Klient (bro)' &aelig;ndrer ikke direkte ved netv&aelig;rksindstillingerne. Det er et beskidt hack som f&aring;r routeren til at foregiver at kun en maskine (et MAC nummer) er tilsluttet. Det sker for at overvinde et problem i 802.11 protokollen, som forhindrer at man problemfrit (i almindelig 'Klient'-tilstand) kan bruge den tr&aring;dl&oslash;se forbindelse fra flere maskiner samtidig. <br /> AP bruges til en standalone router, hvor f.eks. b&aelig;rbare computere skal have adgang til Internet og/eller lokalnet. <br /> Hvis du ikke ved hvad 'Ad Hoc' tilstanden g&oslash;r, har du h&oslash;jst sand!
- synligt ikke brug for den.
--
--Helptext Encryption Type => 'WPA (RADIUS)' er kun underst&oslash;ttet i AP (Access Point) tilstand. <br /> 'WPA (PSK)' fungerer ikke i 'Ad-Hoc' tilstand.
--
--Helptext IP Settings => IP indstilinger er frivillig for DHCP og PPTP.  N&aring;r de er sat, bliver de brugt som standv&aelig;rdiger, hvis der ikke er en tilg&aelig;ngelig DHCP server.
--
--Helptext Idle Time => Ventetid i sekunder f&oslash;r inaktivitet bliver &aring;rsagen til at forbindelsen afbrydes.
--
--Helptext Redial Timeout => Ventetid f&oslash;r der pr&oslash;ves at ringe op igen.
--
--# untranslated:
--Available packages => Available packages
-diff --git a/package/webif/files/usr/lib/webif/lang/ee/common.txt b/package/webif/files/usr/lib/webif/lang/ee/common.txt
-deleted file mode 100644
-index e3690cd..0000000
---- a/package/webif/files/usr/lib/webif/lang/ee/common.txt
-+++ /dev/null
-@@ -1,230 +0,0 @@
--lang => Eesti
--#Common 
--Settings saved => S&auml;tted salvestatud
--Settings not saved => S&auml;tted on salvestamata
--Save Changes => Salvesta muudatused
--Apply Changes => Rakenda muudatused
--Clear Changes => Kustuta muudatused
--Review Changes => Vaata tehtud muudatusi
--Host Name => Hostinimi
--Uptime => T&ouml;&ouml;v&otilde;imeaega seni
--Load => Koormus
--Version => Versioon
--Categories => Kategooriad
--Subcategories => Alamkategooriad
--more... => veel... 
--Add => Lisa
--Remove => Eemalda
--Warning => Hoiatus
--Password_warning => veebilidese ja SSH salas&otilde;na on seadmata<br />Palun, sisesta see (veebiliidese kasutajanimi on 'root').
-- 
--# Categories 
--Info => Info
--About => Teavet
--Router Info => Marsruuteri info
-- 
--Status => Olek
--Connections => &Uuml;hendused
--DHCP => DHCP 
--Wireless => Raadioliides
-- 
--System => S&uuml;steem
--Password => Parool
--Settings => S&auml;tted
--Installed Software => Installitud tarkvara
--Firmware Upgrade => P&uuml;sivara uuendamine
-- 
--Network => V&otilde;rk
--LAN => LAN 
--WAN => WAN 
--Wireless => Raadioliides
--Advanced Wireless => Raadioliidese t&auml;psemad s&auml;tted
--Hosts => Hostid
-- 
--
--# About page 
--Copyright => Copyright 
-- 
--GPL_Text => K&auml;esolev programm on vabavara; seda v&otilde;ib levitada ja/v&otilde;i <br >modifitseerida vastavalt Free Software Foundationi <br > avaldatud avaliku litsentsi GNU General Public License 2. versiooni v&otilde;i <br > (teie valikul) mis tahes uuema versiooni tingimustele.
-- 
--Contributions by => Kaasaaitajad
--Layout based on => Kujunduse idee
--by => autor
-- 
-- 
--No config change. => Konfiguratsioon muutmata. 
--Config discarded. => Konfiguratsioon h&uuml;ljatud. 
--Config changes: => Konfiguratsiooni muudatused: 
--Updating config... => Uuendan konfiguratsiooni... 
-- 
--# Router Info page 
--Firmware Version => P&uuml;sivara versioon
--Kernel Version => Kerneli versioon
--Current Date/Time => Praegune kuup&auml;ev/kellaaeg
--MAC Address => MAC-aadress 
-- 
-- 
--# Connections page 
--Connection Status => &Uuml;henduse olek
--Physical Connections => F&uuml;&uuml;silised &uuml;hendused
--Router Connections => Marsruuteri&uuml;hendused
-- 
-- 
--# DHCP page 
--DHCP leases => DHCP antud aadressid 
--IP Address => IP-aadress
--Name => Nimi
--Expires in => Aegub
-- 
-- 
--# Wireless Status page 
--Wireless Status => Raadioliidese olek
-- 
--# Password page 
--Password Change => Parooli muutmine
--New Password => Uus parool
--Confirm Password => Korrake parooli
-- 
--# System Settings page 
--System Settings => S&uuml;steemi s&auml;tted
--Host Name => Hostinimi
--Language => Keel
-- 
--# Installed Software page 
--Installed Packages => Installitud paketid
--Update package lists => V&auml;rskenda paketiloendit
--Uninstall => Desinstalli
--Install => Installi
--Available packages => Saadaolevad paketid 
-- 
--# Firmware Upgrade page 
--Firmware format => P&uuml;sivara vorming
--Error => T&otilde;rge
--done => valmis
--Invalid_format => Vale vorming
--Erase_JFFS2 => Kustuta JFFS2 
--Options => Valikud
--Firmware_image => P&uuml;sivara t&otilde;mmis
--Upgrade => Versiooniuuendus
--Upgrading... => Uuendan... 
-- 
--# LAN Settings page 
--LAN Settings => LAN-i s&auml;tted 
--LAN Configuration => LAN-i konfiguratsioon 
--Netmask => V&otilde;rgu mask
--Default Gateway => Vaikel&uuml;&uuml;s
--DNS Servers => DNS-serverid 
--DNS Address => DNS-i aadress
-- 
--Note => M&auml;rkus
-- 
-- 
--# WAN Settings page 
--WAN Settings => WAN-i s&auml;tted
--WAN Configuration => WAN-i konfiguratsioon
--PPTP Server IP => PPTP-serveri IP 
--Connection Type => &Uuml;henduse t&uuml;&uuml;p
--No WAN => WAN-i ei kasutata
--DHCP => DHCP 
--Static IP => Staatiline IP
--IP Settings => IP-s&auml;tted
--PPP Settings => PPP-s&auml;tted
--Redial Policy => Kordusvalimispoliitika
--Connect on Demand => &Uuml;henda n&otilde;udmisel
--Keep Alive => Hoia &uuml;hendust t&ouml;&ouml;s
--Maximum Idle Time => Maksimaalne j&otilde;udeaeg
--Redial Timeout => Kordusvalimise aegumine
--MTU => MTU 
--Username => Kasutajanimi
-- 
-- 
--# Wireless Configuration page 
--Wireless Configuration => Raadioliidese konfiguratsioon 
--Wireless Interface => Raadioliides
--WEP Key => WEP-v&otilde;ti 
--Selected WEP Key => Valitud WEP-v&otilde;ti 
--WPA PSK => WPA PSK 
--ESSID => ESSID 
--Channel => Kanal
--RADIUS IP Address => RADIUS IP-aadress
--RADIUS Server Key => RADIUS-serveri v&otilde;ti 
--Enabled => Lubatud
--Disabled => Keelatud
--ESSID Broadcast => ESSID-i levindamine 
--Show => N&auml;ita
--Hide => Peida
--WLAN Mode => WLAN-i rez"iim
--Access Point => AP
--Client => Klient
--Bridge => Sild
--Ad-Hoc => Ad-Hoc 
--Encryption Settings => Kr&uuml;pteerimise s&auml;tted
--Encryption Type => Kr&uuml;pteerimise t&uuml;&uuml;p
--PSK => PSK 
--WPA Mode => WPA rez"iim 
--WPA Algorithms => WPA algoritmid 
--WEP Keys => WEP-v&otilde;tmed 
-- 
-- 
--# Advanced Wireless Configuration page 
--Advanced Wireless Configuration => Raadioliidese t&auml;psem konfiguratsioon
--WDS Connections => WDS-&uuml;hendused 
--MAC Filter List => MAC-filtri loend 
--Filter Mode => Filtri rez"iim
--Allow => Luba
--Deny => Keela
--Set => Sea 
--Settings => S&auml;tted
--Automatic WDS => Automaatne WDS
-- 
--# "Hosts" page 
-- 
--MAC Address => MAC-aadress 
--Configured Hosts => Konfigureeritud hostid
--DHCP Static => Staatiline DHCP
--Host Names => Hostinimed
-- 
-- 
--Up => &Uuml;les
--Down => Alla
--Edit => Muuda
--Delete => Kustuta
--Save => Salvesta
--Cancel => Loobu
-- 
--Forward => Forward
--Accept => Accept
--Drop => Drop
-- 
--Firewall => Tulem&uuml;&uuml;r
--Firewall Rules => Tulem&uuml;&uuml;ri reeglid
--Firewall Configuration => Tulem&uuml;&uuml;ri konfiguratsioon
-- 
--New Rule => Uus reegel
--Match => Vastavus
--Target => Sihtkoht
--Port => Port 
-- 
--Protocol => Protokoll
--Source IP => Saatja IP
--Destination IP => Saaja IP 
--Source Ports => Saatja pordid
--Destination Ports => Saaja pordid
-- 
--Forward to => Suuna:
--Port => Port 
-- 
--Helptext ESSID => Teie traadita v&otilde;rgu v&otilde;rgunimi
--
--Helptext DNS save => Sellel lehel tehtud muudatused tuleb enne DNS-serverite lisamist/eemaldamist salvestada
-- 
--Helptext Operation mode => M&auml;&auml;rab teie traadita v&otilde;rgu t&ouml;&ouml;reziimi. S&auml;te "Klient (Sild)" ei muuda v&otilde;rguliidese s&auml;tteid. Muudetakse ainult raadioliidese draiveri teatud parameetreid, mis on seotud liidese sillarez"iimi piirangute lubamisega
-- 
--Helptext Encryption Type => 'WPA (RADIUS)' on lubatud ainult rez"iimis "AP". <br /> S&auml;te 'WPA (PSK)' ei t&ouml;&ouml;ta v&otilde;rd&otilde;igusv&otilde;rgurez"iimis (Ad-Hoc)
-- 
--Helptext IP Settings => IP-s&auml;tted on DHCP ja PPTP puhul valikulised. Kui muudate neid s&auml;tteid, siis rakendatakse need vaikes&auml;tetena juhul, kui DHCP-server pole saadaval.
-- 
--Helptext Idle Time => Aeg sekundites, mille v&auml;ltel marsruuter enne Interneti-&uuml;henduse katkestamist ootab (ainult s&auml;tte Connect on Demand puhul).
-- 
--Helptext Redial Timeout => Aeg sekundites, kui kaua marsruuter p&auml;rast teenusepakkuja v&otilde;rgust teate "pole vastust" saamist ootab, enne kui asub &uuml;hendust taastama.
--
-diff --git a/package/webif/files/usr/lib/webif/lang/es/common.txt b/package/webif/files/usr/lib/webif/lang/es/common.txt
-deleted file mode 100644
-index d488d1f..0000000
---- a/package/webif/files/usr/lib/webif/lang/es/common.txt
-+++ /dev/null
-@@ -1,227 +0,0 @@
--lang => Espa&ntilde;ol
--# Common
--Settings saved => Cambios guardados
--Settings not saved => No se han podido guardar los cambios
--Save Changes => Guardar cambios
--Apply Changes => Aplicar cambios
--Clear Changes => Deshacer cambios
--Review Changes => Comprobar cambios
--Host Name => Nombre del equipo
--Uptime => Uptime
--Load => Carga del sistema
--Version => Versi&oacute;n
--Categories => Categor&iacute;as
--Subcategories => Subcategor&iacute;s
--more... => m&aacute;s...
--Add => A&ntilde;adir
--Remove => Eliminar
--Warning => Atenci&oacute;n
--Password_warning => no has establecido una contrase&ntilde;a de protecci&oacute;n para el router (acceso web y ssh). Por favor, elija una ahora (el nombre de usuario ser&aacute; 'root')
--
--# Categories
--Info => Info
--About => Acerca de
--Router Info => Informaci&oacute;n del router
--
--Status => Estado
--Connections => Conexiones
--DHCP => DHCP
--Wireless => Wi-Fi
--
--System => Sistema
--Password => Contrase&ntilde;a
--Settings => Configuraci&oacute;n
--Installed Software => Programas instalados
--Firmware Upgrade => Actualizar Firmware
--
--Network => Red
--LAN => LAN
--WAN => Internet
--Wireless => Wi-Fi
--Advanced Wireless => Wi-Fi (avanzado)
--Hosts => Configuration de hosts
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Este programa es software libre; Usted puede distribuirlo y/o <br />modificarlo bajo los t&eacute;rminos de la General Public License<br />como est&aacute; publicada por la Free Sofware Foundation; bien de la versi&oacute;n 2 de dicha Licencia o bien (seg&uacute;n su elecci&oacute;n) de cualquier versi&oacute;n posterior.
--Contributions by => Contribuidores
--Layout based on => Aspecto basado en
--by => por
--
--
--No config change. => No ha habido cambios de configuraci&oacute;n.
--Config discarded. => Los cambios no se han aceptado.
--Config changes: => Configuraci&oacute;n actual:
--Updating config... => Actualizando la configuraci&oacute;n...
--
--
--# 'Router Info' page
--Firmware Version => Versi&oacute;n del firmware
--Kernel Version => Versi&oacute;n del Kernel
--Current Date/Time => Fecha/Hora
--MAC Address => Direcci&oacute;n MAC
--
--
--# 'Connections' page
--Connection Status => Estado de las conexiones
--Physical Connections => Conexiones f&iacute;sicas
--Router Connections => Conexiones del router
--
--
--# 'DHCP' page
--DHCP leases => Pr&eacute;stamos DHCP
--IP Address => Direcci&oacute;n IP
--Name => Nombre
--Expires in => Caduca en
--
--
--# 'Wireless Status' page
--Wireless Status => Estado del Wi-Fi
--
--# 'Password' page
--Password Change => Cambio de la contrase&ntilde;a
--New Password => Nueva contrase&ntilde;a
--Confirm Password => Confirme la contrase&ntilde;a
--
--# 'System Settings' page
--System Settings => Par&aacute;metros del sistema
--Host Name => Nombre del host
--Language => Idioma
--
--# 'Installed Software' page
--Installed Packages => Paquetes instalados
--Update package lists => Actualizaci&oacute;n de la lista de paquetes
--Uninstall => Desinstalar
--Install => Instalar
--
--
--# 'Firmware Upgrade' page
--Firmware format => Formato del firmware
--Error => Error
--done => hecho
--Invalid_formt => Formato del firmware inv&aacute;lido
--Erase_JFFS2 => Borrar la partici&oacute;n JFFS2
--Options => Opciones
--Firmware_image => Archivo del firmware
--Upgrade => Actualizar
--Upgrading... => Actualizaci&oacute;n...
--
--# 'LAN Settings' page
--LAN Settings => Configuraci&oacute;n LAN
--LAN Configuration => Configuraci&oacute;n LAN
--Netmask => M&aacute;scara de subred
--Default Gateway => Puerta de enlace (gateway)
--DNS Servers => Servidor DNS
--DNS Address => Direcci&oacute;n IP del DNS
--
--Note => Nota
--
--# 'WAN Settings' page
--WAN Settings => Configuraci&oacute;n de Internet
--WAN Configuration => Configuraci&oacute;n de Internet
--PPTP Server IP => Direcci&oacute;n IP del servidor PPTP
--Connection Type => Tipo de conexi&oacute;n
--No WAN => Sin configuraci&oacute;n de Internet
--DHCP => DHCP
--Static IP => IP est&aacute;tica
--IP Settings => Configuraci&oacute;n IP
--PPP Settings => Configuraci&oacute;n PPP
--Redial Policy => Opciones de reconexi&oacute;n
--Connect on Demand => Bajo demanda
--Keep Alive => Conexi&oacute;n permanente
--Maximum Idle Time => Tiempo m&aacute;ximo de inactividad
--Redial Timeout => Tiempo de reconexi&oacute;n
--MTU => MTU (tama&ntilde;o de los paquetes)
--Username => Nombre de usuario
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Configuraci&oacute;n Wi-Fi
--Wireless Interface => Interfaz Wi-Fi
--WEP Key => Clave WEP
--Selected WEP Key => Clave WEP seleccionada
--WPA PSK => WPA-PSK
--ESSID => ESSID
--Channel => Canal
--RADIUS IP Address => Direcci&oacute;n IP del servidor RADIUS
--RADIUS Server Key => Secreto RADIUS
--Enabled => Activado
--Disabled => Desactivado
--ESSID Broadcast => Difusi&oacute;n del SSID
--Show => Mostrar
--Hide => Ocultar
--WLAN Mode => Modo Wi-Fi
--Access Point => Punto de acceso
--Client => Cliente
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Operation mode => Modo de funcionamiento
--Encryption Settings => Par&aacute;metros de enriptaci&oacute;n
--Encryption Type => Tipo de encriptaci&oacute;n
--PSK => PSK
--WPA Mode => Modo WPA
--WPA Algorithms => Algoritmos WPA
--WEP Keys => Clave WEP
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Configuraci&oacute;n Wi-Fi avanzada
--WDS Connections => Conexiones WDS
--MAC Filter List => Filtrar por direcci&oacute;n MAC
--Filter Mode => Modo de filtrado
--Allow => Autorizar
--Deny => Denegar
--Set => Establecer
--Settings => Par&aacute;metros
--Automatic WDS => WDS autom&aacute;tico
--
--# "Hosts" page
--
--MAC Address => Direcci&oacute;n MAC
--Configured Hosts => Equipos configurados
--DHCP Static => Entradas DHCP est&aacute;ticas
--Host Names => Nombre de los equipos
--
--Up => Subir
--Down => Bajar
--Edit => Editar
--Delete => Borrar
--Save => Guardar
--Cancel => Cancelar
--
--Forward => Redirigir
--Accept => Aceptar
--Drop => Descartar
--
--Firewall => Firewall
--Firewall Rules => Reglas del Firewall
--Firewall Configuration => Configuraci&oacute;n del Firewall
--
--New Rule => Nueva regla
--Match => Filtrar
--Target => Acci&oacute;n
--Port => Puerto
--
--Protocol => Protocolo
--Source IP => IP origen
--Destination IP => IP destino
--Source Ports => Puertos origen
--Destination Ports => Puertos destino
--
--Forward to => Redirigir a
--Port => Puerto
--
--Helptext ESSID => SSID
--Helptext DNS save => Es recomendable guardar los cambios antes de a&ntilde;adir o eliminar servidores de DNS de la lista
--
--Helptext Operation mode => Establece el modo de operaci&oacute;n de tu red wireless. Eligiendo 'Client (bridge)' no cambiar&aacute; la configuraci&oacute;n de la interfaz de red. Simplemente a&ntilde;adir&aacute; unos par&aacute;metros que permitir&aacute;n que la interfaz wireless act&uacute;e en cierta medida en modo bridge.
--Helptext Encryption Type => 'WPA (RADIUS)' s&oacute;lo puede usarse en modo Punto de Acceso.<br /> 'WPA (PSK)' no funciona en modo Ad-Hoc.
--Helptext IP Settings => Las opciones IP son opcionales para DHCP y PPTP. Si las eliges, se utilizar&aacute;n por defecto en caso de que la configuraci&oacute;n autom&aacute;tica falle.
--Helptext Idle Time => N&uacute;mero de segundos sin actividad con Internet que debe esperar el router antes de desconectarse. (S&oacute;lo para el modo Bajo Demanda).
--Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
--
--
--# untranslated:
--Available packages => Available packages
--
-diff --git a/package/webif/files/usr/lib/webif/lang/fr/common.txt b/package/webif/files/usr/lib/webif/lang/fr/common.txt
-deleted file mode 100644
-index 96cdb83..0000000
---- a/package/webif/files/usr/lib/webif/lang/fr/common.txt
-+++ /dev/null
-@@ -1,238 +0,0 @@
--lang => Fran&ccedil;ais
--Encoding => UTF-8
--
--# Common
--Settings saved => Sauvegard&eacute;
--Settings not saved => Non sauvegard&eacute;
--Save Changes => Sauvegarder
--Apply Changes => Appliquer
--Clear Changes => Effacer
--Review Changes => Revoir
--Host Name => Nom de machine
--Uptime => Uptime
--Load => Charge syst&egrave;me
--Version => Version
--Categories => Cat&eacute;gories
--Subcategories => Sous-cat&eacute;tgories
--more... => davantage...
--Add => Ajouter
--Remove => Enlever
--
--Warning => Attention
--Password_warning => vous n'avez pas configur&eacute; de mot de passe pour l'interface Web et l'acc&egrave;s SSH<br /> Entrez en un maintenant (le nom d'utilisateur dans le navigateur sera 'root'). 
--
--# Categories
--Info => Info
--About => A propos
--Router Info => Informations routeur
--
--Status => Statut
--Connections => Connexions r&eacute;seau
--DHCP => DHCP
--Wireless => Wi-Fi
--
--System => Syst&egrave;me
--Password => Mot de passe
--Settings => Param&egrave;tres
--Installed Software => Logiciels install&eacute;s
--Firmware Upgrade => Mise &agrave; jour firmware
--
--Network => R&eacute;seau
--LAN => LAN
--WAN => Internet
--Wireless => Wi-Fi
--Advanced Wireless => Wi-Fi (avanc&eacute;)
--Hosts => Configuration des h&ocirc;tes
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer
--et/ou le modifier sous les termes de la General Public License telle qu'elle
--est publi&eacute;e par la Free Sofware Foundation; que ce soit sous la version
--2 de la license, ou (&agrave; votre convenance) une version ult&eacute;rieure
--Contributions by => Contributions par
--Layout based on => Pr&eacute;sentation bas&eacute;e sur
--by => par
--
--
--No config change. => Pas de changements.
--Config discarded. => Pas de prise en compte.
--Config changes: => Configuration actuelle:
--Updating config... => Mise &agrave; jour...
--
--
--# 'Router Info' page
--Firmware Version => Version du firmware
--Kernel Version => Version du noyau
--Current Date/Time => Date et heure
--MAC Address => Adresse MAC
--
--
--# 'Connections' page
--Connection Status => Etat des connexions
--Physical Connections => Connexions physiques
--Router Connections => Connexions au routeur
--
--
--# 'DHCP' page
--DHCP leases => Baux DHCP
--IP Address => Adresse IP
--Name => Nom
--Expires in => Expire dans
--
--
--# 'Wireless Status' page
--Wireless Status => Etat du Wi-Fi
--
--# 'Password' page
--Password Change => Changement du mot de passe
--New Password => Nouveau mot de passe
--Confirm Password => Confirmez le mot de passe
--
--# 'System Settings' page
--System Settings => Param&egrave;tres du syst&egrave;me
--Host Name => Nom d'h&ocirc;te
--Language => Langue
--
--# 'Installed Software' page
--Installed Packages => Paquets logiciels install&eacute;s
--Update package lists => Mise &agrave; jour de la liste des paquets
--Uninstall => D&eacute;sinstaller
--Install => Installer
--
--
--# 'Firmware Upgrade' page
--Firmware format => Format du firmware
--Error => Erreur
--done => pr??t
--Invalid_formt => Le firmware n'a pas un format valide
--Erase_JFFS2 => Effacer la partition JFFS2
--Options => Options
--Firmware_image => Fichier firmware
--Upgrade => Mettre &agrave; jour
--Upgrading... => Mise &agrave; jour en cours...
--
--# 'LAN Settings' page
--LAN Settings => Param&egrave;tres LAN
--LAN Configuration => Configuration LAN
--Netmask => Masque r&eacute;seau
--Default Gateway => Passerelle par d&eacute;faut
--DNS Servers => Serveur DNS
--DNS Address => Addresse DNS
--
--Note => Note
--
--
--# 'WAN Settings' page
--WAN Settings => Param&egrave;tres Internet
--WAN Configuration => Configuration Internet
--PPTP Server IP => Adresse IP du serveur PPTP
--Connection Type => Type de connexion
--No WAN => Pas de configuration WAN
--DHCP => DHCP
--Static IP => IP statique
--IP Settings => Param&egrave;tres IP
--PPP Settings => Param&egrave;tres PPP
--Redial Policy => Options de renum&eacute;rotation
--Connect on Demand => Sur demande
--Keep Alive => Toujours connect&eacute;
--Maximum Idle Time => D&eacute;lai maximal d'inactivt&eacute;
--Redial Timeout => D&eacute;lai  avant renum??rotation
--MTU => Taille maximale des paquets
--Username => Nom d'utilisateur
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Configuration Wi-Fi
--Wireless Interface => Interface Wi-Fi
--WEP Key => Cl&eacute; WEP
--Selected WEP Key => Choix de la cl&eacute; WEP
--WPA PSK => WPA cl&eacute; pr&eacute;-partag&eacute;e
--ESSID => ESSID
--Channel => Canal
--RADIUS IP Address => Adresse IP du serveur RADIUS
--RADIUS Server Key => Secret partag&eacute; avec le serveur RADIUS
--Enabled => Activ&eacute;
--Disabled => D&eacute;sactiv&eacute;
--ESSID Broadcast => Diffusion du SSID
--Show => Montrer
--Hide => Cacher
--WLAN Mode => Mode de fonctionnement Wi-Fi
--Access Point => Point d'acc&egrave;s
--Client => Client
--Bridge => Pont-r&eacute;seau
--Ad-Hoc => Ad-Hoc
--Encryption Settings => Param&egrave;tres de chiffrement
--Encryption Type => Type de chiffrement
--PSK => Cl&eacute; pr&eacute;-partag&eacute;e
--WPA Mode => Mode WPA
--WPA Algorithms => Algorithmes WPA
--WEP Keys => Cl&eacute;s WEP
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Configuration Wi-Fi avanc&eacute;e
--WDS Connections => Connexions WDS
--MAC Filter List => Filtre par adresses MAC
--Filter Mode => Mode de filtrage
--Allow => Autoriser
--Deny => Refuser
--Set => Param&egrave;trer
--Settings => Param&egrave;tres
--Automatic WDS => WDS automatique
--WDS watchdog timeout => D&eacute;lai d'inactivit&eacute; WDS
--Antenna selection => S&eacute;lection de l'antenne
--
--# "Hosts" page
--
--MAC Address => Adresse MAC
--Configured Hosts => H&ocirc;tes configur&eacute;s
--DHCP Static => Entr&eacute;es DHCP statiques
--Host Names => Noms d'h&ocirc;tes
--
--Up => Monter
--Down => Descendre
--Edit => Editer
--Delete => Effacer
--Save => Sauvegarder
--Cancel => Annuler
--
--Forward => Transf&eacute;rer
--Accept => Accepter
--Drop => Ignorer
--
--Firewall => Pare-feu
--Firewall Rules => R&egrave;gles du pare-feu
--Firewall Configuration => Configuration du pare-feu
--
--New Rule => Nouvelle r&egrave;gle
--Match => Concordance
--Target => Destination
--Port => Port
--
--Protocol => Protocole
--Source IP => IP source
--Destination IP => IP de destination
--Source Ports => Ports source
--Destination Ports => Ports de destination
--
--Forward to => Transf&eacute;rer vers
--Port => Port
--
--
--Helptext ESSID => Nom du r&eacute;seau sans-fil
--Helptext DNS save => Il est recommand&eacute; de sauvegarder vos param&egrave;tres avant d'ajouter/enlever des serveurs DNS
--
--
--Helptext Operation mode => Configure le mode de fonctionnement de votre
--r&eacute;seau sans-fil. Le mode Client (Pont r&eacute;seau sans-fil) ne changera pas les param&egrave;tres de votre interface. Certains param&egrave;tres de la carte Wi-Fi seront modifi&eacute;s de mani&egrave;re &agrave; pouvoir fonctionner en mode r&eacute;seau sans-fil.
--Helptext Encryption Type => 'WPA (RADIUS)' ne fonctionne qu'en mode point d'acc&egrave;s. <br /> 'WPA (PSK)' ne fonctionne pas en mode Ad-hoc.
--Helptext IP Settings => Les param&egrave;tres IP sont optionnels pour DHCP et PPTP. Si vous les configurez, ils seront utilis&eacute; comme param&egrave;tres par d&eacute;faut dans le cas o&uacute; le serveur DHCP ne r&eacute;pond< pas.
--Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre avant que le routeur d&eacute;connecte d'Internet (Connexion &agrave; la demande)
--Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant un nouvel &eacute;ssai de connexion.
--
--
--Available packages => Paquetages disponibles
--
-diff --git a/package/webif/files/usr/lib/webif/lang/hr/common.txt b/package/webif/files/usr/lib/webif/lang/hr/common.txt
-deleted file mode 100644
-index a6291a2..0000000
---- a/package/webif/files/usr/lib/webif/lang/hr/common.txt
-+++ /dev/null
-@@ -1,199 +0,0 @@
--lang => Hrvatski
--Encoding => UTF-8
--# Common
--Settings saved => Postavke Spremljene
--Settings not saved => Postavke Nisu Spremljene
--Save Changes => Spremi Postavke
--Apply Changes => Primijeni Postavke
--Clear Changes => Obri&scaron;i Postavke
--Review Changes => Pregledaj Izmjene
--Host Name => Naziv Hosta
--Uptime => U Pogonu Od
--Load => Optere&aelig;enje
--Version => Verzija
--Categories => Kategorije
--Subcategories => Podkategorije
--more... => nastavak...
--Add => Dodaj
--Remove => Makni
--Warning => Upozorenje
--Password_warning => Niste postavili lozinku za Web su&egrave;elje i SSH pristup
--Molimo vas unesite lozinku (korisni&egrave;ko ime u va&scaron;em pregledniku &aelig; biti 'root').
--# Categories
--Info => Informacije
--About => Opis
--Router Info => O ure&eth;aju
--Status => Status
--Connections => Veze
--DHCP => DHCP
--Wireless => Wireless
--System => Sustav
--Password => Lozinka
--Settings => Postavke
--Installed Software => Instalirani Softver
--Firmware Upgrade => Nadogradnja Firmware-a
--Network => Mre&zcaron;a
--LAN => LAN
--WAN => WAN
--Wireless => Wireless
--Advanced Wireless => Napredne Wireless Postavke
--Hosts => Konfigurirani Hostovi
--
--# 'About' page
--Copyright => Copyright
--GPL_Text => This program is free software; you can redistribute it and/or 
--modify it under the terms of the GNU General Public License 
--as published by the Free Software Foundation; either version 2 
--of the License, or (at your option) any later version. 
--
--Contributions by => Contributions by SL SOLUCIJE d.o.o.
--Layout based on => Layout based on SmartHop webif
--by => by Silvije Filipovic - silvije.filipovic at slsolucije.hr
--
--No config change. => Nema nikakvih promjena konfiguracije.
--Config discarded. => Va&scaron;e promjene konfiguracije su opozvane.
--Config changes: => Trenutne promjene konfiguracije:
--Updating config... => Konfiguracija se nadogra&eth;uje...
--
--# 'Router Info' page
--Firmware Version => Firmware Verzija
--Kernel Version => Kernel Verzija
--Current Date/Time => Trenutni Datum/ Vrijeme
--MAC Address => Mac Adresa
--
--# 'Connections' page
--Connection Status => Status Veza
--Physical Connections => Fizi&egrave;ke Veze
--Router Connections => Usmjeravanje
--
--# 'DHCP' page
--DHCP leases => DHCP dodjela
--IP Address => IP Adresa
--Name => Naziv
--Expires in => Rok istjecanja
--
--# 'Wireless Status' page
--Wireless Status => Wireless Status
--# 'Password' page
--Password Change => Promjena Lozinke
--New Password => Nova Lozinka
--Confirm Password => Potvrdi Lozinku
--# 'System Settings' page
--System Settings => Postavke Sustava
--Host Name => Naziv Hosta
--Language => Jezik
--# 'Installed Software' page
--Installed Packages => Instalirani Paketi
--Update package lists => A&zcaron;uriraj listu paketa
--Uninstall => Deinstaliraj
--Install => Instaliraj
--
--# 'Firmware Upgrade' page
--Firmware format => Firmware format
--Error => Gre&scaron;ka
--done => gotovo
--Invalid_formt => Neispravan Firmware Format
--Erase_JFFS2 => Izbri&scaron;i JFFS2 particiju
--Options => Opcije
--Firmware_image => Firmware image za upload
--Upgrade => Nadogradi
--Upgrading... => Nadogradnja u tijeku...
--# 'LAN Settings' page
--LAN Settings => LAN Postavke
--LAN Configuration => LAN Konfiguracija
--Netmask => Netmask
--Default Gateway => Default Gateway
--DNS Servers => DNS Serveri
--DNS Address => DNS Adresa
--Note => Bilje&scaron;ke
--# 'WAN Settings' page
--WAN Settings => WAN Postavke
--WAN Configuration => WAN Konfiguracija
--PPTP Server IP => PPTP Server IP
--Connection Type => Tip Konekcije
--No WAN => Bez WAN Konekcije
--DHCP => DHCP
--Static IP => Stati&egrave;ki IP
--IP Settings => IP Postavke
--PPP Settings => PPP Postavke
--Redial Policy => Redial Policy
--Connect on Demand => Spajanje na Zahtjev
--Keep Alive => Keep Alive
--Maximum Idle Time => Dozvoljeni Max. Idle Time
--Redial Timeout => Redial Timeout
--MTU => MTU
--Username => Korisni&egrave;ko Ime
--
--# 'Wireless Configuration' page
--Wireless Configuration => Wireless Konfiguracija
--Wireless Interface => Wireless Interface
--WEP Key => WEP Key
--Selected WEP Key => Odabrani WEP Key
--WPA PSK => WPA PSK
--ESSID => ESSID
--Channel => Kanal
--RADIUS IP Address => RADIUS IP Adresa
--RADIUS Server Key => RADIUS Server Key
--Enabled => Omogu&aelig;eno
--Disabled => Onemogu&aelig;eno
--ESSID Broadcast => ESSID Broadcast
--Show => Neskriveni
--Hide => Skriveni
--WLAN Mode => WLAN Mod
--Access Point => Access Point
--Client => Client
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Operation mode => Operaativni mod
--Encryption Settings => Postavke Enkripcije
--Encryption Type => Tip Enkripcije
--PSK => PSK
--WPA Mode => WPA Mod
--WPA Algorithms => WPA Algoritmi
--WEP Keys => WEP Keys
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Napredne Wireless Postavke
--WDS Connections => WDS Veze
--MAC Filter List => MAC Filter Lista
--Filter Mode => Filter Mod
--Allow => Dozvoli
--Deny => Zabrani
--Set => Postavi
--Settings => Postavke
--Automatic WDS => Automatski WDS
--# "Hosts" page
--MAC Address => MAC Adresa
--Configured Hosts => Konfigurirani Hostovi
--DHCP Static => Stati&egrave;ki DHCP
--Host Names => Nazivi Hostova
--Up => Gore
--Down => Dolje
--Edit => Uredi
--Delete => Bri&scaron;i
--Save => Spremi
--Cancel => Odustani
--Forward => Naprijed
--Accept => Prihvati
--Drop => Otka&zcaron;i
--Firewall => Firewall
--Firewall Rules => Firewall Pravila
--Firewall Configuration => Firewall Konfiguracija
--New Rule => Novo Pravilo
--Match => Uvjet
--Target => Cilj
--Port => Port
--Protocol => Protokol
--Source IP => Ishodi&scaron;ni IP
--Destination IP => Odredi&scaron;ni IP
--Source Ports => Ishodi&scaron;ni Portovi
--Destination Ports => Odredi&scaron;ni Portovi
--Forward to => Preusmjeravanje na
--Port => Port
--Helptext ESSID => Naziv Wireless Mre&zcaron;e
--Helptext DNS save => Trebali biste spremiti va&scaron;e postavke na ovoj stranici prije dodavanja/brisanja DNS poslju&zcaron;itelja
--Helptext Operation mode => Ova opcija odre&eth;uje operativni mod rada va&scaron;e wireless mre&zcaron;e. Odabir 'Client (Bridge)' ne&aelig;e promijeniti postavke mre&zcaron;nog su&egrave;elja. Samo &aelig;e biti dodani parametri u pogonski program koji omogu&aelig;avaju ograni&egrave;ene bridging funkcije su&egrave;elja.
--Helptext Encryption Type => 'WPA (RADIUS)' je podr&zcaron;an samo u Access Point modu. 
--'WPA (PSK)' ne radi u Ad-Hoc modu.
--Helptext IP Settings => IP Postavke su opcionalne za DHCP i PPTP. Ukoliko su postavljene, koriste se kao pretpostavljene, u slu&egrave;aju kada  DHCP poslu&zcaron;itelj nije dostupan.
--Helptext Idle Time => Vrijeme u sekundama bez internet prometa do kojeg ure&eth;aj treba &egrave;ekati prije prekida veze (samo kod Spajanja na Zahtjev)
--Helptext Redial Timeout => Vrijeme u sekundama za prijem odgovora od prividera prije ponovnog spajanja
-diff --git a/package/webif/files/usr/lib/webif/lang/hu/common.txt b/package/webif/files/usr/lib/webif/lang/hu/common.txt
-deleted file mode 100644
-index a8a08e6..0000000
---- a/package/webif/files/usr/lib/webif/lang/hu/common.txt
-+++ /dev/null
-@@ -1,227 +0,0 @@
--lang => Magyar
--# Common
--Settings saved => Be&aacute;ll&iacute;t&aacute;sok elmentve
--Settings not saved => Be&aacute;ll&iacute;t&aacute;sok ment&eacute;s&eacute;nek mell&#337;z&eacute;se
--Save Changes => V&aacute;ltozat&aacute;sok ment&eacute;se
--Apply Changes => V&aacute;ltoztat&aacute;sok alkalmaz&aacute;sa
--Clear Changes => V&aacute;ltoztat&aacute;sok eldob&aacute;sa
--Review Changes => V&aacute;ltoztat&aacute;sok megtekint&eacute;se
--Host Name => Host n&eacute;v
--Uptime => &Uuml;zemid&#337;
--Load => Rendszer terhel&eacute;s
--Version => Verzi&oacute;
--Categories => Kategori&aacute;k
--Subcategories => Alkateg&oacute;ri&aacute;k
--more... => Tov&aacute;bbi inform&aacute;ci&oacute;k...
--Add => Hozz&aacute;ad
--Remove => Elt&aacute;vol&iacute;t
--Warning => Vigy&aacute;zat
--Password_warning => A Web-Adminisztr&aacute;toenak &eacute;s az SSH hozz&aacute;f&eacute;r&eacute;shez m&eacute;g nincs jelsz&oacute; be&aacute;ll&iacute;tva.<br />Adjon meg most egy &uacute;j jelsz&oacute;t (felhaszn&aacute;l&oacute;n&eacute;v a b&ouml;ng&eacute;sz&#337;ben: 'root').
--
--# Categories
--Info => Inform&aacute;ci&oacute;
--About => R&oacute;lunk
--Router Info => Router inform&aacute;ci&oacute;
--
--Status => &Aacute;llapot
--Connections => H&aacute;l&oacute;zati kapcsolatok
--DHCP => DHCP
--Wireless => WLAN
--
--System => Rendszer
--Password => Jelsz&oacute;
--Settings => Be&aacute;ll&iacute;t&aacute;sok
--Installed Software => Telep&iacute;t&eacute;s
--Firmware Upgrade => Firmware friss&iacute;t&eacute;s
--
--Network => H&aacute;l&oacute;zat
--LAN => LAN
--WAN => Internet
--Wireless => WLAN
--Advanced Wireless => WLAN (halad&oacute;)
--Hosts => Host konfigur&aacute;ci&oacute;
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => This program is free software; you can redistribute it and/or <br >modify it under the terms of the GNU General Public License <br >as published by the Free Software Foundation; either version 2 <br > of the License, or (at your option) any later version. 
--Contributions by => Contributions by
--Layout based on => Layout based on
--by => by
--
--No config change. => A konfigur&aacute;ci&oacute;ban nincs v&aacute;ltoz&aacute;s.
--Config discarded. => Konfigur&aacute;ci&oacute; v&aacute;ltoztat&aacute;sok eldobva.
--Config changes: => Konfigur&aacute;ci&oacute; m&oacute;dod&iacute;t&aacute;sok:
--Updating config... => Konfigur&aacute;ci&oacute; friss&iacute;t&eacute;se...
--
--
--# 'Router Info' page
--Firmware Version => Firmware verzi&oacute;
--Kernel Version => Kernel verzi&oacute;
--Current Date/Time => Aktu&aacute;lis d&aacute;tum/id&#337;
--MAC Address => MAC Address
--
--
--# 'Connections' page
--Connection Status => Kapcsolatok
--Physical Connections => Fizikai kapcsolatok
--Router Connections => Router kapcsolatok
--
--
--# 'DHCP' page
--DHCP leases => DHCP b&eacute;rletek
--IP Address => IP c&iacute;m
--Name => N&eacute;v
--Expires in => Lej&aacute;r
--
--
--# 'Wireless Status' page
--Wireless Status => WLAN &aacute;llapot
--
--# 'Password' page
--Password Change => Jelsz&oacute; csere
--New Password => &Uacute;j jelsz&oacute;
--Confirm Password => Jelsz&oacute; m&eacute;gegyszer
--
--# 'System Settings' page
--System Settings => Rendszer be&aacute;ll&iacute;t&aacute;sok
--Host Name => Host n&eacute;v
--Language => Nyelv
--
--# 'Installed Software' page
--Installed Packages => Telep&iacute;tett csomagok
--Update package lists => Csomaglista friss&iacute;t&eacute;se
--Uninstall => Elt&aacute;vol&iacute;t&aacute;s
--Install => Telep&iacute;t&eacute;s
--
--
--# 'Firmware Upgrade' page
--Firmware format => Firmware format
--Error => Hiba
--done => K&eacute;sz
--Invalid_format => &Eacute;rv&eacute;nytelen Firmware
--Erase_JFFS2 => JFFS2 part&iacute;ci&oacute; t&ouml;rl&eacute;se
--Options => Opci&oacute;k
--Firmware_image => Firmware
--Upgrade => Friss&iacute;t&eacute;s
--Upgrading... => Friss&iacute;t&eacute;s folyamatban...
--
--# 'LAN Settings' page
--LAN Settings => H&aacute;l&oacute;zat be&aacute;ll&iacute;t&aacute;sok
--LAN Configuration => H&aacute;l&oacute;zat konfigur&aacute;ci&oacute;
--Netmask => H&aacute;l&oacute;zati maszk
--Default Gateway => Alap&eacute;rtelmezett &aacute;tj&aacute;r&oacute;
--DNS Servers => DNS szerverek
--DNS Address => DNS szerver c&iacute;m
--
--Note => Megjegyz&eacute;s
--
--
--# 'WAN Settings' page
--WAN Settings => Internet be&aacute;ll&iacute;t&aacute;sok
--WAN Configuration => Internet konfigur&aacute;ci&oacute;
--PPTP Server IP => PPTP szerver c&iacute;m
--Connection Type => Kapcsolat t&iacute;pusa
--No WAN => Nincs internet
--DHCP => DHCP
--Static IP => Statikus IP konfigur&aacute;ci&oacute;
--IP Settings => IP be&aacute;ll&iacute;t&aacute;sok
--PPP Settings => PPP be&aacute;ll&iacute;t&aacute;sok
--Redial Policy => &Uacute;jrat&aacute;rcs&aacute;z&aacute;s szab&aacute;lya
--Connect on Demand => Csatlakoz&aacute;s k&eacute;r&eacute;s eset&eacute;n
--Keep Alive => Tartsd &eacute;letben
--Maximum Idle Time => Maximum inakt&iacute;v &iacute;d&#337;
--Redial Timeout => &Uacute;jrat&aacute;rcs&aacute;z&aacute;si id&#337;
--MTU => Maximal Transfer Unit
--Username => Felhaszn&aacute;l&oacute;
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => WLAN konfigur&aacute;ci&oacute;
--Wireless Interface => WLAN interf&eacute;sz
--WEP Key => WEP kulcs
--Selected WEP Key => V&aacute;lasztott WEP kulcs
--WPA PSK => WPA PSK
--ESSID => ESSID
--Channel => Csatorna
--RADIUS IP Address => RADIUS szerver c&iacute;m
--RADIUS Server Key => RADIUS szerver kulcs
--Enabled => Enged&eacute;lyezve
--Disabled => Tiltva
--ESSID Broadcast => ESSID hirdet&eacute;se (sz&oacute;r&aacute;sa)
--Show => Enged&eacute;lyezve
--Hide => Tiltva
--WLAN Mode => WLAN m&oacute;d
--Access Point => Access Point
--Client => Client
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Encryption Settings => Titkos&iacute;t&aacute;s be&aacute;ll&iacute;t&aacute;sok
--Encryption Type => Titkos&iacute;t&aacute;s t&iacute;pusa
--PSK => PSK
--WPA Mode => WPA m&oacute;d
--WPA Algorithms => WPA algoritmus
--WEP Keys => WEP kulcsok
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => WLAN konfigur&aacute;ci&oacute; (halad&oacute;)
--WDS Connections => WDS kapcsolatok
--MAC Filter List => MAC Address sz&uuml;r&eacute;s
--Filter Mode => Sz&uuml;r&#337; m&oacute;d
--Allow => Enged&eacute;lyez&#337;
--Deny => Tilt&oacute;
--Set => Be&aacute;ll&iacute;t&aacute;s
--Settings => Be&aacute;ll&iacute;t&aacute;sok
--Automatic WDS => Automatikus WDS
--
--# "Hosts" page
--
--MAC Address => MAC-Address
--Configured Hosts => Konfigur&aacute;lt g&eacute;pek
--DHCP Static => Statikus DHCP be&aacute;ll&iacute;t&aacute;sok
--Host Names => Host nevek
--
--
--Up => Fel
--Down => Le
--Edit => Szerkeszt&eacute;s
--Delete => T&ouml;rl&eacute;s
--Save => Ment&eacute;s
--Cancel => M&eacute;gse
--
--Forward => Tov&aacute;bb&iacute;t
--Accept => Elfogad
--Drop => Eldob
--
--Firewall => T&#369;zfal
--Firewall Rules => T&#369;zfal szab&aacute;lyok
--Firewall Configuration => T&#369;zfal konfigur&aacute;ci&oacute;
--
--New Rule => &Uacute;j szab&aacute;ly
--Match => Illeszt
--Target => C&eacute;l
--Port => Port
--
--Protocol => Protokoll
--Source IP => Forr&aacute;s-IP
--Destination IP => C&eacute;l-IP
--Source Ports => Forr&aacute;s-Portok
--Destination Ports => C&eacute;l-Portok
--
--Forward to => Tov&aacute;bb&iacute;t
--Port => Port
--
--Helptext ESSID => A vezet&eacute;k n&eacute;lk&uuml;li h&aacute;l&oacute;zat neve.
--Helptext DNS save => Mentsd el a be&aacute;ll&iacute;t&aacute;sokat, miel&#337;tt ezen az oldalon hozz&aacute;adsz ill. elt&aacute;vol&iacute;tasz DNS szervert.
--
--Helptext Operation mode => Ezek a be&aacute;ll&iacute;tsok a vezet&eacute;k n&eacute;lk&uuml;li h&aacute;lozat m&#369;k&ouml;d&eacute;s&eacute;t hat&aacute;rozz&aacute;k meg. A 'Client (Bridge)' m&oacute;d a h&aacute;l&oacute;zati csatol&oacute; be&aacute;ll&iacute;t&aacute;sait nem m&oacute;dos&iacute;tja. Csak n&eacute;h&aacute;ny param&eacute;tert &aacute;ll&iacute;t a vezet&eacute;kn&eacute;lk&uuml;li eszk&ouml;zmeghajt&oacute;ban, a korl&aacute;tozott &aacute;thidal&aacute;shoz.
--Helptext Encryption Type => 'WPA (RADIUS)' csak Access-Pont m&oacute;dban t&aacute;mogatott. <br /> 'WPA (PSK)' nem m&#369;k&ouml;dik Ad-Hoc m&oacute;dban. 
--Helptext IP Settings => IP be&aacute;ll&iacute;t&aacute;sok opcion&aacute;lisak a DHCP-hez &eacute;s a PPTP-hez. Az itt be&aacute;ll&iacute;tott &eacute;rt&eacute;kek lesznek az alap&eacute;rtelmezettek, ha a DHCP szerver nem el&eacute;rhet&#337;. 
--Helptext Idle Time => Maxim&aacute;lis id&#337; m&aacute;sodpercben internet forgalom n&eacute;lk&uuml;l, amennyit a router v&aacute;r miel&#337;tt bontja a kapcsolatot (csak 'Csatlakoz&aacute;s k&eacute;r&eacute;s eset&eacute;n' m&oacute;dban).
--Helptext Redial Timeout => Maxim&aacute;lis id&#337; m&aacute;sodpercben az &uacute;jrat&aacute;rcs&aacute;z&aacute;s el&#337;tt, ha a szolg&aacute;ltat&oacute; nem v&aacute;laszol.
--
--# untranslated:
--Available packages => Haszn&aacute;lhat&oacute; csomagok
--
-diff --git a/package/webif/files/usr/lib/webif/lang/it/common.txt b/package/webif/files/usr/lib/webif/lang/it/common.txt
-deleted file mode 100644
-index 8607fac..0000000
---- a/package/webif/files/usr/lib/webif/lang/it/common.txt
-+++ /dev/null
-@@ -1,226 +0,0 @@
--lang => Italiano
--# Common
--Settings saved => Cambiamenti salvati
--Settings not saved => Cambiamenti non salvati
--Save Changes => Salva cambiamenti
--Apply Changes => Applica cambiamenti
--Clear Changes => Elimina cambiamenti
--Review Changes => Controlla cambiamenti
--Host Name => Nome Host
--Uptime => Uptime
--Load => Caricamento del sistema
--Version => Versione
--Categories => Categoria
--Subcategories => Sottocategoria
--more... => altro...
--Add => Aggiungi
--Remove => Elimina
--Warning => Attenzione
--Password_warning => non e' stata ancora impostata una password di protezione per il router (accesso web o ssh). Per favore, inseriscine una ora (il nome utente sara': 'root')
--
--# Categories
--Info => Info
--About => Ringraziamenti
--Router Info => Informazioni del router
--
--Status => Stato
--Connections => Connessioni
--DHCP => DHCP
--Wireless => Wireless
--
--System => Sistema
--Password => Password
--Settings => Configurazione
--Installed Software => Programmi installati
--Firmware Upgrade => Aggiornamento Firmware
--
--Network => Rete
--LAN => LAN
--WAN => Internet
--Wireless => Wireless
--Advanced Wireless => Wireless (avanzato)
--Hosts => Configurazione Host
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Questo programma  software  libero;  lecito ridistribuirlo e/o <br />modificarlo secondo i  termini della Licenza Pubblica Generica GNU <br />come pubblicata  dalla Free Software Foundation; o la versione 2 della licenza o (a scelta) una versione successiva.
--Contributions by => Contributi
--Layout based on => Interfaccia basata su
--by => da
--
--
--No config change. => Nessun cambiamento della configurazione.
--Config discarded. => I cambiamenti non sono stati accettati.
--Config changes: => Cambiamenti configurazione:
--Updating config... => Aggiornamento configurazione...
--
--
--# 'Router Info' page
--Firmware Version => Versione del firmware
--Kernel Version => Versione del Kernel
--Current Date/Time => Data/Ora
--MAC Address => Indirizzo MAC
--
--
--# 'Connections' page
--Connection Status => Stato della connessione
--Physical Connections => Connessioni fisiche
--Router Connections => Connessioni del router
--
--
--# 'DHCP' page
--DHCP leases => lease DHCP
--IP Address => Indirizzo IP
--Name => Nome
--Expires in => Scade il
--
--
--# 'Wireless Status' page
--Wireless Status => Stato Wireless
--
--# 'Password' page
--Password Change => Cambio password
--New Password => Nuova password
--Confirm Password => Confema password
--
--# 'System Settings' page
--System Settings => Parametri di sistema
--Host Name => Nome dell'host
--Language => Linguaggio
--
--# 'Installed Software' page
--Installed Packages => Pacchetti installati
--Update package lists => Aggiorna la lista dei pacchetti
--Uninstall => Disinstalla
--Install => Installa
--
--
--# 'Firmware Upgrade' page
--Firmware format => Formato del firmware
--Error => Errore
--done => eseguito
--Invalid_formt => Formato del firmware invalido
--Erase_JFFS2 => Cancella la partizione JFFS2
--Options => Opzioni
--Firmware_image => Immagine del firmware
--Upgrade => Aggiorna
--Upgrading... => Aggiornamento in corso...
--
--# 'LAN Settings' page
--LAN Settings => Parametri LAN
--LAN Configuration => Configuzione LAN
--Netmask => Netmask
--Default Gateway => Default Gateway
--DNS Servers => Server DNS
--DNS Address => Indirizzo IP del DNS
--
--Note => Nota
--
--# 'WAN Settings' page
--WAN Settings => Parametri Internet
--WAN Configuration => Configurazione Internet
--PPTP Server IP => Indirizzo IP del server PPTP
--Connection Type => Tipo di connessione
--No WAN => No WAN
--DHCP => DHCP
--Static IP => IP statico
--IP Settings => Paramentri IP
--PPP Settings => Parametri PPP
--Redial Policy => Opzioni di riconnessione
--Connect on Demand => Connessione su richiesta
--Keep Alive => Connessione permanente
--Maximum Idle Time => Tempo di inattivita' massimo
--Redial Timeout => Tempo di riconnessione
--MTU => MTU (grandezza pacchetti)
--Username => Nome utente
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Parametri Wireless
--Wireless Interface => Interfaccia Wireless
--WEP Key => Chiave WEP
--Selected WEP Key => Chiave WEP selezionata
--WPA PSK => WPA-PSK
--ESSID => ESSID
--Channel => Canale
--RADIUS IP Address => Indirizzo IP del server RADIUS
--RADIUS Server Key => Server Key RADIUS
--Enabled => Attivato
--Disabled => Disattivato
--ESSID Broadcast => SSID Broadcast
--Show => Mostra
--Hide => Nascondi
--WLAN Mode => Modo WLAN
--Access Point => Punto di accesso
--Client => Client
--Bridge => Bridge
--Ad-Hoc => Ad-Hoc
--Operation mode => Modo di funzionamento
--Encryption Settings => Parametri di encryption
--Encryption Type => Tipo di encryption
--PSK => PSK
--WPA Mode => Modo WPA
--WPA Algorithms => Algoritmo WPA
--WEP Keys => Chiave WEP
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Configurazione Wireless avanzata
--WDS Connections => Connessioni WDS
--MAC Filter List => Filtro per indirizzo MAC
--Filter Mode => Metodo di filtraggio
--Allow => Autorizza
--Deny => Nega
--Set => Setta
--Settings => Parametri
--Automatic WDS => WDS Automatico
--
--# "Hosts" page
--
--MAC Address => Indirizzo MAC
--Configured Hosts => Host configurati
--DHCP Static => DHCP Statico
--Host Names => Nome Host
--
--Up => Su
--Down => Giu'
--Edit => Edita
--Delete => Elimina
--Save => Salva
--Cancel => Cancella
--
--Forward => Ridirigi
--Accept => Accetta
--Drop => Scarta
--
--Firewall => Firewall
--Firewall Rules => Regole del Firewall
--Firewall Configuration => Configurazione del Firewall
--
--New Rule => Nuova regola
--Match => Filtro
--Target => Obiettivo
--Port => Porta
--
--Protocol => Protocollo
--Source IP => IP di origine
--Destination IP => IP di destinazione
--Source Ports => Porta di origine
--Destination Ports => Porta di destinazione
--
--Forward to => Redirigi su
--Port => Porta
--
--Helptext ESSID => SSID
--Helptext DNS save => E' consigliabile salvare i cambiamenti prima di aggiungere o eliminare server DNS dalla lista
--
--Helptext Operation mode => Imposta il metodo di utilizzo della rete wireless. Scegliendo 'Client (bridge)' non cambiera' la configurazione dell'interfaccia di rete.
--Helptext Encryption Type => 'WPA (RADIUS)' puo' essere usato solo nel modo Access Point.<br /> 'WPA (PSK)' non funziona nel modo Ad-Hoc.
--Helptext IP Settings => Le opzioni IP sono opzioni per DHCP e PPTP.
--Helptext Idle Time => Numero di secondi che deve aspettare il router prima di disconnettersi. (Solo nel metodo ' Connessione su richiesta').
--Helptext Redial Timeout => Numero di secondi che il router deve aspettare per effettuare una nuova riconnessione.
--
--# untranslated:
--Available packages => Available packages
--
-diff --git a/package/webif/files/usr/lib/webif/lang/nl/common.txt b/package/webif/files/usr/lib/webif/lang/nl/common.txt
-deleted file mode 100644
-index 875ba6c..0000000
---- a/package/webif/files/usr/lib/webif/lang/nl/common.txt
-+++ /dev/null
-@@ -1,224 +0,0 @@
--lang => Nederlands
--# Common
--Settings saved => Instellingen bewaard
--Settings not saved => Instellingen niet bewaard
--Save Changes => Bewaar wijzigingen
--Apply Changes => Gebruik wijzigingen
--Clear Changes => Wis wijzigingen
--Review Changes => Bekijk wijzigingen
--Host Name => Host naam
--Uptime => Uptime
--Load => Laad
--Version => Versie
--Categories => Categorie
--Subcategories => Subcategorie
--more... => meer...
--Add => Bijvoegen
--Remove => Verwijder
--Warning => Waarschuwing
--Password_warning => U hebt nog geen wachtwoord ingesteld voor de Web interface en SSH toegang. Gelieve er nu een in te geven (de gebruikersnaam in uw browser zal 'root' zijn).
--
--# Categories
--Info => Info
--About => Over
--Router Info => Router Info
--
--Status => Status
--Connections => Connecties
--DHCP => DHCP
--Wireless => Draadloos
--
--System => Systeem
--Password => Wachtwoord
--Settings => Instellingen
--Installed Software => Geinstalleerde Software
--Firmware Upgrade => Firmware Upgrade
--
--Network => Netwerk
--LAN => LAN
--WAN => WAN
--Wireless => Draadloos
--Advanced Wireless => Geavanceerd Draadloos
--Hosts => Geconfigureerde Hosts
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Dit programma is vrije software; u mag het verdelen en/of wijzigen onder de voorwaarden van GNU General Public License zoals gepubliceerd door de Free Software Foundation; ofwel versie 2 van de licentie, of (volgens Uw keuze) iedere latere versie.
--
--Contributions by => Bijdragen door
--Layout based on => Layout gebasseerd op
--by => door
--
--
--No config change. => Er werden geen configuratie wijzigingen aangebracht.
--Config discarded. => Uw configuratie wijzigingen werden verworpen.
--Config changes: => Huidige configuratie wijzigingen:
--Updating config... => Uw configuratie wordt aangepast...
--
--
--# 'Router Info' page
--Firmware Version => Firmware Versie
--Kernel Version => Kernel Versie
--Current Date/Time => Huidige Datum/Tijd
--MAC Address => MAC Adres
--
--
--# 'Connections' page
--Connection Status => Verbindings Status
--Physical Connections => Fysieke Verbindingen
--Router Connections => Router Verbindingen
--
--
--# 'DHCP' page
--DHCP leases => DHCP leases
--IP Address => IP Adres
--Name => Naam
--Expires in => Vervalt binnen
--
--
--# 'Wireless Status' page
--Wireless Status => Draadloos Status
--
--# 'Password' page
--Password Change => Wachtwoord Wijzigen
--New Password => Nieuw Wachtwoord
--Confirm Password => Bevestig Wachtwoord
--
--# 'System Settings' page
--System Settings => Systeem Instellingen
--Host Name => Host naam
--Language => Taal
--
--# 'Installed Software' page
--Installed Packages => Geinstalleerde Pakketten
--Available packages => Beschikbare pakketten
--Update package lists => Aanpassen Pakketlijst
--Uninstall => Deinstalleren
--Install => Installeren
--
--
--# 'Firmware Upgrade' page
--Firmware format => Firmware Formaat
--Error => Fout
--done => voltooid
--Erase_JFFS2 => Wis JFFS2 partitie
--Options => Opties
--Firmware_image => Firmware image om te laden
--Upgrade => Upgrade
--Upgrading... => Upgrading...
--
--# 'LAN Settings' page
--LAN Settings => LAN Instellingen
--LAN Configuration => LAN Configuratie
--Netmask => Netmask
--Default Gateway => Standaard Gateway
--DNS Servers => DNS Servers
--DNS Address => DNS Adres
--
--Note => Nota
--
--# 'WAN Settings' page
--WAN Settings => WAN Instellingen
--WAN Configuration => WAN configuratie
--PPTP Server IP => PPTP Server IP
--Connection Type => Connectie Type
--No WAN => Geen WAN
--DHCP => DHCP
--Static IP => Statisch IP
--IP Settings => IP Instellingen
--PPP Settings => PPP Instellingen
--Redial Policy => Opnieuw bel beleid
--Redial Timeout => Bel vertraging
--Connect on Demand => Verbinden op Aanvraag
--Keep Alive => Hou actief
--Maximum Idle Time => Maximale Idle Time
--MTU => MTU
--Username => Gebruikersnaam
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Draadloos Configuratie
--Wireless Interface => Draadloos Interface
--WEP Key => WEP Sleutel
--Selected WEP Key => Geselecteerde WEP sleutely
--WPA PSK => WPA PSK
--ESSID => ESSID
--Channel => Kanaal
--RADIUS IP Address => RADIUS IP Adres
--RADIUS Server Key => RADIUS Server Sleutel
--Enabled => Ingeschakeld
--Disabled => Uitgeschakeld
--ESSID Broadcast => ESSID Broadcast
--Show => Toon
--Hide => Verberg
--WLAN Mode => WLAN Mode
--Access Point => Toegangs Punt
--# Was "Klant" first which can only be translated as an economical client, i.e. a customer. AFAIK Dutch doesn't provide any true translation for Client in this context
--Client => Client
--Bridge => Brug
--Ad-Hoc => Ad-Hoc
--Operation mode => Operation mode
--Encryption Settings => Encryptie Instelligen
--Encryption Type => Encryptie Type
--PSK => PSK
--WPA Mode => WPA Mode
--WPA Algorithms => WPA Algoritmen
--WEP Keys => WEP Sleutels
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Geavanceerde Draadloze Configuratie
--WDS Connections => WDS Verbindingen
--MAC Filter List => MAC Filter Lijst
--Filter Mode => Filter Mode
--Allow => Toelaten
--Deny => Weigeren
--Set => Stel
--Settings => Instellingen
--Automatic WDS => Automatische WDS
--
--# "Hosts" page
--
--MAC Address => MAC Adres
--Configured Hosts => Geconfigureerde Hosts
--DHCP Static => DHCP Statisch
--Host Names => Host Namen
--
--Up => Op
--Down => Neer
--Edit => Wijzig
--Delete => Wis
--Save => Bewaar
--Cancel => Afbreken
--
--Forward => Doorsturen
--Accept => Accepteren
--Drop => Negeren
--
--Firewall => Firewall
--Firewall Rules => Firewall Regels
--Firewall Configuration => Firewall Configuratie
--
--New Rule => Nieuwe Regel
--Match => Overeenstemmen
--Target => Doel
--Port => Poort
--
--Protocol => Protocol
--Source IP => Bron IP
--Destination IP => Bestemmings IP
--Source Ports => Bron Poorten
--Destination Ports => Bestemmings Poorten
--
--Forward to => Doorsturen naar
--Port => Poort
--
--Helptext ESSID => Naam van uw Draadloos Netwerk
--Helptext DNS save => U moet de instellingen op deze pagina bewaren alvorens DNS servers te wijzigen/verwijderen
--
--Helptext Operation mode => Dit stelt de Operatie Mode voor uw draadloos netwerk in. Door 'Client (Brug)' te kiezen zullen uw network interface instellingen niet wijzigen. Er zullen alleen enkele parameters ingesteld worden in de draadloze driver die gelimiteerde overbrugging van de interface mogelijk maakt.
--Helptext Encryption Type => 'WPA (RADIUS)' wordt enkel ondersteund in de Toegangs Punt mode.<br />'WPA (PSK)' werkt niet in Ad-Hoc mode.
--Helptext IP Settings => IP instellingen zijn optioneel voor DHCP en PPTP. Indien U ze instelt dan worden ze als standaardwaarden gebruikt indien de DHCP server onbeschikbaar is.
--Helptext Idle Time => Het aantal seconden zonder internet verkeer dat de router zou moeten wachten alvorens zich af te sluiten van het Internet (Alleen bij Verbinden op Aanvraag)
--Helptext Redial Timeout => Het aantal seconden dat gewacht moet worden alvorens opnieuw een verbinding wordt gemaakt indien deze geweigerd werd door uw ISP.
-diff --git a/package/webif/files/usr/lib/webif/lang/no/common.txt b/package/webif/files/usr/lib/webif/lang/no/common.txt
-deleted file mode 100644
-index f94684f..0000000
---- a/package/webif/files/usr/lib/webif/lang/no/common.txt
-+++ /dev/null
-@@ -1,230 +0,0 @@
--lang => Norsk
--# Common
--Settings saved => Innstillingene ble lagret
--Settings not saved => Innstillingene ble ikke lagret
--Save Changes => Lagre endringer
--Apply Changes => Aktiver endringer
--Clear Changes => Glem endringer
--Review Changes => Se endringer
--Host Name => Vertsnavn
--Uptime => Oppetid
--Load => Systembelastning
--Version => Versjon
--Categories => Kategorier
--Subcategories => Underkategorier
--more... => mer...
--Add => Legg til
--Remove => Fjern
--Warning => Advarsel
--Password_warning => Det er ikke satt et passord p&aring; hverken Webadministrasjon eller SSH.<br />Vennligst velg eller tast inn ditt passord (Brukernavn er 'root' med sm&aring; bokstaver).
--
--# Categories
--Info => Info
--About => Om
--Router Info => Routerinformasjon
--
--Status => Status
--Connections => Nettverksforbindelser
--DHCP => DHCP
--Wireless => Tr&aring;dl&oslash;s
--
--System => System
--Password => Passord
--Settings => Innstillinger
--Installed Software => Installerte programmer
--Firmware Upgrade => Firmwareoppgradering
--
--Network => Nettverk
--LAN => Lokalnett
--WAN => Internett
--Wireless => Tr&aring;dl&oslash;s
--Advanced Wireless => Avansert tr&aring;dl&oslash;s
--Hosts => Vertsnavn
--
--
--# 'About' page
--Copyright => Opphavsrett
--
--GPL_Text => Dette programmet er fri programvare.  Du m&aring; bruke, endre og videredistribuere det under betingelsene i "GNU General Public License",<br /> som offentliggjort av "Free Software Foundation" (Den frie programbevegelse), enten i versjon 2 av lisensen eller (etter ditt valg), en hvilkensomhelst senere versjon.
--
--Contributions by => Bidrag fra
--Layout based on => Layout er basert p&aring;
--by => av
--
--
--No config change. => Ingen konfigurasjonsendring foretatt
--Config discarded. => Konfigurasjonsendringerne ble forkastet
--Config changes: => Forel&oslash;pige endringer
--Updating config... => Oppdaterer konfigurasjonen
--
--# 'Router Info' page
--Firmware Version => Firmwareversjon
--Kernel Version => Kjerneversjon
--Current Date/Time => N&aring;v&aelig;rende tid/dato
--MAC Address => MAC adresse
--
--
--# 'Connections' page
--Connection Status => Forbindelsesstatus
--Physical Connections => Fysiske forbindelser
--Router Connections => Routerens forbindelser
--
--
--# 'DHCP' page
--DHCP leases => DHCP leasinger
--IP Address => IP adresse
--Name => Navn
--Expires in => Utl&oslash;pstid
--
--
--# 'Wireless Status' page
--Wireless Status => Tr&aring;dl&oslash;s status
--
--# 'Password' page
--Password Change => Endre passord
--New Password => Nytt passord
--Confirm Password => Nytt passord igjen
--
--# 'System Settings' page
--System Settings => Systeminnstillinger
--Host Name => Vertsnavn
--Language => Spr&aring;k
--
--# 'Installed Software' page
--Installed Packages => Installerte pakker
--Update package lists => Oppdater pakkelisten
--Uninstall => Avinstaller
--Install => Installer
--Available packages => Tilgjengelige pakker
--
--
--# 'Firmware Upgrade' page
--Firmware format => Firmwareformat
--Error => Feil
--done => ferdig
--Invalid_format => Ugyldig_format
--Erase_JFFS2 => Slett_JFFS2_partisjonen
--Options => Alternativer
--Firmware_image => Firmwarefil
--Upgrade => Oppgrader
--Upgrading... => Oppgraderer...
--
--# 'LAN Settings' page
--LAN Settings => Lokale nettinnstillinger
--LAN Configuration => Lokal nettverkskonfigurasjon
--Netmask => Undernettmaske
--Default Gateway => Standard gateway
--DNS Servers => DNS-tjenere
--DNS Address => DNS-tjeneradresse
--
--Note => Merk
--
--
--# 'WAN Settings' page
--WAN Settings => WAN-innstillinger
--WAN Configuration => WAN-konfigurasjon
--PPTP Server IP => PPTP-tjeneradresse
--Connection Type => Forbindelsestype
--No WAN => Ingen WAN
--DHCP => DHCP
--Static IP => Statisk IP
--IP Settings => IP-innstillinger
--PPP Settings => PPP-innstillinger
--Redial Policy => Gjenoppringingspolise
--Connect on Demand => Ring opp n&aring;r behovet er der
--Keep Alive => Hold forbindelsen i live (keep alive)
--Maximum Idle Time => Maksimal tid i tomgang (max idle)
--Redial Timeout => Gjenoppringningsavbrekkstid
--MTU => MTU
--Username => Brukernavn
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => Tr&aring;dl&oslash;s konfigurasjon
--Wireless Interface => Tr&aring;dl&oslash;st nettkort
--WEP Key => WEP n&oslash;kler
--Selected WEP Key => Valgt WEP n&oslash;kkel
--WPA PSK => WPA n&oslash;kler
--ESSID => ESSID
--Channel => Kanal
--RADIUS IP Address => IP adressen p&aring; RADIUS server
--RADIUS Server Key => Passord til RADIUS server
--Enabled => Aktivert
--Disabled => Deaktivert
--ESSID Broadcast => ESSID-Kringkasting 
--Show => Vis
--Hide => Skjul
--WLAN Mode => Tr&aring;dl&oslash;s tilstand
--Access Point => Tilgangspunkt
--Client => Klient
--Bridge => Bro
--Ad-Hoc => Ad-Hoc
--Encryption Settings => Krypteringsinnstillinger
--Encryption Type => Krypteringstype
--PSK => PSK-kode
--WPA Mode => WPA tilstand
--WPA Algorithms => WPA krypteringsalgoritme
--WEP Keys => WEP n&oslash;kler
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Avansert oppsett av tr&aring;dl&oslash;s
--WDS Connections => WDS forbindelser (WDS repeater)
--MAC Filter List => Filteringsliste (MAC-nummer)
--Filter Mode => Filtreringstilstand
--Allow => Tillat
--Deny => Forby
--Set => Sett
--Settings => Innstillinger
--Automatic WDS => Automatisk WDS-forbindelse
--
--# "Hosts" page
--
--MAC Address => MAC-adresse
--Configured Hosts => Vertsnavn
--DHCP Static => Statiske IP adresser til DHCP
--Host Names => Vertsnavn
--
--
--Up => Opp
--Down => Ned
--Edit => Endre
--Delete => Slette
--Save => Lagre
--Cancel => Annuller
--
--Forward => Forward (videresend)
--Accept => Accept (tillat)
--Drop => Drop (kast)
--
--Firewall => Brannmur
--Firewall Rules => Brannmurregler
--Firewall Configuration => Brannmurkonfigurasjon
--
--New Rule => Ny regel
--Match => Match (sammenlign)
--Target => Target (G&aring; til)
--Port => Port
--
--Protocol => Protokoll
--Source IP => Avsenders IP
--Destination IP => Mottakers IP
--Source Ports => Avsenders porter
--Destination Ports => Mottakers porter
--
--Forward to => Send videre til
--Port => Port
--
--Helptext ESSID => Navn p&aring; tr&aring;dl&oslash;s nettverk
--Helptext DNS save => Lagre endringer p&aring; denne siden f&oslash;r du legger til eller fjerner DNS-tjenere (Hvis du ikke vil miste dem.)
--
--Helptext Operation mode => Setter driftstilstanden for den tr&aring;dl&oslash;se delen av routeren. 'Klient' og 'Klient (bro)' brukes for &aring; koble 2 tr&aring;dl&oslash;se routere. I mange tilfeller er WDS en bedre (men mer avansert) l&oslash;ning. 'Klient' utnytter dog b&aring;ndbredden best, hvis du kun har en maskin tilkoblet. <br /> Innstillingen 'Klient (bro)' endrer ikke direkte ved nettverksinnstillingene. Det er et lite 'hack' som f&aring; routeren til &aring; tro at kun en maskin (en MAC-adresse) er tilkoblet. Det er gjort for &aring; overvinne begrensninger i 802.11-protokollen, som forhindrer at man problemfritt (i vanlig 'Klient'-tilstand) kan bruke den tr&aring;dl&oslash;se forbindelsen fra flere maskiner samtidig. <br /> AP brukes til en standalone router, hvor f.eks b&aelig;rbare pc'er skal ha tilgang til Internett og/eller lokalt nettverk. <br /> Hvis du ikke vet hva 'Ad Hoc'-tilstanden gj&oslash;, har du sannsynligvis ikke bruk for den.
--
--Helptext Encryption Type => 'WPA (RADIUS)' er kun st&oslash;ttet i AP (Tilgangspunkt)-tilstand. <br /> 'WPA (PSK)' fungerer ikke i 'Ad-Hoc' tilstand.
--
--Helptext IP Settings => IP-innstillinger er frivillig for DHCP og PPTP. N&aring; de er satt, blir de brukt som standardverdier hvis en DHCP-tjener ikke er tilgjengelig.
--
--Helptext Idle Time => Ventetid med inaktivitet f&oslash;r routeren kobler ned forbindelesen.
--
--Helptext Redial Timeout => Ventetid f&oslash;r routeren fors&oslash;ker &aring; ringe opp igjen.
--
-diff --git a/package/webif/files/usr/lib/webif/lang/pl/common.txt b/package/webif/files/usr/lib/webif/lang/pl/common.txt
-deleted file mode 100644
-index c01b20c..0000000
---- a/package/webif/files/usr/lib/webif/lang/pl/common.txt
-+++ /dev/null
-@@ -1,228 +0,0 @@
--lang => Polski
--# Common
--Settings saved => Ustawienia zosta&#322;y zapisane
--Settings not saved => Ustawienia niezosta&#322;y zapisane
--Save Changes => Zapisz zmiany
--Apply Changes => Zastosuj zmiany
--Clear Changes => Czy&#347;&#263; zmiany
--Review Changes => Przej&#380;yj zmiany
--Host Name => Hostname
--Uptime => Czas pracy
--Load => Obci&#261;&#380;enie
--Version => Wersja
--Categories => Kategorie
--Subcategories => Podkategorie
--more... => Wi&#281;cej Informacji...
--Add => Dodaj
--Remove => Usu&#324;
--Warning => Uwaga
--Password_warning => Niemasz ustawionego has&#322;a dost&#281;pu do WWW oraz SSH<br />Prosze wpisz je teraz(nazwa u&#380;ytkownika to 'root')
--
--# Categories
--Info => Info
--About => O Autorze
--Router Info => Info o WRT
--
--Status => Status
--Connections => Po&#322;aczenia
--DHCP => DHCP
--Wireless => WLAN
--
--System => System
--Password => Has&#322;o
--Settings => Ustawienia
--Installed Software => Zainstalowane pakiety
--Firmware Upgrade => Aktualizacja opr.
--
--Network => Sie&#263;
--LAN => LAN
--WAN => Internet(WAN)
--Wireless => WLAN
--Advanced Wireless => Zaawansowane WLAN
--Hosts => Konfiguracja Host?w
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => This program is free software; you can redistribute it and/or <br >modify it under the terms of the GNU General Public License <br >as published by the Free Software Foundation; either version 2 <br > of the License, or (at your option) any later version. 
--Contributions by => Wsp?lpracownicy
--Layout based on => Layout bazuje na
--by => by
--
--
--No config change. => Nie dokonano zmian.
--Config discarded. => Zmiany zosta&#322;y anulowane.
--Config changes: => Aktualna konfiguracja:
--Updating config... => Aktualizacja konfiguracji...
--
--
--# 'Router Info' page
--Firmware Version => Wersja Opr.
--Kernel Version => Wersja kernela
--Current Date/Time => Aktualna Data/Czas
--MAC Address => Adres MAC
--
--
--# 'Connections' page
--Connection Status => Stan po&#322;acze&#324;
--Physical Connections => Po&#322;&#261;czenia fizyczne
--Router Connections => Po&#322;&#261;czenia do routera
--
--
--# 'DHCP' page
--DHCP leases => Dzier&#380;awa DHCP
--IP Address => Adres IP
--Name => Nazwa
--Expires in => Wygasa za
--
--
--# 'Wireless Status' page
--Wireless Status => Status WLAN
--
--# 'Password' page
--Password Change => Zmien has&#322;o
--New Password => Nowe has&#322;o
--Confirm Password => Potwierdz has&#322;o
--
--# 'System Settings' page
--System Settings => Ustawienia Systemu
--Host Name => Hostname
--Language => J&#281;zyk
--
--# 'Installed Software' page
--Installed Packages => Zainstalowane pakiety
--Update package lists => Aktualizuj liste pakiet?w
--Uninstall => Usu&#324;
--Install => Instaluj
--
--
--# 'Firmware Upgrade' page
--Firmware format => Format pliku firmware
--Error => B&#322;&#261;d
--done => Gotowe
--Invalid_format => B&#322;&#281;dny format firmware
--Erase_JFFS2 => Formatuj JFFS2
--Options => Opcje
--Firmware_image => Obraz FW:
--Upgrade => Aktualizuj
--Upgrading... => Aktualizuje...
--
--# 'LAN Settings' page
--LAN Settings => Ustawienia LAN
--LAN Configuration => Konfiguracja LAN
--Netmask => Maska sieci
--Default Gateway => Brama domy&#347;lna
--DNS Servers => Serwer DNS
--DNS Address => Adres DNS
--
--Note => Notatka
--
--
--# 'WAN Settings' page
--WAN Settings => Ustawienia WAN
--WAN Configuration => Konfiguracja WAN
--PPTP Server IP => Adres serwera PPTP
--Connection Type => Po&#322;aczenie
--No WAN => Bez WAN
--DHCP => DHCP
--Static IP => Statyczne IP
--IP Settings => Ustawienia IP
--PPP Settings => Ustawienia PPP
--Redial Policy => Rodzaj wydzwaniania
--Connect on Demand => Po&#322;&#261;czenia na &#380;adanie
--Keep Alive => Trzymaj po&#322;&#261;czenie
--Maximum Idle Time => Max. czas bezczynno&#347;ci
--	
--MTU => MTU
--Username => Nazwa uzyt.
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => WLAN-Konfiguracja
--Wireless Interface => Intefejs WLAN
--WEP Key => Klucz WEP
--Selected WEP Key => Wybrany klucz WEP
--WPA PSK => WPA PSK
--ESSID => ESSID
--Channel => Kana&#322;
--RADIUS IP Address => Adres IP RADIUS
--RADIUS Server Key => Klucz RADIUS
--Enabled => W&#322;aczone
--Disabled => Wy&#322;&#261;czone
--ESSID Broadcast => Rozsy&#322;anie ESSID 
--Show => Poka&#380;
--Hide => Ukryj
--WLAN Mode => Tryb Radiowy
--Access Point => Punkt Dost&#281;powy
--Client => Klient
--Bridge => Most
--Ad-Hoc => Ad-Hoc
--Encryption Settings => Ustawienia kodowania
--Encryption Type => Rodzaj kodowania
--PSK => PSK
--WPA Mode => Tryb WPA
--WPA Algorithms => Algorytm WPA
--WEP Keys => Klucze WEP
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Zaawansowane WLAN
--WDS Connections => Po&#322;&#261;czenie WDS
--MAC Filter List => Filtrowanie MAC
--Filter Mode => Rodzaj filtra
--Allow => Udzielaj dost&#281;pu
--Deny => Odrzucaj dost&#281;p
--Set => Ustaw
--Settings => Ustawienia
--Automatic WDS => Automatyczny WDS
--
--# "Hosts" page
--
--MAC Address => Adres MAC
--Configured Hosts => Konfiguracja Host&#243;w
--DHCP Static => Statyczne DHCP
--Host Names => Lista Host&#243;w
--
--
--Up => W g&#243;r&#281;
--Down => W d&#243;&#322;
--Edit => Edytuj
--Delete => Kasuj
--Save => Zapisz
--Cancel => Anuluj
--
--Forward => Przekieruj
--Accept => Akceptuj
--Drop => Odrzu&#263;
--
--Firewall => Firewall
--Firewall Rules => Regu&#322;y Firewalla
--Firewall Configuration => Konfiguracja Firewalla
--
--New Rule => Nowa regu&#322;a
--Match => Dotyczy
--Target => Cel
--Port => Port
--
--Protocol => Protok&#243;&#322;
--Source IP => IP &#380;r&#243;d&#322;owe
--Destination IP => IP docelowe
--Source Ports => Port &#380;r&#243;d&#322;owy
--Destination Ports => Port docelowy
--
--Forward to => Przekieruj do
--Port => Port
--
--Helptext ESSID => Nazwa sieci radiowej
--Helptext DNS save => Musisz zapisa&#263; ustawienia przed dodaniem/usuni&#281;ciem serwera DNS
--
--Helptext Operation mode => Umo&#380;liwia wyb&#243;r pracy urz&#261;dzenia.
--Helptext Encryption Type => 'WPA (RADIUS)' dzia&#322;a tylko w trybie Access Point <br /> 'WPA (PSK)' nie dzia&#322;a w trybie Ad-Hoc. 
--Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Je&#380;eli je ustawisz, b&#281;da u&#380;ywane jako domy&#347;lnje w przypadku , gdy serwer DHCP bedzie niedost&#281;pny.
--Helptext Idle Time => Czas w sekundach bezruchu internetowego, po up&#322;ywie kt&#243;rych nast&#281;puje roz&#322;aczenie (tylko Po&#322;&#261;czenie na z&#261;danie)
--Helptext Redial Timeout => Liczba sekund, kt&#243;re trzeba odczekac po tym, jak nie otrzymales odpowiedzi od providera (przed ponowna proba podlaczenia)
--
--# untranslated:
--Available packages => Available packages
--
-diff --git a/package/webif/files/usr/lib/webif/lang/pt/common.txt b/package/webif/files/usr/lib/webif/lang/pt/common.txt
-deleted file mode 100644
-index 2fb4693..0000000
---- a/package/webif/files/usr/lib/webif/lang/pt/common.txt
-+++ /dev/null
-@@ -1,454 +0,0 @@
--lang => Portugu?s
--
--# Common
--
--Settings saved => Altera??es guardadas
--
--Settings not saved => Altera??es n?o foram guardadas
--
--Save Changes => Guardar altera??es
--
--Apply Changes => Aplicar altera??es
--
--Clear Changes => Eliminar altera??es
--
--Review Changes => Verificar altera??es
--
--Host Name => Nome do sistema
--
--Uptime => Uptime
--
--Load => Carga do sistema
--
--Version => Vers?o
--
--Categories => Categorias
--
--Subcategories => Subcategorias
--
--more... => mais
--
--Add => Adicionar
--
--Remove => Eliminar
--
--Warning => Aten??o
--
--Password_warning => N?o foi estabelecida uma palavra-chave para o acesso ao router (acesso web e ssh). Por favor, estabele?a uma palavra-chave agora (o nome de utilizador ser? ?root?)
--
-- 
--
--# Categories
--
--Info => Informa??o
--
--About => Acerca de
--
--Router Info => Informa??es do router
--
-- 
--
--Status => Estado
--
--Connections => Liga??es
--
--DHCP => DHCP
--
--Wireless => Wi-Fi
--
-- 
--
--System => Sistema
--
--Password => Palavra-chave
--
--Settings => Configura??es
--
--Installed Software => Software instalado
--
--Firmware Upgrade => Actualizar Firmware
--
-- 
--
--Network => Rede
--
--LAN => LAN
--
--WAN => Internet
--
--Wireless => Rede sem fios
--
--Advanced Wireless => Rede sem fios (avan?ado)
--
--Hosts => Configura??o de sistemas (hosts)
--
-- 
--
-- 
--
--# 'About' page
--
--Copyright => Copyright
--
-- 
--
--GPL_Text => Este programa ? livre e poder? ser distribu?do e/ou <br>modificado segundo os termos da licen?a GPL (General Public License)<br>tal como publicada pela Free Software Foundation como est? publicada por la Free Sofware Foundation; quer pela vers?o 2<br> quer por qualquer vers?o posterior (? sua escolha).
--
--Contributions by => Contribuidores
--
--Layout based on => Layout baseado em
--
--by => por
--
-- 
--
-- 
--
--No config change. => N?o existem altera??es de configura??es.
--
--Config discarded. => As altera??es foram ignoradas.
--
--Config changes: => Configura??o actual:
--
--Updating config... => Actualizando as altera??es...
--
-- 
--
-- 
--
--# 'Router Info' page
--
--Firmware Version => Vers?o do firmware
--
--Kernel Version => Vers?o do Kernel
--
--Current Date/Time => Data/Hora
--
--MAC Address => Endere?o MAC
--
-- 
--
-- 
--
--# 'Connections' page
--
--Connection Status => Estado das liga??es
--
--Physical Connections => Liga??es f?sicas
--
--Router Connections => Liga??es do router
--
-- 
--
-- 
--
--# 'DHCP' page
--
--DHCP leases => Pr?stimos de DHCP
--
--IP Address => Endere?o IP
--
--Name => Nome
--
--Expires in => Expira em
--
-- 
--
-- 
--
--# 'Wireless Status' page
--
--Wireless Status => Estado da rede sem fios
--
-- 
--
--# 'Password' page
--
--Password Change => Altera??o da palavra-chave
--
--New Password => Nova palavra-chave
--
--Confirm Password => Confirme a palavra-chave
--
-- 
--
--# 'System Settings' page
--
--System Settings => Par?metros do sistema
--
--Host Name => Nome do sistema
--
--Language => Idioma
--
-- 
--
--# 'Installed Software' page
--
--Installed Packages => Pacotes (packages) instalados
--
--Update package lists => Actualiza??o da lista de pacotes
--
--Uninstall => Remover
--
--Install => Instalar
--
--Available packages => Pacotes dispon?veis
--
-- 
--
-- 
--
--# 'Firmware Upgrade' page
--
--Firmware format => Formato do firmware
--
--Error => Erro
--
--done => terminado
--
--Invalid_formt => Formato de firmware inv?lido
--
--Erase_JFFS2 => Apagar parti??o JFFS2
--
--Options => Op??es
--
--Firmware_image => Ficheiro de firmware
--
--Upgrade => Actualizar
--
--Upgrading... => Actualizando...
--
-- 
--
--# 'LAN Settings' page
--
--LAN Settings => Configura??es da LAN (rede local)
--
--LAN Configuration => Par?metros LAN
--
--Netmask => M?scara da sub rede (netmask)
--
--Default Gateway => Gateway
--
--DNS Servers => Servidor DNS
--
--DNS Address => Endere?o IP do DNS
--
-- 
--
--Note => Nota
--
-- 
--
--# 'WAN Settings' page
--
--WAN Settings => Configura??es Internet
--
--WAN Configuration => Par?metros de Internet
--
--PPTP Server IP => Endere?o IP do servidor PPTP
--
--Connection Type => Tipo de liga??o
--
--No WAN => Sem liga??o ? Internet
--
--DHCP => DHCP
--
--Static IP => IP est?tico
--
--IP Settings => Configura??es IP
--
--PPP Settings => Configura??es PPP
--
--Redial Policy => Op??es de restabelecimento da liga??o
--
--Connect on Demand => Ligar quando necess?rio
--
--Keep Alive => Manter liga??o sempre activa
--
--Maximum Idle Time => Tempo m?ximo de inactividade
--
--Redial Timeout => Tempo de restabelecimento da liga??o
--
--MTU => MTU (tamanho dos pacotes)
--
--Username => Nome do utilizador
--
-- 
--
-- 
--
--# 'Wireless Configuration' page
--
--Wireless Configuration => Configura??es rede sem fios
--
--Wireless Interface => Interface rede sem fios
--
--WEP Key => Chave WEP
--
--Selected WEP Key => Palavra-chave WEP seleccionada
--
--WPA PSK => WPA-PSK
--
--ESSID => ESSID
--
--Channel => Canal
--
--RADIUS IP Address => Endere?o IP do servidor RADIUS
--
--RADIUS Server Key => Palavra-chave RADIUS
--
--Enabled => Activo
--
--Disabled => Inactivo
--
--ESSID Broadcast => Difus?o do SSID
--
--Show => Mostrar
--
--Hide => Ocultar
--
--WLAN Mode => Modo rede sem fios
--
--Access Point => Ponto de acesso
--
--Client => Cliente
--
--Bridge => Ponte (Bridge)
--
--Ad-Hoc => Ad-Hoc
--
--Operation mode => Modo de funcionamento
--
--Encryption Settings => Par?metros de encripta??o
--
--Encryption Type => Tipo de encripta??o
--
--PSK => PSK
--
--WPA Mode => Modo WPA
--
--WPA Algorithms => Algoritmos WPA
--
--WEP Keys => Palavra-chave WEP
--
-- 
--
--# 'Advanced Wireless Configuration' page
--
--Advanced Wireless Configuration => Configura??es rede sem fios (avan?adas)
--
--WDS Connections => Liga??es WDS
--
--MAC Filter List => Filtrar por endere?o MAC
--
--Filter Mode => Tipo de filtro
--
--Allow => Autorizar
--
--Deny => Negar
--
--Set => Estabelecer
--
--Settings => Par?metros
--
--Automatic WDS => WDS autom?tico
--
-- 
--
--# "Hosts" page
--
-- 
--
--MAC Address => Endere?o MAC
--
--Configured Hosts => Sistemas configurados
--
--DHCP Static => DHCP est?tico
--
--Host Names => Nome dos sistemas
--
-- 
--
--Up => Subir
--
--Down => Baixar
--
--Edit => Editar
--
--Delete => eliminar
--
--Save => Guardar
--
--Cancel => Cancelar
--
-- 
--
--Forward => Redireccionar
--
--Accept => Aceitar
--
--Drop => Descartar
--
-- 
--
--Firewall => Firewall
--
--Firewall Rules => Regras da Firewall
--
--Firewall Configuration => Configura??es da Firewall
--
-- 
--
--New Rule => Nova regra
--
--Match => Filtrar
--
--Target => Destino
--
--Port => Porta
--
-- 
--
--Protocol => Protocolo
--
--Source IP => IP de origem
--
--Destination IP => IP de destino
--
--Source Ports => Portas de origem
--
--Destination Ports => Portas de destino
--
-- 
--
--Forward to => Redireccionar para
--
--Port => Porta
--
-- 
--
--Helptext ESSID => SSID
--
--Helptext DNS save => ? recomend?vel guardar as altera??es antes de adicionar ou eliminar servidores DNS
--
-- 
--
--Helptext Operation mode => Estabelece o modo de opera??o da rede sem fios. Escolhendo ?Client (bridge)? n?o altera a configura??o da interface de rede. Ir? simplesmente configurar alguns par?metros da rede sem fios para operar em modo ponte (bridge).
--
-- 
--
--Helptext Encryption Type => 'WPA (RADIUS)' s? pode ser usado em modo ?Ponto de acesso?.<br /> 'WPA (PSK)' n?o funciona em modo Ad-Hoc.
--
-- 
--
--Helptext IP Settings => As op??es IP s?o opcionais para os modos DHCP e PPTP. Apenas ser?o usadas caso alguma das configura??es autom?tica falhe
--
--.
--
--Helptext Idle Time => N?mero de segundos sem actividade na Internet que o router deve esperar antes de se desligar da Internet.
--
--(Apenas para o modo ?Ligar quando necess?rio? (connect on demand))
--
-- 
--Helptext Redial Timeout => N?mero de segundo sem receber resposta que o router deve esperar para voltar a estabelecer liga??o ? Internet.
-\ No newline at end of file
-diff --git a/package/webif/files/usr/lib/webif/lang/ru/common.txt b/package/webif/files/usr/lib/webif/lang/ru/common.txt
-deleted file mode 100644
-index 1d490bd..0000000
---- a/package/webif/files/usr/lib/webif/lang/ru/common.txt
-+++ /dev/null
-@@ -1,223 +0,0 @@
--lang => &#x420;&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;
--# Common
--Settings saved => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x435;&#x43D;&#x44B;
--Settings not saved => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x43D;&#x435; &#x441;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x435;&#x43D;&#x44B;
--Save Changes => &#x421;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x438;&#x442;&#x44C; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;
--Apply Changes => &#x41F;&#x440;&#x438;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--Clear Changes => &#x41E;&#x442;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--Review Changes => &#x41F;&#x435;&#x440;&#x435;&#x441;&#x43C;&#x43E;&#x442;&#x440;&#x435;&#x442;&#x44C; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--Host Name => &#x418;&#x43C;&#x44F; &#x443;&#x437;&#x43B;&#x430;
--Uptime => &#x412;&#x440;&#x435;&#x43C;&#x44F; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;
--Load => &#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x43A;&#x430;
--Version => &#x412;&#x435;&#x440;&#x441;&#x438;&#x44F;
--Categories => &#x41A;&#x430;&#x442;&#x435;&#x433;&#x43E;&#x440;&#x438;&#x438;
--Subcategories => &#x41F;&#x43E;&#x434;&#x43A;&#x430;&#x442;&#x435;&#x433;&#x43E;&#x440;&#x438;&#x438;
--more... => &#x434;&#x430;&#x43B;&#x435;&#x435;...
--Add => &#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C;
--Remove => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
--Warning => &#x41F;&#x440;&#x435;&#x434;&#x443;&#x43F;&#x440;&#x435;&#x436;&#x434;&#x435;&#x43D;&#x438;&#x435;
--Password_warning => &#x41F;&#x430;&#x440;&#x43E;&#x43B;&#x44C; &#x434;&#x43B;&#x44F; &#x432;&#x435;&#x431;-&#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x430; &#x438; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x430; &#x43F;&#x43E; SSH &#x43D;&#x435; &#x437;&#x430;&#x434;&#x430;&#x43D;<br/>&#x412;&#x432;&#x435;&#x434;&#x438;&#x442;&#x435; &#x43D;&#x43E;&#x432;&#x44B;&#x439; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C; (&#x438;&#x43C;&#x44F; &#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F; &#x432; web-&#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x435;: 'root').
--
--# Categories
--Info => &#x418;&#x43D;&#x444;&#x43E;&#x440;&#x43C;&#x430;&#x446;&#x438;&#x44F;
--About => &#x41E; &#x441;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x435;
--Router Info => &#x41C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;&#x438;&#x437;&#x430;&#x442;&#x43E;&#x440;
--
--Status => &#x421;&#x442;&#x430;&#x442;&#x443;&#x441;
--Connections => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--DHCP => DHCP
--Wireless => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F; &#x441;&#x435;&#x442;&#x44C;
--
--System => &#x421;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x430;
--Password => &#x41F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
--Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;
--Installed Software => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
--Firmware Upgrade => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
--
--Network => &#x421;&#x435;&#x442;&#x44C;
--LAN => &#x41B;&#x43E;&#x43A;&#x430;&#x43B;&#x44C;&#x43D;&#x430;&#x44F;
--WAN => &#x412;&#x43D;&#x435;&#x448;&#x43D;&#x44F;&#x44F;
--Wireless => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F;
--Advanced Wireless => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F; (&#x43F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;)
--Hosts => &#x423;&#x437;&#x43B;&#x44B;
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => &#x42D;&#x442;&#x43E; &#x441;&#x432;&#x43E;&#x431;&#x43E;&#x434;&#x43D;&#x43E;&#x435; &#x43F;&#x440;&#x43E;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#x43D;&#x43E;&#x435; &#x43E;&#x431;&#x435;&#x441;&#x43F;&#x435;&#x447;&#x435;&#x43D;&#x438;&#x435;. &#x41E;&#x43D;&#x43E; &#x440;&#x430;&#x441;&#x43F;&#x440;&#x43E;&#x441;&#x442;&#x440;&#x430;&#x43D;&#x44F;&#x435;&#x442;&#x441;&#x44F; &#x438; &#x43C;&#x43E;&#x434;&#x438;&#x444;&#x438;&#x446;&#x438;&#x440;&#x443;&#x435;&#x442;&#x441;&#x44F; &#x432; &#x441;&#x43E;&#x43E;&#x442;&#x432;&#x435;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x441; &#x43B;&#x438;&#x446;&#x435;&#x43D;&#x437;&#x438;&#x435;&#x439; GNU General Public License,<br/> &#x43E;&#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x43E;&#x432;&#x430;&#x43D;&#x43D;&#x43E;&#x439; Free Software Foundation; &#x432;&#x435;&#x440;&#x441;&#x438;&#x438; 2 &#x438;&#x43B;&#x438; &#x43F;&#x43E; &#x443;&#x441;&#x43C;&#x43E;&#x442;&#x440;&#x435;&#x43D;&#x438;&#x44E; &#x43F;&#x43E;&!
- #x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F; &#x43B;&#x44E;&#x431;&#x43E;&#x439; &#x431;&#x43E;&#x43B;&#x435;&#x435; &#x43F;&#x43E;&#x437;&#x434;&#x43D;&#x435;&#x439; &#x432;&#x435;&#x440;&#x441;&#x438;&#x438;.
--Contributions by => &#x41F;&#x43E;&#x43C;&#x43E;&#x449;&#x43D;&#x438;&#x43A;&#x438;
--Layout based on => &#x414;&#x438;&#x437;&#x430;&#x439;&#x43D;&#x435;&#x440;
--by => &#x43E;&#x442;
--
--
--No config change. => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x43D;&#x435; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x44F;&#x43B;&#x430;&#x441;&#x44C;.
--Config discarded. => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x43E;&#x442;&#x43A;&#x43B;&#x43E;&#x43D;&#x435;&#x43D;&#x430;.
--Config changes: => &#x418;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x435; &#x43A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x438;:
--Updating config... => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435; &#x43A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x438;...
--
--
--# 'Router Info' page
--Firmware Version => &#x412;&#x435;&#x440;&#x441;&#x438;&#x44F; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
--Kernel Version => &#x412;&#x435;&#x440;&#x441;&#x438;&#x44F; &#x44F;&#x434;&#x440;&#x430;
--Current Date/Time => &#x412;&#x440;&#x435;&#x43C;&#x44F; &#x438; &#x434;&#x430;&#x442;&#x430;
--MAC Address => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
--
--# 'Connections' page
--Connection Status => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435;
--Physical Connections => &#x410;&#x43F;&#x43F;&#x430;&#x440;&#x430;&#x442;&#x43D;&#x44B;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--Router Connections => &#x41F;&#x440;&#x43E;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#x43D;&#x44B;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x43C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;&#x438;&#x437;&#x430;&#x442;&#x43E;&#x440;&#x430;
--
--
--# 'DHCP' page
--DHCP leases => DHCP &#x43A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x44B;
--IP Address => IP &#x430;&#x434;&#x440;&#x435;&#x441;
--Name => &#x418;&#x43C;&#x44F;
--Expires in => &#x418;&#x441;&#x442;&#x435;&#x43A;&#x430;&#x435;&#x442;
--
--
--# 'Wireless Status' page
--Wireless Status => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F; &#x441;&#x435;&#x442;&#x44C;
--
--# 'Password' page
--Password Change => &#x418;&#x437;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
--New Password => &#x41D;&#x43E;&#x432;&#x44B;&#x439; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
--Confirm Password => &#x41F;&#x43E;&#x434;&#x442;&#x432;&#x435;&#x440;&#x436;&#x434;&#x435;&#x43D;&#x438;&#x435; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44F;
--
--# 'System Settings' page
--System Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x44B;
--Host Name => &#x418;&#x43C;&#x44F; &#x443;&#x437;&#x43B;&#x430;
--Language => &#x42F;&#x437;&#x44B;&#x43A;
--
--# 'Installed Software' page
--Installed Packages => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
--Update package lists => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x43E;&#x432;
--Available packages => &#x414;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
--Uninstall => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
--Install => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
--
--
--# 'Firmware Upgrade' page
--Firmware format => &#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
--Error => &#x41E;&#x448;&#x438;&#x431;&#x43A;&#x430;
--done => &#x433;&#x43E;&#x442;&#x43E;&#x432;&#x43E;
--Invalid_format => &#x41D;&#x435;&#x438;&#x437;&#x432;&#x435;&#x441;&#x442;&#x43D;&#x44B;&#x439; &#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
--Erase_JFFS2 => &#x41E;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44C; &#x440;&#x430;&#x437;&#x434;&#x435;&#x43B; jffs2
--Options => &#x41F;&#x430;&#x440;&#x430;&#x43C;&#x435;&#x442;&#x440;&#x44B;
--Firmware_image => &#x41E;&#x431;&#x440;&#x430;&#x437; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;:
--Upgrade => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
--Upgrading... => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435;...
--
--# 'LAN Settings' page
--LAN Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x435;&#x442;&#x438;
--LAN Configuration => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x441;&#x435;&#x442;&#x438;
--Netmask => &#x41C;&#x430;&#x441;&#x43A;&#x430; &#x43F;&#x43E;&#x434;&#x441;&#x435;&#x442;&#x438;
--Default Gateway => &#x428;&#x43B;&#x44E;&#x437; &#x43F;&#x43E; &#x443;&#x43C;&#x43E;&#x43B;&#x447;&#x430;&#x43D;&#x438;&#x44E;
--DNS Servers => &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; DNS
--DNS Address => &#x430;&#x434;&#x440;&#x435;&#x441; DNS
--
--Note => &#x417;&#x430;&#x43C;&#x435;&#x442;&#x43A;&#x430;
--
--
--# 'WAN Settings' page
--WAN Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x439; &#x441;&#x435;&#x442;&#x438;
--WAN Configuration => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x439; &#x441;&#x435;&#x442;&#x438;
--PPTP Server IP => &#x430;&#x434;&#x440;&#x435;&#x441; IP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; PPTP
--Connection Type => &#x422;&#x438;&#x43F; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--No WAN => &#x41D;&#x435;&#x442; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x439; &#x441;&#x435;&#x442;&#x438;
--DHCP => DHCP
--Static IP => &#x421;&#x442;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;&#x439; IP
--IP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; IP
--PPP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; PPP
--Redial Policy => &#x420;&#x430;&#x437;&#x440;&#x44B;&#x432; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
--Connect on Demand => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x44F;&#x442;&#x44C;&#x441;&#x44F; &#x43F;&#x43E; &#x442;&#x440;&#x435;&#x431;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44E;
--Keep Alive => &#x41F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x438;&#x432;&#x430;&#x442;&#x44C; &#x441;&#x432;&#x44F;&#x437;&#x44C;
--Maximum Idle Time => &#x41D;&#x430;&#x438;&#x431;&#x43E;&#x43B;&#x44C;&#x448;&#x435;&#x435; &#x432;&#x440;&#x435;&#x43C;&#x44F; &#x43F;&#x440;&#x43E;&#x441;&#x442;&#x43E;&#x44F;
--Redial Timeout => &#x417;&#x430;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x43D;&#x44B;&#x43C; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435;&#x43C;
--MTU => MTU
--Username => &#x418;&#x43C;&#x44F; &#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F;
--
--
--# 'Wireless Configuration' page
--Wireless Configuration => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
--Wireless Interface => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;
--WEP Key => &#x41A;&#x43B;&#x44E;&#x447; WEP
--Selected WEP Key => &#x412;&#x44B;&#x431;&#x440;&#x430;&#x43D;&#x43D;&#x44B;&#x439; &#x43A;&#x43B;&#x44E;&#x447; WEP
--WPA PSK => WPA &#x440;&#x430;&#x437;&#x434;&#x435;&#x43B;&#x44F;&#x435;&#x43C;&#x44B;&#x439; &#x43A;&#x43B;&#x44E;&#x447;
--ESSID => ESSID
--Channel => &#x41A;&#x430;&#x43D;&#x430;&#x43B;
--RADIUS IP Address => &#x410;&#x434;&#x440;&#x435;&#x441; IP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; RADIUS
--RADIUS Server Key => &#x41A;&#x43B;&#x44E;&#x447; &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; RADIUS
--Enabled => &#x412;&#x43A;&#x43B;&#x44E;&#x447;&#x451;&#x43D;
--Disabled => &#x412;&#x44B;&#x43A;&#x43B;&#x44E;&#x447;&#x435;&#x43D;
--ESSID Broadcast => &#x412;&#x435;&#x449;&#x430;&#x43D;&#x438;&#x435; ESSID
--Show => &#x41F;&#x43E;&#x43A;&#x430;&#x437;&#x430;&#x442;&#x44C;
--Hide => &#x421;&#x43F;&#x440;&#x44F;&#x442;&#x430;&#x442;&#x44C;
--WLAN Mode => &#x420;&#x435;&#x436;&#x438;&#x43C; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
--Access Point => &#x422;&#x43E;&#x447;&#x43A;&#x430; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x430;
--Client => &#x41A;&#x43B;&#x438;&#x435;&#x43D;&#x442;
--Bridge => &#x41C;&#x43E;&#x441;&#x442;
--Ad-Hoc => &#x41F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;
--Encryption Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x431;&#x435;&#x437;&#x43E;&#x43F;&#x430;&#x441;&#x43D;&#x43E;&#x441;&#x442;&#x438;
--Encryption Type => &#x422;&#x438;&#x43F; &#x448;&#x438;&#x444;&#x440;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F;
--PSK => &#x41F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
--WPA Mode => &#x420;&#x435;&#x436;&#x438;&#x43C; WPA
--WPA Algorithms => &#x410;&#x43B;&#x433;&#x43E;&#x440;&#x438;&#x442;&#x43C; WPA
--WEP Keys => WEP &#x43A;&#x43B;&#x44E;&#x447;&#x438;
--
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => &#x420;&#x430;&#x441;&#x448;&#x438;&#x440;&#x435;&#x43D;&#x43D;&#x430;&#x44F; &#x43A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
--WDS Connections => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435; WDS
--MAC Filter List => &#x424;&#x438;&#x43B;&#x44C;&#x442;&#x440; MAC-&#x430;&#x434;&#x440;&#x435;&#x441;&#x43E;&#x432;
--Filter Mode => &#x440;&#x435;&#x436;&#x438;&#x43C; &#x444;&#x438;&#x43B;&#x44C;&#x442;&#x440;&#x430;
--Allow => &#x41F;&#x440;&#x43E;&#x43F;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44C;
--Deny => &#x41E;&#x442;&#x43A;&#x43B;&#x43E;&#x43D;&#x438;&#x442;&#x44C;
--Set => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
--Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;
--Automatic WDS => &#x410;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;&#x439; WDS
--
--# "Hosts" page
--
--MAC Address => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
--Configured Hosts => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x443;&#x437;&#x43B;&#x44B;
--DHCP Static => &#x421;&#x442;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;&#x439; DHCP
--Host Names => &#x418;&#x43C;&#x435;&#x43D;&#x430; &#x443;&#x437;&#x43B;&#x43E;&#x432;
--
--
--Up => &#x412;&#x432;&#x435;&#x440;&#x445;
--Down => &#x412;&#x43D;&#x438;&#x437;
--Edit => &#x41F;&#x440;&#x430;&#x432;&#x43A;&#x430;
--Delete => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
--Save => &#x421;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x438;&#x442;&#x44C;
--Cancel => &#x41E;&#x442;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C;
--
--Forward => &#x41F;&#x435;&#x440;&#x435;&#x43D;&#x430;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C;
--Accept => &#x41F;&#x440;&#x438;&#x43D;&#x44F;&#x442;&#x44C;
--Drop => &#x41E;&#x442;&#x43A;&#x43B;&#x43E;&#x43D;&#x438;&#x442;&#x44C;
--
--Firewall => &#x421;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x439; &#x44D;&#x43A;&#x440;&#x430;&#x43D;
--Firewall Rules => &#x41F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x430; &#x441;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x433;&#x43E; &#x44D;&#x43A;&#x440;&#x430;&#x43D;&#x430;
--Firewall Configuration => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x433;&#x43E; &#x44D;&#x43A;&#x440;&#x430;&#x43D;&#x430;
--
--New Rule => &#x41D;&#x43E;&#x432;&#x43E;&#x435; &#x43F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x43E;
--Match => &#x424;&#x438;&#x43B;&#x44C;&#x442;&#x440;
--Target => &#x426;&#x435;&#x43B;&#x44C;
--Port => &#x41F;&#x43E;&#x440;&#x442;
--
--Protocol => &#x41F;&#x440;&#x43E;&#x442;&#x43E;&#x43A;&#x43E;&#x43B;
--Source IP => IP &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44F;
--Destination IP => IP &#x43F;&#x43E;&#x43B;&#x443;&#x447;&#x430;&#x442;&#x435;&#x43B;&#x44F;
--Source Ports => &#x41F;&#x43E;&#x440;&#x442;&#x44B; &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44F;
--Destination Ports => &#x41F;&#x43E;&#x440;&#x442;&#x44B; &#x43F;&#x43E;&#x43B;&#x443;&#x447;&#x430;&#x442;&#x435;&#x43B;&#x44F;
--
--Forward to => &#x41F;&#x435;&#x440;&#x435;&#x43D;&#x430;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43D;&#x430;
--Port => &#x41F;&#x43E;&#x440;&#x442;
--
--Helptext ESSID => &#x418;&#x43C;&#x44F; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
--Helptext DNS save => &#x41D;&#x443;&#x436;&#x43D;&#x43E; &#x441;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x438;&#x442;&#x44C; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x43D;&#x430; &#x44D;&#x442;&#x43E;&#x439; &#x441;&#x442;&#x440;&#x430;&#x43D;&#x438;&#x446;&#x435; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x440;&#x430;&#x432;&#x43A;&#x43E;&#x439; DNS &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x43E;&#x432;.
--Helptext Operation mode => &#x42D;&#x442;&#x430; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x430; &#x437;&#x430;&#x434;&#x430;&#x451;&#x442; &#x440;&#x435;&#x436;&#x438;&#x43C; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;. &#x412;&#x44B;&#x431;&#x43E;&#x440; '&#x41A;&#x43B;&#x438;&#x435;&#x43D;&#x442; &#x438;&#x43B;&#x438; &#x41C;&#x43E;&#x441;&#x442;' &#x43D;&#x435;&#x43F;&#x43E;&#x432;&#x43B;&#x438;&#x44F;&#x435;&#x442; &#x43D;&#x430; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x433;&#x43E; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x430;. &#x411;&#x443;&#x434;&#x443;&#x442; &#x43E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x44B; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x43D;&#x435;&#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x44B;&#x435; &#x43F;&#x430;&#x440!
- ;&#x430;&#x43C;&#x435;&#x442;&#x440;&#x44B; &#x434;&#x440;&#x430;&#x439;&#x432;&#x435;&#x440;&#x430; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;, &#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x44B;&#x439; &#x43F;&#x43E;&#x437;&#x432;&#x43E;&#x43B;&#x44F;&#x442; &#x43C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;&#x438;&#x437;&#x430;&#x446;&#x438;&#x44E; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x43E;&#x432; &#x441; &#x44D;&#x442;&#x43E;&#x433;&#x43E; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x430;.
--Helptext Encryption Type => 'WPA (RADIUS)' &#x43F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x438;&#x432;&#x430;&#x435;&#x442;&#x441;&#x44F; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x435; &#x442;&#x43E;&#x447;&#x43A;&#x438; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x430;<br/> 'WPA (PSK)' &#x43D;&#x435; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x430;&#x435;&#x442; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x435; &#x43F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;.
--Helptext IP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; IP &#x43C;&#x43E;&#x433;&#x443;&#x442; &#x43D;&#x435; &#x437;&#x430;&#x434;&#x430;&#x432;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x430;&#x445; DHCP &#x438; PPTP. &#x415;&#x441;&#x43B;&#x438; DHCP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440; &#x431;&#x443;&#x434;&#x435;&#x442; &#x43D;&#x435;&#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x435;&#x43D;, &#x431;&#x443;&#x434;&#x443;&#x442; &#x438;&#x441;&#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x437;&#x430;&#x434;&#x430;&#x43D;&#x43D;&#x44B;&#x435; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;.
--Helptext Idle Time => &#x41F;&#x440;&#x43E;&#x43C;&#x435;&#x436;&#x443;&#x442;&#x43E;&#x43A; &#x432;&#x440;&#x435;&#x43C;&#x435;&#x43D;&#x438; &#x432; &#x441;&#x435;&#x43A;&#x443;&#x43D;&#x434;&#x430;&#x445; &#x43F;&#x43E; &#x438;&#x441;&#x442;&#x435;&#x447;&#x435;&#x43D;&#x438;&#x44E; &#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x43E;&#x433;&#x43E; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435; &#x431;&#x443;&#x434;&#x435;&#x442; &#x440;&#x430;&#x437;&#x43E;&#x440;&#x432;&#x430;&#x43D;&#x43E;, &#x435;&#x441;&#x43B;&#x438; &#x434;&#x430;&#x43D;&#x43D;&#x44B;&#x435; &#x43D;&#x435; &#x43F;&#x435;&#x440;&#x435;&#x434;&#x43E;&#x432;&#x430;&#x43B;&#x438;&#x441;&#x44C; &#x43F;&#x43E; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x43C;&#x443; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x443; (&#x438;&#x441;&#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x443;&#x435;&#x442;&#x441;&#x44F; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x432; &#x440;&#x435;&#x436!
- ;&#x438;&#x43C;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x43F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;).
--Helptext Redial Timeout => &#x417;&#x430;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430; &#x432; &#x441;&#x435;&#x43A;&#x443;&#x43D;&#x434;&#x430;&#x445; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x43E;&#x43F;&#x44B;&#x442;&#x43A;&#x43E;&#x439; &#x443;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43A;&#x438; &#x43F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x43D;&#x43E;&#x433;&#x43E; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x441; &#x43F;&#x440;&#x43E;&#x432;&#x430;&#x439;&#x434;&#x435;&#x440;&#x43E;&#x43C;.
-diff --git a/package/webif/files/usr/lib/webif/lang/se/common.txt b/package/webif/files/usr/lib/webif/lang/se/common.txt
-deleted file mode 100644
-index 1c019f5..0000000
---- a/package/webif/files/usr/lib/webif/lang/se/common.txt
-+++ /dev/null
-@@ -1,223 +0,0 @@
--lang => Svenska
--# Common
--Settings saved => Inst&auml;llningar sparade
--Settings not saved => Inst&auml;llningar inte sparade
--Save Changes => Spara f&ouml;r&auml;ndringar
--Apply Changes => Applicera f&ouml;r&auml;ndringar
--Clear Changes => Ta bort f&ouml;r&auml;ndringar
--Review Changes => Se gjorda f&ouml;r&auml;ndringar
--Host Name => V&auml;rdnamn
--Uptime => Tid uppe
--Load => Ladda
--Version => Version
--Categories => Kategorier
--Subcategories => Underkategorier
--more... => mer...
--Add => L&auml;gg till
--Remove => Ta bort
--Warning => Varning
--Password_warning => Du har inte satt n&aring;got l&ouml;senord f&ouml;r Web-gr&auml;nssnittet och SSH accessen <br />Var v&auml;nlig och g&ouml;r detta nu (anv&auml;ndarnamnet i din browser kommer vara 'root').
--# Categories
--Info => Info
--About => Om
--Router Info => Router Info
--
--Status => Status
--Connections => Anslutningar
--DHCP => DHCP
--Wireless => Tr&aring;dl&ouml;s
--
--System => System
--Password => L&ouml;senord
--Settings => Inst&auml;llningar
--Installed Software => Installerad mjukvara
--Firmware Upgrade => Firmware uppgradering
--
--Network => N&auml;tverk
--LAN => LAN
--WAN => WAN
--Wireless => Tr&aring;dl&ouml;s
--Advanced Wireless => Avancerad Tr&aring;dl&ouml;s
--Hosts => Konfigurerade V&auml;rdar
--
--
--# 'About' page
--Copyright => Copyright
--
--GPL_Text => Detta program &auml;r &ouml;ppen programvara; du kan &aring;terdistribuera den och/eller <br /> modifiera den under villkoren av best&auml;mmelserna i GNU General Public License <br /> publicerad av Free Software Foundation; antingen version 2 <br /> av licensen eller senare. <br />
--Contributions by => Bidrag av
--Layout based on => Layout baserad p&aring;
--by => av
--
--
--No config change. => Inga &auml;ndringar i inst&auml;llningarna gjordes.
--Config discarded. => Dina &auml;ndringar i inst&auml;llningarna har avbrutits. 
--Config changes: => Nuvarande &auml;ndringar i inst&auml;llningarna: 
--Updating config... => Uppdaterar dina inst&auml;llningar...
--
--# 'Router Info' page
--Firmware Version => Firmware Version
--Kernel Version => Kernel Version
--Current Date/Time => Nuvarande Datum/Tid
--MAC Address => Mac Adress
--
--
--# 'Connections' page
--Connection Status => Anslutningsstatus
--Physical Connections => Fysiska anslutningar
--Router Connections => Router anslutningar
--
--
--# 'DHCP' page
--DHCP leases => DHCP leases
--IP Address => IP Adress
--Name => Namn
--Expires in => Utg&aring;r om
--
--
--# 'Wireless Status' page
--Wireless Status => Tr&aring;dl&ouml;s Status
--
--# 'Password' page
--Password Change => Byt l&ouml;senord
--New Password => Nytt l&ouml;senord
--Confirm Password => Bekr&auml;fta nytt l&ouml;senord
--
--# 'System Settings' page
--System Settings => System Inst&auml;llningar
--Host Name => V&auml;rdnamn
--Language => Spr&aring;k
--
--# 'Installed Software' page
--Installed Packages => Installerade mjukvaror
--Update package lists => Uppdatera mjukvarulista
--Uninstall => Avinstallera
--Install => Installera
--
--
--# 'Firmware Upgrade' page
--Firmware format => Firmware format
--Error => Fel
--done => utf&ouml;rd
--Invalid_formt => Felaktigt Firmware Format
--Erase_JFFS2 => Ta bort JFFS2 partition
--Options => M&ouml;jligheter
--Firmware_image => Firmware att ladda upp 
--Upgrade => Uppgradering
--Upgrading... => Uppgradering...
--
--# 'LAN Settings' page
--LAN Settings => LAN Inst&auml;llningar
--LAN Configuration => LAN Inst&auml;llningar
--Netmask => Netmask
--Default Gateway => Default Gateway
--DNS Servers => DNS Servrar
--DNS Address => DNS Adress
--
--Note => Noteringar
--
--# 'WAN Settings' page
--WAN Settings => WAN Inst&auml;llningar
--WAN Configuration => WAN Inst&auml;llningar
--PPTP Server IP => PPTP Server IP
--Connection Type => Anslutningstyp
--No WAN => Ingen
--DHCP => DHCP
--Static IP => Statisk IP
--IP Settings => IP Inst&auml;llningar
--PPP Settings => PPP Inst&auml;llningar
--Redial Policy => &Aring;teruppringsnings Policy
--Connect on Demand => Anslut p&aring; beg&auml;ran 
--Keep Alive => H&aring;ll levande
--Maximum Idle Time => Maximum tid i vila
--Redial Timeout => Timeout f&ouml;r &aring;teruppringning
--MTU => MTU
--Username => Anv&auml;ndarnamn
--
--# 'Wireless Configuration' page
--Wireless Configuration => Tr&aring;dl&ouml;sa Inst&auml;llningar
--Wireless Interface => Tr&aring;dl&ouml;st Gr&auml;nssnitt
--WEP Key => WEP Nyckel
--Selected WEP Key => Vald WEP Nyckel
--WPA PSK => WPA PSK
--ESSID => ESSID
--Channel => Kanal
--RADIUS IP Address => RADIUS IP Adress
--RADIUS Server Key => RADIUS Server Nyckel
--Enabled => P&aring;satt
--Disabled => Avst&auml;ngd
--ESSID Broadcast => ESSID Broadcast
--Show => Visa
--Hide => G&ouml;m
--WLAN Mode => WLAN L&auml;ge
--Access Point => Accesspunkt 
--Client => Klient
--Bridge => Brygga
--Ad-Hoc => Ad-Hoc
--Operation mode => Tillst&aring;ndsl&auml;ge
--Encryption Settings => Krypteringsinst&auml;llningar 
--Encryption Type => Krypteringstyp
--PSK => PSK
--WPA Mode => WPA L&auml;ge
--WPA Algorithms => WPA Algoritmer
--WEP Keys => WEP Nyckel
--
--# 'Advanced Wireless Configuration' page
--Advanced Wireless Configuration => Avancerad Tr&aring;dl&ouml;s Inst&auml;llning
--WDS Connections => WDS Anslutningar
--MAC Filter List => MAC Filter Lista
--Filter Mode => Filterl&auml;ge
--Allow => Till&aring;t
--Deny => Neka
--Set => S&auml;tt
--Settings => Settings
--Automatic WDS => Automatisk WDS
--
--# "Hosts" page
--
--MAC Address => MAC Adress
--Configured Hosts => Konfigurerade V&auml;rdar
--DHCP Static => Statisk DHCP 
--Host Names => V&auml;rdnamn
--
--Up => Upp
--Down => Ned
--Edit => Editera
--Delete => Ta bort
--Save => Spara
--Cancel => Avbryt
--
--Forward => Fram&aring;t
--Accept => Acceptera
--Drop => Tappa
--
--Firewall => Brandv&auml;gg
--Firewall Rules => Brandv&auml;ggsregler 
--Firewall Configuration => Brandv&auml;ggsinst&auml;llningar
--
--New Rule => Ny Regel
--Match => Match
--Target => M&aring;l
--Port => Port
--
--Protocol => Protokoll
--Source IP => K&auml;ll IP
--Destination IP => Destinations IP
--Source Ports => K&auml;llport
--Destination Ports => Destinationsport
--
--Forward to => Skicka till
--Port => Port
--
--Helptext ESSID => Namn p&aring; ditt tr&aring;dl&ouml;sa N&auml;tverk
--Helptext DNS save => Du b&ouml;r spara dina inst&auml;llningar p&aring; denna sida f&ouml;re du l&auml;gger till/tar bort DNS servrar
--
--Helptext Operation mode => Detta s&auml;tter l&auml;gesinst&auml;llningen f&ouml;r ditt tr&aring;dl&ouml;sa n&auml;tverk. Att v&auml;lja 'Klient (Brygga)' kommer inte &auml;ndra ditt n&auml;tverks gr&auml;nssnittsinst&auml;llningar. Det kommer endast att s&auml;tta n&aring;gra parametrar i drivrutinerna som till&aring;ter en begr&auml;nsad bryggning av gr&auml;nssnittet. 
--Helptext Encryption Type => 'WPA (RADIUS)' st&ouml;djs endast i Accesspunktsl&auml;ge. <br /> 'WPA (PSK)' fungerar inte i Ad-Hoc l&auml;ge.
--Helptext IP Settings => IP inst&auml;llningar &auml;r inte obligatoriska f&ouml;r DHCP och PPTP. Om du s&auml;tter dem s&aring; anv&auml;nds de som standard om DHCP-servern inte &auml;r tillg&auml;nlig. 
--Helptext Idle Time => Antalet sekunder utan internet trafik som routern skall v&auml;nta p&aring; innan den fr&aring;nkopplar sig fr&aring;n Internet. (Anslut endast p&aring; beg&auml;ran)
--Helptext Redial Timeout => Antalet sekunder att v&auml;nta i innan f&ouml;rs&ouml;k till ny uppkoppling g&ouml;rs. (om ingen kontakt kunnat uppr&auml;ttas med tillhandah&aring;llaren)
--
--# untranslated:
--Available packages => Available packages
--
-diff --git a/package/webif/files/usr/lib/webif/languages.awk b/package/webif/files/usr/lib/webif/languages.awk
-deleted file mode 100644
-index f0111dd..0000000
---- a/package/webif/files/usr/lib/webif/languages.awk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--BEGIN {
--	print "option|en|English"
--}
--
--/webif\/lang\/[a-zA-Z][a-zA-Z]*/ {
--	gsub(/^.*webif\/lang\//, "")
--	shortname = $0
--	gsub(/\/.*$/, "", shortname)
--	gsub(/^.*=>[ \t]*/, "")
--	longname = $0
--	print "option|" shortname "|" longname
--}
-diff --git a/package/webif/files/usr/lib/webif/subcategories.awk b/package/webif/files/usr/lib/webif/subcategories.awk
-deleted file mode 100644
-index 8891ce4..0000000
---- a/package/webif/files/usr/lib/webif/subcategories.awk
-+++ /dev/null
-@@ -1,12 +0,0 @@
--BEGIN {
--	FS=":"
--	print "<div id=\"submenu\"><h3><strong>@TR<<Subcategories>>:</strong></h3><ul>"
--}
--{
--	if ($5 ~ "^" selected "$") print "<li class=\"selected-maincat\"><a href=\"" rootdir "/" $6 "\">&raquo;@TR<<" $5 ">>&laquo;</a></li>"
--	else print "<li><a href=\"" rootdir "/" $6 "\">&nbsp;@TR<<" $5 ">>&nbsp;</a></li>"
--}
--END {
--	print "</ul></div>"
--}
--
-diff --git a/package/webif/files/usr/lib/webif/validate.awk b/package/webif/files/usr/lib/webif/validate.awk
-deleted file mode 100644
-index 60b5915..0000000
---- a/package/webif/files/usr/lib/webif/validate.awk
-+++ /dev/null
-@@ -1,151 +0,0 @@
--# $1 = type
--# $2 = variable name
--# $3 = field name
--# $4 = options
--# $5 = value
--BEGIN {
--	FS="|"
--	output=""
--}
--
--{ 
--	valid_type = 0
--	valid = 1
--	# XXX: weird hack, but it works...
--	n = split($0, param, "|")
--	value = param[5]
--	for (i = 6; i <= n; i++) value = value FS param[i]
--	verr = ""
--}
--
--$1 == "int" {
--	valid_type = 1
--	if (value !~ /^[0-9]*$/) { valid = 0; verr = "@TR<<Invalid value>>" }
--}
--
--# FIXME: add proper netmask validation
--($1 == "ip") || ($1 == "netmask") {
--	valid_type = 1
--	if ((value != "") && (value !~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/)) valid = 0
--	else {
--		split(value, ipaddr, "\\.")
--		for (i = 1; i <= 4; i++) {
--			if ((ipaddr[i] < 0) || (ipaddr[i] > 255)) valid = 0
--		}
--	}
--	if (valid == 0) verr = "@TR<<Invalid value>>"
--}
--
--$1 == "wep" {
--	valid_type = 1
--	if (value !~ /^[0-9A-Fa-f]*$/) {
--		valid = 0
--		verr = "@TR<<Invalid value>>"
--	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
--		valid = 0
--		verr = "Invalid key length"
--	} else if (value ~ /0$/) {
--		valid = 0
--		verr = "Key must not end with '0'"
--	}
--}
--
--$1 == "hostname" {
--	valid_type = 1
--	if (value !~ /^[0-9a-zA-z\.\-]*$/) {
--		valid = 0
--		verr = "@TR<<Invalid value>>"
--	}
--}
--
--$1 == "string" {
--	valid_type = 1
--}
--
--$1 == "mac" {
--	valid_type = 1
--	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]$/)) {
--		valid = 0
--		verr = "@TR<<Invalid value>>"
--	}
--}
--
--$1 == "port" {
--	valid_type = 1
--	if (value !~ /^[0-9]*$/) {
--		valid = 0
--		verr = "@TR<<Invalid value>>"
--	}
--}
--
--$1 == "ports" {
--	valid_type = 1
--	n = split(value ",", ports, ",")
--	for (i = 1; i <= n; i++) {
--		if ((ports[i] !~ /^[0-9]*$/) && (ports[i] !~ /^[0-9][0-9]*-[0-9][0-9]*$/)) {
--			valid = 0
--			verr = "@TR<<Invalid value>>"
--		}
--	}
--}
--
--$1 == "wpapsk" {
--	valid_type = 1
--	if (length(value) > 64) {
--		valid = 0
--		verr = "String too long"
--	}
--	if ((length(value) != 0) && (length(value) < 8)) {
--		valid = 0
--		verr = "String too short"
--	}
--	if ((length(value) == 64) && (value ~ /[^0-9a-fA-F]/)) {
--		valid = 0
--		verr = "Invalid hex key"
--	}
--}
--
--valid_type != 1 { valid = 0 }
--
--valid == 1 {
--	n = split($4, options, " ")
--	for (i = 1; (valid == 1) && (i <= n); i++) {
--		if (options[i] == "required") {
--			if (value == "") { valid = 0; verr = "No value entered" }
--		} else if ((options[i] ~ /^min=/) && (value != "")) {
--			min = options[i]
--			sub(/^min=/, "", min)
--			min = int(min)
--			if ($1 == "int") {
--				if (value < min) { valid = 0; verr = "Value too small (minimum: " min ")" }
--			} else if ($1 == "string") {
--				if (length(value) < min) { valid = 0; verr = "Value too small (minimum length: " min ")"}
--			}
--		} else if ((options[i] ~ /^max=/) && (value != ""))  {
--			max = options[i]
--			sub(/^max=/, "", max)
--			max = int(max)
--			if ($1 == "int") {
--				if (value > max) { valid = 0; verr = "@TR<<Value too large>> (@TR<<maximum>>: " max ")" }
--			} else if ($1 == "string") {
--				if (length(value) > max) { valid = 0; verr = "@TR<<String too short>> (@TR<<maximum>>: " max ")" }
--			}
--		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
--			if (value ~ /\./) {
--				valid = 0
--				verr = "@TR<<Invalid value>>"
--			}
--		}
--	}
--}
--
--valid_type == 1 {
--	if (valid == 1) output = output $2 "=\"" value "\";\n"
--	else error = error "Error in " $3 ": " verr "<br />"
--}
--
--END {
--	print output "ERROR=\"" error "\";\n"
--	if (error == "") print "return 0"
--	else print "return 255"
--}
-diff --git a/package/webif/files/usr/lib/webif/webif.sh b/package/webif/files/usr/lib/webif/webif.sh
-deleted file mode 100755
-index e6147fd..0000000
---- a/package/webif/files/usr/lib/webif/webif.sh
-+++ /dev/null
-@@ -1,286 +0,0 @@
--libdir=/usr/lib/webif
--wwwdir=/www
--cgidir=/www/cgi-bin/webif
--rootdir=/cgi-bin/webif
--indexpage=index.sh
--
--# workarounds for stupid busybox slowness on [ ]
--empty() {
--	case "$1" in
--		"") return 0 ;;
--		*) return 255 ;;
--	esac
--}
--equal() {
--	case "$1" in
--		"$2") return 0 ;;
--		*) return 255 ;;
--	esac
--}
--neq() {
--	case "$1" in
--		"$2") return 255 ;;
--		*) return 0 ;;
--	esac
--}
--# very crazy, but also very fast :-)
--exists() {
--	( < $1 ) 2>&-
--}
--
--categories() {
--	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
--		awk -v "selected=$1" \
--			-v "rootdir=$rootdir" \
--			-v "indexpage=$indexpage" \
--			-f /usr/lib/webif/categories.awk -
--}
--
--subcategories() {
--	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
--		sed -e 's,^.*/\([a-zA-Z0-9_\.\-]*\):\(.*\)$,\2:\1,' | \
--		sort -n | \
--		awk -v "selected=$2" \
--			-v "rootdir=$rootdir" \
--			-f /usr/lib/webif/subcategories.awk -
--}
--
--update_changes() {
--	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
--}
--
--header() {
--	empty "$ERROR" && {
--		_saved_title="${SAVED:+: @TR<<Settings saved>>}"
--	} || {
--		FORM_submit="";
--		ERROR="<h3>$ERROR</h3><br /><br />"
--		_saved_title=": @TR<<Settings not saved>>"
--	}
--
--	_category="$1"
--	_uptime="$(uptime)"
--	_loadavg="${_uptime#*load average: }"
--	_uptime="${_uptime#*up }"
--	_uptime="${_uptime%%,*}"
--	_hostname=$(cat /proc/sys/kernel/hostname)
--	_version=$( grep "(" /etc/banner )
--	_version="${_version%% ---*}"
--	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
--	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
--	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
--	_categories=$(categories $1)
--	_subcategories=${2:+$(subcategories "$1" "$2")}
--	
--	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
--		_nopasswd=1
--		_form=""
--		_savebutton=""
--	}
--
--	update_changes
--	cat <<EOF
--Content-Type: text/html
--Pragma: no-cache
--
--<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
--<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
--	<head>
--    	<title>@TR<<Web Status Console>></title>
--		<link rel="stylesheet" type="text/css" href="/webif.css" />
--		<!--[if IE]> <style> #container { height: 100%; }</style> <![endif]-->
--		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
--	</head>
--	<body $4><div id="container">
--	    <div id="header">
--	        <div id="header-title">
--				<div id="openwrt-title"><h1>Web Status Console</h1></div>
--				<div id="short-status">
--					<h3><strong>Status:</strong></h3>
--					<ul>
--						<li><strong>@TR<<Host Name>>:</strong> $_hostname</li>
--						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
--						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
--						<li><strong>@TR<<Version>>:</strong> $_version</li>
--					</ul>
--				</div>
--			</div>
--			$_categories
--			$_subcategories
--		</div>
--		$_form
--		<div id="content">
--			<div class="settings-block">
--				$_head
--				$ERROR
--EOF
--	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
--		empty "$FORM_passwd1" || {
--			echo '<pre>'
--			(
--				echo "$FORM_passwd1"
--				sleep 1
--				echo "$FORM_passwd2"
--			) | passwd root 2>&1 && apply_passwd
--			echo '</pre>'
--			footer
--			exit
--		}
--		
--		equal "$_nopasswd" 1 && {
--			cat <<EOF
--<br />
--<br />
--<br />
--<h3>@TR<<Warning>>: @TR<<Password_warning|you haven't set a password for the Web interface and SSH access<br />Please enter one now (the user name in your browser will be 'root').>></h3>
--<br />
--<br />
--EOF
--			empty "$NOINPUT" && cat <<EOF
--<form enctype="multipart/form-data" action="$SCRIPT_NAME" method="POST">
--<table>
--	<tr>
--		<td>@TR<<New Password>>:</td>
--		<td><input type="password" name="passwd1" /></td>
--	</tr>
--	<tr>
--		<td>@TR<<Confirm Password>>: &nbsp; </td>
--		<td><input type="password" name="passwd2" /></td>
--	</tr>
--	<tr>
--		<td />
--		<td><input type="submit" name="action" value="@TR<<Set>>" /></td>
--	</tr>
--</table>
--</form>
--EOF
--			footer
--			exit
--		} || {
--			apply_passwd
--		}
--	}
--}
--
--footer() {
--	_changes=${CHANGES#0}
--	_changes=${_changes:+(${_changes})}
--	_endform=${_savebutton:+</form>}
--	cat <<EOF
--			</div>
--			<hr width="40%" />
--		</div>
--		<br />
--		<div id="save">
--			<div class="page-save">
--				<div> </div>
--			</div>
--			<div class="apply">
--				<div> </div>
--			</div>
--		</div>
--		$_endform
--    </div></body>
--</html>
--EOF
--}
--
--apply_passwd() {
--	case ${SERVER_SOFTWARE%% *} in
--		mini_httpd/*)
--			grep '^root:' /etc/passwd | cut -d: -f1,2 > $cgidir/.htpasswd
--			killall -HUP mini_httpd
--			;;
--	esac
--}
--
--display_form() {
--	if empty "$1"; then
--		awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
--	else
--		echo "$1" | awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
--	fi
--}
--
--list_remove() {
--	echo "$1 " | awk '
--BEGIN {
--	RS=" "
--	FS=":"
--}
--($0 !~ /^'"$2"'/) && ($0 != "") {
--	printf " " $0
--	first = 0
--}'
--}
--
--handle_list() {
--	# $1 - remove
--	# $2 - add
--	# $3 - submit
--	# $4 - validate
--	
--	empty "$1" || {
--		LISTVAL="$(list_remove "$LISTVAL" "$1") "
--		LISTVAL="${LISTVAL# }"
--		LISTVAL="${LISTVAL%% }"
--		_changed=1
--	}
--	
--	empty "$3" || {
--		validate "${4:-none}|$2" && {
--			if empty "$LISTVAL"; then
--				LISTVAL="$2"
--			else
--				LISTVAL="$LISTVAL $2"
--			fi
--			_changed=1
--		}
--	}
--
--	LISTVAL="${LISTVAL# }"
--	LISTVAL="${LISTVAL%% }"
--	LISTVAL="${LISTVAL:- }"
--
--	if empty "$_changed"; then
--		return 255
--	else
--		return 0
--	fi
--}
--
--load_settings() {
--	equal "$1" "nvram" || {
--		exists /etc/config/$1 && . /etc/config/$1
--	}
--	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1
--}
--
--validate() {
--	if empty "$1"; then
--		eval "$(awk -f /usr/lib/webif/validate.awk)"
--	else
--		eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
--	fi
--}
--
--
--save_setting() {
--	exists /tmp/.webif/* || mkdir -p /tmp/.webif
--	oldval=$(eval "echo \${$2}")
--	oldval=${oldval:-$(nvram get "$2")}
--	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
--		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&- 
--		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
--		oldval=""
--	}
--	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
--}
--
--
--is_bcm947xx() {
--	read _systype < /proc/cpuinfo
--	equal "${_systype##* }" "BCM947XX"
--}
--
-diff --git a/package/webif/files/www/cgi-bin/webif.sh b/package/webif/files/www/cgi-bin/webif.sh
-deleted file mode 100755
-index 63ed48f..0000000
---- a/package/webif/files/www/cgi-bin/webif.sh
-+++ /dev/null
-@@ -1,2 +0,0 @@
--#!/bin/sh
--exec ./webif/info.sh
-diff --git a/package/webif/files/www/cgi-bin/webif/.categories b/package/webif/files/www/cgi-bin/webif/.categories
-deleted file mode 100644
-index 331d4df..0000000
---- a/package/webif/files/www/cgi-bin/webif/.categories
-+++ /dev/null
-@@ -1,2 +0,0 @@
--##WEBIF:category:Info
--##WEBIF:category:Status
-diff --git a/package/webif/files/www/cgi-bin/webif/about.sh b/package/webif/files/www/cgi-bin/webif/about.sh
-deleted file mode 100755
-index a0049c2..0000000
---- a/package/webif/files/www/cgi-bin/webif/about.sh
-+++ /dev/null
-@@ -1,31 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--header "Info" "About" "@TR<<About>>..."
--?>
--
--<h3>webif - @TR<<OpenWrt Administrative Console>></h3>
--<br />
-- at TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version. <br /> >>
--<br />
-- at TR<<Copyright>> &copy; 2005-2006 OpenWrt.org <br />
--<br />
-- at TR<<Contributions by>>:
--<ul class="about">
--	<li class="about">Philipp Kewisch &lt;<a href="mailto:openwrt@kewis.ch">openwrt at kewis.ch</a>&gt;</li>
--	<li class="about">Spectra &lt;<a href="mailto:spectra@gmx.ch">spectra at gmx.ch</a>&gt;</li>
--	<li class="about">Jeremy Collake &lt;<a href="mailto:jeremy.collake@gmail.com">jeremy.collake at gmail.com</a>&gt;</li>
--	<li class="about">Travis Kemen &lt;<a href="mailto:kemen04@gmail.com">kemen04 at gmail.com</a>&gt;</li>
--	<li class="about">Markus Wigge</li>
--	<li class="about">SeDkY</li>
--	<li class="about">Ivoshiee</li>
--	<li class="about">arteqw</li>
--	<li class="about">silver71</li>
--	<li class="about">@TR<<Layout based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran</li>
--</ul>
--
--
--<? footer ?>
--<!--
--##WEBIF:name:Info:20:About
---->
-diff --git a/package/webif/files/www/cgi-bin/webif/config.sh b/package/webif/files/www/cgi-bin/webif/config.sh
-deleted file mode 100755
-index 0259537..0000000
---- a/package/webif/files/www/cgi-bin/webif/config.sh
-+++ /dev/null
-@@ -1,46 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--
--update_changes
--
--case "$CHANGES" in
--	""|0)FORM_mode=nochange
--esac
--case "$FORM_mode" in 
--	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
--	clear)
--		rm -rf /tmp/.webif >&- 2>&- 
--		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
--		CHANGES=""
--		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
--		;;
--	review)
--		header $FORM_cat . "@TR<<Config changes:|Current configuration changes:>>"
--		cd /tmp/.webif
--		for configname in config-*; do
--			grep = $configname >&- 2>&- && {
--				echo -n "<h3>${configname#config-}</h3><br /><pre>"
--				cat $configname
--				echo '</pre><br />'
--			}
--		done
--		CONFIGFILES=""
--		for configname in file-*; do
--			exists "$configname" && CONFIGFILES="$CONFIGFILES ${configname#file-}"
--		done
--		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
--		echo $CONFIGFILES
--		;;
--	save)
--		header $FORM_cat . "@TR<<Updating config...|Updating your configuration...>>"
--		CHANGES=""
--		echo "<pre>"
--		sh /usr/lib/webif/apply.sh 2>&1
--		echo "</pre>${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
--		;;
--esac
--
--footer
--
--?>
-diff --git a/package/webif/files/www/cgi-bin/webif/index.sh b/package/webif/files/www/cgi-bin/webif/index.sh
-deleted file mode 100755
-index 466b34d..0000000
---- a/package/webif/files/www/cgi-bin/webif/index.sh
-+++ /dev/null
-@@ -1,8 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--category=$FORM_cat
--empty "$category" && category=Info
--header $category 1
--
--footer ?>
-diff --git a/package/webif/files/www/cgi-bin/webif/info.sh b/package/webif/files/www/cgi-bin/webif/info.sh
-deleted file mode 100755
-index cc76397..0000000
---- a/package/webif/files/www/cgi-bin/webif/info.sh
-+++ /dev/null
-@@ -1,44 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--header "Info" "Router Info" "@TR<<Router Info>>"
--
--?>
--<pre><?
--_version=$( grep "(" /etc/banner )
--_version="${_version%% ---*}"
--_kversion="$( cat /proc/version )"
--_date="$(date)"
--_mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
--sed -e 's/&/&amp;/g' < /etc/banner
--cat <<EOF
--</pre>
--<br />
--<br />
--<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
--<tbody>
--	<tr>
--		<td>@TR<<Firmware Version>></td>
--		<td>$_version</td>
--	</tr>
--	<tr>
--		<td>@TR<<Kernel Version>></td>
--		<td>$_kversion</td>
--	</tr>
--	<tr>
--		<td>@TR<<Current Date/Time>></td>
--		<td>$_date</td>
--	</tr>
--	<tr>
--		<td>@TR<<MAC Address>></td>
--		<td>$_mac</td>
--	</tr>
--</tbody>
--</table>
--EOF
--
--footer
--?>
--<!--
--##WEBIF:name:Info:10:Router Info
---->
-diff --git a/package/webif/files/www/cgi-bin/webif/ipkg.sh b/package/webif/files/www/cgi-bin/webif/ipkg.sh
-deleted file mode 100755
-index 62c0fae..0000000
---- a/package/webif/files/www/cgi-bin/webif/ipkg.sh
-+++ /dev/null
-@@ -1,2 +0,0 @@
--#!/bin/sh
--exec ./system-ipkg.sh
-diff --git a/package/webif/files/www/cgi-bin/webif/status-connection.sh b/package/webif/files/www/cgi-bin/webif/status-connection.sh
-deleted file mode 100755
-index fbf329b..0000000
---- a/package/webif/files/www/cgi-bin/webif/status-connection.sh
-+++ /dev/null
-@@ -1,29 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--header "Status" "Connections" "@TR<<Connection Status>>"
--?>
--<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
--<tbody>
--	<tr>
--		<th><b>@TR<<Physical Connections|Ethernet/Wireless Physical Connections>></b></th>
--	</tr>
--	<tr>
--		<td><pre><? cat /proc/net/arp ?></pre></td>
--	</tr>
--	
--	<tr><td><br /><br /></td></tr>
--
--	<tr>
--		<th><b>@TR<<Router Connections|Connections to the Router>></b></th>
--	</tr>
--	<tr>
--		<td><pre><? netstat -n 2>&- | awk '$0 ~ /^Active UNIX/ {ignore = 1}; ignore != 1 { print $0 }' ?></pre></td>
--	</tr>
--</tbody>
--</table>
--
--<? footer ?>
--<!--
--##WEBIF:name:Status:100:Connections
---->
-diff --git a/package/webif/files/www/cgi-bin/webif/status-dhcp.sh b/package/webif/files/www/cgi-bin/webif/status-dhcp.sh
-deleted file mode 100755
-index 5517b78..0000000
---- a/package/webif/files/www/cgi-bin/webif/status-dhcp.sh
-+++ /dev/null
-@@ -1,38 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--header "Status" "DHCP" "@TR<<DHCP leases>>"
--?>
--<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
--<tbody>
--	<tr>
--		<th>@TR<<MAC Address>></th>
--		<th>@TR<<IP Address>></th>
--		<th>@TR<<Name>></th>
--		<th>@TR<<Expires in>></th>
--	</tr>
--<? [ -e /tmp/dhcp.leases ] && awk -vdate="$(date +%s)" '
--$1 > 0 {
--	print "<tr>"
--	print "<td>" $2 "</td>"
--	print "<td>" $3 "</td>"
--	print "<td>" $4 "</td>"
--	print "<td>"
--	t = $1 - date
--	h = int(t / 60 / 60)
--	if (h > 0) printf h "h "
--	m = int(t / 60 % 60)
--	if (m > 0) printf m "min "
--	s = int(t % 60)
--	printf s "sec "
--	printf "</td>"
--	print "</tr>"
--}
--' /tmp/dhcp.leases ?>
--</tbody>
--</table>
--
--<? footer ?>
--<!--
--##WEBIF:name:Status:150:DHCP
---->
-diff --git a/package/webif/files/www/cgi-bin/webif/status-wireless.sh b/package/webif/files/www/cgi-bin/webif/status-wireless.sh
-deleted file mode 100755
-index c7ad0a3..0000000
---- a/package/webif/files/www/cgi-bin/webif/status-wireless.sh
-+++ /dev/null
-@@ -1,12 +0,0 @@
--#!/usr/bin/webif-page
--<? 
--. /usr/lib/webif/webif.sh
--header "Status" "Wireless" "@TR<<Wireless Status>>"
--?>
--
--<pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre>
--
--<? footer ?>
--<!--
--##WEBIF:name:Status:200:Wireless
---->
-diff --git a/package/webif/files/www/index.html b/package/webif/files/www/index.html
-deleted file mode 100644
-index 72a9187..0000000
---- a/package/webif/files/www/index.html
-+++ /dev/null
-@@ -1,16 +0,0 @@
--<?xml version="1.0" encoding="utf-8"?>
--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
--<html xmlns="http://www.w3.org/1999/xhtml">
--	<head>
--		<meta http-equiv="Pragma" CONTENT="no-cache">
--		<meta http-equiv="Expires" CONTENT="-1">
--		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
--		<meta http-equiv="refresh" content="0; URL=/cgi-bin/webif.sh" />
--		<title>Web Administrative Console</title>
--	</head>
--	<body style="margin: 0pt auto; height:100%; color: #C3C4D2; background-color: #213242;">
--		<div style="width: 100%; height: 100%; position: fixed; display: table;">
--			<p style="display: table-cell; line-height: 4em; vertical-align: middle; text-align: center;">Web Administrative Console<br />Redirecting to : <a style="color: inherit;" href="/cgi-bin/webif.sh">main page</a></p>
--		</div>
--	</body>
--</html>
-diff --git a/package/webif/files/www/webif.css b/package/webif/files/www/webif.css
-deleted file mode 100644
-index 86c5a62..0000000
---- a/package/webif/files/www/webif.css
-+++ /dev/null
-@@ -1,296 +0,0 @@
--/* layout */
--
--* {
--	margin: 0;
--	padding: 0;
--}
--
--html, body {
--	width: inherit;
--	height: 100%;
--}
--
--dd {
--	margin-left: 1em;
--	margin-bottom: 0.2em;
--}
--
--ul {
--	display: inline;
--	list-style-type: none;
--}
--
--ul.about {
--	list-style-type: disc;
--}
--
--li.about {
--	margin-left: 2em;
--}
--
--hr,
--#submenu h3,
--#short-status h3,
--#content .settings-block .settings .settings-help h3 {
--	display: none;
--}
--
--ul.about,
--hr.separator {
--	display: block;
--}
--
--option {
--	padding-right: 1em;
--}
--
--#container {
--	position: relative;
--	min-height: 100%;
--}
--
--#header {
--	position: relative;
--	width: 100%;
--}
--
--#header-title {
--	padding-top: 2em;
--	padding-bottom: 0.2em;
--}
--
--#openwrt-title {
--	position: relative;
--	float: left;
--	left: 1em;
--	top: 0.7em;
--}
--
--#short-status {
--	position: relative;
--	right: 1em;
--	line-height: 1.2em;
--	padding-bottom:	0.2em;
--}
--
--#mainmenu,
--#submenu {
--	position: absolute;
--	width: 100%;
--	padding-top: 0.2em;
--	padding-bottom:	0.2em;
--}
--
--#mainmenu
--{
--	top: 0;
--	left: 0;
--}
--
--#mainmenu h3 {
--	padding-left: 1em;
--	float: left;
--}
--
--#mainmenu li {
--	font-size: 0.9em;
--	float: left;
--	margin-left: 1.5em;
--}
--
--#submenu li {
--	float: left;
--	margin-left: 1em;
--}
--
--
--#content {
--	padding-top: 2em;
--	margin-left: 1em;
--	padding-bottom: 6em;
--}
--
--#content .settings-block {
--	margin-bottom: 1.5em;
--}
--
--#content .settings-block .settings-block-title {
--	margin-bottom: 10px;
--}
--
--#content .settings-block .settings {
--	clear: both;
--	margin-left: 1.5em;
--	padding-right: 1em;
--}
--
--#content .settings-block .settings-block-title,
--#content .settings-block .settings .settings-title {
--	padding: 0.2em;
--}
--
--#content .settings-block .settings .settings-content {
--	padding-top: 1em;
--	margin-left: 1em;
--	float: left;
--	width: 58%;
--	padding-bottom: 0.5em;
--}
--
--#content .settings-block .settings .settings-content select,
--#content .settings-block .settings .settings-content input {
--	margin-top: 0.8em;
--}
--
--#content .settings-block .settings .settings-help {
--	padding: 0.4em;
--	padding-top: 1.4em;
--	margin-left: 42%;
--}
--
--#content .settings-block .settings .settings-help .more-help {
--	margin-right: 10%;
--	text-align: right;
--}
--
--#save {
--	position: absolute;
--	bottom: 0;
--	width: 100%;
--}
--
--#save .page-save div {
--	float: right;
--	width: 15em;
--	height: 1.5em;
--	padding-right: 1em;
--	padding-top: 0.5em;
--	padding-bottom:	0.4em;
--}
--
--#save .apply {
--	clear: both;
--	width: 100%;
--	height: 5em;
--}
--
--#save .apply div {
--	float: right;
--	width: 15em;
--	height: 4em;
--	padding-right: 1em;
--	padding-top: 0.5em;
--	padding-bottom: 0.5em;
--}
--
--th {
--	text-align: left;
--}
--
--#content .settings-block .settings .settings-help .more-help,
--#save,
--#short-status {
--	text-align: right;
--}
--
--/* font */
--body {
--	font-family: Verdana, Helvetica, sans-serif;
--	font-size: 1.0em;
--}
--
--dt,
--.selected-maincat,
--#mainmenu a:active,
--#submenu a {
--	font-weight: bold;
--}
--
--
--
--#openwrt-title h1 {
--	font-size: 2.8em;
--}
--
--
--#short-status ul {
--	font-size: 0.8em;
--}
--
--#mainmenu h3,
--#mainmenu li,
--#short-status h3 {
--	font-size: 0.9em;
--}
--
--#mainmenu a,
--#submenu a,
--#save a {
--	text-decoration: none;
--}
--
--#save a:hover {
--	text-decoration: underline;
--}
--
--#mainmenu h3 {
--	text-transform: uppercase;
--}
--
--#save a {
--	font-weight: normal;
--	font-size: 1.1em;
--}
--
--
--/* color */
--
--#header-title,
--#submenu,
--#submenu a,
--#save a,
--#save .page-save
--{
--	color: #fff;
--}
--
--#header-title,
--#save .apply div {
--	background-color: #3D5C7A;
--}
--
--#mainmenu {
--	color: #C3C4D2;
--	background-color: #213242;
--}
--
--#mainmenu a {
--	color: #C3C4D2;
--}
--
--#mainmenu a:hover {
--	color: rgb(193,102,90);
--}
--
--#submenu,
--#save div {
--	background-color: #7590AE;
--}
--
--#content .settings-block .settings-block-title h2 {
--	color: #7590AE;
--}
--
--#submenu a:hover {
--	color: #FB0;
--}
--
--#content .settings-block .settings .settings-title {
--	color: #000;
--	background-color: #CCC;
--}
--
--#save .page-save {
--	background-color: #FFF;
--}
--
-diff --git a/package/webif/files/www/webif.js b/package/webif/files/www/webif.js
-deleted file mode 100644
-index 64d26cd..0000000
---- a/package/webif/files/www/webif.js
-+++ /dev/null
-@@ -1,33 +0,0 @@
--function value(name)
--{
--	var item = document.getElementById(name);
--	return (item ? item.value : "");
--}
--function isset(name, val)
--{
--	return (value(name) == val);
--}
--function checked(name)
--{
--	var item = document.getElementById(name);
--	return ((item) && item.checked);
--}
--function hide(name)
--{
--	var item = document.getElementById(name);
--	if (item) 
--		item.style.display = 'none';
--}
--function show(name)
--{
--	var item = document.getElementById(name);
--	if (item)
--		item.style.display = '';
--}
--function set_visible(name, value)
--{
--	if (value)
--		show(name)
--	else
--		hide(name)
--}
-diff --git a/package/webif/src/bstrip.c b/package/webif/src/bstrip.c
-deleted file mode 100644
-index 1e17d4e..0000000
---- a/package/webif/src/bstrip.c
-+++ /dev/null
-@@ -1,75 +0,0 @@
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--
--#define BUF_SIZE 1024
--#define READ_LEN 14
--
--static int read_len = READ_LEN;
--static char rbuf[32];
--static char rbuflen = 0;
--
--int do_gets(char *buf)
--{
--	int r = 0, c = 0;
--	char *m;
--
--	if (rbuflen > 0)
--		memcpy(buf, rbuf, rbuflen);
--	c += rbuflen;
--
--	while ((c + read_len < BUF_SIZE) && ((r = read(0, &buf[c], read_len)) > 0)) {
--		m = NULL;
--
--		if ((m = memchr(&buf[c], '\n', r)) != NULL) {
--			rbuflen = r - (m - &buf[c] + 1);
--			if (rbuflen > 0)
--				memcpy(rbuf, m + 1, rbuflen);
--			c += m - &buf[c] + 1;
--		} else {
--			rbuflen = 0;
--			c += r;
--		}
--
--		if ((c > 3) && (memcmp(&buf[c - 3], "---", 3) == 0))
--			read_len = 1;
--
--		if (m != NULL)
--			return c;
--	}
--
--	return c;
--}
--
--int main(int argc, char **argv)
--{
--	char buf[BUF_SIZE];
--	char buf1[BUF_SIZE];
--	char *tmp;
--	int len, r = 0, r1 = 0;
--
--	if (argc != 2) {
--		fprintf(stderr, "Syntax: %s (name|data <boundary>)\n", argv[0]);
--		exit(1);
--	}
--	while (tmp = strchr(argv[1], '\r'))
--		*tmp = 0;
--
--	len = strlen(argv[1]);
--
--	*buf = 0;
--	while ((strncmp(buf, argv[1], len) != 0) &&
--		(strncmp(buf + 2, argv[1], len) != 0)) {
--		if (r > 0) {
--			if (r1 > 0)
--				write (1, buf1, r1);
--			r1 = r;
--			memcpy(buf1, buf, r);
--		}
--		if ((r = do_gets(buf)) <= 0)
--			exit(1);
--	}
--
--	if (r1 > 2)
--		write(1, buf1, r1 - 2);
--}
-diff --git a/package/webif/src/webif-page.c b/package/webif/src/webif-page.c
-deleted file mode 100644
-index 13e7093..0000000
---- a/package/webif/src/webif-page.c
-+++ /dev/null
-@@ -1,289 +0,0 @@
--/*
-- * Webif page translator
-- *
-- * Copyright (C) 2005 Felix Fietkau <nbd@openwrt.org>
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Public License
-- * as published by the Free Software Foundation; either version 2
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- */
--
--
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--#include <glob.h>
--#include <ctype.h>
--#ifdef NVRAM
--#include <bcmnvram.h>
--#endif
--
--#define HASH_MAX	100
--#define LINE_BUF	1024 /* max. buffer allocated for one line */
--#define MAX_TR		32	 /* max. translations done on one line */
--#define TR_START	"@TR<<"
--#define TR_END		">>"
--
--struct lstr {
--	char *name;
--	char *value;
--	struct lstr *next;
--};
--typedef struct lstr lstr;
--
--static lstr *ltable[HASH_MAX];
--static char buf[LINE_BUF], buf2[LINE_BUF];
--
--/* djb2 hash function */
--static inline unsigned long hash(char *str)
--{
--	unsigned long hash = 5381;
--	int c;
--
--	while ((c = *str++))
--		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
--	
--	return hash;
--}
--
--static inline char *translate_lookup(char *str)
--{
--	char *name, *def, *p, *res = NULL;
--	lstr *i;
--	int h;
--	
--	def = name = str;
--	if (((p = strchr(str, '|')) != NULL)
--		|| ((p = strchr(str, '#')) != NULL)) {
--		def = p + 1;
--		*p = 0;
--	}
--	
--	h = hash(name) % HASH_MAX;
--	i = ltable[h];
--	while ((res == NULL) && (i != NULL)) {
--		if (strcmp(name, i->name) == 0)
--			res = i->value;
--		i = i->next;
--	}
--	
--	if (res == NULL)
--		res = def;
--	
--	return res;
--}
--
--static inline void add_line(char *name, char *value)
--{
--	int h = hash(name) % HASH_MAX;
--	lstr *s = malloc(sizeof(lstr));
--	lstr *p;
--
--	s->name = strdup(name);
--	s->value = strdup(value);
--	s->next = NULL;
--	
--	if (ltable[h] == NULL)
--		ltable[h] = s;
--	else {
--		for(p = ltable[h]; p->next != NULL; p = p->next);
--		p->next = s;
--	}
--}
--
--static char *translate_line(char *line)
--{
--	static char *tok[MAX_TR * 3];
--	char *l, *p, *p2, *res;
--	int len = 0, pos = 0, i;
--
--	l = line;
--	while (l != NULL) {
--		if ((p = strstr(l, TR_START)) == NULL) {
--			len += strlen((tok[pos++] = l));
--			break;
--		}
--
--		p2 = strstr(p, TR_END);
--		if (p2 == NULL)
--			break;
--
--		*p = 0;
--		*p2 = 0;
--		len += strlen((tok[pos++] = l));
--		len += strlen((tok[pos++] = translate_lookup(p + strlen(TR_START))));
--
--		l = p2;
--		l += strlen(TR_END);
--	}
--	len++;
--	
--	if (len > LINE_BUF)
--		p = malloc(len);
--	else
--		p = buf2;
--
--	p[0] = 0;
--	res = p;
--	for (i = 0; i < pos; i++) {
--		strcat(p, tok[i]);
--		p += strlen(tok[i]);
--	}
--
--	return res;
--}
--
--/* load and parse language file */
--static void load_lang(char *file)
--{
--	FILE *f;
--	char *b, *name, *value;
--
--	f = fopen(file, "r");
--	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f) != NULL)) {
--		b = buf;
--		while (isspace(*b))
--			b++; /* skip leading spaces */
--		if (!*b)
--			continue;
--		
--		name = b;
--		if ((b = strstr(name, "=>")) == NULL)
--			continue; /* separator not found */
--
--		value = b + 2;
--		if (!*value)
--			continue;
--		
--		*b = 0;
--		for (b--; isspace(*b); b--)
--			*b = 0; /* remove trailing spaces */
--		
--		while (isspace(*value))
--			value++; /* skip leading spaces */
--
--		for (b = value + strlen(value) - 1; isspace(*b); b--)
--			*b = 0; /* remove trailing spaces */
--		
--		if (!*value)
--			continue;
--
--		add_line(name, value);
--	}
--}
--
--int main (int argc, char **argv)
--{
--	FILE *f;
--	int len, i, done;
--	char line[LINE_BUF], *tmp, *arg;
--	glob_t langfiles;
--	char *lang = NULL;
--	char *proc = "/usr/bin/haserl";
--
--	memset(ltable, 0, HASH_MAX * sizeof(lstr *));
--#ifdef NVRAM
--	if ((lang = nvram_get("language")) != NULL) {
--#else
--	if ((f = fopen("/etc/config/webif", "r")) != NULL) {
--		int n, i;
--		
--		while (!feof(f) && (lang == NULL)) {
--			fgets(line, LINE_BUF - 1, f);
--			
--			if (strncasecmp(line, "lang", 4) != 0)
--				goto nomatch;
--			
--			lang = line + 4;
--			while (isspace(*lang))
--				lang++;
--			
--			if (*lang != '=')
--				goto nomatch;
--
--			lang++;
--
--			while (isspace(*lang))
--				lang++;
--
--			for (i = 0; isalpha(lang[i]) && (i < 32); i++);
--			lang[i] = 0;
--			continue;
--nomatch:
--			lang = NULL;
--		}
--		fclose(f);
--#endif
--
--		sprintf(buf, "/usr/lib/webif/lang/%s/*.txt", lang);
--		i = glob(buf, GLOB_ERR | GLOB_MARK, NULL, &langfiles);
--		if (i == GLOB_NOSPACE || i == GLOB_ABORTED || i == GLOB_NOMATCH) {
--			// no language files found
--		} else {
--			for (i = 0; i < langfiles.gl_pathc; i++) {
--				load_lang(langfiles.gl_pathv[i]);
--			}
--		}
--	}
--
--	/*
--	 * command line options for this parser are stored in argv[1] only.
--	 * filename to be processed is in argv[2]
--	 */
--	done = 0;
--	i = 1;
--	while (!done) {
--		if (argv[1] == NULL) {
--			done = 1;
--		} else if (strncmp(argv[1], "-e", 2) == 0) {
--			argv[1] = strchr(argv[1], ' ');
--			argv[1]++;
--			if (argv[1] != NULL) {
--				arg = argv[1];
--				if ((tmp = strchr(argv[1], ' ')) != NULL) {
--					*tmp = 0;
--					argv[1] = &tmp[1];
--				} else {
--					argv[1] = NULL;
--					i++;
--				}
--				system(arg);
--			}
--		} else if (strncmp(argv[1], "-p", 2) == 0) {
--			argv[1] = strchr(argv[1], ' ');
--			argv[1]++;
--			if (argv[1] != NULL) {
--				arg = argv[1];
--				if ((tmp = strchr(argv[1], ' ')) != NULL) {
--					*tmp = 0;
--					argv[1] = &tmp[1];
--				} else {
--					argv[1] = NULL;
--					i++;
--				}
--				proc = strdup(arg);
--			}
--		} else {
--			done = 1;
--		}
--	}
--
--	strcpy(buf, proc);
--	while (argv[i]) {
--		sprintf(buf + strlen(buf), " %s", argv[i++]);
--	}
--	f = popen(buf, "r");
--	
--	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
--		fprintf(stdout, "%s", translate_line(buf));
--		fflush(stdout);
--	}
--	
--	return 0;
--}
-diff --git a/package/webif/webif.mk b/package/webif/webif.mk
-deleted file mode 100644
-index d9f3e04..0000000
---- a/package/webif/webif.mk
-+++ /dev/null
-@@ -1,71 +0,0 @@
--#############################################################
--#
--# webif
--#
--#############################################################
--WEBIF_VERSION:=0.2
--WEBIF_SOURCE:=package/webif
--WEBIF_SITE:=https://svn.openwrt.org/openwrt/tags/whiterussian_0.9/package/webif
--WEBIF_DIR:=$(BUILD_DIR)/webif-$(WEBIF_VERSION)
--
--$(WEBIF_DIR)/.unpacked:
--	mkdir -p $(WEBIF_DIR)
--	touch $@
--
--$(WEBIF_DIR)/.built: $(WEBIF_DIR)/.unpacked
--	$(TARGET_CC) $(TARGET_CFLAGS) -o $(WEBIF_DIR)/webif-page $(WEBIF_SOURCE)/src/webif-page.c
--	$(TARGET_CC) $(TARGET_CFLAGS) -o $(WEBIF_DIR)/bstrip $(WEBIF_SOURCE)/src/bstrip.c
--	$(STRIPCMD) --strip-unneeded $(WEBIF_DIR)/webif-page $(WEBIF_DIR)/bstrip
--	touch $@
--
--$(TARGET_DIR)/www/webif.css: $(WEBIF_DIR)/.built
--	mkdir -p $(TARGET_DIR)/etc
--	mkdir -p $(TARGET_DIR)/usr/bin
--	mkdir -p $(TARGET_DIR)/usr/lib
--	mkdir -p $(TARGET_DIR)/www
--	cat $(WEBIF_SOURCE)/files/etc/httpd.conf >> $(TARGET_DIR)/etc/httpd.conf
--	cp -dpfr $(WEBIF_SOURCE)/files/usr/lib/webif $(TARGET_DIR)/usr/lib/
--ifneq ($(BR2_PACKAGE_WEBIF_LANGUAGES),y)
--	rm -rf $(TARGET_DIR)/usr/lib/webif/lang
--endif
--	$(INSTALL) -m0755 $(WEBIF_DIR)/webif-page $(TARGET_DIR)/usr/bin/
--	$(INSTALL) -m0755 $(WEBIF_DIR)/bstrip $(TARGET_DIR)/usr/bin/
--ifeq ($(BR2_PACKAGE_WEBIF_INSTALL_INDEX_HTML),y)
--	@if [ -f "$(TARGET_DIR)/www/index.html" ]; then			\
--		echo;							\
--		echo "webif WARNING:";					\
--		echo "There is already a $(TARGET_DIR)/www/index.html";	\
--		echo "webif might be replacing another package;"	\
--		echo;							\
--		echo "Sleeping for 10 seconds";				\
--		sleep 10;						\
--	fi
--	cp -dpf $(WEBIF_SOURCE)/files/www/index.html $(TARGET_DIR)/www/
--endif
--	cp -dpfr $(WEBIF_SOURCE)/files/www/cgi-bin $(TARGET_DIR)/www/
--	cp -dpfr $(WEBIF_SOURCE)/files/www/webif.* $(TARGET_DIR)/www/
--	@if [ ! -f $(TARGET_DIR)/etc/banner ]; then	\
--		ln -sf issue $(TARGET_DIR)/etc/banner;	\
--	fi
--	touch $@
--
--webif: busybox $(TARGET_DIR)/www/webif.css
--
--webif-clean:
--	rm -rf $(TARGET_DIR)/www/cgi-bin/webif* $(TARGET_DIR)/www/webif.*
--	rm -rf $(TARGET_DIR)/usr/lib/webif
--	rm -f $(TARGET_DIR)/usr/bin/bstrip $(TARGET_DIR)/usr/bin/webif-page
--	rm -r $(WEBIF_DIR)/bstrip $(WEBIF_DIR)/webif-page
--
--webif-source:
--
--webif-dirclean:
--	rm -rf $(WEBIF_DIR)
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_WEBIF),y)
--TARGETS+=webif
--endif
--- 
-1.7.3.4
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
