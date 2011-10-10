@@ -1,45 +1,51 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Sun, 9 Oct 2011 22:25:40 -0400
-Subject: [Buildroot] [PATCH 9/9] toolchain: speed up sysroot lib copying
-In-Reply-To: <201110092346.22169.yann.morin.1998@anciens.enib.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 10 Oct 2011 08:43:34 +0200
+Subject: [Buildroot] [PATCH 1/9] external toolchain: slightly optimize
+ the copy of the toolchain sysroot
+In-Reply-To: <87ehylesfb.fsf@macbook.be.48ers.dk>
 References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
- <00e260122ba4b08d9809dd9eaa00dc3a25f84dbd.1318182187.git.thomas.petazzoni@free-electrons.com>
- <201110092346.22169.yann.morin.1998@anciens.enib.fr>
-Message-ID: <201110092225.41496.vapier@gentoo.org>
+ <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
+ <98f060c40fdcc7c9d5464838a21d2ee7bc44971a.1318182187.git.thomas.petazzoni@free-electrons.com>
+ <87ehylesfb.fsf@macbook.be.48ers.dk>
+Message-ID: <20111010084334.2d3d0544@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 09 October 2011 17:46:21 Yann E. MORIN wrote:
-> On Sunday 09 October 2011 19:44:32 Thomas Petazzoni wrote:
-> > From: Mike Frysinger <vapier@gentoo.org>
-> > 
-> > The copy_toolchain_lib_root helper searches the entire sysroot, but is
-> > only interested in files in certain subdirs.  So rather than waste time
-> > in walking the entire tree, walk the few subdirs at the depth level we
-> > are actually going to be poaching files from.
-> > 
-> > Some simplification suggested by Yann E. MORIN
-> > <yann.morin.1998@anciens.enib.fr> and Arnout Vandecappelle
-> > <arnout@mind.be>, added by Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com>.
-> > 
-> > Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-> 
-> BTW, what's the policy when replying: should I also CC: Mike, as he's
-> the original author, or just the person that submitted the patch?
+Le Mon, 10 Oct 2011 00:00:56 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-i'm just lurking now for buildroot as i'm not working on it anymore, but this 
-looks fine
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 836 bytes
-Desc: This is a digitally signed message part.
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111009/b71d9123/attachment.asc>
+> FYI, this breaks on readonly source directories unless you have the new
+> rsync 3.0.9, which most people don't. I haven't figured out a good fix
+> for older rsync versions yet.
+
+Do you have some details ?
+
+Because:
+
+$ rsync --version | grep version
+rsync  version 3.0.7  protocol version 30
+$ ls -lR toto/
+toto/:
+total 4
+-r--r--r-- 1 thomas thomas    0 2011-10-10 08:41 b
+dr-xr-xr-x 2 thomas thomas 4096 2011-10-10 08:41 titi
+
+toto/titi:
+total 0
+-r--r--r-- 1 thomas thomas 0 2011-10-10 08:41 a
+$ mkdir plop
+$ rsync -au toto/ plop/
+
+And it works just fine.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
