@@ -1,73 +1,57 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 10 Oct 2011 11:22:00 +0200
-Subject: [Buildroot] [PATCH 3/3] xdm: install startup script
-In-Reply-To: <1318238520-16580-1-git-send-email-yegorslists@googlemail.com>
-References: <1318238520-16580-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1318238520-16580-3-git-send-email-yegorslists@googlemail.com>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Mon, 10 Oct 2011 11:32:34 +0200
+Subject: [Buildroot] [RFC] Build time graph generation
+In-Reply-To: <cover.1318176666.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1318176666.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CALR4fE+BG6iN3h1=kpSg2pR-hH63q8stm74uoAOdkUYHkw_igw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Sun, Oct 9, 2011 at 6:17 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-install S99xdm to /etc/init.d to start XDM automatically
+> Here are two patches that implement a simple modification of the
+> package infrastructure to output some timing data about the duration
+> taken by each step for each package, and then a small Python script
+> that generates graphs from those informations.
+>
+> I am not sure that there is any useful usage of those graphs, but it's
+> fun and there are nice to look at.
+>
+> Here are some sample graphs, first on a moderately large package set:
+>
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/histogram-build-order.pdf
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/histogram-duration-order.pdf
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/pie-packages.pdf
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/big/pie-steps.pdf
+>
+> and then on a smaller package set:
+>
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/histogram-build-order.pdf
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/histogram-duration-order.pdf
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/pie-packages.pdf
+>
+> http://free-electrons.com/~thomas/pub/buildroot/graph-time/small/pie-steps.pdf
+>
+> I don't think the modification to the package infrastructure is ready
+> for merging (there are many cases not handled, like when the timing
+> data should be cleaned up, the case of overriden packages not being
+> handled, etc.) and I am not even sure it is useful to complicate the
+> package infrastructure with such a not-so-useful feature.
+>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/x11r7/xapp_xdm/S99xdm      |   27 +++++++++++++++++++++++++++
- package/x11r7/xapp_xdm/xapp_xdm.mk |    6 ++++++
- 2 files changed, 33 insertions(+), 0 deletions(-)
- create mode 100644 package/x11r7/xapp_xdm/S99xdm
-
-diff --git a/package/x11r7/xapp_xdm/S99xdm b/package/x11r7/xapp_xdm/S99xdm
-new file mode 100644
-index 0000000..57b5d92
---- /dev/null
-+++ b/package/x11r7/xapp_xdm/S99xdm
-@@ -0,0 +1,27 @@
-+#!/bin/sh
-+
-+XDM_BIN=/usr/bin/xdm
-+
-+case "$1" in
-+    start)
-+        echo -n "Starting XDM: "
-+        $XDM_BIN
-+        echo "done"
-+        ;;
-+    stop)
-+	echo "Stopping XDM"
-+        killall -q xdm
-+        ;;
-+    restart)
-+        /etc/init.d/S99xdm stop
-+        /etc/init.d/S99xdm start
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop|restart}"
-+        exit 1
-+        ;;
-+esac
-+
-+
-+exit 0
-+
-diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
-index 81e2acd..d0fc2fc 100644
---- a/package/x11r7/xapp_xdm/xapp_xdm.mk
-+++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
-@@ -11,4 +11,10 @@ XAPP_XDM_CONF_ENV = ac_cv_file__dev_urandom=yes
- XAPP_XDM_DEPENDENCIES = xapp_xinit xapp_sessreg xapp_xrdb xlib_libX11 xlib_libXaw xlib_libXdmcp xlib_libXinerama xlib_libXt xproto_xineramaproto xproto_xproto
- XAPP_XDM_CONF_OPT = --with-utmp-file=/var/adm/utmpx --with-wtmp-file=/var/adm/wtmpx
- 
-+define XAPP_XDM_INSTALL_STARTUP_SCRIPT
-+	$(INSTALL) -m 0755 package/x11r7/xapp_xdm/S99xdm $(TARGET_DIR)/etc/init.d/S99xdm
-+endef
-+
-+XAPP_XDM_POST_INSTALL_TARGET_HOOKS += XAPP_XDM_INSTALL_STARTUP_SCRIPT
-+
- $(eval $(call AUTOTARGETS))
--- 
-1.7.1.1
+Nice, that would be a great feature to add. Even better if you can save the
+whole charts in the same doc :)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111010/c4ef8786/attachment.html>
