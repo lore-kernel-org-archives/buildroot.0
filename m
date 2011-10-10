@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Oct 2011 17:29:52 +0200
+Date: Mon, 10 Oct 2011 17:19:19 +0200
 Subject: [Buildroot] [PATCH 9/9] toolchain: speed up sysroot lib copying
-In-Reply-To: <201110101122.49584.vapier@gentoo.org>
+In-Reply-To: <201110101112.18026.vapier@gentoo.org>
 References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
+ <201110092225.41496.vapier@gentoo.org>
+ <20111010084424.6ef9edc0@skate>
  <201110101112.18026.vapier@gentoo.org>
- <20111010171919.268be9d6@skate>
- <201110101122.49584.vapier@gentoo.org>
-Message-ID: <20111010172952.77ba7d69@skate>
+Message-ID: <20111010171919.268be9d6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 10 Oct 2011 11:22:48 -0400,
+Le Mon, 10 Oct 2011 11:12:16 -0400,
 Mike Frysinger <vapier@gentoo.org> a ?crit :
 
-> yes & no.  it's supposed to be here:
-> 	http://blackfin.uclinux.org/git/?p=buildroot
+> > Just curious, is there any specific reason why you gave up working on
+> > Buildroot for the Blackfin architecture?
 > 
-> but it seems they haven't published their internal development tree yet, and i 
-> obviously cannot do that for them
+> i no longer work for ADI :)
 
-Ok, too bad. Is there a way for us to have a contact in this team, so
-we can tell our interest in seeing their developments merged upstream?
+That's a good explanation.
 
-Thanks!
+> the people who still do are using buildroot for Blackfin, but sadly, they were 
+> (are?) not as active as i in pushing upstream
+
+Ah, that's a shame, because your contributions were very interesting.
+Do those people have a public tree where we can follow their
+development and possibly upstream some of it ?
 
 Thomas
 -- 
