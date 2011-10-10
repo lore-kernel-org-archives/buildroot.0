@@ -1,50 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Oct 2011 19:38:54 +0200
-Subject: [Buildroot] [PATCH] add package tango-icon-theme and dependency
- icon-naming-utils
-In-Reply-To: <4E932C1D.1090605@sensortherm.de>
+From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+Date: Mon, 10 Oct 2011 20:07:53 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] add package tango-icon-theme
+In-Reply-To: <1318253496-23729-1-git-send-email-schwarzkopf@sensortherm.de>
 References: <1318253496-23729-1-git-send-email-schwarzkopf@sensortherm.de>
- <20111010161008.3ba4b436@skate> <4E932C1D.1090605@sensortherm.de>
-Message-ID: <20111010193854.0ac757c6@skate>
+Message-ID: <1318270073-32193-1-git-send-email-schwarzkopf@sensortherm.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 10 Oct 2011 19:32:13 +0200,
-Klaus Schwarzkopf <schwarzkopf@sensortherm.de> a ?crit :
+This package need icon-naming-utils.
 
-> make: *** No rule to make target `host-icon-naming-utils', needed by 
-> `tango-icon-theme-depends'.  Stop.
-> 
-> Can you help?
+Signed-off-by: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
+---
+ package/Config.in                            |    1 +
+ package/tango-icon-theme/Config.in           |    6 ++++++
+ package/tango-icon-theme/tango-icon-theme.mk |   15 +++++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/tango-icon-theme/Config.in
+ create mode 100644 package/tango-icon-theme/tango-icon-theme.mk
 
-Yes, see below.
-
-> > We usually have one patch per new package.
-> >
-> >> +$(eval $(call AUTOTARGETS,package,icon-naming-utils,host))
-> >
-> > This should be:
-> >
-> > $(eval $(call AUTOTARGETS))
-
-I should have said:
-
-$(eval $(call AUTOTARGETS,host))
-
-i.e, only the second and third argument have been removed. The optional
-fourth argument, which says whether we instantiate a host or target
-package, remains. Its default value is "target", so with just $(eval
-$(call AUTOTARGETS)) you create a target package and not the host
-package.
-
-Sorry for the mistake.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 7dc8887..1cc953c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -115,6 +115,7 @@ source "package/sdl_sound/Config.in"
+ source "package/sdl_net/Config.in"
+ source "package/sdl_ttf/Config.in"
+ source "package/sdl_gfx/Config.in"
++source "package/tango-icon-theme/Config.in"
+ 
+ comment "other GUIs"
+ source "package/qt/Config.in"
+diff --git a/package/tango-icon-theme/Config.in b/package/tango-icon-theme/Config.in
+new file mode 100644
+index 0000000..cf20e9b
+--- /dev/null
++++ b/package/tango-icon-theme/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_TANGO_ICON_THEME
++	bool "tango icon theme"
++	help
++	  Icons from the tango desktop project.
++
++	  http://tango.freedesktop.org/Tango_Desktop_Project
+diff --git a/package/tango-icon-theme/tango-icon-theme.mk b/package/tango-icon-theme/tango-icon-theme.mk
+new file mode 100644
+index 0000000..2c1a5a5
+--- /dev/null
++++ b/package/tango-icon-theme/tango-icon-theme.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# tango-icon-theme
++#
++#############################################################
++TANGO_ICON_THEME_VERSION = 0.8.90
++TANGO_ICON_THEME_SOURCE = tango-icon-theme-$(TANGO_ICON_THEME_VERSION).tar.gz
++TANGO_ICON_THEME_SITE = http://tango.freedesktop.org/releases/
++
++TANGO_ICON_THEME_CONF_ENV = PKG_CONFIG_PATH=$(HOST_DIR)/usr/lib/pkgconfig
++TANGO_ICON_THEME_CONF_OPT = --disable-icon-framing
++
++TANGO_ICON_THEME_DEPENDENCIES = host-icon-naming-utils host-pkg-config
++
++$(eval $(call AUTOTARGETS))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
