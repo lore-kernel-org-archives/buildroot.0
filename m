@@ -1,44 +1,147 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 10 Oct 2011 12:28:59 +0200
-Subject: [Buildroot] Is BR's http git repo up-to-date?
-In-Reply-To: <4E92A9E2.7030300@visionsystems.de> (Yegor Yefremov's message of
- "Mon, 10 Oct 2011 10:16:34 +0200")
-References: <4E92A9E2.7030300@visionsystems.de>
-Message-ID: <87r52lcf84.fsf@macbook.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 10 Oct 2011 14:35:20 +0200
+Subject: [Buildroot] [PATCH 4/4] New package: ImLib2
+Message-ID: <1318250120-739-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- Yegor> Since last week if I execute git pull I always get "Already up-to-date." Even if I clone the http://git.buildroot.net/git/buildroot.git to a new folder my last commit message is
- Yegor> commit d1c54ade86e8cae6f0aa1bf1709941c70cea1af7
- Yegor> Author: Peter Korsgaard <jacmet@sunsite.dk>
- Yegor> Date:   Wed Oct 5 00:15:47 2011 +0200
+Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
+Signed-off-by: Matias Garcia <mgarcia@rossvideo.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in        |    1 +
+ package/imlib2/Config.in |   37 ++++++++++++++++++++++++++++
+ package/imlib2/imlib2.mk |   61 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 99 insertions(+), 0 deletions(-)
+ create mode 100644 package/imlib2/Config.in
+ create mode 100644 package/imlib2/imlib2.mk
 
- Yegor>     imagemagick: add optional fftw support
-
- Yegor>     Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-
- Yegor> Am I making something wrong? 
-
-No, something has gone wrong.
-
-For http access to work, you need to run git update-server-info on the
-server to rewrite the refs. We did have a call to git-update-server-info
-in hooks/post-update (notice the git-), but the legacy
-git-update-server-info symlink is no longer present on the server,
-causing it to fail.
-
-Interesting, /usr/bin was updated just around that time, so it is
-probably caused by a git upgrade that I wasn't informed about:
-
-drwxr-xr-x   2 root   root     36K Oct  4 22:54 .
-
-I've fixed it now, so hopefully it should work in the future. If not,
-let me know.
-
+diff --git a/package/Config.in b/package/Config.in
+index 7dc8887..7a7b4bf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -282,6 +282,7 @@ source "package/fontconfig/Config.in"
+ source "package/freetype/Config.in"
+ source "package/gtk2-engines/Config.in"
+ source "package/gtk2-themes/Config.in"
++source "package/imlib2/Config.in"
+ source "package/jpeg/Config.in"
+ source "package/libart/Config.in"
+ source "package/libdrm/Config.in"
+diff --git a/package/imlib2/Config.in b/package/imlib2/Config.in
+new file mode 100644
+index 0000000..ed5f2d6
+--- /dev/null
++++ b/package/imlib2/Config.in
+@@ -0,0 +1,37 @@
++config BR2_PACKAGE_IMLIB2
++	bool "imlib2"
++	help
++	  Imlib 2 is the successor to Imlib.
++
++	  http://freshmeat.net/projects/imlib2/
++
++if BR2_PACKAGE_IMLIB2
++
++config BR2_PACKAGE_IMLIB2_JPEG
++	select BR2_PACKAGE_JPEG
++	bool "JPEG support"
++
++config BR2_PACKAGE_IMLIB2_PNG
++	select BR2_PACKAGE_LIBPNG
++	bool "PNG support"
++
++config BR2_PACKAGE_IMLIB2_GIF
++	select BR2_PACKAGE_LIBUNGIF
++	bool "GIF support"
++
++config BR2_PACKAGE_IMLIB2_TIFF
++	select BR2_PACKAGE_TIFF
++	bool "TIFF support"
++
++config BR2_PACKAGE_IMLIB2_FREETYPE
++	select BR2_PACKAGE_FREETYPE
++	bool "FreeType support"
++
++config BR2_PACKAGE_IMLIB2_ID3
++	select BR2_PACKAGE_LIBID3TAG
++	bool "ID3 support"
++
++config BR2_PACKAGE_IMLIB2_X
++	select BR2_PACKAGE_XLIB_LIBX11
++	bool "X support"
++endif
+diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
+new file mode 100644
+index 0000000..22b7633
+--- /dev/null
++++ b/package/imlib2/imlib2.mk
+@@ -0,0 +1,61 @@
++#############################################################
++#
++## IMLIB2
++#
++##############################################################
++IMLIB2_VERSION = 1.4.5
++IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
++IMLIB2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)/
++IMLIB2_INSTALL_STAGING = YES
++#IMLIB2_AUTORECONF = YES
++IMLIB2_DEPENDENCIES = host-pkg-config
++
++ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
++	IMLIB2_CONF_OPT += --with-x
++	IMLIB2_DEPENDENCIES += xlib_libX11
++endif
++
++ifeq ($(BR2_PACKAGE_IMLIB2_FREETYPE),y)
++	IMLIB2_CONF_OPT += --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
++	IMLIB2_DEPENDENCIES += freetype
++else
++	IMLIB2_CONF_OPT += --without-freetype
++endif
++
++ifeq ($(BR2_PACKAGE_IMLIB2_JPEG),y)
++	IMLIB2_CONF_OPT += --with-jpeg
++	IMLIB2_DEPENDENCIES += jpeg
++else
++	IMLIB2_CONF_OPT += --without-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_IMLIB2_PNG),y)
++	IMLIB2_CONF_OPT += --with-png
++	IMLIB2_DEPENDENCIES += libpng
++else
++	IMLIB2_CONF_OPT += --without-png
++endif
++
++ifeq ($(BR2_PACKAGE_IMLIB2_GIF),y)
++	IMLIB2_CONF_OPT += --with-gif
++	IMLIB2_DEPENDENCIES += libungif
++else
++	IMLIB2_CONF_OPT += --without-gif
++endif
++
++ifeq ($(BR2_PACKAGE_IMLIB2_TIFF),y)
++	IMLIB2_CONF_OPT += --with-tiff
++	IMLIB2_DEPENDENCIES += tiff
++else
++	IMLIB2_CONF_OPT += --without-tiff
++endif
++
++ifeq ($(BR2_PACKAGE_IMLIB2_ID3),y)
++	IMLIB2_CONF_OPT += --with-id3
++	IMLIB2_DEPENDENCIES += libid3tag
++else
++	IMLIB2_CONF_OPT += --without-id3
++endif
++
++$(eval $(call AUTOTARGETS))
++
 -- 
-Bye, Peter Korsgaard
+1.7.1.1
