@@ -1,40 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 10 Oct 2011 12:21:22 +0200
-Subject: [Buildroot] configure error with dependency
-In-Reply-To: <4E8F0EC8.6020403@sensortherm.de>
-References: <4E8F0EC8.6020403@sensortherm.de>
-Message-ID: <CAAXf6LXkdGessMWWqfFjiReajBg4=nhn0bpg=-NRws9EVR8fmQ@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Mon, 10 Oct 2011 12:33:30 +0200
+Subject: [Buildroot] Is BR's http git repo up-to-date?
+In-Reply-To: <87r52lcf84.fsf@macbook.be.48ers.dk>
+References: <4E92A9E2.7030300@visionsystems.de>
+ <87r52lcf84.fsf@macbook.be.48ers.dk>
+Message-ID: <4E92C9FA.8040504@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Peter,
 
-On Fri, Oct 7, 2011 at 4:38 PM, Klaus Schwarzkopf
-<schwarzkopf@sensortherm.de> wrote:
-> Hi,
+>  Yegor> Since last week if I execute git pull I always get "Already up-to-date." Even if I clone the http://git.buildroot.net/git/buildroot.git to a new folder my last commit message is
+>  Yegor> commit d1c54ade86e8cae6f0aa1bf1709941c70cea1af7
+>  Yegor> Author: Peter Korsgaard <jacmet@sunsite.dk>
+>  Yegor> Date:   Wed Oct 5 00:15:47 2011 +0200
 >
-> how can i solve the following error in the attached patch?
+>  Yegor>     imagemagick: add optional fftw support
 >
-> configure: error: icon-naming-utils >= 0.8.90 is required to build
-> ? ? ? ? ? ? ? ? and install tango-icon-theme
+>  Yegor>     Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+>
+>  Yegor> Am I making something wrong? 
+>
+> No, something has gone wrong.
+>
+> For http access to work, you need to run git update-server-info on the
+> server to rewrite the refs. We did have a call to git-update-server-info
+> in hooks/post-update (notice the git-), but the legacy
+> git-update-server-info symlink is no longer present on the server,
+> causing it to fail.
+>
+> Interesting, /usr/bin was updated just around that time, so it is
+> probably caused by a git upgrade that I wasn't informed about:
+>
+> drwxr-xr-x   2 root   root     36K Oct  4 22:54 .
+>
+> I've fixed it now, so hopefully it should work in the future. If not,
+> let me know.
 
-Please supply some more information (e.g. did icon-naming-utils
-actually get built, and so is the problem is that tango-icon-theme
-doesn't find it, or isn't it built in the first place).
+It is working now. Thanks.
 
-In the first case, I have encountered such issues with other packages
-I tried to add.
-Can you try to explicitly pass the appropriate
---with-XX=$(STAGING_DIR)/usr option to the configure step of
-tango-icon-theme?
-
-So something like:
-TANGO_ICON_THEME_CONF_OPT = --with-icon-naming-utils=$(STAGING_DIR)/usr
-
-I'm not sure whether this is the official way, but in my case this worked.
-
-Best regards,
-Thomas
+Yegor
