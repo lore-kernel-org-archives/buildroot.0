@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 10 Oct 2011 08:48:37 +0200
-Subject: [Buildroot] [PATCH 1/9] external toolchain: slightly optimize
- the copy of the toolchain sysroot
-In-Reply-To: <20111010084334.2d3d0544@skate>
+Date: Mon, 10 Oct 2011 08:44:24 +0200
+Subject: [Buildroot] [PATCH 9/9] toolchain: speed up sysroot lib copying
+In-Reply-To: <201110092225.41496.vapier@gentoo.org>
 References: <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
- <cover.1318182187.git.thomas.petazzoni@free-electrons.com>
- <98f060c40fdcc7c9d5464838a21d2ee7bc44971a.1318182187.git.thomas.petazzoni@free-electrons.com>
- <87ehylesfb.fsf@macbook.be.48ers.dk>
- <20111010084334.2d3d0544@skate>
-Message-ID: <20111010084837.596f8d00@skate>
+ <00e260122ba4b08d9809dd9eaa00dc3a25f84dbd.1318182187.git.thomas.petazzoni@free-electrons.com>
+ <201110092346.22169.yann.morin.1998@anciens.enib.fr>
+ <201110092225.41496.vapier@gentoo.org>
+Message-ID: <20111010084424.6ef9edc0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 10 Oct 2011 08:43:34 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Le Sun, 9 Oct 2011 22:25:40 -0400,
+Mike Frysinger <vapier@gentoo.org> a ?crit :
 
-> $ rsync --version | grep version
-> rsync  version 3.0.7  protocol version 30
+> i'm just lurking now for buildroot as i'm not working on it anymore, but this 
+> looks fine
 
-Ok, I saw the discussion on IRC. The problem seems to be with rsync
-3.0.8 only. Older versions and newer versions are unaffected. The
-reference discussed on IRC was:
-http://lists.samba.org/archive/rsync/2011-May/026369.html.
+Just curious, is there any specific reason why you gave up working on
+Buildroot for the Blackfin architecture?
+
+Regards,
 
 Thomas
 -- 
