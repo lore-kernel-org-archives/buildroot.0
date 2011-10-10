@@ -1,36 +1,56 @@
 From: Klaus Schwarzkopf <schwarzkopf@sensortherm.de>
-Date: Mon, 10 Oct 2011 20:08:23 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] icon-naming-utils for tango-icon-theme
-In-Reply-To: <1318253496-23729-1-git-send-email-schwarzkopf@sensortherm.de>
-References: <1318253496-23729-1-git-send-email-schwarzkopf@sensortherm.de>
-Message-ID: <1318270103-32230-1-git-send-email-schwarzkopf@sensortherm.de>
+Date: Mon, 10 Oct 2011 20:09:41 +0200
+Subject: [Buildroot] [PATCH] add package tango-icon-theme and dependency
+ icon-naming-utils
+In-Reply-To: <20111010193854.0ac757c6@skate>
+References: <1318253496-23729-1-git-send-email-schwarzkopf@sensortherm.de>	<20111010161008.3ba4b436@skate>	<4E932C1D.1090605@sensortherm.de>
+ <20111010193854.0ac757c6@skate>
+Message-ID: <4E9334E5.6030300@sensortherm.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/icon-naming-utils/icon-naming-utils.mk |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
- create mode 100644 package/icon-naming-utils/icon-naming-utils.mk
+Hi Thomas,
 
-diff --git a/package/icon-naming-utils/icon-naming-utils.mk b/package/icon-naming-utils/icon-naming-utils.mk
-new file mode 100644
-index 0000000..1ac359a
---- /dev/null
-+++ b/package/icon-naming-utils/icon-naming-utils.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# icon-naming-utils
-+#
-+#############################################################
-+ICON_NAMING_UTILS_VERSION = 0.8.90
-+ICON_NAMING_UTILS_SOURCE = icon-naming-utils-$(ICON_NAMING_UTILS_VERSION).tar.gz
-+ICON_NAMING_UTILS_SITE = http://tango.freedesktop.org/releases/
-+HOST_ICON_NAMING_UTILS_CONF_OPT = --datarootdir=$(HOST_DIR)/usr/lib
-+
-+$(eval $(call AUTOTARGETS,host))
--- 
-1.7.0.4
+thanks very much.
+
+Regards,
+
+Klaus
+
+
+
+Am 10.10.2011 19:38, schrieb Thomas Petazzoni:
+> Le Mon, 10 Oct 2011 19:32:13 +0200,
+> Klaus Schwarzkopf<schwarzkopf@sensortherm.de>  a ?crit :
+>
+>> make: *** No rule to make target `host-icon-naming-utils', needed by
+>> `tango-icon-theme-depends'.  Stop.
+>>
+>> Can you help?
+>
+> Yes, see below.
+>
+>>> We usually have one patch per new package.
+>>>
+>>>> +$(eval $(call AUTOTARGETS,package,icon-naming-utils,host))
+>>>
+>>> This should be:
+>>>
+>>> $(eval $(call AUTOTARGETS))
+>
+> I should have said:
+>
+> $(eval $(call AUTOTARGETS,host))
+>
+> i.e, only the second and third argument have been removed. The optional
+> fourth argument, which says whether we instantiate a host or target
+> package, remains. Its default value is "target", so with just $(eval
+> $(call AUTOTARGETS)) you create a target package and not the host
+> package.
+>
+> Sorry for the mistake.
+>
+> Thomas
