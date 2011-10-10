@@ -1,53 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 10 Oct 2011 07:20:29 +0200
-Subject: [Buildroot] [git commit] barebox: add 2011.10,
-	mark 2011.08 as deprecated
-Message-ID: <20111010075224.9E9E78E305@busybox.osuosl.org>
+Date: Mon, 10 Oct 2011 09:47:23 +0200
+Subject: [Buildroot] [git commit] toolchain: speed up sysroot lib copying
+Message-ID: <20111010075225.47DB08E1E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ce1940ddea7d82e5da1e0b8c14395a1302d29086
+commit: http://git.buildroot.net/buildroot/commit/?id=da6353c9e7e6e6accfe72ee4cb5165bdf580b18a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The copy_toolchain_lib_root helper searches the entire sysroot, but is
+only interested in files in certain subdirs.  So rather than waste time
+in walking the entire tree, walk the few subdirs at the depth level we
+are actually going to be poaching files from.
+
+Some simplification suggested by Yann E. MORIN
+<yann.morin.1998@anciens.enib.fr> and Arnout Vandecappelle
+<arnout@mind.be>, added by Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>.
+
+Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/barebox/Config.in |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ toolchain/helpers.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 71d530f..8dfaeb2 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -8,16 +8,20 @@ config BR2_TARGET_BAREBOX
- if BR2_TARGET_BAREBOX
- choice
- 	prompt "version"
--	default BR2_TARGET_BAREBOX_2011_09
-+	default BR2_TARGET_BAREBOX_2011_10
- 	help
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_2011_08
-+	depends on BR2_DEPRECATED
- 	bool "2011.08"
- 
- config BR2_TARGET_BAREBOX_2011_09
- 	bool "2011.09"
- 
-+config BR2_TARGET_BAREBOX_2011_10
-+	bool "2011.10"
-+
- config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	bool "Custom tarball"
- 
-@@ -37,6 +41,7 @@ config BR2_TARGET_BAREBOX_VERSION
- 	string
- 	default "2011.08.0"	if BR2_TARGET_BAREBOX_2011_08
- 	default "2011.09.0"	if BR2_TARGET_BAREBOX_2011_09
-+	default "2011.10.0"	if BR2_TARGET_BAREBOX_2011_10
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
- 
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 7f3efaa..5585f45 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -22,9 +22,8 @@ copy_toolchain_lib_root = \
+ 	DESTDIR="$(strip $3)" ; \
+  \
+ 	LIBS=`(cd $${ARCH_SYSROOT_DIR}; \
+-		find -L . -path "./lib/$${LIB}.*"     -o \
+-			  -path "./usr/lib/$${LIB}.*" -o \
+-			  -path "./usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib*/$${LIB}.*" \
++		find -L lib* usr/lib* usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/lib* \
++			-maxdepth 1 -name "$${LIB}.*" 2>/dev/null \
+ 		)` ; \
+ 	for FILE in $${LIBS} ; do \
+ 		LIB=`basename $${FILE}`; \
