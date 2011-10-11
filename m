@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 11 Oct 2011 11:38:32 -0300
-Subject: [Buildroot] [PATCH 6/6] lzma: remove deprecated
-In-Reply-To: <1318343912-5480-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1318343912-5480-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318343912-5480-6-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 11 Oct 2011 11:38:27 -0300
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/6=5D_webif=3A_remove_deprecated?=
+Message-ID: <1318343912-5480-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +10,5932 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in         |    1 -
- package/lzma/Config.in    |   12 ------------
- package/lzma/lzma.mk      |   16 ----------------
- package/lzma/lzmacheck.sh |    9 ---------
- 4 files changed, 0 insertions(+), 38 deletions(-)
- delete mode 100644 package/lzma/Config.in
- delete mode 100644 package/lzma/lzma.mk
- delete mode 100755 package/lzma/lzmacheck.sh
+ package/Config.in                                  |    1 -
+ package/webif/Config.in                            |   28 --
+ package/webif/files/etc/httpd.conf                 |    8 -
+ package/webif/files/usr/lib/webif/apply.sh         |   76 ----
+ package/webif/files/usr/lib/webif/categories.awk   |   27 --
+ package/webif/files/usr/lib/webif/common.awk       |   38 --
+ package/webif/files/usr/lib/webif/form.awk         |  100 -----
+ .../webif/files/usr/lib/webif/lang/ca/common.txt   |  226 ----------
+ .../webif/files/usr/lib/webif/lang/cz/common.txt   |  225 ----------
+ .../webif/files/usr/lib/webif/lang/de/common.txt   |  228 ----------
+ .../webif/files/usr/lib/webif/lang/dk/common.txt   |  231 ----------
+ .../webif/files/usr/lib/webif/lang/ee/common.txt   |  230 ----------
+ .../webif/files/usr/lib/webif/lang/es/common.txt   |  227 ----------
+ .../webif/files/usr/lib/webif/lang/fr/common.txt   |  238 ----------
+ .../webif/files/usr/lib/webif/lang/hr/common.txt   |  199 ---------
+ .../webif/files/usr/lib/webif/lang/hu/common.txt   |  227 ----------
+ .../webif/files/usr/lib/webif/lang/it/common.txt   |  226 ----------
+ .../webif/files/usr/lib/webif/lang/nl/common.txt   |  224 ----------
+ .../webif/files/usr/lib/webif/lang/no/common.txt   |  230 ----------
+ .../webif/files/usr/lib/webif/lang/pl/common.txt   |  228 ----------
+ .../webif/files/usr/lib/webif/lang/pt/common.txt   |  454 --------------------
+ .../webif/files/usr/lib/webif/lang/ru/common.txt   |  223 ----------
+ .../webif/files/usr/lib/webif/lang/se/common.txt   |  223 ----------
+ package/webif/files/usr/lib/webif/languages.awk    |   12 -
+ .../webif/files/usr/lib/webif/subcategories.awk    |   12 -
+ package/webif/files/usr/lib/webif/validate.awk     |  151 -------
+ package/webif/files/usr/lib/webif/webif.sh         |  286 ------------
+ package/webif/files/www/cgi-bin/webif.sh           |    2 -
+ package/webif/files/www/cgi-bin/webif/.categories  |    2 -
+ package/webif/files/www/cgi-bin/webif/about.sh     |   31 --
+ package/webif/files/www/cgi-bin/webif/config.sh    |   46 --
+ package/webif/files/www/cgi-bin/webif/index.sh     |    8 -
+ package/webif/files/www/cgi-bin/webif/info.sh      |   44 --
+ package/webif/files/www/cgi-bin/webif/ipkg.sh      |    2 -
+ .../files/www/cgi-bin/webif/status-connection.sh   |   29 --
+ .../webif/files/www/cgi-bin/webif/status-dhcp.sh   |   38 --
+ .../files/www/cgi-bin/webif/status-wireless.sh     |   12 -
+ package/webif/files/www/index.html                 |   16 -
+ package/webif/files/www/webif.css                  |  296 -------------
+ package/webif/files/www/webif.js                   |   33 --
+ package/webif/src/bstrip.c                         |   75 ----
+ package/webif/src/webif-page.c                     |  289 -------------
+ package/webif/webif.mk                             |   71 ---
+ 43 files changed, 0 insertions(+), 5572 deletions(-)
+ delete mode 100644 package/webif/Config.in
+ delete mode 100644 package/webif/files/etc/httpd.conf
+ delete mode 100755 package/webif/files/usr/lib/webif/apply.sh
+ delete mode 100644 package/webif/files/usr/lib/webif/categories.awk
+ delete mode 100644 package/webif/files/usr/lib/webif/common.awk
+ delete mode 100644 package/webif/files/usr/lib/webif/form.awk
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/ca/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/cz/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/de/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/dk/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/ee/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/es/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/fr/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/hr/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/hu/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/it/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/nl/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/no/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/pl/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/pt/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/ru/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/lang/se/common.txt
+ delete mode 100644 package/webif/files/usr/lib/webif/languages.awk
+ delete mode 100644 package/webif/files/usr/lib/webif/subcategories.awk
+ delete mode 100644 package/webif/files/usr/lib/webif/validate.awk
+ delete mode 100755 package/webif/files/usr/lib/webif/webif.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif.sh
+ delete mode 100644 package/webif/files/www/cgi-bin/webif/.categories
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/about.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/config.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/index.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/info.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/ipkg.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/status-connection.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/status-dhcp.sh
+ delete mode 100755 package/webif/files/www/cgi-bin/webif/status-wireless.sh
+ delete mode 100644 package/webif/files/www/index.html
+ delete mode 100644 package/webif/files/www/webif.css
+ delete mode 100644 package/webif/files/www/webif.js
+ delete mode 100644 package/webif/src/bstrip.c
+ delete mode 100644 package/webif/src/webif-page.c
+ delete mode 100644 package/webif/webif.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6b9d750..466ea4d 100644
+index 9e27ff8..7176041 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -12,7 +12,6 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
+@@ -484,7 +484,6 @@ source "package/udpcast/Config.in"
+ source "package/vpnc/Config.in"
+ source "package/vsftpd/Config.in"
+ source "package/vtun/Config.in"
+-source "package/webif/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/wget/Config.in"
  endif
- source "package/lzop/Config.in"
--source "package/lzma/Config.in"
- source "package/xz/Config.in"
- endmenu
- 
-diff --git a/package/lzma/Config.in b/package/lzma/Config.in
+diff --git a/package/webif/Config.in b/package/webif/Config.in
 deleted file mode 100644
-index 2b94dde..0000000
---- a/package/lzma/Config.in
+index 2ecbf36..0000000
+--- a/package/webif/Config.in
++++ /dev/null
+@@ -1,28 +0,0 @@
+-config BR2_PACKAGE_WEBIF
+-	bool "webif - Status Console"
+-	depends on BR2_PACKAGE_BUSYBOX # httpd
+-	depends on BR2_DEPRECATED
+-	select BR2_PACKAGE_HASERL
+-	help
+-	  A web interface for showing different network status. This package
+-	  requires awk support on the system, either the one provided by
+-	  Busybox or gawk.
+-
+-	  The default login on the status web pages are root/root and
+-	  admin/admin. This can be changed in the etc/httpd.conf file.
+-
+-config BR2_PACKAGE_WEBIF_INSTALL_INDEX_HTML
+-	bool "instal index.html in /www which redirects to webif"
+-	depends on BR2_PACKAGE_WEBIF
+-	help
+-	  Installs a /www/index.html which redirects to the status console cgi
+-	  scripts.
+-
+-config BR2_PACKAGE_WEBIF_LANGUAGES
+-	bool "install language support"
+-	depends on BR2_PACKAGE_WEBIF
+-	help
+-	  This option installs support for other languages than english.
+-
+-	  Supported languages: ca, cz, de, dk, ee, es, fr, hr, hu, it, nl, no,
+-	                       pl, pt, ru and se.
+diff --git a/package/webif/files/etc/httpd.conf b/package/webif/files/etc/httpd.conf
+deleted file mode 100644
+index 9e125da..0000000
+--- a/package/webif/files/etc/httpd.conf
++++ /dev/null
+@@ -1,8 +0,0 @@
+-.asp:text/html
+-/cgi-bin/webif:root:root
+-/cgi-bin/webif:admin:admin
+-.svg:image/svg+xml
+-.png:image/png
+-.gif:image/gif
+-.jpg:image/jpg
+-
+diff --git a/package/webif/files/usr/lib/webif/apply.sh b/package/webif/files/usr/lib/webif/apply.sh
+deleted file mode 100755
+index 9cbadf4..0000000
+--- a/package/webif/files/usr/lib/webif/apply.sh
++++ /dev/null
+@@ -1,76 +0,0 @@
+-#!/bin/ash
+-#
+-# Default handlers for config files
+-#
+-HANDLERS_config='
+-	wireless) reload_wireless;;
+-	network) reload_network;;
+-	system) reload_system;;
+-'
+-HANDLERS_file='
+-	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
+-	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
+-	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S45firewall;;
+-'
+-
+-# for some reason a for loop with "." doesn't work
+-eval "$(cat /usr/lib/webif/apply-*.sh 2>&-)"
+-
+-reload_network() {
+-	echo '@TR<<Reloading>> @TR<<networking settings>> ...'
+-	grep '^wan_' config-network >&- 2>&- && {
+-		ifdown wan
+-		ifup wan
+-		killall -HUP dnsmasq
+-	}
+-	
+-	grep '^lan_' config-network >&- 2>&- && {
+-		ifdown lan
+-		ifup lan
+-		killall dnsmasq
+-		/etc/init.d/S??dnsmasq
+-	}
+-}
+-
+-reload_wireless() {
+-	echo '@TR<<Reloading>> @TR<<wireless settings>> ...'
+-	killall nas >&- 2>&- && sleep 2
+-	(
+-		/sbin/wifi
+-		[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
+-	) >&- 2>&- <&-
+-}
+-
+-reload_system() {
+-	echo '@TR<<Applying>> @TR<<system settings>> ...'
+-	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
+-}
+-
+-cd /tmp/.webif
+-
+-# file-* 		other config files
+-for config in $(ls file-* 2>&-); do
+-	name=${config#file-}
+-	echo "@TR<<Processing>> @TR<<config file>>: $name"
+-	eval 'case "$name" in
+-		'"$HANDLERS_file"'
+-	esac'
+-done
+-
+-# config-*		simple config files
+-(
+-	cd /proc/self
+-	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
+-		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
+-		echo "@TR<<Committing>> NVRAM ..."
+-		nvram commit
+-	}
+-)
+-for config in $(ls config-* 2>&-); do 
+-	name=${config#config-}
+-	eval 'case "$name" in
+-		'"$HANDLERS_config"'
+-	esac'
+-done
+-sleep 2
+-rm -f config-*
+diff --git a/package/webif/files/usr/lib/webif/categories.awk b/package/webif/files/usr/lib/webif/categories.awk
+deleted file mode 100644
+index 00312c9..0000000
+--- a/package/webif/files/usr/lib/webif/categories.awk
++++ /dev/null
+@@ -1,27 +0,0 @@
+-BEGIN {
+-	n = 0
+-	sel = 0
+-	FS=":"
+-}
+-($3 == "category") && (categories !~ /:$4:/) {
+-	categories = categories ":" $4 ":";
+- 	n++
+-	if ($4 ~ "^" selected "$") sel = n
+-	c[n] = $4
+-	if (f[$4] == "") f[$4] = rootdir "/" indexpage "?cat=" $4
+-}
+-($3 == "name") && ((p[$4] == 0) || (p[$4] > int($5))) {
+-	gsub(/^.*\//, "", $1);
+-	p[$4] = int($5) + 1
+-	f[$4] = rootdir "/" $1
+-}
+-END {
+-	print "<div id=\"mainmenu\"><h3><strong>@TR<<Categories>>:</strong></h3><ul>"
+-	
+-	for (i = 1; i <= n; i++) {
+-		if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&raquo;@TR<<" c[i] ">>&laquo;</a></li>"
+-		else print "<li><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";
+-	}
+-  
+-	print "</ul></div>"
+-}
+diff --git a/package/webif/files/usr/lib/webif/common.awk b/package/webif/files/usr/lib/webif/common.awk
+deleted file mode 100644
+index de3483e..0000000
+--- a/package/webif/files/usr/lib/webif/common.awk
++++ /dev/null
+@@ -1,38 +0,0 @@
+-function start_form(title, field_opts, field_opts2) {
+-	print "<div class=\"settings\"" field_opts ">"
+-	if (title != "") print "<div class=\"settings-title\"><h3><strong>" title "</strong></h3></div>"
+-	print "<div class=\"settings-content\"" field_opts2 ">"
+-}
+-
+-function end_form(form_help, form_help_link) {
+-	print "</div>"
+-	if (form_help != "") form_help = "<dl>" form_help "</dl>"
+-	print "<div class=\"settings-help\"><blockquote><h3><strong>@TR<<Short help>>:</strong></h3>" form_help form_help_link "</blockquote></div>"
+-	print "<div style=\"clear: both\">&nbsp;</div></div>"
+-}
+-
+-function textinput(name, value) {
+-	return "<input type=\"text\" name=\"" name "\" value=\"" value "\" />"
+-}
+-
+-function hidden(name, value) {
+-	return "<input type=\"hidden\" name=\"" name "\" value=\"" value "\" />"
+-}
+-
+-function button(name, caption) {
+-	return "<input type=\"submit\" name=\"" name "\" value=\"@TR<<" caption ">>\" />"
+-}
+-
+-function helpitem(name) { 
+-	return "<dt>@TR<<" name ">>: </dt>"
+-}
+-
+-function helptext(short, name) { 
+-	return "<dd>@TR<<" short "|" name ">>: </dd>"
+-}
+-
+-function sel_option(name, caption, default, sel) {
+-	if (default == name) sel = " selected=\"selected\""
+-	else sel = ""
+-	return "<option value=\"" name "\"" sel ">@TR<<" caption ">></option>"
+-}
+diff --git a/package/webif/files/usr/lib/webif/form.awk b/package/webif/files/usr/lib/webif/form.awk
+deleted file mode 100644
+index 808b99e..0000000
+--- a/package/webif/files/usr/lib/webif/form.awk
++++ /dev/null
+@@ -1,100 +0,0 @@
+-# $1 = type
+-# $2 = form variable name
+-# $3 = form variable value
+-# $4 = (radio button) value of button
+-# $5 = string to append
+-# $6 = additional attributes 
+-
+-BEGIN {
+-	FS="|"
+-}
+-
+-# trim leading whitespaces 
+-{
+-	gsub(/^[ \t]+/,"",$1)
+-}
+-
+-$1 ~ /^onchange/ {
+-	onchange = $2
+-}
+-
+-($1 != "") && ($1 !~ /^option/) && (select_open == 1) {
+-	select_open = 0
+-	printf "</select>"
+-}
+-$1 ~ /^start_form/ {
+-	if ($3 != "") field_opts=" id=\"" $3 "\""
+-	else field_opts=""
+-	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
+-	start_form($2, field_opts);
+-	print "<table width=\"100%\" summary=\"Settings\">"
+-	form_help = ""
+-	form_help_link = ""
+-}
+-$1 ~ /^field/ {
+-	if (field_open == 1) print "</td></tr>"
+-	if ($3 != "") field_opts=" id=\"" $3 "\""
+-	else field_opts=""
+-	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
+-	print "<tr" field_opts ">"
+-	if ($2 != "") print "<td width=\"50%\">" $2 "</td><td width=\"50%\">"
+-	else print "<td colspan=\"2\">"
+-
+-	field_open=1
+-}
+-$1 ~ /^checkbox/ {
+-	if ($3==$4) opts="checked=\"checked\" "
+-	else opts=""
+-	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
+-	print "<input id=\"" $2 "_" $4 "\" type=\"checkbox\" name=\"" $2 "\" value=\"" $4 "\" " opts " />"
+-}
+-$1 ~ /^radio/ {
+-	if ($3==$4) opts="checked=\"checked\" "
+-	else opts=""
+-	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
+-	print "<input id=\"" $2 "_" $4 "\" type=\"radio\" name=\"" $2 "\" value=\"" $4 "\" " opts " />"
+-}
+-$1 ~ /^select/ {
+-	opts = ""
+-	if (onchange != "") opts = opts " onClick=\"" onchange "()\" onChange=\"" onchange "()\""
+-	print "<select id=\"" $2 "\" name=\"" $2 "\"" opts ">"
+-	select_id = $2
+-	select_open = 1
+-	select_default = $3
+-}
+-($1 ~ /^option/) && (select_open == 1) {
+-	if ($2 == select_default) option_selected=" selected=\"selected\""
+-	else option_selected=""
+-	if ($3 != "") option_title = $3
+-	else option_title = $2
+-	print "<option id=\"" select_id "_" $2 "\"" option_selected " value=\"" $2 "\">" option_title "&nbsp;&nbsp;</option>"
+-}
+-($1 ~ /^listedit/) {
+-	n = split($4 " ", items, " ")
+-	for (i = 1; i <= n; i++) {
+-		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 $2 "remove=" items[i] "\">@TR<<Remove>></a></td></tr>"
+-	}
+-	print "<tr><td width=\"100%\" colspan=\"2\"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"@TR<<Add>>\" /></td></tr>"
+-}
+-$1 ~ /^caption/ { print "<b>" $2 "</b>" }
+-$1 ~ /^string/ { print $2 }
+-$1 ~ /^text/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
+-$1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
+-$1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
+-$1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
+-$1 ~ /^helpitem/ { form_help = form_help "<dt>@TR<<" $2 ">>: </dt>" }
+-$1 ~ /^helptext/ { form_help = form_help "<dd>@TR<<" $2 ">> </dd>" }
+-$1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">@TR<<more...>></a></div>" }
+-
+-($1 ~ /^checkbox/) || ($1 ~ /^radio/) {
+-	print $5
+-}
+-
+-$1 ~ /^end_form/ {
+-	if (field_open == 1) print "</td></tr>"
+-	field_open = 0
+-	print "</table>"
+-	end_form(form_help, form_help_link);
+-	form_help = ""
+-	form_help_link = ""
+-}
+diff --git a/package/webif/files/usr/lib/webif/lang/ca/common.txt b/package/webif/files/usr/lib/webif/lang/ca/common.txt
+deleted file mode 100644
+index 3d19974..0000000
+--- a/package/webif/files/usr/lib/webif/lang/ca/common.txt
++++ /dev/null
+@@ -1,226 +0,0 @@
+-lang => Catal?
+-# Common
+-Settings saved => Canvis desats
+-Settings not saved => No s'han pogut desar els canvis
+-Save Changes => Desar canvis
+-Apply Changes => Aplicar canvis
+-Clear Changes => Desfer canvis
+-Review Changes => Comprovar canvis
+-Host Name => Nom de l'equip
+-Uptime => Uptime
+-Load => C?rrega del sistema
+-Version => Versi?
+-Categories => Categories
+-Subcategories => Subcategories
+-more... => m?s...
+-Add => Afegir
+-Remove => Eliminar
+-Warning => Atenci?
+-Password_warning => No heu establert una clau d'acc?s pel router (acc?s web i ssh). Per favor, elegiu-ne una ara (el nom d'usuari ser? 'root')
+-
+-# Categories
+-Info => Info
+-About => Quant a
+-Router Info => Informaci? del router
+-
+-Status => Estat
+-Connections => Connexions
+-DHCP => DHCP
+-Wireless => Wi-Fi
+-
+-System => Sistema
+-Password => Clau
+-Settings => Configuraci?
+-Installed Software => Programes instal?lats
+-Firmware Upgrade => Actualitzar Firmware
+-
+-Network => Xarxa
+-LAN => LAN
+-WAN => Internet
+-Wireless => Wi-Fi
+-Advanced Wireless => Wi-Fi (avan?at)
+-Hosts => Configuraci? de hosts
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Aquest programa ?s programari lliure; podeu redistribuir-lo i/o <br />modificar-lo baix els termes de la General Public License<br /> tal i com est? publicada per la Free Sofware Foundation; b? la versi? 2 d'aquesta Llic?ncia o b? (segons la seva elecci?) de qualsevol posterior.
+-Contributions by => Contribuidors
+-Layout based on => Aspecte basat en
+-by => realitzat per
+-
+-
+-No config change. => No hi ha hagut canvis a la configuraci?.
+-Config discarded. => Els canvis no s'han acceptat.
+-Config changes: => Configuraci? actual:
+-Updating config... => Actualitzant la configuraci?...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Versi? del firmware
+-Kernel Version => Versi? del Kernel
+-Current Date/Time => Data/Hora
+-MAC Address => Adre?a MAC
+-
+-
+-# 'Connections' page
+-Connection Status => Estat de les connexions
+-Physical Connections => Connexions f?siques
+-Router Connections => Connexions del router
+-
+-
+-# 'DHCP' page
+-DHCP leases => Pr?stecs DHCP
+-IP Address => Adre?a IP
+-Name => Nom
+-Expires in => Caduca d'ara a
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Estat del Wi-Fi
+-
+-# 'Password' page
+-Password Change => Canvi de la clau
+-New Password => Nova clau
+-Confirm Password => Confirmeu la clau
+-
+-# 'System Settings' page
+-System Settings => Par?metres del sistema
+-Host Name => Nom de l'host
+-Language => Idioma
+-
+-# 'Installed Software' page
+-Installed Packages => Paquets instal?lats
+-Update package lists => Actualitzaci? de la llista de paquets
+-Uninstall => Desinstal?lar
+-Install => Instal?lar
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Format del firmware
+-Error => Error
+-done => fet
+-Invalid_formt => Format del firmware inv?lid
+-Erase_JFFS2 => Esborrar la partici? JFFS2
+-Options => Opcions
+-Firmware_image => Fitxer del firmware
+-Upgrade => Actualitzar
+-Upgrading... => Actualitzant...
+-
+-# 'LAN Settings' page
+-LAN Settings => Opcions LAN
+-LAN Configuration => Configuraci? LAN
+-Netmask => M?scara de subxarxa
+-Default Gateway => Porta d'enlla? (gateway)
+-DNS Servers => Servidor DNS
+-DNS Address => Adre?a IP del DNS
+-
+-Note => Nota
+-
+-# 'WAN Settings' page
+-WAN Settings => Opcions d'Internet
+-WAN Configuration => Configuraci? d'Internet
+-PPTP Server IP => Adre?a IP del servidor PPTP
+-Connection Type => Tipus de connexi?
+-No WAN => Sense configuraci? d'Internet
+-DHCP => DHCP
+-Static IP => IP est?tica
+-IP Settings => Opcions IP
+-PPP Settings => Opcions PPP
+-Redial Policy => Pol?tica de reconnexi?
+-Connect on Demand => Baix demanda
+-Keep Alive => Connexi? permanent
+-Maximum Idle Time => Temps m?xim d'inactivitat
+-Redial Timeout => Temps de reconnexi?
+-MTU => MTU (mida dels paquets)
+-Username => Nom d'usuari
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Configuraci? Wi-Fi
+-Wireless Interface => Interf?cie Wi-Fi
+-WEP Key => Clau WEP
+-Selected WEP Key => Clau WEP seleccionada
+-WPA PSK => WPA-PSK
+-ESSID => ESSID
+-Channel => Canal
+-RADIUS IP Address => Adre?a IP del servidor RADIUS
+-RADIUS Server Key => Secret RADIUS
+-Enabled => Actiu
+-Disabled => Inactiu
+-ESSID Broadcast => Difusi? del SSID
+-Show => Mostrar
+-Hide => Ocultar
+-WLAN Mode => Mode Wi-Fi
+-Access Point => Punt d'acc?s
+-Client => Client
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Operation mode => Mode de funcionament
+-Encryption Settings => Par?metres d'enriptaci?
+-Encryption Type => Tipus d'encriptaci?
+-PSK => PSK
+-WPA Mode => Mode WPA
+-WPA Algorithms => Algoritmes WPA
+-WEP Keys => Clau WEP
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Configuraci? Wi-Fi avan?ada
+-WDS Connections => Connexions WDS
+-MAC Filter List => Filtrat per adre?a MAC
+-Filter Mode => Mode de filtrat
+-Allow => Autoritzar
+-Deny => Denegar
+-Set => Establir
+-Settings => Par?metres
+-Automatic WDS => WDS autom?tic
+-
+-# "Hosts" page
+-
+-MAC Address => Adre?a MAC
+-Configured Hosts => Equips configurats
+-DHCP Static => Entrades DHCP est?tiques
+-Host Names => Nom dels equips
+-
+-Up => Pujar
+-Down => Baixar
+-Edit => Editar
+-Delete => Esborrar
+-Save => Desar
+-Cancel => Rebutjar
+-
+-Forward => Redirigir
+-Accept => Acceptar
+-Drop => Rebutjar
+-
+-Firewall => Firewall
+-Firewall Rules => Regles del Firewall
+-Firewall Configuration => Configuraci? del Firewall
+-
+-New Rule => Nova regla
+-Match => Filtrar
+-Target => Acci?
+-Port => Port
+-
+-Protocol => Protocol
+-Source IP => IP origen
+-Destination IP => IP dest?
+-Source Ports => Ports origen
+-Destination Ports => Ports dest?
+-
+-Forward to => Redirigir a
+-Port => Port
+-
+-Helptext ESSID => SSID
+-Helptext DNS save => ?s recomanable desar els canvis abans d'afegir o eliminar servidors DNS a la llista
+-
+-Helptext Operation mode => Estableix el mode d'operaci? de la xarxa inal?mbrica (Wi-Fi) 'Client (bridge)' no canviar? la configuraci? de la interf?cie de xarxa. Simplement afegir? uns par?metres que permetran que la interf?cie wireless actui en certa mida com un bridge.
+-Helptext Encryption Type => 'WPA (RADIUS)' nom?s pot emprar-se en mode Punt d'Acc?s.<br /> 'WPA (PSK)' no funciona en mode Ad-Hoc.
+-Helptext IP Settings => Les opcions IP s?n opcionals per a DHCP y PPTP. Si les elegiu, s'empraran per defecte en cas de que la configuraci? autom?tica falli.
+-Helptext Idle Time => Nombre de segons sense activitat amb Internet que ha d'esperar el router abans de desconectar-se. (Nom?s pel mode Baix Demanda).
+-Helptext Redial Timeout => Nombre de segons sense rebre resposta del servidor que ha d'esperar el router per a tornar a connectar-se.
+-
+-# untranslated:
+-Available packages => Paquets disponibles
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/cz/common.txt b/package/webif/files/usr/lib/webif/lang/cz/common.txt
+deleted file mode 100644
+index 773e9d9..0000000
+--- a/package/webif/files/usr/lib/webif/lang/cz/common.txt
++++ /dev/null
+@@ -1,225 +0,0 @@
+-lang => &#268;esky
+-# Common
+-Settings saved => Nastaven&#237; ulo&#382;eno
+-Settings not saved => Nastaven&#237; nebylo ulo&#382;eno
+-Save Changes => Ulo&#382;it zm&#277;ny
+-Apply Changes => Prov&#233;st zm&#277;ny
+-Clear Changes => Vymazat zm&#277;ny
+-Review Changes => Prohl&#233;dnout zm&#277;ny
+-Host Name => Hostname
+-Uptime => Uptime
+-Load => Zat&#237;&#382;en&#237;
+-Version => Verze
+-Categories => Kategorie
+-Subcategories => Podkategorie
+-more... => v&#237;ce...
+-Add => P&#345;idat
+-Remove => Odebrat
+-Warning => Varov&#225;n&#237;
+-Password_warning => nen&#237; nastaveno &#382;&#225;dn&#233; heslo pro p&#345;&#237;stup do webov&#233; administrace a p&#345;es SSH.<br />Nastavte jej pros&#237;m nyn&#237; (Login ve webu pou&#382;&#237;vejte: 'root').
+-
+-# Categories
+-Info => Info
+-About => Projekt
+-Router Info => Router
+-
+-Status => Stav
+-Connections => P&#345;ipojen&#237;
+-DHCP => DHCP
+-Wireless => WLAN
+-
+-System => Syst&#233;m
+-Password => Heslo
+-Settings => Nastaven&#237;
+-Installed Software => Nainstalovan&#253; software
+-Firmware Upgrade => Flashnut&#237; firmware
+-
+-Network => S&#237;&#357;
+-LAN => LAN
+-WAN => WAN port
+-Wireless => WLAN
+-Advanced Wireless => WLAN (podrobn&#233;)
+-Hosts => Stanice (hosts)
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Tento program pat&#345;&#237; mezi voln&#253; software, m&#367;&#382;ete jej distribuovat a/nebo m&#277;nit pod podm&#237;nkami uveden&#253;mi <br /> v licenci GNU GPL (General Public License) vydan&#253;mi Nadac&#237; pro svobodn&#253; software (Free Software Foundation), <br /> jej&#237; druh&#233; verze, p&#345;&#237;padn&#277; pozd&#277;j&#353;&#237;ch verz&#237;.
+-Contributions by => S p&#345;isp&#277;n&#237;m
+-Layout based on => Layout postaven na
+-by => od
+-
+-
+-No config change. => Nebyly provedeny &#382;&#225;dn&#233; zm&#277;ny konfigurace.
+-Config discarded. => Va&#353;e nastaven&#237; byla zahozena.
+-Config changes: => Aktu&#225;ln&#237; zm&#277;ny konfigurace:
+-Updating config... => Aktualizuji konfiguraci...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Verze firmware
+-Kernel Version => Verze j&#225;dra
+-Current Date/Time => Aktu&#225;ln&#237; datum/&#269;as
+-MAC Address => MAC adresa
+-
+-
+-# 'Connections' page
+-Connection Status => Stav spojen&#237;
+-Physical Connections => Obsah ARP cache - aktivn&#237; MAC/IP adresy
+-Router Connections => Spojen&#237; na router
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP v&#253;p&#367;j&#269;ky
+-IP Address => IP adresa
+-Name => Jm&#233;no
+-Expires in => Vypr&#353;&#237;
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Stav wifi
+-
+-# 'Password' page
+-Password Change => Zm&#277;na hesla
+-New Password => Nov&#233; heslo
+-Confirm Password => Nov&#233; heslo (potvrzen&#237;)
+-
+-# 'System Settings' page
+-System Settings => Syst&#233;mov&#225; nastaven&#237;
+-Host Name => Hostname
+-Language => Jazyk
+-
+-# 'Installed Software' page
+-Installed Packages => Nainstalovan&#233; bal&#237;&#269;ky
+-Available packages => Dostupn&#233; bal&#237;&#269;ky
+-Update package lists => Aktualizovat seznam bal&#237;&#269;k&#367;
+-Uninstall => Odinstalovat
+-Install => Nainstalovat
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Form&#225;t firmware
+-Error => Chyba
+-done => hotovo
+-Invalid_format => Form&#225;t firmware je nezn&#225;m&#253;
+-Erase_JFFS2 => Smazat JFFS2 oblast
+-Options => Mo&#382;nosti
+-Firmware_image => Soubor firmware:
+-Upgrade => Flashnout
+-Upgrading... => Flashuji...
+-
+-# 'LAN Settings' page
+-LAN Settings => Nastaven&#237; LAN
+-LAN Configuration => Konfigurace LAN
+-Netmask => Maska
+-Default Gateway => Br&#225;na
+-DNS Servers => DNS servery
+-DNS Address => Adresa DNS serveru
+-
+-Note => Pozn&#225;mka
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => Nastaven&#237; WAN portu
+-WAN Configuration => Konfigurace
+-PPTP Server IP => Adresa PPTP serveru
+-Connection Type => Typ p&#345;ipojen&#237;
+-No WAN => Odpojeno
+-DHCP => DHCP
+-Static IP => Pevn&#225; IP
+-IP Settings => Nastaven&#237; IP
+-PPP Settings => Nastaven&#237; PPP
+-Redial Policy =>  Nav&#225;z&#225;n&#237; spojen&#237;
+-Connect on Demand => Na vy&#382;&#225;d&#225;n&#237; (Connect on Demand)
+-Keep Alive => St&#225;le p&#345;ipojen (Keep Alive)
+-Maximum Idle Time => Maxim&#225;ln&#237; &#269;as bez aktivity (Maximum Idle Time)
+-Redial Timeout => Prodleva znovunav&#225;z&#225;n&#237; spojen&#237; po jeho ztr&#225;t&#277; (Redial Timeout)
+-MTU => Maxim&#225;ln&#237; velikost paketu (MTU)
+-Username => U&#382;ivatelsk&#233; jm&#233;no
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Konfigurace wifi
+-Wireless Interface => Wifi rozhran&#237;
+-WEP Key => WEP kl&#237;&#269;
+-Selected WEP Key => Vybran&#253; WEP kl&#237;&#269;
+-WPA PSK => WPA kl&#237;&#269;
+-ESSID => ESSID
+-Channel => Kan&#225;l
+-RADIUS IP Address => Adresa RADIUS serveru
+-RADIUS Server Key => Heslo RADIUS serveru
+-Enabled => Zapnuto
+-Disabled => Vypnuto
+-ESSID Broadcast => Skryt&#237; ESSID (ESSID-Broadcast) 
+-Show => Zobrazeno
+-Hide => Skryto
+-WLAN Mode => Opera&#269;n&#237; m&#243;d
+-Access Point => Access Point
+-Client => Klient
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => &#352;ifrov&#225;n&#237; p&#345;enosu
+-Encryption Type => Typ &#353;ifrov&#225;n&#237;
+-PSK => WPA PSK
+-WPA Mode => M&#243;d WPA
+-WPA Algorithms => WPA algoritmus
+-WEP Keys => WEP kl&#237;&#269;e
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Roz&#353;&#237;&#345;en&#233; nastaven&#237; wifi
+-WDS Connections => WDS spojen&#237;
+-MAC Filter List => Seznam MAC filtru
+-Filter Mode => M&#243;d MAC filtru
+-Allow => Povolit MAC v seznamu
+-Deny => Zak&#225;zat MAC s seznamu
+-Set => Nastavit
+-Settings => Nastaven&#237;
+-Automatic WDS => Automatick&#233; WDS spojen&#237; (LazyWDS)
+-
+-# "Hosts" page
+-
+-MAC Address => MAC adresa
+-Configured Hosts => Konfigurace stanic (hosts)
+-DHCP Static => Pevn&#233; p&#345;id&#277;len&#237; IP podle MAC (DHCP)
+-Host Names => Jm&#233;na stanic (hosts)
+-
+-
+-Up => Nahoru
+-Down => Dol&#367;
+-Edit => Editovat
+-Delete => Smazat
+-Save => Ulo&#382;it
+-Cancel => Storno
+-
+-Forward => Forward
+-Accept => Accept
+-Drop => Drop
+-
+-Firewall => Firewall
+-Firewall Rules => Pravidla firewallu
+-Firewall Configuration => Konfigurace firewallu
+-
+-New Rule => Nov&#233; pravidlo
+-Match => Filtr
+-Target => C&#237;l
+-Port => Port
+-
+-Protocol => Protokol
+-Source IP => Zdrojov&#225; IP
+-Destination IP => C&#237;lov&#225; IP
+-Source Ports => Zdrojov&#253; port
+-Destination Ports => C&#237;lov&#253; port
+-
+-Forward to => Forward na
+-Port => Port
+-
+-Helptext ESSID => N&#225;zev Va&#353;&#237; bezdr&#225;tov&#233; s&#237;t&#277;
+-Helptext DNS save => P&#345;ed &#250;pravou nastaven&#237; DNS server&#367; ulo&#382;te ostatn&#237; zm&#277;ny na t&#233;to str&#225;nce.
+-
+-Helptext Operation mode => Toto nastaven&#237; m&#277;n&#237; m&#243;d bezdr&#225;tov&#233; s&#237;t&#277;. Volbou Klient (bridge) se nezm&#277;n&#237; nastaven&#237; s&#237;&#357;ov&#253;ch rozhran&#237;, pouze se nastav&#237; n&#277;kter&#233; parametry ovlada&#269;e wifi, kter&#233; umo&#382;n&#237; funk&#269;n&#277; omezenou mo&#382;nost vytvo&#345;en&#237; bridge nad rozhran&#237;mi.
+-Helptext Encryption Type => 'WPA (RADIUS)' lze pou&#382;&#237;t pouze v m&#243;du Access Point. <br /> 'WPA (PSK)' nelze pou&#382;&#237;t v Ad-Hoc m&#243;du. 
+-Helptext IP Settings => Nastaven&#237; IP je pro mo&#382;nost DHCP a PPTP voliteln&#233;. Zadan&#225; adresa se pou&#382;ije v p&#345;&#237;pad&#277;, &#382;e nen&#237; DHCP server dostupn&#253;.
+-Helptext Idle Time => &#268;as v sekund&#225;ch, po kter&#253; kdy&#382; nedojde k &#382;&#225;dn&#233; aktivit&#277;, je spojen&#237; do Internetu uzav&#345;eno. (pouze pro volbu Connect on Demand)
+-Helptext Redial Timeout => &#268;as po odpojen&#237;, po kter&#253; router &#269;ek&#225;, ne&#382; se pokus&#237; znovu nav&#225;zat spojen&#237;.
+diff --git a/package/webif/files/usr/lib/webif/lang/de/common.txt b/package/webif/files/usr/lib/webif/lang/de/common.txt
+deleted file mode 100644
+index f8ab28d..0000000
+--- a/package/webif/files/usr/lib/webif/lang/de/common.txt
++++ /dev/null
+@@ -1,228 +0,0 @@
+-lang => Deutsch
+-# Common
+-Settings saved => Einstellungen gespeichert
+-Settings not saved => Einstellungen nicht gespeichert
+-Save Changes => Speichern
+-Apply Changes => &Uuml;bernehmen
+-Clear Changes => Verwerfen
+-Review Changes => Anzeigen
+-Host Name => Hostname
+-Uptime => Uptime
+-Load => Systemlast
+-Version => Version
+-Categories => Kategorien
+-Subcategories => Unterkategorien
+-more... => Weitere Informationen...
+-Add => Hinzuf&uuml;gen
+-Remove => Entfernen
+-Warning => Warnung
+-Password_warning => es wurde noch kein Passwort f&uuml;r Web-Administration und SSH gesetzt.<br />Bitte geben Sie jetzt ein neues Passwort ein (Benutzername im Browser: 'root').
+-
+-# Categories
+-Info => Info
+-About => &Uuml;ber
+-Router Info => Routerinformationen
+-
+-Status => Status
+-Connections => Netzwerkverbindungen
+-DHCP => DHCP
+-Wireless => WLAN
+-
+-System => System
+-Password => Passwort
+-Settings => Einstellungen
+-Installed Software => Installierte Software
+-Firmware Upgrade => Firmware aktualisieren
+-
+-Network => Netzwerk
+-LAN => LAN
+-WAN => Internet
+-Wireless => WLAN
+-Advanced Wireless => WLAN (erweitert)
+-Hosts => Host-Konfiguration
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Dieses Programm ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License,<br /> wie von der Free Software Foundation ver&ouml;ffentlicht, weitergeben und/oder modifizieren,<br /> entweder gem&auml;&szlig; Version 2 der Lizenz oder (nach Ihrer Option) jeder sp&auml;teren Version.
+-Contributions by => Mit Beitr&auml;gen von
+-Layout based on => Layout basiert auf
+-by => von
+-
+-
+-No config change. => Es wurden keine Konfigurations&auml;nderungen vorgenommen.
+-Config discarded. => Ihre Konfigurations&auml;nderungen wurden verworfen.
+-Config changes: => Aktuelle Konfigurations&auml;nderungen:
+-Updating config... => Aktualisiere die Konfiguration...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Firmwareversion
+-Kernel Version => Kernelversion
+-Current Date/Time => Datum/Uhrzeit
+-MAC Address => MAC-Adresse
+-
+-
+-# 'Connections' page
+-Connection Status => Verbindungsstatus
+-Physical Connections => Netzwerkschnittstellen
+-Router Connections => Netzwerkverbindungen auf dem Router
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP-Leases
+-IP Address => IP-Adresse
+-Name => Name
+-Expires in => G&uuml;ltigkeitsdauer
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => WLAN-Status
+-
+-# 'Password' page
+-Password Change => Passwort &auml;ndern
+-New Password => Neues Passwort
+-Confirm Password => Passwort best&auml;tigen
+-
+-# 'System Settings' page
+-System Settings => Systemeinstellungen
+-Host Name => Hostname
+-Language => Sprache
+-
+-# 'Installed Software' page
+-Installed Packages => Installierte Pakete
+-Update package lists => Paketlisten aktualisieren
+-Uninstall => Deinstallieren
+-Install => Installieren
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmware-Format
+-Error => Fehler
+-done => fertig
+-Invalid_format => Das Dateiformat der Firmware ist ung&uuml;ltig
+-Erase_JFFS2 => JFFS2-Partition l&ouml;schen
+-Options => Optionen
+-Firmware_image => Firmware-Datei:
+-Upgrade => Aktualisieren
+-Upgrading... => Aktualisiere...
+-
+-# 'LAN Settings' page
+-LAN Settings => Netzwerkeinstellungen
+-LAN Configuration => Netzwerkkonfiguration
+-Netmask => Subnetzmaske
+-Default Gateway => Standardgateway
+-DNS Servers => DNS-Server
+-DNS Address => DNS-Serveradresse
+-
+-Note => Hinweis
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => Internet-Einstellungen
+-WAN Configuration => Internet-Konfiguration
+-PPTP Server IP => PPTP-Serveradresse
+-Connection Type => Verbindungsart
+-No WAN => Keine Verbindung
+-DHCP => DHCP
+-Static IP => Statische Konfiguration
+-IP Settings => IP-Konfiguration
+-PPP Settings => PPP-Einstellungen
+-Redial Policy => Verbindungsaufbau
+-Connect on Demand => Bei Bedarf
+-Keep Alive => Verbindung aufrechterhalten
+-Maximum Idle Time => Wartezeit bei Inaktivit&auml;t
+-Redial Timeout => Wartezeit bei unterbrochener Verbindung
+-MTU => Maximale Paketgr&ouml;&szlig;e
+-Username => Benutzername
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => WLAN-Konfiguration
+-Wireless Interface => WLAN-Interface
+-WEP Key => WEP-Schl&uuml;ssel
+-Selected WEP Key => Ausgew&auml;hlter WEP Schl&uuml;ssel
+-WPA PSK => WPA-Schl&uuml;ssel
+-ESSID => ESSID
+-Channel => Kanal
+-RADIUS IP Address => RADIUS-Serveradresse
+-RADIUS Server Key => RADIUS-Serverpasswort
+-Enabled => Aktiviert
+-Disabled => Deaktiviert
+-ESSID Broadcast => ESSID-Broadcast 
+-Show => Anzeigen
+-Hide => Verstecken
+-WLAN Mode => Betriebsmodus
+-Access Point => Access Point
+-Client => Client
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => Verschl&uuml;sselungseinstellungen
+-Encryption Type => Verschl&uuml;sselungsart
+-PSK => Passwort
+-WPA Mode => WPA-Modus
+-WPA Algorithms => WPA-Verschl&uuml;sselungsalgorithmen
+-WEP Keys => WEP-Schl&uuml;ssel
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => WLAN-Konfiguration (erweitert)
+-WDS Connections => WDS-Verbindungen
+-MAC Filter List => Zugriffsbeschr&auml;nkung (MAC-Adresse)
+-Filter Mode => Filtermodus
+-Allow => Erlauben
+-Deny => Verweigern
+-Set => Setzen
+-Settings => Einstellungen
+-Automatic WDS => Automatische WDS-Verbindung
+-
+-# "Hosts" page
+-
+-MAC Address => MAC-Adresse
+-Configured Hosts => Konfigurierte Hosts
+-DHCP Static => Statische DHCP-Eintr&auml;ge
+-Host Names => Host-Eintr&auml;ge
+-
+-
+-Up => Hoch
+-Down => Runter
+-Edit => Bearbeiten
+-Delete => L&ouml;schen
+-Save => Speichern
+-Cancel => Abbrechen
+-
+-Forward => Weiterleiten
+-Accept => Zulassen
+-Drop => Verweigern
+-
+-Firewall => Firewall
+-Firewall Rules => Firewall-Regeln
+-Firewall Configuration => Firewall-Konfiguration
+-
+-New Rule => Neue Regel
+-Match => Filter
+-Target => Ziel
+-Port => Port
+-
+-Protocol => Protokoll
+-Source IP => Quell-IP
+-Destination IP => Ziel-IP
+-Source Ports => Quell-Ports
+-Destination Ports => Ziel-Ports
+-
+-Forward to => Weiterleiten an
+-Port => Port
+-
+-Helptext ESSID => Name des Funknetzwerks
+-Helptext DNS save => Sie m&uuml;ssen Ihre &Auml;nderungen an dieser Seite speichern, bevor Sie DNS-Server hinzuf&uuml;gen oder entfernen
+-
+-Helptext Operation mode => Setzt den Betriebsmodus f&uuml;r das  WLAN-Interface. Die Einstellung 'Client (Bridge)' &auml;ndert nichts an den eigentlichen Netzwerkeinstellungen, es &auml;ndert lediglich einige Parameter im WLAN-Treiber, damit man das Interface eingeschr&auml;nkt in einer Bridge verwenden kann.
+-Helptext Encryption Type => 'WPA (RADIUS)' wird nur im Access-Point-Modus unterst?tzt. <br /> 'WPA (PSK)' funktioniert nicht im Ad-Hoc-Modus. 
+-Helptext IP Settings => IP-Einstellungen sind optional f?r DHCP und PPTP. Wenn sie gesetzt sind, werden sie als Standardwerte verwendet, falls kein DHCP-Server erreichbar ist. 
+-Helptext Idle Time => Wartezeit in Sekunden, nach der bei Inaktivit?t die Internetverbindung getrennt wird.
+-Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provider warten soll, bevor die Verbindung neu aufgebaut wird.
+-
+-# untranslated:
+-Available packages => Verf&uuml;gbare Pakete
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/dk/common.txt b/package/webif/files/usr/lib/webif/lang/dk/common.txt
+deleted file mode 100644
+index bd8f867..0000000
+--- a/package/webif/files/usr/lib/webif/lang/dk/common.txt
++++ /dev/null
+@@ -1,231 +0,0 @@
+-lang => Dansk
+-# Common
+-Settings saved => Indstillingerne er gemt
+-Settings not saved => Indstillinger er ikke gemt
+-Save Changes => Gem &aelig;ndringerne
+-Apply Changes => Aktiver &aelig;ndringer
+-Clear Changes => Glem &aelig;ndringerne
+-Review Changes => Se &aelig;ndringer
+-Host Name => V&aelig;rtsnavn
+-Uptime => Oppetid
+-Load => Systembelastning
+-Version => Version
+-Categories => Kategorier
+-Subcategories => Underkategorier
+-more... => mere...
+-Add => Tilf&oslash;je
+-Remove => Fjern
+-Warning => Advarsel
+-Password_warning => Der er ikke sat noget kodeord eller l&oslash;sen p&aring; hverken Webadministration eller SSH.<br />V&aelig;r venlig at v&aelig;lge og/eller indtaste dit kodeord (Brugernavn er 'root' med sm&aring; bogstaver).
+-
+-# Categories
+-Info => Info
+-About => Om
+-Router Info => Routerinformation
+-
+-Status => Status
+-Connections => Netv&aelig;rksforbindelser
+-DHCP => DHCP
+-Wireless => Tr&aring;dl&oslash;s
+-
+-System => System
+-Password => Kodeord
+-Settings => Indstillinger
+-Installed Software => Installeret programmel
+-Firmware Upgrade => Firmware opgradering
+-
+-Network => Netv&aelig;rk
+-LAN => Lokalnet
+-WAN => Internet
+-Wireless => Tr&aring;dl&oslash;s
+-Advanced Wireless => Avanceret tr&aring;dl&oslash;s
+-Hosts => V&aelig;rtsnavne
+-
+-
+-# 'About' page
+-Copyright => Ophavsret
+-
+-GPL_Text => Dette program er fri software.  De m&aring; bruge, &aelig;ndre og videredistribuere det under betingelserne for "GNU General Public License",<br /> som offentliggjort af "Free Software Foundation" (Den frie softwarebev&aelig;gelse), enten i version 2 af licensen eller (efter deres valg), en hvilkensomhelst senere version.
+-
+-Contributions by => Bidrag fra
+-Layout based on => Layoutet er baseret p&aring;
+-by => af
+-
+-
+-No config change. => Ingen konfigurations&aelig;ndring foretaget
+-Config discarded. => Konfigurations&aelig;ndringerne blev kasseret
+-Config changes: => Forel&oslash;bige &aelig;ndringer
+-Updating config... => S&aelig;tter &aelig;ndringerne i kraft
+-
+-# 'Router Info' page
+-Firmware Version => Firmwareversion
+-Kernel Version => Kerneversion
+-Current Date/Time => Aktuel dato/tid
+-MAC Address => MAC adresse
+-
+-
+-# 'Connections' page
+-Connection Status => Forbindelsesstatus
+-Physical Connections => Fysiske forbindelser
+-Router Connections => Routerens forbindelser
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP leasinger
+-IP Address => IP adresse
+-Name => Navn
+-Expires in => Udl&oslash;bstid
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Tr&aring;dl&oslash;s status
+-
+-# 'Password' page
+-Password Change => &AElig;ndre kodeord
+-New Password => Nyt kodeord
+-Confirm Password => Nyt kodeord igen
+-
+-# 'System Settings' page
+-System Settings => Systemindstillinger
+-Host Name => V&aelig;rtsnavn
+-Language => Sprog
+-
+-# 'Installed Software' page
+-Installed Packages => Installerede pakker
+-Update package lists => Opdater pakkelisten
+-Uninstall => Afindstaller
+-Install => Installer
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmwareformat
+-Error => Fejl
+-done => f&aelig;rdig
+-Invalid_format => Ubrugelig_format
+-Erase_JFFS2 => Slet JFFS2 partitionen
+-Options => Tilvalg
+-Firmware_image => Firmwarefil:
+-Upgrade => Opgradere
+-Upgrading... => Opgraderer...
+-
+-# 'LAN Settings' page
+-LAN Settings => Lokale netindstillinger
+-LAN Configuration => Lokal netv&aelig;rkskonfiguration
+-Netmask => Undernetmaske
+-Default Gateway => Standard gateway
+-DNS Servers => DNS-Server
+-DNS Address => DNS-Serveradresse
+-
+-Note => Bem&aelig;rk
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => Internet indstillinger
+-WAN Configuration => Internetkonfiguration
+-PPTP Server IP => PPTP-serveradresse
+-Connection Type => Forbindelsestype
+-No WAN => Ingen Internetops&aelig;tning
+-DHCP => DHCP
+-Static IP => Statisk IP
+-IP Settings => IP indstillinger
+-PPP Settings => PPP indstillinger
+-Redial Policy => Genopkaldspolitik
+-Connect on Demand => Forbind n&aring;r behovet er der
+-Keep Alive => Hold forbindelsen i live (keep alive)
+-Maximum Idle Time => Maksimal tid i tomgang (max idle)
+-Redial Timeout => Opkaldstimeout
+-MTU => Maksimal pakkest&oslash;relse (MTU)
+-Username => Brugernavn
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Tr&aring;dl&oslash;s konfiguration
+-Wireless Interface => Tr&aring;dl&oslash;s netkort
+-WEP Key => WEP n&oslash;gle
+-Selected WEP Key => Valgt WEP n&oslash;gle
+-WPA PSK => WPA n&oslash;gle
+-ESSID => ESSID
+-Channel => Kanal
+-RADIUS IP Address => IP adressen p&aring; RADIUS server
+-RADIUS Server Key => Kodeord til RADIUS server
+-Enabled => Aktiveret
+-Disabled => Deaktiveret
+-ESSID Broadcast => ESSID-Broadcast 
+-Show => Vis
+-Hide => Skjul
+-WLAN Mode => Tr&aring;dl&oslash;s tilstand
+-Access Point => Access Point
+-Client => Klient
+-Bridge => bro
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => Krypteringsindstillinger
+-Encryption Type => Krypteringstype
+-PSK => PSK kode
+-WPA Mode => WPA tilstand
+-WPA Algorithms => WPA krypteringsalgoritme
+-WEP Keys => WEP n&oslash;gler
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Avanceret ops&aelig;tning af tr&aring;dl&oslash;s
+-WDS Connections => WDS forbindelser (WDS repeater)
+-MAC Filter List => Filteringsliste (MAC-numre)
+-Filter Mode => Filtreingstilstand
+-Allow => Tillad
+-Deny => Forbyd
+-Set => S&aelig;t
+-Settings => Indstillinger
+-Automatic WDS => Automatisk WDS forbindelse
+-
+-# "Hosts" page
+-
+-MAC Address => MAC adresse
+-Configured Hosts => V&aelig;rtsnavne
+-DHCP Static => Statiske IP adresser til DHCP
+-Host Names => V&aelig;rtsnavne
+-
+-
+-Up => Op
+-Down => Ned
+-Edit => Rette
+-Delete => Slette
+-Save => Gemme
+-Cancel => Annullere
+-
+-Forward => Forward (videresend)
+-Accept => Accept (tillad)
+-Drop => Drop (smid v&aelig;k)
+-
+-Firewall => Firewall
+-Firewall Rules => Firewall regler
+-Firewall Configuration => Firewallkonfiguration
+-
+-New Rule => Ny regel
+-Match => Match (sammenlign)
+-Target => Target (G&aring; til)
+-Port => Port
+-
+-Protocol => Protokol
+-Source IP => Afsenders IP
+-Destination IP => Modtagers IP
+-Source Ports => Afsender porte
+-Destination Ports => Modtager porte
+-
+-Forward to => Send videre til
+-Port => Port
+-
+-Helptext ESSID => Navn p&aring; tr&aring;dl&oslash;s netv&aelig;rk
+-Helptext DNS save => Gem &aelig;ndringer p&aring; denne side f&oslash;r du tilf&oslash;jer eller fjerner DNS servere. (Hvis ikke du vil miste dem.)
+-
+-Helptext Operation mode => S&aelig;tter driftstilstanden for den tr&aring;dl&oslash;se del af routeren.  'Klient' og 'Klient (bro)' bruges til at forbinde 2 tr&aring;dl&oslash;se routere.  I mange tilf&aelig;lde er WDS en bedre (men mere avanceret) l&oslash;sning.  'Klient' udnytter dog b&aring;ndbredden bedst, hvis du vitterlig kun har en maskine tilsluttet.  <br /> Indstillingen 'Klient (bro)' &aelig;ndrer ikke direkte ved netv&aelig;rksindstillingerne. Det er et beskidt hack som f&aring;r routeren til at foregiver at kun en maskine (et MAC nummer) er tilsluttet. Det sker for at overvinde et problem i 802.11 protokollen, som forhindrer at man problemfrit (i almindelig 'Klient'-tilstand) kan bruge den tr&aring;dl&oslash;se forbindelse fra flere maskiner samtidig. <br /> AP bruges til en standalone router, hvor f.eks. b&aelig;rbare computere skal have adgang til Internet og/eller lokalnet. <br /> Hvis du ikke ved hvad 'Ad Hoc' tilstanden g&oslash;r, har du h&oslash;jst sand!
+ synligt ikke brug for den.
+-
+-Helptext Encryption Type => 'WPA (RADIUS)' er kun underst&oslash;ttet i AP (Access Point) tilstand. <br /> 'WPA (PSK)' fungerer ikke i 'Ad-Hoc' tilstand.
+-
+-Helptext IP Settings => IP indstilinger er frivillig for DHCP og PPTP.  N&aring;r de er sat, bliver de brugt som standv&aelig;rdiger, hvis der ikke er en tilg&aelig;ngelig DHCP server.
+-
+-Helptext Idle Time => Ventetid i sekunder f&oslash;r inaktivitet bliver &aring;rsagen til at forbindelsen afbrydes.
+-
+-Helptext Redial Timeout => Ventetid f&oslash;r der pr&oslash;ves at ringe op igen.
+-
+-# untranslated:
+-Available packages => Available packages
+diff --git a/package/webif/files/usr/lib/webif/lang/ee/common.txt b/package/webif/files/usr/lib/webif/lang/ee/common.txt
+deleted file mode 100644
+index e3690cd..0000000
+--- a/package/webif/files/usr/lib/webif/lang/ee/common.txt
++++ /dev/null
+@@ -1,230 +0,0 @@
+-lang => Eesti
+-#Common 
+-Settings saved => S&auml;tted salvestatud
+-Settings not saved => S&auml;tted on salvestamata
+-Save Changes => Salvesta muudatused
+-Apply Changes => Rakenda muudatused
+-Clear Changes => Kustuta muudatused
+-Review Changes => Vaata tehtud muudatusi
+-Host Name => Hostinimi
+-Uptime => T&ouml;&ouml;v&otilde;imeaega seni
+-Load => Koormus
+-Version => Versioon
+-Categories => Kategooriad
+-Subcategories => Alamkategooriad
+-more... => veel... 
+-Add => Lisa
+-Remove => Eemalda
+-Warning => Hoiatus
+-Password_warning => veebilidese ja SSH salas&otilde;na on seadmata<br />Palun, sisesta see (veebiliidese kasutajanimi on 'root').
+- 
+-# Categories 
+-Info => Info
+-About => Teavet
+-Router Info => Marsruuteri info
+- 
+-Status => Olek
+-Connections => &Uuml;hendused
+-DHCP => DHCP 
+-Wireless => Raadioliides
+- 
+-System => S&uuml;steem
+-Password => Parool
+-Settings => S&auml;tted
+-Installed Software => Installitud tarkvara
+-Firmware Upgrade => P&uuml;sivara uuendamine
+- 
+-Network => V&otilde;rk
+-LAN => LAN 
+-WAN => WAN 
+-Wireless => Raadioliides
+-Advanced Wireless => Raadioliidese t&auml;psemad s&auml;tted
+-Hosts => Hostid
+- 
+-
+-# About page 
+-Copyright => Copyright 
+- 
+-GPL_Text => K&auml;esolev programm on vabavara; seda v&otilde;ib levitada ja/v&otilde;i <br >modifitseerida vastavalt Free Software Foundationi <br > avaldatud avaliku litsentsi GNU General Public License 2. versiooni v&otilde;i <br > (teie valikul) mis tahes uuema versiooni tingimustele.
+- 
+-Contributions by => Kaasaaitajad
+-Layout based on => Kujunduse idee
+-by => autor
+- 
+- 
+-No config change. => Konfiguratsioon muutmata. 
+-Config discarded. => Konfiguratsioon h&uuml;ljatud. 
+-Config changes: => Konfiguratsiooni muudatused: 
+-Updating config... => Uuendan konfiguratsiooni... 
+- 
+-# Router Info page 
+-Firmware Version => P&uuml;sivara versioon
+-Kernel Version => Kerneli versioon
+-Current Date/Time => Praegune kuup&auml;ev/kellaaeg
+-MAC Address => MAC-aadress 
+- 
+- 
+-# Connections page 
+-Connection Status => &Uuml;henduse olek
+-Physical Connections => F&uuml;&uuml;silised &uuml;hendused
+-Router Connections => Marsruuteri&uuml;hendused
+- 
+- 
+-# DHCP page 
+-DHCP leases => DHCP antud aadressid 
+-IP Address => IP-aadress
+-Name => Nimi
+-Expires in => Aegub
+- 
+- 
+-# Wireless Status page 
+-Wireless Status => Raadioliidese olek
+- 
+-# Password page 
+-Password Change => Parooli muutmine
+-New Password => Uus parool
+-Confirm Password => Korrake parooli
+- 
+-# System Settings page 
+-System Settings => S&uuml;steemi s&auml;tted
+-Host Name => Hostinimi
+-Language => Keel
+- 
+-# Installed Software page 
+-Installed Packages => Installitud paketid
+-Update package lists => V&auml;rskenda paketiloendit
+-Uninstall => Desinstalli
+-Install => Installi
+-Available packages => Saadaolevad paketid 
+- 
+-# Firmware Upgrade page 
+-Firmware format => P&uuml;sivara vorming
+-Error => T&otilde;rge
+-done => valmis
+-Invalid_format => Vale vorming
+-Erase_JFFS2 => Kustuta JFFS2 
+-Options => Valikud
+-Firmware_image => P&uuml;sivara t&otilde;mmis
+-Upgrade => Versiooniuuendus
+-Upgrading... => Uuendan... 
+- 
+-# LAN Settings page 
+-LAN Settings => LAN-i s&auml;tted 
+-LAN Configuration => LAN-i konfiguratsioon 
+-Netmask => V&otilde;rgu mask
+-Default Gateway => Vaikel&uuml;&uuml;s
+-DNS Servers => DNS-serverid 
+-DNS Address => DNS-i aadress
+- 
+-Note => M&auml;rkus
+- 
+- 
+-# WAN Settings page 
+-WAN Settings => WAN-i s&auml;tted
+-WAN Configuration => WAN-i konfiguratsioon
+-PPTP Server IP => PPTP-serveri IP 
+-Connection Type => &Uuml;henduse t&uuml;&uuml;p
+-No WAN => WAN-i ei kasutata
+-DHCP => DHCP 
+-Static IP => Staatiline IP
+-IP Settings => IP-s&auml;tted
+-PPP Settings => PPP-s&auml;tted
+-Redial Policy => Kordusvalimispoliitika
+-Connect on Demand => &Uuml;henda n&otilde;udmisel
+-Keep Alive => Hoia &uuml;hendust t&ouml;&ouml;s
+-Maximum Idle Time => Maksimaalne j&otilde;udeaeg
+-Redial Timeout => Kordusvalimise aegumine
+-MTU => MTU 
+-Username => Kasutajanimi
+- 
+- 
+-# Wireless Configuration page 
+-Wireless Configuration => Raadioliidese konfiguratsioon 
+-Wireless Interface => Raadioliides
+-WEP Key => WEP-v&otilde;ti 
+-Selected WEP Key => Valitud WEP-v&otilde;ti 
+-WPA PSK => WPA PSK 
+-ESSID => ESSID 
+-Channel => Kanal
+-RADIUS IP Address => RADIUS IP-aadress
+-RADIUS Server Key => RADIUS-serveri v&otilde;ti 
+-Enabled => Lubatud
+-Disabled => Keelatud
+-ESSID Broadcast => ESSID-i levindamine 
+-Show => N&auml;ita
+-Hide => Peida
+-WLAN Mode => WLAN-i rez"iim
+-Access Point => AP
+-Client => Klient
+-Bridge => Sild
+-Ad-Hoc => Ad-Hoc 
+-Encryption Settings => Kr&uuml;pteerimise s&auml;tted
+-Encryption Type => Kr&uuml;pteerimise t&uuml;&uuml;p
+-PSK => PSK 
+-WPA Mode => WPA rez"iim 
+-WPA Algorithms => WPA algoritmid 
+-WEP Keys => WEP-v&otilde;tmed 
+- 
+- 
+-# Advanced Wireless Configuration page 
+-Advanced Wireless Configuration => Raadioliidese t&auml;psem konfiguratsioon
+-WDS Connections => WDS-&uuml;hendused 
+-MAC Filter List => MAC-filtri loend 
+-Filter Mode => Filtri rez"iim
+-Allow => Luba
+-Deny => Keela
+-Set => Sea 
+-Settings => S&auml;tted
+-Automatic WDS => Automaatne WDS
+- 
+-# "Hosts" page 
+- 
+-MAC Address => MAC-aadress 
+-Configured Hosts => Konfigureeritud hostid
+-DHCP Static => Staatiline DHCP
+-Host Names => Hostinimed
+- 
+- 
+-Up => &Uuml;les
+-Down => Alla
+-Edit => Muuda
+-Delete => Kustuta
+-Save => Salvesta
+-Cancel => Loobu
+- 
+-Forward => Forward
+-Accept => Accept
+-Drop => Drop
+- 
+-Firewall => Tulem&uuml;&uuml;r
+-Firewall Rules => Tulem&uuml;&uuml;ri reeglid
+-Firewall Configuration => Tulem&uuml;&uuml;ri konfiguratsioon
+- 
+-New Rule => Uus reegel
+-Match => Vastavus
+-Target => Sihtkoht
+-Port => Port 
+- 
+-Protocol => Protokoll
+-Source IP => Saatja IP
+-Destination IP => Saaja IP 
+-Source Ports => Saatja pordid
+-Destination Ports => Saaja pordid
+- 
+-Forward to => Suuna:
+-Port => Port 
+- 
+-Helptext ESSID => Teie traadita v&otilde;rgu v&otilde;rgunimi
+-
+-Helptext DNS save => Sellel lehel tehtud muudatused tuleb enne DNS-serverite lisamist/eemaldamist salvestada
+- 
+-Helptext Operation mode => M&auml;&auml;rab teie traadita v&otilde;rgu t&ouml;&ouml;reziimi. S&auml;te "Klient (Sild)" ei muuda v&otilde;rguliidese s&auml;tteid. Muudetakse ainult raadioliidese draiveri teatud parameetreid, mis on seotud liidese sillarez"iimi piirangute lubamisega
+- 
+-Helptext Encryption Type => 'WPA (RADIUS)' on lubatud ainult rez"iimis "AP". <br /> S&auml;te 'WPA (PSK)' ei t&ouml;&ouml;ta v&otilde;rd&otilde;igusv&otilde;rgurez"iimis (Ad-Hoc)
+- 
+-Helptext IP Settings => IP-s&auml;tted on DHCP ja PPTP puhul valikulised. Kui muudate neid s&auml;tteid, siis rakendatakse need vaikes&auml;tetena juhul, kui DHCP-server pole saadaval.
+- 
+-Helptext Idle Time => Aeg sekundites, mille v&auml;ltel marsruuter enne Interneti-&uuml;henduse katkestamist ootab (ainult s&auml;tte Connect on Demand puhul).
+- 
+-Helptext Redial Timeout => Aeg sekundites, kui kaua marsruuter p&auml;rast teenusepakkuja v&otilde;rgust teate "pole vastust" saamist ootab, enne kui asub &uuml;hendust taastama.
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/es/common.txt b/package/webif/files/usr/lib/webif/lang/es/common.txt
+deleted file mode 100644
+index d488d1f..0000000
+--- a/package/webif/files/usr/lib/webif/lang/es/common.txt
++++ /dev/null
+@@ -1,227 +0,0 @@
+-lang => Espa&ntilde;ol
+-# Common
+-Settings saved => Cambios guardados
+-Settings not saved => No se han podido guardar los cambios
+-Save Changes => Guardar cambios
+-Apply Changes => Aplicar cambios
+-Clear Changes => Deshacer cambios
+-Review Changes => Comprobar cambios
+-Host Name => Nombre del equipo
+-Uptime => Uptime
+-Load => Carga del sistema
+-Version => Versi&oacute;n
+-Categories => Categor&iacute;as
+-Subcategories => Subcategor&iacute;s
+-more... => m&aacute;s...
+-Add => A&ntilde;adir
+-Remove => Eliminar
+-Warning => Atenci&oacute;n
+-Password_warning => no has establecido una contrase&ntilde;a de protecci&oacute;n para el router (acceso web y ssh). Por favor, elija una ahora (el nombre de usuario ser&aacute; 'root')
+-
+-# Categories
+-Info => Info
+-About => Acerca de
+-Router Info => Informaci&oacute;n del router
+-
+-Status => Estado
+-Connections => Conexiones
+-DHCP => DHCP
+-Wireless => Wi-Fi
+-
+-System => Sistema
+-Password => Contrase&ntilde;a
+-Settings => Configuraci&oacute;n
+-Installed Software => Programas instalados
+-Firmware Upgrade => Actualizar Firmware
+-
+-Network => Red
+-LAN => LAN
+-WAN => Internet
+-Wireless => Wi-Fi
+-Advanced Wireless => Wi-Fi (avanzado)
+-Hosts => Configuration de hosts
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Este programa es software libre; Usted puede distribuirlo y/o <br />modificarlo bajo los t&eacute;rminos de la General Public License<br />como est&aacute; publicada por la Free Sofware Foundation; bien de la versi&oacute;n 2 de dicha Licencia o bien (seg&uacute;n su elecci&oacute;n) de cualquier versi&oacute;n posterior.
+-Contributions by => Contribuidores
+-Layout based on => Aspecto basado en
+-by => por
+-
+-
+-No config change. => No ha habido cambios de configuraci&oacute;n.
+-Config discarded. => Los cambios no se han aceptado.
+-Config changes: => Configuraci&oacute;n actual:
+-Updating config... => Actualizando la configuraci&oacute;n...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Versi&oacute;n del firmware
+-Kernel Version => Versi&oacute;n del Kernel
+-Current Date/Time => Fecha/Hora
+-MAC Address => Direcci&oacute;n MAC
+-
+-
+-# 'Connections' page
+-Connection Status => Estado de las conexiones
+-Physical Connections => Conexiones f&iacute;sicas
+-Router Connections => Conexiones del router
+-
+-
+-# 'DHCP' page
+-DHCP leases => Pr&eacute;stamos DHCP
+-IP Address => Direcci&oacute;n IP
+-Name => Nombre
+-Expires in => Caduca en
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Estado del Wi-Fi
+-
+-# 'Password' page
+-Password Change => Cambio de la contrase&ntilde;a
+-New Password => Nueva contrase&ntilde;a
+-Confirm Password => Confirme la contrase&ntilde;a
+-
+-# 'System Settings' page
+-System Settings => Par&aacute;metros del sistema
+-Host Name => Nombre del host
+-Language => Idioma
+-
+-# 'Installed Software' page
+-Installed Packages => Paquetes instalados
+-Update package lists => Actualizaci&oacute;n de la lista de paquetes
+-Uninstall => Desinstalar
+-Install => Instalar
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Formato del firmware
+-Error => Error
+-done => hecho
+-Invalid_formt => Formato del firmware inv&aacute;lido
+-Erase_JFFS2 => Borrar la partici&oacute;n JFFS2
+-Options => Opciones
+-Firmware_image => Archivo del firmware
+-Upgrade => Actualizar
+-Upgrading... => Actualizaci&oacute;n...
+-
+-# 'LAN Settings' page
+-LAN Settings => Configuraci&oacute;n LAN
+-LAN Configuration => Configuraci&oacute;n LAN
+-Netmask => M&aacute;scara de subred
+-Default Gateway => Puerta de enlace (gateway)
+-DNS Servers => Servidor DNS
+-DNS Address => Direcci&oacute;n IP del DNS
+-
+-Note => Nota
+-
+-# 'WAN Settings' page
+-WAN Settings => Configuraci&oacute;n de Internet
+-WAN Configuration => Configuraci&oacute;n de Internet
+-PPTP Server IP => Direcci&oacute;n IP del servidor PPTP
+-Connection Type => Tipo de conexi&oacute;n
+-No WAN => Sin configuraci&oacute;n de Internet
+-DHCP => DHCP
+-Static IP => IP est&aacute;tica
+-IP Settings => Configuraci&oacute;n IP
+-PPP Settings => Configuraci&oacute;n PPP
+-Redial Policy => Opciones de reconexi&oacute;n
+-Connect on Demand => Bajo demanda
+-Keep Alive => Conexi&oacute;n permanente
+-Maximum Idle Time => Tiempo m&aacute;ximo de inactividad
+-Redial Timeout => Tiempo de reconexi&oacute;n
+-MTU => MTU (tama&ntilde;o de los paquetes)
+-Username => Nombre de usuario
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Configuraci&oacute;n Wi-Fi
+-Wireless Interface => Interfaz Wi-Fi
+-WEP Key => Clave WEP
+-Selected WEP Key => Clave WEP seleccionada
+-WPA PSK => WPA-PSK
+-ESSID => ESSID
+-Channel => Canal
+-RADIUS IP Address => Direcci&oacute;n IP del servidor RADIUS
+-RADIUS Server Key => Secreto RADIUS
+-Enabled => Activado
+-Disabled => Desactivado
+-ESSID Broadcast => Difusi&oacute;n del SSID
+-Show => Mostrar
+-Hide => Ocultar
+-WLAN Mode => Modo Wi-Fi
+-Access Point => Punto de acceso
+-Client => Cliente
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Operation mode => Modo de funcionamiento
+-Encryption Settings => Par&aacute;metros de enriptaci&oacute;n
+-Encryption Type => Tipo de encriptaci&oacute;n
+-PSK => PSK
+-WPA Mode => Modo WPA
+-WPA Algorithms => Algoritmos WPA
+-WEP Keys => Clave WEP
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Configuraci&oacute;n Wi-Fi avanzada
+-WDS Connections => Conexiones WDS
+-MAC Filter List => Filtrar por direcci&oacute;n MAC
+-Filter Mode => Modo de filtrado
+-Allow => Autorizar
+-Deny => Denegar
+-Set => Establecer
+-Settings => Par&aacute;metros
+-Automatic WDS => WDS autom&aacute;tico
+-
+-# "Hosts" page
+-
+-MAC Address => Direcci&oacute;n MAC
+-Configured Hosts => Equipos configurados
+-DHCP Static => Entradas DHCP est&aacute;ticas
+-Host Names => Nombre de los equipos
+-
+-Up => Subir
+-Down => Bajar
+-Edit => Editar
+-Delete => Borrar
+-Save => Guardar
+-Cancel => Cancelar
+-
+-Forward => Redirigir
+-Accept => Aceptar
+-Drop => Descartar
+-
+-Firewall => Firewall
+-Firewall Rules => Reglas del Firewall
+-Firewall Configuration => Configuraci&oacute;n del Firewall
+-
+-New Rule => Nueva regla
+-Match => Filtrar
+-Target => Acci&oacute;n
+-Port => Puerto
+-
+-Protocol => Protocolo
+-Source IP => IP origen
+-Destination IP => IP destino
+-Source Ports => Puertos origen
+-Destination Ports => Puertos destino
+-
+-Forward to => Redirigir a
+-Port => Puerto
+-
+-Helptext ESSID => SSID
+-Helptext DNS save => Es recomendable guardar los cambios antes de a&ntilde;adir o eliminar servidores de DNS de la lista
+-
+-Helptext Operation mode => Establece el modo de operaci&oacute;n de tu red wireless. Eligiendo 'Client (bridge)' no cambiar&aacute; la configuraci&oacute;n de la interfaz de red. Simplemente a&ntilde;adir&aacute; unos par&aacute;metros que permitir&aacute;n que la interfaz wireless act&uacute;e en cierta medida en modo bridge.
+-Helptext Encryption Type => 'WPA (RADIUS)' s&oacute;lo puede usarse en modo Punto de Acceso.<br /> 'WPA (PSK)' no funciona en modo Ad-Hoc.
+-Helptext IP Settings => Las opciones IP son opcionales para DHCP y PPTP. Si las eliges, se utilizar&aacute;n por defecto en caso de que la configuraci&oacute;n autom&aacute;tica falle.
+-Helptext Idle Time => N&uacute;mero de segundos sin actividad con Internet que debe esperar el router antes de desconectarse. (S&oacute;lo para el modo Bajo Demanda).
+-Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
+-
+-
+-# untranslated:
+-Available packages => Available packages
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/fr/common.txt b/package/webif/files/usr/lib/webif/lang/fr/common.txt
+deleted file mode 100644
+index 96cdb83..0000000
+--- a/package/webif/files/usr/lib/webif/lang/fr/common.txt
++++ /dev/null
+@@ -1,238 +0,0 @@
+-lang => Fran&ccedil;ais
+-Encoding => UTF-8
+-
+-# Common
+-Settings saved => Sauvegard&eacute;
+-Settings not saved => Non sauvegard&eacute;
+-Save Changes => Sauvegarder
+-Apply Changes => Appliquer
+-Clear Changes => Effacer
+-Review Changes => Revoir
+-Host Name => Nom de machine
+-Uptime => Uptime
+-Load => Charge syst&egrave;me
+-Version => Version
+-Categories => Cat&eacute;gories
+-Subcategories => Sous-cat&eacute;tgories
+-more... => davantage...
+-Add => Ajouter
+-Remove => Enlever
+-
+-Warning => Attention
+-Password_warning => vous n'avez pas configur&eacute; de mot de passe pour l'interface Web et l'acc&egrave;s SSH<br /> Entrez en un maintenant (le nom d'utilisateur dans le navigateur sera 'root'). 
+-
+-# Categories
+-Info => Info
+-About => A propos
+-Router Info => Informations routeur
+-
+-Status => Statut
+-Connections => Connexions r&eacute;seau
+-DHCP => DHCP
+-Wireless => Wi-Fi
+-
+-System => Syst&egrave;me
+-Password => Mot de passe
+-Settings => Param&egrave;tres
+-Installed Software => Logiciels install&eacute;s
+-Firmware Upgrade => Mise &agrave; jour firmware
+-
+-Network => R&eacute;seau
+-LAN => LAN
+-WAN => Internet
+-Wireless => Wi-Fi
+-Advanced Wireless => Wi-Fi (avanc&eacute;)
+-Hosts => Configuration des h&ocirc;tes
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Ce programme est un logiciel libre; vous pouvez le redistribuer
+-et/ou le modifier sous les termes de la General Public License telle qu'elle
+-est publi&eacute;e par la Free Sofware Foundation; que ce soit sous la version
+-2 de la license, ou (&agrave; votre convenance) une version ult&eacute;rieure
+-Contributions by => Contributions par
+-Layout based on => Pr&eacute;sentation bas&eacute;e sur
+-by => par
+-
+-
+-No config change. => Pas de changements.
+-Config discarded. => Pas de prise en compte.
+-Config changes: => Configuration actuelle:
+-Updating config... => Mise &agrave; jour...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Version du firmware
+-Kernel Version => Version du noyau
+-Current Date/Time => Date et heure
+-MAC Address => Adresse MAC
+-
+-
+-# 'Connections' page
+-Connection Status => Etat des connexions
+-Physical Connections => Connexions physiques
+-Router Connections => Connexions au routeur
+-
+-
+-# 'DHCP' page
+-DHCP leases => Baux DHCP
+-IP Address => Adresse IP
+-Name => Nom
+-Expires in => Expire dans
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Etat du Wi-Fi
+-
+-# 'Password' page
+-Password Change => Changement du mot de passe
+-New Password => Nouveau mot de passe
+-Confirm Password => Confirmez le mot de passe
+-
+-# 'System Settings' page
+-System Settings => Param&egrave;tres du syst&egrave;me
+-Host Name => Nom d'h&ocirc;te
+-Language => Langue
+-
+-# 'Installed Software' page
+-Installed Packages => Paquets logiciels install&eacute;s
+-Update package lists => Mise &agrave; jour de la liste des paquets
+-Uninstall => D&eacute;sinstaller
+-Install => Installer
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Format du firmware
+-Error => Erreur
+-done => pr??t
+-Invalid_formt => Le firmware n'a pas un format valide
+-Erase_JFFS2 => Effacer la partition JFFS2
+-Options => Options
+-Firmware_image => Fichier firmware
+-Upgrade => Mettre &agrave; jour
+-Upgrading... => Mise &agrave; jour en cours...
+-
+-# 'LAN Settings' page
+-LAN Settings => Param&egrave;tres LAN
+-LAN Configuration => Configuration LAN
+-Netmask => Masque r&eacute;seau
+-Default Gateway => Passerelle par d&eacute;faut
+-DNS Servers => Serveur DNS
+-DNS Address => Addresse DNS
+-
+-Note => Note
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => Param&egrave;tres Internet
+-WAN Configuration => Configuration Internet
+-PPTP Server IP => Adresse IP du serveur PPTP
+-Connection Type => Type de connexion
+-No WAN => Pas de configuration WAN
+-DHCP => DHCP
+-Static IP => IP statique
+-IP Settings => Param&egrave;tres IP
+-PPP Settings => Param&egrave;tres PPP
+-Redial Policy => Options de renum&eacute;rotation
+-Connect on Demand => Sur demande
+-Keep Alive => Toujours connect&eacute;
+-Maximum Idle Time => D&eacute;lai maximal d'inactivt&eacute;
+-Redial Timeout => D&eacute;lai  avant renum??rotation
+-MTU => Taille maximale des paquets
+-Username => Nom d'utilisateur
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Configuration Wi-Fi
+-Wireless Interface => Interface Wi-Fi
+-WEP Key => Cl&eacute; WEP
+-Selected WEP Key => Choix de la cl&eacute; WEP
+-WPA PSK => WPA cl&eacute; pr&eacute;-partag&eacute;e
+-ESSID => ESSID
+-Channel => Canal
+-RADIUS IP Address => Adresse IP du serveur RADIUS
+-RADIUS Server Key => Secret partag&eacute; avec le serveur RADIUS
+-Enabled => Activ&eacute;
+-Disabled => D&eacute;sactiv&eacute;
+-ESSID Broadcast => Diffusion du SSID
+-Show => Montrer
+-Hide => Cacher
+-WLAN Mode => Mode de fonctionnement Wi-Fi
+-Access Point => Point d'acc&egrave;s
+-Client => Client
+-Bridge => Pont-r&eacute;seau
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => Param&egrave;tres de chiffrement
+-Encryption Type => Type de chiffrement
+-PSK => Cl&eacute; pr&eacute;-partag&eacute;e
+-WPA Mode => Mode WPA
+-WPA Algorithms => Algorithmes WPA
+-WEP Keys => Cl&eacute;s WEP
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Configuration Wi-Fi avanc&eacute;e
+-WDS Connections => Connexions WDS
+-MAC Filter List => Filtre par adresses MAC
+-Filter Mode => Mode de filtrage
+-Allow => Autoriser
+-Deny => Refuser
+-Set => Param&egrave;trer
+-Settings => Param&egrave;tres
+-Automatic WDS => WDS automatique
+-WDS watchdog timeout => D&eacute;lai d'inactivit&eacute; WDS
+-Antenna selection => S&eacute;lection de l'antenne
+-
+-# "Hosts" page
+-
+-MAC Address => Adresse MAC
+-Configured Hosts => H&ocirc;tes configur&eacute;s
+-DHCP Static => Entr&eacute;es DHCP statiques
+-Host Names => Noms d'h&ocirc;tes
+-
+-Up => Monter
+-Down => Descendre
+-Edit => Editer
+-Delete => Effacer
+-Save => Sauvegarder
+-Cancel => Annuler
+-
+-Forward => Transf&eacute;rer
+-Accept => Accepter
+-Drop => Ignorer
+-
+-Firewall => Pare-feu
+-Firewall Rules => R&egrave;gles du pare-feu
+-Firewall Configuration => Configuration du pare-feu
+-
+-New Rule => Nouvelle r&egrave;gle
+-Match => Concordance
+-Target => Destination
+-Port => Port
+-
+-Protocol => Protocole
+-Source IP => IP source
+-Destination IP => IP de destination
+-Source Ports => Ports source
+-Destination Ports => Ports de destination
+-
+-Forward to => Transf&eacute;rer vers
+-Port => Port
+-
+-
+-Helptext ESSID => Nom du r&eacute;seau sans-fil
+-Helptext DNS save => Il est recommand&eacute; de sauvegarder vos param&egrave;tres avant d'ajouter/enlever des serveurs DNS
+-
+-
+-Helptext Operation mode => Configure le mode de fonctionnement de votre
+-r&eacute;seau sans-fil. Le mode Client (Pont r&eacute;seau sans-fil) ne changera pas les param&egrave;tres de votre interface. Certains param&egrave;tres de la carte Wi-Fi seront modifi&eacute;s de mani&egrave;re &agrave; pouvoir fonctionner en mode r&eacute;seau sans-fil.
+-Helptext Encryption Type => 'WPA (RADIUS)' ne fonctionne qu'en mode point d'acc&egrave;s. <br /> 'WPA (PSK)' ne fonctionne pas en mode Ad-hoc.
+-Helptext IP Settings => Les param&egrave;tres IP sont optionnels pour DHCP et PPTP. Si vous les configurez, ils seront utilis&eacute; comme param&egrave;tres par d&eacute;faut dans le cas o&uacute; le serveur DHCP ne r&eacute;pond< pas.
+-Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre avant que le routeur d&eacute;connecte d'Internet (Connexion &agrave; la demande)
+-Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant un nouvel &eacute;ssai de connexion.
+-
+-
+-Available packages => Paquetages disponibles
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/hr/common.txt b/package/webif/files/usr/lib/webif/lang/hr/common.txt
+deleted file mode 100644
+index a6291a2..0000000
+--- a/package/webif/files/usr/lib/webif/lang/hr/common.txt
++++ /dev/null
+@@ -1,199 +0,0 @@
+-lang => Hrvatski
+-Encoding => UTF-8
+-# Common
+-Settings saved => Postavke Spremljene
+-Settings not saved => Postavke Nisu Spremljene
+-Save Changes => Spremi Postavke
+-Apply Changes => Primijeni Postavke
+-Clear Changes => Obri&scaron;i Postavke
+-Review Changes => Pregledaj Izmjene
+-Host Name => Naziv Hosta
+-Uptime => U Pogonu Od
+-Load => Optere&aelig;enje
+-Version => Verzija
+-Categories => Kategorije
+-Subcategories => Podkategorije
+-more... => nastavak...
+-Add => Dodaj
+-Remove => Makni
+-Warning => Upozorenje
+-Password_warning => Niste postavili lozinku za Web su&egrave;elje i SSH pristup
+-Molimo vas unesite lozinku (korisni&egrave;ko ime u va&scaron;em pregledniku &aelig; biti 'root').
+-# Categories
+-Info => Informacije
+-About => Opis
+-Router Info => O ure&eth;aju
+-Status => Status
+-Connections => Veze
+-DHCP => DHCP
+-Wireless => Wireless
+-System => Sustav
+-Password => Lozinka
+-Settings => Postavke
+-Installed Software => Instalirani Softver
+-Firmware Upgrade => Nadogradnja Firmware-a
+-Network => Mre&zcaron;a
+-LAN => LAN
+-WAN => WAN
+-Wireless => Wireless
+-Advanced Wireless => Napredne Wireless Postavke
+-Hosts => Konfigurirani Hostovi
+-
+-# 'About' page
+-Copyright => Copyright
+-GPL_Text => This program is free software; you can redistribute it and/or 
+-modify it under the terms of the GNU General Public License 
+-as published by the Free Software Foundation; either version 2 
+-of the License, or (at your option) any later version. 
+-
+-Contributions by => Contributions by SL SOLUCIJE d.o.o.
+-Layout based on => Layout based on SmartHop webif
+-by => by Silvije Filipovic - silvije.filipovic at slsolucije.hr
+-
+-No config change. => Nema nikakvih promjena konfiguracije.
+-Config discarded. => Va&scaron;e promjene konfiguracije su opozvane.
+-Config changes: => Trenutne promjene konfiguracije:
+-Updating config... => Konfiguracija se nadogra&eth;uje...
+-
+-# 'Router Info' page
+-Firmware Version => Firmware Verzija
+-Kernel Version => Kernel Verzija
+-Current Date/Time => Trenutni Datum/ Vrijeme
+-MAC Address => Mac Adresa
+-
+-# 'Connections' page
+-Connection Status => Status Veza
+-Physical Connections => Fizi&egrave;ke Veze
+-Router Connections => Usmjeravanje
+-
+-# 'DHCP' page
+-DHCP leases => DHCP dodjela
+-IP Address => IP Adresa
+-Name => Naziv
+-Expires in => Rok istjecanja
+-
+-# 'Wireless Status' page
+-Wireless Status => Wireless Status
+-# 'Password' page
+-Password Change => Promjena Lozinke
+-New Password => Nova Lozinka
+-Confirm Password => Potvrdi Lozinku
+-# 'System Settings' page
+-System Settings => Postavke Sustava
+-Host Name => Naziv Hosta
+-Language => Jezik
+-# 'Installed Software' page
+-Installed Packages => Instalirani Paketi
+-Update package lists => A&zcaron;uriraj listu paketa
+-Uninstall => Deinstaliraj
+-Install => Instaliraj
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmware format
+-Error => Gre&scaron;ka
+-done => gotovo
+-Invalid_formt => Neispravan Firmware Format
+-Erase_JFFS2 => Izbri&scaron;i JFFS2 particiju
+-Options => Opcije
+-Firmware_image => Firmware image za upload
+-Upgrade => Nadogradi
+-Upgrading... => Nadogradnja u tijeku...
+-# 'LAN Settings' page
+-LAN Settings => LAN Postavke
+-LAN Configuration => LAN Konfiguracija
+-Netmask => Netmask
+-Default Gateway => Default Gateway
+-DNS Servers => DNS Serveri
+-DNS Address => DNS Adresa
+-Note => Bilje&scaron;ke
+-# 'WAN Settings' page
+-WAN Settings => WAN Postavke
+-WAN Configuration => WAN Konfiguracija
+-PPTP Server IP => PPTP Server IP
+-Connection Type => Tip Konekcije
+-No WAN => Bez WAN Konekcije
+-DHCP => DHCP
+-Static IP => Stati&egrave;ki IP
+-IP Settings => IP Postavke
+-PPP Settings => PPP Postavke
+-Redial Policy => Redial Policy
+-Connect on Demand => Spajanje na Zahtjev
+-Keep Alive => Keep Alive
+-Maximum Idle Time => Dozvoljeni Max. Idle Time
+-Redial Timeout => Redial Timeout
+-MTU => MTU
+-Username => Korisni&egrave;ko Ime
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Wireless Konfiguracija
+-Wireless Interface => Wireless Interface
+-WEP Key => WEP Key
+-Selected WEP Key => Odabrani WEP Key
+-WPA PSK => WPA PSK
+-ESSID => ESSID
+-Channel => Kanal
+-RADIUS IP Address => RADIUS IP Adresa
+-RADIUS Server Key => RADIUS Server Key
+-Enabled => Omogu&aelig;eno
+-Disabled => Onemogu&aelig;eno
+-ESSID Broadcast => ESSID Broadcast
+-Show => Neskriveni
+-Hide => Skriveni
+-WLAN Mode => WLAN Mod
+-Access Point => Access Point
+-Client => Client
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Operation mode => Operaativni mod
+-Encryption Settings => Postavke Enkripcije
+-Encryption Type => Tip Enkripcije
+-PSK => PSK
+-WPA Mode => WPA Mod
+-WPA Algorithms => WPA Algoritmi
+-WEP Keys => WEP Keys
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Napredne Wireless Postavke
+-WDS Connections => WDS Veze
+-MAC Filter List => MAC Filter Lista
+-Filter Mode => Filter Mod
+-Allow => Dozvoli
+-Deny => Zabrani
+-Set => Postavi
+-Settings => Postavke
+-Automatic WDS => Automatski WDS
+-# "Hosts" page
+-MAC Address => MAC Adresa
+-Configured Hosts => Konfigurirani Hostovi
+-DHCP Static => Stati&egrave;ki DHCP
+-Host Names => Nazivi Hostova
+-Up => Gore
+-Down => Dolje
+-Edit => Uredi
+-Delete => Bri&scaron;i
+-Save => Spremi
+-Cancel => Odustani
+-Forward => Naprijed
+-Accept => Prihvati
+-Drop => Otka&zcaron;i
+-Firewall => Firewall
+-Firewall Rules => Firewall Pravila
+-Firewall Configuration => Firewall Konfiguracija
+-New Rule => Novo Pravilo
+-Match => Uvjet
+-Target => Cilj
+-Port => Port
+-Protocol => Protokol
+-Source IP => Ishodi&scaron;ni IP
+-Destination IP => Odredi&scaron;ni IP
+-Source Ports => Ishodi&scaron;ni Portovi
+-Destination Ports => Odredi&scaron;ni Portovi
+-Forward to => Preusmjeravanje na
+-Port => Port
+-Helptext ESSID => Naziv Wireless Mre&zcaron;e
+-Helptext DNS save => Trebali biste spremiti va&scaron;e postavke na ovoj stranici prije dodavanja/brisanja DNS poslju&zcaron;itelja
+-Helptext Operation mode => Ova opcija odre&eth;uje operativni mod rada va&scaron;e wireless mre&zcaron;e. Odabir 'Client (Bridge)' ne&aelig;e promijeniti postavke mre&zcaron;nog su&egrave;elja. Samo &aelig;e biti dodani parametri u pogonski program koji omogu&aelig;avaju ograni&egrave;ene bridging funkcije su&egrave;elja.
+-Helptext Encryption Type => 'WPA (RADIUS)' je podr&zcaron;an samo u Access Point modu. 
+-'WPA (PSK)' ne radi u Ad-Hoc modu.
+-Helptext IP Settings => IP Postavke su opcionalne za DHCP i PPTP. Ukoliko su postavljene, koriste se kao pretpostavljene, u slu&egrave;aju kada  DHCP poslu&zcaron;itelj nije dostupan.
+-Helptext Idle Time => Vrijeme u sekundama bez internet prometa do kojeg ure&eth;aj treba &egrave;ekati prije prekida veze (samo kod Spajanja na Zahtjev)
+-Helptext Redial Timeout => Vrijeme u sekundama za prijem odgovora od prividera prije ponovnog spajanja
+diff --git a/package/webif/files/usr/lib/webif/lang/hu/common.txt b/package/webif/files/usr/lib/webif/lang/hu/common.txt
+deleted file mode 100644
+index a8a08e6..0000000
+--- a/package/webif/files/usr/lib/webif/lang/hu/common.txt
++++ /dev/null
+@@ -1,227 +0,0 @@
+-lang => Magyar
+-# Common
+-Settings saved => Be&aacute;ll&iacute;t&aacute;sok elmentve
+-Settings not saved => Be&aacute;ll&iacute;t&aacute;sok ment&eacute;s&eacute;nek mell&#337;z&eacute;se
+-Save Changes => V&aacute;ltozat&aacute;sok ment&eacute;se
+-Apply Changes => V&aacute;ltoztat&aacute;sok alkalmaz&aacute;sa
+-Clear Changes => V&aacute;ltoztat&aacute;sok eldob&aacute;sa
+-Review Changes => V&aacute;ltoztat&aacute;sok megtekint&eacute;se
+-Host Name => Host n&eacute;v
+-Uptime => &Uuml;zemid&#337;
+-Load => Rendszer terhel&eacute;s
+-Version => Verzi&oacute;
+-Categories => Kategori&aacute;k
+-Subcategories => Alkateg&oacute;ri&aacute;k
+-more... => Tov&aacute;bbi inform&aacute;ci&oacute;k...
+-Add => Hozz&aacute;ad
+-Remove => Elt&aacute;vol&iacute;t
+-Warning => Vigy&aacute;zat
+-Password_warning => A Web-Adminisztr&aacute;toenak &eacute;s az SSH hozz&aacute;f&eacute;r&eacute;shez m&eacute;g nincs jelsz&oacute; be&aacute;ll&iacute;tva.<br />Adjon meg most egy &uacute;j jelsz&oacute;t (felhaszn&aacute;l&oacute;n&eacute;v a b&ouml;ng&eacute;sz&#337;ben: 'root').
+-
+-# Categories
+-Info => Inform&aacute;ci&oacute;
+-About => R&oacute;lunk
+-Router Info => Router inform&aacute;ci&oacute;
+-
+-Status => &Aacute;llapot
+-Connections => H&aacute;l&oacute;zati kapcsolatok
+-DHCP => DHCP
+-Wireless => WLAN
+-
+-System => Rendszer
+-Password => Jelsz&oacute;
+-Settings => Be&aacute;ll&iacute;t&aacute;sok
+-Installed Software => Telep&iacute;t&eacute;s
+-Firmware Upgrade => Firmware friss&iacute;t&eacute;s
+-
+-Network => H&aacute;l&oacute;zat
+-LAN => LAN
+-WAN => Internet
+-Wireless => WLAN
+-Advanced Wireless => WLAN (halad&oacute;)
+-Hosts => Host konfigur&aacute;ci&oacute;
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => This program is free software; you can redistribute it and/or <br >modify it under the terms of the GNU General Public License <br >as published by the Free Software Foundation; either version 2 <br > of the License, or (at your option) any later version. 
+-Contributions by => Contributions by
+-Layout based on => Layout based on
+-by => by
+-
+-No config change. => A konfigur&aacute;ci&oacute;ban nincs v&aacute;ltoz&aacute;s.
+-Config discarded. => Konfigur&aacute;ci&oacute; v&aacute;ltoztat&aacute;sok eldobva.
+-Config changes: => Konfigur&aacute;ci&oacute; m&oacute;dod&iacute;t&aacute;sok:
+-Updating config... => Konfigur&aacute;ci&oacute; friss&iacute;t&eacute;se...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Firmware verzi&oacute;
+-Kernel Version => Kernel verzi&oacute;
+-Current Date/Time => Aktu&aacute;lis d&aacute;tum/id&#337;
+-MAC Address => MAC Address
+-
+-
+-# 'Connections' page
+-Connection Status => Kapcsolatok
+-Physical Connections => Fizikai kapcsolatok
+-Router Connections => Router kapcsolatok
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP b&eacute;rletek
+-IP Address => IP c&iacute;m
+-Name => N&eacute;v
+-Expires in => Lej&aacute;r
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => WLAN &aacute;llapot
+-
+-# 'Password' page
+-Password Change => Jelsz&oacute; csere
+-New Password => &Uacute;j jelsz&oacute;
+-Confirm Password => Jelsz&oacute; m&eacute;gegyszer
+-
+-# 'System Settings' page
+-System Settings => Rendszer be&aacute;ll&iacute;t&aacute;sok
+-Host Name => Host n&eacute;v
+-Language => Nyelv
+-
+-# 'Installed Software' page
+-Installed Packages => Telep&iacute;tett csomagok
+-Update package lists => Csomaglista friss&iacute;t&eacute;se
+-Uninstall => Elt&aacute;vol&iacute;t&aacute;s
+-Install => Telep&iacute;t&eacute;s
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmware format
+-Error => Hiba
+-done => K&eacute;sz
+-Invalid_format => &Eacute;rv&eacute;nytelen Firmware
+-Erase_JFFS2 => JFFS2 part&iacute;ci&oacute; t&ouml;rl&eacute;se
+-Options => Opci&oacute;k
+-Firmware_image => Firmware
+-Upgrade => Friss&iacute;t&eacute;s
+-Upgrading... => Friss&iacute;t&eacute;s folyamatban...
+-
+-# 'LAN Settings' page
+-LAN Settings => H&aacute;l&oacute;zat be&aacute;ll&iacute;t&aacute;sok
+-LAN Configuration => H&aacute;l&oacute;zat konfigur&aacute;ci&oacute;
+-Netmask => H&aacute;l&oacute;zati maszk
+-Default Gateway => Alap&eacute;rtelmezett &aacute;tj&aacute;r&oacute;
+-DNS Servers => DNS szerverek
+-DNS Address => DNS szerver c&iacute;m
+-
+-Note => Megjegyz&eacute;s
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => Internet be&aacute;ll&iacute;t&aacute;sok
+-WAN Configuration => Internet konfigur&aacute;ci&oacute;
+-PPTP Server IP => PPTP szerver c&iacute;m
+-Connection Type => Kapcsolat t&iacute;pusa
+-No WAN => Nincs internet
+-DHCP => DHCP
+-Static IP => Statikus IP konfigur&aacute;ci&oacute;
+-IP Settings => IP be&aacute;ll&iacute;t&aacute;sok
+-PPP Settings => PPP be&aacute;ll&iacute;t&aacute;sok
+-Redial Policy => &Uacute;jrat&aacute;rcs&aacute;z&aacute;s szab&aacute;lya
+-Connect on Demand => Csatlakoz&aacute;s k&eacute;r&eacute;s eset&eacute;n
+-Keep Alive => Tartsd &eacute;letben
+-Maximum Idle Time => Maximum inakt&iacute;v &iacute;d&#337;
+-Redial Timeout => &Uacute;jrat&aacute;rcs&aacute;z&aacute;si id&#337;
+-MTU => Maximal Transfer Unit
+-Username => Felhaszn&aacute;l&oacute;
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => WLAN konfigur&aacute;ci&oacute;
+-Wireless Interface => WLAN interf&eacute;sz
+-WEP Key => WEP kulcs
+-Selected WEP Key => V&aacute;lasztott WEP kulcs
+-WPA PSK => WPA PSK
+-ESSID => ESSID
+-Channel => Csatorna
+-RADIUS IP Address => RADIUS szerver c&iacute;m
+-RADIUS Server Key => RADIUS szerver kulcs
+-Enabled => Enged&eacute;lyezve
+-Disabled => Tiltva
+-ESSID Broadcast => ESSID hirdet&eacute;se (sz&oacute;r&aacute;sa)
+-Show => Enged&eacute;lyezve
+-Hide => Tiltva
+-WLAN Mode => WLAN m&oacute;d
+-Access Point => Access Point
+-Client => Client
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => Titkos&iacute;t&aacute;s be&aacute;ll&iacute;t&aacute;sok
+-Encryption Type => Titkos&iacute;t&aacute;s t&iacute;pusa
+-PSK => PSK
+-WPA Mode => WPA m&oacute;d
+-WPA Algorithms => WPA algoritmus
+-WEP Keys => WEP kulcsok
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => WLAN konfigur&aacute;ci&oacute; (halad&oacute;)
+-WDS Connections => WDS kapcsolatok
+-MAC Filter List => MAC Address sz&uuml;r&eacute;s
+-Filter Mode => Sz&uuml;r&#337; m&oacute;d
+-Allow => Enged&eacute;lyez&#337;
+-Deny => Tilt&oacute;
+-Set => Be&aacute;ll&iacute;t&aacute;s
+-Settings => Be&aacute;ll&iacute;t&aacute;sok
+-Automatic WDS => Automatikus WDS
+-
+-# "Hosts" page
+-
+-MAC Address => MAC-Address
+-Configured Hosts => Konfigur&aacute;lt g&eacute;pek
+-DHCP Static => Statikus DHCP be&aacute;ll&iacute;t&aacute;sok
+-Host Names => Host nevek
+-
+-
+-Up => Fel
+-Down => Le
+-Edit => Szerkeszt&eacute;s
+-Delete => T&ouml;rl&eacute;s
+-Save => Ment&eacute;s
+-Cancel => M&eacute;gse
+-
+-Forward => Tov&aacute;bb&iacute;t
+-Accept => Elfogad
+-Drop => Eldob
+-
+-Firewall => T&#369;zfal
+-Firewall Rules => T&#369;zfal szab&aacute;lyok
+-Firewall Configuration => T&#369;zfal konfigur&aacute;ci&oacute;
+-
+-New Rule => &Uacute;j szab&aacute;ly
+-Match => Illeszt
+-Target => C&eacute;l
+-Port => Port
+-
+-Protocol => Protokoll
+-Source IP => Forr&aacute;s-IP
+-Destination IP => C&eacute;l-IP
+-Source Ports => Forr&aacute;s-Portok
+-Destination Ports => C&eacute;l-Portok
+-
+-Forward to => Tov&aacute;bb&iacute;t
+-Port => Port
+-
+-Helptext ESSID => A vezet&eacute;k n&eacute;lk&uuml;li h&aacute;l&oacute;zat neve.
+-Helptext DNS save => Mentsd el a be&aacute;ll&iacute;t&aacute;sokat, miel&#337;tt ezen az oldalon hozz&aacute;adsz ill. elt&aacute;vol&iacute;tasz DNS szervert.
+-
+-Helptext Operation mode => Ezek a be&aacute;ll&iacute;tsok a vezet&eacute;k n&eacute;lk&uuml;li h&aacute;lozat m&#369;k&ouml;d&eacute;s&eacute;t hat&aacute;rozz&aacute;k meg. A 'Client (Bridge)' m&oacute;d a h&aacute;l&oacute;zati csatol&oacute; be&aacute;ll&iacute;t&aacute;sait nem m&oacute;dos&iacute;tja. Csak n&eacute;h&aacute;ny param&eacute;tert &aacute;ll&iacute;t a vezet&eacute;kn&eacute;lk&uuml;li eszk&ouml;zmeghajt&oacute;ban, a korl&aacute;tozott &aacute;thidal&aacute;shoz.
+-Helptext Encryption Type => 'WPA (RADIUS)' csak Access-Pont m&oacute;dban t&aacute;mogatott. <br /> 'WPA (PSK)' nem m&#369;k&ouml;dik Ad-Hoc m&oacute;dban. 
+-Helptext IP Settings => IP be&aacute;ll&iacute;t&aacute;sok opcion&aacute;lisak a DHCP-hez &eacute;s a PPTP-hez. Az itt be&aacute;ll&iacute;tott &eacute;rt&eacute;kek lesznek az alap&eacute;rtelmezettek, ha a DHCP szerver nem el&eacute;rhet&#337;. 
+-Helptext Idle Time => Maxim&aacute;lis id&#337; m&aacute;sodpercben internet forgalom n&eacute;lk&uuml;l, amennyit a router v&aacute;r miel&#337;tt bontja a kapcsolatot (csak 'Csatlakoz&aacute;s k&eacute;r&eacute;s eset&eacute;n' m&oacute;dban).
+-Helptext Redial Timeout => Maxim&aacute;lis id&#337; m&aacute;sodpercben az &uacute;jrat&aacute;rcs&aacute;z&aacute;s el&#337;tt, ha a szolg&aacute;ltat&oacute; nem v&aacute;laszol.
+-
+-# untranslated:
+-Available packages => Haszn&aacute;lhat&oacute; csomagok
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/it/common.txt b/package/webif/files/usr/lib/webif/lang/it/common.txt
+deleted file mode 100644
+index 8607fac..0000000
+--- a/package/webif/files/usr/lib/webif/lang/it/common.txt
++++ /dev/null
+@@ -1,226 +0,0 @@
+-lang => Italiano
+-# Common
+-Settings saved => Cambiamenti salvati
+-Settings not saved => Cambiamenti non salvati
+-Save Changes => Salva cambiamenti
+-Apply Changes => Applica cambiamenti
+-Clear Changes => Elimina cambiamenti
+-Review Changes => Controlla cambiamenti
+-Host Name => Nome Host
+-Uptime => Uptime
+-Load => Caricamento del sistema
+-Version => Versione
+-Categories => Categoria
+-Subcategories => Sottocategoria
+-more... => altro...
+-Add => Aggiungi
+-Remove => Elimina
+-Warning => Attenzione
+-Password_warning => non e' stata ancora impostata una password di protezione per il router (accesso web o ssh). Per favore, inseriscine una ora (il nome utente sara': 'root')
+-
+-# Categories
+-Info => Info
+-About => Ringraziamenti
+-Router Info => Informazioni del router
+-
+-Status => Stato
+-Connections => Connessioni
+-DHCP => DHCP
+-Wireless => Wireless
+-
+-System => Sistema
+-Password => Password
+-Settings => Configurazione
+-Installed Software => Programmi installati
+-Firmware Upgrade => Aggiornamento Firmware
+-
+-Network => Rete
+-LAN => LAN
+-WAN => Internet
+-Wireless => Wireless
+-Advanced Wireless => Wireless (avanzato)
+-Hosts => Configurazione Host
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Questo programma  software  libero;  lecito ridistribuirlo e/o <br />modificarlo secondo i  termini della Licenza Pubblica Generica GNU <br />come pubblicata  dalla Free Software Foundation; o la versione 2 della licenza o (a scelta) una versione successiva.
+-Contributions by => Contributi
+-Layout based on => Interfaccia basata su
+-by => da
+-
+-
+-No config change. => Nessun cambiamento della configurazione.
+-Config discarded. => I cambiamenti non sono stati accettati.
+-Config changes: => Cambiamenti configurazione:
+-Updating config... => Aggiornamento configurazione...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Versione del firmware
+-Kernel Version => Versione del Kernel
+-Current Date/Time => Data/Ora
+-MAC Address => Indirizzo MAC
+-
+-
+-# 'Connections' page
+-Connection Status => Stato della connessione
+-Physical Connections => Connessioni fisiche
+-Router Connections => Connessioni del router
+-
+-
+-# 'DHCP' page
+-DHCP leases => lease DHCP
+-IP Address => Indirizzo IP
+-Name => Nome
+-Expires in => Scade il
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Stato Wireless
+-
+-# 'Password' page
+-Password Change => Cambio password
+-New Password => Nuova password
+-Confirm Password => Confema password
+-
+-# 'System Settings' page
+-System Settings => Parametri di sistema
+-Host Name => Nome dell'host
+-Language => Linguaggio
+-
+-# 'Installed Software' page
+-Installed Packages => Pacchetti installati
+-Update package lists => Aggiorna la lista dei pacchetti
+-Uninstall => Disinstalla
+-Install => Installa
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Formato del firmware
+-Error => Errore
+-done => eseguito
+-Invalid_formt => Formato del firmware invalido
+-Erase_JFFS2 => Cancella la partizione JFFS2
+-Options => Opzioni
+-Firmware_image => Immagine del firmware
+-Upgrade => Aggiorna
+-Upgrading... => Aggiornamento in corso...
+-
+-# 'LAN Settings' page
+-LAN Settings => Parametri LAN
+-LAN Configuration => Configuzione LAN
+-Netmask => Netmask
+-Default Gateway => Default Gateway
+-DNS Servers => Server DNS
+-DNS Address => Indirizzo IP del DNS
+-
+-Note => Nota
+-
+-# 'WAN Settings' page
+-WAN Settings => Parametri Internet
+-WAN Configuration => Configurazione Internet
+-PPTP Server IP => Indirizzo IP del server PPTP
+-Connection Type => Tipo di connessione
+-No WAN => No WAN
+-DHCP => DHCP
+-Static IP => IP statico
+-IP Settings => Paramentri IP
+-PPP Settings => Parametri PPP
+-Redial Policy => Opzioni di riconnessione
+-Connect on Demand => Connessione su richiesta
+-Keep Alive => Connessione permanente
+-Maximum Idle Time => Tempo di inattivita' massimo
+-Redial Timeout => Tempo di riconnessione
+-MTU => MTU (grandezza pacchetti)
+-Username => Nome utente
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Parametri Wireless
+-Wireless Interface => Interfaccia Wireless
+-WEP Key => Chiave WEP
+-Selected WEP Key => Chiave WEP selezionata
+-WPA PSK => WPA-PSK
+-ESSID => ESSID
+-Channel => Canale
+-RADIUS IP Address => Indirizzo IP del server RADIUS
+-RADIUS Server Key => Server Key RADIUS
+-Enabled => Attivato
+-Disabled => Disattivato
+-ESSID Broadcast => SSID Broadcast
+-Show => Mostra
+-Hide => Nascondi
+-WLAN Mode => Modo WLAN
+-Access Point => Punto di accesso
+-Client => Client
+-Bridge => Bridge
+-Ad-Hoc => Ad-Hoc
+-Operation mode => Modo di funzionamento
+-Encryption Settings => Parametri di encryption
+-Encryption Type => Tipo di encryption
+-PSK => PSK
+-WPA Mode => Modo WPA
+-WPA Algorithms => Algoritmo WPA
+-WEP Keys => Chiave WEP
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Configurazione Wireless avanzata
+-WDS Connections => Connessioni WDS
+-MAC Filter List => Filtro per indirizzo MAC
+-Filter Mode => Metodo di filtraggio
+-Allow => Autorizza
+-Deny => Nega
+-Set => Setta
+-Settings => Parametri
+-Automatic WDS => WDS Automatico
+-
+-# "Hosts" page
+-
+-MAC Address => Indirizzo MAC
+-Configured Hosts => Host configurati
+-DHCP Static => DHCP Statico
+-Host Names => Nome Host
+-
+-Up => Su
+-Down => Giu'
+-Edit => Edita
+-Delete => Elimina
+-Save => Salva
+-Cancel => Cancella
+-
+-Forward => Ridirigi
+-Accept => Accetta
+-Drop => Scarta
+-
+-Firewall => Firewall
+-Firewall Rules => Regole del Firewall
+-Firewall Configuration => Configurazione del Firewall
+-
+-New Rule => Nuova regola
+-Match => Filtro
+-Target => Obiettivo
+-Port => Porta
+-
+-Protocol => Protocollo
+-Source IP => IP di origine
+-Destination IP => IP di destinazione
+-Source Ports => Porta di origine
+-Destination Ports => Porta di destinazione
+-
+-Forward to => Redirigi su
+-Port => Porta
+-
+-Helptext ESSID => SSID
+-Helptext DNS save => E' consigliabile salvare i cambiamenti prima di aggiungere o eliminare server DNS dalla lista
+-
+-Helptext Operation mode => Imposta il metodo di utilizzo della rete wireless. Scegliendo 'Client (bridge)' non cambiera' la configurazione dell'interfaccia di rete.
+-Helptext Encryption Type => 'WPA (RADIUS)' puo' essere usato solo nel modo Access Point.<br /> 'WPA (PSK)' non funziona nel modo Ad-Hoc.
+-Helptext IP Settings => Le opzioni IP sono opzioni per DHCP e PPTP.
+-Helptext Idle Time => Numero di secondi che deve aspettare il router prima di disconnettersi. (Solo nel metodo ' Connessione su richiesta').
+-Helptext Redial Timeout => Numero di secondi che il router deve aspettare per effettuare una nuova riconnessione.
+-
+-# untranslated:
+-Available packages => Available packages
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/nl/common.txt b/package/webif/files/usr/lib/webif/lang/nl/common.txt
+deleted file mode 100644
+index 875ba6c..0000000
+--- a/package/webif/files/usr/lib/webif/lang/nl/common.txt
++++ /dev/null
+@@ -1,224 +0,0 @@
+-lang => Nederlands
+-# Common
+-Settings saved => Instellingen bewaard
+-Settings not saved => Instellingen niet bewaard
+-Save Changes => Bewaar wijzigingen
+-Apply Changes => Gebruik wijzigingen
+-Clear Changes => Wis wijzigingen
+-Review Changes => Bekijk wijzigingen
+-Host Name => Host naam
+-Uptime => Uptime
+-Load => Laad
+-Version => Versie
+-Categories => Categorie
+-Subcategories => Subcategorie
+-more... => meer...
+-Add => Bijvoegen
+-Remove => Verwijder
+-Warning => Waarschuwing
+-Password_warning => U hebt nog geen wachtwoord ingesteld voor de Web interface en SSH toegang. Gelieve er nu een in te geven (de gebruikersnaam in uw browser zal 'root' zijn).
+-
+-# Categories
+-Info => Info
+-About => Over
+-Router Info => Router Info
+-
+-Status => Status
+-Connections => Connecties
+-DHCP => DHCP
+-Wireless => Draadloos
+-
+-System => Systeem
+-Password => Wachtwoord
+-Settings => Instellingen
+-Installed Software => Geinstalleerde Software
+-Firmware Upgrade => Firmware Upgrade
+-
+-Network => Netwerk
+-LAN => LAN
+-WAN => WAN
+-Wireless => Draadloos
+-Advanced Wireless => Geavanceerd Draadloos
+-Hosts => Geconfigureerde Hosts
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Dit programma is vrije software; u mag het verdelen en/of wijzigen onder de voorwaarden van GNU General Public License zoals gepubliceerd door de Free Software Foundation; ofwel versie 2 van de licentie, of (volgens Uw keuze) iedere latere versie.
+-
+-Contributions by => Bijdragen door
+-Layout based on => Layout gebasseerd op
+-by => door
+-
+-
+-No config change. => Er werden geen configuratie wijzigingen aangebracht.
+-Config discarded. => Uw configuratie wijzigingen werden verworpen.
+-Config changes: => Huidige configuratie wijzigingen:
+-Updating config... => Uw configuratie wordt aangepast...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Firmware Versie
+-Kernel Version => Kernel Versie
+-Current Date/Time => Huidige Datum/Tijd
+-MAC Address => MAC Adres
+-
+-
+-# 'Connections' page
+-Connection Status => Verbindings Status
+-Physical Connections => Fysieke Verbindingen
+-Router Connections => Router Verbindingen
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP leases
+-IP Address => IP Adres
+-Name => Naam
+-Expires in => Vervalt binnen
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Draadloos Status
+-
+-# 'Password' page
+-Password Change => Wachtwoord Wijzigen
+-New Password => Nieuw Wachtwoord
+-Confirm Password => Bevestig Wachtwoord
+-
+-# 'System Settings' page
+-System Settings => Systeem Instellingen
+-Host Name => Host naam
+-Language => Taal
+-
+-# 'Installed Software' page
+-Installed Packages => Geinstalleerde Pakketten
+-Available packages => Beschikbare pakketten
+-Update package lists => Aanpassen Pakketlijst
+-Uninstall => Deinstalleren
+-Install => Installeren
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmware Formaat
+-Error => Fout
+-done => voltooid
+-Erase_JFFS2 => Wis JFFS2 partitie
+-Options => Opties
+-Firmware_image => Firmware image om te laden
+-Upgrade => Upgrade
+-Upgrading... => Upgrading...
+-
+-# 'LAN Settings' page
+-LAN Settings => LAN Instellingen
+-LAN Configuration => LAN Configuratie
+-Netmask => Netmask
+-Default Gateway => Standaard Gateway
+-DNS Servers => DNS Servers
+-DNS Address => DNS Adres
+-
+-Note => Nota
+-
+-# 'WAN Settings' page
+-WAN Settings => WAN Instellingen
+-WAN Configuration => WAN configuratie
+-PPTP Server IP => PPTP Server IP
+-Connection Type => Connectie Type
+-No WAN => Geen WAN
+-DHCP => DHCP
+-Static IP => Statisch IP
+-IP Settings => IP Instellingen
+-PPP Settings => PPP Instellingen
+-Redial Policy => Opnieuw bel beleid
+-Redial Timeout => Bel vertraging
+-Connect on Demand => Verbinden op Aanvraag
+-Keep Alive => Hou actief
+-Maximum Idle Time => Maximale Idle Time
+-MTU => MTU
+-Username => Gebruikersnaam
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Draadloos Configuratie
+-Wireless Interface => Draadloos Interface
+-WEP Key => WEP Sleutel
+-Selected WEP Key => Geselecteerde WEP sleutely
+-WPA PSK => WPA PSK
+-ESSID => ESSID
+-Channel => Kanaal
+-RADIUS IP Address => RADIUS IP Adres
+-RADIUS Server Key => RADIUS Server Sleutel
+-Enabled => Ingeschakeld
+-Disabled => Uitgeschakeld
+-ESSID Broadcast => ESSID Broadcast
+-Show => Toon
+-Hide => Verberg
+-WLAN Mode => WLAN Mode
+-Access Point => Toegangs Punt
+-# Was "Klant" first which can only be translated as an economical client, i.e. a customer. AFAIK Dutch doesn't provide any true translation for Client in this context
+-Client => Client
+-Bridge => Brug
+-Ad-Hoc => Ad-Hoc
+-Operation mode => Operation mode
+-Encryption Settings => Encryptie Instelligen
+-Encryption Type => Encryptie Type
+-PSK => PSK
+-WPA Mode => WPA Mode
+-WPA Algorithms => WPA Algoritmen
+-WEP Keys => WEP Sleutels
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Geavanceerde Draadloze Configuratie
+-WDS Connections => WDS Verbindingen
+-MAC Filter List => MAC Filter Lijst
+-Filter Mode => Filter Mode
+-Allow => Toelaten
+-Deny => Weigeren
+-Set => Stel
+-Settings => Instellingen
+-Automatic WDS => Automatische WDS
+-
+-# "Hosts" page
+-
+-MAC Address => MAC Adres
+-Configured Hosts => Geconfigureerde Hosts
+-DHCP Static => DHCP Statisch
+-Host Names => Host Namen
+-
+-Up => Op
+-Down => Neer
+-Edit => Wijzig
+-Delete => Wis
+-Save => Bewaar
+-Cancel => Afbreken
+-
+-Forward => Doorsturen
+-Accept => Accepteren
+-Drop => Negeren
+-
+-Firewall => Firewall
+-Firewall Rules => Firewall Regels
+-Firewall Configuration => Firewall Configuratie
+-
+-New Rule => Nieuwe Regel
+-Match => Overeenstemmen
+-Target => Doel
+-Port => Poort
+-
+-Protocol => Protocol
+-Source IP => Bron IP
+-Destination IP => Bestemmings IP
+-Source Ports => Bron Poorten
+-Destination Ports => Bestemmings Poorten
+-
+-Forward to => Doorsturen naar
+-Port => Poort
+-
+-Helptext ESSID => Naam van uw Draadloos Netwerk
+-Helptext DNS save => U moet de instellingen op deze pagina bewaren alvorens DNS servers te wijzigen/verwijderen
+-
+-Helptext Operation mode => Dit stelt de Operatie Mode voor uw draadloos netwerk in. Door 'Client (Brug)' te kiezen zullen uw network interface instellingen niet wijzigen. Er zullen alleen enkele parameters ingesteld worden in de draadloze driver die gelimiteerde overbrugging van de interface mogelijk maakt.
+-Helptext Encryption Type => 'WPA (RADIUS)' wordt enkel ondersteund in de Toegangs Punt mode.<br />'WPA (PSK)' werkt niet in Ad-Hoc mode.
+-Helptext IP Settings => IP instellingen zijn optioneel voor DHCP en PPTP. Indien U ze instelt dan worden ze als standaardwaarden gebruikt indien de DHCP server onbeschikbaar is.
+-Helptext Idle Time => Het aantal seconden zonder internet verkeer dat de router zou moeten wachten alvorens zich af te sluiten van het Internet (Alleen bij Verbinden op Aanvraag)
+-Helptext Redial Timeout => Het aantal seconden dat gewacht moet worden alvorens opnieuw een verbinding wordt gemaakt indien deze geweigerd werd door uw ISP.
+diff --git a/package/webif/files/usr/lib/webif/lang/no/common.txt b/package/webif/files/usr/lib/webif/lang/no/common.txt
+deleted file mode 100644
+index f94684f..0000000
+--- a/package/webif/files/usr/lib/webif/lang/no/common.txt
++++ /dev/null
+@@ -1,230 +0,0 @@
+-lang => Norsk
+-# Common
+-Settings saved => Innstillingene ble lagret
+-Settings not saved => Innstillingene ble ikke lagret
+-Save Changes => Lagre endringer
+-Apply Changes => Aktiver endringer
+-Clear Changes => Glem endringer
+-Review Changes => Se endringer
+-Host Name => Vertsnavn
+-Uptime => Oppetid
+-Load => Systembelastning
+-Version => Versjon
+-Categories => Kategorier
+-Subcategories => Underkategorier
+-more... => mer...
+-Add => Legg til
+-Remove => Fjern
+-Warning => Advarsel
+-Password_warning => Det er ikke satt et passord p&aring; hverken Webadministrasjon eller SSH.<br />Vennligst velg eller tast inn ditt passord (Brukernavn er 'root' med sm&aring; bokstaver).
+-
+-# Categories
+-Info => Info
+-About => Om
+-Router Info => Routerinformasjon
+-
+-Status => Status
+-Connections => Nettverksforbindelser
+-DHCP => DHCP
+-Wireless => Tr&aring;dl&oslash;s
+-
+-System => System
+-Password => Passord
+-Settings => Innstillinger
+-Installed Software => Installerte programmer
+-Firmware Upgrade => Firmwareoppgradering
+-
+-Network => Nettverk
+-LAN => Lokalnett
+-WAN => Internett
+-Wireless => Tr&aring;dl&oslash;s
+-Advanced Wireless => Avansert tr&aring;dl&oslash;s
+-Hosts => Vertsnavn
+-
+-
+-# 'About' page
+-Copyright => Opphavsrett
+-
+-GPL_Text => Dette programmet er fri programvare.  Du m&aring; bruke, endre og videredistribuere det under betingelsene i "GNU General Public License",<br /> som offentliggjort av "Free Software Foundation" (Den frie programbevegelse), enten i versjon 2 av lisensen eller (etter ditt valg), en hvilkensomhelst senere versjon.
+-
+-Contributions by => Bidrag fra
+-Layout based on => Layout er basert p&aring;
+-by => av
+-
+-
+-No config change. => Ingen konfigurasjonsendring foretatt
+-Config discarded. => Konfigurasjonsendringerne ble forkastet
+-Config changes: => Forel&oslash;pige endringer
+-Updating config... => Oppdaterer konfigurasjonen
+-
+-# 'Router Info' page
+-Firmware Version => Firmwareversjon
+-Kernel Version => Kjerneversjon
+-Current Date/Time => N&aring;v&aelig;rende tid/dato
+-MAC Address => MAC adresse
+-
+-
+-# 'Connections' page
+-Connection Status => Forbindelsesstatus
+-Physical Connections => Fysiske forbindelser
+-Router Connections => Routerens forbindelser
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP leasinger
+-IP Address => IP adresse
+-Name => Navn
+-Expires in => Utl&oslash;pstid
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Tr&aring;dl&oslash;s status
+-
+-# 'Password' page
+-Password Change => Endre passord
+-New Password => Nytt passord
+-Confirm Password => Nytt passord igjen
+-
+-# 'System Settings' page
+-System Settings => Systeminnstillinger
+-Host Name => Vertsnavn
+-Language => Spr&aring;k
+-
+-# 'Installed Software' page
+-Installed Packages => Installerte pakker
+-Update package lists => Oppdater pakkelisten
+-Uninstall => Avinstaller
+-Install => Installer
+-Available packages => Tilgjengelige pakker
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmwareformat
+-Error => Feil
+-done => ferdig
+-Invalid_format => Ugyldig_format
+-Erase_JFFS2 => Slett_JFFS2_partisjonen
+-Options => Alternativer
+-Firmware_image => Firmwarefil
+-Upgrade => Oppgrader
+-Upgrading... => Oppgraderer...
+-
+-# 'LAN Settings' page
+-LAN Settings => Lokale nettinnstillinger
+-LAN Configuration => Lokal nettverkskonfigurasjon
+-Netmask => Undernettmaske
+-Default Gateway => Standard gateway
+-DNS Servers => DNS-tjenere
+-DNS Address => DNS-tjeneradresse
+-
+-Note => Merk
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => WAN-innstillinger
+-WAN Configuration => WAN-konfigurasjon
+-PPTP Server IP => PPTP-tjeneradresse
+-Connection Type => Forbindelsestype
+-No WAN => Ingen WAN
+-DHCP => DHCP
+-Static IP => Statisk IP
+-IP Settings => IP-innstillinger
+-PPP Settings => PPP-innstillinger
+-Redial Policy => Gjenoppringingspolise
+-Connect on Demand => Ring opp n&aring;r behovet er der
+-Keep Alive => Hold forbindelsen i live (keep alive)
+-Maximum Idle Time => Maksimal tid i tomgang (max idle)
+-Redial Timeout => Gjenoppringningsavbrekkstid
+-MTU => MTU
+-Username => Brukernavn
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Tr&aring;dl&oslash;s konfigurasjon
+-Wireless Interface => Tr&aring;dl&oslash;st nettkort
+-WEP Key => WEP n&oslash;kler
+-Selected WEP Key => Valgt WEP n&oslash;kkel
+-WPA PSK => WPA n&oslash;kler
+-ESSID => ESSID
+-Channel => Kanal
+-RADIUS IP Address => IP adressen p&aring; RADIUS server
+-RADIUS Server Key => Passord til RADIUS server
+-Enabled => Aktivert
+-Disabled => Deaktivert
+-ESSID Broadcast => ESSID-Kringkasting 
+-Show => Vis
+-Hide => Skjul
+-WLAN Mode => Tr&aring;dl&oslash;s tilstand
+-Access Point => Tilgangspunkt
+-Client => Klient
+-Bridge => Bro
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => Krypteringsinnstillinger
+-Encryption Type => Krypteringstype
+-PSK => PSK-kode
+-WPA Mode => WPA tilstand
+-WPA Algorithms => WPA krypteringsalgoritme
+-WEP Keys => WEP n&oslash;kler
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Avansert oppsett av tr&aring;dl&oslash;s
+-WDS Connections => WDS forbindelser (WDS repeater)
+-MAC Filter List => Filteringsliste (MAC-nummer)
+-Filter Mode => Filtreringstilstand
+-Allow => Tillat
+-Deny => Forby
+-Set => Sett
+-Settings => Innstillinger
+-Automatic WDS => Automatisk WDS-forbindelse
+-
+-# "Hosts" page
+-
+-MAC Address => MAC-adresse
+-Configured Hosts => Vertsnavn
+-DHCP Static => Statiske IP adresser til DHCP
+-Host Names => Vertsnavn
+-
+-
+-Up => Opp
+-Down => Ned
+-Edit => Endre
+-Delete => Slette
+-Save => Lagre
+-Cancel => Annuller
+-
+-Forward => Forward (videresend)
+-Accept => Accept (tillat)
+-Drop => Drop (kast)
+-
+-Firewall => Brannmur
+-Firewall Rules => Brannmurregler
+-Firewall Configuration => Brannmurkonfigurasjon
+-
+-New Rule => Ny regel
+-Match => Match (sammenlign)
+-Target => Target (G&aring; til)
+-Port => Port
+-
+-Protocol => Protokoll
+-Source IP => Avsenders IP
+-Destination IP => Mottakers IP
+-Source Ports => Avsenders porter
+-Destination Ports => Mottakers porter
+-
+-Forward to => Send videre til
+-Port => Port
+-
+-Helptext ESSID => Navn p&aring; tr&aring;dl&oslash;s nettverk
+-Helptext DNS save => Lagre endringer p&aring; denne siden f&oslash;r du legger til eller fjerner DNS-tjenere (Hvis du ikke vil miste dem.)
+-
+-Helptext Operation mode => Setter driftstilstanden for den tr&aring;dl&oslash;se delen av routeren. 'Klient' og 'Klient (bro)' brukes for &aring; koble 2 tr&aring;dl&oslash;se routere. I mange tilfeller er WDS en bedre (men mer avansert) l&oslash;ning. 'Klient' utnytter dog b&aring;ndbredden best, hvis du kun har en maskin tilkoblet. <br /> Innstillingen 'Klient (bro)' endrer ikke direkte ved nettverksinnstillingene. Det er et lite 'hack' som f&aring; routeren til &aring; tro at kun en maskin (en MAC-adresse) er tilkoblet. Det er gjort for &aring; overvinne begrensninger i 802.11-protokollen, som forhindrer at man problemfritt (i vanlig 'Klient'-tilstand) kan bruke den tr&aring;dl&oslash;se forbindelsen fra flere maskiner samtidig. <br /> AP brukes til en standalone router, hvor f.eks b&aelig;rbare pc'er skal ha tilgang til Internett og/eller lokalt nettverk. <br /> Hvis du ikke vet hva 'Ad Hoc'-tilstanden gj&oslash;, har du sannsynligvis ikke bruk for den.
+-
+-Helptext Encryption Type => 'WPA (RADIUS)' er kun st&oslash;ttet i AP (Tilgangspunkt)-tilstand. <br /> 'WPA (PSK)' fungerer ikke i 'Ad-Hoc' tilstand.
+-
+-Helptext IP Settings => IP-innstillinger er frivillig for DHCP og PPTP. N&aring; de er satt, blir de brukt som standardverdier hvis en DHCP-tjener ikke er tilgjengelig.
+-
+-Helptext Idle Time => Ventetid med inaktivitet f&oslash;r routeren kobler ned forbindelesen.
+-
+-Helptext Redial Timeout => Ventetid f&oslash;r routeren fors&oslash;ker &aring; ringe opp igjen.
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/pl/common.txt b/package/webif/files/usr/lib/webif/lang/pl/common.txt
+deleted file mode 100644
+index c01b20c..0000000
+--- a/package/webif/files/usr/lib/webif/lang/pl/common.txt
++++ /dev/null
+@@ -1,228 +0,0 @@
+-lang => Polski
+-# Common
+-Settings saved => Ustawienia zosta&#322;y zapisane
+-Settings not saved => Ustawienia niezosta&#322;y zapisane
+-Save Changes => Zapisz zmiany
+-Apply Changes => Zastosuj zmiany
+-Clear Changes => Czy&#347;&#263; zmiany
+-Review Changes => Przej&#380;yj zmiany
+-Host Name => Hostname
+-Uptime => Czas pracy
+-Load => Obci&#261;&#380;enie
+-Version => Wersja
+-Categories => Kategorie
+-Subcategories => Podkategorie
+-more... => Wi&#281;cej Informacji...
+-Add => Dodaj
+-Remove => Usu&#324;
+-Warning => Uwaga
+-Password_warning => Niemasz ustawionego has&#322;a dost&#281;pu do WWW oraz SSH<br />Prosze wpisz je teraz(nazwa u&#380;ytkownika to 'root')
+-
+-# Categories
+-Info => Info
+-About => O Autorze
+-Router Info => Info o WRT
+-
+-Status => Status
+-Connections => Po&#322;aczenia
+-DHCP => DHCP
+-Wireless => WLAN
+-
+-System => System
+-Password => Has&#322;o
+-Settings => Ustawienia
+-Installed Software => Zainstalowane pakiety
+-Firmware Upgrade => Aktualizacja opr.
+-
+-Network => Sie&#263;
+-LAN => LAN
+-WAN => Internet(WAN)
+-Wireless => WLAN
+-Advanced Wireless => Zaawansowane WLAN
+-Hosts => Konfiguracja Host?w
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => This program is free software; you can redistribute it and/or <br >modify it under the terms of the GNU General Public License <br >as published by the Free Software Foundation; either version 2 <br > of the License, or (at your option) any later version. 
+-Contributions by => Wsp?lpracownicy
+-Layout based on => Layout bazuje na
+-by => by
+-
+-
+-No config change. => Nie dokonano zmian.
+-Config discarded. => Zmiany zosta&#322;y anulowane.
+-Config changes: => Aktualna konfiguracja:
+-Updating config... => Aktualizacja konfiguracji...
+-
+-
+-# 'Router Info' page
+-Firmware Version => Wersja Opr.
+-Kernel Version => Wersja kernela
+-Current Date/Time => Aktualna Data/Czas
+-MAC Address => Adres MAC
+-
+-
+-# 'Connections' page
+-Connection Status => Stan po&#322;acze&#324;
+-Physical Connections => Po&#322;&#261;czenia fizyczne
+-Router Connections => Po&#322;&#261;czenia do routera
+-
+-
+-# 'DHCP' page
+-DHCP leases => Dzier&#380;awa DHCP
+-IP Address => Adres IP
+-Name => Nazwa
+-Expires in => Wygasa za
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Status WLAN
+-
+-# 'Password' page
+-Password Change => Zmien has&#322;o
+-New Password => Nowe has&#322;o
+-Confirm Password => Potwierdz has&#322;o
+-
+-# 'System Settings' page
+-System Settings => Ustawienia Systemu
+-Host Name => Hostname
+-Language => J&#281;zyk
+-
+-# 'Installed Software' page
+-Installed Packages => Zainstalowane pakiety
+-Update package lists => Aktualizuj liste pakiet?w
+-Uninstall => Usu&#324;
+-Install => Instaluj
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Format pliku firmware
+-Error => B&#322;&#261;d
+-done => Gotowe
+-Invalid_format => B&#322;&#281;dny format firmware
+-Erase_JFFS2 => Formatuj JFFS2
+-Options => Opcje
+-Firmware_image => Obraz FW:
+-Upgrade => Aktualizuj
+-Upgrading... => Aktualizuje...
+-
+-# 'LAN Settings' page
+-LAN Settings => Ustawienia LAN
+-LAN Configuration => Konfiguracja LAN
+-Netmask => Maska sieci
+-Default Gateway => Brama domy&#347;lna
+-DNS Servers => Serwer DNS
+-DNS Address => Adres DNS
+-
+-Note => Notatka
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => Ustawienia WAN
+-WAN Configuration => Konfiguracja WAN
+-PPTP Server IP => Adres serwera PPTP
+-Connection Type => Po&#322;aczenie
+-No WAN => Bez WAN
+-DHCP => DHCP
+-Static IP => Statyczne IP
+-IP Settings => Ustawienia IP
+-PPP Settings => Ustawienia PPP
+-Redial Policy => Rodzaj wydzwaniania
+-Connect on Demand => Po&#322;&#261;czenia na &#380;adanie
+-Keep Alive => Trzymaj po&#322;&#261;czenie
+-Maximum Idle Time => Max. czas bezczynno&#347;ci
+-	
+-MTU => MTU
+-Username => Nazwa uzyt.
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => WLAN-Konfiguracja
+-Wireless Interface => Intefejs WLAN
+-WEP Key => Klucz WEP
+-Selected WEP Key => Wybrany klucz WEP
+-WPA PSK => WPA PSK
+-ESSID => ESSID
+-Channel => Kana&#322;
+-RADIUS IP Address => Adres IP RADIUS
+-RADIUS Server Key => Klucz RADIUS
+-Enabled => W&#322;aczone
+-Disabled => Wy&#322;&#261;czone
+-ESSID Broadcast => Rozsy&#322;anie ESSID 
+-Show => Poka&#380;
+-Hide => Ukryj
+-WLAN Mode => Tryb Radiowy
+-Access Point => Punkt Dost&#281;powy
+-Client => Klient
+-Bridge => Most
+-Ad-Hoc => Ad-Hoc
+-Encryption Settings => Ustawienia kodowania
+-Encryption Type => Rodzaj kodowania
+-PSK => PSK
+-WPA Mode => Tryb WPA
+-WPA Algorithms => Algorytm WPA
+-WEP Keys => Klucze WEP
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Zaawansowane WLAN
+-WDS Connections => Po&#322;&#261;czenie WDS
+-MAC Filter List => Filtrowanie MAC
+-Filter Mode => Rodzaj filtra
+-Allow => Udzielaj dost&#281;pu
+-Deny => Odrzucaj dost&#281;p
+-Set => Ustaw
+-Settings => Ustawienia
+-Automatic WDS => Automatyczny WDS
+-
+-# "Hosts" page
+-
+-MAC Address => Adres MAC
+-Configured Hosts => Konfiguracja Host&#243;w
+-DHCP Static => Statyczne DHCP
+-Host Names => Lista Host&#243;w
+-
+-
+-Up => W g&#243;r&#281;
+-Down => W d&#243;&#322;
+-Edit => Edytuj
+-Delete => Kasuj
+-Save => Zapisz
+-Cancel => Anuluj
+-
+-Forward => Przekieruj
+-Accept => Akceptuj
+-Drop => Odrzu&#263;
+-
+-Firewall => Firewall
+-Firewall Rules => Regu&#322;y Firewalla
+-Firewall Configuration => Konfiguracja Firewalla
+-
+-New Rule => Nowa regu&#322;a
+-Match => Dotyczy
+-Target => Cel
+-Port => Port
+-
+-Protocol => Protok&#243;&#322;
+-Source IP => IP &#380;r&#243;d&#322;owe
+-Destination IP => IP docelowe
+-Source Ports => Port &#380;r&#243;d&#322;owy
+-Destination Ports => Port docelowy
+-
+-Forward to => Przekieruj do
+-Port => Port
+-
+-Helptext ESSID => Nazwa sieci radiowej
+-Helptext DNS save => Musisz zapisa&#263; ustawienia przed dodaniem/usuni&#281;ciem serwera DNS
+-
+-Helptext Operation mode => Umo&#380;liwia wyb&#243;r pracy urz&#261;dzenia.
+-Helptext Encryption Type => 'WPA (RADIUS)' dzia&#322;a tylko w trybie Access Point <br /> 'WPA (PSK)' nie dzia&#322;a w trybie Ad-Hoc. 
+-Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Je&#380;eli je ustawisz, b&#281;da u&#380;ywane jako domy&#347;lnje w przypadku , gdy serwer DHCP bedzie niedost&#281;pny.
+-Helptext Idle Time => Czas w sekundach bezruchu internetowego, po up&#322;ywie kt&#243;rych nast&#281;puje roz&#322;aczenie (tylko Po&#322;&#261;czenie na z&#261;danie)
+-Helptext Redial Timeout => Liczba sekund, kt&#243;re trzeba odczekac po tym, jak nie otrzymales odpowiedzi od providera (przed ponowna proba podlaczenia)
+-
+-# untranslated:
+-Available packages => Available packages
+-
+diff --git a/package/webif/files/usr/lib/webif/lang/pt/common.txt b/package/webif/files/usr/lib/webif/lang/pt/common.txt
+deleted file mode 100644
+index 2fb4693..0000000
+--- a/package/webif/files/usr/lib/webif/lang/pt/common.txt
++++ /dev/null
+@@ -1,454 +0,0 @@
+-lang => Portugu?s
+-
+-# Common
+-
+-Settings saved => Altera??es guardadas
+-
+-Settings not saved => Altera??es n?o foram guardadas
+-
+-Save Changes => Guardar altera??es
+-
+-Apply Changes => Aplicar altera??es
+-
+-Clear Changes => Eliminar altera??es
+-
+-Review Changes => Verificar altera??es
+-
+-Host Name => Nome do sistema
+-
+-Uptime => Uptime
+-
+-Load => Carga do sistema
+-
+-Version => Vers?o
+-
+-Categories => Categorias
+-
+-Subcategories => Subcategorias
+-
+-more... => mais
+-
+-Add => Adicionar
+-
+-Remove => Eliminar
+-
+-Warning => Aten??o
+-
+-Password_warning => N?o foi estabelecida uma palavra-chave para o acesso ao router (acesso web e ssh). Por favor, estabele?a uma palavra-chave agora (o nome de utilizador ser? ?root?)
+-
+- 
+-
+-# Categories
+-
+-Info => Informa??o
+-
+-About => Acerca de
+-
+-Router Info => Informa??es do router
+-
+- 
+-
+-Status => Estado
+-
+-Connections => Liga??es
+-
+-DHCP => DHCP
+-
+-Wireless => Wi-Fi
+-
+- 
+-
+-System => Sistema
+-
+-Password => Palavra-chave
+-
+-Settings => Configura??es
+-
+-Installed Software => Software instalado
+-
+-Firmware Upgrade => Actualizar Firmware
+-
+- 
+-
+-Network => Rede
+-
+-LAN => LAN
+-
+-WAN => Internet
+-
+-Wireless => Rede sem fios
+-
+-Advanced Wireless => Rede sem fios (avan?ado)
+-
+-Hosts => Configura??o de sistemas (hosts)
+-
+- 
+-
+- 
+-
+-# 'About' page
+-
+-Copyright => Copyright
+-
+- 
+-
+-GPL_Text => Este programa ? livre e poder? ser distribu?do e/ou <br>modificado segundo os termos da licen?a GPL (General Public License)<br>tal como publicada pela Free Software Foundation como est? publicada por la Free Sofware Foundation; quer pela vers?o 2<br> quer por qualquer vers?o posterior (? sua escolha).
+-
+-Contributions by => Contribuidores
+-
+-Layout based on => Layout baseado em
+-
+-by => por
+-
+- 
+-
+- 
+-
+-No config change. => N?o existem altera??es de configura??es.
+-
+-Config discarded. => As altera??es foram ignoradas.
+-
+-Config changes: => Configura??o actual:
+-
+-Updating config... => Actualizando as altera??es...
+-
+- 
+-
+- 
+-
+-# 'Router Info' page
+-
+-Firmware Version => Vers?o do firmware
+-
+-Kernel Version => Vers?o do Kernel
+-
+-Current Date/Time => Data/Hora
+-
+-MAC Address => Endere?o MAC
+-
+- 
+-
+- 
+-
+-# 'Connections' page
+-
+-Connection Status => Estado das liga??es
+-
+-Physical Connections => Liga??es f?sicas
+-
+-Router Connections => Liga??es do router
+-
+- 
+-
+- 
+-
+-# 'DHCP' page
+-
+-DHCP leases => Pr?stimos de DHCP
+-
+-IP Address => Endere?o IP
+-
+-Name => Nome
+-
+-Expires in => Expira em
+-
+- 
+-
+- 
+-
+-# 'Wireless Status' page
+-
+-Wireless Status => Estado da rede sem fios
+-
+- 
+-
+-# 'Password' page
+-
+-Password Change => Altera??o da palavra-chave
+-
+-New Password => Nova palavra-chave
+-
+-Confirm Password => Confirme a palavra-chave
+-
+- 
+-
+-# 'System Settings' page
+-
+-System Settings => Par?metros do sistema
+-
+-Host Name => Nome do sistema
+-
+-Language => Idioma
+-
+- 
+-
+-# 'Installed Software' page
+-
+-Installed Packages => Pacotes (packages) instalados
+-
+-Update package lists => Actualiza??o da lista de pacotes
+-
+-Uninstall => Remover
+-
+-Install => Instalar
+-
+-Available packages => Pacotes dispon?veis
+-
+- 
+-
+- 
+-
+-# 'Firmware Upgrade' page
+-
+-Firmware format => Formato do firmware
+-
+-Error => Erro
+-
+-done => terminado
+-
+-Invalid_formt => Formato de firmware inv?lido
+-
+-Erase_JFFS2 => Apagar parti??o JFFS2
+-
+-Options => Op??es
+-
+-Firmware_image => Ficheiro de firmware
+-
+-Upgrade => Actualizar
+-
+-Upgrading... => Actualizando...
+-
+- 
+-
+-# 'LAN Settings' page
+-
+-LAN Settings => Configura??es da LAN (rede local)
+-
+-LAN Configuration => Par?metros LAN
+-
+-Netmask => M?scara da sub rede (netmask)
+-
+-Default Gateway => Gateway
+-
+-DNS Servers => Servidor DNS
+-
+-DNS Address => Endere?o IP do DNS
+-
+- 
+-
+-Note => Nota
+-
+- 
+-
+-# 'WAN Settings' page
+-
+-WAN Settings => Configura??es Internet
+-
+-WAN Configuration => Par?metros de Internet
+-
+-PPTP Server IP => Endere?o IP do servidor PPTP
+-
+-Connection Type => Tipo de liga??o
+-
+-No WAN => Sem liga??o ? Internet
+-
+-DHCP => DHCP
+-
+-Static IP => IP est?tico
+-
+-IP Settings => Configura??es IP
+-
+-PPP Settings => Configura??es PPP
+-
+-Redial Policy => Op??es de restabelecimento da liga??o
+-
+-Connect on Demand => Ligar quando necess?rio
+-
+-Keep Alive => Manter liga??o sempre activa
+-
+-Maximum Idle Time => Tempo m?ximo de inactividade
+-
+-Redial Timeout => Tempo de restabelecimento da liga??o
+-
+-MTU => MTU (tamanho dos pacotes)
+-
+-Username => Nome do utilizador
+-
+- 
+-
+- 
+-
+-# 'Wireless Configuration' page
+-
+-Wireless Configuration => Configura??es rede sem fios
+-
+-Wireless Interface => Interface rede sem fios
+-
+-WEP Key => Chave WEP
+-
+-Selected WEP Key => Palavra-chave WEP seleccionada
+-
+-WPA PSK => WPA-PSK
+-
+-ESSID => ESSID
+-
+-Channel => Canal
+-
+-RADIUS IP Address => Endere?o IP do servidor RADIUS
+-
+-RADIUS Server Key => Palavra-chave RADIUS
+-
+-Enabled => Activo
+-
+-Disabled => Inactivo
+-
+-ESSID Broadcast => Difus?o do SSID
+-
+-Show => Mostrar
+-
+-Hide => Ocultar
+-
+-WLAN Mode => Modo rede sem fios
+-
+-Access Point => Ponto de acesso
+-
+-Client => Cliente
+-
+-Bridge => Ponte (Bridge)
+-
+-Ad-Hoc => Ad-Hoc
+-
+-Operation mode => Modo de funcionamento
+-
+-Encryption Settings => Par?metros de encripta??o
+-
+-Encryption Type => Tipo de encripta??o
+-
+-PSK => PSK
+-
+-WPA Mode => Modo WPA
+-
+-WPA Algorithms => Algoritmos WPA
+-
+-WEP Keys => Palavra-chave WEP
+-
+- 
+-
+-# 'Advanced Wireless Configuration' page
+-
+-Advanced Wireless Configuration => Configura??es rede sem fios (avan?adas)
+-
+-WDS Connections => Liga??es WDS
+-
+-MAC Filter List => Filtrar por endere?o MAC
+-
+-Filter Mode => Tipo de filtro
+-
+-Allow => Autorizar
+-
+-Deny => Negar
+-
+-Set => Estabelecer
+-
+-Settings => Par?metros
+-
+-Automatic WDS => WDS autom?tico
+-
+- 
+-
+-# "Hosts" page
+-
+- 
+-
+-MAC Address => Endere?o MAC
+-
+-Configured Hosts => Sistemas configurados
+-
+-DHCP Static => DHCP est?tico
+-
+-Host Names => Nome dos sistemas
+-
+- 
+-
+-Up => Subir
+-
+-Down => Baixar
+-
+-Edit => Editar
+-
+-Delete => eliminar
+-
+-Save => Guardar
+-
+-Cancel => Cancelar
+-
+- 
+-
+-Forward => Redireccionar
+-
+-Accept => Aceitar
+-
+-Drop => Descartar
+-
+- 
+-
+-Firewall => Firewall
+-
+-Firewall Rules => Regras da Firewall
+-
+-Firewall Configuration => Configura??es da Firewall
+-
+- 
+-
+-New Rule => Nova regra
+-
+-Match => Filtrar
+-
+-Target => Destino
+-
+-Port => Porta
+-
+- 
+-
+-Protocol => Protocolo
+-
+-Source IP => IP de origem
+-
+-Destination IP => IP de destino
+-
+-Source Ports => Portas de origem
+-
+-Destination Ports => Portas de destino
+-
+- 
+-
+-Forward to => Redireccionar para
+-
+-Port => Porta
+-
+- 
+-
+-Helptext ESSID => SSID
+-
+-Helptext DNS save => ? recomend?vel guardar as altera??es antes de adicionar ou eliminar servidores DNS
+-
+- 
+-
+-Helptext Operation mode => Estabelece o modo de opera??o da rede sem fios. Escolhendo ?Client (bridge)? n?o altera a configura??o da interface de rede. Ir? simplesmente configurar alguns par?metros da rede sem fios para operar em modo ponte (bridge).
+-
+- 
+-
+-Helptext Encryption Type => 'WPA (RADIUS)' s? pode ser usado em modo ?Ponto de acesso?.<br /> 'WPA (PSK)' n?o funciona em modo Ad-Hoc.
+-
+- 
+-
+-Helptext IP Settings => As op??es IP s?o opcionais para os modos DHCP e PPTP. Apenas ser?o usadas caso alguma das configura??es autom?tica falhe
+-
+-.
+-
+-Helptext Idle Time => N?mero de segundos sem actividade na Internet que o router deve esperar antes de se desligar da Internet.
+-
+-(Apenas para o modo ?Ligar quando necess?rio? (connect on demand))
+-
+- 
+-Helptext Redial Timeout => N?mero de segundo sem receber resposta que o router deve esperar para voltar a estabelecer liga??o ? Internet.
+\ No newline at end of file
+diff --git a/package/webif/files/usr/lib/webif/lang/ru/common.txt b/package/webif/files/usr/lib/webif/lang/ru/common.txt
+deleted file mode 100644
+index 1d490bd..0000000
+--- a/package/webif/files/usr/lib/webif/lang/ru/common.txt
++++ /dev/null
+@@ -1,223 +0,0 @@
+-lang => &#x420;&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;
+-# Common
+-Settings saved => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x435;&#x43D;&#x44B;
+-Settings not saved => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x43D;&#x435; &#x441;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x435;&#x43D;&#x44B;
+-Save Changes => &#x421;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x438;&#x442;&#x44C; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;
+-Apply Changes => &#x41F;&#x440;&#x438;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-Clear Changes => &#x41E;&#x442;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-Review Changes => &#x41F;&#x435;&#x440;&#x435;&#x441;&#x43C;&#x43E;&#x442;&#x440;&#x435;&#x442;&#x44C; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-Host Name => &#x418;&#x43C;&#x44F; &#x443;&#x437;&#x43B;&#x430;
+-Uptime => &#x412;&#x440;&#x435;&#x43C;&#x44F; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;
+-Load => &#x417;&#x430;&#x433;&#x440;&#x443;&#x437;&#x43A;&#x430;
+-Version => &#x412;&#x435;&#x440;&#x441;&#x438;&#x44F;
+-Categories => &#x41A;&#x430;&#x442;&#x435;&#x433;&#x43E;&#x440;&#x438;&#x438;
+-Subcategories => &#x41F;&#x43E;&#x434;&#x43A;&#x430;&#x442;&#x435;&#x433;&#x43E;&#x440;&#x438;&#x438;
+-more... => &#x434;&#x430;&#x43B;&#x435;&#x435;...
+-Add => &#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C;
+-Remove => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
+-Warning => &#x41F;&#x440;&#x435;&#x434;&#x443;&#x43F;&#x440;&#x435;&#x436;&#x434;&#x435;&#x43D;&#x438;&#x435;
+-Password_warning => &#x41F;&#x430;&#x440;&#x43E;&#x43B;&#x44C; &#x434;&#x43B;&#x44F; &#x432;&#x435;&#x431;-&#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x430; &#x438; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x430; &#x43F;&#x43E; SSH &#x43D;&#x435; &#x437;&#x430;&#x434;&#x430;&#x43D;<br/>&#x412;&#x432;&#x435;&#x434;&#x438;&#x442;&#x435; &#x43D;&#x43E;&#x432;&#x44B;&#x439; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C; (&#x438;&#x43C;&#x44F; &#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F; &#x432; web-&#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x435;: 'root').
+-
+-# Categories
+-Info => &#x418;&#x43D;&#x444;&#x43E;&#x440;&#x43C;&#x430;&#x446;&#x438;&#x44F;
+-About => &#x41E; &#x441;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x435;
+-Router Info => &#x41C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;&#x438;&#x437;&#x430;&#x442;&#x43E;&#x440;
+-
+-Status => &#x421;&#x442;&#x430;&#x442;&#x443;&#x441;
+-Connections => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-DHCP => DHCP
+-Wireless => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F; &#x441;&#x435;&#x442;&#x44C;
+-
+-System => &#x421;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x430;
+-Password => &#x41F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
+-Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;
+-Installed Software => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
+-Firmware Upgrade => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
+-
+-Network => &#x421;&#x435;&#x442;&#x44C;
+-LAN => &#x41B;&#x43E;&#x43A;&#x430;&#x43B;&#x44C;&#x43D;&#x430;&#x44F;
+-WAN => &#x412;&#x43D;&#x435;&#x448;&#x43D;&#x44F;&#x44F;
+-Wireless => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F;
+-Advanced Wireless => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F; (&#x43F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;)
+-Hosts => &#x423;&#x437;&#x43B;&#x44B;
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => &#x42D;&#x442;&#x43E; &#x441;&#x432;&#x43E;&#x431;&#x43E;&#x434;&#x43D;&#x43E;&#x435; &#x43F;&#x440;&#x43E;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#x43D;&#x43E;&#x435; &#x43E;&#x431;&#x435;&#x441;&#x43F;&#x435;&#x447;&#x435;&#x43D;&#x438;&#x435;. &#x41E;&#x43D;&#x43E; &#x440;&#x430;&#x441;&#x43F;&#x440;&#x43E;&#x441;&#x442;&#x440;&#x430;&#x43D;&#x44F;&#x435;&#x442;&#x441;&#x44F; &#x438; &#x43C;&#x43E;&#x434;&#x438;&#x444;&#x438;&#x446;&#x438;&#x440;&#x443;&#x435;&#x442;&#x441;&#x44F; &#x432; &#x441;&#x43E;&#x43E;&#x442;&#x432;&#x435;&#x442;&#x441;&#x442;&#x432;&#x438;&#x438; &#x441; &#x43B;&#x438;&#x446;&#x435;&#x43D;&#x437;&#x438;&#x435;&#x439; GNU General Public License,<br/> &#x43E;&#x43F;&#x443;&#x431;&#x43B;&#x438;&#x43A;&#x43E;&#x432;&#x430;&#x43D;&#x43D;&#x43E;&#x439; Free Software Foundation; &#x432;&#x435;&#x440;&#x441;&#x438;&#x438; 2 &#x438;&#x43B;&#x438; &#x43F;&#x43E; &#x443;&#x441;&#x43C;&#x43E;&#x442;&#x440;&#x435;&#x43D;&#x438;&#x44E; &#x43F;&#x43E;&!
+ #x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F; &#x43B;&#x44E;&#x431;&#x43E;&#x439; &#x431;&#x43E;&#x43B;&#x435;&#x435; &#x43F;&#x43E;&#x437;&#x434;&#x43D;&#x435;&#x439; &#x432;&#x435;&#x440;&#x441;&#x438;&#x438;.
+-Contributions by => &#x41F;&#x43E;&#x43C;&#x43E;&#x449;&#x43D;&#x438;&#x43A;&#x438;
+-Layout based on => &#x414;&#x438;&#x437;&#x430;&#x439;&#x43D;&#x435;&#x440;
+-by => &#x43E;&#x442;
+-
+-
+-No config change. => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x43D;&#x435; &#x438;&#x437;&#x43C;&#x435;&#x43D;&#x44F;&#x43B;&#x430;&#x441;&#x44C;.
+-Config discarded. => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x43E;&#x442;&#x43A;&#x43B;&#x43E;&#x43D;&#x435;&#x43D;&#x430;.
+-Config changes: => &#x418;&#x437;&#x43C;&#x435;&#x43D;&#x435;&#x43D;&#x438;&#x435; &#x43A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x438;:
+-Updating config... => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435; &#x43A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x438;...
+-
+-
+-# 'Router Info' page
+-Firmware Version => &#x412;&#x435;&#x440;&#x441;&#x438;&#x44F; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
+-Kernel Version => &#x412;&#x435;&#x440;&#x441;&#x438;&#x44F; &#x44F;&#x434;&#x440;&#x430;
+-Current Date/Time => &#x412;&#x440;&#x435;&#x43C;&#x44F; &#x438; &#x434;&#x430;&#x442;&#x430;
+-MAC Address => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
+-
+-# 'Connections' page
+-Connection Status => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435;
+-Physical Connections => &#x410;&#x43F;&#x43F;&#x430;&#x440;&#x430;&#x442;&#x43D;&#x44B;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-Router Connections => &#x41F;&#x440;&#x43E;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#x43D;&#x44B;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x43C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;&#x438;&#x437;&#x430;&#x442;&#x43E;&#x440;&#x430;
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP &#x43A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x44B;
+-IP Address => IP &#x430;&#x434;&#x440;&#x435;&#x441;
+-Name => &#x418;&#x43C;&#x44F;
+-Expires in => &#x418;&#x441;&#x442;&#x435;&#x43A;&#x430;&#x435;&#x442;
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x430;&#x44F; &#x441;&#x435;&#x442;&#x44C;
+-
+-# 'Password' page
+-Password Change => &#x418;&#x437;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
+-New Password => &#x41D;&#x43E;&#x432;&#x44B;&#x439; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
+-Confirm Password => &#x41F;&#x43E;&#x434;&#x442;&#x432;&#x435;&#x440;&#x436;&#x434;&#x435;&#x43D;&#x438;&#x435; &#x43F;&#x430;&#x440;&#x43E;&#x43B;&#x44F;
+-
+-# 'System Settings' page
+-System Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x44B;
+-Host Name => &#x418;&#x43C;&#x44F; &#x443;&#x437;&#x43B;&#x430;
+-Language => &#x42F;&#x437;&#x44B;&#x43A;
+-
+-# 'Installed Software' page
+-Installed Packages => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
+-Update package lists => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x43E;&#x432;
+-Available packages => &#x414;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
+-Uninstall => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
+-Install => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => &#x424;&#x43E;&#x440;&#x43C;&#x430;&#x442; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
+-Error => &#x41E;&#x448;&#x438;&#x431;&#x43A;&#x430;
+-done => &#x433;&#x43E;&#x442;&#x43E;&#x432;&#x43E;
+-Invalid_format => &#x41D;&#x435;&#x438;&#x437;&#x432;&#x435;&#x441;&#x442;&#x43D;&#x44B;&#x439; &#x444;&#x43E;&#x440;&#x43C;&#x430;&#x442; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;
+-Erase_JFFS2 => &#x41E;&#x447;&#x438;&#x441;&#x442;&#x438;&#x442;&#x44C; &#x440;&#x430;&#x437;&#x434;&#x435;&#x43B; jffs2
+-Options => &#x41F;&#x430;&#x440;&#x430;&#x43C;&#x435;&#x442;&#x440;&#x44B;
+-Firmware_image => &#x41E;&#x431;&#x440;&#x430;&#x437; &#x43F;&#x440;&#x43E;&#x448;&#x438;&#x432;&#x43A;&#x438;:
+-Upgrade => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
+-Upgrading... => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x438;&#x435;...
+-
+-# 'LAN Settings' page
+-LAN Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x435;&#x442;&#x438;
+-LAN Configuration => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x441;&#x435;&#x442;&#x438;
+-Netmask => &#x41C;&#x430;&#x441;&#x43A;&#x430; &#x43F;&#x43E;&#x434;&#x441;&#x435;&#x442;&#x438;
+-Default Gateway => &#x428;&#x43B;&#x44E;&#x437; &#x43F;&#x43E; &#x443;&#x43C;&#x43E;&#x43B;&#x447;&#x430;&#x43D;&#x438;&#x44E;
+-DNS Servers => &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; DNS
+-DNS Address => &#x430;&#x434;&#x440;&#x435;&#x441; DNS
+-
+-Note => &#x417;&#x430;&#x43C;&#x435;&#x442;&#x43A;&#x430;
+-
+-
+-# 'WAN Settings' page
+-WAN Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x439; &#x441;&#x435;&#x442;&#x438;
+-WAN Configuration => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x439; &#x441;&#x435;&#x442;&#x438;
+-PPTP Server IP => &#x430;&#x434;&#x440;&#x435;&#x441; IP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; PPTP
+-Connection Type => &#x422;&#x438;&#x43F; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-No WAN => &#x41D;&#x435;&#x442; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x439; &#x441;&#x435;&#x442;&#x438;
+-DHCP => DHCP
+-Static IP => &#x421;&#x442;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;&#x439; IP
+-IP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; IP
+-PPP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; PPP
+-Redial Policy => &#x420;&#x430;&#x437;&#x440;&#x44B;&#x432; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F;
+-Connect on Demand => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x44F;&#x442;&#x44C;&#x441;&#x44F; &#x43F;&#x43E; &#x442;&#x440;&#x435;&#x431;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44E;
+-Keep Alive => &#x41F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x438;&#x432;&#x430;&#x442;&#x44C; &#x441;&#x432;&#x44F;&#x437;&#x44C;
+-Maximum Idle Time => &#x41D;&#x430;&#x438;&#x431;&#x43E;&#x43B;&#x44C;&#x448;&#x435;&#x435; &#x432;&#x440;&#x435;&#x43C;&#x44F; &#x43F;&#x440;&#x43E;&#x441;&#x442;&#x43E;&#x44F;
+-Redial Timeout => &#x417;&#x430;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x43D;&#x44B;&#x43C; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435;&#x43C;
+-MTU => MTU
+-Username => &#x418;&#x43C;&#x44F; &#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F;
+-
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => &#x41A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
+-Wireless Interface => &#x411;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;
+-WEP Key => &#x41A;&#x43B;&#x44E;&#x447; WEP
+-Selected WEP Key => &#x412;&#x44B;&#x431;&#x440;&#x430;&#x43D;&#x43D;&#x44B;&#x439; &#x43A;&#x43B;&#x44E;&#x447; WEP
+-WPA PSK => WPA &#x440;&#x430;&#x437;&#x434;&#x435;&#x43B;&#x44F;&#x435;&#x43C;&#x44B;&#x439; &#x43A;&#x43B;&#x44E;&#x447;
+-ESSID => ESSID
+-Channel => &#x41A;&#x430;&#x43D;&#x430;&#x43B;
+-RADIUS IP Address => &#x410;&#x434;&#x440;&#x435;&#x441; IP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; RADIUS
+-RADIUS Server Key => &#x41A;&#x43B;&#x44E;&#x447; &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x430; RADIUS
+-Enabled => &#x412;&#x43A;&#x43B;&#x44E;&#x447;&#x451;&#x43D;
+-Disabled => &#x412;&#x44B;&#x43A;&#x43B;&#x44E;&#x447;&#x435;&#x43D;
+-ESSID Broadcast => &#x412;&#x435;&#x449;&#x430;&#x43D;&#x438;&#x435; ESSID
+-Show => &#x41F;&#x43E;&#x43A;&#x430;&#x437;&#x430;&#x442;&#x44C;
+-Hide => &#x421;&#x43F;&#x440;&#x44F;&#x442;&#x430;&#x442;&#x44C;
+-WLAN Mode => &#x420;&#x435;&#x436;&#x438;&#x43C; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
+-Access Point => &#x422;&#x43E;&#x447;&#x43A;&#x430; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x430;
+-Client => &#x41A;&#x43B;&#x438;&#x435;&#x43D;&#x442;
+-Bridge => &#x41C;&#x43E;&#x441;&#x442;
+-Ad-Hoc => &#x41F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;
+-Encryption Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x431;&#x435;&#x437;&#x43E;&#x43F;&#x430;&#x441;&#x43D;&#x43E;&#x441;&#x442;&#x438;
+-Encryption Type => &#x422;&#x438;&#x43F; &#x448;&#x438;&#x444;&#x440;&#x43E;&#x432;&#x430;&#x43D;&#x438;&#x44F;
+-PSK => &#x41F;&#x430;&#x440;&#x43E;&#x43B;&#x44C;
+-WPA Mode => &#x420;&#x435;&#x436;&#x438;&#x43C; WPA
+-WPA Algorithms => &#x410;&#x43B;&#x433;&#x43E;&#x440;&#x438;&#x442;&#x43C; WPA
+-WEP Keys => WEP &#x43A;&#x43B;&#x44E;&#x447;&#x438;
+-
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => &#x420;&#x430;&#x441;&#x448;&#x438;&#x440;&#x435;&#x43D;&#x43D;&#x430;&#x44F; &#x43A;&#x43E;&#x43D;&#x444;&#x438;&#x433;&#x443;&#x440;&#x430;&#x446;&#x438;&#x44F; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
+-WDS Connections => &#x421;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435; WDS
+-MAC Filter List => &#x424;&#x438;&#x43B;&#x44C;&#x442;&#x440; MAC-&#x430;&#x434;&#x440;&#x435;&#x441;&#x43E;&#x432;
+-Filter Mode => &#x440;&#x435;&#x436;&#x438;&#x43C; &#x444;&#x438;&#x43B;&#x44C;&#x442;&#x440;&#x430;
+-Allow => &#x41F;&#x440;&#x43E;&#x43F;&#x443;&#x441;&#x442;&#x438;&#x442;&#x44C;
+-Deny => &#x41E;&#x442;&#x43A;&#x43B;&#x43E;&#x43D;&#x438;&#x442;&#x44C;
+-Set => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
+-Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;
+-Automatic WDS => &#x410;&#x432;&#x442;&#x43E;&#x43C;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;&#x439; WDS
+-
+-# "Hosts" page
+-
+-MAC Address => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
+-Configured Hosts => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x443;&#x437;&#x43B;&#x44B;
+-DHCP Static => &#x421;&#x442;&#x430;&#x442;&#x438;&#x447;&#x435;&#x441;&#x43A;&#x438;&#x439; DHCP
+-Host Names => &#x418;&#x43C;&#x435;&#x43D;&#x430; &#x443;&#x437;&#x43B;&#x43E;&#x432;
+-
+-
+-Up => &#x412;&#x432;&#x435;&#x440;&#x445;
+-Down => &#x412;&#x43D;&#x438;&#x437;
+-Edit => &#x41F;&#x440;&#x430;&#x432;&#x43A;&#x430;
+-Delete => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
+-Save => &#x421;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x438;&#x442;&#x44C;
+-Cancel => &#x41E;&#x442;&#x43C;&#x435;&#x43D;&#x438;&#x442;&#x44C;
+-
+-Forward => &#x41F;&#x435;&#x440;&#x435;&#x43D;&#x430;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C;
+-Accept => &#x41F;&#x440;&#x438;&#x43D;&#x44F;&#x442;&#x44C;
+-Drop => &#x41E;&#x442;&#x43A;&#x43B;&#x43E;&#x43D;&#x438;&#x442;&#x44C;
+-
+-Firewall => &#x421;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x439; &#x44D;&#x43A;&#x440;&#x430;&#x43D;
+-Firewall Rules => &#x41F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x430; &#x441;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x433;&#x43E; &#x44D;&#x43A;&#x440;&#x430;&#x43D;&#x430;
+-Firewall Configuration => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x433;&#x43E; &#x44D;&#x43A;&#x440;&#x430;&#x43D;&#x430;
+-
+-New Rule => &#x41D;&#x43E;&#x432;&#x43E;&#x435; &#x43F;&#x440;&#x430;&#x432;&#x438;&#x43B;&#x43E;
+-Match => &#x424;&#x438;&#x43B;&#x44C;&#x442;&#x440;
+-Target => &#x426;&#x435;&#x43B;&#x44C;
+-Port => &#x41F;&#x43E;&#x440;&#x442;
+-
+-Protocol => &#x41F;&#x440;&#x43E;&#x442;&#x43E;&#x43A;&#x43E;&#x43B;
+-Source IP => IP &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44F;
+-Destination IP => IP &#x43F;&#x43E;&#x43B;&#x443;&#x447;&#x430;&#x442;&#x435;&#x43B;&#x44F;
+-Source Ports => &#x41F;&#x43E;&#x440;&#x442;&#x44B; &#x43E;&#x442;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x435;&#x43B;&#x44F;
+-Destination Ports => &#x41F;&#x43E;&#x440;&#x442;&#x44B; &#x43F;&#x43E;&#x43B;&#x443;&#x447;&#x430;&#x442;&#x435;&#x43B;&#x44F;
+-
+-Forward to => &#x41F;&#x435;&#x440;&#x435;&#x43D;&#x430;&#x43F;&#x440;&#x430;&#x432;&#x438;&#x442;&#x44C; &#x43D;&#x430;
+-Port => &#x41F;&#x43E;&#x440;&#x442;
+-
+-Helptext ESSID => &#x418;&#x43C;&#x44F; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;
+-Helptext DNS save => &#x41D;&#x443;&#x436;&#x43D;&#x43E; &#x441;&#x43E;&#x445;&#x440;&#x430;&#x43D;&#x438;&#x442;&#x44C; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x43D;&#x430; &#x44D;&#x442;&#x43E;&#x439; &#x441;&#x442;&#x440;&#x430;&#x43D;&#x438;&#x446;&#x435; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x440;&#x430;&#x432;&#x43A;&#x43E;&#x439; DNS &#x441;&#x435;&#x440;&#x432;&#x435;&#x440;&#x43E;&#x432;.
+-Helptext Operation mode => &#x42D;&#x442;&#x430; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x430; &#x437;&#x430;&#x434;&#x430;&#x451;&#x442; &#x440;&#x435;&#x436;&#x438;&#x43C; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;. &#x412;&#x44B;&#x431;&#x43E;&#x440; '&#x41A;&#x43B;&#x438;&#x435;&#x43D;&#x442; &#x438;&#x43B;&#x438; &#x41C;&#x43E;&#x441;&#x442;' &#x43D;&#x435;&#x43F;&#x43E;&#x432;&#x43B;&#x438;&#x44F;&#x435;&#x442; &#x43D;&#x430; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; &#x441;&#x435;&#x442;&#x435;&#x432;&#x43E;&#x433;&#x43E; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x430;. &#x411;&#x443;&#x434;&#x443;&#x442; &#x43E;&#x431;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x44B; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x43D;&#x435;&#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x44B;&#x435; &#x43F;&#x430;&#x440!
+ ;&#x430;&#x43C;&#x435;&#x442;&#x440;&#x44B; &#x434;&#x440;&#x430;&#x439;&#x432;&#x435;&#x440;&#x430; &#x431;&#x435;&#x441;&#x43F;&#x440;&#x43E;&#x432;&#x43E;&#x434;&#x43D;&#x43E;&#x439; &#x441;&#x435;&#x442;&#x438;, &#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x44B;&#x439; &#x43F;&#x43E;&#x437;&#x432;&#x43E;&#x43B;&#x44F;&#x442; &#x43C;&#x430;&#x440;&#x448;&#x440;&#x443;&#x442;&#x438;&#x437;&#x430;&#x446;&#x438;&#x44E; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x43E;&#x432; &#x441; &#x44D;&#x442;&#x43E;&#x433;&#x43E; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x430;.
+-Helptext Encryption Type => 'WPA (RADIUS)' &#x43F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x438;&#x432;&#x430;&#x435;&#x442;&#x441;&#x44F; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x435; &#x442;&#x43E;&#x447;&#x43A;&#x438; &#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x430;<br/> 'WPA (PSK)' &#x43D;&#x435; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x430;&#x435;&#x442; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x435; &#x43F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;.
+-Helptext IP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; IP &#x43C;&#x43E;&#x433;&#x443;&#x442; &#x43D;&#x435; &#x437;&#x430;&#x434;&#x430;&#x432;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x430;&#x445; DHCP &#x438; PPTP. &#x415;&#x441;&#x43B;&#x438; DHCP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440; &#x431;&#x443;&#x434;&#x435;&#x442; &#x43D;&#x435;&#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x435;&#x43D;, &#x431;&#x443;&#x434;&#x443;&#x442; &#x438;&#x441;&#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x437;&#x430;&#x434;&#x430;&#x43D;&#x43D;&#x44B;&#x435; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;.
+-Helptext Idle Time => &#x41F;&#x440;&#x43E;&#x43C;&#x435;&#x436;&#x443;&#x442;&#x43E;&#x43A; &#x432;&#x440;&#x435;&#x43C;&#x435;&#x43D;&#x438; &#x432; &#x441;&#x435;&#x43A;&#x443;&#x43D;&#x434;&#x430;&#x445; &#x43F;&#x43E; &#x438;&#x441;&#x442;&#x435;&#x447;&#x435;&#x43D;&#x438;&#x44E; &#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x43E;&#x433;&#x43E; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435; &#x431;&#x443;&#x434;&#x435;&#x442; &#x440;&#x430;&#x437;&#x43E;&#x440;&#x432;&#x430;&#x43D;&#x43E;, &#x435;&#x441;&#x43B;&#x438; &#x434;&#x430;&#x43D;&#x43D;&#x44B;&#x435; &#x43D;&#x435; &#x43F;&#x435;&#x440;&#x435;&#x434;&#x43E;&#x432;&#x430;&#x43B;&#x438;&#x441;&#x44C; &#x43F;&#x43E; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x43C;&#x443; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x443; (&#x438;&#x441;&#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x443;&#x435;&#x442;&#x441;&#x44F; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x432; &#x440;&#x435;&#x436!
+ ;&#x438;&#x43C;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x43F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;).
+-Helptext Redial Timeout => &#x417;&#x430;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430; &#x432; &#x441;&#x435;&#x43A;&#x443;&#x43D;&#x434;&#x430;&#x445; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x43E;&#x43F;&#x44B;&#x442;&#x43A;&#x43E;&#x439; &#x443;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43A;&#x438; &#x43F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x43D;&#x43E;&#x433;&#x43E; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x441; &#x43F;&#x440;&#x43E;&#x432;&#x430;&#x439;&#x434;&#x435;&#x440;&#x43E;&#x43C;.
+diff --git a/package/webif/files/usr/lib/webif/lang/se/common.txt b/package/webif/files/usr/lib/webif/lang/se/common.txt
+deleted file mode 100644
+index 1c019f5..0000000
+--- a/package/webif/files/usr/lib/webif/lang/se/common.txt
++++ /dev/null
+@@ -1,223 +0,0 @@
+-lang => Svenska
+-# Common
+-Settings saved => Inst&auml;llningar sparade
+-Settings not saved => Inst&auml;llningar inte sparade
+-Save Changes => Spara f&ouml;r&auml;ndringar
+-Apply Changes => Applicera f&ouml;r&auml;ndringar
+-Clear Changes => Ta bort f&ouml;r&auml;ndringar
+-Review Changes => Se gjorda f&ouml;r&auml;ndringar
+-Host Name => V&auml;rdnamn
+-Uptime => Tid uppe
+-Load => Ladda
+-Version => Version
+-Categories => Kategorier
+-Subcategories => Underkategorier
+-more... => mer...
+-Add => L&auml;gg till
+-Remove => Ta bort
+-Warning => Varning
+-Password_warning => Du har inte satt n&aring;got l&ouml;senord f&ouml;r Web-gr&auml;nssnittet och SSH accessen <br />Var v&auml;nlig och g&ouml;r detta nu (anv&auml;ndarnamnet i din browser kommer vara 'root').
+-# Categories
+-Info => Info
+-About => Om
+-Router Info => Router Info
+-
+-Status => Status
+-Connections => Anslutningar
+-DHCP => DHCP
+-Wireless => Tr&aring;dl&ouml;s
+-
+-System => System
+-Password => L&ouml;senord
+-Settings => Inst&auml;llningar
+-Installed Software => Installerad mjukvara
+-Firmware Upgrade => Firmware uppgradering
+-
+-Network => N&auml;tverk
+-LAN => LAN
+-WAN => WAN
+-Wireless => Tr&aring;dl&ouml;s
+-Advanced Wireless => Avancerad Tr&aring;dl&ouml;s
+-Hosts => Konfigurerade V&auml;rdar
+-
+-
+-# 'About' page
+-Copyright => Copyright
+-
+-GPL_Text => Detta program &auml;r &ouml;ppen programvara; du kan &aring;terdistribuera den och/eller <br /> modifiera den under villkoren av best&auml;mmelserna i GNU General Public License <br /> publicerad av Free Software Foundation; antingen version 2 <br /> av licensen eller senare. <br />
+-Contributions by => Bidrag av
+-Layout based on => Layout baserad p&aring;
+-by => av
+-
+-
+-No config change. => Inga &auml;ndringar i inst&auml;llningarna gjordes.
+-Config discarded. => Dina &auml;ndringar i inst&auml;llningarna har avbrutits. 
+-Config changes: => Nuvarande &auml;ndringar i inst&auml;llningarna: 
+-Updating config... => Uppdaterar dina inst&auml;llningar...
+-
+-# 'Router Info' page
+-Firmware Version => Firmware Version
+-Kernel Version => Kernel Version
+-Current Date/Time => Nuvarande Datum/Tid
+-MAC Address => Mac Adress
+-
+-
+-# 'Connections' page
+-Connection Status => Anslutningsstatus
+-Physical Connections => Fysiska anslutningar
+-Router Connections => Router anslutningar
+-
+-
+-# 'DHCP' page
+-DHCP leases => DHCP leases
+-IP Address => IP Adress
+-Name => Namn
+-Expires in => Utg&aring;r om
+-
+-
+-# 'Wireless Status' page
+-Wireless Status => Tr&aring;dl&ouml;s Status
+-
+-# 'Password' page
+-Password Change => Byt l&ouml;senord
+-New Password => Nytt l&ouml;senord
+-Confirm Password => Bekr&auml;fta nytt l&ouml;senord
+-
+-# 'System Settings' page
+-System Settings => System Inst&auml;llningar
+-Host Name => V&auml;rdnamn
+-Language => Spr&aring;k
+-
+-# 'Installed Software' page
+-Installed Packages => Installerade mjukvaror
+-Update package lists => Uppdatera mjukvarulista
+-Uninstall => Avinstallera
+-Install => Installera
+-
+-
+-# 'Firmware Upgrade' page
+-Firmware format => Firmware format
+-Error => Fel
+-done => utf&ouml;rd
+-Invalid_formt => Felaktigt Firmware Format
+-Erase_JFFS2 => Ta bort JFFS2 partition
+-Options => M&ouml;jligheter
+-Firmware_image => Firmware att ladda upp 
+-Upgrade => Uppgradering
+-Upgrading... => Uppgradering...
+-
+-# 'LAN Settings' page
+-LAN Settings => LAN Inst&auml;llningar
+-LAN Configuration => LAN Inst&auml;llningar
+-Netmask => Netmask
+-Default Gateway => Default Gateway
+-DNS Servers => DNS Servrar
+-DNS Address => DNS Adress
+-
+-Note => Noteringar
+-
+-# 'WAN Settings' page
+-WAN Settings => WAN Inst&auml;llningar
+-WAN Configuration => WAN Inst&auml;llningar
+-PPTP Server IP => PPTP Server IP
+-Connection Type => Anslutningstyp
+-No WAN => Ingen
+-DHCP => DHCP
+-Static IP => Statisk IP
+-IP Settings => IP Inst&auml;llningar
+-PPP Settings => PPP Inst&auml;llningar
+-Redial Policy => &Aring;teruppringsnings Policy
+-Connect on Demand => Anslut p&aring; beg&auml;ran 
+-Keep Alive => H&aring;ll levande
+-Maximum Idle Time => Maximum tid i vila
+-Redial Timeout => Timeout f&ouml;r &aring;teruppringning
+-MTU => MTU
+-Username => Anv&auml;ndarnamn
+-
+-# 'Wireless Configuration' page
+-Wireless Configuration => Tr&aring;dl&ouml;sa Inst&auml;llningar
+-Wireless Interface => Tr&aring;dl&ouml;st Gr&auml;nssnitt
+-WEP Key => WEP Nyckel
+-Selected WEP Key => Vald WEP Nyckel
+-WPA PSK => WPA PSK
+-ESSID => ESSID
+-Channel => Kanal
+-RADIUS IP Address => RADIUS IP Adress
+-RADIUS Server Key => RADIUS Server Nyckel
+-Enabled => P&aring;satt
+-Disabled => Avst&auml;ngd
+-ESSID Broadcast => ESSID Broadcast
+-Show => Visa
+-Hide => G&ouml;m
+-WLAN Mode => WLAN L&auml;ge
+-Access Point => Accesspunkt 
+-Client => Klient
+-Bridge => Brygga
+-Ad-Hoc => Ad-Hoc
+-Operation mode => Tillst&aring;ndsl&auml;ge
+-Encryption Settings => Krypteringsinst&auml;llningar 
+-Encryption Type => Krypteringstyp
+-PSK => PSK
+-WPA Mode => WPA L&auml;ge
+-WPA Algorithms => WPA Algoritmer
+-WEP Keys => WEP Nyckel
+-
+-# 'Advanced Wireless Configuration' page
+-Advanced Wireless Configuration => Avancerad Tr&aring;dl&ouml;s Inst&auml;llning
+-WDS Connections => WDS Anslutningar
+-MAC Filter List => MAC Filter Lista
+-Filter Mode => Filterl&auml;ge
+-Allow => Till&aring;t
+-Deny => Neka
+-Set => S&auml;tt
+-Settings => Settings
+-Automatic WDS => Automatisk WDS
+-
+-# "Hosts" page
+-
+-MAC Address => MAC Adress
+-Configured Hosts => Konfigurerade V&auml;rdar
+-DHCP Static => Statisk DHCP 
+-Host Names => V&auml;rdnamn
+-
+-Up => Upp
+-Down => Ned
+-Edit => Editera
+-Delete => Ta bort
+-Save => Spara
+-Cancel => Avbryt
+-
+-Forward => Fram&aring;t
+-Accept => Acceptera
+-Drop => Tappa
+-
+-Firewall => Brandv&auml;gg
+-Firewall Rules => Brandv&auml;ggsregler 
+-Firewall Configuration => Brandv&auml;ggsinst&auml;llningar
+-
+-New Rule => Ny Regel
+-Match => Match
+-Target => M&aring;l
+-Port => Port
+-
+-Protocol => Protokoll
+-Source IP => K&auml;ll IP
+-Destination IP => Destinations IP
+-Source Ports => K&auml;llport
+-Destination Ports => Destinationsport
+-
+-Forward to => Skicka till
+-Port => Port
+-
+-Helptext ESSID => Namn p&aring; ditt tr&aring;dl&ouml;sa N&auml;tverk
+-Helptext DNS save => Du b&ouml;r spara dina inst&auml;llningar p&aring; denna sida f&ouml;re du l&auml;gger till/tar bort DNS servrar
+-
+-Helptext Operation mode => Detta s&auml;tter l&auml;gesinst&auml;llningen f&ouml;r ditt tr&aring;dl&ouml;sa n&auml;tverk. Att v&auml;lja 'Klient (Brygga)' kommer inte &auml;ndra ditt n&auml;tverks gr&auml;nssnittsinst&auml;llningar. Det kommer endast att s&auml;tta n&aring;gra parametrar i drivrutinerna som till&aring;ter en begr&auml;nsad bryggning av gr&auml;nssnittet. 
+-Helptext Encryption Type => 'WPA (RADIUS)' st&ouml;djs endast i Accesspunktsl&auml;ge. <br /> 'WPA (PSK)' fungerar inte i Ad-Hoc l&auml;ge.
+-Helptext IP Settings => IP inst&auml;llningar &auml;r inte obligatoriska f&ouml;r DHCP och PPTP. Om du s&auml;tter dem s&aring; anv&auml;nds de som standard om DHCP-servern inte &auml;r tillg&auml;nlig. 
+-Helptext Idle Time => Antalet sekunder utan internet trafik som routern skall v&auml;nta p&aring; innan den fr&aring;nkopplar sig fr&aring;n Internet. (Anslut endast p&aring; beg&auml;ran)
+-Helptext Redial Timeout => Antalet sekunder att v&auml;nta i innan f&ouml;rs&ouml;k till ny uppkoppling g&ouml;rs. (om ingen kontakt kunnat uppr&auml;ttas med tillhandah&aring;llaren)
+-
+-# untranslated:
+-Available packages => Available packages
+-
+diff --git a/package/webif/files/usr/lib/webif/languages.awk b/package/webif/files/usr/lib/webif/languages.awk
+deleted file mode 100644
+index f0111dd..0000000
+--- a/package/webif/files/usr/lib/webif/languages.awk
 +++ /dev/null
 @@ -1,12 +0,0 @@
--config BR2_PACKAGE_LZMA
--	bool "lzma"
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_DEPRECATED
--	help
--	  Lempel Ziv compression method (LZMA) is a compression
--	  algorithm with high compression ratio.
+-BEGIN {
+-	print "option|en|English"
+-}
 -
--	  http://tukaani.org/lzma/
--
--comment "lzma requires a toolchain with C++ support"
--        depends on !BR2_INSTALL_LIBSTDCPP && BR2_DEPRECATED
-diff --git a/package/lzma/lzma.mk b/package/lzma/lzma.mk
+-/webif\/lang\/[a-zA-Z][a-zA-Z]*/ {
+-	gsub(/^.*webif\/lang\//, "")
+-	shortname = $0
+-	gsub(/\/.*$/, "", shortname)
+-	gsub(/^.*=>[ \t]*/, "")
+-	longname = $0
+-	print "option|" shortname "|" longname
+-}
+diff --git a/package/webif/files/usr/lib/webif/subcategories.awk b/package/webif/files/usr/lib/webif/subcategories.awk
 deleted file mode 100644
-index 4614116..0000000
---- a/package/lzma/lzma.mk
+index 8891ce4..0000000
+--- a/package/webif/files/usr/lib/webif/subcategories.awk
++++ /dev/null
+@@ -1,12 +0,0 @@
+-BEGIN {
+-	FS=":"
+-	print "<div id=\"submenu\"><h3><strong>@TR<<Subcategories>>:</strong></h3><ul>"
+-}
+-{
+-	if ($5 ~ "^" selected "$") print "<li class=\"selected-maincat\"><a href=\"" rootdir "/" $6 "\">&raquo;@TR<<" $5 ">>&laquo;</a></li>"
+-	else print "<li><a href=\"" rootdir "/" $6 "\">&nbsp;@TR<<" $5 ">>&nbsp;</a></li>"
+-}
+-END {
+-	print "</ul></div>"
+-}
+-
+diff --git a/package/webif/files/usr/lib/webif/validate.awk b/package/webif/files/usr/lib/webif/validate.awk
+deleted file mode 100644
+index 60b5915..0000000
+--- a/package/webif/files/usr/lib/webif/validate.awk
++++ /dev/null
+@@ -1,151 +0,0 @@
+-# $1 = type
+-# $2 = variable name
+-# $3 = field name
+-# $4 = options
+-# $5 = value
+-BEGIN {
+-	FS="|"
+-	output=""
+-}
+-
+-{ 
+-	valid_type = 0
+-	valid = 1
+-	# XXX: weird hack, but it works...
+-	n = split($0, param, "|")
+-	value = param[5]
+-	for (i = 6; i <= n; i++) value = value FS param[i]
+-	verr = ""
+-}
+-
+-$1 == "int" {
+-	valid_type = 1
+-	if (value !~ /^[0-9]*$/) { valid = 0; verr = "@TR<<Invalid value>>" }
+-}
+-
+-# FIXME: add proper netmask validation
+-($1 == "ip") || ($1 == "netmask") {
+-	valid_type = 1
+-	if ((value != "") && (value !~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/)) valid = 0
+-	else {
+-		split(value, ipaddr, "\\.")
+-		for (i = 1; i <= 4; i++) {
+-			if ((ipaddr[i] < 0) || (ipaddr[i] > 255)) valid = 0
+-		}
+-	}
+-	if (valid == 0) verr = "@TR<<Invalid value>>"
+-}
+-
+-$1 == "wep" {
+-	valid_type = 1
+-	if (value !~ /^[0-9A-Fa-f]*$/) {
+-		valid = 0
+-		verr = "@TR<<Invalid value>>"
+-	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
+-		valid = 0
+-		verr = "Invalid key length"
+-	} else if (value ~ /0$/) {
+-		valid = 0
+-		verr = "Key must not end with '0'"
+-	}
+-}
+-
+-$1 == "hostname" {
+-	valid_type = 1
+-	if (value !~ /^[0-9a-zA-z\.\-]*$/) {
+-		valid = 0
+-		verr = "@TR<<Invalid value>>"
+-	}
+-}
+-
+-$1 == "string" {
+-	valid_type = 1
+-}
+-
+-$1 == "mac" {
+-	valid_type = 1
+-	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]$/)) {
+-		valid = 0
+-		verr = "@TR<<Invalid value>>"
+-	}
+-}
+-
+-$1 == "port" {
+-	valid_type = 1
+-	if (value !~ /^[0-9]*$/) {
+-		valid = 0
+-		verr = "@TR<<Invalid value>>"
+-	}
+-}
+-
+-$1 == "ports" {
+-	valid_type = 1
+-	n = split(value ",", ports, ",")
+-	for (i = 1; i <= n; i++) {
+-		if ((ports[i] !~ /^[0-9]*$/) && (ports[i] !~ /^[0-9][0-9]*-[0-9][0-9]*$/)) {
+-			valid = 0
+-			verr = "@TR<<Invalid value>>"
+-		}
+-	}
+-}
+-
+-$1 == "wpapsk" {
+-	valid_type = 1
+-	if (length(value) > 64) {
+-		valid = 0
+-		verr = "String too long"
+-	}
+-	if ((length(value) != 0) && (length(value) < 8)) {
+-		valid = 0
+-		verr = "String too short"
+-	}
+-	if ((length(value) == 64) && (value ~ /[^0-9a-fA-F]/)) {
+-		valid = 0
+-		verr = "Invalid hex key"
+-	}
+-}
+-
+-valid_type != 1 { valid = 0 }
+-
+-valid == 1 {
+-	n = split($4, options, " ")
+-	for (i = 1; (valid == 1) && (i <= n); i++) {
+-		if (options[i] == "required") {
+-			if (value == "") { valid = 0; verr = "No value entered" }
+-		} else if ((options[i] ~ /^min=/) && (value != "")) {
+-			min = options[i]
+-			sub(/^min=/, "", min)
+-			min = int(min)
+-			if ($1 == "int") {
+-				if (value < min) { valid = 0; verr = "Value too small (minimum: " min ")" }
+-			} else if ($1 == "string") {
+-				if (length(value) < min) { valid = 0; verr = "Value too small (minimum length: " min ")"}
+-			}
+-		} else if ((options[i] ~ /^max=/) && (value != ""))  {
+-			max = options[i]
+-			sub(/^max=/, "", max)
+-			max = int(max)
+-			if ($1 == "int") {
+-				if (value > max) { valid = 0; verr = "@TR<<Value too large>> (@TR<<maximum>>: " max ")" }
+-			} else if ($1 == "string") {
+-				if (length(value) > max) { valid = 0; verr = "@TR<<String too short>> (@TR<<maximum>>: " max ")" }
+-			}
+-		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
+-			if (value ~ /\./) {
+-				valid = 0
+-				verr = "@TR<<Invalid value>>"
+-			}
+-		}
+-	}
+-}
+-
+-valid_type == 1 {
+-	if (valid == 1) output = output $2 "=\"" value "\";\n"
+-	else error = error "Error in " $3 ": " verr "<br />"
+-}
+-
+-END {
+-	print output "ERROR=\"" error "\";\n"
+-	if (error == "") print "return 0"
+-	else print "return 255"
+-}
+diff --git a/package/webif/files/usr/lib/webif/webif.sh b/package/webif/files/usr/lib/webif/webif.sh
+deleted file mode 100755
+index e6147fd..0000000
+--- a/package/webif/files/usr/lib/webif/webif.sh
++++ /dev/null
+@@ -1,286 +0,0 @@
+-libdir=/usr/lib/webif
+-wwwdir=/www
+-cgidir=/www/cgi-bin/webif
+-rootdir=/cgi-bin/webif
+-indexpage=index.sh
+-
+-# workarounds for stupid busybox slowness on [ ]
+-empty() {
+-	case "$1" in
+-		"") return 0 ;;
+-		*) return 255 ;;
+-	esac
+-}
+-equal() {
+-	case "$1" in
+-		"$2") return 0 ;;
+-		*) return 255 ;;
+-	esac
+-}
+-neq() {
+-	case "$1" in
+-		"$2") return 255 ;;
+-		*) return 0 ;;
+-	esac
+-}
+-# very crazy, but also very fast :-)
+-exists() {
+-	( < $1 ) 2>&-
+-}
+-
+-categories() {
+-	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
+-		awk -v "selected=$1" \
+-			-v "rootdir=$rootdir" \
+-			-v "indexpage=$indexpage" \
+-			-f /usr/lib/webif/categories.awk -
+-}
+-
+-subcategories() {
+-	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
+-		sed -e 's,^.*/\([a-zA-Z0-9_\.\-]*\):\(.*\)$,\2:\1,' | \
+-		sort -n | \
+-		awk -v "selected=$2" \
+-			-v "rootdir=$rootdir" \
+-			-f /usr/lib/webif/subcategories.awk -
+-}
+-
+-update_changes() {
+-	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+-}
+-
+-header() {
+-	empty "$ERROR" && {
+-		_saved_title="${SAVED:+: @TR<<Settings saved>>}"
+-	} || {
+-		FORM_submit="";
+-		ERROR="<h3>$ERROR</h3><br /><br />"
+-		_saved_title=": @TR<<Settings not saved>>"
+-	}
+-
+-	_category="$1"
+-	_uptime="$(uptime)"
+-	_loadavg="${_uptime#*load average: }"
+-	_uptime="${_uptime#*up }"
+-	_uptime="${_uptime%%,*}"
+-	_hostname=$(cat /proc/sys/kernel/hostname)
+-	_version=$( grep "(" /etc/banner )
+-	_version="${_version%% ---*}"
+-	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
+-	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
+-	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
+-	_categories=$(categories $1)
+-	_subcategories=${2:+$(subcategories "$1" "$2")}
+-	
+-	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
+-		_nopasswd=1
+-		_form=""
+-		_savebutton=""
+-	}
+-
+-	update_changes
+-	cat <<EOF
+-Content-Type: text/html
+-Pragma: no-cache
+-
+-<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
+-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+-	<head>
+-    	<title>@TR<<Web Status Console>></title>
+-		<link rel="stylesheet" type="text/css" href="/webif.css" />
+-		<!--[if IE]> <style> #container { height: 100%; }</style> <![endif]-->
+-		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
+-	</head>
+-	<body $4><div id="container">
+-	    <div id="header">
+-	        <div id="header-title">
+-				<div id="openwrt-title"><h1>Web Status Console</h1></div>
+-				<div id="short-status">
+-					<h3><strong>Status:</strong></h3>
+-					<ul>
+-						<li><strong>@TR<<Host Name>>:</strong> $_hostname</li>
+-						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+-						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+-						<li><strong>@TR<<Version>>:</strong> $_version</li>
+-					</ul>
+-				</div>
+-			</div>
+-			$_categories
+-			$_subcategories
+-		</div>
+-		$_form
+-		<div id="content">
+-			<div class="settings-block">
+-				$_head
+-				$ERROR
+-EOF
+-	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
+-		empty "$FORM_passwd1" || {
+-			echo '<pre>'
+-			(
+-				echo "$FORM_passwd1"
+-				sleep 1
+-				echo "$FORM_passwd2"
+-			) | passwd root 2>&1 && apply_passwd
+-			echo '</pre>'
+-			footer
+-			exit
+-		}
+-		
+-		equal "$_nopasswd" 1 && {
+-			cat <<EOF
+-<br />
+-<br />
+-<br />
+-<h3>@TR<<Warning>>: @TR<<Password_warning|you haven't set a password for the Web interface and SSH access<br />Please enter one now (the user name in your browser will be 'root').>></h3>
+-<br />
+-<br />
+-EOF
+-			empty "$NOINPUT" && cat <<EOF
+-<form enctype="multipart/form-data" action="$SCRIPT_NAME" method="POST">
+-<table>
+-	<tr>
+-		<td>@TR<<New Password>>:</td>
+-		<td><input type="password" name="passwd1" /></td>
+-	</tr>
+-	<tr>
+-		<td>@TR<<Confirm Password>>: &nbsp; </td>
+-		<td><input type="password" name="passwd2" /></td>
+-	</tr>
+-	<tr>
+-		<td />
+-		<td><input type="submit" name="action" value="@TR<<Set>>" /></td>
+-	</tr>
+-</table>
+-</form>
+-EOF
+-			footer
+-			exit
+-		} || {
+-			apply_passwd
+-		}
+-	}
+-}
+-
+-footer() {
+-	_changes=${CHANGES#0}
+-	_changes=${_changes:+(${_changes})}
+-	_endform=${_savebutton:+</form>}
+-	cat <<EOF
+-			</div>
+-			<hr width="40%" />
+-		</div>
+-		<br />
+-		<div id="save">
+-			<div class="page-save">
+-				<div> </div>
+-			</div>
+-			<div class="apply">
+-				<div> </div>
+-			</div>
+-		</div>
+-		$_endform
+-    </div></body>
+-</html>
+-EOF
+-}
+-
+-apply_passwd() {
+-	case ${SERVER_SOFTWARE%% *} in
+-		mini_httpd/*)
+-			grep '^root:' /etc/passwd | cut -d: -f1,2 > $cgidir/.htpasswd
+-			killall -HUP mini_httpd
+-			;;
+-	esac
+-}
+-
+-display_form() {
+-	if empty "$1"; then
+-		awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
+-	else
+-		echo "$1" | awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
+-	fi
+-}
+-
+-list_remove() {
+-	echo "$1 " | awk '
+-BEGIN {
+-	RS=" "
+-	FS=":"
+-}
+-($0 !~ /^'"$2"'/) && ($0 != "") {
+-	printf " " $0
+-	first = 0
+-}'
+-}
+-
+-handle_list() {
+-	# $1 - remove
+-	# $2 - add
+-	# $3 - submit
+-	# $4 - validate
+-	
+-	empty "$1" || {
+-		LISTVAL="$(list_remove "$LISTVAL" "$1") "
+-		LISTVAL="${LISTVAL# }"
+-		LISTVAL="${LISTVAL%% }"
+-		_changed=1
+-	}
+-	
+-	empty "$3" || {
+-		validate "${4:-none}|$2" && {
+-			if empty "$LISTVAL"; then
+-				LISTVAL="$2"
+-			else
+-				LISTVAL="$LISTVAL $2"
+-			fi
+-			_changed=1
+-		}
+-	}
+-
+-	LISTVAL="${LISTVAL# }"
+-	LISTVAL="${LISTVAL%% }"
+-	LISTVAL="${LISTVAL:- }"
+-
+-	if empty "$_changed"; then
+-		return 255
+-	else
+-		return 0
+-	fi
+-}
+-
+-load_settings() {
+-	equal "$1" "nvram" || {
+-		exists /etc/config/$1 && . /etc/config/$1
+-	}
+-	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1
+-}
+-
+-validate() {
+-	if empty "$1"; then
+-		eval "$(awk -f /usr/lib/webif/validate.awk)"
+-	else
+-		eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
+-	fi
+-}
+-
+-
+-save_setting() {
+-	exists /tmp/.webif/* || mkdir -p /tmp/.webif
+-	oldval=$(eval "echo \${$2}")
+-	oldval=${oldval:-$(nvram get "$2")}
+-	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
+-		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&- 
+-		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
+-		oldval=""
+-	}
+-	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
+-}
+-
+-
+-is_bcm947xx() {
+-	read _systype < /proc/cpuinfo
+-	equal "${_systype##* }" "BCM947XX"
+-}
+-
+diff --git a/package/webif/files/www/cgi-bin/webif.sh b/package/webif/files/www/cgi-bin/webif.sh
+deleted file mode 100755
+index 63ed48f..0000000
+--- a/package/webif/files/www/cgi-bin/webif.sh
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh
+-exec ./webif/info.sh
+diff --git a/package/webif/files/www/cgi-bin/webif/.categories b/package/webif/files/www/cgi-bin/webif/.categories
+deleted file mode 100644
+index 331d4df..0000000
+--- a/package/webif/files/www/cgi-bin/webif/.categories
++++ /dev/null
+@@ -1,2 +0,0 @@
+-##WEBIF:category:Info
+-##WEBIF:category:Status
+diff --git a/package/webif/files/www/cgi-bin/webif/about.sh b/package/webif/files/www/cgi-bin/webif/about.sh
+deleted file mode 100755
+index a0049c2..0000000
+--- a/package/webif/files/www/cgi-bin/webif/about.sh
++++ /dev/null
+@@ -1,31 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-header "Info" "About" "@TR<<About>>..."
+-?>
+-
+-<h3>webif - @TR<<OpenWrt Administrative Console>></h3>
+-<br />
+- at TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version. <br /> >>
+-<br />
+- at TR<<Copyright>> &copy; 2005-2006 OpenWrt.org <br />
+-<br />
+- at TR<<Contributions by>>:
+-<ul class="about">
+-	<li class="about">Philipp Kewisch &lt;<a href="mailto:openwrt@kewis.ch">openwrt at kewis.ch</a>&gt;</li>
+-	<li class="about">Spectra &lt;<a href="mailto:spectra@gmx.ch">spectra at gmx.ch</a>&gt;</li>
+-	<li class="about">Jeremy Collake &lt;<a href="mailto:jeremy.collake@gmail.com">jeremy.collake at gmail.com</a>&gt;</li>
+-	<li class="about">Travis Kemen &lt;<a href="mailto:kemen04@gmail.com">kemen04 at gmail.com</a>&gt;</li>
+-	<li class="about">Markus Wigge</li>
+-	<li class="about">SeDkY</li>
+-	<li class="about">Ivoshiee</li>
+-	<li class="about">arteqw</li>
+-	<li class="about">silver71</li>
+-	<li class="about">@TR<<Layout based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran</li>
+-</ul>
+-
+-
+-<? footer ?>
+-<!--
+-##WEBIF:name:Info:20:About
+--->
+diff --git a/package/webif/files/www/cgi-bin/webif/config.sh b/package/webif/files/www/cgi-bin/webif/config.sh
+deleted file mode 100755
+index 0259537..0000000
+--- a/package/webif/files/www/cgi-bin/webif/config.sh
++++ /dev/null
+@@ -1,46 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-
+-update_changes
+-
+-case "$CHANGES" in
+-	""|0)FORM_mode=nochange
+-esac
+-case "$FORM_mode" in 
+-	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
+-	clear)
+-		rm -rf /tmp/.webif >&- 2>&- 
+-		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
+-		CHANGES=""
+-		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
+-		;;
+-	review)
+-		header $FORM_cat . "@TR<<Config changes:|Current configuration changes:>>"
+-		cd /tmp/.webif
+-		for configname in config-*; do
+-			grep = $configname >&- 2>&- && {
+-				echo -n "<h3>${configname#config-}</h3><br /><pre>"
+-				cat $configname
+-				echo '</pre><br />'
+-			}
+-		done
+-		CONFIGFILES=""
+-		for configname in file-*; do
+-			exists "$configname" && CONFIGFILES="$CONFIGFILES ${configname#file-}"
+-		done
+-		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
+-		echo $CONFIGFILES
+-		;;
+-	save)
+-		header $FORM_cat . "@TR<<Updating config...|Updating your configuration...>>"
+-		CHANGES=""
+-		echo "<pre>"
+-		sh /usr/lib/webif/apply.sh 2>&1
+-		echo "</pre>${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
+-		;;
+-esac
+-
+-footer
+-
+-?>
+diff --git a/package/webif/files/www/cgi-bin/webif/index.sh b/package/webif/files/www/cgi-bin/webif/index.sh
+deleted file mode 100755
+index 466b34d..0000000
+--- a/package/webif/files/www/cgi-bin/webif/index.sh
++++ /dev/null
+@@ -1,8 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-category=$FORM_cat
+-empty "$category" && category=Info
+-header $category 1
+-
+-footer ?>
+diff --git a/package/webif/files/www/cgi-bin/webif/info.sh b/package/webif/files/www/cgi-bin/webif/info.sh
+deleted file mode 100755
+index cc76397..0000000
+--- a/package/webif/files/www/cgi-bin/webif/info.sh
++++ /dev/null
+@@ -1,44 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-header "Info" "Router Info" "@TR<<Router Info>>"
+-
+-?>
+-<pre><?
+-_version=$( grep "(" /etc/banner )
+-_version="${_version%% ---*}"
+-_kversion="$( cat /proc/version )"
+-_date="$(date)"
+-_mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
+-sed -e 's/&/&amp;/g' < /etc/banner
+-cat <<EOF
+-</pre>
+-<br />
+-<br />
+-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+-<tbody>
+-	<tr>
+-		<td>@TR<<Firmware Version>></td>
+-		<td>$_version</td>
+-	</tr>
+-	<tr>
+-		<td>@TR<<Kernel Version>></td>
+-		<td>$_kversion</td>
+-	</tr>
+-	<tr>
+-		<td>@TR<<Current Date/Time>></td>
+-		<td>$_date</td>
+-	</tr>
+-	<tr>
+-		<td>@TR<<MAC Address>></td>
+-		<td>$_mac</td>
+-	</tr>
+-</tbody>
+-</table>
+-EOF
+-
+-footer
+-?>
+-<!--
+-##WEBIF:name:Info:10:Router Info
+--->
+diff --git a/package/webif/files/www/cgi-bin/webif/ipkg.sh b/package/webif/files/www/cgi-bin/webif/ipkg.sh
+deleted file mode 100755
+index 62c0fae..0000000
+--- a/package/webif/files/www/cgi-bin/webif/ipkg.sh
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#!/bin/sh
+-exec ./system-ipkg.sh
+diff --git a/package/webif/files/www/cgi-bin/webif/status-connection.sh b/package/webif/files/www/cgi-bin/webif/status-connection.sh
+deleted file mode 100755
+index fbf329b..0000000
+--- a/package/webif/files/www/cgi-bin/webif/status-connection.sh
++++ /dev/null
+@@ -1,29 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-header "Status" "Connections" "@TR<<Connection Status>>"
+-?>
+-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+-<tbody>
+-	<tr>
+-		<th><b>@TR<<Physical Connections|Ethernet/Wireless Physical Connections>></b></th>
+-	</tr>
+-	<tr>
+-		<td><pre><? cat /proc/net/arp ?></pre></td>
+-	</tr>
+-	
+-	<tr><td><br /><br /></td></tr>
+-
+-	<tr>
+-		<th><b>@TR<<Router Connections|Connections to the Router>></b></th>
+-	</tr>
+-	<tr>
+-		<td><pre><? netstat -n 2>&- | awk '$0 ~ /^Active UNIX/ {ignore = 1}; ignore != 1 { print $0 }' ?></pre></td>
+-	</tr>
+-</tbody>
+-</table>
+-
+-<? footer ?>
+-<!--
+-##WEBIF:name:Status:100:Connections
+--->
+diff --git a/package/webif/files/www/cgi-bin/webif/status-dhcp.sh b/package/webif/files/www/cgi-bin/webif/status-dhcp.sh
+deleted file mode 100755
+index 5517b78..0000000
+--- a/package/webif/files/www/cgi-bin/webif/status-dhcp.sh
++++ /dev/null
+@@ -1,38 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-header "Status" "DHCP" "@TR<<DHCP leases>>"
+-?>
+-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+-<tbody>
+-	<tr>
+-		<th>@TR<<MAC Address>></th>
+-		<th>@TR<<IP Address>></th>
+-		<th>@TR<<Name>></th>
+-		<th>@TR<<Expires in>></th>
+-	</tr>
+-<? [ -e /tmp/dhcp.leases ] && awk -vdate="$(date +%s)" '
+-$1 > 0 {
+-	print "<tr>"
+-	print "<td>" $2 "</td>"
+-	print "<td>" $3 "</td>"
+-	print "<td>" $4 "</td>"
+-	print "<td>"
+-	t = $1 - date
+-	h = int(t / 60 / 60)
+-	if (h > 0) printf h "h "
+-	m = int(t / 60 % 60)
+-	if (m > 0) printf m "min "
+-	s = int(t % 60)
+-	printf s "sec "
+-	printf "</td>"
+-	print "</tr>"
+-}
+-' /tmp/dhcp.leases ?>
+-</tbody>
+-</table>
+-
+-<? footer ?>
+-<!--
+-##WEBIF:name:Status:150:DHCP
+--->
+diff --git a/package/webif/files/www/cgi-bin/webif/status-wireless.sh b/package/webif/files/www/cgi-bin/webif/status-wireless.sh
+deleted file mode 100755
+index c7ad0a3..0000000
+--- a/package/webif/files/www/cgi-bin/webif/status-wireless.sh
++++ /dev/null
+@@ -1,12 +0,0 @@
+-#!/usr/bin/webif-page
+-<? 
+-. /usr/lib/webif/webif.sh
+-header "Status" "Wireless" "@TR<<Wireless Status>>"
+-?>
+-
+-<pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre>
+-
+-<? footer ?>
+-<!--
+-##WEBIF:name:Status:200:Wireless
+--->
+diff --git a/package/webif/files/www/index.html b/package/webif/files/www/index.html
+deleted file mode 100644
+index 72a9187..0000000
+--- a/package/webif/files/www/index.html
 +++ /dev/null
 @@ -1,16 +0,0 @@
--#############################################################
--#
--# lzma
--#
--#############################################################
--LZMA_VERSION:=4.32.7
--LZMA_SOURCE:=lzma-$(LZMA_VERSION).tar.gz
--LZMA_SITE:=http://tukaani.org/lzma/
--LZMA_INSTALL_STAGING = YES
--LZMA_INSTALL_TARGET = YES
--LZMA_CONF_OPT = $(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
--
--$(eval $(call AUTOTARGETS))
--$(eval $(call AUTOTARGETS,host))
--
--LZMA=$(HOST_DIR)/usr/bin/lzma
-diff --git a/package/lzma/lzmacheck.sh b/package/lzma/lzmacheck.sh
-deleted file mode 100755
-index bcb0423..0000000
---- a/package/lzma/lzmacheck.sh
+-<?xml version="1.0" encoding="utf-8"?>
+-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+-<html xmlns="http://www.w3.org/1999/xhtml">
+-	<head>
+-		<meta http-equiv="Pragma" CONTENT="no-cache">
+-		<meta http-equiv="Expires" CONTENT="-1">
+-		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+-		<meta http-equiv="refresh" content="0; URL=/cgi-bin/webif.sh" />
+-		<title>Web Administrative Console</title>
+-	</head>
+-	<body style="margin: 0pt auto; height:100%; color: #C3C4D2; background-color: #213242;">
+-		<div style="width: 100%; height: 100%; position: fixed; display: table;">
+-			<p style="display: table-cell; line-height: 4em; vertical-align: middle; text-align: center;">Web Administrative Console<br />Redirecting to : <a style="color: inherit;" href="/cgi-bin/webif.sh">main page</a></p>
+-		</div>
+-	</body>
+-</html>
+diff --git a/package/webif/files/www/webif.css b/package/webif/files/www/webif.css
+deleted file mode 100644
+index 86c5a62..0000000
+--- a/package/webif/files/www/webif.css
 +++ /dev/null
-@@ -1,9 +0,0 @@
--#!/bin/sh
+@@ -1,296 +0,0 @@
+-/* layout */
 -
--bin=$(toolchain/dependencies/check-host-lzma.sh)
--if [ "x$bin" = "x" ] ; then
--  echo build-lzma-host-binary
--else
--  echo use-lzma-host-binary
--fi
+-* {
+-	margin: 0;
+-	padding: 0;
+-}
 -
+-html, body {
+-	width: inherit;
+-	height: 100%;
+-}
+-
+-dd {
+-	margin-left: 1em;
+-	margin-bottom: 0.2em;
+-}
+-
+-ul {
+-	display: inline;
+-	list-style-type: none;
+-}
+-
+-ul.about {
+-	list-style-type: disc;
+-}
+-
+-li.about {
+-	margin-left: 2em;
+-}
+-
+-hr,
+-#submenu h3,
+-#short-status h3,
+-#content .settings-block .settings .settings-help h3 {
+-	display: none;
+-}
+-
+-ul.about,
+-hr.separator {
+-	display: block;
+-}
+-
+-option {
+-	padding-right: 1em;
+-}
+-
+-#container {
+-	position: relative;
+-	min-height: 100%;
+-}
+-
+-#header {
+-	position: relative;
+-	width: 100%;
+-}
+-
+-#header-title {
+-	padding-top: 2em;
+-	padding-bottom: 0.2em;
+-}
+-
+-#openwrt-title {
+-	position: relative;
+-	float: left;
+-	left: 1em;
+-	top: 0.7em;
+-}
+-
+-#short-status {
+-	position: relative;
+-	right: 1em;
+-	line-height: 1.2em;
+-	padding-bottom:	0.2em;
+-}
+-
+-#mainmenu,
+-#submenu {
+-	position: absolute;
+-	width: 100%;
+-	padding-top: 0.2em;
+-	padding-bottom:	0.2em;
+-}
+-
+-#mainmenu
+-{
+-	top: 0;
+-	left: 0;
+-}
+-
+-#mainmenu h3 {
+-	padding-left: 1em;
+-	float: left;
+-}
+-
+-#mainmenu li {
+-	font-size: 0.9em;
+-	float: left;
+-	margin-left: 1.5em;
+-}
+-
+-#submenu li {
+-	float: left;
+-	margin-left: 1em;
+-}
+-
+-
+-#content {
+-	padding-top: 2em;
+-	margin-left: 1em;
+-	padding-bottom: 6em;
+-}
+-
+-#content .settings-block {
+-	margin-bottom: 1.5em;
+-}
+-
+-#content .settings-block .settings-block-title {
+-	margin-bottom: 10px;
+-}
+-
+-#content .settings-block .settings {
+-	clear: both;
+-	margin-left: 1.5em;
+-	padding-right: 1em;
+-}
+-
+-#content .settings-block .settings-block-title,
+-#content .settings-block .settings .settings-title {
+-	padding: 0.2em;
+-}
+-
+-#content .settings-block .settings .settings-content {
+-	padding-top: 1em;
+-	margin-left: 1em;
+-	float: left;
+-	width: 58%;
+-	padding-bottom: 0.5em;
+-}
+-
+-#content .settings-block .settings .settings-content select,
+-#content .settings-block .settings .settings-content input {
+-	margin-top: 0.8em;
+-}
+-
+-#content .settings-block .settings .settings-help {
+-	padding: 0.4em;
+-	padding-top: 1.4em;
+-	margin-left: 42%;
+-}
+-
+-#content .settings-block .settings .settings-help .more-help {
+-	margin-right: 10%;
+-	text-align: right;
+-}
+-
+-#save {
+-	position: absolute;
+-	bottom: 0;
+-	width: 100%;
+-}
+-
+-#save .page-save div {
+-	float: right;
+-	width: 15em;
+-	height: 1.5em;
+-	padding-right: 1em;
+-	padding-top: 0.5em;
+-	padding-bottom:	0.4em;
+-}
+-
+-#save .apply {
+-	clear: both;
+-	width: 100%;
+-	height: 5em;
+-}
+-
+-#save .apply div {
+-	float: right;
+-	width: 15em;
+-	height: 4em;
+-	padding-right: 1em;
+-	padding-top: 0.5em;
+-	padding-bottom: 0.5em;
+-}
+-
+-th {
+-	text-align: left;
+-}
+-
+-#content .settings-block .settings .settings-help .more-help,
+-#save,
+-#short-status {
+-	text-align: right;
+-}
+-
+-/* font */
+-body {
+-	font-family: Verdana, Helvetica, sans-serif;
+-	font-size: 1.0em;
+-}
+-
+-dt,
+-.selected-maincat,
+-#mainmenu a:active,
+-#submenu a {
+-	font-weight: bold;
+-}
+-
+-
+-
+-#openwrt-title h1 {
+-	font-size: 2.8em;
+-}
+-
+-
+-#short-status ul {
+-	font-size: 0.8em;
+-}
+-
+-#mainmenu h3,
+-#mainmenu li,
+-#short-status h3 {
+-	font-size: 0.9em;
+-}
+-
+-#mainmenu a,
+-#submenu a,
+-#save a {
+-	text-decoration: none;
+-}
+-
+-#save a:hover {
+-	text-decoration: underline;
+-}
+-
+-#mainmenu h3 {
+-	text-transform: uppercase;
+-}
+-
+-#save a {
+-	font-weight: normal;
+-	font-size: 1.1em;
+-}
+-
+-
+-/* color */
+-
+-#header-title,
+-#submenu,
+-#submenu a,
+-#save a,
+-#save .page-save
+-{
+-	color: #fff;
+-}
+-
+-#header-title,
+-#save .apply div {
+-	background-color: #3D5C7A;
+-}
+-
+-#mainmenu {
+-	color: #C3C4D2;
+-	background-color: #213242;
+-}
+-
+-#mainmenu a {
+-	color: #C3C4D2;
+-}
+-
+-#mainmenu a:hover {
+-	color: rgb(193,102,90);
+-}
+-
+-#submenu,
+-#save div {
+-	background-color: #7590AE;
+-}
+-
+-#content .settings-block .settings-block-title h2 {
+-	color: #7590AE;
+-}
+-
+-#submenu a:hover {
+-	color: #FB0;
+-}
+-
+-#content .settings-block .settings .settings-title {
+-	color: #000;
+-	background-color: #CCC;
+-}
+-
+-#save .page-save {
+-	background-color: #FFF;
+-}
+-
+diff --git a/package/webif/files/www/webif.js b/package/webif/files/www/webif.js
+deleted file mode 100644
+index 64d26cd..0000000
+--- a/package/webif/files/www/webif.js
++++ /dev/null
+@@ -1,33 +0,0 @@
+-function value(name)
+-{
+-	var item = document.getElementById(name);
+-	return (item ? item.value : "");
+-}
+-function isset(name, val)
+-{
+-	return (value(name) == val);
+-}
+-function checked(name)
+-{
+-	var item = document.getElementById(name);
+-	return ((item) && item.checked);
+-}
+-function hide(name)
+-{
+-	var item = document.getElementById(name);
+-	if (item) 
+-		item.style.display = 'none';
+-}
+-function show(name)
+-{
+-	var item = document.getElementById(name);
+-	if (item)
+-		item.style.display = '';
+-}
+-function set_visible(name, value)
+-{
+-	if (value)
+-		show(name)
+-	else
+-		hide(name)
+-}
+diff --git a/package/webif/src/bstrip.c b/package/webif/src/bstrip.c
+deleted file mode 100644
+index 1e17d4e..0000000
+--- a/package/webif/src/bstrip.c
++++ /dev/null
+@@ -1,75 +0,0 @@
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-
+-#define BUF_SIZE 1024
+-#define READ_LEN 14
+-
+-static int read_len = READ_LEN;
+-static char rbuf[32];
+-static char rbuflen = 0;
+-
+-int do_gets(char *buf)
+-{
+-	int r = 0, c = 0;
+-	char *m;
+-
+-	if (rbuflen > 0)
+-		memcpy(buf, rbuf, rbuflen);
+-	c += rbuflen;
+-
+-	while ((c + read_len < BUF_SIZE) && ((r = read(0, &buf[c], read_len)) > 0)) {
+-		m = NULL;
+-
+-		if ((m = memchr(&buf[c], '\n', r)) != NULL) {
+-			rbuflen = r - (m - &buf[c] + 1);
+-			if (rbuflen > 0)
+-				memcpy(rbuf, m + 1, rbuflen);
+-			c += m - &buf[c] + 1;
+-		} else {
+-			rbuflen = 0;
+-			c += r;
+-		}
+-
+-		if ((c > 3) && (memcmp(&buf[c - 3], "---", 3) == 0))
+-			read_len = 1;
+-
+-		if (m != NULL)
+-			return c;
+-	}
+-
+-	return c;
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	char buf[BUF_SIZE];
+-	char buf1[BUF_SIZE];
+-	char *tmp;
+-	int len, r = 0, r1 = 0;
+-
+-	if (argc != 2) {
+-		fprintf(stderr, "Syntax: %s (name|data <boundary>)\n", argv[0]);
+-		exit(1);
+-	}
+-	while (tmp = strchr(argv[1], '\r'))
+-		*tmp = 0;
+-
+-	len = strlen(argv[1]);
+-
+-	*buf = 0;
+-	while ((strncmp(buf, argv[1], len) != 0) &&
+-		(strncmp(buf + 2, argv[1], len) != 0)) {
+-		if (r > 0) {
+-			if (r1 > 0)
+-				write (1, buf1, r1);
+-			r1 = r;
+-			memcpy(buf1, buf, r);
+-		}
+-		if ((r = do_gets(buf)) <= 0)
+-			exit(1);
+-	}
+-
+-	if (r1 > 2)
+-		write(1, buf1, r1 - 2);
+-}
+diff --git a/package/webif/src/webif-page.c b/package/webif/src/webif-page.c
+deleted file mode 100644
+index 13e7093..0000000
+--- a/package/webif/src/webif-page.c
++++ /dev/null
+@@ -1,289 +0,0 @@
+-/*
+- * Webif page translator
+- *
+- * Copyright (C) 2005 Felix Fietkau <nbd@openwrt.org>
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU General Public License
+- * as published by the Free Software Foundation; either version 2
+- * of the License, or (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- */
+-
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <glob.h>
+-#include <ctype.h>
+-#ifdef NVRAM
+-#include <bcmnvram.h>
+-#endif
+-
+-#define HASH_MAX	100
+-#define LINE_BUF	1024 /* max. buffer allocated for one line */
+-#define MAX_TR		32	 /* max. translations done on one line */
+-#define TR_START	"@TR<<"
+-#define TR_END		">>"
+-
+-struct lstr {
+-	char *name;
+-	char *value;
+-	struct lstr *next;
+-};
+-typedef struct lstr lstr;
+-
+-static lstr *ltable[HASH_MAX];
+-static char buf[LINE_BUF], buf2[LINE_BUF];
+-
+-/* djb2 hash function */
+-static inline unsigned long hash(char *str)
+-{
+-	unsigned long hash = 5381;
+-	int c;
+-
+-	while ((c = *str++))
+-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+-	
+-	return hash;
+-}
+-
+-static inline char *translate_lookup(char *str)
+-{
+-	char *name, *def, *p, *res = NULL;
+-	lstr *i;
+-	int h;
+-	
+-	def = name = str;
+-	if (((p = strchr(str, '|')) != NULL)
+-		|| ((p = strchr(str, '#')) != NULL)) {
+-		def = p + 1;
+-		*p = 0;
+-	}
+-	
+-	h = hash(name) % HASH_MAX;
+-	i = ltable[h];
+-	while ((res == NULL) && (i != NULL)) {
+-		if (strcmp(name, i->name) == 0)
+-			res = i->value;
+-		i = i->next;
+-	}
+-	
+-	if (res == NULL)
+-		res = def;
+-	
+-	return res;
+-}
+-
+-static inline void add_line(char *name, char *value)
+-{
+-	int h = hash(name) % HASH_MAX;
+-	lstr *s = malloc(sizeof(lstr));
+-	lstr *p;
+-
+-	s->name = strdup(name);
+-	s->value = strdup(value);
+-	s->next = NULL;
+-	
+-	if (ltable[h] == NULL)
+-		ltable[h] = s;
+-	else {
+-		for(p = ltable[h]; p->next != NULL; p = p->next);
+-		p->next = s;
+-	}
+-}
+-
+-static char *translate_line(char *line)
+-{
+-	static char *tok[MAX_TR * 3];
+-	char *l, *p, *p2, *res;
+-	int len = 0, pos = 0, i;
+-
+-	l = line;
+-	while (l != NULL) {
+-		if ((p = strstr(l, TR_START)) == NULL) {
+-			len += strlen((tok[pos++] = l));
+-			break;
+-		}
+-
+-		p2 = strstr(p, TR_END);
+-		if (p2 == NULL)
+-			break;
+-
+-		*p = 0;
+-		*p2 = 0;
+-		len += strlen((tok[pos++] = l));
+-		len += strlen((tok[pos++] = translate_lookup(p + strlen(TR_START))));
+-
+-		l = p2;
+-		l += strlen(TR_END);
+-	}
+-	len++;
+-	
+-	if (len > LINE_BUF)
+-		p = malloc(len);
+-	else
+-		p = buf2;
+-
+-	p[0] = 0;
+-	res = p;
+-	for (i = 0; i < pos; i++) {
+-		strcat(p, tok[i]);
+-		p += strlen(tok[i]);
+-	}
+-
+-	return res;
+-}
+-
+-/* load and parse language file */
+-static void load_lang(char *file)
+-{
+-	FILE *f;
+-	char *b, *name, *value;
+-
+-	f = fopen(file, "r");
+-	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f) != NULL)) {
+-		b = buf;
+-		while (isspace(*b))
+-			b++; /* skip leading spaces */
+-		if (!*b)
+-			continue;
+-		
+-		name = b;
+-		if ((b = strstr(name, "=>")) == NULL)
+-			continue; /* separator not found */
+-
+-		value = b + 2;
+-		if (!*value)
+-			continue;
+-		
+-		*b = 0;
+-		for (b--; isspace(*b); b--)
+-			*b = 0; /* remove trailing spaces */
+-		
+-		while (isspace(*value))
+-			value++; /* skip leading spaces */
+-
+-		for (b = value + strlen(value) - 1; isspace(*b); b--)
+-			*b = 0; /* remove trailing spaces */
+-		
+-		if (!*value)
+-			continue;
+-
+-		add_line(name, value);
+-	}
+-}
+-
+-int main (int argc, char **argv)
+-{
+-	FILE *f;
+-	int len, i, done;
+-	char line[LINE_BUF], *tmp, *arg;
+-	glob_t langfiles;
+-	char *lang = NULL;
+-	char *proc = "/usr/bin/haserl";
+-
+-	memset(ltable, 0, HASH_MAX * sizeof(lstr *));
+-#ifdef NVRAM
+-	if ((lang = nvram_get("language")) != NULL) {
+-#else
+-	if ((f = fopen("/etc/config/webif", "r")) != NULL) {
+-		int n, i;
+-		
+-		while (!feof(f) && (lang == NULL)) {
+-			fgets(line, LINE_BUF - 1, f);
+-			
+-			if (strncasecmp(line, "lang", 4) != 0)
+-				goto nomatch;
+-			
+-			lang = line + 4;
+-			while (isspace(*lang))
+-				lang++;
+-			
+-			if (*lang != '=')
+-				goto nomatch;
+-
+-			lang++;
+-
+-			while (isspace(*lang))
+-				lang++;
+-
+-			for (i = 0; isalpha(lang[i]) && (i < 32); i++);
+-			lang[i] = 0;
+-			continue;
+-nomatch:
+-			lang = NULL;
+-		}
+-		fclose(f);
+-#endif
+-
+-		sprintf(buf, "/usr/lib/webif/lang/%s/*.txt", lang);
+-		i = glob(buf, GLOB_ERR | GLOB_MARK, NULL, &langfiles);
+-		if (i == GLOB_NOSPACE || i == GLOB_ABORTED || i == GLOB_NOMATCH) {
+-			// no language files found
+-		} else {
+-			for (i = 0; i < langfiles.gl_pathc; i++) {
+-				load_lang(langfiles.gl_pathv[i]);
+-			}
+-		}
+-	}
+-
+-	/*
+-	 * command line options for this parser are stored in argv[1] only.
+-	 * filename to be processed is in argv[2]
+-	 */
+-	done = 0;
+-	i = 1;
+-	while (!done) {
+-		if (argv[1] == NULL) {
+-			done = 1;
+-		} else if (strncmp(argv[1], "-e", 2) == 0) {
+-			argv[1] = strchr(argv[1], ' ');
+-			argv[1]++;
+-			if (argv[1] != NULL) {
+-				arg = argv[1];
+-				if ((tmp = strchr(argv[1], ' ')) != NULL) {
+-					*tmp = 0;
+-					argv[1] = &tmp[1];
+-				} else {
+-					argv[1] = NULL;
+-					i++;
+-				}
+-				system(arg);
+-			}
+-		} else if (strncmp(argv[1], "-p", 2) == 0) {
+-			argv[1] = strchr(argv[1], ' ');
+-			argv[1]++;
+-			if (argv[1] != NULL) {
+-				arg = argv[1];
+-				if ((tmp = strchr(argv[1], ' ')) != NULL) {
+-					*tmp = 0;
+-					argv[1] = &tmp[1];
+-				} else {
+-					argv[1] = NULL;
+-					i++;
+-				}
+-				proc = strdup(arg);
+-			}
+-		} else {
+-			done = 1;
+-		}
+-	}
+-
+-	strcpy(buf, proc);
+-	while (argv[i]) {
+-		sprintf(buf + strlen(buf), " %s", argv[i++]);
+-	}
+-	f = popen(buf, "r");
+-	
+-	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
+-		fprintf(stdout, "%s", translate_line(buf));
+-		fflush(stdout);
+-	}
+-	
+-	return 0;
+-}
+diff --git a/package/webif/webif.mk b/package/webif/webif.mk
+deleted file mode 100644
+index d9f3e04..0000000
+--- a/package/webif/webif.mk
++++ /dev/null
+@@ -1,71 +0,0 @@
+-#############################################################
+-#
+-# webif
+-#
+-#############################################################
+-WEBIF_VERSION:=0.2
+-WEBIF_SOURCE:=package/webif
+-WEBIF_SITE:=https://svn.openwrt.org/openwrt/tags/whiterussian_0.9/package/webif
+-WEBIF_DIR:=$(BUILD_DIR)/webif-$(WEBIF_VERSION)
+-
+-$(WEBIF_DIR)/.unpacked:
+-	mkdir -p $(WEBIF_DIR)
+-	touch $@
+-
+-$(WEBIF_DIR)/.built: $(WEBIF_DIR)/.unpacked
+-	$(TARGET_CC) $(TARGET_CFLAGS) -o $(WEBIF_DIR)/webif-page $(WEBIF_SOURCE)/src/webif-page.c
+-	$(TARGET_CC) $(TARGET_CFLAGS) -o $(WEBIF_DIR)/bstrip $(WEBIF_SOURCE)/src/bstrip.c
+-	$(STRIPCMD) --strip-unneeded $(WEBIF_DIR)/webif-page $(WEBIF_DIR)/bstrip
+-	touch $@
+-
+-$(TARGET_DIR)/www/webif.css: $(WEBIF_DIR)/.built
+-	mkdir -p $(TARGET_DIR)/etc
+-	mkdir -p $(TARGET_DIR)/usr/bin
+-	mkdir -p $(TARGET_DIR)/usr/lib
+-	mkdir -p $(TARGET_DIR)/www
+-	cat $(WEBIF_SOURCE)/files/etc/httpd.conf >> $(TARGET_DIR)/etc/httpd.conf
+-	cp -dpfr $(WEBIF_SOURCE)/files/usr/lib/webif $(TARGET_DIR)/usr/lib/
+-ifneq ($(BR2_PACKAGE_WEBIF_LANGUAGES),y)
+-	rm -rf $(TARGET_DIR)/usr/lib/webif/lang
+-endif
+-	$(INSTALL) -m0755 $(WEBIF_DIR)/webif-page $(TARGET_DIR)/usr/bin/
+-	$(INSTALL) -m0755 $(WEBIF_DIR)/bstrip $(TARGET_DIR)/usr/bin/
+-ifeq ($(BR2_PACKAGE_WEBIF_INSTALL_INDEX_HTML),y)
+-	@if [ -f "$(TARGET_DIR)/www/index.html" ]; then			\
+-		echo;							\
+-		echo "webif WARNING:";					\
+-		echo "There is already a $(TARGET_DIR)/www/index.html";	\
+-		echo "webif might be replacing another package;"	\
+-		echo;							\
+-		echo "Sleeping for 10 seconds";				\
+-		sleep 10;						\
+-	fi
+-	cp -dpf $(WEBIF_SOURCE)/files/www/index.html $(TARGET_DIR)/www/
+-endif
+-	cp -dpfr $(WEBIF_SOURCE)/files/www/cgi-bin $(TARGET_DIR)/www/
+-	cp -dpfr $(WEBIF_SOURCE)/files/www/webif.* $(TARGET_DIR)/www/
+-	@if [ ! -f $(TARGET_DIR)/etc/banner ]; then	\
+-		ln -sf issue $(TARGET_DIR)/etc/banner;	\
+-	fi
+-	touch $@
+-
+-webif: busybox $(TARGET_DIR)/www/webif.css
+-
+-webif-clean:
+-	rm -rf $(TARGET_DIR)/www/cgi-bin/webif* $(TARGET_DIR)/www/webif.*
+-	rm -rf $(TARGET_DIR)/usr/lib/webif
+-	rm -f $(TARGET_DIR)/usr/bin/bstrip $(TARGET_DIR)/usr/bin/webif-page
+-	rm -r $(WEBIF_DIR)/bstrip $(WEBIF_DIR)/webif-page
+-
+-webif-source:
+-
+-webif-dirclean:
+-	rm -rf $(WEBIF_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_WEBIF),y)
+-TARGETS+=webif
+-endif
 -- 
 1.7.3.4
