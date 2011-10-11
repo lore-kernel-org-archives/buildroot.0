@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 11 Oct 2011 19:04:06 +0200
-Subject: [Buildroot] [RFC] Making clear that Buildroot is no longer
-	uClibc specific
-In-Reply-To: <cover.1318343868.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 11 Oct 2011 19:06:41 +0200
+Subject: [Buildroot] [PATCH 1/1] docs: change official IRC channel to
+	#buildroot
+In-Reply-To: <59b5576b23653a7cd9262f00bb0895d04a1a7b4c.1318343868.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1318343868.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201110111904.06608.yann.morin.1998@anciens.enib.fr>
+ <59b5576b23653a7cd9262f00bb0895d04a1a7b4c.1318343868.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201110111906.41182.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +14,28 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On Tuesday 11 October 2011 16:38:55 Thomas Petazzoni wrote:
-> Therefore, the following patch proposed to switch to a dedicated
-> #buildroot IRC channel instead of #uclibc.
+On Tuesday 11 October 2011 16:38:56 Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/docs.html |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/docs/docs.html b/docs/docs.html
+> index 57f4bf6..851d1d2 100644
+> --- a/docs/docs.html
+> +++ b/docs/docs.html
+> @@ -20,8 +20,8 @@ help:</p>
+>    <li>On the <a href="lists.html">buildroot mailing list</a>
+>    at <code>buildroot at uclibc.org</code></li>
+>  
+> -  <li>On the <a href="irc://freenode.net/#uclibc">Buildroot IRC
+> -  channel</a>, <code>#uclibc</code> on Freenode</li>
+> +  <li>On the <a href="irc://freenode.net/#buildroot">Buildroot IRC
+> +  channel</a>, <code>#buildroot</code> on Freenode</li>
 
-Ack.
+Please, register the channel first. Then:
 
-> In addition to that, it'd be great if the mailing-list had
-> buildroot at buildroot.org as its official address, and if the bug
-> tracker had http://bugs.buildroot.org as its official address.
-
-Ack, and Ack. ;-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
 Regards,
 Yann E. MORIN.
