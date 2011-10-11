@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 11 Oct 2011 12:32:30 +0200
-Subject: [Buildroot] [PATCH 1/2] New package: giblib
-Message-ID: <1318329151-9831-1-git-send-email-yegorslists@googlemail.com>
+Date: Tue, 11 Oct 2011 12:32:31 +0200
+Subject: [Buildroot] [PATCH 2/2] New package: feh
+In-Reply-To: <1318329151-9831-1-git-send-email-yegorslists@googlemail.com>
+References: <1318329151-9831-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1318329151-9831-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +14,70 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in        |    1 +
- package/giblib/Config.in |    8 ++++++++
- package/giblib/giblib.mk |   15 +++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/giblib/Config.in
- create mode 100644 package/giblib/giblib.mk
+ package/Config.in     |    1 +
+ package/feh/Config.in |   12 ++++++++++++
+ package/feh/feh.mk    |   22 ++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/feh/Config.in
+ create mode 100644 package/feh/feh.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7a7b4bf..7f82934 100644
+index 7f82934..b39f41b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -280,6 +280,7 @@ source "package/cairo/Config.in"
- source "package/fltk/Config.in"
- source "package/fontconfig/Config.in"
- source "package/freetype/Config.in"
-+source "package/giblib/Config.in"
- source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
-diff --git a/package/giblib/Config.in b/package/giblib/Config.in
+@@ -133,6 +133,7 @@ source "package/fluxbox/Config.in"
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+ source "package/docker/Config.in"
++source "package/feh/Config.in"
+ source "package/gqview/Config.in"
+ source "package/gmpc/Config.in"
+ source "package/gob2/Config.in"
+diff --git a/package/feh/Config.in b/package/feh/Config.in
 new file mode 100644
-index 0000000..0c704e1
+index 0000000..d462cba
 --- /dev/null
-+++ b/package/giblib/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_GIBLIB
-+	bool "giblib"
++++ b/package/feh/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_FEH
++	bool "feh"
++	depends on BR2_PACKAGE_XLIB_LIBXINERAMA
++	depends on BR2_PACKAGE_XLIB_LIBXT
 +	select BR2_PACKAGE_IMLIB2
++	select BR2_PACKAGE_IMLIB2_PNG
++	select BR2_PACKAGE_GIBLIB
++	select BR2_PACKAGE_LIBCURL
 +	help
-+	  Giblib is a simple library which wraps imlib2.
++	  feh is an X11 image viewer aimed mostly at console users.
 +
-+	  http://linuxbrit.co.uk/giblib/
-+
-diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
++	  http://feh.finalrewind.org/
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
 new file mode 100644
-index 0000000..8a868c5
+index 0000000..b59bb2f
 --- /dev/null
-+++ b/package/giblib/giblib.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# giblib
-+#
-+#############################################################
-+GIBLIB_VERSION = 1.2.4
-+GIBLIB_SOURCE = giblib-$(GIBLIB_VERSION).tar.gz
-+GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
-+GIBLIB_INSTALL_STAGING = YES
-+GIBLIB_DEPENDENCIES = imlib2
-+GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING)/usr/lib \
-+		  --with-imlib2-exec-prefix=$(STAGING)/usr/bin
++++ b/package/feh/feh.mk
+@@ -0,0 +1,22 @@
++FEH_VERSION = 2.0
++FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
++FEH_SITE = http://feh.finalrewind.org/
++FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
 +
-+$(eval $(call AUTOTARGETS))
++define FEH_BUILD_CMDS
++	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++		-C $(@D) all
++endef
++
++define FEH_INSTALL_TARGET_CMDS
++	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
++		DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
++
++define FEH_UNINSTALL_TARGET_CMDS
++	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
++		DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
++endef
++
++$(eval $(call GENTARGETS))
 +
 -- 
 1.7.1.1
