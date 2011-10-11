@@ -1,49 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Oct 2011 09:55:32 +0200
-Subject: [Buildroot] [git commit] rpm: only show xz dependency comment if
-	enabled
-Message-ID: <20111011075632.862228E2F8@busybox.osuosl.org>
+Date: Tue, 11 Oct 2011 09:55:31 +0200
+Subject: [Buildroot] [git commit] neon: default to xml support if
+	dependencies are available
+Message-ID: <20111011075632.463438E2F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f35348c3f6435e7e1a420fb07b335c1fd110aa46
+commit: http://git.buildroot.net/buildroot/commit/?id=da653dd4ea233aeaf314f8784c5312b6472a2a2a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Use expat support if expat package is enabled, libxml2 if enabled and
+otherwise noxml.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpm/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/neon/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/rpm/Config.in b/package/rpm/Config.in
-index 8d4c6a3..a80a5a7 100644
---- a/package/rpm/Config.in
-+++ b/package/rpm/Config.in
-@@ -15,16 +15,16 @@ config BR2_PACKAGE_RPM
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index 5ebd64d..53cc8f5 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -21,7 +21,6 @@ config BR2_PACKAGE_NEON_SSL
  
- 	  http://rpm5.org
- 
-+if BR2_PACKAGE_RPM
-+
- config BR2_PACKAGE_RPM_BZIP2_PAYLOADS
- 	bool "support for bzip2 payloads"
--	depends on BR2_PACKAGE_RPM
- 	select BR2_PACKAGE_BZIP2
+ choice
+ 	prompt "XML Support"
+-	default BR2_PACKAGE_NEON_NOXML
+ 	depends on BR2_PACKAGE_NEON
  	help
- 	  Support for bzip2 payloads in RPM.
- 
- config BR2_PACKAGE_RPM_XZ_PAYLOADS
- 	bool "support for xz payloads"
--	depends on BR2_PACKAGE_RPM
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Support for xz payloads in RPM.
-@@ -32,4 +32,6 @@ config BR2_PACKAGE_RPM_XZ_PAYLOADS
- comment "xz payload support requires a toolchain with c++ support"
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 
-+endif
-+
- 
+ 	  Select which XML library to use...
