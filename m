@@ -1,31 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 11 Oct 2011 13:50:45 +0200
-Subject: [Buildroot] [git commit] neon: cleanup
-In-Reply-To: <201110110635.45321.minimod@morethan.org> (Michael S. Zick's
- message of "Tue, 11 Oct 2011 06:35:43 -0500")
-References: <20111011075632.11D3A8E2F8@busybox.osuosl.org>
- <201110110635.45321.minimod@morethan.org>
-Message-ID: <87r52jagru.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 11 Oct 2011 13:52:10 +0200
+Subject: [Buildroot] [git commit] neon: additional white space fix
+Message-ID: <20111011115311.7A95B8E2EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael S Zick <minimod@morethan.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=760d4afd44f95db88b64897dca056ec426323dc0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Michael> On Tue October 11 2011, Peter Korsgaard wrote:
- >> #############################################################
- >> -NEON_VERSION:=0.29.6
- >> -NEON_SITE:=http://www.webdav.org/neon/
- >> -NEON_INSTALL_STAGING:=YES
- >> -NEON_CONF_OPT:=--without-gssapi --disable-rpath
- >> +NEON_VERSION= 0.29.6
- >> 
+Missed from 66e09abc57 (neon: cleanup).
 
- Michael> Shouldn't there be one more space in the above to be consistent?
+Thanks to Michael S. Zick for noticing.
 
-Indeed. Will fix, thanks.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/neon/neon.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 272d5e0..6e365b3 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -3,7 +3,7 @@
+ # neon
+ #
+ #############################################################
+-NEON_VERSION= 0.29.6
++NEON_VERSION = 0.29.6
+ NEON_SITE = http://www.webdav.org/neon/
+ NEON_INSTALL_STAGING = YES
+ NEON_CONF_OPT = --without-gssapi --disable-rpath
