@@ -1,31 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 11 Oct 2011 16:09:33 +0200
-Subject: [Buildroot] [git commit] gawk: show it in config menu when
-	toolchain lacks wchar
-Message-ID: <20111011142357.5D30C8E305@busybox.osuosl.org>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Tue, 11 Oct 2011 16:29:42 +0200
+Subject: [Buildroot] [PATCH 2/2] add libfcgi to buildroot
+References: <add libfcgi to buildroot>
+ <1317285917-2134-1-git-send-email-bachmann@tofwerk.com>
+ <20110929115849.73cbefaa@skate> <201110012259.10267.arnout@mind.be>
+Message-ID: <op.v26yjsdz705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=744070ee6495259ac2f47f24d42912d2151ea64e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 01.10.2011, 22:59 Uhr, schrieb Arnout Vandecappelle
+<arnout@mind.be>:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gawk/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+> 3. Create the patch relative to the build directory:
+> cd output/build
+> diff -rup fcgi-2.4.0.orig fcgi-2.4.0 > \
+>   ../../package/fcgi/fcgi-2.4.0-add-lm.patch
+>
 
-diff --git a/package/gawk/Config.in b/package/gawk/Config.in
-index 62ca860..82c970f 100644
---- a/package/gawk/Config.in
-+++ b/package/gawk/Config.in
-@@ -7,3 +7,6 @@ config BR2_PACKAGE_GAWK
- 	  with just a few lines of code.
- 
- 	  http://www.gnu.org/software/gawk/
-+
-+comment "gawk requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
+When I try to create my patch with this command I got a fault, file or
+folder not found, when I
+delete the backslash after the '>' it works fine. But my patch still have
+no effect if i try to build the
+package with buildroot and use the patch automatically.
+
+If I use my patch manual it works fine:
+
+       commands:
+       cd /buildroot/output/build
+       patch -p0 < ../../package/fcgi/fcgi-2.4.0-add-lm.patch
+
+       output:
+       patching file fcgi-2.4.0/cgi-fcgi/Makefile.in
+       patching file fcgi-2.4.0/examples/Makefile.in
+
+After that I can build the package (of course only without a make
+fcgi-dirclean)
+
+Here is the output form buildroot while using the patch:
+
+       >>> fcgi 2.4.0 Patching packages/fcgi
+       for file in config.guess config.cub; do for i $(find
+/buildroot/output/build/fcgi-2.4.0 -name $file);
+       do cp package/gnuconfig/$file $i;
+       done; done
+
+After that, the build still failed.
