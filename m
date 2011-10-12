@@ -1,146 +1,73 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 12 Oct 2011 13:55:04 +0200
-Subject: [Buildroot] [PATCH v4 1/3] New package: ImLib2
-Message-ID: <1318420506-25398-1-git-send-email-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 12 Oct 2011 12:51:36 +0000 (UTC)
+Subject: [Buildroot] [Bug 4297] New: Qt's qmake uses wrong pkg-config
+Message-ID: <bug-4297-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+https://bugs.busybox.net/show_bug.cgi?id=4297
 
-Signed-off-by: Frederic Bassaler <frederic.bassaler@gmail.com>
-Signed-off-by: Matias Garcia <mgarcia@rossvideo.com>
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in        |    1 +
- package/imlib2/Config.in |   37 ++++++++++++++++++++++++++++
- package/imlib2/imlib2.mk |   60 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 98 insertions(+), 0 deletions(-)
- create mode 100644 package/imlib2/Config.in
- create mode 100644 package/imlib2/imlib2.mk
+           Summary: Qt's qmake uses wrong pkg-config
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: buildroot at bluespirit.la
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/Config.in b/package/Config.in
-index 7dc8887..7a7b4bf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -282,6 +282,7 @@ source "package/fontconfig/Config.in"
- source "package/freetype/Config.in"
- source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
-+source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
- source "package/libart/Config.in"
- source "package/libdrm/Config.in"
-diff --git a/package/imlib2/Config.in b/package/imlib2/Config.in
-new file mode 100644
-index 0000000..0ec4145
---- /dev/null
-+++ b/package/imlib2/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_PACKAGE_IMLIB2
-+	bool "imlib2"
-+	help
-+	  Imlib 2 is the successor to Imlib.
+
+Creating a toolchain for ARM with the latest Qt library will install it's
+libraries and QMAKESPECs. Theses QMAKESPECs have the CXXFLAGS and the correct
+compiler, but don't address the pkg-config location.
+
+If using pkg-config with qmake, it calls pkg-config from /usr/bin which causes
+wrong include dirs.
+
+
+########## Example ##########
+
+Write to your *.pro file:
+
+    # see
+http://doc.trolltech.com/4.6/qmake-project-files.html#configuration-features
+    CONFIG    += link_pkgconfig
+    PKGCONFIG += fuse
+
+
+If the wrong pkg-config is used, the include directory points to
+"-I/usr/include/fuse" - otherwise to a directory inside your toolchain.
+
+########## Patch ############
+
+$ diff -u qws/linux-arm-g++/qmake.conf.orig qws/linux-arm-g++/qmake.conf
+--- qws/linux-arm-g++/qmake.conf.orig    2011-10-12 14:47:49.000000000 +0200
++++ qws/linux-arm-g++/qmake.conf    2011-10-12 14:41:34.000000000 +0200
+@@ -17,6 +17,9 @@
+ QMAKE_CXX      = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-g++
+ QMAKE_CC       = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-gcc
+
++# Define Path to the correct pkg-config
++PKG_CONFIG = /opt/damian/toolchain-arm/usr/bin/pkg-config
 +
-+	  http://freshmeat.net/projects/imlib2/
-+
-+if BR2_PACKAGE_IMLIB2
-+
-+config BR2_PACKAGE_IMLIB2_JPEG
-+	select BR2_PACKAGE_JPEG
-+	bool "JPEG support"
-+
-+config BR2_PACKAGE_IMLIB2_PNG
-+	select BR2_PACKAGE_LIBPNG
-+	bool "PNG support"
-+
-+config BR2_PACKAGE_IMLIB2_GIF
-+	select BR2_PACKAGE_LIBUNGIF
-+	bool "GIF support"
-+
-+config BR2_PACKAGE_IMLIB2_TIFF
-+	select BR2_PACKAGE_TIFF
-+	bool "TIFF support"
-+
-+config BR2_PACKAGE_IMLIB2_FREETYPE
-+	select BR2_PACKAGE_FREETYPE
-+	bool "FreeType support"
-+
-+config BR2_PACKAGE_IMLIB2_ID3
-+	select BR2_PACKAGE_LIBID3TAG
-+	bool "ID3 support"
-+
-+config BR2_PACKAGE_IMLIB2_X
-+	depends on BR2_PACKAGE_XLIB_LIBXEXT
-+	bool "X support"
-+endif
-diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-new file mode 100644
-index 0000000..5a274ee
---- /dev/null
-+++ b/package/imlib2/imlib2.mk
-@@ -0,0 +1,60 @@
-+#############################################################
-+#
-+## IMLIB2
-+#
-+##############################################################
-+IMLIB2_VERSION = 1.4.5
-+IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.bz2
-+IMLIB2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)/
-+IMLIB2_INSTALL_STAGING = YES
-+IMLIB2_DEPENDENCIES = host-pkg-config
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_X),y)
-+	IMLIB2_CONF_OPT += --with-x
-+	IMLIB2_DEPENDENCIES += xlib_libX11 xlib_libXext
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_FREETYPE),y)
-+	IMLIB2_CONF_OPT += --with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config
-+	IMLIB2_DEPENDENCIES += freetype
-+else
-+	IMLIB2_CONF_OPT += --without-freetype
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_JPEG),y)
-+	IMLIB2_CONF_OPT += --with-jpeg
-+	IMLIB2_DEPENDENCIES += jpeg
-+else
-+	IMLIB2_CONF_OPT += --without-jpeg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_PNG),y)
-+	IMLIB2_CONF_OPT += --with-png
-+	IMLIB2_DEPENDENCIES += libpng
-+else
-+	IMLIB2_CONF_OPT += --without-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_GIF),y)
-+	IMLIB2_CONF_OPT += --with-gif
-+	IMLIB2_DEPENDENCIES += libungif
-+else
-+	IMLIB2_CONF_OPT += --without-gif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_TIFF),y)
-+	IMLIB2_CONF_OPT += --with-tiff
-+	IMLIB2_DEPENDENCIES += tiff
-+else
-+	IMLIB2_CONF_OPT += --without-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_IMLIB2_ID3),y)
-+	IMLIB2_CONF_OPT += --with-id3
-+	IMLIB2_DEPENDENCIES += libid3tag
-+else
-+	IMLIB2_CONF_OPT += --without-id3
-+endif
-+
-+$(eval $(call AUTOTARGETS))
-+
+ # modifications to g++.conf
+
+ # modifications to linux.conf
+
+
+
+
+I'm using buildroot 2011.08 with the CodeSoucery 2009q1 toolchain.
+
 -- 
-1.7.1.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
