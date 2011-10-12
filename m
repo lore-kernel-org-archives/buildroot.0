@@ -1,77 +1,105 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 12 Oct 2011 13:14:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 4303] New: Toolchains qmake causes DEBUG builds
-	with -O2
-Message-ID: <bug-4303-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 12 Oct 2011 11:53:09 -0300
+Subject: [Buildroot] [PATCH 1/3] uClibc: add patches to fix daylight saving
+	issues
+Message-ID: <1318431191-2421-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4303
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ....9.31.1-fix-daylight-saving-time-handling.patch |   36 ++++++++++++++++++++
+ ...-0.9.32-fix-daylight-saving-time-handling.patch |   36 ++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31.1-fix-daylight-saving-time-handling.patch
+ create mode 100644 toolchain/uClibc/uClibc-0.9.32-fix-daylight-saving-time-handling.patch
 
-           Summary: Toolchains qmake causes DEBUG builds with -O2
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot at bluespirit.la
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Created attachment 3637
-  --> https://bugs.busybox.net/attachment.cgi?id=3637
-.config file of buildroot 2011.08
-
-When compiling/installing Qt with buildroot, also the qmake.conf is correct.
-When buildroot is compiled with the "-O2" flag, the QMAKE_CXXFLAGS of
-qmake.conf also includes the "-O2" flag, which causes that all builds (even the
-DEBUG ones) are compiled with "-O2", and thus the debugger goes crazy ;)
-
-I would suggest, that when writing the QMAKE_CXXFLAGS (and QMAKE_CFLAGS) to
-qmake.conf, we should filter the flags (e.g. -pipe is ok).
-
-
-############ Result ##############
-
-#
-# qmake configuration for building with arm-linux-g++
-#
-
-include(../../common/g++.conf)
-include(../../common/linux.conf)
-include(../../common/qws.conf)
-QMAKE_LFLAGS = 
-QMAKE_CXXFLAGS = -pipe -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64
-QMAKE_CFLAGS   = -pipe -O2 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64
-QMAKE_STRIP    = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-strip
-QMAKE_RANLIB   =
-/opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-ranlib
-QMAKE_OBJCOPY  =
-/opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-objcopy
-QMAKE_AR       = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-ar
-cqs
-QMAKE_LINK_SHLIB = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-g++
-QMAKE_LINK     = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-g++
-QMAKE_CXX      = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-g++
-QMAKE_CC       = /opt/damian/toolchain-arm/usr/bin/arm-none-linux-gnueabi-gcc
-
-# modifications to g++.conf
-
-# modifications to linux.conf
-
-load(qt_config)
-
+diff --git a/toolchain/uClibc/uClibc-0.9.31.1-fix-daylight-saving-time-handling.patch b/toolchain/uClibc/uClibc-0.9.31.1-fix-daylight-saving-time-handling.patch
+new file mode 100644
+index 0000000..5a96113
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.31.1-fix-daylight-saving-time-handling.patch
+@@ -0,0 +1,36 @@
++From 47f3da1cf49377c25772bb54d07db55225bbb142 Mon Sep 17 00:00:00 2001
++From: Guillaume Bourcier <guillaumebourcier@free.fr>
++Date: Tue, 11 Oct 2011 13:45:33 +0200
++Subject: [PATCH] libc: fix daylight saving time handling
++
++The algorithm computing daylight saving time incorrectly adds a day for
++each month after January for leap years. The clock shift from/to DST can
++be delayed if the last Sunday of a transition month is exactly seven
++days before the first of the following month.
++
++This change adds a day for the February month only.
++
++Signed-off-by: Guillaume Bourcier <guillaumebourcier@free.fr>
++Signed-off-by: Richard Braun <rbraun@sceen.net>
++Signed-off-by: Carmelo Amoroso <carmelo.amoroso@st.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/misc/time/time.c |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/libc/misc/time/time.c b/libc/misc/time/time.c
++index 19d68e1..8e2ebf1 100644
++--- a/libc/misc/time/time.c
+++++ b/libc/misc/time/time.c
++@@ -689,7 +689,7 @@ static int tm_isdst(register const struct tm *__restrict ptm,
++ 					++day;
++ 				}
++ 				monlen = 31 + day_cor[r->month -1] - day_cor[r->month];
++-				if (isleap && (r->month > 1)) {
+++				if (isleap && (r->month == 2)) {
++ 					++monlen;
++ 				}
++ 				/* Wweekday (0 is Sunday) of 1st of the month
++-- 
++1.7.3.4
++
+diff --git a/toolchain/uClibc/uClibc-0.9.32-fix-daylight-saving-time-handling.patch b/toolchain/uClibc/uClibc-0.9.32-fix-daylight-saving-time-handling.patch
+new file mode 100644
+index 0000000..5a96113
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.32-fix-daylight-saving-time-handling.patch
+@@ -0,0 +1,36 @@
++From 47f3da1cf49377c25772bb54d07db55225bbb142 Mon Sep 17 00:00:00 2001
++From: Guillaume Bourcier <guillaumebourcier@free.fr>
++Date: Tue, 11 Oct 2011 13:45:33 +0200
++Subject: [PATCH] libc: fix daylight saving time handling
++
++The algorithm computing daylight saving time incorrectly adds a day for
++each month after January for leap years. The clock shift from/to DST can
++be delayed if the last Sunday of a transition month is exactly seven
++days before the first of the following month.
++
++This change adds a day for the February month only.
++
++Signed-off-by: Guillaume Bourcier <guillaumebourcier@free.fr>
++Signed-off-by: Richard Braun <rbraun@sceen.net>
++Signed-off-by: Carmelo Amoroso <carmelo.amoroso@st.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ libc/misc/time/time.c |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
++
++diff --git a/libc/misc/time/time.c b/libc/misc/time/time.c
++index 19d68e1..8e2ebf1 100644
++--- a/libc/misc/time/time.c
+++++ b/libc/misc/time/time.c
++@@ -689,7 +689,7 @@ static int tm_isdst(register const struct tm *__restrict ptm,
++ 					++day;
++ 				}
++ 				monlen = 31 + day_cor[r->month -1] - day_cor[r->month];
++-				if (isleap && (r->month > 1)) {
+++				if (isleap && (r->month == 2)) {
++ 					++monlen;
++ 				}
++ 				/* Wweekday (0 is Sunday) of 1st of the month
++-- 
++1.7.3.4
++
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
