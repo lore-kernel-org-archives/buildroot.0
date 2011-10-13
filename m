@@ -1,30 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 13 Oct 2011 09:48:55 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/fix-busybox-mdev-conf
-Message-ID: <cover.1318492132.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 13 Oct 2011 09:48:56 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: enable CONFIG_FEATURE_MDEV_RENAME
+In-Reply-To: <cover.1318492132.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1318492132.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b8d171c9f36fb6f5c25c3be1b2113429b56031a4.1318492132.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit bde4564fa74cc25a088aa4173709894d2acf5844:
+Our default mdev.conf file in package/busybox has lines like:
 
-  radvd: show it in config menu when toolchain lacks ipv6 (2011-10-11 16:10:30 +0200)
+  pcm.*           root:audio 660 =snd/
+  event[0-9]+     root:root 640 =input/
 
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/fix-busybox-mdev-conf
+that are used to create the device is the appropriate /dev
+subdirectory. However, this feature requires
+CONFIG_FEATURE_MDEV_RENAME to be enabled, otherwise mdev complains
+with:
 
-Thomas Petazzoni (1):
-      busybox: enable CONFIG_FEATURE_MDEV_RENAME
+  mdev: bad line 25
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/busybox/busybox-1.16.x.config |    2 +-
  package/busybox/busybox-1.17.x.config |    2 +-
  package/busybox/busybox-1.18.x.config |    2 +-
  package/busybox/busybox-1.19.x.config |    2 +-
  4 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks,
+diff --git a/package/busybox/busybox-1.16.x.config b/package/busybox/busybox-1.16.x.config
+index e5f5102..24a27bf 100644
+--- a/package/busybox/busybox-1.16.x.config
++++ b/package/busybox/busybox-1.16.x.config
+@@ -516,7 +516,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
+diff --git a/package/busybox/busybox-1.17.x.config b/package/busybox/busybox-1.17.x.config
+index d131dd6..edf9c6d 100644
+--- a/package/busybox/busybox-1.17.x.config
++++ b/package/busybox/busybox-1.17.x.config
+@@ -547,7 +547,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
+diff --git a/package/busybox/busybox-1.18.x.config b/package/busybox/busybox-1.18.x.config
+index 502048d..9e41550 100644
+--- a/package/busybox/busybox-1.18.x.config
++++ b/package/busybox/busybox-1.18.x.config
+@@ -555,7 +555,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
+diff --git a/package/busybox/busybox-1.19.x.config b/package/busybox/busybox-1.19.x.config
+index 9f4603d..bf5e8df 100644
+--- a/package/busybox/busybox-1.19.x.config
++++ b/package/busybox/busybox-1.19.x.config
+@@ -563,7 +563,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
 -- 
-Thomas Petazzoni
+1.7.4.1
