@@ -1,47 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 13 Oct 2011 17:41:01 +0200
-Subject: [Buildroot] [PATCH 1/1] docs: change official IRC channel to
-	#buildroot
-In-Reply-To: <59b5576b23653a7cd9262f00bb0895d04a1a7b4c.1318343868.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1318343868.git.thomas.petazzoni@free-electrons.com>
- <59b5576b23653a7cd9262f00bb0895d04a1a7b4c.1318343868.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LUpucOk1GsA_52N2DHB9Crfv3bj2=a0RjxnhpHQWKH1=Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 13 Oct 2011 13:18:51 -0300
+Subject: [Buildroot] [PATCH] ext-toolchain: fix ct-ng as external rsync
+	issues
+Message-ID: <1318522731-29400-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 11, 2011 at 4:38 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?docs/docs.html | ? ?4 ++--
-> ?1 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/docs/docs.html b/docs/docs.html
-> index 57f4bf6..851d1d2 100644
-> --- a/docs/docs.html
-> +++ b/docs/docs.html
-> @@ -20,8 +20,8 @@ help:</p>
-> ? <li>On the <a href="lists.html">buildroot mailing list</a>
-> ? at <code>buildroot at uclibc.org</code></li>
->
-> - ?<li>On the <a href="irc://freenode.net/#uclibc">Buildroot IRC
-> - ?channel</a>, <code>#uclibc</code> on Freenode</li>
-> + ?<li>On the <a href="irc://freenode.net/#buildroot">Buildroot IRC
-> + ?channel</a>, <code>#buildroot</code> on Freenode</li>
->
-> ? <li>On our <a href="https://bugs.uclibc.org">bugtracker</a>.</li>
->
+When using a CT-NG toolchain as external toolchain (not with the
+integration) and said toolchain has u-w directories rsync fails.
+So instruct rsync to chmod u+w directories in the target copy to avoid
+the issue.
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/helpers.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> --
-> 1.7.4.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 5585f45..96919d4 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -91,7 +91,7 @@ copy_toolchain_sysroot = \
+ 	ARCH_SUBDIR="$(strip $3)"; \
+ 	for i in etc lib sbin usr ; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+-			rsync -au --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
++			rsync -au --chmod=Du+w --exclude 'usr/lib/locale' $${ARCH_SYSROOT_DIR}/$$i $(STAGING_DIR)/ ; \
+ 		fi ; \
+ 	done ; \
+ 	if [ `readlink -f $${SYSROOT_DIR}` != `readlink -f $${ARCH_SYSROOT_DIR}` ] ; then \
+-- 
+1.7.3.4
