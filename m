@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2011 00:07:05 +0200
+Date: Fri, 14 Oct 2011 00:09:13 +0200
 Subject: [Buildroot] [PATCH v2] New package: ImLib2
-In-Reply-To: <4E955ECB.7000209@visionsystems.de>
+In-Reply-To: <20111012115317.3cc2fc4e@skate>
 References: <1318328770-9496-1-git-send-email-yegorslists@googlemail.com>
- <201110121125.08933.arnout@mind.be> <4E955ECB.7000209@visionsystems.de>
-Message-ID: <201110140007.05681.arnout@mind.be>
+ <4E95618E.6010203@visionsystems.de> <20111012115317.3cc2fc4e@skate>
+Message-ID: <201110140009.13963.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,11 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Wednesday 12 October 2011 11:32:59, Yegor Yefremov wrote:
-> >>> Shouldn't this depend on BR2_PACKAGE_XORG7 ?
-> >>
-> >> Thanks for reviewing. I checked these two packages_ libx11 and libxext
-> >> and they seem to selected by xorg anyway, so I replaced them by
-> >> dependency on  BR2_PACKAGE_XORG7.
-> > 
-> >  libXext indeed selects libX11, but I don't see how libXext would be automatically selected...
-> 
-> What about  BR2_PACKAGE_XSERVER_XORG_SERVER [=y] && BR2_PACKAGE_XORG7 [=y] && !BR2_avr32 [=n]?
+On Wednesday 12 October 2011 11:53:17, Thomas Petazzoni wrote:
+>  *) Because if one day, we manage to enable parallel building of
+>     packages, it is great to have correct dependencies ;
 
- Yes, but you can usefully build ImLib2 without an Xserver.  BR2_PACKAGE_XSERVER_XORG_SERVER does not get selected by BR2_PACKAGE_XORG7.
+ Actually that would only be for Makefile dependencies, not for Kconfig dependencies...
 
  Regards,
  Arnout
@@ -36,4 +29,4 @@ LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111014/bb50d761/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111014/142f2e32/attachment.html>
