@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 14 Oct 2011 00:33:50 +0200
-Subject: [Buildroot] [PATCH 2/2] add libfcgi to buildroot
-In-Reply-To: <op.v28ha3nx705kjs@rico>
-References: <add libfcgi to buildroot> <201110111806.30216.arnout@mind.be>
- <op.v28ha3nx705kjs@rico>
-Message-ID: <201110140033.51194.arnout@mind.be>
+Date: Fri, 14 Oct 2011 00:45:10 +0200
+Subject: [Buildroot] [PATCH] package: add polarssl library support
+In-Reply-To: <20111012231639.4182ac22@skate>
+References: <1318435980-27451-1-git-send-email-plagnioj@jcrosoft.com>
+ <20111012231639.4182ac22@skate>
+Message-ID: <201110140045.10630.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,16 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Wednesday 12 October 2011 12:12:29, Rico Bachmann wrote:
-> yes the file exists in package/fcgi and has 777 rights
+On Wednesday 12 October 2011 23:16:39, Thomas Petazzoni wrote:
+> > +define POLARSSL_BUILD_CMDS
+> > +     AR="$(TARGET_AR)" CC="$(TARGET_CC)" $(MAKE) -C $(@D)/library all
+> > +endef
+> 
+> You probably want to pass the cflags as well ?
 
- Silly me, I just now saw that the package is called libfcgi, not fcgi.  So it should of course be in the package/libfcgi directory and it should be called libfcgi-....patch.
+ ... which is why we have $(TARGET_MAKE_ENV).
 
- Anyway, there's a better solution: add -lm in the LDFLAGS of the configure environment.
-
- I'll just send a patch with the complete libfcgi support as a follow-up of this mail.
-
+ 
  Regards,
  Arnout
 -- 
@@ -32,4 +33,4 @@ LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111014/608b7d0d/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111014/2529bab4/attachment-0001.html>
