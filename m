@@ -1,186 +1,607 @@
 From: Will Wagner <will_wagner@carallon.com>
-Date: Fri, 14 Oct 2011 15:51:57 +0100
-Subject: [Buildroot] [PATCH 5/9] Support for compiling Qt for X11
+Date: Fri, 14 Oct 2011 15:51:55 +0100
+Subject: [Buildroot] [PATCH 3/9] Add openbox window manager
 In-Reply-To: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
 References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <1318603921-22899-6-git-send-email-will_wagner@carallon.com>
+Message-ID: <1318603921-22899-4-git-send-email-will_wagner@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch enables you to cross compile the X11 version of Qt. Although cross compilation of Qt is not officially supported it works well and allows Qt to be build for a target running X11
+Another X window manager, this one is very minimalist and has few dependancies
 
 Signed-off-by: Will Wagner <will_wagner@carallon.com>
 ---
- package/qt/Config.in |   12 ++++++++++++
- package/qt/qt.mk     |   44 +++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 51 insertions(+), 5 deletions(-)
+ package/Config.in          |    1 +
+ package/openbox/Config.in  |   20 +++
+ package/openbox/openbox.mk |   25 ++++
+ package/openbox/rc.xml     |  337 ++++++++++++++++++++++++++++++++++++++++++++
+ package/openbox/themerc    |  159 +++++++++++++++++++++
+ 5 files changed, 542 insertions(+), 0 deletions(-)
+ create mode 100644 package/openbox/Config.in
+ create mode 100644 package/openbox/openbox.mk
+ create mode 100644 package/openbox/rc.xml
+ create mode 100644 package/openbox/themerc
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index ab231d9..513f135 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -11,6 +11,14 @@ menuconfig BR2_PACKAGE_QT
+diff --git a/package/Config.in b/package/Config.in
+index 8b9c816..28cd36f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -128,6 +128,7 @@ source "package/matchbox/Config.in"
+ source "package/metacity/Config.in"
+ source "package/blackbox/Config.in"
+ source "package/fluxbox/Config.in"
++source "package/openbox/Config.in"
  
- if BR2_PACKAGE_QT
- 
-+comment "Qt will be built for use with an X server"
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+diff --git a/package/openbox/Config.in b/package/openbox/Config.in
+new file mode 100644
+index 0000000..f1ae363
+--- /dev/null
++++ b/package/openbox/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_OPENBOX
++	bool "openbox"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_PANGO
++	select BR2_PACKAGE_LIBXML2
++	help
++	  Openbox is a highly configurable, next generation
++	  window manager with extensive standards support. 
 +
-+config BR2_PACKAGE_QT_X11
-+	bool
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
-+	default y
++	  http://openbox.org/wiki/Main_Page
 +
- config BR2_PACKAGE_QT_DEBUG
- 	bool "Compile with debug support"
- 	help
-@@ -85,6 +93,7 @@ config BR2_PACKAGE_QT_GUI_MODULE
- 	  video output, or you don't require Qt GUI, say n.
- 
- if BR2_PACKAGE_QT_GUI_MODULE
-+if !BR2_PACKAGE_QT_X11
- menu "Pixel depths"
- comment "Deselecting each option leads to Qt's default (8,16,32)"
- 
-@@ -165,6 +174,7 @@ config BR2_PACKAGE_QT_SYSTEMFREETYPE
- 	  Use shared libfreetype from the target system.
- 	  See http://www.freetype.org/
- endchoice
-+endif # !BR2_PACKAGE_QT_X11
- 
- config BR2_PACKAGE_QT_GIF
- 	bool "Enable GIF support"
-@@ -255,9 +265,11 @@ endchoice
- 
- source "package/qt/Config.sql.in"
- if BR2_PACKAGE_QT_GUI_MODULE
-+if !BR2_PACKAGE_QT_X11
- source "package/qt/Config.gfx.in"
- source "package/qt/Config.mouse.in"
- source "package/qt/Config.keyboard.in"
-+endif # !BR2_PACKAGE_QT_X11
- 
- config BR2_PACKAGE_QT_PHONON
- 	bool "Phonon Module"
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index cc035bf..a36fcb6 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -96,6 +96,10 @@ ifneq ($(QT_PIXEL_DEPTHS),)
- QT_CONFIGURE_OPTS += -depths $(subst $(space),$(comma),$(strip $(QT_PIXEL_DEPTHS)))
- endif
- 
-+ifneq ($(BR2_PACKAGE_QT_X11),y)
-+### Embedded options
-+QT_CONFIGURE_OPTS += -no-gfx-qnx -no-kbd-qnx -no-mouse-qnx
++config BR2_PACKAGE_OPENBOX_SIMPLE
++	bool "simple openbox config"
++	depends on BR2_PACKAGE_OPENBOX
++	help
++	  This will remove the default openbox
++	  configuration files and themes,
++	  replacing them with a very simple one
+diff --git a/package/openbox/openbox.mk b/package/openbox/openbox.mk
+new file mode 100644
+index 0000000..cfc6976
+--- /dev/null
++++ b/package/openbox/openbox.mk
+@@ -0,0 +1,25 @@
++#############################################################
++#
++# openbox
++#
++#############################################################
 +
- ### Display drivers
- ifeq ($(BR2_PACKAGE_QT_GFX_LINUXFB),y)
- QT_CONFIGURE_OPTS += -qt-gfx-linuxfb
-@@ -129,7 +133,6 @@ else
- QT_CONFIGURE_OPTS += -no-gfx-directfb
- endif
- 
--
- ### Mouse drivers
- ifeq ($(BR2_PACKAGE_QT_MOUSE_PC),y)
- QT_CONFIGURE_OPTS += -qt-mouse-pc
-@@ -178,6 +181,11 @@ else
- QT_CONFIGURE_OPTS += -no-kbd-qvfb
- endif
- 
-+else
-+### X11 options
-+QT_CONFIGURE_OPTS += -no-gtkstyle -no-opengl -no-openvg -no-glib --disable-script
++OPENBOX_VERSION:=3.4.11
++OPENBOX_SOURCE:=openbox-$(OPENBOX_VERSION).tar.gz
++OPENBOX_SITE:=http://openbox.org/dist/openbox/
++
++OPENBOX_DEPENDENCIES:=xlib_libX11 libglib2 pango libxml2
++
++ifeq ($(BR2_PACKAGE_OPENBOX_SIMPLE),y)
++  define OPENBOX_SIMPLE_CONFIG
++    rm $(TARGET_DIR)/etc/xdg/openbox/menu.xml
++    cp package/openbox/rc.xml $(TARGET_DIR)/etc/xdg/openbox/rc.xml
++    rm -rf $(TARGET_DIR)/usr/share/themes/*
++    mkdir -p $(TARGET_DIR)/usr/share/themes/Clearlooks/openbox-3
++    cp package/openbox/themerc $(TARGET_DIR)/usr/share/themes/Clearlooks/openbox-3/
++  endef
++
++  OPENBOX_POST_INSTALL_TARGET_HOOKS += OPENBOX_SIMPLE_CONFIG
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
- QT_CONFIGURE_OPTS += -debug
- else
-@@ -216,7 +224,12 @@ else
- QT_EMB_PLATFORM = generic
- endif
- 
-+ifneq ($(BR2_PACKAGE_QT_X11),y)
- QT_CONFIGURE_OPTS += -embedded $(QT_EMB_PLATFORM)
-+else
-+QT_CONFIGURE_OPTS += -xplatform linux-$(QT_EMB_PLATFORM)-g++ -arch i386
-+QT_DEPENDENCIES   += xserver_xorg-server
-+endif
- 
- ifneq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- QT_CONFIGURE_OPTS += -no-gui
-@@ -415,6 +428,12 @@ else
- QT_CONFIGURE_OPTS += -no-declarative
- endif
- 
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
-+QT_CONFIGURE_OPTS += -xinerama
-+else
-+QT_CONFIGURE_OPTS += -no-xinerama
-+endif
++$(eval $(call AUTOTARGETS))
+\ No newline at end of file
+diff --git a/package/openbox/rc.xml b/package/openbox/rc.xml
+new file mode 100644
+index 0000000..3b9ac55
+--- /dev/null
++++ b/package/openbox/rc.xml
+@@ -0,0 +1,337 @@
++<?xml version="1.0" encoding="UTF-8"?>
 +
- # ccache and precompiled headers don't play well together
- ifeq ($(BR2_CCACHE),y)
- QT_CONFIGURE_OPTS += -no-pch
-@@ -431,7 +450,11 @@ endif
- # End of workaround.
- 
- # Variable for other Qt applications to use
-+ifneq ($(BR2_PACKAGE_QT_X11),y)
- QT_QMAKE:=$(HOST_DIR)/usr/bin/qmake -spec qws/linux-$(QT_EMB_PLATFORM)-g++
-+else
-+QT_QMAKE:=$(HOST_DIR)/usr/bin/qmake -spec linux-$(QT_EMB_PLATFORM)-g++
-+endif
- 
- ################################################################################
- # QT_QMAKE_SET -- helper macro to set QMAKE_<variable> = <value> in
-@@ -445,10 +468,24 @@ QT_QMAKE:=$(HOST_DIR)/usr/bin/qmake -spec qws/linux-$(QT_EMB_PLATFORM)-g++
- # E.G. use like this:
- # $(call QT_QMAKE_SET,variable,value,directory)
- ################################################################################
-+ifneq ($(BR2_PACKAGE_QT_X11),y)
- define QT_QMAKE_SET
- 	$(SED) '/QMAKE_$(1)/d' $(3)/mkspecs/qws/linux-$(QT_EMB_PLATFORM)-g++/qmake.conf
- 	$(SED) '/include.*qws.conf/aQMAKE_$(1) = $(2)' $(3)/mkspecs/qws/linux-$(QT_EMB_PLATFORM)-g++/qmake.conf
- endef
-+else
-+define QT_QMAKE_SET
-+	$(SED) '/QMAKE_$(1)/d' $(3)/mkspecs/linux-$(QT_EMB_PLATFORM)-g++/qmake.conf
-+	$(SED) '/include.*linux.conf/aQMAKE_$(1) = $(2)' $(3)/mkspecs/linux-$(QT_EMB_PLATFORM)-g++/qmake.conf
-+endef
-+endif
++<!-- Do not edit this file, it will be overwritten on install.
++        Copy the file to $HOME/.config/openbox/ instead. -->
 +
-+ifeq ($(BR2_PACKAGE_QT_X11),y)
-+define QT_CONFIGURE_MKSPECS
-+	cp -R $(@D)/mkspecs/linux-g++ $(@D)/mkspecs/linux-$(QT_EMB_PLATFORM)-g++
-+	$(call QT_QMAKE_SET,INCDIR_X11,$(STAGING_DIR)/usr/X11R6/include,$(@D))
-+endef
-+endif
- 
- ifneq ($(BR2_INET_IPV6),y)
- define QT_CONFIGURE_IPV6
-@@ -465,6 +502,7 @@ endif
- 
- define QT_CONFIGURE_CMDS
- 	-[ -f $(@D)/Makefile ] && $(MAKE) -C $(@D) confclean
-+	$(QT_CONFIGURE_MKSPECS)
- 	$(QT_CONFIGURE_IPV6)
- 	$(QT_CONFIGURE_CONFIG_FILE)
- 	# Fix compiler path
-@@ -489,10 +527,6 @@ define QT_CONFIGURE_CMDS
- 		$(if $(VERBOSE),-verbose,-silent) \
- 		-force-pkg-config \
- 		$(QT_CONFIGURE_OPTS) \
--		-no-gfx-qnx \
--		-no-kbd-qnx \
--		-no-mouse-qnx \
--		-no-xinerama \
- 		-no-cups \
- 		-no-nis \
- 		-no-accessibility \
++<openbox_config xmlns="http://openbox.org/3.4/rc">
++
++<resistance>
++  <strength>10</strength>
++  <screen_edge_strength>20</screen_edge_strength>
++</resistance>
++
++<focus>
++  <focusNew>yes</focusNew>
++  <!-- always try to focus new windows when they appear. other rules do
++       apply -->
++  <followMouse>no</followMouse>
++  <!-- move focus to a window when you move the mouse into it -->
++  <focusLast>yes</focusLast>
++  <!-- focus the last used window when changing desktops, instead of the one
++       under the mouse pointer. when followMouse is enabled -->
++  <underMouse>no</underMouse>
++  <!-- move focus under the mouse, even when the mouse is not moving -->
++  <focusDelay>200</focusDelay>
++  <!-- when followMouse is enabled, the mouse must be inside the window for
++       this many milliseconds (1000 = 1 sec) before moving focus to it -->
++  <raiseOnFocus>no</raiseOnFocus>
++  <!-- when followMouse is enabled, and a window is given focus by moving the
++       mouse into it, also raise the window -->
++</focus>
++
++<placement>
++  <policy>Smart</policy>
++  <!-- 'Smart' or 'UnderMouse' -->
++  <center>yes</center>
++  <!-- whether to place windows in the center of the free area found or
++       the top left corner -->
++  <monitor>Active</monitor>
++  <!-- with Smart placement on a multi-monitor system, try to place new windows
++       on: 'Any' - any monitor, 'Mouse' - where the mouse is, 'Active' - where
++       the active window is -->
++  <primaryMonitor>1</primaryMonitor>
++  <!-- The monitor where Openbox should place popup dialogs such as the
++       focus cycling popup, or the desktop switch popup.  It can be an index
++       from 1, specifying a particular monitor.  Or it can be one of the
++       following: 'Mouse' - where the mouse is, or
++                  'Active' - where the active window is -->
++</placement>
++
++<theme>
++  <name>Clearlooks</name>
++  <titleLayout>LC</titleLayout>
++  <!--
++      available characters are NDSLIMC, each can occur@most once.
++      N: window icon
++      L: window label (AKA title).
++      I: iconify
++      M: maximize
++      C: close
++      S: shade (roll up/down)
++      D: omnipresent (on all desktops).
++  -->
++  <keepBorder>yes</keepBorder>
++  <animateIconify>yes</animateIconify>
++  <font place="ActiveWindow">
++    <name>sans</name>
++    <size>8</size>
++    <!-- font size in points -->
++    <weight>bold</weight>
++    <!-- 'bold' or 'normal' -->
++    <slant>normal</slant>
++    <!-- 'italic' or 'normal' -->
++  </font>
++  <font place="InactiveWindow">
++    <name>sans</name>
++    <size>8</size>
++    <!-- font size in points -->
++    <weight>bold</weight>
++    <!-- 'bold' or 'normal' -->
++    <slant>normal</slant>
++    <!-- 'italic' or 'normal' -->
++  </font>
++  <font place="MenuHeader">
++    <name>sans</name>
++    <size>9</size>
++    <!-- font size in points -->
++    <weight>normal</weight>
++    <!-- 'bold' or 'normal' -->
++    <slant>normal</slant>
++    <!-- 'italic' or 'normal' -->
++  </font>
++  <font place="MenuItem">
++    <name>sans</name>
++    <size>9</size>
++    <!-- font size in points -->
++    <weight>normal</weight>
++    <!-- 'bold' or 'normal' -->
++    <slant>normal</slant>
++    <!-- 'italic' or 'normal' -->
++  </font>
++  <font place="OnScreenDisplay">
++    <name>sans</name>
++    <size>9</size>
++    <!-- font size in points -->
++    <weight>bold</weight>
++    <!-- 'bold' or 'normal' -->
++    <slant>normal</slant>
++    <!-- 'italic' or 'normal' -->
++  </font>
++</theme>
++
++<desktops>
++  <!-- this stuff is only used@startup, pagers allow you to change them
++       during a session
++
++       these are default values to use when other ones are not already set
++       by other applications, or saved in your session
++
++       use obconf if you want to change these without having to log out
++       and back in -->
++  <number>1</number>
++  <firstdesk>1</firstdesk>
++  <names>
++    <!-- set names up here if you want to, like this:
++    <name>desktop 1</name>
++    <name>desktop 2</name>
++    -->
++  </names>
++  <popupTime>0</popupTime>
++  <!-- The number of milliseconds to show the popup for when switching
++       desktops.  Set this to 0 to disable the popup. -->
++</desktops>
++
++<resize>
++  <drawContents>yes</drawContents>
++  <popupShow>Nonpixel</popupShow>
++  <!-- 'Always', 'Never', or 'Nonpixel' (xterms and such) -->
++  <popupPosition>Center</popupPosition>
++  <!-- 'Center', 'Top', or 'Fixed' -->
++  <popupFixedPosition>
++    <!-- these are used if popupPosition is set to 'Fixed' -->
++
++    <x>10</x>
++    <!-- positive number for distance from left edge, negative number for
++         distance from right edge, or 'Center' -->
++    <y>10</y>
++    <!-- positive number for distance from top edge, negative number for
++         distance from bottom edge, or 'Center' -->
++  </popupFixedPosition>
++</resize>
++
++<!-- You can reserve a portion of your screen where windows will not cover when
++     they are maximized, or when they are initially placed.
++     Many programs reserve space automatically, but you can use this in other
++     cases. -->
++<margins>
++  <top>0</top>
++  <bottom>0</bottom>
++  <left>0</left>
++  <right>0</right>
++</margins>
++
++<dock>
++  <position>TopLeft</position>
++  <!-- (Top|Bottom)(Left|Right|)|Top|Bottom|Left|Right|Floating -->
++  <floatingX>0</floatingX>
++  <floatingY>0</floatingY>
++  <noStrut>no</noStrut>
++  <stacking>Above</stacking>
++  <!-- 'Above', 'Normal', or 'Below' -->
++  <direction>Vertical</direction>
++  <!-- 'Vertical' or 'Horizontal' -->
++  <autoHide>no</autoHide>
++  <hideDelay>300</hideDelay>
++  <!-- in milliseconds (1000 = 1 second) -->
++  <showDelay>300</showDelay>
++  <!-- in milliseconds (1000 = 1 second) -->
++  <moveButton>Middle</moveButton>
++  <!-- 'Left', 'Middle', 'Right' -->
++</dock>
++
++<keyboard>
++
++  <!-- Keybindings for windows -->
++  <keybind key="H-F4">
++    <action name="Raise"/>
++  </keybind>
++</keyboard>
++
++<mouse>
++  <dragThreshold>8</dragThreshold>
++  <!-- number of pixels the mouse must move before a drag begins -->
++  <doubleClickTime>200</doubleClickTime>
++  <!-- in milliseconds (1000 = 1 second) -->
++  <screenEdgeWarpTime>400</screenEdgeWarpTime>
++  <!-- Time before changing desktops when the pointer touches the edge of the
++       screen while moving a window, in milliseconds (1000 = 1 second).
++       Set this to 0 to disable warping -->
++
++  <context name="Frame">
++    <mousebind button="A-Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="A-Left" action="Click">
++      <action name="Unshade"/>
++    </mousebind>
++    <mousebind button="A-Left" action="Drag">
++      <action name="Move"/>
++    </mousebind>
++
++    <mousebind button="A-Right" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++      <action name="Unshade"/>
++    </mousebind>
++    <mousebind button="A-Right" action="Drag">
++      <action name="Resize"/>
++    </mousebind> 
++  </context>
++
++  <context name="Titlebar">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Move"/>
++    </mousebind>
++  </context>
++
++  <context name="Top">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++      <action name="Unshade"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"><edge>top</edge></action>
++    </mousebind>
++  </context>
++
++  <context name="Left">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"><edge>left</edge></action>
++    </mousebind>
++  </context>
++
++  <context name="Right">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"><edge>right</edge></action>
++    </mousebind>
++  </context>
++
++  <context name="Bottom">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"><edge>bottom</edge></action>
++    </mousebind>
++  </context>
++
++  <context name="BLCorner">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"/>
++    </mousebind>
++  </context>
++
++  <context name="BRCorner">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"/>
++    </mousebind>
++  </context>
++
++  <context name="TLCorner">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++      <action name="Unshade"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"/>
++    </mousebind>
++  </context>
++
++  <context name="TRCorner">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++      <action name="Unshade"/>
++    </mousebind>
++    <mousebind button="Left" action="Drag">
++      <action name="Resize"/>
++    </mousebind>
++  </context>
++
++  <context name="Close">
++    <mousebind button="Left" action="Press">
++      <action name="Focus"/>
++      <action name="Raise"/>
++      <action name="Unshade"/>
++    </mousebind>
++    <mousebind button="Left" action="Click">
++      <action name="Close"/>
++    </mousebind>
++  </context>
++</mouse>
++
++<menu>
++  <applicationIcons>no</applicationIcons>
++  <!-- controls if icons appear in the client-list-(combined-)menu -->
++  <manageDesktops>no</manageDesktops>
++  <!-- show the manage desktops section in the client-list-(combined-)menu -->
++</menu>
++
++<applications>
++</applications>
++
++</openbox_config>
+diff --git a/package/openbox/themerc b/package/openbox/themerc
+new file mode 100644
+index 0000000..1dde5fb
+--- /dev/null
++++ b/package/openbox/themerc
+@@ -0,0 +1,159 @@
++!# Clearlooks-Evolving
++!# Clearlooks as it evolves in gnome-svn...
++!# Last updated 19/01/08
++
++# Fonts
++# these are really halos, but who cares?
++
++*.font: shadow=n
++window.active.label.text.font:shadow=y:shadowtint=25:shadowoffset=1
++window.inactive.label.text.font:shadow=y:shadowtint=00:shadowoffset=0
++menu.items.font:shadow=y:shadowtint=0:shadowoffset=1
++
++!# general stuff
++
++border.width: 1
++padding.width: 3
++padding.height: 2
++window.handle.width: 3
++window.client.padding.width: 0
++menu.overlap: 2
++*.justify: center
++
++!# lets set our damn shadows here, eh?
++
++*.bg.highlight: 50
++*.bg.shadow:    05
++
++window.active.title.bg.highlight: 40
++window.active.title.bg.shadow:    00
++
++window.inactive.title.bg.highlight: 30
++window.inactive.title.bg.shadow:    00
++
++window.*.grip.bg.highlight: 50
++window.*.grip.bg.shadow:    30
++
++window.*.handle.bg.highlight: 50
++window.*.handle.bg.shadow:    30
++
++!# Menu settings
++
++menu.border.color: #aaaaaa
++menu.border.width: 1
++
++menu.title.bg: solid flat
++menu.title.bg.color: #E6E7E6
++menu.title.text.color: #111111
++
++menu.items.bg: Flat Solid
++menu.items.bg.color: #ffffff
++menu.items.text.color: #111111
++menu.items.disabled.text.color: #aaaaaa
++
++menu.items.active.bg: Flat Gradient splitvertical border
++
++menu.items.active.bg.color: #97b8e2
++menu.items.active.bg.color.splitTo: #a8c5e9
++
++menu.items.active.bg.colorTo: #91b3de
++menu.items.active.bg.colorTo.splitTo: #80a7d6
++menu.items.active.bg.border.color: #4b6e99
++menu.items.active.text.color: #ffffff
++
++!# set handles here and only the once?
++
++window.*.handle.bg: Raised solid
++window.*.handle.bg.color: #eaebec
++
++window.*.grip.bg: Raised solid
++window.*.grip.bg.color: #eaebec
++
++!# Active
++
++!# no handles - kind of closer to the clearlooks border, maybe?
++!#window.active.border.color: #455d7c
++
++window.*.border.color: #585a5d
++
++window.active.title.separator.color: #4e76a8
++
++*.title.bg: Raised Gradient splitvertical
++*.title.bg.color: #8CB0DC
++*.title.bg.color.splitTo: #99BAE3
++*.title.bg.colorTo: #86ABD9
++*.title.bg.colorTo.splitTo: #7AA1D1
++
++window.active.label.bg: Parentrelative
++window.active.label.text.color: #ffffff
++
++window.active.button.*.bg: Flat Gradient splitvertical Border
++
++window.active.button.*.bg.color: #92B4DF
++window.active.button.*.bg.color.splitTo: #B0CAEB
++window.active.button.*.bg.colorTo: #86ABD9
++window.active.button.*.bg.colorTo.splitTo: #769FD0
++
++window.active.button.*.bg.border.color: #49678B
++window.active.button.*.image.color: #F4F5F6
++
++window.active.button.hover.bg.color: #b5d3ef
++window.active.button.hover.bg.color.splitTo: #b5d3ef
++window.active.button.hover.bg.colorTo: #9cbae7
++window.active.button.hover.bg.colorTo.splitTo: #8caede
++window.active.button.hover.bg.border.color: #4A658C
++window.active.button.hover.image.color: #ffffff
++
++window.active.button.pressed.bg: Flat solid Border
++window.active.button.pressed.bg.color: #7aa1d2
++
++window.active.button.hover.bg.border.color: #4A658C
++
++!# inactive
++
++!#window.inactive.border.color: #7e8285
++window.inactive.title.separator.color: #96999d
++
++window.inactive.title.bg: Raised Gradient splitvertical
++window.inactive.title.bg.color: #E3E2E0
++window.inactive.title.bg.color.splitTo: #EBEAE9
++window.inactive.title.bg.colorTo: #DEDCDA
++window.inactive.title.bg.colorTo.splitTo: #D5D3D1
++
++window.inactive.label.bg: Parentrelative
++window.inactive.label.text.color: #70747d
++
++window.inactive.button.*.bg: Flat Gradient splitVertical Border
++window.inactive.button.*.bg.color: #ffffff
++window.inactive.button.*.bg.color.splitto: #ffffff
++window.inactive.button.*.bg.colorTo: #F9F8F8
++window.inactive.button.*.bg.colorTo.splitto: #E9E7E6
++window.inactive.button.*.bg.border.color: #928F8B
++window.inactive.button.*.image.color: #6D6C6C
++
++
++!# osd (pop ups and what not, dock?)
++
++osd.border.width: 1
++osd.border.color:  #999
++
++osd.bg: flat border gradient splitvertical
++osd.bg.color: #F0EFEE
++osd.bg.color.splitto: #f5f5f4
++osd.bg.colorTo: #EAEBEC
++osd.bg.colorTo.splitto: #E7E5E4
++
++osd.bg.border.color: #ffffff
++
++osd.label.bg: parentrelative
++osd.label.bg.color: #efefef
++osd.label.bg.border.color: #9c9e9c
++
++osd.label.text.color: #444
++!# yeah whatever, this is fine anyhoo?
++osd.hilight.bg: flat vertical gradient 
++osd.hilight.bg.color: #9ebde5
++osd.hilight.bg.colorTo: #749dcf
++osd.unhilight.bg: flat vertical gradient
++osd.unhilight.bg.color: #BABDB6
++osd.unhilight.bg.colorTo: #efefef
 -- 
 1.7.2.5
