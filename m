@@ -1,45 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Oct 2011 08:36:50 +0200
-Subject: [Buildroot] [PATCH v2] New package: ImLib2
-In-Reply-To: <201110140009.13963.arnout@mind.be>
-References: <1318328770-9496-1-git-send-email-yegorslists@googlemail.com>
- <4E95618E.6010203@visionsystems.de> <20111012115317.3cc2fc4e@skate>
- <201110140009.13963.arnout@mind.be>
-Message-ID: <20111014083650.46368731@skate>
+Date: Fri, 14 Oct 2011 09:50:01 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/perl-check
+Message-ID: <cover.1318578597.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 14 Oct 2011 00:09:13 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+The following changes since commit bde4564fa74cc25a088aa4173709894d2acf5844:
 
->  Actually that would only be for Makefile dependencies, not for
-> Kconfig dependencies...
+  radvd: show it in config menu when toolchain lacks ipv6 (2011-10-11 16:10:30 +0200)
 
-True, but this is also wrong currently for Makefile dependencies:
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/perl-check
 
-cairo/cairo.mk: CAIRO_DEPENDENCIES += xserver_xorg-server
-docker/docker.mk:DOCKER_DEPENDENCIES = host-pkg-config libglib2 xserver_xorg-server
-fltk/fltk.mk:FLTK_DEPENDENCIES = xserver_xorg-server xlib_libXt
-games/rubix/rubix.mk:RUBIX_DEPENDENCIES = xserver_xorg-server
-java/classpath/classpath.mk:    CLASSPATH_DEPENDENCIES+= xserver_xorg-server
-java/jamvm/jamvm.mk:    JAMVM_DEPENDENCIES+= xserver_xorg-server
-libgtk2/libgtk2.mk:     LIBGTK2_DEPENDENCIES += xlib_libXcomposite xserver_xorg-server
-metacity/metacity.mk:METACITY_DEPENDENCIES = libgtk2 xserver_xorg-server
-pango/pango.mk: PANGO_DEPENDENCIES += xserver_xorg-server
-pcmanfm/pcmanfm.mk:PCMANFM_DEPENDENCIES = host-pkg-config libgtk2 gamin startup-notification xserver_xorg-server
-sdl/sdl.mk:SDL_DEPENDENCIES += xserver_xorg-server
-synergy/synergy.mk:SYNERGY_DEPENDENCIES = xserver_xorg-server xlib_libXtst
-torsmo/torsmo.mk:TORSMO_DEPENDENCIES = xserver_xorg-server
-webkit/webkit.mk:       WEBKIT_DEPENDENCIES += xserver_xorg-server xlib_libXt
+Thomas Petazzoni (1):
+      dependencies: additional check for PERL_MM_OPT
 
-I don't think any of these actually require the X.org server to be built.
+ toolchain/dependencies/dependencies.sh |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-Thomas
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
