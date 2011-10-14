@@ -1,33 +1,20 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 14 Oct 2011 16:56:57 +0200
-Subject: [Buildroot] [PATCH 2 of 3 resend] busybox: rename busybox-update to
- busybox-update-config
-In-Reply-To: <patchbomb.1318604215@localhost6.localdomain6>
-References: <patchbomb.1318604215@localhost6.localdomain6>
-Message-ID: <c83b93f562e2811c201d.1318604217@localhost6.localdomain6>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Fri, 14 Oct 2011 15:55:50 +0100
+Subject: [Buildroot] [PATCH 0/9] Miscellaneous patch series
+Message-ID: <4E984D76.9040108@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original name busybox-update is confusing as it only updates a
-configuration file.
+This series of patches have a number of different fixes
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+First one adds option to set the timezone in the default target skeleton
 
----
- package/busybox/busybox.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Second one allows gdbserver to be copied from an external toolchain, 
+comments on this welcome
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -184,5 +184,5 @@
- 	rm -f $(BUSYBOX_DIR)/.stamp_built
- 	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
- 
--busybox-update:
-+busybox-update-config:
- 	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
+The Qt patches allow compilation for X11, add back Qt Commercial 
+support, all tighter control over fonts on target and fix specifying a 
+custom config
