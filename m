@@ -1,50 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 14 Oct 2011 08:35:27 +0200
-Subject: [Buildroot] [PATCH] package: add libfcgi fast cgi library.
-In-Reply-To: <1318546019-28462-1-git-send-email-arnout@mind.be>
-References: <201110140033.51194.arnout@mind.be>
- <1318546019-28462-1-git-send-email-arnout@mind.be>
-Message-ID: <20111014083527.26ceb18f@skate>
+Date: Fri, 14 Oct 2011 08:36:50 +0200
+Subject: [Buildroot] [PATCH v2] New package: ImLib2
+In-Reply-To: <201110140009.13963.arnout@mind.be>
+References: <1318328770-9496-1-git-send-email-yegorslists@googlemail.com>
+ <4E95618E.6010203@visionsystems.de> <20111012115317.3cc2fc4e@skate>
+ <201110140009.13963.arnout@mind.be>
+Message-ID: <20111014083650.46368731@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 14 Oct 2011 00:46:59 +0200,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+Le Fri, 14 Oct 2011 00:09:13 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> +config BR2_PACKAGE_LIBFCGI
-> +    bool "libfcgi"
-> +    help
+>  Actually that would only be for Makefile dependencies, not for
+> Kconfig dependencies...
 
-One tab.
+True, but this is also wrong currently for Makefile dependencies:
 
-> +        This is a fastcgi developer library for C/C++
-> +        http://www.fastcgi.com/
+cairo/cairo.mk: CAIRO_DEPENDENCIES += xserver_xorg-server
+docker/docker.mk:DOCKER_DEPENDENCIES = host-pkg-config libglib2 xserver_xorg-server
+fltk/fltk.mk:FLTK_DEPENDENCIES = xserver_xorg-server xlib_libXt
+games/rubix/rubix.mk:RUBIX_DEPENDENCIES = xserver_xorg-server
+java/classpath/classpath.mk:    CLASSPATH_DEPENDENCIES+= xserver_xorg-server
+java/jamvm/jamvm.mk:    JAMVM_DEPENDENCIES+= xserver_xorg-server
+libgtk2/libgtk2.mk:     LIBGTK2_DEPENDENCIES += xlib_libXcomposite xserver_xorg-server
+metacity/metacity.mk:METACITY_DEPENDENCIES = libgtk2 xserver_xorg-server
+pango/pango.mk: PANGO_DEPENDENCIES += xserver_xorg-server
+pcmanfm/pcmanfm.mk:PCMANFM_DEPENDENCIES = host-pkg-config libgtk2 gamin startup-notification xserver_xorg-server
+sdl/sdl.mk:SDL_DEPENDENCIES += xserver_xorg-server
+synergy/synergy.mk:SYNERGY_DEPENDENCIES = xserver_xorg-server xlib_libXtst
+torsmo/torsmo.mk:TORSMO_DEPENDENCIES = xserver_xorg-server
+webkit/webkit.mk:       WEBKIT_DEPENDENCIES += xserver_xorg-server xlib_libXt
 
-One tab + two spaces.
-
-> diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-> new file mode 100644
-> index 0000000..72bbf9a
-> --- /dev/null
-> +++ b/package/libfcgi/libfcgi.mk
-> @@ -0,0 +1,12 @@
-> +##############################################################################
-> +#
-> +# libfcgi
-> +#
-> +##############################################################################
-> +LIBFCGI_VERSION = 2.4.0
-> +LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
-> +LIBFCGI_SITE = http://www.fastcgi.com/dist
-> +LIBFCGI_INSTALL_STAGING = YES
-> +LIBFCGI_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -lm"
-> +
-> +$(eval $(call AUTOTARGETS,package,libfcgi))
-
-$(eval $(call AUTOTARGETS))
+I don't think any of these actually require the X.org server to be built.
 
 Thomas
 -- 
