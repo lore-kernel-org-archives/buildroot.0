@@ -1,57 +1,71 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Fri, 14 Oct 2011 09:51:28 +0200
-Subject: [Buildroot] [PATCH v2] New package: ImLib2
-In-Reply-To: <20111014083650.46368731@skate>
-References: <1318328770-9496-1-git-send-email-yegorslists@googlemail.com>
- <4E95618E.6010203@visionsystems.de> <20111012115317.3cc2fc4e@skate>
- <201110140009.13963.arnout@mind.be> <20111014083650.46368731@skate>
-Message-ID: <4E97EA00.8060103@visionsystems.de>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 14 Oct 2011 09:59:51 +0200
+Subject: [Buildroot] [PATCH v2] package: add libfcgi fast cgi library.
+In-Reply-To: <20111014083527.26ceb18f@skate>
+References: <20111014083527.26ceb18f@skate>
+Message-ID: <1318579191-31778-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 14.10.2011 08:36, schrieb Thomas Petazzoni:
-> Le Fri, 14 Oct 2011 00:09:13 +0200,
-> Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> 
->>  Actually that would only be for Makefile dependencies, not for
->> Kconfig dependencies...
-> 
-> True, but this is also wrong currently for Makefile dependencies:
-> 
-> cairo/cairo.mk: CAIRO_DEPENDENCIES += xserver_xorg-server
-> docker/docker.mk:DOCKER_DEPENDENCIES = host-pkg-config libglib2 xserver_xorg-server
-> fltk/fltk.mk:FLTK_DEPENDENCIES = xserver_xorg-server xlib_libXt
-> games/rubix/rubix.mk:RUBIX_DEPENDENCIES = xserver_xorg-server
-> java/classpath/classpath.mk:    CLASSPATH_DEPENDENCIES+= xserver_xorg-server
-> java/jamvm/jamvm.mk:    JAMVM_DEPENDENCIES+= xserver_xorg-server
-> libgtk2/libgtk2.mk:     LIBGTK2_DEPENDENCIES += xlib_libXcomposite xserver_xorg-server
-> metacity/metacity.mk:METACITY_DEPENDENCIES = libgtk2 xserver_xorg-server
-> pango/pango.mk: PANGO_DEPENDENCIES += xserver_xorg-server
-> pcmanfm/pcmanfm.mk:PCMANFM_DEPENDENCIES = host-pkg-config libgtk2 gamin startup-notification xserver_xorg-server
-> sdl/sdl.mk:SDL_DEPENDENCIES += xserver_xorg-server
-> synergy/synergy.mk:SYNERGY_DEPENDENCIES = xserver_xorg-server xlib_libXtst
-> torsmo/torsmo.mk:TORSMO_DEPENDENCIES = xserver_xorg-server
-> webkit/webkit.mk:       WEBKIT_DEPENDENCIES += xserver_xorg-server xlib_libXt
-> 
-> I don't think any of these actually require the X.org server to be built.
+From: Rico Bachmann <bachmann@tofwerk.com>
 
-As far as I understand the dependencies should look like this:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+---
+Changes v2: corrected indentation of Config.in, removed redundant
+arguments of AUTOTARGETS.
+---
+ package/Config.in          |    1 +
+ package/libfcgi/Config.in  |    6 ++++++
+ package/libfcgi/libfcgi.mk |   12 ++++++++++++
+ 3 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/libfcgi/Config.in
+ create mode 100644 package/libfcgi/libfcgi.mk
 
-for ImLib2
-
-depends on BR2_PACKAGE_XORG7 /* because it is some kind of subsystem */
-select BR2_PACKAGE_XLIB_LIBX11
-select BR2_PACKAGE_XLIB_LIBXEXT
-
-for feh
-
-depends on BR2_PACKAGE_XORG7 /* because it is some kind of subsystem */
-select BR2_PACKAGE_XLIB_LIBXINERAMA
-select BR2_PACKAGE_XLIB_LIBXT
-
-Do we agree on this scheme?
-
-Yegor
+diff --git a/package/Config.in b/package/Config.in
+index 7dc8887..76c89c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -327,6 +327,7 @@ source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+ source "package/libdnet/Config.in"
+ source "package/libeXosip2/Config.in"
++source "package/libfcgi/Config.in"
+ source "package/libidn/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+diff --git a/package/libfcgi/Config.in b/package/libfcgi/Config.in
+new file mode 100644
+index 0000000..a2f448b
+--- /dev/null
++++ b/package/libfcgi/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBFCGI
++    bool "libfcgi"
++    help
++        This is a fastcgi developer library for C/C++
++        http://www.fastcgi.com/
++
+diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
+new file mode 100644
+index 0000000..72bbf9a
+--- /dev/null
++++ b/package/libfcgi/libfcgi.mk
+@@ -0,0 +1,12 @@
++##############################################################################
++#
++# libfcgi
++#
++##############################################################################
++LIBFCGI_VERSION = 2.4.0
++LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
++LIBFCGI_SITE = http://www.fastcgi.com/dist
++LIBFCGI_INSTALL_STAGING = YES
++LIBFCGI_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -lm"
++
++$(eval $(call AUTOTARGETS,package,libfcgi))
+-- 
+1.7.7
