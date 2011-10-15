@@ -1,39 +1,31 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Date: Sat, 15 Oct 2011 22:53:20 +0200
-Subject: [Buildroot] buildroot noob help!
-In-Reply-To: <CAFo83mG5Gx+LoZHP3j8-avDGXoKiHQxKLUcAM2y4rc8Ok1M_rg@mail.gmail.com>
-References: <CAFo83mG5Gx+LoZHP3j8-avDGXoKiHQxKLUcAM2y4rc8Ok1M_rg@mail.gmail.com>
-Message-ID: <CAEYzJUHho5fwzEks9d67i3dGc8BhEpH09kGr-icoa5LeRgT=uw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 15 Oct 2011 23:01:17 +0200
+Subject: [Buildroot] [PATCH 1/1] dependencies: additional check for
+	PERL_MM_OPT
+In-Reply-To: <099241d4a1d158c57663ffbeb12c34aa1ad2f58a.1318578597.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 14 Oct 2011 09:50:02 +0200")
+References: <cover.1318578597.git.thomas.petazzoni@free-electrons.com>
+ <cover.1318578597.git.thomas.petazzoni@free-electrons.com>
+ <099241d4a1d158c57663ffbeb12c34aa1ad2f58a.1318578597.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87obxirmua.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 October 2011 22:12, Jed Evnull <jedevnull@gmail.com> wrote:
-> I need to compile packages for arm with uclibc and statically link them. Am
-> I selecting the right tool with buildroot?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I haven't done static linking with Buildroot. Is your reason for wanting static
-linking that you will not use the rest of the rootfs Buildroot gives you?
+ Thomas> When the user has Perl local::lib installed, its environment contains
+ Thomas> a PERL_MM_OPT variables which defines
+ Thomas> INSTALL_BASE="/some/location". Unfortunately, having this makes the
+ Thomas> build of libxml-parser-perl (and probably other Perl related packages)
+ Thomas> fail, because it complains that both PREFIX (passed in our .mk file)
+ Thomas> and INSTALL_BASE (passed from the PERL_MM_OPT environment variable)
+ Thomas> are defined. Since in Buildroot we want our PREFIX to be considered,
+ Thomas> we error out when the user has PERL_MM_OPT defined.
 
-> I compiled? buildroot-2011.08
-> with qemu_arm_versatile_defconfig.? The generated cross-compiler compiles
-> simple hello world programs w/o problems, but fails with typical autoconf
-> source packages.
+Committed, thanks.
 
-How did you try to build those packages? You will probably have most success
-if you integrate the package in Buildroot. This is done by (typically)
-writing two
-small files in packages/<yourpackage>/. See the buildroot docs for the details.
-
-> I tried to chroot into the generated image (chroot myimage /bin/sh --login)
-> to compile from there, but chroot fails with /bin/sh not found.
-
-AFAIK, few people use Buildroot to build a compiler into the rootfs,
-so this is not
-that well supported. It's better to use Buildroot as a cross-compile system, not
-native-compile.
-
-Best regards,
-Bj?rn Forsman
+-- 
+Bye, Peter Korsgaard
