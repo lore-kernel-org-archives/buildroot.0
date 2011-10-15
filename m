@@ -1,21 +1,57 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Sat, 15 Oct 2011 13:41:17 +0200
-Subject: [Buildroot] [PATCH 6/9] Qt commercial support
-In-Reply-To: <201110151258.27554.arnout@mind.be>
-References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
- <1318603921-22899-7-git-send-email-will_wagner@carallon.com>
- <201110151258.27554.arnout@mind.be>
-Message-ID: <20111015114117.GD1459@game.jcrosoft.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 15 Oct 2011 21:01:51 +0200
+Subject: [Buildroot] [PATCH v5 1/3] New package: ImLib2
+In-Reply-To: <201110151250.56914.arnout@mind.be>
+References: <1318584328-6080-1-git-send-email-yegorslists@googlemail.com>
+ <1318584328-6080-2-git-send-email-yegorslists@googlemail.com>
+ <201110151250.56914.arnout@mind.be>
+Message-ID: <CAGm1_ksDEGjcZ-iw4zZikNU3OfcgBZJWuvWBJJAuVLnVXYoYSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12:58 Sat 15 Oct     , Arnout Vandecappelle wrote:
->    On Friday 14 October 2011 16:51:58, Will Wagner wrote:
+On Sat, Oct 15, 2011 at 12:50 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> I tried your patch series and it didn't work :-(
+>
+> I have an ARCH=i386 config with the following options:
+>
+> BR2_PACKAGE_IMLIB2=y
+>
+> # BR2_PACKAGE_IMLIB2_JPEG is not set
+>
+> BR2_PACKAGE_IMLIB2_PNG=y
+>
+> # BR2_PACKAGE_IMLIB2_GIF is not set
+>
+> # BR2_PACKAGE_IMLIB2_TIFF is not set
+>
+> # BR2_PACKAGE_IMLIB2_FREETYPE is not set
+>
+> # BR2_PACKAGE_IMLIB2_ID3 is not set
+>
+> BR2_PACKAGE_IMLIB2_X=y
+>
+> Building imlib2 gives me:
+>
+> api.c:30:22: error: ft2build.h: No such file or directory
+>
+> api.c:31:10: error: #include expects "FILENAME" or <FILENAME>
+>
+> api.c:31 is
+>
+> #include FT_FREETYPE_H
+>
+> If I select BR2_PACKAGE_IMLIB2_FREETYPE it goes through without problem.
+>
+> My guess is that the --without-freetype option doesn't really work. So
+>
+> I'd suggest to make the dependency on freetype a hard one and be done with
+> it.
 
-Could you stop to post in HTML please
+Thanks for testing, I'll make it so.
 
-Best Regards,
-J.
+Have you tried some other combinations? Till now I just tried the whole set.
+
+Yegor
