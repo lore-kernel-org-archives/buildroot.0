@@ -1,31 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 15 Oct 2011 23:01:17 +0200
-Subject: [Buildroot] [PATCH 1/1] dependencies: additional check for
-	PERL_MM_OPT
-In-Reply-To: <099241d4a1d158c57663ffbeb12c34aa1ad2f58a.1318578597.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 14 Oct 2011 09:50:02 +0200")
-References: <cover.1318578597.git.thomas.petazzoni@free-electrons.com>
- <cover.1318578597.git.thomas.petazzoni@free-electrons.com>
- <099241d4a1d158c57663ffbeb12c34aa1ad2f58a.1318578597.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87obxirmua.fsf@macbook.be.48ers.dk>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Sat, 15 Oct 2011 16:06:32 -0500
+Subject: [Buildroot] buildroot noob help!
+In-Reply-To: <CAEYzJUHho5fwzEks9d67i3dGc8BhEpH09kGr-icoa5LeRgT=uw@mail.gmail.com>
+References: <CAFo83mG5Gx+LoZHP3j8-avDGXoKiHQxKLUcAM2y4rc8Ok1M_rg@mail.gmail.com>
+ <CAEYzJUHho5fwzEks9d67i3dGc8BhEpH09kGr-icoa5LeRgT=uw@mail.gmail.com>
+Message-ID: <201110151606.35102.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Sat October 15 2011, Bj?rn Forsman wrote:
+> On 15 October 2011 22:12, Jed Evnull <jedevnull@gmail.com> wrote:
+> > I need to compile packages for arm with uclibc and statically link them. Am
+> > I selecting the right tool with buildroot?
+> 
+> I haven't done static linking with Buildroot. Is your reason for wanting static
+> linking that you will not use the rest of the rootfs Buildroot gives you?
+> 
+> > I compiled? buildroot-2011.08
+> > with qemu_arm_versatile_defconfig.? The generated cross-compiler compiles
+> > simple hello world programs w/o problems, but fails with typical autoconf
+> > source packages.
+> 
+> How did you try to build those packages? You will probably have most success
+> if you integrate the package in Buildroot. This is done by (typically)
+> writing two
+> small files in packages/<yourpackage>/. See the buildroot docs for the details.
+> 
+> > I tried to chroot into the generated image (chroot myimage /bin/sh --login)
+> > to compile from there, but chroot fails with /bin/sh not found.
+>
 
- Thomas> When the user has Perl local::lib installed, its environment contains
- Thomas> a PERL_MM_OPT variables which defines
- Thomas> INSTALL_BASE="/some/location". Unfortunately, having this makes the
- Thomas> build of libxml-parser-perl (and probably other Perl related packages)
- Thomas> fail, because it complains that both PREFIX (passed in our .mk file)
- Thomas> and INSTALL_BASE (passed from the PERL_MM_OPT environment variable)
- Thomas> are defined. Since in Buildroot we want our PREFIX to be considered,
- Thomas> we error out when the user has PERL_MM_OPT defined.
+???
 
-Committed, thanks.
+If your __not__ building on non-ARM, why do you need a cross-compiler?
 
--- 
-Bye, Peter Korsgaard
+If you __are__ building on non-ARM, how did you expect your host 
+machine to execute the ARM binaries inside of the chroot?
+
+Me-thinks you need QEMU or such like to do that.
+
+Mike 
+> AFAIK, few people use Buildroot to build a compiler into the rootfs,
+> so this is not
+> that well supported. It's better to use Buildroot as a cross-compile system, not
+> native-compile.
+> 
+> Best regards,
+> Bj?rn Forsman
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
