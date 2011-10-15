@@ -1,32 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Oct 2011 00:07:39 -0300
-Subject: [Buildroot] [PATCH 25/25] squid: bump to version 3.1.16
-In-Reply-To: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318648059-30431-25-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 15 Oct 2011 11:51:42 +0200
+Subject: [Buildroot] [PATCH 1/9] Allow timezone to be set in
+	configuration
+In-Reply-To: <1318603921-22899-2-git-send-email-will_wagner@carallon.com>
+References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
+ <1318603921-22899-2-git-send-email-will_wagner@carallon.com>
+Message-ID: <201110151151.43592.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/squid/squid.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index a77e34c..c5f66f6 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SQUID_VERSION = 3.1.15
-+SQUID_VERSION = 3.1.16
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
- SQUID_DEPENDENCIES = libcap host-libcap
- SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
+On Friday 14 October 2011 16:51:53, Will Wagner wrote:
+> +target_generic_timezone:
+> +       $(SED) '/# GENERIC_TIMEZONE$$/s~^.*#~$(TARGET_GENERIC_TIMEZONE) #~' $(TARGET_DIR)/etc/TZ
+> +
+
+ Why not just create the file here?  I.e.
+
+	echo $(TARGET_GENERIC_TIMEZONE) > $(TARGET_DIR)/etc/TZ
+
+
+ Perhaps even move it out of the SKELETON_DEFAULT condition.
+
+ Regards,
+ Arnout
 -- 
-1.7.3.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111015/10eb0c59/attachment.html>
