@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Oct 2011 00:07:16 -0300
-Subject: [Buildroot] [PATCH 02/25] radvd: security bump to version 1.8.2
+Date: Sat, 15 Oct 2011 00:07:17 -0300
+Subject: [Buildroot] [PATCH 03/25] which: style cleanup
 In-Reply-To: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318648059-30431-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1318648059-30431-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/radvd/radvd.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/which/which.mk |    9 +++------
+ 1 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index ac0c0e9..5d07ff6 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -3,10 +3,10 @@
- # radvd
+diff --git a/package/which/which.mk b/package/which/which.mk
+index 628711d..a7bb577 100644
+--- a/package/which/which.mk
++++ b/package/which/which.mk
+@@ -3,11 +3,8 @@
+ # which
  #
  #############################################################
--RADVD_VERSION:=1.6
--RADVD_SOURCE:=radvd-$(RADVD_VERSION).tar.gz
--RADVD_SITE:=http://www.litech.org/radvd/dist/
--RADVD_DEPENDENCIES:=flex host-flex
+-WHICH_VERSION:=2.20
+-WHICH_SOURCE:=which-$(WHICH_VERSION).tar.gz
+-WHICH_SITE:=http://www.xs4all.nl/~carlo17/which/
+-WHICH_AUTORECONF:=NO
+-WHICH_INSTALL_STAGING:=NO
+-WHICH_INSTALL_TARGET:=YES
 +
-+RADVD_VERSION = 1.8.2
-+RADVD_SITE = http://www.litech.org/radvd/dist/
-+RADVD_DEPENDENCIES = flex host-flex
++WHICH_VERSION = 2.20
++WHICH_SITE = http://carlo17.home.xs4all.nl/which
  
- define RADVD_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.3.4
