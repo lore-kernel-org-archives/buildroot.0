@@ -1,54 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Oct 2011 00:07:34 -0300
-Subject: [Buildroot] [PATCH 20/25] ifplugd: misc fixes
+Date: Sat, 15 Oct 2011 00:07:35 -0300
+Subject: [Buildroot] [PATCH 21/25] libdaemon: style cleanup
 In-Reply-To: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318648059-30431-20-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1318648059-30431-21-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Busybox provides ifplugd, so build after it and make the menu option
-  conditional on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-* Style cleanup
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ifplugd/ifplugd.mk |   13 +++++++------
- 1 files changed, 7 insertions(+), 6 deletions(-)
+ package/libdaemon/libdaemon.mk |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
-index 33c4367..cb06b63 100644
---- a/package/ifplugd/ifplugd.mk
-+++ b/package/ifplugd/ifplugd.mk
-@@ -3,19 +3,20 @@
- # ifplugd
- #
+diff --git a/package/libdaemon/libdaemon.mk b/package/libdaemon/libdaemon.mk
+index 2bfd38b..c04537a 100644
+--- a/package/libdaemon/libdaemon.mk
++++ b/package/libdaemon/libdaemon.mk
+@@ -5,13 +5,10 @@
  #############################################################
-+
- IFPLUGD_VERSION = 0.28
--IFPLUGD_SOURCE = ifplugd-$(IFPLUGD_VERSION).tar.gz
--IFPLUGD_SITE = http://0pointer.de/lennart/projects/ifplugd/
-+IFPLUGD_SITE = http://0pointer.de/lennart/projects/ifplugd
- IFPLUGD_AUTORECONF = YES
--IFPLUGD_INSTALL_STAGING = NO
--IFPLUGD_INSTALL_TARGET = YES
- # install-strip unconditionally overwrites $(TARGET_DIR)/etc/ifplugd/ifplugd.*
- IFPLUGD_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-exec
--
- IFPLUGD_CONF_OPT = --disable-lynx
--
- IFPLUGD_DEPENDENCIES = libdaemon
  
-+# Prefer big ifplugd
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+	IFPLUGD_DEPENDENCIES += busybox
-+endif
-+
- define IFPLUGD_INSTALL_FIXUP
- 	$(INSTALL) -d $(TARGET_DIR)/etc/ifplugd
- 	@if [ ! -f $(TARGET_DIR)/etc/ifplugd/ifplugd.conf ]; then \
+ LIBDAEMON_VERSION = 0.14
+-LIBDAEMON_SOURCE = libdaemon-$(LIBDAEMON_VERSION).tar.gz
+-LIBDAEMON_SITE = http://0pointer.de/lennart/projects/libdaemon/
+-LIBDAEMON_AUTORECONF = NO
++LIBDAEMON_SITE = http://0pointer.de/lennart/projects/libdaemon
+ LIBDAEMON_INSTALL_STAGING = YES
+ LIBDAEMON_CONF_ENV = ac_cv_func_setpgrp_void=no
+ LIBDAEMON_CONF_OPT = --disable-lynx
+-
+ LIBDAEMON_DEPENDENCIES = host-pkg-config
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.3.4
