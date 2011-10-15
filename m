@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Oct 2011 00:07:15 -0300
-Subject: [Buildroot] [PATCH 01/25] quagga: security bump to version 0.99.20
-Message-ID: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 15 Oct 2011 00:07:16 -0300
+Subject: [Buildroot] [PATCH 02/25] radvd: security bump to version 1.8.2
+In-Reply-To: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1318648059-30431-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,263 +12,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/quagga/quagga-fix-no-ipv6.patch |   48 ------------
- package/quagga/quagga-fix-opaque.patch  |  127 -------------------------------
- package/quagga/quagga-zlog.patch        |   43 -----------
- package/quagga/quagga.mk                |    2 +-
- 4 files changed, 1 insertions(+), 219 deletions(-)
- delete mode 100644 package/quagga/quagga-fix-no-ipv6.patch
- delete mode 100644 package/quagga/quagga-fix-opaque.patch
- delete mode 100644 package/quagga/quagga-zlog.patch
+ package/radvd/radvd.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/quagga/quagga-fix-no-ipv6.patch b/package/quagga/quagga-fix-no-ipv6.patch
-deleted file mode 100644
-index acf8fec..0000000
---- a/package/quagga/quagga-fix-no-ipv6.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From 3bde17f1af635c9ca19df0b3516cb8ad0376e6d3 Mon Sep 17 00:00:00 2001
--From: Paul Jakma <paul@quagga.net>
--Date: Wed, 23 Mar 2011 10:30:30 +0000
--Subject: [PATCH 1/1] bgpd: Fix compile failure if IPv6 build was disabled.
--
--* bgp_route.c: ({no_,}ipv6_bgp_network_ttl_cmd) depends on ipv6_bgp_network
--  which is HAVE_IPV6, so these should be too.
--  (bgp_route_init) and the installs should be similarly ifdefed
-----
-- bgpd/bgp_route.c |    6 +++++-
-- 1 files changed, 5 insertions(+), 1 deletions(-)
--
--diff --git a/bgpd/bgp_route.c b/bgpd/bgp_route.c
--index 8c05ba6..5c516f0 100644
----- a/bgpd/bgp_route.c
--+++ b/bgpd/bgp_route.c
--@@ -4327,6 +4327,7 @@ ALIAS_DEPRECATED (no_bgp_network_mask_natural,
--        "Specify a BGP backdoor route\n"
--        "AS-Path hopcount limit attribute\n"
--        "AS-Pathlimit TTL, in number of AS-Path hops\n")
--+#ifdef HAVE_IPV6
-- ALIAS_DEPRECATED (ipv6_bgp_network,
--        ipv6_bgp_network_ttl_cmd,
--        "network X:X::X:X/M pathlimit <0-255>",
--@@ -4342,6 +4343,7 @@ ALIAS_DEPRECATED (no_ipv6_bgp_network,
--        "IPv6 prefix <network>/<length>\n"
--        "AS-Path hopcount limit attribute\n"
--        "AS-Pathlimit TTL, in number of AS-Path hops\n")
--+#endif /* HAVE_IPV6 */
-- 
-- /* Aggreagete address:
-- 
--@@ -12958,9 +12960,11 @@ bgp_route_init (void)
--   install_element (BGP_IPV4M_NODE, &no_bgp_network_backdoor_ttl_cmd);
--   install_element (BGP_IPV4M_NODE, &no_bgp_network_mask_backdoor_ttl_cmd);
--   install_element (BGP_IPV4M_NODE, &no_bgp_network_mask_natural_backdoor_ttl_cmd);
---  
--+
--+#ifdef HAVE_IPV6
--   install_element (BGP_IPV6_NODE, &ipv6_bgp_network_ttl_cmd);
--   install_element (BGP_IPV6_NODE, &no_ipv6_bgp_network_ttl_cmd);
--+#endif
-- }
-- 
-- void
---- 
--1.7.4
--
-diff --git a/package/quagga/quagga-fix-opaque.patch b/package/quagga/quagga-fix-opaque.patch
-deleted file mode 100644
-index 17a970e..0000000
---- a/package/quagga/quagga-fix-opaque.patch
-+++ /dev/null
-@@ -1,127 +0,0 @@
--From d71ea65270408a45e4bec036671ec73b24b994b4 Mon Sep 17 00:00:00 2001
--From: Paul Jakma <paul@quagga.net>
--Date: Tue, 22 Mar 2011 15:23:55 +0000
--Subject: [PATCH 1/1] ospfd: Compile fix for opaque support
--
--* ospfd: Refresher logic cleanup broke OSPF opaque, which does its own thing
--  with regard to refresher logic and which also, in the protocol, requires
--  implementations to keep state of which OI an LSA is received on (rather
--  than providing information in the LSA to allow it to be looked up - as
--  other LSAs requiring such assocation were careful to do).
--* ospf_lsa.h: (struct ospf_interface) Add back the pointer to oi, but only
--  for type-9 now.
--* ospf_nsm.c: (ospf_db_summary_add) check the oi actually exists first -
--  doesn't obviate the need for opaque to ensure oi pointers get cleaned up
--  when ospf_interfaces disappear.
--* ospf_opaque.{c,h}: (ospf_opaque_functab,ospf_opaque_lsa_refresh) Refresher
--  LSA functions now need to return the LSA to the general refresh logic,
--  to indicate whether the LSA was refreshed.
-----
-- ospfd/ospf_lsa.h    |    3 +++
-- ospfd/ospf_nsm.c    |    2 +-
-- ospfd/ospf_opaque.c |   13 +++++++------
-- ospfd/ospf_opaque.h |    4 ++--
-- 4 files changed, 13 insertions(+), 9 deletions(-)
--
--diff --git a/ospfd/ospf_lsa.h b/ospfd/ospf_lsa.h
--index fee3470..72e2f8a 100644
----- a/ospfd/ospf_lsa.h
--+++ b/ospfd/ospf_lsa.h
--@@ -114,6 +114,9 @@ struct ospf_lsa
-- 
--   /* Refreshement List or Queue */
--   int refresh_list;
--+  
--+  /* For Type-9 Opaque-LSAs */
--+  struct ospf_interface *oi;
-- };
-- 
-- /* OSPF LSA Link Type. */
--diff --git a/ospfd/ospf_nsm.c b/ospfd/ospf_nsm.c
--index 279d2a0..cbc3171 100644
----- a/ospfd/ospf_nsm.c
--+++ b/ospfd/ospf_nsm.c
--@@ -216,7 +216,7 @@ ospf_db_summary_add (struct ospf_neighbor *nbr, struct ospf_lsa *lsa)
--     {
--     case OSPF_OPAQUE_LINK_LSA:
--       /* Exclude type-9 LSAs that does not have the same "oi" with "nbr". */
---      if (lsa->oi != nbr->oi)
--+      if (nbr->oi && ospf_if_exists (lsa->oi) != nbr->oi)
--           return 0;
--       break;
--     case OSPF_OPAQUE_AREA_LSA:
--diff --git a/ospfd/ospf_opaque.c b/ospfd/ospf_opaque.c
--index 6e90011..aa126e1 100644
----- a/ospfd/ospf_opaque.c
--+++ b/ospfd/ospf_opaque.c
--@@ -251,7 +251,7 @@ struct ospf_opaque_functab
--   void (* config_write_debug )(struct vty *vty);
--   void (* show_opaque_info   )(struct vty *vty, struct ospf_lsa *lsa);
--   int  (* lsa_originator)(void *arg);
---  void (* lsa_refresher )(struct ospf_lsa *lsa);
--+  struct ospf_lsa *(* lsa_refresher )(struct ospf_lsa *lsa);
--   int (* new_lsa_hook)(struct ospf_lsa *lsa);
--   int (* del_lsa_hook)(struct ospf_lsa *lsa);
-- };
--@@ -354,7 +354,7 @@ ospf_register_opaque_functab (
--   void (* config_write_debug )(struct vty *vty),
--   void (* show_opaque_info   )(struct vty *vty, struct ospf_lsa *lsa),
--   int  (* lsa_originator)(void *arg),
---  void (* lsa_refresher )(struct ospf_lsa *lsa),
--+  struct ospf_lsa *(* lsa_refresher )(struct ospf_lsa *lsa),
--   int (* new_lsa_hook)(struct ospf_lsa *lsa),
--   int (* del_lsa_hook)(struct ospf_lsa *lsa))
-- {
--@@ -1608,12 +1608,13 @@ out:
--   return new;
-- }
-- 
---void
--+struct ospf_lsa *
-- ospf_opaque_lsa_refresh (struct ospf_lsa *lsa)
-- {
--   struct ospf *ospf;
--   struct ospf_opaque_functab *functab;
---
--+  struct ospf_lsa *new = NULL;
--+  
--   ospf = ospf_lookup ();
-- 
--   if ((functab = ospf_opaque_functab_lookup (lsa)) == NULL
--@@ -1633,9 +1634,9 @@ ospf_opaque_lsa_refresh (struct ospf_lsa *lsa)
--       ospf_lsa_flush (ospf, lsa);
--     }
--   else
---    (* functab->lsa_refresher)(lsa);
--+    new = (* functab->lsa_refresher)(lsa);
-- 
---  return;
--+  return new;
-- }
-- 
-- /*------------------------------------------------------------------------*
--diff --git a/ospfd/ospf_opaque.h b/ospfd/ospf_opaque.h
--index f49fe46..2273064 100644
----- a/ospfd/ospf_opaque.h
--+++ b/ospfd/ospf_opaque.h
--@@ -120,7 +120,7 @@ ospf_register_opaque_functab (
--   void (* config_write_debug )(struct vty *vty),
--   void (* show_opaque_info   )(struct vty *vty, struct ospf_lsa *lsa),
--   int  (* lsa_originator)(void *arg),
---  void (* lsa_refresher )(struct ospf_lsa *lsa),
--+  struct ospf_lsa *(* lsa_refresher )(struct ospf_lsa *lsa),
--   int (* new_lsa_hook)(struct ospf_lsa *lsa),
--   int (* del_lsa_hook)(struct ospf_lsa *lsa)
-- );
--@@ -143,7 +143,7 @@ extern void ospf_opaque_lsa_originate_schedule (struct ospf_interface *oi,
-- 						int *init_delay);
-- extern struct ospf_lsa *ospf_opaque_lsa_install (struct ospf_lsa *,
-- 						 int rt_recalc);
---extern void ospf_opaque_lsa_refresh (struct ospf_lsa *lsa);
--+extern struct ospf_lsa *ospf_opaque_lsa_refresh (struct ospf_lsa *lsa);
-- 
-- extern void ospf_opaque_lsa_reoriginate_schedule (void *lsa_type_dependent,
-- 						  u_char lsa_type,
---- 
--1.7.4
--
-diff --git a/package/quagga/quagga-zlog.patch b/package/quagga/quagga-zlog.patch
-deleted file mode 100644
-index ad75bfe..0000000
---- a/package/quagga/quagga-zlog.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From fc95186c30884c96543aecfc56cfe5b08774525b Mon Sep 17 00:00:00 2001
--From: Christian Hammers <ch@debian.org>
--Date: Wed, 23 Mar 2011 13:07:55 +0300
--Subject: [PATCH] lib: fix more format warnings (#637)
--
--The following patch was also neccessary to compile.
--
--* command.c: (config_logmsg_cmd) use "%s" format spec
--* if.c: (connected_log) ditto
-----
-- lib/command.c |    2 +-
-- lib/if.c      |    2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/lib/command.c b/lib/command.c
--index 5a13f39..264e0f7 100644
----- a/lib/command.c
--+++ b/lib/command.c
--@@ -3056,7 +3056,7 @@ DEFUN (config_logmsg,
--   if ((level = level_match(argv[0])) == ZLOG_DISABLED)
--     return CMD_ERR_NO_MATCH;
-- 
---  zlog(NULL, level, ((message = argv_concat(argv, argc, 1)) ? message : ""));
--+  zlog(NULL, level, "%s", ((message = argv_concat(argv, argc, 1)) ? message : ""));
--   if (message)
--     XFREE(MTYPE_TMP, message);
--   return CMD_SUCCESS;
--diff --git a/lib/if.c b/lib/if.c
--index b61bdbf..86f754b 100644
----- a/lib/if.c
--+++ b/lib/if.c
--@@ -664,7 +664,7 @@ connected_log (struct connected *connected, char *str)
--       strncat (logbuf, inet_ntop (p->family, &p->u.prefix, buf, BUFSIZ),
-- 	       BUFSIZ - strlen(logbuf));
--     }
---  zlog (NULL, LOG_INFO, logbuf);
--+  zlog (NULL, LOG_INFO, "%s", logbuf);
-- }
-- 
-- /* If two connected address has same prefix return 1. */
---- 
--1.7.4
--
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index b7a23ab..bcc3f46 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index ac0c0e9..5d07ff6 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -3,10 +3,10 @@
+ # radvd
  #
  #############################################################
+-RADVD_VERSION:=1.6
+-RADVD_SOURCE:=radvd-$(RADVD_VERSION).tar.gz
+-RADVD_SITE:=http://www.litech.org/radvd/dist/
+-RADVD_DEPENDENCIES:=flex host-flex
++
++RADVD_VERSION = 1.8.2
++RADVD_SITE = http://www.litech.org/radvd/dist/
++RADVD_DEPENDENCIES = flex host-flex
  
--QUAGGA_VERSION = 0.99.18
-+QUAGGA_VERSION = 0.99.20
- QUAGGA_SITE = http://www.quagga.net/download
- 
- QUAGGA_DEPENDENCIES = host-gawk
+ define RADVD_INSTALL_INITSCRIPT
+ 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
 -- 
 1.7.3.4
