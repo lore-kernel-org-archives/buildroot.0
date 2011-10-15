@@ -1,77 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 15 Oct 2011 23:20:28 +0200
-Subject: [Buildroot] [git commit] wget: bump to version 1.13.4 and
-	improvements
-Message-ID: <20111015213700.AC3898D520@busybox.osuosl.org>
+Date: Sat, 15 Oct 2011 23:24:36 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.1.16
+Message-ID: <20111015213703.284588E315@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b79ab02d462596566f8f2e2db518dad158bae5eb
+commit: http://git.buildroot.net/buildroot/commit/?id=01a07559a7b808ab5ab7fb4484e485999ba27845
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-* Bump wget to version 1.13.4
-* Enable wget again on !wchar toolchains
-* Enable support for gnutls
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/wget/Config.in |    4 ----
- package/wget/wget.mk   |   22 ++++++++++++++++++++--
- 2 files changed, 20 insertions(+), 6 deletions(-)
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/wget/Config.in b/package/wget/Config.in
-index 172359c..3877a3a 100644
---- a/package/wget/Config.in
-+++ b/package/wget/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_WGET
- 	bool "wget"
--	depends on BR2_USE_WCHAR
- 	help
- 	  Network utility to retrieve files from http, https and ftp.
- 
- 	  http://www.gnu.org/software/wget/
--
--comment "wget requires a toolchain with WCHAR support"
--	depends on !BR2_USE_WCHAR
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index c34a51c..b14cd92 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,12 +4,30 @@
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index a77e34c..c5f66f6 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--WGET_VERSION = 1.12
-+WGET_VERSION = 1.13.4
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- 
-+# Prefer full-blown wget over busybox
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+	WGET_DEPENDENCIES += busybox
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+	WGET_CONF_OPT += --with-ssl=gnutls \
-+		--with-libgnutls-prefix=$(STAGING_DIR)
-+	WGET_DEPENDENCIES += gnutls
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--	WGET_CONF_OPT += --with-ssl --with-libssl-prefix=$(STAGING_DIR)
-+	WGET_CONF_OPT += --with-ssl=openssl --with-libssl-prefix=$(STAGING_DIR)
- 	WGET_DEPENDENCIES += openssl
- endif
- 
-+# --with-ssl is default
-+ifneq ($(BR2_PACKAGE_GNUTLS),y)
-+ifneq ($(BR2_PACKAGE_OPENSSL),y)
-+	WGET_CONF_OPT += --without-ssl
-+endif
-+endif
-+
- $(eval $(call AUTOTARGETS))
+-SQUID_VERSION = 3.1.15
++SQUID_VERSION = 3.1.16
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
+ SQUID_DEPENDENCIES = libcap host-libcap
+ SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
