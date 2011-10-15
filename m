@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 15 Oct 2011 00:07:29 -0300
-Subject: [Buildroot] [PATCH 15/25] vala: new package
+Date: Sat, 15 Oct 2011 00:07:30 -0300
+Subject: [Buildroot] [PATCH 16/25] gmpc: bump to version 11.8.16
 In-Reply-To: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1318648059-30431-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318648059-30431-15-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1318648059-30431-16-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,65 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in      |    1 +
- package/vala/Config.in |   14 ++++++++++++++
- package/vala/vala.mk   |   15 +++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/vala/Config.in
- create mode 100644 package/vala/vala.mk
+ package/gmpc/Config.in |    8 ++++++--
+ package/gmpc/gmpc.mk   |   21 +++++++--------------
+ 2 files changed, 13 insertions(+), 16 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 03cf3ae..fad0f18 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -143,6 +143,7 @@ source "package/rdesktop/Config.in"
- source "package/sylpheed/Config.in"
- source "package/synergy/Config.in"
- source "package/torsmo/Config.in"
-+source "package/vala/Config.in"
- source "package/x11vnc/Config.in"
- source "package/xstroke/Config.in"
- source "package/xterm/Config.in"
-diff --git a/package/vala/Config.in b/package/vala/Config.in
-new file mode 100644
-index 0000000..89b4459
---- /dev/null
-+++ b/package/vala/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_VALA
-+	bool "vala"
-+	depends on BR2_USE_WCHAR # glib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  Compiler for the GObject type system.
-+
-+	  http://live.gnome.org/Vala
-+
-+comment "vala requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-new file mode 100644
-index 0000000..b1217cb
---- /dev/null
-+++ b/package/vala/vala.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# vala
-+#
-+#############################################################
-+
-+VALA_VERSION = 0.12.1
-+VALA_SITE = http://download.gnome.org/sources/vala/0.12
-+VALA_SOURCE = vala-$(VALA_VERSION).tar.bz2
-+VALA_DEPENDENCIES = host-flex libglib2 \
-+		$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
-+HOST_VALA_DEPENDENCIES = host-flex host-libglib2
-+
-+$(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
+diff --git a/package/gmpc/Config.in b/package/gmpc/Config.in
+index 7bfe611..f86945c 100644
+--- a/package/gmpc/Config.in
++++ b/package/gmpc/Config.in
+@@ -2,14 +2,18 @@ config BR2_PACKAGE_GMPC
+ 	bool "gmpc"
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBMPD
+-	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_LIBGLADE
++	select BR2_PACKAGE_LIBSOUP
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_XLIB_LIBICE
++	select BR2_PACKAGE_XLIB_LIBSM
++	select BR2_PACKAGE_XLIB_LIBX11
+ 	help
+ 	  Gnome Music Player Client is a GNOME/GTK2.2 client for
+ 	  Music Player Daemon.
+diff --git a/package/gmpc/gmpc.mk b/package/gmpc/gmpc.mk
+index d6b6e93..831ff3e 100644
+--- a/package/gmpc/gmpc.mk
++++ b/package/gmpc/gmpc.mk
+@@ -3,21 +3,14 @@
+ # gmpc
+ #
+ #############################################################
+-GMPC_VERSION = 0.17.0
+-GMPC_SOURCE = gmpc-$(GMPC_VERSION).tar.gz
+-GMPC_SITE = http://download.sarine.nl/download/Programs/gmpc/$(GMPC_VERSION)/
+-GMPC_CONF_ENV = ac_cv_lib_curl_curl_global_init=yes \
+-		ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
+-GMPC_CONF_OPT = --disable-mmkeys
+ 
+-GMPC_DEPENDENCIES = libglib2 libgtk2 libglade libcurl libmpd host-gob2 host-intltool \
++GMPC_VERSION = 11.8.16
++GMPC_SITE = http://download.sarine.nl/Programs/gmpc/$(GMPC_VERSION)
++GMPC_CONF_ENV =	ac_cv_path_GOB2=$(GOB2_HOST_BINARY)
++GMPC_CONF_OPT = --disable-mmkeys --disable-unique
++GMPC_DEPENDENCIES = host-gob2 host-intltool host-pkg-config host-vala \
++	libglib2 libgtk2 libmpd libsoup sqlite \
++	xlib_libICE xlib_libSM xlib_libX11 \
+ 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBSM),y)
+-GMPC_DEPENDENCIES += xlib_libSM
+-GMPC_CONF_OPT += --enable-sm
+-else
+-GMPC_CONF_OPT += --disable-sm
+-endif
+-
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.3.4
