@@ -1,44 +1,69 @@
-From: Jed Evnull <jedevnull@gmail.com>
-Date: Sun, 16 Oct 2011 14:08:34 -0400
-Subject: [Buildroot] microperl compile fails for arm
-In-Reply-To: <20111016170108.GC7761@tarshish>
-References: <CAFo83mEZiX6BRzN+LY2XAstAqet=rOtQiWd1uv=aU2aCMnsvEg@mail.gmail.com>
- <20111016170108.GC7761@tarshish>
-Message-ID: <CAFo83mHU-DrjmJvsoF9-xTVK57oK=BT0hJtPd4Ho9XABE7hrow@mail.gmail.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sun, 16 Oct 2011 23:57:55 +0000 (UTC)
+Subject: [Buildroot] buildroot noob help!
+References: <CAFo83mG5Gx+LoZHP3j8-avDGXoKiHQxKLUcAM2y4rc8Ok1M_rg@mail.gmail.com>
+ <CAEYzJUHho5fwzEks9d67i3dGc8BhEpH09kGr-icoa5LeRgT=uw@mail.gmail.com>
+ <201110151606.35102.minimod@morethan.org>
+ <CAFo83mEQUkMazfnZLAu=UPn+xgyjY-g4qkYMTmqZDr0JC99vKQ@mail.gmail.com>
+Message-ID: <j7fr23$n6e$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Oct 16, 2011 at 1:01 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+On 2011-10-15, Jed Evnull <jedevnull@gmail.com> wrote:
 
-> Hi Jed,
+>> If your __not__ building on non-ARM, why do you need a
+>> cross-compiler?
+>>
+>> If you __are__ building on non-ARM, how did you expect your host
+>> machine to execute the ARM binaries inside of the chroot?
+>>
+>> Me-thinks you need QEMU or such like to do that.
 >
-> On Sun, Oct 16, 2011 at 12:24:10PM -0400, Jed Evnull wrote:
-> > My compile is blowing up when it hits perl. I'm using qemu_arm as a base
-> > config. I dont see a log file but below is a fragment of where things
-> start
-> > to go south. I'm running ubuntu 10.10.  ??
->
-> [snip]
->
-> > test is in /usr/local/bin/test.
->
-> ...
->
-> > Checking how to test for symbolic links...
-> > Your builtin 'test -h' may be broken.
-> > Trying external '/usr/local/bin/test -h'.
-> > External '/usr/local/bin/test -h' is broken, too.
->
-> So, what is this /usr/local/bin/test? Is it test(1) compatible?
->
-> baruch
->
+> Sorry, I was probably incoherent. My goal is to produce arm binaries for my
+> tablet. I want them as small as possible, so I want statically linked
+> packages with uclibc, rather than glibc.
 
-Oops.  Deleted /usr/local/bin/test and all proceeds normally. Thanks for
-catching that!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111016/9d5529b4/attachment.html>
+Are you trying to build a bootable root filesystem or not?  If not,
+then buildroot is not the right tool.  Buildroot is for building root
+filesystems.  Hence the name. ;)
+
+> My first try was to use just the buildroot cross-compile toolchain
+> with ./configure CC=arm-linux-gcc, LDFLAGS=-static, etc. A 'normal'
+> cross-compile, I guess. This is how I use the sourcery arm toochain
+> to produce kernels for my device.  That didn't work for anything but
+> simple hello world programs. Lots of different errors with autoconf.
+
+If you just want to build statically linked ARM executables on a
+normal Linux desktop (e.g. IA32 or AMD64), then I think you should
+probably just build an arm-linux uclibc toolchain using crosstool-ng
+and use that for your builds (remember, you might have to pass the
+appropriate --sysroot option so the toolchain can find all if its
+include and library files).
+
+ http://crosstool-ng.org/
+
+Using buildroot is going the long way 'round.
+
+I just built a static ARM "hello world" C program using my
+crosstool-ng toochain (the same one I use with Buildroot to build root
+filesystems), and it's 15KB (stripped).  That's a damn sight better
+than my normal Gentoo glibc toolchain does.  It generates a 515KB IA32
+executable (stripped) from the same source file.  Glibc has been
+_spectectacularly_ bad job for static linking for quite some time.
+
+> So I thought I would set up qemu for chroot and directly compile from
+> within the root_fs produced by buildroot, as worked with
+> scratchbox/qemu. But chroot into the image fails.chroot: failed to
+> run command `/bin/su'.
+
+I don't think chroot is what you want.  What you want is gcc's
+--sysroot option 
+
+-- 
+Grant Edwards               grant.b.edwards        Yow! Hmmm ... A hash-singer
+                                  at               and a cross-eyed guy were
+                              gmail.com            SLEEPING on a deserted
+                                                   island, when ...
