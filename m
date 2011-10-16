@@ -1,31 +1,28 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 16 Oct 2011 12:35:00 +0200
-Subject: [Buildroot] [PATCH 2 of 2] linux: make vmlinux target available
- to all architectures
-In-Reply-To: <20110922210743.228f83a8@skate>
-References: <patchbomb.1316587574@localhost6.localdomain6>
- <154480348720d8530ebf.1316587576@localhost6.localdomain6>
- <20110921092929.32fb4335@skate> <20110922210743.228f83a8@skate>
-Message-ID: <CAAXf6LX5R63mPboMH671nHqim-UKg3ype8MOnR7DidUM9-Pa2A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 16 Oct 2011 09:53:16 -0300
+Subject: [Buildroot] [git commit] stunnel: bump to version 4.44
+In-Reply-To: <4E9A9A26.2050409@free-electrons.com>
+References: <20111015213701.E38898E24C@busybox.osuosl.org>
+ <4E9A9A26.2050409@free-electrons.com>
+Message-ID: <2247f2bf1f89d0ba0b3eba6b94afe5d1@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 16.10.2011 05:47, Maxime Ripard wrote:
 
-On Thu, Sep 22, 2011 at 9:07 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 21 Sep 2011 09:29:29 +0200,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+> There's a problem with that. They have a kind of silly policy to
+> store the archives. In the "main" folder, there is only the latest
+> version, while every other version are in obsolete/4.x/. So this will
+> break as soon as a new version will be released, and that was why I
+> put obsolete in the first place.
 >
->> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> I've merged the patch in a linux-changes branch I will push to Peter.
+> Maxime
 
-Could you tell me the status of the linux-changes branch? Do you still
-have other patches that should go in before you push it to Peter?
-
-Thanks,
-Thomas
+Yes, i've noticed, however they don't keep a copy of the latest version 
+in obsolete.
+As long as it's mirrored in sources.buildroot.net it should be safe.
+Maybe fallback/alternate download URLs could be implemented?
+Regards.
