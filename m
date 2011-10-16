@@ -1,38 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Oct 2011 19:01:08 +0200
-Subject: [Buildroot] microperl compile fails for arm
-In-Reply-To: <CAFo83mEZiX6BRzN+LY2XAstAqet=rOtQiWd1uv=aU2aCMnsvEg@mail.gmail.com>
-References: <CAFo83mEZiX6BRzN+LY2XAstAqet=rOtQiWd1uv=aU2aCMnsvEg@mail.gmail.com>
-Message-ID: <20111016170108.GC7761@tarshish>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Sun, 16 Oct 2011 19:39:37 +0200
+Subject: [Buildroot] [git commit] stunnel: bump to version 4.44
+In-Reply-To: <2247f2bf1f89d0ba0b3eba6b94afe5d1@zacarias.com.ar>
+References: <20111015213701.E38898E24C@busybox.osuosl.org>
+ <4E9A9A26.2050409@free-electrons.com>
+ <2247f2bf1f89d0ba0b3eba6b94afe5d1@zacarias.com.ar>
+Message-ID: <4E9B16D9.2070200@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jed,
+On 16/10/2011 14:53, Gustavo Zacarias wrote:
+> On 16.10.2011 05:47, Maxime Ripard wrote:
+> 
+>> There's a problem with that. They have a kind of silly policy to
+>> store the archives. In the "main" folder, there is only the latest
+>> version, while every other version are in obsolete/4.x/. So this will
+>> break as soon as a new version will be released, and that was why I
+>> put obsolete in the first place.
+>>
+>> Maxime
+> 
+> Yes, i've noticed, however they don't keep a copy of the latest version
+> in obsolete.
+> As long as it's mirrored in sources.buildroot.net it should be safe.
 
-On Sun, Oct 16, 2011 at 12:24:10PM -0400, Jed Evnull wrote:
-> My compile is blowing up when it hits perl. I'm using qemu_arm as a base
-> config. I dont see a log file but below is a fragment of where things start
-> to go south. I'm running ubuntu 10.10.  ??
+But do we really need the latest version here ?
 
-[snip]
+Also, how the mirror is generated ? At each release or at a given
+frequency ? Because, in the first case, if a new version is released
+between this commit and the release, we're screwed.
 
-> test is in /usr/local/bin/test.
+> Maybe fallback/alternate download URLs could be implemented?
 
-...
-
-> Checking how to test for symbolic links...
-> Your builtin 'test -h' may be broken.
-> Trying external '/usr/local/bin/test -h'.
-> External '/usr/local/bin/test -h' is broken, too.
-
-So, what is this /usr/local/bin/test? Is it test(1) compatible?
-
-baruch
+Indeed, that's a good idea.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
