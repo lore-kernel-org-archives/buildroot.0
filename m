@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 16 Oct 2011 00:04:32 -0300
-Subject: [Buildroot] [PATCH 6/7] mutt: bump to version 1.5.21
+Date: Sun, 16 Oct 2011 00:04:33 -0300
+Subject: [Buildroot] [PATCH 7/7] ncftp: bump to version 3.2.5
 In-Reply-To: <1318734273-24454-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1318734273-24454-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318734273-24454-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1318734273-24454-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +12,77 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...0080114-nodoc.patch => mutt-1.5.21-nodoc.patch} |    0
- package/mutt/mutt.mk                               |   22 ++++---------------
- 2 files changed, 5 insertions(+), 17 deletions(-)
- rename package/mutt/{mutt-1.5.17+20080114-nodoc.patch => mutt-1.5.21-nodoc.patch} (100%)
+ package/ncftp/Config.in |    4 ----
+ package/ncftp/ncftp.mk  |   24 ++++++++++++------------
+ 2 files changed, 12 insertions(+), 16 deletions(-)
 
-diff --git a/package/mutt/mutt-1.5.17+20080114-nodoc.patch b/package/mutt/mutt-1.5.21-nodoc.patch
-similarity index 100%
-rename from package/mutt/mutt-1.5.17+20080114-nodoc.patch
-rename to package/mutt/mutt-1.5.21-nodoc.patch
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 4b75cc8..4c8e399 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -3,23 +3,11 @@
- # mutt
+diff --git a/package/ncftp/Config.in b/package/ncftp/Config.in
+index a29934a..7b6ae64 100644
+--- a/package/ncftp/Config.in
++++ b/package/ncftp/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_NCFTP
+ 	bool "ncftp"
+-	depends on BR2_LARGEFILE
+ 	help
+ 	  NcFTP Client (also known as just NcFTP) is a set of FREE application
+ 	  programs implementing the File Transfer Protocol (FTP).
+@@ -31,6 +30,3 @@ config BR2_PACKAGE_NCFTP_BOOKMARKS
+ 	select BR2_PACKAGE_NCURSES
+ 
+ endmenu
+-
+-comment "ncftp requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 7fdee9a..3000e7a 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -3,33 +3,33 @@
+ # ncftp client
  #
  #############################################################
--MUTT_VERSION:=1.5.17+20080114
--MUTT_SOURCE:=mutt_$(MUTT_VERSION).orig.tar.gz
--MUTT_PATCH:=mutt_$(MUTT_VERSION)-1.diff.gz
--MUTT_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mutt/
--MUTT_DEPENDENCIES=ncurses
--MUTT_CONF_OPT = \
--		--disable-smtp \
--		--disable-iconv \
--		--without-wc-funcs
--MUTT_AUTORECONF=YES
+-NCFTP_VERSION:=3.2.4
+-NCFTP_SOURCE:=ncftp-$(NCFTP_VERSION)-src.tar.bz2
+-NCFTP_SITE:=ftp://ftp.ncftp.com/ncftp
  
--define MUTT_APPLY_DEBIAN_PATCHES
--        if [ -d $(@D)/debian/patches ]; then \
--                support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
--        fi
--endef
--
--MUTT_POST_PATCH_HOOKS += MUTT_APPLY_DEBIAN_PATCHES
-+MUTT_VERSION = 1.5.21
-+MUTT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mutt
-+MUTT_DEPENDENCIES = ncurses
-+MUTT_CONF_OPT = --disable-iconv --disable-smtp
-+MUTT_AUTORECONF = YES
+-NCFTP_TARGET_BINS:=ncftp
++NCFTP_VERSION = 3.2.5
++NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.bz2
++NCFTP_SITE = ftp://ftp.ncftp.com/ncftp
++NCFTP_TARGET_BINS = ncftp
  
- $(eval $(call AUTOTARGETS))
+ ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+-NCFTP_TARGET_BINS+=ncftpget
++	NCFTP_TARGET_BINS += ncftpget
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_PUT),y)
+-NCFTP_TARGET_BINS+=ncftpput
++	NCFTP_TARGET_BINS += ncftpput
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_LS),y)
+-NCFTP_TARGET_BINS+=ncftpls
++	NCFTP_TARGET_BINS += ncftpls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_BATCH),y)
+-NCFTP_TARGET_BINS+=ncftpbatch
+-NCFTP_INSTALL_NCFTP_BATCH = \
+-	ln -s /usr/bin/ncftpbatch $(TARGET_DIR)/usr/bin/ncftpspooler
++	NCFTP_TARGET_BINS += ncftpbatch
++	NCFTP_INSTALL_NCFTP_BATCH = \
++		ln -s /usr/bin/ncftpbatch $(TARGET_DIR)/usr/bin/ncftpspooler
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_BOOKMARKS),y)
+-NCFTP_TARGET_BINS+=ncftpbookmarks
+-NCFTP_DEPENDENCIES:=ncurses
++	NCFTP_TARGET_BINS += ncftpbookmarks
++	NCFTP_DEPENDENCIES += ncurses
+ endif
+ 
+ define NCFTP_INSTALL_TARGET_CMDS
 -- 
 1.7.3.4
