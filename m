@@ -1,63 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Oct 2011 22:40:00 +0200
-Subject: [Buildroot] [PATCH 4/9] New package: Google Breakpad library
-In-Reply-To: <1318603921-22899-5-git-send-email-will_wagner@carallon.com>
-References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
- <1318603921-22899-5-git-send-email-will_wagner@carallon.com>
-Message-ID: <20111017224000.33a17f76@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 17 Oct 2011 23:13:46 +0200
+Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
+In-Reply-To: <20111017184718.71afc290@skate> (Thomas Petazzoni's message of
+ "Mon, 17 Oct 2011 18:47:18 +0200")
+References: <20111017184718.71afc290@skate>
+Message-ID: <87hb3748z9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Le Fri, 14 Oct 2011 15:51:56 +0100,
-Will Wagner <will_wagner@carallon.com> a ?crit :
+ Thomas> Hello,
+ Thomas> At ELCE, I will be talking about "Using Buildroot for real projects".
+ Thomas> You can see my talk summary at
+ Thomas> https://events.linuxfoundation.org/events/embedded-linux-conference-europe/petazzoni.
 
-> The breakpad library is a crash reporting framework
-> 
-> See http://code.google.com/p/google-breakpad/ for more details
-> 
-> Signed-off-by: Will Wagner <will_wagner@carallon.com>
-> ---
->  package/Config.in                                  |    1 +
->  package/breakpad/Config.in                         |    7 ++++
->  .../breakpad-782_crash_generation_server.patch     |   12 +++++++
->  .../breakpad-782_linux_client_cleanup.patch        |   33 ++++++++++++++++++++
->  package/breakpad/breakpad-782_linux_exit.patch     |   22 +++++++++++++
+ Thomas> The current (unfinished) status of my slides is visible at:
+ Thomas>   http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
 
-As Arnout said, all patches require a proper description +
-Signed-off-by line. See for example
-package/libgtk2/host-libgtk2-2.20.1-reduce-dependencies.patch.
+Thanks, a few quick comments:
 
-> +#############################################################
-> +#
-> +# breakpad
-> +#
-> +#############################################################
-> +
-> +BREAKPAD_SITE:=http://google-breakpad.googlecode.com/svn/trunk/
-> +BREAKPAD_SITE_METHOD:=svn
-> +BREAKPAD_VERSION:=842
-> +BREAKPAD_DEPENDENCIES:=libcurl
+p3: s/How it works?/How does it work?/
+p5: minor, configuration doesn't match output on p6
+p7: "It does not track which packages installs what" <- Is that
+    important to know how it works?
+p9: use uclibc and rootfs size would be half ;)
+p11: s/needs to build rebuilt/needs to be rebuilt/
+p11: s/built with crosstool-NG/from above/
+p12: s/knows some/contains presets for/
+p12: s/well-known toolchains/well-known binary toolchains/
+p14: s/for it build/for it to build/
+p16: "Up to Buildroot 2011.11" reads a bit odd to me (E.G. is it now
+     fixed or not?) Perhaps simply say "Until recently, it wasn't easy
+     to use Buildroot with a custom"
 
-= instead of :=, spaces before and after =.
-
-> +BREAKPAD_LIBTOOL_PATCH = NO
-
-Does it really break something?
-
-> +BREAKPAD_INSTALL_STAGING = YES
-> +BREAKPAD_INSTALL_TARGET = NO
-
-This is a strange combination. A comment would be good to explain why a
-library does not need to be installed on the target.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
