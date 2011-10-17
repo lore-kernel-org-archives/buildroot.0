@@ -1,85 +1,101 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 17 Oct 2011 10:41:07 +0200
-Subject: [Buildroot] [PATCH v6 3/3] New package: feh
-In-Reply-To: <1318840867-20976-1-git-send-email-yegorslists@googlemail.com>
-References: <1318840867-20976-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1318840867-20976-4-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Oct 2011 11:02:57 +0200
+Subject: [Buildroot] [PATCH 5/9] Support for compiling Qt for X11
+Message-ID: <201110171102.57649.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in     |    1 +
- package/feh/Config.in |   14 ++++++++++++++
- package/feh/feh.mk    |   22 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
- create mode 100644 package/feh/Config.in
- create mode 100644 package/feh/feh.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 7f82934..b39f41b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -133,6 +133,7 @@ source "package/fluxbox/Config.in"
- comment "X applications"
- source "package/alsamixergui/Config.in"
- source "package/docker/Config.in"
-+source "package/feh/Config.in"
- source "package/gqview/Config.in"
- source "package/gmpc/Config.in"
- source "package/gob2/Config.in"
-diff --git a/package/feh/Config.in b/package/feh/Config.in
-new file mode 100644
-index 0000000..31e7239
---- /dev/null
-+++ b/package/feh/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_FEH
-+	bool "feh"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXINERAMA
-+	select BR2_PACKAGE_XLIB_LIBXT
-+	select BR2_PACKAGE_IMLIB2_PNG
-+	select BR2_PACKAGE_IMLIB2_JPEG
-+	select BR2_PACKAGE_IMLIB2_X
-+	select BR2_PACKAGE_GIBLIB
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  feh is an X11 image viewer aimed mostly at console users.
-+
-+	  http://feh.finalrewind.org/
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-new file mode 100644
-index 0000000..b59bb2f
---- /dev/null
-+++ b/package/feh/feh.mk
-@@ -0,0 +1,22 @@
-+FEH_VERSION = 2.0
-+FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
-+FEH_SITE = http://feh.finalrewind.org/
-+FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
-+
-+define FEH_BUILD_CMDS
-+	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
-+		-C $(@D) all
-+endef
-+
-+define FEH_INSTALL_TARGET_CMDS
-+	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
-+		DESTDIR=$(TARGET_DIR) -C $(@D) install
-+endef
-+
-+define FEH_UNINSTALL_TARGET_CMDS
-+	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
-+		DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
-+endef
-+
-+$(eval $(call GENTARGETS))
-+
+On Friday 14 October 2011 16:51:57, Will Wagner wrote:
+[snip]
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index cc035bf..a36fcb6 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -96,6 +96,10 @@ ifneq ($(QT_PIXEL_DEPTHS),)
+>  QT_CONFIGURE_OPTS += -depths $(subst $(space),$(comma),$(strip $(QT_PIXEL_DEPTHS)))
+>  endif
+>  
+> +ifneq ($(BR2_PACKAGE_QT_X11),y)
+> +### Embedded options
+> +QT_CONFIGURE_OPTS += -no-gfx-qnx -no-kbd-qnx -no-mouse-qnx
+> +
+>  ### Display drivers
+>  ifeq ($(BR2_PACKAGE_QT_GFX_LINUXFB),y)
+>  QT_CONFIGURE_OPTS += -qt-gfx-linuxfb
+> @@ -129,7 +133,6 @@ else
+>  QT_CONFIGURE_OPTS += -no-gfx-directfb
+>  endif
+>  
+> -
+>  ### Mouse drivers
+>  ifeq ($(BR2_PACKAGE_QT_MOUSE_PC),y)
+>  QT_CONFIGURE_OPTS += -qt-mouse-pc
+> @@ -178,6 +181,11 @@ else
+>  QT_CONFIGURE_OPTS += -no-kbd-qvfb
+>  endif
+>  
+> +else
+> +### X11 options
+> +QT_CONFIGURE_OPTS += -no-gtkstyle -no-opengl -no-openvg -no-glib --disable-script
+> +endif
+> +
+
+ It's a matter of taste, but I prefer the small branch of a condition to be
+at the top.  So
+ifeq ($(BR2_PACKAGE_QT_X11),y)
+### X11 options
+QT_CONFIGURE_OPTS += -no-gtkstyle -no-opengl -no-openvg -no-glib --disable-script
+else
+...
+endif # BR2_PACKAGE_QT_X11
+
+>  ifeq ($(BR2_PACKAGE_QT_DEBUG),y)
+>  QT_CONFIGURE_OPTS += -debug
+>  else
+> @@ -216,7 +224,12 @@ else
+>  QT_EMB_PLATFORM = generic
+>  endif
+>  
+> +ifneq ($(BR2_PACKAGE_QT_X11),y)
+>  QT_CONFIGURE_OPTS += -embedded $(QT_EMB_PLATFORM)
+> +else
+> +QT_CONFIGURE_OPTS += -xplatform linux-$(QT_EMB_PLATFORM)-g++ -arch i386
+
+ Does this really only work for i386?  In that case, add a condition on
+BR2_ARCH to BR2_PACKAGE_QT_X11 in Config.in.  Else, use BR2_ARCH here
+(and compile-test for some other platforms).
+
+> +QT_DEPENDENCIES   += xserver_xorg-server
+
+ This was just discussed on the list :-)  Qt-X11 probably doesn't really
+depend on the Xserver, only on libX11 and libXinerama and perhaps others.
+
+[snip]
+
+ Otherwise, it does look good.
+
+
+ Regards,
+ Arnout
 -- 
-1.7.1.1
+Arnout Vandecappelle                            arnout at mind be
+Senior Embedded Software Architect              +32-16-286540  +32-478-010353
+Essensium/Mind                                  http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium             BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+
+
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
