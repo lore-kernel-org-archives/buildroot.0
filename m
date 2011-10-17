@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Oct 2011 22:32:26 +0200
-Subject: [Buildroot] [PATCH 2/9] Copy gdbserver from external toolchain
-In-Reply-To: <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
+Date: Mon, 17 Oct 2011 22:36:54 +0200
+Subject: [Buildroot] [PATCH 3/9] Add openbox window manager
+In-Reply-To: <1318603921-22899-4-git-send-email-will_wagner@carallon.com>
 References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
- <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
-Message-ID: <20111017223226.5638eac7@skate>
+ <1318603921-22899-4-git-send-email-will_wagner@carallon.com>
+Message-ID: <20111017223654.5d1b9d9b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Le Fri, 14 Oct 2011 15:51:54 +0100,
+Le Fri, 14 Oct 2011 15:51:55 +0100,
 Will Wagner <will_wagner@carallon.com> a ?crit :
 
-> If you are using an external toolchain that includes gdb for host and gdbserver for target, this option will copy gdbserver onto the target.
-> 
-> Currently has support for ct-ng and codesourcery toolchains
-> 
-> Original idea by Anders Darander taken from http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/17747
-> 
-> Signed-off-by: Will Wagner <will_wagner@carallon.com>
+> +OPENBOX_VERSION:=3.4.11
+> +OPENBOX_SOURCE:=openbox-$(OPENBOX_VERSION).tar.gz
+> +OPENBOX_SITE:=http://openbox.org/dist/openbox/
+> +
+> +OPENBOX_DEPENDENCIES:=xlib_libX11 libglib2 pango libxml2
 
-You should wrap the commit log (ditto for all your patches)
+You should use = instead of :=, and put a space before and after =.
 
-See also
+> +ifeq ($(BR2_PACKAGE_OPENBOX_SIMPLE),y)
 
- [PATCH 3/4] debug: provide an option to copy the gdbserver to the
- target
+Perhaps this should be called
+BR2_PACKAGE_OPENBOX_INSTALL_SIMPLE_CONFIG ?
 
-that I posted on July, 11th 2011.
+> +  define OPENBOX_SIMPLE_CONFIG
+
+and OPENBOX_INSTALL_SIMPLE_CONFIG
+
+> +    rm $(TARGET_DIR)/etc/xdg/openbox/menu.xml
+> +    cp package/openbox/rc.xml $(TARGET_DIR)/etc/xdg/openbox/rc.xml
+
+install -D -m 0644 package/openbox/rc.xml $(TARGET_DIR)/etc/xdg/openbox/rc.xml
+
+> +    rm -rf $(TARGET_DIR)/usr/share/themes/*
+
+Couldn't this possibly erase some 'themes' from other applications ?
+
+> +    mkdir -p $(TARGET_DIR)/usr/share/themes/Clearlooks/openbox-3
+> +    cp package/openbox/themerc $(TARGET_DIR)/usr/share/themes/Clearlooks/openbox-3/
+
+install -D -m 0644 package/openbox/themerc $(TARGET_DIR)/usr/share/themes/Clearlooks/openbox-3/themerc
+
+Otherwise, looks good.
 
 Thomas
 -- 
