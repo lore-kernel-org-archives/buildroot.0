@@ -1,30 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Oct 2011 12:50:59 +0200
-Subject: [Buildroot] buildroot noob help!
-In-Reply-To: <CAFo83mEQUkMazfnZLAu=UPn+xgyjY-g4qkYMTmqZDr0JC99vKQ@mail.gmail.com>
-References: <CAFo83mG5Gx+LoZHP3j8-avDGXoKiHQxKLUcAM2y4rc8Ok1M_rg@mail.gmail.com>
- <201110151606.35102.minimod@morethan.org>
- <CAFo83mEQUkMazfnZLAu=UPn+xgyjY-g4qkYMTmqZDr0JC99vKQ@mail.gmail.com>
-Message-ID: <201110171251.00254.arnout@mind.be>
+Date: Mon, 17 Oct 2011 13:45:06 +0200
+Subject: [Buildroot] [PATCH v6 0/3] Add utilities to set background
+	image in Fluxbox
+In-Reply-To: <1318840867-20976-1-git-send-email-yegorslists@googlemail.com>
+References: <1318840867-20976-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201110171345.06616.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Monday 17 October 2011 10:41:04, yegorslists at googlemail.com wrote:
+> 
+> Changes:
+> v6: imlib2: always select freetype, feh: always select ImLib2 JPEG support
+> v5: both imlib2 and feh depend on XORG7 and select relevant X-libraries
+> v3: change package dependencies, so that both ImLib2 and feh depend on BR2_PACKAGE_XORG
+> v2: add libXext dependency to ImLib2
 
-On Saturday 15 October 2011 23:59:07, Jed Evnull wrote:
-> Sorry, I was probably incoherent. My goal is to produce arm binaries for my
-> tablet. I want them as small as possible, so I want statically linked
-> packages with uclibc, rather than glibc.
-
- If you want them as small as possible, you should _not_ link them statically...
-
- However, I guess the real problem is that you don't have access to the cross-compilation shared libraries and headers for your tablet.  In that case linking statically is indeed a good solution.  Follow Grant's suggestion to use crosstool-NG.  Keep in mind though that for quite a few existing packages, linking statically doesn't work well (GStreamer and it's dependents, for instance).
-
+ For the entire series:
+Tested-By: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
