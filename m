@@ -1,31 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 17 Oct 2011 23:25:50 +0200
-Subject: [Buildroot] [git commit] openntpd: style fix - don't capitalize in
-	menu
-Message-ID: <20111018052251.523F98E9B9@busybox.osuosl.org>
+Date: Mon, 17 Oct 2011 23:25:28 +0200
+Subject: [Buildroot] [git commit] vala: bump to version 0.14.0
+Message-ID: <20111018052250.E9FEA8E9B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=16eebdc45f2304acf9a25f88847fc30e8a5b09dc
+commit: http://git.buildroot.net/buildroot/commit/?id=6d3f11d2bb1c56f02f606158229e6109cf55360d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/openntpd/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/vala/vala.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
-index 6b8beb8..e9c3bb5 100644
---- a/package/openntpd/Config.in
-+++ b/package/openntpd/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_OPENNTPD
--	bool "OpenNTPD"
-+	bool "openntpd"
- 	help
- 	     OpenNTPD is an easy to use implementation of the Network Time
- 	     Protocol. It provides the ability to sync the local clock
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index b1217cb..0a1aed0 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ 
+-VALA_VERSION = 0.12.1
+-VALA_SITE = http://download.gnome.org/sources/vala/0.12
++VALA_VERSION = 0.14.0
++VALA_SITE = http://download.gnome.org/sources/vala/0.14
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.bz2
+ VALA_DEPENDENCIES = host-flex libglib2 \
+ 		$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
