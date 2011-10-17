@@ -1,29 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Oct 2011 09:12:09 +0200
-Subject: [Buildroot] [PATCH v5 1/3] New package: ImLib2
-In-Reply-To: <CAGm1_ksDEGjcZ-iw4zZikNU3OfcgBZJWuvWBJJAuVLnVXYoYSA@mail.gmail.com>
-References: <1318584328-6080-1-git-send-email-yegorslists@googlemail.com>
- <201110151250.56914.arnout@mind.be>
- <CAGm1_ksDEGjcZ-iw4zZikNU3OfcgBZJWuvWBJJAuVLnVXYoYSA@mail.gmail.com>
-Message-ID: <201110170912.10036.arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Oct 2011 09:15:39 +0200
+Subject: [Buildroot] [PATCH 2 of 2] linux: make vmlinux target available
+ to all architectures
+In-Reply-To: <CAAXf6LX5R63mPboMH671nHqim-UKg3ype8MOnR7DidUM9-Pa2A@mail.gmail.com>
+References: <patchbomb.1316587574@localhost6.localdomain6>
+ <154480348720d8530ebf.1316587576@localhost6.localdomain6>
+ <20110921092929.32fb4335@skate> <20110922210743.228f83a8@skate>
+ <CAAXf6LX5R63mPboMH671nHqim-UKg3ype8MOnR7DidUM9-Pa2A@mail.gmail.com>
+Message-ID: <20111017091539.2aa8c303@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Le Sun, 16 Oct 2011 12:35:00 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-On Saturday 15 October 2011 21:01:51, Yegor Yefremov wrote:
-> Have you tried some other combinations? Till now I just tried the whole set.
+> Could you tell me the status of the linux-changes branch? Do you still
+> have other patches that should go in before you push it to Peter?
 
- No, just with PNG and with/without FREETYPE.
+I will check this and post the patches soon.
 
- Regards,
- Arnout
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
