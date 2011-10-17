@@ -1,55 +1,40 @@
-From: Jed Evnull <jedevnull@gmail.com>
-Date: Mon, 17 Oct 2011 15:41:58 -0400
-Subject: [Buildroot] buildroot noob help!
-In-Reply-To: <j7hdm0$aqa$1@dough.gmane.org>
-References: <CAFo83mG5Gx+LoZHP3j8-avDGXoKiHQxKLUcAM2y4rc8Ok1M_rg@mail.gmail.com>
- <201110151606.35102.minimod@morethan.org>
- <CAFo83mEQUkMazfnZLAu=UPn+xgyjY-g4qkYMTmqZDr0JC99vKQ@mail.gmail.com>
- <201110171251.00254.arnout@mind.be> <j7hdm0$aqa$1@dough.gmane.org>
-Message-ID: <CAFo83mEBpPwAWYYimCzxRCOAVAWH6n+9SEuefxSNmV6W1miaVQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 17 Oct 2011 22:01:30 +0200
+Subject: [Buildroot] [PATCH 1/9] Allow timezone to be set in
+ configuration
+In-Reply-To: <201110151151.43592.arnout@mind.be>
+References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
+ <1318603921-22899-2-git-send-email-will_wagner@carallon.com>
+ <201110151151.43592.arnout@mind.be>
+Message-ID: <20111017220130.30ce6f38@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Oct 17, 2011 10:22 AM, "Grant Edwards" <grant.b.edwards@gmail.com> wrote:
->
-> On 2011-10-17, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> > On Saturday 15 October 2011 23:59:07, Jed Evnull wrote:
-> >> Sorry, I was probably incoherent. My goal is to produce arm binaries
-for my
-> >> tablet. I want them as small as possible, so I want statically linked
-> >> packages with uclibc, rather than glibc.
-> >
-> > If you want them as small as possible, you should _not_ link them
-> > statically...
-> >
-> > However, I guess the real problem is that you don't have access to
-> > the cross-compilation shared libraries and headers for your tablet.
-> > In that case linking statically is indeed a good solution.  Follow
-> > Grant's suggestion to use crosstool-NG.  Keep in mind though that for
-> > quite a few existing packages, linking statically doesn't work well
-> > (GStreamer and it's dependents, for instance).
->
-> Yep.  Anything that uses "plugins" (object files that are fouand,
-> selected, and loaded dynamically under program control after the
-> program is running) is going to be allergic to static linking.
->
-> --
-> Grant Edwards               grant.b.edwards        Yow! An Italian is
-COMBING
->                                  at               his hair in suburban DES
->                              gmail.com            MOINES!
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Le Sat, 15 Oct 2011 11:51:42 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Thanks for all the replies, it's been a great help. I'm building a toolchain
-with ct-ng now.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111017/2adaa764/attachment.html>
+>  Why not just create the file here?  I.e.
+> 
+> 	echo $(TARGET_GENERIC_TIMEZONE) > $(TARGET_DIR)/etc/TZ
+> 
+>  Perhaps even move it out of the SKELETON_DEFAULT condition.
+
+Agreed.
+
+However, it would be good to mention in the config option help text
+that this only works with uClibc. I don't ask to do it in this patch
+(because it's a lot more work), but it would be great to make this
+works for glibc as well (where it's not /etc/TZ, but /etc/timezone,
+with a different syntax).
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
