@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 17 Oct 2011 22:01:30 +0200
-Subject: [Buildroot] [PATCH 1/9] Allow timezone to be set in
- configuration
-In-Reply-To: <201110151151.43592.arnout@mind.be>
+Date: Mon, 17 Oct 2011 22:32:26 +0200
+Subject: [Buildroot] [PATCH 2/9] Copy gdbserver from external toolchain
+In-Reply-To: <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
 References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
- <1318603921-22899-2-git-send-email-will_wagner@carallon.com>
- <201110151151.43592.arnout@mind.be>
-Message-ID: <20111017220130.30ce6f38@skate>
+ <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
+Message-ID: <20111017223226.5638eac7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 15 Oct 2011 11:51:42 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Hello,
 
->  Why not just create the file here?  I.e.
+Le Fri, 14 Oct 2011 15:51:54 +0100,
+Will Wagner <will_wagner@carallon.com> a ?crit :
+
+> If you are using an external toolchain that includes gdb for host and gdbserver for target, this option will copy gdbserver onto the target.
 > 
-> 	echo $(TARGET_GENERIC_TIMEZONE) > $(TARGET_DIR)/etc/TZ
+> Currently has support for ct-ng and codesourcery toolchains
 > 
->  Perhaps even move it out of the SKELETON_DEFAULT condition.
+> Original idea by Anders Darander taken from http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/17747
+> 
+> Signed-off-by: Will Wagner <will_wagner@carallon.com>
 
-Agreed.
+You should wrap the commit log (ditto for all your patches)
 
-However, it would be good to mention in the config option help text
-that this only works with uClibc. I don't ask to do it in this patch
-(because it's a lot more work), but it would be great to make this
-works for glibc as well (where it's not /etc/TZ, but /etc/timezone,
-with a different syntax).
+See also
 
-Regards,
+ [PATCH 3/4] debug: provide an option to copy the gdbserver to the
+ target
+
+that I posted on July, 11th 2011.
 
 Thomas
 -- 
