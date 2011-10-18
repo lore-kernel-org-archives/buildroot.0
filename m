@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 18 Oct 2011 16:22:23 +0200
+Date: Tue, 18 Oct 2011 16:32:02 +0200
 Subject: [Buildroot] [PATCH 1/2] package infra: add mirror support
 In-Reply-To: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20111018162223.34c2adc1@skate>
+Message-ID: <20111018163202.504d5069@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,20 @@ To: buildroot@busybox.net
 Le Tue, 18 Oct 2011 11:14:54 -0300,
 Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-> Add FOO_MIRROR support for packages that have different URLs to fetch
-> from, for redundancy or when they move to an obsolete/old directory
-> when a new version pops up.
-> Only implement for WGET methods.
+> +	if test -n "$(3)" ; then \
+> +		case "$($(PKG)_SITE_METHOD)" in \
+> +			git) exit ;; \
+> +			svn) exit ;; \
+> +			bzr) exit ;; \
+> +			file) exit ;; \
 
-Just wondering: what about making <pkg>_SITE a space-separated list of
-URLs to try, instead of adding <pkg>_MIRROR ?
+I don't think you want to exit here, you want to continue to evaluate
+the BR2_BACKUP_SITE solution below. For example, sources.buildroot.net
+has http://sources.buildroot.net/libsvgtiny-12121.tar.gz, which is the
+Subversion tarball of libsvgtiny. Same for
+http://sources.buildroot.net/tslib-412d99d8b92c.tar.gz.
+
+Regards,
 
 Thomas
 -- 
