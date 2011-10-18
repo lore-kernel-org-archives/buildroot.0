@@ -1,91 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 18 Oct 2011 09:32:10 -0300
-Subject: [Buildroot] [PATCH 2/2] ntfs-3g: bump to version 2011.4.12 and
-	enhance
-In-Reply-To: <1318941130-19244-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1318941130-19244-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1318941130-19244-2-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Oct 2011 14:33:26 +0200
+Subject: [Buildroot] Request for comments on packages for TI's OMAP3 and
+	DM365 processors
+In-Reply-To: <201110181123.03836.arnout@mind.be>
+References: <1284746402-19186-1-git-send-email-pierreluc.simard@admetric.ca>
+ <201110181123.03836.arnout@mind.be>
+Message-ID: <201110181433.26332.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ntfsprogs is now included into ntfs-3g so add an option to
-enable/disable it.
-It probably doesn't make sense to build ntfsprogs alone so it's not
-implemented.
 
-Add the encrypted volume support option now that we've got gnutls.
+On Tuesday 18 October 2011 11:23:03, Arnout Vandecappelle wrote:
+> On Friday 17 September 2010 19:59:45, Pierre-Luc Simard wrote:
+> > Hello All,
+> > 
+> > I'd like some comment on the packages I've made to support TI's gstreamer 
+> > plugin for the OMAP3 and DM365 processors. All packages compile using 
+> > crosstool-ng and glibc, I have not yet tested them with BR's own internal 
+> > toolchain and the uclibc at the moment. If anybody wants to test these 
+> > package I'll provide as much assistance as I can. I've publish my working 
+> > branch at http://github.com/Admetric/buildroot
+> 
+>  Reviving a year-old thread...
+> 
+>  It seems these patches were never commented upon and also weren't
+> accepted.  I'm going to pick them up again.
+> 
+>  Although these patches still apply cleanly against the current master,
+>  there is probably some duplication with the TI things that were merged
+>  earlier this year.
 
-Also add support for libuuid if it's present.
+ Looks like I spoke too soon...
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ntfs-3g/Config.in  |   15 +++++++++++++++
- package/ntfs-3g/ntfs-3g.mk |   23 +++++++++++++++++++++--
- 2 files changed, 36 insertions(+), 2 deletions(-)
+ That TI stuff is an unholy mess of different libraries, usually binary-only.  The patches that Pierre-Luc posted don't work anymore because things have been moved around on the TI website.  But the worst thing of all, all packages use a binary installer that has to be executed to self-extract the source code and (binary) libraries.
 
-diff --git a/package/ntfs-3g/Config.in b/package/ntfs-3g/Config.in
-index 865f9b4..5301038 100644
---- a/package/ntfs-3g/Config.in
-+++ b/package/ntfs-3g/Config.in
-@@ -12,5 +12,20 @@ config BR2_PACKAGE_NTFS_3G
- 
- 	  http://www.ntfs-3g.org/
- 
-+if BR2_PACKAGE_NTFS_3G
-+
-+config BR2_PACKAGE_NTFS_3G_ENCRYPTED
-+	bool "encrypted volumes"
-+	select BR2_PACKAGE_GNUTLS
-+	help
-+	  Enable support for NTFS encrypted volumes.
-+
-+config BR2_PACKAGE_NTFS_3G_NTFSPROGS
-+	bool "ntfsprogs"
-+	help
-+	  Install NTFS utilities.
-+
-+endif
-+
- comment "ntfs-3g requires a toolchain with LARGEFILE and WCHAR support"
- 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index 99fc20c..f6462bb 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -4,10 +4,29 @@
- #
- #############################################################
- 
--NTFS_3G_VERSION = 2010.10.2
--NTFS_3G_SOURCE = ntfs-3g-$(NTFS_3G_VERSION).tgz
-+NTFS_3G_VERSION = 2011.4.12
-+NTFS_3G_SOURCE = ntfs-3g_ntfsprogs-$(NTFS_3G_VERSION).tgz
- NTFS_3G_SITE = http://tuxera.com/opensource
- NTFS_3G_CONF_OPT = --disable-ldconfig
- NTFS_3G_INSTALL_STAGING = YES
-+NTFS_3G_DEPENDENCIES = host-pkg-config
-+
-+ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-+	NTFS_3G_CONF_OPT += --with-fuse=external
-+	NTFS_3G_DEPENDENCIES += libfuse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+	NTFS_3G_DEPENDENCIES += util-linux
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NTFS_3G_ENCRYPTED),y)
-+	NTFS_3G_CONF_OPT += --enable-crypto
-+	NTFS_3G_DEPENDENCIES += gnutls
-+endif
-+
-+ifneq ($(BR2_PACKAGE_NTFS_3G_NTFSPROGS),y)
-+	NTFS_3G_CONF_OPT += --disable-ntfsprogs
-+endif
- 
- $(eval $(call AUTOTARGETS))
+ Fortunately, TI's license allows redistribution in any form.  So we are allowed to repackage the extracted source/binary code.  That would be my preferred approach: download a .tgz from the buildroot mirror instead of going through the mess of running installer binaries.
+
+ Peter, is that an acceptable solution?
+
+
+ Bottom line will be that nothing of Pierre-Luc's original patches will be left.  For sure, I will limit my work to DM365 (that's the one I need myself).  And finally, my project manager just bumped down the priority of having the gstreamer-ti plugins in our project, so I may never do it after all...
+
+
+ Regards,
+ Arnout
+
 -- 
-1.7.3.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
