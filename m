@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Oct 2011 10:23:35 +0200
-Subject: [Buildroot] [PATCH 2/9] Copy gdbserver from external toolchain
-In-Reply-To: <20111017223226.5638eac7@skate>
+Date: Tue, 18 Oct 2011 10:32:56 +0200
+Subject: [Buildroot] [PATCH 1/9] Allow timezone to be set in
+	configuration
+In-Reply-To: <20111017220130.30ce6f38@skate>
 References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
- <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
- <20111017223226.5638eac7@skate>
-Message-ID: <201110181023.35764.arnout@mind.be>
+ <201110151151.43592.arnout@mind.be> <20111017220130.30ce6f38@skate>
+Message-ID: <201110181032.56682.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,26 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Monday 17 October 2011 22:32:26, Thomas Petazzoni wrote:
-> See also
+ [In a private e-mail, Will indicated to me that he doesn't really have time to work on these patches, so if anyone feels like picking them up...]
+
+On Monday 17 October 2011 22:01:30, Thomas Petazzoni wrote:
+> >  Perhaps even move it out of the SKELETON_DEFAULT condition.
 > 
->  [PATCH 3/4] debug: provide an option to copy the gdbserver to the
->  target
+> Agreed.
 > 
-> that I posted on July, 11th 2011.
+> However, it would be good to mention in the config option help text
+> that this only works with uClibc. I don't ask to do it in this patch
+> (because it's a lot more work), but it would be great to make this
+> works for glibc as well (where it's not /etc/TZ, but /etc/timezone,
+> with a different syntax).
 
- Grmbl, I missed that one and I already started improving Will's patch...  I just love wasting my time like that :-/
+ Actually, /etc/timezone can contain something like MST7MDT too.  It's just more descriptive to put America/Denver.
 
- [I lost my mail archive so it's a bit difficult to your to the original patch, so I'll put my comment here.]
-
- I notice that Will has
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDBSERVER),y)
-+LIB_EXTERNAL_LIBS+=libthread_db.so
-which was not there in your patch.  Is it not needed?
-
+ And AFAIK, /etc/timezone is not even used by glibc, only the environment variable TZ or /etc/localtime.
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
