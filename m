@@ -1,44 +1,22 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 18 Oct 2011 18:02:46 +0200
-Subject: [Buildroot] [PATCH 1/2] package infra: add mirror support
-In-Reply-To: <201110181055.22743.minimod@morethan.org>
-References: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
- <20111018163202.504d5069@skate> <201110181055.22743.minimod@morethan.org>
-Message-ID: <201110181802.46594.yann.morin.1998@anciens.enib.fr>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 18 Oct 2011 16:32:42 +0000 (UTC)
+Subject: [Buildroot] timer_create fails with return -1 errno 0
+Message-ID: <j7k9n9$cru$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike, All,
+I can't figure out why timer_create() is failing.  It returns -1, but
+errno is 0: "Success".
 
-On Tuesday 18 October 2011 17:55:20 Michael S. Zick wrote:
-> On Tue October 18 2011, Thomas Petazzoni wrote:
-> > Le Tue, 18 Oct 2011 11:14:54 -0300,
-> > Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
-> > 
-> > > +	if test -n "$(3)" ; then \
-> > > +		case "$($(PKG)_SITE_METHOD)" in \
-> > > +			git) exit ;; \
-> > > +			svn) exit ;; \
-> > > +			bzr) exit ;; \
-> > > +			file) exit ;; \
-> > 
-> 
-> How about just a nop?
-> s/exit/:/
+I'm using uClibc uClibc-0.9.30.3 (built by crosstool-NG) on an ARM926
+buildroot system.
 
-Or simply:
-  foo) ;;
-
-Regards,
-Yann E. MORIN.
+The same code ran fine using glibc on a desktop IA32 system.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Grant Edwards               grant.b.edwards        Yow! Now we can become
+                                  at               alcoholics!
+                              gmail.com            
