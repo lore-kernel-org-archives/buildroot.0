@@ -1,54 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 18 Oct 2011 09:26:38 +0200
-Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <20111017184718.71afc290@skate>
-References: <20111017184718.71afc290@skate>
-Message-ID: <20111018072638.GF7761@tarshish>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Oct 2011 10:23:35 +0200
+Subject: [Buildroot] [PATCH 2/9] Copy gdbserver from external toolchain
+In-Reply-To: <20111017223226.5638eac7@skate>
+References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
+ <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
+ <20111017223226.5638eac7@skate>
+Message-ID: <201110181023.35764.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
 
-On Mon, Oct 17, 2011 at 06:47:18PM +0200, Thomas Petazzoni wrote:
-> At ELCE, I will be talking about "Using Buildroot for real projects".
-> You can see my talk summary at
-> https://events.linuxfoundation.org/events/embedded-linux-conference-europe/petazzoni.
+On Monday 17 October 2011 22:32:26, Thomas Petazzoni wrote:
+> See also
 > 
-> The current (unfinished) status of my slides is visible at:
->   http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
+>  [PATCH 3/4] debug: provide an option to copy the gdbserver to the
+>  target
 > 
-> The goal of the talk is to give some recommendations and best practices
-> on how to use Buildroot. As I'm sure I forgot a lot of things in my
-> slides above, I'd like to know what you, Buildroot developers/users,
-> would have to say on the topic, so that I can improve the contents of
-> this presentation.
+> that I posted on July, 11th 2011.
 
-A few comments.
+ Grmbl, I missed that one and I already started improving Will's patch...  I just love wasting my time like that :-/
 
-1. Slide 7: maybe elaborate a bit on the meaning of "It does not track which 
-   package installs what", i.e. you can't uninstall (or install) a package 
-   form the target.
+ [I lost my mail archive so it's a bit difficult to your to the original patch, so I'll put my comment here.]
 
-2. Slide 14 header: maybe "External toolchains: HOWTO"
+ I notice that Will has
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDBSERVER),y)
++LIB_EXTERNAL_LIBS+=libthread_db.so
+which was not there in your patch.  Is it not needed?
 
-3. Slide 19: the sysroot copying stage seems to be missing
 
-4. Slide 22: the 'echo' command is missing '-e'?
-
-5. Slides 23-26: headers should be "... (x/5)"
-
-6. Slide 27: old style CMAKETARGETS
-
-By the way, is there a link to the TeX (or DocBook?) source of this 
-presentation.  I'd really like to learn a few Beamer tricks, like the source 
-box in slides 17, 18.
-
-baurch
-
+ Regards,
+ Arnout
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
