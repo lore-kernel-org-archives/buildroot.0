@@ -1,31 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 19 Oct 2011 08:16:33 +0000 (UTC)
-Subject: [Buildroot] [Bug 4333] External toolchain installation failed
-In-Reply-To: <bug-4333-163@https.bugs.busybox.net/>
-References: <bug-4333-163@https.bugs.busybox.net/>
-Message-ID: <20111019081633.B0DBE8EBBD@busybox.osuosl.org>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed, 19 Oct 2011 10:52:16 +0200
+Subject: [Buildroot] [PATCH] Add libmodbus package
+Message-ID: <1319014336-22698-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4333
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-Laurent Kersten <laurent.kersten@gmail.com> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Keywords|                            |patch
-                 CC|                            |laurent.kersten at gmail.com
-               Host|                            |Linux
-    Estimated Hours|0.0                         |0.5
-             Target|                            |ARM
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ Based on previous work of Marek Belisko and comments of Thomas Petazzoni.
 
---- Comment #1 from Laurent Kersten <laurent.kersten@gmail.com>  ---
-Should be fixed with the trivial patch
+ package/Config.in              |    1 +
+ package/libmodbus/Config.in    |    8 ++++++++
+ package/libmodbus/libmodbus.mk |   11 +++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/libmodbus/Config.in
+ create mode 100644 package/libmodbus/libmodbus.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 3b2769d..c4a5ee5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -332,6 +332,7 @@ source "package/libidn/Config.in"
+ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
++source "package/libmodbus/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libmodbus/Config.in b/package/libmodbus/Config.in
+new file mode 100644
+index 0000000..ccf1190
+--- /dev/null
++++ b/package/libmodbus/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBMODBUS
++	bool "libmodbus"
++	help
++	  libmodbus is a free software library to send/receive data according
++	  to the Modbus protocol. This library is written in C and supports
++	  RTU (serial) and TCP (Ethernet) communications.
++
++	  http://libmodbus.org
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+new file mode 100644
+index 0000000..6af855f
+--- /dev/null
++++ b/package/libmodbus/libmodbus.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# libmodbus
++#
++#############################################################
++LIBMODBUS_VERSION = 3.0.1
++LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
++LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
++LIBMODBUS_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS,package,libmodbus))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.4.1
