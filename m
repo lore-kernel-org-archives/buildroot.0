@@ -1,46 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Oct 2011 11:35:52 +0200
-Subject: [Buildroot] [PATCH 1/2] package infra: add mirror support
-In-Reply-To: <1319011959.325.2.camel@sven>
-References: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
- <201110182339.00295.arnout@mind.be> <1319011959.325.2.camel@sven>
-Message-ID: <201110191135.53268.arnout@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 19 Oct 2011 11:41:19 +0200
+Subject: [Buildroot] [PATCH] Add libmodbus package
+In-Reply-To: <1319014336-22698-1-git-send-email-julien.boibessot@free.fr>
+References: <1319014336-22698-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <CAGm1_ksV6r8NOby7Xa_aN1xnji7DdnU+2zawP0ToUGEkdoHNOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Oct 19, 2011 at 10:52 AM,  <julien.boibessot@free.fr> wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+>
+>
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> ---
+> ?Based on previous work of Marek Belisko and comments of Thomas Petazzoni.
+>
+> ?package/Config.in ? ? ? ? ? ? ?| ? ?1 +
+> ?package/libmodbus/Config.in ? ?| ? ?8 ++++++++
+> ?package/libmodbus/libmodbus.mk | ? 11 +++++++++++
+> ?3 files changed, 20 insertions(+), 0 deletions(-)
+> ?create mode 100644 package/libmodbus/Config.in
+> ?create mode 100644 package/libmodbus/libmodbus.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 3b2769d..c4a5ee5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -332,6 +332,7 @@ source "package/libidn/Config.in"
+> ?source "package/libmicrohttpd/Config.in"
+> ?source "package/neon/Config.in"
+> ?source "package/libmnl/Config.in"
+> +source "package/libmodbus/Config.in"
+> ?source "package/libnl/Config.in"
+> ?source "package/libpcap/Config.in"
+> ?source "package/libosip2/Config.in"
+> diff --git a/package/libmodbus/Config.in b/package/libmodbus/Config.in
+> new file mode 100644
+> index 0000000..ccf1190
+> --- /dev/null
+> +++ b/package/libmodbus/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LIBMODBUS
+> + ? ? ? bool "libmodbus"
+> + ? ? ? help
+> + ? ? ? ? libmodbus is a free software library to send/receive data according
+> + ? ? ? ? to the Modbus protocol. This library is written in C and supports
+> + ? ? ? ? RTU (serial) and TCP (Ethernet) communications.
+> +
+> + ? ? ? ? http://libmodbus.org
+> diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+> new file mode 100644
+> index 0000000..6af855f
+> --- /dev/null
+> +++ b/package/libmodbus/libmodbus.mk
+> @@ -0,0 +1,11 @@
+> +#############################################################
+> +#
+> +# libmodbus
+> +#
+> +#############################################################
+> +LIBMODBUS_VERSION = 3.0.1
+> +LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
+> +LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
+> +LIBMODBUS_INSTALL_STAGING = YES
+> +
+> +$(eval $(call AUTOTARGETS,package,libmodbus))
+> --
+> 1.7.4.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-On Wednesday 19 October 2011 10:12:39, Sven Neumann wrote:
-> On Tue, 2011-10-18 at 23:38 +0200, Arnout Vandecappelle wrote:
-> 
-> > > In a non-mandatory way it may be desirable.
-> > > That is if a package doesn't define it then we don't care.
-> > > Most of the time tarballs shouldn't change size & hash, though it 
-> > > doesn't hold true for every project around.
-> > 
-> >  Size and hash should only change when you bump the version
-> 
-> Unfortunately it is not so uncommon for some projects to re-release with
-> the same version number if a bug sneaked into the released tarball. I
-> know that this should not be the case, but it happens every so often.
-> 
-> Not sure though what implications this has for the proposed buildroot
-> changes...
+please change
 
- I guess that if we start with this feature, it should be limited to 
-warnings for the first year or so until it proves its worth.
+$(eval $(call AUTOTARGETS,package,libmodbus))
 
- The recent kernel.org horror has convinced me that some form of
-verification is needed, though.
+to
 
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+$(eval $(call AUTOTARGETS))
+
+Yegor
