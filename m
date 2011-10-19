@@ -1,72 +1,32 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Wed, 19 Oct 2011 12:35:56 +0200
-Subject: [Buildroot] [PATCH v2] Add libmodbus package
-Message-ID: <1319020556-27223-1-git-send-email-julien.boibessot@free.fr>
+From: Phil Edworthy <phil.edworthy@renesas.com>
+Date: Wed, 19 Oct 2011 11:59:40 +0100
+Subject: [Buildroot] [PATCH] sh: Add ttySC* to securetty
+Message-ID: <1319021980-8180-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
 ---
- Changes since v1:
-  - Took Yegor Yefremov remarks about "call AUTOTARGETS' into account.
+ fs/skeleton/etc/securetty |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- Based on previous work of Marek Belisko and comments of Thomas Petazzoni.
-
- package/Config.in              |    1 +
- package/libmodbus/Config.in    |    8 ++++++++
- package/libmodbus/libmodbus.mk |   11 +++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/libmodbus/Config.in
- create mode 100644 package/libmodbus/libmodbus.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 3b2769d..c4a5ee5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -332,6 +332,7 @@ source "package/libidn/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
- source "package/libmnl/Config.in"
-+source "package/libmodbus/Config.in"
- source "package/libnl/Config.in"
- source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
-diff --git a/package/libmodbus/Config.in b/package/libmodbus/Config.in
-new file mode 100644
-index 0000000..ccf1190
---- /dev/null
-+++ b/package/libmodbus/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBMODBUS
-+	bool "libmodbus"
-+	help
-+	  libmodbus is a free software library to send/receive data according
-+	  to the Modbus protocol. This library is written in C and supports
-+	  RTU (serial) and TCP (Ethernet) communications.
-+
-+	  http://libmodbus.org
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-new file mode 100644
-index 0000000..ab134fd
---- /dev/null
-+++ b/package/libmodbus/libmodbus.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# libmodbus
-+#
-+#############################################################
-+LIBMODBUS_VERSION = 3.0.1
-+LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
-+LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
-+LIBMODBUS_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/fs/skeleton/etc/securetty b/fs/skeleton/etc/securetty
+index fd0ec8e..6c07d7f 100644
+--- a/fs/skeleton/etc/securetty
++++ b/fs/skeleton/etc/securetty
+@@ -40,3 +40,9 @@ ttyO3
+ ttyAM0
+ ttyAM1
+ ttyAM2
++ttySC0
++ttySC1
++ttySC2
++ttySC3
++ttySC4
++ttySC5
 -- 
-1.7.4.1
+1.7.0.4
