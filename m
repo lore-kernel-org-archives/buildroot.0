@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Oct 2011 00:10:51 +0200
-Subject: [Buildroot] [PATCH 1/2] package infra: add mirror support
-In-Reply-To: <20111019145934.68b77389@skate>
-References: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
- <201110191135.53268.arnout@mind.be> <20111019145934.68b77389@skate>
-Message-ID: <201110200010.52396.arnout@mind.be>
+Date: Thu, 20 Oct 2011 00:32:56 +0200
+Subject: [Buildroot] [PATCH 1 of 5] Makefile.package.in: add utility
+	functions find*clauses and notfirstword
+In-Reply-To: <31ae7a6eaff4e2cf9a1e.1318602116@devws108>
+References: <patchbomb.1318602115@devws108>
+ <31ae7a6eaff4e2cf9a1e.1318602116@devws108>
+Message-ID: <201110200032.56871.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +13,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Wednesday 19 October 2011 14:59:34, Thomas Petazzoni wrote:
-> Le Wed, 19 Oct 2011 11:35:52 +0200,
-> Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> 
-> >  The recent kernel.org horror has convinced me that some form of
-> > verification is needed, though.
-> 
-> Having hashes in Buildroot will not necessarily provide an additional
-> security. Consider the following scenario:
-> 
->  1. The world exists.
->  2. Project foo releases foo-2.1.tar.bz2
->  3. A BR packager bumps package foo to 2.1. He downloads the new
->     tarball, generates locally its hash and adds this hash to the
->     foo.mk.
->  4. The BR packager patch is merged in Buildroot.
-> 
-> Having hashes in the foo.mk will warn you if the foo website has been
-> cracked after step 3. But if it has been cracked between 2) and 3),
-> then you're doomed: the BR packager will assume foo-2.1.tar.bz2 is
-> correct. 
+On Wednesday 19 October 2011 09:34:04, Thomas De Schampheleire wrote:
+> +# findfileclauses_cont: creates "-o -name 'X' -o -name 'Y'"
+> +# [1:namelist, 2:prefix]
+> +findfileclauses_cont=$(patsubst %,$(2) -name '%',$(1))
+> +# findfileclauses: creates "-name 'X' -o -name 'Y'"
+> +# [1:namelist]
+> +findfileclauses=$(call findfileclauses_cont,$(firstword $(1))) $(call findfileclauses_cont,$(call notfirstword,$(1)),-o)
 
- If the upstream source is cracked, then of course you're doomed.  What it does protect again is man-in-the-middle attacks (same as https is supposed to protect against but doesn't because of unreliable CAs).  If the packager generates a hash of a non-authorized tar, then most users will download packages with a different hash and will (hopefully) report this.
+ The _cont function is a bit redundant, no?
 
- Clearly there is still a vulnerability window, but it is much smaller than in the current situation.
+findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
 
-> This packager will quite probably never check a GPG signature
-> or do any kind of additional security check when bumping foo to 2.1.
-> 
-> Therefore, I fear that this mechanism would give an *impression* of
-> higher security, but would in fact provide no additional security
-> compared to not verifying the hashes.
+ I don't think the duplication of -name warrants the additional function
+call.  It definitely doesn't make it easier to understand.
 
- It does give higher security.  Perhaps not yet high security, though.
+ Nevertheless, this is a nifty patch!
+
 
  Regards,
  Arnout
