@@ -1,129 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 19 Oct 2011 23:42:16 +0200
-Subject: [Buildroot] [PATCH] New package: mc
-In-Reply-To: <1319059019-20685-1-git-send-email-damian@veritymedical.co.uk>
-References: <1319059019-20685-1-git-send-email-damian@veritymedical.co.uk>
-Message-ID: <201110192342.16940.yann.morin.1998@anciens.enib.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 20 Oct 2011 00:10:51 +0200
+Subject: [Buildroot] [PATCH 1/2] package infra: add mirror support
+In-Reply-To: <20111019145934.68b77389@skate>
+References: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
+ <201110191135.53268.arnout@mind.be> <20111019145934.68b77389@skate>
+Message-ID: <201110200010.52396.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Damian, All,
 
-On Wednesday 19 October 2011 23:16:59 Damian Kaczmarek wrote:
-
-Summary line (nit-picking here, but it seems it's the preferred form):
-  mc: new package
-
-> NOTE: wanted to allow linking with slang, but slang-mini is somehow
-> different from normal slang and the build was broken.
+On Wednesday 19 October 2011 14:59:34, Thomas Petazzoni wrote:
+> Le Wed, 19 Oct 2011 11:35:52 +0200,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
 > 
-> Signed-off-by: Damian Kaczmarek <damian@veritymedical.co.uk>
-> ---
->  package/Config.in    |    1 +
->  package/mc/Config.in |   13 +++++++++++++
->  package/mc/mc.mk     |   35 +++++++++++++++++++++++++++++++++++
->  3 files changed, 49 insertions(+), 0 deletions(-)
->  create mode 100644 package/mc/Config.in
->  create mode 100644 package/mc/mc.mk
+> >  The recent kernel.org horror has convinced me that some form of
+> > verification is needed, though.
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 3b2769d..645a88c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -522,6 +522,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  source "package/which/Config.in"
->  endif
->  source "package/xmlstarlet/Config.in"
-> +source "package/mc/Config.in"
->  endmenu
->  
->  menu "System tools"
-> diff --git a/package/mc/Config.in b/package/mc/Config.in
-> new file mode 100644
-> index 0000000..fd2f33c
-> --- /dev/null
-> +++ b/package/mc/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_MC
-> +	bool "mc"
-> +	select BR2_PACKAGE_NCURSES
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	help
-> +	  GNU Midnight Commander is a visual file manager, licensed under 
-> +	  GNU General Public License and therefore qualifies as Free Software. 
-> +	  It's a feature rich full-screen text mode application that allows 
-> +	  you to copy, move and delete files and whole directory trees, search 
-> +	  for files and run commands in the subshell. Internal viewer and 
-> +	  editor are included.
-> +
-> +	  http://www.midnight-commander.org/
-> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-> new file mode 100644
-> index 0000000..1ecf299
-> --- /dev/null
-> +++ b/package/mc/mc.mk
-> @@ -0,0 +1,35 @@
-> +#############################################################
-> +#
-> +# mc
-> +#
-> +#############################################################
-> +MC_VERSION:=4.8.0
-> +MC_SOURCE:=mc-$(MC_VERSION).tar.bz2
-> +MC_SITE:=http://www.midnight-commander.org/downloads
+> Having hashes in Buildroot will not necessarily provide an additional
+> security. Consider the following scenario:
+> 
+>  1. The world exists.
+>  2. Project foo releases foo-2.1.tar.bz2
+>  3. A BR packager bumps package foo to 2.1. He downloads the new
+>     tarball, generates locally its hash and adds this hash to the
+>     foo.mk.
+>  4. The BR packager patch is merged in Buildroot.
+> 
+> Having hashes in the foo.mk will warn you if the foo website has been
+> cracked after step 3. But if it has been cracked between 2) and 3),
+> then you're doomed: the BR packager will assume foo-2.1.tar.bz2 is
+> correct. 
 
-Use '=' instead of ':='. Also, spaces around '='
-  MC_VERSION = 4.8.0
+ If the upstream source is cracked, then of course you're doomed.  What it does protect again is man-in-the-middle attacks (same as https is supposed to protect against but doesn't because of unreliable CAs).  If the packager generates a hash of a non-authorized tar, then most users will download packages with a different hash and will (hopefully) report this.
 
-> +MC_INSTALL_TARGET=YES
+ Clearly there is still a vulnerability window, but it is much smaller than in the current situation.
 
-Not needed, that's the default.
+> This packager will quite probably never check a GPG signature
+> or do any kind of additional security check when bumping foo to 2.1.
+> 
+> Therefore, I fear that this mechanism would give an *impression* of
+> higher security, but would in fact provide no additional security
+> compared to not verifying the hashes.
 
-> +MC_DEPENDENCIES = host-pkg-config libglib2 ncurses
-> +MC_CONF_OPT += --with-screen=ncurses \
-> +	--with-ncurses-libs=$(STAGING_DIR)/usr/lib \
-> +	--with-ncurses-includes=$(STAGING_DIR)/usr/include \
+ It does give higher security.  Perhaps not yet high security, though.
 
-(from your comment below) Even with the above, mc can't find the ncurses
-headers and libs? Strange...
-
-I'll see if I can give it a spin here in a little while...
-
-> +ifeq ($(BR2_PACKAGE_PCRE),y)
-> +  MC_CONF_OPT += --with-search-engine=pcre
-> +  MC_DEPENDENCIES += pcre
-> +endif
-> +
-> +ifneq ($(BR2_LARGEFILE),y)
-> +  MC_CONF_OPT += --disable-largefile
-> +endif
-> +
-> +# MC requires ncurses includes to be instlled in .../usr/include/ncurses 
-> +# folder but not in .../usr/include.
-> +define MC_FIX_NCURSES_INCLUDE_DIR
-> +  /bin/mkdir -p $(STAGING_DIR)/usr/include/ncurses
-> +  /bin/cp -dpf $(STAGING_DIR)/usr/include/curses.h $(STAGING_DIR)/usr/include/ncurses/curses.h
-> +  /bin/cp -dpf $(STAGING_DIR)/usr/include/term.h $(STAGING_DIR)/usr/include/ncurses/term.h
-> +  (cd $(STAGING_DIR)/usr/include/ncurses; /bin/ln -fs curses.h ncurses.h)
-> +endef
-
-That's ugly. If it is really needed, this should be part of ncurses.mk,
-not mc.mk
-
-> +MC_PRE_CONFIGURE_HOOKS += MC_FIX_NCURSES_INCLUDE_DIR
-> +
-> +$(eval $(call AUTOTARGETS,package,mc))
-
-Regards,
-Yann E. MORIN.
-
+ Regards,
+ Arnout
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
