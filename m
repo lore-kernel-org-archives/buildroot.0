@@ -1,36 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 19 Oct 2011 09:36:02 +0200
-Subject: [Buildroot] [PATCH] /etc/profile: read in /etc/profile.d/*.sh files
-Message-ID: <2973c12cb594abeecc60.1318932277@devws108>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 19 Oct 2011 10:11:35 +0200
+Subject: [Buildroot] Adding hashes to package recipes
+In-Reply-To: <201110182339.00295.arnout@mind.be>
+References: <1318947295-24677-1-git-send-email-gustavo@zacarias.com.ar>
+ <20111018192708.68b1ba88@skate>
+ <bd3650393bb885ae632b4e1963278d3f@zacarias.com.ar>
+ <201110182339.00295.arnout@mind.be>
+Message-ID: <20111019101135.7bf470a2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For custom projects, it is more maintainable to add custom profile settings in a
-separate file, than directly in /etc/profile.
+Le Tue, 18 Oct 2011 23:38:59 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-This patch modifies /etc/profile to read in *.sh files from /etc/profile.d/, a
-technique commonly used in Linux distributions.
+>  Size and hash should only change when you bump the version, and in
+> that case you anyway download the new tar file for testing so it
+> shouldn't be too hard to recompute the hash.  And of course, the hash
+> should be the same regardless of which mirror it is downloaded from...
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+True, but what does it bring exactly ?
 
----
- fs/skeleton/etc/profile |  7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+> > It could also be an option to completely disable it.
+> 
+>  Definitely!
 
-diff --git a/fs/skeleton/etc/profile b/fs/skeleton/etc/profile
---- a/fs/skeleton/etc/profile
-+++ b/fs/skeleton/etc/profile
-@@ -46,3 +46,10 @@ if [ "$PS1" ]; then
-     alias calc='calc -Cd '
-     alias bc='calc -Cd '
- fi;
-+
-+# Source configuration files from /etc/profile.d
-+for i in /etc/profile.d/*.sh ; do
-+    if [ -r "$i" ]; then
-+        . $i
-+    fi
-+done
+Well, the check at runtime can be disabled, but the fact that there
+will be hashes in all packages to update every time we bump a package
+is not something that can be "disabled". I am not talking from an user
+point of view, but from a maintenance point of view.
+
+I think in the past we talked about that with Peter and our opinions
+was that it wasn't worth it. Now, I guess that if there are
+sufficiently convincing arguments, we can change our minds :)
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
