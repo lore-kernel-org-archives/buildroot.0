@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Oct 2011 00:32:56 +0200
-Subject: [Buildroot] [PATCH 1 of 5] Makefile.package.in: add utility
-	functions find*clauses and notfirstword
-In-Reply-To: <31ae7a6eaff4e2cf9a1e.1318602116@devws108>
-References: <patchbomb.1318602115@devws108>
- <31ae7a6eaff4e2cf9a1e.1318602116@devws108>
-Message-ID: <201110200032.56871.arnout@mind.be>
+Date: Thu, 20 Oct 2011 00:46:30 +0200
+Subject: [Buildroot] [PATCH] -lsof was unable to patch Makefile.skel due
+	to bad file permissions. Adding chmod solves it. (openSUSE)
+In-Reply-To: <1319057745-31257-1-git-send-email-damian@veritymedical.co.uk>
+References: <1319057745-31257-1-git-send-email-damian@veritymedical.co.uk>
+Message-ID: <201110200046.30854.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-On Wednesday 19 October 2011 09:34:04, Thomas De Schampheleire wrote:
-> +# findfileclauses_cont: creates "-o -name 'X' -o -name 'Y'"
-> +# [1:namelist, 2:prefix]
-> +findfileclauses_cont=$(patsubst %,$(2) -name '%',$(1))
-> +# findfileclauses: creates "-name 'X' -o -name 'Y'"
-> +# [1:namelist]
-> +findfileclauses=$(call findfileclauses_cont,$(firstword $(1))) $(call findfileclauses_cont,$(call notfirstword,$(1)),-o)
+On Wednesday 19 October 2011 22:55:45, Damian Kaczmarek wrote:
+>  # The .tar.bz2 contains another .tar, which contains the source code.
+>  define LSOF_EXTRACT_TAR
+>         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -xf $(@D)/lsof_$(LSOF_VERSION)_src.tar -C $(@D)
+> +       chmod +w -R $(@D)
+>         rm -f $(@D)/lsof_$(LSOF_VERSION)_src.tar
+>  endef
 
- The _cont function is a bit redundant, no?
+ Perhaps it would be better to override the extract command directly, like:
 
-findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
 
- I don't think the duplication of -name warrants the additional function
-call.  It definitely doesn't make it easier to understand.
+LSOF_EXTRACT_CMDS = \
+        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+		$(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -)
 
- Nevertheless, this is a nifty patch!
+ (completely untested, of course)
 
 
  Regards,
