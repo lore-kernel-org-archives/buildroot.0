@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 19 Oct 2011 08:13:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 4333] New: External toolchain installation failed
-Message-ID: <bug-4333-163@https.bugs.busybox.net/>
+Date: Wed, 19 Oct 2011 08:16:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 4333] External toolchain installation failed
+In-Reply-To: <bug-4333-163@https.bugs.busybox.net/>
+References: <bug-4333-163@https.bugs.busybox.net/>
+Message-ID: <20111019081633.B0DBE8EBBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +12,18 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=4333
 
-           Summary: External toolchain installation failed
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: laurent.kersten at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Laurent Kersten <laurent.kersten@gmail.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Keywords|                            |patch
+                 CC|                            |laurent.kersten at gmail.com
+               Host|                            |Linux
+    Estimated Hours|0.0                         |0.5
+             Target|                            |ARM
 
-Created attachment 3643
-  --> https://bugs.busybox.net/attachment.cgi?id=3643
-Patch to fix the error
-
-When selecting external toolchain 
-The installation process fails.
-
-Build-root head (pulled 18th October 2011)
-
-It turns out that a \ was missing in a "if" clause in the
-"toolchain/toolchain-external/ext-tool.mk" file.
-
-
-The git diff is joined as an attachment
-
-/ Laurent
+--- Comment #1 from Laurent Kersten <laurent.kersten@gmail.com>  ---
+Should be fixed with the trivial patch
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
