@@ -1,37 +1,33 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Thu, 20 Oct 2011 21:45:35 +0200
-Subject: [Buildroot] [PATCH] -lsof was unable to patch Makefile.skel due
-	to bad file permissions. Adding chmod solves it. (openSUSE)
-In-Reply-To: <201110201448.53060.arnout@mind.be>
-References: <1319057745-31257-1-git-send-email-damian@veritymedical.co.uk>
- <201110201322.13259.yann.morin.1998@anciens.enib.fr>
- <201110201448.53060.arnout@mind.be>
-Message-ID: <201110202145.36062.yann.morin.1998@anciens.enib.fr>
+Date: Thu, 20 Oct 2011 21:49:24 +0200
+Subject: [Buildroot] [PATCH v2] New package: parted
+In-Reply-To: <20111020150704.29bc1398@skate>
+References: <4E9FC67B.7030109@visionsystems.de>
+ <CALB96N=4OwW95SoxHHusOBR9oQTuQ6uN_1swzkGqoF1q71YC0Q@mail.gmail.com>
+ <20111020150704.29bc1398@skate>
+Message-ID: <201110202149.24143.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+All,
 
-On Thursday 20 October 2011 14:48:52 Arnout Vandecappelle wrote:
-> On Thursday 20 October 2011 13:22:13, Yann E. MORIN wrote:
-> > > LSOF_EXTRACT_CMDS = \
-> > >         $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
-> > >               $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
-> > >         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -)
-> > 
-> > That would not work, because the first $(TAR) will extract actual files
-> > to the disk, and does not send the extracted files to the stdio, so the
-> > second $(TAR) will get nothing on its stdin (at best), or only get
-> > garbage (at worst).
-> 
->  Oh, is -O not a universally accepted tar option?
+On Thursday 20 October 2011 15:07:04 Thomas Petazzoni wrote:
+> Next week, I'll be in Prague, where I will physically meet Peter. And I
+> intend to use this opportunity to use whatever method happens to be
+> necessary to have him merge the asciidoc documentation patches so that
+> we can work on improving the documentation! :-))
 
-Ah. Sigh... I missed that '-O' option... My bad.
+Yes, the asciidoc patches are pretty good. I think they should go in
+before -rc1.
 
-You're right, that would work.
+> Or maybe I should start a fund-raising campaign from Buildroot
+> contributors to buy enough beers to Peter so that he gets drunk enough
+> to blindly merge all our patches. Who's contributing ? :-)
+
+Count me in! It'll be fun to see how Peter copes after a few beers! :-)
 
 Regards,
 Yann E. MORIN.
