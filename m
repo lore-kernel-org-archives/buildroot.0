@@ -1,90 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 20 Oct 2011 14:48:53 -0300
-Subject: [Buildroot] [PATCH 4/4] openswan: new package
-In-Reply-To: <1319132933-13938-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1319132933-13938-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1319132933-13938-4-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Thu, 20 Oct 2011 21:45:35 +0200
+Subject: [Buildroot] [PATCH] -lsof was unable to patch Makefile.skel due
+	to bad file permissions. Adding chmod solves it. (openSUSE)
+In-Reply-To: <201110201448.53060.arnout@mind.be>
+References: <1319057745-31257-1-git-send-email-damian@veritymedical.co.uk>
+ <201110201322.13259.yann.morin.1998@anciens.enib.fr>
+ <201110201448.53060.arnout@mind.be>
+Message-ID: <201110202145.36062.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in            |    1 +
- package/openswan/Config.in   |    8 ++++++++
- package/openswan/openswan.mk |   35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/openswan/Config.in
- create mode 100644 package/openswan/openswan.mk
+Arnout, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index 4943909..aeec8bd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -456,6 +456,7 @@ source "package/nuttcp/Config.in"
- source "package/olsr/Config.in"
- source "package/openntpd/Config.in"
- source "package/openssh/Config.in"
-+source "package/openswan/Config.in"
- source "package/openvpn/Config.in"
- source "package/portmap/Config.in"
- source "package/pppd/Config.in"
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-new file mode 100644
-index 0000000..3336156
---- /dev/null
-+++ b/package/openswan/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_OPENSWAN
-+	bool "openswan"
-+	select BR2_PACKAGE_GMP
-+	select BR2_PACKAGE_IPROUTE2
-+	help
-+	  Openswan is an implementation of IPsec for Linux
-+
-+	  http://www.openswan.org
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-new file mode 100644
-index 0000000..dbd2557
---- /dev/null
-+++ b/package/openswan/openswan.mk
-@@ -0,0 +1,35 @@
-+#############################################################
-+#
-+# openswan
-+#
-+#############################################################
-+
-+OPENSWAN_VERSION = 2.6.36
-+OPENSWAN_SITE = http://www.openswan.org/download
-+OPENSWAN_DEPENDENCIES = host-bison gmp iproute2
-+OPENSWAN_MAKEOPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
-+	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
-+	USE_KLIPS=false USE_MAST=false USE_NM=false
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+	OPENSWAN_DEPENDENCIES = libcurl
-+	OPENSWAN_MAKEOPT += USE_LIBCURL=true
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	OPENSWAN_DEPENDENCIES += openssl
-+	OPENSWAN_MAKEOPT += HAVE_OPENSSL=true
-+ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
-+	OPENSWAN_MAKEOPT += HAVE_OCF=true
-+endif
-+endif
-+
-+define OPENSWAN_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(OPENSWAN_MAKEOPT) programs
-+endef
-+
-+define OPENSWAN_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(OPENSWAN_MAKEOPT) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(call GENTARGETS))
+On Thursday 20 October 2011 14:48:52 Arnout Vandecappelle wrote:
+> On Thursday 20 October 2011 13:22:13, Yann E. MORIN wrote:
+> > > LSOF_EXTRACT_CMDS = \
+> > >         $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+> > >               $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+> > >         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -)
+> > 
+> > That would not work, because the first $(TAR) will extract actual files
+> > to the disk, and does not send the extracted files to the stdio, so the
+> > second $(TAR) will get nothing on its stdin (at best), or only get
+> > garbage (at worst).
+> 
+>  Oh, is -O not a universally accepted tar option?
+
+Ah. Sigh... I missed that '-O' option... My bad.
+
+You're right, that would work.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.3.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
