@@ -1,46 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 20 Oct 2011 02:53:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 4339] New: Allow override of DL_DIR in extract step
-Message-ID: <bug-4339-163@https.bugs.busybox.net/>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 20 Oct 2011 08:55:47 +0200
+Subject: [Buildroot] [PATCH 1 of 5] Makefile.package.in: add utility
+ functions find*clauses and notfirstword
+In-Reply-To: <201110200032.56871.arnout@mind.be>
+References: <patchbomb.1318602115@devws108>
+ <31ae7a6eaff4e2cf9a1e.1318602116@devws108>
+ <201110200032.56871.arnout@mind.be>
+Message-ID: <CAAXf6LVrA=gCTdT-OWZbDcZ0LA2nZmQu_6d_8LHpLT3bMy_LWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4339
+Hi Arnout,
 
-           Summary: Allow override of DL_DIR in extract step
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: d_mo1234 at yahoo.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Thu, Oct 20, 2011 at 12:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> On Wednesday 19 October 2011 09:34:04, Thomas De Schampheleire wrote:
+>> +# findfileclauses_cont: creates "-o -name 'X' -o -name 'Y'"
+>> +# [1:namelist, 2:prefix]
+>> +findfileclauses_cont=$(patsubst %,$(2) -name '%',$(1))
+>> +# findfileclauses: creates "-name 'X' -o -name 'Y'"
+>> +# [1:namelist]
+>> +findfileclauses=$(call findfileclauses_cont,$(firstword $(1))) $(call findfileclauses_cont,$(call notfirstword,$(1)),-o)
+>
+> ?The _cont function is a bit redundant, no?
+>
+> findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
+>
+> ?I don't think the duplication of -name warrants the additional function
+> call. ?It definitely doesn't make it easier to understand.
 
+You're right. I got a little carried away with these functions... :-D
 
-Created attachment 3649
-  --> https://bugs.busybox.net/attachment.cgi?id=3649
-patch file
+>
+> ?Nevertheless, this is a nifty patch!
+>
 
-I am updating from an older version of buildroot to the latest.  I find it
-useful to override the value of DL_DIR for certain packages, to sequester the
-downloaded package in a different area than all the other third party packages.
- However, I found that the [relatively] recent introduction of
-"$(2)_EXTRACT_CMDS" in package/Makefile.package.in broke this, because the
-definition is using $(DL_DIR) instead of $$(DL_DIR) like in other templates in
-the file.  So I would like to add the extra $.  Don't think that should be too
-controversial.
+Thanks!
+I'll wait a while for some more feedback on this series, and then I'll update.
 
-Patch file is attached.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+ Thomas
