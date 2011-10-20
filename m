@@ -1,45 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 20 Oct 2011 08:55:47 +0200
-Subject: [Buildroot] [PATCH 1 of 5] Makefile.package.in: add utility
- functions find*clauses and notfirstword
-In-Reply-To: <201110200032.56871.arnout@mind.be>
-References: <patchbomb.1318602115@devws108>
- <31ae7a6eaff4e2cf9a1e.1318602116@devws108>
- <201110200032.56871.arnout@mind.be>
-Message-ID: <CAAXf6LVrA=gCTdT-OWZbDcZ0LA2nZmQu_6d_8LHpLT3bMy_LWQ@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 20 Oct 2011 08:58:03 +0200
+Subject: [Buildroot] [PATCH v2] New package: parted
+Message-ID: <4E9FC67B.7030109@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in        |    1 +
+ package/parted/Config.in |    9 +++++++++
+ package/parted/parted.mk |   14 ++++++++++++++
+ 3 files changed, 24 insertions(+)
 
-On Thu, Oct 20, 2011 at 12:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
-> On Wednesday 19 October 2011 09:34:04, Thomas De Schampheleire wrote:
->> +# findfileclauses_cont: creates "-o -name 'X' -o -name 'Y'"
->> +# [1:namelist, 2:prefix]
->> +findfileclauses_cont=$(patsubst %,$(2) -name '%',$(1))
->> +# findfileclauses: creates "-name 'X' -o -name 'Y'"
->> +# [1:namelist]
->> +findfileclauses=$(call findfileclauses_cont,$(firstword $(1))) $(call findfileclauses_cont,$(call notfirstword,$(1)),-o)
->
-> ?The _cont function is a bit redundant, no?
->
-> findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
->
-> ?I don't think the duplication of -name warrants the additional function
-> call. ?It definitely doesn't make it easier to understand.
-
-You're right. I got a little carried away with these functions... :-D
-
->
-> ?Nevertheless, this is a nifty patch!
->
-
-Thanks!
-I'll wait a while for some more feedback on this series, and then I'll update.
-
-Best regards,
- Thomas
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -194,6 +194,7 @@
+ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
+ source "package/openocd/Config.in"
++source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
+ source "package/rng-tools/Config.in"
+Index: b/package/parted/Config.in
+===================================================================
+--- /dev/null
++++ b/package/parted/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PARTED
++	bool "parted"
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_READLINE
++	select BR2_PACKAGE_UTIL_LINUX
++	help
++	  parted, the GNU partition resizing program
++
++	  http://www.gnu.org/software/parted/
+Index: b/package/parted/parted.mk
+===================================================================
+--- /dev/null
++++ b/package/parted/parted.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# parted
++#
++#############################################################
++
++PARTED_VERSION = 3.0
++PARTED_SOURCE = parted-$(PARTED_VERSION).tar.gz
++PARTED_SITE = $(BR2_GNU_MIRROR)/parted
++PARTED_DEPENDENCIES = readline util-linux lvm2
++PARTED_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS))
++
