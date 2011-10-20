@@ -1,109 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 20 Oct 2011 12:05:30 +0200
-Subject: [Buildroot] [PATCH] New package: mc
-In-Reply-To: <1319059019-20685-1-git-send-email-damian@veritymedical.co.uk>
-References: <1319059019-20685-1-git-send-email-damian@veritymedical.co.uk>
-Message-ID: <CAAXf6LXge1S4EdewcPutvYFHBQ2hHcWBqtQ_DR0dZ6f3nveNRw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Thu, 20 Oct 2011 13:22:13 +0200
+Subject: [Buildroot] [PATCH] -lsof was unable to patch Makefile.skel due
+	to bad file permissions. Adding chmod solves it. (openSUSE)
+In-Reply-To: <201110200046.30854.arnout@mind.be>
+References: <1319057745-31257-1-git-send-email-damian@veritymedical.co.uk>
+ <201110200046.30854.arnout@mind.be>
+Message-ID: <201110201322.13259.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Arnout, All,
 
-On Wed, Oct 19, 2011 at 11:16 PM, Damian Kaczmarek
-<damian@veritymedical.co.uk> wrote:
-> NOTE: wanted to allow linking with slang, but slang-mini is somehow
-> different from normal slang and the build was broken.
->
-> Signed-off-by: Damian Kaczmarek <damian@veritymedical.co.uk>
-> ---
-> ?package/Config.in ? ?| ? ?1 +
-> ?package/mc/Config.in | ? 13 +++++++++++++
-> ?package/mc/mc.mk ? ? | ? 35 +++++++++++++++++++++++++++++++++++
-> ?3 files changed, 49 insertions(+), 0 deletions(-)
-> ?create mode 100644 package/mc/Config.in
-> ?create mode 100644 package/mc/mc.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 3b2769d..645a88c 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -522,6 +522,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> ?source "package/which/Config.in"
-> ?endif
-> ?source "package/xmlstarlet/Config.in"
-> +source "package/mc/Config.in"
+On Thursday 20 October 2011 004630 Arnout Vandecappelle wrote:
+> On Wednesday 19 October 2011 22:55:45, Damian Kaczmarek wrote:
+> >  # The .tar.bz2 contains another .tar, which contains the source code.
+> >  define LSOF_EXTRACT_TAR
+> >         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -xf $(@D)/lsof_$(LSOF_VERSION)_src.tar -C $(@D)
+> > +       chmod +w -R $(@D)
+> >         rm -f $(@D)/lsof_$(LSOF_VERSION)_src.tar
+> >  endef
+> 
+>  Perhaps it would be better to override the extract command directly, like:
+> 
+> 
+> LSOF_EXTRACT_CMDS = \
+>         $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+> 		$(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+>         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -)
 
-Please put mc alphabetically in the list.
+That would not work, because the first $(TAR) will extract actual files
+to the disk, and does not send the extracted files to the stdio, so the
+second $(TAR) will get nothing on its stdin (at best), or only get
+garbage (at worst).
 
-> ?endmenu
->
-> ?menu "System tools"
-> diff --git a/package/mc/Config.in b/package/mc/Config.in
-> new file mode 100644
-> index 0000000..fd2f33c
-> --- /dev/null
-> +++ b/package/mc/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_MC
-> + ? ? ? bool "mc"
-> + ? ? ? select BR2_PACKAGE_NCURSES
-> + ? ? ? select BR2_PACKAGE_LIBGLIB2
-> + ? ? ? help
-> + ? ? ? ? GNU Midnight Commander is a visual file manager, licensed under
-> + ? ? ? ? GNU General Public License and therefore qualifies as Free Software.
-> + ? ? ? ? It's a feature rich full-screen text mode application that allows
-> + ? ? ? ? you to copy, move and delete files and whole directory trees, search
-> + ? ? ? ? for files and run commands in the subshell. Internal viewer and
-> + ? ? ? ? editor are included.
-> +
-> + ? ? ? ? http://www.midnight-commander.org/
-> diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-> new file mode 100644
-> index 0000000..1ecf299
-> --- /dev/null
-> +++ b/package/mc/mc.mk
-> @@ -0,0 +1,35 @@
-> +#############################################################
-> +#
-> +# mc
-> +#
-> +#############################################################
-> +MC_VERSION:=4.8.0
-> +MC_SOURCE:=mc-$(MC_VERSION).tar.bz2
-> +MC_SITE:=http://www.midnight-commander.org/downloads
-> +MC_INSTALL_TARGET=YES
-> +MC_DEPENDENCIES = host-pkg-config libglib2 ncurses
-> +MC_CONF_OPT += --with-screen=ncurses \
-> + ? ? ? --with-ncurses-libs=$(STAGING_DIR)/usr/lib \
-> + ? ? ? --with-ncurses-includes=$(STAGING_DIR)/usr/include \
-> +
-> +ifeq ($(BR2_PACKAGE_PCRE),y)
-> + ?MC_CONF_OPT += --with-search-engine=pcre
-> + ?MC_DEPENDENCIES += pcre
-> +endif
-> +
-> +ifneq ($(BR2_LARGEFILE),y)
-> + ?MC_CONF_OPT += --disable-largefile
-> +endif
-> +
-> +# MC requires ncurses includes to be instlled in .../usr/include/ncurses
-> +# folder but not in .../usr/include.
-> +define MC_FIX_NCURSES_INCLUDE_DIR
-> + ?/bin/mkdir -p $(STAGING_DIR)/usr/include/ncurses
-> + ?/bin/cp -dpf $(STAGING_DIR)/usr/include/curses.h $(STAGING_DIR)/usr/include/ncurses/curses.h
-> + ?/bin/cp -dpf $(STAGING_DIR)/usr/include/term.h $(STAGING_DIR)/usr/include/ncurses/term.h
-> + ?(cd $(STAGING_DIR)/usr/include/ncurses; /bin/ln -fs curses.h ncurses.h)
-> +endef
-> +
-> +MC_PRE_CONFIGURE_HOOKS += MC_FIX_NCURSES_INCLUDE_DIR
-> +
-> +$(eval $(call AUTOTARGETS,package,mc))
+To extract a tar-in-a-tar, you have to extract the outermost tar, to be
+able to extract the innermost one. This _has_ to be a two-step procedure.
 
-You can now simply call
-$(eval $(call AUTOTARGETS))
+Regards,
+Yann E. MORIN.
 
-Best regards,
-Thomas
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
+| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
+| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
+'------------------------------'-------'------------------'--------------------'
