@@ -1,38 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 20 Oct 2011 22:19:46 +0200
-Subject: [Buildroot] [PATCH v2] New package: parted
-In-Reply-To: <20111020150704.29bc1398@skate> (Thomas Petazzoni's message of
- "Thu, 20 Oct 2011 15:07:04 +0200")
-References: <4E9FC67B.7030109@visionsystems.de>
- <CALB96N=4OwW95SoxHHusOBR9oQTuQ6uN_1swzkGqoF1q71YC0Q@mail.gmail.com>
- <20111020150704.29bc1398@skate>
-Message-ID: <8739en2z6l.fsf@macbook.be.48ers.dk>
+From: Damian Kaczmarek <damian@veritymedical.co.uk>
+Date: Fri, 21 Oct 2011 00:05:23 +0200
+Subject: [Buildroot] [PATCH 1/3] lsof: fix permission of extracted files
+Message-ID: <1319148323-26856-1-git-send-email-damian@veritymedical.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Default tar permissiong make it impossible to apply patches to some of the files
 
-Hi,
+Change extraction command to skip permissions by using "-O" tar option
+and a pipe tar chain. Solution suggested by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/lsof/lsof.mk |   10 ++++------
+ 1 files changed, 4 insertions(+), 6 deletions(-)
 
- Thomas> Next week, I'll be in Prague, where I will physically meet
- Thomas> Peter. And I intend to use this opportunity to use whatever
- Thomas> method happens to be necessary to have him merge the asciidoc
- Thomas> documentation patches so that we can work on improving the
- Thomas> documentation! :-))
-
-It's not lack of willingness, purely an issue of
-not-enough-hours-in-a-day combined with the osuosl guys being very busy 
-because of kernel.org. I'm looking at the patches now..
-
- Thomas> Or maybe I should start a fund-raising campaign from Buildroot
- Thomas> contributors to buy enough beers to Peter so that he gets drunk
- Thomas> enough to blindly merge all our patches. Who's contributing ?
- Thomas> :-)
-
-Heh, I rather have a new laptop though ;)
-
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index bfdfee3..2de0034 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -33,13 +33,11 @@ endef
+ endif
+ 
+ # The .tar.bz2 contains another .tar, which contains the source code.
+-define LSOF_EXTRACT_TAR
+-	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -xf $(@D)/lsof_$(LSOF_VERSION)_src.tar -C $(@D)
+-	chmod +w -R $(@D)
+-	rm -f $(@D)/lsof_$(LSOF_VERSION)_src.tar
+-endef
++LSOF_EXTRACT_CMDS = \
++        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
++                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
++        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+ 
+-LSOF_POST_EXTRACT_HOOKS += LSOF_EXTRACT_TAR
+ 
+ define LSOF_CONFIGURE_CMDS
+ 	(cd $(@D) ; \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
