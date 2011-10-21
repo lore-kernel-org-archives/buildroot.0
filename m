@@ -1,40 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2011 15:58:26 +0200
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 21 Oct 2011 16:24:03 +0200
 Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <CAGm1_kuP2sT=fXdvmnHWbC=B0ie4v4swZTbs9eKHGXVAT5FERA@mail.gmail.com>
+In-Reply-To: <20111021155826.061d9b8f@skate>
 References: <20111017184718.71afc290@skate> <20111021154303.43f98ccd@skate>
  <CAGm1_kuP2sT=fXdvmnHWbC=B0ie4v4swZTbs9eKHGXVAT5FERA@mail.gmail.com>
-Message-ID: <20111021155826.061d9b8f@skate>
+ <20111021155826.061d9b8f@skate>
+Message-ID: <CAGm1_ku2137QALAccV7f-=e54a4iXLXgo_YuYhKqqtcTzK2qqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 21 Oct 2011 15:51:51 +0200,
-Yegor Yefremov <yegorslists@googlemail.com> a ?crit :
+>> Page 23 (setting root password):
+>>
+>> 1. what have you set?
+>
+> The root password.
 
-> thanks for sharing this slides. I found some really useful issues I
-> have never thought about before.
+What is root password: 'root', 'linux' or something else? I tried
+both, but failed. I mean, if someone tries to copy this line, he won't
+be able to login.
 
-You're welcome. Nice to see it is useful.
+Perhaps some howto about how to generate own root password and put it
+in the script could be also useful. On the other hand it could be
+included in the main documentation later.
 
-> Page 23 (setting root password):
-> 
-> 1. what have you set?
-
-The root password.
-
-> 2. $TARGET_DIR is not working for me, but $1/etc/shadow is working
-
-Fixed. I usually do TARGETDIR=$1 or TARGET_DIR=$1 at the beginning of
-the script.
-
-Thanks for the review!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
