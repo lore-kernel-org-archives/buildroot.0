@@ -1,37 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2011 15:43:03 +0200
+Date: Fri, 21 Oct 2011 15:44:48 +0200
 Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <20111017184718.71afc290@skate>
+In-Reply-To: <20111018072638.GF7761@tarshish>
 References: <20111017184718.71afc290@skate>
-Message-ID: <20111021154303.43f98ccd@skate>
+	<20111018072638.GF7761@tarshish>
+Message-ID: <20111021154448.2dcaf8e7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 17 Oct 2011 18:47:18 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Le Tue, 18 Oct 2011 09:26:38 +0200,
+Baruch Siach <baruch@tkos.co.il> a ?crit :
 
-> The current (unfinished) status of my slides is visible at:
->   http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
+> By the way, is there a link to the TeX (or DocBook?) source of this 
+> presentation.  I'd really like to learn a few Beamer tricks, like the
+> source box in slides 17, 18.
 
-First of all, I'd like to thank Peter, Baruch, Thomas, Arnout and Will
-who gave some useful comments about my slides.
+It's just
 
-At the same URL above, I have published a new version, which hopefully
-addresses your comments, and also adds some more slides on various
-topics. The slides should now, at least in terms of contents, represent
-what I had in mind for this talk.
+\begin{block}{}
+\small
+\begin{verbatim}
+Some code here.
+\end{verbatim}
+\end{block}
 
-Now, if you're still willing to spend some time on this, I'd like to
-have comments on:
- * remaining english typos, wording improvements, etc.
- * suggestions of additional contents/topics if there is something I
-   missed. Like if you use best practices that aren't described in
-   those slides.
+I've attached the .tex source for reference, however it won't build
+since it depends on a Free Electrons stylesheet (but I can share it as
+well if you need). Some day, we'll have an publicly accessible Git
+repository for all our training materials and conference slides.
 
-Thanks again!
+Thanks for your comments!
 
 Thomas
 -- 
@@ -39,3 +40,10 @@ Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: using-buildroot-real-project.tex
+Type: text/x-tex
+Size: 27204 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111021/1d48eb6a/attachment-0001.tex>
