@@ -1,82 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2011 17:25:49 +0200
+Date: Fri, 21 Oct 2011 17:34:35 +0200
 Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <4EA182BA.2050400@carallon.com>
+In-Reply-To: <CAGm1_ku2137QALAccV7f-=e54a4iXLXgo_YuYhKqqtcTzK2qqA@mail.gmail.com>
 References: <20111017184718.71afc290@skate> <20111021154303.43f98ccd@skate>
- <4EA182BA.2050400@carallon.com>
-Message-ID: <20111021172549.2611d3a7@skate>
+ <CAGm1_kuP2sT=fXdvmnHWbC=B0ie4v4swZTbs9eKHGXVAT5FERA@mail.gmail.com>
+ <20111021155826.061d9b8f@skate>
+ <CAGm1_ku2137QALAccV7f-=e54a4iXLXgo_YuYhKqqtcTzK2qqA@mail.gmail.com>
+Message-ID: <20111021173435.445b8d5b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 21 Oct 2011 15:33:30 +0100,
-Will Wagner <will_wagner@carallon.com> a ?crit :
+Le Fri, 21 Oct 2011 16:24:03 +0200,
+Yegor Yefremov <yegorslists@googlemail.com> a ?crit :
 
-> Couple of minor points on the English (Still very impressive from a
-> non native speaker)
+> What is root password: 'root', 'linux' or something else? I tried
+> both, but failed. I mean, if someone tries to copy this line, he won't
+> be able to login.
 
-Thanks!
+Ah, my mistake, I copy pasted the hashed password from a project, and
+the password is not 'root'. I've fixed that in the slides, will be part
+of the next version I'll upload.
 
-> p8: "Buildroot starts by the toolchain" should be "starts with the"
+> Perhaps some howto about how to generate own root password and put it
+> in the script could be also useful. On the other hand it could be
+> included in the main documentation later.
 
-Funny, because Will Moore told me to do the exact opposite (in a review
-he sent me privately yesterday):
-
-"""
-Slide 7, "Buildroot starts with the toolchain" not "Buildroot starts by
-the toolchain".
-"""
-
-Now I understand why I fail to further improve my english. It's because
-it's a fuzzy logic language ! :-)
-
-> p16 "Any other project specific file" should perhaps be "files"
-
-I have changed to "All other project specific files", maybe it's more
-correct?
-
-> p17: "kernel and bootloaders often" shouldn't it be singular
-> bootloader?
-
-Not necessarily. On AT91 platforms, you have two bootloaders:
-at91boostrap and u-boot, and I both patch them and build them within
-Buildroot.
-
-> p17: "drawback is that Buildroot does directly" unless I
-> misunderstand the use case, don't you mean doesn't?
-
-Fixed, thanks, that was a major typo.
-
-> p21: "I don't recommend this, ..." I'm not sure if you are not 
-> recommending changing the skeleton or using a script to modify it
-
-Ok, I tried to clarify it:
-
-"""I don't recommend this solution as it consists in duplicating the
-default skeleton, which would prevent from taking advantage of future
-improvements of the default skeleton."""
-
-> p30: "finds automagically" should be "automagically finds"
-
-Fixed.
-
-> p37: "assignements" should be assignments
-
-Fixed.
-
-> p37: "allows to tell" should be "allows you to tell"
-
-Fixed.
- 
-> One thing I'd love to get written up somewhere is best practice for
-> NFS mounting a filesystem image, but I realise this may not be
-> relevant to your talk.
-
-Ah, good point. I'll include a slide about this.
-
-Thanks!
+Just use mkpasswd from the whois package in Debian/Ubuntu distributions.
 
 Thomas
 -- 
