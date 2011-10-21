@@ -1,37 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 21 Oct 2011 09:19:59 -0300
-Subject: [Buildroot] [PATCH 2/2] freetype: security bump to version 2.4.7
-In-Reply-To: <1319199599-1967-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1319199599-1967-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1319199599-1967-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 21 Oct 2011 15:43:03 +0200
+Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
+In-Reply-To: <20111017184718.71afc290@skate>
+References: <20111017184718.71afc290@skate>
+Message-ID: <20111021154303.43f98ccd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/freetype/freetype.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Le Mon, 17 Oct 2011 18:47:18 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index fe6e5d6..142a1ec 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -3,11 +3,11 @@
- # freetype
- #
- #############################################################
--FREETYPE_VERSION = 2.4.6
-+
-+FREETYPE_VERSION = 2.4.7
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_INSTALL_STAGING = YES
--FREETYPE_INSTALL_TARGET = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
- FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
- 
+> The current (unfinished) status of my slides is visible at:
+>   http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
+
+First of all, I'd like to thank Peter, Baruch, Thomas, Arnout and Will
+who gave some useful comments about my slides.
+
+At the same URL above, I have published a new version, which hopefully
+addresses your comments, and also adds some more slides on various
+topics. The slides should now, at least in terms of contents, represent
+what I had in mind for this talk.
+
+Now, if you're still willing to spend some time on this, I'd like to
+have comments on:
+ * remaining english typos, wording improvements, etc.
+ * suggestions of additional contents/topics if there is something I
+   missed. Like if you use best practices that aren't described in
+   those slides.
+
+Thanks again!
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
