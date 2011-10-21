@@ -1,29 +1,47 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 21 Oct 2011 16:24:03 +0200
+From: Will Wagner <will_wagner@carallon.com>
+Date: Fri, 21 Oct 2011 15:33:30 +0100
 Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <20111021155826.061d9b8f@skate>
+In-Reply-To: <20111021154303.43f98ccd@skate>
 References: <20111017184718.71afc290@skate> <20111021154303.43f98ccd@skate>
- <CAGm1_kuP2sT=fXdvmnHWbC=B0ie4v4swZTbs9eKHGXVAT5FERA@mail.gmail.com>
- <20111021155826.061d9b8f@skate>
-Message-ID: <CAGm1_ku2137QALAccV7f-=e54a4iXLXgo_YuYhKqqtcTzK2qqA@mail.gmail.com>
+Message-ID: <4EA182BA.2050400@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Page 23 (setting root password):
->>
->> 1. what have you set?
+On 21/10/2011 14:43, Thomas Petazzoni wrote:
+> Le Mon, 17 Oct 2011 18:47:18 +0200,
+> Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  a ?crit :
 >
-> The root password.
+>> The current (unfinished) status of my slides is visible at:
+>>    http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
+<snip>
+> Now, if you're still willing to spend some time on this, I'd like to
+> have comments on:
+>   * remaining english typos, wording improvements, etc.
 
-What is root password: 'root', 'linux' or something else? I tried
-both, but failed. I mean, if someone tries to copy this line, he won't
-be able to login.
+Couple of minor points on the English (Still very impressive from a non 
+native speaker)
+p8: "Buildroot starts by the toolchain" should be "starts with the"
+p16 "Any other project specific file" should perhaps be "files"
+p17: "kernel and bootloaders often" shouldn't it be singular bootloader?
+p17: "drawback is that Buildroot does directly" unless I misunderstand 
+the use case, don't you mean doesn't?
+p21: "I don't recommend this, ..." I'm not sure if you are not 
+recommending changing the skeleton or using a script to modify it
+p30: "finds automagically" should be "automagically finds"
+p37: "assignements" should be assignments
+p37: "allows to tell" should be "allows you to tell"
 
-Perhaps some howto about how to generate own root password and put it
-in the script could be also useful. On the other hand it could be
-included in the main documentation later.
+>   * suggestions of additional contents/topics if there is something I
+>     missed. Like if you use best practices that aren't described in
+>     those slides.
 
-Yegor
+One thing I'd love to get written up somewhere is best practice for NFS 
+mounting a filesystem image, but I realise this may not be relevant to 
+your talk.
+
+Otherwise your slides are very good at explaining how it all works.
+
+Will
