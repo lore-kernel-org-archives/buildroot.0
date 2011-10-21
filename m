@@ -1,38 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2011 17:34:35 +0200
-Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <CAGm1_ku2137QALAccV7f-=e54a4iXLXgo_YuYhKqqtcTzK2qqA@mail.gmail.com>
-References: <20111017184718.71afc290@skate> <20111021154303.43f98ccd@skate>
- <CAGm1_kuP2sT=fXdvmnHWbC=B0ie4v4swZTbs9eKHGXVAT5FERA@mail.gmail.com>
- <20111021155826.061d9b8f@skate>
- <CAGm1_ku2137QALAccV7f-=e54a4iXLXgo_YuYhKqqtcTzK2qqA@mail.gmail.com>
-Message-ID: <20111021173435.445b8d5b@skate>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Fri, 21 Oct 2011 18:21:18 +0200
+Subject: [Buildroot] [PATCH 1/3] lsof: fix permission of extracted files
+In-Reply-To: <20111021085540.666a392d@skate>
+References: <1319148323-26856-1-git-send-email-damian@veritymedical.co.uk>
+ <20111021085540.666a392d@skate>
+Message-ID: <201110211821.18822.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 21 Oct 2011 16:24:03 +0200,
-Yegor Yefremov <yegorslists@googlemail.com> a ?crit :
+Damian, Thomas, All,
 
-> What is root password: 'root', 'linux' or something else? I tried
-> both, but failed. I mean, if someone tries to copy this line, he won't
-> be able to login.
+On Friday 21 October 2011 08:55:40 Thomas Petazzoni wrote:
+> Le Fri, 21 Oct 2011 00:05:23 +0200,
+> Damian Kaczmarek <damian@veritymedical.co.uk> a ?crit :
+> 
+> > +LSOF_EXTRACT_CMDS = \
+> > +        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+> > +                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+> > +        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+> 
+> I would prefer:
+> 
+> define LSOF_EXTRACT_CMDS
+>         $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+>                 $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+>         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+> endef
+> 
+> since this is what we use for all other pkg_something_CMDS.
 
-Ah, my mistake, I copy pasted the hashed password from a project, and
-the password is not 'root'. I've fixed that in the slides, will be part
-of the next version I'll upload.
+Valid for both solutions:
+Tested-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-> Perhaps some howto about how to generate own root password and put it
-> in the script could be also useful. On the other hand it could be
-> included in the main documentation later.
+Regards,
+Yann E. MORIN.
 
-Just use mkpasswd from the whois package in Debian/Ubuntu distributions.
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
