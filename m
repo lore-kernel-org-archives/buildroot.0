@@ -1,45 +1,48 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Fri, 21 Oct 2011 12:17:19 +0200
-Subject: [Buildroot] [RFC] Gerrit for BR
-In-Reply-To: <87ehy6942n.fsf@macbook.be.48ers.dk>
-References: <4EA02C2A.6070405@visionsystems.de>
- <20111021085714.2e661569@skate> <87ehy6942n.fsf@macbook.be.48ers.dk>
-Message-ID: <4EA146AF.6090402@visionsystems.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 21 Oct 2011 07:33:12 -0300
+Subject: [Buildroot] [PATCH 2/4] ocf: new package
+In-Reply-To: <20111021085347.6e48f74c@skate>
+References: <1319132933-13938-1-git-send-email-gustavo@zacarias.com.ar>
+ <1319132933-13938-2-git-send-email-gustavo@zacarias.com.ar>
+ <20111021085347.6e48f74c@skate>
+Message-ID: <e2cbdc0fad426d5b9cab3fe2c085d35e@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 21.10.2011 09:49, schrieb Peter Korsgaard:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
-> Hi,
-> 
->  >> What do you think about using Gerrit
->  >> (http://code.google.com/p/gerrit/) for Buildroot? Many OSS projects
->  >> seem to switch to this system.
-> 
->  Thomas> How does it compare to patchwork (http://patchwork.ozlabs.org/)
->  Thomas> ?  Patchwork works in relation to a mailing-list, from which it
->  Thomas> automatically picks up patches and related review comments, and
->  Thomas> it allows maintainers to track which patches have been
->  Thomas> applied/not applied.
-> 
->  Thomas> How does Gerrit work in that respect?
-> 
-> I don't have any hands on experience (but I am following the openocd
-> list, so I see it used), and my initial feeling is that something like
-> patchwork would fit better our current way of working.
-> 
-> But that's just an initial feeling, let's discuss at ELC and/or here on
-> the list.
+On 21.10.2011 03:53, Thomas Petazzoni wrote:
 
-Peter, you just mentioned yourself, that you're following openocd list. Please see this thread for pros contra etc.
-http://www.mail-archive.com/openocd-development at lists.berlios.de/msg18509.html
+> Le Thu, 20 Oct 2011 14:48:51 -0300,
+> Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+>
+>> +config BR2_PACKAGE_OCF
+>> +	bool "ocf"
+>> +	help
+>> +	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
+>> +	  Framework (OCF). This port aims to bring full asynchronous HW/SW
+>> +	  crypto acceleration to the Linux kernel and applications
+>> +	  running under Linux.
+>> +
+>> +	  http://ocf-linux.sourceforge.net/
+>
+> Maybe mention here that there is a kernel-side part that must be
+> enabled for this to work, and that it can be enabled with
+> BR2_LINUX_KERNEL_EXT_OCF ?
 
-As far as I understand Gerrit integrates very good with Git and when used properly and by all contributors, you'll have all the patches in one place. The patches can be then commented online and you'll also get history for reworked patches. As soon as patches are verified, maintainer (you :-) ) can merge them with one click. These were the benefits Gerrit would bring Buidroot community. I think such approach makes sense, since lots of patches will be sent almost every day.
+Fair enough, though it won't break anything if it's enabled and you 
+lack OCF support on the kernel side.
+Similar to what would happen if you don't load the appropiate modules 
+or lack hardware support.
 
-And as far as I understand from the openocd list thread mentioned above, patchwork still requires more handwork from maintainer than Gerrit.
+> So basically, it's just a header that needs to be installed?
+>
+> Thomas
 
-Yegor
+Yes.
+For the moment we've got OpenSSL and maybe Openswan that uses OCF.
+Of course anything that links to OpenSSL uses OCF when it's properly 
+enabled on supporting hardware.
+
+Regards.
