@@ -1,52 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2011 08:53:47 +0200
-Subject: [Buildroot] [PATCH 2/4] ocf: new package
-In-Reply-To: <1319132933-13938-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1319132933-13938-1-git-send-email-gustavo@zacarias.com.ar>
- <1319132933-13938-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20111021085347.6e48f74c@skate>
+Date: Fri, 21 Oct 2011 08:55:40 +0200
+Subject: [Buildroot] [PATCH 1/3] lsof: fix permission of extracted files
+In-Reply-To: <1319148323-26856-1-git-send-email-damian@veritymedical.co.uk>
+References: <1319148323-26856-1-git-send-email-damian@veritymedical.co.uk>
+Message-ID: <20111021085540.666a392d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 20 Oct 2011 14:48:51 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Le Fri, 21 Oct 2011 00:05:23 +0200,
+Damian Kaczmarek <damian@veritymedical.co.uk> a ?crit :
 
-> +config BR2_PACKAGE_OCF
-> +	bool "ocf"
-> +	help
-> +	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
-> +	  Framework (OCF). This port aims to bring full asynchronous HW/SW
-> +	  crypto acceleration to the Linux kernel and applications
-> +	  running under Linux.
-> +	  
-> +	  http://ocf-linux.sourceforge.net/
+> +LSOF_EXTRACT_CMDS = \
+> +        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+> +                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+> +        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
 
-Maybe mention here that there is a kernel-side part that must be
-enabled for this to work, and that it can be enabled with
-BR2_LINUX_KERNEL_EXT_OCF ?
+I would prefer:
 
-> +define OCF_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 644 $(@D)/ocf/cryptodev.h \
-> +		$(STAGING_DIR)/usr/include/crypto/cryptodev.h
-> +endef
-> +
-> +define OCF_UNINSTALL_STAGING_CMDS
-> +	rm -f $(STAGING_DIR)/usr/include/crypto/cryptodev.h
-> +endef
-> +
-> +define OCF_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 644 $(@D)/ocf/cryptodev.h \
-> +		$(TARGET_DIR)/usr/include/crypto/cryptodev.h
-> +endef
-> +
-> +define OCF_UNINSTALL_TARGET_CMDS
-> +	rm -f $(TARGET_DIR)/usr/include/crypto/cryptodev.h
-> +endef
+define LSOF_EXTRACT_CMDS
+        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
+                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
+        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+endef
 
-So basically, it's just a header that needs to be installed?
+since this is what we use for all other pkg_something_CMDS.
 
 Thomas
 -- 
