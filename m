@@ -1,32 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 21 Oct 2011 08:55:40 +0200
-Subject: [Buildroot] [PATCH 1/3] lsof: fix permission of extracted files
-In-Reply-To: <1319148323-26856-1-git-send-email-damian@veritymedical.co.uk>
-References: <1319148323-26856-1-git-send-email-damian@veritymedical.co.uk>
-Message-ID: <20111021085540.666a392d@skate>
+Date: Fri, 21 Oct 2011 08:57:14 +0200
+Subject: [Buildroot] [RFC] Gerrit for BR
+In-Reply-To: <4EA02C2A.6070405@visionsystems.de>
+References: <4EA02C2A.6070405@visionsystems.de>
+Message-ID: <20111021085714.2e661569@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 21 Oct 2011 00:05:23 +0200,
-Damian Kaczmarek <damian@veritymedical.co.uk> a ?crit :
+Le Thu, 20 Oct 2011 16:11:54 +0200,
+Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
 
-> +LSOF_EXTRACT_CMDS = \
-> +        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
-> +                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
-> +        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
+> What do you think about using Gerrit (http://code.google.com/p/gerrit/) for Buildroot? Many OSS projects seem to switch to this system.
 
-I would prefer:
+How does it compare to patchwork (http://patchwork.ozlabs.org/) ?
+Patchwork works in relation to a mailing-list, from which it
+automatically picks up patches and related review comments, and it
+allows maintainers to track which patches have been applied/not applied.
 
-define LSOF_EXTRACT_CMDS
-        $(INFLATE.bz2) $(DL_DIR)/$(LSOF_SOURCE) | \
-                $(TAR) -O $(TAR_OPTIONS) - lsof_$(LSOF_VERSION)/lsof_$(LSOF_VERSION)_src.tar | \
-        $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(LSOF_DIR) $(TAR_OPTIONS) -
-endef
-
-since this is what we use for all other pkg_something_CMDS.
+How does Gerrit work in that respect?
 
 Thomas
 -- 
