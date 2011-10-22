@@ -1,32 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 22 Oct 2011 12:17:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 4363] Make sure that copied linux and busybox
- defconfig are writable before modifying
-In-Reply-To: <bug-4363-163@https.bugs.busybox.net/>
-References: <bug-4363-163@https.bugs.busybox.net/>
-Message-ID: <20111022121707.9680D8EDA4@busybox.osuosl.org>
+From: Mike Davies <busybox_mail@rovoreed.com>
+Date: Sat, 22 Oct 2011 14:01:34 +0000
+Subject: [Buildroot] [PATCH v4] package: add opencv
+In-Reply-To: <1319130558-16555-1-git-send-email-s.martin49@gmail.com>
+References: <1319130558-16555-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1319292094.2998.6.camel@ceri>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4363
+Hi,
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2011-10-22 12:17:07 UTC ---
-Is it required to also modify the group permission? I'd expect u+rw to be
-enough. 
+I have tried your previous version (V3) and have a comment.
 
-Moreover, can we safely assume that the read permission is already set, so that
-u+w is the only thing that needs to happen?
+It seems to put over 32Mb into the target, that I think doesn't need to
+be there, i.e.
 
-Thirdly, the same problem is probably present for many other locations, for
-example the uclibc config file, the default target skeleton (that you may want
-to modify from a post-build script) etc.
-To cater for your version control system (Clearcase?) all this should be fixed
-as well...
+[mike at ceri buildroot-2011.08]$ du -ch output/target/usr/share/opencv
+56K	output/target/usr/share/opencv/lbpcascades
+19M	output/target/usr/share/opencv/haarcascades
+504K	output/target/usr/share/opencv/doc/vidsurv
+14M	output/target/usr/share/opencv/doc
+32M	output/target/usr/share/opencv
+32M	total
+[mike at ceri buildroot-2011.08]$ 
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Certainly I don't want any documentation on my target system, and
+there's 14Mb of that.
+
+I built the system with just opencv selected, and nothing in the opencv
+sub-menu selected.
+
+Mike
