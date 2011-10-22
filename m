@@ -1,24 +1,38 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 22 Oct 2011 23:12:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 4363] Make sure that copied linux and busybox
- defconfig are writable before modifying
-In-Reply-To: <bug-4363-163@https.bugs.busybox.net/>
-References: <bug-4363-163@https.bugs.busybox.net/>
-Message-ID: <20111022231255.596838ED92@busybox.osuosl.org>
+Date: Sat, 22 Oct 2011 23:32:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 4381] New: Add option to lighttpd to enable Lua
+	support
+Message-ID: <bug-4381-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4363
+https://bugs.busybox.net/show_bug.cgi?id=4381
 
-Danomi Mocelopolis <d_mo1234@yahoo.com> changed:
+           Summary: Add option to lighttpd to enable Lua support
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: d_mo1234 at yahoo.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #3661|0                           |1
-        is obsolete|                            |
+
+Created attachment 3691
+  --> https://bugs.busybox.net/attachment.cgi?id=3691
+patch file
+
+Add option to lighttpd to enable Lua support. Needed to support mod_magnet.
+
+Patch is attached.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
