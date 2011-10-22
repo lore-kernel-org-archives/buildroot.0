@@ -1,74 +1,65 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sat, 22 Oct 2011 19:04:48 +0200
-Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <20111021154303.43f98ccd@skate>
-References: <20111017184718.71afc290@skate>
-	<20111021154303.43f98ccd@skate>
-Message-ID: <CAAXf6LWuoZu8qv6XHNyD-Ch=gEZPSCOvb6UC7615LiF+PrriCg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 22 Oct 2011 22:48:18 +0000 (UTC)
+Subject: [Buildroot] [Bug 4363] Make sure that copied linux and busybox
+ defconfig are writable before modifying
+In-Reply-To: <bug-4363-163@https.bugs.busybox.net/>
+References: <bug-4363-163@https.bugs.busybox.net/>
+Message-ID: <20111022224818.49AE98EC6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=4363
 
-On Fri, Oct 21, 2011 at 3:43 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Mon, 17 Oct 2011 18:47:18 +0200,
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
->
->> The current (unfinished) status of my slides is visible at:
->> ? http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
->
-> First of all, I'd like to thank Peter, Baruch, Thomas, Arnout and Will
-> who gave some useful comments about my slides.
->
-> At the same URL above, I have published a new version, which hopefully
-> addresses your comments, and also adds some more slides on various
-> topics. The slides should now, at least in terms of contents, represent
-> what I had in mind for this talk.
->
-> Now, if you're still willing to spend some time on this, I'd like to
-> have comments on:
-> ?* remaining english typos, wording improvements, etc.
-> ?* suggestions of additional contents/topics if there is something I
-> ? missed. Like if you use best practices that aren't described in
-> ? those slides.
+--- Comment #2 from Danomi Mocelopolis <d_mo1234@yahoo.com> 2011-10-22 22:48:17 UTC ---
+(In reply to comment #1)
+> Is it required to also modify the group permission? I'd expect u+rw to be
+> enough.
 
-p4: s/build a kernel image/a kernel image/   (the 'build' is already
-mentioned in the header)
-p4: for symmetry reasons, I would suggest to start the last point also
-with 'It builds' instead of 'Builds'
-p4: the 'composed of Busybox' seems odd to me, because 'Busybox' is
-one item. Maybe a native English speaker (Will?) can give feedback on
-this. Suggestions from me are 'containing Busybox' or 'based on
-Busybox'.
+I'm okay with u+rw.
 
-p4/5 title: on page 4 there is a question mark, not so on page 5.
+> Moreover, can we safely assume that the read permission is already set, so that
+> u+w is the only thing that needs to happen?
 
-p5: I'm unsure what you're trying to say with 'Standard languages
-used'. If you refer to make, that was already covered on the previous
-slide and may be redundant here.
+I suppose, but why not do u+rw anyway?  I site the line that
+fixes permissions after uncompressing package archives in
+buildroot/package/Makefile.package.in:
 
-p5: you're mainly typing full sentences, which is good IMO. But the
-'Need to do complete rebuilds' is not consistent with that. I'd
-suggest 'You need to ...'.
+    $(Q)chmod -R +rw $(@D)
 
-p10/11: reminder: still lists a TODO about build time
+But for my purposes, getting the +w would be good enough, if you feel
+strongly about this.
 
-p12: s/more choice/more choices/    (at least, that's my feeling)
-p12: first bullet says: "Buildroot complete rebuild", second says:
-"complete Buildroot rebuild". This should be consistent. I prefer the
-second one.
-
-p24: s/Creating/Create/
-p31: s/Mouting/Mounting/
+(BTW, not sure if "+rw" is better than "u+rw".  I always specify
+the u or ug.  The man for chmod leads me to believe that +rw might
+open up beyond u depending on the umask setting.  Again, I'm not
+picky on this point.)
 
 
+> Thirdly, the same problem is probably present for many other locations, for
+> example the uclibc config file, the default target skeleton (that you may want
+> to modify from a post-build script) etc.
+> To cater for your version control system (Clearcase?) all this should be fixed
+> as well...
 
-Thanks for the credit, and:
-Great job!
+Actually, we're using Perforce, but I don't think that this is 
+catering to Perforce in particular.  I think this would happen with 
+any of the non-distributed version control systems (rcs, cvs, svn, ...).
+No?
 
-Best regards,
-Thomas
+But I think you're right, that this probably effects any place
+that there is a copy from a non-derived file, or a copy from
+a file that wasn't untared by GENTARGETS, and a subsequent
+edit of that file is attempted.  I just had to fix the ones that 
+screwed my own projects, I didn't try to find other places.
+
+So, I have made another patch that includes the changes in the
+first patch, plus uclibc and target skeleton copies, plus any
+other untar opts that I could find.  See what you think.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
