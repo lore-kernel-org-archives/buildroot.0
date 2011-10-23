@@ -1,46 +1,58 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 22 Oct 2011 23:45:48 +0000 (UTC)
-Subject: [Buildroot] [Bug 4387] New: Make sure that dest dir exists before
- installing mtd files
-Message-ID: <bug-4387-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 23 Oct 2011 14:37:55 +0200
+Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
+In-Reply-To: <20111021154303.43f98ccd@skate>
+References: <20111017184718.71afc290@skate>
+ <20111021154303.43f98ccd@skate>
+Message-ID: <20111023123755.GA2455@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4387
+Hi Thomas,
 
-           Summary: Make sure that dest dir exists before installing mtd
-                    files
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: d_mo1234 at yahoo.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Fri, Oct 21, 2011 at 03:43:03PM +0200, Thomas Petazzoni wrote:
+> Le Mon, 17 Oct 2011 18:47:18 +0200,
+> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+> 
+> > The current (unfinished) status of my slides is visible at:
+> >   http://free-electrons.com/~thomas/pub/using-buildroot-real-project.pdf
+> 
+> First of all, I'd like to thank Peter, Baruch, Thomas, Arnout and Will
+> who gave some useful comments about my slides.
+> 
+> At the same URL above, I have published a new version, which hopefully
+> addresses your comments, and also adds some more slides on various
+> topics. The slides should now, at least in terms of contents, represent
+> what I had in mind for this talk.
+> 
+> Now, if you're still willing to spend some time on this, I'd like to
+> have comments on:
+>  * remaining english typos, wording improvements, etc.
+>  * suggestions of additional contents/topics if there is something I
+>    missed. Like if you use best practices that aren't described in
+>    those slides.
+> 
+> Thanks again!
 
+Two of my earlier comments still stand.
 
-Created attachment 3697
-  --> https://bugs.busybox.net/attachment.cgi?id=3697
-patch file
+1. Slide 23: missing -e in the 'echo' command
 
-I ran into a situation where a custom target skeleton did not have a /usr/sbin
-- it relied on something else to make it (busybox?).  So when mtd.mk tried to
-install things to it, install bombed out.  (I think that we were probably using
-the new version of "make", which no longer sorts wildcards in alphabetical
-order - so mtd might have been before busybox.)
+$ echo "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0"
+/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0
 
-I have attached a patch to make sure installation directory actually exists. 
-Seems like a prudent thing to do.
+$ echo -e "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0"
+/dev/mtdblock7      /applog jffs2   defaults        0   0
+
+2. Slides 24-27: header should be "Project-specific packages (x/5)", instead 
+   of "... (x/4)".  (Can't TeX do this automatically somehow?)
+
+baruch
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
