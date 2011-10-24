@@ -1,70 +1,78 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 24 Oct 2011 11:54:02 -0300
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump to version 3.0.7 and
-	add version 3.1
-Message-ID: <1319468043-22999-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 24 Oct 2011 11:54:03 -0300
+Subject: [Buildroot] [PATCH 2/2] linux: bump default kernel to version 3.1
+In-Reply-To: <1319468043-22999-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1319468043-22999-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1319468043-22999-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump default kernel vesion to 3.1 to match headers.
+Also implement downloads for 3.x series kernels.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/kernel-headers/Config.in                 |    8 ++++++--
- toolchain/kernel-headers/kernel-headers.mk         |    2 +-
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 3 files changed, 7 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.4-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ linux/Config.in |   10 +++++-----
+ linux/linux.mk  |    8 +++++---
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index b827ec5..8be9186 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -6,7 +6,7 @@ comment "Kernel Header Options"
- 
+diff --git a/linux/Config.in b/linux/Config.in
+index 5655286..774aaf8 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -19,10 +19,10 @@ if BR2_LINUX_KERNEL
+ #
  choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_3_0
-+	default BR2_KERNEL_HEADERS_3_1
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -33,6 +33,9 @@ choice
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
+ 	prompt "Kernel version"
+-	default BR2_LINUX_KERNEL_2_6_39
++	default BR2_LINUX_KERNEL_3_1
  
-+	config BR2_KERNEL_HEADERS_3_1
-+		bool "Linux 3.1.x kernel headers"
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Linux 2.6 (manually specified version)"
+-config BR2_LINUX_KERNEL_2_6_39
+-	bool "2.6.39.4"
++config BR2_LINUX_KERNEL_3_1
++	bool "3.1"
  
-@@ -54,6 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.4"		if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.7"		if BR2_KERNEL_HEADERS_3_0
-+	default "3.1"		if BR2_KERNEL_HEADERS_3_1
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
-index 044fcf9..72c6007 100644
---- a/toolchain/kernel-headers/kernel-headers.mk
-+++ b/toolchain/kernel-headers/kernel-headers.mk
-@@ -29,7 +29,7 @@ LINUX_HEADERS_VERSION:=$(VERSION).$(PATCHLEVEL)$(SUBLEVEL)$(EXTRAVERSION)
- ifeq ($(findstring x2.6.,x$(DEFAULT_KERNEL_HEADERS)),x2.6.)
- LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
- else
--LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v3.0/
-+LINUX_HEADERS_SITE:=$(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
- endif
- LINUX_HEADERS_SOURCE:=linux-$(LINUX_HEADERS_VERSION).tar.bz2
- LINUX_HEADERS_CAT:=$(BZCAT)
-diff --git a/toolchain/kernel-headers/linux-3.0.4-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.4-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -58,7 +58,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "2.6.39.4"
++	default "3.1"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "2.6.39.4" if BR2_LINUX_KERNEL_2_6_39
++	default "3.1" if BR2_LINUX_KERNEL_3_1
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 99f4649..6b6fd5c 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -18,9 +18,11 @@ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+-LINUX_VERSION_MAJOR = $(word 1,$(subst ., ,$(subst -, ,$(LINUX_VERSION))))
+-LINUX_VERSION_MINOR = $(word 2,$(subst ., ,$(subst -, ,$(LINUX_VERSION))))
+-LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(LINUX_VERSION_MAJOR).$(LINUX_VERSION_MINOR)/
++ifeq ($(findstring x2.6.,x$(LINUX_VERSION)),x2.6.)
++LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
++else
++LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
++endif
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+ LINUX_SITE := $(LINUX_SITE)testing/
 -- 
 1.7.3.4
