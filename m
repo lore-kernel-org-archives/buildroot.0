@@ -1,57 +1,70 @@
-From: ilranzani <marco_cantu_ranzani@libero.it>
-Date: Mon, 24 Oct 2011 08:53:20 -0700 (PDT)
-Subject: [Buildroot] libtool: Version mismatch error
-In-Reply-To: <113697.63851.qm@web120515.mail.ne1.yahoo.com>
-References: <113697.63851.qm@web120515.mail.ne1.yahoo.com>
-Message-ID: <32711319.post@talk.nabble.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 24 Oct 2011 18:42:06 +0200
+Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
+In-Reply-To: <20111024173250.7e598d6f@skate>
+References: <20111017184718.71afc290@skate> <20111023123755.GA2455@tarshish>
+ <20111024173250.7e598d6f@skate>
+Message-ID: <201110241842.06558.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
-same problem HERE:
+On Monday 24 October 2011 17:32:50 Thomas Petazzoni wrote:
+> Le Sun, 23 Oct 2011 14:37:55 +0200,
+> Baruch Siach <baruch@tkos.co.il> a ?crit :
+> 
+> > 1. Slide 23: missing -e in the 'echo' command
+> > 
+> > $ echo "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0"
+> > /dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0
+> > 
+> > $ echo -e "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0"
+> > /dev/mtdblock7      /applog jffs2   defaults        0   0
+> 
+> -e is not needed with sh:
 
-http://old.nabble.com/GnuPG-td29967586.html#a32711202
+The problem is that /bin/sh might be whatever. With a POSIX-conformant
+/bin/sh (eg. dash), this is true. With bash, it is not. Alas, many
+systems still have bash as /bin/sh.
 
+$ ls -l /bin/sh
+lrwxrwxrwx 1 root root 4 May 17 23:53 /bin/sh -> bash
+$ echo "bli\nbla"
+bli\nbla
+$ /bin/bash
+$ echo "bli\nbla"
+bli\nbla
+$ exit
+$ /bin/dash
+$ echo "bli\nbla"
+bli
+bla
 
-Solutions?
+The answer it to use printf [0].
 
-Thanks!:handshake:
+I now use printf as much as I can. printf is in POSIX and does not suffer
+from all the discrepancies there are in the many echo implementations.
 
+> $ echo "bla\nbli"
+> bla
+> bli
+> $ echo -e "bla\nbli"
+> -e bla
+> bli
 
-rpbainjr wrote:
-> 
-> 
-> Any,
-> 
-> I am trying to migrate from buildroot-2009.08 to buildroot-2011.02 for
-> arm.
-> 
-> In a few packages such as tslib and pkg-config (glib) I am getting build
-> errors with message 
-> 
-> ../libtool: line 476: CDPATH: command not found
-> ../libtool: line 476: CDPATH: command not found
-> ../libtool: line 1300: func_opt_split: command not found
-> libtool: Version mismatch error.  This is libtool 2.2.10, but the
-> libtool: definition of this LT_INIT comes from an older release.
-> libtool: You should recreate aclocal.m4 with macros from libtool 2.2.10
-> libtool: and run autoconf again.
-> 
-> I am running Ubuntu 10.10 and tried 11.04 also.
-> 
-> Any suggestions?
-> 
-> Thanks
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+[0] http://pubs.opengroup.org/onlinepubs/9699919799/utilities/printf.html
+
+Regards,
+Yann E. MORIN.
 
 -- 
-View this message in context: http://old.nabble.com/libtool%3A-Version-mismatch-error-tp31533044p32711319.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
