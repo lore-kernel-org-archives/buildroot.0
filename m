@@ -1,41 +1,34 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 24 Oct 2011 16:42:11 -0300
-Subject: [Buildroot] [PATCH 3/6] qemu_mipsel_malta: update to kernel 3.1
-In-Reply-To: <1319485334-15790-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1319485334-15790-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1319485334-15790-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 24 Oct 2011 16:42:09 -0300
+Subject: [Buildroot] [PATCH 1/6] linux: vmlinux target is valid for powerpc
+	too
+Message-ID: <1319485334-15790-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The vmlinux kernel target is valid for powerpc kernels too.
+In fact this broke the qemu sample config.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../{linux-2.6.38.config => linux-3.1.config}      |    0
- configs/qemu_mipsel_malta_defconfig                |    4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename board/qemu/mipsel-malta/{linux-2.6.38.config => linux-3.1.config} (100%)
+ linux/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/board/qemu/mipsel-malta/linux-2.6.38.config b/board/qemu/mipsel-malta/linux-3.1.config
-similarity index 100%
-rename from board/qemu/mipsel-malta/linux-2.6.38.config
-rename to board/qemu/mipsel-malta/linux-3.1.config
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index f95fe24..3f558fe 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -9,9 +9,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-2.6.38.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.1.config"
- BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/linux/Config.in b/linux/Config.in
+index 774aaf8..469fd7c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -146,7 +146,7 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
  
- # Serial port config
+ config BR2_LINUX_KERNEL_VMLINUX
+ 	bool "vmlinux"
+-	depends on BR2_mips || BR2_mipsel
++	depends on BR2_mips || BR2_mipsel || BR2_powerpc
+ 
+ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+ 	bool "custom target"
 -- 
 1.7.3.4
