@@ -1,70 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Mon, 24 Oct 2011 18:42:06 +0200
-Subject: [Buildroot] [RFC] Slides "Using Buildroot for real projects"
-In-Reply-To: <20111024173250.7e598d6f@skate>
-References: <20111017184718.71afc290@skate> <20111023123755.GA2455@tarshish>
- <20111024173250.7e598d6f@skate>
-Message-ID: <201110241842.06558.yann.morin.1998@anciens.enib.fr>
+From: Robert Schwebel <r.schwebel@pengutronix.de>
+Date: Mon, 24 Oct 2011 18:59:04 +0200
+Subject: [Buildroot] Some topics for the Buildroot Developer Day
+In-Reply-To: <20111024173815.2277c6dd@skate>
+References: <20111024173815.2277c6dd@skate>
+Message-ID: <20111024165904.GB9199@pengutronix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On Monday 24 October 2011 17:32:50 Thomas Petazzoni wrote:
-> Le Sun, 23 Oct 2011 14:37:55 +0200,
-> Baruch Siach <baruch@tkos.co.il> a ?crit :
-> 
-> > 1. Slide 23: missing -e in the 'echo' command
-> > 
-> > $ echo "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0"
-> > /dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0
-> > 
-> > $ echo -e "/dev/mtdblock7\t\t/applog\tjffs2\tdefaults\t\t0\t0"
-> > /dev/mtdblock7      /applog jffs2   defaults        0   0
-> 
-> -e is not needed with sh:
+On Mon, Oct 24, 2011 at 05:38:15PM +0200, Thomas Petazzoni wrote:
+> ELCE 2011 meeting agenda
+> ========================
 
-The problem is that /bin/sh might be whatever. With a POSIX-conformant
-/bin/sh (eg. dash), this is true. With bash, it is not. Alas, many
-systems still have bash as /bin/sh.
+I cannot comment much about the buildroot specific things, being an
+alien here :) However, some comments for topics where we might be able
+to do some collaboration with the ptxdist + buildroot folks:
 
-$ ls -l /bin/sh
-lrwxrwxrwx 1 root root 4 May 17 23:53 /bin/sh -> bash
-$ echo "bli\nbla"
-bli\nbla
-$ /bin/bash
-$ echo "bli\nbla"
-bli\nbla
-$ exit
-$ /bin/dash
-$ echo "bli\nbla"
-bli
-bla
+>  * Testing infrastructure. Possible to put build results on the Web
+>    server? Common format for them?
 
-The answer it to use printf [0].
+This would surely be an interesting topic. We have worked on a test
+infrastructure for ptxdist for a while now; in fact, we are in the 3rd
+iteration:
 
-I now use printf as much as I can. printf is in POSIX and does not suffer
-from all the discrepancies there are in the many echo implementations.
+- The first one was "expect" based. It failed because tcl is *just* so
+  ugly, and the risk of getting eye cancer was simply too high ...
 
-> $ echo "bla\nbli"
-> bla
-> bli
-> $ echo -e "bla\nbli"
-> -e bla
-> bli
+- The 2nd one was Python / pexpect based (failed because our method to
+  connect the serial port's file descriptor to pexpect was discontinued
+  some python minor revisions later). And it turned out that our initial
+  idea to easily re-use tests due to the object orientation of Python
+  didn't work, because the test adaptions to a scenario often are bigger
+  then the test itself.
 
-[0] http://pubs.opengroup.org/onlinepubs/9699919799/utilities/printf.html
+- We have a kermit based infrastructure now, with shell wrappers; the
+  kermit code is ugly as hell, but it works reliably and is well
+  wrapped.
 
-Regards,
-Yann E. MORIN.
+If somebody is interested, I can show how we do that.
 
+However, we also do not have the infrastructure for a sane
+representation + website presentation of test results, so this is
+definitely something where we might collaborate nicely.
+
+>  * Next big directions. What are the next big directions for Buildroot
+>    ? The major features we want to implement ?
+
+Does buildroot have a possibility to split between runtime and build
+time dependencies? This is something we are fighting with.
+
+rsc
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
