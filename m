@@ -1,26 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 24 Oct 2011 08:23:16 -0300
-Subject: [Buildroot] GnuPG
-In-Reply-To: <32709446.post@talk.nabble.com>
-References: <0D753D10438DA54287A00B02708426976450C42C46@AUSP01VMBX24.collaborationhost.net>
- <32709446.post@talk.nabble.com>
-Message-ID: <8167afaddbb08fc25202dbf489d78389@zacarias.com.ar>
+From: Rickard Lind <rille@tutus.se>
+Date: Mon, 24 Oct 2011 13:18:57 +0200
+Subject: [Buildroot] x86_64 and grub
+Message-ID: <84EE5802-5412-4BE2-BF4B-DB29FDB7094B@tutus.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24.10.2011 08:12, ilranzani wrote:
+Hi,
 
-> Nobody?
->
-> (in buildroot there's already libgcrypt)
->
-> UP UP UP ! :)
+I'm using buildroot-2011.08 with a x86_64 target to build an ext2 image and I would like to include grub, but building grub fails when linking for not finding libgcc. I think this is because grub wants to be built 32 bit (presumably something to do with booting) and gcc is only built with a 64 bit libgcc due to the --disable-multilib configure option. I tried to remove the --disable-multilib option but then the gcc build dies with "cannot find -lc" while building libgcc. I switched from the default gcc to the latest (4.6.1) but that made no difference. I could not find anything in the bugzilla; is there some workaround or should I file a bug? Or am I doing something wrong?
 
-It's not too hard, you just need to add a couple of extra libraries 
-(packages) that it needs, IIRC libassuan and libksba.
-The rest of the mandatory dependencies are already available 
-(libgpg-error & libgcrypt).
-Regards.
+Regards, Rickard
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 1243 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111024/a3a51aec/attachment.p7s>
