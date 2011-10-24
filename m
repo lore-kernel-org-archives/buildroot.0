@@ -1,222 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 23 Oct 2011 20:58:45 +0200
-Subject: [Buildroot] [PATCH v5] package: add opencv
-Message-ID: <1319396325-9720-1-git-send-email-s.martin49@gmail.com>
+From: ilranzani <marco_cantu_ranzani@libero.it>
+Date: Mon, 24 Oct 2011 04:12:43 -0700 (PDT)
+Subject: [Buildroot] GnuPG
+In-Reply-To: <0D753D10438DA54287A00B02708426976450C42C46@AUSP01VMBX24.collaborationhost.net>
+References: <0D753D10438DA54287A00B02708426976450C42C46@AUSP01VMBX24.collaborationhost.net>
+Message-ID: <32709446.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenCV is a free, open-source, cross-platform computer vision library
 
-Changelog:
- v1: initial submission
- v2: changes according to Thomas Petazonni's review:
-     - remove obvious unneeded options
-     - typo and style fixes
-     - do not use 3RDPARTY_LIBS
- v3: changes according to Thomas Petazonni's review:
-     - typo and style fixes
-     - remove host package (not needed)
- v4: update CMAKETARGET call to follow the infra.
- v5: - add post install hooks (following Mike Davies' remarks):
-       - do not install doc
-       - do not install OpenCVConfig.cmake in the target
-     - optionally install data in the target
-     - remove the 'Build examples' option (only install source files)
-     - disable precompiled header usage (automacally disabled when
-       compiler size optimization is set)
+Nobody?
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/Config.in        |    1 +
- package/opencv/Config.in |   77 ++++++++++++++++++++++++++++++++++++++++++++
- package/opencv/opencv.mk |   80 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 158 insertions(+), 0 deletions(-)
- create mode 100644 package/opencv/Config.in
- create mode 100644 package/opencv/opencv.mk
+(in buildroot there's already libgcrypt)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3b2769d..c6ca350 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -297,6 +297,7 @@ source "package/libraw/Config.in"
- source "package/librsvg/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
-+source "package/opencv/Config.in"
- source "package/pango/Config.in"
- source "package/pixman/Config.in"
- source "package/tiff/Config.in"
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-new file mode 100644
-index 0000000..41cb6c8
---- /dev/null
-+++ b/package/opencv/Config.in
-@@ -0,0 +1,77 @@
-+menuconfig BR2_PACKAGE_OPENCV
-+	bool "opencv"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  OpenCV (Open Source Computer Vision) is a library of programming
-+	  functions for real time computer vision.
-+
-+	  http://opencv.willowgarage.com/wiki/
-+
-+if BR2_PACKAGE_OPENCV
-+
-+comment "Built targets"
-+
-+config BR2_PACKAGE_OPENCV_BUILD_NEW_PYTHON_SUPPORT
-+	bool "Python support"
-+	select BR2_PACKAGE_PYTHON
-+
-+config BR2_PACKAGE_OPENCV_BUILD_TESTS
-+	bool "Tests"
-+
-+comment "Install options"
-+
-+config BR2_PACKAGE_OPENCV_INSTALL_DATA
-+	bool "Install data"
-+	help
-+	  Install various data that is used by cv libraries and/or demo
-+	  applications, specifically for haarcascades and lbpcascades features.
-+
-+	  For further information: see OpenCV documentation.
-+
-+comment "Build options"
-+
-+config BR2_PACKAGE_OPENCV_WITH_FFMPEG
-+	bool "FFMPEG support"
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG_SWSCALE
-+	help
-+	  Use ffmpeg from the target system.
-+
-+config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
-+	bool "Gstreamer support"
-+	select BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE
-+	select BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_APP
-+
-+config BR2_PACKAGE_OPENCV_WITH_GTK
-+	bool "GTK support"
-+	depends on BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_LIBGLIB2
-+
-+config BR2_PACKAGE_OPENCV_WITH_JPEG
-+	bool "JPEG support"
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  Use shared libjpeg from the target system.
-+
-+config BR2_PACKAGE_OPENCV_WITH_PNG
-+	bool "PNG support"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  Use shared libpng from the target system.
-+
-+config BR2_PACKAGE_OPENCV_WITH_QT
-+	bool "Qt Backend support"
-+	select BR2_PACKAGE_QT
-+
-+config BR2_PACKAGE_OPENCV_WITH_TIFF
-+	bool "TIFF support"
-+	select BR2_PACKAGE_TIFF
-+	help
-+	  Use shared libtiff from the target system.
-+
-+config BR2_PACKAGE_OPENCV_WITH_V4L
-+	bool "Video 4 Linux support"
-+	select BR2_PACKAGE_LIBV4L
-+	default y
-+
-+endif
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-new file mode 100644
-index 0000000..48add1e
---- /dev/null
-+++ b/package/opencv/opencv.mk
-@@ -0,0 +1,80 @@
-+#############################################################
-+#
-+# OpenCV (Open Source Computer Vision)
-+#
-+#############################################################
-+OPENCV_SERIES  = 2.3
-+OPENCV_VERSION = $(OPENCV_SERIES).0
-+OPENCV_SITE    = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_SERIES)
-+OPENCV_SOURCE  = OpenCV-$(OPENCV_VERSION).tar.bz2
-+OPENCV_INSTALL_STAGING = YES
-+
-+# Build type
-+OPENCV_CONF_OPT += -DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release)
-+# Built targets
-+OPENCV_CONF_OPT += -DBUILD_DOCS=OFF
-+OPENCV_CONF_OPT += -DBUILD_EXAMPLES=OFF
-+OPENCV_CONF_OPT += -DBUILD_NEW_PYTHON_SUPPORT=$(if $(BR2_PACKAGE_OPENCV_BUILD_NEW_PYTHON_SUPPORT),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_BUILD_NEW_PYTHON_SUPPORT),python host-python,)
-+OPENCV_CONF_OPT += -DBUILD_PACKAGE=OFF
-+OPENCV_CONF_OPT += -DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV_BUILD_TESTS),ON,OFF)
-+# Build options
-+OPENCV_CONF_OPT += -DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON)
-+OPENCV_CONF_OPT += -DOPENCV_BUILD_3RDPARTY_LIBS=OFF
-+OPENCV_CONF_OPT += -DENABLE_PROFILING=OFF
-+OPENCV_CONF_OPT += -DCMAKE_SKIP_RPATH=OFF
-+OPENCV_CONF_OPT += -DUSE_FAST_MATH=ON
-+OPENCV_CONF_OPT += -DUSE_OMIT_FRAME_POINTER=ON
-+OPENCV_CONF_OPT += -DUSE_PRECOMPILED_HEADERS=OFF
-+OPENCV_CONF_OPT += -DWITH_1394=OFF
-+OPENCV_CONF_OPT += -DWITH_CUDA=OFF
-+OPENCV_CONF_OPT += -DWITH_EIGEN=OFF
-+OPENCV_CONF_OPT += -DWITH_FFMPEG=$(if $(BR2_PACKAGE_OPENCV_WITH_FFMPEG),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_FFMPEG),ffmpeg,)
-+OPENCV_CONF_OPT += -DWITH_GSTREAMER=$(if $(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_GSTREAMER),gstreamer gst-plugins-base,)
-+OPENCV_CONF_OPT += -DWITH_GTK=$(if $(BR2_PACKAGE_OPENCV_WITH_GTK),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_GTK),libgtk2 libglib2,)
-+OPENCV_CONF_OPT += -DWITH_IPP=OFF
-+OPENCV_CONF_OPT += -DWITH_JASPER=OFF
-+OPENCV_CONF_OPT += -DWITH_JPEG=$(if $(BR2_PACKAGE_OPENCV_WITH_JPEG),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_JPEG),jpeg,)
-+OPENCV_CONF_OPT += -DWITH_OPENEXR=OFF
-+OPENCV_CONF_OPT += -DWITH_OPENNI=OFF
-+OPENCV_CONF_OPT += -DWITH_PNG=$(if $(BR2_PACKAGE_OPENCV_WITH_PNG),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_PNG),libpng,)
-+OPENCV_CONF_OPT += -DWITH_PVAPI=OFF
-+OPENCV_CONF_OPT += -DWITH_QT=$(if $(BR2_PACKAGE_OPENCV_WITH_QT),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_QT),qt,)
-+OPENCV_CONF_OPT += -DWITH_QT_OPENGL=OFF
-+OPENCV_CONF_OPT += -DWITH_TBB=OFF
-+OPENCV_CONF_OPT += -DWITH_TIFF=$(if $(BR2_PACKAGE_OPENCV_WITH_TIFF),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_TIFF),tiff,)
-+OPENCV_CONF_OPT += -DWITH_UNICAP=OFF
-+OPENCV_CONF_OPT += -DWITH_V4L=$(if $(BR2_PACKAGE_OPENCV_WITH_V4L),ON,OFF)
-+OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_OPENCV_WITH_V4L),libv4l,)
-+OPENCV_CONF_OPT += -DWITH_XINE=OFF
-+# Install options
-+OPENCV_CONF_OPT += -DINSTALL_C_EXAMPLES=OFF
-+OPENCV_CONF_OPT += -DINSTALL_PYTHON_EXAMPLES=OFF
-+
-+define OPENCV_CLEAN_INSTALL_DOC
-+	$(RM) -fr $(TARGET_DIR)/usr/share/opencv/doc
-+endef
-+
-+define OPENCV_CLEAN_INSTALL_CMAKE
-+	$(RM) -fr $(TARGET_DIR)/usr/share/opencv/*.cmake
-+endef
-+
-+define OPENCV_CLEAN_INSTALL_DATA
-+	$(RM) -fr $(TARGET_DIR)/usr/share/opencv/haarcascades \
-+		$(TARGET_DIR)/usr/share/opencv/lbpcascades
-+endef
-+
-+OPENCV_POST_INSTALL_TARGET_HOOKS += OPENCV_CLEAN_INSTALL_DOC OPENCV_CLEAN_INSTALL_CMAKE
-+OPENCV_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_OPENCV_INSTALL_DATA),,OPENCV_CLEAN_INSTALL_DATA)
-+
-+OPENCV_POST_INSTALL_STAGING_HOOKS += OPENCV_CLEAN_INSTALL_DOC
-+OPENCV_POST_INSTALL_STAGING_HOOKS += $(if $(BR2_PACKAGE_OPENCV_INSTALL_DATA),,OPENCV_CLEAN_INSTALL_DATA)
-+
-+$(eval $(call CMAKETARGETS))
+UP UP UP ! :)
+--------------
+
+
+H Hartley Sweeten wrote:
+> 
+> Hello all,
+> 
+> Does anyone had a Buildroot package for GnuPG?
+> 
+> Thanks,
+> Hartley
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
 -- 
-1.7.0.4
+View this message in context: http://old.nabble.com/GnuPG-tp29967586p32709446.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
