@@ -1,39 +1,26 @@
-From: ilranzani <marco_cantu_ranzani@libero.it>
-Date: Mon, 24 Oct 2011 04:12:43 -0700 (PDT)
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 24 Oct 2011 08:23:16 -0300
 Subject: [Buildroot] GnuPG
-In-Reply-To: <0D753D10438DA54287A00B02708426976450C42C46@AUSP01VMBX24.collaborationhost.net>
+In-Reply-To: <32709446.post@talk.nabble.com>
 References: <0D753D10438DA54287A00B02708426976450C42C46@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <32709446.post@talk.nabble.com>
+ <32709446.post@talk.nabble.com>
+Message-ID: <8167afaddbb08fc25202dbf489d78389@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 24.10.2011 08:12, ilranzani wrote:
 
-Nobody?
+> Nobody?
+>
+> (in buildroot there's already libgcrypt)
+>
+> UP UP UP ! :)
 
-(in buildroot there's already libgcrypt)
-
-UP UP UP ! :)
---------------
-
-
-H Hartley Sweeten wrote:
-> 
-> Hello all,
-> 
-> Does anyone had a Buildroot package for GnuPG?
-> 
-> Thanks,
-> Hartley
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-
--- 
-View this message in context: http://old.nabble.com/GnuPG-tp29967586p32709446.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+It's not too hard, you just need to add a couple of extra libraries 
+(packages) that it needs, IIRC libassuan and libksba.
+The rest of the mandatory dependencies are already available 
+(libgpg-error & libgcrypt).
+Regards.
