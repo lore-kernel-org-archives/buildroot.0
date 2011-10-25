@@ -1,42 +1,36 @@
-From: Robert Schwebel <r.schwebel@pengutronix.de>
-Date: Tue, 25 Oct 2011 08:34:44 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 25 Oct 2011 09:13:21 +0200
 Subject: [Buildroot] Some topics for the Buildroot Developer Day
-In-Reply-To: <87vcrdy5g4.fsf@macbook.be.48ers.dk>
+In-Reply-To: <20111025082432.196d59aa@skate> (Thomas Petazzoni's message of
+ "Tue, 25 Oct 2011 08:24:32 +0200")
 References: <20111024173815.2277c6dd@skate>
- <20111024165904.GB9199@pengutronix.de>
- <20111024214747.279c6e72@skate> <4EA5C53B.5000406@eukrea.com>
- <87vcrdy5g4.fsf@macbook.be.48ers.dk>
-Message-ID: <20111025063444.GI9199@pengutronix.de>
+ <CAAu5YTaZHudEQ+1vZoYA0v-RRVZ_tVm07ykR389vH9iaqMgNKw@mail.gmail.com>
+ <20111025082432.196d59aa@skate>
+Message-ID: <871uu1y25q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Oct 25, 2011 at 08:02:19AM +0200, Peter Korsgaard wrote:
-> Yes, I'm using buildbot at work for the defconfigs we use, and it
-> works very well - But the problem is how to get good test coverage of
-> our 700+ package / toolchain / kernel combinations?
-> 
-> What I'm currently doing is simply lots of 'make randpackageconfig'
-> builds - But it generates lots of data, so I haven't found a good way
-> of putting this information online.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-When we started with tests, we quickly found out that you don't only
-have to be able to test, but also have to cope with what you'll find :)
-So if you find lots of broken things, you have to fix them, and that
-quickly becomes a lot of work.
+Hi,
 
-So our current strategy is to have a set of "real-life" configs
-(customer BSPs), plus corner cases (a config with all-yes). We build
-that for the most important platforms (x86/powerpc/arm) and on the
-kernels which have most relevance for us (linus-git, linux-next) on a
-nightly base. That doesn't cover everything, but seems to be a good
-compromise.
+ Thomas> But I still do remember that it was working just fine on autotargets
+ Thomas> packages, but was causing problems on gentargets packages. And there
+ Thomas> were also other problems here and there, and the whole thing was making
+ Thomas> Buildroot a lot more complicated. I really think we need to keep a
+ Thomas> "simplicity first" rule for Buildroot. There are already other very
+ Thomas> elaborate build systems, with package management and al., and it
+ Thomas> doesn't make sense if Buildroot becomes as complicated as those build
+ Thomas> systems.
 
-rsc
+I strongly agree.
+
+I'm wondering if we could somehow get rid of the explicit handling of
+both staging and target (similar to how we do it for host packages), and
+simply exclude some files from staging when we create the file systems.
+
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Bye, Peter Korsgaard
