@@ -1,12 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Oct 2011 12:21:32 +0200
-Subject: [Buildroot] [PATCH 4/4] remove Glibc_vs_uClibc document
-In-Reply-To: <299fae047dc006fe40ddb82c2ea5c21ac14bd7a3.1318236261.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 10 Oct 2011 10:46:42 +0200")
+Date: Tue, 25 Oct 2011 12:22:21 +0200
+Subject: [Buildroot] [PATCH 3/4] remove the old buildroot.html
+	documentation
+In-Reply-To: <07cfbfa627a5c210205bfe3fccb2953bc0296878.1318236261.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 10 Oct 2011 10:46:41 +0200")
 References: <cover.1318236261.git.thomas.petazzoni@free-electrons.com>
  <cover.1318236261.git.thomas.petazzoni@free-electrons.com>
- <299fae047dc006fe40ddb82c2ea5c21ac14bd7a3.1318236261.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87d3dlwevn.fsf@macbook.be.48ers.dk>
+ <07cfbfa627a5c210205bfe3fccb2953bc0296878.1318236261.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878vo9weua.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +16,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> This document has nothing to do with Buildroot, and is probably a
- Thomas> leftover from the uClibc documentation.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> Acked-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-Committed, thanks.
+I'll hold off on this one until the website update script gets updated.
 
 -- 
 Bye, Peter Korsgaard
