@@ -1,35 +1,86 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Oct 2011 09:15:09 +0200
-Subject: [Buildroot] Some topics for the Buildroot Developer Day
-In-Reply-To: <20111025063444.GI9199@pengutronix.de> (Robert Schwebel's message
- of "Tue, 25 Oct 2011 08:34:44 +0200")
-References: <20111024173815.2277c6dd@skate>
- <20111024165904.GB9199@pengutronix.de> <20111024214747.279c6e72@skate>
- <4EA5C53B.5000406@eukrea.com> <87vcrdy5g4.fsf@macbook.be.48ers.dk>
- <20111025063444.GI9199@pengutronix.de>
-Message-ID: <87wrbtwnia.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Tue, 25 Oct 2011 09:22:34 +0200
+Subject: [Buildroot] [RFC] New package: QSerialDevice
+Message-ID: <4EA663BA.5030700@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Robert" == Robert Schwebel <r.schwebel@pengutronix.de> writes:
+I have some questions regarding inclusion of this package:
 
-Hi,
+1. I fetch it from git branch, how can I specify revision?
+2. how do I handle symlinking for libraries? If I just copy all 4 files, I get 4 same files and not one library and 3 symlinks
+3. what about creating some kind of folders/menu (in package/Config.in) for Qt, python etc. add-ons?
 
- >> What I'm currently doing is simply lots of 'make randpackageconfig'
- >> builds - But it generates lots of data, so I haven't found a good way
- >> of putting this information online.
+Yegor
+---
+ package/Config.in                      |    4 ++++
+ package/qserialdevice/Config.in        |    7 +++++++
+ package/qserialdevice/qserialdevice.mk |   26 ++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+)
 
- Robert> When we started with tests, we quickly found out that you don't only
- Robert> have to be able to test, but also have to cope with what you'll find :)
- Robert> So if you find lots of broken things, you have to fix them, and that
- Robert> quickly becomes a lot of work.
-
-Indeed. That's the same experience I have from all then
-'randpackageconfig' builds. Making the issues public (and fixing what
-you can) is not a bad thing though.
-
--- 
-Bye, Peter Korsgaard
+Index: b/package/Config.in
+===================================================================
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -316,6 +316,7 @@
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/python-serial/Config.in"
++source "package/qserialdevice/Config.in"
+ endmenu
+ 
+ if BROKEN
+@@ -556,4 +557,7 @@
+ endif
+ endmenu
+ 
++menu "VScom"
++source "package/vscom/vsguitest/Config.in"
++endmenu
+ endmenu
+Index: b/package/qserialdevice/Config.in
+===================================================================
+--- /dev/null
++++ b/package/qserialdevice/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QSERIALDEVICE
++	bool "QSerialDevice"
++	depends on BR2_PACKAGE_QT
++	depends on BR2_PACKAGE_UDEV
++	select BR2_PACKAGE_QT_STL
++	help
++	  Qt serial port implementation.
+Index: b/package/qserialdevice/qserialdevice.mk
+===================================================================
+--- /dev/null
++++ b/package/qserialdevice/qserialdevice.mk
+@@ -0,0 +1,26 @@
++QSERIALDEVICE_VERSION = 2.0
++QSERIALDEVICE_SITE = git://gitorious.org/qserialdevice/qserialdevice.git
++QSERIALDEVICE_INSTALL_STAGING = YES
++QSERIALDEVICE_DEPENDENCIES = qt udev
++
++define QSERIALDEVICE_CONFIGURE_CMDS
++	$(QT_QMAKE) $(@D)/serialport.pro
++endef
++
++define QSERIALDEVICE_BUILD_CMDS
++	$(MAKE) -C $(@D) all
++endef
++
++define QSERIALDEVICE_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/src/libSerialPort.so* \
++		$(TARGET_DIR)/usr/lib
++endef
++
++define QSERIALDEVICE_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 0755 $(@D)/src/libSerialPort.so* \
++		$(STAGING_DIR)/usr/lib
++	$(INSTALL) -m 0644 $(@D)/include/serial* \
++		$(STAGING_DIR)/usr/include
++endef
++
++$(eval $(call GENTARGETS))
