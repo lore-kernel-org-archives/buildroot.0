@@ -1,45 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Oct 2011 07:38:21 -0300
-Subject: [Buildroot]
- =?utf-8?q?=5BPATCH_4/6=5D_qemu=5Fx86=3A_update_to_ker?=
- =?utf-8?q?nel_3=2E1_and_add_readme?=
-In-Reply-To: <874nyxwehb.fsf@macbook.be.48ers.dk>
-References: <1319485334-15790-1-git-send-email-gustavo@zacarias.com.ar>
- <1319485334-15790-4-git-send-email-gustavo@zacarias.com.ar>
- <87aa8py4ai.fsf@macbook.be.48ers.dk>
- <a0295126a06f4884db6a02d03c460db8@zacarias.com.ar>
- <874nyxwehb.fsf@macbook.be.48ers.dk>
-Message-ID: <566a402c56322b52981797d13ecf99ab@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 25 Oct 2011 12:38:16 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x stable version
+Message-ID: <20111025103845.8777A8F08B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25.10.2011 07:30, Peter Korsgaard wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=28eeaba8eaa217b7b39175a132b26c7803f2a8bd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  Gustavo> Any particular reason for this on x86?
->  Gustavo> It would make things simpler to test graphics apps (X11) 
-> keeping it
->  Gustavo> PC-like IMHO.
->
-> Just to keep it closer to the other configs (E.G. the versatile
-> config). What's the problem with running X11 from a getty on ttyS0?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    2 +-
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
 
-On x86-land we've got two scenarios:
-1) The usual PC-like hardware with VGA and for which modern 
-implementations mostly lack serial ports (even if they have them they 
-lack the connector/level converters thus not having them in practical 
-terms).
-2) The really-embedded x86 boards which completely lack video out and 
-use serial as a console (soekris, pcengines and others).
-If we intend for the qemu sample configs to work on real hardware we 
-should choose one of the above scenarios.
-I think we sholdn't limit ourselves to keep the configs as close as 
-possible between themselves, rather as close as the hardware and use 
-scenario.
-I'm not against serial console for x86, just that many people would 
-probably expect the resulting image to work on a standard non-serial 
-bearing PC. After all qemu emulates a PC rather than a embedded-ish x86 
-with GPIO and other embedded features.
-Regards.
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 8be9186..701a02d 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -57,7 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.7"		if BR2_KERNEL_HEADERS_3_0
++	default "3.0.8"		if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1"		if BR2_KERNEL_HEADERS_3_1
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.8-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.8-headers_install-fix-__packed-in-exported-kernel-head.patch
