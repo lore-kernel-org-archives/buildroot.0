@@ -1,10 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 25 Oct 2011 11:19:49 +0200
-Subject: [Buildroot] [PATCH 0 of 3 resend] Add/rename *-update-config
-	targets
-In-Reply-To: <patchbomb.1318604215@localhost6.localdomain6>
+Date: Tue, 25 Oct 2011 11:20:03 +0200
+Subject: [Buildroot] [PATCH 1 of 3 resend] linux: add
+ linux-update-config and linux-update-defconfig targets
+In-Reply-To: <2841f845388b464fc8a9.1318604216@localhost6.localdomain6>
 References: <patchbomb.1318604215@localhost6.localdomain6>
-Message-ID: <CAAXf6LXekneFmEediqNCKFp80vDksyb5td+PaT97+8HQimHPqA@mail.gmail.com>
+ <2841f845388b464fc8a9.1318604216@localhost6.localdomain6>
+Message-ID: <CAAXf6LXjB47Z6ZbQSVw2XDhjjGquvttQrOR6mc2bhRyyushTkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +14,44 @@ To: buildroot@busybox.net
 
 On Fri, Oct 14, 2011 at 4:56 PM, Thomas De Schampheleire
 <patrickdepinguin+buildroot@gmail.com> wrote:
+> In analogy to build targets uclibc-update and busybox-update, add
+> extra targets to copy the current configuration to the custom
+> configuration file set in buildroot. These targets facilitate the
+> work of developers adding support for a specific board.
+>
+> linux-update-config copies .config directly.
+> linux-update-defconfig first creates a defconfig and copies that.
+>
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
 > ---
-> ?linux/linux.mk ? ? ? ? ? ? | ?11 +++++++++++
-> ?package/busybox/busybox.mk | ? 2 +-
-> ?toolchain/uClibc/uclibc.mk | ? 2 +-
-> ?3 files changed, 13 insertions(+), 2 deletions(-)
+> v2: add defconfig target and rename.
 >
+> ?linux/linux.mk | ?11 +++++++++++
+> ?1 files changed, 11 insertions(+), 0 deletions(-)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -190,6 +190,17 @@
+> ? ? ? ?$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+> ? ? ? ? ? ? ? ?$(subst linux-,,$(subst linux26-,,$@))
+>
+> +ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+> +linux-update-config linux26-update-config: $(LINUX_DIR)/.config
+> + ? ? ? cp -f $(LINUX_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+> +
+> +linux-update-defconfig linux26-update-defconfig: linux-savedefconfig
+> + ? ? ? cp -f $(LINUX_DIR)/defconfig $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+> +else
+> +linux-update-config linux26-update-config: ;
+> +linux-update-defconfig linux26-update-defconfig: ;
+> +endif
+> +
+> ?# Support for rebuilding the kernel after the cpio archive has
+> ?# been generated in $(BINARIES_DIR)/rootfs.cpio.
+> ?$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
 >
 
 bump
