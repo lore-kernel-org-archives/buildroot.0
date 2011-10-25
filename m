@@ -1,36 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 25 Oct 2011 09:13:21 +0200
+Date: Tue, 25 Oct 2011 09:15:09 +0200
 Subject: [Buildroot] Some topics for the Buildroot Developer Day
-In-Reply-To: <20111025082432.196d59aa@skate> (Thomas Petazzoni's message of
- "Tue, 25 Oct 2011 08:24:32 +0200")
+In-Reply-To: <20111025063444.GI9199@pengutronix.de> (Robert Schwebel's message
+ of "Tue, 25 Oct 2011 08:34:44 +0200")
 References: <20111024173815.2277c6dd@skate>
- <CAAu5YTaZHudEQ+1vZoYA0v-RRVZ_tVm07ykR389vH9iaqMgNKw@mail.gmail.com>
- <20111025082432.196d59aa@skate>
-Message-ID: <871uu1y25q.fsf@macbook.be.48ers.dk>
+ <20111024165904.GB9199@pengutronix.de> <20111024214747.279c6e72@skate>
+ <4EA5C53B.5000406@eukrea.com> <87vcrdy5g4.fsf@macbook.be.48ers.dk>
+ <20111025063444.GI9199@pengutronix.de>
+Message-ID: <87wrbtwnia.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Robert" == Robert Schwebel <r.schwebel@pengutronix.de> writes:
 
 Hi,
 
- Thomas> But I still do remember that it was working just fine on autotargets
- Thomas> packages, but was causing problems on gentargets packages. And there
- Thomas> were also other problems here and there, and the whole thing was making
- Thomas> Buildroot a lot more complicated. I really think we need to keep a
- Thomas> "simplicity first" rule for Buildroot. There are already other very
- Thomas> elaborate build systems, with package management and al., and it
- Thomas> doesn't make sense if Buildroot becomes as complicated as those build
- Thomas> systems.
+ >> What I'm currently doing is simply lots of 'make randpackageconfig'
+ >> builds - But it generates lots of data, so I haven't found a good way
+ >> of putting this information online.
 
-I strongly agree.
+ Robert> When we started with tests, we quickly found out that you don't only
+ Robert> have to be able to test, but also have to cope with what you'll find :)
+ Robert> So if you find lots of broken things, you have to fix them, and that
+ Robert> quickly becomes a lot of work.
 
-I'm wondering if we could somehow get rid of the explicit handling of
-both staging and target (similar to how we do it for host packages), and
-simply exclude some files from staging when we create the file systems.
+Indeed. That's the same experience I have from all then
+'randpackageconfig' builds. Making the issues public (and fixing what
+you can) is not a bad thing though.
 
 -- 
 Bye, Peter Korsgaard
