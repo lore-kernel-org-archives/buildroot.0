@@ -1,40 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Oct 2011 08:27:40 +0200
-Subject: [Buildroot] [git commit] qemu_ppc_g3beige: update to kernel 3.1
-Message-ID: <20111025062903.1B92B8F0DD@busybox.osuosl.org>
+From: Robert Schwebel <r.schwebel@pengutronix.de>
+Date: Tue, 25 Oct 2011 08:34:44 +0200
+Subject: [Buildroot] Some topics for the Buildroot Developer Day
+In-Reply-To: <87vcrdy5g4.fsf@macbook.be.48ers.dk>
+References: <20111024173815.2277c6dd@skate>
+ <20111024165904.GB9199@pengutronix.de>
+ <20111024214747.279c6e72@skate> <4EA5C53B.5000406@eukrea.com>
+ <87vcrdy5g4.fsf@macbook.be.48ers.dk>
+Message-ID: <20111025063444.GI9199@pengutronix.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b48629f484a84f29853fe6d587e3c1c2327dc8b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Oct 25, 2011 at 08:02:19AM +0200, Peter Korsgaard wrote:
+> Yes, I'm using buildbot at work for the defconfigs we use, and it
+> works very well - But the problem is how to get good test coverage of
+> our 700+ package / toolchain / kernel combinations?
+> 
+> What I'm currently doing is simply lots of 'make randpackageconfig'
+> builds - But it generates lots of data, so I haven't found a good way
+> of putting this information online.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../{linux-2.6.36.config => linux-3.1.config}      |    0
- configs/qemu_ppc_g3beige_defconfig                 |    4 ++--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+When we started with tests, we quickly found out that you don't only
+have to be able to test, but also have to cope with what you'll find :)
+So if you find lots of broken things, you have to fix them, and that
+quickly becomes a lot of work.
 
-diff --git a/board/qemu/powerpc-g3beige/linux-2.6.36.config b/board/qemu/powerpc-g3beige/linux-3.1.config
-similarity index 100%
-rename from board/qemu/powerpc-g3beige/linux-2.6.36.config
-rename to board/qemu/powerpc-g3beige/linux-3.1.config
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index db7ef74..cf875f0 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -9,9 +9,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.36"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-2.6.36.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.1.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
+So our current strategy is to have a set of "real-life" configs
+(customer BSPs), plus corner cases (a config with all-yes). We build
+that for the most important platforms (x86/powerpc/arm) and on the
+kernels which have most relevance for us (linus-git, linux-next) on a
+nightly base. That doesn't cover everything, but seems to be a good
+compromise.
+
+rsc
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
