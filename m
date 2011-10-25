@@ -1,36 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Oct 2011 12:38:16 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x stable version
-Message-ID: <20111025103845.8777A8F08B@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 25 Oct 2011 09:10:21 -0300
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH_5/6=5D_qemu=5Fsh4=5Fr2d=3A_update_?=
+ =?utf-8?q?to_kernel_3=2E1_and_update_readme?=
+In-Reply-To: <87zkgpuzw4.fsf@macbook.be.48ers.dk>
+References: <1319485334-15790-1-git-send-email-gustavo@zacarias.com.ar>
+ <1319485334-15790-5-git-send-email-gustavo@zacarias.com.ar>
+ <87ehy1y4eg.fsf@macbook.be.48ers.dk>
+ <d232d63f548d58fc6d7af13f979b9153@zacarias.com.ar>
+ <87zkgpuzw4.fsf@macbook.be.48ers.dk>
+Message-ID: <a60caa8f23b8ea6af493627a9ad91833@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28eeaba8eaa217b7b39175a132b26c7803f2a8bd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25.10.2011 07:30, Peter Korsgaard wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    2 +-
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 1 insertions(+), 1 deletions(-)
+>  Gustavo> Me too for real embedded targets unlike qemu-system-x86.
+>  Gustavo> Unfortunately either qemu 0.14 doesn't emulate the UART 
+> and/or the
+>  Gustavo> real target doesn't have one.
+>
+> Ok, I'll commit it then - Thanks.
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 8be9186..701a02d 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -57,7 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.7"		if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.8"		if BR2_KERNEL_HEADERS_3_0
- 	default "3.1"		if BR2_KERNEL_HEADERS_3_1
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.8-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.7-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.8-headers_install-fix-__packed-in-exported-kernel-head.patch
+Found a fix.
+It seems there were kernel changes and qemu behaviour changes too that 
+prevented it from showing up and working.
+Patches will follow.
