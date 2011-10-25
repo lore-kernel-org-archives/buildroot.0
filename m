@@ -1,95 +1,120 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Oct 2011 09:59:22 +0200
-Subject: [Buildroot] [git commit] manual: provide make targets to build the
-	documentation
-Message-ID: <20111025102334.139BE8EF75@busybox.osuosl.org>
+Date: Tue, 25 Oct 2011 12:05:39 +0200
+Subject: [Buildroot] [git commit] manual: refactor the targets into GENDOC
+	macro.
+Message-ID: <20111025102334.7381C8EF75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8792cf9e0d290b9e49d934d5e3025466ed0bd286
+commit: http://git.buildroot.net/buildroot/commit/?id=22c547fba97d4733f047c2d8bf753adc63e3ad90
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Special thanks for Yann E. Morin for giving input and suggestions to
-implement this.
+Also add a clean target, give absolute path to a2x, add a dependency
+on the output file, and add to .PHONY.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-[Peter: skip double mention of manual target in make help]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Peter: build in docs/manual/<format>, fix clean targets]
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |   44 +++++++++++++++++++++++++++++++++++++++++++-
- 1 files changed, 43 insertions(+), 1 deletions(-)
+ Makefile |   85 ++++++++++++++++++++++++++++++++++++++------------------------
+ 1 files changed, 52 insertions(+), 33 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 8525b7d..be90f47 100644
+index be90f47..d95aa3a 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -672,6 +672,14 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
- 	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
- endif
- 	@echo
-+	@echo 'Documentation:'
-+	@echo '  manual                 - build manual in HTML, split HTML, PDF and txt'
-+	@echo '  manual-html            - build manual in HTML'
-+	@echo '  manual-split-html      - build manual in split HTML'
-+	@echo '  manual-pdf             - build manual in PDF'
-+	@echo '  manual-txt             - build manual in txt'
-+	@echo '  manual-epub            - build manual in ePub'
-+	@echo
- 	@echo 'Miscellaneous:'
- 	@echo '  source                 - download all sources needed for offline-build'
- 	@echo '  source-check           - check all packages for valid download URLs'
-@@ -683,7 +691,7 @@ endif
- 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
- 	@echo
--	@echo 'See docs/README and docs/buildroot.html for further details'
-+	@echo 'See docs/README, or generate the Buildroot manual for further details'
- 	@echo
- 
- release: OUT=buildroot-$(BR2_VERSION)
-@@ -691,5 +699,39 @@ release: OUT=buildroot-$(BR2_VERSION)
+@@ -699,39 +699,58 @@ release: OUT=buildroot-$(BR2_VERSION)
  release:
  	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
  
-+MANUAL_SOURCES = $(wildcard docs/manual/*.txt)
+-MANUAL_SOURCES = $(wildcard docs/manual/*.txt)
+-
+-manual: manual-html manual-split-html manual-pdf manual-txt manual-epub
+-
+-manual-html: $(MANUAL_SOURCES)
+-	@echo "HTML manual..."
+-	$(Q)mkdir -p $(O)/docs/manual
+-	$(Q)a2x -f xhtml -d book -L -r docs/images -D $(O)/docs/manual/ \
+-		docs/manual/manual.txt
+-
+-manual-split-html: $(MANUAL_SOURCES)
+-	@echo "Split HTML manual..."
+-	$(Q)mkdir -p $(O)/docs/manual
+-	$(Q)a2x -f chunked -d book -L -r docs/images -D $(O)/docs/manual/ \
+-		docs/manual/manual.txt
+-
+-manual-pdf: $(MANUAL_SOURCES)
+-	@echo "PDF manual..."
+-	$(Q)mkdir -p $(O)/docs/manual
+-	$(Q)a2x --dblatex-opts "-P latex.output.revhistory=0" -f pdf -d book -L -D $(O)/docs/manual/ \
+-		docs/manual/manual.txt
+-
+-manual-txt: $(MANUAL_SOURCES)
+-	@echo "Text manual..."
+-	$(Q)mkdir -p $(O)/docs/manual
+-	$(Q)a2x -f text -d book -L -D $(O)/docs/manual/ \
+-		docs/manual/manual.txt
+-
+-manual-epub: $(MANUAL_SOURCES)
+-	@echo "EPUB manual..."
+-	$(Q)mkdir -p $(O)/docs/manual
+-	$(Q)a2x -f epub -d book -L -r docs/images/ -D $(O)/docs/manual/ \
+-		docs/manual/manual.txt
++################################################################################
++# GENDOC -- generates the make targets needed to build a specific type of
++#           asciidoc documentation.
++#
++#  argument 1 is the name of the document and must be a subdirectory of docs/;
++#             the top-level asciidoc file must have the same name
++#  argument 2 is the type of document to generate (-f argument of a2x)
++#  argument 3 is the document type as used in the make target
++#  argument 4 is the output file extension for the document type
++#  argument 5 is the human text for the document type
++#  argument 6 (optional) are extra arguments for a2x
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++################################################################################
++define GENDOC_INNER
++$(1): $(1)-$(3)
++.PHONY: $(1)-$(3)
++$(1)-$(3): $$(O)/docs/$(1)/$(2)/$(1).$(4)
 +
-+manual: manual-html manual-split-html manual-pdf manual-txt manual-epub
++$$(O)/docs/$(1)/$(2)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
++	@echo "Generating $(5) $(1)..."
++	$(Q)mkdir -p $$(O)/docs/$(1)/$(2)
++	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
++	  -D $$(@D) $$<
 +
-+manual-html: $(MANUAL_SOURCES)
-+	@echo "HTML manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x -f xhtml -d book -L -r docs/images -D $(O)/docs/manual/ \
-+		docs/manual/manual.txt
++clean-$(1): clean-$(1)-$(3)
++.PHONY: clean-$(1)-$(3)
++clean-$(1)-$(3):
++	$(Q)$(RM) -rf $(O)/docs/$(1)/$(2)
 +
-+manual-split-html: $(MANUAL_SOURCES)
-+	@echo "Split HTML manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x -f chunked -d book -L -r docs/images -D $(O)/docs/manual/ \
-+		docs/manual/manual.txt
++endef
 +
-+manual-pdf: $(MANUAL_SOURCES)
-+	@echo "PDF manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x --dblatex-opts "-P latex.output.revhistory=0" -f pdf -d book -L -D $(O)/docs/manual/ \
-+		docs/manual/manual.txt
++################################################################################
++# GENDOC -- generates the make targets needed to build asciidoc documentation.
++#
++#  argument 1 is the name of the document and must be a subdirectory of docs/;
++#             the top-level asciidoc file must have the same name
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++################################################################################
++define GENDOC
++$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
++$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
++$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
++$(call GENDOC_INNER,$(1),text,txt,text,Text)
++$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
++clean: clean-$(1)
++.PHONY: $(1) clean-$(1)
++endef
 +
-+manual-txt: $(MANUAL_SOURCES)
-+	@echo "Text manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x -f text -d book -L -D $(O)/docs/manual/ \
-+		docs/manual/manual.txt
-+
-+manual-epub: $(MANUAL_SOURCES)
-+	@echo "EPUB manual..."
-+	$(Q)mkdir -p $(O)/docs/manual
-+	$(Q)a2x -f epub -d book -L -r docs/images/ -D $(O)/docs/manual/ \
-+		docs/manual/manual.txt
-+
++MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
++$(eval $(call GENDOC,manual))
+ 
  .PHONY: $(noconfig_targets)
  
