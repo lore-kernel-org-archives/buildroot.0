@@ -1,36 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Oct 2011 08:17:10 +0200
-Subject: [Buildroot] [git commit] linux: vmlinux target is valid for powerpc
-	too
-Message-ID: <20111025062902.2BC8A8F0DD@busybox.osuosl.org>
+Date: Tue, 25 Oct 2011 08:18:01 +0200
+Subject: [Buildroot] [git commit] qemu_arm_versatile: use kernel 3.1 and add
+	readme
+Message-ID: <20111025062902.6C2D98F0DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4b0af9885ab6649aa547aa01943cb1ee2d18f09
+commit: http://git.buildroot.net/buildroot/commit/?id=79e288f1fd0b1b3d95ffeefc1f45ceddcd4039e3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The vmlinux kernel target is valid for powerpc kernels too.
-In fact this broke the qemu sample config.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../{linux-2.6.38.config => linux-3.1.config}      |    0
+ board/qemu/arm-versatile/readme.txt                |    6 ++++++
+ configs/qemu_arm_versatile_defconfig               |    4 ++--
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 774aaf8..469fd7c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -146,7 +146,7 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
- 
- config BR2_LINUX_KERNEL_VMLINUX
- 	bool "vmlinux"
--	depends on BR2_mips || BR2_mipsel
-+	depends on BR2_mips || BR2_mipsel || BR2_powerpc
- 
- config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	bool "custom target"
+diff --git a/board/qemu/arm-versatile/linux-2.6.38.config b/board/qemu/arm-versatile/linux-3.1.config
+similarity index 100%
+rename from board/qemu/arm-versatile/linux-2.6.38.config
+rename to board/qemu/arm-versatile/linux-3.1.config
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+new file mode 100644
+index 0000000..834b0e0
+--- /dev/null
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -0,0 +1,6 @@
++Run the emulation with:
++
++  qemu-system-arm -M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio
++
++The login prompt will appear in the terminal that started Qemu. The
++graphical window is the framebuffer.
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index e4a7024..b629ba9 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.38.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-2.6.38.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.1.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
