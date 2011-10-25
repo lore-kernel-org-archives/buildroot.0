@@ -1,33 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 25 Oct 2011 06:53:59 -0300
-Subject: [Buildroot]
- =?utf-8?q?=5BPATCH_5/6=5D_qemu=5Fsh4=5Fr2d=3A_update_?=
- =?utf-8?q?to_kernel_3=2E1_and_update_readme?=
-In-Reply-To: <87ehy1y4eg.fsf@macbook.be.48ers.dk>
-References: <1319485334-15790-1-git-send-email-gustavo@zacarias.com.ar>
- <1319485334-15790-5-git-send-email-gustavo@zacarias.com.ar>
- <87ehy1y4eg.fsf@macbook.be.48ers.dk>
-Message-ID: <d232d63f548d58fc6d7af13f979b9153@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 25 Oct 2011 12:12:53 +0200
+Subject: [Buildroot] [PATCH 1/4] manual: convert existing documentation
+	to the asciidoc format
+In-Reply-To: <cbbd30a37613eb90aa9fa727eb5a6ea6de970abe.1318236261.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 10 Oct 2011 10:46:39 +0200")
+References: <cover.1318236261.git.thomas.petazzoni@free-electrons.com>
+ <cover.1318236261.git.thomas.petazzoni@free-electrons.com>
+ <cbbd30a37613eb90aa9fa727eb5a6ea6de970abe.1318236261.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87pqhlwfa2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25.10.2011 03:24, Peter Korsgaard wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> No serial port emulated? From the defconfig I see:
->
-> CONFIG_SERIAL_8250=y
-> CONFIG_SERIAL_SH_SCI=y
-> CONFIG_SERIAL_SH_SCI_NR_UARTS=1
->
-> I prefer to run the getty on the serial port for the qemu defconfigs,
-> because it's closer to what is typically done on hw (and makes it 
-> easier
-> to reuse rootfs on real hw).
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Thomas> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-Me too for real embedded targets unlike qemu-system-x86.
-Unfortunately either qemu 0.14 doesn't emulate the UART and/or the real 
-target doesn't have one.
-Regards.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
