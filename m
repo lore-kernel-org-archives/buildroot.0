@@ -1,78 +1,62 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 25 Oct 2011 11:29:24 +0200
-Subject: [Buildroot] [RFC] New package: QSerialDevice
-In-Reply-To: <4EA67FD8.2040801@visionsystems.de>
-References: <4EA663BA.5030700@visionsystems.de> <20111025101709.3851667f@skate>
- <4EA67FD8.2040801@visionsystems.de>
-Message-ID: <CAAXf6LUttBAVDvOLWJooFFdjzVzCptuUoo=_KsSDA+nxeAYFyQ@mail.gmail.com>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Tue, 25 Oct 2011 10:36:42 +0100
+Subject: [Buildroot] [PATCH] Allow build of dropbear without wtmp and
+	lastlog support to stop it from generating system log error messages
+Message-ID: <1319535402-2358-1-git-send-email-will.moore@beraninstruments.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Signed-off-by: Will Moore <will.moore@beraninstruments.com>
+---
+ package/dropbear/Config.in   |   16 ++++++++++++++++
+ package/dropbear/dropbear.mk |    8 ++++++++
+ 2 files changed, 24 insertions(+), 0 deletions(-)
 
-On Tue, Oct 25, 2011 at 11:22 AM, Yegor Yefremov
-<yegor_sub1@visionsystems.de> wrote:
-> Am 25.10.2011 10:17, schrieb Thomas Petazzoni:
->> Le Tue, 25 Oct 2011 09:22:34 +0200,
->> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
->>
->>> 1. I fetch it from git branch, how can I specify revision?
->> pkg_VERSION = ...
->>
->> You can specify a git branch, a git commit, whatever commit identifier
->> that is valid for git.
->
-> But how can I combine branch name together with commit? I've already specified branch "2.0" as QSERIALDEVICE_VERSION.
-
-The commit uniquely identifies a particular revision, whatever branch
-it is on. So once you specify the commit, the branch is automatically
-known.
-
->
->>> 2. how do I handle symlinking for libraries? If I just copy all 4
->>> files, I get 4 same files and not one library and 3 symlinks
->> Either use the "make install" of the package (or implement it), or use
->> ln to create the symlinks.
->
-> O.K. I thought there would be some kind of elegant and easy way, like an option that copies only symlink and not it's target if desired :-)
-
-If you want to copy an existing link and not the link target, you can
-use 'cp -P' : (from 'man cp')
-       -P, --no-dereference
-              never follow symbolic links
-
->
->>> 3. what
->>> about creating some kind of folders/menu (in package/Config.in) for
->>> Qt, python etc. add-ons?
->> I don't know. qserialdevice should go in Libraries -> Hardware
->> handling. I don't see why it would need to end up in a qt-specific
->> submenu.
->
-> O.K.
->
->>> +define QSERIALDEVICE_CONFIGURE_CMDS
->>> + ? ?$(QT_QMAKE) $(@D)/serialport.pro
->>> +endef
->> Should be:
->>
->> ? ? ? (cd $(@D); $(QT_QMAKE) serialport.pro)
->
-> You won't believe me, but it worked without cd statement. That's why I was puzzled by my local package not willing to create Makefile in output/build/vsguitest. But I fix it for QSerialDevice for conformance sake.
->
->>
->> Does it *absolutely* require udev ? I have never used QSerialDevice,
->> but QExtSerialPort instead, and udev wasn't necessary.
->
-> It requires both build-time and run-time udev. This package provides two classes/interfaces:
->
-> 1. serial port itself
-> 2. informational class containing all installed serial port sin the system and it uses libudev (I'll send a patch that installs udev in staging)
->
-
-
-Best regards,
-Thomas
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index c30228f..58fed4a 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -23,3 +23,19 @@ config BR2_PACKAGE_DROPBEAR_SMALL
+ 
+ 	  Tradeoffs are slower hashes and ciphers, and disabling of the
+ 	  blowfish cipher and zlib.
++
++config BR2_PACKAGE_DROPBEAR_DISABLE_WTMP
++	bool "disable logging of dropbear access to wtmp"
++	depends on BR2_PACKAGE_DROPBEAR
++	help
++	  Disable logging of dropbear access to wtmp. Buildroot does not generate
++	  wtmp by default and so by disabling dropbear's use of wtmp this
++	  prevents warnings in the system log.
++
++config BR2_PACKAGE_DROPBEAR_DISABLE_LASTLOG
++	bool "disable logging of dropbear access to lastlog"
++	depends on BR2_PACKAGE_DROPBEAR
++	help
++	  Disable logging of dropbear access to lastlog. Buildroot does not
++	  generate lastlog by default and so by disabling dropbear's use of
++	  lastlog this prevents warnings in the system log.
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index e9da42d..0c9c5fc 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -46,6 +46,14 @@ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+ DROPBEAR_DEPENDENCIES += zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_WTMP),y)
++DROPBEAR_CONF_OPT += --disable-wtmp
++endif
++
++ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_LASTLOG),y)
++DROPBEAR_CONF_OPT += --disable-lastlog
++endif
++
+ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+-- 
+1.7.0.4
