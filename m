@@ -1,61 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 25 Oct 2011 10:02:17 +0200
-Subject: [Buildroot] Configuring QMake project issue
-In-Reply-To: <4EA66561.3000002@visionsystems.de>
-References: <4EA66561.3000002@visionsystems.de>
-Message-ID: <20111025100217.4be45d40@skate>
+Date: Tue, 25 Oct 2011 10:17:09 +0200
+Subject: [Buildroot] [RFC] New package: QSerialDevice
+In-Reply-To: <4EA663BA.5030700@visionsystems.de>
+References: <4EA663BA.5030700@visionsystems.de>
+Message-ID: <20111025101709.3851667f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 25 Oct 2011 09:29:37 +0200,
+Le Tue, 25 Oct 2011 09:22:34 +0200,
 Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
 
-> I followed your instructions on how to integrate own small project
-> into BR. This is Qt project based on a *.pro file. My *.mk looks like
-> this:
-> 
-> VSGUITEST_VERSION = 1.0
-> VSGUITEST_SITE_METHOD = local
-> 
-> define VSGUITEST_EXTRACT_CMDS
->         cp -a $(TOPDIR)/package/vscom/vsguitest/src/* $(@D)/
-> endef
+> 1. I fetch it from git branch, how can I specify revision?
 
-If you use _SITE_METHOD = local, then you don't need the custom
-_EXTRACT_CMDS.
+pkg_VERSION = ...
 
-Just do:
+You can specify a git branch, a git commit, whatever commit identifier
+that is valid for git.
 
- _SITE_METHOD = local
- _SITE = $(TOPDIR)/package/vscom/vsguitest/src/
+> 2. how do I handle symlinking for libraries? If I just copy all 4
+> files, I get 4 same files and not one library and 3 symlinks
 
-> define VSGUITEST_CONFIGURE_CMDS
->         $(QT_QMAKE) $(@D)/vsguitest.pro
-> endef
+Either use the "make install" of the package (or implement it), or use
+ln to create the symlinks.
 
-This should be:
+> 3. what
+> about creating some kind of folders/menu (in package/Config.in) for
+> Qt, python etc. add-ons?
 
-	(cd $(@D); $(QT_QMAKE) vsguitest.pro)
+I don't know. qserialdevice should go in Libraries -> Hardware
+handling. I don't see why it would need to end up in a qt-specific
+submenu.
 
-otherwise:
+> +define QSERIALDEVICE_CONFIGURE_CMDS
+> +	$(QT_QMAKE) $(@D)/serialport.pro
+> +endef
 
-> My problem is, that after source code copy qmake generates Makefile
-> directly in BR's root and overwrites the main Makefile. With
-> QSerialDevice I haven't experienced such problems. What can I do
-> about this?
+Should be:
 
-This is because in your _CONFIGURE_CMDS, qmake gets executed inside the
-Buildroot top directory.
+	(cd $(@D); $(QT_QMAKE) serialport.pro)
 
-> P.S. what about adding QMake project type in addition to CMake type?
-
-So far, we don't have any package using Qmake inside the tree, which is
-why we don't have a package infrastructure for them. So either we could
-document how to create Qmake package (which is quite easy), or we could
-add a package infrastructure for them.
+Does it *absolutely* require udev ? I have never used QSerialDevice,
+but QExtSerialPort instead, and udev wasn't necessary.
 
 Regards,
 
