@@ -1,55 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 27 Oct 2011 00:10:11 +0200
-Subject: [Buildroot] Custom automake arguments
-In-Reply-To: <CANdC7UEcaK0AkPfL_Rr_f=DwXbT9=ikhn3H9a+NyLA1CEtubfQ@mail.gmail.com>
-References: <CANdC7UEcaK0AkPfL_Rr_f=DwXbT9=ikhn3H9a+NyLA1CEtubfQ@mail.gmail.com>
-Message-ID: <201110270010.12137.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 27 Oct 2011 00:27:55 +0200
+Subject: [Buildroot] [PATCH] syslinux: add support for host-install
+In-Reply-To: <85632AA8828446C5B830EBF9A14700E5@beraninstruments.com.local>
+References: <85632AA8828446C5B830EBF9A14700E5@beraninstruments.com.local>
+Message-ID: <1319668075-20291-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday, October 25, 2011 15:15:42 Allan Nielsen wrote:
-> Hi
-> 
-> Is it possible to parse custom package specifick arguments to automake
-> (run'ed through autorecong)
-> 
-> I have tried this, but it does not seem to work:
-> foo-configure: override AUTOMAKE:=$(HOST_DIR)/usr/bin/automake
-> $(FOO_AUTOMAKE_FLAGS)
-> 
-> Best Regards
-> Allan W. Nielsen
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- I'm not entirely sure what you mean.  However, if you just want to specify 
-arguments to autoreconf:  autoreconf is called as
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Hoi Will,
 
-$(AUTORECONF) $($(PKG)_AUTORECONF_OPT)
+ This patch (applied to the current HEAD) builds syslinux for the host.
 
- so set FOO_AUTORECONF_OPT before calling AUTOTARGETS to override the default 
-(which is empty).
-
- However, if you want to run automake instead of autoreconf, that's not really 
-supported.  You could hack away using overrides, but probably it's much 
-cleaner to do something like:
-
-define FOO_AUTOMAKE_HOOK
-   $(HOST_DIR)/usr/bin/automake $(FOO_AUTOMAKE_FLAGS)
-endef
-FOO_PRE_CONFIGURE_HOOKS += FOO_AUTOMAKE_HOOK
-FOO_DEPENDENCIES += host-automake
-
+ What is still missing from this is a way to have a Windows self-installer.
+I've got a patch cooking for that too, but it's a hack: it copies the
+precompiled syslinux.exe binary from the extracted tar file.
 
  Regards,
  Arnout
+---
+ boot/syslinux/syslinux.mk |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index fa5af07..66a7076 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -26,4 +26,20 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
+ 	done
+ endef
+ 
++
++HOST_SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
++
++define HOST_SYSLINUX_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_SYSLINUX_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
++endef
++
++define HOST_SYSLINUX_CLEAN_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
++endef
++
+ $(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+1.7.7
