@@ -1,53 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 26 Oct 2011 23:21:57 +0200
-Subject: [Buildroot] [PATCH v5] package: add opencv
-In-Reply-To: <878voazf4r.fsf@macbook.be.48ers.dk>
-References: <1319396325-9720-1-git-send-email-s.martin49@gmail.com>
- <878voazf4r.fsf@macbook.be.48ers.dk>
-Message-ID: <201110262321.57932.arnout@mind.be>
+Date: Thu, 27 Oct 2011 00:10:11 +0200
+Subject: [Buildroot] Custom automake arguments
+In-Reply-To: <CANdC7UEcaK0AkPfL_Rr_f=DwXbT9=ikhn3H9a+NyLA1CEtubfQ@mail.gmail.com>
+References: <CANdC7UEcaK0AkPfL_Rr_f=DwXbT9=ikhn3H9a+NyLA1CEtubfQ@mail.gmail.com>
+Message-ID: <201110270010.12137.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, October 24, 2011 15:35:32 Peter Korsgaard wrote:
-[snip]
->  Samuel> +# Build type
->  Samuel> +OPENCV_CONF_OPT += -DCMAKE_BUILD_TYPE=$(if
-> $(BR2_ENABLE_DEBUG),Debug,Release)
+On Tuesday, October 25, 2011 15:15:42 Allan Nielsen wrote:
+> Hi
 > 
-> While this works it looks quite different than other packages - We
-> normally do:
+> Is it possible to parse custom package specifick arguments to automake
+> (run'ed through autorecong)
 > 
-> OPENCV_CONF_OPT += \
->                 blah=.. \
->                 blih=.. \
->                 bloh=..
+> I have tried this, but it does not seem to work:
+> foo-configure: override AUTOMAKE:=$(HOST_DIR)/usr/bin/automake
+> $(FOO_AUTOMAKE_FLAGS)
 > 
-> ifeq ($(BR2_PACKAGE_BLAH))
-> OPENCV_CONF_OPT += BLAH=on
-> OPENCV_DEPENDENCIES += blah
-> else
-> OPENCV_CONF_OPT += BLAH=OFF
-> endif
-> 
-> ..
-> 
-> I've rewritten it to use that form.
+> Best Regards
+> Allan W. Nielsen
 
- Actually, for that particular one you haven't :-)
+ I'm not entirely sure what you mean.  However, if you just want to specify 
+arguments to autoreconf:  autoreconf is called as
 
- Also I think it's important to use
+$(AUTORECONF) $($(PKG)_AUTORECONF_OPT)
 
-ifeq ($(BR2_PACKAGE_BLAH),y)
+ so set FOO_AUTORECONF_OPT before calling AUTOTARGETS to override the default 
+(which is empty).
 
- so you can easily disable it on the command line with
+ However, if you want to run automake instead of autoreconf, that's not really 
+supported.  You could hack away using overrides, but probably it's much 
+cleaner to do something like:
 
-make BR2_PACKAGE_BLAH=n
+define FOO_AUTOMAKE_HOOK
+   $(HOST_DIR)/usr/bin/automake $(FOO_AUTOMAKE_FLAGS)
+endef
+FOO_PRE_CONFIGURE_HOOKS += FOO_AUTOMAKE_HOOK
+FOO_DEPENDENCIES += host-automake
 
-(Of course, 'make BR2_PACKAGE_BLAH=' would still work, but it's less 
-intuitive.)
 
  Regards,
  Arnout
