@@ -1,25 +1,32 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 26 Oct 2011 14:59:23 +0200
-Subject: [Buildroot] Qt program with GUI issue
-Message-ID: <4EA8042B.2050501@visionsystems.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 26 Oct 2011 10:05:55 -0300
+Subject: [Buildroot] Some topics for the Buildroot Developer Day
+In-Reply-To: <4EA801B8.7000502@visionsystems.de>
+References: <20111024173815.2277c6dd@skate> <4EA801B8.7000502@visionsystems.de>
+Message-ID: <4ff558d1b2a462f239c4c83ef48b6680@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to get my program integrated into BR. So far I managed to successfully build and install it, but as soon as I run it (with -qws option) I get trouble:
+On 26.10.2011 09:48, Yegor Yefremov wrote:
 
-GUI will be shown, but at the same time background/wallpaper goes green (I made nothing to make this happen). When I move my mouse, the pointer seems to draw over GUI, so that real gray background will show up at the places where mouse pointer went through.
+> was such an issue as firmware support already discussed? There is
+> such a repo
+> http://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git
+> containing firmware for a broad set of devices. If we could make an
+> infrastructure for this repo it would be very easy to use it projects
+> without a need to manually copy those files. What do you think about
+> it?
+>
+> Yegor
 
-Is there any simple QT based project I could try to integrate as a reference? I tried CuteCom, but it is fully Qt4 compatible.
-
-Another issue if I don't supply -qws param, I get following error messages:
-
-QWSSocket::connectToLocalFile could not connect:: No such file or directory
-
-My system:
-ARM Cortex-A8
-WindowsManager: Fluxbox
-
-Yegor
+There used to be release/snapshot tarballs in kernel.org before the 
+debacle.
+My $.02 is that we could just do it as a package with a huge option 
+list for each firmware file(s) required for different drivers/devices.
+I'd go for a smaller subset to begin with since there are firmware 
+files for SAN controllers and other big iron stuff that probably are't 
+the target for buildroot.
+Regards.
