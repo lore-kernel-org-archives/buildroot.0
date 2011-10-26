@@ -1,41 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 25 Oct 2011 18:52:59 +0200
-Subject: [Buildroot] [PATCH] manual: refactor the targets into GENDOC
-	macro.
-In-Reply-To: <87hb2xwf17.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
- of "Tue, 25 Oct 2011 12:18:12 +0200")
-References: <201110112257.11996.arnout@mind.be>
- <1318366792-13507-1-git-send-email-arnout@mind.be>
- <87hb2xwf17.fsf@macbook.be.48ers.dk>
-Message-ID: <87vcrdui6s.fsf@macbook.be.48ers.dk>
+Date: Wed, 26 Oct 2011 07:46:40 +0200
+Subject: [Buildroot] [git commit] pulseaudio: gtk supports needs x backend
+Message-ID: <20111026055459.C70488F30B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6fe0b202a21d5d0899e691df3feab0686b6cfab9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Also add a clean target, give absolute path to a2x, add a dependency
- Arnout> on the output file, and add to .PHONY.
+Uses X11 specific apis.
 
- Arnout> +define GENDOC
- Arnout> +$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
- Arnout> +$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
- Arnout> +$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
- Arnout> +$(call GENDOC_INNER,$(1),text,txt,text,Text)
- Arnout> +$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
- Arnout> +clean: clean-$(1)
- Arnout> +clean-$(1):
- Arnout> +	$(Q)$(RM) -r $(O)/docs/$(1)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/pulseaudio/pulseaudio.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
- Peter> This removes the entire docs/manual, including the source files, so I
- Peter> changed this so they are put in docs/manual/<format>, and seperate
- Peter> clean-manual-<format> clean targets.
-
-Ehh, forget this - I somehow missed the $(O)/
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index b73c103..5e68dfb 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -34,6 +34,11 @@ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+ PULSEAUDIO_CONF_OPT += --disable-alsa
+ endif
+ 
++# gtk support needs x backend
++ifneq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG),yy)
++PULSEAUDIO_CONF_OPT += --disable-gtk2
++endif
++
+ ifneq ($(BR2_PACKAGE_VALA),y)
+ define PULSEAUDIO_REMOVE_VALA
+ 	rm -rf $(TARGET_DIR)/usr/share/vala
