@@ -1,72 +1,76 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Oct 2011 21:21:42 -0300
-Subject: [Buildroot] [PATCH 1/2] toolchain/gcc: bump 4.6.x version to 4.6.2
-Message-ID: <1319674903-11563-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 26 Oct 2011 21:21:43 -0300
+Subject: [Buildroot] [PATCH 2/2] oprofile: bump to version 0.9.7 and fixes
+In-Reply-To: <1319674903-11563-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1319674903-11563-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1319674903-11563-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+* Bump to version 0.9.7
+* Style fixes
+* Build fix for x86: i386 is expected, not some other random i?86 as arch
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../gcc/{4.6.1 => 4.6.2}/100-uclibc-conf.patch     |    0
- .../{4.6.1 => 4.6.2}/301-missing-execinfo_h.patch  |    0
- .../gcc/{4.6.1 => 4.6.2}/302-c99-snprintf.patch    |    0
- .../305-libmudflap-susv3-legacy.patch              |    0
- .../810-arm-softfloat-libgcc.patch                 |    0
- .../{4.6.1 => 4.6.2}/820-arm-unbreak-armv4t.patch  |    0
- .../powerpc-link-with-math-lib.patch.conditional   |    0
- toolchain/gcc/Config.in                            |    2 +-
- 8 files changed, 1 insertions(+), 1 deletions(-)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/100-uclibc-conf.patch (100%)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/301-missing-execinfo_h.patch (100%)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/302-c99-snprintf.patch (100%)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/305-libmudflap-susv3-legacy.patch (100%)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/810-arm-softfloat-libgcc.patch (100%)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/820-arm-unbreak-armv4t.patch (100%)
- rename toolchain/gcc/{4.6.1 => 4.6.2}/powerpc-link-with-math-lib.patch.conditional (100%)
+ ...le-0.9.7-001-avr32-enable-lookup_dcookie.patch} |    0
+ ...h => oprofile-0.9.7-002-no-query-modules.patch} |    0
+ package/oprofile/oprofile.mk                       |   21 ++++++++++---------
+ 3 files changed, 11 insertions(+), 10 deletions(-)
+ rename package/oprofile/{oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch => oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch} (100%)
+ rename package/oprofile/{oprofile-0.9.4-002-no-query-modules.patch => oprofile-0.9.7-002-no-query-modules.patch} (100%)
 
-diff --git a/toolchain/gcc/4.6.1/100-uclibc-conf.patch b/toolchain/gcc/4.6.2/100-uclibc-conf.patch
+diff --git a/package/oprofile/oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch b/package/oprofile/oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch
 similarity index 100%
-rename from toolchain/gcc/4.6.1/100-uclibc-conf.patch
-rename to toolchain/gcc/4.6.2/100-uclibc-conf.patch
-diff --git a/toolchain/gcc/4.6.1/301-missing-execinfo_h.patch b/toolchain/gcc/4.6.2/301-missing-execinfo_h.patch
+rename from package/oprofile/oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch
+rename to package/oprofile/oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch
+diff --git a/package/oprofile/oprofile-0.9.4-002-no-query-modules.patch b/package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
 similarity index 100%
-rename from toolchain/gcc/4.6.1/301-missing-execinfo_h.patch
-rename to toolchain/gcc/4.6.2/301-missing-execinfo_h.patch
-diff --git a/toolchain/gcc/4.6.1/302-c99-snprintf.patch b/toolchain/gcc/4.6.2/302-c99-snprintf.patch
-similarity index 100%
-rename from toolchain/gcc/4.6.1/302-c99-snprintf.patch
-rename to toolchain/gcc/4.6.2/302-c99-snprintf.patch
-diff --git a/toolchain/gcc/4.6.1/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.6.2/305-libmudflap-susv3-legacy.patch
-similarity index 100%
-rename from toolchain/gcc/4.6.1/305-libmudflap-susv3-legacy.patch
-rename to toolchain/gcc/4.6.2/305-libmudflap-susv3-legacy.patch
-diff --git a/toolchain/gcc/4.6.1/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.6.2/810-arm-softfloat-libgcc.patch
-similarity index 100%
-rename from toolchain/gcc/4.6.1/810-arm-softfloat-libgcc.patch
-rename to toolchain/gcc/4.6.2/810-arm-softfloat-libgcc.patch
-diff --git a/toolchain/gcc/4.6.1/820-arm-unbreak-armv4t.patch b/toolchain/gcc/4.6.2/820-arm-unbreak-armv4t.patch
-similarity index 100%
-rename from toolchain/gcc/4.6.1/820-arm-unbreak-armv4t.patch
-rename to toolchain/gcc/4.6.2/820-arm-unbreak-armv4t.patch
-diff --git a/toolchain/gcc/4.6.1/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.6.2/powerpc-link-with-math-lib.patch.conditional
-similarity index 100%
-rename from toolchain/gcc/4.6.1/powerpc-link-with-math-lib.patch.conditional
-rename to toolchain/gcc/4.6.2/powerpc-link-with-math-lib.patch.conditional
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index cfc7aec..5905262 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -64,7 +64,7 @@ config BR2_GCC_VERSION
- 	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
- 	default "4.4.6"     if BR2_GCC_VERSION_4_4_X
- 	default "4.5.3"     if BR2_GCC_VERSION_4_5_X
--	default "4.6.1"     if BR2_GCC_VERSION_4_6_X
-+	default "4.6.2"     if BR2_GCC_VERSION_4_6_X
- 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+rename from package/oprofile/oprofile-0.9.4-002-no-query-modules.patch
+rename to package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index ae4cdde..734839f 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -3,25 +3,26 @@
+ # oprofile
+ #
+ #############################################################
+-OPROFILE_VERSION := 0.9.6
+-OPROFILE_CONF_OPT :=	--localstatedir=/var \
+-			--with-kernel-support
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
+-OPROFILE_BINARIES := utils/ophelp
+-OPROFILE_BINARIES += pp/opannotate pp/oparchive pp/opgprof pp/opreport opjitconv/opjitconv
+-OPROFILE_BINARIES += daemon/oprofiled
++OPROFILE_VERSION = 0.9.7
++OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
++OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
++OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
+ 
++ifeq ($(BR2_i386),y)
++OPROFILE_ARCH = i386
++endif
+ ifeq ($(BR2_powerpc),y)
+-OPROFILE_ARCH := ppc
++OPROFILE_ARCH = ppc
+ endif
+ ifeq ($(BR2_x86_64),y)
+-OPROFILE_ARCH := x86-64
++OPROFILE_ARCH = x86-64
+ endif
+ ifeq ($(OPROFILE_ARCH),)
+-OPROFILE_ARCH := $(BR2_ARCH)
++OPROFILE_ARCH = $(BR2_ARCH)
+ endif
+ 
+-OPROFILE_DEPENDENCIES := popt binutils
++OPROFILE_DEPENDENCIES = popt binutils
+ 
+ define OPROFILE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
 -- 
 1.7.3.4
