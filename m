@@ -1,74 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 27 Oct 2011 14:04:56 +0200
-Subject: [Buildroot] [git commit] oprofile: bump to version 0.9.7 and fixes
-Message-ID: <20111027132528.844C68F290@busybox.osuosl.org>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 27 Oct 2011 15:26:21 +0200
+Subject: [Buildroot] Qt program with GUI issue
+In-Reply-To: <4EA824F5.7040009@carallon.com>
+References: <4EA8042B.2050501@visionsystems.de>
+ <4EA820E1.8060403@visionsystems.de> <4EA824F5.7040009@carallon.com>
+Message-ID: <4EA95BFD.1080803@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2a56a141e09b1540875abb572229e5eaec68aef8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 26.10.2011 17:19, schrieb Will Wagner:
+> On 26/10/2011 16:01, Yegor Yefremov wrote:
+>> Am 26.10.2011 14:59, schrieb Yegor Yefremov:
+>>> I'm trying to get my program integrated into BR. So far I managed to successfully build and install it, but as soon as I run it (with -qws option) I get trouble:
+>>>
+>>> GUI will be shown, but at the same time background/wallpaper goes green (I made nothing to make this happen). When I move my mouse, the pointer seems to draw over GUI, so that real gray background will show up at the places where mouse pointer went through.
+>>>
+>>> Is there any simple QT based project I could try to integrate as a reference? I tried CuteCom, but it is fully Qt4 compatible.
+>>>
+>>> Another issue if I don't supply -qws param, I get following error messages:
+>>>
+>>> QWSSocket::connectToLocalFile could not connect:: No such file or directory
+>>>
+>>> My system:
+>>> ARM Cortex-A8
+>>> WindowsManager: Fluxbox
+>>
+>
+> Hi Yegor,
+>
+> It sounds like you are trying to run a Qt embedded app with the X window system. This is not possible, Qt embedded works without X using the frame buffer directly. The reason you have to use -qws when running your app is that specifies that the process should act as a window server. It is this window server that is filling the screen green (This is the qws default) and the mouse draw error will be it interfering with X.
+>
+> You either should remove X from your target or you need to build the X11 version of Qt. Although cross compiling Qt for X11 is not officially supported (in both Qt and buildroot) I have got it working (for x86 at least) and submitted a patch a few weeks back. Got some feedback on it that suggested it need changes for others archs but it should be a good starting point. If you need more help getting the X11 cross compile working I'll try to help.
 
-* Bump to version 0.9.7
-* Style fixes
-* Build fix for x86: i386 is expected, not some other random i?86 as arch
+Thank you for explanations. Now I see the difference. So I got it running in Qt Embedded mode.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...le-0.9.7-001-avr32-enable-lookup_dcookie.patch} |    0
- ...h => oprofile-0.9.7-002-no-query-modules.patch} |    0
- package/oprofile/oprofile.mk                       |   21 ++++++++++---------
- 3 files changed, 11 insertions(+), 10 deletions(-)
+As to X11, I tried your patch, but it produces compiler errors for ARM so it really have to be reworked to properly support other platforms. As for now I'll try to finish my testing app first and then we could fix the patch.
 
-diff --git a/package/oprofile/oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch b/package/oprofile/oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch
-similarity index 100%
-rename from package/oprofile/oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch
-rename to package/oprofile/oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch
-diff --git a/package/oprofile/oprofile-0.9.4-002-no-query-modules.patch b/package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
-similarity index 100%
-rename from package/oprofile/oprofile-0.9.4-002-no-query-modules.patch
-rename to package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index ae4cdde..734839f 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -3,25 +3,26 @@
- # oprofile
- #
- #############################################################
--OPROFILE_VERSION := 0.9.6
--OPROFILE_CONF_OPT :=	--localstatedir=/var \
--			--with-kernel-support
- 
--OPROFILE_BINARIES := utils/ophelp
--OPROFILE_BINARIES += pp/opannotate pp/oparchive pp/opgprof pp/opreport opjitconv/opjitconv
--OPROFILE_BINARIES += daemon/oprofiled
-+OPROFILE_VERSION = 0.9.7
-+OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
-+OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
-+OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
- 
-+ifeq ($(BR2_i386),y)
-+OPROFILE_ARCH = i386
-+endif
- ifeq ($(BR2_powerpc),y)
--OPROFILE_ARCH := ppc
-+OPROFILE_ARCH = ppc
- endif
- ifeq ($(BR2_x86_64),y)
--OPROFILE_ARCH := x86-64
-+OPROFILE_ARCH = x86-64
- endif
- ifeq ($(OPROFILE_ARCH),)
--OPROFILE_ARCH := $(BR2_ARCH)
-+OPROFILE_ARCH = $(BR2_ARCH)
- endif
- 
--OPROFILE_DEPENDENCIES := popt binutils
-+OPROFILE_DEPENDENCIES = popt binutils
- 
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
+Yegor
