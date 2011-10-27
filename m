@@ -1,76 +1,88 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 26 Oct 2011 21:21:43 -0300
-Subject: [Buildroot] [PATCH 2/2] oprofile: bump to version 0.9.7 and fixes
-In-Reply-To: <1319674903-11563-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1319674903-11563-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1319674903-11563-2-git-send-email-gustavo@zacarias.com.ar>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 27 Oct 2011 13:41:12 +0200
+Subject: [Buildroot] [PATCH v5] package: add opencv
+In-Reply-To: <201110262321.57932.arnout@mind.be>
+References: <1319396325-9720-1-git-send-email-s.martin49@gmail.com>
+ <878voazf4r.fsf@macbook.be.48ers.dk> <201110262321.57932.arnout@mind.be>
+Message-ID: <CAHXCMMLt7mzWTA23X11ZRAFOB05e97ritx_+POaMihNwOrG9qQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Bump to version 0.9.7
-* Style fixes
-* Build fix for x86: i386 is expected, not some other random i?86 as arch
+2011/10/26 Arnout Vandecappelle <arnout@mind.be>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...le-0.9.7-001-avr32-enable-lookup_dcookie.patch} |    0
- ...h => oprofile-0.9.7-002-no-query-modules.patch} |    0
- package/oprofile/oprofile.mk                       |   21 ++++++++++---------
- 3 files changed, 11 insertions(+), 10 deletions(-)
- rename package/oprofile/{oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch => oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch} (100%)
- rename package/oprofile/{oprofile-0.9.4-002-no-query-modules.patch => oprofile-0.9.7-002-no-query-modules.patch} (100%)
+> On Monday, October 24, 2011 15:35:32 Peter Korsgaard wrote:
+> [snip]
+> >  Samuel> +# Build type
+> >  Samuel> +OPENCV_CONF_OPT += -DCMAKE_BUILD_TYPE=$(if
+> > $(BR2_ENABLE_DEBUG),Debug,Release)
+> >
+> > While this works it looks quite different than other packages - We
+> > normally do:
+> >
+> > OPENCV_CONF_OPT += \
+> >                 blah=.. \
+> >                 blih=.. \
+> >                 bloh=..
+> >
+> > ifeq ($(BR2_PACKAGE_BLAH))
+> > OPENCV_CONF_OPT += BLAH=on
+> > OPENCV_DEPENDENCIES += blah
+> > else
+> > OPENCV_CONF_OPT += BLAH=OFF
+> > endif
+> >
+> > ..
+> >
+> > I've rewritten it to use that form.
+>
+>  Actually, for that particular one you haven't :-)
+>
+>  Also I think it's important to use
+>
+> ifeq ($(BR2_PACKAGE_BLAH),y)
+>
 
-diff --git a/package/oprofile/oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch b/package/oprofile/oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch
-similarity index 100%
-rename from package/oprofile/oprofile-0.9.4-001-avr32-enable-lookup_dcookie.patch
-rename to package/oprofile/oprofile-0.9.7-001-avr32-enable-lookup_dcookie.patch
-diff --git a/package/oprofile/oprofile-0.9.4-002-no-query-modules.patch b/package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
-similarity index 100%
-rename from package/oprofile/oprofile-0.9.4-002-no-query-modules.patch
-rename to package/oprofile/oprofile-0.9.7-002-no-query-modules.patch
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index ae4cdde..734839f 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -3,25 +3,26 @@
- # oprofile
- #
- #############################################################
--OPROFILE_VERSION := 0.9.6
--OPROFILE_CONF_OPT :=	--localstatedir=/var \
--			--with-kernel-support
- 
--OPROFILE_BINARIES := utils/ophelp
--OPROFILE_BINARIES += pp/opannotate pp/oparchive pp/opgprof pp/opreport opjitconv/opjitconv
--OPROFILE_BINARIES += daemon/oprofiled
-+OPROFILE_VERSION = 0.9.7
-+OPROFILE_CONF_OPT = --localstatedir=/var --with-kernel-support
-+OPROFILE_BINARIES = utils/ophelp pp/opannotate pp/oparchive pp/opgprof
-+OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
- 
-+ifeq ($(BR2_i386),y)
-+OPROFILE_ARCH = i386
-+endif
- ifeq ($(BR2_powerpc),y)
--OPROFILE_ARCH := ppc
-+OPROFILE_ARCH = ppc
- endif
- ifeq ($(BR2_x86_64),y)
--OPROFILE_ARCH := x86-64
-+OPROFILE_ARCH = x86-64
- endif
- ifeq ($(OPROFILE_ARCH),)
--OPROFILE_ARCH := $(BR2_ARCH)
-+OPROFILE_ARCH = $(BR2_ARCH)
- endif
- 
--OPROFILE_DEPENDENCIES := popt binutils
-+OPROFILE_DEPENDENCIES = popt binutils
- 
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
--- 
-1.7.3.4
+Actually, in the 1st version of the patch it was this form, then I changed
+it following the comments of Thomas P. ...
+
+Using one or the other form does not change anything, it is just a matter of
+consistency.
+
+Defining some rules like these can certainly be gathered into a "developer
+guide-line" or something like that.
+If everybody follows the same form/standard (whatever you call it) it will
+make easier processing submitted patches.
+It could also allow to develop some checker scripts.
+
+Regards,
+
+Sam
+
+
+>
+>  so you can easily disable it on the command line with
+>
+> make BR2_PACKAGE_BLAH=n
+>
+> (Of course, 'make BR2_PACKAGE_BLAH=' would still work, but it's less
+> intuitive.)
+>
+>  Regards,
+>  Arnout
+>
+>
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111027/84a0b624/attachment-0001.html>
