@@ -1,57 +1,72 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 27 Oct 2011 00:27:55 +0200
-Subject: [Buildroot] [PATCH] syslinux: add support for host-install
-In-Reply-To: <85632AA8828446C5B830EBF9A14700E5@beraninstruments.com.local>
-References: <85632AA8828446C5B830EBF9A14700E5@beraninstruments.com.local>
-Message-ID: <1319668075-20291-1-git-send-email-arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 26 Oct 2011 21:21:42 -0300
+Subject: [Buildroot] [PATCH 1/2] toolchain/gcc: bump 4.6.x version to 4.6.2
+Message-ID: <1319674903-11563-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Hoi Will,
+ .../gcc/{4.6.1 => 4.6.2}/100-uclibc-conf.patch     |    0
+ .../{4.6.1 => 4.6.2}/301-missing-execinfo_h.patch  |    0
+ .../gcc/{4.6.1 => 4.6.2}/302-c99-snprintf.patch    |    0
+ .../305-libmudflap-susv3-legacy.patch              |    0
+ .../810-arm-softfloat-libgcc.patch                 |    0
+ .../{4.6.1 => 4.6.2}/820-arm-unbreak-armv4t.patch  |    0
+ .../powerpc-link-with-math-lib.patch.conditional   |    0
+ toolchain/gcc/Config.in                            |    2 +-
+ 8 files changed, 1 insertions(+), 1 deletions(-)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/100-uclibc-conf.patch (100%)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/301-missing-execinfo_h.patch (100%)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/302-c99-snprintf.patch (100%)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/305-libmudflap-susv3-legacy.patch (100%)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/810-arm-softfloat-libgcc.patch (100%)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/820-arm-unbreak-armv4t.patch (100%)
+ rename toolchain/gcc/{4.6.1 => 4.6.2}/powerpc-link-with-math-lib.patch.conditional (100%)
 
- This patch (applied to the current HEAD) builds syslinux for the host.
-
- What is still missing from this is a way to have a Windows self-installer.
-I've got a patch cooking for that too, but it's a hack: it copies the
-precompiled syslinux.exe binary from the extracted tar file.
-
- Regards,
- Arnout
----
- boot/syslinux/syslinux.mk |   16 ++++++++++++++++
- 1 files changed, 16 insertions(+), 0 deletions(-)
-
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index fa5af07..66a7076 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -26,4 +26,20 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
- 	done
- endef
+diff --git a/toolchain/gcc/4.6.1/100-uclibc-conf.patch b/toolchain/gcc/4.6.2/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.1/100-uclibc-conf.patch
+rename to toolchain/gcc/4.6.2/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.6.1/301-missing-execinfo_h.patch b/toolchain/gcc/4.6.2/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.1/301-missing-execinfo_h.patch
+rename to toolchain/gcc/4.6.2/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.6.1/302-c99-snprintf.patch b/toolchain/gcc/4.6.2/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.1/302-c99-snprintf.patch
+rename to toolchain/gcc/4.6.2/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.6.1/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.6.2/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.1/305-libmudflap-susv3-legacy.patch
+rename to toolchain/gcc/4.6.2/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.6.1/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.6.2/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.1/810-arm-softfloat-libgcc.patch
+rename to toolchain/gcc/4.6.2/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.6.1/820-arm-unbreak-armv4t.patch b/toolchain/gcc/4.6.2/820-arm-unbreak-armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.1/820-arm-unbreak-armv4t.patch
+rename to toolchain/gcc/4.6.2/820-arm-unbreak-armv4t.patch
+diff --git a/toolchain/gcc/4.6.1/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.6.2/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.6.1/powerpc-link-with-math-lib.patch.conditional
+rename to toolchain/gcc/4.6.2/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index cfc7aec..5905262 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -64,7 +64,7 @@ config BR2_GCC_VERSION
+ 	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
+ 	default "4.4.6"     if BR2_GCC_VERSION_4_4_X
+ 	default "4.5.3"     if BR2_GCC_VERSION_4_5_X
+-	default "4.6.1"     if BR2_GCC_VERSION_4_6_X
++	default "4.6.2"     if BR2_GCC_VERSION_4_6_X
+ 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
  
-+
-+HOST_SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
-+
-+define HOST_SYSLINUX_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_SYSLINUX_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-+endef
-+
-+define HOST_SYSLINUX_CLEAN_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
-+endef
-+
- $(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
 -- 
-1.7.7
+1.7.3.4
