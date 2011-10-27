@@ -1,88 +1,26 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 27 Oct 2011 13:41:12 +0200
-Subject: [Buildroot] [PATCH v5] package: add opencv
-In-Reply-To: <201110262321.57932.arnout@mind.be>
-References: <1319396325-9720-1-git-send-email-s.martin49@gmail.com>
- <878voazf4r.fsf@macbook.be.48ers.dk> <201110262321.57932.arnout@mind.be>
-Message-ID: <CAHXCMMLt7mzWTA23X11ZRAFOB05e97ritx_+POaMihNwOrG9qQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 27 Oct 2011 15:17:16 +0200
+Subject: [Buildroot] [PATCH 1/3] binutils: Makefile and Config.in rework
+	for oprofile ext toolchain compilation
+In-Reply-To: <1307541448-15176-1-git-send-email-benoit.mauduit@gmail.com>
+ (benoit mauduit's message of "Wed, 8 Jun 2011 15:57:26 +0200")
+References: <1307541448-15176-1-git-send-email-benoit.mauduit@gmail.com>
+Message-ID: <87obx2tvz7.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/10/26 Arnout Vandecappelle <arnout@mind.be>
+>>>>> "benoit" == benoit mauduit <benoit.mauduit@gmail.com> writes:
 
-> On Monday, October 24, 2011 15:35:32 Peter Korsgaard wrote:
-> [snip]
-> >  Samuel> +# Build type
-> >  Samuel> +OPENCV_CONF_OPT += -DCMAKE_BUILD_TYPE=$(if
-> > $(BR2_ENABLE_DEBUG),Debug,Release)
-> >
-> > While this works it looks quite different than other packages - We
-> > normally do:
-> >
-> > OPENCV_CONF_OPT += \
-> >                 blah=.. \
-> >                 blih=.. \
-> >                 bloh=..
-> >
-> > ifeq ($(BR2_PACKAGE_BLAH))
-> > OPENCV_CONF_OPT += BLAH=on
-> > OPENCV_DEPENDENCIES += blah
-> > else
-> > OPENCV_CONF_OPT += BLAH=OFF
-> > endif
-> >
-> > ..
-> >
-> > I've rewritten it to use that form.
->
->  Actually, for that particular one you haven't :-)
->
->  Also I think it's important to use
->
-> ifeq ($(BR2_PACKAGE_BLAH),y)
->
+ benoit> From: Benoit Mauduit <benoit.mauduit@openwide.fr>
+ benoit>   * When select full binutils binaries use the default INSTALL_TARGET_CMDS
+ benoit> from AUTOTARGET.
+ benoit>   * Menu config improvement.
+ benoit>   * Install libiberty into Staging dir.
 
-Actually, in the 1st version of the patch it was this form, then I changed
-it following the comments of Thomas P. ...
+Committed with minor changes, thanks.
 
-Using one or the other form does not change anything, it is just a matter of
-consistency.
-
-Defining some rules like these can certainly be gathered into a "developer
-guide-line" or something like that.
-If everybody follows the same form/standard (whatever you call it) it will
-make easier processing submitted patches.
-It could also allow to develop some checker scripts.
-
-Regards,
-
-Sam
-
-
->
->  so you can easily disable it on the command line with
->
-> make BR2_PACKAGE_BLAH=n
->
-> (Of course, 'make BR2_PACKAGE_BLAH=' would still work, but it's less
-> intuitive.)
->
->  Regards,
->  Arnout
->
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111027/84a0b624/attachment-0001.html>
+-- 
+Bye, Peter Korsgaard
