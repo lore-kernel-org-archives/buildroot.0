@@ -1,83 +1,92 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Fri, 28 Oct 2011 12:16:10 +0800
-Subject: [Buildroot] [PATCH 3/3] mplayer: Enable live and tv options
-In-Reply-To: <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
-References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
- <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <CAJhJPsXQzprnSW5eggHMxEofNOZsZX+C7SVMz3UTR2dExAR4Tg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 28 Oct 2011 08:05:21 +0200
+Subject: [Buildroot] [PATCH] Packages: download via NFS/Samba
+In-Reply-To: <CA+hj=Mo42CvZQYWApH6sk0Q5E8NF2N3bnpNUCTqK5QaxrUJo+A@mail.gmail.com>
+References: <CA+hj=Mo42CvZQYWApH6sk0Q5E8NF2N3bnpNUCTqK5QaxrUJo+A@mail.gmail.com>
+Message-ID: <CAAXf6LUzq5ERKcitCJK3LFHeDeVS9s=edO_MtPA2fxbZ_gi21g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bump
+Hi Ivan,
 
-2011/9/20, keguang.zhang at gmail.com <keguang.zhang@gmail.com>:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
+Thanks for your contribution to buildroot. Some comments below, though.
+
+On Thu, Oct 27, 2011 at 6:13 PM, Ivan Wagner <ivan.wagner@gmail.com> wrote:
+> From 345659fe588de7b152a681bb94e50510f43f9fc8 Mon Sep 17 00:00:00 2001
+> From: Ivan Wagner <ivan.wagner@ch.schindler.com>
+> Date: Thu, 27 Oct 2011 18:05:56 +0200
+> Subject: [PATCH] Packages: download via NFS/Samba
 >
-> 1.Enable TV interface.
-> 2.Enable LIVE555 Streaming Media if live555 is available.
+> This patch allows people to set the BR2_PRIMARY_SITE with a "file://"
+> schema useful within corporate networks where i.e. NFS or Samba services
+> are available. This gives a bit of flexibility not to force people
+> (especially within corporate networks) to setup FTP or web-servers.
 >
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+> Signed-off-by: Ivan Wagner <ivan.wagner@ch.schindler.com>
 > ---
->  package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
->  1 files changed, 18 insertions(+), 4 deletions(-)
+> ?package/Makefile.package.in | ? 20 ++++++++++++++++++++
+> ?1 files changed, 20 insertions(+), 0 deletions(-)
 >
-> diff --git a/package/multimedia/mplayer/mplayer.mk
-> b/package/multimedia/mplayer/mplayer.mk
-> index f735464..416572c 100644
-> --- a/package/multimedia/mplayer/mplayer.mk
-> +++ b/package/multimedia/mplayer/mplayer.mk
-> @@ -75,6 +75,22 @@ else
->  MPLAYER_CONF_OPTS += --disable-mad
->  endif
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> index b5ef57b..cd150ef 100644
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -203,6 +203,19 @@ define SHOW_EXTERNAL_DEPS_LOCALFILES
+> ? echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
+> ?endef
 >
-> +ifeq ($(BR2_PACKAGE_LIVE555),y)
-> +MPLAYER_DEPENDENCIES += live555
-> +MPLAYER_CONF_OPTS += --enable-live
-> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
-> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
-> +MPLAYER_LIVE555_CFLAGS +=
-> -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
-> +MPLAYER_LIVE555_CFLAGS +=
-> -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lliveMedia
-> +MPLAYER_LIVE555_LDFLAGS += -lgroupsock
-> +MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lstdc++
-> +else
-> +MPLAYER_CONF_OPTS += --disable-live
-> +endif
+> +define DOWNLOAD_NFS
+> + ? ? ? test -e $(DL_DIR)/$(1) || \
+> + ? ? ? ? ? ? ? $(LOCALFILES) $(call qstrip,$(subst
+> file://,,$(BR2_PRIMARY_SITE)))/$(1) $(DL_DIR)
+> +endef
+
+In which way is this different from the existing LOCALFILES download method?
+Moreover, I think the name NFS is too restrictive (as you indicate it
+can be used for Samba, or even a plain local file)
+
 > +
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-> @@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
->  		--cc="$(TARGET_CC)" \
->  		--as="$(TARGET_AS)" \
->  		--charset=UTF-8 \
-> -		--extra-cflags="$(TARGET_CFLAGS)" \
-> -		--extra-ldflags="$(TARGET_LDFLAGS)" \
-> +		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
-> +		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
->  		--enable-mad \
->  		--enable-fbdev \
->  		$(MPLAYER_CONF_OPTS) \
->  		--enable-cross-compile \
->  		--disable-ivtv \
-> -		--disable-tv \
-> -		--disable-live \
->  		--enable-dynamic-plugins \
->  	)
->  endef
-> --
-> 1.7.1
+> +define SOURCE_CHECK_NFS
+> + ?test -e $(call qstrip,$(subst file://,,$(BR2_PRIMARY_SITE)))/$($(PKG)_SOURCE)
+> +endef
+> +
+> +define SHOW_EXTERNAL_DEPS_NFS
+> + ?echo $(BR2_PRIMARY_SITE)/$($(PKG)_SOURCE)
+> +endef
+> +
+> ?################################################################################
+> ?# DOWNLOAD -- Download helper. Will try to download source from:
+> ?# 1) BR2_PRIMARY_SITE if enabled
+> @@ -218,6 +231,13 @@ endef
 >
->
+> ?define DOWNLOAD
+> ? ? ? ?$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+> + ? ? ? ? ? ? ? if [[ $(BR2_PRIMARY_SITE) == file://* ]] ; then \
+> + ? ? ? ? ? ? ? ? ? ? ? if [[ -z $(2) ]]; then \
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? $(call
+> $(DL_MODE)_NFS,$($(PKG)_SOURCE)) && exit; \
+> + ? ? ? ? ? ? ? ? ? ? ? else \
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? $(call $(DL_MODE)_NFS,$(2)) && exit; \
+> + ? ? ? ? ? ? ? ? ? ? ? fi ; \
+> + ? ? ? ? ? ? ? fi ; \
+> ? ? ? ? ? ? ? ?$(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
+> ? ? ? ?fi ; \
+> ? ? ? ?if test -n "$(1)" ; then \
 
+I have two patches waiting for being merged, that add support for scp
+(secure-copy, copy over SSH) and Mercurial downloads. The scp patch
+also allows the BR2_PRIMARY_SITE to be an scp-URI. I also added
+functions like 'stripurischeme', 'geturischeme' that abstracts the
+qstrip/subst patterns.
+I think the addition of LOCALFILES/NFS to BR2_PRIMARY_SITE should be
+based upon that patch.
 
--- 
-Best Regards!
-Kelvin
+http://lists.busybox.net/pipermail/buildroot/2011-October/047041.html
+http://lists.busybox.net/pipermail/buildroot/2011-October/047042.html
+http://lists.busybox.net/pipermail/buildroot/2011-October/047043.html
+
+Best regards,
+Thomas
