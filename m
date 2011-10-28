@@ -1,41 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 28 Oct 2011 14:59:27 +0200
-Subject: [Buildroot] [git commit] /etc/profile: read in /etc/profile.d/*.sh
-	files
-Message-ID: <20111028131045.926EC8F165@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Oct 2011 15:13:03 +0200
+Subject: [Buildroot] Call For Participation: buildroot + crosstool-NG
+	Developpers' Day
+In-Reply-To: <20111021224836.GT7130@pengutronix.de> (Robert Schwebel's message
+ of "Sat, 22 Oct 2011 00:48:36 +0200")
+References: <201108151803.02636.yann.morin.1998@anciens.enib.fr>
+ <20111021224836.GT7130@pengutronix.de>
+Message-ID: <87obx1p8dc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c8502e8211d6153830929110611ce18956ae42c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Robert" == Robert Schwebel <r.schwebel@pengutronix.de> writes:
 
-For custom projects, it is more maintainable to add custom profile settings
-in a separate file, than directly in /etc/profile.
+ Robert> Hi Yann,
+ Robert> On Mon, Aug 15, 2011 at 06:03:02PM +0200, Yann E. MORIN wrote:
+ >> The meeting will take place in Prague, Czech Republic, October the 29th,
+ >> 2011, the day after ELC-E 2011. The exact location is as yet unknown, but
+ >> we'll be sure to keep you informed when it is.
 
-This patch modifies /etc/profile to read in *.sh files from /etc/profile.d/,
-a technique commonly used in Linux distributions.
+ Robert> Any news about the details? ;)
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/skeleton/etc/profile |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+The reception / bar area at the Clarion at 9:00h - If anyone has any
+power extension plugs, please bring them.
 
-diff --git a/fs/skeleton/etc/profile b/fs/skeleton/etc/profile
-index cc2e0be..31d3180 100644
---- a/fs/skeleton/etc/profile
-+++ b/fs/skeleton/etc/profile
-@@ -46,3 +46,10 @@ if [ "$PS1" ]; then
-     alias calc='calc -Cd '
-     alias bc='calc -Cd '
- fi;
-+
-+# Source configuration files from /etc/profile.d
-+for i in /etc/profile.d/*.sh ; do
-+    if [ -r "$i" ]; then
-+        . $i
-+    fi
-+done
+-- 
+Bye, Peter Korsgaard
