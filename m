@@ -1,26 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Oct 2011 16:12:32 +0200
-Subject: [Buildroot] [PATCH 2/2] ntfs-3g: bump to version 2011.4.12 and
-	enhance
-In-Reply-To: <1318941130-19244-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 18 Oct 2011 09:32:10 -0300")
-References: <1318941130-19244-1-git-send-email-gustavo@zacarias.com.ar>
- <1318941130-19244-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871utxp5m7.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 28 Oct 2011 16:10:58 +0200
+Subject: [Buildroot] [git commit] ntfsprogs: mark as deprecated
+Message-ID: <20111028141311.2561F8F290@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=db697f96b77199c015f57a9fdfd5dd7f0374b8bb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> ntfsprogs is now included into ntfs-3g so add an option to
- Gustavo> enable/disable it.
- Gustavo> It probably doesn't make sense to build ntfsprogs alone so it's not
- Gustavo> implemented.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ntfsprogs/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ntfsprogs/Config.in b/package/ntfsprogs/Config.in
+index 836a2b6..561c1d4 100644
+--- a/package/ntfsprogs/Config.in
++++ b/package/ntfsprogs/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_NTFSPROGS
+ 	bool "ntfsprogs"
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_LARGEFILE
++	depends on BR2_DEPRECATED
+ 	help
+ 	  wide collection of NTFS utilities
+ 
