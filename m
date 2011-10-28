@@ -1,41 +1,39 @@
-From: Ivan Wagner <ivan.wagner@gmail.com>
-Date: Fri, 28 Oct 2011 15:43:15 +0200
-Subject: [Buildroot] Any plans to add ipkg/opkg to generate *.ipk/*.opk
- after package compilation?
-In-Reply-To: <CA+hj=MqVuR5NMfOUWOi3Cs6ptfUpkc6SdprV-5Cx-7=ZCsCg5A@mail.gmail.com>
-References: <CA+hj=Mq22h7gimL16fxF4N67X+MqU0V4Cw4jak9pFF-K=512Jg@mail.gmail.com>
- <CAAXf6LXjhix4mweM-NNqOCeVgKps+hW73Yt09P5_+NUrkFKqEg@mail.gmail.com>
- <CA+hj=MqVuR5NMfOUWOi3Cs6ptfUpkc6SdprV-5Cx-7=ZCsCg5A@mail.gmail.com>
-Message-ID: <CA+hj=MpE=zPP9B3cNuPB=uvrAFuf1Rx6Ojq2scmDkb8guRsJrg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 28 Oct 2011 15:56:06 +0200
+Subject: [Buildroot] Call For Participation: buildroot + crosstool-NG
+	Developpers' Day
+In-Reply-To: <20111028133545.GD14918@pengutronix.de> (Robert Schwebel's
+ message of "Fri, 28 Oct 2011 15:35:45 +0200")
+References: <201108151803.02636.yann.morin.1998@anciens.enib.fr>
+ <20111021224836.GT7130@pengutronix.de>
+ <87obx1p8dc.fsf@macbook.be.48ers.dk>
+ <20111028133545.GD14918@pengutronix.de>
+Message-ID: <87k47pp6dl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Buildroot currently doesn't monitor which files are installed by each
-> package. I think that this is a prerequisite for ipkg/opkg.
->
-> The question was raised whether we should modify this, see the thread
-> 'Some topics for the Buildroot Developer Day':
-> http://lists.busybox.net/pipermail/buildroot/2011-October/046998.html
->
-> The Buildroot developer day is tomorrow, Saturday. We'll have to see
-> what the outcome of this topic is.
->
+>>>>> "Robert" == Robert Schwebel <r.schwebel@pengutronix.de> writes:
 
-Hi Thomas,
+ Robert> On Fri, Oct 28, 2011 at 03:13:03PM +0200, Peter Korsgaard wrote:
+ Robert> On Mon, Aug 15, 2011 at 06:03:02PM +0200, Yann E. MORIN wrote:
+ >> >> The meeting will take place in Prague, Czech Republic, October the 29th,
+ >> >> 2011, the day after ELC-E 2011. The exact location is as yet unknown, but
+ >> >> we'll be sure to keep you informed when it is.
+ >> 
+ Robert> Any news about the details? ;)
+ >> 
+ >> The reception / bar area at the Clarion at 9:00h - If anyone has any
+ >> power extension plugs, please bring them.
 
-thank you for your reply I really appreciate it! I read the link you
-posted and I understand the various points. Did you ever take a look
-at openwrt? It handles all of this within the package's makefile where
-you specify which files (binaries, shared libraries, conf file etc) need to
-be placed on the target. In the builds directory a package-name-ipk
-folder is created (for each package being compiled) and this will be the
-folder used to create the ipk/opk package. Obviously it is the make
-file's responsibility to choose which file and where is has to be placed
-within the package-name-ipk. However I'll see the results from the
-conference.
+ Robert> I'll be there.
 
-Best regards,
-Ivan Wagner
+ Robert> Will we still have network?
+
+I'm not 100% sure, but my understanding is that atlest the Clarion SSID
+should still work.
+
+-- 
+Bye, Peter Korsgaard
