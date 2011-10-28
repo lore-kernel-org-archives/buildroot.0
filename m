@@ -1,62 +1,33 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 28 Oct 2011 08:11:14 +0200
-Subject: [Buildroot] [PATCH 1/3] Add vmlinuz support in Kernel binary
- format for MIPS.
-In-Reply-To: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
-References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <CAAXf6LWmshjKpryo3yrQMiWL4m8mLZBVVr5hDg5w5tx7QTFfVQ@mail.gmail.com>
+Date: Fri, 28 Oct 2011 08:18:06 +0200
+Subject: [Buildroot] Any plans to add ipkg/opkg to generate *.ipk/*.opk
+ after package compilation?
+In-Reply-To: <CA+hj=Mq22h7gimL16fxF4N67X+MqU0V4Cw4jak9pFF-K=512Jg@mail.gmail.com>
+References: <CA+hj=Mq22h7gimL16fxF4N67X+MqU0V4Cw4jak9pFF-K=512Jg@mail.gmail.com>
+Message-ID: <CAAXf6LXjhix4mweM-NNqOCeVgKps+hW73Yt09P5_+NUrkFKqEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Sep 20, 2011 at 11:01 AM,  <keguang.zhang@gmail.com> wrote:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
->
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> ---
-> ?linux/Config.in | ? ?4 ++++
-> ?linux/linux.mk ?| ? ?4 ++++
-> ?2 files changed, 8 insertions(+), 0 deletions(-)
->
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 5655286..09e5685 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -148,6 +148,10 @@ config BR2_LINUX_KERNEL_VMLINUX
-> ? ? ? ?bool "vmlinux"
-> ? ? ? ?depends on BR2_mips || BR2_mipsel
->
-> +config BR2_LINUX_KERNEL_VMLINUZ
-> + ? ? ? bool "vmlinuz"
-> + ? ? ? depends on BR2_mips || BR2_mipsel
-> +
-> ?config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-> ? ? ? ?bool "custom target"
-> ? ? ? ?help
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index f249d96..32b588c 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -63,6 +63,8 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
-> ?LINUX_IMAGE_NAME=vmlinux.bin
-> ?else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-> ?LINUX_IMAGE_NAME=vmlinux
-> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
-> +LINUX_IMAGE_NAME=vmlinuz
-> ?endif
-> ?endif
->
-> @@ -80,6 +82,8 @@ endif
->
-> ?ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-> ?LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
-> +LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-> ?else
-> ?ifeq ($(KERNEL_ARCH),avr32)
-> ?LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
-> --
+Hi Ivan,
 
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Thu, Oct 27, 2011 at 6:25 PM, Ivan Wagner <ivan.wagner@gmail.com> wrote:
+> Dear All,
+>
+> are there any plans to add support for automatic ipk/opk files
+> creation after the package's compilation process?
+
+Buildroot currently doesn't monitor which files are installed by each
+package. I think that this is a prerequisite for ipkg/opkg.
+
+The question was raised whether we should modify this, see the thread
+'Some topics for the Buildroot Developer Day':
+http://lists.busybox.net/pipermail/buildroot/2011-October/046998.html
+
+The Buildroot developer day is tomorrow, Saturday. We'll have to see
+what the outcome of this topic is.
+
+Best regards,
+Thomas
