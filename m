@@ -1,10 +1,10 @@
 From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Fri, 28 Oct 2011 12:12:46 +0800
-Subject: [Buildroot] [PATCH 1/3] Add vmlinuz support in Kernel binary
- format for MIPS.
-In-Reply-To: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
+Date: Fri, 28 Oct 2011 12:14:21 +0800
+Subject: [Buildroot] [PATCH 2/3] live555: install to staging
+In-Reply-To: <1316509288-31106-2-git-send-email-keguang.zhang@gmail.com>
 References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <CAJhJPsUuu_1WCUsFzHovYNOd_RVTAcGSeb42KYzoimPCcPPZGw@mail.gmail.com>
+ <1316509288-31106-2-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <CAJhJPsXHn8dqRBtheWLU=LTSUd8uNK+ZJ6R4ZpQzJqbi5i-QTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,49 +16,78 @@ bump
 2011/9/20, keguang.zhang at gmail.com <keguang.zhang@gmail.com>:
 > From: Kelvin Cheung <keguang.zhang@gmail.com>
 >
+> Install live555 library to staging for mplayer.
+>
 > Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 > ---
->  linux/Config.in |    4 ++++
->  linux/linux.mk  |    4 ++++
->  2 files changed, 8 insertions(+), 0 deletions(-)
+>  package/multimedia/live555/live555.mk |   28 ++++++++++++++++++++++++++++
+>  1 files changed, 28 insertions(+), 0 deletions(-)
 >
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 5655286..09e5685 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -148,6 +148,10 @@ config BR2_LINUX_KERNEL_VMLINUX
->  	bool "vmlinux"
->  	depends on BR2_mips || BR2_mipsel
+> diff --git a/package/multimedia/live555/live555.mk
+> b/package/multimedia/live555/live555.mk
+> index 45a0375..47d6085 100644
+> --- a/package/multimedia/live555/live555.mk
+> +++ b/package/multimedia/live555/live555.mk
+> @@ -7,6 +7,7 @@
+>  LIVE555_VERSION = 2011.06.16
+>  LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+>  LIVE555_SITE = http://www.live555.com/liveMedia/public/
+> +LIVE555_INSTALL_STAGING=YES
+>  LIVE555_INSTALL_TARGET = YES
 >
-> +config BR2_LINUX_KERNEL_VMLINUZ
-> +	bool "vmlinuz"
-> +	depends on BR2_mips || BR2_mipsel
+>  define LIVE555_CONFIGURE_CMDS
+> @@ -26,6 +27,16 @@ define LIVE555_CLEAN_CMDS
+>  	$(MAKE) -C $(@D) clean
+>  endef
+>
+> +LIVE555_HEADERS_TO_INSTALL += liveMedia/include
+> +LIVE555_HEADERS_TO_INSTALL += groupsock/include
+> +LIVE555_HEADERS_TO_INSTALL += UsageEnvironment/include
+> +LIVE555_HEADERS_TO_INSTALL += BasicUsageEnvironment/include
 > +
->  config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
->  	bool "custom target"
->  	help
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index f249d96..32b588c 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -63,6 +63,8 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
->  LINUX_IMAGE_NAME=vmlinux.bin
->  else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
->  LINUX_IMAGE_NAME=vmlinux
-> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
-> +LINUX_IMAGE_NAME=vmlinuz
->  endif
->  endif
+> +LIVE555_LIBS_TO_INSTALL += liveMedia/libliveMedia.a
+> +LIVE555_LIBS_TO_INSTALL += groupsock/libgroupsock.a
+> +LIVE555_LIBS_TO_INSTALL += UsageEnvironment/libUsageEnvironment.a
+> +LIVE555_LIBS_TO_INSTALL += BasicUsageEnvironment/libBasicUsageEnvironment.a
+> +
+>  LIVE555_FILES_TO_INSTALL- =
+>  LIVE555_FILES_TO_INSTALL-y =
+>  LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_OPENRTSP) +=
+> testProgs/openRTSP
+> @@ -33,12 +44,29 @@
+> LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MEDIASERVER) +=
+> mediaServer/live5
+>  LIVE555_FILES_TO_INSTALL-$(BR2_PACKAGE_LIVE555_MPEG2_INDEXER) +=
+> testProgs/MPEG2TransportStreamIndexer
+>  LIVE555_FILES_TO_INSTALL- += $(LIVE555_FILES_TO_INSTALL-y)
 >
-> @@ -80,6 +82,8 @@ endif
+> +define LIVE555_INSTALL_STAGING_CMDS
+> +	for i in $(LIVE555_HEADERS_TO_INSTALL); do \
+> +		mkdir -p $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
+> +		cp -a $(@D)/$$i/* $(STAGING_DIR)/usr/include/live/`dirname $$i`; \
+> +	done; \
+> +	for i in $(LIVE555_LIBS_TO_INSTALL); do \
+> +		$(INSTALL) -D -m 0755 $(@D)/$$i $(STAGING_DIR)/usr/lib/`basename $$i`; \
+> +	done
+> +endef
+> +
+>  define LIVE555_INSTALL_TARGET_CMDS
+>  	for i in $(LIVE555_FILES_TO_INSTALL-y); do \
+>  		$(INSTALL) -D -m 0755 $(@D)/$$i $(TARGET_DIR)/usr/bin/`basename $$i`; \
+>  	done
+>  endef
 >
->  ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
->  LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
-> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
-> +LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
->  else
->  ifeq ($(KERNEL_ARCH),avr32)
->  LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+> +define LIVE555_UNINSTALL_STAGING_CMDS
+> +	[ -d $(STAGING_DIR)/usr/include/live ] && rm -rf
+> $(STAGING_DIR)/usr/include/live; \
+> +	for i in $(LIVE555_LIBS_TO_INSTALL); do \
+> +		rm -f $(addprefix $(STAGING_DIR)/usr/lib/, `basename $$i`); \
+> +	done
+> +endef
+> +
+>  define LIVE555_UNINSTALL_TARGET_CMDS
+>  	for i in $(LIVE555_FILES_TO_INSTALL-); do \
+>  		rm -f $(addprefix $(TARGET_DIR)/usr/bin/, `basename $$i`); \
 > --
 > 1.7.1
 >
