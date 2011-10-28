@@ -1,20 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Oct 2011 14:41:40 +0200
-Subject: [Buildroot] [PATCH] crosstool-ng: fix ccache dependencies order
-In-Reply-To: <1319395872-9051-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 23 Oct 2011 20:51:12 +0200")
-References: <1319395872-9051-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87k47pqoe3.fsf@macbook.be.48ers.dk>
+Date: Fri, 28 Oct 2011 14:44:01 +0200
+Subject: [Buildroot] [PATCH] udev: install in staging
+In-Reply-To: <4EA686CB.5050709@visionsystems.de> (Yegor Yefremov's message of
+ "Tue, 25 Oct 2011 11:52:11 +0200")
+References: <4EA686CB.5050709@visionsystems.de>
+Message-ID: <87fwidqoa6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
- Samuel> avoid gawk complaining when running 'make ctng-menuconfig' in a
- Samuel> clean/distclean tree in which ccache and crosstool-ng are enabled
+ Yegor> will provide libudev.h and libudev.so in staging
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed, thanks.
 
