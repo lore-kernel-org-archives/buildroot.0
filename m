@@ -1,21 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 28 Oct 2011 14:27:49 +0200
-Subject: [Buildroot] [PATCH v2] Add libmodbus package
-In-Reply-To: <1319020556-27223-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Wed, 19 Oct 2011 12:35:56 +0200")
-References: <1319020556-27223-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87r51xqp16.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 28 Oct 2011 13:33:51 +0200
+Subject: [Buildroot] [git commit] sh: Add ttySC* to securetty
+Message-ID: <20111028122942.A2A8D8EDFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=939f0074ec4a7764647b8bdadcaa0d0403e0d9d9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/skeleton/etc/securetty |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/fs/skeleton/etc/securetty b/fs/skeleton/etc/securetty
+index 4ab956f..6c07d7f 100644
+--- a/fs/skeleton/etc/securetty
++++ b/fs/skeleton/etc/securetty
+@@ -42,3 +42,7 @@ ttyAM1
+ ttyAM2
+ ttySC0
+ ttySC1
++ttySC2
++ttySC3
++ttySC4
++ttySC5
