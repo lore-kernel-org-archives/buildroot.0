@@ -1,92 +1,62 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 28 Oct 2011 08:05:21 +0200
-Subject: [Buildroot] [PATCH] Packages: download via NFS/Samba
-In-Reply-To: <CA+hj=Mo42CvZQYWApH6sk0Q5E8NF2N3bnpNUCTqK5QaxrUJo+A@mail.gmail.com>
-References: <CA+hj=Mo42CvZQYWApH6sk0Q5E8NF2N3bnpNUCTqK5QaxrUJo+A@mail.gmail.com>
-Message-ID: <CAAXf6LUzq5ERKcitCJK3LFHeDeVS9s=edO_MtPA2fxbZ_gi21g@mail.gmail.com>
+Date: Fri, 28 Oct 2011 08:11:14 +0200
+Subject: [Buildroot] [PATCH 1/3] Add vmlinuz support in Kernel binary
+ format for MIPS.
+In-Reply-To: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
+References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <CAAXf6LWmshjKpryo3yrQMiWL4m8mLZBVVr5hDg5w5tx7QTFfVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ivan,
-
-Thanks for your contribution to buildroot. Some comments below, though.
-
-On Thu, Oct 27, 2011 at 6:13 PM, Ivan Wagner <ivan.wagner@gmail.com> wrote:
-> From 345659fe588de7b152a681bb94e50510f43f9fc8 Mon Sep 17 00:00:00 2001
-> From: Ivan Wagner <ivan.wagner@ch.schindler.com>
-> Date: Thu, 27 Oct 2011 18:05:56 +0200
-> Subject: [PATCH] Packages: download via NFS/Samba
+On Tue, Sep 20, 2011 at 11:01 AM,  <keguang.zhang@gmail.com> wrote:
+> From: Kelvin Cheung <keguang.zhang@gmail.com>
 >
-> This patch allows people to set the BR2_PRIMARY_SITE with a "file://"
-> schema useful within corporate networks where i.e. NFS or Samba services
-> are available. This gives a bit of flexibility not to force people
-> (especially within corporate networks) to setup FTP or web-servers.
->
-> Signed-off-by: Ivan Wagner <ivan.wagner@ch.schindler.com>
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 > ---
-> ?package/Makefile.package.in | ? 20 ++++++++++++++++++++
-> ?1 files changed, 20 insertions(+), 0 deletions(-)
+> ?linux/Config.in | ? ?4 ++++
+> ?linux/linux.mk ?| ? ?4 ++++
+> ?2 files changed, 8 insertions(+), 0 deletions(-)
 >
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index b5ef57b..cd150ef 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -203,6 +203,19 @@ define SHOW_EXTERNAL_DEPS_LOCALFILES
-> ? echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
-> ?endef
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 5655286..09e5685 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -148,6 +148,10 @@ config BR2_LINUX_KERNEL_VMLINUX
+> ? ? ? ?bool "vmlinux"
+> ? ? ? ?depends on BR2_mips || BR2_mipsel
 >
-> +define DOWNLOAD_NFS
-> + ? ? ? test -e $(DL_DIR)/$(1) || \
-> + ? ? ? ? ? ? ? $(LOCALFILES) $(call qstrip,$(subst
-> file://,,$(BR2_PRIMARY_SITE)))/$(1) $(DL_DIR)
-> +endef
-
-In which way is this different from the existing LOCALFILES download method?
-Moreover, I think the name NFS is too restrictive (as you indicate it
-can be used for Samba, or even a plain local file)
-
+> +config BR2_LINUX_KERNEL_VMLINUZ
+> + ? ? ? bool "vmlinuz"
+> + ? ? ? depends on BR2_mips || BR2_mipsel
 > +
-> +define SOURCE_CHECK_NFS
-> + ?test -e $(call qstrip,$(subst file://,,$(BR2_PRIMARY_SITE)))/$($(PKG)_SOURCE)
-> +endef
-> +
-> +define SHOW_EXTERNAL_DEPS_NFS
-> + ?echo $(BR2_PRIMARY_SITE)/$($(PKG)_SOURCE)
-> +endef
-> +
-> ?################################################################################
-> ?# DOWNLOAD -- Download helper. Will try to download source from:
-> ?# 1) BR2_PRIMARY_SITE if enabled
-> @@ -218,6 +231,13 @@ endef
+> ?config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+> ? ? ? ?bool "custom target"
+> ? ? ? ?help
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index f249d96..32b588c 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -63,6 +63,8 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+> ?LINUX_IMAGE_NAME=vmlinux.bin
+> ?else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+> ?LINUX_IMAGE_NAME=vmlinux
+> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+> +LINUX_IMAGE_NAME=vmlinuz
+> ?endif
+> ?endif
 >
-> ?define DOWNLOAD
-> ? ? ? ?$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-> + ? ? ? ? ? ? ? if [[ $(BR2_PRIMARY_SITE) == file://* ]] ; then \
-> + ? ? ? ? ? ? ? ? ? ? ? if [[ -z $(2) ]]; then \
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? $(call
-> $(DL_MODE)_NFS,$($(PKG)_SOURCE)) && exit; \
-> + ? ? ? ? ? ? ? ? ? ? ? else \
-> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? $(call $(DL_MODE)_NFS,$(2)) && exit; \
-> + ? ? ? ? ? ? ? ? ? ? ? fi ; \
-> + ? ? ? ? ? ? ? fi ; \
-> ? ? ? ? ? ? ? ?$(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ; \
-> ? ? ? ?fi ; \
-> ? ? ? ?if test -n "$(1)" ; then \
+> @@ -80,6 +82,8 @@ endif
+>
+> ?ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
+> ?LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+> +else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+> +LINUX_IMAGE_PATH=$(LINUX_DIR)/$(LINUX_IMAGE_NAME)
+> ?else
+> ?ifeq ($(KERNEL_ARCH),avr32)
+> ?LINUX_IMAGE_PATH=$(KERNEL_ARCH_PATH)/boot/images/$(LINUX_IMAGE_NAME)
+> --
 
-I have two patches waiting for being merged, that add support for scp
-(secure-copy, copy over SSH) and Mercurial downloads. The scp patch
-also allows the BR2_PRIMARY_SITE to be an scp-URI. I also added
-functions like 'stripurischeme', 'geturischeme' that abstracts the
-qstrip/subst patterns.
-I think the addition of LOCALFILES/NFS to BR2_PRIMARY_SITE should be
-based upon that patch.
-
-http://lists.busybox.net/pipermail/buildroot/2011-October/047041.html
-http://lists.busybox.net/pipermail/buildroot/2011-October/047042.html
-http://lists.busybox.net/pipermail/buildroot/2011-October/047043.html
-
-Best regards,
-Thomas
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
