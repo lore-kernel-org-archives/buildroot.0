@@ -1,23 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 29 Oct 2011 15:36:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 4399] Unable to use Ubuntu 11.10 arm cross compiler
-In-Reply-To: <bug-4399-163@https.bugs.busybox.net/>
-References: <bug-4399-163@https.bugs.busybox.net/>
-Message-ID: <20111029153626.9B7BA8F107@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 29 Oct 2011 16:35:47 +0200
+Subject: [Buildroot] [git commit] pulseaudio: needs host-intltool
+Message-ID: <20111029155944.E8DE68EBC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4399
+commit: http://git.buildroot.net/buildroot/commit/?id=296eb11299d1240b3570aba5abb8374a0911bf44
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #1 from Alexander <fenixk19@mail.ru> 2011-10-29 15:36:25 UTC ---
-Created attachment 3703
-  --> https://bugs.busybox.net/attachment.cgi?id=3703
-A patch, can be used as workaround
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/pulseaudio/pulseaudio.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index 5e68dfb..a2d0552 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -14,7 +14,7 @@ PULSEAUDIO_CONF_OPT = \
+ 	--disable-legacy-database-entry-format
+ 
+ PULSEAUDIO_DEPENDENCIES = \
+-	host-pkg-config libtool json-c libsndfile speex \
++	host-pkg-config libtool json-c libsndfile speex host-intltool \
+ 	$(if $(BR2_PACKAGE_LIBINTL),libintl) \
+ 	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
