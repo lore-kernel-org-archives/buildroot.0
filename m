@@ -1,35 +1,36 @@
-From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
-Date: Sun, 30 Oct 2011 20:27:24 +0100
-Subject: [Buildroot] PKG_CONFIG_PATH question
-Message-ID: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 30 Oct 2011 20:27:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 4399] Unable to use Ubuntu 11.10 arm cross compiler
+In-Reply-To: <bug-4399-163@https.bugs.busybox.net/>
+References: <bug-4399-163@https.bugs.busybox.net/>
+Message-ID: <20111030202721.F17EA8F3AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+https://bugs.busybox.net/show_bug.cgi?id=4399
 
-My name is Luke and I am new here.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-After two encouraging sessions about buildroot on ELCE, I decided to
-give it a try.
-I am usually using OpenEmbedded but just for fun I decided to build
-similar image with buildroot, I downloaded buildroot-2011.08.
-Compiled my own toolchain with crostool-ng (btw, all new CodeSourcery
-arm toolchains have ICE when iwmmxt optimization is enabled). And.. i
-get stuck for the while.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
 
-For the build system I use quite ancient host machine (slackware),
-maybe it causes some problems.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2011-10-30 20:27:21 UTC ---
+I had the same problem trying to use the Ubuntu ARM cross-compiler.
+Unfortunately, while it allows to go a bit further, it doesn't fix the fact
+that the Ubuntu ARM cross-compiler is not a *pure* toolchain: it contains many
+more libraries and utilities compiled for the target than a normal toolchain,
+and this doesn't play well with build systems, including Buildroot.
 
-I could not compile libxcb, getting error from configure that
-xcb-proto version is less than 1.5 (buildroot is looking for
-xcb-proto.pc file (during configure) inside " /usr/lib/pkgconfig/" -
-on my build system) is that nomal ?
+For that reason, we do not support building with the Ubuntu ARM cross-compiler
+at the moment. Either build your toolchain with Buildroot or Crosstool-NG, or
+get a pre-compiled one from CodeSourcery (which offers pure toolchains).
 
-I could move forward by setting environment variable PKC_CONFIG_PATH
-to the STAGING_DIR/usr/lib/pkgconfig/, butI do not like this solution.
-
-Best regards,
-Luke Pulka
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
