@@ -1,21 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 29 Oct 2011 18:10:05 +0200
-Subject: [Buildroot] [PATCH] busybox: bump to version 1.19.3
-In-Reply-To: <1319902392-4343-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 29 Oct 2011 12:33:12 -0300")
-References: <1319902392-4343-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87hb2rok2q.fsf@macbook.be.48ers.dk>
+From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
+Date: Sun, 30 Oct 2011 20:27:24 +0100
+Subject: [Buildroot] PKG_CONFIG_PATH question
+Message-ID: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hi all,
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+My name is Luke and I am new here.
 
-Sorry, I already did so, but hadn't pushed yet.
+After two encouraging sessions about buildroot on ELCE, I decided to
+give it a try.
+I am usually using OpenEmbedded but just for fun I decided to build
+similar image with buildroot, I downloaded buildroot-2011.08.
+Compiled my own toolchain with crostool-ng (btw, all new CodeSourcery
+arm toolchains have ICE when iwmmxt optimization is enabled). And.. i
+get stuck for the while.
 
--- 
-Bye, Peter Korsgaard
+For the build system I use quite ancient host machine (slackware),
+maybe it causes some problems.
+
+I could not compile libxcb, getting error from configure that
+xcb-proto version is less than 1.5 (buildroot is looking for
+xcb-proto.pc file (during configure) inside " /usr/lib/pkgconfig/" -
+on my build system) is that nomal ?
+
+I could move forward by setting environment variable PKC_CONFIG_PATH
+to the STAGING_DIR/usr/lib/pkgconfig/, butI do not like this solution.
+
+Best regards,
+Luke Pulka
