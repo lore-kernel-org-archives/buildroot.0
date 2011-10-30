@@ -1,36 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 30 Oct 2011 20:27:21 +0000 (UTC)
-Subject: [Buildroot] [Bug 4399] Unable to use Ubuntu 11.10 arm cross compiler
-In-Reply-To: <bug-4399-163@https.bugs.busybox.net/>
-References: <bug-4399-163@https.bugs.busybox.net/>
-Message-ID: <20111030202721.F17EA8F3AA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 30 Oct 2011 21:29:36 +0100
+Subject: [Buildroot] Some topics for the Buildroot Developer Day
+In-Reply-To: <20111024173815.2277c6dd@skate>
+References: <20111024173815.2277c6dd@skate>
+Message-ID: <20111030212936.16dd321d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4399
+Le Mon, 24 Oct 2011 17:38:15 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> As discussed on IRC, I am posting below a list of topics that might be
+> discussed during the developer day. Note that this is just _my_ list
+> of topics, note the one of the Buildroot project as a whole. Moreover,
+> it's very likely that not all topics will be covered during our
+> meeting day. However, feel free to add your opinion and/or your
+> additional topics, especially if you can't make it to the Developer
+> day.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |INVALID
+For information, the developer day took place on Saturday, as expected.
+I am currently writing a detailed report of what has been said, it'll
+be sent to the mailing list after review by other participants (in
+order to make it as complete and accurate as possible). Hopefully
+should be within this week.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2011-10-30 20:27:21 UTC ---
-I had the same problem trying to use the Ubuntu ARM cross-compiler.
-Unfortunately, while it allows to go a bit further, it doesn't fix the fact
-that the Ubuntu ARM cross-compiler is not a *pure* toolchain: it contains many
-more libraries and utilities compiled for the target than a normal toolchain,
-and this doesn't play well with build systems, including Buildroot.
+Regards,
 
-For that reason, we do not support building with the Ubuntu ARM cross-compiler
-at the moment. Either build your toolchain with Buildroot or Crosstool-NG, or
-get a pre-compiled one from CodeSourcery (which offers pure toolchains).
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
