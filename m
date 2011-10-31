@@ -1,78 +1,86 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Mon, 31 Oct 2011 08:54:39 -0000
-Subject: [Buildroot] [PATCH] syslinux: add support for host-install
-In-Reply-To: <1319668075-20291-1-git-send-email-arnout@mind.be>
-References: <85632AA8828446C5B830EBF9A14700E5@beraninstruments.com.local>
- <1319668075-20291-1-git-send-email-arnout@mind.be>
-Message-ID: <13F2605CC0D1499C8E2BDC920701C3C3@beraninstruments.com.local>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Mon, 31 Oct 2011 17:05:30 +0800
+Subject: [Buildroot] [PATCH 3/3] mplayer: Enable live and tv options
+In-Reply-To: <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
+References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
+ <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <CAJhJPsVC2LuTiP=rUoGFEKOEArvoCdgizDcbkCK-198Zj7Qe4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Peter,
 
-> -----Original Message-----
-> From: Arnout Vandecappelle (Essensium/Mind) [mailto:arnout at mind.be]
-> Sent: 26 October 2011 23:28
-> Subject: [PATCH] syslinux: add support for host-install
-> 
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+What about this patch?
+Any problems?
+
+2011/9/20, keguang.zhang at gmail.com <keguang.zhang@gmail.com>:
+> From: Kelvin Cheung <keguang.zhang@gmail.com>
+>
+> 1.Enable TV interface.
+> 2.Enable LIVE555 Streaming Media if live555 is available.
+>
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 > ---
->  Hoi Will,
-> 
->  This patch (applied to the current HEAD) builds syslinux for the host.
-
-Thanks!
-
-I can see some discussion on the mailing list of a few patches you have sent for
-syslinux moving to v4.04 and adding the host build, but what is the status of
-these?
-
-> 
->  What is still missing from this is a way to have a Windows self-installer.
-> I've got a patch cooking for that too, but it's a hack: it copies the
-> precompiled syslinux.exe binary from the extracted tar file.
-
-I can't see there is another way.  I have no interest in this personally but
-would like to have a target build so my buildroot target can itself syslinux a
-device to make it bootable.  I would suggest that these are both unusual versus
-having a host build and so should be menu options.
-
-> 
->  Regards,
->  Arnout
-> ---
->  boot/syslinux/syslinux.mk |   16 ++++++++++++++++
->  1 files changed, 16 insertions(+), 0 deletions(-)
-> 
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index fa5af07..66a7076 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -26,4 +26,20 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
->  	done
+>  package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
+>  1 files changed, 18 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/multimedia/mplayer/mplayer.mk
+> b/package/multimedia/mplayer/mplayer.mk
+> index f735464..416572c 100644
+> --- a/package/multimedia/mplayer/mplayer.mk
+> +++ b/package/multimedia/mplayer/mplayer.mk
+> @@ -75,6 +75,22 @@ else
+>  MPLAYER_CONF_OPTS += --disable-mad
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_LIVE555),y)
+> +MPLAYER_DEPENDENCIES += live555
+> +MPLAYER_CONF_OPTS += --enable-live
+> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
+> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
+> +MPLAYER_LIVE555_CFLAGS +=
+> -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
+> +MPLAYER_LIVE555_CFLAGS +=
+> -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
+> +MPLAYER_LIVE555_LDFLAGS += -lliveMedia
+> +MPLAYER_LIVE555_LDFLAGS += -lgroupsock
+> +MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
+> +MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
+> +MPLAYER_LIVE555_LDFLAGS += -lstdc++
+> +else
+> +MPLAYER_CONF_OPTS += --disable-live
+> +endif
+> +
+>  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
+>  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+>  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
+> @@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
+>  		--cc="$(TARGET_CC)" \
+>  		--as="$(TARGET_AS)" \
+>  		--charset=UTF-8 \
+> -		--extra-cflags="$(TARGET_CFLAGS)" \
+> -		--extra-ldflags="$(TARGET_LDFLAGS)" \
+> +		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
+> +		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
+>  		--enable-mad \
+>  		--enable-fbdev \
+>  		$(MPLAYER_CONF_OPTS) \
+>  		--enable-cross-compile \
+>  		--disable-ivtv \
+> -		--disable-tv \
+> -		--disable-live \
+>  		--enable-dynamic-plugins \
+>  	)
 >  endef
-> 
-> +
-> +HOST_SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
-> +
-> +define HOST_SYSLINUX_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define HOST_SYSLINUX_INSTALL_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-> +endef
-> +
-> +define HOST_SYSLINUX_CLEAN_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
-> +endef
-> +
->  $(eval $(call GENTARGETS))
-> +$(eval $(call GENTARGETS,host))
 > --
-> 1.7.7
+> 1.7.1
+>
+>
+
+
+-- 
+Best Regards!
+Kelvin
