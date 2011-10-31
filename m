@@ -1,86 +1,30 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Mon, 31 Oct 2011 17:05:30 +0800
-Subject: [Buildroot] [PATCH 3/3] mplayer: Enable live and tv options
-In-Reply-To: <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
-References: <1316509288-31106-1-git-send-email-keguang.zhang@gmail.com>
- <1316509288-31106-3-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <CAJhJPsVC2LuTiP=rUoGFEKOEArvoCdgizDcbkCK-198Zj7Qe4w@mail.gmail.com>
+From: Bruno Niklaus <niklaus.bruno@gmail.com>
+Date: Mon, 31 Oct 2011 10:29:41 +0100
+Subject: [Buildroot] Building opencv for OMAP4430 / Armv7 / Cmake problem
+Message-ID: <CANVadiHy0cddWJrWqF6RPS2QLp-yjY1yPYUhXm2si27m0C7M8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi @all
 
-What about this patch?
-Any problems?
+i tried to build opencv for armv7 / omap4430 processor, i'm using
+codesourcery toolchain with neon optimations enabled.
+when cmake tries to build opencv i allways get strange error with
+*"z_offset64_t"*
+The generated "toolchainfile.cmake" file in the "buildroot/outpout"
+directory sets additional CMAKE_C_FLAGS and CMAKE_CXX_FLAGS at the end:
+*"-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"*
+I dont think these are the right flags, if i delete them and rebuild opencv
+i runs trough without any errors.
+but i dont know where the toolchainfile.cmake is generated? Where should i
+apply a patch?
+And is it okay to just delete the flags or should there be other flags?
 
-2011/9/20, keguang.zhang at gmail.com <keguang.zhang@gmail.com>:
-> From: Kelvin Cheung <keguang.zhang@gmail.com>
->
-> 1.Enable TV interface.
-> 2.Enable LIVE555 Streaming Media if live555 is available.
->
-> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
-> ---
->  package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
->  1 files changed, 18 insertions(+), 4 deletions(-)
->
-> diff --git a/package/multimedia/mplayer/mplayer.mk
-> b/package/multimedia/mplayer/mplayer.mk
-> index f735464..416572c 100644
-> --- a/package/multimedia/mplayer/mplayer.mk
-> +++ b/package/multimedia/mplayer/mplayer.mk
-> @@ -75,6 +75,22 @@ else
->  MPLAYER_CONF_OPTS += --disable-mad
->  endif
->
-> +ifeq ($(BR2_PACKAGE_LIVE555),y)
-> +MPLAYER_DEPENDENCIES += live555
-> +MPLAYER_CONF_OPTS += --enable-live
-> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
-> +MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
-> +MPLAYER_LIVE555_CFLAGS +=
-> -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
-> +MPLAYER_LIVE555_CFLAGS +=
-> -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lliveMedia
-> +MPLAYER_LIVE555_LDFLAGS += -lgroupsock
-> +MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
-> +MPLAYER_LIVE555_LDFLAGS += -lstdc++
-> +else
-> +MPLAYER_CONF_OPTS += --disable-live
-> +endif
-> +
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
->  MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-> @@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
->  		--cc="$(TARGET_CC)" \
->  		--as="$(TARGET_AS)" \
->  		--charset=UTF-8 \
-> -		--extra-cflags="$(TARGET_CFLAGS)" \
-> -		--extra-ldflags="$(TARGET_LDFLAGS)" \
-> +		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
-> +		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
->  		--enable-mad \
->  		--enable-fbdev \
->  		$(MPLAYER_CONF_OPTS) \
->  		--enable-cross-compile \
->  		--disable-ivtv \
-> -		--disable-tv \
-> -		--disable-live \
->  		--enable-dynamic-plugins \
->  	)
->  endef
-> --
-> 1.7.1
->
->
-
-
--- 
-Best Regards!
-Kelvin
+best regards
+Bruno
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111031/b2abbb6c/attachment.html>
