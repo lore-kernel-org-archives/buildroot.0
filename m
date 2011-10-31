@@ -1,50 +1,74 @@
-From: Bruno Niklaus <niklaus.bruno@gmail.com>
-Date: Mon, 31 Oct 2011 11:12:15 +0100
-Subject: [Buildroot] [buildroot] Building opencv for OMAP4430 / Armv7 /
-	Cmake problem
-In-Reply-To: <CANVadiHy0cddWJrWqF6RPS2QLp-yjY1yPYUhXm2si27m0C7M8g@mail.gmail.com>
-References: <CANVadiHy0cddWJrWqF6RPS2QLp-yjY1yPYUhXm2si27m0C7M8g@mail.gmail.com>
-Message-ID: <CANVadiHPm115hUTBUX80bzdCK8pSSbP0vEJgTeUqNC4EfbjDmA@mail.gmail.com>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Mon, 31 Oct 2011 11:15:19 -0000
+Subject: [Buildroot] [PATCH] syslinux: add support for host-install
+In-Reply-To: <1319668075-20291-1-git-send-email-arnout@mind.be>
+References: <85632AA8828446C5B830EBF9A14700E5@beraninstruments.com.local>
+ <1319668075-20291-1-git-send-email-arnout@mind.be>
+Message-ID: <477964B20A0A4C19B09BADE9B337ACC6@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-what works too is to change
-*-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE*
-to
-*-DZLIB_LARGEFILE_SOURCE -DZLIB_LARGEFILE64_SOURCE*
-in the toolchainfile.cmake
-i really don't know whats the difference, but it works. i tried this
-according
-to this mail
-http://mail.madler.net/pipermail/zlib-devel_madler.net/2010-April/001864.html
+Hi Arnout,
 
----------- Forwarded message ----------
-From: Bruno Niklaus <niklaus.bruno@gmail.com>
-Date: 2011/10/31
-Subject: Building opencv for OMAP4430 / Armv7 / Cmake problem
-To: buildroot at busybox.net
+> -----Original Message-----
+> From: Arnout Vandecappelle (Essensium/Mind) [mailto:arnout at mind.be]
+> Sent: 26 October 2011 23:28
+> To: buildroot at busybox.net
+> 
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  Hoi Will,
+> 
+>  This patch (applied to the current HEAD) builds syslinux for the host.
+> 
+>  What is still missing from this is a way to have a Windows self-installer.
+> I've got a patch cooking for that too, but it's a hack: it copies the
+> precompiled syslinux.exe binary from the extracted tar file.
+> 
+>  Regards,
+>  Arnout
+> ---
+>  boot/syslinux/syslinux.mk |   16 ++++++++++++++++
+>  1 files changed, 16 insertions(+), 0 deletions(-)
+> 
+> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+> index fa5af07..66a7076 100644
+> --- a/boot/syslinux/syslinux.mk
+> +++ b/boot/syslinux/syslinux.mk
+> @@ -26,4 +26,20 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
+>  	done
+>  endef
+> 
+> +
+> +HOST_SYSLINUX_POST_EXTRACT_HOOKS += SYSLINUX_RM_MK_LBA_IMG
 
+What have you got defined for SYSLINUX_RM_MK_LBA_IMG?
 
-Hi @all
+> +
+> +define HOST_SYSLINUX_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
 
-i tried to build opencv for armv7 / omap4430 processor, i'm using
-codesourcery toolchain with neon optimations enabled.
-when cmake tries to build opencv i allways get strange error with
-*"z_offset64_t"*
-The generated "toolchainfile.cmake" file in the "buildroot/outpout"
-directory sets additional CMAKE_C_FLAGS and CMAKE_CXX_FLAGS at the end:
-*"-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"*
-I dont think these are the right flags, if i delete them and rebuild opencv
-i runs trough without any errors.
-but i dont know where the toolchainfile.cmake is generated? Where should i
-apply a patch?
-And is it okay to just delete the flags or should there be other flags?
+As per syslinux /doc/distrib.txt:
 
-best regards
-Bruno
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111031/4ad689d1/attachment.html>
+$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
+$(HOST_MAKE_ENV) $(MAKE) -C $(@D) installer
+
+> +endef
+> +
+> +define HOST_SYSLINUX_INSTALL_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
+> +endef
+> +
+> +define HOST_SYSLINUX_CLEAN_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
+> +endef
+> +
+>  $(eval $(call GENTARGETS))
+> +$(eval $(call GENTARGETS,host))
+> --
+> 1.7.7
