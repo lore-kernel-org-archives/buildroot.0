@@ -1,12 +1,32 @@
 From: Bruno Niklaus <niklaus.bruno@gmail.com>
-Date: Mon, 31 Oct 2011 10:29:41 +0100
-Subject: [Buildroot] Building opencv for OMAP4430 / Armv7 / Cmake problem
-Message-ID: <CANVadiHy0cddWJrWqF6RPS2QLp-yjY1yPYUhXm2si27m0C7M8g@mail.gmail.com>
+Date: Mon, 31 Oct 2011 11:12:15 +0100
+Subject: [Buildroot] [buildroot] Building opencv for OMAP4430 / Armv7 /
+	Cmake problem
+In-Reply-To: <CANVadiHy0cddWJrWqF6RPS2QLp-yjY1yPYUhXm2si27m0C7M8g@mail.gmail.com>
+References: <CANVadiHy0cddWJrWqF6RPS2QLp-yjY1yPYUhXm2si27m0C7M8g@mail.gmail.com>
+Message-ID: <CANVadiHPm115hUTBUX80bzdCK8pSSbP0vEJgTeUqNC4EfbjDmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+what works too is to change
+*-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE*
+to
+*-DZLIB_LARGEFILE_SOURCE -DZLIB_LARGEFILE64_SOURCE*
+in the toolchainfile.cmake
+i really don't know whats the difference, but it works. i tried this
+according
+to this mail
+http://mail.madler.net/pipermail/zlib-devel_madler.net/2010-April/001864.html
+
+---------- Forwarded message ----------
+From: Bruno Niklaus <niklaus.bruno@gmail.com>
+Date: 2011/10/31
+Subject: Building opencv for OMAP4430 / Armv7 / Cmake problem
+To: buildroot at busybox.net
+
 
 Hi @all
 
@@ -27,4 +47,4 @@ best regards
 Bruno
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111031/b2abbb6c/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111031/4ad689d1/attachment.html>
