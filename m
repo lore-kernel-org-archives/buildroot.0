@@ -1,62 +1,39 @@
-From: Stany MARCEL <stanypub@gmail.com>
-Date: Tue,  1 Nov 2011 01:53:39 +0100
-Subject: [Buildroot] [PATCH 2/2] toolchain: Add the possibility to have a
-	mcpu option with wrapper
-In-Reply-To: <1320108819-2344-1-git-send-email-stanypub@gmail.com>
-References: <1320108819-2344-1-git-send-email-stanypub@gmail.com>
-Message-ID: <1320108819-2344-2-git-send-email-stanypub@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  1 Nov 2011 01:29:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 4363] Make sure that copied linux and busybox
+ defconfig are writable before modifying
+In-Reply-To: <bug-4363-163@https.bugs.busybox.net/>
+References: <bug-4363-163@https.bugs.busybox.net/>
+Message-ID: <20111101012909.396578F30B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Permit to define the mcpu of the external toolchain wrapper, based on
-BR2_GCC_TARGET_CPU.
+https://bugs.busybox.net/show_bug.cgi?id=4363
 
-Signed-off-by: Stany MARCEL <stanypub@gmail.com>
----
- toolchain/toolchain-external/ext-tool.mk           |    6 ++++++
- .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+--- Comment #5 from Danomi Mocelopolis <d_mo1234@yahoo.com> 2011-11-01 01:29:08 UTC ---
+(In reply to comment #4)
+> I really don't understand why this would be necessary. Could you detail what
+> you mean by "If the custom defconfigs are not checked out, then they are
+> read-only" ?
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 572917f..640db5e 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -129,6 +129,8 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = \
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
- CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
- CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
-+CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-+
- 
- # march/mtune/floating point mode needs to be passed to the external toolchain
- # to select the right multilib variant
-@@ -144,6 +146,10 @@ ifneq ($(CC_TARGET_ABI_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
- endif
-+ifneq ($(CC_TARGET_CPU_),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-+endif
- 
- ifeq ($(BR2_SOFT_FLOAT),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 3e23061..b1a4fcb 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -31,6 +31,9 @@ static char *predef_args[] = {
- #ifdef BR_ABI
- 	"-mabi=" BR_ABI,
- #endif
-+#ifdef BR_CPU
-+	"-mcpu=" BR_CPU,
-+#endif
- #ifdef BR_SOFTFLOAT
- 	"-msoft-float",
- #endif /* BR_SOFTFLOAT */
+For some version control systems, controlled files are read-only unless you
+actually check the file out for modification.  Regardless, if the custom linux
+or busybox defconfig is read-only (for whatever reason), then the copied file
+(made by buildroot) will be read-only.  When that's the case, "sed -i" fails.
+
+I.e., buildroot starts by copying the linux or busybox defconfig from where
+ever it was set up in menuconfig to output/build/*/.config, then uses sed to
+modify some of the selections according to other menuconfig settings.  If the
+file comes out of the initial copy with read-only permissions, then the sed
+will fail, and make will error out.
+
+I would imagine that buildroot's Makefile.package.in does the "chmod -R +rw
+$(@D)" when unpacking archives (prior to patching) for similar reasons, no?
+
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
