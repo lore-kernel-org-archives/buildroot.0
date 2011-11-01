@@ -1,83 +1,93 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 01 Nov 2011 15:26:37 +0100
-Subject: [Buildroot] [PATCH] sudo: optionally add user "default" to sudoers
-In-Reply-To: <CAAXf6LX1JfKGScyO9v269rLEdbk8wf9UTiw_SHdQ=5XqKuJdDA@mail.gmail.com>
-References: <CANVadiHajYSQyOY9VAVX9mL=ZW+3vgsra5SW76LjKZtPJneNcg@mail.gmail.com>
- <CAAXf6LX1JfKGScyO9v269rLEdbk8wf9UTiw_SHdQ=5XqKuJdDA@mail.gmail.com>
-Message-ID: <4EB0019D.3070701@relinux.de>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 1 Nov 2011 16:35:31 +0100
+Subject: [Buildroot] [PATCH 2/2 v2] toolchain: Add the possibility to
+	have a mcpu option with wrapper
+In-Reply-To: <1320149956-3072-1-git-send-email-stanypub@gmail.com>
+References: <201111011151.35278.yann.morin.1998@anciens.enib.fr>
+ <1320149956-3072-1-git-send-email-stanypub@gmail.com>
+Message-ID: <201111011635.31699.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Stany, All,
 
-I think that using a non privileged user even in embedded systems is a
-real good concept.
+On Tuesday 01 November 2011 13:19:16 Stany MARCEL wrote:
+> Permit to define the mcpu of the external toolchain wrapper, based on
+> BR2_GCC_TARGET_CPU.
+> 
+> Signed-off-by: Stany MARCEL <stanypub@gmail.com>
 
-To make things easier I made this little patch that generates a config
-option to add user "default" to the sudoers list when the package sudo
-is included in the system.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-Kind regards
+Peter, I think this should go in before -rc as well.
 
-Stephan
+Regards,
+Yann E. MORIN.
 
+> ---
+> 
+> Changes for v2:
+>  * Spurious empty line removed
+>  * CPU setting positionned above ABI one
+> 
+>  toolchain/toolchain-external/ext-tool.mk           |    5 +++++
+>  .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
+>  2 files changed, 8 insertions(+), 0 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index 572917f..a52621c 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -127,6 +127,7 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = \
+>  	-DBR_SYSROOT='"$(STAGING_DIR)"'
+> 
+>  CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
+> +CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
+>  CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
+>  CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
+> 
+> @@ -140,6 +141,10 @@ ifneq ($(CC_TARGET_ARCH_),)
+>  TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
+>  TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
+>  endif
+> +ifneq ($(CC_TARGET_CPU_),)
+> +TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
+> +TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
+> +endif
+>  ifneq ($(CC_TARGET_ABI_),)
+>  TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+>  TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
+> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+> index 3e23061..cc404f3 100644
+> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
+> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+> @@ -28,6 +28,9 @@ static char *predef_args[] = {
+>  #ifdef BR_TUNE
+>  	"-mtune=" BR_TUNE,
+>  #endif /* BR_TUNE */
+> +#ifdef BR_CPU
+> +	"-mcpu=" BR_CPU,
+> +#endif
+>  #ifdef BR_ABI
+>  	"-mabi=" BR_ABI,
+>  #endif
+> --
+> 1.7.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-
----
- package/sudo/Config.in |    9 +++++++++
- package/sudo/sudo.mk   |    9 +++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
-
-diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-index fc0a175..59b6a93 100644
---- a/package/sudo/Config.in
-+++ b/package/sudo/Config.in
-@@ -7,3 +7,12 @@ config BR2_PACKAGE_SUDO
-          but still allow people to get their work done.
-
-          http://www.sudo.ws/sudo/
-+
-+if BR2_PACKAGE_SUDO
-+
-+config BR2_SUDO_ADD_DEFAULT
-+       bool "add default user"
-+       help
-+         Add user "default" to sudoers file
-+
-+endif
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 9c62c49..adc1c0d 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -15,10 +15,19 @@ SUDO_CONF_OPT = \
-                --without-interfaces \
-                --without-pam
-
-+ifeq ($(BR2_SUDO_ADD_DEFAULT),y)
-+define SUDO_ADD_DEFAULT
-+       mkdir $(TARGET_DIR)/etc/sudoers.d
-+       echo "default ALL = ALL" >$(TARGET_DIR)/etc/sudoers.d/default
-+       chmod 0440 $(TARGET_DIR)/etc/sudoers.d/default
-+endef
-+endif
-+
- define SUDO_INSTALL_TARGET_CMDS
-        install -m 4555 -D $(@D)/sudo $(TARGET_DIR)/usr/bin/sudo
-        install -m 0555 -D $(@D)/visudo $(TARGET_DIR)/usr/sbin/visudo
-        install -m 0440 -D $(@D)/sudoers $(TARGET_DIR)/etc/sudoers
-+       $(SUDO_ADD_DEFAULT)
- endef
-
- $(eval $(call AUTOTARGETS))
 -- 
-1.7.0.4
-
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
