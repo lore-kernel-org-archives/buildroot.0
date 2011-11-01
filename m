@@ -1,27 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  1 Nov 2011 01:48:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 4387] Make sure that dest dir exists before
- installing mtd files
-In-Reply-To: <bug-4387-163@https.bugs.busybox.net/>
-References: <bug-4387-163@https.bugs.busybox.net/>
-Message-ID: <20111101014813.38FA08F3FA@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Tue, 1 Nov 2011 11:46:11 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain: Correct test for external
+	tools symlink creation
+In-Reply-To: <1320108819-2344-1-git-send-email-stanypub@gmail.com>
+References: <1320108819-2344-1-git-send-email-stanypub@gmail.com>
+Message-ID: <201111011146.11248.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4387
+Stany, All,
 
---- Comment #3 from Danomi Mocelopolis <d_mo1234@yahoo.com> 2011-11-01 01:48:12 UTC ---
-Created attachment 3716
-  --> https://bugs.busybox.net/attachment.cgi?id=3716
-patch file
+On Tuesday 01 November 2011 01:53:38 Stany MARCEL wrote:
+> When the external tools chain is installed in a path that match one of
+> the first case test, all symlink are created to the external
+> wrapper. The proposed solution is to test only the base name not the
+> full path.
+> 
+> Signed-off-by: Stany MARCEL <stanypub@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
 
-Okay, I'll submit to mailing list, if that's preferable to using bugzilla.  For
-completeness, the same file has been updated here.
+Peter, this should go in before the -rc, if possible.
+
+> ---
+>  toolchain/toolchain-external/ext-tool.mk |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index 8287916..572917f 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -318,9 +318,9 @@ $(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
+>  $(HOST_DIR)/usr/bin/ext-toolchain-wrapper: $(STAMP_DIR)/ext-toolchain-installed
+>  	mkdir -p $(HOST_DIR)/usr/bin; cd $(HOST_DIR)/usr/bin; \
+>  	for i in $(TOOLCHAIN_EXTERNAL_CROSS)*; do \
+> -		case "$$i" in \
+> +		base=$${i##*/}; \
+> +		case "$$base" in \
+>  		*cc|*cc-*|*++|*++-*|*cpp) \
+> -			base=$${i##*/}; \
+>  			ln -sf $(@F) $$base; \
+>  			;; \
+>  		*) \
+> 
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
