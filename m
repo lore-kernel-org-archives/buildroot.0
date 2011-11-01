@@ -1,52 +1,23 @@
-From: Luca Ceresoli <list@lucaceresoli.net>
-Date: Fri, 30 Sep 2011 23:57:02 +0200
-Subject: [Buildroot] User-enabled host packages?
-In-Reply-To: <20110930195805.0677ff0b@skate>
-References: <4E79E001.7010409@lucaceresoli.net> <20110930160415.69616a8d@skate>
- <CAAXf6LUvj5gJxmLa1gL1WssYJUs9fvWa30cAEBFpscQF_QXMoA@mail.gmail.com>
- <20110930195805.0677ff0b@skate>
-Message-ID: <4E863B2E.7000602@lucaceresoli.net>
+From: D M <d_mo1234@yahoo.com>
+Date: Mon, 31 Oct 2011 19:02:37 -0700 (PDT)
+Subject: [Buildroot] Make sure that dest dir exists before installing mtd
+	files
+Message-ID: <1320112957.28322.YahooMailNeo@web161421.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-Thomas Petazzoni wrote:
-
->
->> Of course, explicit host packages will be treated the same way as
->> dependency-host-packages on Config.in level, but I don't think this is
->> a problem.
-> Not sure what you mean here, but that raises the question of
-> dependencies between host packages.
-I'm also unsure about what Thomas (De Schampheleire) means here, but this
-could be read as a feature as well.
-A package such as omap-u-boot-utils can be required to build an OMAP-signed
-image, thus being a dependency-host-package, or standalone to interact with
-the target, thus being an explicit host package.
-"Being treated in the same way" means it would work in both cases without
-additional effort...
-
-
->>> All these Config.in.host
->>>    files are included in a single "Packages ->  Host utitities"
->>> submenu, from package/Config.in. There is no need to create
->>> subsections in this menu at the moment, since the number of
->>> utilities shown here is suspected to remain limited.
->> If you want to add the new menu under Packages, then the description
->> of that menu should change. Currently it is:
->> "Package Selection for the target"
->> A proposal is simply:
->> "Package selection"
->>
->> The alternative is as proposed earlier: to put the menu at top-level.
-> No strong opinion here. Perhaps a new top-level menu is better, I don't
-> know.
-
-I personally feel a top-level menu would be better, leaving the "packages"
-menu to list what has to be on the target.
-
-Luca
+I ran into a situation where a custom target skeleton did not have a /usr/sbin
+- it relied on something else to make it (busybox?).  So when mtd.mk tried to
+install things to it, install bombed out.  (I think that we were probably using
+the new version of "make", which no longer sorts wildcards in alphabetical
+order - so mtd might have been compiled before busybox.) I have attached a patch to add -D to the install commands. 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: add_mtd_install_dir_fix.patch
+Type: application/octet-stream
+Size: 884 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111031/61ce0deb/attachment-0001.obj>
