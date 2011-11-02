@@ -1,29 +1,22 @@
-From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
-Date: Wed, 2 Nov 2011 14:17:16 +0100
-Subject: [Buildroot] PKG_CONFIG_PATH question
-In-Reply-To: <87ehxqlora.fsf@macbook.be.48ers.dk>
-References: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
- <CAAXf6LU3fXXea4e5_kXftPMeLoYz6AuSO75s6OShtYsgnjgE=g@mail.gmail.com>
- <CALX2uoNrcXSLW0LxOomt=sKMPPPZBrxKVBn5pc-rv0xG0QGN2Q@mail.gmail.com>
- <87ehxqlora.fsf@macbook.be.48ers.dk>
-Message-ID: <CALX2uoMcg9EpXDUfXekcVBt=UmrWaKE93RYW3+pPhaTWsKfzdQ@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Wed, 02 Nov 2011 15:56:49 +0100
+Subject: [Buildroot] Putting udev 174 on a mirror
+Message-ID: <4EB15A31.5060205@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> ??ukasz> The error occured when building xcb-proto for the target
-> ??ukasz> machine, not host-xcb-proto.
-> I guess you mean libxcb?
-Yes, I mean libxcb.
+Hi Peter,
 
-> ??ukasz> After some time I found that buildroot generates host-pkg-config
-> ??ukasz> package, but I wonder why buildroot uses my host installed pkg-config,
-> ??ukasz> what is the reason to build host-pkg-config and use pkg-config from my
-> ??ukasz> machine?
->
-> Because of a missing dependency. I've fixed it in git now.
-Thanks!
+could you please put the latest udev on a mirror, till kernel.org is fully functional?
 
-Lukasz
+http://people.freedesktop.org/~kay/
+
+There are many important changes, so it would be good to test the integration in BR.
+
+http://git.kernel.org/?p=linux/hotplug/udev.git;a=blob;f=NEWS;h=f4ad9f00748de04cab043f3d15dcb4cd989f1f57;hb=b3eccdce81d18ec36c6ea95ac161002fc33d1810
+
+Regards,
+Yegor
