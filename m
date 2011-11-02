@@ -1,32 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Nov 2011 20:56:05 +0100
-Subject: [Buildroot] [git commit] radvd: security bump to version 1.8.3
-Message-ID: <20111102195838.39A9C8F42A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Nov 2011 21:15:46 +0100
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <20111102160349.4afe5935@skate> (Thomas Petazzoni's message of
+ "Wed, 2 Nov 2011 16:03:49 +0100")
+References: <20111102160349.4afe5935@skate>
+Message-ID: <87liryjn65.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=da8ecfeceff9daecc0ffb19520c4db130171c8e1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/radvd/radvd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Hi,
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 5d07ff6..d4b9a73 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--RADVD_VERSION = 1.8.2
-+RADVD_VERSION = 1.8.3
- RADVD_SITE = http://www.litech.org/radvd/dist/
- RADVD_DEPENDENCIES = flex host-flex
- 
+ Thomas> Buildroot Developer Day - ELCE 2011
+ Thomas> ===================================
+
+ Thomas> The Embedded Linux Conference Europe 2011 took place from Wednesday
+ Thomas> October, 26th to Friday October, 28th in Prague. The Buildroot
+ Thomas> developers took that opportunity to organize a one day meeting on
+ Thomas> Saturday October, 29th. The meeting took place in the lobby of the
+ Thomas> Clarion Congress Hotel, where the rest of the conference took place.
+
+Thanks a lot for the writeup Thomas!
+
+ Thomas>  * The development process has a 3 months cycle, with 2 months of
+ Thomas>    development and 1 month of bug-fixing. During the month of
+ Thomas>    bug-fixing, Peter only accepts bug fix patches and other minor
+ Thomas>    evolutions. This means that the merge of more invasive patches is
+ Thomas>    completely stalled during one month and those patches accumulate
+ Thomas>    and it is difficult for Peter to merge them all when the next
+ Thomas>    development cycle opens. To solve this, Peter will now maintain a
+ Thomas>    -next branch during the month of bug-fixing. This way, Peter will
+ Thomas>    continue to merge the patches non-acceptable during the bug-fixing
+ Thomas>    period, and all those patches would be merged into the master
+ Thomas>    branch as soon as the next development cycle starts.
+
+Which means I'm running late for 2011.11-rc1 because of ELCE and other
+real life stuff. I was hoping to be able to put out rc1 today, as I'll
+be away for the rest of the week - But that's not going to happen.
+
+Expect rc1 early next week instead. If you have any pending patches you
+think should go into rc1, please ping me.
+
+Once rc1 is out, then I'll create the -next branch and start merging in
+new stuff.
+
+-- 
+Bye, Peter Korsgaard
