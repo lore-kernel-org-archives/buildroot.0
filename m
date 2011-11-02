@@ -1,45 +1,32 @@
-From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
-Date: Wed, 2 Nov 2011 12:46:52 +0100
-Subject: [Buildroot] PKG_CONFIG_PATH question
-In-Reply-To: <CAAXf6LU3fXXea4e5_kXftPMeLoYz6AuSO75s6OShtYsgnjgE=g@mail.gmail.com>
-References: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
- <CAAXf6LU3fXXea4e5_kXftPMeLoYz6AuSO75s6OShtYsgnjgE=g@mail.gmail.com>
-Message-ID: <CALX2uoNrcXSLW0LxOomt=sKMPPPZBrxKVBn5pc-rv0xG0QGN2Q@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 2 Nov 2011 12:58:04 +0100
+Subject: [Buildroot] [git commit] libxcb: needs pkg-config
+Message-ID: <20111102115833.1484C8F165@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> For the build system I use quite ancient host machine (slackware),
->> maybe it causes some problems.
->>
->> I could not compile libxcb, getting error from configure that
->> xcb-proto version is less than 1.5 (buildroot is looking for
->> xcb-proto.pc file (during configure) inside " /usr/lib/pkgconfig/" -
->> on my build system) is that nomal ?
->>
->> I could move forward by setting environment variable PKC_CONFIG_PATH
->> to the STAGING_DIR/usr/lib/pkgconfig/, butI do not like this solution.
+commit: http://git.buildroot.net/buildroot/commit/?id=c1fa253a1b9180d349bcf9ada4898494d2221fc3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Could you give some more details, for example (part of) the build log,
-> showing which package is being installed. Some packages first install
-> a host- variant. In that case, it is perfectly valid for the configure
-> step of that host package to check /usr/lib/pkgconfig.
+Reported-by: ??ukasz Pu??ka <lukasz@oxnet.pl>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/x11r7/libxcb/libxcb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-The error occured when building xcb-proto for the target machine,  not
-host-xcb-proto.
-
-My version of pkg-config was 0.21, or 0.20, and it did not supported
-PKG_CONFIG_SYSROOT_DIR environment variable.
-After updating my build OS (slackware 12)  with newer pkg-config
-(0.23) it was possible for me to move forward without the trick with
-PKG_CONFIG_PATH.
-
-After some time I found that buildroot generates host-pkg-config
-package, but I wonder why buildroot uses my host installed pkg-config,
-what is the reason to build host-pkg-config and use pkg-config from my
-machine?
-
-Best regards,
-Lukasz
+diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
+index 106a8a4..8fb3dd3 100644
+--- a/package/x11r7/libxcb/libxcb.mk
++++ b/package/x11r7/libxcb/libxcb.mk
+@@ -11,7 +11,7 @@ LIBXCB_INSTALL_STAGING = YES
+ 
+ LIBXCB_DEPENDENCIES = \
+ 	host-libxslt pthread-stubs xcb-proto xlib_libXdmcp xlib_libXau \
+-	host-xcb-proto host-python
++	host-xcb-proto host-python host-pkg-config
+ LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
+ LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
+ 	XCBPROTO_XCBPYTHONDIR=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
