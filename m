@@ -1,79 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Nov 2011 13:28:49 +0100
-Subject: [Buildroot] Talk at Embedded Linux Conference Europe
-In-Reply-To: <CAAXf6LVzd4z5j_Y-w6jXvUCdsmZkgxEqJQtiVG4ZPzDKhdfnjA@mail.gmail.com>
-References: <20111102101535.25934b22@skate>
- <CAAXf6LVzd4z5j_Y-w6jXvUCdsmZkgxEqJQtiVG4ZPzDKhdfnjA@mail.gmail.com>
-Message-ID: <20111102132849.5713060d@skate>
+From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
+Date: Wed, 2 Nov 2011 14:17:16 +0100
+Subject: [Buildroot] PKG_CONFIG_PATH question
+In-Reply-To: <87ehxqlora.fsf@macbook.be.48ers.dk>
+References: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
+ <CAAXf6LU3fXXea4e5_kXftPMeLoYz6AuSO75s6OShtYsgnjgE=g@mail.gmail.com>
+ <CALX2uoNrcXSLW0LxOomt=sKMPPPZBrxKVBn5pc-rv0xG0QGN2Q@mail.gmail.com>
+ <87ehxqlora.fsf@macbook.be.48ers.dk>
+Message-ID: <CALX2uoMcg9EpXDUfXekcVBt=UmrWaKE93RYW3+pPhaTWsKfzdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 2 Nov 2011 11:37:30 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+> ??ukasz> The error occured when building xcb-proto for the target
+> ??ukasz> machine, not host-xcb-proto.
+> I guess you mean libxcb?
+Yes, I mean libxcb.
 
-> > Covering the 40+ slides consumed almost the entire time slot, so
-> > there was only time left for a few questions at the end. Generally
-> > speaking, I had the feeling that there is definitely an interest in
-> > Buildroot, as an alternative to bigger things like OE or Yocto. For
-> > example, I went to the Yocto Bird-of-a-Feather session, and the
-> > first 20 minutes of the session was spent answering questions of
-> > the audience about how Yocto compares to Buildroot, what are the
-> > relative advantages/drawbacks, etc.
-> 
-> It's nice to hear about this interest in Buildroot.
-> Was there anything in particular that came out of the Yocto vs.
-> Buildroot discussion? Things that are seen as a drawback of buildroot
-> that we could improve without sacrificing the design goals? Features
-> that are found lacking?
+> ??ukasz> After some time I found that buildroot generates host-pkg-config
+> ??ukasz> package, but I wonder why buildroot uses my host installed pkg-config,
+> ??ukasz> what is the reason to build host-pkg-config and use pkg-config from my
+> ??ukasz> machine?
+>
+> Because of a missing dependency. I've fixed it in git now.
+Thanks!
 
-You'll be able to watch the video. But basically, the Yocto people were
-putting the emphasis on Yocto being a distribution builder, i.e it
-builds a set of packages and not just a root filesystem image. But
-interestingly, in the room, one of the person said that for his
-embedded Linux projects, which are deeply embedded ones (such as
-washing machines, or other industrial stuff), packaging is completely
-useless and he just wants something that generates a root filesystem
-image.
-
-> > The final version of the slides are available at:
-> >
-> > ?http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf
-> >
-> > I intend to contribute some of those elements to the official
-> > documentation.
-> 
-> I think that would definitely be useful. As several people indicated,
-> your write-up of some best practices is very interesting for project
-> developers.
-
-Ok, I'll try to work on that. I'm pretty busy until end of November due
-to the organization of a free software event in France, but after that,
-my free time will again be dedicated to Buildroot stuff.
-
-> > I also would like to thank all the persons who reviewed
-> > my slides and maybe very useful comments. This definitely helped in
-> > making the talk better.
-> >
-> > For those interested, there is a picture of myself giving the talk
-> > with the beautiful Buildroot t-shirt (I wish I had a yellow helmet
-> > to give the talk):
-> >
-> > ?http://www.flickr.com/photos/13825348 at N03/6303645373/in/photostream
-> 
-> I would have loved the yellow helmet as well :-D
-
-Idea to keep for a future talk I guess :)
-
-> Thanks again for this talk, I think it was a great idea.
-
-You're welcome!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Lukasz
