@@ -1,93 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Tue, 1 Nov 2011 16:35:31 +0100
-Subject: [Buildroot] [PATCH 2/2 v2] toolchain: Add the possibility to
-	have a mcpu option with wrapper
-In-Reply-To: <1320149956-3072-1-git-send-email-stanypub@gmail.com>
-References: <201111011151.35278.yann.morin.1998@anciens.enib.fr>
- <1320149956-3072-1-git-send-email-stanypub@gmail.com>
-Message-ID: <201111011635.31699.yann.morin.1998@anciens.enib.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 2 Nov 2011 08:59:40 +0100
+Subject: [Buildroot] PKG_CONFIG_PATH question
+In-Reply-To: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
+References: <CALX2uoNbshTRLzEXYJMOKuKF2WOxks+Q3w5Rz83YXoku3z_ueA@mail.gmail.com>
+Message-ID: <CAAXf6LU3fXXea4e5_kXftPMeLoYz6AuSO75s6OShtYsgnjgE=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stany, All,
+Hi Luke,
 
-On Tuesday 01 November 2011 13:19:16 Stany MARCEL wrote:
-> Permit to define the mcpu of the external toolchain wrapper, based on
-> BR2_GCC_TARGET_CPU.
-> 
-> Signed-off-by: Stany MARCEL <stanypub@gmail.com>
+2011/10/30 ?ukasz Pu?ka <lukasz@oxnet.pl>:
+> Hi all,
+>
+> My name is Luke and I am new here.
+>
+> After two encouraging sessions about buildroot on ELCE, I decided to
+> give it a try.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Welcome! It's nice to hear that ELCE made a difference!
 
-Peter, I think this should go in before -rc as well.
+> I am usually using OpenEmbedded but just for fun I decided to build
+> similar image with buildroot, I downloaded buildroot-2011.08.
+> Compiled my own toolchain with crostool-ng (btw, all new CodeSourcery
+> arm toolchains have ICE when iwmmxt optimization is enabled). And.. i
+> get stuck for the while.
+>
+> For the build system I use quite ancient host machine (slackware),
+> maybe it causes some problems.
+>
+> I could not compile libxcb, getting error from configure that
+> xcb-proto version is less than 1.5 (buildroot is looking for
+> xcb-proto.pc file (during configure) inside " /usr/lib/pkgconfig/" -
+> on my build system) is that nomal ?
+>
+> I could move forward by setting environment variable PKC_CONFIG_PATH
+> to the STAGING_DIR/usr/lib/pkgconfig/, butI do not like this solution.
 
-Regards,
-Yann E. MORIN.
+Could you give some more details, for example (part of) the build log,
+showing which package is being installed. Some packages first install
+a host- variant. In that case, it is perfectly valid for the configure
+step of that host package to check /usr/lib/pkgconfig.
 
-> ---
-> 
-> Changes for v2:
->  * Spurious empty line removed
->  * CPU setting positionned above ABI one
-> 
->  toolchain/toolchain-external/ext-tool.mk           |    5 +++++
->  .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
->  2 files changed, 8 insertions(+), 0 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> index 572917f..a52621c 100644
-> --- a/toolchain/toolchain-external/ext-tool.mk
-> +++ b/toolchain/toolchain-external/ext-tool.mk
-> @@ -127,6 +127,7 @@ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = \
->  	-DBR_SYSROOT='"$(STAGING_DIR)"'
-> 
->  CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
-> +CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
->  CC_TARGET_ARCH_:=$(call qstrip,$(BR2_GCC_TARGET_ARCH))
->  CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
-> 
-> @@ -140,6 +141,10 @@ ifneq ($(CC_TARGET_ARCH_),)
->  TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
->  TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
->  endif
-> +ifneq ($(CC_TARGET_CPU_),)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
-> +TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-> +endif
->  ifneq ($(CC_TARGET_ABI_),)
->  TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
->  TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
-> diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> index 3e23061..cc404f3 100644
-> --- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> +++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-> @@ -28,6 +28,9 @@ static char *predef_args[] = {
->  #ifdef BR_TUNE
->  	"-mtune=" BR_TUNE,
->  #endif /* BR_TUNE */
-> +#ifdef BR_CPU
-> +	"-mcpu=" BR_CPU,
-> +#endif
->  #ifdef BR_ABI
->  	"-mabi=" BR_ABI,
->  #endif
-> --
-> 1.7.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
