@@ -1,31 +1,30 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 02 Nov 2011 16:53:09 +0100
-Subject: [Buildroot] Putting udev 174 on a mirror
-In-Reply-To: <87zkgejzec.fsf@macbook.be.48ers.dk>
-References: <4EB15A31.5060205@visionsystems.de>
- <87zkgejzec.fsf@macbook.be.48ers.dk>
-Message-ID: <4EB16765.3090309@visionsystems.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Nov 2011 13:05:36 -0300
+Subject: [Buildroot] [PATCH] radvd: security bump to version 1.8.3
+Message-ID: <1320249936-22641-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 02.11.2011 16:51, schrieb Peter Korsgaard:
->>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
->  Yegor> Hi Peter,
->  Yegor> could you please put the latest udev on a mirror, till kernel.org is fully functional?
->
->  Yegor> http://people.freedesktop.org/~kay/
->
->  Yegor> There are many important changes, so it would be good to test the integration in BR.
->
->  Yegor> http://git.kernel.org/?p=linux/hotplug/udev.git;a=blob;f=NEWS;h=f4ad9f00748de04cab043f3d15dcb4cd989f1f57;hb=b3eccdce81d18ec36c6ea95ac161002fc33d1810
->
-> Done:
->
-> http://sources.buildroot.net/udev-174.tar.bz2
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/radvd/radvd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks.
-
-Yegor
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 5d07ff6..d4b9a73 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-RADVD_VERSION = 1.8.2
++RADVD_VERSION = 1.8.3
+ RADVD_SITE = http://www.litech.org/radvd/dist/
+ RADVD_DEPENDENCIES = flex host-flex
+ 
+-- 
+1.7.3.4
