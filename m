@@ -1,25 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Nov 2011 11:46:30 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain: Correct test for external
-	tools symlink creation
-In-Reply-To: <1320108819-2344-1-git-send-email-stanypub@gmail.com> (Stany
- MARCEL's message of "Tue, 1 Nov 2011 01:53:38 +0100")
-References: <1320108819-2344-1-git-send-email-stanypub@gmail.com>
-Message-ID: <87bosun6nt.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Nov 2011 11:05:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 4387] Make sure that dest dir exists before
+ installing mtd files
+In-Reply-To: <bug-4387-163@https.bugs.busybox.net/>
+References: <bug-4387-163@https.bugs.busybox.net/>
+Message-ID: <20111102110540.817A38F3B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Stany" == Stany MARCEL <stanypub@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4387
 
- Stany> When the external tools chain is installed in a path that match one of
- Stany> the first case test, all symlink are created to the external
- Stany> wrapper. The proposed solution is to test only the base name not the
- Stany> full path.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-02 11:05:40 UTC ---
+Committed, thanks
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
