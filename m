@@ -1,56 +1,61 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 2 Nov 2011 12:11:17 +0100
-Subject: [Buildroot] [git commit] uClibc 0.9.31.1: add patch to export
-	strverscmp for real
-Message-ID: <20111102114940.57D248F415@busybox.osuosl.org>
+Date: Wed, 2 Nov 2011 12:00:52 +0100
+Subject: [Buildroot] [git commit] mtd: make sure that dest dir exists before
+	installing mtd files
+Message-ID: <20111102114939.800158F415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6fed97eb0d82c6adfaf957d1b2f00362d1653453
+commit: http://git.buildroot.net/buildroot/commit/?id=6473f6c035863ee846f3b1ebc239cabdcb497301
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Closes #4387
+
+Signed-off-by: Danomi Mocelopolis <d_mo1234@yahoo.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../uClibc/uClibc-0.9.31.1-export-strverscmp.patch |   30 ++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+ CHANGES            |    3 ++-
+ package/mtd/mtd.mk |    4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31.1-export-strverscmp.patch b/toolchain/uClibc/uClibc-0.9.31.1-export-strverscmp.patch
-new file mode 100644
-index 0000000..19bc021
---- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31.1-export-strverscmp.patch
-@@ -0,0 +1,30 @@
-+From 139b8f0c673fed465d27f99c98568e5d5e1b9b72 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 4 Jun 2010 13:36:30 +0200
-+Subject: [PATCH] strverscmp: I forgot to export it
-+
-+Result was:
-+
-+strverscmp.o:
-+000000ec T __GI_strverscmp
-+
-+i.e. no plain "strverscmp"!
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ libc/string/strverscmp.c |    1 +
-+ 1 files changed, 1 insertions(+), 0 deletions(-)
-+
-+diff --git a/libc/string/strverscmp.c b/libc/string/strverscmp.c
-+index 74ae4c6..b19e8f0 100644
-+--- a/libc/string/strverscmp.c
-++++ b/libc/string/strverscmp.c
-+@@ -115,3 +115,4 @@ int strverscmp (const char *s1, const char *s2)
-+       return state;
-+   }
-+ }
-++libc_hidden_def(strverscmp)
-+-- 
-+1.7.3.4
-+
+diff --git a/CHANGES b/CHANGES
+index 74ec64f..0043126 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -33,7 +33,7 @@
+ 	libglib2, libiconv, libmpd, libreplaygain, libroxml,
+ 	libsamplerate, libsndfile, libsoup, libsvgtiny, libtool,
+ 	lighttpd, links, linux-fusion, lite, lrzsz, lsof, lzo, lzop,
+-	makedevs, mcookie, mpg123, mpd, mpfr, musepack, mutt,
++	makedevs, mcookie, mpg123, mpd, mpfr, mtd, musepack, mutt,
+ 	mysql_client, ncftp, ncurses, neon, netcat, netsnmp, ntfs-3g,
+ 	ntfsprogs, ntp, openntpd, openssh, openssl, orc, pciutils,
+ 	psmisc, python, qt, quagga, radvd, rpm, rsync, samba, sawman,
+@@ -70,6 +70,7 @@
+ 	#4183: Codesourcery toolchain download site has changed
+ 	#4231: libneon.so: undefined reference to `SSL_SESSION_cmp'
+ 	#4381: Add option to lighttpd to enable Lua support
++	#4387: Make sure that dest dir exists before installing mtd files
+ 
+ 2011.08, Released August 31th, 2011:
+ 
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index ef876e2..1b23e83 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -91,10 +91,10 @@ endef
+ 
+ define MTD_INSTALL_TARGET_CMDS
+  for f in $(MTD_TARGETS_y) ; do \
+-  install -m 0755 $(@D)/$$f $(TARGET_DIR)/usr/sbin/$$f ; \
++  install -D -m 0755 $(@D)/$$f $(TARGET_DIR)/usr/sbin/$$f ; \
+  done ; \
+  for f in $(MTD_TARGETS_UBI_y) ; do \
+-  install -m 0755 $(@D)/ubi-utils/$$f $(TARGET_DIR)/usr/sbin/$$f ; \
++  install -D -m 0755 $(@D)/ubi-utils/$$f $(TARGET_DIR)/usr/sbin/$$f ; \
+  done
+ endef
+ 
