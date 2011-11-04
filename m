@@ -1,148 +1,92 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu, 03 Nov 2011 19:13:15 +0100
-Subject: [Buildroot] [PATCH] sudo: optionally add user "default" to
-	sudoers
-In-Reply-To: <4EB0019D.3070701@relinux.de>
-References: <CANVadiHajYSQyOY9VAVX9mL=ZW+3vgsra5SW76LjKZtPJneNcg@mail.gmail.com>
- <CAAXf6LX1JfKGScyO9v269rLEdbk8wf9UTiw_SHdQ=5XqKuJdDA@mail.gmail.com>
- <4EB0019D.3070701@relinux.de>
-Message-ID: <4EB2D9BB.10701@relinux.de>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 4 Nov 2011 09:57:39 +0100
+Subject: [Buildroot] Migration to the latest stable release
+In-Reply-To: <CACXKkoacGwW266H8TFRWmjgN76_aLCid9TTzQNEWQM_chNR4Vw@mail.gmail.com>
+References: <CACXKkoZ3hxrhy00WxLPLCmbHet00e1_nnvgGc1E=U+w8hS5vSA@mail.gmail.com>
+ <CAAXf6LU45N-CXRjCKF854jdii-=ZQ+6b+k7xiJUt5-2txZ7COQ@mail.gmail.com>
+ <CACXKkoaHDhFzBT6rskRzoEDrq1e7hL5R03+v0zkV7dGodoaduQ@mail.gmail.com>
+ <CAAXf6LW=hJVyLZs6DO7=QdM1yNKO=YaBJ5VLvEp=0Xj7qXy-Ag@mail.gmail.com>
+ <CACXKkoacGwW266H8TFRWmjgN76_aLCid9TTzQNEWQM_chNR4Vw@mail.gmail.com>
+Message-ID: <CAAXf6LWEc73hibuFNpNeQioRgDRcYzbL4aeRbrwS41i9qrnrNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hello Milan,
 
-my previously sent patch to add user "default" to sudoers fails when
-/etc/sudoers.d/default already exists. Please find the corrected patch
-below.
-
-With kind regards
-
-Stephan
-
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-
----
- package/sudo/Config.in |    9 +++++++++
- package/sudo/sudo.mk   |    9 +++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
-
-diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-index fc0a175..59b6a93 100644
---- a/package/sudo/Config.in
-+++ b/package/sudo/Config.in
-@@ -7,3 +7,12 @@ config BR2_PACKAGE_SUDO
-          but still allow people to get their work done.
-
-          http://www.sudo.ws/sudo/
-+
-+if BR2_PACKAGE_SUDO
-+
-+config BR2_SUDO_ADD_DEFAULT
-+       bool "add default user"
-+       help
-+         Add user "default" to sudoers file
-+
-+endif
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 9c62c49..adc1c0d 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -15,10 +15,19 @@ SUDO_CONF_OPT = \
-                --without-interfaces \
-                --without-pam
-
-+ifeq ($(BR2_SUDO_ADD_DEFAULT),y)
-+define SUDO_ADD_DEFAULT
-+       test -d $(TARGET_DIR)/etc/sudoers.d || mkdir $(TARGET_DIR)/etc/sudoers.d
-+       test -f $(TARGET_DIR)/etc/sudoers.d/default || \
-+               echo "default ALL = ALL" >$(TARGET_DIR)/etc/sudoers.d/default; \
-+               chmod 0440 $(TARGET_DIR)/etc/sudoers.d/default
-+endef
-+endif
-+
- define SUDO_INSTALL_TARGET_CMDS
-        install -m 4555 -D $(@D)/sudo $(TARGET_DIR)/usr/bin/sudo
-        install -m 0555 -D $(@D)/visudo $(TARGET_DIR)/usr/sbin/visudo
-        install -m 0440 -D $(@D)/sudoers $(TARGET_DIR)/etc/sudoers
-+       $(SUDO_ADD_DEFAULT)
- endef
-
- $(eval $(call AUTOTARGETS))
--- 1.7.0.4
+Please don't top-post. See
+http://linux.sgms-centre.com/misc/netiquette.php#toppost
 
 
-
-Am 01.11.2011 15:26, schrieb Stephan Hoffmann:
-> Hello all,
+On Thu, Nov 3, 2011 at 4:05 PM, Milan Stevanovic
+<milan.o.stevanovic@gmail.com> wrote:
+[..]
+>> >> >
+>> >> > I want to migrate to the latest buildroot stable release. Also, I
+>> >> > want
+>> >> > to
+>> >> > keep all my changes after migration.
+>> >> > Is there a some procedure for this?
+>> >>
+>> >> Assuming you have not put your current buildroot environment in a
+>> >> version control system, you'll have to first generate a list of
+>> >> changes you have made compared to the baseline you started from, and
+>> >> then reapply the changes on the new release (you could use diff/patch
+>> >> to help with this).
+>> >>
+>> >> Of course, type of changes you made will determine how easy this goes.
+>>
+>> > Hi,
+>> >
+>> > Thanks for fast replay.
+>> >
+>> > Unfortunately, I was not precise.
+>> > Current buildroot environment is under git version control system.
+>>
+>> In that case, you can use the 'git pull' command to fetch the new
+>> version (you'll probably want to specify a specific tag) and merge
+>> your changes with the latest release. This is generic git usage,
+>> nothing buildroot specific.
 >
-> I think that using a non privileged user even in embedded systems is a
-> real good concept.
->
-> To make things easier I made this little patch that generates a config
-> option to add user "default" to the sudoers list when the package sudo
-> is included in the system.
->
-> Kind regards
->
-> Stephan
->
->
-> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
->
-> ---
->  package/sudo/Config.in |    9 +++++++++
->  package/sudo/sudo.mk   |    9 +++++++++
->  2 files changed, 18 insertions(+), 0 deletions(-)
->
-> diff --git a/package/sudo/Config.in b/package/sudo/Config.in
-> index fc0a175..59b6a93 100644
-> --- a/package/sudo/Config.in
-> +++ b/package/sudo/Config.in
-> @@ -7,3 +7,12 @@ config BR2_PACKAGE_SUDO
->           but still allow people to get their work done.
->
->           http://www.sudo.ws/sudo/
-> +
-> +if BR2_PACKAGE_SUDO
-> +
-> +config BR2_SUDO_ADD_DEFAULT
-> +       bool "add default user"
-> +       help
-> +         Add user "default" to sudoers file
-> +
-> +endif
-> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-> index 9c62c49..adc1c0d 100644
-> --- a/package/sudo/sudo.mk
-> +++ b/package/sudo/sudo.mk
-> @@ -15,10 +15,19 @@ SUDO_CONF_OPT = \
->                 --without-interfaces \
->                 --without-pam
->
-> +ifeq ($(BR2_SUDO_ADD_DEFAULT),y)
-> +define SUDO_ADD_DEFAULT
-> +       mkdir $(TARGET_DIR)/etc/sudoers.d
-> +       echo "default ALL = ALL" >$(TARGET_DIR)/etc/sudoers.d/default
-> +       chmod 0440 $(TARGET_DIR)/etc/sudoers.d/default
-> +endef
-> +endif
-> +
->  define SUDO_INSTALL_TARGET_CMDS
->         install -m 4555 -D $(@D)/sudo $(TARGET_DIR)/usr/bin/sudo
->         install -m 0555 -D $(@D)/visudo $(TARGET_DIR)/usr/sbin/visudo
->         install -m 0440 -D $(@D)/sudoers $(TARGET_DIR)/etc/sudoers
-> +       $(SUDO_ADD_DEFAULT)
->  endef
->
->  $(eval $(call AUTOTARGETS))
+> It is clear. Your first advice is for me.
+> In git repository for my project  buildroot environment is added as source
+> code.
+> My buildroot environment is not under git for buildroot. It is in local git
+> repository.
+> I hope you understand me.
 
+If I understand correctly, you have a tree like
+/tree/.git
+/tree/A
+/tree/B
+/tree/buildroot
+/tree/C
 
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+where buildroot is just an extract of a stable source release tarball,
+or a snapshot of the sources.
+
+In this case, I would suggest the following (note that I'm used to
+Mercurial, rather than Git, but the concepts should be the same):
+* change the working tree of your repository to the revision that
+added the unmodified buildroot sources (without any changes you made),
+using 'git checkout'. (you may want to use -b to create a branch, I'm
+not sure if that's preferable)
+* remove all existing buildroot files (rm)
+* extract the new buildroot revision to the same directory as before
+* notify git of new and removed files (git add -A)
+* at this point you should be able to commit the changes. You now have
+a new head, with the new buildroot release.
+* merge the new head with the latest revision you have. You'll now
+have to merge all the changes you made to buildroot with the new
+version. On top of that, the other files that have changed outside
+buildroot will also be merged, but I would expect all these are
+trivial merges.
+
+A git expert may correct some of this...
+
+I hope this is clear to you.
+
+Best regards,
+Thomas
