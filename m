@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  4 Nov 2011 19:17:34 +0000 (UTC)
-Subject: [Buildroot] [Bug 4448] New: Busybox build must depend on busybox
- configuration file date
-Message-ID: <bug-4448-163@https.bugs.busybox.net/>
+Date: Fri,  4 Nov 2011 20:16:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 4454] New: There should be simple way to update
+ image, when changing external fs skeleton
+Message-ID: <bug-4454-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4448
+https://bugs.busybox.net/show_bug.cgi?id=4454
 
-           Summary: Busybox build must depend on busybox configuration
-                    file date
+           Summary: There should be simple way to update image, when
+                    changing external fs skeleton
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -27,11 +27,10 @@ https://bugs.busybox.net/show_bug.cgi?id=4448
    Estimated Hours: 0.0
 
 
-Busybox build must depend on busybox configuration file date.
+There should be simple way to update image, when changing external fs skeleton.
 
-If you change busybox configuration file and remake buildroot, it won't rebuild
-busybox. So you need to manually delete output/build/busybox* dir to make it
-recompiled.
+If you make changes in external fs skeleton, you don't need full OS rebuild,
+just some repacking. But there is no obvious way to do it.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
