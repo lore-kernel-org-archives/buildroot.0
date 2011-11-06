@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2011 16:26:06 +0100
+From: Daniel Potapov <yeso@bk.ru>
+Date: Sun, 6 Nov 2011 22:52:14 +0700
 Subject: [Buildroot] buildroot stops at pango compilation
-In-Reply-To: <CAC=eiqwhb=ZknTvjhHPquZ-hhtf6u50vNYn6Nc_EPp-ydMtCkQ@mail.gmail.com>
+In-Reply-To: <20111106162606.491d895c@skate>
 References: <CAC=eiqyR36E133EnLBVZNFWsHzx7ayg0Z=4rq2LWOpYE4xTaMw@mail.gmail.com>
  <CAC=eiqy1_-atsKHX4SE0a_KS1b_qJdzzihr+emoSSY0RDco1mQ@mail.gmail.com>
  <20111106143846.46fa1d9b@skate>
  <CAC=eiqwhb=ZknTvjhHPquZ-hhtf6u50vNYn6Nc_EPp-ydMtCkQ@mail.gmail.com>
-Message-ID: <20111106162606.491d895c@skate>
+ <20111106162606.491d895c@skate>
+Message-ID: <CAC=eiqyLq=uBboFLHDNM=ph4m8aOHcZN8799BL+5arheYLbeHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, Nov 6, 2011 at 10:26 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Please do not reply to me directly, but to the list instead. Thanks!
 
-Please do not reply to me directly, but to the list instead. Thanks!
+Yep! Sorry, I forogot it...
 
-Le Sun, 6 Nov 2011 20:49:59 +0700,
-Daniel Potapov <yeso@bk.ru> a ?crit :
+> Your config uses the ARM OABI, can you try with ARM EABI, which is the
+> standard these days ?
+>
 
-> I removed /usr/local/arm_linux_4.2/bin from PATH and got the same
-> results :( My buildroot config in attachments. I'm using Debian 5.0.
-> 
-> When I compile minimal buildroot configuration (without X server, gtk
-> libraries and other) - everything works fine on my target ARM device.
+Ok, I've checked EABI in buildroot config and uclibc, but compilation
+fails with messages:
+make: /home/user/buildroot/buildroot-2011.08/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc:
+Command not found
+make: *** [/home/user/buildroot/buildroot-2011.08/output/toolchain/uClibc-0.9.32/.configured]
+Error 127
 
-Your config uses the ARM OABI, can you try with ARM EABI, which is the
-standard these days ?
+where I can get arm-unknown-linux-uclibcgnueabi-gcc ?
 
-Regards,
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards,
+Daniel
