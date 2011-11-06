@@ -1,41 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  5 Nov 2011 02:28:36 +0000 (UTC)
-Subject: [Buildroot] [Bug 4454] There should be simple way to update image,
- when changing external fs skeleton
-In-Reply-To: <bug-4454-163@https.bugs.busybox.net/>
-References: <bug-4454-163@https.bugs.busybox.net/>
-Message-ID: <20111105022836.4B5B98F460@busybox.osuosl.org>
+From: Daniel Potapov <yeso@bk.ru>
+Date: Sun, 6 Nov 2011 20:20:11 +0700
+Subject: [Buildroot] buildroot stops at pango compilation
+In-Reply-To: <CAC=eiqyR36E133EnLBVZNFWsHzx7ayg0Z=4rq2LWOpYE4xTaMw@mail.gmail.com>
+References: <CAC=eiqyR36E133EnLBVZNFWsHzx7ayg0Z=4rq2LWOpYE4xTaMw@mail.gmail.com>
+Message-ID: <CAC=eiqy1_-atsKHX4SE0a_KS1b_qJdzzihr+emoSSY0RDco1mQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4454
+Hello,
 
---- Comment #1 from Danomi Mocelopolis <d_mo1234@yahoo.com> 2011-11-05 02:28:35 UTC ---
-(In reply to comment #0)
-> There should be simple way to update image, when changing external fs skeleton.
-> 
-> If you make changes in external fs skeleton, you don't need full OS rebuild,
-> just some repacking. But there is no obvious way to do it.
+I'm trying to compile stable version buildroot 2011.08 with libgtk
+support, but it stops at pango compilation (I've attached output) with
+a lot of such messages:
 
-On a few of our projects, we made added a "refresh" target that did:
+In file included from hb-open-file-private.hh:30,
+? ? ? ? ? ? ? ? ?from hb-font.cc:31:
+hb-open-type-private.hh:380: error: size of array
+'_static_assert_on_line_380_failed' is negative
+hb-open-type-private.hh:381: error: size of array
+'_static_assert_on_line_381_failed' is negative
+hb-open-type-private.hh:454: error: size of array
+'_static_assert_on_line_454_failed' is negative
+In file included from hb-font.cc:31:
+hb-open-type-private.hh: In instantiation of 'Null<OffsetTable>':
+hb-open-file-private.hh:71: ? instantiated from here
+hb-open-type-private.hh:70: error: creating array with negative size
+('-0x000000001')
+hb-open-file-private.hh:129: error: size of array
+'_static_assert_on_line_129_failed' is negative
 
-- rm -fv $(BUILD_DIR)/.root $(BUILD_DIR)/*/.stamp_target_installed
 
-- force the target skeleton copy done when making the "$(BUILD_DIR)/.root"
-target
-     + this copied all the skeleton files
+Could you please help me with that?
 
-- normal make
-     + this re-installed everything ... in case a selected custom package
-        installed a file on top of a default file living in the skeleton.
+Thanks in advance.
 
-We used this feature quite often, since target skeleton was part of
-what was updated from time to time as part of project development.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+--
+Best regards,
+Daniel
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: buildroot_output.txt
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111106/be5cab3e/attachment.txt>
