@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Nov 2011 14:38:46 +0100
+Date: Sun, 6 Nov 2011 16:26:06 +0100
 Subject: [Buildroot] buildroot stops at pango compilation
-In-Reply-To: <CAC=eiqy1_-atsKHX4SE0a_KS1b_qJdzzihr+emoSSY0RDco1mQ@mail.gmail.com>
+In-Reply-To: <CAC=eiqwhb=ZknTvjhHPquZ-hhtf6u50vNYn6Nc_EPp-ydMtCkQ@mail.gmail.com>
 References: <CAC=eiqyR36E133EnLBVZNFWsHzx7ayg0Z=4rq2LWOpYE4xTaMw@mail.gmail.com>
  <CAC=eiqy1_-atsKHX4SE0a_KS1b_qJdzzihr+emoSSY0RDco1mQ@mail.gmail.com>
-Message-ID: <20111106143846.46fa1d9b@skate>
+ <20111106143846.46fa1d9b@skate>
+ <CAC=eiqwhb=ZknTvjhHPquZ-hhtf6u50vNYn6Nc_EPp-ydMtCkQ@mail.gmail.com>
+Message-ID: <20111106162606.491d895c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 6 Nov 2011 20:20:11 +0700,
+Hello,
+
+Please do not reply to me directly, but to the list instead. Thanks!
+
+Le Sun, 6 Nov 2011 20:49:59 +0700,
 Daniel Potapov <yeso@bk.ru> a ?crit :
 
-> I'm trying to compile stable version buildroot 2011.08 with libgtk
-> support, but it stops at pango compilation (I've attached output) with
-> a lot of such messages:
+> I removed /usr/local/arm_linux_4.2/bin from PATH and got the same
+> results :( My buildroot config in attachments. I'm using Debian 5.0.
+> 
+> When I compile minimal buildroot configuration (without X server, gtk
+> libraries and other) - everything works fine on my target ARM device.
 
-Can you please post your Buildroot .config, and also remove
-the /usr/local/arm_linux_4.2/bin directory from your PATH in order to
-make sure the cross-compiler installed here does not conflict with the
-one Buildroot has generated ?
+Your config uses the ARM OABI, can you try with ARM EABI, which is the
+standard these days ?
 
-Could you also give some details on what your distribution is (and
-which version) ?
-
-Thanks,
+Regards,
 
 Thomas
 -- 
