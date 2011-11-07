@@ -1,36 +1,18 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Mon, 7 Nov 2011 13:02:50 +0200
-Subject: [Buildroot] UDEV-172 problems, buildroot 2011.08, linux 2.6.33
-In-Reply-To: <20111029141216.1efbddac@skate>
-References: <CAMeaXtxK=Hf3MMSbJK+nHp8UZnFgkAEkef2n5CkwgaitNxvVYQ@mail.gmail.com>
- <20111029141216.1efbddac@skate>
-Message-ID: <CALR4fE+p90Mj=93vjPNFNKW0+kTjB9+gF8eap3agN_bsmUyMHw@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Mon, 07 Nov 2011 12:27:04 +0100
+Subject: [Buildroot] coreutils: stty issue
+Message-ID: <4EB7C088.9050407@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Oct 29, 2011 at 2:12 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+I need to setup speed of 3Mb/s for a FTDI based device. stty from busybox has a limit of about 1Mb/s. So I disabled stty from busybxo and compiled mainline coreutils. If I execute it I get following error:
 
-> Le Sat, 29 Oct 2011 13:25:44 +0200,
-> Robin Theunis <robint91@gmail.com> a ?crit :
->
-> > I have a small problem with udev-172. It fails to build with
-> > buildroot. The target is a custom AT91RM9200 board, the kernel is
-> > 2.6.33. Everything has OABI support.
-> > Has someone an idea what is happening?
->
-> Yes, 2.6.33 is too old to build a modern udev such as udev 172.
-> Probably it can be workaround at udev level, I don't know how
-> complicated it would be, though.
->
->
-Just add a local patch to your buildroot to disable that code. I did
-something similar on my system as I am using a non-supported toolchain. The
-patches were sent here and to udev, but both parties refused them (and I do
-not fell bad about it, they were right).
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111107/536e68d4/attachment.html>
+# stty
+/bin/stty: line 1: ndgetaliasent_rfchdir__sigismemberether_ntoa_rbind_obstack_beginxdr_u_hyperregisterrpcclnt_perrnosgetspent_rposix_fadvise64wctombtimerfd_gettimeposix_spawn_file_actions_destroygetsgnam_rmremapstrcoll__towupper_linw__strtoul_internalsvcfd_createpthread_attr_getschedpolicyether_ntohostmodffiswalpha_IO_getc__wctomb_chkiconv_openrpc_createerr__libc_alloca_cutoff__strtok_rinet6_opt_set_valhtons_dl_addr__getcwd_chkgethostbyname_obstack_allocated_pmrand48__isoc99_wscanfdifftimehsearch__freelocalewcsncpy_IO_str_underflow__getgroups_chkmbsrtowcs__fread_unlocked_chkstrtoq__wcstol_lfchownatseed48_rfgetsgentswab__key_gendes_LOCALpthread_attr_setschedparamsprofil__longjmp_chk__write__connectstrftimemrand48_rtcsendbreakdirfdiconv__iswpunct_lwcpncpy__wcstombs_chk__strtoll_linet6_rth_segmentsrewinddir_
+
+Any idea?
+
+Yegor
