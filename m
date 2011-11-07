@@ -1,50 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Nov 2011 13:25:48 +0100
+Date: Mon, 7 Nov 2011 13:39:02 +0100
 Subject: [Buildroot] Report from the Buildroot Developer Day
-In-Reply-To: <20111107120936.GA26160@merkur.ravnborg.org>
+In-Reply-To: <CAAXf6LV8pXKtNqU5oey_yikX_7YMLLVJpd9aE9SpyCgiuCC7zw@mail.gmail.com>
 References: <20111102160349.4afe5935@skate>
  <CAAXf6LV8pXKtNqU5oey_yikX_7YMLLVJpd9aE9SpyCgiuCC7zw@mail.gmail.com>
- <20111107120936.GA26160@merkur.ravnborg.org>
-Message-ID: <20111107132548.33965b56@skate>
+Message-ID: <20111107133902.416ccf35@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 7 Nov 2011 13:09:36 +0100,
-Sam Ravnborg <sam@ravnborg.org> a ?crit :
+Le Mon, 7 Nov 2011 10:58:22 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-> The tags seems to be used in different ways. The way I have understood
-> their usage - and thus the way I have used them is like this:
+> > This report has been written by Thomas Petazzoni, with reviews and
+> > comments of Yann E. Morin and Peter Korsgaard. It has been written
+> > after the developer day based on memory and raw notes and may
+> > therefore be slightly inaccurate in places.
 > 
-> Acked-by is used when I think that a patch does the right thing.
-> For example when it introduces a a new feature or change something -
-> and which I consider it the right thing to do.
+> Also from me, thanks a lot for writing this...
+
+I hope that was useful. Unfortunately, not many Buildroot
+users/developers could join, and I really want the community to be
+involved in the various decisions, so I felt it was necessary to
+provide an extensive report, including our discussions and arguments
+for the various decisions.
+
+> > We have therefore decided to make the crosstool-NG backend the
+> > default toolchain build mechanism in 2012.02. This will be notified
+> > in the 2011.11 release. For the moment, the internal build
+> > mechanism will remain available.
 > 
-> Reviewed-by is stronger in the sense that I have actually taking my
-> time to carefully read the patch line-by-line and that I consider
-> that the patch is correct.
-> I almost never use "Reviewed-by" for patches touching code areas
-> that I am not familiar with - as I do not know if they are correct.
-> Reviewed-by includes an implicit Acked-by as I would not spend time
-> to review something if I did not agree on the patch.
+> One thing I really like about the internal build mechanism is that
+> it's internal. If you want to modify something about it, you can
+> directly patch the code and submit to the list.
 
-Interestingly, my understanding is more or less the opposite of yours.
-For me:
+Right. For crosstool-NG you can also patch the code and submit to the
+crosstool-NG list. However I agree that some additional steps are
+needed, but we think that the advantage of factorizing the toolchain
+build problem in crosstool-NG is much stronger than the drawback you're
+mentioning.
 
- * Reviewed-by means that you have read the patch and agree with its
-   principle and general implementation, but not that you have actually
-   tested and verified that the patch works. The top-level maintainer
-   will have to do additional testing because you haven't done so.
+> This not only holds for the generation of the toolchain, but also for
+> side-aspects like downloading the necessary tarballs and patching.
+> Since crosstool-ng is treated as a package (at least currently it
+> is), any change you want to make to it, has to be done by adding a
+> patchfile to package/crosstool-ng/. This is much more cumbersome than
+> modifying buildroot files.
+> For example, I added scp support to buildroot some time ago, and use
+> it for the primary download site. When switching to crosstool-ng, this
+> no longer worked, I had to add scp support again.
+> 
+> I think it would be beneficial to buildroot if the integration of
+> crosstool-ng could increase. For example, crosstool-ng using the
+> download mechanisms of buildroot.
 
- * Acked-by is much stronger, as it means that you fully agree with the
-   patch, that you reviewed it *and* tested it, and that the top-level
-   maintainer does not necessarily need to do additional testing if he
-   trusts you, because Acked-by means that you have actually tested
-   this.
+That could be discussed with Yann. I'm not sure how this could work
+practically, though.
 
-Regards,
+> > Next Buildroot Developer Day
+> > ============================
+> >
+> > The next Buildroot Developer Day will take place on Friday, 3rd
+> > February 2012 in Brussels, Belgium. The FOSDEM conference
+> > <http://www.fosdem.org> will take place in Brusells on Saturday and
+> > Sunday. All Buildroot developers and users are invited to join. The
+> > exact location will be given later, but it will be a location in
+> > Brussels center, accessible by metro.
+> 
+> Great, I hope to be able to join this time.
+
+Great!
 
 Thomas
 -- 
