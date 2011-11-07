@@ -1,61 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 7 Nov 2011 11:23:09 +0100
-Subject: [Buildroot] QT support for Buildroot RFS.
-In-Reply-To: <20111107111749.7748f185@skate>
-References: <1F383CDA589639468828C7E2B75EDE9D06029498@POCITMSEXMB02.LntUniverse.com>
- <1F383CDA589639468828C7E2B75EDE9D0602B149@POCITMSEXMB02.LntUniverse.com>
- <CAGm1_ks4qcMAV7gPyq4odX4ub+RXnh=BmhrU4zzdU4_BQ+m0oA@mail.gmail.com>
- <1F383CDA589639468828C7E2B75EDE9D0602B1A8@POCITMSEXMB02.LntUniverse.com>
- <20111107111749.7748f185@skate>
-Message-ID: <CAAXf6LU-bEEV_8RkpCwERcS3Xg1SAcLx4M+f2qCKFyCB+xT-7A@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 7 Nov 2011 12:32:13 +0200
+Subject: [Buildroot] [PATCH] add support for virtual terminal
+In-Reply-To: <4EB7B129.9030608@visionsystems.de>
+References: <4EB7B129.9030608@visionsystems.de>
+Message-ID: <20111107103213.GD26606@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Nov 7, 2011 at 11:17 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Mon, 7 Nov 2011 10:11:15 +0000,
-> Mahanteshwari Hiremath <Mahanteshwari.Hiremath@lnties.com> a ?crit :
->
->> Cross compiling is not a problem, I can able to do it. But I want to
->> compile my program directly on target device using qmake, I want to
->> have qmake support on my target. So only I wanted some suggestions in
->> executing this.
->
-> This is not supported in the current Buildroot, which does not build
-> qmake for the target. Buildroot is designed for cross-compilation, i.e
-> the situation where your target is rather slow compared to your
-> development PC, and therefore cases for which native compilation is not
-> possible or really too painful. We have some support to have a native
-> toolchain on the target (so you can build standard C or C++ programs on
-> the target), but we don't support that for Qt.
->
-> If you want, you can work on extending the Qt .mk file to also generate
-> a qmake for the target, but I think it's going to be very complicated
-> for a benefit that isn't really obvious to me.
+Hi Yegor,
 
-Alternatively, you can download and compile Qt on your target itself,
-with the native toolchain that you installed there.
+On Mon, Nov 07, 2011 at 11:21:29AM +0100, Yegor Yefremov wrote:
+> introduces new option "Enable virtual console on tty1"
+> to enable virtual terminal on tty1
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
 
-You could even (but this is really far-fetched) install buildroot on
-your target, and use it to generate qmake (which will be in
-output/host *on your target*).
+[snip]
 
-Best regards,
-Thomas
+> +# Put a getty on a virtual terminal
+> +#tty1::respawn:/sbin/getty tty1 38400
 
->
-> Regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+You should probably add '# GENERIC_VT' in this line. See below.
+
+> +
+>  # Put a getty on the serial port
+>  #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+
+[snip]
+
+> Index: b/target/generic/Makefile.in
+> ===================================================================
+> --- a/target/generic/Makefile.in
+> +++ b/target/generic/Makefile.in
+> @@ -23,6 +23,14 @@
+>  	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
+>  		$(TARGET_DIR)/etc/inittab
+>  
+> +# Put a getty on virtual terminal
+> +target-generic-do-getty-tty1:
+> +	$(SED) 's/#tty1/tty1/' $(TARGET_DIR)/etc/inittab
+> +
+> +# Don't put a getty on virtual terminal
+> +target-generic-dont-getty-tty1:
+> +	$(SED) 's/tty1/#tty1/' $(TARGET_DIR)/etc/inittab
+
+This might cause unintended changes in /etc/inittab, since the 'tty1' string 
+appears in more places. Add '# GENERIC_VT' as above, and only change matching 
+lines. See how GENERIC_SERIAL is being used
+
+baruch
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
