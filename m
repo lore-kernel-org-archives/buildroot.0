@@ -1,60 +1,31 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 7 Nov 2011 12:32:13 +0200
-Subject: [Buildroot] [PATCH] add support for virtual terminal
-In-Reply-To: <4EB7B129.9030608@visionsystems.de>
-References: <4EB7B129.9030608@visionsystems.de>
-Message-ID: <20111107103213.GD26606@sapphire.tkos.co.il>
+From: Mahanteshwari Hiremath <Mahanteshwari.Hiremath@lnties.com>
+Date: Mon, 7 Nov 2011 10:59:25 +0000
+Subject: [Buildroot] QT support for Buildroot RFS.
+In-Reply-To: <1F383CDA589639468828C7E2B75EDE9D0602B1A8@POCITMSEXMB02.LntUniverse.com>
+References: <1F383CDA589639468828C7E2B75EDE9D06029498@POCITMSEXMB02.LntUniverse.com>
+ <1F383CDA589639468828C7E2B75EDE9D0602B149@POCITMSEXMB02.LntUniverse.com>
+ <CAGm1_ks4qcMAV7gPyq4odX4ub+RXnh=BmhrU4zzdU4_BQ+m0oA@mail.gmail.com>,
+ <1F383CDA589639468828C7E2B75EDE9D0602B1A8@POCITMSEXMB02.LntUniverse.com>
+Message-ID: <1F383CDA589639468828C7E2B75EDE9D0602B1C4@POCITMSEXMB02.LntUniverse.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Hi Thomas,
+thank you for your reply. i will consider your opinions for further steps.
 
-On Mon, Nov 07, 2011 at 11:21:29AM +0100, Yegor Yefremov wrote:
-> introduces new option "Enable virtual console on tty1"
-> to enable virtual terminal on tty1
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
 
-[snip]
+Regards,
+Mahanteshwari Hiremath.
 
-> +# Put a getty on a virtual terminal
-> +#tty1::respawn:/sbin/getty tty1 38400
 
-You should probably add '# GENERIC_VT' in this line. See below.
 
-> +
->  # Put a getty on the serial port
->  #ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
 
-[snip]
 
-> Index: b/target/generic/Makefile.in
-> ===================================================================
-> --- a/target/generic/Makefile.in
-> +++ b/target/generic/Makefile.in
-> @@ -23,6 +23,14 @@
->  	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
->  		$(TARGET_DIR)/etc/inittab
->  
-> +# Put a getty on virtual terminal
-> +target-generic-do-getty-tty1:
-> +	$(SED) 's/#tty1/tty1/' $(TARGET_DIR)/etc/inittab
-> +
-> +# Don't put a getty on virtual terminal
-> +target-generic-dont-getty-tty1:
-> +	$(SED) 's/tty1/#tty1/' $(TARGET_DIR)/etc/inittab
+Larsen & Toubro Limited
 
-This might cause unintended changes in /etc/inittab, since the 'tty1' string 
-appears in more places. Add '# GENERIC_VT' as above, and only change matching 
-lines. See how GENERIC_SERIAL is being used
+www.larsentoubro.com
 
-baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+This Email may contain confidential or privileged information for the intended recipient (s) If you are not the intended recipient, please do not use or disseminate the information, notify the sender and delete it from your system.
