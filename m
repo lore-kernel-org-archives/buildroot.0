@@ -1,33 +1,34 @@
-From: Daniel Potapov <yeso@bk.ru>
-Date: Mon, 7 Nov 2011 14:32:44 +0700
-Subject: [Buildroot] buildroot stops at pango compilation
-In-Reply-To: <CAC=eiqz2Yy=Q0WYjZVbP4FsBFpTBEcg4BdBUFbeH-Kdn4TLpjA@mail.gmail.com>
-References: <CAC=eiqyR36E133EnLBVZNFWsHzx7ayg0Z=4rq2LWOpYE4xTaMw@mail.gmail.com>
- <CAC=eiqy1_-atsKHX4SE0a_KS1b_qJdzzihr+emoSSY0RDco1mQ@mail.gmail.com>
- <20111106143846.46fa1d9b@skate>
- <CAC=eiqwhb=ZknTvjhHPquZ-hhtf6u50vNYn6Nc_EPp-ydMtCkQ@mail.gmail.com>
- <20111106162606.491d895c@skate>
- <CAC=eiqyLq=uBboFLHDNM=ph4m8aOHcZN8799BL+5arheYLbeHw@mail.gmail.com>
- <20111106170605.41259586@skate>
- <CAC=eiqz2Yy=Q0WYjZVbP4FsBFpTBEcg4BdBUFbeH-Kdn4TLpjA@mail.gmail.com>
-Message-ID: <CAC=eiqzORpB4Att=NWsD+6tdbDV=cOSWN-ytCpQ93yTNDfzP7g@mail.gmail.com>
+From: Mahanteshwari Hiremath <Mahanteshwari.Hiremath@lnties.com>
+Date: Mon, 7 Nov 2011 08:16:52 +0000
+Subject: [Buildroot] QT support for Buildroot RFS.
+In-Reply-To: <1F383CDA589639468828C7E2B75EDE9D06029498@POCITMSEXMB02.LntUniverse.com>
+References: <1F383CDA589639468828C7E2B75EDE9D06029498@POCITMSEXMB02.LntUniverse.com>
+Message-ID: <1F383CDA589639468828C7E2B75EDE9D0602B149@POCITMSEXMB02.LntUniverse.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Nov 6, 2011 at 11:09 PM, Daniel Potapov <yeso@bk.ru> wrote:
->> Buildroot generates it. Please do "make clean; make" to rebuild from
->> scratch. EABI vs. OABI is a global toolchain option, so you need to
->> rebuild everything.
->
-> Thank you, I'll try!
->
+Hi,
+          I am trying to buid buildroot RFS with QT supprt.
+I have enabled C++ support in toolchain and Qt support in package selection --> Graphic libraries --> Qt.
+after 'make'  I can see qmake getting installed in staging/usr/bin.
 
-My problem is solved after rebuilding with EABI ! Thanks a lot for help!
+What are the necessary changes(settings) i have to do inorder to get qmake installed in target/bin and libraries in target/lib(nothing but RFS).
+
+Kindly suggest me.
 
 
--- 
-Best regards,
-Daniel
+Regards,
+Mahanteshwari Hiremath.
+
+
+Larsen & Toubro Limited
+
+www.larsentoubro.com
+
+This Email may contain confidential or privileged information for the intended recipient (s) If you are not the intended recipient, please do not use or disseminate the information, notify the sender and delete it from your system.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111107/c647f1a2/attachment.html>
