@@ -1,43 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Nov 2011 23:22:28 +0100
-Subject: [Buildroot] Status of valgrind on powerpc
-In-Reply-To: <CAAXf6LVTAU73avFA3BJXEvcbVoQj6er1PFg-ntjLo9F3tc6hOA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 3 Nov 2011 10:27:58
- +0100")
-References: <CAAXf6LUVQc9JRgoOiKy84BnsiRLqXOxHbd6k+1RzQMpRQA4T0w@mail.gmail.com>
- <20110929121549.4bb68988@skate> <20110930214150.770f09e1@skate>
- <CAAXf6LUKtv1Cs-gEfGj4Aq9wLe3N0tiKHDxniv39dW+RwoQOjw@mail.gmail.com>
- <20111001113902.2aeff98d@skate>
- <CAAXf6LXV-aQgMNarenZa0ZpWpytQZKbeBnL83wKr5E-eK_bCOA@mail.gmail.com>
- <CAAXf6LVTAU73avFA3BJXEvcbVoQj6er1PFg-ntjLo9F3tc6hOA@mail.gmail.com>
-Message-ID: <87y5vrd13v.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 7 Nov 2011 23:13:00 +0100
+Subject: [Buildroot] [git commit] toolchain/gcc: add 4.3 / 4.4 fix for gcc
+	pr 39429
+Message-ID: <20111107222520.B81FE8F462@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3456a6a66cb4ee821efb11fc64f0f18d70f3c968
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Patch from OSELAS.Toolchain-2011.03.1.
 
- Thomas> Possible solutions?
- Thomas> 1. Modify uClibc so that it does not depend on the linux a.out.h file,
- Thomas> but rather provides its own definitions as eglibc does.
- Thomas> 2. Modify the kernel so that powerpc also provides a.out.h
+See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39429 for details.
 
-I looked into this a few years ago, and option 2 is not an option as the
-aout stuff is old and shouldn't be used:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/gcc/4.3.6/gcc-43-pr39429.patch |   24 ++++++++++++++++++++++++
+ toolchain/gcc/4.4.6/gcc-44-pr39429.patch |   24 ++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 0 deletions(-)
 
-https://lkml.org/lkml/2008/6/15/126
-
- Thomas> 3. Modify buildroot to state that valgrind can not be build with uClibc.
-
-4. Fix valgrind to not include a.out.h
-
-It's not really used for much - Have you seen this thread?
-
-http://old.nabble.com/How-to-disable-the-a.out-support-of-valgrind-td29226733.html
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/gcc/4.3.6/gcc-43-pr39429.patch b/toolchain/gcc/4.3.6/gcc-43-pr39429.patch
+new file mode 100644
+index 0000000..4e1dc9e
+--- /dev/null
++++ b/toolchain/gcc/4.3.6/gcc-43-pr39429.patch
+@@ -0,0 +1,24 @@
++From: Michael Olbrich <m.olbrich@pengutronix.de>
++Subject: Fix: compiler create bad asm codes.
++
++See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39429 for details.
++
++Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
++
++---
++ gcc/config/arm/arm.c |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: b/gcc/config/arm/arm.c
++===================================================================
++--- a/gcc/config/arm/arm.c
+++++ b/gcc/config/arm/arm.c
++@@ -6838,7 +6838,7 @@ adjacent_mem_locations (rtx a, rtx b)
++       /* Don't accept any offset that will require multiple
++ 	 instructions to handle, since this would cause the
++ 	 arith_adjacentmem pattern to output an overlong sequence.  */
++-      if (!const_ok_for_op (PLUS, val0) || !const_ok_for_op (PLUS, val1))
+++      if (!const_ok_for_op (val0, PLUS) || !const_ok_for_op (val1, PLUS))
++ 	return 0;
++ 
++       /* Don't allow an eliminable register: register elimination can make
+diff --git a/toolchain/gcc/4.4.6/gcc-44-pr39429.patch b/toolchain/gcc/4.4.6/gcc-44-pr39429.patch
+new file mode 100644
+index 0000000..4e1dc9e
+--- /dev/null
++++ b/toolchain/gcc/4.4.6/gcc-44-pr39429.patch
+@@ -0,0 +1,24 @@
++From: Michael Olbrich <m.olbrich@pengutronix.de>
++Subject: Fix: compiler create bad asm codes.
++
++See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39429 for details.
++
++Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
++
++---
++ gcc/config/arm/arm.c |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: b/gcc/config/arm/arm.c
++===================================================================
++--- a/gcc/config/arm/arm.c
+++++ b/gcc/config/arm/arm.c
++@@ -6838,7 +6838,7 @@ adjacent_mem_locations (rtx a, rtx b)
++       /* Don't accept any offset that will require multiple
++ 	 instructions to handle, since this would cause the
++ 	 arith_adjacentmem pattern to output an overlong sequence.  */
++-      if (!const_ok_for_op (PLUS, val0) || !const_ok_for_op (PLUS, val1))
+++      if (!const_ok_for_op (val0, PLUS) || !const_ok_for_op (val1, PLUS))
++ 	return 0;
++ 
++       /* Don't allow an eliminable register: register elimination can make
