@@ -1,80 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Nov 2011 00:33:13 +0100
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20111108233329.B6F92805FD@busybox.osuosl.org>
+From: Paul Diem <PCDiem@FoxValley.net>
+Date: Tue, 08 Nov 2011 17:35:02 -0600
+Subject: [Buildroot] Multiple Target Architectures
+Message-ID: <4EB9BCA6.4010206@FoxValley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=805de39555682475e3738cca1c3b6a70257ba0aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+A few years ago I built a system using uClibc on x86. I used buildroot 
+to build the initial filesystem for my development machine. My target 
+machines have always been x86 so I've been able build everything 
+natively from within that environment.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |   35 ++++++++++++++++++++++-------------
- 1 files changed, 22 insertions(+), 13 deletions(-)
+I'm now looking at building the same system for MikroTik RouterBoards so 
+I will need to cross compile to PPC and MIPS. I've having a hard time 
+grasping how to do this though. Can I simply build gcc for the other 
+architectures on my current development system and then build for the 
+target? I know I can use buildroot to build a root filesystem for each 
+target architecture but it seems like I would have to run buildroot 
+every time I make a small code change and buildroot will go through the 
+whole process of rebuilding the toolchain each time.
 
-diff --git a/CHANGES b/CHANGES
-index 0043126..2c4c161 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -5,6 +5,12 @@
- 	Move misc scripts and support stuff to support/. Rename
- 	patch-kernel.sh to support/scripts/apply-patches.sh.
- 
-+	Documentation: Moved to asciidoc format, make targets to
-+	generate text/html/pdf/epub output added.
-+
-+	Defconfigs: Qemu configs updated to 3.1 kernel and readmes
-+	added.
-+
- 	Bootloaders: Add support for custom git tree / tarballs for
- 	barebox, similar to how it's handled for u-boot. Clean up
- 	menuconfig options.
-@@ -14,7 +20,8 @@
- 	toolchain, update toolchain versions and optimize toolchain
- 	sysroot copying. Fix uClibc 0.9.32 builds for e500 PPC,
- 	updated GDB versions / download URLs. Binutils
--	libbfd/libopcodes static/dynamic linking fix.
-+	libbfd/libopcodes static/dynamic linking fix. GCC 4.6.2 added,
-+	use ctng-1.13.0.
- 
- 	Package infrastructure: Support for local packages /
- 	overrides, package dir / name arguments dropped from
-@@ -32,20 +39,22 @@
- 	libconfuse, libcuefile, libcurl, libdaemon, libevent,
- 	libglib2, libiconv, libmpd, libreplaygain, libroxml,
- 	libsamplerate, libsndfile, libsoup, libsvgtiny, libtool,
--	lighttpd, links, linux-fusion, lite, lrzsz, lsof, lzo, lzop,
--	makedevs, mcookie, mpg123, mpd, mpfr, mtd, musepack, mutt,
--	mysql_client, ncftp, ncurses, neon, netcat, netsnmp, ntfs-3g,
--	ntfsprogs, ntp, openntpd, openssh, openssl, orc, pciutils,
--	psmisc, python, qt, quagga, radvd, rpm, rsync, samba, sawman,
--	sdl_sound, smartmontools, sqlite, squid, stunnel, sudo,
--	sylpheed, sysstat, taglib, tar, tcpreplay, tslib, usbutils,
--	util-linux, valgrind, wget, whetstone, which, wpa-supplicant,
--	xdata_xcursor-themes, xmlstarlet, xterm
-+	libxcb, lighttpd, links, linux-fusion, lite, lrzsz, lsof, lzo,
-+	lzop, makedevs, mcookie, mpg123, mpd, mpfr, mtd, musepack,
-+	mutt, mysql_client, ncftp, ncurses, neon, netcat, netsnmp,
-+	ntfs-3g, ntfsprogs, ntp, openntpd, openssh, openssl, oprofile,
-+	orc, pciutils, psmisc, python, qt, quagga, radvd, rpm, rsync,
-+	samba, sawman, sdl_sound, smartmontools, sqlite, squid,
-+	stunnel, sudo, sylpheed, sysstat, taglib, tar, tcpreplay,
-+	tslib, usbutils, util-linux, valgrind, wget, whetstone, which,
-+	wpa-supplicant, xdata_xcursor-themes, xmlstarlet, xterm
- 
- 	New packages: bluez-utils, cifs-utils, fftw, fluxbox, json-c,
--	libev, libftdi, libgeotiff, libplayer, ngrep, noip, opencv,
--	openocd, picocom, poco, portaudio, pulseaudio, pv, rtai, vala,
--	xenomai.
-+	libev, libftdi, libgeotiff, libmodbus, libplayer, live555,
-+	ngrep, noip, opencv, openocd, picocom, poco, portaudio,
-+	pulseaudio, pv, rtai, vala, xenomai.
-+
-+	Removed packages: liboil, sfdisk, swfdec, webif
- 
- 	Issues resolved (http://bugs.uclibc.org):
- 
+I'm sure I'm missing something simple but I'm not sure what it is. 
+Basically, I have a kernel, uClibc, busybox and some other packages that 
+I want to be able to compile/cross-compile on an x86 host for x86, PPC 
+and MIPS targets. What's the easiest/best way to do that?
+
+BTW, I tried to use buildroot to build for a target arch of MIPS, the 
+build failed with:
+/usr/src/naos/buildroot-2011.08/output/host/usr/bin/mips-unknown-linux-uclibc-ar: 
+error while loading shared libraries: 
+/usr/src/naos/buildroot-2011.08/output/build/binutils-2.21/./bfd/.libs/libbfd-2.21.so: 
+ELF file data encoding not little-endian
+
+Thanks in advance for any pointers,
+-- 
+Paul C Diem
+PCDiem at FoxValley.net
