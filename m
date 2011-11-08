@@ -1,28 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Nov 2011 17:44:53 +0100
-Subject: [Buildroot] Future...TOOLCHAIN builds.
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6702C39438@WETMEX10.loepfe.com>
- (Noel Vellemans's message of "Tue, 8 Nov 2011 08:14:18 +0100")
-References: <mailman.1400.1320692517.2942.buildroot@busybox.net>
- <1531E53627F1F749B4FE809BF2A4EB6702C39438@WETMEX10.loepfe.com>
-Message-ID: <878vnqwol6.fsf@macbook.be.48ers.dk>
+From: Julian Lunz <git@jlunz.de>
+Date: Tue, 8 Nov 2011 20:22:33 +0100
+Subject: [Buildroot] Patch for x11r7 folder structure
+Message-ID: <20111108202233.4cdfee8e@jl-desk-LL>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
+Hi.
 
-Hi,
+I have a patch to reorganize the folder layout of x11r7 to reflect
+the nice layout available in menuconfig.
 
- Noel> A) On Linux, no BUILDROOT is used to build a complete target, for the
- Noel> at91sam9g10, at91sam9m10 (arm-9).. And recently one for the imx-537
- Noel> (cortex-A8) (and x86 for test cases).
+Layout would change to be:
 
-Out of interest, have you done anything to integrate the imx53 bootup
-sequence and/or gpu/vpu libraries in buildroot? I'm considering the
-imx53 for a new project.
+$ ls -F1 package/x11r7/
+applications/
+Config.in
+drivers/
+fonts/
+libraries/
+other/
+protocols/
+utils/
+x11r7.mk
+xserver_xorg-server/
 
--- 
-Bye, Peter Korsgaard
+
+I have already sent a patch, but as it is quite big (931231 bytes) it
+needs approval, so in the meanwhile I'm curious for comments.
+
+Julian
