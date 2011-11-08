@@ -1,37 +1,67 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Tue, 08 Nov 2011 10:41:12 +0100
-Subject: [Buildroot] [PATCH v2] add support for virtual terminal
-In-Reply-To: <87lirrc5ys.fsf@macbook.be.48ers.dk>
-References: <4EB7C53D.4030902@visionsystems.de>
- <87pqh3d0bn.fsf@macbook.be.48ers.dk> <4EB8DEF6.3020106@visionsystems.de>
- <87lirrc5ys.fsf@macbook.be.48ers.dk>
-Message-ID: <4EB8F938.2070205@visionsystems.de>
+From: keguang.zhang at gmail.com <keguang.zhang@gmail.com>
+Date: Tue,  8 Nov 2011 19:16:17 +0800
+Subject: [Buildroot] [PATCH 3/3 resend] mplayer: Enable live and tv options
+Message-ID: <1320750977-2986-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Hi,
->
->  >> I'm not sure I like another option for this - Can't you just use the
->  >> existing GENERIC_SERIAL and/or the post-build script for this?
->
->  Yegor> I'd like to have both serial console and virtual one (on tty I
->  Yegor> experiment with my program and vie serial console I can do other
->  Yegor> administrative tasks. One could use ssh, but this implies having
->  Yegor> network connection). Every time I execute make clean or clone BR
->  Yegor> I loose my inittab. Earlier versions of inittab had some ttys
->  Yegor> predefined, but they were deleted, so I thought, it would be
->  Yegor> useful to add this as an option. This way everyone should be
->  Yegor> satisfied.
->
-> .. until someone wants a getty on tty2 or tty3 or so on. We need to keep
-> serial config, as different boards have differnt serial port names, but
-> I would like to keep the configuration options to a minimum, and just
-> let people use custom inittab / skeleton or add it with the post-build
-> script for special stuff.
+From: Kelvin Cheung <keguang.zhang@gmail.com>
 
-O.K. I see your point and will follow Thomas's advice adding tty1 to my custom script.
+1.Enable TV interface.
+2.Enable LIVE555 Streaming Media if live555 is available.
 
-Yegor
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+ package/multimedia/mplayer/mplayer.mk |   22 ++++++++++++++++++----
+ 1 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 4c03440..9ef98f1 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -75,6 +75,22 @@ else
+ MPLAYER_CONF_OPTS += --disable-mad
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIVE555),y)
++MPLAYER_DEPENDENCIES += live555
++MPLAYER_CONF_OPTS += --enable-live
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/liveMedia
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/groupsock
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/UsageEnvironment
++MPLAYER_LIVE555_CFLAGS += -I$(STAGING_DIR)/usr/include/live/BasicUsageEnvironment
++MPLAYER_LIVE555_LDFLAGS += -lliveMedia
++MPLAYER_LIVE555_LDFLAGS += -lgroupsock
++MPLAYER_LIVE555_LDFLAGS += -lUsageEnvironment
++MPLAYER_LIVE555_LDFLAGS += -lBasicUsageEnvironment
++MPLAYER_LIVE555_LDFLAGS += -lstdc++
++else
++MPLAYER_CONF_OPTS += --disable-live
++endif
++
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
+@@ -106,15 +122,13 @@ define MPLAYER_CONFIGURE_CMDS
+ 		--cc="$(TARGET_CC)" \
+ 		--as="$(TARGET_AS)" \
+ 		--charset=UTF-8 \
+-		--extra-cflags="$(TARGET_CFLAGS)" \
+-		--extra-ldflags="$(TARGET_LDFLAGS)" \
++		--extra-cflags="$(TARGET_CFLAGS) $(MPLAYER_LIVE555_CFLAGS)" \
++		--extra-ldflags="$(TARGET_LDFLAGS) $(MPLAYER_LIVE555_LDFLAGS)" \
+ 		--enable-mad \
+ 		--enable-fbdev \
+ 		$(MPLAYER_CONF_OPTS) \
+ 		--enable-cross-compile \
+ 		--disable-ivtv \
+-		--disable-tv \
+-		--disable-live \
+ 		--enable-dynamic-plugins \
+ 	)
+ endef
+-- 
+1.7.1
