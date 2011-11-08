@@ -1,40 +1,89 @@
-From: Paul Diem <PCDiem@FoxValley.net>
-Date: Tue, 08 Nov 2011 17:35:02 -0600
-Subject: [Buildroot] Multiple Target Architectures
-Message-ID: <4EB9BCA6.4010206@FoxValley.net>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Wed, 9 Nov 2011 00:38:06 +0100
+Subject: [Buildroot] Future...TOOLCHAIN builds..
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6702C39314@WETMEX10.loepfe.com>
+References: <1531E53627F1F749B4FE809BF2A4EB6702C39314@WETMEX10.loepfe.com>
+Message-ID: <201111090038.06943.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A few years ago I built a system using uClibc on x86. I used buildroot 
-to build the initial filesystem for my development machine. My target 
-machines have always been x86 so I've been able build everything 
-natively from within that environment.
+Noel, All,
 
-I'm now looking at building the same system for MikroTik RouterBoards so 
-I will need to cross compile to PPC and MIPS. I've having a hard time 
-grasping how to do this though. Can I simply build gcc for the other 
-architectures on my current development system and then build for the 
-target? I know I can use buildroot to build a root filesystem for each 
-target architecture but it seems like I would have to run buildroot 
-every time I make a small code change and buildroot will go through the 
-whole process of rebuilding the toolchain each time.
+On Monday 07 November 2011 16:07:35 Vellemans, Noel wrote:
+> While following the discussions on the buildroot mailing list, I saw
+> that for the next releases the CROSSTOOL-NG toolchain will be used as
 
-I'm sure I'm missing something simple but I'm not sure what it is. 
-Basically, I have a kernel, uClibc, busybox and some other packages that 
-I want to be able to compile/cross-compile on an x86 host for x86, PPC 
-and MIPS targets. What's the easiest/best way to do that?
+crosstool-NG, not all caps. ;-)
 
-BTW, I tried to use buildroot to build for a target arch of MIPS, the 
-build failed with:
-/usr/src/naos/buildroot-2011.08/output/host/usr/bin/mips-unknown-linux-uclibc-ar: 
-error while loading shared libraries: 
-/usr/src/naos/buildroot-2011.08/output/build/binutils-2.21/./bfd/.libs/libbfd-2.21.so: 
-ELF file data encoding not little-endian
+> default, so a started to experiment with the CROSSTOOL-NG buildroot
+> toolchain (this morning).
+> 
+> Until now.. U used the buildroot to generate a 'cross-toolchain', even
+> 'worse'; I used buildroot to generate 2 toolchains. 
+> 	A) One running on LINUX 
+> 	B) One running on top of CYGWIN (for the less Linux-minded
+> colleagues)
 
-Thanks in advance for any pointers,
+I am not quite sure I understand correctly... I'll try to state what I
+understood:
+  A) you use buildroot on Linux, to build a Linux-hosted cross-toolchain
+  B) you use buildroot on Cygwin, to build a Cygwin-hosted cross-toolchain
+
+Right? AFAIK, Cygwin support was never official for buildroot. It working
+would have been mere chance! ;-)
+
+> Which was quite easy to do... until now. 
+> 
+> 1) Will this also be possible for the CROSSTOOL-NG toolchain that is
+> build with buildroot?
+
+There have been many reports of successfully building toolchains on Cygwin,
+both natively under Cygwin, and as a canadian-built from Linux, with
+crosstool-NG. I did it myself a few times, and it worked.
+
+> 2) Another question that pops-up when building a CROSSTOOL-NG toolchain,
+> is that I'm not able to select a toolchain with ARM-VECTOR-floating
+> point support is this correct? 
+
+When using the crosstool-NG backend, the toolchain options (most of them)
+in buildroot are hidden. If you want to tweak the toolchain settings, you
+can run:
+    make ctng-menuconfig
+
+which will prompt you the crosstool-NG configuration (like linux-menuconfig
+or busybox-menuconfig would for the Linux kernel, or busybox).
+
+Then, you can tweak the options at will (notice however that some options
+will be forcibly set/reset by the backend mechanism, there is no easy way
+for the crosstool-NG menuconfig if it makes sense to show/hide and/or set/
+reset these options).
+
+> NOTE: Of the record, the buildroot-CYGWIN-toolchain build was working
+> until some weeks ago (for me), in the current git-tree this is not
+> working anymore ( build troubles into mpc/mpfr and gmp),
+
+Ah, yes, MPFR has issues building in Cygwin by default. Here's what is
+done in crosstool-NG to fix this:
+  http://crosstool-ng.org/hg/crosstool-ng/file/tip/scripts/build/companion_libs/mpfr.sh#l66
+
+> without looking
+> to much in detail (I think) it has to do with  'another' way of naming
+> libs 'libxxxxx' on Linux vs 'cygxxxxxxx' on cygwin!
+
+I've never experienced such weirdness... Surely, shared libraries in
+Cygwin are named libxxx, from what I could see. It's the first time I
+read about a 'cyg' prefix...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Paul C Diem
-PCDiem at FoxValley.net
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
