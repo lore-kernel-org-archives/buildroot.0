@@ -1,62 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Nov 2011 00:00:05 +0100
-Subject: [Buildroot] [git commit] webif: remove deprecated
-Message-ID: <20111108231131.6B2B68F4D0@busybox.osuosl.org>
+Date: Tue, 8 Nov 2011 23:48:53 +0100
+Subject: [Buildroot] [git commit] util-linux: fix partx build breakage
+Message-ID: <20111108231130.AA78B8F4D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f5e5aeb7125c065c535ecb0774ab48cb7ef4622e
+commit: http://git.buildroot.net/buildroot/commit/?id=789a7cf4069b86f1bd44c55d69205aff1837f906
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+addpart, delpart and partx are enabled by default so --disable now to
+avoid build breaking when we lack libblkid.
+Also select libblkid when it's enabled now.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    1 -
- package/webif/Config.in                            |   28 --
- package/webif/files/etc/httpd.conf                 |    8 -
- package/webif/files/usr/lib/webif/apply.sh         |   76 ----
- package/webif/files/usr/lib/webif/categories.awk   |   27 --
- package/webif/files/usr/lib/webif/common.awk       |   38 --
- package/webif/files/usr/lib/webif/form.awk         |  100 -----
- .../webif/files/usr/lib/webif/lang/ca/common.txt   |  226 ----------
- .../webif/files/usr/lib/webif/lang/cz/common.txt   |  225 ----------
- .../webif/files/usr/lib/webif/lang/de/common.txt   |  228 ----------
- .../webif/files/usr/lib/webif/lang/dk/common.txt   |  231 ----------
- .../webif/files/usr/lib/webif/lang/ee/common.txt   |  230 ----------
- .../webif/files/usr/lib/webif/lang/es/common.txt   |  227 ----------
- .../webif/files/usr/lib/webif/lang/fr/common.txt   |  238 ----------
- .../webif/files/usr/lib/webif/lang/hr/common.txt   |  199 ---------
- .../webif/files/usr/lib/webif/lang/hu/common.txt   |  227 ----------
- .../webif/files/usr/lib/webif/lang/it/common.txt   |  226 ----------
- .../webif/files/usr/lib/webif/lang/nl/common.txt   |  224 ----------
- .../webif/files/usr/lib/webif/lang/no/common.txt   |  230 ----------
- .../webif/files/usr/lib/webif/lang/pl/common.txt   |  228 ----------
- .../webif/files/usr/lib/webif/lang/pt/common.txt   |  454 --------------------
- .../webif/files/usr/lib/webif/lang/ru/common.txt   |  223 ----------
- .../webif/files/usr/lib/webif/lang/se/common.txt   |  223 ----------
- package/webif/files/usr/lib/webif/languages.awk    |   12 -
- .../webif/files/usr/lib/webif/subcategories.awk    |   12 -
- package/webif/files/usr/lib/webif/validate.awk     |  151 -------
- package/webif/files/usr/lib/webif/webif.sh         |  286 ------------
- package/webif/files/www/cgi-bin/webif.sh           |    2 -
- package/webif/files/www/cgi-bin/webif/.categories  |    2 -
- package/webif/files/www/cgi-bin/webif/about.sh     |   31 --
- package/webif/files/www/cgi-bin/webif/config.sh    |   46 --
- package/webif/files/www/cgi-bin/webif/index.sh     |    8 -
- package/webif/files/www/cgi-bin/webif/info.sh      |   44 --
- package/webif/files/www/cgi-bin/webif/ipkg.sh      |    2 -
- .../files/www/cgi-bin/webif/status-connection.sh   |   29 --
- .../webif/files/www/cgi-bin/webif/status-dhcp.sh   |   38 --
- .../files/www/cgi-bin/webif/status-wireless.sh     |   12 -
- package/webif/files/www/index.html                 |   16 -
- package/webif/files/www/webif.css                  |  296 -------------
- package/webif/files/www/webif.js                   |   33 --
- package/webif/src/bstrip.c                         |   75 ----
- package/webif/src/webif-page.c                     |  289 -------------
- package/webif/webif.mk                             |   71 ---
- 43 files changed, 0 insertions(+), 5572 deletions(-)
+ package/util-linux/Config.in     |    7 ++++---
+ package/util-linux/util-linux.mk |    4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 816130d..43a8444 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -67,6 +67,10 @@ config BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS
+ config BR2_PACKAGE_UTIL_LINUX_WALL
+ 	bool "build \"wall\""
+ 
++config BR2_PACKAGE_UTIL_LINUX_PARTX
++	bool "build \"addpart, delpart, partx\""
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++
+ ############################################
+ # default disabled and should be enabled by
+ #  --enable-foo
+@@ -86,9 +90,6 @@ config BR2_PACKAGE_UTIL_LINUX_LAST
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	bool "build \"mesg\""
+ 
+-config BR2_PACKAGE_UTIL_LINUX_PARTX
+-	bool "build \"addpart, delpart, partx\""
+-
+ config BR2_PACKAGE_UTIL_LINUX_RAW
+ 	bool "build \"raw\""
+ 
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index b77e326..a3d6e13 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -49,7 +49,8 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_UNSHARE),,--disable-unshare) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RENAME),,--disable-rename) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS),,--disable-schedutils) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),,--disable-wall)
++	$(if $(BR2_PACKAGE_UTIL_LINUX_WALL),,--disable-wall) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),,--disable-partx)
+ 
+ #############################################
+ #
+@@ -61,7 +62,6 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg) \
+-	$(if $(BR2_PACKAGE_UTIL_LINUX_PARTX),--enable-partx) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RAW),--enable-raw) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_RESET),--enable-reset) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-login-utils) \
