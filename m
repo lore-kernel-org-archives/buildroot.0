@@ -1,57 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 8 Nov 2011 17:06:13 +0100
-Subject: [Buildroot] [git commit] toolchain-external: fix x86 codesourcery
-	config symbol typo
-Message-ID: <20111108160701.D62158F4D3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Nov 2011 17:44:53 +0100
+Subject: [Buildroot] Future...TOOLCHAIN builds.
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6702C39438@WETMEX10.loepfe.com>
+ (Noel Vellemans's message of "Tue, 8 Nov 2011 08:14:18 +0100")
+References: <mailman.1400.1320692517.2942.buildroot@busybox.net>
+ <1531E53627F1F749B4FE809BF2A4EB6702C39438@WETMEX10.loepfe.com>
+Message-ID: <878vnqwol6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=69f34bafa8dc8af6d66e86f8a965c423552e1eb3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Noel" == Vellemans, Noel <Noel.Vellemans@visionBMS.com> writes:
 
-As noticed on irc.
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-external/Config.in   |    4 ++--
- toolchain/toolchain-external/ext-tool.mk |    2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Noel> A) On Linux, no BUILDROOT is used to build a complete target, for the
+ Noel> at91sam9g10, at91sam9m10 (arm-9).. And recently one for the imx-537
+ Noel> (cortex-A8) (and x86 for test cases).
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 0a4b922..678babd 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -199,7 +199,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	  has support for the following variants:
-             - SH2A, uClibc, big endian
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	bool "Sourcery CodeBench x86/x86_64 2010.09"
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-@@ -271,7 +271,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
--	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009
-+	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
- 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index a52621c..2ac4973 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -202,7 +202,7 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-60-sh-uclinux-i686-pc-linux-gnu.tar.bz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package8749/public/sh-uclinux/
- TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-36-sh-uclinux-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOUCERY_X86_201009),y)
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009),y)
- TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/sgpp/lite/ia32/portal/package7682/public/i686-pc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=ia32-2010.09-44-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
+Out of interest, have you done anything to integrate the imx53 bootup
+sequence and/or gpu/vpu libraries in buildroot? I'm considering the
+imx53 for a new project.
+
+-- 
+Bye, Peter Korsgaard
