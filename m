@@ -1,50 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 8 Nov 2011 09:33:41 +0100
-Subject: [Buildroot] Status of valgrind on powerpc
-In-Reply-To: <87y5vrd13v.fsf@macbook.be.48ers.dk>
-References: <CAAXf6LUVQc9JRgoOiKy84BnsiRLqXOxHbd6k+1RzQMpRQA4T0w@mail.gmail.com>
- <20110929121549.4bb68988@skate> <20110930214150.770f09e1@skate>
- <CAAXf6LUKtv1Cs-gEfGj4Aq9wLe3N0tiKHDxniv39dW+RwoQOjw@mail.gmail.com>
- <20111001113902.2aeff98d@skate>
- <CAAXf6LXV-aQgMNarenZa0ZpWpytQZKbeBnL83wKr5E-eK_bCOA@mail.gmail.com>
- <CAAXf6LVTAU73avFA3BJXEvcbVoQj6er1PFg-ntjLo9F3tc6hOA@mail.gmail.com>
- <87y5vrd13v.fsf@macbook.be.48ers.dk>
-Message-ID: <CAAXf6LUJw3_6x_kXfP2QBQV0YoyODnaW4EnSJdx1ehHFKmFBcg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Nov 2011 10:28:13 +0100
+Subject: [Buildroot] [PATCH v2] add support for virtual terminal
+In-Reply-To: <4EB8DEF6.3020106@visionsystems.de>
+References: <4EB7C53D.4030902@visionsystems.de>
+ <87pqh3d0bn.fsf@macbook.be.48ers.dk>
+ <4EB8DEF6.3020106@visionsystems.de>
+Message-ID: <20111108102813.084fff3d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Le Tue, 08 Nov 2011 08:49:10 +0100,
+Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
 
-On Mon, Nov 7, 2011 at 11:22 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
->
-> Hi,
->
-> ?Thomas> Possible solutions?
-> ?Thomas> 1. Modify uClibc so that it does not depend on the linux a.out.h file,
-> ?Thomas> but rather provides its own definitions as eglibc does.
-> ?Thomas> 2. Modify the kernel so that powerpc also provides a.out.h
->
-> I looked into this a few years ago, and option 2 is not an option as the
-> aout stuff is old and shouldn't be used:
->
-> https://lkml.org/lkml/2008/6/15/126
->
-> ?Thomas> 3. Modify buildroot to state that valgrind can not be build with uClibc.
->
-> 4. Fix valgrind to not include a.out.h
->
-> It's not really used for much - Have you seen this thread?
->
-> http://old.nabble.com/How-to-disable-the-a.out-support-of-valgrind-td29226733.html
+> I'd like to have both serial console and virtual one (on tty I
+> experiment with my program and vie serial console I can do other
+> administrative tasks. One could use ssh, but this implies having
+> network connection). Every time I execute make clean or clone BR I
+> loose my inittab. Earlier versions of inittab had some ttys
+> predefined, but they were deleted, so I thought, it would be useful
+> to add this as an option. This way everyone should be satisfied.
 
-I hadn't seen it no, but it looks indeed a good alternative solution.
+Just use a post-build script to customize your inittab. Something like:
 
-I'll add it to my list, but I don't think I can look into this soon.
-So, if anyone has some free time, feel free to take this over.
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/yegor_company/yegor_project/post-build.sh"
 
-Best regards,
+with board/yegor_company/yegor_project/post-build.sh containing:
+
+---------------8<------------------
+#!/bin/sh
+
+TARGET_DIR=$1
+
+grep -q "^tty1::respawn:" $TARGET_DIR/etc/inittab || \
+	echo "tty1::respawn:/sbin/getty tty1 38400" >> $TARGET_DIR/etc/inittab
+---------------8<------------------
+
+And there you are. If you don't like that, you can also just copy the
+fs/skeleton/etc/inittab into board/yegor_company/yegor_project/ and
+have the post-build.sh script do something like:
+
+---------------8<------------------
+#!/bin/sh
+
+TARGET_DIR=$1
+BOARD_DIR=board/yegor_company/yegor_project/
+
+cp $BOARD_DIR/inittab $TARGET_DIR/etc/inittab
+---------------8<------------------
+
+And there you are.
+
+Regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
