@@ -1,144 +1,113 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 8 Nov 2011 14:20:57 +0100
-Subject: [Buildroot] Report from the Buildroot Developer Day
-In-Reply-To: <201111071339.28612.yann.morin.1998@anciens.enib.fr>
-References: <20111102160349.4afe5935@skate>
- <20111107120936.GA26160@merkur.ravnborg.org>
- <20111107132548.33965b56@skate>
- <201111071339.28612.yann.morin.1998@anciens.enib.fr>
-Message-ID: <CAAXf6LVoKWVEn018FWGqxbCTjx4CtdvMZrkp=baeMGmhHZyciA@mail.gmail.com>
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Tue, 8 Nov 2011 14:33:50 +0100
+Subject: [Buildroot] Future...TOOLCHAIN builds.
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB6702C396ED@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Resending .. Prev. mail seems not to have reached the list,Don't ask me
+why.
+Sorry for this.
 
-On Mon, Nov 7, 2011 at 1:39 PM, Yann E. MORIN
-<yann.morin.1998@anciens.enib.fr> wrote:
-> Thomas, Sam, All,
->
-> On Monday 07 November 2011 132548 Thomas Petazzoni wrote:
->> Le Mon, 7 Nov 2011 13:09:36 +0100,
->> Sam Ravnborg <sam@ravnborg.org> a ?crit :
->>
->> > The tags seems to be used in different ways. The way I have understood
->> > their usage - and thus the way I have used them is like this:
->> >
->> > Acked-by is used when I think that a patch does the right thing.
->> > For example when it introduces a a new feature or change something -
->> > and which I consider it the right thing to do.
->> >
->> > Reviewed-by is stronger in the sense that I have actually taking my
->> > time to carefully read the patch line-by-line and that I consider
->> > that the patch is correct.
->> > I almost never use "Reviewed-by" for patches touching code areas
->> > that I am not familiar with - as I do not know if they are correct.
->> > Reviewed-by includes an implicit Acked-by as I would not spend time
->> > to review something if I did not agree on the patch.
->>
->> Interestingly, my understanding is more or less the opposite of yours.
->> For me:
->>
->> ?* Reviewed-by means that you have read the patch and agree with its
->> ? ?principle and general implementation, but not that you have actually
->> ? ?tested and verified that the patch works. The top-level maintainer
->> ? ?will have to do additional testing because you haven't done so.
->>
->> ?* Acked-by is much stronger, as it means that you fully agree with the
->> ? ?patch, that you reviewed it *and* tested it, and that the top-level
->> ? ?maintainer does not necessarily need to do additional testing if he
->> ? ?trusts you, because Acked-by means that you have actually tested
->> ? ?this.
->
-> I would tend to agree with Sam here.
->
-> - Acked-by is a way to say 'yep, looks good to me'
-> - Reviewed-by means 'I did some careful analysis, and could not find any
-> ?flaw, good for me'
-> - Tested-by means 'I did try that stuff, it works for me'.
->
-> Here are the corresponding snippets from Documenation/SubmittingPatches:
->
-> ---8<---
-> Acked-by: is not as formal as Signed-off-by:. It is a record that the acker
-> has at least reviewed the patch and has indicated acceptance. ?Hence patch
-> mergers will sometimes manually convert an acker's "yep, looks good to me"
-> into an Acked-by:.
->
-> Reviewed-by:, instead, indicates that the patch has been reviewed and found
-> acceptable according to the Reviewer's Statement:
-> (blabla)
-> ? ? (a) I have carried out a technical review of this patch to
-> ? ? ? ? evaluate its appropriateness and readiness for inclusion into
-> ? ? ? ? the mainline kernel.
-> ? ? (b) Any problems, concerns, or questions relating to the patch
-> ? ? ? ? have been communicated back to the submitter. ?I am satisfied
-> ? ? ? ? with the submitter's response to my comments.
->
-> A Tested-by: tag indicates that the patch has been successfully tested (in
-> some environment) by the person named. ?This tag informs maintainers that
-> some testing has been performed, provides a means to locate testers for
-> future patches, and ensures credit for the testers.
-> ---8<---
->
-> So, in my understanding, Reviewed-by is stronger than Acked-by, because
-> Reviewed-by means that some technical review has been made (whereas
-> Acked-by does not specify what type of review was made).
+Regards noel
 
-I don't really agree on the last point. Acked-by implies a review
-according to the above snippets, and I don't really see the point of
-having a review that is not technical. No-one will add the tag
-'Reviewed-by' to a patch, if he only checked for typos (unless for
-documentation patches).
-So, based on this argument, I'd say that Acked-by is stronger than
-Reviewed-by. I tend to understand that as well from the kernel docs,
-since Acked-by is indicated to be used by subsystem maintainers.
 
+>> While following the discussions on the buildroot mailing list, I saw 
+>> that for the next releases the CROSSTOOL-NG toolchain will be used as
+
+>> default, so a started to experiment with the CROSSTOOL-NG buildroot 
+>> toolchain (this morning).
 >
-> Also, it would be possible to add bith Reviewed-by and Tested-by on a single
-> patch, whereas Acked-by and Reviewed-by would be equivalent to Reviewed-by
-> as it is stronger.
+
+<<Thomas >> 
+> Great! It's really nice to have feedback on this.
+
+Having some troubles to get a buildroot-CROSSTOOL-NG-toolchain build (on
+Linux host)... But I'll keep you all informed.
+
+>> Until now.. U used the buildroot to generate a 'cross-toolchain', 
+>> even 'worse'; I used buildroot to generate 2 toolchains.
+>> 	A) One running on LINUX 
+>> 	B) One running on top of CYGWIN (for the less Linux-minded
+>> colleagues)
+
+<<Thomas >> 
+>Do you use Buildroot only to build a toolchain ?
+
+Well it is a whole story, 
+
+A) On Linux, no BUILDROOT is used to build a complete target, for the
+at91sam9g10, at91sam9m10 (arm-9).. And recently one for the imx-537
+(cortex-A8) (and x86 for test cases).
+
+B) On Cygwin (windows) yes, I do only build the toolchain, for my
+colleagues that not want (can?) switch to Linux (for several reasons).
+(These colleagues are writing ... custom application-software.)
+
+Having some troubles to get a buildroot-CROSSTOOL-NG-toolchain build (on
+Linux host)... But I'll keep you all informed.
+
+
+>> 1) Will this also be possible for the CROSSTOOL-NG toolchain that is 
+>> build with buildroot?
+
+<<Thomas >> 
 >
-> For a project like buildroot, we could agree that Acked-by is equivalent
-> to Reviewed-by, as we could say that the difference is not that important
-> for buildroot.
->
-> But we should emphasise the difference between Tested-by and Reviewed-by,
-> and we should encourage the users to add their Tested-by as much as possible.
+>If you build only a toolchain, then crosstool-NG is a very good 
+>replacement for Buildroot.
 
-Regardless of the names, I can think of the following type of responses:
+>If you build a toolchain and then use Buildroot to build an embedded 
+>Linux build system, then you can build your toolchain with crosstool-NG
 
-1. I think the patch addresses a valid problem or proposes a nice
-improvement (so I think it or something like it should be included),
-but have not tested nor reviewed it.
-2. I have read the patch line-by-line, and based on my current
-understanding of the buildroot system / make syntax, I think the patch
-is correct and looks good. But, I have not checked whether the patch
-applies cleanly, nor tested it.
-3. The same as above, plus I have integrated your patch in my
-buildroot tree and verified that it applies cleanly.
-4. I have integrated your patch in my tree and did some form of
-testing with it, but have not reviewed it for technical correctness /
-compliance with the philosophy of buildroot.
+>separately, and then use it as an external toolchain in Buildroot, or 
+>you can instruct Buildroot to use crosstool-NG has a backed to build 
+>the toolchain.
 
-If we can agree on some listing like this, we should simply map words
-on them, and document that. This is particularly important as we saw
-that Thomas and Sam/Yann use Acked-by and Reviewed-by in an opposite
-way.
+>Note that we intend to do in 2012.02 is move the crosstool-NG backend 
+>as the default, not to remove the Buildroot code to build toolchain, 
+>which will still be offered as an alternate choice. However, on the 
+>long run, if everything works fine, we might drop the Buildroot code to
 
-The difference between 1 and 2 is big enough to create a different
-name for it, IMO.
+>build the toolchain.
 
-4. would definitely be 'Tested-by'.
-2. looks like 'Reviewed-by' to me (and could also be Acked-by if we
-accept that we don't have subsystem maintainers and that is the only
-difference between the two)
-1. doesn't have a name yet, maybe: Liked-by:
-3. is very similar to 2. I'm not sure we need a separate category for
-that if we trust the submitter. In the rare case he hasn't done his
-job, Peter will notice immediately.
+>> 2) Another question that pops-up when building a CROSSTOOL-NG 
+>> toolchain, is that I'm not able to select a toolchain with 
+>> ARM-VECTOR-floating point support is this correct?
 
-Best regards,
-Thomas
+<<Thomas >> 
+>In Target Options -> Floating Point, you can choose between hardware 
+>floating point and software floating point. There are patches being 
+>discussed/reviewed to add a choice between the hard and softfp ABI to 
+>pass floating-point arguments. And I'm sure than Yann, crosstool-NG's 
+>maintainer, is definitely interested by patches improving things in 
+>that area.
+
+For some reason I missing this, in other words, when selecting a
+CROSSTOOL-NG-toolchain (in buildroot) the option for
+arm-vector-FLOATING-point is disappearing and I'm not able to find any
+option that allows me to turn this on.
+Note: the 'use-software floating point by default' option is still
+there, but I have not selected this.
+
+
+>> NOTE: Of the record, the buildroot-CYGWIN-toolchain build was working
+
+>> until some weeks ago (for me), in the current git-tree this is not 
+>> working anymore ( build troubles into mpc/mpfr and gmp), without 
+>> looking to much in detail (I think) it has to do with  'another' way 
+>> of naming libs 'libxxxxx' on Linux vs 'cygxxxxxxx' on cygwin!
+
+<<Thomas >> 
+>Buildroot has never supported officially Cygwin, and nobody tests this.
+>I think crosstool-NG has better support for this, but Yann might 
+>comment on this.
+
+I know thomas, and I was aware of this, this was the reason why I said
+'of the record' !
+But even if it was (and never will be, I understand this) suported, it
+was nice that is was working :-)  
+ 
+Regards Noel
