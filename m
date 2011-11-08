@@ -1,81 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 9 Nov 2011 00:38:06 +0100
+Date: Wed, 9 Nov 2011 00:46:58 +0100
 Subject: [Buildroot] Future...TOOLCHAIN builds..
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6702C39314@WETMEX10.loepfe.com>
+In-Reply-To: <20111107163557.27aaa627@skate>
 References: <1531E53627F1F749B4FE809BF2A4EB6702C39314@WETMEX10.loepfe.com>
-Message-ID: <201111090038.06943.yann.morin.1998@anciens.enib.fr>
+ <20111107163557.27aaa627@skate>
+Message-ID: <201111090046.58926.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noel, All,
+Thomas, Noel, All,
 
-On Monday 07 November 2011 16:07:35 Vellemans, Noel wrote:
-> While following the discussions on the buildroot mailing list, I saw
-> that for the next releases the CROSSTOOL-NG toolchain will be used as
-
-crosstool-NG, not all caps. ;-)
-
-> default, so a started to experiment with the CROSSTOOL-NG buildroot
-> toolchain (this morning).
+On Monday 07 November 2011 16:35:57 Thomas Petazzoni wrote:
+> Le Mon, 7 Nov 2011 16:07:35 +0100,
+> "Vellemans, Noel" <Noel.Vellemans@visionBMS.com> a ?crit :
+> > 2) Another question that pops-up when building a CROSSTOOL-NG toolchain,
+> > is that I'm not able to select a toolchain with ARM-VECTOR-floating
+> > point support is this correct? 
 > 
-> Until now.. U used the buildroot to generate a 'cross-toolchain', even
-> 'worse'; I used buildroot to generate 2 toolchains. 
-> 	A) One running on LINUX 
-> 	B) One running on top of CYGWIN (for the less Linux-minded
-> colleagues)
+> In Target Options -> Floating Point, you can choose between hardware
+> floating point and software floating point.
 
-I am not quite sure I understand correctly... I'll try to state what I
-understood:
-  A) you use buildroot on Linux, to build a Linux-hosted cross-toolchain
-  B) you use buildroot on Cygwin, to build a Cygwin-hosted cross-toolchain
+This is in the ctng-menuconfig.
 
-Right? AFAIK, Cygwin support was never official for buildroot. It working
-would have been mere chance! ;-)
+This will probably be a FAQ at some point, when people notice that all the
+nice target options they were used to finf in buildroot's menuconfig will
+disapear when the crosstool-NG backend is used.
+We'll have to prominently point to 'make ctng-menuconfig' in the doc.
 
-> Which was quite easy to do... until now. 
-> 
-> 1) Will this also be possible for the CROSSTOOL-NG toolchain that is
-> build with buildroot?
+> And I'm sure than Yann, crosstool-NG's
+> maintainer, is definitely interested by patches improving things in
+> that area.
 
-There have been many reports of successfully building toolchains on Cygwin,
-both natively under Cygwin, and as a canadian-built from Linux, with
-crosstool-NG. I did it myself a few times, and it worked.
+Yes, definitely. This all happens there:
+  home: http://crosstool-ng.org/
+  ML  : http://sourceware.org/ml/crossgcc/
 
-> 2) Another question that pops-up when building a CROSSTOOL-NG toolchain,
-> is that I'm not able to select a toolchain with ARM-VECTOR-floating
-> point support is this correct? 
+> Buildroot has never supported officially Cygwin, and nobody tests this.
+> I think crosstool-NG has better support for this, but Yann might
+> comment on this.
 
-When using the crosstool-NG backend, the toolchain options (most of them)
-in buildroot are hidden. If you want to tweak the toolchain settings, you
-can run:
-    make ctng-menuconfig
-
-which will prompt you the crosstool-NG configuration (like linux-menuconfig
-or busybox-menuconfig would for the Linux kernel, or busybox).
-
-Then, you can tweak the options at will (notice however that some options
-will be forcibly set/reset by the backend mechanism, there is no easy way
-for the crosstool-NG menuconfig if it makes sense to show/hide and/or set/
-reset these options).
-
-> NOTE: Of the record, the buildroot-CYGWIN-toolchain build was working
-> until some weeks ago (for me), in the current git-tree this is not
-> working anymore ( build troubles into mpc/mpfr and gmp),
-
-Ah, yes, MPFR has issues building in Cygwin by default. Here's what is
-done in crosstool-NG to fix this:
-  http://crosstool-ng.org/hg/crosstool-ng/file/tip/scripts/build/companion_libs/mpfr.sh#l66
-
-> without looking
-> to much in detail (I think) it has to do with  'another' way of naming
-> libs 'libxxxxx' on Linux vs 'cygxxxxxxx' on cygwin!
-
-I've never experienced such weirdness... Surely, shared libraries in
-Cygwin are named libxxx, from what I could see. It's the first time I
-read about a 'cyg' prefix...
+Yes, indeed. There have been many reports of sucess.
+Although Cygwin is not an official host in my point of view, as I can't test,
+I try not to break it. If it happens, and someone sends a tested patch (or I
+can trivially deduce how to fix it myself), I'm happy to apply Cugwin-related
+patches to the tree. ;-)
 
 Regards,
 Yann E. MORIN.
