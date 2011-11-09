@@ -1,56 +1,32 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Wed, 9 Nov 2011 09:04:10 +0100
-Subject: [Buildroot] buildroot Digest, Vol 65, Issue 22
-In-Reply-To: <mailman.2243.1320780341.2942.buildroot@busybox.net>
-References: <mailman.2243.1320780341.2942.buildroot@busybox.net>
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB6702C398D3@WETMEX10.loepfe.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Nov 2011 09:13:05 +0100
+Subject: [Buildroot] Future...TOOLCHAIN builds..
+In-Reply-To: <201111090046.58926.yann.morin.1998@anciens.enib.fr>
+References: <1531E53627F1F749B4FE809BF2A4EB6702C39314@WETMEX10.loepfe.com>
+ <20111107163557.27aaa627@skate>
+ <201111090046.58926.yann.morin.1998@anciens.enib.fr>
+Message-ID: <20111109091305.79396671@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
- 
+Le Wed, 9 Nov 2011 00:46:58 +0100,
+"Yann E. MORIN" <yann.morin.1998@anciens.enib.fr> a ?crit :
 
-Noel> A) On Linux, no BUILDROOT is used to build a complete target, for
-the  Noel> at91sam9g10, at91sam9m10 (arm-9).. And recently one for the
-imx-537  Noel> (cortex-A8) (and x86 for test cases).
+> This will probably be a FAQ at some point, when people notice that all the
+> nice target options they were used to finf in buildroot's menuconfig will
+> disapear when the crosstool-NG backend is used.
+> We'll have to prominently point to 'make ctng-menuconfig' in the doc.
 
-<<Peter >> Out of interest, have you done anything to integrate the
-imx53 bootup sequence and/or gpu/vpu libraries in buildroot? I'm
-considering the
-<<Peter >> imx53 for a new project.
+I have started upgrading the documentation, and documenting in more
+details the three toolchain mechanisms is definitely part of what I
+intend to work on.
 
-
-Peter, it is my intention to do this but at this time, no not yet.
-I'm running buildroot-test-builds on the imx-QSB (for some weeks now).
-
-At this time I grabbed 
-A) The UBOOT-boot loader for the QSB-board demo SD card (I even did not
-build an uboot yet)
-B) Use buildroot to build the tool-chain (hardware FP and cortex A8,
-gecko 4.5.x)
-C) Grabbed the IMX-53x kernel patches from the imx-web-site and build
-the 2.6.35.x kernel with buildroot.
-D) Use buildroot to build a 'GRAPICHAL' ( X-windows) rootfs that
-contains a web-server and web-client (web-browser).
-E) .. Etc..
-
-
-
-You know how it works :-), in the process of deciding what CPU-to take.
-
-All this stuff is done manually, I trying to be ahead with the software,
-we have no board yet, and the schematic (and pcb) for our board with the
-IMX53x is being draw at this time.
-
-I hope to get all this stuff nicely integrated with the next stable
-buildroot, but at this time I'm experimenting (testing) to see where I
-get.
-
-And I must say, I'm not that experienced with buildroot as you are (you
-might recall me form one of the internal-buildroot sessions you held
-together with marc some years ago )
-
-Regards Noel
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
