@@ -1,44 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Wed, 9 Nov 2011 09:39:34 +0100
-Subject: [Buildroot] Cygwin build - MPC
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6702C398EE@WETMEX10.loepfe.com>
-References: <1531E53627F1F749B4FE809BF2A4EB6702C398EE@WETMEX10.loepfe.com>
-Message-ID: <201111090939.35013.yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 9 Nov 2011 09:39:29 +0100
+Subject: [Buildroot] [git commit] gpsd: garmintxt driver gets enabled by
+	default, so disable if not selected
+Message-ID: <20111109084558.223958F408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Noel, Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=b66156835ea8ef253dac8e96fed9dbb4cb30f204
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wednesday 09 November 2011 092638 Vellemans, Noel wrote:
-> While testing the current git-tree under Linux and cygwin, I have run
-> into the following build-problem.
-> 
-> Host-mpc fails to build on a windows host (on Cygwin).
-[--SNIP--]
-> And of course once found... I very quickly ended up with 'googeling' for
-> the same problem and yes... there was indeed someone that also has
-> discovered this...
-> 
-> http://lists.gforge.inria.fr/pipermail/mpc-discuss/attachments/20110430/
-> 9b6dfa4b/attachment.obj
-> 
-> http://lists.gforge.inria.fr/pipermail/mpc-discuss/2011-April/000898.htm
-> l
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gpsd/gpsd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Ah, I see why I don't get this in crosstool-NG. That's because the companion
-libraries (GMP, MPFR, MPC and the likes) are build statically. So, we do
-not have that issue in crosstool-NG.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +0/33 662376056 | Software  Designer | \ / CAMPAIGN     |   ^                |
-| --==< O_o >==-- '------------.-------:  X  AGAINST      |  /e\  There is no  |
-| http://ymorin.is-a-geek.org/ | (*_*) | / \ HTML MAIL    |  """  conspiracy.  |
-'------------------------------'-------'------------------'--------------------'
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 10e66ba..be6daeb 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -58,8 +58,8 @@ endif
+ ifneq ($(BR2_PACKAGE_GPSD_GARMIN),y)
+ 	GPSD_CONF_OPT += --disable-garmin
+ endif
+-ifeq ($(BR2_PACKAGE_GPSD_GARMIN_SIMPLE_TXT),y)
+-	GPSD_CONF_OPT += --enable-garmintxt
++ifneq ($(BR2_PACKAGE_GPSD_GARMIN_SIMPLE_TXT),y)
++	GPSD_CONF_OPT += --disable-garmintxt
+ endif
+ ifneq ($(BR2_PACKAGE_GPSD_GPSCLOCK),y)
+ 	GPSD_CONF_OPT += --disable-gpsclock
