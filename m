@@ -1,21 +1,23 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Nov 2011 16:24:26 +0100
-Subject: [Buildroot] [PATCH] dhcp: security bump to version 4.1-ESV-R3
-In-Reply-To: <1320838259-30988-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 9 Nov 2011 08:30:59 -0300")
-References: <1320838259-30988-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87sjlx2uad.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 09 Nov 2011 12:26:04 -0300
+Subject: [Buildroot] [PATCH 1/2] iw: bump to 3.2
+In-Reply-To: <1320850673-24222-2-git-send-email-yegorslists@googlemail.com>
+References: <1320850673-24222-1-git-send-email-yegorslists@googlemail.com>
+ <1320850673-24222-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <79860763eaefb79bdfb7654620b57def@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 09.11.2011 11:57, yegorslists at googlemail.com wrote:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> version 3.2 provides support for libnl 3.x, so remove the relevant 
+> patch
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
