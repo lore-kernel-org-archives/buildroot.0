@@ -1,73 +1,95 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Nov 2011 23:42:23 +0100
-Subject: [Buildroot] [git commit] mplayer: Enable live and tv options
-Message-ID: <20111109224312.7583C8F44E@busybox.osuosl.org>
+Date: Wed, 9 Nov 2011 10:06:02 +0100
+Subject: [Buildroot] [git commit] devmem2: undeprecate and conver to
+	gentargets
+Message-ID: <20111109224311.B7B038F44E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88b5a31f31c12abb0ed15290efc1d09e3ac84fc2
+commit: http://git.buildroot.net/buildroot/commit/?id=4e8fd936f580d5a5e6938e175811a57f7d3e080f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-1.Enable TV interface.
-2.Enable LIVE555 Streaming Media if live555 is available.
-
-[Peter: cleanup CFLAGS/LDFLAGS handling]
-Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mplayer/mplayer.mk |   20 ++++++++++++++++----
- 1 files changed, 16 insertions(+), 4 deletions(-)
+ package/devmem2/Config.in  |    1 -
+ package/devmem2/devmem2.mk |   49 +++++++++++++++++--------------------------
+ 2 files changed, 19 insertions(+), 31 deletions(-)
 
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 4c03440..776cc68 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -8,6 +8,9 @@ MPLAYER_VERSION = 32726
- # MPLAYER_SITE = http://www.mplayerhq.hu/MPlayer/releases
- MPLAYER_SITE = svn://svn.mplayerhq.hu/mplayer/trunk
+diff --git a/package/devmem2/Config.in b/package/devmem2/Config.in
+index 233b4b0..cb00a51 100644
+--- a/package/devmem2/Config.in
++++ b/package/devmem2/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_DEVMEM2
+ 	bool "devmem2"
+-	depends on BR2_DEPRECATED
+ 	help
+ 	  Simple program to read/write from/to any location in memory.
  
-+MPLAYER_CFLAGS = $(TARGET_CFLAGS)
-+MPLAYER_LDFLAGS = $(TARGET_LDFLAGS)
-+
- # mplayer needs pcm+mixer support, but configure fails to check for it
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
- MPLAYER_DEPENDENCIES += alsa-lib
-@@ -75,6 +78,17 @@ else
- MPLAYER_CONF_OPTS += --disable-mad
- endif
+diff --git a/package/devmem2/devmem2.mk b/package/devmem2/devmem2.mk
+index 457a181..f477589 100644
+--- a/package/devmem2/devmem2.mk
++++ b/package/devmem2/devmem2.mk
+@@ -4,39 +4,28 @@
+ #
+ #############################################################
  
-+ifeq ($(BR2_PACKAGE_LIVE555),y)
-+MPLAYER_DEPENDENCIES += live555
-+MPLAYER_CONF_OPTS += --enable-live
-+MPLAYER_LIVE555 = liveMedia groupsock UsageEnvironment BasicUsageEnvironment
-+MPLAYER_CFLAGS += \
-+	$(addprefix -I$(STAGING_DIR)/usr/include/live/,$(MPLAYER_LIVE555))
-+MPLAYER_LDFLAGS += $(addprefix -l,$(MPLAYER_LIVE555)) -lstdc++
-+else
-+MPLAYER_CONF_OPTS += --disable-live
-+endif
-+
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
- MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
-@@ -106,15 +120,13 @@ define MPLAYER_CONFIGURE_CMDS
- 		--cc="$(TARGET_CC)" \
- 		--as="$(TARGET_AS)" \
- 		--charset=UTF-8 \
--		--extra-cflags="$(TARGET_CFLAGS)" \
--		--extra-ldflags="$(TARGET_LDFLAGS)" \
-+		--extra-cflags="$(MPLAYER_CFLAGS)" \
-+		--extra-ldflags="$(MPLAYER_LDFLAGS)" \
- 		--enable-mad \
- 		--enable-fbdev \
- 		$(MPLAYER_CONF_OPTS) \
- 		--enable-cross-compile \
- 		--disable-ivtv \
--		--disable-tv \
--		--disable-live \
- 		--enable-dynamic-plugins \
- 	)
- endef
+-DEVMEM2_SOURCE:=devmem2.c
+-DEVMEM2_SITE:=http://free-electrons.com/pub/mirror
+-DEVMEM2_BINARY:=devmem2
+-DEVMEM2_DIR:=$(BUILD_DIR)/devmem2
++DEVMEM2_SITE = http://free-electrons.com/pub/mirror
++DEVMEM2_SOURCE = devmem2.c
++DEVMEM2_VERSION = 1
+ 
+-$(DL_DIR)/$(DEVMEM2_SOURCE):
+-	$(call DOWNLOAD,$(DEVMEM2_SITE),$(DEVMEM2_SOURCE))
++define DEVMEM2_EXTRACT_CMDS
++	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
++endef
+ 
+-$(DEVMEM2_DIR)/$(DEVMEM2_SOURCE): $(DL_DIR)/$(DEVMEM2_SOURCE)
+-	mkdir -p $(@D)
+-	cp $^ $@
++define DEVMEM2_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) devmem2
++endef
+ 
+-$(DEVMEM2_DIR)/$(DEVMEM2_BINARY): $(DEVMEM2_DIR)/$(DEVMEM2_SOURCE)
+-	$(TARGET_CC) $(TARGET_CFLAGS) -o $@ $^
++define DEVMEM2_CLEAN_CMDS
++	rm -f $(@D)/devmem2
++endef
+ 
+-$(TARGET_DIR)/sbin/$(DEVMEM2_BINARY): $(DEVMEM2_DIR)/$(DEVMEM2_BINARY)
+-	cp $^ $@
+-	$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $@
++define DEVMEM2_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/devmem2 $(TARGET_DIR)/sbin/devmem2
++endef
+ 
+-devmem2: $(TARGET_DIR)/sbin/$(DEVMEM2_BINARY)
++define DEVMEM2_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/sbin/devmem2
++endef
+ 
+-devmem2-source: $(DL_DIR)/$(DEVMEM2_SOURCE)
+-
+-devmem2-clean:
+-	rm -f $(TARGET_DIR/sbin/$(DEVMEM2_BINARY)
+-
+-devmem2-dirclean:
+-	rm -rf $(DEVMEM2_DIR)
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_DEVMEM2),y)
+-TARGETS+=devmem2
+-endif
++$(eval $(call GENTARGETS))
