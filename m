@@ -1,74 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Nov 2011 09:42:22 +0100
-Subject: [Buildroot] [git commit] gpsd: fix navcom driver build when no
-	other drivers using binary are enabled
-Message-ID: <20111109084558.7EA468F4A4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Nov 2011 09:49:02 +0100
+Subject: [Buildroot] buildroot build fails for buildroot 2011.08
+In-Reply-To: <20111108214722.49f660d0da0b2739d35378f29283c9ab.d84f2addad.wbe@email10.secureserver.net>
+References: <20111108214722.49f660d0da0b2739d35378f29283c9ab.d84f2addad.wbe@email10.secureserver.net>
+Message-ID: <20111109094902.79514902@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=891ba7a4efcf90aeabd13f215fbddd8c754f1da4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Tue, 08 Nov 2011 21:47:22 -0700,
+<santhosh@msys-tech.com> a ?crit :
 
-Patch sent upstream.
+> i am trying to build kernel image for m68k in buildroot 20.11.08  using external toolchain . I am facing following error message.
+> 
+>         Target:m68k   changes made in target directory in Config.arch.in
+>         toolchain type: freescale coldfire -4.4 and given path of the toolchain in buildroot
+> 
+> Checking external toolchain settings
+> Incorrect selection of the C library
+> make: *** [/home/santhosh/Desktop/santhosh/buildroot20.11.0.8/buildroot-2011.08/output/stamps/ext-toolchain-checked] Error 255
+> can you tell me the steps how to solve this error.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gpsd/gpsd-2.95-navcom.patch |   47 +++++++++++++++++++++++++++++++++++
- 1 files changed, 47 insertions(+), 0 deletions(-)
+I guess the toolchain is for no-MMU and doesn't support shared library,
+and for the moment, the external toolchain code makes the assumption
+that the external toolchain supports shared library. This needs to be
+improved a little bit in the external toolchain code.
 
-diff --git a/package/gpsd/gpsd-2.95-navcom.patch b/package/gpsd/gpsd-2.95-navcom.patch
-new file mode 100644
-index 0000000..659cea1
---- /dev/null
-+++ b/package/gpsd/gpsd-2.95-navcom.patch
-@@ -0,0 +1,47 @@
-+[PATCH] Navcom needs binary support
-+
-+Enable binary support when navcom driver is enabled, otherwise the build
-+errors out with:
-+
-+./libgpsd.so: undefined reference to `navcom_binary'
-+
-+If no other drivers needing binary support are enabled.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ driver_navcom.c |    4 ++--
-+ gpsd.h-tail     |    2 +-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+Index: gpsd-2.95/driver_navcom.c
-+===================================================================
-+--- gpsd-2.95.orig/driver_navcom.c
-++++ gpsd-2.95/driver_navcom.c
-+@@ -44,7 +44,7 @@
-+ #include <stdio.h>
-+ #include "gpsd.h"
-+ 
-+-#if defined(NAVCOM_ENABLE) && defined(BINARY_ENABLE)
-++#if defined(NAVCOM_ENABLE)
-+ #include "bits.h"
-+ 
-+ /* Have data which is 24 bits long */
-+@@ -1339,4 +1339,4 @@
-+ };
-+ /* *INDENT-ON* */
-+ 
-+-#endif /* defined(NAVCOM_ENABLE) && defined(BINARY_ENABLE) */
-++#endif /* defined(NAVCOM_ENABLE) */
-+Index: gpsd-2.95/gpsd.h-tail
-+===================================================================
-+--- gpsd-2.95.orig/gpsd.h-tail
-++++ gpsd-2.95/gpsd.h-tail
-+@@ -30,7 +30,7 @@
-+ #ifdef EARTHMATE_ENABLE
-+ #define ZODIAC_ENABLE	
-+ #endif
-+-#if defined(ZODIAC_ENABLE) || defined(SIRF_ENABLE) || defined(GARMIN_ENABLE) || defined(TSIP_ENABLE) || defined(EVERMORE_ENABLE) || defined(ITRAX_ENABLE) || defined(UBX_ENABLE) || defined(SUPERSTAR2_ENABLE) || defined(ONCORE_ENABLE)
-++#if defined(ZODIAC_ENABLE) || defined(SIRF_ENABLE) || defined(GARMIN_ENABLE) || defined(TSIP_ENABLE) || defined(EVERMORE_ENABLE) || defined(ITRAX_ENABLE) || defined(UBX_ENABLE) || defined(SUPERSTAR2_ENABLE) || defined(ONCORE_ENABLE) || defined(NAVCOM_ENABLE)
-+ #define BINARY_ENABLE	
-+ #endif
-+ #if defined(TRIPMATE_ENABLE) || defined(BINARY_ENABLE)
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
