@@ -1,36 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 Nov 2011 15:53:09 +0100
-Subject: [Buildroot] [git commit] dhcp: security bump to version 4.1-ESV-R3
-Message-ID: <20111109224312.1BC048F44E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Nov 2011 23:43:01 +0100
+Subject: [Buildroot] [PATCH 3/3 resend] mplayer: Enable live and tv
+	options
+In-Reply-To: <1320750977-2986-1-git-send-email-keguang.zhang@gmail.com>
+ (keguang zhang's message of "Tue, 8 Nov 2011 19:16:17 +0800")
+References: <1320750977-2986-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <877h383oju.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb3785fca4f07ef170feac3c60ce7926466d5457
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "keguang" == keguang zhang <keguang.zhang@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dhcp/dhcp.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ keguang> From: Kelvin Cheung <keguang.zhang@gmail.com>
+ keguang> 1.Enable TV interface.
+ keguang> 2.Enable LIVE555 Streaming Media if live555 is available.
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index f520d77..7548f41 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -3,9 +3,9 @@
- # dhcp
- #
- #############################################################
--DHCP_VERSION  = 4.1.1-P1
--DHCP_SOURCE   = dhcp-$(DHCP_VERSION).tar.gz
--DHCP_SITE     = http://ftp.isc.org/isc/dhcp/
-+
-+DHCP_VERSION  = 4.1-ESV-R3
-+DHCP_SITE     = http://ftp.isc.org/isc/dhcp
- DHCP_CONF_ENV = ac_cv_file__dev_random=yes
- DHCP_CONF_OPT = \
- 	--localstatedir=/var/lib/dhcp \
+Committed with minor cleanups, thanks.
+
+-- 
+Bye, Peter Korsgaard
