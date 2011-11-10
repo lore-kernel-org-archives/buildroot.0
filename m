@@ -1,134 +1,56 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 10 Nov 2011 20:31:58 +0100
-Subject: [Buildroot] [PATCH 3 of 5 RFC] dependencies: build a host-tar if no
- suitable tar can be found
+Date: Thu, 10 Nov 2011 20:32:00 +0100
+Subject: [Buildroot] [PATCH 4 of 5 RFC] dependencies: remove unused lzma
+	checking scripts
 In-Reply-To: <patchbomb.1320911665@devws108>
 References: <patchbomb.1320911665@devws108>
-Message-ID: <bd9622b6331d3350b82e.1320911668@devws108>
+Message-ID: <8cb6371f26ea9b9af34f.1320911669@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some toolchains, like the one built with buildroot itself, use hardlinks (for
-example to link between the c++ and g++ binary). Unpacking such a toolchain
-with the --strip-components options does not work correctly if the system tar
-is too old (<1.17). Even recent releases of RedHat/CentOS still ship with
-tar 1.15.
-
-This patch checks for a suitable tar version (tar 1.17+) on the host system,
-and adds host-tar to the host dependencies if none can be found.
-
-TAR is redefined to HOST_TAR, except when extracting host-tar (this is a
-chicken-and-egg problem), so that all packages use the host-tar if no suitable
-tar was found.
-
-Along with this patch, the definition of TAR_STRIP_COMPONENTS was moved to
-check-host-tar.mk.
+Files package/lzma/lzmacheck.sh and toolchain/dependencies/check-host-lzma.sh
+are present since the very beginning of buildroot, but do not appear to be
+used (anymore). Let's remove them.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/Makefile.package.in              |  12 ------------
- package/tar/tar.mk                       |   4 ++++
- toolchain/dependencies/check-host-tar.mk |  24 ++++++++++++++++++++++++
- toolchain/dependencies/check-host-tar.sh |  29 +++++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+), 12 deletions(-)
+ package/lzma/lzmacheck.sh                 |   9 ---------
+ toolchain/dependencies/check-host-lzma.sh |  13 -------------
+ 2 files changed, 0 insertions(+), 22 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -235,18 +235,6 @@ define DOWNLOAD
- 	exit 1
- endef
- 
--# Utility programs used to build packages
--TAR ?= tar
+diff --git a/package/lzma/lzmacheck.sh b/package/lzma/lzmacheck.sh
+deleted file mode 100755
+--- a/package/lzma/lzmacheck.sh
++++ /dev/null
+@@ -1,9 +0,0 @@
+-#!/bin/sh
 -
--# Automatically detect tar --strip-path/components option
--TAR_STRIP_COMPONENTS := \
--  $(shell $(TAR) --help | grep strip-path > /dev/null ; \
--  if test $$? = 0 ; then \
--   echo '--strip-path' ; \
--  else \
--   echo '--strip-components' ; \
--  fi)
+-bin=$(toolchain/dependencies/check-host-lzma.sh)
+-if [ "x$bin" = "x" ] ; then
+-  echo build-lzma-host-binary
+-else
+-  echo use-lzma-host-binary
+-fi
 -
- # Needed for the foreach loops to loop over the list of hooks, so that
- # each hook call is properly separated by a newline.
- define sep
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -8,3 +8,7 @@ TAR_VERSION = 1.26
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- 
- $(eval $(call AUTOTARGETS))
-+
-+TAR := $(SYSTEM_TAR) # We need a real tar to extract tar
-+$(eval $(call AUTOTARGETS,host))
-+TAR := $(HOST_TAR)
-diff --git a/toolchain/dependencies/check-host-tar.mk b/toolchain/dependencies/check-host-tar.mk
-new file mode 100644
---- /dev/null
-+++ b/toolchain/dependencies/check-host-tar.mk
-@@ -0,0 +1,24 @@
-+TAR ?= tar
-+SYSTEM_TAR := $(TAR)
-+
-+ifneq (,$(call suitable-host-package,tar))
-+  HOST_TAR := $(TAR)
-+
-+  # Automatically detect tar --strip-path/components option
-+  # --strip-path was renamed to --strip-components in tar 1.15
-+  TAR_STRIP_COMPONENTS := \
-+    $(shell $(TAR) --help | grep strip-path > /dev/null ; \
-+    if test $$? = 0 ; then \
-+     echo '--strip-path' ; \
-+    else \
-+     echo '--strip-components' ; \
-+    fi)
-+
-+else
-+  DEPENDENCIES_HOST_PREREQ += host-tar
-+  HOST_TAR := $(HOST_DIR)/usr/bin/tar
-+  TAR_STRIP_COMPONENTS := --strip-components
-+
-+endif
-+
-+TAR := $(HOST_TAR)
-diff --git a/toolchain/dependencies/check-host-tar.sh b/toolchain/dependencies/check-host-tar.sh
-new file mode 100755
---- /dev/null
-+++ b/toolchain/dependencies/check-host-tar.sh
-@@ -0,0 +1,29 @@
-+#!/bin/sh
-+
-+tar=`which tar`
-+if [ -z "$tar" ]; then
-+	return
-+fi
-+
-+# Output of 'tar --version' examples:
-+# tar (GNU tar) 1.15.1 
-+# tar (GNU tar) 1.25
-+version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
-+major=`echo "$version" | cut -d. -f1`
-+minor=`echo "$version" | cut -d. -f2`
-+bugfix=`echo "$version" | cut -d. -f3`
-+
-+# Minimal version = 1.17 (previous versions do not correctly unpack archives
-+# containing hard-links if the --strip-components option is used).
-+major_min=1
-+minor_min=17
-+if [ $major -gt $major_min ]; then
-+	echo $tar
-+else
-+	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
-+		echo $tar
-+	else
-+		false
-+		# echo nothing: no suitable tar found
-+	fi
-+fi
+diff --git a/toolchain/dependencies/check-host-lzma.sh b/toolchain/dependencies/check-host-lzma.sh
+deleted file mode 100755
+--- a/toolchain/dependencies/check-host-lzma.sh
++++ /dev/null
+@@ -1,13 +0,0 @@
+-#!/bin/sh
+-
+-ok=""
+-
+-for bin in /usr/bin/lzma $LZMA
+-do
+-# TODO: add check for proper functionality here..
+-  $bin --version > /dev/null 2>&1 && ok="$bin"
+-  if test "x$ok" != "x" ; then
+-    break
+-  fi
+-done
+-echo "$ok"
