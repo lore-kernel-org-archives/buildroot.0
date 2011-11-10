@@ -1,24 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Nov 2011 23:43:01 +0100
-Subject: [Buildroot] [PATCH 3/3 resend] mplayer: Enable live and tv
-	options
-In-Reply-To: <1320750977-2986-1-git-send-email-keguang.zhang@gmail.com>
- (keguang zhang's message of "Tue, 8 Nov 2011 19:16:17 +0800")
-References: <1320750977-2986-1-git-send-email-keguang.zhang@gmail.com>
-Message-ID: <877h383oju.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Nov 2011 08:25:25 -0300
+Subject: [Buildroot] [PATCH 1/3] module-init-tools: bump to version 3.15
+Message-ID: <1320924327-3019-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "keguang" == keguang zhang <keguang.zhang@gmail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...it-tools-3.15-add-manpages-config-option.patch} |    0
+ package/module-init-tools/module-init-tools.mk     |   13 +++++++------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+ rename package/module-init-tools/{module-init-tools-3.11-add-manpages-config-option.patch => module-init-tools-3.15-add-manpages-config-option.patch} (100%)
 
- keguang> From: Kelvin Cheung <keguang.zhang@gmail.com>
- keguang> 1.Enable TV interface.
- keguang> 2.Enable LIVE555 Streaming Media if live555 is available.
-
-Committed with minor cleanups, thanks.
-
+diff --git a/package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch b/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+similarity index 100%
+rename from package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch
+rename to package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index d7e7c24..ad92a1a 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -3,19 +3,20 @@
+ # module-init-tools
+ #
+ #############################################################
+-MODULE_INIT_TOOLS_VERSION=3.12
+-MODULE_INIT_TOOLS_SOURCE=module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
+-MODULE_INIT_TOOLS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
++
++MODULE_INIT_TOOLS_VERSION = 3.15
++MODULE_INIT_TOOLS_SOURCE = module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
++MODULE_INIT_TOOLS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
+ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ MODULE_INIT_TOOLS_CONF_OPT = \
+ 	--disable-static-utils \
+ 	--disable-builddir \
+ 	--program-transform-name=''
+ 
+-# module-init-tools-3.11-add-manpages-config-option.patch is modifying
++# module-init-tools-3.15-add-manpages-config-option.patch is modifying
+ # configure.ac and Makefile.am
+-MODULE_INIT_TOOLS_AUTORECONF=YES
+-HOST_MODULE_INIT_TOOLS_AUTORECONF=YES
++MODULE_INIT_TOOLS_AUTORECONF = YES
++HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
+ HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
