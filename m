@@ -1,71 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 10 Nov 2011 20:40:03 +0100
-Subject: [Buildroot] [RFC] Making clear that Buildroot is no longer
-	uClibc specific
-In-Reply-To: <CAAXf6LV5TPv9Q93m0ju4=16FRfNkfRebJ5pb=+qXVRcqaWisQg@mail.gmail.com>
-References: <cover.1318343868.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LV5TPv9Q93m0ju4=16FRfNkfRebJ5pb=+qXVRcqaWisQg@mail.gmail.com>
-Message-ID: <CAAXf6LWvU8ZMwQMZH=UxhDxjXQHWma_GzoahvSr+jYDVDWxA2g@mail.gmail.com>
+From: Mahmoud Mamdouh Al Shamy <mamdouh.al.shamy@gmail.com>
+Date: Thu, 10 Nov 2011 19:44:08 +0000 (UTC)
+Subject: [Buildroot] Invitation to connect on LinkedIn
+Message-ID: <345358011.11683586.1320954248984.JavaMail.app@ela4-bed78.prod>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+I'd like to add you to my professional network on LinkedIn.
 
-On Thu, Oct 13, 2011 at 5:40 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi,
->
-> On Tue, Oct 11, 2011 at 4:38 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> Historically, the Buildroot project was started by uClibc
->> developers. Nowadays, Buildroot can be used regardless of the choice
->> of C library, but many people still think it's an uClibc-only
->> solution.
->>
->> Therefore, the following patch proposed to switch to a dedicated
->> #buildroot IRC channel instead of #uclibc.
->>
->> In addition to that, it'd be great if the mailing-list had
->> buildroot at buildroot.org as its official address, and if the bug
->> tracker had http://bugs.buildroot.org as its official address.
->>
->> What do you think?
->
-> I'm all in favor!
-> This also would render the busybox.net mailing list alias redundant (I
-> always found it confusing that busybox used .net and uclibc and
-> buildroot used .org)
+- Mahmoud
 
-Is there anything in progress regarding this?
-The IRC channel is already changed. What about the bug tracker and
-mailing list? Is this something that simply needs to be requested, or
-is there much more to it than that?
+Mahmoud Mamdouh Al  Shamy
+Android Developer at IPneo
+Egypt
 
->>
->> The following changes since commit bde4564fa74cc25a088aa4173709894d2acf5844:
->>
->> ?radvd: show it in config menu when toolchain lacks ipv6 (2011-10-11 16:10:30 +0200)
->>
->> are available in the git repository at:
->> ?http://free-electrons.com/~thomas/buildroot.git for-2011.11/irc-change
->>
->> Thomas Petazzoni (1):
->> ? ? ?docs: change official IRC channel to #buildroot
->>
->> ?docs/docs.html | ? ?4 ++--
->> ?1 files changed, 2 insertions(+), 2 deletions(-)
->>
->> Thanks,
->> --
->> Thomas Petazzoni
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
+Confirm that you know Mahmoud Mamdouh Al  Shamy:
+https://www.linkedin.com/e/da6dbl-guu61xqt-50/isd/4870988209/ogB1HrX7/?hs=false&tok=09CSF7KquwXQY1
+
+--
+You are receiving Invitation to Connect emails. Click to unsubscribe:
+http://www.linkedin.com/e/da6dbl-guu61xqt-50/v_X5R9y9buUJOHRIy_v6x559yhCK889_Ea/goo/buildroot%40busybox%2Enet/20061/I1694788049_1/?hs=false&tok=1keHzek_2wXQY1
+
+(c) 2011 LinkedIn Corporation. 2029 Stierlin Ct, Mountain View, CA 94043, USA.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111110/768c7ab6/attachment-0001.html>
