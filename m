@@ -1,93 +1,99 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Nov 2011 08:25:27 -0300
-Subject: [Buildroot] [PATCH 3/3] dropbear: bump to version 2011.54
-In-Reply-To: <1320924327-3019-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1320924327-3019-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1320924327-3019-3-git-send-email-gustavo@zacarias.com.ar>
+From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
+Date: Thu, 10 Nov 2011 14:08:37 +0100
+Subject: [Buildroot] Cygwin-buildroot-toolchain build(s) Finally - working.
+Message-ID: <1531E53627F1F749B4FE809BF2A4EB6702C66D6B@WETMEX10.loepfe.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../dropbear-0.53.1-static_build_fix.patch         |   26 --------------------
- package/dropbear/dropbear-2011.54-no-ipv6.patch    |   18 +++++++++++++
- package/dropbear/dropbear.mk                       |    3 +-
- 3 files changed, 19 insertions(+), 28 deletions(-)
- delete mode 100644 package/dropbear/dropbear-0.53.1-static_build_fix.patch
- create mode 100644 package/dropbear/dropbear-2011.54-no-ipv6.patch
 
-diff --git a/package/dropbear/dropbear-0.53.1-static_build_fix.patch b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
-deleted file mode 100644
-index 0e0a91a..0000000
---- a/package/dropbear/dropbear-0.53.1-static_build_fix.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--dropbear: fix static build
+Hi all,
+
+
+I finally managed to get a Cygwin-toolchain-Build running for the latest
+buildroot-Git-tree.
+
+I know it is officially not supported but as said before it's nice to
+have it working.
+
+Basically I had 2 problems that took me some time to solve (or avoid)
+them.
+1) a bug into gmp-0.9 that caused a build failure (only for 'shared'
+builds of the host-mpc)
+2) The initial-compiler was not generating code for the crt1.S files and
+was not correctly probing the possible options while building uClibc. 
+
+<< snip>>
+check_gcc=$(shell \
+	if $(CC) $(1) -S -o /dev/null -xc /dev/null > /dev/null 2>&1; \
+	then echo "$(1)"; else echo "$(2)"; fi)
+
+CPU_CFLAGS-y += $(call check_gcc,-fno-asm,)
+<< SNIP-END >>
+The result for this was not correct.
+
+
+Finally I ended up with one-solution (or work-around whatever you want
+to call it) for the both problems, I've build the host-gmp, host-mpfr,
+and host-mpc statically (as Yann does into the crosstool-NG)
+
+
+This seems to solve all the W32-cygwin troubles for
+buildroot-toolchain-builds. 
+
+
+FYI: Is this cygwin-cross-toolchain tested? 
+Yes I did compile some SMALL 'sample-programs' and tested them on a real
+platform (imx-537 cortex-A8).
+
+
+Regards Noel
+
+
+Note: For the people that are interrested, these are the changes/patches
+that I needed to make for building a toolchain under CYGWIN.
+
+
+diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
+index 5eb6ecc..da718b0 100644
+--- a/package/gmp/gmp.mk
++++ b/package/gmp/gmp.mk
+@@ -8,6 +8,6 @@ GMP_VERSION = 5.0.2
+ GMP_SITE = $(BR2_GNU_MIRROR)/gmp
+ GMP_SOURCE = gmp-$(GMP_VERSION).tar.bz2
+ GMP_INSTALL_STAGING = YES
 -
--the -lcrypt is missing during the link
++HOST_GMP_CONF_OPT=--disable-shared --enable-static
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index 608c9f4..4eb0833 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
+@@ -11,6 +11,6 @@ MPC_DEPENDENCIES = gmp mpfr
+ MPC_AUTORECONF = YES
+ HOST_MPC_AUTORECONF = YES
+ HOST_MPC_DEPENDENCIES = host-gmp host-mpfr
 -
--svr-authpasswd.o: In function `svr_auth_password':
--svr-authpasswd.c:(.text+0xfc): undefined reference to `crypt'
--collect2: ld returned 1 exit status
++HOST_MPC_CONF_OPT = --disable-shared --enable-static 
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+index 7f33599..543b887 100644
+--- a/package/mpfr/mpfr.mk
++++ b/package/mpfr/mpfr.mk
+@@ -11,6 +11,6 @@ MPFR_INSTALL_STAGING = YES
+ MPFR_DEPENDENCIES = gmp
+ MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+ HOST_MPFR_DEPENDENCIES = host-gmp
 -
--Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-----
-- Makefile.in |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -77,7 +77,7 @@ STRIP=@STRIP@
-- INSTALL=@INSTALL@
-- CPPFLAGS=@CPPFLAGS@
-- CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
---LIBS+=@LIBS@
--+LIBS+=@CRYPTLIB@ @LIBS@
-- LDFLAGS=@LDFLAGS@
-- 
-- EXEEXT=@EXEEXT@
-diff --git a/package/dropbear/dropbear-2011.54-no-ipv6.patch b/package/dropbear/dropbear-2011.54-no-ipv6.patch
-new file mode 100644
-index 0000000..4ee9aaa
---- /dev/null
-+++ b/package/dropbear/dropbear-2011.54-no-ipv6.patch
-@@ -0,0 +1,18 @@
-+Check for IPV6_TCLASS instead of IPPROTO_IPV6 since
-+it's present on non-IPv6 enabled toolchains too.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+
-+diff -Nura dropbear-2011.54.orig/dbutil.c dropbear-2011.54/dbutil.c
-+--- dropbear-2011.54.orig/dbutil.c	2011-11-08 09:48:15.000000000 -0300
-++++ dropbear-2011.54/dbutil.c	2011-11-09 12:14:59.430074138 -0300
-+@@ -164,7 +164,7 @@
-+ 	/* set the TOS bit for either ipv4 or ipv6 */
-+ #ifdef IPTOS_LOWDELAY
-+ 	val = IPTOS_LOWDELAY;
-+-#ifdef IPPROTO_IPV6
-++#ifdef IPV6_TCLASS
-+ 	setsockopt(sock, IPPROTO_IPV6, IPV6_TCLASS, (void*)&val, sizeof(val));
-+ #endif
-+ 	setsockopt(sock, IPPROTO_IP, IP_TOS, (void*)&val, sizeof(val));
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bced0ef..5fa50ba 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,8 +4,7 @@
- #
- #############################################################
- 
--DROPBEAR_VERSION = 0.53.1
--DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.gz
-+DROPBEAR_VERSION = 2011.54
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
- DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
--- 
-1.7.3.4
++HOST_MPFR_CONF_OPT = --disable-shared --enable-static
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111110/5b5aa3f9/attachment.html>
