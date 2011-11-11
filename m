@@ -1,59 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 22:15:02 +0100
-Subject: [Buildroot] [git commit branch/next] uClibc: fix sparc build
-	breakage
-Message-ID: <20111111211610.966C58F4EF@busybox.osuosl.org>
+Date: Fri, 11 Nov 2011 22:15:15 +0100
+Subject: [Buildroot] [git commit branch/next] qemu_sparc: add new qemu
+	defconfig
+Message-ID: <20111111211611.031F48F4EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b847ed050d85e7b0befc5521f4acff7cc1f31693
+commit: http://git.buildroot.net/buildroot/commit/?id=5ae731063619966f58ed8b58eeeda6cda5b0ed25
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fix build breakage for sparc as reported in bug #4021
-Patches from Konrad Eisele <konrad@gaisler.com>
-Submitted in the uclibc mailing list.
+Add a new qemu sample config for the SPARC architecture.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch   |   11 +++++++++++
- .../uClibc/uClibc-0.9.32-sparc-errno-fix.patch     |   11 +++++++++++
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ board/qemu/sparc-ss10/readme.txt  |    7 +++++++
+ configs/qemu_sparc_ss10_defconfig |   14 ++++++++++++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
 new file mode 100644
-index 0000000..44d06cb
+index 0000000..5f01efa
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
-@@ -0,0 +1,11 @@
-+--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
-++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
-+@@ -52,7 +52,7 @@
-+ 	 restore %g0,%g0,%o0
-+ 
-+ .Lerror:
-+-	call	HIDDEN_JUMPTARGET(__errno_location)
-++	call	__errno_location
-+ 	 or	%g0,EINVAL,%i0
-+ 	st	%i0,[%o0]
-+ 	ret
-diff --git a/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -0,0 +1,7 @@
++Run the emulation with:
++
++  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio
++
++The login prompt will appear in the terminal that started Qemu.
++The graphical window is the framebuffer.
++
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
 new file mode 100644
-index 0000000..44d06cb
+index 0000000..20cd9fb
 --- /dev/null
-+++ b/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
-@@ -0,0 +1,11 @@
-+--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
-++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
-+@@ -52,7 +52,7 @@
-+ 	 restore %g0,%g0,%o0
-+ 
-+ .Lerror:
-+-	call	HIDDEN_JUMPTARGET(__errno_location)
-++	call	__errno_location
-+ 	 or	%g0,EINVAL,%i0
-+ 	st	%i0,[%o0]
-+ 	ret
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -0,0 +1,14 @@
++# Architecture
++BR2_sparc=y
++BR2_sparc_supersparc=y
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Linux kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
++BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
++BR2_LINUX_KERNEL_ZIMAGE=y
