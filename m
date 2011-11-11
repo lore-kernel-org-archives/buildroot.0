@@ -1,31 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Nov 2011 13:06:49 -0300
-Subject: [Buildroot] [PATCHv2] oprofile: fix mipsel build, solves bug #3709
-Message-ID: <1321027609-19181-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 11 Nov 2011 18:59:16 +0000 (UTC)
+Subject: [Buildroot] [Bug 3709] oprofile doesn't build for mipsel
+In-Reply-To: <bug-3709-163@https.bugs.busybox.net/>
+References: <bug-3709-163@https.bugs.busybox.net/>
+Message-ID: <20111111185916.B450C8F46A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/oprofile/oprofile.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=3709
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 734839f..5da794b 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -12,6 +12,9 @@ OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
- ifeq ($(BR2_i386),y)
- OPROFILE_ARCH = i386
- endif
-+ifeq ($(BR2_mipsel),y)
-+OPROFILE_ARCH = mips
-+endif
- ifeq ($(BR2_powerpc),y)
- OPROFILE_ARCH = ppc
- endif
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-11 18:59:16 UTC ---
+Fixed by Gustavo Zacarias in git (dd3177c) - Thanks.
+
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
