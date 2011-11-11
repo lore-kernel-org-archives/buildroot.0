@@ -1,37 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 20:14:40 +0100
-Subject: [Buildroot] [git commit] uclibc: rename uclibc-update to
-	uclibc-update-config
-Message-ID: <20111111191542.804D68F4D6@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Nov 2011 16:55:11 -0300
+Subject: [Buildroot] [PATCH 1/2] qemu_x86: update to kernel 3.1 and add
+	readme
+Message-ID: <1321041312-3297-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2af8cace6f82db28f4c4cdd28289d70515da9aa8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The original name uclibc-update is confusing as it only updates a
-configuration file.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/uClibc/uclibc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ .../x86/{linux-3.0.config => linux-3.1.config}     |    0
+ board/qemu/x86/readme.txt                          |    5 +++++
+ configs/qemu_x86_defconfig                         |    5 +++--
+ 3 files changed, 8 insertions(+), 2 deletions(-)
+ rename board/qemu/x86/{linux-3.0.config => linux-3.1.config} (100%)
+ create mode 100644 board/qemu/x86/readme.txt
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 0fc5a81..6335e6a 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -500,7 +500,7 @@ uclibc-config: $(UCLIBC_DIR)/.config
+diff --git a/board/qemu/x86/linux-3.0.config b/board/qemu/x86/linux-3.1.config
+similarity index 100%
+rename from board/qemu/x86/linux-3.0.config
+rename to board/qemu/x86/linux-3.1.config
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+new file mode 100644
+index 0000000..c06d24f
+--- /dev/null
++++ b/board/qemu/x86/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
++
++  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda
++
++The login prompt will appear in the graphical window.
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index d60b38d..8efe9ae 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -4,6 +4,7 @@ BR2_x86_pentiumpro=y
  
- uclibc-oldconfig: $(UCLIBC_DIR)/.oldconfig
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="tty1"
  
--uclibc-update: uclibc-config
-+uclibc-update-config: uclibc-config
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
- uclibc-configured: gcc_initial kernel-headers $(UCLIBC_DIR)/.configured
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -12,6 +13,6 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.0.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.0.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.1.config"
+-- 
+1.7.3.4
