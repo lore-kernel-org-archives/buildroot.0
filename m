@@ -1,129 +1,89 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 21:36:09 +0100
-Subject: [Buildroot] [git commit branch/next] qemu_x86_64: add new qemu
-	defconfig
-Message-ID: <20111111203812.3D2108F4AE@busybox.osuosl.org>
+Date: Fri, 11 Nov 2011 21:38:34 +0100
+Subject: [Buildroot] [git commit branch/next] iw: bump to 3.2
+Message-ID: <20111111203852.9C1108F4AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e974ba2d218df614877270431ee1043503bc2d5
+commit: http://git.buildroot.net/buildroot/commit/?id=2c1035097755db14cb219752e188d5c4e862fbab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+version 3.2 provides support for libnl 3.x, so remove the relevant patch
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- board/qemu/x86_64/linux-3.1.config |   67 ++++++++++++++++++++++++++++++++++++
- board/qemu/x86_64/readme.txt       |    5 +++
- configs/qemu_x86_64_defconfig      |   17 +++++++++
- 3 files changed, 89 insertions(+), 0 deletions(-)
+ package/iw/iw-libnl-30-support.patch |   47 ----------------------------------
+ package/iw/iw.mk                     |    2 +-
+ 2 files changed, 1 insertions(+), 48 deletions(-)
 
-diff --git a/board/qemu/x86_64/linux-3.1.config b/board/qemu/x86_64/linux-3.1.config
-new file mode 100644
-index 0000000..5bf6944
---- /dev/null
-+++ b/board/qemu/x86_64/linux-3.1.config
-@@ -0,0 +1,67 @@
-+CONFIG_EXPERIMENTAL=y
-+# CONFIG_LOCALVERSION_AUTO is not set
-+# CONFIG_SWAP is not set
-+# CONFIG_COMPAT_BRK is not set
-+# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_X86_EXTENDED_PLATFORM is not set
-+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
-+# CONFIG_MTRR_SANITIZER is not set
-+# CONFIG_SECCOMP is not set
-+# CONFIG_RELOCATABLE is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_FIRMWARE_IN_KERNEL is not set
-+# CONFIG_BLK_DEV is not set
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NET_ETHERNET=y
-+CONFIG_NET_PCI=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
-+# CONFIG_NETDEV_1000 is not set
-+# CONFIG_NETDEV_10000 is not set
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_SERPORT is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_DEVKMEM is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+# CONFIG_MFD_SUPPORT is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
-+# CONFIG_HID_SUPPORT is not set
-+# CONFIG_USB_SUPPORT is not set
-+# CONFIG_X86_PLATFORM_DEVICES is not set
-+# CONFIG_DMIID is not set
-+CONFIG_EXT2_FS=y
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+# CONFIG_ENABLE_MUST_CHECK is not set
-+# CONFIG_UNUSED_SYMBOLS is not set
-+# CONFIG_FRAME_POINTER is not set
-+# CONFIG_X86_VERBOSE_BOOTUP is not set
-+# CONFIG_VIRTUALIZATION is not set
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-new file mode 100644
-index 0000000..c06d24f
---- /dev/null
-+++ b/board/qemu/x86_64/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
-+
-+  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda
-+
-+The login prompt will appear in the graphical window.
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-new file mode 100644
-index 0000000..e6a59ac
---- /dev/null
-+++ b/configs/qemu_x86_64_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_x86_64=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.1.config"
+diff --git a/package/iw/iw-libnl-30-support.patch b/package/iw/iw-libnl-30-support.patch
+deleted file mode 100644
+index 48a179f..0000000
+--- a/package/iw/iw-libnl-30-support.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+----
+- Makefile |   10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-Index: b/Makefile
+-===================================================================
+---- a/Makefile
+-+++ b/Makefile
+-@@ -24,6 +24,7 @@
+-
+- NL1FOUND := $(shell $(PKG_CONFIG) --atleast-version=1 libnl-1 && echo Y)
+- NL2FOUND := $(shell $(PKG_CONFIG) --atleast-version=2 libnl-2.0 && echo Y)
+-+NL3FOUND := $(shell $(PKG_CONFIG) --atleast-version=3 libnl-3.0 && echo Y)
+-
+- ifeq ($(NL1FOUND),Y)
+- NLLIBNAME = libnl-1
+-@@ -35,6 +36,12 @@
+- NLLIBNAME = libnl-2.0
+- endif
+-
+-+ifeq ($(NL3FOUND),Y)
+-+CFLAGS += -DCONFIG_LIBNL20
+-+LIBS += -lnl-genl
+-+NLLIBNAME = libnl-3.0
+-+endif
+-+
+- ifeq ($(NLLIBNAME),)
+- $(error Cannot find development files for any supported version of libnl)
+- endif
+-@@ -53,6 +60,8 @@
+- all: version_check $(ALL)
+-
+- version_check:
+-+ifeq ($(NL3FOUND),Y)
+-+else
+- ifeq ($(NL2FOUND),Y)
+- else
+- ifeq ($(NL1FOUND),Y)
+-@@ -60,6 +69,7 @@
+- 	$(error No libnl found)
+- endif
+- endif
+-+endif
+-
+-
+- VERSION_OBJS := $(filter-out version.o, $(OBJS))
+-
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 9f1d65f..ab6c676 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IW_VERSION = 3.1
++IW_VERSION = 3.2
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+ IW_SITE = http://wireless.kernel.org/download/iw
+ IW_DEPENDENCIES = host-pkg-config libnl
