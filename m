@@ -1,30 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 11:38:45 +0100
-Subject: [Buildroot] [git commit] CHANGES: #507 is resolved
-Message-ID: <20111111185933.B14368F46A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 11 Nov 2011 19:59:37 +0100
+Subject: [Buildroot] [PATCHv2] oprofile: fix mipsel build,
+	solves bug #3709
+In-Reply-To: <1321027609-19181-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 11 Nov 2011 13:06:49 -0300")
+References: <1321027609-19181-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8739du32p2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9c52d715bb599539102e77e954dcc7239ee1237
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/CHANGES b/CHANGES
-index 2c4c161..0800c1f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -59,6 +59,7 @@
- 	Issues resolved (http://bugs.uclibc.org):
- 
- 	#505:  live555: new package
-+	#507:  Enable live and tv options in MPlayer-1.0rc2
- 	#531:  let e2fsprogs package to export headers to staging dir if needed
- 	#1171: Linuxthreads new cannot find sysdep.h
- 	#2107: New package: input-event-daemon
+Committed (and resolved), thanks.
+
+-- 
+Bye, Peter Korsgaard
