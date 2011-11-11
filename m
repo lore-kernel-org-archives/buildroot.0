@@ -1,37 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Nov 2011 16:04:54 -0300
-Subject: [Buildroot] [PATCH] libgpg-error: bump to version 1.10
-Message-ID: <1321038294-32236-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 11 Nov 2011 20:14:55 +0100
+Subject: [Buildroot] [PATCH 1 of 3 resend] linux: add
+	linux-update-config and linux-update-defconfig targets
+In-Reply-To: <2841f845388b464fc8a9.1318604216@localhost6.localdomain6> (Thomas
+ De Schampheleire's message of "Fri, 14 Oct 2011 16:56:56 +0200")
+References: <patchbomb.1318604215@localhost6.localdomain6>
+ <2841f845388b464fc8a9.1318604216@localhost6.localdomain6>
+Message-ID: <87vcqq1nf4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 1.10, closes bug #3403
-Switch to gnupg.org mirror, closes bug #3409
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgpg-error/libgpg-error.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ Thomas> In analogy to build targets uclibc-update and busybox-update, add
+ Thomas> extra targets to copy the current configuration to the custom
+ Thomas> configuration file set in buildroot. These targets facilitate the
+ Thomas> work of developers adding support for a specific board.
 
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 45a348e..1b78b17 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -3,10 +3,9 @@
- # libgpg-error
- #
- #############################################################
--LIBGPG_ERROR_VERSION:=1.8
--LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
--LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
- 
-+LIBGPG_ERROR_VERSION = 1.10
-+LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
- LIBGPG_ERROR_INSTALL_STAGING = YES
- 
- $(eval $(call AUTOTARGETS))
+ Thomas> linux-update-config copies .config directly.
+ Thomas> linux-update-defconfig first creates a defconfig and copies that.
+
+Committed, thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
