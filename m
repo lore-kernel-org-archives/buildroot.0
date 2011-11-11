@@ -1,28 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 11 Nov 2011 15:42:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 1357] Add bluez to buildroot system
-In-Reply-To: <bug-1357-163@https.bugs.busybox.net/>
-References: <bug-1357-163@https.bugs.busybox.net/>
-Message-ID: <20111111154202.BA4A68F4D6@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Nov 2011 13:05:39 -0300
+Subject: [Buildroot] [PATCH] oprofile: fix mispel build, solves bug #3709
+Message-ID: <1321027539-15240-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=1357
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/oprofile/oprofile.mk |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #4 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2011-11-11 15:42:02 UTC ---
-Committed in git 06c3e2159686a886e52b2522a47e60c300cfb7f7
-
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 734839f..5da794b 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -12,6 +12,9 @@ OPROFILE_BINARIES += pp/opreport opjitconv/opjitconv daemon/oprofiled
+ ifeq ($(BR2_i386),y)
+ OPROFILE_ARCH = i386
+ endif
++ifeq ($(BR2_mipsel),y)
++OPROFILE_ARCH = mips
++endif
+ ifeq ($(BR2_powerpc),y)
+ OPROFILE_ARCH = ppc
+ endif
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.3.4
