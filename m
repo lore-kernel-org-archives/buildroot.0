@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Nov 2011 20:15:09 +0100
-Subject: [Buildroot] [PATCH 2 of 3 resend] busybox: rename
-	busybox-update to busybox-update-config
-In-Reply-To: <c83b93f562e2811c201d.1318604217@localhost6.localdomain6> (Thomas
- De Schampheleire's message of "Fri, 14 Oct 2011 16:56:57 +0200")
+Date: Fri, 11 Nov 2011 20:15:22 +0100
+Subject: [Buildroot] [PATCH 3 of 3 resend] uclibc: rename uclibc-update
+	to uclibc-update-config
+In-Reply-To: <e4abed4517b5f7e865f6.1318604218@localhost6.localdomain6> (Thomas
+ De Schampheleire's message of "Fri, 14 Oct 2011 16:56:58 +0200")
 References: <patchbomb.1318604215@localhost6.localdomain6>
- <c83b93f562e2811c201d.1318604217@localhost6.localdomain6>
-Message-ID: <87r51e1neq.fsf@macbook.be.48ers.dk>
+ <e4abed4517b5f7e865f6.1318604218@localhost6.localdomain6>
+Message-ID: <87mxc21ned.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- Thomas> The original name busybox-update is confusing as it only updates a
+ Thomas> The original name uclibc-update is confusing as it only updates a
  Thomas> configuration file.
 
  Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
