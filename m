@@ -1,92 +1,56 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 21:42:26 +0100
-Subject: [Buildroot] [git commit branch/next] dropbear: bump to version
-	2011.54
-Message-ID: <20111111204301.4E3068EDF4@busybox.osuosl.org>
+Date: Fri, 11 Nov 2011 21:41:21 +0100
+Subject: [Buildroot] [git commit branch/next] module-init-tools: bump to
+	version 3.15
+Message-ID: <20111111204300.A0D1E8F4FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b56bfe8385826c6417dbc8dc731ad535b0de3b5
+commit: http://git.buildroot.net/buildroot/commit/?id=7c60be98b2d898e5d49b0fa305b7f56dec59a366
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../dropbear-0.53.1-static_build_fix.patch         |   26 --------------------
- package/dropbear/dropbear-2011.54-no-ipv6.patch    |   18 +++++++++++++
- package/dropbear/dropbear.mk                       |    3 +-
- 3 files changed, 19 insertions(+), 28 deletions(-)
+ ...it-tools-3.15-add-manpages-config-option.patch} |    0
+ package/module-init-tools/module-init-tools.mk     |   13 +++++++------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/dropbear/dropbear-0.53.1-static_build_fix.patch b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
-deleted file mode 100644
-index 0e0a91a..0000000
---- a/package/dropbear/dropbear-0.53.1-static_build_fix.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--dropbear: fix static build
--
--the -lcrypt is missing during the link
--
--svr-authpasswd.o: In function `svr_auth_password':
--svr-authpasswd.c:(.text+0xfc): undefined reference to `crypt'
--collect2: ld returned 1 exit status
--
--Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-----
-- Makefile.in |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -77,7 +77,7 @@ STRIP=@STRIP@
-- INSTALL=@INSTALL@
-- CPPFLAGS=@CPPFLAGS@
-- CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
---LIBS+=@LIBS@
--+LIBS+=@CRYPTLIB@ @LIBS@
-- LDFLAGS=@LDFLAGS@
-- 
-- EXEEXT=@EXEEXT@
-diff --git a/package/dropbear/dropbear-2011.54-no-ipv6.patch b/package/dropbear/dropbear-2011.54-no-ipv6.patch
-new file mode 100644
-index 0000000..4ee9aaa
---- /dev/null
-+++ b/package/dropbear/dropbear-2011.54-no-ipv6.patch
-@@ -0,0 +1,18 @@
-+Check for IPV6_TCLASS instead of IPPROTO_IPV6 since
-+it's present on non-IPv6 enabled toolchains too.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+
-+diff -Nura dropbear-2011.54.orig/dbutil.c dropbear-2011.54/dbutil.c
-+--- dropbear-2011.54.orig/dbutil.c	2011-11-08 09:48:15.000000000 -0300
-++++ dropbear-2011.54/dbutil.c	2011-11-09 12:14:59.430074138 -0300
-+@@ -164,7 +164,7 @@
-+ 	/* set the TOS bit for either ipv4 or ipv6 */
-+ #ifdef IPTOS_LOWDELAY
-+ 	val = IPTOS_LOWDELAY;
-+-#ifdef IPPROTO_IPV6
-++#ifdef IPV6_TCLASS
-+ 	setsockopt(sock, IPPROTO_IPV6, IPV6_TCLASS, (void*)&val, sizeof(val));
-+ #endif
-+ 	setsockopt(sock, IPPROTO_IP, IP_TOS, (void*)&val, sizeof(val));
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bced0ef..5fa50ba 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,8 +4,7 @@
+diff --git a/package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch b/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+similarity index 100%
+rename from package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch
+rename to package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index d7e7c24..ad92a1a 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -3,19 +3,20 @@
+ # module-init-tools
  #
  #############################################################
+-MODULE_INIT_TOOLS_VERSION=3.12
+-MODULE_INIT_TOOLS_SOURCE=module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
+-MODULE_INIT_TOOLS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
++
++MODULE_INIT_TOOLS_VERSION = 3.15
++MODULE_INIT_TOOLS_SOURCE = module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
++MODULE_INIT_TOOLS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
+ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ MODULE_INIT_TOOLS_CONF_OPT = \
+ 	--disable-static-utils \
+ 	--disable-builddir \
+ 	--program-transform-name=''
  
--DROPBEAR_VERSION = 0.53.1
--DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.gz
-+DROPBEAR_VERSION = 2011.54
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
- DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+-# module-init-tools-3.11-add-manpages-config-option.patch is modifying
++# module-init-tools-3.15-add-manpages-config-option.patch is modifying
+ # configure.ac and Makefile.am
+-MODULE_INIT_TOOLS_AUTORECONF=YES
+-HOST_MODULE_INIT_TOOLS_AUTORECONF=YES
++MODULE_INIT_TOOLS_AUTORECONF = YES
++HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
+ HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ 
+ $(eval $(call AUTOTARGETS))
