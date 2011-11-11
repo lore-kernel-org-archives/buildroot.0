@@ -1,66 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 21:39:26 +0100
-Subject: [Buildroot] [git commit branch/next] usbmount: bump to 0.0.22
-Message-ID: <20111111204048.450798F4FF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 11 Nov 2011 21:41:38 +0100
+Subject: [Buildroot] [PATCH 1/3] module-init-tools: bump to version 3.15
+In-Reply-To: <1320924327-3019-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 10 Nov 2011 08:25:25 -0300")
+References: <1320924327-3019-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r51ez919.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba2a0cf5a135873ab0029a43de7d0bf82d6578df
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-FSTYPE detection bug was fixed upstream, so delete relevant patch
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../usbmount/usbmount-fstype-detection-fix.patch   |   25 --------------------
- package/usbmount/usbmount.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 26 deletions(-)
+Committed to next, thanks.
 
-diff --git a/package/usbmount/usbmount-fstype-detection-fix.patch b/package/usbmount/usbmount-fstype-detection-fix.patch
-deleted file mode 100644
-index a3686f1..0000000
---- a/package/usbmount/usbmount-fstype-detection-fix.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--newer blkid version shows two parameter with TYPE within:
--
--/dev/sda1: VERSION="0.0" TYPE="ext2" USAGE="filesystem" PART_ENTRY_SCHEME="dos"
--PART_ENTRY_TYPE="0xc" PART_ENTRY_FLAGS="0x80" PART_ENTRY_NUMBER="1"
--
--change regular expression to take " TYPE" only
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- usbmount |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: b/usbmount
--===================================================================
----- a/usbmount
--+++ b/usbmount
--@@ -88,7 +88,7 @@
--     #   FIXME: improvement: implement mounting by label (notice that labels
--     #   can contain spaces, which makes things a little bit less comfortable).
--     DEVINFO=$(/sbin/blkid -p $DEVNAME)
---    FSTYPE=$(echo "$DEVINFO" | sed 's/.*TYPE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--+    FSTYPE=$(echo "$DEVINFO" | sed 's/.* TYPE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--     UUID=$(echo "$DEVINFO"   | sed 's/.*UUID="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--     USAGE=$(echo "$DEVINFO"  | sed 's/.*USAGE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--
-diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
-index 8434570..a6b2d43 100644
---- a/package/usbmount/usbmount.mk
-+++ b/package/usbmount/usbmount.mk
-@@ -3,7 +3,7 @@
- # usbmount
- #
- #############################################################
--USBMOUNT_VERSION = 0.0.21
-+USBMOUNT_VERSION = 0.0.22
- USBMOUNT_SOURCE = usbmount_$(USBMOUNT_VERSION).tar.gz
- USBMOUNT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/u/usbmount
- USBMOUNT_DEPENDENCIES = udev lockfile-progs util-linux
+-- 
+Bye, Peter Korsgaard
