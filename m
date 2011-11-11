@@ -1,131 +1,98 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Nov 2011 16:55:12 -0300
-Subject: [Buildroot] [PATCH 2/2] qemu_x86_64: add new sample
-In-Reply-To: <1321041312-3297-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1321041312-3297-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1321041312-3297-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 11 Nov 2011 20:26:10 +0100
+Subject: [Buildroot] [git commit] Update for 2011.11-rc1
+Message-ID: <20111111202527.8F5F18F434@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- board/qemu/x86_64/linux-3.1.config |   67 ++++++++++++++++++++++++++++++++++++
- board/qemu/x86_64/readme.txt       |    5 +++
- configs/qemu_x86_64_defconfig      |   17 +++++++++
- 3 files changed, 89 insertions(+), 0 deletions(-)
- create mode 100644 board/qemu/x86_64/linux-3.1.config
- create mode 100644 board/qemu/x86_64/readme.txt
- create mode 100644 configs/qemu_x86_64_defconfig
+commit: http://git.buildroot.net/buildroot/commit/?id=1507c39b7634fec3b6d561da5ff5f18867f6b28c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/board/qemu/x86_64/linux-3.1.config b/board/qemu/x86_64/linux-3.1.config
-new file mode 100644
-index 0000000..5bf6944
---- /dev/null
-+++ b/board/qemu/x86_64/linux-3.1.config
-@@ -0,0 +1,67 @@
-+CONFIG_EXPERIMENTAL=y
-+# CONFIG_LOCALVERSION_AUTO is not set
-+# CONFIG_SWAP is not set
-+# CONFIG_COMPAT_BRK is not set
-+# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_X86_EXTENDED_PLATFORM is not set
-+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
-+# CONFIG_MTRR_SANITIZER is not set
-+# CONFIG_SECCOMP is not set
-+# CONFIG_RELOCATABLE is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_FIRMWARE_IN_KERNEL is not set
-+# CONFIG_BLK_DEV is not set
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NET_ETHERNET=y
-+CONFIG_NET_PCI=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
-+# CONFIG_NETDEV_1000 is not set
-+# CONFIG_NETDEV_10000 is not set
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_SERPORT is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_DEVKMEM is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+# CONFIG_MFD_SUPPORT is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
-+# CONFIG_HID_SUPPORT is not set
-+# CONFIG_USB_SUPPORT is not set
-+# CONFIG_X86_PLATFORM_DEVICES is not set
-+# CONFIG_DMIID is not set
-+CONFIG_EXT2_FS=y
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+# CONFIG_ENABLE_MUST_CHECK is not set
-+# CONFIG_UNUSED_SYMBOLS is not set
-+# CONFIG_FRAME_POINTER is not set
-+# CONFIG_X86_VERBOSE_BOOTUP is not set
-+# CONFIG_VIRTUALIZATION is not set
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-new file mode 100644
-index 0000000..c06d24f
---- /dev/null
-+++ b/board/qemu/x86_64/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |    4 ++--
+ Makefile           |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 21 insertions(+), 8 deletions(-)
+
+diff --git a/CHANGES b/CHANGES
+index 0eab0e3..7f74346 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,8 +1,8 @@
+-2011.11, Not released yet:
++2011.11-rc1, Released November 11th, 2011:
+ 
+ 	Fixes all over the tree and new features.
+ 
+-	Move misc scripts and support stuff to support/. Rename
++	Moved misc scripts and support stuff to support/. Renamed
+ 	patch-kernel.sh to support/scripts/apply-patches.sh.
+ 
+ 	Documentation: Moved to asciidoc format, make targets to
+diff --git a/Makefile b/Makefile
+index 80ca587..df2f859 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2011.11-git
++export BR2_VERSION:=2011.11-rc1
+ 
+ # This top-level Makefile can *not* be executed in parallel
+ .NOTPARALLEL:
+diff --git a/docs/download.html b/docs/download.html
+index a397fe0..81ad2a7 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -13,15 +13,15 @@ here:<p>
+ or
+ <a href="/downloads/buildroot-2011.08.tar.bz2">buildroot-2011.08.tar.bz2</a>.
+ <p>
+-<!--
+-The latest release candidate is <b>2011.08-rc2</b>, which can be
 +
-+  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda
++The latest release candidate is <b>2011.11-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2011.08-rc2.tar.gz">buildroot-2011.08-rc2.tar.gz</a>
++<a href="/downloads/buildroot-2011.11-rc1.tar.gz">buildroot-2011.11-rc1.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2011.08-rc2.tar.bz2">buildroot-2011.08-rc2.tar.bz2</a>.
++<a href="/downloads/buildroot-2011.11-rc1.tar.bz2">buildroot-2011.11-rc1.tar.bz2</a>.
+ <p>
+--->
 +
-+The login prompt will appear in the graphical window.
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-new file mode 100644
-index 0000000..e6a59ac
---- /dev/null
-+++ b/configs/qemu_x86_64_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_x86_64=y
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index 658d82a..ba5f7d0 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>11 November 2011 -- 2011.11-rc1 released</b>
 +
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc1">CHANGES</a>
++    file for details.
 +
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2011.11-rc1.tar.bz2">2011.11-rc1
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.1.config"
--- 
-1.7.3.4
+   <li><b>31 August 2011 -- 2011.08 released</b>
+ 
+     <p>The stable 2011.08 release is out - Thanks to everyone
