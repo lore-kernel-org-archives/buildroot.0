@@ -1,98 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 20:26:10 +0100
-Subject: [Buildroot] [git commit] Update for 2011.11-rc1
-Message-ID: <20111111202527.8F5F18F434@busybox.osuosl.org>
+Date: Fri, 11 Nov 2011 21:30:35 +0100
+Subject: [Buildroot] [git commit branch/next] libgpg-error: bump to version
+	1.10
+Message-ID: <20111111203133.EA1C58F46F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1507c39b7634fec3b6d561da5ff5f18867f6b28c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=1f52b2ae1d2bbc5784c10dda397493236fb1ed5a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Bump to version 1.10, closes bug #3403
+Switch to gnupg.org mirror, closes bug #3409
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES            |    4 ++--
- Makefile           |    2 +-
- docs/download.html |   10 +++++-----
- docs/news.html     |   13 +++++++++++++
- 4 files changed, 21 insertions(+), 8 deletions(-)
+ package/libgpg-error/libgpg-error.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 0eab0e3..7f74346 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,8 +1,8 @@
--2011.11, Not released yet:
-+2011.11-rc1, Released November 11th, 2011:
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 45a348e..1b78b17 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -3,10 +3,9 @@
+ # libgpg-error
+ #
+ #############################################################
+-LIBGPG_ERROR_VERSION:=1.8
+-LIBGPG_ERROR_SOURCE:=libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+-LIBGPG_ERROR_SITE:=ftp://gd.tuwien.ac.at/privacy/gnupg/libgpg-error
  
- 	Fixes all over the tree and new features.
++LIBGPG_ERROR_VERSION = 1.10
++LIBGPG_ERROR_SITE = ftp://ftp.gnupg.org/gcrypt/libgpg-error
+ LIBGPG_ERROR_INSTALL_STAGING = YES
  
--	Move misc scripts and support stuff to support/. Rename
-+	Moved misc scripts and support stuff to support/. Renamed
- 	patch-kernel.sh to support/scripts/apply-patches.sh.
- 
- 	Documentation: Moved to asciidoc format, make targets to
-diff --git a/Makefile b/Makefile
-index 80ca587..df2f859 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2011.11-git
-+export BR2_VERSION:=2011.11-rc1
- 
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
-diff --git a/docs/download.html b/docs/download.html
-index a397fe0..81ad2a7 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -13,15 +13,15 @@ here:<p>
- or
- <a href="/downloads/buildroot-2011.08.tar.bz2">buildroot-2011.08.tar.bz2</a>.
- <p>
--<!--
--The latest release candidate is <b>2011.08-rc2</b>, which can be
-+
-+The latest release candidate is <b>2011.11-rc1</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2011.08-rc2.tar.gz">buildroot-2011.08-rc2.tar.gz</a>
-+<a href="/downloads/buildroot-2011.11-rc1.tar.gz">buildroot-2011.11-rc1.tar.gz</a>
- or
--<a href="/downloads/buildroot-2011.08-rc2.tar.bz2">buildroot-2011.08-rc2.tar.bz2</a>.
-+<a href="/downloads/buildroot-2011.11-rc1.tar.bz2">buildroot-2011.11-rc1.tar.bz2</a>.
- <p>
---->
-+
- This and earlier releases can always be downloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
-diff --git a/docs/news.html b/docs/news.html
-index 658d82a..ba5f7d0 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,19 @@
- <p>
- 
- <ul>
-+  <li><b>11 November 2011 -- 2011.11-rc1 released</b>
-+
-+    <p>We have a new release candidate! Lots of changes all over the
-+    tree, see the <a
-+    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc1">CHANGES</a>
-+    file for details.
-+
-+    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2011.11-rc1.tar.bz2">2011.11-rc1
-+    release candidate</a>, and report any problems found to the <a
-+    href="lists.html">mailing list</a> or <a
-+    href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>31 August 2011 -- 2011.08 released</b>
- 
-     <p>The stable 2011.08 release is out - Thanks to everyone
+ $(eval $(call AUTOTARGETS))
