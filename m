@@ -1,36 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Nov 2011 21:49:04 +0100
-Subject: [Buildroot] [RFC] Making clear that Buildroot is no longer
-	uClibc specific
-In-Reply-To: <CAAXf6LWvU8ZMwQMZH=UxhDxjXQHWma_GzoahvSr+jYDVDWxA2g@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 10 Nov 2011 20:40:03
- +0100")
-References: <cover.1318343868.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LV5TPv9Q93m0ju4=16FRfNkfRebJ5pb=+qXVRcqaWisQg@mail.gmail.com>
- <CAAXf6LWvU8ZMwQMZH=UxhDxjXQHWma_GzoahvSr+jYDVDWxA2g@mail.gmail.com>
-Message-ID: <87ehxez8ov.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 11 Nov 2011 21:59:57 +0100
+Subject: [Buildroot] [git commit] news.html: add 2011.11-rc1 announcement
+	link
+Message-ID: <20111111210021.DC5308F4E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1b972b2189fd32f9d0faf300c0a59790f1972ebf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/news.html |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
- >> I'm all in favor!
- >> This also would render the busybox.net mailing list alias redundant (I
- >> always found it confusing that busybox used .net and uclibc and
- >> buildroot used .org)
-
- Thomas> Is there anything in progress regarding this?
- Thomas> The IRC channel is already changed. What about the bug tracker and
- Thomas> mailing list? Is this something that simply needs to be requested, or
- Thomas> is there much more to it than that?
-
-No, that's about it. DNS/apache/mailman changes. I'll try to get it all
-resolved before the end of the month (and final 2011.11 release).
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/news.html b/docs/news.html
+index ba5f7d0..1e4e5ea 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -10,7 +10,8 @@
+     <p>We have a new release candidate! Lots of changes all over the
+     tree, see the <a
+     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc1">CHANGES</a>
+-    file for details.
++    file for details, and read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2011-November/047395.html">announcement</a>
+ 
+     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2011.11-rc1.tar.bz2">2011.11-rc1
