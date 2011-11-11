@@ -1,33 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 21:59:57 +0100
-Subject: [Buildroot] [git commit] news.html: add 2011.11-rc1 announcement
-	link
-Message-ID: <20111111210021.DC5308F4E4@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Nov 2011 18:12:46 -0300
+Subject: [Buildroot] [PATCH 1/2] uClibc: fix sparc build breakage
+Message-ID: <1321045967-6216-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b972b2189fd32f9d0faf300c0a59790f1972ebf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix build breakage for sparc as reported in bug #4021
+Patches from Konrad Eisele <konrad@gaisler.com>
+Submitted in the uclibc mailing list.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- docs/news.html |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ .../uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch   |   11 +++++++++++
+ .../uClibc/uClibc-0.9.32-sparc-errno-fix.patch     |   11 +++++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
+ create mode 100644 toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
 
-diff --git a/docs/news.html b/docs/news.html
-index ba5f7d0..1e4e5ea 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,8 @@
-     <p>We have a new release candidate! Lots of changes all over the
-     tree, see the <a
-     href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11_rc1">CHANGES</a>
--    file for details.
-+    file for details, and read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2011-November/047395.html">announcement</a>
- 
-     <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2011.11-rc1.tar.bz2">2011.11-rc1
+diff --git a/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
+new file mode 100644
+index 0000000..44d06cb
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
+@@ -0,0 +1,11 @@
++--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
+++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
++@@ -52,7 +52,7 @@
++ 	 restore %g0,%g0,%o0
++ 
++ .Lerror:
++-	call	HIDDEN_JUMPTARGET(__errno_location)
+++	call	__errno_location
++ 	 or	%g0,EINVAL,%i0
++ 	st	%i0,[%o0]
++ 	ret
+diff --git a/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
+new file mode 100644
+index 0000000..44d06cb
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
+@@ -0,0 +1,11 @@
++--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
+++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
++@@ -52,7 +52,7 @@
++ 	 restore %g0,%g0,%o0
++ 
++ .Lerror:
++-	call	HIDDEN_JUMPTARGET(__errno_location)
+++	call	__errno_location
++ 	 or	%g0,EINVAL,%i0
++ 	st	%i0,[%o0]
++ 	ret
+-- 
+1.7.3.4
