@@ -1,78 +1,77 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Nov 2011 21:32:38 +0100
-Subject: [Buildroot] [git commit] crosstool-ng: add patch to use wget
-	instead of curl
-Message-ID: <20111113203426.F1EE48F314@busybox.osuosl.org>
+Date: Sun, 13 Nov 2011 21:28:50 +0100
+Subject: [Buildroot] [git commit] doc: more details about expressing
+	dependencies in Config.in
+Message-ID: <20111113203424.A3FFD8F314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0d2a03cc5a682266e1a00c3eb312dcf089e2323d
+commit: http://git.buildroot.net/buildroot/commit/?id=d0afbdad6b5a5b0fe7b0665cc0d9a337f0ace412
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: Minor tweak]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../crosstool-ng-001-wget-instead-of-curl.patch    |   52 ++++++++++++++++++++
- 1 files changed, 52 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-directory.txt |   45 +++++++++++++++++++++++++++++
+ 1 files changed, 45 insertions(+), 0 deletions(-)
 
-diff --git a/package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch b/package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch
-new file mode 100644
-index 0000000..d40f178
---- /dev/null
-+++ b/package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch
-@@ -0,0 +1,52 @@
-+Use wget instead of curl
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 2e8786a..58f0262 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -46,6 +46,51 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
+ 
++The +Config.in+ file of your package must also ensure that
++dependencies are enabled. Typically, Buildroot uses the following
++rules:
 +
-+While crosstool-NG did support either curl or wget in the past, it now
-+only supports curl. Unfortunately, Buildroot uses wget for all its
-+downloads, so wget is a hard dependency of Buildroot, while curl
-+isn't.
++* Use a +select+ type of dependency for dependencies on
++  libraries. These dependencies are generally not obvious and it
++  therefore make sense to have the kconfig system ensure that the
++  dependencies are selected. For example, the _libgtk2_ package uses
++  +select BR2_PACKAGE_LIBGLIB2+ to make sure this library is also
++  enabled.
 +
-+Instead of adding curl as a new Buildroot dependency, or building curl
-+for the host, we simply tweak crosstool-NG to use wget instead of
-+curl.
++* Use a +depends on+ type of dependency when the user really needs to
++  be aware of the dependency. Typically, Buildroot uses this type of
++  dependency for dependencies on toolchain options (large file
++  support, RPC support, IPV6 support), or for dependencies on "big"
++  things, such as the X.org system. In some cases, especially
++  dependency on toolchain options, it is recommended to add a
++  +comment+ displayed when the option is not enabled, so that the user
++  knows why the package is not available.
 +
-+The script/functions change has been provided by Yann E. Morin.
++An example illustrates both the usage of +select+ and +depends on+.
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++--------------------------
++config BR2_PACKAGE_ACL
++        bool "acl"
++        select BR2_PACKAGE_ATTR
++        depends on BR2_LARGEFILE
++        help
++          POSIX Access Control Lists, which are used to define more
++          fine-grained discretionary access rights for files and
++          directories.
++          This package also provides libacl.
 +
-+Index: crosstool-ng-1.13.0/configure
-+===================================================================
-+--- crosstool-ng-1.13.0.orig/configure
-++++ crosstool-ng-1.13.0/configure
-+@@ -496,7 +496,7 @@
-+              ver='\(GNU libtool.*\) (2[[:digit:]]*\.|1\.6[[:digit:]]*\.|1\.5\.[2-9][[:digit:]]+)'   \
-+              err="'libtoolize' 1.5.26 or above was not found"
-+ has_or_abort prog=stat
-+-has_or_abort prog="curl"
-++has_or_abort prog="wget"
-+ has_or_abort prog=patch
-+ has_or_abort prog=tar
-+ has_or_abort prog=gzip
-+Index: crosstool-ng-1.13.0/scripts/functions
-+===================================================================
-+--- crosstool-ng-1.13.0.orig/scripts/functions
-++++ crosstool-ng-1.13.0/scripts/functions
-+@@ -456,13 +456,12 @@
-+     # Some company networks have firewalls to connect to the internet, but it's
-+     # not easy to detect them, so force a global ${CT_CONNECT_TIMEOUT}-second
-+     # timeout.
-+-    # For curl, no good progress indicator is available. So, be silent.
-+-    if CT_DoExecLog ALL curl --ftp-pasv                                 \
-+-                             --retry 3                                  \
-+-                             --connect-timeout ${CT_CONNECT_TIMEOUT}    \
-+-                             --location --fail --silent                 \
-+-                             --output "${tmp}"                          \
-+-                             "${url}"
-++    if CT_DoExecLog ALL wget --passive-ftp --tries=3 -nc    \
-++                             -T ${CT_CONNECT_TIMEOUT}       \
-++                             -O "${tmp}"                    \
-++                              "${url}"
-++
-++
-+     then
-+         # Success, we got it, good!
-+         mv "${tmp}" "${dest}"
++          http://savannah.nongnu.org/projects/acl
++
++comment "acl requires a toolchain with LARGEFILE support"
++        depends on !BR2_LARGEFILE
++--------------------------
++
++
++Note that such dependencies will make sure that the dependency option
++is also enabled, but not necessarily built before your package. To do
++so, the dependency also needs to be expressed in the +.mk+ file of the
++package.
++
+ The +.mk+ file
+ ~~~~~~~~~~~~~~
+ 
