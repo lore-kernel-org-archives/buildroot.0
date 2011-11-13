@@ -1,36 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2011 09:56:51 +0100
-Subject: [Buildroot] [PATCH 1/2] uClibc: fix sparc build breakage
-In-Reply-To: <87aa82z7ge.fsf@macbook.be.48ers.dk>
-References: <1321045967-6216-1-git-send-email-gustavo@zacarias.com.ar>
- <87aa82z7ge.fsf@macbook.be.48ers.dk>
-Message-ID: <20111113095651.22f5942c@skate>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Sun, 13 Nov 2011 06:45:01 -0600
+Subject: [Buildroot] [PATCH 2/5] doc: mention how to format the
+	Config.in file
+In-Reply-To: <a829e41c56d4cc0fea0131d7e7bd0002d6ebab5f.1321174391.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
+ <a829e41c56d4cc0fea0131d7e7bd0002d6ebab5f.1321174391.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201111130645.03086.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 11 Nov 2011 22:15:45 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
-
-> >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On Sun November 13 2011, Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  docs/manual/adding-packages-directory.txt |    5 +++++
+>  1 files changed, 5 insertions(+), 0 deletions(-)
 > 
->  Gustavo> Fix build breakage for sparc as reported in bug #4021
->  Gustavo> Patches from Konrad Eisele <konrad@gaisler.com>
->  Gustavo> Submitted in the uclibc mailing list.
-> 
-> Committed to next, thanks.
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index a262a8c..b61eb54 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -24,6 +24,11 @@ config BR2_PACKAGE_LIBFOO
+>  	  http://foosoftware.org/libfoo/
+>  ---------------------------
+>  
+> +The +bool+ line, +help+ line and other meta-informations about the
+> +configuration option must be indented with one tab. The help text
+> +itself but be indented with one tab and two spaces, and it must
 
-Since it fixes a build breakage, shouldn't it be applied to 2011.11
-instead ? The fix itself only touches Sparc, so the risk is fairly
-minimal.
+s/but/should/
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Mike
+> +mention the upstream URL of the project.
+> +
+>  Of course, you can add other sub-options into a +if
+>  BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
+>  in your software. You can look at examples in other packages. The
