@@ -1,28 +1,26 @@
-From: =?iso-8859-2?Q?Jaroslav_Jir=E1sek?= <jirasek@sauron.cz>
-Date: Sun, 13 Nov 2011 20:29:54 +0100
-Subject: [Buildroot] compile under buildroot
-Message-ID: <B4FA196829E44A5AB99055A1E2166936@ch3mikPC>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 13 Nov 2011 21:31:08 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/doc-updates
+In-Reply-To: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 13 Nov 2011 09:54:42 +0100")
+References: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87y5vjydbn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, I build buildroot with all development tools, under CentOS 6.
-Buildroot I unpack and chroot to this.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Now I want compile something (for example busybox)
-All attemps ends with this error:
+ Thomas> Hello,
+ Thomas> A few documentation updates that should go in 2011.11. It's far from
+ Thomas> complete, but it's better to have this rather than nothing.
 
-In file included from /usr/include/sys/types.h:27,
-                 from scripts/basic/fixdep.c:105:
-/usr/lib/gcc/x86_64-unknown-linux-uclibc/4.3.6/include-fixed/features.h:361:23: error: gnu/stubs.h: No such file or directory
+ Thomas> Thomas
 
+Committed all 5, thanks.
 
-How can I solve this?
-
-Thank you Jarda
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111113/41c307b0/attachment.html>
+-- 
+Bye, Peter Korsgaard
