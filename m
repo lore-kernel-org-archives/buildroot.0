@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2011 09:54:46 +0100
-Subject: [Buildroot] [PATCH 4/5] doc: mention the CMAKETARGETS
-	infrastructure in the list of infrastructures
+Date: Sun, 13 Nov 2011 09:54:45 +0100
+Subject: [Buildroot] [PATCH 3/5] doc: more details about expressing
+	dependencies in Config.in
 In-Reply-To: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3793f473e81e591dd5122ae7d8ac47b2930e20b4.1321174391.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f2d354155adeb46458675f2893d8f4e8508c8f7b.1321174391.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,64 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-directory.txt |   11 +++++++++--
- 1 files changed, 9 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-directory.txt |   45 +++++++++++++++++++++++++++++
+ 1 files changed, 45 insertions(+), 0 deletions(-)
 
 diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index a6b1f17..0299c44 100644
+index b61eb54..a6b1f17 100644
 --- a/docs/manual/adding-packages-directory.txt
 +++ b/docs/manual/adding-packages-directory.txt
-@@ -101,8 +101,8 @@ installed, etc.
- Depending on the package type, the +.mk+ file must be written in a
- different way, using different infrastructures:
+@@ -46,6 +46,51 @@ supposed to contain anything but the 'bare' name of the package.
+ source "package/libfoo/Config.in"
+ --------------------------
  
--* *Makefiles for generic packages* (not using autotools): These are
--  based on an infrastructure similar to the one used for
-+* *Makefiles for generic packages* (not using autotools or CMake):
-+  These are based on an infrastructure similar to the one used for
-   autotools-based packages, but requires a little more work from the
-   developer. They specify what should be done for the configuration,
-   compilation, installation and cleanup of the package. This
-@@ -119,6 +119,13 @@ different way, using different infrastructures:
-   system. We cover them through a xref:autotargets-tutorial[tutorial]
-   and xref:autotargets-reference[reference].
- 
-+* *Makefiles for cmake-based software*: We provide a dedicated
-+   infrastructure for such packages, as CMake is a more and more
-+   commonly used build system and has a standardized behaviour. This
-+   infrastructure 'must' be used for new packages that rely on
-+   CMake. We cover them through a xref:cmaketargets-tutorial[tutorial]
-+   and xref:cmaketargets-reference[reference].
++The +Config.in+ file of your package must also ensure that
++dependencies are also enabled. Typically, Buildroot uses the following
++rules:
 +
- * *Hand-written Makefiles:* These are currently obsolete, and no new
-   manual Makefiles should be added. However, since there are still
-   many of them in the tree, we keep them documented in a
++* Use a +select+ type of dependency for dependencies on
++  libraries. These dependencies are generally not obvious and it
++  therefore make sense to have the kconfig system ensure that the
++  dependencies are selected. For example, the _libgtk2_ package uses
++  +select BR2_PACKAGE_LIBGLIB2+ to make sure this library is also
++  enabled.
++
++* Use a +depends on+ type of dependency when the user really needs to
++  be aware of the dependency. Typically, Buildroot uses this type of
++  dependency for dependencies on toolchain options (large file
++  support, RPC support, IPV6 support), or for dependencies on "big"
++  things, such as the X.org system. In some cases, especially
++  dependency on toolchain options, it is recommended to add a
++  +comment+ displayed when the option is not enabled, so that the user
++  knows why the package is not available.
++
++An example illustrates both the usage of +select+ and +depends on+.
++
++--------------------------
++config BR2_PACKAGE_ACL
++        bool "acl"
++        select BR2_PACKAGE_ATTR
++        depends on BR2_LARGEFILE
++        help
++          POSIX Access Control Lists, which are used to define more
++          fine-grained discretionary access rights for files and
++          directories.
++          This package also provides libacl.
++
++          http://savannah.nongnu.org/projects/acl
++
++comment "acl requires a toolchain with LARGEFILE support"
++        depends on !BR2_LARGEFILE
++--------------------------
++
++
++Note that such dependencies will make sure that the dependency option
++is also enabled, but not necessarily built before your package. To do
++so, the dependency also needs to be expressed in the +.mk+ file of the
++package.
++
+ The +.mk+ file
+ ~~~~~~~~~~~~~~
+ 
 -- 
 1.7.4.1
