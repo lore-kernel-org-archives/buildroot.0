@@ -1,36 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2011 09:55:56 +0100
-Subject: [Buildroot] [PATCH 3/3] target gdb: depend on thread support
+Date: Sun, 13 Nov 2011 09:55:55 +0100
+Subject: [Buildroot] [PATCH 2/3] crosstool-ng: add patch to use wget instead
+	of curl
 In-Reply-To: <cover.1321174528.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1321174528.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <849ed290aaa79818217390097fda68699ab0cae0.1321174528.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <481762cdd42ab541b416b2a4cacdd2d5075e3ab7.1321174528.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling gdb for the target requires thread support in the C library,
-otherwise:
-
-/home/test/outputs/test-888/toolchain/gdb-7.3.1/gdb/gdb_thread_db.h:37:21: fatal error: pthread.h: No such file or directory
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gdb/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ .../crosstool-ng-001-wget-instead-of-curl.patch    |   52 ++++++++++++++++++++
+ 1 files changed, 52 insertions(+), 0 deletions(-)
+ create mode 100644 package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index af6e56a..8a02255 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_sh && !BR2_sh64
- 	help
- 	    Build the full gdb debugger to run on the target.
+diff --git a/package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch b/package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch
+new file mode 100644
+index 0000000..d40f178
+--- /dev/null
++++ b/package/crosstool-ng/crosstool-ng-001-wget-instead-of-curl.patch
+@@ -0,0 +1,52 @@
++Use wget instead of curl
++
++While crosstool-NG did support either curl or wget in the past, it now
++only supports curl. Unfortunately, Buildroot uses wget for all its
++downloads, so wget is a hard dependency of Buildroot, while curl
++isn't.
++
++Instead of adding curl as a new Buildroot dependency, or building curl
++for the host, we simply tweak crosstool-NG to use wget instead of
++curl.
++
++The script/functions change has been provided by Yann E. Morin.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: crosstool-ng-1.13.0/configure
++===================================================================
++--- crosstool-ng-1.13.0.orig/configure
+++++ crosstool-ng-1.13.0/configure
++@@ -496,7 +496,7 @@
++              ver='\(GNU libtool.*\) (2[[:digit:]]*\.|1\.6[[:digit:]]*\.|1\.5\.[2-9][[:digit:]]+)'   \
++              err="'libtoolize' 1.5.26 or above was not found"
++ has_or_abort prog=stat
++-has_or_abort prog="curl"
+++has_or_abort prog="wget"
++ has_or_abort prog=patch
++ has_or_abort prog=tar
++ has_or_abort prog=gzip
++Index: crosstool-ng-1.13.0/scripts/functions
++===================================================================
++--- crosstool-ng-1.13.0.orig/scripts/functions
+++++ crosstool-ng-1.13.0/scripts/functions
++@@ -456,13 +456,12 @@
++     # Some company networks have firewalls to connect to the internet, but it's
++     # not easy to detect them, so force a global ${CT_CONNECT_TIMEOUT}-second
++     # timeout.
++-    # For curl, no good progress indicator is available. So, be silent.
++-    if CT_DoExecLog ALL curl --ftp-pasv                                 \
++-                             --retry 3                                  \
++-                             --connect-timeout ${CT_CONNECT_TIMEOUT}    \
++-                             --location --fail --silent                 \
++-                             --output "${tmp}"                          \
++-                             "${url}"
+++    if CT_DoExecLog ALL wget --passive-ftp --tries=3 -nc    \
+++                             -T ${CT_CONNECT_TIMEOUT}       \
+++                             -O "${tmp}"                    \
+++                              "${url}"
+++
+++
++     then
++         # Success, we got it, good!
++         mv "${tmp}" "${dest}"
 -- 
 1.7.4.1
