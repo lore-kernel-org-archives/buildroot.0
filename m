@@ -1,32 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 11 Nov 2011 22:45:28 +0100
-Subject: [Buildroot] [git commit branch/next] kickoff 2012.02 development
-	cycle
-Message-ID: <20111111214555.B76118F4DB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Nov 2011 09:54:42 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/doc-updates
+Message-ID: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7c26a26780d6160dca1473c120507058dc2550f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+A few documentation updates that should go in 2011.11. It's far from
+complete, but it's better to have this rather than nothing.
 
-diff --git a/Makefile b/Makefile
-index df2f859..84cea1c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2011.11-rc1
-+export BR2_VERSION:=2012.02-git
- 
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
+Thomas
+
+The following changes since commit 296eb11299d1240b3570aba5abb8374a0911bf44:
+
+  pulseaudio: needs host-intltool (2011-10-29 16:35:47 +0200)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2011.11/doc-updates
+
+Thomas Petazzoni (5):
+      doc: suggest how to add suboptions
+      doc: mention how to format the Config.in file
+      doc: more details about expressing dependencies in Config.in
+      doc: mention the CMAKETARGETS infrastructure in the list of infrastructures
+      doc: update GENTARGETS/AUTOTARGETS/CMAKETARGETS on the number of arguments
+
+ docs/manual/adding-packages-autotargets.txt  |    2 +-
+ docs/manual/adding-packages-cmaketargets.txt |    2 +-
+ docs/manual/adding-packages-directory.txt    |   70 +++++++++++++++++++++++--
+ docs/manual/adding-packages-gentargets.txt   |   29 +++--------
+ 4 files changed, 74 insertions(+), 29 deletions(-)
+
+Thanks,
+-- 
+Thomas Petazzoni
