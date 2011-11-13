@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2011 09:54:42 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/doc-updates
-Message-ID: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Nov 2011 09:54:43 +0100
+Subject: [Buildroot] [PATCH 1/5] doc: suggest how to add suboptions
+In-Reply-To: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <19e206323149f851e149a40a952129f74af37b85.1321174391.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-directory.txt |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-A few documentation updates that should go in 2011.11. It's far from
-complete, but it's better to have this rather than nothing.
-
-Thomas
-
-The following changes since commit 296eb11299d1240b3570aba5abb8374a0911bf44:
-
-  pulseaudio: needs host-intltool (2011-10-29 16:35:47 +0200)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2011.11/doc-updates
-
-Thomas Petazzoni (5):
-      doc: suggest how to add suboptions
-      doc: mention how to format the Config.in file
-      doc: more details about expressing dependencies in Config.in
-      doc: mention the CMAKETARGETS infrastructure in the list of infrastructures
-      doc: update GENTARGETS/AUTOTARGETS/CMAKETARGETS on the number of arguments
-
- docs/manual/adding-packages-autotargets.txt  |    2 +-
- docs/manual/adding-packages-cmaketargets.txt |    2 +-
- docs/manual/adding-packages-directory.txt    |   70 +++++++++++++++++++++++--
- docs/manual/adding-packages-gentargets.txt   |   29 +++--------
- 4 files changed, 74 insertions(+), 29 deletions(-)
-
-Thanks,
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 058ebad..a262a8c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -24,10 +24,11 @@ config BR2_PACKAGE_LIBFOO
+ 	  http://foosoftware.org/libfoo/
+ ---------------------------
+ 
+-Of course, you can add other options to configure particular things in
+-your software. You can look at examples in other packages. The syntax
+-of the +Config.in+ file is the same as the one for the kernel Kconfig
+-file. The documentation for this syntax is available at
++Of course, you can add other sub-options into a +if
++BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
++in your software. You can look at examples in other packages. The
++syntax of the +Config.in+ file is the same as the one for the kernel
++Kconfig file. The documentation for this syntax is available at
+ http://lxr.free-electrons.com/source/Documentation/kbuild/kconfig-language.txt[]
+ 
+ Finally you have to add your new +libfoo/Config.in+ to
 -- 
-Thomas Petazzoni
+1.7.4.1
