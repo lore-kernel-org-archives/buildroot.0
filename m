@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 13 Nov 2011 21:31:08 +0100
+Date: Sun, 13 Nov 2011 21:33:10 +0100
 Subject: [Buildroot] [pull request] Pull request for branch
-	for-2011.11/doc-updates
-In-Reply-To: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 13 Nov 2011 09:54:42 +0100")
-References: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y5vjydbn.fsf@macbook.be.48ers.dk>
+	for-2011.11/build-fixes
+In-Reply-To: <cover.1321174528.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 13 Nov 2011 09:55:53 +0100")
+References: <cover.1321174528.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ty67yd89.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +15,10 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  Thomas> Hello,
- Thomas> A few documentation updates that should go in 2011.11. It's far from
- Thomas> complete, but it's better to have this rather than nothing.
+ Thomas> Here are three fixes for build failures detected when doing
+ Thomas> randpackageconfig builds.
 
- Thomas> Thomas
-
-Committed all 5, thanks.
+Committed all 3, thanks.
 
 -- 
 Bye, Peter Korsgaard
