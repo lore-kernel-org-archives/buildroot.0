@@ -1,39 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Nov 2011 21:31:39 +0100
-Subject: [Buildroot] [git commit] gdb: do not allow native gdb on SuperH
-	architecture
-Message-ID: <20111113203426.936538F314@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 13 Nov 2011 21:43:09 +0100
+Subject: [Buildroot] [PATCH 0 of 2 v2] gentargets: add scp and Mercurial
+	download helpers
+In-Reply-To: <patchbomb.1318602760@devws108>
+References: <patchbomb.1318602760@devws108>
+Message-ID: <CAAXf6LXGTJeSbqqpBUMqchv=CTq7zyTH36=vkZHvtWwP=c2Qaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=33b8c556afbe7bf544fee4e0e7263bb4b9284ac1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-The gdb debugger does not have support for running as the native
-debugger on the SuperH architecture:
+On Fri, Oct 14, 2011 at 4:32 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> This patch series adds download methods for scp and Mercurial.
+>
+> Documentation was updated in the first version of this series, but this update
+> was left out in this series because of the move to asciidoc that is not yet
+> complete. Once the new documentation format is in master, it needs to be
+> updated with these new features.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+> v2: update scp patch based on comments.
+>
+> ?Config.in ? ? ? ? ? ? ? ? ? | ?17 ++++++++++++++++-
+> ?package/Makefile.package.in | ?82 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------
+> ?2 files changed, 91 insertions(+), 8 deletions(-)
+>
 
- configure: error: "*** Gdb does not support native target sh4-unknown-linux-gnu"
+I think we should include these two patches also in 2011.11.
+I'll try to prepare a documentation update for this as well and send
+out this week.
 
-See also http://lists.debian.org/debian-superh/2010/04/msg00000.html.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/gdb/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index e593698..af6e56a 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
-+	depends on !BR2_sh && !BR2_sh64
- 	help
- 	    Build the full gdb debugger to run on the target.
- 
+Best regards,
+Thomas
