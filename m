@@ -1,59 +1,167 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 13 Nov 2011 19:27:51 -0300
-Subject: [Buildroot] [PATCH 03/10] bison: bump to version 2.5
+Date: Sun, 13 Nov 2011 19:27:53 -0300
+Subject: [Buildroot] [PATCH 05/10] diffutils: bump to version 3.2
 In-Reply-To: <1321223278-14388-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1321223278-14388-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1321223278-14388-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1321223278-14388-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump to diffutils version 3.2
+Drop all unnecessary configure hints.
+There's no point in installing diffutils to staging so drop that too.
+Build after busybox if it's enabled to prefer full-blown diff.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../bison/bison-2.4.3-uclibc-sched_param-def.patch |   19 -------------------
- package/bison/bison.mk                             |    2 +-
- 2 files changed, 1 insertions(+), 20 deletions(-)
- delete mode 100644 package/bison/bison-2.4.3-uclibc-sched_param-def.patch
+ package/diffutils/Config.in                       |    4 ++
+ package/diffutils/diffutils-2.8.1-__mempcpy.patch |   47 -----------------
+ package/diffutils/diffutils.mk                    |   57 ++-------------------
+ 3 files changed, 9 insertions(+), 99 deletions(-)
+ delete mode 100644 package/diffutils/diffutils-2.8.1-__mempcpy.patch
 
-diff --git a/package/bison/bison-2.4.3-uclibc-sched_param-def.patch b/package/bison/bison-2.4.3-uclibc-sched_param-def.patch
+diff --git a/package/diffutils/Config.in b/package/diffutils/Config.in
+index df3e426..86da5d3 100644
+--- a/package/diffutils/Config.in
++++ b/package/diffutils/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_DIFFUTILS
+ 	bool"diffutils"
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  GNU diff. Compare files per line.
+ 
+ 	  http://www.gnu.org/software/diffutils/diffutils.html
++
++comment "diffutils requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/diffutils/diffutils-2.8.1-__mempcpy.patch b/package/diffutils/diffutils-2.8.1-__mempcpy.patch
 deleted file mode 100644
-index 50652d8..0000000
---- a/package/bison/bison-2.4.3-uclibc-sched_param-def.patch
+index 94144c1..0000000
+--- a/package/diffutils/diffutils-2.8.1-__mempcpy.patch
 +++ /dev/null
-@@ -1,19 +0,0 @@
--uclibc defines __GLIBC__ but it does not expose struct shed_param as much as glibc
--and is not needed too per standard. gnulib attempts to use it but we have to account
--for it because in this case uclibc does not behave like glibc.
+@@ -1,47 +0,0 @@
+-[PATCH] diffutils: Don't use glibc specific __mempcpy
 -
---Khem
+-The configure script checks for mempcpy, but the code uses the (glibc
+-specific) __mempcpy instead. Fix it to use mempcpy which is more
+-portable.
 -
--http://bugs.gentoo.org/336484
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>x
+----
+- lib/getopt.c |    4 ++--
+- lib/regex.c  |    2 +-
+- 2 files changed, 3 insertions(+), 3 deletions(-)
 -
----- m4-1.4.14/lib/spawn.in.h
--+++ m4-1.4.14/lib/spawn.in.h
--@@ -31,7 +31,7 @@
-- 
-- /* Get definitions of 'struct sched_param' and 'sigset_t'.
--    But avoid namespace pollution on glibc systems.  */
---#ifndef __GLIBC__
--+#if !defined __GLIBC__ || defined __UCLIBC__
-- # include <sched.h>
-- # include <signal.h>
-- #endif
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index d365e33..759592e 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
+-Index: diffutils-2.8.1/lib/getopt.c
+-===================================================================
+---- diffutils-2.8.1.orig/lib/getopt.c
+-+++ diffutils-2.8.1/lib/getopt.c
+-@@ -334,7 +334,7 @@ exchange (argv)
+- 	nonoption_flags_len = nonoption_flags_max_len = 0;
+-       else
+- 	{
+--	  memset (__mempcpy (new_str, __getopt_nonoption_flags,
+-+	  memset (mempcpy (new_str, __getopt_nonoption_flags,
+- 			     nonoption_flags_max_len),
+- 		  '\0', top + 1 - nonoption_flags_max_len);
+- 	  nonoption_flags_max_len = top + 1;
+-@@ -445,7 +445,7 @@ _getopt_initialize (argc, argv, optstrin
+- 	      if (__getopt_nonoption_flags == NULL)
+- 		nonoption_flags_max_len = -1;
+- 	      else
+--		memset (__mempcpy (__getopt_nonoption_flags, orig_str, len),
+-+		memset (mempcpy (__getopt_nonoption_flags, orig_str, len),
+- 			'\0', nonoption_flags_max_len - len);
+- 	    }
+- 	}
+-Index: diffutils-2.8.1/lib/regex.c
+-===================================================================
+---- diffutils-2.8.1.orig/lib/regex.c
+-+++ diffutils-2.8.1/lib/regex.c
+-@@ -8314,7 +8314,7 @@ regerror (errcode, preg, errbuf, errbuf_
+-       if (msg_size > errbuf_size)
+-         {
+- #if defined HAVE_MEMPCPY || defined _LIBC
+--	  *((char *) __mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
+-+	  *((char *) mempcpy (errbuf, msg, errbuf_size - 1)) = '\0';
+- #else
+-           memcpy (errbuf, msg, errbuf_size - 1);
+-           errbuf[errbuf_size - 1] = 0;
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 693b0c8..6d1896a 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -3,62 +3,15 @@
+ # diffutils
  #
  #############################################################
+-DIFFUTILS_VERSION=2.8.1
+-DIFFUTILS_SOURCE:=diffutils-$(DIFFUTILS_VERSION).tar.gz
+-DIFFUTILS_SITE:=$(BR2_GNU_MIRROR)/diffutils
+-
+-DIFFUTILS_INSTALL_STAGING = YES
  
--BISON_VERSION = 2.4.3
-+BISON_VERSION = 2.5
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
++DIFFUTILS_VERSION = 3.2
++DIFFUTILS_SITE = $(BR2_GNU_MIRROR)/diffutils
+ DIFFUTILS_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
+ 	$(if $(BR2_PACKAGE_LIBINTL),libintl)
  
- define BISON_DISABLE_EXAMPLES
+-DIFFUTILS_CONF_ENV = ac_cv_func_strtod=yes
+-		ac_fsusage_space=yes \
+-		fu_cv_sys_stat_statfs2_bsize=yes \
+-		ac_cv_func_closedir_void=no \
+-		ac_cv_func_getloadavg=no \
+-		ac_cv_lib_util_getloadavg=no \
+-		ac_cv_lib_getloadavg_getloadavg=no \
+-		ac_cv_func_getgroups=yes \
+-		ac_cv_func_getgroups_works=yes \
+-		ac_cv_func_chown_works=yes \
+-		ac_cv_have_decl_euidaccess=no \
+-		ac_cv_func_euidaccess=no \
+-		ac_cv_have_decl_strnlen=yes \
+-		ac_cv_func_strnlen_working=yes \
+-		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+-		ac_cv_func_lstat_empty_string_bug=no \
+-		ac_cv_func_stat_empty_string_bug=no \
+-		vb_cv_func_rename_trailing_slash_bug=no \
+-		ac_cv_have_decl_nanosleep=yes \
+-		jm_cv_func_nanosleep_works=yes \
+-		gl_cv_func_working_utimes=yes \
+-		ac_cv_func_utime_null=yes \
+-		ac_cv_have_decl_strerror_r=yes \
+-		ac_cv_func_strerror_r_char_p=no \
+-		jm_cv_func_svid_putenv=yes \
+-		ac_cv_func_getcwd_null=yes \
+-		ac_cv_func_getdelim=yes \
+-		ac_cv_func_mkstemp=yes \
+-		utils_cv_func_mkstemp_limitations=no \
+-		utils_cv_func_mkdir_trailing_slash_bug=no \
+-		jm_cv_func_gettimeofday_clobber=no \
+-		am_cv_func_working_getline=yes \
+-		gl_cv_func_working_readdir=yes \
+-		jm_ac_cv_func_link_follows_symlink=no \
+-		utils_cv_localtime_cache=no \
+-		ac_cv_struct_st_mtim_nsec=no \
+-		gl_cv_func_tzset_clobber=no \
+-		gl_cv_func_getcwd_null=yes \
+-		gl_cv_func_getcwd_path_max=yes \
+-		ac_cv_func_fnmatch_gnu=yes \
+-		am_getline_needs_run_time_check=no \
+-		am_cv_func_working_getline=yes \
+-		gl_cv_func_mkdir_trailing_slash_bug=no \
+-		gl_cv_func_mkstemp_limitations=no \
+-		ac_cv_func_working_mktime=yes \
+-		jm_cv_func_working_re_compile_pattern=yes \
+-		ac_use_included_regex=no
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++DIFFUTILS_DEPENDENCIES += busybox
++endif
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.3.4
