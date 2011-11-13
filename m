@@ -1,101 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Nov 2011 21:30:33 +0100
-Subject: [Buildroot] [git commit] doc: update
-	GENTARGETS/AUTOTARGETS/CMAKETARGETS on the number of arguments
-Message-ID: <20111113203426.245168F314@busybox.osuosl.org>
+Date: Sun, 13 Nov 2011 21:20:44 +0100
+Subject: [Buildroot] [git commit] doc: suggest how to add suboptions
+Message-ID: <20111113203423.710218F53D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e17418480719803f4454c4393c5be5d2c0f8033a
+commit: http://git.buildroot.net/buildroot/commit/?id=939d0ab264bea00f18cb6085547580df43c50653
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-autotargets.txt  |    2 +-
- docs/manual/adding-packages-cmaketargets.txt |    2 +-
- docs/manual/adding-packages-gentargets.txt   |   29 +++++++------------------
- 3 files changed, 10 insertions(+), 23 deletions(-)
+ docs/manual/adding-packages-directory.txt |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-autotargets.txt b/docs/manual/adding-packages-autotargets.txt
-index cb41ead..428a182 100644
---- a/docs/manual/adding-packages-autotargets.txt
-+++ b/docs/manual/adding-packages-autotargets.txt
-@@ -23,7 +23,7 @@ package, with an example :
- 11: LIBFOO_CONF_OPT = --enable-shared
- 12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
- 13:
--14: $(eval $(call AUTOTARGETS,package,libfoo))
-+14: $(eval $(call AUTOTARGETS))
- ------------------------
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 058ebad..a262a8c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -24,10 +24,11 @@ config BR2_PACKAGE_LIBFOO
+ 	  http://foosoftware.org/libfoo/
+ ---------------------------
  
- On line 6, we declare the version of the package.
-diff --git a/docs/manual/adding-packages-cmaketargets.txt b/docs/manual/adding-packages-cmaketargets.txt
-index b03eb68..3e400ec 100644
---- a/docs/manual/adding-packages-cmaketargets.txt
-+++ b/docs/manual/adding-packages-cmaketargets.txt
-@@ -23,7 +23,7 @@ with an example :
- 11: LIBFOO_CONF_OPT = -DBUILD_DEMOS=ON
- 12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
- 13:
--14: $(eval $(call CMAKETARGETS,package,libfoo))
-+14: $(eval $(call CMAKETARGETS))
- ------------------------
+-Of course, you can add other options to configure particular things in
+-your software. You can look at examples in other packages. The syntax
+-of the +Config.in+ file is the same as the one for the kernel Kconfig
+-file. The documentation for this syntax is available at
++Of course, you can add other sub-options into a +if
++BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
++in your software. You can look at examples in other packages. The
++syntax of the +Config.in+ file is the same as the one for the kernel
++Kconfig file. The documentation for this syntax is available at
+ http://lxr.free-electrons.com/source/Documentation/kbuild/kconfig-language.txt[]
  
- On line 6, we declare the version of the package.
-diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
-index 9a319d1..29fc640 100644
---- a/docs/manual/adding-packages-gentargets.txt
-+++ b/docs/manual/adding-packages-gentargets.txt
-@@ -38,7 +38,7 @@ system is based on hand-written Makefiles or shell scripts.
- 24: 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
- 25: endef
- 26:
--27: $(eval $(call GENTARGETS,package,libfoo))
-+27: $(eval $(call GENTARGETS))
- --------------------------------
- 
- The Makefile begins on line 6 to 8 with metadata information: the
-@@ -84,32 +84,19 @@ Makefile code necessary to make your package working.
- +GENTARGETS+ Reference
- ~~~~~~~~~~~~~~~~~~~~~~
- 
--The +GENTARGETS+ macro takes three arguments:
--
--* The first argument is the package directory prefix. If your package
--  is in +package/libfoo+, then the directory prefix is +package+. If
--  your package is in +package/editors/foo+, then the directory prefix
--  must be +package/editors+.
--
--* The second argument is the lower-cased package name. It must match
--  the prefix of the variables in the +.mk+ file and must match the
--  configuration option name in the +Config.in+ file. For example, if
--  the package name is +libfoo+, then the variables in the +.mk+ file
--  must start with +LIBFOO_+ and the configuration option in the
--  +Config.in+ file must be +BR2_PACKAGE_LIBFOO+.
--
--* The third argument is optional. It can be used to tell if the
--  package is a target package (cross-compiled for the target) or a
--  host package (natively compiled for the host). If unspecified, it is
--  assumed that it is a target package. See below for details.
-+The +GENTARGETS+ macro takes one optional argument. This argument can
-+be used to tell if the package is a target package (cross-compiled for
-+the target) or a host package (natively compiled for the host). If
-+unspecified, it is assumed that it is a target package. See below for
-+details.
- 
- For a given package, in a single +.mk+ file, it is possible to call
- GENTARGETS twice, once to create the rules to generate a target
- package and once to create the rules to generate a host package:
- 
- ----------------------
--$(eval $(call GENTARGETS,package,libfoo))
--$(eval $(call GENTARGETS,package,libfoo,host))
-+$(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
- ----------------------
- 
- This might be useful if the compilation of the target package requires
+ Finally you have to add your new +libfoo/Config.in+ to
