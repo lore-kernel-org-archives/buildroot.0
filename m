@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Nov 2011 09:54:44 +0100
-Subject: [Buildroot] [PATCH 2/5] doc: mention how to format the Config.in
-	file
+Date: Sun, 13 Nov 2011 09:54:46 +0100
+Subject: [Buildroot] [PATCH 4/5] doc: mention the CMAKETARGETS
+	infrastructure in the list of infrastructures
 In-Reply-To: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1321174391.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a829e41c56d4cc0fea0131d7e7bd0002d6ebab5f.1321174391.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3793f473e81e591dd5122ae7d8ac47b2930e20b4.1321174391.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/adding-packages-directory.txt |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-directory.txt |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index a262a8c..b61eb54 100644
+index a6b1f17..0299c44 100644
 --- a/docs/manual/adding-packages-directory.txt
 +++ b/docs/manual/adding-packages-directory.txt
-@@ -24,6 +24,11 @@ config BR2_PACKAGE_LIBFOO
- 	  http://foosoftware.org/libfoo/
- ---------------------------
+@@ -101,8 +101,8 @@ installed, etc.
+ Depending on the package type, the +.mk+ file must be written in a
+ different way, using different infrastructures:
  
-+The +bool+ line, +help+ line and other meta-informations about the
-+configuration option must be indented with one tab. The help text
-+itself but be indented with one tab and two spaces, and it must
-+mention the upstream URL of the project.
+-* *Makefiles for generic packages* (not using autotools): These are
+-  based on an infrastructure similar to the one used for
++* *Makefiles for generic packages* (not using autotools or CMake):
++  These are based on an infrastructure similar to the one used for
+   autotools-based packages, but requires a little more work from the
+   developer. They specify what should be done for the configuration,
+   compilation, installation and cleanup of the package. This
+@@ -119,6 +119,13 @@ different way, using different infrastructures:
+   system. We cover them through a xref:autotargets-tutorial[tutorial]
+   and xref:autotargets-reference[reference].
+ 
++* *Makefiles for cmake-based software*: We provide a dedicated
++   infrastructure for such packages, as CMake is a more and more
++   commonly used build system and has a standardized behaviour. This
++   infrastructure 'must' be used for new packages that rely on
++   CMake. We cover them through a xref:cmaketargets-tutorial[tutorial]
++   and xref:cmaketargets-reference[reference].
 +
- Of course, you can add other sub-options into a +if
- BR2_PACKAGE_LIBFOO...endif+ statement to configure particular things
- in your software. You can look at examples in other packages. The
+ * *Hand-written Makefiles:* These are currently obsolete, and no new
+   manual Makefiles should be added. However, since there are still
+   many of them in the tree, we keep them documented in a
 -- 
 1.7.4.1
