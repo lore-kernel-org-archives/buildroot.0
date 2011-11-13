@@ -1,36 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 13 Nov 2011 21:32:57 +0100
-Subject: [Buildroot] [git commit] target gdb: depend on thread support
-Message-ID: <20111113203427.5C0928F314@busybox.osuosl.org>
+Date: Sun, 13 Nov 2011 21:30:20 +0100
+Subject: [Buildroot] [git commit] doc: mention the CMAKETARGETS
+	infrastructure in the list of infrastructures
+Message-ID: <20111113203425.8C27C8F314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=096c185c19d66c6904109b621e14a6ef44c7d9ac
+commit: http://git.buildroot.net/buildroot/commit/?id=bcd0158e311cea8e3bc6fa9091fe81ab651084f3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Compiling gdb for the target requires thread support in the C library,
-otherwise:
-
-/home/test/outputs/test-888/toolchain/gdb-7.3.1/gdb/gdb_thread_db.h:37:21: fatal error: pthread.h: No such file or directory
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-directory.txt |   11 +++++++++--
+ 1 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index af6e56a..8a02255 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_GDB
- 	bool "Build gdb debugger for the Target"
- 	select BR2_PACKAGE_NCURSES
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_sh && !BR2_sh64
- 	help
- 	    Build the full gdb debugger to run on the target.
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 58f0262..0852b04 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -101,8 +101,8 @@ installed, etc.
+ Depending on the package type, the +.mk+ file must be written in a
+ different way, using different infrastructures:
+ 
+-* *Makefiles for generic packages* (not using autotools): These are
+-  based on an infrastructure similar to the one used for
++* *Makefiles for generic packages* (not using autotools or CMake):
++  These are based on an infrastructure similar to the one used for
+   autotools-based packages, but requires a little more work from the
+   developer. They specify what should be done for the configuration,
+   compilation, installation and cleanup of the package. This
+@@ -119,6 +119,13 @@ different way, using different infrastructures:
+   system. We cover them through a xref:autotargets-tutorial[tutorial]
+   and xref:autotargets-reference[reference].
+ 
++* *Makefiles for cmake-based software*: We provide a dedicated
++   infrastructure for such packages, as CMake is a more and more
++   commonly used build system and has a standardized behaviour. This
++   infrastructure 'must' be used for new packages that rely on
++   CMake. We cover them through a xref:cmaketargets-tutorial[tutorial]
++   and xref:cmaketargets-reference[reference].
++
+ * *Hand-written Makefiles:* These are currently obsolete, and no new
+   manual Makefiles should be added. However, since there are still
+   many of them in the tree, we keep them documented in a
