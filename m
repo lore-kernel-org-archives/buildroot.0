@@ -1,18 +1,22 @@
-From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
-Date: Sun, 13 Nov 2011 22:50:32 +0100
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: update to 1.13.1
-Message-ID: <1321221032-12081-1-git-send-email-yann.morin.1998@anciens.enib.fr>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 13 Nov 2011 23:14:30 +0100
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: update to 1.13.1
+Message-ID: <20111113221441.949F78F314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=f1ec29eaec46d901ad32acf7bc6dec19f5bfe7e4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 crosstool-ng-1.13.1 contains a fix for the UBI breakage in
 the installed kernel headers.
 Refresh a patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  .../crosstool-ng-000-makefile-recursion.patch      |    2 +-
  package/crosstool-ng/crosstool-ng.mk               |    2 +-
@@ -41,5 +45,3 @@ index f676697..82c1fbe 100644
  CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
  CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
  CROSSTOOL_NG_INSTALL_STAGING   = NO
--- 
-1.7.2.5
