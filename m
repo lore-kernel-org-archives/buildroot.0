@@ -1,33 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 16:16:17 +0100
-Subject: [Buildroot] [git commit] file: install to staging as well
-Message-ID: <20111114153837.581A88F3AA@busybox.osuosl.org>
+Date: Mon, 14 Nov 2011 16:20:53 +0100
+Subject: [Buildroot] [git commit] linux: make vmlinux target available to
+	all architectures
+Message-ID: <20111114153838.00CE08F3AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a276ff90301ee82a4955fa15c8410fb2e3cf7ddd
+commit: http://git.buildroot.net/buildroot/commit/?id=73d757b714becaa64d3b5d389094369c39524150
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-file provides libmagic, which other packages might use - So install it
-into staging.
+The 'vmlinux' target in the linux build directory is a generic target. It may
+not be directly bootable for all architectures, but for projects where a custom
+bootloader is used, it can be of value.
 
+Previously, this target was only available for mips architectures. This patch
+removes this restriction.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/file/file.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ linux/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/file/file.mk b/package/file/file.mk
-index d9a533f..7536056 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -8,6 +8,7 @@ FILE_VERSION = 5.09
- FILE_SITE = ftp://ftp.astron.com/pub/file/
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
-+FILE_INSTALL_STAGING = YES
+diff --git a/linux/Config.in b/linux/Config.in
+index 67381dc..c304d86 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -146,7 +146,6 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
  
- define FILE_UNINSTALL_TARGET_CMDS
- 	$(MAKE) DESTDIR=$(TARGET_DIR) uninstall -C $(FILE_DIR)
+ config BR2_LINUX_KERNEL_VMLINUX
+ 	bool "vmlinux"
+-	depends on BR2_mips || BR2_mipsel || BR2_powerpc
+ 
+ config BR2_LINUX_KERNEL_VMLINUZ
+ 	bool "vmlinuz"
