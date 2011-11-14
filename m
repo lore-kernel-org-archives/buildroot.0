@@ -1,36 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 13:12:26 +0100
-Subject: [Buildroot] [git commit] libxcb: don't build doxygen
-	documentation
-In-Reply-To: <20111114120409.GB13389@sapphire.tkos.co.il> (Baruch Siach's
- message of "Mon, 14 Nov 2011 14:04:09 +0200")
-References: <20111114114010.05E838E1B9@busybox.osuosl.org>
- <20111114120409.GB13389@sapphire.tkos.co.il>
-Message-ID: <87hb26oqc5.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 14 Nov 2011 13:15:04 +0100
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: update stable kernel
+	version to 3.1.1
+In-Reply-To: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Mon, 14 Nov 2011 10:07:03 +0100")
+References: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87d3cuoq7r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Hi,
+ Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 
- >> +HOST_LIBXCB_CONF_OPT = --disable-build-docs
- >> 
- >> HOST_LIBXCB_DEPENDENCIES = \
- >> host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp \
- >> host-xlib_libXau host-python
- >> 
- >> +HOST_LIBXCB_CONF_OPT = --disable-build-docs
-
- Baruch> Do we really need this line twice?
-
-Argh, cutnpaste issue - The first was supposed to be for the target,
-naturally. Those two need to be specified explicitly.
-
-Will fix.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
