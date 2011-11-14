@@ -1,57 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 09:34:42 +0100
-Subject: [Buildroot] [git commit branch/next] coreutils: bump to version 8.14
-Message-ID: <20111114083550.889CD8F555@busybox.osuosl.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 14 Nov 2011 10:07:03 +0100
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: update stable kernel
+	version to 3.1.1
+Message-ID: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ddfb134399b295dbf3410be3ee4bb52d7b97e6ed
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- ...man.patch => coreutils-8.14-hostname-man.patch} |    0
- package/coreutils/coreutils.mk                     |    7 +++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/coreutils/coreutils-8.9-hostname-man.patch b/package/coreutils/coreutils-8.14-hostname-man.patch
-similarity index 100%
-rename from package/coreutils/coreutils-8.9-hostname-man.patch
-rename to package/coreutils/coreutils-8.14-hostname-man.patch
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 7ee37b1..eb88535 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -3,9 +3,10 @@
- # coreutils
- #
- #############################################################
--COREUTILS_VERSION = 8.9
--COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.gz
-+
-+COREUTILS_VERSION = 8.14
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
-+COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- 
- # If both coreutils and busybox are selected, make certain coreutils
- # wins the fight over who gets to have their utils actually installed.
-@@ -20,6 +21,7 @@ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostnam
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		ac_cv_func_chown_works=yes \
- 		ac_cv_func_euidaccess=no \
-+		ac_cv_func_fstatat=yes \
- 		ac_cv_func_getdelim=yes \
- 		ac_cv_func_getgroups=yes \
- 		ac_cv_func_getgroups_works=yes \
-@@ -41,6 +43,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		gl_cv_func_getcwd_null=yes \
- 		gl_cv_func_getcwd_path_max=yes \
- 		gl_cv_func_gettimeofday_clobber=no \
-+		gl_cv_func_fstatat_zero_flag=no \
- 		gl_cv_func_link_follows_symlink=no \
- 		gl_cv_func_re_compile_pattern_working=yes \
- 		gl_cv_func_svid_putenv=yes \
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 701a02d..7ac5dad 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -58,6 +58,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.8"		if BR2_KERNEL_HEADERS_3_0
+-	default "3.1"		if BR2_KERNEL_HEADERS_3_1
++	default "3.1.1"		if BR2_KERNEL_HEADERS_3_1
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.7.5.4
