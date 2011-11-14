@@ -1,58 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 09:25:25 +0100
-Subject: [Buildroot] [git commit branch/next] bison: bump to version 2.5
-Message-ID: <20111114083547.BD5C18F555@busybox.osuosl.org>
+Date: Mon, 14 Nov 2011 09:24:27 +0100
+Subject: [Buildroot] [git commit branch/next] lame: bump to version 3.99
+Message-ID: <20111114083546.D5C2F8F55A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28df108c9b446ec582530721636584fefe27b564
+commit: http://git.buildroot.net/buildroot/commit/?id=e88733af5746c723e6a3a3c5fd1974faa11fa38b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../bison/bison-2.4.3-uclibc-sched_param-def.patch |   19 -------------------
- package/bison/bison.mk                             |    2 +-
- 2 files changed, 1 insertions(+), 20 deletions(-)
+ package/multimedia/lame/lame-no-static.patch |   28 --------------------------
+ package/multimedia/lame/lame.mk              |    3 +-
+ 2 files changed, 2 insertions(+), 29 deletions(-)
 
-diff --git a/package/bison/bison-2.4.3-uclibc-sched_param-def.patch b/package/bison/bison-2.4.3-uclibc-sched_param-def.patch
+diff --git a/package/multimedia/lame/lame-no-static.patch b/package/multimedia/lame/lame-no-static.patch
 deleted file mode 100644
-index 50652d8..0000000
---- a/package/bison/bison-2.4.3-uclibc-sched_param-def.patch
+index f507f7f..0000000
+--- a/package/multimedia/lame/lame-no-static.patch
 +++ /dev/null
-@@ -1,19 +0,0 @@
--uclibc defines __GLIBC__ but it does not expose struct shed_param as much as glibc
--and is not needed too per standard. gnulib attempts to use it but we have to account
--for it because in this case uclibc does not behave like glibc.
+@@ -1,28 +0,0 @@
+-We don't want statically compiled binaries by force so nuke that.
 -
---Khem
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--http://bugs.gentoo.org/336484
--
----- m4-1.4.14/lib/spawn.in.h
--+++ m4-1.4.14/lib/spawn.in.h
--@@ -31,7 +31,7 @@
+-diff -Nura lame-3.98.4/frontend/Makefile.am lame-3.98.4.nostatic/frontend/Makefile.am
+---- lame-3.98.4/frontend/Makefile.am	2006-09-30 06:17:05.000000000 -0300
+-+++ lame-3.98.4.nostatic/frontend/Makefile.am	2011-02-10 13:46:05.512559590 -0300
+-@@ -52,7 +52,7 @@
+- endif
 - 
-- /* Get definitions of 'struct sched_param' and 'sigset_t'.
--    But avoid namespace pollution on glibc systems.  */
---#ifndef __GLIBC__
--+#if !defined __GLIBC__ || defined __UCLIBC__
-- # include <sched.h>
-- # include <signal.h>
-- #endif
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index d365e33..759592e 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
+- CFLAGS = @CFLAGS@ @GTK_CFLAGS@ @FRONTEND_CFLAGS@ @SNDFILE_CFLAGS@
+--LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
+-+LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
+- 
+- INCLUDES = -I$(top_srcdir)/libmp3lame -I$(top_srcdir)/include -I$(top_builddir)
+- 
+-diff -Nura lame-3.98.4/frontend/Makefile.in lame-3.98.4.nostatic/frontend/Makefile.in
+---- lame-3.98.4/frontend/Makefile.in	2008-06-25 09:17:51.000000000 -0300
+-+++ lame-3.98.4.nostatic/frontend/Makefile.in	2011-02-10 13:45:54.752559590 -0300
+-@@ -152,7 +152,7 @@
+- 	$(top_builddir)/libmp3lame/libmp3lame.la \
+- 	@FRONTEND_LDADD@
+- 
+--LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
+-+LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
+- LIBOBJS = @LIBOBJS@
+- LIBS = @LIBS@
+- LIBTOOL = @LIBTOOL@
+diff --git a/package/multimedia/lame/lame.mk b/package/multimedia/lame/lame.mk
+index 7609f2d..fbf0dda 100644
+--- a/package/multimedia/lame/lame.mk
++++ b/package/multimedia/lame/lame.mk
+@@ -4,11 +4,12 @@
  #
  #############################################################
  
--BISON_VERSION = 2.4.3
-+BISON_VERSION = 2.5
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
+-LAME_VERSION = 3.98.4
++LAME_VERSION = 3.99
+ LAME_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lame
+ LAME_DEPENDENCIES = host-pkg-config
+ LAME_INSTALL_STAGING = YES
+ LAME_CONF_ENV = GTK_CONFIG=/bin/false
++LAME_CONF_OPT = --enable-dynamic-frontends
  
- define BISON_DISABLE_EXAMPLES
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+ LAME_DEPENDENCIES += libsndfile
