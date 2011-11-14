@@ -1,50 +1,64 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 14 Nov 2011 10:07:04 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: update stable kernel version to 3.1.1
-In-Reply-To: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
-References: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1321261624-1835-2-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Nov 2011 10:16:49 +0100
+Subject: [Buildroot] [git commit] rrdtool: fix build when host has
+	libart/freetype development files
+Message-ID: <20111114092054.CE41B8F4D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=534c6a682e5d7785669ec22fd0d34878edb151fd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0082ca8..67381dc 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_1
- 
- config BR2_LINUX_KERNEL_3_1
--	bool "3.1"
-+	bool "3.1.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -58,7 +58,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "3.1"
-+	default "3.1.1"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.1" if BR2_LINUX_KERNEL_3_1
-+	default "3.1.1" if BR2_LINUX_KERNEL_3_1
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.7.5.4
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...2.30-configure-dont-hardcode-include-dirs.patch |   26 ++++++++++++++++++++
+ package/rrdtool/rrdtool.mk                         |    1 +
+ 2 files changed, 27 insertions(+), 0 deletions(-)
+
+diff --git a/package/rrdtool/rrdtool-1.2.30-configure-dont-hardcode-include-dirs.patch b/package/rrdtool/rrdtool-1.2.30-configure-dont-hardcode-include-dirs.patch
+new file mode 100644
+index 0000000..43b57a1
+--- /dev/null
++++ b/package/rrdtool/rrdtool-1.2.30-configure-dont-hardcode-include-dirs.patch
+@@ -0,0 +1,26 @@
++[PATCH] configure.ac: don't hardcode include files search paths
++
++Breaks cross compilation if host has libart/freetype.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ configure.ac |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++Index: rrdtool-1.2.30/configure.ac
++===================================================================
++--- rrdtool-1.2.30.orig/configure.ac
+++++ rrdtool-1.2.30/configure.ac
++@@ -524,10 +524,10 @@
++ 
++ CORE_LIBS="$LIBS"
++ 
++-EX_CHECK_ALL(art_lgpl_2, art_vpath_add_point,       libart_lgpl/libart.h,   libart-2.0,  2.3.17, ftp://ftp.gnome.org/pub/GNOME/sources/libart_lgpl/2.3/, /usr/include/libart-2.0)
+++EX_CHECK_ALL(art_lgpl_2, art_vpath_add_point,       libart_lgpl/libart.h,   libart-2.0,  2.3.17, ftp://ftp.gnome.org/pub/GNOME/sources/libart_lgpl/2.3/, "")
++ EX_CHECK_ALL(z,          zlibVersion,               zlib.h,                 zlib,        1.2.3,  http://www.gzip.org/zlib/, "")
++ EX_CHECK_ALL(png,        png_access_version_number, png.h,                  libpng,      1.2.10,  http://prdownloads.sourceforge.net/libpng/, "")
++-EX_CHECK_ALL(freetype,   FT_Init_FreeType,          ft2build.h,		    freetype2,   2.1.10,  http://prdownloads.sourceforge.net/freetype/, /usr/include/freetype2)
+++EX_CHECK_ALL(freetype,   FT_Init_FreeType,          ft2build.h,		    freetype2,   2.1.10,  http://prdownloads.sourceforge.net/freetype/, "")
++ 
++ if test "$EX_CHECK_ALL_ERR" = "YES"; then
++   AC_MSG_ERROR([Please fix the library issues listed above and try again.])
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 55aed9e..55bdd51 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -7,6 +7,7 @@
+ RRDTOOL_VERSION = 1.2.30
+ RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ RRDTOOL_DEPENDENCIES = host-pkg-config freetype libart libpng zlib
++RRDTOOL_AUTORECONF = YES
+ RRDTOOL_INSTALL_STAGING = YES
+ RRDTOOL_CONF_ENV = rd_cv_ieee_works=yes rd_cv_null_realloc=nope \
+ 			ac_cv_func_mmap_fixed_mapped=yes
