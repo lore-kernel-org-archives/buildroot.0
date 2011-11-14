@@ -1,8 +1,9 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 14 Nov 2011 10:07:03 +0100
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: update stable kernel
-	version to 3.1.1
-Message-ID: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
+Date: Mon, 14 Nov 2011 10:07:04 +0100
+Subject: [Buildroot] [PATCH 2/2] linux: update stable kernel version to 3.1.1
+In-Reply-To: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
+References: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1321261624-1835-2-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,20 +12,39 @@ To: buildroot@busybox.net
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ linux/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 701a02d..7ac5dad 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -58,6 +58,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.8"		if BR2_KERNEL_HEADERS_3_0
--	default "3.1"		if BR2_KERNEL_HEADERS_3_1
-+	default "3.1.1"		if BR2_KERNEL_HEADERS_3_1
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/linux/Config.in b/linux/Config.in
+index 0082ca8..67381dc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_1
+ 
+ config BR2_LINUX_KERNEL_3_1
+-	bool "3.1"
++	bool "3.1.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -58,7 +58,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "3.1"
++	default "3.1.1"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.1" if BR2_LINUX_KERNEL_3_1
++	default "3.1.1" if BR2_LINUX_KERNEL_3_1
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 1.7.5.4
