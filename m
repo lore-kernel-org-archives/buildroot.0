@@ -1,58 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 16:17:14 +0100
-Subject: [Buildroot] [git commit] rpm: use external (BR versions) of file
-	and pcre
-Message-ID: <20111114153837.B04B58F3AA@busybox.osuosl.org>
+Date: Mon, 14 Nov 2011 22:14:53 +0100
+Subject: [Buildroot] [git commit] mplayer: fix build on i386
+Message-ID: <20111114212022.E56488F4E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=03d9092659216bd02b7447b55c8e4a105b6ba89e
+commit: http://git.buildroot.net/buildroot/commit/?id=fd38100e1189d19cad87a64c52df2c773eb47e40
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Saves space in rootfs, and fixes build issues (internal pcre needs
-C++ support for unit test, internal file breaks with incompatible
-file versions on host).
+Mplayer needs to be built with -fomit-frame-pointer on x86, otherwise
+gcc errors out on the inline asm with too few registers.
+
+Also disable yasm support, both because this mplayer revision forgets
+to build the gpl'ed asm snippets (fixed in r32736), breaking the build
+- And also to ensure the build is reproducable and doesn't use host
+components behind the users' back (E.G. if yasm is available on host).
+
+Once we have added yasm as a package, this can get removed again (and
+mplayer svn rev bumped) for the performance boost it gives.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rpm/rpm.mk |   18 ++++++++++++++++--
- 1 files changed, 16 insertions(+), 2 deletions(-)
+ package/multimedia/mplayer/mplayer.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 3407f49..4d8fe21 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -10,14 +10,28 @@ RPM_AUTORECONF = NO
- RPM_DEPENDENCIES = zlib beecrypt neon popt
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 776cc68..2ac5e16 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -108,6 +108,12 @@ ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
+ MPLAYER_CONF_OPTS += --enable-neon
+ endif
  
- RPM_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/beecrypt -I$(STAGING_DIR)/usr/include/neon -DHAVE_MUTEX_THREAD_ONLY" \
--		ac_cv_va_copy=yes 
-+		ac_cv_va_copy=yes
- 
- RPM_CONF_OPT = --disable-build-versionscript --disable-rpath \
- 	--without-selinux \
- 	--without-python --without-perl \
- 	--with-zlib=$(STAGING_DIR) \
- 	--with-libbeecrypt=$(STAGING_DIR) \
--	--with-popt=$(STAGING_DIR) 
-+	--with-popt=$(STAGING_DIR)
-+
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+RPM_DEPENDENCIES += pcre
-+RPM_CONF_OPT += --with-pcre=external
-+else
-+RPM_CONF_OPT += --with-pcre=no
++ifeq ($(BR2_i386),y)
++# inline asm breaks with "can't find a register in class 'GENERAL_REGS'"
++# inless we free up ebp
++MPLAYER_CFLAGS += -fomit-frame-pointer
 +endif
 +
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+RPM_DEPENDENCIES += file
-+RPM_CONF_OPT += --with-file=external
-+else
-+RPM_CONF_OPT += --with-file=no
-+endif
- 
- ifeq ($(BR2_PACKAGE_RPM_XZ_PAYLOADS),y)
- RPM_CONF_OPT+=--with-xz
+ define MPLAYER_CONFIGURE_CMDS
+ 	(cd $(@D); rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
+@@ -122,6 +128,7 @@ define MPLAYER_CONFIGURE_CMDS
+ 		--charset=UTF-8 \
+ 		--extra-cflags="$(MPLAYER_CFLAGS)" \
+ 		--extra-ldflags="$(MPLAYER_LDFLAGS)" \
++		--yasm='' \
+ 		--enable-mad \
+ 		--enable-fbdev \
+ 		$(MPLAYER_CONF_OPTS) \
