@@ -1,40 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 16:20:53 +0100
-Subject: [Buildroot] [git commit] linux: make vmlinux target available to
-	all architectures
-Message-ID: <20111114153838.00CE08F3AA@busybox.osuosl.org>
+Date: Mon, 14 Nov 2011 16:17:14 +0100
+Subject: [Buildroot] [git commit] rpm: use external (BR versions) of file
+	and pcre
+Message-ID: <20111114153837.B04B58F3AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73d757b714becaa64d3b5d389094369c39524150
+commit: http://git.buildroot.net/buildroot/commit/?id=03d9092659216bd02b7447b55c8e4a105b6ba89e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The 'vmlinux' target in the linux build directory is a generic target. It may
-not be directly bootable for all architectures, but for projects where a custom
-bootloader is used, it can be of value.
+Saves space in rootfs, and fixes build issues (internal pcre needs
+C++ support for unit test, internal file breaks with incompatible
+file versions on host).
 
-Previously, this target was only available for mips architectures. This patch
-removes this restriction.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/rpm/rpm.mk |   18 ++++++++++++++++--
+ 1 files changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 67381dc..c304d86 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -146,7 +146,6 @@ config BR2_LINUX_KERNEL_VMLINUX_BIN
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 3407f49..4d8fe21 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -10,14 +10,28 @@ RPM_AUTORECONF = NO
+ RPM_DEPENDENCIES = zlib beecrypt neon popt
  
- config BR2_LINUX_KERNEL_VMLINUX
- 	bool "vmlinux"
--	depends on BR2_mips || BR2_mipsel || BR2_powerpc
+ RPM_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/beecrypt -I$(STAGING_DIR)/usr/include/neon -DHAVE_MUTEX_THREAD_ONLY" \
+-		ac_cv_va_copy=yes 
++		ac_cv_va_copy=yes
  
- config BR2_LINUX_KERNEL_VMLINUZ
- 	bool "vmlinuz"
+ RPM_CONF_OPT = --disable-build-versionscript --disable-rpath \
+ 	--without-selinux \
+ 	--without-python --without-perl \
+ 	--with-zlib=$(STAGING_DIR) \
+ 	--with-libbeecrypt=$(STAGING_DIR) \
+-	--with-popt=$(STAGING_DIR) 
++	--with-popt=$(STAGING_DIR)
++
++ifeq ($(BR2_PACKAGE_PCRE),y)
++RPM_DEPENDENCIES += pcre
++RPM_CONF_OPT += --with-pcre=external
++else
++RPM_CONF_OPT += --with-pcre=no
++endif
++
++ifeq ($(BR2_PACKAGE_FILE),y)
++RPM_DEPENDENCIES += file
++RPM_CONF_OPT += --with-file=external
++else
++RPM_CONF_OPT += --with-file=no
++endif
+ 
+ ifeq ($(BR2_PACKAGE_RPM_XZ_PAYLOADS),y)
+ RPM_CONF_OPT+=--with-xz
