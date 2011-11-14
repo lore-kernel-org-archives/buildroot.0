@@ -1,23 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 Nov 2011 13:15:12 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: update stable kernel version to
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 Nov 2011 13:13:25 +0100
+Subject: [Buildroot] [git commit] linux: update stable kernel version to
 	3.1.1
-In-Reply-To: <1321261624-1835-2-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Mon, 14 Nov 2011 10:07:04 +0100")
-References: <1321261624-1835-1-git-send-email-s.neumann@raumfeld.com>
- <1321261624-1835-2-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <878vnioq7j.fsf@macbook.be.48ers.dk>
+Message-ID: <20111114121532.CE2DD8F533@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0693e5c9c78d7126fa7fadcb990bf6ac8a1f3dff
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 0082ca8..67381dc 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_1
+ 
+ config BR2_LINUX_KERNEL_3_1
+-	bool "3.1"
++	bool "3.1.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -58,7 +58,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "3.1"
++	default "3.1.1"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.1" if BR2_LINUX_KERNEL_3_1
++	default "3.1.1" if BR2_LINUX_KERNEL_3_1
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
