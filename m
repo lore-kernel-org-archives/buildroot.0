@@ -1,34 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 13:11:29 +0100
-Subject: [Buildroot] [git commit] libxcb: really disable doxygen
-	documentation for target
-Message-ID: <20111114121234.2CCC78F55A@busybox.osuosl.org>
+Date: Mon, 14 Nov 2011 13:12:26 +0100
+Subject: [Buildroot] [git commit] libxcb: don't build doxygen
+	documentation
+In-Reply-To: <20111114120409.GB13389@sapphire.tkos.co.il> (Baruch Siach's
+ message of "Mon, 14 Nov 2011 14:04:09 +0200")
+References: <20111114114010.05E838E1B9@busybox.osuosl.org>
+ <20111114120409.GB13389@sapphire.tkos.co.il>
+Message-ID: <87hb26oqc5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0268d6ededb519929bda8fc019b57f4bb61f7868
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Thanks to Baruch Siach for noticing.
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/x11r7/libxcb/libxcb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ >> +HOST_LIBXCB_CONF_OPT = --disable-build-docs
+ >> 
+ >> HOST_LIBXCB_DEPENDENCIES = \
+ >> host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp \
+ >> host-xlib_libXau host-python
+ >> 
+ >> +HOST_LIBXCB_CONF_OPT = --disable-build-docs
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index cf01534..a68779d 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -15,7 +15,7 @@ LIBXCB_DEPENDENCIES = \
- LIBXCB_CONF_ENV = STAGING_DIR="$(STAGING_DIR)"
- LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
- 	XCBPROTO_XCBPYTHONDIR=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
--HOST_LIBXCB_CONF_OPT = --disable-build-docs
-+LIBXCB_CONF_OPT = --disable-build-docs
- 
- HOST_LIBXCB_DEPENDENCIES = \
- 	host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp \
+ Baruch> Do we really need this line twice?
+
+Argh, cutnpaste issue - The first was supposed to be for the target,
+naturally. Those two need to be specified explicitly.
+
+Will fix.
+
+-- 
+Bye, Peter Korsgaard
