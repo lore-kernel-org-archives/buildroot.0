@@ -1,54 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 Nov 2011 22:14:53 +0100
-Subject: [Buildroot] [git commit] mplayer: fix build on i386
-Message-ID: <20111114212022.E56488F4E7@busybox.osuosl.org>
+From: =?UTF-8?Q?Jaroslav_Jir=C3=A1sek?= <jirasek@sauron.cz>
+Date: Mon, 14 Nov 2011 23:29:46 +0100
+Subject: [Buildroot] compile under buildroot
+In-Reply-To: <CAAXf6LXQ3aVY2iEqfmD8E4AH-kiKJJXBFJa6Q9reYngSZ=_OjA@mail.gmail.com>
+References: <B4FA196829E44A5AB99055A1E2166936@ch3mikPC>
+ <CAAXf6LXQ3aVY2iEqfmD8E4AH-kiKJJXBFJa6Q9reYngSZ=_OjA@mail.gmail.com>
+Message-ID: <b8c0f5683123f8187c9dc946bc9800a6@sauron.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fd38100e1189d19cad87a64c52df2c773eb47e40
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Yes, I have enabled this options.
 
-Mplayer needs to be built with -fomit-frame-pointer on x86, otherwise
-gcc errors out on the inline asm with too few registers.
+ The file "stubs.h" is nowhere in buildroot, but
+ "/usr/lib/gcc/x86_64-unknown-linux-uclibc/4.3.6/include-fixed/features.h"
+ point to this. From googling, it seems that this file is part from 
+ glibc.
 
-Also disable yasm support, both because this mplayer revision forgets
-to build the gpl'ed asm snippets (fixed in r32736), breaking the build
-- And also to ensure the build is reproducable and doesn't use host
-components behind the users' back (E.G. if yasm is available on host).
+ Jarda
 
-Once we have added yasm as a package, this can get removed again (and
-mplayer svn rev bumped) for the performance boost it gives.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/mplayer/mplayer.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
-
-diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
-index 776cc68..2ac5e16 100644
---- a/package/multimedia/mplayer/mplayer.mk
-+++ b/package/multimedia/mplayer/mplayer.mk
-@@ -108,6 +108,12 @@ ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
- MPLAYER_CONF_OPTS += --enable-neon
- endif
- 
-+ifeq ($(BR2_i386),y)
-+# inline asm breaks with "can't find a register in class 'GENERAL_REGS'"
-+# inless we free up ebp
-+MPLAYER_CFLAGS += -fomit-frame-pointer
-+endif
-+
- define MPLAYER_CONFIGURE_CMDS
- 	(cd $(@D); rm -rf config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
-@@ -122,6 +128,7 @@ define MPLAYER_CONFIGURE_CMDS
- 		--charset=UTF-8 \
- 		--extra-cflags="$(MPLAYER_CFLAGS)" \
- 		--extra-ldflags="$(MPLAYER_LDFLAGS)" \
-+		--yasm='' \
- 		--enable-mad \
- 		--enable-fbdev \
- 		$(MPLAYER_CONF_OPTS) \
+ On Mon, 14 Nov 2011 08:30:50 +0100, Thomas De Schampheleire wrote:
+> Hi,
+>
+> 2011/11/13 Jaroslav Jir?sek <jirasek@sauron.cz>:
+>> Hi, I build buildroot with all development tools, under CentOS 6.
+>> Buildroot I unpack and chroot to this.
+>>
+>> Now I want compile something (for example busybox)
+>> All attemps ends with this error:
+>>
+>> In file included from /usr/include/sys/types.h:27,
+>> ???????????????? from scripts/basic/fixdep.c:105:
+>> 
+>> /usr/lib/gcc/x86_64-unknown-linux-uclibc/4.3.6/include-fixed/features.h:361:23:
+>> error: gnu/stubs.h: No such file or directory
+>
+> Just taking a stab at it, but did you enable BR2_HAVE_DEVFILES ? It's
+> under 'Build options, "development files in target filesystem".
+>
+>>
+>> How can I solve this?
+>>
+>> Thank you Jarda
+>
+> Best regards,
+> Thomas
