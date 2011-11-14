@@ -1,58 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 13 Nov 2011 19:27:58 -0300
-Subject: [Buildroot] [PATCH 10/10] coreutils: bump to version 8.14
-In-Reply-To: <1321223278-14388-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1321223278-14388-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1321223278-14388-10-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 14 Nov 2011 08:30:50 +0100
+Subject: [Buildroot] compile under buildroot
+In-Reply-To: <B4FA196829E44A5AB99055A1E2166936@ch3mikPC>
+References: <B4FA196829E44A5AB99055A1E2166936@ch3mikPC>
+Message-ID: <CAAXf6LXQ3aVY2iEqfmD8E4AH-kiKJJXBFJa6Q9reYngSZ=_OjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...man.patch => coreutils-8.14-hostname-man.patch} |    0
- package/coreutils/coreutils.mk                     |    7 +++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
- rename package/coreutils/{coreutils-8.9-hostname-man.patch => coreutils-8.14-hostname-man.patch} (100%)
+Hi,
 
-diff --git a/package/coreutils/coreutils-8.9-hostname-man.patch b/package/coreutils/coreutils-8.14-hostname-man.patch
-similarity index 100%
-rename from package/coreutils/coreutils-8.9-hostname-man.patch
-rename to package/coreutils/coreutils-8.14-hostname-man.patch
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 7ee37b1..eb88535 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -3,9 +3,10 @@
- # coreutils
- #
- #############################################################
--COREUTILS_VERSION = 8.9
--COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.gz
-+
-+COREUTILS_VERSION = 8.14
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
-+COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- 
- # If both coreutils and busybox are selected, make certain coreutils
- # wins the fight over who gets to have their utils actually installed.
-@@ -20,6 +21,7 @@ COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false hostnam
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		ac_cv_func_chown_works=yes \
- 		ac_cv_func_euidaccess=no \
-+		ac_cv_func_fstatat=yes \
- 		ac_cv_func_getdelim=yes \
- 		ac_cv_func_getgroups=yes \
- 		ac_cv_func_getgroups_works=yes \
-@@ -41,6 +43,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 		gl_cv_func_getcwd_null=yes \
- 		gl_cv_func_getcwd_path_max=yes \
- 		gl_cv_func_gettimeofday_clobber=no \
-+		gl_cv_func_fstatat_zero_flag=no \
- 		gl_cv_func_link_follows_symlink=no \
- 		gl_cv_func_re_compile_pattern_working=yes \
- 		gl_cv_func_svid_putenv=yes \
--- 
-1.7.3.4
+2011/11/13 Jaroslav Jir?sek <jirasek@sauron.cz>:
+> Hi, I build buildroot with all development tools, under CentOS 6.
+> Buildroot I unpack and chroot to this.
+>
+> Now I want compile something (for example busybox)
+> All attemps ends with this error:
+>
+> In file included from /usr/include/sys/types.h:27,
+> ???????????????? from scripts/basic/fixdep.c:105:
+> /usr/lib/gcc/x86_64-unknown-linux-uclibc/4.3.6/include-fixed/features.h:361:23:
+> error: gnu/stubs.h: No such file or directory
+
+Just taking a stab at it, but did you enable BR2_HAVE_DEVFILES ? It's
+under 'Build options, "development files in target filesystem".
+
+>
+> How can I solve this?
+>
+> Thank you Jarda
+
+Best regards,
+Thomas
