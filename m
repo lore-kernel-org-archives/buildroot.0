@@ -1,32 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 Nov 2011 09:45:11 +0100
-Subject: [Buildroot] RFC: package patching
-In-Reply-To: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
- (Thomas De Schampheleire's message of "Tue, 15 Nov 2011 09:33:38
- +0100")
-References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
-Message-ID: <87k471n59k.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 15 Nov 2011 11:55:39 +0100
+Subject: [Buildroot] 2011.11: manual improvements
+Message-ID: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
-
 Hi,
 
- Thomas> I think we should try and improve this.
+In 2011.11, the new asciidoc manual will be included.
 
- Thomas> A first approach could be to simply remove support for
- Thomas> foo-1.2.3-something.patch, and require version-specific patches to be
- Thomas> in a versioned subdirectory, package/foo/foo-1.2.3. For this, we
- Thomas> should remove line 02-04. In this case, common patches are applied
- Thomas> first, followed by versioned patches in subdirectories.
+There are a few points I'd like to mention regarding this:
 
-Yes, I know - We hit this with E.G. busybox in the past. I would go for
-the versioned-patches-in-subdir, as we (luckily) only support multiple
-versions for a limited number of packages.
+* The 2011.11-rc1 tarball does not contain a ready-made manual. A user
+that doesn't know buildroot and searches for the manual, will only
+find the manual sources in docs/manual. These are readable, but they
+are not intended for that purpose. I don't think we can expect users
+to first run 'make manual', and have asciidoc installed.
+Therefore I think we should provide a ready-made manual in the
+tarballs. It probably requires a rewrite of the 'release' target,
+because the current 'git archive' used there will not take along
+untracked files. One approach is to add the files to the tarball
+afterwards.
 
--- 
-Bye, Peter Korsgaard
+* I think it should become more clear that the contents of
+'docs/manual' are really the manual sources, not the finished manual.
+One way to do this would be to move them in a subdirectory 'sources'
+or rename 'manual' to 'manual-sources'.
+
+* Suppose a user does execute 'make manual', then it's unclear what
+the location of the manual is. I think we should print the location
+when executing the corresponding make targets, and provide a README or
+similar in docs/manual to explain this. I would actually like it if
+the manual were generated in docs/manual directly, instead of in
+'output'.
+
+Best regards,
+Thomas
