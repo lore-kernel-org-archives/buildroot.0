@@ -1,42 +1,36 @@
-From: Thireos, Mike <mthireos@vanteon.com>
-Date: Tue, 15 Nov 2011 13:10:14 -0500
-Subject: [Buildroot] How to add share/zoneinfo to my Linux target
-Message-ID: <C5029C549AA03148AF1B73C0F27DC86D021CED9B@mse2003.vanteonrdc.vanteon.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 Nov 2011 20:54:53 +0100
+Subject: [Buildroot] [git commit] clean-for-rebuild: also remove
+	images_installed stamp
+Message-ID: <20111115195517.793CA8F533@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear fellow Linux engineers:
+commit: http://git.buildroot.net/buildroot/commit/?id=d6fb91bf7ae609f9690e89c77902d0daf7687c3d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Without this, a linux-rebuild or bootloader-rebuild will not install
+the rebuilt image in the images directory.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.package.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index b5ef57b..bd9ceb5 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -603,6 +603,7 @@ endif
+ 			rm -f $$($(2)_TARGET_BUILD)
+ 			rm -f $$($(2)_TARGET_INSTALL_STAGING)
+ 			rm -f $$($(2)_TARGET_INSTALL_TARGET)
++			rm -f $$($(2)_TARGET_INSTALL_IMAGES)
+ 			rm -f $$($(2)_TARGET_INSTALL_HOST)
  
-
-We are using buildroot with linux  2.6.31 and glibc to build for our
-target platform. I see the zoneinfo directory in the staging folder, but
-I can't seem to find any configuration option to get it into my target
-file system. I also tried adding it to the skeleton folder with no luck.
-
- 
-
-Any help with this would be appreciated.
-
- 
-
-Thanks
-
- 
-
-Mike
-
- 
-
- 
-
- 
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111115/cd4e974e/attachment.html>
+ $(1)-rebuild:		$(1)-clean-for-rebuild all
