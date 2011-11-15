@@ -1,50 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2011 22:28:19 +0100
-Subject: [Buildroot] RFC: package patching
-In-Reply-To: <201111151914.38517.arnout@mind.be>
-References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
- <87k471n59k.fsf@macbook.be.48ers.dk>
- <201111151914.38517.arnout@mind.be>
-Message-ID: <20111115222819.4dd46e3b@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 Nov 2011 22:17:08 +0000
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <20111102160349.4afe5935@skate>
+References: <20111102160349.4afe5935@skate>
+Message-ID: <201111152217.08212.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 15 Nov 2011 19:14:38 +0000,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
-
-> > Yes, I know - We hit this with E.G. busybox in the past. I would go
-> > for the versioned-patches-in-subdir, as we (luckily) only support
-> > multiple versions for a limited number of packages.
+On Wednesday 02 November 2011 15:03:49 Thomas Petazzoni wrote:
+> On the feature that is often discussed on the Buildroot list, and
+> which was on the agenda for this meeting was the general topic of
+> "package management". To summarize, the idea would be to add some
+> tracking of which Buildroot package installs what files, with the
+> goals of :
 > 
->  While we're at it, I would also make it policy to not include the
-> version number in the patch, except for packages with multiple active
-> versions.  Now, when you're upgrading a package, you also have to do
-> a lot of renames of patches.
+>  * Being able to remove files installed by a package when this package
+>    gets unselected from the menuconfig ;
 
-I agree with both Thomas and Arnout. Thomas is right on the fact that
-we should clarify the patching logic in the package infrastructure, but
-this clarification should also come together with a clarification of
-the best practices for storing patches for packages.
+ I completely agree with the final conclusion that this is almost impossible to 
+achieve in a simple, consistent and reliable way.  Something that would help a 
+lot for that purpose, however, is to have a 'make clean-target' target.  This 
+would wipe $(TARGET_DIR) and remove all .stamp_target_installed files.  The 
+next build will re-copy the skeleton and reinstall all packages, which should 
+be sufficient and shouldn't take very long.  clean-staging would also be nice 
+but is probably a bit more difficult to implement because of the toolchain.
 
-As Arnout suggests, I think that most packages should just have patches
-whose filename do not contain the version. Only packages that support
-multiple versions would have subdirectories.
 
-At the same time, we should also probably generalize the usage of patch
-numbering, in order to have a clear order of the patches. I.e,
-something such as:
+>  * Ultimately, be able to generate binary packages (ipk or other
+>    format) that can be installed on the target without re-generating a
+>    new root filesystem image.
 
-	foobar-0001-something.patch
-	foobar-0002-somethingelse.patch
+ Now this, on the other hand, is still a useful addition.  At least, if it 
+doesn't make the build system much more complicated to add it (you probably 
+need at least a per-package staging dir).
 
-Regards,
 
-Thomas
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
