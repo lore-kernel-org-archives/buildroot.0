@@ -1,49 +1,78 @@
-From: =?UTF-8?Q?Jaroslav_Jir=C3=A1sek?= <jirasek@sauron.cz>
-Date: Mon, 14 Nov 2011 23:29:46 +0100
-Subject: [Buildroot] compile under buildroot
-In-Reply-To: <CAAXf6LXQ3aVY2iEqfmD8E4AH-kiKJJXBFJa6Q9reYngSZ=_OjA@mail.gmail.com>
-References: <B4FA196829E44A5AB99055A1E2166936@ch3mikPC>
- <CAAXf6LXQ3aVY2iEqfmD8E4AH-kiKJJXBFJa6Q9reYngSZ=_OjA@mail.gmail.com>
-Message-ID: <b8c0f5683123f8187c9dc946bc9800a6@sauron.cz>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 15 Nov 2011 09:33:38 +0100
+Subject: [Buildroot] RFC: package patching
+Message-ID: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Yes, I have enabled this options.
+Hi,
 
- The file "stubs.h" is nowhere in buildroot, but
- "/usr/lib/gcc/x86_64-unknown-linux-uclibc/4.3.6/include-fixed/features.h"
- point to this. From googling, it seems that this file is part from 
- glibc.
+The current automatic patching of packages based on files in
+package/foo is not very nice.
 
- Jarda
+01:        if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME); then \
+02:          if test "$(wildcard
+$($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER)*.patch*)"; then \
+03:            support/scripts/apply-patches.sh $(@D)
+$($(PKG)_DIR_PREFIX)/$(RAWNAME) $(NAMEVER)\*.patch
+$(NAMEVER)\*.patch.$(ARCH) || exit 1; \
+04:          else \
+05:            support/scripts/apply-patches.sh $(@D)
+$($(PKG)_DIR_PREFIX)/$(RAWNAME) $(RAWNAME)\*.patch
+$(RAWNAME)\*.patch.$(ARCH) || exit 1; \
+06:            if test -d $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER); then \
+07:              support/scripts/apply-patches.sh $(@D)
+$($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH)
+|| exit 1; \
+08:            fi; \
+09:          fi; \
+10:        fi; \
+11:        )
+
+The current principles are as follows (assume we are patching package
+foo with version 1.2.3):
+
+* if there are patches package/foo/foo-1.2.3-something.patch, apply
+those, and stop.
+* if there are no such files, apply any patch of the form
+package/foo/foo-something.patch, and
+* check whether there is a directory package/foo/foo-1.2.3, and apply
+all patches therein.
+
+Here are some problems with this approach:
+
+1. package/foo/foo-1.2.3.patch cannot co-exist with any other type of
+patch, like package/foo/foo-common-change.patch or
+package/foo/foo-1.2.3/something.patch. Whenever the first type exists,
+none of the others will be applied.
+
+2. it is not possible to hold a patch for a previous version while
+there is no patch at all for the current version, unless you move it
+to a foo-xyz subdirectory. If you have
+package/foo/foo-1.2.2-backport.patch while the current version is
+1.2.3 but has no specific patches, then the if on line 02 above will
+be false, and line 05 will apply any patch that starts with 'foo' and
+ends with '.patch', including foo-1.2.2-backport.patch, which it
+shouldn't.
 
 
- On Mon, 14 Nov 2011 08:30:50 +0100, Thomas De Schampheleire wrote:
-> Hi,
->
-> 2011/11/13 Jaroslav Jir?sek <jirasek@sauron.cz>:
->> Hi, I build buildroot with all development tools, under CentOS 6.
->> Buildroot I unpack and chroot to this.
->>
->> Now I want compile something (for example busybox)
->> All attemps ends with this error:
->>
->> In file included from /usr/include/sys/types.h:27,
->> ???????????????? from scripts/basic/fixdep.c:105:
->> 
->> /usr/lib/gcc/x86_64-unknown-linux-uclibc/4.3.6/include-fixed/features.h:361:23:
->> error: gnu/stubs.h: No such file or directory
->
-> Just taking a stab at it, but did you enable BR2_HAVE_DEVFILES ? It's
-> under 'Build options, "development files in target filesystem".
->
->>
->> How can I solve this?
->>
->> Thank you Jarda
->
-> Best regards,
-> Thomas
+I think we should try and improve this.
+
+A first approach could be to simply remove support for
+foo-1.2.3-something.patch, and require version-specific patches to be
+in a versioned subdirectory, package/foo/foo-1.2.3. For this, we
+should remove line 02-04. In this case, common patches are applied
+first, followed by versioned patches in subdirectories.
+
+Alternatively, we can continue to support foo-1.2.3.patch, but we'll
+have to make sure that this form is not matched by line 05, to fix
+problem 2. Additionally, the mutual exclusivity of line 03 versus
+lines 05-07 should be removed.
+
+Comments are welcome.
+
+Best regards,
+Thomas
