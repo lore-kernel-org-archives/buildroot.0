@@ -1,33 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Nov 2011 19:07:02 +0100
-Subject: [Buildroot] [PATCH] clean-for-rebuild: also remove
- images_installed stamp
-In-Reply-To: <1321378277-5625-1-git-send-email-arnout@mind.be>
-References: <1321378277-5625-1-git-send-email-arnout@mind.be>
-Message-ID: <20111115190702.6b9a2ddc@skate>
+From: Thireos, Mike <mthireos@vanteon.com>
+Date: Tue, 15 Nov 2011 13:10:14 -0500
+Subject: [Buildroot] How to add share/zoneinfo to my Linux target
+Message-ID: <C5029C549AA03148AF1B73C0F27DC86D021CED9B@mse2003.vanteonrdc.vanteon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 15 Nov 2011 17:31:17 +0000,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+Dear fellow Linux engineers:
 
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> 
-> Without this, a linux-rebuild or bootloader-rebuild will not install
-> the rebuilt image in the images directory.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ 
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+We are using buildroot with linux  2.6.31 and glibc to build for our
+target platform. I see the zoneinfo directory in the staging folder, but
+I can't seem to find any configuration option to get it into my target
+file system. I also tried adding it to the skeleton folder with no luck.
 
-Should go into 2011.11.
+ 
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Any help with this would be appreciated.
+
+ 
+
+Thanks
+
+ 
+
+Mike
+
+ 
+
+ 
+
+ 
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111115/cd4e974e/attachment.html>
