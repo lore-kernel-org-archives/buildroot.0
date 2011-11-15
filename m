@@ -1,99 +1,67 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Nov 2011 23:22:18 +0000
-Subject: [Buildroot] [PATCH 2 of 5 RFC] dependencies: add function
-	suitable-host-package
-In-Reply-To: <59ff6675857a8c1c280b.1320911667@devws108>
-References: <patchbomb.1320911665@devws108>
- <59ff6675857a8c1c280b.1320911667@devws108>
-Message-ID: <201111152322.18743.arnout@mind.be>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Tue, 15 Nov 2011 17:28:40 -0600
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <201111152217.08212.arnout@mind.be>
+References: <20111102160349.4afe5935@skate> <201111152217.08212.arnout@mind.be>
+Message-ID: <201111151728.43325.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 10 November 2011 19:31:54 Thomas De Schampheleire wrote:
-> Sometimes, buildroot needs a certain host tool to do its job, e.g. tar. In
-> many cases, we expect this tool to be present on the host system, but this is
-> not always the case. Or maybe, the version on the host system is not
-> suitable, and we need a more recent one.
+On Tue November 15 2011, Arnout Vandecappelle wrote:
+> > ?* Ultimately, be able to generate binary packages (ipk or other
+> > ? ?format) that can be installed on the target without re-generating a
+> > ? ?new root filesystem image.
 > 
-> In some of these cases, instead of bailing out, buildroot could build the
-> package first (but only if the existing system package is not suitable).
-> 
-> To aid in detecting if a host package is suitable or not, this patch adds a
-> function suitable-host-package. When called with parameter foo, it will
-> execute check-host-foo.sh, or if absent, make function check-host-foo. These
-> should return either the path to the suitable host package, or the empty
-> string if no suitable package can be found.
-> The rules to determine whether something is suitable or not is left to the
-> check-host-foo(.sh) function and depends on foo.
-> 
-> An example usage of suitable-host-package is:
-> DEPENDENCIES_HOST_PREREQ += $(if $(call suitable-host-package,foo),,host-foo)
-> 
-> To avoid cluttering the existing dependencies.mk file, it includes any
-> check-host-foo.mk file. These files can be used to hold the appropriate
-> functions or definitions.
-
-While you're at it, perhaps move the toolchain/dependencies directory to 
-support/dependencies?  And also it can be included from the top-level
-Makefile instead of the toolchain makefiles.  Not that this is in any way
-related to this patch :-)
-
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-[ I just realized that I agree with Thomas DS's conclusion that we should 
-use Reviewed-by, not Acked-by... So my previous Acks should be Reviews.]
-
-> 
-> ---
->  toolchain/dependencies/dependencies.mk |  10 ++++++++++
->  1 files changed, 10 insertions(+), 0 deletions(-)
-> 
-> diff --git a/toolchain/dependencies/dependencies.mk b/toolchain/dependencies/dependencies.mk
-> --- a/toolchain/dependencies/dependencies.mk
-> +++ b/toolchain/dependencies/dependencies.mk
-> @@ -6,6 +6,16 @@
->  ######################################################################
->  
->  DEPENDENCIES_HOST_PREREQ:=
-> +
-> +# suitable-host-pkg: calls check-host-$(1).sh shell script if it exists,
-> +# otherwise calls check-host-$(1) make function. This script/function
-> +# should return the path to the suitable host tool, or nothing if no
-> +# suitable tool was found.
-> +define suitable-host-package
-> +$(if $(wildcard toolchain/dependencies/check-host-$(1).sh),$(shell toolchain/dependencies/check-host-$(1).sh),$(call check-host-$(1)))
-
- I would remove the possibility of having check-host-xxx as a function
-unless there is a use case for it.  It's fairly easy to add later, and this
-function becomes much more readable without it:
-+$(shell toolchain/dependencies/check-host-$(1).sh)
-
-> +endef
-> +include toolchain/dependencies/check-host-*.mk
-> +
->  ifeq ($(BR2_STRIP_sstrip),y)
->  DEPENDENCIES_HOST_PREREQ+=host-sstrip
->  endif
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> ?Now this, on the other hand, is still a useful addition. ?At least, if it 
+> doesn't make the build system much more complicated to add it (you probably 
+> need at least a per-package staging dir).
 > 
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111115/738a076b/attachment-0001.html>
+Or,
+A per-package filesystem layer.
+Better than a per-package directory because the layered filesystem
+would also 'capture' changes and deletions, not just additions.
+
+The filesystem I have in mind as I write this, is auFS.
+
+But,
+The auFS filesystem isn't in the main-stream kernel, and requiring
+a specially patched kernel (not all distros have an 'auFS' kernel)
+would be too restrictive for general Buildroot usage.
+
+And, the folks not running Buildroot on a Linux host would be
+really left out in the cold.  ;-)
+
+Hmm...
+Then again,
+It might be practical to support such an 'external' (user provided)
+system with the only changes to main-stream Buildroot being a pair
+of (normally empty) 'hooks' in the package install infrastructure.
+
+The user could then provide (perhaps based on a Buildroot 'contrib'
+tree submissions) the prolog and epilog functions/scripts needed.
+
+In this sort of 'package building' infrastructure;
+
+The 'PKG_INSTALL_INIT' hook ensures there is an empty/clean, R/W
+top layer of the filesystem.
+
+The 'PKG_INSTALL_FINAL' hook would examine the top layer (from
+outside of the total stack mount point) - -
+All of the newly added files will be __only__ on that clean layer;
+All of the changed files will have been copied up (which can be detected);
+All of the deleted files will have 'whiteouts' recorded in the layer.
+
+Currently, JRO (auFS author) is considering adding a 'move down'
+function to the file system, which would simplify going from the
+"final" state of the prior package to the "init" state of the next
+package somewhat simpler.
+
+This way, the people who are running an auFS enabled kernel could
+just set the 'hooks' to their extra packaging code;
+everyone else could just ignore the new hooks with minimal impact.
+
+Mike
