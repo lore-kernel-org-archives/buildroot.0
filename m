@@ -1,69 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 Nov 2011 23:52:54 +0000
-Subject: [Buildroot] [PATCH 5 of 5 RFC] dirs and dependencies should be
-	executed before every package
-In-Reply-To: <229371fcaeaf9f44e4e4.1320911670@devws108>
-References: <patchbomb.1320911665@devws108>
- <229371fcaeaf9f44e4e4.1320911670@devws108>
-Message-ID: <201111152352.54229.arnout@mind.be>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Wed, 16 Nov 2011 09:18:42 +0300
+Subject: [Buildroot] RFC: package patching
+In-Reply-To: <20111115222819.4dd46e3b@skate>
+References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
+ <87k471n59k.fsf@macbook.be.48ers.dk>
+ <201111151914.38517.arnout@mind.be> <20111115222819.4dd46e3b@skate>
+Message-ID: <CAH3pVZO8niF8VmTW77pu72Jq0s6tRMkgZrFzWwo56a-ubesy-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 10 November 2011 19:32:02 Thomas De Schampheleire wrote:
-[snip]
-> To solve both problems, this patch changes the gentargets 'foo-source' target
-> to explicitly depend on 'dirs' and 'dependencies'. This way, every package
-> built with gentargets/autotargets/cmake will be built after dirs and
-> dependencies.
-> 
-> But, certain problems remain:
-> * When a dependency package is not using gentargets.
+Maybe it is worth to introduce a variable where patches to apply are
+mentioned (like in openembedded + bitbake)?
+PKGNAME_PATCHES = patch1 patch2 ...  - apply these patches
+PKGNAME_PATCHES =                           - do not apply patches
+<variable is not specified>                          - default
+buildroot behavior
 
- packets not using gentargets are deprecated.  AFAICS there are only 14 left:
-cups/cups.mk
-customize/customize.mk
-fis/fis.mk
-games/doom-wad/doom-wads.mk
-gettext/gettext.mk
-java/concierge/concierge.mk
-microperl/microperl.mk
-netkitbase/netkitbase.mk
-netkittelnet/netkittelnet.mk
-newt/newt.mk
-tinyhttpd/tinyhttpd.mk
-ttcp/ttcp.mk
-uemacs/uemacs.mk
-vpnc/vpnc.mk
-xfsprogs/xfsprogs.mk
+somewhere in GENTARGETS/AUTOTARGETS:
+PKGNAME_PATCHES ?= (shell find ...)
 
- The only worrysome one is gettext.
+but bitbake search pathes in different directories (current, directory
+with pkg name, dir with pkgname-version), so this is only a draft.
 
-> * In some cases, this patch introduces a circular make dependency, because e.g.
->   dependencies <-- host-tar
->   <any package>  <-- dirs dependencies
+Sergey Naumov.
 
- This is of course much more important.
-
- For dirs it certainly isn't a problem.
-
- For the dependencies, I'm actually thinking that a much better solution
-would be to add a dependencies step at the first build, that checks for all
-potentially needed host packages.  It creates a hostpackages.mk file that
-contains variable assignments for all potential dependencies.  Specifying
-a rule for hostpackages.mk in the top-level Makefile will make sure that it is
-generated if it doesn't exist.  This has the advantage that dependencies
-have to be checked only at the first build and not every single time.  But
-it is a lot more work to implement of course...
-
- Regards,
- Arnout
--- 
-Arnout Vandecappelle                               arnout@mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+2011/11/16, Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Tue, 15 Nov 2011 19:14:38 +0000,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>> > Yes, I know - We hit this with E.G. busybox in the past. I would go
+>> > for the versioned-patches-in-subdir, as we (luckily) only support
+>> > multiple versions for a limited number of packages.
+>>
+>>  While we're at it, I would also make it policy to not include the
+>> version number in the patch, except for packages with multiple active
+>> versions.  Now, when you're upgrading a package, you also have to do
+>> a lot of renames of patches.
+>
+> I agree with both Thomas and Arnout. Thomas is right on the fact that
+> we should clarify the patching logic in the package infrastructure, but
+> this clarification should also come together with a clarification of
+> the best practices for storing patches for packages.
+>
+> As Arnout suggests, I think that most packages should just have patches
+> whose filename do not contain the version. Only packages that support
+> multiple versions would have subdirectories.
+>
+> At the same time, we should also probably generalize the usage of patch
+> numbering, in order to have a clear order of the patches. I.e,
+> something such as:
+>
+> 	foobar-0001-something.patch
+> 	foobar-0002-somethingelse.patch
+>
+> Regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
