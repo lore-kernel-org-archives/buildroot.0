@@ -1,36 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 16 Nov 2011 22:53:33 +0100
-Subject: [Buildroot] [git commit] gst-plugins-bad: decklink plugin needs C++
-	support
-Message-ID: <20111116215357.20E468F58A@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 Nov 2011 05:57:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
+	`__GI___errno_location'
+In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
+References: <bug-4021-163@https.bugs.busybox.net/>
+Message-ID: <20111117055754.AE8538F554@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcde677598286b8fa39dce48112f1d209c40484e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=4021
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/gst-plugins-bad/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-diff --git a/package/multimedia/gst-plugins-bad/Config.in b/package/multimedia/gst-plugins-bad/Config.in
-index a8d01bc..e772930 100644
---- a/package/multimedia/gst-plugins-bad/Config.in
-+++ b/package/multimedia/gst-plugins-bad/Config.in
-@@ -55,8 +55,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS
- 	bool "debugutils"
- 
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DECKLINK
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	bool "decklink"
- 
-+comment "decklink requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DTMF
- 	bool "dtmf"
- 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-17 05:57:54 UTC ---
+Fixed by Gustavos in git (8c38a0a44), thanks
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
