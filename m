@@ -1,10 +1,10 @@
 From: Konrad Eisele <konrad@gaisler.com>
-Date: Thu, 17 Nov 2011 15:18:08 +0100
+Date: Thu, 17 Nov 2011 15:20:26 +0100
 Subject: [Buildroot] [PATCH 1/2] Add a configuration subtree and an
 	execution command to kconfig:
 In-Reply-To: <1321539489-19737-1-git-send-email-konrad@gaisler.com>
 References: <1321539489-19737-1-git-send-email-konrad@gaisler.com>
-Message-ID: <1321539489-19737-2-git-send-email-konrad@gaisler.com>
+Message-ID: <1321539626-19772-1-git-send-email-konrad@gaisler.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
