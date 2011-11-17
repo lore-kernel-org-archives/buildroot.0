@@ -1,307 +1,1094 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 17 Nov 2011 18:14:25 +0100
-Subject: [Buildroot] [git commit branch/next] Add Transmission package
-Message-ID: <20111117200507.0904B8F5CB@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 17 Nov 2011 21:09:03 +0100
+Subject: [Buildroot] [PATCH 1/2] Add a configuration subtree and an
+ execution command to kconfig:
+In-Reply-To: <1321539626-19772-1-git-send-email-konrad@gaisler.com>
+References: <1321539489-19737-1-git-send-email-konrad@gaisler.com>
+ <1321539626-19772-1-git-send-email-konrad@gaisler.com>
+Message-ID: <CAAXf6LXJLXQ1tm_zQTH=XaBLZBEnt0W3u14aYZJ0e0K0vZ5ohw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6e223241e1bb58a27eb890291f9f5c1fcc6a0818
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi,
 
-Initial work by marcus.osdoba at googlemail.com
+On Thu, Nov 17, 2011 at 3:20 PM, Konrad Eisele <konrad@gaisler.com> wrote:
+> New kconfig command "subsource":
+> subsource "<kconfig>" "<cwd>" "<.config>" "<title>" ?<internal_prefix> <.config_prefix>
+> Allocates <kconfig> as a configuration subtree using <.config> as the configuration
+> file to save and load from. <cwd> is the directory path to switch to for "source" to
+> work, "<title>" is the Menu tile of the subtree, <internal_prefix> is a internal prefix,
+> and <.config_prefix> is the prefix to append/remove when saving/loading <.config>.
+>
+> New kconfig config-type "execute":
+> Type "execute" is similar to "string". However instead of editing, the string is executed
+> using call to "system(<string>)" i.e.:
+> config EXECUTE_BUILD
+> ? ? ? ?execute "title"
+> ? ? ? ?default "make CFLAGS=\"\" build"
+> ? ? ? ?help
+> ? ? ? ? ?Execute "make build"
+>
+> An utility function
+> char *resolve_vars(const char *n, struct conf_level *l)
+> has been added in util.c that takes a string and replaces $(...) parts
+> with a symbol value i.e.:
+>
+> config TARGET
+> ? ? ? ?string "Specify target"
+> ? ? ? ?default "all"
+> ? ? ? ? ? ? ? ?help
+>
+> config EXECUTE_BUILD
+> ? ? ? ?execute "title"
+> ? ? ? ?default "make CFLAGS=\"\" $(TARGET)"
+> ? ? ? ?help
+> ? ? ? ? ?Execute "make"
+> ---
+> ?Makefile ? ? ? ? ? ? ? ? ? ?| ? ?2 +-
+> ?support/kconfig/conf.c ? ? ?| ? ?8 ++-
+> ?support/kconfig/confdata.c ?| ?103 ++++++++++++++++++++++++++++++++-----------
+> ?support/kconfig/expr.h ? ? ?| ? 15 ++++++-
+> ?support/kconfig/flatten.pl ?| ? 27 +++++++++++
+> ?support/kconfig/gconf.c ? ? | ? ?2 +
+> ?support/kconfig/lkc.h ? ? ? | ? ?1 +
+> ?support/kconfig/lkc_proto.h | ? ?5 ++
+> ?support/kconfig/mconf.c ? ? | ? ?1 +
+> ?support/kconfig/menu.c ? ? ?| ? ?5 +-
+> ?support/kconfig/qconf.cc ? ?| ? 24 ++++++++++
+> ?support/kconfig/qconf.h ? ? | ? ?1 +
+> ?support/kconfig/symbol.c ? ?| ? 54 ++++++++++++++++++++---
+> ?support/kconfig/util.c ? ? ?| ? 45 +++++++++++++++++++
+> ?support/kconfig/zconf.l ? ? | ? 50 ++++++++++++++++++++-
+> ?support/kconfig/zconf.y ? ? | ? 26 ++++++++++-
+> ?16 files changed, 326 insertions(+), 43 deletions(-)
+> ?create mode 100644 support/kconfig/flatten.pl
+>
 
-[Peter: add -daemon option, tweak Config.in]
-Signed-off-by: Maxime Ripard <maxime@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                    |    1 +
- package/transmission/Config.in       |   39 ++++++++
- package/transmission/S92transmission |  161 ++++++++++++++++++++++++++++++++++
- package/transmission/transmission.mk |   52 +++++++++++
- 4 files changed, 253 insertions(+), 0 deletions(-)
+I'm unfamiliar with the internals of kconfig, so I can't really
+comment on the contents of the patch.
+However, I think you should split up your patch in more pieces. For
+example, the addition of the new execute type is independent from the
+subsource command, and could therefore be in a separate patch. This
+makes it easier to understand and review your changes.
 
-diff --git a/package/Config.in b/package/Config.in
-index 4b5e5d8..cc26f20 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -475,6 +475,7 @@ source "package/thttpd/Config.in"
- source "package/tinyhttpd/Config.in"
- endif
- source "package/tn5250/Config.in"
-+source "package/transmission/Config.in"
- source "package/ttcp/Config.in"
- source "package/udpcast/Config.in"
- source "package/vpnc/Config.in"
-diff --git a/package/transmission/Config.in b/package/transmission/Config.in
-new file mode 100644
-index 0000000..5284446
---- /dev/null
-+++ b/package/transmission/Config.in
-@@ -0,0 +1,39 @@
-+config BR2_PACKAGE_TRANSMISSION
-+	bool "transmission"
-+	depends on BR2_INET_IPV6
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBEVENT
-+	help
-+	  Transmission is a cross-platform BitTorrent client.
-+
-+if BR2_PACKAGE_TRANSMISSION
-+
-+config BR2_PACKAGE_TRANSMISSION_UTP
-+	bool "Transmission uTP support"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Install support for uTorrent Transport Protocol
-+
-+comment "uTP requires a toolchain with C++ support"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+config BR2_PACKAGE_TRANSMISSION_CLI
-+	bool "transmission-cli"
-+	help
-+	  Install transmission command line interface.
-+
-+config BR2_PACKAGE_TRANSMISSION_DAEMON
-+	bool "transmission-daemon"
-+	help
-+	  Install transmission daemon.
-+
-+config BR2_PACKAGE_TRANSMISSION_REMOTE
-+	bool "transmission-remote"
-+	help
-+	  Install transmission remote management tool.
-+endif
-+
-+comment "Transmission requires a toolchain with IPv6 support"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-new file mode 100644
-index 0000000..f226154
---- /dev/null
-+++ b/package/transmission/S92transmission
-@@ -0,0 +1,161 @@
-+#!/bin/sh
-+
-+# Original Author: Lennart A. Jtte, based on Rob Howell's script
-+# Modified by Maarten Van Coile & others (on IRC)
-+
-+# Changes for buildroot:
-+# USERNAME points to 'default' in standard installation
-+# TODO: set logfile with --logfile option
-+
-+# Do NOT "set -e"
-+
-+#
-+# ----- CONFIGURATION -----
-+#
-+# For the default location Transmission uses, visit:
-+# http://trac.transmissionbt.com/wiki/ConfigFiles
-+# For a guide on how set the preferences, visit:
-+# http://trac.transmissionbt.com/wiki/EditConfigFiles
-+# For the available environement variables, visit:
-+# http://trac.transmissionbt.com/wiki/EnvironmentVariables
-+#
-+# The name of the user that should run Transmission.
-+# It's RECOMENDED to run Transmission in it's own user,
-+# by default, this is set to 'transmission'.
-+# For the sake of security you shouldn't set a password
-+# on this user
-+#USERNAME=transmission
-+USERNAME=default
-+
-+
-+
-+# ----- *ADVANCED* CONFIGURATION -----
-+# Only change these options if you know what you are doing!
-+#
-+# The folder where Transmission stores the config & web files.
-+# ONLY change this you have it at a non-default location
-+#TRANSMISSION_HOME="/var/config/transmission-daemon"
-+#TRANSMISSION_WEB_HOME="/usr/share/transmission/web"
-+#
-+# The arguments passed on to transmission-daemon.
-+# ONLY change this you need to, otherwise use the
-+# settings file as per above.
-+#TRANSMISSION_ARGS=""
-+
-+
-+# ----- END OF CONFIGURATION -----
-+#
-+# PATH should only include /usr/* if it runs after the mountnfs.sh script.
-+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-+DESC="bittorrent client"
-+NAME=transmission-daemon
-+DAEMON=$(which $NAME)
-+PIDFILE=/var/run/$NAME.pid
-+SCRIPTNAME=/etc/init.d/$NAME
-+
-+# Exit if the package is not installed
-+[ -x "$DAEMON" ] || exit 0
-+
-+# Read configuration variable file if it is present
-+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
-+
-+# Load the VERBOSE setting and other rcS variables
-+[ -f /etc/default/rcS ] && . /etc/default/rcS
-+
-+#
-+# Function that starts the daemon/service
-+#
-+
-+do_start()
-+{
-+    # Export the configuration/web directory, if set
-+    if [ -n "$TRANSMISSION_HOME" ]; then
-+          export TRANSMISSION_HOME
-+    fi
-+    if [ -n "$TRANSMISSION_WEB_HOME" ]; then
-+          export TRANSMISSION_WEB_HOME
-+    fi
-+
-+    # Return
-+    #   0 if daemon has been started
-+    #   1 if daemon was already running
-+    #   2 if daemon could not be started
-+    start-stop-daemon --chuid $USERNAME --start --pidfile $PIDFILE --make-pidfile \
-+            --exec $DAEMON --background --test -- -f $TRANSMISSION_ARGS > /dev/null \
-+            || return 1
-+    start-stop-daemon --chuid $USERNAME --start --pidfile $PIDFILE --make-pidfile \
-+            --exec $DAEMON --background -- -f $TRANSMISSION_ARGS \
-+            || return 2
-+}
-+
-+#
-+# Function that stops the daemon/service
-+#
-+do_stop()
-+{
-+        # Return
-+        #   0 if daemon has been stopped
-+        #   1 if daemon was already stopped
-+        #   2 if daemon could not be stopped
-+        #   other if a failure occurred
-+        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --name $NAME
-+        RETVAL="$?"
-+        [ "$RETVAL" = 2 ] && return 2
-+
-+        # Wait for children to finish too if this is a daemon that forks
-+        # and if the daemon is only ever run from this initscript.
-+        # If the above conditions are not satisfied then add some other code
-+        # that waits for the process to drop all resources that could be
-+        # needed by services started subsequently.  A last resort is to
-+        # sleep for some time.
-+
-+        start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
-+        [ "$?" = 2 ] && return 2
-+
-+        # Many daemons don't delete their pidfiles when they exit.
-+        rm -f $PIDFILE
-+
-+        return "$RETVAL"
-+}
-+
-+case "$1" in
-+  start)
-+        echo "Starting $DESC" "$NAME..."
-+        do_start
-+        case "$?" in
-+                0|1) echo "   Starting $DESC $NAME succeeded" ;;
-+                *)   echo "   Starting $DESC $NAME failed" ;;
-+        esac
-+        ;;
-+  stop)
-+        echo "Stopping $DESC $NAME..."
-+        do_stop
-+        case "$?" in
-+                0|1) echo "   Stopping $DESC $NAME succeeded" ;;
-+                *)   echo "   Stopping $DESC $NAME failed" ;;
-+        esac
-+        ;;
-+  restart|force-reload)
-+        #
-+        # If the "reload" option is implemented then remove the
-+        # 'force-reload' alias
-+        #
-+        echo "Restarting $DESC $NAME..."
-+        do_stop
-+        case "$?" in
-+          0|1)
-+                do_start
-+                case "$?" in
-+                    0|1) echo "   Restarting $DESC $NAME succeeded" ;;
-+                    *)   echo "   Restarting $DESC $NAME failed: couldn't start $NAME" ;;
-+                esac
-+                ;;
-+          *)
-+                echo "   Restarting $DESC $NAME failed: couldn't stop $NAME" ;;
-+        esac
-+        ;;
-+  *)
-+        echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
-+        exit 3
-+        ;;
-+esac
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-new file mode 100644
-index 0000000..db06692
---- /dev/null
-+++ b/package/transmission/transmission.mk
-@@ -0,0 +1,52 @@
-+#############################################################
-+#
-+# transmission
-+#
-+#############################################################
-+TRANSMISSION_VERSION = 2.33
-+TRANSMISSION_SITE = http://download.transmissionbt.com/files/
-+TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.bz2
-+TRANSMISSION_DEPENDENCIES = \
-+	host-pkg-config \
-+	libcurl \
-+	libevent \
-+	openssl \
-+	zlib
-+
-+TRANSMISSION_CONF_OPT = \
-+	--disable-gtk \
-+	--disable-libnotify \
-+	--enable-lightweight
-+
-+define TRANSMISSION_INIT_SCRIPT_INSTALL
-+	[ -f $(TARGET_DIR)/etc/init.d/S92transmission ] || \
-+		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
-+			$(TARGET_DIR)/etc/init.d/S92transmission
-+endef
-+
-+ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
-+	TRANSMISSION_CONF_OPT += --enable-utp
-+else
-+	TRANSMISSION_CONF_OPT += --disable-utp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TRANSMISSION_CLI),y)
-+	TRANSMISSION_CONF_OPT += --enable-cli
-+else
-+	TRANSMISSION_CONF_OPT += --disable-cli
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TRANSMISSION_DAEMON),y)
-+	TRANSMISSION_CONF_OPT += --enable-daemon
-+	TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_INIT_SCRIPT_INSTALL
-+else
-+	TRANSMISSION_CONF_OPT += --disable-daemon
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
-+	TRANSMISSION_CONF_OPT += --enable-remote
-+else
-+	TRANSMISSION_CONF_OPT += --disable-remote
-+endif
-+
-+$(eval $(call AUTOTARGETS))
+Some comments below though.
+
+
+> diff --git a/Makefile b/Makefile
+> index df2f859..50c5cf0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -523,7 +523,7 @@ COMMON_CONFIG_ENV = \
+>
+> ?xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
+> ? ? ? ?@mkdir -p $(BUILD_DIR)/buildroot-config
+> - ? ? ? @$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+> + ? ? ? @$(COMMON_CONFIG_ENV) $< -s $(CONFIG_CONFIG_IN)
+>
+> ?gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
+> ? ? ? ?@mkdir -p $(BUILD_DIR)/buildroot-config
+> diff --git a/support/kconfig/conf.c b/support/kconfig/conf.c
+> index 652e079..0dbe229 100644
+> --- a/support/kconfig/conf.c
+> +++ b/support/kconfig/conf.c
+> @@ -117,6 +117,7 @@ static int conf_askvalue(struct symbol *sym, const char *def)
+> ? ? ? ?switch (type) {
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?printf("%s\n", def);
+> ? ? ? ? ? ? ? ?return 1;
+> @@ -394,6 +395,7 @@ static void conf(struct menu *menu)
+> ? ? ? ?switch (sym->type) {
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?conf_string(menu);
+> ? ? ? ? ? ? ? ?break;
+> @@ -542,7 +544,7 @@ int main(int ac, char **av)
+> ? ? ? ?case randconfig:
+> ? ? ? ? ? ? ? ?name = getenv("KCONFIG_ALLCONFIG");
+> ? ? ? ? ? ? ? ?if (name && !stat(name, &tmpstat)) {
+> - ? ? ? ? ? ? ? ? ? ? ? conf_read_simple(name, S_DEF_USER);
+> + ? ? ? ? ? ? ? ? ? ? ? conf_read_simple_level(name, S_DEF_USER, 0);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> ? ? ? ? ? ? ? ?}
+> ? ? ? ? ? ? ? ?switch (input_mode) {
+> @@ -554,9 +556,9 @@ int main(int ac, char **av)
+> ? ? ? ? ? ? ? ?default: break;
+> ? ? ? ? ? ? ? ?}
+> ? ? ? ? ? ? ? ?if (!stat(name, &tmpstat))
+> - ? ? ? ? ? ? ? ? ? ? ? conf_read_simple(name, S_DEF_USER);
+> + ? ? ? ? ? ? ? ? ? ? ? conf_read_simple_level(name, S_DEF_USER, 0);
+> ? ? ? ? ? ? ? ?else if (!stat("all.config", &tmpstat))
+> - ? ? ? ? ? ? ? ? ? ? ? conf_read_simple("all.config", S_DEF_USER);
+> + ? ? ? ? ? ? ? ? ? ? ? conf_read_simple_level("all.config", S_DEF_USER, 0);
+> ? ? ? ? ? ? ? ?break;
+> ? ? ? ?default:
+> ? ? ? ? ? ? ? ?break;
+> diff --git a/support/kconfig/confdata.c b/support/kconfig/confdata.c
+> index c9f13ee..def8ec4 100644
+> --- a/support/kconfig/confdata.c
+> +++ b/support/kconfig/confdata.c
+> @@ -178,11 +178,11 @@ static int conf_set_sym_val(struct symbol *sym, int def, int def_flags, char *p)
+> ? ? ? ?return 0;
+> ?}
+>
+> -int conf_read_simple(const char *name, int def)
+> +int conf_read_simple_level(const char *name, int def, struct conf_level *l)
+> ?{
+> ? ? ? ?FILE *in = NULL;
+> ? ? ? ?char line[1024];
+> - ? ? ? char *p, *p2;
+> + ? ? ? char *p, *p2, *lp;
+> ? ? ? ?struct symbol *sym;
+> ? ? ? ?int i, def_flags;
+>
+> @@ -219,13 +219,14 @@ int conf_read_simple(const char *name, int def)
+> ? ? ? ? ? ? ? ?return 1;
+>
+> ?load:
+> +
+
+Extra whitespace without added value IMO.
+
+> ? ? ? ?conf_filename = name;
+> ? ? ? ?conf_lineno = 0;
+> ? ? ? ?conf_warnings = 0;
+> ? ? ? ?conf_unsaved = 0;
+>
+> ? ? ? ?def_flags = SYMBOL_DEF << def;
+> - ? ? ? for_all_symbols(i, sym) {
+> + ? ? ? for_all_symbols_level(i, sym, l) {
+> ? ? ? ? ? ? ? ?sym->flags |= SYMBOL_CHANGED;
+> ? ? ? ? ? ? ? ?sym->flags &= ~(def_flags|SYMBOL_VALID);
+> ? ? ? ? ? ? ? ?if (sym_is_choice(sym))
+> @@ -233,6 +234,7 @@ load:
+> ? ? ? ? ? ? ? ?switch (sym->type) {
+> ? ? ? ? ? ? ? ?case S_INT:
+> ? ? ? ? ? ? ? ?case S_HEX:
+> + ? ? ? ? ? ? ? case S_EXECUTE:
+> ? ? ? ? ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ? ? ? ? ?if (sym->def[def].val)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?free(sym->def[def].val);
+> @@ -246,7 +248,7 @@ load:
+> ? ? ? ? ? ? ? ?conf_lineno++;
+> ? ? ? ? ? ? ? ?sym = NULL;
+> ? ? ? ? ? ? ? ?if (line[0] == '#') {
+> - ? ? ? ? ? ? ? ? ? ? ? if (memcmp(line + 2, CONFIG_, strlen(CONFIG_)))
+> + ? ? ? ? ? ? ? ? ? ? ? if (memcmp(line + 2, l ? l->conf_prefix : CONFIG_, strlen(l ? l->conf_prefix : CONFIG_)))
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?continue;
+> ? ? ? ? ? ? ? ? ? ? ? ?p = strchr(line + 2, ' ');
+> ? ? ? ? ? ? ? ? ? ? ? ?if (!p)
+> @@ -254,14 +256,20 @@ load:
+> ? ? ? ? ? ? ? ? ? ? ? ?*p++ = 0;
+> ? ? ? ? ? ? ? ? ? ? ? ?if (strncmp(p, "is not set", 10))
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?continue;
+> + ? ? ? ? ? ? ? ? ? ? ? lp = line + 2;
+> + ? ? ? ? ? ? ? ? ? ? ? if (l
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? && l->conf_prefix
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? && strstr(lp, l->conf_prefix) == lp) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? lp += strlen(l->conf_prefix);
+> + ? ? ? ? ? ? ? ? ? ? ? }
+> ? ? ? ? ? ? ? ? ? ? ? ?if (def == S_DEF_USER) {
+> - ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_find(line + 2);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_find_level(lp, l);
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?if (!sym) {
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?sym_add_change_count(1);
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?goto setsym;
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?}
+> ? ? ? ? ? ? ? ? ? ? ? ?} else {
+> - ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_lookup(line + 2, 0);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_lookup_level(lp, 0, l);
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?if (sym->type == S_UNKNOWN)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?sym->type = S_BOOLEAN;
+> ? ? ? ? ? ? ? ? ? ? ? ?}
+> @@ -288,14 +296,20 @@ load:
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?if (*p2 == '\r')
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?*p2 = 0;
+> ? ? ? ? ? ? ? ? ? ? ? ?}
+> + ? ? ? ? ? ? ? ? ? ? ? lp = line;
+> + ? ? ? ? ? ? ? ? ? ? ? if (l
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? && l->conf_prefix
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? && strstr(lp, l->conf_prefix) == lp) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? lp += strlen(l->conf_prefix);
+> + ? ? ? ? ? ? ? ? ? ? ? }
+> ? ? ? ? ? ? ? ? ? ? ? ?if (def == S_DEF_USER) {
+> - ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_find(line);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_find_level(lp, l);
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?if (!sym) {
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?sym_add_change_count(1);
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?goto setsym;
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?}
+> ? ? ? ? ? ? ? ? ? ? ? ?} else {
+> - ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_lookup(line, 0);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym = sym_lookup_level(line, 0, l);
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?if (sym->type == S_UNKNOWN)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?sym->type = S_OTHER;
+> ? ? ? ? ? ? ? ? ? ? ? ?}
+> @@ -337,7 +351,7 @@ setsym:
+> ? ? ? ?return 0;
+> ?}
+>
+> -int conf_read(const char *name)
+> +int conf_read_level(const char *name, struct conf_level *l)
+> ?{
+> ? ? ? ?struct symbol *sym, *choice_sym;
+> ? ? ? ?struct property *prop;
+> @@ -346,10 +360,10 @@ int conf_read(const char *name)
+>
+> ? ? ? ?sym_set_change_count(0);
+>
+> - ? ? ? if (conf_read_simple(name, S_DEF_USER))
+> + ? ? ? if (conf_read_simple_level(name, S_DEF_USER, l))
+> ? ? ? ? ? ? ? ?return 1;
+>
+> - ? ? ? for_all_symbols(i, sym) {
+> + ? ? ? for_all_symbols_level(i, sym, l) {
+> ? ? ? ? ? ? ? ?sym_calc_value(sym);
+> ? ? ? ? ? ? ? ?if (sym_is_choice(sym) || (sym->flags & SYMBOL_AUTO))
+> ? ? ? ? ? ? ? ? ? ? ? ?goto sym_ok;
+> @@ -386,7 +400,7 @@ int conf_read(const char *name)
+> ? ? ? ? ? ? ? ?sym->flags &= flags | ~SYMBOL_DEF_USER;
+> ? ? ? ?}
+>
+> - ? ? ? for_all_symbols(i, sym) {
+> + ? ? ? for_all_symbols_level(i, sym, l) {
+> ? ? ? ? ? ? ? ?if (sym_has_value(sym) && !sym_is_choice_value(sym)) {
+> ? ? ? ? ? ? ? ? ? ? ? ?/* Reset values of generates values, so they'll appear
+> ? ? ? ? ? ? ? ? ? ? ? ? * as new, if they should become visible, but that
+> @@ -396,6 +410,7 @@ int conf_read(const char *name)
+> ? ? ? ? ? ? ? ? ? ? ? ?if (sym->visible == no && !conf_unsaved)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?sym->flags &= ~SYMBOL_DEF_USER;
+> ? ? ? ? ? ? ? ? ? ? ? ?switch (sym->type) {
+> + ? ? ? ? ? ? ? ? ? ? ? case S_EXECUTE:
+> ? ? ? ? ? ? ? ? ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ? ? ? ? ?case S_INT:
+> ? ? ? ? ? ? ? ? ? ? ? ?case S_HEX:
+> @@ -416,15 +431,32 @@ int conf_read(const char *name)
+> ? ? ? ?return 0;
+> ?}
+>
+> +int conf_read(const char *name) {
+> + ? ? ? int r = conf_read_level(name, 0);
+> + ? ? ? if (!r && !name) {
+> + ? ? ? ? ? ? ? struct conf_level *l = conf_levels;
+> + ? ? ? ? ? ? ? while (l) {
+> + ? ? ? ? ? ? ? ? ? ? ? char *n = resolve_vars(l->conf, l->parent);
+> + ? ? ? ? ? ? ? ? ? ? ? if (n) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? if (r = conf_read_level(n, l))
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? break;
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? free(n);
+> + ? ? ? ? ? ? ? ? ? ? ? }
+> + ? ? ? ? ? ? ? ? ? ? ? l = l->n;
+> + ? ? ? ? ? ? ? }
+> + ? ? ? }
+> + ? ? ? return r;
+> +}
+> +
+> ?/* Write a S_STRING */
+> -static void conf_write_string(bool headerfile, const char *name,
+> +static void conf_write_string(bool headerfile, const char *prefix, const char *name,
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? const char *str, FILE *out)
+> ?{
+> ? ? ? ?int l;
+> ? ? ? ?if (headerfile)
+> - ? ? ? ? ? ? ? fprintf(out, "#define %s \"", name);
+> + ? ? ? ? ? ? ? fprintf(out, "#define %s%s \"", prefix, name);
+> ? ? ? ?else
+> - ? ? ? ? ? ? ? fprintf(out, "%s=\"", name);
+> + ? ? ? ? ? ? ? fprintf(out, "%s%s=\"", prefix, name);
+>
+> ? ? ? ?while (1) {
+> ? ? ? ? ? ? ? ?l = strcspn(str, "\"\\");
+> @@ -439,6 +471,8 @@ static void conf_write_string(bool headerfile, const char *name,
+> ? ? ? ?fputs("\"\n", out);
+> ?}
+>
+> +#define CONFPREFIX(sym) ((sym && sym->level && sym->level->conf_prefix) ? sym->level->conf_prefix : "")
+> +
+> ?static void conf_write_symbol(struct symbol *sym, FILE *out, bool write_no)
+> ?{
+> ? ? ? ?const char *str;
+> @@ -449,24 +483,24 @@ static void conf_write_symbol(struct symbol *sym, FILE *out, bool write_no)
+> ? ? ? ? ? ? ? ?switch (sym_get_tristate_value(sym)) {
+> ? ? ? ? ? ? ? ?case no:
+> ? ? ? ? ? ? ? ? ? ? ? ?if (write_no)
+> - ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? fprintf(out, "# %s is not set\n",
+> - ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym->name);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? fprintf(out, "# %s%s is not set\n",
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? CONFPREFIX(sym), sym->name);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> ? ? ? ? ? ? ? ?case mod:
+> - ? ? ? ? ? ? ? ? ? ? ? fprintf(out, "%s=m\n", sym->name);
+> + ? ? ? ? ? ? ? ? ? ? ? fprintf(out, "%s%s=m\n", CONFPREFIX(sym), sym->name);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> ? ? ? ? ? ? ? ?case yes:
+> - ? ? ? ? ? ? ? ? ? ? ? fprintf(out, "%s=y\n", sym->name);
+> + ? ? ? ? ? ? ? ? ? ? ? fprintf(out, "%s%s=y\n", CONFPREFIX(sym), sym->name);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> ? ? ? ? ? ? ? ?}
+> ? ? ? ? ? ? ? ?break;
+> ? ? ? ?case S_STRING:
+> - ? ? ? ? ? ? ? conf_write_string(false, sym->name, sym_get_string_value(sym), out);
+> + ? ? ? ? ? ? ? conf_write_string(false, CONFPREFIX(sym), sym->name, sym_get_string_value(sym), out);
+> ? ? ? ? ? ? ? ?break;
+> ? ? ? ?case S_HEX:
+> ? ? ? ?case S_INT:
+> ? ? ? ? ? ? ? ?str = sym_get_string_value(sym);
+> - ? ? ? ? ? ? ? fprintf(out, "%s=%s\n", sym->name, str);
+> + ? ? ? ? ? ? ? fprintf(out, "%s%s=%s\n", CONFPREFIX(sym), sym->name, str);
+> ? ? ? ? ? ? ? ?break;
+> ? ? ? ?case S_OTHER:
+> ? ? ? ?case S_UNKNOWN:
+> @@ -551,7 +585,7 @@ next_menu:
+> ? ? ? ?return 0;
+> ?}
+>
+> -int conf_write(const char *name)
+> +int conf_write_level(const char *name, struct conf_level *l)
+> ?{
+> ? ? ? ?FILE *out;
+> ? ? ? ?struct symbol *sym;
+> @@ -621,7 +655,7 @@ int conf_write(const char *name)
+> ? ? ? ?while (menu) {
+> ? ? ? ? ? ? ? ?sym = menu->sym;
+> ? ? ? ? ? ? ? ?if (!sym) {
+> - ? ? ? ? ? ? ? ? ? ? ? if (!menu_is_visible(menu))
+> + ? ? ? ? ? ? ? ? ? ? ? if (!menu_is_visible(menu) || menu->level != l)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?goto next;
+> ? ? ? ? ? ? ? ? ? ? ? ?str = menu_get_prompt(menu);
+> ? ? ? ? ? ? ? ? ? ? ? ?fprintf(out, "\n"
+> @@ -634,7 +668,8 @@ int conf_write(const char *name)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?goto next;
+> ? ? ? ? ? ? ? ? ? ? ? ?sym->flags &= ~SYMBOL_WRITE;
+> ? ? ? ? ? ? ? ? ? ? ? ?/* Write config symbol to file */
+> - ? ? ? ? ? ? ? ? ? ? ? conf_write_symbol(sym, out, true);
+> + ? ? ? ? ? ? ? ? ? ? ? if (sym->level == l)
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? conf_write_symbol(sym, out, true);
+> ? ? ? ? ? ? ? ?}
+>
+> ?next:
+> @@ -668,6 +703,22 @@ next:
+> ? ? ? ?return 0;
+> ?}
+>
+> +int conf_write(const char *name) {
+> + ? ? ? int r = conf_write_level(name, 0);
+> + ? ? ? if (!r && !name) {
+> + ? ? ? ? ? ? ? struct conf_level *l = conf_levels;
+> + ? ? ? ? ? ? ? while (l) {
+> + ? ? ? ? ? ? ? ? ? ? ? char *n = resolve_vars(l->conf, l->parent);
+> + ? ? ? ? ? ? ? ? ? ? ? if (r = conf_write_level(n, l))
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? break;
+> + ? ? ? ? ? ? ? ? ? ? ? l = l->n;
+> + ? ? ? ? ? ? ? ? ? ? ? if (n)
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? free(n);
+> + ? ? ? ? ? ? ? }
+> + ? ? ? }
+> + ? ? ? return r;
+> +}
+> +
+> ?static int conf_split_config(void)
+> ?{
+> ? ? ? ?const char *name;
+> @@ -679,7 +730,7 @@ static int conf_split_config(void)
+> ? ? ? ?int res, i, fd;
+>
+> ? ? ? ?name = conf_get_autoconfig_name();
+> - ? ? ? conf_read_simple(name, S_DEF_AUTO);
+> + ? ? ? conf_read_simple_level(name, S_DEF_AUTO, 0);
+>
+> ? ? ? ?opwd = malloc(256);
+> ? ? ? ?_name = strdup(name);
+> @@ -889,7 +940,7 @@ int conf_write_autoconf(void)
+> ? ? ? ? ? ? ? ? ? ? ? ?}
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> ? ? ? ? ? ? ? ?case S_STRING:
+> - ? ? ? ? ? ? ? ? ? ? ? conf_write_string(true, sym->name, sym_get_string_value(sym), out_h);
+> + ? ? ? ? ? ? ? ? ? ? ? conf_write_string(true, CONFPREFIX(sym), sym->name, sym_get_string_value(sym), out_h);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> ? ? ? ? ? ? ? ?case S_HEX:
+> ? ? ? ? ? ? ? ? ? ? ? ?str = sym_get_string_value(sym);
+> diff --git a/support/kconfig/expr.h b/support/kconfig/expr.h
+> index 3d238db..286bb5e 100644
+> --- a/support/kconfig/expr.h
+> +++ b/support/kconfig/expr.h
+> @@ -15,6 +15,16 @@ extern "C" {
+> ?#include <stdbool.h>
+> ?#endif
+>
+> +struct conf_level {
+> + ? ? ? ?struct conf_level *n, *parent;
+> + ? ? ? ?char *sym_prefix;
+> + ? ? ? char *conf, *conf_prefix, *cwd;
+> + ? ? ? struct symbol *modules_sym;
+> +};
+
+I don't really like the fact that multiple fields are listed on one
+line here. IMO this makes it more difficult to see the contents of the
+structure.
+
+
+> +extern struct conf_level *conf_levels;
+> +extern struct conf_level *current_conf_level;
+> +extern int dosubsource;
+> +
+> ?struct file {
+> ? ? ? ?struct file *next;
+> ? ? ? ?struct file *parent;
+> @@ -62,7 +72,7 @@ struct symbol_value {
+> ?};
+>
+> ?enum symbol_type {
+> - ? ? ? S_UNKNOWN, S_BOOLEAN, S_TRISTATE, S_INT, S_HEX, S_STRING, S_OTHER
+> + ? ? ? S_UNKNOWN, S_BOOLEAN, S_TRISTATE, S_INT, S_HEX, S_STRING, S_EXECUTE, S_OTHER
+> ?};
+>
+> ?/* enum values are used as index to symbol.def[] */
+> @@ -77,6 +87,7 @@ enum {
+> ?struct symbol {
+> ? ? ? ?struct symbol *next;
+> ? ? ? ?char *name;
+> + ? ? ? struct conf_level *level;
+> ? ? ? ?enum symbol_type type;
+> ? ? ? ?struct symbol_value curr;
+> ? ? ? ?struct symbol_value def[S_DEF_COUNT];
+> @@ -88,6 +99,7 @@ struct symbol {
+> ?};
+>
+> ?#define for_all_symbols(i, sym) for (i = 0; i < SYMBOL_HASHSIZE; i++) for (sym = symbol_hash[i]; sym; sym = sym->next) if (sym->type != S_OTHER)
+> +#define for_all_symbols_level(i, sym, l) for (i = 0; i < SYMBOL_HASHSIZE; i++) for (sym = symbol_hash[i]; sym; sym = sym->next) if (sym->level == l && sym->type != S_OTHER)
+>
+> ?#define SYMBOL_CONST ? ? ?0x0001 ?/* symbol is const */
+> ?#define SYMBOL_CHECK ? ? ?0x0008 ?/* used during dependency checking */
+> @@ -171,6 +183,7 @@ struct menu {
+> ? ? ? ?struct file *file;
+> ? ? ? ?int lineno;
+> ? ? ? ?void *data;
+> + ? ? ? struct conf_level *level;
+> ?};
+>
+> ?#define MENU_CHANGED ? ? ? ? ? 0x0001
+> diff --git a/support/kconfig/flatten.pl b/support/kconfig/flatten.pl
+> new file mode 100644
+> index 0000000..1ae82e5
+> --- /dev/null
+> +++ b/support/kconfig/flatten.pl
+> @@ -0,0 +1,27 @@
+> +#!/usr/bin/perl
+> +
+> +flatten($ARGV[0]);
+> +
+> +sub readfile {
+> + ? ?my ($in) = @_;
+> + ? ?usage(\*STDOUT) if (length($in) == 0) ;
+> + ? ?open IN, "$in" or die "Reading \"$in\":".$!;
+> + ? ?local $/ = undef;
+> + ? ?$m = <IN>;
+> + ? ?close IN;
+> + ? ?return $m;
+> +}
+> +
+> +sub flatten {
+> + ? ?my ($f) = @_;
+> + ? ?foreach my $l (split("\n",readfile($f))) {
+> + ? ? ? if ($l =~ /^\s*source/) {
+> + ? ? ? ? ? print ("# -> $l\n");
+> + ? ? ? ? ? my $nf = substr($l,length($&));
+> + ? ? ? ? ? $nf =~ s/"//g;
+> + ? ? ? ? ? flatten($nf);
+> + ? ? ? } else {
+> + ? ? ? ? ? print ("$l\n");
+> + ? ? ? }
+> + ? ?}
+> +}
+> diff --git a/support/kconfig/gconf.c b/support/kconfig/gconf.c
+> index f9daf98..409977b 100644
+> --- a/support/kconfig/gconf.c
+> +++ b/support/kconfig/gconf.c
+> @@ -869,6 +869,7 @@ static void change_sym_value(struct menu *menu, gint col)
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> ? ? ? ?case S_STRING:
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?default:
+> ? ? ? ? ? ? ? ?break;
+> ? ? ? ?}
+> @@ -1205,6 +1206,7 @@ static gchar **fill_row(struct menu *menu)
+> ? ? ? ? ? ? ? ?break;
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?def = sym_get_string_value(sym);
+> ? ? ? ? ? ? ? ?row[COL_VALUE] = g_strdup(def);
+> diff --git a/support/kconfig/lkc.h b/support/kconfig/lkc.h
+> index e899066..f22dc87 100644
+> --- a/support/kconfig/lkc.h
+> +++ b/support/kconfig/lkc.h
+> @@ -78,6 +78,7 @@ void zconf_starthelp(void);
+> ?FILE *zconf_fopen(const char *name);
+> ?void zconf_initscan(const char *name);
+> ?void zconf_nextfile(const char *name);
+> +void zconf_nextconf(const char *name, char *subdir, char *subconf, char *title, char *subprefix, char *confprefix);
+> ?int zconf_lineno(void);
+> ?const char *zconf_curname(void);
+>
+> diff --git a/support/kconfig/lkc_proto.h b/support/kconfig/lkc_proto.h
+> index 17342fe..334fdfc 100644
+> --- a/support/kconfig/lkc_proto.h
+> +++ b/support/kconfig/lkc_proto.h
+> @@ -29,7 +29,9 @@ P(menu_get_ext_help,void,(struct menu *menu, struct gstr *help));
+> ?P(symbol_hash,struct symbol *,[SYMBOL_HASHSIZE]);
+>
+> ?P(sym_lookup,struct symbol *,(const char *name, int flags));
+> +P(sym_lookup_level,struct symbol *,(const char *name, int flags,struct conf_level *l));
+> ?P(sym_find,struct symbol *,(const char *name));
+> +P(sym_find_level,struct symbol *,(const char *name,struct conf_level *l));
+> ?P(sym_expand_string_value,const char *,(const char *in));
+> ?P(sym_re_search,struct symbol **,(const char *pattern));
+> ?P(sym_type_name,const char *,(enum symbol_type type));
+> @@ -51,3 +53,6 @@ P(prop_get_type_name,const char *,(enum prop_type type));
+> ?/* expr.c */
+> ?P(expr_compare_type,int,(enum expr_type t1, enum expr_type t2));
+> ?P(expr_print,void,(struct expr *e, void (*fn)(void *, struct symbol *, const char *), void *data, int prevtoken));
+> +
+> +/* util.c */
+> +P(resolve_vars,char*,(const char *n, struct conf_level *l));
+> diff --git a/support/kconfig/mconf.c b/support/kconfig/mconf.c
+> index 3ed8a25..5bd3c10 100644
+> --- a/support/kconfig/mconf.c
+> +++ b/support/kconfig/mconf.c
+> @@ -714,6 +714,7 @@ static void conf_string(struct menu *menu)
+> ? ? ? ? ? ? ? ?case S_HEX:
+> ? ? ? ? ? ? ? ? ? ? ? ?heading = _(inputbox_instructions_hex);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> + ? ? ? ? ? ? ? case S_EXECUTE:
+> ? ? ? ? ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ? ? ? ? ?heading = _(inputbox_instructions_string);
+> ? ? ? ? ? ? ? ? ? ? ? ?break;
+> diff --git a/support/kconfig/menu.c b/support/kconfig/menu.c
+> index d49f8b8..1629613 100644
+> --- a/support/kconfig/menu.c
+> +++ b/support/kconfig/menu.c
+> @@ -54,7 +54,8 @@ void menu_add_entry(struct symbol *sym)
+> ? ? ? ?menu->parent = current_menu;
+> ? ? ? ?menu->file = current_file;
+> ? ? ? ?menu->lineno = zconf_lineno();
+> -
+> + ? ? ? menu->level = current_conf_level;
+> +
+> ? ? ? ?*last_entry_ptr = menu;
+> ? ? ? ?last_entry_ptr = &menu->next;
+> ? ? ? ?current_entry = menu;
+> @@ -216,7 +217,7 @@ static void sym_check_prop(struct symbol *sym)
+> ? ? ? ?for (prop = sym->prop; prop; prop = prop->next) {
+> ? ? ? ? ? ? ? ?switch (prop->type) {
+> ? ? ? ? ? ? ? ?case P_DEFAULT:
+> - ? ? ? ? ? ? ? ? ? ? ? if ((sym->type == S_STRING || sym->type == S_INT || sym->type == S_HEX) &&
+> + ? ? ? ? ? ? ? ? ? ? ? if ((sym->type == S_STRING || sym->type == S_EXECUTE || sym->type == S_INT || sym->type == S_HEX) &&
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ?prop->expr->type != E_SYMBOL)
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?prop_warn(prop,
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?"default for config symbol '%s'"
+> diff --git a/support/kconfig/qconf.cc b/support/kconfig/qconf.cc
+> index 06dd2e3..2a74a24 100644
+> --- a/support/kconfig/qconf.cc
+> +++ b/support/kconfig/qconf.cc
+> @@ -296,6 +296,24 @@ ConfigLineEdit::ConfigLineEdit(ConfigView* parent)
+> ? ? ? ?connect(this, SIGNAL(lostFocus()), SLOT(hide()));
+> ?}
+>
+> +void ConfigLineEdit::execute(ConfigItem* i)
+> +{
+> + ? ? ? struct symbol *sym;
+> + ? ? ? item = i;
+> + ? ? ? sym = item->menu->sym;
+> + ? ? ? if (sym
+> + ? ? ? ? ? && sym_get_string_value(sym)
+> + ? ? ? ? ? && sym_get_type(sym) == S_EXECUTE) {
+> + ? ? ? ? ? ? ? const char *cmd = sym_get_string_value(sym);
+> + ? ? ? ? ? ? ? char *rcmd = resolve_vars(cmd, sym->level);
+> + ? ? ? ? ? ? ? conf_write(NULL);
+> + ? ? ? ? ? ? ? if (rcmd) {
+> + ? ? ? ? ? ? ? ? ? ? ? system(rcmd);
+> + ? ? ? ? ? ? ? ? ? ? ? free(rcmd);
+> + ? ? ? ? ? ? ? }
+> + ? ? ? }
+> +}
+> +
+> ?void ConfigLineEdit::show(ConfigItem* i)
+> ?{
+> ? ? ? ?item = i;
+> @@ -537,6 +555,9 @@ void ConfigList::changeValue(ConfigItem* item)
+> ? ? ? ? ? ? ? ?if (oldexpr != newexpr)
+> ? ? ? ? ? ? ? ? ? ? ? ?parent()->updateList(item);
+> ? ? ? ? ? ? ? ?break;
+> + ? ? ? case S_EXECUTE:
+> + ? ? ? ? ? ? ? parent()->lineEdit->execute(item);
+> + ? ? ? ? ? ? ? break;
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> ? ? ? ?case S_STRING:
+> @@ -1754,6 +1775,9 @@ int main(int ac, char** av)
+> ? ? ? ?configApp = new QApplication(ac, av);
+> ? ? ? ?if (ac > 1 && av[1][0] == '-') {
+> ? ? ? ? ? ? ? ?switch (av[1][1]) {
+> + ? ? ? ? ? ? ? case 's':
+> + ? ? ? ? ? ? ? ? ? ? ? dosubsource = 1;
+> + ? ? ? ? ? ? ? ? ? ? ? break;
+> ? ? ? ? ? ? ? ?case 'h':
+> ? ? ? ? ? ? ? ?case '?':
+> ? ? ? ? ? ? ? ? ? ? ? ?usage();
+> diff --git a/support/kconfig/qconf.h b/support/kconfig/qconf.h
+> index 91677d9..1537671 100644
+> --- a/support/kconfig/qconf.h
+> +++ b/support/kconfig/qconf.h
+> @@ -209,6 +209,7 @@ public:
+> ? ? ? ? ? ? ? ?return (ConfigView*)Parent::parent();
+> ? ? ? ?}
+> ? ? ? ?void show(ConfigItem *i);
+> + ? ? ? void execute(ConfigItem *i);
+> ? ? ? ?void keyPressEvent(QKeyEvent *e);
+>
+> ?public:
+> diff --git a/support/kconfig/symbol.c b/support/kconfig/symbol.c
+> index a796c95..9574e6e 100644
+> --- a/support/kconfig/symbol.c
+> +++ b/support/kconfig/symbol.c
+> @@ -33,6 +33,13 @@ struct symbol symbol_yes = {
+> ?struct symbol *sym_defconfig_list;
+> ?struct symbol *modules_sym;
+> ?tristate modules_val;
+> +struct symbol *modules_sym_level(struct symbol *sym) {
+> + ? ? ? if (sym->level) {
+> + ? ? ? ? ? ? ? return sym->level->modules_sym;
+> + ? ? ? } else {
+> + ? ? ? ? ? ? ? return modules_sym;
+> + ? ? ? }
+> +}
+>
+> ?struct expr *sym_env_list;
+>
+> @@ -85,6 +92,8 @@ const char *sym_type_name(enum symbol_type type)
+> ? ? ? ? ? ? ? ?return "integer";
+> ? ? ? ?case S_HEX:
+> ? ? ? ? ? ? ? ?return "hex";
+> + ? ? ? case S_EXECUTE:
+> + ? ? ? ? ? ? ? return "execute";
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?return "string";
+> ? ? ? ?case S_UNKNOWN:
+> @@ -301,6 +310,7 @@ void sym_calc_value(struct symbol *sym)
+> ? ? ? ?switch (sym->type) {
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?newval = symbol_empty.curr;
+> ? ? ? ? ? ? ? ?break;
+> @@ -367,6 +377,7 @@ void sym_calc_value(struct symbol *sym)
+> ? ? ? ? ? ? ? ?if (newval.tri == mod && sym_get_type(sym) == S_BOOLEAN)
+> ? ? ? ? ? ? ? ? ? ? ? ?newval.tri = yes;
+> ? ? ? ? ? ? ? ?break;
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ?case S_HEX:
+> ? ? ? ?case S_INT:
+> @@ -398,9 +409,9 @@ void sym_calc_value(struct symbol *sym)
+>
+> ? ? ? ?if (memcmp(&oldval, &sym->curr, sizeof(oldval))) {
+> ? ? ? ? ? ? ? ?sym_set_changed(sym);
+> - ? ? ? ? ? ? ? if (modules_sym == sym) {
+> + ? ? ? ? ? ? ? if (modules_sym_level(sym) == sym) {
+> ? ? ? ? ? ? ? ? ? ? ? ?sym_set_all_changed();
+> - ? ? ? ? ? ? ? ? ? ? ? modules_val = modules_sym->curr.tri;
+> + ? ? ? ? ? ? ? ? ? ? ? modules_val = modules_sym_level(sym)->curr.tri;
+> ? ? ? ? ? ? ? ?}
+> ? ? ? ?}
+>
+> @@ -424,6 +435,7 @@ void sym_calc_value(struct symbol *sym)
+> ?void sym_clear_all_valid(void)
+> ?{
+> ? ? ? ?struct symbol *sym;
+> + ? ? ? struct conf_level *l;
+> ? ? ? ?int i;
+>
+> ? ? ? ?for_all_symbols(i, sym)
+> @@ -431,6 +443,12 @@ void sym_clear_all_valid(void)
+> ? ? ? ?sym_add_change_count(1);
+> ? ? ? ?if (modules_sym)
+> ? ? ? ? ? ? ? ?sym_calc_value(modules_sym);
+> + ? ? ? l = conf_levels;
+> + ? ? ? while (l) {
+> + ? ? ? ? ? ? ? if (l->modules_sym)
+> + ? ? ? ? ? ? ? ? ? ? ? sym_calc_value(l->modules_sym);
+> + ? ? ? ? ? ? ? l = l->n;
+> + ? ? ? }
+> ?}
+>
+> ?void sym_set_changed(struct symbol *sym)
+> @@ -536,6 +554,7 @@ bool sym_string_valid(struct symbol *sym, const char *str)
+> ? ? ? ?signed char ch;
+>
+> ? ? ? ?switch (sym->type) {
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?return true;
+> ? ? ? ?case S_INT:
+> @@ -580,6 +599,7 @@ bool sym_string_within_range(struct symbol *sym, const char *str)
+> ? ? ? ?int val;
+>
+> ? ? ? ?switch (sym->type) {
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?return sym_string_valid(sym, str);
+> ? ? ? ?case S_INT:
+> @@ -680,7 +700,7 @@ const char *sym_get_string_default(struct symbol *sym)
+> ? ? ? ?tristate val;
+>
+> ? ? ? ?sym_calc_visibility(sym);
+> - ? ? ? sym_calc_value(modules_sym);
+> + ? ? ? sym_calc_value(modules_sym_level(sym));
+> ? ? ? ?val = symbol_no.curr.tri;
+> ? ? ? ?str = symbol_empty.curr.val;
+>
+> @@ -712,7 +732,7 @@ const char *sym_get_string_default(struct symbol *sym)
+>
+> ? ? ? ?/* transpose mod to yes if modules are not enabled */
+> ? ? ? ?if (val == mod)
+> - ? ? ? ? ? ? ? if (!sym_is_choice_value(sym) && modules_sym->curr.tri == no)
+> + ? ? ? ? ? ? ? if (!sym_is_choice_value(sym) && modules_sym_level(sym)->curr.tri == no)
+> ? ? ? ? ? ? ? ? ? ? ? ?val = yes;
+>
+> ? ? ? ?/* transpose mod to yes if type is bool */
+> @@ -730,6 +750,7 @@ const char *sym_get_string_default(struct symbol *sym)
+> ? ? ? ?case S_INT:
+> ? ? ? ?case S_HEX:
+> ? ? ? ? ? ? ? ?return str;
+> + ? ? ? case S_EXECUTE:
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?return str;
+> ? ? ? ?case S_OTHER:
+> @@ -793,7 +814,7 @@ struct symbol *sym_lookup(const char *name, int flags)
+> ? ? ? ? ? ? ? ?hash = strhash(name) % SYMBOL_HASHSIZE;
+>
+> ? ? ? ? ? ? ? ?for (symbol = symbol_hash[hash]; symbol; symbol = symbol->next) {
+> - ? ? ? ? ? ? ? ? ? ? ? if (symbol->name &&
+> + ? ? ? ? ? ? ? ? ? ? ? if (symbol->name && symbol->level == current_conf_level &&
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ?!strcmp(symbol->name, name) &&
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ?(flags ? symbol->flags & flags
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? : !(symbol->flags & (SYMBOL_CONST|SYMBOL_CHOICE))))
+> @@ -810,13 +831,23 @@ struct symbol *sym_lookup(const char *name, int flags)
+> ? ? ? ?symbol->name = new_name;
+> ? ? ? ?symbol->type = S_UNKNOWN;
+> ? ? ? ?symbol->flags |= flags;
+> -
+> + ? ? ? symbol->level = current_conf_level;
+> +
+
+Is this extra blank line really needed? The same in several other
+places in this patch...
+
+> ? ? ? ?symbol->next = symbol_hash[hash];
+> ? ? ? ?symbol_hash[hash] = symbol;
+>
+> ? ? ? ?return symbol;
+> ?}
+>
+> +struct symbol *sym_lookup_level(const char *name, int flags, struct conf_level *l)
+> +{
+> + ? ? ? struct conf_level *ol = current_conf_level; struct symbol *sym;
+
+I don't really like multiple declarations on one line. Why don't you
+put each declaration on a line of its own?
+
+> + ? ? ? current_conf_level = l;
+> + ? ? ? sym = sym_lookup(name, flags);
+> + ? ? ? current_conf_level = ol;
+> + ? ? ? return sym;
+> +}
+> +
+> ?struct symbol *sym_find(const char *name)
+> ?{
+> ? ? ? ?struct symbol *symbol = NULL;
+> @@ -836,6 +867,7 @@ struct symbol *sym_find(const char *name)
+>
+> ? ? ? ?for (symbol = symbol_hash[hash]; symbol; symbol = symbol->next) {
+> ? ? ? ? ? ? ? ?if (symbol->name &&
+> + ? ? ? ? ? ? ? ? ? symbol->level == current_conf_level &&
+> ? ? ? ? ? ? ? ? ? ?!strcmp(symbol->name, name) &&
+> ? ? ? ? ? ? ? ? ? ?!(symbol->flags & SYMBOL_CONST))
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?break;
+> @@ -893,6 +925,16 @@ const char *sym_expand_string_value(const char *in)
+> ? ? ? ?return res;
+> ?}
+>
+> +struct symbol *sym_find_level(const char *name, struct conf_level *l)
+> +{
+> + ? ? ? struct conf_level *ol = current_conf_level; struct symbol *sym;
+
+Idem: multiple declarations.
+
+> + ? ? ? current_conf_level = l;
+> + ? ? ? sym = sym_find(name);
+> + ? ? ? current_conf_level = ol;
+> + ? ? ? return sym;
+> +}
+> +
+> +
+> ?struct symbol **sym_re_search(const char *pattern)
+> ?{
+> ? ? ? ?struct symbol *sym, **sym_arr = NULL;
+> diff --git a/support/kconfig/util.c b/support/kconfig/util.c
+> index 8a5efaa..e0dc21d 100644
+> --- a/support/kconfig/util.c
+> +++ b/support/kconfig/util.c
+> @@ -263,3 +263,48 @@ const char *str_get(struct gstr *gs)
+> ? ? ? ?return gs->s;
+> ?}
+>
+> +#define APPEND_STR(r,a,l) if (l) {int rl=r?strlen(r):0; r = realloc(r,rl+l+1); memcpy(r+rl,a,l);r[rl+l] = 0;}
+
+I would suggest to put this on multiple lines, splitted with \
+Moreover, I think you should consider using a do {} while (0)
+statement here. See http://kernelnewbies.org/FAQ/DoWhile0
+
+
+> +
+> +char *resolve_vars(const char *n, struct conf_level *l) {
+> + ? ? ? char *r = 0, *var = 0; const char *val = 0; int nl = strlen(n); int i,j;
+
+This is a really long declaration list as well...
+
+> + ? ? ? struct symbol *sym;
+> + ? ? ? struct conf_level *o = current_conf_level;
+> + ? ? ? current_conf_level = l;
+> +
+> + ? ? ? for (i = 0, j = 0; i < nl; i++) {
+> + ? ? ? ? ? ? ? if (n[i] == '$' && n[i+1] == '(') {
+> + ? ? ? ? ? ? ? ? ? ? ? APPEND_STR(r,&n[j],i-j);
+> + ? ? ? ? ? ? ? ? ? ? ? for (i+=2, j = i; i < nl; i++) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? if (n[i] == ')') {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? break;
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? }
+> + ? ? ? ? ? ? ? ? ? ? ? }
+> + ? ? ? ? ? ? ? ? ? ? ? if (i < nl && i > j) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? var = malloc(i-j+1);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? memcpy(var, &n[j], i-j);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? var[i-j] = 0;
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? if ((sym = sym_lookup(var, 0))) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? if (sym_get_type(sym) == S_STRING) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? sym_calc_value(sym);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? val ?= sym_get_string_value(sym);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? if (val) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? APPEND_STR(r,val,strlen(val));
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? }
+> +
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? }
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? }
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? free(var);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? j=i+1;
+> + ? ? ? ? ? ? ? ? ? ? ? }
+> + ? ? ? ? ? ? ? }
+> + ? ? ? }
+> + ? ? ? APPEND_STR(r,&n[j],i-j);
+> + ? ? ? current_conf_level = o;
+> + ? ? ? return r;
+> +error_out:
+> + ? ? ? if (r)
+> + ? ? ? ? ? ? ? free(r);
+> + ? ? ? if (var)
+> + ? ? ? ? ? ? ? free(var);
+> + ? ? ? return 0;
+> +}
+> diff --git a/support/kconfig/zconf.l b/support/kconfig/zconf.l
+> index 3dbaec1..0f9d201 100644
+> --- a/support/kconfig/zconf.l
+> +++ b/support/kconfig/zconf.l
+> @@ -30,6 +30,7 @@ static int text_size, text_asize;
+> ?struct buffer {
+> ? ? ? ? struct buffer *parent;
+> ? ? ? ? YY_BUFFER_STATE state;
+> + ? ? ? ?struct conf_level *level;
+> ?};
+>
+> ?struct buffer *current_buf;
+> @@ -312,6 +313,7 @@ void zconf_nextfile(const char *name)
+> ? ? ? ?}
+> ? ? ? ?yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
+> ? ? ? ?buf->parent = current_buf;
+> + ? ? ? buf->level = current_conf_level;
+> ? ? ? ?current_buf = buf;
+>
+> ? ? ? ?if (file->flags & FILE_BUSY) {
+> @@ -331,6 +333,35 @@ void zconf_nextfile(const char *name)
+> ? ? ? ?current_file = file;
+> ?}
+>
+> +void zconf_nextconf(const char *name, char *subdir, char *subconf, char *title, char *subprefix, char *confprefix)
+> +{
+> + ? ? ? struct conf_level **lp, *l;
+> + ? ? ? l = malloc(sizeof(struct conf_level));
+> + ? ? ? memset(l,0,sizeof(*l));
+> + ? ? ? l->conf = subconf;
+> + ? ? ? l->sym_prefix = subprefix;
+> + ? ? ? l->conf_prefix = confprefix;
+> + ? ? ? l->parent = current_conf_level;
+> + ? ? ? for (lp = &conf_levels; *lp; lp = &(*lp)->n) ;
+> + ? ? ? *lp = l;
+> + ? ? ? current_conf_level = l;
+> +
+> + ? ? ? zconf_nextfile(name);
+> +
+> + ? ? ? /* allocate per conf module-sym */
+> + ? ? ? l->modules_sym = sym_lookup(NULL, 0);
+> + ? ? ? l->modules_sym->type = S_BOOLEAN;
+> + ? ? ? l->modules_sym->flags |= SYMBOL_AUTO;
+> + ? ? ? l->cwd = getcwd(0,0);
+> + ? ? ? chdir(subdir);
+> +
+> + ? ? ? /* open new menue */
+> + ? ? ? menu_add_entry(NULL);
+> + ? ? ? menu_add_prompt(P_MENU, title, NULL);
+> + ? ? ? menu_add_menu();
+> +
+> +}
+> +
+> ?static void zconf_endfile(void)
+> ?{
+> ? ? ? ?struct buffer *parent;
+> @@ -340,10 +371,27 @@ static void zconf_endfile(void)
+> ? ? ? ?current_file = current_file->parent;
+>
+> ? ? ? ?parent = current_buf->parent;
+> +
+> ? ? ? ?if (parent) {
+> - ? ? ? ? ? ? ? fclose(yyin);
+> + ? ? ? ? ? ? ? ?fclose(yyin);
+> ? ? ? ? ? ? ? ?yy_delete_buffer(YY_CURRENT_BUFFER);
+> ? ? ? ? ? ? ? ?yy_switch_to_buffer(parent->state);
+> +
+> + ? ? ? ? ? ? ? if (current_buf->level && (parent->level != current_buf->level)) {
+> + ? ? ? ? ? ? ? ? ? ? ? /* close menue */
+
+typo: menu
+
+> + ? ? ? ? ? ? ? ? ? ? ? menu_end_menu();
+> + ? ? ? ? ? ? ? ? ? ? ? /* restore cwd */
+> + ? ? ? ? ? ? ? ? ? ? ? chdir(current_buf->level->cwd);
+> +
+> + ? ? ? ? ? ? ? ? ? ? ? if (current_conf_level && !current_conf_level->modules_sym->prop) {
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? struct property *prop;
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? prop = prop_alloc(P_DEFAULT, current_conf_level->modules_sym);
+> + ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? prop->expr = expr_alloc_symbol(sym_lookup("MODULES", 0));
+> + ? ? ? ? ? ? ? ? ? ? ? }
+> +
+> + ? ? ? ? ? ? ? ? ? ? ? /* switch to previous conf */
+> + ? ? ? ? ? ? ? ? ? ? ? current_conf_level = parent->level;
+> + ? ? ? ? ? ? ? }
+> ? ? ? ?}
+> ? ? ? ?free(current_buf);
+> ? ? ? ?current_buf = parent;
+> diff --git a/support/kconfig/zconf.y b/support/kconfig/zconf.y
+> index 0717a32..de7c498 100644
+> --- a/support/kconfig/zconf.y
+> +++ b/support/kconfig/zconf.y
+> @@ -20,7 +20,8 @@
+> ?#define DEBUG_PARSE ? ?0x0002
+>
+> ?int cdebug = PRINTD;
+> -
+> +int dosubsource = 0;
+> +
+> ?extern int zconflex(void);
+> ?static void zconfprint(const char *err, ...);
+> ?static void zconf_error(const char *err, ...);
+> @@ -30,6 +31,8 @@ static bool zconf_endtoken(struct kconf_id *id, int starttoken, int endtoken);
+> ?struct symbol *symbol_hash[SYMBOL_HASHSIZE];
+>
+> ?static struct menu *current_menu, *current_entry;
+> +struct conf_level *current_conf_level = 0;
+> +struct conf_level *conf_levels = 0;
+>
+> ?#define YYDEBUG 0
+> ?#if YYDEBUG
+> @@ -52,6 +55,7 @@ static struct menu *current_menu, *current_entry;
+> ?%token <id>T_MENU
+> ?%token <id>T_ENDMENU
+> ?%token <id>T_SOURCE
+> +%token <id>T_SUBSOURCE
+> ?%token <id>T_CHOICE
+> ?%token <id>T_ENDCHOICE
+> ?%token <id>T_COMMENT
+> @@ -107,7 +111,7 @@ static struct menu *current_menu, *current_entry;
+> ?%%
+> ?input: nl start | start;
+>
+> -start: mainmenu_stmt stmt_list | stmt_list;
+> +start: stmt_list;
+>
+> ?stmt_list:
+> ? ? ? ? ?/* empty */
+> @@ -130,10 +134,12 @@ option_name:
+> ?common_stmt:
+> ? ? ? ? ?T_EOL
+> ? ? ? ?| if_stmt
+> + ? ? ? | mainmenu_stmt
+> ? ? ? ?| comment_stmt
+> ? ? ? ?| config_stmt
+> ? ? ? ?| menuconfig_stmt
+> ? ? ? ?| source_stmt
+> + ? ? ? | subsource_stmt
+> ?;
+>
+> ?option_error:
+> @@ -389,6 +395,15 @@ source_stmt: T_SOURCE prompt T_EOL
+> ? ? ? ?zconf_nextfile($2);
+> ?};
+>
+> +/* subsource $2:"sub-kconfig" $3:"sub-chdir" $4:"sub-.config" $5:"Title" $6:"subdomainprefix" $7:"confprefix" */
+> +subsource_stmt: T_SUBSOURCE prompt prompt prompt prompt T_WORD word_opt T_EOL
+> +{
+> + ? ? ? if (dosubsource) {
+> + ? ? ? ? ? ? ? printd(DEBUG_PARSE, "%s:%d:subsource %s\n", zconf_curname(), zconf_lineno(), $2);
+> + ? ? ? ? ? ? ? zconf_nextconf($2, $3, $4, $5, $6, $7);
+> + ? ? ? }
+> +}
+> +
+> ?/* comment entry */
+>
+> ?comment: T_COMMENT prompt T_EOL
+> @@ -522,8 +537,10 @@ void conf_parse(const char *name)
+>
+> ? ? ? ?menu_finalize(&rootmenu);
+> ? ? ? ?for_all_symbols(i, sym) {
+> - ? ? ? ? ? ? ? if (sym_check_deps(sym))
+> + ? ? ? ? ? ? ? if (sym_check_deps(sym)) {
+> + ? ? ? ? ? ? ? ? ? ? ? fprintf(stderr, "Cannot check dependencies for %s\n", sym->name ? sym->name : "<null>");
+> ? ? ? ? ? ? ? ? ? ? ? ?zconfnerrs++;
+> + ? ? ? ? ? ? ? }
+> ? ? ? ? }
+> ? ? ? ?if (zconfnerrs)
+> ? ? ? ? ? ? ? ?exit(1);
+> @@ -631,6 +648,9 @@ static void print_symbol(FILE *out, struct menu *menu)
+> ? ? ? ?case S_STRING:
+> ? ? ? ? ? ? ? ?fputs(" ?string\n", out);
+> ? ? ? ? ? ? ? ?break;
+> + ? ? ? case S_EXECUTE:
+> + ? ? ? ? ? ? ? fputs(" ?execute\n", out);
+> + ? ? ? ? ? ? ? break;
+> ? ? ? ?case S_INT:
+> ? ? ? ? ? ? ? ?fputs(" ?integer\n", out);
+> ? ? ? ? ? ? ? ?break;
+> --
+> 1.6.4.1
+>
+
+Best regards,
+Thomas
