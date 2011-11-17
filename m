@@ -1,60 +1,60 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 17 Nov 2011 14:05:47 +0100
-Subject: [Buildroot] RFC: package patching
-In-Reply-To: <20111116190306.6e9596a0@skate>
-References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
- <87k471n59k.fsf@macbook.be.48ers.dk>
- <201111151914.38517.arnout@mind.be> <20111115222819.4dd46e3b@skate>
- <CAAXf6LVgWfk4SeocyimX6qZXLjB5sBhj3i+igAOenBEF9v1t3Q@mail.gmail.com>
- <20111116190306.6e9596a0@skate>
-Message-ID: <CAAXf6LW_qTUwtbdC+QjYnUAd1w5gZ4H55-6+G1Gnt3NV-s4F5w@mail.gmail.com>
+Date: Thu, 17 Nov 2011 14:57:41 +0100
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <201111152217.08212.arnout@mind.be>
+References: <20111102160349.4afe5935@skate> <201111152217.08212.arnout@mind.be>
+Message-ID: <CAAXf6LUGj-F04ktNJC1r7-Uy1Ob6WgRqzAdFCk1rJvCk7HZaBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 16, 2011 at 7:03 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 16 Nov 2011 07:44:54 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> > As Arnout suggests, I think that most packages should just have
->> > patches whose filename do not contain the version. Only packages
->> > that support multiple versions would have subdirectories.
+On Tue, Nov 15, 2011 at 11:17 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Wednesday 02 November 2011 15:03:49 Thomas Petazzoni wrote:
+>> On the feature that is often discussed on the Buildroot list, and
+>> which was on the agenda for this meeting was the general topic of
+>> "package management". To summarize, the idea would be to add some
+>> tracking of which Buildroot package installs what files, with the
+>> goals of :
 >>
->> I'm not sure if this is so black-and-white. If a patch backports a
->> change from 1.2.3 to 1.2.2, then IMO the patch should really be named
->> 1.2.2, even if only 1.2.2 is present in Buildroot. If it is named
->> without version, then it will also be taken along when bumping the
->> package (and possibly but not necessarily cause a patch conflict).
->> Only in cases were the change made by the patch is generic and not
->> intended for a specific version, should we remove the version from the
->> patch name.
+>> ?* Being able to remove files installed by a package when this package
+>> ? ?gets unselected from the menuconfig ;
 >
-> A generic patch doesn't exist, a patch is *always* for a specific
-> version of a source tree. The fact that it might apply on multiple
-> versions of a given package is just pure luck. Therefore, I don't see
-> where the distinction between "generic patch" and a "version-specific"
-> patch is.
+> ?I completely agree with the final conclusion that this is almost impossible to
+> achieve in a simple, consistent and reliable way. ?Something that would help a
+> lot for that purpose, however, is to have a 'make clean-target' target. ?This
+> would wipe $(TARGET_DIR) and remove all .stamp_target_installed files. ?The
+> next build will re-copy the skeleton and reinstall all packages, which should
+> be sufficient and shouldn't take very long. ?clean-staging would also be nice
+> but is probably a bit more difficult to implement because of the toolchain.
 
-How does a version-bumper currently go about? How is he supposed to
-know whether a patch is still valid or not?
+Just for the record: I like this idea...
 
-Although you are right that there is no such thing as a generic patch,
-I still feel there is a conceptual difference between:
-* modifications intended for all versions of a package, for example
-modifications that we know will never go upstream because they are
-buildroot-specific, and
-* modifications which are intended for a specific version, for example
-a backport of a change that was already fixed in a later version.
-
-To remove our reliance on 'luck', I agree it may be best to add
-version numbers to either type of patch. If a package has multiple
-versions, the patch may simply be duplicated with separate version
-numbers.
-
-But, should we mark the difference between such patches in a different way?
-
-Best regards,
-Thomas
+>
+>
+>> ?* Ultimately, be able to generate binary packages (ipk or other
+>> ? ?format) that can be installed on the target without re-generating a
+>> ? ?new root filesystem image.
+>
+> ?Now this, on the other hand, is still a useful addition. ?At least, if it
+> doesn't make the build system much more complicated to add it (you probably
+> need at least a per-package staging dir).
+>
+>
+> ?Regards,
+> ?Arnout
+>
+>
+> --
+> Arnout Vandecappelle ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? arnout at mind be
+> Senior Embedded Software Architect ? ? ? ? ? ? ? ? +32-16-286540
+> Essensium/Mind ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium ? ? ? ? ? ? ? ?BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint: ?31BB CF53 8660 6F88 345D ?54CC A836 5879 20D7 CF43
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
