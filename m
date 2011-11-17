@@ -1,33 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Nov 2011 20:23:56 +0100
-Subject: [Buildroot] arm-unknown-linux-uclibcgnueabi-g++
-In-Reply-To: <004101cca55a$c8a68e20$0400a8c0@dspcgrnzks9p98> (Jeff Krasky's
- message of "Thu, 17 Nov 2011 12:57:40 -0600")
-References: <004101cca55a$c8a68e20$0400a8c0@dspcgrnzks9p98>
-Message-ID: <87sjlma6yb.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 17 Nov 2011 20:41:39 +0100
+Subject: [Buildroot] [PATCH 0 of 5 v2] Add find utility functions / exclude
+ files from strip / reduce python
+Message-ID: <patchbomb.1321557989@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jeff" == Jeff Krasky <jeff.krasky@dspcg.com> writes:
+This patch series adds a few utility functions to Makefile.package.in that
+help in composing find commands, and uses these functions to:
+* exclude user-configured files and directories from being stripped in
+ target-finalize, and
+* reduce a python installation to the bare minimum.
 
- Jeff> Hi,
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- Jeff> I am using buildroot-2011.05 and I am in need of a g++ compiler
- Jeff> in order to compile for the target board.  So I assume it would
- Jeff> be called arm-unknown-linux-uclibcgnueabi-g++. I notice it does
- Jeff> not include anything called
- Jeff> "arm-unknown-linux-uclibcgnueabi-g++". Does anyone know anything
- Jeff> about this? I ran 'make uclibc-menuconfig' to try and tell it to
- Jeff> build a g++ compiler but I didn't see that listed.  I do see
- Jeff> arm-unknown-linux-uclibcgnueabi-gcc though.
-
-You probably didn't enable C++ support. To enable it simply do:
-
-make menuconfig, enable 'Toolchain->Enable C++ support' option, save
-make clean; make
-
--- 
-Bye, Peter Korsgaard
+---
+ Config.in                   |  19 +++++++++++++++++++
+ Makefile                    |   9 +++++++--
+ package/Makefile.package.in |  11 +++++++++++
+ package/python/Config.in    |  26 ++++++++++++++++++++++----
+ package/python/python.mk    |  28 +++++++++++++++++++++++++++-
+ 5 files changed, 86 insertions(+), 7 deletions(-)
