@@ -1,39 +1,61 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 29 Nov 2011 21:02:29 +0100
-Subject: [Buildroot] [git commit branch/next] libroxml: bump version to 2.1.2
-Message-ID: <20111130232437.D1E9F8F71A@busybox.osuosl.org>
+Date: Thu, 17 Nov 2011 20:57:23 +0100
+Subject: [Buildroot] [git commit] transmission: add gtk support
+Message-ID: <20111201085835.F18068F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3c6b3853ef054efe3ab9800392aec7aa7656dd3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: http://git.buildroot.net/buildroot/commit/?id=2211f63e79d9bc3057e94179fba22284b6b635a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix some xpath bugs
-
-Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ....1-werror.patch => libroxml-2.1.2-werror.patch} |    0
- package/libroxml/libroxml.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+ package/transmission/Config.in       |    7 +++++++
+ package/transmission/transmission.mk |    8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
-diff --git a/package/libroxml/libroxml-2.1.1-werror.patch b/package/libroxml/libroxml-2.1.2-werror.patch
-similarity index 100%
-rename from package/libroxml/libroxml-2.1.1-werror.patch
-rename to package/libroxml/libroxml-2.1.2-werror.patch
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index f494348..5c0bf01 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
-@@ -2,7 +2,7 @@
- # libroxml
- #
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+index 5284446..3fcf017 100644
+--- a/package/transmission/Config.in
++++ b/package/transmission/Config.in
+@@ -33,6 +33,13 @@ config BR2_PACKAGE_TRANSMISSION_REMOTE
+ 	bool "transmission-remote"
+ 	help
+ 	  Install transmission remote management tool.
++
++config BR2_PACKAGE_TRANSMISSION_GTK
++	bool "transmission-gtk"
++	depends on BR2_PACKAGE_LIBGTK2
++	help
++	  Install transmission GTK-based GUI interface.
++
+ endif
  
--LIBROXML_VERSION = 2.1.1
-+LIBROXML_VERSION = 2.1.2
- LIBROXML_SITE = http://libroxml.googlecode.com/files
- LIBROXML_INSTALL_STAGING = YES
+ comment "Transmission requires a toolchain with IPv6 support"
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index db06692..c0d763b 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -14,7 +14,6 @@ TRANSMISSION_DEPENDENCIES = \
+ 	zlib
  
+ TRANSMISSION_CONF_OPT = \
+-	--disable-gtk \
+ 	--disable-libnotify \
+ 	--enable-lightweight
+ 
+@@ -49,4 +48,11 @@ else
+ 	TRANSMISSION_CONF_OPT += --disable-remote
+ endif
+ 
++ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
++	TRANSMISSION_CONF_OPT += --enable-gtk
++	TRANSMISSION_DEPENDENCIES += libgtk2
++else
++	TRANSMISSION_CONF_OPT += --disable-gtk
++endif
++
+ $(eval $(call AUTOTARGETS))
