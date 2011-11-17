@@ -1,93 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 17 Nov 2011 21:03:05 +0100
-Subject: [Buildroot] [PATCH] Add Transmission package
-In-Reply-To: <1318432931-13347-1-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Wed, 12 Oct 2011 17:22:11 +0200")
-References: <d6de2d00988b709d01b373cae8f326f889f67904.1317636624.git.maxime.ripard@free-electrons.com>
- <1318432931-13347-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <87k46ya552.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 17 Nov 2011 20:57:23 +0100
+Subject: [Buildroot] [git commit branch/next] transmission: add gtk support
+Message-ID: <20111117200507.6B6678F5CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2211f63e79d9bc3057e94179fba22284b6b635a8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Maxime> From: Maxime Ripard <maxime@free-electrons.com>
- Maxime> Initial work by marcus.osdoba at googlemail.com
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/transmission/Config.in       |    7 +++++++
+ package/transmission/transmission.mk |    8 +++++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
-Committed with minor comments (see below) to next, thanks.
-
- Maxime> +++ b/package/transmission/Config.in
- Maxime> @@ -0,0 +1,35 @@
- Maxime> +config BR2_PACKAGE_TRANSMISSION
- Maxime> +	bool "transmission"
- Maxime> +	depends on BR2_INET_IPV6
- Maxime> +	select BR2_PACKAGE_ZLIB
- Maxime> +	select BR2_PACKAGE_OPENSSL
- Maxime> +	select BR2_PACKAGE_LIBCURL
- Maxime> +	select BR2_PACKAGE_LIBEVENT
- Maxime> +	help
- Maxime> +	  Transmission is a cross-platform BitTorrent client.
- Maxime> +
- Maxime> +comment "Transmission requires a toolchain with IPv6 support"
- Maxime> +	depends on !BR2_INET_IPV6
- Maxime> +
-
-This comment should go to the end of the file, otherwise the sub options
-don't get indented under the main transmission option in menuconfig.
-
- Maxime> +++ b/package/transmission/transmission.mk
- Maxime> @@ -0,0 +1,47 @@
- Maxime> +#############################################################
- Maxime> +#
- Maxime> +# transmission
- Maxime> +#
- Maxime> +#############################################################
- Maxime> +TRANSMISSION_VERSION = 2.33
- Maxime> +TRANSMISSION_SITE = http://download.transmissionbt.com/files/
- Maxime> +TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.bz2
- Maxime> +TRANSMISSION_DEPENDENCIES = \
- Maxime> +	host-pkg-config \
- Maxime> +	libcurl \
- Maxime> +	libevent \
- Maxime> +	openssl \
- Maxime> +	zlib
- Maxime> +
- Maxime> +TRANSMISSION_CONF_OPT = \
- Maxime> +	--disable-gtk \
- Maxime> +	--disable-libnotify \
- Maxime> +	--enable-lightweight
- Maxime> +
- Maxime> +define TRANSMISSION_INIT_SCRIPT_INSTALL
- Maxime> +	[ -f $(TARGET_DIR)/etc/init.d/S92transmission ] || \
- Maxime> +		$(INSTALL) -m 0755 -D package/transmission/S92transmission \
- Maxime> +			$(TARGET_DIR)/etc/init.d/S92transmission
- Maxime> +endef
- Maxime> +
- Maxime> +ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
- Maxime> +	TRANSMISSION_CONF_OPT += --enable-utp
- Maxime> +else
- Maxime> +	TRANSMISSION_CONF_OPT += --disable-utp
- Maxime> +endif
- Maxime> +
- Maxime> +ifeq ($(BR2_PACKAGE_TRANSMISSION_CLI),y)
- Maxime> +	TRANSMISSION_CONF_OPT += --enable-cli
- Maxime> +else
- Maxime> +	TRANSMISSION_CONF_OPT += --disable-cli
- Maxime> +endif
- Maxime> +
- Maxime> +
- Maxime> +ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
- Maxime> +	TRANSMISSION_CONF_OPT += --enable-remote
- Maxime> +else
- Maxime> +	TRANSMISSION_CONF_OPT += --disable-remote
- Maxime> +	TRANSMISSION_POST_INSTALL_TARGET_HOOKS += TRANSMISSION_INIT_SCRIPT_INSTALL
-
-I don't see the connection between transmission-remote and the the init
-script for transmission-daemon? I've instead added a TRANSMISSION_DAEMON
-option, and only install the init script if that is enabled instead.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+index 5284446..3fcf017 100644
+--- a/package/transmission/Config.in
++++ b/package/transmission/Config.in
+@@ -33,6 +33,13 @@ config BR2_PACKAGE_TRANSMISSION_REMOTE
+ 	bool "transmission-remote"
+ 	help
+ 	  Install transmission remote management tool.
++
++config BR2_PACKAGE_TRANSMISSION_GTK
++	bool "transmission-gtk"
++	depends on BR2_PACKAGE_LIBGTK2
++	help
++	  Install transmission GTK-based GUI interface.
++
+ endif
+ 
+ comment "Transmission requires a toolchain with IPv6 support"
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index db06692..c0d763b 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -14,7 +14,6 @@ TRANSMISSION_DEPENDENCIES = \
+ 	zlib
+ 
+ TRANSMISSION_CONF_OPT = \
+-	--disable-gtk \
+ 	--disable-libnotify \
+ 	--enable-lightweight
+ 
+@@ -49,4 +48,11 @@ else
+ 	TRANSMISSION_CONF_OPT += --disable-remote
+ endif
+ 
++ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
++	TRANSMISSION_CONF_OPT += --enable-gtk
++	TRANSMISSION_DEPENDENCIES += libgtk2
++else
++	TRANSMISSION_CONF_OPT += --disable-gtk
++endif
++
+ $(eval $(call AUTOTARGETS))
