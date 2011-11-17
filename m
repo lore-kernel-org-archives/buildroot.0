@@ -1,54 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Nov 2011 20:55:01 +0100
-Subject: [Buildroot] [PATCH 5 of 5 v2] python: allow reduced installation
-In-Reply-To: <3fb04c960d0e58ea5bb1.1321557994@devws108>
-References: <patchbomb.1321557989@devws108>
- <3fb04c960d0e58ea5bb1.1321557994@devws108>
-Message-ID: <20111117205501.62cd8518@skate>
+Date: Thu, 17 Nov 2011 20:57:45 +0100
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF9328 support.
+In-Reply-To: <1321525301-13110-1-git-send-email-julien.boibessot@free.fr>
+References: <1321525301-13110-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20111117205745.00cfdac6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 17 Nov 2011 20:42:04 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Hello,
 
-> A default python installation takes more than 13M of disk space on
-> target. The python library takes about 4,5M, and the other 9M is
-> occupied by various modules in /usr/lib/python2.7. A usable
-> installation doesn't need such a large module directory. A minimal
-> configuration with only those modules needed to start an interactive
-> session requires only about 450K, plus the python library itself.
+Good to see Armadeus stuff coming into mainline Buildroot!
+
+Le Thu, 17 Nov 2011 11:21:41 +0100,
+julien.boibessot at free.fr a ?crit :
+
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
 > 
-> This patch adds an option to reduce the number of installed python
-> modules to the bare minimum. Additional modules to install can be
-> specified in the config file as a string.
+> The APF9328 is an i.MXL+FPGA based SOM (System On Module). Here only minimal support is added: booting Linux kernel (UART, Ethernet and NOR), Buildroot toolchain and JFFS2 rootfs.
 
-While I agree that the feature is nice, I am not a fan of the
-implementation. Currently, we already have a way of enabling/disabling
-certain Python modules with one Kconfig option for each module that can
-be enabled/disabled. The list of modules that can be enabled/disabled
-this way has been built taking into account two factors :
+This should be wrapped at ~80 chars.
 
- * We want to be able to configure out modules that have external
-   dependencies (on other libraries)
+> +BR2_DL_DIR="$(BASE_DIR)/../downloads"
+> +BR2_SOURCEFORGE_MIRROR="switch"
+> +BR2_JLEVEL=1
+> +BR2_CCACHE=y
 
- * We want to be able to configure certain modules that take a huge
-   amount of space (I'm thinking of all the japanese/korean handling)
-   and may not be useful in most situations
+Those four options (or at least the first three) are very
+user-specific. I don't think they should be part of a default board
+configuration file.
 
-So we already have a way of configuring which modules are
-built/installed with one Kconfig option per-module.
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_PATCH="board/armadeus/apf9328"
+> +BR2_LINUX_KERNEL_DEFCONFIG="mx1"
 
-Now, you're adding a new option "I want a minimal version of Python"
-with an additional option "but I also want those additional modules". I
-think that taken together with the existing per-module Kconfig options,
-it makes the Python configuration very strange. I am not sure what to
-propose exactly (having one Kconfig option for each and every module
-would be horrible), but I don't like really much this proposal.
+Since two kernel patches are needed, you should have a defconfig that
+explicitly tells which kernel version it wants:
 
-Regards,
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
+
+see configs/qemu_* for examples.
 
 Thomas
 -- 
