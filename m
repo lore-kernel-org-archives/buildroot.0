@@ -1,8 +1,8 @@
 From: kakuschky at elbe-net.de <kakuschky@elbe-net.de>
-Date: Fri, 18 Nov 2011 20:01:35 +0100 (CET)
+Date: Fri, 18 Nov 2011 20:00:07 +0100 (CET)
 Subject: [Buildroot] kernel build name
-In-Reply-To: <1759685407.78.1321642881642.JavaMail.root@zimbra>
-Message-ID: <1071622422.80.1321642895370.JavaMail.root@zimbra>
+In-Reply-To: <1047228267.70.1321642216649.JavaMail.root@zimbra>
+Message-ID: <1387062378.76.1321642807551.JavaMail.root@zimbra>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,7 +11,7 @@ To: buildroot@busybox.net
 
 Hi, I'm just starting to explorer buildroot. Just one question. Where are the parts of the build name coming from?
 
-If I use make menuconfig my target is named "arm-unknown-linux-uclibcgnueabi"
+If I use make menuconfig my target is named "arm-unknown-linux-uclibcgnueabi" 
 
 - arm is releated to the target platform
 - linux o.k. it's a linux kernel I want to build
