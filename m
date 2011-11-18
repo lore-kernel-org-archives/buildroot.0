@@ -1,62 +1,84 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Nov 2011 00:24:39 +0000
-Subject: [Buildroot] [PATCH 5 of 5 v2] python: allow reduced installation
-In-Reply-To: <20111117205501.62cd8518@skate>
+Date: Fri, 18 Nov 2011 00:10:30 +0000
+Subject: [Buildroot] [PATCH 1 of 5 v2] Makefile.package.in: add utility
+	functions find*clauses and notfirstword
+In-Reply-To: <b6579582d02dd802adca.1321557990@devws108>
 References: <patchbomb.1321557989@devws108>
- <3fb04c960d0e58ea5bb1.1321557994@devws108> <20111117205501.62cd8518@skate>
-Message-ID: <201111180024.39586.arnout@mind.be>
+ <b6579582d02dd802adca.1321557990@devws108>
+Message-ID: <201111180010.30871.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 17 November 2011 19:55:01 Thomas Petazzoni wrote:
-> Le Thu, 17 Nov 2011 20:42:04 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
-> 
-> > A default python installation takes more than 13M of disk space on
-> > target. The python library takes about 4,5M, and the other 9M is
-> > occupied by various modules in /usr/lib/python2.7. A usable
-> > installation doesn't need such a large module directory. A minimal
-> > configuration with only those modules needed to start an interactive
-> > session requires only about 450K, plus the python library itself.
-> > 
-> > This patch adds an option to reduce the number of installed python
-> > modules to the bare minimum. Additional modules to install can be
-> > specified in the config file as a string.
-> 
-> While I agree that the feature is nice, I am not a fan of the
-> implementation. Currently, we already have a way of enabling/disabling
-> certain Python modules with one Kconfig option for each module that can
-> be enabled/disabled. The list of modules that can be enabled/disabled
-> this way has been built taking into account two factors :
-> 
->  * We want to be able to configure out modules that have external
->    dependencies (on other libraries)
-> 
->  * We want to be able to configure certain modules that take a huge
->    amount of space (I'm thinking of all the japanese/korean handling)
->    and may not be useful in most situations
-> 
-> So we already have a way of configuring which modules are
-> built/installed with one Kconfig option per-module.
-> 
-> Now, you're adding a new option "I want a minimal version of Python"
-> with an additional option "but I also want those additional modules". I
-> think that taken together with the existing per-module Kconfig options,
-> it makes the Python configuration very strange. I am not sure what to
-> propose exactly (having one Kconfig option for each and every module
-> would be horrible), but I don't like really much this proposal.
+On Thursday 17 November 2011 19:41:48 Thomas De Schampheleire wrote:
+> # HG changeset patch
+> # User Thomas De Schampheleire <thomas.de_schampheleire@alcatel-lucent.com>
+> # Date 1318518890 -7200
+> # Node ID b6579582d02dd802adca94e2b38972cc19cd8b76
+> # Parent  baa870774b887fb01a9de0cc69161f250553f896
+> Makefile.package.in: add utility functions find*clauses and notfirstword
 
- Maybe a middle way is to have the reduced setup by default, with a
-BR2_PACKAGE_PYTHON_EXTRA_MODULES option and another option to enable
-all 'usual' modules (which would disable the EXTRA_MODULES option).
-At a later stage, more options for 'usual' modules can be added.
+ Is it possible to tell hg to remove these lines?  git-am will include them
+in the commit message...
+
+> 
+> This patch adds a few utility functions to Makefile.package.in.
+> 
+> Functions finddirclauses and findfileclauses help in building a find command
+> that skips a set of directories and performs operations on a set of files.
+> This pattern can for example be used to keep certain files or directories from
+> being stripped, or to remove certain files from a package installation.
+> 
+> The notfirstword function is the inverse of the 'firstword' function in make:
+> it returns all but the first word.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+ I think you could safely have added a
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ And to ThomasP: this helper does simplify patch 3/5 a lot.  Even though
+the macros look a bit ugly indeed.
 
  Regards,
  Arnout
 
+> 
+> ---
+> v2: integrate _cont variants in main find*clauses functions. Thanks, Arnout.
+> 
+>  package/Makefile.package.in |  11 +++++++++++
+>  1 files changed, 11 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -87,6 +87,17 @@ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)
+>  TERM_BOLD := $(shell tput smso)
+>  TERM_RESET := $(shell tput rmso)
+>  
+> +# Utility functions for 'find'
+> +# findfileclauses: creates "-name 'X' -o -name 'Y'"
+> +# [1:namelist]
+> +findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
+> +# finddirclauses: creates "-wholename 'basedir/dirX' -o -wholename 'basedir/dirY'"
+> +# [1:basedir, 2:namelist]
+> +finddirclauses=-wholename '$(firstword $(2))' $(patsubst %,-o -wholename '$(1)/%',$(call notfirstword,$(2)))
+> +
+> +# Miscellaneous utility functions
+> +notfirstword=$(wordlist 2,$(words $(1)),$(1))
+> +
+>  # Download method commands
+>  WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
+>  SVN:=$(call qstrip,$(BR2_SVN))
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
