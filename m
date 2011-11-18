@@ -1,11 +1,11 @@
 From: Konrad Eisele <konrad@gaisler.com>
-Date: Fri, 18 Nov 2011 11:39:48 +0100
+Date: Fri, 18 Nov 2011 11:46:33 +0100
 Subject: [Buildroot] [PATCH 0/2] intro
 In-Reply-To: <CAAXf6LXj3OgU-3w4H9UYfjor_sm+W0gkBs-T8KGxfBrfjoqsxg@mail.gmail.com>
 References: <1321539489-19737-1-git-send-email-konrad@gaisler.com>
  <201111172336.18958.arnout@mind.be>
  <CAAXf6LXj3OgU-3w4H9UYfjor_sm+W0gkBs-T8KGxfBrfjoqsxg@mail.gmail.com>
-Message-ID: <4EC635F4.3030300@gaisler.com>
+Message-ID: <4EC63789.5040704@gaisler.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -73,14 +73,25 @@ Thomas De Schampheleire wrote:
 > were discussed in the context of crosstool-ng integration into
 > buildroot. See the thread "Report from the Buildroot Developer Day"
 > and Yann's comments on it.
-
-Maybe there is some interest in it then.
-I have created a split patch as requested, splitting subtree and execution tag.
-I sent it to the buildroot list.  The patch is called:
- [PATCH 1/1] kconfig: Add a configuration subtree command to kconfig
-hope you got it.
-
 > 
+
+I read the thread and:
+
+>There are two ways to do a better integration:
+>
+>1) Include the crosstool-NG menuconfig entries into the buildroot
+>   menuconfig. This will be difficule for two reasons:
+>   - namespace clashing [1]
+
+with "subsource" there is not namespace clashing.
+
+>   - maintenance when a newer crosstool-NG version gets integrated
+
+The newest crosstools kconfig gets added always. As written in a previous mal
+you can make a "subsource" to the kconfig _after_ download and install. It not
+present the "subsource" is ignored.
+
+
 > 
 > Best regards,
 > Thomas
