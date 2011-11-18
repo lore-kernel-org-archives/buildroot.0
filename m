@@ -1,35 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Nov 2011 19:27:41 +0000
-Subject: [Buildroot] RFC: package patching
-In-Reply-To: <20111117224211.0e793a0b@skate>
-References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
- <201111172123.05834.arnout@mind.be> <20111117224211.0e793a0b@skate>
-Message-ID: <201111181927.41880.arnout@mind.be>
+Date: Fri, 18 Nov 2011 17:51:22 +0000
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <CAEYzJUHexHVW+q95qUD3dVp5cTJp7Hu2yGShdkNr5w-rRfnoBw@mail.gmail.com>
+References: <20111102160349.4afe5935@skate>
+ <CAAXf6LUYoR7Hoasa0K-Rc3qJuATFn8mKWMbuKNtnU6XSSALpaQ@mail.gmail.com>
+ <CAEYzJUHexHVW+q95qUD3dVp5cTJp7Hu2yGShdkNr5w-rRfnoBw@mail.gmail.com>
+Message-ID: <201111181751.22578.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 17 November 2011 21:42:11 Thomas Petazzoni wrote:
-> Having a comment inside a patch seems to be enough. Sometimes when the
-> patch is pushed upstream, it's merged in the Git repo of the upstream
-> project, but there isn't yet a release with the modification, so it
-> would be hard to known which "nextversion" the patch will be in.
+On Friday 18 November 2011 11:04:58 Bj?rn Forsman wrote:
+> Thomas P. had some concerns about the patch not handling staging-dir
+> and I never got around fixing that.
+> 
+> Should I resubmit even if the patch doesn't address the staging-dir issue?
 
- Most projects have a single trunk, so you can predict that a patch in trunk will appear in the next release.  Even if a project has a more complex release scheme, it will typically have branches.  The only issue could be that you don't know if it will be 1.9 or 2.0, but then tagging it as 1.9 is a safe bet.
+ I consider clean-staging less important than clean-target.  Having things lingering around in staging is usually not a problem, except for the presence of some header or .pc of a library that is no longer present.  Normally buildroot should disable old that in the configure step, but of course you can never be sure.
 
- I find a release number tag much more useful than e.g. a commit ID.  With the commit ID, it is still pretty difficult to find out if a partical release contains it.
-
- Oh, and patches which have not (yet) been accepted upstream should not be tagged.
-
- Anyway, as a version bumper, I would use that tag just as a hint.
-
-> We already have comments in patches, those comments can carry the
-> upstream status of the patch, which is also compatible with what we
-> intend to do with the send-patches.org project.
-
- Is there going to be a tag for it, similar to Reviewed-by?
+ To implement a clean-staging, we'll probably need to use the copy-to-staging step of the external toolchains for all toolchains.
 
  Regards,
  Arnout
