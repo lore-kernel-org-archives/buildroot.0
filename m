@@ -1,33 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 18 Nov 2011 12:01:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 4237]
-	http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48308
-In-Reply-To: <bug-4237-163@https.bugs.busybox.net/>
-References: <bug-4237-163@https.bugs.busybox.net/>
-Message-ID: <20111118120159.583268F5E2@busybox.osuosl.org>
+From: vignesh rajendran <vickylinuxer@gmail.com>
+Date: Fri, 18 Nov 2011 12:07:12 +0000
+Subject: [Buildroot] add cpulimit buildroot
+Message-ID: <CALoDM-H_TdS37EzBhWT3qyh3rxuf66X=5q6x957__USQVgkpvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4237
+Hi list.,
 
-marco <marco_cantu_ranzani@libero.it> changed:
+ cpulimit is a simple c source  package , that can easily added to
+buildroot.Please take a look at,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|WORKSFORME                  |
-
---- Comment #3 from marco <marco_cantu_ranzani@libero.it> 2011-11-18 12:01:59 UTC ---
-Sorry,
-
-I forgot this post!
-
-I'll send the configurations in the afternoon!
+*http://cpulimit.sourceforge.net/*
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards
+
+Vignesh Rajendran
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111118/ed80cbd3/attachment.html>
