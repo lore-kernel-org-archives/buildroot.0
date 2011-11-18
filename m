@@ -1,37 +1,43 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 18 Nov 2011 23:08:19 +0000
-Subject: [Buildroot] [PATCH] linux: remove default for custom kernel version
-In-Reply-To: <201111182306.16803.arnout@mind.be>
-References: <201111182306.16803.arnout@mind.be>
-Message-ID: <1321657699-7140-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Nov 2011 23:16:42 +0000
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <87fwhlrqjm.fsf@macbook.be.48ers.dk>
+References: <20111102160349.4afe5935@skate>
+ <201111181751.22578.arnout@mind.be> <87fwhlrqjm.fsf@macbook.be.48ers.dk>
+Message-ID: <201111182316.42534.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On Friday 18 November 2011 22:53:17 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  Arnout>  To implement a clean-staging, we'll probably need to use the
+>  Arnout>  copy-to-staging step of the external toolchains for all
+>  Arnout>  toolchains.
+> 
+> Rather than handling both staging and target, I would prefer to move to
+> generating target from staging just before the filesystems are created
+> (similar to the other target-finalize stuff).
 
-There already is a default kernel version, so it makes little sense to have
-a default custom kernel version as well.  This default breaks the 'make
-savedefconfig' if we want to force a specific version.
+ Well...
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- linux/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ 'make clean-target' is currently easy to implement.  Generating target 
+from staging is not.  So I hope you don't mean that this preference would 
+block the acceptance of 'make clean-target'.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c304d86..b0d90c4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -58,7 +58,6 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "3.1.1"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
+
+ Regards,
+ Arnout
+
 -- 
-1.7.7.2
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
