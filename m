@@ -1,52 +1,71 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 18 Nov 2011 07:39:05 +0100
-Subject: [Buildroot] Report from the Buildroot Developer Day
-In-Reply-To: <CAEYzJUE7w2r0uSfjNoWpBoEpFHGEppEFnj-WEnJbHfauN51HwQ@mail.gmail.com>
-References: <20111102160349.4afe5935@skate> <201111152217.08212.arnout@mind.be>
- <CAAXf6LUGj-F04ktNJC1r7-Uy1Ob6WgRqzAdFCk1rJvCk7HZaBA@mail.gmail.com>
- <CAEYzJUE7w2r0uSfjNoWpBoEpFHGEppEFnj-WEnJbHfauN51HwQ@mail.gmail.com>
-Message-ID: <CAAXf6LUYoR7Hoasa0K-Rc3qJuATFn8mKWMbuKNtnU6XSSALpaQ@mail.gmail.com>
+Date: Fri, 18 Nov 2011 07:53:22 +0100
+Subject: [Buildroot] RFC: package patching
+In-Reply-To: <20111117224211.0e793a0b@skate>
+References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
+ <20111116190306.6e9596a0@skate>
+ <CAAXf6LW_qTUwtbdC+QjYnUAd1w5gZ4H55-6+G1Gnt3NV-s4F5w@mail.gmail.com>
+ <201111172123.05834.arnout@mind.be> <20111117224211.0e793a0b@skate>
+Message-ID: <CAAXf6LVzQpbdCJ3yaQsSREAoNUTjhGLGTgm3izj19m6Z2HJFYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2011/11/17 Bj?rn Forsman <bjorn.forsman@gmail.com>:
-> On 17 November 2011 14:57, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> On Tue, Nov 15, 2011 at 11:17 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>> On Wednesday 02 November 2011 15:03:49 Thomas Petazzoni wrote:
->>>> On the feature that is often discussed on the Buildroot list, and
->>>> which was on the agenda for this meeting was the general topic of
->>>> "package management". To summarize, the idea would be to add some
->>>> tracking of which Buildroot package installs what files, with the
->>>> goals of :
->>>>
->>>> ?* Being able to remove files installed by a package when this package
->>>> ? ?gets unselected from the menuconfig ;
->>>
->>> ?I completely agree with the final conclusion that this is almost impossible to
->>> achieve in a simple, consistent and reliable way. ?Something that would help a
->>> lot for that purpose, however, is to have a 'make clean-target' target. ?This
->>> would wipe $(TARGET_DIR) and remove all .stamp_target_installed files. ?The
->>> next build will re-copy the skeleton and reinstall all packages, which should
->>> be sufficient and shouldn't take very long. ?clean-staging would also be nice
->>> but is probably a bit more difficult to implement because of the toolchain.
+On Thu, Nov 17, 2011 at 10:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Thu, 17 Nov 2011 21:23:05 +0000,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>> ?With that in mind, I would propose a format like this for backport
+>> patches:
 >>
->> Just for the record: I like this idea...
+>> <pkg>-<seqno>-from_<nextversion>-description-of-the-patch
 >
-> Here is a (old) patch that tries to do that:
+> Having a comment inside a patch seems to be enough. Sometimes when the
+> patch is pushed upstream, it's merged in the Git repo of the upstream
+> project, but there isn't yet a release with the modification, so it
+> would be hard to known which "nextversion" the patch will be in.
 >
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/29333/
+> We already have comments in patches, those comments can carry the
+> upstream status of the patch, which is also compatible with what we
+> intend to do with the send-patches.org project.
 >
-> I use it in one project and I like it very much. It would be nice if
-> mainline Buildroot
-> had this functionality.
+>> ?I think ThomasP meant that it is best to _remove_ the version numbers.
+>> A version bumper will most likely try to take along all patches anyway, so
+>> putting a version number is just increasing the diffstat. ?Without version
+>> numbers, the diffstat will show much better which patches could be
+>> removed, which ones were added and which ones needed to be modified.
+>
+> Agreed.
 
-I propose you resubmit the patch again, but lined up with recent
-buildroot. We'll have to see which comments come out of it, but at
-least it'll be back on the list.
+Ok, so an attempt to summarize the discussion so far:
+
+- most patches should live in package/foo and have a filename of the form:
+<pkg>-<seqnum>-<description>.patch
+
+- for packages that have multiple versions at once in buildroot,
+patches go into package/foo/foo-version, but have the same filename:
+<pkg>-<seqnum>-<description>.patch
+
+- support for <pkg>-<version>-<description>.patch is removed, and all
+existing such patches are renamed/moved according to the rules above.
+
+
+Some remaining questions:
+* what if a package has multiple versions, and a certain patch applies
+to both versions. Should there be one copy of the patch in
+package/foo, or should the patch be duplicated in
+package/foo/foo-version1 and package/foo/foo-version2 ?
+
+* how many digits should the sequence number have? I now that
+git-format-patch uses 4 digits (0001) but really isn't necessary for
+buildroot since the number of patches we'll have for each package is
+limited. A package with 99 patches would already be extraneous, so I'd
+say 01 (2 digits) is enough.
+This may seem like a detail, but discussing this should keep things
+consistent throughout the future.
 
 Thanks,
 Thomas
