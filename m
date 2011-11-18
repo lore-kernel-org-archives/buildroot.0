@@ -1,30 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 Nov 2011 23:53:17 +0100
-Subject: [Buildroot] Report from the Buildroot Developer Day
-In-Reply-To: <201111181751.22578.arnout@mind.be> (Arnout Vandecappelle's
- message of "Fri, 18 Nov 2011 17:51:22 +0000")
-References: <20111102160349.4afe5935@skate>
- <CAAXf6LUYoR7Hoasa0K-Rc3qJuATFn8mKWMbuKNtnU6XSSALpaQ@mail.gmail.com>
- <CAEYzJUHexHVW+q95qUD3dVp5cTJp7Hu2yGShdkNr5w-rRfnoBw@mail.gmail.com>
- <201111181751.22578.arnout@mind.be>
-Message-ID: <87fwhlrqjm.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Nov 2011 23:06:16 +0000
+Subject: [Buildroot] [PATCH] Add Armadeus systems APF9328 support.
+In-Reply-To: <87sjlls36c.fsf@macbook.be.48ers.dk>
+References: <1321525301-13110-1-git-send-email-julien.boibessot@free.fr>
+ <4EC690A5.301@free.fr> <87sjlls36c.fsf@macbook.be.48ers.dk>
+Message-ID: <201111182306.16803.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Friday 18 November 2011 18:20:27 Peter Korsgaard wrote:
+> >>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
+> 
+> Hi,
+> 
+>  >> Since two kernel patches are needed, you should have a defconfig that
+>  >> explicitly tells which kernel version it wants:
+>  >> 
+>  >> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  >> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
+> 
+>  Julien> ok but if I set BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.1",
+>  Julien> it is not saved by "make savedefconfig". Seems like there is a
+>  Julien> "bug" in BR when custom kernel version == default one
+> 
+> Well, it's how savedefconfig behaves in the kernel. Just edit the file
+> manually afterwards - That way it will still work when we change the
+> default kernel version to be 3.2.
 
-Hi,
+ In fact, that default for the custom kernel version is redundant.  We
+already have a default kernel version, there's no point in having it twice.
 
- Arnout>  To implement a clean-staging, we'll probably need to use the
- Arnout>  copy-to-staging step of the external toolchains for all
- Arnout>  toolchains.
+ Patch follows.
 
-Rather than handling both staging and target, I would prefer to move to
-generating target from staging just before the filesystems are created
-(similar to the other target-finalize stuff).
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
