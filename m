@@ -1,27 +1,35 @@
-From: kakuschky at elbe-net.de <kakuschky@elbe-net.de>
-Date: Fri, 18 Nov 2011 20:00:07 +0100 (CET)
-Subject: [Buildroot] kernel build name
-In-Reply-To: <1047228267.70.1321642216649.JavaMail.root@zimbra>
-Message-ID: <1387062378.76.1321642807551.JavaMail.root@zimbra>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Fri, 18 Nov 2011 21:02:42 +0100
+Subject: [Buildroot] systemd
+Message-ID: <CAAfyv34FVf5V-ZH4-xapeG8F+2VSgXOWMsf+5O03m9wimRx1Ug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, I'm just starting to explorer buildroot. Just one question. Where are the parts of the build name coming from?
+Hi,
 
-If I use make menuconfig my target is named "arm-unknown-linux-uclibcgnueabi" 
+when looking for ELCE 2011 videos one video was very
+interesting:http://events.linuxfoundation.org/events/embedded-linux-conference-europe/kooi
+There is a lot of discussion about decreasing boot time for embedded
+systems and systemd seems not yet included in buildroot (OE have it
+also angstrom).
 
-- arm is releated to the target platform
-- linux o.k. it's a linux kernel I want to build
-- eabi is the interface for embedded systems
+Is there anybody who working on this or can I start integration to buildroot?
 
-The two I don't know are
+Regards,
 
-- uclib is because I'm linking against GNU uclibc?
-- unknown
+Marek
 
-Can somebody explain me where to set the part which is named "unknown" ?
+-- 
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
 
-Thanks & best regards Michael
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
