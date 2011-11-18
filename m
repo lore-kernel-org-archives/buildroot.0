@@ -1,47 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Nov 2011 23:06:16 +0000
-Subject: [Buildroot] [PATCH] Add Armadeus systems APF9328 support.
-In-Reply-To: <87sjlls36c.fsf@macbook.be.48ers.dk>
-References: <1321525301-13110-1-git-send-email-julien.boibessot@free.fr>
- <4EC690A5.301@free.fr> <87sjlls36c.fsf@macbook.be.48ers.dk>
-Message-ID: <201111182306.16803.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 18 Nov 2011 23:08:19 +0000
+Subject: [Buildroot] [PATCH] linux: remove default for custom kernel version
+In-Reply-To: <201111182306.16803.arnout@mind.be>
+References: <201111182306.16803.arnout@mind.be>
+Message-ID: <1321657699-7140-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 18 November 2011 18:20:27 Peter Korsgaard wrote:
-> >>>>> "Julien" == Julien Boibessot <julien.boibessot@free.fr> writes:
-> 
-> Hi,
-> 
->  >> Since two kernel patches are needed, you should have a defconfig that
->  >> explicitly tells which kernel version it wants:
->  >> 
->  >> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  >> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-> 
->  Julien> ok but if I set BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.1",
->  Julien> it is not saved by "make savedefconfig". Seems like there is a
->  Julien> "bug" in BR when custom kernel version == default one
-> 
-> Well, it's how savedefconfig behaves in the kernel. Just edit the file
-> manually afterwards - That way it will still work when we change the
-> default kernel version to be 3.2.
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- In fact, that default for the custom kernel version is redundant.  We
-already have a default kernel version, there's no point in having it twice.
+There already is a default kernel version, so it makes little sense to have
+a default custom kernel version as well.  This default breaks the 'make
+savedefconfig' if we want to force a specific version.
 
- Patch follows.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ linux/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
- Regards,
- Arnout
-
+diff --git a/linux/Config.in b/linux/Config.in
+index c304d86..b0d90c4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -58,7 +58,6 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "3.1.1"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+1.7.7.2
