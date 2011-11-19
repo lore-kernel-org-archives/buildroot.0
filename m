@@ -1,40 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 Nov 2011 22:40:33 +0100
-Subject: [Buildroot] [git commit] opencv: ffmpeg supports needs largefile /
-	ipv6
-Message-ID: <20111119214056.6372782B39@busybox.osuosl.org>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Date: Sat, 19 Nov 2011 22:42:21 +0100
+Subject: [Buildroot] need help making bootable image
+In-Reply-To: <FE2CFD94-31A4-4D5D-B6B0-634C6358BE93@jakesullivan.com>
+References: <FE2CFD94-31A4-4D5D-B6B0-634C6358BE93@jakesullivan.com>
+Message-ID: <CAEYzJUGZSNDiNXmngFvy+M_RX9o6wcSrye7=V+sOiAkD=ntc1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c83738b2a41fbab73472d48cb676182c8fae48d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19 November 2011 21:51, Jacob Sullivan <mail@jakesullivan.com> wrote:
+[...]
+> Questions:
+> 1) is this the right approach, or am I missing an obvious step?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/opencv/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+I haven't worked with ISO images + Buildroot, so I don't really have
+any comments.
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 1f454b6..961282f 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -31,11 +31,16 @@ config BR2_PACKAGE_OPENCV_WITH_PYTHON
- 
- config BR2_PACKAGE_OPENCV_WITH_FFMPEG
- 	bool "ffmpeg support"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_INET_IPV6
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	help
- 	  Use ffmpeg from the target system.
- 
-+comment "ffmpeg support requires a toolchain with LARGEFILE and IPV6 support"
-+	depends on !(BR2_LARGEFILE && BR2_INET_IPV6)
-+
- config BR2_PACKAGE_OPENCV_WITH_GSTREAMER
- 	bool "gstreamer support"
- 	select BR2_PACKAGE_GSTREAMER
+> 2) is there a reason that the inittab file only has getty on a serial port by default?
+
+I think Buildroot is used most often on headless systems.
+
+> 3) what is the recommended way of making changes to buildroot so that when a new version comes out I don't lose all my changes. ?I thought that I would just need to put my .configs into source control, but it looks like I need to change the inittab file in the skeleton. How do other people handle configuration changes that aren't covered by any of the .configs (or the various make menuconfigs)?
+
+I personally use git branches.
+
+For your .config file: make savedefconfig && cp defconfig
+configs/myconfig_defconfig
+
+Now Buildroot will list your config file when "make help" and load the
+configuration when "make myconfig_defconfig".
+
+Best regards,
+Bj?rn Forsman
