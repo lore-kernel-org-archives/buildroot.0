@@ -1,42 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Nov 2011 13:13:23 +0100
-Subject: [Buildroot] RFC: package patching
-In-Reply-To: <CAEYzJUEmGkit9PXw-Ek-f871U0d54A+uV0Ohv6N8DnMvjP6oMA@mail.gmail.com>
-References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
- <201111181927.41880.arnout@mind.be>
- <CAEYzJUEmGkit9PXw-Ek-f871U0d54A+uV0Ohv6N8DnMvjP6oMA@mail.gmail.com>
-Message-ID: <201111191313.24069.arnout@mind.be>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sat, 19 Nov 2011 14:17:17 +0100
+Subject: [Buildroot] Buildroot U-boot user patch applying problem
+Message-ID: <B55DD04487614DE2890707C4FF7B640E@NX5000J>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 19 November 2011 10:26:17 Bj?rn Forsman wrote:
-> On 18 November 2011 20:27, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >  With the commit ID, it is still pretty difficult to find out if a partical release contains it.
-                                                                       ^^^^^^^^
-                                                           I meant "particular"
-> 
-> git describe --contains <commit-id>
-> 
-> I just learned it! :-)
+Hi,
 
- Yes, but then you have to clone the repository, while normally when you're
-bumping a version you just download the release tar.
+Buildroot U-boot user patch name shoud be formated
+u-boot-<version>-<descryption>.patch
 
- But thanks for the tip.
+buildroot-2011.11.rc2  patch
 
- Regards,
- Arnout
+Buildroot U-boot user patch applying problem Jerzy Grzegorek  jerzy.grzegorek at trzebnica.net
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+
+index cf22312..c3818c5 100644
+
+--- a/boot/uboot/uboot.mk
+
++++ b/boot/uboot/uboot.mk
+
+@@ -53,7 +53,7 @@ endef
+
+ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
+
+define UBOOT_APPLY_CUSTOM_PATCHES
+
+support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
+
+- uboot-$(UBOOT_VERSION)-\*.patch
+
++ u-boot-$(UBOOT_VERSION)-\*.patch
+
+endef
+
+
+UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+
+This same bug is in this year previous versions of BUILDROOT.
+
+Regards,
+
+Jerzy
+
+
+
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111119/031e6465/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111119/9f22fc42/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: uboot.patch
+Type: application/octet-stream
+Size: 472 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111119/9f22fc42/attachment.obj>
