@@ -1,34 +1,33 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sat, 19 Nov 2011 07:13:34 -0000
-Subject: [Buildroot] [PATCH 1 of 5 v2] Makefile.package.in: add utility
-	functions find*clauses and notfirstword
-References: <patchbomb.1321557989@devws108>
- <b6579582d02dd802adca.1321557990@devws108>
-Message-ID: <172e.4ec7571e.5a6e@getafix.xdna.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 19 Nov 2011 09:24:06 +0100
+Subject: [Buildroot] Report from the Buildroot Developer Day
+In-Reply-To: <201111182316.42534.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Fri, 18 Nov 2011 23:16:42 +0000")
+References: <20111102160349.4afe5935@skate> <201111181751.22578.arnout@mind.be>
+ <87fwhlrqjm.fsf@macbook.be.48ers.dk>
+ <201111182316.42534.arnout@mind.be>
+Message-ID: <87bos8seop.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Apologies if you have seen this, but I haven't seen my response to this
-come through (probably a gmane stuffup).
+ >> Rather than handling both staging and target, I would prefer to move to
+ >> generating target from staging just before the filesystems are created
+ >> (similar to the other target-finalize stuff).
 
->+# finddirclauses: creates "-wholename 'basedir/dirX' -o -wholename 'basedir/dirY'"
->+# [1:basedir, 2:namelist]
->+finddirclauses=-wholename '$(firstword $(2))' $(patsubst %,-o -wholename '$(1)/%',$(call notfirstword,$(2)))
+ Arnout>  Well...
 
-I think the first -wholename argument is meant to be
-  '$(1)/$(firstword $(2))'
+ Arnout>  'make clean-target' is currently easy to implement.
+ Arnout> Generating target from staging is not.  So I hope you don't
+ Arnout> mean that this preference would block the acceptance of 'make
+ Arnout> clean-target'.
 
-according to the comment above it.
+No, that's not what I'm saying - Just that I rather merge staging/target
+before doing any significant work on a clean-staging.
 
-Also, my man page for find(1) says this about -wholename:
-  See -path.    This alternative is less portable than -path.
-
-Do you find -wholename to be more readable? It's not an option I've used
-much, so I need to look up the man page anyway, but -path is easier to
-look up because you do not get redirected to another option like you do
-with -wholename.
+-- 
+Bye, Peter Korsgaard
