@@ -1,52 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Nov 2011 19:44:42 +0000
-Subject: [Buildroot] RFC: package patching
-In-Reply-To: <CAAXf6LVzQpbdCJ3yaQsSREAoNUTjhGLGTgm3izj19m6Z2HJFYg@mail.gmail.com>
-References: <CAAXf6LXWc56UcU0s0DBRAVd4SKgB+3P6N49Dc4aGkYFP4oq20Q@mail.gmail.com>
- <20111117224211.0e793a0b@skate>
- <CAAXf6LVzQpbdCJ3yaQsSREAoNUTjhGLGTgm3izj19m6Z2HJFYg@mail.gmail.com>
-Message-ID: <201111181944.42621.arnout@mind.be>
+From: Cam Hutchison <camh@xdna.net>
+Date: Sat, 19 Nov 2011 07:13:34 -0000
+Subject: [Buildroot] [PATCH 1 of 5 v2] Makefile.package.in: add utility
+	functions find*clauses and notfirstword
+References: <patchbomb.1321557989@devws108>
+ <b6579582d02dd802adca.1321557990@devws108>
+Message-ID: <172e.4ec7571e.5a6e@getafix.xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 18 November 2011 06:53:22 Thomas De Schampheleire wrote:
-> - for packages that have multiple versions at once in buildroot,
-> patches go into package/foo/foo-version, but have the same filename:
-> <pkg>-<seqnum>-<description>.patch
-[snip]
-> * how many digits should the sequence number have? I now that
-> git-format-patch uses 4 digits (0001) but really isn't necessary for
-> buildroot since the number of patches we'll have for each package is
-> limited. A package with 99 patches would already be extraneous, so I'd
-> say 01 (2 digits) is enough.
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- After going through ThomasP's ELC presentation, I've started using the approach of a <PKG>_OVERRIDE_SRCDIR which contains a git clone to generate the patches.  Works out great, much more convenient than my previous approach of copying the source tree to .orig and diffing.
+Apologies if you have seen this, but I haven't seen my response to this
+come through (probably a gmane stuffup).
 
- Except for one little detail: the patch naming.  git format-patch doesn't give much leeway in how the patches are named, so you end up needing to do a rename of the resulting patch set.
+>+# finddirclauses: creates "-wholename 'basedir/dirX' -o -wholename 'basedir/dirY'"
+>+# [1:basedir, 2:namelist]
+>+finddirclauses=-wholename '$(firstword $(2))' $(patsubst %,-o -wholename '$(1)/%',$(call notfirstword,$(2)))
 
- For prepending a <pkg>- prefix, it is still doable with a simple
-for i in 00*patch; do mv $i linux-$i; done
-But with only two digits, you almost need a shell script (or mmv or mrename) to do it...
+I think the first -wholename argument is meant to be
+  '$(1)/$(firstword $(2))'
 
- Bottom line: I would prefer to see a git format-patch compatible filename:
-<pkg>/0000-<description>.patch
-<pkg>/<version>/0000-<description>.patch
+according to the comment above it.
 
- The extra zeroes are not really in the way IMO, and the package name is really redundant anyway.
+Also, my man page for find(1) says this about -wholename:
+  See -path.    This alternative is less portable than -path.
 
- Note that people who prefer to name their patches in any other way can still do it.  The only thing you can't do is to mix patches of two different packages (or two different versions) in the same directory.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Do you find -wholename to be more readable? It's not an option I've used
+much, so I need to look up the man page anyway, but -path is easier to
+look up because you do not get redirected to another option like you do
+with -wholename.
