@@ -1,63 +1,26 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Sat, 19 Nov 2011 14:17:17 +0100
-Subject: [Buildroot] Buildroot U-boot user patch applying problem
-Message-ID: <B55DD04487614DE2890707C4FF7B640E@NX5000J>
+From: =?UTF-8?q?V=C3=ADctor=20Manuel=20J=C3=A1quez=20Leal?= <vjaquez@igalia.com>
+Date: Sat, 19 Nov 2011 15:31:34 +0100
+Subject: [Buildroot] [PATCH] gst-dsp: upgrade to 0.9.0
+Message-ID: <1321713094-13396-1-git-send-email-vjaquez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+---
+ package/multimedia/gst-dsp/gst-dsp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Buildroot U-boot user patch name shoud be formated
-u-boot-<version>-<descryption>.patch
-
-buildroot-2011.11.rc2  patch
-
-Buildroot U-boot user patch applying problem Jerzy Grzegorek  jerzy.grzegorek at trzebnica.net
-
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-
-index cf22312..c3818c5 100644
-
---- a/boot/uboot/uboot.mk
-
-+++ b/boot/uboot/uboot.mk
-
-@@ -53,7 +53,7 @@ endef
-
-ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
-
-define UBOOT_APPLY_CUSTOM_PATCHES
-
-support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
-
-- uboot-$(UBOOT_VERSION)-\*.patch
-
-+ u-boot-$(UBOOT_VERSION)-\*.patch
-
-endef
-
-
-UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
-
-This same bug is in this year previous versions of BUILDROOT.
-
-Regards,
-
-Jerzy
-
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111119/9f22fc42/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: uboot.patch
-Type: application/octet-stream
-Size: 472 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111119/9f22fc42/attachment.obj>
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
+index 17eb189..154ab75 100644
+--- a/package/multimedia/gst-dsp/gst-dsp.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
+@@ -1,4 +1,4 @@
+-GST_DSP_VERSION=0.8.0
++GST_DSP_VERSION=0.9.0
+ GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
+ GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
+ 
+-- 
+1.7.7.1
