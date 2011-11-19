@@ -1,26 +1,34 @@
-From: =?UTF-8?q?V=C3=ADctor=20Manuel=20J=C3=A1quez=20Leal?= <vjaquez@igalia.com>
-Date: Sat, 19 Nov 2011 15:31:34 +0100
-Subject: [Buildroot] [PATCH] gst-dsp: upgrade to 0.9.0
-Message-ID: <1321713094-13396-1-git-send-email-vjaquez@igalia.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 19 Nov 2011 15:56:48 +0100
+Subject: [Buildroot] [git commit] mplayer: external tremor support needs ogg
+	as well
+Message-ID: <20111119145730.AF0D68F4F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/multimedia/gst-dsp/gst-dsp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=c29fad1e1b6a438b0012bc5703ae044370eb7222
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
-index 17eb189..154ab75 100644
---- a/package/multimedia/gst-dsp/gst-dsp.mk
-+++ b/package/multimedia/gst-dsp/gst-dsp.mk
-@@ -1,4 +1,4 @@
--GST_DSP_VERSION=0.8.0
-+GST_DSP_VERSION=0.9.0
- GST_DSP_SOURCE=gst-dsp-$(GST_DSP_VERSION).tar.gz
- GST_DSP_SITE=http://gst-dsp.googlecode.com/files/
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mplayer/mplayer.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 2ac5e16..96b4e73 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -67,8 +67,8 @@ else
+ MPLAYER_CONF_OPTS += --disable-mencoder
+ endif
  
--- 
-1.7.7.1
+-ifeq ($(BR2_PACKAGE_TREMOR),y)
+-MPLAYER_DEPENDENCIES += tremor
++ifeq ($(BR2_PACKAGE_TREMOR)$(BR2_PACKAGE_LIBOGG),yy)
++MPLAYER_DEPENDENCIES += tremor libogg
+ MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
+ endif
+ 
