@@ -1,24 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 Nov 2011 23:20:10 +0100
-Subject: [Buildroot] [PATCH] docs: Configuration path update
-In-Reply-To: <1321913206-10645-1-git-send-email-twoerner@gmail.com> (Trevor
- Woerner's message of "Mon, 21 Nov 2011 17:06:46 -0500")
-References: <1321913206-10645-1-git-send-email-twoerner@gmail.com>
-Message-ID: <871ut1qfs5.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 Nov 2011 23:17:52 +0100
+Subject: [Buildroot] [git commit] docs: Configuration path update
+Message-ID: <20111121222026.2C5658F606@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trevor" == Trevor Woerner <twoerner@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a51194985af9ffa7e9c956b58ef32132748c7d0b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Trevor> From: Trevor Woerner <twoerner@gmail.com>
- Trevor> Update the procedure for modifying /etc/inittab's getty line with
- Trevor> the correct port and baud values to reflect their current names and
- Trevor> locations in the Buildroot configuration.
+Update the procedure for modifying /etc/inittab's getty line with
+the correct port and baud values to reflect their current names and
+locations in the Buildroot configuration.
 
-Committed, thanks. We're moving the documentation to asciidoc though.
+Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/buildroot.html |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/buildroot.html b/docs/buildroot.html
+index 2314d10..d5be127 100644
+--- a/docs/buildroot.html
++++ b/docs/buildroot.html
+@@ -1787,9 +1787,9 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
+     <p>then it means that your system is running, but didn't start a
+     shell on the serial console. In order to have the system start a
+     shell on your serial console, you have to go in the Buildroot
+-    configuration, <code>Target options</code>, enable <code>Generic
+-    serial port config</code>, and select the serial port and speed
+-    you would like to use for the shell. This will automatically tune
++    configuration, <code>System configuration</code>, and modify
++    <code>Port to run a getty (login prompt) on</code> and
++    <code>Baudrate to use</code> as appropriate. This will automatically tune
+     the <code>/etc/inittab</code> file of the generated system so that
+     a shell starts on the correct serial port.</p>
+ 
