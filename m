@@ -1,52 +1,59 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 21 Nov 2011 10:34:32 +0100
-Subject: [Buildroot] systemd
-In-Reply-To: <CAAfyv34FVf5V-ZH4-xapeG8F+2VSgXOWMsf+5O03m9wimRx1Ug@mail.gmail.com>
-References: <CAAfyv34FVf5V-ZH4-xapeG8F+2VSgXOWMsf+5O03m9wimRx1Ug@mail.gmail.com>
-Message-ID: <4ECA1B28.50907@free-electrons.com>
+From: Emmanuel BOUAZIZ <ebouaziz@neotion.com>
+Date: Mon, 21 Nov 2011 12:32:27 +0100
+Subject: [Buildroot] help needed with realtek gigabit network adapter
+Message-ID: <4ECA36CB.5010803@neotion.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi guys,
 
-On 18/11/2011 21:02, Belisko Marek wrote:
-> Hi,
-> 
-> when looking for ELCE 2011 videos one video was very
-> interesting:http://events.linuxfoundation.org/events/embedded-linux-conference-europe/kooi
-> There is a lot of discussion about decreasing boot time for embedded
-> systems and systemd seems not yet included in buildroot (OE have it
-> also angstrom).
-> 
-> Is there anybody who working on this or can I start integration to buildroot?
+I'm trying to run buildroot 2011.08 on an atom based board, but I have a problem with the network driver:
 
-After attending this exact talk, I've begun to work on some integration
-of systemd in Buildroot.
+It's a realtek gigabit network device, the traces say RTL8168d/8111d:
 
-This has been stalled lately because I didn't have time to improve my
-initial implementation, but basically, I have for now :
-  - Made the systemd package
-  - Added new package variables to define both Sys-V and systemd-format
-init scripts
-  - Added the needed logic so that you can only select one of the init
-systems available in Buildroot (sysvinit, Busybox, systemd)
-  - Migrated the existing packages to use the mentionned variables.
+r8168 Gigabit Ethernet driver 2.3LK-NAPI loaded
+r8169 0000:01:00.0: PCI INT A -> Link[LNKA] -> GSI 11 (level, low) -> IRQ 11
+r8169 0000:01:00.0: no MSI. Back to INTx.
+r8169 0000:01:00.0: eth0: RTL8168d/8111d at 0xf8012000, 70:71:bc:31:87:6f, XID 081000c0 IRQ 11
 
-I still have some issues that I need to address, that explains why I
-haven't yet posted the patches :
-  - I have a bug that adds the sysv init scripts to the target even if
-it shouldn't
-  - I have not tested it "live" yet
+When I want to bring it up, it freezes for a minute or two before I get the following message:
 
-I'll try to work on it this week
+r8169 0000:01:00.0: eth0: unable to load firmware patch rtl_nic/rtl8168d-1.fw (-2)
+r8169 0000:01:00.0: eth0: link down
+r8169 0000:01:00.0: eth0: link down
+ADDRCONF(NETDEV_UP): eth0: link is not ready
+r8169 0000:01:00.0: eth0: link up
+ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
 
-Maxime
+at this point, the network seems to work, it gets a DHCP lease.
+
+after some more minutes, I get another error which does not happen if I don't bring the network up:
+
+irq 7: nobody cared (try booting with the "irqpoll" option)
+Pid: 0, comm: swapper Not tainted 3.0.4 #1
+Call Trace:
+(...)
+handlers:
+[<c11a1050>] usb_hcd_irq
+Disabling IRQ #7
+
+I have tried to put a the rtl8168d-1.fw and rtl8168d-1.fw in /lib/firmware/rtl_nic directory
+I tried to define the CONFIG_EXTRA_FIRMWARE_DIR="/lib/firmware" but it requires to define CONFIG_EXTRA_FIRMWARE and I
+don't know what to set it to. I tried with "rtl8168d" and some variations but it didn't work
+I also tried to deactivate firmware support but it doesn't seem to have any effect, I'm not sure I did that correctly
+though.
+
+I googled the error messages but didn't find any solution so I'm stuck.
+The firmware thing apparently appeared with kernel 2.6.38
+I had an old version of buildroot that works with this hardware but it's from early 2009 and the config file changed
+deeply since then.
+
+Any idea welcome,
+
+regard,
 
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Emmanuel
