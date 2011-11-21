@@ -1,70 +1,52 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 21 Nov 2011 09:42:31 +0100
-Subject: [Buildroot] [PATCH 1 of 5 v2] Makefile.package.in: add utility
- functions find*clauses and notfirstword
-In-Reply-To: <172e.4ec7571e.5a6e@getafix.xdna.net>
-References: <patchbomb.1321557989@devws108>
- <b6579582d02dd802adca.1321557990@devws108>
- <172e.4ec7571e.5a6e@getafix.xdna.net>
-Message-ID: <CAAXf6LUX2GCq4wve6hFmpaMK9HGEt910PkHgmHJysqOL4SkHJA@mail.gmail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 21 Nov 2011 10:34:32 +0100
+Subject: [Buildroot] systemd
+In-Reply-To: <CAAfyv34FVf5V-ZH4-xapeG8F+2VSgXOWMsf+5O03m9wimRx1Ug@mail.gmail.com>
+References: <CAAfyv34FVf5V-ZH4-xapeG8F+2VSgXOWMsf+5O03m9wimRx1Ug@mail.gmail.com>
+Message-ID: <4ECA1B28.50907@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Cam,
+Hi,
 
-On Sat, Nov 19, 2011 at 8:13 AM, Cam Hutchison <camh@xdna.net> wrote:
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
->
-> Apologies if you have seen this, but I haven't seen my response to this
-> come through (probably a gmane stuffup).
->
->>+# finddirclauses: creates "-wholename 'basedir/dirX' -o -wholename 'basedir/dirY'"
->>+# [1:basedir, 2:namelist]
->>+finddirclauses=-wholename '$(firstword $(2))' $(patsubst %,-o -wholename '$(1)/%',$(call notfirstword,$(2)))
->
-> I think the first -wholename argument is meant to be
-> ?'$(1)/$(firstword $(2))'
->
-> according to the comment above it.
+On 18/11/2011 21:02, Belisko Marek wrote:
+> Hi,
+> 
+> when looking for ELCE 2011 videos one video was very
+> interesting:http://events.linuxfoundation.org/events/embedded-linux-conference-europe/kooi
+> There is a lot of discussion about decreasing boot time for embedded
+> systems and systemd seems not yet included in buildroot (OE have it
+> also angstrom).
+> 
+> Is there anybody who working on this or can I start integration to buildroot?
 
-You are absolutely right. I can't believe I missed that! Thanks for noticing.
+After attending this exact talk, I've begun to work on some integration
+of systemd in Buildroot.
 
->
-> Also, my man page for find(1) says this about -wholename:
-> ?See -path. ? ?This alternative is less portable than -path.
+This has been stalled lately because I didn't have time to improve my
+initial implementation, but basically, I have for now :
+  - Made the systemd package
+  - Added new package variables to define both Sys-V and systemd-format
+init scripts
+  - Added the needed logic so that you can only select one of the init
+systems available in Buildroot (sysvinit, Busybox, systemd)
+  - Migrated the existing packages to use the mentionned variables.
 
-That is funny. My man page redirects in the opposite way:
+I still have some issues that I need to address, that explains why I
+haven't yet posted the patches :
+  - I have a bug that adds the sysv init scripts to the target even if
+it shouldn't
+  - I have not tested it "live" yet
 
-       -path pattern
-              See -wholename.   The predicate -path is also supported
-by HP-UX find.
+I'll try to work on it this week
 
-       -wholename pattern
-              File name matches shell pattern pattern.  The
-metacharacters do not treat ?/? or ?.? specially; so, for example,
-                        find . -wholename ?./sr*sc?
-              will print an entry for a directory called ?./src/misc?
-(if one exists).  To ignore a whole directory tree, use -prune
-              rather than checking every file in the tree.  For
-example, to skip the directory ?src/emacs? and all files and
-              directories under it, and print the names of the other
-files found, do something like this:
-                        find . -wholename ?./src/emacs? -prune -o -print
+Maxime
 
-But beware, this is CentOS 5, and probably more ancient than your system.
-
->
-> Do you find -wholename to be more readable? It's not an option I've used
-> much, so I need to look up the man page anyway, but -path is easier to
-> look up because you do not get redirected to another option like you do
-> with -wholename.
-
-The main reason was because my man page uses -wholename when giving
--prune information, and I was not aware of -path. But I'll change to
--path if that's more portable.
-
-Thanks,
-Thomas
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
