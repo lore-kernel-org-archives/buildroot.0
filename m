@@ -1,22 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 22 Nov 2011 10:16:17 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: update stable kernel to 3.1.2
-In-Reply-To: <1321928087-25965-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 21 Nov 2011 23:14:47 -0300")
-References: <1321928087-25965-1-git-send-email-gustavo@zacarias.com.ar>
- <1321928087-25965-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fwhgplem.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 22 Nov 2011 10:15:09 +0100
+Subject: [Buildroot] [git commit] freetype: security bump to version 2.4.8
+Message-ID: <20111122091706.6A6308F5A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f4642c8bae842243f5a98d1d8028ce08d1962612
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Bump freetype to version 2.4.8 to fix CVE-2011-3439.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/freetype/freetype.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 142a1ec..6eb6b29 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-FREETYPE_VERSION = 2.4.7
++FREETYPE_VERSION = 2.4.8
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
