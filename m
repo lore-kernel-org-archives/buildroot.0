@@ -1,40 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 Nov 2011 23:17:52 +0100
-Subject: [Buildroot] [git commit] docs: Configuration path update
-Message-ID: <20111121222026.2C5658F606@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Nov 2011 22:59:21 -0300
+Subject: [Buildroot] [PATCH] freetype: security bump to version 2.4.8
+Message-ID: <1321927161-13262-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a51194985af9ffa7e9c956b58ef32132748c7d0b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bump freetype to version 2.4.8 to fix CVE-2011-3439.
 
-Update the procedure for modifying /etc/inittab's getty line with
-the correct port and baud values to reflect their current names and
-locations in the Buildroot configuration.
-
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- docs/buildroot.html |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/freetype/freetype.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 2314d10..d5be127 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -1787,9 +1787,9 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK</pre>
-     <p>then it means that your system is running, but didn't start a
-     shell on the serial console. In order to have the system start a
-     shell on your serial console, you have to go in the Buildroot
--    configuration, <code>Target options</code>, enable <code>Generic
--    serial port config</code>, and select the serial port and speed
--    you would like to use for the shell. This will automatically tune
-+    configuration, <code>System configuration</code>, and modify
-+    <code>Port to run a getty (login prompt) on</code> and
-+    <code>Baudrate to use</code> as appropriate. This will automatically tune
-     the <code>/etc/inittab</code> file of the generated system so that
-     a shell starts on the correct serial port.</p>
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 142a1ec..6eb6b29 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
+-FREETYPE_VERSION = 2.4.7
++FREETYPE_VERSION = 2.4.8
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
+-- 
+1.7.3.4
