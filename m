@@ -1,32 +1,45 @@
 From: Dechesne, Nicolas <n-dechesne@ti.com>
-Date: Tue, 22 Nov 2011 22:38:12 +0100
-Subject: [Buildroot] [PATCH v2] New package: parted
-In-Reply-To: <CALB96N=4OwW95SoxHHusOBR9oQTuQ6uN_1swzkGqoF1q71YC0Q@mail.gmail.com>
-References: <4E9FC67B.7030109@visionsystems.de>
- <CALB96N=4OwW95SoxHHusOBR9oQTuQ6uN_1swzkGqoF1q71YC0Q@mail.gmail.com>
-Message-ID: <CALB96Nn=LHVhMqxtvZ+h_gxOgVaVqzBR-z9Z6D_sqXDJVrsSYA@mail.gmail.com>
+Date: Tue, 22 Nov 2011 22:52:54 +0100
+Subject: [Buildroot] support for TI PandaBoard?
+In-Reply-To: <CAPCu-pSkqQy8LPJu5aF+EzgKy+S_TskTph4m0M+8P6F7Q2kp8Q@mail.gmail.com>
+References: <CALB96N=oQ6KWsQymURs59k=dDhESBbecYvdEuro0_8ye6nCJNQ@mail.gmail.com>
+ <CAPCu-pSkqQy8LPJu5aF+EzgKy+S_TskTph4m0M+8P6F7Q2kp8Q@mail.gmail.com>
+Message-ID: <CALB96N=mEwGN0KN5WPKgUheZfQ147OjZO8kQBTpPRsaE45r=vQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Oct 20, 2011 at 2:49 PM, Dechesne, Nicolas <n-dechesne@ti.com>wrote:
+On Tue, Nov 22, 2011 at 10:38 PM, C.A, Subramaniam <subramaniam.ca@ti.com>wrote:
 
-> On Thu, Oct 20, 2011 at 8:58 AM, Yegor Yefremov <
-> yegor_sub1 at visionsystems.de> wrote:
->
->> +
->> +PARTED_VERSION = 3.0
->>
->
-> thanks for updating ;-)
->
-> i tested with 3.0 and it's working.
+> I have a similar def config that I have been using for sometime now. I
+> have been using it for Panda and SDPs as well.
 >
 
-anything more needed to get 'parted' package merged? let me know if I can
-do anything.
+yeah. my goal really is to get this panda config into buildroot to make it
+obvious and simple that BR has Panda support...
+
+
+> I do not have the
+> u-boot and spl parts though.
+>
+Are you planning on getting something
+> working with linaro
+>
+
+that's a good question. I believe we should stick to mainline trees for
+kernel and uboot in the default config. my feeling is that linaro is doing
+great upstreaming work on u-boot. so mainline should be fine. unless
+somebody else has a different view..
+
+
+> / goz trees?
+>
+
+definitely not. goz (note: stands for git.omapzoom.org) has very custom
+uboot/xloader trees used for android development, but they are too far away
+from mainline to be considered as target for inclusion in BR.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111122/15e101fb/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111122/a29ff1f5/attachment.html>
