@@ -1,32 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Nov 2011 22:59:21 -0300
-Subject: [Buildroot] [PATCH] freetype: security bump to version 2.4.8
-Message-ID: <1321927161-13262-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 21 Nov 2011 23:14:46 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: update to 3.1.2 and 3.0.10
+Message-ID: <1321928087-25965-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump freetype to version 2.4.8 to fix CVE-2011-3439.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freetype/freetype.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.9-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.10-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 142a1ec..6eb6b29 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--FREETYPE_VERSION = 2.4.7
-+FREETYPE_VERSION = 2.4.8
- FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_INSTALL_STAGING = YES
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 334e241..b94d4c0 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -57,7 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.9"		if BR2_KERNEL_HEADERS_3_0
+-	default "3.1.1"		if BR2_KERNEL_HEADERS_3_1
++	default "3.0.10"	if BR2_KERNEL_HEADERS_3_0
++	default "3.1.2"		if BR2_KERNEL_HEADERS_3_1
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.9-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.10-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.9-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.10-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
 1.7.3.4
