@@ -1,49 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Nov 2011 16:05:22 +0100
-Subject: [Buildroot] [git commit] busybox: only install S01logging if
-	syslogd applet is enabled
-In-Reply-To: <4ECCDBC4.8030805@free-electrons.com> (Maxime Ripard's message of
- "Wed, 23 Nov 2011 12:40:52 +0100")
-References: <20110704191002.1D1B48A31E@busybox.osuosl.org>
- <4ECCDBC4.8030805@free-electrons.com>
-Message-ID: <8739deq3pp.fsf@macbook.be.48ers.dk>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Wed, 23 Nov 2011 09:05:52 -0600
+Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
+	no suitable tar can be found
+In-Reply-To: <20111123152440.0fef75ca@skate>
+References: <patchbomb.1322053783@devws108>
+ <d4b15640ce2d3ab89835.1322053785@devws108> <20111123152440.0fef75ca@skate>
+Message-ID: <201111230905.55751.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+On Wed November 23 2011, Thomas Petazzoni wrote:
+> Le Wed, 23 Nov 2011 14:59:59 +0100,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+> 
+> > Some toolchains, like the one built with buildroot itself, use
+> > hardlinks (for example to link between the c++ and g++ binary).
+> > Unpacking such a toolchain with the --strip-components options does
+> > not work correctly if the system tar is too old (<1.17). Even recent
+> > releases of RedHat/CentOS still ship with tar 1.15.
+> > 
+> > This patch checks for a suitable tar version (tar 1.17+) on the host
+> > system, and adds host-tar to the host dependencies if none can be
+> > found.
+> > 
+> > TAR is redefined to HOST_TAR, except when extracting host-tar (this
+> > is a chicken-and-egg problem), so that all packages use the host-tar
+> > if no suitable tar was found.
+> 
+> I am still puzzled by the fact that tar is needed to extract this
+> host-tar, so there's like a chicken-and-egg problem. I understand that
+> the real host tar is used to extract the host-tar, which is then use to
+> extract all other packages. But that sounds really nasty to me.
+> 
 
- Maxime> Hi Peter,
+Maybe:
+ftp://ftp.gnu.org/gnu/tar/tar-1.26.cpio.gz
 
- Maxime> Looking at the init scripts installation stuff, I found this,
- Maxime> which is confusing to me.
+Then you only need the more stable cpio and gzip utilities.
+Even Busybox can provide those.
 
- Maxime> There seems to be a glitch here.
-
-Ahh yes.
-
- Maxime> While it shouldn't happen in the common use-case, because of
- Maxime> the dependency we set on busybox in all the logger packages, if
- Maxime> the user put his init script for another logger in the
- Maxime> skeleton, it will always remove it, and install the default
- Maxime> one.
-
- Maxime> Maybe the common name was not such a good idea, and that we
- Maxime> should have a distinct name for each init scripts. Or we revert
- Maxime> this commit. I don't know.
-
-For 2011.11 I would suggest we just remove the 2nd part (E.G. removal of
-init script if syslog daemon isn't enabled) - The first part is needed
-to support custom S01logging scripts with busybox (E.G. I have projects
-where we log to shared memory instead of files, so you need -S option to
-syslogd).
-
-Once 2011.11 is out, then we should probably rename the files to work
-around this.
-
-I'll fix - Thanks for bringing it out.
-
--- 
-Bye, Peter Korsgaard
+Mike
+> Thomas
