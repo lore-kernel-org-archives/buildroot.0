@@ -1,69 +1,58 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 23 Nov 2011 12:40:52 +0100
-Subject: [Buildroot] [git commit] busybox: only install S01logging if
- syslogd applet is enabled
-In-Reply-To: <20110704191002.1D1B48A31E@busybox.osuosl.org>
-References: <20110704191002.1D1B48A31E@busybox.osuosl.org>
-Message-ID: <4ECCDBC4.8030805@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 Nov 2011 13:57:59 +0200
+Subject: [Buildroot] [PATCH 1/3] Add the systemd package
+In-Reply-To: <1322047811-12933-2-git-send-email-maxime.ripard@free-electrons.com>
+References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1322047811-12933-2-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <20111123115759.GD4309@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Maxime,
 
-Looking at the init scripts installation stuff, I found this, which is
-confusing to me.
-
-There seems to be a glitch here.
-
-AFAIK, when I proposed that name, we renamed all the init scripts for
-logging daemons to S01logging.
-
-But this combined with this commit leads to erasing the init scripts for
-other daemons when logging is not enabled in busybox.
-
-While it shouldn't happen in the common use-case, because of the
-dependency we set on busybox in all the logger packages, if the user put
-his init script for another logger in the skeleton, it will always
-remove it, and install the default one.
-
-Maybe the common name was not such a good idea, and that we should have
-a distinct name for each init scripts. Or we revert this commit. I don't
-know.
-
-On 04/07/2011 21:03, Peter Korsgaard wrote:
-> 
-> commit: http://git.buildroot.net/buildroot/commit/?id=abf7af17e95855e9fe2535729f7d83fce603463f
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+On Wed, Nov 23, 2011 at 12:30:09PM +0100, Maxime Ripard wrote:
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 > ---
->  package/busybox/busybox.mk |    6 ++++--
->  1 files changed, 4 insertions(+), 2 deletions(-)
+>  fs/skeleton/etc/mtab       |    2 +-
+>  linux/linux.mk             |    2 +
+>  package/Config.in          |    1 +
+>  package/dbus/dbus.mk       |    4 +++
+>  package/systemd/Config.in  |   16 +++++++++++++++
+>  package/systemd/systemd.mk |   45 ++++++++++++++++++++++++++++++++++++++++++++
+>  6 files changed, 69 insertions(+), 1 deletions(-)
+>  create mode 100644 package/systemd/Config.in
+>  create mode 100644 package/systemd/systemd.mk
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 4931b07..509c3bb 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -123,8 +123,10 @@ endef
->  endif
->  
->  define BUSYBOX_INSTALL_LOGGING_SCRIPT
-> -	$(INSTALL) -m 0755 -D package/busybox/S01logging \
-> -		$(TARGET_DIR)/etc/init.d/S01logging
-> +	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
-> +		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-> +			$(TARGET_DIR)/etc/init.d/S01logging; \
-> +	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
->  endef
->  
->  # We do this here to avoid busting a modified .config in configure
+> diff --git a/fs/skeleton/etc/mtab b/fs/skeleton/etc/mtab
+> index e1c2045..4c0a094 120000
+> --- a/fs/skeleton/etc/mtab
+> +++ b/fs/skeleton/etc/mtab
+> @@ -1 +1 @@
+> -../proc/mounts
+> \ No newline at end of file
+> +/proc/mounts
+> \ No newline at end of file
 
+Why is this change needed?
+
+[snip]
+
+> +define SYSTEMD_INSTALL_INIT_HOOK
+> +	ln -fs /bin/systemd $(TARGET_DIR)/sbin/init
+> +	ln -fs /bin/systemctl $(TARGET_DIR)/sbin/halt
+> +	ln -fs /bin/systemctl $(TARGET_DIR)/sbin/poweroff
+> +	ln -fs /bin/systemctl $(TARGET_DIR)/sbin/reboot
+> +endef
+
+You should probably add busybox to your dependencies to make sure you override 
+the busybox provided applets.
+
+baruch
 
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
