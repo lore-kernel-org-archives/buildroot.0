@@ -1,40 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2011 15:24:40 +0100
-Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
- no suitable tar can be found
-In-Reply-To: <d4b15640ce2d3ab89835.1322053785@devws108>
+Date: Wed, 23 Nov 2011 15:25:26 +0100
+Subject: [Buildroot] [PATCH 3 of 3 v2] Move toolchain/dependencies to
+ support/dependencies
+In-Reply-To: <52e7185c07a0115567d6.1322053786@devws108>
 References: <patchbomb.1322053783@devws108>
- <d4b15640ce2d3ab89835.1322053785@devws108>
-Message-ID: <20111123152440.0fef75ca@skate>
+ <52e7185c07a0115567d6.1322053786@devws108>
+Message-ID: <20111123152526.61059281@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 23 Nov 2011 14:59:59 +0100,
+Le Wed, 23 Nov 2011 15:00:02 +0100,
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-> Some toolchains, like the one built with buildroot itself, use
-> hardlinks (for example to link between the c++ and g++ binary).
-> Unpacking such a toolchain with the --strip-components options does
-> not work correctly if the system tar is too old (<1.17). Even recent
-> releases of RedHat/CentOS still ship with tar 1.15.
+> As suggested by Arnout Vandecappelle, move toolchain/dependencies to
+> support/dependencies, as it really is not toolchain-specific anymore.
 > 
-> This patch checks for a suitable tar version (tar 1.17+) on the host
-> system, and adds host-tar to the host dependencies if none can be
-> found.
-> 
-> TAR is redefined to HOST_TAR, except when extracting host-tar (this
-> is a chicken-and-egg problem), so that all packages use the host-tar
-> if no suitable tar was found.
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-I am still puzzled by the fact that tar is needed to extract this
-host-tar, so there's like a chicken-and-egg problem. I understand that
-the real host tar is used to extract the host-tar, which is then use to
-extract all other packages. But that sounds really nasty to me.
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
