@@ -1,36 +1,33 @@
-From: Tim Judd <tjudd2k@yahoo.com>
-Date: Wed, 23 Nov 2011 14:38:27 -0800 (PST)
-Subject: [Buildroot] a visit long ago
-Message-ID: <1322087907.73142.YahooMailNeo@web161206.mail.bf1.yahoo.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 23 Nov 2011 23:32:00 +0100
+Subject: [Buildroot] [git commit] gdb: fix version logic for bfin
+Message-ID: <20111123224131.9E56E8F665@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone.
+commit: http://git.buildroot.net/buildroot/commit/?id=e9985f5d5fb10d3441479bc2b89dfec862fe1d85
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+GDB should default to 6.6 on bfin, not on !bfin.
 
-I've been working hard to try to get buildroot (current and past archive versions) to build me a firmware image for a little useless NAS now that I've gutted it.? It's a headless 486 (with very limited instruction or cpu set).? This is not the problem, I can get the userland to boot, once I solve the problem I'm writing to you about.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/gdb/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-the OEM has kernel 2.6.19 installed.? Someone else has gotten 2.6.20.4 working with it too.? I'd rather stick with that genre of time for the kernel (planning to keep the kernel, just replace the userland since it's an OEM proprietary box).? Problem I'm repeatedly getting myself into is libc headers and redefines of functions.? This one is stumping me for answers.? Kernel 2.6.20 redefines getline() and the error thrown says /usr/lib/stdio.h previously defines getline and errors out.
-? Where I'm confused is if "/usr...." is my host build environment stdlibc, or if it's uclibc during the build process.? How can I check/be sure?? I seem to haphazardly removing and adding packages to the host (and tried multiple hosts at that) to resolve these old legacy coding problems.? And hasn't solved them? :(
-
-
-
-If, on the other hand, using kernel headers from something like 2.6.35 isn't going to give 2.6.19 or 2.6.20.4 problems, I can successfully compile the userland with the newer kernel/toolchain headers.
-
-
-
-I'm baffled on how to keep the 2.6.19 (preferred) kernel (which has lots of OEM patches) with any userland that is sure not to give problems.? my small microtesting with kernel toolchain headers from 2.6.35 aren't giving kernel 2.6.19 problems but I am not at all versed with linuxisms to resolve this with my own limited knowledge.
-
-
-
-
-thanks all,
-
-?
---Tim
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111123/90fe9622/attachment.html>
+diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
+index 8a02255..2a2844a 100644
+--- a/toolchain/gdb/Config.in
++++ b/toolchain/gdb/Config.in
+@@ -28,7 +28,7 @@ config BR2_PACKAGE_GDB_HOST
+ 
+ choice
+ 	prompt "GDB debugger Version"
+-	default BR2_GDB_VERSION_6_6 if !BR2_bfin
++	default BR2_GDB_VERSION_6_6 if BR2_bfin
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GDB_VERSION_7_3
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_GDB_SERVER || BR2_PACKAGE_GDB_HOST
