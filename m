@@ -1,36 +1,40 @@
-From: Emmanuel BOUAZIZ <ebouaziz@neotion.com>
-Date: Wed, 23 Nov 2011 10:24:30 +0100
-Subject: [Buildroot] help needed with realtek gigabit network adapter
-In-Reply-To: <4ECB795E.90607@neotion.com>
-References: <4ECA36CB.5010803@neotion.com> <1321879312.2085.18.camel@sven>
- <20111121134405.02151918@skate> <4ECA8C28.1020306@neotion.com>
- <20111121210817.5eddecc0@skate> <4ECB795E.90607@neotion.com>
-Message-ID: <4ECCBBCE.8090907@neotion.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 23 Nov 2011 12:09:53 +0100
+Subject: [Buildroot] Adding Microblaze support to Buildroot
+In-Reply-To: <87sjlgplif.fsf@macbook.be.48ers.dk>
+References: <4EBC554E.7050605@gmail.com>
+ <4EBC5656.2010103@gmail.com>	<4EBD18F1.6020804@relinux.de>
+ <4ECB62C8.6030301@relinux.de> <87sjlgplif.fsf@macbook.be.48ers.dk>
+Message-ID: <4ECCD481.4030707@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am 22.11.2011 10:14, schrieb Peter Korsgaard:
+>>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+>  Stephan> Hello all,
+>
+>  Stephan> is there an interest in adding the Microblaze architecture to
+>  Stephan> buildroot?
+>
+> Yes, I would say so.
+>
+>  I'm more worrying about how much we need to patch individual
+> packages to work on microblaze.
+To which extend do you expect individual packages being tested on the
+different architectures?
 
-On 11/22/2011 11:28 AM, Emmanuel BOUAZIZ wrote:
-> uhci_hcd 0000:00:1d.2: PCI INT C -> Link[LNKC] -> GSI 7 (level, low) -> IRQ 7
-> uhci_hcd 0000:00:1d.2: UHCI Host Controller
-> uhci_hcd 0000:00:1d.2: new USB bus registered, assigned bus number 4
-> uhci_hcd 0000:00:1d.2: irq 7, io base 0x0000f040
-> 
-> there are 4 of them, 2 of which use IRQ 11 and the last one IRQ 10.
-> 
-> The UHCI driver is selected in linux's configuration.
-> 
-> regards,
-> 
+By now I have a busybox only configuration that can boot with the U-Boot
+available from the Avnet website.
 
-Hi,
+I can send a patch against buildroot's next branch if desired.
 
-I'm not sure why but the problem dissapeared after I enabled Sparse IRQ numbering (and DMA)
-
-Thanks for your help,
+Stephan
 
 -- 
-Emmanuel
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
