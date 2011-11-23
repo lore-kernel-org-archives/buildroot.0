@@ -1,86 +1,33 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 23 Nov 2011 14:59:27 +0100
-Subject: [Buildroot] [PATCH 2 of 2 v3] build: add option to exclude
- executables/dirs from being stripped
-In-Reply-To: <patchbomb.1322054943@devws108>
-References: <patchbomb.1322054943@devws108>
-Message-ID: <9a78f164806919c72b15.1322054945@devws108>
+Date: Wed, 23 Nov 2011 14:59:43 +0100
+Subject: [Buildroot] [PATCH 0 of 3 v2] dependencies: some improvements
+Message-ID: <patchbomb.1322053783@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes it may be desirable to keep debug symbols for some binaries and
-libraries on the target. This commit introduces the config option
-BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
-and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
-directories excluded from stripping entirely.
-These exclusions are passed to the find command in the target-finalize step.
+The original series had the following patches:
+ 1 dependencies: check core dependencies before anything else
+ 2 dependencies: add function suitable-host-package
+ 3 dependencies: build a host-tar if no suitable tar can be found
+ 4 dependencies: remove unused lzma checking scripts
+ 5 dirs and dependencies should be executed before every package
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Patches 1 and 4 are already merged (thanks Peter).
+
+Patch 5 tried to fix some non-default scenarios, like running 'make
+ctng-menuconfig'
+without having run 'make dependencies' or plain 'make' first. But, this
+attempt mainly suffered from the introduction of circular dependencies, which
+are not easy to solve. I therefore decided not to support these scenarios in
+this series.
+
+Patch 2 and 3 are updated in this series based on the input from Arnout
+(thanks!)
+
+Additionally, a new patch moves toolchain/dependencies to
+support/dependencies.
+
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
-v3: merge with redundant patch 'stripping: use findfileclauses utility function'
-v2: add the possibility to exclude entire directories
-
- Config.in |  19 +++++++++++++++++++
- Makefile  |   9 +++++++--
- 2 files changed, 26 insertions(+), 2 deletions(-)
-
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -247,6 +247,25 @@ config BR2_STRIP_none
- 	  none    do not strip (only for debugging!)
- endchoice
- 
-+config BR2_STRIP_EXCLUDE_FILES
-+	string "executables that should not be stripped"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of binaries and libraries
-+	  here that should not be stripped on the target.
-+
-+config BR2_STRIP_EXCLUDE_DIRS
-+	string "directories that should be skipped when stripping"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of directories that should
-+	  be skipped when stripping. Binaries and libraries in these
-+	  directories will not be touched.
-+	  The directories should be specified relative to the target directory,
-+	  without leading slash.
-+
- choice
- 	prompt "gcc optimization level"
- 	default BR2_OPTIMIZE_S
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -430,6 +430,12 @@ endif
- erase-fakeroots:
- 	rm -f $(BUILD_DIR)/.fakeroot*
- 
-+STRIP_FIND_CMD=find $(TARGET_DIR)
-+ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-+STRIP_FIND_CMD+=\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-+endif
-+STRIP_FIND_CMD+=-type f -perm +111 -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-+
- target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-@@ -454,8 +460,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
--	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
--		xargs $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD) || true
- 
