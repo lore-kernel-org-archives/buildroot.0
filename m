@@ -1,65 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Nov 2011 09:23:14 +0100
-Subject: [Buildroot] 2011.11: manual improvements
-In-Reply-To: <CAAXf6LV2Z+FEk79qj3nqg1faH1wpWXzAVBin1Uh9xUvpvf0pTg@mail.gmail.com>
-References: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
- <CAAXf6LV2Z+FEk79qj3nqg1faH1wpWXzAVBin1Uh9xUvpvf0pTg@mail.gmail.com>
-Message-ID: <20111123092314.5065a4b8@skate>
+Date: Wed, 23 Nov 2011 09:25:47 +0100
+Subject: [Buildroot] equivalent of a 'make modules'
+In-Reply-To: <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <20111122230429.2bef52c2@skate>
+ <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
+ <20111122232914.76a86e7d@skate>
+ <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
+Message-ID: <20111123092547.2898f799@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 23 Nov 2011 08:23:47 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Le Tue, 22 Nov 2011 16:35:20 -0600,
+"Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
 
-> > * The 2011.11-rc1 tarball does not contain a ready-made manual. A
-> > user that doesn't know buildroot and searches for the manual, will
-> > only find the manual sources in docs/manual. These are readable,
-> > but they are not intended for that purpose. I don't think we can
-> > expect users to first run 'make manual', and have asciidoc
-> > installed. Therefore I think we should provide a ready-made manual
-> > in the tarballs. It probably requires a rewrite of the 'release'
-> > target, because the current 'git archive' used there will not take
-> > along untracked files. One approach is to add the files to the
-> > tarball afterwards.
+> Ok, this is where it becomes new for me.  Is this the "only way" or
+> the "most convenient" way, or the "simplest way" for someone not that
+> familiar with BuildRoot?
 
-I agree on the need to have a generated version of the manual in the
-released tarballs.
+Basically you have the choice of :
 
-> > * I think it should become more clear that the contents of
-> > 'docs/manual' are really the manual sources, not the finished
-> > manual. One way to do this would be to move them in a subdirectory
-> > 'sources' or rename 'manual' to 'manual-sources'.
+ * Generating your system with Buildroot, then manually build EtherCAT
+   outside of Buildroot using the Buildroot cross-compiler and the
+   kernel built by Buildroot. Advantages: I don't see any, except maybe
+   the fact that you don't need to learn out to create packages in
+   Buildroot. Drawbacks: it might actually be *harder* to achieve than
+   to create a package in Buildroot, and your build process is no
+   longer nicely integrated.
 
-Hum, not sure this is so important. I know Peter wanted to move the
-website sources from docs/* to docs/website/. Many the manual sources
-can be in docs/manual/src/ and the generated manual available in
-released tarballs stored in docs/manual/.
+ * Add a package in Buildroot. Requires learning a bit about how to
+   create packages (but our documentation on this is quite good I
+   think, and the Buildroot source tree is full of examples). In the
+   end, it might be simpler to package your software component than
+   building it manually, and you have the benefit of having it nicely
+   integrated.
 
-> > * Suppose a user does execute 'make manual', then it's unclear what
-> > the location of the manual is. I think we should print the location
-> > when executing the corresponding make targets, and provide a README
-> > or similar in docs/manual to explain this. I would actually like it
-> > if the manual were generated in docs/manual directly, instead of in
-> > 'output'.
-
-That's what I implemented originally, but I was told that it wasn't
-correct to generate things within the source tree. If we do support
-out-of-tree build, then it's true that we should support the case where
-the source tree is kept read-only. I don't feel very strongly about
-this.
-
-> I haven't seen any comments regarding this. Still, I think it's
-> important to discuss before releasing 2011.11.
-
-I don't think any of those problems are show-stoppers for the release.
-They would be nice to have (especially having generated manuals in the
-release tarballs), but they can be improved in future releases if not
-implemented for 2011.11.
-
-Best regards,
+Regards,
 
 Thomas
 -- 
