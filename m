@@ -1,74 +1,49 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 23 Nov 2011 08:19:33 +0100
-Subject: [Buildroot] equivalent of a 'make modules'
-In-Reply-To: <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <20111122230429.2bef52c2@skate>
- <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
- <20111122232914.76a86e7d@skate>
- <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
-Message-ID: <CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com>
+Date: Wed, 23 Nov 2011 08:23:47 +0100
+Subject: [Buildroot] 2011.11: manual improvements
+In-Reply-To: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
+References: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
+Message-ID: <CAAXf6LV2Z+FEk79qj3nqg1faH1wpWXzAVBin1Uh9xUvpvf0pTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 22, 2011 at 11:35 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
->> Ok. I guess the EtherCAT stuff is not open-source, unfortunately.
+On Tue, Nov 15, 2011 at 11:55 AM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> Hi,
 >
-> This is what I am working with:
+> In 2011.11, the new asciidoc manual will be included.
 >
-> http://www.etherlab.org/en/ethercat/index.php
+> There are a few points I'd like to mention regarding this:
 >
+> * The 2011.11-rc1 tarball does not contain a ready-made manual. A user
+> that doesn't know buildroot and searches for the manual, will only
+> find the manual sources in docs/manual. These are readable, but they
+> are not intended for that purpose. I don't think we can expect users
+> to first run 'make manual', and have asciidoc installed.
+> Therefore I think we should provide a ready-made manual in the
+> tarballs. It probably requires a rewrite of the 'release' target,
+> because the current 'git archive' used there will not take along
+> untracked files. One approach is to add the files to the tarball
+> afterwards.
 >
->> What you should do is create a Buildroot package
+> * I think it should become more clear that the contents of
+> 'docs/manual' are really the manual sources, not the finished manual.
+> One way to do this would be to move them in a subdirectory 'sources'
+> or rename 'manual' to 'manual-sources'.
 >
-> Ok, this is where it becomes new for me. ?Is this the "only way" or the
-> "most convenient" way, or the "simplest way" for someone not that familiar
-> with BuildRoot?
+> * Suppose a user does execute 'make manual', then it's unclear what
+> the location of the manual is. I think we should print the location
+> when executing the corresponding make targets, and provide a README or
+> similar in docs/manual to explain this. I would actually like it if
+> the manual were generated in docs/manual directly, instead of in
+> 'output'.
+>
 
-I would say it's both.
-
-Below is an example package .mk file for a kernel module. It uses the
-GENTARGETS infrastructure to explicitly specify the commands that
-should be executed when building and installing.
-Depending on the organization of EtherCAT, it may be a good idea to
-create two packages: one for the application and one for the kernel
-modules. It will probably make the .mk files a tad simpler.
-
-FOOMODULE_VERSION = 0.1.2
-FOOMODULE_SOURCE = foomodule-$(FOOMODULE_VERSION).tar.gz
-FOOMODULE_SITE = http://yoursite
-
-FOOMODULE_DEPENDENCIES = linux
-
-FOOMODULE_INSTALL_MOD_DIR = foo
-
-define FOOMODULE_BUILD_CMDS
-       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
-endef
-
-define FOOMODULE_INSTALL_TARGET_CMDS
-       $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) \
-               INSTALL_MOD_STRIP=1 \
-               INSTALL_MOD_DIR=$(FOOMODULE_INSTALL_MOD_DIR) \
-               modules_install
-endef
-
-define FOOMODULE_UNINSTALL_TARGET_CMDS
-       rm -rf $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/$(FOOMODULE_INSTALL_MOD_DIR)
-endef
-
-$(eval $(call GENTARGETS))
-
-
-Documentation on adding packages is available here:
-http://buildroot.uclibc.org/buildroot.html#add_packages
-If the EtherCAT application uses autotools (i.e. when it has files
-like configure.in, configure.ac, Makefile.in, Makefile.am) then you
-can use the AUTOTOOLS infrastructure for that part. The modules should
-be done with GENTARGETS.
+I haven't seen any comments regarding this. Still, I think it's
+important to discuss before releasing 2011.11.
 
 Best regards,
 Thomas
