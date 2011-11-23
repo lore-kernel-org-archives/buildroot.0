@@ -1,83 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 23 Nov 2011 09:37:49 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Nov 2011 09:47:52 +0100
 Subject: [Buildroot] 2011.11: manual improvements
-In-Reply-To: <20111123092314.5065a4b8@skate>
+In-Reply-To: <CAAXf6LWh3_+8zwBjaJkpFH05+J=oSSPZbztZuNsoAVOKmGRuXw@mail.gmail.com>
 References: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
  <CAAXf6LV2Z+FEk79qj3nqg1faH1wpWXzAVBin1Uh9xUvpvf0pTg@mail.gmail.com>
  <20111123092314.5065a4b8@skate>
-Message-ID: <CAAXf6LWh3_+8zwBjaJkpFH05+J=oSSPZbztZuNsoAVOKmGRuXw@mail.gmail.com>
+ <CAAXf6LWh3_+8zwBjaJkpFH05+J=oSSPZbztZuNsoAVOKmGRuXw@mail.gmail.com>
+Message-ID: <20111123094752.076f5383@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Le Wed, 23 Nov 2011 09:37:49 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-On Wed, Nov 23, 2011 at 9:23 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 23 Nov 2011 08:23:47 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> > * The 2011.11-rc1 tarball does not contain a ready-made manual. A
->> > user that doesn't know buildroot and searches for the manual, will
->> > only find the manual sources in docs/manual. These are readable,
->> > but they are not intended for that purpose. I don't think we can
->> > expect users to first run 'make manual', and have asciidoc
->> > installed. Therefore I think we should provide a ready-made manual
->> > in the tarballs. It probably requires a rewrite of the 'release'
->> > target, because the current 'git archive' used there will not take
->> > along untracked files. One approach is to add the files to the
->> > tarball afterwards.
->
-> I agree on the need to have a generated version of the manual in the
-> released tarballs.
->
->> > * I think it should become more clear that the contents of
->> > 'docs/manual' are really the manual sources, not the finished
->> > manual. One way to do this would be to move them in a subdirectory
->> > 'sources' or rename 'manual' to 'manual-sources'.
->
-> Hum, not sure this is so important. I know Peter wanted to move the
-> website sources from docs/* to docs/website/. Many the manual sources
-> can be in docs/manual/src/ and the generated manual available in
-> released tarballs stored in docs/manual/.
+> Alternatively, we could add a symbolic link from docs/manual to
+> output/docs/manual, and put the link under version control.
 
-That seems like a clear split to me.
+No. The output is not necessarily in output/. With the O= option, you
+can put it wherever you want (that's the point of out-of-tree build).
 
->
->> > * Suppose a user does execute 'make manual', then it's unclear what
->> > the location of the manual is. I think we should print the location
->> > when executing the corresponding make targets, and provide a README
->> > or similar in docs/manual to explain this. I would actually like it
->> > if the manual were generated in docs/manual directly, instead of in
->> > 'output'.
->
-> That's what I implemented originally, but I was told that it wasn't
-> correct to generate things within the source tree. If we do support
-> out-of-tree build, then it's true that we should support the case where
-> the source tree is kept read-only. I don't feel very strongly about
-> this.
+> But, this has the downside of having manuals in two places: the
+> official manual distributed with a release tarball and the generated
+> manual in output/docs.
 
-It's true that this would clutter the output of 'git status', unless
-we add it to the .gitignore files or similar.
+I simply think it's a matter of :
 
-Alternatively, we could add a symbolic link from docs/manual to
-output/docs/manual, and put the link under version control. But, this
-has the downside of having manuals in two places: the official manual
-distributed with a release tarball and the generated manual in
-output/docs.
+ * Having generated versions of the manual in the release tarball
 
->
->> I haven't seen any comments regarding this. Still, I think it's
->> important to discuss before releasing 2011.11.
->
-> I don't think any of those problems are show-stoppers for the release.
-> They would be nice to have (especially having generated manuals in the
-> release tarballs), but they can be improved in future releases if not
-> implemented for 2011.11.
+ * Having generated versions of the manual on the Buildroot website.
+   Actually, I think people will more naturally search on the project
+   website for documentation rather than inside the tarball. These
+   days, everybody 'googles something' before running 'man something' :)
 
-Ok, agreed.
+ * Documenting how to generate the manual.
 
-Thanks for your input,
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
