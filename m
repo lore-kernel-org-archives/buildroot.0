@@ -1,49 +1,65 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 23 Nov 2011 08:23:47 +0100
-Subject: [Buildroot] 2011.11: manual improvements
-In-Reply-To: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
-References: <CAAXf6LUPKRJUJF83-x1n4rRVXdmg3Ob-1dgtyuV+6v+aqfKbWQ@mail.gmail.com>
-Message-ID: <CAAXf6LV2Z+FEk79qj3nqg1faH1wpWXzAVBin1Uh9xUvpvf0pTg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Nov 2011 08:49:00 +0100
+Subject: [Buildroot] systemd
+In-Reply-To: <4ECA1B28.50907@free-electrons.com>
+References: <CAAfyv34FVf5V-ZH4-xapeG8F+2VSgXOWMsf+5O03m9wimRx1Ug@mail.gmail.com>
+ <4ECA1B28.50907@free-electrons.com>
+Message-ID: <201111230849.07277.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Nov 15, 2011 at 11:55 AM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
+On Monday 21 November 2011 10:34:32 Maxime Ripard wrote:
 > Hi,
->
-> In 2011.11, the new asciidoc manual will be included.
->
-> There are a few points I'd like to mention regarding this:
->
-> * The 2011.11-rc1 tarball does not contain a ready-made manual. A user
-> that doesn't know buildroot and searches for the manual, will only
-> find the manual sources in docs/manual. These are readable, but they
-> are not intended for that purpose. I don't think we can expect users
-> to first run 'make manual', and have asciidoc installed.
-> Therefore I think we should provide a ready-made manual in the
-> tarballs. It probably requires a rewrite of the 'release' target,
-> because the current 'git archive' used there will not take along
-> untracked files. One approach is to add the files to the tarball
-> afterwards.
->
-> * I think it should become more clear that the contents of
-> 'docs/manual' are really the manual sources, not the finished manual.
-> One way to do this would be to move them in a subdirectory 'sources'
-> or rename 'manual' to 'manual-sources'.
->
-> * Suppose a user does execute 'make manual', then it's unclear what
-> the location of the manual is. I think we should print the location
-> when executing the corresponding make targets, and provide a README or
-> similar in docs/manual to explain this. I would actually like it if
-> the manual were generated in docs/manual directly, instead of in
-> 'output'.
->
+> 
+> On 18/11/2011 21:02, Belisko Marek wrote:
+> > Hi,
+> > 
+> > when looking for ELCE 2011 videos one video was very
+> > interesting:http://events.linuxfoundation.org/events/embedded-linux-conference-europe/kooi
+> > There is a lot of discussion about decreasing boot time for embedded
+> > systems and systemd seems not yet included in buildroot (OE have it
+> > also angstrom).
+> > 
+> > Is there anybody who working on this or can I start integration to buildroot?
+> 
+> After attending this exact talk, I've begun to work on some integration
+> of systemd in Buildroot.
+> 
+> This has been stalled lately because I didn't have time to improve my
+> initial implementation, but basically, I have for now :
+>   - Made the systemd package
+>   - Added new package variables to define both Sys-V and systemd-format
+> init scripts
+>   - Added the needed logic so that you can only select one of the init
+> systems available in Buildroot (sysvinit, Busybox, systemd)
+>   - Migrated the existing packages to use the mentionned variables.
+> 
+> I still have some issues that I need to address, that explains why I
+> haven't yet posted the patches :
+>   - I have a bug that adds the sysv init scripts to the target even if
+> it shouldn't
+>   - I have not tested it "live" yet
 
-I haven't seen any comments regarding this. Still, I think it's
-important to discuss before releasing 2011.11.
+ If you post the patches already as an RFC, perhaps you will get some 
+comments that help you overcome these issues... Especially with a user
+that is willing to test them.
 
-Best regards,
-Thomas
+ Marek, if you test the eventual patches (and they work), can you give
+them your Tested-by: tag?
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111123/b16af227/attachment-0001.html>
