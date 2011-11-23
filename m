@@ -1,54 +1,86 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 23 Nov 2011 14:59:20 +0100
-Subject: [Buildroot] [PATCH 1 of 2 v3] Makefile.package.in: add utility
- functions find*clauses and notfirstword
+Date: Wed, 23 Nov 2011 14:59:27 +0100
+Subject: [Buildroot] [PATCH 2 of 2 v3] build: add option to exclude
+ executables/dirs from being stripped
 In-Reply-To: <patchbomb.1322054943@devws108>
 References: <patchbomb.1322054943@devws108>
-Message-ID: <eb97ed352368a5b29048.1322054944@devws108>
+Message-ID: <9a78f164806919c72b15.1322054945@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a few utility functions to Makefile.package.in.
+Sometimes it may be desirable to keep debug symbols for some binaries and
+libraries on the target. This commit introduces the config option
+BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
+and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
+directories excluded from stripping entirely.
+These exclusions are passed to the find command in the target-finalize step.
 
-Functions finddirclauses and findfileclauses help in building a find command
-that skips a set of directories and performs operations on a set of files.
-This pattern can for example be used to keep certain files or directories from
-being stripped, or to remove certain files from a package installation.
-
-The notfirstword function is the inverse of the 'firstword' function in make:
-it returns all but the first word.
-
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
-v3: use -path instead of -wholename; fix a bug in finddirclauses. Thanks, Cam.
-v2: integrate _cont variants in main find*clauses functions. Thanks, Arnout.
+v3: merge with redundant patch 'stripping: use findfileclauses utility function'
+v2: add the possibility to exclude entire directories
 
- package/Makefile.package.in |  11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ Config.in |  19 +++++++++++++++++++
+ Makefile  |   9 +++++++--
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -87,6 +87,17 @@ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)
- TERM_BOLD := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
+diff --git a/Config.in b/Config.in
+--- a/Config.in
++++ b/Config.in
+@@ -247,6 +247,25 @@ config BR2_STRIP_none
+ 	  none    do not strip (only for debugging!)
+ endchoice
  
-+# Utility functions for 'find'
-+# findfileclauses: creates "-name 'X' -o -name 'Y'"
-+# [1:namelist]
-+findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
-+# finddirclauses: creates "-path 'basedir/dirX' -o -path 'basedir/dirY'"
-+# [1:basedir, 2:namelist]
-+finddirclauses=-path '$(1)/$(firstword $(2))' $(patsubst %,-o -path '$(1)/%',$(call notfirstword,$(2)))
++config BR2_STRIP_EXCLUDE_FILES
++	string "executables that should not be stripped"
++	depends on !BR2_STRIP_none
++	default ""
++	help
++	  You may specify a space-separated list of binaries and libraries
++	  here that should not be stripped on the target.
 +
-+# Miscellaneous utility functions
-+notfirstword=$(wordlist 2,$(words $(1)),$(1))
++config BR2_STRIP_EXCLUDE_DIRS
++	string "directories that should be skipped when stripping"
++	depends on !BR2_STRIP_none
++	default ""
++	help
++	  You may specify a space-separated list of directories that should
++	  be skipped when stripping. Binaries and libraries in these
++	  directories will not be touched.
++	  The directories should be specified relative to the target directory,
++	  without leading slash.
 +
- # Download method commands
- WGET:=$(call qstrip,$(BR2_WGET)) $(QUIET)
- SVN:=$(call qstrip,$(BR2_SVN))
+ choice
+ 	prompt "gcc optimization level"
+ 	default BR2_OPTIMIZE_S
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -430,6 +430,12 @@ endif
+ erase-fakeroots:
+ 	rm -f $(BUILD_DIR)/.fakeroot*
+ 
++STRIP_FIND_CMD=find $(TARGET_DIR)
++ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
++STRIP_FIND_CMD+=\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
++endif
++STRIP_FIND_CMD+=-type f -perm +111 -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
++
+ target-finalize:
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+@@ -454,8 +460,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+ endif
+-	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
+-		xargs $(STRIPCMD) 2>/dev/null || true
++	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(KSTRIPCMD) || true
+ 
