@@ -1,34 +1,59 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Nov 2011 23:16:58 +0100
-Subject: [Buildroot] [git commit] busybox: only install S01logging if
-	syslogd applet is enabled
-In-Reply-To: <4ECD6C09.1090001@free-electrons.com> (Maxime Ripard's message of
- "Wed, 23 Nov 2011 22:56:25 +0100")
-References: <20110704191002.1D1B48A31E@busybox.osuosl.org>
- <4ECCDBC4.8030805@free-electrons.com>
- <8739deq3pp.fsf@macbook.be.48ers.dk>
- <874nxuo6sm.fsf@macbook.be.48ers.dk>
- <4ECD6C09.1090001@free-electrons.com>
-Message-ID: <87zkfmmqlh.fsf@macbook.be.48ers.dk>
+From: Trevor Woerner <twoerner@gmail.com>
+Date: Wed, 23 Nov 2011 17:24:06 -0500
+Subject: [Buildroot] [PATCH] rootfs: clean up /etc/inittab
+Message-ID: <1322087046-5473-1-git-send-email-twoerner@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+If, for example, sysklogd is not selected try to strip out the logging
+commands from /etc/inittab.
+---
+ target/generic/Makefile.in |   25 +++++++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
 
- Maxime> It is more in the case where :
- Maxime>   - The user has a custom S01logging script for rsyslog (also works
- Maxime> for all but busybox syslog)
- Maxime>   - Busybox runs first, as rsyslog depends on it
- Maxime>   - Busybox init is not enabled, so the package removes S01logging
- Maxime>   - rsyslog is built, and as there is no S01logging, installs its
- Maxime> default one.
-
-But rsyslog already installs (unconditially, which is a bug) 01rsyslog -
-People would presumably have a custom S01rsyslog file if they use
-rsyslog instead of a S01logging file?
-
+diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
+index 4185202..bd400c3 100644
+--- a/target/generic/Makefile.in
++++ b/target/generic/Makefile.in
+@@ -31,6 +31,20 @@ target-generic-do-remount-rw:
+ target-generic-dont-remount-rw:
+ 	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+ 
++target-generic-no-util-linux:
++	$(SED) '/\<mount\>/d' $(TARGET_DIR)/etc/inittab
++	$(SED) '/\<umount\>/d' $(TARGET_DIR)/etc/inittab
++	$(SED) '/\<swapoff\>/d' $(TARGET_DIR)/etc/inittab
++
++target-generic-no-coreutils:
++	$(SED) '/\<mkdir\>/d' $(TARGET_DIR)/etc/inittab
++	$(SED) '/\<hostname\>/d' $(TARGET_DIR)/etc/inittab
++	$(SED) '/\<touch\>/d' $(TARGET_DIR)/etc/inittab
++
++target-generic-no-sysklogd:
++	$(SED) '/\<klogd\>/d' $(TARGET_DIR)/etc/inittab
++	$(SED) '/\<syslogd\>/d' $(TARGET_DIR)/etc/inittab
++
+ ifneq ($(TARGET_GENERIC_HOSTNAME),)
+ TARGETS += target-generic-hostname
+ endif
+@@ -50,4 +64,15 @@ TARGETS += target-generic-do-remount-rw
+ else
+ TARGETS += target-generic-dont-remount-rw
+ endif
++ifneq ($(BR2_PACKAGE_BUSYBOX),y)
++ifneq ($(BR2_PACKAGE_UTIL_LINUX),y)
++TARGETS += target-generic-no-util-linux
++endif
++ifneq ($(BR2_PACAKGE_COREUTILS),y)
++TARGETS += target-generic-no-coreutils
++endif
++ifneq ($(BR2_PACKAGE_SYSKLOGD),y)
++TARGETS += target-generic-no-sysklogd
++endif
++endif
+ endif
 -- 
-Bye, Peter Korsgaard
+1.7.6.233.gd79bc
