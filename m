@@ -1,33 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 Nov 2011 23:32:00 +0100
-Subject: [Buildroot] [git commit] gdb: fix version logic for bfin
-Message-ID: <20111123224131.9E56E8F665@busybox.osuosl.org>
+Date: Wed, 23 Nov 2011 23:36:32 +0100
+Subject: [Buildroot] [git commit] busybox: remove old unused quirk handling
+Message-ID: <20111123224132.5FEEC8F665@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9985f5d5fb10d3441479bc2b89dfec862fe1d85
+commit: http://git.buildroot.net/buildroot/commit/?id=468f1cac8a2dad537bea6cbdabbf34031ceaae42
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GDB should default to 6.6 on bfin, not on !bfin.
+The definition of these variables were removed back in June
+(7d814728 / f1e4aac4).
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/busybox/busybox.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 8a02255..2a2844a 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -28,7 +28,7 @@ config BR2_PACKAGE_GDB_HOST
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 9e91136..d18b6d0 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -141,8 +141,6 @@ endef
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
  
- choice
- 	prompt "GDB debugger Version"
--	default BR2_GDB_VERSION_6_6 if !BR2_bfin
-+	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
- 	default BR2_GDB_VERSION_7_3
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_GDB_SERVER || BR2_PACKAGE_GDB_HOST
+ define BUSYBOX_CONFIGURE_CMDS
+-	$(BUSYBOX_SET_SYSKLOGD)
+-	$(BUSYBOX_SET_BB_PWD)
+ 	$(BUSYBOX_SET_LARGEFILE)
+ 	$(BUSYBOX_SET_IPV6)
+ 	$(BUSYBOX_SET_RPC)
