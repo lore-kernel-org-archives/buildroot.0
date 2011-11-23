@@ -1,47 +1,44 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 23 Nov 2011 15:05:42 +0100
-Subject: [Buildroot] [RFC] Add systemd to buildroot
-In-Reply-To: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <4ECCFDB6.1070401@free-electrons.com>
+From: Jeff Krasky <jeff.krasky@dspcg.com>
+Date: Wed, 23 Nov 2011 08:17:24 -0600
+Subject: [Buildroot] equivalent of a 'make modules'
+In-Reply-To: <20111123092547.2898f799@skate>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <20111122230429.2bef52c2@skate>
+ <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
+ <20111122232914.76a86e7d@skate>
+ <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
+ <20111123092547.2898f799@skate>
+Message-ID: <000601cca9ea$a02df6b0$0400a8c0@dspcgrnzks9p98>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also, what needs to be done:
-  - Convert some packages to have systemd units
-  - Change the folder I install the scripts in to /etc/systemd/system
-for $(PKG)_INIT_SYSTEMD
+>Basically you have the choice of :
+>
+> * Generating your system with Buildroot, then manually build EtherCAT
+>   outside of Buildroot using the Buildroot cross-compiler and the
+>   kernel built by Buildroot. Advantages: I don't see any, except maybe
+>   the fact that you don't need to learn out to create packages in
+>   Buildroot.
 
-On 23/11/2011 12:30, Maxime Ripard wrote:
-> Hi list,
-> 
-> I've been working for some time on adding systemd to buildroot in a nice way. It
-> is now in a pretty nice state I guess, at least nice enough to send an RFC and
-> get some review about the basic mechanics.
-> 
-> While the system should boot with systemd, for a reason unknown to me, udev
-> doesn't take into account its rules, and don't tag the devices for systemd,
-> which, in turn, doesn't expose a getty.
-> 
-> Another problem is that I still have some sysv init scripts added to the
-> filesystem through the skeleton. Since it is completely static, I don't find a
-> good way around this problem. Maybe we don't care. I don't know.
-> 
-> So, give it a look, and please tell me what you think :)
-> 
-> Maxime
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+That, and I am already trying this approach.  If there are just one or two
+small things to do along this approach, it might be easier to stick with it.
+For example, if there was just an easy way to do something like 'make
+modules' then this approach might be quickest.
 
+> Drawbacks: it might actually be *harder* to achieve than
+>   to create a package in Buildroot, and your build process is no
+>   longer nicely integrated.
 
--- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Is the 'make modules' idea considered hard?
+
+> * Add a package in Buildroot. Requires learning a bit about how to
+>   create packages (but our documentation on this is quite good I
+>   think, and the Buildroot source tree is full of examples).
+
+I believe another poster sent a link to read about this, so I will look at
+that.  In the meantime, can you comment on the first part of this email?
+
+Thanks.
