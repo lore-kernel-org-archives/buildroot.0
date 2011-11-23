@@ -1,65 +1,53 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 23 Nov 2011 14:53:34 +0100
-Subject: [Buildroot] [PATCH 1/3] Add the systemd package
-In-Reply-To: <20111123115759.GD4309@sapphire.tkos.co.il>
-References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
- <1322047811-12933-2-git-send-email-maxime.ripard@free-electrons.com>
- <20111123115759.GD4309@sapphire.tkos.co.il>
-Message-ID: <4ECCFADE.9060700@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Nov 2011 14:54:48 +0100
+Subject: [Buildroot] Adding Microblaze support to Buildroot
+In-Reply-To: <4ECCD481.4030707@relinux.de>
+References: <4EBC554E.7050605@gmail.com> <4EBC5656.2010103@gmail.com>
+ <4EBD18F1.6020804@relinux.de> <4ECB62C8.6030301@relinux.de>
+ <87sjlgplif.fsf@macbook.be.48ers.dk> <4ECCD481.4030707@relinux.de>
+Message-ID: <20111123145448.5f5d15b9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Wed, 23 Nov 2011 12:09:53 +0100,
+Stephan Hoffmann <sho@relinux.de> a ?crit :
 
-On 23/11/2011 12:57, Baruch Siach wrote:
-> On Wed, Nov 23, 2011 at 12:30:09PM +0100, Maxime Ripard wrote:
->> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
->> ---
->>  fs/skeleton/etc/mtab       |    2 +-
->>  linux/linux.mk             |    2 +
->>  package/Config.in          |    1 +
->>  package/dbus/dbus.mk       |    4 +++
->>  package/systemd/Config.in  |   16 +++++++++++++++
->>  package/systemd/systemd.mk |   45 ++++++++++++++++++++++++++++++++++++++++++++
->>  6 files changed, 69 insertions(+), 1 deletions(-)
->>  create mode 100644 package/systemd/Config.in
->>  create mode 100644 package/systemd/systemd.mk
->>
->> diff --git a/fs/skeleton/etc/mtab b/fs/skeleton/etc/mtab
->> index e1c2045..4c0a094 120000
->> --- a/fs/skeleton/etc/mtab
->> +++ b/fs/skeleton/etc/mtab
->> @@ -1 +1 @@
->> -../proc/mounts
->> \ No newline at end of file
->> +/proc/mounts
->> \ No newline at end of file
+> To which extend do you expect individual packages being tested on the
+> different architectures?
+
+On Blackfin, there are many packages that don't build, because they
+simply cannot build on !MMU systems. Our goal is to progressively add
+the "depends on BR2_USE_MMU" on all packages that need a MMU to
+build/work properly.
+
+So, it's definitely not a problem if not all packages have not been
+tested with Microblaze. I'll add a Microblaze toolchain into my
+Buildroot testing stuff, it will raise issues, and we will fix them as
+we go.
+
+> By now I have a busybox only configuration that can boot with the
+> U-Boot available from the Avnet website.
 > 
-> Why is this change needed?
+> I can send a patch against buildroot's next branch if desired.
 
-Because systemd tests if /etc/mtab is a link to /proc/mounts or
-/proc/self/mounts, and thus fails with this link.
+Excellent. Would be good to have :
 
-http://cgit.freedesktop.org/systemd/tree/src/main.c#n1082
+ * A patch adding the general Microblaze support
 
->> +define SYSTEMD_INSTALL_INIT_HOOK
->> +	ln -fs /bin/systemd $(TARGET_DIR)/sbin/init
->> +	ln -fs /bin/systemctl $(TARGET_DIR)/sbin/halt
->> +	ln -fs /bin/systemctl $(TARGET_DIR)/sbin/poweroff
->> +	ln -fs /bin/systemctl $(TARGET_DIR)/sbin/reboot
->> +endef
-> 
-> You should probably add busybox to your dependencies to make sure you override 
-> the busybox provided applets.
+ * A patch that adds some defconfig for the Microblaze board you have
 
-Right
+ * It would be even better if another patch could add a defconfig for
+   the Microblaze Qemu emulation, so that those not having a
+   Microblaze board can test.
 
+Best regards,
 
+Thomas
 -- 
-Maxime Ripard, Free Electrons
+Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
