@@ -1,42 +1,82 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 24 Nov 2011 09:15:34 +0100
-Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <20111122230429.2bef52c2@skate>
- <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
- <20111122232914.76a86e7d@skate>
- <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com>
- <001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
-Message-ID: <CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Thu, 24 Nov 2011 09:32:02 +0100
+Subject: [Buildroot] [PATCH] Rework of shutdown policy in inittab
+In-Reply-To: <1314966310-4360-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1314966310-4360-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <4ECE0102.6080009@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 23, 2011 at 10:38 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
-> According to the documentation for making the .mk file
-> (http://buildroot.uclibc.org/buildroot.html#autotools-tutorial), what is the
-> syntax for specifying a local (hard drive location) of the .bz2 file?
->
-> LIBFOO_SITE = http://www.foosoftware.org/download
->
-> Is the example given. ?Can I just do something like
->
-> LIBFOO_SITE = /home/libfoo.tar.bz2
+Ping ?
 
-You can use
+On 02/09/2011 14:25, Maxime Ripard wrote:
+> This commit follows commit ad501b66. Start up of the busybox logging
+> daemons were moved to an init script but the shutdown were still
+> performed in inittab. This commit moves the shutdown policy to an
+> rcK script that calls the stop function of all the init scripts in
+> a reversed order.
+> 
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> ---
+>  fs/skeleton/etc/init.d/rcK |   27 +++++++++++++++++++++++++++
+>  fs/skeleton/etc/inittab    |    3 +--
+>  2 files changed, 28 insertions(+), 2 deletions(-)
+>  create mode 100755 fs/skeleton/etc/init.d/rcK
+> 
+> diff --git a/fs/skeleton/etc/init.d/rcK b/fs/skeleton/etc/init.d/rcK
+> new file mode 100755
+> index 0000000..59e9c54
+> --- /dev/null
+> +++ b/fs/skeleton/etc/init.d/rcK
+> @@ -0,0 +1,27 @@
+> +#!/bin/sh
+> +
+> +
+> +# Stop all init scripts in /etc/init.d
+> +# executing them in reversed numerical order.
+> +#
+> +for i in $(ls -r /etc/init.d/S??*) ;do
+> +
+> +     # Ignore dangling symlinks (if any).
+> +     [ ! -f "$i" ] && continue
+> +
+> +     case "$i" in
+> +	*.sh)
+> +	    # Source shell script for speed.
+> +	    (
+> +		trap - INT QUIT TSTP
+> +		set stop
+> +		. $i
+> +	    )
+> +	    ;;
+> +	*)
+> +	    # No sh extension, so fork subprocess.
+> +	    $i stop
+> +	    ;;
+> +    esac
+> +done
+> +
+> diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
+> index ac410d6..85881f4 100644
+> --- a/fs/skeleton/etc/inittab
+> +++ b/fs/skeleton/etc/inittab
+> @@ -30,8 +30,7 @@ null::sysinit:/bin/hostname -F /etc/hostname
+>  ::ctrlaltdel:/sbin/reboot
+>  
+>  # Stuff to do before rebooting
+> -null::shutdown:/usr/bin/killall klogd
+> -null::shutdown:/usr/bin/killall syslogd
+> +null::shutdown:/etc/init.d/rcK
+>  null::shutdown:/bin/umount -a -r
+>  null::shutdown:/sbin/swapoff -a
+>  
 
-LIBFOO_SITE = file:///home/libfoo.tar.bz2
 
-(note the three slashes; two from the scheme, the third one for an
-absolute path)
-
-Note that using file:// will not really help other people, except if
-they have access to the same filesystem. You may consider using an
-http/ftp server, or an scp url.
-
-Best regards,
-Thomas
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
