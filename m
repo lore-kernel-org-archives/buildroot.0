@@ -1,43 +1,42 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Thu, 24 Nov 2011 09:03:12 +0100
-Subject: [Buildroot] [git commit] busybox: only install S01logging if
- syslogd applet is enabled
-In-Reply-To: <87zkfmmqlh.fsf@macbook.be.48ers.dk>
-References: <20110704191002.1D1B48A31E@busybox.osuosl.org>
- <4ECCDBC4.8030805@free-electrons.com> <8739deq3pp.fsf@macbook.be.48ers.dk>
- <874nxuo6sm.fsf@macbook.be.48ers.dk> <4ECD6C09.1090001@free-electrons.com>
- <87zkfmmqlh.fsf@macbook.be.48ers.dk>
-Message-ID: <4ECDFA40.8030508@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 24 Nov 2011 09:15:34 +0100
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <20111122230429.2bef52c2@skate>
+ <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
+ <20111122232914.76a86e7d@skate>
+ <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com>
+ <001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
+Message-ID: <CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/11/2011 23:16, Peter Korsgaard wrote:
->>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
-> 
->  Maxime> It is more in the case where :
->  Maxime>   - The user has a custom S01logging script for rsyslog (also works
->  Maxime> for all but busybox syslog)
->  Maxime>   - Busybox runs first, as rsyslog depends on it
->  Maxime>   - Busybox init is not enabled, so the package removes S01logging
->  Maxime>   - rsyslog is built, and as there is no S01logging, installs its
->  Maxime> default one.
-> 
-> But rsyslog already installs (unconditially, which is a bug) 01rsyslog -
-> People would presumably have a custom S01rsyslog file if they use
-> rsyslog instead of a S01logging file?
+On Wed, Nov 23, 2011 at 10:38 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
+> According to the documentation for making the .mk file
+> (http://buildroot.uclibc.org/buildroot.html#autotools-tutorial), what is the
+> syntax for specifying a local (hard drive location) of the .bz2 file?
+>
+> LIBFOO_SITE = http://www.foosoftware.org/download
+>
+> Is the example given. ?Can I just do something like
+>
+> LIBFOO_SITE = /home/libfoo.tar.bz2
 
-Oh yes, you're right, rsyslog has S01rsyslog. Well it was my intent to
-do so at first then, but I didn't submitted anything to do it that way.
+You can use
 
-Sorry about that :)
+LIBFOO_SITE = file:///home/libfoo.tar.bz2
 
-Maxime
+(note the three slashes; two from the scheme, the third one for an
+absolute path)
 
--- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Note that using file:// will not really help other people, except if
+they have access to the same filesystem. You may consider using an
+http/ftp server, or an scp url.
+
+Best regards,
+Thomas
