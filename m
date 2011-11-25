@@ -1,36 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 24 Nov 2011 21:44:21 -0300
-Subject: [Buildroot] [PATCH] ruby: fix build breakage
-Message-ID: <1322181861-11963-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 25 Nov 2011 07:00:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 4538] New: main() not exited normally then using
+	pthreads
+Message-ID: <bug-4538-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build breakage regarding invalid file format of
-/usr/lib/libpthread.so
-This is because ruby has rpath enabled by default and was throwing in
-the runtime paths and pulling in host libraries into the mix.
-So disable rpath.
+https://bugs.busybox.net/show_bug.cgi?id=4538
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ruby/ruby.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+           Summary: main() not exited normally then using pthreads
+           Product: buildroot
+           Version: 2011.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: sunheretic13 at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 3495333..a34a251 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -10,7 +10,7 @@ RUBY_AUTORECONF = YES
- HOST_RUBY_AUTORECONF = YES
- RUBY_DEPENDENCIES = host-ruby
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
--RUBY_CONF_OPT = --disable-install-doc
-+RUBY_CONF_OPT = --disable-install-doc --disable-rpath
- 
- HOST_RUBY_CONF_OPT = --disable-install-doc
- 
+
+Created attachment 3782
+  --> https://bugs.busybox.net/attachment.cgi?id=3782
+Source Code demonstrated a bug
+
+Architecture: x86.
+
+When I build system with buildroot-2011.08 with uclibc-0.9.32 (old stable
+threads)simple program not working properly.
+
+main function not exited normally. Program not stopped, until I not press
+Ctrl-C.
+
+But if I put _exit() at the end of main(), the program exited normally???
+
+Attach: simple program source code.
+
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
