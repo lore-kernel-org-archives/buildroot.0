@@ -1,31 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Nov 2011 13:50:41 +0100
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Fri, 25 Nov 2011 14:02:26 +0100
 Subject: [Buildroot] uboot patch file location ??
-In-Reply-To: <20111125134712.7d240a35@skate>
+In-Reply-To: <141715BD74664D68A40946332371F408@JohanW7>
 References: <141715BD74664D68A40946332371F408@JohanW7>
- <20111125134712.7d240a35@skate>
-Message-ID: <20111125135041.0d8cb614@skate>
+Message-ID: <1322226146.2063.3.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 25 Nov 2011 13:47:12 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+On Fri, 2011-11-25 at 13:13 +0100, Sagaert Johan wrote:
 
-> However, note that this isn't really how board/ is supposed to be
-> used. The suggestion is not create a directory hierarchy as follows :
+> Board/UBOOT/2010.12/u-boot-2010.12.patch
 
-Of course, this should have been:
+There used to be a bug in the documentation that has been fixed
+recently. The patches should be named uboot-<version>-<something>.patch,
+not u-boot-<version>-<something>.patch.
 
-"The suggestion *is* to create a directory hierarchy as follows:"
 
-Thanks Maxime for noticing,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Sven
