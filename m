@@ -1,54 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 26 Nov 2011 13:07:14 +0100
-Subject: [Buildroot] [git commit] thttpd: fix build breakage with
-	eglibc/glibc
-Message-ID: <20111126133046.AFEE08F643@busybox.osuosl.org>
+Date: Sat, 26 Nov 2011 14:30:11 +0100
+Subject: [Buildroot] [git commit] ruby: fix build breakage
+Message-ID: <20111126133047.4A6FD8F643@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7948b0c621adab123f7585a32c0cf6810f83ca91
+commit: http://git.buildroot.net/buildroot/commit/?id=fc11bb0ab4db4c44f50b8985b5d1a6f7ca7f5b84
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix getline() function conflict with glibc/eglibc by renaming it.
+Fix build breakage regarding invalid file format of
+/usr/lib/libpthread.so
+This is because ruby has rpath enabled by default and was throwing in
+the runtime paths and pulling in host libraries into the mix.
+So disable rpath.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/thttpd/thttpd-2.25b-getline.patch |   26 ++++++++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
+ package/ruby/ruby.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/thttpd/thttpd-2.25b-getline.patch b/package/thttpd/thttpd-2.25b-getline.patch
-new file mode 100644
-index 0000000..35c366a
---- /dev/null
-+++ b/package/thttpd/thttpd-2.25b-getline.patch
-@@ -0,0 +1,26 @@
-+Fix glibc/eglibc getline() conflicting functions.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+
-+diff -Nura thttpd-2.25b.orig/extras/htpasswd.c thttpd-2.25b/extras/htpasswd.c
-+--- thttpd-2.25b.orig/extras/htpasswd.c	2001-12-18 21:08:08.000000000 -0300
-++++ thttpd-2.25b/extras/htpasswd.c	2011-11-25 11:42:47.198582812 -0300
-+@@ -49,7 +49,7 @@
-+     while((line[y++] = line[x++]));
-+ }
-+ 
-+-static int getline(char *s, int n, FILE *f) {
-++static int get_line(char *s, int n, FILE *f) {
-+     register int i=0;
-+ 
-+     while(1) {
-+@@ -189,7 +189,7 @@
-+     strcpy(user,argv[2]);
-+ 
-+     found = 0;
-+-    while(!(getline(line,MAX_STRING_LEN,f))) {
-++    while(!(get_line(line,MAX_STRING_LEN,f))) {
-+         if(found || (line[0] == '#') || (!line[0])) {
-+             putline(tfp,line);
-+             continue;
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 3495333..a34a251 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -10,7 +10,7 @@ RUBY_AUTORECONF = YES
+ HOST_RUBY_AUTORECONF = YES
+ RUBY_DEPENDENCIES = host-ruby
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+-RUBY_CONF_OPT = --disable-install-doc
++RUBY_CONF_OPT = --disable-install-doc --disable-rpath
+ 
+ HOST_RUBY_CONF_OPT = --disable-install-doc
+ 
