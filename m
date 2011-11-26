@@ -1,29 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 26 Nov 2011 20:57:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 4357] prevent patch commands from accessing source
-	control
-In-Reply-To: <bug-4357-163@https.bugs.busybox.net/>
-References: <bug-4357-163@https.bugs.busybox.net/>
-Message-ID: <20111126205729.6A2858F6BC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 26 Nov 2011 21:51:42 +0100
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20111126205816.D0CDC8F6BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4357
+commit: http://git.buildroot.net/buildroot/commit/?id=6d985f97c87a963674c6d9230b5fc6fe9982ff87
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-26 20:57:29 UTC ---
-Committed, thanks
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/CHANGES b/CHANGES
+index 9fbfe9f..b8bb451 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -7,7 +7,7 @@
+ 	patch, bump crosstool-ng, kernel headers and linux versions.
+ 
+ 	Updated/fixed packages: busybox, freetype, mplayer, opencv,
+-	rsyslog, xapp_xf86dga
++	php, rsyslog, ruby, thttpd, xapp_xf86dga
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
+ 
