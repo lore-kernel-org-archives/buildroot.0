@@ -1,30 +1,33 @@
-From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Sat, 26 Nov 2011 21:48:50 +0100
-Subject: [Buildroot] [PATCH] libiqrf: Bump to verion v0.1.1.
-Message-ID: <1322340530-4758-1-git-send-email-marek.belisko@open-nandra.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 26 Nov 2011 20:49:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 4514] Booting OS,
+ that requires automount of devtmpfs fails if fs image used as
+ initramfs
+In-Reply-To: <bug-4514-163@https.bugs.busybox.net/>
+References: <bug-4514-163@https.bugs.busybox.net/>
+Message-ID: <20111126204941.0453F8F600@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
----
- package/libiqrf/libiqrf.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=4514
 
-diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
-index 81e8421..0e3a018 100644
---- a/package/libiqrf/libiqrf.mk
-+++ b/package/libiqrf/libiqrf.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBIQRF_VERSION = v0.1.0
-+LIBIQRF_VERSION = v0.1.1
- LIBIQRF_SITE = git://github.com/nandra/libiqrf.git
- LIBIQRF_INSTALL_STAGING = YES
- 
+Peter Korsgaard <jacmet@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-26 20:49:40 UTC ---
+What buildroot version are you using? We have a pre-init wrapper script in
+buildroot since July which does exactly this.
+
+Please update to 2011.11(-rc2).
+
 -- 
-1.7.5.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
