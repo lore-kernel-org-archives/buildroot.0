@@ -1,28 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 26 Nov 2011 20:46:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 4484] libstdc++ has _GLIBCXX_HAVE_FENV_H undefined
- but uclibc appears to have a fenv.h
-In-Reply-To: <bug-4484-163@https.bugs.busybox.net/>
-References: <bug-4484-163@https.bugs.busybox.net/>
-Message-ID: <20111126204652.AA3698F6CA@busybox.osuosl.org>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Sat, 26 Nov 2011 21:48:50 +0100
+Subject: [Buildroot] [PATCH] libiqrf: Bump to verion v0.1.1.
+Message-ID: <1322340530-4758-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4484
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+---
+ package/libiqrf/libiqrf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-26 20:46:52 UTC ---
-On what arch is this? uClibc currently only has basic fenv support for i386
-
+diff --git a/package/libiqrf/libiqrf.mk b/package/libiqrf/libiqrf.mk
+index 81e8421..0e3a018 100644
+--- a/package/libiqrf/libiqrf.mk
++++ b/package/libiqrf/libiqrf.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBIQRF_VERSION = v0.1.0
++LIBIQRF_VERSION = v0.1.1
+ LIBIQRF_SITE = git://github.com/nandra/libiqrf.git
+ LIBIQRF_INSTALL_STAGING = YES
+ 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.5.4
