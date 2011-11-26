@@ -1,39 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 26 Nov 2011 13:56:24 +0100
-Subject: [Buildroot] [PATCH] php: fix build breakage
-In-Reply-To: <1322236144-2570-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 25 Nov 2011 12:49:04 -0300")
-References: <1322236144-2570-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nxrjb47.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 26 Nov 2011 13:07:14 +0100
+Subject: [Buildroot] [git commit] thttpd: fix build breakage with
+	eglibc/glibc
+Message-ID: <20111126133046.AFEE08F643@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7948b0c621adab123f7585a32c0cf6810f83ca91
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> The zip extension requires zlib, so select it.
+Fix getline() function conflict with glibc/eglibc by renaming it.
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/php/Config.ext |    2 ++
- Gustavo>  1 files changed, 2 insertions(+), 0 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/thttpd/thttpd-2.25b-getline.patch |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
 
- Gustavo> diff --git a/package/php/Config.ext b/package/php/Config.ext
- Gustavo> index 4f1614e..6df8cc3 100644
- Gustavo> --- a/package/php/Config.ext
- Gustavo> +++ b/package/php/Config.ext
- Gustavo> @@ -125,6 +125,8 @@ config BR2_PACKAGE_PHP_EXT_SYSVSHM
- 
- Gustavo>  config BR2_PACKAGE_PHP_EXT_ZIP
- Gustavo>  	bool "zip"
- Gustavo> +	select BR2_PACKAGE_PHP_EXT_ZLIB
- Gustavo> +	select BR2_PACKAGE_ZLIB
-
-Thanks, but selecting the zlib extension doesn't seem completely right
-(not a big deal, but still), so I've changed it to only select zlib +
-add the --with-zlib / add zlib to deps in the .mk instead.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/thttpd/thttpd-2.25b-getline.patch b/package/thttpd/thttpd-2.25b-getline.patch
+new file mode 100644
+index 0000000..35c366a
+--- /dev/null
++++ b/package/thttpd/thttpd-2.25b-getline.patch
+@@ -0,0 +1,26 @@
++Fix glibc/eglibc getline() conflicting functions.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++
++diff -Nura thttpd-2.25b.orig/extras/htpasswd.c thttpd-2.25b/extras/htpasswd.c
++--- thttpd-2.25b.orig/extras/htpasswd.c	2001-12-18 21:08:08.000000000 -0300
+++++ thttpd-2.25b/extras/htpasswd.c	2011-11-25 11:42:47.198582812 -0300
++@@ -49,7 +49,7 @@
++     while((line[y++] = line[x++]));
++ }
++ 
++-static int getline(char *s, int n, FILE *f) {
+++static int get_line(char *s, int n, FILE *f) {
++     register int i=0;
++ 
++     while(1) {
++@@ -189,7 +189,7 @@
++     strcpy(user,argv[2]);
++ 
++     found = 0;
++-    while(!(getline(line,MAX_STRING_LEN,f))) {
+++    while(!(get_line(line,MAX_STRING_LEN,f))) {
++         if(found || (line[0] == '#') || (!line[0])) {
++             putline(tfp,line);
++             continue;
