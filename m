@@ -1,39 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 27 Nov 2011 22:16:40 +0100
-Subject: [Buildroot] [git commit] ruby: really disable ncurses/readline for
-	host
-Message-ID: <20111127212439.2194D8F6ED@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 27 Nov 2011 22:37:59 +0100
+Subject: [Buildroot] [PATCH 1 of 2 v2] GENTARGETS: add support for scp://
+In-Reply-To: <29b8fe2f0be0b8a62162.1318602761@devws108> (Thomas De
+ Schampheleire's message of "Wed, 19 Oct 2011 09:25:40 +0200")
+References: <patchbomb.1318602760@devws108>
+ <29b8fe2f0be0b8a62162.1318602761@devws108>
+Message-ID: <87lir1gsaw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e4c61e5ea4b09bf112c94b86cde78784476c4014
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-Commit 150124b (ruby: fix host build breakage) tried to fix host-ruby
-build failures by disabling ncurses/readline extensions, but the
-ruby configure script doesn't understand --without-ncurses /
---without-readline arguments, so the commit didn't do anything.
+ Thomas> This patch adds support for scp:// both for use in the package
+ Thomas> Makefiles, as for the BR2_PRIMARY_SITE variable.
 
-Fix it by really disabling them using the --with-out-ext argument.
+ Thomas> This patch was based on the work of Richard Guy Briggs
+ Thomas> (see https://bugs.busybox.net/show_bug.cgi?id=3343).
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ruby/ruby.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed to next, sorry for the slow response.
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index ad791f8..d99fd1e 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -11,7 +11,7 @@ HOST_RUBY_AUTORECONF = YES
- RUBY_DEPENDENCIES = host-ruby
- RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
- RUBY_CONF_OPT = --disable-install-doc --disable-rpath
--HOST_RUBY_CONF_OPT = --disable-install-doc --without-ncurses --without-readline
-+HOST_RUBY_CONF_OPT = --disable-install-doc --with-out-ext=curses,readline
- 
- # Force optionals to build before we do
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+-- 
+Bye, Peter Korsgaard
