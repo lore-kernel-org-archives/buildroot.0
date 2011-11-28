@@ -1,65 +1,66 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Mon, 28 Nov 2011 06:50:18 -0600
-Subject: [Buildroot] MySQL Server Package, help needed
-In-Reply-To: <CAAXf6LUsAz19qfcmuga0pvdSuUWog=p7XMM_+Cxg408HhneDig@mail.gmail.com>
-References: <CAOrUntZRB7JSVt+WFn3bOfQd9WiYfN-qx9c0iRsO_cZ+qObYSw@mail.gmail.com>
- <CAAXf6LUsAz19qfcmuga0pvdSuUWog=p7XMM_+Cxg408HhneDig@mail.gmail.com>
-Message-ID: <201111280650.21240.minimod@morethan.org>
+From: Jeff Krasky <jeff.krasky@dspcg.com>
+Date: Mon, 28 Nov 2011 09:07:54 -0600
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98><20111122230429.2bef52c2@skate><005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98><20111122232914.76a86e7d@skate><006101cca967$050bb240$0400a8c0@dspcgrnzks9p98><CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com><001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com>
+Message-ID: <001e01ccaddf$81c0f300$0400a8c0@dspcgrnzks9p98>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon November 28 2011, Thomas De Schampheleire wrote:
-> Hi Ben,
+> You can use
 > 
-> On Sat, Nov 26, 2011 at 10:46 AM, Andrea Benini <andreabenini@gmail.com> wrote:
-> > Hi Guys,
-> > I've used buildroot and uclibc for a while and I'm now stucked with a
-> > package I'd like to build.
-> > Target Architecture: i386, variant: i686. Buildroot 2011.08 stable
-> > I'd like to add MySQL to the package list, I'd like to have a MySQL daemon
-> > installed (mysqld), not just the client interface.
-> > MySQL Server is not yet supported due to cross compiling issues I suppose.
-> > I was wondering if someone else has?a ready made package for MySQL, I've
-> > tried several solutions grabbed all around after a lot of google searches
-> > (from: Voltz,?Zuerker, fork on googlecode, and few tips taken from Oracle)
-> > but I'm still stuck here due to different compiling issues. I've tried to
-> > build my own package as well but MySQL seems to be tricky to handle in a
-> > toolchain. So I'm still stuck at the starting point.
-> > Is there someone else that has already maded it with 2011.08 buildroot ? may
-> > I see package files for it ?
+> LIBFOO_SITE = file:///home/libfoo.tar.bz2
 > 
-> I didn't attempt to build MySQL with Buildroot.
-> But, I suggest you describe the problems you experience in more
-> detail, then maybe someone on the list can help.
-> 
-> Btw, have you seen this:
-> http://forge.mysql.com/wiki/Linux_Cross_Compilation
->
+> (note the three slashes; two from the scheme, the third one for an
+> absolute path)
 
-While reading that with an eye towards using that information in a
-Buildroot port (if you are thinking of doing that)...
+One issue now is that 'make' in Buildroot doesn't seem to find this file and
+put it in the download directory.  Here is EtherCAT.mk:
 
-I recall that the subject of "stack direction" has come up
-here in the past.
+#############################################################
+#
+# EtherCAT
+#
+#############################################################
+ETHERCAT_VERSION = 1.0
+ETHERCAT_SOURCE = etherlabmaster.tar.bz2
+ETHERCAT_SITE = file:///home/user1/Desktop/EtherCAT4Atmel
+ETHERCAT_INSTALL_STAGING = YES
+ETHERCAT_INSTALL_TARGET = YES
+ETHERCAT_CONF_OPT = --enable-generic
+#####LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
 
-I think that the only "stack grows up" cpu that the Linux Kernel
-supports is HP, PA-RISC.  Since PA-RISC isn't a Buildroot target,
-it should be safe to hard code "stack direction" as "grows down".
+$(eval $(call AUTOTARGETS,package,ethercat))
 
-It is always possible that has changed, so to be certain, check
-the most recent Linux kernel sources.
- 
-Mike
-> (not sure if it will fix your problems though, we'd need more details.)
-> 
-> Best regards,
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+
+
+So you can see that the file is at /home/user1/Desktop/EtherCAT4Atmel/
+etherlabmaster.tar.bz2
+
+Now this is the message from 'make' in Buildroot:
+
+user1 at linux-0mmn:~/buildroot-2011.05> make
+>>> ethercat 1.0 Extracting
+bzcat: Can't open input file
+/home/user1/buildroot-2011.05/dl/etherlabmaster.tar.bz2: No such file or
+directory.
+tar: This does not look like a tar archive
+tar: Exiting with failure status due to previous errors
+make: ***
+[/home/user1/buildroot-2011.05/output/build/ethercat-1.0/.stamp_extracted]
+Error 2
+user1 at linux-0mmn:~/buildroot-2011.05>
+
+
+So it looks like it never copies /home/user1/Desktop/EtherCAT4Atmel/
+etherlabmaster.tar.bz2 over to the buildroot-2011.05/dl/ directory.  When I
+manually inspect buildroot-2011.05/dl/ I do not see the file there.
+
+Why isn't it getting copied over to dl/ ?
+
+
+Thanks.
