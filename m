@@ -1,54 +1,39 @@
-From: Adriano Campos <adrianoribeirocampos@gmail.com>
-Date: Mon, 28 Nov 2011 18:00:44 +0000
-Subject: [Buildroot] buildroot Digest, Vol 65, Issue 104
-In-Reply-To: <mailman.14523.1322494787.2942.buildroot@busybox.net>
-References: <mailman.14523.1322494787.2942.buildroot@busybox.net>
-Message-ID: <CAOiFVFvqVKYWY1TPBJTgYvLPz-vaXRzYsOTmDFAbufsYOiwk5A@mail.gmail.com>
+From: Jeff Krasky <jeff.krasky@dspcg.com>
+Date: Mon, 28 Nov 2011 12:50:22 -0600
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <201111281139.37028.minimod@morethan.org>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <20111128165422.49361aed@skate>
+ <002001ccade8$e03e9f00$0400a8c0@dspcgrnzks9p98>
+ <201111281139.37028.minimod@morethan.org>
+Message-ID: <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
-> Le Mon, 28 Nov 2011 12:24:42 +0000,
-> Adriano Campos <adrianoribeirocampos@gmail.com> a ?crit :
->
-> >  In the 2011-08 version of buildroot works correctly using the
-> configuration
-> > file "buildroot-2011-08 \ config \ qemu_arm_versatile_defconfig" supplied
-> > with the buildroot. However I need to apply the patch and Xenomai is not
-> > possible in this version so I'm now using the buildroot version
-> 2011-11-rc3,
-> > but is not working.
->
-> "is not working" is not precise enough to help you. Could you provide
-> some details ?
->
-> > With the same configuration file, the generated image does not run under
-> > QEMU. Can you help?
->
-> I'm not sure you realize that Xenomai is a patch against the kernel and
-> that this patch is therefore only available for *certain* kernel
-> versions. The kernel version used in qemu_arm_versatile_defconfig has
-> no Xenomai patch available. If you want to use Xenomai, you *have* to
-> use a kernel version that is explicitly supported by Xenomai, and the
-> version supported by Xenomai depend on the architecture.
->
-> hello,
-thanks for reply.
-Checking the folder Xenomai ...
+> Try a "make clean" then try again.
+> The missing file was reported to be the downloaded (*/dl/* directory)
+> the system may have that marked as already downloaded.
 
-root at debian:/usr/local/buildroot-2011.11-rc3/output/build/xenomai-2.6.0/ksrc/arch/arm/patches#
-ls
-README
-adeos-ipipe-2.6.35.9-arm-1.18-03.patch
-adeos-ipipe-2.6.38.8-arm-1.18-04.patch
-adeos-ipipe-2.6.37.6-arm-1.18-03.patch
+>>> ethercat 1.0 Downloading
+file:///home/user1/Desktop/EtherCAT4Atmel//etherlabmaster.tar.bz2:
+Unsupported scheme "file".
+>>> ethercat 1.0 Extracting
+bzcat: Can't open input file
+/home/user1/buildroot-2011.05/dl/etherlabmaster.tar.bz2: No such file or
+directory.
+tar: This does not look like a tar archive
+tar: Exiting with failure status due to previous errors
+make: ***
+[/home/user1/buildroot-2011.05/output/build/ethercat-1.0/.stamp_extracted]
+Error 2
+user1 at linux-0mmn:~/buildroot-2011.05>
 
-You mean I can only use these three kernel versions?
-The configuration file (qemu_arm_versatile_defconfig) is kernel v3.1. I
-have no way of putting it compactivel?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111128/5de86d48/attachment.html>
+
+I did the 'make clean' and now it appears like it doesn't like the "file://"
+part of things.  Has anyone done it like this?  The website for EtherCAT
+doesn't point directly at a .bz2 file and so I can't do the http:// method.
+
+Thanks.
