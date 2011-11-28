@@ -1,22 +1,30 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Mon, 28 Nov 2011 10:21:35 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 Nov 2011 10:34:08 +0100
 Subject: [Buildroot] "Qt "mkspecs" now publicly available"
-Message-ID: <CAHQn0kicn2SOXr9zFuZg1nnm0QEj2JeXv0fxad26tEm6wWJa4Q@mail.gmail.com>
+In-Reply-To: <CAHQn0kicn2SOXr9zFuZg1nnm0QEj2JeXv0fxad26tEm6wWJa4Q@mail.gmail.com>
+ ("Daniel =?utf-8?Q?Nystr=C3=B6m=22's?= message of "Mon, 28 Nov 2011
+ 10:21:35 +0100")
+References: <CAHQn0kicn2SOXr9zFuZg1nnm0QEj2JeXv0fxad26tEm6wWJa4Q@mail.gmail.com>
+Message-ID: <878vn0h9pr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just wanted to pass the news that Nokia has released a couple of new
-"mkspecs" for Qt which, among many other things, includes support for
-Raspberry Pi, OMAP3430, Pandaboard, Tegra 2 and more...
+>>>>> "Daniel" == Daniel Nystr?m <daniel.nystrom@timeterminal.se> writes:
 
-I guess Buildroot could benefit a whole lot from this. Unfortently I
-don't currenty have the time to implement it myself, hence this post.
+ Daniel> Just wanted to pass the news that Nokia has released a couple of new
+ Daniel> "mkspecs" for Qt which, among many other things, includes support for
+ Daniel> Raspberry Pi, OMAP3430, Pandaboard, Tegra 2 and more...
 
-More information at
-http://blog.qt.nokia.com/2011/11/25/qt-platform-%E2%80%9Cmkspecs%E2%80%9D-now-publicly-available/
+ Daniel> I guess Buildroot could benefit a whole lot from this. Unfortently I
+ Daniel> don't currenty have the time to implement it myself, hence this post.
 
-Best regards
-Daniel
+Yes, I had a look at it as well yesterdays - It looks interesting.
+
+I'll try to find time to work on it for the pandaboard/imx53qsb during
+the 2012.02 cycle.
+
+-- 
+Bye, Peter Korsgaard
