@@ -1,33 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 28 Nov 2011 21:48:11 +0100
-Subject: [Buildroot] [Bug ] 2011.11rc3 On 64bit Linux Dev Machine armeb
-	builds libs to lib64 dir
-In-Reply-To: <zarafa.4ed3c000.2af5.444b2d795dbc1c99@jedmail.edag.de> (Peter
- Katzmann's message of "Mon, 28 Nov 2011 18:08:16 +0100")
-References: <zarafa.4ed3c000.2af5.444b2d795dbc1c99@jedmail.edag.de>
-Message-ID: <874nxo3rec.fsf@macbook.be.48ers.dk>
+From: Jeff Krasky <jeff.krasky@dspcg.com>
+Date: Mon, 28 Nov 2011 15:14:01 -0600
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <003601ccae04$ada02e80$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <201111281139.37028.minimod@morethan.org>
+ <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
+ <201111281324.38619.minimod@morethan.org>
+ <003601ccae04$ada02e80$0400a8c0@dspcgrnzks9p98>
+Message-ID: <003801ccae12$a7781190$0400a8c0@dspcgrnzks9p98>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Katzmann <peter.katzmann@edag.de> writes:
+It looks like the possible methods for getting it are:
 
- Peter> Hello,
- Peter> i have a OpenSuse 12.1 64 Bit dev machine and building an armeb tree.
- Peter> Now when tries to build mtd:
- Peter> /usr2/new/Source-ast18/build_env/buildroot/project_build_armeb/host/usr/lib64/gcc/armeb-unknown-linux-uclibcgnueabi/4.6.2/../../../../armeb-unknown-linux-uclibcgnueabi/bin/ld: cannot find -llzo2
- Peter> collect2: ld returned 1 exit status
+wget
+svn
+git
+bzr
 
-More details please. What is your .config exactly?
+and none of those seem to apply to wanting to use a local copy.  So instead
+I just did this:
 
-I just did a quick test build with the following configuration which
-built without problems:
+cp etherlabmaster-1.0.tar.bz2 /home/user1/buildroot-2011.05/dl/
 
-BR2_armeb=y
-BR2_arm926t=y
-BR2_PACKAGE_MTD=y
+to get it in the dl/ directory.
 
--- 
-Bye, Peter Korsgaard
+Can anyone see a problem with this?
