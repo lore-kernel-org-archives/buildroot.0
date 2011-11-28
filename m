@@ -1,90 +1,64 @@
-From: Trevor Woerner <twoerner@gmail.com>
-Date: Mon, 28 Nov 2011 10:39:43 -0500
-Subject: [Buildroot] [PATCH] mingetty: add package
-In-Reply-To: <87ipm6iq74.fsf@macbook.be.48ers.dk>
-References: <1322082860-12704-1-git-send-email-twoerner@gmail.com>
- <87ipm6iq74.fsf@macbook.be.48ers.dk>
-Message-ID: <CAHUNapQg56jACLC+Px8Bgm5V1f--piR6cBE5yfrAp8Jykc+Rtg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Nov 2011 16:54:22 +0100
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <001f01ccade1$204918d0$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <20111122230429.2bef52c2@skate>
+ <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
+ <20111122232914.76a86e7d@skate>
+ <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com>
+ <001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com>
+ <001e01ccaddf$81c0f300$0400a8c0@dspcgrnzks9p98>
+ <20111128161124.0f95d0d4@skate>
+ <001f01ccade1$204918d0$0400a8c0@dspcgrnzks9p98>
+Message-ID: <20111128165422.49361aed@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for having a look at my patch.
+Le Mon, 28 Nov 2011 09:19:29 -0600,
+"Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
 
-On Sat, Nov 26, 2011 at 3:28 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> ?Trevor> +MINGETTY_SITE ? ?= http://downloads.sourceforge.net/project/mingetty/mingetty/$(MINGETTY_VERSION)
->
-> Use the mirror support we have
+> My understanding from the tutorial at
+> http://buildroot.uclibc.org/buildroot.html#add_packages was that
+> 
+> ETHERCAT_SITE = file:///home/user1/Desktop/EtherCAT4Atmel
+> 
+> specifies the path (whether it is http or filesystem)
+> 
+> and
+> 
+> ETHERCAT_SOURCE = etherlabmaster.tar.bz2
+> 
+> specifies the file name.
+> 
+> Then I thought Buildroot would put ETHERCAT_SITE + ETHERCAT_SOURCE to come
+> up with the location of the file.  This is not correct?
 
-Thanks, I wasn't sure how to use it.
+Woops, you're right, my bad. The manual is obvisouly correct.
 
-> ?Trevor> +
-> ?Trevor> +# Override sysvinit's implementations if it is enabled.
->
-> sysvinit doesn't contain a getty implementation. What you mean is that
-> you want to run after sysvinit so it doesn't overwrite your inittab.
+You should use :
 
-Yes, that's correct.
+ETHERCAT_VERSION = 3.3
+ETHERCAT_SITE = http://foobar.com/somewhere/
+ETHERCAT_SOURCE = ethercat-$(ETHERCAT_VERSION).tar.bz2
 
-> ?Trevor> +define MINGETTY_INSTALL_TARGET_CMDS
-> ?Trevor> + ? ? ?$(INSTALL) -D -m 0755 $(@D)/mingetty $(TARGET_DIR)/sbin
-> ?Trevor> + ? ? ?$(INSTALL) -D -m 0644 package/mingetty/inittab $(TARGET_DIR)/etc/inittab
->
-> Please don't do that. People might have a custom inittab (I know
-> sysvinit does so as well, but as the syntax is different than busybox's
-> there isn't really much else it can do).
+> ETHERCAT_SITE = file:///home/user1/Desktop/EtherCAT4Atmel/
+> etherlabmaster.tar.bz2
 
-Okay, no problem. [I had actually used inittab as the template upon
-which I based this new package, so that's why I was doing the same as
-it was doing.]
+Why are you using a local directory ? You *really* should be using a
+tarball available from http or ftp so that you can later contribute
+your package to Buildroot.
 
-> The nicest thing would be instead to replace /sbin/getty with
-> /sbin/mingetty in the existing inittab, but as mingetty doesn't handle
-> the same arguments as busybox getty, this gets quite tricky.
->
-> ?Trevor> diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-> ?Trevor> index 4185202..5ce1447 100644
-> ?Trevor> --- a/target/generic/Makefile.in
-> ?Trevor> +++ b/target/generic/Makefile.in
->
-> And drop this.
+Thanks,
 
-I'm confused by this last request. If the nicest thing to do would be
-to replace /sbin/getty with /sbin/mingetty wouldn't my modification to
-target/generic/Makefile.in be the way to go about it?
-
-I have copied my original modifications to target/generic/Makefile.in below:
-
-diff --git a/target/generic/Makefile.in b/target/generic/Makefile.in
-index 4185202..5ce1447 100644
---- a/target/generic/Makefile.in
-+++ b/target/generic/Makefile.in
-@@ -23,6 +23,11 @@ target-generic-getty-sysvinit:
-       $(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo
-$(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/getty -L
-$(TARGET_GENERIC_GETTY) $(TARGET_GENERIC_GETTY_BAUDRATE) vt100 #~' \
-               $(TARGET_DIR)/etc/inittab
-
-+# Set the getty to mingetty
-+target-generic-getty-mingetty:
-+       $(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo
-$(TARGET_GENERIC_GETTY) | tail -c+4)::respawn:/sbin/mingetty --noclear
-$(TARGET_GENERIC_GETTY) #~' \
-+               $(TARGET_DIR)/etc/inittab
-+
- # Find commented line, if any, and remove leading '#'s
- target-generic-do-remount-rw:
-       $(SED) '/^#.*# REMOUNT_ROOTFS_RW$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
-@@ -40,7 +45,9 @@ TARGETS += target-generic-issue
- endif
-
- ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
--ifeq ($(BR2_PACKAGE_SYSVINIT),y)
-+ifeq ($(BR2_PACKAGE_MINGETTY),y)
-+TARGETS += target-generic-getty-mingetty
-+else ifeq ($(BR2_PACKAGE_SYSVINIT),y)
- TARGETS += target-generic-getty-sysvinit
- else
- TARGETS += target-generic-getty-busybox
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
