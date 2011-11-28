@@ -1,57 +1,54 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Mon, 28 Nov 2011 11:39:34 -0600
-Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <002001ccade8$e03e9f00$0400a8c0@dspcgrnzks9p98>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <20111128165422.49361aed@skate>
- <002001ccade8$e03e9f00$0400a8c0@dspcgrnzks9p98>
-Message-ID: <201111281139.37028.minimod@morethan.org>
+From: Adriano Campos <adrianoribeirocampos@gmail.com>
+Date: Mon, 28 Nov 2011 18:00:44 +0000
+Subject: [Buildroot] buildroot Digest, Vol 65, Issue 104
+In-Reply-To: <mailman.14523.1322494787.2942.buildroot@busybox.net>
+References: <mailman.14523.1322494787.2942.buildroot@busybox.net>
+Message-ID: <CAOiFVFvqVKYWY1TPBJTgYvLPz-vaXRzYsOTmDFAbufsYOiwk5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon November 28 2011, Jeff Krasky wrote:
-> > Woops, you're right, my bad. The manual is obvisouly correct.
-> > 
-> > You should use :
-> >
-> > ETHERCAT_VERSION = 3.3
-> > ETHERCAT_SITE = http://foobar.com/somewhere/
-> > ETHERCAT_SOURCE = ethercat-$(ETHERCAT_VERSION).tar.bz2
-> > 
-> > Why are you using a local directory ? You *really* should be using a
-> > tarball available from http or ftp so that you can later contribute
-> > your package to Buildroot.
-> 
-> Because I don't want just the default source of EtherCAT built into the
-> Linux image.  Lets say I want to modify something in the examples directory
-> of EtherCAT.  For instance, I had to modify the sample code and rebuild.  So
-> what I want is this "rebuilt" version of EtherCAT, with customized example
-> code, as part of the Linux image.  If I point at the EtherCAT website, that
-> won't be the correct version.  The EtherCAT examples development will occur
-> on the same machine that Buildroot is on, hence why I like the local
-> filesystem solution.
 >
+> Le Mon, 28 Nov 2011 12:24:42 +0000,
+> Adriano Campos <adrianoribeirocampos@gmail.com> a ?crit :
+>
+> >  In the 2011-08 version of buildroot works correctly using the
+> configuration
+> > file "buildroot-2011-08 \ config \ qemu_arm_versatile_defconfig" supplied
+> > with the buildroot. However I need to apply the patch and Xenomai is not
+> > possible in this version so I'm now using the buildroot version
+> 2011-11-rc3,
+> > but is not working.
+>
+> "is not working" is not precise enough to help you. Could you provide
+> some details ?
+>
+> > With the same configuration file, the generated image does not run under
+> > QEMU. Can you help?
+>
+> I'm not sure you realize that Xenomai is a patch against the kernel and
+> that this patch is therefore only available for *certain* kernel
+> versions. The kernel version used in qemu_arm_versatile_defconfig has
+> no Xenomai patch available. If you want to use Xenomai, you *have* to
+> use a kernel version that is explicitly supported by Xenomai, and the
+> version supported by Xenomai depend on the architecture.
+>
+> hello,
+thanks for reply.
+Checking the folder Xenomai ...
 
-The typical way to handle that is to create a patch of the difference
-between your local version and the download version;
-Then let the build system apply the patch.
- 
-> So any thoughts on why it is not finding the file?
-> 
+root at debian:/usr/local/buildroot-2011.11-rc3/output/build/xenomai-2.6.0/ksrc/arch/arm/patches#
+ls
+README
+adeos-ipipe-2.6.35.9-arm-1.18-03.patch
+adeos-ipipe-2.6.38.8-arm-1.18-04.patch
+adeos-ipipe-2.6.37.6-arm-1.18-03.patch
 
-Try a "make clean" then try again.
-The missing file was reported to be the downloaded (*/dl/* directory)
-the system may have that marked as already downloaded.
-
-Mike
-> Thanks.
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+You mean I can only use these three kernel versions?
+The configuration file (qemu_arm_versatile_defconfig) is kernel v3.1. I
+have no way of putting it compactivel?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111128/5de86d48/attachment.html>
