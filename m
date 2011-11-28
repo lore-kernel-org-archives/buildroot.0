@@ -1,29 +1,89 @@
-From: Jeff Krasky <jeff.krasky@dspcg.com>
-Date: Mon, 28 Nov 2011 13:02:11 -0600
+From: Michael S. Zick <minimod@morethan.org>
+Date: Mon, 28 Nov 2011 13:24:35 -0600
 Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <CAAu5YTbrKzjHZn2=r_mM6rPJD=p7SY=yd5x+Z7yz2-meopthLA@mail.gmail.com>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98><20111122230429.2bef52c2@skate><005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98><20111122232914.76a86e7d@skate><006101cca967$050bb240$0400a8c0@dspcgrnzks9p98><CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com><001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98><CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com><001e01ccaddf$81c0f300$0400a8c0@dspcgrnzks9p98><20111128161124.0f95d0d4@skate><001f01ccade1$204918d0$0400a8c0@dspcgrnzks9p98><20111128165422.49361aed@skate><002001ccade8$e03e9f00$0400a8c0@dspcgrnzks9p98>
- <CAAu5YTbrKzjHZn2=r_mM6rPJD=p7SY=yd5x+Z7yz2-meopthLA@mail.gmail.com>
-Message-ID: <002b01ccae00$3c97b4f0$0400a8c0@dspcgrnzks9p98>
+In-Reply-To: <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <201111281139.37028.minimod@morethan.org>
+ <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
+Message-ID: <201111281324.38619.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Try "make ethercat-dirclean"
+On Mon November 28 2011, Jeff Krasky wrote:
+> > Try a "make clean" then try again.
+> > The missing file was reported to be the downloaded (*/dl/* directory)
+> > the system may have that marked as already downloaded.
+> 
+> >>> ethercat 1.0 Downloading
+> file:///home/user1/Desktop/EtherCAT4Atmel//etherlabmaster.tar.bz2:
+> Unsupported scheme "file".
+> >>> ethercat 1.0 Extracting
+> bzcat: Can't open input file
+> /home/user1/buildroot-2011.05/dl/etherlabmaster.tar.bz2: No such file or
+> directory.
+> tar: This does not look like a tar archive
+> tar: Exiting with failure status due to previous errors
+> make: ***
+> [/home/user1/buildroot-2011.05/output/build/ethercat-1.0/.stamp_extracted]
+> Error 2
+> user1 at linux-0mmn:~/buildroot-2011.05>
+> 
+> 
+> I did the 'make clean' and now it appears like it doesn't like the "file://"
 
-This removed output/build/ethercat-1.0
+Try:
+"file:///"
 
-> "rm dl/ethercat*"
+> part of things.  Has anyone done it like this?  The website for EtherCAT
+> doesn't point directly at a .bz2 file and so I can't do the http:// method.
+> 
 
-No files like this existed.
+Check me on this - see if I am following your description -
+The site:
+http://etherlab.org/en/components.php
 
-> "make ethercat"
+Has a multiple component download file:
+http://etherlab.org/download/bundle/etherlab-bundle-1.4.tar.bz2
 
-Same problem still.  What makes Buildroot think it has the file in dl
-already?
+That should be your download site and download package name.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111128/a78bddbf/attachment.html>
+Inside the bundle, it has directory trees of (among other things):
+etherlab-bundle-1.6/2_rtal/linux-2.6.24.7.tar.bz2
+etherlab-bundle-1.6/2_rtal/rtal-3.6.2.tar.bz2
+etherlab-bundle-1.6/3_ethercat-1.4.0.tar.bz2
+etherlab-bundle-1.6/5_etherlab/etherlab-1.2-rc4.tar.gz
+etherlab-bundle-1.6/8_examples/example.mdl
+etherlab-bundle-1.6/8_examples/example.sml
+......
+
+and you want to extract, patch, and build __some__ of the contained
+archives (or, for examples, some of the files)....
+
+Although I haven't done this myself, I do recall reading on the M.L.
+here that there is a way in Buildroot to define a "custom extract"
+(or download) step (or script?) -
+That should be able to handle such an ugly package structure.
+
+I think all it has to do is download the bundle of archives,
+open just the outer bundle and mark each of the contained archives
+as having been downloaded.  I __think__.
+
+With the contained archives now downloaded (by extracting from the
+containing package) the BR system should be able to return to running
+the "extract,..." steps of each of the make files for each contained archive.
+
+If that is what you need to do - one of the experts on the Buildroot
+infrastructure needs to chime in with a "how to" here.  ;-)
+
+Mike
+> Thanks.
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
