@@ -1,47 +1,55 @@
-From: Jeff Krasky <jeff.krasky@dspcg.com>
-Date: Mon, 28 Nov 2011 10:14:58 -0600
-Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <20111128165422.49361aed@skate>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <20111122230429.2bef52c2@skate>
- <005d01cca963$b9a61eb0$0400a8c0@dspcgrnzks9p98>
- <20111122232914.76a86e7d@skate>
- <006101cca967$050bb240$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LVFSZpPxtsu9DmiEtw9LjNtdEWGQ+zdBQhscRAZ67vu_Q@mail.gmail.com>
- <001001ccaa28$4b7515c0$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LVDR+9KnTJP36-hugA51QTikDsQ2ESO4c3C9-L8UJgqBA@mail.gmail.com>
- <001e01ccaddf$81c0f300$0400a8c0@dspcgrnzks9p98>
- <20111128161124.0f95d0d4@skate>
- <001f01ccade1$204918d0$0400a8c0@dspcgrnzks9p98>
- <20111128165422.49361aed@skate>
-Message-ID: <002001ccade8$e03e9f00$0400a8c0@dspcgrnzks9p98>
+From: =?utf-8?Q?Peter_Katzmann?= <peter.katzmann@edag.de>
+Date: Mon, 28 Nov 2011 18:08:16 +0100
+Subject: [Buildroot] [Bug ] 2011.11rc3 On 64bit Linux Dev Machine armeb
+ builds libs to lib64 dir
+Message-ID: <zarafa.4ed3c000.2af5.444b2d795dbc1c99@jedmail.edag.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Woops, you're right, my bad. The manual is obvisouly correct.
-> 
-> You should use :
->
-> ETHERCAT_VERSION = 3.3
-> ETHERCAT_SITE = http://foobar.com/somewhere/
-> ETHERCAT_SOURCE = ethercat-$(ETHERCAT_VERSION).tar.bz2
-> 
-> Why are you using a local directory ? You *really* should be using a
-> tarball available from http or ftp so that you can later contribute
-> your package to Buildroot.
+Hello,
+i have a OpenSuse 12.1 64 Bit dev machine and building an armeb tree.
+Now when tries to build mtd:
+/usr2/new/Source-ast18/build_env/buildroot/project_build_armeb/host/usr/lib64/gcc/armeb-unknown-linux-uclibcgnueabi/4.6.2/../../../../armeb-unknown-linux-uclibcgnueabi/bin/ld: cannot find -llzo2
+collect2: ld returned 1 exit status
 
-Because I don't want just the default source of EtherCAT built into the
-Linux image.  Lets say I want to modify something in the examples directory
-of EtherCAT.  For instance, I had to modify the sample code and rebuild.  So
-what I want is this "rebuilt" version of EtherCAT, with customized example
-code, as part of the Linux image.  If I point at the EtherCAT website, that
-won't be the correct version.  The EtherCAT examples development will occur
-on the same machine that Buildroot is on, hence why I like the local
-filesystem solution.
+The lzo lib was build but it seems that some libraries are under lib and some are under lib64 :
+pet at linux-06u7:/usr2/new/Source-ast18/build_env/buildroot> file project_build_armeb/target/usr/lib/
+libgomp.so        libgomp.so.1.0.0  libtiff.so.3      libz.a            libz.so.1         pkgconfig/        
+libgomp.so.1      libtiff.so        libtiff.so.3.9.4  libz.so           libz.so.1.2.5     
+pet at linux-06u7:/usr2/new/Source-ast18/build_env/buildroot> file project_build_armeb/target/usr/lib64/lib
+libatomic_ops.a      libjpeg.a            libjpeg.so           libjpeg.so.8.3.0     liblzo2.la           liblzo2.so.2         
+libatomic_ops_gpl.a  libjpeg.la           libjpeg.so.8         liblzo2.a            liblzo2.so           liblzo2.so.2.0.0     
 
-So any thoughts on why it is not finding the file?
+But they are 32 bit arm builds.
 
-Thanks.
+peter
+
+EDAG GmbH & Co.KG aA
+Steinauer Stra?e 20 
+36100 Petersberg
+Tel.: +49 - (0)661 / 6000 - 9444
+Fax: +49 - (0)661 / 6000 - 1116208
+E-Mail: Peter.Katzmann at edag.de
+?Die n?chsten Messeauftritte der EDAG Group:
+Business of Design Week in Hongkong vom 01.-03.12.2011 in der Inspiration Hall, Stand 3D-C09
+Auto Expo in Neu Delhi vom 05.-11.01.2012
+Internationaler Automobilsalon in Genf vom 06.-18.03.2012 in Halle 2, Stand 2158
+
+The EDAG Group's next exhibitions: 
+Business of Design Week in Hongkong, 1 to 3 December 2011 at Inspiration Hall, Stand 3D-C09
+Auto Expo in Neu Delhi, 5 to 11 January 2012
+International Motor Show in Geneva, 6 to 18 March 2012 at Stand 2158, Hall 2
+
+Mehr News und Informationen aus der Welt der EDAG Group k?nnen Sie in unserem interaktiven EMAG-Magazin (http://www.edag.de/pr/Newsletter/) nachlesen! Wir freuen uns auf Ihren Besuch!
+
+------------------------------------------------------------------------------
+Court of jurisdiction: Amtsgericht Fulda, HRB 1075     USt.-Id: DE 112 402 594
+Gesch?ftsf?hrung / Executive Board: J?rg Ohlsen: Gesch?ftsf?hrer / CEO, Manfred Hahl: Gesch?ftsf?hrer / COO, Rainer Bauer: Gesch?ftsf?hrer / CFO
+Aufsichtsratsvorsitzender / Chairman of the Supervisory Board: Dr. Lutz Helmig
+Pers?nlich haftende Gesellschafterin / General partner: EDAG Gesellschaft mbH, Wien, Handelsgericht Wien, FN 297836 W
+Headquarters: EDAG GmbH & Co. KGaA, Reesbergstra?e 1, 36039 Fulda, Germany  /  www.edag.com
+
+This e-mail may contain confidential and/or privileged information. If you are not the intended recipient (or have received this e-mail in error) please notify the sender immediately and destroy this e-mail. Any unauthorised copying, disclosure or distribution of the material in this e-mail is strictly forbidden.
