@@ -1,42 +1,29 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 28 Nov 2011 08:59:18 +0100
-Subject: [Buildroot] MySQL Server Package, help needed
-In-Reply-To: <CAOrUntZRB7JSVt+WFn3bOfQd9WiYfN-qx9c0iRsO_cZ+qObYSw@mail.gmail.com>
-References: <CAOrUntZRB7JSVt+WFn3bOfQd9WiYfN-qx9c0iRsO_cZ+qObYSw@mail.gmail.com>
-Message-ID: <CAAXf6LUsAz19qfcmuga0pvdSuUWog=p7XMM_+Cxg408HhneDig@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Nov 2011 09:12:42 +0100
+Subject: [Buildroot] [PATCH 04/15] package: add <pkg>-rebuild	and
+ <pkg>-reconfigure
+In-Reply-To: <4ED2783B.1010205@relinux.de>
+References: <550d3ba3c9db7d0a9df78aa52e09da9af93e20d8.1314826231.git.thomas.petazzoni@free-electrons.com>
+ <4EB3B403.4020404@relinux.de> <4ED2783B.1010205@relinux.de>
+Message-ID: <20111128091242.39ef2487@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ben,
+Le Sun, 27 Nov 2011 18:49:47 +0100,
+Stephan Hoffmann <sho@relinux.de> a ?crit :
 
-On Sat, Nov 26, 2011 at 10:46 AM, Andrea Benini <andreabenini@gmail.com> wrote:
-> Hi Guys,
-> I've used buildroot and uclibc for a while and I'm now stucked with a
-> package I'd like to build.
-> Target Architecture: i386, variant: i686. Buildroot 2011.08 stable
-> I'd like to add MySQL to the package list, I'd like to have a MySQL daemon
-> installed (mysqld), not just the client interface.
-> MySQL Server is not yet supported due to cross compiling issues I suppose.
-> I was wondering if someone else has?a ready made package for MySQL, I've
-> tried several solutions grabbed all around after a lot of google searches
-> (from: Voltz,?Zuerker, fork on googlecode, and few tips taken from Oracle)
-> but I'm still stuck here due to different compiling issues. I've tried to
-> build my own package as well but MySQL seems to be tricky to handle in a
-> toolchain. So I'm still stuck at the starting point.
-> Is there someone else that has already maded it with 2011.08 buildroot ? may
-> I see package files for it ?
+> No interest in this?
 
-I didn't attempt to build MySQL with Buildroot.
-But, I suggest you describe the problems you experience in more
-detail, then maybe someone on the list can help.
+I am just wondering why we would document the <pkg>-rebuild and
+<pkg>-reconfigure targets in the help text and not all the other
+<pkg>-* targets.
 
-Btw, have you seen this:
-http://forge.mysql.com/wiki/Linux_Cross_Compilation
-
-(not sure if it will fix your problems though, we'd need more details.)
-
-Best regards,
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
