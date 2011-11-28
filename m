@@ -1,50 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 27 Nov 2011 22:41:29 +0100
-Subject: [Buildroot] [git commit] linux: update stable kernel to 3.1.3
-Message-ID: <20111127214605.F20A58F6E5@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 28 Nov 2011 07:26:50 +0200
+Subject: [Buildroot] [PATCH] Adding Microblaze support to Buildroot
+In-Reply-To: <4ED275A5.30903@relinux.de>
+References: <4EBC554E.7050605@gmail.com> <4EBC5656.2010103@gmail.com>
+ <4EBD18F1.6020804@relinux.de> <4ECB62C8.6030301@relinux.de>
+ <87sjlgplif.fsf@macbook.be.48ers.dk> <4ECCD481.4030707@relinux.de>
+ <20111123145448.5f5d15b9@skate> <4ED275A5.30903@relinux.de>
+Message-ID: <20111128052650.GA20297@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6932d21480dfd0b7e0afbcb1f1ae05b52de8189
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Stephan,
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+On Sun, Nov 27, 2011 at 06:38:45PM +0100, Stephan Hoffmann wrote:
+> Am 23.11.2011 14:54, schrieb Thomas Petazzoni:
+> > Excellent. Would be good to have :
+> >
+> >  * A patch adding the general Microblaze support
+> >
+> >  * A patch that adds some defconfig for the Microblaze board you have
+> >
+> Hello all,
+> 
+> here is my patch to introduce MicroBlaze to buildroot. Comments are
+> highly welcome!
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 591ab3d..2ceaef0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_1
- 
- config BR2_LINUX_KERNEL_3_1
--	bool "3.1.2"
-+	bool "3.1.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -58,7 +58,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "3.1.2"
-+	default "3.1.3"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.1.2" if BR2_LINUX_KERNEL_3_1
-+	default "3.1.3" if BR2_LINUX_KERNEL_3_1
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+[snip]
+
+> +This is the buildroot board support for the Avnet Spartan6 LX9 MicroBoard.
+> +
+> +The board can be bought from Avnet or from Trenz for a low prize.
+
+s/prize/price/
+
+baruch
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
