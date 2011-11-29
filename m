@@ -1,71 +1,40 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Tue, 29 Nov 2011 19:27:33 +0100
-Subject: [Buildroot] [PATCH] hostapd: fix build with new libnl-3
-In-Reply-To: <1322590619-9814-1-git-send-email-zonque@gmail.com>
-References: <1322584033-19870-1-git-send-email-zonque@gmail.com>
- <1322590619-9814-1-git-send-email-zonque@gmail.com>
-Message-ID: <4ED52415.8000501@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 Nov 2011 19:26:21 +0000 (UTC)
+Subject: [Buildroot] [Bug 4484] libstdc++ has _GLIBCXX_HAVE_FENV_H undefined
+ but uclibc appears to have a fenv.h
+In-Reply-To: <bug-4484-163@https.bugs.busybox.net/>
+References: <bug-4484-163@https.bugs.busybox.net/>
+Message-ID: <20111129192621.97E1B8F6BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/29/2011 07:16 PM, Daniel Mack wrote:
-> The CFLAGS have to be augmented for the include dir and a small patch
-> will make the binary link to libnl-3 and libnl-genl-3 instead of libnl
-> and libnl-gen.
+https://bugs.busybox.net/show_bug.cgi?id=4484
 
-There might be more patches like this necessary, and unfortunately, the
-approach is a nasty hack which don't like either. But don't see any
-cleaner way to make this work.
-
-The root cause for touching all this is that I need libnl-3 with
-libnl-route3 support for another package I'm working on.
-
-
-Daniel
-
-
-
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> 2011-11-29 19:26:20 UTC ---
+(In reply to comment #4)
+> Submitted my configuration file and full error log.
 > 
-> Signed-off-by: Daniel Mack <zonque@gmail.com>
-> ---
->  package/hostapd/hostapd-0.7.3-libnl3.patch |   15 +++++++++++++++
->  package/hostapd/hostapd.mk                 |    1 +
->  2 files changed, 16 insertions(+), 0 deletions(-)
->  create mode 100644 package/hostapd/hostapd-0.7.3-libnl3.patch
+> Solution for compiling without this error:
+> after getting the error
+> make uclibc-menuconfig
+> switch UCLIBC_HAS_FENV to [=y]
 > 
-> diff --git a/package/hostapd/hostapd-0.7.3-libnl3.patch b/package/hostapd/hostapd-0.7.3-libnl3.patch
-> new file mode 100644
-> index 0000000..e47da73
-> --- /dev/null
-> +++ b/package/hostapd/hostapd-0.7.3-libnl3.patch
-> @@ -0,0 +1,15 @@
-> +--- a/src/drivers/drivers.mak	2011-11-29 19:09:23.889942913 +0100
-> ++++ b/src/drivers/drivers.mak	2011-11-29 19:09:40.637381428 +0100
-> +@@ -31,10 +31,10 @@
-> + NEED_AP_MLME=y
-> + NEED_NETLINK=y
-> + NEED_LINUX_IOCTL=y
-> +-DRV_LIBS += -lnl
-> ++DRV_LIBS += -lnl-3
-> + 
-> + ifdef CONFIG_LIBNL20
-> +-DRV_LIBS += -lnl-genl
-> ++DRV_LIBS += -lnl-genl-3
-> + DRV_CFLAGS += -DCONFIG_LIBNL20
-> + endif
-> + endif
-> diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-> index 0d6c2c5..53af871 100644
-> --- a/package/hostapd/hostapd.mk
-> +++ b/package/hostapd/hostapd.mk
-> @@ -18,6 +18,7 @@ endif
->  
->  define HOSTAPD_LIBNL_CONFIG
->  	echo "CONFIG_LIBNL20=y" >>$(HOSTAPD_CONFIG)
-> +	echo "CFLAGS += -I$(TARGET_DIR)/usr/include/libnl3/" >>$(HOSTAPD_CONFIG)
->  endef
->  
->  define HOSTAPD_CRYPTO_CONFIG
+> PS. bug reporting for the first time - please excuse any inconveniences
+
+From the .config I see:
+
+grep ^BR2_UCLIBC .config
+BR2_UCLIBC_VERSION_0_9_32=y
+BR2_UCLIBC_VERSION_STRING="0.9.32"
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
+
+So you try to build uClibc 0.9.32 with a 0.9.31 defconfig. That is not going to
+work. Please change it to uClibc-0.9.32.config and try again.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
