@@ -1,30 +1,39 @@
-From: Jeff Krasky <jeff.krasky@dspcg.com>
-Date: Wed, 30 Nov 2011 16:54:58 -0600
-Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <20111130234906.4f75994e@skate>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98><003801ccae12$a7781190$0400a8c0@dspcgrnzks9p98><003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98><20111129083710.1a83fad6@skate><001201ccaea3$3ad7df70$0400a8c0@dspcgrnzks9p98><20111129153619.4f080721@skate><001301ccaea5$37ec1f40$0400a8c0@dspcgrnzks9p98><001401ccaedf$e5751f60$0400a8c0@dspcgrnzks9p98><001501ccaee8$34c408d0$0400a8c0@dspcgrnzks9p98><000b01ccaf79$085d0800$0400a8c0@dspcgrnzks9p98><20111130170450.2f33e6c2@skate><000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98><20111130173327.069f46fb@skate><000d01ccaf7e$78243280$0400a8c0@dspcgrnzks9p98><CAAXf6LV8ArEeuQ=w3r7745AK00t2XqtSoLqv+tBc9rnpjS8sCQ@mail.gmail.com><000f01ccaf8b$7279ed90$0400a8c0@dspcgrnzks9p98><CAAXf6LWSPgAR6C_+eqq5DZ5CCJkzJ22zpfyTzr7bNEGj-mOKYw@mail.gmail.com><001101ccaf9a$cebe63b0$0400a8c0@dspcgrnzks9p98><20111130232114.208390c8@skate><001201ccafb0$4b5e06e0$0400a8c0@dspcgrnzks9p98>
- <20111130234906.4f75994e@skate>
-Message-ID: <001301ccafb3$1631f000$0400a8c0@dspcgrnzks9p98>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 29 Nov 2011 21:02:29 +0100
+Subject: [Buildroot] [git commit branch/next] libroxml: bump version to 2.1.2
+Message-ID: <20111130232437.D1E9F8F71A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> After untarring the tarball, you have to apply the patch. The
-> igh-ethercat package is *not* part of the release.
+commit: http://git.buildroot.net/buildroot/commit/?id=e3c6b3853ef054efe3ab9800392aec7aa7656dd3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Oh, ok.  So the patch will be a .patch file on 
+Fix some xpath bugs
 
-http://buildroot.uclibc.org/downloads/
+Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ....1-werror.patch => libroxml-2.1.2-werror.patch} |    0
+ package/libroxml/libroxml.mk                       |    2 +-
+ 2 files changed, 1 insertions(+), 1 deletions(-)
 
-and I just have to
-
-1. download it
-2. go into buildroot-2011.11 directory
-3. run 'patch filename.patch'
-4. then do the 'make menuconfig', 'make' etc.
-
-is that correct?
-
-Thanks again.
+diff --git a/package/libroxml/libroxml-2.1.1-werror.patch b/package/libroxml/libroxml-2.1.2-werror.patch
+similarity index 100%
+rename from package/libroxml/libroxml-2.1.1-werror.patch
+rename to package/libroxml/libroxml-2.1.2-werror.patch
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index f494348..5c0bf01 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -2,7 +2,7 @@
+ # libroxml
+ #
+ 
+-LIBROXML_VERSION = 2.1.1
++LIBROXML_VERSION = 2.1.2
+ LIBROXML_SITE = http://libroxml.googlecode.com/files
+ LIBROXML_INSTALL_STAGING = YES
+ 
