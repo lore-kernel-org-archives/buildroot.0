@@ -1,33 +1,43 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Tue, 29 Nov 2011 17:27:13 +0100
-Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.3
-Message-ID: <1322584033-19870-1-git-send-email-zonque@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 Nov 2011 16:47:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 4568] New: Added initscript for avahi-autoipd
+Message-ID: <bug-4568-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This newer version splits the library code into libnl, libnl-route,
-libnl-genl and libnl-nf, each individually selectable via pkgconfig.
+https://bugs.busybox.net/show_bug.cgi?id=4568
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
----
- package/libnl/libnl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+           Summary: Added initscript for avahi-autoipd
+           Product: buildroot
+           Version: 2011.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: tilman.baumann at grandeye.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index dd0d7fb..612908b 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBNL_VERSION = 3.0
-+LIBNL_VERSION = 3.2.3
- LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
- LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
- LIBNL_INSTALL_STAGING = YES
+
+Created attachment 3830
+  --> https://bugs.busybox.net/attachment.cgi?id=3830
+Adds initscript-for-avahi-autoipd
+
+I needed avahi-autoipd running so I created a initscript.
+
+Two things I like to add to make it nicer but would need some pointers.
+A list of interfaces to monitor settable via Kconfig.
+Command line options settable via KConfig. (I need --force-bind)
+
+But it's usable like that. (See patch)
+
 -- 
-1.7.7.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
