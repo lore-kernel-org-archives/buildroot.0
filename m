@@ -1,94 +1,58 @@
-From: blunderer at blunderer.org <blunderer@blunderer.org>
-Date: Tue, 29 Nov 2011 18:19:46 +0100
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.1.2
-Message-ID: <1322587186-21732-1-git-send-email-blunderer@blunderer.org>
+From: Daniel Mack <zonque@gmail.com>
+Date: Tue, 29 Nov 2011 19:16:59 +0100
+Subject: [Buildroot] [PATCH] hostapd: fix build with new libnl-3
+In-Reply-To: <1322584033-19870-1-git-send-email-zonque@gmail.com>
+References: <1322584033-19870-1-git-send-email-zonque@gmail.com>
+Message-ID: <1322590619-9814-1-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Tristan Lelong <tristan.lelong@blunderer.org>
+The CFLAGS have to be augmented for the include dir and a small patch
+will make the binary link to libnl-3 and libnl-genl-3 instead of libnl
+and libnl-gen.
 
-Fix some xpath bugs
-
-Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+Signed-off-by: Daniel Mack <zonque@gmail.com>
 ---
- package/libroxml/libroxml-2.1.1-werror.patch |   22 ----------------------
- package/libroxml/libroxml-2.1.2-werror.patch |   22 ++++++++++++++++++++++
- package/libroxml/libroxml.mk                 |    2 +-
- 3 files changed, 23 insertions(+), 23 deletions(-)
- delete mode 100644 package/libroxml/libroxml-2.1.1-werror.patch
- create mode 100644 package/libroxml/libroxml-2.1.2-werror.patch
+ package/hostapd/hostapd-0.7.3-libnl3.patch |   15 +++++++++++++++
+ package/hostapd/hostapd.mk                 |    1 +
+ 2 files changed, 16 insertions(+), 0 deletions(-)
+ create mode 100644 package/hostapd/hostapd-0.7.3-libnl3.patch
 
-diff --git a/package/libroxml/libroxml-2.1.1-werror.patch b/package/libroxml/libroxml-2.1.1-werror.patch
-deleted file mode 100644
-index a72f2a7..0000000
---- a/package/libroxml/libroxml-2.1.1-werror.patch
-+++ /dev/null
-@@ -1,22 +0,0 @@
--[PATCH] remove -Werror from CFLAGS
--
---Werror should only be used during development, not in released SW.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- Makefile |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: libroxml-2.1.0/Makefile
--===================================================================
----- libroxml-2.1.0.orig/Makefile
--+++ libroxml-2.1.0/Makefile
--@@ -41,7 +41,7 @@
-- 
-- # options
-- override CPPFLAGS += -Iinc/
---override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
--+override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
-- override LDFLAGS += 
-- 
-- ifeq ("$(OS)", "Darwin")
-diff --git a/package/libroxml/libroxml-2.1.2-werror.patch b/package/libroxml/libroxml-2.1.2-werror.patch
+diff --git a/package/hostapd/hostapd-0.7.3-libnl3.patch b/package/hostapd/hostapd-0.7.3-libnl3.patch
 new file mode 100644
-index 0000000..a72f2a7
+index 0000000..e47da73
 --- /dev/null
-+++ b/package/libroxml/libroxml-2.1.2-werror.patch
-@@ -0,0 +1,22 @@
-+[PATCH] remove -Werror from CFLAGS
-+
-+-Werror should only be used during development, not in released SW.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ Makefile |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: libroxml-2.1.0/Makefile
-+===================================================================
-+--- libroxml-2.1.0.orig/Makefile
-++++ libroxml-2.1.0/Makefile
-+@@ -41,7 +41,7 @@
++++ b/package/hostapd/hostapd-0.7.3-libnl3.patch
+@@ -0,0 +1,15 @@
++--- a/src/drivers/drivers.mak	2011-11-29 19:09:23.889942913 +0100
+++++ b/src/drivers/drivers.mak	2011-11-29 19:09:40.637381428 +0100
++@@ -31,10 +31,10 @@
++ NEED_AP_MLME=y
++ NEED_NETLINK=y
++ NEED_LINUX_IOCTL=y
++-DRV_LIBS += -lnl
+++DRV_LIBS += -lnl-3
 + 
-+ # options
-+ override CPPFLAGS += -Iinc/
-+-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
-++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
-+ override LDFLAGS += 
-+ 
-+ ifeq ("$(OS)", "Darwin")
-diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
-index f494348..5c0bf01 100644
---- a/package/libroxml/libroxml.mk
-+++ b/package/libroxml/libroxml.mk
-@@ -2,7 +2,7 @@
- # libroxml
- #
++ ifdef CONFIG_LIBNL20
++-DRV_LIBS += -lnl-genl
+++DRV_LIBS += -lnl-genl-3
++ DRV_CFLAGS += -DCONFIG_LIBNL20
++ endif
++ endif
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 0d6c2c5..53af871 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -18,6 +18,7 @@ endif
  
--LIBROXML_VERSION = 2.1.1
-+LIBROXML_VERSION = 2.1.2
- LIBROXML_SITE = http://libroxml.googlecode.com/files
- LIBROXML_INSTALL_STAGING = YES
+ define HOSTAPD_LIBNL_CONFIG
+ 	echo "CONFIG_LIBNL20=y" >>$(HOSTAPD_CONFIG)
++	echo "CFLAGS += -I$(TARGET_DIR)/usr/include/libnl3/" >>$(HOSTAPD_CONFIG)
+ endef
  
+ define HOSTAPD_CRYPTO_CONFIG
 -- 
 1.7.7.3
