@@ -1,86 +1,70 @@
-From: Jeff Krasky <jeff.krasky@dspcg.com>
-Date: Tue, 29 Nov 2011 08:43:10 -0600
+From: Michael S. Zick <minimod@morethan.org>
+Date: Tue, 29 Nov 2011 08:54:19 -0600
 Subject: [Buildroot] LIBFOO_SITE in .mk file
 In-Reply-To: <20111129153619.4f080721@skate>
 References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <201111281139.37028.minimod@morethan.org>
- <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
- <201111281324.38619.minimod@morethan.org>
- <003601ccae04$ada02e80$0400a8c0@dspcgrnzks9p98>
- <003801ccae12$a7781190$0400a8c0@dspcgrnzks9p98>
- <003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98>
- <20111129083710.1a83fad6@skate>
  <001201ccaea3$3ad7df70$0400a8c0@dspcgrnzks9p98>
  <20111129153619.4f080721@skate>
-Message-ID: <001301ccaea5$37ec1f40$0400a8c0@dspcgrnzks9p98>
+Message-ID: <201111290854.22348.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue November 29 2011, Thomas Petazzoni wrote:
+> Le Tue, 29 Nov 2011 08:28:56 -0600,
+> "Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
+> 
+> > #############################################################
+> > #
+> > # EtherCAT
+> > #
+> > #############################################################
+> > ETHERCAT_VERSION = 1.0
+> > ETHERCAT_SOURCE = etherlabmaster-1.0.tar.bz2
+> > ###ETHERCAT_SITE = file:///home/user1/Desktop/EtherCAT4Atmel/
+> > ETHERCAT_SITE = http://127.0.0.1/home/user1/Desktop/EtherCAT4Atmel/
+> 
+> That will work, but you still seem to not understand how to do this
+> properly. I've already explained in the past e-mails. You should do 
+> 
+> ETHERCAT_SITE = http://www.ethercat.org/somedirectory/
+> 
+
+And if you want more recent than version 1.4, either
+switch to Buildroot 2011.11(-rc?) and use the hg methods for download
+or
+use the direct hg link to the tarball of the stable version 1.5 tag
+that I posted.
+
+The hg setup installed at SourceForge is set to provide a *.tar.bz2
+of any tag in the repository, down to a specific file level.
+Other hg repositories may be setup differently (the one I run provides
+zip and *.tar.gz).
+
+The Buildroot hg method will clone and tar-ball the entire repository,
+which may take more than a few cpu cycles.  ;-)
+But that is the more general method.
+
+Hardcoding the URL displayed by the "tar-ball button(s)" when browsing
+an hg repository leaves you with a strangely named file but it may
+be a much smaller download.
+Although not as general, that only needs the http methods available
+in the older Buildroot versions.
+
+Mike
+> And then if you really need to hack EtherCAT locally, use the source
+> override feature.
+> 
+> > Regarding how the EtherCAT build system works, how do I answer this for you?
+> > Are there some Makefiles that would explain it?  Some other file I can post
+> > that will explain it?
+> 
 > I'll try to look at the EtherCAT build system, but I'm quite busy at
 > the moment. The INSTALL file has some details, but to build within
 > Buildroot, probably quite a few environment variables have to be passed.
-
-Here are the contents of the INSTALL file:
-
-----------------------------------------------------------------------------
----
-
-This is the INSTALL file of the IgH EtherCAT Master.
-
-$Id$
-
-vim: set spelllang=en spell tw=78
-
-----------------------------------------------------------------------------
----
-
-Building and installing
-=======================
-
-The complete build and installation procedure is described in the respective
-section of the documentation available from http://etherlab.org/en/ethercat.
-
-----------------------------------------------------------------------------
----
-
-For the impatient: The procedure mainly consists of calling
-
-$ ./boostrap # to create the configure script, if downloaded from the repo
-
-$ ./configure
-$ make all modules
-
-... and as root:
-
-# make modules_install install
-# depmod
-
-... and linking the init script and copying the sysconfig file from
-$PREFIX/etc
-to the appropriate locations and customizing the sysconfig file.
-
-# ln -s ${PREFIX}/etc/init.d/ethercat /etc/init.d/ethercat
-# cp ${PREFIX}/etc/sysconfig/ethercat /etc/sysconfig/ethercat
-# vi /etc/sysconfig/ethercat
-
-Make sure, that the 'udev' package is installed, to automatically create the
-EtherCAT character devices. The character devices will be created with mode
-0660 and group root by default. If you want to give normal users reading
-access, create a udev rule like this:
-
-# echo KERNEL==\"EtherCAT[0-9]*\", MODE=\"0664\" >
-/etc/udev/rules.d/99-EtherCAT.rules
-
-Now you can start the EtherCAT master:
-
-# /etc/init.d/ethercat start
-
-Have a look at the examples/ subdirectory for some application examples.
-
-Have fun!
-
-----------------------------------------------------------------------------
----
+> 
+> Regards,
+> 
+> Thomas
