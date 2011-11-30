@@ -1,42 +1,72 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Wed, 30 Nov 2011 18:33:12 +0200
-Subject: [Buildroot] OT: Using oprofile
-In-Reply-To: <4EB19B97.10902@carallon.com>
-References: <4EB19B97.10902@carallon.com>
-Message-ID: <CAMP44s0oPqwswyMRMTV+aSnLNQQZRsmG+XVJB1kwgwyPEDS-Kg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Nov 2011 17:33:27 +0100
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <201111281139.37028.minimod@morethan.org>
+ <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
+ <201111281324.38619.minimod@morethan.org>
+ <003601ccae04$ada02e80$0400a8c0@dspcgrnzks9p98>
+ <003801ccae12$a7781190$0400a8c0@dspcgrnzks9p98>
+ <003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98>
+ <20111129083710.1a83fad6@skate>
+ <001201ccaea3$3ad7df70$0400a8c0@dspcgrnzks9p98>
+ <20111129153619.4f080721@skate>
+ <001301ccaea5$37ec1f40$0400a8c0@dspcgrnzks9p98>
+ <001401ccaedf$e5751f60$0400a8c0@dspcgrnzks9p98>
+ <001501ccaee8$34c408d0$0400a8c0@dspcgrnzks9p98>
+ <000b01ccaf79$085d0800$0400a8c0@dspcgrnzks9p98>
+ <20111130170450.2f33e6c2@skate>
+ <000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98>
+Message-ID: <20111130173327.069f46fb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Nov 2, 2011 at 9:35 PM, Will Wagner <will_wagner@carallon.com> wrote:
-> I know this is slightly off topic, but I assume some buildroot users must be
-> doing this...
->
-> I want to use oprofile on my target, which I have the basics working (using
-> buildroot master). However I am having two problems which I am not sure how
-> to work around:
->
-> - when trying to profile with vmlinux it fails saying objdump is not
-> installed (which it is not). It says I can pass in the kernel range, I'm
-> just not sure how to get it.
+Le Wed, 30 Nov 2011 10:20:41 -0600,
+"Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
 
-You can read the soucecode, objdump is a shell script. Check
-get_image_range() and run the objdump commands on your machine.
+> Thank you so much for the reply.  I just checked and I don't see
+> "LINUX_MAKE_FLAGS" in buildroot-2011.05/linux/linux.mk.  Maybe that's in the
+> 2011.11 version?  But, are you saying that I could still use the
+> autotools-based makefile and just add INSTALL_MOD_PATH, ARCH, and
+> CROSS_COMPILE?  I have it running now, but the build takes a while, so if
+> this is wrong can you tell me?
 
-> - the app I would like to profile is stripped and I have no source on the
-> target. I want to get more detailed call info so I assume I need to copy the
-> collected data back onto my build machine where I can then do the analysis.
-> Is this the correct way of doing it? Does anyone have examples of what they
-> do.
+It is wrong.
 
-You need the debug symbols. They can be installed in a separate
-location, but you need them. There are some hacks that could be used
-on some systems so you don't need those symbols (I remember we used
-something like that for the Nokia N900), but that's pretty obscure.
+> #############################################################
+> #
+> # EtherCAT
+> #
+> #############################################################
+> ETHERCAT_VERSION = 1.0
+> ETHERCAT_SOURCE = etherlabmaster-1.0.tar.bz2
+> ###ETHERCAT_SITE = file:///home/user1/Desktop/EtherCAT4Atmel/
+> ETHERCAT_SITE = http://127.0.0.1/home/user1/Desktop/EtherCAT4Atmel/
+> ETHERCAT_INSTALL_STAGING = YES
+> ETHERCAT_INSTALL_TARGET = YES
+> ETHERCAT_CONF_OPT = --enable-generic
+> #####LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
+> #####ETHERCAT_MAKE_OPT = INSTALL_MOD_DIR="ethercat" modules_install
+> ETHERCAT_INSTALL_MOD_PATH = /lib/modules/2.6.33/ethercat
+> ETHERCAT_ARCH = arm
+> ETHERCAT_CROSS_COMPILE = arm-unknown-linux-uclibcgnueabi-
 
-Cheers.
+Those are not Buildroot variables, but Kbuild variables, that you must
+pass when running the modules_install. The fact that EtherCAT contains
+kernel modules makes it not completely straightforward to package.
 
+Do you need it right now ? I might be interested in helping package
+EtherCAT, but I don't have much time at the moment.
+
+Best regards,
+
+Thomas
 -- 
-Felipe Contreras
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
