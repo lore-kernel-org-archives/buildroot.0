@@ -1,30 +1,42 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Wed, 30 Nov 2011 10:36:38 -0600
-Subject: [Buildroot] [PATCH 1/2] iw: fix build with new libnl-3
-In-Reply-To: <4ED65A6C.2020003@gmail.com>
-References: <CAGm1_kt-QPDOyfnnjQJ=R_8=S_++h0GcDY4wid7J69v2QawExw@mail.gmail.com>
- <CAGm1_kvpf=bZxzPqgXQ65R_vo6XVp-3KFkjCt_JC8WY32OPaiw@mail.gmail.com>
- <4ED65A6C.2020003@gmail.com>
-Message-ID: <201111301036.41643.minimod@morethan.org>
+From: Jeff Krasky <jeff.krasky@dspcg.com>
+Date: Wed, 30 Nov 2011 10:38:19 -0600
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <20111130173327.069f46fb@skate>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <201111281139.37028.minimod@morethan.org>
+ <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
+ <201111281324.38619.minimod@morethan.org>
+ <003601ccae04$ada02e80$0400a8c0@dspcgrnzks9p98>
+ <003801ccae12$a7781190$0400a8c0@dspcgrnzks9p98>
+ <003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98>
+ <20111129083710.1a83fad6@skate>
+ <001201ccaea3$3ad7df70$0400a8c0@dspcgrnzks9p98>
+ <20111129153619.4f080721@skate>
+ <001301ccaea5$37ec1f40$0400a8c0@dspcgrnzks9p98>
+ <001401ccaedf$e5751f60$0400a8c0@dspcgrnzks9p98>
+ <001501ccaee8$34c408d0$0400a8c0@dspcgrnzks9p98>
+ <000b01ccaf79$085d0800$0400a8c0@dspcgrnzks9p98>
+ <20111130170450.2f33e6c2@skate>
+ <000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98>
+ <20111130173327.069f46fb@skate>
+Message-ID: <000d01ccaf7e$78243280$0400a8c0@dspcgrnzks9p98>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed November 30 2011, Daniel Mack wrote:
-> I can do this. I wasn't even aware of this branch, and part of the
-> reason is that it doesn't show up on the cgit web interface
-> (http://git.buildroot.net/buildroot) when there's no trailing slash in
-> the URI, which is unfortunately the location the website
-> (http://buildroot.uclibc.org/git.html) points visitors to. You can click
-> on "refs" and back on "summary" which will add the "/" suffix, and then
-> cgit will show the existance of the "next" branch. Very odd.
-> 
+> Those are not Buildroot variables, but Kbuild variables, that you must
+> pass when running the modules_install. The fact that EtherCAT contains
+> kernel modules makes it not completely straightforward to package.
 
-Confirmed here also.
+At what point is modules_install being run?
 
-Just adding the "/" to the URI in the browser bar and hitting "enter"
-fixes the display of the "next" branch also.
+> Do you need it right now ? I might be interested in helping package
+> EtherCAT, but I don't have much time at the moment.
 
-Mike
+Time is very short, yes.  Anything you can do to help is definitely
+appreciated.  Like, for now, can you say more about running modules_install
+and passing parameters to it?
+
+Thank you very much, again.
