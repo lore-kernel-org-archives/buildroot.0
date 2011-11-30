@@ -1,10 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Nov 2011 23:21:14 +0100
+Date: Wed, 30 Nov 2011 23:49:06 +0100
 Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <001101ccaf9a$cebe63b0$0400a8c0@dspcgrnzks9p98>
+In-Reply-To: <001201ccafb0$4b5e06e0$0400a8c0@dspcgrnzks9p98>
 References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <201111281324.38619.minimod@morethan.org>
- <003601ccae04$ada02e80$0400a8c0@dspcgrnzks9p98>
  <003801ccae12$a7781190$0400a8c0@dspcgrnzks9p98>
  <003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98>
  <20111129083710.1a83fad6@skate>
@@ -22,27 +20,42 @@ References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
  <000f01ccaf8b$7279ed90$0400a8c0@dspcgrnzks9p98>
  <CAAXf6LWSPgAR6C_+eqq5DZ5CCJkzJ22zpfyTzr7bNEGj-mOKYw@mail.gmail.com>
  <001101ccaf9a$cebe63b0$0400a8c0@dspcgrnzks9p98>
-Message-ID: <20111130232114.208390c8@skate>
+ <20111130232114.208390c8@skate>
+ <001201ccafb0$4b5e06e0$0400a8c0@dspcgrnzks9p98>
+Message-ID: <20111130234906.4f75994e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 30 Nov 2011 14:01:10 -0600,
+Hello,
+
+Please don't reply to me directly, but use the list instead.
+
+Le Wed, 30 Nov 2011 16:34:59 -0600,
 "Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
 
-> It did.  I just wrote a post about how it's there but the application isn't.
+> > I have just posted a patch that adds the igh-ethercat package to
+> > Buildroot. It applies on the latest Buildroot Git, which should become
+> > in a few hours the 2011.11 release.
+> 
+> So if I:
+> 
+> wget http://buildroot.uclibc.org/downloads/buildroot-2011.11.tar.bz2
+> 
+> I can un-tar it, go into 'make menuconfig' and select EtherCAT and then it
+> will build both the application and kernel module as part of the Linux
+> image/filesystem?
 
-I have just posted a patch that adds the igh-ethercat package to
-Buildroot. It applies on the latest Buildroot Git, which should become
-in a few hours the 2011.11 release.
+After untarring the tarball, you have to apply the patch. The
+igh-ethercat package is *not* part of the release.
 
-The patch has only been compile tested, I don't have the EtherCAT
-slaves hardware to test this. Note that you must use a kernel version
-compatible with the EtherCAT network drivers.
+> Right now I am building with 2.6.33, will I still be able to select that in
+> buildroot-2011.11?
 
-Best regards,
+Buildroot allows you to select whatever kernel version you want.
+However, none of the EtherCAT drivers seem to be supported for 2.6.33.
 
 Thomas
 -- 
