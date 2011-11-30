@@ -1,59 +1,50 @@
-From: =?utf-8?Q?Peter_Katzmann?= <peter.katzmann@edag.de>
-Date: Wed, 30 Nov 2011 08:33:01 +0100
-Subject: [Buildroot] [Bug ] 2011.11rc3 On 64bit Linux Dev Machine armeb
- builds libs to lib64 dir
-Message-ID: <zarafa.4ed5dc2d.603a.2deccef7625bf8b7@jedmail.edag.de>
+From: Adriano Campos <adrianoribeirocampos@gmail.com>
+Date: Wed, 30 Nov 2011 10:36:27 +0000
+Subject: [Buildroot] include the Xenomai in kernel linux
+Message-ID: <CAOiFVFvG0FrhcgdYo9-16Pyy5D6a79bL5B2+QvvXPj86TXqb-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
-in my case it was atomic_ops, jpeg and lzo.
-Afters this the build process failed, so probably more libs are affected.
+Le Mon, 28 Nov 2011 12:24:42 +0000,
+Adriano Campos <adrianoribeirocampos@gmail.com> a ?crit :
+Hi,
+I have another question about buildroot and qemu. I try buildroor with
+config file "qemu_arm_versatile_defconfig" and this work with QEMU
+(emuling arm versatilepb), but config file "integrator926_defconfig"
+dont work with QEMU (emuling arm integrator). Does this file is the
+configuration for the card and not for the qemu virtual machine. Who
+makes these files?Anyone can help me to create a configuration file
+for "QEMU_integrator926_defconfig."
+best regads
+Adriano Campos
 
-peter
 
+>  In the 2011-08 version of buildroot works correctly using the configuration
+> file "buildroot-2011-08 \ config \ qemu_arm_versatile_defconfig" supplied
+> with the buildroot. However I need to apply the patch and Xenomai is not
+> possible in this version so I'm now using the buildroot version 2011-11-rc3,
+> but is not working.
 
------Urspr?ngliche Nachricht-----
-An:	Peter Katzmann <peter.katzmann@edag.de>; 
-CC:	Trevor Woerner <twoerner@gmail.com>; buildroot at busybox.net; 
-Von:	Peter Korsgaard <jacmet@uclibc.org>
-Gesendet:	Di 29.11.2011 20:45
-Betreff:	Re: [Bug ] 2011.11rc3 On 64bit Linux Dev Machine armeb builds libs to lib64 dir
-> >>>>> "Peter" == Peter Katzmann <peter.katzmann@edag.de> writes:
-> 
->  Peter> Hello,
->  Peter> it seems that some configure scripts needs a little help to know where 
-> to place the library's.
->  Peter> The following small patch fixes the problem for me, but i don't know if 
-> it is a good idea for all platforms to insist that the libdir is /usr/lib .
->  Peter> peter
-> 
-> What packages were those exactly?
-> 
-> -- 
-> Bye, Peter Korsgaard
-> 
->
-?Die n?chsten Messeauftritte der EDAG Group:
-Business of Design Week in Hongkong vom 01.-03.12.2011 in der Inspiration Hall, Stand 3D-C09
-Auto Expo in Neu Delhi vom 05.-11.01.2012
-Internationaler Automobilsalon in Genf vom 06.-18.03.2012 in Halle 2, Stand 2158
+"is not working" is not precise enough to help you. Could you provide
+some details ?
 
-The EDAG Group's next exhibitions: 
-Business of Design Week in Hongkong, 1 to 3 December 2011 at Inspiration Hall, Stand 3D-C09
-Auto Expo in Neu Delhi, 5 to 11 January 2012
-International Motor Show in Geneva, 6 to 18 March 2012 at Stand 2158, Hall 2
+> With the same configuration file, the generated image does not run under
+> QEMU. Can you help?
 
-Mehr News und Informationen aus der Welt der EDAG Group k?nnen Sie in unserem interaktiven EMAG-Magazin (http://www.edag.de/pr/Newsletter/) nachlesen! Wir freuen uns auf Ihren Besuch!
+I'm not sure you realize that Xenomai is a patch against the kernel and
+that this patch is therefore only available for *certain* kernel
+versions. The kernel version used in qemu_arm_versatile_defconfig has
+no Xenomai patch available. If you want to use Xenomai, you *have* to
+use a kernel version that is explicitly supported by Xenomai, and the
+version supported by Xenomai depend on the architecture.
 
-------------------------------------------------------------------------------
-Court of jurisdiction: Amtsgericht Fulda, HRB 1075     USt.-Id: DE 112 402 594
-Gesch?ftsf?hrung / Executive Board: J?rg Ohlsen: Gesch?ftsf?hrer / CEO, Manfred Hahl: Gesch?ftsf?hrer / COO, Rainer Bauer: Gesch?ftsf?hrer / CFO
-Aufsichtsratsvorsitzender / Chairman of the Supervisory Board: Dr. Lutz Helmig
-Pers?nlich haftende Gesellschafterin / General partner: EDAG Gesellschaft mbH, Wien, Handelsgericht Wien, FN 297836 W
-Headquarters: EDAG GmbH & Co. KGaA, Reesbergstra?e 1, 36039 Fulda, Germany  /  www.edag.com
+Best regards,
 
-This e-mail may contain confidential and/or privileged information. If you are not the intended recipient (or have received this e-mail in error) please notify the sender immediately and destroy this e-mail. Any unauthorised copying, disclosure or distribution of the material in this e-mail is strictly forbidden.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
