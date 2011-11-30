@@ -1,7 +1,7 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 30 Nov 2011 18:48:13 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Nov 2011 18:58:31 +0100
 Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <000d01ccaf7e$78243280$0400a8c0@dspcgrnzks9p98>
+In-Reply-To: <CAAXf6LV8ArEeuQ=w3r7745AK00t2XqtSoLqv+tBc9rnpjS8sCQ@mail.gmail.com>
 References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
  <201111281139.37028.minimod@morethan.org>
  <002701ccadfe$961b9430$0400a8c0@dspcgrnzks9p98>
@@ -20,64 +20,45 @@ References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
  <000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98>
  <20111130173327.069f46fb@skate>
  <000d01ccaf7e$78243280$0400a8c0@dspcgrnzks9p98>
-Message-ID: <CAAXf6LV8ArEeuQ=w3r7745AK00t2XqtSoLqv+tBc9rnpjS8sCQ@mail.gmail.com>
+ <CAAXf6LV8ArEeuQ=w3r7745AK00t2XqtSoLqv+tBc9rnpjS8sCQ@mail.gmail.com>
+Message-ID: <20111130185831.2694b179@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeff,
+Le Wed, 30 Nov 2011 18:48:13 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-On Wed, Nov 30, 2011 at 5:38 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
->> Those are not Buildroot variables, but Kbuild variables, that you must
->> pass when running the modules_install. The fact that EtherCAT contains
->> kernel modules makes it not completely straightforward to package.
->
-> At what point is modules_install being run?
->
->> Do you need it right now ? I might be interested in helping package
->> EtherCAT, but I don't have much time at the moment.
->
-> Time is very short, yes. ?Anything you can do to help is definitely
-> appreciated. ?Like, for now, can you say more about running modules_install
-> and passing parameters to it?
->
+> * create two different packages, one for ethercat and one for the
+> ethercat driver. Each would have a .mk file in a package/* directory.
 
-Since your ethercat is actually containing two things, being an
-application *and* a kernel module, you should treat it as such. In my
-opinion, you should either:
+I don't agree here. This will make it hard to keep both things in sync.
 
-* create two different packages, one for ethercat and one for the
-ethercat driver. Each would have a .mk file in a package/* directory.
-* create one .mk file, but with two different sets of build rules, one
-for the application and one for the driver. You can make sure that one
-depends on the other so that they're always built together. If the
-application is autotools-based, you can use the AUTOTOOLS
-infrastructure. For the driver I suggest the GENTARGETS one (see
-below).
-* create one .mk file, with one set of build rules, that combine the
-build steps for the application and for the kernel.
+The build system of EtherCAT seems to integrate both the build of the
+kernel-space parts and the user-space parts, and it's probably doable
+inside a single package.
 
-With regards to the kernel driver part, I have already given you an
-example set of build rules in one of your other threads, see
-http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/35273
-Do you understand how these build rules work? Did you try them?
+> * create one .mk file, but with two different sets of build rules, one
+> for the application and one for the driver. You can make sure that one
+> depends on the other so that they're always built together. If the
+> application is autotools-based, you can use the AUTOTOOLS
+> infrastructure. For the driver I suggest the GENTARGETS one (see
+> below).
 
-Building this with older versions of buildroot is perfectly possible,
-if you have to stick with older versions for some reason. (if you are
-free to update, I'd suggest you do). Do keep in mind that in previous
-versions of buildroot, the LINUX_ prefix was called LINUX26_, so for
-example LINUX_MAKE_FLAGS needs to be renamed to LINUX26_MAKE_FLAGS,
-likewise with LINUX_DIR.
-
-I hope this helps.
-
-If you still have questions, I suggest you provide us with your
-current.mk file and the problems (e.g. build errors) you still
-experience with it. Please take some time to provide detailed
-information, this will allow you to get more relevant responses from
-the list.
+I haven't had the time to look closely, but it seems like the
+autotools-based build system triggers the build of the kernel parts. At
+least, the kernel part is described by a Kbuild.in file that needs to
+be processed by autoconf before being able to build the kernel side
+part. So definitely, the userspace parts and kernelspace parts are
+related in terms of build system.
 
 Best regards,
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
