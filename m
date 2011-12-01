@@ -1,91 +1,72 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Dec 2011 08:58:31 -0000
-Subject: [Buildroot] [git commit] dropbear: bump to version 2011.54
-Message-ID: <20111201085828.CEE7D8F626@busybox.osuosl.org>
+Date: Thu, 01 Dec 2011 08:58:32 -0000
+Subject: [Buildroot] [git commit] lame: bump to version 3.99
+Message-ID: <20111201085830.C17168F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b56bfe8385826c6417dbc8dc731ad535b0de3b5
+commit: http://git.buildroot.net/buildroot/commit/?id=e88733af5746c723e6a3a3c5fd1974faa11fa38b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../dropbear-0.53.1-static_build_fix.patch         |   26 --------------------
- package/dropbear/dropbear-2011.54-no-ipv6.patch    |   18 +++++++++++++
- package/dropbear/dropbear.mk                       |    3 +-
- 3 files changed, 19 insertions(+), 28 deletions(-)
+ package/multimedia/lame/lame-no-static.patch |   28 --------------------------
+ package/multimedia/lame/lame.mk              |    3 +-
+ 2 files changed, 2 insertions(+), 29 deletions(-)
 
-diff --git a/package/dropbear/dropbear-0.53.1-static_build_fix.patch b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
+diff --git a/package/multimedia/lame/lame-no-static.patch b/package/multimedia/lame/lame-no-static.patch
 deleted file mode 100644
-index 0e0a91a..0000000
---- a/package/dropbear/dropbear-0.53.1-static_build_fix.patch
+index f507f7f..0000000
+--- a/package/multimedia/lame/lame-no-static.patch
 +++ /dev/null
-@@ -1,26 +0,0 @@
--dropbear: fix static build
+@@ -1,28 +0,0 @@
+-We don't want statically compiled binaries by force so nuke that.
 -
--the -lcrypt is missing during the link
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--svr-authpasswd.o: In function `svr_auth_password':
--svr-authpasswd.c:(.text+0xfc): undefined reference to `crypt'
--collect2: ld returned 1 exit status
--
--Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-----
-- Makefile.in |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: b/Makefile.in
--===================================================================
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -77,7 +77,7 @@ STRIP=@STRIP@
-- INSTALL=@INSTALL@
-- CPPFLAGS=@CPPFLAGS@
-- CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
---LIBS+=@LIBS@
--+LIBS+=@CRYPTLIB@ @LIBS@
-- LDFLAGS=@LDFLAGS@
+-diff -Nura lame-3.98.4/frontend/Makefile.am lame-3.98.4.nostatic/frontend/Makefile.am
+---- lame-3.98.4/frontend/Makefile.am	2006-09-30 06:17:05.000000000 -0300
+-+++ lame-3.98.4.nostatic/frontend/Makefile.am	2011-02-10 13:46:05.512559590 -0300
+-@@ -52,7 +52,7 @@
+- endif
 - 
-- EXEEXT=@EXEEXT@
-diff --git a/package/dropbear/dropbear-2011.54-no-ipv6.patch b/package/dropbear/dropbear-2011.54-no-ipv6.patch
-new file mode 100644
-index 0000000..4ee9aaa
---- /dev/null
-+++ b/package/dropbear/dropbear-2011.54-no-ipv6.patch
-@@ -0,0 +1,18 @@
-+Check for IPV6_TCLASS instead of IPPROTO_IPV6 since
-+it's present on non-IPv6 enabled toolchains too.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+
-+diff -Nura dropbear-2011.54.orig/dbutil.c dropbear-2011.54/dbutil.c
-+--- dropbear-2011.54.orig/dbutil.c	2011-11-08 09:48:15.000000000 -0300
-++++ dropbear-2011.54/dbutil.c	2011-11-09 12:14:59.430074138 -0300
-+@@ -164,7 +164,7 @@
-+ 	/* set the TOS bit for either ipv4 or ipv6 */
-+ #ifdef IPTOS_LOWDELAY
-+ 	val = IPTOS_LOWDELAY;
-+-#ifdef IPPROTO_IPV6
-++#ifdef IPV6_TCLASS
-+ 	setsockopt(sock, IPPROTO_IPV6, IPV6_TCLASS, (void*)&val, sizeof(val));
-+ #endif
-+ 	setsockopt(sock, IPPROTO_IP, IP_TOS, (void*)&val, sizeof(val));
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index bced0ef..5fa50ba 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -4,8 +4,7 @@
+- CFLAGS = @CFLAGS@ @GTK_CFLAGS@ @FRONTEND_CFLAGS@ @SNDFILE_CFLAGS@
+--LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
+-+LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
+- 
+- INCLUDES = -I$(top_srcdir)/libmp3lame -I$(top_srcdir)/include -I$(top_builddir)
+- 
+-diff -Nura lame-3.98.4/frontend/Makefile.in lame-3.98.4.nostatic/frontend/Makefile.in
+---- lame-3.98.4/frontend/Makefile.in	2008-06-25 09:17:51.000000000 -0300
+-+++ lame-3.98.4.nostatic/frontend/Makefile.in	2011-02-10 13:45:54.752559590 -0300
+-@@ -152,7 +152,7 @@
+- 	$(top_builddir)/libmp3lame/libmp3lame.la \
+- 	@FRONTEND_LDADD@
+- 
+--LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@ -static
+-+LDFLAGS = @LDFLAGS@ @FRONTEND_LDFLAGS@ @SNDFILE_LIBS@
+- LIBOBJS = @LIBOBJS@
+- LIBS = @LIBS@
+- LIBTOOL = @LIBTOOL@
+diff --git a/package/multimedia/lame/lame.mk b/package/multimedia/lame/lame.mk
+index 7609f2d..fbf0dda 100644
+--- a/package/multimedia/lame/lame.mk
++++ b/package/multimedia/lame/lame.mk
+@@ -4,11 +4,12 @@
  #
  #############################################################
  
--DROPBEAR_VERSION = 0.53.1
--DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.gz
-+DROPBEAR_VERSION = 2011.54
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
- DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
+-LAME_VERSION = 3.98.4
++LAME_VERSION = 3.99
+ LAME_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lame
+ LAME_DEPENDENCIES = host-pkg-config
+ LAME_INSTALL_STAGING = YES
+ LAME_CONF_ENV = GTK_CONFIG=/bin/false
++LAME_CONF_OPT = --enable-dynamic-frontends
+ 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+ LAME_DEPENDENCIES += libsndfile
