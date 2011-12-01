@@ -1,55 +1,91 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Dec 2011 08:58:30 -0000
-Subject: [Buildroot] [git commit] qemu_sparc: add new qemu defconfig
-Message-ID: <20111201085829.C8F668F75B@busybox.osuosl.org>
+Date: Thu, 01 Dec 2011 08:58:31 -0000
+Subject: [Buildroot] [git commit] dropbear: bump to version 2011.54
+Message-ID: <20111201085828.CEE7D8F626@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ae731063619966f58ed8b58eeeda6cda5b0ed25
+commit: http://git.buildroot.net/buildroot/commit/?id=8b56bfe8385826c6417dbc8dc731ad535b0de3b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add a new qemu sample config for the SPARC architecture.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- board/qemu/sparc-ss10/readme.txt  |    7 +++++++
- configs/qemu_sparc_ss10_defconfig |   14 ++++++++++++++
- 2 files changed, 21 insertions(+), 0 deletions(-)
+ .../dropbear-0.53.1-static_build_fix.patch         |   26 --------------------
+ package/dropbear/dropbear-2011.54-no-ipv6.patch    |   18 +++++++++++++
+ package/dropbear/dropbear.mk                       |    3 +-
+ 3 files changed, 19 insertions(+), 28 deletions(-)
 
-diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+diff --git a/package/dropbear/dropbear-0.53.1-static_build_fix.patch b/package/dropbear/dropbear-0.53.1-static_build_fix.patch
+deleted file mode 100644
+index 0e0a91a..0000000
+--- a/package/dropbear/dropbear-0.53.1-static_build_fix.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-dropbear: fix static build
+-
+-the -lcrypt is missing during the link
+-
+-svr-authpasswd.o: In function `svr_auth_password':
+-svr-authpasswd.c:(.text+0xfc): undefined reference to `crypt'
+-collect2: ld returned 1 exit status
+-
+-Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+----
+- Makefile.in |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: b/Makefile.in
+-===================================================================
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -77,7 +77,7 @@ STRIP=@STRIP@
+- INSTALL=@INSTALL@
+- CPPFLAGS=@CPPFLAGS@
+- CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
+--LIBS+=@LIBS@
+-+LIBS+=@CRYPTLIB@ @LIBS@
+- LDFLAGS=@LDFLAGS@
+- 
+- EXEEXT=@EXEEXT@
+diff --git a/package/dropbear/dropbear-2011.54-no-ipv6.patch b/package/dropbear/dropbear-2011.54-no-ipv6.patch
 new file mode 100644
-index 0000000..5f01efa
+index 0000000..4ee9aaa
 --- /dev/null
-+++ b/board/qemu/sparc-ss10/readme.txt
-@@ -0,0 +1,7 @@
-+Run the emulation with:
++++ b/package/dropbear/dropbear-2011.54-no-ipv6.patch
+@@ -0,0 +1,18 @@
++Check for IPV6_TCLASS instead of IPPROTO_IPV6 since
++it's present on non-IPv6 enabled toolchains too.
 +
-+  qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
 +
-+The login prompt will appear in the terminal that started Qemu.
-+The graphical window is the framebuffer.
-+
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-new file mode 100644
-index 0000000..20cd9fb
---- /dev/null
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -0,0 +1,14 @@
-+# Architecture
-+BR2_sparc=y
-+BR2_sparc_supersparc=y
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Linux kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
-+BR2_LINUX_KERNEL_ZIMAGE=y
++diff -Nura dropbear-2011.54.orig/dbutil.c dropbear-2011.54/dbutil.c
++--- dropbear-2011.54.orig/dbutil.c	2011-11-08 09:48:15.000000000 -0300
+++++ dropbear-2011.54/dbutil.c	2011-11-09 12:14:59.430074138 -0300
++@@ -164,7 +164,7 @@
++ 	/* set the TOS bit for either ipv4 or ipv6 */
++ #ifdef IPTOS_LOWDELAY
++ 	val = IPTOS_LOWDELAY;
++-#ifdef IPPROTO_IPV6
+++#ifdef IPV6_TCLASS
++ 	setsockopt(sock, IPPROTO_IPV6, IPV6_TCLASS, (void*)&val, sizeof(val));
++ #endif
++ 	setsockopt(sock, IPPROTO_IP, IP_TOS, (void*)&val, sizeof(val));
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bced0ef..5fa50ba 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,8 +4,7 @@
+ #
+ #############################################################
+ 
+-DROPBEAR_VERSION = 0.53.1
+-DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.gz
++DROPBEAR_VERSION = 2011.54
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+ DROPBEAR_MAKE =	$(MAKE) MULTI=1 SCPPROGRESS=1 \
