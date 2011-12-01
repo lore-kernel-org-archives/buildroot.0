@@ -1,78 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Dec 2011 08:58:29 -0000
-Subject: [Buildroot] [git commit] flex: bump to version 2.5.35-10 and
-	cleanup style
-Message-ID: <20111201085828.6227F8F75C@busybox.osuosl.org>
+Date: Thu, 01 Dec 2011 08:58:30 -0000
+Subject: [Buildroot] [git commit] uClibc: fix sparc build breakage
+Message-ID: <20111201085829.756098F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a1dd178f3a11a0f19aaf4fe76c61869ea8836a55
+commit: http://git.buildroot.net/buildroot/commit/?id=b847ed050d85e7b0befc5521f4acff7cc1f31693
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix build breakage for sparc as reported in bug #4021
+Patches from Konrad Eisele <konrad@gaisler.com>
+Submitted in the uclibc mailing list.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ....33-prog-ar.patch => flex-2.5.35-prog-ar.patch} |    0
- package/flex/flex.mk                               |   23 ++++++++++---------
- 2 files changed, 12 insertions(+), 11 deletions(-)
+ .../uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch   |   11 +++++++++++
+ .../uClibc/uClibc-0.9.32-sparc-errno-fix.patch     |   11 +++++++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/flex/flex-2.5.33-prog-ar.patch b/package/flex/flex-2.5.35-prog-ar.patch
-similarity index 100%
-rename from package/flex/flex-2.5.33-prog-ar.patch
-rename to package/flex/flex-2.5.35-prog-ar.patch
-diff --git a/package/flex/flex.mk b/package/flex/flex.mk
-index 706b89d..df1b420 100644
---- a/package/flex/flex.mk
-+++ b/package/flex/flex.mk
-@@ -3,24 +3,25 @@
- # flex
- #
- #############################################################
--FLEX_VERSION:=2.5.35
--FLEX_PATCH_VERSION:=9.1
--FLEX_SOURCE:=flex_$(FLEX_VERSION).orig.tar.gz
--FLEX_PATCH:=flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
--FLEX_SITE:=$(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
--FLEX_DIR:=$(BUILD_DIR)/flex-$(FLEX_VERSION)
--FLEX_INSTALL_STAGING=YES
-+
-+FLEX_VERSION = 2.5.35
-+FLEX_PATCH_VERSION = 10
-+FLEX_SOURCE = flex_$(FLEX_VERSION).orig.tar.gz
-+FLEX_PATCH = flex_$(FLEX_VERSION)-$(FLEX_PATCH_VERSION).diff.gz
-+FLEX_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/f/flex
-+FLEX_DIR = $(BUILD_DIR)/flex-$(FLEX_VERSION)
-+FLEX_INSTALL_STAGING = YES
- FLEX_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
- 	$(if $(BR2_PACKAGE_LIBINTL),libintl)
- 
- # lex -> flex
- define FLEX_INSTALL_LEX
--cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
-+	cd $(TARGET_DIR)/usr/bin && ln -snf flex lex
- endef
- 
- define FLEX_UNINSTALL_LEX
---rm $(TARGET_DIR)/usr/bin/lex
-+	-rm $(TARGET_DIR)/usr/bin/lex
- endef
- 
- FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LEX
-@@ -29,11 +30,11 @@ FLEX_POST_CLEAN_HOOKS += FLEX_UNINSTALL_LEX
- # libfl installation
- ifeq ($(BR2_PACKAGE_FLEX_LIBFL),y)
- define FLEX_INSTALL_LIBFL
--install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
-+	install -D $(FLEX_DIR)/libfl.a $(STAGING_DIR)/usr/lib/libfl.a
- endef
- 
- define FLEX_UNINSTALL_LIBFL
---rm $(STAGING_DIR)/lib/libfl.a
-+	-rm $(STAGING_DIR)/lib/libfl.a
- endef
- 
- FLEX_POST_INSTALL_HOOKS += FLEX_INSTALL_LIBFL
+diff --git a/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
+new file mode 100644
+index 0000000..44d06cb
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.31.1-sparc-errno-fix.patch
+@@ -0,0 +1,11 @@
++--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
+++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
++@@ -52,7 +52,7 @@
++ 	 restore %g0,%g0,%o0
++ 
++ .Lerror:
++-	call	HIDDEN_JUMPTARGET(__errno_location)
+++	call	__errno_location
++ 	 or	%g0,EINVAL,%i0
++ 	st	%i0,[%o0]
++ 	ret
+diff --git a/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch b/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
+new file mode 100644
+index 0000000..44d06cb
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.32-sparc-errno-fix.patch
+@@ -0,0 +1,11 @@
++--- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
+++++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
++@@ -52,7 +52,7 @@
++ 	 restore %g0,%g0,%o0
++ 
++ .Lerror:
++-	call	HIDDEN_JUMPTARGET(__errno_location)
+++	call	__errno_location
++ 	 or	%g0,EINVAL,%i0
++ 	st	%i0,[%o0]
++ 	ret
