@@ -1,33 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 1 Dec 2011 23:09:52 +0100
-Subject: [Buildroot] [git commit] news.html: add 2011.11 announcement link
-Message-ID: <20111201221052.905C088E04@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 01 Dec 2011 23:12:23 +0100
+Subject: [Buildroot] [PATCH 2/2] dbus-glib: bump to version 0.98
+In-Reply-To: <1322758957-8248-2-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Thu, 1 Dec 2011 18:02:37 +0100")
+References: <1322758957-8248-1-git-send-email-zonque@gmail.com>
+ <1322758957-8248-2-git-send-email-zonque@gmail.com>
+Message-ID: <877h2ggcvs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=657d3155d5e54e8f650a7b00d83c128895514462
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/news.html |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
 
-diff --git a/docs/news.html b/docs/news.html
-index 2e54a9e..345dc0e 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -10,7 +10,9 @@
-     <p>The stable 2011.11 release is out - Thanks to everyone
-     contributing and testing the release candidates. See the
-     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2011.11">CHANGES</a>
--    file for more details, and go to the <a href="/downloads/">downloads page</a> to pick up the
-+    file for more details, read the
-+    <a href="http://lists.busybox.net/pipermail/buildroot/2011-November/047926.html">announcement</a>
-+    and go to the <a href="/downloads/">downloads page</a> to pick up the
-     <a href="/downloads/buildroot-2011.11.tar.bz2">2011.11 release</a>.</p>
- 
-   <li><b>26 November 2011 -- 2011.11-rc3 released</b>
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
