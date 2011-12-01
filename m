@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 01 Dec 2011 23:12:23 +0100
-Subject: [Buildroot] [PATCH 2/2] dbus-glib: bump to version 0.98
-In-Reply-To: <1322758957-8248-2-git-send-email-zonque@gmail.com> (Daniel
- Mack's message of "Thu, 1 Dec 2011 18:02:37 +0100")
-References: <1322758957-8248-1-git-send-email-zonque@gmail.com>
- <1322758957-8248-2-git-send-email-zonque@gmail.com>
-Message-ID: <877h2ggcvs.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 1 Dec 2011 23:12:05 +0100
+Subject: [Buildroot] [git commit] dbus-glib: bump to version 0.98
+Message-ID: <20111201221238.DC9CC8F72B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2dda9ea0d31d30c990a2cb76b764e80c4ed06ca3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dbus-glib/dbus-glib.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index 8717f63..397996e 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -3,7 +3,7 @@
+ # dbus-glib
+ #
+ #############################################################
+-DBUS_GLIB_VERSION = 0.94
++DBUS_GLIB_VERSION = 0.98
+ DBUS_GLIB_SOURCE = dbus-glib-$(DBUS_GLIB_VERSION).tar.gz
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib/
+ DBUS_GLIB_INSTALL_STAGING = YES
