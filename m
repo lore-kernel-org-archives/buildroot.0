@@ -1,34 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 01 Dec 2011 08:58:35 -0000
-Subject: [Buildroot] [git commit] nano: bump to version 2.3.1
-Message-ID: <20111201085834.0909B8F75B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] grep: bump to version 2.9
+Message-ID: <20111201085834.B62B88F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=14520a6866e89d504947443bcf5633ffb34d3a92
+commit: http://git.buildroot.net/buildroot/commit/?id=7dbf60b29dfe14b46f3a54afba609f73a22e370f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bump grep to version 2.9
+Also make it build after busybox if it's enabled, we prefer full-blown
+utilities.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/nano/nano.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/grep/grep.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index c4162c1..2bf7121 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index e8b9cfe..e039135 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--NANO_VERSION = 2.2.6
--NANO_SITE = http://www.nano-editor.org/dist/v2.2
-+NANO_VERSION = 2.3.1
-+NANO_SITE = http://www.nano-editor.org/dist/v2.3
- NANO_MAKE_ENV = CURSES_LIB="-lncurses"
- NANO_CONF_OPT = --without-slang --enable-tiny
- NANO_DEPENDENCIES = ncurses
+-GREP_VERSION = 2.7
++GREP_VERSION = 2.9
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
+ GREP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
+@@ -15,4 +15,9 @@ GREP_CONF_ENV += LIBS=-liconv
+ GREP_DEPENDENCIES += libiconv
+ endif
+ 
++# Full grep preferred over busybox grep
++ifeq ($(BR2_PACKAGE_BUSYBOX),y)
++GREP_DEPENDENCIES += busybox
++endif
++
+ $(eval $(call AUTOTARGETS))
