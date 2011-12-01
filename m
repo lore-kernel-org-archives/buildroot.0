@@ -1,31 +1,16 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Dec 2011 08:58:41 -0000
-Subject: [Buildroot] [git commit] kickoff 2012.02 development cycle
-Message-ID: <20111201085830.5C3638F75B@busybox.osuosl.org>
+Date: Thu, 1 Dec 2011 09:56:54 +0100
+Subject: [Buildroot] [git commit] Merge branch 'next'
+Message-ID: <20111201085841.0EBC58F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f7c26a26780d6160dca1473c120507058dc2550f
+commit: http://git.buildroot.net/buildroot/commit/?id=c3b72c6cd7b82e70cf61f4eac59f176444eaebf1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+And kickoff 2012.02 cycle.
 
-diff --git a/Makefile b/Makefile
-index df2f859..84cea1c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2011.11-rc1
-+export BR2_VERSION:=2012.02-git
- 
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
