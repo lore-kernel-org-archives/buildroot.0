@@ -1,39 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 1 Dec 2011 07:38:14 +0200
-Subject: [Buildroot] OT: Using oprofile
-In-Reply-To: <CAMP44s0oPqwswyMRMTV+aSnLNQQZRsmG+XVJB1kwgwyPEDS-Kg@mail.gmail.com>
-References: <4EB19B97.10902@carallon.com>
- <CAMP44s0oPqwswyMRMTV+aSnLNQQZRsmG+XVJB1kwgwyPEDS-Kg@mail.gmail.com>
-Message-ID: <20111201053814.GA15878@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Dec 2011 09:11:52 +0100
+Subject: [Buildroot] LIBFOO_SITE in .mk file
+In-Reply-To: <001301ccafb3$1631f000$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98>
+ <20111129083710.1a83fad6@skate>
+ <001201ccaea3$3ad7df70$0400a8c0@dspcgrnzks9p98>
+ <20111129153619.4f080721@skate>
+ <001301ccaea5$37ec1f40$0400a8c0@dspcgrnzks9p98>
+ <001401ccaedf$e5751f60$0400a8c0@dspcgrnzks9p98>
+ <001501ccaee8$34c408d0$0400a8c0@dspcgrnzks9p98>
+ <000b01ccaf79$085d0800$0400a8c0@dspcgrnzks9p98>
+ <20111130170450.2f33e6c2@skate>
+ <000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98>
+ <20111130173327.069f46fb@skate>
+ <000d01ccaf7e$78243280$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LV8ArEeuQ=w3r7745AK00t2XqtSoLqv+tBc9rnpjS8sCQ@mail.gmail.com>
+ <000f01ccaf8b$7279ed90$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LWSPgAR6C_+eqq5DZ5CCJkzJ22zpfyTzr7bNEGj-mOKYw@mail.gmail.com>
+ <001101ccaf9a$cebe63b0$0400a8c0@dspcgrnzks9p98>
+ <20111130232114.208390c8@skate>
+ <001201ccafb0$4b5e06e0$0400a8c0@dspcgrnzks9p98>
+ <20111130234906.4f75994e@skate>
+ <001301ccafb3$1631f000$0400a8c0@dspcgrnzks9p98>
+Message-ID: <20111201091152.68aa9433@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Felipe
+Le Wed, 30 Nov 2011 16:54:58 -0600,
+"Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
 
-On Wed, Nov 30, 2011 at 06:33:12PM +0200, Felipe Contreras wrote:
-> On Wed, Nov 2, 2011 at 9:35 PM, Will Wagner <will_wagner@carallon.com> wrote:
-> > I know this is slightly off topic, but I assume some buildroot users must be
-> > doing this...
-> >
-> > I want to use oprofile on my target, which I have the basics working (using
-> > buildroot master). However I am having two problems which I am not sure how
-> > to work around:
-> >
-> > - when trying to profile with vmlinux it fails saying objdump is not
-> > installed (which it is not). It says I can pass in the kernel range, I'm
-> > just not sure how to get it.
+> Oh, ok.  So the patch will be a .patch file on 
 > 
-> You can read the soucecode, objdump is a shell script. Check
-> get_image_range() and run the objdump commands on your machine.
+> http://buildroot.uclibc.org/downloads/
 
-You probably meant to say "opcontrol is a shell script".
+No, the patch is in an e-mail I have sent to the list yesterday evening.
 
-baruch
+> 1. download it
+> 2. go into buildroot-2011.11 directory
+> 3. run 'patch filename.patch'
 
+No:
+
+cat filename.patch | patch -p1
+
+Thomas
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
