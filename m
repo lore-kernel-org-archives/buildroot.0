@@ -1,128 +1,66 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Thu, 01 Dec 2011 08:58:28 -0000
-Subject: [Buildroot] [git commit] qemu_x86_64: add new qemu defconfig
-Message-ID: <20111201085826.D24658F75B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] usbmount: bump to 0.0.22
+Message-ID: <20111201085827.8DDCF8F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e974ba2d218df614877270431ee1043503bc2d5
+commit: http://git.buildroot.net/buildroot/commit/?id=ba2a0cf5a135873ab0029a43de7d0bf82d6578df
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+FSTYPE detection bug was fixed upstream, so delete relevant patch
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- board/qemu/x86_64/linux-3.1.config |   67 ++++++++++++++++++++++++++++++++++++
- board/qemu/x86_64/readme.txt       |    5 +++
- configs/qemu_x86_64_defconfig      |   17 +++++++++
- 3 files changed, 89 insertions(+), 0 deletions(-)
+ .../usbmount/usbmount-fstype-detection-fix.patch   |   25 --------------------
+ package/usbmount/usbmount.mk                       |    2 +-
+ 2 files changed, 1 insertions(+), 26 deletions(-)
 
-diff --git a/board/qemu/x86_64/linux-3.1.config b/board/qemu/x86_64/linux-3.1.config
-new file mode 100644
-index 0000000..5bf6944
---- /dev/null
-+++ b/board/qemu/x86_64/linux-3.1.config
-@@ -0,0 +1,67 @@
-+CONFIG_EXPERIMENTAL=y
-+# CONFIG_LOCALVERSION_AUTO is not set
-+# CONFIG_SWAP is not set
-+# CONFIG_COMPAT_BRK is not set
-+# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_IOSCHED_DEADLINE is not set
-+# CONFIG_IOSCHED_CFQ is not set
-+# CONFIG_X86_EXTENDED_PLATFORM is not set
-+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
-+# CONFIG_MTRR_SANITIZER is not set
-+# CONFIG_SECCOMP is not set
-+# CONFIG_RELOCATABLE is not set
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
-+# CONFIG_FIRMWARE_IN_KERNEL is not set
-+# CONFIG_BLK_DEV is not set
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_ATA_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NET_ETHERNET=y
-+CONFIG_NET_PCI=y
-+CONFIG_NE2K_PCI=y
-+CONFIG_8139CP=y
-+# CONFIG_NETDEV_1000 is not set
-+# CONFIG_NETDEV_10000 is not set
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_SERPORT is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_DEVKMEM is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+# CONFIG_MFD_SUPPORT is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_HDA_INTEL=y
-+# CONFIG_HID_SUPPORT is not set
-+# CONFIG_USB_SUPPORT is not set
-+# CONFIG_X86_PLATFORM_DEVICES is not set
-+# CONFIG_DMIID is not set
-+CONFIG_EXT2_FS=y
-+# CONFIG_DNOTIFY is not set
-+# CONFIG_INOTIFY_USER is not set
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-+# CONFIG_ENABLE_WARN_DEPRECATED is not set
-+# CONFIG_ENABLE_MUST_CHECK is not set
-+# CONFIG_UNUSED_SYMBOLS is not set
-+# CONFIG_FRAME_POINTER is not set
-+# CONFIG_X86_VERBOSE_BOOTUP is not set
-+# CONFIG_VIRTUALIZATION is not set
-diff --git a/board/qemu/x86_64/readme.txt b/board/qemu/x86_64/readme.txt
-new file mode 100644
-index 0000000..c06d24f
---- /dev/null
-+++ b/board/qemu/x86_64/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
-+
-+  qemu-system-x86_64 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append root=/dev/sda
-+
-+The login prompt will appear in the graphical window.
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-new file mode 100644
-index 0000000..e6a59ac
---- /dev/null
-+++ b/configs/qemu_x86_64_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_x86_64=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.1.config"
+diff --git a/package/usbmount/usbmount-fstype-detection-fix.patch b/package/usbmount/usbmount-fstype-detection-fix.patch
+deleted file mode 100644
+index a3686f1..0000000
+--- a/package/usbmount/usbmount-fstype-detection-fix.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-newer blkid version shows two parameter with TYPE within:
+-
+-/dev/sda1: VERSION="0.0" TYPE="ext2" USAGE="filesystem" PART_ENTRY_SCHEME="dos"
+-PART_ENTRY_TYPE="0xc" PART_ENTRY_FLAGS="0x80" PART_ENTRY_NUMBER="1"
+-
+-change regular expression to take " TYPE" only
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- usbmount |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: b/usbmount
+-===================================================================
+---- a/usbmount
+-+++ b/usbmount
+-@@ -88,7 +88,7 @@
+-     #   FIXME: improvement: implement mounting by label (notice that labels
+-     #   can contain spaces, which makes things a little bit less comfortable).
+-     DEVINFO=$(/sbin/blkid -p $DEVNAME)
+--    FSTYPE=$(echo "$DEVINFO" | sed 's/.*TYPE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
+-+    FSTYPE=$(echo "$DEVINFO" | sed 's/.* TYPE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
+-     UUID=$(echo "$DEVINFO"   | sed 's/.*UUID="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
+-     USAGE=$(echo "$DEVINFO"  | sed 's/.*USAGE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
+-
+diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
+index 8434570..a6b2d43 100644
+--- a/package/usbmount/usbmount.mk
++++ b/package/usbmount/usbmount.mk
+@@ -3,7 +3,7 @@
+ # usbmount
+ #
+ #############################################################
+-USBMOUNT_VERSION = 0.0.21
++USBMOUNT_VERSION = 0.0.22
+ USBMOUNT_SOURCE = usbmount_$(USBMOUNT_VERSION).tar.gz
+ USBMOUNT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/u/usbmount
+ USBMOUNT_DEPENDENCIES = udev lockfile-progs util-linux
