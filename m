@@ -1,29 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 01 Dec 2011 16:49:00 +0100
-Subject: [Buildroot] [git commit] dropbear: bump to version 2011.54
-In-Reply-To: <CAAXf6LVMmix+5RSbHDJKj09GGd_60Y6cBtSk2-+qODfOkvm2+g@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 1 Dec 2011 15:35:44
- +0100")
-References: <20111201085828.CEE7D8F626@busybox.osuosl.org>
- <201112010722.35449.minimod@morethan.org>
- <20111201145224.197356c8@skate>
- <CAAXf6LVMmix+5RSbHDJKj09GGd_60Y6cBtSk2-+qODfOkvm2+g@mail.gmail.com>
-Message-ID: <87sjl4gumr.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 1 Dec 2011 16:50:03 +0100
+Subject: [Buildroot] [git commit] u-boot: add version 2011.09
+Message-ID: <20111201155255.2B1F08F733@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0239612fb2af681984af222c9a84bf06ce9b77ec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/uboot/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
- Thomas> Just throwing the question out: should we adapt existing .mk files to
- Thomas> remove lines that correspond to the default? This is such an example,
- Thomas> and FOO_INSTALL_TARGET=YES is another one.
-
-For _INSTALL_TARGET definately, yes.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 506f354..dd49a2c 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
+ 
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2011_06
++	default BR2_TARGET_UBOOT_2011_09
+ 	help
+ 	  Select the specific U-Boot version you want to use
+ 
++config BR2_TARGET_UBOOT_2011_09
++	bool "2011.09"
++
+ config BR2_TARGET_UBOOT_2011_06
+ 	bool "2011.06"
+ 
+@@ -48,6 +51,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2011.09"	if BR2_TARGET_UBOOT_2011_09
+ 	default "2011.06"	if BR2_TARGET_UBOOT_2011_06
+ 	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
+ 	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
