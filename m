@@ -1,55 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Dec 2011 09:11:52 +0100
-Subject: [Buildroot] LIBFOO_SITE in .mk file
-In-Reply-To: <001301ccafb3$1631f000$0400a8c0@dspcgrnzks9p98>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <003901ccae1b$2d82f950$0400a8c0@dspcgrnzks9p98>
- <20111129083710.1a83fad6@skate>
- <001201ccaea3$3ad7df70$0400a8c0@dspcgrnzks9p98>
- <20111129153619.4f080721@skate>
- <001301ccaea5$37ec1f40$0400a8c0@dspcgrnzks9p98>
- <001401ccaedf$e5751f60$0400a8c0@dspcgrnzks9p98>
- <001501ccaee8$34c408d0$0400a8c0@dspcgrnzks9p98>
- <000b01ccaf79$085d0800$0400a8c0@dspcgrnzks9p98>
- <20111130170450.2f33e6c2@skate>
- <000c01ccaf7c$01f3c460$0400a8c0@dspcgrnzks9p98>
- <20111130173327.069f46fb@skate>
- <000d01ccaf7e$78243280$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LV8ArEeuQ=w3r7745AK00t2XqtSoLqv+tBc9rnpjS8sCQ@mail.gmail.com>
- <000f01ccaf8b$7279ed90$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LWSPgAR6C_+eqq5DZ5CCJkzJ22zpfyTzr7bNEGj-mOKYw@mail.gmail.com>
- <001101ccaf9a$cebe63b0$0400a8c0@dspcgrnzks9p98>
- <20111130232114.208390c8@skate>
- <001201ccafb0$4b5e06e0$0400a8c0@dspcgrnzks9p98>
- <20111130234906.4f75994e@skate>
- <001301ccafb3$1631f000$0400a8c0@dspcgrnzks9p98>
-Message-ID: <20111201091152.68aa9433@skate>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 1 Dec 2011 09:33:24 +0100
+Subject: [Buildroot] [PATCH 1/1] igh-ethercat: new package
+In-Reply-To: <8994d83580fbd41c89016f1cc35e10ecce46025b.1322691543.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1322691543.git.thomas.petazzoni@free-electrons.com>
+ <8994d83580fbd41c89016f1cc35e10ecce46025b.1322691543.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LVJ+QSdZOs2YUwFnKH2Y7gH6LJMXtJeaF5cAQA85YERmg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 30 Nov 2011 16:54:58 -0600,
-"Jeff Krasky" <jeff.krasky@dspcg.com> a ?crit :
+Hi Thomas,
 
-> Oh, ok.  So the patch will be a .patch file on 
-> 
-> http://buildroot.uclibc.org/downloads/
+First of all: nice work.
+I was about to attempt creating a .mk file myself as well, but you beat me :-)
 
-No, the patch is in an e-mail I have sent to the list yesterday evening.
+On Wed, Nov 30, 2011 at 11:19 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-> 1. download it
-> 2. go into buildroot-2011.11 directory
-> 3. run 'patch filename.patch'
+> ---
+> ?package/Config.in ? ? ? ? ? ? ? ? ? ?| ? ?1 +
+> ?package/igh-ethercat/Config.in ? ? ? | ? 23 +++++++++++++++++++++++
+> ?package/igh-ethercat/igh-ethercat.mk | ? 34 ++++++++++++++++++++++++++++++++++
+> ?3 files changed, 58 insertions(+), 0 deletions(-)
+> ?create mode 100644 package/igh-ethercat/Config.in
+> ?create mode 100644 package/igh-ethercat/igh-ethercat.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 4b5e5d8..2ccdc1d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -412,6 +412,7 @@ source "package/dhcpdump/Config.in"
+> ?source "package/dnsmasq/Config.in"
+> ?source "package/dropbear/Config.in"
+> ?source "package/ebtables/Config.in"
+> +source "package/igh-ethercat/Config.in"
+> ?source "package/ethtool/Config.in"
+> ?source "package/hostapd/Config.in"
+> ?if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 
-No:
+It seems you renamed the package later, as the alphabetical order is
+not correct anymore.
 
-cat filename.patch | patch -p1
+> diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+> new file mode 100644
+> index 0000000..764a021
+> --- /dev/null
+> +++ b/package/igh-ethercat/Config.in
+> @@ -0,0 +1,23 @@
+> +config BR2_PACKAGE_IGH_ETHERCAT
+> + ? ? ? bool "igh-ethercat"
+> + ? ? ? depends on BR2_LINUX_KERNEL
+> + ? ? ? help
+> + ? ? ? ? IgH EtherCAT Master for Linux.
+> +
+> + ? ? ? ? http://www.etherlab.org/en/ethercat/index.php
+> +
+> +if BR2_PACKAGE_IGH_ETHERCAT
+> +
+> +config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
+> + ? ? ? bool "8139too driver"
+> +
+> +config BR2_PACKAGE_IGH_ETHERCAT_E100
+> + ? ? ? bool "e100 driver"
+> +
+> +config BR2_PACKAGE_IGH_ETHERCAT_E1000
+> + ? ? ? bool "e1000 driver"
+> +
+> +config BR2_PACKAGE_IGH_ETHERCAT_R8169
+> + ? ? ? bool "r8169 driver"
+> +
+> +endif
+> diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+> new file mode 100644
+> index 0000000..eb49591
+> --- /dev/null
+> +++ b/package/igh-ethercat/igh-ethercat.mk
+> @@ -0,0 +1,34 @@
+> +IGH_ETHERCAT_VERSION = stable-1.5
+> +IGH_ETHERCAT_SITE ? ?= http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
+> +IGH_ETHERCAT_SOURCE ?= $(IGH_ETHERCAT_VERSION).tar.bz2
+> +IGH_ETHERCAT_AUTORECONF = YES
+> +IGH_ETHERCAT_DEPENDENCIES = linux
+> +IGH_ETHERCAT_INSTALL_STAGING = YES
+> +
+> +IGH_ETHERCAT_CONF_OPT = \
+> + ? ? ? --with-linux-dir=$(LINUX_DIR)
+> +
+> +IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
+> +IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
+> +IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
+> +IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+> +
+> +define IGH_ETHERCAT_CREATE_CHANGELOG
+> + ? ? ? touch $(@D)/ChangeLog
+> +endef
+> +
+> +IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
 
+Maybe it's a good idea to add a comment here, e.g.
+# Since we download ethercat from source control, we have to emulate
+the bootstrap script that creates ChangeLog.
+# We don't want to run that script directly, as it also runs
+'autoreconf' which will be done by the autotargets infrastructure.
+
+> +
+> +define IGH_ETHERCAT_BUILD_MODULES
+> + ? ? ? $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+> +endef
+> +
+> +IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
+> +
+> +define IGH_ETHERCAT_INSTALL_MODULES
+> + ? ? ? $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
+> +endef
+> +
+> +IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
+> +
+> +$(eval $(call AUTOTARGETS))
+> \ No newline at end of file
+
+Shouldn't there be a newline here?
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
