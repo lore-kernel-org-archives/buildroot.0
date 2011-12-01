@@ -1,50 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 1 Dec 2011 12:49:14 +0100
-Subject: [Buildroot] RFC dependencies: checking minimum make version
-Message-ID: <CAAXf6LW__qfNLx-9jPsx+B_t9MMw4Uinti6+PrP7GzY+1X5mVg@mail.gmail.com>
+From: Daniel Mack <zonque@gmail.com>
+Date: Thu, 01 Dec 2011 12:50:31 +0100
+Subject: [Buildroot] [PATCH 1/2] iw: fix build with new libnl-3
+In-Reply-To: <CAGm1_kshT=7x4wjx+UX2jyU8M0kmRt4xdhY+0YctioFzg_1FRw@mail.gmail.com>
+References: <CAGm1_kt-QPDOyfnnjQJ=R_8=S_++h0GcDY4wid7J69v2QawExw@mail.gmail.com>
+ <1322665560-29888-1-git-send-email-zonque@gmail.com>
+ <CAGm1_kvpf=bZxzPqgXQ65R_vo6XVp-3KFkjCt_JC8WY32OPaiw@mail.gmail.com>
+ <4ED65A6C.2020003@gmail.com>
+ <CAGm1_kshT=7x4wjx+UX2jyU8M0kmRt4xdhY+0YctioFzg_1FRw@mail.gmail.com>
+Message-ID: <4ED76A07.7020301@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 11/30/2011 10:31 PM, Yegor Yefremov wrote:
+> Hi Daniel,
+> 
+>>>> The CFLAGS have to be augmented for the include dir and the patch
+>>>> needs to be tweaked to make the binary link to libnl-3 instead of
+>>>> libnl-gen.
+>>>>
+>>>> Signed-off-by: Daniel Mack <zonque@gmail.com>
+>>>> ---
+>>>>  package/iw/iw-libnl-30-support.patch |    2 +-
+>>>>  package/iw/iw.mk                     |    2 +-
+>>>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/package/iw/iw-libnl-30-support.patch b/package/iw/iw-libnl-30-support.patch
+>>>
+>>> this file has gone in next. Please rebase your patches on the next
+>>
+>> I can do this. I wasn't even aware of this branch, and part of the
+>> reason is that it doesn't show up on the cgit web interface
+>> (http://git.buildroot.net/buildroot) when there's no trailing slash in
+>> the URI, which is unfortunately the location the website
+>> (http://buildroot.uclibc.org/git.html) points visitors to. You can click
+>> on "refs" and back on "summary" which will add the "/" suffix, and then
+>> cgit will show the existance of the "next" branch. Very odd.
+>>
+>>> branch and try to get iw from git with this commit
+>>> http://git.sipsolutions.net/?p=iw.git;a=commit;h=a82abc2cac9dea7def53070565201145c76c8c6c.
+>>
+>> Not sure whether I follow you here. Do you suggest writing package
+>> definitions for sources that are not released yet officially? If that is
+>> the case, what is the reason?
+> 
+> I see here 3 possibilities:
+> 
+> 1. replace official release with git one
+> 2. wait for iw 3.3
+> 3. apply related patches (from iw repo) only
+> 
+> the first way is simpler and quicker to implement
 
-The buildroot Makefile uses constructs like:
+Ok, fine. I did that and the git version seems to cope well with
+nibnl-3. Nice.
 
-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-include toolchain/toolchain-buildroot.mk
-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-include toolchain/toolchain-external.mk
-else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
-include toolchain/toolchain-crosstool-ng.mk
-endif
+>> Also, I fail to see how the commit you pointed me to is related to the
+>> changed location of libnl-3. Is this not something that should be
+>> addressed independently?
+> 
+> I just pointed to the latest commit. You can choose the one with related changes
 
-which is supported from 3.81 onwards.
-This means that make 3.80 will give a syntax error, even though the
-toolchain/dependencies/dependencies.sh checks for minimal make version
-(in fact, this script never gets a chance to run).
-
-To fix this, and detect old make versions gracefully, I see following solutions:
-1. Adapt our Makefiles to be make 3.80 compatible, by e.g. adapting
-the above construct. This is not a waterproof solution, as a similar
-but different problem may arise in the future.
-
-2. Check for the make version in make instead of in shell, e.g. with
-the following pattern: (adopted from
-http://www.jgc.org/blog/cookbook-sample.pdf)
-need := 3.81
-ok := $(filter $(need),$(firstword $(sort $(MAKE_VERSION) $(need))))
-ifeq (,$(ok))
-$(error make too old!)
-endif
-
-This will not work when make 10.x comes out because of the sort trick,
-but otherwise should work fine. This code should be included as early
-as possible in the Makefile.
+Ok. I rebased all patches and will repost them all. Thanks for your review!
 
 
-What do you think?
-
-Thanks,
-Thomas
+Dainel
