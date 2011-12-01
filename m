@@ -1,66 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Dec 2011 08:58:28 -0000
-Subject: [Buildroot] [git commit] usbmount: bump to 0.0.22
-Message-ID: <20111201085827.8DDCF8F75B@busybox.osuosl.org>
+Date: Thu, 01 Dec 2011 08:58:29 -0000
+Subject: [Buildroot] [git commit] module-init-tools: bump to version 3.15
+Message-ID: <20111201085827.EF0828F75B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba2a0cf5a135873ab0029a43de7d0bf82d6578df
+commit: http://git.buildroot.net/buildroot/commit/?id=7c60be98b2d898e5d49b0fa305b7f56dec59a366
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-FSTYPE detection bug was fixed upstream, so delete relevant patch
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../usbmount/usbmount-fstype-detection-fix.patch   |   25 --------------------
- package/usbmount/usbmount.mk                       |    2 +-
- 2 files changed, 1 insertions(+), 26 deletions(-)
+ ...it-tools-3.15-add-manpages-config-option.patch} |    0
+ package/module-init-tools/module-init-tools.mk     |   13 +++++++------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/usbmount/usbmount-fstype-detection-fix.patch b/package/usbmount/usbmount-fstype-detection-fix.patch
-deleted file mode 100644
-index a3686f1..0000000
---- a/package/usbmount/usbmount-fstype-detection-fix.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--newer blkid version shows two parameter with TYPE within:
--
--/dev/sda1: VERSION="0.0" TYPE="ext2" USAGE="filesystem" PART_ENTRY_SCHEME="dos"
--PART_ENTRY_TYPE="0xc" PART_ENTRY_FLAGS="0x80" PART_ENTRY_NUMBER="1"
--
--change regular expression to take " TYPE" only
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- usbmount |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--Index: b/usbmount
--===================================================================
----- a/usbmount
--+++ b/usbmount
--@@ -88,7 +88,7 @@
--     #   FIXME: improvement: implement mounting by label (notice that labels
--     #   can contain spaces, which makes things a little bit less comfortable).
--     DEVINFO=$(/sbin/blkid -p $DEVNAME)
---    FSTYPE=$(echo "$DEVINFO" | sed 's/.*TYPE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--+    FSTYPE=$(echo "$DEVINFO" | sed 's/.* TYPE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--     UUID=$(echo "$DEVINFO"   | sed 's/.*UUID="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--     USAGE=$(echo "$DEVINFO"  | sed 's/.*USAGE="\([^"]*\)".*/\1/g; s/[[:blank:]]*//g;')
--
-diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
-index 8434570..a6b2d43 100644
---- a/package/usbmount/usbmount.mk
-+++ b/package/usbmount/usbmount.mk
-@@ -3,7 +3,7 @@
- # usbmount
+diff --git a/package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch b/package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+similarity index 100%
+rename from package/module-init-tools/module-init-tools-3.11-add-manpages-config-option.patch
+rename to package/module-init-tools/module-init-tools-3.15-add-manpages-config-option.patch
+diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
+index d7e7c24..ad92a1a 100644
+--- a/package/module-init-tools/module-init-tools.mk
++++ b/package/module-init-tools/module-init-tools.mk
+@@ -3,19 +3,20 @@
+ # module-init-tools
  #
  #############################################################
--USBMOUNT_VERSION = 0.0.21
-+USBMOUNT_VERSION = 0.0.22
- USBMOUNT_SOURCE = usbmount_$(USBMOUNT_VERSION).tar.gz
- USBMOUNT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/u/usbmount
- USBMOUNT_DEPENDENCIES = udev lockfile-progs util-linux
+-MODULE_INIT_TOOLS_VERSION=3.12
+-MODULE_INIT_TOOLS_SOURCE=module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
+-MODULE_INIT_TOOLS_SITE=$(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
++
++MODULE_INIT_TOOLS_VERSION = 3.15
++MODULE_INIT_TOOLS_SOURCE = module-init-tools-$(MODULE_INIT_TOOLS_VERSION).tar.bz2
++MODULE_INIT_TOOLS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/module-init-tools/
+ MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ MODULE_INIT_TOOLS_CONF_OPT = \
+ 	--disable-static-utils \
+ 	--disable-builddir \
+ 	--program-transform-name=''
+ 
+-# module-init-tools-3.11-add-manpages-config-option.patch is modifying
++# module-init-tools-3.15-add-manpages-config-option.patch is modifying
+ # configure.ac and Makefile.am
+-MODULE_INIT_TOOLS_AUTORECONF=YES
+-HOST_MODULE_INIT_TOOLS_AUTORECONF=YES
++MODULE_INIT_TOOLS_AUTORECONF = YES
++HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
+ HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
+ 
+ $(eval $(call AUTOTARGETS))
