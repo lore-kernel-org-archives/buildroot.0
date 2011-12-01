@@ -1,69 +1,78 @@
 From: Daniel Mack <zonque@gmail.com>
-Date: Thu, 01 Dec 2011 12:50:31 +0100
-Subject: [Buildroot] [PATCH 1/2] iw: fix build with new libnl-3
-In-Reply-To: <CAGm1_kshT=7x4wjx+UX2jyU8M0kmRt4xdhY+0YctioFzg_1FRw@mail.gmail.com>
-References: <CAGm1_kt-QPDOyfnnjQJ=R_8=S_++h0GcDY4wid7J69v2QawExw@mail.gmail.com>
- <1322665560-29888-1-git-send-email-zonque@gmail.com>
- <CAGm1_kvpf=bZxzPqgXQ65R_vo6XVp-3KFkjCt_JC8WY32OPaiw@mail.gmail.com>
- <4ED65A6C.2020003@gmail.com>
- <CAGm1_kshT=7x4wjx+UX2jyU8M0kmRt4xdhY+0YctioFzg_1FRw@mail.gmail.com>
-Message-ID: <4ED76A07.7020301@gmail.com>
+Date: Thu,  1 Dec 2011 12:56:34 +0100
+Subject: [Buildroot] [PATCH v2 5/5] kismet: fix build with new libnl-3
+In-Reply-To: <1322740594-13595-1-git-send-email-zonque@gmail.com>
+References: <1322740594-13595-1-git-send-email-zonque@gmail.com>
+Message-ID: <1322740594-13595-5-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/30/2011 10:31 PM, Yegor Yefremov wrote:
-> Hi Daniel,
-> 
->>>> The CFLAGS have to be augmented for the include dir and the patch
->>>> needs to be tweaked to make the binary link to libnl-3 instead of
->>>> libnl-gen.
->>>>
->>>> Signed-off-by: Daniel Mack <zonque@gmail.com>
->>>> ---
->>>>  package/iw/iw-libnl-30-support.patch |    2 +-
->>>>  package/iw/iw.mk                     |    2 +-
->>>>  2 files changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/package/iw/iw-libnl-30-support.patch b/package/iw/iw-libnl-30-support.patch
->>>
->>> this file has gone in next. Please rebase your patches on the next
->>
->> I can do this. I wasn't even aware of this branch, and part of the
->> reason is that it doesn't show up on the cgit web interface
->> (http://git.buildroot.net/buildroot) when there's no trailing slash in
->> the URI, which is unfortunately the location the website
->> (http://buildroot.uclibc.org/git.html) points visitors to. You can click
->> on "refs" and back on "summary" which will add the "/" suffix, and then
->> cgit will show the existance of the "next" branch. Very odd.
->>
->>> branch and try to get iw from git with this commit
->>> http://git.sipsolutions.net/?p=iw.git;a=commit;h=a82abc2cac9dea7def53070565201145c76c8c6c.
->>
->> Not sure whether I follow you here. Do you suggest writing package
->> definitions for sources that are not released yet officially? If that is
->> the case, what is the reason?
-> 
-> I see here 3 possibilities:
-> 
-> 1. replace official release with git one
-> 2. wait for iw 3.3
-> 3. apply related patches (from iw repo) only
-> 
-> the first way is simpler and quicker to implement
+The CPPFLAGS have to be augmented, so configure finds the correct include
+dir, and the patch needs to be tweaked to make the binary link to
+libnl-3 instead of libnl-gen.
 
-Ok, fine. I did that and the git version seems to cope well with
-nibnl-3. Nice.
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+ package/kismet/kismet-libnl-30-support.patch |   13 +++++++++----
+ package/kismet/kismet.mk                     |    1 +
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
->> Also, I fail to see how the commit you pointed me to is related to the
->> changed location of libnl-3. Is this not something that should be
->> addressed independently?
-> 
-> I just pointed to the latest commit. You can choose the one with related changes
-
-Ok. I rebased all patches and will repost them all. Thanks for your review!
-
-
-Dainel
+diff --git a/package/kismet/kismet-libnl-30-support.patch b/package/kismet/kismet-libnl-30-support.patch
+index cf3c845..dca6151 100644
+--- a/package/kismet/kismet-libnl-30-support.patch
++++ b/package/kismet/kismet-libnl-30-support.patch
+@@ -35,7 +35,7 @@ Index: b/configure
+    libnl20_CFLAGS
+                C compiler flags for libnl20, overriding pkg-config
+    libnl20_LIBS
+-@@ -6760,6 +6768,75 @@
++@@ -6760,6 +6768,76 @@
+  	fi
+  fi
+ 
+@@ -103,6 +103,7 @@ Index: b/configure
+ +	libnl30_CFLAGS=$pkg_cv_libnl30_CFLAGS
+ +	libnl30_LIBS=$pkg_cv_libnl30_LIBS
+ +        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+++	CPPFLAGS="$CPPFLAGS $libnl30_CFLAGS"
+ +$as_echo "yes" >&6; }
+ +	libnl30=yes
+ +fi
+@@ -111,13 +112,17 @@ Index: b/configure
+  pkg_failed=no
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnl20" >&5
+  $as_echo_n "checking for libnl20... " >&6; }
+-@@ -6897,7 +6974,7 @@
++@@ -6897,7 +6974,11 @@
+  $as_echo "yes" >&6; }
+  	libnl1=yes
+  fi
+ -	if test "$libnl20" = "yes"; then
+-+	if test "$libnl20" = "yes" -o "$libnl30" = "yes"; then
+-
+++	if test "$libnl30" = "yes"; then
+++$as_echo "#define HAVE_LIBNL 1" >>confdefs.h
+++$as_echo "#define HAVE_LIBNL20 1" >>confdefs.h
+++               NLLIBS="-lnl-genl-3 -lnl-3"
+++	elif test "$libnl20" = "yes"; then
++ 
+  $as_echo "#define HAVE_LIBNL 1" >>confdefs.h
+ 
+ 
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 4c7d6e2..854c9dd 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -10,6 +10,7 @@ KISMET_DEPENDENCIES = libpcap ncurses
+ 
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ 	KISMET_DEPENDENCIES += libnl
++	KISMET_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/"
+ endif
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ 	KISMET_DEPENDENCIES += pcre
+-- 
+1.7.7.3
