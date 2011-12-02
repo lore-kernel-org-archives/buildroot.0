@@ -1,16 +1,34 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 2 Dec 2011 15:42:15 -0800
+From: Tim Judd <tjudd2k@yahoo.com>
+Date: Fri, 2 Dec 2011 15:47:31 -0800 (PST)
 Subject: [Buildroot] USB FAT drive in Linux on MPC8321
-In-Reply-To: <1322867345.1778.YahooMailNeo@web161206.mail.bf1.yahoo.com>
+In-Reply-To: <CALo-6+gHTU218ZVcSvN4XSs08Oh2tJnZgXr1i3kd85SVygrXUQ@mail.gmail.com>
 References: <CALo-6+i-OXWXHxpmsH4tab9RBhT5qoWOcpSbfR84nbt9GaAn4Q@mail.gmail.com>
  <1322867345.1778.YahooMailNeo@web161206.mail.bf1.yahoo.com>
-Message-ID: <CALo-6+gHTU218ZVcSvN4XSs08Oh2tJnZgXr1i3kd85SVygrXUQ@mail.gmail.com>
+ <CALo-6+gHTU218ZVcSvN4XSs08Oh2tJnZgXr1i3kd85SVygrXUQ@mail.gmail.com>
+Message-ID: <1322869651.95421.YahooMailNeo@web161202.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+I'm not able to give any more advice/help -- I named what seemed to be the issue but have no directions to give for resolution.
+
+?
+If opportunity doesn't knock, build a door.
+"I can" is a way of life.
+More and Bigger is not always Better.
+The road to success is always uphill.
+Life isn't about finding yourself, it's about creating yourself.
+
+
+________________________________
+ From: Charles Krinke <charles.krinke@gmail.com>
+To: Tim Judd <tjudd2k@yahoo.com> 
+Cc: buildroot <buildroot@busybox.net> 
+Sent: Friday, December 2, 2011 4:42 PM
+Subject: Re: [Buildroot] USB FAT drive in Linux on MPC8321
+ 
 Dear Tim:
 
 I'm having trouble finding a msdos setting in the make xconfig in
@@ -93,3 +111,6 @@ On Fri, Dec 2, 2011 at 3:09 PM, Tim Judd <tjudd2k@yahoo.com> wrote:
 
 -- 
 Charles Krinke
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111202/a5f84118/attachment.html>
