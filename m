@@ -1,51 +1,59 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Fri, 02 Dec 2011 19:33:47 +0100
-Subject: [Buildroot] Real time Linux implementation
-In-Reply-To: <20111201221840.00174379@skate>
-References: <CAO6BqMXyye4TFHf0Pxc99Naq28wWg1ne=--q=e+VmfvPVuwD3w@mail.gmail.com>
- <20111201221840.00174379@skate>
-Message-ID: <4ED91A0B.10403@relinux.de>
+From: Jeff Krasky <jeff.krasky@dspcg.com>
+Date: Fri, 2 Dec 2011 12:30:14 -0600
+Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
+In-Reply-To: <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
+ <201112020734.00122.minimod@morethan.org>
+ <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
+ <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
+ <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
+ <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
+ <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
+Message-ID: <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 01.12.2011 22:18, schrieb Thomas Petazzoni:
-> Le Thu, 1 Dec 2011 11:27:37 -0800,
-> Morten Jensen <mjensen@nvs-technologies.com> a ?crit :
+> afair this message could be because of lack of dev/console and/or
+dev/null.
+> You must run "mknod -m 660 dev/console c 5 1" and "mknod -m
+> 660dev/null c 1 3" in root partition.
 >
->> Hello,
->> We are using Buildroot on an ARM based development platform from IC-BOARD:
->> http://www.ic-board.de/product_info.php?info=p163_STK-ADB3000---ICnova-SAM9G45-XC3S700AN-OEM.html
->>
->> Does anybody have any experience with implementing Real Time OS
->> functionality in the Linux Buildroot system or can you guide us to someone
->> that may be able to help or consult in this effort ?
-> Yes. First thing to find out is what you need in terms of real-time :
->
->  *) A vanilla Linux kernel with preemption enabled and proper process
->     priorities ;
->
->  *) A Linux kernel patched with PREEMPT_RT
-I have good experiences with this patch, but did not try it with a ARM.
-It's not that much effort and integrates well with buildroot. Look here:
-https://rt.wiki.kernel.org/ and here:
-https://www.osadl.org/Latest-Stable-Realtime.latest-stable-realtime-linux.0.html
-for further information.
+> How to do it? I have my on usb stick, so i
+> simply mount usb drive, and do some changes. If youre using yaffs2 and
+> NAND memory, you can use
+> 
+> System configuration --> Custom script to run before creating filesystem
+> images
+> 
+> to invoke those commands or just find unyaffs script (somewhere on the
+> Internet, on google code
+> afair), unyaffs your rootfs, make changes and make yaffs image one
+> more time.
 
-@Peter and Thomas,
+Ok, I ran 'make menuconfig' and went into "System configuration -> Custom
+script to run before creating filesystem images" and I entered this string:
 
-what do you think about adding the PREEMPT_RT patch as a config option
-to buildroot?
+mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3
 
-Kind regards
+and I got this when running 'make':
 
-Stephan
+echo 2011.11 > /home/user1/buildroot-2011.11/output/target/etc/br-version
+"mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3"
+/home/user1/buildroot-2011.11/output/target
+/bin/sh: mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3: No
+such file or directory
+make: *** [target-finalize] Error 127
+user1 at dhcppc15:~/buildroot-2011.11>
 
 
--- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
+> You have output/target folder with your rootfs, so you can make changes
+> there :)
+
+How to do it to a already built .jffs2 file?  Can I just open a terminal
+window on the linux PC that buildroot is on and run some commands?
