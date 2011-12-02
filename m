@@ -1,115 +1,138 @@
-From: Tim Judd <tjudd2k@yahoo.com>
-Date: Fri, 2 Dec 2011 10:31:43 -0800 (PST)
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
- <201112020734.00122.minimod@morethan.org>
- <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
- <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
- <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
- <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
- <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
- <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
-Message-ID: <1322850703.54503.YahooMailNeo@web161204.mail.bf1.yahoo.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  2 Dec 2011 17:45:48 -0300
+Subject: [Buildroot] [PATCH 1/2] ipset: bump to version 6.10
+Message-ID: <1322858749-16654-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lack of dev/console or /dev/null should give a message something like "can't allocate initial tty!"
-I was having those errors too.? his is unable to run/survive init
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ipset/ipset-drop-modules.patch |  100 --------------------------------
+ package/ipset/ipset.mk                 |    2 +-
+ 2 files changed, 1 insertions(+), 101 deletions(-)
+ delete mode 100644 package/ipset/ipset-drop-modules.patch
 
-
-having dev/console and dev/null (and if necessary dev/tty*) so the console can be opened.? It's odd the kernel can spit the bootup on ttyS0 but complains when trying to run init.? one of the great mysteries of linux.
-
-
-
-?
-
-If opportunity doesn't knock, build a door.
-"I can" is a way of life.
-More and Bigger is not always Better.
-The road to success is always uphill.
-Life isn't about finding yourself, it's about creating yourself.
-
-
-________________________________
- From: Aleksander Dutkowski <adutkowski@gmail.com>
-To: buildroot at busybox.net 
-Sent: Friday, December 2, 2011 11:21 AM
-Subject: Re: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
+diff --git a/package/ipset/ipset-drop-modules.patch b/package/ipset/ipset-drop-modules.patch
+deleted file mode 100644
+index ee29d43..0000000
+--- a/package/ipset/ipset-drop-modules.patch
++++ /dev/null
+@@ -1,100 +0,0 @@
+-Drop all the kernel checks and let the user deal with having a new enough
+-version of the kernel to enjoy this.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-
+-diff -Nura ipset-6.8.orig//Makefile.am ipset-6.8/Makefile.am
+---- ipset-6.8.orig//Makefile.am	2011-08-17 16:10:41.999386034 -0300
+-+++ ipset-6.8/Makefile.am	2011-08-17 16:17:34.108702969 -0300
+-@@ -4,11 +4,6 @@
+- 
+- include $(top_srcdir)/Make_global.am
+- 
+--if ! WITH_KBUILDDIR
+--KBUILD_OUTPUT=/lib/modules/`uname -r`/build
+--else
+--KBUILD_OUTPUT=$(KBUILDDIR)
+--endif
+- if ! WITH_MAXSETS
+- IP_SET_MAX=256
+- else
+-@@ -22,23 +17,6 @@
+- 
+- SUBDIRS		= lib src
+- 
+--modules_sparse:
+--	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter \
+--			V=$V C=2 CF=-D__CHECK_ENDIAN__ \
+--			IP_SET_MAX=$(IP_SET_MAX) KDIR=$$PWD/kernel modules
+--
+--modules:
+--	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter V=$V \
+--			IP_SET_MAX=$(IP_SET_MAX) KDIR=$$PWD/kernel modules
+--
+--modules_install:
+--	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter \
+--			KDIR=$$PWD/kernel modules_install
+--
+--modules_clean:
+--	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter \
+--			KDIR=$$PWD/kernel clean
+--
+- update_includes:
+- 	./update ip_set.h
+- 	./update ip_set_bitmap.h
+-diff -Nura ipset-6.8.orig//configure.ac ipset-6.8/configure.ac
+---- ipset-6.8.orig//configure.ac	2011-08-17 16:10:42.015387986 -0300
+-+++ ipset-6.8/configure.ac	2011-08-17 16:18:01.578056869 -0300
+-@@ -11,51 +11,6 @@
+- *) AC_MSG_ERROR([Linux systems supported exclusively!]);;
+- esac
+- 
+--dnl Additional arguments
+--dnl Kernel build directory or source tree
+--AC_ARG_WITH([kbuild],
+--            AS_HELP_STRING([--with-kbuild=PATH],
+--                           [Path to kernel build directory]),
+--            [KBUILDDIR="$withval";])
+--AC_ARG_WITH([ksource],
+--            AS_HELP_STRING([--with-ksource=PATH],
+--                           [Path to kernel source directory, if not the same as the kernel build directory]),
+--            [KSOURCEDIR="$withval";])
+--AM_CONDITIONAL(WITH_KBUILDDIR, test "$KBUILDDIR" != "")
+--AC_SUBST(KBUILDDIR)
+--
+--dnl Sigh: check kernel version dependencies
+--if test "$KBUILDDIR" != ""
+--then
+--	kbuilddir="$KBUILDDIR"
+--else
+--	kbuilddir="/lib/modules/`uname -r`/build"
+--fi
+--
+--if test -n "$KSOURCEDIR"; then
+--	ksourcedir="$KSOURCEDIR"
+--elif test -e "$kbuilddir/include/linux/netfilter/nfnetlink.h"; then
+--	ksourcedir="$kbuilddir"
+--else
+--	ksourcedir="/lib/modules/$(uname -r)/source"
+--fi
+--if test ! -e "$ksourcedir/include/linux/netfilter/nfnetlink.h"
+--then
+--	AC_MSG_ERROR([Invalid kernel source directory $ksourcedir])
+--fi
+--
+--if test ! -e "$kbuilddir/.config"
+--then
+--	AC_MSG_ERROR([The kernel build directory $kbuilddir is not configured])
+--fi
+--
+--AC_PROG_GREP
+--
+--if test "X`$GREP 'NFNL_SUBSYS_IPSET' $ksourcedir/include/linux/netfilter/nfnetlink.h`" = "X"
+--then
+--	AC_MSG_ERROR([The kernel source directory $ksourcedir is not patched with netlink.patch to support ipset])
+--fi
+--
+- dnl Maximal number of sets supported by the kernel, default 256
+- AC_ARG_WITH([maxsets],
+- 	    AS_HELP_STRING([--with-maxsets=256],
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index f98f73f..6294234 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-afair this message could be because of lack of dev/console and/or dev/null.
-You must run "mknod -m 660 dev/console c 5 1" and "mknod -m
-660dev/null c 1 3" in root partition.
-
-How to do it? I have my on usb stick, so i
-simply mount usb drive, and do some changes. If youre using yaffs2 and
-NAND memory, you can use
-
-System configuration --> Custom script to run before creating filesystem images
-
-to invoke those commands or just find unyaffs script (somewhere on the
-Internet, on google code
-afair), unyaffs your rootfs, make changes and make yaffs image one
-more time.
-You have output/target folder with your rootfs, so you can make changes there :)
-
-
-On Fri, Dec 2, 2011 at 7:02 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
->> "Attempted to kill init" means the init process died.? Kernel must panic
->> because init cannot terminate.
->
->> There's something preventing init from running, or it is dying during
->> execution.
->
->>
->
->> Is your userland correctly have an init?? normally /sbin/init is called.
->> If your init is somewhere else, use
->
->> the init= paramater to kernel append
->
->
->
-> How do I know where init is if I can?t bring the board up and run any linux
-> commands?
->
->
->
->>you may have a mounted jffs2 filesystem but not directly usable (think
->> squashfs), is it loaded to
->
->> ramdisk?? if so, root=/dev/ram0 init=/sbin/init
->
->
->
-> When I successfully ran 2.6.33 built from Buildroot-2011.05, in U-boot the
-> setting for root was root=/dev/mtdblock1. ?I am not sure what squashfs is.
-> How can the filesystem not be usable?
->
->
->
-> Thanks.
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+-IPSET_VERSION = 6.9.1
++IPSET_VERSION = 6.10
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_AUTORECONF = YES
 -- 
-pozdrawiam
-Aleksander Dutkowski
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111202/b8eaca41/attachment.html>
+1.7.3.4
