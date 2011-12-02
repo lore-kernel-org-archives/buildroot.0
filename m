@@ -1,47 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Dec 2011 15:58:01 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 02 Dec 2011 15:59:22 +0100
 Subject: [Buildroot] 2011.11 zlib headers problem?
-In-Reply-To: <E06240F532254AA9BA06ECC0B98E6A19@beraninstruments.com.local>
+In-Reply-To: <DAC204EF7EE84F359328546B86282CFD@beraninstruments.com.local>
+ (Will Moore's message of "Fri, 2 Dec 2011 12:15:08 -0000")
 References: <2DEA474F53884F0AA751ABAD42769383@beraninstruments.com.local>
  <DAC204EF7EE84F359328546B86282CFD@beraninstruments.com.local>
- <20111202131728.77b8c6ee@skate>
- <E06240F532254AA9BA06ECC0B98E6A19@beraninstruments.com.local>
-Message-ID: <20111202155801.57d914a5@skate>
+Message-ID: <87pqg7f29h.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 2 Dec 2011 13:50:28 -0000,
-"Will Moore" <will.moore@beraninstruments.com> a ?crit :
+>>>>> "Will" == Will Moore <will.moore@beraninstruments.com> writes:
 
-> > Can you post the Buildroot .config you use to reproduce the problem?
-> 
-> See attached.
+Hi,
 
-Interestingly, here, the build fails when building gdbhost:
+ Will> So this is a internet / crosstool-NG toolchain thing and not a
+ Will> 2011.08 / 2011.11 thing?
 
-configure: creating ./config.status
-config.status: creating Makefile
-./config.status: line 1123: gawk: command not found
-config.status: creating testsuite/Makefile
-./config.status: line 1123: gawk: command not found
-config.status: creating config.h
-./config.status: line 1149: gawk: command not found
-config.status: error: could not create config.h
-make[3]: *** [configure-libiberty] Error 1
-make[2]: *** [all] Error 2
-make[1]: *** [/home/test/outputs/will/toolchain/gdbhost-7.3.1/gdb/gdb]
-Error 2
+Must be. I do zlib/internal toolchain based builds almost daily without
+problems.
 
-(Note: gawk is not available on my build machine, but has been built as
-a dependency of ct-ng. I guess the gdbhost build process misses
-$(HOST_DIR)/usr/bin in its PATH).
+ls output/staging/usr/include/z*
+output/staging/usr/include/zconf.h  output/staging/usr/include/zlib.h
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
