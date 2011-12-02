@@ -1,35 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 2 Dec 2011 15:56:50 +0100
-Subject: [Buildroot] crosstool-ng and uClibc toolchain
-In-Reply-To: <4ED8E43B.6020102@carallon.com>
-References: <4ED8E43B.6020102@carallon.com>
-Message-ID: <20111202155650.590ef8fd@skate>
+Date: Fri, 2 Dec 2011 15:58:01 +0100
+Subject: [Buildroot] 2011.11 zlib headers problem?
+In-Reply-To: <E06240F532254AA9BA06ECC0B98E6A19@beraninstruments.com.local>
+References: <2DEA474F53884F0AA751ABAD42769383@beraninstruments.com.local>
+ <DAC204EF7EE84F359328546B86282CFD@beraninstruments.com.local>
+ <20111202131728.77b8c6ee@skate>
+ <E06240F532254AA9BA06ECC0B98E6A19@beraninstruments.com.local>
+Message-ID: <20111202155801.57d914a5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 02 Dec 2011 14:44:11 +0000,
-Will Wagner <will_wagner@carallon.com> a ?crit :
+Le Fri, 2 Dec 2011 13:50:28 -0000,
+"Will Moore" <will.moore@beraninstruments.com> a ?crit :
 
-> In fact the uClibc config you are forced to use has lots of settings I 
-> would consider wrong.
+> > Can you post the Buildroot .config you use to reproduce the problem?
 > 
-> Am I correct thinking these things are broken or am I missing something?
+> See attached.
 
-I haven't fallen into these issues as I'm not using the ct-ng backend
-a lot (I do use ct-ng outside of Buildroot in general).
+Interestingly, here, the build fails when building gdbhost:
 
-> Am currently working on a patch that does the following:
-> - Allow user to pick uClibc version when using ct-ng
-> - Allow user to select nptl when using 0.9.32
-> - Supply better default uClibc config files (Using same config files as 
-> for internal buildroot config)
-> - Allow user to specify a custom uClibc config file
+configure: creating ./config.status
+config.status: creating Makefile
+./config.status: line 1123: gawk: command not found
+config.status: creating testsuite/Makefile
+./config.status: line 1123: gawk: command not found
+config.status: creating config.h
+./config.status: line 1149: gawk: command not found
+config.status: error: could not create config.h
+make[3]: *** [configure-libiberty] Error 1
+make[2]: *** [all] Error 2
+make[1]: *** [/home/test/outputs/will/toolchain/gdbhost-7.3.1/gdb/gdb]
+Error 2
 
-Those sounds like good ideas, especially the sharing the uClibc config
-files between the internal build process and the ct-ng build process.
+(Note: gawk is not available on my build machine, but has been built as
+a dependency of ct-ng. I guess the gdbhost build process misses
+$(HOST_DIR)/usr/bin in its PATH).
 
 Thomas
 -- 
