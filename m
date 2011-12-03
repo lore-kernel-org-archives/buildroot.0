@@ -1,116 +1,102 @@
-From: Tim Judd <tjudd2k@yahoo.com>
-Date: Fri, 2 Dec 2011 15:47:31 -0800 (PST)
-Subject: [Buildroot] USB FAT drive in Linux on MPC8321
-In-Reply-To: <CALo-6+gHTU218ZVcSvN4XSs08Oh2tJnZgXr1i3kd85SVygrXUQ@mail.gmail.com>
-References: <CALo-6+i-OXWXHxpmsH4tab9RBhT5qoWOcpSbfR84nbt9GaAn4Q@mail.gmail.com>
- <1322867345.1778.YahooMailNeo@web161206.mail.bf1.yahoo.com>
- <CALo-6+gHTU218ZVcSvN4XSs08Oh2tJnZgXr1i3kd85SVygrXUQ@mail.gmail.com>
-Message-ID: <1322869651.95421.YahooMailNeo@web161202.mail.bf1.yahoo.com>
+From: Aleksander Dutkowski <adutkowski@gmail.com>
+Date: Sat, 3 Dec 2011 01:25:41 +0100
+Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
+In-Reply-To: <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
+ <201112020734.00122.minimod@morethan.org>
+ <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
+ <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
+ <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
+ <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
+ <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
+ <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
+Message-ID: <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm not able to give any more advice/help -- I named what seemed to be the issue but have no directions to give for resolution.
+On Fri, Dec 2, 2011 at 7:30 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
+>> afair this message could be because of lack of dev/console and/or
+> dev/null.
+>> You must run "mknod -m 660 dev/console c 5 1" and "mknod -m
+>> 660dev/null c 1 3" in root partition.
+>>
+>> How to do it? I have my on usb stick, so i
+>> simply mount usb drive, and do some changes. If youre using yaffs2 and
+>> NAND memory, you can use
+>>
+>> System configuration --> Custom script to run before creating filesystem
+>> images
+>>
+>> to invoke those commands or just find unyaffs script (somewhere on the
+>> Internet, on google code
+>> afair), unyaffs your rootfs, make changes and make yaffs image one
+>> more time.
+>
+> Ok, I ran 'make menuconfig' and went into "System configuration -> Custom
+> script to run before creating filesystem images" and I entered this string:
+>
+> mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3
+>
+> and I got this when running 'make':
+>
+> echo 2011.11 > /home/user1/buildroot-2011.11/output/target/etc/br-version
+> "mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3"
+> /home/user1/buildroot-2011.11/output/target
+> /bin/sh: mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3: No
+> such file or directory
+> make: *** [target-finalize] Error 127
+> user1 at dhcppc15:~/buildroot-2011.11>
 
-?
-If opportunity doesn't knock, build a door.
-"I can" is a way of life.
-More and Bigger is not always Better.
-The road to success is always uphill.
-Life isn't about finding yourself, it's about creating yourself.
+"System configuration --> Custom script to run before creating
+filesystem image" input is for specify a PATH to bash script.
+You you must simply create script, fill with mknod commands (remember
+- mknod can be ran only by root! so do 'sudo mknod')
+and then put the path to the script in "Custom script to run before
+creating filesystem image".
+Remeber to add execute mode to the script (chmod +x file)
+>
+>
+>> You have output/target folder with your rootfs, so you can make changes
+>> there :)
+>
+> How to do it to a already built .jffs2 file? ?Can I just open a terminal
+> window on the linux PC that buildroot is on and run some commands?
 
+When buildroot is done compiling all packages, it installs all in
+'output/target' directory, and then create image.
+I am used to tell buildroot not to create any images, make my own
+adjustements in output/target dir, and then create image by hand.
+If you need to create yaffs, you can look for "mkyaffs2" script, which
+you can find on code.google.com.
 
-________________________________
- From: Charles Krinke <charles.krinke@gmail.com>
-To: Tim Judd <tjudd2k@yahoo.com> 
-Cc: buildroot <buildroot@busybox.net> 
-Sent: Friday, December 2, 2011 4:42 PM
-Subject: Re: [Buildroot] USB FAT drive in Linux on MPC8321
- 
-Dear Tim:
+On Fri, Dec 2, 2011 at 7:31 PM, Tim Judd <tjudd2k@yahoo.com> wrote:
+> lack of dev/console or /dev/null should give a message something like "can't
+> allocate initial tty!"
+> I was having those errors too.? his is unable to run/survive init
+>
+>
+> having dev/console and dev/null (and if necessary dev/tty*) so the console
+> can be opened.? It's odd the kernel can spit the bootup on ttyS0 but
+> complains when trying to run init.? one of the great mysteries of linux.
 
-I'm having trouble finding a msdos setting in the make xconfig in
-Linux-2.6.35.12. I did find vfat and it is enabled, but looking near
-it, I dont see anything reminiscent of msdos idiosyncracies.
+I had another error message (I experienced problem with lack of
+/dev/console some time ago), but you can be right. I'm just assuming,
+that my solution is proper, and want Jeff to check it ;)
 
-Can you give me an additional hint, please?
-
-Charles
-
-On Fri, Dec 2, 2011 at 3:09 PM, Tim Judd <tjudd2k@yahoo.com> wrote:
-> Debian is taking advantage of "Long File Name" support in DOS.? Your MPC8321
-> is doing only the 8.3 legacy dos naming convention.
 >
-> Enabling LFN support in your msdos driver is what's missing.
->
->
->
->
-> If opportunity doesn't knock, build a door.
-> "I can" is a way of life.
-> More and Bigger is not always Better.
-> The road to success is always uphill.
-> Life isn't about finding yourself, it's about creating yourself.
-> ________________________________
-> From: Charles Krinke <charles.krinke@gmail.com>
-> To: buildroot <buildroot@busybox.net>
-> Sent: Friday, December 2, 2011 3:37 PM
-> Subject: [Buildroot] USB FAT drive in Linux on MPC8321
->
-> Gentlemen:
->
-> I seem to be having a file name issue with USB drives with my MPC8321
-> target. This isnt a buildroot issue so much as a plea for help in
-> understanding how I can gain sanity back into this FAT USB disk issue.
->
-> To illustrate, here is an ls from my debian laptop followed by an ls
-> of the same USB drive from the MPC8321 target illustrating the issues.
->
-> I do have the module vfat in the build, so it is something more then vfat.ko
->
-> ls /media/801C-A3AB/
-> 1q.bmp
-> 2q.bmp
-> 4.bmp
-> 5.bmp
-> Logic Setup 1.1.5.1 (32-bit).exe
-> SdlcSerialAnalyser.dll
-> startup
-> TEES2009.pdf
-> CD00264885.pdf
-> TEMP
-> CHKSER
-> TempATCControllerFirmwarePDP.doc
-> CHKUSB
-> TESTCLOC
-> CK
->
-> 1q? ? ~1.bmp
-> 2q? ? ~1.bmp
-> 4? ? ~1.bmp
-> 5? ? ~1.bmp
-> logics~1.exe
-> sdlcse~1.dll
-> startup
-> tees2009.pdf
-> temp
-> testcloc
->
-> --
-> Charles Krinke
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
 
 
 
 -- 
-Charles Krinke
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111202/a5f84118/attachment.html>
+pozdrawiam
+Aleksander Dutkowski
