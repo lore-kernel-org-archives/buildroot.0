@@ -1,61 +1,33 @@
 From: Daniel Mack <zonque@gmail.com>
-Date: Sat,  3 Dec 2011 14:07:04 +0100
-Subject: [Buildroot] [PATCH v3 5/5] kismet: fix build with new libnl-3
-In-Reply-To: <1322917624-10152-1-git-send-email-zonque@gmail.com>
-References: <1322917624-10152-1-git-send-email-zonque@gmail.com>
-Message-ID: <1322917624-10152-5-git-send-email-zonque@gmail.com>
+Date: Sat,  3 Dec 2011 14:07:00 +0100
+Subject: [Buildroot] [PATCH v3 1/5] libnl: bump to version 3.2.3
+Message-ID: <1322917624-10152-1-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CFLAGS have to be augmented, so configure finds the correct include
-dir, and the patch needs to be tweaked to make the binary link to
-libnl-3 instead of libnl-gen.
+This newer version splits the library code into libnl, libnl-route,
+libnl-genl and libnl-nf, each individually selectable via pkgconfig.
 
 Signed-off-by: Daniel Mack <zonque@gmail.com>
 ---
- package/kismet/kismet-libnl-30-support.patch |   10 +++++++---
- package/kismet/kismet.mk                     |    1 +
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/libnl/libnl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/kismet/kismet-libnl-30-support.patch b/package/kismet/kismet-libnl-30-support.patch
-index cf3c845..5100a69 100644
---- a/package/kismet/kismet-libnl-30-support.patch
-+++ b/package/kismet/kismet-libnl-30-support.patch
-@@ -111,13 +111,17 @@ Index: b/configure
-  pkg_failed=no
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnl20" >&5
-  $as_echo_n "checking for libnl20... " >&6; }
--@@ -6897,7 +6974,7 @@
-+@@ -6897,7 +6974,11 @@
-  $as_echo "yes" >&6; }
-  	libnl1=yes
-  fi
- -	if test "$libnl20" = "yes"; then
--+	if test "$libnl20" = "yes" -o "$libnl30" = "yes"; then
--
-++	if test "$libnl30" = "yes"; then
-++$as_echo "#define HAVE_LIBNL 1" >>confdefs.h
-++$as_echo "#define HAVE_LIBNL20 1" >>confdefs.h
-++               NLLIBS="-lnl-genl-3 -lnl-3"
-++	elif test "$libnl20" = "yes"; then
-+ 
-  $as_echo "#define HAVE_LIBNL 1" >>confdefs.h
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index dd0d7fb..612908b 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index 4c7d6e2..854c9dd 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -10,6 +10,7 @@ KISMET_DEPENDENCIES = libpcap ncurses
- 
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	KISMET_DEPENDENCIES += libnl
-+	KISMET_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/"
- endif
- ifeq ($(BR2_PACKAGE_PCRE),y)
- 	KISMET_DEPENDENCIES += pcre
+-LIBNL_VERSION = 3.0
++LIBNL_VERSION = 3.2.3
+ LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
+ LIBNL_INSTALL_STAGING = YES
 -- 
 1.7.7.3
