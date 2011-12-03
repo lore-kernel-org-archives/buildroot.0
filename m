@@ -1,58 +1,73 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Sat,  3 Dec 2011 14:07:01 +0100
-Subject: [Buildroot] [PATCH v3 2/5] hostapd: fix build with new libnl-3
-In-Reply-To: <1322917624-10152-1-git-send-email-zonque@gmail.com>
-References: <1322917624-10152-1-git-send-email-zonque@gmail.com>
-Message-ID: <1322917624-10152-2-git-send-email-zonque@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  3 Dec 2011 10:53:43 -0300
+Subject: [Buildroot] [PATCH] uclibc: update internal toolchain build
+Message-ID: <1322920423-22129-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CFLAGS have to be augmented for the include dir and a small patch
-will make the binary link to libnl-3 and libnl-genl-3 instead of libnl
-and libnl-gen.
+Update the uClibc build procedure to accomodate for the new build
+system, otherwise it breaks with snapshot versions.
+As pointed by linuxjacques on IRC.
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/hostapd/hostapd-0.7.3-libnl3.patch |   15 +++++++++++++++
- package/hostapd/hostapd.mk                 |    1 +
- 2 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 package/hostapd/hostapd-0.7.3-libnl3.patch
+ toolchain/uClibc/uclibc.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/hostapd/hostapd-0.7.3-libnl3.patch b/package/hostapd/hostapd-0.7.3-libnl3.patch
-new file mode 100644
-index 0000000..e47da73
---- /dev/null
-+++ b/package/hostapd/hostapd-0.7.3-libnl3.patch
-@@ -0,0 +1,15 @@
-+--- a/src/drivers/drivers.mak	2011-11-29 19:09:23.889942913 +0100
-++++ b/src/drivers/drivers.mak	2011-11-29 19:09:40.637381428 +0100
-+@@ -31,10 +31,10 @@
-+ NEED_AP_MLME=y
-+ NEED_NETLINK=y
-+ NEED_LINUX_IOCTL=y
-+-DRV_LIBS += -lnl
-++DRV_LIBS += -lnl-3
-+ 
-+ ifdef CONFIG_LIBNL20
-+-DRV_LIBS += -lnl-genl
-++DRV_LIBS += -lnl-genl-3
-+ DRV_CFLAGS += -DCONFIG_LIBNL20
-+ endif
-+ endif
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 0d6c2c5..26ebf1d 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -18,6 +18,7 @@ endif
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 6335e6a..fbfb0df 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -384,6 +384,7 @@ $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
+ 		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		HOSTCC="$(HOSTCC)" \
+ 		oldconfig
+ 	touch $@
+@@ -401,6 +402,7 @@ $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.confi
+ 		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		HOSTCC="$(HOSTCC)" headers \
+ 		lib/crt1.o lib/crti.o lib/crtn.o \
+ 		install_headers
+@@ -421,6 +423,7 @@ $(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate) $(LIBFLO
+ 		PREFIX= \
+ 		DEVEL_PREFIX=/ \
+ 		RUNTIME_PREFIX=/ \
++		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		HOSTCC="$(HOSTCC)" \
+ 		all
+ 	touch -c $@
+@@ -431,6 +434,7 @@ uclibc-menuconfig: dirs $(UCLIBC_DIR)/.config
+ 		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
++		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		HOSTCC="$(HOSTCC)" \
+ 		menuconfig && \
+ 	touch -c $(UCLIBC_DIR)/.config
+@@ -442,6 +446,7 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
+ 		PREFIX=$(STAGING_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
++		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		install_runtime install_dev
+ 	# Install the kernel headers to the staging dir if necessary
+ 	if [ ! -f $(STAGING_DIR)/usr/include/linux/version.h ]; then \
+@@ -471,6 +476,7 @@ $(TARGET_DIR)/lib/libc.so.0: $(STAGING_DIR)/usr/lib/libc.a
+ 		PREFIX=$(TARGET_DIR) \
+ 		DEVEL_PREFIX=/usr/ \
+ 		RUNTIME_PREFIX=/ \
++		CROSS_COMPILE="$(TARGET_CROSS)" \
+ 		install_runtime
+ 	touch -c $@
  
- define HOSTAPD_LIBNL_CONFIG
- 	echo "CONFIG_LIBNL20=y" >>$(HOSTAPD_CONFIG)
-+	echo "CFLAGS += -I$(STAGING_DIR)/usr/include/libnl3/" >>$(HOSTAPD_CONFIG)
- endef
- 
- define HOSTAPD_CRYPTO_CONFIG
 -- 
-1.7.7.3
+1.7.3.4
