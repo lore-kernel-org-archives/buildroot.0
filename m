@@ -1,58 +1,57 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Sat,  3 Dec 2011 18:03:29 +0100
-Subject: [Buildroot] [PATCH v4 2/5] hostapd: fix build with new libnl-3
-In-Reply-To: <1322931812-10734-1-git-send-email-zonque@gmail.com>
-References: <1322931812-10734-1-git-send-email-zonque@gmail.com>
-Message-ID: <1322931812-10734-2-git-send-email-zonque@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 3 Dec 2011 19:40:00 +0100
+Subject: [Buildroot] Device files and Buildroot
+In-Reply-To: <CAHUNapQdgYL7a6DdKW4COasRKUREmvfhJEncAW_OaWp4TA_2yQ@mail.gmail.com>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
+ <201112020734.00122.minimod@morethan.org>
+ <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
+ <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
+ <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
+ <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
+ <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
+ <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
+ <20111203092553.0acf80a5@skate>
+ <CAHUNapQdgYL7a6DdKW4COasRKUREmvfhJEncAW_OaWp4TA_2yQ@mail.gmail.com>
+Message-ID: <20111203194000.1c6a1bc7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CFLAGS have to be augmented for the include dir and a small patch
-will make the binary link to libnl-3 and libnl-genl-3 instead of libnl
-and libnl-gen.
+Le Sat, 3 Dec 2011 07:53:51 -0500,
+Trevor Woerner <twoerner@gmail.com> a ?crit :
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
----
- package/hostapd/hostapd-0.7.3-libnl3.patch |   15 +++++++++++++++
- package/hostapd/hostapd.mk                 |    1 +
- 2 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 package/hostapd/hostapd-0.7.3-libnl3.patch
+> Excellent write-up. Does buildroot's /dev handling also tweak
+> /etc/fstab? I would assume /dev would only need to be mounted in the
+> non-static cases.
 
-diff --git a/package/hostapd/hostapd-0.7.3-libnl3.patch b/package/hostapd/hostapd-0.7.3-libnl3.patch
-new file mode 100644
-index 0000000..e47da73
---- /dev/null
-+++ b/package/hostapd/hostapd-0.7.3-libnl3.patch
-@@ -0,0 +1,15 @@
-+--- a/src/drivers/drivers.mak	2011-11-29 19:09:23.889942913 +0100
-++++ b/src/drivers/drivers.mak	2011-11-29 19:09:40.637381428 +0100
-+@@ -31,10 +31,10 @@
-+ NEED_AP_MLME=y
-+ NEED_NETLINK=y
-+ NEED_LINUX_IOCTL=y
-+-DRV_LIBS += -lnl
-++DRV_LIBS += -lnl-3
-+ 
-+ ifdef CONFIG_LIBNL20
-+-DRV_LIBS += -lnl-genl
-++DRV_LIBS += -lnl-genl-3
-+ DRV_CFLAGS += -DCONFIG_LIBNL20
-+ endif
-+ endif
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 0d6c2c5..26ebf1d 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -18,6 +18,7 @@ endif
- 
- define HOSTAPD_LIBNL_CONFIG
- 	echo "CONFIG_LIBNL20=y" >>$(HOSTAPD_CONFIG)
-+	echo "CFLAGS += -I$(STAGING_DIR)/usr/include/libnl3/" >>$(HOSTAPD_CONFIG)
- endef
- 
- define HOSTAPD_CRYPTO_CONFIG
+Two cases here :
+
+ * Static /dev. In this case /dev is part of the root filesystem
+   itself, so there is no need for anything special in /etc/fstab.
+
+ * Dynamic /dev (either with devtmpfs only, or with devtmpfs+mdev or
+   devtmpfs+udev). In this case, we use the CONFIG_DEVTMPFS_MOUNT
+   kernel option, which tells the kernel to automatically mount the
+   devtmpfs filesystem at boot time. So the root filesystem simply
+   contains a /dev directory, completely empty. Nothing is needed
+   in /etc/fstab: the kernel will mount devtmpfs in /dev automatically.
+   The only special case here is when the root filesystem is an
+   initramfs: for some reason, the kernel does not mount devtmpfs
+   automatically in this case, but Buildroot installs a special /init
+   wrapper script, which mounts devtmpfs before starting the real init.
+   But even in this case, nothing special is needed in /etc/fstab.
+
+Does that answer your question?
+
+Thomas
 -- 
-1.7.7.3
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
