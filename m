@@ -1,48 +1,32 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sat, 3 Dec 2011 05:24:26 -0600
-Subject: [Buildroot] Real time Linux implementation
-In-Reply-To: <20111203120816.4c0f862a@skate>
-References: <CAO6BqMXyye4TFHf0Pxc99Naq28wWg1ne=--q=e+VmfvPVuwD3w@mail.gmail.com>
- <201112030453.45164.minimod@morethan.org> <20111203120816.4c0f862a@skate>
-Message-ID: <201112030524.28230.minimod@morethan.org>
+From: Trevor Woerner <twoerner@gmail.com>
+Date: Sat, 3 Dec 2011 07:53:51 -0500
+Subject: [Buildroot] Device files and Buildroot
+In-Reply-To: <20111203092553.0acf80a5@skate>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
+ <201112020734.00122.minimod@morethan.org>
+ <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
+ <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
+ <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
+ <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
+ <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
+ <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
+ <20111203092553.0acf80a5@skate>
+Message-ID: <CAHUNapQdgYL7a6DdKW4COasRKUREmvfhJEncAW_OaWp4TA_2yQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat December 3 2011, Thomas Petazzoni wrote:
-> > Will the project need a general policy of just how "strange and unusual"
-> > will be considered for inclusion in the build system?
-> > 
-> > My reason for posing this question early in the life-time of the
-> > "kernel extensions" feature is the on-going maintenace chore of 
-> > these specializations.
-> 
-> For all these kernel extensions, Buildroot does not even try to make
-> sure that the kernel selected by the user is compatible with the kernel
-> extension that was enabled. We leave that work to the user, simply
-> because it is impossible to keep track of which kernel extension
-> supports which kernel version on which architecture.
-> 
-> I think that Buildroot is merely a tool to automate the build process
-> of an embedded Linux system. It doesn't, and it will never, replace the
-> engineer that makes decision on using Xenomai version X, knowing that
-> it supports the kernel version Y that he is using on his embedded
-> device. Buildroot only helps here by making the build process
-> automated, *once* the engineer has made the right choices in terms of
-> versions (kernel version and kernel extension version).
-> 
+Hi Thomas,
 
-Sounds like a policy statement to me.
-Buildroot != Automated engineering
+Excellent write-up. Does buildroot's /dev handling also tweak
+/etc/fstab? I would assume /dev would only need to be mounted in the
+non-static cases.
 
-Maybe even distill that down to a (polite) "user is on their own here"
-comment at the head of the kernel extensions menu branch.
-;-)
-
-Since BR does provide a great degree of build automation, a new user
-might just assume that it is also fully checking package compatability.
-(It doesn't and I agree that it shouldn't - different job.)
-
-Mike
+Best regards,
+    Trevor
