@@ -1,73 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  3 Dec 2011 10:53:43 -0300
-Subject: [Buildroot] [PATCH] uclibc: update internal toolchain build
-Message-ID: <1322920423-22129-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 3 Dec 2011 16:20:56 +0100
+Subject: [Buildroot] [PATCH v3 4/5] iw: fix build with new libnl-3
+In-Reply-To: <1322917624-10152-4-git-send-email-zonque@gmail.com>
+References: <1322917624-10152-1-git-send-email-zonque@gmail.com>
+ <1322917624-10152-4-git-send-email-zonque@gmail.com>
+Message-ID: <CAGm1_kv1d6catNQ-yVC++Kp+hztQUF1DJq5uFFpoh0B71owmBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the uClibc build procedure to accomodate for the new build
-system, otherwise it breaks with snapshot versions.
-As pointed by linuxjacques on IRC.
+On Sat, Dec 3, 2011 at 2:07 PM, Daniel Mack <zonque@gmail.com> wrote:
+> The CFLAGS have to be augmented for the include dir and the patch
+> needs to be tweaked to make the binary link to libnl-3 instead of
+> libnl-gen.
+>
+> Signed-off-by: Daniel Mack <zonque@gmail.com>
+> ---
+> ?package/iw/iw-libnl-30-support.patch | ? ?2 +-
+> ?package/iw/iw.mk ? ? ? ? ? ? ? ? ? ? | ? ?2 +-
+> ?2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/iw/iw-libnl-30-support.patch b/package/iw/iw-libnl-30-support.patch
+> index 48a179f..02e818c 100644
+> --- a/package/iw/iw-libnl-30-support.patch
+> +++ b/package/iw/iw-libnl-30-support.patch
+> @@ -20,7 +20,7 @@ Index: b/Makefile
+>
+> ?+ifeq ($(NL3FOUND),Y)
+> ?+CFLAGS += -DCONFIG_LIBNL20
+> -+LIBS += -lnl-genl
+> ++LIBS += -lnl-genl-3
+> ?+NLLIBNAME = libnl-3.0
+> ?+endif
+> ?+
+> diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+> index 9f1d65f..65326b7 100644
+> --- a/package/iw/iw.mk
+> +++ b/package/iw/iw.mk
+> @@ -15,7 +15,7 @@ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+>
+> ?define IW_CONFIGURE_CMDS
+> ? ? ? ?echo "CC = $(TARGET_CC)" >$(IW_CONFIG)
+> - ? ? ? echo "CFLAGS = $(TARGET_CFLAGS)" >>$(IW_CONFIG)
+> + ? ? ? echo "CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/" >>$(IW_CONFIG)
+> ? ? ? ?echo "LDFLAGS = $(TARGET_LDFLAGS)" >>$(IW_CONFIG)
+> ?endef
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/uClibc/uclibc.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+This patch won't apply. This an old version (v1). What is the reason for v3?
 
-diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
-index 6335e6a..fbfb0df 100644
---- a/toolchain/uClibc/uclibc.mk
-+++ b/toolchain/uClibc/uclibc.mk
-@@ -384,6 +384,7 @@ $(UCLIBC_DIR)/.config: $(UCLIBC_DIR)/.oldconfig
- 		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		HOSTCC="$(HOSTCC)" \
- 		oldconfig
- 	touch $@
-@@ -401,6 +402,7 @@ $(UCLIBC_DIR)/.configured: $(LINUX_HEADERS_DIR)/.configured $(UCLIBC_DIR)/.confi
- 		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		HOSTCC="$(HOSTCC)" headers \
- 		lib/crt1.o lib/crti.o lib/crtn.o \
- 		install_headers
-@@ -421,6 +423,7 @@ $(UCLIBC_DIR)/lib/libc.a: $(UCLIBC_DIR)/.configured $(gcc_intermediate) $(LIBFLO
- 		PREFIX= \
- 		DEVEL_PREFIX=/ \
- 		RUNTIME_PREFIX=/ \
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		HOSTCC="$(HOSTCC)" \
- 		all
- 	touch -c $@
-@@ -431,6 +434,7 @@ uclibc-menuconfig: dirs $(UCLIBC_DIR)/.config
- 		PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=$(TOOLCHAIN_DIR)/uClibc_dev/ \
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		HOSTCC="$(HOSTCC)" \
- 		menuconfig && \
- 	touch -c $(UCLIBC_DIR)/.config
-@@ -442,6 +446,7 @@ $(STAGING_DIR)/usr/lib/libc.a: $(UCLIBC_DIR)/lib/libc.a
- 		PREFIX=$(STAGING_DIR) \
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=/ \
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		install_runtime install_dev
- 	# Install the kernel headers to the staging dir if necessary
- 	if [ ! -f $(STAGING_DIR)/usr/include/linux/version.h ]; then \
-@@ -471,6 +476,7 @@ $(TARGET_DIR)/lib/libc.so.0: $(STAGING_DIR)/usr/lib/libc.a
- 		PREFIX=$(TARGET_DIR) \
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=/ \
-+		CROSS_COMPILE="$(TARGET_CROSS)" \
- 		install_runtime
- 	touch -c $@
- 
--- 
-1.7.3.4
+Yegor
