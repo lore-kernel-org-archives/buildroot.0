@@ -1,32 +1,50 @@
-From: Trevor Woerner <twoerner@gmail.com>
-Date: Sat, 3 Dec 2011 07:53:51 -0500
-Subject: [Buildroot] Device files and Buildroot
-In-Reply-To: <20111203092553.0acf80a5@skate>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
- <201112020734.00122.minimod@morethan.org>
- <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
- <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
- <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
- <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
- <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
- <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
- <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
- <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
- <20111203092553.0acf80a5@skate>
-Message-ID: <CAHUNapQdgYL7a6DdKW4COasRKUREmvfhJEncAW_OaWp4TA_2yQ@mail.gmail.com>
+From: Daniel Mack <zonque@gmail.com>
+Date: Sat,  3 Dec 2011 14:07:03 +0100
+Subject: [Buildroot] [PATCH v3 4/5] iw: fix build with new libnl-3
+In-Reply-To: <1322917624-10152-1-git-send-email-zonque@gmail.com>
+References: <1322917624-10152-1-git-send-email-zonque@gmail.com>
+Message-ID: <1322917624-10152-4-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The CFLAGS have to be augmented for the include dir and the patch
+needs to be tweaked to make the binary link to libnl-3 instead of
+libnl-gen.
 
-Excellent write-up. Does buildroot's /dev handling also tweak
-/etc/fstab? I would assume /dev would only need to be mounted in the
-non-static cases.
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+ package/iw/iw-libnl-30-support.patch |    2 +-
+ package/iw/iw.mk                     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-    Trevor
+diff --git a/package/iw/iw-libnl-30-support.patch b/package/iw/iw-libnl-30-support.patch
+index 48a179f..02e818c 100644
+--- a/package/iw/iw-libnl-30-support.patch
++++ b/package/iw/iw-libnl-30-support.patch
+@@ -20,7 +20,7 @@ Index: b/Makefile
+ 
+ +ifeq ($(NL3FOUND),Y)
+ +CFLAGS += -DCONFIG_LIBNL20
+-+LIBS += -lnl-genl
+++LIBS += -lnl-genl-3
+ +NLLIBNAME = libnl-3.0
+ +endif
+ +
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 9f1d65f..65326b7 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -15,7 +15,7 @@ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
+ 
+ define IW_CONFIGURE_CMDS
+ 	echo "CC = $(TARGET_CC)" >$(IW_CONFIG)
+-	echo "CFLAGS = $(TARGET_CFLAGS)" >>$(IW_CONFIG)
++	echo "CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/" >>$(IW_CONFIG)
+ 	echo "LDFLAGS = $(TARGET_LDFLAGS)" >>$(IW_CONFIG)
+ endef
+ 
+-- 
+1.7.7.3
