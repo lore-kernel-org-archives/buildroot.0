@@ -1,7 +1,7 @@
-From: Aleksander Dutkowski <adutkowski@gmail.com>
-Date: Sat, 3 Dec 2011 01:25:41 +0100
-Subject: [Buildroot] Kernel panic - not syncing: Attempted to kill init!
-In-Reply-To: <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 3 Dec 2011 09:25:53 +0100
+Subject: [Buildroot] Device files and Buildroot
+In-Reply-To: <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
 References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
  <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
  <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
@@ -13,90 +13,92 @@ References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
  <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
  <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
  <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
-Message-ID: <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
+ <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
+Message-ID: <20111203092553.0acf80a5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 2, 2011 at 7:30 PM, Jeff Krasky <jeff.krasky@dspcg.com> wrote:
->> afair this message could be because of lack of dev/console and/or
-> dev/null.
->> You must run "mknod -m 660 dev/console c 5 1" and "mknod -m
->> 660dev/null c 1 3" in root partition.
->>
->> How to do it? I have my on usb stick, so i
->> simply mount usb drive, and do some changes. If youre using yaffs2 and
->> NAND memory, you can use
->>
->> System configuration --> Custom script to run before creating filesystem
->> images
->>
->> to invoke those commands or just find unyaffs script (somewhere on the
->> Internet, on google code
->> afair), unyaffs your rootfs, make changes and make yaffs image one
->> more time.
->
-> Ok, I ran 'make menuconfig' and went into "System configuration -> Custom
-> script to run before creating filesystem images" and I entered this string:
->
-> mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3
->
-> and I got this when running 'make':
->
-> echo 2011.11 > /home/user1/buildroot-2011.11/output/target/etc/br-version
-> "mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3"
-> /home/user1/buildroot-2011.11/output/target
-> /bin/sh: mknod -m 660 dev/console c 5 1; mknod -m 660 dev/null c 1 3: No
-> such file or directory
-> make: *** [target-finalize] Error 127
-> user1 at dhcppc15:~/buildroot-2011.11>
+Le Sat, 3 Dec 2011 01:25:41 +0100,
+Aleksander Dutkowski <adutkowski@gmail.com> a ?crit :
 
-"System configuration --> Custom script to run before creating
-filesystem image" input is for specify a PATH to bash script.
-You you must simply create script, fill with mknod commands (remember
-- mknod can be ran only by root! so do 'sudo mknod')
-and then put the path to the script in "Custom script to run before
-creating filesystem image".
-Remeber to add execute mode to the script (chmod +x file)
->
->
->> You have output/target folder with your rootfs, so you can make changes
->> there :)
->
-> How to do it to a already built .jffs2 file? ?Can I just open a terminal
-> window on the linux PC that buildroot is on and run some commands?
+> "System configuration --> Custom script to run before creating
+> filesystem image" input is for specify a PATH to bash script.
+> You you must simply create script, fill with mknod commands (remember
+> - mknod can be ran only by root! so do 'sudo mknod')
 
-When buildroot is done compiling all packages, it installs all in
-'output/target' directory, and then create image.
-I am used to tell buildroot not to create any images, make my own
-adjustements in output/target dir, and then create image by hand.
-If you need to create yaffs, you can look for "mkyaffs2" script, which
-you can find on code.google.com.
+No, no, no and no ! I'm sorry but this is totally horrible and is
+definitely not the way of doing things with Buildroot.
 
-On Fri, Dec 2, 2011 at 7:31 PM, Tim Judd <tjudd2k@yahoo.com> wrote:
-> lack of dev/console or /dev/null should give a message something like "can't
-> allocate initial tty!"
-> I was having those errors too.? his is unable to run/survive init
->
->
-> having dev/console and dev/null (and if necessary dev/tty*) so the console
-> can be opened.? It's odd the kernel can spit the bootup on ttyS0 but
-> complains when trying to run init.? one of the great mysteries of linux.
+With Buildroot, you have four ways of managing the device files
+in /dev. The mechanism used to manage device files is configured from
+System configuration -> /dev management. The four ways are :
 
-I had another error message (I experienced problem with lack of
-/dev/console some time ago), but you can be right. I'm just assuming,
-that my solution is proper, and want Jeff to check it ;)
+ * Static using device table. In this case the "System configuration ->
+   Path to the device tables" option gives a space-separated list of
+   files, each of which containing a list of devices to create at build
+   time in the root filesystem. By default, this list is defined to
+   just the target/generic/device_table_dev.txt, which creates some
+   basic device files. Those device files are created at *build* time
+   and are statically present in the root filesystem image generated by
+   Buildroot. All basic devices such as /dev/console, /dev/null and al.
+   are already present in the default device table. If you are in this
+   mode and want to add more device files, then you should add them to
+   target/generic/device_table_dev.txt, or better, create your own
+   additional device table in
+   board/<yourcompany>/<yourproject>/device_table.txt, and add it to
+   the space-separated list in "System configuration -> Path to the
+   device tables".
 
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ * Dynamic using devtmpfs only. Devtmpfs is a virtual filesystem
+   implemented in the Linux kernel that can be mounted in /dev. The
+   kernel will automatically create/remove device files from this
+   filesystem as devices appear/disappear from the system. devtmpfs
+   exists in the Linux kernel since 2.6.32. When this option is
+   selected *and* Buildroot is responsible for building the kernel,
+   then Buildroot ensures that the kernel is built with the appropriate
+   options to make devtmpfs work. When Buildroot is *not* responsible
+   for building the kernel (the user does it on its own), then the user
+   is responsible for making sure that CONFIG_DEVTMPFS and
+   CONFIG_DEVTMPFS_MOUNT are both enabled in the kernel configuration.
+   When this mode is used, no static device files are created in the
+   root filesystem: the device files are automatically created at boot
+   time by the kernel.
 
+ * Dynamic using mdev. This is exactly like with 'devtmpfs' (i.e,
+   devtmpfs is required for this mode to work), but Buildroot adds the
+   mdev utility into the mix. mdev is an utility bundled with Busybox
+   which gets executed when the kernel notifies that a device has been
+   added or removed from the system. Compared to a pure 'devtmpfs'
+   solution, it allows to execute arbitrary applications or shell
+   scripts when devices appear/disappear. mdev behaviour can be
+   configured from /etc/mdev.conf, refer to the Busybox documentation
+   for more details. Since this case relies on devtmpfs, there are no
+   static device files created in the root filesystem, and no device
+   table is used.
 
+ * Dynamic using udev. This is also exactly like with 'devtmpfs' (i.e,
+   devtmpfs is required for this mode to work), but Buildroot adds the
+   udev daemon into the mix. udev is the "device event manager" used in
+   all Linux desktop and server systems and can be seen as a
+   "full-featured" mdev. It is more configurable, provides a library
+   called libudev to allow applications to query for which devices are
+   available, etc.
 
+So, no, do *NOT* ever use the post-build script to create device files.
+Just understand how those device files work and the different mode
+Buildroot provides to handle them.
+
+If you need precisions or have questions on this topic, don't hesitate
+to ask. We have many people on the list ready to answer your questions.
+
+Best regards,
+
+Thomas
 -- 
-pozdrawiam
-Aleksander Dutkowski
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
