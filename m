@@ -1,63 +1,59 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Dec 2011 20:27:21 +0100
-Subject: [Buildroot] [git commit] dependencies: check for extract tools as
-	well
-Message-ID: <20111204192810.3EF7B8F790@busybox.osuosl.org>
+Date: Sun, 4 Dec 2011 21:46:36 +0100
+Subject: [Buildroot] [git commit] bison: fix m4 dependency
+Message-ID: <20111204204658.64F968F73D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c6390a5d0c01420879e9f23bc89afb19976da4a
+commit: http://git.buildroot.net/buildroot/commit/?id=2077f955ef64b48c3832e0be31a18aaf04d786da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Most of the extract tools (gzip/bzip/..) we already check for explicitly
-in dependencies.sh (as they are used outside GENTARGETS), but not for
-xzcat.
-The .xz format is used fairly rarely, and it is likely to not be available
-on build hosts, so an explicit (hardcoded) check for it isn't optimal.
-Instead, add the inflate tools used to DL_TOOLS_DEPENDENCIES, similar to
-how we do it for svn/git/bzr/...
+Bison needs m4 (at runtime). In addition, the bison 2.5 configure script
+checks for m4 4.1.6 or newer, and bails out otherwise, but ends up looking
+at whatever the build host has rather than the cross version, which might
+not be the correct version (or even available).
+
+Fix it by short circuiting the check.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.package.in            |    2 ++
- toolchain/dependencies/dependencies.mk |    8 +-------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/bison/Config.in |    1 +
+ package/bison/bison.mk  |    5 +++++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 2349b05..e85eb15 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -726,6 +726,8 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
- DL_TOOLS_DEPENDENCIES += hg
- endif # SITE_METHOD
+diff --git a/package/bison/Config.in b/package/bison/Config.in
+index e8aa0b6..da0ac3f 100644
+--- a/package/bison/Config.in
++++ b/package/bison/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BISON
+ 	bool "bison"
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_M4
+ 	help
+ 	  General-purpose parser generator that converts a
+ 	  grammar description for an LALR context-free grammar into a C
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 759592e..c277e96 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -7,11 +7,16 @@
+ BISON_VERSION = 2.5
+ BISON_SITE = $(BR2_GNU_MIRROR)/bison
  
-+DL_TOOLS_DEPENDENCIES += $(firstword $(INFLATE$(suffix $($(2)_SOURCE))))
++BISON_CONF_ENV += ac_cv_path_M4=/usr/bin/m4
++BISON_DEPENDENCIES += m4
 +
- endif # $(2)_KCONFIG_VAR
- endef # GENTARGETS_INNER
+ define BISON_DISABLE_EXAMPLES
+ 	echo 'all install:' > $(@D)/examples/Makefile
+ endef
  
-diff --git a/toolchain/dependencies/dependencies.mk b/toolchain/dependencies/dependencies.mk
-index 24d6666..ea8bf25 100644
---- a/toolchain/dependencies/dependencies.mk
-+++ b/toolchain/dependencies/dependencies.mk
-@@ -10,16 +10,10 @@ ifeq ($(BR2_STRIP_sstrip),y)
- DEPENDENCIES_HOST_PREREQ+=host-sstrip
- endif
+ BISON_POST_CONFIGURE_HOOKS += BISON_DISABLE_EXAMPLES
  
--# Remove duplicate entries from $(DL_TOOLS_DEPENDENCIES)
--DL_TOOLS = \
--	$(findstring svn,$(DL_TOOLS_DEPENDENCIES)) \
--	$(findstring git,$(DL_TOOLS_DEPENDENCIES)) \
--	$(findstring bzr,$(DL_TOOLS_DEPENDENCIES))
--
- core-dependencies:
- 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
- 		CONFIG_FILE="$(CONFIG_DIR)/.config" \
--		DL_TOOLS="$(DL_TOOLS)" \
-+		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
- 		$(TOPDIR)/toolchain/dependencies/dependencies.sh
- 
- dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
++HOST_BISON_DEPENDENCIES += host-m4
++
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
