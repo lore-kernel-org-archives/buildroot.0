@@ -1,35 +1,63 @@
-From: Mike Davies <busybox_mail@rovoreed.com>
-Date: Sun, 04 Dec 2011 15:48:33 +0000
-Subject: [Buildroot] Problem building package usbutils under
-	buildroot-2011.11
-Message-ID: <1323013713.2865.9.camel@ceri>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 4 Dec 2011 20:27:21 +0100
+Subject: [Buildroot] [git commit] dependencies: check for extract tools as
+	well
+Message-ID: <20111204192810.3EF7B8F790@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Have a problem building the package usbutils under buildroot-2011.11.
+commit: http://git.buildroot.net/buildroot/commit/?id=2c6390a5d0c01420879e9f23bc89afb19976da4a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm supposed to be using uClibc but it appears to be trying to link with
-libraries in my hosts root filesystem i.e. glibc stuff
+Most of the extract tools (gzip/bzip/..) we already check for explicitly
+in dependencies.sh (as they are used outside GENTARGETS), but not for
+xzcat.
+The .xz format is used fairly rarely, and it is likely to not be available
+on build hosts, so an explicit (hardcoded) check for it isn't optimal.
+Instead, add the inflate tools used to DL_TOOLS_DEPENDENCIES, similar to
+how we do it for svn/git/bzr/...
 
-i.e.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.package.in            |    2 ++
+ toolchain/dependencies/dependencies.mk |    8 +-------
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-make[5]: Entering directory `/home/mike/buildroot-2011.11/output/build/usbutils-004/usbhid-dump/src'
-/home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc -DHAVE_CONFIG_H -I. -I..   -I/home/mike/br/output/build/usbutils-004/usbhid-dump -I/home/mike/br/output/build/usbutils-004/usbhid-dump/include -D_GNU_SOURCE -DNDEBUG   -Os -Wall  -Os  -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -MT usbhid-dump.o -MD -MP -MF .deps/usbhid-dump.Tpo -c -o usbhid-dump.o usbhid-dump.c
-mv -f .deps/usbhid-dump.Tpo .deps/usbhid-dump.Po
-/bin/sh ../libtool --tag=CC   --mode=link /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc  -Os -Wall  -Os  -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -o usbhid-dump usbhid-dump.o ../lib/libusbhid_dump.la -lusb-1.0 
-libtool: link: /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc -Os -Wall -Os -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o usbhid-dump usbhid-dump.o  ../lib/.libs/libusbhid_dump.a /usr/local/lib/libusb-1.0.so -lrt -pthread -Wl,-rpath -Wl,/usr/local/lib -Wl,-rpath -Wl,/usr/local/lib
-/home/mike/buildroot-2011.11/output/host/usr/bin/../lib/gcc/x86_64-unknown-linux-uclibc/4.6.2/../../../../x86_64-unknown-linux-uclibc/bin/ld: warning: librt.so.1, needed by /usr/local/lib/libusb-1.0.so, not found (try using -rpath or -rpath-link)
-/home/mike/buildroot-2011.11/output/host/usr/bin/../lib/gcc/x86_64-unknown-linux-uclibc/4.6.2/../../../../x86_64-unknown-linux-uclibc/bin/ld: warning: libc.so.6, needed by /usr/local/lib/libusb-1.0.so, not found (try using -rpath or -rpath-link)
-/usr/local/lib/libusb-1.0.so: undefined reference to `memset at GLIBC_2.2.5'
-/usr/local/lib/libusb-1.0.so: undefined reference to `clock_gettime at GLIBC_2.2.5'
-/usr/local/lib/libusb-1.0.so: undefined reference to `strlen at GLIBC_2.2.5'
-
-... etc (there are lots undefines)
-
-I'm not sure if I've ever tried building this package before, and I'm
-not sure how to fix the problem.
-
-Can anyone offer advice ?
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 2349b05..e85eb15 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -726,6 +726,8 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
+ DL_TOOLS_DEPENDENCIES += hg
+ endif # SITE_METHOD
+ 
++DL_TOOLS_DEPENDENCIES += $(firstword $(INFLATE$(suffix $($(2)_SOURCE))))
++
+ endif # $(2)_KCONFIG_VAR
+ endef # GENTARGETS_INNER
+ 
+diff --git a/toolchain/dependencies/dependencies.mk b/toolchain/dependencies/dependencies.mk
+index 24d6666..ea8bf25 100644
+--- a/toolchain/dependencies/dependencies.mk
++++ b/toolchain/dependencies/dependencies.mk
+@@ -10,16 +10,10 @@ ifeq ($(BR2_STRIP_sstrip),y)
+ DEPENDENCIES_HOST_PREREQ+=host-sstrip
+ endif
+ 
+-# Remove duplicate entries from $(DL_TOOLS_DEPENDENCIES)
+-DL_TOOLS = \
+-	$(findstring svn,$(DL_TOOLS_DEPENDENCIES)) \
+-	$(findstring git,$(DL_TOOLS_DEPENDENCIES)) \
+-	$(findstring bzr,$(DL_TOOLS_DEPENDENCIES))
+-
+ core-dependencies:
+ 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
+ 		CONFIG_FILE="$(CONFIG_DIR)/.config" \
+-		DL_TOOLS="$(DL_TOOLS)" \
++		DL_TOOLS="$(sort $(DL_TOOLS_DEPENDENCIES))" \
+ 		$(TOPDIR)/toolchain/dependencies/dependencies.sh
+ 
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
