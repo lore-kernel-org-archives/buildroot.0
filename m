@@ -1,59 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Dec 2011 21:46:36 +0100
-Subject: [Buildroot] [git commit] bison: fix m4 dependency
-Message-ID: <20111204204658.64F968F73D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 4 Dec 2011 21:49:39 +0100
+Subject: [Buildroot] Problem building package usbutils under
+ buildroot-2011.11
+In-Reply-To: <1323013713.2865.9.camel@ceri>
+References: <1323013713.2865.9.camel@ceri>
+Message-ID: <20111204214939.29b10ebe@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2077f955ef64b48c3832e0be31a18aaf04d786da
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sun, 04 Dec 2011 15:48:33 +0000,
+Mike Davies <busybox_mail@rovoreed.com> a ?crit :
 
-Bison needs m4 (at runtime). In addition, the bison 2.5 configure script
-checks for m4 4.1.6 or newer, and bails out otherwise, but ends up looking
-at whatever the build host has rather than the cross version, which might
-not be the correct version (or even available).
+> /bin/sh ../libtool --tag=CC   --mode=link /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc  -Os -Wall  -Os  -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -o usbhid-dump usbhid-dump.o ../lib/libusbhid_dump.la -lusb-1.0 
+> libtool: link: /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc -Os -Wall -Os -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o usbhid-dump usbhid-dump.o  ../lib/.libs/libusbhid_dump.a /usr/local/lib/libusb-1.0.so -lrt -pthread -Wl,-rpath -Wl,/usr/local/lib -Wl,-rpath -Wl,/usr/local/lib
 
-Fix it by short circuiting the check.
+Here it's linking against /usr/local/lib/libusb-1.0.so and not the
+libusb that has been built by Buildroot against uClibc and installed in
+$(STAGING_DIR). A quick, but very ugly, workaround is to uninstall
+libusb-dev from your development machine. But we need to find why
+usbutils is preferring the host libusb instead of the one built by
+Buildroot.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bison/Config.in |    1 +
- package/bison/bison.mk  |    5 +++++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+Best regards,
 
-diff --git a/package/bison/Config.in b/package/bison/Config.in
-index e8aa0b6..da0ac3f 100644
---- a/package/bison/Config.in
-+++ b/package/bison/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BISON
- 	bool "bison"
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_M4
- 	help
- 	  General-purpose parser generator that converts a
- 	  grammar description for an LALR context-free grammar into a C
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index 759592e..c277e96 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -7,11 +7,16 @@
- BISON_VERSION = 2.5
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- 
-+BISON_CONF_ENV += ac_cv_path_M4=/usr/bin/m4
-+BISON_DEPENDENCIES += m4
-+
- define BISON_DISABLE_EXAMPLES
- 	echo 'all install:' > $(@D)/examples/Makefile
- endef
- 
- BISON_POST_CONFIGURE_HOOKS += BISON_DISABLE_EXAMPLES
- 
-+HOST_BISON_DEPENDENCIES += host-m4
-+
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
