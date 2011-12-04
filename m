@@ -1,59 +1,43 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Sat, 3 Dec 2011 11:15:08 -0800
-Subject: [Buildroot] USB FAT drive in Linux on MPC8321
-In-Reply-To: <20111203092854.3301cf7f@skate>
-References: <CALo-6+i-OXWXHxpmsH4tab9RBhT5qoWOcpSbfR84nbt9GaAn4Q@mail.gmail.com>
- <20111203092854.3301cf7f@skate>
-Message-ID: <CALo-6+hZ-A8=+HosZJhjW3xGaXp7a_y3T6vdH2wu6c5TMuQ1og@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 4 Dec 2011 12:47:36 +0200
+Subject: [Buildroot] [PATCH 2/2] ebtables: bump to version 2.0.10-2
+In-Reply-To: <1322858749-16654-2-git-send-email-gustavo@zacarias.com.ar>
+References: <1322858749-16654-1-git-send-email-gustavo@zacarias.com.ar>
+ <1322858749-16654-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20111204104735.GC2328@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas:
+Hi Gustavo,
 
-In doing a bit googling last night, I found mention of a usb mount point
-being of either type "msdos" or "vfat" and it is entirely possible this
-might be the case.
+On Fri, Dec 02, 2011 at 05:45:49PM -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/ebtables/ebtables.mk |    3 ++-
+>  1 files changed, 2 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+> index 6cfdfdc..66242a4 100644
+> --- a/package/ebtables/ebtables.mk
+> +++ b/package/ebtables/ebtables.mk
+> @@ -3,7 +3,8 @@
+>  # ebtables
+>  #
+>  #############################################################
+> -EBTABLES_VERSION = 2.0.10-1
+> +
+> +EBTABLES_VERSION = 2.0.10-2
+>  EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
+>  EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
 
-I dont have the target with me at home this weekend, but having a mount
-point that is 8.3 centric is at least possible.
+Version 2.0.10-3 has now been released. Care to update?
 
-If you dont mind, I'll do a bit more research next week as I dont want to
-cause any unnecessary effort. As always, I treasure your technically
-focused advice as we get this project throuh some qualification testing.
+baruch
 
-Charles
-On Dec 3, 2011 12:29 AM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello Charles,
->
-> Le Fri, 2 Dec 2011 14:37:17 -0800,
-> Charles Krinke <charles.krinke@gmail.com> a ?crit :
->
-> > To illustrate, here is an ls from my debian laptop followed by an ls
-> > of the same USB drive from the MPC8321 target illustrating the issues.
->
-> Presumably your kernel has CONFIG_FAT_FS enabled, but not
-> CONFIG_VFAT_FS enabled. The latter is the one that enables long file
-> name support.
->
-> Can you provide your kernel .config and give details on your kernel
-> version (vanilla version, version modified by an hardware vendor,
-> etc.) ?
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111203/9e1bc398/attachment.html>
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
