@@ -1,38 +1,31 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 05 Dec 2011 18:45:29 +0000
-Subject: [Buildroot] Question about using mdev for /dev management
-Message-ID: <4EDD1149.8060104@carallon.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Dec 2011 20:20:28 +0100
+Subject: [Buildroot] [PATCH v2] Add package connman
+In-Reply-To: <4EDCFEB2.60603@gmail.com>
+References: <20111205130056.GB30001@sapphire.tkos.co.il>
+ <1323090955-5661-1-git-send-email-zonque@gmail.com>
+ <87obvnrsnv.fsf@macbook.be.48ers.dk> <4EDCFEB2.60603@gmail.com>
+Message-ID: <20111205202028.75432ef3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Le Mon, 05 Dec 2011 18:26:10 +0100,
+Daniel Mack <zonque@gmail.com> a ?crit :
 
-I am using buildroot 2011.11 and looking at using mdev for /dev management.
+> I'm cloning from a git repository, for the reason described in the
+> commit log. Hence, the configure script has to be generated.
 
-This works but I have a couple of questions about it.
+Could you add a comment above the _AUTORECONF=YES line mentioning this
+reason ?
 
-Firstly it replaces $(TARGET_DIR)/init with fs/cpio/init which attempts 
-to mount devtmpfs. My kernel doesn't support this (it's too old) and I'd 
-rather not get this trace in the boot (it worries other developers). I 
-assume that for mdev we could not replace init but instead make sure 
-that /dev/console (and possibly /dev/null?) exist?
+Thanks,
 
-The other small issue I have is that mdev fails to spot one of the 
-kernel devices (as the driver doesn't have a sysfs entry) so it needs 
-adding manually. I do that by adding an entry to BR2_ROOTFS_DEVICE_TABLE 
-which works fine, but doesn't seem ideal as I thought device entries 
-were meant to be set in BR2_ROOTFS_STATIC_DEVICE_TABLE, but that is not 
-offered unless static devices used. Is there a better way to do this or 
-should I just leave it as is?
-
-Thanks
-Will
+Thomas
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
