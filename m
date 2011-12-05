@@ -1,118 +1,190 @@
-From: Aleksander Dutkowski <adutkowski@gmail.com>
-Date: Mon, 5 Dec 2011 11:54:25 +0100
-Subject: [Buildroot] Device files and Buildroot
-In-Reply-To: <20111203092553.0acf80a5@skate>
-References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
- <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
- <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
- <201112020734.00122.minimod@morethan.org>
- <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
- <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
- <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
- <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
- <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
- <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
- <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
- <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
- <20111203092553.0acf80a5@skate>
-Message-ID: <CABkKHSavqtgyxegoovdAO35sm0oE51vdf49EcosaK7W83WoefA@mail.gmail.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 05 Dec 2011 11:10:25 +0000
+Subject: [Buildroot] [PATCH] Improved uClibc support with crosstool-ng
+ generated toolchain
+In-Reply-To: <201112022254.51498.yann.morin.1998@anciens.enib.fr>
+References: <1322841206-2247-1-git-send-email-will_wagner@carallon.com>
+ <201112022254.51498.yann.morin.1998@anciens.enib.fr>
+Message-ID: <4EDCA6A1.6040406@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've read your message, and I now know, what was the problem in my
-case - I'am using kernel 2.6.30 with udev and it doesn't have
-devtmpfs, so it is not creating dev/null and /dev/console. Thanks!
+On 02/12/2011 21:54, Yann E. MORIN wrote:
+> Will, All,
+>
+> Please CC: me next time! ;-)
+>
+> On Friday 02 December 2011 16:53:26 Will Wagner wrote:
+>> Currently there is a hard coded uClibc config file when building
+>> with crosstools-ng. This patch:
+>> - Allows user to pick uClibc version when using ct-ng
+>> - Allows user to select nptl when using 0.9.32
+>> - Supplys better default uClibc config files (Using same config files as for internal buildroot config)
+>> - Allows user to specify a custom uClibc config file
+>
+> Globally, nothing really wrong IMHO.
+>
+> The only comment is: make separate patches for each changes. I would suggest
+> this ordering:
+>   1/4 Allows user to pick uClibc version when using ct-ng
+>   2/4 Supplys better default uClibc config files
+>   3/4 Allows user to specify a custom uClibc config file
+>   4/4 Allows user to select nptl when using 0.9.32
 
-Best Regards,
-Aleksander
+Will split it up, not sure how easy I can split 2 and 3 but will see.
 
-On Sat, Dec 3, 2011 at 9:25 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Sat, 3 Dec 2011 01:25:41 +0100,
-> Aleksander Dutkowski <adutkowski@gmail.com> a ?crit :
 >
->> "System configuration --> Custom script to run before creating
->> filesystem image" input is for specify a PATH to bash script.
->> You you must simply create script, fill with mknod commands (remember
->> - mknod can be ran only by root! so do 'sudo mknod')
+> See some other comments below...
 >
-> No, no, no and no ! I'm sorry but this is totally horrible and is
-> definitely not the way of doing things with Buildroot.
+>> Signed-off-by: Will Wagner<will_wagner@carallon.com>
+>> ---
+>>   toolchain/toolchain-crosstool-ng/Config.in       |   28 +++-
+>>   toolchain/toolchain-crosstool-ng/crosstool-ng.mk |   14 ++-
+>>   toolchain/toolchain-crosstool-ng/uClibc.config   |  246 ----------------------
+>>   3 files changed, 40 insertions(+), 248 deletions(-)
+>>   delete mode 100644 toolchain/toolchain-crosstool-ng/uClibc.config
+>>
+>> diff --git a/toolchain/toolchain-crosstool-ng/Config.in b/toolchain/toolchain-crosstool-ng/Config.in
+>> index 2d1e801..7e21ce9 100644
+>> --- a/toolchain/toolchain-crosstool-ng/Config.in
+>> +++ b/toolchain/toolchain-crosstool-ng/Config.in
+>> @@ -50,6 +50,30 @@ if BR2_TOOLCHAIN_CTNG_uClibc
+>>
+>>   comment "Toolchain Options"
+>>
+>> +choice
+>> +	prompt "uClibc C library Version"
+>> +	default BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30
+>> +	help
+>> +	  Select the version of uClibc you wish to use.
+>> +
+>> +	config BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30
+>> +		bool "uClibc 0.9.30.x"
+>> +
+>> +	config BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32
+>> +		bool "uClibc 0.9.32.x"
+>> +
+>> +endchoice
+>> +
+>> +config BR2_TOOLCHAIN_CTNG_uClibc_CONFIG
+>> +	string "uClibc configuration file to use?"
+>> +	default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30
+>> +	default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32
+>> +	help
+>> +	  Some people may wish to use their own modified uClibc configuration
+>> +	  file and will specify their config file location with this option.
+>> +	  See also docs/README in this package.
+>> +	  If unsure, use the default.
+>> +
+>>   config BR2_TOOLCHAIN_CTNG_uClibc_LARGEFILE
+>>   	bool "Enable large file (files>  2 GB) support"
+>>   	select BR2_LARGEFILE
+>> @@ -130,7 +154,9 @@ choice
+>>   		bool "Native POSIX Threading (NPTL)"
+>>   		select BR2_TOOLCHAIN_HAS_THREADS
+>>   		depends on BR2_TOOLCHAIN_CTNG_eglibc || \
+>> -			   BR2_TOOLCHAIN_CTNG_glibc
+>> +		           BR2_TOOLCHAIN_CTNG_glibc || \
+>> +		           BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32
+>> +
 >
-> With Buildroot, you have four ways of managing the device files
-> in /dev. The mechanism used to manage device files is configured from
-> System configuration -> /dev management. The four ways are :
+> This means that, when newer uClibc version come out, we'll have to maintain
+> this 'depends on'. I'd suggest:
 >
-> ?* Static using device table. In this case the "System configuration ->
-> ? Path to the device tables" option gives a space-separated list of
-> ? files, each of which containing a list of devices to create at build
-> ? time in the root filesystem. By default, this list is defined to
-> ? just the target/generic/device_table_dev.txt, which creates some
-> ? basic device files. Those device files are created at *build* time
-> ? and are statically present in the root filesystem image generated by
-> ? Buildroot. All basic devices such as /dev/console, /dev/null and al.
-> ? are already present in the default device table. If you are in this
-> ? mode and want to add more device files, then you should add them to
-> ? target/generic/device_table_dev.txt, or better, create your own
-> ? additional device table in
-> ? board/<yourcompany>/<yourproject>/device_table.txt, and add it to
-> ? the space-separated list in "System configuration -> Path to the
-> ? device tables".
+> config BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32
+>      bool "0.9.32"
+>      select BR2_TOOLCHAIN_CTNG_uClibc_NPTL_OK
 >
-> ?* Dynamic using devtmpfs only. Devtmpfs is a virtual filesystem
-> ? implemented in the Linux kernel that can be mounted in /dev. The
-> ? kernel will automatically create/remove device files from this
-> ? filesystem as devices appear/disappear from the system. devtmpfs
-> ? exists in the Linux kernel since 2.6.32. When this option is
-> ? selected *and* Buildroot is responsible for building the kernel,
-> ? then Buildroot ensures that the kernel is built with the appropriate
-> ? options to make devtmpfs work. When Buildroot is *not* responsible
-> ? for building the kernel (the user does it on its own), then the user
-> ? is responsible for making sure that CONFIG_DEVTMPFS and
-> ? CONFIG_DEVTMPFS_MOUNT are both enabled in the kernel configuration.
-> ? When this mode is used, no static device files are created in the
-> ? root filesystem: the device files are automatically created at boot
-> ? time by the kernel.
+> config BR2_TOOLCHAIN_CTNG_uClibc_NPTL_OK
+>      bool
 >
-> ?* Dynamic using mdev. This is exactly like with 'devtmpfs' (i.e,
-> ? devtmpfs is required for this mode to work), but Buildroot adds the
-> ? mdev utility into the mix. mdev is an utility bundled with Busybox
-> ? which gets executed when the kernel notifies that a device has been
-> ? added or removed from the system. Compared to a pure 'devtmpfs'
-> ? solution, it allows to execute arbitrary applications or shell
-> ? scripts when devices appear/disappear. mdev behaviour can be
-> ? configured from /etc/mdev.conf, refer to the Busybox documentation
-> ? for more details. Since this case relies on devtmpfs, there are no
-> ? static device files created in the root filesystem, and no device
-> ? table is used.
+> config BR2_TOOLCHAIN_CTNG_THREADS_NPTL
+>      bool "NPTL"
+>      depends on glibc || eglibc || BR2_TOOLCHAIN_CTNG_uClibc_NPTL_OK
 >
-> ?* Dynamic using udev. This is also exactly like with 'devtmpfs' (i.e,
-> ? devtmpfs is required for this mode to work), but Buildroot adds the
-> ? udev daemon into the mix. udev is the "device event manager" used in
-> ? all Linux desktop and server systems and can be seen as a
-> ? "full-featured" mdev. It is more configurable, provides a library
-> ? called libudev to allow applications to query for which devices are
-> ? available, etc.
+> (Note: I used shortened names for readability only, this should not be
+> used as-is, of course!)
+
+For ease of maintainability we could use the negative (ie 
+BR2_TOOLCHAIN_CTNG_uClibc_NO_NPTL) as then people won't have to remember 
+to add 'select BR2_TOOLCHAIN_CTNG_uClibc_NPTL_OK' when they add a new 
+uClibc version.
+
 >
-> So, no, do *NOT* ever use the post-build script to create device files.
-> Just understand how those device files work and the different mode
-> Buildroot provides to handle them.
+>>   endchoice
+>>
+>>   endif # BR2_TOOLCHAIN_CTNG
+>> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+>> index 3a205dd..4311097 100644
+>> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+>> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+>> @@ -10,7 +10,7 @@
+>>
+>>   CTNG_DIR := $(BUILD_DIR)/build-toolchain
+>>
+>> -CTNG_UCLIBC_CONFIG_FILE := $(TOPDIR)/toolchain/toolchain-crosstool-ng/uClibc.config
+>> +CTNG_UCLIBC_CONFIG_FILE := $(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_CONFIG))
+>>   CTNG_CONFIG_FILE:=$(call qstrip,$(BR2_TOOLCHAIN_CTNG_CONFIG))
+>>
+>>   # Hack! ct-ng is in fact a Makefile script. As such, it accepts all
+>> @@ -267,6 +267,18 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
+>>   # uClibc specific options
+>>   ifeq ($(BR2_TOOLCHAIN_CTNG_uClibc),y)
+>>
+>> +# Set version
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_32).*:\# \2 is not set:;
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_30_3).*:\# \2 is not set:;
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_30_2).*:\# \2 is not set:;
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_30_1).*:\# \2 is not set:;
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_30).*:\# \2 is not set:;
+>> +ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32)),)
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_32).*:\2=y:;
+>> +else ifneq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30)),)
+>> +CTNG_FIX_DOT_CONFIG_SED += s:^(|\# )(CT_LIBC_UCLIBC_V_0_9_30_3).*:\2=y:;
+>> +endif
 >
-> If you need precisions or have questions on this topic, don't hesitate
-> to ask. We have many people on the list ready to answer your questions.
+> You'll get the same issue as the LT_NEW vs. LT_OLD you mentioned earlier.
+> Also, I do not like negative tests:
+>    ifneq ($(blabla),)
+>    do blabla stuff
+> would be better written thus:
+>    ifeq ($(blabla),y)
+>    do blabla stuff
 >
-> Best regards,
+> The following should be OK (untested, may need some tweaking)
 >
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> # Set version
+> ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32)),y)
+> CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_V)(.+)=y$$:# \1\2 is not set\n\1_0_9_32=y:;
+> else ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30)),y)
+> CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_V)(.+)=y$$:# \1\2 is not set\n\1_0_9_30=y:;
+> endif
+
+I'd prefer not to do this as I copied exactly how buildroot does it for 
+internal uClibc build. The reason it works fine there is those default 
+config files have entries for all three threading options but the one in 
+crosstool-ng doesn't. I'm not sure how Peter generates them, but as the 
+entries are there already I would rather keep the mechanism exactly the 
+same as for internal toolchain.
+
+>
+> Otherwise, pretty OK for me. Care to address the above, so I can test
+> and apply my tag-lines?
+
+Will respin with your comments and repost.
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+
+
+-- 
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7371 2032
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
