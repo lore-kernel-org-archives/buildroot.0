@@ -1,38 +1,45 @@
 From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 05 Dec 2011 18:15:47 +0000
-Subject: [Buildroot] Patches to uClibc when using ct-ng backend in buildroot
-Message-ID: <4EDD0A53.4060008@carallon.com>
+Date: Mon, 05 Dec 2011 18:19:42 +0000
+Subject: [Buildroot] [PATCH 2/9] Copy gdbserver from external toolchain
+In-Reply-To: <201110181023.35764.arnout@mind.be>
+References: <1318603921-22899-1-git-send-email-will_wagner@carallon.com>
+ <1318603921-22899-3-git-send-email-will_wagner@carallon.com>
+ <20111017223226.5638eac7@skate> <201110181023.35764.arnout@mind.be>
+Message-ID: <4EDD0B3E.6030408@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+On 18/10/2011 09:23, Arnout Vandecappelle wrote:
+>
+> On Monday 17 October 2011 22:32:26, Thomas Petazzoni wrote:
+>> See also
+>>
+>>   [PATCH 3/4] debug: provide an option to copy the gdbserver to the
+>>   target
+>>
+>> that I posted on July, 11th 2011.
+>
+>   Grmbl, I missed that one and I already started improving Will's patch...  I just love wasting my time like that :-/
+>
+>   [I lost my mail archive so it's a bit difficult to your to the original patch, so I'll put my comment here.]
+>
+>   I notice that Will has
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDBSERVER),y)
+> +LIB_EXTERNAL_LIBS+=libthread_db.so
+> which was not there in your patch.  Is it not needed?
 
-I am using ct-ng to build a toolchain within buildroot which I've got 
-working fine.
+Arnout, did you ever finish your changes here? I'd love to see a version 
+of this committed to buildroot.
 
-However the uClibc library has different patches applied compared to an 
-internal buildroot toolchain. In particular the patches I am interested 
-in are:
-toolchain/uClibc/uClibc-0.9.32-fix-daylight-saving-time-handling.patch
-toolchain/uClibc/uClibc-0.9.32-linuxthreads-errno-fix.patch
-
-I have hacked in changes to package\crosstool-ng\crosstool-ng.mk to make 
-them be applied, however I don't think this is a sensible long term 
-solution.
-
-Presumably the daylight savings patch could get added to ct-ng for the 
-next release as it has been accepted upstream. However the other one is 
-rejected upstream and I believe ct-ng doesn't want to carry it. There 
-are also a number of other patches in buildroot that are not in ct-ng.
-
-Going forward what is the best thing to do here? If there is any easy 
-solution people would be happy with I'll work on a patch.
+Any testing/review I can do?
 
 Thanks
 Will
+
+
 -- 
 ------------------------------------------------------------------------
 Will Wagner                                     will_wagner at carallon.com
