@@ -1,45 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 5 Dec 2011 13:03:41 +0100
-Subject: [Buildroot] Pre-RFC: clean integration of unclean packages
-In-Reply-To: <CAAXf6LV85CrRSQbUbKgHBB4-uP6SHWcpDcbDFHo5dMekU5ee2g@mail.gmail.com>
-References: <201112051046.38674.arnout@mind.be>
- <201112051108.12890.arnout@mind.be>
- <CAAXf6LV85CrRSQbUbKgHBB4-uP6SHWcpDcbDFHo5dMekU5ee2g@mail.gmail.com>
-Message-ID: <201112051303.41429.arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  5 Dec 2011 12:22:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 4568] [PATCH] Added initscript for avahi-autoipd
+In-Reply-To: <bug-4568-163@https.bugs.busybox.net/>
+References: <bug-4568-163@https.bugs.busybox.net/>
+Message-ID: <20111205122223.3B7178F782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 December 2011 12:13:48 Thomas De Schampheleire wrote:
-> > Note that the same Makefile.ti is used for all ti packages.
-> 
-> Could you gives us an idea of the contents of this file?
-> Depending on its contents, this may be problematic: what if you update
-> only one of the ti packages and it became incompatible with the
-> existing Makefile.ti?
-> But, if this Makefile.ti file is sufficiently general, I wouldn't be
-> opposed to this principle.
+https://bugs.busybox.net/show_bug.cgi?id=4568
 
- My Makefile.ti is currently still in flux.
+Tilman Baumann <tilman.baumann@grandeye.com> changed:
 
- If you change or add a TI package, it may be necessary to modify Makefile.ti as well.  That's how I'm working now.  It should be possible to keep it compatible with the existing use cases.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-> What if someone would really like the full xdctools for some reason?
-> I think it'd be better to rename your package to something more
-> specific, like xdctools-dep, or otherwise to have just one package but
-> with two targets (with a different name, of course).
+--- Comment #2 from Tilman Baumann <tilman.baumann@grandeye.com> 2011-12-05 12:22:22 UTC ---
+(In reply to comment #1)
+> avahi-autoipd is normally used as a fallback for dhcp (which is why we install
+> the custom udhcpc script). If you want to use it without udhcpc then you indeed
+> need to run it manually somehow, using an init script or from
+> /etc/network/interfaces, but just unconditionally installing this init script
+> for everyone doesn't make much sense.
 
- Good point, I'll do that.
+Thanks. That makes sense.
 
- Thank you for all your feedback!
- Regards,
- Arnout
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
