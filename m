@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Dec 2011 20:20:28 +0100
+Date: Mon, 5 Dec 2011 20:21:12 +0100
 Subject: [Buildroot] [PATCH v2] Add package connman
-In-Reply-To: <4EDCFEB2.60603@gmail.com>
+In-Reply-To: <87obvnrsnv.fsf@macbook.be.48ers.dk>
 References: <20111205130056.GB30001@sapphire.tkos.co.il>
  <1323090955-5661-1-git-send-email-zonque@gmail.com>
- <87obvnrsnv.fsf@macbook.be.48ers.dk> <4EDCFEB2.60603@gmail.com>
-Message-ID: <20111205202028.75432ef3@skate>
+ <87obvnrsnv.fsf@macbook.be.48ers.dk>
+Message-ID: <20111205202112.5db3b435@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 05 Dec 2011 18:26:10 +0100,
-Daniel Mack <zonque@gmail.com> a ?crit :
+Le Mon, 05 Dec 2011 15:37:24 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> I'm cloning from a git repository, for the reason described in the
-> commit log. Hence, the configure script has to be generated.
+> Thanks, looks interesting. Kos_tom also worked on a package which
+> unfortunately got lost together with his laptop.
 
-Could you add a comment above the _AUTORECONF=YES line mentioning this
-reason ?
+Actually, I did work on packaging udisks, not connman. I still intend
+to work, someday, on udisks.
 
-Thanks,
+Best regards,
 
 Thomas
 -- 
