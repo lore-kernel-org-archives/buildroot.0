@@ -1,106 +1,125 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 5 Dec 2011 12:53:04 +0100
-Subject: [Buildroot] [git commit] binutils: 2.22 powerpc textrels fix
-Message-ID: <20111205134653.4F3428F7A8@busybox.osuosl.org>
+Date: Mon, 5 Dec 2011 12:54:43 +0100
+Subject: [Buildroot] [git commit] ruby: bump to version 1.9.2-p290
+Message-ID: <20111205134653.EBBC58F7A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e96cbcc065b0ffdb5171e2701f4e6d7201fa867
+commit: http://git.buildroot.net/buildroot/commit/?id=a521a0d2e7f0735600e5640be7328f7658ba12ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See http://thread.gmane.org/gmane.comp.embedded.crossdev/106 for details.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../binutils/binutils-2.22/999-ppc-textrels.patch  |   80 ++++++++++++++++++++
- 1 files changed, 80 insertions(+), 0 deletions(-)
+ package/ruby/ruby-configure2.patch     |   26 ---------------
+ package/ruby/ruby-openssl1.0-fix.patch |   53 --------------------------------
+ package/ruby/ruby.mk                   |    2 +-
+ 3 files changed, 1 insertions(+), 80 deletions(-)
 
-diff --git a/package/binutils/binutils-2.22/999-ppc-textrels.patch b/package/binutils/binutils-2.22/999-ppc-textrels.patch
-new file mode 100644
-index 0000000..c1efacf
---- /dev/null
-+++ b/package/binutils/binutils-2.22/999-ppc-textrels.patch
-@@ -0,0 +1,80 @@
-+http://bugs.gentoo.org/392645
-+http://sourceware.org/bugzilla/show_bug.cgi?id=13470
-+
-+2011-12-03  Alan Modra  <amodra@gmail.com>
-+
-+	PR ld/13470
-+	* elf32-ppc.c (ppc_elf_copy_indirect_symbol): Revert substantive
-+	change in 2011-07-01 commit.  Comment.
-+	* elf64-ppc.c (ppc64_elf_copy_indirect_symbol): Likewise.
-+
-+===================================================================
-+RCS file: /cvs/src/src/bfd/elf32-ppc.c,v
-+retrieving revision 1.302.2.1
-+retrieving revision 1.302.2.2
-+diff -u -r1.302.2.1 -r1.302.2.2
-+--- src/bfd/elf32-ppc.c	2011/11/15 11:36:52	1.302.2.1
-++++ src/bfd/elf32-ppc.c	2011/12/03 00:58:01	1.302.2.2
-+@@ -2987,10 +2987,6 @@
-+   edir->elf.needs_plt |= eind->elf.needs_plt;
-+   edir->elf.pointer_equality_needed |= eind->elf.pointer_equality_needed;
-+ 
-+-  /* If we were called to copy over info for a weak sym, that's all.  */
-+-  if (eind->elf.root.type != bfd_link_hash_indirect)
-+-    return;
-+-
-+   if (eind->dyn_relocs != NULL)
-+     {
-+       if (edir->dyn_relocs != NULL)
-+@@ -3022,6 +3018,16 @@
-+       eind->dyn_relocs = NULL;
-+     }
-+ 
-++  /* If we were called to copy over info for a weak sym, that's all.
-++     You might think dyn_relocs need not be copied over;  After all,
-++     both syms will be dynamic or both non-dynamic so we're just
-++     moving reloc accounting around.  However, ELIMINATE_COPY_RELOCS 
-++     code in ppc_elf_adjust_dynamic_symbol needs to check for
-++     dyn_relocs in read-only sections, and it does so on what is the
-++     DIR sym here.  */
-++  if (eind->elf.root.type != bfd_link_hash_indirect)
-++    return;
-++
-+   /* Copy over the GOT refcount entries that we may have already seen to
-+      the symbol which just became indirect.  */
-+   edir->elf.got.refcount += eind->elf.got.refcount;
-+===================================================================
-+RCS file: /cvs/src/src/bfd/elf64-ppc.c,v
-+retrieving revision 1.363.2.4
-+retrieving revision 1.363.2.5
-+diff -u -r1.363.2.4 -r1.363.2.5
-+--- src/bfd/elf64-ppc.c	2011/11/08 13:46:36	1.363.2.4
-++++ src/bfd/elf64-ppc.c	2011/12/03 00:58:02	1.363.2.5
-+@@ -4435,10 +4435,6 @@
-+   edir->elf.ref_regular_nonweak |= eind->elf.ref_regular_nonweak;
-+   edir->elf.needs_plt |= eind->elf.needs_plt;
-+ 
-+-  /* If we were called to copy over info for a weak sym, that's all.  */
-+-  if (eind->elf.root.type != bfd_link_hash_indirect)
-+-    return;
-+-
-+   /* Copy over any dynamic relocs we may have on the indirect sym.  */
-+   if (eind->dyn_relocs != NULL)
-+     {
-+@@ -4471,6 +4467,16 @@
-+       eind->dyn_relocs = NULL;
-+     }
-+ 
-++  /* If we were called to copy over info for a weak sym, that's all.
-++     You might think dyn_relocs need not be copied over;  After all,
-++     both syms will be dynamic or both non-dynamic so we're just
-++     moving reloc accounting around.  However, ELIMINATE_COPY_RELOCS 
-++     code in ppc64_elf_adjust_dynamic_symbol needs to check for
-++     dyn_relocs in read-only sections, and it does so on what is the
-++     DIR sym here.  */
-++  if (eind->elf.root.type != bfd_link_hash_indirect)
-++    return;
-++
-+   /* Copy over got entries that we may have already seen to the
-+      symbol which just became indirect.  */
-+   if (eind->elf.got.glist != NULL)
+diff --git a/package/ruby/ruby-configure2.patch b/package/ruby/ruby-configure2.patch
+deleted file mode 100644
+index 405fc41..0000000
+--- a/package/ruby/ruby-configure2.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From ac89b1414c84dbc038f623591c738b0637745415 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 4 Nov 2010 18:31:38 -0300
+-Subject: [PATCH] Fix bad sed in configure.in
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.in |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/configure.in b/configure.in
+-index e97216f..a978c97 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -152,7 +152,7 @@ AC_MSG_RESULT([$ARCH_FLAG])
+- AC_DEFUN([RUBY_UNIVERSAL_ARCH], [
+- # RUBY_UNIVERSAL_ARCH begin
+- test ${CFLAGS+set} && CFLAGS=`echo "$CFLAGS" | sed -e 's/ *-arch  *[^ ]*//g' -e 's/ *-m32//g' -e 's/ *-m64//g'`
+--test ${LDFLAGS+set} && LDFLAGS=`echo "$LDFLAGS" | sed 's/ *-arch  *[^ ]*//g' -e 's/ *-m32//g' -e 's/ *-m64//g'`
+-+test ${LDFLAGS+set} && LDFLAGS=`echo "$LDFLAGS" | sed -e 's/ *-arch  *[^ ]*//g' -e 's/ *-m32//g' -e 's/ *-m64//g'`
+- unset ARCH_FLAG universal_binary universal_archnames
+- if test ${target_archs+set}; then
+-     AC_MSG_CHECKING([target architectures])
+--- 
+-1.7.2.2
+-
+diff --git a/package/ruby/ruby-openssl1.0-fix.patch b/package/ruby/ruby-openssl1.0-fix.patch
+deleted file mode 100644
+index 5591d99..0000000
+--- a/package/ruby/ruby-openssl1.0-fix.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From b983e73adf7a7d3fd07fdf493eee51c22881a6e6 Mon Sep 17 00:00:00 2001
+-From: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+-Date: Wed, 6 Apr 2011 02:28:09 +0900
+-Subject: [PATCH] Add option which enable SSLv2 support
+-
+-From openssl 1.0, SSLv2 becomes disable by default.
+-If you want to use SSLv2 in ruby, you need config with --enable-opensslv2.
+-The SSLv2 support is disable by default.
+-
+-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
+----
+- ext/openssl/extconf.rb |    8 ++++++++
+- ext/openssl/ossl_ssl.c |    2 ++
+- 2 files changed, 10 insertions(+), 0 deletions(-)
+-
+-diff --git a/ext/openssl/extconf.rb b/ext/openssl/extconf.rb
+-index b1f2d88..89c6f19 100644
+---- a/ext/openssl/extconf.rb
+-+++ b/ext/openssl/extconf.rb
+-@@ -33,6 +33,14 @@ if with_config("debug") or enable_config("debug")
+-   end
+- end
+- 
+-+## 
+-+## From openssl 1.0, SSLv2 becomes disable by default.
+-+## If you want to use SSLv2 in ruby, you need config with --enable-opensslv2.
+-+##
+-+if enable_config("opensslv2")
+-+  $defs << "-DENABLE_OPENSSLV2"
+-+end
+-+
+- message "=== Checking for system dependent stuff... ===\n"
+- have_library("nsl", "t_open")
+- have_library("socket", "socket")
+-diff --git a/ext/openssl/ossl_ssl.c b/ext/openssl/ossl_ssl.c
+-index d8951fb..d0c9059 100644
+---- a/ext/openssl/ossl_ssl.c
+-+++ b/ext/openssl/ossl_ssl.c
+-@@ -107,9 +107,11 @@ struct {
+-     OSSL_SSL_METHOD_ENTRY(TLSv1),
+-     OSSL_SSL_METHOD_ENTRY(TLSv1_server),
+-     OSSL_SSL_METHOD_ENTRY(TLSv1_client),
+-+#if defined(ENABLE_OPENSSLV2)
+-     OSSL_SSL_METHOD_ENTRY(SSLv2),
+-     OSSL_SSL_METHOD_ENTRY(SSLv2_server),
+-     OSSL_SSL_METHOD_ENTRY(SSLv2_client),
+-+#endif
+-     OSSL_SSL_METHOD_ENTRY(SSLv3),
+-     OSSL_SSL_METHOD_ENTRY(SSLv3_server),
+-     OSSL_SSL_METHOD_ENTRY(SSLv3_client),
+--- 
+-1.7.4.1
+-
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index d99fd1e..26db931 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-RUBY_VERSION = 1.9.2-p0
++RUBY_VERSION = 1.9.2-p290
+ RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
+ RUBY_AUTORECONF = YES
+ HOST_RUBY_AUTORECONF = YES
