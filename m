@@ -1,42 +1,64 @@
-From: Mike Davies <busybox_mail@rovoreed.com>
-Date: Mon, 05 Dec 2011 12:22:12 +0000
-Subject: [Buildroot] Problem building package usbutils under
- buildroot-2011.11
-In-Reply-To: <20111204214939.29b10ebe@skate>
-References: <1323013713.2865.9.camel@ceri>  <20111204214939.29b10ebe@skate>
-Message-ID: <1323087732.3037.2.camel@ceri>
+From: Daniel Mack <zonque@gmail.com>
+Date: Mon,  5 Dec 2011 13:33:18 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: add CONFIG_AP support
+Message-ID: <1323088398-32014-1-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2011-12-04 at 21:49 +0100, Thomas Petazzoni wrote:
-> Le Sun, 04 Dec 2011 15:48:33 +0000,
-> Mike Davies <busybox_mail@rovoreed.com> a ?crit :
-> 
-> > /bin/sh ../libtool --tag=CC   --mode=link /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc  -Os -Wall  -Os  -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -o usbhid-dump usbhid-dump.o ../lib/libusbhid_dump.la -lusb-1.0 
-> > libtool: link: /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc -Os -Wall -Os -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o usbhid-dump usbhid-dump.o  ../lib/.libs/libusbhid_dump.a /usr/local/lib/libusb-1.0.so -lrt -pthread -Wl,-rpath -Wl,/usr/local/lib -Wl,-rpath -Wl,/usr/local/lib
-> 
-> Here it's linking against /usr/local/lib/libusb-1.0.so and not the
-> libusb that has been built by Buildroot against uClibc and installed in
-> $(STAGING_DIR). A quick, but very ugly, workaround is to uninstall
-> libusb-dev from your development machine. But we need to find why
-> usbutils is preferring the host libusb instead of the one built by
-> Buildroot.
-> 
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+ package/wpa_supplicant/Config.in         |    9 +++++++++
+ package/wpa_supplicant/wpa_supplicant.mk |   11 +++++++++++
+ 2 files changed, 20 insertions(+), 0 deletions(-)
 
-
-Thanks for the reply. I can confirm I have now built the package by
-moving the following files (and then putting them back)
-
-[root at ceri br]# ls -al /usr/local/lib/libusb*
--rw-r--r--. 1 root root 316586 May 18  2011 /usr/local/lib/libusb-1.0.a
--rwxr-xr-x. 1 root root    955 May 18  2011 /usr/local/lib/libusb-1.0.la
-lrwxrwxrwx. 1 root root     19 May 18  2011 /usr/local/lib/libusb-1.0.so -> libusb-1.0.so.0.0.0
-lrwxrwxrwx. 1 root root     19 May 18  2011 /usr/local/lib/libusb-1.0.so.0 -> libusb-1.0.so.0.0.0
--rwxr-xr-x. 1 root root 195061 May 18  2011 /usr/local/lib/libusb-1.0.so.0.0.0
-[root at ceri br]#
-
-
-Mike
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index e3df2b4..aa2d196 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -23,3 +23,12 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	help
+ 	  Install wpa_passphrase command line utility
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
++	bool "Enable support for soft AP"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT
++	help
++	  With this option enabled, wpa_supplicant can act as
++	  access point. This can be used for open and WPA2-Personal networks
++          (optionally, with WPS); this links in parts of hostapd functionality
++          into wpa_supplicant.
++
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 96f64ca..f722b81 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -25,6 +25,16 @@ define WPA_SUPPLICANT_EAP_CONFIG
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
++define WPA_SUPPLICANT_AP_CONFIG
++	echo "CONFIG_AP=y" >>$(WPA_SUPPLICANT_CONFIG)
++endef
++else
++define WPA_SUPPLICANT_AP_CONFIG
++	$(SED) "s/^CONFIG_AP=y//" $(WPA_SUPPLICANT_CONFIG)
++endef
++endif
++
+ define WPA_SUPPLICANT_CRYPTO_CONFIG
+ 	echo "CONFIG_CRYPTO=internal" >>$(WPA_SUPPLICANT_CONFIG)
+ 	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(WPA_SUPPLICANT_CONFIG)
+@@ -69,6 +79,7 @@ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	$(WPA_SUPPLICANT_EAP_CONFIG)
+ 	$(WPA_SUPPLICANT_LIBNL_CONFIG)
+ 	$(WPA_SUPPLICANT_DBUS_CONFIG)
++	$(WPA_SUPPLICANT_AP_CONFIG)
+ endef
+ 
+ define WPA_SUPPLICANT_REMOVE_CLI
+-- 
+1.7.7.3
