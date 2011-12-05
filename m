@@ -1,146 +1,106 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 5 Dec 2011 09:27:01 +0100
-Subject: [Buildroot] [git commit] binutils: add version 2.22
-Message-ID: <20111205134653.0620D8F7A8@busybox.osuosl.org>
+Date: Mon, 5 Dec 2011 12:53:04 +0100
+Subject: [Buildroot] [git commit] binutils: 2.22 powerpc textrels fix
+Message-ID: <20111205134653.4F3428F7A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e9f7d6fd5df09e32c3313ee5ec1bf8a595ff5dd
+commit: http://git.buildroot.net/buildroot/commit/?id=7e96cbcc065b0ffdb5171e2701f4e6d7201fa867
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+See http://thread.gmane.org/gmane.comp.embedded.crossdev/106 for details.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/binutils/Config.in.host                    |    7 ++++-
- package/binutils/binutils-2.22/120-sh-conf.patch   |   29 ++++++++++++++++++++
- .../binutils-2.22/300-001_ld_makefile_patch.patch  |   24 ++++++++++++++++
- .../300-012_check_ldrunpath_length.patch           |   21 ++++++++++++++
- 4 files changed, 80 insertions(+), 1 deletions(-)
+ .../binutils/binutils-2.22/999-ppc-textrels.patch  |   80 ++++++++++++++++++++
+ 1 files changed, 80 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 756bc58..f829549 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -3,7 +3,7 @@ comment "Binutils Options"
- choice
- 	prompt "Binutils Version"
- 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
--	default BR2_BINUTILS_VERSION_2_21_1 if (BR2_UCLIBC_VERSION_0_9_32 || BR2_UCLIBC_VERSION_SNAPSHOT)
-+	default BR2_BINUTILS_VERSION_2_22 if (BR2_UCLIBC_VERSION_0_9_32 || BR2_UCLIBC_VERSION_SNAPSHOT)
- 	default BR2_BINUTILS_VERSION_2_21
- 	help
- 	  Select the version of binutils you wish to use.
-@@ -28,6 +28,10 @@ choice
- 		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_30 || BR2_UCLIBC_VERSION_0_9_31)
- 		bool "binutils 2.21.1"
- 
-+	config BR2_BINUTILS_VERSION_2_22
-+		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_30 || BR2_UCLIBC_VERSION_0_9_31)
-+		bool "binutils 2.22"
-+
- endchoice
- 
- config BR2_BINUTILS_VERSION
-@@ -37,6 +41,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
- 	default "2.21"		if BR2_BINUTILS_VERSION_2_21
- 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
-+	default "2.22"		if BR2_BINUTILS_VERSION_2_22
- 
- config BR2_BINUTILS_EXTRA_CONFIG_OPTIONS
- 	string "Additional binutils options"
-diff --git a/package/binutils/binutils-2.22/120-sh-conf.patch b/package/binutils/binutils-2.22/120-sh-conf.patch
+diff --git a/package/binutils/binutils-2.22/999-ppc-textrels.patch b/package/binutils/binutils-2.22/999-ppc-textrels.patch
 new file mode 100644
-index 0000000..ea3d1b6
+index 0000000..c1efacf
 --- /dev/null
-+++ b/package/binutils/binutils-2.22/120-sh-conf.patch
-@@ -0,0 +1,29 @@
-+r10231 | lethal | 2005-05-02 09:58:00 -0400 (Mon, 02 May 2005) | 13 lines
++++ b/package/binutils/binutils-2.22/999-ppc-textrels.patch
+@@ -0,0 +1,80 @@
++http://bugs.gentoo.org/392645
++http://sourceware.org/bugzilla/show_bug.cgi?id=13470
 +
-+Likewise, binutils has no idea about any of these new targets either, so we 
-+fix that up too.. now we're able to actually build a real toolchain for 
-+sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more 
-+inept targets than that one, really. Go look, I promise).
++2011-12-03  Alan Modra  <amodra@gmail.com>
 +
-+--- a/configure
-++++ b/configure
-+@@ -1495,7 +1495,7 @@
-+   mips*-*-*)
-+     noconfigdirs="$noconfigdirs gprof"
-+     ;;
-+-  sh-*-* | sh64-*-*)
-++  sh*-*-* | sh64-*-*)
-+     case "${target}" in
-+       sh*-*-elf)
-+          ;;
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -712,7 +712,7 @@
-+   mips*-*-*)
-+     noconfigdirs="$noconfigdirs gprof"
-+     ;;
-+-  sh-*-* | sh64-*-*)
-++  sh*-*-* | sh64-*-*)
-+     case "${target}" in
-+       sh*-*-elf)
-+          ;;
-diff --git a/package/binutils/binutils-2.22/300-001_ld_makefile_patch.patch b/package/binutils/binutils-2.22/300-001_ld_makefile_patch.patch
-new file mode 100644
-index 0000000..5cb0f61
---- /dev/null
-+++ b/package/binutils/binutils-2.22/300-001_ld_makefile_patch.patch
-@@ -0,0 +1,24 @@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.am binutils-2.17.50.0.17/ld/Makefile.am
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.am	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.am	2007-06-25 10:00:36.000000000 +0200
-+@@ -18,7 +18,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
++	PR ld/13470
++	* elf32-ppc.c (ppc_elf_copy_indirect_symbol): Revert substantive
++	change in 2011-07-01 commit.  Comment.
++	* elf64-ppc.c (ppc64_elf_copy_indirect_symbol): Likewise.
++
++===================================================================
++RCS file: /cvs/src/src/bfd/elf32-ppc.c,v
++retrieving revision 1.302.2.1
++retrieving revision 1.302.2.2
++diff -u -r1.302.2.1 -r1.302.2.2
++--- src/bfd/elf32-ppc.c	2011/11/15 11:36:52	1.302.2.1
+++++ src/bfd/elf32-ppc.c	2011/12/03 00:58:01	1.302.2.2
++@@ -2987,10 +2987,6 @@
++   edir->elf.needs_plt |= eind->elf.needs_plt;
++   edir->elf.pointer_equality_needed |= eind->elf.pointer_equality_needed;
 + 
-+ EMUL = @EMUL@
-+ EMULATION_OFILES = @EMULATION_OFILES@
-+diff -u binutils-2.17.50.0.17.oorig/ld/Makefile.in binutils-2.17.50.0.17/ld/Makefile.in
-+--- binutils-2.17.50.0.17.oorig/ld/Makefile.in	2007-06-18 19:29:29.000000000 +0200
-++++ binutils-2.17.50.0.17/ld/Makefile.in	2007-06-25 10:00:36.000000000 +0200
-+@@ -287,7 +287,7 @@
-+ # We put the scripts in the directory $(scriptdir)/ldscripts.
-+ # We can't put the scripts in $(datadir) because the SEARCH_DIR
-+ # directives need to be different for native and cross linkers.
-+-scriptdir = $(tooldir)/lib
-++scriptdir = $(libdir)
-+ BASEDIR = $(srcdir)/..
-+ BFDDIR = $(BASEDIR)/bfd
-+ INCDIR = $(BASEDIR)/include
-diff --git a/package/binutils/binutils-2.22/300-012_check_ldrunpath_length.patch b/package/binutils/binutils-2.22/300-012_check_ldrunpath_length.patch
-new file mode 100644
-index 0000000..df78310
---- /dev/null
-+++ b/package/binutils/binutils-2.22/300-012_check_ldrunpath_length.patch
-@@ -0,0 +1,21 @@
-+diff -Nura binutils-2.21.orig/ld/emultempl/elf32.em binutils-2.21/ld/emultempl/elf32.em
-+--- binutils-2.21.orig/ld/emultempl/elf32.em	2010-10-29 09:10:36.000000000 -0300
-++++ binutils-2.21/ld/emultempl/elf32.em	2010-12-10 09:26:56.746102724 -0300
-+@@ -1270,6 +1270,8 @@
-+ 	      && command_line.rpath == NULL)
-+ 	    {
-+ 	      lib_path = (const char *) getenv ("LD_RUN_PATH");
-++	      if ((lib_path) && (strlen (lib_path) == 0))
-++	      	lib_path = NULL;
-+ 	      if (gld${EMULATION_NAME}_search_needed (lib_path, &n,
-+ 						      force))
-+ 		break;
-+@@ -1497,6 +1499,8 @@
-+   rpath = command_line.rpath;
-+   if (rpath == NULL)
-+     rpath = (const char *) getenv ("LD_RUN_PATH");
-++  if ((rpath) && (strlen (rpath) == 0))
-++  	rpath = NULL;
++-  /* If we were called to copy over info for a weak sym, that's all.  */
++-  if (eind->elf.root.type != bfd_link_hash_indirect)
++-    return;
++-
++   if (eind->dyn_relocs != NULL)
++     {
++       if (edir->dyn_relocs != NULL)
++@@ -3022,6 +3018,16 @@
++       eind->dyn_relocs = NULL;
++     }
 + 
-+   for (abfd = link_info.input_bfds; abfd; abfd = abfd->link_next)
-+     if (bfd_get_flavour (abfd) == bfd_target_elf_flavour)
+++  /* If we were called to copy over info for a weak sym, that's all.
+++     You might think dyn_relocs need not be copied over;  After all,
+++     both syms will be dynamic or both non-dynamic so we're just
+++     moving reloc accounting around.  However, ELIMINATE_COPY_RELOCS 
+++     code in ppc_elf_adjust_dynamic_symbol needs to check for
+++     dyn_relocs in read-only sections, and it does so on what is the
+++     DIR sym here.  */
+++  if (eind->elf.root.type != bfd_link_hash_indirect)
+++    return;
+++
++   /* Copy over the GOT refcount entries that we may have already seen to
++      the symbol which just became indirect.  */
++   edir->elf.got.refcount += eind->elf.got.refcount;
++===================================================================
++RCS file: /cvs/src/src/bfd/elf64-ppc.c,v
++retrieving revision 1.363.2.4
++retrieving revision 1.363.2.5
++diff -u -r1.363.2.4 -r1.363.2.5
++--- src/bfd/elf64-ppc.c	2011/11/08 13:46:36	1.363.2.4
+++++ src/bfd/elf64-ppc.c	2011/12/03 00:58:02	1.363.2.5
++@@ -4435,10 +4435,6 @@
++   edir->elf.ref_regular_nonweak |= eind->elf.ref_regular_nonweak;
++   edir->elf.needs_plt |= eind->elf.needs_plt;
++ 
++-  /* If we were called to copy over info for a weak sym, that's all.  */
++-  if (eind->elf.root.type != bfd_link_hash_indirect)
++-    return;
++-
++   /* Copy over any dynamic relocs we may have on the indirect sym.  */
++   if (eind->dyn_relocs != NULL)
++     {
++@@ -4471,6 +4467,16 @@
++       eind->dyn_relocs = NULL;
++     }
++ 
+++  /* If we were called to copy over info for a weak sym, that's all.
+++     You might think dyn_relocs need not be copied over;  After all,
+++     both syms will be dynamic or both non-dynamic so we're just
+++     moving reloc accounting around.  However, ELIMINATE_COPY_RELOCS 
+++     code in ppc64_elf_adjust_dynamic_symbol needs to check for
+++     dyn_relocs in read-only sections, and it does so on what is the
+++     DIR sym here.  */
+++  if (eind->elf.root.type != bfd_link_hash_indirect)
+++    return;
+++
++   /* Copy over got entries that we may have already seen to the
++      symbol which just became indirect.  */
++   if (eind->elf.got.glist != NULL)
