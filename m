@@ -1,63 +1,133 @@
 From: Daniel Mack <zonque@gmail.com>
-Date: Mon, 05 Dec 2011 18:26:10 +0100
-Subject: [Buildroot] [PATCH v2] Add package connman
-In-Reply-To: <87obvnrsnv.fsf@macbook.be.48ers.dk>
-References: <20111205130056.GB30001@sapphire.tkos.co.il>
- <1323090955-5661-1-git-send-email-zonque@gmail.com>
- <87obvnrsnv.fsf@macbook.be.48ers.dk>
-Message-ID: <4EDCFEB2.60603@gmail.com>
+Date: Mon,  5 Dec 2011 18:30:41 +0100
+Subject: [Buildroot] [PATCH v3] Add package connman
+In-Reply-To: <4EDCFEB2.60603@gmail.com>
+References: <4EDCFEB2.60603@gmail.com>
+Message-ID: <1323106241-22192-1-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/05/2011 03:37 PM, Peter Korsgaard wrote:
->>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
->  Daniel> +config BR2_PACKAGE_CONNMAN_BLUETOOTH
->  Daniel> +	bool "enable Bluetooth support"
-> 
-> Does this not need BR2_PACKAGE_BLUEZ_UTILS?
+The ConnMan project provides a daemon for managing internet connections
+within embedded devices running the Linux operating system. The
+Connection Manager is designed to be slim and to use as few resources as
+possible, so it can be easily integrated. It is a fully modular system
+that can be extended, through plug-ins, to support all kinds of wired or
+wireless technologies. Also, configuration methods, like DHCP and domain
+name resolving, are implemented using plug-ins. The plug-in approach
+allows for easy adaption and modification for various use cases.
 
-Nope, it doesn't seem to need that. Just double-checked.
+The location for released tarballs is still unavailable due to the
+recent kernel.org outage, hence the package obtains the sources from git
+for now.
 
->  Daniel> +++ b/package/connman/connman.mk
->  Daniel> @@ -0,0 +1,21 @@
->  Daniel> +#######################################################
->  Daniel> +#
->  Daniel> +# connman - open source connection manager
->  Daniel> +#
->  Daniel> +#######################################################
->  Daniel> +
->  Daniel> +CONNMAN_VERSION = 0.77
->  Daniel> +CONNMAN_SITE = git://git.kernel.org/pub/scm/network/connman/connman.git
->  Daniel> +CONNMAN_DEPENDENCIES = libglib2 dbus iptables
->  Daniel> +CONNMAN_AUTORECONF = YES
-> 
-> Why? You don't seem to be editing configure.ac or similar.
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+Changelog:
+v3: bump to v0.78, drop --sysconfdir
+v2: replace ifeq-blocks with $(if $(BR2_PACKAGE_CONNMAN_FOO),--enable-foo,--disable-foo) constructs
+v1: initial
 
-I'm cloning from a git repository, for the reason described in the
-commit log. Hence, the configure script has to be generated.
+ package/Config.in          |    1 +
+ package/connman/Config.in  |   47 ++++++++++++++++++++++++++++++++++++++++++++
+ package/connman/connman.mk |   21 +++++++++++++++++++
+ 3 files changed, 69 insertions(+), 0 deletions(-)
+ create mode 100644 package/connman/Config.in
+ create mode 100644 package/connman/connman.mk
 
->  Daniel> +CONNMAN_CONF_OPT += --localstatedir=/var --sysconfdir=/etc \
-> 
-> --sysconfdir is automatically used by AUTOTARGETS, so you don't need to
-> explicitly pass it.
-
-Ok, I dropped that.
-
->  Daniel> +	$(if $(BR2_PACKAGE_CONNMAN_THREADS),--enable-threads,--disable-threads)		\
->  Daniel> +	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
->  Daniel> +	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
->  Daniel> +	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
-> 
-> You probably also need to add wpa_supplicant to CONNMAN_DEPENDENCIES
-
-As described in the other mail, wpa_supplicant is just a runtime dependency.
-
-I'll send a v3 that drops --sysconfdir and uses v0.78 which was just
-released.
-
-
-Thanks,
-Daniel
+diff --git a/package/Config.in b/package/Config.in
+index a781870..c94bcc0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -402,6 +402,7 @@ source "package/bmon/Config.in"
+ source "package/bridge-utils/Config.in"
+ source "package/bwm-ng/Config.in"
+ source "package/can-utils/Config.in"
++source "package/connman/Config.in"
+ source "package/ctorrent/Config.in"
+ source "package/cifs-utils/Config.in"
+ source "package/cups/Config.in"
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+new file mode 100644
+index 0000000..59f1a8d
+--- /dev/null
++++ b/package/connman/Config.in
+@@ -0,0 +1,47 @@
++menuconfig BR2_PACKAGE_CONNMAN
++	bool "connman"
++	depends on BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_IPTABLES
++	help
++	  The Connection Manager (ConnMan) project provides a daemon for
++	  managing internet connections within embedded devices running
++	  the Linux operating system.
++
++	  For more information, see http://connman.net/
++
++if BR2_PACKAGE_CONNMAN
++
++config BR2_PACKAGE_CONNMAN_THREADS
++	bool "enable threading support"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	default y
++
++config BR2_PACKAGE_CONNMAN_ETHERNET
++	bool "enable Ethernet support"
++	default y
++
++config BR2_PACKAGE_CONNMAN_WIFI
++	bool "enable WiFi support"
++	select BR2_PACKAGE_WPA_SUPPLICANT
++	default y
++
++config BR2_PACKAGE_CONNMAN_BLUETOOTH
++	bool "enable Bluetooth support"
++
++config BR2_PACKAGE_CONNMAN_LOOPBACK
++	bool "enable loopback support"
++
++config BR2_PACKAGE_CONNMAN_NTPD
++	bool "enable ntpd support"
++
++config BR2_PACKAGE_CONNMAN_DEBUG
++	bool "enable compiling with debugging information"
++
++config BR2_PACKAGE_CONNMAN_CLIENT
++	bool "enable command line client"
++
++endif # BR2_PACKAGE_CONNMAN
++
++comment "connman needs DBus enabled"
++	depends on !BR2_PACKAGE_DBUS
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+new file mode 100644
+index 0000000..8a34bd5
+--- /dev/null
++++ b/package/connman/connman.mk
+@@ -0,0 +1,21 @@
++#######################################################
++#
++# connman - open source connection manager
++#
++#######################################################
++
++CONNMAN_VERSION = 0.78
++CONNMAN_SITE = git://git.kernel.org/pub/scm/network/connman/connman.git
++CONNMAN_DEPENDENCIES = libglib2 dbus iptables
++CONNMAN_AUTORECONF = YES
++CONNMAN_CONF_OPT += --localstatedir=/var \
++	$(if $(BR2_PACKAGE_CONNMAN_THREADS),--enable-threads,--disable-threads)		\
++	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
++	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
++	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
++	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
++	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
++	$(if $(BR2_PACKAGE_CONNMAN_NTPD),--enable-ntpd,--disable-ntpd)			\
++	$(if $(BR2_PACKAGE_CONNMAN_CLIENT),--enable-client,--disable-client)
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.7.3
