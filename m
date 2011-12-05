@@ -1,36 +1,60 @@
-From: Daniel Mack <zonque@gmail.com>
-Date: Mon, 05 Dec 2011 20:32:34 +0100
-Subject: [Buildroot] [PATCH v2] Add package connman
-In-Reply-To: <20111205202028.75432ef3@skate>
-References: <20111205130056.GB30001@sapphire.tkos.co.il>
- <1323090955-5661-1-git-send-email-zonque@gmail.com>
- <87obvnrsnv.fsf@macbook.be.48ers.dk> <4EDCFEB2.60603@gmail.com>
- <20111205202028.75432ef3@skate>
-Message-ID: <4EDD1C52.1050907@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@anciens.enib.fr>
+Date: Mon, 5 Dec 2011 22:24:11 +0100
+Subject: [Buildroot] [PATCH 1/4] Allow user to pick uClibc version when
+	using ct-ng
+In-Reply-To: <1323108498-2398-2-git-send-email-will_wagner@carallon.com>
+References: <1323108498-2398-1-git-send-email-will_wagner@carallon.com>
+ <1323108498-2398-2-git-send-email-will_wagner@carallon.com>
+Message-ID: <201112052224.11404.yann.morin.1998@anciens.enib.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Will, All,
 
-On 12/05/2011 08:20 PM, Thomas Petazzoni wrote:
-> Le Mon, 05 Dec 2011 18:26:10 +0100,
-> Daniel Mack <zonque@gmail.com> a ?crit :
-> 
->> I'm cloning from a git repository, for the reason described in the
->> commit log. Hence, the configure script has to be generated.
-> 
-> Could you add a comment above the _AUTORECONF=YES line mentioning this
-> reason ?
+On Monday 05 December 2011 19:08:15 Will Wagner wrote:
+[--SNIP--]
+> diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> index 3a205dd..192c6ff 100644
+> --- a/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> +++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.mk
+> @@ -267,6 +267,13 @@ CTNG_FIX_DOT_CONFIG_PATHS_SED += s:^(CT_SYSROOT_DIR_PREFIX)=.*:\1="":;
+>  # uClibc specific options
+>  ifeq ($(BR2_TOOLCHAIN_CTNG_uClibc),y)
+>  
+> +# Set version
+> +ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32)),y)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_V)(.+)=y$$:\# \1\2 is not set\n\1_0_9_32=y:;
+-------------------------------------------------^^
 
-Really? The commit log already states the fact and the reason for the
-git checkout, and AFAIK, all packages that are pulled from upstream
-repositories have to have _AUTORECONF=YES, don't they?
+You missed the trailing underscore. Without it, the folowing option
+would also match: CT_LIBC_UCLIBC_VERBOSITY_0 (and _1 and _2, too).
 
-I can do that, I'm just wondering if that one comment line is worth
-another version :)
+Yes, I also forgot it in my answer to your initial mail, but I just
+wrote that regexp directly in the mail, and said:
+    "untested, may need some tweaking"
 
+;-)
 
-Daniel
+> +else ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30)),y)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_V)(.+)=y$$:\# \1\2 is not set\n\1_0_9_30_3=y:;
+-------------------------------------------------^^
+Ditto.
+
+You can resping an ammended patch with my:
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
