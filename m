@@ -1,34 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 Dec 2011 21:49:39 +0100
-Subject: [Buildroot] Problem building package usbutils under
- buildroot-2011.11
-In-Reply-To: <1323013713.2865.9.camel@ceri>
-References: <1323013713.2865.9.camel@ceri>
-Message-ID: <20111204214939.29b10ebe@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Dec 2011 09:25:46 +0100
+Subject: [Buildroot] [PATCH 1/4] nbd: bump to version 2.9.24
+In-Reply-To: <1322651462-20300-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 30 Nov 2011 08:10:59 -0300")
+References: <1322651462-20300-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d3c3tofp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 04 Dec 2011 15:48:33 +0000,
-Mike Davies <busybox_mail@rovoreed.com> a ?crit :
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> /bin/sh ../libtool --tag=CC   --mode=link /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc  -Os -Wall  -Os  -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64   -o usbhid-dump usbhid-dump.o ../lib/libusbhid_dump.la -lusb-1.0 
-> libtool: link: /home/mike/br/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc -Os -Wall -Os -fPIC -DPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o usbhid-dump usbhid-dump.o  ../lib/.libs/libusbhid_dump.a /usr/local/lib/libusb-1.0.so -lrt -pthread -Wl,-rpath -Wl,/usr/local/lib -Wl,-rpath -Wl,/usr/local/lib
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
+ Gustavo>  package/nbd/nbd.mk |    4 ++--
+ Gustavo>  1 files changed, 2 insertions(+), 2 deletions(-)
 
-Here it's linking against /usr/local/lib/libusb-1.0.so and not the
-libusb that has been built by Buildroot against uClibc and installed in
-$(STAGING_DIR). A quick, but very ugly, workaround is to uninstall
-libusb-dev from your development machine. But we need to find why
-usbutils is preferring the host libusb instead of the one built by
-Buildroot.
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
