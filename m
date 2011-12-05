@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 05 Dec 2011 14:46:25 +0100
-Subject: [Buildroot] [PATCH 4/4] ruby: bump to version 1.9.2-p290
-In-Reply-To: <1322651462-20300-4-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 30 Nov 2011 08:11:02 -0300")
-References: <1322651462-20300-1-git-send-email-gustavo@zacarias.com.ar>
- <1322651462-20300-4-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wrabrv0u.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 5 Dec 2011 09:22:25 +0100
+Subject: [Buildroot] [git commit] nbd: bump to version 2.9.24
+Message-ID: <20111205134651.E2CFC8F7A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=72958d1e4cddfc349527f9c9479f174b08ae7203
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/nbd/nbd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 69a55ae..d9d0a85 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
+ 
+-NBD_VERSION = 2.9.15
++NBD_VERSION = 2.9.24
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
+-NBD_SITE=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/nbd/
++NBD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/nbd/
+ NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
+ NBD_DEPENDENCIES = libglib2
+ 
