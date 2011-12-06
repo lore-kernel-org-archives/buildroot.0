@@ -1,22 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 Dec 2011 20:01:49 +0100
-Subject: [Buildroot] [PATCH v2] netsnmp: bump to 5.7.1 LTS
-In-Reply-To: <1323190211-8150-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Tue, 6 Dec 2011 17:50:11 +0100")
-References: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
- <1323190211-8150-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87d3c1r0bm.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  6 Dec 2011 20:18:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 4327] I use the i686-linux-gcc-4.6.1 compiled
+ grub-0.97 does not work
+In-Reply-To: <bug-4327-163@https.bugs.busybox.net/>
+References: <bug-4327-163@https.bugs.busybox.net/>
+Message-ID: <20111206201837.96E788F7CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4327
 
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Committed, thanks.
+--- Comment #2 from Jaap Crezee <jaap@jcz.nl> 2011-12-06 20:18:36 UTC ---
+Same problem over here when using buildroot-2011.11, selecting gcc-4.6.x and
+'using' buildroot compiled grub.
+The generated file stage2 seems corrupt (it is not recognized as being a grub
+component by 'file' which works fine on other systems with grub 0.97)...
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
