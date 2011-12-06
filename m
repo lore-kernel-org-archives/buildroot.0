@@ -1,66 +1,66 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 6 Dec 2011 09:56:05 -0600
-Subject: [Buildroot] buildroot with SquashFS root file system
-In-Reply-To: <4EDE32C3.7020400@neotion.com>
-References: <4EDE32C3.7020400@neotion.com>
-Message-ID: <201112060956.07523.minimod@morethan.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue,  6 Dec 2011 17:50:11 +0100
+Subject: [Buildroot] [PATCH v2] netsnmp: bump to 5.7.1 LTS
+In-Reply-To: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
+References: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1323190211-8150-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue December 6 2011, Emmanuel BOUAZIZ wrote:
-> 
-> Hi,
-> 
-> I'm trying to run buildroot 2011.11 on an atom based board, booting via PXE.
-> 
-> I've selected the SquashFS 4.x root filesystem (xz compressed), bzImage as the Kernel binary format, and
-> syslinux/pxelinux as the  bootloader.
-> In the system configuration, I checked "remount root filesystem read-write during boot"
-> 
-> In the kernel configuration, I checked Initial RAM filesystem and RAM disk support+XZ, and SquashFS/XZ filesystem support.
-> 
-> On the PXE server, I put these kernel parameters: append vga=0x305 fbcon=scrollback:4096k initrd=rootfs.squashfs
-> 
-> Here is what I get during the boot sequence:
-> 
-> (...)
-> RAMDISK: squashfs filesystem found at block 0
-> RAMDISK: Loading 14133KiB [1 disk] into ram disk.../
-> usb 1-7: new high speed USB device number 3 using ehci_hcd
-> VFS: Mounted root (squashfs filesystem) readonly on device 1:0
-> usb 2-2: new full speed USB device number 2 using uhci_hcd
-> can't open /dev/null: No such file or directory
-> can't open /dev/null: No such file or directory
-> can't open /dev/null: No such file or directory
-> can't open /dev/null: No such file or directory
-> can't open /dev/null: No such file or directory
-> can't open /dev/null: No such file or directory
-> Starting logging: OK
-> Starting mdev...
-> mdev: /sys/class: No such file or directory
-> Starting network...
-> hub 2-2:1.0: USB found
-> hub 2-2:1.0: 3 ports detected
-> ifup: can't open '/var/run/ifstate': Read-only file system
-> (...)
-> 
-> I get the exact same result if I try to use a cramfs instead of a SquashFS.
-> 
-> Oddly enough, it works perfectly with a cpio root filesystem, or when I integrate the root filesystem as an initramfs in
-> the kernel image.
-> 
-> I probably missed an important item, but can't figure which. 
-> Any help appreciated. 
-> 
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+Changed in v2:
+ - added patch to fix crash on uClibc. Thanks Gustavo Zacarias for reporting,
+   with request to test it as I do not have a target where I can reproduce the
+   problem.
 
-SquashFS is a read-only file system.
+PS: Peter, I wonder if Gustavo should have a SoB line on this patch, since he
+did a significant part of the work. If it is the case, is it something
+that I should have done, or is this your role as a maintainer? Thanks.
 
-So which of the "device support" options did you choose?
-You'll need one that puts devices in something writable, like tmpfs.
+ package/netsnmp/netsnmp-swinst-crash.patch |   17 +++++++++++++++++
+ package/netsnmp/netsnmp.mk                 |    2 +-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
+ create mode 100644 package/netsnmp/netsnmp-swinst-crash.patch
 
-Mike
-> Thanks,
-> 
+diff --git a/package/netsnmp/netsnmp-swinst-crash.patch b/package/netsnmp/netsnmp-swinst-crash.patch
+new file mode 100644
+index 0000000..f7298a6
+--- /dev/null
++++ b/package/netsnmp/netsnmp-swinst-crash.patch
+@@ -0,0 +1,17 @@
++Fixes runtime error with uClibc (and possibly others).
++
++Original patch and bug description:
++http://sourceforge.net/tracker/?func=detail&aid=3436528&group_id=12694&atid=312694
++
++--- net-snmp-5.7.1/agent/mibgroup/host/data_access/swinst_pkginfo.c
+++++ /home/fabled//net-snmp-5.7.1.patched/agent/mibgroup/host/data_access/swinst_pkginfo.c
++@@ -140,7 +140,8 @@
++         memcpy( entry->swDate, cp, date_len );
++         entry->swDate_len = date_len;
++     }
++-    closedir( d );
+++    if (d != NULL)
+++        closedir( d );
++ 
++     DEBUGMSGTL(("swinst:load:arch"," loaded %d entries\n",
++                 (int)CONTAINER_SIZE(container)));
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 5d789b9..959e39f 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-NETSNMP_VERSION = 5.6.1.1
++NETSNMP_VERSION = 5.7.1
+ NETSNMP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/net-snmp
+ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+ NETSNMP_INSTALL_STAGING = YES
+-- 
+1.7.5.4
