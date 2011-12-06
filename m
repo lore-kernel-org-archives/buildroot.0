@@ -1,26 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 06 Dec 2011 07:43:14 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Dec 2011 11:48:01 +0100
 Subject: [Buildroot] [PATCH] netsnmp: bump to 5.7.1 LTS
-In-Reply-To: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
+In-Reply-To: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 6 Dec 2011 10:43:23 +0100")
 References: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <ef682c5dfbfcc25c3eaec14233e080a5@zacarias.com.ar>
+Message-ID: <87ty5eq8m6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06.12.2011 06:43, Luca Ceresoli wrote:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-> -NETSNMP_VERSION = 5.6.1.1
-> +NETSNMP_VERSION = 5.7.1
->  NETSNMP_SITE =
-> 
-> http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/net-snmp
->  NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
->  NETSNMP_INSTALL_STAGING = YES
+ Luca> ---
+ Luca>  package/netsnmp/netsnmp.mk |    2 +-
+ Luca>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-NAK.
-The 5.7 series (up to 5.7.1) fails miserably with a segfault on 
-powerpc.
-Regards.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
