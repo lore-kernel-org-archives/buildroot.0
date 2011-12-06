@@ -1,33 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 06 Dec 2011 08:15:39 -0300
-Subject: [Buildroot] [PATCH] netsnmp: bump to 5.7.1 LTS
-In-Reply-To: <4EDDF849.7020607@comelit.it>
-References: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
- <ef682c5dfbfcc25c3eaec14233e080a5@zacarias.com.ar>
- <4EDDF849.7020607@comelit.it>
-Message-ID: <cf520906005257f394e77ac57ed45b13@zacarias.com.ar>
+From: Daniel Mack <zonque@gmail.com>
+Date: Tue,  6 Dec 2011 12:45:58 +0100
+Subject: [Buildroot] [PATCH 2/3] libffi: enable host target
+In-Reply-To: <1323171959-24873-1-git-send-email-zonque@gmail.com>
+References: <1323171959-24873-1-git-send-email-zonque@gmail.com>
+Message-ID: <1323171959-24873-3-git-send-email-zonque@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06.12.2011 08:11, Luca Ceresoli wrote:
+libffi is a new requirement for libglib, and as libglib has to be built
+for the host as well, libffi has to follow.
 
->> NAK.
->> The 5.7 series (up to 5.7.1) fails miserably with a segfault on 
->> powerpc.
->
-> Thanks for your information.
->
-> Did you report this to the net-snmp mailing list to get help and,
-> hopefully, a fix?
-> It's disappointing that all buildroot users must stick to an old
-> version of a package because it's not working in some configurations.
->
-> Luca
+Signed-off-by: Daniel Mack <zonque@gmail.com>
+---
+ package/libffi/libffi.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Not yet, i need a meaningful trace rather than just pointing fingers.
-I'll try to give it some time today but no promises, i'm pretty 
-stretched lately.
-Regards.
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 5ada36d..e9e87ef 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -32,4 +32,5 @@ endef
+ LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
+ 
+ $(eval $(call AUTOTARGETS))
++$(eval $(call AUTOTARGETS,host))
+ 
+-- 
+1.7.7.3
