@@ -1,40 +1,23 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue,  6 Dec 2011 21:52:02 +0100
-Subject: [Buildroot] [PATCH 3/4] sqlite: refactor how CFLAGS are passed to
-	the configure script
-In-Reply-To: <1323204723-6020-1-git-send-email-s.neumann@raumfeld.com>
-References: <1323204723-6020-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1323204723-6020-3-git-send-email-s.neumann@raumfeld.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  6 Dec 2011 20:54:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 4327] I use the i686-linux-gcc-4.6.1 compiled
+ grub-0.97 does not work
+In-Reply-To: <bug-4327-163@https.bugs.busybox.net/>
+References: <bug-4327-163@https.bugs.busybox.net/>
+Message-ID: <20111206205453.527098F7CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Change the way the SQLITE_CONF_ENV variable is constructed in
-preparation of passing other CFLAGS to the configure script.
+https://bugs.busybox.net/show_bug.cgi?id=4327
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/sqlite/sqlite.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+--- Comment #3 from Jaap Crezee <jaap@jcz.nl> 2011-12-06 20:54:52 UTC ---
+No problem with grub when using gcc 4.5.x (file stage2 recognises grub
+component...).
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index f587f47..0bee337 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -13,9 +13,11 @@ ifneq ($(BR2_LARGEFILE),y)
- # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
- # --disable-largefile is passed, breaking the build. Work around it by
- # simply adding it to CFLAGS for configure instead
--SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DSQLITE_DISABLE_LFS"
-+SQLITE_CFLAGS += -DSQLITE_DISABLE_LFS
- endif
- 
-+SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
-+
- SQLITE_CONF_OPT = \
- 	--enable-threadsafe \
- 	--localstatedir=/var
 -- 
-1.7.5.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
