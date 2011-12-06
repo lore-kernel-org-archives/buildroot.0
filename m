@@ -1,28 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 06 Dec 2011 13:54:45 -0300
-Subject: [Buildroot] [PATCH v2] netsnmp: bump to 5.7.1 LTS
-In-Reply-To: <1323190211-8150-1-git-send-email-luca@lucaceresoli.net>
-References: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
- <1323190211-8150-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <287e5c4ef8ea1be48eb0c2427016988c@zacarias.com.ar>
+From: Emmanuel BOUAZIZ <ebouaziz@neotion.com>
+Date: Tue, 06 Dec 2011 18:59:02 +0100
+Subject: [Buildroot] buildroot with SquashFS root file system
+In-Reply-To: <201112060956.07523.minimod@morethan.org>
+References: <4EDE32C3.7020400@neotion.com>
+ <201112060956.07523.minimod@morethan.org>
+Message-ID: <4EDE57E6.4040007@neotion.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06.12.2011 13:50, Luca Ceresoli wrote:
 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+On 12/06/2011 04:56 PM, Michael S. Zick wrote:
+> SquashFS is a read-only file system.
+> 
+> So which of the "device support" options did you choose?
+> You'll need one that puts devices in something writable, like tmpfs.
+> 
+Hi Michael,
+thank you for your answer.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I'm not sure what you mean by "device support" options.
+I enabled mdev and in the kernel's generic driver options, I checked "Maintain a devtmpfs filesystem to mount at /dev"
+and "Automount devtmpfs at /dev after the kernel mounted the rootfs"
 
-> PS: Peter, I wonder if Gustavo should have a SoB line on this patch, 
-> since he
-> did a significant part of the work. If it is the case, is it 
-> something
-> that I should have done, or is this your role as a maintainer? 
-> Thanks.
+regards,
 
-It's actually something i should do as above :)
-Thanks!
+-- 
+Emmanuel
