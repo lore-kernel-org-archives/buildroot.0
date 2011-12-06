@@ -1,68 +1,34 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Tue, 06 Dec 2011 12:19:28 +0000
-Subject: [Buildroot] [PATCH 2/4] Supply better default uClibc config
- file when using ct-ng
-In-Reply-To: <5b4fbca78f7b4e45fa487a81d96270a5@zacarias.com.ar>
-References: <1323108498-2398-1-git-send-email-will_wagner@carallon.com>
- <1323108498-2398-3-git-send-email-will_wagner@carallon.com>
- <201112052233.51317.yann.morin.1998@anciens.enib.fr>
- <5b4fbca78f7b4e45fa487a81d96270a5@zacarias.com.ar>
-Message-ID: <4EDE0850.10502@carallon.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 06 Dec 2011 09:20:41 -0300
+Subject: [Buildroot] [PATCH] netsnmp: bump to 5.7.1 LTS
+In-Reply-To: <4EDDF849.7020607@comelit.it>
+References: <1323164603-5503-1-git-send-email-luca@lucaceresoli.net>
+ <ef682c5dfbfcc25c3eaec14233e080a5@zacarias.com.ar>
+ <4EDDF849.7020607@comelit.it>
+Message-ID: <dc31ce84ed5d15142ad8641869a5bedb@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/2011 00:44, Gustavo Zacarias wrote:
-> On 05.12.2011 18:33, Yann E. MORIN wrote:
+On 06.12.2011 08:11, Luca Ceresoli wrote:
+
+>> NAK.
+>> The 5.7 series (up to 5.7.1) fails miserably with a segfault on 
+>> powerpc.
 >
->> Will and Gustavo, please coordinate with each other:
->>
->> - Will wants to reference that file to commonalise the uClibc
->> configuration
->> files between the internal backend and the crosstool-NG backend, see:
->> http://lists.busybox.net/pipermail/buildroot/2011-December/048123.html
->>
->> - Gustavo wants to remove the file because the internal toolchain backend
->> is dropping support for uClibc-0.9.30; see:
->> http://lists.busybox.net/pipermail/buildroot/2011-December/048099.html
->>
->> I am not sure what the proper resolution could be. Surely enough, I think
->> what Will wants to do is the correct way: use a single (set of) files for
->> both backends. Also, the internal backend should not be impacted by some
->> requirements of the ct-ng backend.
->>
->> Anyway, in the meantime, because Gustavo's patch is not yet applied...
->> Will, you can add my:
->> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
->>
->> Regards,
->> Yann E. MORIN.
+> Thanks for your information.
 >
-> It's quite simple actually, if we support any form of uClibc 0.9.30.x
-> there are packages which won't build unless functionality backporting is
-> done.
-> For example udev needs needs 99c1547124d7f410a3e3db66aa5816e53a96c156
-> for 0.9.31 (and would so for 0.9.30.x)
-> Any takers for undeprecating and testing a ton of packages against
-> 0.9.30.x?
-> Maybe the backporting is there for ct-ng toolchains?
-> Regards.
+> Did you report this to the net-snmp mailing list to get help and,
+> hopefully, a fix?
+> It's disappointing that all buildroot users must stick to an old
+> version of a package because it's not working in some configurations.
 >
+> Luca
 
-I had not noticed that 0.9.30 was marked as deprecated, added that to ct-ng.
-
-Not sure we need to rush to remove 0.9.30 as it is already marked 
-deprecated, but when we do remove it I guess we should remove from ct-ng 
-toolchains as well.
-
-Will
-
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Digging up found that bad mojo with closedir() and uclibc was to blame.
+It's already been reported and a patch available at 
+http://sourceforge.net/tracker/?func=detail&aid=3436528&group_id=12694&atid=312694
+Tested working so add up the patch, respin and we're good to go.
+Regards.
