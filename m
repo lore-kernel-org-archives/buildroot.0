@@ -1,30 +1,40 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue,  6 Dec 2011 21:52:00 +0100
-Subject: [Buildroot] [PATCH 1/4] sqlite: bump to version 3.7.9
-Message-ID: <1323204723-6020-1-git-send-email-s.neumann@raumfeld.com>
+Date: Tue,  6 Dec 2011 21:52:01 +0100
+Subject: [Buildroot] [PATCH 2/4] sqlite: remove obsolete configure options
+In-Reply-To: <1323204723-6020-1-git-send-email-s.neumann@raumfeld.com>
+References: <1323204723-6020-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1323204723-6020-2-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop options that are unknown to the configure script.
+
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 ---
- package/sqlite/sqlite.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/sqlite/sqlite.mk |    8 +++-----
+ 1 files changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 10fe9fe..5391d86 100644
+index 5391d86..f587f47 100644
 --- a/package/sqlite/sqlite.mk
 +++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+@@ -16,11 +16,9 @@ ifneq ($(BR2_LARGEFILE),y)
+ SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DSQLITE_DISABLE_LFS"
+ endif
  
--SQLITE_VERSION = 3070800
-+SQLITE_VERSION = 3070900
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org
- SQLITE_INSTALL_STAGING = YES
+-SQLITE_CONF_OPT =	--enable-tempstore=yes \
+-			--enable-threadsafe \
+-			--enable-releasemode \
+-			--disable-tcl \
+-			--localstatedir=/var
++SQLITE_CONF_OPT = \
++	--enable-threadsafe \
++	--localstatedir=/var
+ 
+ ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
+ SQLITE_DEPENDENCIES += ncurses readline
 -- 
 1.7.5.4
