@@ -1,30 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Dec 2011 10:00:46 +0100
-Subject: [Buildroot] [git commit] fs/skeleton: make /var/lib/misc a symlink
-	to /tmp
-Message-ID: <20111206090153.C65248F72F@busybox.osuosl.org>
+Date: Tue, 06 Dec 2011 10:13:52 +0100
+Subject: [Buildroot] Kernel panic!
+In-Reply-To: <1F383CDA589639468828C7E2B75EDE9D096BB9DE@POCITMSEXMB02.LntUniverse.com>
+ (Mahanteshwari Hiremath's message of "Tue, 6 Dec 2011 09:04:41 +0000")
+References: <1F383CDA589639468828C7E2B75EDE9D096BB9DE@POCITMSEXMB02.LntUniverse.com>
+Message-ID: <87y5uqqcz3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fe83751e8fcbe1c3b1883c1773c2e0e7a520730b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Mahanteshwari" == Mahanteshwari Hiremath <Mahanteshwari.Hiremath@lnties.com> writes:
 
-Similar to the other symlinks, so you can use E.G. dnsmasq with a read
-only rootfs.
+ Mahanteshwari> Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/skeleton/var/lib/misc |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Mahanteshwari>     I am trying use buildroot built root file system for
+ Mahanteshwari>  my embedded target board. I am able to boot my system
+ Mahanteshwari>  partially, it stops at some point saying /sbin/init:
+ Mahanteshwari>  cannot load libc.so.0, kernel panic-not
+ Mahanteshwari>  syncing:Attempted to kill init
 
-diff --git a/fs/skeleton/var/lib/misc b/fs/skeleton/var/lib/misc
-new file mode 120000
-index 0000000..f1fde8c
---- /dev/null
-+++ b/fs/skeleton/var/lib/misc
-@@ -0,0 +1 @@
-+../../tmp
-\ No newline at end of file
+Buildroot related questions should go to the buildroot list (addressed
+in this mail). Please reply (only to the buildroot list) with more
+details about your system, E.G. your hw platform and your buildroot
+version and configuration (run make savedefconfig and send the defconfig
+file).
+
+Thanks.
+
+-- 
+Bye, Peter Korsgaard
