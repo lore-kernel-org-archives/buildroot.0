@@ -1,34 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Dec 2011 09:49:09 +0100
-Subject: [Buildroot] [git commit] dnsmasq: create runtime directory
-Message-ID: <20111206090153.701488F72F@busybox.osuosl.org>
+Date: Tue, 6 Dec 2011 10:00:46 +0100
+Subject: [Buildroot] [git commit] fs/skeleton: make /var/lib/misc a symlink
+	to /tmp
+Message-ID: <20111206090153.C65248F72F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=09be7e24e567c3cb93bec0978a9ee64c396168cc
+commit: http://git.buildroot.net/buildroot/commit/?id=fe83751e8fcbe1c3b1883c1773c2e0e7a520730b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-$(TARGET_DIR)/var/lib/misc/ is the location where dnsmasq stores its
-lease files. Create it to make the daemon work.
+Similar to the other symlinks, so you can use E.G. dnsmasq with a read
+only rootfs.
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dnsmasq/dnsmasq.mk |    1 +
+ fs/skeleton/var/lib/misc |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 0f8db9d..fc43abd 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -57,6 +57,7 @@ endef
- 
- define DNSMASQ_INSTALL_TARGET_CMDS
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPT) install
-+	mkdir -p $(TARGET_DIR)/var/lib/misc/
- endef
- 
- define DNSMASQ_UNINSTALL_TARGET_CMDS
+diff --git a/fs/skeleton/var/lib/misc b/fs/skeleton/var/lib/misc
+new file mode 120000
+index 0000000..f1fde8c
+--- /dev/null
++++ b/fs/skeleton/var/lib/misc
+@@ -0,0 +1 @@
++../../tmp
+\ No newline at end of file
