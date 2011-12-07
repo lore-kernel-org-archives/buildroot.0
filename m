@@ -1,127 +1,39 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 07 Dec 2011 14:08:04 +0100
-Subject: [Buildroot] [PATCH] Rework of shutdown policy in inittab
-In-Reply-To: <CAAXf6LU1QuFL=pOD09e0dzA1ntsauaFSD2qUr-OPEbmXB74fyw@mail.gmail.com>
-References: <1314966310-4360-1-git-send-email-maxime.ripard@free-electrons.com>
- <CAAXf6LU1QuFL=pOD09e0dzA1ntsauaFSD2qUr-OPEbmXB74fyw@mail.gmail.com>
-Message-ID: <4EDF6534.4090409@free-electrons.com>
+From: Attila Kinali <attila@kinali.ch>
+Date: Wed, 7 Dec 2011 16:34:25 +0100
+Subject: [Buildroot] building .sb files for freescale i.MX processors
+In-Reply-To: <4EDF279D.3080608@free.fr>
+References: <20111201222951.4a52c7aa.attila@kinali.ch>
+ <4EDF279D.3080608@free.fr>
+Message-ID: <20111207163425.b9027f8a.attila@kinali.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/12/2011 07:52, Thomas De Schampheleire wrote:
-> Hi,
+Salut Julien,
+
+On Wed, 07 Dec 2011 09:45:17 +0100
+Julien Boibessot <julien.boibessot@free.fr> wrote:
+
+> On 01/12/2011 22:29, Attila Kinali wrote:
+> > Has anyone ever successulfy made .sb files for freescales i.MX processors 
+> > of the u-boot or the kernel outside LTIB? If so, could you give me
+> > a hand? I can create .sb files, but the resulting files do not boot.
 > 
-> On Fri, Sep 2, 2011 at 2:25 PM, Maxime Ripard
-> <maxime.ripard@free-electrons.com> wrote:
->> This commit follows commit ad501b66. Start up of the busybox logging
->> daemons were moved to an init script but the shutdown were still
->> performed in inittab. This commit moves the shutdown policy to an
->> rcK script that calls the stop function of all the init scripts in
->> a reversed order.
->>
->> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
->> ---
->>  fs/skeleton/etc/init.d/rcK |   27 +++++++++++++++++++++++++++
->>  fs/skeleton/etc/inittab    |    3 +--
->>  2 files changed, 28 insertions(+), 2 deletions(-)
->>  create mode 100755 fs/skeleton/etc/init.d/rcK
->>
->> diff --git a/fs/skeleton/etc/init.d/rcK b/fs/skeleton/etc/init.d/rcK
->> new file mode 100755
->> index 0000000..59e9c54
->> --- /dev/null
->> +++ b/fs/skeleton/etc/init.d/rcK
->> @@ -0,0 +1,27 @@
->> +#!/bin/sh
->> +
->> +
->> +# Stop all init scripts in /etc/init.d
->> +# executing them in reversed numerical order.
->> +#
->> +for i in $(ls -r /etc/init.d/S??*) ;do
->> +
->> +     # Ignore dangling symlinks (if any).
->> +     [ ! -f "$i" ] && continue
->> +
->> +     case "$i" in
->> +       *.sh)
->> +           # Source shell script for speed.
->> +           (
->> +               trap - INT QUIT TSTP
->> +               set stop
->> +               . $i
->> +           )
->> +           ;;
->> +       *)
->> +           # No sh extension, so fork subprocess.
->> +           $i stop
->> +           ;;
->> +    esac
->> +done
->> +
->> diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
->> index ac410d6..85881f4 100644
->> --- a/fs/skeleton/etc/inittab
->> +++ b/fs/skeleton/etc/inittab
->> @@ -30,8 +30,7 @@ null::sysinit:/bin/hostname -F /etc/hostname
->>  ::ctrlaltdel:/sbin/reboot
->>
->>  # Stuff to do before rebooting
->> -null::shutdown:/usr/bin/killall klogd
->> -null::shutdown:/usr/bin/killall syslogd
->> +null::shutdown:/etc/init.d/rcK
->>  null::shutdown:/bin/umount -a -r
->>  null::shutdown:/sbin/swapoff -a
-> 
-> This is a different behavior now. Before only the logging daemons were
-> killed, now all init scripts are run.
-> 
-> For this to work properly, all init scripts that users have in
-> /etc/init.d should actually have a stop() function. Since this
-> behavior was not required previously, I expect several users not to
-> have this.
-> For such users, a reboot would suddenly trigger several
-> initializations that are unexpected.
+> We (Armadeus) are currently working on it for our i.MX28 based SOM.
+> Feel free to follow our progress on our SourceForge repository.
 
-I have to admit, I didn't think about in-the-wild users in such a case.
+Cool! Thanks a lot. I'll dig trough your code.
 
-> I think there are at least two solutions:
-> 1. Keep the new behavior created with this patch, but make sure that
-> the release notes clearly state this behavior change and update the
-> documentation.
+> We will send our patches to Buildroot as soon as we are satisfied with them.
 
-I hardly see how this is a new behaviour, every single init scripts we
-have already implements it, and we require it to.
+Hmm.. maybe i can add the i.MX23 code as well. Lets see..
 
-> 2. Adapt the new behavior: currently you are following
-> /etc/init.d/Sxxxx files/links, while I think that the default policy
-> on many distributions is to use /etc/init.d/Kxxxx for shutdown (and
-> Sxxxx only for startup).
+			Attila Kinali
 
-The only one doing that I can think of is OpenWRT, it is barely many.
-
-> In this scenario, users who have custom Sxxx
-> init scripts will not be impacted. Only if they choose to, can they
-> create appropriate Kxxxx links and provide stop functions.
-> For scripts present in the buildroot distribution, we can provide
-> appropriate S and K links immediately.
-
-You're right.
-
-I'm glad we can finally have that sort of discussion, I was starting to
-think every one had a dev/null rule for my patches.
-
-However, this touches the same area than my systemd patches, so I'd
-prefer not to touch the same area in every packages in such a small time
-frame. So maybe the easier way would be to merge such as mechanism with
-the init mechanism introduced with these patches.
-
-Maxime
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+The trouble with you, Shev, is you don't say anything until you've saved
+up a whole truckload of damned heavy brick arguments and then you dump
+them all out and never look at the bleeding body mangled beneath the heap
+		-- Tirin, The Dispossessed, U. Le Guin
