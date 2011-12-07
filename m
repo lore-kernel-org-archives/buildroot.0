@@ -1,34 +1,41 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 07 Dec 2011 19:55:31 +0100
-Subject: [Buildroot] [PATCH 4/4] sqlite: add option to enable additional
- query optimizations (stat3)
-In-Reply-To: <CAAXf6LWGTLq_m9WXA4iu_b86cWMAqPa5=prqws2Kd5vgdQkZ=Q@mail.gmail.com>
-References: <1323204723-6020-1-git-send-email-s.neumann@raumfeld.com>
- <1323204723-6020-4-git-send-email-s.neumann@raumfeld.com>
- <CAAXf6LWGTLq_m9WXA4iu_b86cWMAqPa5=prqws2Kd5vgdQkZ=Q@mail.gmail.com>
-Message-ID: <1323284131.8394.1.camel@bender>
+Date: Wed,  7 Dec 2011 20:00:09 +0100
+Subject: [Buildroot] [PATCH 3/4] sqlite: refactor how CFLAGS are passed to
+	the configure script
+In-Reply-To: <1323284410-8884-1-git-send-email-s.neumann@raumfeld.com>
+References: <1323284410-8884-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1323284410-8884-3-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2011-12-07 at 07:57 +0100, Thomas De Schampheleire wrote:
-> On Tue, Dec 6, 2011 at 9:52 PM, Sven Neumann <s.neumann@raumfeld.com> wrote:
-> > +config BR2_PACKAGE_SQLITE_STAT3
-> > +       bool "Additional query optimizations (stat3)"
-> > +       depends on BR2_PACKAGE_SQLITE
-> > +       help
-> > +         Adds additional logic to the ANALYZE command and to the query
-> > +         planner that can help SQLite to chose a better query plan under
-> 
-> s/chose/choose/
+Change the way the SQLITE_CONF_ENV variable is constructed in
+preparation of passing other CFLAGS to the configure script.
 
-Actually that typo should be fixed upstream in the sqlite documentation
-then ;-)
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ package/sqlite/sqlite.mk |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Thanks for the review, I'll resubmit the patch-set with the typo fixed
-and your Reviewed-by: added.
-
-
-Sven
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index f587f47..0bee337 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -13,9 +13,11 @@ ifneq ($(BR2_LARGEFILE),y)
+ # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
+ # --disable-largefile is passed, breaking the build. Work around it by
+ # simply adding it to CFLAGS for configure instead
+-SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DSQLITE_DISABLE_LFS"
++SQLITE_CFLAGS += -DSQLITE_DISABLE_LFS
+ endif
+ 
++SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
++
+ SQLITE_CONF_OPT = \
+ 	--enable-threadsafe \
+ 	--localstatedir=/var
+-- 
+1.7.5.4
