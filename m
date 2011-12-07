@@ -1,22 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Dec 2011 22:16:04 +0100
-Subject: [Buildroot] [PATCH 1/2] uClibc: add unshare() syscall support
-In-Reply-To: <1323090042-3435-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 5 Dec 2011 10:00:41 -0300")
-References: <1323090042-3435-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fwgwaxrf.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 7 Dec 2011 21:47:53 +0100
+Subject: [Buildroot] [git commit] ebtables: bump to version 2.0.10-3
+Message-ID: <20111207213522.AEFC98F8BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7cbb85c15065aa02c425747c4d5df15c1934fd33
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Add unshare() syscall support for uClibc 0.9.31 and 0.9.32 series.
- Gustavo> This is required by newer versions of iproute2.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ebtables/ebtables.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index 6cfdfdc..b29c462 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -3,7 +3,8 @@
+ # ebtables
+ #
+ #############################################################
+-EBTABLES_VERSION = 2.0.10-1
++
++EBTABLES_VERSION = 2.0.10-3
+ EBTABLES_SOURCE = ebtables-v$(EBTABLES_VERSION).tar.gz
+ EBTABLES_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/ebtables
+ 
