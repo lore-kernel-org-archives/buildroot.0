@@ -1,118 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 7 Dec 2011 20:48:08 +0100
-Subject: [Buildroot] [git commit] Add Armadeus systems APF9328 support.
-Message-ID: <20111207195041.0DF398F778@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Dec 2011 21:04:10 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: add CONFIG_AP support
+In-Reply-To: <1323088398-32014-1-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Mon, 5 Dec 2011 13:33:18 +0100")
+References: <1323088398-32014-1-git-send-email-zonque@gmail.com>
+Message-ID: <87aa74cfnp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=88f95f82b71faf845a0041c93011939d8f560350
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-The APF9328 is an i.MXL+FPGA based SOM (System On Module). Here only minimal
-support is added: booting Linux kernel (UART, Ethernet and NOR), Buildroot
-toolchain and JFFS2 rootfs.
+ Daniel> Signed-off-by: Daniel Mack <zonque@gmail.com>
+ Daniel> ---
+ Daniel>  package/wpa_supplicant/Config.in         |    9 +++++++++
+ Daniel>  package/wpa_supplicant/wpa_supplicant.mk |   11 +++++++++++
+ Daniel>  2 files changed, 20 insertions(+), 0 deletions(-)
 
-[Peter: Remove redundant BR2_TARGET_OPTIMIZATION]
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...1.1-0001-fixes_arm_mach-types_for_apf9328.patch |   26 ++++++++++++++++
- ...002-add_missing_config_option_for_apf9328.patch |   16 ++++++++++
- configs/armadeus_apf9328_defconfig                 |   31 ++++++++++++++++++++
- 3 files changed, 73 insertions(+), 0 deletions(-)
+ Daniel> diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+ Daniel> index e3df2b4..aa2d196 100644
+ Daniel> --- a/package/wpa_supplicant/Config.in
+ Daniel> +++ b/package/wpa_supplicant/Config.in
+ Daniel> @@ -23,3 +23,12 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ Daniel>  	help
+ Daniel>  	  Install wpa_passphrase command line utility
+ 
+ Daniel> +config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ Daniel> +	bool "Enable support for soft AP"
+ Daniel> +	depends on BR2_PACKAGE_WPA_SUPPLICANT
+ Daniel> +	help
+ Daniel> +	  With this option enabled, wpa_supplicant can act as
+ Daniel> +	  access point. This can be used for open and WPA2-Personal networks
+ Daniel> +          (optionally, with WPS); this links in parts of hostapd functionality
+ Daniel> +          into wpa_supplicant.
 
-diff --git a/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch b/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
-new file mode 100644
-index 0000000..aa464a3
---- /dev/null
-+++ b/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
-@@ -0,0 +1,26 @@
-+From 053ba505eb0d40287ac5750daf454af0aed2ce75 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
-+Date: Tue, 4 Oct 2011 14:19:58 +0200
-+Subject: [PATCH 1/2] [ARM] mach-types: Re-add apf9328
-+
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
-+---
-+ arch/arm/tools/mach-types |    1 +
-+ 1 files changed, 1 insertions(+), 0 deletions(-)
-+
-+diff --git a/arch/arm/tools/mach-types b/arch/arm/tools/mach-types
-+index fff68d0..07811a7 100644
-+--- a/arch/arm/tools/mach-types
-++++ b/arch/arm/tools/mach-types
-+@@ -188,6 +188,7 @@ omap_2430sdp		MACH_OMAP_2430SDP	OMAP_2430SDP		900
-+ davinci_evm		MACH_DAVINCI_EVM	DAVINCI_EVM		901
-+ palmz72			MACH_PALMZ72		PALMZ72			904
-+ nxdb500			MACH_NXDB500		NXDB500			905
-++apf9328			MACH_APF9328		APF9328			906
-+ palmt5			MACH_PALMT5		PALMT5			917
-+ palmtc			MACH_PALMTC		PALMTC			918
-+ omap_apollon		MACH_OMAP_APOLLON	OMAP_APOLLON		919
-+-- 
-+1.7.3.4
-+
-diff --git a/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch b/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
-new file mode 100644
-index 0000000..312b9a0
---- /dev/null
-+++ b/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
-@@ -0,0 +1,16 @@
-+APF9328 needs CONFIG_MTD_CFI_INTELEXT to boot on its NOR FLASH.
-+
-+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
-+
-+Index: linux-3.1.1/arch/arm/mach-imx/Kconfig
-+===================================================================
-+--- linux-3.1.1.orig/arch/arm/mach-imx/Kconfig	2011-11-16 14:45:55.000000000 +0100
-++++ linux-3.1.1/arch/arm/mach-imx/Kconfig	2011-11-16 14:47:20.000000000 +0100
-+@@ -84,6 +84,7 @@
-+ 	bool "APF9328"
-+ 	select SOC_IMX1
-+ 	select IMX_HAVE_PLATFORM_IMX_UART
-++	select MTD_CFI_INTELEXT
-+ 	help
-+ 	  Say Yes here if you are using the Armadeus APF9328 development board
-+ 
-diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
-new file mode 100644
-index 0000000..945d385
---- /dev/null
-+++ b/configs/armadeus_apf9328_defconfig
-@@ -0,0 +1,31 @@
-+# Architecture
-+BR2_arm=y
-+BR2_arm920t=y
-+
-+# Toolchain
-+BR2_STRIP_sstrip=y
-+BR2_GCC_VERSION_4_4_X=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_GDB_HOST=y
-+BR2_ENABLE_LOCALE_PURGE=y
-+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="apf9328"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_JFFS2=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.1"
-+BR2_LINUX_KERNEL_PATCH="board/armadeus/apf9328"
-+BR2_LINUX_KERNEL_DEFCONFIG="mx1"
+The indentation is wrong, otherwise it looks good, committed thanks.
+
+-- 
+Bye, Peter Korsgaard
