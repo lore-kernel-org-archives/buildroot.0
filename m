@@ -1,41 +1,35 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed,  7 Dec 2011 20:00:08 +0100
-Subject: [Buildroot] [PATCH 2/4] sqlite: remove obsolete configure options
-In-Reply-To: <1323284410-8884-1-git-send-email-s.neumann@raumfeld.com>
-References: <1323284410-8884-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1323284410-8884-2-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 Dec 2011 20:25:42 +0100
+Subject: [Buildroot] [PATCH v4] Add package connman
+In-Reply-To: <1323127621-10775-1-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Tue, 6 Dec 2011 00:27:01 +0100")
+References: <877h2asivx.fsf@macbook.be.48ers.dk>
+ <1323127621-10775-1-git-send-email-zonque@gmail.com>
+Message-ID: <87iplschft.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop options that are unknown to the configure script.
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- package/sqlite/sqlite.mk |    8 +++-----
- 1 files changed, 3 insertions(+), 5 deletions(-)
+ Daniel> The ConnMan project provides a daemon for managing internet
+ Daniel> connections within embedded devices running the Linux operating
+ Daniel> system. The Connection Manager is designed to be slim and to
+ Daniel> use as few resources as possible, so it can be easily
+ Daniel> integrated. It is a fully modular system that can be extended,
+ Daniel> through plug-ins, to support all kinds of wired or wireless
+ Daniel> technologies. Also, configuration methods, like DHCP and domain
+ Daniel> name resolving, are implemented using plug-ins. The plug-in
+ Daniel> approach allows for easy adaption and modification for various
+ Daniel> use cases.
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 5391d86..f587f47 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -16,11 +16,9 @@ ifneq ($(BR2_LARGEFILE),y)
- SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DSQLITE_DISABLE_LFS"
- endif
- 
--SQLITE_CONF_OPT =	--enable-tempstore=yes \
--			--enable-threadsafe \
--			--enable-releasemode \
--			--disable-tcl \
--			--localstatedir=/var
-+SQLITE_CONF_OPT = \
-+	--enable-threadsafe \
-+	--localstatedir=/var
- 
- ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
- SQLITE_DEPENDENCIES += ncurses readline
+Thanks, committed with minor changes:
+
+ - The Kconfig logic to only enable on glibc/eglibc/uclibc snapshot
+ - Use start-stop-daemon in initscript
+ - Install client/cm to target if --enable-client is used
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
