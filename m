@@ -1,93 +1,46 @@
-From: Kelvin Cheung <keguang.zhang@gmail.com>
-Date: Wed, 7 Dec 2011 12:31:00 +0800
-Subject: [Buildroot] [PATCH] Rework of shutdown policy in inittab
-In-Reply-To: <1314966310-4360-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1314966310-4360-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <CAJhJPsWpE2JTuwwVbXDSLQ3PAjFUsF4v561r_p7YPpD6nCe1-Q@mail.gmail.com>
+From: sangam shetty <sangam8245@gmail.com>
+Date: Wed, 7 Dec 2011 11:39:51 +0530
+Subject: [Buildroot] ST-Ericsson Snowball
+Message-ID: <CADcT_i0WXyEU2D88=_iD5Zntem+GpBqeoK1hHRuq_L=oVGv42w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This policy seems more reasonable.
+Hi All,
+    I got a snowball board recently. I downloaded the Latest buildroot and
+built the cross_compiler for the same(arm-cortex-A9). I wrote a simple
+hello world program to see if i have build the things correctly. When i
+execute the hello world on the snowball board it is coming up with the
+following error :
 
-2011/9/2 Maxime Ripard <maxime.ripard@free-electrons.com>
+root at linaro-desktop:/home/linaro# ls -l hello
+-rwxrwxrwx 1 root root 4346 2000-01-01 00:04 hello
+root at linaro-desktop:/home/linaro# file hello
+hello: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked
+(uses shared libs), not stripped
+root at linaro-desktop:/home/linaro# ./hello
+-bash: ./hello: No such file or directory
+root at linaro-desktop:/home/linaro# ls -l ./hello
+-rwxrwxrwx 1 root root 4346 2000-01-01 00:04 ./hello
+root at linaro-desktop:/home/linaro#
 
-> This commit follows commit ad501b66. Start up of the busybox logging
-> daemons were moved to an init script but the shutdown were still
-> performed in inittab. This commit moves the shutdown policy to an
-> rcK script that calls the stop function of all the init scripts in
-> a reversed order.
->
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-> ---
->  fs/skeleton/etc/init.d/rcK |   27 +++++++++++++++++++++++++++
->  fs/skeleton/etc/inittab    |    3 +--
->  2 files changed, 28 insertions(+), 2 deletions(-)
->  create mode 100755 fs/skeleton/etc/init.d/rcK
->
-> diff --git a/fs/skeleton/etc/init.d/rcK b/fs/skeleton/etc/init.d/rcK
-> new file mode 100755
-> index 0000000..59e9c54
-> --- /dev/null
-> +++ b/fs/skeleton/etc/init.d/rcK
-> @@ -0,0 +1,27 @@
-> +#!/bin/sh
-> +
-> +
-> +# Stop all init scripts in /etc/init.d
-> +# executing them in reversed numerical order.
-> +#
-> +for i in $(ls -r /etc/init.d/S??*) ;do
-> +
-> +     # Ignore dangling symlinks (if any).
-> +     [ ! -f "$i" ] && continue
-> +
-> +     case "$i" in
-> +       *.sh)
-> +           # Source shell script for speed.
-> +           (
-> +               trap - INT QUIT TSTP
-> +               set stop
-> +               . $i
-> +           )
-> +           ;;
-> +       *)
-> +           # No sh extension, so fork subprocess.
-> +           $i stop
-> +           ;;
-> +    esac
-> +done
-> +
-> diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
-> index ac410d6..85881f4 100644
-> --- a/fs/skeleton/etc/inittab
-> +++ b/fs/skeleton/etc/inittab
-> @@ -30,8 +30,7 @@ null::sysinit:/bin/hostname -F /etc/hostname
->  ::ctrlaltdel:/sbin/reboot
->
->  # Stuff to do before rebooting
-> -null::shutdown:/usr/bin/killall klogd
-> -null::shutdown:/usr/bin/killall syslogd
-> +null::shutdown:/etc/init.d/rcK
->  null::shutdown:/bin/umount -a -r
->  null::shutdown:/sbin/swapoff -a
->
-> --
-> 1.7.4.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Can someone tell me what wrong i did or there is no support for snowball in
+buildroot. Attachment contains the buildroot config after doing make
+menuconfig.
 
+waiting for your replay.
 
-
--- 
-Best Regards!
-Kelvin
+wwr,
+sangamesh
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111207/141e5576/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111207/0427b10c/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config
+Type: application/octet-stream
+Size: 20021 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111207/0427b10c/attachment-0001.obj>
