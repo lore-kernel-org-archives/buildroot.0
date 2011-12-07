@@ -1,75 +1,54 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 07 Dec 2011 11:32:17 +0100
-Subject: [Buildroot] [PATCH 3/3] xdm: install startup script
-In-Reply-To: <1318238520-16580-3-git-send-email-yegorslists@googlemail.com>
-References: <1318238520-16580-1-git-send-email-yegorslists@googlemail.com>
- <1318238520-16580-3-git-send-email-yegorslists@googlemail.com>
-Message-ID: <4EDF40B1.7090303@visionsystems.de>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 7 Dec 2011 11:37:07 +0100
+Subject: [Buildroot] [PATCH 1/1] Add new package libesmtp library for
+	sending mail through smtp
+Message-ID: <F1714CE52FFD41F7963A43CAB26BF2BC@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 10.10.2011 11:22, schrieb yegorslists at googlemail.com:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> install S99xdm to /etc/init.d to start XDM automatically
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/x11r7/xapp_xdm/S99xdm      |   27 +++++++++++++++++++++++++++
->  package/x11r7/xapp_xdm/xapp_xdm.mk |    6 ++++++
->  2 files changed, 33 insertions(+), 0 deletions(-)
->  create mode 100644 package/x11r7/xapp_xdm/S99xdm
-> 
-> diff --git a/package/x11r7/xapp_xdm/S99xdm b/package/x11r7/xapp_xdm/S99xdm
-> new file mode 100644
-> index 0000000..57b5d92
-> --- /dev/null
-> +++ b/package/x11r7/xapp_xdm/S99xdm
-> @@ -0,0 +1,27 @@
-> +#!/bin/sh
-> +
-> +XDM_BIN=/usr/bin/xdm
-> +
-> +case "$1" in
-> +    start)
-> +        echo -n "Starting XDM: "
-> +        $XDM_BIN
-> +        echo "done"
-> +        ;;
-> +    stop)
-> +	echo "Stopping XDM"
-> +        killall -q xdm
-> +        ;;
-> +    restart)
-> +        /etc/init.d/S99xdm stop
-> +        /etc/init.d/S99xdm start
-> +        ;;
-> +    *)
-> +        echo "Usage: $0 {start|stop|restart}"
-> +        exit 1
-> +        ;;
-> +esac
-> +
-> +
-> +exit 0
-> +
-> diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
-> index 81e2acd..d0fc2fc 100644
-> --- a/package/x11r7/xapp_xdm/xapp_xdm.mk
-> +++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
-> @@ -11,4 +11,10 @@ XAPP_XDM_CONF_ENV = ac_cv_file__dev_urandom=yes
->  XAPP_XDM_DEPENDENCIES = xapp_xinit xapp_sessreg xapp_xrdb xlib_libX11 xlib_libXaw xlib_libXdmcp xlib_libXinerama xlib_libXt xproto_xineramaproto xproto_xproto
->  XAPP_XDM_CONF_OPT = --with-utmp-file=/var/adm/utmpx --with-wtmp-file=/var/adm/wtmpx
->  
-> +define XAPP_XDM_INSTALL_STARTUP_SCRIPT
-> +	$(INSTALL) -m 0755 package/x11r7/xapp_xdm/S99xdm $(TARGET_DIR)/etc/init.d/S99xdm
-> +endef
-> +
-> +XAPP_XDM_POST_INSTALL_TARGET_HOOKS += XAPP_XDM_INSTALL_STARTUP_SCRIPT
-> +
->  $(eval $(call AUTOTARGETS))
 
-ping?
+Add new package libesmtp  library for sending mail through smtp
+
+
+diff -rupN buildroot-2011.11/package/libesmtp/Config.in
+buildroot-2011.11js/package/libesmtp/Config.in
+--- buildroot-2011.11/package/libesmtp/Config.in	1970-01-01
+01:00:00.000000000 +0100
++++ buildroot-2011.11js/package/libesmtp/Config.in	2011-12-03
+20:20:00.000000000 +0100
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBESMTP
++	bool "libesmtp"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Library for smtp mailing
++	  
++	  http://www.stafford.uklinux.net/libesmtp
+diff -rupN buildroot-2011.11/package/libesmtp/libesmtp.mk
+buildroot-2011.11js/package/libesmtp/libesmtp.mk
+--- buildroot-2011.11/package/libesmtp/libesmtp.mk	1970-01-01
+01:00:00.000000000 +0100
++++ buildroot-2011.11js/package/libesmtp/libesmtp.mk	2011-12-03
+20:20:00.000000000 +0100
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libesmtp
++#
++#############################################################
++LIBESMTP_VERSION = 1.0.6
++LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
++LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
++LIBESMTP_DEPENDENCIES = openssl
++LIBESMTP_INSTALL_STAGING = YES
++LIBESMTP_INSTALL_TARGET = YES
++#LIBESMTP_CONF_OPT = --disable-libftdipp --without-docs --with-examples
++
++$(eval $(call AUTOTARGETS,package,libesmtp))
+
+
+
+Johan
