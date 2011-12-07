@@ -1,73 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 7 Dec 2011 13:56:19 +0200
-Subject: [Buildroot] [PATCH 1/1] Add new package libesmtp library for
- sending mail through smtp
-In-Reply-To: <F1714CE52FFD41F7963A43CAB26BF2BC@JohanW7>
-References: <F1714CE52FFD41F7963A43CAB26BF2BC@JohanW7>
-Message-ID: <20111207115619.GA3306@sapphire.tkos.co.il>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Wed, 7 Dec 2011 20:09:20 +0800
+Subject: [Buildroot] [PATCH] linux: support "local" as download method
+In-Reply-To: <1323255396-28263-1-git-send-email-tjlee@ambarella.com>
+References: <1323255396-28263-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <CAEvN+1j08xz+a+sz_3vmUa8tQ18xnv+9KR2MA9E_ub-SZeerEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sagaert,
+Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
+---
+?linux/Config.in | ? 10 ++++++++++
+?linux/linux.mk ?| ? ?3 +++
+?2 files changed, 13 insertions(+), 0 deletions(-)
 
-On Wed, Dec 07, 2011 at 11:37:07AM +0100, Sagaert Johan wrote:
-> Add new package libesmtp  library for sending mail through smtp
+diff --git a/linux/Config.in b/linux/Config.in
+index dc6aa73..4053c41 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -53,6 +53,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
+? ? ? ? ?This option allows Buildroot to get the Linux kernel source
+? ? ? ? ?code from a Git repository.
 
-You need to sign off your patches for them to be applied.
++config BR2_LINUX_KERNEL_CUSTOM_LOCAL
++ ? ? ? bool "Custom local source tree"
++ ? ? ? help
++ ? ? ? ? This option allows Buildroot to get the Linux kernel source
++ ? ? ? ? code from a local repository.
++
+?endchoice
 
-> diff -rupN buildroot-2011.11/package/libesmtp/Config.in
-> buildroot-2011.11js/package/libesmtp/Config.in
-> --- buildroot-2011.11/package/libesmtp/Config.in	1970-01-01
-> 01:00:00.000000000 +0100
-> +++ buildroot-2011.11js/package/libesmtp/Config.in	2011-12-03
-> 20:20:00.000000000 +0100
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBESMTP
-> +	bool "libesmtp"
-> +	select BR2_PACKAGE_OPENSSL
-> +	help
-> +	  Library for smtp mailing
-> +	  
-> +	  http://www.stafford.uklinux.net/libesmtp
-> diff -rupN buildroot-2011.11/package/libesmtp/libesmtp.mk
-> buildroot-2011.11js/package/libesmtp/libesmtp.mk
-> --- buildroot-2011.11/package/libesmtp/libesmtp.mk	1970-01-01
-> 01:00:00.000000000 +0100
-> +++ buildroot-2011.11js/package/libesmtp/libesmtp.mk	2011-12-03
-> 20:20:00.000000000 +0100
-> @@ -0,0 +1,14 @@
-> +#############################################################
-> +#
-> +# libesmtp
-> +#
-> +#############################################################
-> +LIBESMTP_VERSION = 1.0.6
-> +LIBESMTP_SOURCE = libesmtp-$(LIBESMTP_VERSION).tar.bz2
-> +LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
-> +LIBESMTP_DEPENDENCIES = openssl
-> +LIBESMTP_INSTALL_STAGING = YES
-> +LIBESMTP_INSTALL_TARGET = YES
+?config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+@@ -72,6 +78,10 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+? ? ? ?string "Custom Git version"
+? ? ? ?depends on BR2_LINUX_KERNEL_CUSTOM_GIT
 
-Not needed; this is the default.
-
-> +#LIBESMTP_CONF_OPT = --disable-libftdipp --without-docs --with-examples
-
-Why is this commented out?
-
-> +
-> +$(eval $(call AUTOTARGETS,package,libesmtp))
-
-Current versions of Buildroot don't need those extra AUTOTARGETS parameters.  
-Just do:
-
-$(eval $(call AUTOTARGETS))
-
-baruch
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
++config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
++ ? ? ? string "Custom Local path"
++ ? ? ? depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
++
+?config BR2_LINUX_KERNEL_VERSION
+? ? ? ?string
+? ? ? ?default "3.1.4" if BR2_LINUX_KERNEL_3_1
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5c5a1d2..d5617a2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -13,6 +13,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
+?else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+?LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
+?LINUX_SITE_METHOD = git
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
++LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
++LINUX_SITE_METHOD = local
+?else
+?LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
+?# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+--
+1.7.8
