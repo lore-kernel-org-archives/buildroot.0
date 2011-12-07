@@ -1,117 +1,127 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Dec 2011 18:23:36 +0100
-Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
-	no suitable tar can be found
-In-Reply-To: <d4b15640ce2d3ab89835.1322053785@devws108>
-References: <patchbomb.1322053783@devws108>
- <d4b15640ce2d3ab89835.1322053785@devws108>
-Message-ID: <201112061823.36798.arnout@mind.be>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Wed, 07 Dec 2011 09:54:56 +0100
+Subject: [Buildroot] [PATCH v2] Add Armadeus systems APF9328 support.
+In-Reply-To: <1321640272-20793-1-git-send-email-julien.boibessot@free.fr>
+References: <1321640272-20793-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <4EDF29E0.4000701@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 23 November 2011 14:59:59 Thomas De Schampheleire wrote:
-> diff --git a/toolchain/dependencies/check-host-tar.mk b/toolchain/dependencies/check-host-tar.mk
+ping
+
+On 18/11/2011 19:17, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+>
+> The APF9328 is an i.MXL+FPGA based SOM (System On Module). Here only minimal
+> support is added: booting Linux kernel (UART, Ethernet and NOR), Buildroot
+> toolchain and JFFS2 rootfs.
+>
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
+> ---
+>  Changes since v1:
+>  - Took remarks of Thomas Petazzoni for defconfig into account + beautify it
+>
+>  ...1.1-0001-fixes_arm_mach-types_for_apf9328.patch |   26 ++++++++++++++++
+>  ...002-add_missing_config_option_for_apf9328.patch |   16 ++++++++++
+>  configs/armadeus_apf9328_defconfig                 |   32 ++++++++++++++++++++
+>  3 files changed, 74 insertions(+), 0 deletions(-)
+>  create mode 100644 board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
+>  create mode 100644 board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
+>  create mode 100644 configs/armadeus_apf9328_defconfig
+>
+> diff --git a/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch b/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
 > new file mode 100644
+> index 0000000..aa464a3
 > --- /dev/null
-> +++ b/toolchain/dependencies/check-host-tar.mk
+> +++ b/board/armadeus/apf9328/linux-3.1.1-0001-fixes_arm_mach-types_for_apf9328.patch
+> @@ -0,0 +1,26 @@
+> +From 053ba505eb0d40287ac5750daf454af0aed2ce75 Mon Sep 17 00:00:00 2001
+> +From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
+> +Date: Tue, 4 Oct 2011 14:19:58 +0200
+> +Subject: [PATCH 1/2] [ARM] mach-types: Re-add apf9328
+> +
+> +
+> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@armadeus.com>
+> +---
+> + arch/arm/tools/mach-types |    1 +
+> + 1 files changed, 1 insertions(+), 0 deletions(-)
+> +
+> +diff --git a/arch/arm/tools/mach-types b/arch/arm/tools/mach-types
+> +index fff68d0..07811a7 100644
+> +--- a/arch/arm/tools/mach-types
+> ++++ b/arch/arm/tools/mach-types
+> +@@ -188,6 +188,7 @@ omap_2430sdp		MACH_OMAP_2430SDP	OMAP_2430SDP		900
+> + davinci_evm		MACH_DAVINCI_EVM	DAVINCI_EVM		901
+> + palmz72			MACH_PALMZ72		PALMZ72			904
+> + nxdb500			MACH_NXDB500		NXDB500			905
+> ++apf9328			MACH_APF9328		APF9328			906
+> + palmt5			MACH_PALMT5		PALMT5			917
+> + palmtc			MACH_PALMTC		PALMTC			918
+> + omap_apollon		MACH_OMAP_APOLLON	OMAP_APOLLON		919
+> +-- 
+> +1.7.3.4
+> +
+> diff --git a/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch b/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
+> new file mode 100644
+> index 0000000..312b9a0
+> --- /dev/null
+> +++ b/board/armadeus/apf9328/linux-3.1.1-0002-add_missing_config_option_for_apf9328.patch
+> @@ -0,0 +1,16 @@
+> +APF9328 needs CONFIG_MTD_CFI_INTELEXT to boot on its NOR FLASH.
+> +
+> +Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> +
+> +Index: linux-3.1.1/arch/arm/mach-imx/Kconfig
+> +===================================================================
+> +--- linux-3.1.1.orig/arch/arm/mach-imx/Kconfig	2011-11-16 14:45:55.000000000 +0100
+> ++++ linux-3.1.1/arch/arm/mach-imx/Kconfig	2011-11-16 14:47:20.000000000 +0100
+> +@@ -84,6 +84,7 @@
+> + 	bool "APF9328"
+> + 	select SOC_IMX1
+> + 	select IMX_HAVE_PLATFORM_IMX_UART
+> ++	select MTD_CFI_INTELEXT
+> + 	help
+> + 	  Say Yes here if you are using the Armadeus APF9328 development board
+> + 
+> diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
+> new file mode 100644
+> index 0000000..b985e6d
+> --- /dev/null
+> +++ b/configs/armadeus_apf9328_defconfig
 > @@ -0,0 +1,32 @@
-> +TAR ?= tar
+> +# Architecture
+> +BR2_arm=y
+> +BR2_arm920t=y
 > +
-> +# To extract tar, we always need a real (system) tar. Provide the necessary
-> +# definitions here to avoid cluttering package/tar/tar.mk .
-> +# TAR will be overridden again when the tar .mk file is included, so we must
-> +# finalize the value of SYSTEM_TAR by using :=
-> +SYSTEM_TAR := $(TAR)
-> +# Automatically detect tar --strip-path/components option
-> +# --strip-path was renamed to --strip-components in tar 1.15
-> +SYSTEM_TAR_STRIP_COMPONENTS := \
-> +    $(shell $(SYSTEM_TAR) --help | grep strip-path > /dev/null ; \
-> +    if test $$? = 0 ; then \
-> +     echo '--strip-path' ; \
-> +    else \
-> +     echo '--strip-components' ; \
-> +    fi)
-
- This can move inside the ifneq below, with a 
-SYSTEM_TAR_STRIP_COMPONENTS := $(HOST_TAR_STRIP_COMPONENTS)
-in the else (and moving that one up of course).
-
+> +# Toolchain
+> +BR2_STRIP_sstrip=y
+> +BR2_GCC_VERSION_4_4_X=y
+> +BR2_PACKAGE_GDB=y
+> +BR2_PACKAGE_GDB_HOST=y
+> +BR2_ENABLE_LOCALE_PURGE=y
+> +BR2_TARGET_OPTIMIZATION="-Os -pipe"
+> +BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> +BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+> +BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+> +BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
 > +
-> +# Determine correct HOST_TAR
-> +ifneq (,$(call suitable-host-package,tar))
-> +  HOST_TAR = $(SYSTEM_TAR)
-> +else
-> +  DEPENDENCIES_HOST_PREREQ += host-tar
-> +  HOST_TAR = $(HOST_DIR)/usr/bin/tar
-> +endif
+> +# System
+> +BR2_TARGET_GENERIC_HOSTNAME="apf9328"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
+> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
 > +
-> +# Since HOST_TAR is at least 1.17, it will certainly support --strip-components
-> +HOST_TAR_STRIP_COMPONENTS = --strip-components
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_JFFS2=y
 > +
-> +# Set definitions used by all .mk files included after this one and before
-> +# package/tar/tar.mk
-> +TAR = $(HOST_TAR)
-> +TAR_STRIP_COMPONENTS = $(HOST_TAR_STRIP_COMPONENTS)
-> diff --git a/toolchain/dependencies/check-host-tar.sh b/toolchain/dependencies/check-host-tar.sh
-> new file mode 100755
-> --- /dev/null
-> +++ b/toolchain/dependencies/check-host-tar.sh
-> @@ -0,0 +1,29 @@
-> +#!/bin/sh
-> +
-> +tar=`which tar`
-
- This contradicts the TAR ?= tar in check-host-tar.mk: if the user provided
-their own tar version, it isn't checked and host-tar will still be built...
-I guess $TAR should be given as an argument to this script.
-
-> +if [ -z "$tar" ]; then
-> +	return
-> +fi
-
- This could be a [ ! -x "$tar" ]
-and it should be exit 1, not return.
-
- Regards,
- Arnout
-
-
-> +
-> +# Output of 'tar --version' examples:
-> +# tar (GNU tar) 1.15.1 
-> +# tar (GNU tar) 1.25
-> +version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
-> +major=`echo "$version" | cut -d. -f1`
-> +minor=`echo "$version" | cut -d. -f2`
-> +bugfix=`echo "$version" | cut -d. -f3`
-> +
-> +# Minimal version = 1.17 (previous versions do not correctly unpack archives
-> +# containing hard-links if the --strip-components option is used).
-> +major_min=1
-> +minor_min=17
-> +if [ $major -gt $major_min ]; then
-> +	echo $tar
-> +else
-> +	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
-> +		echo $tar
-> +	else
-> +		false
-> +		# echo nothing: no suitable tar found
-> +	fi
-> +fi
-> 
-> 
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111206/4fce0ba6/attachment.html>
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1.1"
+> +BR2_LINUX_KERNEL_PATCH="board/armadeus/apf9328"
+> +BR2_LINUX_KERNEL_DEFCONFIG="mx1"
