@@ -1,133 +1,59 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 8 Dec 2011 09:05:46 -0600
-Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
-	no suitable tar can be found
-In-Reply-To: <201112080813.43996.minimod@morethan.org>
-References: <patchbomb.1322053783@devws108>
- <CAAXf6LVqXTShGnjV7cDON6jU-yWGi0wrGCaZVHZAFJUystnNQg@mail.gmail.com>
- <201112080813.43996.minimod@morethan.org>
-Message-ID: <201112080905.48711.minimod@morethan.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  8 Dec 2011 15:17:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 4484] libstdc++ has _GLIBCXX_HAVE_FENV_H undefined
+ but uclibc appears to have a fenv.h
+In-Reply-To: <bug-4484-163@https.bugs.busybox.net/>
+References: <bug-4484-163@https.bugs.busybox.net/>
+Message-ID: <20111208151734.E71E48F8C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu December 8 2011, Michael S. Zick wrote:
-> On Thu December 8 2011, Thomas De Schampheleire wrote:
-> > On Tue, Dec 6, 2011 at 6:07 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > > On Wednesday 23 November 2011 15:24:40 Thomas Petazzoni wrote:
-> > >
-> > >> > TAR is redefined to HOST_TAR, except when extracting host-tar (this
-> > >
-> > >> > is a chicken-and-egg problem), so that all packages use the host-tar
-> > >
-> > >> > if no suitable tar was found.
-> > >
-> > >>
-> > >
-> > >> I am still puzzled by the fact that tar is needed to extract this
-> > >
-> > >> host-tar, so there's like a chicken-and-egg problem. I understand that
-> > >
-> > >> the real host tar is used to extract the host-tar, which is then use to
-> > >
-> > >> extract all other packages. But that sounds really nasty to me.
-> > >
-> > >
-> > > It's not so strange, it's like a compiler's canadian build. You need a
-> > >
-> > > compiler to compile the compiler, right?
-> > >
-> > >
-> > > The way it is solved for tar is OK for me. I think adding support for
-> > >
-> > > cpio archives would just complicate things, because then host-tar
-> > >
-> > > can't use GENTARGETS anymore.
-> > 
-> > I don't think that's true. I started adding cpio support to
-> > gentargets. Essentially, here is the code that needs modification:
-> > 
-> > # Define extractors for different archive suffixes
-> > INFLATE.bz2  = $(BZCAT)
-> > INFLATE.gz   = $(ZCAT)
-> > INFLATE.tbz  = $(BZCAT)
-> > INFLATE.tbz2 = $(BZCAT)
-> > INFLATE.tgz  = $(ZCAT)
-> > INFLATE.xz   = $(XZCAT)
-> > INFLATE.tar  = cat
-> > 
-> > $(2)_EXTRACT_CMDS ?= \
-> >         $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE)))
-> > $(DL_DIR)/$$($(2)_SOURCE) | \
-> >         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-> > 
-> > 
-> > Although the inflate step already handles multiple suffices, the
-> > extract does not yet.
-> >
+https://bugs.busybox.net/show_bug.cgi?id=4484
 
-Is the inflate step being used for tar archives?
+--- Comment #6 from Jacek Ko?odziejski <jacek.kolo@gmail.com> 2011-12-08 15:17:34 UTC ---
+(In reply to comment #5)
+> (In reply to comment #4)
+> > Submitted my configuration file and full error log.
+> > 
+> > Solution for compiling without this error:
+> > after getting the error
+> > make uclibc-menuconfig
+> > switch UCLIBC_HAS_FENV to [=y]
+> > 
+> > PS. bug reporting for the first time - please excuse any inconveniences
+> 
+> From the .config I see:
+> 
+> grep ^BR2_UCLIBC .config
+> BR2_UCLIBC_VERSION_0_9_32=y
+> BR2_UCLIBC_VERSION_STRING="0.9.32"
+> BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.31.config"
+> 
+> So you try to build uClibc 0.9.32 with a 0.9.31 defconfig. That is not going to
+> work. Please change it to uClibc-0.9.32.config and try again.
 
-The reason I ask is because GNU-tar (and BSD-tar) will auto-detect
-the compression method from the file and un-archive it without
-a prior de-compression.
+Hi,
+I changed the .config to use "toolchain/uClibc/uClibc-0.9.32.config" (I only
+touched this thing), did make clean, and git pull.The compilation ends in the
+same place with the same effect (small unrelated differences - I can submit if
+you want). 
 
-In fact, if the "host tar" is BSD-tar, then you can unpack *.iso9660
-as if it was an archive.
+I looked at the two defconfigs - both have # UCLIBC_HAS_FENV is not set. 
+I also noticed this patch:
+toolchain/uClibc/uClibc-0.9.32-honor-UCLIBC_HAS_FENV-for-e500.patch, but sadly
+I don't understand if it has anything in common.
 
-Mike 
-> > My current approach is this:
-> > +INFLATE.cpio = cat
-> > +
-> > +EXTRACT.tar = $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(1) $(TAR_OPTIONS) -
-> > +EXTRACT.cpio = ( mkdir -p $(1) && cd $(1) && cpio -i )
-> > 
-> >  $(2)_EXTRACT_CMDS ?= \
-> >         $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE)))
-> > $(DL_DIR)/$$($(2)_SOURCE) | \
-> > -       $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-> > +       $$(if $$(EXTRACT$$(suffix $$($(2)_SOURCE))),$$(call
-> > EXTRACT$$(suffix $$($(2)_SOURCE)),$$($(2)_DIR)),$$(call
-> > EXTRACT$$(suffix $$(basename $$($(2)_SOURCE))),$$($(2)_DIR))))
-> > 
-> > 
-> > The only thing I'm struggling with is that cpio does not have a
-> > --strip-components functionality. 
-> >
-> 
-> Would: "--no-absolute-filenames" help on the cpio command?
-> 
-> If this will become a general purpose extract.cpio command, it
-> should have that option even if it doesn't help in this case.
-> 
-> Many cpio archives do have absolute paths (like the initramFS
-> archive) even if the GNU-TAR cpio archive does not.
-> 
-> Mike
-> > As a result, the package is 
-> > extracted in output/build/host-tar-1.26/tar-1.26 which is not right.
-> > I don't directly know the name 'tar-1.26', because all I have is the
-> > string 'host-tar-1.26'. I see two approaches:
-> > * either try to strip of 'host' from $(2)_DIR
-> > * or do something like 'mv * .' or 'find -maxdepth 1 -type d | xargs mv {} .'
-> > 
-> > Suggestions are much appreciated...
-> > 
-> > Thanks,
-> > Thomas
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> > 
-> > 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+Regards, Jacek
+
+grep ^BR2_UCLIBC .config
+BR2_UCLIBC_VERSION_0_9_32=y
+BR2_UCLIBC_VERSION_STRING="0.9.32"
+BR2_UCLIBC_CONFIG="toolchain/uClibc/uClibc-0.9.32.config"
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
