@@ -1,39 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2011 22:32:20 +0100
-Subject: [Buildroot] [PATCH  1/1] bump libosip2  3.3.0 ->3.5.0
-In-Reply-To: <44F7530B252A4144827800C1F9838E11@JohanW7>
-References: <44F7530B252A4144827800C1F9838E11@JohanW7>
-Message-ID: <20111208223220.232e9e51@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  8 Dec 2011 21:50:13 +0000 (UTC)
+Subject: [Buildroot] [Bug 3403] libgpg-error: bump to version 1.10
+In-Reply-To: <bug-3403-163@https.bugs.busybox.net/>
+References: <bug-3403-163@https.bugs.busybox.net/>
+Message-ID: <20111208215013.A79F58F7C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=3403
 
-Le Wed, 7 Dec 2011 11:28:19 +0100,
-"Sagaert Johan" <sagaert.johan@skynet.be> a ?crit :
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-> Bump version
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Few comments:
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-08 21:50:13 UTC ---
+Fixed in git by Gustavoz, thanks.
 
- * No need to mention "Bump version" as the long description as it
-   doesn't add anything to the short description
-
- * You must add a Signed-off-by line to your patches.
-
- * Your patch is word-wrapped. Check your e-mail client settings, or
-   better, use git send-email to send your patches.
-
- * Do not keep commented lines in your patch?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
