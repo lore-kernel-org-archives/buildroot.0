@@ -1,11 +1,11 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 8 Dec 2011 08:13:40 -0600
+Date: Thu, 8 Dec 2011 08:19:42 -0600
 Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
 	no suitable tar can be found
-In-Reply-To: <CAAXf6LVqXTShGnjV7cDON6jU-yWGi0wrGCaZVHZAFJUystnNQg@mail.gmail.com>
-References: <patchbomb.1322053783@devws108> <201112061807.48048.arnout@mind.be>
- <CAAXf6LVqXTShGnjV7cDON6jU-yWGi0wrGCaZVHZAFJUystnNQg@mail.gmail.com>
-Message-ID: <201112080813.43996.minimod@morethan.org>
+In-Reply-To: <CAAXf6LU+qVzGgJnhNnEJUShSaA5kZmUF=xp+gR7p5CP45rwikg@mail.gmail.com>
+References: <patchbomb.1322053783@devws108> <201112061823.36798.arnout@mind.be>
+ <CAAXf6LU+qVzGgJnhNnEJUShSaA5kZmUF=xp+gR7p5CP45rwikg@mail.gmail.com>
+Message-ID: <201112080819.44711.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,96 +13,189 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Thu December 8 2011, Thomas De Schampheleire wrote:
-> On Tue, Dec 6, 2011 at 6:07 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > On Wednesday 23 November 2011 15:24:40 Thomas Petazzoni wrote:
-> >
-> >> > TAR is redefined to HOST_TAR, except when extracting host-tar (this
-> >
-> >> > is a chicken-and-egg problem), so that all packages use the host-tar
-> >
-> >> > if no suitable tar was found.
-> >
-> >>
-> >
-> >> I am still puzzled by the fact that tar is needed to extract this
-> >
-> >> host-tar, so there's like a chicken-and-egg problem. I understand that
-> >
-> >> the real host tar is used to extract the host-tar, which is then use to
-> >
-> >> extract all other packages. But that sounds really nasty to me.
-> >
-> >
-> > It's not so strange, it's like a compiler's canadian build. You need a
-> >
-> > compiler to compile the compiler, right?
-> >
-> >
-> > The way it is solved for tar is OK for me. I think adding support for
-> >
-> > cpio archives would just complicate things, because then host-tar
-> >
-> > can't use GENTARGETS anymore.
+> Hi Arnout,
 > 
-> I don't think that's true. I started adding cpio support to
-> gentargets. Essentially, here is the code that needs modification:
-> 
-> # Define extractors for different archive suffixes
-> INFLATE.bz2  = $(BZCAT)
-> INFLATE.gz   = $(ZCAT)
-> INFLATE.tbz  = $(BZCAT)
-> INFLATE.tbz2 = $(BZCAT)
-> INFLATE.tgz  = $(ZCAT)
-> INFLATE.xz   = $(XZCAT)
-> INFLATE.tar  = cat
-> 
-> $(2)_EXTRACT_CMDS ?= \
->         $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE)))
-> $(DL_DIR)/$$($(2)_SOURCE) | \
->         $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-> 
-> 
-> Although the inflate step already handles multiple suffices, the
-> extract does not yet.
-> 
-> My current approach is this:
-> +INFLATE.cpio = cat
-> +
-> +EXTRACT.tar = $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(1) $(TAR_OPTIONS) -
-> +EXTRACT.cpio = ( mkdir -p $(1) && cd $(1) && cpio -i )
-> 
->  $(2)_EXTRACT_CMDS ?= \
->         $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE)))
-> $(DL_DIR)/$$($(2)_SOURCE) | \
-> -       $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
-> +       $$(if $$(EXTRACT$$(suffix $$($(2)_SOURCE))),$$(call
-> EXTRACT$$(suffix $$($(2)_SOURCE)),$$($(2)_DIR)),$$(call
-> EXTRACT$$(suffix $$(basename $$($(2)_SOURCE))),$$($(2)_DIR))))
-> 
-> 
-> The only thing I'm struggling with is that cpio does not have a
-> --strip-components functionality. 
+> (First of all: your sending mails in both plaintext and html, messes
+> up my Gmail sending: extra white lines are added between each line. Am
+> I the only one with this problem? Does anyone know a fix? (one fix
+> would be to send pure plain text to this list, but I don't know if
+> that's an option for you)
 >
 
-Would: "--no-absolute-filenames" help on the cpio command?
+I see the same thing here.
+He is using Kmail for an e-mail client, so "plain text only" is an
+option of his e-mail client.
+(At least the version of Kmail I am sending this with has the option.)
 
-If this will become a general purpose extract.cpio command, it
-should have that option even if it doesn't help in this case.
-
-Many cpio archives do have absolute paths (like the initramFS
-archive) even if the GNU-TAR cpio archive does not.
-
-Mike
-> As a result, the package is 
-> extracted in output/build/host-tar-1.26/tar-1.26 which is not right.
-> I don't directly know the name 'tar-1.26', because all I have is the
-> string 'host-tar-1.26'. I see two approaches:
-> * either try to strip of 'host' from $(2)_DIR
-> * or do something like 'mv * .' or 'find -maxdepth 1 -type d | xargs mv {} .'
+Mike 
+> On Tue, Dec 6, 2011 at 6:23 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> > On Wednesday 23 November 2011 14:59:59 Thomas De Schampheleire wrote:
+> >
+> >> diff --git a/toolchain/dependencies/check-host-tar.mk
+> >> b/toolchain/dependencies/check-host-tar.mk
+> >
+> >> new file mode 100644
+> >
+> >> --- /dev/null
+> >
+> >> +++ b/toolchain/dependencies/check-host-tar.mk
+> >
+> >> @@ -0,0 +1,32 @@
+> >
+> >> +TAR ?= tar
+> >
+> >> +
+> >
+> >> +# To extract tar, we always need a real (system) tar. Provide the
+> >> necessary
+> >
+> >> +# definitions here to avoid cluttering package/tar/tar.mk .
+> >
+> >> +# TAR will be overridden again when the tar .mk file is included, so we
+> >> must
+> >
+> >> +# finalize the value of SYSTEM_TAR by using :=
+> >
+> >> +SYSTEM_TAR := $(TAR)
+> >
+> >> +# Automatically detect tar --strip-path/components option
+> >
+> >> +# --strip-path was renamed to --strip-components in tar 1.15
+> >
+> >> +SYSTEM_TAR_STRIP_COMPONENTS := \
+> >
+> >> + $(shell $(SYSTEM_TAR) --help | grep strip-path > /dev/null ; \
+> >
+> >> + if test $$? = 0 ; then \
+> >
+> >> + echo '--strip-path' ; \
+> >
+> >> + else \
+> >
+> >> + echo '--strip-components' ; \
+> >
+> >> + fi)
+> >
+> >
+> > This can move inside the ifneq below, with a
+> >
+> > SYSTEM_TAR_STRIP_COMPONENTS := $(HOST_TAR_STRIP_COMPONENTS)
+> >
+> > in the else (and moving that one up of course).
+> >
 > 
-> Suggestions are much appreciated...
+> I don't think this is true.
+> For the chicken-egg problem in the current patch, you need SYSTEM_TAR
+> (a real one) to build host-tar if needed. So in the 'else' case, you
+> need the full SYSTEM_TAR_STRIP_COMPONENTS.
 > 
-> Thanks,
+> You could do the following: (maybe this is what you meant)
+> 
+> HOST_TAR_STRIP_COMPONENTS = --strip-components
+> ifneq (,$(call suitable-host-package,tar))
+>   HOST_TAR = $(SYSTEM_TAR)
+>   SYSTEM_TAR_STRIP_COMPONENTS := $(HOST_TAR_STRIP_COMPONENTS)
+> else
+>   DEPENDENCIES_HOST_PREREQ += host-tar
+>   HOST_TAR = $(HOST_DIR)/usr/bin/tar
+>   SYSTEM_TAR_STRIP_COMPONENTS := \
+>     $(shell $(SYSTEM_TAR) --help | grep strip-path > /dev/null ; \
+>     if test $$? = 0 ; then \
+>      echo '--strip-path' ; \
+>     else \
+>      echo '--strip-components' ; \
+>     fi)
+> endif
+> 
+> But to be honest, I don't think we'll need any of this complexity
+> anymore with the cpio approach (see next mail).
+> 
+> 
+> >
+> >> +
+> >
+> >> +# Determine correct HOST_TAR
+> >
+> >> +ifneq (,$(call suitable-host-package,tar))
+> >
+> >> + HOST_TAR = $(SYSTEM_TAR)
+> >
+> >> +else
+> >
+> >> + DEPENDENCIES_HOST_PREREQ += host-tar
+> >
+> >> + HOST_TAR = $(HOST_DIR)/usr/bin/tar
+> >
+> >> +endif
+> >
+> >> +
+> >
+> >> +# Since HOST_TAR is at least 1.17, it will certainly support
+> >> --strip-components
+> >
+> >> +HOST_TAR_STRIP_COMPONENTS = --strip-components
+> >
+> >> +
+> >
+> >> +# Set definitions used by all .mk files included after this one and
+> >> before
+> >
+> >> +# package/tar/tar.mk
+> >
+> >> +TAR = $(HOST_TAR)
+> >
+> >> +TAR_STRIP_COMPONENTS = $(HOST_TAR_STRIP_COMPONENTS)
+> >
+> >> diff --git a/toolchain/dependencies/check-host-tar.sh
+> >> b/toolchain/dependencies/check-host-tar.sh
+> >
+> >> new file mode 100755
+> >
+> >> --- /dev/null
+> >
+> >> +++ b/toolchain/dependencies/check-host-tar.sh
+> >
+> >> @@ -0,0 +1,29 @@
+> >
+> >> +#!/bin/sh
+> >
+> >> +
+> >
+> >> +tar=`which tar`
+> >
+> >
+> > This contradicts the TAR ?= tar in check-host-tar.mk: if the user provided
+> >
+> > their own tar version, it isn't checked and host-tar will still be built...
+> >
+> > I guess $TAR should be given as an argument to this script.
+> 
+> You're right, I missed this one.
+> 
+> >
+> >
+> >> +if [ -z "$tar" ]; then
+> >
+> >> + return
+> >
+> >> +fi
+> >
+> >
+> > This could be a [ ! -x "$tar" ]
+> 
+> ok
+> 
+> >
+> > and it should be exit 1, not return.
+> 
+> Why? The convention is that the check-host-foo.sh script should give
+> as output either nothing (no suitable package found) or the path to
+> the suitable package. The return code is not checked.
+> Of course, it wouldn't hurt, but it's not needed for the implementation.
+> 
+> Thanks for your comments.
+> 
+> Best regards,
 > Thomas
 > _______________________________________________
 > buildroot mailing list
