@@ -1,205 +1,45 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 8 Dec 2011 08:19:42 -0600
-Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
-	no suitable tar can be found
-In-Reply-To: <CAAXf6LU+qVzGgJnhNnEJUShSaA5kZmUF=xp+gR7p5CP45rwikg@mail.gmail.com>
-References: <patchbomb.1322053783@devws108> <201112061823.36798.arnout@mind.be>
- <CAAXf6LU+qVzGgJnhNnEJUShSaA5kZmUF=xp+gR7p5CP45rwikg@mail.gmail.com>
-Message-ID: <201112080819.44711.minimod@morethan.org>
+Date: Thu, 8 Dec 2011 08:27:01 -0600
+Subject: [Buildroot] buildroot with SquashFS root file system
+In-Reply-To: <4EE09ED3.5060102@neotion.com>
+References: <4EDE32C3.7020400@neotion.com>
+ <87pqfzbaq9.fsf@macbook.be.48ers.dk> <4EE09ED3.5060102@neotion.com>
+Message-ID: <201112080827.03828.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu December 8 2011, Thomas De Schampheleire wrote:
-> Hi Arnout,
+On Thu December 8 2011, Emmanuel BOUAZIZ wrote:
 > 
-> (First of all: your sending mails in both plaintext and html, messes
-> up my Gmail sending: extra white lines are added between each line. Am
-> I the only one with this problem? Does anyone know a fix? (one fix
-> would be to send pure plain text to this list, but I don't know if
-> that's an option for you)
+> On 12/08/2011 11:48 AM, Peter Korsgaard wrote:
+> 
+> >  Emmanuel> The only remaining problem is that the whole filesystem is
+> >  Emmanuel> read-only despite the 'rw' including /var and /tmp.
+> > 
+> > That's because you're using squashfs. Squashfs is a readonly
+> > filesystem. Either move to initramfs or use ext2 in your initrd.
+> > 
+> 
+> > /tmp should be a tmpfs though (check /etc/fstab), and most of /var
+> > symlinks to /tmp/.
+> > 
+> 
+> Oh that's rigth, it's writable, I mixed with another directory that I wanted to write to (/usr/local). I mounted it as
+> tmpfs too and everything's fine now. Thanks a lot for your help :)
+> 
+> Well, I'll switch back to initramfs anyway since it's less tricky.
 >
 
-I see the same thing here.
-He is using Kmail for an e-mail client, so "plain text only" is an
-option of his e-mail client.
-(At least the version of Kmail I am sending this with has the option.)
+You do not have to put your entire run-time file system in the initramfs,
+only what you need to establish the full run-time file system.
+I.E: Your full run-time file system can remain as a squashfs file.
+You just have to provide the "init" scripting to get it loaded and
+mounted while in the early user space of the initramfs.
+
+See: EarlyUserSpace in the kernel documentation tree;
+and maybe look at how some "LiveCD" systems handle the setup.
 
 Mike 
-> On Tue, Dec 6, 2011 at 6:23 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > On Wednesday 23 November 2011 14:59:59 Thomas De Schampheleire wrote:
-> >
-> >> diff --git a/toolchain/dependencies/check-host-tar.mk
-> >> b/toolchain/dependencies/check-host-tar.mk
-> >
-> >> new file mode 100644
-> >
-> >> --- /dev/null
-> >
-> >> +++ b/toolchain/dependencies/check-host-tar.mk
-> >
-> >> @@ -0,0 +1,32 @@
-> >
-> >> +TAR ?= tar
-> >
-> >> +
-> >
-> >> +# To extract tar, we always need a real (system) tar. Provide the
-> >> necessary
-> >
-> >> +# definitions here to avoid cluttering package/tar/tar.mk .
-> >
-> >> +# TAR will be overridden again when the tar .mk file is included, so we
-> >> must
-> >
-> >> +# finalize the value of SYSTEM_TAR by using :=
-> >
-> >> +SYSTEM_TAR := $(TAR)
-> >
-> >> +# Automatically detect tar --strip-path/components option
-> >
-> >> +# --strip-path was renamed to --strip-components in tar 1.15
-> >
-> >> +SYSTEM_TAR_STRIP_COMPONENTS := \
-> >
-> >> + $(shell $(SYSTEM_TAR) --help | grep strip-path > /dev/null ; \
-> >
-> >> + if test $$? = 0 ; then \
-> >
-> >> + echo '--strip-path' ; \
-> >
-> >> + else \
-> >
-> >> + echo '--strip-components' ; \
-> >
-> >> + fi)
-> >
-> >
-> > This can move inside the ifneq below, with a
-> >
-> > SYSTEM_TAR_STRIP_COMPONENTS := $(HOST_TAR_STRIP_COMPONENTS)
-> >
-> > in the else (and moving that one up of course).
-> >
-> 
-> I don't think this is true.
-> For the chicken-egg problem in the current patch, you need SYSTEM_TAR
-> (a real one) to build host-tar if needed. So in the 'else' case, you
-> need the full SYSTEM_TAR_STRIP_COMPONENTS.
-> 
-> You could do the following: (maybe this is what you meant)
-> 
-> HOST_TAR_STRIP_COMPONENTS = --strip-components
-> ifneq (,$(call suitable-host-package,tar))
->   HOST_TAR = $(SYSTEM_TAR)
->   SYSTEM_TAR_STRIP_COMPONENTS := $(HOST_TAR_STRIP_COMPONENTS)
-> else
->   DEPENDENCIES_HOST_PREREQ += host-tar
->   HOST_TAR = $(HOST_DIR)/usr/bin/tar
->   SYSTEM_TAR_STRIP_COMPONENTS := \
->     $(shell $(SYSTEM_TAR) --help | grep strip-path > /dev/null ; \
->     if test $$? = 0 ; then \
->      echo '--strip-path' ; \
->     else \
->      echo '--strip-components' ; \
->     fi)
-> endif
-> 
-> But to be honest, I don't think we'll need any of this complexity
-> anymore with the cpio approach (see next mail).
-> 
-> 
-> >
-> >> +
-> >
-> >> +# Determine correct HOST_TAR
-> >
-> >> +ifneq (,$(call suitable-host-package,tar))
-> >
-> >> + HOST_TAR = $(SYSTEM_TAR)
-> >
-> >> +else
-> >
-> >> + DEPENDENCIES_HOST_PREREQ += host-tar
-> >
-> >> + HOST_TAR = $(HOST_DIR)/usr/bin/tar
-> >
-> >> +endif
-> >
-> >> +
-> >
-> >> +# Since HOST_TAR is at least 1.17, it will certainly support
-> >> --strip-components
-> >
-> >> +HOST_TAR_STRIP_COMPONENTS = --strip-components
-> >
-> >> +
-> >
-> >> +# Set definitions used by all .mk files included after this one and
-> >> before
-> >
-> >> +# package/tar/tar.mk
-> >
-> >> +TAR = $(HOST_TAR)
-> >
-> >> +TAR_STRIP_COMPONENTS = $(HOST_TAR_STRIP_COMPONENTS)
-> >
-> >> diff --git a/toolchain/dependencies/check-host-tar.sh
-> >> b/toolchain/dependencies/check-host-tar.sh
-> >
-> >> new file mode 100755
-> >
-> >> --- /dev/null
-> >
-> >> +++ b/toolchain/dependencies/check-host-tar.sh
-> >
-> >> @@ -0,0 +1,29 @@
-> >
-> >> +#!/bin/sh
-> >
-> >> +
-> >
-> >> +tar=`which tar`
-> >
-> >
-> > This contradicts the TAR ?= tar in check-host-tar.mk: if the user provided
-> >
-> > their own tar version, it isn't checked and host-tar will still be built...
-> >
-> > I guess $TAR should be given as an argument to this script.
-> 
-> You're right, I missed this one.
-> 
-> >
-> >
-> >> +if [ -z "$tar" ]; then
-> >
-> >> + return
-> >
-> >> +fi
-> >
-> >
-> > This could be a [ ! -x "$tar" ]
-> 
-> ok
-> 
-> >
-> > and it should be exit 1, not return.
-> 
-> Why? The convention is that the check-host-foo.sh script should give
-> as output either nothing (no suitable package found) or the path to
-> the suitable package. The return code is not checked.
-> Of course, it wouldn't hurt, but it's not needed for the implementation.
-> 
-> Thanks for your comments.
-> 
-> Best regards,
-> Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+> regards,
