@@ -1,96 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Dec 2011 22:30:00 +0100
-Subject: [Buildroot] [PATCH] linux: support "local" as download method
-In-Reply-To: <CAEvN+1j08xz+a+sz_3vmUa8tQ18xnv+9KR2MA9E_ub-SZeerEA@mail.gmail.com>
-References: <1323255396-28263-1-git-send-email-tjlee@ambarella.com>
- <CAEvN+1j08xz+a+sz_3vmUa8tQ18xnv+9KR2MA9E_ub-SZeerEA@mail.gmail.com>
-Message-ID: <20111208223000.72d8e084@skate>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Thu, 8 Dec 2011 23:30:21 +0200
+Subject: [Buildroot] Device files and Buildroot
+In-Reply-To: <20111203092553.0acf80a5@skate>
+References: <003b01cca958$91486a00$0400a8c0@dspcgrnzks9p98>
+ <001c01ccb07c$85e85190$0400a8c0@dspcgrnzks9p98>
+ <CAAXf6LUnHUAQk_4j2fyjE_tYum+U-i08aUKksK__tLOu0XgMeA@mail.gmail.com>
+ <201112020734.00122.minimod@morethan.org>
+ <001201ccb10b$22c23010$0400a8c0@dspcgrnzks9p98>
+ <CAAu5YTas_VmvbHEkwOZqVZ3iD+sy4nYdmykMKZAagtAEYViYHA@mail.gmail.com>
+ <001601ccb112$a16043b0$0400a8c0@dspcgrnzks9p98>
+ <1322847199.55324.YahooMailNeo@web161204.mail.bf1.yahoo.com>
+ <002f01ccb11c$9a835280$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSbDDD8rFU5UhYpR7tCcJWNXtbUNNNbmHU2yfjt23zzgWg@mail.gmail.com>
+ <003e01ccb120$6f8f16a0$0400a8c0@dspcgrnzks9p98>
+ <CABkKHSacRwGaT0ajXySqPeV0aFzGthxLykC7LXOsut4SPjNsmA@mail.gmail.com>
+ <20111203092553.0acf80a5@skate>
+Message-ID: <CAMP44s0bpx_mJRG=4bz5yhewujwaAhC1tQqqWNyCCbtNZysRgg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sat, Dec 3, 2011 at 10:25 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Sat, 3 Dec 2011 01:25:41 +0100,
+> Aleksander Dutkowski <adutkowski@gmail.com> a ?crit :
+>
+>> "System configuration --> Custom script to run before creating
+>> filesystem image" input is for specify a PATH to bash script.
+>> You you must simply create script, fill with mknod commands (remember
+>> - mknod can be ran only by root! so do 'sudo mknod')
+>
+> No, no, no and no ! I'm sorry but this is totally horrible and is
+> definitely not the way of doing things with Buildroot.
+>
+> With Buildroot, you have four ways of managing the device files
+> in /dev. The mechanism used to manage device files is configured from
+> System configuration -> /dev management. The four ways are :
 
-What this patch does is already possible through the "override source
-directory" mechanism, which is available for every package.
+Why is this not described when one press '?' on the menu options?
 
-It's true that the Linux package is special in that it is very likely
-that many people will want to use a local source directory, but I'm
-fearing that we will end up adding many of those
-"<something>_CUSTOM_LOCAL" option that just duplicate what is possible
-thanks to the override source directory mechanism.
-
-See http://free-electrons.com/blog/buildroot-2011-11/ for more details
-on this source directory override mechanism.
-
-Best regards,
-
-Thomas
-
-Le Wed, 7 Dec 2011 20:09:20 +0800,
-Tzu-Jung Lee <roylee17@gmail.com> a ?crit :
-
-> Signed-off-by: Tzu-Jung Lee <tjlee@ambarella.com>
-> ---
-> ?linux/Config.in | ? 10 ++++++++++
-> ?linux/linux.mk ?| ? ?3 +++
-> ?2 files changed, 13 insertions(+), 0 deletions(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index dc6aa73..4053c41 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -53,6 +53,12 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT
-> ? ? ? ? ?This option allows Buildroot to get the Linux kernel source
-> ? ? ? ? ?code from a Git repository.
-> 
-> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> + ? ? ? bool "Custom local source tree"
-> + ? ? ? help
-> + ? ? ? ? This option allows Buildroot to get the Linux kernel source
-> + ? ? ? ? code from a local repository.
-> +
-> ?endchoice
-> 
-> ?config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-> @@ -72,6 +78,10 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
-> ? ? ? ?string "Custom Git version"
-> ? ? ? ?depends on BR2_LINUX_KERNEL_CUSTOM_GIT
-> 
-> +config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
-> + ? ? ? string "Custom Local path"
-> + ? ? ? depends on BR2_LINUX_KERNEL_CUSTOM_LOCAL
-> +
-> ?config BR2_LINUX_KERNEL_VERSION
-> ? ? ? ?string
-> ? ? ? ?default "3.1.4" if BR2_LINUX_KERNEL_3_1
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 5c5a1d2..d5617a2 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -13,6 +13,9 @@ LINUX_SOURCE = $(notdir $(LINUX_TARBALL))
-> ?else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-> ?LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL))
-> ?LINUX_SITE_METHOD = git
-> +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
-> +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-> +LINUX_SITE_METHOD = local
-> ?else
-> ?LINUX_SOURCE = linux-$(LINUX_VERSION).tar.bz2
-> ?# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-> --
-> 1.7.8
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+Cheers.
 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Felipe Contreras
