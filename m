@@ -1,52 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 8 Dec 2011 23:09:24 +0100
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20111208221029.082188F71A@busybox.osuosl.org>
+Date: Thu, 8 Dec 2011 23:35:37 +0100
+Subject: [Buildroot] [git commit] binutils: don't default to 2.22
+Message-ID: <20111208224035.6786B8F702@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11eb9e7fbec3f458fa2146558d9ad162615d63be
+commit: http://git.buildroot.net/buildroot/commit/?id=7d7873df78c3f6745a188baf5d41abab7cfe3f23
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Lots of packages are failing with binutils 2.22 with undefined symbols,
+as it defaults to --no-copy-dt-needed-entries. Long term, the packages
+should get fixed, but let's keep it at 2.21.1 for now.
+
+For more details, see:
+- http://wiki.debian.org/ToolChain/DSOLinking
+- https://wiki.ubuntu.com/NattyNarwhal/ToolchainTransition
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   26 ++++++++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
+ package/binutils/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index e5311f0..330ac6a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,29 @@
-+2012.02, Not yet released:
-+
-+	Fixes all over the tree and new features.
-+
-+	Gentargets: scp and mercurial support.
-+
-+	defconfigs: qemu configs for x86-64 and sparc.
-+
-+	uClibc: remove 0.9.30, backport unshare() support.
-+
-+	Updated/fixed packages: barebox, bash, binutils, bison,
-+	coreutils, dbus-glib, diffutils, dropbear, ebtables, flex,
-+	fluxbox, gawk, grep, gst-dsp, htop, iproute2, iw, lame,
-+	libgpg-error, libgtk2, libroxml, m4, module-init-tools,
-+	mtd-utils, nano, nbd, netsnmp, ruby, u-boot, usbmount,
-+	wpa_supplicant, xdm
-+
-+	New packages: connman, transmission
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#743:  Add Transmission bit torrent option to buildroot
-+	#3403: libgpg-error: bump to version 1.10
-+	#3409: libgpg-error: download from gnupg.org
-+	#3421: nano: make tiny flag optional
-+
- 2011.11, Released November 30th, 2011:
- 
- 	Fixes all over the tree.
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index f829549..aec51b3 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -3,7 +3,7 @@ comment "Binutils Options"
+ choice
+ 	prompt "Binutils Version"
+ 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+-	default BR2_BINUTILS_VERSION_2_22 if (BR2_UCLIBC_VERSION_0_9_32 || BR2_UCLIBC_VERSION_SNAPSHOT)
++	default BR2_BINUTILS_VERSION_2_21_1 if (BR2_UCLIBC_VERSION_0_9_32 || BR2_UCLIBC_VERSION_SNAPSHOT)
+ 	default BR2_BINUTILS_VERSION_2_21
+ 	help
+ 	  Select the version of binutils you wish to use.
