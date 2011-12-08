@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Thu, 08 Dec 2011 09:35:47 +0100
-Subject: [Buildroot] [PATCH v6 2/3] New package: giblib
-In-Reply-To: <1318840867-20976-3-git-send-email-yegorslists@googlemail.com>
+Date: Thu, 08 Dec 2011 09:35:58 +0100
+Subject: [Buildroot] [PATCH v6 3/3] New package: feh
+In-Reply-To: <1318840867-20976-4-git-send-email-yegorslists@googlemail.com>
 References: <1318840867-20976-1-git-send-email-yegorslists@googlemail.com>
- <1318840867-20976-3-git-send-email-yegorslists@googlemail.com>
-Message-ID: <4EE076E3.3070306@visionsystems.de>
+ <1318840867-20976-4-git-send-email-yegorslists@googlemail.com>
+Message-ID: <4EE076EE.5000108@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,59 +16,72 @@ Am 17.10.2011 10:41, schrieb yegorslists at googlemail.com:
 > 
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/Config.in        |    1 +
->  package/giblib/Config.in |    8 ++++++++
->  package/giblib/giblib.mk |   15 +++++++++++++++
->  3 files changed, 24 insertions(+), 0 deletions(-)
->  create mode 100644 package/giblib/Config.in
->  create mode 100644 package/giblib/giblib.mk
+>  package/Config.in     |    1 +
+>  package/feh/Config.in |   14 ++++++++++++++
+>  package/feh/feh.mk    |   22 ++++++++++++++++++++++
+>  3 files changed, 37 insertions(+), 0 deletions(-)
+>  create mode 100644 package/feh/Config.in
+>  create mode 100644 package/feh/feh.mk
 > 
 > diff --git a/package/Config.in b/package/Config.in
-> index 7a7b4bf..7f82934 100644
+> index 7f82934..b39f41b 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -280,6 +280,7 @@ source "package/cairo/Config.in"
->  source "package/fltk/Config.in"
->  source "package/fontconfig/Config.in"
->  source "package/freetype/Config.in"
-> +source "package/giblib/Config.in"
->  source "package/gtk2-engines/Config.in"
->  source "package/gtk2-themes/Config.in"
->  source "package/imlib2/Config.in"
-> diff --git a/package/giblib/Config.in b/package/giblib/Config.in
+> @@ -133,6 +133,7 @@ source "package/fluxbox/Config.in"
+>  comment "X applications"
+>  source "package/alsamixergui/Config.in"
+>  source "package/docker/Config.in"
+> +source "package/feh/Config.in"
+>  source "package/gqview/Config.in"
+>  source "package/gmpc/Config.in"
+>  source "package/gob2/Config.in"
+> diff --git a/package/feh/Config.in b/package/feh/Config.in
 > new file mode 100644
-> index 0000000..0c704e1
+> index 0000000..31e7239
 > --- /dev/null
-> +++ b/package/giblib/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_GIBLIB
-> +	bool "giblib"
-> +	select BR2_PACKAGE_IMLIB2
+> +++ b/package/feh/Config.in
+> @@ -0,0 +1,14 @@
+> +config BR2_PACKAGE_FEH
+> +	bool "feh"
+> +	depends on BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXINERAMA
+> +	select BR2_PACKAGE_XLIB_LIBXT
+> +	select BR2_PACKAGE_IMLIB2_PNG
+> +	select BR2_PACKAGE_IMLIB2_JPEG
+> +	select BR2_PACKAGE_IMLIB2_X
+> +	select BR2_PACKAGE_GIBLIB
+> +	select BR2_PACKAGE_LIBCURL
 > +	help
-> +	  Giblib is a simple library which wraps imlib2.
+> +	  feh is an X11 image viewer aimed mostly at console users.
 > +
-> +	  http://linuxbrit.co.uk/giblib/
-> +
-> diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
+> +	  http://feh.finalrewind.org/
+> diff --git a/package/feh/feh.mk b/package/feh/feh.mk
 > new file mode 100644
-> index 0000000..8a868c5
+> index 0000000..b59bb2f
 > --- /dev/null
-> +++ b/package/giblib/giblib.mk
-> @@ -0,0 +1,15 @@
-> +#############################################################
-> +#
-> +# giblib
-> +#
-> +#############################################################
-> +GIBLIB_VERSION = 1.2.4
-> +GIBLIB_SOURCE = giblib-$(GIBLIB_VERSION).tar.gz
-> +GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
-> +GIBLIB_INSTALL_STAGING = YES
-> +GIBLIB_DEPENDENCIES = imlib2
-> +GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING)/usr/lib \
-> +		  --with-imlib2-exec-prefix=$(STAGING)/usr/bin
+> +++ b/package/feh/feh.mk
+> @@ -0,0 +1,22 @@
+> +FEH_VERSION = 2.0
+> +FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+> +FEH_SITE = http://feh.finalrewind.org/
+> +FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
 > +
-> +$(eval $(call AUTOTARGETS))
+> +define FEH_BUILD_CMDS
+> +	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+> +		-C $(@D) all
+> +endef
+> +
+> +define FEH_INSTALL_TARGET_CMDS
+> +	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
+> +		DESTDIR=$(TARGET_DIR) -C $(@D) install
+> +endef
+> +
+> +define FEH_UNINSTALL_TARGET_CMDS
+> +	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) " \
+> +		DESTDIR=$(TARGET_DIR) -C $(@D) uninstall
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
 > +
 
 ping
