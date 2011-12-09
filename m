@@ -1,81 +1,152 @@
-From: Tzu-Jung Lee <roylee17@gmail.com>
-Date: Fri, 9 Dec 2011 10:44:24 +0800
-Subject: [Buildroot] [PATCH] linux: support "local" as download method
-In-Reply-To: <20111208223000.72d8e084@skate>
-References: <1323255396-28263-1-git-send-email-tjlee@ambarella.com>
- <CAEvN+1j08xz+a+sz_3vmUa8tQ18xnv+9KR2MA9E_ub-SZeerEA@mail.gmail.com>
- <20111208223000.72d8e084@skate>
-Message-ID: <CAEvN+1hUU4Xd+BuMn+5DmdHAYx2Oue8QeruW50FLH0+LJ3PB2A@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 9 Dec 2011 08:00:37 +0100
+Subject: [Buildroot] [PATCH 2 of 3 v2] dependencies: build a host-tar if
+ no suitable tar can be found
+In-Reply-To: <201112080905.48711.minimod@morethan.org>
+References: <patchbomb.1322053783@devws108>
+ <CAAXf6LVqXTShGnjV7cDON6jU-yWGi0wrGCaZVHZAFJUystnNQg@mail.gmail.com>
+ <201112080813.43996.minimod@morethan.org>
+ <201112080905.48711.minimod@morethan.org>
+Message-ID: <CAAXf6LUMprKGztV3fy7yW7JucNSf6L-+4+2BbySKrS=rBy3gUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Fri, Dec 9, 2011 at 5:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
+On Thu, Dec 8, 2011 at 4:05 PM, Michael S. Zick <minimod@morethan.org> wrote:
+> On Thu December 8 2011, Michael S. Zick wrote:
+>> On Thu December 8 2011, Thomas De Schampheleire wrote:
+>> > On Tue, Dec 6, 2011 at 6:07 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> > > On Wednesday 23 November 2011 15:24:40 Thomas Petazzoni wrote:
+>> > >
+>> > >> > TAR is redefined to HOST_TAR, except when extracting host-tar (this
+>> > >
+>> > >> > is a chicken-and-egg problem), so that all packages use the host-tar
+>> > >
+>> > >> > if no suitable tar was found.
+>> > >
+>> > >>
+>> > >
+>> > >> I am still puzzled by the fact that tar is needed to extract this
+>> > >
+>> > >> host-tar, so there's like a chicken-and-egg problem. I understand that
+>> > >
+>> > >> the real host tar is used to extract the host-tar, which is then use to
+>> > >
+>> > >> extract all other packages. But that sounds really nasty to me.
+>> > >
+>> > >
+>> > > It's not so strange, it's like a compiler's canadian build. You need a
+>> > >
+>> > > compiler to compile the compiler, right?
+>> > >
+>> > >
+>> > > The way it is solved for tar is OK for me. I think adding support for
+>> > >
+>> > > cpio archives would just complicate things, because then host-tar
+>> > >
+>> > > can't use GENTARGETS anymore.
+>> >
+>> > I don't think that's true. I started adding cpio support to
+>> > gentargets. Essentially, here is the code that needs modification:
+>> >
+>> > # Define extractors for different archive suffixes
+>> > INFLATE.bz2 ?= $(BZCAT)
+>> > INFLATE.gz ? = $(ZCAT)
+>> > INFLATE.tbz ?= $(BZCAT)
+>> > INFLATE.tbz2 = $(BZCAT)
+>> > INFLATE.tgz ?= $(ZCAT)
+>> > INFLATE.xz ? = $(XZCAT)
+>> > INFLATE.tar ?= cat
+>> >
+>> > $(2)_EXTRACT_CMDS ?= \
+>> > ? ? ? ? $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE)))
+>> > $(DL_DIR)/$$($(2)_SOURCE) | \
+>> > ? ? ? ? $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
+>> >
+>> >
+>> > Although the inflate step already handles multiple suffices, the
+>> > extract does not yet.
+>> >
 >
-> What this patch does is already possible through the "override source
-> directory" mechanism, which is available for every package.
+> Is the inflate step being used for tar archives?
 >
-> It's true that the Linux package is special in that it is very likely
-> that many people will want to use a local source directory, but I'm
-> fearing that we will end up adding many of those
-> "<something>_CUSTOM_LOCAL" option that just duplicate what is possible
-> thanks to the override source directory mechanism.
+> The reason I ask is because GNU-tar (and BSD-tar) will auto-detect
+> the compression method from the file and un-archive it without
+> a prior de-compression.
+>
 
-I tried both LINUX_OVERRIDE_SRCDIR and LINUX_CUSTOM_LOCAL, and sent the
-patch for the latter in case someone else might end up doing the same thing.
+Yes, the inflate step is used for tar archives.
+Suppose you have a file called foo.tar.gz, then the commands executed
+will be similar to: (left out some details)
+zcat foo.tar.gz | tar -xf
 
-But soon I realized that our team may need another METHOD to support
-out use case.
-Have we considered IN-PLACE build alternative or option?
+For foo.tar.bz2, this will be:
+bzcat foo.tar.bz2 | tar -xf
 
+The tar step does not have to bother with compression.
 
-For most of the packages, it is good enough for users/developers to
-leverage the power of buildroot to
-
-    fetch, ..., configure, build, mkimage
-
-However for some packages, ex: linux kernel, that a team or company
-actually works on,
-
-   modify, configure, build, mkimage
-
-has much higher frequency than the former case.
-
-I tried to find a "OVERRIDE" ways to do this haven't worked out yet.
-Any comments or suggestion will be appreciated.
-
-Do I need to extend the following code for support IN-PLACE case?
-
-ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-# In the normal case (no package override), the sequence of steps is
-#  source, by downloading
-#  depends
-#  extract
-#  patch
-#  configure
-#  build
-else if <OVERRIDE CASE>
-# In the package override case, the sequence of steps
-#  source, by rsyncing
-#  depends
-#  configure
-# build
-
-else if <IN-PLACE CASE>
-#  depends
-#  configure
-#  build
-
-> See http://free-electrons.com/blog/buildroot-2011-11/ for more details
-> on this source directory override mechanism.
-
-Actually, it was this post that brought me to buildroot again :)
-
-Thanks,
-Roy
+> In fact, if the "host tar" is BSD-tar, then you can unpack *.iso9660
+> as if it was an archive.
+>
+> Mike
+>> > My current approach is this:
+>> > +INFLATE.cpio = cat
+>> > +
+>> > +EXTRACT.tar = $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(1) $(TAR_OPTIONS) -
+>> > +EXTRACT.cpio = ( mkdir -p $(1) && cd $(1) && cpio -i )
+>> >
+>> > ?$(2)_EXTRACT_CMDS ?= \
+>> > ? ? ? ? $$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE)))
+>> > $(DL_DIR)/$$($(2)_SOURCE) | \
+>> > - ? ? ? $(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
+>> > + ? ? ? $$(if $$(EXTRACT$$(suffix $$($(2)_SOURCE))),$$(call
+>> > EXTRACT$$(suffix $$($(2)_SOURCE)),$$($(2)_DIR)),$$(call
+>> > EXTRACT$$(suffix $$(basename $$($(2)_SOURCE))),$$($(2)_DIR))))
+>> >
+>> >
+>> > The only thing I'm struggling with is that cpio does not have a
+>> > --strip-components functionality.
+>> >
+>>
+>> Would: "--no-absolute-filenames" help on the cpio command?
+>>
+>> If this will become a general purpose extract.cpio command, it
+>> should have that option even if it doesn't help in this case.
+>>
+>> Many cpio archives do have absolute paths (like the initramFS
+>> archive) even if the GNU-TAR cpio archive does not.
+>>
+>> Mike
+>> > As a result, the package is
+>> > extracted in output/build/host-tar-1.26/tar-1.26 which is not right.
+>> > I don't directly know the name 'tar-1.26', because all I have is the
+>> > string 'host-tar-1.26'. I see two approaches:
+>> > * either try to strip of 'host' from $(2)_DIR
+>> > * or do something like 'mv * .' or 'find -maxdepth 1 -type d | xargs mv {} .'
+>> >
+>> > Suggestions are much appreciated...
+>> >
+>> > Thanks,
+>> > Thomas
+>> > _______________________________________________
+>> > buildroot mailing list
+>> > buildroot at busybox.net
+>> > http://lists.busybox.net/mailman/listinfo/buildroot
+>> >
+>> >
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
