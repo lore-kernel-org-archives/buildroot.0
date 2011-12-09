@@ -1,30 +1,15 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Fri, 9 Dec 2011 15:45:55 +0100
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 09 Dec 2011 15:31:45 +0100
 Subject: [Buildroot] [PATCH] Add new package libmbus Library for
-	communicating with energy metering devices
-In-Reply-To: <4EE21BD1.6000001@lucaceresoli.net>
+ communicating with energy metering devices
+In-Reply-To: <1323434376-22948-1-git-send-email-sagaert.johan@skynet.be>
 References: <1323434376-22948-1-git-send-email-sagaert.johan@skynet.be>
- <4EE21BD1.6000001@lucaceresoli.net>
-Message-ID: <1E7578A9BC0F45538AD6BF81E18A8B4C@JohanW7>
+Message-ID: <4EE21BD1.6000001@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-Hi
-
-LIBMBUS_AUTORECONF=YES is needed because without it the build yields an
-error : 'test/Makefile.in' not found .
-
-
------Oorspronkelijk bericht-----
-Van: Luca Ceresoli [mailto:luca at lucaceresoli.net] 
-Verzonden: vrijdag 9 december 2011 15:32
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH] Add new package libmbus Library for
-communicating with energy metering devices
 
 Sagaert Johan wrote:
 >
@@ -58,8 +43,7 @@ Sagaert Johan wrote:
 > +config BR2_PACKAGE_LIBMBUS
 > +	bool "libmbus"
 > +	help
-> +	  libmbus is a library for communicating with energie metering
-devices
+> +	  libmbus is a library for communicating with energie metering devices
 > +	  supports TCP and RS232 M-bus gateways.
 
 s/energie/energy/
