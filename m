@@ -1,39 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  9 Dec 2011 09:39:19 -0300
-Subject: [Buildroot] [PATCH] proftpd: security bump to version 1.3.3g
-Message-ID: <1323434359-9752-1-git-send-email-gustavo@zacarias.com.ar>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Fri,  9 Dec 2011 13:39:36 +0100
+Subject: [Buildroot] [PATCH] Add new package libmbus Library for
+	communicating with energy metering devices
+Message-ID: <1323434376-22948-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security bump version to 1.3.3g, fix for CVE-2011-4130
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- ....3g-fix-kernel-header-capability-version.patch} |    0
- package/proftpd/proftpd.mk                         |    3 ++-
- 2 files changed, 2 insertions(+), 1 deletions(-)
- rename package/proftpd/{proftpd-1.3.3e-fix-kernel-header-capability-version.patch => proftpd-1.3.3g-fix-kernel-header-capability-version.patch} (100%)
+ package/Config.in          |    1 +
+ package/libmbus/Config.in  |    7 +++++++
+ package/libmbus/libmbus.mk |   12 ++++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/libmbus/Config.in
+ create mode 100644 package/libmbus/libmbus.mk
 
-diff --git a/package/proftpd/proftpd-1.3.3e-fix-kernel-header-capability-version.patch b/package/proftpd/proftpd-1.3.3g-fix-kernel-header-capability-version.patch
-similarity index 100%
-rename from package/proftpd/proftpd-1.3.3e-fix-kernel-header-capability-version.patch
-rename to package/proftpd/proftpd-1.3.3g-fix-kernel-header-capability-version.patch
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 2523dd2..5352ea7 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -3,7 +3,8 @@
- # proftpd
- #
- #############################################################
--PROFTPD_VERSION = 1.3.3e
+diff --git a/package/Config.in b/package/Config.in
+index e949649..8f0b5ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -330,6 +330,7 @@ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
++source "package/libmbus/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
+new file mode 100644
+index 0000000..93666ed
+--- /dev/null
++++ b/package/libmbus/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBMBUS
++	bool "libmbus"
++	help
++	  libmbus is a library for communicating with energie metering devices
++	  supports TCP and RS232 M-bus gateways.
++	  
++	  http://www.freescada.com/libmbus
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+new file mode 100644
+index 0000000..a57595e
+--- /dev/null
++++ b/package/libmbus/libmbus.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# libmbus
++#
++#############################################################
++LIBMBUS_VERSION:=0.6.1
++LIBMBUS_SOURCE:=libmbus-$(LIBMBUS_VERSION).tar.gz
++LIBMBUS_SITE:=http://www.freescada.com/public-dist/
++LIBMBUS_INSTALL_STAGING=YES
++LIBMBUS_AUTORECONF=YES
 +
-+PROFTPD_VERSION = 1.3.3g
- PROFTPD_SOURCE = proftpd-$(PROFTPD_VERSION).tar.bz2
- PROFTPD_SITE = ftp://ftp.proftpd.org/distrib/source/
- 
++$(eval $(call AUTOTARGETS))
 -- 
-1.7.3.4
+1.7.8-rc3
