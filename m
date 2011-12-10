@@ -1,46 +1,42 @@
 From: Guillaume Gardet <guillaume.gardet@free.fr>
-Date: Sat, 10 Dec 2011 11:06:31 +0100
+Date: Sat, 10 Dec 2011 11:28:22 +0100
 Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
-In-Reply-To: <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
+In-Reply-To: <20111209193729.0cc88e6e@skate>
 References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
- <87y5ull8z0.fsf@macbook.be.48ers.dk> <87ty59l5y1.fsf@macbook.be.48ers.dk>
- <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
-Message-ID: <4EE32F27.4080805@free.fr>
+Message-ID: <4EE33446.3070902@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-Le 10/12/2011 00:27, Trevor Woerner a ?crit :
-> On Fri, Dec 9, 2011 at 5:45 PM, Peter Korsgaard<jacmet@sunsite.dk>  wrote:
->>   Peter>  I'll try the specific .config next.
+Le 09/12/2011 19:37, Thomas Petazzoni a ?crit :
+> Hello Guillaume,
+>
+> Le Fri, 09 Dec 2011 09:47:16 +0100,
+> Guillaume Gardet<guillaume.gardet@free.fr>  a ?crit :
+>
+>> I tried a simple build (.config in attachment) on a 64-bit Linux
+>> (openSUSE 12.1) with CS 2009q1 toolchain (and last buildroot trunk)
+>> and some libs are built to output/target/usr/lib64/ so they are not
+>> found as dependencies. With the .config in attachment, you can try a
+>> build and check directfb config.log file and PNG lib and others are
+>> not found, so directfb is built without support for them. In the
+>> final image, they are also in usr/lib64 folder. It may be a problem
+>> for other packages.
 >>
->> Which just finished building here without any problems and no
->> usr/lib64. Any ideas?
-> I too am not able to reproduce this build failure.
-
-It was not a real failure, just a directfb build without PNG support. If you want a build failure, try to add fbgrab.
-
+>> What could be the problem and how to solve it?
+> Yeah, we had report of issues with openSUSE. I guess it's the multilib
+> implementation in openSUSE that confuses Buildroot somehow. I need to
+> get my hand on an openSUSE system to debug this.
 >
-> Starting with a fresh, basic, install of openSUSE 12.1 x86_64 (i.e.
-> not adding any extra packages above and beyond what the installer
-> chooses by default) then:
->
-> # zypper -n install git-core gcc ncurses-devel gcc-c++ bison flex
-> texinfo patch gmp-devel mpfr-devel mpc-devel
->
-> After that I ran a default build using the latest buildroot from git;
-> it succeeded. Then I tried using the config as provided in the initial
-> email (I only had to change it to download the CS toolchain) and it
-> too succeeded. I do end up with a target/usr/lib64 directory which
-> appears to contain everything yours does (quick glance) but it doesn't
-> seem to be a problem.
+> Can you easily provide me a basic chroot environment with openSUSE
+> installed in it, or point me to the documentation to set it up
+> (knowing, of course, that I don't have openSUSE installed here, so I
+> can't use openSUSE specific utilities to build the openSUSE chroot) ?
 
-It is since ld will not find libraries in it.
-
-> [...]
+Cannot you make a VM? Because I cannot provide you an openSUSE chroot.
 
 Guillaume
