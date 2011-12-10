@@ -1,31 +1,49 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 10 Dec 2011 11:46:29 +0100
-Subject: [Buildroot] [PATCH 1/1] Don't use host gcc use target
-	tools.(signed-off this time)
-Message-ID: <1323513989-8594-1-git-send-email-sagaert.johan@skynet.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 10 Dec 2011 15:46:19 +0100
+Subject: [Buildroot] [PATCH 1/1] New Package libmbus library for
+ communicating with M-bus devices.(rework)
+In-Reply-To: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
+References: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20111210154619.2fdaccf8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/libcgi/libcgi.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+You forgot your Signed-off-by line, which is mandatory.
 
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index 5867ff9..e70be80 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -7,5 +7,7 @@ LIBCGI_VERSION:=1.0
- LIBCGI_SOURCE:=libcgi-$(LIBCGI_VERSION).tar.gz
- LIBCGI_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcgi
- LIBCGI_INSTALL_STAGING=YES
-+#Don't use host compiler
-+LIBCGI_MAKE_ENV = CC="$(TARGET_CC)"  AR="$(TARGET_AR)"
- 
- $(eval $(call AUTOTARGETS))
+Le Sat, 10 Dec 2011 01:48:00 +0100,
+Sagaert Johan <sagaert.johan@skynet.be> a ?crit :
+
+> +++ b/package/libmbus/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_LIBMBUS
+> +	bool "libmbus"
+> +	help
+> +	  libmbus is a library for communicating with energy metering devices.
+> +	  It supports TCP and RS232 M-bus gateways.
+> +	  ( M-bus standard : http://www.m-bus.com/ )
+
+Remove space after ( and before ).
+
+> +LIBMBUS_VERSION:=0.6.1
+
+= instead of :=
+
+> +LIBMBUS_SOURCE:=libmbus-$(LIBMBUS_VERSION).tar.gz
+
+Not needed, that's the default.
+
+> +LIBMBUS_SITE:=http://www.freescada.com/public-dist/
+
+= instead of :=
+
+Thomas
 -- 
-1.7.8
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
