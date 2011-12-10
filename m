@@ -1,10 +1,11 @@
 From: Guillaume Gardet <guillaume.gardet@free.fr>
-Date: Sat, 10 Dec 2011 11:01:54 +0100
+Date: Sat, 10 Dec 2011 11:06:31 +0100
 Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
-In-Reply-To: <87y5ull8z0.fsf@macbook.be.48ers.dk>
+In-Reply-To: <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
 References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
- <87y5ull8z0.fsf@macbook.be.48ers.dk>
-Message-ID: <4EE32E12.3000303@free.fr>
+ <87y5ull8z0.fsf@macbook.be.48ers.dk> <87ty59l5y1.fsf@macbook.be.48ers.dk>
+ <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
+Message-ID: <4EE32F27.4080805@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,33 @@ To: buildroot@busybox.net
 
 
 
-Le 09/12/2011 22:40, Peter Korsgaard a ?crit :
->>>>>> "Thomas" == Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  writes:
->   >>  What could be the problem and how to solve it?
->
->   Thomas>  Yeah, we had report of issues with openSUSE. I guess it's the multilib
->   Thomas>  implementation in openSUSE that confuses Buildroot somehow. I need to
->   Thomas>  get my hand on an openSUSE system to debug this.
->
-> I just did a suse install in kvm, and haven't been able to reproduce the
-> issue yet. The SUSE devs does seem to have a few peculiar choices, such
-> as having . in the path and using /usr/lib64 for the native 64bit libs.
+Le 10/12/2011 00:27, Trevor Woerner a ?crit :
+> On Fri, Dec 9, 2011 at 5:45 PM, Peter Korsgaard<jacmet@sunsite.dk>  wrote:
+>>   Peter>  I'll try the specific .config next.
+>>
+>> Which just finished building here without any problems and no
+>> usr/lib64. Any ideas?
+> I too am not able to reproduce this build failure.
 
-I am using openSUSE (not SUSE Enterprise). Which version are you using?
-PATH should not contain . and mine (openSUSE 12.1) does not have it.
+It was not a real failure, just a directfb build without PNG support. If you want a build failure, try to add fbgrab.
 
 >
-> I'll try the specific .config next.
+> Starting with a fresh, basic, install of openSUSE 12.1 x86_64 (i.e.
+> not adding any extra packages above and beyond what the installer
+> chooses by default) then:
 >
+> # zypper -n install git-core gcc ncurses-devel gcc-c++ bison flex
+> texinfo patch gmp-devel mpfr-devel mpc-devel
+>
+> After that I ran a default build using the latest buildroot from git;
+> it succeeded. Then I tried using the config as provided in the initial
+> email (I only had to change it to download the CS toolchain) and it
+> too succeeded. I do end up with a target/usr/lib64 directory which
+> appears to contain everything yours does (quick glance) but it doesn't
+> seem to be a problem.
+
+It is since ld will not find libraries in it.
+
+> [...]
+
+Guillaume
