@@ -1,37 +1,72 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 10 Dec 2011 23:19:43 +0100
-Subject: [Buildroot] [git commit] gst-ffmpeg: bump to version 0.10.13
-Message-ID: <20111210222041.190818F8F9@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sun, 11 Dec 2011 00:23:31 +0100
+Subject: [Buildroot] [PATCH 1/1] New package libmbus library for
+	communicating with M-bus energy metering devices.
+Message-ID: <1323559411-1383-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a9d409aba0c1d30645204d163517044fd56a7e5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+libmbus is an open source M-bus (Meter-Bus) library.
+The Meter-Bus is a standard for reading out meter data from electricity meters, heat meters, gas meters, etc.
+
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/multimedia/gst-ffmpeg/gst-ffmpeg.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in          |    1 +
+ package/libmbus/Config.in  |    8 ++++++++
+ package/libmbus/libmbus.mk |   14 ++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/libmbus/Config.in
+ create mode 100644 package/libmbus/libmbus.mk
 
-diff --git a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-index 41a7f3b..c955632 100644
---- a/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/multimedia/gst-ffmpeg/gst-ffmpeg.mk
-@@ -4,11 +4,11 @@
- #
- #############################################################
- 
--GST_FFMPEG_VERSION = 0.10.11
-+GST_FFMPEG_VERSION = 0.10.13
- GST_FFMPEG_SOURCE = gst-ffmpeg-$(GST_FFMPEG_VERSION).tar.bz2
- GST_FFMPEG_SITE = http://gstreamer.freedesktop.org/src/gst-ffmpeg
- GST_FFMPEG_INSTALL_STAGING = YES
--GST_FFMPEG_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg
-+GST_FFMPEG_DEPENDENCIES = host-pkg-config gstreamer gst-plugins-base ffmpeg
- GST_FFMPEG_CONF_OPT = --with-system-ffmpeg
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
+diff --git a/package/Config.in b/package/Config.in
+index eb93b1c..9e9027d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -333,6 +333,7 @@ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
++source "package/libmbus/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
+new file mode 100644
+index 0000000..f545117
+--- /dev/null
++++ b/package/libmbus/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBMBUS
++	bool "libmbus"
++	help
++	  libmbus is a library for communicating with energy metering devices.
++	  It supports TCP and RS232 M-bus gateways.
++	  (M-bus standard : http://www.m-bus.com/)
++	  
++	  http://www.freescada.com/libmbus
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+new file mode 100644
+index 0000000..a6d31da
+--- /dev/null
++++ b/package/libmbus/libmbus.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# libmbus
++#
++#############################################################
++LIBMBUS_VERSION=0.6.1
++LIBMBUS_SITE=http://www.freescada.com/public-dist/
++LIBMBUS_INSTALL_STAGING=YES
++
++# Without this the build yields an error:
++#   cannot find input file: `test/Makefile.in'
++LIBMBUS_AUTORECONF=YES
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.8
