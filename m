@@ -1,49 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 10 Dec 2011 15:46:19 +0100
-Subject: [Buildroot] [PATCH 1/1] New Package libmbus library for
- communicating with M-bus devices.(rework)
-In-Reply-To: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
-References: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20111210154619.2fdaccf8@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 10 Dec 2011 15:45:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 4592] New: libXfont and libXft building failed,
+ cross-compilation error
+Message-ID: <bug-4592-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=4592
 
-You forgot your Signed-off-by line, which is mandatory.
+           Summary: libXfont and libXft building failed, cross-compilation
+                    error
+           Product: buildroot
+           Version: 2011.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: marioabajo at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Le Sat, 10 Dec 2011 01:48:00 +0100,
-Sagaert Johan <sagaert.johan@skynet.be> a ?crit :
 
-> +++ b/package/libmbus/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBMBUS
-> +	bool "libmbus"
-> +	help
-> +	  libmbus is a library for communicating with energy metering devices.
-> +	  It supports TCP and RS232 M-bus gateways.
-> +	  ( M-bus standard : http://www.m-bus.com/ )
+Hi :)
+ I was  getting this type of errors when building an arm images with Xorg:
 
-Remove space after ( and before ).
 
-> +LIBMBUS_VERSION:=0.6.1
+  CC     xftswap.lo
+  CC     xftxlfd.lo
+  CCLD   libXft.la
+/usr/lib/libfreetype.so: file not recognized: File format not recognized
+collect2: ld returned 1 exit status
+make[3]: *** [libXft.la] Error 1
 
-= instead of :=
+I was able to correct the problem adding this line to the package definition
+file xlib_libXfont.mk:
+XLIB_LIBXFONT_CONF_ENV = FREETYPE_LIBS=$(STAGING_DIR)/usr/lib
 
-> +LIBMBUS_SOURCE:=libmbus-$(LIBMBUS_VERSION).tar.gz
+and also to xlib_libXft.mk:
+XLIB_LIBXFT_CONF_ENV = FREETYPE_LIBS=$(STAGING_DIR)/usr/lib
 
-Not needed, that's the default.
 
-> +LIBMBUS_SITE:=http://www.freescada.com/public-dist/
+Thanks a lot for this great piece of software.
 
-= instead of :=
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
