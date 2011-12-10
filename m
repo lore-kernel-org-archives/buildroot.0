@@ -1,54 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 10 Dec 2011 15:45:35 +0000 (UTC)
-Subject: [Buildroot] [Bug 4592] New: libXfont and libXft building failed,
- cross-compilation error
-Message-ID: <bug-4592-163@https.bugs.busybox.net/>
+From: Lukasz Pulka <lukasz@oxnet.pl>
+Date: Sat, 10 Dec 2011 17:58:37 +0100
+Subject: [Buildroot] [PATCH] gst-dsp: Bump to version 0.10.0
+Message-ID: <1323536317-3531-1-git-send-email-lukasz@oxnet.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4592
+Signed-off-by: Lukasz Pulka <lukasz@oxnet.pl>
+---
+ package/multimedia/gst-dsp/gst-dsp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-           Summary: libXfont and libXft building failed, cross-compilation
-                    error
-           Product: buildroot
-           Version: 2011.11
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: marioabajo at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-Hi :)
- I was  getting this type of errors when building an arm images with Xorg:
-
-
-  CC     xftswap.lo
-  CC     xftxlfd.lo
-  CCLD   libXft.la
-/usr/lib/libfreetype.so: file not recognized: File format not recognized
-collect2: ld returned 1 exit status
-make[3]: *** [libXft.la] Error 1
-
-I was able to correct the problem adding this line to the package definition
-file xlib_libXfont.mk:
-XLIB_LIBXFONT_CONF_ENV = FREETYPE_LIBS=$(STAGING_DIR)/usr/lib
-
-and also to xlib_libXft.mk:
-XLIB_LIBXFT_CONF_ENV = FREETYPE_LIBS=$(STAGING_DIR)/usr/lib
-
-
-Thanks a lot for this great piece of software.
-
+diff --git a/package/multimedia/gst-dsp/gst-dsp.mk b/package/multimedia/gst-dsp/gst-dsp.mk
+index cd856c1..1e1894d 100644
+--- a/package/multimedia/gst-dsp/gst-dsp.mk
++++ b/package/multimedia/gst-dsp/gst-dsp.mk
+@@ -1,4 +1,4 @@
+-GST_DSP_VERSION = 0.9.0
++GST_DSP_VERSION = 0.10.0
+ GST_DSP_SITE = http://gst-dsp.googlecode.com/files/
+ 
+ define GST_DSP_BUILD_CMDS
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.2.5
