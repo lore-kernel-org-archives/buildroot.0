@@ -1,44 +1,68 @@
-From: Trevor Woerner <twoerner@gmail.com>
-Date: Fri, 9 Dec 2011 18:27:34 -0500
-Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
-In-Reply-To: <87ty59l5y1.fsf@macbook.be.48ers.dk>
-References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
- <87y5ull8z0.fsf@macbook.be.48ers.dk>
- <87ty59l5y1.fsf@macbook.be.48ers.dk>
-Message-ID: <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 10 Dec 2011 01:48:00 +0100
+Subject: [Buildroot] [PATCH 1/1] New Package libmbus library for
+	communicating with M-bus devices.(rework)
+Message-ID: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 9, 2011 at 5:45 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
-> ?Peter> I'll try the specific .config next.
->
-> Which just finished building here without any problems and no
-> usr/lib64. Any ideas?
+---
+ package/Config.in          |    1 +
+ package/libmbus/Config.in  |    8 ++++++++
+ package/libmbus/libmbus.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/libmbus/Config.in
+ create mode 100644 package/libmbus/libmbus.mk
 
-I too am not able to reproduce this build failure.
-
-Starting with a fresh, basic, install of openSUSE 12.1 x86_64 (i.e.
-not adding any extra packages above and beyond what the installer
-chooses by default) then:
-
-# zypper -n install git-core gcc ncurses-devel gcc-c++ bison flex
-texinfo patch gmp-devel mpfr-devel mpc-devel
-
-After that I ran a default build using the latest buildroot from git;
-it succeeded. Then I tried using the config as provided in the initial
-email (I only had to change it to download the CS toolchain) and it
-too succeeded. I do end up with a target/usr/lib64 directory which
-appears to contain everything yours does (quick glance) but it doesn't
-seem to be a problem.
-
-I then installed the "glibc-devel-32bit" package and tried again. It
-too succeeded (after a "make clean"). I installed that package because
-the presence of the "/usr/include/gnu/stubs-32.h" file this package
-installs was interfering with a prior yocto build I had performed (so
-I thought it might also be a culprit here too, but it wasn't).
-
-Best regards,
-    Trevor
+diff --git a/package/Config.in b/package/Config.in
+index e949649..8f0b5ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -330,6 +330,7 @@ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
++source "package/libmbus/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
+new file mode 100644
+index 0000000..0f71ec5
+--- /dev/null
++++ b/package/libmbus/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBMBUS
++	bool "libmbus"
++	help
++	  libmbus is a library for communicating with energy metering devices.
++	  It supports TCP and RS232 M-bus gateways.
++	  ( M-bus standard : http://www.m-bus.com/ )
++	  
++	  http://www.freescada.com/libmbus
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+new file mode 100644
+index 0000000..d9915ea
+--- /dev/null
++++ b/package/libmbus/libmbus.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# libmbus
++#
++#############################################################
++LIBMBUS_VERSION:=0.6.1
++LIBMBUS_SOURCE:=libmbus-$(LIBMBUS_VERSION).tar.gz
++LIBMBUS_SITE:=http://www.freescada.com/public-dist/
++LIBMBUS_INSTALL_STAGING=YES
++
++# Without this the build yields an error:
++#   cannot find input file: `test/Makefile.in'
++LIBMBUS_AUTORECONF=YES
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.8
