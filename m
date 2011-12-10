@@ -1,71 +1,62 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 10 Dec 2011 22:13:15 +0100
-Subject: [Buildroot] [git commit] New package: giblib
-Message-ID: <20111210222040.C5A0B8F8F9@busybox.osuosl.org>
+Date: Sat, 10 Dec 2011 22:20:56 +0100
+Subject: [Buildroot] [git commit] ffmpeg: bump to version 0.8.7
+Message-ID: <20111210222041.0B7D28F8F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5917191b3fd88104493165c1bcb0e116b1f848da
+commit: http://git.buildroot.net/buildroot/commit/?id=f113cc334059093a5a4aa8d04908f161835f7386
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: Needs X support and X support in imlib2]
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Tested-By: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in        |    1 +
- package/giblib/Config.in |   10 ++++++++++
- package/giblib/giblib.mk |   14 ++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch |   18 +++++++++---------
+ package/multimedia/ffmpeg/ffmpeg.mk              |    2 +-
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 50fbfc0..cf0f400 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -277,6 +277,7 @@ source "package/cairo/Config.in"
- source "package/fltk/Config.in"
- source "package/fontconfig/Config.in"
- source "package/freetype/Config.in"
-+source "package/giblib/Config.in"
- source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
-diff --git a/package/giblib/Config.in b/package/giblib/Config.in
-new file mode 100644
-index 0000000..7153bd5
---- /dev/null
-+++ b/package/giblib/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_GIBLIB
-+	bool "giblib"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_IMLIB2
-+	select BR2_PACKAGE_IMLIB2_X
-+	help
-+	  Giblib is a simple library which wraps imlib2.
-+
-+	  http://linuxbrit.co.uk/giblib/
-+
-diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
-new file mode 100644
-index 0000000..8288b74
---- /dev/null
-+++ b/package/giblib/giblib.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# giblib
-+#
-+#############################################################
-+GIBLIB_VERSION = 1.2.4
-+GIBLIB_SOURCE = giblib-$(GIBLIB_VERSION).tar.gz
-+GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
-+GIBLIB_INSTALL_STAGING = YES
-+GIBLIB_DEPENDENCIES = imlib2
-+GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING)/usr/lib \
-+		  --with-imlib2-exec-prefix=$(STAGING)/usr/bin
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch b/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch
+index de2c004..64371b2 100644
+--- a/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch
++++ b/package/multimedia/ffmpeg/ffmpeg-sdlconfig.patch
+@@ -3,15 +3,15 @@ So just pass the whole string to make things simpler.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura ffmpeg-0.6.1/configure ffmpeg-0.6.1.sdl/configure
+---- ffmpeg-0.6.1/configure	2010-06-15 16:44:30.000000000 -0300
+-+++ ffmpeg-0.6.1.sdl/configure	2011-02-25 17:13:12.979168176 -0300
+-@@ -2640,7 +2640,7 @@
+-     die "ERROR: No version of libdc1394 found "
+- fi
++diff -Nura ffmpeg-0.8.7.orig/configure ffmpeg-0.8.7/configure
++--- ffmpeg-0.8.7.orig/configure	2011-11-21 16:49:30.000000000 -0300
+++++ ffmpeg-0.8.7/configure	2011-12-02 08:13:36.746619395 -0300
++@@ -2957,7 +2957,7 @@
++ enabled libxvid    && require  libxvid xvid.h xvid_global -lxvidcore
++ enabled mlib       && require  mediaLib mlib_types.h mlib_VectorSub_S16_U8_Mod -lmlib
+  
+ -SDL_CONFIG="${cross_prefix}sdl-config"
+ +SDL_CONFIG="${SDL_CONFIG}"
+- if "${SDL_CONFIG}" --version > /dev/null 2>&1; then
+-     sdl_cflags=$("${SDL_CONFIG}" --cflags)
+-     sdl_libs=$("${SDL_CONFIG}" --libs)
++ if check_pkg_config sdl SDL_version.h SDL_Linked_Version; then
++     check_cpp_condition SDL.h "(SDL_MAJOR_VERSION<<16 | SDL_MINOR_VERSION<<8 | SDL_PATCHLEVEL) >= 0x010201" $sdl_cflags &&
++     enable sdl &&
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index ca41892..ef97674 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-FFMPEG_VERSION = 0.6.3
++FFMPEG_VERSION = 0.8.7
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
