@@ -1,143 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 10 Dec 2011 20:33:11 +0100
-Subject: [Buildroot] [git commit] ipset: bump to version 6.10
-Message-ID: <20111210222040.8FB948F8FF@busybox.osuosl.org>
+Date: Sat, 10 Dec 2011 22:13:15 +0100
+Subject: [Buildroot] [git commit] New package: giblib
+Message-ID: <20111210222040.C5A0B8F8F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8623910ed01805ccd7408a0582ddabb7997a1a8
+commit: http://git.buildroot.net/buildroot/commit/?id=5917191b3fd88104493165c1bcb0e116b1f848da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Peter: Needs X support and X support in imlib2]
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-By: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ipset/ipset-drop-modules.patch |  100 --------------------------------
- package/ipset/ipset.mk                 |    3 +-
- 2 files changed, 2 insertions(+), 101 deletions(-)
+ package/Config.in        |    1 +
+ package/giblib/Config.in |   10 ++++++++++
+ package/giblib/giblib.mk |   14 ++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/package/ipset/ipset-drop-modules.patch b/package/ipset/ipset-drop-modules.patch
-deleted file mode 100644
-index ee29d43..0000000
---- a/package/ipset/ipset-drop-modules.patch
-+++ /dev/null
-@@ -1,100 +0,0 @@
--Drop all the kernel checks and let the user deal with having a new enough
--version of the kernel to enjoy this.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--
--diff -Nura ipset-6.8.orig//Makefile.am ipset-6.8/Makefile.am
----- ipset-6.8.orig//Makefile.am	2011-08-17 16:10:41.999386034 -0300
--+++ ipset-6.8/Makefile.am	2011-08-17 16:17:34.108702969 -0300
--@@ -4,11 +4,6 @@
-- 
-- include $(top_srcdir)/Make_global.am
-- 
---if ! WITH_KBUILDDIR
---KBUILD_OUTPUT=/lib/modules/`uname -r`/build
---else
---KBUILD_OUTPUT=$(KBUILDDIR)
---endif
-- if ! WITH_MAXSETS
-- IP_SET_MAX=256
-- else
--@@ -22,23 +17,6 @@
-- 
-- SUBDIRS		= lib src
-- 
---modules_sparse:
---	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter \
---			V=$V C=2 CF=-D__CHECK_ENDIAN__ \
---			IP_SET_MAX=$(IP_SET_MAX) KDIR=$$PWD/kernel modules
---
---modules:
---	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter V=$V \
---			IP_SET_MAX=$(IP_SET_MAX) KDIR=$$PWD/kernel modules
---
---modules_install:
---	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter \
---			KDIR=$$PWD/kernel modules_install
---
---modules_clean:
---	${MAKE} -C $(KBUILD_OUTPUT) M=$$PWD/kernel/net/netfilter \
---			KDIR=$$PWD/kernel clean
---
-- update_includes:
-- 	./update ip_set.h
-- 	./update ip_set_bitmap.h
--diff -Nura ipset-6.8.orig//configure.ac ipset-6.8/configure.ac
----- ipset-6.8.orig//configure.ac	2011-08-17 16:10:42.015387986 -0300
--+++ ipset-6.8/configure.ac	2011-08-17 16:18:01.578056869 -0300
--@@ -11,51 +11,6 @@
-- *) AC_MSG_ERROR([Linux systems supported exclusively!]);;
-- esac
-- 
---dnl Additional arguments
---dnl Kernel build directory or source tree
---AC_ARG_WITH([kbuild],
---            AS_HELP_STRING([--with-kbuild=PATH],
---                           [Path to kernel build directory]),
---            [KBUILDDIR="$withval";])
---AC_ARG_WITH([ksource],
---            AS_HELP_STRING([--with-ksource=PATH],
---                           [Path to kernel source directory, if not the same as the kernel build directory]),
---            [KSOURCEDIR="$withval";])
---AM_CONDITIONAL(WITH_KBUILDDIR, test "$KBUILDDIR" != "")
---AC_SUBST(KBUILDDIR)
---
---dnl Sigh: check kernel version dependencies
---if test "$KBUILDDIR" != ""
---then
---	kbuilddir="$KBUILDDIR"
---else
---	kbuilddir="/lib/modules/`uname -r`/build"
---fi
---
---if test -n "$KSOURCEDIR"; then
---	ksourcedir="$KSOURCEDIR"
---elif test -e "$kbuilddir/include/linux/netfilter/nfnetlink.h"; then
---	ksourcedir="$kbuilddir"
---else
---	ksourcedir="/lib/modules/$(uname -r)/source"
---fi
---if test ! -e "$ksourcedir/include/linux/netfilter/nfnetlink.h"
---then
---	AC_MSG_ERROR([Invalid kernel source directory $ksourcedir])
---fi
---
---if test ! -e "$kbuilddir/.config"
---then
---	AC_MSG_ERROR([The kernel build directory $kbuilddir is not configured])
---fi
---
---AC_PROG_GREP
---
---if test "X`$GREP 'NFNL_SUBSYS_IPSET' $ksourcedir/include/linux/netfilter/nfnetlink.h`" = "X"
---then
---	AC_MSG_ERROR([The kernel source directory $ksourcedir is not patched with netlink.patch to support ipset])
---fi
---
-- dnl Maximal number of sets supported by the kernel, default 256
-- AC_ARG_WITH([maxsets],
-- 	    AS_HELP_STRING([--with-maxsets=256],
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index f98f73f..d8df026 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,10 +4,11 @@
- #
- #############################################################
- 
--IPSET_VERSION = 6.9.1
-+IPSET_VERSION = 6.10
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_AUTORECONF = YES
- IPSET_DEPENDENCIES = libmnl host-pkg-config
-+IPSET_CONF_OPT = --with-kmod=no
- 
- $(eval $(call AUTOTARGETS))
+diff --git a/package/Config.in b/package/Config.in
+index 50fbfc0..cf0f400 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -277,6 +277,7 @@ source "package/cairo/Config.in"
+ source "package/fltk/Config.in"
+ source "package/fontconfig/Config.in"
+ source "package/freetype/Config.in"
++source "package/giblib/Config.in"
+ source "package/gtk2-engines/Config.in"
+ source "package/gtk2-themes/Config.in"
+ source "package/imlib2/Config.in"
+diff --git a/package/giblib/Config.in b/package/giblib/Config.in
+new file mode 100644
+index 0000000..7153bd5
+--- /dev/null
++++ b/package/giblib/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_GIBLIB
++	bool "giblib"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_IMLIB2
++	select BR2_PACKAGE_IMLIB2_X
++	help
++	  Giblib is a simple library which wraps imlib2.
++
++	  http://linuxbrit.co.uk/giblib/
++
+diff --git a/package/giblib/giblib.mk b/package/giblib/giblib.mk
+new file mode 100644
+index 0000000..8288b74
+--- /dev/null
++++ b/package/giblib/giblib.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# giblib
++#
++#############################################################
++GIBLIB_VERSION = 1.2.4
++GIBLIB_SOURCE = giblib-$(GIBLIB_VERSION).tar.gz
++GIBLIB_SITE = http://linuxbrit.co.uk/downloads/
++GIBLIB_INSTALL_STAGING = YES
++GIBLIB_DEPENDENCIES = imlib2
++GIBLIB_CONF_OPT = --with-imlib2-prefix=$(STAGING)/usr/lib \
++		  --with-imlib2-exec-prefix=$(STAGING)/usr/bin
++
++$(eval $(call AUTOTARGETS))
