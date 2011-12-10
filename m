@@ -1,22 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 10 Dec 2011 22:12:00 +0100
-Subject: [Buildroot] [PATCH v6 3/3] New package: feh
-In-Reply-To: <1318840867-20976-4-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 17 Oct 2011 10:41:07
- +0200")
-References: <1318840867-20976-1-git-send-email-yegorslists@googlemail.com>
- <1318840867-20976-4-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87y5ukjfmn.fsf@macbook.be.48ers.dk>
+Date: Sat, 10 Dec 2011 22:16:25 +0100
+Subject: [Buildroot] [PATCH] gst-dsp: Bump to version 0.10.0
+In-Reply-To: <1323536317-3531-1-git-send-email-lukasz@oxnet.pl> (Lukasz
+ Pulka's message of "Sat, 10 Dec 2011 17:58:37 +0100")
+References: <1323536317-3531-1-git-send-email-lukasz@oxnet.pl>
+Message-ID: <87ty58jffa.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Lukasz" == Lukasz Pulka <lukasz@oxnet.pl> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Lukasz> Signed-off-by: Lukasz Pulka <lukasz@oxnet.pl>
+ Lukasz> ---
 
 Committed, thanks.
 
