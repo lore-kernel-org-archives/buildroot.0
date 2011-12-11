@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 11 Dec 2011 12:25:59 -0300
-Subject: [Buildroot] [PATCH 4/5] wavpack: fix broken build with binutils
-	2.22+
+Date: Sun, 11 Dec 2011 12:26:00 -0300
+Subject: [Buildroot] [PATCH 5/5] xf86-video-sis: bump to version 0.10.3
 In-Reply-To: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1323617160-4360-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1323617160-4360-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/wavpack/wavpack.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ .../xdriver_xf86-video-sis.mk                      |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/wavpack/wavpack.mk b/package/multimedia/wavpack/wavpack.mk
-index 8b0af0b..9680385 100644
---- a/package/multimedia/wavpack/wavpack.mk
-+++ b/package/multimedia/wavpack/wavpack.mk
-@@ -11,6 +11,8 @@ WAVPACK_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+index 8343761..69a5d52 100644
+--- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
++++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifneq ($(BR2_ENABLE_LOCALE),y)
- WAVPACK_DEPENDENCIES += libiconv
-+# Fix for binutils 2.22+ new default --no-copy-dt-needed
-+WAVPACK_CONF_ENV = LIBS="-liconv"
- endif
- 
- $(eval $(call AUTOTARGETS))
+-XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.2
++XDRIVER_XF86_VIDEO_SIS_VERSION = 0.10.3
+ XDRIVER_XF86_VIDEO_SIS_SOURCE = xf86-video-sis-$(XDRIVER_XF86_VIDEO_SIS_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
 -- 
 1.7.3.4
