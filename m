@@ -1,36 +1,22 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 11 Dec 2011 21:53:05 +0000 (UTC)
-Subject: [Buildroot] [Bug 4592] libXfont and libXft building failed,
- cross-compilation error
-In-Reply-To: <bug-4592-163@https.bugs.busybox.net/>
-References: <bug-4592-163@https.bugs.busybox.net/>
-Message-ID: <20111211215305.4FA028F8CB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 Dec 2011 22:53:55 +0100
+Subject: [Buildroot] [PATCH 1/5] squid: bump to version 3.1.18
+In-Reply-To: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 11 Dec 2011 12:25:56 -0300")
+References: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871usadbbg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4592
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Gustavo> ---
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-11 21:53:05 UTC ---
-Sorry, I cannot reproduce it here. Please provide some more details:
-
-- What is your exact .config?
-- Do you have freetype development headers/libs on your host?
-- libXft uses pkg-config to find freetype, and freetype depends on
-host-pkg-config, so that should be fine. Could you please attach your
-output/build/xlib_libXft-2.1.14/config.log file?
-
-Thanks.
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
