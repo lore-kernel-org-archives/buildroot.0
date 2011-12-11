@@ -1,32 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Dec 2011 23:35:07 +0100
-Subject: [Buildroot] [git commit] libffi: enable host target
-Message-ID: <20111211224225.20C1F8F8FD@busybox.osuosl.org>
+Date: Sun, 11 Dec 2011 23:54:12 +0100
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20111211225425.37B958F901@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9c35d5ceaaf32b939e90277edc8f14153e9524c
+commit: http://git.buildroot.net/buildroot/commit/?id=1bde07d6edb12a686203e8be7d65a3d62a88e0da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libffi is a new requirement for libglib, and as libglib has to be built
-for the host as well, libffi has to follow.
-
-Signed-off-by: Daniel Mack <zonque@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libffi/libffi.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ CHANGES |   19 ++++++++++++-------
+ 1 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 5ada36d..e9e87ef 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -32,4 +32,5 @@ endef
- LIBFFI_POST_INSTALL_TARGET_HOOKS += LIBFFI_MOVE_TARGET_HEADERS
+diff --git a/CHANGES b/CHANGES
+index 330ac6a..515e3db 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -2,6 +2,8 @@
  
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
+ 	Fixes all over the tree and new features.
+ 
++	Toolchain: Default to GCC 4.5.x, add binutils 2.22.
++
+ 	Gentargets: scp and mercurial support.
+ 
+ 	defconfigs: qemu configs for x86-64 and sparc.
+@@ -9,13 +11,16 @@
+ 	uClibc: remove 0.9.30, backport unshare() support.
+ 
+ 	Updated/fixed packages: barebox, bash, binutils, bison,
+-	coreutils, dbus-glib, diffutils, dropbear, ebtables, flex,
+-	fluxbox, gawk, grep, gst-dsp, htop, iproute2, iw, lame,
+-	libgpg-error, libgtk2, libroxml, m4, module-init-tools,
+-	mtd-utils, nano, nbd, netsnmp, ruby, u-boot, usbmount,
+-	wpa_supplicant, xdm
+-
+-	New packages: connman, transmission
++	coreutils, dbus-glib, diffutils, dropbear, ebtables, ffmpeg,
++	flex, fluxbox, gawk, grep, gst-dsp, gst-ffmpeg, htop,
++	i2c-tools, iproute2, ipset, iw, lame, libcgi, libeXosip2,
++	libffi, libgpg-error, libgtk2, libroxml, m4,
++	module-init-tools, mpd, mtd-utils, nano, nbd, netsnmp, opencv,
++	pcre, proftpd, ruby, sqlite, squid, u-boot, usbmount, vsftpd,
++	wpa_supplicant, xdm, xf86-video-sis
++
++	New packages: connman, gliblib, feh, imlib2, transmission,
++	xinput-calibrator
+ 
+ 	Issues resolved (http://bugs.uclibc.org):
  
