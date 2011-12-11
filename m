@@ -1,9 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 11 Dec 2011 12:25:58 -0300
-Subject: [Buildroot] [PATCH 3/5] faad2: fix broken build with binutils 2.22+
+Date: Sun, 11 Dec 2011 12:25:59 -0300
+Subject: [Buildroot] [PATCH 4/5] wavpack: fix broken build with binutils
+	2.22+
 In-Reply-To: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1323617160-4360-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1323617160-4360-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/multimedia/faad2/faad2.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/multimedia/wavpack/wavpack.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/faad2/faad2.mk b/package/multimedia/faad2/faad2.mk
-index 366515c..2913272 100644
---- a/package/multimedia/faad2/faad2.mk
-+++ b/package/multimedia/faad2/faad2.mk
-@@ -7,5 +7,8 @@
- FAAD2_VERSION = 2.7
- FAAD2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/faac
- FAAD2_INSTALL_STAGING = YES
+diff --git a/package/multimedia/wavpack/wavpack.mk b/package/multimedia/wavpack/wavpack.mk
+index 8b0af0b..9680385 100644
+--- a/package/multimedia/wavpack/wavpack.mk
++++ b/package/multimedia/wavpack/wavpack.mk
+@@ -11,6 +11,8 @@ WAVPACK_INSTALL_STAGING = YES
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ WAVPACK_DEPENDENCIES += libiconv
 +# Fix for binutils 2.22+ new default --no-copy-dt-needed
-+# Requires libm
-+FAAD2_CONF_ENV = LIBS="-lm"
++WAVPACK_CONF_ENV = LIBS="-liconv"
+ endif
  
  $(eval $(call AUTOTARGETS))
 -- 
