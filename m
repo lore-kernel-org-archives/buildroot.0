@@ -1,54 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 Dec 2011 13:40:47 +0100
-Subject: [Buildroot] [PATCH 1/1] New Package libmbus library for
- communicating with M-bus devices.(rework)
-In-Reply-To: <8C82EF97265D4A6DA5ED238B24FD8DC0@JohanW7>
-References: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
- <20111210154619.2fdaccf8@skate>
- <8C82EF97265D4A6DA5ED238B24FD8DC0@JohanW7>
-Message-ID: <20111211134047.003e334d@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 11 Dec 2011 12:25:56 -0300
+Subject: [Buildroot] [PATCH 1/5] squid: bump to version 3.1.18
+Message-ID: <1323617160-4360-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Johan,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Please keep the Buildroot list Cc'ed.
-
-Le Sat, 10 Dec 2011 18:26:31 +0100,
-"Sagaert Johan" <sagaert.johan@skynet.be> a ?crit :
-
-> Yes, i just saw it, I started using git only since last week, and I used
->  --signed-off instead of --signoff. Still need to learn a lot and do some
-> tuning in the .gitconfig file. Will create some script so I don't forget any
-> mandatory options.
-
-No problem. Don't worry if everything is not perfect the first time:
-that's why we have code review. Even experienced developers don't
-always get everything right.
-
-> One more question: is it OK to comment in the xxx.mk files ?
-> (I have a libcgi patch and i included a comment line why I added the
-> AUTORECONF option.) 
-
-Yes, it is perfectly ok, and even better, in your case, I think it was
-a very good idea. Having _AUTORECONF=YES is strange when no patch is
-changing the configure.ac or Makefile.in files, so having a short
-comment justifying the usage of _AUTORECONF=YES is welcome.
-
-> I use qgit and smartgit gui-clients, do you suggest something better ?)
-
-I do all my git stuff using the git command line utility, and I've
-never tried any of the graphical stuff for git (except gitk for pure
-visualization of git history).
-
-Best regards,
-
-Thomas
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index c5f66f6..a2160f1 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQUID_VERSION = 3.1.16
++SQUID_VERSION = 3.1.18
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
+ SQUID_DEPENDENCIES = libcap host-libcap
+ SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
