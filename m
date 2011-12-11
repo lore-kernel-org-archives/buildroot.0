@@ -1,50 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Dec 2011 23:34:48 +0100
-Subject: [Buildroot] [git commit] libffi: remove invalid variable
-	'includedir' in .pc file
-Message-ID: <20111211224225.126848F8FD@busybox.osuosl.org>
+Date: Sun, 11 Dec 2011 23:33:27 +0100
+Subject: [Buildroot] [git commit] i2c-tools: fix Config.in whitespace
+Message-ID: <20111211224225.034C38F8FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=22acade2ec3116021304f82d157b3c09ab22f45e
+commit: http://git.buildroot.net/buildroot/commit/?id=a877a07ee83878d6dae0dc364aacd4962fcf169a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following error:
+Purely cosmetical.
 
-  Variable 'includedir' not defined in '/home/daniel/buildroot/output/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/lib/pkgconfig/libffi.pc'
-
-Also, use $(SED) instead of 'sed -i'.
-
-Signed-off-by: Daniel Mack <zonque@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libffi/libffi.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/i2c-tools/Config.in |   14 +++++++-------
+ 1 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 660a034..5ada36d 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -13,7 +13,8 @@ LIBFFI_INSTALL_STAGING = YES
- # accordingly
- define LIBFFI_MOVE_STAGING_HEADERS
- 	mv $(STAGING_DIR)/usr/lib/libffi-*/include/*.h $(STAGING_DIR)/usr/include/
--	sed -i '/^includedir.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
-+	$(SED) '/^includedir.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
-+	$(SED) '/^Cflags:.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
- 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
- endef
+diff --git a/package/i2c-tools/Config.in b/package/i2c-tools/Config.in
+index 47d0642..43f5e05 100644
+--- a/package/i2c-tools/Config.in
++++ b/package/i2c-tools/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_I2C_TOOLS
+-    bool "i2c-tools"
+-    help
+-        Heterogeneous set of I2C tools for Linux
++	bool "i2c-tools"
++	help
++	  Heterogeneous set of I2C tools for Linux
  
-@@ -23,7 +24,8 @@ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
- define LIBFFI_MOVE_TARGET_HEADERS
- 	install -d $(TARGET_DIR)/usr/include/
- 	mv $(TARGET_DIR)/usr/lib/libffi-*/include/*.h $(TARGET_DIR)/usr/include/
--	sed -i '/^includedir.*/d' $(TARGET_DIR)/usr/lib/pkgconfig/libffi.pc
-+	$(SED) '/^includedir.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
-+	$(SED) '/^Cflags:.*/d' $(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
- 	rm -rf $(TARGET_DIR)/usr/lib/libffi-*
- endef
+-        This package contains a heterogeneous set of I2C tools for Linux:
+-        a bus probing tool, a chip dumper, register-level access helpers,
+-        EEPROM decoding scripts, and more.
++	  This package contains a heterogeneous set of I2C tools for Linux:
++	  a bus probing tool, a chip dumper, register-level access helpers,
++	  EEPROM decoding scripts, and more.
  
+-        http://www.lm-sensors.org
++	  http://www.lm-sensors.org
