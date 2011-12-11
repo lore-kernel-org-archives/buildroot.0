@@ -1,22 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Dec 2011 22:23:57 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: update stable kernel to 3.1.5
-In-Reply-To: <1323466995-21127-2-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Fri, 9 Dec 2011 22:43:15 +0100")
-References: <1323466995-21127-1-git-send-email-s.neumann@raumfeld.com>
- <1323466995-21127-2-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <8762hmdcpe.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 Dec 2011 21:53:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 4592] libXfont and libXft building failed,
+ cross-compilation error
+In-Reply-To: <bug-4592-163@https.bugs.busybox.net/>
+References: <bug-4592-163@https.bugs.busybox.net/>
+Message-ID: <20111211215305.4FA028F8CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4592
 
- Sven> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-11 21:53:05 UTC ---
+Sorry, I cannot reproduce it here. Please provide some more details:
+
+- What is your exact .config?
+- Do you have freetype development headers/libs on your host?
+- libXft uses pkg-config to find freetype, and freetype depends on
+host-pkg-config, so that should be fine. Could you please attach your
+output/build/xlib_libXft-2.1.14/config.log file?
+
+Thanks.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
