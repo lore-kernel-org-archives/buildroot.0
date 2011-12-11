@@ -1,53 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Dec 2011 22:17:58 +0100
-Subject: [Buildroot] [git commit] sqlite: add option to enable additional
-	query optimizations (stat3)
-Message-ID: <20111211215606.833238F8D6@busybox.osuosl.org>
+Date: Sun, 11 Dec 2011 22:22:29 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.1.x stable
+	versions
+Message-ID: <20111211215606.922348F8D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bb9a6db18f9c54df3356bc5116ac064637e8368
+commit: http://git.buildroot.net/buildroot/commit/?id=267e1672166741ec1d5049061cc010294545e512
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: rename headers_install patch so it gets applied]
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sqlite/Config.in |    8 ++++++++
- package/sqlite/sqlite.mk |    4 ++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index f9b12ae..25aaa3f 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -14,3 +14,11 @@ config BR2_PACKAGE_SQLITE_READLINE
- 	help
- 	  Enable command-line editing. This requires ncurses and readline.
- 
-+config BR2_PACKAGE_SQLITE_STAT3
-+	bool "Additional query optimizations (stat3)"
-+	depends on BR2_PACKAGE_SQLITE
-+	help
-+	  Adds additional logic to the ANALYZE command and to the query
-+	  planner that can help SQLite to choose a better query plan under
-+	  certain situations.
-+
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 0bee337..042c7f9 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -16,6 +16,10 @@ ifneq ($(BR2_LARGEFILE),y)
- SQLITE_CFLAGS += -DSQLITE_DISABLE_LFS
- endif
- 
-+ifeq ($(BR2_PACKAGE_SQLITE_STAT3),y)
-+SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT3
-+endif
-+
- SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
- 
- SQLITE_CONF_OPT = \
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 9e72b00..04407d1 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -57,7 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.12"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.1.4"		if BR2_KERNEL_HEADERS_3_1
++	default "3.0.13"	if BR2_KERNEL_HEADERS_3_0
++	default "3.1.5"		if BR2_KERNEL_HEADERS_3_1
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.12-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.12-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch
