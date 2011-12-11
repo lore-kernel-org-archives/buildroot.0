@@ -1,40 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Dec 2011 23:15:49 +0100
-Subject: [Buildroot] [git commit] libcgi: build for target, not host
-Message-ID: <20111211222422.D3AFD8F8CD@busybox.osuosl.org>
+Date: Sun, 11 Dec 2011 23:20:35 +0100
+Subject: [Buildroot] [git commit] libeXosip2: bump version
+Message-ID: <20111211222422.E40B18F8CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e1d1c379e9f9aad3956f19a2c3d67eb7701cb48f
+commit: http://git.buildroot.net/buildroot/commit/?id=792b018b3712effe16da39787c8f75629fde8362
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: Ensure correct CFLAGS are used, whitespace cleanup]
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcgi/libcgi.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/libeXosip2/libeXosip2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
-index 5867ff9..5a52fa6 100644
---- a/package/libcgi/libcgi.mk
-+++ b/package/libcgi/libcgi.mk
-@@ -3,9 +3,11 @@
- # libcgi
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 69fdca3..4a00a2b 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -3,7 +3,7 @@
+ # libeXosip2
  #
  #############################################################
--LIBCGI_VERSION:=1.0
--LIBCGI_SOURCE:=libcgi-$(LIBCGI_VERSION).tar.gz
--LIBCGI_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcgi
--LIBCGI_INSTALL_STAGING=YES
-+
-+LIBCGI_VERSION = 1.0
-+LIBCGI_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcgi
-+LIBCGI_INSTALL_STAGING = YES
-+# use cross CC/AR rather than host
-+LIBCGI_MAKE_ENV = CC="$(TARGET_CC) $(TARGET_CFLAGS)" AR="$(TARGET_AR)"
- 
- $(eval $(call AUTOTARGETS))
+-LIBEXOSIP2_VERSION = 3.3.0
++LIBEXOSIP2_VERSION = 3.5.0
+ LIBEXOSIP2_SOURCE = libexosip2_$(LIBEXOSIP2_VERSION).orig.tar.gz
+ LIBEXOSIP2_PATCH = libexosip2_$(LIBEXOSIP2_VERSION)-1.diff.gz
+ LIBEXOSIP2_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libe/libexosip2
