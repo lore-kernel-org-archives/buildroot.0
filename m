@@ -1,72 +1,96 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 11 Dec 2011 00:23:31 +0100
-Subject: [Buildroot] [PATCH 1/1] New package libmbus library for
-	communicating with M-bus energy metering devices.
-Message-ID: <1323559411-1383-1-git-send-email-sagaert.johan@skynet.be>
+From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
+Date: Sun, 11 Dec 2011 11:48:51 +0100
+Subject: [Buildroot] [PATCH] ffmpeg: add TARGET_CFLAGS to configure
+In-Reply-To: <1323456835-16869-1-git-send-email-lukasz@oxnet.pl>
+References: <1323456835-16869-1-git-send-email-lukasz@oxnet.pl>
+Message-ID: <CALX2uoNb3s7T9QYNDF3y+yysN8N6R2fRaGdzm7Y3jcePqybnFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+> Without setting extra-cflags some optimzations are not enabled by configure (e.g. NEON), even if --enable-neon is used.
+>
+> Signed-off-by: Lukasz Pulka <lukasz@oxnet.pl>
+> ---
+> ?package/multimedia/ffmpeg/ffmpeg.mk | ? ?2 +-
+> ?1 files changed, 1 insertions(+), 1 deletions(-)
+>
+> diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+> index ca41892..2517a62 100644
+> --- a/package/multimedia/ffmpeg/ffmpeg.mk
+> +++ b/package/multimedia/ffmpeg/ffmpeg.mk
+> @@ -166,7 +166,7 @@ define FFMPEG_CONFIGURE_CMDS
+> ? ? ? ? ? ? ? ?--host-cc="$(HOSTCC)" \
+> ? ? ? ? ? ? ? ?--arch=$(BR2_ARCH) \
+> ? ? ? ? ? ? ? ?--target-os=linux \
+> - ? ? ? ? ? ? ? --extra-cflags=-fPIC \
+> + ? ? ? ? ? ? ? --extra-cflags='-fPIC $(TARGET_CFLAGS)' \
+> ? ? ? ? ? ? ? ?$(SHARED_STATIC_LIBS_OPTS) \
+> ? ? ? ? ? ? ? ?$(FFMPEG_CONF_OPT) \
+> ? ? ? ?)
+> --
+> 1.7.2.5
+>
 
-libmbus is an open source M-bus (Meter-Bus) library.
-The Meter-Bus is a standard for reading out meter data from electricity meters, heat meters, gas meters, etc.
+Hi,
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/Config.in          |    1 +
- package/libmbus/Config.in  |    8 ++++++++
- package/libmbus/libmbus.mk |   14 ++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/libmbus/Config.in
- create mode 100644 package/libmbus/libmbus.mk
+Maybe I will present some more detailed information,  about this patch.
 
-diff --git a/package/Config.in b/package/Config.in
-index eb93b1c..9e9027d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -333,6 +333,7 @@ source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
- source "package/libmnl/Config.in"
- source "package/libmodbus/Config.in"
-+source "package/libmbus/Config.in"
- source "package/libnl/Config.in"
- source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
-diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
-new file mode 100644
-index 0000000..f545117
---- /dev/null
-+++ b/package/libmbus/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBMBUS
-+	bool "libmbus"
-+	help
-+	  libmbus is a library for communicating with energy metering devices.
-+	  It supports TCP and RS232 M-bus gateways.
-+	  (M-bus standard : http://www.m-bus.com/)
-+	  
-+	  http://www.freescada.com/libmbus
-diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
-new file mode 100644
-index 0000000..a6d31da
---- /dev/null
-+++ b/package/libmbus/libmbus.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# libmbus
-+#
-+#############################################################
-+LIBMBUS_VERSION=0.6.1
-+LIBMBUS_SITE=http://www.freescada.com/public-dist/
-+LIBMBUS_INSTALL_STAGING=YES
-+
-+# Without this the build yields an error:
-+#   cannot find input file: `test/Makefile.in'
-+LIBMBUS_AUTORECONF=YES
-+
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.8
+I want to build ffmpeg with NEON optimizations for Cortex A8 target,
+if i use latest buildroot from git and  my following settings in my
+board defconfig:
+
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TARGET_OPTIMIZATION="-mfpu=neon -ftree-vectorize -mfloat-abi=softfp"
+
+BR2_TOOLCHAIN_CTNG=y
+BR2_TOOLCHAIN_CTNG_glibc=y
+BR2_TOOLCHAIN_CTNG_CXX=y
+
+after ffpmeg-reconfigure I see following output
+
+big-endian                no
+runtime cpu detection     no
+ARMv5TE enabled           yes
+ARMv6 enabled             yes
+ARMv6T2 enabled           yes
+ARM VFP enabled           no
+IWMMXT enabled            no
+NEON enabled              no
+debug symbols             yes
+strip symbols             yes
+optimize for size         no
+optimizations             yes
+static                    yes
+
+it is clear for me that NEON optimizations are not enabled, however
+few lines above I can see the configure command line which ends with
+"--enable-pthreads --enable-zlib --enable-armvfp --enable-neon".
+
+If I add TARGET_CFLAGS to the extra-cflags configure option,  and
+recofnigure ffmpeg, NEON is enabled (I belive that -mfpu=neon does the
+trick).
+
+big-endian                no
+runtime cpu detection     no
+ARMv5TE enabled           yes
+ARMv6 enabled             yes
+ARMv6T2 enabled           yes
+ARM VFP enabled           yes
+IWMMXT enabled            no
+NEON enabled              yes
+debug symbols             yes
+strip symbols             yes
+optimize for size         no
+optimizations             yes
+static                    yes
+shared                    yes
+
+Is there any other cleaner(without patching buildroot), way of
+enabling NEON optimizations for ffmpeg ?
+
+Best regards,
+Lukasz Pulka
