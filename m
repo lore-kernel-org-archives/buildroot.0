@@ -1,41 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Dec 2011 22:16:16 +0100
-Subject: [Buildroot] [git commit] sqlite: refactor how CFLAGS are passed to
-	the configure script
-Message-ID: <20111211215606.7466B8F8D6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 Dec 2011 23:18:00 +0100
+Subject: [Buildroot] [PATCH 1/1] Don't use host gcc use target
+	tools.(signed-off this time)
+In-Reply-To: <1323513989-8594-1-git-send-email-sagaert.johan@skynet.be>
+ (Sagaert Johan's message of "Sat, 10 Dec 2011 11:46:29 +0100")
+References: <1323513989-8594-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <87k462bvmv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2e7ec721f28a360b6bda2ed7e0f26218accc292
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Change the way the SQLITE_CONF_ENV variable is constructed in
-preparation of passing other CFLAGS to the configure script.
+Please don't add comments like that in the subject, as that goes in the
+final commit message - Rather put it after the '---' line and before the
+patch.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sqlite/sqlite.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index f587f47..0bee337 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -13,9 +13,11 @@ ifneq ($(BR2_LARGEFILE),y)
- # the sqlite configure script fails to define SQLITE_DISABLE_LFS when
- # --disable-largefile is passed, breaking the build. Work around it by
- # simply adding it to CFLAGS for configure instead
--SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DSQLITE_DISABLE_LFS"
-+SQLITE_CFLAGS += -DSQLITE_DISABLE_LFS
- endif
- 
-+SQLITE_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) $(SQLITE_CFLAGS)"
-+
- SQLITE_CONF_OPT = \
- 	--enable-threadsafe \
- 	--localstatedir=/var
+
+ Sagaert> ---
+ Sagaert>  package/libcgi/libcgi.mk |    2 ++
+ Sagaert>  1 files changed, 2 insertions(+), 0 deletions(-)
+
+ Sagaert> diff --git a/package/libcgi/libcgi.mk b/package/libcgi/libcgi.mk
+ Sagaert> index 5867ff9..e70be80 100644
+ Sagaert> --- a/package/libcgi/libcgi.mk
+ Sagaert> +++ b/package/libcgi/libcgi.mk
+ Sagaert> @@ -7,5 +7,7 @@ LIBCGI_VERSION:=1.0
+ Sagaert>  LIBCGI_SOURCE:=libcgi-$(LIBCGI_VERSION).tar.gz
+ Sagaert>  LIBCGI_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libcgi
+ Sagaert>  LIBCGI_INSTALL_STAGING=YES
+ Sagaert> +#Don't use host compiler
+ Sagaert> +LIBCGI_MAKE_ENV = CC="$(TARGET_CC)"  AR="$(TARGET_AR)"
+
+We should also pass TARGET_CFLAGS, to ensure the right compiler flags
+are used.
+
+I fixed that up and cleaned up some whitespace issues while I was at it
+and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
