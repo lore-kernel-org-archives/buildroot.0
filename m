@@ -1,96 +1,54 @@
-From: =?ISO-8859-2?B?o3VrYXN6IFB1s2th?= <lukasz@oxnet.pl>
-Date: Sun, 11 Dec 2011 11:48:51 +0100
-Subject: [Buildroot] [PATCH] ffmpeg: add TARGET_CFLAGS to configure
-In-Reply-To: <1323456835-16869-1-git-send-email-lukasz@oxnet.pl>
-References: <1323456835-16869-1-git-send-email-lukasz@oxnet.pl>
-Message-ID: <CALX2uoNb3s7T9QYNDF3y+yysN8N6R2fRaGdzm7Y3jcePqybnFw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 Dec 2011 13:40:47 +0100
+Subject: [Buildroot] [PATCH 1/1] New Package libmbus library for
+ communicating with M-bus devices.(rework)
+In-Reply-To: <8C82EF97265D4A6DA5ED238B24FD8DC0@JohanW7>
+References: <1323478080-2915-1-git-send-email-sagaert.johan@skynet.be>
+ <20111210154619.2fdaccf8@skate>
+ <8C82EF97265D4A6DA5ED238B24FD8DC0@JohanW7>
+Message-ID: <20111211134047.003e334d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Without setting extra-cflags some optimzations are not enabled by configure (e.g. NEON), even if --enable-neon is used.
->
-> Signed-off-by: Lukasz Pulka <lukasz@oxnet.pl>
-> ---
-> ?package/multimedia/ffmpeg/ffmpeg.mk | ? ?2 +-
-> ?1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-> index ca41892..2517a62 100644
-> --- a/package/multimedia/ffmpeg/ffmpeg.mk
-> +++ b/package/multimedia/ffmpeg/ffmpeg.mk
-> @@ -166,7 +166,7 @@ define FFMPEG_CONFIGURE_CMDS
-> ? ? ? ? ? ? ? ?--host-cc="$(HOSTCC)" \
-> ? ? ? ? ? ? ? ?--arch=$(BR2_ARCH) \
-> ? ? ? ? ? ? ? ?--target-os=linux \
-> - ? ? ? ? ? ? ? --extra-cflags=-fPIC \
-> + ? ? ? ? ? ? ? --extra-cflags='-fPIC $(TARGET_CFLAGS)' \
-> ? ? ? ? ? ? ? ?$(SHARED_STATIC_LIBS_OPTS) \
-> ? ? ? ? ? ? ? ?$(FFMPEG_CONF_OPT) \
-> ? ? ? ?)
-> --
-> 1.7.2.5
->
+Hello Johan,
 
-Hi,
+Please keep the Buildroot list Cc'ed.
 
-Maybe I will present some more detailed information,  about this patch.
+Le Sat, 10 Dec 2011 18:26:31 +0100,
+"Sagaert Johan" <sagaert.johan@skynet.be> a ?crit :
 
-I want to build ffmpeg with NEON optimizations for Cortex A8 target,
-if i use latest buildroot from git and  my following settings in my
-board defconfig:
+> Yes, i just saw it, I started using git only since last week, and I used
+>  --signed-off instead of --signoff. Still need to learn a lot and do some
+> tuning in the .gitconfig file. Will create some script so I don't forget any
+> mandatory options.
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_TARGET_OPTIMIZATION="-mfpu=neon -ftree-vectorize -mfloat-abi=softfp"
+No problem. Don't worry if everything is not perfect the first time:
+that's why we have code review. Even experienced developers don't
+always get everything right.
 
-BR2_TOOLCHAIN_CTNG=y
-BR2_TOOLCHAIN_CTNG_glibc=y
-BR2_TOOLCHAIN_CTNG_CXX=y
+> One more question: is it OK to comment in the xxx.mk files ?
+> (I have a libcgi patch and i included a comment line why I added the
+> AUTORECONF option.) 
 
-after ffpmeg-reconfigure I see following output
+Yes, it is perfectly ok, and even better, in your case, I think it was
+a very good idea. Having _AUTORECONF=YES is strange when no patch is
+changing the configure.ac or Makefile.in files, so having a short
+comment justifying the usage of _AUTORECONF=YES is welcome.
 
-big-endian                no
-runtime cpu detection     no
-ARMv5TE enabled           yes
-ARMv6 enabled             yes
-ARMv6T2 enabled           yes
-ARM VFP enabled           no
-IWMMXT enabled            no
-NEON enabled              no
-debug symbols             yes
-strip symbols             yes
-optimize for size         no
-optimizations             yes
-static                    yes
+> I use qgit and smartgit gui-clients, do you suggest something better ?)
 
-it is clear for me that NEON optimizations are not enabled, however
-few lines above I can see the configure command line which ends with
-"--enable-pthreads --enable-zlib --enable-armvfp --enable-neon".
-
-If I add TARGET_CFLAGS to the extra-cflags configure option,  and
-recofnigure ffmpeg, NEON is enabled (I belive that -mfpu=neon does the
-trick).
-
-big-endian                no
-runtime cpu detection     no
-ARMv5TE enabled           yes
-ARMv6 enabled             yes
-ARMv6T2 enabled           yes
-ARM VFP enabled           yes
-IWMMXT enabled            no
-NEON enabled              yes
-debug symbols             yes
-strip symbols             yes
-optimize for size         no
-optimizations             yes
-static                    yes
-shared                    yes
-
-Is there any other cleaner(without patching buildroot), way of
-enabling NEON optimizations for ffmpeg ?
+I do all my git stuff using the git command line utility, and I've
+never tried any of the graphical stuff for git (except gitk for pure
+visualization of git history).
 
 Best regards,
-Lukasz Pulka
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
