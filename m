@@ -1,31 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Dec 2011 10:15:04 +0100
-Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
-In-Reply-To: <4EE5B9E9.40404@free.fr> (Guillaume Gardet's message of "Mon, 12
- Dec 2011 09:23:05 +0100")
-References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
- <87y5ull8z0.fsf@macbook.be.48ers.dk>
- <87ty59l5y1.fsf@macbook.be.48ers.dk>
- <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
- <4EE5B9E9.40404@free.fr>
-Message-ID: <87hb16up5z.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 12 Dec 2011 09:17:01 +0000 (UTC)
+Subject: [Buildroot] [Bug 4592] libXfont and libXft building failed,
+ cross-compilation error
+In-Reply-To: <bug-4592-163@https.bugs.busybox.net/>
+References: <bug-4592-163@https.bugs.busybox.net/>
+Message-ID: <20111212091701.683E08F930@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Guillaume" == Guillaume Gardet <guillaume.gardet@free.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4592
 
- Guillaume> Hi,
- Guillaume> I finally found the problem. It comes from the file /usr/share/site/x86_64-unknown-linux-gnu which deals with lib64 and does not support arm.
- Guillaume> A bug report with a patch has been submitted on openSUSE bugzilla :
- Guillaume> https://bugzilla.novell.com/show_bug.cgi?id=736143
-
-Ahh. I guess the best approach in buildroot is simply to unset
-CONFIG_SITE.
-
-Thanks.
+--- Comment #2 from Mario <marioabajo@gmail.com> 2011-12-12 09:17:01 UTC ---
+Created attachment 3878
+  --> https://bugs.busybox.net/attachment.cgi?id=3878
+.config file of the buildroot
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
