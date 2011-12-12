@@ -1,28 +1,70 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 12 Dec 2011 13:28:16 +0100
-Subject: [Buildroot] connman dowload failure
-In-Reply-To: <87wra2t1q6.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
- of "Mon, 12 Dec 2011 13:26:41 +0100")
-References: <20111212120653.GF4531@sapphire.tkos.co.il>
- <87wra2t1q6.fsf@macbook.be.48ers.dk>
-Message-ID: <87sjkqt1nj.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 12 Dec 2011 15:25:48 +0100
+Subject: [Buildroot] [PATCH 1/1] New package gsl The GNU Scientific Library.
+Message-ID: <1323699948-25758-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-Hi,
+The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers.
+The library provides a wide range of mathematical routines such as random number generators,
+special functions and least-squares fitting.
+There are over 1000 functions in total with an extensive test suite.
 
- Peter> This is caused by cf71111b99ab951 (Cleanup the VCS commands
- Peter> configuration). The BR2_GIT variable changed from "git clone" to just
- Peter> "git". If you change that in your .config it should work again.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/Config.in     |    1 +
+ package/gsl/Config.in |    8 ++++++++
+ package/gsl/gsl.mk    |   11 +++++++++++
+ 3 files changed, 20 insertions(+), 0 deletions(-)
+ create mode 100644 package/gsl/Config.in
+ create mode 100644 package/gsl/gsl.mk
 
-This breakage is indeed a bit unfortunate. For this (and other) reason
-it is a good idea to work with defconfig files which only contain the
-non-default settings (make savedefconfig).
-
+diff --git a/package/Config.in b/package/Config.in
+index eb93b1c..ff0838c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -343,6 +343,7 @@ endmenu
+ 
+ menu "Other"
+ source "package/fftw/Config.in"
++source "package/gsl/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+ source "package/libatomic_ops/Config.in"
+diff --git a/package/gsl/Config.in b/package/gsl/Config.in
+new file mode 100644
+index 0000000..75a38cd
+--- /dev/null
++++ b/package/gsl/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_GSL
++	bool "gsl"
++	help
++	  GSL The GNU Scientific Library.
++	  Includes a wide range of math functions.
++	  Statistics, Complex numbers, FFT, ...
++	  
++	  http://www.gnu.org/software/gsl
+diff --git a/package/gsl/gsl.mk b/package/gsl/gsl.mk
+new file mode 100644
+index 0000000..aa5a64a
+--- /dev/null
++++ b/package/gsl/gsl.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# gnu gsl
++#
++#############################################################
++GSL_VERSION = 1.15
++GSL_SITE = ftp://ftp.gnu.org/gnu/gsl/
++GSL_INSTALL_STAGING = YES
++GSL_INSTALL_TARGET = YES
++
++$(eval $(call AUTOTARGETS))
 -- 
-Bye, Peter Korsgaard
+1.7.8
