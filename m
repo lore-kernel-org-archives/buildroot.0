@@ -1,31 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Dec 2011 16:08:00 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Dec 2011 16:27:22 +0100
 Subject: [Buildroot] [PATCH 1/1] libosip2 : bump version.
-In-Reply-To: <1323701031-27344-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Mon, 12 Dec 2011 15:43:51 +0100")
+In-Reply-To: <87liqhu8tr.fsf@macbook.be.48ers.dk>
 References: <1323701031-27344-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87liqhu8tr.fsf@macbook.be.48ers.dk>
+ <87liqhu8tr.fsf@macbook.be.48ers.dk>
+Message-ID: <20111212162722.14634b32@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+Le Mon, 12 Dec 2011 16:08:00 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- Sagaert> Bump libosip2 version since libeXosip2 depends on this.
+> Either use the real upstream or change to a stable snapshot.debian.org
+> URL.
 
-Debian seems to have moved on..
+Generally speaking, I think we should refuse to use URLs on
+ftp.debian.org. Those are *always* changing all the time, and have
+already broken the build for numerous packages. They are also causing
+problems to people using old versions of Buildroot.
 
->>> libosip2 3.5.0 Downloading
---2011-12-12 16:05:45--  http://ftp.debian.org/debian/pool/main/libo/libosip2/libosip2_3.5.0.orig.tar.gz
-Resolving ftp.debian.org (ftp.debian.org)... 130.89.148.12, 2001:610:1908:b000::148:12
-Connecting to ftp.debian.org (ftp.debian.org)|130.89.148.12|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2011-12-12 16:05:46 ERROR 404: Not Found.
-
-Either use the real upstream or change to a stable snapshot.debian.org
-URL.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
