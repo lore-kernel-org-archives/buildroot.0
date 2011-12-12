@@ -1,33 +1,31 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 12 Dec 2011 15:43:51 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 12 Dec 2011 16:08:00 +0100
 Subject: [Buildroot] [PATCH 1/1] libosip2 : bump version.
-Message-ID: <1323701031-27344-1-git-send-email-sagaert.johan@skynet.be>
+In-Reply-To: <1323701031-27344-1-git-send-email-sagaert.johan@skynet.be>
+ (Sagaert Johan's message of "Mon, 12 Dec 2011 15:43:51 +0100")
+References: <1323701031-27344-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <87liqhu8tr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Bump libosip2 version since libeXosip2 depends on this.
+ Sagaert> Bump libosip2 version since libeXosip2 depends on this.
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/libosip2/libosip2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Debian seems to have moved on..
 
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 29d2a55..1cb926a 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -3,7 +3,7 @@
- # libosip2
- #
- #############################################################
--LIBOSIP2_VERSION = 3.3.0
-+LIBOSIP2_VERSION = 3.5.0
- LIBOSIP2_SOURCE = libosip2_$(LIBOSIP2_VERSION).orig.tar.gz
- LIBOSIP2_PATCH = libosip2_$(LIBOSIP2_VERSION)-1.diff.gz
- LIBOSIP2_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libo/libosip2
+>>> libosip2 3.5.0 Downloading
+--2011-12-12 16:05:45--  http://ftp.debian.org/debian/pool/main/libo/libosip2/libosip2_3.5.0.orig.tar.gz
+Resolving ftp.debian.org (ftp.debian.org)... 130.89.148.12, 2001:610:1908:b000::148:12
+Connecting to ftp.debian.org (ftp.debian.org)|130.89.148.12|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2011-12-12 16:05:46 ERROR 404: Not Found.
+
+Either use the real upstream or change to a stable snapshot.debian.org
+URL.
+
 -- 
-1.7.8
+Bye, Peter Korsgaard
