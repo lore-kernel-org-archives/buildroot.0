@@ -1,34 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 12 Dec 2011 09:31:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 4592] libXfont and libXft building failed,
- cross-compilation error
-In-Reply-To: <bug-4592-163@https.bugs.busybox.net/>
-References: <bug-4592-163@https.bugs.busybox.net/>
-Message-ID: <20111212093131.3E8418F906@busybox.osuosl.org>
+From: Guillaume Gardet <guillaume.gardet@free.fr>
+Date: Mon, 12 Dec 2011 11:13:15 +0100
+Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
+In-Reply-To: <87hb16up5z.fsf@macbook.be.48ers.dk>
+References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
+ <87y5ull8z0.fsf@macbook.be.48ers.dk> <87ty59l5y1.fsf@macbook.be.48ers.dk>
+ <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
+ <4EE5B9E9.40404@free.fr> <87hb16up5z.fsf@macbook.be.48ers.dk>
+Message-ID: <4EE5D3BB.7000700@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4592
 
---- Comment #7 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-12 09:31:31 UTC ---
-(In reply to comment #6)
-> I was getting similar errors with other packages and i start investigating in
-> other direction when i found the LD_LIBRARY_PATH pointing at /usr/lib .
-> Pointing that env variable to
-> /home/turin/proyectos/mini2440/buildroot/buildroot-2011.11/output/host/usr/lib
-> made the building process without errors. My computer is still compilling, so
-> when it finish y will try to restart the building with a clean LD_LIBRARY_PATH
-> variable to see if this was the problem.
 
-LD_LIBRARY_PATH can indeed screw up stuff. Normally it shouldn't be needed for
-a location like /usr/lib, so I suggest you delete rather than pointing to your
-buildroot dir (we already use rpath, so it shouldn't be needed for buildroot
-either).
+Le 12/12/2011 10:15, Peter Korsgaard a ?crit :
+>>>>>> "Guillaume" == Guillaume Gardet<guillaume.gardet@free.fr>  writes:
+>   Guillaume>  Hi,
+>   Guillaume>  I finally found the problem. It comes from the file /usr/share/site/x86_64-unknown-linux-gnu which deals with lib64 and does not support arm.
+>   Guillaume>  A bug report with a patch has been submitted on openSUSE bugzilla :
+>   Guillaume>  https://bugzilla.novell.com/show_bug.cgi?id=736143
+>
+> Ahh. I guess the best approach in buildroot is simply to unset
+> CONFIG_SITE.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+If buildroot do not use/need it, yes.
+Because I have same kind of troubles with some host packages now (not yet released packages). :(
+
+If I unset CONFIG_SITE, it seems to work fine. :)
+Could you unset CONFIG_SITE in Buildroot, please?
+
+Guillaume
