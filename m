@@ -1,54 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 12 Dec 2011 21:13:58 +0100
-Subject: [Buildroot] [git commit] libosip: bump version,
-	use upstream directly
-Message-ID: <20111212202250.DF8208F92D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libeXosip2: fix openssl handling
+Message-ID: <20111212202250.EC3D98F934@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62c10600ab3a0958c9a141de7f99cfbf55308cd9
+commit: http://git.buildroot.net/buildroot/commit/?id=d8ce8742e2b87c9e8fb34d5c5ce565cf3b3a3891
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of Debian.
+Build libeXosip2 after openssl if enabled, and explicitly disable support
+for it otherwise, so configure doesn't end up looking for it on host.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libosip2/libosip2.mk |   22 ++++------------------
- 1 files changed, 4 insertions(+), 18 deletions(-)
+ package/libeXosip2/libeXosip2.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index 29d2a55..1d53f76 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -3,24 +3,10 @@
- # libosip2
- #
- #############################################################
--LIBOSIP2_VERSION = 3.3.0
--LIBOSIP2_SOURCE = libosip2_$(LIBOSIP2_VERSION).orig.tar.gz
--LIBOSIP2_PATCH = libosip2_$(LIBOSIP2_VERSION)-1.diff.gz
--LIBOSIP2_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libo/libosip2
--LIBOSIP2_INSTALL_STAGING = YES
--
--ifneq ($(LIBOSIP2_PATCH),)
--define LIBOSIP2_DEBIAN_PATCHES
--	if [ -d $(@D)/debian/patches ]; then \
--		(cd $(@D)/debian/patches && for i in *; \
--		 do $(SED) 's,^\+\+\+ .*cvs-$(LIBOSIP2_VERSION)/,+++ cvs-$(LIBOSIP2_VERSION)/,' $$i; \
--		 done; \
--		); \
--		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*; \
--	fi
--endef
--endif
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 4a00a2b..7c4753d 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -11,6 +11,13 @@ LIBEXOSIP2_INSTALL_STAGING = YES
  
--LIBOSIP2_POST_PATCH_HOOKS += LIBOSIP2_DEBIAN_PATCHES
-+LIBOSIP2_VERSION = 3.6.0
-+LIBOSIP2_SOURCE = libosip2-$(LIBOSIP2_VERSION).tar.gz
-+LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
-+LIBOSIP2_INSTALL_STAGING = YES
+ LIBEXOSIP2_DEPENDENCIES = host-pkg-config libosip2
  
- $(eval $(call AUTOTARGETS))
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBEXOSIP2_DEPENDENCIES += openssl
++LIBEXOSIP2_CONF_OPT += --enable-openssl
++else
++LIBEXOSIP2_CONF_OPT += --disable-openssl
++endif
++
+ ifneq ($(LIBEXOSIP2_PATCH),)
+ define LIBEXOSIP2_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
