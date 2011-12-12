@@ -1,11 +1,11 @@
 From: Guillaume Gardet <guillaume.gardet@free.fr>
-Date: Mon, 12 Dec 2011 09:23:05 +0100
+Date: Mon, 12 Dec 2011 09:25:52 +0100
 Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
-In-Reply-To: <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
+In-Reply-To: <87liqkkyzz.fsf@macbook.be.48ers.dk>
 References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
- <87y5ull8z0.fsf@macbook.be.48ers.dk> <87ty59l5y1.fsf@macbook.be.48ers.dk>
- <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
-Message-ID: <4EE5B9E9.40404@free.fr>
+ <87y5ull8z0.fsf@macbook.be.48ers.dk> <4EE32E12.3000303@free.fr>
+ <87liqkkyzz.fsf@macbook.be.48ers.dk>
+Message-ID: <4EE5BA90.9040205@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,20 @@ To: buildroot@busybox.net
 
 Hi,
 
-I finally found the problem. It comes from the file /usr/share/site/x86_64-unknown-linux-gnu which deals with lib64 and does not support arm.
-A bug report with a patch has been submitted on openSUSE bugzilla :
-https://bugzilla.novell.com/show_bug.cgi?id=736143
+Le 10/12/2011 20:28, Peter Korsgaard a ?crit :
+>>>>>> "Guillaume" == Guillaume Gardet<guillaume.gardet@free.fr>  writes:
+> Hi,
+>
+>   Guillaume>  I am using openSUSE (not SUSE Enterprise). Which version are
+>   Guillaume>  you using?  PATH should not contain . and mine (openSUSE
+>   Guillaume>  12.1) does not have it.
+>
+> OpenSUSE 12.1 installed from the gnome livecd. Everything standard
+> except for the extra packages needed for buildroot.
+>
+It is best to install from DVD (especially for non english langages). I assumed you used a 64-bit live CD.
 
-If needed, you can apply it on a running machine :
-https://bugzillafiles.novell.org/attachment.cgi?id=466930
+Anyway, I found the (openSUSE) problem and made a patch for it. (See my previous email).
 
 Regards,
 
