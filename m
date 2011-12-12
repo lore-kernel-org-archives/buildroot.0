@@ -1,34 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Dec 2011 15:33:14 +0100
-Subject: [Buildroot] [PATCH 1/1] New package gsl The GNU Scientific
- Library.
-In-Reply-To: <1323699948-25758-1-git-send-email-sagaert.johan@skynet.be>
-References: <1323699948-25758-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20111212153314.63d6bdb2@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 12 Dec 2011 15:43:51 +0100
+Subject: [Buildroot] [PATCH 1/1] libosip2 : bump version.
+Message-ID: <1323701031-27344-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 12 Dec 2011 15:25:48 +0100,
-Sagaert Johan <sagaert.johan@skynet.be> a ?crit :
 
-> +GSL_VERSION = 1.15
-> +GSL_SITE = ftp://ftp.gnu.org/gnu/gsl/
+Bump libosip2 version since libeXosip2 depends on this.
 
-use BR2_GNU_MIRROR here.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/libosip2/libosip2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +GSL_INSTALL_STAGING = YES
-> +GSL_INSTALL_TARGET = YES
-
-This line can be removed, that's the default.
-
-Thanks again for this new package!
-
-Thomas
+diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+index 29d2a55..1cb926a 100644
+--- a/package/libosip2/libosip2.mk
++++ b/package/libosip2/libosip2.mk
+@@ -3,7 +3,7 @@
+ # libosip2
+ #
+ #############################################################
+-LIBOSIP2_VERSION = 3.3.0
++LIBOSIP2_VERSION = 3.5.0
+ LIBOSIP2_SOURCE = libosip2_$(LIBOSIP2_VERSION).orig.tar.gz
+ LIBOSIP2_PATCH = libosip2_$(LIBOSIP2_VERSION)-1.diff.gz
+ LIBOSIP2_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libo/libosip2
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8
