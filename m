@@ -1,21 +1,29 @@
-From: Trevor Woerner <twoerner@gmail.com>
-Date: Mon, 12 Dec 2011 07:19:41 -0500
-Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
-In-Reply-To: <4EE5B9E9.40404@free.fr>
-References: <4EE1CB14.9010802@free.fr> <20111209193729.0cc88e6e@skate>
- <87y5ull8z0.fsf@macbook.be.48ers.dk>
- <87ty59l5y1.fsf@macbook.be.48ers.dk>
- <CAHUNapRt1=nyUK=o__fUDk2JQVn66F1ikwBF+jarECg9=CESSg@mail.gmail.com>
- <4EE5B9E9.40404@free.fr>
-Message-ID: <CAHUNapQoVmFLu+MTSwG0R2WV6wHFO9yC-pNZ4FAL-VZbts7_Qw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 12 Dec 2011 13:26:41 +0100
+Subject: [Buildroot] connman dowload failure
+In-Reply-To: <20111212120653.GF4531@sapphire.tkos.co.il> (Baruch Siach's
+ message of "Mon, 12 Dec 2011 14:06:53 +0200")
+References: <20111212120653.GF4531@sapphire.tkos.co.il>
+Message-ID: <87wra2t1q6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Dec 12, 2011 at 3:23 AM, Guillaume Gardet
-<guillaume.gardet@free.fr> wrote:
-> I finally found the problem.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Awesome catch! Thanks for the update.
+ Baruch> Hi Buildroot list,
+ Baruch> I'm trying to build connman for my platform, but the build fails at the source 
+ Baruch> download stage using both git and wget. This is the output of 'make V=1':
+
+ >>>> connman 0.78 Downloading
+
+ Baruch>  test -e /home/baruch/git/buildroot/output/dl/connman-0.78.tar.gz || (pushd /home/baruch/git/buildroot/output/dl > /dev/null && git clone clone --bare git://git.kernel.org/pub/scm/network/connman/connman.git connman-0.78 && pushd connman-0.78 > /dev/null && git clone archive --format=tar --prefix=connman-0.78/ 0.78 | gzip -c > /home/baruch/git/buildroot/output/dl/connman-0.78.tar.gz && popd > /dev/null && rm -rf /home/baruch/git/buildroot/output/dl/connman-0.78 && popd > /dev/null) && exit 
+
+This is caused by cf71111b99ab951 (Cleanup the VCS commands
+configuration). The BR2_GIT variable changed from "git clone" to just
+"git". If you change that in your .config it should work again.
+
+-- 
+Bye, Peter Korsgaard
