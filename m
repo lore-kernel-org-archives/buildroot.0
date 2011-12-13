@@ -1,55 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Dec 2011 09:39:34 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 13 Dec 2011 14:39:18 +0100
 Subject: [Buildroot] Question about using mdev for /dev management
-In-Reply-To: <4EDD1149.8060104@carallon.com>
-References: <4EDD1149.8060104@carallon.com>
-Message-ID: <201112130939.34100.arnout@mind.be>
+In-Reply-To: <201112130939.34100.arnout@mind.be>
+References: <4EDD1149.8060104@carallon.com> <201112130939.34100.arnout@mind.be>
+Message-ID: <20111213143918.2790f6e4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 December 2011 19:45:29 Will Wagner wrote:
-> Firstly it replaces $(TARGET_DIR)/init with fs/cpio/init which attempts 
-> to mount devtmpfs. My kernel doesn't support this (it's too old) and I'd 
-> rather not get this trace in the boot (it worries other developers).
+Le Tue, 13 Dec 2011 09:39:34 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
- I didn't realize that mdev worked without devtmpfs in the kernel...
-If devtmpfs exists (and it does for all currently supported kernels), then
-it should be mounted as soon as possible.  It is normally mounted
-automatically by the kernel, except when it runs /init for an initramfs.
-That's why we have this extra /init script for the cpio rootfs.
+>  If you ask me, it's OK to add /dev entries in the
+> BR2_ROOTFS_DEVICE_TABLE. In fact, I think /dev/console and /dev/null
+> should be put in there.  But I've never gotten around to roll a patch
+> for it.
 
- You could add a check to the init script that mounts a normal tmpfs on
-/dev if the mount fails (and redirect its output to /dev/null).
+FWIW, when I initially introduced (based on prior patches) this
+static /dev vs. devtmpfs vs. mdev vs. udev selection, the mdev and udev
+choices were independent of devtmpfs, i.e there were using a minimal
+device tables with /dev/null and /dev/console. But after discussion on
+the mailing-list, it was decided that it was better to make devtmpfs a
+requirement when mdev and udev were choosen.
 
-> I assume that for mdev we could not replace init but instead make sure 
-> that /dev/console (and possibly /dev/null?) exist?
+See
 
- Yeah, actually, I think /dev/console and /dev/null should be created
-on the rootfs even if devtmpfs is used.  Which brings us to:
+  Message-Id: <f92465f9de8bcd24cf2c974b158a600a84e96422.1291582352.git.thomas.petazzoni@free-electrons.com>
 
+for the initial patch I proposed on December, 5th 2010.
 
-> The other small issue I have is that mdev fails to spot one of the 
-> kernel devices (as the driver doesn't have a sysfs entry) so it needs 
-> adding manually. I do that by adding an entry to BR2_ROOTFS_DEVICE_TABLE 
-> which works fine, but doesn't seem ideal as I thought device entries 
-> were meant to be set in BR2_ROOTFS_STATIC_DEVICE_TABLE, but that is not 
-> offered unless static devices used. Is there a better way to do this or 
-> should I just leave it as is?
+And
 
- If you ask me, it's OK to add /dev entries in the BR2_ROOTFS_DEVICE_TABLE.
-In fact, I think /dev/console and /dev/null should be put in there.  But
-I've never gotten around to roll a patch for it.
+ Message-ID: <87r5dgfldw.fsf@macbook.be.48ers.dk>
 
- Regards,
- Arnout
+for Peter's answer (December, 17th 2010), saying :
 
+"""
+ Thomas> At compile time, only a minimal /dev is created in the filesystem,
+ Thomas> with only "console" and "null". This is done thanks to a small device
+ Thomas> table in target/generic/device_table_mdev_udev.txt. This is done
+ Thomas> directly at the configuration level (fs/Config.in).  
+
+While I agree we need the minimal device table for /etc/shadow and
+similar permissions, do we really need to support mdev/udev without
+devtmpfs? It's been in the kernel now for close to 2 years, it's very
+small and it simplifies (and speeds up) the boot sequence quite a lot.
+"""
+
+Regards,
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
