@@ -1,45 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 13 Dec 2011 07:34:15 +0200
-Subject: [Buildroot] connman dowload failure
-In-Reply-To: <87wra2t1q6.fsf@macbook.be.48ers.dk>
-References: <20111212120653.GF4531@sapphire.tkos.co.il>
- <87wra2t1q6.fsf@macbook.be.48ers.dk>
-Message-ID: <20111213053415.GA11676@sapphire.tkos.co.il>
+From: Shawn Ferris <shawn.ferris@gmail.com>
+Date: Mon, 12 Dec 2011 23:14:13 -0700
+Subject: [Buildroot] Bad symbols on plugins for connman
+Message-ID: <1323756853.26968.6.camel@barkley.virtualsmf.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi All - I'm new to build-root, so I hope this isn't obvious. (My
+apologies if it is) Anyway, I just pulled a recent git (within the last
+few days) and I'm trying to get connman working but I'm getting the
+following errors running connmand with the --debug option. I get this
+with and without the option 'enable compiling with debugging
+information' set.
 
-On Mon, Dec 12, 2011 at 01:26:41PM +0100, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  Baruch> Hi Buildroot list,
->  Baruch> I'm trying to build connman for my platform, but the build fails at the source 
->  Baruch> download stage using both git and wget. This is the output of 'make V=1':
-> 
->  >>>> connman 0.78 Downloading
-> 
->  Baruch>  test -e /home/baruch/git/buildroot/output/dl/connman-0.78.tar.gz || (pushd /home/baruch/git/buildroot/output/dl > /dev/null && git clone clone --bare git://git.kernel.org/pub/scm/network/connman/connman.git connman-0.78 && pushd connman-0.78 > /dev/null && git clone archive --format=tar --prefix=connman-0.78/ 0.78 | gzip -c > /home/baruch/git/buildroot/output/dl/connman-0.78.tar.gz && popd > /dev/null && rm -rf /home/baruch/git/buildroot/output/dl/connman-0.78 && popd > /dev/null) && exit 
-> 
-> This is caused by cf71111b99ab951 (Cleanup the VCS commands
-> configuration). The BR2_GIT variable changed from "git clone" to just
-> "git". If you change that in your .config it should work again.
+Any help will be much appreciated! Thanks..
 
-Thanks for the tip.
+Shawn
 
-Eventually I had to manually clone connman.git with http, and generate a tar 
-file because of a stupid firewall rule blocking the native git port :-(.
+connmand[649]: src/plugin.c:__connman_plugin_init() 
 
-Can you put a connman tar file in http://sources.buildroot.net for others 
-similarly unlucky, so that at least the wget fallback will succeed?
+/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
 
-Thanks,
-baruch
+/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
+connmand[649]: Can't load /usr/lib/connman/plugins/wifi.so: (null)
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
+
+/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
+connmand[649]: Can't load /usr/lib/connman/plugins/bluetooth.so: (null)
+
+/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
+
+/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
+connmand[649]: Can't load /usr/lib/connman/plugins/ntpd.so: (null)
+
+/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
+
+/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
+connmand[649]: Can't load /usr/lib/connman/plugins/ethernet.so: (null)
