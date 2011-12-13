@@ -1,9 +1,9 @@
 From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 13 Dec 2011 08:58:08 -0600
+Date: Tue, 13 Dec 2011 09:24:14 -0600
 Subject: [Buildroot] Question about using mdev for /dev management
 In-Reply-To: <201112130939.34100.arnout@mind.be>
 References: <4EDD1149.8060104@carallon.com> <201112130939.34100.arnout@mind.be>
-Message-ID: <201112130858.10405.minimod@morethan.org>
+Message-ID: <201112130924.16783.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,6 @@ On Tue December 13 2011, Arnout Vandecappelle wrote:
 > > rather not get this trace in the boot (it worries other developers).
 > 
 >  I didn't realize that mdev worked without devtmpfs in the kernel...
->
-
-It does, and it has for nearly a decade.  ;-)
-
-With tmpfs sysfs available in the kernel and a tmpfs mounted on /dev -
-an mdev -s will populate it for you.
-
-It was only recent changes to the BR configuration dependences that make
-(when looking at the BR menu) that mdev/udev requires devtmpfs.
-
-That was just a decision by the project to move forward with the new
-and drop the old but it isn't dropped in the kernel. ;-)
-
-Mike
 > If devtmpfs exists (and it does for all currently supported kernels), then
 > it should be mounted as soon as possible.  It is normally mounted
 > automatically by the kernel, except when it runs /init for an initramfs.
@@ -43,7 +29,39 @@ Mike
 > > that /dev/console (and possibly /dev/null?) exist?
 > 
 >  Yeah, actually, I think /dev/console and /dev/null should be created
-> on the rootfs even if devtmpfs is used.  Which brings us to:
+> on the rootfs even if devtmpfs is used.  
+>
+
+In the "old days" (2.6.days) if you didn't provide the files for the
+initramfs to the kernel, the kernel build a default one containing
+only /dev/console and /dev/null and "self appended" it.
+
+I don't know if that behavior has changed, or if it is just being
+over-written (the "normal thing" to do) when the initramfs file
+is appended to the built kernel.
+
+- - - -
+
+The kernel didn't (doesn't?) have any length of the expected file, 
+it left that up to the decompression/cpio routines.
+
+So with a few od/dd handsprings, you could take the old initramfs
+file off a built kernel and replace it with a new one even if you
+didn't have the kernel map file.
+
+And, at least cpio.gz format, doesn't care how long the file is
+either (although the command line tools will give you a "data
+found beyond end of file" nasty-gram).
+Which is where some distributions append their splash graphic image.
+But a few more od/dd handsprings will also split the archive/image
+into two files for you.
+
+Not that I am proposing a "decompose" function be added to BR.
+This project just makes 'em, not takes them apart.  ;-)
+
+Mike
+
+> Which brings us to: 
 > 
 > 
 > > The other small issue I have is that mdev fails to spot one of the 
