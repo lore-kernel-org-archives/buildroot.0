@@ -1,22 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Dec 2011 07:56:10 +0100
-Subject: [Buildroot] [PATCH v2 0/4] Improved uClibc support with ct-ng
-	generated toolchain
-In-Reply-To: <1323173840-8837-1-git-send-email-will_wagner@carallon.com>
-References: <1323173840-8837-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <201112140756.10716.arnout@mind.be>
+Date: Tue, 13 Dec 2011 18:18:53 +0100
+Subject: [Buildroot] buildroot with SquashFS root file system
+In-Reply-To: <4EDE32C3.7020400@neotion.com>
+References: <4EDE32C3.7020400@neotion.com>
+Message-ID: <201112131818.53512.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 06 December 2011 13:17:16 Will Wagner wrote:
-> This version minor changes and added
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@anciens.enib.fr>
+On Tuesday 06 December 2011 16:20:35 Emmanuel BOUAZIZ wrote:
+> On the PXE server, I put these kernel parameters: append vga=0x305 fbcon=scrollback:4096k initrd=rootfs.squashfs
 
- For the whole series:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Hm, my assumption that you would only use an initramfs with a 
+cpio archive was clearly wrong.  So perhaps we should execute the 
+ROOTFS_CPIO_ADD_INIT hook unconditionally for all filesystems?
+
 
  Regards,
  Arnout
