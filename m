@@ -1,42 +1,27 @@
-From: Shawn Ferris <shawn.ferris@gmail.com>
-Date: Mon, 12 Dec 2011 23:14:13 -0700
-Subject: [Buildroot] Bad symbols on plugins for connman
-Message-ID: <1323756853.26968.6.camel@barkley.virtualsmf.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 13 Dec 2011 07:20:09 +0100
+Subject: [Buildroot] connman dowload failure
+In-Reply-To: <20111213053415.GA11676@sapphire.tkos.co.il> (Baruch Siach's
+ message of "Tue, 13 Dec 2011 07:34:15 +0200")
+References: <20111212120653.GF4531@sapphire.tkos.co.il>
+ <87wra2t1q6.fsf@macbook.be.48ers.dk>
+ <20111213053415.GA11676@sapphire.tkos.co.il>
+Message-ID: <87ty55ro12.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All - I'm new to build-root, so I hope this isn't obvious. (My
-apologies if it is) Anyway, I just pulled a recent git (within the last
-few days) and I'm trying to get connman working but I'm getting the
-following errors running connmand with the --debug option. I get this
-with and without the option 'enable compiling with debugging
-information' set.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Any help will be much appreciated! Thanks..
+Hi,
 
-Shawn
+ Baruch> Can you put a connman tar file in http://sources.buildroot.net
+ Baruch> for others similarly unlucky, so that at least the wget
+ Baruch> fallback will succeed?
 
-connmand[649]: src/plugin.c:__connman_plugin_init() 
+Yes, I have a script running every Wednesday doing that.
 
-/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
-
-/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
-connmand[649]: Can't load /usr/lib/connman/plugins/wifi.so: (null)
-
-/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
-
-/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
-connmand[649]: Can't load /usr/lib/connman/plugins/bluetooth.so: (null)
-
-/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
-
-/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
-connmand[649]: Can't load /usr/lib/connman/plugins/ntpd.so: (null)
-
-/usr/sbin/connmand: symbol '__start___debug': can't resolve symbol
-
-/usr/sbin/connmand: symbol '__stop___debug': can't resolve symbol
-connmand[649]: Can't load /usr/lib/connman/plugins/ethernet.so: (null)
+-- 
+Bye, Peter Korsgaard
