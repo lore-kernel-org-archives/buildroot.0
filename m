@@ -1,42 +1,45 @@
-From: Xianghua Xiao <xiaoxianghua@gmail.com>
-Date: Mon, 12 Dec 2011 17:09:05 -0600
-Subject: [Buildroot] [PATCH 1/1]
-	Auto-disable-gcc-version-unsupported-on-ppc-and-cortex
-Message-ID: <CAP7cwts3gZuwD+ngkMHBo7eck8Hyg9vgKFAm_ZGBJOKyOEG6FQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 13 Dec 2011 07:34:15 +0200
+Subject: [Buildroot] connman dowload failure
+In-Reply-To: <87wra2t1q6.fsf@macbook.be.48ers.dk>
+References: <20111212120653.GF4531@sapphire.tkos.co.il>
+ <87wra2t1q6.fsf@macbook.be.48ers.dk>
+Message-ID: <20111213053415.GA11676@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-resend---
+Hi Peter,
 
-Signed-off-by: xxiao <xxiao@fosiao.com>
----
- toolchain/gcc/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon, Dec 12, 2011 at 01:26:41PM +0100, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  Baruch> Hi Buildroot list,
+>  Baruch> I'm trying to build connman for my platform, but the build fails at the source 
+>  Baruch> download stage using both git and wget. This is the output of 'make V=1':
+> 
+>  >>>> connman 0.78 Downloading
+> 
+>  Baruch>  test -e /home/baruch/git/buildroot/output/dl/connman-0.78.tar.gz || (pushd /home/baruch/git/buildroot/output/dl > /dev/null && git clone clone --bare git://git.kernel.org/pub/scm/network/connman/connman.git connman-0.78 && pushd connman-0.78 > /dev/null && git clone archive --format=tar --prefix=connman-0.78/ 0.78 | gzip -c > /home/baruch/git/buildroot/output/dl/connman-0.78.tar.gz && popd > /dev/null && rm -rf /home/baruch/git/buildroot/output/dl/connman-0.78 && popd > /dev/null) && exit 
+> 
+> This is caused by cf71111b99ab951 (Cleanup the VCS commands
+> configuration). The BR2_GIT variable changed from "git clone" to just
+> "git". If you change that in your .config it should work again.
 
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index dbcbbd3..08b0058 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -15,7 +15,7 @@ choice
-               bool "gcc 4.2.2-avr32-2.1.5"
+Thanks for the tip.
 
-        config BR2_GCC_VERSION_4_3_X
--               depends on !BR2_avr32 && !BR2_sparc_sparchfleon &&
-!BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon &&
-!BR2_sparc_sparcsfleonv8
-+               depends on !BR2_avr32 && !BR2_sparc_sparchfleon &&
-!BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon &&
-!BR2_sparc_sparcsfleonv8 && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3
-&& !BR2_powerpc_e500mc && !BR2_cortex_a8 && !BR2_cortex_a9
-                bool "gcc 4.3.x"
+Eventually I had to manually clone connman.git with http, and generate a tar 
+file because of a stupid firewall rule blocking the native git port :-(.
 
-        config BR2_GCC_VERSION_4_4_X
+Can you put a connman tar file in http://sources.buildroot.net for others 
+similarly unlucky, so that at least the wget fallback will succeed?
+
+Thanks,
+baruch
+
 -- 
-1.7.2.3
-
-
-On Mon, Dec 12, 2011 at 5:03 PM, Xianghua Xiao <xiaoxianghua@gmail.com> wrote:
->
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
