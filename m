@@ -1,59 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Dec 2011 14:39:18 +0100
+From: Michael S. Zick <minimod@morethan.org>
+Date: Tue, 13 Dec 2011 08:58:08 -0600
 Subject: [Buildroot] Question about using mdev for /dev management
 In-Reply-To: <201112130939.34100.arnout@mind.be>
 References: <4EDD1149.8060104@carallon.com> <201112130939.34100.arnout@mind.be>
-Message-ID: <20111213143918.2790f6e4@skate>
+Message-ID: <201112130858.10405.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 13 Dec 2011 09:39:34 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+On Tue December 13 2011, Arnout Vandecappelle wrote:
+> On Monday 05 December 2011 19:45:29 Will Wagner wrote:
+> > Firstly it replaces $(TARGET_DIR)/init with fs/cpio/init which attempts 
+> > to mount devtmpfs. My kernel doesn't support this (it's too old) and I'd 
+> > rather not get this trace in the boot (it worries other developers).
+> 
+>  I didn't realize that mdev worked without devtmpfs in the kernel...
+>
 
->  If you ask me, it's OK to add /dev entries in the
-> BR2_ROOTFS_DEVICE_TABLE. In fact, I think /dev/console and /dev/null
-> should be put in there.  But I've never gotten around to roll a patch
-> for it.
+It does, and it has for nearly a decade.  ;-)
 
-FWIW, when I initially introduced (based on prior patches) this
-static /dev vs. devtmpfs vs. mdev vs. udev selection, the mdev and udev
-choices were independent of devtmpfs, i.e there were using a minimal
-device tables with /dev/null and /dev/console. But after discussion on
-the mailing-list, it was decided that it was better to make devtmpfs a
-requirement when mdev and udev were choosen.
+With tmpfs sysfs available in the kernel and a tmpfs mounted on /dev -
+an mdev -s will populate it for you.
 
-See
+It was only recent changes to the BR configuration dependences that make
+(when looking at the BR menu) that mdev/udev requires devtmpfs.
 
-  Message-Id: <f92465f9de8bcd24cf2c974b158a600a84e96422.1291582352.git.thomas.petazzoni@free-electrons.com>
+That was just a decision by the project to move forward with the new
+and drop the old but it isn't dropped in the kernel. ;-)
 
-for the initial patch I proposed on December, 5th 2010.
-
-And
-
- Message-ID: <87r5dgfldw.fsf@macbook.be.48ers.dk>
-
-for Peter's answer (December, 17th 2010), saying :
-
-"""
- Thomas> At compile time, only a minimal /dev is created in the filesystem,
- Thomas> with only "console" and "null". This is done thanks to a small device
- Thomas> table in target/generic/device_table_mdev_udev.txt. This is done
- Thomas> directly at the configuration level (fs/Config.in).  
-
-While I agree we need the minimal device table for /etc/shadow and
-similar permissions, do we really need to support mdev/udev without
-devtmpfs? It's been in the kernel now for close to 2 years, it's very
-small and it simplifies (and speeds up) the boot sequence quite a lot.
-"""
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Mike
+> If devtmpfs exists (and it does for all currently supported kernels), then
+> it should be mounted as soon as possible.  It is normally mounted
+> automatically by the kernel, except when it runs /init for an initramfs.
+> That's why we have this extra /init script for the cpio rootfs.
+> 
+>  You could add a check to the init script that mounts a normal tmpfs on
+> /dev if the mount fails (and redirect its output to /dev/null).
+> 
+> > I assume that for mdev we could not replace init but instead make sure 
+> > that /dev/console (and possibly /dev/null?) exist?
+> 
+>  Yeah, actually, I think /dev/console and /dev/null should be created
+> on the rootfs even if devtmpfs is used.  Which brings us to:
+> 
+> 
+> > The other small issue I have is that mdev fails to spot one of the 
+> > kernel devices (as the driver doesn't have a sysfs entry) so it needs 
+> > adding manually. I do that by adding an entry to BR2_ROOTFS_DEVICE_TABLE 
+> > which works fine, but doesn't seem ideal as I thought device entries 
+> > were meant to be set in BR2_ROOTFS_STATIC_DEVICE_TABLE, but that is not 
+> > offered unless static devices used. Is there a better way to do this or 
+> > should I just leave it as is?
+> 
+>  If you ask me, it's OK to add /dev entries in the BR2_ROOTFS_DEVICE_TABLE.
+> In fact, I think /dev/console and /dev/null should be put in there.  But
+> I've never gotten around to roll a patch for it.
+> 
+>  Regards,
+>  Arnout
+> 
