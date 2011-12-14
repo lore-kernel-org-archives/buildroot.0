@@ -1,7 +1,7 @@
 From: dan robinson <dgrobinson@dgrobinson.com>
-Date: Wed, 14 Dec 2011 10:55:50 -0800 (PST)
-Subject: [Buildroot]  root permissions issue
-Message-ID: <32975349.post@talk.nabble.com>
+Date: Wed, 14 Dec 2011 10:58:04 -0800 (PST)
+Subject: [Buildroot]  root permissions issue (reformatted)
+Message-ID: <32975350.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -81,8 +81,5 @@ default:x:1000:1000:Default non-root user:/home/default:/bin/sh
 
 
 -- 
-View this message in context: http://old.nabble.com/root-permissions-issue-tp32975349p32975349.html
+View this message in context: http://old.nabble.com/root-permissions-issue-%28reformatted%29-tp32975350p32975350.html
 Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111214/76aaa834/attachment.html>
