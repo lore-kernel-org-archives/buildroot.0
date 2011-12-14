@@ -1,51 +1,45 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 14 Dec 2011 11:43:44 +0100
-Subject: [Buildroot] [RFC] Add systemd to buildroot
-In-Reply-To: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <4EE87DE0.7090409@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Dec 2011 11:43:53 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+ for-2011.11/pkg-device
+In-Reply-To: <4EE87CEE.5050304@free-electrons.com>
+References: <cover.1315577080.git.maxime.ripard@free-electrons.com>
+ <4EE87CEE.5050304@free-electrons.com>
+Message-ID: <20111214114353.5a5e047a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Wed, 14 Dec 2011 11:39:42 +0100,
+Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
 
-Do you all agree on that ?
+> Any review on that ?
 
-Also, this patchset should include the rework of the shutdown policy
-like we discussed last week.
+I don't like the <pkg>_FILES name, because it makes me think that *all*
+files installed by the package must be listed in this variable, while
+in fact, only files for which special permissions must be applied, or
+for device files.
 
-Maxime
+What about having two variables:
 
-On 23/11/2011 12:30, Maxime Ripard wrote:
-> Hi list,
-> 
-> I've been working for some time on adding systemd to buildroot in a nice way. It
-> is now in a pretty nice state I guess, at least nice enough to send an RFC and
-> get some review about the basic mechanics.
-> 
-> While the system should boot with systemd, for a reason unknown to me, udev
-> doesn't take into account its rules, and don't tag the devices for systemd,
-> which, in turn, doesn't expose a getty.
-> 
-> Another problem is that I still have some sysv init scripts added to the
-> filesystem through the skeleton. Since it is completely static, I don't find a
-> good way around this problem. Maybe we don't care. I don't know.
-> 
-> So, give it a look, and please tell me what you think :)
-> 
-> Maxime
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ <pkg>_PERMISSIONS
 
+and
 
+ <pkg>_DEVICES
+
+The idea is that by separating permission-modifications (like the one
+for Busybox) for device files, it is much easier to use *_PERMISSIONS +
+*_DEVICES when static /dev is used, and only *_PERMISSIONS when
+dynamic /dev is used.
+
+Regards,
+
+Thomas
 -- 
-Maxime Ripard, Free Electrons
+Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
 development, consulting, training and support.
 http://free-electrons.com
