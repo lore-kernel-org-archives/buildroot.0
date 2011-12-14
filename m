@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Dec 2011 11:43:53 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
- for-2011.11/pkg-device
-In-Reply-To: <4EE87CEE.5050304@free-electrons.com>
-References: <cover.1315577080.git.maxime.ripard@free-electrons.com>
- <4EE87CEE.5050304@free-electrons.com>
-Message-ID: <20111214114353.5a5e047a@skate>
+Date: Wed, 14 Dec 2011 11:46:50 +0100
+Subject: [Buildroot] [PATCH] New package: python-dpkt
+In-Reply-To: <4EE87CC9.1040809@visionsystems.de>
+References: <1323858932-10219-1-git-send-email-yegorslists@googlemail.com>
+ <4EE87CC9.1040809@visionsystems.de>
+Message-ID: <20111214114650.539556ba@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Dec 2011 11:39:42 +0100,
-Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
+Le Wed, 14 Dec 2011 11:39:05 +0100,
+Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
 
-> Any review on that ?
+> I have following problem building this package:
+> 
+> Traceback (most recent call last):
+>   File "setup.py", line 4, in <module>
+>     import dpkt
+>   File
+> "/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/build/python-dpkt-1.7/dpkt/__init__.py",
+> line 26, in <module> import gzip File
+> "/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/build/python-dpkt-1.7/dpkt/gzip.py",
+> line 5, in <module> import struct, zlib ImportError: No module named
+> zlib
 
-I don't like the <pkg>_FILES name, because it makes me think that *all*
-files installed by the package must be listed in this variable, while
-in fact, only files for which special permissions must be applied, or
-for device files.
-
-What about having two variables:
-
- <pkg>_PERMISSIONS
-
-and
-
- <pkg>_DEVICES
-
-The idea is that by separating permission-modifications (like the one
-for Busybox) for device files, it is much easier to use *_PERMISSIONS +
-*_DEVICES when static /dev is used, and only *_PERMISSIONS when
-dynamic /dev is used.
+At build time, the host-python is used. And the fact that you enabled
+"zlib" for the target python has no impact on the configuration of the
+host python. Why does it require zlib support in Python at build time?
+Or, said otherwise, why does it tries to import the dpkt Python module
+you're building, at build time?
 
 Regards,
 
