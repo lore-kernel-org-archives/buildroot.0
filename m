@@ -1,30 +1,90 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Dec 2011 15:21:53 +0100
-Subject: [Buildroot] [PATCH 0 of 4 v3] dependencies: some improvements
-Message-ID: <patchbomb.1323862796@devws108>
+Date: Wed, 14 Dec 2011 15:22:02 +0100
+Subject: [Buildroot] [PATCH 1 of 4 v3] dependencies: move from toolchain/ to
+	support/
+In-Reply-To: <patchbomb.1323862796@devws108>
+References: <patchbomb.1323862796@devws108>
+Message-ID: <50eab7753cb252ec4cdc.1323862797@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series has been updated as follows:
-- move 'Move toolchain/dependencies to support/dependencies' to first position
-- new patch to check for minimal make version
-- update suitable-host-package and tar patches based on comments and remove
-  tar chicken-egg problem. The latter change greatly simplifies things IMO.
+As suggested by Arnout Vandecappelle, move toolchain/dependencies to
+support/dependencies, as it really is not toolchain-specific anymore.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- Makefile                               |    8 ++++++++
- package/Makefile.package.in            |   12 ------------
- package/tar/tar.mk                     |    9 +++++++++
- support/dependencies/check-host-tar.mk |    9 +++++++++
- support/dependencies/check-host-tar.sh |   35 +++++++++++++++++++++++++++++++++++
- toolchain/dependencies/dependencies.mk |   12 +++++++++++-
+ Makefile                               |    2 ++
+ toolchain/dependencies/dependencies.mk |    2 +-
  toolchain/dependencies/dependencies.sh |  Bin
  toolchain/toolchain-buildroot.mk       |    1 -
  toolchain/toolchain-crosstool-ng.mk    |    1 -
  toolchain/toolchain-external.mk        |    1 -
- 10 files changed, 72 insertions(+), 16 deletions(-)
+ 6 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -298,6 +298,8 @@ include package/Makefile.in
+ 
+ all: world
+ 
++include support/dependencies/dependencies.mk
++
+ # We also need the various per-package makefiles, which also add
+ # each selected package to TARGETS if that package was selected
+ # in the .config file.
+diff --git a/toolchain/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+rename from toolchain/dependencies/dependencies.mk
+rename to support/dependencies/dependencies.mk
+--- a/toolchain/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -20,7 +20,7 @@ core-dependencies:
+ 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
+ 		CONFIG_FILE="$(CONFIG_DIR)/.config" \
+ 		DL_TOOLS="$(DL_TOOLS)" \
+-		$(TOPDIR)/toolchain/dependencies/dependencies.sh
++		$(TOPDIR)/support/dependencies/dependencies.sh
+ 
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
+ 
+diff --git a/toolchain/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+rename from toolchain/dependencies/dependencies.sh
+rename to support/dependencies/dependencies.sh
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -1,6 +1,5 @@
+ # Include files required for the internal toolchain backend
+ 
+-include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
+diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
+--- a/toolchain/toolchain-crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng.mk
+@@ -2,7 +2,6 @@
+ 
+ # Explicit ordering:
+ include toolchain/helpers.mk
+-include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+--- a/toolchain/toolchain-external.mk
++++ b/toolchain/toolchain-external.mk
+@@ -1,7 +1,6 @@
+ # Required includes for the external toolchain backend
+ 
+ include toolchain/helpers.mk
+-include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
