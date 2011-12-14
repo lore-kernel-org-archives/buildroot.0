@@ -1,30 +1,25 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Dec 2011 18:30:02 +0100
-Subject: [Buildroot] [PATCH] linux: support "local" as download method
-In-Reply-To: <CAEvN+1hUU4Xd+BuMn+5DmdHAYx2Oue8QeruW50FLH0+LJ3PB2A@mail.gmail.com>
-References: <1323255396-28263-1-git-send-email-tjlee@ambarella.com>
- <20111208223000.72d8e084@skate>
- <CAEvN+1hUU4Xd+BuMn+5DmdHAYx2Oue8QeruW50FLH0+LJ3PB2A@mail.gmail.com>
-Message-ID: <201112131830.02660.arnout@mind.be>
+Date: Wed, 14 Dec 2011 07:51:38 +0100
+Subject: [Buildroot] [PATCH v2 2/4] Supply better default uClibc config
+	file when using ct-ng
+In-Reply-To: <1323173840-8837-3-git-send-email-will_wagner@carallon.com>
+References: <1323173840-8837-1-git-send-email-will_wagner@carallon.com>
+ <1323173840-8837-3-git-send-email-will_wagner@carallon.com>
+Message-ID: <201112140751.38731.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 09 December 2011 03:44:24 Tzu-Jung Lee wrote:
-> > It's true that the Linux package is special in that it is very likely
-> > that many people will want to use a local source directory, but I'm
-> > fearing that we will end up adding many of those
-> > "<something>_CUSTOM_LOCAL" option that just duplicate what is possible
-> > thanks to the override source directory mechanism.
-> 
-> I tried both LINUX_OVERRIDE_SRCDIR and LINUX_CUSTOM_LOCAL, and sent the
-> patch for the latter in case someone else might end up doing the same thing.
+On Tuesday 06 December 2011 13:17:18 Will Wagner wrote:
+> +config BR2_TOOLCHAIN_CTNG_uClibc_CONFIG
+> +       default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30
+> +       default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32
+> +
 
- You can actually achieve the same from the command line:
-
-make LINUX_SITE=/... LINUX_SITE_METHOD=file linux
+ I believe that if you don't specify a type, it will default to bool.
+So you should add a line containing only 'string'.
 
  Regards,
  Arnout
