@@ -1,31 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Dec 2011 09:40:45 +0100
-Subject: [Buildroot] buildroot with SquashFS root file system
-In-Reply-To: <201112131818.53512.arnout@mind.be>
-References: <4EDE32C3.7020400@neotion.com> <201112131818.53512.arnout@mind.be>
-Message-ID: <20111214094045.59167319@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 14 Dec 2011 09:41:50 +0100
+Subject: [Buildroot] Make problem on 64-bit linux with CS 2009q1
+In-Reply-To: <20111214093123.17a1d8da@skate> (Thomas Petazzoni's message of
+ "Wed, 14 Dec 2011 09:31:23 +0100")
+References: <4EE1CB14.9010802@free.fr>
+ <CAHUNapQTUqg5Vo4c57Yg4OqG+FL6trcjZBPJsEzfE0xGc=cdvQ@mail.gmail.com>
+ <87d3bttw2v.fsf@macbook.be.48ers.dk>
+ <201112140808.49826.arnout@mind.be> <20111214093123.17a1d8da@skate>
+Message-ID: <87mxavmto1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 13 Dec 2011 18:18:53 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
->  Hm, my assumption that you would only use an initramfs with a 
-> cpio archive was clearly wrong.  So perhaps we should execute the 
-> ROOTFS_CPIO_ADD_INIT hook unconditionally for all filesystems?
+ Thomas> Le Wed, 14 Dec 2011 08:08:49 +0100,
+ Thomas> Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-I'd prefer not to. I don't want this wrapper script in all filesystems
-just to solve the initramfs problem, because it is useless for the
-filesystem is not used as an initramfs filesystem.
+ >> Or better yet, to use our own and prime it with all the generic
+ >> configure variables.  That may bring down the huge amount of time
+ >> spent in running configure scripts...
 
-Regards,
+ Thomas> We tried to share the configure variables in the past by sharing the
+ Thomas> configure cache between packages and this has proven to be very
+ Thomas> unreliable. However, sharing some really generic variables that are
+ Thomas> known to be understood by all configure scripts in the same way, is a
+ Thomas> possibility.
 
-Thomas
+We already do that with TARGET_CONFIGURE_ARGS. Putting those in a
+config.site would afaik be equivalent, but arguably somewhat cleaner.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
