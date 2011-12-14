@@ -1,32 +1,88 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 14 Dec 2011 18:47:59 +0100
-Subject: [Buildroot] [PATCH 1/1] New package libmbus library for
- communicating with M-bus energy metering devices. not in latest git pull
-In-Reply-To: <71D1CCECD12D4938A05F122FB71F2AC4@JohanW7>
-References: <1323559411-1383-1-git-send-email-sagaert.johan@skynet.be>
- <4EE4DB4D.8000605@lucaceresoli.net>
- <71D1CCECD12D4938A05F122FB71F2AC4@JohanW7>
-Message-ID: <4EE8E14F.8060500@lucaceresoli.net>
+From: dan robinson <dgrobinson@dgrobinson.com>
+Date: Wed, 14 Dec 2011 10:55:50 -0800 (PST)
+Subject: [Buildroot]  root permissions issue
+Message-ID: <32975349.post@talk.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert Johan wrote:
-> Hi
->
-> I didn't notice the libmbus package in my latest git pull.
-> Is there something wrong wit hit ?
 
-I don't think there's anything wrong with your patch (My Reviewed-by
-means exactly this).
+I have an NFS mounted root.  The directory, on the NFS server, does not have
+write permissions for 'other'.  I am not able to create a file when I run
+the command, 'touch one'.  On the NFS server side, I run 'chmod o+w' and
+that is shown in the second 'ls' command.  I can create a file.
 
-But the maintainer of Buildroot is Peter Korsgaard, not me, so it's
-him that chooses which patches to merge. It might take some days for
-him to find time to take a look at your mail, so you should wait at
-least 1~2 weeks before considering your patch "not merged".
-And if this time elapses and nothing happens, then you might send a
-ping email to revive the topic.
+If I 'su' to default, I can create files in that user's directory.
 
-Luca
+Note that the file, 'one', is owned by 65534.  I have included the
+/etc/passwd file.  This is -2 in 16 bits.  Noteworthy?
+
+I ran the 'id' command.
+# id
+uid=0(root) gid=0(root) groups=0(root),10(wheel)
+
+Ideas?
+
+--dan robinson
+
+
+
+# ls -al
+total 20
+drwxrwxr-x    2 root     root          4096 Dec 14  2011 .
+drwxr-xr-x   16 root     root          4096 Dec  7  2011 ..
+-rw-------    1 65534    65534          104 Dec 14  2011 .ash_history
+-rw-r--r--    1 root     root             0 Nov 30  2011 .bash_history
+-rw-r--r--    1 root     root           175 Nov 30  2011 .bash_logout
+-rw-r--r--    1 root     root           161 Nov 30  2011 .bash_profile
+# touch one
+touch: one: Permission denied
+
+// chmod o+w has been run on NFS server
+# ls -al
+total 20
+drwxrwxrwx    2 root     root          4096 Dec 14  2011 .
+
+drwxr-xr-x   16 root     root          4096 Dec  7  2011 ..
+-rw-------    1 65534    65534          121 Dec 14  2011 .ash_history
+-rw-r--r--    1 root     root             0 Nov 30  2011 .bash_history
+-rw-r--r--    1 root     root           175 Nov 30  2011 .bash_logout
+-rw-r--r--    1 root     root           161 Nov 30  2011 .bash_profile
+# touch one
+# ls -al
+total 20
+drwxrwxrwx    2 root     root          4096 Dec 14  2011 .
+drwxr-xr-x   16 root     root          4096 Dec  7  2011 ..
+-rw-------    1 65534    65534          138 Dec 14  2011 .ash_history
+-rw-r--r--    1 root     root             0 Nov 30  2011 .bash_history
+-rw-r--r--    1 root     root           175 Nov 30  2011 .bash_logout
+-rw-r--r--    1 root     root           161 Nov 30  2011 .bash_profile
+-rw-r--r--    1 65534    65534            0 Dec 14  2011 one
+
+# cat /etc/passwd
+root::0:0:root:/root:/bin/sh
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:100:sync:/bin:/bin/sync
+mail:x:8:8:mail:/var/spool/mail:/bin/sh
+proxy:x:13:13:proxy:/bin:/bin/sh
+www-data:x:33:33:www-data:/var/www:/bin/sh
+backup:x:34:34:backup:/var/backups:/bin/sh
+operator:x:37:37:Operator:/var:/bin/sh
+haldaemon:x:68:68:hald:/:/bin/sh
+dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
+ftp:x:83:83:ftp:/home/ftp:/bin/sh
+nobody:x:99:99:nobody:/home:/bin/sh
+sshd:x:103:99:Operator:/var:/bin/sh
+default:x:1000:1000:Default non-root user:/home/default:/bin/sh
+
+
+-- 
+View this message in context: http://old.nabble.com/root-permissions-issue-tp32975349p32975349.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111214/76aaa834/attachment.html>
