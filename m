@@ -1,10 +1,9 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 14 Dec 2011 11:39:42 +0100
-Subject: [Buildroot] [pull request v2] Pull request for branch
-	for-2011.11/pkg-device
-In-Reply-To: <cover.1315577080.git.maxime.ripard@free-electrons.com>
-References: <cover.1315577080.git.maxime.ripard@free-electrons.com>
-Message-ID: <4EE87CEE.5050304@free-electrons.com>
+Date: Wed, 14 Dec 2011 11:43:44 +0100
+Subject: [Buildroot] [RFC] Add systemd to buildroot
+In-Reply-To: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <4EE87DE0.7090409@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +12,36 @@ To: buildroot@busybox.net
 
 Hi,
 
-Any review on that ?
+Do you all agree on that ?
 
-The cramfs patch should obviously be dropped, as it has already been
-applied. From what I read in the BDD report, the renaming of the
-device_table should also be dropped. But it also says that a more
-precise comment on what the attendees expected would be given.
+Also, this patchset should include the rework of the shutdown policy
+like we discussed last week.
 
 Maxime
 
-On 09/09/2011 16:05, Maxime Ripard wrote:
-> Hello,
+On 23/11/2011 12:30, Maxime Ripard wrote:
+> Hi list,
 > 
-> Here is a minor set of improvement on how the devices are
-> declared in buildroot. For now, All the devices to be created
-> were in two files generic to every compilation. This was fine
-> for most usage, but was a bit problematic when packages needed
-> to create files or use specific permissions.
+> I've been working for some time on adding systemd to buildroot in a nice way. It
+> is now in a pretty nice state I guess, at least nice enough to send an RFC and
+> get some review about the basic mechanics.
 > 
-> This set of patches are addressing this issue by creating a
-> new $(PKG)_FILES variable, containing the package specific
-> devices, using the makedevs syntax.
+> While the system should boot with systemd, for a reason unknown to me, udev
+> doesn't take into account its rules, and don't tag the devices for systemd,
+> which, in turn, doesn't expose a getty.
 > 
-> Changes since v1:
->   * Rename the device tables and all mentions of devices to a more exact term
->   * Cramfs was still passing a hardcoded device table. Remove it.
+> Another problem is that I still have some sysv init scripts added to the
+> filesystem through the skeleton. Since it is completely static, I don't find a
+> good way around this problem. Maybe we don't care. I don't know.
 > 
-> The following changes since commit facd602dcad54df769ac759886f48f248b61e692:
+> So, give it a look, and please tell me what you think :)
 > 
->   Update for 2011.08 (2011-08-31 13:44:55 +0200)
+> Maxime
 > 
-> are available in the git repository at:
->   http://free-electrons.com/~maxime/git/buildroot.git for-2011.11/pkg-device
-> 
-> Maxime Ripard (4):
->       Cleanup cramfs package declaration.
->       Rename the device table in the code base
->       Add support for package-declared devices
->       Convert busybox to the device declaration method
-> 
->  Makefile                                           |    4 +
->  fs/common.mk                                       |   15 +-
->  fs/cramfs/cramfs.mk                                |    6 +-
->  package/Makefile.package.in                        |    1 +
->  package/busybox/busybox.mk                         |    5 +
->  package/cramfs/cramfs-01-devtable.patch            | 1269 --------------------
->  ...amfs-02-endian.patch => cramfs-01-endian.patch} |   68 +-
->  package/cramfs/cramfs-02-cygwin_IO.patch           |   15 +
->  package/cramfs/cramfs-03-cygwin_IO.patch           |   13 -
->  .../{device_table.txt => file_install_table.txt}   |    0
->  target/generic/Config.in                           |    6 +-
->  .../{device_table.txt => file_install_table.txt}   |    2 -
->  ...evice_table_dev.txt => static_device_table.txt} |    0
->  target/xtensa/defconfig                            |    2 +-
->  14 files changed, 74 insertions(+), 1332 deletions(-)
->  delete mode 100644 package/cramfs/cramfs-01-devtable.patch
->  rename package/cramfs/{cramfs-02-endian.patch => cramfs-01-endian.patch} (86%)
->  create mode 100644 package/cramfs/cramfs-02-cygwin_IO.patch
->  delete mode 100644 package/cramfs/cramfs-03-cygwin_IO.patch
->  rename target/device/xtensa/{device_table.txt => file_install_table.txt} (100%)
->  rename target/generic/{device_table.txt => file_install_table.txt} (90%)
->  rename target/generic/{device_table_dev.txt => static_device_table.txt} (100%)
-> 
-> Thanks,
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
 -- 
