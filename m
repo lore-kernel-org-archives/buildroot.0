@@ -1,7 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 14 Dec 2011 11:08:24 +0100
-Subject: [Buildroot] [PATCH] Python: add external modules option
-Message-ID: <1323857304-8969-1-git-send-email-yegorslists@googlemail.com>
+Date: Wed, 14 Dec 2011 11:35:32 +0100
+Subject: [Buildroot] [PATCH] New package: python-dpkt
+Message-ID: <1323858932-10219-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,53 +10,78 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-all external python packages/libraries should reside in
-"external python modules" section.
-
-Move existing modules python-serial and python-mad there
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in            |    7 ++++++-
- package/multimedia/Config.in |    1 -
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/Config.in                  |    1 +
+ package/python-dpkt/Config.in      |   11 +++++++++++
+ package/python-dpkt/python-dpkt.mk |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-dpkt/Config.in
+ create mode 100644 package/python-dpkt/python-dpkt.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index eb93b1c..cca2b0a 100644
+index cca2b0a..e5c2cae 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -236,6 +236,12 @@ endif
- source "package/microperl/Config.in"
- source "package/php/Config.in"
- source "package/python/Config.in"
-+if BR2_PACKAGE_PYTHON
-+menu "external python modules"
-+source "package/multimedia/python-mad/Config.in"
-+source "package/python-serial/Config.in"
-+endmenu
-+endif
- source "package/ruby/Config.in"
- source "package/tcl/Config.in"
+@@ -239,6 +239,7 @@ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+ source "package/multimedia/python-mad/Config.in"
++source "package/python-dpkt/Config.in"
+ source "package/python-serial/Config.in"
  endmenu
-@@ -312,7 +318,6 @@ source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
--source "package/python-serial/Config.in"
- endmenu
- 
- if BROKEN
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index d50e4fc..a05d1d9 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -40,7 +40,6 @@ source "package/multimedia/mplayer/Config.in"
- source "package/multimedia/musepack/Config.in"
- source "package/multimedia/portaudio/Config.in"
- source "package/multimedia/pulseaudio/Config.in"
--source "package/multimedia/python-mad/Config.in"
- source "package/multimedia/speex/Config.in"
- source "package/multimedia/tidsp-binaries/Config.in"
- source "package/multimedia/taglib/Config.in"
+ endif
+diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+new file mode 100644
+index 0000000..2d337dd
+--- /dev/null
++++ b/package/python-dpkt/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_DPKT
++	bool "python-dpkt"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_ZLIB
++	help
++	  Fast, simple packet creation / parsing, with definitions 
++	  for the basic TCP/IP protocols. 
++
++	  http://code.google.com/p/dpkt/ 
++
++
+diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+new file mode 100644
+index 0000000..a76e8ca
+--- /dev/null
++++ b/package/python-dpkt/python-dpkt.mk
+@@ -0,0 +1,29 @@
++#############################################################
++#
++# python-dpkt
++#
++#############################################################
++
++PYTHON_DPKT_VERSION = 1.7
++PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
++PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
++
++PYTHON_DPKT_DEPENDENCIES = python
++
++define PYTHON_DPKT_BUILD_CMDS
++	(cd $(@D); \
++		CC="$(TARGET_CC)"		\
++		CFLAGS="$(TARGET_CFLAGS)" 	\
++		LDSHARED="$(TARGET_CC) -shared" \
++		LDFLAGS="$(TARGET_LDFLAGS)" 	\
++	$(HOST_DIR)/usr/bin/python setup.py build_ext \
++	--include-dirs=$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR))
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_DPKT_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(call GENTARGETS))
++
 -- 
 1.7.1.1
