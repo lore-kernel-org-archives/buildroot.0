@@ -1,37 +1,76 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 14 Dec 2011 12:37:55 +0100
-Subject: [Buildroot] [PATCH] New package: python-dpkt
-In-Reply-To: <20111214114650.539556ba@skate>
-References: <1323858932-10219-1-git-send-email-yegorslists@googlemail.com>
- <4EE87CC9.1040809@visionsystems.de> <20111214114650.539556ba@skate>
-Message-ID: <4EE88A93.3090409@visionsystems.de>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 14 Dec 2011 13:07:45 +0100
+Subject: [Buildroot] [PATCH] Python: add external modules option
+In-Reply-To: <1323857304-8969-1-git-send-email-yegorslists@googlemail.com>
+References: <1323857304-8969-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <CAAXf6LVpth6X5afc1wNyivPTkCxCR2Sy9gsMQLSZjFFJpH_aOA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 14.12.2011 11:46, schrieb Thomas Petazzoni:
-> Le Wed, 14 Dec 2011 11:39:05 +0100,
-> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+On Wed, Dec 14, 2011 at 11:08 AM,  <yegorslists@googlemail.com> wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 >
->> I have following problem building this package:
->>
->> Traceback (most recent call last):
->>   File "setup.py", line 4, in <module>
->>     import dpkt
->>   File
->> "/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/build/python-dpkt-1.7/dpkt/__init__.py",
->> line 26, in <module> import gzip File
->> "/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/build/python-dpkt-1.7/dpkt/gzip.py",
->> line 5, in <module> import struct, zlib ImportError: No module named
->> zlib
-> At build time, the host-python is used. And the fact that you enabled
-> "zlib" for the target python has no impact on the configuration of the
-> host python. Why does it require zlib support in Python at build time?
-> Or, said otherwise, why does it tries to import the dpkt Python module
-> you're building, at build time?
+> all external python packages/libraries should reside in
+> "external python modules" section.
+>
+> Move existing modules python-serial and python-mad there
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+> ?package/Config.in ? ? ? ? ? ?| ? ?7 ++++++-
+> ?package/multimedia/Config.in | ? ?1 -
+> ?2 files changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index eb93b1c..cca2b0a 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -236,6 +236,12 @@ endif
+> ?source "package/microperl/Config.in"
+> ?source "package/php/Config.in"
+> ?source "package/python/Config.in"
+> +if BR2_PACKAGE_PYTHON
+> +menu "external python modules"
+> +source "package/multimedia/python-mad/Config.in"
 
-This is a good question to maintainer of dpkt. I copied version, author and other stuff from dpkt/_init_.py to setup.py, commented import dpkt and could successfully install this package. Still haven't tested it. Because I need netifaces and this package needs setuptools :-(
+What do we do with this?
+Do we keep python-mad in multimedia, or move it up one directory to
+package/python-mad?
+I wouldn't be opposed to moving it.
 
-Yegor
+> +source "package/python-serial/Config.in"
+> +endmenu
+> +endif
+> ?source "package/ruby/Config.in"
+> ?source "package/tcl/Config.in"
+> ?endmenu
+> @@ -312,7 +318,6 @@ source "package/libhid/Config.in"
+> ?source "package/libiqrf/Config.in"
+> ?source "package/libusb/Config.in"
+> ?source "package/libusb-compat/Config.in"
+> -source "package/python-serial/Config.in"
+> ?endmenu
+>
+> ?if BROKEN
+> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+> index d50e4fc..a05d1d9 100644
+> --- a/package/multimedia/Config.in
+> +++ b/package/multimedia/Config.in
+> @@ -40,7 +40,6 @@ source "package/multimedia/mplayer/Config.in"
+> ?source "package/multimedia/musepack/Config.in"
+> ?source "package/multimedia/portaudio/Config.in"
+> ?source "package/multimedia/pulseaudio/Config.in"
+> -source "package/multimedia/python-mad/Config.in"
+> ?source "package/multimedia/speex/Config.in"
+> ?source "package/multimedia/tidsp-binaries/Config.in"
+> ?source "package/multimedia/taglib/Config.in"
+> --
+> 1.7.1.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
