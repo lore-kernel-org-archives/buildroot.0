@@ -1,102 +1,101 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 14 Dec 2011 16:15:35 +0100
-Subject: [Buildroot] [PATCH 1/1] New package libmbus library for
-	communicating with M-bus energy metering devices. not in
-	latest git pull
-In-Reply-To: <4EE4DB4D.8000605@lucaceresoli.net>
-References: <1323559411-1383-1-git-send-email-sagaert.johan@skynet.be>
- <4EE4DB4D.8000605@lucaceresoli.net>
-Message-ID: <71D1CCECD12D4938A05F122FB71F2AC4@JohanW7>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 14 Dec 2011 12:15:17 -0300
+Subject: [Buildroot] [PATCH 2/3] libcap: security bump to version 2.22
+In-Reply-To: <1323875718-25871-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1323875718-25871-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1323875718-25871-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...system.patch => libcap-2.22-build-system.patch} |   34 ++++++++++----------
+ package/libcap/libcap.mk                           |    7 +++-
+ 2 files changed, 22 insertions(+), 19 deletions(-)
+ rename package/libcap/{libcap-2.20-build-system.patch => libcap-2.22-build-system.patch} (74%)
 
-I didn't notice the libmbus package in my latest git pull.
-Is there something wrong wit hit ?
-
-Johan
-
-
------Oorspronkelijk bericht-----
-Van: Luca Ceresoli [mailto:luca at lucaceresoli.net] 
-Verzonden: zondag 11 december 2011 17:33
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH 1/1] New package libmbus library for communicating with M-bus energy metering devices.
-
-Sagaert Johan wrote:
-> libmbus is an open source M-bus (Meter-Bus) library.
-> The Meter-Bus is a standard for reading out meter data from electricity meters, heat meters, gas meters, etc.
->
-> Signed-off-by: Sagaert Johan<sagaert.johan@skynet.be>
-
-Reviewed-by: Luca Ceresoli<luca@lucaceresoli.net>
-
-Thanks for contributing.
-
-For future patch submissions, you should remember to add "v2" (then "v3", "v4"
-etc) to the [PATCH] prefix each time you resubmit a patch with modifications.
-This avoids confusion to the people reviewing and merging your patches.
-Take a look in the mailing-list for examples.
-
-Luca
-
-
-> ---
->   package/Config.in          |    1 +
->   package/libmbus/Config.in  |    8 ++++++++
->   package/libmbus/libmbus.mk |   14 ++++++++++++++
->   3 files changed, 23 insertions(+), 0 deletions(-)
->   create mode 100644 package/libmbus/Config.in
->   create mode 100644 package/libmbus/libmbus.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index eb93b1c..9e9027d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -333,6 +333,7 @@ source "package/libmicrohttpd/Config.in"
->   source "package/neon/Config.in"
->   source "package/libmnl/Config.in"
->   source "package/libmodbus/Config.in"
-> +source "package/libmbus/Config.in"
->   source "package/libnl/Config.in"
->   source "package/libpcap/Config.in"
->   source "package/libosip2/Config.in"
-> diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
-> new file mode 100644
-> index 0000000..f545117
-> --- /dev/null
-> +++ b/package/libmbus/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LIBMBUS
-> +	bool "libmbus"
-> +	help
-> +	  libmbus is a library for communicating with energy metering devices.
-> +	  It supports TCP and RS232 M-bus gateways.
-> +	  (M-bus standard : http://www.m-bus.com/)
-> +	
-> +	  http://www.freescada.com/libmbus
-> diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
-> new file mode 100644
-> index 0000000..a6d31da
-> --- /dev/null
-> +++ b/package/libmbus/libmbus.mk
-> @@ -0,0 +1,14 @@
-> +#############################################################
-> +#
-> +# libmbus
-> +#
-> +#############################################################
-> +LIBMBUS_VERSION=0.6.1
-> +LIBMBUS_SITE=http://www.freescada.com/public-dist/
-> +LIBMBUS_INSTALL_STAGING=YES
-> +
-> +# Without this the build yields an error:
-> +#   cannot find input file: `test/Makefile.in'
-> +LIBMBUS_AUTORECONF=YES
-> +
-> +$(eval $(call AUTOTARGETS))
+diff --git a/package/libcap/libcap-2.20-build-system.patch b/package/libcap/libcap-2.22-build-system.patch
+similarity index 74%
+rename from package/libcap/libcap-2.20-build-system.patch
+rename to package/libcap/libcap-2.22-build-system.patch
+index 397aff2..8915a69 100644
+--- a/package/libcap/libcap-2.20-build-system.patch
++++ b/package/libcap/libcap-2.22-build-system.patch
+@@ -3,21 +3,33 @@ Also install the shared lib +x
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura libcap-2.20/Make.Rules libcap-2.20-build/Make.Rules
+---- libcap-2.20/Make.Rules	2011-01-19 02:06:44.000000000 -0300
+-+++ libcap-2.20-build/Make.Rules	2011-04-19 14:07:53.544903094 -0300
++diff -Nura libcap-2.22.orig/libcap/Makefile libcap-2.22/libcap/Makefile
++--- libcap-2.22.orig/libcap/Makefile	2010-08-08 19:26:04.000000000 -0300
+++++ libcap-2.22/libcap/Makefile	2011-12-14 11:33:51.761800334 -0300
++@@ -65,7 +65,7 @@
++ 	install -m 0644 include/sys/capability.h $(INCDIR)/sys
++ 	mkdir -p -m 0755 $(LIBDIR)
++ 	install -m 0644 $(STALIBNAME) $(LIBDIR)/$(STALIBNAME)
++-	install -m 0644 $(MINLIBNAME) $(LIBDIR)/$(MINLIBNAME)
+++	install -m 0755 $(MINLIBNAME) $(LIBDIR)/$(MINLIBNAME)
++ 	ln -sf $(MINLIBNAME) $(LIBDIR)/$(MAJLIBNAME)
++ 	ln -sf $(MAJLIBNAME) $(LIBDIR)/$(LIBNAME)
++ ifeq ($(FAKEROOT),)
++diff -Nura libcap-2.22.orig/Make.Rules libcap-2.22/Make.Rules
++--- libcap-2.22.orig/Make.Rules	2011-07-24 23:18:23.000000000 -0300
+++++ libcap-2.22/Make.Rules	2011-12-14 11:33:28.707278685 -0300
+ @@ -47,25 +47,25 @@
+  KERNEL_HEADERS := $(topdir)/libcap/include
+  IPATH += -fPIC -I$(topdir)/libcap/include -I$(KERNEL_HEADERS)
+  
+ -CC := gcc
+--CFLAGS := -O2
++-CFLAGS := -O2 -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ -BUILD_CC := $(CC)
+ -BUILD_CFLAGS := $(CFLAGS) $(IPATH)
+ -AR := ar
+ -RANLIB := ranlib
+ +CC ?= gcc
+-+CFLAGS ?= -O2
+++CFLAGS ?= -O2 -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ +BUILD_CC ?= $(CC)
+ +BUILD_CFLAGS ?= $(CFLAGS) $(IPATH)
+ +AR ?= ar
+@@ -40,15 +52,3 @@ diff -Nura libcap-2.20/Make.Rules libcap-2.20-build/Make.Rules
+  INDENT := $(shell if [ -n "$(which indent 2>/dev/null)" ]; then echo "| indent -kr" ; fi)
+  DYNAMIC := $(shell if [ ! -d "$(topdir)/.git" ]; then echo yes; fi)
+  LIBATTR := yes
+-diff -Nura libcap-2.20/libcap/Makefile libcap-2.20-build/libcap/Makefile
+---- libcap-2.20/libcap/Makefile	2010-08-08 19:26:04.000000000 -0300
+-+++ libcap-2.20-build/libcap/Makefile	2011-04-19 14:08:29.377146094 -0300
+-@@ -65,7 +65,7 @@
+- 	install -m 0644 include/sys/capability.h $(INCDIR)/sys
+- 	mkdir -p -m 0755 $(LIBDIR)
+- 	install -m 0644 $(STALIBNAME) $(LIBDIR)/$(STALIBNAME)
+--	install -m 0644 $(MINLIBNAME) $(LIBDIR)/$(MINLIBNAME)
+-+	install -m 0755 $(MINLIBNAME) $(LIBDIR)/$(MINLIBNAME)
+- 	ln -sf $(MINLIBNAME) $(LIBDIR)/$(MAJLIBNAME)
+- 	ln -sf $(MAJLIBNAME) $(LIBDIR)/$(LIBNAME)
+- ifeq ($(FAKEROOT),)
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index a7b33a0..9d6acf2 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -4,8 +4,11 @@
+ #
+ #############################################################
+ 
+-LIBCAP_VERSION = 2.20
+-LIBCAP_SITE = http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
++LIBCAP_VERSION = 2.22
++# Until kernel.org is completely back up use debian mirror
++#LIBCAP_SITE = http://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
++LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
++LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
+ LIBCAP_DEPENDENCIES = host-libcap
+ LIBCAP_INSTALL_STAGING = YES
+ 
+-- 
+1.7.3.4
