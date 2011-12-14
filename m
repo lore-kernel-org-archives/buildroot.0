@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Dec 2011 15:25:51 +0100
-Subject: [Buildroot] [PATCH 2 of 4 v3] dependencies: check minimal make
- version early on
-In-Reply-To: <d174ce85883c9e51f006.1323862798@devws108>
+Date: Wed, 14 Dec 2011 15:29:21 +0100
+Subject: [Buildroot] [PATCH 4 of 4 v3] dependencies: build a host-tar if
+ no suitable tar can be found
+In-Reply-To: <bc11accdafb5b8b0d945.1323862800@devws108>
 References: <patchbomb.1323862796@devws108>
- <d174ce85883c9e51f006.1323862798@devws108>
-Message-ID: <20111214152551.58d40263@skate>
+ <bc11accdafb5b8b0d945.1323862800@devws108>
+Message-ID: <20111214152921.72ddc4b0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Dec 2011 15:22:08 +0100,
+Le Wed, 14 Dec 2011 15:22:18 +0100,
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-> Although support/dependencies/dependencies.sh checks for the version of make,
-> this script doesn't get a chance to run if make encounters a syntax error as a
-> result of being too old.
-> 
-> For example, the following syntax is only supported from make 3.81 onwards:
-> 
-> ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> include toolchain/toolchain-buildroot.mk
-> else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> include toolchain/toolchain-external.mk
-> else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
-> include toolchain/toolchain-crosstool-ng.mk
-> endif
-> 
-> This patch adds a check for the version of make very early in the Makefile, so
-> that old make versions are handled gracefully.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> +HOST_TAR_EXTRACT_CMDS = \
+> +	mkdir -p $(HOST_TAR_DIR) && cd $(HOST_TAR_DIR) && \
+> +	$(INFLATE.gz) $(DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i && \
+> +	mv tar-$(TAR_VERSION)/* . && rmdir tar-$(TAR_VERSION)
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I would prefer
 
+define HOST_TAR_EXTRACT_CMDS
+	...
+endef
+
+here.
+
+I haven't checked the details, but I'm fine with the general approach.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
