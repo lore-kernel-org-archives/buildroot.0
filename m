@@ -1,38 +1,121 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Wed, 14 Dec 2011 16:36:00 +0100
-Subject: [Buildroot] [PATCH v2 2/2] New package: python-dpkt
-In-Reply-To: <20111214162501.75616803@skate>
-References: <1323873386-31047-1-git-send-email-yegorslists@googlemail.com>
- <1323873386-31047-2-git-send-email-yegorslists@googlemail.com>
- <20111214162501.75616803@skate>
-Message-ID: <4EE8C260.9020602@visionsystems.de>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 14 Dec 2011 16:38:36 +0100
+Subject: [Buildroot] [PATCH v3 2/2] New package: python-dpkt
+Message-ID: <1323877116-31436-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 14.12.2011 16:25, schrieb Thomas Petazzoni:
-> Le Wed, 14 Dec 2011 15:36:26 +0100,
-> yegorslists at googlemail.com a ?crit :
-> 
->> --- /dev/null
->> +++ b/package/python-dpkt/python-dpkt-setup.patch
->> @@ -0,0 +1,23 @@
->> +---
->> + setup.py |    7 +++----
-> 
-> Description + SoB line needed here. And also push upstream the patch
-> explaining why it is stupid do depends on the Python module to be
-> installed during the build process.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-ACK
+python-dpkt-setup.patch removes dpkt inclusion in setup.py
+and stores package metadata directly in setup.py. This avoids
+unneeded host-python dependencies like zlib
 
->> +PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
-> 
-> That's the default value, so it could be dropped.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changelog:
+v3: add description and SoB to setup patch
+ package/Config.in                           |    1 +
+ package/python-dpkt/Config.in               |   11 +++++++++++
+ package/python-dpkt/python-dpkt-setup.patch |   27 +++++++++++++++++++++++++++
+ package/python-dpkt/python-dpkt.mk          |   22 ++++++++++++++++++++++
+ 4 files changed, 61 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-dpkt/Config.in
+ create mode 100644 package/python-dpkt/python-dpkt-setup.patch
+ create mode 100644 package/python-dpkt/python-dpkt.mk
 
-No. It can't. Because the BR package is called python-dpkt and real package dpkt.
-
-Best regards,
-Yegor
+diff --git a/package/Config.in b/package/Config.in
+index 6ab893f..bb5e5b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -238,6 +238,7 @@ source "package/php/Config.in"
+ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
++source "package/python-dpkt/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-serial/Config.in"
+ endmenu
+diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+new file mode 100644
+index 0000000..aac9f09
+--- /dev/null
++++ b/package/python-dpkt/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_DPKT
++	bool "python-dpkt"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_ZLIB
++	help
++	  Fast, simple packet creation / parsing, with definitions
++	  for the basic TCP/IP protocols.
++
++	  http://code.google.com/p/dpkt/
++
++
+diff --git a/package/python-dpkt/python-dpkt-setup.patch b/package/python-dpkt/python-dpkt-setup.patch
+new file mode 100644
+index 0000000..a025272
+--- /dev/null
++++ b/package/python-dpkt/python-dpkt-setup.patch
+@@ -0,0 +1,27 @@
++remove dpkt inclusion in setup.py to avoid unneeded dependencies
++like zlib
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ setup.py |    7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -1,11 +1,10 @@
++ #!/usr/bin/env python
++
++ from distutils.core import setup
++-import dpkt
++
++ setup(name='dpkt',
++-      version=dpkt.__version__,
++-      author=dpkt.__author__,
++-      url=dpkt.__url__,
+++      version='1.7',
+++      author='Dug Song <dugsong@monkey.org>',
+++      url='http://dpkt.googlecode.com/',
++       description='dumb packet module',
++       packages=[ 'dpkt' ])
+diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+new file mode 100644
+index 0000000..7ac873c
+--- /dev/null
++++ b/package/python-dpkt/python-dpkt.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# python-dpkt
++#
++#############################################################
++
++PYTHON_DPKT_VERSION = 1.7
++PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
++PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
++
++PYTHON_DPKT_DEPENDENCIES = python
++
++define PYTHON_DPKT_BUILD_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_DPKT_INSTALL_TARGET_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(call GENTARGETS))
++
+-- 
+1.7.1.1
