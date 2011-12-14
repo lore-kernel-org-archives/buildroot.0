@@ -1,28 +1,62 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Dec 2011 10:01:13 +0100
-Subject: [Buildroot] buildroot with SquashFS root file system
-In-Reply-To: <201112131818.53512.arnout@mind.be> (Arnout Vandecappelle's
- message of "Tue, 13 Dec 2011 18:18:53 +0100")
-References: <4EDE32C3.7020400@neotion.com> <201112131818.53512.arnout@mind.be>
-Message-ID: <87ehw7msrq.fsf@macbook.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 14 Dec 2011 11:08:24 +0100
+Subject: [Buildroot] [PATCH] Python: add external modules option
+Message-ID: <1323857304-8969-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- Arnout> On Tuesday 06 December 2011 16:20:35 Emmanuel BOUAZIZ wrote:
- >> On the PXE server, I put these kernel parameters: append vga=0x305 fbcon=scrollback:4096k initrd=rootfs.squashfs
+all external python packages/libraries should reside in
+"external python modules" section.
 
- Arnout>  Hm, my assumption that you would only use an initramfs with a 
- Arnout> cpio archive was clearly wrong.  So perhaps we should execute the 
- Arnout> ROOTFS_CPIO_ADD_INIT hook unconditionally for all filesystems?
+Move existing modules python-serial and python-mad there
 
-This is initrd, not initramfs (which isn't really recommended anymore).
-As far as I can see, devtmpfs does get mounted for initrd's
-(init/do_mounts.c:prepare_namespace()).
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in            |    7 ++++++-
+ package/multimedia/Config.in |    1 -
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/package/Config.in b/package/Config.in
+index eb93b1c..cca2b0a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -236,6 +236,12 @@ endif
+ source "package/microperl/Config.in"
+ source "package/php/Config.in"
+ source "package/python/Config.in"
++if BR2_PACKAGE_PYTHON
++menu "external python modules"
++source "package/multimedia/python-mad/Config.in"
++source "package/python-serial/Config.in"
++endmenu
++endif
+ source "package/ruby/Config.in"
+ source "package/tcl/Config.in"
+ endmenu
+@@ -312,7 +318,6 @@ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+-source "package/python-serial/Config.in"
+ endmenu
+ 
+ if BROKEN
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index d50e4fc..a05d1d9 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -40,7 +40,6 @@ source "package/multimedia/mplayer/Config.in"
+ source "package/multimedia/musepack/Config.in"
+ source "package/multimedia/portaudio/Config.in"
+ source "package/multimedia/pulseaudio/Config.in"
+-source "package/multimedia/python-mad/Config.in"
+ source "package/multimedia/speex/Config.in"
+ source "package/multimedia/tidsp-binaries/Config.in"
+ source "package/multimedia/taglib/Config.in"
 -- 
-Bye, Peter Korsgaard
+1.7.1.1
