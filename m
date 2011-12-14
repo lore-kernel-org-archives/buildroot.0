@@ -1,25 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Dec 2011 07:51:38 +0100
-Subject: [Buildroot] [PATCH v2 2/4] Supply better default uClibc config
-	file when using ct-ng
-In-Reply-To: <1323173840-8837-3-git-send-email-will_wagner@carallon.com>
+Date: Wed, 14 Dec 2011 07:54:40 +0100
+Subject: [Buildroot] [PATCH v2 1/4] Allow user to pick uClibc version
+	when using ct-ng
+In-Reply-To: <1323173840-8837-2-git-send-email-will_wagner@carallon.com>
 References: <1323173840-8837-1-git-send-email-will_wagner@carallon.com>
- <1323173840-8837-3-git-send-email-will_wagner@carallon.com>
-Message-ID: <201112140751.38731.arnout@mind.be>
+ <1323173840-8837-2-git-send-email-will_wagner@carallon.com>
+Message-ID: <201112140754.40229.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 06 December 2011 13:17:18 Will Wagner wrote:
-> +config BR2_TOOLCHAIN_CTNG_uClibc_CONFIG
-> +       default "toolchain/uClibc/uClibc-0.9.30.config" if BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30
-> +       default "toolchain/uClibc/uClibc-0.9.32.config" if BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32
+On Tuesday 06 December 2011 13:17:17 Will Wagner wrote:
+> +# Set version
+> +ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_32)),y)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_V_)(.+)=y$$:\# \1\2 is not set\n\10_9_32=y:;
+> +else ifeq ($(call qstrip,$(BR2_TOOLCHAIN_CTNG_uClibc_VERSION_0_9_30)),y)
+> +CTNG_FIX_DOT_CONFIG_SED += s:^(CT_LIBC_UCLIBC_V_)(.+)=y$$:\# \1\2 is not set\n\10_9_30_3=y:;
+> +endif
 > +
+>  # Handle the locales option
+>  ifneq ($(call qstrip,$(BR2_ENABLE_LOCALE)),)
+>  CTNG_FIX_DOT_CONFIG_SED += s:^\# (CT_LIBC_UCLIBC_LOCALES) is not set:\1=y\n\# CT_LIBC_UCLIBC_LOCALES_PREGEN_DATA is not set:;
 
- I believe that if you don't specify a type, it will default to bool.
-So you should add a line containing only 'string'.
+ I realize that it isn't used for the existing fixes, but is it possible to
+use the KCONFIG_ENABLE_OPT/KCONFIG_DISABLE_OPT function from Makefile.package.in?
+
 
  Regards,
  Arnout
