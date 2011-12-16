@@ -1,53 +1,90 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 16 Dec 2011 08:09:02 +0100
-Subject: [Buildroot] [PATCH 2 of 4 v4] dependencies: check minimal make
-	version early on
+Date: Fri, 16 Dec 2011 08:08:56 +0100
+Subject: [Buildroot] [PATCH 1 of 4 v4] dependencies: move from toolchain/ to
+	support/
 In-Reply-To: <patchbomb.1324018824@devws108>
 References: <patchbomb.1324018824@devws108>
-Message-ID: <e30db73389390b3c1c72.1324018826@devws108>
+Message-ID: <50eab7753cb252ec4cdc.1324018825@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Although support/dependencies/dependencies.sh checks for the version of make,
-this script doesn't get a chance to run if make encounters a syntax error as a
-result of being too old.
-
-For example, the following syntax is only supported from make 3.81 onwards:
-
-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-include toolchain/toolchain-buildroot.mk
-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-include toolchain/toolchain-external.mk
-else ifeq ($(BR2_TOOLCHAIN_CTNG),y)
-include toolchain/toolchain-crosstool-ng.mk
-endif
-
-This patch adds a check for the version of make very early in the Makefile, so
-that old make versions are handled gracefully.
+As suggested by Arnout Vandecappelle, move toolchain/dependencies to
+support/dependencies, as it really is not toolchain-specific anymore.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- Makefile |  6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ Makefile                               |    2 ++
+ toolchain/dependencies/dependencies.mk |    2 +-
+ toolchain/dependencies/dependencies.sh |  Bin
+ toolchain/toolchain-buildroot.mk       |    1 -
+ toolchain/toolchain-crosstool-ng.mk    |    1 -
+ toolchain/toolchain-external.mk        |    1 -
+ 6 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/Makefile b/Makefile
 --- a/Makefile
 +++ b/Makefile
-@@ -26,6 +26,12 @@
- # Set and export the version string
- export BR2_VERSION:=2011.11-rc2
+@@ -298,6 +298,8 @@ include package/Makefile.in
  
-+# Check for minimal make version (note: this check will break at make 10.x)
-+MIN_MAKE_VERSION=3.81
-+ifeq (,$(filter $(MIN_MAKE_VERSION),$(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION)))))
-+$(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
-+endif
+ all: world
+ 
++include support/dependencies/dependencies.mk
 +
- # This top-level Makefile can *not* be executed in parallel
- .NOTPARALLEL:
+ # We also need the various per-package makefiles, which also add
+ # each selected package to TARGETS if that package was selected
+ # in the .config file.
+diff --git a/toolchain/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+rename from toolchain/dependencies/dependencies.mk
+rename to support/dependencies/dependencies.mk
+--- a/toolchain/dependencies/dependencies.mk
++++ b/support/dependencies/dependencies.mk
+@@ -20,7 +20,7 @@ core-dependencies:
+ 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
+ 		CONFIG_FILE="$(CONFIG_DIR)/.config" \
+ 		DL_TOOLS="$(DL_TOOLS)" \
+-		$(TOPDIR)/toolchain/dependencies/dependencies.sh
++		$(TOPDIR)/support/dependencies/dependencies.sh
  
+ dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
+ 
+diff --git a/toolchain/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+rename from toolchain/dependencies/dependencies.sh
+rename to support/dependencies/dependencies.sh
+diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
+--- a/toolchain/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot.mk
+@@ -1,6 +1,5 @@
+ # Include files required for the internal toolchain backend
+ 
+-include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
+diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
+--- a/toolchain/toolchain-crosstool-ng.mk
++++ b/toolchain/toolchain-crosstool-ng.mk
+@@ -2,7 +2,6 @@
+ 
+ # Explicit ordering:
+ include toolchain/helpers.mk
+-include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
+diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
+--- a/toolchain/toolchain-external.mk
++++ b/toolchain/toolchain-external.mk
+@@ -1,7 +1,6 @@
+ # Required includes for the external toolchain backend
+ 
+ include toolchain/helpers.mk
+-include toolchain/dependencies/dependencies.mk
+ include toolchain/elf2flt/elf2flt.mk
+ include toolchain/gcc/gcc-uclibc-4.x.mk
+ include toolchain/gdb/gdb.mk
