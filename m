@@ -1,90 +1,66 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 16 Dec 2011 09:52:20 +0100
-Subject: [Buildroot] [PATCH 1 of 5 v5] dependencies: move from toolchain/ to
-	support/
+Date: Fri, 16 Dec 2011 09:52:24 +0100
+Subject: [Buildroot] [PATCH 3 of 5 v5] dependencies: add function
+	suitable-host-package
 In-Reply-To: <patchbomb.1324025231@devws108>
 References: <patchbomb.1324025231@devws108>
-Message-ID: <38d1f34bd55f4670f965.1324025232@devws108>
+Message-ID: <c3e0572d6f6dc340702f.1324025234@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Arnout Vandecappelle, move toolchain/dependencies to
-support/dependencies, as it really is not toolchain-specific anymore.
+Sometimes, buildroot needs a certain host tool to do its job, e.g. tar. In
+many cases, we expect this tool to be present on the host system, but this is
+not always the case. Or maybe, the version on the host system is not
+suitable, and we need a more recent one.
+
+In some of these cases, instead of bailing out, buildroot could build the
+package first (but only if the existing system package is not suitable).
+
+To aid in detecting if a host package is suitable or not, this patch adds a
+function suitable-host-package. When called with parameter foo, it will
+execute check-host-foo.sh. This script should return either the path to the
+suitable host package, or the empty string if no suitable package can be found.
+The rules to determine whether something is suitable or not is left to
+check-host-foo.sh and depends on foo.
+
+An example usage of suitable-host-package is:
+DEPENDENCIES_HOST_PREREQ += $(if $(call suitable-host-package,foo),,host-foo)
+
+To avoid cluttering the existing dependencies.mk file, it includes any
+check-host-foo.mk file. These files can be used to hold appropriate
+dependency-related actions for foo.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+v1 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- Makefile                               |    2 ++
- toolchain/dependencies/dependencies.mk |    2 +-
- toolchain/dependencies/dependencies.sh |  Bin
- toolchain/toolchain-buildroot.mk       |    1 -
- toolchain/toolchain-crosstool-ng.mk    |    1 -
- toolchain/toolchain-external.mk        |    1 -
- 6 files changed, 3 insertions(+), 4 deletions(-)
+v3: Add optional second parameter to suitable-host-package, to specify a
+    candidate tool.
 
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -298,6 +298,8 @@ include package/Makefile.in
- 
- all: world
- 
-+include support/dependencies/dependencies.mk
-+
- # We also need the various per-package makefiles, which also add
- # each selected package to TARGETS if that package was selected
- # in the .config file.
-diff --git a/toolchain/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
-rename from toolchain/dependencies/dependencies.mk
-rename to support/dependencies/dependencies.mk
---- a/toolchain/dependencies/dependencies.mk
+ support/dependencies/dependencies.mk |  10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+--- a/support/dependencies/dependencies.mk
 +++ b/support/dependencies/dependencies.mk
-@@ -20,7 +20,7 @@ core-dependencies:
- 	@HOSTCC="$(firstword $(HOSTCC))" MAKE="$(MAKE)" \
- 		CONFIG_FILE="$(CONFIG_DIR)/.config" \
- 		DL_TOOLS="$(DL_TOOLS)" \
--		$(TOPDIR)/toolchain/dependencies/dependencies.sh
-+		$(TOPDIR)/support/dependencies/dependencies.sh
+@@ -6,6 +6,16 @@
+ ######################################################################
  
- dependencies: core-dependencies $(DEPENDENCIES_HOST_PREREQ)
- 
-diff --git a/toolchain/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-rename from toolchain/dependencies/dependencies.sh
-rename to support/dependencies/dependencies.sh
-diff --git a/toolchain/toolchain-buildroot.mk b/toolchain/toolchain-buildroot.mk
---- a/toolchain/toolchain-buildroot.mk
-+++ b/toolchain/toolchain-buildroot.mk
-@@ -1,6 +1,5 @@
- # Include files required for the internal toolchain backend
- 
--include toolchain/dependencies/dependencies.mk
- include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/gdb/gdb.mk
-diff --git a/toolchain/toolchain-crosstool-ng.mk b/toolchain/toolchain-crosstool-ng.mk
---- a/toolchain/toolchain-crosstool-ng.mk
-+++ b/toolchain/toolchain-crosstool-ng.mk
-@@ -2,7 +2,6 @@
- 
- # Explicit ordering:
- include toolchain/helpers.mk
--include toolchain/dependencies/dependencies.mk
- include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/gdb/gdb.mk
-diff --git a/toolchain/toolchain-external.mk b/toolchain/toolchain-external.mk
---- a/toolchain/toolchain-external.mk
-+++ b/toolchain/toolchain-external.mk
-@@ -1,7 +1,6 @@
- # Required includes for the external toolchain backend
- 
- include toolchain/helpers.mk
--include toolchain/dependencies/dependencies.mk
- include toolchain/elf2flt/elf2flt.mk
- include toolchain/gcc/gcc-uclibc-4.x.mk
- include toolchain/gdb/gdb.mk
+ DEPENDENCIES_HOST_PREREQ:=
++
++# suitable-host-pkg: calls check-host-$(1).sh shell script. Parameter (2)
++# can be the candidate to be checked. If not present, the check-host-$(1).sh
++# script should use 'which' to find a candidate. The script should return
++# the path to the suitable host tool, or nothing if no suitable tool was found.
++define suitable-host-package
++$(shell support/dependencies/check-host-$(1).sh $(2))
++endef
++-include support/dependencies/check-host-*.mk
++
+ ifeq ($(BR2_STRIP_sstrip),y)
+ DEPENDENCIES_HOST_PREREQ+=host-sstrip
+ endif
