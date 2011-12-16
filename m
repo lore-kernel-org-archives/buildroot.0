@@ -1,23 +1,27 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 15 Dec 2011 16:08:51 +0100
-Subject: [Buildroot] [PATCH] Rework of shutdown policy in inittab
-In-Reply-To: <CBA0E7E1478449AB9BEC88E21C18E508@JohanW7>
-References: <CBA0E7E1478449AB9BEC88E21C18E508@JohanW7>
-Message-ID: <CAAXf6LWfW+Ut0Xr+uLfa6+b88AaOo7QcGy+tsZAwLQK5YZpi4g@mail.gmail.com>
+Date: Fri, 16 Dec 2011 08:08:50 +0100
+Subject: [Buildroot] [PATCH 0 of 4 v4] dependencies: some improvements
+Message-ID: <patchbomb.1324018824@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Dec 15, 2011 at 2:21 PM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
-> Hi
->
->
->
-> I think for the majority of embedded systems? the shutdown is performed by
-> pulling the plug?.
 
-That really depends on the type of system.
-Note also that the shutdown script is not only used for a real
-shutdown, but also for a reboot.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+---
+v4: add Acks by ThomasP and update after feedback
+
+ Makefile                               |    8 ++++++++
+ package/Makefile.package.in            |   12 ------------
+ package/tar/tar.mk                     |   12 ++++++++++++
+ support/dependencies/check-host-tar.mk |    9 +++++++++
+ support/dependencies/check-host-tar.sh |   35 +++++++++++++++++++++++++++++++++++
+ toolchain/dependencies/dependencies.mk |   12 +++++++++++-
+ toolchain/dependencies/dependencies.sh |  Bin
+ toolchain/toolchain-buildroot.mk       |    1 -
+ toolchain/toolchain-crosstool-ng.mk    |    1 -
+ toolchain/toolchain-external.mk        |    1 -
+ 10 files changed, 75 insertions(+), 16 deletions(-)
