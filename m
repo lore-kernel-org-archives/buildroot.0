@@ -1,66 +1,134 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 16 Dec 2011 08:09:03 +0100
-Subject: [Buildroot] [PATCH 3 of 4 v4] dependencies: add function
-	suitable-host-package
+Date: Fri, 16 Dec 2011 08:09:06 +0100
+Subject: [Buildroot] [PATCH 4 of 4 v4] dependencies: build a host-tar if no
+ suitable tar can be found
 In-Reply-To: <patchbomb.1324018824@devws108>
 References: <patchbomb.1324018824@devws108>
-Message-ID: <ea3a7d26f729efdb3b00.1324018827@devws108>
+Message-ID: <c5f62f1ed1acdf31cf19.1324018828@devws108>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes, buildroot needs a certain host tool to do its job, e.g. tar. In
-many cases, we expect this tool to be present on the host system, but this is
-not always the case. Or maybe, the version on the host system is not
-suitable, and we need a more recent one.
+Some toolchains, like the one built with buildroot itself, use hardlinks (for
+example to link between the c++ and g++ binary). Unpacking such a toolchain
+with the --strip-components options does not work correctly if the system tar
+is too old (<1.17). Even recent releases of RedHat/CentOS still ship with
+tar 1.15.
 
-In some of these cases, instead of bailing out, buildroot could build the
-package first (but only if the existing system package is not suitable).
+This patch checks for a suitable tar version (tar 1.17+) on the host system,
+and adds host-tar to the host dependencies if none can be found.
 
-To aid in detecting if a host package is suitable or not, this patch adds a
-function suitable-host-package. When called with parameter foo, it will
-execute check-host-foo.sh. This script should return either the path to the
-suitable host package, or the empty string if no suitable package can be found.
-The rules to determine whether something is suitable or not is left to
-check-host-foo.sh and depends on foo.
-
-An example usage of suitable-host-package is:
-DEPENDENCIES_HOST_PREREQ += $(if $(call suitable-host-package,foo),,host-foo)
-
-To avoid cluttering the existing dependencies.mk file, it includes any
-check-host-foo.mk file. These files can be used to hold appropriate
-dependency-related actions for foo.
+host-tar is download and extracted as cpio.gz instead of tar.gz, to prevent
+chicken-egg problem.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-v1 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+v1/v2 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
-v3: Add optional second parameter to suitable-host-package, to specify a
-    candidate tool.
+v3: remove chicken-egg problem, causing great simplification; update check-
+    host-tar.sh with Arnout's comments.
+v4: use 'define' for HOST_TAR_EXTRACT_CMDS after suggestion by ThomasP
 
- support/dependencies/dependencies.mk |  10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+ package/Makefile.package.in            |  12 ------------
+ package/tar/tar.mk                     |  12 ++++++++++++
+ support/dependencies/check-host-tar.mk |   9 +++++++++
+ support/dependencies/check-host-tar.sh |  35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 56 insertions(+), 12 deletions(-)
 
-diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
---- a/support/dependencies/dependencies.mk
-+++ b/support/dependencies/dependencies.mk
-@@ -6,6 +6,16 @@
- ######################################################################
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -235,18 +235,6 @@ define DOWNLOAD
+ 	exit 1
+ endef
  
- DEPENDENCIES_HOST_PREREQ:=
-+
-+# suitable-host-pkg: calls check-host-$(1).sh shell script. Parameter (2)
-+# can be the candidate to be checked. If not present, the check-host-$(1).sh
-+# script should use 'which' to find a candidate. The script should return
-+# the path to the suitable host tool, or nothing if no suitable tool was found.
-+define suitable-host-package
-+$(shell support/dependencies/check-host-$(1).sh $(2))
-+endef
-+-include support/dependencies/check-host-*.mk
-+
- ifeq ($(BR2_STRIP_sstrip),y)
- DEPENDENCIES_HOST_PREREQ+=host-sstrip
+-# Utility programs used to build packages
+-TAR ?= tar
+-
+-# Automatically detect tar --strip-path/components option
+-TAR_STRIP_COMPONENTS := \
+-  $(shell $(TAR) --help | grep strip-path > /dev/null ; \
+-  if test $$? = 0 ; then \
+-   echo '--strip-path' ; \
+-  else \
+-   echo '--strip-components' ; \
+-  fi)
+-
+ # Needed for the foreach loops to loop over the list of hooks, so that
+ # each hook call is properly separated by a newline.
+ define sep
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -13,3 +13,15 @@ TAR_DEPENDENCIES += busybox
  endif
+ 
+ $(eval $(call AUTOTARGETS))
++
++# host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
++# of needing tar to build tar.
++HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
++define HOST_TAR_EXTRACT_CMDS
++	mkdir -p $(HOST_TAR_DIR)
++	cd $(HOST_TAR_DIR) && \
++		$(INFLATE.gz) $(DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i
++	mv $(HOST_TAR_DIR)/tar-$(TAR_VERSION)/* $(HOST_TAR_DIR)
++	rmdir $(HOST_TAR_DIR)/tar-$(TAR_VERSION)
++endef
++$(eval $(call AUTOTARGETS,host))
+diff --git a/support/dependencies/check-host-tar.mk b/support/dependencies/check-host-tar.mk
+new file mode 100644
+--- /dev/null
++++ b/support/dependencies/check-host-tar.mk
+@@ -0,0 +1,9 @@
++TAR ?= tar
++
++ifeq (,$(call suitable-host-package,tar,$(TAR)))
++  DEPENDENCIES_HOST_PREREQ += host-tar
++  TAR = $(HOST_DIR)/usr/bin/tar
++endif
++
++# Since TAR is at least 1.17, it will certainly support --strip-components
++TAR_STRIP_COMPONENTS = --strip-components
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+new file mode 100755
+--- /dev/null
++++ b/support/dependencies/check-host-tar.sh
+@@ -0,0 +1,35 @@
++#!/bin/sh
++
++candidate="$1"
++
++tar=`which $candidate`
++if [ ! -x "$tar" ]; then
++	tar=`which tar`
++	if [ ! -x "$tar" ]; then
++		# echo nothing: no suitable tar found
++		exit 1
++	fi
++fi
++
++# Output of 'tar --version' examples:
++# tar (GNU tar) 1.15.1
++# tar (GNU tar) 1.25
++version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
++major=`echo "$version" | cut -d. -f1`
++minor=`echo "$version" | cut -d. -f2`
++bugfix=`echo "$version" | cut -d. -f3`
++
++# Minimal version = 1.17 (previous versions do not correctly unpack archives
++# containing hard-links if the --strip-components option is used).
++major_min=1
++minor_min=17
++if [ $major -gt $major_min ]; then
++	echo $tar
++else
++	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
++		echo $tar
++	else
++		# echo nothing: no suitable tar found
++		exit 1
++	fi
++fi
