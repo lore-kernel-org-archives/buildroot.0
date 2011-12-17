@@ -1,87 +1,48 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sun, 18 Dec 2011 07:53:49 -0600
-Subject: [Buildroot] [Bug 4634] New: Bigendian binary is output even if
-	it is configured to output little endian
-In-Reply-To: <201112180733.12681.minimod@morethan.org>
-References: <bug-4634-163@https.bugs.busybox.net/>
- <201112180733.12681.minimod@morethan.org>
-Message-ID: <201112180753.51312.minimod@morethan.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 17 Dec 2011 22:31:51 +0100
+Subject: [Buildroot] [git commit] uboot-tools: fix install commands
+Message-ID: <20111218210431.A71918FA93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun December 18 2011, Michael S. Zick wrote:
-> On Sat December 17 2011, bugzilla at busybox.net wrote:
-> > https://bugs.busybox.net/show_bug.cgi?id=4634
-> > 
-> >            Summary: Bigendian binary is output even if it is configured to
-> >                     output little endian
-> >            Product: buildroot
-> >            Version: 2011.11
-> >           Platform: PC
-> >         OS/Version: Linux
-> >             Status: NEW
-> >           Severity: major
-> >           Priority: P5
-> >          Component: Other
-> >         AssignedTo: unassigned at buildroot.uclibc.org
-> >         ReportedBy: matusita at k-micro.com
-> >                 CC: buildroot at uclibc.org
-> >    Estimated Hours: 0.0
-> > 
-> > 
-> > I set build options as below in "make menuconfig" to build root filesystem:
-> >   Target Architecture (mipsel)
-> >   Target Architecture Variant (mips 32r2)
-> >   Toolcain-Toolchain type (External toolchain)
-> >   Toolcain-Toolchain (CodeSourcery MIPS 2011.03)
-> > 
-> > I expected that little enfian binary will be output because "mipsel" is
-> > selected. But it was big endian.
-> > I confirmed it by objdump with "-f" option like below.
-> > 
-> >   % mips-linux-gnu-objdump -f busybox
-> >     busybox:     file format elf32-tradbigmips      <-- Big endian !!!
-> >     architecture: mips:isa32r2, flags 0x00000112:
-> >     EXEC_P, HAS_SYMS, D_PAGED
-> >     start address 0x00403f00
-> > 
-> > So, I saw following file:
-> >   toolchain/toolchain-external/ext-tool.mk
-> > 
-> > And I understand that this script get libraries' location by calling
-> > (prefix)-gcc with following options:
-> >   -print-sysroot
-> >   -print-file-name=libc.a
-> > 
-> > But as for this toolchain(CodeSourcery MIPS 2011.03), it is need to set "-EL"
-> > option as well to get correct location of little endian libraries.
-> > 
-> 
-> I think that the endian default is a gcc build-time option and some builders
-> do select (or it defaults to) little endian.
-> 
-> But the CS toolchains do default to big endian.
-> Too be more general purpose, perhaps there should also be a "knob" to pass
-> -mno-mips16 since the gcc default is to produce mixed 16/32 (or 16/64) bit
-> code and the mips16e decoder is not a core requirement.
-> 
-> http://openplayer.org/resource/tutorials/57-cs-multi-library-tour.html
-> 
-PS:
-Another point -
+commit: http://git.buildroot.net/buildroot/commit/?id=54b2f131067003fc53240b9bd4497a25c145591a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The MIPS recommendation for code generation is to use:
--Os (the BR default) when compiling 'pure' code and to use:
--O2 when compiling mixed code (gcc defaults to mixed code).
+Signed-off-by: Henri Bragge <henri.bragge@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/uboot-tools/uboot-tools.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Mike
-> Mike
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index e20560a..00592d6 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -13,13 +13,13 @@ endef
+ 
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE),y)
+ define UBOOT_TOOLS_INSTALL_MKIMAGE
+-	install -m 0755 -D $(@D)/tools/mkimage $(TARGET_DIR)/usr/bin
++	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(TARGET_DIR)/usr/bin/mkimage
+ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV),y)
+ define UBOOT_TOOLS_INSTALL_FWPRINTENV
+-	install -m 0755 -D $(@D)/tools/env/fw_printenv $(TARGET_DIR)/usr/sbin
++	$(INSTALL) -m 0755 -D $(@D)/tools/env/fw_printenv $(TARGET_DIR)/usr/sbin/fw_printenv
+ 	ln -sf fw_printenv $(TARGET_DIR)/usr/sbin/fw_setenv
+ endef
+ endif
+@@ -48,7 +48,7 @@ define HOST_UBOOT_TOOLS_BUILD_CMDS
+ endef
+ 
+ define HOST_UBOOT_TOOLS_INSTALL_CMDS
+-	install -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin
++	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin/mkimage
+ endef
+ 
+ $(eval $(call GENTARGETS))
