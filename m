@@ -1,74 +1,71 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Dec 2011 00:07:46 +0100
-Subject: [Buildroot] [git commit] package: add explorercanvas
-Message-ID: <20111218230946.008D48F960@busybox.osuosl.org>
+Date: Sun, 18 Dec 2011 23:28:44 +0100
+Subject: [Buildroot] [git commit] package: add jQuery Validation plugin
+Message-ID: <20111218230945.C0F6C8F960@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1886506b6b9e45f678f98e3d8e50bbcde1acad95
+commit: http://git.buildroot.net/buildroot/commit/?id=50e00c3b6d2a40ea69716cb3df160a40892e19fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Explorercanvas is a HTML5 canvas tag emulation library for IE<9.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                        |    1 +
- package/explorercanvas/Config.in         |   10 ++++++++++
- package/explorercanvas/explorercanvas.mk |   18 ++++++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
+ package/Config.in                              |    1 +
+ package/jquery-validation/Config.in            |    9 +++++++++
+ package/jquery-validation/jquery-validation.mk |   18 ++++++++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index bfa4b40..1c62ea3 100644
+index b8eb066..2c15f23 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -323,6 +323,7 @@ endmenu
- endif
+@@ -324,6 +324,7 @@ endif
  
  menu "Javascript"
-+source "package/explorercanvas/Config.in"
- source "package/flot/Config.in"
  source "package/jquery/Config.in"
- source "package/jquery-sparkline/Config.in"
-diff --git a/package/explorercanvas/Config.in b/package/explorercanvas/Config.in
++source "package/jquery-validation/Config.in"
+ endmenu
+ 
+ menu "Networking"
+diff --git a/package/jquery-validation/Config.in b/package/jquery-validation/Config.in
 new file mode 100644
-index 0000000..9714a58
+index 0000000..2a764c1
 --- /dev/null
-+++ b/package/explorercanvas/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_EXPLORERCANVAS
-+	bool "explorercanvas"
++++ b/package/jquery-validation/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_JQUERY_VALIDATION
++	bool "jQuery-Validation"
++	select BR2_PACKAGE_JQUERY
 +	help
-+	  Modern browsers like Firefox, Safari, Chrome and Opera
-+	  support the HTML5 canvas tag to allow 2D command-based
-+	  drawing. ExplorerCanvas brings the same functionality to
-+	  Internet Explorer (<v9). To use, web developers only need to
-+	  include a single script tag in their existing web pages.
++	  The jQuery Validation Plugin provides drop-in validation for
++	  your existing forms, while making all kinds of
++	  customizations to fit your application really easy.
 +
-+	  http://excanvas.sf.net/
-diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
++	  http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
 new file mode 100644
-index 0000000..93dcb1f
+index 0000000..5f25b58
 --- /dev/null
-+++ b/package/explorercanvas/explorercanvas.mk
++++ b/package/jquery-validation/jquery-validation.mk
 @@ -0,0 +1,18 @@
-+EXPLORERCANVAS_VERSION = r3
-+EXPLORERCANVAS_SITE = http://explorercanvas.googlecode.com/files/
-+EXPLORERCANVAS_SOURCE = excanvas_$(EXPLORERCANVAS_VERSION).zip
++JQUERY_VALIDATION_VERSION = 1.9.0
++JQUERY_VALIDATION_SITE = http://jquery.bassistance.de/validate
++JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
 +
-+define EXPLORERCANVAS_EXTRACT_CMDS
-+	unzip -d $(@D) $(DL_DIR)/$(EXPLORERCANVAS_SOURCE)
++define JQUERY_VALIDATION_EXTRACT_CMDS
++	unzip -d $(BUILD_DIR) $(DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
 +endef
 +
-+define EXPLORERCANVAS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/excanvas.compiled.js \
-+		$(TARGET_DIR)/var/www/excanvas.js
++define JQUERY_VALIDATION_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/jquery.validate.min.js \
++		$(TARGET_DIR)/var/www/jquery.validate.js
 +endef
 +
-+define EXPLORERCANVAS_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/var/www/excanvas.js
++define JQUERY_VALIDATION_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/var/www/jquery.validate.js
 +endef
 +
 +$(eval $(call GENTARGETS))
