@@ -1,126 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Dec 2011 00:01:43 +0100
-Subject: [Buildroot] [git commit] package: add flot jQuery plugin
-Message-ID: <20111218230945.E27458F960@busybox.osuosl.org>
+Date: Mon, 19 Dec 2011 00:07:46 +0100
+Subject: [Buildroot] [git commit] package: add explorercanvas
+Message-ID: <20111218230946.008D48F960@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8342a525bb2287846d1dcfd279e54b1bfc2d3db
+commit: http://git.buildroot.net/buildroot/commit/?id=1886506b6b9e45f678f98e3d8e50bbcde1acad95
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Explorercanvas is a HTML5 canvas tag emulation library for IE<9.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in      |    1 +
- package/flot/Config.in |   59 ++++++++++++++++++++++++++++++++++++++++++++++++
- package/flot/flot.mk   |   23 ++++++++++++++++++
- 3 files changed, 83 insertions(+), 0 deletions(-)
+ package/Config.in                        |    1 +
+ package/explorercanvas/Config.in         |   10 ++++++++++
+ package/explorercanvas/explorercanvas.mk |   18 ++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 5520279..bfa4b40 100644
+index bfa4b40..1c62ea3 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -323,6 +323,7 @@ endmenu
  endif
  
  menu "Javascript"
-+source "package/flot/Config.in"
++source "package/explorercanvas/Config.in"
+ source "package/flot/Config.in"
  source "package/jquery/Config.in"
  source "package/jquery-sparkline/Config.in"
- source "package/jquery-validation/Config.in"
-diff --git a/package/flot/Config.in b/package/flot/Config.in
+diff --git a/package/explorercanvas/Config.in b/package/explorercanvas/Config.in
 new file mode 100644
-index 0000000..60534c1
+index 0000000..9714a58
 --- /dev/null
-+++ b/package/flot/Config.in
-@@ -0,0 +1,59 @@
-+config BR2_PACKAGE_FLOT
-+	bool "flot"
-+	select BR2_PACKAGE_JQUERY
++++ b/package/explorercanvas/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_EXPLORERCANVAS
++	bool "explorercanvas"
 +	help
-+	  Flot is a pure Javascript plotting library for jQuery. It
-+	  produces graphical plots of arbitrary datasets on-the-fly
-+	  client-side.
++	  Modern browsers like Firefox, Safari, Chrome and Opera
++	  support the HTML5 canvas tag to allow 2D command-based
++	  drawing. ExplorerCanvas brings the same functionality to
++	  Internet Explorer (<v9). To use, web developers only need to
++	  include a single script tag in their existing web pages.
 +
-+	  The focus is on simple usage (all settings are optional),
-+	  attractive looks and interactive features like zooming and
-+	  mouse tracking.
-+
-+	  The plugin works with Internet Explorer 6+, Firefox 2.x+,
-+	  Safari 3.0+, Opera 9.5+ and Konqueror 4.x+ with the HTML
-+	  canvas tag.
-+
-+	  https://code.google.com/p/flot/
-+
-+if BR2_PACKAGE_FLOT
-+
-+comment "flot plugins"
-+
-+config BR2_PACKAGE_FLOT_NAVIGATE
-+	bool "navigate"
-+	help
-+	  Flot plugin for adding panning and zooming capabilities to a plot
-+
-+config BR2_PACKAGE_FLOT_PIE
-+	bool "pie"
-+	help
-+	  Flot plugin for rendering pie charts
-+
-+config BR2_PACKAGE_FLOT_RESIZE
-+	bool "resize"
-+	help
-+	  Flot plugin for automatically redrawing plots when the
-+	  placeholder size changes.
-+
-+config BR2_PACKAGE_FLOT_SELECTION
-+	bool "selection"
-+	help
-+	  Flot plugin for selecting regions
-+
-+config BR2_PACKAGE_FLOT_STACK
-+	bool "stack"
-+	help
-+	  Flot plugin for stacking data sets
-+
-+config BR2_PACKAGE_FLOT_SYMBOL
-+	bool "symbol"
-+	help
-+	  Flot plugin that adds some extra symbols for plotting points
-+
-+config BR2_PACKAGE_FLOT_THRESHOLD
-+	bool "threshold"
-+	help
-+	  Flot plugin for thresholding data
-+
-+endif
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
++	  http://excanvas.sf.net/
+diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
 new file mode 100644
-index 0000000..df3f4d1
+index 0000000..93dcb1f
 --- /dev/null
-+++ b/package/flot/flot.mk
-@@ -0,0 +1,23 @@
-+FLOT_VERSION = 0.7
-+FLOT_SITE = http://flot.googlecode.com/files
-+FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
-+	$(if $(BR2_PACKAGE_FLOT_NAVIGATE),navigate) \
-+	$(if $(BR2_PACKAGE_FLOT_PIE),pie) \
-+	$(if $(BR2_PACKAGE_FLOT_RESIZE),resize) \
-+	$(if $(BR2_PACKAGE_FLOT_SELECTION),selection) \
-+	$(if $(BR2_PACKAGE_FLOT_STACK),stack) \
-+	$(if $(BR2_PACKAGE_FLOT_SYMBOL),symbol) \
-+	$(if $(BR2_PACKAGE_FLOT_THRESHOLD),threshold) \
-+	)
++++ b/package/explorercanvas/explorercanvas.mk
+@@ -0,0 +1,18 @@
++EXPLORERCANVAS_VERSION = r3
++EXPLORERCANVAS_SITE = http://explorercanvas.googlecode.com/files/
++EXPLORERCANVAS_SOURCE = excanvas_$(EXPLORERCANVAS_VERSION).zip
 +
-+define FLOT_INSTALL_TARGET_CMDS
-+	for i in $(FLOT_FILES); do \
-+		$(INSTALL) -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js; \
-+	done
++define EXPLORERCANVAS_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(EXPLORERCANVAS_SOURCE)
 +endef
 +
-+define FLOT_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/var/www/jquery.flot*
++define EXPLORERCANVAS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/excanvas.compiled.js \
++		$(TARGET_DIR)/var/www/excanvas.js
++endef
++
++define EXPLORERCANVAS_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/var/www/excanvas.js
 +endef
 +
 +$(eval $(call GENTARGETS))
