@@ -1,75 +1,77 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Dec 2011 23:40:11 +0100
-Subject: [Buildroot] [git commit] package: add jQuery sparkline plugin
-Message-ID: <20111218230945.D18A68F960@busybox.osuosl.org>
+Date: Sun, 18 Dec 2011 23:28:37 +0100
+Subject: [Buildroot] [git commit] package: add Javascript menu and jQuery
+	package
+Message-ID: <20111218230945.AF9D38F960@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=645ff758fea4c640d1afc8d1a00da1a5f0b076ab
+commit: http://git.buildroot.net/buildroot/commit/?id=4e20e8fe00b7125e2fe4538c69c6560f5bb75121
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+A lot of open source Javascript libraries can be interesting to use on
+embedded systems, so add a specific Javascript menu and the probably most
+well known library of them all, jQuery.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                            |    1 +
- package/jquery-sparkline/Config.in           |   13 +++++++++++++
- package/jquery-sparkline/jquery-sparkline.mk |   18 ++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
+ package/Config.in        |    4 ++++
+ package/jquery/Config.in |    8 ++++++++
+ package/jquery/jquery.mk |   17 +++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 2c15f23..5520279 100644
+index eb93b1c..b8eb066 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -324,6 +324,7 @@ endif
- 
- menu "Javascript"
- source "package/jquery/Config.in"
-+source "package/jquery-sparkline/Config.in"
- source "package/jquery-validation/Config.in"
+@@ -322,6 +322,10 @@ source "package/java/concierge/Config.in"
  endmenu
+ endif
  
-diff --git a/package/jquery-sparkline/Config.in b/package/jquery-sparkline/Config.in
++menu "Javascript"
++source "package/jquery/Config.in"
++endmenu
++
+ menu "Networking"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+diff --git a/package/jquery/Config.in b/package/jquery/Config.in
 new file mode 100644
-index 0000000..ae66364
+index 0000000..92f5604
 --- /dev/null
-+++ b/package/jquery-sparkline/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_JQUERY_SPARKLINE
-+	bool "jQuery-Sparkline"
-+	select BR2_PACKAGE_JQUERY
++++ b/package/jquery/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_JQUERY
++	bool "jQuery"
 +	help
-+	  This jQuery plugin generates sparklines (small inline
-+	  charts) directly in the browser using data supplied either
-+	  inline in the HTML, or via javascript.
++	  jQuery is a fast and concise JavaScript Library that
++	  simplifies HTML document traversing, event handling,
++	  animating, and Ajax interactions for rapid web development.
 +
-+	  The plugin is compatible with most modern browsers and has
-+	  been tested with Firefox 2+, Safari 3+, Opera 9, Google
-+	  Chrome and Internet Explorer 6, 7 & 8.
-+
-+	  http://www.omnipotent.net/jquery.sparkline/
-diff --git a/package/jquery-sparkline/jquery-sparkline.mk b/package/jquery-sparkline/jquery-sparkline.mk
++	  http://jquery.com
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
 new file mode 100644
-index 0000000..93dddf0
+index 0000000..aba6301
 --- /dev/null
-+++ b/package/jquery-sparkline/jquery-sparkline.mk
-@@ -0,0 +1,18 @@
-+JQUERY_SPARKLINE_VERSION = 1.6
-+JQUERY_SPARKLINE_SITE = http://www.omnipotent.net/jquery.sparkline/$(JQUERY_SPARKLINE_VERSION)
-+JQUERY_SPARKLINE_SOURCE = jquery.sparkline.min.js
++++ b/package/jquery/jquery.mk
+@@ -0,0 +1,17 @@
++JQUERY_VERSION = 1.7.1
++JQUERY_SITE = http://code.jquery.com
++JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
 +
-+define JQUERY_SPARKLINE_EXTRACT_CMDS
-+	cp $(DL_DIR)/$(JQUERY_SPARKLINE_SOURCE) $(@D)
++define JQUERY_EXTRACT_CMDS
++	cp $(DL_DIR)/$(JQUERY_SOURCE) $(@D)
 +endef
 +
-+define JQUERY_SPARKLINE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/$(JQUERY_SPARKLINE_SOURCE) \
-+		$(TARGET_DIR)/var/www/jquery.sparkline.js
++define JQUERY_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/$(JQUERY_SOURCE) $(TARGET_DIR)/var/www/jquery.js
 +endef
 +
-+define JQUERY_SPARKLINE_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/var/www/jquery.sparkline.js
++define JQUERY_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/var/www/jquery.js
 +endef
 +
 +$(eval $(call GENTARGETS))
