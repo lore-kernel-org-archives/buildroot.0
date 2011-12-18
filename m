@@ -1,28 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 Dec 2011 21:49:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 4628] Unable to download properly file
-	genext2fs-1.4.1.tar.gz
-In-Reply-To: <bug-4628-163@https.bugs.busybox.net/>
-References: <bug-4628-163@https.bugs.busybox.net/>
-Message-ID: <20111217214940.7430B8FA7F@busybox.osuosl.org>
+From: Tim Judd <tjudd2k@yahoo.com>
+Date: Sat, 17 Dec 2011 18:33:34 -0800 (PST)
+Subject: [Buildroot] quick steps for buildroot?
+Message-ID: <1324175614.84733.YahooMailNeo@web161206.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4628
+I've been using buildroot to generate a i486 toolchain because I don't know how to do it myself.
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+Would anyone be gentle enough to paraphrase/quick steps (no details necessary) of what tools to use, in the right order?? I'm savvy enough to understand how in a list of items how they're put together, but I don't know what I need.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-17 21:49:40 UTC ---
-Again, works for me. Maybe check your internet connection/proxy settings?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thanks!
+
+?
+If opportunity doesn't knock, build a door.
+"I can" is a way of life.
+More and Bigger is not always Better.
+The road to success is always uphill.
+Life isn't about finding yourself, it's about creating yourself.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111217/aa118707/attachment.html>
