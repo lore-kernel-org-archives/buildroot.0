@@ -1,27 +1,60 @@
-From: Tim Judd <tjudd2k@yahoo.com>
-Date: Sat, 17 Dec 2011 18:33:34 -0800 (PST)
-Subject: [Buildroot] quick steps for buildroot?
-Message-ID: <1324175614.84733.YahooMailNeo@web161206.mail.bf1.yahoo.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 Dec 2011 05:28:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 4634] New: Bigendian binary is output even if it
+ is configured to output little endian
+Message-ID: <bug-4634-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've been using buildroot to generate a i486 toolchain because I don't know how to do it myself.
+https://bugs.busybox.net/show_bug.cgi?id=4634
+
+           Summary: Bigendian binary is output even if it is configured to
+                    output little endian
+           Product: buildroot
+           Version: 2011.11
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: matusita at k-micro.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
 
-Would anyone be gentle enough to paraphrase/quick steps (no details necessary) of what tools to use, in the right order?? I'm savvy enough to understand how in a list of items how they're put together, but I don't know what I need.
+I set build options as below in "make menuconfig" to build root filesystem:
+  Target Architecture (mipsel)
+  Target Architecture Variant (mips 32r2)
+  Toolcain-Toolchain type (External toolchain)
+  Toolcain-Toolchain (CodeSourcery MIPS 2011.03)
 
+I expected that little enfian binary will be output because "mipsel" is
+selected. But it was big endian.
+I confirmed it by objdump with "-f" option like below.
 
-Thanks!
+  % mips-linux-gnu-objdump -f busybox
+    busybox:     file format elf32-tradbigmips      <-- Big endian !!!
+    architecture: mips:isa32r2, flags 0x00000112:
+    EXEC_P, HAS_SYMS, D_PAGED
+    start address 0x00403f00
 
-?
-If opportunity doesn't knock, build a door.
-"I can" is a way of life.
-More and Bigger is not always Better.
-The road to success is always uphill.
-Life isn't about finding yourself, it's about creating yourself.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111217/aa118707/attachment.html>
+So, I saw following file:
+  toolchain/toolchain-external/ext-tool.mk
+
+And I understand that this script get libraries' location by calling
+(prefix)-gcc with following options:
+  -print-sysroot
+  -print-file-name=libc.a
+
+But as for this toolchain(CodeSourcery MIPS 2011.03), it is need to set "-EL"
+option as well to get correct location of little endian libraries.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
