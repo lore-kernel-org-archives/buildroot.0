@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Dec 2011 13:56:55 +0000 (UTC)
+Date: Mon, 19 Dec 2011 14:09:03 +0000 (UTC)
 Subject: [Buildroot] [Bug 4622] Unable to download properly file
 	fakeroot_1.9.5.tar.gz
 In-Reply-To: <bug-4622-163@https.bugs.busybox.net/>
 References: <bug-4622-163@https.bugs.busybox.net/>
-Message-ID: <20111219135655.58AC08F8D8@busybox.osuosl.org>
+Message-ID: <20111219140903.942558F6F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,13 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=4622
 
---- Comment #7 from arco at ieec.uab.es 2011-12-19 13:56:55 UTC ---
-I am using linuxbuild 1.0.1. Please indicate where I can find the latest
-version. Just to make sure I am up to date.
+--- Comment #8 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-19 14:09:03 UTC ---
+(In reply to comment #7)
+> I am using linuxbuild 1.0.1. Please indicate where I can find the latest
+> version. Just to make sure I am up to date.
 
-Thanks again
+What is linuxbuild? Google doesn't seem helpful. The latest Buildroot release
+can be found on http://buildroot.net/download.html
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
