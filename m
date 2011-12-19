@@ -1,26 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Dec 2011 08:30:27 +0100
-Subject: [Buildroot] quick steps for buildroot?
-In-Reply-To: <1324175614.84733.YahooMailNeo@web161206.mail.bf1.yahoo.com>
-References: <1324175614.84733.YahooMailNeo@web161206.mail.bf1.yahoo.com>
-Message-ID: <201112190830.27132.arnout@mind.be>
+Date: Mon, 19 Dec 2011 08:25:32 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Python: add external modules option
+In-Reply-To: <1323873386-31047-1-git-send-email-yegorslists@googlemail.com>
+References: <1323873386-31047-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201112190825.32305.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 18 December 2011 03:33:34 Tim Judd wrote:
-> I've been using buildroot to generate a i486 toolchain because I don't know how to do it myself.
+On Wednesday 14 December 2011 15:36:25 yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
+> all external python packages/libraries should reside in
+> "external python modules" section.
 > 
-> Would anyone be gentle enough to paraphrase/quick steps (no details necessary) of what tools to use, in the right order?  I'm savvy enough to understand how in a list of items how they're put together, but I don't know what I need.
+> Move existing modules python-serial and python-mad there
+> 
+> Move python-mad from package/multimedia to package
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- Download crosstool-NG and use its configure mechanism to create a cross-toolchain.
-
-
- Regards,
- Arnout
+ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
