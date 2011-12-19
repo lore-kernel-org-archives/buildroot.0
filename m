@@ -1,35 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 19 Dec 2011 11:22:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 4622] Unable to download properly file
-	fakeroot_1.9.5.tar.gz
-In-Reply-To: <bug-4622-163@https.bugs.busybox.net/>
-References: <bug-4622-163@https.bugs.busybox.net/>
-Message-ID: <20111219112223.B9E958FAB0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Dec 2011 14:53:26 +0100
+Subject: [Buildroot] XWindow Browser, anyone ?
+In-Reply-To: <CAOrUntZhzjati0cHKQp0s=ov-eoLaeGDjz987qjSZ=1ZMFYA-A@mail.gmail.com>
+References: <CAOrUntZhzjati0cHKQp0s=ov-eoLaeGDjz987qjSZ=1ZMFYA-A@mail.gmail.com>
+Message-ID: <20111219145326.226d43f1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4622
+Hello,
 
---- Comment #6 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-19 11:22:23 UTC ---
-(In reply to comment #5)
-> Following the make file development...
-> 
-> --2011-12-19 11:25:34-- 
-> http://snapshot.debian.net/archive/2008/04/27/debian/pool/main/f/fakeroot//fakeroot_1.9.5.tar.gz
+Le Mon, 19 Dec 2011 09:05:36 +0100,
+Andrea Benini <andreabenini@gmail.com> a ?crit :
 
-That's not the right URL. What Buildroot version are you using? We fixed this
-back in March 2011 when snapshot.debian.net moved to .debian.org.
+> Has someone ever ported a browser suitable for X ?
+> I've seen Lynx in packages directory but I'm just looking for
+> something nice for XWindow, I'm trying to compile XUL for Firefox but
+> it seems to be hard with uclibc libs.
+> Is there someone with a package for Firefox, Chromium, Opera or
+> something else available under X ? I'd like to create a minimal
+> XWindow system with a browser but without success yet, and of course
+> I'm not interested in Chromium OS, buildroot system is still my
+> favorite choice.
 
-Please consider moving to the last 2011.11 release.
+You can have a look at Midori, for which we have a package in
+Buildroot. Another alternative is to use the WebKit rendering engine
+built-in with Qt and develop a small web browser in Qt with a few lines
+of code (there are many examples available on the Web), or even to
+compile a simple Qt-based web browser.
 
-> `/home/darwin/arco/Documents/linuxbuild-1.0.1/dist/buildroot/downloads/fakeroot_1.9.5.tar.gz'
+Best regards,
 
-What is this linuxbuild?
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
