@@ -1,33 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Dec 2011 08:25:32 +0100
-Subject: [Buildroot] [PATCH v2 1/2] Python: add external modules option
-In-Reply-To: <1323873386-31047-1-git-send-email-yegorslists@googlemail.com>
-References: <1323873386-31047-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <201112190825.32305.arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 19 Dec 2011 10:04:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 4622] Unable to download properly file
+	fakeroot_1.9.5.tar.gz
+In-Reply-To: <bug-4622-163@https.bugs.busybox.net/>
+References: <bug-4622-163@https.bugs.busybox.net/>
+Message-ID: <20111219100443.AA9308F931@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 14 December 2011 15:36:25 yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> all external python packages/libraries should reside in
-> "external python modules" section.
-> 
-> Move existing modules python-serial and python-mad there
-> 
-> Move python-mad from package/multimedia to package
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+https://bugs.busybox.net/show_bug.cgi?id=4622
 
- Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> 2011-12-19 10:04:43 UTC ---
+(In reply to comment #3)
+> Sorry, I forgot to attach the file...
+> 
+> This is the file downloaded during default "make build"
+
+Ok, that looks like the frontpage of snapshot.debian.org. Could you show the
+exact output of the download step (E.G. the wget invocation)? (rm
+dl/fakeroot_1.9.5.tar.gz; make)
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  31BB CF53 8660 6F88 345D  54CC A836 5879 20D7 CF43
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
