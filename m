@@ -1,27 +1,24 @@
-From: Andrea Benini <andreabenini@gmail.com>
-Date: Mon, 19 Dec 2011 09:05:36 +0100
-Subject: [Buildroot] XWindow Browser, anyone ?
-Message-ID: <CAOrUntZhzjati0cHKQp0s=ov-eoLaeGDjz987qjSZ=1ZMFYA-A@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 19 Dec 2011 08:12:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 4622] Unable to download properly file
+	fakeroot_1.9.5.tar.gz
+In-Reply-To: <bug-4622-163@https.bugs.busybox.net/>
+References: <bug-4622-163@https.bugs.busybox.net/>
+Message-ID: <20111219081226.C4D158FA9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi guys,
-Has someone ever ported a browser suitable for X ?
-I've seen Lynx in packages directory but I'm just looking for something
-nice for XWindow, I'm trying to compile XUL for Firefox but it seems to be
-hard with uclibc libs.
-Is there someone with a package for Firefox, Chromium, Opera or something
-else available under X ? I'd like to create a minimal XWindow system with a
-browser but without success yet, and of course I'm not interested in
-Chromium OS, buildroot system is still my favorite choice.
+https://bugs.busybox.net/show_bug.cgi?id=4622
 
-Thanks in advance for your reply
-Cheers
+--- Comment #2 from arco at ieec.uab.es 2011-12-19 08:12:26 UTC ---
+Created attachment 3914
+  --> https://bugs.busybox.net/attachment.cgi?id=3914
+File downloaded while "make build" which does not correspond to expected
 
-Ben
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111219/49d0f0a6/attachment.html>
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
