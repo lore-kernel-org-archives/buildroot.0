@@ -1,80 +1,78 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Dec 2011 11:23:53 +0100
-Subject: [Buildroot] [git commit] package: add jsmin (javascript minimizer)
-Message-ID: <20111220110103.B96FB8FB06@busybox.osuosl.org>
+Date: Tue, 20 Dec 2011 11:24:29 +0100
+Subject: [Buildroot] [git commit] package: don't install javascript files as
+	executable
+Message-ID: <20111220110103.C7B298FB06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4565a1d75f7576c4b654152e1e5162f8b932f1ca
+commit: http://git.buildroot.net/buildroot/commit/?id=601bf47ef8a68f773393210b5a7c54f9020ec91a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+install defaults to mode 0755, not 0644, so explicitly pass mode to
+ensure .js files aren't made executable.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in       |    1 +
- package/jsmin/Config.in |   11 +++++++++++
- package/jsmin/jsmin.mk  |   25 +++++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
+ package/flot/flot.mk                           |    2 +-
+ package/jquery-sparkline/jquery-sparkline.mk   |    2 +-
+ package/jquery-validation/jquery-validation.mk |    2 +-
+ package/jquery/jquery.mk                       |    3 ++-
+ 4 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1c62ea3..adebd4b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -328,6 +328,7 @@ source "package/flot/Config.in"
- source "package/jquery/Config.in"
- source "package/jquery-sparkline/Config.in"
- source "package/jquery-validation/Config.in"
-+source "package/jsmin/Config.in"
- endmenu
+diff --git a/package/flot/flot.mk b/package/flot/flot.mk
+index df3f4d1..8b51b55 100644
+--- a/package/flot/flot.mk
++++ b/package/flot/flot.mk
+@@ -12,7 +12,7 @@ FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
  
- menu "Networking"
-diff --git a/package/jsmin/Config.in b/package/jsmin/Config.in
-new file mode 100644
-index 0000000..d0948b8
---- /dev/null
-+++ b/package/jsmin/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_JSMIN
-+	bool "jsmin"
-+	help
-+	  JSMin is a filter which removes comments and unnecessary
-+	  whitespace from JavaScript files. It typically reduces
-+	  filesize by half, resulting in faster downloads. It also
-+	  encourages a more expressive programming style because it
-+	  eliminates the download cost of clean, literate
-+	  self-documentation.
-+
-+	  http://www.crockford.com/javascript/jsmin.html
-diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
-new file mode 100644
-index 0000000..1c414ff
---- /dev/null
-+++ b/package/jsmin/jsmin.mk
-@@ -0,0 +1,25 @@
-+JSMIN_VERSION = a9b47554d5684a55301a2eb7ca8480b7ee7630d4
-+JSMIN_SITE = git://github.com/douglascrockford/JSMin.git
-+
-+define JSMIN_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
-+endef
-+
-+define JSMIN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/jsmin $(TARGET_DIR)/usr/bin/jsmin
-+endef
-+
-+define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/jsmin
-+endef
-+
-+define HOST_JSMIN_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) jsmin
-+endef
-+
-+define HOST_JSMIN_INSTALL_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/jsmin $(HOST_DIR)/usr/bin/jsmin
-+endef
-+
-+$(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
+ define FLOT_INSTALL_TARGET_CMDS
+ 	for i in $(FLOT_FILES); do \
+-		$(INSTALL) -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js; \
++		$(INSTALL) -m 0644 -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js; \
+ 	done
+ endef
+ 
+diff --git a/package/jquery-sparkline/jquery-sparkline.mk b/package/jquery-sparkline/jquery-sparkline.mk
+index 93dddf0..d0b478a 100644
+--- a/package/jquery-sparkline/jquery-sparkline.mk
++++ b/package/jquery-sparkline/jquery-sparkline.mk
+@@ -7,7 +7,7 @@ define JQUERY_SPARKLINE_EXTRACT_CMDS
+ endef
+ 
+ define JQUERY_SPARKLINE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/$(JQUERY_SPARKLINE_SOURCE) \
++	$(INSTALL) -m 0644 -D $(@D)/$(JQUERY_SPARKLINE_SOURCE) \
+ 		$(TARGET_DIR)/var/www/jquery.sparkline.js
+ endef
+ 
+diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
+index 5f25b58..5fee4c1 100644
+--- a/package/jquery-validation/jquery-validation.mk
++++ b/package/jquery-validation/jquery-validation.mk
+@@ -7,7 +7,7 @@ define JQUERY_VALIDATION_EXTRACT_CMDS
+ endef
+ 
+ define JQUERY_VALIDATION_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/jquery.validate.min.js \
++	$(INSTALL) -m 0644 -D $(@D)/jquery.validate.min.js \
+ 		$(TARGET_DIR)/var/www/jquery.validate.js
+ endef
+ 
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index aba6301..08dd4a3 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -7,7 +7,8 @@ define JQUERY_EXTRACT_CMDS
+ endef
+ 
+ define JQUERY_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D $(@D)/$(JQUERY_SOURCE) $(TARGET_DIR)/var/www/jquery.js
++	$(INSTALL) -m 0644 -D $(@D)/$(JQUERY_SOURCE) \
++		$(TARGET_DIR)/var/www/jquery.js
+ endef
+ 
+ define JQUERY_UNINSTALL_TARGET_CMDS
