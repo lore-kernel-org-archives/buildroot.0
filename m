@@ -1,28 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Dec 2011 13:09:44 +0100
-Subject: [Buildroot] [git commit] package: add jsmin (javascript
-	minimizer)
-In-Reply-To: <20111220121007.353fefe0@skate> (Thomas Petazzoni's message of
- "Tue, 20 Dec 2011 12:10:07 +0100")
-References: <20111220110103.B96FB8FB06@busybox.osuosl.org>
- <20111220121007.353fefe0@skate>
-Message-ID: <8762hbfnqv.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 20 Dec 2011 13:10:17 +0100
+Subject: [Buildroot] [git commit] jsmin: fix typo in uninstall target
+Message-ID: <20111220121310.BD7798FAD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=47f20335f548994216e8299eac9dd6295c042773
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Le Tue, 20 Dec 2011 11:23:53 +0100,
- Thomas> Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+Thanks to Thomas for noticing.
 
- >> +define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/jsmin/jsmin.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Thomas> Something wrong here :)
-
-Argh, cutnpaste - Will fix, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jsmin/jsmin.mk b/package/jsmin/jsmin.mk
+index 1c414ff..491bb3e 100644
+--- a/package/jsmin/jsmin.mk
++++ b/package/jsmin/jsmin.mk
+@@ -9,7 +9,7 @@ define JSMIN_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/jsmin $(TARGET_DIR)/usr/bin/jsmin
+ endef
+ 
+-define INPUT_EVENT_DAEMON_UNINSTALL_TARGET_CMDS
++define JSMIN_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/bin/jsmin
+ endef
+ 
