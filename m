@@ -1,29 +1,35 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 19 Dec 2011 22:08:37 +0100
-Subject: [Buildroot] Buildroot and GPL compliance
-In-Reply-To: <4EEDDD2D.1030801@relinux.de>
-References: <CAAXf6LVHqHhTH_qADzZcu=zAZ=+9YYPfpfHwL4so2O_akNPGQQ@mail.gmail.com>
- <4EEDDD2D.1030801@relinux.de>
-Message-ID: <4EEFA7D5.8060709@lucaceresoli.net>
+From: vbr vbr <vvvg77@gmail.com>
+Date: Mon, 19 Dec 2011 17:47:42 -0800
+Subject: [Buildroot] tutorial to extend buildroot?
+Message-ID: <CAOrAeomixni4EZqKWV0p9bVfg9eOsQ+4LP4=CyK6POTsiga2iw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephan,
+Hi,
 
-Stephan Hoffmann wrote:
->> Technically, the only solution I see is to add 'prominent notices' to
->> modified files in our own repository, but manually remove them when
->> submitting patches to the buildroot list. This is annoying but may be
->> the only legal possibility. How do others see this?
-> I think we should try to find out how other projects handle this or how
-> lawyers or GNU comment on this.
+I have set up my buildroot environment, built an external toolchain
+(crosstool ng) with uClibc, and I understand how to add autotools-based
+packages to buildroot. I committed buildroot source to my svn repo and most
+of the tarballs that I needed which sit in the dl directory. Everything
+works great!
 
-Sounds like a good idea. I think the FSF provides free (as in beer)
-consultancy to free (as in speech) software projects of some importance.
-It might be worth trying, after we have focused on a few precise
-questions.
+Now I have private programs and libraries that I would want to add in
+buildroot infrastructure too, but I don't want to add them in the form of a
+tarball like other open-source tools and libraries. I just want to commit
+the source code for each library and integrate their respective makefiles
+(or create a new makefile for each of them to work) with buildroot. (no
+tarball involved).
 
-Luca
+Does buildroot infrastructure/makefiles support that? Any guidelines or
+examples?
+I haven't found info regarding that question in the online documentation so
+far.
+
+Thanks
+Vincent
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111219/f6dd9f4f/attachment.html>
