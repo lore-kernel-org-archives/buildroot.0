@@ -1,88 +1,38 @@
-From: vbr vbr <vvvg77@gmail.com>
-Date: Tue, 20 Dec 2011 12:08:33 -0800
-Subject: [Buildroot] tutorial to extend buildroot?
-In-Reply-To: <CAAXf6LXrANu2mfxX6zjVGRZYUKH7Ud=wv+Xh7N0p338yxSMHpQ@mail.gmail.com>
-References: <CAOrAeomixni4EZqKWV0p9bVfg9eOsQ+4LP4=CyK6POTsiga2iw@mail.gmail.com>
- <CAAXf6LXrANu2mfxX6zjVGRZYUKH7Ud=wv+Xh7N0p338yxSMHpQ@mail.gmail.com>
-Message-ID: <CAOrAeom996AY1PwC=1Ce01qxLOYKZV5wdGd0+Dj6pBq-+X1q-g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 20 Dec 2011 22:14:29 +0100
+Subject: [Buildroot] [RFC] Add systemd to buildroot
+In-Reply-To: <4ECD673A.7000405@free-electrons.com>
+References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
+ <CAAfyv35NYoDU9qaGT-LBbS++b_s+0e7LWAp=DCYzFUn90E9aKA@mail.gmail.com>
+ <4ECD673A.7000405@free-electrons.com>
+Message-ID: <201112202214.29933.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks! It seems like "local" is the method I need.
+On Wednesday 23 November 2011 22:35:54 Maxime Ripard wrote:
+> > thanks for good work. I don't see any patches where adding systemd
+> > specific services.
+> > Are they in your queue or this was only basic patches?
+> 
+> It's still a work to be done.
+> Once we will have a nice way to add systemd to buildroot, which is not 
+> sure yet, I guess we will add the systemd units one unit at a time.
 
-MYPKG_SITE = <top_dir>/extra/libmypkg
-MYPKG_SITE_METHOD = local
+ It would help to accept the systemd changes if you would add a systemd 
+definition for at least one package.  That helps us to review the impact
+of the changes.
+
+ Regards,
+ Arnout
 
 
-Let say I have a Makefile in my buildroot-2011.08/extra/libmypkg source
-directory.
-After reading the link you provided, I wasn't sure how buildroot will build
-my code. Is it going to copy the source to the build dir and then invoke
-"make" from there with the right toolchain?
-Or does it expect libmypkg to be based on autotools?
-
-Thanks
-Vincent
-
-
-
-On Mon, Dec 19, 2011 at 11:33 PM, Thomas De Schampheleire <
-patrickdepinguin+buildroot@gmail.com> wrote:
-
-> Hello Vincent,
->
-> On Tue, Dec 20, 2011 at 2:47 AM, vbr vbr <vvvg77@gmail.com> wrote:
-> > Hi,
-> >
-> > I have set up my buildroot environment, built an external toolchain
-> > (crosstool ng) with uClibc, and I understand how to add autotools-based
-> > packages to buildroot. I committed buildroot source to my svn repo and
-> most
-> > of the tarballs that I needed which sit in the dl directory. Everything
-> > works great!
->
-> That's nice to hear!
->
-> >
-> > Now I have private programs and libraries that I would want to add in
-> > buildroot infrastructure too, but I don't want to add them in the form
-> of a
-> > tarball like other open-source tools and libraries. I just want to commit
-> > the source code for each library and integrate their respective makefiles
-> > (or create a new makefile for each of them to work) with buildroot. (no
-> > tarball involved).
-> >
-> > Does buildroot infrastructure/makefiles support that? Any guidelines or
-> > examples?
-> > I haven't found info regarding that question in the online documentation
-> so
-> > far.
->
-> You could either use the git, svn, bzr or hg site methods, or use the
-> 'local' site method.
-> The first set of methods will automatically clone the right revision
-> from your repository and build it. The revision itself is packaged in
-> a tarball in the background, but I don't think this bothers you. It is
-> transparent. All you have to do is specify the revision to use in the
-> .mk file.
-> This is described in the buildroot documentation (search for
-> LIBFOO_SITE_METHOD).
->
-> The local site method allows you to use an already existing clone or
-> source base. In this case, you point buildroot to the path where this
-> working directory is located. You can have uncommitted files there,
-> which is useful during development. This feature is described in the
-> following blog post made by Thomas Petazzoni:
-> http://free-electrons.com/blog/buildroot-2011-11/
-> It describes some of the new features of buildroot 2011.11 that are
-> not yet documented.
->
-> Best regards,
-> Thomas
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111220/a3f25ae3/attachment.html>
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
