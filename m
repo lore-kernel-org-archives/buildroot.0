@@ -1,54 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Dec 2011 13:42:13 +0100
-Subject: [Buildroot] [PATCH] New package: python-setuptools
-In-Reply-To: <1324464775-9409-1-git-send-email-yegorslists@googlemail.com>
-References: <1324464775-9409-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20111221134213.2f868bdc@skate>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 21 Dec 2011 22:18:05 +0100
+Subject: [Buildroot] [PATCH v3 2/2] New package: python-dpkt
+In-Reply-To: <CAGm1_kth4YjFHuLYop=Xu7bGETrHSmpT7TWoVud2v8wGHWMC5w@mail.gmail.com>
+References: <1323877116-31436-1-git-send-email-yegorslists@googlemail.com>
+ <201112210754.28934.arnout@mind.be> <20111221091337.1d310b75@skate>
+ <4EF19726.3070605@visionsystems.de> <20111221093830.1440d9a0@skate>
+ <CAGm1_kth4YjFHuLYop=Xu7bGETrHSmpT7TWoVud2v8wGHWMC5w@mail.gmail.com>
+Message-ID: <CAGm1_kvCgYiEcD+=so5egQKiAgJVAo0fh+xduGwYArWWygVEXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Dec 2011 11:52:55 +0100,
-yegorslists at googlemail.com a ?crit :
+On Wed, Dec 21, 2011 at 9:48 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Wed, Dec 21, 2011 at 9:38 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Le Wed, 21 Dec 2011 09:21:58 +0100,
+>> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+>>
+>>> What would speak against compiling host-python with zlib support? I
+>>> think we'll need it for host-setuputils anyway. AFAIK python-dpkt
+>>> seems to be neglected for quite a while. Though I submitted a bug
+>>> report: http://code.google.com/p/dpkt/issues/detail?id=82, I don't
+>>> think it will be accepted shortly.
+>>>
+>>> Should I prepare a patch for host-python with zlib support?
+>>
+>> Adding zlib support in host-python just because dpkt includes itself in
+>> its setup.py script is silly. If all packages do that, then we'll end
+>> up adding cairo support in host-python, just because some Python module
+>> relying on cairo includes itself in its setup.py script.
+>>
+>> That said, if zlib support in host-python is needed for
+>> host-setuputils, then it's a different story and zlib support can be
+>> enabled in host-python. But I definitely don't want the host-python to
+>> be cluttered with more and more things simply because some packages do
+>> silly stuff in their setup.py.
+>
+> I agree with you. So I'll see how far I'll get with adding setuptools.
+> This should have no impact at the current patch for now.
 
-> +PYTHON_INSTALL_STAGING = YES
 
-Your .mk file does not contain the build and install commands for a
-target version of this package, so this line is useless.
+By the way as we enable zlib due to setuptools dependency, should I
+remove the dpkt setup.py patch? It is simpler for us to bump the
+version without this patch as Arnout mentioned.
 
-> +PYTHON_SETUPTOOLS_DEPENDENCIES = python
-
-Again, this won't be used since you have defined only a host variant
-for your package. What you need is:
-
-HOST_PYTHON_SETUPTOOLS_DEPENDENCIES = host-python
-
-> +	(cd $(@D); PYTHONPATH="$(HOST_DIR)/usr/lib/python2.7/site-packages"\
-
-Use $(PYTHON_VERSION_MAJOR) instead of hardcoding 2.7.
-
-> +$(eval $(call GENTARGETS))
-
-Remove this line this you haven't implemented a target variant for this
-package.
-
-> +source "package/python-setuptools/Config.in"
-
-And remove the Config.in file altogether as you haven't implemented a
-target variant for this package.
-
-Of course, if you intend to also support building setuptools for the
-target, keep the Config.in file and the $(eval $(call GENTARGETS))
-line, but remember to implement the BUILD_CMDS and INSTALL_*_CMDS as
-well.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
