@@ -1,33 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 21 Dec 2011 22:59:24 +0100
-Subject: [Buildroot] [git commit] ethtool: bump to version 3.1
-Message-ID: <20111221220349.DB7828FAAF@busybox.osuosl.org>
+Date: Wed, 21 Dec 2011 23:02:31 +0100
+Subject: [Buildroot] [git commit] cdrkit: bump to version 1.1.11 and adjust
+	style
+Message-ID: <20111221220350.058B78FAAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d134ce8b56175b84614bda58191075c3582ce6cc
+commit: http://git.buildroot.net/buildroot/commit/?id=ef3fe1bef6581c66af3858d540343e011cb9fdd6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ethtool/ethtool.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ ...0-no-rcmd.patch => cdrkit-1.1.11-no-rcmd.patch} |    0
+ package/cdrkit/cdrkit.mk                           |   14 +++++++++-----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index a42169c..04f7dac 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/cdrkit/cdrkit-1.1.10-no-rcmd.patch b/package/cdrkit/cdrkit-1.1.11-no-rcmd.patch
+similarity index 100%
+rename from package/cdrkit/cdrkit-1.1.10-no-rcmd.patch
+rename to package/cdrkit/cdrkit-1.1.11-no-rcmd.patch
+diff --git a/package/cdrkit/cdrkit.mk b/package/cdrkit/cdrkit.mk
+index 9eebe6e..fc22c18 100644
+--- a/package/cdrkit/cdrkit.mk
++++ b/package/cdrkit/cdrkit.mk
+@@ -1,9 +1,13 @@
+-CDRKIT_VERSION=1.1.10
+-CDRKIT_SOURCE=cdrkit-$(CDRKIT_VERSION).tar.gz
+-CDRKIT_SITE=http://www.cdrkit.org/releases/
++#############################################################
++#
++# cdrkit
++#
++#############################################################
  
--ETHTOOL_VERSION = 3.0
--ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool/
-+ETHTOOL_VERSION = 3.1
-+ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+-CDRKIT_DEPENDENCIES=libcap bzip2 zlib
+-HOST_CDRKIT_DEPENDENCIES=host-libcap host-bzip2 host-zlib
++CDRKIT_VERSION = 1.1.11
++CDRKIT_SITE = http://www.cdrkit.org/releases
++CDRKIT_DEPENDENCIES = libcap bzip2 zlib
++HOST_CDRKIT_DEPENDENCIES = host-libcap host-bzip2 host-zlib
  
- $(eval $(call AUTOTARGETS))
+ ifeq ($(BR2_ENDIAN),"BIG")
+ CMAKE_ENDIAN_OPT=-DBITFIELDS_HTOL=1
