@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Dec 2011 23:30:22 +0100
-Subject: [Buildroot] [PATCH 1/7] liburcu: new package
+Date: Wed, 21 Dec 2011 23:30:24 +0100
+Subject: [Buildroot] [PATCH 3/7] lttng-tools: new package
 In-Reply-To: <cover.1324506157.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1324506157.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <db5f42a42d2fda67c6b0de4edb3ea2fe75aa7f84.1324506157.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <232e7cba0896844bab11165cff086e2206c0a533.1324506157.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,52 +12,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/liburcu/Config.in  |    9 +++++++++
- package/liburcu/liburcu.mk |    8 ++++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
- create mode 100644 package/liburcu/Config.in
- create mode 100644 package/liburcu/liburcu.mk
+ package/Config.in                  |    1 +
+ package/lttng-tools/Config.in      |   19 +++++++++++++++++++
+ package/lttng-tools/lttng-tools.mk |   12 ++++++++++++
+ 3 files changed, 32 insertions(+), 0 deletions(-)
+ create mode 100644 package/lttng-tools/Config.in
+ create mode 100644 package/lttng-tools/lttng-tools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b6df18a..e30eac5 100644
+index f0cc4f2..df49778 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -365,6 +365,7 @@ source "package/libffi/Config.in"
- source "package/libglib2/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
-+source "package/liburcu/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+@@ -25,6 +25,7 @@ source "package/lmbench/Config.in"
+ source "package/lsof/Config.in"
+ source "package/ltp-testsuite/Config.in"
+ source "package/lttng-modules/Config.in"
++source "package/lttng-tools/Config.in"
+ source "package/ltrace/Config.in"
+ source "package/memstat/Config.in"
+ source "package/netperf/Config.in"
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
 new file mode 100644
-index 0000000..71bec65
+index 0000000..5bd7349
 --- /dev/null
-+++ b/package/liburcu/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBURCU
-+	bool "liburcu"
++++ b/package/lttng-tools/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LTTNG_TOOLS
++	bool "lttng-tools"
++	depends on BR2_PACKAGE_LTTNG_MODULES
++	select BR2_PACKAGE_LIBURCU
++	select BR2_PACKAGE_POPT
 +	help
-+	  Userspace implementation of the Read-Copy-Update (RCU)
-+	  synchronization mechanism. This library is mainly used by
-+	  the LTTng tracing infrastructure, but can be used for other
-+	  purposes as well.
++	  Userspace utilities for the LTTng 2.0 tracing
++	  infrastructure.
 +
-+	  http://lttng.org/urcu
-\ No newline at end of file
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
++	  Those utilities are required on the target system to start
++	  and stop tracing sessions. Analysis of the trace can be done
++	  on the host machine using the babeltrace utility. This
++	  utility is automatically built by Buildroot in
++	  $(O)/host/usr/bin/babeltrace, as a dependency of
++	  lttng-tools. However, there is also a lttng-babeltrace
++	  package for the target, if babeltrace on the target is
++	  interesting.
++
++	  http://lttng.org
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
 new file mode 100644
-index 0000000..5cb6419
+index 0000000..474f3c1
 --- /dev/null
-+++ b/package/liburcu/liburcu.mk
-@@ -0,0 +1,8 @@
-+LIBURCU_VERSION = 0.6.7
-+LIBURCU_SITE    = http://lttng.org/files/bundles/20111214/
-+LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -0,0 +1,12 @@
++LTTNG_TOOLS_VERSION = 2.0-pre15
++LTTNG_TOOLS_SITE    = http://lttng.org/files/bundles/20111214/
++LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
 +
-+LIBURCU_INSTALL_STAGING = YES
++# The host-lttng-babeltrace technically isn't a required build
++# dependency. However, having the babeltrace utilities built for the
++# host is very useful, since those tools allow to convert the binary
++# trace format into an human readable format.
++LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace
 +
 +$(eval $(call AUTOTARGETS))
 +
