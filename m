@@ -1,79 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Dec 2011 22:29:19 +0100
-Subject: [Buildroot] [PATCH 3/3] Migrate the packages to the new infra
-In-Reply-To: <1322047811-12933-4-git-send-email-maxime.ripard@free-electrons.com>
-References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
- <1322047811-12933-4-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <201112202229.19551.arnout@mind.be>
+Date: Wed, 21 Dec 2011 07:54:28 +0100
+Subject: [Buildroot] [PATCH v3 2/2] New package: python-dpkt
+In-Reply-To: <1323877116-31436-1-git-send-email-yegorslists@googlemail.com>
+References: <1323877116-31436-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201112210754.28934.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 23 November 2011 12:30:11 Maxime Ripard wrote:
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
- I only did a partial review, so no Reviewed-by tag.
-[snip]
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 73c4969..0ff27ca 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -30,11 +30,7 @@ endif
->  
->  # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
->  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-> -define BUSYBOX_INSTALL_MDEV_SCRIPT
-> -	[ -f $(TARGET_DIR)/etc/init.d/S10mdev ] || \
-> -		install -D -m 0755 package/busybox/S10mdev \
-> -			$(TARGET_DIR)/etc/init.d/S10mdev
-> -endef
-> +BUSYBOX_INIT_SYSV += package/busybox/S10mdev
- This is not actually equivalent: the original makes sure not to overwrite 
-an existing S10mdev (coming from the skeleton).  Perhaps patch 2/3 should
-include this test as well.
+On Wednesday 14 December 2011 16:38:36 yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> python-dpkt-setup.patch removes dpkt inclusion in setup.py
+> and stores package metadata directly in setup.py. This avoids
+> unneeded host-python dependencies like zlib
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
->  define BUSYBOX_INSTALL_MDEV_CONF
->  	[ -f $(TARGET_DIR)/etc/mdev.conf ] || \
->  		install -D -m 0644 package/busybox/mdev.conf \
-> @@ -139,6 +135,7 @@ define BUSYBOX_SET_INIT
->  endef
->  endif
->  
-> +ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
->  define BUSYBOX_INSTALL_LOGGING_SCRIPT
->  	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
->  		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
-> @@ -146,12 +143,15 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
->  				$(TARGET_DIR)/etc/init.d/S01logging; \
->  	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
->  endef
-> +else
-> +define BUSYBOX_INSTALL_LOGGING_SCRIPT
+[snip]
+> diff --git a/package/python-dpkt/python-dpkt-setup.patch b/package/python-dpkt/python-dpkt-setup.patch
+> new file mode 100644
+> index 0000000..a025272
+> --- /dev/null
+> +++ b/package/python-dpkt/python-dpkt-setup.patch
+> @@ -0,0 +1,27 @@
+> +remove dpkt inclusion in setup.py to avoid unneeded dependencies
+> +like zlib
+> +
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + setup.py |    7 +++----
+> + 1 file changed, 3 insertions(+), 4 deletions(-)
+> +
+> +Index: b/setup.py
+> +===================================================================
+> +--- a/setup.py
+> ++++ b/setup.py
+> +@@ -1,11 +1,10 @@
+> + #!/usr/bin/env python
+> +
+> + from distutils.core import setup
+> +-import dpkt
+> +
+> + setup(name='dpkt',
+> +-      version=dpkt.__version__,
+> +-      author=dpkt.__author__,
+> +-      url=dpkt.__url__,
+> ++      version='1.7',
+> ++      author='Dug Song <dugsong@monkey.org>',
+> ++      url='http://dpkt.googlecode.com/',
+ Good idea, but it makes life more difficult for version bumpers.  There
+should at least be a comment in the .mk file to point the version bumper
+to this patch, explaining the version should be incremented here as well.
+Alternatively, the information could be passed in environment variables
+which are set in the .mk file.
+
+> +       description='dumb packet module',
+> +       packages=[ 'dpkt' ])
+> diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+> new file mode 100644
+> index 0000000..7ac873c
+> --- /dev/null
+> +++ b/package/python-dpkt/python-dpkt.mk
+> @@ -0,0 +1,22 @@
+> +#############################################################
+> +#
+> +# python-dpkt
+> +#
+> +#############################################################
+> +
+> +PYTHON_DPKT_VERSION = 1.7
+> +PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
+> +PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
+> +
+> +PYTHON_DPKT_DEPENDENCIES = python
+> +
+> +define PYTHON_DPKT_BUILD_CMDS
+> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 > +endef
-> +endif
- This else part is not necessary: an undefined variable evaluates to nothing.
-
->  
->  # We do this here to avoid busting a modified .config in configure
->  BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
->  
->  define BUSYBOX_CONFIGURE_CMDS
-> -	$(BUSYBOX_SET_SYSKLOGD)
->  	$(BUSYBOX_SET_BB_PWD)
->  	$(BUSYBOX_SET_LARGEFILE)
->  	$(BUSYBOX_SET_IPV6)
-> @@ -177,7 +177,6 @@ define BUSYBOX_INSTALL_TARGET_CMDS
->  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
->  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
->  	fi
-> -	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
->  	$(BUSYBOX_INSTALL_MDEV_CONF)
->  	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
->  endef
-[snip]
-
- By the way, doesn't systemd support sysv-style init scripts as well?
+> +
+> +define PYTHON_DPKT_INSTALL_TARGET_CMDS
+> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
+> +
+> 
 
  Regards,
  Arnout
