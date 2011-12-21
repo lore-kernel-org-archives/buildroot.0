@@ -1,94 +1,129 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Dec 2011 07:54:28 +0100
-Subject: [Buildroot] [PATCH v3 2/2] New package: python-dpkt
-In-Reply-To: <1323877116-31436-1-git-send-email-yegorslists@googlemail.com>
-References: <1323877116-31436-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <201112210754.28934.arnout@mind.be>
+Date: Wed, 21 Dec 2011 08:12:47 +0100
+Subject: [Buildroot] [PATCH 5 of 5 v5] dependencies: build a host-tar if
+	no suitable tar can be found
+In-Reply-To: <5ee5358c709c54f31926.1324025236@devws108>
+References: <patchbomb.1324025231@devws108>
+ <5ee5358c709c54f31926.1324025236@devws108>
+Message-ID: <201112210812.47310.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 14 December 2011 16:38:36 yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Friday 16 December 2011 09:52:29 Thomas De Schampheleire wrote:
+> Some toolchains, like the one built with buildroot itself, use hardlinks (for
+> example to link between the c++ and g++ binary). Unpacking such a toolchain
+> with the --strip-components options does not work correctly if the system tar
+> is too old (<1.17). Even recent releases of RedHat/CentOS still ship with
+> tar 1.15.
 > 
-> python-dpkt-setup.patch removes dpkt inclusion in setup.py
-> and stores package metadata directly in setup.py. This avoids
-> unneeded host-python dependencies like zlib
+> This patch checks for a suitable tar version (tar 1.17+) on the host system,
+> and adds host-tar to the host dependencies if none can be found.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> host-tar is download and extracted as cpio.gz instead of tar.gz, to prevent
+> chicken-egg problem.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> v1/v2 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
 [snip]
-> diff --git a/package/python-dpkt/python-dpkt-setup.patch b/package/python-dpkt/python-dpkt-setup.patch
-> new file mode 100644
-> index 0000000..a025272
-> --- /dev/null
-> +++ b/package/python-dpkt/python-dpkt-setup.patch
-> @@ -0,0 +1,27 @@
-> +remove dpkt inclusion in setup.py to avoid unneeded dependencies
-> +like zlib
+> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+> --- a/package/tar/tar.mk
+> +++ b/package/tar/tar.mk
+> @@ -13,3 +13,15 @@ TAR_DEPENDENCIES += busybox
+>  endif
+>  
+>  $(eval $(call AUTOTARGETS))
 > +
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +---
-> + setup.py |    7 +++----
-> + 1 file changed, 3 insertions(+), 4 deletions(-)
-> +
-> +Index: b/setup.py
-> +===================================================================
-> +--- a/setup.py
-> ++++ b/setup.py
-> +@@ -1,11 +1,10 @@
-> + #!/usr/bin/env python
-> +
-> + from distutils.core import setup
-> +-import dpkt
-> +
-> + setup(name='dpkt',
-> +-      version=dpkt.__version__,
-> +-      author=dpkt.__author__,
-> +-      url=dpkt.__url__,
-> ++      version='1.7',
-> ++      author='Dug Song <dugsong@monkey.org>',
-> ++      url='http://dpkt.googlecode.com/',
- Good idea, but it makes life more difficult for version bumpers.  There
-should at least be a comment in the .mk file to point the version bumper
-to this patch, explaining the version should be incremented here as well.
-Alternatively, the information could be passed in environment variables
-which are set in the .mk file.
+> +# host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+> +# of needing tar to build tar.
+> +HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
+> +define HOST_TAR_EXTRACT_CMDS
+> +	mkdir -p $(HOST_TAR_DIR)
+> +	cd $(HOST_TAR_DIR) && \
+> +		$(INFLATE.gz) $(DL_DIR)/$(HOST_TAR_SOURCE) | cpio -i
+> +	mv $(HOST_TAR_DIR)/tar-$(TAR_VERSION)/* $(HOST_TAR_DIR)
+> +	rmdir $(HOST_TAR_DIR)/tar-$(TAR_VERSION)
+> +endef
+> +$(eval $(call AUTOTARGETS,host))
 
-> +       description='dumb packet module',
-> +       packages=[ 'dpkt' ])
-> diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+ It is indeed much simpler this way!
+
+ One small remark: we usually use $(@D) rather than $($(PKG)_DIR).
+
+> diff --git a/support/dependencies/check-host-tar.mk b/support/dependencies/check-host-tar.mk
 > new file mode 100644
-> index 0000000..7ac873c
 > --- /dev/null
-> +++ b/package/python-dpkt/python-dpkt.mk
-> @@ -0,0 +1,22 @@
-> +#############################################################
-> +#
-> +# python-dpkt
-> +#
-> +#############################################################
+> +++ b/support/dependencies/check-host-tar.mk
+> @@ -0,0 +1,9 @@
+> +TAR ?= tar
 > +
-> +PYTHON_DPKT_VERSION = 1.7
-> +PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
-> +PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
+> +ifeq (,$(call suitable-host-package,tar,$(TAR)))
+> +  DEPENDENCIES_HOST_PREREQ += host-tar
+> +  TAR = $(HOST_DIR)/usr/bin/tar
+> +endif
 > +
-> +PYTHON_DPKT_DEPENDENCIES = python
+> +# Since TAR is at least 1.17, it will certainly support --strip-components
+> +TAR_STRIP_COMPONENTS = --strip-components
+> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+> new file mode 100755
+> --- /dev/null
+> +++ b/support/dependencies/check-host-tar.sh
+> @@ -0,0 +1,35 @@
+> +#!/bin/sh
 > +
-> +define PYTHON_DPKT_BUILD_CMDS
-> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-> +endef
+> +candidate="$1"
 > +
-> +define PYTHON_DPKT_INSTALL_TARGET_CMDS
-> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-> +endef
+> +tar=`which $candidate`
+> +if [ ! -x "$tar" ]; then
+> +	tar=`which tar`
+> +	if [ ! -x "$tar" ]; then
+> +		# echo nothing: no suitable tar found
+> +		exit 1
+> +	fi
+> +fi
 > +
-> +$(eval $(call GENTARGETS))
+> +# Output of 'tar --version' examples:
+> +# tar (GNU tar) 1.15.1
+> +# tar (GNU tar) 1.25
+> +version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
+> +major=`echo "$version" | cut -d. -f1`
+> +minor=`echo "$version" | cut -d. -f2`
+> +bugfix=`echo "$version" | cut -d. -f3`
 > +
-> 
+> +# Minimal version = 1.17 (previous versions do not correctly unpack archives
+> +# containing hard-links if the --strip-components option is used).
+> +major_min=1
+> +minor_min=17
+> +if [ $major -gt $major_min ]; then
+> +	echo $tar
+> +else
+> +	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
+> +		echo $tar
+> +	else
+> +		# echo nothing: no suitable tar found
+> +		exit 1
+> +	fi
+> +fi
+
+ You could use the same sorting trick that you use in patch 2/5, but then
+using host sort:
+
+version=`echo -e '${MINIMAL_VERSION}\n${version}' | sort -n`
+if [ "$version" != "${MINIMAL_VERSION}" ]; then
+  exit 1
+else
+  echo $tar
+fi
+
+(completely untested, of course).
+
+ But don't count this as a requirement to get my Acked-by :-)
 
  Regards,
  Arnout
