@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Dec 2011 10:57:17 +0100
-Subject: [Buildroot] [PATCH 1/7] liburcu: new package
+Date: Thu, 22 Dec 2011 10:57:18 +0100
+Subject: [Buildroot] [PATCH 2/7] lttng-modules: new package
 In-Reply-To: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <68820e75e9033387fce658fe32f6c73109704179.1324547779.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <5c075a80f633c498d1e359c7a7bc521157caf22a.1324547779.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in          |    1 +
- package/liburcu/Config.in  |    9 +++++++++
- package/liburcu/liburcu.mk |    8 ++++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
- create mode 100644 package/liburcu/Config.in
- create mode 100644 package/liburcu/liburcu.mk
+ package/Config.in                      |    1 +
+ package/lttng-modules/Config.in        |   18 ++++++++++++++++++
+ package/lttng-modules/lttng-modules.mk |   16 ++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/lttng-modules/Config.in
+ create mode 100644 package/lttng-modules/lttng-modules.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b6df18a..e30eac5 100644
+index e30eac5..f0cc4f2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -365,6 +365,7 @@ source "package/libffi/Config.in"
- source "package/libglib2/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
-+source "package/liburcu/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
+@@ -24,6 +24,7 @@ source "package/kexec/Config.in"
+ source "package/lmbench/Config.in"
+ source "package/lsof/Config.in"
+ source "package/ltp-testsuite/Config.in"
++source "package/lttng-modules/Config.in"
+ source "package/ltrace/Config.in"
+ source "package/memstat/Config.in"
+ source "package/netperf/Config.in"
+diff --git a/package/lttng-modules/Config.in b/package/lttng-modules/Config.in
 new file mode 100644
-index 0000000..5a6e4b2
+index 0000000..2a0f938
 --- /dev/null
-+++ b/package/liburcu/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LIBURCU
-+	bool "liburcu"
++++ b/package/lttng-modules/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LTTNG_MODULES
++	bool "lttng-modules"
++	depends on BR2_LINUX_KERNEL
 +	help
-+	  Userspace implementation of the Read-Copy-Update (RCU)
-+	  synchronization mechanism. This library is mainly used by
-+	  the LTTng tracing infrastructure, but can be used for other
-+	  purposes as well.
++	  Kernel modules for the LTTng 2.0 kernel tracing
++	  infrastructure.
 +
-+	  http://lttng.org/urcu
-diff --git a/package/liburcu/liburcu.mk b/package/liburcu/liburcu.mk
++	  Your kernel must have CONFIG_TRACEPOINTS enabled for this
++	  package to build something useful. You may also want to have
++	  CONFIG_PERF_EVENTS to access perf event counters from
++	  ltt-ng. Note that system call tracing is only available on
++	  architectures that support CONFIG_HAVE_SYSCALL_TRACEPOINTS.
++
++	  The packaged version is compatible with kernel 2.6.38,
++	  2.6.39, 3.0 and 3.1.0. See
++	  http://lttng.org/files/bundles/20111214/README.compatible.kernels.txt
++
++	  http://lttng.org
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
 new file mode 100644
-index 0000000..5cb6419
+index 0000000..450a40c
 --- /dev/null
-+++ b/package/liburcu/liburcu.mk
-@@ -0,0 +1,8 @@
-+LIBURCU_VERSION = 0.6.7
-+LIBURCU_SITE    = http://lttng.org/files/bundles/20111214/
-+LIBURCU_SOURCE  = userspace-rcu-$(LIBURCU_VERSION).tar.bz2
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -0,0 +1,16 @@
++LTTNG_MODULES_VERSION = 2.0-pre11
++LTTNG_MODULES_SITE    = http://lttng.org/files/bundles/20111214/
++LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
 +
-+LIBURCU_INSTALL_STAGING = YES
++LTTNG_MODULES_DEPENDENCIES = linux
 +
-+$(eval $(call AUTOTARGETS))
++define LTTNG_MODULES_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
++endef
++
++define LTTNG_MODULES_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR) modules_install
++endef
++
++$(eval $(call GENTARGETS))
 +
 -- 
 1.7.4.1
