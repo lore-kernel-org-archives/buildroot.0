@@ -1,134 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Dec 2011 13:13:38 +0100
-Subject: [Buildroot] [PATCH] rt-tests: new package
-Message-ID: <1324556018-17540-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 22 Dec 2011 13:13:32 +0100
+Subject: [Buildroot] [PATCH v4 5/5] New package: python-netifaces
+In-Reply-To: <1324555715-32123-6-git-send-email-yegorslists@googlemail.com>
+References: <1324555715-32123-1-git-send-email-yegorslists@googlemail.com>
+ <1324555715-32123-6-git-send-email-yegorslists@googlemail.com>
+Message-ID: <4EF31EEC.2090401@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                |    1 +
- package/rt-tests/Config.in                       |   13 +++++++
- package/rt-tests/rt-tests-fix-build-system.patch |   43 ++++++++++++++++++++++
- package/rt-tests/rt-tests.mk                     |   25 +++++++++++++
- 4 files changed, 82 insertions(+), 0 deletions(-)
- create mode 100644 package/rt-tests/Config.in
- create mode 100644 package/rt-tests/rt-tests-fix-build-system.patch
- create mode 100644 package/rt-tests/rt-tests.mk
+Am 22.12.2011 13:08, schrieb yegorslists at googlemail.com:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/Config.in                            |    1 +
+>  package/python-netifaces/Config.in           |    9 +++++++++
+>  package/python-netifaces/python-netifaces.mk |   26 ++++++++++++++++++++++++++
+>  3 files changed, 36 insertions(+), 0 deletions(-)
+>  create mode 100644 package/python-netifaces/Config.in
+>  create mode 100644 package/python-netifaces/python-netifaces.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 71e1889..666a224 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -240,6 +240,7 @@ if BR2_PACKAGE_PYTHON
+>  menu "external python modules"
+>  source "package/python-dpkt/Config.in"
+>  source "package/python-mad/Config.in"
+> +source "package/python-netifaces/Config.in"
+>  source "package/python-serial/Config.in"
+>  source "package/python-setuptools/Config.in"
+>  endmenu
+> diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
+> new file mode 100644
+> index 0000000..199191c
+> --- /dev/null
+> +++ b/package/python-netifaces/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_NETIFACES
+> +	bool "python-netifaces"
+> +	depends on BR2_PACKAGE_PYTHON
+> +	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+> +	help
+> +	  Portable access to network interfaces from Python.
+> +
+> +	  http://alastairs-place.net/projects/netifaces
+> +
+> diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+> new file mode 100644
+> index 0000000..9a626ef
+> --- /dev/null
+> +++ b/package/python-netifaces/python-netifaces.mk
+> @@ -0,0 +1,26 @@
+> +#############################################################
+> +#
+> +# python-netifaces
+> +#
+> +#############################################################
+> +
+> +PYTHON_NETIFACES_VERSION = 0.6
+> +PYTHON_NETIFACES_SOURCE  = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
+> +PYTHON_NETIFACES_SITE    = http://alastairs-place.net/projects/netifaces
+> +
+> +PYTHON_NETIFACES_DEPENDENCIES = python host-python-setuptools
+> +
+> +define PYTHON_NETIFACES_BUILD_CMDS
+> +	(cd $(@D); \
+> +		CC="$(TARGET_CC)"		\
+> +	$(HOST_DIR)/usr/bin/python setup.py build)
+> +endef
+> +
+> +define PYTHON_NETIFACES_INSTALL_TARGET_CMDS
+> +	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
+> +	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+> +endef
+> +
+> +
+> +$(eval $(call GENTARGETS))
+> +
 
-diff --git a/package/Config.in b/package/Config.in
-index b6df18a..e5e11be 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -28,6 +28,7 @@ source "package/ltrace/Config.in"
- source "package/memstat/Config.in"
- source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
-+source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
- source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-new file mode 100644
-index 0000000..e645266
---- /dev/null
-+++ b/package/rt-tests/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_RT_TESTS
-+	bool "rt-tests"
-+	help
-+	  Set of utilities for testing the real-time behaviour of a
-+	  Linux system.
-+
-+	  All tools are simple C programs with no dependencies, except
-+	  the hwlatdetect utility, which is a Python script and
-+	  therefore requires the Python interpreter. It will only be
-+	  installed if a Python interpreter has been selected in the
-+	  Buildroot configuration.
-+
-+	  http://rt.wiki.kernel.org
-diff --git a/package/rt-tests/rt-tests-fix-build-system.patch b/package/rt-tests/rt-tests-fix-build-system.patch
-new file mode 100644
-index 0000000..9d6aa05
---- /dev/null
-+++ b/package/rt-tests/rt-tests-fix-build-system.patch
-@@ -0,0 +1,43 @@
-+Fix various minor issues with rt-tests build system
-+
-+The issues fixed are :
-+
-+ * Remove the automatic NUMA detection from the host
-+   architecture. This is broken when doing cross-compilation. One can
-+   still set NUMA=1 if NUMA support is desired.
-+
-+ * Expand the CFLAGS provided through the environment instead of
-+   overriding it.
-+
-+ * Provide a HASPYTHON variable to tell whether the target system has
-+   Python or not. Otherwise, the build system simply tests whether
-+   Python is available on the host. The PYLIB variable is also changed
-+   so that it can be overriden from the environment, in order to
-+   provide the correct Python module location for the target.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: rt-tests/Makefile
-+===================================================================
-+--- rt-tests.orig/Makefile
-++++ rt-tests/Makefile
-+@@ -14,15 +14,11 @@
-+ mandir	?= $(prefix)/share/man
-+ srcdir	?= $(prefix)/src
-+ 
-+-machinetype = $(shell uname -m | \
-+-    sed -e 's/i.86/i386/' -e 's/mips.*/mips/' -e 's/ppc.*/powerpc/')
-+-ifneq ($(filter x86_64 i386 ia64 mips powerpc,$(machinetype)),)
-+-NUMA 	:= 1
-+-endif
-+-
-+-CFLAGS = -D_GNU_SOURCE -Wall -Wno-nonnull -Isrc/include
-++override CFLAGS += -D_GNU_SOURCE -Wall -Wno-nonnull -Isrc/include
-+ 
-+-PYLIB  := $(shell python -c 'import distutils.sysconfig;  print distutils.sysconfig.get_python_lib()')
-++ifeq ($(HASPYTHON),1)
-++PYLIB ?= $(shell python -c 'import distutils.sysconfig;  print distutils.sysconfig.get_python_lib()')
-++endif
-+ 
-+ ifndef DEBUG
-+ 	CFLAGS	+= -O2
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-new file mode 100644
-index 0000000..222733f
---- /dev/null
-+++ b/package/rt-tests/rt-tests.mk
-@@ -0,0 +1,25 @@
-+RT_TESTS_SITE    = http://snapshot.debian.org/archive/debian/20111202T222101Z/pool/main/r/rt-tests/
-+RT_TESTS_VERSION = 0.83
-+RT_TESTS_SOURCE  = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+RT_TESTS_DEPENDENCIES = python
-+endif
-+
-+define RT_TESTS_BUILD_CMDS
-+	$(MAKE) -C $(@D) 			\
-+		CC="$(TARGET_CC)" 		\
-+		CFLAGS="$(TARGET_CFLAGS)"	\
-+		prefix=/usr
-+endef
-+
-+define RT_TESTS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) 				\
-+		DESTDIR="$(TARGET_DIR)" 		\
-+		prefix=/usr 				\
-+		$(if $(BR2_PACKAGE_PYTHON),HASPYTHON=1 PYLIB=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/) \
-+		install
-+endef
-+
-+$(eval $(call GENTARGETS))
-+
--- 
-1.7.4.1
+This is what I get:
+
+>>> python-netifaces 0.6 Building
+(cd /home/YegorYefremov/projects/versioned/tests/br-queue-python/output/build/python-netifaces-0.6; CC="/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/bin/arm-none-linux-gnueabi-gcc" /home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/bin/python setup.py build)
+running build
+running build_ext
+checking for getifaddrs... not found. (cached)
+checking for getnameinfo... not found. (cached)
+checking for socket IOCTLs... not found. (cached)
+checking for optional header files... netash/ash.h netatalk/at.h netax25/ax25.h neteconet/ec.h netipx/ipx.h netpacket/packet.h linux/irda.h linux/atm.h linux/llc.h linux/tipc.h linux/dn.h. (cached)
+checking whether struct sockaddr has a length field... no. (cached)
+checking which sockaddr_xxx structs are defined... at ax25 in in6 ipx un ash ec ll atmpvc atmsvc dn irda llc. (cached)
+building 'netifaces' extension
+/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/bin/arm-none-linux-gnueabi-gcc -fno-strict-aliasing -O2 -I/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/include -I/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/include -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -DHAVE_NETASH_ASH_H=1 -DHAVE_NETATALK_AT_H=1 -DHAVE_NETAX25_AX25_H=1 -DHAVE_NETECONET_EC_H=1 -DHAVE_NETIPX_IPX_H=1 -DHAVE_NETPACKET_PACKET_H=1 -DHAVE_LINUX_IRDA_H=1 -DHAVE_LINUX_ATM_H=1 -DHAVE_LINUX_LLC_H=1 -DHAVE_LINUX_TIPC_H=1 -DHAVE_LINUX_DN_H=1 -DHAVE_SOCKADDR_AT=1 -DHAVE_SOCKADDR_AX25=1 -DHAVE_SOCKADDR_IN=1 -DHAVE_SOCKADDR_IN6=1 -DHAVE_SOCKADDR_IPX=1 -DHAVE_SOCKADDR_UN=1 -DHAVE_SOCKADDR_ASH=1 -DHAVE_SOCKADDR_EC=1 -DHAVE_SOCKADDR_LL=1 -DHAVE_SOCKADDR_ATMPVC=1 -DHAVE_SOCKADDR_ATMSVC=1 -DHAVE_SOCKADDR_DN=1 -DHAVE_SOCKADDR_IRDA=1 -DHAVE_SOCKADDR_LLC=1 -I/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/h
+ost/usr/include/python2.7 -c netifaces.c -o build/temp.linux-x86_64-2.7/netifaces.o
+In file included from /home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/include/python2.7/Python.h:58:0,
+                 from netifaces.c:1:
+/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/include/python2.7/pyport.h:849:2: error: #error "LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)."
+netifaces.c:143:6: error: #error You need to add code for your platform.
+netifaces.c:268:1: warning: 'string_from_sockaddr' defined but not used
+netifaces.c:360:1: warning: 'add_to_family' defined but not used
+error: command '/home/YegorYefremov/projects/versioned/tests/br-queue-python/output/host/usr/bin/arm-none-linux-gnueabi-gcc' failed with exit status 1
+
+Even if I cheat and let the test for getifaddrs etc. be successful and netifaces.c gets cross-compiled, the process failed as setup.py tries to create a library and uses gcc instead of cross-compiler. Any ideas?
+
+Yegor
