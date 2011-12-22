@@ -1,111 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 22 Dec 2011 14:03:14 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Dec 2011 14:16:05 +0100
 Subject: [Buildroot] [PATCH 2/7] lttng-modules: new package
-In-Reply-To: <5c075a80f633c498d1e359c7a7bc521157caf22a.1324547779.git.thomas.petazzoni@free-electrons.com>
+In-Reply-To: <CAAXf6LUiqde1C2zY=aoKkRCc37r-ZASSfavVCX1WmwWT9g=TyA@mail.gmail.com>
 References: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
  <5c075a80f633c498d1e359c7a7bc521157caf22a.1324547779.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LUiqde1C2zY=aoKkRCc37r-ZASSfavVCX1WmwWT9g=TyA@mail.gmail.com>
+ <CAAXf6LUiqde1C2zY=aoKkRCc37r-ZASSfavVCX1WmwWT9g=TyA@mail.gmail.com>
+Message-ID: <20111222141605.160d5b67@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Le Thu, 22 Dec 2011 14:03:14 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-On Thu, Dec 22, 2011 at 10:57 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?package/Config.in ? ? ? ? ? ? ? ? ? ? ?| ? ?1 +
-> ?package/lttng-modules/Config.in ? ? ? ?| ? 18 ++++++++++++++++++
-> ?package/lttng-modules/lttng-modules.mk | ? 16 ++++++++++++++++
-> ?3 files changed, 35 insertions(+), 0 deletions(-)
-> ?create mode 100644 package/lttng-modules/Config.in
-> ?create mode 100644 package/lttng-modules/lttng-modules.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index e30eac5..f0cc4f2 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -24,6 +24,7 @@ source "package/kexec/Config.in"
-> ?source "package/lmbench/Config.in"
-> ?source "package/lsof/Config.in"
-> ?source "package/ltp-testsuite/Config.in"
-> +source "package/lttng-modules/Config.in"
-> ?source "package/ltrace/Config.in"
-> ?source "package/memstat/Config.in"
-> ?source "package/netperf/Config.in"
-> diff --git a/package/lttng-modules/Config.in b/package/lttng-modules/Config.in
-> new file mode 100644
-> index 0000000..2a0f938
-> --- /dev/null
-> +++ b/package/lttng-modules/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_LTTNG_MODULES
-> + ? ? ? bool "lttng-modules"
-> + ? ? ? depends on BR2_LINUX_KERNEL
-> + ? ? ? help
-> + ? ? ? ? Kernel modules for the LTTng 2.0 kernel tracing
-> + ? ? ? ? infrastructure.
-> +
-> + ? ? ? ? Your kernel must have CONFIG_TRACEPOINTS enabled for this
-> + ? ? ? ? package to build something useful. You may also want to have
-> + ? ? ? ? CONFIG_PERF_EVENTS to access perf event counters from
-> + ? ? ? ? ltt-ng. Note that system call tracing is only available on
-> + ? ? ? ? architectures that support CONFIG_HAVE_SYSCALL_TRACEPOINTS.
-> +
-> + ? ? ? ? The packaged version is compatible with kernel 2.6.38,
-> + ? ? ? ? 2.6.39, 3.0 and 3.1.0. See
-> + ? ? ? ? http://lttng.org/files/bundles/20111214/README.compatible.kernels.txt
-> +
-> + ? ? ? ? http://lttng.org
-> diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-> new file mode 100644
-> index 0000000..450a40c
-> --- /dev/null
-> +++ b/package/lttng-modules/lttng-modules.mk
-> @@ -0,0 +1,16 @@
-> +LTTNG_MODULES_VERSION = 2.0-pre11
-> +LTTNG_MODULES_SITE ? ?= http://lttng.org/files/bundles/20111214/
-> +LTTNG_MODULES_SOURCE ?= lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
-> +
-> +LTTNG_MODULES_DEPENDENCIES = linux
-> +
-> +define LTTNG_MODULES_BUILD_CMDS
-> + ? ? ? $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
-> +endef
-> +
-> +define LTTNG_MODULES_INSTALL_TARGET_CMDS
-> + ? ? ? $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR) modules_install
+> On an old system, I have noticed a problem with this approach. With
+> the above line, the 'depmod' utility of the host will be used instead
+> of the depmod that was built with the linux kernel in $(LINUX_DIR). If
+> the host depmod is very old, a segmentation fault occurs.
+> 
+> To fix this, one should add DEPMOD="$(HOST_DIR)/usr/sbin/depmod" to
+> the command, just as linux/linux.mk does it.  
 
-On an old system, I have noticed a problem with this approach. With
-the above line, the 'depmod' utility of the host will be used instead
-of the depmod that was built with the linux kernel in $(LINUX_DIR). If
-the host depmod is very old, a segmentation fault occurs.
+Ah, ok. Then maybe this DEPMOD=... variable should be part of
+LINUX_MAKE_FLAGS.
 
-To fix this, one should add DEPMOD="$(HOST_DIR)/usr/sbin/depmod" to
-the command, just as linux/linux.mk does it.
+> In fact, since building kernel modules from buildroot is not uncommon
+> anymore (there are some packages in the tree that do it, plus
+> user-specific packages, wouldn't it be a good idea to provide a small
+> infrastructure for building kernel modules? This would prevent such
+> mistakes. Instead of gentargets, we could have something like
+> kernelmodule.
+> What do you think about that?  
 
-In fact, since building kernel modules from buildroot is not uncommon
-anymore (there are some packages in the tree that do it, plus
-user-specific packages, wouldn't it be a good idea to provide a small
-infrastructure for building kernel modules? This would prevent such
-mistakes. Instead of gentargets, we could have something like
-kernelmodule.
-What do you think about that?
+I don't know. I am not exactly sure because there is no real standard
+way for packaging external kernel modules. If you look at linux-fusion,
+RTAI or lttng-modules, you'll see that the build mechanism is very
+different. I'm not sure there is a real pattern here that we can
+factorize nicely in an infrastructure. Which pattern do you see?
 
 Best regards,
-Thomas
 
-> +endef
-> +
-> +$(eval $(call GENTARGETS))
-> +
-> --
-> 1.7.4.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
