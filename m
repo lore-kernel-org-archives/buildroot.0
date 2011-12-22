@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Dec 2011 10:57:22 +0100
-Subject: [Buildroot] [PATCH 6/7] lttng-babeltrace: new package
+Date: Thu, 22 Dec 2011 10:57:23 +0100
+Subject: [Buildroot] [PATCH 7/7] lttng-libust: new package
 In-Reply-To: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a897d67b3f49e814440d55e8e2b8ac5e8049fb5c.1324547779.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <f5761ab7aed1ebb37cdd1bfe17bf5e398869a01c.1324547779.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,75 +12,88 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                            |    1 +
- package/lttng-babeltrace/Config.in           |   22 ++++++++++++++++++++++
- package/lttng-babeltrace/lttng-babeltrace.mk |   17 +++++++++++++++++
- 3 files changed, 40 insertions(+), 0 deletions(-)
- create mode 100644 package/lttng-babeltrace/Config.in
- create mode 100644 package/lttng-babeltrace/lttng-babeltrace.mk
+ package/Config.in                                  |    1 +
+ package/lttng-libust/Config.in                     |   10 +++++++
+ .../lttng-libust-fix-overflow-32-bits.patch        |   26 ++++++++++++++++++++
+ package/lttng-libust/lttng-libust.mk               |    8 ++++++
+ 4 files changed, 45 insertions(+), 0 deletions(-)
+ create mode 100644 package/lttng-libust/Config.in
+ create mode 100644 package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
+ create mode 100644 package/lttng-libust/lttng-libust.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index df49778..30e0567 100644
+index 30e0567..77b277d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -24,6 +24,7 @@ source "package/kexec/Config.in"
- source "package/lmbench/Config.in"
- source "package/lsof/Config.in"
- source "package/ltp-testsuite/Config.in"
-+source "package/lttng-babeltrace/Config.in"
- source "package/lttng-modules/Config.in"
- source "package/lttng-tools/Config.in"
- source "package/ltrace/Config.in"
-diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+@@ -369,6 +369,7 @@ source "package/libglib2/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/liburcu/Config.in"
++source "package/lttng-libust/Config.in"
+ source "package/orc/Config.in"
+ source "package/poco/Config.in"
+ source "package/startup-notification/Config.in"
+diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
 new file mode 100644
-index 0000000..e6f3845
+index 0000000..335a956
 --- /dev/null
-+++ b/package/lttng-babeltrace/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_LTTNG_BABELTRACE
-+	bool "lttng-babeltrace"
-+	depends on BR2_PACKAGE_LTTNG_TOOLS
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_LIBGLIB2
++++ b/package/lttng-libust/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LTTNG_LIBUST
++	bool "lttng-libust"
++	select BR2_PACKAGE_LIBURCU
 +	help
-+	  Babeltrace is part of the LTTng 2.x project.
-+
-+	  This project provides trace read and write libraries, as
-+	  well as a trace converter. A plugin can be created for any
-+	  trace format to allow its conversion to/from another trace
-+	  format.
-+
-+	  Having this tool on the target is not mandatory. You can
-+	  transfer the binary trace output from the target to your
-+	  development workstation, and use babeltrace here. Buildroot
-+	  automatically builds a host babeltrace in
-+	  $(O)/host/usr/bin/babeltrace as a dependency of the
-+	  lttng-tools package.
++	  Userspace tracing library for the Lttng tracing
++	  infrastructure. It allows userspace programs to create
++	  custom trace events that are integrated with all other
++	  events gathered by LTTng.
 +
 +	  http://lttng.org
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
+diff --git a/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
 new file mode 100644
-index 0000000..5977dda
+index 0000000..c2a4dd2
 --- /dev/null
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -0,0 +1,17 @@
-+LTTNG_BABELTRACE_SITE    = http://lttng.org/files/bundles/20111214/
-+LTTNG_BABELTRACE_VERSION = 0.8
-+LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
++++ b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
+@@ -0,0 +1,26 @@
++From dc190cc1f8ddccfa7b0b8323ed157afb29a0ebb7 Mon Sep 17 00:00:00 2001
++From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++Date: Wed, 21 Dec 2011 16:24:48 -0500
++Subject: [PATCH] Fix clock source overflow on 32-bit archs
 +
-+# Needed to fix libtool handling, otherwise the build fails when
-+# building the ctf-parser-test program, which depends on libctf-ast.so
-+# which itself depends on libbabeltrace_types.so.0 (and libtool gets
-+# lost in the middle of this).
-+LTTNG_BABELTRACE_AUTORECONF      = YES
-+HOST_LTTNG_BABELTRACE_AUTORECONF = YES
++Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++---
++ liblttng-ust/clock.h |    2 +-
++ 1 files changed, 1 insertions(+), 1 deletions(-)
 +
-+LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
++diff --git a/liblttng-ust/clock.h b/liblttng-ust/clock.h
++index b5d3e77..23294d2 100644
++--- a/liblttng-ust/clock.h
+++++ b/liblttng-ust/clock.h
++@@ -39,7 +39,7 @@ static __inline__ uint64_t trace_clock_read64(void)
++ 	struct timespec ts;
++ 
++ 	clock_gettime(CLOCK_MONOTONIC, &ts);
++-	return (ts.tv_sec * 1000000000) + ts.tv_nsec;
+++	return ((uint64_t) ts.tv_sec * 1000000000ULL) + ts.tv_nsec;
++ }
++ 
++ static __inline__ uint32_t trace_clock_freq_scale(void)
++-- 
++1.7.2.5
 +
-+HOST_LTTNG_BABELTRACE_DEPENDENCIES = host-popt host-libglib2 host-util-linux
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+new file mode 100644
+index 0000000..a2cef2a
+--- /dev/null
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -0,0 +1,8 @@
++LTTNG_LIBUST_SITE    = http://lttng.org/files/bundles/20111214/
++LTTNG_LIBUST_VERSION = 1.9.2
++LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
++
++LTTNG_LIBUST_INSTALL_STAGING = YES
++LTTNG_LIBUST_DEPENDENCIES    = liburcu
 +
 +$(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
 -- 
 1.7.4.1
