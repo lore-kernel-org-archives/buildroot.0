@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 22 Dec 2011 13:08:34 +0100
-Subject: [Buildroot] [PATCH v4 4/5] New package: python-setuptools
+Date: Thu, 22 Dec 2011 13:08:35 +0100
+Subject: [Buildroot] [PATCH v4 5/5] New package: python-netifaces
 In-Reply-To: <1324555715-32123-1-git-send-email-yegorslists@googlemail.com>
 References: <1324555715-32123-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1324555715-32123-5-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1324555715-32123-6-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,72 +14,71 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                              |    1 +
- package/python-setuptools/Config.in            |    8 ++++++
- package/python-setuptools/python-setuptools.mk |   28 ++++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
- create mode 100644 package/python-setuptools/Config.in
- create mode 100644 package/python-setuptools/python-setuptools.mk
+ package/Config.in                            |    1 +
+ package/python-netifaces/Config.in           |    9 +++++++++
+ package/python-netifaces/python-netifaces.mk |   26 ++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-netifaces/Config.in
+ create mode 100644 package/python-netifaces/python-netifaces.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index bb5e5b0..71e1889 100644
+index 71e1889..666a224 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -241,6 +241,7 @@ menu "external python modules"
+@@ -240,6 +240,7 @@ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
  source "package/python-dpkt/Config.in"
  source "package/python-mad/Config.in"
++source "package/python-netifaces/Config.in"
  source "package/python-serial/Config.in"
-+source "package/python-setuptools/Config.in"
+ source "package/python-setuptools/Config.in"
  endmenu
- endif
- source "package/ruby/Config.in"
-diff --git a/package/python-setuptools/Config.in b/package/python-setuptools/Config.in
+diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
 new file mode 100644
-index 0000000..63c2b01
+index 0000000..199191c
 --- /dev/null
-+++ b/package/python-setuptools/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	bool "python-setuptools"
++++ b/package/python-netifaces/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_NETIFACES
++	bool "python-netifaces"
 +	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_ZLIB
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
 +	help
-+	  Download, build, install, upgrade, and uninstall Python packages.
++	  Portable access to network interfaces from Python.
 +
-+	  http://pypi.python.org/pypi/setuptools
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
++	  http://alastairs-place.net/projects/netifaces
++
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
 new file mode 100644
-index 0000000..1bcd628
+index 0000000..9a626ef
 --- /dev/null
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -0,0 +1,28 @@
++++ b/package/python-netifaces/python-netifaces.mk
+@@ -0,0 +1,26 @@
 +#############################################################
 +#
-+# python-setuptools
++# python-netifaces
 +#
 +#############################################################
 +
-+PYTHON_SETUPTOOLS_VERSION = 0.6c11
-+PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-+PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
-+PYTHON_SETUPTOOLS_DEPENDENCIES = host-python
++PYTHON_NETIFACES_VERSION = 0.6
++PYTHON_NETIFACES_SOURCE  = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
++PYTHON_NETIFACES_SITE    = http://alastairs-place.net/projects/netifaces
 +
-+define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++PYTHON_NETIFACES_DEPENDENCIES = python host-python-setuptools
++
++define PYTHON_NETIFACES_BUILD_CMDS
++	(cd $(@D); \
++		CC="$(TARGET_CC)"		\
++	$(HOST_DIR)/usr/bin/python setup.py build)
 +endef
 +
-+define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
-+	(cd $(@D); PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
-+endef
-+
-+define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
-+	(cd $(@D); PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
++define PYTHON_NETIFACES_INSTALL_TARGET_CMDS
++	(cd $(@D); PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
 +	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 +endef
 +
++
 +$(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
 +
 -- 
 1.7.1.1
