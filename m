@@ -1,99 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Dec 2011 10:57:23 +0100
-Subject: [Buildroot] [PATCH 7/7] lttng-libust: new package
-In-Reply-To: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f5761ab7aed1ebb37cdd1bfe17bf5e398869a01c.1324547779.git.thomas.petazzoni@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 22 Dec 2011 11:59:22 +0100
+Subject: [Buildroot] tutorial to extend buildroot?
+In-Reply-To: <CAOrAeom996AY1PwC=1Ce01qxLOYKZV5wdGd0+Dj6pBq-+X1q-g@mail.gmail.com>
+References: <CAOrAeomixni4EZqKWV0p9bVfg9eOsQ+4LP4=CyK6POTsiga2iw@mail.gmail.com>
+ <CAAXf6LXrANu2mfxX6zjVGRZYUKH7Ud=wv+Xh7N0p338yxSMHpQ@mail.gmail.com>
+ <CAOrAeom996AY1PwC=1Ce01qxLOYKZV5wdGd0+Dj6pBq-+X1q-g@mail.gmail.com>
+Message-ID: <CAAXf6LXvhT1+QUskni8-1F=OKvD5omDxCfwLB9SYLbgM5GOXkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                  |    1 +
- package/lttng-libust/Config.in                     |   10 +++++++
- .../lttng-libust-fix-overflow-32-bits.patch        |   26 ++++++++++++++++++++
- package/lttng-libust/lttng-libust.mk               |    8 ++++++
- 4 files changed, 45 insertions(+), 0 deletions(-)
- create mode 100644 package/lttng-libust/Config.in
- create mode 100644 package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
- create mode 100644 package/lttng-libust/lttng-libust.mk
+On Tue, Dec 20, 2011 at 9:08 PM, vbr vbr <vvvg77@gmail.com> wrote:
+> Thanks! It seems like "local" is the method I need.
+>
+> MYPKG_SITE = <top_dir>/extra/libmypkg
+> MYPKG_SITE_METHOD = local
+>
+>
+> Let say I have a Makefile in my buildroot-2011.08/extra/libmypkg source
+> directory.
 
-diff --git a/package/Config.in b/package/Config.in
-index 30e0567..77b277d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -369,6 +369,7 @@ source "package/libglib2/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
- source "package/liburcu/Config.in"
-+source "package/lttng-libust/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-new file mode 100644
-index 0000000..335a956
---- /dev/null
-+++ b/package/lttng-libust/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LTTNG_LIBUST
-+	bool "lttng-libust"
-+	select BR2_PACKAGE_LIBURCU
-+	help
-+	  Userspace tracing library for the Lttng tracing
-+	  infrastructure. It allows userspace programs to create
-+	  custom trace events that are integrated with all other
-+	  events gathered by LTTng.
-+
-+	  http://lttng.org
-diff --git a/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
-new file mode 100644
-index 0000000..c2a4dd2
---- /dev/null
-+++ b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
-@@ -0,0 +1,26 @@
-+From dc190cc1f8ddccfa7b0b8323ed157afb29a0ebb7 Mon Sep 17 00:00:00 2001
-+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+Date: Wed, 21 Dec 2011 16:24:48 -0500
-+Subject: [PATCH] Fix clock source overflow on 32-bit archs
-+
-+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+---
-+ liblttng-ust/clock.h |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/liblttng-ust/clock.h b/liblttng-ust/clock.h
-+index b5d3e77..23294d2 100644
-+--- a/liblttng-ust/clock.h
-++++ b/liblttng-ust/clock.h
-+@@ -39,7 +39,7 @@ static __inline__ uint64_t trace_clock_read64(void)
-+ 	struct timespec ts;
-+ 
-+ 	clock_gettime(CLOCK_MONOTONIC, &ts);
-+-	return (ts.tv_sec * 1000000000) + ts.tv_nsec;
-++	return ((uint64_t) ts.tv_sec * 1000000000ULL) + ts.tv_nsec;
-+ }
-+ 
-+ static __inline__ uint32_t trace_clock_freq_scale(void)
-+-- 
-+1.7.2.5
-+
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-new file mode 100644
-index 0000000..a2cef2a
---- /dev/null
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -0,0 +1,8 @@
-+LTTNG_LIBUST_SITE    = http://lttng.org/files/bundles/20111214/
-+LTTNG_LIBUST_VERSION = 1.9.2
-+LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
-+
-+LTTNG_LIBUST_INSTALL_STAGING = YES
-+LTTNG_LIBUST_DEPENDENCIES    = liburcu
-+
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.4.1
+Note that the local method does not yet exist in buildroot-2011.08 but
+only starting from 2011.11.
+
+> After reading the link you provided, I wasn't sure how buildroot will build
+> my code. Is it going to copy the source to the build dir and then invoke
+> "make" from there with the right toolchain?
+> Or does it expect libmypkg to be based on autotools?
+
+You still have to create a package/libmypkg/libmypkg.mk file as for
+normal packages. In that file, you specify the MYPKG_SITE_METHOD
+variable, and call the appropriate infrastructure: either gentargets,
+autotargets, or cmaketargets.
+If your package is not autotools based, no problem, you'd choose
+gentargets and you have to provide some build and install commands.
+Typically these can be 'make' and 'make install'.
+Have a look at the following documentation:
+http://buildroot.uclibc.org/buildroot.html#add_packages
+
+The local method will create a copy of your sources from the directory
+specified in MYPKG_SITE, using rsync, to the buildroot build
+directory.
+
+Best regards,
+Thomas
+
+>
+>
+> On Mon, Dec 19, 2011 at 11:33 PM, Thomas De Schampheleire
+> <patrickdepinguin+buildroot@gmail.com> wrote:
+>>
+>> Hello Vincent,
+>>
+>> On Tue, Dec 20, 2011 at 2:47 AM, vbr vbr <vvvg77@gmail.com> wrote:
+>> > Hi,
+>> >
+>> > I have set up my buildroot environment, built an external toolchain
+>> > (crosstool ng) with uClibc, and I understand how to add autotools-based
+>> > packages to buildroot. I committed buildroot source to my svn repo and
+>> > most
+>> > of the tarballs that I needed which sit in the dl directory. Everything
+>> > works great!
+>>
+>> That's nice to hear!
+>>
+>> >
+>> > Now I have private programs and libraries that I would want to add in
+>> > buildroot infrastructure too, but I don't want to add them in the form
+>> > of a
+>> > tarball like other open-source tools and libraries. I just want to
+>> > commit
+>> > the source code for each library and integrate their respective
+>> > makefiles
+>> > (or create a new makefile for each of them to work) with buildroot. (no
+>> > tarball involved).
+>> >
+>> > Does buildroot infrastructure/makefiles support that? Any guidelines or
+>> > examples?
+>> > I haven't found info regarding that question in the online documentation
+>> > so
+>> > far.
+>>
+>> You could either use the git, svn, bzr or hg site methods, or use the
+>> 'local' site method.
+>> The first set of methods will automatically clone the right revision
+>> from your repository and build it. The revision itself is packaged in
+>> a tarball in the background, but I don't think this bothers you. It is
+>> transparent. All you have to do is specify the revision to use in the
+>> .mk file.
+>> This is described in the buildroot documentation (search for
+>> LIBFOO_SITE_METHOD).
+>>
+>> The local site method allows you to use an already existing clone or
+>> source base. In this case, you point buildroot to the path where this
+>> working directory is located. You can have uncommitted files there,
+>> which is useful during development. This feature is described in the
+>> following blog post made by Thomas Petazzoni:
+>> http://free-electrons.com/blog/buildroot-2011-11/
+>> It describes some of the new features of buildroot 2011.11 that are
+>> not yet documented.
+>>
+>> Best regards,
+>> Thomas
+>
+>
