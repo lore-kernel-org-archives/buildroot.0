@@ -1,32 +1,17 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Dec 2011 12:32:33 +0100
-Subject: [Buildroot] Buildroot & GIT branch
-In-Reply-To: <CAAXf6LVb=h2rObnfJ8RBncyrwo5cONuvDi5c83PaDCbKTxKBWw@mail.gmail.com>
-References: <DUB105-W30E0FD52CE9490FC698A25CDAA0@phx.gbl>
- <CAAXf6LVb=h2rObnfJ8RBncyrwo5cONuvDi5c83PaDCbKTxKBWw@mail.gmail.com>
-Message-ID: <20111222123233.6d6b7c4f@skate>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 22 Dec 2011 13:08:30 +0100
+Subject: [Buildroot] [PATCH v4 0/5] Python related changes
+Message-ID: <1324555715-32123-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 22 Dec 2011 12:19:40 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+1. add infrastructure to external python packages
+2. enable zlib support for host-python due to setuptools and others dependencies
+3. add some external packages
 
-> I think you should put the branch name as Linux kernel version in the
-> configuration.
+FIXME: python-netifaces crosscompilation. I'll comment later on the patch.
 
-Right. Something like:
-
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://myserver.com"
-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="mybranch"
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+ChangeLog: integrate all patches in one serie. Remove dpkt patch as zlib is enabled by default
