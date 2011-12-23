@@ -1,92 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 22 Dec 2011 20:55:18 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Dec 2011 07:04:52 +0100
 Subject: [Buildroot] Fwd: Call for presentations: Open Mobile Linux at
-	FOSDEM 2012
-Message-ID: <201112222055.18440.arnout@mind.be>
+ FOSDEM 2012
+In-Reply-To: <201112222055.18440.arnout@mind.be>
+References: <201112222055.18440.arnout@mind.be>
+Message-ID: <20111223070452.3024ab76@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hoi all,
 
- Is anyone planning to do a 15-minute talk about buildroot in the
-Open Mobile Linux devroom at FOSDEM?  If not, I'll do it because I
-think we should be there.  I'd reuse some of ThomasP's slides from 
-ELC-E, of course.
+Hello Arnout,
 
- Regards,
- Arnout
+Le Thu, 22 Dec 2011 20:55:18 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
+>  Is anyone planning to do a 15-minute talk about buildroot in the
+> Open Mobile Linux devroom at FOSDEM?  If not, I'll do it because I
+> think we should be there.  I'd reuse some of ThomasP's slides from 
+> ELC-E, of course.
 
-----------  Forwarded Message  ----------
+I have submitted two talks for the Embedded DevRoom in FOSDEM, the two
+talks I gave at ELC-E. One is about Buildroot, the other one about
+using Qt for non-graphical applications. I don't know at this point if
+one of them will be accept, and if so, which one will be accepted.
 
-Subject: [FOSDEM] Call for presentations: Open Mobile Linux at FOSDEM 2012
-Date: Wednesday 14 December 2011, 10:48:33
-From: Henri Bergius <henri.bergius@iki.fi>
-To: fosdem at lists.fosdem.org
+But regardless of this, I think it would definitely be good if you
+submitted a lightning talk for this Open Mobile Linux room. However, it
+looks like this room is more oriented towards "multimedia" systems
+(phone, tablets, etc.) which require fairly large distributions, while
+Buildroot, is IMO, more oriented towards "industrial" systems. But you
+can anyway propose a 15 minutes talk to raise the attention around
+Buildroot.
 
-Hi,
+FWIW, I have also submitted a talk for ELC (February in the US) about
+Buildroot. We'll see if it gets accepted.
 
-At FOSDEM 2012 we will have a devroom related to Open Mobile Linux.
-Our primary goal is to facilitate meetups, collaboration and awareness
-between different projects and communities within Open Mobile Linux
-and provide a place to present directions, ideas and your projects
-themselves.
+Best regards,
 
-By Open Mobile Linux we mean any open source projects revolving around
-typical non-desktop/server Linux, such as handsets, tablets, netbooks
-or other creative uses. Examples of such projects could be Qt5, Mer,
-MeeGo, Android, webOS, Plasma Active, Tizen, Boot to Gecko, SHR and
-other related projects.
-
-We have the room AW1.120 with 74 seats, a video projector (VGA),
-wireless internet on Saturday 4th February for a total of 8 hours.
-
-The format we will be utilizing is lightning talks of length 15
-minutes with 10 minutes of questions, 5 minute changeover to next
-speaker. Our goal is about 15 talks during the day.
-
-The motivation is that after each talk, you and your project will be
-visible to the rest of the Open Mobile Linux community and further
-deeper discussions into your topic with your peers can continue
-outside the devroom.
-
-Please send a short biography and an abstract for your talk to
-carsten.munk at gmail.com by Dec 31st 2011, and we'll get back to you at
-latest January 7th.
-
-http://bergie.iki.fi/blog/call_for_presentations-open_mobile_linux_at_fosdem_2012/
-
+Thomas
 -- 
-Henri Bergius
-Motorcycle Adventures and Free Software
-http://bergie.iki.fi/
-
-Jabber: henri.bergius at gmail.com
-Microblogs: @bergie
-_______________________________________________
-FOSDEM mailing list
-FOSDEM at lists.fosdem.org
-https://lists.fosdem.org/listinfo/fosdem
-
------------------------------------------
--- 
-Arnout Vandecappelle . . . . . . arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . +32-16-286540 . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111222/97f7f987/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
