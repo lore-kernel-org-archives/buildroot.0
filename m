@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Dec 2011 11:19:04 +0100
-Subject: [Buildroot] Thank You
-In-Reply-To: <4EF5A082.8010204@relinux.de>
-References: <CAKm6Z3Vnevex7hjJo7DxQRX_pnS6L1foeih=m=cQgttG7ZeaNQ@mail.gmail.com>
- <CAKm6Z3UVRFhfa68gRWXu0Oj1UD0vGh6T0p93uL8C=r2xt_ijgQ@mail.gmail.com>
- <20111224103851.364e126a@skate> <4EF5A082.8010204@relinux.de>
-Message-ID: <20111224111904.4c48712d@skate>
+Date: Sat, 24 Dec 2011 11:28:36 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.02/ethercat
+Message-ID: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 24 Dec 2011 10:50:58 +0100,
-Stephan Hoffmann <sho@relinux.de> a ?crit :
+The following changes since commit ef3fe1bef6581c66af3858d540343e011cb9fdd6:
 
-> I'd like to thank all contributors for this great piece of work they
-> made for all of us!
+  cdrkit: bump to version 1.1.11 and adjust style (2011-12-21 23:02:31 +0100)
 
-Thanks! Merry Christmas to everyone!
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2012.02/ethercat
 
-Thomas
+Thomas Petazzoni (1):
+      igh-ethercat: new package
+
+ package/Config.in                    |    1 +
+ package/igh-ethercat/Config.in       |   23 +++++++++++++++++++
+ package/igh-ethercat/igh-ethercat.mk |   41 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 65 insertions(+), 0 deletions(-)
+ create mode 100644 package/igh-ethercat/Config.in
+ create mode 100644 package/igh-ethercat/igh-ethercat.mk
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
