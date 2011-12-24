@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Dec 2011 11:17:50 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.02/fix-busybox-mdev-conf
-Message-ID: <cover.1324721862.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 24 Dec 2011 11:19:04 +0100
+Subject: [Buildroot] Thank You
+In-Reply-To: <4EF5A082.8010204@relinux.de>
+References: <CAKm6Z3Vnevex7hjJo7DxQRX_pnS6L1foeih=m=cQgttG7ZeaNQ@mail.gmail.com>
+ <CAKm6Z3UVRFhfa68gRWXu0Oj1UD0vGh6T0p93uL8C=r2xt_ijgQ@mail.gmail.com>
+ <20111224103851.364e126a@skate> <4EF5A082.8010204@relinux.de>
+Message-ID: <20111224111904.4c48712d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit ef3fe1bef6581c66af3858d540343e011cb9fdd6:
+Le Sat, 24 Dec 2011 10:50:58 +0100,
+Stephan Hoffmann <sho@relinux.de> a ?crit :
 
-  cdrkit: bump to version 1.1.11 and adjust style (2011-12-21 23:02:31 +0100)
+> I'd like to thank all contributors for this great piece of work they
+> made for all of us!
 
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2012.02/fix-busybox-mdev-conf
+Thanks! Merry Christmas to everyone!
 
-Thomas Petazzoni (1):
-      busybox: enable CONFIG_FEATURE_MDEV_RENAME
-
- package/busybox/busybox-1.16.x.config |    2 +-
- package/busybox/busybox-1.17.x.config |    2 +-
- package/busybox/busybox-1.18.x.config |    2 +-
- package/busybox/busybox-1.19.x.config |    2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
-
-Thanks,
+Thomas
 -- 
-Thomas Petazzoni
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
