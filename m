@@ -1,111 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Dec 2011 11:28:37 +0100
-Subject: [Buildroot] [PATCH 1/1] igh-ethercat: new package
-In-Reply-To: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4c1a7e11e452cd28d544a607d73709275f42665e.1324722512.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 24 Dec 2011 13:07:03 +0100
+Subject: [Buildroot] [PATCH 1/1] autotools: add escaping when using
+	HOST_MAKE_ENV and TARGET_MAKE_ENV
+In-Reply-To: <cover.1324728420.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1324728420.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c91c50548194e19d2771900df958546f49f29b44.1324728420.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Without this escaping, the evaluation of HOST_MAKE_ENV and
+TARGET_MAKE_ENV is done when the AUTOTARGETS_INNER macro is defined,
+not when it is instantiated by the various packages. The result is
+that the $(PKG_CONFIG_HOST_BINARY) variable, used in $(HOST_MAKE_ENV)
+gets expanded before it is defined.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                    |    1 +
- package/igh-ethercat/Config.in       |   23 +++++++++++++++++++
- package/igh-ethercat/igh-ethercat.mk |   41 ++++++++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+), 0 deletions(-)
- create mode 100644 package/igh-ethercat/Config.in
- create mode 100644 package/igh-ethercat/igh-ethercat.mk
+ package/Makefile.autotools.in |   16 ++++++++--------
+ 1 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b6df18a..f7a5a13 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -431,6 +431,7 @@ source "package/hostapd/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/ifplugd/Config.in"
+diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
+index 3f523dc..c84afa0 100644
+--- a/package/Makefile.autotools.in
++++ b/package/Makefile.autotools.in
+@@ -212,11 +212,11 @@ endif
+ ifndef $(2)_BUILD_CMDS
+ ifeq ($(5),target)
+ define $(2)_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ else
+ define $(2)_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
  endif
-+source "package/igh-ethercat/Config.in"
- source "package/iperf/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
-diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
-new file mode 100644
-index 0000000..764a021
---- /dev/null
-+++ b/package/igh-ethercat/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_IGH_ETHERCAT
-+	bool "igh-ethercat"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  IgH EtherCAT Master for Linux.
-+
-+	  http://www.etherlab.org/en/ethercat/index.php
-+
-+if BR2_PACKAGE_IGH_ETHERCAT
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
-+	bool "8139too driver"
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_E100
-+	bool "e100 driver"
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_E1000
-+	bool "e1000 driver"
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_R8169
-+	bool "r8169 driver"
-+
-+endif
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-new file mode 100644
-index 0000000..b6ac5b8
---- /dev/null
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -0,0 +1,41 @@
-+IGH_ETHERCAT_VERSION = stable-1.5
-+IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
-+IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
-+
-+IGH_ETHERCAT_AUTORECONF      = YES
-+IGH_ETHERCAT_DEPENDENCIES    = linux
-+IGH_ETHERCAT_INSTALL_STAGING = YES
-+
-+IGH_ETHERCAT_CONF_OPT = \
-+	--with-linux-dir=$(LINUX_DIR)
-+
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
-+
-+# Since we download ethercat from source control, we have to emulate
-+# the bootstrap script that creates the ChangeLog file before running
-+# autoreconf.  We don't want to run that script directly, since we
-+# leave to the autotargets infrastructure the responsability of
-+# running 'autoreconf' so that the dependencies on host-automake,
-+# host-autoconf and al. are correct.
-+define IGH_ETHERCAT_CREATE_CHANGELOG
-+	touch $(@D)/ChangeLog
-+endef
-+
-+IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
-+
-+define IGH_ETHERCAT_BUILD_MODULES
-+	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
-+endef
-+
-+IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
-+
-+define IGH_ETHERCAT_INSTALL_MODULES
-+	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
-+endef
-+
-+IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
-+
-+$(eval $(call AUTOTARGETS))
+ endif
+@@ -227,7 +227,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
++	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
+ endef
+ endif
+ 
+@@ -237,7 +237,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+ 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
+ 		cp -f $$$$i $$$$i~; \
+ 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
+@@ -251,7 +251,7 @@ endif
+ #
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
+@@ -261,7 +261,7 @@ endif
+ #
+ ifndef $(2)_CLEAN_CMDS
+ define $(2)_CLEAN_CMDS
+-	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
++	-$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
+@@ -271,7 +271,7 @@ endif
+ #
+ ifndef $(2)_UNINSTALL_STAGING_CMDS
+ define $(2)_UNINSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
+@@ -281,7 +281,7 @@ endif
+ #
+ ifndef $(2)_UNINSTALL_TARGET_CMDS
+ define $(2)_UNINSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
+ endef
+ endif
+ 
 -- 
 1.7.4.1
