@@ -1,24 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 Dec 2011 11:28:36 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.02/ethercat
-Message-ID: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
+Date: Sat, 24 Dec 2011 11:28:37 +0100
+Subject: [Buildroot] [PATCH 1/1] igh-ethercat: new package
+In-Reply-To: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4c1a7e11e452cd28d544a607d73709275f42665e.1324722512.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit ef3fe1bef6581c66af3858d540343e011cb9fdd6:
-
-  cdrkit: bump to version 1.1.11 and adjust style (2011-12-21 23:02:31 +0100)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2012.02/ethercat
-
-Thomas Petazzoni (1):
-      igh-ethercat: new package
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/Config.in                    |    1 +
  package/igh-ethercat/Config.in       |   23 +++++++++++++++++++
  package/igh-ethercat/igh-ethercat.mk |   41 ++++++++++++++++++++++++++++++++++
@@ -26,6 +19,93 @@ Thomas Petazzoni (1):
  create mode 100644 package/igh-ethercat/Config.in
  create mode 100644 package/igh-ethercat/igh-ethercat.mk
 
-Thanks,
+diff --git a/package/Config.in b/package/Config.in
+index b6df18a..f7a5a13 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -431,6 +431,7 @@ source "package/hostapd/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/ifplugd/Config.in"
+ endif
++source "package/igh-ethercat/Config.in"
+ source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+new file mode 100644
+index 0000000..764a021
+--- /dev/null
++++ b/package/igh-ethercat/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_IGH_ETHERCAT
++	bool "igh-ethercat"
++	depends on BR2_LINUX_KERNEL
++	help
++	  IgH EtherCAT Master for Linux.
++
++	  http://www.etherlab.org/en/ethercat/index.php
++
++if BR2_PACKAGE_IGH_ETHERCAT
++
++config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
++	bool "8139too driver"
++
++config BR2_PACKAGE_IGH_ETHERCAT_E100
++	bool "e100 driver"
++
++config BR2_PACKAGE_IGH_ETHERCAT_E1000
++	bool "e1000 driver"
++
++config BR2_PACKAGE_IGH_ETHERCAT_R8169
++	bool "r8169 driver"
++
++endif
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+new file mode 100644
+index 0000000..b6ac5b8
+--- /dev/null
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -0,0 +1,41 @@
++IGH_ETHERCAT_VERSION = stable-1.5
++IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
++IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
++
++IGH_ETHERCAT_AUTORECONF      = YES
++IGH_ETHERCAT_DEPENDENCIES    = linux
++IGH_ETHERCAT_INSTALL_STAGING = YES
++
++IGH_ETHERCAT_CONF_OPT = \
++	--with-linux-dir=$(LINUX_DIR)
++
++IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
++IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
++IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
++IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
++
++# Since we download ethercat from source control, we have to emulate
++# the bootstrap script that creates the ChangeLog file before running
++# autoreconf.  We don't want to run that script directly, since we
++# leave to the autotargets infrastructure the responsability of
++# running 'autoreconf' so that the dependencies on host-automake,
++# host-autoconf and al. are correct.
++define IGH_ETHERCAT_CREATE_CHANGELOG
++	touch $(@D)/ChangeLog
++endef
++
++IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
++
++define IGH_ETHERCAT_BUILD_MODULES
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
++endef
++
++IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
++
++define IGH_ETHERCAT_INSTALL_MODULES
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
++endef
++
++IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
++
++$(eval $(call AUTOTARGETS))
 -- 
-Thomas Petazzoni
+1.7.4.1
