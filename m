@@ -1,87 +1,43 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Fri, 23 Dec 2011 16:37:55 -0600
+From: Sergio Prado <sergiosiena@gmail.com>
+Date: Fri, 23 Dec 2011 23:32:41 -0200
 Subject: [Buildroot] [PATCH] Xorg and Tslib
-In-Reply-To: <CAKm6Z3UVRFhfa68gRWXu0Oj1UD0vGh6T0p93uL8C=r2xt_ijgQ@mail.gmail.com>
+In-Reply-To: <201112231637.59428.minimod@morethan.org>
 References: <CAKm6Z3Vnevex7hjJo7DxQRX_pnS6L1foeih=m=cQgttG7ZeaNQ@mail.gmail.com>
  <CAKm6Z3UVRFhfa68gRWXu0Oj1UD0vGh6T0p93uL8C=r2xt_ijgQ@mail.gmail.com>
-Message-ID: <201112231637.59428.minimod@morethan.org>
+ <201112231637.59428.minimod@morethan.org>
+Message-ID: <CAKm6Z3UUdheT6au=gkQRx8jGeAtuzRejU+u3C9GGkXdyy5rqAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri December 23 2011, Sergio Prado wrote:
->
+Thanks for the feedback Michael.
 
-Pardon a small bit of nit-picking...
+I totally agree that plain text is much better for patches. The problem is
+that Gmail wraps lines somewhere around 80 characters, as you can see from
+my first email, and the patch gets all messed up.
 
-> Sorry, I forgot to send it in rich text format. Here is the patch again:
->
+I search everywhere in the Gmail configuration and Google forums, and I did
+not find a way (yet) to disable it.
 
-Plain text works best for patches.
- 
-> ---
->  package/x11r7/Config.in                            |    1 +
->  package/x11r7/xdriver_xf86-input-tslib/Config.in   |    8 ++++++++
->  .../xdriver_xf86-input-tslib.mk                    |   13 +++++++++++++
->  3 files changed, 22 insertions(+), 0 deletions(-)
->  create mode 100644 package/x11r7/xdriver_xf86-input-tslib/Config.in
->  create mode 100644 package/x11r7/xdriver_xf86-input-tslib/
-> xdriver_xf86-input-tslib.mk
-> 
-> diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-> index 50816f2..af55939 100644
-> --- a/package/x11r7/Config.in
-> +++ b/package/x11r7/Config.in
-> @@ -176,6 +176,7 @@ endmenu
->   source package/x11r7/xdriver_xf86-input-synaptics/Config.in
->   source package/x11r7/xdriver_xf86-input-vmmouse/Config.in
->   source package/x11r7/xdriver_xf86-input-void/Config.in
-> + source package/x11r7/xdriver_xf86-input-tslib/Config.in
+Anyway, here is the patch again, with the change you suggest:
 
-T before V 
+---
+ package/x11r7/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Mike
->   source package/x11r7/xdriver_xf86-video-apm/Config.in
->   source package/x11r7/xdriver_xf86-video-ark/Config.in
->   source package/x11r7/xdriver_xf86-video-ast/Config.in
-> diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in
-> b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-> new file mode 100644
-> index 0000000..4c3f719
-> --- /dev/null
-> +++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
-> + bool "xf86-input-tslib"
-> + select BR2_PACKAGE_XPROTO_INPUTPROTO
-> + select BR2_PACKAGE_XSERVER_XORG_SERVER
-> + select BR2_PACKAGE_XPROTO_RANDRPROTO
-> + select BR2_PACKAGE_XPROTO_XPROTO
-> + help
-> +  Touch screen library input driver
-> diff --git a/package/x11r7/xdriver_xf86-input-tslib/
-> xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/
-> xdriver_xf86-input-tslib.mk
-> new file mode 100644
-> index 0000000..b6455e7
-> --- /dev/null
-> +++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# xdriver_xf86-input-tslib -- Touch screen library input driver
-> +#
-> +################################################################################
-> +
-> +XDRIVER_XF86_INPUT_TSLIB_VERSION = 0.0.6
-> +XDRIVER_XF86_INPUT_TSLIB_SOURCE =
-> xf86-input-tslib_$(XDRIVER_XF86_INPUT_TSLIB_VERSION).orig.tar.gz
-> +XDRIVER_XF86_INPUT_TSLIB_SITE =
-> http://ftp.de.debian.org/debian/pool/main/x/xf86-input-tslib/
-> +XDRIVER_XF86_INPUT_TSLIB_AUTORECONF = NO
-> +XDRIVER_XF86_INPUT_TSLIB_DEPENDENCIES = xproto_inputproto
-> xserver_xorg-server xproto_randrproto xproto_xproto
-> +
-> +$(eval $(call AUTOTARGETS,package/x11r7,xdriver_xf86-input-tslib))
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 50816f2..664226f 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -174,6 +174,7 @@ endmenu
+  source package/x11r7/xdriver_xf86-input-keyboard/Config.in
+  source package/x11r7/xdriver_xf86-input-mouse/Config.in
+  source package/x11r7/xdriver_xf86-input-synaptics/Config.in
++ source package/x11r7/xdriver_xf86-input-tslib/Config.in
+  source package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+  source package/x11r7/xdriver_xf86-input-void/Config.in
+  source package/x11r7/xdriver_xf86-video-apm/Config.in
+-- 
+1.7.1
