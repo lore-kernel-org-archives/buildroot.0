@@ -1,45 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sat, 24 Dec 2011 15:41:11 +0100
-Subject: [Buildroot] Thank You
-In-Reply-To: <20111224111904.4c48712d@skate>
-References: <CAKm6Z3Vnevex7hjJo7DxQRX_pnS6L1foeih=m=cQgttG7ZeaNQ@mail.gmail.com>
- <CAKm6Z3UVRFhfa68gRWXu0Oj1UD0vGh6T0p93uL8C=r2xt_ijgQ@mail.gmail.com>
- <20111224103851.364e126a@skate> <4EF5A082.8010204@relinux.de>
- <20111224111904.4c48712d@skate>
-Message-ID: <CAAXf6LWNSmV2TVQErYvwPqCEO5Gfx_KGPDA4M4VjVw30stwAvg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 24 Dec 2011 16:24:14 +0100
+Subject: [Buildroot] [PATCH 1/2] iw: fix build with new libnl-3
+In-Reply-To: <4ED65A6C.2020003@gmail.com> (Daniel Mack's message of "Wed, 30
+ Nov 2011 17:31:40 +0100")
+References: <CAGm1_kt-QPDOyfnnjQJ=R_8=S_++h0GcDY4wid7J69v2QawExw@mail.gmail.com>
+ <1322665560-29888-1-git-send-email-zonque@gmail.com>
+ <CAGm1_kvpf=bZxzPqgXQ65R_vo6XVp-3KFkjCt_JC8WY32OPaiw@mail.gmail.com>
+ <4ED65A6C.2020003@gmail.com>
+Message-ID: <8762h6ouw1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 24, 2011 at 11:19 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-> Le Sat, 24 Dec 2011 10:50:58 +0100,
-> Stephan Hoffmann <sho@relinux.de> a ?crit :
->
-> > I'd like to thank all contributors for this great piece of work they
-> > made for all of us!
->
-> Thanks! Merry Christmas to everyone!
->
+ >> this file has gone in next. Please rebase your patches on the next
 
-The same from me, Merry Christmas and a great 2012 for all of you!
+ Daniel> I can do this. I wasn't even aware of this branch, and part of the
+ Daniel> reason is that it doesn't show up on the cgit web interface
+ Daniel> (http://git.buildroot.net/buildroot) when there's no trailing slash in
+ Daniel> the URI, which is unfortunately the location the website
+ Daniel> (http://buildroot.uclibc.org/git.html) points visitors to. You can click
+ Daniel> on "refs" and back on "summary" which will add the "/" suffix, and then
+ Daniel> cgit will show the existance of the "next" branch. Very odd.
 
-Although I haven't followed buildroot for that long, I have the impression
-that quite some infrastructure improvements were made this year. Several
-new download methods were added, including support for development source
-trees; a cmake infrastructure was created next to gentargets and
-autotargets; the board support was completely reworked; there have been
-quite some changes on the toolchain part; linux and the bootloaders now use
-gentargets as well; and the documentation was converted to asciidoc.
+Yes, I know. I've reported it to the osuosl.org guys a while back, and
+they are looking into it, but so far without any luck.
 
-Looking at these achievements, I'm looking forward to seeing the changes in
-2012!
+I've now fixed the website link.
 
-All the best,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111224/7b7499df/attachment.html>
+-- 
+Bye, Peter Korsgaard
