@@ -1,49 +1,73 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 24 Dec 2011 20:08:21 +0100
-Subject: [Buildroot] Thank You
-In-Reply-To: <CAAXf6LWNSmV2TVQErYvwPqCEO5Gfx_KGPDA4M4VjVw30stwAvg@mail.gmail.com>
-References: <CAKm6Z3Vnevex7hjJo7DxQRX_pnS6L1foeih=m=cQgttG7ZeaNQ@mail.gmail.com>
- <CAKm6Z3UVRFhfa68gRWXu0Oj1UD0vGh6T0p93uL8C=r2xt_ijgQ@mail.gmail.com>
- <20111224103851.364e126a@skate> <4EF5A082.8010204@relinux.de>
- <20111224111904.4c48712d@skate>
- <CAAXf6LWNSmV2TVQErYvwPqCEO5Gfx_KGPDA4M4VjVw30stwAvg@mail.gmail.com>
-Message-ID: <CAGm1_ksgC1gQ+UerkU8eFmRyPLfqYtChKqhm6H4=7CKD5w9DCg@mail.gmail.com>
+From: Wojciech Zabolotny <wzab01@gmail.com>
+Date: Sun, 25 Dec 2011 01:10:53 +0100
+Subject: [Buildroot] Buildroot 2011.11 on x86_64 - neither udev nor mdev
+ loads needed modules at startup
+Message-ID: <CAMduVEdmasu=7LYzR7AkGO9amtOLV7L3AYxBJJ6+9_jhhk7LAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 24, 2011 at 3:41 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> On Sat, Dec 24, 2011 at 11:19 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->>
->> Le Sat, 24 Dec 2011 10:50:58 +0100,
->> Stephan Hoffmann <sho@relinux.de> a ?crit :
->>
->> > I'd like to thank all contributors for this great piece of work they
->> > made for all of us!
->>
->> Thanks! Merry Christmas to everyone!
->
->
-> The same from me, Merry Christmas and a great 2012 for all of you!
->
-> Although I haven't followed buildroot for that long, I have the impression
-> that quite some infrastructure improvements were made this year. Several new
-> download methods were added, including support for development source trees;
-> a cmake infrastructure was created next to gentargets and autotargets; the
-> board support was completely reworked; there have been quite some changes on
-> the toolchain part; linux and the bootloaders now use gentargets as well;
-> and the documentation was converted to asciidoc.
->
-> Looking at these achievements, I'm looking forward to seeing the changes in
-> 2012!
+Hi,
 
-Merry Christmas and Happy New Year from me too!
+I compiled the buildroot-2011.11 for x86_64 platform. Unfortunately
+after the startup the device drivers are not loaded. I've tried to use
+both mdev and udev, and results are the same.
+I have the following settings in the kernel configuration:
+CONFIG_DEVTMPFS=y
+CONFIG_DEVTMPFS_MOUNT=y
 
-There were really a lot of improvements in BR this year. I hope next
-year will bring even more. Let's make it real.
+When I load the drivers manually:
+eg. (on qemu-system-x86_64):
+#modprobe e1000
+#modprobe uhci_hcd
 
-Yegor
+the NIC and the USB device (passed by -usbdevice host:0xabcd:0xcdef)
+are recognized correctly.
+The syptoms were the same on the real hardware (E350M1 board) which
+currently not available to me.
+
+I attach my buildroot configuration and my kernel configuration
+together with /var/log/messages from the emulated machine.
+
+The "mount" command returns the following:
+rootfs on / type rootfs (rw,relatime)
+devtmpfs on /dev type devtmpfs
+(rw,relatime,size=998680k,nr_inodes=249670,mode=755)
+proc on /proc type proc (rw,relatime)
+devpts on /dev/pts type devpts (rw,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /dev/shm type tmpfs (rw,relatime,mode=777)
+tmpfs on /tmp type tmpfs (rw,relatime)
+sysfs on /sys type sysfs (rw,relatime)
+
+The udevd is running (what's interesting, after I run "#modprobe
+e1000", there are even two udevd processes running both as
+"/sbin/udevd -d").
+
+Is it a problem with this release of buildroot, or have I something
+misconfigured?
+-- 
+TIA & Merry Christmas!
+WZab
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: kernel_config.gz
+Type: application/x-gzip
+Size: 32361 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111225/38e9d3cb/attachment-0003.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_config.gz
+Type: application/x-gzip
+Size: 5000 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111225/38e9d3cb/attachment-0004.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: var_log_messages.gz
+Type: application/x-gzip
+Size: 3616 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111225/38e9d3cb/attachment-0005.bin>
