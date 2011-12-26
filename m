@@ -1,32 +1,22 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Mon, 26 Dec 2011 17:50:18 +0200
-Subject: [Buildroot] Buildroot 2011.11 on x86_64 - neither udev nor mdev
- loads needed modules at startup
-In-Reply-To: <4EF89684.8070401@gmail.com>
-References: <4EF879B6.8080902@gmail.com> <4EF89684.8070401@gmail.com>
-Message-ID: <CALR4fELfX4RSJyN-V+NB5sOQAQQhbrvrGqM4SU3fs-tnAyg90A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 Dec 2011 17:02:15 +0100
+Subject: [Buildroot] [PATCH v4 1/5] libnl: bump to version 3.2.3
+In-Reply-To: <1322931812-10734-1-git-send-email-zonque@gmail.com> (Daniel
+ Mack's message of "Sat, 3 Dec 2011 18:03:28 +0100")
+References: <1322931812-10734-1-git-send-email-zonque@gmail.com>
+Message-ID: <87zkefnwxk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While not a solution...
+>>>>> "Daniel" == Daniel Mack <zonque@gmail.com> writes:
 
-On Mon, Dec 26, 2011 at 5:45 PM, Wojciech Zabolotny <wzab01@gmail.com>wrote:
+ Daniel> This newer version splits the library code into libnl, libnl-route,
+ Daniel> libnl-genl and libnl-nf, each individually selectable via pkgconfig.
 
->
-> Anyway the reason why the modules are not loaded automatically is still
-> unclear :-(.
+Committed entire series, thanks.
 
-
-When I started using buildroot for my devices, I found the same problem.
-However, since this is a dedicated device, the amount of hardware that can
-be plugged in is rather small... so I "modprobed" the needed modules (2-3)
-and continued.
-
-How are modules loaded enerally, the kernel requests them from a user space
-utility?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/4d512e37/attachment.html>
+-- 
+Bye, Peter Korsgaard
