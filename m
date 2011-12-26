@@ -1,57 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Dec 2011 08:41:36 +0100
-Subject: [Buildroot] [git commit] hostapd: fix build with new libnl-3
-Message-ID: <20111226160333.CAA478FDD0@busybox.osuosl.org>
+From: Alain-Serge Nagni <alainsergenagni@yahoo.com>
+Date: Mon, 26 Dec 2011 09:03:11 -0800 (PST)
+Subject: [Buildroot] Issue with Xorg: i cannot generate and xorg.conf file
+Message-ID: <1324918991.39069.YahooMailNeo@web124920.mail.ne1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11f7a7b4fb676ae6db33c03402e624ad5b5d6968
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
+??? I have an issue with Xorg. I'm using buildroot-2011.11, and i did build Xorg as part the modules for the embeded system that I'm constructing. The target CPU is an Intel Atom 1.1 GHz and I I have a 4GB Compact Flash (CF).
 
-The CFLAGS have to be augmented for the include dir and a small patch
-will make the binary link to libnl-3 and libnl-genl-3 instead of libnl
-and libnl-gen.
 
-Signed-off-by: Daniel Mack <zonque@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/hostapd/hostapd-0.7.3-libnl3.patch |   15 +++++++++++++++
- package/hostapd/hostapd.mk                 |    1 +
- 2 files changed, 16 insertions(+), 0 deletions(-)
+After completing the build and loading the system on my CF, I booted the system. The system did boot properly and I logged in as "root".
 
-diff --git a/package/hostapd/hostapd-0.7.3-libnl3.patch b/package/hostapd/hostapd-0.7.3-libnl3.patch
-new file mode 100644
-index 0000000..e47da73
---- /dev/null
-+++ b/package/hostapd/hostapd-0.7.3-libnl3.patch
-@@ -0,0 +1,15 @@
-+--- a/src/drivers/drivers.mak	2011-11-29 19:09:23.889942913 +0100
-++++ b/src/drivers/drivers.mak	2011-11-29 19:09:40.637381428 +0100
-+@@ -31,10 +31,10 @@
-+ NEED_AP_MLME=y
-+ NEED_NETLINK=y
-+ NEED_LINUX_IOCTL=y
-+-DRV_LIBS += -lnl
-++DRV_LIBS += -lnl-3
-+ 
-+ ifdef CONFIG_LIBNL20
-+-DRV_LIBS += -lnl-genl
-++DRV_LIBS += -lnl-genl-3
-+ DRV_CFLAGS += -DCONFIG_LIBNL20
-+ endif
-+ endif
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 0d6c2c5..26ebf1d 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -18,6 +18,7 @@ endif
- 
- define HOSTAPD_LIBNL_CONFIG
- 	echo "CONFIG_LIBNL20=y" >>$(HOSTAPD_CONFIG)
-+	echo "CFLAGS += -I$(STAGING_DIR)/usr/include/libnl3/" >>$(HOSTAPD_CONFIG)
- endef
- 
- define HOSTAPD_CRYPTO_CONFIG
+
+? 
+
+I did execute the command " Xorg -configure" to generate the "xorg.config" file but the command failed: No xorg.conf will be generated and the screen will remain black. That is strange. 
+
+But when I executed the command "startx", xwindows started without any problem. I could run Xwindows applications without any problem.
+
+
+Normally on Desktop sytem, if you are not able to execute the command " Xorg -configure" you will not be able to start Xwindows. So I'm asking myself what should I be doing differently with buildroot to generate the xorg.conf file?
+
+
+Do anybody knows what is going on and how can I solve the issue? Thanks for your help.
+
+
+I did attached to this email, my build root configuration file and the Xorg output.
+
+
+Thanks for your help,
+:-)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/fd5c624c/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot.config
+Type: application/octet-stream
+Size: 27688 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/fd5c624c/attachment-0002.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Xorg.0.log
+Type: application/octet-stream
+Size: 11725 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/fd5c624c/attachment-0003.obj>
