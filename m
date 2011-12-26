@@ -1,34 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Dec 2011 19:33:43 +0100
-Subject: [Buildroot] [git commit] ti-utils: unbreak build after libnl
-	version bump
-Message-ID: <20111226183410.693548FDD6@busybox.osuosl.org>
+From: Wojciech Zabolotny <wzab01@gmail.com>
+Date: Mon, 26 Dec 2011 23:52:43 +0100
+Subject: [Buildroot] SOLVED! Re: Buildroot 2011.11 on x86_64 - neither
+ udev nor mdev loads needed modules at startup
+In-Reply-To: <4EF8B484.4050908@gmail.com>
+References: <4EF8B484.4050908@gmail.com>
+Message-ID: <4EF8FABB.9060104@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68902f743729b3482bb6bc2ae9d0306aa9c00f65
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ooops, I've forgotten about one more detail.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ti-utils/ti-utils.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+I have compiled the external module-init-tools instead of those provided by busybox.
+I had to add "udevadm trigger --action=add" command to the /etc/init.d/S10udev file
+  [...]
+$UDEV_BIN -d || (echo "FAIL" && exit 1)
+udevadm trigger --action=add
+echo "done"
+;;
+[...]
 
-diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
-index 15e620c..71a610d 100644
---- a/package/ti-utils/ti-utils.mk
-+++ b/package/ti-utils/ti-utils.mk
-@@ -10,8 +10,8 @@ TI_UTILS_DEPENDENCIES = libnl
- 
- define TI_UTILS_BUILD_CMDS
- 	$(MAKE1) NFSROOT="$(STAGING_DIR)" \
--		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
--		-C $(@D) all
-+		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -I$(STAGING_DIR)/usr/include/libnl3" \
-+		LIBS="-lnl-3 -lnl-genl-3 -lm" -C $(@D) all
- endef
- 
- define TI_UTILS_INSTALL_TARGET_CMDS
+In case if I've forgotten any other modification, I attach my "buildroot_config", my "busybox_config" and my "kernel_config" files.
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: kernel_config.gz
+Type: application/x-gzip
+Size: 32276 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/20f53042/attachment-0003.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: busybox_config.gz
+Type: application/x-gzip
+Size: 6485 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/20f53042/attachment-0004.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_config.gz
+Type: application/x-gzip
+Size: 4981 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20111226/20f53042/attachment-0005.bin>
