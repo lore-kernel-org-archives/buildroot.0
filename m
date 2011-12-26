@@ -1,36 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Mon, 26 Dec 2011 08:19:13 +0100
-Subject: [Buildroot] [git commit] git.html: fix cgit link
-Message-ID: <20111226071932.9ECB98FDD4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] xapp_xman: drop optional xprint option
+Message-ID: <20111226071932.925808FDD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24c80c9bfdac00e185b9239a43c2e897d4763cd3
+commit: http://git.buildroot.net/buildroot/commit/?id=39ae9160d419944193b1d77f7f8f86112de0a629
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There's an issue with the cgit installation, which causes
-git.buildroot.net/buildroot (no trailing /) requests to return stale
-results. The osuosl people are looking into it, but until then atleast
-use the the correct URL on the website link.
+When built with --enable-xprint, xman needs libXaw8 (rather than libXaw7),
+which we don't have in buildroot.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/git.html |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/x11r7/xapp_xman/xapp_xman.mk |    4 ----
+ 1 files changed, 0 insertions(+), 4 deletions(-)
 
-diff --git a/docs/git.html b/docs/git.html
-index 111a29a..bf894b9 100644
---- a/docs/git.html
-+++ b/docs/git.html
-@@ -4,7 +4,7 @@
- <h3>Git Access</h3>
+diff --git a/package/x11r7/xapp_xman/xapp_xman.mk b/package/x11r7/xapp_xman/xapp_xman.mk
+index 2706d61..6caaf3f 100644
+--- a/package/x11r7/xapp_xman/xapp_xman.mk
++++ b/package/x11r7/xapp_xman/xapp_xman.mk
+@@ -13,8 +13,4 @@ XAPP_XMAN_CONF_ENV = ac_cv_file__etc_man_conf=no \
+ 		ac_cv_file__etc_man_config=no \
+ 		ac_cv_file__etc_manpath_config=no
  
- The buildroot repository can be browsed online through cgit at
--<a href="http://git.buildroot.net/buildroot">http://git.buildroot.net/buildroot</a>.
-+<a href="http://git.buildroot.net/buildroot/">http://git.buildroot.net/buildroot</a>.
- To grab a copy of the repository use
- 
- <pre>
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXPRINTUTIL),y)
+-XAPP_XMAN_CONF_OPT += --enable-xprint
+-endif
+-
+ $(eval $(call AUTOTARGETS))
