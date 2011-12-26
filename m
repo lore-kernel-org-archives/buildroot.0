@@ -1,10 +1,10 @@
-From: wzab <wzab01@gmail.com>
-Date: Tue, 27 Dec 2011 00:57:56 +0100
+From: Wojciech Zabolotny <wzab01@gmail.com>
+Date: Tue, 27 Dec 2011 00:59:35 +0100
 Subject: [Buildroot] SOLVED! Re: Buildroot 2011.11 on x86_64 - neither
  udev nor mdev loads needed modules at startup
 In-Reply-To: <4EF8FABB.9060104@gmail.com>
 References: <4EF8FABB.9060104@gmail.com>
-Message-ID: <4EF90A04.7090101@gmail.com>
+Message-ID: <4EF90A67.7030202@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
