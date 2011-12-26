@@ -1,24 +1,34 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Mon, 26 Dec 2011 18:53:08 +0100
-Subject: [Buildroot] SOLVED! Re: Buildroot 2011.11 on x86_64 - neither udev
- nor mdev loads needed modules at startup
-In-Reply-To: <CALR4fELfX4RSJyN-V+NB5sOQAQQhbrvrGqM4SU3fs-tnAyg90A@mail.gmail.com>
-References: <CALR4fELfX4RSJyN-V+NB5sOQAQQhbrvrGqM4SU3fs-tnAyg90A@mail.gmail.com>
-Message-ID: <4EF8B484.4050908@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 26 Dec 2011 19:33:43 +0100
+Subject: [Buildroot] [git commit] ti-utils: unbreak build after libnl
+	version bump
+Message-ID: <20111226183410.693548FDD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Finally I've got it! The reason was so simple, that I can't believe I've spent such a long time at it :-(.
+commit: http://git.buildroot.net/buildroot/commit/?id=68902f743729b3482bb6bc2ae9d0306aa9c00f65
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In the buildroot-2011.11 the modprobe is located in /usr/bin:
-# which modprobe
-/usr/bin/modprobe
-However in the /lib/udev/rules.d scripts the modprobe is called as /sbin/modprobe .
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ti-utils/ti-utils.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-So I've added the symlink /sbin/modprobe pointing to /usr/sbin/modprobe and everything works perfectly!
--- 
-Thanks & Regards,
-Wojtek
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index 15e620c..71a610d 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -10,8 +10,8 @@ TI_UTILS_DEPENDENCIES = libnl
+ 
+ define TI_UTILS_BUILD_CMDS
+ 	$(MAKE1) NFSROOT="$(STAGING_DIR)" \
+-		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
+-		-C $(@D) all
++		CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -I$(STAGING_DIR)/usr/include/libnl3" \
++		LIBS="-lnl-3 -lnl-genl-3 -lm" -C $(@D) all
+ endef
+ 
+ define TI_UTILS_INSTALL_TARGET_CMDS
