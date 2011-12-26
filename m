@@ -1,78 +1,57 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 26 Dec 2011 08:42:38 +0100
-Subject: [Buildroot] [git commit] kismet: fix build with new libnl-3
-Message-ID: <20111226160334.009848FDD0@busybox.osuosl.org>
+Date: Mon, 26 Dec 2011 08:41:36 +0100
+Subject: [Buildroot] [git commit] hostapd: fix build with new libnl-3
+Message-ID: <20111226160333.CAA478FDD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f472b915c0b394ba637553da931c5797b07c0b59
+commit: http://git.buildroot.net/buildroot/commit/?id=11f7a7b4fb676ae6db33c03402e624ad5b5d6968
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The CPPFLAGS have to be augmented, so configure finds the correct include
-dir, and the patch needs to be tweaked to make the binary link to
-libnl-3 instead of libnl-gen.
+The CFLAGS have to be augmented for the include dir and a small patch
+will make the binary link to libnl-3 and libnl-genl-3 instead of libnl
+and libnl-gen.
 
 Signed-off-by: Daniel Mack <zonque@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/kismet/kismet-libnl-30-support.patch |   13 +++++++++----
- package/kismet/kismet.mk                     |    1 +
- 2 files changed, 10 insertions(+), 4 deletions(-)
+ package/hostapd/hostapd-0.7.3-libnl3.patch |   15 +++++++++++++++
+ package/hostapd/hostapd.mk                 |    1 +
+ 2 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/kismet/kismet-libnl-30-support.patch b/package/kismet/kismet-libnl-30-support.patch
-index cf3c845..dca6151 100644
---- a/package/kismet/kismet-libnl-30-support.patch
-+++ b/package/kismet/kismet-libnl-30-support.patch
-@@ -35,7 +35,7 @@ Index: b/configure
-    libnl20_CFLAGS
-                C compiler flags for libnl20, overriding pkg-config
-    libnl20_LIBS
--@@ -6760,6 +6768,75 @@
-+@@ -6760,6 +6768,76 @@
-  	fi
-  fi
- 
-@@ -103,6 +103,7 @@ Index: b/configure
- +	libnl30_CFLAGS=$pkg_cv_libnl30_CFLAGS
- +	libnl30_LIBS=$pkg_cv_libnl30_LIBS
- +        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-++	CPPFLAGS="$CPPFLAGS $libnl30_CFLAGS"
- +$as_echo "yes" >&6; }
- +	libnl30=yes
- +fi
-@@ -111,13 +112,17 @@ Index: b/configure
-  pkg_failed=no
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnl20" >&5
-  $as_echo_n "checking for libnl20... " >&6; }
--@@ -6897,7 +6974,7 @@
-+@@ -6897,7 +6974,11 @@
-  $as_echo "yes" >&6; }
-  	libnl1=yes
-  fi
- -	if test "$libnl20" = "yes"; then
--+	if test "$libnl20" = "yes" -o "$libnl30" = "yes"; then
--
-++	if test "$libnl30" = "yes"; then
-++$as_echo "#define HAVE_LIBNL 1" >>confdefs.h
-++$as_echo "#define HAVE_LIBNL20 1" >>confdefs.h
-++               NLLIBS="-lnl-genl-3 -lnl-3"
-++	elif test "$libnl20" = "yes"; then
+diff --git a/package/hostapd/hostapd-0.7.3-libnl3.patch b/package/hostapd/hostapd-0.7.3-libnl3.patch
+new file mode 100644
+index 0000000..e47da73
+--- /dev/null
++++ b/package/hostapd/hostapd-0.7.3-libnl3.patch
+@@ -0,0 +1,15 @@
++--- a/src/drivers/drivers.mak	2011-11-29 19:09:23.889942913 +0100
+++++ b/src/drivers/drivers.mak	2011-11-29 19:09:40.637381428 +0100
++@@ -31,10 +31,10 @@
++ NEED_AP_MLME=y
++ NEED_NETLINK=y
++ NEED_LINUX_IOCTL=y
++-DRV_LIBS += -lnl
+++DRV_LIBS += -lnl-3
 + 
-  $as_echo "#define HAVE_LIBNL 1" >>confdefs.h
++ ifdef CONFIG_LIBNL20
++-DRV_LIBS += -lnl-genl
+++DRV_LIBS += -lnl-genl-3
++ DRV_CFLAGS += -DCONFIG_LIBNL20
++ endif
++ endif
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 0d6c2c5..26ebf1d 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -18,6 +18,7 @@ endif
  
+ define HOSTAPD_LIBNL_CONFIG
+ 	echo "CONFIG_LIBNL20=y" >>$(HOSTAPD_CONFIG)
++	echo "CFLAGS += -I$(STAGING_DIR)/usr/include/libnl3/" >>$(HOSTAPD_CONFIG)
+ endef
  
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index 4c7d6e2..854c9dd 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -10,6 +10,7 @@ KISMET_DEPENDENCIES = libpcap ncurses
- 
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	KISMET_DEPENDENCIES += libnl
-+	KISMET_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/"
- endif
- ifeq ($(BR2_PACKAGE_PCRE),y)
- 	KISMET_DEPENDENCIES += pcre
+ define HOSTAPD_CRYPTO_CONFIG
