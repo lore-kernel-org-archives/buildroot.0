@@ -1,42 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Dec 2011 22:26:02 +0100
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.0.x / 3.1.x stable
-	versions
-In-Reply-To: <cover.1325193931.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1325193931.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <808bfd0731c4aa97582e056533b173d3a10b1ca8.1325193931.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Dec 2011 22:26:01 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.02/valgrind-bump
+Message-ID: <cover.1325193931.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Peter Korsgaard <jacmet@sunsite.dk>
+Hello,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    4 ++--
+Here is a single patch that bumps Valgrind to 3.7.0 and also fixes the
+build of Valgrind when the ccache support is enabled.
+
+Thomas
+
+The following changes since commit ef3fe1bef6581c66af3858d540343e011cb9fdd6:
+
+  cdrkit: bump to version 1.1.11 and adjust style (2011-12-21 23:02:31 +0100)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2012.02/valgrind-bump
+
+Peter Korsgaard (1):
+      kernel-headers: bump 3.0.x / 3.1.x stable versions
+
+Thomas Petazzoni (1):
+      valgrind: bump to 3.7.0 and fix build with ccache
+
+ .../valgrind-3.6.1-configure-support-linux-3.patch |   30 --------
+ .../valgrind/valgrind-3.7.0-compiler-check.patch   |   76 ++++++++++++++++++++
+ .../valgrind-3.7.0-fix-ccache-support.patch        |   51 +++++++++++++
+ ...gefile.patch => valgrind-3.7.0-largefile.patch} |   22 +++---
+ ...ctls.patch => valgrind-3.7.0-more-ioctls.patch} |   34 +++++-----
+ package/valgrind/valgrind-3.7.0-readstab-fix.patch |   13 ++++
+ ...valgrind-3.7.0-workaround-SIGSEGV-on-PPC.patch} |   15 ++---
+ package/valgrind/valgrind.mk                       |    3 +-
+ toolchain/kernel-headers/Config.in                 |    4 +-
  ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 10 files changed, 177 insertions(+), 71 deletions(-)
+ delete mode 100644 package/valgrind/valgrind-3.6.1-configure-support-linux-3.patch
+ create mode 100644 package/valgrind/valgrind-3.7.0-compiler-check.patch
+ create mode 100644 package/valgrind/valgrind-3.7.0-fix-ccache-support.patch
+ rename package/valgrind/{valgrind-3.6.1-largefile.patch => valgrind-3.7.0-largefile.patch} (71%)
+ rename package/valgrind/{valgrind-3.6.1-more-ioctls.patch => valgrind-3.7.0-more-ioctls.patch} (90%)
+ create mode 100644 package/valgrind/valgrind-3.7.0-readstab-fix.patch
+ rename package/valgrind/{valgrind-3.6.1-workaround-SIGSEGV-on-PPC.patch => valgrind-3.7.0-workaround-SIGSEGV-on-PPC.patch} (60%)
  rename toolchain/kernel-headers/{linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 04407d1..e092651 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -57,7 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.13"	if BR2_KERNEL_HEADERS_3_0
--	default "3.1.5"		if BR2_KERNEL_HEADERS_3_1
-+	default "3.0.14"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.1.6"		if BR2_KERNEL_HEADERS_3_1
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
