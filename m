@@ -1,64 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Dec 2011 18:40:48 +0100
-Subject: [Buildroot] [PATCH 6/7] openocd: add host variant
-In-Reply-To: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <37af45f118d422d240b625f1169ddb7fb93a60f3.1325178529.git.thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Dec 2011 22:26:02 +0100
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.0.x / 3.1.x stable
+	versions
+In-Reply-To: <cover.1325193931.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1325193931.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <808bfd0731c4aa97582e056533b173d3a10b1ca8.1325193931.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in.host         |    1 +
- package/openocd/Config.in.host |    6 ++++++
- package/openocd/openocd.mk     |   10 ++++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/openocd/Config.in.host
+From: Peter Korsgaard <jacmet@sunsite.dk>
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index b8f8aab..6499eb5 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
- source "package/uboot-tools/Config.in.host"
-+source "package/openocd/Config.in.host"
- 
- endmenu
-diff --git a/package/openocd/Config.in.host b/package/openocd/Config.in.host
-new file mode 100644
-index 0000000..2380942
---- /dev/null
-+++ b/package/openocd/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_OPENOCD
-+	bool "host openocd"
-+	help
-+	  OpenOCD - Open On-Chip Debugger
-+
-+	  http://openocd.berlios.de/web/
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 5f61367..d79b33b 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -29,4 +29,14 @@ ifeq ($(BR2_PACKAGE_OPENOCD_VSLLINK),y)
- OPENOCD_CONF_OPT += --enable-vsllink
- endif
- 
-+HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
-+
-+HOST_OPENOCD_CONF_OPT = 	\
-+	--disable-doxygen-html 	\
-+	--enable-dummy 		\
-+	--enable-ft2232_libftdi \
-+	--enable-jlink 		\
-+	--enable-vsllink
-+
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 04407d1..e092651 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -57,7 +57,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.13"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.1.5"		if BR2_KERNEL_HEADERS_3_1
++	default "3.0.14"	if BR2_KERNEL_HEADERS_3_0
++	default "3.1.6"		if BR2_KERNEL_HEADERS_3_1
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.13-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
 1.7.4.1
