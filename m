@@ -1,31 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Dec 2011 18:40:47 +0100
-Subject: [Buildroot] [PATCH 5/7] libusb: add host variant
+Date: Thu, 29 Dec 2011 18:40:43 +0100
+Subject: [Buildroot] [PATCH 1/7] Add basic config infrastructure for host
+	utilities
 In-Reply-To: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <89d5795c0b7eafa13ee19fe5c2d2cb5b3d41f6bd.1325178529.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ded746d7319be4d549f958c4707d7493c74f1a8b.1325178529.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Most of the host packages don't have to be exposed to the user as they
+are only used as build dependencies of target packages.
+
+However, some host utilities, such as flashing utilities, image
+creation programs, specific debuggers, might be useful and should be
+presented to the user.
+
+Therefore, we have a new global menu, which lists those host
+utilities. These utilities are described in package/*/Config.in.host
+files, which will be sourced by package/Config.in.host.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libusb/libusb.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ Config.in              |    2 ++
+ package/Config.in.host |    3 +++
+ 2 files changed, 5 insertions(+), 0 deletions(-)
+ create mode 100644 package/Config.in.host
 
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index af75f5f..b3ca353 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -10,4 +10,7 @@ LIBUSB_DEPENDENCIES = host-pkg-config
- LIBUSB_INSTALL_STAGING = YES
- LIBUSB_INSTALL_TARGET = YES
+diff --git a/Config.in b/Config.in
+index ab77ef3..8579a63 100644
+--- a/Config.in
++++ b/Config.in
+@@ -371,6 +371,8 @@ source "target/generic/Config.in"
  
-+HOST_LIBUSB_DEPENDENCIES = host-pkg-config
+ source "package/Config.in"
+ 
++source "package/Config.in.host"
 +
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
+ source "fs/Config.in"
+ 
+ source "boot/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+new file mode 100644
+index 0000000..54f6a59
+--- /dev/null
++++ b/package/Config.in.host
+@@ -0,0 +1,3 @@
++menu "Host utilities"
++
++endmenu
 -- 
 1.7.4.1
