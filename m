@@ -1,34 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 Dec 2011 09:06:15 +0100
-Subject: [Buildroot] problem with ccache during valgrind compiling
-In-Reply-To: <CAAfyv341H2aP2sMHJxBanOgMHHv+bOz1KNwVocqkL2UKiacquQ@mail.gmail.com>
-References: <CAAfyv341H2aP2sMHJxBanOgMHHv+bOz1KNwVocqkL2UKiacquQ@mail.gmail.com>
-Message-ID: <20111230090615.1b93ee88@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 30 Dec 2011 12:02:17 -0300
+Subject: [Buildroot] [PATCH] u-boot: add version 2011.12
+Message-ID: <1325257337-11806-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Belisko, Diego,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ boot/uboot/Config.in |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-Le Fri, 9 Dec 2011 20:09:58 +0100,
-Belisko Marek <marek.belisko@gmail.com> a ?crit :
-
-> I'm trying to build valgrind but it fails on my system with:
-
-I have sent yesterday a patch that updates Valgrind to 3.7.0 and that
-fixes the build problem with ccache. See
-http://lists.busybox.net/pipermail/buildroot/2011-December/048683.html.
-
-If would be great if you had the time to test this patch and see if
-Valgrind works for you.
-
-Best regards,
-
-Thomas
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f154bd1..281a909 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
+ 
+ choice
+ 	prompt "U-Boot Version"
+-	default BR2_TARGET_UBOOT_2011_09
++	default BR2_TARGET_UBOOT_2011_12
+ 	help
+ 	  Select the specific U-Boot version you want to use
+ 
++config BR2_TARGET_UBOOT_2011_12
++	bool "2011.12"
++
+ config BR2_TARGET_UBOOT_2011_09
+ 	bool "2011.09"
+ 
+@@ -51,6 +54,7 @@ endif
+ 
+ config BR2_TARGET_UBOOT_VERSION
+ 	string
++	default "2011.12"	if BR2_TARGET_UBOOT_2011_12
+ 	default "2011.09"	if BR2_TARGET_UBOOT_2011_09
+ 	default "2011.06"	if BR2_TARGET_UBOOT_2011_06
+ 	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
