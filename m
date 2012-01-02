@@ -1,110 +1,75 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jan 2012 20:15:30 +0100
-Subject: [Buildroot] [git commit] igh-ethercat: new package
-Message-ID: <20120102191619.D5FB98FF8F@busybox.osuosl.org>
+Date: Mon, 2 Jan 2012 22:20:31 +0100
+Subject: [Buildroot] [git commit] package: add libmbus library
+Message-ID: <20120102212140.DA4DC8FE2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27ad470d7df5509ae4a96edd04521211900090e4
+commit: http://git.buildroot.net/buildroot/commit/?id=43f8bb8c250b2e0fbf9fb73a240c299a60511cc4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+libmbus is an open source M-bus (Meter-Bus) library.
+
+The Meter-Bus is a standard for reading out meter data from electricity
+meters, heat meters, gas meters, etc.
+
+[Peter: minor whitespace fixes]
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Reviewed-by: Luca Ceresoli<luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                    |    1 +
- package/igh-ethercat/Config.in       |   23 +++++++++++++++++++
- package/igh-ethercat/igh-ethercat.mk |   41 ++++++++++++++++++++++++++++++++++
- 3 files changed, 65 insertions(+), 0 deletions(-)
+ package/Config.in          |    1 +
+ package/libmbus/Config.in  |    8 ++++++++
+ package/libmbus/libmbus.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index dc12ad5..0e51493 100644
+index 0e51493..eb5bfa9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -431,6 +431,7 @@ source "package/hostapd/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/ifplugd/Config.in"
- endif
-+source "package/igh-ethercat/Config.in"
- source "package/iperf/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
-diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+@@ -343,6 +343,7 @@ source "package/libmicrohttpd/Config.in"
+ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
++source "package/libmbus/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
 new file mode 100644
-index 0000000..764a021
+index 0000000..1e2a8de
 --- /dev/null
-+++ b/package/igh-ethercat/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_IGH_ETHERCAT
-+	bool "igh-ethercat"
-+	depends on BR2_LINUX_KERNEL
++++ b/package/libmbus/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBMBUS
++	bool "libmbus"
 +	help
-+	  IgH EtherCAT Master for Linux.
++	  libmbus is a library for communicating with energy metering devices.
++	  It supports TCP and RS232 M-bus gateways.
++	  (M-bus standard: http://www.m-bus.com/)
 +
-+	  http://www.etherlab.org/en/ethercat/index.php
-+
-+if BR2_PACKAGE_IGH_ETHERCAT
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
-+	bool "8139too driver"
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_E100
-+	bool "e100 driver"
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_E1000
-+	bool "e1000 driver"
-+
-+config BR2_PACKAGE_IGH_ETHERCAT_R8169
-+	bool "r8169 driver"
-+
-+endif
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
++	  http://www.freescada.com/libmbus
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
 new file mode 100644
-index 0000000..b6ac5b8
+index 0000000..9abb2bf
 --- /dev/null
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -0,0 +1,41 @@
-+IGH_ETHERCAT_VERSION = stable-1.5
-+IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
-+IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
++++ b/package/libmbus/libmbus.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# libmbus
++#
++#############################################################
 +
-+IGH_ETHERCAT_AUTORECONF      = YES
-+IGH_ETHERCAT_DEPENDENCIES    = linux
-+IGH_ETHERCAT_INSTALL_STAGING = YES
++LIBMBUS_VERSION = 0.6.1
++LIBMBUS_SITE = http://www.freescada.com/public-dist/
++LIBMBUS_INSTALL_STAGING = YES
 +
-+IGH_ETHERCAT_CONF_OPT = \
-+	--with-linux-dir=$(LINUX_DIR)
-+
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
-+
-+# Since we download ethercat from source control, we have to emulate
-+# the bootstrap script that creates the ChangeLog file before running
-+# autoreconf.  We don't want to run that script directly, since we
-+# leave to the autotargets infrastructure the responsability of
-+# running 'autoreconf' so that the dependencies on host-automake,
-+# host-autoconf and al. are correct.
-+define IGH_ETHERCAT_CREATE_CHANGELOG
-+	touch $(@D)/ChangeLog
-+endef
-+
-+IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
-+
-+define IGH_ETHERCAT_BUILD_MODULES
-+	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
-+endef
-+
-+IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
-+
-+define IGH_ETHERCAT_INSTALL_MODULES
-+	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
-+endef
-+
-+IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
++# Without this the build yields an error:
++#   cannot find input file: `test/Makefile.in'
++LIBMBUS_AUTORECONF = YES
 +
 +$(eval $(call AUTOTARGETS))
