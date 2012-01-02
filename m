@@ -1,50 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jan 2012 19:55:28 +0100
-Subject: [Buildroot] [git commit] linux: update stable kernel to 3.1.6
-Message-ID: <20120102185604.588088FE17@busybox.osuosl.org>
+Date: Mon, 2 Jan 2012 20:13:26 +0100
+Subject: [Buildroot] [git commit] docs: change official IRC channel to
+	#buildroot
+Message-ID: <20120102191345.B5B338FF10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cca999969535bb59ae8c87404beccb4adb795580
+commit: http://git.buildroot.net/buildroot/commit/?id=f94f9a23971220a317865d15051e508f2c1b37cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ docs/docs.html |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3022b91..892a503 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_1
+diff --git a/docs/docs.html b/docs/docs.html
+index 57f4bf6..851d1d2 100644
+--- a/docs/docs.html
++++ b/docs/docs.html
+@@ -20,8 +20,8 @@ help:</p>
+   <li>On the <a href="lists.html">buildroot mailing list</a>
+   at <code>buildroot at uclibc.org</code></li>
  
- config BR2_LINUX_KERNEL_3_1
--	bool "3.1.5"
-+	bool "3.1.6"
+-  <li>On the <a href="irc://freenode.net/#uclibc">Buildroot IRC
+-  channel</a>, <code>#uclibc</code> on Freenode</li>
++  <li>On the <a href="irc://freenode.net/#buildroot">Buildroot IRC
++  channel</a>, <code>#buildroot</code> on Freenode</li>
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -58,7 +58,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "3.1.5"
-+	default "3.1.6"
+   <li>On our <a href="https://bugs.uclibc.org">bugtracker</a>.</li>
  
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.1.5" if BR2_LINUX_KERNEL_3_1
-+	default "3.1.6" if BR2_LINUX_KERNEL_3_1
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
