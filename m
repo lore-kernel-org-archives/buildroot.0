@@ -1,88 +1,48 @@
-From: Alexandre Belloni <abelloni@adeneo-embedded.com>
-Date: Mon, 02 Jan 2012 17:09:49 +0100
-Subject: [Buildroot] [git commit] u-boot: remove 2010.x versions,
- deprecate 2011.03 / 2011.06
-In-Reply-To: <20120102160217.580058FFBF@busybox.osuosl.org>
-References: <20120102160217.580058FFBF@busybox.osuosl.org>
-Message-ID: <1325520589.2442.5.camel@emblysd024.adetel.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon,  2 Jan 2012 17:43:20 +0100
+Subject: [Buildroot] [PATCH] linux: update stable kernel to 3.1.6
+Message-ID: <1325522600-1679-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ linux/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Isn't that breaking all the at91sam def_configs ?
-
-I'm in the process of updating those configs to use uboot 2011.12 and
-linux 3.1. But until then, I guess those won't build anymore.
-
-On Mon, 2012-01-02 at 17:00 +0100, Peter Korsgaard wrote:
-
-> commit: http://git.buildroot.net/buildroot/commit/?id=0c5f68a4d31c1c437fbc920c2ecdad03301fb5da
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->  boot/uboot/Config.in |   14 ++------------
->  1 files changed, 2 insertions(+), 12 deletions(-)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 281a909..c8db9fb 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -24,18 +24,11 @@ config BR2_TARGET_UBOOT_2011_09
->  
->  config BR2_TARGET_UBOOT_2011_06
->  	bool "2011.06"
-> +	depends on BR2_DEPRECATED
->  
->  config BR2_TARGET_UBOOT_2011_03
->  	bool "2011.03"
-> -
-> -config BR2_TARGET_UBOOT_2010_12
-> -	bool "2010.12"
-> -
-> -config BR2_TARGET_UBOOT_2010_09
-> -	bool "2010.09"
-> -
-> -config BR2_TARGET_UBOOT_2010_06
-> -	bool "2010.06"
-> +	depends on BR2_DEPRECATED
->  
->  config BR2_TARGET_UBOOT_CUSTOM_TARBALL
->  	bool "Custom tarball"
-> @@ -58,9 +51,6 @@ config BR2_TARGET_UBOOT_VERSION
->  	default "2011.09"	if BR2_TARGET_UBOOT_2011_09
->  	default "2011.06"	if BR2_TARGET_UBOOT_2011_06
->  	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
-> -	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
-> -	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
-> -	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
->  	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
->  	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Alexandre Belloni
-
-Adeneo Embedded
-Adetel Group
-
-2, ch. du Ruisseau - 69134 Ecully, France
-
-www.adeneo-embedded.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 3022b91..892a503 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_1
  
-
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120102/830a0a06/attachment.html>
+ config BR2_LINUX_KERNEL_3_1
+-	bool "3.1.5"
++	bool "3.1.6"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -58,7 +58,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "3.1.5"
++	default "3.1.6"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.1.5" if BR2_LINUX_KERNEL_3_1
++	default "3.1.6" if BR2_LINUX_KERNEL_3_1
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+1.7.5.4
