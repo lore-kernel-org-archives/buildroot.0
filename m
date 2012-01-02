@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jan 2012 20:13:49 +0100
-Subject: [Buildroot] [PATCH 1/1] docs: change official IRC channel to
-	#buildroot
-In-Reply-To: <0abe2fe74fbaed3149432f0481aadccd7d9968aa.1325177326.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 29 Dec 2011 17:48:53 +0100")
-References: <cover.1325177326.git.thomas.petazzoni@free-electrons.com>
- <cover.1325177326.git.thomas.petazzoni@free-electrons.com>
- <0abe2fe74fbaed3149432f0481aadccd7d9968aa.1325177326.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ipkt29zm.fsf@macbook.be.48ers.dk>
+Date: Mon, 02 Jan 2012 20:15:53 +0100
+Subject: [Buildroot] [PATCH 1/1] igh-ethercat: new package
+In-Reply-To: <4c1a7e11e452cd28d544a607d73709275f42665e.1324722512.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 24 Dec 2011 11:28:37 +0100")
+References: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
+ <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
+ <4c1a7e11e452cd28d544a607d73709275f42665e.1324722512.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ehvh29w6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
