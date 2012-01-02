@@ -1,98 +1,86 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jan 2012 23:02:33 +0100
-Subject: [Buildroot] [git commit] autotools: add escaping when using
-	HOST_MAKE_ENV and TARGET_MAKE_ENV
-Message-ID: <20120102221533.4F04C8FF7F@busybox.osuosl.org>
+Date: Mon, 2 Jan 2012 22:49:44 +0100
+Subject: [Buildroot] [git commit] busybox: enable CONFIG_FEATURE_MDEV_RENAME
+Message-ID: <20120102221533.3E98E8FF7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43695a98920a8b2856f8973b8afac2c012cf0f45
+commit: http://git.buildroot.net/buildroot/commit/?id=b12dfaf15cd9c1df55eed225754389303f76b013
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Without this escaping, the evaluation of HOST_MAKE_ENV and
-TARGET_MAKE_ENV is done when the AUTOTARGETS_INNER macro is defined,
-not when it is instantiated by the various packages. The result is
-that the $(PKG_CONFIG_HOST_BINARY) variable, used in $(HOST_MAKE_ENV)
-gets expanded before it is defined.
+Our default mdev.conf file in package/busybox has lines like:
+
+  pcm.*           root:audio 660 =snd/
+  event[0-9]+     root:root 640 =input/
+
+that are used to create the device is the appropriate /dev
+subdirectory. However, this feature requires
+CONFIG_FEATURE_MDEV_RENAME to be enabled, otherwise mdev complains
+with:
+
+  mdev: bad line 25
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.autotools.in |   16 ++++++++--------
- 1 files changed, 8 insertions(+), 8 deletions(-)
+ package/busybox/busybox-1.16.x.config |    2 +-
+ package/busybox/busybox-1.17.x.config |    2 +-
+ package/busybox/busybox-1.18.x.config |    2 +-
+ package/busybox/busybox-1.19.x.config |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Makefile.autotools.in b/package/Makefile.autotools.in
-index 3f523dc..c84afa0 100644
---- a/package/Makefile.autotools.in
-+++ b/package/Makefile.autotools.in
-@@ -212,11 +212,11 @@ endif
- ifndef $(2)_BUILD_CMDS
- ifeq ($(5),target)
- define $(2)_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- else
- define $(2)_BUILD_CMDS
--	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- endif
-@@ -227,7 +227,7 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
-+	$$(HOST_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) -C $$($$(PKG)_SRCDIR) install
- endef
- endif
- 
-@@ -237,7 +237,7 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
- 	for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
- 		cp -f $$$$i $$$$i~; \
- 		$$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
-@@ -251,7 +251,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
-@@ -261,7 +261,7 @@ endif
- #
- ifndef $(2)_CLEAN_CMDS
- define $(2)_CLEAN_CMDS
--	-$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
-+	-$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)  $$($$(PKG)_CLEAN_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
-@@ -271,7 +271,7 @@ endif
- #
- ifndef $(2)_UNINSTALL_STAGING_CMDS
- define $(2)_UNINSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
-@@ -281,7 +281,7 @@ endif
- #
- ifndef $(2)_UNINSTALL_TARGET_CMDS
- define $(2)_UNINSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
-+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_UNINSTALL_TARGET_OPT) -C $$($$(PKG)_SRCDIR)
- endef
- endif
- 
+diff --git a/package/busybox/busybox-1.16.x.config b/package/busybox/busybox-1.16.x.config
+index e5f5102..24a27bf 100644
+--- a/package/busybox/busybox-1.16.x.config
++++ b/package/busybox/busybox-1.16.x.config
+@@ -516,7 +516,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
+diff --git a/package/busybox/busybox-1.17.x.config b/package/busybox/busybox-1.17.x.config
+index d131dd6..edf9c6d 100644
+--- a/package/busybox/busybox-1.17.x.config
++++ b/package/busybox/busybox-1.17.x.config
+@@ -547,7 +547,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
+diff --git a/package/busybox/busybox-1.18.x.config b/package/busybox/busybox-1.18.x.config
+index 502048d..9e41550 100644
+--- a/package/busybox/busybox-1.18.x.config
++++ b/package/busybox/busybox-1.18.x.config
+@@ -555,7 +555,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
+diff --git a/package/busybox/busybox-1.19.x.config b/package/busybox/busybox-1.19.x.config
+index 9f4603d..bf5e8df 100644
+--- a/package/busybox/busybox-1.19.x.config
++++ b/package/busybox/busybox-1.19.x.config
+@@ -563,7 +563,7 @@ CONFIG_LSPCI=y
+ CONFIG_LSUSB=y
+ CONFIG_MDEV=y
+ CONFIG_FEATURE_MDEV_CONF=y
+-# CONFIG_FEATURE_MDEV_RENAME is not set
++CONFIG_FEATURE_MDEV_RENAME=y
+ # CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
+ CONFIG_FEATURE_MDEV_EXEC=y
+ # CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
