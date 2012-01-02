@@ -1,48 +1,31 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon,  2 Jan 2012 17:43:20 +0100
-Subject: [Buildroot] [PATCH] linux: update stable kernel to 3.1.6
-Message-ID: <1325522600-1679-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 02 Jan 2012 19:54:25 +0100
+Subject: [Buildroot] [git commit] u-boot: remove 2010.x versions,
+	deprecate 2011.03 / 2011.06
+In-Reply-To: <1325520589.2442.5.camel@emblysd024.adetel.com> (Alexandre
+ Belloni's message of "Mon, 02 Jan 2012 17:09:49 +0100")
+References: <20120102160217.580058FFBF@busybox.osuosl.org>
+ <1325520589.2442.5.camel@emblysd024.adetel.com>
+Message-ID: <87r4zi0wbi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Alexandre" == Alexandre Belloni <abelloni@adeneo-embedded.com> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3022b91..892a503 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_1
- 
- config BR2_LINUX_KERNEL_3_1
--	bool "3.1.5"
-+	bool "3.1.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -58,7 +58,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "3.1.5"
-+	default "3.1.6"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.1.5" if BR2_LINUX_KERNEL_3_1
-+	default "3.1.6" if BR2_LINUX_KERNEL_3_1
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ Alexandre> Hi,
+ Alexandre> Isn't that breaking all the at91sam def_configs ?
+
+Ahh, yes - I've forgotten about those.
+
+ Alexandre> I'm in the process of updating those configs to use uboot
+ Alexandre> 2011.12 and linux 3.1. But until then, I guess those won't
+ Alexandre> build anymore.
+
+True. I've just updated the 9g20 defconfig, but please send your patches
+for the others.
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
