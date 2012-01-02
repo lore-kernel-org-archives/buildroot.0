@@ -1,22 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jan 2012 15:55:57 +0100
-Subject: [Buildroot] [PATCH 1/2] uClibc: bump 0.9.32.x version to
-	0.9.32.1
-In-Reply-To: <1325275801-10526-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 30 Dec 2011 17:10:00 -0300")
-References: <1325275801-10526-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nwe2lxe.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 2 Jan 2012 16:42:01 +0100
+Subject: [Buildroot] Generating a 32-bit toolchain on a 64-bit machine
+Message-ID: <CAAXf6LXeu+ftimzd=ydJAnwTry6BgZ4QXJ4qhUFnLWyNE3NhfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hi,
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+I would like to create a 32-bit toolchain on a 64-bit machine with
+buildroot/crosstool-ng. By default, all host tools will be 64-bit.
 
-Committed, thanks.
+I couldn't find a configuration option or the like for this.
+I guess one way to do is it to call 'make' like this:
+make HOSTCC="`which gcc` -m32" HOSTCXX="`which g++` -m32" HOSTCPP="cpp
+-m32" HOSTLD="ld -m32"
+but ideally there'd be a configuration for this.
 
--- 
-Bye, Peter Korsgaard
+In crosstool-ng I didn't find such an option either...
+
+Thanks for your advice,
+Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120102/ba97f067/attachment-0001.html>
