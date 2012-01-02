@@ -1,46 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jan 2012 15:56:37 +0100
-Subject: [Buildroot] [git commit] u-boot: add version 2011.12
-Message-ID: <20120102160217.474E38FFC7@busybox.osuosl.org>
+Date: Mon, 2 Jan 2012 17:00:34 +0100
+Subject: [Buildroot] [git commit] u-boot: remove 2010.x versions,
+	deprecate 2011.03 / 2011.06
+Message-ID: <20120102160217.580058FFBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f63d39eeb12d1d833e71ff690a638a396ed2bba
+commit: http://git.buildroot.net/buildroot/commit/?id=0c5f68a4d31c1c437fbc920c2ecdad03301fb5da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/uboot/Config.in |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ boot/uboot/Config.in |   14 ++------------
+ 1 files changed, 2 insertions(+), 12 deletions(-)
 
 diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f154bd1..281a909 100644
+index 281a909..c8db9fb 100644
 --- a/boot/uboot/Config.in
 +++ b/boot/uboot/Config.in
-@@ -12,10 +12,13 @@ config BR2_TARGET_UBOOT_BOARDNAME
+@@ -24,18 +24,11 @@ config BR2_TARGET_UBOOT_2011_09
  
- choice
- 	prompt "U-Boot Version"
--	default BR2_TARGET_UBOOT_2011_09
-+	default BR2_TARGET_UBOOT_2011_12
- 	help
- 	  Select the specific U-Boot version you want to use
+ config BR2_TARGET_UBOOT_2011_06
+ 	bool "2011.06"
++	depends on BR2_DEPRECATED
  
-+config BR2_TARGET_UBOOT_2011_12
-+	bool "2011.12"
-+
- config BR2_TARGET_UBOOT_2011_09
- 	bool "2011.09"
+ config BR2_TARGET_UBOOT_2011_03
+ 	bool "2011.03"
+-
+-config BR2_TARGET_UBOOT_2010_12
+-	bool "2010.12"
+-
+-config BR2_TARGET_UBOOT_2010_09
+-	bool "2010.09"
+-
+-config BR2_TARGET_UBOOT_2010_06
+-	bool "2010.06"
++	depends on BR2_DEPRECATED
  
-@@ -51,6 +54,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
-+	default "2011.12"	if BR2_TARGET_UBOOT_2011_12
+ config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+@@ -58,9 +51,6 @@ config BR2_TARGET_UBOOT_VERSION
  	default "2011.09"	if BR2_TARGET_UBOOT_2011_09
  	default "2011.06"	if BR2_TARGET_UBOOT_2011_06
  	default "2011.03"	if BR2_TARGET_UBOOT_2011_03
+-	default "2010.12"	if BR2_TARGET_UBOOT_2010_12
+-	default "2010.09"	if BR2_TARGET_UBOOT_2010_09
+-	default "2010.06"	if BR2_TARGET_UBOOT_2010_06
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default $BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION if BR2_TARGET_UBOOT_CUSTOM_GIT
+ 
