@@ -1,36 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jan 2012 17:02:21 +0100
-Subject: [Buildroot] [git commit] samba: security bump to version 3.5.12
-Message-ID: <20120102160226.9B5418FFBF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Jan 2012 17:02:33 +0100
+Subject: [Buildroot] [PATCH] samba: security bump to version 3.5.12
+In-Reply-To: <1325260292-19107-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 30 Dec 2011 12:51:32 -0300")
+References: <1325260292-19107-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vcou149y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f026f825cecc5bf106e433c0307f07fed2ae842b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/samba/samba.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
-index de2c13b..4e02682 100644
---- a/package/samba/samba.mk
-+++ b/package/samba/samba.mk
-@@ -3,9 +3,9 @@
- # samba
- #
- #############################################################
--SAMBA_VERSION = 3.5.11
--SAMBA_SOURCE = samba-$(SAMBA_VERSION).tar.gz
--SAMBA_SITE = http://ftp.samba.org/pub/samba/stable/
-+
-+SAMBA_VERSION = 3.5.12
-+SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
- 
- SAMBA_SUBDIR = source3
- SAMBA_AUTORECONF = NO
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
