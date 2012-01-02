@@ -1,103 +1,35 @@
-From: Alexandre Belloni <abelloni@adeneo-embedded.com>
-Date: Mon, 02 Jan 2012 14:25:35 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Jan 2012 14:29:59 +0100
 Subject: [Buildroot] [PATCH 7/7] sam-ba: new package with host variant
  only
-In-Reply-To: <6bc9d7f888570bd1692acf6b32c8de92f3829640.1325178529.git.thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1325510735.2442.2.camel@emblysd024.adetel.com>
 References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
  <6bc9d7f888570bd1692acf6b32c8de92f3829640.1325178529.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <1325510735.2442.2.camel@emblysd024.adetel.com>
+ <1325510735.2442.2.camel@emblysd024.adetel.com>
+Message-ID: <20120102142959.0abeedb8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shouldn't we go further and provide scripts to flash the boards using
-the
-default addresses used in at91bootstrap and u-boot ?
+Hello Alexandre,
 
-On Thu, 2011-12-29 at 18:40 +0100, Thomas Petazzoni wrote:
+Le Mon, 02 Jan 2012 14:25:35 +0100,
+Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
 
-> sam-ba is a tool needed to reprogram AT91-based systems using an USB
-> connection or a serial port connection.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/Config.in.host        |    1 +
->  package/sam-ba/Config.in.host |    6 ++++++
->  package/sam-ba/sam-ba.mk      |   23 +++++++++++++++++++++++
->  3 files changed, 30 insertions(+), 0 deletions(-)
->  create mode 100644 package/sam-ba/Config.in.host
->  create mode 100644 package/sam-ba/sam-ba.mk
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 6499eb5..21e2a11 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -2,5 +2,6 @@ menu "Host utilities"
->  
->  source "package/uboot-tools/Config.in.host"
->  source "package/openocd/Config.in.host"
-> +source "package/sam-ba/Config.in.host"
->  
->  endmenu
-> diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
-> new file mode 100644
-> index 0000000..1e46c30
-> --- /dev/null
-> +++ b/package/sam-ba/Config.in.host
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_HOST_SAM_BA
-> +	bool "host sam-ba"
-> +	help
-> +	  Atmel SAM-BA? software provides an open set of tools for
-> +	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
-> +	  microcontrollers.
-> diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-> new file mode 100644
-> index 0000000..bdad695
-> --- /dev/null
-> +++ b/package/sam-ba/sam-ba.mk
-> @@ -0,0 +1,23 @@
-> +SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
-> +SAM_BA_VERSION = 2.10
-> +SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
-> +
-> +define HOST_SAM_BA_EXTRACT_CMDS
-> +        unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
-> +        mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
-> +        rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
-> +endef
-> +
-> +# Since it's a prebuilt application and it does not conform to the
-> +# usual Unix hierarchy, we install it in $(HOST_DIR)/opt/sam-ba and
-> +# then create a symbolic link from $(HOST_DIR)/usr/bin to the
-> +# application binary, for easier usage.
-> +
-> +define HOST_SAM_BA_INSTALL_CMDS
-> +	mkdir -p $(HOST_DIR)/opt/sam-ba/
-> +	cp -a $(@D)/* $(HOST_DIR)/opt/sam-ba/
-> +	ln -s ../../opt/sam-ba/sam-ba $(HOST_DIR)/usr/bin/sam-ba
-> +endef
-> +
-> +$(eval $(call GENTARGETS,host))
-> +
+> Shouldn't we go further and provide scripts to flash the boards using
+> the
+> default addresses used in at91bootstrap and u-boot ?
 
+Indeed, that would be the next step to improve the board support for
+AT91 evaluation boards. You are welcome to contribute patches :-)
 
+Regards,
+
+Thomas
 -- 
-Alexandre Belloni
-
-Adeneo Embedded
-Adetel Group
-
-2, ch. du Ruisseau - 69134 Ecully, France
-
-www.adeneo-embedded.com
- 
-
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120102/0a701ad3/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
