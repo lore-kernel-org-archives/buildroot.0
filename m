@@ -1,21 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jan 2012 17:02:33 +0100
-Subject: [Buildroot] [PATCH] samba: security bump to version 3.5.12
-In-Reply-To: <1325260292-19107-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 30 Dec 2011 12:51:32 -0300")
-References: <1325260292-19107-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87vcou149y.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Jan 2012 17:05:25 +0100
+Subject: [Buildroot] Generating a 32-bit toolchain on a 64-bit machine
+In-Reply-To: <CAAXf6LXeu+ftimzd=ydJAnwTry6BgZ4QXJ4qhUFnLWyNE3NhfQ@mail.gmail.com>
+References: <CAAXf6LXeu+ftimzd=ydJAnwTry6BgZ4QXJ4qhUFnLWyNE3NhfQ@mail.gmail.com>
+Message-ID: <20120102170525.79f91811@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Le Mon, 2 Jan 2012 16:42:01 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> In crosstool-ng I didn't find such an option either...
 
-Committed, thanks.
+I did so with crosstool-ng. I created a Debian 32 bits chroot on my 64
+bits machine and did the build in here. I had to force ABI=32 to
+the ./configure script of GMP to get it to build properly, though,
+since it gets confused by the fact of having a 64 bits kernel and a 32
+bits userspace. My reason for using a chroot is also because I wanted
+the toolchain to be built against an old version of the C library, so
+as to be compatible with as many hosts as possible.
 
+Regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
