@@ -1,36 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jan 2012 20:13:26 +0100
-Subject: [Buildroot] [git commit] docs: change official IRC channel to
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Jan 2012 20:13:49 +0100
+Subject: [Buildroot] [PATCH 1/1] docs: change official IRC channel to
 	#buildroot
-Message-ID: <20120102191345.B5B338FF10@busybox.osuosl.org>
+In-Reply-To: <0abe2fe74fbaed3149432f0481aadccd7d9968aa.1325177326.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 29 Dec 2011 17:48:53 +0100")
+References: <cover.1325177326.git.thomas.petazzoni@free-electrons.com>
+ <cover.1325177326.git.thomas.petazzoni@free-electrons.com>
+ <0abe2fe74fbaed3149432f0481aadccd7d9968aa.1325177326.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ipkt29zm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f94f9a23971220a317865d15051e508f2c1b37cb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- docs/docs.html |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/docs/docs.html b/docs/docs.html
-index 57f4bf6..851d1d2 100644
---- a/docs/docs.html
-+++ b/docs/docs.html
-@@ -20,8 +20,8 @@ help:</p>
-   <li>On the <a href="lists.html">buildroot mailing list</a>
-   at <code>buildroot at uclibc.org</code></li>
- 
--  <li>On the <a href="irc://freenode.net/#uclibc">Buildroot IRC
--  channel</a>, <code>#uclibc</code> on Freenode</li>
-+  <li>On the <a href="irc://freenode.net/#buildroot">Buildroot IRC
-+  channel</a>, <code>#buildroot</code> on Freenode</li>
- 
-   <li>On our <a href="https://bugs.uclibc.org">bugtracker</a>.</li>
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
