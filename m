@@ -1,136 +1,103 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 2 Jan 2012 14:21:02 +0100
-Subject: [Buildroot] [PATCH 1/1] igh-ethercat: new package
-In-Reply-To: <4c1a7e11e452cd28d544a607d73709275f42665e.1324722512.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1324722512.git.thomas.petazzoni@free-electrons.com>
- <4c1a7e11e452cd28d544a607d73709275f42665e.1324722512.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LVvSXAZxSLyTAji=7m=0Ckix82EwhRMDoG6nCMOuS5JCg@mail.gmail.com>
+From: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Date: Mon, 02 Jan 2012 14:25:35 +0100
+Subject: [Buildroot] [PATCH 7/7] sam-ba: new package with host variant
+ only
+In-Reply-To: <6bc9d7f888570bd1692acf6b32c8de92f3829640.1325178529.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
+ <6bc9d7f888570bd1692acf6b32c8de92f3829640.1325178529.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <1325510735.2442.2.camel@emblysd024.adetel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Dec 24, 2011 at 11:28 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Shouldn't we go further and provide scripts to flash the boards using
+the
+default addresses used in at91bootstrap and u-boot ?
 
+On Thu, 2011-12-29 at 18:40 +0100, Thomas Petazzoni wrote:
+
+> sam-ba is a tool needed to reprogram AT91-based systems using an USB
+> connection or a serial port connection.
+> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-
 > ---
->  package/Config.in                    |    1 +
->  package/igh-ethercat/Config.in       |   23 +++++++++++++++++++
->  package/igh-ethercat/igh-ethercat.mk |   41
-> ++++++++++++++++++++++++++++++++++
->  3 files changed, 65 insertions(+), 0 deletions(-)
->  create mode 100644 package/igh-ethercat/Config.in
->  create mode 100644 package/igh-ethercat/igh-ethercat.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index b6df18a..f7a5a13 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -431,6 +431,7 @@ source "package/hostapd/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  source "package/ifplugd/Config.in"
->  endif
-> +source "package/igh-ethercat/Config.in"
->  source "package/iperf/Config.in"
->  source "package/iproute2/Config.in"
->  source "package/ipsec-tools/Config.in"
-> diff --git a/package/igh-ethercat/Config.in
-> b/package/igh-ethercat/Config.in
+>  package/Config.in.host        |    1 +
+>  package/sam-ba/Config.in.host |    6 ++++++
+>  package/sam-ba/sam-ba.mk      |   23 +++++++++++++++++++++++
+>  3 files changed, 30 insertions(+), 0 deletions(-)
+>  create mode 100644 package/sam-ba/Config.in.host
+>  create mode 100644 package/sam-ba/sam-ba.mk
+> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 6499eb5..21e2a11 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -2,5 +2,6 @@ menu "Host utilities"
+>  
+>  source "package/uboot-tools/Config.in.host"
+>  source "package/openocd/Config.in.host"
+> +source "package/sam-ba/Config.in.host"
+>  
+>  endmenu
+> diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
 > new file mode 100644
-> index 0000000..764a021
+> index 0000000..1e46c30
 > --- /dev/null
-> +++ b/package/igh-ethercat/Config.in
+> +++ b/package/sam-ba/Config.in.host
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_HOST_SAM_BA
+> +	bool "host sam-ba"
+> +	help
+> +	  Atmel SAM-BA? software provides an open set of tools for
+> +	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
+> +	  microcontrollers.
+> diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+> new file mode 100644
+> index 0000000..bdad695
+> --- /dev/null
+> +++ b/package/sam-ba/sam-ba.mk
 > @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_IGH_ETHERCAT
-> +       bool "igh-ethercat"
-> +       depends on BR2_LINUX_KERNEL
-> +       help
-> +         IgH EtherCAT Master for Linux.
+> +SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+> +SAM_BA_VERSION = 2.10
+> +SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
 > +
-> +         http://www.etherlab.org/en/ethercat/index.php
-> +
-> +if BR2_PACKAGE_IGH_ETHERCAT
-> +
-> +config BR2_PACKAGE_IGH_ETHERCAT_8139TOO
-> +       bool "8139too driver"
-> +
-> +config BR2_PACKAGE_IGH_ETHERCAT_E100
-> +       bool "e100 driver"
-> +
-> +config BR2_PACKAGE_IGH_ETHERCAT_E1000
-> +       bool "e1000 driver"
-> +
-> +config BR2_PACKAGE_IGH_ETHERCAT_R8169
-> +       bool "r8169 driver"
-> +
-> +endif
-> diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/
-> igh-ethercat.mk
-> new file mode 100644
-> index 0000000..b6ac5b8
-> --- /dev/null
-> +++ b/package/igh-ethercat/igh-ethercat.mk
-> @@ -0,0 +1,41 @@
-> +IGH_ETHERCAT_VERSION = stable-1.5
-> +IGH_ETHERCAT_SITE    =
-> http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
-> +IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
-> +
-> +IGH_ETHERCAT_AUTORECONF      = YES
-> +IGH_ETHERCAT_DEPENDENCIES    = linux
-> +IGH_ETHERCAT_INSTALL_STAGING = YES
-> +
-> +IGH_ETHERCAT_CONF_OPT = \
-> +       --with-linux-dir=$(LINUX_DIR)
-> +
-> +IGH_ETHERCAT_CONF_OPT += $(if
-> $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
-> +IGH_ETHERCAT_CONF_OPT += $(if
-> $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
-> +IGH_ETHERCAT_CONF_OPT += $(if
-> $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
-> +IGH_ETHERCAT_CONF_OPT += $(if
-> $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
-> +
-> +# Since we download ethercat from source control, we have to emulate
-> +# the bootstrap script that creates the ChangeLog file before running
-> +# autoreconf.  We don't want to run that script directly, since we
-> +# leave to the autotargets infrastructure the responsability of
-> +# running 'autoreconf' so that the dependencies on host-automake,
-> +# host-autoconf and al. are correct.
-> +define IGH_ETHERCAT_CREATE_CHANGELOG
-> +       touch $(@D)/ChangeLog
+> +define HOST_SAM_BA_EXTRACT_CMDS
+> +        unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
+> +        mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
+> +        rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
 > +endef
 > +
-> +IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
+> +# Since it's a prebuilt application and it does not conform to the
+> +# usual Unix hierarchy, we install it in $(HOST_DIR)/opt/sam-ba and
+> +# then create a symbolic link from $(HOST_DIR)/usr/bin to the
+> +# application binary, for easier usage.
 > +
-> +define IGH_ETHERCAT_BUILD_MODULES
-> +       $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+> +define HOST_SAM_BA_INSTALL_CMDS
+> +	mkdir -p $(HOST_DIR)/opt/sam-ba/
+> +	cp -a $(@D)/* $(HOST_DIR)/opt/sam-ba/
+> +	ln -s ../../opt/sam-ba/sam-ba $(HOST_DIR)/usr/bin/sam-ba
 > +endef
 > +
-> +IGH_ETHERCAT_POST_BUILD_HOOKS += IGH_ETHERCAT_BUILD_MODULES
+> +$(eval $(call GENTARGETS,host))
 > +
-> +define IGH_ETHERCAT_INSTALL_MODULES
-> +       $(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules_install
-> +endef
-> +
-> +IGH_ETHERCAT_POST_INSTALL_TARGET_HOOKS += IGH_ETHERCAT_INSTALL_MODULES
-> +
-> +$(eval $(call AUTOTARGETS))
-> --
-> 1.7.4.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+
+
+-- 
+Alexandre Belloni
+
+Adeneo Embedded
+Adetel Group
+
+2, ch. du Ruisseau - 69134 Ecully, France
+
+www.adeneo-embedded.com
+ 
+
+
+
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120102/7de569d9/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120102/0a701ad3/attachment.html>
