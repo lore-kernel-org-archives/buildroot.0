@@ -1,49 +1,89 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 02 Jan 2012 10:58:03 +0100
-Subject: [Buildroot] [RFC] Add systemd to buildroot
-In-Reply-To: <201112200749.10389.arnout@mind.be>
+Date: Mon, 02 Jan 2012 11:02:27 +0100
+Subject: [Buildroot] [PATCH 3/3] Migrate the packages to the new infra
+In-Reply-To: <201112202229.19551.arnout@mind.be>
 References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
- <201112200749.10389.arnout@mind.be>
-Message-ID: <4F017FAB.6050001@free-electrons.com>
+ <1322047811-12933-4-git-send-email-maxime.ripard@free-electrons.com>
+ <201112202229.19551.arnout@mind.be>
+Message-ID: <4F0180B3.5010105@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On 20/12/2011 22:29, Arnout Vandecappelle wrote:
+> On Wednesday 23 November 2011 12:30:11 Maxime Ripard wrote:
+>> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+>  I only did a partial review, so no Reviewed-by tag.
+> [snip]
+>> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+>> index 73c4969..0ff27ca 100644
+>> --- a/package/busybox/busybox.mk
+>> +++ b/package/busybox/busybox.mk
+>> @@ -30,11 +30,7 @@ endif
+>>  
+>>  # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+>>  ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+>> -define BUSYBOX_INSTALL_MDEV_SCRIPT
+>> -	[ -f $(TARGET_DIR)/etc/init.d/S10mdev ] || \
+>> -		install -D -m 0755 package/busybox/S10mdev \
+>> -			$(TARGET_DIR)/etc/init.d/S10mdev
+>> -endef
+>> +BUSYBOX_INIT_SYSV += package/busybox/S10mdev
+>  This is not actually equivalent: the original makes sure not to overwrite 
+> an existing S10mdev (coming from the skeleton).  Perhaps patch 2/3 should
+> include this test as well.
 
-On 20/12/2011 07:49, Arnout Vandecappelle wrote:
-> On Wednesday 23 November 2011 12:30:08 Maxime Ripard wrote:
->> I've been working for some time on adding systemd to buildroot in a nice way. It
->> is now in a pretty nice state I guess, at least nice enough to send an RFC and
->> get some review about the basic mechanics.
+Definitely.
+
+>>  define BUSYBOX_INSTALL_MDEV_CONF
+>>  	[ -f $(TARGET_DIR)/etc/mdev.conf ] || \
+>>  		install -D -m 0644 package/busybox/mdev.conf \
+>> @@ -139,6 +135,7 @@ define BUSYBOX_SET_INIT
+>>  endef
+>>  endif
+>>  
+>> +ifeq ($(BR2_INIT_BUSYBOX)$(BR2_INIT_SYSV),y)
+>>  define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>>  	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+>>  		[ -f $(TARGET_DIR)/etc/init.d/S01logging ] || \
+>> @@ -146,12 +143,15 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>>  				$(TARGET_DIR)/etc/init.d/S01logging; \
+>>  	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+>>  endef
+>> +else
+>> +define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>> +endef
+>> +endif
+>  This else part is not necessary: an undefined variable evaluates to nothing.
+
+Ok, good to know
+
+>>  
+>>  # We do this here to avoid busting a modified .config in configure
+>>  BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+>>  
+>>  define BUSYBOX_CONFIGURE_CMDS
+>> -	$(BUSYBOX_SET_SYSKLOGD)
+>>  	$(BUSYBOX_SET_BB_PWD)
+>>  	$(BUSYBOX_SET_LARGEFILE)
+>>  	$(BUSYBOX_SET_IPV6)
+>> @@ -177,7 +177,6 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+>>  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+>>  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+>>  	fi
+>> -	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+>>  	$(BUSYBOX_INSTALL_MDEV_CONF)
+>>  	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+>>  endef
+> [snip]
 > 
->  You didn't get much comments, so I'll try to do some review.  No testing though.
+>  By the way, doesn't systemd support sysv-style init scripts as well?
 
-Thanks :)
+It does, but you lose almost if not all the benefits of using systemd
+with sysv scripts.
 
->> While the system should boot with systemd, for a reason unknown to me, udev
->> doesn't take into account its rules, and don't tag the devices for systemd,
->> which, in turn, doesn't expose a getty.
-> 
->  This is of course a show-stopper for inclusion.  People expect the git
-> HEAD to work.
-
-Of course, and I expect it too, this is one of the reason I flagged the
-patchset as an RFC and not an actual patch :)
-
->> Another problem is that I still have some sysv init scripts added to the
->> filesystem through the skeleton. Since it is completely static, I don't find a
->> good way around this problem. Maybe we don't care. I don't know.
-> 
->  I guess you mean the S20urandom and S40network in the skeleton?  For the
-> moment, I don't think it's a problem to leave them there.  To fix it, you
-> could include a target-install hook that removes them (which obviously still
-> leaves the init scripts installed by other packages, but that should be
-> fixed separately per package).
-
-I'm not very fond of removing them neither. So let's forget them :)
 
 -- 
 Maxime Ripard, Free Electrons
