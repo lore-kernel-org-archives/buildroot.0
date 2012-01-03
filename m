@@ -1,42 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Jan 2012 21:14:12 +0100
-Subject: [Buildroot] [pull request v3] Pull request for branch
- for-2012.02/pkg-device
-In-Reply-To: <cover.1325583983.git.maxime.ripard@free-electrons.com>
-References: <y>
-	<cover.1325583983.git.maxime.ripard@free-electrons.com>
-Message-ID: <20120103211412.491fad60@skate>
+Date: Tue,  3 Jan 2012 21:22:41 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.02/ext-toolchain-updates
+Message-ID: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue,  3 Jan 2012 11:13:55 +0100,
-y at mail.free-electrons.com a ?crit :
+Hello,
 
-> are available in the git repository at:
->   http://free-electrons.com/~maxime/git/buildroot.git for-2012.02/pkg-device
-> 
-> Maxime Ripard (3):
->       Add support for package-declared devices
->       Convert busybox to the device declaration method
->       Migrate Xenomai to the new infrastructure
-> 
->  fs/common.mk                        |    4 ++++
->  package/Makefile.package.in         |    2 ++
->  package/busybox/busybox.mk          |    5 +++++
->  package/xenomai/xenomai.mk          |    8 ++++++--
->  target/generic/device_table.txt     |    2 --
->  target/generic/device_table_dev.txt |    5 -----
->  6 files changed, 17 insertions(+), 9 deletions(-)
+What follows is a set of patches doing various improvements and
+updates to the external toolchain support:
 
-I haven't actually tested those patches, but I'm ok with the principle
-and its implementation.
+ * Fixes to the x86_64 handling of BR2_GCC_TARGET_ARCH and addition of
+   the Atom processor variant. Those changes are needed to make a
+   better usage of the Sourcery CodeBench x86/x86_64 toolchain (i.e,
+   allow the selection of the available multilib variants).
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ * Improve the logic to copy libraries from the toolchain to the
+   staging directory and the target directory to handle the directory
+   organization of the Sourcery CodeBench x86/x86_64 toolchain.
+
+ * Improve the same logic to support multilib toolchains with multilib
+   variants in directories of multiple levels. For example, the MIPS
+   Sourcery CodeBench toolchain has many multilib variants, and some
+   of them are in directories like mips16/soft-float/el/. This
+   requires a small modification of the way we create the symlink that
+   allows to fake the original sysroot location.
+
+ * Expand the external toolchain wrapper to include
+   BR2_TARGET_OPTIMIZATION.
+
+ * Various updates to the available external toolchains: add ARM
+   Sourcery CodeBench 2011.03, update the MIPS Sourcery CodeBench
+   2011.03, add the PowerPC Sourcery CodeBench 2011.03, add the
+   x86/x86_64 Sourcery CodeBench 2011.09, add the Blackfin 2011R1-RC4
+   toolchain.
+
+ * Document how to use the various multilib variants available.
+
+ * Adjust the uClibc detection logic to support static-only
+   toolchains.
+
+Best regards,
+
+Thomas Petazzoni
+
+The following changes since commit 5528286147492aafa8740c09db63290042b79cb0:
+
+  rt-tests: fix build issues on uClibc (2012-01-03 09:15:17 +0100)
+
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2012.02/ext-toolchain-updates
+
+Thomas Petazzoni (14):
+      Add x86_64 variants to BR2_GCC_TARGET_ARCH
+      Add the Atom processor in the list of supported x86/x86_64 processors
+      Improve external toolchain logic to support IA32 Sourcery CodeBench toolchain
+      Support multilib variants in sub-subdirectories
+      Expand external toolchain wrapper to custom flags
+      external-toolchain: remove 2009q1 ARM Sourcery toolchain
+      external-toolchain: add Sourcery CodeBench ARM 2011.09
+      external-toolchain: bump MIPS 2011.03 from -93 to -110
+      external-toolchain: add Sourcery CodeBench PowerPC 2011.03
+      external-toolchain: add Sourcery CodeBench x86/x86_64 2011.09
+      external-toolchain: Blackfin.uclinux.org 2011R1-RC4
+      external-toolchain: details on selecting the multilib variants
+      external-toolchain: run checks even on extracted toolchains
+      external-toolchain: adjust check for uClibc static toolchains
+
+ target/Config.in.arch                              |   15 ++
+ toolchain/helpers.mk                               |   30 ++-
+ toolchain/toolchain-external/Config.in             |  205 ++++++++++++++++++--
+ toolchain/toolchain-external/ext-tool.mk           |   97 +++++++---
+ .../toolchain-external/ext-toolchain-wrapper.c     |    3 +
+ 5 files changed, 302 insertions(+), 48 deletions(-)
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
