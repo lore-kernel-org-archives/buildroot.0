@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Jan 2012 21:46:05 +0100
-Subject: [Buildroot] [PATCH 6/7] openocd: add host variant
-In-Reply-To: <CAAXf6LX6R-aW4bPtv6tg933PomgwiBpZvrO2-p+5-jeMVG-Biw@mail.gmail.com>
-References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
- <37af45f118d422d240b625f1169ddb7fb93a60f3.1325178529.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LX6R-aW4bPtv6tg933PomgwiBpZvrO2-p+5-jeMVG-Biw@mail.gmail.com>
-Message-ID: <20120103214605.1dc27f74@skate>
+Date: Tue,  3 Jan 2012 21:48:45 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.02/xenomai-update
+Message-ID: <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 2 Jan 2012 14:13:51 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+The following changes since commit 5528286147492aafa8740c09db63290042b79cb0:
 
-> >  source "package/uboot-tools/Config.in.host"
-> > +source "package/openocd/Config.in.host"
-> 
-> Shouldn't we be ordering this alphabetically?
+  rt-tests: fix build issues on uClibc (2012-01-03 09:15:17 +0100)
 
-Correct, thanks! I fixed it (and for sam-ba as well), and pushed a new
-version on my public repository. I'll wait for other comments (if any)
-before sending a new v3, unless Peter pulls the branch in the mean time.
+are available in the git repository at:
+  http://free-electrons.com/~thomas/buildroot.git for-2012.02/xenomai-update
 
-Thanks!
+Thomas Petazzoni (3):
+      xenomai: bump to 2.6.0
+      xenomai: restrict to the set of supported architectures
+      xenomai: mention which kernel versions are supported
 
-Thomas
+ linux/Config.ext.in                         |    8 +++
+ package/xenomai/Config.in                   |   62 +----------------------
+ package/xenomai/xenomai-fix-lfs-issue.patch |   72 +++++++++++++++++++++++++++
+ package/xenomai/xenomai.mk                  |   11 +----
+ 4 files changed, 83 insertions(+), 70 deletions(-)
+ create mode 100644 package/xenomai/xenomai-fix-lfs-issue.patch
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
