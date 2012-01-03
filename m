@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  3 Jan 2012 21:22:55 +0100
-Subject: [Buildroot] [PATCH 14/14] external-toolchain: adjust check for
-	uClibc static toolchains
-In-Reply-To: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <4d6093b12f4299eae0ff52f07b583bac3faea924.1325622133.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Jan 2012 21:46:05 +0100
+Subject: [Buildroot] [PATCH 6/7] openocd: add host variant
+In-Reply-To: <CAAXf6LX6R-aW4bPtv6tg933PomgwiBpZvrO2-p+5-jeMVG-Biw@mail.gmail.com>
+References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
+ <37af45f118d422d240b625f1169ddb7fb93a60f3.1325178529.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LX6R-aW4bPtv6tg933PomgwiBpZvrO2-p+5-jeMVG-Biw@mail.gmail.com>
+Message-ID: <20120103214605.1dc27f74@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current check for uClibc toolchain was verifying that a
-ld-uClibc.so dynamic loader was present. However, with static-only
-uClibc toolchains, this does not work. Instead, we check for an
-uClibc-specific header file in the sysroot.
+Le Mon, 2 Jan 2012 14:13:51 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/helpers.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> >  source "package/uboot-tools/Config.in.host"
+> > +source "package/openocd/Config.in.host"
+> 
+> Shouldn't we be ordering this alphabetically?
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3f4818f..6e7f1f4 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -196,7 +196,7 @@ check_uclibc_feature = \
- #
- check_uclibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if ! test -f $${SYSROOT_DIR}/lib/ld*-uClibc.so.* ; then \
-+	if ! test -f $${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
+Correct, thanks! I fixed it (and for sam-ba as well), and pushed a new
+version on my public repository. I'll wait for other comments (if any)
+before sending a new v3, unless Peter pulls the branch in the mean time.
+
+Thanks!
+
+Thomas
 -- 
-1.7.4.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
