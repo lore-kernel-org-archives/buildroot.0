@@ -1,73 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  3 Jan 2012 21:22:47 +0100
-Subject: [Buildroot] [PATCH 06/14] external-toolchain: remove 2009q1 ARM
-	Sourcery toolchain
+Date: Tue,  3 Jan 2012 21:22:51 +0100
+Subject: [Buildroot] [PATCH 10/14] external-toolchain: add Sourcery
+	CodeBench x86/x86_64 2011.09
 In-Reply-To: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cb458acad9b4a915f6d0f576a2133d633b02e97f.1325622133.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a7f91889d3fa36885c3bb6709ebff330780aac81.1325622133.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We are going to add one more ARM Sourcery toolchain version, so it's
-time to remove the oldest version.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   15 ---------------
- toolchain/toolchain-external/ext-tool.mk |    5 +----
- 2 files changed, 1 insertions(+), 19 deletions(-)
+ toolchain/toolchain-external/Config.in   |   16 ++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 19 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index eadfe50..f983727 100644
+index 271f838..3221d3d 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -59,20 +59,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
-             - ARMv4T, little endian, soft-float, glibc
-             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+@@ -219,6 +219,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	  has support for the following variants:
+             - SH2A, uClibc, big endian
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
--	bool "Sourcery CodeBench ARM 2009q1"
--	depends on BR2_arm
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_INSTALL_LIBSTDCPP
--	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.3.3, binutils 2.19, glibc 2.8
--	  and gdb 6.8 and kernel headers 2.6.30. It has support for
--	  the following variants:
--            - ARMv5T, little endian, soft-float, glibc
--            - ARMv4T, little endian, soft-float, glibc
--            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	bool "Sourcery CodeBench MIPS 2011.03"
- 	depends on BR2_mips || BR2_mipsel
-@@ -262,7 +248,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
++	bool "Sourcery CodeBench x86/x86_64 2011.09"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Sourcery CodeBench toolchain for the x86/x86_64
++	  architectures, from Mentor Graphics. It uses gcc 4.6.1,
++	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
++	  3.0.1. It has support for the following variants:
++	    - Intel Pentium 4, glibc, 32 bits
++            - Intel Atom, glibc, 32 bits
++            - Intel Xeon, glibc, 64 bits
++            - Intel Core 2, glibc, 64 bits
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+ 	bool "Sourcery CodeBench x86/x86_64 2010.09"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -294,6 +309,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
++	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
+ 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b768c0b..1864fe9 100644
+index 9346dc0..7432074 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -174,10 +174,7 @@ else
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package5383/public/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
+@@ -216,6 +216,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-36-sh-uclinux-i686-pc-linux-gnu.tar.bz
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/sgpp/lite/ia32/portal/package7682/public/i686-pc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=ia32-2010.09-44-i686-pc-linux-gnu-i386-linux.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
++TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
+ TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
+ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
 -- 
 1.7.4.1
