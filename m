@@ -1,31 +1,168 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 3 Jan 2012 08:16:00 -0600
-Subject: [Buildroot] Different runlevels support
-In-Reply-To: <201201030810.51116.minimod@morethan.org>
-References: <1F383CDA589639468828C7E2B75EDE9D096DE3C1@POCITMSEXMB03.LntUniverse.com>
- <1F383CDA589639468828C7E2B75EDE9D096DE461@POCITMSEXMB03.LntUniverse.com>
- <201201030810.51116.minimod@morethan.org>
-Message-ID: <201201030816.02413.minimod@morethan.org>
+From: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Date: Tue,  3 Jan 2012 19:49:28 +0100
+Subject: [Buildroot] [PATCH 2/2] Add defconfigs for LPC3250 boards
+In-Reply-To: <1325616568-17471-1-git-send-email-abelloni@adeneo-embedded.com>
+References: <1325616568-17471-1-git-send-email-abelloni@adeneo-embedded.com>
+Message-ID: <1325616568-17471-3-git-send-email-abelloni@adeneo-embedded.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue January 3 2012, Michael S. Zick wrote:
-> > Larsen & Toubro Limited
-> > 
-> > www.larsentoubro.com
-> > 
-> > This Email may contain confidential or privileged information for the 
-> > intended recipient (s) If you are not the intended recipient, please 
-> > do not use or disseminate the information, notify the sender and delete 
-> > it from your system.   
-> > 
-> 
+ea3250: Embedded Artists
+http://www.embeddedartists.com/products/kits/lpc3250_kit.php
 
-By the way,
-Lots of luck in getting the World to take down all the copies of the
-sysvinit manual.  ;-)
+fdi3250: Future Designs Inc.
+http://www.teamfdi.com/development-tools-kits/products/6/SOMDIMM-LPC3250
 
-Mike
+phy3250: Phytec
+http://www.phytec.com/products/som/ARM-XScale/phyCORE-ARM9-LPC3250.html
+
+Signed-off-by: Alexandre Belloni <abelloni@adeneo-embedded.com>
+---
+ configs/ea3250_defconfig  |   39 +++++++++++++++++++++++++++++++++++++++
+ configs/fdi3250_defconfig |   39 +++++++++++++++++++++++++++++++++++++++
+ configs/phy3250_defconfig |   39 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 117 insertions(+), 0 deletions(-)
+ create mode 100644 configs/ea3250_defconfig
+ create mode 100644 configs/fdi3250_defconfig
+ create mode 100644 configs/phy3250_defconfig
+
+diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+new file mode 100644
+index 0000000..da84c7e
+--- /dev/null
++++ b/configs/ea3250_defconfig
+@@ -0,0 +1,39 @@
++# Architecture
++BR2_arm=y
++BR2_arm926t=y
++
++BR2_ARM_TYPE="ARM926T"
++BR2_ARM_EABI=y
++
++#
++# GCC Options
++# We need to force GCC 4.3.x because it is the last version
++# that will compile a kernel with ethernet working correctly
++BR2_GCC_VERSION_4_3_X=y
++
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="ea3250"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_VERSION="master"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_LPC32XXCDL=y
++BR2_TARGET_LPC32XXCDL_BOARDNAME="ea3250"
++
++
++#
++# Kernel
++#
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_VERSION="master"
++BR2_LINUX_KERNEL_PATCH=""
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="ea3250"
++BR2_LINUX_KERNEL_UIMAGE=y
++
+diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
+new file mode 100644
+index 0000000..505dc8b
+--- /dev/null
++++ b/configs/fdi3250_defconfig
+@@ -0,0 +1,39 @@
++# Architecture
++BR2_arm=y
++BR2_arm926t=y
++
++BR2_ARM_TYPE="ARM926T"
++BR2_ARM_EABI=y
++
++#
++# GCC Options
++# We need to force GCC 4.3.x because it is the last version
++# that will compile a kernel with ethernet working correctly
++BR2_GCC_VERSION_4_3_X=y
++
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_VERSION="master"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_LPC32XXCDL=y
++BR2_TARGET_LPC32XXCDL_BOARDNAME="fdi3250"
++
++
++#
++# Kernel
++#
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_VERSION="master"
++BR2_LINUX_KERNEL_PATCH=""
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="fdi3250"
++BR2_LINUX_KERNEL_UIMAGE=y
++
+diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
+new file mode 100644
+index 0000000..d46d719
+--- /dev/null
++++ b/configs/phy3250_defconfig
+@@ -0,0 +1,39 @@
++# Architecture
++BR2_arm=y
++BR2_arm926t=y
++
++BR2_ARM_TYPE="ARM926T"
++BR2_ARM_EABI=y
++
++#
++# GCC Options
++# We need to force GCC 4.3.x because it is the last version
++# that will compile a kernel with ethernet working correctly
++BR2_GCC_VERSION_4_3_X=y
++
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="phy3250"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_VERSION="master"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_LPC32XXCDL=y
++BR2_TARGET_LPC32XXCDL_BOARDNAME="phy3250"
++
++
++#
++# Kernel
++#
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_VERSION="master"
++BR2_LINUX_KERNEL_PATCH=""
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="phy3250"
++BR2_LINUX_KERNEL_UIMAGE=y
++
+-- 
+1.7.7.3
