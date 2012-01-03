@@ -1,10 +1,10 @@
 From: y at mail.free-electrons.com <y@mail.free-electrons.com>
-Date: Tue,  3 Jan 2012 11:13:55 +0100
-Subject: [Buildroot] [pull request v3] Pull request for branch
-	for-2012.02/pkg-device
-In-Reply-To: <y>
+Date: Tue,  3 Jan 2012 11:13:56 +0100
+Subject: [Buildroot] [PATCH 1/3] Add support for package-declared devices
+In-Reply-To: <cover.1325583983.git.maxime.ripard@free-electrons.com>
 References: <y>
-Message-ID: <cover.1325583983.git.maxime.ripard@free-electrons.com>
+ <cover.1325583983.git.maxime.ripard@free-electrons.com>
+Message-ID: <7f63de52a6a55277a25c25024285269922ebbdb8.1325583983.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,43 @@ To: buildroot@busybox.net
 
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-Hi List,
+Add a way for packages to declare files they need instead of relying
+only on device tables, which creates files no matter if the package is
+indeed enabled, as we can see for busybox.
 
-Here is a new version of the patchset adding a bit of infrastructure to handle
-per package device creation and permission modifications. Since v2, I dropped
-the renaming of the device table, and splitted the $(PKG)_FILES into
-$(PKG)_DEVICES for device files creation and $(PKG)_PERMISSIONS for permissions
-modifications. The only difference between the two are while $(PKG)_PERMISSIONS
-is always used, $(PKG)_DEVICES is only used when using a static /dev.
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+ fs/common.mk                |    4 ++++
+ package/Makefile.package.in |    2 ++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-
-The following changes since commit 68902f743729b3482bb6bc2ae9d0306aa9c00f65:
-
-  ti-utils: unbreak build after libnl version bump (2011-12-26 19:33:43 +0100)
-
-are available in the git repository at:
-  http://free-electrons.com/~maxime/git/buildroot.git for-2012.02/pkg-device
-
-Maxime Ripard (3):
-      Add support for package-declared devices
-      Convert busybox to the device declaration method
-      Migrate Xenomai to the new infrastructure
-
- fs/common.mk                        |    4 ++++
- package/Makefile.package.in         |    2 ++
- package/busybox/busybox.mk          |    5 +++++
- package/xenomai/xenomai.mk          |    8 ++++++--
- target/generic/device_table.txt     |    2 --
- target/generic/device_table_dev.txt |    5 -----
- 6 files changed, 17 insertions(+), 9 deletions(-)
-
-Thanks,
+diff --git a/fs/common.mk b/fs/common.mk
+index f793ff9..d426f37 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -50,6 +50,10 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+ 	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
++	echo -e '$(subst $(sep),\n,$(PACKAGES_DEVICES_TABLE))' >> $(FULL_DEVICE_TABLE)
++endif
++	echo -e '$(subst $(sep),\n,$(PACKAGES_PERMISSIONS_TABLE))' >> $(FULL_DEVICE_TABLE)
+ 	echo "$(HOST_DIR)/usr/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ endif
+ 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index e85eb15..24333f7 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -713,6 +713,8 @@ endif
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+ 
+ TARGETS += $(1)
++PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
++PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
+ 
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
-Maxime Ripard
+1.7.4.1
