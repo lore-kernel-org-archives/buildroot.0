@@ -1,46 +1,86 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 3 Jan 2012 11:48:58 +0100
-Subject: [Buildroot] [PATCH] Rework of shutdown policy in inittab
-In-Reply-To: <4F02D6E0.7070909@free-electrons.com>
-References: <1314966310-4360-1-git-send-email-maxime.ripard@free-electrons.com>
- <CAAXf6LU1QuFL=pOD09e0dzA1ntsauaFSD2qUr-OPEbmXB74fyw@mail.gmail.com>
- <20111214174653.7319339e@skate>
- <CAAXf6LUiEn75JpSsLK4O5_cj8qxgqRhEvNLjQ8sFAB2UjEYeEg@mail.gmail.com>
- <4F02D6E0.7070909@free-electrons.com>
-Message-ID: <CAAXf6LV-Q8yg+7gdswavGnXn5sOwywSzi9h-zcbt2pyWNzb-=A@mail.gmail.com>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Tue, 3 Jan 2012 08:10:48 -0600
+Subject: [Buildroot] Different runlevels support
+In-Reply-To: <1F383CDA589639468828C7E2B75EDE9D096DE461@POCITMSEXMB03.LntUniverse.com>
+References: <1F383CDA589639468828C7E2B75EDE9D096DE3C1@POCITMSEXMB03.LntUniverse.com>
+ <CALR4fEKNQp=Ee=V0WQAqeYjE_L5E9Rr=QALLtuUuUhz=wFKEnA@mail.gmail.com>
+ <1F383CDA589639468828C7E2B75EDE9D096DE461@POCITMSEXMB03.LntUniverse.com>
+Message-ID: <201201030810.51116.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 3, 2012 at 11:22 AM, Maxime Ripard <
-maxime.ripard@free-electrons.com> wrote:
+On Mon January 2 2012, Mahanteshwari Hiremath wrote:
+> >>Busybox's init does not support run levels. All scripts are executed always.
+> 
+> >>Are you sure you are running sysv init and not busybox?
+> 
+> Hi,
+> Yes I am using sysv init not busy box, I have completely disabled init
+> utilities in busybox and enabled sysvinit. 
+>  And the contets of the sysvinit generated inittab are like this,
+> 
 
-> On 15/12/2011 09:44, Thomas De Schampheleire wrote:
-> > On Wed, Dec 14, 2011 at 5:46 PM, Thomas Petazzoni
-> > <thomas.petazzoni@free-electrons.com> wrote:
-> >> Le Wed, 7 Dec 2011 07:52:20 +0100,
-> >> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit
-> :
-> >>
-> >>> I think there are at least two solutions:
-> >>> 1. Keep the new behavior created with this patch, but make sure that
-> >>> the release notes clearly state this behavior change and update the
-> >>> documentation.
-> >>
-> >> I'd go for this one. All initscripts in Buildroot itself implement the
-> >> start/stop/restart logic, so author of scripts that haven't been
-> >> submitted upstream should have read this as a suggestion of following a
-> >> similar scheme.
-> >
-> > No problem for me. I also think this is the best alternative.
->
-> Then I guess we are all ok for it to be merged ? :)
->
+The command: 'man inittab' on a system with sysv installed will give
+you all the gory details, but...
 
-I am, but I'd like to see something added to the documentation, or at least
-a mention of this in the CHANGES file.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120103/0d57aa49/attachment.html>
+> 
+> # /etc/inittab
+> #
+> # This inittab is a basic inittab sample for sysvinit, which mimics
+> # Buildroot's default inittab for Busybox.
+> id:1:initdefault:
+> 
+> proc::sysinit:/bin/mount -t proc proc /proc
+> rwmo::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+> dpts::sysinit:/bin/mkdir -p /dev/pts
+> moun::sysinit:/bin/mount -a
+> host::sysinit:/bin/hostname -F /etc/hostname
+> init::sysinit:/etc/init.d/rcS
+> 
+> 1:1:respawn:/sbin/getty 38400 tty1
+> 2:1:respawn:/sbin/getty 38400 tty2
+> 
+
+If you want the above to happen in all levels except 0 & 6 :
+1:12345:respawn:/sbin/getty 38400 tty1
+2:12345:respawn:/sbin/getty 38400 tty2
+
+Other examples in the man(ual), such as how to use the S&K scripts.
+If you don't have a system with the sysvinit manual installed,
+Google can find you a copy posted on the web.
+
+Mike
+> S0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+> 
+> # Logging junk
+> mess::sysinit:/bin/touch /var/log/messages
+> sysl:1:respawn:/sbin/syslogd -n -m 0
+> klog:1:respawn:/sbin/klogd -n
+> 
+> # Stuff to do for the 3-finger salute
+> rebo::ctrlaltdel:/sbin/reboot
+> 
+> # Stuff to do before rebooting
+> sklo:6:wait:/usr/bin/killall klogd
+> ssys:6:wait:/usr/bin/killall syslogd
+> umou:6:wait:/bin/umount -a -r
+> swap:6:wait:/sbin/swapoff -a
+> 
+> 
+> can u tell what else to do next to get all other runlevels.
+> 
+> 
+> 
+> Regards,
+> Mahanteshwari.
+> 
+> 
+> Larsen & Toubro Limited
+> 
+> www.larsentoubro.com
+> 
+> This Email may contain confidential or privileged information for the intended recipient (s) If you are not the intended recipient, please do not use or disseminate the information, notify the sender and delete it from your system.
+> 
