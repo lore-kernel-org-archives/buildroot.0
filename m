@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 4 Jan 2012 08:55:51 +0100
-Subject: [Buildroot] [PATCH 04/14] Support multilib variants in
-	sub-subdirectories
-In-Reply-To: <c92c89ab091f3560c1339b0fbcf5958ef7810f1c.1325622133.git.thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Jan 2012 09:09:15 +0100
+Subject: [Buildroot] [PATCH 09/14] external-toolchain: add Sourcery
+ CodeBench PowerPC 2011.03
+In-Reply-To: <0df1652050c555f0c6ca02522ae1260bf1679697.1325622133.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
- <c92c89ab091f3560c1339b0fbcf5958ef7810f1c.1325622133.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LVF73FoLcUkEa3=bLrWUfhmdAzuKkAr8qK_bobqr5X+Fw@mail.gmail.com>
+ <0df1652050c555f0c6ca02522ae1260bf1679697.1325622133.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LU2CU-7PCR8bYaJZj4XF+Rd6UNZfVHGi4jo3O8QcW6Suw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,71 +15,93 @@ To: buildroot@busybox.net
 On Tue, Jan 3, 2012 at 9:22 PM, Thomas Petazzoni <
 thomas.petazzoni@free-electrons.com> wrote:
 
-> When an external toolchain has multiple variants organized in
-> sub-directories, Buildroot only copies the selected sysroot and not
-> all sysroots. In order to make this work, Buildroot creates a symbolic
-> link of the name of the original selected sysroot to the main sysroot
-> to trick the compiler so that it finds its libraries at the expected
-> location.
->
-> I.e, if the toolchain as the following organization (example take on
-> the ARM CodeSourcery toolchain) :
->
->     .          for ARMv5T
->     armv4      for ARMv4T
->     thumb2     for ARMv7-A/Thumb
->
-> and ARMv4T is selected, then Buildroot will copy the contents of
-> armv4t/ from the toolchain into its $(STAGING_DIR) and then create a
-> $(STAGING_DIR)/armv4t symbolic link to $(STAGING_DIR).
->
-> However, our logic to do so only works when there was one directory
-> level for multilib sysroots. But in the MIPS CodeSourcery toolchain
-> there are multiple levels. For example, the MIPS16 soft-float
-> little-endian sysroot variant is in mips16/soft-float/el/ compared to
-> the main sysroot.
->
-> This patch improves our logic to support this case. The logic is a bit
-> more complicated as we don't want to create a symbolic link to an
-> absolute path, but a symbolic link to a relative path, because we want
-> the host/ directory to be relocatable.
->
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  toolchain/helpers.mk |    9 ++++++++-
->  1 files changed, 8 insertions(+), 1 deletions(-)
+>  toolchain/toolchain-external/Config.in   |   19 +++++++++++++++++++
+>  toolchain/toolchain-external/ext-tool.mk |    3 +++
+>  2 files changed, 22 insertions(+), 0 deletions(-)
 >
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 4c3f240..3f4818f 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -103,7 +103,14 @@ copy_toolchain_sysroot = \
->                if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
->                        cp -a $${SYSROOT_DIR}/usr/include
-> $(STAGING_DIR)/usr ; \
->                fi ; \
-> -               ln -s . $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-> +               mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-> +               relpath="./" ; \
-> +               nbslashs=`echo -n $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc
-> -c` ; \
-> +               for slash in `seq 1 $${nbslashs}` ; do \
-> +                       relpath=$${relpath}"../" ; \
-> +               done ; \
-> +               ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-> +               echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} ->
-> $${relpath}" ; \
->        fi ; \
->        find $(STAGING_DIR) -type d | xargs chmod 755
+> diff --git a/toolchain/toolchain-external/Config.in
+> b/toolchain/toolchain-external/Config.in
+> index 8e5d53f..271f838 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -119,6 +119,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+>             - MIPS32 big endian soft float uclibc
+>             - MIPS32 little endian soft float uclibc
 >
+> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+> +       bool "Sourcery CodeBench PowerPC 2011.03"
+> +       depends on BR2_powerpc
+> +       select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +       select BR2_INSTALL_LIBSTDCPP
+> +       help
+> +         Sourcery CodeBench toolchain for the PowerPC architecture,
+> +         from Sourcery CodeBench. It uses gcc 4.5.2, binutils 2.20.51,
 >
-Can we be sure that ARCH_SUBDIR never contains a trailing slash?
-It comes from:
-ARCH_SUBDIR=`$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)
--print-multi-directory`
 
-If not (I don't know myself), then we should remove that first as it would
-result in nbslashs to be too big.
+Didn't you mean 'from Mentor Graphics' here?
+
+
+
+> +         glibc 2.13, gdb 7.2.50 and kernel headers 2.6.38. It has
+> +         support for the following variants:
+> +            - 603 glibc, 32 bits
+> +            - 603 soft float glibc, 32 bits
+> +            - e600 altivec glibc, 32 bits
+> +            - e500v1 glibc, 32 bits
+> +            - e500v2 glibc, 32 bits
+> +            - e500mc glibc, 32 bits
+> +            - 970 glibc hard-float, 64 bits
+> +
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+>        bool "Sourcery CodeBench PowerPC 2010.09"
+>        depends on BR2_powerpc
+> @@ -270,6 +288,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>        default "mips-linux-gnu"         if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+>        default "mips-linux-gnu"         if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+>        default "powerpc-linux-gnu"      if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+> +       default "powerpc-linux-gnu"      if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+>        default "sh-linux-gnu"           if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+>        default "sh-linux-gnu"           if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+>        default "sh-uclinux"             if
+> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+> diff --git a/toolchain/toolchain-external/ext-tool.mkb/toolchain/toolchain-external/
+> ext-tool.mk
+> index 92723af..9346dc0 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -198,6 +198,9 @@
+> TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-110-mips-linux-gnu-i686-pc-linux-gnu.tar.
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+>  TOOLCHAIN_EXTERNAL_SITE=
+> http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
+>
+>  TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103),y)
+> +TOOLCHAIN_EXTERNAL_SITE=
+> http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
+>
+> +TOOLCHAIN_EXTERNAL_SOURCE=freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2<http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/%0A+TOOLCHAIN_EXTERNAL_SOURCE=freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2>
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
+>  TOOLCHAIN_EXTERNAL_SITE=
+> http://sourcery.mentor.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
+>
+>  TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+> --
+> 1.7.4.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120104/263a3a35/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120104/f857e8a6/attachment.html>
