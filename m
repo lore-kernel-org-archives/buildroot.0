@@ -1,43 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 4 Jan 2012 09:37:49 +0100
-Subject: [Buildroot] [PATCH 04/14] Support multilib variants in
-	sub-subdirectories
-In-Reply-To: <20120104092403.7727719c@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Jan 2012 09:44:09 +0100
+Subject: [Buildroot] [PATCH 02/14] Add the Atom processor in the list of
+	supported x86/x86_64 processors
+In-Reply-To: <d0643d15e126a270c3d8b60593f620579a4e4b83.1325622133.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 3 Jan 2012 21:22:43 +0100")
 References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
- <c92c89ab091f3560c1339b0fbcf5958ef7810f1c.1325622133.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LVF73FoLcUkEa3=bLrWUfhmdAzuKkAr8qK_bobqr5X+Fw@mail.gmail.com>
- <20120104092403.7727719c@skate>
-Message-ID: <CAAXf6LXuzVx7Chuz2C91piaDSkarECT71ihRN+RrSW-+RtmBtg@mail.gmail.com>
+ <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
+ <d0643d15e126a270c3d8b60593f620579a4e4b83.1325622133.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <874nwbc0x2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 4, 2012 at 9:24 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Le Wed, 4 Jan 2012 08:55:51 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
-> > Can we be sure that ARCH_SUBDIR never contains a trailing slash?
-> > It comes from:
-> > ARCH_SUBDIR=`$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)
-> > -print-multi-directory`
->
-> Hum, it no longer comes from -print-multi-directory as per 03/14.
-> ARCH_SUBDIR is computed as follows:
->
-> +       ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e
-> "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
->
-> As you can see, the sed expression removes the trailing slash.
->
-> Is this correct?
->
+ Thomas> This allows to easily select the corresponding Atom multilib variant
+ Thomas> in the Sourcery CodeBench toolchain.
 
-Ok, I took the ARCH_SUBDIR from an unpatched repo not realizing it changed
-as well. My bad..
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120104/274bd227/attachment.html>
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  target/Config.in.arch |   10 ++++++++++
+ Thomas>  1 files changed, 10 insertions(+), 0 deletions(-)
+
+ Thomas> diff --git a/target/Config.in.arch b/target/Config.in.arch
+ Thomas> index 7faa010..b5ff694 100644
+ Thomas> --- a/target/Config.in.arch
+ Thomas> +++ b/target/Config.in.arch
+ Thomas> @@ -266,6 +266,8 @@ config BR2_x86_nocona
+ Thomas>  	bool "nocona"
+ Thomas>  config BR2_x86_core2
+ Thomas>  	bool "core2"
+ Thomas> +config BR2_x86_atom
+ Thomas> +	bool "atom"
+
+Atom support was only added to GCC in 4.5, so please add a comment
+mentioning this similar to how we do it for Cortex A8/A9.
+
+-- 
+Bye, Peter Korsgaard
