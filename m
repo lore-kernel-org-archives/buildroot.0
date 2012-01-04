@@ -1,30 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Jan 2012 09:50:32 +0100
-Subject: [Buildroot] [PATCH 02/14] Add the Atom processor in the list of
- supported x86/x86_64 processors
-In-Reply-To: <874nwbc0x2.fsf@macbook.be.48ers.dk>
-References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
- <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
- <d0643d15e126a270c3d8b60593f620579a4e4b83.1325622133.git.thomas.petazzoni@free-electrons.com>
- <874nwbc0x2.fsf@macbook.be.48ers.dk>
-Message-ID: <20120104095032.08ffc51e@skate>
+From: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Date: Wed, 04 Jan 2012 12:12:54 +0100
+Subject: [Buildroot] [PATCH 0/2] V2: Add defconfigs for LPC3250 boards
+In-Reply-To: <20120103210959.703bc30b@skate>
+References: <1325616568-17471-1-git-send-email-abelloni@adeneo-embedded.com>
+ <20120103210959.703bc30b@skate>
+Message-ID: <1325675574.2442.18.camel@emblysd024.adetel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 04 Jan 2012 09:44:09 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+On Tue, 2012-01-03 at 21:09 +0100, Thomas Petazzoni wrote:
+> Le Tue,  3 Jan 2012 19:49:26 +0100,
+> Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
+> 
+> > I also fixed the gcc version to 4.3.x as using a later version seems to
+> > break the network drivers.
+> 
+> It's not a show-stopper for inclusion in Buildroot, but is there some
+> debugging effort going on to fix this?
+> 
 
-> Atom support was only added to GCC in 4.5, so please add a comment
-> mentioning this similar to how we do it for Cortex A8/A9.
+Not so sure but I reported the bug upstream and it seems that anyway,
+they it the same bug while using their 2.6.39 port.
 
-Ok, will do, thanks.
+I'll ask again.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Alexandre Belloni
+
+Adeneo Embedded
+Adetel Group
+
+2, ch. du Ruisseau - 69134 Ecully, France
+
+www.adeneo-embedded.com
+ 
