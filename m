@@ -1,50 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  4 Jan 2012 14:02:19 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: update stable kernel to version 3.1.7
-In-Reply-To: <1325696539-30011-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1325696539-30011-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1325696539-30011-2-git-send-email-gustavo@zacarias.com.ar>
+From: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Date: Wed,  4 Jan 2012 18:13:33 +0100
+Subject: [Buildroot] [PATCH v3 0/2] Add defconfigs for LPC3250 boards
+Message-ID: <1325697215-29906-1-git-send-email-abelloni@adeneo-embedded.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+V3 using feedback from Thomas.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 892a503..66e06c8 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_1
- 
- config BR2_LINUX_KERNEL_3_1
--	bool "3.1.6"
-+	bool "3.1.7"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -58,7 +58,7 @@ endchoice
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
- 	string "Kernel version"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
--	default "3.1.6"
-+	default "3.1.7"
- 
- config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
-@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.1.6" if BR2_LINUX_KERNEL_3_1
-+	default "3.1.7" if BR2_LINUX_KERNEL_3_1
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Alexandre Belloni (2):
+  lpc32xx: Add CDL to the available bootloaders
+  Add defconfigs for LPC3250 boards
+
+ boot/Config.in                                     |    1 +
+ boot/lpc32xxcdl/Config.in                          |   10 +
+ .../lpc32xxcdl/lpc32xxcdl-2.11-compiler_name.patch |   52 ++
+ .../lpc32xxcdl-2.11-delete_redundant_files.patch   |  964 ++++++++++++++++++++
+ boot/lpc32xxcdl/lpc32xxcdl-2.11-libnosys_gnu.patch |  183 ++++
+ boot/lpc32xxcdl/lpc32xxcdl-2.11-slashes.patch      |  521 +++++++++++
+ boot/lpc32xxcdl/lpc32xxcdl.mk                      |   60 ++
+ configs/ea3250_defconfig                           |   39 +
+ configs/fdi3250_defconfig                          |   39 +
+ configs/phy3250_defconfig                          |   39 +
+ 10 files changed, 1908 insertions(+), 0 deletions(-)
+ create mode 100644 boot/lpc32xxcdl/Config.in
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-compiler_name.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-delete_redundant_files.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-libnosys_gnu.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-slashes.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl.mk
+ create mode 100644 configs/ea3250_defconfig
+ create mode 100644 configs/fdi3250_defconfig
+ create mode 100644 configs/phy3250_defconfig
+
 -- 
-1.7.3.4
+1.7.8.2
