@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  4 Jan 2012 12:30:02 +0100
-Subject: [Buildroot] [PATCH v5 3/6] New package: python-dpkt
+Date: Wed,  4 Jan 2012 12:30:03 +0100
+Subject: [Buildroot] [PATCH v5 4/6] New package: python-setuptools
 In-Reply-To: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
 References: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1325676605-31194-4-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1325676605-31194-5-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,79 @@ To: buildroot@busybox.net
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in                  |    1 +
- package/python-dpkt/Config.in      |   11 +++++++++++
- package/python-dpkt/python-dpkt.mk |   22 ++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 0 deletions(-)
- create mode 100644 package/python-dpkt/Config.in
- create mode 100644 package/python-dpkt/python-dpkt.mk
+ package/Config.in                              |    1 +
+ package/python-setuptools/Config.in            |    8 +++++
+ package/python-setuptools/python-setuptools.mk |   34 ++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-setuptools/Config.in
+ create mode 100644 package/python-setuptools/python-setuptools.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6ab893f..bb5e5b0 100644
+index bb5e5b0..71e1889 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -238,6 +238,7 @@ source "package/php/Config.in"
- source "package/python/Config.in"
- if BR2_PACKAGE_PYTHON
- menu "external python modules"
-+source "package/python-dpkt/Config.in"
+@@ -241,6 +241,7 @@ menu "external python modules"
+ source "package/python-dpkt/Config.in"
  source "package/python-mad/Config.in"
  source "package/python-serial/Config.in"
++source "package/python-setuptools/Config.in"
  endmenu
-diff --git a/package/python-dpkt/Config.in b/package/python-dpkt/Config.in
+ endif
+ source "package/ruby/Config.in"
+diff --git a/package/python-setuptools/Config.in b/package/python-setuptools/Config.in
 new file mode 100644
-index 0000000..aac9f09
+index 0000000..63c2b01
 --- /dev/null
-+++ b/package/python-dpkt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_DPKT
-+	bool "python-dpkt"
++++ b/package/python-setuptools/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_SETUPTOOLS
++	bool "python-setuptools"
 +	depends on BR2_PACKAGE_PYTHON
 +	select BR2_PACKAGE_PYTHON_ZLIB
 +	help
-+	  Fast, simple packet creation / parsing, with definitions
-+	  for the basic TCP/IP protocols.
++	  Download, build, install, upgrade, and uninstall Python packages.
 +
-+	  http://code.google.com/p/dpkt/
-+
-+
-diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
++	  http://pypi.python.org/pypi/setuptools
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
 new file mode 100644
-index 0000000..7ac873c
+index 0000000..b75987b
 --- /dev/null
-+++ b/package/python-dpkt/python-dpkt.mk
-@@ -0,0 +1,22 @@
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -0,0 +1,34 @@
 +#############################################################
 +#
-+# python-dpkt
++# python-setuptools
 +#
 +#############################################################
 +
-+PYTHON_DPKT_VERSION = 1.7
-+PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
-+PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
++PYTHON_SETUPTOOLS_VERSION = 0.6c11
++PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
++PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
++PYTHON_SETUPTOOLS_DEPENDENCIES = python
++HOST_PYTHON_SETUPTOOLS_DEPENDENCIES = host-python
 +
-+PYTHON_DPKT_DEPENDENCIES = python
 +
-+define PYTHON_DPKT_BUILD_CMDS
++define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
 +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
 +endef
 +
-+define PYTHON_DPKT_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++define PYTHON_SETUPTOOLS_BUILD_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
++	(cd $(@D); PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
++endef
++
++define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
++	(cd $(@D); PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
++	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
 +endef
 +
 +$(eval $(call GENTARGETS))
++$(eval $(call GENTARGETS,host))
 +
 -- 
 1.7.1.1
