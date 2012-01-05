@@ -1,8 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  5 Jan 2012 13:30:14 -0300
-Subject: [Buildroot] [PATCH 1/9] kernel-headers: bump 3.0 & 3.1 stable
-	versions, add 3.2
-Message-ID: <1325781022-19371-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  5 Jan 2012 13:30:15 -0300
+Subject: [Buildroot] [PATCH 2/9] linux: update stable kernel to version 3.2
+In-Reply-To: <1325781022-19371-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1325781022-19371-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1325781022-19371-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,48 +12,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/kernel-headers/Config.in                 |   10 +++++++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 7 insertions(+), 3 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.15-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ linux/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index e092651..ccd7a30 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -6,7 +6,7 @@ comment "Kernel Header Options"
- 
+diff --git a/linux/Config.in b/linux/Config.in
+index 892a503..db364fe 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -19,10 +19,10 @@ if BR2_LINUX_KERNEL
+ #
  choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_3_1
-+	default BR2_KERNEL_HEADERS_3_2
- 	help
- 	  Select the version of kernel header files you wish to use.
- 	  You must select the correct set of header files to match
-@@ -36,6 +36,9 @@ choice
- 	config BR2_KERNEL_HEADERS_3_1
- 		bool "Linux 3.1.x kernel headers"
+ 	prompt "Kernel version"
+-	default BR2_LINUX_KERNEL_3_1
++	default BR2_LINUX_KERNEL_3_2
  
-+	config BR2_KERNEL_HEADERS_3_2
-+		bool "Linux 3.2.x kernel headers"
-+
- 	config BR2_KERNEL_HEADERS_VERSION
- 		bool "Linux 2.6 (manually specified version)"
+-config BR2_LINUX_KERNEL_3_1
+-	bool "3.1.6"
++config BR2_LINUX_KERNEL_3_2
++	bool "3.2"
  
-@@ -57,7 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.14"	if BR2_KERNEL_HEADERS_3_0
--	default "3.1.6"		if BR2_KERNEL_HEADERS_3_1
-+	default "3.0.15"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.1.7"		if BR2_KERNEL_HEADERS_3_1
-+	default "3.2"		if BR2_KERNEL_HEADERS_3_2
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.15-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.15-headers_install-fix-__packed-in-exported-kernel-head.patch
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -58,7 +58,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "3.1.6"
++	default "3.2"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.1.6" if BR2_LINUX_KERNEL_3_1
++	default "3.2" if BR2_LINUX_KERNEL_3_2
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
 1.7.3.4
