@@ -1,42 +1,40 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Thu, 05 Jan 2012 11:37:33 +0100
-Subject: [Buildroot] [PATCH v5 3/6] New package: python-dpkt
-In-Reply-To: <20120105111645.2caf8493@skate>
-References: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
- <1325676605-31194-4-git-send-email-yegorslists@googlemail.com>
- <4F0577F1.9070604@free.fr> <20120105111645.2caf8493@skate>
-Message-ID: <4F057D6D.6030500@visionsystems.de>
+From: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Date: Thu,  5 Jan 2012 12:03:47 +0100
+Subject: [Buildroot] [PATCH v4 0/3] Add defconfigs for LPC3250 boards
+Message-ID: <1325761430-3942-1-git-send-email-abelloni@adeneo-embedded.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 05.01.2012 11:16, schrieb Thomas Petazzoni:
-> Le Thu, 05 Jan 2012 11:14:09 +0100,
-> Julien Boibessot <julien.boibessot@free.fr> a ?crit :
-> 
->> Do somebody ever thought in doing a distutils package infrastructure 
->> that would make the adding of a new python package just a matter of:
->>      $(eval $(call DISTUTILSTARGETS))
->> (or something like that)
-> 
-> Yeah, we discussed that sometime ago. I think our conclusion was:
-> "let's wait to have a few Python packages to see what are the common
-> things and then we'll do an infrastructure". I guess we could merge
-> Yegor's patches as is and then work on a common infrastructure.
+v4 now reordering boot/Config.in entries and useful comments
 
-I agree. These package can be merged as they are. In the patch series we have 3 packages all using different installation methods:
+Alexandre Belloni (3):
+  Reorder entries alphabetically
+  lpc32xx: Add CDL to the available bootloaders
+  Add defconfigs for LPC3250 boards
 
-dpkt - uses internal distutils and ships no C code
-mad - uses internal distutils but a part of it must be cross-compiled
-netifaces - uses setuptools on top of distutils, has C code and uses distutilscross to get the code crosscompiled
+ boot/Config.in                                     |    5 +-
+ boot/lpc32xxcdl/Config.in                          |   10 +
+ .../lpc32xxcdl/lpc32xxcdl-2.11-compiler_name.patch |   52 ++
+ .../lpc32xxcdl-2.11-delete_redundant_files.patch   |  969 ++++++++++++++++++++
+ boot/lpc32xxcdl/lpc32xxcdl-2.11-libnosys_gnu.patch |  188 ++++
+ boot/lpc32xxcdl/lpc32xxcdl-2.11-slashes.patch      |  521 +++++++++++
+ boot/lpc32xxcdl/lpc32xxcdl.mk                      |   60 ++
+ configs/ea3250_defconfig                           |   39 +
+ configs/fdi3250_defconfig                          |   39 +
+ configs/phy3250_defconfig                          |   39 +
+ 10 files changed, 1920 insertions(+), 2 deletions(-)
+ create mode 100644 boot/lpc32xxcdl/Config.in
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-compiler_name.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-delete_redundant_files.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-libnosys_gnu.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl-2.11-slashes.patch
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl.mk
+ create mode 100644 configs/ea3250_defconfig
+ create mode 100644 configs/fdi3250_defconfig
+ create mode 100644 configs/phy3250_defconfig
 
-in the future there will be one more internal tool ditsutils2 https://bitbucket.org/tarek/distutils2/overview
-
-and Chris Lambacher is going to PyCon with following talk: https://us.pycon.org/2012/schedule/presentation/11/
-
-So we should wait a little till the sings will calm down and then make our decision.
-
-Best regards,
-Yegor
+-- 
+1.7.8.2
