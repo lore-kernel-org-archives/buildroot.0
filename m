@@ -1,36 +1,30 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 5 Jan 2012 11:19:19 -0600
-Subject: [Buildroot] customize package: odd copy construction
-In-Reply-To: <20120105180624.380257c8@skate>
-References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
- <201201051027.05059.minimod@morethan.org> <20120105180624.380257c8@skate>
-Message-ID: <201201051119.21069.minimod@morethan.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 Jan 2012 15:26:14 -0300
+Subject: [Buildroot] [PATCH 01/10] libmnl: bump to version 1.0.2
+Message-ID: <1325787983-8591-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu January 5 2012, Thomas Petazzoni wrote:
-> Le Thu, 5 Jan 2012 10:27:02 -0600,
-> "Michael S. Zick" <minimod@morethan.org> a ?crit :
-> 
-> > It looks to me as if the intent was in the handling of symbolic links.
-> > ls -d * does not dereference symbolic links.
-> 
-> So does 'cp -a', I think.
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libmnl/libmnl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Right.  You caught me.  ;-)
-
-cp -a: cp --no-dereference --preserve=all --recursive
-
-I have to step to the other side of the floor and
-join the group saying: "I don't see the point".
-
-Unless there is a difference in the handling of hard
-links or special files.
-
-Mike
+diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+index 6871034..407ca52 100644
+--- a/package/libmnl/libmnl.mk
++++ b/package/libmnl/libmnl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-> Thomas
+-LIBMNL_VERSION = 1.0.1
++LIBMNL_VERSION = 1.0.2
+ LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
+ LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
+ LIBMNL_INSTALL_STAGING = YES
+-- 
+1.7.3.4
