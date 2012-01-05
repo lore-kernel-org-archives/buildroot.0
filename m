@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Jan 2012 11:16:45 +0100
-Subject: [Buildroot] [PATCH v5 3/6] New package: python-dpkt
-In-Reply-To: <4F0577F1.9070604@free.fr>
-References: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
- <1325676605-31194-4-git-send-email-yegorslists@googlemail.com>
- <4F0577F1.9070604@free.fr>
-Message-ID: <20120105111645.2caf8493@skate>
+Date: Thu, 5 Jan 2012 11:18:04 +0100
+Subject: [Buildroot] Buildroot source directory
+In-Reply-To: <DUB105-W14CD6E2D85878E0DB9DBD8CD940@phx.gbl>
+References: <DUB105-W14CD6E2D85878E0DB9DBD8CD940@phx.gbl>
+Message-ID: <20120105111804.0e3d6d80@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 05 Jan 2012 11:14:09 +0100,
-Julien Boibessot <julien.boibessot@free.fr> a ?crit :
+Hello,
 
-> Do somebody ever thought in doing a distutils package infrastructure 
-> that would make the adding of a new python package just a matter of:
->      $(eval $(call DISTUTILSTARGETS))
-> (or something like that)
+Please fix your mailer, the text version it's sending is badly wrapped.
 
-Yeah, we discussed that sometime ago. I think our conclusion was:
-"let's wait to have a few Python packages to see what are the common
-things and then we'll do an infrastructure". I guess we could merge
-Yegor's patches as is and then work on a common infrastructure.
+Le Thu, 5 Jan 2012 12:47:50 +0300,
+Janne H?meenaho <jannehameenaho@hotmail.com> a ?crit :
+
+> I've got a Buildroot makefile issue with Mercurial repository. Here's the makefile that get's the whole repository, but this prodtest module needs only /my-device/prodtest folder. How do I show Buildroot to use that folder? I don't mind that the whole repo comes along to tar, I just want to use that certain subfolder.
+> ############################################################### prodtest##############################################################PRODTEST_VERSION    = defaultPRODTEST_SITE_METHOD = hgPRODTEST_SITE	   = http://hg.my.lan/trunk/my-device
+> define PRODTEST_BUILD_CMDS
+> 	$(MAKE) -C $(@D) 			\		CC="$(TARGET_CROSS)"		\					endef
+
+Use:
+
+	$(MAKE) -C $(@D)/prodtest
+
+Does that answer your question?
 
 Regards,
 
