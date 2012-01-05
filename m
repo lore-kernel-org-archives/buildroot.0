@@ -1,48 +1,58 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Thu, 5 Jan 2012 10:27:02 -0600
-Subject: [Buildroot] customize package: odd copy construction
-In-Reply-To: <20120105163648.3bf64bcd@skate>
-References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
- <20120105163648.3bf64bcd@skate>
-Message-ID: <201201051027.05059.minimod@morethan.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 Jan 2012 13:30:14 -0300
+Subject: [Buildroot] [PATCH 1/9] kernel-headers: bump 3.0 & 3.1 stable
+	versions, add 3.2
+Message-ID: <1325781022-19371-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu January 5 2012, Thomas Petazzoni wrote:
-> Le Thu, 5 Jan 2012 16:23:23 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
-> 
-> > The customize uses an odd copy construction that I can't really explain:
-> > 
-> >         rm -f $(BUILD_DIR)/series
-> >         (cd $(CUST_DIR); \
-> >          /bin/ls -d * > $(BUILD_DIR)/series || \
-> >          touch $(BUILD_DIR)/series )
-> >         for f in `cat $(BUILD_DIR)/series`; do \
-> >                 cp -af $(CUST_DIR)/$$f $(TARGET_DIR); \
-> >         done
-> >         rm -f $(BUILD_DIR)/series
-> > 
-> > This was changed from:
-> >         -cp -af $(CUST_DIR)/* $(TARGET_DIR)/
-> > 
-> > in the following commit:
-> > http://git.buildroot.org/buildroot/commit/?id=06cc62f9cfbe43e9d31a07667a6af905b5f34a42
-> > 
-> > Why would you create a series file first if you're removing it
-> > immediately afterwards?
-> > Doesn't the original copy statement do exactly the same?
-> 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |   10 +++++++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.15-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-It looks to me as if the intent was in the handling of symbolic links.
-ls -d * does not dereference symbolic links.
-
-Mike
-> I don't know, but I'm not sure this customize package is good example
-> these days. It should probably be removed, or changed to something
-> saner that uses the package infrastructure.
-> 
-> Thomas
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index e092651..ccd7a30 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -6,7 +6,7 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_1
++	default BR2_KERNEL_HEADERS_3_2
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -36,6 +36,9 @@ choice
+ 	config BR2_KERNEL_HEADERS_3_1
+ 		bool "Linux 3.1.x kernel headers"
+ 
++	config BR2_KERNEL_HEADERS_3_2
++		bool "Linux 3.2.x kernel headers"
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Linux 2.6 (manually specified version)"
+ 
+@@ -57,7 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.14"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.1.6"		if BR2_KERNEL_HEADERS_3_1
++	default "3.0.15"	if BR2_KERNEL_HEADERS_3_0
++	default "3.1.7"		if BR2_KERNEL_HEADERS_3_1
++	default "3.2"		if BR2_KERNEL_HEADERS_3_2
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.15-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.14-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.15-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.7.3.4
