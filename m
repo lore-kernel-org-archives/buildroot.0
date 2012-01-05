@@ -1,32 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  5 Jan 2012 13:30:22 -0300
-Subject: [Buildroot] [PATCH 9/9] qemu/sparc-ss10: update to use kernel
-	version 3.2
-In-Reply-To: <1325781022-19371-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1325781022-19371-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1325781022-19371-9-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Jan 2012 18:06:24 +0100
+Subject: [Buildroot] customize package: odd copy construction
+In-Reply-To: <201201051027.05059.minimod@morethan.org>
+References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
+ <20120105163648.3bf64bcd@skate>
+ <201201051027.05059.minimod@morethan.org>
+Message-ID: <20120105180624.380257c8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/qemu_sparc_ss10_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Le Thu, 5 Jan 2012 10:27:02 -0600,
+"Michael S. Zick" <minimod@morethan.org> a ?crit :
 
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 20cd9fb..834514f 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -9,6 +9,6 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
- BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
- BR2_LINUX_KERNEL_ZIMAGE=y
+> It looks to me as if the intent was in the handling of symbolic links.
+> ls -d * does not dereference symbolic links.
+
+So does 'cp -a', I think.
+
+Thomas
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
