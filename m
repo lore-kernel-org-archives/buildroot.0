@@ -1,23 +1,52 @@
-From: =?iso-8859-1?B?SmFubmUgSORtZWVuYWhv?= <jannehameenaho@hotmail.com>
-Date: Thu, 5 Jan 2012 12:47:50 +0300
-Subject: [Buildroot] Buildroot source directory
-Message-ID: <DUB105-W14CD6E2D85878E0DB9DBD8CD940@phx.gbl>
+From: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Date: Thu, 05 Jan 2012 10:51:29 +0100
+Subject: [Buildroot] [PATCH v3 1/2] lpc32xx: Add CDL to the available
+ bootloaders
+In-Reply-To: <20120105082913.307b0c4a@skate>
+References: <1325697215-29906-1-git-send-email-abelloni@adeneo-embedded.com>
+ <1325697215-29906-2-git-send-email-abelloni@adeneo-embedded.com>
+ <20120105082913.307b0c4a@skate>
+Message-ID: <1325757089.2442.39.camel@emblysd024.adetel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 2012-01-05 at 08:29 +0100, Thomas Petazzoni wrote:
 
-Hi,
-I've got a Buildroot makefile issue with Mercurial repository. Here's the makefile that get's the whole repository, but this prodtest module needs only /my-device/prodtest folder. How do I show Buildroot to use that folder? I don't mind that the whole repo comes along to tar, I just want to use that certain subfolder.
-############################################################### prodtest##############################################################PRODTEST_VERSION    = defaultPRODTEST_SITE_METHOD = hgPRODTEST_SITE	   = http://hg.my.lan/trunk/my-device
-define PRODTEST_BUILD_CMDS
-	$(MAKE) -C $(@D) 			\		CC="$(TARGET_CROSS)"		\					endef
+> Le Wed,  4 Jan 2012 18:13:34 +0100,
+> Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
+> 
+> > @@ -7,6 +7,7 @@ source "boot/uboot/Config.in"
+> >  source "boot/at91bootstrap/Config.in"
+> >  source "boot/at91dataflashboot/Config.in"
+> >  source "boot/xloader/Config.in"
+> > +source "boot/lpc32xxcdl/Config.in"
+> 
+> Sorry, I didn't notice that in my previous review. Entries should be
+> ordered alphabetically.
+> 
 
-$(eval $(call GENTARGETS,package,prodtest)) 
+I read that on the mailing list but that is not the case at the moment,
+should I reorder all the entries  ?
 
-Br,Janne H 		 	   		  
+
+
+-- 
+Alexandre Belloni
+
+Adeneo Embedded
+Adetel Group
+
+2, ch. du Ruisseau - 69134 Ecully, France
+
+www.adeneo-embedded.com
+ 
+
+
+
+
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120105/383a6c77/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120105/958a1476/attachment.html>
