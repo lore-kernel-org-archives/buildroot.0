@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Jan 2012 11:18:04 +0100
-Subject: [Buildroot] Buildroot source directory
-In-Reply-To: <DUB105-W14CD6E2D85878E0DB9DBD8CD940@phx.gbl>
-References: <DUB105-W14CD6E2D85878E0DB9DBD8CD940@phx.gbl>
-Message-ID: <20120105111804.0e3d6d80@skate>
+Date: Thu, 5 Jan 2012 11:18:35 +0100
+Subject: [Buildroot] [PATCH v3 1/2] lpc32xx: Add CDL to the available
+ bootloaders
+In-Reply-To: <1325757089.2442.39.camel@emblysd024.adetel.com>
+References: <1325697215-29906-1-git-send-email-abelloni@adeneo-embedded.com>
+ <1325697215-29906-2-git-send-email-abelloni@adeneo-embedded.com>
+ <20120105082913.307b0c4a@skate>
+ <1325757089.2442.39.camel@emblysd024.adetel.com>
+Message-ID: <20120105111835.7a8e83ea@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Thu, 05 Jan 2012 10:51:29 +0100,
+Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
 
-Please fix your mailer, the text version it's sending is badly wrapped.
+> I read that on the mailing list but that is not the case at the moment,
+> should I reorder all the entries  ?
 
-Le Thu, 5 Jan 2012 12:47:50 +0300,
-Janne H?meenaho <jannehameenaho@hotmail.com> a ?crit :
+Yes, as a preliminary patch in your series, re-order the entries, and
+then add LPC CDL at the right location.
 
-> I've got a Buildroot makefile issue with Mercurial repository. Here's the makefile that get's the whole repository, but this prodtest module needs only /my-device/prodtest folder. How do I show Buildroot to use that folder? I don't mind that the whole repo comes along to tar, I just want to use that certain subfolder.
-> ############################################################### prodtest##############################################################PRODTEST_VERSION    = defaultPRODTEST_SITE_METHOD = hgPRODTEST_SITE	   = http://hg.my.lan/trunk/my-device
-> define PRODTEST_BUILD_CMDS
-> 	$(MAKE) -C $(@D) 			\		CC="$(TARGET_CROSS)"		\					endef
-
-Use:
-
-	$(MAKE) -C $(@D)/prodtest
-
-Does that answer your question?
-
-Regards,
+Thanks!
 
 Thomas
 -- 
