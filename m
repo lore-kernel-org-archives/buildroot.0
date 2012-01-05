@@ -1,52 +1,50 @@
-From: Alexandre Belloni <abelloni@adeneo-embedded.com>
-Date: Thu, 05 Jan 2012 10:51:29 +0100
-Subject: [Buildroot] [PATCH v3 1/2] lpc32xx: Add CDL to the available
- bootloaders
-In-Reply-To: <20120105082913.307b0c4a@skate>
-References: <1325697215-29906-1-git-send-email-abelloni@adeneo-embedded.com>
- <1325697215-29906-2-git-send-email-abelloni@adeneo-embedded.com>
- <20120105082913.307b0c4a@skate>
-Message-ID: <1325757089.2442.39.camel@emblysd024.adetel.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Thu, 05 Jan 2012 11:14:09 +0100
+Subject: [Buildroot] [PATCH v5 3/6] New package: python-dpkt
+In-Reply-To: <1325676605-31194-4-git-send-email-yegorslists@googlemail.com>
+References: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
+ <1325676605-31194-4-git-send-email-yegorslists@googlemail.com>
+Message-ID: <4F0577F1.9070604@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2012-01-05 at 08:29 +0100, Thomas Petazzoni wrote:
+On 01/04/2012 12:30 PM, yegorslists at googlemail.com wrote:
+> diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
+> new file mode 100644
+> index 0000000..7ac873c
+> --- /dev/null
+> +++ b/package/python-dpkt/python-dpkt.mk
+> @@ -0,0 +1,22 @@
+> +#############################################################
+> +#
+> +# python-dpkt
+> +#
+> +#############################################################
+> +
+> +PYTHON_DPKT_VERSION = 1.7
+> +PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
+> +PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
+> +
+> +PYTHON_DPKT_DEPENDENCIES = python
+> +
+> +define PYTHON_DPKT_BUILD_CMDS
+> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
+> +endef
+> +
+> +define PYTHON_DPKT_INSTALL_TARGET_CMDS
+> +	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
+> +
+Do somebody ever thought in doing a distutils package infrastructure 
+that would make the adding of a new python package just a matter of:
+     $(eval $(call DISTUTILSTARGETS))
+(or something like that)
+?
 
-> Le Wed,  4 Jan 2012 18:13:34 +0100,
-> Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
-> 
-> > @@ -7,6 +7,7 @@ source "boot/uboot/Config.in"
-> >  source "boot/at91bootstrap/Config.in"
-> >  source "boot/at91dataflashboot/Config.in"
-> >  source "boot/xloader/Config.in"
-> > +source "boot/lpc32xxcdl/Config.in"
-> 
-> Sorry, I didn't notice that in my previous review. Entries should be
-> ordered alphabetically.
-> 
-
-I read that on the mailing list but that is not the case at the moment,
-should I reorder all the entries  ?
-
-
-
--- 
-Alexandre Belloni
-
-Adeneo Embedded
-Adetel Group
-
-2, ch. du Ruisseau - 69134 Ecully, France
-
-www.adeneo-embedded.com
- 
-
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120105/958a1476/attachment.html>
+Regards,
+Julien
