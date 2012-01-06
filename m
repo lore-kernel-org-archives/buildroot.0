@@ -1,32 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 6 Jan 2012 11:08:14 +0100
-Subject: [Buildroot] [git commit] ffmpeg: bump to version 0.8.8
-Message-ID: <20120106101009.35E7D8FFE3@busybox.osuosl.org>
+From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
+Date: Fri,  6 Jan 2012 13:47:00 +0100
+Subject: [Buildroot] [RFC PATCH v3]kernel-patch.sh: script changed to
+	support archives in a proper way
+In-Reply-To: <201106290542.26383.minimod@morethan.org>
+References: <201106290542.26383.minimod@morethan.org>
+Message-ID: <1325854022-32258-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2e372b097c6eb8176930735b8c32ec1d2b5baf8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/multimedia/ffmpeg/ffmpeg.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This is an update of the previous patch, it is based on BuildRoot 2011.11.
 
-diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
-index ef97674..38f04aa 100644
---- a/package/multimedia/ffmpeg/ffmpeg.mk
-+++ b/package/multimedia/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--FFMPEG_VERSION = 0.8.7
-+FFMPEG_VERSION = 0.8.8
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+In addition the presency of rejected files is checked before applying patches.
+
+Regards
+
+Ludovic
