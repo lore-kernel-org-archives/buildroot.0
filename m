@@ -1,58 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 6 Jan 2012 10:30:58 +0100
-Subject: [Buildroot] [git commit] qemu/mipsel-malta: update readme and use
-	kernel version 3.2
-Message-ID: <20120106093658.6BB0E90018@busybox.osuosl.org>
+Date: Fri, 6 Jan 2012 10:29:05 +0100
+Subject: [Buildroot] [git commit] linux: update stable kernel to version 3.2
+Message-ID: <20120106093658.49AB890017@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=37f488843cb7d5c2cca3d6455e5a19808e3c70eb
+commit: http://git.buildroot.net/buildroot/commit/?id=dbfcdc68369abf6106c22b8359ba9f908ca9da9c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update configuration to use kernel version 3.2
-Also update the readme to use buildroot basedir as a reference for
-kernel and rootfs like the other samples do.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../{linux-3.1.config => linux-3.2.config}         |    0
- board/qemu/mipsel-malta/readme.txt                 |    2 +-
- configs/qemu_mipsel_malta_defconfig                |    4 ++--
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/qemu/mipsel-malta/linux-3.1.config b/board/qemu/mipsel-malta/linux-3.2.config
-similarity index 100%
-rename from board/qemu/mipsel-malta/linux-3.1.config
-rename to board/qemu/mipsel-malta/linux-3.2.config
-diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
-index b494976..94e959d 100644
---- a/board/qemu/mipsel-malta/readme.txt
-+++ b/board/qemu/mipsel-malta/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
+diff --git a/linux/Config.in b/linux/Config.in
+index 892a503..db364fe 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -19,10 +19,10 @@ if BR2_LINUX_KERNEL
+ #
+ choice
+ 	prompt "Kernel version"
+-	default BR2_LINUX_KERNEL_3_1
++	default BR2_LINUX_KERNEL_3_2
  
-- qemu-system-mipsel -M malta -kernel vmlinux -serial stdio -hda rootfs.ext2 -append "root=/dev/hda"
-+ qemu-system-mipsel -M malta -kernel output/images/vmlinux -serial stdio -hda output/images/rootfs.ext2 -append "root=/dev/hda"
+-config BR2_LINUX_KERNEL_3_1
+-	bool "3.1.6"
++config BR2_LINUX_KERNEL_3_2
++	bool "3.2"
  
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 3f558fe..a46f886 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -9,9 +9,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.1.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.2.config"
- BR2_LINUX_KERNEL_VMLINUX=y
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -58,7 +58,7 @@ endchoice
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
+ 	string "Kernel version"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_VERSION
+-	default "3.1.6"
++	default "3.2"
  
- # Serial port config
+ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+@@ -74,7 +74,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.1.6" if BR2_LINUX_KERNEL_3_1
++	default "3.2" if BR2_LINUX_KERNEL_3_2
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
