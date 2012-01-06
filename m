@@ -1,32 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 6 Jan 2012 07:52:52 +0100
-Subject: [Buildroot] [PATCH 3/3] Migrate the packages to the new infra
-In-Reply-To: <4F0180B3.5010105@free-electrons.com>
-References: <1322047811-12933-1-git-send-email-maxime.ripard@free-electrons.com>
- <201112202229.19551.arnout@mind.be> <4F0180B3.5010105@free-electrons.com>
-Message-ID: <201201060752.52798.arnout@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 6 Jan 2012 09:29:22 +0100
+Subject: [Buildroot] customize package: odd copy construction
+In-Reply-To: <20120105163648.3bf64bcd@skate>
+References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
+ <20120105163648.3bf64bcd@skate>
+Message-ID: <CAAXf6LVx+0y35z2X3Aj-63e+u2Ks8GusUmGhETTFTdX6Aww+kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 02 January 2012 11:02:27 Maxime Ripard wrote:
-> >  By the way, doesn't systemd support sysv-style init scripts as well?
-> 
-> It does, but you lose almost if not all the benefits of using systemd
-> with sysv scripts.
+On Thu, Jan 5, 2012 at 4:36 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Thu, 5 Jan 2012 16:23:23 +0100,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>
+>> The customize uses an odd copy construction that I can't really explain:
+>>
+>> ? ? ? ? rm -f $(BUILD_DIR)/series
+>> ? ? ? ? (cd $(CUST_DIR); \
+>> ? ? ? ? ?/bin/ls -d * > $(BUILD_DIR)/series || \
+>> ? ? ? ? ?touch $(BUILD_DIR)/series )
+>> ? ? ? ? for f in `cat $(BUILD_DIR)/series`; do \
+>> ? ? ? ? ? ? ? ? cp -af $(CUST_DIR)/$$f $(TARGET_DIR); \
+>> ? ? ? ? done
+>> ? ? ? ? rm -f $(BUILD_DIR)/series
+>>
+>> This was changed from:
+>> ? ? ? ? -cp -af $(CUST_DIR)/* $(TARGET_DIR)/
+>>
+>> in the following commit:
+>> http://git.buildroot.org/buildroot/commit/?id=06cc62f9cfbe43e9d31a07667a6af905b5f34a42
+>>
+>> Why would you create a series file first if you're removing it
+>> immediately afterwards?
+>> Doesn't the original copy statement do exactly the same?
 
- Yes, but then we should install a package's sysv init scripts if it 
-doesn't define systemd init scripts.
+First of all, I'm glad I'm not the only one that is puzzled about the
+usefulness of the series trick :-)
 
- Regards,
- Arnout
+>
+> I don't know, but I'm not sure this customize package is good example
+> these days. It should probably be removed, or changed to something
+> saner that uses the package infrastructure.
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+The customize package (or at least the feature that it implements) can
+be useful to copy applications built externally to the buildroot
+environment. In many cases you could copy directly to the
+output/target directory, but when you're packaging your buildroot
+environment to send to someone else this is not the best thing. Not
+only because sending the whole output/target is unnecessarily big (as
+most of it can be recreated from buildroot), but also because a 'make
+clean' would remove these applications.
+
+So in my opinion, this use case should be kept in mind, unless there
+is a good alternative...
+
+~Thomas
