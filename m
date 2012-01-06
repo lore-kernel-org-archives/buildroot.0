@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Jan 2012 11:09:56 +0100
-Subject: [Buildroot] [PATCH 01/10] libmnl: bump to version 1.0.2
-In-Reply-To: <1325787983-8591-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 5 Jan 2012 15:26:14 -0300")
-References: <1325787983-8591-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87boqhi1l7.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 6 Jan 2012 11:02:50 +0100
+Subject: [Buildroot] [git commit] libmnl: bump to version 1.0.2
+Message-ID: <20120106101008.A969F8FFE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=454057b4ee25336129eecdeb04ab72696e8560b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libmnl/libmnl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed entire series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
+index 6871034..407ca52 100644
+--- a/package/libmnl/libmnl.mk
++++ b/package/libmnl/libmnl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBMNL_VERSION = 1.0.1
++LIBMNL_VERSION = 1.0.2
+ LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
+ LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
+ LIBMNL_INSTALL_STAGING = YES
