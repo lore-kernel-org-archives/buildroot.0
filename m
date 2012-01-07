@@ -1,87 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 7 Jan 2012 20:57:37 +0100
-Subject: [Buildroot] [git commit] New package: python-setuptools
-Message-ID: <20120107201230.D07F98FFE7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jan 2012 00:20:20 +0100
+Subject: [Buildroot] [PATCH 1/3] xenomai: bump to 2.6.0
+In-Reply-To: <87sjjrgv2b.fsf@macbook.be.48ers.dk>
+References: <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
+ <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
+ <cd40e28044a3cbd6a93176e2ff4320e4231ac8f4.1325623724.git.thomas.petazzoni@free-electrons.com>
+ <87sjjrgv2b.fsf@macbook.be.48ers.dk>
+Message-ID: <20120108002020.13ad49ee@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0717f0357db48198a01233b0629251ba5399ca27
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Sat, 07 Jan 2012 20:40:44 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                              |    1 +
- package/python-setuptools/Config.in            |    8 +++++
- package/python-setuptools/python-setuptools.mk |   34 ++++++++++++++++++++++++
- 3 files changed, 43 insertions(+), 0 deletions(-)
+> It would have been to mention why the ARM variant stuff is no longer
+> needed, but ok - Committed, thanks.
 
-diff --git a/package/Config.in b/package/Config.in
-index d70f9b0..bfb6ac9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -242,6 +242,7 @@ menu "external python modules"
- source "package/python-dpkt/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-serial/Config.in"
-+source "package/python-setuptools/Config.in"
- endmenu
- endif
- source "package/ruby/Config.in"
-diff --git a/package/python-setuptools/Config.in b/package/python-setuptools/Config.in
-new file mode 100644
-index 0000000..63c2b01
---- /dev/null
-+++ b/package/python-setuptools/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	bool "python-setuptools"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_ZLIB
-+	help
-+	  Download, build, install, upgrade, and uninstall Python packages.
-+
-+	  http://pypi.python.org/pypi/setuptools
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-new file mode 100644
-index 0000000..b75987b
---- /dev/null
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -0,0 +1,34 @@
-+#############################################################
-+#
-+# python-setuptools
-+#
-+#############################################################
-+
-+PYTHON_SETUPTOOLS_VERSION = 0.6c11
-+PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-+PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
-+PYTHON_SETUPTOOLS_DEPENDENCIES = python
-+HOST_PYTHON_SETUPTOOLS_DEPENDENCIES = host-python
-+
-+
-+define HOST_PYTHON_SETUPTOOLS_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_SETUPTOOLS_BUILD_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define HOST_PYTHON_SETUPTOOLS_INSTALL_CMDS
-+	(cd $(@D); PYTHONPATH="$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(HOST_DIR)/usr)
-+endef
-+
-+define PYTHON_SETUPTOOLS_INSTALL_TARGET_CMDS
-+	(cd $(@D); PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
-+	$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
-+
+The --enable-arm-mach option has been removed, and the --enable-arm-tsc
+option is only useful is very specific situations. See:
+http://git.xenomai.org/?p=xenomai-2.6.git;a=commitdiff;h=1f988e5b616a884fb13b85056757349b6312a592
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
