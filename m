@@ -1,28 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 07 Jan 2012 20:36:04 +0100
-Subject: [Buildroot] genext2fs: couldn't allocate a block (no free space)
-In-Reply-To: <CAOrAeonTZC0dXZnNLLfTjrcZHyiTGHRUWcKDO06mz3MOT0Y7CQ@mail.gmail.com>
- (vbr vbr's message of "Fri, 6 Jan 2012 10:39:42 -0800")
-References: <CAOrAeonTZC0dXZnNLLfTjrcZHyiTGHRUWcKDO06mz3MOT0Y7CQ@mail.gmail.com>
-Message-ID: <87zkdzgva3.fsf@macbook.be.48ers.dk>
+Date: Sat, 07 Jan 2012 20:40:44 +0100
+Subject: [Buildroot] [PATCH 1/3] xenomai: bump to 2.6.0
+In-Reply-To: <cd40e28044a3cbd6a93176e2ff4320e4231ac8f4.1325623724.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 3 Jan 2012 21:48:46 +0100")
+References: <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
+ <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
+ <cd40e28044a3cbd6a93176e2ff4320e4231ac8f4.1325623724.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87sjjrgv2b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "vbr" == vbr vbr <vvvg77@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- vbr> Hi,
- vbr> I am using buildroot 2011.11 with x86_64 and hitting this issue after enabling
- vbr> valgrind which made my target fatter:
- vbr> genext2fs: couldn't allocate a block (no free space)
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- vbr> I made this change to work around this issue increasing the number
- vbr> of BLOCKS, but it's probably not the right thing to do:
-
-40% is probably a bit extreme. Out of interest, how many blocks did it
-estimate before, and how many did you need?
+It would have been to mention why the ARM variant stuff is no longer
+needed, but ok - Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
