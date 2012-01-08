@@ -1,33 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jan 2012 00:20:20 +0100
-Subject: [Buildroot] [PATCH 1/3] xenomai: bump to 2.6.0
-In-Reply-To: <87sjjrgv2b.fsf@macbook.be.48ers.dk>
-References: <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
- <cover.1325623724.git.thomas.petazzoni@free-electrons.com>
- <cd40e28044a3cbd6a93176e2ff4320e4231ac8f4.1325623724.git.thomas.petazzoni@free-electrons.com>
- <87sjjrgv2b.fsf@macbook.be.48ers.dk>
-Message-ID: <20120108002020.13ad49ee@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 08 Jan 2012 12:03:37 +0100
+Subject: [Buildroot] [PATCH v5 6/6] New package: python-netifaces
+In-Reply-To: <87pqevffkd.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
+ of "Sat, 07 Jan 2012 21:00:50 +0100")
+References: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
+ <1325676605-31194-7-git-send-email-yegorslists@googlemail.com>
+ <87pqevffkd.fsf@macbook.be.48ers.dk>
+Message-ID: <87ipkmfoc6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 07 Jan 2012 20:40:44 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
 
-> It would have been to mention why the ARM variant stuff is no longer
-> needed, but ok - Committed, thanks.
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-The --enable-arm-mach option has been removed, and the --enable-arm-tsc
-option is only useful is very specific situations. See:
-http://git.xenomai.org/?p=xenomai-2.6.git;a=commitdiff;h=1f988e5b616a884fb13b85056757349b6312a592
+ Peter> Committed, thanks.
 
-Regards,
+It unfortunately seems broken and tries to build for the host rather
+than the target:
 
-Thomas
+(on a ppc64 host building for i686):
+
+creating build/lib.linux-ppc64-2.7
+/usr/lib64/ccache/gcc -pthread -shared -L/home/peko/scratch/host/lib -L/home/peko/scratch/host/usr/lib -Wl,-rpath,/home/peko/scratch/host/usr/lib -L/home/peko/scratch/host/usr/i686-unknown-linux-uclibc/sysroot/lib -L/home/peko/scratch/host/usr/i686-unknown-linux-uclibc/sysroot/usr/lib build/temp.linux-ppc64-2.7/netifaces.o -o build/lib.linux-ppc64-2.7/netifaces.so
+/usr/bin/ld: skipping incompatible /home/peko/scratch/host/usr/i686-unknown-linux-uclibc/sysroot/lib/libgcc_s.so when searching for -lgcc_s
+/usr/bin/ld: skipping incompatible /lib/libpthread.so.0 when searching for /lib/libpthread.so.0
+/usr/bin/ld: cannot find /lib/libpthread.so.0
+/usr/bin/ld: skipping incompatible /usr/lib/libpthread_nonshared.a when searching for /usr/lib/libpthread_nonshared.a
+/usr/bin/ld: cannot find /usr/lib/libpthread_nonshared.a
+collect2: ld returned 1 exit status
+error: command '/usr/lib64/ccache/gcc' failed with exit status 1
+make: *** [/home/peko/scratch/build/python-netifaces-0.6/.stamp_built] Error 1
+
+Any ideas?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
