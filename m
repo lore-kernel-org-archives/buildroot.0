@@ -1,43 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 08 Jan 2012 12:03:37 +0100
-Subject: [Buildroot] [PATCH v5 6/6] New package: python-netifaces
-In-Reply-To: <87pqevffkd.fsf@macbook.be.48ers.dk> (Peter Korsgaard's message
- of "Sat, 07 Jan 2012 21:00:50 +0100")
-References: <1325676605-31194-1-git-send-email-yegorslists@googlemail.com>
- <1325676605-31194-7-git-send-email-yegorslists@googlemail.com>
- <87pqevffkd.fsf@macbook.be.48ers.dk>
-Message-ID: <87ipkmfoc6.fsf@macbook.be.48ers.dk>
+Date: Sun, 8 Jan 2012 18:16:07 +0100
+Subject: [Buildroot] [git commit] ccache: bump version
+Message-ID: <20120108171623.D0EDE8F678@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <jacmet@uclibc.org> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bcf3103f0eee3c3d127f7e45f8cd4b94e7f418fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ccache/ccache.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Peter> Committed, thanks.
-
-It unfortunately seems broken and tries to build for the host rather
-than the target:
-
-(on a ppc64 host building for i686):
-
-creating build/lib.linux-ppc64-2.7
-/usr/lib64/ccache/gcc -pthread -shared -L/home/peko/scratch/host/lib -L/home/peko/scratch/host/usr/lib -Wl,-rpath,/home/peko/scratch/host/usr/lib -L/home/peko/scratch/host/usr/i686-unknown-linux-uclibc/sysroot/lib -L/home/peko/scratch/host/usr/i686-unknown-linux-uclibc/sysroot/usr/lib build/temp.linux-ppc64-2.7/netifaces.o -o build/lib.linux-ppc64-2.7/netifaces.so
-/usr/bin/ld: skipping incompatible /home/peko/scratch/host/usr/i686-unknown-linux-uclibc/sysroot/lib/libgcc_s.so when searching for -lgcc_s
-/usr/bin/ld: skipping incompatible /lib/libpthread.so.0 when searching for /lib/libpthread.so.0
-/usr/bin/ld: cannot find /lib/libpthread.so.0
-/usr/bin/ld: skipping incompatible /usr/lib/libpthread_nonshared.a when searching for /usr/lib/libpthread_nonshared.a
-/usr/bin/ld: cannot find /usr/lib/libpthread_nonshared.a
-collect2: ld returned 1 exit status
-error: command '/usr/lib64/ccache/gcc' failed with exit status 1
-make: *** [/home/peko/scratch/build/python-netifaces-0.6/.stamp_built] Error 1
-
-Any ideas?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 87a64e5..9155441 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-CCACHE_VERSION = 3.1.4
++CCACHE_VERSION = 3.1.7
+ CCACHE_SITE    = http://samba.org/ftp/ccache
+ CCACHE_SOURCE  = ccache-$(CCACHE_VERSION).tar.bz2
+ 
