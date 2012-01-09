@@ -1,57 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jan 2012 09:04:04 +0100
-Subject: [Buildroot] [PATCH] Static build changes
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C60E4498@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C60E4498@ex-mb1.corp.adtran.com>
-Message-ID: <20120109090404.74b2733b@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 09 Jan 2012 09:18:58 +0100
+Subject: [Buildroot] [PATCH] python-netifaces: add -x option to fix
+	cross-compilation
+In-Reply-To: <1326094927-27207-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Mon, 9 Jan 2012 08:42:07
+ +0100")
+References: <1326094927-27207-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <8739bpffv1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Le Tue, 20 Dec 2011 16:11:54 +0000,
-ANDY KENNEDY <ANDY.KENNEDY@adtran.com> a ?crit :
+Hi,
 
-> In the system I am building, we want to use all static applications in
-> place of using eglibc for the target.  I prefer to use uClibC for
-> busybox, and the applications you see above.  To prevent from having
-> dynamically linked applications, without having installed libraries, I
-> have modified these to either not install the application (in the case
-> of uClibC installing ldconfig, libgcrypt installing iconv, etc), or
-> build the target binary static.  In the case of a couple of libraries,
-> the install was modified to prevent the libraries from being installed
-> to the target when all that is needed is for another application being
-> installed.
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> ---
+ yegorslists>  package/python-netifaces/python-netifaces.mk |    2 +-
+ yegorslists>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-Many of the modifications to the various packages look very similar.
-Isn't it possible to factorize those needed flags and options at the
-package infrastructure level somehow?
+ yegorslists> diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+ yegorslists> index e9a7099..5bfa326 100644
+ yegorslists> --- a/package/python-netifaces/python-netifaces.mk
+ yegorslists> +++ b/package/python-netifaces/python-netifaces.mk
+ yegorslists> @@ -14,7 +14,7 @@ define PYTHON_NETIFACES_BUILD_CMDS
+ yegorslists>  	(cd $(@D); \
+ yegorslists>  		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+ yegorslists>  		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+ yegorslists> -	$(HOST_DIR)/usr/bin/python setup.py build)
+ yegorslists> +	$(HOST_DIR)/usr/bin/python setup.py build -x)
+ yegorslists>  endef
 
-The modifications that I see are:
+Thanks, so far so good, but it still doesn't build here:
 
- * Adding -static to the LDFLAGS
+building 'netifaces' extension
+/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -fno-strict-aliasing -pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -DHAVE_GETNAMEINFO=1 -DHAVE_SIOCGIFCONF=1 -DHAVE_SIOCGIFHWADDR=1 -DHAVE_SIOCGIFADDR=1 -DHAVE_SIOCGIFFLAGS=1 -DHAVE_SIOCGIFDSTADDR=1 -DHAVE_SIOCGIFBRDADDR=1 -DHAVE_SIOCGIFNETMASK=1 -DHAVE_SOCKET_IOCTLS=1 -DHAVE_NETAX25_AX25_H=1 -DHAVE_NETECONET_EC_H=1 -DHAVE_NETIPX_IPX_H=1 -DHAVE_NETPACKET_PACKET_H=1 -DHAVE_LINUX_IRDA_H=1 -DHAVE_LINUX_ATM_H=1 -DHAVE_LINUX_LLC_H=1 -DHAVE_LINUX_TIPC_H=1 -DHAVE_LINUX_DN_H=1 -DHAVE_SOCKADDR_AX25=1 -DHAVE_SOCKADDR_IN=1 -DHAVE_SOCKADDR_IN6=1 -DHAVE_SOCKADDR_IPX=1 -DHAVE_SOCKADDR_UN=1 -DHAVE_SOCKADDR_EC=1 -DHAVE_SOCKADDR_LL=1 -DHAVE_SOCKADDR_ATMPVC=1 -DHAVE_SOCKADDR_ATMSVC=1 -DHAVE_SOCKADDR_DN=1 -DHAVE_SOCKADDR_IRDA=1 -DHAVE_SOCKADDR_LLC=1 -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/python2.7 -c netifaces.c -o build/temp.linux-x86_64-2.7/netifaces.o
+netifaces.c: In function 'ifaddrs':
+netifaces.c:627: error: invalid type argument of '->' (have 'struct ifreq')
+netifaces.c:637: error: expected ';' before 'do'
+ 
 
- * Adding --enable-static --disable-shared in the configuration options
-   for autotools packages, which I think is useless because it's
-   already done at the end of package/Makefile.in
+Where netifaces.c:627 is:
 
- * Using _INSTALL_TARGET=NO for libraries. This shouldn't be needed: if
-   the shared variant is not built, the static variant will be
-   installed on the target, then removed by target-finalize
+if (string_from_sockaddr (ifr->CNAME(ifr_addr), buffer, sizeof (buffer)) == 0) {
 
-For sure, there will probably be things that remain at the individual
-package level, but I'd like to see some reflection on what needs to be
-factorized at the package infrastructure level, especially for
-autotools packages that have a relatively well standardized behaviour.
+and netifaces.c:637 is:
 
-Regards,
+        Py_XDECREF (dict);
+        Py_XDECREF (list)
+        Py_XDECREF (family);
 
-Thomas
+What kind of toolchain configuration are you using?
+
+I also notice that it detects HAVE_SOCKADDR_IN6 even though my config
+doesn't have IPv6 support, which might be a problem.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
