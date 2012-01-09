@@ -1,31 +1,65 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 8 Jan 2012 18:16:07 +0100
-Subject: [Buildroot] [git commit] ccache: bump version
-Message-ID: <20120108171623.D0EDE8F678@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun,  8 Jan 2012 23:35:42 -0500
+Subject: [Buildroot] [PATCH] New package: sane-backends
+Message-ID: <1326083742-1539-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bcf3103f0eee3c3d127f7e45f8cd4b94e7f418fc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/ccache/ccache.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in                      |    1 +
+ package/sane-backends/Config.in        |    7 +++++++
+ package/sane-backends/sane-backends.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/sane-backends/Config.in
+ create mode 100644 package/sane-backends/sane-backends.mk
 
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index 87a64e5..9155441 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--CCACHE_VERSION = 3.1.4
-+CCACHE_VERSION = 3.1.7
- CCACHE_SITE    = http://samba.org/ftp/ccache
- CCACHE_SOURCE  = ccache-$(CCACHE_VERSION).tar.bz2
- 
+diff --git a/package/Config.in b/package/Config.in
+index a82c658..276806b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -199,6 +199,7 @@ source "package/openocd/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
+ source "package/rng-tools/Config.in"
++source "package/sane-backends/Config.in"
+ source "package/sdparm/Config.in"
+ source "package/setserial/Config.in"
+ source "package/smartmontools/Config.in"
+diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
+new file mode 100644
+index 0000000..fb73435
+--- /dev/null
++++ b/package/sane-backends/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SANE_BACKENDS
++	bool "sane-backends"
++	select BR2_PACKAGE_LIBUSB
++	help
++	  SANE - Scanner Access Now Easy
++
++	  http://www.sane-project.org
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+new file mode 100644
+index 0000000..bc8a2af
+--- /dev/null
++++ b/package/sane-backends/sane-backends.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# sane-backends
++#
++#############################################################
++SANE_BACKENDS_VERSION:=1.0.22
++SANE_BACKENDS_SOURCE:=sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
++SANE_BACKENDS_SITE:=ftp://ftp2.sane-project.org/pub/sane/sane-backends-$(SANE_BACKENDS_VERSION)
++
++SANE_BACKENDS_DEPENDENCIES += libusb
++SANE_BACKENDS_CONF_OPT += --enable-libusb_1_0
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.0.4
