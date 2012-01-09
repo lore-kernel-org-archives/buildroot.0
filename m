@@ -1,31 +1,223 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Jan 2012 10:50:30 -0300
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.1.x series to version
-	3.1.8
-Message-ID: <1326117030-927-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 9 Jan 2012 16:09:56 +0100
+Subject: [Buildroot] [PATCH] Add pygame package
+In-Reply-To: <1326101526-12889-1-git-send-email-julien.boibessot@free.fr>
+References: <1326101526-12889-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <CAGm1_ks=t5=ZmZMeKnYS+CT1tENLG6yCx+WyLAEN+NLr0bTRRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon, Jan 9, 2012 at 10:32 AM,  <julien.boibessot@free.fr> wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+>
+>
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> ---
+> ?package/Config.in ? ? ? ?| ? ?1 +
+> ?package/pygame/Config.in | ? 55 ++++++++++++++++++++++++
+> ?package/pygame/pygame.mk | ?106 ++++++++++++++++++++++++++++++++++++++++++++++
+> ?3 files changed, 162 insertions(+), 0 deletions(-)
+> ?create mode 100644 package/pygame/Config.in
+> ?create mode 100644 package/pygame/pygame.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 92b80e6..40a97e8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -108,6 +108,7 @@ source "package/fbv/Config.in"
+> ?source "package/imagemagick/Config.in"
+> ?source "package/linux-fusion/Config.in"
+> ?source "package/lite/Config.in"
+> +source "package/pygame/Config.in"
+> ?source "package/sawman/Config.in"
+> ?source "package/sdl/Config.in"
+> ?source "package/sdl_image/Config.in"
+> diff --git a/package/pygame/Config.in b/package/pygame/Config.in
+> new file mode 100644
+> index 0000000..e6c1d31
+> --- /dev/null
+> +++ b/package/pygame/Config.in
+> @@ -0,0 +1,55 @@
+> +config BR2_PACKAGE_PYGAME
+> + ? ? ? bool "pygame"
+> + ? ? ? depends on BR2_PACKAGE_PYTHON
+> + ? ? ? select BR2_PACKAGE_SDL
+> + ? ? ? help
+> + ? ? ? ? Pygame is a cross-platfrom library designed to make it easy to write
+> + ? ? ? ? multimedia software, such as games, in Python. Pygame requires the
+> + ? ? ? ? Python language and SDL multimedia library.
+> + ? ? ? ? It can also make use of several other popular libraries.
+> +
+> + ? ? ? ? http://www.pygame.org/
+> +
+> +menu "pygame optional modules selection"
+> + ? ? ? depends on BR2_PACKAGE_PYGAME
+> +
+> +config BR2_PACKAGE_PYGAME_IMAGE
+> + ? ? ? bool "pygame.image"
+> + ? ? ? depends on BR2_PACKAGE_SDL_IMAGE_PNG && BR2_PACKAGE_SDL_IMAGE_JPEG
+> + ? ? ? help
+> + ? ? ? ? pygame module for loading, saving and transfering images
+> +
+> +comment "pygame.image requires sdl_image with png and jpeg support"
+> + ? ? ? depends on !BR2_PACKAGE_SDL_IMAGE_PNG || !BR2_PACKAGE_SDL_IMAGE_JPEG
+> +
+> +config BR2_PACKAGE_PYGAME_FONT
+> + ? ? ? bool "pygame.font"
+> + ? ? ? depends on BR2_PACKAGE_SDL_TTF
+> + ? ? ? help
+> + ? ? ? ? pygame module for loading and rendering fonts
+> +
+> +comment "pygame.font requires sdl_ttf"
+> + ? ? ? depends on !BR2_PACKAGE_SDL_TTF
+> +
+> +config BR2_PACKAGE_PYGAME_MIXER
+> + ? ? ? bool "pygame.mixer"
+> + ? ? ? depends on BR2_PACKAGE_SDL_MIXER
+> + ? ? ? help
+> + ? ? ? ? pygame module for loading and playing sounds
+> +
+> +comment "pygame.mixer requires sdl_mixer"
+> + ? ? ? depends on !BR2_PACKAGE_SDL_MIXER
+> +
+> +config BR2_PACKAGE_PYGAME_MIXER_MUSIC
+> + ? ? ? bool "pygame.mixer.music"
+> + ? ? ? depends on BR2_PACKAGE_PYGAME_MIXER
+> + ? ? ? help
+> + ? ? ? ? pygame module for controlling streamed audio
+> +
+> +config BR2_PACKAGE_PYGAME_SCRAP
+> + ? ? ? bool "pygame.scrap"
+> + ? ? ? depends on BR2_PACKAGE_SDL_X11
+> + ? ? ? help
+> + ? ? ? ? pygame module for clipboard support (X11 needed)
+> +
+> +endmenu
+> diff --git a/package/pygame/pygame.mk b/package/pygame/pygame.mk
+> new file mode 100644
+> index 0000000..06a7844
+> --- /dev/null
+> +++ b/package/pygame/pygame.mk
+> @@ -0,0 +1,106 @@
+> +#############################################################
+> +#
+> +# Pygame
+> +#
+> +#############################################################
+> +# stable 1.9.1 release requires V4L which has been wiped out of recent Linux
+> +# kernels, so use latest mercurial revision until next stable release is out.
+> +PYGAME_VERSION = f0bb4a4b365d
+> +PYGAME_SITE = https://bitbucket.org/pygame/pygame
+> +PYGAME_SITE_METHOD = hg
+> +
+> +ifeq ($(BR2_PACKAGE_PYGAME_IMAGE),y)
+> +PYGAME_OPT_DEPENDS += sdl_image
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PYGAME_FONT),y)
+> +PYGAME_OPT_DEPENDS += sdl_ttf
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PYGAME_MIXER),y)
+> +PYGAME_OPT_DEPENDS += sdl_mixer
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PYGAME_MOVIE),y)
+> +PYGAME_OPT_DEPENDS += smpeg
+> +endif
+> +
+> +PYGAME_DEPENDENCIES = python sdl $(PYGAME_OPT_DEPENDS)
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_IMAGE),y)
+> +define PYGAME_CONFIGURE_IMAGE
+> + ? ? ? $(SED) 's/^imageext/#imageext/' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_FONT),y)
+> +define PYGAME_CONFIGURE_FONT
+> + ? ? ? $(SED) 's/^font/#font/' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_MIXER),y)
+> +define PYGAME_CONFIGURE_MIXER
+> + ? ? ? $(SED) 's/^mixer/#mixer/g' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_SNDARRAY),y)
+> +define PYGAME_CONFIGURE_SNDARRAY
+> + ? ? ? $(SED) 's/^_numericsndarray/#_numericsndarray/' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_SURFARRAY),y)
+> +define PYGAME_CONFIGURE_SURFARRAY
+> + ? ? ? $(SED) 's/^_numericsurfarray/#_numericsurfarray/' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_MOVIE),y)
+> +define PYGAME_CONFIGURE_MOVIE
+> + ? ? ? $(SED) 's/^movie/#movie/' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +ifneq ($(BR2_PACKAGE_PYGAME_SCRAP),y)
+> +define PYGAME_CONFIGURE_SCRAP
+> + ? ? ? $(SED) 's/^scrap/#scrap/' $(@D)/Setup
+> +endef
+> +endif
+> +
+> +PYGAME_SDL_FLAGS = $(shell $(STAGING_DIR)/usr/bin/sdl-config --cflags)
+> +PYGAME_SDL_FLAGS += $(shell $(STAGING_DIR)/usr/bin/sdl-config --libs)
+> +
+> +# Pygame needs a Setup file where options should be commented out if
+> +# dependencies are not available
+> +define PYGAME_CONFIGURE_CMDS
+> + ? ? ? cp -f $(@D)/Setup.in $(@D)/Setup
+> + ? ? ? $(SED) 's<^SDL = <SDL = $(PYGAME_SDL_FLAGS) \n#<' $(@D)/Setup
+> + ? ? ? $(SED) 's/^pypm/#pypm/' $(@D)/Setup
+> + ? ? ? $(PYGAME_CONFIGURE_IMAGE)
+> + ? ? ? $(PYGAME_CONFIGURE_FONT)
+> + ? ? ? $(PYGAME_CONFIGURE_MIXER)
+> + ? ? ? $(PYGAME_CONFIGURE_SNDARRAY)
+> + ? ? ? $(PYGAME_CONFIGURE_SURFARRAY)
+> + ? ? ? $(PYGAME_CONFIGURE_MOVIE)
+> + ? ? ? $(PYGAME_CONFIGURE_SCRAP)
+> +endef
+> +
+> +define PYGAME_BUILD_CMDS
+> + ? ? ? (cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+> + ? ? ? ? ? ? ? LDSHARED="$(TARGET_CROSS)gcc -shared" \
+> + ? ? ? ? ? ? ? $(HOST_DIR)/usr/bin/python setup.py build)
+> +endef
+> +
+> +define PYGAME_INSTALL_TARGET_CMDS
+> + ? ? ? (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr && \
+> + ? ? ? rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs && \
+> + ? ? ? rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests)
+> +endef
+> +
+> +define PYGAME_UNINSTALL_TARGET_CMDS
+> + ? ? ? rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame*
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
+> --
+> 1.7.5.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index ccd7a30..e6b2909 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -61,7 +61,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.15"	if BR2_KERNEL_HEADERS_3_0
--	default "3.1.7"		if BR2_KERNEL_HEADERS_3_1
-+	default "3.1.8"		if BR2_KERNEL_HEADERS_3_1
- 	default "3.2"		if BR2_KERNEL_HEADERS_3_2
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-1.7.3.4
+As for now python packages should reside in package/python-pkgname and
+will be shown as "external python modules". See the latest python
+patches and packages like netifaces, dpkt etc.
+
+Yegor
