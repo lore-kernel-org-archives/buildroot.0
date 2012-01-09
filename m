@@ -1,194 +1,36 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun,  8 Jan 2012 23:44:31 -0500
-Subject: [Buildroot] [PATCH] tiff: add utility commands and library options
-Message-ID: <1326084271-12749-1-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 9 Jan 2012 08:27:23 +0100
+Subject: [Buildroot] [PATCH] New package: sane-backends
+In-Reply-To: <1326083742-1539-1-git-send-email-fhunleth@troodon-software.com>
+References: <1326083742-1539-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20120109082723.713e0463@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added support for compiling tiffcp and tiff2pdf.
+Hello,
 
-Added options for compiling out various libtiff features. By default,
-all libtiff features are built so that the result is the same as before
-this change.
+Le Sun,  8 Jan 2012 23:35:42 -0500,
+Frank Hunleth <fhunleth@troodon-software.com> a ?crit :
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/tiff/Config.in |   75 ++++++++++++++++++++++++++++++++++++++++++++++-
- package/tiff/tiff.mk   |   70 ++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 142 insertions(+), 3 deletions(-)
+> +SANE_BACKENDS_VERSION:=1.0.22
+> +SANE_BACKENDS_SOURCE:=sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
+> +SANE_BACKENDS_SITE:=ftp://ftp2.sane-project.org/pub/sane/sane-backends-$(SANE_BACKENDS_VERSION)
 
-diff --git a/package/tiff/Config.in b/package/tiff/Config.in
-index c6336e2..007b37d 100644
---- a/package/tiff/Config.in
-+++ b/package/tiff/Config.in
-@@ -1,8 +1,79 @@
- config BR2_PACKAGE_TIFF
- 	bool "tiff"
--	select BR2_PACKAGE_ZLIB
--	select BR2_PACKAGE_JPEG
- 	help
- 	  Library for handling TIFF (Tag Image File Format) images.
- 
- 	  http://www.libtiff.org/
-+
-+if BR2_PACKAGE_TIFF
-+menu "tiff Options"
-+
-+config BR2_PACKAGE_TIFF_LARGE_FILE
-+        bool "Large file support"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_CCITT
-+	bool "CCITT Group 3 & 4 support"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_PACKBITS
-+	bool "Macintosh PackBits algorithm"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_LZW
-+	bool "LZW algorithm"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_THUNDER
-+	bool "ThunderScan 4-bit RLE algorithm"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_NEXT
-+	bool "NeXT 2-bit RLE algorithm"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_LOGLUV
-+	bool "LogLuv high dynamic range encoding"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_MDI
-+	bool "Microsoft Document Imaging"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_ZLIB
-+	bool "Zlib usage (required for Deflate compression)"
-+	select BR2_PACKAGE_ZLIB
-+	default y
-+
-+config BR2_PACKAGE_TIFF_PIXARLOG
-+	bool "Pixar log-format algorithm (requires Zlib)"
-+	select BR2_PACKAGE_TIFF_ZLIB
-+	default y
-+
-+config BR2_PACKAGE_TIFF_JPEG
-+	bool "JPEG compression"
-+	select BR2_PACKAGE_JPEG
-+	default y
-+
-+config BR2_PACKAGE_TIFF_OLD_JPEG
-+	bool "Old JPEG decompression"
-+	default y
-+
-+config BR2_PACKAGE_TIFF_JBIG
-+	bool "JBIG compression"
-+	default y
-+endmenu
-+
-+endif
-+
-+config BR2_PACKAGE_TIFF_TIFF2PDF
-+	bool "tiff2pdf"
-+	depends on BR2_PACKAGE_TIFF
-+	help
-+	  tiff2pdf utility
-+
-+config BR2_PACKAGE_TIFF_TIFFCP
-+	bool "tiffcp"
-+	depends on BR2_PACKAGE_TIFF
-+	help
-+	  tiffcp utility
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 1d57db7..9febfa0 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -12,10 +12,78 @@ TIFF_CONF_OPT = \
- 	--disable-cxx \
- 	--without-x \
- 
--TIFF_DEPENDENCIES = host-pkg-config zlib jpeg
-+TIFF_DEPENDENCIES = host-pkg-config
-+
-+TIFF_TOOLS_LIST =
-+ifeq ($(BR2_PACKAGE_TIFF_TIFF2PDF),y)
-+	TIFF_TOOLS_LIST += tiff2pdf
-+endif
-+ifeq ($(BR2_PACKAGE_TIFF_TIFFCP),y)
-+	TIFF_TOOLS_LIST += tiffcp
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_LARGEFILE),y)
-+	TIFF_CONF_OPT += --disable-largefile
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
-+	TIFF_CONF_OPT += --disable-ccitt
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_PACKBITS),y)
-+	TIFF_CONF_OPT += --disable-packbits
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_LZW),y)
-+	TIFF_CONF_OPT += --disable-lzw
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_THUNDER),y)
-+	TIFF_CONF_OPT += --disable-thunder
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_NEXT),y)
-+	TIFF_CONF_OPT += --disable-next
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_LOGLUV),y)
-+	TIFF_CONF_OPT += --disable-logluv
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_MDI),y)
-+	TIFF_CONF_OPT += --disable-mdi
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_ZLIB),y)
-+	TIFF_CONF_OPT += --disable-zlib
-+else
-+TIFF_DEPENDENCIES += zlib
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_PIXARLOG),y)
-+	TIFF_CONF_OPT += --disable-pixarlog
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_JPEG),y)
-+	TIFF_CONF_OPT += --disable-jpeg
-+else
-+TIFF_DEPENDENCIES += jpeg
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_OLD_JPEG),y)
-+	TIFF_CONF_OPT += --disable-old-jpeg
-+endif
-+
-+ifneq ($(BR2_PACKAGE_TIFF_JBIG),y)
-+	TIFF_CONF_OPT += --disable-jbig
-+endif
- 
- define TIFF_INSTALL_TARGET_CMDS
- 	-cp -a $(@D)/libtiff/.libs/libtiff.so* $(TARGET_DIR)/usr/lib/
-+	for i in $(TIFF_TOOLS_LIST); \
-+        do \
-+                $(INSTALL) -m 755 -D $(@D)/tools/$$i $(TARGET_DIR)/usr/bin/$$i; \
-+        done
- endef
- 
- $(eval $(call AUTOTARGETS))
+Please use '=' instead of ':=' here.
+
+> +SANE_BACKENDS_DEPENDENCIES += libusb
+> +SANE_BACKENDS_CONF_OPT += --enable-libusb_1_0
+> +
+> +$(eval $(call AUTOTARGETS))
+
+Otherwise, looks like a sane package :-)
+
+Thomas
 -- 
-1.7.0.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
