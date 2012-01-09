@@ -1,45 +1,33 @@
-From: vbr vbr <vvvg77@gmail.com>
-Date: Mon, 9 Jan 2012 14:25:41 -0800
-Subject: [Buildroot] genext2fs: couldn't allocate a block (no free space)
-In-Reply-To: <87zkdzgva3.fsf@macbook.be.48ers.dk>
-References: <CAOrAeonTZC0dXZnNLLfTjrcZHyiTGHRUWcKDO06mz3MOT0Y7CQ@mail.gmail.com>
- <87zkdzgva3.fsf@macbook.be.48ers.dk>
-Message-ID: <CAOrAeom9caS+7U3O-5iby8XK-3io_cB+zMQf=vezNxTCgmqrKg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 9 Jan 2012 22:55:04 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.1.x series to
+	version 3.1.8
+Message-ID: <20120109223958.670F790046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-INODES=1010
-BLOCKS=98925
-genext2fs: couldn't allocate a block (no free space)
+commit: http://git.buildroot.net/buildroot/commit/?id=f7950dbfe55a95237e3a5f1d80e86a5a2c4bd1b9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tried incrementing gradually from 11 and ended up at 14.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks
-Vincent
-
-
-On Sat, Jan 7, 2012 at 11:36 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-
-> >>>>> "vbr" == vbr vbr <vvvg77@gmail.com> writes:
->
->  vbr> Hi,
->  vbr> I am using buildroot 2011.11 with x86_64 and hitting this issue
-> after enabling
->  vbr> valgrind which made my target fatter:
->  vbr> genext2fs: couldn't allocate a block (no free space)
->
->  vbr> I made this change to work around this issue increasing the number
->  vbr> of BLOCKS, but it's probably not the right thing to do:
->
-> 40% is probably a bit extreme. Out of interest, how many blocks did it
-> estimate before, and how many did you need?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120109/4595f7eb/attachment.html>
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index ccd7a30..e6b2909 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -61,7 +61,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.15"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.1.7"		if BR2_KERNEL_HEADERS_3_1
++	default "3.1.8"		if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2"		if BR2_KERNEL_HEADERS_3_2
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
