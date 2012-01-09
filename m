@@ -1,209 +1,223 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Mon,  9 Jan 2012 10:32:06 +0100
-Subject: [Buildroot] [PATCH] Add pygame package
-Message-ID: <1326101526-12889-1-git-send-email-julien.boibessot@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 9 Jan 2012 10:45:51 +0100
+Subject: [Buildroot] [RFC PATCH v3 1/2] apply-patches.sh: script changed
+ to support archives in a proper way
+In-Reply-To: <2d2359b7b656cfa35c85ccef3ef5654e9141e889.1325851860.git.ludovic.desroches@atmel.com>
+References: <201106290542.26383.minimod@morethan.org>
+ <1325854022-32258-1-git-send-email-ludovic.desroches@atmel.com>
+ <2d2359b7b656cfa35c85ccef3ef5654e9141e889.1325851860.git.ludovic.desroches@atmel.com>
+Message-ID: <CAAXf6LVNMNGcZNYhcboydR5YFqmuoV3zpzecXCAucN+a6o5qkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+On Fri, Jan 6, 2012 at 1:47 PM,  <ludovic.desroches@atmel.com> wrote:
+> From: Ludovic Desroches <ludovic.desroches@atmel.com>
+>
+> The previous script doesn't support patching order with archives since
+> it didn't extract archives but simply decompressed file and piped the
+> result to the patch command.
+> This new script extracts archives in a temporary folder and then applies
+> patches.
+>
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+>
+> Conflicts:
+>
+> ? ? ? ?support/scripts/apply-patches.sh
+> ---
+> ?support/scripts/apply-patches.sh | ?159 +++++++++++++++++++++++++-------------
+> ?1 files changed, 105 insertions(+), 54 deletions(-)
+>
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 1aef47e..0492e01 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -1,66 +1,117 @@
+> -#! /bin/bash
+> -# A little script I whipped up to make it easy to
+> -# patch source trees and have sane error handling
+> -# -Erik
+> -#
+> -# (c) 2002 Erik Andersen <andersen@codepoet.org>
+> +#!/bin/bash
 
+I wonder why you removed the original copyright. I'd say you should
+keep it, possibly together with a description of the changes and your
+name.
+Although it may not be the convention of adding explicit copyrights to
+scripts in buildroot, removing an existing one seems wrong IMO.
 
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
----
- package/Config.in        |    1 +
- package/pygame/Config.in |   55 ++++++++++++++++++++++++
- package/pygame/pygame.mk |  106 ++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 162 insertions(+), 0 deletions(-)
- create mode 100644 package/pygame/Config.in
- create mode 100644 package/pygame/pygame.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 92b80e6..40a97e8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -108,6 +108,7 @@ source "package/fbv/Config.in"
- source "package/imagemagick/Config.in"
- source "package/linux-fusion/Config.in"
- source "package/lite/Config.in"
-+source "package/pygame/Config.in"
- source "package/sawman/Config.in"
- source "package/sdl/Config.in"
- source "package/sdl_image/Config.in"
-diff --git a/package/pygame/Config.in b/package/pygame/Config.in
-new file mode 100644
-index 0000000..e6c1d31
---- /dev/null
-+++ b/package/pygame/Config.in
-@@ -0,0 +1,55 @@
-+config BR2_PACKAGE_PYGAME
-+	bool "pygame"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_SDL
-+	help
-+	  Pygame is a cross-platfrom library designed to make it easy to write
-+	  multimedia software, such as games, in Python. Pygame requires the
-+	  Python language and SDL multimedia library.
-+	  It can also make use of several other popular libraries.
-+
-+	  http://www.pygame.org/
-+
-+menu "pygame optional modules selection"
-+	depends on BR2_PACKAGE_PYGAME
-+
-+config BR2_PACKAGE_PYGAME_IMAGE
-+	bool "pygame.image"
-+	depends on BR2_PACKAGE_SDL_IMAGE_PNG && BR2_PACKAGE_SDL_IMAGE_JPEG
-+	help
-+	  pygame module for loading, saving and transfering images
-+
-+comment "pygame.image requires sdl_image with png and jpeg support"
-+	depends on !BR2_PACKAGE_SDL_IMAGE_PNG || !BR2_PACKAGE_SDL_IMAGE_JPEG
-+
-+config BR2_PACKAGE_PYGAME_FONT
-+	bool "pygame.font"
-+	depends on BR2_PACKAGE_SDL_TTF
-+	help
-+	  pygame module for loading and rendering fonts
-+
-+comment "pygame.font requires sdl_ttf"
-+	depends on !BR2_PACKAGE_SDL_TTF
-+
-+config BR2_PACKAGE_PYGAME_MIXER
-+	bool "pygame.mixer"
-+	depends on BR2_PACKAGE_SDL_MIXER
-+	help
-+	  pygame module for loading and playing sounds
-+
-+comment "pygame.mixer requires sdl_mixer"
-+	depends on !BR2_PACKAGE_SDL_MIXER
-+
-+config BR2_PACKAGE_PYGAME_MIXER_MUSIC
-+	bool "pygame.mixer.music"
-+	depends on BR2_PACKAGE_PYGAME_MIXER
-+	help
-+	  pygame module for controlling streamed audio
-+
-+config BR2_PACKAGE_PYGAME_SCRAP
-+	bool "pygame.scrap"
-+	depends on BR2_PACKAGE_SDL_X11
-+	help
-+	  pygame module for clipboard support (X11 needed)
-+
-+endmenu
-diff --git a/package/pygame/pygame.mk b/package/pygame/pygame.mk
-new file mode 100644
-index 0000000..06a7844
---- /dev/null
-+++ b/package/pygame/pygame.mk
-@@ -0,0 +1,106 @@
-+#############################################################
-+#
-+# Pygame
-+#
-+#############################################################
-+# stable 1.9.1 release requires V4L which has been wiped out of recent Linux
-+# kernels, so use latest mercurial revision until next stable release is out.
-+PYGAME_VERSION = f0bb4a4b365d
-+PYGAME_SITE = https://bitbucket.org/pygame/pygame
-+PYGAME_SITE_METHOD = hg
-+
-+ifeq ($(BR2_PACKAGE_PYGAME_IMAGE),y)
-+PYGAME_OPT_DEPENDS += sdl_image
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYGAME_FONT),y)
-+PYGAME_OPT_DEPENDS += sdl_ttf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYGAME_MIXER),y)
-+PYGAME_OPT_DEPENDS += sdl_mixer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYGAME_MOVIE),y)
-+PYGAME_OPT_DEPENDS += smpeg
-+endif
-+
-+PYGAME_DEPENDENCIES = python sdl $(PYGAME_OPT_DEPENDS)
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_IMAGE),y)
-+define PYGAME_CONFIGURE_IMAGE
-+	$(SED) 's/^imageext/#imageext/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_FONT),y)
-+define PYGAME_CONFIGURE_FONT
-+	$(SED) 's/^font/#font/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_MIXER),y)
-+define PYGAME_CONFIGURE_MIXER
-+	$(SED) 's/^mixer/#mixer/g' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_SNDARRAY),y)
-+define PYGAME_CONFIGURE_SNDARRAY
-+	$(SED) 's/^_numericsndarray/#_numericsndarray/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_SURFARRAY),y)
-+define PYGAME_CONFIGURE_SURFARRAY
-+	$(SED) 's/^_numericsurfarray/#_numericsurfarray/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_MOVIE),y)
-+define PYGAME_CONFIGURE_MOVIE
-+	$(SED) 's/^movie/#movie/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYGAME_SCRAP),y)
-+define PYGAME_CONFIGURE_SCRAP
-+	$(SED) 's/^scrap/#scrap/' $(@D)/Setup
-+endef
-+endif
-+
-+PYGAME_SDL_FLAGS = $(shell $(STAGING_DIR)/usr/bin/sdl-config --cflags)
-+PYGAME_SDL_FLAGS += $(shell $(STAGING_DIR)/usr/bin/sdl-config --libs)
-+
-+# Pygame needs a Setup file where options should be commented out if
-+# dependencies are not available
-+define PYGAME_CONFIGURE_CMDS
-+	cp -f $(@D)/Setup.in $(@D)/Setup
-+	$(SED) 's<^SDL = <SDL = $(PYGAME_SDL_FLAGS) \n#<' $(@D)/Setup
-+	$(SED) 's/^pypm/#pypm/' $(@D)/Setup
-+	$(PYGAME_CONFIGURE_IMAGE)
-+	$(PYGAME_CONFIGURE_FONT)
-+	$(PYGAME_CONFIGURE_MIXER)
-+	$(PYGAME_CONFIGURE_SNDARRAY)
-+	$(PYGAME_CONFIGURE_SURFARRAY)
-+	$(PYGAME_CONFIGURE_MOVIE)
-+	$(PYGAME_CONFIGURE_SCRAP)
-+endef
-+
-+define PYGAME_BUILD_CMDS
-+	(cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		LDSHARED="$(TARGET_CROSS)gcc -shared" \
-+		$(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYGAME_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr && \
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs && \
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests)
-+endef
-+
-+define PYGAME_UNINSTALL_TARGET_CMDS
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame*
-+endef
-+
-+$(eval $(call GENTARGETS))
--- 
-1.7.5.4
+>
+> -# Set directories from arguments, or use defaults.
+> -targetdir=${1-.}
+> -patchdir=${2-../kernel-patches}
+> -shift 2
+> -patchpattern=${@-*}
+> +# function apply_patch patch_file
+> +# this function no more deal with directory case since it is managed
+> +# in an upper layer
+> +function apply_patch {
+> +apply="patch -p1 -E -d"
+> +#if [ ! -e "${1}" ] ; then
+> +# ? ? ?echo "${1} is not a file"
+> +# ? ? ?exit 1
+> +#fi
+>
+> -if [ ! -d "${targetdir}" ] ; then
+> - ? ?echo "Aborting. ?'${targetdir}' is not a directory."
+> - ? ?exit 1
+> +case "${1}" in
+> +*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
+> + ? ? ? echo "Error with ${1}";
+> + ? ? ? echo "Archives into a directory or another archive is not supported";
+> + ? ? ? return 1;
+> + ? ? ? ;;
+> +*\.gz$)
+> + ? ? ? type="gzip"; uncomp="gunzip -dc"; ;;
+> +*\.bz$)
+> + ? ? ? type="bzip"; uncomp="bunzip -dc"; ;;
+> +*\.bz2$)
+> + ? ? ? type="bzip2"; uncomp="bunzip2 -dc"; ;;
+> +*\.zip$)
+> + ? ? ? type="zip"; uncomp="unzip -d"; ;;
+> +*\.Z$)
+> + ? ? ? type="compress"; uncomp="uncompress -c"; ;;
+> +*\.diff*)
+> + ? ? ? type="diff"; uncomp="cat"; ;;
+> +*\.patch*)
+> + ? ? ? type="patch"; uncomp="cat"; ;;
+> +*)
+> + ? ? ? echo "Unsupported format file for ${1}, skip it";
+> + ? ? ? return 0;
+> + ? ? ? ;;
+> +esac
+> +
+> +echo ""
+> +echo "Applying ${1} using ${type}: "
+> +echo ${1} | cat >> ${builddir}/.applied_patches_list
+> +${uncomp} ${1} | ${apply} ${builddir}
+> +if [ $? != 0 ] ; then
+> + ? ? ? echo "Patch failed! Please fix ${1}!"
+> + ? ? ? return 1
+> ?fi
+> +}
+> +
+> +
+> +# entry point
+> +builddir=${1}
+> +patchdir=${2}
+> +shift 2
+> +patchlist=${@}
+> +patchesdir="${builddir}/../$(basename $builddir)-patches"
+> +
+> +# check directories
+> ?if [ ! -d "${patchdir}" ] ; then
+> - ? ?echo "Aborting. ?'${patchdir}' is not a directory."
+> - ? ?exit 1
+> + ? ? ? echo "Aborting: ${patchdir} is not a directory."
+> + ? ? ? exit 1
+> ?fi
+> -
+> -for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
+> - ? ?apply="patch -g0 -p1 -E -d"
+> - ? ?uncomp_parm=""
+> - ? ?if [ -d "${patchdir}/$i" ] ; then
+> - ? ? ? type="directory overlay"
+> - ? ? ? uncomp="tar cf - --exclude=.svn --no-anchored -C"
+> - ? ? ? uncomp_parm="."
+> - ? ? ? apply="tar xvf - -C"
+> - ? ?else case "$i" in
+> - ? ? ? *.gz)
+> - ? ? ? type="gzip"; uncomp="gunzip -dc"; ;;
+> - ? ? ? *.bz)
+> - ? ? ? type="bzip"; uncomp="bunzip -dc"; ;;
+> - ? ? ? *.bz2)
+> - ? ? ? type="bzip2"; uncomp="bunzip2 -dc"; ;;
+> - ? ? ? *.zip)
+> - ? ? ? type="zip"; uncomp="unzip -d"; ;;
+> - ? ? ? *.Z)
+> - ? ? ? type="compress"; uncomp="uncompress -c"; ;;
+> - ? ? ? *.tgz)
+> - ? ? ? type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;;
+> - ? ? ? *.tar)
+> - ? ? ? type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;;
+> - ? ? ? *)
+> - ? ? ? type="plaintext"; uncomp="cat"; ;;
+> - ? ?esac fi
+> - ? ?echo ""
+> - ? ?echo "Applying ${i} using ${type}: "
+> - ? ? ? echo ${i} | cat >> ${targetdir}/.applied_patches_list
+> - ? ?${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${targetdir}
+> - ? ?if [ $? != 0 ] ; then
+> - ? ? ? ?echo "Patch failed! ?Please fix $i!"
+> +if [ ! -d "${builddir}" ] ; then
+> + ? ? ? echo "Aborting: ${builddir} is not a directory."
+> ? ? ? ?exit 1
+> - ? ?fi
+> +fi
+> +
+> +# parse patch list, extract archives, apply patches
+> +for i in $patchlist ; do
+> + ? ? ? # for remote files, directory is buildroot dl dir
+> + ? ? ? #if echo $i | grep -q -E "^http://|^ftp://" ; then
+> + ? ? ? # ? ? ? patchdir=$patchdir
+> + ? ? ? #else
+> + ? ? ? # ? ? ? patchdir=$(dirname $i)
+> + ? ? ? #fi
+> + ? ? ? patch_path="${patchdir}/${i}"
+> + ? ? ? # three cases: directory, archive, file patch (compressed or not)
+> + ? ? ? # directory
+> + ? ? ? if [ -d "${patch_path}" ] ; then
+> + ? ? ? ? ? ? ? for p in $(ls ${patch_path}) ; do
+> + ? ? ? ? ? ? ? ? ? ? ? apply_patch "${patch_path}/${p}" || exit 1
+> + ? ? ? ? ? ? ? done
+> + ? ? ? # archive
+> + ? ? ? elif echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$|tar\.gz$|tgz$" ; then
+> + ? ? ? ? ? ? ? mkdir "${patchesdir}"
+> + ? ? ? ? ? ? ? # extract archive
+> + ? ? ? ? ? ? ? if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
+> + ? ? ? ? ? ? ? ? ? ? ? tar_options="-xjf"
+> + ? ? ? ? ? ? ? else
+> + ? ? ? ? ? ? ? ? ? ? ? tar_options="-xzf"
+> + ? ? ? ? ? ? ? fi
+> + ? ? ? ? ? ? ? tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
+> + ? ? ? ? ? ? ? # apply patches from the archive
+> + ? ? ? ? ? ? ? #echo ${patchesdir}
+> + ? ? ? ? ? ? ? #find ${patchesdir} | sort
+> + ? ? ? ? ? ? ? for p in $(find ${patchesdir} | sort) ; do
+> + ? ? ? ? ? ? ? ? ? ? ? apply_patch "${p}" || { rm -rf "${patchesdir}" ; exit 1; }
+> + ? ? ? ? ? ? ? done
+> + ? ? ? ? ? ? ? rm -rf "${patchesdir}"
+> + ? ? ? # file which is not an archive
+> + ? ? ? else
+> + ? ? ? ? ? ? ? # we can have regex into patch name as package*.patch.arm that's
+> + ? ? ? ? ? ? ? # why using ls
+> + ? ? ? ? ? ? ? for p in $(ls -d ${patch_path} 2> /dev/null) ; do
+> + ? ? ? ? ? ? ? ? ? ? ? apply_patch "${p}" || exit 1
+> + ? ? ? ? ? ? ? done
+> + ? ? ? fi
+> ?done
+>
+> -# Check for rejects...
+> -if [ "`find $targetdir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+> +# check for rejects...
+> +if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+> ? ? echo "Aborting. ?Reject files found."
+> ? ? exit 1
+> ?fi
+>
+> -# Remove backup files
+> -find $targetdir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
+> +# remove backup files
+> +find ${builddir}/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
+> +
+> --
+> 1.7.5.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
