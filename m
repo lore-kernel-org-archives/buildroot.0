@@ -1,223 +1,65 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 9 Jan 2012 10:45:51 +0100
-Subject: [Buildroot] [RFC PATCH v3 1/2] apply-patches.sh: script changed
- to support archives in a proper way
-In-Reply-To: <2d2359b7b656cfa35c85ccef3ef5654e9141e889.1325851860.git.ludovic.desroches@atmel.com>
-References: <201106290542.26383.minimod@morethan.org>
- <1325854022-32258-1-git-send-email-ludovic.desroches@atmel.com>
- <2d2359b7b656cfa35c85ccef3ef5654e9141e889.1325851860.git.ludovic.desroches@atmel.com>
-Message-ID: <CAAXf6LVNMNGcZNYhcboydR5YFqmuoV3zpzecXCAucN+a6o5qkg@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Mon, 09 Jan 2012 10:57:23 +0100
+Subject: [Buildroot] [PATCH] python-netifaces: add -x option to fix
+	cross-compilation
+In-Reply-To: <8739bpffv1.fsf@macbook.be.48ers.dk>
+References: <1326094927-27207-1-git-send-email-yegorslists@googlemail.com>
+ <8739bpffv1.fsf@macbook.be.48ers.dk>
+Message-ID: <4F0ABA03.3030206@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jan 6, 2012 at 1:47 PM,  <ludovic.desroches@atmel.com> wrote:
-> From: Ludovic Desroches <ludovic.desroches@atmel.com>
->
-> The previous script doesn't support patching order with archives since
-> it didn't extract archives but simply decompressed file and piped the
-> result to the patch command.
-> This new script extracts archives in a temporary folder and then applies
-> patches.
->
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
->
-> Conflicts:
->
-> ? ? ? ?support/scripts/apply-patches.sh
-> ---
-> ?support/scripts/apply-patches.sh | ?159 +++++++++++++++++++++++++-------------
-> ?1 files changed, 105 insertions(+), 54 deletions(-)
->
-> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 1aef47e..0492e01 100755
-> --- a/support/scripts/apply-patches.sh
-> +++ b/support/scripts/apply-patches.sh
-> @@ -1,66 +1,117 @@
-> -#! /bin/bash
-> -# A little script I whipped up to make it easy to
-> -# patch source trees and have sane error handling
-> -# -Erik
-> -#
-> -# (c) 2002 Erik Andersen <andersen@codepoet.org>
-> +#!/bin/bash
+Am 09.01.2012 09:18, schrieb Peter Korsgaard:
+>>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+> 
+> Hi,
+> 
+>  yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+>  yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>  yegorslists> ---
+>  yegorslists>  package/python-netifaces/python-netifaces.mk |    2 +-
+>  yegorslists>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+>  yegorslists> diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+>  yegorslists> index e9a7099..5bfa326 100644
+>  yegorslists> --- a/package/python-netifaces/python-netifaces.mk
+>  yegorslists> +++ b/package/python-netifaces/python-netifaces.mk
+>  yegorslists> @@ -14,7 +14,7 @@ define PYTHON_NETIFACES_BUILD_CMDS
+>  yegorslists>  	(cd $(@D); \
+>  yegorslists>  		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+>  yegorslists>  		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+>  yegorslists> -	$(HOST_DIR)/usr/bin/python setup.py build)
+>  yegorslists> +	$(HOST_DIR)/usr/bin/python setup.py build -x)
+>  yegorslists>  endef
+> 
+> Thanks, so far so good, but it still doesn't build here:
+> 
+> building 'netifaces' extension
+> /home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -fno-strict-aliasing -pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC -DHAVE_GETNAMEINFO=1 -DHAVE_SIOCGIFCONF=1 -DHAVE_SIOCGIFHWADDR=1 -DHAVE_SIOCGIFADDR=1 -DHAVE_SIOCGIFFLAGS=1 -DHAVE_SIOCGIFDSTADDR=1 -DHAVE_SIOCGIFBRDADDR=1 -DHAVE_SIOCGIFNETMASK=1 -DHAVE_SOCKET_IOCTLS=1 -DHAVE_NETAX25_AX25_H=1 -DHAVE_NETECONET_EC_H=1 -DHAVE_NETIPX_IPX_H=1 -DHAVE_NETPACKET_PACKET_H=1 -DHAVE_LINUX_IRDA_H=1 -DHAVE_LINUX_ATM_H=1 -DHAVE_LINUX_LLC_H=1 -DHAVE_LINUX_TIPC_H=1 -DHAVE_LINUX_DN_H=1 -DHAVE_SOCKADDR_AX25=1 -DHAVE_SOCKADDR_IN=1 -DHAVE_SOCKADDR_IN6=1 -DHAVE_SOCKADDR_IPX=1 -DHAVE_SOCKADDR_UN=1 -DHAVE_SOCKADDR_EC=1 -DHAVE_SOCKADDR_LL=1 -DHAVE_SOCKADDR_ATMPVC=1 -DHAVE_SOCKADDR_ATMSVC=1 -DHAVE_SOCKADDR_DN=1 -DHAVE_SOCKADDR_IRDA=1 -DHAVE_SOCKADDR_LLC=1 -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/python2.7 -c netifaces.c -o build/temp.linux-x86_64-2.7/netifaces.
+o
+> netifaces.c: In function 'ifaddrs':
+> netifaces.c:627: error: invalid type argument of '->' (have 'struct ifreq')
+> netifaces.c:637: error: expected ';' before 'do'
+>  
+> 
+> Where netifaces.c:627 is:
+> 
+> if (string_from_sockaddr (ifr->CNAME(ifr_addr), buffer, sizeof (buffer)) == 0) {
+> 
+> and netifaces.c:637 is:
+> 
+>         Py_XDECREF (dict);
+>         Py_XDECREF (list)
+>         Py_XDECREF (family);
+> 
+> What kind of toolchain configuration are you using?
+> 
+> I also notice that it detects HAVE_SOCKADDR_IN6 even though my config
+> doesn't have IPv6 support, which might be a problem.
 
-I wonder why you removed the original copyright. I'd say you should
-keep it, possibly together with a description of the changes and your
-name.
-Although it may not be the convention of adding explicit copyrights to
-scripts in buildroot, removing an existing one seems wrong IMO.
+That's really strange. I used CodeSourcery toolchain and had no problems, but with native BR toolchain I have the same behavior as yours. I'll look into this issue.
 
->
-> -# Set directories from arguments, or use defaults.
-> -targetdir=${1-.}
-> -patchdir=${2-../kernel-patches}
-> -shift 2
-> -patchpattern=${@-*}
-> +# function apply_patch patch_file
-> +# this function no more deal with directory case since it is managed
-> +# in an upper layer
-> +function apply_patch {
-> +apply="patch -p1 -E -d"
-> +#if [ ! -e "${1}" ] ; then
-> +# ? ? ?echo "${1} is not a file"
-> +# ? ? ?exit 1
-> +#fi
->
-> -if [ ! -d "${targetdir}" ] ; then
-> - ? ?echo "Aborting. ?'${targetdir}' is not a directory."
-> - ? ?exit 1
-> +case "${1}" in
-> +*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
-> + ? ? ? echo "Error with ${1}";
-> + ? ? ? echo "Archives into a directory or another archive is not supported";
-> + ? ? ? return 1;
-> + ? ? ? ;;
-> +*\.gz$)
-> + ? ? ? type="gzip"; uncomp="gunzip -dc"; ;;
-> +*\.bz$)
-> + ? ? ? type="bzip"; uncomp="bunzip -dc"; ;;
-> +*\.bz2$)
-> + ? ? ? type="bzip2"; uncomp="bunzip2 -dc"; ;;
-> +*\.zip$)
-> + ? ? ? type="zip"; uncomp="unzip -d"; ;;
-> +*\.Z$)
-> + ? ? ? type="compress"; uncomp="uncompress -c"; ;;
-> +*\.diff*)
-> + ? ? ? type="diff"; uncomp="cat"; ;;
-> +*\.patch*)
-> + ? ? ? type="patch"; uncomp="cat"; ;;
-> +*)
-> + ? ? ? echo "Unsupported format file for ${1}, skip it";
-> + ? ? ? return 0;
-> + ? ? ? ;;
-> +esac
-> +
-> +echo ""
-> +echo "Applying ${1} using ${type}: "
-> +echo ${1} | cat >> ${builddir}/.applied_patches_list
-> +${uncomp} ${1} | ${apply} ${builddir}
-> +if [ $? != 0 ] ; then
-> + ? ? ? echo "Patch failed! Please fix ${1}!"
-> + ? ? ? return 1
-> ?fi
-> +}
-> +
-> +
-> +# entry point
-> +builddir=${1}
-> +patchdir=${2}
-> +shift 2
-> +patchlist=${@}
-> +patchesdir="${builddir}/../$(basename $builddir)-patches"
-> +
-> +# check directories
-> ?if [ ! -d "${patchdir}" ] ; then
-> - ? ?echo "Aborting. ?'${patchdir}' is not a directory."
-> - ? ?exit 1
-> + ? ? ? echo "Aborting: ${patchdir} is not a directory."
-> + ? ? ? exit 1
-> ?fi
-> -
-> -for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
-> - ? ?apply="patch -g0 -p1 -E -d"
-> - ? ?uncomp_parm=""
-> - ? ?if [ -d "${patchdir}/$i" ] ; then
-> - ? ? ? type="directory overlay"
-> - ? ? ? uncomp="tar cf - --exclude=.svn --no-anchored -C"
-> - ? ? ? uncomp_parm="."
-> - ? ? ? apply="tar xvf - -C"
-> - ? ?else case "$i" in
-> - ? ? ? *.gz)
-> - ? ? ? type="gzip"; uncomp="gunzip -dc"; ;;
-> - ? ? ? *.bz)
-> - ? ? ? type="bzip"; uncomp="bunzip -dc"; ;;
-> - ? ? ? *.bz2)
-> - ? ? ? type="bzip2"; uncomp="bunzip2 -dc"; ;;
-> - ? ? ? *.zip)
-> - ? ? ? type="zip"; uncomp="unzip -d"; ;;
-> - ? ? ? *.Z)
-> - ? ? ? type="compress"; uncomp="uncompress -c"; ;;
-> - ? ? ? *.tgz)
-> - ? ? ? type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;;
-> - ? ? ? *.tar)
-> - ? ? ? type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;;
-> - ? ? ? *)
-> - ? ? ? type="plaintext"; uncomp="cat"; ;;
-> - ? ?esac fi
-> - ? ?echo ""
-> - ? ?echo "Applying ${i} using ${type}: "
-> - ? ? ? echo ${i} | cat >> ${targetdir}/.applied_patches_list
-> - ? ?${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${targetdir}
-> - ? ?if [ $? != 0 ] ; then
-> - ? ? ? ?echo "Patch failed! ?Please fix $i!"
-> +if [ ! -d "${builddir}" ] ; then
-> + ? ? ? echo "Aborting: ${builddir} is not a directory."
-> ? ? ? ?exit 1
-> - ? ?fi
-> +fi
-> +
-> +# parse patch list, extract archives, apply patches
-> +for i in $patchlist ; do
-> + ? ? ? # for remote files, directory is buildroot dl dir
-> + ? ? ? #if echo $i | grep -q -E "^http://|^ftp://" ; then
-> + ? ? ? # ? ? ? patchdir=$patchdir
-> + ? ? ? #else
-> + ? ? ? # ? ? ? patchdir=$(dirname $i)
-> + ? ? ? #fi
-> + ? ? ? patch_path="${patchdir}/${i}"
-> + ? ? ? # three cases: directory, archive, file patch (compressed or not)
-> + ? ? ? # directory
-> + ? ? ? if [ -d "${patch_path}" ] ; then
-> + ? ? ? ? ? ? ? for p in $(ls ${patch_path}) ; do
-> + ? ? ? ? ? ? ? ? ? ? ? apply_patch "${patch_path}/${p}" || exit 1
-> + ? ? ? ? ? ? ? done
-> + ? ? ? # archive
-> + ? ? ? elif echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$|tar\.gz$|tgz$" ; then
-> + ? ? ? ? ? ? ? mkdir "${patchesdir}"
-> + ? ? ? ? ? ? ? # extract archive
-> + ? ? ? ? ? ? ? if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
-> + ? ? ? ? ? ? ? ? ? ? ? tar_options="-xjf"
-> + ? ? ? ? ? ? ? else
-> + ? ? ? ? ? ? ? ? ? ? ? tar_options="-xzf"
-> + ? ? ? ? ? ? ? fi
-> + ? ? ? ? ? ? ? tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
-> + ? ? ? ? ? ? ? # apply patches from the archive
-> + ? ? ? ? ? ? ? #echo ${patchesdir}
-> + ? ? ? ? ? ? ? #find ${patchesdir} | sort
-> + ? ? ? ? ? ? ? for p in $(find ${patchesdir} | sort) ; do
-> + ? ? ? ? ? ? ? ? ? ? ? apply_patch "${p}" || { rm -rf "${patchesdir}" ; exit 1; }
-> + ? ? ? ? ? ? ? done
-> + ? ? ? ? ? ? ? rm -rf "${patchesdir}"
-> + ? ? ? # file which is not an archive
-> + ? ? ? else
-> + ? ? ? ? ? ? ? # we can have regex into patch name as package*.patch.arm that's
-> + ? ? ? ? ? ? ? # why using ls
-> + ? ? ? ? ? ? ? for p in $(ls -d ${patch_path} 2> /dev/null) ; do
-> + ? ? ? ? ? ? ? ? ? ? ? apply_patch "${p}" || exit 1
-> + ? ? ? ? ? ? ? done
-> + ? ? ? fi
-> ?done
->
-> -# Check for rejects...
-> -if [ "`find $targetdir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-> +# check for rejects...
-> +if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-> ? ? echo "Aborting. ?Reject files found."
-> ? ? exit 1
-> ?fi
->
-> -# Remove backup files
-> -find $targetdir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-> +# remove backup files
-> +find ${builddir}/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-> +
-> --
-> 1.7.5.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Yegor
