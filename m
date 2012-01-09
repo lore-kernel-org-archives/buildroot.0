@@ -1,36 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jan 2012 08:27:23 +0100
-Subject: [Buildroot] [PATCH] New package: sane-backends
-In-Reply-To: <1326083742-1539-1-git-send-email-fhunleth@troodon-software.com>
-References: <1326083742-1539-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20120109082723.713e0463@skate>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  9 Jan 2012 08:42:07 +0100
+Subject: [Buildroot] [PATCH] python-netifaces: add -x option to fix
+	cross-compilation
+Message-ID: <1326094927-27207-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Le Sun,  8 Jan 2012 23:35:42 -0500,
-Frank Hunleth <fhunleth@troodon-software.com> a ?crit :
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-netifaces/python-netifaces.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> +SANE_BACKENDS_VERSION:=1.0.22
-> +SANE_BACKENDS_SOURCE:=sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
-> +SANE_BACKENDS_SITE:=ftp://ftp2.sane-project.org/pub/sane/sane-backends-$(SANE_BACKENDS_VERSION)
-
-Please use '=' instead of ':=' here.
-
-> +SANE_BACKENDS_DEPENDENCIES += libusb
-> +SANE_BACKENDS_CONF_OPT += --enable-libusb_1_0
-> +
-> +$(eval $(call AUTOTARGETS))
-
-Otherwise, looks like a sane package :-)
-
-Thomas
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+index e9a7099..5bfa326 100644
+--- a/package/python-netifaces/python-netifaces.mk
++++ b/package/python-netifaces/python-netifaces.mk
+@@ -14,7 +14,7 @@ define PYTHON_NETIFACES_BUILD_CMDS
+ 	(cd $(@D); \
+ 		PYTHONXCPREFIX="$(STAGING_DIR)/usr/" \
+ 		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+-	$(HOST_DIR)/usr/bin/python setup.py build)
++	$(HOST_DIR)/usr/bin/python setup.py build -x)
+ endef
+ 
+ define PYTHON_NETIFACES_INSTALL_TARGET_CMDS
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1.1
