@@ -1,65 +1,58 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Tue, 10 Jan 2012 07:18:59 -0500
-Subject: [Buildroot] [PATCH v2] New package: sane-backends
-Message-ID: <1326197939-26535-1-git-send-email-fhunleth@troodon-software.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 10 Jan 2012 13:41:49 +0100
+Subject: [Buildroot] [git commit] python-netifaces: fix build on setups
+	without getifaddrs
+Message-ID: <20120110124715.6B84E901F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/Config.in                      |    1 +
- package/sane-backends/Config.in        |    7 +++++++
- package/sane-backends/sane-backends.mk |   13 +++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/sane-backends/Config.in
- create mode 100644 package/sane-backends/sane-backends.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=3c57ebe4dd97e123a6ede9869d094eb50f0fbd05
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index a82c658..276806b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -199,6 +199,7 @@ source "package/openocd/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
- source "package/rng-tools/Config.in"
-+source "package/sane-backends/Config.in"
- source "package/sdparm/Config.in"
- source "package/setserial/Config.in"
- source "package/smartmontools/Config.in"
-diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
+E.G. default uClibc configuration. Patch sent upstream.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../python-netifaces-ifaddrs-uclibc.patch          |   31 ++++++++++++++++++++
+ 1 files changed, 31 insertions(+), 0 deletions(-)
+
+diff --git a/package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch b/package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch
 new file mode 100644
-index 0000000..fb73435
+index 0000000..375b08d
 --- /dev/null
-+++ b/package/sane-backends/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SANE_BACKENDS
-+	bool "sane-backends"
-+	select BR2_PACKAGE_LIBUSB
-+	help
-+	  SANE - Scanner Access Now Easy
++++ b/package/python-netifaces/python-netifaces-ifaddrs-uclibc.patch
+@@ -0,0 +1,31 @@
++[PATCH] fix compile error in ifaddrs() for HAVE_SOCKET_IOCTLS variant
 +
-+	  http://www.sane-project.org
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-new file mode 100644
-index 0000000..1188d18
---- /dev/null
-+++ b/package/sane-backends/sane-backends.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# sane-backends
-+#
-+#############################################################
-+SANE_BACKENDS_VERSION = 1.0.22
-+SANE_BACKENDS_SOURCE = sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
-+SANE_BACKENDS_SITE = ftp://ftp2.sane-project.org/pub/sane/sane-backends-$(SANE_BACKENDS_VERSION)
++Used on E.G. uClibc. This variant seems to have bitrotten somewhat.
 +
-+SANE_BACKENDS_DEPENDENCIES += libusb
-+SANE_BACKENDS_CONF_OPT += --enable-libusb_1_0
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ netifaces.c |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.0.4
++Index: netifaces-0.6/netifaces.c
++===================================================================
++--- netifaces-0.6.orig/netifaces.c
+++++ netifaces-0.6/netifaces.c
++@@ -624,7 +624,7 @@
++   if (ioctl (sock, SIOCGIFHWADDR, &ifr) == 0) {
++     found = TRUE;
++ 
++-    if (string_from_sockaddr (ifr->CNAME(ifr_addr), buffer, sizeof (buffer)) == 0) {
+++    if (string_from_sockaddr ((struct sockaddr *)&ifr.CNAME(ifr_addr), buffer, sizeof (buffer)) == 0) {
++       PyObject *hwaddr = PyString_FromString (buffer);
++       PyObject *dict = PyDict_New ();
++       PyObject *list = PyList_New (1);
++@@ -633,7 +633,7 @@
++       if (!hwaddr || !dict || !list || !family) {
++         Py_XDECREF (hwaddr);
++         Py_XDECREF (dict);
++-        Py_XDECREF (list)
+++        Py_XDECREF (list);
++         Py_XDECREF (family);
++         Py_XDECREF (result);
++         close (sock);
