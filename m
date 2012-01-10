@@ -1,189 +1,29 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Tue, 10 Jan 2012 19:01:55 +0100
-Subject: [Buildroot] [RFC PATCH v4 1/2] apply-patches.sh: script changed to
-	support archives in a proper way
-In-Reply-To: <1326218516-28062-1-git-send-email-ludovic.desroches@atmel.com>
-References: <CAAXf6LWYfg-JO0NnW-ng2XfyTr159aGDSsU9Ec6NZriXQHpvrA@mail.gmail.com>
- <1326218516-28062-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <a1a34b76b35ddb80d06ab96bca9fb13a01922aef.1326218007.git.ludovic.desroches@atmel.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Jan 2012 16:49:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 3529] alsa-lib 1.0.24.1 build fails with daily
+ snapshot (2011-03-29)
+In-Reply-To: <bug-3529-163@https.bugs.busybox.net/>
+References: <bug-3529-163@https.bugs.busybox.net/>
+Message-ID: <20120110164930.7E3CC902EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+https://bugs.busybox.net/show_bug.cgi?id=3529
 
-The previous script doesn't support patching order with archives since
-it didn't extract archives but simply decompressed file and piped the
-result to the patch command.
-This new script extracts archives in a temporary folder and then applies
-patches.
+--- Comment #7 from Stephane Fillod <fillods@users.sf.net> 2012-01-10 16:49:29 UTC ---
+Created attachment 3950
+  --> https://bugs.busybox.net/attachment.cgi?id=3950
+package/multimedia/alsa-lib/alsa-lib-1.0.24.1-uclibc-missing-versionsort.patch
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+uClibc users ought to upgrade.
 
-Conflicts:
+However, if you're trapped in a parallel space-time, you may place the attached
+patch file in package/multimedia/alsa-lib/ for a shameful plug.
 
-	support/scripts/apply-patches.sh
----
- support/scripts/apply-patches.sh |  135 +++++++++++++++++++++++++-------------
- 1 files changed, 89 insertions(+), 46 deletions(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 1aef47e..2a25606 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -5,62 +5,105 @@
- #
- # (c) 2002 Erik Andersen <andersen@codepoet.org>
- 
--# Set directories from arguments, or use defaults.
--targetdir=${1-.}
--patchdir=${2-../kernel-patches}
--shift 2
--patchpattern=${@-*}
-+# function apply_patch patch_file
-+# This function no more deals with directory case since it is managed
-+# in an upper layer
-+function apply_patch {
-+apply="patch -p1 -E -d"
- 
--if [ ! -d "${targetdir}" ] ; then
--    echo "Aborting.  '${targetdir}' is not a directory."
--    exit 1
-+case "${1}" in
-+*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
-+	echo "Error with ${1}";
-+	echo "Archives into a directory or another archive is not supported";
-+	return 1;
-+	;;
-+*\.gz$)
-+	type="gzip"; uncomp="gunzip -dc"; ;;
-+*\.bz$)
-+	type="bzip"; uncomp="bunzip -dc"; ;;
-+*\.bz2$)
-+	type="bzip2"; uncomp="bunzip2 -dc"; ;;
-+*\.zip$)
-+	type="zip"; uncomp="unzip -d"; ;;
-+*\.Z$)
-+	type="compress"; uncomp="uncompress -c"; ;;
-+*\.diff*)
-+	type="diff"; uncomp="cat"; ;;
-+*\.patch*)
-+	type="patch"; uncomp="cat"; ;;
-+*)
-+	echo "Unsupported format file for ${1}, skip it";
-+	return 0;
-+	;;
-+esac
-+
-+echo ""
-+echo "Applying ${1} using ${type}: "
-+echo ${1} | cat >> ${builddir}/.applied_patches_list
-+${uncomp} ${1} | ${apply} ${builddir}
-+if [ $? != 0 ] ; then
-+	echo "Patch failed! Please fix ${1}!"
-+	return 1
- fi
-+}
-+
-+
-+# Entry point
-+builddir=${1}
-+patchdir=${2}
-+shift 2
-+patchlist=${@}
-+patchesdir="${builddir}/../$(basename $builddir)-patches"
-+
-+# Check directories
- if [ ! -d "${patchdir}" ] ; then
--    echo "Aborting.  '${patchdir}' is not a directory."
--    exit 1
-+	echo "Aborting: ${patchdir} is not a directory."
-+	exit 1
- fi
--    
--for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
--    apply="patch -g0 -p1 -E -d"
--    uncomp_parm=""
--    if [ -d "${patchdir}/$i" ] ; then
--	type="directory overlay"
--	uncomp="tar cf - --exclude=.svn --no-anchored -C"
--	uncomp_parm="."
--	apply="tar xvf - -C"
--    else case "$i" in
--	*.gz)
--	type="gzip"; uncomp="gunzip -dc"; ;; 
--	*.bz)
--	type="bzip"; uncomp="bunzip -dc"; ;; 
--	*.bz2)
--	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
--	*.zip)
--	type="zip"; uncomp="unzip -d"; ;; 
--	*.Z)
--	type="compress"; uncomp="uncompress -c"; ;; 
--	*.tgz)
--	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
--	*.tar)
--	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
--	*)
--	type="plaintext"; uncomp="cat"; ;; 
--    esac fi
--    echo ""
--    echo "Applying ${i} using ${type}: " 
--	echo ${i} | cat >> ${targetdir}/.applied_patches_list
--    ${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${targetdir} 
--    if [ $? != 0 ] ; then
--        echo "Patch failed!  Please fix $i!"
-+if [ ! -d "${builddir}" ] ; then
-+	echo "Aborting: ${builddir} is not a directory."
- 	exit 1
--    fi
-+fi
-+
-+# Parse patch list, extract archives, apply patches
-+for i in $patchlist ; do
-+	patch_path="${patchdir}/${i}"
-+	# three cases: directory, archive, file patch (compressed or not)
-+	# directory
-+	if [ -d "${patch_path}" ] ; then
-+		for p in $(ls ${patch_path}) ; do
-+			apply_patch "${patch_path}/${p}" || exit 1
-+		done
-+	# archive
-+	elif echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$|tar\.gz$|tgz$" ; then
-+		mkdir "${patchesdir}"
-+		# extract archive
-+		if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
-+			tar_options="-xjf"
-+		else
-+			tar_options="-xzf"
-+		fi
-+		tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
-+		# apply patches from the archive
-+		for p in $(find ${patchesdir} | sort) ; do
-+			apply_patch "${p}" || { rm -rf "${patchesdir}" ; exit 1; }
-+		done
-+		rm -rf "${patchesdir}"
-+	# file which is not an archive
-+	else
-+		# we can have regex into patch name as package*.patch.arm that's
-+		# why using ls
-+		for p in $(ls -d ${patch_path} 2> /dev/null) ; do
-+			apply_patch "${p}" || exit 1
-+		done
-+	fi
- done
- 
- # Check for rejects...
--if [ "`find $targetdir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-+if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-     echo "Aborting.  Reject files found."
-     exit 1
- fi
- 
- # Remove backup files
--find $targetdir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-+find ${builddir}/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
 -- 
-1.7.5.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
