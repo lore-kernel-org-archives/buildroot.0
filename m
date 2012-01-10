@@ -1,214 +1,63 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Tue, 10 Jan 2012 18:57:44 +0100
-Subject: [Buildroot] [PATCH v2] Add pygame package
-Message-ID: <1326218264-6286-1-git-send-email-julien.boibessot@free.fr>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Tue, 10 Jan 2012 15:23:05 +0100
+Subject: [Buildroot] [PATCH v2] barebox: add 2012.01 release, remove 2011.10
+Message-ID: <1326205385-18483-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien Boibessot <julien.boibessot@armadeus.com>
+And mark 2011.11 as deprecated.
 
-
-Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
 ---
- Changes since v1:
- - moved pygame to package/python-pygame and to "external python modules" menu
-   as requested by Yegor Yefremov
+V2:
 
- package/Config.in                      |    1 +
- package/python-pygame/Config.in        |   55 ++++++++++++++++
- package/python-pygame/python-pygame.mk |  107 ++++++++++++++++++++++++++++++++
- 3 files changed, 163 insertions(+), 0 deletions(-)
- create mode 100644 package/python-pygame/Config.in
- create mode 100644 package/python-pygame/python-pygame.mk
+	fix comment
+ boot/barebox/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a82c658..c45cf56 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -242,6 +242,7 @@ menu "external python modules"
- source "package/python-dpkt/Config.in"
- source "package/python-mad/Config.in"
- source "package/python-netifaces/Config.in"
-+source "package/python-pygame/Config.in"
- source "package/python-serial/Config.in"
- source "package/python-setuptools/Config.in"
- endmenu
-diff --git a/package/python-pygame/Config.in b/package/python-pygame/Config.in
-new file mode 100644
-index 0000000..47a1792
---- /dev/null
-+++ b/package/python-pygame/Config.in
-@@ -0,0 +1,55 @@
-+config BR2_PACKAGE_PYTHON_PYGAME
-+	bool "pygame"
-+	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_SDL
-+	help
-+	  Pygame is a cross-platfrom library designed to make it easy to write
-+	  multimedia software, such as games, in Python. Pygame requires the
-+	  Python language and SDL multimedia library.
-+	  It can also make use of several other popular libraries.
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b8e2b95..914fd0b 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,20 +8,20 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2011_12
++	default BR2_TARGET_BAREBOX_2012_01
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2011_10
+-	depends on BR2_DEPRECATED
+-	bool "2011.10"
+-
+ config BR2_TARGET_BAREBOX_2011_11
++	depends on BR2_DEPRECATED
+ 	bool "2011.11"
+ 
+ config BR2_TARGET_BAREBOX_2011_12
+ 	bool "2011.12"
+ 
++config BR2_TARGET_BAREBOX_2012_01
++	bool "2012.01"
 +
-+	  http://www.pygame.org/
-+
-+menu "pygame optional modules selection"
-+	depends on BR2_PACKAGE_PYTHON_PYGAME
-+
-+config BR2_PACKAGE_PYTHON_PYGAME_IMAGE
-+	bool "pygame.image"
-+	depends on BR2_PACKAGE_SDL_IMAGE_PNG && BR2_PACKAGE_SDL_IMAGE_JPEG
-+	help
-+	  pygame module for loading, saving and transfering images
-+
-+comment "pygame.image requires sdl_image with png and jpeg support"
-+	depends on !BR2_PACKAGE_SDL_IMAGE_PNG || !BR2_PACKAGE_SDL_IMAGE_JPEG
-+
-+config BR2_PACKAGE_PYTHON_PYGAME_FONT
-+	bool "pygame.font"
-+	depends on BR2_PACKAGE_SDL_TTF
-+	help
-+	  pygame module for loading and rendering fonts
-+
-+comment "pygame.font requires sdl_ttf"
-+	depends on !BR2_PACKAGE_SDL_TTF
-+
-+config BR2_PACKAGE_PYTHON_PYGAME_MIXER
-+	bool "pygame.mixer"
-+	depends on BR2_PACKAGE_SDL_MIXER
-+	help
-+	  pygame module for loading and playing sounds
-+
-+comment "pygame.mixer requires sdl_mixer"
-+	depends on !BR2_PACKAGE_SDL_MIXER
-+
-+config BR2_PACKAGE_PYTHON_PYGAME_MIXER_MUSIC
-+	bool "pygame.mixer.music"
-+	depends on BR2_PACKAGE_PYTHON_PYGAME_MIXER
-+	help
-+	  pygame module for controlling streamed audio
-+
-+config BR2_PACKAGE_PYTHON_PYGAME_SCRAP
-+	bool "pygame.scrap"
-+	depends on BR2_PACKAGE_SDL_X11
-+	help
-+	  pygame module for clipboard support (X11 needed)
-+
-+endmenu
-diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
-new file mode 100644
-index 0000000..8fb52ff
---- /dev/null
-+++ b/package/python-pygame/python-pygame.mk
-@@ -0,0 +1,107 @@
-+#############################################################
-+#
-+# Pygame
-+#
-+#############################################################
-+# stable 1.9.1 release requires V4L which has been wiped out of recent Linux
-+# kernels, so use latest mercurial revision until next stable release is out.
-+PYTHON_PYGAME_VERSION = f0bb4a4b365d
-+PYTHON_PYGAME_SOURCE  = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
-+PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
-+PYTHON_PYGAME_SITE_METHOD = hg
-+
-+ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
-+PYTHON_PYGAME_OPT_DEPENDS += sdl_image
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_FONT),y)
-+PYTHON_PYGAME_OPT_DEPENDS += sdl_ttf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_MIXER),y)
-+PYTHON_PYGAME_OPT_DEPENDS += sdl_mixer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_MOVIE),y)
-+PYTHON_PYGAME_OPT_DEPENDS += smpeg
-+endif
-+
-+PYTHON_PYGAME_DEPENDENCIES = python sdl $(PYTHON_PYGAME_OPT_DEPENDS)
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
-+define PYTHON_PYGAME_CONFIGURE_IMAGE
-+	$(SED) 's/^imageext/#imageext/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_FONT),y)
-+define PYTHON_PYGAME_CONFIGURE_FONT
-+	$(SED) 's/^font/#font/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_MIXER),y)
-+define PYTHON_PYGAME_CONFIGURE_MIXER
-+	$(SED) 's/^mixer/#mixer/g' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_SNDARRAY),y)
-+define PYTHON_PYGAME_CONFIGURE_SNDARRAY
-+	$(SED) 's/^_numericsndarray/#_numericsndarray/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_SURFARRAY),y)
-+define PYTHON_PYGAME_CONFIGURE_SURFARRAY
-+	$(SED) 's/^_numericsurfarray/#_numericsurfarray/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_MOVIE),y)
-+define PYTHON_PYGAME_CONFIGURE_MOVIE
-+	$(SED) 's/^movie/#movie/' $(@D)/Setup
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_PYTHON_PYGAME_SCRAP),y)
-+define PYTHON_PYGAME_CONFIGURE_SCRAP
-+	$(SED) 's/^scrap/#scrap/' $(@D)/Setup
-+endef
-+endif
-+
-+PYTHON_PYGAME_SDL_FLAGS = $(shell $(STAGING_DIR)/usr/bin/sdl-config --cflags)
-+PYTHON_PYGAME_SDL_FLAGS += $(shell $(STAGING_DIR)/usr/bin/sdl-config --libs)
-+
-+# Pygame needs a Setup file where options should be commented out if
-+# dependencies are not available
-+define PYTHON_PYGAME_CONFIGURE_CMDS
-+	cp -f $(@D)/Setup.in $(@D)/Setup
-+	$(SED) 's<^SDL = <SDL = $(PYTHON_PYGAME_SDL_FLAGS) \n#<' $(@D)/Setup
-+	$(SED) 's/^pypm/#pypm/' $(@D)/Setup
-+	$(PYTHON_PYGAME_CONFIGURE_IMAGE)
-+	$(PYTHON_PYGAME_CONFIGURE_FONT)
-+	$(PYTHON_PYGAME_CONFIGURE_MIXER)
-+	$(PYTHON_PYGAME_CONFIGURE_SNDARRAY)
-+	$(PYTHON_PYGAME_CONFIGURE_SURFARRAY)
-+	$(PYTHON_PYGAME_CONFIGURE_MOVIE)
-+	$(PYTHON_PYGAME_CONFIGURE_SCRAP)
-+endef
-+
-+define PYTHON_PYGAME_BUILD_CMDS
-+	(cd $(@D); CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		LDSHARED="$(TARGET_CROSS)gcc -shared" \
-+		$(HOST_DIR)/usr/bin/python setup.py build)
-+endef
-+
-+define PYTHON_PYGAME_INSTALL_TARGET_CMDS
-+	(cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr && \
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/docs && \
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame/tests)
-+endef
-+
-+define PYTHON_PYGAME_UNINSTALL_TARGET_CMDS
-+	rm -rf $(TARGET_DIR)/usr/lib/python*/site-packages/pygame*
-+endef
-+
-+$(eval $(call GENTARGETS))
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -39,9 +39,9 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2011.10.0"	if BR2_TARGET_BAREBOX_2011_10
+ 	default "2011.11.0"	if BR2_TARGET_BAREBOX_2011_11
+ 	default "2011.12.0"	if BR2_TARGET_BAREBOX_2011_12
++	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_01
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
 -- 
-1.7.5.4
+1.7.7
