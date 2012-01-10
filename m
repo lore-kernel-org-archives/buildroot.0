@@ -1,21 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 10 Jan 2012 20:50:30 +0100
-Subject: [Buildroot] [PATCH v2] New package: sane-backends
-In-Reply-To: <1326197939-26535-1-git-send-email-fhunleth@troodon-software.com>
- (Frank Hunleth's message of "Tue, 10 Jan 2012 07:18:59 -0500")
-References: <1326197939-26535-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <87wr8zbam1.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 10 Jan 2012 16:12:34 +0100
+Subject: [Buildroot] [git commit] Add ttyGS0 to securetty
+Message-ID: <20120110195326.52C58901F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=60033b8f88b477841239fc383349eea5c357fb99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Frank> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ fs/skeleton/etc/securetty |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/fs/skeleton/etc/securetty b/fs/skeleton/etc/securetty
+index 6c07d7f..547ceda 100644
+--- a/fs/skeleton/etc/securetty
++++ b/fs/skeleton/etc/securetty
+@@ -46,3 +46,4 @@ ttySC2
+ ttySC3
+ ttySC4
+ ttySC5
++ttyGS0
