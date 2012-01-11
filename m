@@ -1,22 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jan 2012 19:40:44 +0100
-Subject: [Buildroot] [PATCH] pkg-stats: fix table layout
-In-Reply-To: <1326292479-11992-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 11 Jan 2012 15:34:39 +0100")
-References: <1326292479-11992-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87vcoi84lv.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 11 Jan 2012 19:40:32 +0100
+Subject: [Buildroot] [git commit] pkg-stats: fix table layout
+Message-ID: <20120111184054.BFDBF90302@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0e6695fc365df202ec8e27c7deb322a34ae3abf9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Luca> The "Patch count" cell needs rowspan=2, otherwise the host/target
- Luca> cells are misaligned.
+The "Patch count" cell needs rowspan=2, otherwise the host/target cells are
+misaligned.
 
-Committed, thanks.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ support/scripts/pkg-stats |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 64aae5f..8228274 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -51,7 +51,7 @@ tr.correct td {
+ <tr>
+ <td rowspan=\"2\">Id</td>
+ <td rowspan=\"2\">Package</td>
+-<td>Patch count</td>
++<td rowspan=\"2\">Patch count</td>
+ <td colspan=\"2\" class=\"centered\">AUTOTARGETS</td>
+ <td colspan=\"2\" class=\"centered\">GENTARGETS</td>
+ <td colspan=\"2\" class=\"centered\">CMAKETARGETS</td>
