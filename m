@@ -1,30 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jan 2012 18:24:42 +0100
-Subject: [Buildroot] customize package: odd copy construction
-In-Reply-To: <20120105163648.3bf64bcd@skate> (Thomas Petazzoni's message of
- "Thu, 5 Jan 2012 16:36:48 +0100")
-References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
- <20120105163648.3bf64bcd@skate>
-Message-ID: <878vle9mp1.fsf@macbook.be.48ers.dk>
+Date: Wed, 11 Jan 2012 18:36:15 +0100
+Subject: [Buildroot] [PATCH 1/2] Rework of shutdown policy in inittab
+In-Reply-To: <9620f2c623d3fdb946abdaa3ce694d6ee441f940.1326301656.git.maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Wed, 11 Jan 2012 18:09:22 +0100")
+References: <cover.1326301656.git.maxime.ripard@free-electrons.com>
+ <cover.1326301656.git.maxime.ripard@free-electrons.com>
+ <9620f2c623d3fdb946abdaa3ce694d6ee441f940.1326301656.git.maxime.ripard@free-electrons.com>
+Message-ID: <874nw29m5s.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Hi,
+ Maxime> This commit follows commit ad501b66. Start up of the busybox logging
+ Maxime> daemons were moved to an init script but the shutdown were still
+ Maxime> performed in inittab. This commit moves the shutdown policy to an
+ Maxime> rcK script that calls the stop function of all the init scripts in
+ Maxime> a reversed order.
 
- >> Why would you create a series file first if you're removing it
- >> immediately afterwards?
- >> Doesn't the original copy statement do exactly the same?
-
- Thomas> I don't know, but I'm not sure this customize package is good example
- Thomas> these days. It should probably be removed, or changed to something
- Thomas> saner that uses the package infrastructure.
-
-I agree. What about marking it as deprecated for now?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
