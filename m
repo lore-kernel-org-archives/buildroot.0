@@ -1,34 +1,57 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 11 Jan 2012 18:09:23 +0100
-Subject: [Buildroot] [PATCH 2/2] Update the CHANGES file to mention this new
-	policy
-In-Reply-To: <cover.1326301656.git.maxime.ripard@free-electrons.com>
-References: <cover.1326301656.git.maxime.ripard@free-electrons.com>
-Message-ID: <d9bcbeac65110789d393278b8984823864083c52.1326301656.git.maxime.ripard@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jan 2012 18:22:44 +0100
+Subject: [Buildroot] [PATCH] tiff: add utility commands and library
+	options
+In-Reply-To: <1326084271-12749-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Sun, 8 Jan 2012 23:44:31 -0500")
+References: <1326084271-12749-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87d3aq9msb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- CHANGES |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-diff --git a/CHANGES b/CHANGES
-index 515e3db..5c1e9c9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -10,6 +10,9 @@
+ Frank> Added support for compiling tiffcp and tiff2pdf.
+ Frank> Added options for compiling out various libtiff features. By default,
+ Frank> all libtiff features are built so that the result is the same as before
+ Frank> this change.
+
+ Frank> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+ Frank> ---
+ Frank>  package/tiff/Config.in |   75 ++++++++++++++++++++++++++++++++++++++++++++++-
+ Frank>  package/tiff/tiff.mk   |   70 ++++++++++++++++++++++++++++++++++++++++++++-
+ Frank>  2 files changed, 142 insertions(+), 3 deletions(-)
+
+ Frank> diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+ Frank> index c6336e2..007b37d 100644
+ Frank> --- a/package/tiff/Config.in
+ Frank> +++ b/package/tiff/Config.in
+ Frank> @@ -1,8 +1,79 @@
+ Frank>  config BR2_PACKAGE_TIFF
+ Frank>  	bool "tiff"
+ Frank> -	select BR2_PACKAGE_ZLIB
+ Frank> -	select BR2_PACKAGE_JPEG
+ Frank>  	help
+ Frank>  	  Library for handling TIFF (Tag Image File Format) images.
  
- 	uClibc: remove 0.9.30, backport unshare() support.
- 
-+	Buildroot now calls the stop function of scripts in /etc/init.d at
-+	shutdown.
-+
- 	Updated/fixed packages: barebox, bash, binutils, bison,
- 	coreutils, dbus-glib, diffutils, dropbear, ebtables, ffmpeg,
- 	flex, fluxbox, gawk, grep, gst-dsp, gst-ffmpeg, htop,
+ Frank>  	  http://www.libtiff.org/
+ Frank> +
+ Frank> +if BR2_PACKAGE_TIFF
+ Frank> +menu "tiff Options"
+ Frank> +
+ Frank> +config BR2_PACKAGE_TIFF_LARGE_FILE
+ Frank> +        bool "Large file support"
+ Frank> +	default y
+
+Need to indent with <tab>.
+
+How is this related to the global BR2_LARGEFILE setting? We already pass
+--disable-largefile for !BR2_LARGEFILE builds (see package/Makefile.in).
+
+Otherwise it looks good.
+
 -- 
-1.7.4.1
+Bye, Peter Korsgaard
