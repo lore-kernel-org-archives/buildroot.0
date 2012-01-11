@@ -1,60 +1,118 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jan 2012 09:33:13 +0100
-Subject: [Buildroot] [PATCH v3] Add pygame package
-In-Reply-To: <1326266671-9161-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Wed, 11 Jan 2012 08:24:31 +0100")
-References: <1326266671-9161-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <87sjjmbpva.fsf@macbook.be.48ers.dk>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Wed, 11 Jan 2012 16:54:23 +0800
+Subject: [Buildroot] [PATCH] busybox: install S41inetd and inetd.conf if
+	inetd applet is enabled
+Message-ID: <1326272063-2479-1-git-send-email-keguang.zhang@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+Install S41inetd and inetd.conf if inetd is enabled in busybox.
+Add ftpd to /etc/inetd.conf if if inetd and ftpd are enabled.
+Add telnetd to /etc/inetd.conf if if inetd and telnetd are enabled.
+Add tftpd to /etc/inetd.conf if if inetd and tftpd are enabled.
 
- julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
- julien> ---
- julien>  Changes since v2:
- julien>  As requested by Peter Korsgaard:
- julien>  - autoselect sdl_* libs instead of depending of them
- julien>  - removed movie/sndarray/surfarray config check (will be re-added when
- julien>    smpeg/numpy are integrated in BR)
- julien>  - remove doc only if !BR2_HAVE_DOCUMENTATION
- julien>  Other:
- julien>  - renamed PYTHON_PYGAME_CONFIGURE_* in PYTHON_PYGAME_UNCONFIGURE_* to better
- julien>    understand that we remove modules from default build config if dependancies
- julien>    are not available
+Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+---
+ package/busybox/S41inetd   |   27 +++++++++++++++++++++++++++
+ package/busybox/busybox.mk |   32 ++++++++++++++++++++++++++++++++
+ package/busybox/inetd.conf |    2 ++
+ 3 files changed, 61 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/S41inetd
+ create mode 100644 package/busybox/inetd.conf
 
-Thanks, looks good. Unfortunately it doesn't work:
-
-building 'pygame.gfxdraw' extension
-creating build/temp.linux-x86_64-2.7
-creating build/temp.linux-x86_64-2.7/src
-creating build/temp.linux-x86_64-2.7/src/SDL_gfx
-/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -pipe -Os -fPIC -D_GNU_SOURCE= -D_REENTRANT -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/SDL -I/home/peko/source/buildroot/output/host/usr/include/python2.7 -c src/gfxdraw.c -o build/temp.linux-x86_64-2.7/src/gfxdraw.o
-In file included from /home/peko/source/buildroot/output/host/usr/include/python2.7/Python.h:8,
-                 from src/pygame.h:80,
-                 from src/gfxdraw.c:33:
-/home/peko/source/buildroot/output/host/usr/include/python2.7/pyconfig.h:1136:1: warning: "_GNU_SOURCE" redefined
-<command-line>: warning: this is the location of the previous definition
-In file included from /home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/limits.h:27,
-                 from /opt/br/arm926t-wchar/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/include-fixed/limits.h:122,
-                 from /opt/br/arm926t-wchar/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/include-fixed/syslimits.h:7,
-                 from /opt/br/arm926t-wchar/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/include-fixed/limits.h:11,
-                 from /home/peko/source/buildroot/output/host/usr/include/python2.7/Python.h:19,
-                 from src/pygame.h:80,
-                 from src/gfxdraw.c:33:
-/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/features.h:219:5:
-error: #error It appears you have defined
-_FILE_OFFSET_BITS=64. Unfortunately, uClibc was built without large file
-support enabled.
-
-Notice how it is looking at my host-python rather than target-python
-(where I don't have largefile support) includes.
-
-Any idea?
-
+diff --git a/package/busybox/S41inetd b/package/busybox/S41inetd
+new file mode 100644
+index 0000000..cc288dd
+--- /dev/null
++++ b/package/busybox/S41inetd
+@@ -0,0 +1,27 @@
++#!/bin/sh
++#
++# Starts the inetd daemon.
++#
++
++NAME=inetd
++DAEMON=/usr/sbin/$NAME
++
++case "$1" in
++  start)
++	echo -n "Starting $NAME: "
++	start-stop-daemon -S -q -x $DAEMON && echo "OK" || echo "Failed"
++	;;
++  stop)
++	echo -n "Stopping $NAME: "
++	start-stop-daemon -K -q -n $NAME && echo "OK" || echo "Failed"
++	;;
++  restart|reload)
++	$0 stop
++	$0 start
++	;;
++  *)
++	echo $"Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d18b6d0..1c0d473 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -137,6 +137,36 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+ endef
+ 
++define BUSYBOX_INSTALL_INETD_SCRIPT
++	if grep -q CONFIG_INETD=y $(@D)/.config; then \
++		[ -f $(TARGET_DIR)/etc/init.d/S41inetd ] || \
++			$(INSTALL) -m 0755 -D package/busybox/S41inetd \
++				$(TARGET_DIR)/etc/init.d/S41inetd; \
++	else rm -f $(TARGET_DIR)/etc/init.d/S41inetd; fi
++endef
++define BUSYBOX_INSTALL_INETD_CONF
++	if grep -q CONFIG_INETD=y $(@D)/.config; then \
++		[ -f $(TARGET_DIR)/etc/inetd.conf ] || \
++			install -D -m 0644 package/busybox/inetd.conf \
++				$(TARGET_DIR)/etc/inetd.conf; \
++		if grep -q CONFIG_FTPD=y $(@D)/.config; then \
++			if ! grep -q '^ftp' $(TARGET_DIR)/etc/inetd.conf; then \
++				echo -e "ftp\tstream\ttcp\tnowait\troot\t/usr/sbin/ftpd\tftpd" >> $(TARGET_DIR)/etc/inetd.conf; \
++			fi; \
++		else $(SED) '/^ftp/d' $(TARGET_DIR)/etc/inetd.conf; fi; \
++		if grep -q CONFIG_TELNETD=y $(@D)/.config; then \
++			if ! grep -q '^telnet' $(TARGET_DIR)/etc/inetd.conf; then \
++				echo -e "telnet\tstream\ttcp\tnowait\troot\t/usr/sbin/telnetd\ttelnetd -i" >> $(TARGET_DIR)/etc/inetd.conf; \
++			fi; \
++		else $(SED) '/^telnet/d' $(TARGET_DIR)/etc/inetd.conf; fi; \
++		if grep -q CONFIG_TFTPD=y $(@D)/.config; then \
++			if ! grep -q '^tftp' $(TARGET_DIR)/etc/inetd.conf; then \
++				echo -e "tftp\tdgram\tudp\tnowait\tnobody\t/usr/bin/tftpd\ttftpd" >> $(TARGET_DIR)/etc/inetd.conf; \
++			fi; \
++		else $(SED) '/^tftp/d' $(TARGET_DIR)/etc/inetd.conf; fi \
++	else rm -f $(TARGET_DIR)/etc/inetd.conf; fi
++endef
++
+ # We do this here to avoid busting a modified .config in configure
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+ 
+@@ -167,6 +197,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
++	$(BUSYBOX_INSTALL_INETD_SCRIPT)
++	$(BUSYBOX_INSTALL_INETD_CONF)
+ endef
+ 
+ define BUSYBOX_UNINSTALL_TARGET_CMDS
+diff --git a/package/busybox/inetd.conf b/package/busybox/inetd.conf
+new file mode 100644
+index 0000000..36cebd5
+--- /dev/null
++++ b/package/busybox/inetd.conf
+@@ -0,0 +1,2 @@
++# <service_name> <sock_type> <proto> <flags> <user> <server_path> <args>
++#
 -- 
-Bye, Peter Korsgaard
+1.7.1
