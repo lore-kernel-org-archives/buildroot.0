@@ -1,52 +1,115 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Jan 2012 11:11:59 -0300
-Subject: [Buildroot] [PATCH 2/2] sshfs: bump to version 2.3,
-	adjust SITE and description
-In-Reply-To: <1326291119-24184-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1326291119-24184-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1326291119-24184-2-git-send-email-gustavo@zacarias.com.ar>
+From: Michael S. Zick <minimod@morethan.org>
+Date: Wed, 11 Jan 2012 08:19:58 -0600
+Subject: [Buildroot] Can't use output/host/ as "SDK" with external
+	toolchain
+In-Reply-To: <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
+References: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
+ <CAJpxd05O47LQDdsEcG=VOdunYr7NGsKhirEe+LADi8WDNLhbOA@mail.gmail.com>
+ <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
+Message-ID: <201201110820.00566.minimod@morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sshfs/Config.in |    5 +----
- package/sshfs/sshfs.mk  |    4 ++--
- 2 files changed, 3 insertions(+), 6 deletions(-)
+On Wed January 11 2012, Thomas De Schampheleire wrote:
+> On Tue, Jan 10, 2012 at 9:22 PM, Bryce Schober <bryce.schober@gmail.com> wrote:
+> > As I said in my original post, I am using an externally generated and
+> > configured (and statically linked) crosstool-ng toolchain.
+> 
+> I'm sorry, I read over that part.
+> 
+> > I believe that it
+> > is the buildroot import thereof that is at fault. Again, in summary:
+> > 1. Buildroot generates absolute-pathed symbolic links to the external
+> > binutils in output/host/usr/bin instead of copying them in.
+> > 2. Buildroot's ext-toolchain-wrapper uses an absolute path for its sysroot
+> > configuration.
+> > 3. Buildroot's ext-toolchain-wrapper uses?an?absolute path for its binary
+> > exec path.
+> >
+> > I realize that these problems are triggered by my specification of:
+> > BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOPDIR)/../my-ext-toolchain-dir/"
+> > But I can't specify merely "../my-ext-toolchain-dir/" without breaking
+> > things either.
+> >
+> 
+> Have you tried using BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD instead? This
+> requires you to archive the crosstool-ng toolchain and specify it to
+> buildroot. Buildroot will then extract it and unpack. The binutils
+> will be copied in this case, and not symlinked.
+> 
+> This is not possibly in stock buildroot. I have submitted patches for
+> this a while ago, but they are not yet included. I think there was a
+> comment by Thomas that I still have to fix. In the mean time, try
+> using patches 1 and 2 of the following series:
+> http://lists.busybox.net/pipermail/buildroot/2011-August/044779.html
+>
 
-diff --git a/package/sshfs/Config.in b/package/sshfs/Config.in
-index 1d9f759..73d552f 100644
---- a/package/sshfs/Config.in
-+++ b/package/sshfs/Config.in
-@@ -9,10 +9,7 @@ config BR2_PACKAGE_SSHFS
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # glib2
- 	help
--	  FUSE makes it possible to implement a filesystem in a userspace
--	  program. Features include: simple yet comprehensive API, secure
--	  mounting by non-root users, support for 2.4 and 2.6 Linux
--	  kernels, multi-threaded operation. etc...
-+	  FUSE filesystem client based on the SSH File Transfer Protocol.
- 
- 	  http://fuse.sourceforge.net/sshfs.html
- 
-diff --git a/package/sshfs/sshfs.mk b/package/sshfs/sshfs.mk
-index 81eb4c6..738b4d0 100644
---- a/package/sshfs/sshfs.mk
-+++ b/package/sshfs/sshfs.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--SSHFS_VERSION = 2.2
--SSHFS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)/sshfs-fuse
-+SSHFS_VERSION = 2.3
-+SSHFS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/$(SSHFS_VERSION)
- SSHFS_SOURCE = sshfs-fuse-$(SSHFS_VERSION).tar.gz
- SSHFS_DEPENDENCIES = \
- 	libglib2 libfuse openssh \
--- 
-1.7.3.4
+The best kind of 'bump' for things in the "Pending" box,
+somebody needs it. 
+
+Shall we invent a 'Needed-by: ... ' attribute for the pending patches?
+
+Mike
+> Best regards,
+> Thomas
+> 
+> 
+> >
+> > On Tue, Jan 10, 2012 at 3:26 AM, Thomas De Schampheleire
+> > <patrickdepinguin+buildroot@gmail.com> wrote:
+> >>
+> >> Hi Bryce,
+> >>
+> >> On Mon, Jan 9, 2012 at 11:54 PM, Bryce Schober <bryce.schober@gmail.com>
+> >> wrote:
+> >> > What I mean by "SDK" is the ability to compile external programs using
+> >> > the
+> >> > buildroot toolchain and libraries on any reasonably-compatible host. I'm
+> >> > assuming that the toolchain itself is built properly static for its own
+> >> > host
+> >> > independence (which in my case, it is).?Ideally the toolchain in the
+> >> > output/host directory would be capable of standing alone, when built
+> >> > properly
+> >> >
+> >> > I'm having two issues w/ archving the?output/host dir for extraction and
+> >> > usage in a different host directory. I'm using a custom-built
+> >> > crosstool-ng
+> >> > built externally and independent of buildroot.
+> >> >
+> >> > The external toolchain import results in three distinct problems that I
+> >> > can
+> >> > see:
+> >> > 1. The symbolic links for binutils binaries in use absolute paths to
+> >> > link to
+> >> > the external toolchain instead of copying them in.
+> >> > 2. The ext-toolchain-wrapper uses an absolute path for the sysroot
+> >> > directory.
+> >> > 3. The ext-toolchain-wrapper seems to point to the old (import-from) bin
+> >> > directory, not the path to which the toolchain has been copied.
+> >> >
+> >> > I'm not particularly familiar with the relocatability of toolchains or
+> >> > buildroot's method thereof, and so am not sure where to start with a
+> >> > proposal, let alone a patch. If I could get some direction as to how
+> >> > best to
+> >> > tackle this, I'd be grateful.
+> >>
+> >> It is known that the toolchains generated by buildroot are not
+> >> relocatable.
+> >> However, you can tell buildroot to create the toolchain with
+> >> crosstool-ng, and this one is relocatable. I suggest you give that a
+> >> try to see if it solves your problems.
+> >> I'm using buildroot in the same way and it works fine for me.
+> >>
+> >> Best regards,
+> >> Thomas
+> >
+> >
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
