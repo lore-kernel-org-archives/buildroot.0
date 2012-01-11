@@ -1,115 +1,65 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Wed, 11 Jan 2012 08:19:58 -0600
-Subject: [Buildroot] Can't use output/host/ as "SDK" with external
-	toolchain
-In-Reply-To: <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
-References: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
- <CAJpxd05O47LQDdsEcG=VOdunYr7NGsKhirEe+LADi8WDNLhbOA@mail.gmail.com>
- <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
-Message-ID: <201201110820.00566.minimod@morethan.org>
+From: Jigar SOLANKI <jigar.solanki@labri.fr>
+Date: Wed, 11 Jan 2012 15:22:58 +0100
+Subject: [Buildroot] Cant type anything into Serial Console login
+In-Reply-To: <8739bmbb3o.fsf@macbook.be.48ers.dk>
+References: <4F0D76AB.7000508@labri.fr> <8739bmbb3o.fsf@macbook.be.48ers.dk>
+Message-ID: <4F0D9B42.2070604@labri.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed January 11 2012, Thomas De Schampheleire wrote:
-> On Tue, Jan 10, 2012 at 9:22 PM, Bryce Schober <bryce.schober@gmail.com> wrote:
-> > As I said in my original post, I am using an externally generated and
-> > configured (and statically linked) crosstool-ng toolchain.
+Le 11/01/2012 14:52, Peter Korsgaard a ?crit :
+>>>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
 > 
-> I'm sorry, I read over that part.
+> Hi,
 > 
-> > I believe that it
-> > is the buildroot import thereof that is at fault. Again, in summary:
-> > 1. Buildroot generates absolute-pathed symbolic links to the external
-> > binutils in output/host/usr/bin instead of copying them in.
-> > 2. Buildroot's ext-toolchain-wrapper uses an absolute path for its sysroot
-> > configuration.
-> > 3. Buildroot's ext-toolchain-wrapper uses?an?absolute path for its binary
-> > exec path.
-> >
-> > I realize that these problems are triggered by my specification of:
-> > BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOPDIR)/../my-ext-toolchain-dir/"
-> > But I can't specify merely "../my-ext-toolchain-dir/" without breaking
-> > things either.
-> >
+>  Jigar> 1- the kernel command line (console=/dev/ttyS0,115200)
 > 
-> Have you tried using BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD instead? This
-> requires you to archive the crosstool-ng toolchain and specify it to
-> buildroot. Buildroot will then extract it and unpack. The binutils
-> will be copied in this case, and not symlinked.
+>  Jigar> 2- and also checked in target options->generic serial config->put a
+>  Jigar> getty on ttyS0, 115200.
 > 
-> This is not possibly in stock buildroot. I have submitted patches for
-> this a while ago, but they are not yet included. I think there was a
-> comment by Thomas that I still have to fix. In the mean time, try
-> using patches 1 and 2 of the following series:
-> http://lists.busybox.net/pipermail/buildroot/2011-August/044779.html
->
+>  Jigar> 3- I checked the inittab :
+> 
+>  Jigar> # Set up a couple of getty's
+>  Jigar> tty1::respawn:/sbin/getty 115200 tty1
+>  Jigar> tty2::respawn:/sbin/getty 115200 tty2
+> 
+>  Jigar> # Put a getty on the serial port
+>  Jigar> ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+> 
+>  Jigar> 4- and I checked the /etc/securetty file too (ttyS0 is there).
+> 
+>  Jigar> What am I missing here?
+> 
+> Seems good. Can you interact with the shell over serial if you boot with
+> init=/bin/sh ?
+> 
 
-The best kind of 'bump' for things in the "Pending" box,
-somebody needs it. 
+Nope. It hangs on Booting Linux...and that's all. I can't do anything,
+can't type anything on keyboard.
 
-Shall we invent a 'Needed-by: ... ' attribute for the pending patches?
 
-Mike
-> Best regards,
-> Thomas
-> 
-> 
-> >
-> > On Tue, Jan 10, 2012 at 3:26 AM, Thomas De Schampheleire
-> > <patrickdepinguin+buildroot@gmail.com> wrote:
-> >>
-> >> Hi Bryce,
-> >>
-> >> On Mon, Jan 9, 2012 at 11:54 PM, Bryce Schober <bryce.schober@gmail.com>
-> >> wrote:
-> >> > What I mean by "SDK" is the ability to compile external programs using
-> >> > the
-> >> > buildroot toolchain and libraries on any reasonably-compatible host. I'm
-> >> > assuming that the toolchain itself is built properly static for its own
-> >> > host
-> >> > independence (which in my case, it is).?Ideally the toolchain in the
-> >> > output/host directory would be capable of standing alone, when built
-> >> > properly
-> >> >
-> >> > I'm having two issues w/ archving the?output/host dir for extraction and
-> >> > usage in a different host directory. I'm using a custom-built
-> >> > crosstool-ng
-> >> > built externally and independent of buildroot.
-> >> >
-> >> > The external toolchain import results in three distinct problems that I
-> >> > can
-> >> > see:
-> >> > 1. The symbolic links for binutils binaries in use absolute paths to
-> >> > link to
-> >> > the external toolchain instead of copying them in.
-> >> > 2. The ext-toolchain-wrapper uses an absolute path for the sysroot
-> >> > directory.
-> >> > 3. The ext-toolchain-wrapper seems to point to the old (import-from) bin
-> >> > directory, not the path to which the toolchain has been copied.
-> >> >
-> >> > I'm not particularly familiar with the relocatability of toolchains or
-> >> > buildroot's method thereof, and so am not sure where to start with a
-> >> > proposal, let alone a patch. If I could get some direction as to how
-> >> > best to
-> >> > tackle this, I'd be grateful.
-> >>
-> >> It is known that the toolchains generated by buildroot are not
-> >> relocatable.
-> >> However, you can tell buildroot to create the toolchain with
-> >> crosstool-ng, and this one is relocatable. I suggest you give that a
-> >> try to see if it solves your problems.
-> >> I'm using buildroot in the same way and it works fine for me.
-> >>
-> >> Best regards,
-> >> Thomas
-> >
-> >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+-- 
+Jigar SOLANKI
+
+LaBRI - UMR 5800
+Universit? Bordeaux 1
+351 Cours de la Lib?ration
+F-33405 Talence Cedex
+Phone : (+33) 5 4000 24 87
+Fax   : (+33) 5 4000 66 69
+Web   : http://www.labri.fr/perso/solanki
+
+* Please do not print this e-mail unless it's really necessary *
+---
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 554 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120111/f3e72b15/attachment.asc>
