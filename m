@@ -1,54 +1,33 @@
-From: Jigar SOLANKI <jigar.solanki@labri.fr>
-Date: Wed, 11 Jan 2012 15:30:54 +0100
-Subject: [Buildroot] Cant type anything into Serial Console login
-In-Reply-To: <87y5te9uxy.fsf@macbook.be.48ers.dk>
-References: <4F0D76AB.7000508@labri.fr> <8739bmbb3o.fsf@macbook.be.48ers.dk>
- <4F0D9B42.2070604@labri.fr> <87y5te9uxy.fsf@macbook.be.48ers.dk>
-Message-ID: <4F0D9D1E.7090406@labri.fr>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 11 Jan 2012 15:34:39 +0100
+Subject: [Buildroot] [PATCH] pkg-stats: fix table layout
+Message-ID: <1326292479-11992-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 11/01/2012 15:26, Peter Korsgaard a ?crit :
->>>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
-> 
->  >> Seems good. Can you interact with the shell over serial if you boot with
->  >> init=/bin/sh ?
->  >> 
-> 
->  Jigar> Nope. It hangs on Booting Linux...and that's all. I can't do anything,
->  Jigar> can't type anything on keyboard.
-> 
-> You did keep the console=.. part, right? What is your entire kernel
-> cmdline?
-> 
-Yes I did keep this ^^.
-Here's the complete command line :
+The "Patch count" cell needs rowspan=2, otherwise the host/target cells are
+misaligned.
 
-LB_MKLI_CMDLINE="console=ttyS2,38400 init=/bin/sh"
-
-
--- 
-Jigar SOLANKI
-
-LaBRI - UMR 5800
-Universit? Bordeaux 1
-351 Cours de la Lib?ration
-F-33405 Talence Cedex
-Phone : (+33) 5 4000 24 87
-Fax   : (+33) 5 4000 66 69
-Web   : http://www.labri.fr/perso/solanki
-
-* Please do not print this e-mail unless it's really necessary *
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
+ support/scripts/pkg-stats |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 554 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120111/b6d90e27/attachment-0001.asc>
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 64aae5f..8228274 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -51,7 +51,7 @@ tr.correct td {
+ <tr>
+ <td rowspan=\"2\">Id</td>
+ <td rowspan=\"2\">Package</td>
+-<td>Patch count</td>
++<td rowspan=\"2\">Patch count</td>
+ <td colspan=\"2\" class=\"centered\">AUTOTARGETS</td>
+ <td colspan=\"2\" class=\"centered\">GENTARGETS</td>
+ <td colspan=\"2\" class=\"centered\">CMAKETARGETS</td>
+-- 
+1.7.5.4
