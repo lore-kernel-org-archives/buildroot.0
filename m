@@ -1,40 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jan 2012 18:37:14 +0100
-Subject: [Buildroot] [PATCH 2/2] Update the CHANGES file to mention this
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 11 Jan 2012 18:35:41 +0100
+Subject: [Buildroot] [git commit] Update the CHANGES file to mention this
 	new policy
-In-Reply-To: <d9bcbeac65110789d393278b8984823864083c52.1326301656.git.maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Wed, 11 Jan 2012 18:09:23 +0100")
-References: <cover.1326301656.git.maxime.ripard@free-electrons.com>
- <cover.1326301656.git.maxime.ripard@free-electrons.com>
- <d9bcbeac65110789d393278b8984823864083c52.1326301656.git.maxime.ripard@free-electrons.com>
-Message-ID: <87zkdu87jp.fsf@macbook.be.48ers.dk>
+Message-ID: <20120111173831.6770A902FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=234dd8e6a2ce006283a5419f457973c3336558ca
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
- Maxime> ---
- Maxime>  CHANGES |    3 +++
- Maxime>  1 files changed, 3 insertions(+), 0 deletions(-)
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
- Maxime> diff --git a/CHANGES b/CHANGES
- Maxime> index 515e3db..5c1e9c9 100644
- Maxime> --- a/CHANGES
- Maxime> +++ b/CHANGES
- Maxime> @@ -10,6 +10,9 @@
+diff --git a/CHANGES b/CHANGES
+index 1dc1f36..8f6870b 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -13,6 +13,9 @@
  
- Maxime>  	uClibc: remove 0.9.30, backport unshare() support.
+ 	Bootloaders: U-Boot: add 2011.12, remove 2010.xx versions.
  
- Maxime> +	Buildroot now calls the stop function of scripts in /etc/init.d at
- Maxime> +	shutdown.
-
-Thanks. In general I prefer to maintain CHANGES myself, as we otherwise
-easily get merge conflicts (like now), but I've fixed up the conflict
-and committed.
-
--- 
-Bye, Peter Korsgaard
++	Buildroot now calls the stop function of scripts in /etc/init.d at
++	shutdown.
++
+ 	Updated/fixed packages: barebox, bash, beecrypt, binutils,
+ 	bison, busybox, cdrkit, coreutils, dbus-glib, diffutils,
+ 	dropbear, ebtables, ethtool, ffmpeg, flex, fluxbox, gawk,
