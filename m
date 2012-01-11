@@ -1,31 +1,57 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jan 2012 22:43:41 +0100
-Subject: [Buildroot] customize package: odd copy construction
-In-Reply-To: <CAAXf6LX5xef3YE0zO0mDZxaFZ3s8NpfPU_jQaDxq0h-XCWOqxQ@mail.gmail.com>
- (Thomas De Schampheleire's message of "Wed, 11 Jan 2012 20:50:57
- +0100")
-References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
- <20120105163648.3bf64bcd@skate> <878vle9mp1.fsf@macbook.be.48ers.dk>
- <CAAXf6LX5xef3YE0zO0mDZxaFZ3s8NpfPU_jQaDxq0h-XCWOqxQ@mail.gmail.com>
-Message-ID: <87r4z59ape.fsf@macbook.be.48ers.dk>
+Date: Thu, 12 Jan 2012 00:03:22 +0100
+Subject: [Buildroot] Can't use output/host/ as "SDK" with external
+	toolchain
+In-Reply-To: <CAJpxd065CgUHOd=RN7gU-G+T+HoJT-iD4REwwJedwGjVsSROdw@mail.gmail.com>
+ (Bryce Schober's message of "Wed, 11 Jan 2012 11:49:31 -0800")
+References: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
+ <CAAXf6LWZu9B0ndF+1QYXXg6eU9-et2cY-7tAP7Hoq4mAJkeBmg@mail.gmail.com>
+ <CAJpxd05O47LQDdsEcG=VOdunYr7NGsKhirEe+LADi8WDNLhbOA@mail.gmail.com>
+ <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
+ <CAJpxd065CgUHOd=RN7gU-G+T+HoJT-iD4REwwJedwGjVsSROdw@mail.gmail.com>
+Message-ID: <87mx9t970l.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Bryce" == Bryce Schober <bryce.schober@gmail.com> writes:
 
 Hi,
 
- >> I agree. What about marking it as deprecated for now?
+ Bryce> I just tried that, and I get the same results. Both the binutils
+ Bryce> symbolic links and?ext-toolchain-wrapper?still use absolute
+ Bryce> paths. These patches don't touch the logic used to assemble a
+ Bryce> full sysroot with the compiler and buildroot host outputs in the
+ Bryce> same place.
 
- Thomas> I'm currently using the customize package to add externally
- Thomas> built packages to a buildroot distribution, so that they are
- Thomas> not removed upon make clean.  I'd like such a feature to be
- Thomas> preserved, in one way or another.
+ Bryce> It seems that the current importing and wrapping of any type of
+ Bryce> external toolchain would have to be fundamentally re-worked in
+ Bryce> order to be relocatable.
 
-So you mean prebuilt binaries, not just custom packages?
+Sorry, I haven't read the entire thread, but are you aware of the
+discussions we had at the Buildroot developers day in October?
+
+Thomas made a nice summary of it:
+
+http://lists.busybox.net/pipermail/buildroot/2011-November/047229.html
+
+ Bryce> It seems that two things would need to change:
+ Bryce> 1. Any symbolic links created would have to have any absolute paths converted
+ Bryce> to relative.
+ Bryce> 2. Any paths used in the ext-toolchain-wrapper would have to be relative, and
+ Bryce> the wrapper itself would have to determine the path to itself in order to
+ Bryce> correctly exec the programs it wraps.
+
+Other things need to be fixed as well (as listed in the summary):
+
+ - Host tools
+ - .la files / cmake / qmake configuraiton
+ - pkg-config
+ - ..
+
+So it's a fairly major change.
 
 -- 
 Bye, Peter Korsgaard
