@@ -1,97 +1,40 @@
-From: Jigar SOLANKI <jigar.solanki@labri.fr>
-Date: Wed, 11 Jan 2012 14:18:51 +0100
-Subject: [Buildroot] Fwd: Re: Cant type anything into Serial Console
-	login
-In-Reply-To: <69d6daaa-60fe-42e2-9ecf-7017d0e35ce7@email.android.com>
-References: <69d6daaa-60fe-42e2-9ecf-7017d0e35ce7@email.android.com>
-Message-ID: <4F0D8C3B.6030100@labri.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jan 2012 14:52:11 +0100
+Subject: [Buildroot] Cant type anything into Serial Console login
+In-Reply-To: <4F0D76AB.7000508@labri.fr> (Jigar SOLANKI's message of "Wed, 11
+ Jan 2012 12:46:51 +0100")
+References: <4F0D76AB.7000508@labri.fr>
+Message-ID: <8739bmbb3o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just found how to disable hardware/software control using minicom. So,
-I disabled both. Same problem : I can't type anything at the login prompt.
+>>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
 
-Is there any particular configuration that I might miss ? Parity ? Stop
-bits? Anything else? Is this comming from the Linux/BusyBox or from the
-Serial console program ? Any clues of any kind please folks ?
+Hi,
 
-Thanks.
+ Jigar> 1- the kernel command line (console=/dev/ttyS0,115200)
 
+ Jigar> 2- and also checked in target options->generic serial config->put a
+ Jigar> getty on ttyS0, 115200.
 
+ Jigar> 3- I checked the inittab :
 
-Le 11/01/2012 13:12, Jigar SOLANKI a ?crit :
-> 
-> -- 
-> Jigar SOLANKI
-> 
-> Envoy? de mon smartphone Android avec K-9 Mail. Excusez la brievet?.
-> 
-> 
-> Jigar SOLANKI <jigar.solanki@labri.fr> a ?crit :
-> 
->     Thanks for the quick reply. What is hardware flow control and how to
->     disable it? Didnt know that feature.
->     -- 
->     Jigar SOLANKI
-> 
->     Envoy? de mon smartphone Android avec K-9 Mail. Excusez la brievet?.
-> 
-> 
->     Will Newton <will.newton@gmail.com> a ?crit :
-> 
->         On Wed, Jan 11, 2012 at 11:46 AM, Jigar SOLANKI <jigar.solanki@labri.fr> wrote:
->         > Hi all and happy new year :-)
->         >
->         > I'm trying to build a Linux Environment using buildroot on a Leon3
->         > architecture.
->         >
->         > I've managed to compile and successfully run the Linux image with
->         > initramfs.
->         > At boot prompt, welcomme tobuildroot, buildroot login, I can't type
->         > anything in there. The serial console client (I've tried Kermit,
->         > Minicom, GTKTerm) just hangs, my keyboard is useless at that time.
->         >
->         > For what I have googled, I already checked the following :
->         >
->         > 1- the kernel command line (console=/dev/ttyS0,115200)
->         >
->         > 2- and also checked in target options->generic serial config->put a
->         > getty on ttyS0, 115200.
-> 
->         Have you made sure to disable hardware fl
->          ow
->         control?
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Jigar> # Set up a couple of getty's
+ Jigar> tty1::respawn:/sbin/getty 115200 tty1
+ Jigar> tty2::respawn:/sbin/getty 115200 tty2
 
+ Jigar> # Put a getty on the serial port
+ Jigar> ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+
+ Jigar> 4- and I checked the /etc/securetty file too (ttyS0 is there).
+
+ Jigar> What am I missing here?
+
+Seems good. Can you interact with the shell over serial if you boot with
+init=/bin/sh ?
 
 -- 
-Jigar SOLANKI
-
-LaBRI - UMR 5800
-Universit? Bordeaux 1
-351 Cours de la Lib?ration
-F-33405 Talence Cedex
-Phone : (+33) 5 4000 24 87
-Fax   : (+33) 5 4000 66 69
-Web   : http://www.labri.fr/perso/solanki
-
-* Please do not print this e-mail unless it's really necessary *
----
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 554 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120111/e7635110/attachment.asc>
+Bye, Peter Korsgaard
