@@ -1,34 +1,65 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Wed, 11 Jan 2012 12:09:44 +0100
-Subject: [Buildroot] [PATCH v3] Add pygame package
-In-Reply-To: <87fwfmbm3i.fsf@macbook.be.48ers.dk>
-References: <1326266671-9161-1-git-send-email-julien.boibessot@free.fr>
- <87sjjmbpva.fsf@macbook.be.48ers.dk> <4F0D5742.7060803@free.fr>
- <87fwfmbm3i.fsf@macbook.be.48ers.dk>
-Message-ID: <4F0D6DF8.2050602@free.fr>
+From: Jigar SOLANKI <jigar.solanki@labri.fr>
+Date: Wed, 11 Jan 2012 12:46:51 +0100
+Subject: [Buildroot] Cant type anything into Serial Console login
+Message-ID: <4F0D76AB.7000508@labri.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/11/2012 10:54 AM, Peter Korsgaard wrote:
->   Julien>  You have the same problem (include added) in python-mad package. Does
->   Julien>  it compile on your Host ?
->
-> It does compile here. Presumably because of the --include-dirs, even
-> though it ends up adding both an -I for host-python and target-python
-> (but target is first, so used) which isn't really nice:
->
-> building 'madmodule' extension
-> creating build
-> creating build/temp.linux-x86_64-2.7
-> creating build/temp.linux-x86_64-2.7/src
-> /home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -pipe -Os -fPIC -DVERSION_MAJOR=0 -DVERSION_MINOR=6 -DVERSION="0.6" -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/python2.7 -I/home/peko/source/buildroot/output/host/usr/include/python2.7 -c src/madmodule.c -o build/temp.linux-x86_64-2.7/src/madmodule.o
->
+Hi all and happy new year :-)
 
-can you try my v4 patch version please ? I used Thomas distutils 
-cross-compilation modifications to prevent Host include usage.
+I'm trying to build a Linux Environment using buildroot on a Leon3
+architecture.
 
-Regards,
-Julien
+I've managed to compile and successfully run the Linux image with
+initramfs.
+At boot prompt, welcomme tobuildroot, buildroot login, I can't type
+anything in there. The serial console client (I've tried Kermit,
+Minicom, GTKTerm) just hangs, my keyboard is useless at that time.
+
+For what I have googled, I already checked the following :
+
+1- the kernel command line (console=/dev/ttyS0,115200)
+
+2- and also checked in target options->generic serial config->put a
+getty on ttyS0, 115200.
+
+3- I checked the inittab :
+
+# Set up a couple of getty's
+tty1::respawn:/sbin/getty 115200 tty1
+tty2::respawn:/sbin/getty 115200 tty2
+
+# Put a getty on the serial port
+ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
+
+
+4- and I checked the /etc/securetty file too (ttyS0 is there).
+
+What am I missing here?
+
+
+-- 
+Jigar SOLANKI
+
+LaBRI - UMR 5800
+Universit? Bordeaux 1
+351 Cours de la Lib?ration
+F-33405 Talence Cedex
+Phone : (+33) 5 4000 24 87
+Fax   : (+33) 5 4000 66 69
+Web   : http://www.labri.fr/perso/solanki
+
+* Please do not print this e-mail unless it's really necessary *
+---
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 554 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120111/0b1a6022/attachment-0001.asc>
