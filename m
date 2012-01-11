@@ -1,149 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jan 2012 08:01:36 +0100
-Subject: [Buildroot] [PATCH] Static build changes
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C60EF684@ex-mb1.corp.adtran.com>
-References: <F9C551623D2CBB4C9488801D14F864C60E4498@ex-mb1.corp.adtran.com>
- <201201090812.57114.arnout@mind.be>
- <F9C551623D2CBB4C9488801D14F864C60EF684@ex-mb1.corp.adtran.com>
-Message-ID: <201201110801.36481.arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jan 2012 09:33:13 +0100
+Subject: [Buildroot] [PATCH v3] Add pygame package
+In-Reply-To: <1326266671-9161-1-git-send-email-julien.boibessot@free.fr>
+ (julien boibessot's message of "Wed, 11 Jan 2012 08:24:31 +0100")
+References: <1326266671-9161-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <87sjjmbpva.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 09 January 2012 21:45:16 ANDY KENNEDY wrote:
-> > > Makefile
-> > > package/ethtool/ethtool.mk
-> > > package/htop/htop.mk
-> > > package/i2c-tools/i2c-tools.mk
-> > > package/kexec/kexec.mk
-> > > package/libgcrypt/libgcrypt.mk
-> > > package/libgpg-error/libgpg-error.mk
-> > > package/makedevs/makedevs.mk
-> > > package/mtd/mtd.mk
-> > > package/ncurses/ncurses.mk
-> > > package/portmap/portmap.mk
-> > > package/proftpd/proftpd.mk
-> > > toolchain/uClibc/uclibc.mk
-> > 
-> >  This part of the log message is redundant.  It shows up in the git
-> > shortlog.
-> > However, it is useful to include a remark that this doesn't fix the
-> > issue
-> > for all packages.
-> 
-> I do not have the time to figure out how to (nor am I sure that on this
-> network I can) use git to do the patches.  Were I able to get git going,
-> the first e-mail would have been that really nice blurb about the files
-> affected.  This was my intent by the above.
+>>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
 
- The thing is, everything that you put in the e-mail will end up in the
-git commit as well.  To add comments in the mail that should not be in
-the commit message, add something like
----
-additional comment
----
-between the commit message (first part) and the first diff.
+ julien> From: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+ julien> ---
+ julien>  Changes since v2:
+ julien>  As requested by Peter Korsgaard:
+ julien>  - autoselect sdl_* libs instead of depending of them
+ julien>  - removed movie/sndarray/surfarray config check (will be re-added when
+ julien>    smpeg/numpy are integrated in BR)
+ julien>  - remove doc only if !BR2_HAVE_DOCUMENTATION
+ julien>  Other:
+ julien>  - renamed PYTHON_PYGAME_CONFIGURE_* in PYTHON_PYGAME_UNCONFIGURE_* to better
+ julien>    understand that we remove modules from default build config if dependancies
+ julien>    are not available
 
-> > > @@ -7,4 +7,8 @@
-> > >  ETHTOOL_VERSION = 3.0
-> > >  ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool/
-> > >
-> > > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> > > +ETHTOOL_CONF_ENV += LDFLAGS+=-static
-> > > +endif
-> > 
-> >  Wouldn't it be more convenient if this was added globally to
-> > TARGET_LDFLAGS in Makefile.in?  The -static is anyway just a hint,
-> > it doesn't force the linker to link statically.
-> 
-> To quote Bill Cosby:  "I hadn't thought of that."
+Thanks, looks good. Unfortunately it doesn't work:
 
- That's why we have reviews :-)
+building 'pygame.gfxdraw' extension
+creating build/temp.linux-x86_64-2.7
+creating build/temp.linux-x86_64-2.7/src
+creating build/temp.linux-x86_64-2.7/src/SDL_gfx
+/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -pipe -Os -fPIC -D_GNU_SOURCE= -D_REENTRANT -I/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/SDL -I/home/peko/source/buildroot/output/host/usr/include/python2.7 -c src/gfxdraw.c -o build/temp.linux-x86_64-2.7/src/gfxdraw.o
+In file included from /home/peko/source/buildroot/output/host/usr/include/python2.7/Python.h:8,
+                 from src/pygame.h:80,
+                 from src/gfxdraw.c:33:
+/home/peko/source/buildroot/output/host/usr/include/python2.7/pyconfig.h:1136:1: warning: "_GNU_SOURCE" redefined
+<command-line>: warning: this is the location of the previous definition
+In file included from /home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/limits.h:27,
+                 from /opt/br/arm926t-wchar/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/include-fixed/limits.h:122,
+                 from /opt/br/arm926t-wchar/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/include-fixed/syslimits.h:7,
+                 from /opt/br/arm926t-wchar/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.3.6/include-fixed/limits.h:11,
+                 from /home/peko/source/buildroot/output/host/usr/include/python2.7/Python.h:19,
+                 from src/pygame.h:80,
+                 from src/gfxdraw.c:33:
+/home/peko/source/buildroot/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include/features.h:219:5:
+error: #error It appears you have defined
+_FILE_OFFSET_BITS=64. Unfortunately, uClibc was built without large file
+support enabled.
 
-> > > +
-> > >  $(eval $(call AUTOTARGETS))
-> > > diff -Naur a/package/htop/htop.mk b/package/htop/htop.mk
-> > > --- a/package/htop/htop.mk      2011-12-14 15:54:04.000000000 -
-> > 0600
-> > > +++ b/package/htop/htop.mk      2011-12-20 09:44:06.000000000 -
-> > 0600
-> > > @@ -11,4 +11,9 @@
-> > >  HTOP_AUTORECONF = YES
-> > >  HTOP_CONF_OPT += --disable-unicode
-> > >
-> > > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> > > +HTOP_CONF_ENV += LDFLAGS+="--static -lpthread"
-> > > +HTOP_CONF_OPT += "'--enable-static' --disable-shared"
-> >  Is this needed?  The $(PKG)_CONFIGURE_CMDS of
-> > Makefile.autotools.in
-> > already includes $(SHARED_STATIC_LIBS_OPTS).
-> 
-> Okay, I'm cool with that too.  Looking at the various configure scripts,
-> I seem to recall an issue with giving a parameter that wasn't available
-> in the configure script.  Like it errored out.  I cannot recall, though.
-> I did this patch up over a month ago and sent it out before xmas. (I've
-> slept since then.)  The bottom line, there appears to be a lack of a
-> standard for dealing with the configure options (or at least not all
-> packages use the standard).
+Notice how it is looking at my host-python rather than target-python
+(where I don't have largefile support) includes.
 
- GNU autoconf will give a warning about unsupported options.  One of the
-global options is actually unsupported for most platforms:
---disable-gtk-doc.
+Any idea?
 
- If some package has a custom configure script that errors out, it
-should override $(PKG)_CONFIGURE_CMDS.
-
-[snip]
-> > > diff -Naur a/toolchain/uClibc/uclibc.mk
-> > b/toolchain/uClibc/uclibc.mk
-> > > --- a/toolchain/uClibc/uclibc.mk        2011-12-14
-> > 15:54:04.000000000 -0600
-> > > +++ b/toolchain/uClibc/uclibc.mk        2011-12-20
-> > 09:53:49.000000000 -0600
-> > > @@ -480,6 +480,7 @@
-> > >                 install_runtime
-> > >         touch -c $@
-> > >
-> > > +ifneq ($(BR2_PREFER_STATIC_LIB),y)
-> > >  $(TARGET_DIR)/usr/bin/ldd: $(cross_compiler)
-> > >         $(MAKE1) -C $(UCLIBC_DIR) CC=$(TARGET_CROSS)gcc \
-> > >                 CPP=$(TARGET_CROSS)cpp LD=$(TARGET_CROSS)ld \
-> > > @@ -487,7 +488,6 @@
-> > >                 PREFIX=$(TARGET_DIR) utils install_utils
-> > >         touch -c $@
-> > >
-> > > -ifneq ($(BR2_PREFER_STATIC_LIB),y)
-> > >  UCLIBC_TARGETS=$(TARGET_DIR)/lib/libc.so.0
-> > >  endif
-> > 
-> >  I'm not sure if I agree with this change.  Prefer static does not
-> > mean
-> > force static, so the dynamic linker stuff should still be present.
-> 
-> So, the original design I had done was to add top-level config option
-> under PREFER_STATIC as BUILD_ONLY_STATIC.  I guessed that this would not
-> be well received by the hive.  Perhaps that would have been a better
-> thing to do.  PREFER_STATIC seems to be misleading (based upon my
-> expectations) given that if you _PREFER_ to use static libraries, then
-> shouldn't the system ONLY USE static libraries and never install the
-> shared objects?  I mean, if I ask my contractor to use screws to build
-> something, and he uses nails, that isn't what I asked for.  But again,
-> perhaps I have the wrong expectations for PREFER_STATIC.
-
- I guess this is because some packages don't know how to build static
-libraries, or how to link with them.  Such packages would have to depend
-on !BUILD_ONLY_STATIC.  But I think that it is a lot of work to maintain
-that option, with little benefit.
-
-
- Regards,
- Arnout
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
