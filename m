@@ -1,73 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 11 Jan 2012 18:33:03 +0100
-Subject: [Buildroot] [git commit] Rework of shutdown policy in inittab
-Message-ID: <20120111173831.57D0C902FF@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 11 Jan 2012 18:53:37 +0100
+Subject: [Buildroot] [pull request v4] Pull request for branch
+	for-2012.02/pkg-device
+Message-ID: <cover.1326304128.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0aa54eb0d741108743d230bce2f2deb054ba9c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-This commit follows commit ad501b66. Start up of the busybox logging
-daemons were moved to an init script but the shutdown were still
-performed in inittab. This commit moves the shutdown policy to an
-rcK script that calls the stop function of all the init scripts in
-a reversed order.
+This is an update of the patches adding the $(PKG)_DEVICES and
+$(PKG)_PERMISSIONS variables.
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- fs/skeleton/etc/init.d/rcK |   27 +++++++++++++++++++++++++++
- fs/skeleton/etc/inittab    |    3 +--
- 2 files changed, 28 insertions(+), 2 deletions(-)
+In this version, I just added a patch for the documentation presenting a basic
+example on how to use such variables.
 
-diff --git a/fs/skeleton/etc/init.d/rcK b/fs/skeleton/etc/init.d/rcK
-new file mode 100755
-index 0000000..59e9c54
---- /dev/null
-+++ b/fs/skeleton/etc/init.d/rcK
-@@ -0,0 +1,27 @@
-+#!/bin/sh
-+
-+
-+# Stop all init scripts in /etc/init.d
-+# executing them in reversed numerical order.
-+#
-+for i in $(ls -r /etc/init.d/S??*) ;do
-+
-+     # Ignore dangling symlinks (if any).
-+     [ ! -f "$i" ] && continue
-+
-+     case "$i" in
-+	*.sh)
-+	    # Source shell script for speed.
-+	    (
-+		trap - INT QUIT TSTP
-+		set stop
-+		. $i
-+	    )
-+	    ;;
-+	*)
-+	    # No sh extension, so fork subprocess.
-+	    $i stop
-+	    ;;
-+    esac
-+done
-+
-diff --git a/fs/skeleton/etc/inittab b/fs/skeleton/etc/inittab
-index ac410d6..85881f4 100644
---- a/fs/skeleton/etc/inittab
-+++ b/fs/skeleton/etc/inittab
-@@ -30,8 +30,7 @@ null::sysinit:/bin/hostname -F /etc/hostname
- ::ctrlaltdel:/sbin/reboot
- 
- # Stuff to do before rebooting
--null::shutdown:/usr/bin/killall klogd
--null::shutdown:/usr/bin/killall syslogd
-+null::shutdown:/etc/init.d/rcK
- null::shutdown:/bin/umount -a -r
- null::shutdown:/sbin/swapoff -a
- 
+Maxime
+
+The following changes since commit e6480f2bb91e2df46096ed5f6ef8d3138cd38470:
+
+  sshfs: bump to version 2.3, adjust SITE and description (2012-01-11 15:36:45 +0100)
+
+are available in the git repository at:
+  http://free-electrons.com/~maxime/git/buildroot.git for-2012.02/pkg-device
+
+Maxime Ripard (4):
+      Add support for package-declared devices
+      Convert busybox to the device declaration method
+      Migrate Xenomai to the new infrastructure
+      Update the documentation to add these changes
+
+ docs/manual/adding-packages-gentargets.txt |   19 +++++++++++++++++--
+ fs/common.mk                               |    4 ++++
+ package/Makefile.package.in                |    2 ++
+ package/busybox/busybox.mk                 |    5 +++++
+ package/xenomai/xenomai.mk                 |    8 ++++++--
+ target/generic/device_table.txt            |    2 --
+ target/generic/device_table_dev.txt        |    5 -----
+ 7 files changed, 34 insertions(+), 11 deletions(-)
+
+Thanks,
+-- 
+Maxime Ripard
