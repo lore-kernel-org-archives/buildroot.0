@@ -1,14 +1,30 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 11 Jan 2012 11:56:17 +0000
-Subject: [Buildroot] Cant type anything into Serial Console login
-In-Reply-To: <4F0D76AB.7000508@labri.fr>
-References: <4F0D76AB.7000508@labri.fr>
-Message-ID: <CAFbHwiT+=wz1vsp9VG5uB=t7ss=m6DRVuuwuzhb=xVyPm0X45w@mail.gmail.com>
+From: Jigar SOLANKI <jigar.solanki@labri.fr>
+Date: Wed, 11 Jan 2012 13:12:25 +0100
+Subject: [Buildroot] Fwd: Re: Cant type anything into Serial Console login
+Message-ID: <69d6daaa-60fe-42e2-9ecf-7017d0e35ce7@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+
+-- 
+Jigar SOLANKI 
+
+Envoy? de mon smartphone Android avec K-9 Mail. Excusez la brievet?.
+
+
+Jigar SOLANKI <jigar.solanki@labri.fr> a ?crit :
+
+Thanks for the quick reply. What is hardware flow control and how to disable it? Didnt know that feature.
+-- 
+Jigar SOLANKI 
+
+Envoy? de mon smartphone Android avec K-9 Mail. Excusez la brievet?.
+
+
+Will Newton <will.newton@gmail.com> a ?crit :
 
 On Wed, Jan 11, 2012 at 11:46 AM, Jigar SOLANKI <jigar.solanki@labri.fr> wrote:
 > Hi all and happy new year :-)
@@ -30,3 +46,7 @@ On Wed, Jan 11, 2012 at 11:46 AM, Jigar SOLANKI <jigar.solanki@labri.fr> wrote:
 > getty on ttyS0, 115200.
 
 Have you made sure to disable hardware flow control?
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120111/02853cf4/attachment.html>
