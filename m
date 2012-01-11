@@ -1,60 +1,64 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 11 Jan 2012 18:53:39 +0100
-Subject: [Buildroot] [PATCH 2/4] Convert busybox to the device declaration
-	method
+Date: Wed, 11 Jan 2012 18:53:41 +0100
+Subject: [Buildroot] [PATCH 4/4] Update the documentation to add these
+	changes
 In-Reply-To: <cover.1326304128.git.maxime.ripard@free-electrons.com>
 References: <cover.1326304128.git.maxime.ripard@free-electrons.com>
-Message-ID: <1098caad9414fca0d7395e8c65b7034c780f4ed3.1326304128.git.maxime.ripard@free-electrons.com>
+Message-ID: <ad9fb6b99c31f84658dcc8f15cbd5c2440ee0918.1326304128.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox used to declare and create files even if the package was not
-enabled through the device table. Remove the entries for busybox in the
-device table and move them to the package declaration.
-
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/busybox/busybox.mk      |    5 +++++
- target/generic/device_table.txt |    2 --
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-gentargets.txt |   19 +++++++++++++++++--
+ 1 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d18b6d0..59448d5 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -28,6 +28,11 @@ ifndef BUSYBOX_CONFIG_FILE
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
+diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
+index b344494..6617e26 100644
+--- a/docs/manual/adding-packages-gentargets.txt
++++ b/docs/manual/adding-packages-gentargets.txt
+@@ -38,7 +38,15 @@ system is based on hand-written Makefiles or shell scripts.
+ 24: 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
+ 25: endef
+ 26:
+-27: $(eval $(call GENTARGETS))
++27: define LIBFOO_DEVICES
++28: 	/dev/foo  c  666  0  0  42  0  -  -  -
++29: endef
++30:
++31: define LIBFOO_PERMISSIONS
++32: 	/bin/foo  f  4755  0  0  -  -  -  -  -
++33: endef
++34:
++35: $(eval $(call GENTARGETS))
+ --------------------------------
  
-+define BUSYBOX_PERMISSIONS
-+/bin/busybox			 f 4755	0 0 - - - - -
-+/usr/share/udhcpc/default.script f 755  0 0 - - - - -
-+endef
+ The Makefile begins on line 6 to 8 with metadata information: the
+@@ -75,7 +83,7 @@ All these steps rely on the +$(@D)+ variable, which
+ contains the directory where the source code of the package has been
+ extracted.
+ 
+-Finally, on line 27, we call the +GENTARGETS+ which
++Finally, on line 35, we call the +GENTARGETS+ which
+ generates, according to the variables defined previously, all the
+ Makefile code necessary to make your package working.
+ 
+@@ -188,6 +196,13 @@ information is (assuming the package name is +libfoo+) :
+   variables are executed to install the package into the target
+   directory.
+ 
++* +LIBFOO_DEVICES+ lists the device files to be created by Buildroot
++  when using the static device table. The syntax to use is the
++  makedevs one.
 +
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
- define BUSYBOX_INSTALL_MDEV_SCRIPT
-diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
-index 12f35b2..d3e394b 100644
---- a/target/generic/device_table.txt
-+++ b/target/generic/device_table.txt
-@@ -10,13 +10,11 @@
- /tmp					d	1777	0	0	-	-	-	-	-
- /etc					d	755	0	0	-	-	-	-	-
- /home/default				d	2755	1000	1000	-	-	-	-	-
--/bin/busybox				f	4755	0	0	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
- /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
- /etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
- /etc/network/if-down.d			d	755	0	0	-	-	-	-	-
- /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
--/usr/share/udhcpc/default.script	f	755	0	0	-	-	-	-	-
- # uncomment this to allow starting x as non-root
- #/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
++* +LIBFOO_PERMISSIONS+ lists the changes of permissions to be done at
++  the end of the build process. The syntax is once again the makedevs one.
++
+ The recommended way to define these variables is to use the following
+ syntax:
+ 
 -- 
 1.7.4.1
