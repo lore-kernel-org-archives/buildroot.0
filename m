@@ -1,57 +1,53 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 11 Jan 2012 18:53:40 +0100
-Subject: [Buildroot] [PATCH 3/4] Migrate Xenomai to the new infrastructure
+Date: Wed, 11 Jan 2012 18:53:38 +0100
+Subject: [Buildroot] [PATCH 1/4] Add support for package-declared devices
 In-Reply-To: <cover.1326304128.git.maxime.ripard@free-electrons.com>
 References: <cover.1326304128.git.maxime.ripard@free-electrons.com>
-Message-ID: <31afa9349370aa1475388f49271b0cd235b1224a.1326304128.git.maxime.ripard@free-electrons.com>
+Message-ID: <821d176cb2d32a4cfd9de1fb10d64f89003680f3.1326304128.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xenomai used to have commented out devices to be created in the device
-table that the user had to uncomment. Use the new infrastructure to do
-just that.
+Add a way for packages to declare files they need instead of relying
+only on device tables, which creates files no matter if the package is
+indeed enabled, as we can see for busybox.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/xenomai/xenomai.mk          |    8 ++++++--
- target/generic/device_table_dev.txt |    5 -----
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ fs/common.mk                |    4 ++++
+ package/Makefile.package.in |    2 ++
+ 2 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index f795579..02e5152 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -98,8 +98,12 @@ endef
+diff --git a/fs/common.mk b/fs/common.mk
+index f793ff9..d426f37 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -50,6 +50,10 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+ 	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
++ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
++	echo -e '$(subst $(sep),\n,$(PACKAGES_DEVICES_TABLE))' >> $(FULL_DEVICE_TABLE)
++endif
++	echo -e '$(subst $(sep),\n,$(PACKAGES_PERMISSIONS_TABLE))' >> $(FULL_DEVICE_TABLE)
+ 	echo "$(HOST_DIR)/usr/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ endif
+ 	echo "$(ROOTFS_$(2)_CMD)" >> $(FAKEROOT_SCRIPT)
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index e85eb15..24333f7 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -713,6 +713,8 @@ endif
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
  
- XENOMAI_POST_INSTALL_TARGET_HOOKS += XENOMAI_REMOVE_SKINS
+ TARGETS += $(1)
++PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
++PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
  
--# If you use static /dev creation don't forget to update your
--#  device_table_dev.txt
-+define XENOMAI_DEVICES
-+/dev/rtheap  c  666  0  0  10  254  0  0  -
-+/dev/rtscope c  666  0  0  10  253  0  0  -
-+/dev/rtp     c  666  0  0  150 0    0  1  32
-+endef
-+
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
- XENOMAI_DEPENDENCIES += udev
- 
-diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
-index 71cd083..a3d53d4 100644
---- a/target/generic/device_table_dev.txt
-+++ b/target/generic/device_table_dev.txt
-@@ -141,8 +141,3 @@
- 
- # I2C device nodes
- /dev/i2c-	c	666	0	0	89	0	0	1	4
--
--# Xenomai
--#/dev/rtheap     c       666     0       0       10      254     0       0       -
--#/dev/rtscope    c       666     0       0       10      253     0       0       -
--#/dev/rtp        c       666     0       0       150     0       0       1       32
+ ifeq ($$($(2)_SITE_METHOD),svn)
+ DL_TOOLS_DEPENDENCIES += svn
 -- 
 1.7.4.1
