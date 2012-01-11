@@ -1,57 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Jan 2012 00:03:22 +0100
-Subject: [Buildroot] Can't use output/host/ as "SDK" with external
-	toolchain
-In-Reply-To: <CAJpxd065CgUHOd=RN7gU-G+T+HoJT-iD4REwwJedwGjVsSROdw@mail.gmail.com>
- (Bryce Schober's message of "Wed, 11 Jan 2012 11:49:31 -0800")
-References: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
- <CAAXf6LWZu9B0ndF+1QYXXg6eU9-et2cY-7tAP7Hoq4mAJkeBmg@mail.gmail.com>
- <CAJpxd05O47LQDdsEcG=VOdunYr7NGsKhirEe+LADi8WDNLhbOA@mail.gmail.com>
- <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
- <CAJpxd065CgUHOd=RN7gU-G+T+HoJT-iD4REwwJedwGjVsSROdw@mail.gmail.com>
-Message-ID: <87mx9t970l.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 12 Jan 2012 00:32:35 +0100
+Subject: [Buildroot] Error installing  udev  : frugalware ??
+Message-ID: <DBC7AF7422C5458EB0B788B267A834FC@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bryce" == Bryce Schober <bryce.schober@gmail.com> writes:
+Hi
 
-Hi,
+Using 2011.11 :
 
- Bryce> I just tried that, and I get the same results. Both the binutils
- Bryce> symbolic links and?ext-toolchain-wrapper?still use absolute
- Bryce> paths. These patches don't touch the logic used to assemble a
- Bryce> full sysroot with the compiler and buildroot host outputs in the
- Bryce> same place.
+udev seems to build, but the install fails.
 
- Bryce> It seems that the current importing and wrapping of any type of
- Bryce> external toolchain would have to be fundamentally re-worked in
- Bryce> order to be relocatable.
+There seems to be no  ?(TOPDIR)/output/build/udev-173/etc/udev/frugalware/*
 
-Sorry, I haven't read the entire thread, but are you aware of the
-discussions we had at the Buildroot developers day in October?
+In my configfile I have
 
-Thomas made a nice summary of it:
+BR2_PACKAGE_UDEV=y
+# BR2_PACKAGE_UDEV_ALL_EXTRAS is not set
 
-http://lists.busybox.net/pipermail/buildroot/2011-November/047229.html
+Error :
 
- Bryce> It seems that two things would need to change:
- Bryce> 1. Any symbolic links created would have to have any absolute paths converted
- Bryce> to relative.
- Bryce> 2. Any paths used in the ext-toolchain-wrapper would have to be relative, and
- Bryce> the wrapper itself would have to determine the path to itself in order to
- Bryce> correctly exec the programs it wraps.
+Snip ...
+mkdir -p /home/johan/buildroot/output/target/etc/udev/rules.d
+mkdir -p /home/johan/buildroot/output/target/lib/udev/devices
+Making install in libudev/docs
+make[4]: Nothing to be done for `install-exec-am'.
+-- Installing ./html/api-index-full.html
+-- Installing ./html/ch01.html
+-- Installing ./html/home.png
+-- Installing ./html/index.html
+-- Installing ./html/index.sgml
+-- Installing ./html/left.png
+-- Installing ./html/libudev.devhelp
+-- Installing ./html/libudev.devhelp2
+-- Installing ./html/libudev-udev-device.html
+-- Installing ./html/libudev-udev-enumerate.html
+-- Installing ./html/libudev-udev.html
+-- Installing ./html/libudev-udev-list.html
+-- Installing ./html/libudev-udev-monitor.html
+-- Installing ./html/libudev-udev-queue.html
+-- Installing ./html/right.png
+-- Installing ./html/style.css
+-- Installing ./html/up.png
+make[1]: Leaving directory `/home/johan/buildroot-2011.11js/output/build/udev-173'
+/usr/bin/install -m 0755 package/udev/S10udev /home/johan/buildroot/output/target/etc/init.d
+/usr/bin/install -m 0644 /home/johan/buildroot/output/build/udev-173/etc/udev/frugalware/*
+/home/johan/buildroot/output/target/etc/udev/rules.d
+/usr/bin/install: cannot stat `/home/johan/buildroot/output/build/udev-173/etc/udev/frugalware/*': No such file or directory
+make: *** [/home/johan/buildroot/output/build/udev-173/.stamp_target_installed] Error 1
 
-Other things need to be fixed as well (as listed in the summary):
-
- - Host tools
- - .la files / cmake / qmake configuraiton
- - pkg-config
- - ..
-
-So it's a fairly major change.
-
--- 
-Bye, Peter Korsgaard
+?
+Sagaert Johan
