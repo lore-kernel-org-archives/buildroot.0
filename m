@@ -1,136 +1,31 @@
-From: Bryce Schober <bryce.schober@gmail.com>
-Date: Wed, 11 Jan 2012 11:49:31 -0800
-Subject: [Buildroot] Can't use output/host/ as "SDK" with external
-	toolchain
-In-Reply-To: <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
-References: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
- <CAAXf6LWZu9B0ndF+1QYXXg6eU9-et2cY-7tAP7Hoq4mAJkeBmg@mail.gmail.com>
- <CAJpxd05O47LQDdsEcG=VOdunYr7NGsKhirEe+LADi8WDNLhbOA@mail.gmail.com>
- <CAAXf6LVOnJ25zLqdBwoLXX0XORPwNp_pGab_+6xB9Zsi2TJhig@mail.gmail.com>
-Message-ID: <CAJpxd065CgUHOd=RN7gU-G+T+HoJT-iD4REwwJedwGjVsSROdw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jan 2012 22:43:41 +0100
+Subject: [Buildroot] customize package: odd copy construction
+In-Reply-To: <CAAXf6LX5xef3YE0zO0mDZxaFZ3s8NpfPU_jQaDxq0h-XCWOqxQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 11 Jan 2012 20:50:57
+ +0100")
+References: <CAAXf6LW1GnqA3fgU9zGXXMdevw+FxCBN2x4PUpCzxM-cHYJeUA@mail.gmail.com>
+ <20120105163648.3bf64bcd@skate> <878vle9mp1.fsf@macbook.be.48ers.dk>
+ <CAAXf6LX5xef3YE0zO0mDZxaFZ3s8NpfPU_jQaDxq0h-XCWOqxQ@mail.gmail.com>
+Message-ID: <87r4z59ape.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I just tried that, and I get the same results. Both the binutils symbolic
-links and ext-toolchain-wrapper still use absolute paths. These patches
-don't touch the logic used to assemble a full sysroot with the compiler and
-buildroot host outputs in the same place.
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-It seems that the current importing and wrapping of any type of external
-toolchain would have to be fundamentally re-worked in order to be
-relocatable. It seems that two things would need to change:
-1. Any symbolic links created would have to have any absolute paths
-converted to relative.
-2. Any paths used in the ext-toolchain-wrapper would have to be relative,
-and the wrapper itself would have to determine the path to itself in order
-to correctly exec the programs it wraps.
+Hi,
 
-<><  <><  <><
-Bryce Schober
+ >> I agree. What about marking it as deprecated for now?
 
+ Thomas> I'm currently using the customize package to add externally
+ Thomas> built packages to a buildroot distribution, so that they are
+ Thomas> not removed upon make clean.  I'd like such a feature to be
+ Thomas> preserved, in one way or another.
 
+So you mean prebuilt binaries, not just custom packages?
 
-On Tue, Jan 10, 2012 at 11:38 PM, Thomas De Schampheleire <
-patrickdepinguin+buildroot@gmail.com> wrote:
-
-> On Tue, Jan 10, 2012 at 9:22 PM, Bryce Schober <bryce.schober@gmail.com>
-> wrote:
-> > As I said in my original post, I am using an externally generated and
-> > configured (and statically linked) crosstool-ng toolchain.
->
-> I'm sorry, I read over that part.
->
-> > I believe that it
-> > is the buildroot import thereof that is at fault. Again, in summary:
-> > 1. Buildroot generates absolute-pathed symbolic links to the external
-> > binutils in output/host/usr/bin instead of copying them in.
-> > 2. Buildroot's ext-toolchain-wrapper uses an absolute path for its
-> sysroot
-> > configuration.
-> > 3. Buildroot's ext-toolchain-wrapper uses an absolute path for its binary
-> > exec path.
-> >
-> > I realize that these problems are triggered by my specification of:
-> > BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOPDIR)/../my-ext-toolchain-dir/"
-> > But I can't specify merely "../my-ext-toolchain-dir/" without breaking
-> > things either.
-> >
->
-> Have you tried using BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD instead? This
-> requires you to archive the crosstool-ng toolchain and specify it to
-> buildroot. Buildroot will then extract it and unpack. The binutils
-> will be copied in this case, and not symlinked.
->
-> This is not possibly in stock buildroot. I have submitted patches for
-> this a while ago, but they are not yet included. I think there was a
-> comment by Thomas that I still have to fix. In the mean time, try
-> using patches 1 and 2 of the following series:
-> http://lists.busybox.net/pipermail/buildroot/2011-August/044779.html
->
-> Best regards,
-> Thomas
->
->
-> >
-> > On Tue, Jan 10, 2012 at 3:26 AM, Thomas De Schampheleire
-> > <patrickdepinguin+buildroot@gmail.com> wrote:
-> >>
-> >> Hi Bryce,
-> >>
-> >> On Mon, Jan 9, 2012 at 11:54 PM, Bryce Schober <bryce.schober@gmail.com
-> >
-> >> wrote:
-> >> > What I mean by "SDK" is the ability to compile external programs using
-> >> > the
-> >> > buildroot toolchain and libraries on any reasonably-compatible host.
-> I'm
-> >> > assuming that the toolchain itself is built properly static for its
-> own
-> >> > host
-> >> > independence (which in my case, it is). Ideally the toolchain in the
-> >> > output/host directory would be capable of standing alone, when built
-> >> > properly
-> >> >
-> >> > I'm having two issues w/ archving the output/host dir for extraction
-> and
-> >> > usage in a different host directory. I'm using a custom-built
-> >> > crosstool-ng
-> >> > built externally and independent of buildroot.
-> >> >
-> >> > The external toolchain import results in three distinct problems that
-> I
-> >> > can
-> >> > see:
-> >> > 1. The symbolic links for binutils binaries in use absolute paths to
-> >> > link to
-> >> > the external toolchain instead of copying them in.
-> >> > 2. The ext-toolchain-wrapper uses an absolute path for the sysroot
-> >> > directory.
-> >> > 3. The ext-toolchain-wrapper seems to point to the old (import-from)
-> bin
-> >> > directory, not the path to which the toolchain has been copied.
-> >> >
-> >> > I'm not particularly familiar with the relocatability of toolchains or
-> >> > buildroot's method thereof, and so am not sure where to start with a
-> >> > proposal, let alone a patch. If I could get some direction as to how
-> >> > best to
-> >> > tackle this, I'd be grateful.
-> >>
-> >> It is known that the toolchains generated by buildroot are not
-> >> relocatable.
-> >> However, you can tell buildroot to create the toolchain with
-> >> crosstool-ng, and this one is relocatable. I suggest you give that a
-> >> try to see if it solves your problems.
-> >> I'm using buildroot in the same way and it works fine for me.
-> >>
-> >> Best regards,
-> >> Thomas
-> >
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120111/7ac2b48f/attachment.html>
+-- 
+Bye, Peter Korsgaard
