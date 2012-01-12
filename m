@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Jan 2012 11:46:46 +0100
-Subject: [Buildroot] [PATCH 2/2] bluez_utils: bump to 4.97
-In-Reply-To: <1326358922-17139-2-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 12 Jan 2012 10:02:02
- +0100")
-References: <1326358922-17139-1-git-send-email-yegorslists@googlemail.com>
- <1326358922-17139-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87wr8x6vvt.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 12 Jan 2012 11:11:26 +0100
+Subject: [Buildroot] [git commit] libnl: bump to 3.2.4
+Message-ID: <20120112104709.DE00790314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d242cb20945bf00d3e0603ee446044a2067f3d18
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> patch removes dependency for check package
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libnl/libnl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 612908b..fc37c7d 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBNL_VERSION = 3.2.3
++LIBNL_VERSION = 3.2.4
+ LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
+ LIBNL_INSTALL_STAGING = YES
