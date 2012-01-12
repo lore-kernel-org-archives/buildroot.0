@@ -1,49 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jan 2012 10:17:30 +0100
-Subject: [Buildroot] Can't use output/host/ as "SDK" with external
- toolchain
-In-Reply-To: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
-References: <CAJpxd07HP8j=A15yW-PKg_SbMVw3tCeMvTodx2BdcCjR7-7rmQ@mail.gmail.com>
-Message-ID: <20120112101730.472c6e92@skate>
+From: Johannes Teiwes <jteiwes@informatik.uni-bremen.de>
+Date: Thu, 12 Jan 2012 09:47:13 +0100
+Subject: [Buildroot] including python when compiling for microblaze
+Message-ID: <2AB0B5A7-70EA-4CDB-8B28-A07F81E83394@informatik.uni-bremen.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bryce,
+I am currently trying to port the python package in buidroot to the microblaze platform.
+I have everything set up with a custom toolchain etc. and it works fine. The problem is
+the libffi library, which is required for building any script language (e.g. perl, python)
+for buildroot. The exact error message says
 
-Le Mon, 9 Jan 2012 14:54:13 -0800,
-Bryce Schober <bryce.schober@gmail.com> a ?crit :
+configure: error: "libffi has not been ported to microblaze-unknown-linux-gnu."
 
-> What I mean by "SDK" is the ability to compile external programs
-> using the buildroot toolchain and libraries on any
-> reasonably-compatible host. I'm assuming that the toolchain itself is
-> built properly static for its own host independence (which in my
-> case, it is). Ideally the toolchain in the output/host directory
-> would be capable of standing alone, when built properly
-> 
-> I'm having two issues w/ archving the output/host dir for extraction
-> and usage in a different host directory. I'm using a custom-built
-> crosstool-ng built externally and independent of buildroot.
+Has anyone started to port libffi to another platform or even found a specific workaround
+for microblaze? Is there any alternative to the libffi library or installing python via buildroot?
 
-As Peter has mentioned, moving the "SDK" to a different directory is
-currently not supported. It has been discussed during our last meeting
-in Prague, we listed the different things that we think need to be
-fixed, but the work hasn't been done yet.
+Any help is greatly appreciated.
+--
+Johannes Teiwes - jteiwes at tzi.de
 
-The meeting report that Peter has mentioned lists the different issues
-that need to be fixed. So if you want to help, feel free to start with
-this list :)
 
-Those items are also on my TODO-list, but that one is so long that I
-can't guarantee when I'll be able to do it.
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120112/0c11dae3/attachment.html>
