@@ -1,31 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jan 2012 09:30:08 +0100
-Subject: [Buildroot] [PATCH 4/4] Update the documentation to add these
- changes
-In-Reply-To: <ad9fb6b99c31f84658dcc8f15cbd5c2440ee0918.1326304128.git.maxime.ripard@free-electrons.com>
-References: <cover.1326304128.git.maxime.ripard@free-electrons.com>
- <ad9fb6b99c31f84658dcc8f15cbd5c2440ee0918.1326304128.git.maxime.ripard@free-electrons.com>
-Message-ID: <20120112093008.63cf020d@skate>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 12 Jan 2012 10:02:01 +0100
+Subject: [Buildroot] [PATCH 1/2] libnl: bump to 3.2.4
+Message-ID: <1326358922-17139-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Jan 2012 18:53:41 +0100,
-Maxime Ripard <maxime.ripard@free-electrons.com> a ?crit :
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> +* +LIBFOO_DEVICES+ lists the device files to be created by Buildroot
-> +  when using the static device table. The syntax to use is the
-> +  makedevs one.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libnl/libnl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Would be great to mention that <foo>_DEVICES and <foo>_PERMISSIONS are
-optional, and where to find the makedevs syntax, or mention it directly
-in the documentation (better).
-
-Thomas
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 612908b..fc37c7d 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBNL_VERSION = 3.2.3
++LIBNL_VERSION = 3.2.4
+ LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
+ LIBNL_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1.1
