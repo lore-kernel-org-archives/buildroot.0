@@ -1,39 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 13 Jan 2012 00:13:13 +0100
-Subject: [Buildroot] [PATCH 7/7] sam-ba: new package with host variant
-	only
-In-Reply-To: <20120102142959.0abeedb8@skate>
-References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
- <1325510735.2442.2.camel@emblysd024.adetel.com>
- <20120102142959.0abeedb8@skate>
-Message-ID: <201201130013.13601.arnout@mind.be>
+Date: Fri, 13 Jan 2012 00:29:49 +0100
+Subject: [Buildroot] [PATCH] Adding xf86-input-tslib driver
+In-Reply-To: <1324745464-10155-1-git-send-email-sergiosiena@gmail.com>
+References: <1324745464-10155-1-git-send-email-sergiosiena@gmail.com>
+Message-ID: <201201130029.49859.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 02 January 2012 14:29:59 Thomas Petazzoni wrote:
-> Hello Alexandre,
+On Saturday 24 December 2011 17:51:04 Sergio Prado wrote:
+> Adding xf86-input-tslib driver so X11 can talk directly to 
+> touchscreen devices.
 > 
-> Le Mon, 02 Jan 2012 14:25:35 +0100,
-> Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
-> 
-> > Shouldn't we go further and provide scripts to flash the boards using
-> > the
-> > default addresses used in at91bootstrap and u-boot ?
-> 
-> Indeed, that would be the next step to improve the board support for
-> AT91 evaluation boards. You are welcome to contribute patches :-)
+> Signed-off-by: Sergio Prado <sergiosiena@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Buildroot is missing post-image scripting in general.  You will typically
-want to package the kernel and rootfs in a compressed and signed image that
-can be distributed and installed on the target.  Or during development, you
-would like to untar it to the nfsroot.
+ Also compile-tested for ARM with codesourcery.
+
+> diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+> new file mode 100644
+> index 0000000..4c3f719
+> --- /dev/null
+> +++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+> +       bool "xf86-input-tslib"
+> +       select BR2_PACKAGE_XPROTO_INPUTPROTO
+> +       select BR2_PACKAGE_XSERVER_XORG_SERVER
+> +       select BR2_PACKAGE_XPROTO_RANDRPROTO
+> +       select BR2_PACKAGE_XPROTO_XPROTO
+ Missing
+	  select BR2_PACKAGE_TSLIB
+
+> +       help
+> +         Touch screen library input driver
+> diff --git
+> a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
+> new file mode 100644
+> index 0000000..eb550c2
+> --- /dev/null
+> +++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# xdriver_xf86-input-tslib -- Touch screen library input driver
+> +#
+> +################################################################################
+> +XDRIVER_XF86_INPUT_TSLIB_VERSION = 0.0.6
+> +XDRIVER_XF86_INPUT_TSLIB_SOURCE = xf86-input-tslib-$(XDRIVER_XF86_INPUT_TSLIB_VERSION).tar.bz2
+> +XDRIVER_XF86_INPUT_TSLIB_SITE = http://www.ptxdist.org/software/xf86-input-tslib/download
+> +XDRIVER_XF86_INPUT_TSLIB_DEPENDENCIES = xproto_inputproto xserver_xorg-server xproto_randrproto xproto_xproto 
+
+ Missing dependency on tslib.
+
+ The randr and input dependencies are actually optional.  But I guess
+it doesn't hurt that much to force them on.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
