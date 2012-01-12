@@ -1,87 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jan 2012 14:42:56 +0100
-Subject: [Buildroot] [PATCH] Add package for open2300
-In-Reply-To: <1326375221-2223-1-git-send-email-alexandre.belloni@piout.net>
-References: <1326375221-2223-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <20120112144256.1ce4bfcb@skate>
+From: Alexandre Belloni <alexandre.belloni@piout.net>
+Date: Thu, 12 Jan 2012 15:03:02 +0100
+Subject: [Buildroot] [PATCH v2] Add package for open2300
+Message-ID: <1326376982-30979-1-git-send-email-alexandre.belloni@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 12 Jan 2012 14:33:41 +0100,
-Alexandre Belloni <alexandre.belloni@piout.net> a ?crit :
+Open2300 is a package of software tools that reads (and writes) data
+from a Lacrosse WS2300/WS2305/WS2310/WS2315 Weather Station.
 
->  menu "Miscellaneous"
-> +source "package/open2300/Config.in"
->  source "package/shared-mime-info/Config.in"
->  endmenu
+This package will install all the binaries on the target.
 
-Looking at what the application does, probably it needs to go in the
-"Hardware handling" menu.
+Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+---
+ package/Config.in            |    1 +
+ package/open2300/Config.in   |    7 +++++++
+ package/open2300/open2300.mk |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 0 deletions(-)
+ create mode 100644 package/open2300/Config.in
+ create mode 100644 package/open2300/open2300.mk
 
-> +config BR2_PACKAGE_OPEN2300
-> +	bool "open2300"
-> +	help
-> +	  open2300 reads (and writes) data from a Lacrosse
-> +	  WS2300/WS2305/WS2310/WS2315 Weather Station
-
-We generally add an empty line here, and then the URL of the project.
-
-> +OPEN2300_SITE:=http://www.lavrsen.dk/svn/open2300/trunk/
-> +OPEN2300_SITE_METHOD:=svn
-> +OPEN2300_VERSION:=12
-
-Use = instead of := and do some nice formatting:
-
-OPEN2300_SITE        = http://www.lavrsen.dk/svn/open2300/trunk/
-OPEN2300_SITE_METHOD = svn
-OPEN2300_VERSION     = 12
-
-> +OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300
-> history2300 histlog2300 bin2300 xml2300 light2300 interval2300
-> minmax2300
-
-Please use \ at some point to avoid the very long line.
-
-> +ifeq ($(BR2_PACKAGE_MYSQL),y)
-> +	OPEN2300_BINS += mysql2300 mysqlhistlog2300
-> +endif
-
-Do those programs need the mysql client library to be built? If so,
-then you need:
-
-OPEN2300_DEPENDENCIES += mysql_client
-
-to ensure that mysql is built before open2300.
-
-> +define OPEN2300_BUILD_CMDS
-> +	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D)
-> $(OPEN2300_BINS) +endef
-> +
-> +define OPEN2300_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(addprefix $(@D)/,$(OPEN2300_BINS))
-> $(TARGET_DIR)/usr/bin/ +endef
-
-Won't work. If you use -D, you must pass the complete path of the
-target file, i.e:
-
-	for prog in $(OPEN2300_BINS); do \
-		$(INSTALL) -D -m 0755 $(@D)/$$prog $(TARGET_DIR)/usr/bin/$$prog ; \
-	done
-
-> +$(eval $(call GENTARGETS,package,open2300))
-
-Just:
-
-$(eval $(call GENTARGETS))
-
-Regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 1042d95..63ceb49 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -195,6 +195,7 @@ source "package/memtester/Config.in"
+ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
++source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
+diff --git a/package/open2300/Config.in b/package/open2300/Config.in
+new file mode 100644
+index 0000000..df0a969
+--- /dev/null
++++ b/package/open2300/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_OPEN2300
++	bool "open2300"
++	help
++	  open2300 reads (and writes) data from a Lacrosse
++	  WS2300/WS2305/WS2310/WS2315 Weather Station
++
++	  http://www.lavrsen.dk/foswiki/bin/view/Open2300/WebHome
+diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
+new file mode 100644
+index 0000000..78784fa
+--- /dev/null
++++ b/package/open2300/open2300.mk
+@@ -0,0 +1,29 @@
++############################################################
++#
++# Open2300
++#
++############################################################
++
++OPEN2300_SITE        = http://www.lavrsen.dk/svn/open2300/trunk/
++OPEN2300_SITE_METHOD = svn
++OPEN2300_VERSION     = 12
++
++OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300 history2300 \
++				histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
++
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++	OPEN2300_DEPENDENCIES += mysql_client
++	OPEN2300_BINS         += mysql2300 mysqlhistlog2300
++endif
++
++define OPEN2300_BUILD_CMDS
++	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) $(OPEN2300_BINS)
++endef
++
++define OPEN2300_INSTALL_TARGET_CMDS
++	for prog in $(OPEN2300_BINS); do \
++		$(INSTALL) -D -m 0755 $(@D)/$$prog $(TARGET_DIR)/usr/bin/$$prog ; \
++	done                                                          
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.5.4
