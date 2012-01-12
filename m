@@ -1,36 +1,35 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 11 Jan 2012 22:11:41 -0500
-Subject: [Buildroot] [PATCH] tiff: add utility commands and library
-	options
-In-Reply-To: <87d3aq9msb.fsf@macbook.be.48ers.dk>
-References: <1326084271-12749-1-git-send-email-fhunleth@troodon-software.com>
- <87d3aq9msb.fsf@macbook.be.48ers.dk>
-Message-ID: <CA+-urNRp5r0-PJRqSiggBRpF3RqNJsRxZTJM9MV0V_dhruKSyA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 12 Jan 2012 09:10:11 +0100
+Subject: [Buildroot] Error installing  udev  : frugalware ??
+In-Reply-To: <DBC7AF7422C5458EB0B788B267A834FC@JohanW7> (Sagaert Johan's
+ message of "Thu, 12 Jan 2012 00:32:35 +0100")
+References: <DBC7AF7422C5458EB0B788B267A834FC@JohanW7>
+Message-ID: <87ipkh8hp8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 11, 2012 at 12:22 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->
-> >>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
->
-> ?Frank> +
-> ?Frank> +config BR2_PACKAGE_TIFF_LARGE_FILE
-> ?Frank> + ? ? ? ?bool "Large file support"
-> ?Frank> + ? ? ? default y
->
-> Need to indent with <tab>.
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Fixed.
+ Sagaert> Hi
+ Sagaert> Using 2011.11 :
 
->
-> How is this related to the global BR2_LARGEFILE setting? We already pass
-> --disable-largefile for !BR2_LARGEFILE builds (see package/Makefile.in).
+ Sagaert> make[1]: Leaving directory `/home/johan/buildroot-2011.11js/output/build/udev-173'
 
-Cool. I hadn't noticed that --disable-largefile was getting passed
-automatically. Removing the large file lines from the patch.
+Looks to be the end of 'make install'
 
-Thanks,
-Frank
+ Sagaert> /usr/bin/install -m 0755 package/udev/S10udev /home/johan/buildroot/output/target/etc/init.d
+
+This is UDEV_INSTALL_INITSCRIPT
+
+ Sagaert> /usr/bin/install -m 0644 /home/johan/buildroot/output/build/udev-173/etc/udev/frugalware/*
+ Sagaert> /home/johan/buildroot/output/target/etc/udev/rules.d
+ Sagaert> /usr/bin/install: cannot stat `/home/johan/buildroot/output/build/udev-173/etc/udev/frugalware/*': No such file or directory
+ Sagaert> make: *** [/home/johan/buildroot/output/build/udev-173/.stamp_target_installed] Error 1
+
+But this isn't. Do you have any local modifications related to this?
+
+-- 
+Bye, Peter Korsgaard
