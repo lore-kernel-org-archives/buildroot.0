@@ -1,30 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jan 2012 10:52:31 +0100
-Subject: [Buildroot] Error installing  udev  : frugalware ??
-In-Reply-To: <8E8EC4AEBD4345D2BF6FE26E33A7874A@JohanW7>
-References: <DBC7AF7422C5458EB0B788B267A834FC@JohanW7>
- <87ipkh8hp8.fsf@macbook.be.48ers.dk>
- <8E8EC4AEBD4345D2BF6FE26E33A7874A@JohanW7>
-Message-ID: <20120112105231.4f9e62f4@skate>
+Date: Thu, 12 Jan 2012 11:02:45 +0100
+Subject: [Buildroot] including python when compiling for microblaze
+In-Reply-To: <2AB0B5A7-70EA-4CDB-8B28-A07F81E83394@informatik.uni-bremen.de>
+References: <2AB0B5A7-70EA-4CDB-8B28-A07F81E83394@informatik.uni-bremen.de>
+Message-ID: <20120112110245.73e2323b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 12 Jan 2012 10:43:38 +0100,
-"Sagaert Johan" <sagaert.johan@skynet.be> a ?crit :
+Hello,
 
-> Why is the package directory scanned ?
+Le Thu, 12 Jan 2012 09:47:13 +0100,
+Johannes Teiwes <jteiwes@informatik.uni-bremen.de> a ?crit :
 
-Because the main Makefile does:
+> I am currently trying to port the python package in buidroot to the
+> microblaze platform. I have everything set up with a custom toolchain
+> etc. and it works fine. The problem is the libffi library, which is
+> required for building any script language (e.g. perl, python) for
+> buildroot. The exact error message says
+> 
+> configure: error: "libffi has not been ported to
+> microblaze-unknown-linux-gnu."
+> 
+> Has anyone started to port libffi to another platform or even found a
+> specific workaround for microblaze? Is there any alternative to the
+> libffi library or installing python via buildroot?
 
-include package/*/*.mk
+Apparently, libffi has no supported for microblaze, and it seems that
+libffi is a mandatory dependency for building Python. It looks like you
+have two options:
 
-The inclusion of the Config.in file has nothing to do with the
-inclusion of the .mk files. Config.in files must be explicitly included
-by package/Config.in, while all .mk file in subdirectories of package/
-are automatically included.
+ *) Port libffi to Microblaze
+
+ *) Use a more lightweight scripting language such as Lua. Python is
+    quite heavy for MMU-less systems at 100-180 Mhz such as Microblaze
+    systems. Lua is probably a much better fit for this kind of systems.
 
 Regards,
 
