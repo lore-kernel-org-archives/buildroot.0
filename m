@@ -1,35 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Jan 2012 23:47:42 +0100
-Subject: [Buildroot] strace doesn't compile on x86_64
-In-Reply-To: <4EF89684.8070401@gmail.com>
-References: <4EF879B6.8080902@gmail.com> <4EF89684.8070401@gmail.com>
-Message-ID: <201201122347.42661.arnout@mind.be>
+Date: Fri, 13 Jan 2012 00:13:13 +0100
+Subject: [Buildroot] [PATCH 7/7] sam-ba: new package with host variant
+	only
+In-Reply-To: <20120102142959.0abeedb8@skate>
+References: <cover.1325178529.git.thomas.petazzoni@free-electrons.com>
+ <1325510735.2442.2.camel@emblysd024.adetel.com>
+ <20120102142959.0abeedb8@skate>
+Message-ID: <201201130013.13601.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 26 December 2011 16:45:08 Wojciech Zabolotny wrote:
-> Additionally to analyze my problems with udev, I had to compile strace.
-> It didn't compile "out of the box" leading to error:
+On Monday 02 January 2012 14:29:59 Thomas Petazzoni wrote:
+> Hello Alexandre,
 > 
-> /usr/local/wzab/asus_amd/buildroot-2011.11/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc -DHAVE_CONFIG_H -I. -I./linux/x86_64 -I./linux   -Wall -pipe -Os  -fPIC -DPIC -D_LARGEFILE_SOURCE 
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -MT file.o -MD -MP -MF .deps/file.Tpo -c -o file.o file.c
-> file.c: In function 'printstat64':
-> file.c:1046:16: error: storage size of 'statbuf' isn't known
+> Le Mon, 02 Jan 2012 14:25:35 +0100,
+> Alexandre Belloni <abelloni@adeneo-embedded.com> a ?crit :
 > 
-> To compile it I had to comment out the line 1010 in file.c:
-> // #if !defined HAVE_STAT64 && defined LINUX && defined X86_64
-> and corresponding line 1040:
-> //#endif
+> > Shouldn't we go further and provide scripts to flash the boards using
+> > the
+> > default addresses used in at91bootstrap and u-boot ?
+> 
+> Indeed, that would be the next step to improve the board support for
+> AT91 evaluation boards. You are welcome to contribute patches :-)
 
- Yes, I noticed that as well...  strace should be configure'd (and 
-compiled) without the -D_LARGEFILE64_SOURCE flag.  But I'm not sure
-how to handle it cleanly so I never got around to try to patch it.
+ Buildroot is missing post-image scripting in general.  You will typically
+want to package the kernel and rootfs in a compressed and signed image that
+can be distributed and installed on the target.  Or during development, you
+would like to untar it to the nfsroot.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
