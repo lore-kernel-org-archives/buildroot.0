@@ -1,47 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 12 Jan 2012 23:05:50 +0100
-Subject: [Buildroot] [PATCH 2/7] lttng-modules: new package
-In-Reply-To: <20111222141605.160d5b67@skate>
+Date: Thu, 12 Jan 2012 23:12:13 +0100
+Subject: [Buildroot] [PATCH 5/7] util-linux: add host variant for
+	host-lttng-babeltrace
+In-Reply-To: <11bbfa19e9391b673b8ce8d76156a8b8871eb970.1324547779.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LUiqde1C2zY=aoKkRCc37r-ZASSfavVCX1WmwWT9g=TyA@mail.gmail.com>
- <20111222141605.160d5b67@skate>
-Message-ID: <201201122305.51006.arnout@mind.be>
+ <11bbfa19e9391b673b8ce8d76156a8b8871eb970.1324547779.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201201122312.13965.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 22 December 2011 14:16:05 Thomas Petazzoni wrote:
-> > In fact, since building kernel modules from buildroot is not uncommon
-> > anymore (there are some packages in the tree that do it, plus
-> > user-specific packages, wouldn't it be a good idea to provide a small
-> > infrastructure for building kernel modules? This would prevent such
-> > mistakes. Instead of gentargets, we could have something like
-> > kernelmodule.
-> > What do you think about that?  
+On Thursday 22 December 2011 10:57:21 Thomas Petazzoni wrote:
+> lttng-babeltrace needs libuuid, which is provided by util-linux, and
+> since we want to build lttng-babeltrace for the host, we need to build
+> libuuid for the host. It's a shame that libuuid is part of such a big
+> package as util-linux.
 > 
-> I don't know. I am not exactly sure because there is no real standard
-> way for packaging external kernel modules. If you look at linux-fusion,
-> RTAI or lttng-modules, you'll see that the build mechanism is very
-> different. I'm not sure there is a real pattern here that we can
-> factorize nicely in an infrastructure. Which pattern do you see?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/util-linux/util-linux.mk |    9 +++++++++
+>  1 files changed, 9 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index a3d6e13..6bffc2c 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -67,7 +67,16 @@ UTIL_LINUX_CONF_OPT += \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-login-utils) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write)
+>  
+> +HOST_UTIL_LINUX_CONF_OPT += \
+> +	--enable-libuuid \
+> +	--disable-mount --disable-fsck --disable-libmount \
+> +	--disable-uuidd --disable-libblkid --disable-agetty \
+> +	--disable-cramfs --disable-switch_root --disable-pivot_root \
+> +	--disable-fallocate --disable-unshare --disable-rename \
+> +	--disable-schedutils --disable-wall --disable-partx
+> +
 
- RTAI is different because it is much more than a kernel module.  But I
-do see a pattern for linux-fusion, lttng-modules and others I've been
-using locally.  They generally have a Makefile that tries to be smart
-about the kernel sources, and eventually calls a sub-make as
-
- $(MAKE) -C $(KERNELDIR) M=$(PWD) <extracflags> <target>
-
- I think we can do the latter directly from buildroot.
-
- In some cases there is a user-space component in the same package, but
-that normally can be built separately as well.
-
+ I would put (part of) the comment of the commit message right here in the
+mk file.  Else, two years down the road someone will look at this and wonder
+what the hell is going on...
 
  Regards,
  Arnout
+
+
+>  $(eval $(call AUTOTARGETS))
+> +$(eval $(call AUTOTARGETS,host))
+>  
+>  # MKINSTALLDIRS comes from tweaked m4/nls.m4, but autoreconf uses staging
+>  # one, so it disappears
+> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
