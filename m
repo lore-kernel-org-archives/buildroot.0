@@ -1,35 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 12 Jan 2012 22:04:35 +0100
-Subject: [Buildroot] Error in patch file
-In-Reply-To: <F9C551623D2CBB4C9488801D14F864C60F0F51@ex-mb1.corp.adtran.com>
- (ANDY KENNEDY's message of "Thu, 12 Jan 2012 20:48:02 +0000")
-References: <F9C551623D2CBB4C9488801D14F864C60F0F51@ex-mb1.corp.adtran.com>
-Message-ID: <87r4z47huk.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 12 Jan 2012 23:05:50 +0100
+Subject: [Buildroot] [PATCH 2/7] lttng-modules: new package
+In-Reply-To: <20111222141605.160d5b67@skate>
+References: <cover.1324547779.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LUiqde1C2zY=aoKkRCc37r-ZASSfavVCX1WmwWT9g=TyA@mail.gmail.com>
+ <20111222141605.160d5b67@skate>
+Message-ID: <201201122305.51006.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ANDY" == ANDY KENNEDY <ANDY.KENNEDY@adtran.com> writes:
+On Thursday 22 December 2011 14:16:05 Thomas Petazzoni wrote:
+> > In fact, since building kernel modules from buildroot is not uncommon
+> > anymore (there are some packages in the tree that do it, plus
+> > user-specific packages, wouldn't it be a good idea to provide a small
+> > infrastructure for building kernel modules? This would prevent such
+> > mistakes. Instead of gentargets, we could have something like
+> > kernelmodule.
+> > What do you think about that?  
+> 
+> I don't know. I am not exactly sure because there is no real standard
+> way for packaging external kernel modules. If you look at linux-fusion,
+> RTAI or lttng-modules, you'll see that the build mechanism is very
+> different. I'm not sure there is a real pattern here that we can
+> factorize nicely in an infrastructure. Which pattern do you see?
 
- ANDY> I had an error in an file I was working with, so I searched via:
- ANDY> grep -rI '\\[        ][      ]*$' .
+ RTAI is different because it is much more than a kernel module.  But I
+do see a pattern for linux-fusion, lttng-modules and others I've been
+using locally.  They generally have a Makefile that tries to be smart
+about the kernel sources, and eventually calls a sub-make as
 
- ANDY> In case LookOut morphs this, the [ 	] is <space><tab>.
+ $(MAKE) -C $(KERNELDIR) M=$(PWD) <extracflags> <target>
 
- ANDY> It returns:
- ANDY> ./package/java/jamvm/jamvm-1.5.0.patch.avr32:
- ANDY> +//        printf("compare and swap %d %d %s:line%d\n",oldval,newval,__FILE__,__LINE__);   \ 
+ I think we can do the latter directly from buildroot.
 
- ANDY> Note:  there is a space at the end of this line, negating the \ for line continuation.
+ In some cases there is a user-space component in the same package, but
+that normally can be built separately as well.
 
- ANDY> I don't know whether this patch is even used.  There are no sigs
- ANDY> in the patch file either.
 
-No, because I marked the java packages as broken back in July
-2010. Nobody seemed to have cared about it, so I will now remove the
-packages.
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
