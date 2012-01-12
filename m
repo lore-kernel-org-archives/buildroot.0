@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 12 Jan 2012 10:02:01 +0100
-Subject: [Buildroot] [PATCH 1/2] libnl: bump to 3.2.4
-Message-ID: <1326358922-17139-1-git-send-email-yegorslists@googlemail.com>
+Date: Thu, 12 Jan 2012 10:02:02 +0100
+Subject: [Buildroot] [PATCH 2/2] bluez_utils: bump to 4.97
+In-Reply-To: <1326358922-17139-1-git-send-email-yegorslists@googlemail.com>
+References: <1326358922-17139-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1326358922-17139-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,23 +12,124 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
+patch removes dependency for check package
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libnl/libnl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...tils-move-libcheck-under-TEST-conditional.patch |   85 ++++++++++++++++++++
+ package/bluez_utils/bluez_utils.mk                 |    3 +-
+ 2 files changed, 87 insertions(+), 1 deletions(-)
+ create mode 100755 package/bluez_utils/bluez_utils-move-libcheck-under-TEST-conditional.patch
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 612908b..fc37c7d 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/bluez_utils/bluez_utils-move-libcheck-under-TEST-conditional.patch b/package/bluez_utils/bluez_utils-move-libcheck-under-TEST-conditional.patch
+new file mode 100755
+index 0000000..b2f5303
+--- /dev/null
++++ b/package/bluez_utils/bluez_utils-move-libcheck-under-TEST-conditional.patch
+@@ -0,0 +1,85 @@
++From bf5d45f2fbd1b1463512f4eb8d30bffb3478ccc7 Mon Sep 17 00:00:00 2001
++From: Marcel Holtmann <marcel@holtmann.org>
++Date: Tue, 27 Dec 2011 20:09:56 -0800
++Subject: [PATCH] build: Move libcheck under TEST conditional
++
++---
++ Makefile.am  |    5 ++++-
++ acinclude.m4 |    8 +++++++-
++ configure.ac |    3 +--
++ 3 files changed, 12 insertions(+), 4 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 9112483..5cf287c 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -449,6 +449,7 @@ endif
++ 
++ unit_objects =
++ 
+++if TEST
++ unit_tests = unit/test-eir
++ 
++ noinst_PROGRAMS += $(unit_tests)
++@@ -456,8 +457,10 @@ noinst_PROGRAMS += $(unit_tests)
++ unit_test_eir_SOURCES = unit/test-eir.c src/eir.c src/glib-helper.c
++ unit_test_eir_LDADD = lib/libbluetooth-private.la @GLIB_LIBS@ @CHECK_LIBS@
++ unit_test_eir_CFLAGS = $(AM_CFLAGS) @CHECK_CFLAGS@
++-unit_test_eir_SHORTNAME = unit
++ unit_objects += $(unit_test_eir_OBJECTS)
+++else
+++unit_tests =
+++endif
++ 
++ TESTS = $(unit_tests)
++ 
++diff --git a/acinclude.m4 b/acinclude.m4
++index 2097d77..753b994 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -170,6 +170,12 @@ AC_DEFUN([AC_PATH_READLINE], [
++ 		[])
++ ])
++ 
+++AC_DEFUN([AC_PATH_CHECK], [
+++	PKG_CHECK_MODULES(CHECK, check >= 0.9.4, check_found=yes, check_found=no)
+++	AC_SUBST(CHECK_CFLAGS)
+++	AC_SUBST(CHECK_LIBS)
+++])
+++
++ AC_DEFUN([AC_PATH_OUI], [
++ 	AC_ARG_WITH(ouifile,
++ 		    AS_HELP_STRING([--with-ouifile=PATH],[Path to the oui.txt file @<:@auto@:>@]),
++@@ -422,7 +428,7 @@ AC_DEFUN([AC_ARG_BLUEZ], [
++ 	AM_CONDITIONAL(PAND, test "${pand_enable}" = "yes")
++ 	AM_CONDITIONAL(DUND, test "${dund_enable}" = "yes")
++ 	AM_CONDITIONAL(CUPS, test "${cups_enable}" = "yes")
++-	AM_CONDITIONAL(TEST, test "${test_enable}" = "yes")
+++	AM_CONDITIONAL(TEST, test "${test_enable}" = "yes" && test "${check_found}" = "yes")
++ 	AM_CONDITIONAL(TOOLS, test "${tools_enable}" = "yes")
++ 	AM_CONDITIONAL(BCCMD, test "${bccmd_enable}" = "yes")
++ 	AM_CONDITIONAL(PCMCIA, test "${pcmcia_enable}" = "yes")
++diff --git a/configure.ac b/configure.ac
++index 3a5dfde..a7670da 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -24,8 +24,6 @@ AC_PROG_YACC
++ AM_PROG_LEX
++ AM_PROG_MKDIR_P
++ 
++-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
++-
++ m4_define([_LT_AC_TAGCONFIG], [])
++ m4_ifdef([AC_LIBTOOL_TAGS], [AC_LIBTOOL_TAGS([])])
++ 
++@@ -50,6 +48,7 @@ AC_PATH_UDEV
++ AC_PATH_SNDFILE
++ AC_PATH_OUI
++ AC_PATH_READLINE
+++AC_PATH_CHECK
++ 
++ AC_ARG_BLUEZ
++ 
++-- 
++1.7.6.5
++
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
+index 860ecbd..fe0f43f 100644
+--- a/package/bluez_utils/bluez_utils.mk
++++ b/package/bluez_utils/bluez_utils.mk
+@@ -3,12 +3,13 @@
+ # bluez_utils
  #
  #############################################################
+-BLUEZ_UTILS_VERSION = 4.96
++BLUEZ_UTILS_VERSION = 4.97
+ BLUEZ_UTILS_SOURCE = bluez-$(BLUEZ_UTILS_VERSION).tar.gz
+ BLUEZ_UTILS_SITE = http://www.kernel.org/pub/linux/bluetooth/
+ BLUEZ_UTILS_INSTALL_STAGING = YES
+ BLUEZ_UTILS_DEPENDENCIES = dbus libglib2
+ BLUEZ_UTILS_CONF_OPT = --enable-test --enable-tools
++BLUEZ_UTILS_AUTORECONF = YES
  
--LIBNL_VERSION = 3.2.3
-+LIBNL_VERSION = 3.2.4
- LIBNL_SOURCE = libnl-$(LIBNL_VERSION).tar.gz
- LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files/
- LIBNL_INSTALL_STAGING = YES
+ # BlueZ 3.x compatibility
+ ifeq ($(BR2_PACKAGE_BLUEZ_UTILS_COMPAT),y)
 -- 
 1.7.1.1
