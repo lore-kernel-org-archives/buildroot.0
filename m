@@ -1,25 +1,21 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 13 Jan 2012 20:23:23 +0100
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Jan 2012 21:33:39 +0100
 Subject: [Buildroot] [PATCH] Fix typo buiding -> building
-Message-ID: <fbb83c23f4d48ca0ca16.1326482603@beantl019720>
+In-Reply-To: <fbb83c23f4d48ca0ca16.1326482603@beantl019720> (Thomas De
+ Schampheleire's message of "Fri, 13 Jan 2012 20:23:23 +0100")
+References: <fbb83c23f4d48ca0ca16.1326482603@beantl019720>
+Message-ID: <87boq7tk9o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
----
- toolchain/toolchain-common.in |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -105,4 +105,4 @@ config BR2_TARGET_OPTIMIZATION
- config BR2_TARGET_LDFLAGS
- 	string "Target linker options"
- 	help
--	  Extra options to pass to the linker when buiding for the target.
-+	  Extra options to pass to the linker when building for the target.
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
