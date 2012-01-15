@@ -1,62 +1,100 @@
-From: vbr vbr <vvvg77@gmail.com>
-Date: Sat, 14 Jan 2012 11:02:00 -0800
-Subject: [Buildroot] strace doesn't compile on x86_64
-In-Reply-To: <201201122347.42661.arnout@mind.be>
-References: <4EF879B6.8080902@gmail.com> <4EF89684.8070401@gmail.com>
- <201201122347.42661.arnout@mind.be>
-Message-ID: <CAOrAeokrgwKeS_QNzFG7TOjnak7J_uF5kyEpLXcGFfmPc76Nxg@mail.gmail.com>
+From: Arkady Gilinsky <arcadyg@gmail.com>
+Date: Sun, 15 Jan 2012 08:11:08 +0200
+Subject: [Buildroot] [PATCH] BASH: Adding features that can not be
+ automatically detected while cross-compiling
+Message-ID: <CA+gTGJGUmtWp2cnyrP=Za7=ySQmiQ3REWxJatydJCKv6et-OzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have this issue as well. any clue from the experts?
+From: Arkady Gilinsky <arcadyg@gmail.com>
+Date: Sat, 14 Jan 2012 11:27:11 +0200
+Subject: [PATCH] BASH: Adding features that can not be automatically
+detected
+ while cross-compiling
 
-Thanks
-Vincent
+There are some bash features that can not be detected automatically during
+configure stage while cross-compiling. This commit add ability to force
+support of such a features.
+
+Signed-off-by: Arkady Gilinsky <arcadyg@gmail.com>
+---
+ package/bash/Config.in |   33 +++++++++++++++++++++++++++++++++
+ package/bash/bash.mk   |    6 +++++-
+ 2 files changed, 38 insertions(+), 1 deletions(-)
+
+diff --git a/package/bash/Config.in b/package/bash/Config.in
+index 9ee46e8..b7cc27d 100644
+--- a/package/bash/Config.in
++++ b/package/bash/Config.in
+@@ -5,3 +5,36 @@ config BR2_PACKAGE_BASH
+       The standard GNU Bourne again shell.
+
+       http://tiswww.case.edu/php/chet/bash/bashtop.html
++
++menu "BASH cross compile features selection"
++    depends on BR2_PACKAGE_BASH
++
++config BR2_PACKAGE_BASH_JOB_CONTROL
++    bool "job_control"
++    depends on BR2_PACKAGE_BASH
++    help
++       The job control feature (Ctrl-Z and etc.)
++       Configure variable - bash_cv_job_control_missing
++
++config BR2_PACKAGE_BASH_NAMED_PIPES
++    bool "named_pipes"
++    depends on BR2_PACKAGE_BASH
++    help
++       Named pipe presence
++       Configure variable - bash_cv_sys_named_pipes
++
++config BR2_PACKAGE_BASH_SIG_SET_JUMP
++    bool "sigsetjmp"
++    depends on BR2_PACKAGE_BASH
++    help
++       POSIX-style sigsetjmp/siglongjmp
++       Configure variable - bash_cv_func_sigsetjmp
++
++config BR2_PACKAGE_BASH_PRINTF_A_FORMAT
++    bool "printf_a_format"
++    depends on BR2_PACKAGE_BASH
++    help
++       Printf floating point output in hex notation
++       Configure variable - bash_cv_printf_a_format
++
++endmenu
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index f1f951c..78face7 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -7,7 +7,11 @@
+ BASH_VERSION = 4.2
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ BASH_DEPENDENCIES = ncurses
+-BASH_CONF_ENV = bash_cv_job_control_missing=no
++BASH_CONF_ENV
++=                                                                \
++   bash_cv_job_control_missing=$(if
+$(BR2_PACKAGE_BASH_JOB_CONTROL),present,no) \
++   $(if $(BR2_PACKAGE_BASH_NAMED_PIPES),
+bash_cv_sys_named_pipes=present,)      \
++   $(if $(BR2_PACKAGE_BASH_SIG_SET_JUMP),
+bash_cv_func_sigsetjmp=present,)      \
++   $(if $(BR2_PACKAGE_BASH_PRINTF_A_FORMAT), bash_cv_printf_a_format=yes,)
+
+ # Make sure we build after busybox so that /bin/sh links to bash
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-- 
+1.7.7
 
 
-On Thu, Jan 12, 2012 at 2:47 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
 
-> On Monday 26 December 2011 16:45:08 Wojciech Zabolotny wrote:
-> > Additionally to analyze my problems with udev, I had to compile strace.
-> > It didn't compile "out of the box" leading to error:
-> >
-> >
-> /usr/local/wzab/asus_amd/buildroot-2011.11/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc
-> -DHAVE_CONFIG_H -I. -I./linux/x86_64 -I./linux   -Wall -pipe -Os  -fPIC
-> -DPIC -D_LARGEFILE_SOURCE
-> > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -MT file.o -MD -MP -MF
-> .deps/file.Tpo -c -o file.o file.c
-> > file.c: In function 'printstat64':
-> > file.c:1046:16: error: storage size of 'statbuf' isn't known
-> >
-> > To compile it I had to comment out the line 1010 in file.c:
-> > // #if !defined HAVE_STAT64 && defined LINUX && defined X86_64
-> > and corresponding line 1040:
-> > //#endif
->
->  Yes, I noticed that as well...  strace should be configure'd (and
-> compiled) without the -D_LARGEFILE64_SOURCE flag.  But I'm not sure
-> how to handle it cleanly so I never got around to try to patch it.
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+-- 
+Best regards
+Arkady Gilinsky
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120114/bea61ea4/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120115/bd3d6787/attachment.html>
