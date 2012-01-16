@@ -1,30 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Jan 2012 09:42:10 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.02/ext-toolchain-updates
-In-Reply-To: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201201160942.10256.arnout@mind.be>
+Date: Mon, 16 Jan 2012 09:50:18 +0100
+Subject: [Buildroot] Request for review: buildroot in Open Mobile Linux
+	devroom of FOSDEM
+Message-ID: <201201160950.18702.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 03 January 2012 21:22:41 Thomas Petazzoni wrote:
-> Hello,
-> 
-> What follows is a set of patches doing various improvements and
-> updates to the external toolchain support:
+ Hoi all,
 
- For the whole series:
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- with Codesourcery 2011.09 on Atom.
+ As I announced earlier, I'll be giving a talk in the Open Mobile Linux
+devroom on FOSDEM.  I would like to get feedback on the slides.  You can
+find them on http://mind.be/?page=publications (in .odp and .pdf).
 
+ It's a 15 minute talk.  My goal is not to explain how to use buildroot,
+but rather to convince the audience that buildroot (or something similar)
+is the way to go for "open" embedded devices, because it empowers the
+user to make modifications and improvements.
+
+ My slides aren't really stand-alone, so it may actually be difficult to
+review them without hearing my talk :-(
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
