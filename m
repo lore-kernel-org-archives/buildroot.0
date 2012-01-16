@@ -1,56 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Jan 2012 18:34:05 +0100
-Subject: [Buildroot] pci_ids.h missing
-In-Reply-To: <CAOrAeomeuJhMTOicaqz22Y+xULo1hZBs92xASrWsSYCG8gvVdw@mail.gmail.com>
-References: <CAOrAeokiOHCwrwG7VGbAem=w4-Gx-P8QjuqQYK_y3=S278S=xg@mail.gmail.com>
- <201201160050.53285.vapier@gentoo.org>
- <CAOrAeomeuJhMTOicaqz22Y+xULo1hZBs92xASrWsSYCG8gvVdw@mail.gmail.com>
-Message-ID: <201201161834.06077.arnout@mind.be>
+Date: Mon, 16 Jan 2012 18:45:50 +0100
+Subject: [Buildroot] [PATCH 2/2] New package: kmod
+In-Reply-To: <1326726276-8442-2-git-send-email-yegorslists@googlemail.com>
+References: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
+ <1326726276-8442-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201201161845.51186.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 16 January 2012 17:38:01 vbr vbr wrote:
-> Just downloaded and extracted a vanilla 2.6.39.4 kernel from kernel.org,
-> and this version does ship pci_ids.h. There must be something else going on:
-> 
-> x linux-2.6.39.4/include/linux/pch_dma.h
-> x linux-2.6.39.4/include/linux/pci-acpi.h
-> x linux-2.6.39.4/include/linux/pci-aspm.h
-> x linux-2.6.39.4/include/linux/pci-dma.h
-> x linux-2.6.39.4/include/linux/pci.h
-> x linux-2.6.39.4/include/linux/pci_hotplug.h
-> x linux-2.6.39.4/include/linux/pci_ids.h   <<<<<<<<<<<<<
-> x linux-2.6.39.4/include/linux/pci_regs.h
-> x linux-2.6.39.4/include/linux/pcieport_if.h
-> 
-> Thanks
-> Vincent
-> 
-> 
-> On Sun, Jan 15, 2012 at 9:50 PM, Mike Frysinger <vapier@gentoo.org> wrote:
-> 
-> > On Sunday 15 January 2012 14:24:41 vbr vbr wrote:
-> > > pci_ids.h is missing from the include/linux directory in the staging
-> > area:
-> > >
-> > > # ls output/staging/usr/include/linux/pci*.h
-> > > output/staging/usr/include/linux/pci.h
-> > > output/staging/usr/include/linux/pci_regs.h
-> > >
-> > > Am I missing something in the buildroot configuration?
-> >
-> > upstream linux kernel doesn't ship it, thus buildroot does not
-                                  ^^^^
- This should be: upstream linux kernel doesn't *install* it.
+On Monday 16 January 2012 16:04:36 yegorslists at googlemail.com wrote:
+> diff --git a/package/kmod/Config.in b/package/kmod/Config.in
+> new file mode 100644
+> index 0000000..f83237e
+> --- /dev/null
+> +++ b/package/kmod/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_KMOD
+> +	bool "kmod"
+> +	help
+> +	  handle kernel modules
+> +
+> +	  http://git.profusion.mobi/cgit.cgi/kmod.git/
 
- pci_ids.h is not considered ABI and should not be accessed by userspace.
-External modules should always be compiled from the Linux source tree 
-itself so they don't need pci_ids.h in staging.
+ It would be nice if there was a config option to disable installing
+the tools, in case you want to use it as a library (which is probably
+the primary intention).
 
- pciutils, for instance, includes its own list of ids.
+ That option should set
+KMOD_INSTALL_STAGING = NO
+KMOD_CONF_OPT += --disable-tools
 
 
  Regards,
