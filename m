@@ -1,48 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jan 2012 14:04:55 +0000 (UTC)
-Subject: [Buildroot] [Bug 4706] New: Removing .stamp_target_installed does
- not trigger reinstall libraries
-Message-ID: <bug-4706-163@https.bugs.busybox.net/>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 16 Jan 2012 16:04:35 +0100
+Subject: [Buildroot] [PATCH 1/2] ethtool: bump to 3.2
+Message-ID: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4706
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-           Summary: Removing .stamp_target_installed does not trigger
-                    reinstall libraries
-           Product: buildroot
-           Version: 2010.08
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot at bluespirit.la
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/ethtool/ethtool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-I've replaced content in the target_skeleton, and thus wanted to rebuild the
-rootfs.tar. I did the following:
-
-1) rm -rf target
-2) rm -rf build/.root
-3) rm -rf `find build -name "\.stamp_target_installed"
-4) make
-
-On the device I got a "Kernel panic - not syncing: No init found.". The problem
-was that only when removing .stamp_staging_installed and
-stamps/ext-toolchain-installed also the libs on the target were installed.
-
-It would be a great help, that removing all ".stamp_target_installed" and
-".root" would create a bootable target filesystem.
-
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 04f7dac..101d0a1 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-ETHTOOL_VERSION = 3.1
++ETHTOOL_VERSION = 3.2
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.1.1
