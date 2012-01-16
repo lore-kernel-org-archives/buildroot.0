@@ -1,25 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jan 2012 16:18:41 +0100
-Subject: [Buildroot] [PATCH 2/2] New package: kmod
-In-Reply-To: <1326726276-8442-2-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 16 Jan 2012 16:04:36
- +0100")
-References: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
- <1326726276-8442-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87mx9nd6b2.fsf@macbook.be.48ers.dk>
+Date: Mon, 16 Jan 2012 16:47:47 +0100
+Subject: [Buildroot] [PATCH v2] Add package for open2300
+In-Reply-To: <1326376982-30979-1-git-send-email-alexandre.belloni@piout.net>
+ (Alexandre Belloni's message of "Thu, 12 Jan 2012 15:03:02 +0100")
+References: <1326376982-30979-1-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <877h0rd4yk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@piout.net> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Alexandre> Open2300 is a package of software tools that reads (and writes) data
+ Alexandre> from a Lacrosse WS2300/WS2305/WS2310/WS2315 Weather Station.
 
-You were missing a host-pkg-config dependency. I've fixed that and
-committed, thanks.
+ Alexandre> This package will install all the binaries on the target.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
