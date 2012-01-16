@@ -1,43 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Jan 2012 10:13:01 +0100
-Subject: [Buildroot] Request for review: buildroot in Open Mobile Linux
-	devroom of FOSDEM
-In-Reply-To: <20120116090057.GB25522@sapphire.tkos.co.il>
-References: <201201160950.18702.arnout@mind.be>
- <20120116090057.GB25522@sapphire.tkos.co.il>
-Message-ID: <201201161013.01500.arnout@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 16 Jan 2012 10:30:43 +0100
+Subject: [Buildroot] [git commit] sane-backends: make libusb optional,
+	add optional jpeg, tiff, avahi and snmp deps
+Message-ID: <20120116093410.8B8EB90356@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 16 January 2012 10:00:57 Baruch Siach wrote:
-> Hi Arnout,
-> 
-> On Mon, Jan 16, 2012 at 09:50:18AM +0100, Arnout Vandecappelle wrote:
-> >  As I announced earlier, I'll be giving a talk in the Open Mobile Linux
-> > devroom on FOSDEM.  I would like to get feedback on the slides.  You can
-> > find them on http://mind.be/?page=publications (in .odp and .pdf).
-> 
-> Slide no. 3 looks identical to slide no. 1 in the PDF version. Is this 
-> intentional?
+commit: http://git.buildroot.net/buildroot/commit/?id=8c7c0ab34469ac7bfe1f5ccb9fc3c74c9ef0b4c7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yes, that's something I learned from Jean-luc Doumont (an excellent 
-communications teacher, http://principiae.be - shameless plug): starting
-a presentation with a title slide isn't very useful, because you only
-get to the subject of the talk after explaining some context.  So the title
-slide should be the second slide.  However, while you're waiting to start,
-something should be projected already, and the title slide is good for that.
-So I always repeat the title slide.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sane-backends/Config.in        |    1 -
+ package/sane-backends/sane-backends.mk |   23 +++++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletions(-)
 
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
+index fb73435..03865d1 100644
+--- a/package/sane-backends/Config.in
++++ b/package/sane-backends/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_SANE_BACKENDS
+ 	bool "sane-backends"
+-	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  SANE - Scanner Access Now Easy
+ 
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index 1188d18..d9f3690 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -7,7 +7,30 @@ SANE_BACKENDS_VERSION = 1.0.22
+ SANE_BACKENDS_SOURCE = sane-backends-$(SANE_BACKENDS_VERSION).tar.gz
+ SANE_BACKENDS_SITE = ftp://ftp2.sane-project.org/pub/sane/sane-backends-$(SANE_BACKENDS_VERSION)
+ 
++ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ SANE_BACKENDS_DEPENDENCIES += libusb
+ SANE_BACKENDS_CONF_OPT += --enable-libusb_1_0
++else
++SANE_BACKENDS_CONF_OPT += --disable-libusb
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++SANE_BACKENDS_DEPENDENCIES += jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_TIFF),y)
++SANE_BACKENDS_DEPENDENCIES += tiff
++endif
++
++ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yyy)
++SANE_BACKENDS_DEPENDENCIES += avahi
++SANE_BACKENDS_CONF_OPT += --enable-avahi
++endif
++
++ifeq ($(BR2_PACKAGE_NETSNMP),y)
++SANE_BACKENDS_DEPENDENCIES += netsnmp
++else
++SANE_BACKENDS_CONF_OPT += --without-snmp
++endif
+ 
+ $(eval $(call AUTOTARGETS))
