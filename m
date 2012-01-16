@@ -1,50 +1,74 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 16 Jan 2012 13:54:57 +0100
-Subject: [Buildroot] [git commit] setlocalversion: fix i18n issue with svn
-Message-ID: <20120116125801.732F29035A@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 16 Jan 2012 14:58:34 +0100
+Subject: [Buildroot] Derive HOST_FOO_DEPENDENCIES automatically
+Message-ID: <1326722336-11759-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4861aed1f1fccd20bf092127b255562eaaf183c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch series derives HOST_FOO_DEPENDENCIES automatically from 
+FOO_DEPENDENCIES.  It is a repost of my earlier patch series,
+rebased on the current master.
 
-Closes #4700
+I only compile-tested some of the modified packages.  However, I
+checked that 'make host-foo-show-depends' outputs the same result.
+There are two exceptions:
 
-Signed-off-by: Frederik Pasch <fpasch@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+host-libxcb: the dependency on host-xcb-proto now appears twice.
+This is harmless.
+
+host-xlib_libX11: also some reordering, which should be OK. I also
+removed the dependency on xproto_bigreqsproto, which doesn't seem to
+be needed.  *This one really requires testing.*
+
 ---
- CHANGES                         |    1 +
- support/scripts/setlocalversion |    4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Arnout Vandecappelle (Essensium/Mind) (22):
+      package: derive HOST_FOO_DEPENDENCIES from FOO_DEPENDENCIES
+      atk: removed redundant HOST_FOO_DEPENDENCIES
+      cramfs: removed redundant HOST_FOO_DEPENDENCIES
+      libpng: removed redundant HOST_FOO_DEPENDENCIES
+      fontconfig: removed redundant HOST_FOO_DEPENDENCIES
+      mpc: removed redundant HOST_FOO_DEPENDENCIES
+      libxml-parser-perl: removed redundant HOST_FOO_DEPENDENCIES
+      squashfs3: removed redundant HOST_FOO_DEPENDENCIES
+      mpfr: removed redundant HOST_FOO_DEPENDENCIES
+      xapp_mkfontscale: removed redundant HOST_FOO_DEPENDENCIES
+      xlib_libXdmcp: removed redundant HOST_FOO_DEPENDENCIES
+      xfont_encodings: removed redundant HOST_FOO_DEPENDENCIES
+      xlib_libXfont: removed redundant HOST_FOO_DEPENDENCIES
+      xlib_libXau: removed redundant HOST_FOO_DEPENDENCIES
+      xapp_xkbcomp: removed redundant HOST_FOO_DEPENDENCIES
+      libxcb: removed redundant HOST_FOO_DEPENDENCIES
+      xlib_libX11: removed redundant HOST_FOO_DEPENDENCIES and incorrect target dependency
+      xapp_bdftopcf: removed redundant HOST_FOO_DEPENDENCIES
+      xlib_libxkbfile: removed redundant HOST_FOO_DEPENDENCIES
+      xfont_font-util: removed redundant HOST_FOO_DEPENDENCIES
+      xlib_libfontenc: removed redundant HOST_FOO_DEPENDENCIES
+      xapp_mkfontdir: removed redundant HOST_FOO_DEPENDENCIES
 
-diff --git a/CHANGES b/CHANGES
-index 8f6870b..19f6e7c 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -38,6 +38,7 @@
- 	#3403: libgpg-error: bump to version 1.10
- 	#3409: libgpg-error: download from gnupg.org
- 	#3421: nano: make tiny flag optional
-+	#4700: setlocalversion not working for combination svn/ubuntu 11.10...
- 
- 2011.11, Released November 30th, 2011:
- 
-diff --git a/support/scripts/setlocalversion b/support/scripts/setlocalversion
-index 8d6fe90..a6edd71 100755
---- a/support/scripts/setlocalversion
-+++ b/support/scripts/setlocalversion
-@@ -56,9 +56,9 @@ if hgid=`hg id 2>/dev/null`; then
- fi
- 
- # Check for svn and a svn repo.
--if rev=`LANG=C svn info 2>/dev/null | grep '^Last Changed Rev'`; then
-+if rev=`LC_ALL=C svn info 2>/dev/null | grep '^Last Changed Rev'`; then
- 	rev=`echo $rev | awk '{print $NF}'`
--	changes=`LANG=C svn status 2>/dev/null | grep '^[AMD]' | wc -l`
-+	changes=`LC_ALL=C svn status 2>/dev/null | grep '^[AMD]' | wc -l`
- 
- 	# Are there uncommitted changes?
- 	if [ $changes != 0 ]; then
+ package/Makefile.autotools.in                      |   10 ++++++++++
+ package/Makefile.package.in                        |    7 ++++++-
+ package/atk/atk.mk                                 |    2 --
+ package/cramfs/cramfs.mk                           |    1 -
+ package/fontconfig/fontconfig.mk                   |    1 -
+ package/libpng/libpng.mk                           |    2 --
+ package/libxml-parser-perl/libxml-parser-perl.mk   |    1 -
+ package/mpc/mpc.mk                                 |    1 -
+ package/mpfr/mpfr.mk                               |    1 -
+ package/squashfs3/squashfs3.mk                     |    1 -
+ package/x11r7/libxcb/libxcb.mk                     |    4 ----
+ package/x11r7/xapp_bdftopcf/xapp_bdftopcf.mk       |    1 -
+ package/x11r7/xapp_mkfontdir/xapp_mkfontdir.mk     |    1 -
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    1 -
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk         |    1 -
+ package/x11r7/xfont_encodings/xfont_encodings.mk   |    1 -
+ package/x11r7/xfont_font-util/xfont_font-util.mk   |    2 --
+ package/x11r7/xlib_libX11/xlib_libX11.mk           |    4 +---
+ package/x11r7/xlib_libXau/xlib_libXau.mk           |    2 --
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |    2 --
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    1 -
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |    2 --
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |    2 --
+ 23 files changed, 17 insertions(+), 34 deletions(-)
