@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 16 Jan 2012 14:58:44 +0100
-Subject: [Buildroot] [PATCH resend 10/22] xapp_mkfontscale: removed
-	redundant HOST_FOO_DEPENDENCIES
+Date: Mon, 16 Jan 2012 14:58:45 +0100
+Subject: [Buildroot] [PATCH resend 11/22] xlib_libXdmcp: removed redundant
+	HOST_FOO_DEPENDENCIES
 In-Reply-To: <1326722336-11759-1-git-send-email-arnout@mind.be>
 References: <1326722336-11759-1-git-send-email-arnout@mind.be>
-Message-ID: <1326722336-11759-11-git-send-email-arnout@mind.be>
+Message-ID: <1326722336-11759-12-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +15,19 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-index a4218b0..02e7824 100644
---- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-+++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
-@@ -8,7 +8,6 @@ XAPP_MKFONTSCALE_VERSION = 1.0.7
- XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
- XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xproto_xproto
--HOST_XAPP_MKFONTSCALE_DEPENDENCIES = host-zlib host-freetype host-xlib_libfontenc host-xproto_xproto
+diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+index 6f513cf..5308206 100644
+--- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
++++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+@@ -10,7 +10,5 @@ XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXDMCP_INSTALL_STAGING = YES
+ XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xproto_xproto
  
+-HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
+-
  $(eval $(call AUTOTARGETS))
  $(eval $(call AUTOTARGETS,host))
 -- 
