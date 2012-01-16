@@ -1,34 +1,48 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 16 Jan 2012 14:58:54 +0100
-Subject: [Buildroot] [PATCH resend 20/22] xfont_font-util: removed redundant
-	HOST_FOO_DEPENDENCIES
-In-Reply-To: <1326722336-11759-1-git-send-email-arnout@mind.be>
-References: <1326722336-11759-1-git-send-email-arnout@mind.be>
-Message-ID: <1326722336-11759-21-git-send-email-arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 16 Jan 2012 14:04:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 4706] New: Removing .stamp_target_installed does
+ not trigger reinstall libraries
+Message-ID: <bug-4706-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+https://bugs.busybox.net/show_bug.cgi?id=4706
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/x11r7/xfont_font-util/xfont_font-util.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+           Summary: Removing .stamp_target_installed does not trigger
+                    reinstall libraries
+           Product: buildroot
+           Version: 2010.08
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: buildroot at bluespirit.la
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 680fdc7..c5243ad 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -11,7 +11,5 @@ XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
- XFONT_FONT_UTIL_INSTALL_STAGING = YES
- XFONT_FONT_UTIL_INSTALL_TARGET = NO
- 
--HOST_XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
--
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
+
+I've replaced content in the target_skeleton, and thus wanted to rebuild the
+rootfs.tar. I did the following:
+
+1) rm -rf target
+2) rm -rf build/.root
+3) rm -rf `find build -name "\.stamp_target_installed"
+4) make
+
+On the device I got a "Kernel panic - not syncing: No init found.". The problem
+was that only when removing .stamp_staging_installed and
+stamps/ext-toolchain-installed also the libs on the target were installed.
+
+It would be a great help, that removing all ".stamp_target_installed" and
+".root" would create a bootable target filesystem.
+
 -- 
-1.7.8.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
