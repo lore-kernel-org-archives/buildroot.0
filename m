@@ -1,52 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Jan 2012 09:40:33 +0100
-Subject: [Buildroot] [PATCH 01/14] Add x86_64 variants to
-	BR2_GCC_TARGET_ARCH
-In-Reply-To: <f9dc6aa657ca5df40d228684611ae8ee5fb1b360.1325622133.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Jan 2012 09:42:10 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.02/ext-toolchain-updates
+In-Reply-To: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1325622133.git.thomas.petazzoni@free-electrons.com>
- <f9dc6aa657ca5df40d228684611ae8ee5fb1b360.1325622133.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201201160940.34437.arnout@mind.be>
+Message-ID: <201201160942.10256.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 03 January 2012 21:22:42 Thomas Petazzoni wrote:
-> With the Sourcery CodeBench IA32/AMD64 toolchain, the proper -march=
-> switch must be passed. So, on x86_64, we make sure that
-> BR2_GCC_TARGET_ARCH gets defined to the correct value, just as we do
-> on x86.
+On Tuesday 03 January 2012 21:22:41 Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> What follows is a set of patches doing various improvements and
+> updates to the external toolchain support:
 
- This one will be useful for me even for buildroot-built toolchains...
+ For the whole series:
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ with Codesourcery 2011.09 on Atom.
+
 
  Regards,
  Arnout
 
-> ---
->  target/Config.in.arch |    5 +++++
->  1 files changed, 5 insertions(+), 0 deletions(-)
-> 
-> diff --git a/target/Config.in.arch b/target/Config.in.arch
-> index 5e9fad4..7faa010 100644
-> --- a/target/Config.in.arch
-> +++ b/target/Config.in.arch
-> @@ -659,6 +659,11 @@ config BR2_GCC_TARGET_ARCH
->  	default athlon-4	if BR2_x86_athlon_4
->  	default winchip-c6	if BR2_x86_winchip_c6
->  	default winchip2	if BR2_x86_winchip2
-> +	default nocona		if BR2_x86_64_nocona
-> +	default core2		if BR2_x86_64_core2
-> +	default k8		if BR2_x86_64_opteron
-> +	default k8-sse3		if BR2_x86_64_opteron_sse3
-> +	default barcelona	if BR2_x86_64_barcelona
->  	default c3		if BR2_x86_c3
->  	default c3-2		if BR2_x86_c32
->  	default geode		if BR2_x86_geode
-> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
