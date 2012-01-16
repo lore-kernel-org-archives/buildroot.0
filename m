@@ -1,47 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jan 2012 08:59:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 4700] New: setlocalversion not working for
- combination svn/ubuntu 11.10/non-english locale
-Message-ID: <bug-4700-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 16 Jan 2012 11:00:57 +0200
+Subject: [Buildroot] Request for review: buildroot in Open Mobile Linux
+ devroom of FOSDEM
+In-Reply-To: <201201160950.18702.arnout@mind.be>
+References: <201201160950.18702.arnout@mind.be>
+Message-ID: <20120116090057.GB25522@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4700
+Hi Arnout,
 
-           Summary: setlocalversion not working for combination svn/ubuntu
-                    11.10/non-english locale
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: trivial
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: fpasch at googlemail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On Mon, Jan 16, 2012 at 09:50:18AM +0100, Arnout Vandecappelle wrote:
+>  As I announced earlier, I'll be giving a talk in the Open Mobile Linux
+> devroom on FOSDEM.  I would like to get feedback on the slides.  You can
+> find them on http://mind.be/?page=publications (in .odp and .pdf).
 
+Slide no. 3 looks identical to slide no. 1 in the PDF version. Is this 
+intentional?
 
-Created attachment 3974
-  --> https://bugs.busybox.net/attachment.cgi?id=3974
-patch for setlocalversion
+baruch
 
-Running buildroot on Ubuntu 11.10 Oneiric Ocelot with German locale from a
-private subversion repository...
-
-LANG=C doesn't change the output of svn to english here, hence, the output of
-setlocalversion stays empty.
-
-My fix is to change LANG=C to LC_ALL=C (see attached patch)
-
-Simon Pasch
+>  It's a 15 minute talk.  My goal is not to explain how to use buildroot,
+> but rather to convince the audience that buildroot (or something similar)
+> is the way to go for "open" embedded devices, because it empowers the
+> user to make modifications and improvements.
+> 
+>  My slides aren't really stand-alone, so it may actually be difficult to
+> review them without hearing my talk :-(
+> 
+>  Regards,
+>  Arnout
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
