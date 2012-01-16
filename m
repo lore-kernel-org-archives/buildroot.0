@@ -1,46 +1,87 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jan 2012 20:27:20 +0100
-Subject: [Buildroot] [PATCH 2/2] New package: kmod
-In-Reply-To: <201201161845.51186.arnout@mind.be> (Arnout Vandecappelle's
- message of "Mon, 16 Jan 2012 18:45:50 +0100")
-References: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
- <1326726276-8442-2-git-send-email-yegorslists@googlemail.com>
- <201201161845.51186.arnout@mind.be>
-Message-ID: <8739bfcusn.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 16 Jan 2012 21:35:00 +0100
+Subject: [Buildroot] GDB 7.3.1 boken for ARM ? (2011.11)
+Message-ID: <69B86DB5B70A4977A204FB5312DD0C7E@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Hi
 
- Arnout> On Monday 16 January 2012 16:04:36 yegorslists at googlemail.com wrote:
- >> diff --git a/package/kmod/Config.in b/package/kmod/Config.in
- >> new file mode 100644
- >> index 0000000..f83237e
- >> --- /dev/null
- >> +++ b/package/kmod/Config.in
- >> @@ -0,0 +1,7 @@
- >> +config BR2_PACKAGE_KMOD
- >> +	bool "kmod"
- >> +	help
- >> +	  handle kernel modules
- >> +
- >> +	  http://git.profusion.mobi/cgit.cgi/kmod.git/
+ 
 
- Arnout>  It would be nice if there was a config option to disable installing
- Arnout> the tools, in case you want to use it as a library (which is probably
- Arnout> the primary intention).
+Hi
 
-True. /usr/bin/kmod is 88k, so not huge - But ok.
+ 
 
- Arnout>  That option should set
- Arnout> KMOD_INSTALL_STAGING = NO
+ 
 
-Why would you not install into staging?
+While trying to cross debug with GDB 7.3.1 and gdbserver on the target  i get this on  the eclipse console :
 
- Arnout> KMOD_CONF_OPT += --disable-tools
+So the 7.3.1 seems to be broken for ARM.
 
--- 
-Bye, Peter Korsgaard
+ 
+
+I'm sorry, Dave, I can't do that.  Symbol format `elf32-littlearm' unknown.
+
+Reading symbols from /home/johan/other/projects_other/SMSController-1.0.0/Debug/SMSController...214-gdb-set confirm off
+
+214^done
+
+(gdb) 
+
+215-gdb-set width 0
+
+215^done
+
+(gdb) 
+
+216-gdb-set height 0
+
+216^done
+
+(gdb) 
+
+217-interpreter-exec console echo
+
+217^done
+
+218-gdb-show prompt
+
+(gdb) 
+
+218^done,value="(gdb) "
+
+(gdb) 
+
+219-gdb-set auto-solib-add off
+
+219^done
+
+(gdb) 
+
+220-gdb-set stop-on-solib-events 0
+
+220^done
+
+(gdb) 
+
+221-target-select remote 192.168.1.122:10000
+
+ 
+
+I tried the 7.1 and 7.2.1 and these seem to be OK 
+
+(rest of toolchain is binutils 2.22 & gcc 4.5.x ).
+
+ 
+
+Sagaert Johan
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120116/12442b6a/attachment-0001.html>
