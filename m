@@ -1,64 +1,32 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 16 Jan 2012 16:04:36 +0100
-Subject: [Buildroot] [PATCH 2/2] New package: kmod
-In-Reply-To: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
-References: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1326726276-8442-2-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 16 Jan 2012 16:08:09 +0100
+Subject: [Buildroot] [git commit] ethtool: bump to 3.2
+Message-ID: <20120116152022.EF0E490359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=9e42c6d04e43b562fc6683c34179426dff9d5a84
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in      |    1 +
- package/kmod/Config.in |    7 +++++++
- package/kmod/kmod.mk   |    8 ++++++++
- 3 files changed, 16 insertions(+), 0 deletions(-)
- create mode 100644 package/kmod/Config.in
- create mode 100644 package/kmod/kmod.mk
+ package/ethtool/ethtool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1042d95..2d0550f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -557,6 +557,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/bootutils/Config.in"
- endif
- source "package/htop/Config.in"
-+source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- source "package/procps/Config.in"
-diff --git a/package/kmod/Config.in b/package/kmod/Config.in
-new file mode 100644
-index 0000000..f83237e
---- /dev/null
-+++ b/package/kmod/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KMOD
-+	bool "kmod"
-+	help
-+	  handle kernel modules
-+
-+	  http://git.profusion.mobi/cgit.cgi/kmod.git/
-+
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-new file mode 100644
-index 0000000..1d21296
---- /dev/null
-+++ b/package/kmod/kmod.mk
-@@ -0,0 +1,8 @@
-+KMOD_VERSION = 3
-+KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.bz2
-+KMOD_SITE = http://git.profusion.mobi/cgit.cgi/kmod.git/snapshot
-+KMOD_INSTALL_STAGING =YES
-+KMOD_AUTORECONF = YES
-+
-+$(eval $(call AUTOTARGETS))
-+
--- 
-1.7.1.1
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 04f7dac..101d0a1 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-ETHTOOL_VERSION = 3.1
++ETHTOOL_VERSION = 3.2
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ 
+ $(eval $(call AUTOTARGETS))
