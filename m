@@ -1,86 +1,48 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 16 Jan 2012 16:45:21 +0100
-Subject: [Buildroot] [git commit] Add package for open2300
-Message-ID: <20120116154914.897BC90359@busybox.osuosl.org>
+From: vbr vbr <vvvg77@gmail.com>
+Date: Mon, 16 Jan 2012 08:38:01 -0800
+Subject: [Buildroot] pci_ids.h missing
+In-Reply-To: <201201160050.53285.vapier@gentoo.org>
+References: <CAOrAeokiOHCwrwG7VGbAem=w4-Gx-P8QjuqQYK_y3=S278S=xg@mail.gmail.com>
+ <201201160050.53285.vapier@gentoo.org>
+Message-ID: <CAOrAeomeuJhMTOicaqz22Y+xULo1hZBs92xASrWsSYCG8gvVdw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=723cc255f74321967df80a6ff821edad5a35830b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Just downloaded and extracted a vanilla 2.6.39.4 kernel from kernel.org,
+and this version does ship pci_ids.h. There must be something else going on:
 
-Open2300 is a package of software tools that reads (and writes) data
-from a Lacrosse WS2300/WS2305/WS2310/WS2315 Weather Station.
+x linux-2.6.39.4/include/linux/pch_dma.h
+x linux-2.6.39.4/include/linux/pci-acpi.h
+x linux-2.6.39.4/include/linux/pci-aspm.h
+x linux-2.6.39.4/include/linux/pci-dma.h
+x linux-2.6.39.4/include/linux/pci.h
+x linux-2.6.39.4/include/linux/pci_hotplug.h
+x linux-2.6.39.4/include/linux/pci_ids.h   <<<<<<<<<<<<<
+x linux-2.6.39.4/include/linux/pci_regs.h
+x linux-2.6.39.4/include/linux/pcieport_if.h
 
-This package will install all the binaries on the target.
+Thanks
+Vincent
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in            |    1 +
- package/open2300/Config.in   |    7 +++++++
- package/open2300/open2300.mk |   29 +++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 67b8094..2e91427 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -195,6 +195,7 @@ source "package/memtester/Config.in"
- source "package/mtd/Config.in"
- source "package/ntfs-3g/Config.in"
- source "package/ntfsprogs/Config.in"
-+source "package/open2300/Config.in"
- source "package/openocd/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
-diff --git a/package/open2300/Config.in b/package/open2300/Config.in
-new file mode 100644
-index 0000000..df0a969
---- /dev/null
-+++ b/package/open2300/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_OPEN2300
-+	bool "open2300"
-+	help
-+	  open2300 reads (and writes) data from a Lacrosse
-+	  WS2300/WS2305/WS2310/WS2315 Weather Station
-+
-+	  http://www.lavrsen.dk/foswiki/bin/view/Open2300/WebHome
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-new file mode 100644
-index 0000000..450b990
---- /dev/null
-+++ b/package/open2300/open2300.mk
-@@ -0,0 +1,29 @@
-+############################################################
-+#
-+# Open2300
-+#
-+############################################################
-+
-+OPEN2300_SITE        = http://www.lavrsen.dk/svn/open2300/trunk/
-+OPEN2300_SITE_METHOD = svn
-+OPEN2300_VERSION     = 12
-+
-+OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300 history2300 \
-+		histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
-+
-+ifeq ($(BR2_PACKAGE_MYSQL),y)
-+	OPEN2300_DEPENDENCIES += mysql_client
-+	OPEN2300_BINS         += mysql2300 mysqlhistlog2300
-+endif
-+
-+define OPEN2300_BUILD_CMDS
-+	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) $(OPEN2300_BINS)
-+endef
-+
-+define OPEN2300_INSTALL_TARGET_CMDS
-+	for prog in $(OPEN2300_BINS); do \
-+		$(INSTALL) -D -m 0755 $(@D)/$$prog $(TARGET_DIR)/usr/bin/$$prog ; \
-+	done
-+endef
-+
-+$(eval $(call GENTARGETS))
+On Sun, Jan 15, 2012 at 9:50 PM, Mike Frysinger <vapier@gentoo.org> wrote:
+
+> On Sunday 15 January 2012 14:24:41 vbr vbr wrote:
+> > pci_ids.h is missing from the include/linux directory in the staging
+> area:
+> >
+> > # ls output/staging/usr/include/linux/pci*.h
+> > output/staging/usr/include/linux/pci.h
+> > output/staging/usr/include/linux/pci_regs.h
+> >
+> > Am I missing something in the buildroot configuration?
+>
+> upstream linux kernel doesn't ship it, thus buildroot does not
+> -mike
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120116/44966363/attachment.html>
