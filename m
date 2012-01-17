@@ -1,38 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Jan 2012 16:26:15 +0100
-Subject: [Buildroot] [git commit] cairo: remove remaining host variables
-Message-ID: <20120117152637.92EDB9036E@busybox.osuosl.org>
+Date: Tue, 17 Jan 2012 15:10:35 +0100
+Subject: [Buildroot] [git commit] sane-backends: mention in help message
+	which libraries may be selected
+Message-ID: <20120117152637.85EEF9036D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fcc7cd3c7b42a2ff829a0cf7d28894cff3a89660
+commit: http://git.buildroot.net/buildroot/commit/?id=b65e08c5764305f0bef34426b9cce5d77d6ebc9f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host support was removed in 7b38fc20ba (cairo: remove host variant),
-but it forgot to remove the HOST_CAIRO_CONF_OPT assignment.
-
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cairo/cairo.mk |    8 --------
- 1 files changed, 0 insertions(+), 8 deletions(-)
+ package/sane-backends/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 1746eff..2230587 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -79,12 +79,4 @@ else
- 	CAIRO_CONF_OPT += --disable-svg
- endif
+diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
+index 03865d1..04222fc 100644
+--- a/package/sane-backends/Config.in
++++ b/package/sane-backends/Config.in
+@@ -4,3 +4,7 @@ config BR2_PACKAGE_SANE_BACKENDS
+ 	  SANE - Scanner Access Now Easy
  
--HOST_CAIRO_CONF_OPT = \
--		--enable-ps \
--		--enable-pdf \
--		--enable-xlib \
--		--with-x \
--		--disable-png \
--		--disable-svg
--
- $(eval $(call AUTOTARGETS))
+ 	  http://www.sane-project.org
++
++	  Backends are included automatically based on the libraries that have
++	  been selected: libusb, jpeg, tiff, avahi (with dbus and libglib2),
++	  and netsnmp.
