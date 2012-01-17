@@ -1,129 +1,30 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Tue, 17 Jan 2012 16:40:36 -0600
-Subject: [Buildroot] [PATCH] BASH: Adding features that can not be
-	automatically detected while cross-compiling
-In-Reply-To: <201201171818.25317.arnout@mind.be>
-References: <CA+gTGJG2ZZayS9hbyqiZwJG_-eWDjJx8cZgKd5i5goEFNXBT0g@mail.gmail.com>
- <201201171818.25317.arnout@mind.be>
-Message-ID: <201201171640.38385.minimod@morethan.org>
+From: Stephan Raue <mailinglists@openelec.tv>
+Date: Tue, 17 Jan 2012 23:32:26 +0100
+Subject: [Buildroot] [PATCH 2/2] New package: kmod
+In-Reply-To: <CAGm1_ks1+PmxFWF6CAA7Y4FSaWVKSaOvRZXwQRVXti=ojMcRbA@mail.gmail.com>
+References: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
+ <201201161845.51186.arnout@mind.be> <8739bfcusn.fsf@macbook.be.48ers.dk>
+ <201201171457.13088.arnout@mind.be> <87ty3upg82.fsf@macbook.be.48ers.dk>
+ <CAGm1_ks1+PmxFWF6CAA7Y4FSaWVKSaOvRZXwQRVXti=ojMcRbA@mail.gmail.com>
+Message-ID: <4F15F6FA.5020805@openelec.tv>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue January 17 2012, Arnout Vandecappelle wrote:
->  Hoi Arkady,
-> 
->  It's difficult or impossible to post patches from GMail.  
->
+On 01/17/2012 11:13 PM, Yegor Yefremov wrote:
+> I added this package, because it is udev's dependency now. I'll have 
+> to look into udev, to tell if it uses only library or binary too. As 
+> we came to this topic, what is your opinion on adding /run? It also 
+> became udev's dependency. I'll set my udev's patch series tomorrow. 
+> Yegor _______________________________________________ buildroot 
+> mailing list buildroot at busybox.net 
+> http://lists.busybox.net/mailman/listinfo/buildroot 
 
-There was a second posting with the GMail-Text features fixed.
+udev byself needs only the lib. the binarys can be used as 
+insmod/rmmod/modprobe/modinfo replacement from module-init-tools or 
+busybox's solution. the "kmod" binary byself is a multicall binary so 
+insmod/rmmod/... can be symlinks to this binary.
 
-> I've taken over your patch and will post it in reply.  
-> I'll also post a v2 which incorporates some of my feedback, below.
-> 
-
-I am sure the O.P. will appreciate that.  Just making GMail work
-was a challenge.  ;-)
-
-Mike
-> On Sunday 15 January 2012 18:14:32 Arkady Gilinsky wrote:
-> > From: Arkady Gilinsky <arcadyg@gmail.com>
-> > Date: Sat, 14 Jan 2012 11:27:11 +0200
-> > Subject: [PATCH] BASH: Adding features that can not be automatically detected
-> >  while cross-compiling
-> > 
-> > There are some bash features that can not be detected automatically during
-> > configure stage while cross-compiling. This commit add ability to force
-> > support of such a features.
-> > 
-> > Signed-off-by: Arkady Gilinsky <arcadyg@gmail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> > ---
-> >  package/bash/Config.in |   33 +++++++++++++++++++++++++++++++++
-> >  package/bash/bash.mk   |    6 +++++-
-> >  2 files changed, 38 insertions(+), 1 deletions(-)
-> > 
-> > diff --git a/package/bash/Config.in b/package/bash/Config.in
-> > index 9ee46e8..b7cc27d 100644
-> > --- a/package/bash/Config.in
-> > +++ b/package/bash/Config.in
-> > @@ -5,3 +5,36 @@ config BR2_PACKAGE_BASH
-> >  	  The standard GNU Bourne again shell.
-> > 
-> >  	  http://tiswww.case.edu/php/chet/bash/bashtop.html
-> > +
-> > +menu "BASH cross compile features selection"
-> > +	depends on BR2_PACKAGE_BASH
-> 
->  Adding a menu just makes things more complex - the indentation added
-> by the 'depends on' statements is sufficient.  But then it should be
-> a comment that explains the subsequent options.
-> 
-> > +config BR2_PACKAGE_BASH_JOB_CONTROL
-> > +	bool "job_control"
-> > +	depends on BR2_PACKAGE_BASH
-> > +	help
-> > +	   The job control feature (Ctrl-Z and etc.)
-> > +	   Configure variable - bash_cv_job_control_missing
->  I don' think mentioning the configure variable is relevant here.  (Same
-> for the other options.)
-> 
->  Actually, doesn't this feature always exist on a Linux kernel?
-> (Again, same for the other options, except possibly printf_a_format.)
-> 
-> > +
-> > +config BR2_PACKAGE_BASH_NAMED_PIPES
-> > +	bool "named_pipes"
-> > +	depends on BR2_PACKAGE_BASH
-> > +	help
-> > +	   Named pipe presence
-> > +	   Configure variable - bash_cv_sys_named_pipes
-> > +
-> > +config BR2_PACKAGE_BASH_SIG_SET_JUMP
-> > +	bool "sigsetjmp"
-> > +	depends on BR2_PACKAGE_BASH
-> > +	help
-> > +	   POSIX-style sigsetjmp/siglongjmp
-> > +	   Configure variable - bash_cv_func_sigsetjmp
-> > +
-> > +config BR2_PACKAGE_BASH_PRINTF_A_FORMAT
-> > +	bool "printf_a_format"
-> > +	depends on BR2_PACKAGE_BASH
-> > +	help
-> > +	   Printf floating point output in hex notation
-> > +	   Configure variable - bash_cv_printf_a_format
-> > +
-> > +endmenu
-> > diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> > index f1f951c..78face7 100644
-> > --- a/package/bash/bash.mk
-> > +++ b/package/bash/bash.mk
-> > @@ -7,7 +7,11 @@
-> >  BASH_VERSION = 4.2
-> >  BASH_SITE = $(BR2_GNU_MIRROR)/bash
-> >  BASH_DEPENDENCIES = ncurses
-> > -BASH_CONF_ENV = bash_cv_job_control_missing=no
-> > +BASH_CONF_ENV +=
-> >           \
-> > +   bash_cv_job_control_missing=$(if
-> > $(BR2_PACKAGE_BASH_JOB_CONTROL),present,no) \
-> > +   $(if $(BR2_PACKAGE_BASH_NAMED_PIPES),
-> > bash_cv_sys_named_pipes=present,)      \
-> > +   $(if $(BR2_PACKAGE_BASH_SIG_SET_JUMP),
-> > bash_cv_func_sigsetjmp=present,)      \
-> > +   $(if $(BR2_PACKAGE_BASH_PRINTF_A_FORMAT), bash_cv_printf_a_format=yes,)
->  I prefer (and I believe Peter does as well):
-> 
-> ifeq ($(BR2_PACKAGE_BASH_JOB_CONTROL),y)
-> BASH_CONF_ENV += bash_cv_job_control_missing=no
-> endif
-> 
-> more lines, but easier to read.
-> 
-> 
->  Regards,
->  Arnout
-> 
+Stephan
