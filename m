@@ -1,32 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Jan 2012 15:10:35 +0100
-Subject: [Buildroot] [git commit] sane-backends: mention in help message
-	which libraries may be selected
-Message-ID: <20120117152637.85EEF9036D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 Jan 2012 15:45:50 +0100
+Subject: [Buildroot] __tls_get_addr compilation issue
+In-Reply-To: <CAOrAeon=h3sVxakTz9P3FT7VuvHuHO2_sLZ+Dgxi7+EHrXsSrw@mail.gmail.com>
+ (vbr vbr's message of "Mon, 16 Jan 2012 16:00:26 -0800")
+References: <CAOrAeo=gMDLMBaHrTaxWa0z98Ym_kt-DpVOzSZc5W3XPEdzyCg@mail.gmail.com>
+ <CAOrAeon=h3sVxakTz9P3FT7VuvHuHO2_sLZ+Dgxi7+EHrXsSrw@mail.gmail.com>
+Message-ID: <87pqeipeu9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b65e08c5764305f0bef34426b9cce5d77d6ebc9f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "vbr" == vbr vbr <vvvg77@gmail.com> writes:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sane-backends/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ vbr> In case someone else hits this, I worked around the problem by disabling tls
+ vbr> when compiling gcc. This is from crosstool ng config:
 
-diff --git a/package/sane-backends/Config.in b/package/sane-backends/Config.in
-index 03865d1..04222fc 100644
---- a/package/sane-backends/Config.in
-+++ b/package/sane-backends/Config.in
-@@ -4,3 +4,7 @@ config BR2_PACKAGE_SANE_BACKENDS
- 	  SANE - Scanner Access Now Easy
- 
- 	  http://www.sane-project.org
-+
-+	  Backends are included automatically based on the libraries that have
-+	  been selected: libusb, jpeg, tiff, avahi (with dbus and libglib2),
-+	  and netsnmp.
+ vbr> grep disable .config
+ vbr> CT_CC_EXTRA_CONFIG_ARRAY="--disable-tls"
+
+Maybe we should make the BR2_GCC_ENABLE_TLS option we have for internal
+toolchains available for ctng as well.
+
+-- 
+Bye, Peter Korsgaard
