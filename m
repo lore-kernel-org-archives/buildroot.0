@@ -1,30 +1,33 @@
-From: Stephan Raue <mailinglists@openelec.tv>
-Date: Tue, 17 Jan 2012 23:32:26 +0100
-Subject: [Buildroot] [PATCH 2/2] New package: kmod
-In-Reply-To: <CAGm1_ks1+PmxFWF6CAA7Y4FSaWVKSaOvRZXwQRVXti=ojMcRbA@mail.gmail.com>
-References: <1326726276-8442-1-git-send-email-yegorslists@googlemail.com>
- <201201161845.51186.arnout@mind.be> <8739bfcusn.fsf@macbook.be.48ers.dk>
- <201201171457.13088.arnout@mind.be> <87ty3upg82.fsf@macbook.be.48ers.dk>
- <CAGm1_ks1+PmxFWF6CAA7Y4FSaWVKSaOvRZXwQRVXti=ojMcRbA@mail.gmail.com>
-Message-ID: <4F15F6FA.5020805@openelec.tv>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 17 Jan 2012 23:32:33 +0100
+Subject: [Buildroot] [git commit] libpng: removed redundant
+	HOST_FOO_DEPENDENCIES
+Message-ID: <20120117224424.4ACB59036D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/17/2012 11:13 PM, Yegor Yefremov wrote:
-> I added this package, because it is udev's dependency now. I'll have 
-> to look into udev, to tell if it uses only library or binary too. As 
-> we came to this topic, what is your opinion on adding /run? It also 
-> became udev's dependency. I'll set my udev's patch series tomorrow. 
-> Yegor _______________________________________________ buildroot 
-> mailing list buildroot at busybox.net 
-> http://lists.busybox.net/mailman/listinfo/buildroot 
+commit: http://git.buildroot.net/buildroot/commit/?id=cfd73405e082ca2d955c689ebadacccc168530e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-udev byself needs only the lib. the binarys can be used as 
-insmod/rmmod/modprobe/modinfo replacement from module-init-tools or 
-busybox's solution. the "kmod" binary byself is a multicall binary so 
-insmod/rmmod/... can be symlinks to this binary.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libpng/libpng.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-Stephan
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index d2aa329..f78b61d 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -10,8 +10,6 @@ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkg-config zlib
+ 
+-HOST_LIBPNG_DEPENDENCIES = host-pkg-config host-zlib
+-
+ define LIBPNG_STAGING_LIBPNG12_CONFIG_FIXUP
+ 	$(SED) "s,^prefix=.*,prefix=\'$(STAGING_DIR)/usr\',g" \
+ 		-e "s,^exec_prefix=.*,exec_prefix=\'$(STAGING_DIR)/usr\',g" \
