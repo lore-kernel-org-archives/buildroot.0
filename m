@@ -1,88 +1,59 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 17 Jan 2012 18:22:17 +0100
-Subject: [Buildroot] [PATCH] BASH: Adding features that can not be
-	automatically detected
-In-Reply-To: <CA+gTGJG2ZZayS9hbyqiZwJG_-eWDjJx8cZgKd5i5goEFNXBT0g@mail.gmail.com>
-References: <CA+gTGJG2ZZayS9hbyqiZwJG_-eWDjJx8cZgKd5i5goEFNXBT0g@mail.gmail.com>
-Message-ID: <1326820937-28384-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 17 Jan 2012 23:35:27 +0100
+Subject: [Buildroot] Derive HOST_FOO_DEPENDENCIES automatically
+In-Reply-To: <1326722336-11759-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 16 Jan 2012 14:58:34 +0100")
+References: <1326722336-11759-1-git-send-email-arnout@mind.be>
+Message-ID: <8762gaot3k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arkady Gilinsky <arcadyg@gmail.com>
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- while cross-compiling
+ Arnout> This patch series derives HOST_FOO_DEPENDENCIES automatically from 
+ Arnout> FOO_DEPENDENCIES.  It is a repost of my earlier patch series,
+ Arnout> rebased on the current master.
 
-There are some bash features that can not be detected automatically during
-configure stage while cross-compiling. This commit add ability to force
-support of such a features.
+ Arnout> I only compile-tested some of the modified packages.  However, I
+ Arnout> checked that 'make host-foo-show-depends' outputs the same result.
+ Arnout> There are two exceptions:
 
-Signed-off-by: Arkady Gilinsky <arcadyg@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/bash/Config.in |   33 +++++++++++++++++++++++++++++++++
- package/bash/bash.mk   |    6 +++++-
- 2 files changed, 38 insertions(+), 1 deletions(-)
+ Arnout> host-libxcb: the dependency on host-xcb-proto now appears twice.
+ Arnout> This is harmless.
 
-diff --git a/package/bash/Config.in b/package/bash/Config.in
-index 9ee46e8..b7cc27d 100644
---- a/package/bash/Config.in
-+++ b/package/bash/Config.in
-@@ -5,3 +5,36 @@ config BR2_PACKAGE_BASH
- 	  The standard GNU Bourne again shell.
- 
- 	  http://tiswww.case.edu/php/chet/bash/bashtop.html
-+
-+menu "BASH cross compile features selection"
-+	depends on BR2_PACKAGE_BASH
-+
-+config BR2_PACKAGE_BASH_JOB_CONTROL
-+	bool "job_control"
-+	depends on BR2_PACKAGE_BASH
-+	help
-+	   The job control feature (Ctrl-Z and etc.)
-+	   Configure variable - bash_cv_job_control_missing
-+
-+config BR2_PACKAGE_BASH_NAMED_PIPES
-+	bool "named_pipes"
-+	depends on BR2_PACKAGE_BASH
-+	help
-+	   Named pipe presence
-+	   Configure variable - bash_cv_sys_named_pipes
-+
-+config BR2_PACKAGE_BASH_SIG_SET_JUMP
-+	bool "sigsetjmp"
-+	depends on BR2_PACKAGE_BASH
-+	help
-+	   POSIX-style sigsetjmp/siglongjmp
-+	   Configure variable - bash_cv_func_sigsetjmp
-+
-+config BR2_PACKAGE_BASH_PRINTF_A_FORMAT
-+	bool "printf_a_format"
-+	depends on BR2_PACKAGE_BASH
-+	help
-+	   Printf floating point output in hex notation
-+	   Configure variable - bash_cv_printf_a_format
-+
-+endmenu
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index f1f951c..78face7 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -7,7 +7,11 @@
- BASH_VERSION = 4.2
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- BASH_DEPENDENCIES = ncurses
--BASH_CONF_ENV = bash_cv_job_control_missing=no
-+BASH_CONF_ENV +=                                                                \
-+   bash_cv_job_control_missing=$(if $(BR2_PACKAGE_BASH_JOB_CONTROL),present,no) \
-+   $(if $(BR2_PACKAGE_BASH_NAMED_PIPES), bash_cv_sys_named_pipes=present,)      \
-+   $(if $(BR2_PACKAGE_BASH_SIG_SET_JUMP), bash_cv_func_sigsetjmp=present,)      \
-+   $(if $(BR2_PACKAGE_BASH_PRINTF_A_FORMAT), bash_cv_printf_a_format=yes,)
- 
- # Make sure we build after busybox so that /bin/sh links to bash
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ Arnout> host-xlib_libX11: also some reordering, which should be OK. I also
+ Arnout> removed the dependency on xproto_bigreqsproto, which doesn't seem to
+ Arnout> be needed.  *This one really requires testing.*
+
+ Arnout> ---
+ Arnout> Arnout Vandecappelle (Essensium/Mind) (22):
+ Arnout>       package: derive HOST_FOO_DEPENDENCIES from FOO_DEPENDENCIES
+ Arnout>       atk: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       cramfs: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       libpng: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       fontconfig: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       mpc: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       libxml-parser-perl: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       squashfs3: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       mpfr: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xapp_mkfontscale: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xlib_libXdmcp: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xfont_encodings: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xlib_libXfont: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xlib_libXau: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xapp_xkbcomp: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       libxcb: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xlib_libX11: removed redundant HOST_FOO_DEPENDENCIES and incorrect target dependency
+ Arnout>       xapp_bdftopcf: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xlib_libxkbfile: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xfont_font-util: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xlib_libfontenc: removed redundant HOST_FOO_DEPENDENCIES
+ Arnout>       xapp_mkfontdir: removed redundant HOST_FOO_DEPENDENCIES
+
+Committed entire series, thanks!
+
 -- 
-1.7.8.3
+Bye, Peter Korsgaard
