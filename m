@@ -1,35 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Jan 2012 23:32:42 +0100
-Subject: [Buildroot] [git commit] libxcb: removed redundant
+Date: Tue, 17 Jan 2012 23:32:40 +0100
+Subject: [Buildroot] [git commit] xapp_mkfontscale: removed redundant
 	HOST_FOO_DEPENDENCIES
-Message-ID: <20120117224425.0723C8FF38@busybox.osuosl.org>
+Message-ID: <20120117224424.A150B8FF38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=605d22042b69378588bb3642533a3d0e6ec3a013
+commit: http://git.buildroot.net/buildroot/commit/?id=f8245eb1952598d1c028ef3565def8550d6290aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/libxcb/libxcb.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index a68779d..3e15951 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -17,10 +17,6 @@ LIBXCB_MAKE_OPT = XCBPROTO_XCBINCLUDEDIR=$(STAGING_DIR)/usr/share/xcb \
- 	XCBPROTO_XCBPYTHONDIR=$(HOST_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
- LIBXCB_CONF_OPT = --disable-build-docs
- 
--HOST_LIBXCB_DEPENDENCIES = \
--	host-libxslt host-pthread-stubs host-xcb-proto host-xlib_libXdmcp \
--	host-xlib_libXau host-python
--
- HOST_LIBXCB_CONF_OPT = --disable-build-docs
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+index a4218b0..02e7824 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+@@ -8,7 +8,6 @@ XAPP_MKFONTSCALE_VERSION = 1.0.7
+ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+ XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xproto_xproto
+-HOST_XAPP_MKFONTSCALE_DEPENDENCIES = host-zlib host-freetype host-xlib_libfontenc host-xproto_xproto
  
  $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
