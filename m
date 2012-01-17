@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 17 Jan 2012 23:32:49 +0100
-Subject: [Buildroot] [git commit] xfont_font-util: removed redundant
+Date: Tue, 17 Jan 2012 23:32:42 +0100
+Subject: [Buildroot] [git commit] xlib_libXau: removed redundant
 	HOST_FOO_DEPENDENCIES
-Message-ID: <20120117224425.40DCB90370@busybox.osuosl.org>
+Message-ID: <20120117224424.DE53D8FF38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b109bd2bdc64425f099c9c7e0aca57d39708edd
+commit: http://git.buildroot.net/buildroot/commit/?id=45ab97089242d6edd70c5da5190c38ff29ff2236
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.mk |    2 --
+ package/x11r7/xlib_libXau/xlib_libXau.mk |    2 --
  1 files changed, 0 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.mk b/package/x11r7/xfont_font-util/xfont_font-util.mk
-index 680fdc7..c5243ad 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.mk
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.mk
-@@ -11,7 +11,5 @@ XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
- XFONT_FONT_UTIL_INSTALL_STAGING = YES
- XFONT_FONT_UTIL_INSTALL_TARGET = NO
+diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
+index f7eb3bd..8d67501 100644
+--- a/package/x11r7/xlib_libXau/xlib_libXau.mk
++++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
+@@ -10,7 +10,5 @@ XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAU_INSTALL_STAGING = YES
+ XLIB_LIBXAU_DEPENDENCIES = xutil_util-macros xproto_xproto
  
--HOST_XFONT_FONT_UTIL_DEPENDENCIES = host-pkg-config
+-HOST_XLIB_LIBXAU_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
 -
  $(eval $(call AUTOTARGETS))
  $(eval $(call AUTOTARGETS,host))
