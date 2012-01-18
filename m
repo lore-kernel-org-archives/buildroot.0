@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
 Date: Wed, 18 Jan 2012 16:02:55 +0100
-Subject: [Buildroot] [git commit] e2fsprogs: unbreak host build after
+Subject: [Buildroot] [git commit] libcap: unbreak host build after
 	auto-host-deps change
-Message-ID: <20120118150407.BB95290383@busybox.osuosl.org>
+Message-ID: <20120118150408.0BB7A90385@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9e7663e2992032d8fe2b5e8b7c6041e7a1028f31
+commit: http://git.buildroot.net/buildroot/commit/?id=24c0ee47f0fe00483c89f74c87e5a53e7dae89f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/e2fsprogs/e2fsprogs.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libcap/libcap.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index cf9b089..d945a12 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -28,6 +28,8 @@ E2FSPROGS_MAKE_OPT = \
- define HOST_E2FSPROGS_INSTALL_CMDS
-  $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
- endef
-+# we don't have a host-util-linux
-+HOST_E2FSPROGS_DEPENDENCIES = host-pkg-config
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 9d6acf2..4683121 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -10,6 +10,7 @@ LIBCAP_VERSION = 2.22
+ LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
+ LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
+ LIBCAP_DEPENDENCIES = host-libcap
++HOST_LIBCAP_DEPENDENCIES =
+ LIBCAP_INSTALL_STAGING = YES
  
- # binaries to keep or remove
- E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_BADBLOCKS) += usr/sbin/badblocks
+ define LIBCAP_BUILD_CMDS
