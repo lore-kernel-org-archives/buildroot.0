@@ -1,50 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 18 Jan 2012 16:02:55 +0100
-Subject: [Buildroot] [git commit] libxslt: cleanup
-Message-ID: <20120118150408.1C67C90386@busybox.osuosl.org>
+Date: Wed, 18 Jan 2012 16:02:56 +0100
+Subject: [Buildroot] [git commit] ruby: unbreak host build after
+	auto-host-deps change
+Message-ID: <20120118150408.6AB0E85779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=db8fcd04ba94ce8b2916c624a8231d6505beb301
+commit: http://git.buildroot.net/buildroot/commit/?id=ef52202c15af9fe9e24f7722ee51974e72e0612c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-get rid of unused EXTRA variables.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libxslt/libxslt.mk |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
+ package/ruby/ruby.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index fec85f0..2a1730e 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -8,18 +8,18 @@ LIBXSLT_VERSION = 1.1.26
- LIBXSLT_SITE = ftp://xmlsoft.org/libxslt
- LIBXSLT_INSTALL_STAGING = YES
- 
-+LIBXSLT_CONF_OPT = --with-gnu-ld --without-debug \
-+		--without-python --with-libxml-prefix=$(STAGING_DIR)/usr/
-+
-+LIBXSLT_DEPENDENCIES = libxml2
-+
- # If we have enabled libgcrypt then use it, else disable crypto support.
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
--LIBXSLT_DEPENDENCIES_EXTRA=libgcrypt
-+LIBXSLT_DEPENDENCIES += libgcrypt
- else
--LIBXSLT_XTRA_CONF_OPT = --without-crypto
-+LIBXSLT_CONF_OPT = --without-crypto
- endif
- 
--LIBXSLT_CONF_OPT = --with-gnu-ld $(LIBXSLT_XTRA_CONF_OPT) --without-debug \
--		--without-python --with-libxml-prefix=$(STAGING_DIR)/usr/
--
--LIBXSLT_DEPENDENCIES = libxml2 $(LIBXSLT_DEPENDENCIES_EXTRA)
--
- HOST_LIBXSLT_CONF_OPT = --without-debug --without-python --without-crypto
- 
- HOST_LIBXSLT_DEPENDENCIES = host-libxml2
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 26db931..c984d67 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -9,6 +9,7 @@ RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
+ RUBY_AUTORECONF = YES
+ HOST_RUBY_AUTORECONF = YES
+ RUBY_DEPENDENCIES = host-ruby
++HOST_RUBY_DEPENDENCIES =
+ RUBY_MAKE_ENV = $(TARGET_MAKE_ENV)
+ RUBY_CONF_OPT = --disable-install-doc --disable-rpath
+ HOST_RUBY_CONF_OPT = --disable-install-doc --with-out-ext=curses,readline
