@@ -1,31 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 18 Jan 2012 16:02:55 +0100
-Subject: [Buildroot] [git commit] libcap: unbreak host build after
-	auto-host-deps change
-Message-ID: <20120118150408.0BB7A90385@busybox.osuosl.org>
+Date: Wed, 18 Jan 2012 16:02:57 +0100
+Subject: [Buildroot] [git commit] xfont_encodings: cleanup
+Message-ID: <20120118150408.8B48185779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24c0ee47f0fe00483c89f74c87e5a53e7dae89f0
+commit: http://git.buildroot.net/buildroot/commit/?id=c601f4661f217510b2fefb72c35b61871ccff1e6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+MAKE_OPT defaults to the empty string, so drop it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcap/libcap.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/x11r7/xfont_encodings/xfont_encodings.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 9d6acf2..4683121 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -10,6 +10,7 @@ LIBCAP_VERSION = 2.22
- LIBCAP_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/libc/libcap2
- LIBCAP_SOURCE = libcap2_$(LIBCAP_VERSION).orig.tar.gz
- LIBCAP_DEPENDENCIES = host-libcap
-+HOST_LIBCAP_DEPENDENCIES =
- LIBCAP_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
+index 3207b06..ead8ace 100644
+--- a/package/x11r7/xfont_encodings/xfont_encodings.mk
++++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
+@@ -7,7 +7,6 @@
+ XFONT_ENCODINGS_VERSION = 1.0.3
+ XFONT_ENCODINGS_SOURCE = encodings-$(XFONT_ENCODINGS_VERSION).tar.bz2
+ XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
+-XFONT_ENCODINGS_MAKE_OPT =
+ XFONT_ENCODINGS_DEPENDENCIES = host-xapp_mkfontscale
  
- define LIBCAP_BUILD_CMDS
+ $(eval $(call AUTOTARGETS))
