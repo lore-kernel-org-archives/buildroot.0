@@ -1,7 +1,7 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Wed, 18 Jan 2012 11:17:37 +0000
-Subject: [Buildroot] [PATCH 6/7] libedje: Add new package.
-Message-ID: <CAFbHwiSuSw5zXZJM+ZUM5c2yPmSx1bLsR2rFwUhw+V1oA4=BOg@mail.gmail.com>
+Date: Wed, 18 Jan 2012 11:17:41 +0000
+Subject: [Buildroot] [PATCH 7/7] expedite: Add new package.
+Message-ID: <CAFbHwiT-xD8qTcXfR1Fy6g70Oc5i62qPYoJKR85TNfjnRAq02w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +10,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Will Newton <will.newton@imgtec.com>
 ---
- package/efl/Config.in          |    1 +
- package/efl/libedje/Config.in  |   19 +++++++++++++++++++
- package/efl/libedje/libedje.mk |   22 ++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 0 deletions(-)
- create mode 100644 package/efl/libedje/Config.in
- create mode 100644 package/efl/libedje/libedje.mk
+ package/efl/Config.in            |    1 +
+ package/efl/expedite/Config.in   |   13 +++++++++++++
+ package/efl/expedite/expedite.mk |   11 +++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/efl/expedite/Config.in
+ create mode 100644 package/efl/expedite/expedite.mk
 
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 0e27dab..7d9c1ff 100644
+index 7d9c1ff..258d99a 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -13,6 +13,7 @@ source "package/efl/libecore/Config.in"
+@@ -8,6 +8,7 @@ menuconfig BR2_PACKAGE_EFL
+
+ if BR2_PACKAGE_EFL
+
++source "package/efl/expedite/Config.in"
+ source "package/efl/libeina/Config.in"
+ source "package/efl/libecore/Config.in"
  source "package/efl/libeet/Config.in"
- source "package/efl/libevas/Config.in"
- source "package/efl/libembryo/Config.in"
-+source "package/efl/libedje/Config.in"
-
- endif # BR2_PACKAGE_EFL
-
-diff --git a/package/efl/libedje/Config.in b/package/efl/libedje/Config.in
+diff --git a/package/efl/expedite/Config.in b/package/efl/expedite/Config.in
 new file mode 100644
-index 0000000..8c355d5
+index 0000000..54da290
 --- /dev/null
-+++ b/package/efl/libedje/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBEDJE
-+	bool "libedje"
++++ b/package/efl/expedite/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_EXPEDITE
++	bool "expedite"
 +	select BR2_PACKAGE_LIBEINA
-+	select BR2_PACKAGE_LIBEET
-+	select BR2_PACKAGE_LIBECORE
-+	select BR2_PACKAGE_LIBECORE_EVAS
-+	select BR2_PACKAGE_LIBEMBRYO
 +	select BR2_PACKAGE_LIBEVAS
-+	select BR2_PACKAGE_LUA
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  A graphical layout and animation library for animated
-+	  resizable, compressed and scalable themes.
++	  Expedite is the official Evas benchmark tool. It can test different
++	  engines, such as X11, XRender, OpenGL (also ES variant), SDL,
++	  DirectFB and so on. Its tests are quite extensive, trying to
++	  reproduce real world usage cases.
 +
-+if BR2_PACKAGE_LIBEDJE
-+
-+config BR2_PACKAGE_LIBEDJE_CC
-+	bool "build edje_cc"
-+
-+endif # BR2_PACKAGE_LIBEDJE
-diff --git a/package/efl/libedje/libedje.mk b/package/efl/libedje/libedje.mk
++comment "expedite requires C++ support in toolchain"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/efl/expedite/expedite.mk b/package/efl/expedite/expedite.mk
 new file mode 100644
-index 0000000..c56f607
+index 0000000..e0b8e76
 --- /dev/null
-+++ b/package/efl/libedje/libedje.mk
-@@ -0,0 +1,22 @@
++++ b/package/efl/expedite/expedite.mk
+@@ -0,0 +1,11 @@
 +#############################################################
 +#
-+# libedje
++# expedite
 +#
 +#############################################################
 +
-+LIBEDJE_VERSION = 1.1.0
-+LIBEDJE_SOURCE = edje-$(LIBEDJE_VERSION).tar.bz2
-+LIBEDJE_SITE =  http://download.enlightenment.org/releases/
-+LIBEDJE_INSTALL_STAGING = YES
-+LIBEDJE_INSTALL_TARGET = YES
-+
-+LIBEDJE_DEPENDENCIES = host-pkg-config lua libeina libeet libecore libevas \
-+			libembryo
-+
-+ifeq ($(BR2_PACKAGE_LIBEDJE_CC),y)
-+LIBEDJE_CONF_OPT += --enable-edje-cc
-+else
-+LIBEDJE_CONF_OPT += --disable-edje-cc
-+endif
++EXPEDITE_VERSION = 1.1.0
++EXPEDITE_SITE = http://download.enlightenment.org/releases/
++EXPEDITE_DEPENDENCIES = libevas libeina
 +
 +$(eval $(call AUTOTARGETS))
 -- 
