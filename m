@@ -1,43 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 18 Jan 2012 12:31:51 +0100
-Subject: [Buildroot] [PATCH v3] bash: Adding features that can not be
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 18 Jan 2012 12:36:17 +0100
+Subject: [Buildroot] [PATCH v2] bash: Adding features that can not be
 	automatically detected while cross-compiling
-In-Reply-To: <201201181230.52774.arnout@mind.be>
-References: <201201181230.52774.arnout@mind.be>
-Message-ID: <1326886311-3155-1-git-send-email-arnout@mind.be>
+In-Reply-To: <87wr8qnd1c.fsf@macbook.be.48ers.dk>
+References: <1326820937-28384-1-git-send-email-arnout@mind.be>
+ <1326821128-29133-1-git-send-email-arnout@mind.be>
+ <87wr8qnd1c.fsf@macbook.be.48ers.dk>
+Message-ID: <201201181236.17419.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On Wednesday 18 January 2012 00:07:43 Peter Korsgaard wrote:
+> Ok, but does it make sense to make these things configurable? I haven't
+> checked, but presumably these are supported on all Linux archs, and
+> don't affect the binary size significantly (compared to bash size)?
 
-There are some bash features that can not be detected automatically during
-configure stage while cross-compiling. This commit forces them on.
+ By the way, on ARM it increases the size from 878K to 879K...
 
-Signed-off-by: Arkady Gilinsky <arcadyg@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/bash/bash.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index f1f951c..60fab06 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -7,7 +7,11 @@
- BASH_VERSION = 4.2
- BASH_SITE = $(BR2_GNU_MIRROR)/bash
- BASH_DEPENDENCIES = ncurses
--BASH_CONF_ENV = bash_cv_job_control_missing=no
-+BASH_CONF_ENV +=                       \
-+   bash_cv_job_control_missing=no      \
-+   bash_cv_sys_named_pipes=present     \
-+   bash_cv_func_sigsetjmp=present      \
-+   bash_cv_printf_a_format=yes
- 
- # Make sure we build after busybox so that /bin/sh links to bash
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
-1.7.8.3
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
