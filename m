@@ -1,75 +1,31 @@
-From: Arkady Gilinsky <arcadyg@gmail.com>
-Date: Wed, 18 Jan 2012 14:42:14 +0200
-Subject: [Buildroot] [PATCH v3] bash: Adding features that can not be
- automatically detected while cross-compiling
-In-Reply-To: <1326886311-3155-1-git-send-email-arnout@mind.be>
-References: <201201181230.52774.arnout@mind.be>
- <1326886311-3155-1-git-send-email-arnout@mind.be>
-Message-ID: <CA+gTGJGnxMiY9NKWhFsvsKhZT95N2QV_V2-XzDMN7aJMZRo3uA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 18 Jan 2012 16:02:54 +0100
+Subject: [Buildroot] [git commit] bison: remove redundant
+	HOST_M4_DEPENDENCIES
+Message-ID: <20120118150407.9CC4990383@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 18, 2012 at 1:31 PM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
->
-> There are some bash features that can not be detected automatically during
-> configure stage while cross-compiling. This commit forces them on.
->
-> Signed-off-by: Arkady Gilinsky <arcadyg@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> ?package/bash/bash.mk | ? ?6 +++++-
-> ?1 files changed, 5 insertions(+), 1 deletions(-)
->
-> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index f1f951c..60fab06 100644
-> --- a/package/bash/bash.mk
-> +++ b/package/bash/bash.mk
-> @@ -7,7 +7,11 @@
-> ?BASH_VERSION = 4.2
-> ?BASH_SITE = $(BR2_GNU_MIRROR)/bash
-> ?BASH_DEPENDENCIES = ncurses
-> -BASH_CONF_ENV = bash_cv_job_control_missing=no
-> +BASH_CONF_ENV += ? ? ? ? ? ? ? ? ? ? ? \
-> + ? bash_cv_job_control_missing=no ? ? ?\
-I think it is not correct.
-According to my analyze of bash configure script the variable
-bash_cv_job_control_missing
-not implemented straight forward - the value 'missing' means that job
-control is disabled
-and value 'present' means that job control supported by final binary.
-Find below the fragment of configure script of bash.
-"
-...
-  if test "$cross_compiling" = yes; then
-  { $as_echo "$as_me:$LINENO: WARNING: cannot check job control if
-cross-compiling -- defaulting to missing" >&5
-$as_echo "$as_me: WARNING: cannot check job control if cross-compiling
--- defaulting to missing" >&2;}
-     bash_cv_job_control_missing=missing
-...
-"
-as you can see 'missing' value is set when cross compiling and
-configure script can not detect
-if this feature is supported or not.
+commit: http://git.buildroot.net/buildroot/commit/?id=880438cba4b1ac8b4411618313b10fcd7581ff37
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bison/bison.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-> + ? bash_cv_sys_named_pipes=present ? ? \
-> + ? bash_cv_func_sigsetjmp=present ? ? ?\
-> + ? bash_cv_printf_a_format=yes
->
-> ?# Make sure we build after busybox so that /bin/sh links to bash
-> ?ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> --
-> 1.7.8.3
->
-
-
-
--- 
-Best regards
-Arkady Gilinsky
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index c277e96..a1de39a 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -16,7 +16,5 @@ endef
+ 
+ BISON_POST_CONFIGURE_HOOKS += BISON_DISABLE_EXAMPLES
+ 
+-HOST_BISON_DEPENDENCIES += host-m4
+-
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
