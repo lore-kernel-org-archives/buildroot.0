@@ -1,34 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 Jan 2012 09:41:57 +0100
-Subject: [Buildroot] [git commit] libxslt: fix typo from db8fcd04ba94ce8
-	(libxslt: cleanup)
-Message-ID: <20120119084323.48B01902F1@busybox.osuosl.org>
+From: Willy <willy@willygroup.org>
+Date: Thu, 19 Jan 2012 12:42:16 +0100
+Subject: [Buildroot] "configure: error: Can't use static libraries for DRI
+ drivers" attempting to install X11 intel driver
+Message-ID: <CAJSc0StTh6_SEt=vL93-ZbuHvojfEVkma2aP1gPG2t9NK=6H3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f05c8a432c1e009b3dd03aab5d957bcc3b70e790
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
+in my buildroot 2011.11 I've tried to install X11 intel video driver.
+After that I get the error:
+"configure: error: Can't use static libraries for DRI drivers"
 
---without-crypto should be appended to the configure opts, not replace them.
+Even if I deselect X11 intel video driver the error continues to show and
+my building fails every times.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libxslt/libxslt.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I saw this message:
 
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 2a1730e..15b6e6a 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -17,7 +17,7 @@ LIBXSLT_DEPENDENCIES = libxml2
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- LIBXSLT_DEPENDENCIES += libgcrypt
- else
--LIBXSLT_CONF_OPT = --without-crypto
-+LIBXSLT_CONF_OPT += --without-crypto
- endif
- 
- HOST_LIBXSLT_CONF_OPT = --without-debug --without-python --without-crypto
+http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/33419
+
+but I don't understand where I could download the patch (if there is one!)
+and how apply to my buildroot.
+
+Regards,
+-- 
+Willy
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120119/96f3d214/attachment.html>
