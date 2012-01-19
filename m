@@ -1,35 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 Jan 2012 12:25:22 +0100
-Subject: [Buildroot] [git commit] kmod: bump version
-Message-ID: <20120119120038.36EF4902F1@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 19 Jan 2012 13:22:08 +0100
+Subject: [Buildroot] [PATCH v4] bash: Adding features that can not be
+	automatically detected while cross-compiling
+In-Reply-To: <CA+gTGJGnxMiY9NKWhFsvsKhZT95N2QV_V2-XzDMN7aJMZRo3uA@mail.gmail.com>
+References: <CA+gTGJGnxMiY9NKWhFsvsKhZT95N2QV_V2-XzDMN7aJMZRo3uA@mail.gmail.com>
+Message-ID: <1326975728-25580-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95632704cd966b32c3391aa732eaad10d24fe0fb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+There are some bash features that can not be detected automatically during
+configure stage while cross-compiling. This commit forces them on.
+
+Signed-off-by: Arkady Gilinsky <arcadyg@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/kmod/kmod.mk |    9 ++++-----
- 1 files changed, 4 insertions(+), 5 deletions(-)
+ package/bash/bash.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index a7a5bf5..0e3bc34 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -1,8 +1,7 @@
--KMOD_VERSION = 3
--KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.bz2
--KMOD_SITE = http://git.profusion.mobi/cgit.cgi/kmod.git/snapshot
--KMOD_INSTALL_STAGING =YES
--KMOD_AUTORECONF = YES
-+KMOD_VERSION = 4
-+KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
-+KMOD_SITE = http://packages.profusion.mobi/kmod/
-+KMOD_INSTALL_STAGING = YES
- KMOD_DEPENDENCIES = host-pkg-config
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index f1f951c..44f9337 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -7,7 +7,11 @@
+ BASH_VERSION = 4.2
+ BASH_SITE = $(BR2_GNU_MIRROR)/bash
+ BASH_DEPENDENCIES = ncurses
+-BASH_CONF_ENV = bash_cv_job_control_missing=no
++BASH_CONF_ENV +=                       \
++   bash_cv_job_control_missing=present \
++   bash_cv_sys_named_pipes=present     \
++   bash_cv_func_sigsetjmp=present      \
++   bash_cv_printf_a_format=yes
  
- $(eval $(call AUTOTARGETS))
+ # Make sure we build after busybox so that /bin/sh links to bash
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-- 
+1.7.8.3
