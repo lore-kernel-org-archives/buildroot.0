@@ -1,258 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Jan 2012 23:21:43 +0100
-Subject: [Buildroot] [RFC PATCH v4 1/2] apply-patches.sh: script changed
-	to support archives in a proper way
-In-Reply-To: <a1a34b76b35ddb80d06ab96bca9fb13a01922aef.1326218007.git.ludovic.desroches@atmel.com>
+Date: Thu, 19 Jan 2012 23:26:45 +0100
+Subject: [Buildroot] [RFC PATCH v4 2/2] apply-patches.sh check if they
+	are rejects before applying patches
+In-Reply-To: <c170b553688aa9cf430f99b35f7a7d02481f4474.1326218007.git.ludovic.desroches@atmel.com>
 References: <CAAXf6LWYfg-JO0NnW-ng2XfyTr159aGDSsU9Ec6NZriXQHpvrA@mail.gmail.com>
  <1326218516-28062-1-git-send-email-ludovic.desroches@atmel.com>
- <a1a34b76b35ddb80d06ab96bca9fb13a01922aef.1326218007.git.ludovic.desroches@atmel.com>
-Message-ID: <201201192321.43429.arnout@mind.be>
+ <c170b553688aa9cf430f99b35f7a7d02481f4474.1326218007.git.ludovic.desroches@atmel.com>
+Message-ID: <201201192326.46203.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 10 January 2012 19:01:55 ludovic.desroches at atmel.com wrote:
+ Short commit message should be:
+apply-patches.sh: check if there are rejects before applying patches
+
+On Tuesday 10 January 2012 19:01:56 ludovic.desroches at atmel.com wrote:
 > From: Ludovic Desroches <ludovic.desroches@atmel.com>
 > 
-> The previous script doesn't support patching order with archives since
-> it didn't extract archives but simply decompressed file and piped the
-> result to the patch command.
-> This new script extracts archives in a temporary folder and then applies
-> patches.
-
- You need to document the API changes clearly.
-
-- Uncompressed patches must match *.diff* or *.patch*; else they are skipped.
-
-- The defaults are removed; three or more arguments must be supplied.
-
-- Behaviour of directories is changed: it is not considered an overlay, but
-rather a collection of patches.
-
- Since these changes actually have nothing to do with supporting archives
-in a proper way, I suggest you make separate patches for them.
-
+> If we don't do it, the rejects' check at the end of the script can complain
+> about rejects not deleted by the user from a previous try.
 > 
 > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> 
-> Conflicts:
-> 
-> 	support/scripts/apply-patches.sh
-
- Please remove this piece from the comment.
+ Since this patch is much more likely to go in on the short term, I would
+reverse the order of the patches.  That means: revert builddir to targetdir.
 
 > ---
->  support/scripts/apply-patches.sh |  135 +++++++++++++++++++++++++-------------
->  1 files changed, 89 insertions(+), 46 deletions(-)
+>  support/scripts/apply-patches.sh |    7 +++++++
+>  1 files changed, 7 insertions(+), 0 deletions(-)
 > 
 > diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> index 1aef47e..2a25606 100755
+> index 2a25606..a15b5c1 100755
 > --- a/support/scripts/apply-patches.sh
 > +++ b/support/scripts/apply-patches.sh
-> @@ -5,62 +5,105 @@
->  #
->  # (c) 2002 Erik Andersen <andersen@codepoet.org>
->  
-> -# Set directories from arguments, or use defaults.
-> -targetdir=${1-.}
-> -patchdir=${2-../kernel-patches}
-> -shift 2
-> -patchpattern=${@-*}
-> +# function apply_patch patch_file
-> +# This function no more deals with directory case since it is managed
-> +# in an upper layer
- This comment isn't very helpful, since the reader can't see how it was before.
-Actually, no comment is needed here (it's pretty obvious that it applies a single
-patch).
-
-> +function apply_patch {
- Please indent the body of the function.  And preferably keep the same
-whitespace convention as the original (4 spaces).  That makes the diff 
-smaller.  Do feel free to get rid of the original's mixed tabs-and-spaces,
-though...
-
-> +apply="patch -p1 -E -d"
- Since apply is used only once it is no longer necessary to make it a variable.
-
- Why did the -g0 option get dropped?
-
-> -if [ ! -d "${targetdir}" ] ; then
-> -    echo "Aborting.  '${targetdir}' is not a directory."
-> -    exit 1
-> +case "${1}" in
-> +*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
-> +	echo "Error with ${1}";
-> +	echo "Archives into a directory or another archive is not supported";
-> +	return 1;
- I think this piece is a bit redundant, but it doesn't hurt.
-
-> +	;;
-> +*\.gz$)
-> +	type="gzip"; uncomp="gunzip -dc"; ;;
-> +*\.bz$)
-> +	type="bzip"; uncomp="bunzip -dc"; ;;
-> +*\.bz2$)
-> +	type="bzip2"; uncomp="bunzip2 -dc"; ;;
-> +*\.zip$)
-> +	type="zip"; uncomp="unzip -d"; ;;
-> +*\.Z$)
-> +	type="compress"; uncomp="uncompress -c"; ;;
-> +*\.diff*)
-> +	type="diff"; uncomp="cat"; ;;
-> +*\.patch*)
-> +	type="patch"; uncomp="cat"; ;;
-> +*)
-> +	echo "Unsupported format file for ${1}, skip it";
-> +	return 0;
-> +	;;
-> +esac
-> +
-> +echo ""
-> +echo "Applying ${1} using ${type}: "
-> +echo ${1} | cat >> ${builddir}/.applied_patches_list
- The 'cat' here is completely redundant AFAICS.  (I realize this was
-already present in the original.)
-
-> +${uncomp} ${1} | ${apply} ${builddir}
- If you use "$1" and "$builddir", you also support names with spaces and
-other shell-interpreted stuff.
-
-> +if [ $? != 0 ] ; then
-> +	echo "Patch failed! Please fix ${1}!"
-> +	return 1
->  fi
-> +}
-> +
-> +
-> +# Entry point
-> +builddir=${1}
-> +patchdir=${2}
- Any particular reason why you renamed 'targetdir' to 'builddir'?  Also,
-keep this in the beginning of the file so the diff becomes clearer.
-
- Again, quoting would be useful.
-
-> +shift 2
-> +patchlist=${@}
- Note that $@ implies the quotes already, so they're not required here.
-
-> +patchesdir="${builddir}/../$(basename $builddir)-patches"
- I would make the patchesdir a subdirectory of the builddir, so it does
-get cleaned up with a -dirclean.  E.g. 
-$builddir/.patches-$(basename $tarfile)-unpacked
-
-> +
-> +# Check directories
->  if [ ! -d "${patchdir}" ] ; then
-> -    echo "Aborting.  '${patchdir}' is not a directory."
-> -    exit 1
-> +	echo "Aborting: ${patchdir} is not a directory."
-> +	exit 1
- Preferably, don't modify things unnecessarily.
-
->  fi
-> -    
-> -for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
-> -    apply="patch -g0 -p1 -E -d"
-> -    uncomp_parm=""
-> -    if [ -d "${patchdir}/$i" ] ; then
-> -	type="directory overlay"
-> -	uncomp="tar cf - --exclude=.svn --no-anchored -C"
-> -	uncomp_parm="."
-> -	apply="tar xvf - -C"
-> -    else case "$i" in
-> -	*.gz)
-> -	type="gzip"; uncomp="gunzip -dc"; ;; 
-> -	*.bz)
-> -	type="bzip"; uncomp="bunzip -dc"; ;; 
-> -	*.bz2)
-> -	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
-> -	*.zip)
-> -	type="zip"; uncomp="unzip -d"; ;; 
-> -	*.Z)
-> -	type="compress"; uncomp="uncompress -c"; ;; 
-> -	*.tgz)
-> -	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
-> -	*.tar)
-> -	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
-> -	*)
-> -	type="plaintext"; uncomp="cat"; ;; 
-> -    esac fi
-> -    echo ""
-> -    echo "Applying ${i} using ${type}: " 
-> -	echo ${i} | cat >> ${targetdir}/.applied_patches_list
-> -    ${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${targetdir} 
-> -    if [ $? != 0 ] ; then
-> -        echo "Patch failed!  Please fix $i!"
-> +if [ ! -d "${builddir}" ] ; then
-> +	echo "Aborting: ${builddir} is not a directory."
+> @@ -64,6 +64,13 @@ if [ ! -d "${builddir}" ] ; then
+>  	echo "Aborting: ${builddir} is not a directory."
 >  	exit 1
-> -    fi
-> +fi
-> +
-> +# Parse patch list, extract archives, apply patches
-> +for i in $patchlist ; do
-> +	patch_path="${patchdir}/${i}"
-> +	# three cases: directory, archive, file patch (compressed or not)
-> +	# directory
-> +	if [ -d "${patch_path}" ] ; then
-> +		for p in $(ls ${patch_path}) ; do
-> +			apply_patch "${patch_path}/${p}" || exit 1
-> +		done
-> +	# archive
-> +	elif echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$|tar\.gz$|tgz$" ; then
-> +		mkdir "${patchesdir}"
- Remove the patchesdir first, in case it got left behind by an interrupted
-previous run.
-
-> +		# extract archive
-> +		if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
-> +			tar_options="-xjf"
-> +		else
-> +			tar_options="-xzf"
-> +		fi
-> +		tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
- This will give problems on CentOS 5 IIRC - the issue with host-tar, which 
-ThomasDS solved recently.
-
- Actually it is probably a better idea to handle the tar case in the 
-Makefiles...
-
-> +		# apply patches from the archive
-> +		for p in $(find ${patchesdir} | sort) ; do
-> +			apply_patch "${p}" || { rm -rf "${patchesdir}" ; exit 1; }
-> +		done
-> +		rm -rf "${patchesdir}"
- I would not remove the patchesdir; makes it easier for a developer to read
-and/or unapply the patches.
-
-> +	# file which is not an archive
-> +	else
-> +		# we can have regex into patch name as package*.patch.arm that's
- Actually, it's not a regex but a glob pattern.
-
-> +		# why using ls
-> +		for p in $(ls -d ${patch_path} 2> /dev/null) ; do
-> +			apply_patch "${p}" || exit 1
-> +		done
-> +	fi
->  done
->  
->  # Check for rejects...
-> -if [ "`find $targetdir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-> +if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
->      echo "Aborting.  Reject files found."
->      exit 1
 >  fi
->  
->  # Remove backup files
-> -find $targetdir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-> +find ${builddir}/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
-> 
+> +# check for rejects because if there are some, even if patches are well
+> +# applied, at the end it will complain about rejects into buildir
+> +if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+> +    echo "There are remaining rejecting file into ${buildir}, please delete them"
+ Should be:
+echo "There are remaining reject files in '${buildir}', please delete them."
+
+ Otherwise, looks perfect.
 
  Regards,
  Arnout
