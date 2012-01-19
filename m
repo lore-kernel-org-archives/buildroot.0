@@ -1,96 +1,258 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Jan 2012 15:22:02 +0100
-Subject: [Buildroot] [PATCH 1/2] udev: bump to 177
-In-Reply-To: <1326874717-1666-1-git-send-email-yegorslists@googlemail.com>
-References: <1326874717-1666-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <201201191522.03177.arnout@mind.be>
+Date: Thu, 19 Jan 2012 23:21:43 +0100
+Subject: [Buildroot] [RFC PATCH v4 1/2] apply-patches.sh: script changed
+	to support archives in a proper way
+In-Reply-To: <a1a34b76b35ddb80d06ab96bca9fb13a01922aef.1326218007.git.ludovic.desroches@atmel.com>
+References: <CAAXf6LWYfg-JO0NnW-ng2XfyTr159aGDSsU9Ec6NZriXQHpvrA@mail.gmail.com>
+ <1326218516-28062-1-git-send-email-ludovic.desroches@atmel.com>
+ <a1a34b76b35ddb80d06ab96bca9fb13a01922aef.1326218007.git.ludovic.desroches@atmel.com>
+Message-ID: <201201192321.43429.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 18 January 2012 09:18:36 yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Tuesday 10 January 2012 19:01:55 ludovic.desroches at atmel.com wrote:
+> From: Ludovic Desroches <ludovic.desroches@atmel.com>
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> The previous script doesn't support patching order with archives since
+> it didn't extract archives but simply decompressed file and piped the
+> result to the patch command.
+> This new script extracts archives in a temporary folder and then applies
+> patches.
+
+ You need to document the API changes clearly.
+
+- Uncompressed patches must match *.diff* or *.patch*; else they are skipped.
+
+- The defaults are removed; three or more arguments must be supplied.
+
+- Behaviour of directories is changed: it is not considered an overlay, but
+rather a collection of patches.
+
+ Since these changes actually have nothing to do with supporting archives
+in a proper way, I suggest you make separate patches for them.
+
+> 
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> ---
->  package/udev/Config.in |    9 ++++++++-
->  package/udev/S10udev   |    2 +-
->  package/udev/udev.mk   |   15 ++++++++++-----
->  3 files changed, 19 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/udev/Config.in b/package/udev/Config.in
-> index 391c718..e793496 100644
-> --- a/package/udev/Config.in
-> +++ b/package/udev/Config.in
-> @@ -1,6 +1,9 @@
->  config BR2_PACKAGE_UDEV
->  	bool "udev"
->  	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-> +	select BR2_PACKAGE_E2FSPROGS
-> +	select BR2_PACKAGE_USBUTILS
+> Conflicts:
+> 
+> 	support/scripts/apply-patches.sh
 
- Are these dependencies really required now?  They're kind of
-silly if you don't have e2fs or USB on your target system...
+ Please remove this piece from the comment.
 
- If they are required now, can you add a comment about it to the
-commit message?
-
-> +	select BR2_PACKAGE_KMOD
->  	help
->  	  Userspace device daemon.
->  
-> @@ -8,6 +11,11 @@ config BR2_PACKAGE_UDEV
->  
->  if BR2_PACKAGE_UDEV
->  
-> +config BR2_PACKAGE_UDEV_RULES_GEN
-> +	bool "enable rules generator"
-> +	help
-> +	  Enable persistant rules generator
-> +
-
- Also please mention this option in the commit message.
-
-[snip]
-> diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-> index 1825396..395899a 100644
-> --- a/package/udev/udev.mk
-> +++ b/package/udev/udev.mk
-> @@ -3,7 +3,7 @@
->  # udev
+> ---
+>  support/scripts/apply-patches.sh |  135 +++++++++++++++++++++++++-------------
+>  1 files changed, 89 insertions(+), 46 deletions(-)
+> 
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 1aef47e..2a25606 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -5,62 +5,105 @@
 >  #
->  #############################################################
-> -UDEV_VERSION = 173
-> +UDEV_VERSION = 177
->  UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
->  UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
->  UDEV_INSTALL_STAGING = YES
-> @@ -12,15 +12,20 @@ UDEV_CONF_OPT =			\
->  	--sbindir=/sbin		\
->  	--with-rootlibdir=/lib	\
->  	--libexecdir=/lib/udev	\
-> +	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
+>  # (c) 2002 Erik Andersen <andersen@codepoet.org>
+>  
+> -# Set directories from arguments, or use defaults.
+> -targetdir=${1-.}
+> -patchdir=${2-../kernel-patches}
+> -shift 2
+> -patchpattern=${@-*}
+> +# function apply_patch patch_file
+> +# This function no more deals with directory case since it is managed
+> +# in an upper layer
+ This comment isn't very helpful, since the reader can't see how it was before.
+Actually, no comment is needed here (it's pretty obvious that it applies a single
+patch).
 
-> +	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
+> +function apply_patch {
+ Please indent the body of the function.  And preferably keep the same
+whitespace convention as the original (4 spaces).  That makes the diff 
+smaller.  Do feel free to get rid of the original's mixed tabs-and-spaces,
+though...
 
- I haven't actually ran it, but:
+> +apply="patch -p1 -E -d"
+ Since apply is used only once it is no longer necessary to make it a variable.
 
-- I have the usb.ids in /usr/share/usb.ids
+ Why did the -g0 option get dropped?
 
-- I don't get pci.ids (that one should come from pciutils or directly
-from http://pciids.sourceforge.net/pci.ids)
+> -if [ ! -d "${targetdir}" ] ; then
+> -    echo "Aborting.  '${targetdir}' is not a directory."
+> -    exit 1
+> +case "${1}" in
+> +*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
+> +	echo "Error with ${1}";
+> +	echo "Archives into a directory or another archive is not supported";
+> +	return 1;
+ I think this piece is a bit redundant, but it doesn't hurt.
 
-- shouldn't the $(TARGET_DIR) be removed?
+> +	;;
+> +*\.gz$)
+> +	type="gzip"; uncomp="gunzip -dc"; ;;
+> +*\.bz$)
+> +	type="bzip"; uncomp="bunzip -dc"; ;;
+> +*\.bz2$)
+> +	type="bzip2"; uncomp="bunzip2 -dc"; ;;
+> +*\.zip$)
+> +	type="zip"; uncomp="unzip -d"; ;;
+> +*\.Z$)
+> +	type="compress"; uncomp="uncompress -c"; ;;
+> +*\.diff*)
+> +	type="diff"; uncomp="cat"; ;;
+> +*\.patch*)
+> +	type="patch"; uncomp="cat"; ;;
+> +*)
+> +	echo "Unsupported format file for ${1}, skip it";
+> +	return 0;
+> +	;;
+> +esac
+> +
+> +echo ""
+> +echo "Applying ${1} using ${type}: "
+> +echo ${1} | cat >> ${builddir}/.applied_patches_list
+ The 'cat' here is completely redundant AFAICS.  (I realize this was
+already present in the original.)
 
- Note that these comments have nothing to do with the version bump, so
-any changes should either go in a separate patch or be documented in the
-commit message (and extent the short message with 'and other fixes').
+> +${uncomp} ${1} | ${apply} ${builddir}
+ If you use "$1" and "$builddir", you also support names with spaces and
+other shell-interpreted stuff.
 
-[snip]
+> +if [ $? != 0 ] ; then
+> +	echo "Patch failed! Please fix ${1}!"
+> +	return 1
+>  fi
+> +}
+> +
+> +
+> +# Entry point
+> +builddir=${1}
+> +patchdir=${2}
+ Any particular reason why you renamed 'targetdir' to 'builddir'?  Also,
+keep this in the beginning of the file so the diff becomes clearer.
+
+ Again, quoting would be useful.
+
+> +shift 2
+> +patchlist=${@}
+ Note that $@ implies the quotes already, so they're not required here.
+
+> +patchesdir="${builddir}/../$(basename $builddir)-patches"
+ I would make the patchesdir a subdirectory of the builddir, so it does
+get cleaned up with a -dirclean.  E.g. 
+$builddir/.patches-$(basename $tarfile)-unpacked
+
+> +
+> +# Check directories
+>  if [ ! -d "${patchdir}" ] ; then
+> -    echo "Aborting.  '${patchdir}' is not a directory."
+> -    exit 1
+> +	echo "Aborting: ${patchdir} is not a directory."
+> +	exit 1
+ Preferably, don't modify things unnecessarily.
+
+>  fi
+> -    
+> -for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
+> -    apply="patch -g0 -p1 -E -d"
+> -    uncomp_parm=""
+> -    if [ -d "${patchdir}/$i" ] ; then
+> -	type="directory overlay"
+> -	uncomp="tar cf - --exclude=.svn --no-anchored -C"
+> -	uncomp_parm="."
+> -	apply="tar xvf - -C"
+> -    else case "$i" in
+> -	*.gz)
+> -	type="gzip"; uncomp="gunzip -dc"; ;; 
+> -	*.bz)
+> -	type="bzip"; uncomp="bunzip -dc"; ;; 
+> -	*.bz2)
+> -	type="bzip2"; uncomp="bunzip2 -dc"; ;; 
+> -	*.zip)
+> -	type="zip"; uncomp="unzip -d"; ;; 
+> -	*.Z)
+> -	type="compress"; uncomp="uncompress -c"; ;; 
+> -	*.tgz)
+> -	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
+> -	*.tar)
+> -	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
+> -	*)
+> -	type="plaintext"; uncomp="cat"; ;; 
+> -    esac fi
+> -    echo ""
+> -    echo "Applying ${i} using ${type}: " 
+> -	echo ${i} | cat >> ${targetdir}/.applied_patches_list
+> -    ${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${targetdir} 
+> -    if [ $? != 0 ] ; then
+> -        echo "Patch failed!  Please fix $i!"
+> +if [ ! -d "${builddir}" ] ; then
+> +	echo "Aborting: ${builddir} is not a directory."
+>  	exit 1
+> -    fi
+> +fi
+> +
+> +# Parse patch list, extract archives, apply patches
+> +for i in $patchlist ; do
+> +	patch_path="${patchdir}/${i}"
+> +	# three cases: directory, archive, file patch (compressed or not)
+> +	# directory
+> +	if [ -d "${patch_path}" ] ; then
+> +		for p in $(ls ${patch_path}) ; do
+> +			apply_patch "${patch_path}/${p}" || exit 1
+> +		done
+> +	# archive
+> +	elif echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$|tar\.gz$|tgz$" ; then
+> +		mkdir "${patchesdir}"
+ Remove the patchesdir first, in case it got left behind by an interrupted
+previous run.
+
+> +		# extract archive
+> +		if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
+> +			tar_options="-xjf"
+> +		else
+> +			tar_options="-xzf"
+> +		fi
+> +		tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
+ This will give problems on CentOS 5 IIRC - the issue with host-tar, which 
+ThomasDS solved recently.
+
+ Actually it is probably a better idea to handle the tar case in the 
+Makefiles...
+
+> +		# apply patches from the archive
+> +		for p in $(find ${patchesdir} | sort) ; do
+> +			apply_patch "${p}" || { rm -rf "${patchesdir}" ; exit 1; }
+> +		done
+> +		rm -rf "${patchesdir}"
+ I would not remove the patchesdir; makes it easier for a developer to read
+and/or unapply the patches.
+
+> +	# file which is not an archive
+> +	else
+> +		# we can have regex into patch name as package*.patch.arm that's
+ Actually, it's not a regex but a glob pattern.
+
+> +		# why using ls
+> +		for p in $(ls -d ${patch_path} 2> /dev/null) ; do
+> +			apply_patch "${p}" || exit 1
+> +		done
+> +	fi
+>  done
+>  
+>  # Check for rejects...
+> -if [ "`find $targetdir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+> +if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+>      echo "Aborting.  Reject files found."
+>      exit 1
+>  fi
+>  
+>  # Remove backup files
+> -find $targetdir/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
+> +find ${builddir}/ '(' -name '*.orig' -o -name '.*.orig' ')' -exec rm -f {} \;
+> 
 
  Regards,
  Arnout
