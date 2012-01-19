@@ -1,32 +1,35 @@
-From: Willy <willy@willygroup.org>
-Date: Thu, 19 Jan 2012 12:42:16 +0100
-Subject: [Buildroot] "configure: error: Can't use static libraries for DRI
- drivers" attempting to install X11 intel driver
-Message-ID: <CAJSc0StTh6_SEt=vL93-ZbuHvojfEVkma2aP1gPG2t9NK=6H3w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 19 Jan 2012 12:25:22 +0100
+Subject: [Buildroot] [git commit] kmod: bump version
+Message-ID: <20120119120038.36EF4902F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-in my buildroot 2011.11 I've tried to install X11 intel video driver.
-After that I get the error:
-"configure: error: Can't use static libraries for DRI drivers"
+commit: http://git.buildroot.net/buildroot/commit/?id=95632704cd966b32c3391aa732eaad10d24fe0fb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even if I deselect X11 intel video driver the error continues to show and
-my building fails every times.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/kmod/kmod.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-I saw this message:
-
-http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/33419
-
-but I don't understand where I could download the patch (if there is one!)
-and how apply to my buildroot.
-
-Regards,
--- 
-Willy
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120119/96f3d214/attachment.html>
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index a7a5bf5..0e3bc34 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -1,8 +1,7 @@
+-KMOD_VERSION = 3
+-KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.bz2
+-KMOD_SITE = http://git.profusion.mobi/cgit.cgi/kmod.git/snapshot
+-KMOD_INSTALL_STAGING =YES
+-KMOD_AUTORECONF = YES
++KMOD_VERSION = 4
++KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
++KMOD_SITE = http://packages.profusion.mobi/kmod/
++KMOD_INSTALL_STAGING = YES
+ KMOD_DEPENDENCIES = host-pkg-config
+ 
+ $(eval $(call AUTOTARGETS))
