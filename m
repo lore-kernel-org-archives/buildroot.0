@@ -1,78 +1,169 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Jan 2012 22:42:19 +0100
-Subject: [Buildroot] [PATCH 1/2] udev: bump to 177
-In-Reply-To: <4F191C7C.3010600@visionsystems.de>
-References: <1326874717-1666-1-git-send-email-yegorslists@googlemail.com>
- <201201191522.03177.arnout@mind.be> <4F191C7C.3010600@visionsystems.de>
-Message-ID: <201201202242.19955.arnout@mind.be>
+Date: Fri, 20 Jan 2012 23:44:35 +0100
+Subject: [Buildroot] [PATCH v2 2/2] udev: bump to 177
+In-Reply-To: <1327055414-22482-3-git-send-email-yegorslists@googlemail.com>
+References: <1327055414-22482-1-git-send-email-yegorslists@googlemail.com>
+ <1327055414-22482-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201201202344.36161.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 20 January 2012 08:49:16 Yegor Yefremov wrote:
-> Am 19.01.2012 15:22, schrieb Arnout Vandecappelle:
-> > On Wednesday 18 January 2012 09:18:36 yegorslists at googlemail.com wrote:
-[snip]
-> >> +	select BR2_PACKAGE_E2FSPROGS
-> >> +	select BR2_PACKAGE_USBUTILS
-> > 
-> >  Are these dependencies really required now?  They're kind of
-> > silly if you don't have e2fs or USB on your target system...
+ Silly me, I hadn't noticed that you had sent a new patch and I replied to
+your original reaction...  I'll repeat the comments from my previous mail
+here so it's all in one place.  Sorry for the noise.  There are also some
+new comments below.  If you've read my previous mail and just want to see
+the new things: I've marked them with a *.
+
+ Since things are getting a bit complex, I'll update and send the v3 patch
+myself.  Yegor, feel free to review it, ignore it or take it over again.
+
+
+On Friday 20 January 2012 11:30:14 yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> At least with the same config options they are required. I haven't found any option to disable these dependencies.
+> Changes:
+> - Linux kernel requirement: 2.6.34 and above (devtmpfs is mandatory)
+ * Maybe add this requirement to the udev help text.
 
- Okay, I looked at it in more detail...
+> - usbutils, hwdata are now mandatory, so that
+> usb.ids and pci.ids paths are provided by default
+ * Actually it's not.  The paths aren't verified at compile time, and a
+missing file is handled gracefully.  So we can compile in the path to the
+hwdata even if it is missing.
 
-- e2fsprogs is only needed for libblkid.  You can get that from util-linux 
-too, and that one is way smaller (plus it defaults to leaving out everything
-except libblkid and libuuid).  Actually e2fsprogs is a nice example.  Note BTW
-that util-linux depends on LARGEFILE and WCHAR, so these dependencies (+ 
-the comment) should be added to the udev config as well - and therefore also 
-to BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV.
+> - persistant rules generator is disabled by default, so option
+> is introduced to enable this option if desired
+> - new dependencies: kmod and e2fsprogs
+ e2fsprogs -> util-linux
 
-- usbutils is only needed for the usb.ids.  Giving the --with-usb-ids-path
-removes the dependency.
-
-[snip]
-> >>  	--libexecdir=/lib/udev	\
- I didn't notice before, but this dumps the udev stuff into /lib/udev/udev/
-which I don't think is your intention.  It should be --libexecdir=/lib
-
-> >> +	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
-> > 
-> >> +	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
-> > 
-> >  I haven't actually ran it, but:
-> > 
-> > - I have the usb.ids in /usr/share/usb.ids
-> > 
-> > - I don't get pci.ids (that one should come from pciutils or directly
-> > from http://pciids.sourceforge.net/pci.ids)
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/udev/Config.in |   15 ++++++++++-----
+>  package/udev/S10udev   |    2 +-
+>  package/udev/udev.mk   |   16 ++++++++++------
+>  3 files changed, 21 insertions(+), 12 deletions(-)
 > 
-> You're right. I have over reacted, as I've seen that udev can't find usb.ids (usbutils dependency). hwdata is responsible for pci.ids, so I'll move it to extras case.
+> diff --git a/package/udev/Config.in b/package/udev/Config.in
+> index 391c718..8588aa0 100644
+> --- a/package/udev/Config.in
+> +++ b/package/udev/Config.in
+> @@ -1,6 +1,10 @@
+>  config BR2_PACKAGE_UDEV
+>  	bool "udev"
+>  	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+> +	select BR2_PACKAGE_E2FSPROGS
+ UTIL_LINUX and UTIL_LINUX_BLKID instead of E2FSPROGS
+
+ Because of UTIL_LINUX, there is also a dependency on LARGEFILE and WCHAR.
+
+> +	select BR2_PACKAGE_USBUTILS
+> +	select BR2_PACKAGE_HWDATA
+ USBUTILS and HWDATA are optional (like they were).
+
+> +	select BR2_PACKAGE_KMOD
+>  	help
+>  	  Userspace device daemon.
 >  
-> > - shouldn't the $(TARGET_DIR) be removed?
-> 
-> What do you mean? Why removing $(TARGET_DIR)?
+> @@ -8,19 +12,20 @@ config BR2_PACKAGE_UDEV
+>  
+>  if BR2_PACKAGE_UDEV
+>  
+> +config BR2_PACKAGE_UDEV_RULES_GEN
+> +	bool "enable rules generator"
+> +	help
+> +	  Enable persistant rules generator
+> +
+>  config BR2_PACKAGE_UDEV_ALL_EXTRAS
+>  	bool "enable all extras"
+>  	depends on BR2_LARGEFILE # acl
+>  	depends on BR2_USE_WCHAR # libglib2
+>  	select BR2_PACKAGE_ACL
+> -	select BR2_PACKAGE_LIBUSB
+> -	select BR2_PACKAGE_LIBUSB_COMPAT
+ These are indeed redundant.
 
- I should have explained that better.  The path is only used in a C file
-that will be executed on the target (configure doesn't actually check the
-validity of the path).  So your linked udevd will have something like
-$ strings -a target/lib/udev/udev/udevd | grep hwdata
-/home/arnout/src/buildroot/output-ext-toolchain-x86_64/target/usr/share/hwdata/pci.ids
-/home/arnout/src/buildroot/output-ext-toolchain-x86_64/target/usr/share/hwdata/usb.ids
-Clearly, on my targe there is no /home/arnout directory.
+> -	select BR2_PACKAGE_USBUTILS
+> -	select BR2_PACKAGE_HWDATA
+ These should stay in the extras.
 
-> >  Note that these comments have nothing to do with the version bump, so
-> > any changes should either go in a separate patch or be documented in the
-> > commit message (and extent the short message with 'and other fixes').
-> 
-> I'll include all the issues in my next commit message. All these changes are "bump related".
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	help
+>  	  Enable all extras with external dependencies like
+> -	  libacl, libusb, libusb-compat, usbutils, hwdata
+> +	  libacl and libglib2
+>  
+>  comment "udev extras requires a toolchain with LARGEFILE + WCHAR support"
+>  	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+> diff --git a/package/udev/S10udev b/package/udev/S10udev
+> index 29eb107..928c7b6 100755
+> --- a/package/udev/S10udev
+> +++ b/package/udev/S10udev
+> @@ -17,7 +17,7 @@
+>  #
+>  
+>  # Check for missing binaries
+> -UDEV_BIN=/sbin/udevd
+> +UDEV_BIN=/lib/udev/udev/udevd
+ It makes more sense to put it in /lib/udev/ than /lib/udev/udev/
 
- With "these comments" I meant the incorrect hwdata and the $(TARGET_DIR),
-which were already there in the previous version (and thus were bugs).
+>  test -x $UDEV_BIN || exit 5
+>  
+>  # Check for config file and read it
+> diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+> index 1825396..03d1d22 100644
+> --- a/package/udev/udev.mk
+> +++ b/package/udev/udev.mk
+> @@ -3,7 +3,7 @@
+>  # udev
+>  #
+>  #############################################################
+> -UDEV_VERSION = 173
+> +UDEV_VERSION = 177
+>  UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
+>  UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+>  UDEV_INSTALL_STAGING = YES
+> @@ -12,19 +12,23 @@ UDEV_CONF_OPT =			\
+>  	--sbindir=/sbin		\
+>  	--with-rootlibdir=/lib	\
+>  	--libexecdir=/lib/udev	\
+> +	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
+> +	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
+ Should be without $(TARGET_DIR), otherwise the path to the buildroot
+environment is linked into the udevd executable.
+
+ * I just noticed an annoying thing: the hwdata package installs it in
+/usr/share/hwdata/usb.ids, while usbutils puts it in /usr/share/usb.ids.
+Totally unrelated to udev, though :-)
+
+> +	--with-firmware-path=/lib/firmware				\
+>  	--disable-introspection
+>  
+> -UDEV_DEPENDENCIES = host-gperf host-pkg-config
+> +UDEV_DEPENDENCIES = host-gperf host-pkg-config e2fsprogs kmod usbutils hwdata
+> +
+> +ifeq ($(BR2_PACKAGE_UDEV_RULES_GEN),y)
+> +UDEV_CONF_OPT += --enable-rule_generator
+> +endif
+>  
+>  ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
+> -UDEV_DEPENDENCIES += libusb libusb-compat acl usbutils hwdata libglib2
+> +UDEV_DEPENDENCIES += acl libglib2
+ Dependencies should stay as original, except the redundant libusb*
+
+>  UDEV_CONF_OPT +=							\
+> -	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
+> -	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
+>  	--enable-udev_acl
+>  else
+>  UDEV_CONF_OPT +=		\
+> -	--disable-hwdb		\
+>  	--disable-gudev
+>  endif
+
 
  Regards,
  Arnout
