@@ -1,32 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Jan 2012 16:14:23 -0300
-Subject: [Buildroot] [PATCH 2/2] openssl: security bump to version 1.0.0g
-In-Reply-To: <1327086863-9470-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1327086863-9470-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1327086863-9470-2-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 20 Jan 2012 21:54:40 +0100
+Subject: [Buildroot] [PATCH v4] bash: Adding features that can not be
+	automatically detected while cross-compiling
+In-Reply-To: <87k44mixzc.fsf@macbook.be.48ers.dk>
+References: <CA+gTGJGnxMiY9NKWhFsvsKhZT95N2QV_V2-XzDMN7aJMZRo3uA@mail.gmail.com>
+ <201201191327.37010.arnout@mind.be> <87k44mixzc.fsf@macbook.be.48ers.dk>
+Message-ID: <201201202154.40800.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Friday 20 January 2012 09:23:19 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+>  Arnout> On Thursday 19 January 2012 13:22:08 Arnout Vandecappelle (Essensium/Mind) wrote:
+>  >> +   bash_cv_printf_a_format=yes
+> 
+>  Arnout>  Actually this one depends on UCLIBC_HAS_HEXADECIMAL_FLOATS, so
+>  Arnout> maybe that should be kept as a configure option?
+> 
+> No, a lot of packages break if you start tweaking the uClibc
+> configuration. I don't want to add configuration option of all of these,
+> and really consider the custom uClibc config stuff to be an advanced
+> "you-have-to-know-what-you-are-doing" option.
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index a7616ba..d638ce1 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--OPENSSL_VERSION = 1.0.0f
-+OPENSSL_VERSION = 1.0.0g
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
+ I agree; however:
+
+toolchain/toolchain-crosstool-ng/uClibc.config:# UCLIBC_HAS_HEXADECIMAL_FLOATS is not set
+
+ Regards,
+ Arnout
+
 -- 
-1.7.3.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
