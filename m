@@ -1,174 +1,152 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 20 Jan 2012 23:49:55 +0100
-Subject: [Buildroot] [PATCH v3] udev: bump to 177 and other fixes
-Message-ID: <1327099795-15016-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Jan 2012 00:12:47 +0100
+Subject: [Buildroot] [PATCH] busybox: install S41inetd and inetd.conf if
+	inetd applet is enabled
+In-Reply-To: <1326272063-2479-1-git-send-email-keguang.zhang@gmail.com>
+References: <1326272063-2479-1-git-send-email-keguang.zhang@gmail.com>
+Message-ID: <201201210012.47309.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-
-Changes:
-- Linux kernel requirement: 2.6.34 and above (devtmpfs is mandatory)
-- optional dependency on libusb and usbutils removed
-- added dependency on kmod
-- added dependency on util-linux for libblkid
-- install in /lib/udev instead of /usr/libexec/udev
-- udevd moved to /lib/udev
-- fixed path to pci.ids and usb.ids
-- persistent rules generator is disabled by default, so option
-is introduced to enable this option if desired
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Wednesday 11 January 2012 09:54:23 Kelvin Cheung wrote:
+> Install S41inetd and inetd.conf if inetd is enabled in busybox.
+> Add ftpd to /etc/inetd.conf if if inetd and ftpd are enabled.
+> Add telnetd to /etc/inetd.conf if if inetd and telnetd are enabled.
+> Add tftpd to /etc/inetd.conf if if inetd and tftpd are enabled.
+> 
+> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
----
-Changes:
-v3: less aggressive dependencies and small fixes (Arnout Vandecappelle)
-v2: fix dependencies and make verbose commit message (review by Arnout Vandecappelle)
-v1: initial (Yegor Yefremov)
----
- package/udev/Config.in   |   26 +++++++++++++++++---------
- package/udev/S10udev     |    4 ++--
- package/udev/udev.mk     |   20 ++++++++++++--------
- target/generic/Config.in |    2 ++
- 4 files changed, 33 insertions(+), 19 deletions(-)
+ Not tested by me, and also not many real comments.
 
-diff --git a/package/udev/Config.in b/package/udev/Config.in
-index 391c718..dfb4f0d 100644
---- a/package/udev/Config.in
-+++ b/package/udev/Config.in
-@@ -1,31 +1,39 @@
- config BR2_PACKAGE_UDEV
- 	bool "udev"
- 	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_KMOD
- 	help
- 	  Userspace device daemon.
- 
-+	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
-+
- 	  ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/
- 
- if BR2_PACKAGE_UDEV
- 
-+config BR2_PACKAGE_UDEV_RULES_GEN
-+	bool "enable rules generator"
-+	help
-+	  Enable persistant rules generator
-+
- config BR2_PACKAGE_UDEV_ALL_EXTRAS
- 	bool "enable all extras"
--	depends on BR2_LARGEFILE # acl
--	depends on BR2_USE_WCHAR # libglib2
- 	select BR2_PACKAGE_ACL
--	select BR2_PACKAGE_LIBUSB
--	select BR2_PACKAGE_LIBUSB_COMPAT
--	select BR2_PACKAGE_USBUTILS
- 	select BR2_PACKAGE_HWDATA
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
- 	  Enable all extras with external dependencies like
--	  libacl, libusb, libusb-compat, usbutils, hwdata
--
--comment "udev extras requires a toolchain with LARGEFILE + WCHAR support"
--	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-+	  libacl, hwdata and libglib2
- 
- endif
- 
- comment "udev requires /dev mgmnt set to udev under System configuration"
- 	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-+
-+comment "udev requires a toolchain with LARGEFILE + WCHAR support"
-+    depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-+
-diff --git a/package/udev/S10udev b/package/udev/S10udev
-index 29eb107..70a7c34 100755
---- a/package/udev/S10udev
-+++ b/package/udev/S10udev
-@@ -2,7 +2,7 @@
- #
- # udev	This is a minimal non-LSB version of a UDEV startup script.  It
- #	was derived by stripping down the udev-058 LSB version for use
--#	with buildroot on embedded hardware using Linux 2.6.12+ kernels.
-+#	with buildroot on embedded hardware using Linux 2.6.34+ kernels.
- #
- #	You may need to customize this for your system's resource limits
- #	(including startup time!) and administration.  For example, if
-@@ -17,7 +17,7 @@
- #
- 
- # Check for missing binaries
--UDEV_BIN=/sbin/udevd
-+UDEV_BIN=/lib/udev/udevd
- test -x $UDEV_BIN || exit 5
- 
- # Check for config file and read it
-diff --git a/package/udev/udev.mk b/package/udev/udev.mk
-index 1825396..1c5d936 100644
---- a/package/udev/udev.mk
-+++ b/package/udev/udev.mk
-@@ -3,7 +3,7 @@
- # udev
- #
- #############################################################
--UDEV_VERSION = 173
-+UDEV_VERSION = 177
- UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
- UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
- UDEV_INSTALL_STAGING = YES
-@@ -11,20 +11,24 @@ UDEV_INSTALL_STAGING = YES
- UDEV_CONF_OPT =			\
- 	--sbindir=/sbin		\
- 	--with-rootlibdir=/lib	\
--	--libexecdir=/lib/udev	\
-+	--libexecdir=/lib	\
-+	--with-usb-ids-path=/usr/share/hwdata/usb.ids	\
-+	--with-pci-ids-path=/usr/share/hwdata/pci.ids	\
-+	--with-firmware-path=/lib/firmware		\
- 	--disable-introspection
- 
--UDEV_DEPENDENCIES = host-gperf host-pkg-config
-+UDEV_DEPENDENCIES = host-gperf host-pkg-config util-linux kmod
-+
-+ifeq ($(BR2_PACKAGE_UDEV_RULES_GEN),y)
-+UDEV_CONF_OPT += --enable-rule_generator
-+endif
- 
- ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
--UDEV_DEPENDENCIES += libusb libusb-compat acl usbutils hwdata libglib2
--UDEV_CONF_OPT +=							\
--	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
--	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
-+UDEV_DEPENDENCIES += acl usbutils hwdata libglib2
-+UDEV_CONF_OPT +=		\
- 	--enable-udev_acl
- else
- UDEV_CONF_OPT +=		\
--	--disable-hwdb		\
- 	--disable-gudev
- endif
- 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index a91de32..5334a4b 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -28,6 +28,8 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
- 
- config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
- 	bool "Dynamic using udev"
-+	depends on BR2_LARGEFILE # udev
-+	depends on BR2_USE_WCHAR # udev
- 	select BR2_PACKAGE_UDEV
- 
- endchoice
+> ---
+>  package/busybox/S41inetd   |   27 +++++++++++++++++++++++++++
+>  package/busybox/busybox.mk |   32 ++++++++++++++++++++++++++++++++
+>  package/busybox/inetd.conf |    2 ++
+>  3 files changed, 61 insertions(+), 0 deletions(-)
+>  create mode 100644 package/busybox/S41inetd
+>  create mode 100644 package/busybox/inetd.conf
+> 
+> diff --git a/package/busybox/S41inetd b/package/busybox/S41inetd
+> new file mode 100644
+> index 0000000..cc288dd
+> --- /dev/null
+> +++ b/package/busybox/S41inetd
+> @@ -0,0 +1,27 @@
+> +#!/bin/sh
+> +#
+> +# Starts the inetd daemon.
+> +#
+> +
+> +NAME=inetd
+> +DAEMON=/usr/sbin/$NAME
+> +
+> +case "$1" in
+> +  start)
+> +	echo -n "Starting $NAME: "
+> +	start-stop-daemon -S -q -x $DAEMON && echo "OK" || echo "Failed"
+ I'd create a PID file too, cfr. S01logging.  But it's not required.
+
+> +	;;
+> +  stop)
+> +	echo -n "Stopping $NAME: "
+> +	start-stop-daemon -K -q -n $NAME && echo "OK" || echo "Failed"
+ Same here.
+
+> +	;;
+> +  restart|reload)
+> +	$0 stop
+> +	$0 start
+> +	;;
+> +  *)
+> +	echo $"Usage: $0 {start|stop|restart}"
+> +	exit 1
+> +esac
+> +
+> +exit $?
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index d18b6d0..1c0d473 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -137,6 +137,36 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>  	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+>  endef
+>  
+> +define BUSYBOX_INSTALL_INETD_SCRIPT
+> +	if grep -q CONFIG_INETD=y $(@D)/.config; then \
+> +		[ -f $(TARGET_DIR)/etc/init.d/S41inetd ] || \
+> +			$(INSTALL) -m 0755 -D package/busybox/S41inetd \
+> +				$(TARGET_DIR)/etc/init.d/S41inetd; \
+> +	else rm -f $(TARGET_DIR)/etc/init.d/S41inetd; fi
+ Unfortunately, if the user has a different start script, chances are
+that it will also have a different number.  Not sure how to fix that,
+though, unless we re-implement something like Debian's update-rc.d.
+
+ Also, two things here would be nice to generalize:
+- Checking a sub-.config option, which is useful in a large number of cases.
+- Installing an init script.
+But those are not for this patch.
+
+> +endef
+> +define BUSYBOX_INSTALL_INETD_CONF
+> +	if grep -q CONFIG_INETD=y $(@D)/.config; then \
+> +		[ -f $(TARGET_DIR)/etc/inetd.conf ] || \
+> +			install -D -m 0644 package/busybox/inetd.conf \
+> +				$(TARGET_DIR)/etc/inetd.conf; \
+> +		if grep -q CONFIG_FTPD=y $(@D)/.config; then \
+> +			if ! grep -q '^ftp' $(TARGET_DIR)/etc/inetd.conf; then \
+> +				echo -e "ftp\tstream\ttcp\tnowait\troot\t/usr/sbin/ftpd\tftpd" >> $(TARGET_DIR)/etc/inetd.conf; \
+> +			fi; \
+> +		else $(SED) '/^ftp/d' $(TARGET_DIR)/etc/inetd.conf; fi; \
+> +		if grep -q CONFIG_TELNETD=y $(@D)/.config; then \
+> +			if ! grep -q '^telnet' $(TARGET_DIR)/etc/inetd.conf; then \
+> +				echo -e "telnet\tstream\ttcp\tnowait\troot\t/usr/sbin/telnetd\ttelnetd -i" >> $(TARGET_DIR)/etc/inetd.conf; \
+> +			fi; \
+> +		else $(SED) '/^telnet/d' $(TARGET_DIR)/etc/inetd.conf; fi; \
+> +		if grep -q CONFIG_TFTPD=y $(@D)/.config; then \
+> +			if ! grep -q '^tftp' $(TARGET_DIR)/etc/inetd.conf; then \
+> +				echo -e "tftp\tdgram\tudp\tnowait\tnobody\t/usr/bin/tftpd\ttftpd" >> $(TARGET_DIR)/etc/inetd.conf; \
+> +			fi; \
+> +		else $(SED) '/^tftp/d' $(TARGET_DIR)/etc/inetd.conf; fi \
+> +	else rm -f $(TARGET_DIR)/etc/inetd.conf; fi
+> +endef
+> +
+>  # We do this here to avoid busting a modified .config in configure
+>  BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+>  
+> @@ -167,6 +197,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+>  	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+>  	$(BUSYBOX_INSTALL_MDEV_CONF)
+>  	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+> +	$(BUSYBOX_INSTALL_INETD_SCRIPT)
+> +	$(BUSYBOX_INSTALL_INETD_CONF)
+>  endef
+>  
+>  define BUSYBOX_UNINSTALL_TARGET_CMDS
+ Uninstall of S41inetd and inetd.conf is missing.
+
+> diff --git a/package/busybox/inetd.conf b/package/busybox/inetd.conf
+> new file mode 100644
+> index 0000000..36cebd5
+> --- /dev/null
+> +++ b/package/busybox/inetd.conf
+> @@ -0,0 +1,2 @@
+> +# <service_name> <sock_type> <proto> <flags> <user> <server_path> <args>
+> +#
+> 
+
+ Nice patch!
+
+ Regards,
+ Arnout
+
 -- 
-1.7.8.3
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
