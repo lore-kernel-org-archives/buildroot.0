@@ -1,45 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Jan 2012 03:46:05 +0100
-Subject: [Buildroot] "configure: error: Can't use static libraries for
-	DRI drivers" attempting to install X11 intel driver
-In-Reply-To: <CAJSc0StTh6_SEt=vL93-ZbuHvojfEVkma2aP1gPG2t9NK=6H3w@mail.gmail.com>
-References: <CAJSc0StTh6_SEt=vL93-ZbuHvojfEVkma2aP1gPG2t9NK=6H3w@mail.gmail.com>
-Message-ID: <201201210346.06201.arnout@mind.be>
+Date: Sat, 21 Jan 2012 03:53:59 +0100
+Subject: [Buildroot] Qt command line issue
+In-Reply-To: <2cff0fc240e25617ac5c8ae586f9c698@bluespirit.la>
+References: <2cff0fc240e25617ac5c8ae586f9c698@bluespirit.la>
+Message-ID: <201201210353.59935.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 19 January 2012 12:42:16 Willy wrote:
-> Hi,
-> in my buildroot 2011.11 I've tried to install X11 intel video driver.
-> After that I get the error:
-> "configure: error: Can't use static libraries for DRI drivers"
-> 
-> Even if I deselect X11 intel video driver the error continues to show and
-> my building fails every times.
-> 
-> I saw this message:
-> 
-> http://permalink.gmane.org/gmane.comp.lib.uclibc.buildroot/33419
-> 
-> but I don't understand where I could download the patch (if there is one!)
-> and how apply to my buildroot.
-> 
-> Regards,
-> 
+On Friday 20 January 2012 12:32:17 Karl Krach wrote:
+> 2) The output via SSH lacks of a "carriage return". On X11 it's working 
+> fine, but on the ARM evaluation board the output looks like this:
+> my debug output
+>                 my debug output
+>                                my debug output
+>                                               my debug output
+>                                                              ...
+ 
+ Are you sure you get this over SSH?  This is typically what you see on a
+serial terminal.  The serial terminal should be configured to expect LF
+instead of CRLF.  Alternatively, if you have a shell on the other side,
+you can do 'stty onlret' (or is it -onlret?) to let the tty driver insert
+the CR.
 
- Buildroot sets SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared to 
-build both static and shared libraries, but mesa (and probably others) 
-can't build both, and will default to static.
+ Don't know about your other issue.
 
- To fix it, add --disable-static to MESA3D_CONF_OPT (in 
-package/x11r7/mesa3d/mesa3d.mk).  If you have another package with the same
-problem, you can fix it in the same way (and please report it on the list).
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
