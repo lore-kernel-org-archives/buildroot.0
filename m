@@ -1,101 +1,118 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Jan 2012 02:27:51 +0100
-Subject: [Buildroot] [PATCH 3/7] libevas: Add new package.
-In-Reply-To: <CAFbHwiR1j6z42ZfV+htJ8pYjzf-i1pxmqBBAkHP_XfYMf+tfMQ@mail.gmail.com>
-References: <CAFbHwiR1j6z42ZfV+htJ8pYjzf-i1pxmqBBAkHP_XfYMf+tfMQ@mail.gmail.com>
-Message-ID: <201201210227.52231.arnout@mind.be>
+Date: Sat, 21 Jan 2012 02:44:08 +0100
+Subject: [Buildroot] [PATCH 4/7] libecore: Add new package.
+In-Reply-To: <CAFbHwiSB2HaSTBAwYPxZczj8t2+FfySNtbroM_wijRnn9WkyDg@mail.gmail.com>
+References: <CAFbHwiSB2HaSTBAwYPxZczj8t2+FfySNtbroM_wijRnn9WkyDg@mail.gmail.com>
+Message-ID: <201201210244.08837.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 18 January 2012 12:15:31 Will Newton wrote:
+On Wednesday 18 January 2012 12:17:30 Will Newton wrote:
 > Signed-off-by: Will Newton <will.newton@imgtec.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 [snip]
-> +config BR2_PACKAGE_LIBEVAS_SDL
-> +	bool "libevas sdl backend"
- I would expect a select BR2_PACKAGE_SDL here.
-
-> +	help
-> +	  This is the sdl engine that uses sdl library
-> +	  (http://www.libsdl.org). This library should work on many
-> +	  operating system.
-[snip]
-> +comment "libevas code tunning"
- tuning, not tunning
-
- I would expect the following to be a choice rather than a set of bools.
-Or can you sensibly compile libevas with no code?
-
-> +
-> +config BR2_PACKAGE_LIBEVAS_C
-> +	bool "libevas c code"
- This probably needs a 'default y'.
-
-> +	help
-> +	  This enabled the c code. you can actually build the code
-> +	  without the c fallback code and only have the mmx routines
-> +	  for example.
-> +
-> +config BR2_PACKAGE_LIBEVAS_MMX
-> +	bool "libevas mmx routines"
-> +	depends on BR2_i386 || BR2_x86_64
- These dependencies could be a bit more accurate.  You can find in 'man gcc'
- which architectures support MMX.  I guess something like this should work:
-depends on (BR2_i386 && !BR2_x86_i386 && !BR2_x86_i486 && !BR2_x86_i586 && !BR2_x86_i686 && !BR2_x86_pentiumpro) || BR2_x86_64
-
-> +	help
-> +	  This enables the mmx optimised routines. this works for
-> +	  pentium, pentium2, pentium3, pentium4, athlon and duron
-> +	  processors.
-> +
-> +config BR2_PACKAGE_LIBEVAS_SSE
-> +	bool "libevas sse routines"
-> +	depends on BR2_i386 || BR2_x86_64
- Same remark, but here you should find out of it is SSE, SSE2, SSE3, or 
-SSSE3 is required.
-
-> +	help
-> +	  This enables sse optimizations availbale in he pentium3 and
-> +	  4 cpus (not athlon and duron or pentium 2 or pentium cpu's).
-> +
-[snip]
-> diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+> diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
 > new file mode 100644
-> index 0000000..7bea475
+> index 0000000..fd4da93
 > --- /dev/null
-> +++ b/package/efl/libevas/libevas.mk
-> @@ -0,0 +1,165 @@
+> +++ b/package/efl/libecore/Config.in
+> @@ -0,0 +1,81 @@
+> +config BR2_PACKAGE_LIBECORE
+> +	bool "libecore"
+> +	select BR2_PACKAGE_LIBEINA
+> +	help
+> +	  Ecore is the event/X abstraction layer that makes doing
+> +	  selections, Xdnd, general X stuff, event loops, timeouts and
+> +	  idle handlers fast, optimized, and convenient.
+> +
+> +if BR2_PACKAGE_LIBECORE
+> +
+> +config BR2_PACKAGE_LIBECORE_DIRECTFB
+> +	bool "libecore directfb support"
+> +	depends on BR2_PACKAGE_DIRECTFB
+ You could add a 'default y' (which will only apply if directfb is 
+selected).  But I'm not sure if that's a good idea.
+
+> +
+> +config BR2_PACKAGE_LIBECORE_FB
+> +	bool "libecore framebuffer support"
+ Don't add default y here!
+
+> +
+> +config BR2_PACKAGE_LIBECORE_SDL
+> +	bool "libecore sdl support"
+> +	depends on BR2_PACKAGE_SDL
+> +
+> +config BR2_PACKAGE_LIBECORE_X
+> +	bool "libecore x support"
+> +	depends on BR2_PACKAGE_X11R7
+> +
+> +config BR2_PACKAGE_LIBECORE_EVAS
+> +	bool "libecore evas support"
+> +	select BR2_PACKAGE_EVAS
+> +
+> +if BR2_PACKAGE_LIBECORE_EVAS
+> +
+> +config BR2_PACKAGE_LIBECORE_EVAS_BUFFER
+> +	bool "libecore evas software buffer support"
+> +	select BR2_PACKAGE_LIBEVAS
+ Redundant select: already selected by LIBECORE_EVAS.  But you probably
+meant 'select BR2_PACKAGE_LIBEVAS_BUFFER', in which case you should add
+the dependency on BR2_PACKAGE_XORG7.  Or maybe it should depend on
+BR2_PACKAGE_LIBECORE_X?
+
+> +config BR2_PACKAGE_LIBECORE_EVAS_X11
+> +	bool "libecore evas x11 support"
+> +	depends on BR2_PACKAGE_X11R7
+ BR2_PACKAGE_X11R7 doesn't exist...
+
+ Since there's a big group of similar dependencies here, I would wrap them
+in an 'if BR2_PACKAGE_XORG7' instead of adding individual 'depends on'.
+
+ This probably misses a select BR2_PACKAGE_LIBEVAS_X11.  And more like that
+in the following options.
+
+ I wonder though...  Won't the libecore configure script find out automatically
+which evas backends are supported, and enable just those?  Then it's sufficient
+to select the backends in libevas.
+
+[snip]
+> diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
+> new file mode 100644
+> index 0000000..acd7fa3
+> --- /dev/null
+> +++ b/package/efl/libecore/libecore.mk
+> @@ -0,0 +1,124 @@
 > +#############################################################
 > +#
-> +# libevas
+> +# libecore
 > +#
 > +#############################################################
 > +
-> +LIBEVAS_VERSION = 1.1.0
-> +LIBEVAS_SOURCE = evas-$(LIBEVAS_VERSION).tar.bz2
-> +LIBEVAS_SITE = http://download.enlightenment.org/releases/
-> +LIBEVAS_INSTALL_STAGING = YES
-> +LIBEVAS_INSTALL_TARGET = YES
+> +LIBECORE_VERSION = 1.1.0
+> +LIBECORE_SOURCE = ecore-$(LIBECORE_VERSION).tar.bz2
+> +LIBECORE_SITE = http://download.enlightenment.org/releases/
+> +LIBECORE_INSTALL_STAGING = YES
+> +LIBECORE_INSTALL_TARGET = YES
  _INSTALL_TARGET already defaults to YES.
 
-> +LIBEVAS_DEPENDENCIES = host-pkg-config zlib libeina freetype
-> +
-> +LIBEVAS_CONF_OPT =
- _CONF_OPT defaults to empty.  It's OK to immediately assign using +=.
+[snip]
+> +ifeq ($(BR2_PACKAGE_LIBECORE_EVAS_XCB),y)
+> +#LIBECORE_CONF_OPT += --enable-ecore-evas-software-xcb
+> +LIBECORE_CONF_OPT += --enable-ecore-x-xcb
+> +LIBECORE_DEPENDENCIES += xcb-proto
+> +else
+> +#LIBECORE_CONF_OPT += --disable-ecore-evas-software-xcb
+> +LIBECORE_CONF_OPT += --disable-ecore-x-xcb
+> +endif
+ Don't leave those commented-out lines in the patch.  Or if there is a good
+reason for it, add a FIXME comment to explain it.
 
 [snip]
-> +ifeq ($(BR2_PACKAGE_LIBEVAS_GL_X11),y)
-> +
-> +LIBEVAS_CONF_OPT += --enable-gl-x11
-> +LIBEVAS_DEPENDENCIES += xserver_xorg-server
- This doesn't correspond to the dependency in Config.in.
-
-[snip]
-
 
  Regards,
  Arnout
