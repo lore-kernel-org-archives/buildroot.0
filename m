@@ -1,35 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Jan 2012 02:51:26 +0100
-Subject: [Buildroot] [PATCH 0/7] EFL packages for buildroot
-In-Reply-To: <CAFbHwiQEZ4T8xdPk9hx9MihC4LDMcvWTueuG1KfdxzQywG_B+Q@mail.gmail.com>
-References: <CAFbHwiQEZ4T8xdPk9hx9MihC4LDMcvWTueuG1KfdxzQywG_B+Q@mail.gmail.com>
-Message-ID: <201201210251.26370.arnout@mind.be>
+Date: Sat, 21 Jan 2012 02:59:15 +0100
+Subject: [Buildroot] [git commit] flex: unbreak host build after
+	auto-host-deps change
+In-Reply-To: <20120118150407.CB51890385@busybox.osuosl.org>
+References: <20120118150407.CB51890385@busybox.osuosl.org>
+Message-ID: <201201210259.16285.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 18 January 2012 12:15:14 Will Newton wrote:
-> These patches update the ones posted by Lionel Landwerlin a couple of years
-> ago, moving to released versions of the libraries and fixing up to reflect
-> changes in the buildroot infrastructure over the years.
- Shouldn't you add a SOB for Lionel, then?  Or did he not add it in the original
-patches?  In the latter case we have a copyright problem...
+On Wednesday 18 January 2012 16:02:55 Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=f009b7b93eb0bb4d766f1b0da78ba9d1bdd94bd3
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+>  package/flex/flex.mk |    2 ++
+>  1 files changed, 2 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+> index df1b420..041aba8 100644
+> --- a/package/flex/flex.mk
+> +++ b/package/flex/flex.mk
+> @@ -14,6 +14,8 @@ FLEX_INSTALL_STAGING = YES
+>  FLEX_DEPENDENCIES = \
+>  	$(if $(BR2_PACKAGE_GETTEXT),gettext) \
+>  	$(if $(BR2_PACKAGE_LIBINTL),libintl)
+> +# we don't have a host-gettext/libintl
+> +HOST_FLEX_DEPENDENCIES =
 
-> Will Newton (7):
->   libeina: Add new package along with EFL infrastructure.
->   libeet: Add new package.
->   libevas: Add new package.
->   libecore: Add new package.
->   libembryo: Add new package.
->   libedje: Add new package.
->   expedite: Add new package.
-
- For the whole series:
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (I didn't reply to patches on which I had no comments.)
+ Maybe it would be worthwhile to instead globally remove 
+host-gettext/libintl/busybox/util-linux/$(PKG) from the auto-generated 
+dependencies, just like we do for automake etc.
 
  Regards,
  Arnout
