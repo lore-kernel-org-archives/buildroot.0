@@ -1,22 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 22 Jan 2012 21:56:47 +0100
-Subject: [Buildroot] [PATCH 2/2] openssl: security bump to version 1.0.0g
-In-Reply-To: <1327086863-9470-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 20 Jan 2012 16:14:23 -0300")
-References: <1327086863-9470-1-git-send-email-gustavo@zacarias.com.ar>
- <1327086863-9470-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ty3nh2wg.fsf@macbook.be.48ers.dk>
+Date: Sun, 22 Jan 2012 21:57:42 +0100
+Subject: [Buildroot] [PATCH v4] bash: Adding features that can not be
+	automatically detected while cross-compiling
+In-Reply-To: <201201202154.40800.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Fri, 20 Jan 2012 21:54:40 +0100")
+References: <CA+gTGJGnxMiY9NKWhFsvsKhZT95N2QV_V2-XzDMN7aJMZRo3uA@mail.gmail.com>
+ <201201191327.37010.arnout@mind.be>
+ <87k44mixzc.fsf@macbook.be.48ers.dk>
+ <201201202154.40800.arnout@mind.be>
+Message-ID: <87pqebh2ux.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ >> No, a lot of packages break if you start tweaking the uClibc
+ >> configuration. I don't want to add configuration option of all of these,
+ >> and really consider the custom uClibc config stuff to be an advanced
+ >> "you-have-to-know-what-you-are-doing" option.
 
-Committed, thanks.
+ Arnout>  I agree; however:
+
+ Arnout> toolchain/toolchain-crosstool-ng/uClibc.config:# UCLIBC_HAS_HEXADECIMAL_FLOATS is not set
+
+*Grumble* Why is it again we cannot use the same uClibc config for ctng
+as for the internal toolchain?
 
 -- 
 Bye, Peter Korsgaard
