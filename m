@@ -1,108 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 22 Jan 2012 21:08:15 +0100
-Subject: [Buildroot] [git commit] sane-backends: fix libv4l dependency
-Message-ID: <20120122200858.800DA8FDDA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 22 Jan 2012 21:40:55 +0100
+Subject: [Buildroot] [PATCH] iw: bump to 3.3
+In-Reply-To: <1326879091-31187-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Wed, 18 Jan 2012 10:31:31
+ +0100")
+References: <1326879091-31187-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <8762g3ii7c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0376a2bc112107434eeedac0dd1b5220e503ec6e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Patch from Fedora.
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../sane-backends/sane-backends-1.0.22-v4l.patch   |   66 ++++++++++++++++++++
- package/sane-backends/sane-backends.mk             |    4 +
- 2 files changed, 70 insertions(+), 0 deletions(-)
+Committed, thanks.
 
-diff --git a/package/sane-backends/sane-backends-1.0.22-v4l.patch b/package/sane-backends/sane-backends-1.0.22-v4l.patch
-new file mode 100644
-index 0000000..e9bdd20
---- /dev/null
-+++ b/package/sane-backends/sane-backends-1.0.22-v4l.patch
-@@ -0,0 +1,66 @@
-+From Fedora git: http://pkgs.fedoraproject.org/gitweb/?p=sane-backends.git;a=blob;f=sane-backends-1.0.22-v4l.patch;hb=4c4b8135b896ef9f00b926ce5f435ae5c9b156d5
-+
-+From 26c69b228b29f612faf4b0cc85db969ee7cc4ea6 Mon Sep 17 00:00:00 2001
-+From: Nils Philippsen <nils@redhat.com>
-+Date: Mon, 14 Mar 2011 13:35:05 +0100
-+Subject: [PATCH] patch: v4l
-+
-+Squashed commit of the following:
-+
-+commit 23381932c76846191b42a48e505b37cd74711265
-+Author: Julien BLACHE <jb@jblache.org>
-+Date:   Wed Feb 16 19:37:43 2011 +0100
-+
-+    Fix v4l build with libv4l 0.8.3+
-+
-+    (cherry picked from commit c5ca46c2d1be78c651afb843cc834cf2b5b24953)
-+
-+    Conflicts:
-+
-+    	ChangeLog
-+
-+    Signed-off-by: Nils Philippsen <nils@redhat.com>
-+---
-+ backend/v4l.c |    3 +--
-+ backend/v4l.h |    3 ++-
-+ 2 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/backend/v4l.c b/backend/v4l.c
-+index 6510ef0..38595ed 100644
-+--- a/backend/v4l.c
-++++ b/backend/v4l.c
-+@@ -84,9 +84,8 @@
-+ #include "../include/sane/sanei_config.h"
-+ #define V4L_CONFIG_FILE "v4l.conf"
-+ 
-+-#include "v4l.h"
-+-
-+ #include <libv4l1.h>
-++#include "v4l.h"
-+ 
-+ static const SANE_Device **devlist = NULL;
-+ static int num_devices;
-+diff --git a/backend/v4l.h b/backend/v4l.h
-+index 588b96e..6aee586 100644
-+--- a/backend/v4l.h
-++++ b/backend/v4l.h
-+@@ -29,6 +29,7 @@
-+ #ifndef v4l_h
-+ #define v4l_h
-+ 
-++#ifndef __LINUX_VIDEODEV_H
-+ /* Kernel interface */
-+ /* Only the stuff we need. For more features, more defines are needed */
-+ 
-+@@ -165,7 +166,7 @@ struct video_channel
-+ 
-+ 
-+ /* end of kernel interface */
-+-
-++#endif /* !__LINUX_VIDEODEV_H */
-+ 
-+ #include <../include/sane/sane.h>
-+ 
-+-- 
-+1.7.4
-+
-diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
-index d9f3690..621cff5 100644
---- a/package/sane-backends/sane-backends.mk
-+++ b/package/sane-backends/sane-backends.mk
-@@ -22,6 +22,10 @@ ifeq ($(BR2_PACKAGE_TIFF),y)
- SANE_BACKENDS_DEPENDENCIES += tiff
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+SANE_BACKENDS_DEPENDENCIES += libv4l
-+endif
-+
- ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yyy)
- SANE_BACKENDS_DEPENDENCIES += avahi
- SANE_BACKENDS_CONF_OPT += --enable-avahi
+-- 
+Bye, Peter Korsgaard
