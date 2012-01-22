@@ -1,7 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 22 Jan 2012 14:50:24 +0100
-Subject: [Buildroot] [PATCH 1/2] re: new package
-Message-ID: <1327240226-6082-1-git-send-email-arnout@mind.be>
+Date: Sun, 22 Jan 2012 14:50:25 +0100
+Subject: [Buildroot] [PATCH 2/2] baresip: new package
+In-Reply-To: <1327240226-6082-1-git-send-email-arnout@mind.be>
+References: <1327240226-6082-1-git-send-email-arnout@mind.be>
+Message-ID: <1327240226-6082-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,94 +15,146 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Laurent Kersten <laurent.kersten@essensium.com>
 ---
- package/Config.in    |    1 +
- package/re/Config.in |   11 +++++++++++
- package/re/re.mk     |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+), 0 deletions(-)
- create mode 100644 package/re/Config.in
- create mode 100644 package/re/re.mk
+ package/multimedia/Config.in          |    1 +
+ package/multimedia/baresip/Config.in  |   33 ++++++++++++++
+ package/multimedia/baresip/baresip.mk |   79 +++++++++++++++++++++++++++++++++
+ 3 files changed, 113 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/baresip/Config.in
+ create mode 100644 package/multimedia/baresip/baresip.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index efed5a0..100ee53 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -353,6 +353,7 @@ source "package/libmbus/Config.in"
- source "package/libnl/Config.in"
- source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
-+source "package/re/Config.in"
- source "package/librsync/Config.in"
- source "package/libsoup/Config.in"
- source "package/libupnp/Config.in"
-diff --git a/package/re/Config.in b/package/re/Config.in
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index 320a55a..eb04bbf 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -2,6 +2,7 @@ menu "Audio and video libraries and applications"
+ source "package/multimedia/alsa-lib/Config.in"
+ source "package/multimedia/alsa-utils/Config.in"
+ source "package/multimedia/aumix/Config.in"
++source "package/multimedia/baresip/Config.in"
+ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+ source "package/multimedia/ffmpeg/Config.in"
+diff --git a/package/multimedia/baresip/Config.in b/package/multimedia/baresip/Config.in
 new file mode 100644
-index 0000000..c458ba6
+index 0000000..2184716
 --- /dev/null
-+++ b/package/re/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_RE
-+	bool "re library"
++++ b/package/multimedia/baresip/Config.in
+@@ -0,0 +1,33 @@
++config BR2_PACKAGE_BARESIP
++	bool "baresip"
++	select BR2_PACKAGE_RE
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
 +	help
-+	  Toolkit library for asynchronous network IO
-+	  with protocol stacks including SIP, SDP, RTP,
-+	  STUN, TURN, ICE and DNS.
++	  baresip is a bare-bones SIP user agent.
++	  It supports SIP, SDP, RTP/RTCP, and STUN/TURN/ICE, and IPv4 and
++	  IPv6, is RFC-compliant and has portable C89 and C99 source code.
 +
-+	  Warning: if you use uClibc, you must enable
-+	  UCLIBC_HAS_BSD_RES_CLOSE.
-+  
++	  A modular plugin architecture provides:
++	    - stdio, cons, and evdev user interfaces,
++	    - celt, g711, g722, gsm, ilbc, l16, and speex audio codecs
++	    - alsa, coreaudio, gst portaudio, oss, winwav, and mda audio
++	      drivers
++	    - speex_pp, speex_aec, speex_resamp, and sndfile audio filters
++	    - the avcodec video codec, avformat, quicktime, qtcapture, v4l,
++	      v4l2 video sources
++	    - sdl, opengl, and x11 video display drivers
++	    - srtp media encoding.
++
++	  To select the plugins, just enable the corresponding libraries in
++	  buildroot:
++	    - SPEEX for speex audio codec
++	    - ALSA_LIB for alsa audio driver
++	    - LIBSNDFILE for sndfile audio filters
++	    - FFMPEG (with SWSCALE) for avcodec, avformat, v4l, v4l2 video sources
++	    - SDL for sdl video display driver
++	    - XORG7 for x11 video display drivers
++	    - GSTREAMER for GStreamer's audio and video codecs
++
 +	  http://www.creytiv.com
-diff --git a/package/re/re.mk b/package/re/re.mk
++
+diff --git a/package/multimedia/baresip/baresip.mk b/package/multimedia/baresip/baresip.mk
 new file mode 100644
-index 0000000..93bc50a
+index 0000000..100a2cf
 --- /dev/null
-+++ b/package/re/re.mk
-@@ -0,0 +1,49 @@
++++ b/package/multimedia/baresip/baresip.mk
+@@ -0,0 +1,79 @@
 +#############################################################
 +#
-+# re
++# BARESIP
 +#
 +#############################################################
 +
-+RE_VERSION = 0.2.0
-+RE_SITE = http://www.creytiv.com/pub
-+RE_INSTALL_STAGING = YES
++BARESIP_VERSION = 0.2.0
++BARESIP_SITE = http://www.creytiv.com/pub
++BARESIP_DEPENDENCIES = re zlib
 +
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+RE_DEPENDENCIES += openssl
-+endif
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+RE_DEPENDENCIES += zlib
-+endif
-+
-+RE_MAKE_ENV = \
++BARESIP_MAKE_ENV = \
 +	$(TARGET_CONFIGURE_OPTS) \
 +	SYSROOT=$(STAGING_DIR)/usr \
++	LD="$(TARGET_CC)" \
 +	LFLAGS="$(TARGET_LDFLAGS)"
 +
-+define RE_BUILD_CMDS
-+	$(RE_MAKE_ENV) $(MAKE) -C $(@D) all
++BARESIP_MAKE_ARGS = \
++	LIBRE_MK="$(STAGING_DIR)/usr/share/re/re.mk" \
++	LIBRE_INC="$(STAGING_DIR)/usr/include/re" \
++	LIBRE_SO="$(STAGING_DIR)/usr/lib"
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++BARESIP_DEPENDENCIES += alsa-lib
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
++BARESIP_DEPENDENCIES += ffmpeg
++BARESIP_MAKE_ENV += \
++	CFLAGS+=-DCODEC_TYPE_VIDEO=AVMEDIA_TYPE_VIDEO
++endif
++
++ifeq ($(BR2_PACKAGE_GSTREAMER),y)
++BARESIP_DEPENDENCIES += gstreamer
++endif
++
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++BARESIP_DEPENDENCIES += portaudio
++endif
++
++ifeq ($(BR2_PACKAGE_SDL),y)
++BARESIP_DEPENDENCIES += sdl
++BARESIP_MAKE_ARGS += SDL_VERSION=1.2
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++BARESIP_DEPENDENCIES += libsndfile
++endif
++
++ifeq ($(BR2_PACKAGE_SPEEX),y)
++BARESIP_DEPENDENCIES += speex
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++BARESIP_DEPENDENCIES += util-linux
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++BARESIP_DEPENDENCIES += xlib_libXext
++endif
++
++define BARESIP_BUILD_CMDS
++	$(BARESIP_MAKE_ENV) $(MAKE) $(BARESIP_MAKE_ARGS) -C $(@D) all
 +endef
 +
-+define RE_CLEAN_CMDS
-+	$(RE_MAKE_ENV) $(MAKE) -C $(@D) clean
++define BARESIP_CLEAN_CMDS
++	$(BARESIP_MAKE_ENV) $(MAKE) $(BARESIP_MAKE_ARGS) -C $(@D) clean
 +endef
 +
-+define RE_INSTALL_STAGING_CMDS
-+	$(RE_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(MAKE) -C $(@D) install
++define BARESIP_INSTALL_TARGET_CMDS       
++	$(BARESIP_MAKE_ENV) DESTDIR=$(TARGET_DIR) $(MAKE) $(BARESIP_MAKE_ARGS) -C $(@D) install
 +endef
 +
-+define RE_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 644 -D $(@D)/libre.so $(TARGET_DIR)/usr/lib/libre.so
-+endef
-+
-+define RE_UNINSTALL_STAGING_CMDS
-+	$(RM) -r $(STAGING_DIR)/usr/include/re
-+	$(RM) $(STAGING_DIR)/usr/lib/libre.a
-+	$(RM) $(STAGING_DIR)/usr/lib/libre.so
-+endef
-+
-+define RE_UNINSTALL_TARGET_CMDS
-+	$(RM) $(TARGET_DIR)/usr/lib/libre.so
++define BARESIP_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/usr/bin/baresip
++	$(RM) -r $(TARGET_DIR)/usr/lib/baresip
++	$(RM) -r $(TARGET_DIR)/usr/share/baresip
 +endef
 +
 +$(eval $(call GENTARGETS))
