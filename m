@@ -1,32 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 22 Jan 2012 21:45:09 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.0g
-Message-ID: <20120122215542.E119590358@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 22 Jan 2012 22:57:27 +0100
+Subject: [Buildroot] [PATCH 2/2] syslinux: add support for host-install
+In-Reply-To: <1327181975-31060-2-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 21 Jan 2012 22:39:35 +0100")
+References: <1327181975-31060-1-git-send-email-arnout@mind.be>
+ <1327181975-31060-2-git-send-email-arnout@mind.be>
+Message-ID: <87ipk3h03c.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6d8abaf9f13d9ec9358ca6be2fc9986d2d13d251
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 0354f58..cb29fe4 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--OPENSSL_VERSION = 1.0.0f
-+OPENSSL_VERSION = 1.0.0g
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
+What was the reason for this again (please document in commit message)?
+
+
+-- 
+Bye, Peter Korsgaard
