@@ -1,41 +1,108 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 22 Jan 2012 14:49:07 +0100
-Subject: [Buildroot] [PATCH 1/2] syslinux: bump to version 4.04
-In-Reply-To: <20120122033848.GB2568@tarshish>
-References: <1327181975-31060-1-git-send-email-arnout@mind.be>
- <20120122033848.GB2568@tarshish>
-Message-ID: <201201221449.08760.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 22 Jan 2012 14:50:24 +0100
+Subject: [Buildroot] [PATCH 1/2] re: new package
+Message-ID: <1327240226-6082-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 22 January 2012 04:38:48 Baruch Siach wrote:
-> Hi Arnout,
-> 
-> On Sat, Jan 21, 2012 at 10:39:34PM +0100, Arnout Vandecappelle (Essensium/Mind) wrote:
-> > From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> > -SYSLINUX_VERSION = 3.85
-> > +SYSLINUX_VERSION = 4.04
-> 
-> Version 4.05 is present in 
-> http://www.kernel.org/pub/linux/utils/boot/syslinux/4.xx/.
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- Sorry, too much work.  The isohybrid installer requires uuid.h in 4.05.
-The current syslinux mk file builds everything, not just the pxelinux.bin
-and isolinux.bin that we really want, so you would need to depend on
-util-linux's libuuid.  However, syslinux is compiled with HOST_CC instead
-of TARGET_CC, so you don't get access to libuuid...  It's all kind of
-messy and difficult to understand, and probably requires patching
-syslinux's Makefile to support proper cross-compiling to start with.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Laurent Kersten <laurent.kersten@essensium.com>
+---
+ package/Config.in    |    1 +
+ package/re/Config.in |   11 +++++++++++
+ package/re/re.mk     |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+), 0 deletions(-)
+ create mode 100644 package/re/Config.in
+ create mode 100644 package/re/re.mk
 
- Regards,
- Arnout
+diff --git a/package/Config.in b/package/Config.in
+index efed5a0..100ee53 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -353,6 +353,7 @@ source "package/libmbus/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
++source "package/re/Config.in"
+ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
+ source "package/libupnp/Config.in"
+diff --git a/package/re/Config.in b/package/re/Config.in
+new file mode 100644
+index 0000000..c458ba6
+--- /dev/null
++++ b/package/re/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_RE
++	bool "re library"
++	help
++	  Toolkit library for asynchronous network IO
++	  with protocol stacks including SIP, SDP, RTP,
++	  STUN, TURN, ICE and DNS.
++
++	  Warning: if you use uClibc, you must enable
++	  UCLIBC_HAS_BSD_RES_CLOSE.
++  
++	  http://www.creytiv.com
+diff --git a/package/re/re.mk b/package/re/re.mk
+new file mode 100644
+index 0000000..93bc50a
+--- /dev/null
++++ b/package/re/re.mk
+@@ -0,0 +1,49 @@
++#############################################################
++#
++# re
++#
++#############################################################
++
++RE_VERSION = 0.2.0
++RE_SITE = http://www.creytiv.com/pub
++RE_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++RE_DEPENDENCIES += openssl
++endif
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++RE_DEPENDENCIES += zlib
++endif
++
++RE_MAKE_ENV = \
++	$(TARGET_CONFIGURE_OPTS) \
++	SYSROOT=$(STAGING_DIR)/usr \
++	LFLAGS="$(TARGET_LDFLAGS)"
++
++define RE_BUILD_CMDS
++	$(RE_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define RE_CLEAN_CMDS
++	$(RE_MAKE_ENV) $(MAKE) -C $(@D) clean
++endef
++
++define RE_INSTALL_STAGING_CMDS
++	$(RE_MAKE_ENV) DESTDIR=$(STAGING_DIR) $(MAKE) -C $(@D) install
++endef
++
++define RE_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 644 -D $(@D)/libre.so $(TARGET_DIR)/usr/lib/libre.so
++endef
++
++define RE_UNINSTALL_STAGING_CMDS
++	$(RM) -r $(STAGING_DIR)/usr/include/re
++	$(RM) $(STAGING_DIR)/usr/lib/libre.a
++	$(RM) $(STAGING_DIR)/usr/lib/libre.so
++endef
++
++define RE_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/usr/lib/libre.so
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.8.3
