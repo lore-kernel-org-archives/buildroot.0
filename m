@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 22 Jan 2012 21:51:55 +0100
-Subject: [Buildroot] [PATCH 1/2] libidn: bump to version 1.24
-In-Reply-To: <1327086863-9470-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 20 Jan 2012 16:14:22 -0300")
+Date: Sun, 22 Jan 2012 21:56:47 +0100
+Subject: [Buildroot] [PATCH 2/2] openssl: security bump to version 1.0.0g
+In-Reply-To: <1327086863-9470-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 20 Jan 2012 16:14:23 -0300")
 References: <1327086863-9470-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y5szh34k.fsf@macbook.be.48ers.dk>
+ <1327086863-9470-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ty3nh2wg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
