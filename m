@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 22 Jan 2012 23:24:40 +0100
-Subject: [Buildroot] [PATCH] ffmpeg: depends on host-nasm if MMX is
-	enabled
-In-Reply-To: <1327233857-25481-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 22 Jan 2012 13:04:16 +0100")
-References: <1327233857-25481-1-git-send-email-arnout@mind.be>
-Message-ID: <8762g3gytz.fsf@macbook.be.48ers.dk>
+Date: Sun, 22 Jan 2012 23:25:20 +0100
+Subject: [Buildroot] [PATCH] tcl: add host version
+In-Reply-To: <1327182832-9615-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 21 Jan 2012 22:53:52 +0100")
+References: <1327182832-9615-1-git-send-email-arnout@mind.be>
+Message-ID: <871uqrgysv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +14,9 @@ To: buildroot@busybox.net
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
  Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> Also formatting cleanup.
 
-Committed, thanks.
+Please document why we need a host version.
 
 -- 
 Bye, Peter Korsgaard
