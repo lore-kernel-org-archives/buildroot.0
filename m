@@ -1,38 +1,108 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 22 Jan 2012 16:31:02 +0100
-Subject: [Buildroot] [git commit] libv4l: bump version
-Message-ID: <20120122200858.5B3BE8FDDA@busybox.osuosl.org>
+Date: Sun, 22 Jan 2012 21:08:15 +0100
+Subject: [Buildroot] [git commit] sane-backends: fix libv4l dependency
+Message-ID: <20120122200858.800DA8FDDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3c5be770be0bab1975af3d908299f6c46d83fab1
+commit: http://git.buildroot.net/buildroot/commit/?id=0376a2bc112107434eeedac0dd1b5220e503ec6e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Jpeg decompression is now done using libjpeg.
+Patch from Fedora.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libv4l/libv4l.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ .../sane-backends/sane-backends-1.0.22-v4l.patch   |   66 ++++++++++++++++++++
+ package/sane-backends/sane-backends.mk             |    4 +
+ 2 files changed, 70 insertions(+), 0 deletions(-)
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 4df64fc..dbd8769 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -3,11 +3,12 @@
- # libv4l
- #
- #############################################################
--LIBV4L_VERSION = 0.8.3
-+LIBV4L_VERSION = 0.8.5
- LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
- LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils/
- LIBV4L_INSTALL_STAGING = YES
- LIBV4L_MAKE_OPTS = PREFIX=/usr
-+LIBV4L_DEPENDENCIES = jpeg
+diff --git a/package/sane-backends/sane-backends-1.0.22-v4l.patch b/package/sane-backends/sane-backends-1.0.22-v4l.patch
+new file mode 100644
+index 0000000..e9bdd20
+--- /dev/null
++++ b/package/sane-backends/sane-backends-1.0.22-v4l.patch
+@@ -0,0 +1,66 @@
++From Fedora git: http://pkgs.fedoraproject.org/gitweb/?p=sane-backends.git;a=blob;f=sane-backends-1.0.22-v4l.patch;hb=4c4b8135b896ef9f00b926ce5f435ae5c9b156d5
++
++From 26c69b228b29f612faf4b0cc85db969ee7cc4ea6 Mon Sep 17 00:00:00 2001
++From: Nils Philippsen <nils@redhat.com>
++Date: Mon, 14 Mar 2011 13:35:05 +0100
++Subject: [PATCH] patch: v4l
++
++Squashed commit of the following:
++
++commit 23381932c76846191b42a48e505b37cd74711265
++Author: Julien BLACHE <jb@jblache.org>
++Date:   Wed Feb 16 19:37:43 2011 +0100
++
++    Fix v4l build with libv4l 0.8.3+
++
++    (cherry picked from commit c5ca46c2d1be78c651afb843cc834cf2b5b24953)
++
++    Conflicts:
++
++    	ChangeLog
++
++    Signed-off-by: Nils Philippsen <nils@redhat.com>
++---
++ backend/v4l.c |    3 +--
++ backend/v4l.h |    3 ++-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/backend/v4l.c b/backend/v4l.c
++index 6510ef0..38595ed 100644
++--- a/backend/v4l.c
+++++ b/backend/v4l.c
++@@ -84,9 +84,8 @@
++ #include "../include/sane/sanei_config.h"
++ #define V4L_CONFIG_FILE "v4l.conf"
++ 
++-#include "v4l.h"
++-
++ #include <libv4l1.h>
+++#include "v4l.h"
++ 
++ static const SANE_Device **devlist = NULL;
++ static int num_devices;
++diff --git a/backend/v4l.h b/backend/v4l.h
++index 588b96e..6aee586 100644
++--- a/backend/v4l.h
+++++ b/backend/v4l.h
++@@ -29,6 +29,7 @@
++ #ifndef v4l_h
++ #define v4l_h
++ 
+++#ifndef __LINUX_VIDEODEV_H
++ /* Kernel interface */
++ /* Only the stuff we need. For more features, more defines are needed */
++ 
++@@ -165,7 +166,7 @@ struct video_channel
++ 
++ 
++ /* end of kernel interface */
++-
+++#endif /* !__LINUX_VIDEODEV_H */
++ 
++ #include <../include/sane/sane.h>
++ 
++-- 
++1.7.4
++
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index d9f3690..621cff5 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -22,6 +22,10 @@ ifeq ($(BR2_PACKAGE_TIFF),y)
+ SANE_BACKENDS_DEPENDENCIES += tiff
+ endif
  
- LIBV4L_DIRS_y += lib
- LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_DECODE_TM6000)	+= utils/decode_tm6000
++ifeq ($(BR2_PACKAGE_LIBV4L),y)
++SANE_BACKENDS_DEPENDENCIES += libv4l
++endif
++
+ ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yyy)
+ SANE_BACKENDS_DEPENDENCIES += avahi
+ SANE_BACKENDS_CONF_OPT += --enable-avahi
