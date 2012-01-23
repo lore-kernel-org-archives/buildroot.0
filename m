@@ -1,70 +1,36 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Mon, 23 Jan 2012 16:36:27 +0000
-Subject: [Buildroot] [PATCH 14/14] libedbus: Add new package
-Message-ID: <CAFbHwiRMV41vA3FUVdekg6H123c-yyUV7n5qQQHObJ-yw0Qc=g@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Jan 2012 21:07:48 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: fix missing 3993 for
+	AUTOTARGET's SUBDIR
+In-Reply-To: <87aa5fgyz0.fsf@macbook.be.48ers.dk>
+References: <1327182759-23029-1-git-send-email-arnout@mind.be>
+ <87aa5fgyz0.fsf@macbook.be.48ers.dk>
+Message-ID: <201201232107.49146.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
----
- package/efl/Config.in            |    1 +
- package/efl/libedbus/Config.in   |    8 ++++++++
- package/efl/libedbus/libedbus.mk |   16 ++++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
- create mode 100644 package/efl/libedbus/Config.in
- create mode 100644 package/efl/libedbus/libedbus.mk
+On Sunday 22 January 2012 23:21:39 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+> 
+>  Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+>  Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> That isn't really a good commit message, but I adjusted that and
+> committed, thanks.
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index ec8c513..c783d7f 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -18,6 +18,7 @@ source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
- source "package/efl/libethumb/Config.in"
- source "package/efl/libelementary/Config.in"
-+source "package/efl/libedbus/Config.in"
+ The 3993 is a $$ which got expanded to the shell's PID.  So no my shell's 
+PID is saved in history for eternity :-)
 
- endif # BR2_PACKAGE_EFL
+ Regards,
+ Arnout
 
-diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
-new file mode 100644
-index 0000000..71e3b50
---- /dev/null
-+++ b/package/efl/libedbus/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBEDBUS
-+	bool "libedbus"
-+	select BR2_PACKAGE_LIBEINA
-+	select BR2_PACKAGE_DBUS
-+	help
-+	  E_Dbus is a set of wrappers around DBus APIs by third party, so
-+	  they can be easily used by EFL applications, automatically
-+	  providing Ecore/main loop integration, as well as Eina data types.
-diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
-new file mode 100644
-index 0000000..e2ac836
---- /dev/null
-+++ b/package/efl/libedbus/libedbus.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# libedbus
-+#
-+#############################################################
-+
-+LIBEDBUS_VERSION = 1.1.0
-+LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
-+LIBEDBUS_SITE = http://download.enlightenment.org/releases/
-+LIBEDBUS_AUTORECONF = YES
-+LIBEDBUS_LIBTOOL_PATCH = YES
-+LIBEDBUS_INSTALL_STAGING = YES
-+
-+LIBEDBUS_DEPENDENCIES = host-pkg-config dbus libeina
-+
-+$(eval $(call AUTOTARGETS))
 -- 
-1.7.1
--------------- next part --------------
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
