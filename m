@@ -1,27 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jan 2012 09:59:23 +0100
-Subject: [Buildroot] [PATCH] sqlcipher: new package
-In-Reply-To: <1327183020-16149-1-git-send-email-arnout@mind.be>
-References: <1327183020-16149-1-git-send-email-arnout@mind.be>
-Message-ID: <20120123095923.56576574@skate>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 23 Jan 2012 10:09:08 +0100
+Subject: [Buildroot] [PATCH 1/3] jpeg: bump to v8d
+Message-ID: <1327309750-7104-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 21 Jan 2012 22:57:00 +0100,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> SQLCipher is a fork of SQLite that adds AES encryption using OpenSSL.
-> It relies on tcl to generate some of its source code, so host-tcl is
-> required.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/jpeg/jpeg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-The dependency on host-tcl is missing, no?
-
-Thomas
+diff --git a/package/jpeg/jpeg.mk b/package/jpeg/jpeg.mk
+index bac5f3e..555c3e1 100644
+--- a/package/jpeg/jpeg.mk
++++ b/package/jpeg/jpeg.mk
+@@ -3,7 +3,7 @@
+ # jpeg (libraries needed by some apps)
+ #
+ #############################################################
+-JPEG_VERSION = 8c
++JPEG_VERSION = 8d
+ JPEG_SITE = http://www.ijg.org/files/
+ JPEG_SOURCE = jpegsrc.v$(JPEG_VERSION).tar.gz
+ JPEG_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1.1
