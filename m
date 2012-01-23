@@ -1,27 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jan 2012 22:14:07 +0100
-Subject: [Buildroot] Add rt squarewave example in buildroot
-In-Reply-To: <loom.20120123T152253-656@post.gmane.org>
-References: <loom.20120123T152253-656@post.gmane.org>
-Message-ID: <20120123221407.2d5f5043@skate>
+Date: Mon, 23 Jan 2012 22:15:37 +0100
+Subject: [Buildroot] [PATCH 01/14] jpeg: Allow building of libjpeg for
+ the host
+In-Reply-To: <CAFbHwiR7en5qANxRvtOzu=+tvd30s_hT7L7PWzQ=zR2WyxpKqg@mail.gmail.com>
+References: <CAFbHwiR7en5qANxRvtOzu=+tvd30s_hT7L7PWzQ=zR2WyxpKqg@mail.gmail.com>
+Message-ID: <20120123221537.20559df1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 23 Jan 2012 14:43:06 +0000 (UTC),
-Willy <willy@willygroup.org> a ?crit :
+Le Mon, 23 Jan 2012 16:35:09 +0000,
+Will Newton <will.newton@gmail.com> a ?crit :
 
-> I've compiled and configured the 3.0.14 kernel with rt patch? 
-> in buildroot 11-2011.
+> Signed-off-by: Will Newton <will.newton@imgtec.com>
 
-Which toolchain are you using? Have you modified the uClibc
-configuration?
-
-Best regards,
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
