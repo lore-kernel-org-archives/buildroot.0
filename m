@@ -1,7 +1,7 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Mon, 23 Jan 2012 16:35:31 +0000
-Subject: [Buildroot] [PATCH 06/14] libevas: Add new package
-Message-ID: <CAFbHwiSO2O7Yvg_6eJ3_J0H3o4hYCjSeE5wD9N55wCfxb5e4ww@mail.gmail.com>
+Date: Mon, 23 Jan 2012 16:35:38 +0000
+Subject: [Buildroot] [PATCH 07/14] libecore: Add new package
+Message-ID: <CAFbHwiT=bhg_jZAWkXgxdM9JkOrT3FoWksvxyO57MTbaTov4dQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,459 +11,130 @@ To: buildroot@busybox.net
 Signed-off-by: Will Newton <will.newton@imgtec.com>
 Reviewed-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/efl/Config.in          |    1 +
- package/efl/libevas/Config.in  |  238 ++++++++++++++++++++++++++++++++++++++++
- package/efl/libevas/libevas.mk |  185 +++++++++++++++++++++++++++++++
- 3 files changed, 424 insertions(+), 0 deletions(-)
- create mode 100644 package/efl/libevas/Config.in
- create mode 100644 package/efl/libevas/libevas.mk
+ package/efl/Config.in            |    1 +
+ package/efl/libecore/Config.in   |   36 ++++++++++++++++++++++
+ package/efl/libecore/libecore.mk |   61 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 98 insertions(+), 0 deletions(-)
+ create mode 100644 package/efl/libecore/Config.in
+ create mode 100644 package/efl/libecore/libecore.mk
 
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 8ca514d..27d1f95 100644
+index 27d1f95..3007783 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -10,6 +10,7 @@ if BR2_PACKAGE_EFL
+@@ -9,6 +9,7 @@ menuconfig BR2_PACKAGE_EFL
+ if BR2_PACKAGE_EFL
 
  source "package/efl/libeina/Config.in"
++source "package/efl/libecore/Config.in"
  source "package/efl/libeet/Config.in"
-+source "package/efl/libevas/Config.in"
+ source "package/efl/libevas/Config.in"
 
- endif # BR2_PACKAGE_EFL
-
-diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+diff --git a/package/efl/libecore/Config.in b/package/efl/libecore/Config.in
 new file mode 100644
-index 0000000..04926ab
+index 0000000..35c9966
 --- /dev/null
-+++ b/package/efl/libevas/Config.in
-@@ -0,0 +1,238 @@
-+config BR2_PACKAGE_LIBEVAS
-+	bool "libevas"
-+	select BR2_PACKAGE_FREETYPE
++++ b/package/efl/libecore/Config.in
+@@ -0,0 +1,36 @@
++config BR2_PACKAGE_LIBECORE
++	bool "libecore"
 +	select BR2_PACKAGE_LIBEINA
 +	help
-+	  Evas is a clean display canvas API for several target
-+	  display systems that can draw anti-aliased text, smooth
-+	  super and sub-sampled scaled images, alpha-blend objects
-+	  much and more.
++	  Ecore is the event/X abstraction layer that makes doing
++	  selections, Xdnd, general X stuff, event loops, timeouts and
++	  idle handlers fast, optimized, and convenient.
 +
-+if BR2_PACKAGE_LIBEVAS
++if BR2_PACKAGE_LIBECORE
 +
-+comment "libevas rendering options"
++config BR2_PACKAGE_LIBECORE_DIRECTFB
++	bool "libecore DirectFB support"
++	select BR2_PACKAGE_DIRECTFB
 +
-+config BR2_PACKAGE_LIBEVAS_SCALE_SAMPLE
-+	bool "libevas sampling scaler"
-+	help
-+	  This enables the sampling scaler code. This is the fastest
-+	  image scaling code, but also the lowest quality.
++config BR2_PACKAGE_LIBECORE_FB
++	bool "libecore framebuffer support"
 +
-+config BR2_PACKAGE_LIBEVAS_SCALE_SMOOTH
-+	bool "libevas smooth scaler"
-+	help
-+	  This is the nicest looking scaler that is not that much
-+	  slower than tri-linear, but it looks really good.
-+
-+config BR2_PACKAGE_LIBEVAS_SMALL_DITHERING
-+	bool "libevas small dithering"
-+	help
-+	  This uses a 4x4 dither mask instead of 128x128. On desktop
-+	  boxes these days (Pentium, Pentium2, amd etc.) the speed
-+	  difference is not really measurable, but the quality of the
-+	  128x128 dither mask is quite a lot better.
-+
-+config BR2_PACKAGE_LIBEVAS_LINE_DITHERING
-+	bool "libevas line dithering"
-+
-+config BR2_PACKAGE_LIBEVAS_NO_DITHERING
-+	bool "libevas no dithering"
-+
-+
-+comment "libevas backends"
-+
-+config BR2_PACKAGE_LIBEVAS_BUFFER
-+	bool "libevas buffer backend"
-+	depends on BR2_PACKAGE_XORG7
-+	help
-+	  This enables the software buffer rendering engine. There is
-+	  no hardware assist here.
-+
-+config BR2_PACKAGE_LIBEVAS_DIRECTFB
-+	bool "libevas DirectFB backend"
-+	depends on BR2_PACKAGE_DIRECTFB
-+	help
-+	  This is the DirectFB engine that uses the DirectFB library
-+	  (http://www.directfb.org) on Linux to access the framebuffer
-+	  with (or maybe without) acceleration.
-+
-+config BR2_PACKAGE_LIBEVAS_FB
-+	bool "libevas frame buffer backend"
-+	help
-+	  This is the software framebuffer driving engine. this uses
-+	  the linux framebuffer device (/dev/fb<x>) and will currently
-+	  just inherit the current framebuffer settings on the fb
-+	  device and use them to run in.
-+
-+config BR2_PACKAGE_LIBEVAS_SDL
-+	bool "libevas SDL backend"
++config BR2_PACKAGE_LIBECORE_SDL
++	bool "libecore SDL support"
 +	select BR2_PACKAGE_SDL
-+	help
-+	  This is the software SDL engine that uses SDL library
-+	  (http://www.libsdl.org). This library should work on many
-+	  operating systems.
 +
-+config BR2_PACKAGE_LIBEVAS_SDL_GL
-+	bool "libevas SDL OpenGL backend"
-+	select BR2_PACKAGE_SDL
-+	help
-+	  This is the SDL OpenGL engine that uses SDL library
-+	  and OpenGL to render. This may be hardware accelerated.
-+
-+config BR2_PACKAGE_LIBEVAS_X11
-+	bool "libevas X11 backend"
++config BR2_PACKAGE_LIBECORE_X
++	bool "libecore X support"
 +	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  This enables the software X11 rendering engine that renders
-+	  to X drawable targets using highly optimised software
-+	  routines. There is no hardware assist here.
++	select BR2_PACKAGE_XLIB_LIBXEXT
 +
-+config BR2_PACKAGE_LIBEVAS_X11_GLX
-+	bool "libevas X11 GLX backend"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+	help
-+	  This enables the OpenGL X11 rendering engine that renders
-+	  using GLX which may be hardware accelerated.
-+
-+config BR2_PACKAGE_LIBEVAS_XCB
-+	bool "libevas XCB backend"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL
++config BR2_PACKAGE_LIBECORE_X_XCB
++	bool "libecore XCB support"
++	depends on BR2_PACKAGE_LIBECORE_X
 +	select BR2_PACKAGE_XCB_PROTO
-+	select BR2_PACKAGE_PIXMAN
-+	help
-+	  This enable the software XCB rendering engine. It allows the
-+	  same features than the software X11 engine.
 +
-+config BR2_PACKAGE_LIBEVAS_XCB_GLX
-+	bool "libevas XCB GLX backend"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+	select BR2_PACKAGE_XCB_UTIL
-+	select BR2_PACKAGE_XCB_PROTO
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+	help
-+	  This enables the OpenGL X11 XCB rendering engine that renders
-+	  using GLX which may be hardware accelerated.
++config BR2_PACKAGE_LIBECORE_EVAS
++	bool "libecore Evas support"
++	select BR2_PACKAGE_LIBEVAS
 +
-+choice
-+	prompt "libevas OpenGL flavor"
-+	depends on BR2_PACKAGE_LIBEVAS_SDL_GL || BR2_PACKAGE_LIBEVAS_X11_GLX
-|| BR2_PACKAGE_LIBEVAS_XCB_GLX
-+	default BR2_PACKAGE_LIBEVAS_GL
-+
-+config BR2_PACKAGE_LIBEVAS_GL
-+       bool "generic OpenGL"
-+
-+config BR2_PACKAGE_LIBEVAS_GLES_SGX
-+       bool "OpenGL-ES SGX"
-+
-+config BR2_PACKAGE_LIBEVAS_GLES_S3C6410
-+       bool "OpenGL-ES S3C6410"
-+endchoice
-+
-+
-+comment "libevas code tuning"
-+
-+config BR2_PACKAGE_LIBEVAS_DISABLE_C
-+	bool "libevas disable C code"
-+	depends on BR2_PACKAGE_LIBEVAS_MMX || BR2_PACKAGE_LIBEVAS_SSE ||
-BR2_PACKAGE_LIBEVAS_SSE3
-+	help
-+	  This disables the generic C fallback code which is not required
-+	  if MMX or SSE is used instead.
-+
-+config BR2_PACKAGE_LIBEVAS_MMX
-+	bool "libevas MMX routines"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  This enables the MMX optimized routines. this works for
-+	  Pentium, Pentium 2, Pentium 3, Pentium 4, Athlon and Duron
-+	  processors.
-+
-+config BR2_PACKAGE_LIBEVAS_SSE
-+	bool "libevas SSE routines"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  This enables SSE optimizations available in the Pentium 3 and
-+	  4 cpus (not Athlon and Duron or Pentium 2 or Pentium cpus).
-+
-+config BR2_PACKAGE_LIBEVAS_SSE3
-+	bool "libevas SSE3 routines"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  This enables SSE3 optimizations available in the Pentium 4 and
-+	  above cpus.
-+
-+config BR2_PACKAGE_LIBEVAS_ALTIVEC
-+	bool "libevas altivec routines"
-+	depends on BR2_powerpc
-+	help
-+	  This enables AltiVec optimizations available in soem PowerPC cpus.
-+
-+config BR2_PACKAGE_LIBEVAS_NEON
-+	bool "libevas neon routines"
-+	depends on BR2_arm
-+	help
-+	  This enables NEON optimizations available in some ARM cpus.
-+
-+
-+comment "libevas loaders"
-+
-+config BR2_PACKAGE_LIBEVAS_PNG
-+	bool "libevas png loader"
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  This enables the loader code that loads png files using
-+	  libpng.
-+
-+config BR2_PACKAGE_LIBEVAS_JPEG
-+	bool "libevas jpeg loader"
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  This enables the loader code that loads jpeg files using
-+	  libjpeg.
-+
-+config BR2_PACKAGE_LIBEVAS_GIF
-+	bool "libevas gif loader"
-+	select BR2_PACKAGE_LIBUNGIF
-+	help
-+	  This enables the loader code that loads gif files using
-+	  libungif.
-+
-+config BR2_PACKAGE_LIBEVAS_PMAPS
-+	bool "libevas pmaps loader"
-+	help
-+	  This enables the loader code that loads pmaps files.
-+
-+config BR2_PACKAGE_LIBEVAS_TIFF
-+	bool "libevas tiff loader"
-+	select BR2_PACKAGE_TIFF
-+	help
-+	  This enables the loader code that loads tiff files.
-+
-+config BR2_PACKAGE_LIBEVAS_SVG
-+	bool "libevas svg loader"
-+	help
-+	  This enables the loader code that loads svg files.
-+
-+config BR2_PACKAGE_LIBEVAS_XPM
-+	bool "libevas xpm loader"
-+	help
-+	  This enables the loader code that loads xpm files.
-+
-+config BR2_PACKAGE_LIBEVAS_EET
-+	bool "libevas eet image loader"
-+	select BR2_PACKAGE_LIBEET
-+	help
-+	  This enables the loader code that loads images using libeet.
-+
-+config BR2_PACKAGE_LIBEVAS_EET_FONT
-+	bool "libevas eet font loader"
-+	select BR2_PACKAGE_LIBEET
-+	help
-+	  This enables the loader code that loads fonts using libeet.
-+
-+endif # BR2_PACKAGE_LIBEVAS
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
++endif # BR2_PACKAGE_LIBECORE
+diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
 new file mode 100644
-index 0000000..7e1f2ca
+index 0000000..3082fcf
 --- /dev/null
-+++ b/package/efl/libevas/libevas.mk
-@@ -0,0 +1,185 @@
++++ b/package/efl/libecore/libecore.mk
+@@ -0,0 +1,61 @@
 +#############################################################
 +#
-+# libevas
++# libecore
 +#
 +#############################################################
 +
-+LIBEVAS_VERSION = 1.1.0
-+LIBEVAS_SOURCE = evas-$(LIBEVAS_VERSION).tar.bz2
-+LIBEVAS_SITE = http://download.enlightenment.org/releases/
-+LIBEVAS_INSTALL_STAGING = YES
++LIBECORE_VERSION = 1.1.0
++LIBECORE_SOURCE = ecore-$(LIBECORE_VERSION).tar.bz2
++LIBECORE_SITE = http://download.enlightenment.org/releases/
++LIBECORE_INSTALL_STAGING = YES
 +
-+LIBEVAS_DEPENDENCIES = host-pkg-config zlib libeina freetype
++LIBECORE_DEPENDENCIES = host-pkg-config libeina
 +
-+HOST_LIBEVAS_DEPENDENCIES = host-pkg-config host-zlib host-libeina
-host-freetype
++HOST_LIBECORE_DEPENDENCIES = host-pkg-config host-libeina
 +
-+# rendering options
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SCALE_SAMPLE),y)
-+LIBEVAS_CONF_OPT += --enable-scale-sample
++# default options
++LIBECORE_CONF_OPT = --disable-simple-x11
++
++# libecore
++ifeq ($(BR2_PACKAGE_LIBECORE_DIRECTFB),y)
++LIBECORE_CONF_OPT += --enable-ecore-directfb
 +else
-+LIBEVAS_CONF_OPT += --disable-scale-sample
++LIBECORE_CONF_OPT += --disable-ecore-directfb
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SCALE_SMOOTH),y)
-+LIBEVAS_CONF_OPT += --enable-scale-smooth
++ifeq ($(BR2_PACKAGE_LIBECORE_FB),y)
++LIBECORE_CONF_OPT += --enable-ecore-fb
 +else
-+LIBEVAS_CONF_OPT += --disable-scale-smooth
++LIBECORE_CONF_OPT += --disable-ecore-fb
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SMALL_DITHERING),y)
-+LIBEVAS_CONF_OPT += --enable-small-dither-mask
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_LINE_DITHERING),y)
-+LIBEVAS_CONF_OPT += --enable-line-dither-mask
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_NO_DITHERING),y)
-+LIBEVAS_CONF_OPT += --enable-no-dither-mask
-+endif
-+
-+# backends
-+ifeq ($(BR2_PACKAGE_LIBEVAS_BUFFER),y)
-+LIBEVAS_CONF_OPT += --enable-buffer
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_X11),y)
-+LIBEVAS_CONF_OPT += --enable-software-xlib
-+LIBEVAS_DEPENDENCIES += xproto_xproto
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_X11_GLX),y)
-+LIBEVAS_CONF_OPT += --enable-gl-xlib
-+LIBEVAS_DEPENDENCIES += xproto_glproto xlib_libX11
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_XCB),y)
-+LIBEVAS_CONF_OPT += --enable-software-xcb
-+LIBEVAS_DEPENDENCIES += libxcb xcb-proto xcb-util pixman
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_XCB_GLX),y)
-+LIBEVAS_CONF_OPT += --enable-gl-xcb
-+LIBEVAS_DEPENDENCIES += libxcb xcb-proto xcb-util xproto_glproto
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_FB),y)
-+LIBEVAS_CONF_OPT += --enable-fb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_DIRECTFB),y)
-+LIBEVAS_CONF_OPT += --enable-directfb
-+LIBEVAS_DEPENDENCIES += directfb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SDL),y)
-+LIBEVAS_CONF_OPT += --enable-software-sdl
-+LIBEVAS_DEPENDENCIES += sdl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SDL_GL),y)
-+LIBEVAS_CONF_OPT += --enable-gl-sdl
-+LIBEVAS_DEPENDENCIES += sdl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GLES_SGX),y)
-+LIBEVAS_CONF_OPT += --enable-gl-flavor-gles --enable-gles-variety-sgx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GLES_S3C6410),y)
-+LIBEVAS_CONF_OPT += --enable-gl-flavor-gles --enable-gles-variety-s3c6410
-+endif
-+
-+# code options
-+ifeq ($(BR2_PACKAGE_LIBEVAS_DISABLE_C),y)
-+LIBEVAS_CONF_OPT += --disable-cpu-c
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_MMX),y)
-+LIBEVAS_CONF_OPT += --enable-cpu-mmx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SSE),y)
-+LIBEVAS_CONF_OPT += --enable-cpu-sse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SSE3),y)
-+LIBEVAS_CONF_OPT += --enable-cpu-sse3
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_ALTIVEC),y)
-+LIBEVAS_CONF_OPT += --enable-cpu-altivec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_NEON),y)
-+LIBEVAS_CONF_OPT += --enable-cpu-neon
-+endif
-+
-+# loaders
-+ifeq ($(BR2_PACKAGE_LIBEVAS_PNG),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-png
-+LIBEVAS_DEPENDENCIES += libpng
++ifeq ($(BR2_PACKAGE_LIBECORE_SDL),y)
++LIBECORE_CONF_OPT += --enable-ecore-sdl
 +else
-+LIBEVAS_CONF_OPT += --disable-image-loader-png
++LIBECORE_CONF_OPT += --disable-ecore-sdl
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEVAS_JPEG),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-jpeg
-+LIBEVAS_DEPENDENCIES += jpeg
++ifeq ($(BR2_PACKAGE_LIBECORE_X),y)
++LIBECORE_CONF_OPT += --enable-ecore-x
++LIBECORE_DEPENDENCIES += xlib_libXext
 +else
-+LIBEVAS_CONF_OPT += --disable-image-loader-jpeg
++LIBECORE_CONF_OPT += --disable-ecore-x
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEVAS_GIF),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-gif
-+LIBEVAS_DEPENDENCIES += libungif
++ifeq ($(BR2_PACKAGE_LIBECORE_X_XCB),y)
++LIBECORE_CONF_OPT += --enable-ecore-x-xcb
++LIBECORE_DEPENDENCIES += xcb-proto
 +else
-+LIBEVAS_CONF_OPT += --disable-image-loader-gif
++LIBECORE_CONF_OPT += --disable-ecore-x-xcb
 +endif
 +
-+ifeq ($(BR2_PACKAGE_LIBEVAS_PMAPS),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-pmaps
++# libecore-evas
++ifeq ($(BR2_PACKAGE_LIBECORE_EVAS),y)
++LIBECORE_CONF_OPT += --enable-ecore-evas
++LIBECORE_DEPENDENCIES += libevas
 +else
-+LIBEVAS_CONF_OPT += --disable-image-loader-pmaps
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_SVG),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-svg
-+else
-+LIBEVAS_CONF_OPT += --disable-image-loader-svg
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_TIFF),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-tiff
-+LIBEVAS_DEPENDENCIES += tiff
-+else
-+LIBEVAS_CONF_OPT += --disable-image-loader-tiff
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_XPM),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-xpm
-+else
-+LIBEVAS_CONF_OPT += --disable-image-loader-xpm
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_EET),y)
-+LIBEVAS_CONF_OPT += --enable-image-loader-eet
-+LIBEVAS_DEPENDENCIES += libeet
-+else
-+LIBEVAS_CONF_OPT += --disable-image-loader-eet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEVAS_EET_FONT),y)
-+LIBEVAS_CONF_OPT += --enable-font-loader-eet
-+LIBEVAS_DEPENDENCIES += libeet
-+else
-+LIBEVAS_CONF_OPT += --disable-font-loader-eet
-+endif
-+
-+# documentation
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+LIBEVAS_CONF_OPT += --disable-doc
++LIBECORE_CONF_OPT += --disable-ecore-evas
 +endif
 +
 +$(eval $(call AUTOTARGETS))
