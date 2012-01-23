@@ -1,22 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jan 2012 09:58:54 +0100
-Subject: [Buildroot] [PATCH] tcl: add host version
-In-Reply-To: <871uqrgysv.fsf@macbook.be.48ers.dk>
-References: <1327182832-9615-1-git-send-email-arnout@mind.be>
- <871uqrgysv.fsf@macbook.be.48ers.dk>
-Message-ID: <20120123095854.34a7ef83@skate>
+Date: Mon, 23 Jan 2012 09:59:23 +0100
+Subject: [Buildroot] [PATCH] sqlcipher: new package
+In-Reply-To: <1327183020-16149-1-git-send-email-arnout@mind.be>
+References: <1327183020-16149-1-git-send-email-arnout@mind.be>
+Message-ID: <20120123095923.56576574@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 22 Jan 2012 23:25:20 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Le Sat, 21 Jan 2012 22:57:00 +0100,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-> Please document why we need a host version.
+> SQLCipher is a fork of SQLite that adds AES encryption using OpenSSL.
+> It relies on tcl to generate some of its source code, so host-tcl is
+> required.
 
-See the sqlcipher package posted by Arnout.
+The dependency on host-tcl is missing, no?
 
 Thomas
 -- 
