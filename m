@@ -1,23 +1,26 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Mon, 23 Jan 2012 09:22:02 +0100
-Subject: [Buildroot] [RFC PATCH v4 1/2] apply-patches.sh: script changed
- to support archives in a proper way
-In-Reply-To: <201201192321.43429.arnout@mind.be>
-References: <CAAXf6LWYfg-JO0NnW-ng2XfyTr159aGDSsU9Ec6NZriXQHpvrA@mail.gmail.com>
- <1326218516-28062-1-git-send-email-ludovic.desroches@atmel.com>
- <a1a34b76b35ddb80d06ab96bca9fb13a01922aef.1326218007.git.ludovic.desroches@atmel.com>
- <201201192321.43429.arnout@mind.be>
-Message-ID: <20120123082202.GV22482@ldesroches-Latitude-E6320>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Jan 2012 09:58:54 +0100
+Subject: [Buildroot] [PATCH] tcl: add host version
+In-Reply-To: <871uqrgysv.fsf@macbook.be.48ers.dk>
+References: <1327182832-9615-1-git-send-email-arnout@mind.be>
+ <871uqrgysv.fsf@macbook.be.48ers.dk>
+Message-ID: <20120123095854.34a7ef83@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Le Sun, 22 Jan 2012 23:25:20 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Thanks for your comments, I will rework this patch and send a new one.
+> Please document why we need a host version.
 
-Regards
+See the sqlcipher package posted by Arnout.
 
-Ludovic
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
