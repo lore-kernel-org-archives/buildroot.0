@@ -1,140 +1,50 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 23 Jan 2012 21:23:25 +0100
-Subject: [Buildroot] [PATCH v2 2/2] sqlcipher: new package
-In-Reply-To: <1327350205-25669-1-git-send-email-arnout@mind.be>
-References: <1327350205-25669-1-git-send-email-arnout@mind.be>
-Message-ID: <1327350205-25669-2-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Jan 2012 21:31:09 +0100
+Subject: [Buildroot] [PATCH 1/2] re: new package
+In-Reply-To: <20120123111235.58b957ff@skate>
+References: <1327240226-6082-1-git-send-email-arnout@mind.be>
+ <20120123111235.58b957ff@skate>
+Message-ID: <201201232131.09850.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On Monday 23 January 2012 11:12:35 Thomas Petazzoni wrote:
+> Le Sun, 22 Jan 2012 14:50:24 +0100,
+> "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+> 
+> >  package/Config.in    |    1 +
+> >  package/re/Config.in |   11 +++++++++++
+> >  package/re/re.mk     |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
+> 
+> Upstream, the package seems to be named 'libre' (the tarball is named
+> re-..., but the library is documented as libre on the website),
+> shouldn't we use the same name in Buildroot?
 
-SQLCipher is a fork of SQLite that adds AES encryption using OpenSSL.
-It relies on tcl to generate some of its source code, so host-tcl is
-required.
+ I also found libre a more logical name, but since the tar was called 
+re-$(VERSION).tar.gz I thought to keep that.  I hadn't thought of looking
+at the official name on the website, though.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: Added forgotten dependency on host-tcl
----
- package/Config.in              |    1 +
- package/sqlcipher/Config.in    |   27 ++++++++++++++++++
- package/sqlcipher/sqlcipher.mk |   58 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+), 0 deletions(-)
- create mode 100644 package/sqlcipher/Config.in
- create mode 100644 package/sqlcipher/sqlcipher.mk
+ I'll make a respin with libre instead of re.
 
-diff --git a/package/Config.in b/package/Config.in
-index f219e37..b245da8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -272,6 +272,7 @@ endmenu
- menu "Database"
- source "package/berkeleydb/Config.in"
- source "package/mysql_client/Config.in"
-+source "package/sqlcipher/Config.in"
- source "package/sqlite/Config.in"
- endmenu
- 
-diff --git a/package/sqlcipher/Config.in b/package/sqlcipher/Config.in
-new file mode 100644
-index 0000000..bf77307
---- /dev/null
-+++ b/package/sqlcipher/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_SQLCIPHER
-+	bool "sqlcipher"
-+	depends on !BR2_PACKAGE_SQLITE
-+	help
-+	  SQLCipher is an SQLite extension that provides 256 bits AES
-+	  encryption of database files.  Note that it is a fork of SQLite
-+	  and they cannot be installed side-by-side.
-+	  http://sqlcipher.net
-+
-+config BR2_PACKAGE_SQLCIPHER_READLINE
-+	bool "Command-line editing"
-+	depends on BR2_PACKAGE_SQLCIPHER
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
-+	help
-+	  Enable command-line editing. This requires ncurses and readline.
-+
-+config BR2_PACKAGE_SQLCIPHER_STAT3
-+	bool "Additional query optimizations (stat3)"
-+	depends on BR2_PACKAGE_SQLCIPHER
-+	help
-+	  Adds additional logic to the ANALYZE command and to the query
-+	  planner that can help SQLite to choose a better query plan under
-+	  certain situations.
-+
-+comment "sqlcipher conflicts with sqlite"
-+	depends on BR2_PACKAGE_SQLITE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-new file mode 100644
-index 0000000..e3d337a
---- /dev/null
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -0,0 +1,58 @@
-+#############################################################
-+#
-+# Sqlcipher extension of sqlite
-+# http://sqlcipher.net
-+#
-+#############################################################
-+SQLCIPHER_VERSION = 1.1.9
-+SQLCIPHER_SITE = http://github.com/sjlombardo/sqlcipher/tarball/v$(SQLCIPHER_VERSION)
-+SQLCIPHER_DEPENDENCIES = openssl host-tcl
-+SQLCIPHER_INSTALL_STAGING = YES
-+
-+SQLCIPHER_CONF_ENV = \
-+	CFLAGS+=" $(SQLCIPHER_CFLAGS)" \
-+	LDFLAGS+=" $(SQLCIPHER_LDFLAGS)" \
-+	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh8.4
-+
-+SQLCIPHER_CONF_OPT = \
-+	--enable-threadsafe \
-+	--localstatedir=/var
-+
-+SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
-+SQLCIPHER_LDFLAGS += -lcrypto
-+
-+ifneq ($(BR2_LARGEFILE),y)
-+# the sqlite configure script fails to define SQLITE_DISABLE_LFS when
-+# --disable-largefile is passed, breaking the build. Work around it by
-+# simply adding it to CFLAGS for configure instead
-+SQLCIPHER_CFLAGS += -DSQLITE_DISABLE_LFS
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLCIPHER_STAT3),y)
-+SQLCIPHER_CFLAGS += -DSQLITE_ENABLE_STAT3
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLCIPHER_READLINE),y)
-+SQLCIPHER_DEPENDENCIES += ncurses readline
-+SQLCIPHER_CONF_OPT += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
-+else
-+SQLCIPHER_CONF_OPT += --disable-readline
-+endif
-+
-+define SQLCIPHER_UNINSTALL_TARGET_CMDS
-+	rm -f $(TARGET_DIR)/usr/bin/sqlite3
-+	rm -f $(TARGET_DIR)/usr/lib/libsqlite3*
-+	rm -f $(TARGET_DIR)/usr/lib/pkgconfig/sqlite3.pc
-+	rm -f $(TARGET_DIR)/usr/include/sqlite3*.h
-+endef
-+
-+define SQLCIPHER_UNINSTALL_STAGING_CMDS
-+	rm -f $(STAGING_DIR)/usr/bin/sqlite3
-+	rm -f $(STAGING_DIR)/usr/lib/libsqlite3*
-+	rm -f $(STAGING_DIR)/usr/lib/pkgconfig/sqlite3.pc
-+	rm -f $(STAGING_DIR)/usr/include/sqlite3*.h
-+endef
-+
-+$(eval $(call AUTOTARGETS))
-+
-+
+> > +define RE_INSTALL_TARGET_CMDS
+> > +	$(INSTALL) -m 644 -D $(@D)/libre.so $(TARGET_DIR)/usr/lib/libre.so
+> > +endef
+> 
+> I guess that the package build system doesn't use .so versioning?
+
+ Not that I could find, no.
+
+ Regards,
+ Arnout
+
+
 -- 
-1.7.8.3
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
