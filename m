@@ -1,46 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 24 Jan 2012 12:59:47 +0100
-Subject: [Buildroot] [git commit] syslinux: add support for host-install
-Message-ID: <20120124120024.EB91D903C9@busybox.osuosl.org>
+Date: Tue, 24 Jan 2012 12:46:37 +0100
+Subject: [Buildroot] [git commit] gdb: also force ELF support for gdbhost
+Message-ID: <20120124120024.DA4EB903C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9baaa5b4a39145f4cc64c6bba1a6aa8cec48f00a
+commit: http://git.buildroot.net/buildroot/commit/?id=afb6e3ed52142ef8d9450a743f9487c4fedf9a0f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This makes it possible to build the syslinux/extlinux installer, so a
-bootable USB drive, CompactFlash or SD card can be created by a user
-script.
+Similar to how we do for target (ee39d53ce3ee (Fix GDB BFD test linking)).
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Gdb comes with an embedded copy of libiberty, but binutils also installs
+libiberty.a into HOST_DIR. The gdb configure script tries to link against
+this one rather than the gdb version when it checks for ELF support.
+This may fail if those versions are not compatible, leading to obscure
+error messages from gdb at runtime such as:
+
+I'm sorry, Dave, I can't do that. Symbol format `elf32-$ARCH' unknown.
+
+Fix it by forcing ELF support.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- boot/syslinux/syslinux.mk |   14 ++++++++++++++
- 1 files changed, 14 insertions(+), 0 deletions(-)
+ toolchain/gdb/gdb.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index da30d5a..3e89bdf 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -26,4 +26,18 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
- 	done
- endef
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 85b892f..56faf49 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -195,6 +195,8 @@ $(GDB_HOST_DIR)/.configured: $(GDB_DIR)/.unpacked
+ 	touch $@
  
-+
-+define HOST_SYSLINUX_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_SYSLINUX_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-+endef
-+
-+define HOST_SYSLINUX_CLEAN_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) clean
-+endef
-+
- $(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
+ $(GDB_HOST_DIR)/gdb/gdb: $(GDB_HOST_DIR)/.configured
++	# force ELF support since it fails due to BFD linking problems
++	gdb_cv_var_elf=yes \
+ 	$(MAKE) -C $(GDB_HOST_DIR)
+ 	strip $(GDB_HOST_DIR)/gdb/gdb
+ 
