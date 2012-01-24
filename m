@@ -1,29 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2012 11:53:32 +0100
-Subject: [Buildroot] [PATCH] pkg-infra: fix missing 3993 for
- AUTOTARGET's SUBDIR
-In-Reply-To: <201201232107.49146.arnout@mind.be>
-References: <1327182759-23029-1-git-send-email-arnout@mind.be>
- <87aa5fgyz0.fsf@macbook.be.48ers.dk>
- <201201232107.49146.arnout@mind.be>
-Message-ID: <20120124115332.19c44e64@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 24 Jan 2012 11:46:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 4429] buildroot 2011.08 does not build on Ubuntu
+	11.10
+In-Reply-To: <bug-4429-163@https.bugs.busybox.net/>
+References: <bug-4429-163@https.bugs.busybox.net/>
+Message-ID: <20120124114606.217339039E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 23 Jan 2012 21:07:48 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=4429
 
->  The 3993 is a $$ which got expanded to the shell's PID.  So no my
-> shell's PID is saved in history for eternity :-)
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> 2012-01-24 11:46:05 UTC ---
+(In reply to comment #4)
+> I've opened bug 920661 [1] against byobu to have it not set the environment
+> variable SED.
+> 
+> --
+> [1] https://bugs.launchpad.net/byobu/+bug/920661
 
-Ah, ah :-) I was wondering what was the meaning of this 3993 number :)
 
-Thomas
+Thanks. Out of interest what does byobu set SED to?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
