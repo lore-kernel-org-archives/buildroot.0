@@ -1,26 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 24 Jan 2012 21:54:47 +0000 (UTC)
-Subject: [Buildroot] [Bug 4429] buildroot 2011.08 does not build on Ubuntu
-	11.10
-In-Reply-To: <bug-4429-163@https.bugs.busybox.net/>
-References: <bug-4429-163@https.bugs.busybox.net/>
-Message-ID: <20120124215447.670BA9039B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 24 Jan 2012 23:34:15 +0100
+Subject: [Buildroot] [git commit] libgtk2: bump version
+Message-ID: <20120124223446.507F09039C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4429
+commit: http://git.buildroot.net/buildroot/commit/?id=f8cdf54d4dcd1d17c1e53cd2d7e4c1facac2de99
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #6 from Scott Moser <smoser@ubuntu.com> 2012-01-24 21:54:47 UTC ---
-byobu sets SED to "sed" (without quotes).
-so, it is really confusing to me why that would cause failure, as generally on
-ubuntu 'sed' is a perfectly good "sed".
+Tarball is (so far?) only available as .xz
 
-None the less, the easiest work around is to unset it.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libgtk2/libgtk2.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 52edf47..cfdc8f9 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -4,10 +4,10 @@
+ #
+ #############################################################
+ LIBGTK2_VERSION_MAJOR = 2.24
+-LIBGTK2_VERSION_MINOR = 8
++LIBGTK2_VERSION_MINOR = 9
+ LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).$(LIBGTK2_VERSION_MINOR)
+ 
+-LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.bz2
++LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
+ LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
+ LIBGTK2_AUTORECONF = NO
+ LIBGTK2_INSTALL_STAGING = YES
