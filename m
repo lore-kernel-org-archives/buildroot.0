@@ -1,60 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Jan 2012 14:50:28 +0100
-Subject: [Buildroot] [PATCH v2 2/2] sqlcipher: new package
-In-Reply-To: <1327350205-25669-2-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Mon, 23 Jan 2012 21:23:25 +0100")
-References: <1327350205-25669-1-git-send-email-arnout@mind.be>
- <1327350205-25669-2-git-send-email-arnout@mind.be>
-Message-ID: <8762g19pln.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 24 Jan 2012 14:59:26 +0100
+Subject: [Buildroot] [git commit] tcl: add _VERSION_MAJOR / _VERSION_MINOR
+	and use instead of hardcoded 8.4
+Message-ID: <20120124140017.7BDC19039E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=16b17c9a15509f926579ced17285e9b38952b548
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> SQLCipher is a fork of SQLite that adds AES encryption using OpenSSL.
- Arnout> It relies on tcl to generate some of its source code, so host-tcl is
- Arnout> required.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sqlcipher/sqlcipher.mk |    2 +-
+ package/tcl/tcl.mk             |    8 +++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout> v2: Added forgotten dependency on host-tcl
- Arnout> ---
- Arnout>  package/Config.in              |    1 +
- Arnout>  package/sqlcipher/Config.in    |   27 ++++++++++++++++++
- Arnout>  package/sqlcipher/sqlcipher.mk |   58 ++++++++++++++++++++++++++++++++++++++++
- Arnout>  3 files changed, 86 insertions(+), 0 deletions(-)
- Arnout>  create mode 100644 package/sqlcipher/Config.in
- Arnout>  create mode 100644 package/sqlcipher/sqlcipher.mk
-
- Arnout> diff --git a/package/Config.in b/package/Config.in
- Arnout> index f219e37..b245da8 100644
- Arnout> --- a/package/Config.in
- Arnout> +++ b/package/Config.in
- Arnout> @@ -272,6 +272,7 @@ endmenu
- Arnout>  menu "Database"
- Arnout>  source "package/berkeleydb/Config.in"
- Arnout>  source "package/mysql_client/Config.in"
- Arnout> +source "package/sqlcipher/Config.in"
- Arnout>  source "package/sqlite/Config.in"
- Arnout>  endmenu
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 9ad3e55..3e69a96 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -12,7 +12,7 @@ SQLCIPHER_INSTALL_STAGING = YES
+ SQLCIPHER_CONF_ENV = \
+ 	CFLAGS+=" $(SQLCIPHER_CFLAGS)" \
+ 	LDFLAGS+=" $(SQLCIPHER_LDFLAGS)" \
+-	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh8.4
++	TCLSH_CMD=$(HOST_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
  
- Arnout> diff --git a/package/sqlcipher/Config.in b/package/sqlcipher/Config.in
- Arnout> new file mode 100644
- Arnout> index 0000000..bf77307
- Arnout> --- /dev/null
- Arnout> +++ b/package/sqlcipher/Config.in
- Arnout> @@ -0,0 +1,27 @@
- Arnout> +config BR2_PACKAGE_SQLCIPHER
- Arnout> +	bool "sqlcipher"
- Arnout> +	depends on !BR2_PACKAGE_SQLITE
- Arnout> +	help
-
-You forgot to select BR2_PACKAGE_OPENSSL. Otherwise it looks good -
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ SQLCIPHER_CONF_OPT = \
+ 	--enable-threadsafe \
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 7bde8c7..8ed81ab 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -3,7 +3,9 @@
+ # TCL8.4
+ #
+ #############################################################
+-TCL_VERSION = 8.4.19
++TCL_VERSION_MAJOR = 8.4
++TCL_VERSION_MINOR = 19
++TCL_VERSION = $(TCL_VERSION_MAJOR).$(TCL_VERSION_MINOR)
+ TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tcl
+ TCL_SUBDIR = unix
+@@ -20,10 +22,10 @@ HOST_TCL_CONF_OPT = \
+ define TCL_POST_INSTALL_CLEANUP
+ 	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
+ 	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
+-	rm -Rf $(TARGET_DIR)/usr/lib/tcl8.4/encoding/*; \
++	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
+ 	fi
+ 	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
+-	rm -f $(TARGET_DIR)/usr/bin/tclsh8.4; \
++	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
+ 	fi
+ endef
+ 
