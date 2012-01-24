@@ -1,25 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Jan 2012 13:00:08 +0100
-Subject: [Buildroot] [PATCH v2] syslinux: add support for host-install
-In-Reply-To: <1327349969-24852-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Mon, 23 Jan 2012 21:19:29 +0100")
-References: <87ipk3h03c.fsf@macbook.be.48ers.dk>
- <1327349969-24852-1-git-send-email-arnout@mind.be>
-Message-ID: <87ipk19upj.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 24 Jan 2012 14:37:22 +0100
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.7.10
+Message-ID: <20120124133729.55E0190394@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e9c61ecb585b05cc43da5682d05c28a4350a2bd5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
- Arnout> This makes it possible to build the syslinux/extlinux installer, so a
- Arnout> bootable USB drive, CompactFlash or SD card can be created by a user
- Arnout> script.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sqlite/sqlite.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 042c7f9..18617e8 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION = 3070900
++SQLITE_VERSION = 3071000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_INSTALL_STAGING = YES
