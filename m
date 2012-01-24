@@ -1,53 +1,48 @@
-From: Willy <willy@willygroup.org>
-Date: Tue, 24 Jan 2012 10:18:17 +0000 (UTC)
-Subject: [Buildroot] Add rt squarewave example in buildroot
-References: <loom.20120123T152253-656@post.gmane.org>
- <20120123221407.2d5f5043@skate> <loom.20120124T085832-891@post.gmane.org>
- <20120124103221.1f769dba@skate>
-Message-ID: <loom.20120124T111319-435@post.gmane.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Tue, 24 Jan 2012 10:26:10 +0000
+Subject: [Buildroot] [PATCH 00/14] Add EFL packages to buildroot
+In-Reply-To: <20120123222150.7f28bf58@skate>
+References: <CAFbHwiQEzOV7_wK647kRDjXZTWxEEPjnXo3uLfpOk=u1AbxszQ@mail.gmail.com>
+ <20120123222150.7f28bf58@skate>
+Message-ID: <CAFbHwiSeN_7-GHLg-2Xc=+OYszabK9pT3MsshHTHLQUsdzaJwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@...> writes:
+On Mon, Jan 23, 2012 at 9:21 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 
-> Can you try with a test case program?
+Hi Thomas!
 
-How?
+Thanks for taking a look at the patches.
 
-> Strange, the uClibc is by default compiled with
-> UCLIBC_HAS_ADVANCED_REALTIME, clock_nanosleep() should be there in
-> librt.
+> Le Mon, 23 Jan 2012 16:35:06 +0000,
+> Will Newton <will.newton@gmail.com> a ?crit :
+>
+>> This series is a reworked version of the previous series. It takes
+>> into account review comments by Arnout Vandecappelle, fixes some bugs
+>> and also adds some new packages, efreet, ethumb elementary and edbus.
+>>
+>> There are 3 patches to non-EFL packages that are required, a host
+>> version of libjpeg and lua must be built and the xcb-util libraries
+>> need to be installed into staging.
+>
+> Good to see EFL getting into Buildroot.
+>
+> Many of your packages have a host variant, but do not defined any
+> HOST_... information, and the host variant appears to be unused. Take
+> libembryo for example, it declares a host variant, but does not define
+> any HOST_LIBEMBRYO_DEPENDENCIES. Is this normal?
 
-The uClibc configuration file contains:
-output/toolchain/uClibc-0.9.32/.config:UCLIBC_HAS_ADVANCED_REALTIME=y
+I believe after the patch series by Arnout committed on January 18th
+that host deps are calculated automatically. I'm not 100% sure if I
+got it right but it builds so it appears that it's at least partially
+right. I suppose one downside of that change is that it does make it
+much harder to figure out who is depending on what.
 
-And this file:
-output/toolchain/uClibc-0.9.32/librt/clock_nanosleep.c
-exists and contains:
-######################
-<cut>
-#ifdef __ASSUME_POSIX_TIMERS
-int
-clock_nanosleep (clockid_t clock_id, int flags, const struct timespec *req,
-		 struct timespec *rem)
-{
-<cut>
-}
-#else
-# ifdef __NR_clock_nanosleep
-extern int __libc_missing_posix_timers attribute_hidden;
-#  define SYSDEP_NANOSLEEP \
-  if (!__libc_missing_posix_timers)					      \
-    {									      \
-    <cut>
-    }
-# endif
-# include <sysdeps/unix/clock_nanosleep.c>
-#endif
-########################
+> It looks like some of the packages for the host are needed to build
+> edje-cc and eet-eet for the host. This could be explained somewhere.
 
-Thanks,
-Willy
+I'll have a think about where the best place might be...
