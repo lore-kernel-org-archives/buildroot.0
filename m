@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jan 2012 10:32:21 +0100
-Subject: [Buildroot] Add rt squarewave example in buildroot
-In-Reply-To: <loom.20120124T085832-891@post.gmane.org>
-References: <loom.20120123T152253-656@post.gmane.org>
- <20120123221407.2d5f5043@skate>
- <loom.20120124T085832-891@post.gmane.org>
-Message-ID: <20120124103221.1f769dba@skate>
+Date: Tue, 24 Jan 2012 10:56:54 +0100
+Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
+ Brussels
+In-Reply-To: <20120124000812.6d043023@skate>
+References: <20120124000812.6d043023@skate>
+Message-ID: <20120124105654.3eca70b2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 24 Jan 2012 08:07:04 +0000 (UTC),
-Willy <willy@willygroup.org> a ?crit :
+Le Tue, 24 Jan 2012 00:08:12 +0100,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-> I'm using the generated toolchain with the default configuration.
+> As of today, I have received confirmations from the following
+> participants:
+> 
+>  * Peter Korsgaard
+>  * Arnout Vandecapelle
+>  * Thomas De Schampheleire
+>  * Luca Ceresoli
+>  * Yann E. Morin
+>  * myself
 
-Strange, the uClibc is by default compiled with
-UCLIBC_HAS_ADVANCED_REALTIME, clock_nanosleep() should be there in
-librt. Can you try with a test case program?
+And I forgot:
 
-Best regards,
+   * Maxime Ripard
 
 Thomas
 -- 
