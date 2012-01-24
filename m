@@ -1,34 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 24 Jan 2012 23:40:49 +0100
-Subject: [Buildroot] [git commit] grep: bump to version 2.10
-Message-ID: <20120124225256.BF0FC90392@busybox.osuosl.org>
+Date: Tue, 24 Jan 2012 23:40:34 +0100
+Subject: [Buildroot] [git commit] sudo: bump to version 1.7.8p1
+Message-ID: <20120124225256.B185890392@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ce7a7896c5cdc4ecc6a5ca16f9403c57d0a329f9
+commit: http://git.buildroot.net/buildroot/commit/?id=70b489f2d9da688c5b4005b34576b4bbe6eb67dd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/grep/grep.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/sudo/sudo.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index e039135..a4391d7 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 9c62c49..f10d294 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--GREP_VERSION = 2.9
-+GREP_VERSION = 2.10
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
-+GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
- GREP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
+-SUDO_VERSION = 1.7.7
++SUDO_VERSION = 1.7.8p1
+ SUDO_SITE    = http://www.sudo.ws/sudo/dist
  
+ SUDO_CONF_OPT = \
