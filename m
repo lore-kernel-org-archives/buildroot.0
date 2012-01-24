@@ -1,69 +1,29 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Tue, 24 Jan 2012 10:32:50 +0000
-Subject: [Buildroot] [PATCH 14/14] libedbus: Add new package
-In-Reply-To: <201201232351.35126.arnout@mind.be>
-References: <CAFbHwiRMV41vA3FUVdekg6H123c-yyUV7n5qQQHObJ-yw0Qc=g@mail.gmail.com>
- <201201232351.35126.arnout@mind.be>
-Message-ID: <CAFbHwiTmVeZYM_OBKzzNLkdvbr30RG06wi8FxFzbhVhP9KcTbw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Jan 2012 11:53:32 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: fix missing 3993 for
+ AUTOTARGET's SUBDIR
+In-Reply-To: <201201232107.49146.arnout@mind.be>
+References: <1327182759-23029-1-git-send-email-arnout@mind.be>
+ <87aa5fgyz0.fsf@macbook.be.48ers.dk>
+ <201201232107.49146.arnout@mind.be>
+Message-ID: <20120124115332.19c44e64@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 23, 2012 at 10:51 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Monday 23 January 2012 17:36:27 Will Newton wrote:
->> Signed-off-by: Will Newton <will.newton@imgtec.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> [snip]
->> diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
->> new file mode 100644
->> index 0000000..71e3b50
->> --- /dev/null
->> +++ b/package/efl/libedbus/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_LIBEDBUS
->> + ? ? bool "libedbus"
->> + ? ? select BR2_PACKAGE_LIBEINA
->> + ? ? select BR2_PACKAGE_DBUS
-> ?DBUS depends on BR2_PACKAGE_EXPAT || BR2_PACKAGE_LIBXML2
-> so you have to repeat that here.
+Le Mon, 23 Jan 2012 21:07:48 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Hmm, would it be better just to add a comment asking the user to
-enable dbus rather than adding the select for the XML library? I'm not
-sure what the best way to handle that is.
+>  The 3993 is a $$ which got expanded to the shell's PID.  So no my
+> shell's PID is saved in history for eternity :-)
 
-> ?BTW, it's advisable to compile-test your patches against a minimal
-> uclibc-based 32-bit and 64-bit cross-toolchain. ?That helps detecting
-> dependencies on USE_WCHAR and USE_LARGEFILE.
+Ah, ah :-) I was wondering what was the meaning of this 3993 number :)
 
-There is a top-level dependency on WCHAR for all of EFL, I'll test
-with LARGEFILE enabled too.
-
->> + ? ? help
->> + ? ? ? E_Dbus is a set of wrappers around DBus APIs by third party, so
-> ?I believe the official name is D-Bus.
->
->> + ? ? ? they can be easily used by EFL applications, automatically
->> + ? ? ? providing Ecore/main loop integration, as well as Eina data types.
->> diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
->> new file mode 100644
->> index 0000000..e2ac836
->> --- /dev/null
->> +++ b/package/efl/libedbus/libedbus.mk
->> @@ -0,0 +1,16 @@
->> +#############################################################
->> +#
->> +# libedbus
->> +#
->> +#############################################################
->> +
->> +LIBEDBUS_VERSION = 1.1.0
->> +LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
->> +LIBEDBUS_SITE = http://download.enlightenment.org/releases/
->> +LIBEDBUS_AUTORECONF = YES
->> +LIBEDBUS_LIBTOOL_PATCH = YES
-> ?Libtool patching is enabled by default.
-
-Thanks for the review, I'll fix these.
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
