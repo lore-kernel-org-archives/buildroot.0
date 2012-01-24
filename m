@@ -1,30 +1,19 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Jan 2012 15:05:03 +0100
-Subject: [Buildroot] [PATCH v2 2/2] sqlcipher: new package
-In-Reply-To: <8762g19pln.fsf@macbook.be.48ers.dk>
-References: <1327350205-25669-1-git-send-email-arnout@mind.be>
- <1327350205-25669-2-git-send-email-arnout@mind.be>
- <8762g19pln.fsf@macbook.be.48ers.dk>
-Message-ID: <201201241505.03600.arnout@mind.be>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue, 24 Jan 2012 15:12:25 +0100
+Subject: [Buildroot] [RFC] Firmware handling in BR
+Message-ID: <1327414346-12587-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 24 January 2012 14:50:28 Peter Korsgaard wrote:
-> You forgot to select BR2_PACKAGE_OPENSSL.
+So I made the first attempt to add binary firmware images to BR. I placed the stuff under "Hardware handling" in the configuration menu, but I think it would be better to place this menu direct under "Package selection for the target".
 
- Lesson learnt: don't try to prepare 17 patches for submission in a single 
-week-end :-)
+Some more issues:
 
- Regards,
- Arnout
+1. at the time firmware script creates /lib/firmware folder itself: should it be included in skeleton?
+2. /lib/firmware will be used by firmware package and by udev at build/config time: should we introduce a env variable for this?
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards,
+Yegor
