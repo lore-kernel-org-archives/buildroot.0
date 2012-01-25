@@ -1,76 +1,179 @@
-From: Poole, Donald R. <drpoole@swri.org>
-Date: Wed, 25 Jan 2012 15:16:57 +0000
-Subject: [Buildroot] Buildroot RFS Login Question
-Message-ID: <CB457908.2D7A%donald.poole@swri.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 25 Jan 2012 16:38:30 +0100
+Subject: [Buildroot] [PATCH v2] New package: linux-firmware
+Message-ID: <1327505910-15070-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jan 24, 2012 at 2:29 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
->>>>> "Donald" == Donald Poole <donny3000 at gmail.com<mailto:donny3000@gmail.com>> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi,
+add infrastructure for closed binary blobs
 
- Donald> Unfortunately, if I use the root user get a "Login Incorrect"
- Donald> message and a new login prompt that looks like this: Starting
- Donald> input-event-daemon: done
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes:
+v2: 
+	change package name from firmware to linux-firmware (Gustavo Zacarias)
+	create more granular options (Gustavo Zacarias)
 
+ package/Config.in                        |    1 +
+ package/linux-firmware/Config.in         |   46 +++++++++++++++++
+ package/linux-firmware/linux-firmware.mk |   79 ++++++++++++++++++++++++++++++
+ 3 files changed, 126 insertions(+), 0 deletions(-)
+ create mode 100644 package/linux-firmware/Config.in
+ create mode 100644 package/linux-firmware/linux-firmware.mk
 
- Donald>     Welcome to VICTORY Embedded
- Donald>     victory-embedded login: root
- Donald>     Login incorrect
-
- Donald>     victory-embedded login:
-
-
- Donald> I'm using the default filesystem skeleton.  I'm not sure what
- Donald> buildroot config information would be helpful, so I will need
- Donald> some more direction on what to give you guys for
- Donald> assistance. But i am using udev, my getty port is ttymxc0 at
- Donald> 115200 baudrate and I'm using BusyBox 1.19.x in the "Package
- Donald> Selection for Target" configuration.  I'm also using buildroot
- Donald> version builroot-2011.11.
-
-Ok, and how do you boot the system, what kind of filesystem output are
-you using?
-
-I am booting the kernel with u-boot (Freescales u-boot for i.MX53 processors version rel_imx_2.6.35_11.01.00<http://opensource.freescale.com/git?p=imx/uboot-imx.git;a=commit;h=a069e6b2ca7e8f0ad39375ca12bec11bb0d41ba4>) with the boot arguments
-
-console=ttymxc0,115200 video=mxcdi1fb:GBR24,XGA di1_primary tve root=/dev/mmcblk0p1 rw rootwait rootflags=barrier=1
-
-I am directing all filesystem output to the console (ttymxc0).  This is my /etc/inittab file:
-
-# Startup the system
-null::sysinit:/bin/mount -t proc proc /proc
-null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
-null::sysinit:/bin/mkdir -p /dev/pts
-null::sysinit:/bin/mkdir -p /dev/shm
-null::sysinit:/bin/mount -a
-null::sysinit:/bin/hostname -F /etc/hostname
-# now run any rc scripts
-::sysinit:/etc/init.d/rcS
-
-# Put a getty on the serial port
-ttymxc0::respawn:/sbin/getty -L ttymxc0 115200 vt100 # GENERIC_SERIAL
-
-# Stuff to do for the 3-finger salute
-::ctrlaltdel:/sbin/reboot
-
-# Stuff to do before rebooting
-null::shutdown:/usr/bin/killall klogd
-null::shutdown:/usr/bin/killall syslogd
-null::shutdown:/bin/umount -a -r
-null::shutdown:/sbin/swapoff ?a
-
-It should be the default inittab created by buildroot, but I wanted to post it anyway for everyone to take a look to see if anything might be suspect.
-
-Donald R. Poole, Jr.
-Research Engineer
-Voice: 210.522.3131 | Fax: 210.522.4931
-Tactical Networks & Communications (tacticalnetworks.swri.org)
-Southwest Research Institute (SwRI)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120125/f50c57f4/attachment-0001.html>
+diff --git a/package/Config.in b/package/Config.in
+index f219e37..10f9f79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -185,6 +185,7 @@ source "package/input-tools/Config.in"
+ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+ source "package/kbd/Config.in"
++source "package/linux-firmware/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lsuio/Config.in"
+ source "package/lvm2/Config.in"
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+new file mode 100644
+index 0000000..8778189
+--- /dev/null
++++ b/package/linux-firmware/Config.in
+@@ -0,0 +1,46 @@
++config BR2_PACKAGE_LINUX_FIRMWARE
++	bool "linux-firmware"
++	help
++	  This package provides various binary firmware files 
++	  (closed binary blobs) for such devices like LAN, WLAN crads etc.
++
++if BR2_PACKAGE_LINUX_FIRMWARE
++
++menu "Devices"
++
++menu "Texas Instruments"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
++	bool "wl127X"
++	help
++	  Firmware files for WLAN and Bluetooth modules wl1271 and wl1273
++
++config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X
++	bool "wl128X"
++	help
++	  Firmware files for WLAN and Bluetooth modules wl128x
++
++endmenu
++
++menu "Ralink"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
++	bool "Ralink rt2501/rt61"
++	help
++	  Ralink rt2501/rt61
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73
++	bool "Ralink rt73"
++	help
++	  Ralink rt73
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX
++	bool "Ralink rt27xx/rt28xx/rt30xx"
++	help
++	  Ralink rt27xx/rt28xx/rt30xx
++
++endmenu
++
++endmenu
++
++endif
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+new file mode 100644
+index 0000000..dda3f2b
+--- /dev/null
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -0,0 +1,79 @@
++#############################################################
++#
++# linux-firmware
++#
++#############################################################
++LINUX_FIRMWARE_VERSION = a2995d38c234e3d767df7223d84a0f33a1a24997
++LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
++LINUX_FIRMWARE_SITE_METHOD = git
++
++# wl127x
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
++define FIRMWARE_TI_WL127X_INSTALL_TO_TARGET
++	cp -rf $(@D)/ti-connectivity/wl127* $(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/ti-connectivity/TIInit_7.2.31.bts \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ti-connectivity \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# wl128x
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
++define FIRMWARE_TI_WL128X_INSTALL_TO_TARGET
++	cp -rf $(@D)/ti-connectivity/wl128* $(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/ti-connectivity/TIInit_7.2.31.bts \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ti-connectivity \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# rt2501/rt61
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
++define FIRMWARE_RALINK_RT61_INSTALL_TO_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/rt2561.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt2561s.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt2661.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ralink-firmware.txt \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# rt73
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73),y)
++define FIRMWARE_RALINK_RT73_INSTALL_TO_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/rt73.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ralink-firmware.txt \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# rt73
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
++define FIRMWARE_RALINK_RT2XX_INSTALL_TO_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/rt2860.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt2870.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt3071.bin \
++		$(TARGET_DIR)/lib/firmware
++	cp -rf $(@D)/rt30* $(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ralink-firmware.txt \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
++	$(FIRMWARE_TI_WL127X_INSTALL_TO_TARGET)
++	$(FIRMWARE_TI_WL128X_INSTALL_TO_TARGET)
++	$(FIRMWARE_RALINK_RT61_INSTALL_TO_TARGET)
++	$(FIRMWARE_RALINK_RT73_INSTALL_TO_TARGET)
++	$(FIRMWARE_RALINK_RT2XX_INSTALL_TO_TARGET)
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.1.1
