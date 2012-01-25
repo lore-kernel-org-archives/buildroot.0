@@ -1,84 +1,25 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Wed, 25 Jan 2012 12:07:25 -0600
-Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
-	Brussels
-In-Reply-To: <201201251204.35978.minimod@morethan.org>
-References: <20120124000812.6d043023@skate> <20120125135707.6ceb7e86@skate>
- <201201251204.35978.minimod@morethan.org>
-Message-ID: <201201251207.27503.minimod@morethan.org>
+From: David Lynch Jr. <dhlii@dlasys.net>
+Date: Wed, 25 Jan 2012 14:13:59 -0500
+Subject: [Buildroot] Kconfig
+Message-ID: <1327518839.21058.52.camel@hp-dhlii>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed January 25 2012, Michael S. Zick wrote:
-> On Wed January 25 2012, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > Le Wed, 25 Jan 2012 12:03:12 +0100,
-> > Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
-> > 
-> > > Some topics we could discuss:
-> > > 
-> > > - status of some things that were discussed on the previous BDD
-> > > -- send-patches
-> > > -- testing infrastructure
-> > > -- crosstool-ng integration
-> > > -- documentation migration
-> > > -- out-of-tree builds
-> > > -- website update
-> > > -- maintenance process / patchwork
-> > > -- relocatable toolchain
-> > > 
-> > > - things that may need further discussion:
-> > > -- license stuff (report generation, ...)
-> > > -- finalization of Acked-by / Signed-off-by / Reviewed-by discussion.
-> > > We talked about this before, but as far as I know there was no final
-> > > decision as to: we'll do it this way.
-> > > 
-> 
-> A suggestion which passed by on the OpenEmbedded M.L. recently that might
->
+This is probably not the right list for this, but I have a project that 
+makes sense to use the configuration system that BareBox, BuildRoot,
+the 
+Linux Kernel and some other things are using.
 
-Oops, wrong credit, should have been: OpenWRT mailing list.
+Where can I find some documentation, information to try to get this 
+setup for a new project.
 
-Mike
-> fit into that discussion:
-> 
-> On the 'Tested-by:' attribute (if used) then adding a classification of
-> what that testing covered or did not cover (whichever is most informative).
-> I.E:
-> 
-> Tested-by: J. Q. Public
-> Coverage: HP, PA-RISC only
-> or
-> Coverage-needed: World
-> 
-> Examples above are invented only to display the coverage attribute names.
-> 
-> Mike
-> 
-> > > - future directions for buildroot
-> > > -- deprecate customize package
-> > > -- ...
-> > > 
-> > > I'll let you know if I think of other things.
-> > 
-> > Sounds like a good start. However, I fear that on most topics, no much
-> > progress has been made since the Prague BDD. But this upcoming BDD will
-> > gather more developers, so probably we'll be able to spread the
-> > development effort a bit more, and it's good to make a status on items
-> > that were discussed in previous meetings.
-> > 
-> > Best regards,
-> > 
-> > Thomas
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
+I have gotten part why by just stealing peices from the linux kernel, 
+and creating Makefiles and Kconfig's,
+But that is not the most efficient approach and doesn't provide lots of 
+documentation or detailed understanding.
+
+
+Pointers would be appreciated.
