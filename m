@@ -1,66 +1,51 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 25 Jan 2012 22:07:35 +0100
-Subject: [Buildroot] [PATCH v2] New package: linux-firmware
-In-Reply-To: <201201251031.14621.minimod@morethan.org>
-References: <1327505910-15070-1-git-send-email-yegorslists@googlemail.com>
- <201201251031.14621.minimod@morethan.org>
-Message-ID: <CAGm1_kvbynTpn=q9PF64n3U_g8X2CnhROQXAaLTK0MHVkhDpYg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 25 Jan 2012 22:21:21 +0100
+Subject: [Buildroot] Kconfig
+In-Reply-To: <1327518856.21058.53.camel@hp-dhlii>
+References: <1327518856.21058.53.camel@hp-dhlii>
+Message-ID: <201201252221.21220.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 25, 2012 at 5:31 PM, Michael S. Zick <minimod@morethan.org> wrote:
-> On Wed January 25 2012, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> add infrastructure for closed binary blobs
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->> Changes:
->> v2:
->> ? ? ? change package name from firmware to linux-firmware (Gustavo Zacarias)
->> ? ? ? create more granular options (Gustavo Zacarias)
->>
->> ?package/Config.in ? ? ? ? ? ? ? ? ? ? ? ?| ? ?1 +
->> ?package/linux-firmware/Config.in ? ? ? ? | ? 46 +++++++++++++++++
->> ?package/linux-firmware/linux-firmware.mk | ? 79 ++++++++++++++++++++++++++++++
->> ?3 files changed, 126 insertions(+), 0 deletions(-)
->> ?create mode 100644 package/linux-firmware/Config.in
->> ?create mode 100644 package/linux-firmware/linux-firmware.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index f219e37..10f9f79 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -185,6 +185,7 @@ source "package/input-tools/Config.in"
->> ?source "package/iostat/Config.in"
->> ?source "package/irda-utils/Config.in"
->> ?source "package/kbd/Config.in"
->> +source "package/linux-firmware/Config.in"
->> ?source "package/lm-sensors/Config.in"
->> ?source "package/lsuio/Config.in"
->> ?source "package/lvm2/Config.in"
->> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
->> new file mode 100644
->> index 0000000..8778189
->> --- /dev/null
->> +++ b/package/linux-firmware/Config.in
->> @@ -0,0 +1,46 @@
->> +config BR2_PACKAGE_LINUX_FIRMWARE
->> + ? ? bool "linux-firmware"
->> + ? ? help
->> + ? ? ? This package provides various binary firmware files
->> + ? ? ? (closed binary blobs) for such devices like LAN, WLAN crads etc.
->>
->
-> crads? ?crud? ?cruft? ?cards?
-> ;-)
+David, All,
 
-Oops! Next time I'll make ":set spell" before sending. Promise :-)
+On Wednesday 25 January 2012 20:14:16 David Lynch Jr. wrote:
+> This is probably not the right list for this, but I have a project that 
+> makes sense to use the configuration system that BareBox, BuildRoot,
+> the 
+> Linux Kernel and some other things are using.
+> 
+> Where can I find some documentation, information to try to get this 
+> setup for a new project.
 
-Any other comments before I send new spell checked version?
+As it happens, I have just started working on this myself. I created a
+package with just the kconfig parser and frontends, and just added the
+required autotools-glue around these. This is not yet complete, but it
+Works For Me (TM).
 
-Yegor
+The Mercurial repository is available there:
+   http://ymorin.is-a-geek.org/hg/kconfig-frontends/
+
+Don't expect this to be its permanent home. Also, don't expect that the
+repository content is stable. This is just preliminary work. I have no
+plan yet as to how I will handle releases, and how the version numbering
+will be handled, and stuff like that...
+
+Note also that it's just about the parser and frontends, and does not
+contain the build-system itself.
+
+I will announce it shortly on the linux-kbuild mailing list...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
