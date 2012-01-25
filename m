@@ -1,36 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Jan 2012 15:02:29 +0100
-Subject: [Buildroot] [git commit] libogg: bump version
-Message-ID: <20120125140244.267229056F@busybox.osuosl.org>
+From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
+Date: Wed, 25 Jan 2012 17:33:47 +0100
+Subject: [Buildroot] [PATCH 1/1] apply-patches.sh: check if there are
+	rejects before applying patches
+Message-ID: <96c0ec6a36f4772d4182be934a4e8675ccdf3a0e.1327508994.git.ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28f9df141ed47badcc1ab9d8a44513fae39f78ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/multimedia/libogg/libogg.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ support/scripts/apply-patches.sh |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/libogg/libogg.mk b/package/multimedia/libogg/libogg.mk
-index 86d5b01..c40f04e 100644
---- a/package/multimedia/libogg/libogg.mk
-+++ b/package/multimedia/libogg/libogg.mk
-@@ -3,12 +3,10 @@
- # libogg
- #
- #############################################################
--LIBOGG_VERSION = 1.2.2
-+LIBOGG_VERSION = 1.3.0
- LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.gz
- LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
--LIBOGG_AUTORECONF = NO
- LIBOGG_INSTALL_STAGING = YES
--LIBOGG_INSTALL_TARGET = YES
- 
- LIBOGG_DEPENDENCIES = host-pkg-config
- 
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index 1aef47e..4763106 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -19,6 +19,11 @@ if [ ! -d "${patchdir}" ] ; then
+     echo "Aborting.  '${patchdir}' is not a directory."
+     exit 1
+ fi
++
++# Check for rejects because if there are some, even if patches are well
++# applied, at the end it will complain about rejects into targetdir.
++if [ "`find ${targetdir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
++	echo "There are remaining reject files into ${targetdir}, please delete them."
+     
+ for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
+     apply="patch -g0 -p1 -E -d"
+-- 
+1.7.5.4
