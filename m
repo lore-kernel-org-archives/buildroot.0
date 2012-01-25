@@ -1,25 +1,29 @@
-From: David Lynch Jr. <dhlii@dlasys.net>
-Date: Wed, 25 Jan 2012 14:14:16 -0500
-Subject: [Buildroot] Kconfig
-Message-ID: <1327518856.21058.53.camel@hp-dhlii>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 25 Jan 2012 21:34:05 +0100
+Subject: [Buildroot] Buildroot RFS Login Question
+In-Reply-To: <CB457908.2D7A%donald.poole@swri.org> (Donald R. Poole's message
+ of "Wed, 25 Jan 2012 15:16:57 +0000")
+References: <CB457908.2D7A%donald.poole@swri.org>
+Message-ID: <87hazj4j42.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is probably not the right list for this, but I have a project that 
-makes sense to use the configuration system that BareBox, BuildRoot,
-the 
-Linux Kernel and some other things are using.
+>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
 
-Where can I find some documentation, information to try to get this 
-setup for a new project.
+ Peter> Ok, and how do you boot the system, what kind of filesystem output are
+ Peter> you using?
 
-I have gotten part why by just stealing peices from the linux kernel, 
-and creating Makefiles and Kconfig's,
-But that is not the most efficient approach and doesn't provide lots of 
-documentation or detailed understanding.
+ Donald> I am booting the kernel with u-boot (Freescales u-boot for
+ Donald> i.MX53 processors version rel_imx_2.6.35_11.01.00) with the
+ Donald> boot arguments
 
+ Donald> console=ttymxc0,115200 video=mxcdi1fb:GBR24,XGA di1_primary tve
+ Donald> root=/dev/mmcblk0p1 rw rootwait rootflags=barrier=1
 
-Pointers would be appreciated.
+Ok, good. How do you create the file system on the SD card exactly?
+
+-- 
+Bye, Peter Korsgaard
