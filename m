@@ -1,33 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Jan 2012 07:28:45 +0100
-Subject: [Buildroot] compiling package/libcgi before my cgi code
-In-Reply-To: <1327461829.96179.YahooMailNeo@web120202.mail.ne1.yahoo.com>
- (Sridhar Addagada's message of "Tue, 24 Jan 2012 19:23:49 -0800
- (PST)")
-References: <1327461829.96179.YahooMailNeo@web120202.mail.ne1.yahoo.com>
-Message-ID: <87d3a88fdu.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 25 Jan 2012 11:23:15 +0100
+Subject: [Buildroot] uclibc 0.33-rcx build error : cc1: error: unrecognized
+	command line option "-mlittle-endian"
+Message-ID: <8DF7738D9C7143DC8D6816D185A51611@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sridhar" == Sridhar Addagada <sridhar_a@yahoo.com> writes:
+Hi 
 
- Sridhar> Hi,
+ 
 
- Sridhar> I'm working to implement web management on our device, and
- Sridhar> have enabled lighttpd, and created a new directory under
- Sridhar> packages (packages/mycgi) where i put in my xxx-cgi.c code.  I
- Sridhar> need to make sure that libcgi compiles before my cgi sources
- Sridhar> are compiled.  Here is the makefile I've cooked up.  Any
- Sridhar> suggestions appreciated.
+I tried to build the 0.9.33 version because i have problems with a bug in 0.9.32.1 
 
-You use rather use the new-style GENTARGETS format, and simply add
-WEBCFG_DEPENDENCIES = libcgi like you already did. For details, see the
-documentation:
+ 
 
-http://buildroot.net/buildroot.html#generic-tutorial
+But the 0.9.33-rc* build fails :  (ARM 9 target )
 
--- 
-Bye, Peter Korsgaard
+cc1: error: unrecognized command line option "-mlittle-endian"
+
+ 
+
+something is wrong in uclibc 0.9.32.1 that seems to cause this :
+
+http://mail.gnome.org/archives/libsoup-list/2012-January/msg00005.html 
+
+( runnning libsoup from a thread is not working, from main thread it works .)
+
+ 
+
+ 
+
+I did a git pull but I see no 32. and 32.1 tags in the git  log so its difficult to find out why the 32 works and the 32.1 not.
+
+ 
+
+Regards  .
+
+ 
+
+Sagaert Johan
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120125/1b939c09/attachment.html>
