@@ -1,36 +1,57 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Jan 2012 12:03:10 +0100
-Subject: [Buildroot] [git commit] yajl: bump version
-Message-ID: <20120125112029.A439090391@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Jan 2012 13:57:07 +0100
+Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
+ Brussels
+In-Reply-To: <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
+References: <20120124000812.6d043023@skate>
+ <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
+Message-ID: <20120125135707.6ceb7e86@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01e5bee40f7ae083a5d62c99667bb9709d266f16
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...-math-link.patch => yajl-2.0.4-math-link.patch} |    0
- package/yajl/yajl.mk                               |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
+Le Wed, 25 Jan 2012 12:03:12 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-diff --git a/package/yajl/yajl-2.0.2-math-link.patch b/package/yajl/yajl-2.0.4-math-link.patch
-similarity index 100%
-rename from package/yajl/yajl-2.0.2-math-link.patch
-rename to package/yajl/yajl-2.0.4-math-link.patch
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-index 723cce4..1c0df38 100644
---- a/package/yajl/yajl.mk
-+++ b/package/yajl/yajl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--YAJL_VERSION = 2.0.2
-+YAJL_VERSION = 2.0.4
- YAJL_SITE = git://github.com/lloyd/yajl.git
- YAJL_INSTALL_STAGING = YES
- 
+> Some topics we could discuss:
+> 
+> - status of some things that were discussed on the previous BDD
+> -- send-patches
+> -- testing infrastructure
+> -- crosstool-ng integration
+> -- documentation migration
+> -- out-of-tree builds
+> -- website update
+> -- maintenance process / patchwork
+> -- relocatable toolchain
+> 
+> - things that may need further discussion:
+> -- license stuff (report generation, ...)
+> -- finalization of Acked-by / Signed-off-by / Reviewed-by discussion.
+> We talked about this before, but as far as I know there was no final
+> decision as to: we'll do it this way.
+> 
+> - future directions for buildroot
+> -- deprecate customize package
+> -- ...
+> 
+> I'll let you know if I think of other things.
+
+Sounds like a good start. However, I fear that on most topics, no much
+progress has been made since the Prague BDD. But this upcoming BDD will
+gather more developers, so probably we'll be able to spread the
+development effort a bit more, and it's good to make a status on items
+that were discussed in previous meetings.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
