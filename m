@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 27 Jan 2012 00:41:29 +0100
-Subject: [Buildroot] [PATCH 3/6] samba: avahi: replace dependency on dbus by
+Date: Fri, 27 Jan 2012 00:41:30 +0100
+Subject: [Buildroot] [PATCH 4/6] qt: qt-dbus: replace dependency on dbus by
 	select
 In-Reply-To: <1327621292-13580-1-git-send-email-arnout@mind.be>
 References: <CAFbHwiTmVeZYM_OBKzzNLkdvbr30RG06wi8FxFzbhVhP9KcTbw@mail.gmail.com>
  <1327621292-13580-1-git-send-email-arnout@mind.be>
-Message-ID: <1327621292-13580-3-git-send-email-arnout@mind.be>
+Message-ID: <1327621292-13580-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,28 +16,26 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/samba/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/qt/Config.in |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba/Config.in b/package/samba/Config.in
-index 3a77776..a5a5c29 100644
---- a/package/samba/Config.in
-+++ b/package/samba/Config.in
-@@ -249,12 +249,12 @@ config BR2_PACKAGE_SAMBA_AVAHI
- 	default y
- 	depends on BR2_PACKAGE_SAMBA
- 	depends on BR2_PACKAGE_AVAHI_DAEMON
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index ab231d9..3a552d0 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -280,12 +280,9 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 	  If unsure, say n.
+ endif
+ 
+-comment "Qt Dbus module not available (needs dbus)"
+-	depends on !BR2_PACKAGE_DBUS
+-
+ config BR2_PACKAGE_QT_DBUS
+ 	bool "DBus Module"
 -	depends on BR2_PACKAGE_DBUS
 +	select BR2_PACKAGE_DBUS
  	help
- 	  Include support for avahi
+ 	  Build the Qt DBus module.
  
--comment "support avahi - disabled (requires avahi-daemon/dbus)"
--	depends on !BR2_PACKAGE_AVAHI_DAEMON || !BR2_PACKAGE_DBUS
-+comment "support avahi - disabled (requires avahi-daemon)"
-+	depends on !BR2_PACKAGE_AVAHI_DAEMON
- 
- config BR2_PACKAGE_SAMBA_GAMIN
- 	bool "support gamin"
 -- 
 1.7.8.3
