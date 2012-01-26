@@ -1,22 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Jan 2012 22:25:29 +0100
-Subject: [Buildroot] [PATCH 01/13] bind: security bump to version
-	9.6-ESV-R5-P1
-In-Reply-To: <1327596692-30728-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 26 Jan 2012 13:51:20 -0300")
-References: <1327596692-30728-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877h0eduly.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 26 Jan 2012 22:22:36 +0100
+Subject: [Buildroot] [git commit] expat: fix style and drop stray file
+Message-ID: <20120126212542.4121F9058C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bc83dd2706082b140203a29084ca33c293cf6469
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/expat/Makefile.in |    3 ---
+ package/expat/expat.mk    |    3 ---
+ 2 files changed, 0 insertions(+), 6 deletions(-)
 
-Committed entire series, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/expat/Makefile.in b/package/expat/Makefile.in
+deleted file mode 100644
+index 1d5d6bc..0000000
+--- a/package/expat/Makefile.in
++++ /dev/null
+@@ -1,3 +0,0 @@
+-ifeq ($(BR2_PACKAGE_EXPAT),y)
+-TARGETS+=expat
+-endif
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 64a1416..b179383 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -5,13 +5,10 @@
+ #############################################################
+ 
+ EXPAT_VERSION = 2.0.1
+-EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.gz
+ EXPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/expat
+ EXPAT_INSTALL_STAGING = YES
+-EXPAT_INSTALL_TARGET = YES
+ EXPAT_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) installlib
+ EXPAT_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) installlib
+-
+ EXPAT_DEPENDENCIES = host-pkg-config
+ 
+ $(eval $(call AUTOTARGETS))
