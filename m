@@ -1,32 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 15:19:26 +0100
-Subject: [Buildroot] [git commit] avahi: S05avahi-setup.sh: fix s/pid/ipd/
-	typo
-Message-ID: <20120126142151.8E98F9058E@busybox.osuosl.org>
+From: David Lynch Jr. <dhlii@dlasys.net>
+Date: Thu, 26 Jan 2012 09:31:25 -0500
+Subject: [Buildroot] Kconfig
+In-Reply-To: <201201252314.30754.yann.morin.1998@free.fr>
+References: <1327518856.21058.53.camel@hp-dhlii>
+ <201201252221.21220.yann.morin.1998@free.fr>
+ <1327527444.19793.30.camel@hp-dhlii>
+ <201201252314.30754.yann.morin.1998@free.fr>
+Message-ID: <1327588285.11044.6.camel@hp-dhlii>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c4c38403df01c4cbbb89c8b327d184f5a4b4dc6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I swear the last time I looked at this I had looked in the kernel source
+Documentation directory. There is an awful lot there that I figured out
+the hard way. Thank You.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/avahi/S05avahi-setup.sh |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Yes, I am blurring Kconfig and Kbuild. 
+My interest is in using the tools on other projects. 
+Though Documentation/kbuild fills in holes, I had already gleaned what I
+needed to deal with anything related to linux kernel development.  
 
-diff --git a/package/avahi/S05avahi-setup.sh b/package/avahi/S05avahi-setup.sh
-index 002f0c8..f42a4d3 100755
---- a/package/avahi/S05avahi-setup.sh
-+++ b/package/avahi/S05avahi-setup.sh
-@@ -2,7 +2,7 @@
- 
- case "$1" in
-     start|"")
--	if [ ! -d /tmp/avahi-autopid ]; then
-+	if [ ! -d /tmp/avahi-autoipd ]; then
- 	    rm -rf /tmp/avahi-autoipd
- 	    mkdir /tmp/avahi-autoipd
- 	    chown default.default /tmp/avahi-autoipd
+Thank you, you have been very helpful. 
