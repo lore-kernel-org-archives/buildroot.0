@@ -1,25 +1,35 @@
-From: David Lynch Jr. <dhlii@dlasys.net>
-Date: Thu, 26 Jan 2012 09:31:25 -0500
-Subject: [Buildroot] Kconfig
-In-Reply-To: <201201252314.30754.yann.morin.1998@free.fr>
-References: <1327518856.21058.53.camel@hp-dhlii>
- <201201252221.21220.yann.morin.1998@free.fr>
- <1327527444.19793.30.camel@hp-dhlii>
- <201201252314.30754.yann.morin.1998@free.fr>
-Message-ID: <1327588285.11044.6.camel@hp-dhlii>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Jan 2012 15:42:04 +0100
+Subject: [Buildroot] [RFC] Support libraries for TI OMAP and DaVinci DSP
+	accelerators
+In-Reply-To: <1327251861-16833-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 22 Jan 2012 18:04:21 +0100")
+References: <1327251861-16833-1-git-send-email-arnout@mind.be>
+Message-ID: <87sjj234qr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I swear the last time I looked at this I had looked in the kernel source
-Documentation directory. There is an awful lot there that I figured out
-the hard way. Thank You.
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Yes, I am blurring Kconfig and Kbuild. 
-My interest is in using the tools on other projects. 
-Though Documentation/kbuild fills in holes, I had already gleaned what I
-needed to deal with anything related to linux kernel development.  
+Hi,
 
-Thank you, you have been very helpful. 
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> This (huge) patch adds the support libraries for OMAP and DaVinci
+ Arnout> processors to buildroot.  This is an RFC: there are still a bunch
+ Arnout> of FIXMEs and I've only tried it on a DM365.  I post it as one
+ Arnout> big patch this time, so it is easier to see the overall structure.
+
+ Arnout> As I said, it is far from ready.  However, it has been sitting
+ Arnout> in my repository for more than two months now and I haven't had
+ Arnout> time to improve it.  So I thought it would be better to post it
+ Arnout> now, unfinished, rather than risking that it becomes unusable.
+
+Thanks! Lets discuss some more about it during the dev day. I'm starting
+a TI-based project at work at the moment, and I've takend a quick look
+at the powervr situation, which is a similar mess.
+
+-- 
+Bye, Peter Korsgaard
