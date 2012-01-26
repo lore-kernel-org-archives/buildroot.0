@@ -1,40 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Jan 2012 18:02:04 +0100
-Subject: [Buildroot] [PATCH v4] New package: linux-firmware
-In-Reply-To: <87bopq30ii.fsf@macbook.be.48ers.dk>
-References: <1327590802-17503-1-git-send-email-yegorslists@googlemail.com>
- <87bopq30ii.fsf@macbook.be.48ers.dk>
-Message-ID: <20120126180204.5900134e@skate>
+From: Will Newton <will.newton@gmail.com>
+Date: Thu, 26 Jan 2012 17:15:30 +0000
+Subject: [Buildroot] [PULL REQUEST] EFL packages
+In-Reply-To: <87fwf2325m.fsf@macbook.be.48ers.dk>
+References: <CAFbHwiRvGh680H8Oj6qArSGViHM1qjsQn5m6oVP1LJ78G_q54A@mail.gmail.com>
+ <87fwf2325m.fsf@macbook.be.48ers.dk>
+Message-ID: <CAFbHwiT-vq1n7_+hqhx0FwxaTVxaLM14iDmFxvwiU3PBRFZ+zQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 26 Jan 2012 17:13:25 +0100,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+On Thu, Jan 26, 2012 at 3:37 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+>
+> ?Will> Hi Peter,
+>
+> ?Will> These patches take into account the second round of review
+> ?Will> comments and add the various Acked-by and Reviewed-by tags. Let
+> ?Will> me know if you would prefer the changes in patch form rather than
+> ?Will> as a git repo.
+>
+> Yes please, makes it easier to comment on individual commits.
 
->  yegorslists> +define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
->  yegorslists> +	mkdir -p $(TARGET_DIR)/lib/firmware
->  yegorslists> +	for i in $(LINUX_FIRMWARE_FILES_y); do \
->  yegorslists> +		cp -af $(@D)/$$i
->  yegorslists> $(TARGET_DIR)/lib/firmware/$$i; \
->  yegorslists> +	done
-> 
-> That won't work as cp doesn't create the destination directories -
-> install -D is also not really good as that doesn't handle symlinks,
-> so I think the best approach is to use tar.
-
-What about:
-
-	mkdir -p $(dirname $(TARGET_DIR)/lib/firmware/$$i)
- 	cp -af $(@D)/$$i $(TARGET_DIR)/lib/firmware/$$i
-
- ?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Ok, I'll post the series again. The changes are quite small from the
+last time I posted them though, mostly adding Acked-by/Reviewed-by.
