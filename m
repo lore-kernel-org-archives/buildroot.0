@@ -1,92 +1,100 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 22:34:33 +0100
-Subject: [Buildroot] [git commit] lua: Allow building lua for the host
-Message-ID: <20120126220754.D218090591@busybox.osuosl.org>
+Date: Thu, 26 Jan 2012 23:02:46 +0100
+Subject: [Buildroot] [git commit] libeina: Add new package along with EFL
+	infrastructure
+Message-ID: <20120126220754.F1D8290591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd21fa2d661f0c2bbdfd93f4aded7a8a61caf504
+commit: http://git.buildroot.net/buildroot/commit/?id=66c1b5f4088382da8b607bed7809169fc1edad8f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: drop autoreconf, add URL]
 Signed-off-by: Will Newton <will.newton@imgtec.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lua/lua.mk |   39 +++++++++++++++++++++++++++++++++++++++
- 1 files changed, 39 insertions(+), 0 deletions(-)
+ package/Config.in              |    1 +
+ package/efl/Config.in          |   16 ++++++++++++++++
+ package/efl/efl.mk             |    1 +
+ package/efl/libeina/Config.in  |    6 ++++++
+ package/efl/libeina/libeina.mk |   15 +++++++++++++++
+ 5 files changed, 39 insertions(+), 0 deletions(-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index c95e18a..1dabedf 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -21,6 +21,10 @@ else
- 	LUA_MYCFLAGS += -DLUA_USE_POSIX
- endif
+diff --git a/package/Config.in b/package/Config.in
+index 251da85..65c2a98 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -118,6 +118,7 @@ source "package/sdl_ttf/Config.in"
+ source "package/sdl_gfx/Config.in"
  
-+HOST_LUA_DEPENDENCIES =
-+HOST_LUA_MYCFLAGS = -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
-+HOST_LUA_MYLIBS = -ldl
-+
- define LUA_BUILD_CMDS
- 	sed -i -e 's/-O2//' $(@D)/src/Makefile
- 	sed -i -e 's/\/usr\/local/\/usr/' $(@D)/etc/lua.pc
-@@ -31,6 +35,15 @@ define LUA_BUILD_CMDS
- 	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
- endef
+ comment "other GUIs"
++source "package/efl/Config.in"
+ source "package/qt/Config.in"
+ source "package/x11r7/Config.in"
  
-+define HOST_LUA_BUILD_CMDS
-+	sed -i -e 's/-O2//' $(@D)/src/Makefile
-+	sed -i -e 's/\/usr\/local/\/usr/' $(@D)/etc/lua.pc
-+	$(MAKE) \
-+	MYCFLAGS="$(HOST_LUA_MYCFLAGS)" \
-+	MYLIBS="$(HOST_LUA_MYLIBS)" \
-+	PKG_VERSION=$(LUA_VERSION) -C $(@D)/src all
-+endef
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+new file mode 100644
+index 0000000..cc677cb
+--- /dev/null
++++ b/package/efl/Config.in
+@@ -0,0 +1,16 @@
++menuconfig BR2_PACKAGE_EFL
++	bool "Enlightenment Foundation Libraries"
++	depends on BR2_USE_WCHAR
++	help
++	  Enlightenment Foundation Libraries
 +
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
- define LUA_INSTALL_STAGING_SHARED_LIB
- 	$(INSTALL) -D $(@D)/src/liblua.so.$(LUA_VERSION) \
-@@ -94,6 +107,21 @@ define LUA_INSTALL_TARGET_CMDS
- 	$(LUA_INSTALL_DEVFILES)
- endef
- 
-+define HOST_LUA_INSTALL_CMDS
-+	$(INSTALL) $(@D)/src/lua $(HOST_DIR)/usr/bin
-+	$(INSTALL) $(@D)/src/luac $(HOST_DIR)/usr/bin
-+	$(INSTALL) $(@D)/src/liblua.so.$(LUA_VERSION) \
-+		$(HOST_DIR)/usr/lib/liblua.so.$(LUA_VERSION)
-+	ln -sf liblua.so.$(LUA_VERSION) $(HOST_DIR)/usr/lib/liblua.so
-+	$(INSTALL) $(@D)/src/liblua.a $(HOST_DIR)/usr/lib/liblua.a
-+	$(INSTALL) -m 0644 -D $(@D)/etc/lua.pc \
-+		$(HOST_DIR)/usr/lib/pkgconfig/lua.pc
-+	$(INSTALL) $(@D)/src/lua.h $(HOST_DIR)/usr/include
-+	$(INSTALL) $(@D)/src/luaconf.h $(HOST_DIR)/usr/include
-+	$(INSTALL) $(@D)/src/lualib.h $(HOST_DIR)/usr/include
-+	$(INSTALL) $(@D)/src/lauxlib.h $(HOST_DIR)/usr/include
-+endef
++	  http://enlightenment.org
 +
- LUA_INSTALLED_FILES = \
- 	/usr/include/lua.h \
- 	/usr/include/luaconf.h \
-@@ -117,8 +145,19 @@ define LUA_UNINSTALL_TARGET_CMDS
- 	done
- endef
- 
-+define HOST_LUA_UNINSTALL_TARGET_CMDS
-+	for i in $(LUA_INSTALLED_FILES); do \
-+		rm -f $(HOST_DIR)$$i; \
-+	done
-+endef
++if BR2_PACKAGE_EFL
 +
- define LUA_CLEAN_CMDS
- 	-$(MAKE) -C $(@D) clean
- endef
- 
-+define HOST_LUA_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
++source "package/efl/libeina/Config.in"
 +
- $(eval $(call GENTARGETS))
-+$(eval $(call GENTARGETS,host))
++endif # BR2_PACKAGE_EFL
++
++comment "EFL requires WCHAR support in toolchain"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+new file mode 100644
+index 0000000..d8d53cf
+--- /dev/null
++++ b/package/efl/efl.mk
+@@ -0,0 +1 @@
++include package/efl/*/*.mk
+diff --git a/package/efl/libeina/Config.in b/package/efl/libeina/Config.in
+new file mode 100644
+index 0000000..80600ad
+--- /dev/null
++++ b/package/efl/libeina/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBEINA
++	bool "libeina"
++	help
++	  Eina is a tiny library to handle data types (list, hash, etc.)
++
++	  http://trac.enlightenment.org/e/wiki/Eina
+diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
+new file mode 100644
+index 0000000..b457e3f
+--- /dev/null
++++ b/package/efl/libeina/libeina.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# libeina
++#
++#############################################################
++
++LIBEINA_VERSION = 1.1.0
++LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
++LIBEINA_SITE = http://download.enlightenment.org/releases/
++LIBEINA_INSTALL_STAGING = YES
++
++LIBEINA_DEPENDENCIES = host-pkg-config
++
++$(eval $(call AUTOTARGETS))
++$(eval $(call AUTOTARGETS,host))
