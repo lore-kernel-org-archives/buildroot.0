@@ -1,30 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 17:13:25 +0100
-Subject: [Buildroot] [PATCH v4] New package: linux-firmware
-In-Reply-To: <1327590802-17503-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 26 Jan 2012 16:13:22
- +0100")
-References: <1327590802-17503-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87bopq30ii.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 26 Jan 2012 13:51:20 -0300
+Subject: [Buildroot] [PATCH 01/13] bind: security bump to version
+	9.6-ESV-R5-P1
+Message-ID: <1327596692-30728-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bind/bind.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- yegorslists> +define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
- yegorslists> +	mkdir -p $(TARGET_DIR)/lib/firmware
- yegorslists> +	for i in $(LINUX_FIRMWARE_FILES_y); do \
- yegorslists> +		cp -af $(@D)/$$i $(TARGET_DIR)/lib/firmware/$$i; \
- yegorslists> +	done
-
-That won't work as cp doesn't create the destination directories -
-install -D is also not really good as that doesn't handle symlinks, so I
-think the best approach is to use tar.
-
-I'll fix that up while committing.
-
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 4c7a612..0de986d 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BIND_VERSION = 9.6-ESV-R5
++BIND_VERSION = 9.6-ESV-R5-P1
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ BIND_MAKE = $(MAKE1)
+ BIND_TARGET_SBINS = lwresd named named-checkconf named-checkzone
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
