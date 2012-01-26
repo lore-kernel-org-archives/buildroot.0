@@ -1,35 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 22:23:16 +0100
-Subject: [Buildroot] [git commit] i2c-tools: bump to version 3.1.0
-Message-ID: <20120126212542.5F5CA9058C@busybox.osuosl.org>
+Date: Thu, 26 Jan 2012 22:24:30 +0100
+Subject: [Buildroot] [git commit] libpcap: bump to version 1.2.1
+Message-ID: <20120126212542.8F23A9058C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c72d3a2a7e2c041f1e7566d78368ca01efa8f3f8
+commit: http://git.buildroot.net/buildroot/commit/?id=17bbd07af452bf76b6b2a605fc669a487a362986
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/i2c-tools/i2c-tools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpcap/libpcap.mk |   15 +++++++--------
+ 1 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 8628eaf..aeabf02 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 6b44e49..0b88a42 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,18 +4,17 @@
  #
  #############################################################
  
--I2C_TOOLS_VERSION = 3.0.3
-+I2C_TOOLS_VERSION = 3.1.0
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
--I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases/
-+I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+-LIBPCAP_VERSION:=1.1.1
+-LIBPCAP_SITE:=http://www.tcpdump.org/release
+-LIBPCAP_SOURCE:=libpcap-$(LIBPCAP_VERSION).tar.gz
+-LIBPCAP_INSTALL_STAGING:=YES
++LIBPCAP_VERSION = 1.2.1
++LIBPCAP_SITE = http://www.tcpdump.org/release
++LIBPCAP_INSTALL_STAGING = YES
+ # doesn't have an install-strip
+ LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
+ 	$(if $(BR2_PREFER_STATIC_LIB),install,install-shared)
+ LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
+ 	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
+-LIBPCAP_DEPENDENCIES:=zlib
+-LIBPCAP_CONF_ENV:=ac_cv_linux_vers=2 \
+-		  ac_cv_header_linux_wireless_h=yes # configure misdetects this
+-LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
++LIBPCAP_DEPENDENCIES = zlib
++LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
++		ac_cv_header_linux_wireless_h=yes # configure misdetects this
++LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
  
- define I2C_TOOLS_BUILD_CMDS
-  $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ $(eval $(call AUTOTARGETS))
