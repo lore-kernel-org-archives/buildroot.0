@@ -1,49 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 22:24:30 +0100
-Subject: [Buildroot] [git commit] libpcap: bump to version 1.2.1
-Message-ID: <20120126212542.8F23A9058C@busybox.osuosl.org>
+Date: Thu, 26 Jan 2012 22:25:15 +0100
+Subject: [Buildroot] [git commit] ipset: bump to version 6.11
+Message-ID: <20120126212542.B44B99058C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=17bbd07af452bf76b6b2a605fc669a487a362986
+commit: http://git.buildroot.net/buildroot/commit/?id=bae709907c30aaf6f84f44d188f9f399038bd410
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libpcap/libpcap.mk |   15 +++++++--------
- 1 files changed, 7 insertions(+), 8 deletions(-)
+ package/ipset/ipset.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 6b44e49..0b88a42 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,18 +4,17 @@
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index d8df026..06393f4 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--LIBPCAP_VERSION:=1.1.1
--LIBPCAP_SITE:=http://www.tcpdump.org/release
--LIBPCAP_SOURCE:=libpcap-$(LIBPCAP_VERSION).tar.gz
--LIBPCAP_INSTALL_STAGING:=YES
-+LIBPCAP_VERSION = 1.2.1
-+LIBPCAP_SITE = http://www.tcpdump.org/release
-+LIBPCAP_INSTALL_STAGING = YES
- # doesn't have an install-strip
- LIBPCAP_INSTALL_TARGET_OPT= DESTDIR="$(TARGET_DIR)" \
- 	$(if $(BR2_PREFER_STATIC_LIB),install,install-shared)
- LIBPCAP_INSTALL_STAGING_OPT= DESTDIR="$(STAGING_DIR)" install \
- 	$(if $(BR2_PREFER_STATIC_LIB),,install-shared)
--LIBPCAP_DEPENDENCIES:=zlib
--LIBPCAP_CONF_ENV:=ac_cv_linux_vers=2 \
--		  ac_cv_header_linux_wireless_h=yes # configure misdetects this
--LIBPCAP_CONF_OPT:=--disable-yydebug --with-pcap=linux
-+LIBPCAP_DEPENDENCIES = zlib
-+LIBPCAP_CONF_ENV = ac_cv_linux_vers=2 \
-+		ac_cv_header_linux_wireless_h=yes # configure misdetects this
-+LIBPCAP_CONF_OPT = --disable-yydebug --with-pcap=linux
- 
- $(eval $(call AUTOTARGETS))
+-IPSET_VERSION = 6.10
++IPSET_VERSION = 6.11
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_AUTORECONF = YES
