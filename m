@@ -1,166 +1,180 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 11:30:29 +0100
-Subject: [Buildroot] [git commit] gst-plugins-base: fix build with updated
-	tremor
-Message-ID: <20120126103108.5EC869058C@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 26 Jan 2012 12:30:14 +0100
+Subject: [Buildroot] [PATCH v3] New package: linux-firmware
+Message-ID: <1327577414-11374-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=208e2388dfc5f80b36661c0ddd6cb63d80028717
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Patch sent upstream.
+add infrastructure for closed binary blobs
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- .../gst-plugins-base-0.10.35-tremor.patch          |  139 ++++++++++++++++++++
- 1 files changed, 139 insertions(+), 0 deletions(-)
+Changes:
+v3:
+	typo fix (Michael S. Zick)
+v2: 
+	change package name from firmware to linux-firmware (Gustavo Zacarias)
+	create more granular options (Gustavo Zacarias)
+ package/Config.in                        |    1 +
+ package/linux-firmware/Config.in         |   46 +++++++++++++++++
+ package/linux-firmware/linux-firmware.mk |   79 ++++++++++++++++++++++++++++++
+ 3 files changed, 126 insertions(+), 0 deletions(-)
+ create mode 100644 package/linux-firmware/Config.in
+ create mode 100644 package/linux-firmware/linux-firmware.mk
 
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch
+diff --git a/package/Config.in b/package/Config.in
+index f219e37..10f9f79 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -185,6 +185,7 @@ source "package/input-tools/Config.in"
+ source "package/iostat/Config.in"
+ source "package/irda-utils/Config.in"
+ source "package/kbd/Config.in"
++source "package/linux-firmware/Config.in"
+ source "package/lm-sensors/Config.in"
+ source "package/lsuio/Config.in"
+ source "package/lvm2/Config.in"
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
 new file mode 100644
-index 0000000..fa8785b
+index 0000000..3ea002f
 --- /dev/null
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch
-@@ -0,0 +1,139 @@
-+From 0088753651350de3060ece22c1be4153b6009515 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <jacmet@sunsite.dk>
-+Date: Wed, 25 Jan 2012 23:53:04 +0100
-+Subject: [PATCH] base: vorbisdeclib: support modern Tremor versions
++++ b/package/linux-firmware/Config.in
+@@ -0,0 +1,46 @@
++config BR2_PACKAGE_LINUX_FIRMWARE
++	bool "linux-firmware"
++	help
++	  This package provides various binary firmware files 
++	  (closed binary blobs) for such devices like LAN, WLAN cards etc.
 +
-+Reported upstream as https://bugzilla.gnome.org/show_bug.cgi?id=668726
++if BR2_PACKAGE_LINUX_FIRMWARE
 +
-+Tremor changed to use standard libogg rather than its own incompatible
-+copy back in Aug 2010 (r17375), causing gst-plugin-base build to fail.
++menu "Devices"
 +
-+Tremolo so far unfortunately hasn't been updated. Restructure
-+vorbisdeclib.h so the legacy _ogg_packet_wrapper code is only used for
-+Tremolo.
++menu "Texas Instruments"
 +
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ ext/vorbis/gstvorbisdeclib.h |   77 ++++++++++++++++++++++-------------------
-+ 1 files changed, 41 insertions(+), 36 deletions(-)
++config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
++	bool "wl127X"
++	help
++	  Firmware files for WLAN and Bluetooth modules wl1271 and wl1273
 +
-+diff --git a/ext/vorbis/gstvorbisdeclib.h b/ext/vorbis/gstvorbisdeclib.h
-+index ca00af9..e147591 100644
-+--- a/ext/vorbis/gstvorbisdeclib.h
-++++ b/ext/vorbis/gstvorbisdeclib.h
-+@@ -29,11 +29,6 @@
-+ 
-+ #ifndef TREMOR
-+ 
-+-#include <vorbis/codec.h>
-+-
-+-typedef float                          vorbis_sample_t;
-+-typedef ogg_packet                     ogg_packet_wrapper;
-+-
-+ #define GST_VORBIS_DEC_DESCRIPTION "decode raw vorbis streams to float audio"
-+ 
-+ #define GST_VORBIS_DEC_SRC_CAPS \
-+@@ -47,6 +42,42 @@ typedef ogg_packet                     ogg_packet_wrapper;
-+ 
-+ #define GST_VORBIS_DEC_GLIB_TYPE_NAME      GstVorbisDec
-+ 
-++#else /* TREMOR */
-++
-++#define GST_VORBIS_DEC_DESCRIPTION "decode raw vorbis streams to integer audio"
-++
-++#define GST_VORBIS_DEC_SRC_CAPS \
-++    GST_STATIC_CAPS ("audio/x-raw-int, "   \
-++        "rate = (int) [ 1, MAX ], "        \
-++        "channels = (int) [ 1, 6 ], "      \
-++        "endianness = (int) BYTE_ORDER, "  \
-++        "width = (int) { 16, 32 }, "       \
-++        "depth = (int) 16, "               \
-++        "signed = (boolean) true")
-++
-++#define GST_VORBIS_DEC_DEFAULT_SAMPLE_WIDTH           (16)
-++
-++/* we need a different type name here */
-++#define GST_VORBIS_DEC_GLIB_TYPE_NAME      GstIVorbisDec
-++
-++/* and still have it compile */
-++typedef struct _GstVorbisDec               GstIVorbisDec;
-++typedef struct _GstVorbisDecClass          GstIVorbisDecClass;
-++
-++#endif /* TREMOR */
-++
-++#ifndef USE_TREMOLO
-++
-++#ifdef TREMOR
-++ #include <tremor/ivorbiscodec.h>
-++ typedef ogg_int32_t                    vorbis_sample_t;
-++#else
-++ #include <vorbis/codec.h>
-++ typedef float                          vorbis_sample_t;
-++#endif
-++
-++typedef ogg_packet                     ogg_packet_wrapper;
-++
-+ static inline guint8 *
-+ gst_ogg_packet_data (ogg_packet * p)
-+ {
-+@@ -72,17 +103,11 @@ gst_ogg_packet_from_wrapper (ogg_packet_wrapper * packet)
-+   return packet;
-+ }
-+ 
-+-#else
-+-
-+-#ifdef USE_TREMOLO
-+-  #include <Tremolo/ivorbiscodec.h>
-+-  #include <Tremolo/codec_internal.h>
-+-  typedef ogg_int16_t                    vorbis_sample_t;
-+-#else
-+-  #include <tremor/ivorbiscodec.h>
-+-  typedef ogg_int32_t                    vorbis_sample_t;
-+-#endif
-++#else /* USE_TREMOLO */
-+ 
-++#include <Tremolo/ivorbiscodec.h>
-++#include <Tremolo/codec_internal.h>
-++typedef ogg_int16_t                    vorbis_sample_t;
-+ typedef struct _ogg_packet_wrapper     ogg_packet_wrapper;
-+ 
-+ struct _ogg_packet_wrapper {
-+@@ -91,26 +116,6 @@ struct _ogg_packet_wrapper {
-+   ogg_buffer          buf;
-+ };
-+ 
-+-#define GST_VORBIS_DEC_DESCRIPTION "decode raw vorbis streams to integer audio"
-+-
-+-#define GST_VORBIS_DEC_SRC_CAPS \
-+-    GST_STATIC_CAPS ("audio/x-raw-int, "   \
-+-        "rate = (int) [ 1, MAX ], "        \
-+-        "channels = (int) [ 1, 6 ], "      \
-+-        "endianness = (int) BYTE_ORDER, "  \
-+-        "width = (int) { 16, 32 }, "       \
-+-        "depth = (int) 16, "               \
-+-        "signed = (boolean) true")
-+-
-+-#define GST_VORBIS_DEC_DEFAULT_SAMPLE_WIDTH           (16)
-+-
-+-/* we need a different type name here */
-+-#define GST_VORBIS_DEC_GLIB_TYPE_NAME      GstIVorbisDec
-+-
-+-/* and still have it compile */
-+-typedef struct _GstVorbisDec               GstIVorbisDec;
-+-typedef struct _GstVorbisDecClass          GstIVorbisDecClass;
-+-
-+ /* compensate minor variation */
-+ #define vorbis_synthesis(a, b)             vorbis_synthesis (a, b, 1)
-+ 
-+@@ -154,7 +159,7 @@ gst_ogg_packet_from_wrapper (ogg_packet_wrapper * packet)
-+   return &(packet->packet);
-+ }
-+ 
-+-#endif
-++#endif /* USE_TREMOLO */
-+ 
-+ typedef void (*CopySampleFunc)(vorbis_sample_t *out, vorbis_sample_t **in,
-+                            guint samples, gint channels, gint width);
-+-- 
-+1.7.8.3
++config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X
++	bool "wl128X"
++	help
++	  Firmware files for WLAN and Bluetooth modules wl128x
 +
++endmenu
++
++menu "Ralink"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
++	bool "Ralink rt2501/rt61"
++	help
++	  Ralink rt2501/rt61
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73
++	bool "Ralink rt73"
++	help
++	  Ralink rt73
++
++config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX
++	bool "Ralink rt27xx/rt28xx/rt30xx"
++	help
++	  Ralink rt27xx/rt28xx/rt30xx
++
++endmenu
++
++endmenu
++
++endif
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+new file mode 100644
+index 0000000..dda3f2b
+--- /dev/null
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -0,0 +1,79 @@
++#############################################################
++#
++# linux-firmware
++#
++#############################################################
++LINUX_FIRMWARE_VERSION = a2995d38c234e3d767df7223d84a0f33a1a24997
++LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
++LINUX_FIRMWARE_SITE_METHOD = git
++
++# wl127x
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
++define FIRMWARE_TI_WL127X_INSTALL_TO_TARGET
++	cp -rf $(@D)/ti-connectivity/wl127* $(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/ti-connectivity/TIInit_7.2.31.bts \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ti-connectivity \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# wl128x
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X),y)
++define FIRMWARE_TI_WL128X_INSTALL_TO_TARGET
++	cp -rf $(@D)/ti-connectivity/wl128* $(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/ti-connectivity/TIInit_7.2.31.bts \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ti-connectivity \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# rt2501/rt61
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
++define FIRMWARE_RALINK_RT61_INSTALL_TO_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/rt2561.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt2561s.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt2661.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ralink-firmware.txt \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# rt73
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73),y)
++define FIRMWARE_RALINK_RT73_INSTALL_TO_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/rt73.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ralink-firmware.txt \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++# rt73
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX),y)
++define FIRMWARE_RALINK_RT2XX_INSTALL_TO_TARGET
++	$(INSTALL) -m 0644 -D $(@D)/rt2860.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt2870.bin \
++		$(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/rt3071.bin \
++		$(TARGET_DIR)/lib/firmware
++	cp -rf $(@D)/rt30* $(TARGET_DIR)/lib/firmware
++	$(INSTALL) -m 0644 -D $(@D)/LICENCE.ralink-firmware.txt \
++		$(TARGET_DIR)/lib/firmware
++endef
++endif
++
++define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
++	$(FIRMWARE_TI_WL127X_INSTALL_TO_TARGET)
++	$(FIRMWARE_TI_WL128X_INSTALL_TO_TARGET)
++	$(FIRMWARE_RALINK_RT61_INSTALL_TO_TARGET)
++	$(FIRMWARE_RALINK_RT73_INSTALL_TO_TARGET)
++	$(FIRMWARE_RALINK_RT2XX_INSTALL_TO_TARGET)
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.1.1
