@@ -1,40 +1,166 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 09:03:55 +0100
-Subject: [Buildroot] [git commit] linux: bump default 3.2.x stable version
-Message-ID: <20120126080428.816D09058E@busybox.osuosl.org>
+Date: Thu, 26 Jan 2012 11:30:29 +0100
+Subject: [Buildroot] [git commit] gst-plugins-base: fix build with updated
+	tremor
+Message-ID: <20120126103108.5EC869058C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd97b5d2b103c83dce09af6c4ae11d98038d92e7
+commit: http://git.buildroot.net/buildroot/commit/?id=208e2388dfc5f80b36661c0ddd6cb63d80028717
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Patch sent upstream.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ .../gst-plugins-base-0.10.35-tremor.patch          |  139 ++++++++++++++++++++
+ 1 files changed, 139 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index bbef487..132f87e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_2
- 
- config BR2_LINUX_KERNEL_3_2
--	bool "3.2.1"
-+	bool "3.2.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.2.1" if BR2_LINUX_KERNEL_3_2
-+	default "3.2.2" if BR2_LINUX_KERNEL_3_2
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch
+new file mode 100644
+index 0000000..fa8785b
+--- /dev/null
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch
+@@ -0,0 +1,139 @@
++From 0088753651350de3060ece22c1be4153b6009515 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <jacmet@sunsite.dk>
++Date: Wed, 25 Jan 2012 23:53:04 +0100
++Subject: [PATCH] base: vorbisdeclib: support modern Tremor versions
++
++Reported upstream as https://bugzilla.gnome.org/show_bug.cgi?id=668726
++
++Tremor changed to use standard libogg rather than its own incompatible
++copy back in Aug 2010 (r17375), causing gst-plugin-base build to fail.
++
++Tremolo so far unfortunately hasn't been updated. Restructure
++vorbisdeclib.h so the legacy _ogg_packet_wrapper code is only used for
++Tremolo.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ ext/vorbis/gstvorbisdeclib.h |   77 ++++++++++++++++++++++-------------------
++ 1 files changed, 41 insertions(+), 36 deletions(-)
++
++diff --git a/ext/vorbis/gstvorbisdeclib.h b/ext/vorbis/gstvorbisdeclib.h
++index ca00af9..e147591 100644
++--- a/ext/vorbis/gstvorbisdeclib.h
+++++ b/ext/vorbis/gstvorbisdeclib.h
++@@ -29,11 +29,6 @@
++ 
++ #ifndef TREMOR
++ 
++-#include <vorbis/codec.h>
++-
++-typedef float                          vorbis_sample_t;
++-typedef ogg_packet                     ogg_packet_wrapper;
++-
++ #define GST_VORBIS_DEC_DESCRIPTION "decode raw vorbis streams to float audio"
++ 
++ #define GST_VORBIS_DEC_SRC_CAPS \
++@@ -47,6 +42,42 @@ typedef ogg_packet                     ogg_packet_wrapper;
++ 
++ #define GST_VORBIS_DEC_GLIB_TYPE_NAME      GstVorbisDec
++ 
+++#else /* TREMOR */
+++
+++#define GST_VORBIS_DEC_DESCRIPTION "decode raw vorbis streams to integer audio"
+++
+++#define GST_VORBIS_DEC_SRC_CAPS \
+++    GST_STATIC_CAPS ("audio/x-raw-int, "   \
+++        "rate = (int) [ 1, MAX ], "        \
+++        "channels = (int) [ 1, 6 ], "      \
+++        "endianness = (int) BYTE_ORDER, "  \
+++        "width = (int) { 16, 32 }, "       \
+++        "depth = (int) 16, "               \
+++        "signed = (boolean) true")
+++
+++#define GST_VORBIS_DEC_DEFAULT_SAMPLE_WIDTH           (16)
+++
+++/* we need a different type name here */
+++#define GST_VORBIS_DEC_GLIB_TYPE_NAME      GstIVorbisDec
+++
+++/* and still have it compile */
+++typedef struct _GstVorbisDec               GstIVorbisDec;
+++typedef struct _GstVorbisDecClass          GstIVorbisDecClass;
+++
+++#endif /* TREMOR */
+++
+++#ifndef USE_TREMOLO
+++
+++#ifdef TREMOR
+++ #include <tremor/ivorbiscodec.h>
+++ typedef ogg_int32_t                    vorbis_sample_t;
+++#else
+++ #include <vorbis/codec.h>
+++ typedef float                          vorbis_sample_t;
+++#endif
+++
+++typedef ogg_packet                     ogg_packet_wrapper;
+++
++ static inline guint8 *
++ gst_ogg_packet_data (ogg_packet * p)
++ {
++@@ -72,17 +103,11 @@ gst_ogg_packet_from_wrapper (ogg_packet_wrapper * packet)
++   return packet;
++ }
++ 
++-#else
++-
++-#ifdef USE_TREMOLO
++-  #include <Tremolo/ivorbiscodec.h>
++-  #include <Tremolo/codec_internal.h>
++-  typedef ogg_int16_t                    vorbis_sample_t;
++-#else
++-  #include <tremor/ivorbiscodec.h>
++-  typedef ogg_int32_t                    vorbis_sample_t;
++-#endif
+++#else /* USE_TREMOLO */
++ 
+++#include <Tremolo/ivorbiscodec.h>
+++#include <Tremolo/codec_internal.h>
+++typedef ogg_int16_t                    vorbis_sample_t;
++ typedef struct _ogg_packet_wrapper     ogg_packet_wrapper;
++ 
++ struct _ogg_packet_wrapper {
++@@ -91,26 +116,6 @@ struct _ogg_packet_wrapper {
++   ogg_buffer          buf;
++ };
++ 
++-#define GST_VORBIS_DEC_DESCRIPTION "decode raw vorbis streams to integer audio"
++-
++-#define GST_VORBIS_DEC_SRC_CAPS \
++-    GST_STATIC_CAPS ("audio/x-raw-int, "   \
++-        "rate = (int) [ 1, MAX ], "        \
++-        "channels = (int) [ 1, 6 ], "      \
++-        "endianness = (int) BYTE_ORDER, "  \
++-        "width = (int) { 16, 32 }, "       \
++-        "depth = (int) 16, "               \
++-        "signed = (boolean) true")
++-
++-#define GST_VORBIS_DEC_DEFAULT_SAMPLE_WIDTH           (16)
++-
++-/* we need a different type name here */
++-#define GST_VORBIS_DEC_GLIB_TYPE_NAME      GstIVorbisDec
++-
++-/* and still have it compile */
++-typedef struct _GstVorbisDec               GstIVorbisDec;
++-typedef struct _GstVorbisDecClass          GstIVorbisDecClass;
++-
++ /* compensate minor variation */
++ #define vorbis_synthesis(a, b)             vorbis_synthesis (a, b, 1)
++ 
++@@ -154,7 +159,7 @@ gst_ogg_packet_from_wrapper (ogg_packet_wrapper * packet)
++   return &(packet->packet);
++ }
++ 
++-#endif
+++#endif /* USE_TREMOLO */
++ 
++ typedef void (*CopySampleFunc)(vorbis_sample_t *out, vorbis_sample_t **in,
++                            guint samples, gint channels, gint width);
++-- 
++1.7.8.3
++
