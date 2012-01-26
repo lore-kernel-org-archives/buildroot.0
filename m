@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jan 2012 13:51:27 -0300
-Subject: [Buildroot] [PATCH 08/13] i2c-tools: bump to version 3.1.0
+Date: Thu, 26 Jan 2012 13:51:29 -0300
+Subject: [Buildroot] [PATCH 10/13] e2fsprogs: bump to version 1.42
 In-Reply-To: <1327596692-30728-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1327596692-30728-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1327596692-30728-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1327596692-30728-10-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,86 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/i2c-tools/i2c-tools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/e2fsprogs/Config.in                        |    3 ++
+ ... e2fsprogs-add-missing-dep-of-tst_uuid-o.patch} |    0
+ package/e2fsprogs/e2fsprogs-fallocate.patch        |   22 ++++++++++++++++++++
+ ...it-libs.patch => e2fsprogs-sem-init-libs.patch} |    0
+ package/e2fsprogs/e2fsprogs.mk                     |    3 +-
+ 5 files changed, 27 insertions(+), 1 deletions(-)
+ rename package/e2fsprogs/{e2fsprogs-1.41.9-add-missing-dep-of-tst_uuid-o.patch => e2fsprogs-add-missing-dep-of-tst_uuid-o.patch} (100%)
+ create mode 100644 package/e2fsprogs/e2fsprogs-fallocate.patch
+ rename package/e2fsprogs/{e2fsprogs-1.41.9-sem-init-libs.patch => e2fsprogs-sem-init-libs.patch} (100%)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index 8628eaf..aeabf02 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
+index a98c49e..d4f4405 100644
+--- a/package/e2fsprogs/Config.in
++++ b/package/e2fsprogs/Config.in
+@@ -47,6 +47,9 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
+ 	bool "e2undo"
+ 	default y
+ 
++config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
++	bool "e4defrag"
++
+ config BR2_PACKAGE_E2FSPROGS_FILEFRAG
+ 	bool "filefrag"
+ 	default y
+diff --git a/package/e2fsprogs/e2fsprogs-1.41.9-add-missing-dep-of-tst_uuid-o.patch b/package/e2fsprogs/e2fsprogs-add-missing-dep-of-tst_uuid-o.patch
+similarity index 100%
+rename from package/e2fsprogs/e2fsprogs-1.41.9-add-missing-dep-of-tst_uuid-o.patch
+rename to package/e2fsprogs/e2fsprogs-add-missing-dep-of-tst_uuid-o.patch
+diff --git a/package/e2fsprogs/e2fsprogs-fallocate.patch b/package/e2fsprogs/e2fsprogs-fallocate.patch
+new file mode 100644
+index 0000000..4d952a5
+--- /dev/null
++++ b/package/e2fsprogs/e2fsprogs-fallocate.patch
+@@ -0,0 +1,22 @@
++We assume that fallocate is supported somehow
++but we need to check if we have fallocate()
++this problem shows up on uclibc systems since
++uclibc does not have fallocate() implemented
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++
++Upstream-Status: Pending
++
++Index: e2fsprogs-1.42/lib/ext2fs/unix_io.c
++===================================================================
++--- e2fsprogs-1.42.orig/lib/ext2fs/unix_io.c	2012-01-17 17:24:34.290780625 -0800
+++++ e2fsprogs-1.42/lib/ext2fs/unix_io.c	2012-01-17 17:25:37.338783680 -0800
++@@ -895,7 +895,7 @@
++ 		goto unimplemented;
++ #endif
++ 	} else {
++-#ifdef FALLOC_FL_PUNCH_HOLE
+++#if defined FALLOC_FL_PUNCH_HOLE && defined HAVE_FALLOCATE
++ 		/*
++ 		 * If we are not on block device, try to use punch hole
++ 		 * to reclaim free space.
+diff --git a/package/e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch b/package/e2fsprogs/e2fsprogs-sem-init-libs.patch
+similarity index 100%
+rename from package/e2fsprogs/e2fsprogs-1.41.9-sem-init-libs.patch
+rename to package/e2fsprogs/e2fsprogs-sem-init-libs.patch
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index d945a12..912deab 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--I2C_TOOLS_VERSION = 3.0.3
-+I2C_TOOLS_VERSION = 3.1.0
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
--I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases/
-+I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+-E2FSPROGS_VERSION = 1.41.14
++E2FSPROGS_VERSION = 1.42
+ E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
  
- define I2C_TOOLS_BUILD_CMDS
-  $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ E2FSPROGS_CONF_OPT = \
+@@ -39,6 +39,7 @@ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_E2FREEFRAG) += usr/sbin/e2freefrag
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_E2FSCK) += usr/sbin/e2fsck
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_E2LABEL) += usr/sbin/e2label
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_E2UNDO) += usr/sbin/e2undo
++E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_E4DEFRAG) += usr/sbin/e4defrag
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_FILEFRAG) += usr/sbin/filefrag
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_FSCK) += usr/sbin/fsck
+ E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_LOGSAVE) += usr/sbin/logsave
 -- 
 1.7.3.4
