@@ -1,32 +1,158 @@
-From: Johannes Teiwes <jteiwes@informatik.uni-bremen.de>
-Date: Thu, 26 Jan 2012 19:19:51 +0100
-Subject: [Buildroot] porting libffi to microblaze architecture
-Message-ID: <1A377131-99F1-49A3-942A-98679A105DBA@informatik.uni-bremen.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 26 Jan 2012 19:58:31 +0100
+Subject: [Buildroot] [PATCH v4] New package: linux-firmware
+In-Reply-To: <1327590802-17503-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Thu, 26 Jan 2012 16:13:22
+ +0100")
+References: <1327590802-17503-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <877h0e2svc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey fellow buildroot contributors,
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-(Sorry for posting a similar request again - i could not find the original thread)
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> add infrastructure for closed binary blobs
 
-I am trying to run python on a microblaze-based SoC. The Systems configuration and creation is currently done using buildroot for cross-compiling and package selection (which works like a charm). 
-The problem still remains that libffi (one of pythons dependencies) has not been ported to the Microblaze architecture. We have an existing software framework written in python, which should run on that processor - so python is mandatory for me. 
+Committed with minor fixes (see below) - Thanks!
 
-Can anybody point me to the right spots inside the libffi configuration or code to adjust some parameters in order to compile that library for the microblaze processor? What is the exact difficulty when porting this library to a different machine?
+ yegorslists> new file mode 100644
+ yegorslists> index 0000000..b4fa645
+ yegorslists> --- /dev/null
+ yegorslists> +++ b/package/linux-firmware/Config.in
+ yegorslists> @@ -0,0 +1,46 @@
+ yegorslists> +config BR2_PACKAGE_LINUX_FIRMWARE
+ yegorslists> +	bool "linux-firmware"
+ yegorslists> +	help
+ yegorslists> +	  This package provides various binary firmware files 
+ yegorslists> +	  (closed binary blobs) for such devices like LAN, WLAN cards etc.
 
-One possible problem i would see is that the Microblaze CPU is some kind of a moving target, since it can be configured in many ways (MMU/NOMMU, HARDFPU/SOFTFPU/NOFPU etc.) so one could then only target one specific configuration.
+Trailing spaces. We normally add an upstream URL here as well. I've
+added the link to gitweb for it.
 
-So i am thankful for any help, recipes for porting software or any advice, you can give me.
+ yegorslists> +
 
-thanks, Johannes
---
-Johannes Teiwes - jteiwes at tzi.de
+ yegorslists> +if BR2_PACKAGE_LINUX_FIRMWARE
+ yegorslists> +
+ yegorslists> +menu "Devices"
+ yegorslists> +
+ yegorslists> +menu "Ralink"
+
+I don't like too many sub menus, so I've dropped the outer "Devices"
+one.
+
+ yegorslists> +
+ yegorslists> +config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+ yegorslists> +	bool "Ralink rt2501/rt61"
+ yegorslists> +	help
+ yegorslists> +	  Ralink rt2501/rt61
+ yegorslists> +
+ yegorslists> +config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73
+ yegorslists> +	bool "Ralink rt73"
+ yegorslists> +	help
+ yegorslists> +	  Ralink rt73
+ yegorslists> +
+ yegorslists> +config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX
+ yegorslists> +	bool "Ralink rt27xx/rt28xx/rt30xx"
+ yegorslists> +	help
+ yegorslists> +	  Ralink rt27xx/rt28xx/rt30xx
+ yegorslists> +
+ yegorslists> +endmenu
+ yegorslists> +
+ yegorslists> +menu "Texas Instruments"
+ yegorslists> +
+ yegorslists> +config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
+ yegorslists> +	bool "wl127X"
+ yegorslists> +	help
+ yegorslists> +	  Firmware files for WLAN and Bluetooth modules wl1271 and wl1273
+ yegorslists> +
+ yegorslists> +config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X
+ yegorslists> +	bool "wl128X"
+ yegorslists> +	help
+ yegorslists> +	  Firmware files for WLAN and Bluetooth modules wl128x
+ yegorslists> +
+ yegorslists> +endmenu
+ yegorslists> +
+ yegorslists> +endmenu
+ yegorslists> +
+ yegorslists> +endif
+ yegorslists> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+ yegorslists> new file mode 100644
+ yegorslists> index 0000000..af48d13
+ yegorslists> --- /dev/null
+ yegorslists> +++ b/package/linux-firmware/linux-firmware.mk
+ yegorslists> @@ -0,0 +1,56 @@
+ yegorslists> +#############################################################
+ yegorslists> +#
+ yegorslists> +# linux-firmware
+ yegorslists> +#
+ yegorslists> +#############################################################
+ yegorslists> +LINUX_FIRMWARE_VERSION = a2995d38c234e3d767df7223d84a0f33a1a24997
+ yegorslists> +LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ yegorslists> +LINUX_FIRMWARE_SITE_METHOD = git
+ yegorslists> +
+ yegorslists> +# rt2501/rt61
+ yegorslists> +LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61) += \
+ yegorslists> +	rt2561.bin rt2561s.bin rt2661.bin LICENCE.ralink-firmware.txt 
+ yegorslists> +
+ yegorslists> +
+ yegorslists> +# rt73
+ yegorslists> +LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73) += \
+ yegorslists> +	rt73.bin LICENCE.ralink-firmware.txt 
+ yegorslists> +
+ yegorslists> +# rt2xx
+ yegorslists> +LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
+ yegorslists> +	rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin 	\
+ yegorslists> +	LICENCE.ralink-firmware.txt 
+
+A number of trailing spaces here as well.
+
+Does it make sense to install the license files? We don't otherwise
+install other license documentation.
+
+ yegorslists> +
+ yegorslists> +# wl127x
+ yegorslists> +LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
+ yegorslists> +	ti-connectivity/wl1271-fw-2.bin				\
+ yegorslists> +	ti-connectivity/wl1271-fw-ap.bin			\
+ yegorslists> +	ti-connectivity/wl1271-fw.bin				\
+ yegorslists> +	ti-connectivity/wl1271-nvs.bin				\
+ yegorslists> +	ti-connectivity/wl127x-fw-3.bin				\
+ yegorslists> +	ti-connectivity/wl127x-fw-plt-3.bin			\
+ yegorslists> +	ti-connectivity/wl127x-nvs.bin				\
+ yegorslists> +	ti-connectivity/TIInit_7.2.31.bts 			\
+ yegorslists> +	LICENCE.ti-connectivity
+ yegorslists> +
+ yegorslists> +# wl128x
+ yegorslists> +LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X) += \
+ yegorslists> +	ti-connectivity/wl128x-fw-3.bin				\
+ yegorslists> +	ti-connectivity/wl128x-fw-ap.bin			\
+ yegorslists> +	ti-connectivity/wl128x-fw-plt-3.bin			\
+ yegorslists> +	ti-connectivity/wl128x-fw.bin				\
+ yegorslists> +	ti-connectivity/wl1271-nvs.bin				\
+ yegorslists> +	ti-connectivity/wl128x-nvs.bin				\
+ yegorslists> +	ti-connectivity/wl12xx-nvs.bin				\
+ yegorslists> +	ti-connectivity/TIInit_7.2.31.bts 			\
+ yegorslists> +	LICENCE.ti-connectivity
+ yegorslists> +
+ yegorslists> +
+ yegorslists> +define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ yegorslists> +	mkdir -p $(TARGET_DIR)/lib/firmware
+ yegorslists> +	for i in $(LINUX_FIRMWARE_FILES_y); do \
+ yegorslists> +		cp -af $(@D)/$$i $(TARGET_DIR)/lib/firmware/$$i; \
+ yegorslists> +	done
+ yegorslists> +endef
+
+I've changed this to use 2x tar instead.
+
+ yegorslists> +
+ yegorslists> +$(eval $(call GENTARGETS))
+ yegorslists> -- 
+ yegorslists> 1.7.1.1
 
 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120126/ad096fec/attachment.html>
+-- 
+Bye, Peter Korsgaard
