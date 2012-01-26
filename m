@@ -1,29 +1,25 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Jan 2012 16:23:51 +0100
-Subject: [Buildroot] [PATCH v4] New package: linux-firmware
-In-Reply-To: <4F216E47.4070604@visionsystems.de> (Yegor Yefremov's message of
- "Thu, 26 Jan 2012 16:16:23 +0100")
-References: <1327590802-17503-1-git-send-email-yegorslists@googlemail.com>
- <4F216E47.4070604@visionsystems.de>
-Message-ID: <87k44e32t4.fsf@macbook.be.48ers.dk>
+From: David Lynch Jr. <dhlii@dlasys.net>
+Date: Thu, 26 Jan 2012 10:20:49 -0500
+Subject: [Buildroot] Kconfig
+In-Reply-To: <201201252314.30754.yann.morin.1998@free.fr>
+References: <1327518856.21058.53.camel@hp-dhlii>
+ <201201252221.21220.yann.morin.1998@free.fr>
+ <1327527444.19793.30.camel@hp-dhlii>
+ <201201252314.30754.yann.morin.1998@free.fr>
+Message-ID: <1327591249.3254.1.camel@hp-dhlii>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+I swear the last time I looked at this I had looked in the kernel source
+Documentation directory. There is an awful lot there that I figured out
+the hard way. Thank You.
 
- Yegor> Am 26.01.2012 16:13, schrieb yegorslists at googlemail.com:
+Yes, I am blurring Kconfig and Kbuild. 
+My interest is in using the tools on other projects. 
+Though Documentation/kbuild fills in holes, I had already gleaned what I
+needed to deal with anything related to linux kernel development.  
 
- Yegor> So here we have another issue: how can I define if files should
- Yegor> be copied to /lib/firmware or /lib/firmware/foo? ti-connectivity
- Yegor> firmware files should go direct to /lib/firmware. This is not
- Yegor> the case now.
-
-Ahh, I thought there would be a 1-to-1 relation between the
-linux-firmware.git location an /lib/firmware. How do other distributions
-handle it?
-
--- 
-Bye, Peter Korsgaard
+Thank you, you have been very helpful. 
