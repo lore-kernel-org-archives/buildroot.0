@@ -1,26 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Jan 2012 16:37:57 +0100
-Subject: [Buildroot] [PULL REQUEST] EFL packages
-In-Reply-To: <CAFbHwiRvGh680H8Oj6qArSGViHM1qjsQn5m6oVP1LJ78G_q54A@mail.gmail.com>
- (Will Newton's message of "Tue, 24 Jan 2012 15:46:26 +0000")
-References: <CAFbHwiRvGh680H8Oj6qArSGViHM1qjsQn5m6oVP1LJ78G_q54A@mail.gmail.com>
-Message-ID: <87fwf2325m.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Jan 2012 16:38:12 +0100
+Subject: [Buildroot] Request for review: buildroot in Open Mobile Linux
+ devroom of FOSDEM
+In-Reply-To: <201201160950.18702.arnout@mind.be>
+References: <201201160950.18702.arnout@mind.be>
+Message-ID: <20120126163812.02917ef3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+Le Mon, 16 Jan 2012 09:50:18 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
- Will> Hi Peter,
+>  As I announced earlier, I'll be giving a talk in the Open Mobile
+> Linux devroom on FOSDEM.  I would like to get feedback on the
+> slides.  You can find them on http://mind.be/?page=publications
+> (in .odp and .pdf).
+> 
+>  It's a 15 minute talk.  My goal is not to explain how to use
+> buildroot, but rather to convince the audience that buildroot (or
+> something similar) is the way to go for "open" embedded devices,
+> because it empowers the user to make modifications and improvements.
+> 
+>  My slides aren't really stand-alone, so it may actually be difficult
+> to review them without hearing my talk :-(
 
- Will> These patches take into account the second round of review
- Will> comments and add the various Acked-by and Reviewed-by tags. Let
- Will> me know if you would prefer the changes in patch form rather than
- Will> as a git repo.
+I did a quick review, and those slides look good. As you say, without
+the actual speech, it's hard to see where you want to go. From my point
+of view, the very important thing with embedded Linux build systems is
+repeatability/reproducibility. I have seen way too many
+people/companies building their embedded Linux system by randomly
+cross-compiling dozens of libraries manually, without any way of
+reproducing that build process.
 
-Yes please, makes it easier to comment on individual commits.
+Best regards,
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
