@@ -1,60 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Jan 2012 23:19:39 +0100
+From: Sinan Akman <sinan@writeme.com>
+Date: Thu, 26 Jan 2012 02:01:06 -0500
 Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <CB45C55B.2D94%donald.poole@swri.org> (Donald R. Poole's message
- of "Wed, 25 Jan 2012 20:56:34 +0000")
-References: <CB45C55B.2D94%donald.poole@swri.org>
-Message-ID: <87aa5b4e84.fsf@macbook.be.48ers.dk>
+In-Reply-To: <CB4468D5.2D36%donald.poole@swri.org>
+References: <CB4468D5.2D36%donald.poole@swri.org>
+Message-ID: <4F20FA32.2000000@writeme.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+On 01/24/2012 02:59 PM, Poole, Donald R. wrote:
 
- >> Ok, good. How do you create the file system on the SD card exactly?
+> Unfortunately, if I use the root user get a "Login Incorrect" message and a new login prompt that looks like this:
+> Starting input-event-daemon: done
+>
+> Welcome to VICTORY Embedded
+> victory-embedded login: root
+> Login incorrect
 
- Donald> I create the file system by first creating a single partition
- Donald> (sudo fdisk /dev/sdc && sync && sync in my case and selecting
- Donald> the appropriate commands).  Then, I format the partition (sudo
- Donald> mkfs.ext3 /dev/sdc1 && sync && sync).  Finally, I mount the
- Donald> partition (sudo mount /dev/sdc1 <some_mount_point>) and untar
- Donald> the generated root.tar filesystem tarball to the mount point
- Donald> (sudo tar -xvf root.tar -C <some_mount_point> && sync && sync).
+   Donald, I am not sure if this is what you are asking but if you are
+using imx53Loco board with rootfs that it ships with, you are probably
+aware that you will have to enter user name : lucid  and password : lucid.
 
-That all sounds good.
-
-From your earlier mail you mentioned that you got 'Login incorrect'
-right after typing root, so we must end up somewhere here
-(busybox/loginutils/login.c):
-
-
-		if (pw->pw_passwd[0] == '!' || pw->pw_passwd[0] == '*')
-			goto auth_failed;
-
-		if (opt & LOGIN_OPT_f)
-			break; /* -f USER: success without asking passwd */
-
-		if (pw->pw_uid == 0 && !check_securetty(short_tty))
-			goto auth_failed;
-
-		/* Don't check the password if password entry is empty (!) */
-		if (!pw->pw_passwd[0])
-			break;
-..
-
- auth_failed:
-..
-		puts("Login incorrect");
-
-As you're using the default fs skeleton, the pw_passwd[0] and
-/etc/securetty tests shouldn't fail, but apparently they do. Could you
-enable strace and run
-
-strace -f login
-
-And send the output to the list?
-
--- 
-Bye, Peter Korsgaard
+   -- sinan
