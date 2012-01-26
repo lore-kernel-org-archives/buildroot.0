@@ -1,8 +1,7 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Thu, 26 Jan 2012 17:42:25 +0000
-Subject: [Buildroot] [PATCH 04/14] libeina: Add new package along with EFL
-	infrastructure
-Message-ID: <CAFbHwiT0gRXscpUTjtzdwGRruwKETPcmW-zS+eGrqAHfYQnJQw@mail.gmail.com>
+Date: Thu, 26 Jan 2012 17:42:29 +0000
+Subject: [Buildroot] [PATCH 05/14] libeet: Add new package
+Message-ID: <CAFbHwiQuZ8aWRAFBF50d_3FF3Pz-ZSAADFiK0O2SY-2agQcySg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,87 +11,59 @@ To: buildroot@busybox.net
 Signed-off-by: Will Newton <will.newton@imgtec.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Config.in              |    1 +
- package/efl/Config.in          |   16 ++++++++++++++++
- package/efl/efl.mk             |    1 +
- package/efl/libeina/Config.in  |    4 ++++
- package/efl/libeina/libeina.mk |   16 ++++++++++++++++
- 5 files changed, 38 insertions(+), 0 deletions(-)
- create mode 100644 package/efl/Config.in
- create mode 100644 package/efl/efl.mk
- create mode 100644 package/efl/libeina/Config.in
- create mode 100644 package/efl/libeina/libeina.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index b245da8..9d435d6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -118,6 +118,7 @@ source "package/sdl_ttf/Config.in"
- source "package/sdl_gfx/Config.in"
-
- comment "other GUIs"
-+source "package/efl/Config.in"
- source "package/qt/Config.in"
- source "package/x11r7/Config.in"
+ package/efl/Config.in        |    1 +
+ package/efl/libeet/Config.in |    9 +++++++++
+ package/efl/libeet/libeet.mk |   16 ++++++++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/efl/libeet/Config.in
+ create mode 100644 package/efl/libeet/libeet.mk
 
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-new file mode 100644
-index 0000000..cc677cb
---- /dev/null
+index cc677cb..8ca514d 100644
+--- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -0,0 +1,16 @@
-+menuconfig BR2_PACKAGE_EFL
-+	bool "Enlightenment Foundation Libraries"
-+	depends on BR2_USE_WCHAR
+@@ -9,6 +9,7 @@ menuconfig BR2_PACKAGE_EFL
+ if BR2_PACKAGE_EFL
+
+ source "package/efl/libeina/Config.in"
++source "package/efl/libeet/Config.in"
+
+ endif # BR2_PACKAGE_EFL
+
+diff --git a/package/efl/libeet/Config.in b/package/efl/libeet/Config.in
+new file mode 100644
+index 0000000..fa1dd2a
+--- /dev/null
++++ b/package/efl/libeet/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBEET
++	bool "libeet"
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBEINA
 +	help
-+	  Enlightenment Foundation Libraries
-+
-+	  http://enlightenment.org
-+
-+if BR2_PACKAGE_EFL
-+
-+source "package/efl/libeina/Config.in"
-+
-+endif # BR2_PACKAGE_EFL
-+
-+comment "EFL requires WCHAR support in toolchain"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/efl/efl.mk b/package/efl/efl.mk
++	  Eet is a tiny library designed to write an arbitary set of
++	  chunks of data to a file and optionally compress each chunk
++	  (very much like a zip file).
+diff --git a/package/efl/libeet/libeet.mk b/package/efl/libeet/libeet.mk
 new file mode 100644
-index 0000000..d8d53cf
+index 0000000..bcea73e
 --- /dev/null
-+++ b/package/efl/efl.mk
-@@ -0,0 +1 @@
-+include package/efl/*/*.mk
-diff --git a/package/efl/libeina/Config.in b/package/efl/libeina/Config.in
-new file mode 100644
-index 0000000..b937b3b
---- /dev/null
-+++ b/package/efl/libeina/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_LIBEINA
-+	bool "libeina"
-+	help
-+	  Eina is a tiny library to handle data types (list, hash, etc.)
-diff --git a/package/efl/libeina/libeina.mk b/package/efl/libeina/libeina.mk
-new file mode 100644
-index 0000000..3ed43db
---- /dev/null
-+++ b/package/efl/libeina/libeina.mk
++++ b/package/efl/libeet/libeet.mk
 @@ -0,0 +1,16 @@
 +#############################################################
 +#
-+# libeina
++# libeet
 +#
 +#############################################################
 +
-+LIBEINA_VERSION = 1.1.0
-+LIBEINA_SOURCE = eina-$(LIBEINA_VERSION).tar.bz2
-+LIBEINA_SITE = http://download.enlightenment.org/releases/
-+LIBEINA_AUTORECONF = YES
-+LIBEINA_INSTALL_STAGING = YES
++LIBEET_VERSION = 1.5.0
++LIBEET_SOURCE = eet-$(LIBEET_VERSION).tar.bz2
++LIBEET_SITE = http://download.enlightenment.org/releases/
++LIBEET_INSTALL_STAGING = YES
++LIBEET_INSTALL_TARGET = YES
 +
-+LIBEINA_DEPENDENCIES = host-pkg-config
++LIBEET_DEPENDENCIES = host-pkg-config zlib jpeg libeina
 +
 +$(eval $(call AUTOTARGETS))
 +$(eval $(call AUTOTARGETS,host))
