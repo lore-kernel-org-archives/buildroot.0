@@ -1,7 +1,7 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Thu, 26 Jan 2012 17:42:49 +0000
-Subject: [Buildroot] [PATCH 11/14] libefreet: Add new package
-Message-ID: <CAFbHwiToPSSEQdBxNjpEfwR-dgn7c3Bk00R6d1ZesULL-Yp=iQ@mail.gmail.com>
+Date: Thu, 26 Jan 2012 17:42:52 +0000
+Subject: [Buildroot] [PATCH 12/14] libethumb: Add new package
+Message-ID: <CAFbHwiQ=H1i3_fuQAHmN432s42dxjxeOmSKFbMOWUiyeFnWRdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +12,59 @@ Signed-off-by: Will Newton <will.newton@imgtec.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
  package/efl/Config.in              |    1 +
- package/efl/libefreet/Config.in    |    8 ++++++++
- package/efl/libefreet/libefreet.mk |   14 ++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/efl/libefreet/Config.in
- create mode 100644 package/efl/libefreet/libefreet.mk
+ package/efl/libethumb/Config.in    |    8 ++++++++
+ package/efl/libethumb/libethumb.mk |   16 ++++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/efl/libethumb/Config.in
+ create mode 100644 package/efl/libethumb/libethumb.mk
 
 diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 258d99a..b747953 100644
+index b747953..1632290 100644
 --- a/package/efl/Config.in
 +++ b/package/efl/Config.in
-@@ -12,6 +12,7 @@ source "package/efl/expedite/Config.in"
- source "package/efl/libeina/Config.in"
- source "package/efl/libecore/Config.in"
- source "package/efl/libeet/Config.in"
-+source "package/efl/libefreet/Config.in"
+@@ -16,6 +16,7 @@ source "package/efl/libefreet/Config.in"
  source "package/efl/libevas/Config.in"
  source "package/efl/libembryo/Config.in"
  source "package/efl/libedje/Config.in"
-diff --git a/package/efl/libefreet/Config.in b/package/efl/libefreet/Config.in
++source "package/efl/libethumb/Config.in"
+
+ endif # BR2_PACKAGE_EFL
+
+diff --git a/package/efl/libethumb/Config.in b/package/efl/libethumb/Config.in
 new file mode 100644
-index 0000000..7a43501
+index 0000000..6f59e00
 --- /dev/null
-+++ b/package/efl/libefreet/Config.in
++++ b/package/efl/libethumb/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBEFREET
-+	bool "libefreet"
++config BR2_PACKAGE_LIBETHUMB
++	bool "libethumb"
 +	select BR2_PACKAGE_LIBEINA
-+	select BR2_PACKAGE_LIBEET
++	select BR2_PACKAGE_LIBEVAS
 +	select BR2_PACKAGE_LIBECORE
++	select BR2_PACKAGE_LIBEDJE
 +	help
-+	  Efreet is a library designed to help apps work several of the
-+	  Freedesktop.org standards regarding Icons, Desktop files and Menus.
-diff --git a/package/efl/libefreet/libefreet.mk
-b/package/efl/libefreet/libefreet.mk
++	  Ethumb is a library for generating thumbnail images of documents.
+diff --git a/package/efl/libethumb/libethumb.mk
+b/package/efl/libethumb/libethumb.mk
 new file mode 100644
-index 0000000..14fb8cb
+index 0000000..16b2ba9
 --- /dev/null
-+++ b/package/efl/libefreet/libefreet.mk
-@@ -0,0 +1,14 @@
++++ b/package/efl/libethumb/libethumb.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# libefreet
++# libethumb
 +#
 +################################################################################
 +
-+LIBEFREET_VERSION = 1.1.0
-+LIBEFREET_SOURCE = efreet-$(LIBEFREET_VERSION).tar.bz2
-+LIBEFREET_SITE = http://download.enlightenment.org/releases/
-+LIBEFREET_INSTALL_STAGING = YES
++LIBETHUMB_VERSION = 0.1.1.65643
++LIBETHUMB_SOURCE = ethumb-$(LIBETHUMB_VERSION).tar.bz2
++LIBETHUMB_SITE = http://download.enlightenment.org/snapshots/2011-11-28
++LIBETHUMB_INSTALL_STAGING = YES
 +
-+LIBEFREET_DEPENDENCIES = libeina libeet libecore
++LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
++
++LIBETHUMB_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
 +
 +$(eval $(call AUTOTARGETS))
 -- 
