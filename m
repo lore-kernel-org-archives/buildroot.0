@@ -1,49 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2012 11:19:28 +0100
-Subject: [Buildroot] gtkmm in buildroot toolchain
-In-Reply-To: <loom.20120127T095631-99@post.gmane.org>
-References: <loom.20120127T095631-99@post.gmane.org>
-Message-ID: <20120127111928.3e881f03@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 27 Jan 2012 11:18:52 +0100
+Subject: [Buildroot] [git commit] mplayer: add optional vorbis dependency
+Message-ID: <20120127102425.5BE4F90918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=5796753b6b4caba703cf23f45f68b7715d1150a4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le Fri, 27 Jan 2012 08:56:57 +0000 (UTC),
-Willy <willy@willygroup.org> a ?crit :
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mplayer/mplayer.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-> I've some program written in c++ and gtkmm. 
-> 
-> Which is the better way to compile them for my embedded system
-> between:
-> 
->  1. Add (somehow) libgtkmm (and other needed libraries) in buildroot
-> toolchain 2. Rewrite entirely my programs with gtk+ (and use always
-> it in future) 3. Use another graphic library and rewrite all
-
-All options are possible of course, but option 1) is the one that will
-allow you to re-use your software as-is. We already have gtk+ support
-in Buildroot, and I don't think that gtkmm has many more dependencies
-outside of gtk+, so it should be relatively easy to integrate into
-Buildroot.
-
-> PS: I need more documentation for buildroot, exist some good book or
-> forum for rookie users?
-
-There is some documentation in the Buildroot sources, run 'make manual'
-to generate the documentation.
-
-You can also read the documentation online at
-http://buildroot.org/downloads/buildroot.html.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/multimedia/mplayer/mplayer.mk b/package/multimedia/mplayer/mplayer.mk
+index 2ac5e16..216bb46 100644
+--- a/package/multimedia/mplayer/mplayer.mk
++++ b/package/multimedia/mplayer/mplayer.mk
+@@ -72,6 +72,11 @@ MPLAYER_DEPENDENCIES += tremor
+ MPLAYER_CONF_OPTS += --disable-tremor-internal --enable-tremor
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
++MPLAYER_DEPENDENCIES += libvorbis
++MPLAYER_CONF_OPTS += --enable-libvorbis
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBMAD),y)
+ MPLAYER_DEPENDENCIES += libmad
+ else
