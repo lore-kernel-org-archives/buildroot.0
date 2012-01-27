@@ -1,31 +1,70 @@
-From: Willy <willy@willygroup.org>
-Date: Fri, 27 Jan 2012 14:38:23 +0000 (UTC)
-Subject: [Buildroot] gtkmm in buildroot toolchain
-References: <loom.20120127T095631-99@post.gmane.org>
- <20120127111928.3e881f03@skate> <loom.20120127T145617-861@post.gmane.org>
- <201201270827.51630.minimod@morethan.org>
-Message-ID: <loom.20120127T153354-348@post.gmane.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 27 Jan 2012 15:59:05 +0100
+Subject: [Buildroot] [PATCH] New package: libical
+Message-ID: <1327676345-8958-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael S. Zick <minimod@...> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> > Perhaps do I install those *mm library manually one by one? 
-> >
-> 
-> That is one choice.
-> 
-> Might be worth the effort of writing another makefile for each,
-> setting your dependencies in the gtkmm makefile to depend on them,
-> then let Buildroot build the entire set.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in          |    1 +
+ package/libical/Config.in  |   11 +++++++++++
+ package/libical/libical.mk |   12 ++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/libical/Config.in
+ create mode 100644 package/libical/libical.mk
 
-That's too much complicated for me :(
-
-Maybe this time I will install the libraries one by one, then when I will be
-more confident with the use of Makefiles I will try the other way.
-
-Thanks a lot,
-Willy
+diff --git a/package/Config.in b/package/Config.in
+index c74c08b..4ceb7b1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -372,6 +372,7 @@ source "package/libevent/Config.in"
+ source "package/libev/Config.in"
+ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
++source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+ source "package/orc/Config.in"
+diff --git a/package/libical/Config.in b/package/libical/Config.in
+new file mode 100644
+index 0000000..12abdb2
+--- /dev/null
++++ b/package/libical/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBICAL
++	bool "libical"
++	depends on BR2_USE_WCHAR
++	help
++	  libical is an Open Source (MPL/LGPL) implementation of the IETF's 
++	  iCalendar Calendaring and Scheduling protocols.
++
++	  http://www.citadel.org/doku.php/documentation:featured_projects:libical
++
++comment "libical requires a toolchain with WCHAR support"
++	depends on !(BR2_USE_WCHAR)
+diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+new file mode 100644
+index 0000000..63311eb
+--- /dev/null
++++ b/package/libical/libical.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# libical
++#
++#############################################################
++
++LIBICAL_VERSION = 0.48
++LIBICAL_SITE = http://heanet.dl.sourceforge.net/project/freeassociation/libical/libical-$(LIBICAL_VERSION)
++LIBICAL_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS))
++
+-- 
+1.7.1.1
