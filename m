@@ -1,33 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2012 16:14:43 +0100
-Subject: [Buildroot] gtkmm in buildroot toolchain
-In-Reply-To: <loom.20120127T153354-348@post.gmane.org>
-References: <loom.20120127T095631-99@post.gmane.org>
- <20120127111928.3e881f03@skate>
- <loom.20120127T145617-861@post.gmane.org>
- <201201270827.51630.minimod@morethan.org>
- <loom.20120127T153354-348@post.gmane.org>
-Message-ID: <20120127161443.23b718e8@skate>
+Date: Fri, 27 Jan 2012 16:16:40 +0100
+Subject: [Buildroot] Bug 3877 - Patch not working
+In-Reply-To: <87wr8dji1h.fsf@macbook.be.48ers.dk>
+References: <BLU0-SMTP12114F40C37660CBB539A15D28E0@phx.gbl>
+ <BLU0-SMTP1654BA5FF86775DFCB3429FD28E0@phx.gbl>
+ <87wr8dji1h.fsf@macbook.be.48ers.dk>
+Message-ID: <20120127161640.27bec4f4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 27 Jan 2012 14:38:23 +0000 (UTC),
-Willy <willy@willygroup.org> a ?crit :
+Le Fri, 27 Jan 2012 16:12:42 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> > Might be worth the effort of writing another makefile for each,
-> > setting your dependencies in the gtkmm makefile to depend on them,
-> > then let Buildroot build the entire set.
-> 
-> That's too much complicated for me :(
+> uClibc will only add an accept4() function if your kernel headers
+> expose sys_accept4, which for ARM was only added in 2.6.36.
 
-I don't think it's that complicated. You simply need to create one
-simple .mk file as you did for glibmm, for each of gtkmm, atkmm,
-pangomm and cairomm. That should be sufficient.
-
-Best regards,
+According to his .config file, the kernel headers used were 2.6.35, so
+I guess you found the right spot.
 
 Thomas
 -- 
