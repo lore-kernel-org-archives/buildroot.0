@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2012 16:52:39 +0100
-Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
- Brussels
-In-Reply-To: <4F22C7E3.30900@visionsystems.de>
-References: <20120124000812.6d043023@skate>
- <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
- <201201271133.20517.arnout@mind.be> <20120127125805.580febd8@skate>
- <87sjj1jhhw.fsf@macbook.be.48ers.dk>
- <20120127162722.7c227e2f@skate> <4F22C372.20908@visionsystems.de>
- <20120127163630.5d604b7d@skate> <4F22C7E3.30900@visionsystems.de>
-Message-ID: <20120127165239.4209c438@skate>
+Date: Fri, 27 Jan 2012 16:53:34 +0100
+Subject: [Buildroot] [RFC] python bindings handling
+In-Reply-To: <CAGm1_ksToKWTwgAjys49Nop66WwLSdMi7ztC3Zc=g6QHE-7WbQ@mail.gmail.com>
+References: <CAGm1_ksToKWTwgAjys49Nop66WwLSdMi7ztC3Zc=g6QHE-7WbQ@mail.gmail.com>
+Message-ID: <20120127165334.6d1dd39b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 27 Jan 2012 16:50:59 +0100,
-Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+Le Fri, 27 Jan 2012 16:02:54 +0100,
+Yegor Yefremov <yegorslists@googlemail.com> a ?crit :
 
-> 1. keeping all patches at one place
-> 2. automatic checks for applying patches (not building)
+> How should we handle Python and other bindings?
+> 
+> 1. check if Python etc is selected and enable them automatically?
+> 2. make an option per package containing bindings
+> 3. something else
 
-Yes. Which is why during the Prague meeting, we discussed using
-patchwork and the decision was to try to set it up somewhere.
+I think I would say 2. It's not because you have Python *and* you have
+some library that you necessarily want the binding for that lib. Just
+make those bindings new Python packages (in the new Python menu you
+created!) and that should be good. No?
 
 Best regards,
 
