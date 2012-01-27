@@ -1,29 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jan 2012 16:16:40 +0100
-Subject: [Buildroot] Bug 3877 - Patch not working
-In-Reply-To: <87wr8dji1h.fsf@macbook.be.48ers.dk>
-References: <BLU0-SMTP12114F40C37660CBB539A15D28E0@phx.gbl>
- <BLU0-SMTP1654BA5FF86775DFCB3429FD28E0@phx.gbl>
- <87wr8dji1h.fsf@macbook.be.48ers.dk>
-Message-ID: <20120127161640.27bec4f4@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 27 Jan 2012 16:24:27 +0100
+Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
+	Brussels
+In-Reply-To: <20120127125805.580febd8@skate> (Thomas Petazzoni's message of
+ "Fri, 27 Jan 2012 12:58:05 +0100")
+References: <20120124000812.6d043023@skate>
+ <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
+ <201201271133.20517.arnout@mind.be> <20120127125805.580febd8@skate>
+Message-ID: <87sjj1jhhw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 27 Jan 2012 16:12:42 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> uClibc will only add an accept4() function if your kernel headers
-> expose sys_accept4, which for ARM was only added in 2.6.36.
+Hi,
 
-According to his .config file, the kernel headers used were 2.6.35, so
-I guess you found the right spot.
+ Thomas> Peter: could you try to handle the patches in a more FIFO fashion,
+ Thomas> rather than the LIFO fashion you're using these days? There are many
+ Thomas> patches that have been waiting for a very long time, while the most
+ Thomas> recent patches are being taken into account very quickly. Some
+ Thomas> examples: the host tools menu Arnout is referring to, or Maxime
+ Thomas> Ripard's patches on the per-package device/permission stuff.
 
-Thomas
+Completely FIFO is not an option with the current backlog as updates are
+sometimes sent and the latest version should be used, but I agree - The
+situation is not optimal.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
