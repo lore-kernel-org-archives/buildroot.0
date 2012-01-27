@@ -1,40 +1,33 @@
-From: inblueswithu <inblueswithu@hotmail.com>
-Date: Fri, 27 Jan 2012 21:04:37 +0530
-Subject: [Buildroot] Bug 3877 - Patch not working
-In-Reply-To: <87wr8dji1h.fsf@macbook.be.48ers.dk>
-References: <BLU0-SMTP12114F40C37660CBB539A15D28E0@phx.gbl>
- <BLU0-SMTP1654BA5FF86775DFCB3429FD28E0@phx.gbl>
- <87wr8dji1h.fsf@macbook.be.48ers.dk>
-Message-ID: <BLU0-SMTP11894E10861A68A1582828ED28E0@phx.gbl>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 27 Jan 2012 16:32:02 +0100
+Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
+	Brussels
+In-Reply-To: <20120127162722.7c227e2f@skate>
+References: <20120124000812.6d043023@skate>
+ <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
+ <201201271133.20517.arnout@mind.be> <20120127125805.580febd8@skate>
+ <87sjj1jhhw.fsf@macbook.be.48ers.dk> <20120127162722.7c227e2f@skate>
+Message-ID: <4F22C372.20908@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->   inblueswithu>  Hi,
->
->   inblueswithu>  I 've got "undefined reference to `accept4'" this error
->   inblueswithu>  while using buildroot.  When I googled, I got this patch:
->   inblueswithu>  https://bugs.uclibc.org/attachment.cgi?id=
->   inblueswithu>  3415&action=edit
->
-> uClibc will only add an accept4() function if your kernel headers expose
-> sys_accept4, which for ARM was only added in 2.6.36.
->
-> Make sure your kernel headers (and runtime kernel) is atleast 2.6.36.
-Thank You for your reply. This might be the problem, I'm working on this 
-right now.
+Am 27.01.2012 16:27, schrieb Thomas Petazzoni:
+> Le Fri, 27 Jan 2012 16:24:27 +0100,
+> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+> 
+>> Completely FIFO is not an option with the current backlog as updates
+>> are sometimes sent and the latest version should be used, but I agree
+>> - The situation is not optimal.
+> 
+> Yeah, of course full FIFO will not work. I just wanted to point out
+> some of the patch sets that have been sitting around for a while. But
+> agreed, the most recent patches are the one that have the highest
+> chance of applying properly, so it's definitely easier to handle them.
 
-    Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+That's where such tools as gerrit and build server come in play, cause they perform automatic integration build and let you know if patch is broken or breaks something.
 
-    According to his .config file, the kernel headers used were 2.6.35, so
-    I guess you found the right spot.
-
-Thank you for that quick reference & suggestion
-
-Thanks & Regards
-/inblueswithu/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120127/29965166/attachment-0001.html>
+Best regards,
+Yegor
