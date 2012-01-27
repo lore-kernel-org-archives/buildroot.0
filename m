@@ -1,35 +1,31 @@
-From: inblueswithu <inblueswithu@hotmail.com>
-Date: Fri, 27 Jan 2012 20:06:32 +0530
-Subject: [Buildroot] Bug 3877 - Patch not working
-In-Reply-To: <20120127125854.67b2f604@skate>
-References: <BLU0-SMTP12114F40C37660CBB539A15D28E0@phx.gbl>
- <BLU0-SMTP1654BA5FF86775DFCB3429FD28E0@phx.gbl>
- <20120127125854.67b2f604@skate>
-Message-ID: <BLU0-SMTP391DDD1C2A7E6442017AD83D28E0@phx.gbl>
+From: Willy <willy@willygroup.org>
+Date: Fri, 27 Jan 2012 14:38:23 +0000 (UTC)
+Subject: [Buildroot] gtkmm in buildroot toolchain
+References: <loom.20120127T095631-99@post.gmane.org>
+ <20120127111928.3e881f03@skate> <loom.20120127T145617-861@post.gmane.org>
+ <201201270827.51630.minimod@morethan.org>
+Message-ID: <loom.20120127T153354-348@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 27 January 2012 05:28 PM, Thomas Petazzoni wrote:
-> Le Fri, 27 Jan 2012 15:24:09 +0530,
-> inblueswithu<inblueswithu@hotmail.com>  a ?crit :
->
->> I 've got *"undefined reference to `accept4'"* this error while using
->> buildroot.
->> When I googled, I got this patch:
->> https://bugs.uclibc.org/attachment.cgi?id=3415&action=edit
-> >  Can you please post your Buildroot .config file?
-Thanks for the reply. I'm attaching my .config file.
-Please look into it.
+Michael S. Zick <minimod@...> writes:
 
-Thanks & Regards
-/inblueswithu/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120127/029f2148/attachment-0001.html>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: .config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120127/029f2148/attachment-0001.ksh>
+> > Perhaps do I install those *mm library manually one by one? 
+> >
+> 
+> That is one choice.
+> 
+> Might be worth the effort of writing another makefile for each,
+> setting your dependencies in the gtkmm makefile to depend on them,
+> then let Buildroot build the entire set.
+
+That's too much complicated for me :(
+
+Maybe this time I will install the libraries one by one, then when I will be
+more confident with the use of Makefiles I will try the other way.
+
+Thanks a lot,
+Willy
