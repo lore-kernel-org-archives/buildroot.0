@@ -1,64 +1,45 @@
-From: inblueswithu <inblueswithu@hotmail.com>
-Date: Sat, 28 Jan 2012 13:55:19 +0530
-Subject: [Buildroot] Image created is not booting, waiting for infinite time
-Message-ID: <BLU0-SMTP88C894F00679EB12CEC0A3D28F0@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Jan 2012 12:49:31 +0100
+Subject: [Buildroot] Image created is not booting,
+ waiting for infinite time
+In-Reply-To: <BLU0-SMTP88C894F00679EB12CEC0A3D28F0@phx.gbl>
+References: <BLU0-SMTP88C894F00679EB12CEC0A3D28F0@phx.gbl>
+Message-ID: <20120128124931.5dddc20e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Sat, 28 Jan 2012 13:55:19 +0530,
+inblueswithu <inblueswithu@hotmail.com> a ?crit :
 
-I am trying to build a custom ARM linux kernel which must be very small 
-in size. I'm new to these things.
+>     $ qemu-system-arm -M versatilepb -m 128 -kernel
+>     ./output/images/zImage --nographic
+>     oss: Could not initialize DAC
+>     oss: Failed to open `/dev/dsp'
+>     oss: Reason: No such file or directory
+>     oss: Could not initialize DAC
+>     oss: Failed to open `/dev/dsp'
+>     oss: Reason: No such file or directory
+>     audio: Failed to create voice `lm4549.out'
+>     Uncompressing Linux... done, booting the kernel.
 
-NOTE: As I was getting errors with u-boot, I omitted bootloaders (i 've 
-not selected any of it).
-After compilation, I 've got zImage and rootfs.ext2 images.
-When I try to run the image
+Most likely your kernel configuration is wrong. Please use the
+qemu_arm_versatile_defconfig available in Buildroot as an initial
+configuration, so that you start from a known-working configuration for
+the ARM Versatile platform emulated by Qemu.
 
-    $ qemu-system-arm -M versatilepb -m 128 -kernel
-    ./output/images/zImage --nographic
-    oss: Could not initialize DAC
-    oss: Failed to open `/dev/dsp'
-    oss: Reason: No such file or directory
-    oss: Could not initialize DAC
-    oss: Failed to open `/dev/dsp'
-    oss: Reason: No such file or directory
-    audio: Failed to create voice `lm4549.out'
-    Uncompressing Linux... done, booting the kernel.
+For example, your configuration selects the armeb architecture, while
+most likely the Versatile Qemu support in arm only (i.e little-endian).
+More or less everybody uses little-endian on ARM anyway, so you should
+really start from here.
 
-It waits here for infinite time. I also tried like this as shown in 
-/board/qemu/arm-versatile/readme.txt/
+Best regards,
 
-    $ qemu-system-arm -M versatilepb -kernel ./output/images/zImage
-    -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio
-    oss: Could not initialize DAC
-    oss: Failed to open `/dev/dsp'
-    oss: Reason: No such file or directory
-    oss: Could not initialize DAC
-    oss: Failed to open `/dev/dsp'
-    oss: Reason: No such file or directory
-    audio: Failed to create voice `lm4549.out'
-    Uncompressing Linux... done, booting the kernel.
-
-Here also it waits for infinite time. I dont know if my configuration is 
-wrong or the way I'm trying to boot is wrong.
-I'm attaching my configuration file also.
-This is not the first time it is happening like this. I tried using 
-Cross-LFS(clfs) for doing this (custom ARM linux OS).
-Even then It has same effect, it waits for infinite time after that last 
-line!!
-Can someone plz help me.
-
-Thanks & Regards
-/inblueswithu/
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120128/9a043e3a/attachment-0001.html>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: .config
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120128/9a043e3a/attachment-0001.ksh>
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
