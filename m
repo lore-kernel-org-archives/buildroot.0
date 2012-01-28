@@ -1,84 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 28 Jan 2012 20:50:48 +0100
-Subject: [Buildroot] [PATCH 06/16] external-toolchain: remove 2009q1 ARM
- Sourcery toolchain
-In-Reply-To: <e5683e82c67fffb7f73e14f6798fa5a2d06318bc.1327772176.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
- <e5683e82c67fffb7f73e14f6798fa5a2d06318bc.1327772176.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAGm1_ksXAOCRaaKMB9G+cpLd8UCnt-z=wjVb3UasXYx3HnmZ_g@mail.gmail.com>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Sat, 28 Jan 2012 21:04:01 +0100
+Subject: [Buildroot] Gdb(server) on ARM and uClibc
+Message-ID: <CAE4k23-gErY-gcTnjN1Ldeo6Qv=+ze4OFrMui-sw5HfP0R=9Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 28, 2012 at 6:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> We are going to add one more ARM Sourcery toolchain version, so it's
-> time to remove the oldest version.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> ?toolchain/toolchain-external/Config.in ? | ? 15 ---------------
-> ?toolchain/toolchain-external/ext-tool.mk | ? ?5 +----
-> ?2 files changed, 1 insertions(+), 19 deletions(-)
->
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index eadfe50..f983727 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -59,20 +59,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
-> ? ? ? ? ? ? - ARMv4T, little endian, soft-float, glibc
-> ? ? ? ? ? ? - ARMv7-A, Thumb 2, little endian, soft-float, glibc
->
-> -config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
-> - ? ? ? bool "Sourcery CodeBench ARM 2009q1"
-> - ? ? ? depends on BR2_arm
-> - ? ? ? select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> - ? ? ? select BR2_INSTALL_LIBSTDCPP
-> - ? ? ? help
-> - ? ? ? ? Sourcery CodeBench toolchain for the ARM architecture, from
-> - ? ? ? ? Mentor Graphics. It uses gcc 4.3.3, binutils 2.19, glibc 2.8
-> - ? ? ? ? and gdb 6.8 and kernel headers 2.6.30. It has support for
-> - ? ? ? ? the following variants:
-> - ? ? ? ? ? ?- ARMv5T, little endian, soft-float, glibc
-> - ? ? ? ? ? ?- ARMv4T, little endian, soft-float, glibc
-> - ? ? ? ? ? ?- ARMv7-A, Thumb 2, little endian, soft-float, glibc
-> -
-> ?config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
-> ? ? ? ?bool "Sourcery CodeBench MIPS 2011.03"
-> ? ? ? ?depends on BR2_mips || BR2_mipsel
-> @@ -262,7 +248,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
->
-> ?config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-> ? ? ? ?string
-> - ? ? ? default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
-> ? ? ? ?default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
-> ? ? ? ?default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
-> ? ? ? ?default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
-> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-> index dde6f22..883fbdb 100644
-> --- a/toolchain/toolchain-external/ext-tool.mk
-> +++ b/toolchain/toolchain-external/ext-tool.mk
-> @@ -174,10 +174,7 @@ else
-> ?TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
-> ?endif
->
-> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1),y)
-> -TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/
-> -TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
-> ?TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package5383/public/arm-none-linux-gnueabi/
-> ?TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-> ?else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
+Hi,
 
-I still have an issue with CodeSourcery toolchain and u-boot for TI (am3517):
+I'm probably missing something simple when it comes to my
+uClibc-configuration... (Or is there still problems with gdb on uClibc
+and ARM?)
 
-CodeSourcery toolchains from 2009 produce correct code, but two latest
-produce wrong code (u-boot is functioning, but cannot start kernel). I
-reported on this issue for some time and last week I worked with
-u-boot again and tested various toolchains. Peter, you said you're
-going to work with TI hardware, could you please check this issue?
+I'm getting "error: No uintptr_t available; your C library is too
+old." when I'm compiling uClibc. I've tried both 7.2.x and 7.3.x. Next
+step will be to merge the tree I've based my work on sofar with
+master, and try 7.4, however I doubt that it'll help me... (I've sofar
+based this work on the tree
+https://github.com/fhunleth/buildroot-beaglebone.git, as I'm working
+on a beaglebone. I know that the tree in question is getting close to
+2 months behind master now, but apart from the 7.4 inclusion, I
+haven't seen anything in the git log that I immediately recognize as a
+potential solution).
 
-Yegor
+Any ideas were to start looking?
+I've mostly been out of the buildroot world for a 1 1/2 year, working
+on OE instead.
+
+Cheers,
+Anders
+
+-- 
+Anders Darander
+EPO guidelines 1978: "If the contribution to the known art resides
+solely in a computer program then the subject matter is not
+patentable in whatever manner it may be presented in the claims."
