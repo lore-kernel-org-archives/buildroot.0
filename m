@@ -1,38 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2012 18:36:54 +0100
-Subject: [Buildroot] [PATCH 14/16] external-toolchain: adjust check for
-	uClibc static toolchains
+Date: Sat, 28 Jan 2012 18:36:55 +0100
+Subject: [Buildroot] [PATCH 15/16] external-toolchain: fix description of
+	PowerPC 2010.09 from Mentor Graphics
 In-Reply-To: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d75bf101aaf13873fdf2db125f2832c6e6ada6d4.1327772176.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <77c572ec48a82f291185cc3a6753f9bb0e1cf426.1327772176.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current check for uClibc toolchain was verifying that a
-ld-uClibc.so dynamic loader was present. However, with static-only
-uClibc toolchains, this does not work. Instead, we check for an
-uClibc-specific header file in the sysroot.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/helpers.mk |    2 +-
+ toolchain/toolchain-external/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 3f4818f..6e7f1f4 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -196,7 +196,7 @@ check_uclibc_feature = \
- #
- check_uclibc = \
- 	SYSROOT_DIR="$(strip $1)"; \
--	if ! test -f $${SYSROOT_DIR}/lib/ld*-uClibc.so.* ; then \
-+	if ! test -f $${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; then \
- 		echo "Incorrect selection of the C library"; \
- 		exit -1; \
- 	fi; \
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index d3b591d..f3f49e9 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -240,7 +240,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Sourcery CodeBench toolchain for the PowerPC architecture,
+-	  from Sourcery CodeBench. It uses gcc 4.5.1, binutils 2.20,
++	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
+ 	  glibc 2.11, gdb 7.2.50 and kernel headers 2.6.35.2. It has
+ 	  support for the following variants:
+             - 603 glibc, 32 bits
 -- 
 1.7.4.1
