@@ -1,66 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2012 18:42:54 +0100
-Subject: [Buildroot] [PATCH 6/7] openocd: add host variant
+Date: Sat, 28 Jan 2012 18:42:55 +0100
+Subject: [Buildroot] [PATCH 7/7] sam-ba: new package with host variant only
 In-Reply-To: <cover.1327772556.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1327772556.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <db5b4b83f1cde44b8d513728eaa0b023c6c1c4f1.1327772556.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3c537b5ffb9ff8a5c85878c05f044c0fecdcf0f3.1327772556.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+sam-ba is a tool needed to reprogram AT91-based systems using an USB
+connection or a serial port connection.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- package/Config.in.host         |    1 +
- package/openocd/Config.in.host |    6 ++++++
- package/openocd/openocd.mk     |   10 ++++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/openocd/Config.in.host
+ package/Config.in.host        |    1 +
+ package/sam-ba/Config.in.host |    6 ++++++
+ package/sam-ba/sam-ba.mk      |   23 +++++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
+ create mode 100644 package/sam-ba/Config.in.host
+ create mode 100644 package/sam-ba/sam-ba.mk
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index b8f8aab..6bc828b 100644
+index 6bc828b..1f49e79 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
+@@ -1,6 +1,7 @@
  menu "Host utilities"
  
-+source "package/openocd/Config.in.host"
+ source "package/openocd/Config.in.host"
++source "package/sam-ba/Config.in.host"
  source "package/uboot-tools/Config.in.host"
  
  endmenu
-diff --git a/package/openocd/Config.in.host b/package/openocd/Config.in.host
+diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
 new file mode 100644
-index 0000000..2380942
+index 0000000..27ffd12
 --- /dev/null
-+++ b/package/openocd/Config.in.host
++++ b/package/sam-ba/Config.in.host
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_OPENOCD
-+	bool "host openocd"
++config BR2_PACKAGE_HOST_SAM_BA
++	bool "host sam-ba"
 +	help
-+	  OpenOCD - Open On-Chip Debugger
++	  Atmel SAM-BA software provides an open set of tools for
++	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
++	  microcontrollers.
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+new file mode 100644
+index 0000000..bdad695
+--- /dev/null
++++ b/package/sam-ba/sam-ba.mk
+@@ -0,0 +1,23 @@
++SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
++SAM_BA_VERSION = 2.10
++SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
 +
-+	  http://openocd.berlios.de/web/
-diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
-index 5f61367..d79b33b 100644
---- a/package/openocd/openocd.mk
-+++ b/package/openocd/openocd.mk
-@@ -29,4 +29,14 @@ ifeq ($(BR2_PACKAGE_OPENOCD_VSLLINK),y)
- OPENOCD_CONF_OPT += --enable-vsllink
- endif
- 
-+HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
++define HOST_SAM_BA_EXTRACT_CMDS
++        unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
++        mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
++        rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
++endef
 +
-+HOST_OPENOCD_CONF_OPT = 	\
-+	--disable-doxygen-html 	\
-+	--enable-dummy 		\
-+	--enable-ft2232_libftdi \
-+	--enable-jlink 		\
-+	--enable-vsllink
++# Since it's a prebuilt application and it does not conform to the
++# usual Unix hierarchy, we install it in $(HOST_DIR)/opt/sam-ba and
++# then create a symbolic link from $(HOST_DIR)/usr/bin to the
++# application binary, for easier usage.
 +
- $(eval $(call AUTOTARGETS))
-+$(eval $(call AUTOTARGETS,host))
++define HOST_SAM_BA_INSTALL_CMDS
++	mkdir -p $(HOST_DIR)/opt/sam-ba/
++	cp -a $(@D)/* $(HOST_DIR)/opt/sam-ba/
++	ln -s ../../opt/sam-ba/sam-ba $(HOST_DIR)/usr/bin/sam-ba
++endef
++
++$(eval $(call GENTARGETS,host))
++
 -- 
 1.7.4.1
