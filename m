@@ -1,81 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2012 18:42:55 +0100
-Subject: [Buildroot] [PATCH 7/7] sam-ba: new package with host variant only
-In-Reply-To: <cover.1327772556.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1327772556.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3c537b5ffb9ff8a5c85878c05f044c0fecdcf0f3.1327772556.git.thomas.petazzoni@free-electrons.com>
+From: MERCADIER Johann <johann.mercadier@imerir.com>
+Date: Sat, 28 Jan 2012 19:32:50 +0000
+Subject: [Buildroot] first things first for a newbie
+Message-ID: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sam-ba is a tool needed to reprogram AT91-based systems using an USB
-connection or a serial port connection.
+Hello everybody,
+  I am newbie in the embedded computer world. I first start with Buildroot
+as it seems to be more "simple" and straight forward while having to deal
+with just few configs and cards.
+  But! nothing seems to way it should and I feel pretty annoyed by this as
+I cannot find any relevant help on the internet or through misc. books.
+Most of the time what I found is tutorial where everything seems to work
+fine.
+  So my first question is why Buildroot has no Forum or a good developped
+FAQ? I don't really understand why it so great to work with mailing list?
+If I have to I will do it this way  (o_-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- package/Config.in.host        |    1 +
- package/sam-ba/Config.in.host |    6 ++++++
- package/sam-ba/sam-ba.mk      |   23 +++++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/sam-ba/Config.in.host
- create mode 100644 package/sam-ba/sam-ba.mk
+  My second question is more technical and is related to PandaBoard. I
+finally decided to by one for misc purposes. To build everything I need I
+got first Buildroot 2011.11
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 6bc828b..1f49e79 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
- 
- source "package/openocd/Config.in.host"
-+source "package/sam-ba/Config.in.host"
- source "package/uboot-tools/Config.in.host"
- 
- endmenu
-diff --git a/package/sam-ba/Config.in.host b/package/sam-ba/Config.in.host
-new file mode 100644
-index 0000000..27ffd12
---- /dev/null
-+++ b/package/sam-ba/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_SAM_BA
-+	bool "host sam-ba"
-+	help
-+	  Atmel SAM-BA software provides an open set of tools for
-+	  programming the Atmel SAM3, SAM7 and SAM9 ARM-based
-+	  microcontrollers.
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-new file mode 100644
-index 0000000..bdad695
---- /dev/null
-+++ b/package/sam-ba/sam-ba.mk
-@@ -0,0 +1,23 @@
-+SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
-+SAM_BA_VERSION = 2.10
-+SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
-+
-+define HOST_SAM_BA_EXTRACT_CMDS
-+        unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
-+        mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
-+        rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
-+endef
-+
-+# Since it's a prebuilt application and it does not conform to the
-+# usual Unix hierarchy, we install it in $(HOST_DIR)/opt/sam-ba and
-+# then create a symbolic link from $(HOST_DIR)/usr/bin to the
-+# application binary, for easier usage.
-+
-+define HOST_SAM_BA_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/opt/sam-ba/
-+	cp -a $(@D)/* $(HOST_DIR)/opt/sam-ba/
-+	ln -s ../../opt/sam-ba/sam-ba $(HOST_DIR)/usr/bin/sam-ba
-+endef
-+
-+$(eval $(call GENTARGETS,host))
-+
+   I use the following:
+     BR2_DEFAULT_KERNEL_HEADERS="3.0.4"
+     BR2_UCLIBC_VERSION_STRING="0.9.32"
+     BR2_BINUTILS_VERSION="2.21.1"
+     BR2_TOOLCHAIN_BUILDROOT=y
+     BR2_cortex_a9=y
+     BR2_ARM_TYPE="ARM_CORTEXA9"
+     BR2_ARM_EABI=y
+     BR2_ARCH="arm"
+     BR2_ENDIAN="LITTLE"
+     BR2_GCC_TARGET_TUNE="cortex-a9"
+     BR2_GCC_TARGET_ARCH="armv7-a"
+     BR2_GCC_TARGET_ABI="aapcs-linux"
+     BR2_arm=y
+
+  When I try to build the TC it doesn't work well and I get an issue with
+'gettext' while I've got everything on my host computer. I then remove all
+related part to gettext as i18n stuff and WCHAR then I got a TC. Then I do
+again a 'make menuconfig' add the locale and do a 'time make V=1' I got a
+TC whith the locale. strange behaviour, probably some dependencies and jobs
+to be done in a given order?
+  On the next stage I try to go further  configuring the uClibc, busybox,
+and file support everything working fine, then I got such a kind of error
+if I try to add GDB for the target, host, and server part
+"
+/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:22:29:
+error: expected ')' before 'ucs'
+/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:72:21:
+error: expected ')' before 'ucs'
+/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:139:28:
+error: expected ';', ',' or ')' before '*' token
+/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:161:32:
+error: expected ')' before 'ucs'
+/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:230:32:
+error: expected ';', ',' or ')' before '*' token
+make[3]: *** [wcwidth.o] Error 1
+make[2]: *** [all-readline] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [all] Error 2
+make: ***
+[/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/build/gdb-7.3.1-target/gdb/gdb]
+Error 2
+"
+ I don't know what to look after, should I have a look into the 'wcwidth.c'
+program file? Could it be wrong? or it come from some other part.
+
+Any help is welcome ;o)
+
+bye
+
+
 -- 
-1.7.4.1
+Cordialement.
+
+___Johann MERCADIER___
+
+:(){ :|:& };:
+"I am the Unknown lead by the Unknowing.
+I have done so much with so little for so long
+that I am now qualified to do anything with nothing."
+HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120128/8aef9b0e/attachment.html>
