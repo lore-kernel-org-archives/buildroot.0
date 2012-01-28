@@ -1,85 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2012 22:45:34 +0100
-Subject: [Buildroot] first things first for a newbie
-In-Reply-To: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
-References: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
-Message-ID: <20120128224534.4787e302@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 28 Jan 2012 23:48:21 +0100
+Subject: [Buildroot] [PATCH 06/14] libevas: Add new package
+In-Reply-To: <CAFbHwiTPx=X_FuZ9=UnsYhUETaNCM-LPF=oA8QH-GQUyriNrUQ@mail.gmail.com>
+ (Will Newton's message of "Thu, 26 Jan 2012 17:42:33 +0000")
+References: <CAFbHwiTPx=X_FuZ9=UnsYhUETaNCM-LPF=oA8QH-GQUyriNrUQ@mail.gmail.com>
+Message-ID: <87bopnjvey.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-Le Sat, 28 Jan 2012 19:32:50 +0000,
-MERCADIER Johann <johann.mercadier@imerir.com> a ?crit :
+ Will> Signed-off-by: Will Newton <will.newton@imgtec.com>
+ Will> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
->   But! nothing seems to way it should and I feel pretty annoyed by
-> this as I cannot find any relevant help on the internet or through
-> misc. books. Most of the time what I found is tutorial where
-> everything seems to work fine.
->   So my first question is why Buildroot has no Forum or a good
-> developped FAQ? I don't really understand why it so great to work
-> with mailing list? If I have to I will do it this way  (o_-)
+Thanks, committed with minor tweaks.
 
-We have :
+ Will> +comment "libevas backends"
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_BUFFER
+ Will> +	bool "libevas buffer backend"
+ Will> +	depends on BR2_PACKAGE_XORG7
+ Will> +	help
+ Will> +	  This enables the software buffer rendering engine. There is
+ Will> +	  no hardware assist here.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_DIRECTFB
+ Will> +	bool "libevas DirectFB backend"
+ Will> +	depends on BR2_PACKAGE_DIRECTFB
 
- * Some documentation, available in docs/manual/, and that you can
-   generate using "make manual" ;
+It makes sense to enable this if directfb is enabled, so I added
+         default y
 
- * This mailing-list, which is the traditional way of providing support
-   in the free software / open-source world ;
+ Will> +	help
+ Will> +	  This is the DirectFB engine that uses the DirectFB library
+ Will> +	  (http://www.directfb.org) on Linux to access the framebuffer
+ Will> +	  with (or maybe without) acceleration.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_FB
+ Will> +	bool "libevas frame buffer backend"
+ Will> +	help
+ Will> +	  This is the software framebuffer driving engine. this uses
+ Will> +	  the linux framebuffer device (/dev/fb<x>) and will currently
+ Will> +	  just inherit the current framebuffer settings on the fb
+ Will> +	  device and use them to run in.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_SDL
+ Will> +	bool "libevas SDL backend"
+ Will> +	select BR2_PACKAGE_SDL
+ Will> +	help
+ Will> +	  This is the software SDL engine that uses SDL library
+ Will> +	  (http://www.libsdl.org). This library should work on many
+ Will> +	  operating systems.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_SDL_GL
+ Will> +	bool "libevas SDL OpenGL backend"
+ Will> +	select BR2_PACKAGE_SDL
 
- * The #buildroot IRC channel on Freenode
+This seems to only be supported by the X11 SDL backend, so I made it
+depend on BR2_PACKAGE_SDL_X11
 
->   When I try to build the TC it doesn't work well and I get an issue
 
-What is "TC" ?
 
-> with 'gettext' while I've got everything on my host computer. I then
+ Will> +comment "libevas code tuning"
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_DISABLE_C
+ Will> +	bool "libevas disable C code"
+ Will> +	depends on BR2_PACKAGE_LIBEVAS_MMX || BR2_PACKAGE_LIBEVAS_SSE ||
+ Will> BR2_PACKAGE_LIBEVAS_SSE3
+ Will> +	help
+ Will> +	  This disables the generic C fallback code which is not required
+ Will> +	  if MMX or SSE is used instead.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_MMX
+ Will> +	bool "libevas MMX routines"
+ Will> +	depends on BR2_i386 || BR2_x86_64
+ Will> +	help
+ Will> +	  This enables the MMX optimized routines. this works for
+ Will> +	  Pentium, Pentium 2, Pentium 3, Pentium 4, Athlon and Duron
+ Will> +	  processors.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_SSE
+ Will> +	bool "libevas SSE routines"
+ Will> +	depends on BR2_i386 || BR2_x86_64
+ Will> +	help
+ Will> +	  This enables SSE optimizations available in the Pentium 3 and
+ Will> +	  4 cpus (not Athlon and Duron or Pentium 2 or Pentium cpus).
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_SSE3
+ Will> +	bool "libevas SSE3 routines"
+ Will> +	depends on BR2_i386 || BR2_x86_64
+ Will> +	help
+ Will> +	  This enables SSE3 optimizations available in the Pentium 4 and
+ Will> +	  above cpus.
+ Will> +
+ Will> +config BR2_PACKAGE_LIBEVAS_ALTIVEC
+ Will> +	bool "libevas altivec routines"
+ Will> +	depends on BR2_powerpc
+ Will> +	help
+ Will> +	  This enables AltiVec optimizations available in soem PowerPC cpus.
 
-Which issue ?
+s/soem/some/
 
-> remove all related part to gettext as i18n stuff and WCHAR then I got
-> a TC. Then I do again a 'make menuconfig' add the locale and do a
-> 'time make V=1' I got a TC whith the locale. strange behaviour,
-> probably some dependencies and jobs to be done in a given order?
+All of this is bound to give problems with randconfig builds, so I
+prefer autoselect these options depending on the CPU variant selected in
+BR, similar to how we do it for ffmpeg.
 
-When you change toolchain options, you need to do a full rebuild, i.e
-'make clean' followed by 'make'. Buildroot does not try to be smart,
-and therefore does not rebuild anything unless you tell him to do so.
-
->   On the next stage I try to go further  configuring the uClibc,
-> busybox, and file support everything working fine, then I got such a
-> kind of error if I try to add GDB for the target, host, and server
-> part "
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:22:29:
-> error: expected ')' before 'ucs'
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:72:21:
-> error: expected ')' before 'ucs'
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:139:28:
-> error: expected ';', ',' or ')' before '*' token
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:161:32:
-> error: expected ')' before 'ucs'
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:230:32:
-> error: expected ';', ',' or ')' before '*' token
-> make[3]: *** [wcwidth.o] Error 1
-> make[2]: *** [all-readline] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [all] Error 2
-> make: ***
-> [/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/build/gdb-7.3.1-target/gdb/gdb]
-> Error 2
-
-Please post the Buildroot .config file that allows you to produce this
-build error, and we will try to reproduce it.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
