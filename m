@@ -1,79 +1,84 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 28 Jan 2012 20:39:08 +0100
-Subject: [Buildroot] first things first for a newbie
-In-Reply-To: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
-References: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
-Message-ID: <CAGm1_ks0o1+P_6a_V1Ty9Y8SGMW6A8NNOa+EaJqcTvFLS-J-Eg@mail.gmail.com>
+Date: Sat, 28 Jan 2012 20:50:48 +0100
+Subject: [Buildroot] [PATCH 06/16] external-toolchain: remove 2009q1 ARM
+ Sourcery toolchain
+In-Reply-To: <e5683e82c67fffb7f73e14f6798fa5a2d06318bc.1327772176.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
+ <e5683e82c67fffb7f73e14f6798fa5a2d06318bc.1327772176.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAGm1_ksXAOCRaaKMB9G+cpLd8UCnt-z=wjVb3UasXYx3HnmZ_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jan 28, 2012 at 8:32 PM, MERCADIER Johann
-<johann.mercadier@imerir.com> wrote:
-> Hello everybody,
-> ??I am newbie in the embedded computer world. I first start with Buildroot
-> as it seems to be more "simple" and straight forward while having to deal
-> with just few configs and cards.
-> ??But! nothing seems to way it should and I feel pretty annoyed by this as I
-> cannot find any relevant help on the internet or through misc. books. Most
-> of the time what I found is tutorial where everything seems to work fine.
-> ??So my first question is why Buildroot has no Forum or a good developped
-> FAQ? I don't really understand why it so great to work with mailing list? If
-> I have to I will do it this way ?(o_-)
+On Sat, Jan 28, 2012 at 6:36 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> We are going to add one more ARM Sourcery toolchain version, so it's
+> time to remove the oldest version.
 >
-> ??My second question is more technical and is related to PandaBoard. I
-> finally decided to by one for misc purposes. To build everything I need I
-> got first Buildroot 2011.11
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> ?toolchain/toolchain-external/Config.in ? | ? 15 ---------------
+> ?toolchain/toolchain-external/ext-tool.mk | ? ?5 +----
+> ?2 files changed, 1 insertions(+), 19 deletions(-)
 >
-> ?? I use the following:
-> ?? ? BR2_DEFAULT_KERNEL_HEADERS="3.0.4"
-> ?? ? BR2_UCLIBC_VERSION_STRING="0.9.32"
-> ?? ? BR2_BINUTILS_VERSION="2.21.1"
-> ?? ??BR2_TOOLCHAIN_BUILDROOT=y
-> ?? ??BR2_cortex_a9=y
-> ?? ? BR2_ARM_TYPE="ARM_CORTEXA9"
-> ?? ? BR2_ARM_EABI=y
-> ?? ? BR2_ARCH="arm"
-> ?? ? BR2_ENDIAN="LITTLE"
-> ?? ? BR2_GCC_TARGET_TUNE="cortex-a9"
-> ?? ? BR2_GCC_TARGET_ARCH="armv7-a"
-> ?? ? BR2_GCC_TARGET_ABI="aapcs-linux"
-> ?? ? BR2_arm=y
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index eadfe50..f983727 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -59,20 +59,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
+> ? ? ? ? ? ? - ARMv4T, little endian, soft-float, glibc
+> ? ? ? ? ? ? - ARMv7-A, Thumb 2, little endian, soft-float, glibc
 >
-> ??When I try to build the TC it doesn't work well and I get an issue with
-> 'gettext' while I've got everything on my host computer. I then remove all
-> related part to gettext as i18n stuff and WCHAR then I got a TC. Then I do
-> again a 'make menuconfig' add the locale and do a 'time make V=1' I got a TC
-> whith the locale. strange behaviour, probably some dependencies and jobs to
-> be done in a given order?
-> ??On the next stage I try to go further ?configuring the uClibc, busybox,
-> and file support everything working fine, then I got such a kind of error if
-> I try to add GDB for the target, host, and server part
-> "
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:22:29:
-> error: expected ')' before 'ucs'
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:72:21:
-> error: expected ')' before 'ucs'
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:139:28:
-> error: expected ';', ',' or ')' before '*' token
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:161:32:
-> error: expected ')' before 'ucs'
-> /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/toolchain/gdb-7.3.1/readline/support/wcwidth.c:230:32:
-> error: expected ';', ',' or ')' before '*' token
-> make[3]: *** [wcwidth.o] Error 1
-> make[2]: *** [all-readline] Error 2
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [all] Error 2
-> make: ***
-> [/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot-2011.11/output/build/gdb-7.3.1-target/gdb/gdb]
-> Error 2
-> "
-> ?I don't know what to look after, should I have a look into the 'wcwidth.c'
-> program file? Could it be wrong? or it come from some other part.
+> -config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
+> - ? ? ? bool "Sourcery CodeBench ARM 2009q1"
+> - ? ? ? depends on BR2_arm
+> - ? ? ? select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> - ? ? ? select BR2_INSTALL_LIBSTDCPP
+> - ? ? ? help
+> - ? ? ? ? Sourcery CodeBench toolchain for the ARM architecture, from
+> - ? ? ? ? Mentor Graphics. It uses gcc 4.3.3, binutils 2.19, glibc 2.8
+> - ? ? ? ? and gdb 6.8 and kernel headers 2.6.30. It has support for
+> - ? ? ? ? the following variants:
+> - ? ? ? ? ? ?- ARMv5T, little endian, soft-float, glibc
+> - ? ? ? ? ? ?- ARMv4T, little endian, soft-float, glibc
+> - ? ? ? ? ? ?- ARMv7-A, Thumb 2, little endian, soft-float, glibc
+> -
+> ?config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+> ? ? ? ?bool "Sourcery CodeBench MIPS 2011.03"
+> ? ? ? ?depends on BR2_mips || BR2_mipsel
+> @@ -262,7 +248,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+>
+> ?config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+> ? ? ? ?string
+> - ? ? ? default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
+> ? ? ? ?default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
+> ? ? ? ?default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+> ? ? ? ?default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+> diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+> index dde6f22..883fbdb 100644
+> --- a/toolchain/toolchain-external/ext-tool.mk
+> +++ b/toolchain/toolchain-external/ext-tool.mk
+> @@ -174,10 +174,7 @@ else
+> ?TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
+> ?endif
+>
+> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1),y)
+> -TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/
+> -TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
+> ?TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package5383/public/arm-none-linux-gnueabi/
+> ?TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+> ?else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
 
-Have you tried one of the CodeSourcery toolchains? It will save a lot
-of build time.
+I still have an issue with CodeSourcery toolchain and u-boot for TI (am3517):
+
+CodeSourcery toolchains from 2009 produce correct code, but two latest
+produce wrong code (u-boot is functioning, but cannot start kernel). I
+reported on this issue for some time and last week I worked with
+u-boot again and tested various toolchains. Peter, you said you're
+going to work with TI hardware, could you please check this issue?
 
 Yegor
