@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jan 2012 18:36:51 +0100
-Subject: [Buildroot] [PATCH 11/16] external-toolchain: Blackfin.uclinux.org
-	2011R1-RC4
+Date: Sat, 28 Jan 2012 18:36:49 +0100
+Subject: [Buildroot] [PATCH 09/16] external-toolchain: add Sourcery
+	CodeBench PowerPC 2011.03
 In-Reply-To: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <fdcaf2632678e9947e35fcc00a84bf3e2464514d.1327772176.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <c2956bc04a83efcc30145dde78b947c9c056547f.1327772176.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,70 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   17 +++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    8 +++++++-
- 2 files changed, 24 insertions(+), 1 deletions(-)
+ toolchain/toolchain-external/Config.in   |   19 +++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a552cc2..6fb9ef6 100644
+index 8e5d53f..fea1565 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -249,6 +249,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
-             - Intel Xeon, glibc, 64 bits
-             - Intel Core 2, glibc, 64 bits
+@@ -119,6 +119,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+             - MIPS32 big endian soft float uclibc
+             - MIPS32 little endian soft float uclibc
  
-+config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
-+	bool "Blackfin.uclinux.org 2011R1-RC4"
-+	depends on BR2_bfin
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
++	bool "Sourcery CodeBench PowerPC 2011.03"
++	depends on BR2_powerpc
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
 +	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_INET_RPC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
 +	help
-+	  Toolchain for the Blackfin architecture, from
-+	  http://blackfin.uclinux.org.
++	  Sourcery CodeBench toolchain for the PowerPC architecture,
++	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51,
++	  glibc 2.13, gdb 7.2.50 and kernel headers 2.6.38. It has
++	  support for the following variants:
++            - 603 glibc, 32 bits
++            - 603 soft float glibc, 32 bits
++            - e600 altivec glibc, 32 bits
++            - e500v1 glibc, 32 bits
++            - e500v2 glibc, 32 bits
++            - e500mc glibc, 32 bits
++            - 970 glibc hard-float, 64 bits
 +
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
- 	bool "Blackfin.uclinux.org 2010RC1"
- 	depends on BR2_bfin
-@@ -312,6 +327,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
-+	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && !BR2_BFIN_FDPIC
-+	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1 && BR2_BFIN_FDPIC
- 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
- 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	bool "Sourcery CodeBench PowerPC 2010.09"
+ 	depends on BR2_powerpc
+@@ -270,6 +288,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
++	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index a6a5028..132aacd 100644
+index 1e8e03e..409355e 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -225,6 +225,12 @@ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8386/
- TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2010R1-RC4.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1),y)
-+TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9509/
-+TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
-+TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
-+TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
- else
- # A value must be set (even if unused), otherwise the
- # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
-@@ -237,7 +243,7 @@ endif
- # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
- # which themselves contain the toolchain. This is why we strip more
- # components than usual.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1),y)
- $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
- 	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1),$(TOOLCHAIN_EXTERNAL_SOURCE_1))
- 
+@@ -198,6 +198,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-110-mips-linux-gnu-i686-pc-linux-gnu.tar.
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
 1.7.4.1
