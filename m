@@ -1,34 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Jan 2012 20:36:22 +0100
-Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
-	Brussels
-In-Reply-To: <20120127165239.4209c438@skate> (Thomas Petazzoni's message of
- "Fri, 27 Jan 2012 16:52:39 +0100")
-References: <20120124000812.6d043023@skate>
- <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
- <201201271133.20517.arnout@mind.be> <20120127125805.580febd8@skate>
- <87sjj1jhhw.fsf@macbook.be.48ers.dk> <20120127162722.7c227e2f@skate>
- <4F22C372.20908@visionsystems.de> <20120127163630.5d604b7d@skate>
- <4F22C7E3.30900@visionsystems.de> <20120127165239.4209c438@skate>
-Message-ID: <87obtpj5u1.fsf@macbook.be.48ers.dk>
+From: inblueswithu <inblueswithu@hotmail.com>
+Date: Sat, 28 Jan 2012 10:45:44 +0530
+Subject: [Buildroot] U-Boot error while booting
+Message-ID: <BLU0-SMTP17690347562EB630FDF178CD28F0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi,
 
- Thomas> Le Fri, 27 Jan 2012 16:50:59 +0100,
- Thomas> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+U-boot gave me this error while compiling the Buildroot
 
- >> 1. keeping all patches at one place
- >> 2. automatic checks for applying patches (not building)
+    make[1]: Entering directory
+    `/home/inblueswithu/buildroot2/buildroot/output/build/uboot-2011.03'
+    awk '(NF && $1 !~ /^#/) { print $1 ": " $1 "_config; $(MAKE)" }'
+    boards.cfg > .boards.depend
+    make[1]: Leaving directory
+    `/home/inblueswithu/buildroot2/buildroot/output/build/uboot-2011.03'
+    make[1]: Entering directory
+    `/home/inblueswithu/buildroot2/buildroot/output/build/uboot-2011.03'
+    make[1]: *** No rule to make target `U-Boot'.  Stop.
+    make[1]: Leaving directory
+    `/home/inblueswithu/buildroot2/buildroot/output/build/uboot-2011.03'
+    make: ***
+    [/home/inblueswithu/buildroot2/buildroot/output/build/uboot-2011.03/.stamp_configured]
+    Error 2
 
- Thomas> Yes. Which is why during the Prague meeting, we discussed using
- Thomas> patchwork and the decision was to try to set it up somewhere.
+I tried to google it, but there is not even one error with the same line.
+But I could see variants like : ///
+/
 
-.. But I didn't manage to find time to do so yet.
+  * /No rule to make target/ .depend
+  * /No rule to make target/ `include/autoconf.mk'
+  * /No rule to make target/ `y_config'
 
--- 
-Bye, Peter Korsgaard
+but not with No rule to make target `U-Boot'.Can some one plz help me.
+
+Thanks & Regards
+/inblueswithu/
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120128/6364fcc1/attachment-0001.html>
