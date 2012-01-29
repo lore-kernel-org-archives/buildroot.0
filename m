@@ -1,22 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 30 Jan 2012 00:09:03 +0100
-Subject: [Buildroot] [PATCH] dmalloc: Fix install path for headers and
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Jan 2012 00:07:35 +0100
+Subject: [Buildroot] [git commit] dmalloc: Fix install path for headers and
 	info files.
-In-Reply-To: <CAFbHwiTEqX1MbtADiOYvcJe7NfLv4H1-m_OdDcLFK7q+79LPCQ@mail.gmail.com>
- (Will Newton's message of "Wed, 28 Sep 2011 15:29:55 +0100")
-References: <CAFbHwiTEqX1MbtADiOYvcJe7NfLv4H1-m_OdDcLFK7q+79LPCQ@mail.gmail.com>
-Message-ID: <87pqe2gl80.fsf@macbook.be.48ers.dk>
+Message-ID: <20120129231156.73C619092E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a4e27b11607113f178366469c4c2a827941be283
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Will> Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dmalloc/dmalloc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 4de324e..89d067d 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -37,7 +37,7 @@ define DMALLOC_INSTALL_STAGING_CMDS
+ 		bindir="$(STAGING_DIR)/usr/bin" \
+ 		libdir="$(STAGING_DIR)/usr/lib" \
+ 		shlibdir="$(STAGING_DIR)/usr/lib" \
+-		includedir="$(STAGING_DIR)/usr/share/info/" \
++		infodir="$(STAGING_DIR)/usr/share/info/" \
+ 		-C $(@D) install
+ endef
+ 
