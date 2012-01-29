@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 29 Jan 2012 16:11:39 +0100
-Subject: [Buildroot] [RFC 06/15] linux: define license
+Date: Sun, 29 Jan 2012 16:11:40 +0100
+Subject: [Buildroot] [RFC 07/15] m4: define license
 In-Reply-To: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
 References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1327849908-15588-7-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1327849908-15588-8-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- linux/linux.mk |    1 +
+ package/m4/m4.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5c5a1d2..cb481b1 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -4,6 +4,7 @@
- #
- ###############################################################################
- LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_LICENSE = GPL_V2_ONLY
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 173bba8..480df7b 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -7,6 +7,7 @@
+ M4_VERSION = 1.4.16
+ M4_SOURCE = m4-$(M4_VERSION).tar.bz2
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
++M4_LICENSE = GPL_V3
+ M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
  
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(LINUX_VERSION),custom)
+ ifneq ($(BR2_USE_WCHAR),y)
 -- 
 1.7.5.4
