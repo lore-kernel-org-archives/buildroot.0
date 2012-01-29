@@ -1,48 +1,70 @@
-From: inblueswithu <inblueswithu@hotmail.com>
-Date: Sun, 29 Jan 2012 17:35:48 +0530
-Subject: [Buildroot] Image created is not booting,
- waiting for infinite time
-In-Reply-To: <20120129124434.3096460b@skate>
-References: <BLU0-SMTP88C894F00679EB12CEC0A3D28F0@phx.gbl>
- <20120128124931.5dddc20e@skate>
- <BLU0-SMTP296551C52410B48DE52F60D28C0@phx.gbl>
- <20120129103634.620aced8@skate>
- <BLU0-SMTP3763BD6AB472CBE81E9839DD28C0@phx.gbl>
- <20120129124434.3096460b@skate>
-Message-ID: <BLU0-SMTP1493F4E86136ABF17E33C3BD28C0@phx.gbl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Jan 2012 14:49:29 +0100
+Subject: [Buildroot] first things first for a newbie
+In-Reply-To: <CAPEB33zWQevjj3qs0C6x4POw1qjgByXDSwAxaGdh7VEJ47wn6A@mail.gmail.com>
+References: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
+ <20120128224534.4787e302@skate>
+ <CAPEB33zWQevjj3qs0C6x4POw1qjgByXDSwAxaGdh7VEJ47wn6A@mail.gmail.com>
+Message-ID: <20120129144929.41aeb832@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 29 January 2012 05:14 PM, Thomas Petazzoni wrote:
->
-> Your conclusion is wrong: it is not because you have used the kernel
-> headers 2.6.37.x that you *must* use 2.6.37 on your target.
-Thankyou for that clarification.
-> It might require some minor adaptation.
->
-> But still, I don't understand your persistence in trying to use 2.6.37
-> while the qemu_arm_versatile_defconfig is a known working
-> configuration. Can you please try with that one without any
-> modification.
-I 've proceeded with few changes in the qemu_arm_versatile_defconfig but 
-with out any
-potential changes, it worked find. I 've got the Images and successfully 
-booted them!
-/This is my first successful Build!/ Thanks for all those who 
-contributed to buildroot.
+Hello,
 
-I still 've a lot to try, to learn the buildroot for full length 
-customizing my OS.
+[ Please don't reply to me directly: keep the list in Cc ]
 
-I'll try with out any changes to the qemu_arm_versatile_defconfig and 
-let you know if
-it is successful.
+Le Sun, 29 Jan 2012 13:34:03 +0000,
+MERCADIER Johann <johann.mercadier@imerir.com> a ?crit :
 
-Thanks & Regards
-/inblueswithu/
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120129/3690af7b/attachment.html>
+>    I just registered into IRC channel as JoM. The Doc/manual does'nt
+> answer to my problem they look much more as guidelines. By the way I
+> got the following problem while creating the manual:
+> "
+> $ make manual
+> Generating HTML manual...
+> /bin/bash: a2x: command not found
+> make: *** [output/docs/manual/manual.html] Error 127
+> "
+> if you already have faced out such a mistake?
+
+Could you read the error message? It says:
+
+  a2x: command not found
+
+So it means that the a2x command is not available on your system, and
+that you must install it. You have to install the 'asciidoc' package,
+which contains the necessary utilities to compile the Buildroot
+documentation.
+
+> TC stand for Tool Chain
+
+Ok. This is not a very common acronym.
+
+>    Sorry about that my mistake was to have created a HOST_DIR called
+> 'target'... Please say nothing...So I modify that to call it
+> 'workdone' til know everything work fine all options for GDB have
+> been compiled out.
+> 
+>    Will proceed with the creation of a defconfig for the pandaboard.
+> 
+>    I noticed that no config file does exist for this board does it
+> mean that every person who want to use it has to do those steps
+> before using it? or it is mainly dependant of the buildroot version?
+
+A Pandaboard defconfig file was submitted some time ago, but hasn't
+been integrated into Buildroot (due to lack of time of the maintainer
+at the moment), but it would definitely be great to have one. You can
+search in the mailing list archives for the patch adding the Pandaboard
+defconfig file.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
