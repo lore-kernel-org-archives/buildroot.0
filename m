@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Jan 2012 22:36:36 +0100
-Subject: [Buildroot] [PATCH 13/14] libelementary: Add new package
-In-Reply-To: <CAFbHwiTeF+Q5AT5hPws9M=S2cdtc6_Vq2mNcf+u8vu_7UksOBg@mail.gmail.com>
- (Will Newton's message of "Thu, 26 Jan 2012 17:42:56 +0000")
-References: <CAFbHwiTeF+Q5AT5hPws9M=S2cdtc6_Vq2mNcf+u8vu_7UksOBg@mail.gmail.com>
-Message-ID: <87aa56i42j.fsf@macbook.be.48ers.dk>
+Date: Sun, 29 Jan 2012 23:22:45 +0100
+Subject: [Buildroot] [PATCH 14/14] libedbus: Add new package
+In-Reply-To: <CAFbHwiTEaezGnZBkvvfH_gMODERa=FAhXZqyjZ80bf02YF4+iw@mail.gmail.com>
+ (Will Newton's message of "Thu, 26 Jan 2012 17:42:59 +0000")
+References: <CAFbHwiTEaezGnZBkvvfH_gMODERa=FAhXZqyjZ80bf02YF4+iw@mail.gmail.com>
+Message-ID: <8762fui1xm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,53 +16,49 @@ To: buildroot@busybox.net
  Will> Signed-off-by: Will Newton <will.newton@imgtec.com>
  Will> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Committed with minor tweak, thanks.
+Committed with minor tweaks, thanks.
 
- Will> diff --git a/package/efl/libelementary/Config.in
- Will> b/package/efl/libelementary/Config.in
  Will> new file mode 100644
- Will> index 0000000..507f142
+ Will> index 0000000..27993f0
  Will> --- /dev/null
- Will> +++ b/package/efl/libelementary/Config.in
- Will> @@ -0,0 +1,19 @@
- Will> +config BR2_PACKAGE_LIBELEMENTARY
- Will> +	bool "libelementary"
- Will> +	select BR2_PACKAGE_LIBEINA
- Will> +	select BR2_PACKAGE_LIBEVAS
- Will> +	select BR2_PACKAGE_LIBECORE
- Will> +	select BR2_PACKAGE_LIBEDJE
- Will> +	help
- Will> +	  Elementary is a widget toolkit and EFL wrapper and convenience
- Will> +	  library to make it easy to build applications and tools with UIs
- Will> +	  with less code.
- Will> +
-
-Missing upstream URL.
-
-
- Will> +if BR2_PACKAGE_LIBELEMENTARY
- Will> +
- Will> +config BR2_PACKAGE_LIBELEMENTARY_EXAMPLES
- Will> +	bool "libelementary examples"
- Will> +	help
- Will> +	  Build and install the elemenatry examples.
- Will> +
-
-I agree with Arnout here, so I dropped this option. Once this is fixed
-upstream we can re-add it if you like.
-
- Will> b/package/efl/libelementary/libelementary-0.8.0.65643-examples1.patch
- Will> new file mode 100644
- Will> index 0000000..9b81ab6
- Will> --- /dev/null
- Will> +++ b/package/efl/libelementary/libelementary-0.8.0.65643-examples1.patch
+ Will> +++ b/package/efl/libedbus/Config.in
  Will> @@ -0,0 +1,10 @@
- Will> +index_example01 requires a dict.txt file containing strings that does
- Will> not seem to be
- Will> +included in the snapshot. Add a dumym file to allow it to build.
+ Will> +config BR2_PACKAGE_LIBEDBUS
+ Will> +	bool "libedbus"
+ Will> +	select BR2_PACKAGE_LIBEINA
+ Will> +	select BR2_PACKAGE_LIBECORE
+ Will> +	select BR2_PACKAGE_DBUS
+ Will> +	select BR2_PACKAGE_EXPAT if !BR2_PACKAGE_LIBXML2
 
-Have these been sent upstream? Please add a git-style Signed-off-by line
-in the patch header in the future.
+I prefer to just do depends on BR2_PACKAGE_DBUS (atleast until Arnout's
+patches are merged).
+
+ Will> +	help
+ Will> +	  E_Dbus is a set of wrappers around D-Bus APIs so they can be
+ Will> +	  easily used by EFL applications, automatically providing
+ Will> +	  Ecore/main loop integration, as well as Eina data types.
+
+You forgot upstream URL.
+
+ Will> diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
+ Will> new file mode 100644
+ Will> index 0000000..fe883e0
+ Will> --- /dev/null
+ Will> +++ b/package/efl/libedbus/libedbus.mk
+ Will> @@ -0,0 +1,15 @@
+ Will> +#############################################################
+ Will> +#
+ Will> +# libedbus
+ Will> +#
+ Will> +#############################################################
+ Will> +
+ Will> +LIBEDBUS_VERSION = 1.1.0
+ Will> +LIBEDBUS_SOURCE = e_dbus-$(LIBEDBUS_VERSION).tar.bz2
+ Will> +LIBEDBUS_SITE = http://download.enlightenment.org/releases/
+ Will> +LIBEDBUS_AUTORECONF = YES
+
+You are not patching any autotools files, so no need for AUTORECONF.
+
 
 -- 
 Bye, Peter Korsgaard
