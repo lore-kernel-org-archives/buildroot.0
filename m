@@ -1,70 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jan 2012 14:49:29 +0100
+From: MERCADIER Johann <johann.mercadier@imerir.com>
+Date: Sun, 29 Jan 2012 14:42:13 +0000
 Subject: [Buildroot] first things first for a newbie
-In-Reply-To: <CAPEB33zWQevjj3qs0C6x4POw1qjgByXDSwAxaGdh7VEJ47wn6A@mail.gmail.com>
+In-Reply-To: <20120129144929.41aeb832@skate>
 References: <CAPEB33x-LxCP9mz0hhH6dr5-Hftke3EjNLyVMt4s7kfd_0cCiw@mail.gmail.com>
  <20120128224534.4787e302@skate>
  <CAPEB33zWQevjj3qs0C6x4POw1qjgByXDSwAxaGdh7VEJ47wn6A@mail.gmail.com>
-Message-ID: <20120129144929.41aeb832@skate>
+ <20120129144929.41aeb832@skate>
+Message-ID: <CAPEB33x8S8Gxn_M9GL8p7Yw+TUrOm=+pA4ZnT+KC02wWr3G6_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>
+> [ Please don't reply to me directly: keep the list in Cc ]
+>
 
-[ Please don't reply to me directly: keep the list in Cc ]
-
-Le Sun, 29 Jan 2012 13:34:03 +0000,
-MERCADIER Johann <johann.mercadier@imerir.com> a ?crit :
-
->    I just registered into IRC channel as JoM. The Doc/manual does'nt
-> answer to my problem they look much more as guidelines. By the way I
-> got the following problem while creating the manual:
-> "
-> $ make manual
-> Generating HTML manual...
-> /bin/bash: a2x: command not found
-> make: *** [output/docs/manual/manual.html] Error 127
-> "
-> if you already have faced out such a mistake?
-
-Could you read the error message? It says:
-
-  a2x: command not found
+ I am not really used to with mailing-list is the first time I use one.
+ Ok! I will pay attention by now!
 
 So it means that the a2x command is not available on your system, and
-that you must install it. You have to install the 'asciidoc' package,
-which contains the necessary utilities to compile the Buildroot
-documentation.
 
-> TC stand for Tool Chain
+> that you must install it. You have to install the 'asciidoc' package,
+> which contains the necessary utilities to compile the Buildroot
+> documentation.
+>
 
-Ok. This is not a very common acronym.
+Thanks, I knew that I had to install a new program but I couldn't manage to
+find it out with an 'apt-cache search a2x'. it is installed now.
 
->    Sorry about that my mistake was to have created a HOST_DIR called
-> 'target'... Please say nothing...So I modify that to call it
-> 'workdone' til know everything work fine all options for GDB have
-> been compiled out.
-> 
->    Will proceed with the creation of a defconfig for the pandaboard.
-> 
->    I noticed that no config file does exist for this board does it
-> mean that every person who want to use it has to do those steps
-> before using it? or it is mainly dependant of the buildroot version?
+  I will search for this patch.
 
-A Pandaboard defconfig file was submitted some time ago, but hasn't
-been integrated into Buildroot (due to lack of time of the maintainer
-at the moment), but it would definitely be great to have one. You can
-search in the mailing list archives for the patch adding the Pandaboard
-defconfig file.
+Regards.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Cordialement.
+
+___Johann MERCADIER___
+
+:(){ :|:& };:
+"I am the Unknown lead by the Unknowing.
+I have done so much with so little for so long
+that I am now qualified to do anything with nothing."
+HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120129/6819b5e9/attachment.html>
