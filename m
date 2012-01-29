@@ -1,31 +1,38 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 29 Jan 2012 16:11:45 +0100
-Subject: [Buildroot] [RFC 12/15] lzop: define license
-In-Reply-To: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Sun, 29 Jan 2012 17:26:49 +0200
+Subject: [Buildroot] [RFC 14/15] foobar: create a fake proprietary
+ package (testing only)
+In-Reply-To: <1327849908-15588-15-git-send-email-luca@lucaceresoli.net>
 References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1327849908-15588-13-git-send-email-luca@lucaceresoli.net>
+ <1327849908-15588-15-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CALR4fELbaToSJw6qJHWJ=hF8TBA4gMsN49eTaiESt+PJRytoUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/lzop/lzop.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+On Sun, Jan 29, 2012 at 5:11 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>
+> This is only for testing the proprietary package handling, not to be
+> committed in any serious repository.
+>
+> +FOOBAR_LICENSE = PROPRIETARY
+>
+> +++ b/package/foobar/source/foobar.c
+> @@ -0,0 +1,7 @@
+> +#include <stdlib.h>
+> +
+> +int main(void)
+> +{
+> + ?printf("Hello, World!\n");
+> + ?return 0;
+> +}
 
-diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
-index 6d1d674..2ef329b 100644
---- a/package/lzop/lzop.mk
-+++ b/package/lzop/lzop.mk
-@@ -6,6 +6,7 @@
- LZOP_VERSION = 1.03
- LZOP_SOURCE = lzop-$(LZOP_VERSION).tar.gz
- LZOP_SITE = http://www.lzop.org/download/
-+LZOP_LICENSE = GPL_V2
- LZOP_DEPENDENCIES = lzo
- 
- $(eval $(call AUTOTARGETS))
--- 
-1.7.5.4
+
+<sarcasm>
+OMG OMG... buildroot is forking into a?proprietary?applications DB...
+where is ./ where we need them?
+</sarcasm>
+
+/me takes a cup of water and relaxes... ;-)
