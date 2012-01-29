@@ -1,77 +1,89 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Jan 2012 22:36:46 +0100
-Subject: [Buildroot] [git commit] libelementary: Add new package
-Message-ID: <20120129222325.4B55990042@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 30 Jan 2012 00:04:18 +0100
+Subject: [Buildroot] [PATCH v2] boost: New package added. Version 1.47
+In-Reply-To: <4E96BFD0.2050706@visionsystems.de> (Yegor Yefremov's message of
+ "Thu, 13 Oct 2011 12:39:12 +0200")
+References: <4E96BFD0.2050706@visionsystems.de>
+Message-ID: <87vcnuglfx.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c3e2f9789d2b1536157a19379d352840e76f85a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-[Peter: Add upstream URL, remove examples option/patches]
-Signed-off-by: Will Newton <will.newton@imgtec.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/efl/Config.in                      |    1 +
- package/efl/libelementary/Config.in        |   12 ++++++++++++
- package/efl/libelementary/libelementary.mk |   18 ++++++++++++++++++
- 3 files changed, 31 insertions(+), 0 deletions(-)
+ Yegor> Signed-off-by: Allan W. Nielsen <a@awn.dk>
+ Yegor> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 1632290..ec8c513 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -17,6 +17,7 @@ source "package/efl/libevas/Config.in"
- source "package/efl/libembryo/Config.in"
- source "package/efl/libedje/Config.in"
- source "package/efl/libethumb/Config.in"
-+source "package/efl/libelementary/Config.in"
- 
- endif # BR2_PACKAGE_EFL
- 
-diff --git a/package/efl/libelementary/Config.in b/package/efl/libelementary/Config.in
-new file mode 100644
-index 0000000..59af80e
---- /dev/null
-+++ b/package/efl/libelementary/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBELEMENTARY
-+	bool "libelementary"
-+	select BR2_PACKAGE_LIBEINA
-+	select BR2_PACKAGE_LIBEVAS
-+	select BR2_PACKAGE_LIBECORE
-+	select BR2_PACKAGE_LIBEDJE
-+	help
-+	  Elementary is a widget toolkit and EFL wrapper and convenience
-+	  library to make it easy to build applications and tools with UIs
-+	  with less code.
-+
-+	  http://trac.enlightenment.org/e/wiki/Elementary
-diff --git a/package/efl/libelementary/libelementary.mk b/package/efl/libelementary/libelementary.mk
-new file mode 100644
-index 0000000..475fd45
---- /dev/null
-+++ b/package/efl/libelementary/libelementary.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# libelementary
-+#
-+################################################################################
-+
-+LIBELEMENTARY_VERSION = 0.8.0.65643
-+LIBELEMENTARY_SOURCE = elementary-$(LIBELEMENTARY_VERSION).tar.bz2
-+LIBELEMENTARY_SITE = http://download.enlightenment.org/snapshots/2011-11-28
-+LIBELEMENTARY_INSTALL_STAGING = YES
-+
-+LIBELEMENTARY_DEPENDENCIES = libeina libevas libecore libedje host-libedje \
-+				host-libeet
-+
-+LIBELEMENTARY_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
-+			 --with-eet-eet=$(HOST_DIR)/usr/bin/eet
-+
-+$(eval $(call AUTOTARGETS))
+Committed with minor tweaks, sorry for the slow response.
+
+ Yegor> ---
+ Yegor> changes: 
+ Yegor> 1. convert GENTARGETS to the latest syntax
+ Yegor> 2. add all dependencies in one line
+ Yegor>  package/Config.in       |    1 
+ Yegor>  package/boost/Config.in |   99 ++++++++++++++++++++++++++++++++++++++++++++++++
+ Yegor>  package/boost/boost.mk  |   83 ++++++++++++++++++++++++++++++++++++++++
+ Yegor>  3 files changed, 183 insertions(+)
+ Yegor>  create mode 100644 package/boost/Config.in
+ Yegor>  create mode 100644 package/boost/boost.mk
+
+ Yegor> Index: b/package/Config.in
+ Yegor> ===================================================================
+ Yegor> --- a/package/Config.in
+ Yegor> +++ b/package/Config.in
+ Yegor> @@ -346,6 +346,7 @@
+ Yegor>  source "package/fftw/Config.in"
+ Yegor>  source "package/libargtable2/Config.in"
+ Yegor>  source "package/argp-standalone/Config.in"
+ Yegor> +source "package/boost/Config.in"
+ Yegor>  source "package/libatomic_ops/Config.in"
+ Yegor>  source "package/libcap/Config.in"
+ Yegor>  source "package/libdaemon/Config.in"
+ Yegor> Index: b/package/boost/Config.in
+ Yegor> ===================================================================
+ Yegor> --- /dev/null
+ Yegor> +++ b/package/boost/Config.in
+ Yegor> @@ -0,0 +1,99 @@
+ Yegor> +config BR2_PACKAGE_BOOST
+ Yegor> +	bool "boost"
+ Yegor> +	select BR2_PACKAGE_BZIP2
+ Yegor> +	select BR2_PACKAGE_ZLIB
+
+You're forgetting a 'depends on BR2_INSTALL_LIBSTCPP'
+
+ Yegor> +	help
+ Yegor> +	  A general purpose c++ library
+
+s/c++/C++/
+
+ Yegor> +
+ Yegor> +	  http://www.boost.org/
+ Yegor> +
+ Yegor> +menu "Boost libraries"
+ Yegor> +	depends on BR2_PACKAGE_BOOST
+ Yegor> +
+
+It makes more sense to put all these options in a
+if BR2_PACKAGE_BOOST
+..
+
+endif 
+
+
+ Yegor> +config BR2_PACKAGE_BOOST_MULTITHREADED
+ Yegor> +	depends on BR2_PACKAGE_BOOST
+ Yegor> +	bool "boost-multithreaded"
+
+Should depend on BR2_TOOLCHAIN_HAS_THREADS
+
+ Yegor> +config BR2_PACKAGE_BOOST_THREAD
+ Yegor> +	depends on BR2_PACKAGE_BOOST
+ Yegor> +	bool "boost-thread"
+
+This one as well.
+
+
+-- 
+Bye, Peter Korsgaard
