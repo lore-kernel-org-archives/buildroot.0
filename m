@@ -1,73 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 30 Jan 2012 23:35:31 +0100
-Subject: [Buildroot] [PATCH 2/2] openssl: split out ocf
-In-Reply-To: <1327667762-10831-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1327667762-10831-1-git-send-email-gustavo@zacarias.com.ar>
- <1327667762-10831-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201201302335.31863.arnout@mind.be>
+Date: Mon, 30 Jan 2012 23:43:25 +0100
+Subject: [Buildroot] [PATCH] New package: libical
+In-Reply-To: <1327676345-8958-1-git-send-email-yegorslists@googlemail.com>
+References: <1327676345-8958-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201201302343.26186.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 27 January 2012 13:36:02 Gustavo Zacarias wrote:
-> Ditch OCF and switch to the proper package.
+On Friday 27 January 2012 15:59:05 yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/openssl/Config.in                |    1 +
->  package/openssl/ocf-cryptodev-20101223.h |  480 ------------------------------
->  package/openssl/openssl.mk               |   10 +-
->  3 files changed, 3 insertions(+), 488 deletions(-)
->  delete mode 100644 package/openssl/ocf-cryptodev-20101223.h
-> 
-> diff --git a/package/openssl/Config.in b/package/openssl/Config.in
-> index 3e09d88..0240603 100644
-> --- a/package/openssl/Config.in
-> +++ b/package/openssl/Config.in
-> @@ -25,6 +25,7 @@ config BR2_PACKAGE_OPENSSL_ENGINES
->  config BR2_PACKAGE_OPENSSL_OCF
->         bool "openssl ocf support"
->         depends on BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_OCF
->         help
->           Enable openssl cryptodev (OCF) hardware acceleration support.
->           This requires kernel patches from the ocf-linux project otherwise
-> 
- Maybe it's useful to refer to the OCF kernel extension in the help
-text.
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 [snip]
-> diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-> index cb29fe4..d638ce1 100644
-> --- a/package/openssl/openssl.mk
-> +++ b/package/openssl/openssl.mk
-> @@ -12,14 +12,8 @@ OPENSSL_TARGET_ARCH = generic32
+> diff --git a/package/libical/Config.in b/package/libical/Config.in
+> new file mode 100644
+> index 0000000..12abdb2
+> --- /dev/null
+> +++ b/package/libical/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_LIBICAL
+> +	bool "libical"
+> +	depends on BR2_USE_WCHAR
+> +	help
+> +	  libical is an Open Source (MPL/LGPL) implementation of the IETF's 
+> +	  iCalendar Calendaring and Scheduling protocols.
+> +
+> +	  http://www.citadel.org/doku.php/documentation:featured_projects:libical
+> +
+> +comment "libical requires a toolchain with WCHAR support"
+> +	depends on !(BR2_USE_WCHAR)
+ I think the brackets are redundant here.
+
+> diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+> new file mode 100644
+> index 0000000..63311eb
+> --- /dev/null
+> +++ b/package/libical/libical.mk
+> @@ -0,0 +1,12 @@
+> +#############################################################
+> +#
+> +# libical
+> +#
+> +#############################################################
+> +
+> +LIBICAL_VERSION = 0.48
+> +LIBICAL_SITE = http://heanet.dl.sourceforge.net/project/freeassociation/libical/libical-$(LIBICAL_VERSION)
+ Please use $(BR2_SOURCEFORGE_MIRROR)
+
+> +LIBICAL_INSTALL_STAGING = YES
+> +
+> +$(eval $(call AUTOTARGETS))
+> +
 > 
->  OPENSSL_CFLAGS = $(TARGET_CFLAGS)
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
-> 
-> -OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
-> -
-> -define OPENSSL_INSTALL_CRYPTODEV_H
-> -$(INSTALL) -D package/openssl/ocf-cryptodev-20101223.h \
-> -       $(STAGING_DIR)/usr/include/crypto/cryptodev.h
-> -endef
-> -
-> -OPENSSL_POST_EXTRACT_HOOKS += OPENSSL_INSTALL_CRYPTODEV_H
-> +       OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
-> +       OPENSSL_DEPENDENCIES += ocf
- I don't think we usually put indentation in make conditionals.
 
  Regards,
  Arnout
 
-> 
->  endif
->  
->  # Some architectures are optimized in OpenSSL
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
