@@ -1,70 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 30 Jan 2012 23:43:25 +0100
-Subject: [Buildroot] [PATCH] New package: libical
-In-Reply-To: <1327676345-8958-1-git-send-email-yegorslists@googlemail.com>
-References: <1327676345-8958-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <201201302343.26186.arnout@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 30 Jan 2012 23:22:51 +0100
+Subject: [Buildroot] [git commit] libevas: really fix x86 cpu optimization
+	options handling
+Message-ID: <20120130232839.106BF9094F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 27 January 2012 15:59:05 yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+commit: http://git.buildroot.net/buildroot/commit/?id=cf96a9bec0c2ad40b820c6f465c2ac17d3bc4e03
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[snip]
-> diff --git a/package/libical/Config.in b/package/libical/Config.in
-> new file mode 100644
-> index 0000000..12abdb2
-> --- /dev/null
-> +++ b/package/libical/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_LIBICAL
-> +	bool "libical"
-> +	depends on BR2_USE_WCHAR
-> +	help
-> +	  libical is an Open Source (MPL/LGPL) implementation of the IETF's 
-> +	  iCalendar Calendaring and Scheduling protocols.
-> +
-> +	  http://www.citadel.org/doku.php/documentation:featured_projects:libical
-> +
-> +comment "libical requires a toolchain with WCHAR support"
-> +	depends on !(BR2_USE_WCHAR)
- I think the brackets are redundant here.
+Disable all options by default, and only enable the applicable one.
 
-> diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-> new file mode 100644
-> index 0000000..63311eb
-> --- /dev/null
-> +++ b/package/libical/libical.mk
-> @@ -0,0 +1,12 @@
-> +#############################################################
-> +#
-> +# libical
-> +#
-> +#############################################################
-> +
-> +LIBICAL_VERSION = 0.48
-> +LIBICAL_SITE = http://heanet.dl.sourceforge.net/project/freeassociation/libical/libical-$(LIBICAL_VERSION)
- Please use $(BR2_SOURCEFORGE_MIRROR)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/efl/libevas/libevas.mk |    9 +++------
+ 1 files changed, 3 insertions(+), 6 deletions(-)
 
-> +LIBICAL_INSTALL_STAGING = YES
-> +
-> +$(eval $(call AUTOTARGETS))
-> +
-> 
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 6ad1126..acb2f4b 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -94,6 +94,9 @@ endif
+ 
+ # code options
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
++# defaults
++LIBEVAS_CONF_OPT += --disable-cpu-mmx --disable-cpu-sse --disable-cpu-sse3
++
+ # enable if cpu variant has mmx support
+ ifneq ($(BR2_x86_i386)$(BR2_x86_i486)$(BR2_x86_i586)$(BR2_x86_i686)$(BR2_x86_pentiumpro)$(BR2_x86_geode),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-mmx
+@@ -103,14 +106,8 @@ LIBEVAS_CONF_OPT += --enable-cpu-sse
+ 
+ ifneq ($(BR2_x86_pentium3)$(BR2_x86_pentium4)$(BR2_x86_prescott)$(BR2_x86_athlon_4)$(BR2_x86_opteron)$(BR2_x86_c32)$(BR2_x86_64_opteron),y)
+ LIBEVAS_CONF_OPT += --enable-cpu-sse3
+-else
+-LIBEVAS_CONF_OPT += --disable-cpu-sse3
+ endif # sse3
+-else
+-LIBEVAS_CONF_OPT += --disable-cpu-sse
+ endif # sse
+-else
+-LIBEVAS_CONF_OPT += --disable-cpu-mmx
+ endif # mmx
+ endif # x86
+ 
