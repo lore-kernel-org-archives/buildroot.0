@@ -1,42 +1,40 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Mon, 30 Jan 2012 13:00:21 +0100
-Subject: [Buildroot] [PATCH v2 1/1] apply-patches.sh: check if there are
-	rejects before applying patches
-In-Reply-To: <96c0ec6a36f4772d4182be934a4e8675ccdf3a0e.1327508994.git.ludovic.desroches@atmel.com>
-References: <96c0ec6a36f4772d4182be934a4e8675ccdf3a0e.1327508994.git.ludovic.desroches@atmel.com>
-Message-ID: <1327924821-24628-1-git-send-email-ludovic.desroches@atmel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Jan 2012 12:26:49 +0100
+Subject: [Buildroot] Buildroot Developer Day, Friday 3rd February,
+ Brussels
+In-Reply-To: <CAAXf6LU_=sZ4fw_mJ=FL1JZjpc5+Fqf=K=wWQCbHtGLkyZVaBA@mail.gmail.com>
+References: <20120124000812.6d043023@skate>
+ <CAAXf6LW6aCs-G_FD=pXNGsBrV3133donzNxsuNV_7O=9JMCs4Q@mail.gmail.com>
+ <201201271133.20517.arnout@mind.be>
+ <CAAXf6LU_=sZ4fw_mJ=FL1JZjpc5+Fqf=K=wWQCbHtGLkyZVaBA@mail.gmail.com>
+Message-ID: <20120130122649.71f44783@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Le Mon, 30 Jan 2012 10:19:12 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Sorry missing fi into previous patch.
+> For most packages, the version to be used is hardcoded in the .mk
+> file. For others, like gdb, there is a choice of versions via the
+> .config file. I understand we cannot supply such gdb-like
+> configuration for all packages as that would be way overkill. However,
+> another mechanism could be used, e.g. like the source directory
+> override feature (but then: version override).
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/scripts/apply-patches.sh |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+It is relatively easy to do version override, but the problem is that
+if you override the version, most likely you'll also need to override
+the other variables: the configuration options change between versions,
+the build procedure might change, etc. So in the end we will end up
+needing to be able to override everything. We will discuss this on
+Friday, but I'm not sure it is possible to do this in a nice and
+maintainable way.
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 1aef47e..1ad7d1f 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -19,6 +19,12 @@ if [ ! -d "${patchdir}" ] ; then
-     echo "Aborting.  '${patchdir}' is not a directory."
-     exit 1
- fi
-+
-+# Check for rejects because if there are some, even if patches are well
-+# applied, at the end it will complain about rejects into targetdir.
-+if [ "`find ${targetdir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-+	echo "There are remaining reject files into ${targetdir}, please delete them."
-+fi
-     
- for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
-     apply="patch -g0 -p1 -E -d"
+Thomas
 -- 
-1.7.5.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
