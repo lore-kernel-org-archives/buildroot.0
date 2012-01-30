@@ -1,37 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jan 2012 18:09:23 +0100
-Subject: [Buildroot] [PATCH] Documentation: quotes around TARGET_CC
- variable.
-In-Reply-To: <CAGiDA6L-nk3EikextETqnJiQpW2iywmT-4gsn429oPtM-qNQsA@mail.gmail.com>
-References: <CAGiDA6L-nk3EikextETqnJiQpW2iywmT-4gsn429oPtM-qNQsA@mail.gmail.com>
-Message-ID: <20120130180923.23d719d4@skate>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Mon, 30 Jan 2012 21:18:33 +0100
+Subject: [Buildroot] Gdb(server) on ARM and uClibc
+In-Reply-To: <CAE4k23-gErY-gcTnjN1Ldeo6Qv=+ze4OFrMui-sw5HfP0R=9Kw@mail.gmail.com>
+References: <CAE4k23-gErY-gcTnjN1Ldeo6Qv=+ze4OFrMui-sw5HfP0R=9Kw@mail.gmail.com>
+Message-ID: <CAE4k2388pmoeXVufYiU6cN+K-HgOtoHNg9Qd8QxhdxVhpu7dXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 30 Jan 2012 12:01:15 -0500,
-"Shawn J. Goff" <shawn7400@gmail.com> a ?crit :
+On Sat, Jan 28, 2012 at 21:04, Anders Darander
+<anders.darander@gmail.com> wrote:
+> Hi,
+>
+> I'm probably missing something simple when it comes to my
+> uClibc-configuration... (Or is there still problems with gdb on uClibc
+> and ARM?)
+>
+> I'm getting "error: No uintptr_t available; your C library is too
+> old." when I'm compiling uClibc. I've tried both 7.2.x and 7.3.x. Next
+> step will be to merge the tree I've based my work on sofar with
+> master, and try 7.4, however I doubt that it'll help me... (I've sofar
+> based this work on the tree
+> https://github.com/fhunleth/buildroot-beaglebone.git, as I'm working
+> on a beaglebone. I know that the tree in question is getting close to
+> 2 months behind master now, but apart from the 7.4 inclusion, I
+> haven't seen anything in the git log that I immediately recognize as a
+> potential solution).
 
-> How is http://buildroot.uclibc.org/buildroot.html updated? Is it
-> generated from the .txt?
+Again, it shows that one should check HEAD first...
 
-No, it is the old version of the documentation, which was written
-directly in HTML. It is no longer updated, but is unfortunately still
-the only one visible on the website. This should be fixed someday. Only
-when the new documentation is visible on the website we will remove the
-buildroot.html from the Git repository.
+After merging my branch cloned from
+https://github.com/fhunleth/buildroot-beaglebone.git, with master from
+buildroot, I can at least compile gdbserver.
 
-> Should the other .html files also be removed?
+The main differences, gdb 7.3 => 7.4, and uClibc 0.9.32 => 0.9.32.1.
+And Peter also had some gdb-related bug fixes, that might have
+helped...
 
-No, the other .html files are the website itself and must be preserved.
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Cheers,
+Anders
