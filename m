@@ -1,41 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 31 Jan 2012 23:52:55 +0100
-Subject: [Buildroot] [PATCH 8/8] lttng-babeltrace: new package
-In-Reply-To: <8909ec4e636e84ac7cdf6a0b0c6c51c1bd36ccd6.1328038759.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 31 Jan 2012 20:40:06 +0100")
-References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <8909ec4e636e84ac7cdf6a0b0c6c51c1bd36ccd6.1328038759.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87vcnrh4c8.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 31 Jan 2012 23:55:19 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+ for-2012.02/ext-toolchain-updates
+In-Reply-To: <201201312324.20779.arnout@mind.be>
+References: <cover.1327772176.git.thomas.petazzoni@free-electrons.com>
+ <201201312324.20779.arnout@mind.be>
+Message-ID: <20120131235519.6d1f5fa1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Tue, 31 Jan 2012 23:24:20 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
- Thomas> +++ b/package/lttng-babeltrace/lttng-babeltrace.mk
- Thomas> @@ -0,0 +1,17 @@
- Thomas> +LTTNG_BABELTRACE_SITE    = http://lttng.org/files/bundles/20111214/
- Thomas> +LTTNG_BABELTRACE_VERSION = 0.8
- Thomas> +LTTNG_BABELTRACE_SOURCE  = babeltrace-$(LTTNG_BABELTRACE_VERSION).tar.bz2
- Thomas> +
- Thomas> +# Needed to fix libtool handling, otherwise the build fails when
- Thomas> +# building the ctf-parser-test program, which depends on libctf-ast.so
- Thomas> +# which itself depends on libbabeltrace_types.so.0 (and libtool gets
- Thomas> +# lost in the middle of this).
- Thomas> +LTTNG_BABELTRACE_AUTORECONF      = YES
- Thomas> +HOST_LTTNG_BABELTRACE_AUTORECONF = YES
- Thomas> +
- Thomas> +LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
- Thomas> +
- Thomas> +HOST_LTTNG_BABELTRACE_DEPENDENCIES = host-popt host-libglib2 host-util-linux
+>  Didn't you promise to include my "Automatically set -m64 if the 
+> architecture is x86_64" patch?  Would you like a repost?
 
-HOST_..._DEPENDENCIES are now automatically derived from _DEPENDENCIES
-by default, so this can be dropped.
+Ah, yes, sorry. Will do.
 
-Other than that it looks good, committed - Thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
