@@ -1,59 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 31 Jan 2012 18:25:03 +0100
-Subject: [Buildroot] [RFC 02/15] legal-info: produce a manifest file
-	with licensing info
-In-Reply-To: <1327849908-15588-3-git-send-email-luca@lucaceresoli.net>
+Date: Tue, 31 Jan 2012 23:10:06 +0100
+Subject: [Buildroot] [RFC 03/15] legal-info: save source tarballs for
+	all packages
+In-Reply-To: <1327849908-15588-4-git-send-email-luca@lucaceresoli.net>
 References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
- <1327849908-15588-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <201201311825.03489.arnout@mind.be>
+ <1327849908-15588-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <201201312310.06332.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 29 January 2012 16:11:35 Luca Ceresoli wrote:
+On Sunday 29 January 2012 16:11:36 Luca Ceresoli wrote:
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Darn, I've been adding Reviewed-by tags even though I said I wouldn't :-)
 
 [snip]
->  dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
-> -	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
-> +	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR)
- Since legal-info-prepare-manifest already depends on LEGAL_INFO_DIR, this
- is redundant.
-
-[snip]
-> +legal-info-prepare-manifest: $(LEGAL_INFO_DIR)
-> +	@rm -f $(LEGAL_MANIFEST_CSV)
-> +	@echo "package,version,license" >$(LEGAL_MANIFEST_CSV)
-> +
- I might be wrong, but I think this won't rebuild the manifest if the
-directory already exists.  You'd need a dependency on FORCE (and add the
-phony FORCE target).
-
- Again a minor comment: the clean target is missing here (but it's added
-in the next patch).  But for me, the first three patches can be rolled
-into one.
-
-> +legal-info: legal-info-prepare-manifest $(TARGETS_LEGAL_INFO)
+> @@ -633,7 +635,8 @@ endif
 >  
->  show-targets:
->  	@echo $(TARGETS)
+>  clean:
+>  	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+> -		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging
+> +		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
+> +		$(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR)
+ $(REDIST_SOURCES_DIR) is a subdir of $(LEGAL_INFO_DIR), so doesn't need
+to be cleaned twice.
+
+>  
+>  distclean: clean
+>  ifeq ($(DL_DIR),$(TOPDIR)/dl)
 > diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index 8e73f34..e117223 100644
+> index e117223..0d7e081 100644
 > --- a/package/Makefile.package.in
 > +++ b/package/Makefile.package.in
-> @@ -653,8 +653,10 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+> @@ -653,10 +653,11 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
 >  $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
 >  endif
 >  
-> -$(1)-legal-info:	$(1)-source
-> +$(1)-legal-info:	$(1)-source $(LEGAL_INFO_DIR)
+> -$(1)-legal-info:	$(1)-source $(LEGAL_INFO_DIR)
+> +$(1)-legal-info:	$(1)-source $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR)
 >  			@echo -e "$(1)\t$$($(3)_VERSION)\t$$($(3)_LICENSE)"
-> +			@echo "$(1),$$($(3)_VERSION),$$($(3)_LICENSE)" \
-> +				>>$(LEGAL_MANIFEST_CSV)
- Same here: will the manifest be rebuilt if the directory already exists?
+>  			@echo "$(1),$$($(3)_VERSION),$$($(3)_LICENSE)" \
+>  				>>$(LEGAL_MANIFEST_CSV)
+> +			@cp $(DL_DIR)/$$($(3)_SOURCE) $(REDIST_SOURCES_DIR)
+
+ Actually, for local and override packages (of which you said they are not
+supported at the moment), $(1)-source should create a tar file.
 
  Regards,
  Arnout
