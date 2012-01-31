@@ -1,43 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jan 2012 17:26:06 +0100
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 31 Jan 2012 20:38:51 +0100
 Subject: [Buildroot] problem when using build cache ?
-In-Reply-To: <9C7AEB06A00A49B5BC4F3D164ABB579E@JohanW7>
+In-Reply-To: <8739avkfhp.fsf@macbook.be.48ers.dk>
 References: <9C7AEB06A00A49B5BC4F3D164ABB579E@JohanW7>
-Message-ID: <20120131172606.6b123f1d@skate>
+ <8739avkfhp.fsf@macbook.be.48ers.dk>
+Message-ID: <3DA04F4AA8F24A45B49F31E8169AE50E@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi
 
-Le Tue, 31 Jan 2012 17:10:46 +0100,
-"Sagaert Johan" <sagaert.johan@skynet.be> a ?crit :
+After some search i found that if you create a directory under /lib/udev/devices/pts  then udev will create(copy) this directory
+under /dev so I think its not needed to do it in inittab.
 
-> The udev version in 2011.11 (v1.73) does not  generate the /dev/pts nodes  and as result there is no devpts in the mounts.
+Johan
 
-I guess you're talking about version 173 of udev, there is no such
-thing as 1.73. If you use udev, then your kernel must have
-CONFIG_DEVTMPFS and CONFIG_DEVTMPFS_MOUNT enabled. If you let Buildroot
-build your kernel, then Buildroot will automatically ensure that your
-kernel is configured with those two options enabled. If you build your
-kernel manually outside of Buildroot, then you must enable those
-options, otherwise udev will not work.
+-----Oorspronkelijk bericht-----
+Van: Peter Korsgaard [mailto:jacmet at gmail.com] Namens Peter Korsgaard
+Verzonden: dinsdag 31 januari 2012 17:24
+Aan: Sagaert Johan
+CC: buildroot at busybox.net
+Onderwerp: Re: problem when using build cache ?
 
-I guess this is where your problem is: check your kernel configuration.
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-> I noticed udev 1.14 does not build  when the build ccache is ON.
+ Sagaert> Hi
+ Sagaert> Using 2011.11 :
 
-Honestly, we don't really care about udev 114 since the current
-Buildroot version contains udev 173, and this one appears to build
-properly with ccache enabled.
+ 
 
-Regards,
+ Sagaert> The udev version in 2011.11 (v1.73) does not  generate the /dev/pts nodes  and
+ Sagaert> as result there is no devpts in the mounts.
 
-Thomas
+No, but the default /etc/inittab has a mkdir -p /dev/pts
+ 
+ Sagaert> Has this something to do with the fact that the udev 1.14
+ Sagaert> package makefile is different in structure then the structure
+ Sagaert> used in 2011.11 ?
+
+Perhaps.
+ 
+
+ Sagaert> If you check the udev doc, it states that udev 1.73 only works with kernels >=
+ Sagaert> 2.6.34
+
+ Sagaert> But I was using 2.6.36.1 and there where no /dev/pts nodes
+
+  Sagaert> So there is a tight connection between udev versions and the
+ Sagaert> kernel versions.
+
+The /dev/pts issue isn't directly related to udev or the kernel, simply
+that devtmpfs doesn't create that mount point (and it shouldn't as no
+device drivers tells it to do so).
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
