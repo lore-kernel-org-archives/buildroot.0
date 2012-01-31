@@ -1,26 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 31 Jan 2012 23:20:01 +0100
-Subject: [Buildroot] problem when using build cache ?
-In-Reply-To: <3DA04F4AA8F24A45B49F31E8169AE50E@JohanW7> (Sagaert Johan's
- message of "Tue, 31 Jan 2012 20:38:51 +0100")
-References: <9C7AEB06A00A49B5BC4F3D164ABB579E@JohanW7>
- <8739avkfhp.fsf@macbook.be.48ers.dk>
- <3DA04F4AA8F24A45B49F31E8169AE50E@JohanW7>
-Message-ID: <87ty3bikfi.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 31 Jan 2012 22:21:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 4303] Toolchains qmake causes DEBUG builds with -O2
+In-Reply-To: <bug-4303-163@https.bugs.busybox.net/>
+References: <bug-4303-163@https.bugs.busybox.net/>
+Message-ID: <20120131222106.17A7C9095D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4303
 
- Sagaert> Hi
- Sagaert> After some search i found that if you create a directory under /lib/udev/devices/pts  then udev will create(copy) this directory
- Sagaert> under /dev so I think its not needed to do it in inittab.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-It is for non-udev builds, so it makes most sense to to it in
-/etc/inittab.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
+
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-01-31 22:21:05 UTC ---
+Why should we make a special case for Qt here ? If you tell Buildroot to use
+-O2, then it sounds quite logical to have -O2 in the qmake CXXFLAGS, no ? If
+you don't want -O2 in the qmake CXXFLAGS, then tell Buildroot to not use -O2,
+and you're all set.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
