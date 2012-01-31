@@ -1,63 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 31 Jan 2012 10:23:49 +0100
-Subject: [Buildroot] [PATCH] New package: libical
-In-Reply-To: <201201302343.26186.arnout@mind.be>
-References: <1327676345-8958-1-git-send-email-yegorslists@googlemail.com>
- <201201302343.26186.arnout@mind.be>
-Message-ID: <CAGm1_ktjH8rhsC6r9fguaMqzcgDPtAm6-EOpQBqXHF_mwj3qRw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 31 Jan 2012 10:25:30 +0100
+Subject: [Buildroot] [git commit] header.html: fixup cgit link
+Message-ID: <20120131092709.E211890963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 30, 2012 at 11:43 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Friday 27 January 2012 15:59:05 yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+commit: http://git.buildroot.net/buildroot/commit/?id=14e9f44c07fba19b621cb21f3a72f47193ae3a94
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for review.
+The strange caching issue still not resolved, so atleast make sure we're
+using the working variant.
 
-> [snip]
->> diff --git a/package/libical/Config.in b/package/libical/Config.in
->> new file mode 100644
->> index 0000000..12abdb2
->> --- /dev/null
->> +++ b/package/libical/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_LIBICAL
->> + ? ? bool "libical"
->> + ? ? depends on BR2_USE_WCHAR
->> + ? ? help
->> + ? ? ? libical is an Open Source (MPL/LGPL) implementation of the IETF's
->> + ? ? ? iCalendar Calendaring and Scheduling protocols.
->> +
->> + ? ? ? http://www.citadel.org/doku.php/documentation:featured_projects:libical
->> +
->> +comment "libical requires a toolchain with WCHAR support"
->> + ? ? depends on !(BR2_USE_WCHAR)
-> ?I think the brackets are redundant here.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/header.html |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-This is how Peter made this for blue-utils, so I just copied this.
-
->> diff --git a/package/libical/libical.mk b/package/libical/libical.mk
->> new file mode 100644
->> index 0000000..63311eb
->> --- /dev/null
->> +++ b/package/libical/libical.mk
->> @@ -0,0 +1,12 @@
->> +#############################################################
->> +#
->> +# libical
->> +#
->> +#############################################################
->> +
->> +LIBICAL_VERSION = 0.48
->> +LIBICAL_SITE = http://heanet.dl.sourceforge.net/project/freeassociation/libical/libical-$(LIBICAL_VERSION)
-> ?Please use $(BR2_SOURCEFORGE_MIRROR)
-
-Will do.
-
-Yegor
+diff --git a/docs/header.html b/docs/header.html
+index c8cb135..c9dcf31 100644
+--- a/docs/header.html
++++ b/docs/header.html
+@@ -49,7 +49,7 @@
+     <br><a href="/about.html">About</a>
+     <br><a href="/news.html">Latest News</a>
+     <br><a href="/download.html">Download</a>
+-    <br><a href="http://git.buildroot.net/buildroot">Browse Source</a>
++    <br><a href="http://git.buildroot.net/buildroot/">Browse Source</a>
+     <br><a href="/git.html">Accessing Source</a>
+     <br><a href="https://bugs.uclibc.org/">Bug Tracking</a>
+     <br><a href="/docs.html">Documentation</a>
