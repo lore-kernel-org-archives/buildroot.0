@@ -1,67 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 31 Jan 2012 12:22:36 +0100
-Subject: [Buildroot] [git commit] dbus: make it easier to select an XML
-	library (select rather than depends on)
-Message-ID: <20120131112714.2574590966@busybox.osuosl.org>
+Date: Tue, 31 Jan 2012 12:23:42 +0100
+Subject: [Buildroot] [git commit] qt: qt-dbus: replace dependency on dbus by
+	select
+Message-ID: <20120131112714.51FA090967@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c312adc9852413a21f671016b17a0a58bc5c7679
+commit: http://git.buildroot.net/buildroot/commit/?id=d018125508c1d13f69b71702384c00c7095986a1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-D-Bus requires an XML library, expat or libxml2.  There already is a choice
-between them in the config menu, but it requires the user to first select
-one of the libraries, and then select dbus.  With this patch, the choice
-automatically selects the XML library.  Note that this removes the
-automatic choice of libxml2 for dbus if libxml2 had already been selected,
-i.e. in that case both libxml2 and expat will be selected unless the user
-takes action.
-
-An alternative would be to remove the choice completely, and to take the
-path of bluez-utils: select BR2_PACKAGE_EXPAT if !BR2_PACKAGE_DBUS_LIBXML2
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dbus/Config.in |    9 ++-------
- 1 files changed, 2 insertions(+), 7 deletions(-)
+ package/qt/Config.in |    5 +----
+ 1 files changed, 1 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus/Config.in b/package/dbus/Config.in
-index c625382..54a8540 100644
---- a/package/dbus/Config.in
-+++ b/package/dbus/Config.in
-@@ -1,18 +1,13 @@
- config BR2_PACKAGE_DBUS
- 	bool "dbus"
--	depends on BR2_PACKAGE_EXPAT || BR2_PACKAGE_LIBXML2
- 	help
- 	  The D-Bus message bus system.
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index ab231d9..3a552d0 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -280,12 +280,9 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
+ 	  If unsure, say n.
+ endif
  
- 	  http://www.freedesktop.org/wiki/Software/dbus
- 
--comment "dbus not available (need expat or libxml2)"
--	depends on !BR2_PACKAGE_EXPAT && !BR2_PACKAGE_LIBXML2
+-comment "Qt Dbus module not available (needs dbus)"
+-	depends on !BR2_PACKAGE_DBUS
 -
- choice
- 	prompt "XML library to use"
- 	depends on BR2_PACKAGE_DBUS
--	default BR2_DBUS_LIBXML2 if (BR2_PACKAGE_LIBXML2 && !BR2_PACKAGE_EXPAT)
- 	default BR2_DBUS_EXPAT
+ config BR2_PACKAGE_QT_DBUS
+ 	bool "DBus Module"
+-	depends on BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_DBUS
  	help
- 	  Select the XML library to use with D-Bus. Select Expat
-@@ -21,10 +16,10 @@ choice
+ 	  Build the Qt DBus module.
  
- 	config BR2_DBUS_EXPAT
- 		bool "Expat"
--		depends on BR2_PACKAGE_EXPAT
-+		select BR2_PACKAGE_EXPAT
- 
- 	config BR2_DBUS_LIBXML2
- 		bool "libxml2"
--		depends on BR2_PACKAGE_LIBXML2
-+		select BR2_PACKAGE_LIBXML2
- 
- endchoice
