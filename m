@@ -1,99 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jan 2012 20:40:02 +0100
-Subject: [Buildroot] [PATCH 4/8] lttng-libust: new package
+Date: Tue, 31 Jan 2012 20:40:05 +0100
+Subject: [Buildroot] [PATCH 7/8] util-linux: add host variant for
+	host-lttng-babeltrace
 In-Reply-To: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <25addf8b73d710166c064f6ad74bad2f34259ad5.1328038759.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b2a0f7f41aaba9aa1691286d04bb51fe3b6a35f6.1328038759.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+lttng-babeltrace needs libuuid, which is provided by util-linux, and
+since we want to build lttng-babeltrace for the host, we need to build
+libuuid for the host. It's a shame that libuuid is part of such a big
+package as util-linux.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/lttng-libust/Config.in                     |   10 +++++++
- .../lttng-libust-fix-overflow-32-bits.patch        |   26 ++++++++++++++++++++
- package/lttng-libust/lttng-libust.mk               |    8 ++++++
- 4 files changed, 45 insertions(+), 0 deletions(-)
- create mode 100644 package/lttng-libust/Config.in
- create mode 100644 package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
- create mode 100644 package/lttng-libust/lttng-libust.mk
+ package/util-linux/util-linux.mk |   14 ++++++++++++++
+ 1 files changed, 14 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d016ac2..1ee9ed3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -377,6 +377,7 @@ source "package/libglib2/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
- source "package/liburcu/Config.in"
-+source "package/lttng-libust/Config.in"
- source "package/orc/Config.in"
- source "package/poco/Config.in"
- source "package/startup-notification/Config.in"
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-new file mode 100644
-index 0000000..335a956
---- /dev/null
-+++ b/package/lttng-libust/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LTTNG_LIBUST
-+	bool "lttng-libust"
-+	select BR2_PACKAGE_LIBURCU
-+	help
-+	  Userspace tracing library for the Lttng tracing
-+	  infrastructure. It allows userspace programs to create
-+	  custom trace events that are integrated with all other
-+	  events gathered by LTTng.
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index a3d6e13..86d970f 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -13,6 +13,9 @@ UTIL_LINUX_DEPENDENCIES = host-pkg-config
+ 
+ UTIL_LINUX_CONF_OPT += --disable-rpath --disable-makeinstall-chown
+ 
++# We don't want the host-busybox dependency to be added automatically
++HOST_UTIL_LINUX_DEPENDENCIES = host-pkg-config
 +
-+	  http://lttng.org
-diff --git a/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
-new file mode 100644
-index 0000000..c2a4dd2
---- /dev/null
-+++ b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
-@@ -0,0 +1,26 @@
-+From dc190cc1f8ddccfa7b0b8323ed157afb29a0ebb7 Mon Sep 17 00:00:00 2001
-+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+Date: Wed, 21 Dec 2011 16:24:48 -0500
-+Subject: [PATCH] Fix clock source overflow on 32-bit archs
+ # If both util-linux and busybox are selected, make certain util-linux
+ # wins the fight over who gets to have their utils actually installed
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+@@ -67,7 +70,18 @@ UTIL_LINUX_CONF_OPT += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-login-utils) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_WRITE),--enable-write)
+ 
++# In the host version of util-linux, we so far only require libuuid,
++# and none of the util-linux utilities, so we disable all of them.
++HOST_UTIL_LINUX_CONF_OPT += \
++	--enable-libuuid \
++	--disable-mount --disable-fsck --disable-libmount \
++	--disable-uuidd --disable-libblkid --disable-agetty \
++	--disable-cramfs --disable-switch_root --disable-pivot_root \
++	--disable-fallocate --disable-unshare --disable-rename \
++	--disable-schedutils --disable-wall --disable-partx
 +
-+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-+---
-+ liblttng-ust/clock.h |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/liblttng-ust/clock.h b/liblttng-ust/clock.h
-+index b5d3e77..23294d2 100644
-+--- a/liblttng-ust/clock.h
-++++ b/liblttng-ust/clock.h
-+@@ -39,7 +39,7 @@ static __inline__ uint64_t trace_clock_read64(void)
-+ 	struct timespec ts;
-+ 
-+ 	clock_gettime(CLOCK_MONOTONIC, &ts);
-+-	return (ts.tv_sec * 1000000000) + ts.tv_nsec;
-++	return ((uint64_t) ts.tv_sec * 1000000000ULL) + ts.tv_nsec;
-+ }
-+ 
-+ static __inline__ uint32_t trace_clock_freq_scale(void)
-+-- 
-+1.7.2.5
-+
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-new file mode 100644
-index 0000000..a2cef2a
---- /dev/null
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -0,0 +1,8 @@
-+LTTNG_LIBUST_SITE    = http://lttng.org/files/bundles/20111214/
-+LTTNG_LIBUST_VERSION = 1.9.2
-+LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
-+
-+LTTNG_LIBUST_INSTALL_STAGING = YES
-+LTTNG_LIBUST_DEPENDENCIES    = liburcu
-+
-+$(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS))
++$(eval $(call AUTOTARGETS,host))
+ 
+ # MKINSTALLDIRS comes from tweaked m4/nls.m4, but autoreconf uses staging
+ # one, so it disappears
 -- 
 1.7.4.1
