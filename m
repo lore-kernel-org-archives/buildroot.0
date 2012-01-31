@@ -1,38 +1,53 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 31 Jan 2012 12:23:42 +0100
-Subject: [Buildroot] [git commit] qt: qt-dbus: replace dependency on dbus by
-	select
-Message-ID: <20120131112714.51FA090967@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 31 Jan 2012 12:39:01 +0100
+Subject: [Buildroot] [PATCH 1/6] dbus: make it easier to select an XML
+	library (select rather than depends on)
+In-Reply-To: <87fwewjeof.fsf@macbook.be.48ers.dk>
+References: <CAFbHwiTmVeZYM_OBKzzNLkdvbr30RG06wi8FxFzbhVhP9KcTbw@mail.gmail.com>
+ <1327621292-13580-1-git-send-email-arnout@mind.be>
+ <87fwewjeof.fsf@macbook.be.48ers.dk>
+Message-ID: <201201311239.02217.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d018125508c1d13f69b71702384c00c7095986a1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tuesday 31 January 2012 12:26:40 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+> 
+>  Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> 
+>  Arnout> D-Bus requires an XML library, expat or libxml2.  There already
+>  Arnout> is a choice between them in the config menu, but it requires
+>  Arnout> the user to first select one of the libraries, and then select
+>  Arnout> dbus.  With this patch, the choice automatically selects the
+>  Arnout> XML library.  Note that this removes the automatic choice of
+>  Arnout> libxml2 for dbus if libxml2 had already been selected, i.e. in
+>  Arnout> that case both libxml2 and expat will be selected unless the
+>  Arnout> user takes action.
+> 
+> Committed entire series, thanks.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/Config.in |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ What does everybody think of the alternative (which Peter snipped here):
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index ab231d9..3a552d0 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -280,12 +280,9 @@ config BR2_PACKAGE_QT_PHONON_BACKEND
- 	  If unsure, say n.
- endif
- 
--comment "Qt Dbus module not available (needs dbus)"
--	depends on !BR2_PACKAGE_DBUS
--
- config BR2_PACKAGE_QT_DBUS
- 	bool "DBus Module"
--	depends on BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS
- 	help
- 	  Build the Qt DBus module.
- 
+  An alternative would be to remove the choice completely, and to take the
+  path of bluez-utils: select BR2_PACKAGE_EXPAT if !BR2_PACKAGE_DBUS_LIBXML2
+
+ Advantage: no redundant expat library if the user has selected libxml2
+
+ Disadvantage: what happens when the user has selected both libxml2 and 
+expat?  (My answer: dbus will use libxml2)
+
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
