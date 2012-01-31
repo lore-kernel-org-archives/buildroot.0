@@ -1,76 +1,78 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 31 Jan 2012 23:46:06 +0100
-Subject: [Buildroot] [git commit] lttng-tools: new package
-Message-ID: <20120131232309.D024990963@busybox.osuosl.org>
+Date: Tue, 31 Jan 2012 23:42:45 +0100
+Subject: [Buildroot] [git commit] lttng-modules: new package
+Message-ID: <20120131232309.AD8ED90953@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a7dfa29d128a2edf91f33f1d66dc55fa41ac0b4a
+commit: http://git.buildroot.net/buildroot/commit/?id=16891da22d99ec73696aa22c7564083146d664ec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                  |    1 +
- package/lttng-tools/Config.in      |   20 ++++++++++++++++++++
- package/lttng-tools/lttng-tools.mk |   11 +++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
+ package/Config.in                      |    1 +
+ package/lttng-modules/Config.in        |   18 ++++++++++++++++++
+ package/lttng-modules/lttng-modules.mk |   15 +++++++++++++++
+ 3 files changed, 34 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index ed91605..7c3eb2e 100644
+index d15e934..d437e6e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -25,6 +25,7 @@ source "package/lmbench/Config.in"
+@@ -24,6 +24,7 @@ source "package/kexec/Config.in"
+ source "package/lmbench/Config.in"
  source "package/lsof/Config.in"
  source "package/ltp-testsuite/Config.in"
- source "package/lttng-modules/Config.in"
-+source "package/lttng-tools/Config.in"
++source "package/lttng-modules/Config.in"
  source "package/ltrace/Config.in"
  source "package/memstat/Config.in"
  source "package/netperf/Config.in"
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+diff --git a/package/lttng-modules/Config.in b/package/lttng-modules/Config.in
 new file mode 100644
-index 0000000..cc74966
+index 0000000..2a0f938
 --- /dev/null
-+++ b/package/lttng-tools/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_LTTNG_TOOLS
-+	bool "lttng-tools"
-+	depends on BR2_PACKAGE_LTTNG_MODULES
-+	select BR2_PACKAGE_LIBURCU
-+	select BR2_PACKAGE_POPT
-+	select BR2_PACKAGE_LTTNG_LIBUST
++++ b/package/lttng-modules/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LTTNG_MODULES
++	bool "lttng-modules"
++	depends on BR2_LINUX_KERNEL
 +	help
-+	  Userspace utilities for the LTTng 2.0 tracing
++	  Kernel modules for the LTTng 2.0 kernel tracing
 +	  infrastructure.
 +
-+	  Those utilities are required on the target system to start
-+	  and stop tracing sessions. Analysis of the trace can be done
-+	  on the host machine using the babeltrace utility. This
-+	  utility is automatically built by Buildroot in
-+	  $(O)/host/usr/bin/babeltrace, as a dependency of
-+	  lttng-tools. However, there is also a lttng-babeltrace
-+	  package for the target, if babeltrace on the target is
-+	  interesting.
++	  Your kernel must have CONFIG_TRACEPOINTS enabled for this
++	  package to build something useful. You may also want to have
++	  CONFIG_PERF_EVENTS to access perf event counters from
++	  ltt-ng. Note that system call tracing is only available on
++	  architectures that support CONFIG_HAVE_SYSCALL_TRACEPOINTS.
++
++	  The packaged version is compatible with kernel 2.6.38,
++	  2.6.39, 3.0 and 3.1.0. See
++	  http://lttng.org/files/bundles/20111214/README.compatible.kernels.txt
 +
 +	  http://lttng.org
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
 new file mode 100644
-index 0000000..9e87480
+index 0000000..1820c8f
 --- /dev/null
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -0,0 +1,11 @@
-+LTTNG_TOOLS_VERSION = 2.0-pre15
-+LTTNG_TOOLS_SITE    = http://lttng.org/files/bundles/20111214/
-+LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -0,0 +1,15 @@
++LTTNG_MODULES_VERSION = 2.0-pre11
++LTTNG_MODULES_SITE    = http://lttng.org/files/bundles/20111214/
++LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
 +
-+# The host-lttng-babeltrace technically isn't a required build
-+# dependency. However, having the babeltrace utilities built for the
-+# host is very useful, since those tools allow to convert the binary
-+# trace format into an human readable format.
-+LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
++LTTNG_MODULES_DEPENDENCIES = linux
 +
-+$(eval $(call AUTOTARGETS))
++define LTTNG_MODULES_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
++endef
++
++define LTTNG_MODULES_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR) modules_install
++endef
++
++$(eval $(call GENTARGETS))
