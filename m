@@ -1,40 +1,67 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 31 Jan 2012 12:24:22 +0100
-Subject: [Buildroot] [git commit] connman: replace dependency on dbus by
-	select
-Message-ID: <20120131112714.7300290961@busybox.osuosl.org>
+Date: Tue, 31 Jan 2012 12:22:36 +0100
+Subject: [Buildroot] [git commit] dbus: make it easier to select an XML
+	library (select rather than depends on)
+Message-ID: <20120131112714.2574590966@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=91a3f5aec6e901bff1892b3251896c6d6bd0b571
+commit: http://git.buildroot.net/buildroot/commit/?id=c312adc9852413a21f671016b17a0a58bc5c7679
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+D-Bus requires an XML library, expat or libxml2.  There already is a choice
+between them in the config menu, but it requires the user to first select
+one of the libraries, and then select dbus.  With this patch, the choice
+automatically selects the XML library.  Note that this removes the
+automatic choice of libxml2 for dbus if libxml2 had already been selected,
+i.e. in that case both libxml2 and expat will be selected unless the user
+takes action.
+
+An alternative would be to remove the choice completely, and to take the
+path of bluez-utils: select BR2_PACKAGE_EXPAT if !BR2_PACKAGE_DBUS_LIBXML2
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/connman/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ package/dbus/Config.in |    9 ++-------
+ 1 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 237c30e..2801b87 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_CONNMAN
- 	bool "connman"
--	depends on BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_IPTABLES
- 	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc
-@@ -43,5 +43,5 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+diff --git a/package/dbus/Config.in b/package/dbus/Config.in
+index c625382..54a8540 100644
+--- a/package/dbus/Config.in
++++ b/package/dbus/Config.in
+@@ -1,18 +1,13 @@
+ config BR2_PACKAGE_DBUS
+ 	bool "dbus"
+-	depends on BR2_PACKAGE_EXPAT || BR2_PACKAGE_LIBXML2
+ 	help
+ 	  The D-Bus message bus system.
  
- endif # BR2_PACKAGE_CONNMAN
+ 	  http://www.freedesktop.org/wiki/Software/dbus
  
--comment "connman needs DBus enabled and a toolchain with resolver support"
--	depends on !BR2_PACKAGE_DBUS || !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc)
-+comment "connman needs a toolchain with resolver support"
-+	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc)
+-comment "dbus not available (need expat or libxml2)"
+-	depends on !BR2_PACKAGE_EXPAT && !BR2_PACKAGE_LIBXML2
+-
+ choice
+ 	prompt "XML library to use"
+ 	depends on BR2_PACKAGE_DBUS
+-	default BR2_DBUS_LIBXML2 if (BR2_PACKAGE_LIBXML2 && !BR2_PACKAGE_EXPAT)
+ 	default BR2_DBUS_EXPAT
+ 	help
+ 	  Select the XML library to use with D-Bus. Select Expat
+@@ -21,10 +16,10 @@ choice
+ 
+ 	config BR2_DBUS_EXPAT
+ 		bool "Expat"
+-		depends on BR2_PACKAGE_EXPAT
++		select BR2_PACKAGE_EXPAT
+ 
+ 	config BR2_DBUS_LIBXML2
+ 		bool "libxml2"
+-		depends on BR2_PACKAGE_LIBXML2
++		select BR2_PACKAGE_LIBXML2
+ 
+ endchoice
