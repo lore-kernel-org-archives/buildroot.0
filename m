@@ -1,100 +1,127 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 31 Jan 2012 08:15:23 +0100
-Subject: [Buildroot] [RFC 00/15] Automatically produce legal compliance
-	info
-In-Reply-To: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
-References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <201201310815.24022.arnout@mind.be>
+Date: Tue, 31 Jan 2012 07:59:14 +0100
+Subject: [Buildroot] [RFC PATCH v4 1/2] apply-patches.sh: script changed
+	to support archives in a proper way
+In-Reply-To: <20120129162825.GE26295@ldesroches-Latitude-E6320>
+References: <CAAXf6LWYfg-JO0NnW-ng2XfyTr159aGDSsU9Ec6NZriXQHpvrA@mail.gmail.com>
+ <201201192321.43429.arnout@mind.be>
+ <20120129162825.GE26295@ldesroches-Latitude-E6320>
+Message-ID: <201201310759.14801.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 29 January 2012 16:11:33 Luca Ceresoli wrote:
-[snip]
->   $ make legal-info
->   busybox  1.19.3       GPL_V2_ONLY
->   bzip2    1.0.5        BSD
->   directfb 1.4.15       LGPL_V2.1
->   foobar   1.2.3.4      PROPRIETARY
->   freetype 2.4.8        unknown
->   iostat   2.2          GPL_V2
-
- Cool!
-
->   ...
->   $ cat output/legal-info/manifest.csv 
->   package,version,license
->   busybox,1.19.3,GPL_V2_ONLY
->   bzip2,1.0.5,BSD
->   directfb,1.4.15,LGPL_V2.1
->   foobar,1.2.3.4,PROPRIETARY
->   freetype,2.4.8,unknown
->   iostat,2.2,GPL_V2
->   ...
-
- Personally I'd have used tabs instead of commas, so it is still
-human-readable.  Not sure how non-libreoffice spreadsheets deal with
-that, though.
-
->   $ ls output/legal-info/sources/
->   autoconf-2.65.tar.bz2
->   automake-1.11.1.tar.bz2
->   binutils-2.21.1.tar.bz2
->   busybox-1.19.3.tar.bz2
->   bzip2-1.0.5.tar.gz
->   DirectFB-1.4.15.tar.gz
->   fakeroot_1.9.5.tar.gz
->   freetype-2.4.8.tar.bz2
->   ...
-
- I think these should be hardlinks instead of copies of the dl 
-directory.  You can use 'cp -l', which I believe falls back to
-actual copying if the target filesystem doesn't support hardlinks
-(although I can't think of a filesystem that supports symlinks but
-not hardlinks).
-
-[snip]
-> The implementation takes only ~35 lines of code so it should be simple to
-> review.
-
- I'll try to do that the coming days.  Without Reviewed-by tag, since this 
-is still RFC.
-
+On Sunday 29 January 2012 17:28:25 Ludovic Desroches wrote:
+> Hello Arnout,
 > 
-> Now the long list of open issues.
+> First sorry for some mistakes, I wanted to quickly send this patch for the
+> upstream version and I forgot to do some basic checks. I thought this file
+> was only moved from toolchain/patch-kernel.sh to 
+> support/scripts/apply-patches.sh. It explains some errors as dropping -g0
+> option.
 > 
-> The semantics of the _LICENSE variable is still non well defined.
-> It might be a generic string (e.g. FOOBAR_LICENSE = modified 3-clause BSD),
-> or one from a well-defined list of known licenses.
-> The former interpretation is probably the more useful for producing a manifest
-> file. The latter might be useful to help an automated implementation of the
-> last goal listed above: save the complete text of all license files to a
-> directory.
+> I wanted to send a new version but I am facing some issues in relation
+> with your advices:
+> 
+> On Thu, Jan 19, 2012 at 11:21:43PM +0100, Arnout Vandecappelle wrote:
+> > On Tuesday 10 January 2012 19:01:55 ludovic.desroches at atmel.com wrote:
+> > > From: Ludovic Desroches <ludovic.desroches@atmel.com>
+> > > 
+> > > The previous script doesn't support patching order with archives since
+> > > it didn't extract archives but simply decompressed file and piped the
+> > > result to the patch command.
+> > > This new script extracts archives in a temporary folder and then applies
+> > > patches.
+> > 
+> >  You need to document the API changes clearly.
+> > 
+> > - Uncompressed patches must match *.diff* or *.patch*; else they are skipped.
+> > 
+> > - The defaults are removed; three or more arguments must be supplied.
+> > 
+> > - Behaviour of directories is changed: it is not considered an overlay, but
+> > rather a collection of patches.
+> 
+> Ok I will do it.
+> > 
+> >  Since these changes actually have nothing to do with supporting archives
+> > in a proper way, I suggest you make separate patches for them.
+> 
+> It is my main issue splitting the patch into archive management and the change
+> of the behaviour of directories.
+> I may have to split we apply_patch function: one part to compute type, uncomp,
+> etc. and one other for the command to apply the patch
 
- I would pre-define a number of strings, for which a predefined license
-text exists.  The packager should check if the license text is identical,
-and attach 'dirty' or something to the name if not.
-
+ You misunderstand my point.  You now have one patch (i.e. one git commit)
+that fixes the support for patch archives.  This patch also changes the API
+of apply-patches.sh.  There may be good reasons for that - AFAICS currently
+the only way apply-patches.sh is used in existing buildroot packages, is
+for *.patch files.  So it makes sense to simplify the script and remove the
+redundant features.  However, such a thing should be done in a separate patch,
+with a separate git commit, so it is easier to trace back afterwards when the
+feature got removed.  So you'd have a first patch that removes redundant features,
+and a second patch that fixes the support for archives.
 
 [snip]
-> Copying the source tarball does not currently work for packages with
-> _SITE_METHOD equal to local, as there is no tarball associated to it.
- That should be fixed for the final version.
-
-> Other methods, such as file and all versioning systems, are not tested, but
-> they should work as there's a tarball in the download dir.
+> > > -if [ ! -d "${targetdir}" ] ; then
+> > > -    echo "Aborting.  '${targetdir}' is not a directory."
+> > > -    exit 1
+> > > +case "${1}" in
+> > > +*\.tar\.gz$|*\.tgz$|*\.tar\.bz$|*\.tar\.bz2$|*\.tbz$|*\.tbz2$)
+> > > +	echo "Error with ${1}";
+> > > +	echo "Archives into a directory or another archive is not supported";
+> > > +	return 1;
+> >  I think this piece is a bit redundant, but it doesn't hurt.
 > 
-> Non-gentargets and non-autotargets packages are not tested. I guess they need
-> a $(PKG)-legal-info target to be defined manually.
- Those packages should be converted anyway.
+> I don't see why. If we have an archive here we will have the old behavior
+> which can cause isssues when applying patches since the patch order may not be
+> kept.
+ You're right, my mistake, I had just considered the .tgz case, which 
+doesn't match any of the case branches and will fall into the default
+"Unsupported file format..." branch.
 
+ BTW, just noticed now: the \. is redundant.  The case branches match
+glob patterns, not regular expressions, so . isn't anything special.
+Same for the $.
 
-> It might be useful to remove the output/legal-info dir before populating it,
-> to be sure there are no remnants of previous runs. It would not have a big
-> additional cost, since the computations and copies must be done anyway.
- I agree.
+[snip]
+> > > +# Entry point
+> > > +builddir=${1}
+> > > +patchdir=${2}
+> >  Any particular reason why you renamed 'targetdir' to 'builddir'?  Also,
+> > keep this in the beginning of the file so the diff becomes clearer.
+> 
+> I thought builddir was a better name since targetdir is not output/target as
+> it can suggest. It can be a separated patch and maybe this change is not
+> useful.
+ This could be part of that first cleanup patch.
+
+[snip]
+> > > +		# extract archive
+> > > +		if echo $i | grep -q -E "tar\.bz$|tar\.bz2$|tbz$|tbz2$" ; then
+> > > +			tar_options="-xjf"
+> > > +		else
+> > > +			tar_options="-xzf"
+> > > +		fi
+> > > +		tar -C ${patchesdir} --strip-components=1 ${tar_options} ${patch_path}
+> >  This will give problems on CentOS 5 IIRC - the issue with host-tar, which 
+> > ThomasDS solved recently.
+
+ Actually, it's probably a good idea to export HOST_PATH from the Makefile.
+This issue probably occurs in other places as well.  But that's not for you
+to take care of, Ludovic.
+
+> 
+> Ok I have to checked what is this issue and how it has been solved.
+> 
+> > 
+> >  Actually it is probably a better idea to handle the tar case in the 
+> > Makefiles...
+> 
+> Isn't better here? It will involve changing many files, isn't it?
+ You're right, I wasn't thinking.
 
 [snip]
 
