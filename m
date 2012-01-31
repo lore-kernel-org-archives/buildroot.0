@@ -1,44 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 31 Jan 2012 20:09:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 4448] Busybox build must depend on busybox
- configuration file date
-In-Reply-To: <bug-4448-163@https.bugs.busybox.net/>
-References: <bug-4448-163@https.bugs.busybox.net/>
-Message-ID: <20120131200926.9D88390953@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 31 Jan 2012 18:15:51 +0100
+Subject: [Buildroot] [RFC 01/15] legal-info: new target to echo basic
+	per-package legal info
+In-Reply-To: <1327849908-15588-2-git-send-email-luca@lucaceresoli.net>
+References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
+ <1327849908-15588-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <201201311815.51660.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4448
+On Sunday 29 January 2012 16:11:34 Luca Ceresoli wrote:
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> ---
+>  Makefile                    |    9 ++++++++-
+>  package/Makefile.package.in |    6 ++++++
+>  2 files changed, 14 insertions(+), 1 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 912012f..507fd78 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -354,6 +354,11 @@ HOST_DEPS = $(sort $(foreach dep,\
+>  		$($(dep))))
+>  HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+>  
+> +TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
+> +		$(filter-out makedevs,\
+> +		$(patsubst host-%,%,\
+> +		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
+> +
+ Are we creating the legal info of the target or the SDK here?  If it is
+for the target, the host-% are not needed since they are not distributed.
+I think there should be a separate command for the SDK's legal info.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
+[snip]
+> +$(1)-legal-info:	$(1)-source
+> +			@echo -e "$(1)\t$$($(3)_VERSION)\t$$($(3)_LICENSE)"
+> +
+ Minor detail: if this patch is separate from the one that saves the source
+tarball, the dependency on $(1)-source is unnecessary.
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-01-31 20:09:26 UTC ---
-In order to change the Busybox configuration, one is supposed to run make
-busybox-menuconfig, make busybox-xconfig or make busybox-gconfig. Those targets
-take care of removing the appropriate stamp files to force Buildroot to restart
-the Busybox build process at the next 'make' invocation.
+[snip]
 
-If you are modifying the Busybox configuration file manually (without going
-through these 'make busybox-*config' targets), then I would say you know what
-you are doing and you know you need to take some action to make Buildroot
-restart the build of Busybox, for example by running 'make busybox-rebuild'.
-
-If we do that for the Busybox configuration, what shouldn't we do that for all
-the source files of all packages? I.e, I modify
-output/build/linux-3.0/init/main.c, and at the next 'make' invocation, I want
-Buildroot to figure out that the kernel needs to be rebuilt. It is
-unfortunately not possible to achieve that without re-doing a make invocation
-in all packages, which is not really reasonable.
+ Regards,
+ Arnout
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
