@@ -1,27 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 31 Jan 2012 23:50:07 +0100
-Subject: [Buildroot] [PATCH 7/8] util-linux: add host variant for
-	host-lttng-babeltrace
-In-Reply-To: <b2a0f7f41aaba9aa1691286d04bb51fe3b6a35f6.1328038759.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 31 Jan 2012 20:40:05 +0100")
-References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <b2a0f7f41aaba9aa1691286d04bb51fe3b6a35f6.1328038759.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87zkd3h4gw.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 31 Jan 2012 22:50:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 3703] Consider using /usr/bin/env bash in scripts
+In-Reply-To: <bug-3703-163@https.bugs.busybox.net/>
+References: <bug-3703-163@https.bugs.busybox.net/>
+Message-ID: <20120131225047.5243A90962@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=3703
 
- Thomas> lttng-babeltrace needs libuuid, which is provided by util-linux, and
- Thomas> since we want to build lttng-babeltrace for the host, we need to build
- Thomas> libuuid for the host. It's a shame that libuuid is part of such a big
- Thomas> package as util-linux.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
+
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-01-31 22:50:47 UTC ---
+Not sure what to do with those FreeBSD-specific changes. I am not sure we want
+to support FreeBSD as a build host, since nobody is actively working on this.
+If someone is interested, please send the corresponding patches on the mailing
+list. There has been no activity on this FreeBSD topic since may 2011, so I
+suspect there simply isn't enough interested people.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
