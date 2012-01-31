@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jan 2012 20:39:59 +0100
-Subject: [Buildroot] [PATCH 1/8] linux: use the depmod built in HOST_DIR
+Date: Tue, 31 Jan 2012 20:40:04 +0100
+Subject: [Buildroot] [PATCH 6/8] popt: add host variant for
+	host-lttng-babeltrace
 In-Reply-To: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <28c6a15900cdc487752287f9d20e1ad7af0f992a.1328038759.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fc1f2b9218a1922b9e15ba27062ae9e2b34bac24.1328038759.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/linux.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/popt/popt.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5c5a1d2..dbe1ad7 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -40,7 +40,8 @@ LINUX_MAKE_FLAGS = \
- 	ARCH=$(KERNEL_ARCH) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
--	LZMA="$(LZMA)"
-+	LZMA="$(LZMA)" \
-+	DEPMOD=$(HOST_DIR)/usr/sbin/depmod
+diff --git a/package/popt/popt.mk b/package/popt/popt.mk
+index 98f438d..fd25caa 100644
+--- a/package/popt/popt.mk
++++ b/package/popt/popt.mk
+@@ -16,3 +16,4 @@ POPT_CONF_OPT += --with-libiconv-prefix=$(STAGING_DIR)/usr
+ endif
  
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
+ $(eval $(call AUTOTARGETS))
++$(eval $(call AUTOTARGETS,host))
 -- 
 1.7.4.1
