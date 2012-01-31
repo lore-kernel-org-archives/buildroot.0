@@ -1,43 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 31 Jan 2012 17:22:42 +0100
-Subject: [Buildroot] lib files
-In-Reply-To: <CAPeX=+vjLjg2vZL50NgSD-TozqDXtq8R3Anj=PNvCoCtTd0+EA@mail.gmail.com>
-References: <CAPeX=+vjLjg2vZL50NgSD-TozqDXtq8R3Anj=PNvCoCtTd0+EA@mail.gmail.com>
-Message-ID: <20120131172242.3a84c018@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 31 Jan 2012 17:23:46 +0100
+Subject: [Buildroot] problem when using build cache ?
+In-Reply-To: <9C7AEB06A00A49B5BC4F3D164ABB579E@JohanW7> (Sagaert Johan's
+ message of "Tue, 31 Jan 2012 17:10:46 +0100")
+References: <9C7AEB06A00A49B5BC4F3D164ABB579E@JohanW7>
+Message-ID: <8739avkfhp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 31 Jan 2012 18:01:01 +0200,
-Ozgun <ozgun.gunay@gmail.com> a ?crit :
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-> I built rootfs with opengl and QT without problem. (The compiled examples
-> of QT also run in ubuntu without problem)
-> But when I tried to run these qt examples in created rootfs, it gives "file
-> not found" error. (I both tried these examples static and shared compiled.)
+ Sagaert> Hi
+ Sagaert> Using 2011.11 :
 
-Can you show exactly how this error appears? If it appears when you try
-to run the application, then it usually means that the kernel can't
-find your dynamic library loader.
+ 
 
-I never use Buildroot to generate a filesystem in which I'm chroot-ing.
-If the target architecture is the same as the host, it should work, but
-there might be issues, it's not the common use case for Buildroot
-(usually, you take the generated root filesystem image and put it on a
-target device).
+ Sagaert> The udev version in 2011.11 (v1.73) does not  generate the /dev/pts nodes  and
+ Sagaert> as result there is no devpts in the mounts.
 
-> Then I cheked the dependency of application, you can see results below.
-> The /usr/lib folder has the lib files but in a .a format.
-> For example libm.a is exist but libm.so absent.
+No, but the default /etc/inittab has a mkdir -p /dev/pts
+ 
+ Sagaert> Has this something to do with the fact that the udev 1.14
+ Sagaert> package makefile is different in structure then the structure
+ Sagaert> used in 2011.11 ?
 
-The shared versions of the C library and related libraries (libm, etc.)
-are in /lib, not in /usr/lib.
+Perhaps.
+ 
 
-Thomas
+ Sagaert> If you check the udev doc, it states that udev 1.73 only works with kernels >=
+ Sagaert> 2.6.34
+
+ Sagaert> But I was using 2.6.36.1 and there where no /dev/pts nodes
+
+  Sagaert> So there is a tight connection between udev versions and the
+ Sagaert> kernel versions.
+
+The /dev/pts issue isn't directly related to udev or the kernel, simply
+that devtmpfs doesn't create that mount point (and it shouldn't as no
+device drivers tells it to do so).
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
