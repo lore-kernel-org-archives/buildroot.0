@@ -1,23 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 31 Jan 2012 23:43:04 +0100
-Subject: [Buildroot] [PATCH 3/8] lttng-modules: new package
-In-Reply-To: <69c816343f0b9438709666446e4627814946c356.1328038759.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 31 Jan 2012 20:40:01 +0100")
-References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <69c816343f0b9438709666446e4627814946c356.1328038759.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87hazbijd3.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 31 Jan 2012 22:43:47 +0000 (UTC)
+Subject: [Buildroot] [Bug 1747] external toolchain does not include mtd-util
+	headers
+In-Reply-To: <bug-1747-163@https.bugs.busybox.net/>
+References: <bug-1747-163@https.bugs.busybox.net/>
+Message-ID: <20120131224347.C750C9095F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=1747
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Committed, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
+
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-01-31 22:43:47 UTC ---
+No news since almost a year and a half, closing.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
