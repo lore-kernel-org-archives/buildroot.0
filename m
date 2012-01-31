@@ -1,34 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 31 Jan 2012 22:15:16 +0000 (UTC)
-Subject: [Buildroot] [Bug 4484] libstdc++ has _GLIBCXX_HAVE_FENV_H undefined
- but uclibc appears to have a fenv.h
-In-Reply-To: <bug-4484-163@https.bugs.busybox.net/>
-References: <bug-4484-163@https.bugs.busybox.net/>
-Message-ID: <20120131221516.DC62E90924@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 31 Jan 2012 23:20:01 +0100
+Subject: [Buildroot] problem when using build cache ?
+In-Reply-To: <3DA04F4AA8F24A45B49F31E8169AE50E@JohanW7> (Sagaert Johan's
+ message of "Tue, 31 Jan 2012 20:38:51 +0100")
+References: <9C7AEB06A00A49B5BC4F3D164ABB579E@JohanW7>
+ <8739avkfhp.fsf@macbook.be.48ers.dk>
+ <3DA04F4AA8F24A45B49F31E8169AE50E@JohanW7>
+Message-ID: <87ty3bikfi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4484
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ Sagaert> Hi
+ Sagaert> After some search i found that if you create a directory under /lib/udev/devices/pts  then udev will create(copy) this directory
+ Sagaert> under /dev so I think its not needed to do it in inittab.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|ASSIGNED                    |RESOLVED
-         Resolution|                            |WORKSFORME
-
---- Comment #7 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-01-31 22:15:16 UTC ---
-I just tried with the latest Buildroot to build a PowerPC toolchain with gcc
-4.6 for e500mc, and it just works fine.
-
-If it still doesn't work for you, please post your Buildroot .config file. Your
-previous one was incorrect because it was using the 0.9.31 uClibc configuration
-with a 0.9.32 uClibc.
+It is for non-udev builds, so it makes most sense to to it in
+/etc/inittab.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
