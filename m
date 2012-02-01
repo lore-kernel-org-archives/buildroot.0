@@ -1,61 +1,72 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 01 Feb 2012 22:38:07 +0100
-Subject: [Buildroot] [RFC 03/15] legal-info: save source tarballs for
- all packages
-In-Reply-To: <201201312310.06332.arnout@mind.be>
+Date: Wed, 01 Feb 2012 22:47:59 +0100
+Subject: [Buildroot] [RFC 00/15] Automatically produce legal compliance
+ info
+In-Reply-To: <CAAXf6LVW_4J-aqqRx1DemP42dLnZbBFnGoiPBSa89QmN0E6yoA@mail.gmail.com>
 References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
- <1327849908-15588-4-git-send-email-luca@lucaceresoli.net>
- <201201312310.06332.arnout@mind.be>
-Message-ID: <4F29B0BF.3080303@lucaceresoli.net>
+ <201201312327.22738.yann.morin.1998@free.fr>
+ <CAAXf6LVW_4J-aqqRx1DemP42dLnZbBFnGoiPBSa89QmN0E6yoA@mail.gmail.com>
+Message-ID: <4F29B30F.303@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle wrote:
-> On Sunday 29 January 2012 16:11:36 Luca Ceresoli wrote:
->> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
->   Darn, I've been adding Reviewed-by tags even though I said I wouldn't :-)
->
-> [snip]
->> @@ -633,7 +635,8 @@ endif
->>
->>   clean:
->>   	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
->> -		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging
->> +		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
->> +		$(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR)
->   $(REDIST_SOURCES_DIR) is a subdir of $(LEGAL_INFO_DIR), so doesn't need
-> to be cleaned twice.
+Yann, Thomas,
+thanks for your follow-ups.
 
-You're right.
-Again a remnant of my initial drafts, when the two subdirs ere not one
-inside the other...
-
->
+Thomas De Schampheleire wrote:
 >>
->>   distclean: clean
->>   ifeq ($(DL_DIR),$(TOPDIR)/dl)
->> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
->> index e117223..0d7e081 100644
->> --- a/package/Makefile.package.in
->> +++ b/package/Makefile.package.in
->> @@ -653,10 +653,11 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->>   $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
->>   endif
+>> However, I can see something missing for GPL/LGPL packages. GPL/LGPL states
+>> that you must also provide "the scripts used to control compilation and
+>> installation of the executable."
 >>
->> -$(1)-legal-info:	$(1)-source $(LEGAL_INFO_DIR)
->> +$(1)-legal-info:	$(1)-source $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR)
->>   			@echo -e "$(1)\t$$($(3)_VERSION)\t$$($(3)_LICENSE)"
->>   			@echo "$(1),$$($(3)_VERSION),$$($(3)_LICENSE)" \
->>   				>>$(LEGAL_MANIFEST_CSV)
->> +			@cp $(DL_DIR)/$$($(3)_SOURCE) $(REDIST_SOURCES_DIR)
+>> Which means that, for packages such as Linux, busybox and uClibc (maybe
+>> others as well), the associated .config file should be bundled as well.
+>>
+>> Also, the config/build/install instructions for each GPL/LGPL package
+>> must be provided. This could probably be done by bundling the buildroot
+>> sources too in output/legal-info/sources/, or by leveraging the package
+>> infrastructure to output the executed commands for every packages.
+>>
+>> Also, for packages that get patches applied by buildroot, you must make
+>> sure that the tarballs for those packages do contain the pathced code,
+>> or that the patches are bundled as well. From what I see, you currently
+>> only copy the downladed tarballs. Of course, if buildroot is also copied
+>> to the output/legal-info/sources/ the patches will be there.
 >
->   Actually, for local and override packages (of which you said they are not
-> supported at the moment), $(1)-source should create a tar file.
+> I agree with Yann: I think we should package buildroot itself as well.
+>
+> In fact, I think we should:
+> - make distclean
+> - create the manifest
+> - download all needed sources
+> - run a pre-legal-package script for customization
+> - create a .tar file with the whole
+>
+> The pre-legal-package script (whatever the name) is similar to the
+> post-build script, and allows projects to modify certain things. For
+> example, modify the defconfig to disable some proprietary things that
+> are not useful or usable by the customer.
+>
+> Also, I think the DL_DIR setting should be modified so that it points
+> to the location where the source tarballs are downloaded. This way,
+> the customer can directly use these sources from that location when
+> re-building buildroot.
+>
+> I haven't done a technical review of your patches, but I went through
+> them and agree with the principle. Thanks for posting them before the
+> developer day, it will certainly help the discussion!
 
-Yes, this is another point in my TODO list. I have a few implementation
-options to choose from.
+I think the best way is to just package BR itself in the legal-info
+subdir. I'll have to check if/how it is feasible.
+I'd also copy the current .config, which IMHO is part of the "scripts
+used to control compilation".
+
+OTOH I don't think a pre-legal-package script would be a good idea, as
+it would easily allow to trick and create a fake GPL-compliant release.
+In other words, what I use for building must go directly in the stuff
+to be released.
 
 Luca
