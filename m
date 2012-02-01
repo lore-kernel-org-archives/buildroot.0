@@ -1,69 +1,76 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed,  1 Feb 2012 18:09:57 +0100
-Subject: [Buildroot] [PATCH] dbus: deprecate libxml2 support
-In-Reply-To: <87bopkjaaf.fsf@macbook.be.48ers.dk>
-References: <87bopkjaaf.fsf@macbook.be.48ers.dk>
-Message-ID: <1328116197-2106-1-git-send-email-arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  1 Feb 2012 17:23:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 4718] python (built for powerpc) distutils has
+ paths to host compiler toolchain
+In-Reply-To: <bug-4718-163@https.bugs.busybox.net/>
+References: <bug-4718-163@https.bugs.busybox.net/>
+Message-ID: <20120201172307.20B839096F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+https://bugs.busybox.net/show_bug.cgi?id=4718
+
+--- Comment #2 from William Welch <bvwelch@gmail.com> 2012-02-01 17:23:06 UTC ---
+(In reply to comment #1)
+> Python support for cross-compilation is quite horrible, so the problem may be
+> quite hard to fix.
+> 
+> Could you give some steps to reproduce what you are seeing?
+
+First, may I say that with some more research I found a workaround that is easy
+and works good.
+
+But, here is what happens without the workaround:
 
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/dbus/Config.in |   23 +++++++++++++++++------
- 1 files changed, 17 insertions(+), 6 deletions(-)
+python setup.py build_ext --inplace
 
-diff --git a/package/dbus/Config.in b/package/dbus/Config.in
-index 54a8540..850753d 100644
---- a/package/dbus/Config.in
-+++ b/package/dbus/Config.in
-@@ -1,25 +1,36 @@
- config BR2_PACKAGE_DBUS
- 	bool "dbus"
-+	select BR2_DBUS_EXPAT if !BR2_DEPRECATED
- 	help
- 	  The D-Bus message bus system.
- 
- 	  http://www.freedesktop.org/wiki/Software/dbus
- 
-+config BR2_DBUS_EXPAT
-+	bool
-+	select BR2_PACKAGE_EXPAT
-+
-+if BR2_DEPRECATED
- choice
- 	prompt "XML library to use"
- 	depends on BR2_PACKAGE_DBUS
--	default BR2_DBUS_EXPAT
-+	default BR2_DBUS_CHOICE_EXPAT
- 	help
- 	  Select the XML library to use with D-Bus. Select Expat
- 	  unless you have specific reasons for using libxml2 as
- 	  Expat is significant smaller.
- 
--	config BR2_DBUS_EXPAT
-+	config BR2_DBUS_CHOICE_EXPAT
- 		bool "Expat"
--		select BR2_PACKAGE_EXPAT
-+		select BR2_DBUS_EXPAT
- 
--	config BR2_DBUS_LIBXML2
-+	config BR2_DBUS_CHOICE_LIBXML2
- 		bool "libxml2"
--		select BR2_PACKAGE_LIBXML2
--
-+		select BR2_DBUS_LIBXML2
- endchoice
-+
-+config BR2_DBUS_LIBXML2
-+	bool
-+	select BR2_PACKAGE_LIBXML2
-+
-+endif
+running build_ext
+building '_ncapio' extension
+creating build
+creating build/temp.linux-ppc-2.7
+
+/home/bwelch/jan23a/buildroot-2011.11/output/host/usr/bin/powerpc-unknown-linux-uclibc-gcc
+-fno-strict-aliasing -pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall
+-Wstrict-prototypes -fPIC -I/usr/include/python2.7 -c _ncapio.c -o
+build/temp.linux-ppc-2.7/_ncapio.o
+
+unable to execute
+/home/bwelch/jan23a/buildroot-2011.11/output/host/usr/bin/powerpc-unknown-linux-uclibc-gcc:
+No such file or directory
+
+error: command
+'/home/bwelch/jan23a/buildroot-2011.11/output/host/usr/bin/powerpc-unknown-linux-uclibc-gcc'
+failed with exit status 1
+
+Note that instead of using my native powerpc 'gcc' and 'ld', somehow it tried
+to use pathnames from my host computer's cross-toolcain??
+
+------------------------
+
+Now the simple workaround:
+
+export CC='gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions'
+export LDSHARED='ld -shared'
+
+running build_ext
+building '_ncapio' extension
+gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -fno-strict-aliasing
+-pipe -Os -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -fPIC
+-I/usr/include/python2.7 -c _ncapio.c -o build/temp.linux-ppc-2.7/_ncapio.o
+
+ld -shared build/temp.linux-ppc-2.7/_ncapio.o -L/usr/lib -lpython2.7 -o
+/root/ncapio/_ncapio.so
+
+
+# works fine
+
+thank you!  buildroot, python, native gcc all working great
+
 -- 
-1.7.8.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
