@@ -1,31 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2012 23:15:14 +0100
-Subject: [Buildroot] [RFC 02/15] legal-info: produce a manifest file
- with licensing info
-In-Reply-To: <4F29AED3.4050306@lucaceresoli.net>
-References: <1327849908-15588-1-git-send-email-luca@lucaceresoli.net>
- <1327849908-15588-3-git-send-email-luca@lucaceresoli.net>
- <201201311825.03489.arnout@mind.be>
- <4F29AED3.4050306@lucaceresoli.net>
-Message-ID: <20120201231514.736d65c5@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 01 Feb 2012 23:19:17 +0100
+Subject: [Buildroot] [PATCH v2] mdev.conf: Add ttyO devices
+In-Reply-To: <1325564832-3149-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Mon, 2 Jan 2012 23:27:12 -0500")
+References: <1325564832-3149-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <87mx92ci3e.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 01 Feb 2012 22:29:55 +0100,
-Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-> Anybody has something against squashing the first 3 or 4 patches as
-> Arnout suggests?
+ Frank> This is needed to support the serial ports on OMAP/AM335x devices
+ Frank> when using mdev.
 
-No, I think it's ok to have them squashed together, as long as the
-commit log in sufficiently long to explain how the implementation works.
+ Frank> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+ Frank> ---
+ Frank>  package/busybox/mdev.conf |    1 +
+ Frank>  1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
+ Frank> diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
+ Frank> index 247c0ed..7fb71bc 100644
+ Frank> --- a/package/busybox/mdev.conf
+ Frank> +++ b/package/busybox/mdev.conf
+ Frank> @@ -20,6 +20,7 @@ tty		root:tty 666
+ Frank>  tty[0-9]*	root:tty 660
+ Frank>  vcsa*[0-9]*	root:tty 660
+ Frank>  ttyS[0-9]*	root:root 660
+ Frank> +ttyO[0-9]*	root:root 660
+
+What does this exactly do? Isn't root:root / perm 660 default anyway?
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
