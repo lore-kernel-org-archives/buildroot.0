@@ -1,23 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 01 Feb 2012 22:50:17 +0100
-Subject: [Buildroot] [PATCH] sdparm: bump to 1.07
-In-Reply-To: <1327659246-9217-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 27 Jan 2012 11:14:06
- +0100")
-References: <1327659246-9217-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <874nvady06.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 1 Feb 2012 22:50:21 +0100
+Subject: [Buildroot] [git commit] sdparm: bump to 1.07
+Message-ID: <20120201215216.80BDF9097A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f372dca94f2e75ebd0fec48edabf83cfcb036d36
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sdparm/sdparm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
+index 21befd6..9d2b00b 100644
+--- a/package/sdparm/sdparm.mk
++++ b/package/sdparm/sdparm.mk
+@@ -1,4 +1,4 @@
+-SDPARM_VERSION = 1.06
++SDPARM_VERSION = 1.07
+ SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tgz
+ SDPARM_SITE = http://sg.danny.cz/sg/p/
+ 
