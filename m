@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 1 Feb 2012 09:13:47 +0100
-Subject: [Buildroot] [PATCH 8/8] lttng-babeltrace: new package
-In-Reply-To: <87vcnrh4c8.fsf@macbook.be.48ers.dk>
-References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <8909ec4e636e84ac7cdf6a0b0c6c51c1bd36ccd6.1328038759.git.thomas.petazzoni@free-electrons.com>
- <87vcnrh4c8.fsf@macbook.be.48ers.dk>
-Message-ID: <20120201091347.58a38efd@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 1 Feb 2012 09:18:17 +0100
+Subject: [Buildroot] [git commit] libevas: disable sse3 optimizations for
+	host builds
+Message-ID: <20120201082049.D6ADC9058E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 31 Jan 2012 23:52:55 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=2a273b6129efaf07e01b9fc4a70d7730481c68d6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> HOST_..._DEPENDENCIES are now automatically derived from _DEPENDENCIES
-> by default, so this can be dropped.
+There's not really any advantage to adding it, and it depends on
+immintrin.h which was added in gcc 4.4, so it breaks with older
+host compilers.
 
-Ah, yes, sorry. The patch has been written prior to the introduction of
-this mechanism, and I forgot to check this point. Thanks for taking
-care of reviewing and fixing!
+For details, see:
 
-Regards,
+http://trac.enlightenment.org/e/ticket/942
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/efl/libevas/libevas.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index acb2f4b..e34967b 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -13,7 +13,7 @@ LIBEVAS_DEPENDENCIES = host-pkg-config zlib libeina freetype
+ 
+ HOST_LIBEVAS_DEPENDENCIES = host-pkg-config host-zlib host-libeina \
+ 				host-freetype host-libpng
+-HOST_LIBEVAS_CONF_OPT += --enable-image-loader-png
++HOST_LIBEVAS_CONF_OPT += --enable-image-loader-png --disable-cpu-sse3
+ 
+ # rendering options
+ ifeq ($(BR2_PACKAGE_LIBEVAS_SCALE_SAMPLE),y)
