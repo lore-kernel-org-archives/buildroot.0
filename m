@@ -1,116 +1,149 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed, 29 Feb 2012 19:44:17 -0800
-Subject: [Buildroot] Buildroot 2012.02-rc3 released
-In-Reply-To: <CAJJ6jxvVLYcoRgdtRbt6=CwFU2w_Wo-ASK5tHpOh7TT-ZYfQfw@mail.gmail.com>
-References: <87ehtg2r6n.fsf@macbook.be.48ers.dk>
- <201203010017.12296.arnout@mind.be>
- <CAJJ6jxvuCDspQ7eFe=1-=Zp00PygaFcXkyNh20sPsiAN77h3zQ@mail.gmail.com>
- <201203010100.03660.arnout@mind.be>
- <CAJJ6jxvVLYcoRgdtRbt6=CwFU2w_Wo-ASK5tHpOh7TT-ZYfQfw@mail.gmail.com>
-Message-ID: <4F4EF091.8030906@gmail.com>
+From: Ozgun <ozgun.gunay@gmail.com>
+Date: Wed, 1 Feb 2012 09:58:33 +0200
+Subject: [Buildroot] lib files
+Message-ID: <CAPeX=+uthjbtNySUJ7j0sGG3Xzd=iF-uwT2=85VDGcV_iSN7-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/29/2012 05:47 PM, Steve Calfee wrote:
-> On Wed, Feb 29, 2012 at 5:00 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
->> On Thursday 01 March 2012 00:52:20 Steve Calfee wrote:
->>> On Wed, Feb 29, 2012 at 4:17 PM, Arnout Vandecappelle<arnout@mind.be>  wrote:
->>>> On Wednesday 29 February 2012 23:48:36 Steve Calfee wrote:
->>>>> Both systems sit on a NAT LAN with 192.168* ip addresses. I don't know
->>>>> if that affects things, shouldn't.
->>>>   It will.  The DNS on the NAT will cache the authoritive server for
->>>> uclibc.org.  If the original uclibc.org DNS server still replies to DNS
->>>> requests, but doesn't give answers for uclibc.org addresses, then the NAT
->>>> will not look further.  You can verify this by issuing
->>>>
->>>> host -v -t SOA uclibc.org
->>>>
->>>> which should reply
->>>>
->>>> uclibc.org.             86125   IN      SOA     ns1.auth.osuosl.org. hostmaster.osuosl.org. 1330554603 300 900 604800 86400
->>>>
->>>> but will probably reply with the old DNS server.
->>>>
->>>>   There is unfortunately no way to force your NAT to forget the cached
->>>> record.  You can try to NOT access any uclibc.org site for 48 hours,
->>>> which may expire the cache.
->>>>
->>> I did what you suggested, But I don't know if the differences are important:
->>> me:~$ host -v -t SOA uclibc.org
->>> Trying "uclibc.org"
->>> ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 64103
->>> ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
->>>
->>> ;; QUESTION SECTION:
->>> ;uclibc.org.                  IN      SOA
->>>
->>> ;; ANSWER SECTION:
->>> uclibc.org.           86400   IN      SOA     ns1.auth.osuosl.org. hostmaster.osuosl.org.
->>> 1330554603 300 900 604800 86400
->>>
->>> ;; ADDITIONAL SECTION:
->>> ns1.auth.osuosl.org.  67451   IN      A       140.211.166.140
->>>
->>> Received 107 bytes from 192.168.3.31#53 in 305 ms
->>   That looks OK though...  So my explanation has some flaws :-)
->>
->>   What does host -v -t SOA git.buildroot.net tell you?
->>
->> Trying "git.buildroot.net"
->> ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 44693
->> ;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 1, ADDITIONAL: 0
->>
->> ;; QUESTION SECTION:
->> ;git.buildroot.net.             IN      SOA
->>
->> ;; ANSWER SECTION:
->> git.buildroot.net.      36219   IN      CNAME   buildroot.uclibc.org.
->> buildroot.uclibc.org.   79420   IN      CNAME   www.uclibc.org.
->>
->> ;; AUTHORITY SECTION:
->> uclibc.org.             10664   IN      SOA     ns1.auth.osuosl.org. hostmaster.osuosl.org. 1330554603 300 900 604800 86400
->>
->> Received 150 bytes from 192.168.22.22#53 in 70 ms
->>
->> --
-> Hi Arnout, thanks for trying to help. Here is my screen:
->
-> me:~$ host -v -t SOA git.buildroot.net
-> Trying "git.buildroot.net"
-> ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 36106
-> ;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
->
-> ;; QUESTION SECTION:
-> ;git.buildroot.net.		IN	SOA
->
-> ;; ANSWER SECTION:
-> git.buildroot.net.	21181	IN	CNAME	buildroot.uclibc.org.
-> buildroot.uclibc.org.	86400	IN	SOA	ns1.auth.osuosl.org.
-> hostmaster.osuosl.org. 1330554603 300 900 604800 86400
->
-> ;; ADDITIONAL SECTION:
-> ns1.auth.osuosl.org.	64383	IN	A	140.211.166.140
->
-> Received 148 bytes from 192.168.3.31#53 in 93 ms
->
-> I don't see anything obviously weird, but the link
-> (http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3)
-> still does not work.
->
-> Wait, I just tried git and it now will fetch, and now I tried that
-> link again and it works now. So either magic happened or someone,
-> somewhere in DNS land fixed it.
->
-> So for me, for now, from work this is fixed!
->
-> Thanks, Steve
-Hi all from DNS land.
+I used chroot environment to get the error log easily. Normally I use the
+rootfs in a embedded pc.
+But the error message are same.
 
-I took the laptop home to the att uverse network, and I still cannot get 
-through. I even went though the host query commands with similar 
-results. Just git fetch and the git.buildroot.net link still fail.
+When I try to run application (./affine), it gives "file not found" error.
 
-Regards, Steve
+When I check the dependency (ldd affine)  below log occurs. (even the file
+compiled static.)
+It looks like dynamic library loader finds the .so files under /lib but
+couldn't find .so files under /usr/lib
+
+I used crosstool glibc instead of uclibc toolchain and the problem solved.
+(with same etc folder)
+But I want to know what cause this problem.
+
+thanks,
+Ozgun
+
+
+
+    libdl.so.0 => /lib/libdl.so.0 (0xb7788000)
+    libc.so.0 => /lib/libc.so.0 (0xb7733000)
+    ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0xb778e000)
+    ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0xb77f9000)
+    libc.so.0 => /lib/libc.so.0 (0xb783d000)
+    ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0xb7894000)
+    libc.so.0 => /lib/libc.so.0 (0xb777c000)
+    ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0xb77d3000)
+checking sub-depends for '/usr/lib/libSM.so.6'
+checking sub-depends for '/usr/lib/libICE.so.6'
+checking sub-depends for '/usr/lib/libXrender.so.1'
+checking sub-depends for '/usr/lib/libXcursor.so.1'
+checking sub-depends for '/usr/lib/libfontconfig.so.1'
+checking sub-depends for '/usr/lib/libfreetype.so.6'
+checking sub-depends for '/usr/lib/libXext.so.6'
+checking sub-depends for '/usr/lib/libX11.so.6'
+checking sub-depends for 'not found'
+checking sub-depends for 'not found'
+checking sub-depends for '/usr/lib/libGL.so.1'
+checking sub-depends for '/lib/libpthread.so.0'
+checking sub-depends for '/usr/lib/libstdc++.so.6'
+checking sub-depends for 'not found'
+checking sub-depends for '/lib/libgcc_s.so.1'
+checking sub-depends for 'not found'
+checking sub-depends for '/lib/libc.so.0'
+checking sub-depends for '/usr/lib/libXfixes.so.3'
+checking sub-depends for '/usr/lib/libz.so.1'
+checking sub-depends for '/usr/lib/libbz2.so.1.0'
+checking sub-depends for '/usr/lib/libexpat.so.1'
+checking sub-depends for '/usr/lib/libxcb.so.1'
+checking sub-depends for '/lib/libdl.so.0'
+checking sub-depends for '/usr/lib/libXdamage.so.1'
+checking sub-depends for '/usr/lib/libXxf86vm.so.1'
+checking sub-depends for '/usr/lib/libdrm.so.2'
+checking sub-depends for '/lib/libm.so.0'
+checking sub-depends for '/usr/lib/libXau.so.6'
+checking sub-depends for '/usr/lib/libXdmcp.so.6'
+    libSM.so.6 => /usr/lib/libSM.so.6 (0x00000000)
+    libICE.so.6 => /usr/lib/libICE.so.6 (0x00000000)
+    libXrender.so.1 => /usr/lib/libXrender.so.1 (0x00000000)
+    libXcursor.so.1 => /usr/lib/libXcursor.so.1 (0x00000000)
+    libfontconfig.so.1 => /usr/lib/libfontconfig.so.1 (0x00000000)
+    libfreetype.so.6 => /usr/lib/libfreetype.so.6 (0x00000000)
+    libXext.so.6 => /usr/lib/libXext.so.6 (0x00000000)
+    libX11.so.6 => /usr/lib/libX11.so.6 (0x00000000)
+    libdl.so.2 => not found (0x00000000)
+    librt.so.1 => not found (0x00000000)
+    libGL.so.1 => /usr/lib/libGL.so.1 (0x00000000)
+    libpthread.so.0 => /lib/libpthread.so.0 (0x00000000)
+    libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x00000000)
+    libm.so.6 => not found (0x00000000)
+    libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x00000000)
+    libc.so.6 => not found (0x00000000)
+    libc.so.0 => /lib/libc.so.0 (0x00000000)
+    libXfixes.so.3 => /usr/lib/libXfixes.so.3 (0x00000000)
+    libz.so.1 => /usr/lib/libz.so.1 (0x00000000)
+    libbz2.so.1.0 => /usr/lib/libbz2.so.1.0 (0x00000000)
+    libexpat.so.1 => /usr/lib/libexpat.so.1 (0x00000000)
+    libxcb.so.1 => /usr/lib/libxcb.so.1 (0x00000000)
+    libdl.so.0 => /lib/libdl.so.0 (0x00000000)
+    libXdamage.so.1 => /usr/lib/libXdamage.so.1 (0x00000000)
+    libXxf86vm.so.1 => /usr/lib/libXxf86vm.so.1 (0x00000000)
+    libdrm.so.2 => /usr/lib/libdrm.so.2 (0x00000000)
+    libm.so.0 => /lib/libm.so.0 (0x00000000)
+    /lib/ld-uClibc.so.0 => /lib/ld-uClibc.so.0 (0x00000000)
+    libXau.so.6 => /usr/lib/libXau.so.6 (0x00000000)
+    libXdmcp.so.6 => /usr/lib/libXdmcp.so.6 (0x00000000)
+    not a dynamic executable
+
+
+
+
+
+Date: Tue, 31 Jan 2012 17:22:42 +0100
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: buildroot at busybox.net
+> Subject: Re: [Buildroot] lib files
+> Message-ID: <20120131172242.3a84c018@skate>
+> Content-Type: text/plain; charset=UTF-8
+>
+> Le Tue, 31 Jan 2012 18:01:01 +0200,
+> Ozgun <ozgun.gunay@gmail.com> a ?crit :
+>
+> > I built rootfs with opengl and QT without problem. (The compiled examples
+> > of QT also run in ubuntu without problem)
+> > But when I tried to run these qt examples in created rootfs, it gives
+> "file
+> > not found" error. (I both tried these examples static and shared
+> compiled.)
+>
+> Can you show exactly how this error appears? If it appears when you try
+> to run the application, then it usually means that the kernel can't
+> find your dynamic library loader.
+>
+> I never use Buildroot to generate a filesystem in which I'm chroot-ing.
+> If the target architecture is the same as the host, it should work, but
+> there might be issues, it's not the common use case for Buildroot
+> (usually, you take the generated root filesystem image and put it on a
+> target device).
+>
+> > Then I cheked the dependency of application, you can see results below.
+> > The /usr/lib folder has the lib files but in a .a format.
+> > For example libm.a is exist but libm.so absent.
+>
+> The shared versions of the C library and related libraries (libm, etc.)
+> are in /lib, not in /usr/lib.
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120201/05c9755a/attachment.html>
