@@ -1,25 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 01 Feb 2012 23:38:39 +0100
-Subject: [Buildroot] [PATCH v4 0/3] Add defconfigs for LPC3250 boards
-In-Reply-To: <1325761430-3942-1-git-send-email-abelloni@adeneo-embedded.com>
- (Alexandre Belloni's message of "Thu, 5 Jan 2012 12:03:47 +0100")
-References: <1325761430-3942-1-git-send-email-abelloni@adeneo-embedded.com>
-Message-ID: <87ipjqch74.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 1 Feb 2012 23:30:22 +0100
+Subject: [Buildroot] [git commit] boot: Reorder entries alphabetically
+Message-ID: <20120201224701.77EC090979@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <abelloni@adeneo-embedded.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=14b600203b31f69d4ca90572b2fbf096053c29e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Alexandre> v4 now reordering boot/Config.in entries and useful comments
- Alexandre> Alexandre Belloni (3):
- Alexandre>   Reorder entries alphabetically
- Alexandre>   lpc32xx: Add CDL to the available bootloaders
- Alexandre>   Add defconfigs for LPC3250 boards
+Signed-off-by: Alexandre Belloni <abelloni@adeneo-embedded.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed series, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/Config.in b/boot/Config.in
+index 2a97695..7e3d108 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -1,11 +1,11 @@
+ menu "Bootloaders"
+ 
++source "boot/at91bootstrap/Config.in"
++source "boot/at91dataflashboot/Config.in"
+ source "boot/barebox/Config.in"
+ source "boot/grub/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/uboot/Config.in"
+-source "boot/at91bootstrap/Config.in"
+-source "boot/at91dataflashboot/Config.in"
+ source "boot/xloader/Config.in"
+ 
+ endmenu
