@@ -1,47 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  2 Feb 2012 23:29:25 +0100
-Subject: [Buildroot] [PATCH 1/2] poco: the Zip module depends on XML,
-	Net and Util modules
+Date: Thu,  2 Feb 2012 23:29:26 +0100
+Subject: [Buildroot] [PATCH 2/2] at91bootstrap: allow specification of a
+	custom patch directory
 In-Reply-To: <cover.1328221763.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328221763.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <3b38408088d90bd4c521eb6f35d73502c1d5f352.1328221763.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8fe0225224326ed767967fd789e7d3b33c1bb674.1328221763.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this, in a configuration where the Zip module is selected but
-not the XML module, the build fails due to missing expat.h. This is
-because POCO builds the XML module as soon as the Zip module is
-enabled.
-
-This fixes the build breakage visible at:
-
-  http://free-electrons.com/~thomas/buildroot/test-output-2011-12-02/test-920-output.bz2
-
-with the configuration visible at:
-
-  http://free-electrons.com/~thomas/buildroot/test-output-2011-12-02/test-920-config
+Fixes bug #4664.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/poco/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ boot/at91bootstrap/Config.in        |    9 +++++++++
+ boot/at91bootstrap/at91bootstrap.mk |    9 +++++++++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/poco/Config.in b/package/poco/Config.in
-index 241e304..36d8de9 100644
---- a/package/poco/Config.in
-+++ b/package/poco/Config.in
-@@ -37,6 +37,9 @@ config BR2_PACKAGE_POCO_NETSSL_OPENSSL
+diff --git a/boot/at91bootstrap/Config.in b/boot/at91bootstrap/Config.in
+index b232b3b..9cbaf81 100644
+--- a/boot/at91bootstrap/Config.in
++++ b/boot/at91bootstrap/Config.in
+@@ -10,6 +10,15 @@ config BR2_TARGET_AT91BOOTSTRAP
  
- config BR2_PACKAGE_POCO_ZIP
- 	bool "zip"
-+	select BR2_PACKAGE_POCO_XML
-+	select BR2_PACKAGE_POCO_NET
-+	select BR2_PACKAGE_POCO_UTIL
+ if	BR2_TARGET_AT91BOOTSTRAP
  
- config BR2_PACKAGE_POCO_DATA
- 	bool
++config BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR
++	string "custom patch dir"
++	help
++	  If your board requires custom patches, add the path to the
++	  directory containing the patches here. The patches must be
++	  named at91bootstrap-<version>-<something>.patch.
++
++	  Most users may leave this empty
++
+ config BR2_TARGET_AT91BOOTSTRAP_BOARD
+ 	string "Bootstrap board"
+ 	default ""
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index a7a856c..5592d37 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -21,6 +21,15 @@ define AT91BOOTSTRAP_EXTRACT_CMDS
+ 	rmdir $(BUILD_DIR)/Bootstrap-v$(AT91BOOTSTRAP_VERSION)
+ endef
+ 
++ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
++define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
++	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \
++		at91bootstrap-$(AT91BOOTSTRAP_VERSION)-\*.patch
++endef
++
++AT91BOOTSTRAP_POST_PATCH_HOOKS += AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
++endif
++
+ define AT91BOOTSTRAP_BUILD_CMDS
+ 	$(MAKE) CROSS_COMPILE=$(TARGET_CROSS) -C $(@D)/$(AT91BOOTSTRAP_MAKE_SUBDIR)
+ endef
 -- 
 1.7.4.1
