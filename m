@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Feb 2012 21:00:11 +0100
-Subject: [Buildroot] [PATCH 4/7] libusb-compat: add host variant
-In-Reply-To: <13b44d8b46e93d46b1cd1d09fb6b67be12df4349.1327772556.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 28 Jan 2012 18:42:52 +0100")
+Date: Thu, 02 Feb 2012 21:02:02 +0100
+Subject: [Buildroot] [PATCH 5/7] libusb: add host variant
+In-Reply-To: <f3a4170c4cadff973bd8b27cbb916007e47d72bf.1327772556.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 28 Jan 2012 18:42:53 +0100")
 References: <cover.1327772556.git.thomas.petazzoni@free-electrons.com>
  <cover.1327772556.git.thomas.petazzoni@free-electrons.com>
- <13b44d8b46e93d46b1cd1d09fb6b67be12df4349.1327772556.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87wr8580qc.fsf@macbook.be.48ers.dk>
+ <f3a4170c4cadff973bd8b27cbb916007e47d72bf.1327772556.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87sjit80n9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,23 +19,20 @@ To: buildroot@busybox.net
  Thomas> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
  Thomas> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
  Thomas> ---
- Thomas>  package/libusb-compat/libusb-compat.mk |    4 ++++
- Thomas>  1 files changed, 4 insertions(+), 0 deletions(-)
+ Thomas>  package/libusb/libusb.mk |    3 +++
+ Thomas>  1 files changed, 3 insertions(+), 0 deletions(-)
 
- Thomas> diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
- Thomas> index e39cdd8..99e7716 100644
- Thomas> --- a/package/libusb-compat/libusb-compat.mk
- Thomas> +++ b/package/libusb-compat/libusb-compat.mk
- Thomas> @@ -18,4 +18,8 @@ endef
+ Thomas> diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+ Thomas> index af75f5f..b3ca353 100644
+ Thomas> --- a/package/libusb/libusb.mk
+ Thomas> +++ b/package/libusb/libusb.mk
+ Thomas> @@ -10,4 +10,7 @@ LIBUSB_DEPENDENCIES = host-pkg-config
+ Thomas>  LIBUSB_INSTALL_STAGING = YES
+ Thomas>  LIBUSB_INSTALL_TARGET = YES
  
- Thomas>  LIBUSB_COMPAT_POST_INSTALL_STAGING_HOOKS+=LIBUSB_COMPAT_FIXUP_CONFIG
- 
- Thomas> +HOST_LIBUSB_COMPAT_DEPENDENCIES = host-pkg-config host-libusb
+ Thomas> +HOST_LIBUSB_DEPENDENCIES = host-pkg-config
 
-I removed this one as well. This should go before the libftdi patch to
-not break the build, so I reordered (same for libusb).
-
-Committed, thanks.
+Same comments as libusb-compat. Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
