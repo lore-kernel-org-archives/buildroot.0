@@ -1,29 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  2 Feb 2012 23:29:24 +0100
-Subject: [Buildroot] [pull request] Pull request for branch for-2012.02/misc
-Message-ID: <cover.1328221763.git.thomas.petazzoni@free-electrons.com>
+Date: Thu,  2 Feb 2012 23:29:25 +0100
+Subject: [Buildroot] [PATCH 1/2] poco: the Zip module depends on XML,
+	Net and Util modules
+In-Reply-To: <cover.1328221763.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1328221763.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <3b38408088d90bd4c521eb6f35d73502c1d5f352.1328221763.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 8c3e2cbb53b0383f5b273a0a0c908b8b232d1072:
+Without this, in a configuration where the Zip module is selected but
+not the XML module, the build fails due to missing expat.h. This is
+because POCO builds the XML module as soon as the Zip module is
+enabled.
 
-  Introduce /run directory (2012-02-02 23:03:13 +0100)
+This fixes the build breakage visible at:
 
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2012.02/misc
+  http://free-electrons.com/~thomas/buildroot/test-output-2011-12-02/test-920-output.bz2
 
-Thomas Petazzoni (2):
-      poco: the Zip module depends on XML, Net and Util modules
-      at91bootstrap: allow specification of a custom patch directory
+with the configuration visible at:
 
- boot/at91bootstrap/Config.in        |    9 +++++++++
- boot/at91bootstrap/at91bootstrap.mk |    9 +++++++++
- package/poco/Config.in              |    3 +++
- 3 files changed, 21 insertions(+), 0 deletions(-)
+  http://free-electrons.com/~thomas/buildroot/test-output-2011-12-02/test-920-config
 
-Thanks,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/poco/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
+
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index 241e304..36d8de9 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -37,6 +37,9 @@ config BR2_PACKAGE_POCO_NETSSL_OPENSSL
+ 
+ config BR2_PACKAGE_POCO_ZIP
+ 	bool "zip"
++	select BR2_PACKAGE_POCO_XML
++	select BR2_PACKAGE_POCO_NET
++	select BR2_PACKAGE_POCO_UTIL
+ 
+ config BR2_PACKAGE_POCO_DATA
+ 	bool
 -- 
-Thomas Petazzoni
+1.7.4.1
