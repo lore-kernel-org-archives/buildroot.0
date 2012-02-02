@@ -1,116 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 2 Feb 2012 10:06:44 +0100
-Subject: [Buildroot] [git commit] uClibc: tweak 0.9.33 / snapshot configs
-Message-ID: <20120202090835.EDA739099E@busybox.osuosl.org>
+Date: Thu, 2 Feb 2012 09:07:39 +0100
+Subject: [Buildroot] [git commit] binutils: default to 2.21.1 for uClibc
+	0.9.33 as well
+Message-ID: <20120202090835.DAEED9099F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a4937957148f4d82b35923c55619fe37407d7d2
+commit: http://git.buildroot.net/buildroot/commit/?id=4461b3213d35a4ea4a6ccfd395663eb0b7a5f88a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-With default values so it doesn't stop build and ask user. Also disable
-2.4 modules support by default like upstream does.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/uClibc/uClibc-0.9.33.config   |    8 +++++++-
- toolchain/uClibc/uClibc-snapshot.config |    8 +++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/binutils/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/uClibc/uClibc-0.9.33.config b/toolchain/uClibc/uClibc-0.9.33.config
-index a3fe200..2a6754c 100644
---- a/toolchain/uClibc/uClibc-0.9.33.config
-+++ b/toolchain/uClibc/uClibc-0.9.33.config
-@@ -49,6 +49,7 @@
- # CONFIG_ARM_XSCALE is not set
- # CONFIG_ARM_IWMMXT is not set
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index aec51b3..a13d61b 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -3,7 +3,7 @@ comment "Binutils Options"
+ choice
+ 	prompt "Binutils Version"
+ 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+-	default BR2_BINUTILS_VERSION_2_21_1 if (BR2_UCLIBC_VERSION_0_9_32 || BR2_UCLIBC_VERSION_SNAPSHOT)
++	default BR2_BINUTILS_VERSION_2_21_1 if (!BR2_UCLIBC_VERSION_0_9_31)
+ 	default BR2_BINUTILS_VERSION_2_21
+ 	help
+ 	  Select the version of binutils you wish to use.
+@@ -25,11 +25,11 @@ choice
+ 		bool "binutils 2.21"
  
-+# COMPILE_IN_THUMB_MODE is not set
- USE_BX=y
+ 	config BR2_BINUTILS_VERSION_2_21_1
+-		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_30 || BR2_UCLIBC_VERSION_0_9_31)
++		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
+ 		bool "binutils 2.21.1"
  
- TARGET_SUBARCH=""
-@@ -93,6 +94,7 @@ LDSO_PRELOAD_ENV_SUPPORT=y
- # UCLIBC_STATIC_LDCONFIG is not set
- LDSO_RUNPATH=y
- LDSO_SEARCH_INTERP_PATH=y
-+LDSO_LD_LIBRARY_PATH=y
- # LDSO_NO_CLEANUP is not set
- UCLIBC_CTOR_DTOR=y
- # LDSO_GNU_HASH_SUPPORT is not set
-@@ -139,7 +141,8 @@ UCLIBC_GRP_BUFFER_SIZE=256
- #
- # Support various families of functions
- #
--UCLIBC_LINUX_MODULE_24=y
-+UCLIBC_LINUX_MODULE_26=y
-+# UCLIBC_LINUX_MODULE_24 is not set
- UCLIBC_LINUX_SPECIFIC=y
- UCLIBC_HAS_GNU_ERROR=y
- UCLIBC_BSD_SPECIFIC=y
-@@ -154,6 +157,8 @@ UCLIBC_HAS_EPOLL=y
- UCLIBC_HAS_XATTR=y
- UCLIBC_HAS_PROFILING=y
- UCLIBC_HAS_CRYPT_IMPL=y
-+# UCLIBC_HAS_SHA256_CRYPT_IMPL is not set
-+# UCLIBC_HAS_SHA512_CRYPT_IMPL is not set
- UCLIBC_HAS_CRYPT=y
- UCLIBC_HAS_NETWORK_SUPPORT=y
- UCLIBC_HAS_SOCKET=y
-@@ -205,6 +210,7 @@ UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
- UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
- # UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
- UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
-+# UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE is not set
- UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
- UCLIBC_HAS_PRINTF_M_SPEC=y
- UCLIBC_HAS_ERRNO_MESSAGES=y
-diff --git a/toolchain/uClibc/uClibc-snapshot.config b/toolchain/uClibc/uClibc-snapshot.config
-index a3fe200..2a6754c 100644
---- a/toolchain/uClibc/uClibc-snapshot.config
-+++ b/toolchain/uClibc/uClibc-snapshot.config
-@@ -49,6 +49,7 @@
- # CONFIG_ARM_XSCALE is not set
- # CONFIG_ARM_IWMMXT is not set
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_30 || BR2_UCLIBC_VERSION_0_9_31)
++		depends on !(BR2_avr32 || BR2_UCLIBC_VERSION_0_9_31)
+ 		bool "binutils 2.22"
  
-+# COMPILE_IN_THUMB_MODE is not set
- USE_BX=y
- 
- TARGET_SUBARCH=""
-@@ -93,6 +94,7 @@ LDSO_PRELOAD_ENV_SUPPORT=y
- # UCLIBC_STATIC_LDCONFIG is not set
- LDSO_RUNPATH=y
- LDSO_SEARCH_INTERP_PATH=y
-+LDSO_LD_LIBRARY_PATH=y
- # LDSO_NO_CLEANUP is not set
- UCLIBC_CTOR_DTOR=y
- # LDSO_GNU_HASH_SUPPORT is not set
-@@ -139,7 +141,8 @@ UCLIBC_GRP_BUFFER_SIZE=256
- #
- # Support various families of functions
- #
--UCLIBC_LINUX_MODULE_24=y
-+UCLIBC_LINUX_MODULE_26=y
-+# UCLIBC_LINUX_MODULE_24 is not set
- UCLIBC_LINUX_SPECIFIC=y
- UCLIBC_HAS_GNU_ERROR=y
- UCLIBC_BSD_SPECIFIC=y
-@@ -154,6 +157,8 @@ UCLIBC_HAS_EPOLL=y
- UCLIBC_HAS_XATTR=y
- UCLIBC_HAS_PROFILING=y
- UCLIBC_HAS_CRYPT_IMPL=y
-+# UCLIBC_HAS_SHA256_CRYPT_IMPL is not set
-+# UCLIBC_HAS_SHA512_CRYPT_IMPL is not set
- UCLIBC_HAS_CRYPT=y
- UCLIBC_HAS_NETWORK_SUPPORT=y
- UCLIBC_HAS_SOCKET=y
-@@ -205,6 +210,7 @@ UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
- UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
- # UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
- UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
-+# UCLIBC_HAS_FOPEN_CLOSEEXEC_MODE is not set
- UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
- UCLIBC_HAS_PRINTF_M_SPEC=y
- UCLIBC_HAS_ERRNO_MESSAGES=y
+ endchoice
