@@ -1,32 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Feb 2012 16:56:25 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Feb 2012 17:00:59 +0100
 Subject: [Buildroot] [git commit] boot: only show vendor-specific
-	bootloaders for applicable arm variant
-In-Reply-To: <20120202164743.30dfab12@skate> (Thomas Petazzoni's message of
- "Thu, 2 Feb 2012 16:47:43 +0100")
+ bootloaders for applicable arm variant
+In-Reply-To: <87ipjp9ql2.fsf@macbook.be.48ers.dk>
 References: <20120201224701.C13259097B@busybox.osuosl.org>
  <20120202164743.30dfab12@skate>
-Message-ID: <87ipjp9ql2.fsf@macbook.be.48ers.dk>
+ <87ipjp9ql2.fsf@macbook.be.48ers.dk>
+Message-ID: <20120202170059.42c7b05e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Thu, 02 Feb 2012 16:56:25 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
- >> Atmel at91sam9 and NXP lpc32xx are both all arm926t, so only show
- >> then if that arm variant is selected.
+> True. Is that a common use case? If so then I'll revert.
 
- Thomas> Technically this is correct, but I am pretty sure a lot of
- Thomas> people keep the default "generic_arm" and therefore would not
- Thomas> see the availability of AT91Bootstrap or the LPC bootloaders.
+I don't know if it's a common use case. But I would suspect that many
+newcomers do not necessarily select the right sub-architecture. But I
+don't have a strong opinion with your regard to your patch. I just
+think that people may not discover that those bootloaders are available
+in Buildroot.
 
- Thomas> For example, if you use a CodeSourcery external toolchain,
- Thomas> there is basically no difference between generic_arm and
- Thomas> arm926t, because the toolchain already defaults to armv5t.
+However, as discussed on IRC, we might see an increase of
+platform-specific packages (3D drivers and libraries, codecs and DSP
+stuff, etc.), so maybe we'll need some way of selecting the platform in
+order to show only the relevant packages? Or maybe simply by organizing
+the packages like:
 
-True. Is that a common use case? If so then I'll revert.
+ Platform specific packages ->
+  Texas Instruments OMAP packages ->
+  Freescale i.MX packages ->
+  ...
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
