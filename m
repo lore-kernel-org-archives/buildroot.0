@@ -1,129 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 2 Feb 2012 14:58:33 +0100
-Subject: [Buildroot] [git commit] cairo: Bump version to 1.10.2
-Message-ID: <20120202150357.9FB1F909A0@busybox.osuosl.org>
+Date: Thu, 2 Feb 2012 16:02:48 +0100
+Subject: [Buildroot] [git commit] lpc32xxcdl: fix patch step
+Message-ID: <20120202150357.AF880909A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfa93b47f721c4161dcb782cd48cb2fb52493d73
+commit: http://git.buildroot.net/buildroot/commit/?id=84babf1c1a5fb26d56ee5c534b2ac2c3f9825af2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update the DirectFB patch as it no longer applied cleanly.
+The lpc32xxcdl files have dos newlines, which our patch infrastructure
+doesn't handle. Work around it by converting the affected files to unix
+newlines before patching.
 
-[Peter: drop redundant AUTORECONF = NO line]
-Signed-off-by: Will Newton <will.newton@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/cairo/cairo-1.10.2-directfb.patch |   36 ++++++++++++++++++++++++++
- package/cairo/cairo-1.8.10-directfb.patch |   39 -----------------------------
- package/cairo/cairo.mk                    |    4 +--
- 3 files changed, 37 insertions(+), 42 deletions(-)
+ boot/lpc32xxcdl/lpc32xxcdl.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-diff --git a/package/cairo/cairo-1.10.2-directfb.patch b/package/cairo/cairo-1.10.2-directfb.patch
-new file mode 100644
-index 0000000..8b4c6f7
---- /dev/null
-+++ b/package/cairo/cairo-1.10.2-directfb.patch
-@@ -0,0 +1,36 @@
-+--- cairo-1.10.2/src/cairo-directfb-surface.c	2010-06-18 12:47:12.000000000 +0100
-++++ cairo-1.10.2.mod/src/cairo-directfb-surface.c	2012-02-02 11:40:57.835273391 +0000
-+@@ -700,6 +700,7 @@
-+ 	surface->dfbsurface->Blit (surface->dfbsurface,
-+ 				   buffer, NULL,
-+ 				   image_rect->x, image_rect->y);
-++        surface->dfbsurface->ReleaseSource (surface->dfbsurface);
-+     }
-+ 
-+     cairo_surface_destroy (&image->base);
-+@@ -928,6 +929,9 @@
-+                             cairo_surface_attributes_t *src_attr)
-+ {
-+     _cairo_pattern_release_surface (src_pattern, src, src_attr);
-++
-++    if (dst->dfbsurface)
-++        dst->dfbsurface->ReleaseSource (dst->dfbsurface);
-+ }
-+ #endif /* DFB_COMPOSITE || DFB_COMPOSITE_TRAPEZOIDS */
-+ 
-+@@ -1584,6 +1588,7 @@
-+ 
-+ 	    new_cache->dfbsurface->Blit (new_cache->dfbsurface,
-+ 					 cache->dfbsurface, NULL, 0, 0);
-++            new_cache->dfbsurface->ReleaseSource (new_cache->dfbsurface);
-+ 
-+ 	    _directfb_destroy_font_cache (cache);
-+ 	    scaled_font->surface_private = cache = new_cache;
-+@@ -1809,6 +1814,7 @@
-+     RUN_CLIPPED (dst, clip_region, NULL,
-+ 		 dst->dfbsurface->BatchBlit (dst->dfbsurface,
-+ 					     cache->dfbsurface, rects, points, num));
-++    dst->dfbsurface->ReleaseSource (dst->dfbsurface);
-+ 
-+     return CAIRO_STATUS_SUCCESS;
-+ }
-diff --git a/package/cairo/cairo-1.8.10-directfb.patch b/package/cairo/cairo-1.8.10-directfb.patch
-deleted file mode 100644
-index 12a51ec..0000000
---- a/package/cairo/cairo-1.8.10-directfb.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--diff --git a/src/cairo-directfb-surface.c b/src/cairo-directfb-surface.c
--index bb02dbf..65f2d55 100644
----- a/src/cairo-directfb-surface.c
--+++ b/src/cairo-directfb-surface.c
--@@ -609,6 +609,8 @@ _cairo_directfb_surface_release_dest_image (void                  *abstract_surf
-- 		     surface->dfbsurface->Blit (surface->dfbsurface,
-- 						buffer, NULL,
-- 						image_rect->x, image_rect->y));
--+
--+    surface->dfbsurface->ReleaseSource (surface->dfbsurface);
--     }
-- 
--     cairo_surface_destroy (&image->base);
--@@ -848,6 +850,9 @@ _directfb_finish_composite (cairo_directfb_surface_t   *dst,
--                             cairo_surface_attributes_t *src_attr)
-- {
--     _cairo_pattern_release_surface (src_pattern, src, src_attr);
--+
--+    if (dst->dfbsurface)
--+         dst->dfbsurface->ReleaseSource( dst->dfbsurface );
-- }
-- #endif /* DFB_COMPOSITE || DFB_COMPOSITE_TRAPEZOIDS */
-- 
--@@ -1555,6 +1560,7 @@ _directfb_acquire_font_cache (cairo_directfb_surface_t     *surface,
-- 
-- 	    new_cache->dfbsurface->Blit (new_cache->dfbsurface,
-- 					 cache->dfbsurface, NULL, 0, 0);
--+        new_cache->dfbsurface->ReleaseSource (new_cache->dfbsurface);
-- 
-- 	    _directfb_destroy_font_cache (cache);
-- 	    scaled_font->surface_private = cache = new_cache;
--@@ -1778,6 +1784,7 @@ _cairo_directfb_surface_show_glyphs (void                *abstract_dst,
--     RUN_CLIPPED (dst, NULL,
-- 		 dst->dfbsurface->BatchBlit (dst->dfbsurface,
-- 					     cache->dfbsurface, rects, points, num));
--+    dst->dfbsurface->ReleaseSource (dst->dfbsurface);
-- 
--     return CAIRO_STATUS_SUCCESS;
-- }
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 2230587..55068dd 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -3,12 +3,10 @@
- # cairo
- #
- #############################################################
--CAIRO_VERSION = 1.8.10
-+CAIRO_VERSION = 1.10.2
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.gz
- CAIRO_SITE = http://cairographics.org/releases
--CAIRO_AUTORECONF = NO
- CAIRO_INSTALL_STAGING = YES
--CAIRO_INSTALL_TARGET = YES
+diff --git a/boot/lpc32xxcdl/lpc32xxcdl.mk b/boot/lpc32xxcdl/lpc32xxcdl.mk
+index 80f3493..d11be6c 100644
+--- a/boot/lpc32xxcdl/lpc32xxcdl.mk
++++ b/boot/lpc32xxcdl/lpc32xxcdl.mk
+@@ -42,6 +42,16 @@ LPC32XXCDL_BUILD_FLAGS = \
+ LPC32XXCDL_BOARD_STARTUP_DIR = \
+ 	csps/lpc32xx/bsps/$(BR2_TARGET_LPC32XXCDL_BOARDNAME)/startup/examples/
  
- CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
- 		glib_cv_uscore=no ac_cv_func_strtod=yes \
++# Source files are with dos newlines, which our patch infrastructure doesn't
++# handle. Work around it by converting the affected files to unix newlines
++# before patching
++define LPC32XXCDL_DOS2UNIX_FOR_PATCH
++	sed -n 's|^[+-]\{3\} [^/]\+\([^ \t]*\)\(.*\)|$(@D)\1|p' \
++		boot/lpc32xxcdl/*.patch| sort -u | xargs $(SED) 's/\x0D$$//'
++endef
++
++LPC32XXCDL_POST_EXTRACT_HOOKS += LPC32XXCDL_DOS2UNIX_FOR_PATCH
++
+ define LPC32XXCDL_BUILD_CMDS
+ 	$(MAKE1) $(LPC32XXCDL_BUILD_FLAGS) -C $(@D)
+ 	$(MAKE1) $(LPC32XXCDL_BUILD_FLAGS) -C $(@D)/$(LPC32XXCDL_BOARD_STARTUP_DIR)/Burners/$(LPC32XXCDL_KICKSTART_BURNER)
