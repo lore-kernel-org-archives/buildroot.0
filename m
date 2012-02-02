@@ -1,26 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 02 Feb 2012 21:36:39 +0100
-Subject: [Buildroot] install-to-staging OK but install-to-target fails
-In-Reply-To: <D921DC3114DE02419F1BFD413E98678E102B2859C8@VA3DIAXVS331.RED001.local>
- (Edward Endejan's message of "Thu, 2 Feb 2012 12:04:47 -0800")
-References: <D921DC3114DE02419F1BFD413E98678E102B2859C8@VA3DIAXVS331.RED001.local>
-Message-ID: <87d39x7z1k.fsf@macbook.be.48ers.dk>
+Date: Thu, 02 Feb 2012 22:36:22 +0100
+Subject: [Buildroot] [RFC] python bindings handling
+In-Reply-To: <20120127165334.6d1dd39b@skate> (Thomas Petazzoni's message of
+ "Fri, 27 Jan 2012 16:53:34 +0100")
+References: <CAGm1_ksToKWTwgAjys49Nop66WwLSdMi7ztC3Zc=g6QHE-7WbQ@mail.gmail.com>
+ <20120127165334.6d1dd39b@skate>
+Message-ID: <878vkk9auh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Edward" == Endejan, Edward <Edward.Endejan@dmh-global.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Edward> Hi,
- Edward> I'm attempting to build gstreamer and gst-plugins-base from git 
- Edward> repositories with buildroot, cross-compiling for ARM. The build 
- Edward> and install-to-staging phases complete without error, but then 
- Edward> install-to-target fails as follows:
+ Thomas> Le Fri, 27 Jan 2012 16:02:54 +0100,
+ Thomas> Yegor Yefremov <yegorslists@googlemail.com> a ?crit :
 
-It works here. Care to post your buildroot defconfig (run make
-savedefconfig to create it).
+ >> How should we handle Python and other bindings?
+ >> 
+ >> 1. check if Python etc is selected and enable them automatically?
+ >> 2. make an option per package containing bindings
+ >> 3. something else
+
+ Thomas> I think I would say 2. It's not because you have Python *and* you have
+ Thomas> some library that you necessarily want the binding for that lib. Just
+ Thomas> make those bindings new Python packages (in the new Python menu you
+ Thomas> created!) and that should be good. No?
+
+So you're suggesting to put those BR2_ options in seperate Config.in
+files and source them under the Python menu? Hmm, I'm not sure I like
+that. Aren't most python bindings very small compared to python / the
+libraries they provide bindings for? If so, I think option 1 is nicer
+(similar to how we E.G. handle optional openssl support in lots of
+places).
+
 
 -- 
 Bye, Peter Korsgaard
