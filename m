@@ -1,32 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 2 Feb 2012 16:16:10 +0100
-Subject: [Buildroot] [git commit] python-serial: bump to 2.6
-Message-ID: <20120202151637.57A799099A@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 2 Feb 2012 16:47:43 +0100
+Subject: [Buildroot] [git commit] boot: only show vendor-specific
+ bootloaders for applicable arm variant
+In-Reply-To: <20120201224701.C13259097B@busybox.osuosl.org>
+References: <20120201224701.C13259097B@busybox.osuosl.org>
+Message-ID: <20120202164743.30dfab12@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=faf266b460c339019aab446c454b358492887c45
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/python-serial/python-serial.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Le Wed, 1 Feb 2012 23:46:48 +0100,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
-diff --git a/package/python-serial/python-serial.mk b/package/python-serial/python-serial.mk
-index 4c8a891..add9667 100644
---- a/package/python-serial/python-serial.mk
-+++ b/package/python-serial/python-serial.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--PYTHON_SERIAL_VERSION = 2.5
-+PYTHON_SERIAL_VERSION = 2.6
- PYTHON_SERIAL_SOURCE  = pyserial-$(PYTHON_SERIAL_VERSION).tar.gz
- PYTHON_SERIAL_SITE    = http://pypi.python.org/packages/source/p/pyserial/
- 
+> Atmel at91sam9 and NXP lpc32xx are both all arm926t, so only show
+> then if that arm variant is selected.
+
+Technically this is correct, but I am pretty sure a lot of people keep
+the default "generic_arm" and therefore would not see the availability
+of AT91Bootstrap or the LPC bootloaders.
+
+For example, if you use a CodeSourcery external toolchain, there is
+basically no difference between generic_arm and arm926t, because the
+toolchain already defaults to armv5t.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
