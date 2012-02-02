@@ -1,75 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 2 Feb 2012 12:48:39 +0100
-Subject: [Buildroot] [git commit] liboauth: Add new package
-Message-ID: <20120202121044.4A31C90974@busybox.osuosl.org>
+Date: Thu, 2 Feb 2012 13:07:23 +0100
+Subject: [Buildroot] [git commit] pixman: Bump version to 0.24.2
+Message-ID: <20120202121044.58B4D90974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cee43cbcbd698f95025ecf3fe0697ecedf5f4aab
+commit: http://git.buildroot.net/buildroot/commit/?id=a2a9f6358d3c1442028a7fd5366651b8826d4547
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: swap libcurl test around]
+[Peter: depend on pkg-config, forcibly disable gtk-based demos]
 Signed-off-by: Will Newton <will.newton@imgtec.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in            |    1 +
- package/liboauth/Config.in   |   10 ++++++++++
- package/liboauth/liboauth.mk |   19 +++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ package/pixman/pixman-0.10.0-no-tests.patch |   11 -----------
+ package/pixman/pixman.mk                    |    6 ++++--
+ 2 files changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c506df8..66ee266 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -350,6 +350,7 @@ source "package/libdnet/Config.in"
- source "package/libesmtp/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libidn/Config.in"
-+source "package/liboauth/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
- source "package/libmnl/Config.in"
-diff --git a/package/liboauth/Config.in b/package/liboauth/Config.in
-new file mode 100644
-index 0000000..77a78f1
---- /dev/null
-+++ b/package/liboauth/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBOAUTH
-+	bool "liboauth"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  liboauth is a collection of c functions implementing the oAuth
-+	  Core 1.0 Rev A standard API. liboauth provides basic functions to
-+	  escape and encode parameters according to oAuth specs and offers
-+	  high-level functions to sign requests or verify signatures.
-+
-+	  http://liboauth.sourceforge.net/
-diff --git a/package/liboauth/liboauth.mk b/package/liboauth/liboauth.mk
-new file mode 100644
-index 0000000..8646947
---- /dev/null
-+++ b/package/liboauth/liboauth.mk
-@@ -0,0 +1,19 @@
-+#############################################################
-+#
-+# liboauth
-+#
-+#############################################################
-+LIBOAUTH_VERSION = 0.9.6
-+LIBOAUTH_SOURCE = liboauth-$(LIBOAUTH_VERSION).tar.gz
-+LIBOAUTH_SITE = http://liboauth.sourceforge.net/pool
-+LIBOAUTH_INSTALL_STAGING = YES
-+
-+LIBOAUTH_DEPENDENCIES += host-pkg-config openssl
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+LIBOAUTH_DEPENDENCIES += libcurl
-+else
-+LIBOAUTH_CONF_OPT += --disable-libcurl
-+endif
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/pixman/pixman-0.10.0-no-tests.patch b/package/pixman/pixman-0.10.0-no-tests.patch
+deleted file mode 100644
+index fbd0d26..0000000
+--- a/package/pixman/pixman-0.10.0-no-tests.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/Makefile.in.orig	2008-05-23 14:04:37.000000000 +0000
+-+++ b/Makefile.in	2008-05-23 14:04:50.000000000 +0000
+-@@ -198,7 +198,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
+- top_builddir = @top_builddir@
+- top_srcdir = @top_srcdir@
+--SUBDIRS = pixman test
+-+SUBDIRS = pixman
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = pixman-1.pc
+- USERNAME = $$USER
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 2b39a77..a2e1832 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -3,11 +3,13 @@
+ # pixman
+ #
+ ################################################################################
+-PIXMAN_VERSION = 0.17.6
++PIXMAN_VERSION = 0.24.2
+ PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
+ PIXMAN_SITE = http://cairographics.org/releases/
+-PIXMAN_AUTORECONF = NO
+ PIXMAN_INSTALL_STAGING = YES
++PIXMAN_DEPENDENCIES = host-pkg-config
++# don't build gtk based demos
++PIXMAN_CONF_OPT = --disable-gtk
+ 
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
