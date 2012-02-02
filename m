@@ -1,75 +1,54 @@
 From: Will Newton <will.newton@gmail.com>
-Date: Thu, 2 Feb 2012 11:28:11 +0000
-Subject: [Buildroot] [PATCH] liboauth: Add new package
-Message-ID: <CAFbHwiRh1gFDp1ktEK612jxreKo83vqM=JzPaAsq0R2WTBBswg@mail.gmail.com>
+Date: Thu, 2 Feb 2012 11:31:09 +0000
+Subject: [Buildroot] [PATCH] pixman: Bump version to 0.24.2
+Message-ID: <CAFbHwiTE-oKMz5iyy284Kz++1VwWhei-T=iAhUVx3o2_GJs-jA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The patch to disable tests is no longer required as configure
+checks to see if the GTK+ tests should be built.
+
 Signed-off-by: Will Newton <will.newton@imgtec.com>
 ---
- package/Config.in            |    1 +
- package/liboauth/Config.in   |   10 ++++++++++
- package/liboauth/liboauth.mk |   19 +++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
- create mode 100644 package/liboauth/Config.in
- create mode 100644 package/liboauth/liboauth.mk
+ package/pixman/pixman-0.10.0-no-tests.patch |   11 -----------
+ package/pixman/pixman.mk                    |    2 +-
+ 2 files changed, 1 insertions(+), 12 deletions(-)
+ delete mode 100644 package/pixman/pixman-0.10.0-no-tests.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index c506df8..66ee266 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -350,6 +350,7 @@ source "package/libdnet/Config.in"
- source "package/libesmtp/Config.in"
- source "package/libeXosip2/Config.in"
- source "package/libidn/Config.in"
-+source "package/liboauth/Config.in"
- source "package/libmicrohttpd/Config.in"
- source "package/neon/Config.in"
- source "package/libmnl/Config.in"
-diff --git a/package/liboauth/Config.in b/package/liboauth/Config.in
-new file mode 100644
-index 0000000..77a78f1
---- /dev/null
-+++ b/package/liboauth/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBOAUTH
-+	bool "liboauth"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  liboauth is a collection of c functions implementing the oAuth
-+	  Core 1.0 Rev A standard API. liboauth provides basic functions to
-+	  escape and encode parameters according to oAuth specs and offers
-+	  high-level functions to sign requests or verify signatures.
-+
-+	  http://liboauth.sourceforge.net/
-diff --git a/package/liboauth/liboauth.mk b/package/liboauth/liboauth.mk
-new file mode 100644
-index 0000000..888470e
---- /dev/null
-+++ b/package/liboauth/liboauth.mk
-@@ -0,0 +1,19 @@
-+#############################################################
-+#
-+# liboauth
-+#
-+#############################################################
-+LIBOAUTH_VERSION = 0.9.6
-+LIBOAUTH_SOURCE = liboauth-$(LIBOAUTH_VERSION).tar.gz
-+LIBOAUTH_SITE = http://liboauth.sourceforge.net/pool
-+LIBOAUTH_INSTALL_STAGING = YES
-+
-+LIBOAUTH_DEPENDENCIES += host-pkg-config openssl
-+
-+ifneq ($(BR2_PACKAGE_LIBCURL),y)
-+LIBOAUTH_CONF_OPT += --disable-libcurl
-+else
-+LIBOAUTH_DEPENDENCIES += libcurl
-+endif
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/pixman/pixman-0.10.0-no-tests.patch
+b/package/pixman/pixman-0.10.0-no-tests.patch
+deleted file mode 100644
+index fbd0d26..0000000
+--- a/package/pixman/pixman-0.10.0-no-tests.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- a/Makefile.in.orig	2008-05-23 14:04:37.000000000 +0000
+-+++ b/Makefile.in	2008-05-23 14:04:50.000000000 +0000
+-@@ -198,7 +198,7 @@ sysconfdir = @sysconfdir@
+- target_alias = @target_alias@
+- top_builddir = @top_builddir@
+- top_srcdir = @top_srcdir@
+--SUBDIRS = pixman test
+-+SUBDIRS = pixman
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = pixman-1.pc
+- USERNAME = $$USER
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index 2b39a77..11c21b9 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -3,7 +3,7 @@
+ # pixman
+ #
+ ################################################################################
+-PIXMAN_VERSION = 0.17.6
++PIXMAN_VERSION = 0.24.2
+ PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.gz
+ PIXMAN_SITE = http://cairographics.org/releases/
+ PIXMAN_AUTORECONF = NO
 -- 
 1.7.1
 -------------- next part --------------
