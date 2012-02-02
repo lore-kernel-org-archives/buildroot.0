@@ -1,58 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 2 Feb 2012 12:43:49 +0100
-Subject: [Buildroot] [git commit] fis: sort output of fis list
-Message-ID: <20120202114617.DE8A390962@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 02 Feb 2012 12:53:19 +0100
+Subject: [Buildroot] [PATCH] liboauth: Add new package
+In-Reply-To: <CAFbHwiRh1gFDp1ktEK612jxreKo83vqM=JzPaAsq0R2WTBBswg@mail.gmail.com>
+ (Will Newton's message of "Thu, 2 Feb 2012 11:28:11 +0000")
+References: <CAFbHwiRh1gFDp1ktEK612jxreKo83vqM=JzPaAsq0R2WTBBswg@mail.gmail.com>
+Message-ID: <87haz9bgeo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5256c77b46fb2fd9bf84dd790a7b8de873b7dcd9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-This sorts the output of 'fis list' using the flash_base address
-similar to the output from RedBoot.
+ Will> +#############################################################
+ Will> +#
+ Will> +# liboauth
+ Will> +#
+ Will> +#############################################################
+ Will> +LIBOAUTH_VERSION = 0.9.6
+ Will> +LIBOAUTH_SOURCE = liboauth-$(LIBOAUTH_VERSION).tar.gz
+ Will> +LIBOAUTH_SITE = http://liboauth.sourceforge.net/pool
+ Will> +LIBOAUTH_INSTALL_STAGING = YES
+ Will> +
+ Will> +LIBOAUTH_DEPENDENCIES += host-pkg-config openssl
+ Will> +
+ Will> +ifneq ($(BR2_PACKAGE_LIBCURL),y)
+ Will> +LIBOAUTH_CONF_OPT += --disable-libcurl
+ Will> +else
+ Will> +LIBOAUTH_DEPENDENCIES += libcurl
+ Will> +endif
 
-Signed-off-by: H Hartley Sweeten <hsweeten@visionengravers.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/fis/fis-004-sorted_list.patch |   30 ++++++++++++++++++++++++++++++
- 1 files changed, 30 insertions(+), 0 deletions(-)
+I prefer positive tests, so I swapped the libcurl conditional
+around. Otherwise it looks good - Committed, thanks.
 
-diff --git a/package/fis/fis-004-sorted_list.patch b/package/fis/fis-004-sorted_list.patch
-new file mode 100644
-index 0000000..6854977
---- /dev/null
-+++ b/package/fis/fis-004-sorted_list.patch
-@@ -0,0 +1,30 @@
-+--- fis.orig/fis.c	2010-05-12 11:09:22.000000000 -0700
-++++ fis/fis.c	2010-05-12 11:05:45.000000000 -0700
-+@@ -401,9 +401,24 @@
-+   dir_t dir;
-+   load_dir(fd,offset,&size,swap_endianness,&dir);
-+   fprintf(stdout,"Name              FLASH addr  Mem addr    Length      Entry point Checksum\n");
-+-  FOR_EACH_DIR_ENTRY(dir,i) {
-+-    dump_desc(stdout,get(i));
-+-  }
-++  uint32_t last_addr = 0;
-++  bool image_found;
-++  do {
-++    uint32_t lowest_addr = 0xffffffff;
-++    iter_t index;
-++    image_found = false;
-++    FOR_EACH_DIR_ENTRY(dir,i) {
-++      const struct fis_image_desc *d = get(i);
-++      if ((d->flash_base >= last_addr) && (d->flash_base < lowest_addr)) {
-++        lowest_addr = d->flash_base;
-++        image_found = true;
-++        index = i;
-++      }
-++    }
-++    if (image_found)
-++      dump_desc(stdout,get(index));
-++    last_addr = lowest_addr + 1;
-++  } while (image_found == true);
-+ }
-+ 
-+ 
+-- 
+Bye, Peter Korsgaard
