@@ -1,68 +1,227 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 03 Feb 2012 08:00:03 +0100
-Subject: [Buildroot] install-to-staging OK but install-to-target fails
-In-Reply-To: <D921DC3114DE02419F1BFD413E98678E102B05F49F@VA3DIAXVS331.RED001.local>
- (Edward Endejan's message of "Thu, 2 Feb 2012 18:38:25 -0800")
-References: <D921DC3114DE02419F1BFD413E98678E102B2859C8@VA3DIAXVS331.RED001.local>
- <87d39x7z1k.fsf@macbook.be.48ers.dk>
- <D921DC3114DE02419F1BFD413E98678E102B05F49F@VA3DIAXVS331.RED001.local>
-Message-ID: <871uqce70s.fsf@macbook.be.48ers.dk>
+From: Mathieu Briand <mbriand@adeneo-embedded.com>
+Date: Fri,  3 Feb 2012 13:47:03 +0100
+Subject: [Buildroot] [PATCH] Add Freescale MX53 support
+Message-ID: <1328273223-16093-1-git-send-email-mbriand@adeneo-embedded.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Edward" == Endejan, Edward <Edward.Endejan@dmh-global.com> writes:
+Buildroot config and Linux Kernel config.
+Binaries blob not supported yet
+---
+ board/freescale/mx53/linux.config |  175 +++++++++++++++++++++++++++++++++++++
+ configs/freescale_mx53_defconfig  |   19 ++++
+ 2 files changed, 194 insertions(+), 0 deletions(-)
+ create mode 100644 board/freescale/mx53/linux.config
+ create mode 100644 configs/freescale_mx53_defconfig
 
-Hi,
-
-
- Edward> Thanks for the quick response. Our corporate internet
- Edward> connection went down this afternoon so we were pretty much dead
- Edward> in the water for the rest of the workday. Luckily we have a web
- Edward> interface to our cloud-hosted email so I saw your response
- Edward> tonight from home.
-
- Edward> Assuming our connection is restored by tomorrow, I'll get the
- Edward> defconfig to you. Is doing a 'make savedefconfig' any different
- Edward> than just sending the .config file from the base directory of
- Edward> buildroot?
-
-Great. It contains the same info, but it's easier to look at as it only
-shows the options you have changed from the details.
-
- Edward> A couple of other details in case they are relevant ...
-
- Edward> We were able to successfully build these GStreamer libraries
- Edward> with the original .mk files included with buildroot, but they
- Edward> were using .tar.gz snapshots rather than fetching the source
- Edward> using git. We want to convert to using the git approach so that
- Edward> we can easily push modifications to their source code back to
- Edward> that project.
-
-Ok.
-
- Edward> We have cloned the GStreamer git repositories that we are using
- Edward> to a local git server so that we have them local and for
- Edward> faster, uninterrupted access. We have modified these .mk files
- Edward> to use git instead and to fetch from our local repository of
- Edward> clones. As another side-effect of this we added a pre-configure
- Edward> hook to run their autogen.sh script because the GStreamer
- Edward> project uses this approach rather than the standard buildroot
- Edward> autotools configuration approach. The .tar.gz snapshots include
- Edward> pre-built .configure files - the git clone versions do
- Edward> not. I'll send you the modified .mk files so that you have the
- Edward> whole picture, but they will have to be modified to point to
- Edward> the cgit.freedesktop.org git repositories before they will work
- Edward> for you.
-
-It should be enough to just add a <foo>_AUTORECONF = YES line in the
-affected packages. See connman for an example. If you ./autogen.sh with
-your normal host libtool then that could explain the problem (we patch
-up libtool output to work around cross compile issues). Could you try a
-fresh rebuild with the AUTORECONF = YES lines added.
-
-
+diff --git a/board/freescale/mx53/linux.config b/board/freescale/mx53/linux.config
+new file mode 100644
+index 0000000..b625a59
+--- /dev/null
++++ b/board/freescale/mx53/linux.config
+@@ -0,0 +1,175 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_KERNEL_LZO=y
++CONFIG_SYSVIPC=y
++CONFIG_LOG_BUF_SHIFT=18
++CONFIG_RELAY=y
++CONFIG_EXPERT=y
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_LBDAF is not set
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_ARCH_MXC=y
++CONFIG_ARCH_MX5=y
++CONFIG_MACH_MX53_LOCO=y
++CONFIG_MXC_PWM=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_VMSPLIT_2G=y
++CONFIG_PREEMPT_VOLUNTARY=y
++CONFIG_AEABI=y
++# CONFIG_OABI_COMPAT is not set
++CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
++CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
++CONFIG_VFP=y
++CONFIG_NEON=y
++CONFIG_BINFMT_MISC=m
++CONFIG_PM_DEBUG=y
++CONFIG_PM_TEST_SUSPEND=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++CONFIG_CONNECTOR=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_MULTI_LUN=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_ATA=y
++CONFIG_PATA_IMX=y
++CONFIG_NETDEVICES=y
++CONFIG_MII=m
++CONFIG_MARVELL_PHY=y
++CONFIG_DAVICOM_PHY=y
++CONFIG_QSEMI_PHY=y
++CONFIG_LXT_PHY=y
++CONFIG_CICADA_PHY=y
++CONFIG_VITESSE_PHY=y
++CONFIG_SMSC_PHY=y
++CONFIG_BROADCOM_PHY=y
++CONFIG_ICPLUS_PHY=y
++CONFIG_REALTEK_PHY=y
++CONFIG_NATIONAL_PHY=y
++CONFIG_STE10XP=y
++CONFIG_LSI_ET1011C_PHY=y
++CONFIG_MICREL_PHY=y
++CONFIG_NET_ETHERNET=y
++# CONFIG_NETDEV_1000 is not set
++# CONFIG_NETDEV_10000 is not set
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_EVBUG=m
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_MOUSE_PS2=m
++CONFIG_MOUSE_PS2_ELANTECH=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_MMA8450=y
++CONFIG_SERIO_SERPORT=m
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_IMX=y
++CONFIG_SERIAL_IMX_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_I2C=y
++# CONFIG_I2C_COMPAT is not set
++CONFIG_I2C_CHARDEV=y
++# CONFIG_I2C_HELPER_AUTO is not set
++CONFIG_I2C_ALGOBIT=m
++CONFIG_I2C_ALGOPCF=m
++CONFIG_I2C_ALGOPCA=m
++CONFIG_I2C_IMX=y
++CONFIG_SPI=y
++CONFIG_SPI_IMX=y
++CONFIG_GPIO_SYSFS=y
++# CONFIG_HWMON is not set
++CONFIG_WATCHDOG=y
++CONFIG_IMX2_WDT=y
++CONFIG_MFD_MC13XXX=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_MC13892=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_MXC=y
++CONFIG_USB_STORAGE=y
++CONFIG_MMC=y
++CONFIG_MMC_BLOCK=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_SDHCI_ESDHC_IMX=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_INTF_DEV_UIE_EMUL=y
++CONFIG_RTC_MXC=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_QUOTA=y
++CONFIG_QUOTA_NETLINK_INTERFACE=y
++# CONFIG_PRINT_QUOTA_WARNING is not set
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_ISO9660_FS=m
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_UDF_FS=m
++CONFIG_MSDOS_FS=m
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_CONFIGFS_FS=m
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_DEFAULT="cp437"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_UTF8=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_BUGVERBOSE is not set
++# CONFIG_FTRACE is not set
++# CONFIG_ARM_UNWIND is not set
++CONFIG_SECURITYFS=y
++CONFIG_CRYPTO_DEFLATE=m
++CONFIG_CRYPTO_LZO=m
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++# CONFIG_CRYPTO_HW is not set
++CONFIG_CRC_CCITT=m
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC7=m
++CONFIG_LIBCRC32C=m
+diff --git a/configs/freescale_mx53_defconfig b/configs/freescale_mx53_defconfig
+new file mode 100644
+index 0000000..25551ec
+--- /dev/null
++++ b/configs/freescale_mx53_defconfig
+@@ -0,0 +1,19 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mx53/linux.config"
 -- 
-Bye, Peter Korsgaard
+1.7.5.4
