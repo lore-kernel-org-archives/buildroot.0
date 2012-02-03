@@ -1,121 +1,154 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 03 Feb 2012 21:32:50 +0100
-Subject: [Buildroot] [PATCH 1/5] Add the systemd package
-In-Reply-To: <1328279247-7277-2-git-send-email-maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Fri, 3 Feb 2012 15:27:23 +0100")
-References: <1328279247-7277-1-git-send-email-maxime.ripard@free-electrons.com>
- <1328279247-7277-2-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <87liojd5e5.fsf@macbook.be.48ers.dk>
+From: Endejan, Edward <Edward.Endejan@dmh-global.com>
+Date: Fri, 3 Feb 2012 14:27:25 -0800
+Subject: [Buildroot] install-to-staging OK but install-to-target fails
+In-Reply-To: <871uqce70s.fsf@macbook.be.48ers.dk>
+References: <D921DC3114DE02419F1BFD413E98678E102B2859C8@VA3DIAXVS331.RED001.local>
+ <87d39x7z1k.fsf@macbook.be.48ers.dk>
+ <D921DC3114DE02419F1BFD413E98678E102B05F49F@VA3DIAXVS331.RED001.local>
+ <871uqce70s.fsf@macbook.be.48ers.dk>
+Message-ID: <D921DC3114DE02419F1BFD413E98678E102B285FDC@VA3DIAXVS331.RED001.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+Hi Peter,
 
- Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
- Maxime> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Peter> It should be enough to just add a <foo>_AUTORECONF = YES line in the
+Peter> affected packages. See connman for an example. If you ./autogen.sh with
+Peter> your normal host libtool then that could explain the problem (we patch
+Peter> up libtool output to work around cross compile issues). Could you try a
+Peter> fresh rebuild with the AUTORECONF = YES lines added.
 
-Looks good, a few minor comments:
+First, the <foo>_AUTORECONF = YES appears to have worked (almost). 
+Some step of the reconfigure seems to process AC_SUBST of the 
+GETTEXT_MACRO_VERSION macro improperly and the resulting Makefile 
+is incorrect. As long as I do the substitution manually, the subsequent 
+make gstreamer-install-target completes normally.
 
- Maxime> diff --git a/fs/skeleton/etc/mtab b/fs/skeleton/etc/mtab
- Maxime> index e1c2045..4c0a094 120000
- Maxime> --- a/fs/skeleton/etc/mtab
- Maxime> +++ b/fs/skeleton/etc/mtab
- Maxime> @@ -1 +1 @@
- Maxime> -../proc/mounts
- Maxime> \ No newline at end of file
- Maxime> +/proc/mounts
- Maxime> \ No newline at end of file
+I've spent most of the day trying to track this down. I'm sure that I'm close.
+Thanks for pointing me in the right direction.
 
-Is this needed by systemd? I would prefer to see this as a seperate
-patch.
+Peter> Great. It contains the same info, but it's easier to look at as it only
+Peter> shows the options you have changed from the details.
 
- Maxime> diff --git a/linux/linux.mk b/linux/linux.mk
- Maxime> index dbe1ad7..d7c9c9c 100644
- Maxime> --- a/linux/linux.mk
- Maxime> +++ b/linux/linux.mk
- Maxime> @@ -150,6 +150,8 @@ define LINUX_CONFIGURE_CMDS
- Maxime>  	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
- Maxime>  		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
- Maxime>  	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
- Maxime> +	$(if $(BR2_PACKAGE_SYSTEMD),
- Maxime> +		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config),)
+Just in case it still is useful, here is the result of 'make savedefconfig':
 
-The very last ',' can be removed. This could also go in a seperate
-patch.
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_WGET="wget --passive-ftp -nd"
+BR2_PRIMARY_SITE="http://git.escient.com/dl"
+BR2_BACKUP_SITE="http://buildroot.net/downloads/sources/"
+BR2_SOURCEFORGE_MIRROR="superb-sea2"
+BR2_JLEVEL=16
+BR2_CCACHE=y
+BR2_KERNEL_HEADERS_3_1=y
+BR2_BINUTILS_VERSION_2_20_1=y
+BR2_GCC_VERSION_4_4_X=y
+BR2_TARGET_OPTIMIZATION="-Os -pipe -march=armv7-a -mtune=cortex-a8 -mfpu=neon -ftree-vectorize -mfloat-abi=softfp"
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PTHREADS_OLD=y
+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
+BR2_TARGET_GENERIC_ISSUE="Welcome to ADS"
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+BR2_ROOTFS_DEVICE_TABLE="board/denon/ads/device_table.txt"
+BR2_ROOTFS_SKELETON_CUSTOM=y
+BR2_ROOTFS_SKELETON_CUSTOM_PATH="board/denon/ads/skeleton"
+BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.16.x.config"
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_ALSA_UTILS=y
+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+BR2_PACKAGE_ALSA_UTILS_AMIXER=y
+BR2_PACKAGE_ALSA_UTILS_APLAY=y
+BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
+BR2_PACKAGE_FAAD2=y
+BR2_PACKAGE_GSTREAMER=y
+BR2_PACKAGE_GST_FFMPEG=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORATE=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ENCODING=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG=y
+BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VORBIS=y
+BR2_PACKAGE_GST_PLUGINS_GOOD=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUDIOFX=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUPARSE=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_LEVEL=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTP=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_UDP=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC=y
+BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC=y
+BR2_PACKAGE_GST_PLUGINS_BAD=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ADPCMDEC=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ADPCMENC=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFF=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LEGACYRESAMPLE=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGDEMUX=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGPSMUX=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGTSMUX=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RAWPARSE=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RTPMUX=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO=y
+BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SNDFILE=y
+BR2_PACKAGE_GST_PLUGINS_UGLY=y
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ASFDEMUX=y
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEGAUDIOPARSE=y
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEGSTREAM=y
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_LAME=y
+BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD=y
+BR2_PACKAGE_LIBAO=y
+BR2_PACKAGE_LIBCDAUDIO=y
+BR2_PACKAGE_LIBSAMPLERATE=y
+BR2_PACKAGE_TAGLIB=y
+BR2_PACKAGE_TAGLIB_MP4=y
+BR2_PACKAGE_TAGLIB_ASF=y
+BR2_PACKAGE_SYSSTAT=y
+BR2_PACKAGE_OPENSSL_BIN=y
+BR2_PACKAGE_OPENSSL_ENGINES=y
+BR2_PACKAGE_OPENSSL_OCF=y
+BR2_PACKAGE_LIBCURL=y
+BR2_PACKAGE_NTP=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_PTPV2D=y
+BR2_PACKAGE_PROCPS=y
+BR2_PACKAGE_ADS=y
+BR2_TARGET_ROOTFS_EXT2=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
+BR2_TARGET_UBOOT_CUSTOM_GIT=y
+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/ti/beaglebone/u-boot"
+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.escient.com/boot/u-boot"
+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="256415d8499bb76a094a179292c82c321a20192a"
+BR2_TARGET_UBOOT_FORMAT_IMG=y
+BR2_TARGET_UBOOT_MLO=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.escient.com/kernel/linux"
+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="c9c405dd9e2df8818b37a9f6b87c3b171fd47211"
+BR2_LINUX_KERNEL_PATCH="board/ti/beaglebone/linux"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/ti/beaglebone/kernel_defconfig"
 
- Maxime> +++ b/package/systemd/Config.in
- Maxime> @@ -0,0 +1,19 @@
- Maxime> +config BR2_PACKAGE_SYSTEMD
- Maxime> +	bool "systemd"
- Maxime> +	depends on BR2_PACKAGE_UDEV
- Maxime> +	select BR2_PACKAGE_DBUS
- Maxime> +	select BR2_PACKAGE_LIBCAP
- Maxime> +	help
- Maxime> +	  systemd is a system and service manager for Linux, compatible with
- Maxime> +	  SysV and LSB init scripts. systemd provides aggressive parallelization
- Maxime> +	  capabilities, uses socket and D-Bus activation for starting services,
- Maxime> +	  offers on-demand starting of daemons, keeps track of processes using
- Maxime> +	  Linux cgroups, supports snapshotting and restoring of the system
- Maxime> +	  state, maintains mount and automount points and implements an
- Maxime> +	  elaborate transactional dependency-based service control logic. It can
 
-This looks a bit too wide. "It can" should go on the next line.
- 
- Maxime> +++ b/package/systemd/systemd.mk
- Maxime> @@ -0,0 +1,68 @@
- Maxime> +#############################################################
- Maxime> +#
- Maxime> +# systemd
- Maxime> +#
- Maxime> +#############################################################
- Maxime> +SYSTEMD_VERSION = 37
- Maxime> +SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
- Maxime> +SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.bz2
- Maxime> +SYSTEMD_DEPENDENCIES = \
- Maxime> +	host-intltool \
- Maxime> +	libcap \
- Maxime> +	udev \
- Maxime> +	dbus
- Maxime> +
- Maxime> +# Build after Busybox
- Maxime> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- Maxime> +	SYSTEMD_DEPENDENCIES += busybox
- Maxime> +endif
- Maxime> +
- Maxime> +SYSTEMD_CONF_OPT += \
- Maxime> +	--with-distro=other \
- Maxime> +	--disable-selinux \
- Maxime> +	--disable-pam \
- Maxime> +	--disable-libcryptsetup \
- Maxime> +	--disable-gtk \
- Maxime> +	--disable-plymouth \
- Maxime> +	--with-rootdir=/ \
- Maxime> +	--with-dbuspolicydir=/etc/dbus-1/system.d \
- Maxime> +	--with-dbussessionservicedir=/usr/share/dbus-1/services \
- Maxime> +	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
- Maxime> +	--with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
- Maxime> +	--with-udevrulesdir=/etc/udev/rules.d \
- Maxime> +	--with-sysvinit-path=/etc/init.d/ \
- Maxime> +	--without-sysvrcd-path
- Maxime> +
- Maxime> +ifeq ($(BR2_PACKAGE_ACL),y)
- Maxime> +	SYSTEMD_CONF_OPT += --enable-acl
-
-You're missing
-SYSTEMD_DEPENDENCIES += acl
-
- Maxime> +++ b/package/udev/udev.mk
- Maxime> @@ -12,7 +12,7 @@ UDEV_CONF_OPT =			\
- Maxime>  	--sbindir=/sbin		\
- Maxime>  	--with-rootlibdir=/lib	\
- Maxime>  	--libexecdir=/lib/udev	\
- Maxime> -	--disable-introspection
- Maxime> +	--disable-introspection \
-
-Why?
-
--- 
-Bye, Peter Korsgaard
+-----Original Message-----
+From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
+Sent: Friday, February 03, 2012 2:00 AM
+To: Endejan, Edward
+Cc: Peter Korsgaard; buildroot at busybox.net
+Subject: Re: install-to-staging OK but install-to-target fails
