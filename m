@@ -1,29 +1,229 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri,  3 Feb 2012 13:34:00 +0000 (UTC)
-Subject: [Buildroot] [Bug 755] Add Boost libraries as a package
-In-Reply-To: <bug-755-163@https.bugs.busybox.net/>
-References: <bug-755-163@https.bugs.busybox.net/>
-Message-ID: <20120203133400.CAE45909A2@busybox.osuosl.org>
+From: Mathieu Briand <mbriand@adeneo-embedded.com>
+Date: Fri,  3 Feb 2012 14:56:10 +0100
+Subject: [Buildroot] [PATCH] Add Freescale MX53 support
+In-Reply-To: <1328273223-16093-1-git-send-email-mbriand@adeneo-embedded.com>
+References: <1328273223-16093-1-git-send-email-mbriand@adeneo-embedded.com>
+Message-ID: <1328277370-18423-1-git-send-email-mbriand@adeneo-embedded.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=755
+Buildroot config and Linux Kernel config.
+Binaries blob not supported yet.
+---
+ board/freescale/mx53loco/linux.config |  175 +++++++++++++++++++++++++++++++++
+ configs/freescale_mx53loco_defconfig  |   19 ++++
+ 2 files changed, 194 insertions(+), 0 deletions(-)
+ create mode 100644 board/freescale/mx53loco/linux.config
+ create mode 100644 configs/freescale_mx53loco_defconfig
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-02-03 13:34:00 UTC ---
-A boost package, with boost 1.47.0 has been added in Buildroot and will be part
-of the upcoming 2012.02 stable release.
-
+diff --git a/board/freescale/mx53loco/linux.config b/board/freescale/mx53loco/linux.config
+new file mode 100644
+index 0000000..b625a59
+--- /dev/null
++++ b/board/freescale/mx53loco/linux.config
+@@ -0,0 +1,175 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_KERNEL_LZO=y
++CONFIG_SYSVIPC=y
++CONFIG_LOG_BUF_SHIFT=18
++CONFIG_RELAY=y
++CONFIG_EXPERT=y
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_LBDAF is not set
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_ARCH_MXC=y
++CONFIG_ARCH_MX5=y
++CONFIG_MACH_MX53_LOCO=y
++CONFIG_MXC_PWM=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_VMSPLIT_2G=y
++CONFIG_PREEMPT_VOLUNTARY=y
++CONFIG_AEABI=y
++# CONFIG_OABI_COMPAT is not set
++CONFIG_DEFAULT_MMAP_MIN_ADDR=32768
++CONFIG_CMDLINE="noinitrd console=ttymxc0,115200"
++CONFIG_VFP=y
++CONFIG_NEON=y
++CONFIG_BINFMT_MISC=m
++CONFIG_PM_DEBUG=y
++CONFIG_PM_TEST_SUSPEND=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_STANDALONE is not set
++CONFIG_CONNECTOR=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++# CONFIG_SCSI_PROC_FS is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_MULTI_LUN=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++# CONFIG_SCSI_LOWLEVEL is not set
++CONFIG_ATA=y
++CONFIG_PATA_IMX=y
++CONFIG_NETDEVICES=y
++CONFIG_MII=m
++CONFIG_MARVELL_PHY=y
++CONFIG_DAVICOM_PHY=y
++CONFIG_QSEMI_PHY=y
++CONFIG_LXT_PHY=y
++CONFIG_CICADA_PHY=y
++CONFIG_VITESSE_PHY=y
++CONFIG_SMSC_PHY=y
++CONFIG_BROADCOM_PHY=y
++CONFIG_ICPLUS_PHY=y
++CONFIG_REALTEK_PHY=y
++CONFIG_NATIONAL_PHY=y
++CONFIG_STE10XP=y
++CONFIG_LSI_ET1011C_PHY=y
++CONFIG_MICREL_PHY=y
++CONFIG_NET_ETHERNET=y
++# CONFIG_NETDEV_1000 is not set
++# CONFIG_NETDEV_10000 is not set
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_EVBUG=m
++CONFIG_KEYBOARD_GPIO=y
++CONFIG_MOUSE_PS2=m
++CONFIG_MOUSE_PS2_ELANTECH=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_MMA8450=y
++CONFIG_SERIO_SERPORT=m
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_IMX=y
++CONFIG_SERIAL_IMX_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_I2C=y
++# CONFIG_I2C_COMPAT is not set
++CONFIG_I2C_CHARDEV=y
++# CONFIG_I2C_HELPER_AUTO is not set
++CONFIG_I2C_ALGOBIT=m
++CONFIG_I2C_ALGOPCF=m
++CONFIG_I2C_ALGOPCA=m
++CONFIG_I2C_IMX=y
++CONFIG_SPI=y
++CONFIG_SPI_IMX=y
++CONFIG_GPIO_SYSFS=y
++# CONFIG_HWMON is not set
++CONFIG_WATCHDOG=y
++CONFIG_IMX2_WDT=y
++CONFIG_MFD_MC13XXX=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_MC13892=y
++CONFIG_USB=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_EHCI_MXC=y
++CONFIG_USB_STORAGE=y
++CONFIG_MMC=y
++CONFIG_MMC_BLOCK=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_SDHCI_ESDHC_IMX=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_INTF_DEV_UIE_EMUL=y
++CONFIG_RTC_MXC=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_EXT4_FS_SECURITY=y
++CONFIG_QUOTA=y
++CONFIG_QUOTA_NETLINK_INTERFACE=y
++# CONFIG_PRINT_QUOTA_WARNING is not set
++CONFIG_AUTOFS4_FS=y
++CONFIG_FUSE_FS=y
++CONFIG_ISO9660_FS=m
++CONFIG_JOLIET=y
++CONFIG_ZISOFS=y
++CONFIG_UDF_FS=m
++CONFIG_MSDOS_FS=m
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_CONFIGFS_FS=m
++CONFIG_NFS_FS=y
++CONFIG_NFS_V3=y
++CONFIG_NFS_V3_ACL=y
++CONFIG_NFS_V4=y
++CONFIG_ROOT_NFS=y
++CONFIG_NLS_DEFAULT="cp437"
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ASCII=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_ISO8859_15=m
++CONFIG_NLS_UTF8=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
++# CONFIG_SCHED_DEBUG is not set
++# CONFIG_DEBUG_BUGVERBOSE is not set
++# CONFIG_FTRACE is not set
++# CONFIG_ARM_UNWIND is not set
++CONFIG_SECURITYFS=y
++CONFIG_CRYPTO_DEFLATE=m
++CONFIG_CRYPTO_LZO=m
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++# CONFIG_CRYPTO_HW is not set
++CONFIG_CRC_CCITT=m
++CONFIG_CRC_T10DIF=y
++CONFIG_CRC7=m
++CONFIG_LIBCRC32C=m
+diff --git a/configs/freescale_mx53loco_defconfig b/configs/freescale_mx53loco_defconfig
+new file mode 100644
+index 0000000..dbf0e2c
+--- /dev/null
++++ b/configs/freescale_mx53loco_defconfig
+@@ -0,0 +1,19 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mx53loco/linux.config"
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.5.4
