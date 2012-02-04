@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  4 Feb 2012 15:48:46 +0100
-Subject: [Buildroot] [PATCH 5/7] lttng-tools: make the dependency on
-	lttng-libust optional
+Date: Sat,  4 Feb 2012 15:48:48 +0100
+Subject: [Buildroot] [PATCH 7/7] lttng-babeltrace: fix build on uClibc due
+	to missing posix_fallocate()
 In-Reply-To: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cc297d07bc7c92e8c986efe0dde859a7e67436e3.1328366921.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <a42ba268e6311f078f9472d80d7a40d5b576677a.1328366921.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +13,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-tools/Config.in      |    4 +++-
- package/lttng-tools/lttng-tools.mk |    9 ++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ ...beltrace-0.8-no-posix-fallocate-in-uclibc.patch |   25 ++++++++++++++++++++
+ 1 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index cc74966..3040af6 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	depends on BR2_PACKAGE_LTTNG_MODULES
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_POPT
--	select BR2_PACKAGE_LTTNG_LIBUST
- 	help
- 	  Userspace utilities for the LTTng 2.0 tracing
- 	  infrastructure.
-@@ -17,4 +16,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	  package for the target, if babeltrace on the target is
- 	  interesting.
- 
-+	  If userspace tracing is desired, you need to enable
-+	  lttng-libust.
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
+new file mode 100644
+index 0000000..5ba7f1d
+--- /dev/null
++++ b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
+@@ -0,0 +1,25 @@
++Do not call posix_fallocate() on uClibc
 +
- 	  http://lttng.org
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index bcf2f67..8e6fc1a 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -6,8 +6,15 @@ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- # dependency. However, having the babeltrace utilities built for the
- # host is very useful, since those tools allow to convert the binary
- # trace format into an human readable format.
--LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
-+LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace
- 
- LTTNG_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
-+LTTNG_TOOLS_CONF_OPT += --enable-lttng-ust
-+LTTNG_TOOLS_DEPENDENCIES += lttng-libust
-+else
-+LTTNG_TOOLS_CONF_OPT += --disable-lttng-ust
-+endif
++uClibc does not implement posix_fallocate(), and posix_fallocate() is
++mostly only an hint to the kernel that we will need such or such
++amount of space inside a file. So we just don't call posix_fallocate()
++when building against uClibc.
 +
- $(eval $(call AUTOTARGETS))
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: lttng-babeltrace-0.8/formats/ctf/ctf.c
++===================================================================
++--- lttng-babeltrace-0.8.orig/formats/ctf/ctf.c	2012-02-04 09:01:16.788552141 +0100
+++++ lttng-babeltrace-0.8/formats/ctf/ctf.c	2012-02-04 09:01:33.638258644 +0100
++@@ -384,9 +384,11 @@
++ 		}
++ 		pos->content_size = -1U;	/* Unknown at this point */
++ 		pos->packet_size = WRITE_PACKET_LEN;
+++#ifndef __UCLIBC__
++ 		off = posix_fallocate(pos->fd, pos->mmap_offset,
++ 				      pos->packet_size / CHAR_BIT);
++ 		assert(off >= 0);
+++#endif
++ 		pos->offset = 0;
++ 	} else {
++ 	read_next_packet:
 -- 
 1.7.4.1
