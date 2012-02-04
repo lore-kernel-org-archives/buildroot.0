@@ -1,154 +1,72 @@
-From: Endejan, Edward <Edward.Endejan@dmh-global.com>
-Date: Fri, 3 Feb 2012 14:27:25 -0800
-Subject: [Buildroot] install-to-staging OK but install-to-target fails
-In-Reply-To: <871uqce70s.fsf@macbook.be.48ers.dk>
-References: <D921DC3114DE02419F1BFD413E98678E102B2859C8@VA3DIAXVS331.RED001.local>
- <87d39x7z1k.fsf@macbook.be.48ers.dk>
- <D921DC3114DE02419F1BFD413E98678E102B05F49F@VA3DIAXVS331.RED001.local>
- <871uqce70s.fsf@macbook.be.48ers.dk>
-Message-ID: <D921DC3114DE02419F1BFD413E98678E102B285FDC@VA3DIAXVS331.RED001.local>
+From: Alexandre Belloni <alexandre.belloni@piout.net>
+Date: Sat,  4 Feb 2012 13:21:31 +0100
+Subject: [Buildroot] [PATCH 2/2] Add lpc3250loader to lpc3250 configs
+In-Reply-To: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
+References: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <1328358091-20998-2-git-send-email-alexandre.belloni@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+---
+ configs/ea3250_defconfig  |    6 ++++++
+ configs/fdi3250_defconfig |    6 ++++++
+ configs/phy3250_defconfig |    6 ++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
 
-Peter> It should be enough to just add a <foo>_AUTORECONF = YES line in the
-Peter> affected packages. See connman for an example. If you ./autogen.sh with
-Peter> your normal host libtool then that could explain the problem (we patch
-Peter> up libtool output to work around cross compile issues). Could you try a
-Peter> fresh rebuild with the AUTORECONF = YES lines added.
-
-First, the <foo>_AUTORECONF = YES appears to have worked (almost). 
-Some step of the reconfigure seems to process AC_SUBST of the 
-GETTEXT_MACRO_VERSION macro improperly and the resulting Makefile 
-is incorrect. As long as I do the substitution manually, the subsequent 
-make gstreamer-install-target completes normally.
-
-I've spent most of the day trying to track this down. I'm sure that I'm close.
-Thanks for pointing me in the right direction.
-
-Peter> Great. It contains the same info, but it's easier to look at as it only
-Peter> shows the options you have changed from the details.
-
-Just in case it still is useful, here is the result of 'make savedefconfig':
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_WGET="wget --passive-ftp -nd"
-BR2_PRIMARY_SITE="http://git.escient.com/dl"
-BR2_BACKUP_SITE="http://buildroot.net/downloads/sources/"
-BR2_SOURCEFORGE_MIRROR="superb-sea2"
-BR2_JLEVEL=16
-BR2_CCACHE=y
-BR2_KERNEL_HEADERS_3_1=y
-BR2_BINUTILS_VERSION_2_20_1=y
-BR2_GCC_VERSION_4_4_X=y
-BR2_TARGET_OPTIMIZATION="-Os -pipe -march=armv7-a -mtune=cortex-a8 -mfpu=neon -ftree-vectorize -mfloat-abi=softfp"
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PTHREADS_OLD=y
-BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-BR2_TARGET_GENERIC_ISSUE="Welcome to ADS"
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-BR2_ROOTFS_DEVICE_TABLE="board/denon/ads/device_table.txt"
-BR2_ROOTFS_SKELETON_CUSTOM=y
-BR2_ROOTFS_SKELETON_CUSTOM_PATH="board/denon/ads/skeleton"
-BR2_PACKAGE_BUSYBOX_CONFIG="package/busybox/busybox-1.16.x.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_ALSA_UTILS=y
-BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-BR2_PACKAGE_ALSA_UTILS_AMIXER=y
-BR2_PACKAGE_ALSA_UTILS_APLAY=y
-BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST=y
-BR2_PACKAGE_FAAD2=y
-BR2_PACKAGE_GSTREAMER=y
-BR2_PACKAGE_GST_FFMPEG=y
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIORATE=y
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ENCODING=y
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG=y
-BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VORBIS=y
-BR2_PACKAGE_GST_PLUGINS_GOOD=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUDIOFX=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUDIOPARSERS=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUPARSE=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_AUTODETECT=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEBUGUTILS=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_DEINTERLACE=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_INTERLEAVE=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_LEVEL=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTP=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTPMANAGER=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_RTSP=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_UDP=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_WAVENC=y
-BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC=y
-BR2_PACKAGE_GST_PLUGINS_BAD=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ADPCMDEC=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ADPCMENC=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AIFF=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_ASFMUX=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_AUTOCONVERT=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_DEBUGUTILS=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_LEGACYRESAMPLE=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGDEMUX=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGPSMUX=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGTSDEMUX=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_MPEGTSMUX=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RAWPARSE=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RTPMUX=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SPEED=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_STEREO=y
-BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SNDFILE=y
-BR2_PACKAGE_GST_PLUGINS_UGLY=y
-BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_ASFDEMUX=y
-BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEGAUDIOPARSE=y
-BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MPEGSTREAM=y
-BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_LAME=y
-BR2_PACKAGE_GST_PLUGINS_UGLY_PLUGIN_MAD=y
-BR2_PACKAGE_LIBAO=y
-BR2_PACKAGE_LIBCDAUDIO=y
-BR2_PACKAGE_LIBSAMPLERATE=y
-BR2_PACKAGE_TAGLIB=y
-BR2_PACKAGE_TAGLIB_MP4=y
-BR2_PACKAGE_TAGLIB_ASF=y
-BR2_PACKAGE_SYSSTAT=y
-BR2_PACKAGE_OPENSSL_BIN=y
-BR2_PACKAGE_OPENSSL_ENGINES=y
-BR2_PACKAGE_OPENSSL_OCF=y
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_NTP=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_PTPV2D=y
-BR2_PACKAGE_PROCPS=y
-BR2_PACKAGE_ADS=y
-BR2_TARGET_ROOTFS_EXT2=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_UBOOT=y
-BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
-BR2_TARGET_UBOOT_CUSTOM_GIT=y
-BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/ti/beaglebone/u-boot"
-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.escient.com/boot/u-boot"
-BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="256415d8499bb76a094a179292c82c321a20192a"
-BR2_TARGET_UBOOT_FORMAT_IMG=y
-BR2_TARGET_UBOOT_MLO=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.escient.com/kernel/linux"
-BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="c9c405dd9e2df8818b37a9f6b87c3b171fd47211"
-BR2_LINUX_KERNEL_PATCH="board/ti/beaglebone/linux"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/ti/beaglebone/kernel_defconfig"
-
-
------Original Message-----
-From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter Korsgaard
-Sent: Friday, February 03, 2012 2:00 AM
-To: Endejan, Edward
-Cc: Peter Korsgaard; buildroot at busybox.net
-Subject: Re: install-to-staging OK but install-to-target fails
+diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+index da84c7e..9cd7b34 100644
+--- a/configs/ea3250_defconfig
++++ b/configs/ea3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="ea3250"
+diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
+index 505dc8b..1fd0b05 100644
+--- a/configs/fdi3250_defconfig
++++ b/configs/fdi3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
+diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
+index d46d719..bc17d5c 100644
+--- a/configs/phy3250_defconfig
++++ b/configs/phy3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="phy3250"
+-- 
+1.7.5.4
