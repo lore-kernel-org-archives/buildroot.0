@@ -1,60 +1,141 @@
-From: Alexandre Belloni <alexandre.belloni@piout.net>
-Date: Sat,  4 Feb 2012 13:21:30 +0100
-Subject: [Buildroot] [PATCH 1/2] Add lpc3250loader to the host tools
-Message-ID: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Sat, 04 Feb 2012 14:13:09 +0100
+Subject: [Buildroot] [PATCH 1/5] Add the systemd package
+In-Reply-To: <87liojd5e5.fsf@macbook.be.48ers.dk>
+References: <1328279247-7277-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1328279247-7277-2-git-send-email-maxime.ripard@free-electrons.com>
+ <87liojd5e5.fsf@macbook.be.48ers.dk>
+Message-ID: <4F2D2EE5.2000205@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
----
- package/Config.in.host                 |    1 +
- package/lpc3250loader/Config.in.host   |    7 +++++++
- package/lpc3250loader/lpc3250loader.mk |    9 +++++++++
- 3 files changed, 17 insertions(+), 0 deletions(-)
- create mode 100644 package/lpc3250loader/Config.in.host
- create mode 100644 package/lpc3250loader/lpc3250loader.mk
+hi Peter,
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1f49e79..861b736 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+source "package/lpc3250loader/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/lpc3250loader/Config.in.host b/package/lpc3250loader/Config.in.host
-new file mode 100644
-index 0000000..750080b
---- /dev/null
-+++ b/package/lpc3250loader/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_LPC3250LOADER
-+	bool "host lpc3250loader"
-+	help
-+	  lpc3250loader is a tool to load/burn programs (in particular kickstart
-+	  and S1L) on an LPC3250 platform.
-+
-+	  https://gitorious.org/lpc3250loader
-diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
-new file mode 100644
-index 0000000..d66cd4a
---- /dev/null
-+++ b/package/lpc3250loader/lpc3250loader.mk
-@@ -0,0 +1,9 @@
-+LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
-+LPC3250LOADER_VERSION = master
-+LPC3250LOADER_SITE_METHOD = git
-+
-+define HOST_LPC3250LOADER_INSTALL_CMDS
-+	cp -a $(@D)/* $(HOST_DIR)/usr/bin/
-+endef
-+
-+$(eval $(call GENTARGETS,host))
+On 03/02/2012 21:32, Peter Korsgaard wrote:
+>>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+>  Maxime> diff --git a/fs/skeleton/etc/mtab b/fs/skeleton/etc/mtab
+>  Maxime> index e1c2045..4c0a094 120000
+>  Maxime> --- a/fs/skeleton/etc/mtab
+>  Maxime> +++ b/fs/skeleton/etc/mtab
+>  Maxime> @@ -1 +1 @@
+>  Maxime> -../proc/mounts
+>  Maxime> \ No newline at end of file
+>  Maxime> +/proc/mounts
+>  Maxime> \ No newline at end of file
+> 
+> Is this needed by systemd? I would prefer to see this as a seperate
+> patch.
+
+Yes, this is needed as it checks for /etc/mtab being equal to
+/proc/mounts or /proc/self/mounts.
+
+http://cgit.freedesktop.org/systemd/tree/src/main.c#n1082
+
+Or I guess I can patch it as well...
+What do you prefer ? A patch for systemd, a separate patch to change
+this or keep it this way ?
+
+> 
+>  Maxime> diff --git a/linux/linux.mk b/linux/linux.mk
+>  Maxime> index dbe1ad7..d7c9c9c 100644
+>  Maxime> --- a/linux/linux.mk
+>  Maxime> +++ b/linux/linux.mk
+>  Maxime> @@ -150,6 +150,8 @@ define LINUX_CONFIGURE_CMDS
+>  Maxime>  	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+>  Maxime>  		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
+>  Maxime>  	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
+>  Maxime> +	$(if $(BR2_PACKAGE_SYSTEMD),
+>  Maxime> +		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config),)
+> 
+> The very last ',' can be removed. This could also go in a seperate
+> patch.
+
+Ok.
+
+>  Maxime> +++ b/package/systemd/Config.in
+>  Maxime> @@ -0,0 +1,19 @@
+>  Maxime> +config BR2_PACKAGE_SYSTEMD
+>  Maxime> +	bool "systemd"
+>  Maxime> +	depends on BR2_PACKAGE_UDEV
+>  Maxime> +	select BR2_PACKAGE_DBUS
+>  Maxime> +	select BR2_PACKAGE_LIBCAP
+>  Maxime> +	help
+>  Maxime> +	  systemd is a system and service manager for Linux, compatible with
+>  Maxime> +	  SysV and LSB init scripts. systemd provides aggressive parallelization
+>  Maxime> +	  capabilities, uses socket and D-Bus activation for starting services,
+>  Maxime> +	  offers on-demand starting of daemons, keeps track of processes using
+>  Maxime> +	  Linux cgroups, supports snapshotting and restoring of the system
+>  Maxime> +	  state, maintains mount and automount points and implements an
+>  Maxime> +	  elaborate transactional dependency-based service control logic. It can
+> 
+> This looks a bit too wide. "It can" should go on the next line.
+
+Ok.
+
+>  Maxime> +++ b/package/systemd/systemd.mk
+>  Maxime> @@ -0,0 +1,68 @@
+>  Maxime> +#############################################################
+>  Maxime> +#
+>  Maxime> +# systemd
+>  Maxime> +#
+>  Maxime> +#############################################################
+>  Maxime> +SYSTEMD_VERSION = 37
+>  Maxime> +SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
+>  Maxime> +SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.bz2
+>  Maxime> +SYSTEMD_DEPENDENCIES = \
+>  Maxime> +	host-intltool \
+>  Maxime> +	libcap \
+>  Maxime> +	udev \
+>  Maxime> +	dbus
+>  Maxime> +
+>  Maxime> +# Build after Busybox
+>  Maxime> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  Maxime> +	SYSTEMD_DEPENDENCIES += busybox
+>  Maxime> +endif
+>  Maxime> +
+>  Maxime> +SYSTEMD_CONF_OPT += \
+>  Maxime> +	--with-distro=other \
+>  Maxime> +	--disable-selinux \
+>  Maxime> +	--disable-pam \
+>  Maxime> +	--disable-libcryptsetup \
+>  Maxime> +	--disable-gtk \
+>  Maxime> +	--disable-plymouth \
+>  Maxime> +	--with-rootdir=/ \
+>  Maxime> +	--with-dbuspolicydir=/etc/dbus-1/system.d \
+>  Maxime> +	--with-dbussessionservicedir=/usr/share/dbus-1/services \
+>  Maxime> +	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+>  Maxime> +	--with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
+>  Maxime> +	--with-udevrulesdir=/etc/udev/rules.d \
+>  Maxime> +	--with-sysvinit-path=/etc/init.d/ \
+>  Maxime> +	--without-sysvrcd-path
+>  Maxime> +
+>  Maxime> +ifeq ($(BR2_PACKAGE_ACL),y)
+>  Maxime> +	SYSTEMD_CONF_OPT += --enable-acl
+> 
+> You're missing
+> SYSTEMD_DEPENDENCIES += acl
+
+Right.
+
+>  Maxime> +++ b/package/udev/udev.mk
+>  Maxime> @@ -12,7 +12,7 @@ UDEV_CONF_OPT =			\
+>  Maxime>  	--sbindir=/sbin		\
+>  Maxime>  	--with-rootlibdir=/lib	\
+>  Maxime>  	--libexecdir=/lib/udev	\
+>  Maxime> -	--disable-introspection
+>  Maxime> +	--disable-introspection \
+> 
+> Why?
+
+Sorry, I used to have a line following this one, but it got removed,
+will fix.
+
+
 -- 
-1.7.5.4
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
