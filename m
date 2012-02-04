@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  4 Feb 2012 15:48:41 +0100
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.02/lttng-uclibc-fixes
-Message-ID: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
+Date: Sat,  4 Feb 2012 15:48:42 +0100
+Subject: [Buildroot] [PATCH 1/7] liburcu: add patch to fix build with uClibc
+In-Reply-To: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <fef652a4afaa01890b129d278dbb0a950ca63e3e.1328366921.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 2ba094de31bbc9f986b6d5bce7932d5bb7443829:
+Under uClibc, defining _GNU_SOURCE is strictly needed to access the
+CPU_*() macros.
 
-  crosstool-ng: bump version (2012-02-03 15:24:39 +0100)
-
-are available in the git repository at:
-  http://free-electrons.com/~thomas/buildroot.git for-2012.02/lttng-uclibc-fixes
-
-Thomas Petazzoni (7):
-      liburcu: add patch to fix build with uClibc
-      lttng-tools: fix build on uClibc due to sync_file_range()
-      lttng-babeltrace: make sure WCHAR and LARGEFILE are enabled
-      lttng-libust: add the dependency on util-linux
-      lttng-tools: make the dependency on lttng-libust optional
-      lttng-libust: add patch to fix build issue when C++ support is not available
-      lttng-babeltrace: fix build on uClibc due to missing posix_fallocate()
-
- .../liburcu/liburcu-0.6.7-missing-gnu-source.patch |   13 +++
- package/lttng-babeltrace/Config.in                 |    8 ++
- ...beltrace-0.8-no-posix-fallocate-in-uclibc.patch |   25 ++++++
- package/lttng-libust/Config.in                     |    8 ++
- ...2-dont-build-cxx-tests-when-not-available.patch |   50 +++++++++++
- package/lttng-libust/lttng-libust.mk               |    4 +-
- package/lttng-tools/Config.in                      |    4 +-
- ...ls-2.0-pre15-no-sync-file-range-in-uclibc.patch |   87 ++++++++++++++++++++
- package/lttng-tools/lttng-tools.mk                 |   11 ++-
- 9 files changed, 207 insertions(+), 3 deletions(-)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../liburcu/liburcu-0.6.7-missing-gnu-source.patch |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
  create mode 100644 package/liburcu/liburcu-0.6.7-missing-gnu-source.patch
- create mode 100644 package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
- create mode 100644 package/lttng-libust/lttng-libust-1.9.2-dont-build-cxx-tests-when-not-available.patch
- create mode 100644 package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
 
-Thanks,
+diff --git a/package/liburcu/liburcu-0.6.7-missing-gnu-source.patch b/package/liburcu/liburcu-0.6.7-missing-gnu-source.patch
+new file mode 100644
+index 0000000..f34120c
+--- /dev/null
++++ b/package/liburcu/liburcu-0.6.7-missing-gnu-source.patch
+@@ -0,0 +1,13 @@
++Define _GNU_SOURCE to access CPU_ZERO() macro in uClibc
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: userspace-rcu-0.6.7/tests/urcutorture.c
++===================================================================
++--- userspace-rcu-0.6.7.orig/tests/urcutorture.c	2012-02-01 10:17:09.938804402 +0100
+++++ userspace-rcu-0.6.7/tests/urcutorture.c	2012-02-01 10:17:15.308713372 +0100
++@@ -1,3 +1,4 @@
+++#define _GNU_SOURCE
++ #include <string.h>
++ #include <sys/time.h>
++ #include <poll.h>
 -- 
-Thomas Petazzoni
+1.7.4.1
