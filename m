@@ -1,129 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  4 Feb 2012 15:48:43 +0100
-Subject: [Buildroot] [PATCH 2/7] lttng-tools: fix build on uClibc due to
-	sync_file_range()
+Date: Sat,  4 Feb 2012 15:48:44 +0100
+Subject: [Buildroot] [PATCH 3/7] lttng-babeltrace: make sure WCHAR and
+	LARGEFILE are enabled
 In-Reply-To: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <cd91ba13b014d9e86a017ab35858badd0a4b69cb.1328366921.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <31d67f92d3e86811ef403486a84a4afb8c6257f5.1328366921.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to use fdatasync() instead of sync_file_range() when the
-latter is not available.
+Since lttng-babeltrace depends on util-linux and libglib2, we need to
+make sure WCHAR and LARGEFILE are enabled.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...ls-2.0-pre15-no-sync-file-range-in-uclibc.patch |   87 ++++++++++++++++++++
- package/lttng-tools/lttng-tools.mk                 |    2 +
- 2 files changed, 89 insertions(+), 0 deletions(-)
- create mode 100644 package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
+ package/lttng-babeltrace/Config.in |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
-new file mode 100644
-index 0000000..861686b
---- /dev/null
-+++ b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
-@@ -0,0 +1,87 @@
-+Make sync_file_range() usage optional
-+
-+Under uClibc, sync_file_range() is not available under all
-+architectures, so we fall back to fdatasync() in this case.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: lttng-tools-2.0-pre15/configure.ac
-+===================================================================
-+--- lttng-tools-2.0-pre15.orig/configure.ac	2012-02-01 16:31:31.140978817 +0100
-++++ lttng-tools-2.0-pre15/configure.ac	2012-02-01 16:31:42.110783708 +0100
-+@@ -96,7 +96,7 @@
-+ 
-+ AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
-+ 
-+-AC_CHECK_FUNCS([sched_getcpu sysconf])
-++AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
-+ 
-+ # Option to only build the consumer daemon and its libraries
-+ AC_ARG_WITH([consumerd-only],
-+Index: lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c
-+===================================================================
-+--- lttng-tools-2.0-pre15.orig/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:00.876292596 +0100
-++++ lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:23.435901163 +0100
-+@@ -527,11 +527,15 @@
-+ 	if (orig_offset < stream->chan->max_sb_size) {
-+ 		return;
-+ 	}
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 	sync_file_range(outfd, orig_offset - stream->chan->max_sb_size,
-+ 			stream->chan->max_sb_size,
-+ 			SYNC_FILE_RANGE_WAIT_BEFORE
-+ 			| SYNC_FILE_RANGE_WRITE
-+ 			| SYNC_FILE_RANGE_WAIT_AFTER);
-++#else
-++	fdatasync(outfd);
-++#endif
-+ 	/*
-+ 	 * Give hints to the kernel about how we access the file:
-+ 	 * POSIX_FADV_DONTNEED : we won't re-access data in a near future after
-+Index: lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c
-+===================================================================
-+--- lttng-tools-2.0-pre15.orig/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:36:36.215679416 +0100
-++++ lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:59:08.622203348 +0100
-+@@ -71,8 +71,12 @@
-+ 			goto end;
-+ 		}
-+ 		/* This won't block, but will start writeout asynchronously */
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 		sync_file_range(outfd, stream->out_fd_offset, ret,
-+ 				SYNC_FILE_RANGE_WRITE);
-++#else
-++		fdatasync(outfd);
-++#endif
-+ 		stream->out_fd_offset += ret;
-+ 	}
-+ 
-+@@ -121,8 +125,12 @@
-+ 		}
-+ 		len -= ret;
-+ 		/* This won't block, but will start writeout asynchronously */
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 		sync_file_range(outfd, stream->out_fd_offset, ret,
-+ 				SYNC_FILE_RANGE_WRITE);
-++#else
-++		fdatasync(outfd);
-++#endif
-+ 		stream->out_fd_offset += ret;
-+ 	}
-+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
-+Index: lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c
-+===================================================================
-+--- lttng-tools-2.0-pre15.orig/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:11.495067263 +0100
-++++ lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:31.224724916 +0100
-+@@ -70,8 +70,12 @@
-+ 			goto end;
-+ 		}
-+ 		/* This won't block, but will start writeout asynchronously */
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 		sync_file_range(outfd, stream->out_fd_offset, ret,
-+ 				SYNC_FILE_RANGE_WRITE);
-++#else
-++		fdatasync(outfd);
-++#endif
-+ 		stream->out_fd_offset += ret;
-+ 	}
-+ 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 9e87480..bcf2f67 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -8,4 +8,6 @@ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- # trace format into an human readable format.
- LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
+diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+index e6f3845..6f47304 100644
+--- a/package/lttng-babeltrace/Config.in
++++ b/package/lttng-babeltrace/Config.in
+@@ -4,6 +4,11 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_LIBGLIB2
++	# libglib2 needs gettext which needs wchar support, and we
++	# also depends on util-linux which needs wchar
++	depends on BR2_USE_WCHAR
++	# util-linux depends on largefile support
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Babeltrace is part of the LTTng 2.x project.
  
-+LTTNG_AUTORECONF = YES
+@@ -20,3 +25,6 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	  lttng-tools package.
+ 
+ 	  http://lttng.org
 +
- $(eval $(call AUTOTARGETS))
++comment "lttng-babeltrace needs WCHAR and LARGEFILE support"
++	depends on BR2_PACKAGE_LTTNG_TOOLS && !(BR2_USE_WCHAR || BR2_LARGEFILE)
 -- 
 1.7.4.1
