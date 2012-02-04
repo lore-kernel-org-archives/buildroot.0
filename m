@@ -1,59 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  4 Feb 2012 15:48:45 +0100
-Subject: [Buildroot] [PATCH 4/7] lttng-libust: add the dependency on
-	util-linux
+Date: Sat,  4 Feb 2012 15:48:46 +0100
+Subject: [Buildroot] [PATCH 5/7] lttng-tools: make the dependency on
+	lttng-libust optional
 In-Reply-To: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <a0d85d82de2395276de40242f75143c3165bc5c8.1328366921.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cc297d07bc7c92e8c986efe0dde859a7e67436e3.1328366921.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This dependency was missing in the initial addition of the package to
-Buildroot.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lttng-libust/Config.in       |    8 ++++++++
- package/lttng-libust/lttng-libust.mk |    2 +-
- 2 files changed, 9 insertions(+), 1 deletions(-)
+ package/lttng-tools/Config.in      |    4 +++-
+ package/lttng-tools/lttng-tools.mk |    9 ++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 335a956..ae74bed 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -1,6 +1,11 @@
- config BR2_PACKAGE_LTTNG_LIBUST
- 	bool "lttng-libust"
+diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
+index cc74966..3040af6 100644
+--- a/package/lttng-tools/Config.in
++++ b/package/lttng-tools/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	depends on BR2_PACKAGE_LTTNG_MODULES
  	select BR2_PACKAGE_LIBURCU
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	# util-linux needs wchar and largefile
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_LARGEFILE
+ 	select BR2_PACKAGE_POPT
+-	select BR2_PACKAGE_LTTNG_LIBUST
  	help
- 	  Userspace tracing library for the Lttng tracing
- 	  infrastructure. It allows userspace programs to create
-@@ -8,3 +13,6 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	  events gathered by LTTng.
+ 	  Userspace utilities for the LTTng 2.0 tracing
+ 	  infrastructure.
+@@ -17,4 +16,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
+ 	  package for the target, if babeltrace on the target is
+ 	  interesting.
  
- 	  http://lttng.org
++	  If userspace tracing is desired, you need to enable
++	  lttng-libust.
 +
-+comment "lttng-libust needs WCHAR and LARGEFILE support"
-+	depends on !(BR2_USE_WCHAR || BR2_LARGEFILE)
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index a2cef2a..ebe14ca 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -3,6 +3,6 @@ LTTNG_LIBUST_VERSION = 1.9.2
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
+ 	  http://lttng.org
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index bcf2f67..8e6fc1a 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -6,8 +6,15 @@ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ # dependency. However, having the babeltrace utilities built for the
+ # host is very useful, since those tools allow to convert the binary
+ # trace format into an human readable format.
+-LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
++LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace
  
- LTTNG_LIBUST_INSTALL_STAGING = YES
--LTTNG_LIBUST_DEPENDENCIES    = liburcu
-+LTTNG_LIBUST_DEPENDENCIES    = liburcu util-linux
+ LTTNG_AUTORECONF = YES
  
++ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
++LTTNG_TOOLS_CONF_OPT += --enable-lttng-ust
++LTTNG_TOOLS_DEPENDENCIES += lttng-libust
++else
++LTTNG_TOOLS_CONF_OPT += --disable-lttng-ust
++endif
++
  $(eval $(call AUTOTARGETS))
 -- 
 1.7.4.1
