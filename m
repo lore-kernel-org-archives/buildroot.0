@@ -1,9 +1,7 @@
 From: Alexandre Belloni <alexandre.belloni@piout.net>
-Date: Sat,  4 Feb 2012 13:21:31 +0100
-Subject: [Buildroot] [PATCH 2/2] Add lpc3250loader to lpc3250 configs
-In-Reply-To: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
-References: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <1328358091-20998-2-git-send-email-alexandre.belloni@piout.net>
+Date: Sat,  4 Feb 2012 13:21:30 +0100
+Subject: [Buildroot] [PATCH 1/2] Add lpc3250loader to the host tools
+Message-ID: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +10,51 @@ To: buildroot@busybox.net
 
 Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
 ---
- configs/ea3250_defconfig  |    6 ++++++
- configs/fdi3250_defconfig |    6 ++++++
- configs/phy3250_defconfig |    6 ++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
+ package/Config.in.host                 |    1 +
+ package/lpc3250loader/Config.in.host   |    7 +++++++
+ package/lpc3250loader/lpc3250loader.mk |    9 +++++++++
+ 3 files changed, 17 insertions(+), 0 deletions(-)
+ create mode 100644 package/lpc3250loader/Config.in.host
+ create mode 100644 package/lpc3250loader/lpc3250loader.mk
 
-diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
-index da84c7e..9cd7b34 100644
---- a/configs/ea3250_defconfig
-+++ b/configs/ea3250_defconfig
-@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
- BR2_GCC_VERSION_4_3_X=y
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1f49e79..861b736 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
  
- 
-+#
-+# Host utilities
-+#
-+BR2_PACKAGE_HOST_LPC3250LOADER=y
++source "package/lpc3250loader/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+diff --git a/package/lpc3250loader/Config.in.host b/package/lpc3250loader/Config.in.host
+new file mode 100644
+index 0000000..750080b
+--- /dev/null
++++ b/package/lpc3250loader/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_LPC3250LOADER
++	bool "host lpc3250loader"
++	help
++	  lpc3250loader is a tool to load/burn programs (in particular kickstart
++	  and S1L) on an LPC3250 platform.
 +
++	  https://gitorious.org/lpc3250loader
+diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
+new file mode 100644
+index 0000000..d66cd4a
+--- /dev/null
++++ b/package/lpc3250loader/lpc3250loader.mk
+@@ -0,0 +1,9 @@
++LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
++LPC3250LOADER_VERSION = master
++LPC3250LOADER_SITE_METHOD = git
 +
- # Bootloaders
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="ea3250"
-diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
-index 505dc8b..1fd0b05 100644
---- a/configs/fdi3250_defconfig
-+++ b/configs/fdi3250_defconfig
-@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
- BR2_GCC_VERSION_4_3_X=y
- 
- 
-+#
-+# Host utilities
-+#
-+BR2_PACKAGE_HOST_LPC3250LOADER=y
++define HOST_LPC3250LOADER_INSTALL_CMDS
++	cp -a $(@D)/* $(HOST_DIR)/usr/bin/
++endef
 +
-+
- # Bootloaders
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
-diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
-index d46d719..bc17d5c 100644
---- a/configs/phy3250_defconfig
-+++ b/configs/phy3250_defconfig
-@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
- BR2_GCC_VERSION_4_3_X=y
- 
- 
-+#
-+# Host utilities
-+#
-+BR2_PACKAGE_HOST_LPC3250LOADER=y
-+
-+
- # Bootloaders
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="phy3250"
++$(eval $(call GENTARGETS,host))
 -- 
 1.7.5.4
