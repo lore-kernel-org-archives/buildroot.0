@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 Feb 2012 11:15:53 +0100
-Subject: [Buildroot] [PATCH 4/7] lttng-libust: add the dependency on
-	util-linux
-In-Reply-To: <a0d85d82de2395276de40242f75143c3165bc5c8.1328366921.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 4 Feb 2012 15:48:45 +0100")
+Date: Sun, 05 Feb 2012 11:17:01 +0100
+Subject: [Buildroot] [PATCH 5/7] lttng-tools: make the dependency on
+	lttng-libust optional
+In-Reply-To: <cc297d07bc7c92e8c986efe0dde859a7e67436e3.1328366921.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 4 Feb 2012 15:48:46 +0100")
 References: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
  <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
- <a0d85d82de2395276de40242f75143c3165bc5c8.1328366921.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehu9si06.fsf@macbook.be.48ers.dk>
+ <cc297d07bc7c92e8c986efe0dde859a7e67436e3.1328366921.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87aa4xshya.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,8 +16,7 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> This dependency was missing in the initial addition of the package to
- Thomas> Buildroot.
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
