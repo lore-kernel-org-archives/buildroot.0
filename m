@@ -1,62 +1,105 @@
-From: Daniele Salvatore Albano <info@daccii.it>
-Date: Sun, 05 Feb 2012 15:07:27 +0100
-Subject: [Buildroot] connman fails on uclibc
-Message-ID: <4F2E8D1F.60600@daccii.it>
+From: D M <d_mo1234@yahoo.com>
+Date: Sun, 5 Feb 2012 10:11:20 -0800 (PST)
+Subject: [Buildroot] ccache problem with codesourcery toolchain
+In-Reply-To: <20120205084546.2db4fec8@skate>
+References: <1328403901.12122.YahooMailNeo@web160901.mail.bf1.yahoo.com>
+ <20120205084546.2db4fec8@skate>
+Message-ID: <1328465480.15765.YahooMailNeo@web160904.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm trying to get connman working on uclibc.
+Hi Thomas,
 
-I've seen that connman has been commited to git so i've pulled last 
-updates and trying with them.
+>?or even?directly modify the ccache code to make it the default.
 
-However, i got two problems:
-- connman wants uclibc snapshot, but uclibc-0.9.33 sholdn't works fine? 
-resolver isn't there?
-- connman wants backtrace support that, as far i understand, is a glibc 
-specific feature, so i've made a simple patch to avoid using backtrace 
-on uclibc, but there isn't any way to have backtrace on uclibc to make 
-connman happy?
+I hadn't considered patching ccache itself to make "none" the
+default. ?I wasn't sure if other use-cases of buildroot would
+actually want to have the "mtime" setting - like maybe a completely
+external toolchain? ?So I was envisioning a sub-menu where you could
+select 1 of the 3 options to be explicitly set in the CCACHE var, or maybe
+1 of 4 to have a dont-specify-anything option; or a text field, to type in
+whatever you want - in case you want to specify additional env vars, like
+the CCACHE_BASEDIR var, so that parallel buildroot trees can use the?
+same cached?objects. ?But for my particular use-case, a patch is as good?
+a solution?as any.
 
-I'm using ct-ng 1.14.0 patched to support uclibc 0.9.33.
+> where do the 3 minutes time reduction?come from even when?
+> CCACHE_COMPILERCHECK=mtime? ?Maybe it's the time
+> reduction gained on compiling host packages,
 
-Initially i've compiled the toolchain with only 
-UCLIBC_HAS_RESOLVER_SUPPORT without any success because connman 
-configure continued to fail (ns_initparse symbol/resolver missing), so 
-i've selected UCLIBC_HAS_LIBRESOLV_STUB, but i don't know if it will 
-work, i'm yet compiling.
+I didn't try to track that down, but you're probably correct, since the
+host tool compiler is the only compiler that didn't change, mtime-wise.
 
-Any ideas?
+Dan -
 
 
-Best Regards,
-Daniele
 
+----- Original Message -----
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: D M <d_mo1234@yahoo.com>
+Cc: "buildroot at busybox.net" <buildroot@busybox.net>
+Sent: Sunday, February 5, 2012 2:45 AM
+Subject: Re: [Buildroot] ccache problem with codesourcery toolchain
+
+Hello Danomi,
+
+Le Sat, 4 Feb 2012 17:05:01 -0800 (PST),
+D M <d_mo1234@yahoo.com> a ?crit :
+
+> I am working on a project based on the 2011.08 release of buildroot.
+> ?We found that the ccache savings was not as good as with our older
+> version of buildroot (which used an older version of ccache). ?For
+> example, starting from an empty cache directory, our compile takes
+> about half an hour. ?With the newer version of ccache, we only save
+> about 3 minutes; with the older version, we saved about 13 minutes.
+> ?We traced the problem to a feature introduced in ccache 3.0,
+> the?CCACHE_COMPILERCHECK option. ?Quoting from ccache manual:?
+> 
+> ? ?"By default, ccache includes the modification time (?mtime?) and
+> size of the compiler in the hash to ensure that results retrieved
+> from the cache are accurate. The CACHE_COMPILERCHECK environment
+> variable can be used to select another strategy." ?
+> 
+> The default is "mtime", but if we select "none", we get back all of
+> our savings. ?Again quoting from the manual: ?
+> 
+> ? ? "none - Don?t hash anything. This may be good for situations
+> where you can safely use the cached results even though the
+> compiler?s mtime or size has changed (e.g. if the compiler is built
+> as part of your build system and the compiler?s source has not
+> changed, or if the compiler only has changes that don?t affect code
+> generation)."
+> 
+> Since we are using buildroot's capability to automatically download
+> and extract the CodeSourcery ARM toolchain, the "mtime" used in the
+> hash is different every time we do a full recompile. ?So a value of
+> "none" seems appropriate when use buildroot this way.
+> 
+> Have others ran into this? ?Since buildroot has this kind of
+> CodeSourcery toolchain support, I was wondering if there should be an
+> option in menuconfig to specify CCACHE_COMPILERCHECK, to, for
+> example, prepend a "CCACHE_COMPILERCHECK=none" to the beginning of
+> the CCACHE variable that is used to make TARGET_CC, TARGET_CXX,
+> HOSTCC, HOSTCXX.
+
+Good research! Obviously, using the default value of
+CCACHE_COMPILERCHECK=mtime will completely defeat the compiler cache in
+the context of Buildroot, because the compiler gets re-created pretty
+much at every build, so definitely we should arrange for
+CCACHE_COMPILERCHECK=none to be set in the ccache environment, or even
+directly modify the ccache code to make it the default.
+
+The thing I am curious about is where do the 3 minutes time reduction
+come from even when CCACHE_COMPILERCHECK=mtime? Maybe it's the time
+reduction gained on compiling host packages, since those always use the
+same host compiler.
+
+Thomas
 -- 
-____________________________________________________________
-                                         |
-Daniele Salvatore Albano                | web site:
-  IT Consultant                          | http://www.itechcon.it
-  Mobile Software Development            | http://www.daccii.it
-  Webapps Design and Development         |
-  Software Engineer and Developer        | e-mail:
-  Linux Servers SetUp And Administration | info at itechcon.it
-  Embedded Network Solutions             | d.albano at itechcon.it
-
-Are you lazy? Take a look to LazyDroid (www.lazydroid.net): android for 
-lazy people!
-
-Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
-questo messaggio sono riservate ed a uso esclusivo del destinatario. 
-Qualora il messaggio in parola Le fosse pervenuto per errore, La 
-invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
-dandocene gentilmente comunicazione. Grazie.
-Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
-that this message contains confidential information intended only for 
-the use of the addressee. If you are not the addressee, and have 
-received this message by mistake, please delete it and immediately 
-notify us. You may not copy or disseminate this message to anyone. Thank 
-you.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
