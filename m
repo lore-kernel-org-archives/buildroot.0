@@ -1,128 +1,88 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 Feb 2012 11:11:37 +0100
-Subject: [Buildroot] [git commit] lttng-tools: fix build on uClibc due to
-	sync_file_range()
-Message-ID: <20120205134245.374A68F546@busybox.osuosl.org>
+Date: Sun, 5 Feb 2012 11:28:04 +0100
+Subject: [Buildroot] [git commit] lttng-libust: add patch to fix build issue
+	when C++ support is not available
+Message-ID: <20120205134245.78E1A909C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2531c0178ef6fb8046efd798dcd376c171e0f22
+commit: http://git.buildroot.net/buildroot/commit/?id=42852b31ef5e70f56138dcc9b8863a69cd98308e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add a patch to use fdatasync() instead of sync_file_range() when the
-latter is not available.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...ls-2.0-pre15-no-sync-file-range-in-uclibc.patch |   87 ++++++++++++++++++++
- package/lttng-tools/lttng-tools.mk                 |    2 +
- 2 files changed, 89 insertions(+), 0 deletions(-)
+ ...2-dont-build-cxx-tests-when-not-available.patch |   50 ++++++++++++++++++++
+ package/lttng-libust/lttng-libust.mk               |    2 +
+ 2 files changed, 52 insertions(+), 0 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
+diff --git a/package/lttng-libust/lttng-libust-1.9.2-dont-build-cxx-tests-when-not-available.patch b/package/lttng-libust/lttng-libust-1.9.2-dont-build-cxx-tests-when-not-available.patch
 new file mode 100644
-index 0000000..861686b
+index 0000000..d7be22d
 --- /dev/null
-+++ b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
-@@ -0,0 +1,87 @@
-+Make sync_file_range() usage optional
++++ b/package/lttng-libust/lttng-libust-1.9.2-dont-build-cxx-tests-when-not-available.patch
+@@ -0,0 +1,50 @@
++Do not build C++ example if a C++ compiler isn't available
 +
-+Under uClibc, sync_file_range() is not available under all
-+architectures, so we fall back to fdatasync() in this case.
++By default lttng-ust builds a hello.cxx C++ example that demonstrates
++the usage of the userspace tracing library in a C++
++program. Unfortunately, when no C++ support is available, the build
++of lttng-ust fails just because of this example code. So we make the
++compilation of this code conditional on whether a working C++ compiler
++was found.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+Index: lttng-tools-2.0-pre15/configure.ac
++Index: lttng-ust-1.9.2/configure.ac
 +===================================================================
-+--- lttng-tools-2.0-pre15.orig/configure.ac	2012-02-01 16:31:31.140978817 +0100
-++++ lttng-tools-2.0-pre15/configure.ac	2012-02-01 16:31:42.110783708 +0100
-+@@ -96,7 +96,7 @@
++--- lttng-ust-1.9.2.orig/configure.ac	2012-02-04 14:49:45.387325814 +0100
+++++ lttng-ust-1.9.2/configure.ac	2012-02-04 14:50:08.156920117 +0100
++@@ -38,6 +38,18 @@
++ AC_PROG_MAKE_SET
++ LT_INIT
 + 
-+ AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
-+ 
-+-AC_CHECK_FUNCS([sched_getcpu sysconf])
-++AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
-+ 
-+ # Option to only build the consumer daemon and its libraries
-+ AC_ARG_WITH([consumerd-only],
-+Index: lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c
+++# rw_PROG_CXX_WORKS
+++# Check whether the C++ compiler works.
+++AC_CACHE_CHECK([whether the C++ compiler works],
+++               [rw_cv_prog_cxx_works],
+++               [AC_LANG_PUSH([C++])
+++                AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
+++                               [rw_cv_prog_cxx_works=yes],
+++                               [rw_cv_prog_cxx_works=no])
+++                AC_LANG_POP([C++])])
+++
+++AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+++
++ ## Checks for libraries.
++ AC_CHECK_LIB([dl], [dlopen])
++ AC_CHECK_LIB([pthread], [pthread_create])
++Index: lttng-ust-1.9.2/tests/Makefile.am
 +===================================================================
-+--- lttng-tools-2.0-pre15.orig/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:00.876292596 +0100
-++++ lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:23.435901163 +0100
-+@@ -527,11 +527,15 @@
-+ 	if (orig_offset < stream->chan->max_sb_size) {
-+ 		return;
-+ 	}
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 	sync_file_range(outfd, orig_offset - stream->chan->max_sb_size,
-+ 			stream->chan->max_sb_size,
-+ 			SYNC_FILE_RANGE_WAIT_BEFORE
-+ 			| SYNC_FILE_RANGE_WRITE
-+ 			| SYNC_FILE_RANGE_WAIT_AFTER);
-++#else
-++	fdatasync(outfd);
-++#endif
-+ 	/*
-+ 	 * Give hints to the kernel about how we access the file:
-+ 	 * POSIX_FADV_DONTNEED : we won't re-access data in a near future after
-+Index: lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c
-+===================================================================
-+--- lttng-tools-2.0-pre15.orig/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:36:36.215679416 +0100
-++++ lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:59:08.622203348 +0100
-+@@ -71,8 +71,12 @@
-+ 			goto end;
-+ 		}
-+ 		/* This won't block, but will start writeout asynchronously */
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 		sync_file_range(outfd, stream->out_fd_offset, ret,
-+ 				SYNC_FILE_RANGE_WRITE);
-++#else
-++		fdatasync(outfd);
-++#endif
-+ 		stream->out_fd_offset += ret;
-+ 	}
++--- lttng-ust-1.9.2.orig/tests/Makefile.am	2012-02-04 14:49:49.157258640 +0100
+++++ lttng-ust-1.9.2/tests/Makefile.am	2012-02-04 14:50:15.096796474 +0100
++@@ -1,6 +1,10 @@
++-SUBDIRS = . hello fork ust-basic-tracing ust-multi-test demo hello.cxx
+++SUBDIRS = . hello fork ust-basic-tracing ust-multi-test demo
++ #SUBDIRS = . hello2 basic basic_long simple_include snprintf test-nevents test-libustinstr-malloc dlopen same_line_marker trace_event register_test tracepoint libustctl_function_tests exit-fast
 + 
-+@@ -121,8 +125,12 @@
-+ 		}
-+ 		len -= ret;
-+ 		/* This won't block, but will start writeout asynchronously */
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 		sync_file_range(outfd, stream->out_fd_offset, ret,
-+ 				SYNC_FILE_RANGE_WRITE);
-++#else
-++		fdatasync(outfd);
-++#endif
-+ 		stream->out_fd_offset += ret;
-+ 	}
-+ 	lttng_consumer_sync_trace_file(stream, orig_offset);
-+Index: lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c
-+===================================================================
-+--- lttng-tools-2.0-pre15.orig/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:11.495067263 +0100
-++++ lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:31.224724916 +0100
-+@@ -70,8 +70,12 @@
-+ 			goto end;
-+ 		}
-+ 		/* This won't block, but will start writeout asynchronously */
-++#ifdef HAVE_SYNC_FILE_RANGE
-+ 		sync_file_range(outfd, stream->out_fd_offset, ret,
-+ 				SYNC_FILE_RANGE_WRITE);
-++#else
-++		fdatasync(outfd);
-++#endif
-+ 		stream->out_fd_offset += ret;
-+ 	}
+++if CXX_WORKS
+++SUBDIRS += hello.cxx
+++endif
+++
++ dist_noinst_SCRIPTS = test_loop runtests trace_matches
 + 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 9e87480..bcf2f67 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -8,4 +8,6 @@ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- # trace format into an human readable format.
- LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
++ noinst_LIBRARIES = libtap.a
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index ebe14ca..f54999e 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -5,4 +5,6 @@ LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
+ LTTNG_LIBUST_INSTALL_STAGING = YES
+ LTTNG_LIBUST_DEPENDENCIES    = liburcu util-linux
  
-+LTTNG_AUTORECONF = YES
++LTTNG_LIBUST_AUTORECONF = YES
 +
  $(eval $(call AUTOTARGETS))
