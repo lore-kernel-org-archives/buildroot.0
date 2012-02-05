@@ -1,64 +1,128 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 Feb 2012 14:42:16 +0100
-Subject: [Buildroot] [git commit] lttng-babeltrace: fix build on uClibc due
-	to missing posix_fallocate()
-Message-ID: <20120205134245.89FF4909CC@busybox.osuosl.org>
+Date: Sun, 5 Feb 2012 11:11:37 +0100
+Subject: [Buildroot] [git commit] lttng-tools: fix build on uClibc due to
+	sync_file_range()
+Message-ID: <20120205134245.374A68F546@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8bf70e01e8c2712ce4be8069d90025231a7ac49
+commit: http://git.buildroot.net/buildroot/commit/?id=e2531c0178ef6fb8046efd798dcd376c171e0f22
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: add explicit #include <features.h>
+Add a patch to use fdatasync() instead of sync_file_range() when the
+latter is not available.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...beltrace-0.8-no-posix-fallocate-in-uclibc.patch |   37 ++++++++++++++++++++
- 1 files changed, 37 insertions(+), 0 deletions(-)
+ ...ls-2.0-pre15-no-sync-file-range-in-uclibc.patch |   87 ++++++++++++++++++++
+ package/lttng-tools/lttng-tools.mk                 |    2 +
+ 2 files changed, 89 insertions(+), 0 deletions(-)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
+diff --git a/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
 new file mode 100644
-index 0000000..d77825f
+index 0000000..861686b
 --- /dev/null
-+++ b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
-@@ -0,0 +1,37 @@
-+Do not call posix_fallocate() on uClibc
++++ b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
+@@ -0,0 +1,87 @@
++Make sync_file_range() usage optional
 +
-+uClibc does not implement posix_fallocate(), and posix_fallocate() is
-+mostly only an hint to the kernel that we will need such or such
-+amount of space inside a file. So we just don't call posix_fallocate()
-+when building against uClibc.
++Under uClibc, sync_file_range() is not available under all
++architectures, so we fall back to fdatasync() in this case.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+[Peter: add #include <features.h>
-+---
-+ formats/ctf/ctf.c |    3 +++
-+ 1 file changed, 3 insertions(+)
 +
-+Index: lttng-babeltrace-0.8/formats/ctf/ctf.c
++Index: lttng-tools-2.0-pre15/configure.ac
 +===================================================================
-+--- lttng-babeltrace-0.8.orig/formats/ctf/ctf.c
-++++ lttng-babeltrace-0.8/formats/ctf/ctf.c
-+@@ -32,6 +32,7 @@
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-+ #include <dirent.h>
-++#include <features.h>
-+ #include <glib.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+@@ -384,9 +385,11 @@
-+ 		}
-+ 		pos->content_size = -1U;	/* Unknown at this point */
-+ 		pos->packet_size = WRITE_PACKET_LEN;
-++#ifndef __UCLIBC__
-+ 		off = posix_fallocate(pos->fd, pos->mmap_offset,
-+ 				      pos->packet_size / CHAR_BIT);
-+ 		assert(off >= 0);
++--- lttng-tools-2.0-pre15.orig/configure.ac	2012-02-01 16:31:31.140978817 +0100
+++++ lttng-tools-2.0-pre15/configure.ac	2012-02-01 16:31:42.110783708 +0100
++@@ -96,7 +96,7 @@
++ 
++ AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
++ 
++-AC_CHECK_FUNCS([sched_getcpu sysconf])
+++AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
++ 
++ # Option to only build the consumer daemon and its libraries
++ AC_ARG_WITH([consumerd-only],
++Index: lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c
++===================================================================
++--- lttng-tools-2.0-pre15.orig/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:00.876292596 +0100
+++++ lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:23.435901163 +0100
++@@ -527,11 +527,15 @@
++ 	if (orig_offset < stream->chan->max_sb_size) {
++ 		return;
++ 	}
+++#ifdef HAVE_SYNC_FILE_RANGE
++ 	sync_file_range(outfd, orig_offset - stream->chan->max_sb_size,
++ 			stream->chan->max_sb_size,
++ 			SYNC_FILE_RANGE_WAIT_BEFORE
++ 			| SYNC_FILE_RANGE_WRITE
++ 			| SYNC_FILE_RANGE_WAIT_AFTER);
+++#else
+++	fdatasync(outfd);
 ++#endif
-+ 		pos->offset = 0;
-+ 	} else {
-+ 	read_next_packet:
++ 	/*
++ 	 * Give hints to the kernel about how we access the file:
++ 	 * POSIX_FADV_DONTNEED : we won't re-access data in a near future after
++Index: lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c
++===================================================================
++--- lttng-tools-2.0-pre15.orig/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:36:36.215679416 +0100
+++++ lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:59:08.622203348 +0100
++@@ -71,8 +71,12 @@
++ 			goto end;
++ 		}
++ 		/* This won't block, but will start writeout asynchronously */
+++#ifdef HAVE_SYNC_FILE_RANGE
++ 		sync_file_range(outfd, stream->out_fd_offset, ret,
++ 				SYNC_FILE_RANGE_WRITE);
+++#else
+++		fdatasync(outfd);
+++#endif
++ 		stream->out_fd_offset += ret;
++ 	}
++ 
++@@ -121,8 +125,12 @@
++ 		}
++ 		len -= ret;
++ 		/* This won't block, but will start writeout asynchronously */
+++#ifdef HAVE_SYNC_FILE_RANGE
++ 		sync_file_range(outfd, stream->out_fd_offset, ret,
++ 				SYNC_FILE_RANGE_WRITE);
+++#else
+++		fdatasync(outfd);
+++#endif
++ 		stream->out_fd_offset += ret;
++ 	}
++ 	lttng_consumer_sync_trace_file(stream, orig_offset);
++Index: lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c
++===================================================================
++--- lttng-tools-2.0-pre15.orig/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:11.495067263 +0100
+++++ lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:31.224724916 +0100
++@@ -70,8 +70,12 @@
++ 			goto end;
++ 		}
++ 		/* This won't block, but will start writeout asynchronously */
+++#ifdef HAVE_SYNC_FILE_RANGE
++ 		sync_file_range(outfd, stream->out_fd_offset, ret,
++ 				SYNC_FILE_RANGE_WRITE);
+++#else
+++		fdatasync(outfd);
+++#endif
++ 		stream->out_fd_offset += ret;
++ 	}
++ 
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 9e87480..bcf2f67 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -8,4 +8,6 @@ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ # trace format into an human readable format.
+ LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
+ 
++LTTNG_AUTORECONF = YES
++
+ $(eval $(call AUTOTARGETS))
