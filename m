@@ -1,59 +1,64 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 Feb 2012 11:15:22 +0100
-Subject: [Buildroot] [git commit] lttng-libust: add the dependency on
-	util-linux
-Message-ID: <20120205134245.59188909C9@busybox.osuosl.org>
+Date: Sun, 5 Feb 2012 14:42:16 +0100
+Subject: [Buildroot] [git commit] lttng-babeltrace: fix build on uClibc due
+	to missing posix_fallocate()
+Message-ID: <20120205134245.89FF4909CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3e40b680fb485eacc3d9c1d64cbce2140fb47178
+commit: http://git.buildroot.net/buildroot/commit/?id=d8bf70e01e8c2712ce4be8069d90025231a7ac49
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This dependency was missing in the initial addition of the package to
-Buildroot.
-
+[Peter: add explicit #include <features.h>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lttng-libust/Config.in       |    8 ++++++++
- package/lttng-libust/lttng-libust.mk |    2 +-
- 2 files changed, 9 insertions(+), 1 deletions(-)
+ ...beltrace-0.8-no-posix-fallocate-in-uclibc.patch |   37 ++++++++++++++++++++
+ 1 files changed, 37 insertions(+), 0 deletions(-)
 
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 335a956..ae74bed 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -1,6 +1,11 @@
- config BR2_PACKAGE_LTTNG_LIBUST
- 	bool "lttng-libust"
- 	select BR2_PACKAGE_LIBURCU
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	# util-linux needs wchar and largefile
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_LARGEFILE
- 	help
- 	  Userspace tracing library for the Lttng tracing
- 	  infrastructure. It allows userspace programs to create
-@@ -8,3 +13,6 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	  events gathered by LTTng.
- 
- 	  http://lttng.org
+diff --git a/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
+new file mode 100644
+index 0000000..d77825f
+--- /dev/null
++++ b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
+@@ -0,0 +1,37 @@
++Do not call posix_fallocate() on uClibc
 +
-+comment "lttng-libust needs WCHAR and LARGEFILE support"
-+	depends on !(BR2_USE_WCHAR || BR2_LARGEFILE)
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index a2cef2a..ebe14ca 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -3,6 +3,6 @@ LTTNG_LIBUST_VERSION = 1.9.2
- LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
- 
- LTTNG_LIBUST_INSTALL_STAGING = YES
--LTTNG_LIBUST_DEPENDENCIES    = liburcu
-+LTTNG_LIBUST_DEPENDENCIES    = liburcu util-linux
- 
- $(eval $(call AUTOTARGETS))
++uClibc does not implement posix_fallocate(), and posix_fallocate() is
++mostly only an hint to the kernel that we will need such or such
++amount of space inside a file. So we just don't call posix_fallocate()
++when building against uClibc.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[Peter: add #include <features.h>
++---
++ formats/ctf/ctf.c |    3 +++
++ 1 file changed, 3 insertions(+)
++
++Index: lttng-babeltrace-0.8/formats/ctf/ctf.c
++===================================================================
++--- lttng-babeltrace-0.8.orig/formats/ctf/ctf.c
+++++ lttng-babeltrace-0.8/formats/ctf/ctf.c
++@@ -32,6 +32,7 @@
++ #include <sys/stat.h>
++ #include <fcntl.h>
++ #include <dirent.h>
+++#include <features.h>
++ #include <glib.h>
++ #include <unistd.h>
++ #include <stdlib.h>
++@@ -384,9 +385,11 @@
++ 		}
++ 		pos->content_size = -1U;	/* Unknown at this point */
++ 		pos->packet_size = WRITE_PACKET_LEN;
+++#ifndef __UCLIBC__
++ 		off = posix_fallocate(pos->fd, pos->mmap_offset,
++ 				      pos->packet_size / CHAR_BIT);
++ 		assert(off >= 0);
+++#endif
++ 		pos->offset = 0;
++ 	} else {
++ 	read_next_packet:
