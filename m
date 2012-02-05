@@ -1,47 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 05 Feb 2012 14:41:58 +0100
-Subject: [Buildroot] [PATCH 7/7] lttng-babeltrace: fix build on uClibc
-	due to missing posix_fallocate()
-In-Reply-To: <a42ba268e6311f078f9472d80d7a40d5b576677a.1328366921.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 4 Feb 2012 15:48:48 +0100")
-References: <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
- <cover.1328366921.git.thomas.petazzoni@free-electrons.com>
- <a42ba268e6311f078f9472d80d7a40d5b576677a.1328366921.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87y5shqtw9.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 5 Feb 2012 11:00:32 +0100
+Subject: [Buildroot] [git commit] liburcu: add patch to fix build with uClibc
+Message-ID: <20120205134245.247F78F546@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d8f71a4c5695657c4deb5557b990b614a6a45488
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  ...beltrace-0.8-no-posix-fallocate-in-uclibc.patch |   25 ++++++++++++++++++++
- Thomas>  1 files changed, 25 insertions(+), 0 deletions(-)
- Thomas>  create mode 100644 package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
+Under uClibc, defining _GNU_SOURCE is strictly needed to access the
+CPU_*() macros.
 
- Thomas> diff --git a/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
- Thomas> new file mode 100644
- Thomas> index 0000000..5ba7f1d
- Thomas> --- /dev/null
- Thomas> +++ b/package/lttng-babeltrace/lttng-babeltrace-0.8-no-posix-fallocate-in-uclibc.patch
- Thomas> @@ -0,0 +1,25 @@
- Thomas> +Do not call posix_fallocate() on uClibc
- Thomas> +
- Thomas> +uClibc does not implement posix_fallocate(), and posix_fallocate() is
- Thomas> +mostly only an hint to the kernel that we will need such or such
- Thomas> +amount of space inside a file. So we just don't call posix_fallocate()
- Thomas> +when building against uClibc.
- Thomas> +
- Thomas> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../liburcu/liburcu-0.6.7-missing-gnu-source.patch |   13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-Normally you need to #include <features.h> to get the __UCLIBC__
-define. I don't see any explicit includes of it anywhere in babeltrace,
-but presumably some of the headers indirectly include it.
-
-I've added the explicit include to the patch and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/liburcu/liburcu-0.6.7-missing-gnu-source.patch b/package/liburcu/liburcu-0.6.7-missing-gnu-source.patch
+new file mode 100644
+index 0000000..f34120c
+--- /dev/null
++++ b/package/liburcu/liburcu-0.6.7-missing-gnu-source.patch
+@@ -0,0 +1,13 @@
++Define _GNU_SOURCE to access CPU_ZERO() macro in uClibc
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: userspace-rcu-0.6.7/tests/urcutorture.c
++===================================================================
++--- userspace-rcu-0.6.7.orig/tests/urcutorture.c	2012-02-01 10:17:09.938804402 +0100
+++++ userspace-rcu-0.6.7/tests/urcutorture.c	2012-02-01 10:17:15.308713372 +0100
++@@ -1,3 +1,4 @@
+++#define _GNU_SOURCE
++ #include <string.h>
++ #include <sys/time.h>
++ #include <poll.h>
