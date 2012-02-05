@@ -1,31 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 3 Feb 2012 21:23:42 +0100
-Subject: [Buildroot] [git commit] CHANGES: #755 / #2299 closed
-Message-ID: <20120205134245.1C04F909C9@busybox.osuosl.org>
+Date: Sun, 5 Feb 2012 11:14:41 +0100
+Subject: [Buildroot] [git commit] lttng-babeltrace: make sure WCHAR and
+	LARGEFILE are enabled
+Message-ID: <20120205134245.48030909CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27a35801b8b506c0d8e562b73f5cca6ff8f2b32f
+commit: http://git.buildroot.net/buildroot/commit/?id=7733fad43c8b76cb1ebf7f02485ae966cf5192ef
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Since lttng-babeltrace depends on util-linux and libglib2, we need to
+make sure WCHAR and LARGEFILE are enabled.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/lttng-babeltrace/Config.in |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 4a1b552..a18ebc6 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -56,6 +56,8 @@
- 	Issues resolved (http://bugs.uclibc.org):
+diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
+index e6f3845..6f47304 100644
+--- a/package/lttng-babeltrace/Config.in
++++ b/package/lttng-babeltrace/Config.in
+@@ -4,6 +4,11 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_LIBGLIB2
++	# libglib2 needs gettext which needs wchar support, and we
++	# also depends on util-linux which needs wchar
++	depends on BR2_USE_WCHAR
++	# util-linux depends on largefile support
++	depends on BR2_LARGEFILE
+ 	help
+ 	  Babeltrace is part of the LTTng 2.x project.
  
- 	#743:  Add Transmission bit torrent option to buildroot
-+	#755:  Add Boost libraries as a package
-+	#2299: Add crypto support to libsoup
- 	#2617: Pixman 0.19.2 & Cairo 1.10.0
- 	#3403: libgpg-error: bump to version 1.10
- 	#3409: libgpg-error: download from gnupg.org
+@@ -20,3 +25,6 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
+ 	  lttng-tools package.
+ 
+ 	  http://lttng.org
++
++comment "lttng-babeltrace needs WCHAR and LARGEFILE support"
++	depends on BR2_PACKAGE_LTTNG_TOOLS && !(BR2_USE_WCHAR || BR2_LARGEFILE)
