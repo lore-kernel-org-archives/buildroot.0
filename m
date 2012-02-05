@@ -1,62 +1,62 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 5 Feb 2012 11:16:33 +0100
-Subject: [Buildroot] [git commit] lttng-tools: make the dependency on
-	lttng-libust optional
-Message-ID: <20120205134245.681CA909C9@busybox.osuosl.org>
+From: Daniele Salvatore Albano <info@daccii.it>
+Date: Sun, 05 Feb 2012 15:07:27 +0100
+Subject: [Buildroot] connman fails on uclibc
+Message-ID: <4F2E8D1F.60600@daccii.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a6f72650681ea55370cbe21ef02aca266daf5ea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I'm trying to get connman working on uclibc.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/lttng-tools/Config.in      |    4 +++-
- package/lttng-tools/lttng-tools.mk |    9 ++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+I've seen that connman has been commited to git so i've pulled last 
+updates and trying with them.
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index cc74966..3040af6 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	depends on BR2_PACKAGE_LTTNG_MODULES
- 	select BR2_PACKAGE_LIBURCU
- 	select BR2_PACKAGE_POPT
--	select BR2_PACKAGE_LTTNG_LIBUST
- 	help
- 	  Userspace utilities for the LTTng 2.0 tracing
- 	  infrastructure.
-@@ -17,4 +16,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	  package for the target, if babeltrace on the target is
- 	  interesting.
- 
-+	  If userspace tracing is desired, you need to enable
-+	  lttng-libust.
-+
- 	  http://lttng.org
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index bcf2f67..8e6fc1a 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -6,8 +6,15 @@ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- # dependency. However, having the babeltrace utilities built for the
- # host is very useful, since those tools allow to convert the binary
- # trace format into an human readable format.
--LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace lttng-libust
-+LTTNG_TOOLS_DEPENDENCIES = liburcu popt host-lttng-babeltrace
- 
- LTTNG_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
-+LTTNG_TOOLS_CONF_OPT += --enable-lttng-ust
-+LTTNG_TOOLS_DEPENDENCIES += lttng-libust
-+else
-+LTTNG_TOOLS_CONF_OPT += --disable-lttng-ust
-+endif
-+
- $(eval $(call AUTOTARGETS))
+However, i got two problems:
+- connman wants uclibc snapshot, but uclibc-0.9.33 sholdn't works fine? 
+resolver isn't there?
+- connman wants backtrace support that, as far i understand, is a glibc 
+specific feature, so i've made a simple patch to avoid using backtrace 
+on uclibc, but there isn't any way to have backtrace on uclibc to make 
+connman happy?
+
+I'm using ct-ng 1.14.0 patched to support uclibc 0.9.33.
+
+Initially i've compiled the toolchain with only 
+UCLIBC_HAS_RESOLVER_SUPPORT without any success because connman 
+configure continued to fail (ns_initparse symbol/resolver missing), so 
+i've selected UCLIBC_HAS_LIBRESOLV_STUB, but i don't know if it will 
+work, i'm yet compiling.
+
+Any ideas?
+
+
+Best Regards,
+Daniele
+
+-- 
+____________________________________________________________
+                                         |
+Daniele Salvatore Albano                | web site:
+  IT Consultant                          | http://www.itechcon.it
+  Mobile Software Development            | http://www.daccii.it
+  Webapps Design and Development         |
+  Software Engineer and Developer        | e-mail:
+  Linux Servers SetUp And Administration | info at itechcon.it
+  Embedded Network Solutions             | d.albano at itechcon.it
+
+Are you lazy? Take a look to LazyDroid (www.lazydroid.net): android for 
+lazy people!
+
+Ai sensi del D.Lgs. 196/2003 si precisa che le informazioni contenute in 
+questo messaggio sono riservate ed a uso esclusivo del destinatario. 
+Qualora il messaggio in parola Le fosse pervenuto per errore, La 
+invitiamo ad eliminarlo senza copiarlo e a non inoltrarlo a terzi, 
+dandocene gentilmente comunicazione. Grazie.
+Pursuant to Legislative Decree No. 196/2003, you are hereby informed 
+that this message contains confidential information intended only for 
+the use of the addressee. If you are not the addressee, and have 
+received this message by mistake, please delete it and immediately 
+notify us. You may not copy or disseminate this message to anyone. Thank 
+you.
