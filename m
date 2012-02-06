@@ -1,40 +1,70 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 Feb 2012 17:26:58 +0100
-Subject: [Buildroot] [git commit] linux: bump 3.2.x stable version
-Message-ID: <20120206190750.6A424909EB@busybox.osuosl.org>
+Date: Mon, 6 Feb 2012 17:22:38 +0100
+Subject: [Buildroot] [git commit] mesa3d: fix build
+Message-ID: <20120206190750.46AC68FE09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3b84754d43f0eecd0abe88bd698a00d15b3e69e
+commit: http://git.buildroot.net/buildroot/commit/?id=5d425d3334231340790677e6f6e8212901e6dc23
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We build mesa3d with dri support, which doesn't work with static builds,
+so disable it.
+
+From configure.ac:
+
+dri)
+    # DRI must be shared, I think
+    if test "$enable_static" = yes; then
+        AC_MSG_ERROR([Can't use static libraries for DRI drivers])
+    fi
+
+At the same time fixup minor style issues (:= vs =, long lines).
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/mesa3d/mesa3d.mk |   26 +++++++++++++++++++++-----
+ 1 files changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 132f87e..970146b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_2
+diff --git a/package/x11r7/mesa3d/mesa3d.mk b/package/x11r7/mesa3d/mesa3d.mk
+index 095d66d..1e9ec77 100644
+--- a/package/x11r7/mesa3d/mesa3d.mk
++++ b/package/x11r7/mesa3d/mesa3d.mk
+@@ -3,13 +3,29 @@
+ # mesa3d
+ #
+ #############################################################
+-MESA3D_VERSION:=7.6.1
+-MESA3D_SOURCE:=MesaLib-$(MESA3D_VERSION).tar.gz
+-MESA3D_SITE:=ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
  
- config BR2_LINUX_KERNEL_3_2
--	bool "3.2.2"
-+	bool "3.2.4"
+-MESA3D_CONF_OPT = --disable-egl --disable-glu --disable-glw --disable-glut --disable-gallium --with-driver=dri --with-dri-drivers=swrast
++MESA3D_VERSION = 7.6.1
++MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.gz
++MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_INSTALL_STAGING = YES
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+-MESA3D_DEPENDENCIES = xproto_glproto xlib_libXxf86vm xlib_libXdamage xlib_libXfixes xproto_dri2proto libdrm expat
++MESA3D_CONF_OPT = \
++	--disable-egl \
++	--disable-glu \
++	--disable-glw \
++	--disable-glut \
++	--disable-gallium \
++	--with-driver=dri \
++	--with-dri-drivers=swrast \
++	--disable-static
++
++MESA3D_DEPENDENCIES = \
++	xproto_glproto \
++	xlib_libXxf86vm \
++	xlib_libXdamage \
++	xlib_libXfixes \
++	xproto_dri2proto \
++	libdrm \
++	expat
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.2.2" if BR2_LINUX_KERNEL_3_2
-+	default "3.2.4" if BR2_LINUX_KERNEL_3_2
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ $(eval $(call AUTOTARGETS))
