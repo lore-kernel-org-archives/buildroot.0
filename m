@@ -1,39 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 Feb 2012 17:24:19 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.2.x stable
-	versions
-Message-ID: <20120206190750.56C188FE09@busybox.osuosl.org>
+From: Jigar SOLANKI <jigar.solanki@labri.fr>
+Date: Mon, 06 Feb 2012 20:43:45 +0100
+Subject: [Buildroot] Buildroot networking problems
+Message-ID: <4F302D71.9020308@labri.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=436ceeafbc59ad8a68f995f8cd5f11dc3abfd2ae
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+I've built a Buildroot Linux on a Leon3 CPU, everything works fine
+except the network configuration.
+
+I have the eth0 interface configured correctly with a default gw,
+netmask etc...but when I ping the interface adress itself, it doesnt
+respond at all.
+
+I've also tried to ping 127.0.0.1, same result, lo is not responding.
+(I have read some posts on resolv.conf but in my case, it is not a dns
+related issue, I ping numerical adresses..)
+
+Any idea on what is going wrong ?
+
+-- 
+Jigar SOLANKI
+
+LaBRI - UMR 5800
+Universit? Bordeaux 1
+351 Cours de la Lib?ration
+F-33405 Talence Cedex
+Phone : (+33) 5 4000 24 87
+Fax   : (+33) 5 4000 66 69
+Web   : http://www.labri.fr/perso/solanki
+
+* Please do not print this e-mail unless it's really necessary *
 ---
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 701fe7f..eda3fa9 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.18"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.19"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.2"		if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.4"		if BR2_KERNEL_HEADERS_3_2
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.18-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.19-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.18-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.19-headers_install-fix-__packed-in-exported-kernel-head.patch
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 554 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120206/9137ca0c/attachment.asc>
