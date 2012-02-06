@@ -1,26 +1,36 @@
 From: J.C. Woltz <jwoltz@gmail.com>
-Date: Mon, 6 Feb 2012 16:44:35 -0500
-Subject: [Buildroot] Help submitting patches
-In-Reply-To: <CAGm1_ksNiUsa5N6ute0OQBY8KvHvDa72xWhSfKOngfzzORSpOA@mail.gmail.com>
-References: <CAC78Gpc2rZ8-9FjnkC=dNqAXBQ1pTSJ+yT0tdOtEzjEus7MmCQ@mail.gmail.com>
- <87aa4vvffj.fsf@macbook.be.48ers.dk>
- <CAGm1_ksNiUsa5N6ute0OQBY8KvHvDa72xWhSfKOngfzzORSpOA@mail.gmail.com>
-Message-ID: <CAC78GpcUfeaoA6w7HUfGxC-GsD1kJMqGQdeaft7_QJNfy9Sfjg@mail.gmail.com>
+Date: Mon, 6 Feb 2012 16:53:25 -0500
+Subject: [Buildroot] New Board Support and process
+Message-ID: <CAC78GpfSiOFDHwJ243n+t81ub-Bchs7gWs_16wjrEseiVCLF_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-git format-patch -1
+Hello,
 
+I have been maintaining my own branch of buildroot for the Synapse Wireless
+E10.
+http://www.synapse-wireless.com/index.php?mainID=3&subID=10&type=product&prodID=10
 
-> to format the last made patch. See here for further details for the
-> case you need to rework a patch series:
-> https://libbits.wordpress.com/2011/12/27/managing-patch-series-with-git/
->
+From a linux point of view, it is an Atmel AT91SAM9G20 based machine.
+I have patches for u-boot, linux, a linux config, and a buildroot
+e10_defconfig.
+Except for the e10_defconfig, the files are located under
+board/synapse/e10/.
+Can I submit these as a patch, or is there a preferred alternative?
 
-Thank you
+I have also updated usb_modeswitch to version 1.2.3 and created a package
+for usb_modeswitch_data which contains udev rules among other things.
+
+I would like to submit these and have them available in future releases.
+That way other users of the E10 have an easier time making custom builds.
+
+Thoughts? Objections? Other?
+
+Thank you,
+J.C. Woltz
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120206/a5f9c4e5/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120206/74804da6/attachment.html>
