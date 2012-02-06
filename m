@@ -1,74 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 6 Feb 2012 11:59:53 +0100
-Subject: [Buildroot] [PATCH 1/2] Add support for U-Boot SPL
-In-Reply-To: <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
-References: <1328402147-21404-1-git-send-email-n-dechesne@ti.com>
- <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
-Message-ID: <CAAXf6LX7ZFju=i6=Owvh_q8vXNC3TL90nGJcWogo5Odg8EhCow@mail.gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Mon,  6 Feb 2012 15:29:41 +0100
+Subject: [Buildroot] [PATCH 1/1] barebox: add 2012.02, remove 2011.11
+Message-ID: <1328538581-21006-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 5, 2012 at 1:35 AM, Nicolas Dechesne <n-dechesne@ti.com> wrote:
-> SPL is a first stage bootloader. On pandaboard it supercedes x-loader,
-> and should now be used.
->
-> - this patch ensures that either SPL or xloader can be selected
-> - SPL will load 'u-boot.img' instead of 'u-boot.bin, so the name
-> ?is updated accordingly
->
-> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
-> ---
-> ?boot/uboot/Config.in | ? ?6 ++++++
-> ?boot/uboot/uboot.mk ?| ? ?4 ++++
-> ?2 files changed, 10 insertions(+), 0 deletions(-)
->
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index c8db9fb..1b94803 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -137,4 +137,10 @@ config BR2_TARGET_UBOOT_ETH1ADDR
->
-> ?endif # BR2_TARGET_UBOOT_NETWORK
->
-> +config BR2_TARGET_UBOOT_SPL
-> + ? ? ? bool "U-Boot SPL suport"
+And mark 2011.12 as deprecated.
 
-typo: support
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+---
+ boot/barebox/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-> + ? ? ? depends on !BR2_TARGET_XLOADER
-> + ? ? ? help
-> + ? ? ? ? Enable the U-Boot SPL support
-> +
-> ?endif # BR2_TARGET_UBOOT
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index db9de8d..b327f4b 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -29,6 +29,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
-> ?UBOOT_BIN ? ? ? ? ?= u-boot.ldr
-> ?else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
-> ?UBOOT_BIN ? ? ? ? ?= u-boot-nand.bin
-> +else ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> +UBOOT_BIN ? ? ? ? ?= u-boot.img
-> ?else
-> ?UBOOT_BIN ? ? ? ? ?= u-boot.bin
-> ?endif
-> @@ -88,6 +90,8 @@ endef
->
-> ?define UBOOT_INSTALL_IMAGES_CMDS
-> ? ? ? ?cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
-> + ? ? ? $(if $(BR2_TARGET_UBOOT_SPL),
-> + ? ? ? ? ? ? ? cp -dpf $(@D)/MLO $(BINARIES_DIR)/)
-> ?endef
->
-> ?$(eval $(call GENTARGETS))
-> --
-> 1.7.8.3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b98878b..c335af0 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,20 +8,20 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2012_01
++	default BR2_TARGET_BAREBOX_2012_02
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2011_11
+-	depends on BR2_DEPRECATED
+-	bool "2011.11"
+-
+ config BR2_TARGET_BAREBOX_2011_12
++	depends on BR2_DEPRECATED
+ 	bool "2011.12"
+ 
+ config BR2_TARGET_BAREBOX_2012_01
+ 	bool "2012.01"
+ 
++config BR2_TARGET_BAREBOX_2012_02
++	bool "2012.02"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -39,9 +39,9 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2011.11.0"	if BR2_TARGET_BAREBOX_2011_11
+ 	default "2011.12.0"	if BR2_TARGET_BAREBOX_2011_12
+ 	default "2012.01.0"	if BR2_TARGET_BAREBOX_2012_01
++	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
+-- 
+1.7.7
