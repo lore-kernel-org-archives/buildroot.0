@@ -1,10 +1,10 @@
 From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Mon,  6 Feb 2012 02:47:18 +0100
-Subject: [Buildroot] [RFC PATCH 5/6] apply-patches.sh: add recursivity when
-	scanning patchdir
+Date: Mon,  6 Feb 2012 02:47:19 +0100
+Subject: [Buildroot] [RFC PATCH 6/6] apply-patches.sh: change archive
+	management
 In-Reply-To: <1328492839-13657-1-git-send-email-ludovic.desroches@atmel.com>
 References: <1328492839-13657-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <d2e8663c748c61c4ea9e881eb4ecf74e64096a7b.1328492511.git.ludovic.desroches@atmel.com>
+Message-ID: <76267ac6ba3ddac4379b9896f72875dedd455ebd.1328492511.git.ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,47 @@ To: buildroot@busybox.net
 
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
+The way archives were managed was incorrect because the uncompressed archives
+were sent directly to patch command. It means that alphabetical patch orderwas
+not respected.
+
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- support/scripts/apply-patches.sh |   24 +++++++++++++++---------
- 1 files changed, 15 insertions(+), 9 deletions(-)
+ support/scripts/apply-patches.sh |   15 +++++++++++----
+ 1 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 1fc93f6..3a73ab9 100755
+index 3a73ab9..9c2fbb3 100755
 --- a/support/scripts/apply-patches.sh
 +++ b/support/scripts/apply-patches.sh
-@@ -42,6 +42,20 @@ function apply_patch {
-     fi
- }
- 
-+function scan_patchdir {
-+    path=$1
-+    shift 1
-+    patches=${@-*}
-+
-+    for i in `cd $path; ls -d $patches 2> /dev/null` ; do
-+        if [ -d "${path}/$i" ] ; then
-+	    scan_patchdir "${path}/$i"
-+        else
-+            apply_patch "$path" "$i" || exit 1
-+        fi
-+    done
-+}
-+
- if [ ! -d "${builddir}" ] ; then
-     echo "Aborting.  '${builddir}' is not a directory."
-     exit 1
-@@ -57,15 +71,7 @@ if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; th
- 	echo "There are remaining reject files into ${builddir}, please delete them."
- fi
- 
--for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
--    if [ -d "${patchdir}/$i" ] ; then
--        for p in `ls -d "$i"` ; do
--	    apply_patch "${patchdir}/${i}" "$p" || exit 1
--	done
--    else
--        apply_patch "$patchdir" "$i" || exit 1
--    fi
--done
-+scan_patchdir $patchdir $patchpattern
- 
- # Check for rejects...
- if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+@@ -25,10 +25,6 @@ function apply_patch {
+ 	type="zip"; uncomp="unzip -d"; ;; 
+ 	*.Z)
+ 	type="compress"; uncomp="uncompress -c"; ;; 
+-	*.tgz)
+-	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
+-	*.tar)
+-	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
+ 	*)
+ 	type="plaintext"; uncomp="cat"; ;; 
+     esac
+@@ -50,6 +46,17 @@ function scan_patchdir {
+     for i in `cd $path; ls -d $patches 2> /dev/null` ; do
+         if [ -d "${path}/$i" ] ; then
+ 	    scan_patchdir "${path}/$i"
++	elif echo "$i" | grep -q -E "tar\.bz$|tbz$|tar.\bz2$|tbz2$|tar\.gz$|tgz$" ; then
++            unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
++	    rm -rf "$unpackedarchivedir" 2> /dev/null
++	    mkdir "$unpackedarchivedir"
++	    if echo "$i" | grep "tar\.bz$|tbz$|tar\.bz2$|.tbz2$" ; then
++	        tar_options="-xjf"
++	    else
++	        tar_options="-xzf"
++	    fi
++	    tar -C "$unpackedarchivedir" --strip-components=1 $tar_options "${path}/$i"
++	    scan_patchdir "$unpackedarchivedir"
+         else
+             apply_patch "$path" "$i" || exit 1
+         fi
 -- 
 1.7.5.4
