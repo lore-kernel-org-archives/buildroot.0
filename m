@@ -1,23 +1,96 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 06 Feb 2012 23:25:27 +0100
-Subject: [Buildroot] [PATCH 1/1] barebox: add 2012.02, remove 2011.11
-In-Reply-To: <1328538581-21006-1-git-send-email-plagnioj@jcrosoft.com>
- (Jean-Christophe PLAGNIOL-VILLARD's message of "Mon, 6 Feb 2012
- 15:29:41 +0100")
-References: <1328538581-21006-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <87lioftx9k.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 7 Feb 2012 00:00:33 +0100
+Subject: [Buildroot] [PATCH] Add Freescale MX53 support
+In-Reply-To: <1328277370-18423-1-git-send-email-mbriand@adeneo-embedded.com>
+References: <1328273223-16093-1-git-send-email-mbriand@adeneo-embedded.com>
+ <1328277370-18423-1-git-send-email-mbriand@adeneo-embedded.com>
+Message-ID: <201202070000.34270.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "JC" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+ Thank you for this contribution!  We certainly need more defconfigs.
 
- JC> And mark 2011.12 as deprecated.
- JC> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+ Below are a few comments on your patch.  Please consider them and if
+necessary re-post it.  If you will not be able to re-post it, let us know
+so someone else can adopt it.
 
-Committed, thanks.
+ We will certainly need a Signed-off-by tag on your patch, i.e. a line saying
+
+Signed-off-by: Your Name <your@email.address>
+
+This is a short way for you to assert that you are entitled to contribute
+the patch under buildroot's GPL license.  See 
+http://kerneltrap.org/files/Jeremy/DCO.txt for more details.
+
+
+On Friday 03 February 2012 14:56:10 Mathieu Briand wrote:
+> Buildroot config and Linux Kernel config.
+> Binaries blob not supported yet.
+
+ What does 'Binaries blob' mean?
+
+> ---
+>  board/freescale/mx53loco/linux.config |  175 +++++++++++++++++++++++++++++++++
+>  configs/freescale_mx53loco_defconfig  |   19 ++++
+>  2 files changed, 194 insertions(+), 0 deletions(-)
+>  create mode 100644 board/freescale/mx53loco/linux.config
+>  create mode 100644 configs/freescale_mx53loco_defconfig
+
+ The processor is called "i.MX53", I believe.  We also usually don't 
+include the vendor name in the processor identification.  So something
+like configs/imx53loco_defconfig is probably more appropriate.  OTOH,
+Freescale themselves seem to call i.MX3x processors "imx" and i.MX5x
+processors "mx5"...
+
+
+> diff --git a/board/freescale/mx53loco/linux.config b/board/freescale/mx53loco/linux.config
+ Personally I'd prefer to use a kernel defconfig (mx5_defconfig), but
+perhaps this one is more appropriate.
+
+[snip]
+> diff --git a/configs/freescale_mx53loco_defconfig b/configs/freescale_mx53loco_defconfig
+> new file mode 100644
+> index 0000000..dbf0e2c
+> --- /dev/null
+> +++ b/configs/freescale_mx53loco_defconfig
+> @@ -0,0 +1,19 @@
+> +# Architecture
+> +BR2_arm=y
+> +BR2_cortex_a8=y
+> +
+> +# System
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
+> +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
+
+ I think it is better (more predictable) to specify an exact version instead
+of the latest HEAD.  Either a git sha or a tarball, e.g. 
+http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/snapshot/rel_imx_2.6.38_12.01.01.tar.gz
+(if that is a relevant snapshot at all).
+
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mx53loco/linux.config"
+> 
+
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
