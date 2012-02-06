@@ -1,49 +1,20 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2012 00:39:09 +0100
-Subject: [Buildroot] [PATCH 1/2] Add lpc3250loader to the host tools
-In-Reply-To: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
-References: <1328358091-20998-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <201202070039.09571.arnout@mind.be>
+Date: Tue, 7 Feb 2012 00:44:27 +0100
+Subject: [Buildroot] [git commit] mesa3d: don't depend on the X server
+In-Reply-To: <20120206190750.3B69E909EB@busybox.osuosl.org>
+References: <20120206190750.3B69E909EB@busybox.osuosl.org>
+Message-ID: <201202070044.27132.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 04 February 2012 13:21:30 Alexandre Belloni wrote:
-[snip]
-> diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
-> new file mode 100644
-> index 0000000..d66cd4a
-> --- /dev/null
-> +++ b/package/lpc3250loader/lpc3250loader.mk
-> @@ -0,0 +1,9 @@
-> +LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
-> +LPC3250LOADER_VERSION = master
-> +LPC3250LOADER_SITE_METHOD = git
+On Monday 06 February 2012 17:14:39 Peter Korsgaard wrote:
+> There's no particular reason why you shouldn't be able to build mesa
+> without the X server (E.G. for remote X), so remove it.
 
- It's a bug in Makefile.package.in that the site method is needed here...
-All the ifdefs there are wrong and should be replaced by ?=
-
- Anyway, since this is a host-only package, I think it should be
-
-HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
-HOST_LPC3250LOADER_VERSION = master
-
-which works fine without the site-method.
-
- And finally, I think we should use a specific tag or sha instead of 'master'.
-
-> +
-> +define HOST_LPC3250LOADER_INSTALL_CMDS
-> +	cp -a $(@D)/* $(HOST_DIR)/usr/bin/
- There should be an mkdir -p here, or else
-for f in $(@D)/*; do $(INSTALL) -D -m 0755 $$f $(HOST_DIR)/usr/bin/$$f; done
-
-> +endef
-> +
-> +$(eval $(call GENTARGETS,host))
-> 
+ And this will become even more true when we get Wayland in buildroot :-)
 
  Regards,
  Arnout
