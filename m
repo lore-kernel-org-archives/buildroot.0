@@ -1,59 +1,27 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Mon,  6 Feb 2012 02:47:19 +0100
-Subject: [Buildroot] [RFC PATCH 6/6] apply-patches.sh: change archive
-	management
-In-Reply-To: <1328492839-13657-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1328492839-13657-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <76267ac6ba3ddac4379b9896f72875dedd455ebd.1328492511.git.ludovic.desroches@atmel.com>
+From: Stefan Miklosovic <miklosovic.freebsd@gmail.com>
+Date: Mon, 6 Feb 2012 03:08:57 +0100
+Subject: [Buildroot] eth0 in buildroot (vmware)
+In-Reply-To: <CAMWiMy-5s_BMCGbpJka1HUS5jGHa3Dxf0SzA+kUCqpPsnyuyHw@mail.gmail.com>
+References: <CAPRmHH2q3bY22dSE0BVooO3OSDr6eXz2U42euRzaU00CJbqn1A@mail.gmail.com>
+ <CAMWiMy-5s_BMCGbpJka1HUS5jGHa3Dxf0SzA+kUCqpPsnyuyHw@mail.gmail.com>
+Message-ID: <CAPRmHH1bzTBHLmRTTbMuaPEE6ppKyotwV7GvBGCs4pZuqtNDTg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+This one did the trick ... for everyone to know in order to prevent
+questions like this one:
 
-The way archives were managed was incorrect because the uncompressed archives
-were sent directly to patch command. It means that alphabetical patch orderwas
-not respected.
+i had to compile some additional network driver to the kernel
+(Intel(R) 82575/82576 PCI-Express Gigabit Ethernet support + Intel(R)
+82576 Virtual Function Ethernet support) and switch network adapter in
+virtualbox settings like Intel PRO/1000 MT Desktop (82540EM) under
+network ? adapter 1 ? ?advanced? settings
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- support/scripts/apply-patches.sh |   15 +++++++++++----
- 1 files changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 3a73ab9..9c2fbb3 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -25,10 +25,6 @@ function apply_patch {
- 	type="zip"; uncomp="unzip -d"; ;; 
- 	*.Z)
- 	type="compress"; uncomp="uncompress -c"; ;; 
--	*.tgz)
--	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
--	*.tar)
--	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
- 	*)
- 	type="plaintext"; uncomp="cat"; ;; 
-     esac
-@@ -50,6 +46,17 @@ function scan_patchdir {
-     for i in `cd $path; ls -d $patches 2> /dev/null` ; do
-         if [ -d "${path}/$i" ] ; then
- 	    scan_patchdir "${path}/$i"
-+	elif echo "$i" | grep -q -E "tar\.bz$|tbz$|tar.\bz2$|tbz2$|tar\.gz$|tgz$" ; then
-+            unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
-+	    rm -rf "$unpackedarchivedir" 2> /dev/null
-+	    mkdir "$unpackedarchivedir"
-+	    if echo "$i" | grep "tar\.bz$|tbz$|tar\.bz2$|.tbz2$" ; then
-+	        tar_options="-xjf"
-+	    else
-+	        tar_options="-xzf"
-+	    fi
-+	    tar -C "$unpackedarchivedir" --strip-components=1 $tar_options "${path}/$i"
-+	    scan_patchdir "$unpackedarchivedir"
-         else
-             apply_patch "$path" "$i" || exit 1
-         fi
--- 
-1.7.5.4
+On Sun, Feb 5, 2012 at 10:37 PM, curriegrad2004
+<curriegrad2004@gmail.com> wrote:
+>
+> Have you built in the e1000 drivers and pcnet32 drivers too? Those are
+> the drivers that VMware uses for virtual machines
