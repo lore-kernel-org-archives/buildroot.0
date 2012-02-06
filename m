@@ -1,34 +1,44 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 6 Feb 2012 22:10:16 +0100
-Subject: [Buildroot] Help submitting patches
-In-Reply-To: <87aa4vvffj.fsf@macbook.be.48ers.dk>
-References: <CAC78Gpc2rZ8-9FjnkC=dNqAXBQ1pTSJ+yT0tdOtEzjEus7MmCQ@mail.gmail.com>
- <87aa4vvffj.fsf@macbook.be.48ers.dk>
-Message-ID: <CAGm1_ksNiUsa5N6ute0OQBY8KvHvDa72xWhSfKOngfzzORSpOA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 06 Feb 2012 22:32:40 +0100
+Subject: [Buildroot] [PATCH] New package: gpio9260
+In-Reply-To: <1450339669-1328562959-cardhu_decombobulator_blackberry.rim.net-667609737-@b26.c30.bise6.blackberry>
+ (J. C. Woltz's message of "Mon, 6 Feb 2012 21:16:02 +0000")
+References: <1450339669-1328562959-cardhu_decombobulator_blackberry.rim.net-667609737-@b26.c30.bise6.blackberry>
+Message-ID: <871uq7ve9z.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 6, 2012 at 10:07 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "J" == J C Woltz <jwoltz@gmail.com> writes:
->
-> ?J> Please forgive my ignorance. I would like to submit some patches. I am using
-> ?J> git. Can someone paste the commands to format patch and sign off?
->
-> git format-patch -s master
->
-> That is if you made your changes on a seperate branch like you should,
-> otherwise replace master with the commit id of the last change before
-> your local changes.
+>>>>> "J" == J C Woltz <jwoltz@gmail.com> writes:
 
-or just call
+Hi,
 
-git format-patch -1
+ J> I cannot answer what the advantage is. This is just a first patch of
+ J> many to support full functionality of the Synapse Wireless E10. They
+ J> and calao use gpio9260 for simple user access from shell script.
+ J> Primarily for reading push buttons.
 
-to format the last made patch. See here for further details for the
-case you need to rework a patch series:
-https://libbits.wordpress.com/2011/12/27/managing-patch-series-with-git/
+So you are not the author of the software? Where did you get it from?
 
-Yegor
+ J> I don't care if this is accepted. It would be nice, but not needed. 
+
+ J> I have patches for the following:
+ J> -updated usb_modswitch
+ J> -add usb_modeswitch_data package
+
+ J> -board support for the E10 including linux patch, u-boot patch, and
+ J> linux config, and buildroot e10_defconfig
+
+What is this e10? Is the Linux/U-boot patches submitted upstream?
+
+ J> Since I am new to submitting patches to buildroot, I would
+ J> appreciate any advice/etiquette you have for me to submit the
+ J> patches.
+
+My first advice is that you should keep discussion on the mailing list,
+don't just mail me directly, thanks.
+
+-- 
+Bye, Peter Korsgaard
