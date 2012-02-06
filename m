@@ -1,56 +1,26 @@
 From: J.C. Woltz <jwoltz@gmail.com>
-Date: Mon, 6 Feb 2012 16:43:03 -0500
-Subject: [Buildroot] [PATCH] New package: gpio9260
-In-Reply-To: <87ehu7vfhx.fsf@macbook.be.48ers.dk>
-References: <1328559215-12206-1-git-send-email-jwoltz@gmail.com>
- <87ehu7vfhx.fsf@macbook.be.48ers.dk>
-Message-ID: <CAC78Gpc3fHmCkD2idUGDJzoHqw0h1JfKKq70TOZoi=sw7gx4og@mail.gmail.com>
+Date: Mon, 6 Feb 2012 16:44:35 -0500
+Subject: [Buildroot] Help submitting patches
+In-Reply-To: <CAGm1_ksNiUsa5N6ute0OQBY8KvHvDa72xWhSfKOngfzzORSpOA@mail.gmail.com>
+References: <CAC78Gpc2rZ8-9FjnkC=dNqAXBQ1pTSJ+yT0tdOtEzjEus7MmCQ@mail.gmail.com>
+ <87aa4vvffj.fsf@macbook.be.48ers.dk>
+ <CAGm1_ksNiUsa5N6ute0OQBY8KvHvDa72xWhSfKOngfzzORSpOA@mail.gmail.com>
+Message-ID: <CAC78GpcUfeaoA6w7HUfGxC-GsD1kJMqGQdeaft7_QJNfy9Sfjg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  J> From: "J.C. Woltz" <jwoltz@gmail.com>
->  J> gpio9260 is an utility used to read and set gpio states on
->  J> the at91sam9260 and at91sam9g20 CPUs
->
-> What's the advantage of using this compared to normal /sys/class/gpio
-> sysfs access?
->
-> I did not write this program. Its header states:
-/*
- * (C) Copyright 2004  Roman Avramenko <roman@imsystems.ru>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- * MA 02111-1307 USA
- */
+git format-patch -1
 
 
-Calao and Synapse Wireless ship the gpio9260 to allow script and users easy
-access to (primarily) push buttons. It is used like:
-/usr/bin/gpio9260 ?PB10
-Then the return code lets you know the state of the input. Or it can be
-used to set outputs, but in that case the /sys/class/led or other makes
-sense.
-
-
-> It's just a program (no headers/libraries), so why install into staging?
+> to format the last made patch. See here for further details for the
+> case you need to rework a patch series:
+> https://libbits.wordpress.com/2011/12/27/managing-patch-series-with-git/
 >
->
-That is my mistake. I will fix that.
+
+Thank you
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120206/37bae65c/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120206/a5f9c4e5/attachment.html>
