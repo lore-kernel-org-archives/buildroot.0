@@ -1,32 +1,62 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 Feb 2012 23:23:50 +0100
-Subject: [Buildroot] [git commit] libev: bump to 4.11
-Message-ID: <20120207092250.05DA3909F5@busybox.osuosl.org>
+Date: Mon, 6 Feb 2012 23:25:10 +0100
+Subject: [Buildroot] [git commit] barebox: add 2012.02, remove 2011.11
+Message-ID: <20120207092250.17099909F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0802fc24e999ca42cbc7ac1a8596ded6d6d8c729
+commit: http://git.buildroot.net/buildroot/commit/?id=defa3768eafbefbd85a03ee1a671a3d1f1de6a27
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+And mark 2011.12 as deprecated.
+
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libev/libev.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ boot/barebox/Config.in |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libev/libev.mk b/package/libev/libev.mk
-index 8beaa8e..6656d15 100644
---- a/package/libev/libev.mk
-+++ b/package/libev/libev.mk
-@@ -3,7 +3,7 @@
- # libev
- #
- #############################################################
--LIBEV_VERSION = 4.04
-+LIBEV_VERSION = 4.11
- LIBEV_SOURCE = libev-$(LIBEV_VERSION).tar.gz
- LIBEV_SITE = http://dist.schmorp.de/libev/
- LIBEV_INSTALL_STAGING = YES
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b98878b..c335af0 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -8,20 +8,20 @@ config BR2_TARGET_BAREBOX
+ if BR2_TARGET_BAREBOX
+ choice
+ 	prompt "version"
+-	default BR2_TARGET_BAREBOX_2012_01
++	default BR2_TARGET_BAREBOX_2012_02
+ 	help
+ 	  Select the specific Barebox version you want to use
+ 
+-config BR2_TARGET_BAREBOX_2011_11
+-	depends on BR2_DEPRECATED
+-	bool "2011.11"
+-
+ config BR2_TARGET_BAREBOX_2011_12
++	depends on BR2_DEPRECATED
+ 	bool "2011.12"
+ 
+ config BR2_TARGET_BAREBOX_2012_01
+ 	bool "2012.01"
+ 
++config BR2_TARGET_BAREBOX_2012_02
++	bool "2012.02"
++
+ config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	bool "Custom tarball"
+ 
+@@ -39,9 +39,9 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2011.11.0"	if BR2_TARGET_BAREBOX_2011_11
+ 	default "2011.12.0"	if BR2_TARGET_BAREBOX_2011_12
+ 	default "2012.01.0"	if BR2_TARGET_BAREBOX_2012_01
++	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
