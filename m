@@ -1,44 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 06 Feb 2012 22:32:40 +0100
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Mon, 6 Feb 2012 16:43:03 -0500
 Subject: [Buildroot] [PATCH] New package: gpio9260
-In-Reply-To: <1450339669-1328562959-cardhu_decombobulator_blackberry.rim.net-667609737-@b26.c30.bise6.blackberry>
- (J. C. Woltz's message of "Mon, 6 Feb 2012 21:16:02 +0000")
-References: <1450339669-1328562959-cardhu_decombobulator_blackberry.rim.net-667609737-@b26.c30.bise6.blackberry>
-Message-ID: <871uq7ve9z.fsf@macbook.be.48ers.dk>
+In-Reply-To: <87ehu7vfhx.fsf@macbook.be.48ers.dk>
+References: <1328559215-12206-1-git-send-email-jwoltz@gmail.com>
+ <87ehu7vfhx.fsf@macbook.be.48ers.dk>
+Message-ID: <CAC78Gpc3fHmCkD2idUGDJzoHqw0h1JfKKq70TOZoi=sw7gx4og@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J" == J C Woltz <jwoltz@gmail.com> writes:
+  J> From: "J.C. Woltz" <jwoltz@gmail.com>
+>  J> gpio9260 is an utility used to read and set gpio states on
+>  J> the at91sam9260 and at91sam9g20 CPUs
+>
+> What's the advantage of using this compared to normal /sys/class/gpio
+> sysfs access?
+>
+> I did not write this program. Its header states:
+/*
+ * (C) Copyright 2004  Roman Avramenko <roman@imsystems.ru>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ * MA 02111-1307 USA
+ */
 
-Hi,
 
- J> I cannot answer what the advantage is. This is just a first patch of
- J> many to support full functionality of the Synapse Wireless E10. They
- J> and calao use gpio9260 for simple user access from shell script.
- J> Primarily for reading push buttons.
+Calao and Synapse Wireless ship the gpio9260 to allow script and users easy
+access to (primarily) push buttons. It is used like:
+/usr/bin/gpio9260 ?PB10
+Then the return code lets you know the state of the input. Or it can be
+used to set outputs, but in that case the /sys/class/led or other makes
+sense.
 
-So you are not the author of the software? Where did you get it from?
 
- J> I don't care if this is accepted. It would be nice, but not needed. 
-
- J> I have patches for the following:
- J> -updated usb_modswitch
- J> -add usb_modeswitch_data package
-
- J> -board support for the E10 including linux patch, u-boot patch, and
- J> linux config, and buildroot e10_defconfig
-
-What is this e10? Is the Linux/U-boot patches submitted upstream?
-
- J> Since I am new to submitting patches to buildroot, I would
- J> appreciate any advice/etiquette you have for me to submit the
- J> patches.
-
-My first advice is that you should keep discussion on the mailing list,
-don't just mail me directly, thanks.
-
--- 
-Bye, Peter Korsgaard
+> It's just a program (no headers/libraries), so why install into staging?
+>
+>
+That is my mistake. I will fix that.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120206/37bae65c/attachment.html>
