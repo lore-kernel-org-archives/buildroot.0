@@ -1,33 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 6 Feb 2012 17:14:39 +0100
-Subject: [Buildroot] [git commit] mesa3d: don't depend on the X server
-Message-ID: <20120206190750.3B69E909EB@busybox.osuosl.org>
+Date: Mon, 6 Feb 2012 17:24:19 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.2.x stable
+	versions
+Message-ID: <20120206190750.56C188FE09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80a7e8216e53cd7195e78e30e90821584b537b53
+commit: http://git.buildroot.net/buildroot/commit/?id=436ceeafbc59ad8a68f995f8cd5f11dc3abfd2ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-There's no particular reason why you shouldn't be able to build mesa
-without the X server (E.G. for remote X), so remove it.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/x11r7/mesa3d/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/mesa3d/Config.in b/package/x11r7/mesa3d/Config.in
-index 596eea3..47ded29 100644
---- a/package/x11r7/mesa3d/Config.in
-+++ b/package/x11r7/mesa3d/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_EXPAT
--	depends on BR2_PACKAGE_XSERVER_XORG_SERVER
- 	depends on BR2_PACKAGE_XSERVER_xorg
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 701fe7f..eda3fa9 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.18"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.19"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.2"		if BR2_KERNEL_HEADERS_3_2
++	default "3.2.4"		if BR2_KERNEL_HEADERS_3_2
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.18-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.19-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.18-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.19-headers_install-fix-__packed-in-exported-kernel-head.patch
