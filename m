@@ -1,73 +1,74 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  6 Feb 2012 10:55:35 +0100
-Subject: [Buildroot] [PATCH 3/3] New package: parted
-In-Reply-To: <1328522135-5123-1-git-send-email-yegorslists@googlemail.com>
-References: <1328522135-5123-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1328522135-5123-3-git-send-email-yegorslists@googlemail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 6 Feb 2012 11:59:53 +0100
+Subject: [Buildroot] [PATCH 1/2] Add support for U-Boot SPL
+In-Reply-To: <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
+References: <1328402147-21404-1-git-send-email-n-dechesne@ti.com>
+ <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
+Message-ID: <CAAXf6LX7ZFju=i6=Owvh_q8vXNC3TL90nGJcWogo5Odg8EhCow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Sun, Feb 5, 2012 at 1:35 AM, Nicolas Dechesne <n-dechesne@ti.com> wrote:
+> SPL is a first stage bootloader. On pandaboard it supercedes x-loader,
+> and should now be used.
+>
+> - this patch ensures that either SPL or xloader can be selected
+> - SPL will load 'u-boot.img' instead of 'u-boot.bin, so the name
+> ?is updated accordingly
+>
+> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+> ---
+> ?boot/uboot/Config.in | ? ?6 ++++++
+> ?boot/uboot/uboot.mk ?| ? ?4 ++++
+> ?2 files changed, 10 insertions(+), 0 deletions(-)
+>
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index c8db9fb..1b94803 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -137,4 +137,10 @@ config BR2_TARGET_UBOOT_ETH1ADDR
+>
+> ?endif # BR2_TARGET_UBOOT_NETWORK
+>
+> +config BR2_TARGET_UBOOT_SPL
+> + ? ? ? bool "U-Boot SPL suport"
 
-Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/Config.in        |    1 +
- package/parted/Config.in |    9 +++++++++
- package/parted/parted.mk |   14 ++++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/parted/Config.in
- create mode 100644 package/parted/parted.mk
+typo: support
 
-diff --git a/package/Config.in b/package/Config.in
-index 7206f65..88437ae 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -201,6 +201,7 @@ source "package/ntfs-3g/Config.in"
- source "package/ntfsprogs/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-+source "package/parted/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
- source "package/rng-tools/Config.in"
-diff --git a/package/parted/Config.in b/package/parted/Config.in
-new file mode 100644
-index 0000000..86d6679
---- /dev/null
-+++ b/package/parted/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PARTED
-+	bool "parted"
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	help
-+	  parted, the GNU partition resizing program
-+
-+	  http://www.gnu.org/software/parted/
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-new file mode 100644
-index 0000000..826c5f8
---- /dev/null
-+++ b/package/parted/parted.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# parted
-+#
-+#############################################################
-+
-+PARTED_VERSION = 3.0
-+PARTED_SOURCE = parted-$(PARTED_VERSION).tar.gz
-+PARTED_SITE = $(BR2_GNU_MIRROR)/parted
-+PARTED_DEPENDENCIES = readline util-linux lvm2
-+PARTED_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS))
-+
--- 
-1.7.1.1
+> + ? ? ? depends on !BR2_TARGET_XLOADER
+> + ? ? ? help
+> + ? ? ? ? Enable the U-Boot SPL support
+> +
+> ?endif # BR2_TARGET_UBOOT
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index db9de8d..b327f4b 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -29,6 +29,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
+> ?UBOOT_BIN ? ? ? ? ?= u-boot.ldr
+> ?else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+> ?UBOOT_BIN ? ? ? ? ?= u-boot-nand.bin
+> +else ifeq ($(BR2_TARGET_UBOOT_SPL),y)
+> +UBOOT_BIN ? ? ? ? ?= u-boot.img
+> ?else
+> ?UBOOT_BIN ? ? ? ? ?= u-boot.bin
+> ?endif
+> @@ -88,6 +90,8 @@ endef
+>
+> ?define UBOOT_INSTALL_IMAGES_CMDS
+> ? ? ? ?cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+> + ? ? ? $(if $(BR2_TARGET_UBOOT_SPL),
+> + ? ? ? ? ? ? ? cp -dpf $(@D)/MLO $(BINARIES_DIR)/)
+> ?endef
+>
+> ?$(eval $(call GENTARGETS))
+> --
+> 1.7.8.3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
