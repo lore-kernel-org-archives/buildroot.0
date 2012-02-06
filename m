@@ -1,32 +1,29 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  7 Feb 2012 10:18:30 +0100
-Subject: [Buildroot] [PATCH] libmodbus: bump to 3.0.2
-Message-ID: <1328606310-10214-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 6 Feb 2012 23:23:29 +0100
+Subject: [Buildroot] [git commit] feh: bump to 2.3
+Message-ID: <20120207092249.E96DA909F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=7487e914da8562cecd551d657022037a165e0b19
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libmodbus/libmodbus.mk |    2 +-
+ package/feh/feh.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
-index ab134fd..4dcfe23 100644
---- a/package/libmodbus/libmodbus.mk
-+++ b/package/libmodbus/libmodbus.mk
-@@ -3,7 +3,7 @@
- # libmodbus
- #
- #############################################################
--LIBMODBUS_VERSION = 3.0.1
-+LIBMODBUS_VERSION = 3.0.2
- LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
- LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
- LIBMODBUS_INSTALL_STAGING = YES
--- 
-1.7.1.1
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index f036393..f459f8a 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -1,4 +1,4 @@
+-FEH_VERSION = 2.2
++FEH_VERSION = 2.3
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org/
+ FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
