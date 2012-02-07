@@ -1,37 +1,76 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Feb 2012 21:45:32 +0100
-Subject: [Buildroot] Buildroot networking problems
-In-Reply-To: <4F3126EB.8000409@labri.fr> (Jigar SOLANKI's message of "Tue, 07
- Feb 2012 14:28:11 +0100")
-References: <4F302D71.9020308@labri.fr> <87ipjjvgtg.fsf@macbook.be.48ers.dk>
- <4F3126EB.8000409@labri.fr>
-Message-ID: <87fwems783.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 07 Feb 2012 21:51:22 +0100
+Subject: [Buildroot] [PATCH] Add package dstat (python script for system
+	stats/profiling)
+Message-ID: <b75d62eb1595ea7619c5.1328647882@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Hi,
+---
+ package/Config.in       |   1 +
+ package/dstat/Config.in |  19 +++++++++++++++++++
+ package/dstat/dstat.mk  |  15 +++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
- >> Please provide some more info. Please paste output of ipconfig -a. What
- >> kind of errors do you get?
+v2: reduce parameters to GENTARGETS
 
- Jigar> I do not have any errors. The ping just simply do not respond. The
- Jigar> packets are lost.
-
- Jigar> There are two interfaces eth0 and lo.
-
- Jigar> eth0 : 10.10.10.0/24  IP:10.10.10.1 Gw : 10.10.10.254
-
- Jigar> So, when I ping 10.10.10.254 from 10.10.10.1, I dont have any response :
- Jigar> the packets are lost, tcpdump on the gw (10.10.10.254) shows incoming
- Jigar> ICMP packets, though !
-
-But no reply? If the packets are wellformed the gw should reply. Could
-you show up the tcpdump output please?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -19,6 +19,7 @@ endmenu
+ menu "Debugging, profiling and benchmark"
+ source "package/bonnie/Config.in"
+ source "package/dhrystone/Config.in"
++source "package/dstat/Config.in"
+ source "package/dmalloc/Config.in"
+ source "package/kexec/Config.in"
+ source "package/lmbench/Config.in"
+diff --git a/package/dstat/Config.in b/package/dstat/Config.in
+new file mode 100644
+--- /dev/null
++++ b/package/dstat/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_DSTAT
++	bool "dstat"
++	select BR2_PACKAGE_PYTHON
++	help
++	  Dstat, written in Python, is a versatile replacement for vmstat,
++	  iostat, netstat and ifstat. Dstat overcomes some of their limitations
++	  and adds some extra features, more counters and flexibility. Dstat is
++	  handy for monitoring systems during performance tuning tests,
++	  benchmarks or troubleshooting.
++	  Dstat allows you to view all of your system resources in real-time,
++	  you can e.g. compare disk utilization in combination with interrupts
++	  from your IDE controller, or compare the network bandwidth numbers
++	  directly with the disk throughput (in the same interval).
++	
++	  Note that to get proper output, your terminal size should be known by
++	  the termios subsystem. This can be done by running the 'resize'
++	  utility of busybox.
++	
++	  http://dag.wieers.com/home-made/dstat/ 
+diff --git a/package/dstat/dstat.mk b/package/dstat/dstat.mk
+new file mode 100644
+--- /dev/null
++++ b/package/dstat/dstat.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# dstat
++#
++#############################################################
++
++DSTAT_VERSION = 0.7.2
++DSTAT_SOURCE = dstat-$(DSTAT_VERSION).tar.bz2
++DSTAT_SITE = http://dag.wieers.com/home-made/dstat
++
++define DSTAT_INSTALL_TARGET_CMDS
++       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(call GENTARGETS))
