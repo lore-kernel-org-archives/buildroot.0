@@ -1,53 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2012 18:21:42 +0100
-Subject: [Buildroot] ccache problem with codesourcery toolchain
-In-Reply-To: <1328465480.15765.YahooMailNeo@web160904.mail.bf1.yahoo.com>
-References: <1328403901.12122.YahooMailNeo@web160901.mail.bf1.yahoo.com>
- <20120205084546.2db4fec8@skate>
- <1328465480.15765.YahooMailNeo@web160904.mail.bf1.yahoo.com>
-Message-ID: <201202071821.43045.arnout@mind.be>
+Date: Tue, 7 Feb 2012 20:44:02 +0100
+Subject: [Buildroot] [PATCH 1/2] udev: bump to 181 and other fixes
+In-Reply-To: <1328631380-12272-1-git-send-email-yegorslists@googlemail.com>
+References: <1328631380-12272-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <201202072044.02929.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 05 February 2012 19:11:20 D M wrote:
-> > or even directly modify the ccache code to make it the default.
-> 
-> I hadn't considered patching ccache itself to make "none" the
-> default.  I wasn't sure if other use-cases of buildroot would
-> actually want to have the "mtime" setting - like maybe a completely
-> external toolchain?
+On Tuesday 07 February 2012 17:16:19 yegorslists at googlemail.com wrote:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
- You're right: if you do a make clean, change the config of the toolchain,
-and make again, then we don't want to take object files out of the cache...
-Of course, we already had this situation in earlier versions of ccache.
+ Sorry about that - I have --reset-author on by default on 
+git commit --amend.  Yegor should remain as author, of course.
 
-> So I was envisioning a sub-menu where you could
-> select 1 of the 3 options to be explicitly set in the CCACHE var, or maybe
-> 1 of 4 to have a dont-specify-anything option; or a text field, to type in
-> whatever you want - in case you want to specify additional env vars, like
-> the CCACHE_BASEDIR var, so that parallel buildroot trees can use the 
-> same cached objects.
+[snip]
+>  config BR2_PACKAGE_UDEV_ALL_EXTRAS
+>  	bool "enable all extras"
+> -	depends on BR2_LARGEFILE # acl
+> -	depends on BR2_USE_WCHAR # libglib2
+>  	select BR2_PACKAGE_ACL
+> -	select BR2_PACKAGE_LIBUSB
+> -	select BR2_PACKAGE_LIBUSB_COMPAT
+> -	select BR2_PACKAGE_USBUTILS
+>  	select BR2_PACKAGE_HWDATA
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	help
+>  	  Enable all extras with external dependencies like
+> -	  libacl, libusb, libusb-compat, usbutils, hwdata
+> -
+> -comment "udev extras requires a toolchain with LARGEFILE + WCHAR support"
+> -	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+> +	  libacl, hwdata and libglib2
+[snip]
+>  ifeq ($(BR2_PACKAGE_UDEV_ALL_EXTRAS),y)
+> -UDEV_DEPENDENCIES += libusb libusb-compat acl usbutils hwdata libglib2
+> -UDEV_CONF_OPT +=							\
+> -	--with-pci-ids-path=$(TARGET_DIR)/usr/share/hwdata/pci.ids	\
+> -	--with-usb-ids-path=$(TARGET_DIR)/usr/share/hwdata/usb.ids	\
+> +UDEV_DEPENDENCIES += acl usbutils hwdata libglib2
 
- I think that's a bit too complex.
-
- I see two generic solutions:
-
-- Stick to mtime, but make sure the mtime of external toolchains isn't 
-changed.  Since we actually create a toolchain wrapper, we'd need to do
-a 'touch -r <real-toolchain>' on it.
-
-- Use the command string option of CCACHE_COMPILERCHECK.  We can
-calculate a static hash of the compiler/kernel-headers/libc/whatnot
-configuration, and use 'echo <hash>' as the value of
-CCACHE_COMPILERCHECK.  That's quite a bit more complex, but it
-makes it possible to use the compiler cache also for an internal
-toolchain after you've done a make clean.
+ There's an inconsistency between the config and the mk-file here:
+mk-file depends on usbutils but Config.in doesn't select it. I realize 
+I wrote this myself - to err is human :-)
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
