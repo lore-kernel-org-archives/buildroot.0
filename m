@@ -1,30 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 7 Feb 2012 22:46:11 +0100
-Subject: [Buildroot] Reviewing the Buildroot ELC presentation slides
-Message-ID: <20120207224611.0d9e45d5@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Feb 2012 23:31:47 +0100
+Subject: [Buildroot] [PATCH] Add package dstat (python script for system
+	stats/profiling)
+In-Reply-To: <b75d62eb1595ea7619c5.1328647882@beantl019720> (Thomas De
+ Schampheleire's message of "Tue, 07 Feb 2012 21:51:22 +0100")
+References: <b75d62eb1595ea7619c5.1328647882@beantl019720>
+Message-ID: <87bopas2b0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-I have posted at http://free-electrons.com/~thomas/pub/buildroot.pdf
-the current version of the slides I intend to present next week at the
-ELC in San Francisco.
+ Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ Thomas> ---
+ Thomas>  package/Config.in       |   1 +
+ Thomas>  package/dstat/Config.in |  19 +++++++++++++++++++
+ Thomas>  package/dstat/dstat.mk  |  15 +++++++++++++++
+ Thomas>  3 files changed, 35 insertions(+), 0 deletions(-)
 
-For the record, the conference abstract is:
-https://events.linuxfoundation.org/events/embedded-linux-conference/petazzoni
+ Thomas> v2: reduce parameters to GENTARGETS
 
-I would be very interested in your comments and review, both on details
-(typos, mistakes) but also on the overall contents of the slides.
+ Thomas> diff --git a/package/Config.in b/package/Config.in
+ Thomas> --- a/package/Config.in
+ Thomas> +++ b/package/Config.in
+ Thomas> @@ -19,6 +19,7 @@ endmenu
+ Thomas>  menu "Debugging, profiling and benchmark"
+ Thomas>  source "package/bonnie/Config.in"
+ Thomas>  source "package/dhrystone/Config.in"
+ Thomas> +source "package/dstat/Config.in"
+ Thomas>  source "package/dmalloc/Config.in"
+ Thomas>  source "package/kexec/Config.in"
+ Thomas>  source "package/lmbench/Config.in"
+ Thomas> diff --git a/package/dstat/Config.in b/package/dstat/Config.in
+ Thomas> new file mode 100644
+ Thomas> --- /dev/null
+ Thomas> +++ b/package/dstat/Config.in
+ Thomas> @@ -0,0 +1,19 @@
+ Thomas> +config BR2_PACKAGE_DSTAT
+ Thomas> +	bool "dstat"
+ Thomas> +	select BR2_PACKAGE_PYTHON
 
-Thanks,
+Python needs WCHAR, so you need to depend on it as well.
 
-Thomas
+Otherwise it looks good - Committed, thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
