@@ -1,33 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2012 20:53:00 +0100
-Subject: [Buildroot] Customize package not copy .svn .git etc?
-In-Reply-To: <jgrm1h$3h3$1@dough.gmane.org>
-References: <jgrkfd$m8n$1@dough.gmane.org> <jgrm1h$3h3$1@dough.gmane.org>
-Message-ID: <201202072053.00460.arnout@mind.be>
+Date: Tue, 7 Feb 2012 21:03:27 +0100
+Subject: [Buildroot] [PATCHv2 1/2] Add lpc3250loader to the host tools
+In-Reply-To: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+References: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <201202072103.27556.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 07 February 2012 18:12:17 Grant Edwards wrote:
-> The other obvious choice would be to use tar:
-> 
-> $(BUILD_DIR)/.customize:
->         tar -c -f - -C $(CUST_DIR) --exclude-vcs --exclude-backup . | tar -x -f - -C $(TARGET_DIR)
->         touch $@
-> 
-> I'd be happy to submit a patch containing the latter if everybody
-> agrees that they don't want vcs files, backup files, and lockfiles
-> copied.  It is specific to gnu tar -- I assume that's not a problem?
+On Tuesday 07 February 2012 12:01:25 Alexandre Belloni wrote:
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- The tar way is indeed a good idea.  And if you use $(TAR) instead of
-plain tar, it's guaranteed to be gnu tar.
-
- As Luca mentioned, customize will be deprecated in favour of the 
-rootfs-additions approach.  We'll add this to the target/generic/Config.in
-and target-finalize.  If you'd like to prepare a patch for that, you're
-more than welcome!
+ Thomas, the dependency on ARCH_arm isn't necessary for me.  But I don't
+oppose it either.
 
  Regards,
  Arnout
