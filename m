@@ -1,58 +1,40 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue,  7 Feb 2012 11:33:31 +0100
-Subject: [Buildroot] [PATCH] wpa_supplicant: add config option to enable
-	support for WPS
-Message-ID: <1328610811-5476-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 7 Feb 2012 11:39:41 +0100
+Subject: [Buildroot] [git commit] make release: add html/text/pdf manual and
+	create .tar.bz2 format as well
+Message-ID: <20120207104119.ED9F7909FC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/wpa_supplicant/Config.in         |    6 ++++++
- package/wpa_supplicant/wpa_supplicant.mk |    7 +++++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=134ab1ce4f34837587d68e7b4f9fabd5cfc4a537
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index a4e0fba..8ac2576 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -31,3 +31,9 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	  access point. This can be used for open and WPA2-Personal networks
- 	  (optionally, with WPS); this links in parts of hostapd functionality
- 	  into wpa_supplicant.
-+
-+config BR2_PACKAGE_WPA_SUPPLICANT_WPS
-+	bool "Enable support for WPS"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT
-+	help
-+	  Enable support for Wi-Fi Protected Setup (WPS)
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index f722b81..0a672ee 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -35,6 +35,12 @@ define WPA_SUPPLICANT_AP_CONFIG
- endef
- endif
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 7aeee96..e1621f9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -695,8 +695,15 @@ endif
  
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
-+define WPA_SUPPLICANT_WPS_CONFIG
-+	echo "CONFIG_WPS=y" >>$(WPA_SUPPLICANT_CONFIG)
-+endef
-+endif
-+
- define WPA_SUPPLICANT_CRYPTO_CONFIG
- 	echo "CONFIG_CRYPTO=internal" >>$(WPA_SUPPLICANT_CONFIG)
- 	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(WPA_SUPPLICANT_CONFIG)
-@@ -77,6 +83,7 @@ define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	$(WPA_SUPPLICANT_CRYPTO_CONFIG)
- 	$(WPA_SUPPLICANT_TLS_CONFIG)
- 	$(WPA_SUPPLICANT_EAP_CONFIG)
-+	$(WPA_SUPPLICANT_WPS_CONFIG)
- 	$(WPA_SUPPLICANT_LIBNL_CONFIG)
- 	$(WPA_SUPPLICANT_DBUS_CONFIG)
- 	$(WPA_SUPPLICANT_AP_CONFIG)
--- 
-1.7.5.4
+ release: OUT=buildroot-$(BR2_VERSION)
+ 
++# Create release tarballs. We need to fiddle a bit to add the generated
++# documentation to the git output
+ release:
+-	git archive --format=tar --prefix=$(OUT)/ master|gzip -9 >$(OUT).tar.gz
++	git archive --format=tar --prefix=$(OUT)/ master > $(OUT).tar
++	$(MAKE) O=$(OUT) manual-html manual-txt manual-pdf
++	tar rf $(OUT).tar $(OUT)
++	gzip -9 -c < $(OUT).tar > $(OUT).tar.gz
++	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
++	rm -rf $(OUT) $(OUT).tar
+ 
+ ################################################################################
+ # GENDOC -- generates the make targets needed to build a specific type of
