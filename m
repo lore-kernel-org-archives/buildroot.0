@@ -1,53 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 7 Feb 2012 21:05:50 +0100
-Subject: [Buildroot] [PATCH] sam-ba is host only
-In-Reply-To: <1328620373-8784-2-git-send-email-alexandre.belloni@piout.net>
-References: <1328620373-8784-1-git-send-email-alexandre.belloni@piout.net>
- <1328620373-8784-2-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <201202072105.50249.arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Feb 2012 21:45:32 +0100
+Subject: [Buildroot] Buildroot networking problems
+In-Reply-To: <4F3126EB.8000409@labri.fr> (Jigar SOLANKI's message of "Tue, 07
+ Feb 2012 14:28:11 +0100")
+References: <4F302D71.9020308@labri.fr> <87ipjjvgtg.fsf@macbook.be.48ers.dk>
+ <4F3126EB.8000409@labri.fr>
+Message-ID: <87fwems783.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 07 February 2012 14:12:53 Alexandre Belloni wrote:
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
 
-> ---
->  package/sam-ba/sam-ba.mk |    9 +++++----
->  1 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-> index d00575c..ad02326 100644
-> --- a/package/sam-ba/sam-ba.mk
-> +++ b/package/sam-ba/sam-ba.mk
-> @@ -1,9 +1,9 @@
-> -SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
-> -SAM_BA_VERSION = 2.10
-> -SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
-> +HOST_SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
-> +HOST_SAM_BA_VERSION = 2.10
-> +HOST_SAM_BA_SOURCE  = sam-ba_$(HOST_SAM_BA_VERSION).zip
->  
->  define HOST_SAM_BA_EXTRACT_CMDS
-> -        unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
-> +        unzip -d $(BUILD_DIR) $(DL_DIR)/$(HOST_SAM_BA_SOURCE)
->          mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
->          rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
->  endef
+Hi,
 
- With 4 packages using it, it's time to add support for zip to the generic 
-extract...
+ >> Please provide some more info. Please paste output of ipconfig -a. What
+ >> kind of errors do you get?
 
- Regards,
- Arnout
+ Jigar> I do not have any errors. The ping just simply do not respond. The
+ Jigar> packets are lost.
+
+ Jigar> There are two interfaces eth0 and lo.
+
+ Jigar> eth0 : 10.10.10.0/24  IP:10.10.10.1 Gw : 10.10.10.254
+
+ Jigar> So, when I ping 10.10.10.254 from 10.10.10.1, I dont have any response :
+ Jigar> the packets are lost, tcpdump on the gw (10.10.10.254) shows incoming
+ Jigar> ICMP packets, though !
+
+But no reply? If the packets are wellformed the gw should reply. Could
+you show up the tcpdump output please?
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
