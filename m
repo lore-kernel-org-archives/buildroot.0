@@ -1,33 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 7 Feb 2012 09:51:09 +0100
-Subject: [Buildroot] FW: Buildroot RFS Login Question
-In-Reply-To: <CB4468D5.2D36%donald.poole@swri.org>
-References: <CB44467D.2D31%donald.poole@swri.org>
- <CB4468D5.2D36%donald.poole@swri.org>
-Message-ID: <CAHXCMM+Y-gHrkSCuZVmDkDNqLKqkdGCfmXVj=xuA-o9wPsEjew@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 07 Feb 2012 09:59:01 +0100
+Subject: [Buildroot] [PATCH] manual: update download helper information
+In-Reply-To: <a19551b34f1bdd74cc65.1328560868@beantl019720> (Thomas De
+ Schampheleire's message of "Mon, 06 Feb 2012 21:41:08 +0100")
+References: <a19551b34f1bdd74cc65.1328560868@beantl019720>
+Message-ID: <87haz3t3xm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-> Unfortunately, if I use the root user get a "Login Incorrect" message and a
-> new login prompt that looks like this:
-> Starting input-event-daemon: done
->
-> Welcome to VICTORY Embedded
-> victory-embedded login: root
-> Login incorrect
->
-> victory-embedded login:
->
+ Thomas> Signed-off-by: Thomas De Schampheleire
+ Thomas> <thomas.de.schampheleire@gmail.com>
 
-It may be stupid, but could you check that /etc/passwd and /etc/shadow
-are valid in the rootfs.
-I did spend some time debugging rootfs with a valid /etc/passwd and
-empty /etc/shadow whereas it should not.
+Thanks, committed.
 
+ Thomas> +  Examples: +
+ Thomas> +    +LIBFOO_VERSION = 0.1.2+ +
+ Thomas> +    +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+ +
+ Thomas> +    +LIBFOO_VERSION = stable+
 
-Sam
+Not your fault, but a2x doesn't seem to add line breaks here. I don't
+particulary know docbook, but looking a bit closer, it seems like you
+need to add something like:
+
+<xsl:template match="processing-instruction('asciidoc-br')">
+  <xsl:text disable-output-escaping="yes"><![CDATA[<br/>]]></xsl:text>
+</xsl:template>
+
+To /etc/asciidoc/docbook-xsl/{xhtml,text}.xsl
+
+I don't quite understand why upstream isn't doing that though.
+
+-- 
+Bye, Peter Korsgaard
