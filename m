@@ -1,44 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 7 Feb 2012 15:54:04 +0200
-Subject: [Buildroot] Buildroot networking problems
-In-Reply-To: <4F3126EB.8000409@labri.fr>
-References: <4F302D71.9020308@labri.fr> <87ipjjvgtg.fsf@macbook.be.48ers.dk>
- <4F3126EB.8000409@labri.fr>
-Message-ID: <20120207135404.GB3690@tarshish>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 7 Feb 2012 15:24:11 +0100
+Subject: [Buildroot] [PATCHv2 1/2] Add lpc3250loader to the host tools
+In-Reply-To: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+References: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <CAAXf6LV1icxeia44weRDfuoSwkSbmkZRmdNG+wskWOmgGhOGMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jigar,
-
-On Tue, Feb 07, 2012 at 02:28:11PM +0100, Jigar SOLANKI wrote:
-> Le 06/02/2012 21:37, Peter Korsgaard a ?crit :
-> >>>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
-> > 
-> >  Jigar> Hi all,
-> >  Jigar> I've built a Buildroot Linux on a Leon3 CPU, everything works fine
-> >  Jigar> except the network configuration.
-> > 
-> >  Jigar> I have the eth0 interface configured correctly with a default gw,
-> >  Jigar> netmask etc...but when I ping the interface adress itself, it doesnt
-> >  Jigar> respond at all.
-> > 
-> >  Jigar> I've also tried to ping 127.0.0.1, same result, lo is not responding.
-> >  Jigar> (I have read some posts on resolv.conf but in my case, it is not a dns
-> >  Jigar> related issue, I ping numerical adresses..)
-> > 
-> > Please provide some more info. Please paste output of ipconfig -a. What
-> > kind of errors do you get?
+On Tue, Feb 7, 2012 at 12:01 PM, Alexandre Belloni
+<alexandre.belloni@piout.net> wrote:
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+> ---
+> ?package/Config.in.host ? ? ? ? ? ? ? ? | ? ?1 +
+> ?package/lpc3250loader/Config.in.host ? | ? ?7 +++++++
+> ?package/lpc3250loader/lpc3250loader.mk | ? ?9 +++++++++
+> ?3 files changed, 17 insertions(+), 0 deletions(-)
+> ?create mode 100644 package/lpc3250loader/Config.in.host
+> ?create mode 100644 package/lpc3250loader/lpc3250loader.mk
 >
-> [detailed setup description]
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 1f49e79..861b736 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -1,5 +1,6 @@
+> ?menu "Host utilities"
+>
+> +source "package/lpc3250loader/Config.in.host"
+> ?source "package/openocd/Config.in.host"
+> ?source "package/sam-ba/Config.in.host"
+> ?source "package/uboot-tools/Config.in.host"
+> diff --git a/package/lpc3250loader/Config.in.host b/package/lpc3250loader/Config.in.host
+> new file mode 100644
+> index 0000000..750080b
+> --- /dev/null
+> +++ b/package/lpc3250loader/Config.in.host
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_HOST_LPC3250LOADER
+> + ? ? ? bool "host lpc3250loader"
+> + ? ? ? help
+> + ? ? ? ? lpc3250loader is a tool to load/burn programs (in particular kickstart
+> + ? ? ? ? and S1L) on an LPC3250 platform.
 
-Please send the output of 'iptables -L -n'.
+Does it make sense to have this config depend on an architecture
+specific variable?
+Although it would still be very broad, depending on BR2_ARCH_arm could
+be a possibility...
 
-baruch
+This way, users of other architectures are not presented with packages
+that are irrelevant for them...
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> +
+> + ? ? ? ? https://gitorious.org/lpc3250loader
+> diff --git a/package/lpc3250loader/lpc3250loader.mk b/package/lpc3250loader/lpc3250loader.mk
+> new file mode 100644
+> index 0000000..e3d5528
+> --- /dev/null
+> +++ b/package/lpc3250loader/lpc3250loader.mk
+> @@ -0,0 +1,9 @@
+> +HOST_LPC3250LOADER_SITE = git://gitorious.org/lpc3250loader/lpc3250loader.git
+> +HOST_LPC3250LOADER_VERSION = 1.0
+> +
+> +define HOST_LPC3250LOADER_INSTALL_CMDS
+> + ? ? ? mkdir -p $(HOST_DIR)/usr/bin/
+> + ? ? ? cp -a $(@D)/* $(HOST_DIR)/usr/bin/
+> +endef
+> +
+> +$(eval $(call GENTARGETS,host))
+> --
+> 1.7.5.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
