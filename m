@@ -1,45 +1,53 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 7 Feb 2012 15:32:00 +0100
-Subject: [Buildroot] [PATCHv2 1/2] Add lpc3250loader to the host tools
-In-Reply-To: <20120207142657.GA9121@piout.net>
-References: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
- <CAAXf6LV1icxeia44weRDfuoSwkSbmkZRmdNG+wskWOmgGhOGMw@mail.gmail.com>
- <20120207142657.GA9121@piout.net>
-Message-ID: <CAAXf6LV5H-EZVvPJSFrO5rDZXzEPab7uZSjshDaLiM29Zc0rTw@mail.gmail.com>
+From: Jigar SOLANKI <jigar.solanki@labri.fr>
+Date: Tue, 07 Feb 2012 15:35:36 +0100
+Subject: [Buildroot] Buildroot networking problems
+In-Reply-To: <20120207135404.GB3690@tarshish>
+References: <4F302D71.9020308@labri.fr> <87ipjjvgtg.fsf@macbook.be.48ers.dk>
+ <4F3126EB.8000409@labri.fr> <20120207135404.GB3690@tarshish>
+Message-ID: <4F3136B8.9020004@labri.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 7, 2012 at 3:26 PM, Alexandre Belloni
-<alexandre.belloni@piout.net> wrote:
-> On Tue, Feb 07, 2012 at 03:24:11PM +0100, Thomas De Schampheleire wrote :
->> On Tue, Feb 7, 2012 at 12:01 PM, Alexandre Belloni
->> <alexandre.belloni@piout.net> wrote:
->> > diff --git a/package/lpc3250loader/Config.in.host b/package/lpc3250loader/Config.in.host
->> > new file mode 100644
->> > index 0000000..750080b
->> > --- /dev/null
->> > +++ b/package/lpc3250loader/Config.in.host
->> > @@ -0,0 +1,7 @@
->> > +config BR2_PACKAGE_HOST_LPC3250LOADER
->> > + ? ? ? bool "host lpc3250loader"
->> > + ? ? ? help
->> > + ? ? ? ? lpc3250loader is a tool to load/burn programs (in particular kickstart
->> > + ? ? ? ? and S1L) on an LPC3250 platform.
->>
->> Does it make sense to have this config depend on an architecture
->> specific variable?
->> Although it would still be very broad, depending on BR2_ARCH_arm could
->> be a possibility...
->>
->> This way, users of other architectures are not presented with packages
->> that are irrelevant for them...
->>
->
-> Could be, it wasn't the case for sam-ba though...
 
-In my opinion, the same change could be done for sam-ba then.
+> Please send the output of 'iptables -L -n'.
 
-What do others think?
+I tried with and without iptables support.
+
+Here's the ouput with :
+> # iptables -L -n
+modprobe: chdir(/lib/modules): No such file or directory
+iptables v1.4.10: can't initialize iptables table `filter': Table does
+not exist (do you need to insmod?)
+Perhaps iptables or your kernel needs to be upgraded.
+#
+
+
+> baruch
+> 
+
+
+-- 
+Jigar SOLANKI
+
+LaBRI - UMR 5800
+Universit? Bordeaux 1
+351 Cours de la Lib?ration
+F-33405 Talence Cedex
+Phone : (+33) 5 4000 24 87
+Fax   : (+33) 5 4000 66 69
+Web   : http://www.labri.fr/perso/solanki
+
+* Please do not print this e-mail unless it's really necessary *
+---
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 554 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120207/453237b4/attachment.asc>
