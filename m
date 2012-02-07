@@ -1,51 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Feb 2012 23:31:47 +0100
-Subject: [Buildroot] [PATCH] Add package dstat (python script for system
-	stats/profiling)
-In-Reply-To: <b75d62eb1595ea7619c5.1328647882@beantl019720> (Thomas De
- Schampheleire's message of "Tue, 07 Feb 2012 21:51:22 +0100")
-References: <b75d62eb1595ea7619c5.1328647882@beantl019720>
-Message-ID: <87bopas2b0.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 7 Feb 2012 23:13:25 +0100
+Subject: [Buildroot] [git commit] libevas: x11 glx option needs Xrender,
+	Xext and libeet
+Message-ID: <20120207223219.9F73F90A10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a5617a52d0401a42a70f733bb3f593497f117f2d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- Thomas> ---
- Thomas>  package/Config.in       |   1 +
- Thomas>  package/dstat/Config.in |  19 +++++++++++++++++++
- Thomas>  package/dstat/dstat.mk  |  15 +++++++++++++++
- Thomas>  3 files changed, 35 insertions(+), 0 deletions(-)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/efl/libevas/Config.in  |    3 +++
+ package/efl/libevas/libevas.mk |    3 ++-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
- Thomas> v2: reduce parameters to GENTARGETS
-
- Thomas> diff --git a/package/Config.in b/package/Config.in
- Thomas> --- a/package/Config.in
- Thomas> +++ b/package/Config.in
- Thomas> @@ -19,6 +19,7 @@ endmenu
- Thomas>  menu "Debugging, profiling and benchmark"
- Thomas>  source "package/bonnie/Config.in"
- Thomas>  source "package/dhrystone/Config.in"
- Thomas> +source "package/dstat/Config.in"
- Thomas>  source "package/dmalloc/Config.in"
- Thomas>  source "package/kexec/Config.in"
- Thomas>  source "package/lmbench/Config.in"
- Thomas> diff --git a/package/dstat/Config.in b/package/dstat/Config.in
- Thomas> new file mode 100644
- Thomas> --- /dev/null
- Thomas> +++ b/package/dstat/Config.in
- Thomas> @@ -0,0 +1,19 @@
- Thomas> +config BR2_PACKAGE_DSTAT
- Thomas> +	bool "dstat"
- Thomas> +	select BR2_PACKAGE_PYTHON
-
-Python needs WCHAR, so you need to depend on it as well.
-
-Otherwise it looks good - Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index f5e79b3..e2f5349 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -98,7 +98,10 @@ config BR2_PACKAGE_LIBEVAS_X11_GLX
+ 	bool "libevas X11 GLX backend"
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXRENDER
++	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
++	select BR2_PACKAGE_LIBEET
+ 	help
+ 	  This enables the OpenGL X11 rendering engine that renders
+ 	  using GLX which may be hardware accelerated.
+diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
+index 7758b18..14f49bb 100644
+--- a/package/efl/libevas/libevas.mk
++++ b/package/efl/libevas/libevas.mk
+@@ -65,7 +65,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBEVAS_X11_GLX),y)
+ LIBEVAS_CONF_OPT += --enable-gl-xlib
+-LIBEVAS_DEPENDENCIES += xproto_glproto xlib_libX11
++LIBEVAS_DEPENDENCIES += xproto_glproto xlib_libX11 xlib_libXrender \
++			xlib_libXext libeet
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBEVAS_XCB),y)
