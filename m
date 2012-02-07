@@ -1,38 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Feb 2012 10:01:28 +0100
-Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <CB561DC5.2E86%donald.poole@swri.org> (Donald R. Poole's message
- of "Tue, 7 Feb 2012 06:31:46 +0000")
-References: <CB561DC5.2E86%donald.poole@swri.org>
-Message-ID: <87aa4vt3tj.fsf@macbook.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  7 Feb 2012 10:18:30 +0100
+Subject: [Buildroot] [PATCH] libmodbus: bump to 3.0.2
+Message-ID: <1328606310-10214-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- >> puts("Login incorrect");
- >> 
- >> As you're using the default fs skeleton, the pw_passwd[0] and
- >> /etc/securetty tests shouldn't fail, but apparently they do. Could you
- >> enable strace and run
- >> 
- >> strace -f login
- >> 
- >> And send the output to the list?
- >> 
- >> -- 
- >> Bye, Peter Korsgaard
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libmodbus/libmodbus.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Donald> Ok, sorry for the delay, but I was tied up at work getting ready for a
- Donald> demo.  But, here is the strace output?it's quite long:
-
- Donald> 1292  execve("bin/login", ["bin/login"], [/* 8 vars */]) = 0
-
-I don't see "Login incorrect" anywhere in that log. Did you remember to
-use strace -f ?
-
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+index ab134fd..4dcfe23 100644
+--- a/package/libmodbus/libmodbus.mk
++++ b/package/libmodbus/libmodbus.mk
+@@ -3,7 +3,7 @@
+ # libmodbus
+ #
+ #############################################################
+-LIBMODBUS_VERSION = 3.0.1
++LIBMODBUS_VERSION = 3.0.2
+ LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
+ LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
+ LIBMODBUS_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+1.7.1.1
