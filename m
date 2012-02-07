@@ -1,109 +1,58 @@
-From: Mathieu <mbriand@adeneo-embedded.com>
-Date: Tue, 07 Feb 2012 11:22:29 +0100
-Subject: [Buildroot] [PATCH] Add Freescale MX53 support
-In-Reply-To: <201202070000.34270.arnout@mind.be>
-References: <1328273223-16093-1-git-send-email-mbriand@adeneo-embedded.com>
- <1328277370-18423-1-git-send-email-mbriand@adeneo-embedded.com>
- <201202070000.34270.arnout@mind.be>
-Message-ID: <1328610149.18704.23.camel@mathieu-OptiPlex-745>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue,  7 Feb 2012 11:33:31 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: add config option to enable
+	support for WPS
+Message-ID: <1328610811-5476-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2012-02-07 at 00:00 +0100, Arnout Vandecappelle wrote:
-Thank you for this contribution!  We certainly need more defconfigs.
-> 
->  Below are a few comments on your patch.  Please consider them and if
-> necessary re-post it.  If you will not be able to re-post it, let us
-know
-> so someone else can adopt it.
-> 
->  We will certainly need a Signed-off-by tag on your patch, i.e. a line
-saying
-> 
-> Signed-off-by: Your Name <your@email.address>
-> 
-> This is a short way for you to assert that you are entitled to
-contribute
-> the patch under buildroot's GPL license.  See 
-> http://kerneltrap.org/files/Jeremy/DCO.txt for more details.
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+---
+ package/wpa_supplicant/Config.in         |    6 ++++++
+ package/wpa_supplicant/wpa_supplicant.mk |    7 +++++++
+ 2 files changed, 13 insertions(+), 0 deletions(-)
 
-Ok
-
-> 
-> 
-> On Friday 03 February 2012 14:56:10 Mathieu Briand wrote:
-> > Buildroot config and Linux Kernel config.
-> > Binaries blob not supported yet.
-> 
->  What does 'Binaries blob' mean?
-
-By 'Binaries blob' I mean Freescale Multimedia Codecs. Current buildroot
-configuration will probably not allow users to use them.
-
-> 
-> > ---
-> >  board/freescale/mx53loco/linux.config |  175 +++++++++++++++++++++++++++++++++
-> >  configs/freescale_mx53loco_defconfig  |   19 ++++
-> >  2 files changed, 194 insertions(+), 0 deletions(-)
-> >  create mode 100644 board/freescale/mx53loco/linux.config
-> >  create mode 100644 configs/freescale_mx53loco_defconfig
-> 
->  The processor is called "i.MX53", I believe.  We also usually don't 
-> include the vendor name in the processor identification.  So something
-> like configs/imx53loco_defconfig is probably more appropriate.  OTOH,
-> Freescale themselves seem to call i.MX3x processors "imx" and i.MX5x
-> processors "mx5"...
-> 
-
-Ok for the vendor name.
-For imx53/mx53 it seemed appropriate to name it mx53 since it's the name
-in kernel and u-boot.
-
-> 
-> > diff --git a/board/freescale/mx53loco/linux.config b/board/freescale/mx53loco/linux.config
->  Personally I'd prefer to use a kernel defconfig (mx5_defconfig), but
-> perhaps this one is more appropriate.
-> 
-> [snip]
-> > diff --git a/configs/freescale_mx53loco_defconfig b/configs/freescale_mx53loco_defconfig
-> > new file mode 100644
-> > index 0000000..dbf0e2c
-> > --- /dev/null
-> > +++ b/configs/freescale_mx53loco_defconfig
-> > @@ -0,0 +1,19 @@
-> > +# Architecture
-> > +BR2_arm=y
-> > +BR2_cortex_a8=y
-> > +
-> > +# System
-> > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> > +BR2_TARGET_UBOOT=y
-> > +BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
-> > +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> > +BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
-> > +BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="master"
-> > +
-> > +# Kernel
-> > +BR2_LINUX_KERNEL=y
-> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> > +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
-> > +BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="master"
-> 
->  I think it is better (more predictable) to specify an exact version instead
-> of the latest HEAD.  Either a git sha or a tarball, e.g. 
-> http://git.freescale.com/git/cgit.cgi/imx/linux-2.6-imx.git/snapshot/rel_imx_2.6.38_12.01.01.tar.gz
-> (if that is a relevant snapshot at all).
-
-Ok
-
-> 
-> > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> > +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/freescale/mx53loco/linux.config"
-> > 
-> 
->  Regards,
->  Arnout
-> 
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index a4e0fba..8ac2576 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -31,3 +31,9 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ 	  access point. This can be used for open and WPA2-Personal networks
+ 	  (optionally, with WPS); this links in parts of hostapd functionality
+ 	  into wpa_supplicant.
++
++config BR2_PACKAGE_WPA_SUPPLICANT_WPS
++	bool "Enable support for WPS"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT
++	help
++	  Enable support for Wi-Fi Protected Setup (WPS)
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index f722b81..0a672ee 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -35,6 +35,12 @@ define WPA_SUPPLICANT_AP_CONFIG
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
++define WPA_SUPPLICANT_WPS_CONFIG
++	echo "CONFIG_WPS=y" >>$(WPA_SUPPLICANT_CONFIG)
++endef
++endif
++
+ define WPA_SUPPLICANT_CRYPTO_CONFIG
+ 	echo "CONFIG_CRYPTO=internal" >>$(WPA_SUPPLICANT_CONFIG)
+ 	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(WPA_SUPPLICANT_CONFIG)
+@@ -77,6 +83,7 @@ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	$(WPA_SUPPLICANT_CRYPTO_CONFIG)
+ 	$(WPA_SUPPLICANT_TLS_CONFIG)
+ 	$(WPA_SUPPLICANT_EAP_CONFIG)
++	$(WPA_SUPPLICANT_WPS_CONFIG)
+ 	$(WPA_SUPPLICANT_LIBNL_CONFIG)
+ 	$(WPA_SUPPLICANT_DBUS_CONFIG)
+ 	$(WPA_SUPPLICANT_AP_CONFIG)
+-- 
+1.7.5.4
