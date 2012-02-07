@@ -1,80 +1,45 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 7 Feb 2012 15:29:52 +0100
-Subject: [Buildroot] kernel boot problem
-In-Reply-To: <7E2C5DAB2B124E0C900A527EE0EF019C@JohanW7>
-References: <7E2C5DAB2B124E0C900A527EE0EF019C@JohanW7>
-Message-ID: <CAAXf6LXL+1pkZTm56CUUkwmqkd0j9ozm6Yut8xhtGGC3qAVuHQ@mail.gmail.com>
+Date: Tue, 7 Feb 2012 15:32:00 +0100
+Subject: [Buildroot] [PATCHv2 1/2] Add lpc3250loader to the host tools
+In-Reply-To: <20120207142657.GA9121@piout.net>
+References: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+ <CAAXf6LV1icxeia44weRDfuoSwkSbmkZRmdNG+wskWOmgGhOGMw@mail.gmail.com>
+ <20120207142657.GA9121@piout.net>
+Message-ID: <CAAXf6LV5H-EZVvPJSFrO5rDZXzEPab7uZSjshDaLiM29Zc0rTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, Feb 7, 2012 at 3:26 PM, Alexandre Belloni
+<alexandre.belloni@piout.net> wrote:
+> On Tue, Feb 07, 2012 at 03:24:11PM +0100, Thomas De Schampheleire wrote :
+>> On Tue, Feb 7, 2012 at 12:01 PM, Alexandre Belloni
+>> <alexandre.belloni@piout.net> wrote:
+>> > diff --git a/package/lpc3250loader/Config.in.host b/package/lpc3250loader/Config.in.host
+>> > new file mode 100644
+>> > index 0000000..750080b
+>> > --- /dev/null
+>> > +++ b/package/lpc3250loader/Config.in.host
+>> > @@ -0,0 +1,7 @@
+>> > +config BR2_PACKAGE_HOST_LPC3250LOADER
+>> > + ? ? ? bool "host lpc3250loader"
+>> > + ? ? ? help
+>> > + ? ? ? ? lpc3250loader is a tool to load/burn programs (in particular kickstart
+>> > + ? ? ? ? and S1L) on an LPC3250 platform.
+>>
+>> Does it make sense to have this config depend on an architecture
+>> specific variable?
+>> Although it would still be very broad, depending on BR2_ARCH_arm could
+>> be a possibility...
+>>
+>> This way, users of other architectures are not presented with packages
+>> that are irrelevant for them...
+>>
+>
+> Could be, it wasn't the case for sam-ba though...
 
-On Mon, Feb 6, 2012 at 4:04 PM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
-> Hi
->
-> I receive this on the console when my system boots:
->
-> When i build the same kernel (same version ,same patches and same kernel config )
-> With 2011.11 : panic !
-> With 2010.02 : ok
->
-> Kernel 2.6.31.9 ,build with gcc 4.5.3
->
-> Any idea (both are build in OABI but EABI yields same problem)?
->
-> snip
-> ....
-> sd 0:0:0:0: [sda] Assuming drive cache: write through
-> ?sda: sda1 < sda5 > sda2
-> sd 0:0:0:0: [sda] Assuming drive cache: write through
-> sd 0:0:0:0: [sda] Attached SCSI removable disk
-> EXT2-fs warning: mounting unchecked fs, running e2fsck is recommended
-> VFS: Mounted root (ext2 filesystem) on device 8:5.
-> Freeing init memory: 112K
-> BUG: Bad page state in process init ?pfn:204b6
-> page:c04086c0 flags:00000400 count:1 mapcount:0 mapping:(null) index:0
-> [<c002a748>] (unwind_backtrace+0x0/0xd0) from [<c006b5fc>] (bad_page+0x104/0x138)
-> [<c006b5fc>] (bad_page+0x104/0x138) from [<c006d1c4>] (get_page_from_freelist+0x344/0x470)
-> [<c006d1c4>] (get_page_from_freelist+0x344/0x470) from [<c006d3d8>] (__alloc_pages_nodemask+0xe8/0x518)
-> [<c006d3d8>] (__alloc_pages_nodemask+0xe8/0x518) from [<c006fa08>] (__do_page_cache_readahead+0x114/0x260)[<c006fa08>]
-> (__do_page_cache_readahead+0x114/0x260) from [<c006fdbc>] (ra_submit+0x20/0x24)
-> [<c006fdbc>] (ra_submit+0x20/0x24) from [<c0067e8c>] (filemap_fault+0x1f0/0x434)
->
-> [<c0067e8c>] (filemap_fault+0x1f0/0x434) from [<c007a128>] (__do_fault+0x50/0x404)
->
-> This is from the one build in 2010.02 and is OK
->
-> Snip
-> ...
-> sd 0:0:0:0: [sda] Assuming drive cache: write through
-> ?sda: sda1 < sda5 > sda2
-> sd 0:0:0:0: [sda] Assuming drive cache: write through
-> sd 0:0:0:0: [sda] Attached SCSI removable disk
-> EXT2-fs warning: mounting unchecked fs, running e2fsck is recommended
-> VFS: Mounted root (ext2 filesystem) on device 8:5.
-> Freeing init memory: 120K
-> init started: BusyBox v1.15.3 (2010-04-30 12:24:59 CEST)
-> UBIFS error (pid 348): ubifs_get_sb: cannot open "ubi0:data", error -19
-> starting pid 352, tty '': '/etc/init.d/rcS'
-> Populating /dev using udev: done
-> Starting portmap: done
-> Initializing random number generator... done.
-> Starting network...
-> ifconfig: SIOCGIFFLAGS: No such device
-> Starting dropbear sshd: OK
-> Starting inetd : OK
-> sucses 0 adding beeper0
-> doing timer start
-> Major =251
-> sucses 0 adding oled0
-> OLED: Loaded
-> ....
->
->
+In my opinion, the same change could be done for sam-ba then.
 
-Can you compare the versions of other packages used between both
-buildroot versions?
-For example, busybox probably changed version. Can you try stepping back that ?
+What do others think?
