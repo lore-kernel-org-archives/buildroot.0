@@ -1,59 +1,40 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 7 Feb 2012 17:54:59 +0000 (UTC)
-Subject: [Buildroot] Customize package not copy .svn .git etc?
-References: <jgrkfd$m8n$1@dough.gmane.org> <4F315A9B.1000207@lucaceresoli.net>
-Message-ID: <jgrohj$npe$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 7 Feb 2012 18:48:14 +0100
+Subject: [Buildroot] [PATCH 1/2] poco: the Zip module depends on XML,
+ Net and Util modules
+In-Reply-To: <201202062310.04009.arnout@mind.be>
+References: <cover.1328221763.git.thomas.petazzoni@free-electrons.com>
+ <3b38408088d90bd4c521eb6f35d73502c1d5f352.1328221763.git.thomas.petazzoni@free-electrons.com>
+ <201202062310.04009.arnout@mind.be>
+Message-ID: <20120207184814.5275f6bf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-02-07, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+Le Mon, 6 Feb 2012 23:10:03 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> Grant Edwards wrote:
->> Do other users of the customize package not use svn, git, CVS, etc?
->
-> During the Buildroot Developers Day last Friday we agreed that the
-> customize package is not well-written and not satisfactory, thus it
-> will be deprecated in 2012.02 and removed in a following release.
+> > This fixes the build breakage visible at:
+> > 
+> >   http://free-electrons.com/~thomas/buildroot/test-output-2011-12-02/test-920-output.bz2
+> > 
+> > with the configuration visible at:
+> > 
+> >   http://free-electrons.com/~thomas/buildroot/test-output-2011-12-02/test-920-config
+> 
+>  Good idea to refer to the test.  However, will it exist there
+> forever? If not, I'm not sure if it should be in the commit message.
 
-I guess I won't submit a patch for it then. :)
+I can't guarantee it will be there forever, no. So indeed, next time
+I'll put it after the ---.
 
-> A much better method to obtain the same result is to put your board
-> specific files in board/<company>/<project>/rootfs-additions/, and
-> write a command in the post-build script to copy these files onto the
-> target root filesystem.
+Best regards,
 
-I'll put that on the list of things to do.
-
-> Ah, actually this won't solve your problem with some version control
-> systems such as Subversion < 1.7 or CVS which create hidden
-> directories for their metadata. To solve this problem you should, in
-> my personal order of preference:
->
-> - use git, which creates only one hidden dir in the project root, or
-
-Not an option.  We've spent the last several years moving from VSS to
-SVN (and we're not finished yet).  Suggesting we now switch to git
-would be futile (though I personally would like git just fine handling
-branches in svn is clumsy compared to git).  The last time I checked
-git wasn't well supported on Windows, and we have some windows
-projects to worry about.
-
-> - upgrade to Subversion >= 1.7, which created only one dir as git
->   does, or
-
-That will happen eventually...
-
-> - write your post-build script so that it bypasses .svn and CVS dirs,
->   for example using the find command.
-
-That's probably "the right thing".
-
-Thanks for the warning about customize going away.
-
+Thomas
 -- 
-Grant Edwards               grant.b.edwards        Yow! Now KEN and BARBIE
-                                  at               are PERMANENTLY ADDICTED to
-                              gmail.com            MIND-ALTERING DRUGS ...
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
