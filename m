@@ -1,23 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 07 Feb 2012 11:50:51 +0100
-Subject: [Buildroot] [PATCH] libmodbus: bump to 3.0.2
-In-Reply-To: <1328606310-10214-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Tue, 7 Feb 2012 10:18:30
- +0100")
-References: <1328606310-10214-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87sjimsyr8.fsf@macbook.be.48ers.dk>
+From: Alexandre Belloni <alexandre.belloni@piout.net>
+Date: Tue,  7 Feb 2012 12:01:26 +0100
+Subject: [Buildroot] [PATCHv2 2/2] Add lpc3250loader to lpc3250 configs
+In-Reply-To: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+References: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
+Message-ID: <1328612486-7770-2-git-send-email-alexandre.belloni@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+---
+ configs/ea3250_defconfig  |    6 ++++++
+ configs/fdi3250_defconfig |    6 ++++++
+ configs/phy3250_defconfig |    6 ++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Committed, thanks.
-
+diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+index da84c7e..9cd7b34 100644
+--- a/configs/ea3250_defconfig
++++ b/configs/ea3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="ea3250"
+diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
+index 505dc8b..1fd0b05 100644
+--- a/configs/fdi3250_defconfig
++++ b/configs/fdi3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
+diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
+index d46d719..bc17d5c 100644
+--- a/configs/phy3250_defconfig
++++ b/configs/phy3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="phy3250"
 -- 
-Bye, Peter Korsgaard
+1.7.5.4
