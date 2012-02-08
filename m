@@ -1,45 +1,19 @@
-From: Poole, Donald R. <drpoole@swri.org>
-Date: Wed, 8 Feb 2012 23:17:36 +0000
-Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <87fwel8esq.fsf@macbook.be.48ers.dk>
-Message-ID: <CB585E3C.2EF2%donald.poole@swri.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 9 Feb 2012 00:32:42 +0100
+Subject: [Buildroot] [RFC] progress indicator
+Message-ID: <CAGm1_kt5qPOB2fpWNRREejgp5jMhsM+o0Dq5Po3LHMpySecEjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2/8/12 10:34 AM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
+What about making a progress indicator, so that user always knows how
+many packages left to be built? Like Android (AOSP) does during repo
+sync:
 
+Fetching projects:  53% (127/238)  Receiving objects:  22% (290/1289), 195.95 Ki
+Fetching projects:  54% (129/238)  Receiving objects:  28% (361/1289), 195.95 Ki
+Fetching projects:  55% (131/238)  Receiving objects:  47% (606/1289), 643.81 Ki
 
->>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
->
->Hi,
->
-> >> Ok, but what happened to the "Login incorrect" line? Do you still get
-> >> that printed to the serial port?
->
-> Donald> No, that never was printed to the serial port.  After executing
-> Donald> the strace command, it hung and kept printing out:
->
-> Donald> 	1292  ioctl(0, SNDCTL_TMR_CONTINUE or TCSETSF, {B115200 opost
->isig icanon
-> Donald> 	echo ...}) = ? ERESTARTSYS (To be restarted)
-> Donald> 	1292  --- SIGTTOU (Stopped (tty output)) @ 0 (0) ---
-> Donald> 	1292  --- SIGTTOU (Stopped (tty output)) @ 0 (0) ---
->
->But in your original email you told us that you were getting that
->error. What changed?
->
->-- 
->Bye, Peter Korsgaard
-
-Ok, I found the problem. /bin/busybox wasn't setuid root. Changing the uid
-to root fixed the problem.  I thought buildroot did this automatically
-after installing to target?
-
-Donald R. Poole, Jr.
-Research Engineer
-Voice: 210.522.3131 | Fax: 210.522.4931
-Tactical Networks & Communications (tacticalnetworks.swri.org)
-Southwest Research Institute (SwRI)
+Yegor
