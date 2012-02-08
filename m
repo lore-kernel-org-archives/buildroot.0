@@ -1,115 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 8 Feb 2012 15:39:45 +0100
-Subject: [Buildroot] problem creating package : download fails !
- (buildroot appends netpbm-10.35.83.gz
-In-Reply-To: <AE4D3E2B6F4C4BD7A04C5850E738E32E@JohanW7>
-References: <ABF59CC0FD964B918D2A589BD7790307@JohanW7>
- <CAAXf6LVEp4t1Bba8nCaD7Pezm5trHkroreGfhPa-iMUA7FO47A@mail.gmail.com>
- <AE4D3E2B6F4C4BD7A04C5850E738E32E@JohanW7>
-Message-ID: <CAAXf6LWUNrFCtZq_JEca3UAdamWFxvEvQdAWM8r2+zsRqZXw_A@mail.gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Wed, 8 Feb 2012 14:27:43 +0100
+Subject: [Buildroot] [PATCH] New package: gpio9260
+In-Reply-To: <87y5sd8y91.fsf@macbook.be.48ers.dk>
+References: <1328559215-12206-1-git-send-email-jwoltz@gmail.com>
+ <20120208091043.GB19413@game.jcrosoft.org>
+ <87y5sd8y91.fsf@macbook.be.48ers.dk>
+Message-ID: <20120208132743.GD19413@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 8, 2012 at 2:06 PM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
->
-> Hi
->
-> Its solved :
->
-> i only used NETPBM_SITE=http://kent.dl.sourceforge.net/project/netpbm/super_stable/10.35.83/netpbm-10.35.83.tgz
->
-> It works with :
->
-> NETPBM_SITE=http://kent.dl.sourceforge.net/project/netpbm/super_stable/10.35.83
-> NETPBM_SOURCE=netpbm-10.35.83.tgz
->
-> I use this package because i need it to create a custom linux bootlogo ( i already patched linux/linux.mk and its Config.in)
->
-> For now i installed it on my host (apt-get intall netpbm)
->
-> But i want to build the netpbm ONLY for the host machine so its build binaries should end up in output/host and i then can call them
-> from my linux.mk to create a new bootlogo for the kernel. (pngtopnm , ppmquant and ?pnmtoplainpnm are part the netpbm package)
+On 10:34 Wed 08 Feb     , Peter Korsgaard wrote:
+> >>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+> 
+>  Jean-Christophe> On 15:13 Mon 06 Feb     , J.C. Woltz wrote:
+>  >> From: "J.C. Woltz" <jwoltz@gmail.com>
+>  >> 
+>  >> gpio9260 is an utility used to read and set gpio states on
+>  >> the at91sam9260 and at91sam9g20 CPUs
+>  Jean-Christophe> why dont u use the kernel instead via sysfs
+> 
+> My comment as well.
+> 
+>  Jean-Christophe> If this need kernel modification I don't think it will
+>  go mainline
+> 
+> It's just a glorified devmem2 (E.G. using /dev/mem). It turns out it's
+> from 2004, so from before gpiolib got added to the kernel.
+I read the source code of this package
 
-In that case you should create a host package. The call to AUTOTARGETS
-should be:
-$(eval $(call AUTOTARGETS,host))
-and your commands should begin with HOST_...
+it's a dangerous one, as it's play with the same register as done by the
+gpiolib.
 
-See http://buildroot.uclibc.org/buildroot.html#add_packages for more
-information.
+So NACK
 
->
-> The magic is (snip from my linux.mk):
-> ...
-> define LINUX_CUSTOM_BOOTLOGO
-> ? ? ? ?pngtopnm $(BR2_LINUX_KERNEL_CUSTOM_BOOTLOGO_FILE) | ppmquant -fs 223 | pnmtoplainpnm >
-> $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
-> endef
->
-> ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_BOOTLOGO),y)
-> LINUX_POST_CONFIGURE_HOOKS += LINUX_CUSTOM_BOOTLOGO
-> endif
->
->
-> So far no luck in creating this as a package ...
->
-> In my netpbm.mk i have:
->
-> #############################################################
-> #
-> # netpbm
-> #
-> #############################################################
-> NETPBM_VERSION = 10.35.83
-> NETPBM_SOURCE = netpbm-$(NETPBM_VERSION).tgz
-> NETPBM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/netpbm/super_stable/$(NETPBM_VERSION)
->
-> NETPBM_INSTALL_TARGET = NO
-> NETPBM_INSTALL_STAGING = NO
-> NETPBM_INSTALL_HOST = YES
->
-> $(eval $(call AUTOTARGETS))
->
->
->
->
->
-> -----Oorspronkelijk bericht-----
-> Van: patrickdepinguin at gmail.com [mailto:patrickdepinguin at gmail.com] Namens Thomas De Schampheleire
-> Verzonden: woensdag 8 februari 2012 13:37
-> Aan: Sagaert Johan
-> CC: buildroot at busybox.net
-> Onderwerp: Re: [Buildroot] problem creating package : download fails ! (buildroot appends netpbm-10.35.83.gz
->
-> Johan,
->
-> On Wed, Feb 8, 2012 at 1:24 PM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
->> Hi
->>
->> I have a problem in creating a package : the download link does not
->> work
->>
->> The link is
->> http://kent.dl.sourceforge.net/project/netpbm/super_stable/10.35.83/netpbm-10.35.83.tgz
->>
->> But buildroot seems to append netpbm-10.35.83.gz
->>
->> So it tries
->> http://kent.dl.sourceforge.net/project/netpbm/super_stable/10.35.83/ne
->> tpbm-10.35.83.tgz/netpbm-10.35.83.gz
->>
->> That fails.
->>
->> How to resolve this ?
->
-> You really need to provide some more information. The above description is way too vague.
-> Please provide your .mk file.
->
-> My guess is that you added the name of the package in the FOO_SITE variable, while you shouldn't.
->
-> Best regards,
-> Thomas
->
+Best Regards,
+J.
