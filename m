@@ -1,40 +1,40 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Wed, 8 Feb 2012 14:27:43 +0100
-Subject: [Buildroot] [PATCH] New package: gpio9260
-In-Reply-To: <87y5sd8y91.fsf@macbook.be.48ers.dk>
-References: <1328559215-12206-1-git-send-email-jwoltz@gmail.com>
- <20120208091043.GB19413@game.jcrosoft.org>
- <87y5sd8y91.fsf@macbook.be.48ers.dk>
-Message-ID: <20120208132743.GD19413@game.jcrosoft.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  8 Feb 2012 14:59:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 4760] New: Qt: add host-pkg-config to
+	dependency-list
+Message-ID: <bug-4760-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10:34 Wed 08 Feb     , Peter Korsgaard wrote:
-> >>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
-> 
->  Jean-Christophe> On 15:13 Mon 06 Feb     , J.C. Woltz wrote:
->  >> From: "J.C. Woltz" <jwoltz@gmail.com>
->  >> 
->  >> gpio9260 is an utility used to read and set gpio states on
->  >> the at91sam9260 and at91sam9g20 CPUs
->  Jean-Christophe> why dont u use the kernel instead via sysfs
-> 
-> My comment as well.
-> 
->  Jean-Christophe> If this need kernel modification I don't think it will
->  go mainline
-> 
-> It's just a glorified devmem2 (E.G. using /dev/mem). It turns out it's
-> from 2004, so from before gpiolib got added to the kernel.
-I read the source code of this package
+https://bugs.busybox.net/show_bug.cgi?id=4760
 
-it's a dangerous one, as it's play with the same register as done by the
-gpiolib.
+           Summary: Qt: add host-pkg-config to dependency-list
+           Product: buildroot
+           Version: unspecified
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: fpasch at googlemail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-So NACK
 
-Best Regards,
-J.
+Created attachment 4016
+  --> https://bugs.busybox.net/attachment.cgi?id=4016
+patch
+
+host-pkg-config is needed for building Qt.
+
+Attached patch adds missing dependency.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
