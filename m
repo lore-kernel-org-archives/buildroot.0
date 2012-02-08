@@ -1,42 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 9 Feb 2012 00:04:34 +0100
-Subject: [Buildroot] [PATCH] busybox: add watchdog daemon startup script
-In-Reply-To: <20120208222639.36359e6a@skate>
-References: <1328686893-6841-1-git-send-email-fabio.porcedda@telit.com>
- <20120208222639.36359e6a@skate>
-Message-ID: <201202090004.34325.arnout@mind.be>
+Date: Thu, 9 Feb 2012 00:15:15 +0100
+Subject: [Buildroot] [PATCH 1/1] docs: Add customizing toolchain section
+In-Reply-To: <1328739654-7585-1-git-send-email-s.martin49@gmail.com>
+References: <1328739654-7585-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <201202090015.15668.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 08 February 2012 22:26:39 Thomas Petazzoni wrote:
-> Le Wed,  8 Feb 2012 08:41:33 +0100,
-> Fabio Porcedda <fabio.porcedda@telit.com> a ?crit :
+On Wednesday 08 February 2012 23:20:54 Samuel MARTIN wrote:
 > 
-> > +config BR2_PACKAGE_BUSYBOX_WATCHDOG
-> > +	bool "Install watchdog daemon startup script"
-> > +	help
-> > +	  Install the watchdog daemon startup script,
-> > +	  that just start at the boot the busybox watchdog daemon.
-> > +
-> 
-> Maybe instead of creating a new configuration option, we can just make
-> the installation of the S15watchdog script automatic if the Busybox
-> configuration file has enabled CONFIG_WATCHDOG=y?
-> 
-> The current default Busybox configuration file in Buildroot has
-> CONFIG_WATCHDOG=y, so we may want to change this default to disable
-> CONFIG_WATCHDOG.
+> Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- NACK.  Many people will want to use watchdog in a different way.  And it
-may be installed as S<someothernumber>watchdog so the check if it exists
-already doesn't help.
+ Documentation updates, we need more of those!  Thanks, Samuel.
 
- Having the start script _is_ relevant, even if it is just as an example.
-It would be even better if the config option allowed to set the reset
-frequency.
+[snip]
+> +Using the internal Buildroot toolchain backend
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +The internal Buildroot toolchain backend *only* allows to generate
+> +*http://www.uclibc.org/[uClibc]-based toolchains*.
+> +
+> +However, it allows to tune major settings, such as:
+> +
+> +* Linux header version
+> +
+> +* http://www.uclibc.org/[uClibc] configuration (see xref:uclibc-custom[uClibc])
+> +
+> +* Binutils, GCC, Gdb and toolchain options
+> +
+> +This is directly avaiblable after selecting the +Buildroot toolchain+ type in
+> +the menu +Toolchain+.
+
+Then, the toolchain can be finely tuned invoking +make uclibc-menuconfig+.
+
+:-)
 
  Regards,
  Arnout
