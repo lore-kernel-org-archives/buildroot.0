@@ -1,93 +1,48 @@
-From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Wed,  8 Feb 2012 23:20:54 +0100
-Subject: [Buildroot] [PATCH 1/1] docs: Add customizing toolchain section
-Message-ID: <1328739654-7585-1-git-send-email-s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 8 Feb 2012 23:38:13 +0100
+Subject: [Buildroot] Buildroot networking problems
+In-Reply-To: <87fwems783.fsf@macbook.be.48ers.dk>
+References: <4F302D71.9020308@labri.fr> <4F3126EB.8000409@labri.fr>
+ <87fwems783.fsf@macbook.be.48ers.dk>
+Message-ID: <201202082338.13714.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tuesday 07 February 2012 21:45:32 Peter Korsgaard wrote:
+> >>>>> "Jigar" == Jigar SOLANKI <jigar.solanki@labri.fr> writes:
+> 
+> Hi,
+> 
+>  >> Please provide some more info. Please paste output of ipconfig -a. What
+>  >> kind of errors do you get?
+> 
+>  Jigar> I do not have any errors. The ping just simply do not respond. The
+>  Jigar> packets are lost.
+> 
+>  Jigar> There are two interfaces eth0 and lo.
+> 
+>  Jigar> eth0 : 10.10.10.0/24  IP:10.10.10.1 Gw : 10.10.10.254
+> 
+>  Jigar> So, when I ping 10.10.10.254 from 10.10.10.1, I dont have any response :
+>  Jigar> the packets are lost, tcpdump on the gw (10.10.10.254) shows incoming
+>  Jigar> ICMP packets, though !
+> 
+> But no reply? If the packets are wellformed the gw should reply. Could
+> you show up the tcpdump output please?
 
-Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
----
- docs/manual/customize-toolchain.txt |   45 +++++++++++++++++++++++++++++++++++
- docs/manual/customize.txt           |    2 +
- docs/manual/external-toolchain.txt  |    1 +
- 3 files changed, 48 insertions(+), 0 deletions(-)
- create mode 100644 docs/manual/customize-toolchain.txt
+ Maybe also a kernel defconfig?  'make linux-savedefconfig' and attach the 
+output/linux-*/defconfig.
 
-diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
-new file mode 100644
-index 0000000..a54e2e2
---- /dev/null
-+++ b/docs/manual/customize-toolchain.txt
-@@ -0,0 +1,45 @@
-+Customizing the toolchain
-+-------------------------
-+[[toolchain-custom]]
-+
-+There are three distinct types of toolchain backend supported in Buildroot,
-+available under the menu +Toolchain+, invoking +make menuconfig+.
-+
-+Using the external toolchain backend
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+There is no way of tuning an external toolchain since Buildroot does not
-+generate it.
-+
-+It also requires to set the Buildroot settings according to the toolchain ones
-+(see xref:external-toolchain[]).
-+
-+Using the internal Buildroot toolchain backend
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The internal Buildroot toolchain backend *only* allows to generate
-+*http://www.uclibc.org/[uClibc]-based toolchains*.
-+
-+However, it allows to tune major settings, such as:
-+
-+* Linux header version
-+
-+* http://www.uclibc.org/[uClibc] configuration (see xref:uclibc-custom[uClibc])
-+
-+* Binutils, GCC, Gdb and toolchain options
-+
-+This is directly avaiblable after selecting the +Buildroot toolchain+ type in
-+the menu +Toolchain+.
-+
-+Using the Crosstool-NG backend
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
-+limited set of settings under the Buildroot +Toolchain+ menu (ie. when invoking
-++make menuconfig+); mostly:
-+
-+* The http://crosstool-ng.org[crosstool-NG] configuration file
-+
-+* Gdb and some toolchain options
-+
-+Then, the toolchain can be finely tuned invoking +make ctng-menuconfig+.
-diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
-index c9f4dfd..e8235de 100644
---- a/docs/manual/customize.txt
-+++ b/docs/manual/customize.txt
-@@ -8,3 +8,5 @@ include::customize-busybox-config.txt[]
- include::customize-uclibc-config.txt[]
- 
- include::customize-kernel-config.txt[]
-+
-+include::customize-toolchain.txt[]
-diff --git a/docs/manual/external-toolchain.txt b/docs/manual/external-toolchain.txt
-index 20eebdb..62eb0a3 100644
---- a/docs/manual/external-toolchain.txt
-+++ b/docs/manual/external-toolchain.txt
-@@ -1,5 +1,6 @@
- Using an external toolchain
- ===========================
-+[[external-toolchain]]
- 
- Using an already existing toolchain is useful for different
- reasons:
+ Regards,
+ Arnout
+
 -- 
-1.7.9
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
