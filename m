@@ -1,28 +1,38 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Feb 2012 08:49:46 +0100
-Subject: [Buildroot] FW: Buildroot RFS Login Question
-In-Reply-To: <4F321CF0.7000305@renta.net> (Mark Constable's message of "Wed,
- 08 Feb 2012 16:57:52 +1000")
-References: <CB5771EE.2EBB%donald.poole@swri.org> <4F321CF0.7000305@renta.net>
-Message-ID: <87bop9zrvp.fsf@macbook.be.48ers.dk>
+Date: Wed, 08 Feb 2012 09:05:46 +0100
+Subject: [Buildroot] Reviewing the Buildroot ELC presentation slides
+In-Reply-To: <CAAXf6LUubuiS01Xqv+h+vMBSCMgH9FEfbkEAP2v4bdWQeXAynA@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Wed, 8 Feb 2012 08:02:23
+ +0100")
+References: <20120207224611.0d9e45d5@skate>
+ <CAAXf6LUubuiS01Xqv+h+vMBSCMgH9FEfbkEAP2v4bdWQeXAynA@mail.gmail.com>
+Message-ID: <877gzxzr51.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mark" == Mark Constable <markc@renta.net> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
- Mark> On 08/02/12 16:28, Poole, Donald R. wrote:
- >> Sam, I took a look at my /etc/passwd and /etc/shadow in my rootfs
- >> and each file is populated, but how do I know if they are valid?
+Hi,
 
- Mark> FWIW I find on a fresh install I have to login as "default" and then
- Mark> "su -" to root.
+ Thomas> slide 14: an uClibc --> here I think it should be 'a uClibc' as you
+ Thomas> pronounce as 'you-see-libc'.
 
-With the default skeleton the root user has an empty password, so you
-should be able to login as root on the console (not ssh, as that
-typically doesn't allow empty passwords).
+And there seems to be something missing in that line. I suggest using
+'.. build a uClibc based toolchain'.
+
+slide 27: (external) 'copies the original toolchain sysroot in the
+host/usr'. I would use 'copy to' rather than 'copy in'.
+
+slide 29: s/typle/tuple/. You use host/usr, but only target/ - Probably
+drop "usr".
+
+slide 38: maybe explain when you would want to autoreconfigure
+(E.G. when patching auto* files).
+
+Otherwise it looks good to me, thanks!
 
 -- 
 Bye, Peter Korsgaard
