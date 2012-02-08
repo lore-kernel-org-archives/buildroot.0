@@ -1,91 +1,91 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 8 Feb 2012 08:23:20 +0100
-Subject: [Buildroot] Reviewing the Buildroot ELC presentation slides
-In-Reply-To: <CAAXf6LUubuiS01Xqv+h+vMBSCMgH9FEfbkEAP2v4bdWQeXAynA@mail.gmail.com>
-References: <20120207224611.0d9e45d5@skate>
- <CAAXf6LUubuiS01Xqv+h+vMBSCMgH9FEfbkEAP2v4bdWQeXAynA@mail.gmail.com>
-Message-ID: <CAAXf6LUD_Xg2+KstrC0hmNOnFyeZi+kZStR4L5asKYL01_vAAA@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@telit.com>
+Date: Wed,  8 Feb 2012 08:41:33 +0100
+Subject: [Buildroot] [PATCH] busybox: add watchdog daemon startup script
+Message-ID: <1328686893-6841-1-git-send-email-fabio.porcedda@telit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[sorry wasn't finished yet]
 
-On Wed, Feb 8, 2012 at 8:02 AM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Thomas,
->
-> On Tue, Feb 7, 2012 at 10:46 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> I have posted at http://free-electrons.com/~thomas/pub/buildroot.pdf
->> the current version of the slides I intend to present next week at the
->> ELC in San Francisco.
->>
->> For the record, the conference abstract is:
->> https://events.linuxfoundation.org/events/embedded-linux-conference/petazzoni
->>
->> I would be very interested in your comments and review, both on details
->> (typos, mistakes) but also on the overall contents of the slides.
->
-> slide 4: Complete rebuild -> rebuilds
->
-> slide 9: I find it a bit strange that the toolchain block is at the
-> bottom, since it is the first thing to be produced. But maybe you
-> intentionally put it there as most people would care more about the
-> other blocks...
->
-> slide 13: a SDK -> I think this should be 'an SDK' as this is how you
-> pronounce it.
->
-> slide 14: on the internal toolchain you write 'the historic one': I
-> feel it could be interpreted negatively and not as a viable
-> alternative.
-> slide 14: an uClibc --> here I think it should be 'a uClibc' as you
-> pronounce as 'you-see-libc'.
->
-> slide 18: is9660 -> iso9660
->
-> slide 23: I'd put a semicolon instead of comma between the toolchain
-> and library example
-> slide 23: all reverse dependencies needs to be rebuilt -> need
->
-> slide 25: a few stamps files -> stamp
->
-> slide 29: there should be a space after 'make' in
-> make<foo>-reconfigure and make<foo>-rebuild
->
-> slide 30: choosen -> chosen
->
+Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
+---
+ package/busybox/Config.in   |    6 ++++++
+ package/busybox/S15watchdog |   20 ++++++++++++++++++++
+ package/busybox/busybox.mk  |    9 +++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/S15watchdog
 
-slide 38: needs to set --> need
-
-
-General things:
-- ordering of slides: I had a jump-around feeling around slide 20 and
-a bit further:
-20: building
-21-22: examples
-23: simplicity principle
-24-25: build output
-26 and further: overall logic
-
-I would put the slides on build output after slide 20 about building.
-And the simplicity slide seems a bit lost there in my opinion. I don't
-directly see the relation with the surrounding slides. Maybe it can be
-put further on, e.g. before the 'future directions' slide. But again,
-this can be just me.
-
-Are you still planning to add an agenda slide?
-
-You haven't mentioned anything about recent features as source
-directory override and local site method. Not sure if this becomes too
-detailed, though.
-
-But overall: nice job again for this presentation. Good luck with it!
-
-Best regards,
-Thomas
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 4176020..c5b2eb8 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -62,6 +62,12 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
+ 
++config BR2_PACKAGE_BUSYBOX_WATCHDOG
++	bool "Install watchdog daemon startup script"
++	help
++	  Install the watchdog daemon startup script,
++	  that just start at the boot the busybox watchdog daemon.
++
+ endif
+ 
+ if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
+diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
+new file mode 100644
+index 0000000..3a2e8eb
+--- /dev/null
++++ b/package/busybox/S15watchdog
+@@ -0,0 +1,20 @@
++#!/bin/sh
++#
++# Start watchdog
++#
++
++case "$1" in
++ start)
++	echo "Starting watchdog..."
++	watchdog -t 5 /dev/watchdog
++	;;
++  stop)
++	;;
++  restart|reload)
++	;;
++  *)
++	echo $"Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 59448d5..985f974 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -142,6 +142,14 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+ endef
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
++define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
++	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
++		install -D -m 0755 package/busybox/S15watchdog \
++			$(TARGET_DIR)/etc/init.d/S15watchdog
++endef
++endif
++
+ # We do this here to avoid busting a modified .config in configure
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+ 
+@@ -172,6 +180,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
++	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ endef
+ 
+ define BUSYBOX_UNINSTALL_TARGET_CMDS
+-- 
+1.7.8.3
