@@ -1,92 +1,57 @@
 From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Wed, 8 Feb 2012 10:10:43 +0100
+Date: Wed, 8 Feb 2012 10:12:15 +0100
 Subject: [Buildroot] [PATCH] New package: gpio9260
-In-Reply-To: <1328559215-12206-1-git-send-email-jwoltz@gmail.com>
+In-Reply-To: <CAC78Gpc3fHmCkD2idUGDJzoHqw0h1JfKKq70TOZoi=sw7gx4og@mail.gmail.com>
 References: <1328559215-12206-1-git-send-email-jwoltz@gmail.com>
-Message-ID: <20120208091043.GB19413@game.jcrosoft.org>
+ <87ehu7vfhx.fsf@macbook.be.48ers.dk>
+ <CAC78Gpc3fHmCkD2idUGDJzoHqw0h1JfKKq70TOZoi=sw7gx4og@mail.gmail.com>
+Message-ID: <20120208091215.GC19413@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15:13 Mon 06 Feb     , J.C. Woltz wrote:
-> From: "J.C. Woltz" <jwoltz@gmail.com>
+On 16:43 Mon 06 Feb     , J.C. Woltz wrote:
+>        J> From: "J.C. Woltz" <jwoltz@gmail.com>
+>       J> gpio9260 is an utility used to read and set gpio states on
+>       J> the at91sam9260 and at91sam9g20 CPUs
 > 
-> gpio9260 is an utility used to read and set gpio states on
-> the at91sam9260 and at91sam9g20 CPUs
-why dont u use the kernel instead via sysfs
-
-If this need kernel modification I don't think it will go mainline
+>      What's the advantage of using this compared to normal /sys/class/gpio
+>      sysfs access?
+> 
+>    I did not write this program. Its header states:
+>    /*
+>     * (C) Copyright 2004  Roman Avramenko <roman@imsystems.ru>
+>     *
+>     * This program is free software; you can redistribute it and/or
+>     * modify it under the terms of the GNU General Public License as
+>     * published by the Free Software Foundation; either version 2 of
+>     * the License, or (at your option) any later version.
+>     *
+>     * This program is distributed in the hope that it will be useful,
+>     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+>     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+>     * GNU General Public License for more details.
+>     *
+>     * You should have received a copy of the GNU General Public License
+>     * along with this program; if not, write to the Free Software
+>     * Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+>     * MA 02111-1307 USA
+>     */
+> 
+>    Calao and Synapse Wireless ship the gpio9260 to allow script and users
+>    easy access to (primarily) push buttons. It is used like:
+>    /usr/bin/gpio9260 ?PB10
+>    Then the return code lets you know the state of the input. Or it can be
+>    used to set outputs, but in that case the /sys/class/led or other makes
+>    sense.
+>     
+> 
+>      It's just a program (no headers/libraries), so why install into staging?
+> 
+>    That is my mistake. I will fix that.
+For Calao platfrom this is depricated
 
 Best Regards,
 J.
-> 
-> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-> ---
->  package/Config.in            |    1 +
->  package/gpio9260/Config.in   |    5 +++++
->  package/gpio9260/gpio9260.mk |   23 +++++++++++++++++++++++
->  3 files changed, 29 insertions(+), 0 deletions(-)
->  create mode 100644 package/gpio9260/Config.in
->  create mode 100644 package/gpio9260/gpio9260.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 66ee266..c083bfc 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -177,6 +177,7 @@ source "package/gadgetfs-test/Config.in"
->  source "package/gdisk/Config.in"
->  source "package/genext2fs/Config.in"
->  source "package/genromfs/Config.in"
-> +source "package/gpio9260/Config.in"
->  source "package/gpsd/Config.in"
->  source "package/gvfs/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> diff --git a/package/gpio9260/Config.in b/package/gpio9260/Config.in
-> new file mode 100644
-> index 0000000..088b11e
-> --- /dev/null
-> +++ b/package/gpio9260/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_GPIO9260
-> +	bool "gpio9260"
-> +	help
-> +		gpio9260 is a program to interact with at91sam9260
-> +		and at91sam9g20 GPIOs. 
-> diff --git a/package/gpio9260/gpio9260.mk b/package/gpio9260/gpio9260.mk
-> new file mode 100644
-> index 0000000..b9adb41
-> --- /dev/null
-> +++ b/package/gpio9260/gpio9260.mk
-> @@ -0,0 +1,23 @@
-> +#############################################################
-> +#
-> +# gpio9260
-> +#
-> +#############################################################
-> +GPIO9260_VERSION = 1.0
-> +GPIO9260_SOURCE = gpio9260-$(GPIO9260_VERSION).tar.gz
-> +GPIO9260_SITE = https://www.jcwoltz.com/e10
-> +GPIO9260_INSTALL_STAGING = YES
-> +
-> +define GPIO9260_BUILD_CMDS
-> +	$(MAKE) CC=$(TARGET_CC) LD=$(TARGET_LD) -C $(@D) all
-> +endef
-> +
-> +define GPIO9260_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/gpio9260 $(STAGING_DIR)/usr/bin
-> +endef
-> +
-> +define GPIO9260_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/gpio9260 $(TARGET_DIR)/usr/bin
-> +endef
-> +
-> +$(eval $(call GENTARGETS,package,gpio9260))
-> -- 
-> 1.7.5.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
