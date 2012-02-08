@@ -1,165 +1,91 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 8 Feb 2012 21:55:18 +0100
-Subject: [Buildroot] problem creating package : download fails !
- (buildroot appends netpbm-10.35.83.gz
-In-Reply-To: <5714F3547D8F47779AEED71436CE5C20@JohanW7>
-References: <ABF59CC0FD964B918D2A589BD7790307@JohanW7>
- <CAAXf6LVEp4t1Bba8nCaD7Pezm5trHkroreGfhPa-iMUA7FO47A@mail.gmail.com>
- <AE4D3E2B6F4C4BD7A04C5850E738E32E@JohanW7>
- <CAAXf6LWUNrFCtZq_JEca3UAdamWFxvEvQdAWM8r2+zsRqZXw_A@mail.gmail.com>
- <5714F3547D8F47779AEED71436CE5C20@JohanW7>
-Message-ID: <CAAXf6LWGvLzuxbRZn+9uCLPHh+snKGgDueSOTZdRcCgUh6K5-g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 08 Feb 2012 22:07:54 +0100
+Subject: [Buildroot] [PATCH v2 2/2] udev: bump to 181 and other fixes
+In-Reply-To: <1328694625-17204-2-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Wed, 8 Feb 2012 10:50:25
+ +0100")
+References: <1328694625-17204-1-git-send-email-yegorslists@googlemail.com>
+ <1328694625-17204-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87k43x3ufp.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 8 feb. 2012 21:14 schreef "Sagaert Johan" <sagaert.johan@skynet.be> het
-volgende:
->
->
->
-> Hi Thomas
->
-> Thanks for the hint, but it did not work out because the configure script
-is no autoconf generated script but just an interactive
-> script with the same name !
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-For generic packages that are not autotools based, you should use the
-gentargets infrastructure. The principe of host packages remains the same.
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Best regards,
-Thomas
+ yegorslists> Changes:
+ yegorslists> - Linux kernel requirement: 2.6.34 and above (devtmpfs is mandatory)
+ yegorslists> (this also applies to the chosen toolchain, because of Kernel headers)
+ yegorslists> - optional dependency on libusb and usbutils removed
+ yegorslists> - added dependency on kmod
+ yegorslists> - added dependency on util-linux for libblkid
+ yegorslists> - install in /lib/udev instead of /usr/libexec/udev
+ yegorslists> - udevd moved to /lib/udev
+ yegorslists> - fixed path to pci.ids and usb.ids
+ yegorslists> - persistent rules generator is disabled by default, so option
+ yegorslists> is introduced to enable this option if desired
 
-> I will use apt-get install netpbm instead of trying it to build it in
-buildroot, its a host tool only anyway.
->
->
-> -----Oorspronkelijk bericht-----
-> Van: patrickdepinguin at gmail.com [mailto:patrickdepinguin at gmail.com]
-Namens Thomas De Schampheleire
-> Verzonden: woensdag 8 februari 2012 15:40
-> Aan: Sagaert Johan
-> CC: buildroot at busybox.net
-> Onderwerp: Re: [Buildroot] problem creating package : download fails !
-(buildroot appends netpbm-10.35.83.gz
->
-> On Wed, Feb 8, 2012 at 2:06 PM, Sagaert Johan <sagaert.johan@skynet.be>
-wrote:
-> >
-> > Hi
-> >
-> > Its solved :
-> >
-> > i only used
-> > NETPBM_SITE=http://kent.dl.sourceforge.net/project/netpbm/super_stable
-> > /10.35.83/netpbm-10.35.83.tgz
-> >
-> > It works with :
-> >
-> > NETPBM_SITE=http://kent.dl.sourceforge.net/project/netpbm/super_stable
-> > /10.35.83
-> > NETPBM_SOURCE=netpbm-10.35.83.tgz
-> >
-> > I use this package because i need it to create a custom linux bootlogo
-> > ( i already patched linux/linux.mk and its Config.in)
-> >
-> > For now i installed it on my host (apt-get intall netpbm)
-> >
-> > But i want to build the netpbm ONLY for the host machine so its build
-> > binaries should end up in output/host and i then can call them from my
-> > linux.mk to create a new bootlogo for the kernel. (pngtopnm , ppmquant
-> > and  pnmtoplainpnm are part the netpbm package)
->
-> In that case you should create a host package. The call to AUTOTARGETS
-should be:
-> $(eval $(call AUTOTARGETS,host))
-> and your commands should begin with HOST_...
->
-> See http://buildroot.uclibc.org/buildroot.html#add_packages for more
-information.
->
-> >
-> > The magic is (snip from my linux.mk):
-> > ...
-> > define LINUX_CUSTOM_BOOTLOGO
-> >        pngtopnm $(BR2_LINUX_KERNEL_CUSTOM_BOOTLOGO_FILE) | ppmquant
-> > -fs 223 | pnmtoplainpnm >
-> > $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
-> > endef
-> >
-> > ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_BOOTLOGO),y)
-> > LINUX_POST_CONFIGURE_HOOKS += LINUX_CUSTOM_BOOTLOGO endif
-> >
-> >
-> > So far no luck in creating this as a package ...
-> >
-> > In my netpbm.mk i have:
-> >
-> > #############################################################
-> > #
-> > # netpbm
-> > #
-> > #############################################################
-> > NETPBM_VERSION = 10.35.83
-> > NETPBM_SOURCE = netpbm-$(NETPBM_VERSION).tgz
-> > NETPBM_SITE = http://$(BR2_SOURCEFORGE_MIRROR).
-dl.sourceforge.net/project/netpbm/super_stable/$(NETPBM_VERSION)
-> >
-> > NETPBM_INSTALL_TARGET = NO
-> > NETPBM_INSTALL_STAGING = NO
-> > NETPBM_INSTALL_HOST = YES
-> >
-> > $(eval $(call AUTOTARGETS))
-> >
-> >
-> >
-> >
-> >
-> > -----Oorspronkelijk bericht-----
-> > Van: patrickdepinguin at gmail.com [mailto:patrickdepinguin at gmail.com]
-Namens Thomas De Schampheleire
-> > Verzonden: woensdag 8 februari 2012 13:37
-> > Aan: Sagaert Johan
-> > CC: buildroot at busybox.net
-> > Onderwerp: Re: [Buildroot] problem creating package : download fails !
-(buildroot appends netpbm-10.35.83.gz
-> >
-> > Johan,
-> >
-> > On Wed, Feb 8, 2012 at 1:24 PM, Sagaert Johan <sagaert.johan@skynet.be>
-wrote:
-> >> Hi
-> >>
-> >> I have a problem in creating a package : the download link does not
-> >> work
-> >>
-> >> The link is
-> >>
-http://kent.dl.sourceforge.net/project/netpbm/super_stable/10.35.83/netpbm-10.35.83.tgz
-> >>
-> >> But buildroot seems to append netpbm-10.35.83.gz
-> >>
-> >> So it tries
-> >> http://kent.dl.sourceforge.net/project/netpbm/super_stable/10.35.83/ne
-> >> tpbm-10.35.83.tgz/netpbm-10.35.83.gz
-> >>
-> >> That fails.
-> >>
-> >> How to resolve this ?
-> >
-> > You really need to provide some more information. The above description
-is way too vague.
-> > Please provide your .mk file.
-> >
-> > My guess is that you added the name of the package in the FOO_SITE
-variable, while you shouldn't.
-> >
-> > Best regards,
-> > Thomas
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120208/69e1eebd/attachment.html>
+Thanks, committed with minor tweaks (see below).
+
+
+ yegorslists> +++ b/package/udev/Config.in
+ yegorslists> @@ -1,31 +1,39 @@
+ yegorslists>  config BR2_PACKAGE_UDEV
+ yegorslists>  	bool "udev"
+ yegorslists>  	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ yegorslists> +	depends on BR2_LARGEFILE # util-linux
+ yegorslists> +	depends on BR2_USE_WCHAR # util-linux
+ yegorslists> +	select BR2_PACKAGE_UTIL_LINUX
+ yegorslists> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ yegorslists> +	select BR2_PACKAGE_KMOD
+ yegorslists>  	help
+ yegorslists>  	  Userspace device daemon.
+ 
+ yegorslists> +	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
+ yegorslists> +
+
+The devtmpfs dependency is not really an issue as we already depend on
+it for dynamic /dev handling.
+
+  yegorslists>  comment "udev requires /dev mgmnt set to udev under System configuration"
+ yegorslists>  	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ yegorslists> +
+ yegorslists> +comment "udev requires a toolchain with LARGEFILE + WCHAR support"
+ yegorslists> +    depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+ 
+
+This doesn't really make sense to show here, so I moved it
+target/generic where the user selects the /dev handling method. This
+line would only be shown in situations where he couldn't select udev
+anyway (as he hadn't selected BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV).
+
+ yegorslists> +++ b/package/udev/udev.mk
+ yegorslists> @@ -3,7 +3,7 @@
+ yegorslists>  # udev
+ yegorslists>  #
+ yegorslists>  #############################################################
+ yegorslists> -UDEV_VERSION = 173
+ yegorslists> +UDEV_VERSION = 181
+ yegorslists>  UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
+ yegorslists>  UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+ yegorslists>  UDEV_INSTALL_STAGING = YES
+ yegorslists> @@ -11,20 +11,24 @@ UDEV_INSTALL_STAGING = YES
+ yegorslists>  UDEV_CONF_OPT =			\
+ yegorslists>  	--sbindir=/sbin		\
+ yegorslists>  	--with-rootlibdir=/lib	\
+ yegorslists> -	--libexecdir=/lib/udev	\
+ yegorslists> +	--libexecdir=/lib	\
+ yegorslists> +	--with-usb-ids-path=/usr/share/hwdata/usb.ids	\
+ yegorslists> +	--with-pci-ids-path=/usr/share/hwdata/pci.ids	\
+ yegorslists> +	--with-firmware-path=/lib/firmware		\
+ yegorslists>  	--disable-introspection
+
+udevd now needs to link with librt as it calls mq_getattr() (which isn't
+automatically done on uClibc), so I added UDEV_CONF_ENV += LIBS='-lt'
+
+-- 
+Bye, Peter Korsgaard
