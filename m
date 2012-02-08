@@ -1,33 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Feb 2012 17:34:29 +0100
-Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <CB57FCFF.2EDB%donald.poole@swri.org> (Donald R. Poole's message
- of "Wed, 8 Feb 2012 16:25:38 +0000")
-References: <CB57FCFF.2EDB%donald.poole@swri.org>
-Message-ID: <87fwel8esq.fsf@macbook.be.48ers.dk>
+From: Mark Constable <markc@renta.net>
+Date: Thu, 09 Feb 2012 06:04:42 +1000
+Subject: [Buildroot] FW: Buildroot RFS Login Question
+In-Reply-To: <87bop9zrvp.fsf@macbook.be.48ers.dk>
+References: <CB5771EE.2EBB%donald.poole@swri.org> <4F321CF0.7000305@renta.net>
+ <87bop9zrvp.fsf@macbook.be.48ers.dk>
+Message-ID: <4F32D55A.6010004@renta.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+On Wed 08 Feb 2012 17:49:46 EST, Peter Korsgaard wrote:
+>  Mark> FWIW I find on a fresh install I have to login as "default" and then
+>  Mark> "su -" to root.
+>
+> With the default skeleton the root user has an empty password, so you
+> should be able to login as root on the console (not ssh, as that
+> typically doesn't allow empty passwords).
 
-Hi,
+Right, I was struggling to find the right inittab entry for a "normal" 
+console
+login and had used /bin/login which seems to demand a non-root login. 
+Once
+I tried this it let me in as root without a password...
 
- >> Ok, but what happened to the "Login incorrect" line? Do you still get
- >> that printed to the serial port?
+tty1::respawn:/sbin/getty 38400 tty1
 
- Donald> No, that never was printed to the serial port.  After executing
- Donald> the strace command, it hung and kept printing out:
-
- Donald> 	1292  ioctl(0, SNDCTL_TMR_CONTINUE or TCSETSF, {B115200 opost isig icanon
- Donald> 	echo ...}) = ? ERESTARTSYS (To be restarted)
- Donald> 	1292  --- SIGTTOU (Stopped (tty output)) @ 0 (0) ---
- Donald> 	1292  --- SIGTTOU (Stopped (tty output)) @ 0 (0) ---
-
-But in your original email you told us that you were getting that
-error. What changed?
-
--- 
-Bye, Peter Korsgaard
+It would have saved me a lot of time if this entry was in /etc/inittab, 
+even if
+it was commented out.
