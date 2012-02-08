@@ -1,31 +1,48 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 8 Feb 2012 09:55:31 +0100
-Subject: [Buildroot] [git commit] libevas: software buffer backend doesn't
-	need X11
-Message-ID: <20120208133907.41C0D90391@busybox.osuosl.org>
+Date: Wed, 8 Feb 2012 11:42:56 +0100
+Subject: [Buildroot] [git commit] sdl: fix X11 dependencies
+Message-ID: <20120208133907.4F93990A32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e1231afc0190d6dbb0d1ed704637b70ff50d2927
+commit: http://git.buildroot.net/buildroot/commit/?id=9a9fdf92893c0b5e3ed904b59bd30e63ba8987c3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+No need to build the entire X server to build SDL with X11 support.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/efl/libevas/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/sdl/Config.in |    2 ++
+ package/sdl/sdl.mk    |    4 +++-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
-index 3afba1b..4615749 100644
---- a/package/efl/libevas/Config.in
-+++ b/package/efl/libevas/Config.in
-@@ -47,7 +47,6 @@ comment "libevas backends"
+diff --git a/package/sdl/Config.in b/package/sdl/Config.in
+index 869173d..65ac8a2 100644
+--- a/package/sdl/Config.in
++++ b/package/sdl/Config.in
+@@ -24,5 +24,7 @@ config BR2_PACKAGE_SDL_QTOPIA
+ config BR2_PACKAGE_SDL_X11
+ 	bool "SDL X11 video driver"
+ 	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
  
- config BR2_PACKAGE_LIBEVAS_BUFFER
- 	bool "libevas buffer backend"
--	depends on BR2_PACKAGE_XORG7
- 	help
- 	  This enables the software buffer rendering engine. There is
- 	  no hardware assist here.
+ endif
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index f15a521..5460f51 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -32,7 +32,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL_X11),y)
+ SDL_CONF_OPT+=--enable-video-x11=yes
+-SDL_DEPENDENCIES += xserver_xorg-server
++SDL_DEPENDENCIES += xlib_libX11 xlib_libXext \
++	$(if $(BR2_PACKAGE_XLIB_LIBXRENDER), xlib_libXrender) \
++	$(if $(BR2_PACKAGE_XLIB_LIBXRANDR), xlib_libXrandr)
+ else
+ SDL_CONF_OPT+=--enable-video-x11=no
+ endif
