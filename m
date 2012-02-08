@@ -1,51 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 9 Feb 2012 00:15:15 +0100
-Subject: [Buildroot] [PATCH 1/1] docs: Add customizing toolchain section
-In-Reply-To: <1328739654-7585-1-git-send-email-s.martin49@gmail.com>
-References: <1328739654-7585-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <201202090015.15668.arnout@mind.be>
+From: Poole, Donald R. <drpoole@swri.org>
+Date: Wed, 8 Feb 2012 23:17:36 +0000
+Subject: [Buildroot] Buildroot RFS Login Question
+In-Reply-To: <87fwel8esq.fsf@macbook.be.48ers.dk>
+Message-ID: <CB585E3C.2EF2%donald.poole@swri.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 08 February 2012 23:20:54 Samuel MARTIN wrote:
-> 
-> Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 2/8/12 10:34 AM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
 
- Documentation updates, we need more of those!  Thanks, Samuel.
 
-[snip]
-> +Using the internal Buildroot toolchain backend
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +The internal Buildroot toolchain backend *only* allows to generate
-> +*http://www.uclibc.org/[uClibc]-based toolchains*.
-> +
-> +However, it allows to tune major settings, such as:
-> +
-> +* Linux header version
-> +
-> +* http://www.uclibc.org/[uClibc] configuration (see xref:uclibc-custom[uClibc])
-> +
-> +* Binutils, GCC, Gdb and toolchain options
-> +
-> +This is directly avaiblable after selecting the +Buildroot toolchain+ type in
-> +the menu +Toolchain+.
+>>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+>
+>Hi,
+>
+> >> Ok, but what happened to the "Login incorrect" line? Do you still get
+> >> that printed to the serial port?
+>
+> Donald> No, that never was printed to the serial port.  After executing
+> Donald> the strace command, it hung and kept printing out:
+>
+> Donald> 	1292  ioctl(0, SNDCTL_TMR_CONTINUE or TCSETSF, {B115200 opost
+>isig icanon
+> Donald> 	echo ...}) = ? ERESTARTSYS (To be restarted)
+> Donald> 	1292  --- SIGTTOU (Stopped (tty output)) @ 0 (0) ---
+> Donald> 	1292  --- SIGTTOU (Stopped (tty output)) @ 0 (0) ---
+>
+>But in your original email you told us that you were getting that
+>error. What changed?
+>
+>-- 
+>Bye, Peter Korsgaard
 
-Then, the toolchain can be finely tuned invoking +make uclibc-menuconfig+.
+Ok, I found the problem. /bin/busybox wasn't setuid root. Changing the uid
+to root fixed the problem.  I thought buildroot did this automatically
+after installing to target?
 
-:-)
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Donald R. Poole, Jr.
+Research Engineer
+Voice: 210.522.3131 | Fax: 210.522.4931
+Tactical Networks & Communications (tacticalnetworks.swri.org)
+Southwest Research Institute (SwRI)
