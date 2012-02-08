@@ -1,38 +1,26 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 08 Feb 2012 09:05:46 +0100
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 8 Feb 2012 09:46:23 +0100
 Subject: [Buildroot] Reviewing the Buildroot ELC presentation slides
-In-Reply-To: <CAAXf6LUubuiS01Xqv+h+vMBSCMgH9FEfbkEAP2v4bdWQeXAynA@mail.gmail.com>
- (Thomas De Schampheleire's message of "Wed, 8 Feb 2012 08:02:23
- +0100")
+In-Reply-To: <877gzxzr51.fsf@macbook.be.48ers.dk>
 References: <20120207224611.0d9e45d5@skate>
  <CAAXf6LUubuiS01Xqv+h+vMBSCMgH9FEfbkEAP2v4bdWQeXAynA@mail.gmail.com>
-Message-ID: <877gzxzr51.fsf@macbook.be.48ers.dk>
+ <877gzxzr51.fsf@macbook.be.48ers.dk>
+Message-ID: <CAHXCMMJM9LHTqRig1t84KP5uS5yASGmA4qXchc19WbG845tBKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
-
 Hi,
 
- Thomas> slide 14: an uClibc --> here I think it should be 'a uClibc' as you
- Thomas> pronounce as 'you-see-libc'.
+First, nice job!
+It is a clear presentation about BR and and its innards.
 
-And there seems to be something missing in that line. I suggest using
-'.. build a uClibc based toolchain'.
+Though the improving of the doc appears in the "Future directions"
+section (slide 40),
+I think it could interesting for new comers to have a link pointed to it anyway.
 
-slide 27: (external) 'copies the original toolchain sysroot in the
-host/usr'. I would use 'copy to' rather than 'copy in'.
+Regards,
 
-slide 29: s/typle/tuple/. You use host/usr, but only target/ - Probably
-drop "usr".
-
-slide 38: maybe explain when you would want to autoreconfigure
-(E.G. when patching auto* files).
-
-Otherwise it looks good to me, thanks!
-
--- 
-Bye, Peter Korsgaard
+Sam
