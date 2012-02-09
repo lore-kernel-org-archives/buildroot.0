@@ -1,112 +1,89 @@
-From: J.C. Woltz <jwoltz@gmail.com>
-Date: Thu,  9 Feb 2012 18:51:37 -0500
-Subject: [Buildroot] [PATCH] new program: usb_modeswitch_data Signed-off-by:
-	J.C. Woltz <jwoltz@gmail.com>
-Message-ID: <1328831497-18455-1-git-send-email-jwoltz@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 10 Feb 2012 00:58:01 +0100
+Subject: [Buildroot] [PATCH 1/2] Add support for U-Boot SPL
+In-Reply-To: <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
+References: <1328402147-21404-1-git-send-email-n-dechesne@ti.com>
+ <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
+Message-ID: <201202100058.02053.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "J.C. Woltz" <jwoltz@gmail.com>
+On Sunday 05 February 2012 01:35:46 Nicolas Dechesne wrote:
+> SPL is a first stage bootloader. On pandaboard it supercedes x-loader,
+> and should now be used.
+> 
+> - this patch ensures that either SPL or xloader can be selected
+> - SPL will load 'u-boot.img' instead of 'u-boot.bin, so the name
+>   is updated accordingly
 
----
- package/Config.in                                  |    1 +
- package/usb_modeswitch_data/Config.in              |    7 +++++
- .../usb_modeswitch_data-makefile.patch             |   24 ++++++++++++++++++
- package/usb_modeswitch_data/usb_modeswitch_data.mk |   26 ++++++++++++++++++++
- 4 files changed, 58 insertions(+), 0 deletions(-)
- create mode 100644 package/usb_modeswitch_data/Config.in
- create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
- create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data.mk
+ It doesn't work well, but unfortunately I don't know how to solve it.
+MLO and u-boot.img are only created for the omap configs, and only in
+u-boot 2011.12 or later.  Depending on omap in the Config.in is almost
+impossible, and also depending on 2011.12 is difficult because it could
+be a custom git instead.
 
-diff --git a/package/Config.in b/package/Config.in
-index c679652..ff11cd0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -220,6 +220,7 @@ source "package/uboot-tools/Config.in"
- source "package/udev/Config.in"
- source "package/unionfs/Config.in"
- source "package/usb_modeswitch/Config.in"
-+source "package/usb_modeswitch_data/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
- source "package/wipe/Config.in"
-diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
-new file mode 100644
-index 0000000..cd584ce
---- /dev/null
-+++ b/package/usb_modeswitch_data/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_USB_MODESWITCH_DATA
-+	bool "usb_modeswitch_data"
-+	select BR2_PACKAGE_USB_MODESWITCH
-+	help
-+	  USB mode switcher data
-+	  Contains udev rules and other data 
-+
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-new file mode 100644
-index 0000000..024bc76
---- /dev/null
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-@@ -0,0 +1,24 @@
-+diff -Nura usb_modeswitch_data-20120120.orig/Makefile usb_modeswitch_data-20120120/Makefile
-+--- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
-++++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
-+@@ -12,9 +12,9 @@
-+ 
-+ clean:
-+ 
-+-install: files-install db-install rules-reload
-++install: files-install db-install
-+ 
-+-install-packed: files-install db-install-packed rules-reload
-++install-packed: files-install db-install-packed
-+ 
-+ files-install:
-+ 	install -d $(PREFIX)/share/usb_modeswitch
-+@@ -50,7 +50,7 @@
-+ 		fi \
-+ 	fi
-+ 
-+-uninstall: files-uninstall rules-reload
-++uninstall: files-uninstall
-+ 
-+ files-uninstall:
-+ 	$(RM) $(RULESDIR)/40-usb_modeswitch.rules
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-new file mode 100644
-index 0000000..9f1b3ff
---- /dev/null
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -0,0 +1,26 @@
-+#############################################################
-+#
-+# usb_modeswitch_data
-+#
-+#############################################################
-+
-+USB_MODESWITCH_DATA_VERSION = 20120120
-+USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
-+USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
-+USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
-+
-+define USB_MODESWITCH_DATA_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
-+endef
-+
-+define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+
-+define USB_MODESWITCH_DATA_CLEAN_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
-+endef
-+
-+$(eval $(call GENTARGETS))
-+
+ I think the only solution is to add a check in the .mk file if MLO and
+u-boot.img indeed exist, and fall back to the default instead if not.
+
+ What is also missing is that the choice between the different image types
+should depend on !BR2_TARGET_UBOOT_SPL.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+> ---
+>  boot/uboot/Config.in |    6 ++++++
+>  boot/uboot/uboot.mk  |    4 ++++
+>  2 files changed, 10 insertions(+), 0 deletions(-)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index c8db9fb..1b94803 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -137,4 +137,10 @@ config BR2_TARGET_UBOOT_ETH1ADDR
+>  
+>  endif # BR2_TARGET_UBOOT_NETWORK
+>  
+> +config BR2_TARGET_UBOOT_SPL
+> +	bool "U-Boot SPL suport"
+> +	depends on !BR2_TARGET_XLOADER
+> +	help
+> +	  Enable the U-Boot SPL support
+> +
+>  endif # BR2_TARGET_UBOOT
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index db9de8d..b327f4b 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -29,6 +29,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
+>  UBOOT_BIN          = u-boot.ldr
+>  else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
+>  UBOOT_BIN          = u-boot-nand.bin
+> +else ifeq ($(BR2_TARGET_UBOOT_SPL),y)
+> +UBOOT_BIN          = u-boot.img
+>  else
+>  UBOOT_BIN          = u-boot.bin
+>  endif
+> @@ -88,6 +90,8 @@ endef
+>  
+>  define UBOOT_INSTALL_IMAGES_CMDS
+>  	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+> +	$(if $(BR2_TARGET_UBOOT_SPL),
+> +		cp -dpf $(@D)/MLO $(BINARIES_DIR)/)
+>  endef
+>  
+>  $(eval $(call GENTARGETS))
+> 
+
 -- 
-1.7.5.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
