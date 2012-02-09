@@ -1,29 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Feb 2012 16:36:40 +0100
-Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <CB593EC4.2F2F%donald.poole@swri.org> (Donald R. Poole's message
- of "Thu, 9 Feb 2012 15:16:53 +0000")
-References: <CB593EC4.2F2F%donald.poole@swri.org>
-Message-ID: <87vcng3to7.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 9 Feb 2012 16:54:57 +0100
+Subject: [Buildroot] segfault when running a simple c program on env
+ build with buildroot
+In-Reply-To: <4F33E363.5040107@scalemp.com>
+References: <4F33DCBE.7080606@scalemp.com> <20120209161150.36d6c6d6@skate>
+ <4F33E363.5040107@scalemp.com>
+Message-ID: <20120209165457.2a99305b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+Le Thu, 09 Feb 2012 17:16:51 +0200,
+Eial Czerwacki <eial@scalemp.com> a ?crit :
 
-Hi,
+> > What is your hardware platform?
+> >
+> > Thomas
+> 
+> any generic Intel/AMD cpu
 
- Donald> Hmm, interestingly I do have that in my .config.  Why would it
- Donald> have failed to execute the Setuid in this case?
+Sorry this does not exist. Your configuration states i686. If your
+processor is only i486 or i586 compatible, then those segfaults are
+expected since the generated code might use instructions that do not
+exist on your processor.
 
-Sorry, no idea. Do you see it in the fakeroot invocation to create the
-tarball? Are the permissions in the tarball correct?
+> I've compiled iasl, dmidecode and biosdecode with same image, you say
+> that I cannot do that?
+> I need the bin linked to uclibc and my desktop doesn't support uclibc
 
-E.G.:
-tar tvf output/images/rootfs.tar | grep '^-.*busybox'
--rwsr-xr-x root/root    420472 2012-02-09 09:29 ./bin/busybox
+Buildroot generates for you an uClibc cross-compilation toolchain in
+output/host/usr/bin that you can use to cross-compile applications for
+the target platform.
 
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
