@@ -1,28 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Feb 2012 22:10:55 +0100
-Subject: [Buildroot] [PATCH 4 of 5 v6] Makefile: change order of dirs
-	and dependencies
-In-Reply-To: <56de77645492978917b5.1328718139@beantl019720> (Thomas De
- Schampheleire's message of "Wed, 08 Feb 2012 17:22:19 +0100")
-References: <patchbomb.1328718135@beantl019720>
- <56de77645492978917b5.1328718139@beantl019720>
-Message-ID: <87fwej4srk.fsf@macbook.be.48ers.dk>
+Date: Thu, 09 Feb 2012 22:22:22 +0100
+Subject: [Buildroot] Buildroot RFS Login Question
+In-Reply-To: <CB597E68.2F40%donald.poole@swri.org> (Donald R. Poole's message
+ of "Thu, 9 Feb 2012 19:56:56 +0000")
+References: <CB597E68.2F40%donald.poole@swri.org>
+Message-ID: <878vkb4s8h.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
 
- Thomas> If during the dependencies step, a package needs to be downloaded, the
- Thomas> download directory already has to be present. If not, the file will be
- Thomas> downloaded under the name 'dl' instead of in the directory 'dl'.
+Hi,
 
- Thomas> This patch changes the order of dirs and dependencies in the
- Thomas> world target to fix this.
+ Donald> So, I see it in the fakroot invocation and when I issue the command you
+ Donald> gave to check the permissions of the busybox binary, it get this output:
 
-Committed, thanks.
+ Donald> 	-rwsr-xr-x root/root    621852 2012-02-09 13:43 ./bin/busybox
+
+ Donald> So, it appears that it's being set correctly too.
+
+All good. So where does it get stripped from here on until you execute
+it on the target?
 
 -- 
 Bye, Peter Korsgaard
