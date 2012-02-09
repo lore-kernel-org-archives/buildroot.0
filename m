@@ -1,43 +1,45 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 9 Feb 2012 23:54:36 +0100
+Date: Thu, 9 Feb 2012 23:58:34 +0100
 Subject: [Buildroot] [PATCH 1/8] linux: use the depmod built in HOST_DIR
-In-Reply-To: <87mx92hiyr.fsf@macbook.be.48ers.dk>
+In-Reply-To: <28c6a15900cdc487752287f9d20e1ad7af0f992a.1328038759.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <20120201091257.636dc684@skate> <87mx92hiyr.fsf@macbook.be.48ers.dk>
-Message-ID: <201202092354.36488.arnout@mind.be>
+ <28c6a15900cdc487752287f9d20e1ad7af0f992a.1328038759.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201202092358.34713.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 01 February 2012 12:49:16 Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Tuesday 31 January 2012 20:39:59 Thomas Petazzoni wrote:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  linux/linux.mk |    3 ++-
+>  1 files changed, 2 insertions(+), 1 deletions(-)
 > 
->  >> Committed, thanks. Not released to this patch, but is the LZMA stuff
->  >> still used/needed?
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 5c5a1d2..dbe1ad7 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -40,7 +40,8 @@ LINUX_MAKE_FLAGS = \
+>  	ARCH=$(KERNEL_ARCH) \
+>  	INSTALL_MOD_PATH=$(TARGET_DIR) \
+>  	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+> -	LZMA="$(LZMA)"
+> +	LZMA="$(LZMA)" \
+> +	DEPMOD=$(HOST_DIR)/usr/sbin/depmod
+>  
+>  # Get the real Linux version, which tells us where kernel modules are
+>  # going to be installed in the target filesystem.
 > 
->  Thomas> It has been added by
->  Thomas> http://git.buildroot.net/buildroot/commit/target/linux/Makefile.in?id=ea8b1fa6a60705eedc5bd4f405f45c8f531c2126,
->  Thomas> which is a bit limited in details on why it was needed. I guess the
->  Thomas> goal was to tell the Linux build process to use the lzma utility built
->  Thomas> for the host by Buildroot, in case the Linux kernel is built (or the
->  Thomas> initramfs) with LZMA compression. But that remains to be verified.
-> 
-> Yes, I know - But I don't see anything using it right away grepping the
-> kernel. I just wondered if anyone remembered what it was used for (and
-> if it still is)?
 
- I also looked in detail at the kernel and I also don't think it can be used 
-by anything.  Maybe it used to be used at some point, but I don't feel like
-grepping through the entire kernel history to find that :-)
-
- So I also think it can be removed.  Anyway, the TARGET_PATH will make sure
-that our host-lzma is used.
+ Do you know why this is necessary in the first place?  It should be
+covered by the TARGET_MAKE_ENV with contains the TARGET_PATH, no?
+Or is the problem that igh-ethercat and lttng-modules forget to
+include TARGET_MAKE_ENV?
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
