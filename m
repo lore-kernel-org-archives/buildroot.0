@@ -1,67 +1,79 @@
-From: Trevor Woerner <twoerner@gmail.com>
-Date: Thu,  9 Feb 2012 12:40:39 -0500
-Subject: [Buildroot] [PATCH fbdirect] Font handling in directfb requires
-	libbz2
-Message-ID: <1328809239-12021-1-git-send-email-twoerner@gmail.com>
+From: Poole, Donald R. <drpoole@swri.org>
+Date: Thu, 9 Feb 2012 19:56:56 +0000
+Subject: [Buildroot] Buildroot RFS Login Question
+In-Reply-To: <87vcng3to7.fsf@macbook.be.48ers.dk>
+Message-ID: <CB597E68.2F40%donald.poole@swri.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Trevor Woerner <twoerner@gmail.com>
+On 2/9/12 9:36 AM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
 
-One of the libraries which is built by directfb, libidirectfbfont_ft2.so,
-requires libbz2:
 
-        libdirect-1.4.so.6 => /usr/lib/libdirect-1.4.so.6 (0x40107000)
-        libdirectfb-1.4.so.6 => /usr/lib/libdirectfb-1.4.so.6 (0x40123000)
-        libfusion-1.4.so.6 => /usr/lib/libfusion-1.4.so.6 (0x401c6000)
-        libz.so.1 => /usr/lib/libz.so.1 (0x40003000)
-        libfreetype.so.6 => /usr/lib/libfreetype.so.6 (0x401fb000)
-        libm.so.6 => /lib/libm.so.6 (0x4026d000)
-        libdl.so.2 => /lib/libdl.so.2 (0x40047000)
-        libpthread.so.0 => /lib/libpthread.so.0 (0x4007c000)
-        libc.so.6 => /lib/libc.so.6 (0x402e0000)
-        libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x40052000)
-        libbz2.so.1 => /usr/lib/libbz2.so.1 (0x400ae000)
-        /lib/ld-2.9.so (0x400e1000)
+>>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+>
+>Hi,
+>
+> Donald> Hmm, interestingly I do have that in my .config.  Why would it
+> Donald> have failed to execute the Setuid in this case?
+>
+>Sorry, no idea. Do you see it in the fakeroot invocation to create the
+>tarball? Are the permissions in the tarball correct?
+>
+>E.G.:
+>tar tvf output/images/rootfs.tar | grep '^-.*busybox'
+>-rwsr-xr-x root/root    420472 2012-02-09 09:29 ./bin/busybox
+>
+>-- 
+>Bye, Peter Korsgaard
 
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
----
- package/directfb/directfb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+This is the my tarball creation output:
 
-Although this dependency is necessary this patch is still not complete but
-I'm not sure how to fix it. When I try to fun a fbdirect demo on my device
-it still complains because the demo is looking to link to libbz2.so.1 and
-that link is not created by default:
+	>>>   Generating root filesystem image rootfs.tar
+	rm -f 
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	touch 
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/.fakeroot.00000
+	cat /opt/embedded-systems/armv7/buildroot-2011.11/output/build/.fakeroot*
+> /opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	echo "chown -R 0:0
+/opt/embedded-systems/armv7/buildroot-2011.11/output/target" >>
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	cat target/generic/device_table.txt  >
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_device_table.tx
+t
+	echo 
+"/opt/embedded-systems/armv7/buildroot-2011.11/output/host/usr/bin/makedevs
+ -d 
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_device_table.tx
+t /opt/embedded-systems/armv7/buildroot-2011.11/output/target" >>
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	echo " tar -c""f 
+/opt/embedded-systems/armv7/buildroot-2011.11/output/images/rootfs.tar -C
+/opt/embedded-systems/armv7/buildroot-2011.11/output/target ." >>
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	chmod a+x 
+/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	/opt/embedded-systems/armv7/buildroot-2011.11/output/host/usr/bin/fakeroot
+ -- /opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
+	rootdir=/opt/embedded-systems/armv7/buildroot-2011.11/output/target
+	table='/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_device_
+table.txt'
+	bzip2 -9 -c 
+/opt/embedded-systems/armv7/buildroot-2011.11/output/images/rootfs.tar >
+/opt/embedded-systems/armv7/buildroot-2011.11/output/images/rootfs.tar.bz2
 
-# df_dok
-...
-(!) Direct/Interface: Unable to dlopen `/usr/lib/directfb-1.4-6/interfaces/IDirectFBFont/libidirectfbfont_ft2.so'!
-    --> libbz2.so.1: cannot open shared object file: No such file or directory
+So, I see it in the fakroot invocation and when I issue the command you
+gave to check the permissions of the busybox binary, it get this output:
 
-# ls -l /usr/lib/libbz2*
-lrwxrwxrwx    1 root     root            15 Feb  9 16:32 /usr/lib/libbz2.so -> libbz2.so.1.0.4
-lrwxrwxrwx    1 root     root            15 Feb  9 16:32 /usr/lib/libbz2.so.1.0 -> libbz2.so.1.0.4
--rwxr-xr-x    1 root     root         58064 Feb  9 16:34 /usr/lib/libbz2.so.1.0.4
+	-rwsr-xr-x root/root    621852 2012-02-09 13:43 ./bin/busybox
 
-So something still needs to be tweaked to create the /usr/lib/libbz2.so.1
-link.
+So, it appears that it's being set correctly too.
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 977d272..8fd8d5e 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -23,7 +23,7 @@ DIRECTFB_CONF_OPT = \
- 	--disable-video4linux2 \
- 	--without-tools
- 
--DIRECTFB_DEPENDENCIES = freetype zlib
-+DIRECTFB_DEPENDENCIES = freetype zlib bzip2
- 
- ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
- DIRECTFB_CONF_OPT += --enable-multi --enable-fusion
--- 
-1.7.9.GIT
+Donald R. Poole, Jr.
+Research Engineer
+Voice: 210.522.3131 | Fax: 210.522.4931
+Tactical Networks & Communications (tacticalnetworks.swri.org)
+Southwest Research Institute (SwRI)
