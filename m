@@ -1,43 +1,100 @@
-From: Poole, Donald R. <drpoole@swri.org>
-Date: Thu, 9 Feb 2012 06:49:24 +0000
-Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <871uq44j0r.fsf@macbook.be.48ers.dk>
-Message-ID: <CB58C6EF.2EFA%donald.poole@swri.org>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 09 Feb 2012 08:26:53 +0100
+Subject: [Buildroot] [PATCH v2 2/2] udev: bump to 181 and other fixes
+In-Reply-To: <87k43x3ufp.fsf@macbook.be.48ers.dk>
+References: <1328694625-17204-1-git-send-email-yegorslists@googlemail.com>
+ <1328694625-17204-2-git-send-email-yegorslists@googlemail.com>
+ <87k43x3ufp.fsf@macbook.be.48ers.dk>
+Message-ID: <4F33753D.7030002@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2/9/12 12:29 AM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
+Am 08.02.2012 22:07, schrieb Peter Korsgaard:
+>>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+> 
+>  yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+>  yegorslists> Changes:
+>  yegorslists> - Linux kernel requirement: 2.6.34 and above (devtmpfs is mandatory)
+>  yegorslists> (this also applies to the chosen toolchain, because of Kernel headers)
+>  yegorslists> - optional dependency on libusb and usbutils removed
+>  yegorslists> - added dependency on kmod
+>  yegorslists> - added dependency on util-linux for libblkid
+>  yegorslists> - install in /lib/udev instead of /usr/libexec/udev
+>  yegorslists> - udevd moved to /lib/udev
+>  yegorslists> - fixed path to pci.ids and usb.ids
+>  yegorslists> - persistent rules generator is disabled by default, so option
+>  yegorslists> is introduced to enable this option if desired
+> 
+> Thanks, committed with minor tweaks (see below).
+> 
+> 
+>  yegorslists> +++ b/package/udev/Config.in
+>  yegorslists> @@ -1,31 +1,39 @@
+>  yegorslists>  config BR2_PACKAGE_UDEV
+>  yegorslists>  	bool "udev"
+>  yegorslists>  	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+>  yegorslists> +	depends on BR2_LARGEFILE # util-linux
+>  yegorslists> +	depends on BR2_USE_WCHAR # util-linux
+>  yegorslists> +	select BR2_PACKAGE_UTIL_LINUX
+>  yegorslists> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>  yegorslists> +	select BR2_PACKAGE_KMOD
+>  yegorslists>  	help
+>  yegorslists>  	  Userspace device daemon.
+>  
+>  yegorslists> +	  udev requires a Linux kernel >= 2.6.34: it relies on devtmpfs.
+>  yegorslists> +
+> 
+> The devtmpfs dependency is not really an issue as we already depend on
+> it for dynamic /dev handling.
 
->>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
->
->Hi,
->
-> >> But in your original email you told us that you were getting that
-> >> error. What changed?
->
-> Donald> Ok, I found the problem. /bin/busybox wasn't setuid
-> Donald> root. Changing the uid to root fixed the problem.  I thought
-> Donald> buildroot did this automatically after installing to target?
->
->If you extract the tarball to your nfsroot as root, yes (or use one of
->the other filesystem outputs). You are not trying to use output/target
->directly, are you?
->
->-- 
->Bye, Peter Korsgaard
+ACK
+ 
+>   yegorslists>  comment "udev requires /dev mgmnt set to udev under System configuration"
+>  yegorslists>  	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+>  yegorslists> +
+>  yegorslists> +comment "udev requires a toolchain with LARGEFILE + WCHAR support"
+>  yegorslists> +    depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+>  
+> 
+> This doesn't really make sense to show here, so I moved it
+> target/generic where the user selects the /dev handling method. This
+> line would only be shown in situations where he couldn't select udev
+> anyway (as he hadn't selected BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV).
 
-No, I am not. After I create an ext3 filesystem on my SD card (sudo
-mkfs.ext3 /dev/sdc1 in my case) and mount the newly create filesystem
-(sudo mount /dev/sdc1 /path/to/mount/point) is do a "sudo tar -xvf
-rootfs.tar -C /path/to/mount/point".  So, when that is all said and done,
-my filesystem is indeed owned by root, but the setuid bit for /bin/busybox
-was not set.
+ACK
+ 
+>  yegorslists> +++ b/package/udev/udev.mk
+>  yegorslists> @@ -3,7 +3,7 @@
+>  yegorslists>  # udev
+>  yegorslists>  #
+>  yegorslists>  #############################################################
+>  yegorslists> -UDEV_VERSION = 173
+>  yegorslists> +UDEV_VERSION = 181
+>  yegorslists>  UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
+>  yegorslists>  UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+>  yegorslists>  UDEV_INSTALL_STAGING = YES
+>  yegorslists> @@ -11,20 +11,24 @@ UDEV_INSTALL_STAGING = YES
+>  yegorslists>  UDEV_CONF_OPT =			\
+>  yegorslists>  	--sbindir=/sbin		\
+>  yegorslists>  	--with-rootlibdir=/lib	\
+>  yegorslists> -	--libexecdir=/lib/udev	\
+>  yegorslists> +	--libexecdir=/lib	\
+>  yegorslists> +	--with-usb-ids-path=/usr/share/hwdata/usb.ids	\
+>  yegorslists> +	--with-pci-ids-path=/usr/share/hwdata/pci.ids	\
+>  yegorslists> +	--with-firmware-path=/lib/firmware		\
+>  yegorslists>  	--disable-introspection
+> 
+> udevd now needs to link with librt as it calls mq_getattr() (which isn't
+> automatically done on uClibc), so I added UDEV_CONF_ENV += LIBS='-lt'
 
-Donald R. Poole, Jr.
-Research Engineer
-Voice: 210.522.3131 | Fax: 210.522.4931
-Tactical Networks & Communications (tacticalnetworks.swri.org)
-Southwest Research Institute (SwRI)
+O.K. Thanks for reviewing and committing. Due to kernel version dependency we can almost retire these toolchains in case of udev:
+
+Sourcery CodeBench ARM 2010q1
+Sourcery CodeBench ARM 2009q3
+Sourcery CodeBench ARM 2009q1 
+
+Yegor
