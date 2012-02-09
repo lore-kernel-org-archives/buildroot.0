@@ -1,40 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Feb 2012 23:02:34 +0100
-Subject: [Buildroot] [PATCH v2 fbdirect] Font handling in directfb
-	requires libbz2
-In-Reply-To: <1328824580-28004-1-git-send-email-twoerner@gmail.com> (Trevor
- Woerner's message of "Thu, 9 Feb 2012 16:56:20 -0500")
-References: <1328824580-28004-1-git-send-email-twoerner@gmail.com>
-Message-ID: <87vcnf3bt1.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 9 Feb 2012 22:59:20 +0100
+Subject: [Buildroot] [git commit] Makefile: fix old make check thinko
+Message-ID: <20120209221235.6D76890A44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trevor" == Trevor Woerner <twoerner@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8139e21c978d2c82f559849343ebcec3dd886607
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+So it doesn't fail with 3.81.
 
- Trevor> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
- Trevor> ---
- Trevor>  package/bzip2/bzip2.mk       |    3 ++-
- Trevor>  package/directfb/directfb.mk |    2 +-
- Trevor>  2 files changed, 3 insertions(+), 2 deletions(-)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Trevor> diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
- Trevor> index d3bb2b0..8e6ae92 100644
- Trevor> --- a/package/bzip2/bzip2.mk
- Trevor> +++ b/package/bzip2/bzip2.mk
- Trevor> @@ -60,6 +60,7 @@ define BZIP2_INSTALL_TARGET_CMDS
- Trevor>  	(cd $(TARGET_DIR)/usr/lib; \
- Trevor>  		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
- Trevor>  		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
- Trevor> +		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
-
-Could you please split this out in a seperate patch (and put .so.1
-before .so?)
-
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index d3e8610..25da853 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@ export BR2_VERSION:=2012.02-git
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+-ifeq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MAKE_VERSION))
++ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSION))
+ $(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
+ endif
+ 
