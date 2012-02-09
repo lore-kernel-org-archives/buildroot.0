@@ -1,38 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 9 Feb 2012 23:36:12 +0100
-Subject: [Buildroot] Ext4 rootfs option
-In-Reply-To: <878vkd3rbo.fsf@macbook.be.48ers.dk>
-References: <4F3220B8.9040604@renta.net> <201202082310.49254.arnout@mind.be>
- <878vkd3rbo.fsf@macbook.be.48ers.dk>
-Message-ID: <201202092336.12939.arnout@mind.be>
+Date: Thu, 9 Feb 2012 23:54:36 +0100
+Subject: [Buildroot] [PATCH 1/8] linux: use the depmod built in HOST_DIR
+In-Reply-To: <87mx92hiyr.fsf@macbook.be.48ers.dk>
+References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
+ <20120201091257.636dc684@skate> <87mx92hiyr.fsf@macbook.be.48ers.dk>
+Message-ID: <201202092354.36488.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 08 February 2012 23:15:07 Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On Wednesday 01 February 2012 12:49:16 Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
-> Hi,
+>  >> Committed, thanks. Not released to this patch, but is the LZMA stuff
+>  >> still used/needed?
 > 
->  Arnout>  I currently use genext2fs, followed by tune2fs to add the
->  Arnout> journal and e2fsck to fix the incorrect FS version number.  But
->  Arnout> it's extremely inefficient, especially since genext2fs first
->  Arnout> builds the filesystem in memory before committing to the output
->  Arnout> image.  Not good when you want to create a 500GB partition :-)
+>  Thomas> It has been added by
+>  Thomas> http://git.buildroot.net/buildroot/commit/target/linux/Makefile.in?id=ea8b1fa6a60705eedc5bd4f405f45c8f531c2126,
+>  Thomas> which is a bit limited in details on why it was needed. I guess the
+>  Thomas> goal was to tell the Linux build process to use the lzma utility built
+>  Thomas> for the host by Buildroot, in case the Linux kernel is built (or the
+>  Thomas> initramfs) with LZMA compression. But that remains to be verified.
 > 
-> Wow, you're using Buildroot for systems with 500GB rootfs? Must be those
-> binary video codecs / GPU drivers you were talking about ;)
+> Yes, I know - But I don't see anything using it right away grepping the
+> kernel. I just wondered if anyone remembered what it was used for (and
+> if it still is)?
 
- Actually, no.  I wrote the script so it was possible to write the image to
-a block device, and it would determine the required fs size automatically.  
-And then some idiot had the idea of plugging in a USB harddisk instead of 
-the normal 1GB compactflash card...  Serves me right for trying to be too
-generic.
+ I also looked in detail at the kernel and I also don't think it can be used 
+by anything.  Maybe it used to be used at some point, but I don't feel like
+grepping through the entire kernel history to find that :-)
+
+ So I also think it can be removed.  Anyway, the TARGET_PATH will make sure
+that our host-lzma is used.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
