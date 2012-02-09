@@ -1,7 +1,10 @@
 From: Trevor Woerner <twoerner@gmail.com>
-Date: Thu,  9 Feb 2012 17:25:13 -0500
-Subject: [Buildroot] [PATCH bzip2] bzip2: add so.1 link
-Message-ID: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
+Date: Thu,  9 Feb 2012 17:25:14 -0500
+Subject: [Buildroot] [PATCH v3 directfb] directfb: font handling requires
+	libbz2
+In-Reply-To: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
+References: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
+Message-ID: <1328826314-30424-2-git-send-email-twoerner@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +13,42 @@ To: buildroot@busybox.net
 
 From: Trevor Woerner <twoerner@gmail.com>
 
-In addition to the .so link add a .so.1 link for the target rootfs.
+One of the libraries which is built by directfb, libidirectfbfont_ft2.so,
+requires libbz2:
+
+$ pwd
+/usr/lib/directfb-1.4-6/interfaces/IDirectFBFont
+$ /lib/ld-2.9.so --list ./libidirectfbfont_ft2.so
+        libdirect-1.4.so.6 => /usr/lib/libdirect-1.4.so.6 (0x40155000)
+        libdirectfb-1.4.so.6 => /usr/lib/libdirectfb-1.4.so.6 (0x40171000)
+        libfusion-1.4.so.6 => /usr/lib/libfusion-1.4.so.6 (0x40133000)
+        libz.so.1 => /usr/lib/libz.so.1 (0x4008b000)
+        libfreetype.so.6 => /usr/lib/libfreetype.so.6 (0x40214000)
+        libm.so.6 => /lib/libm.so.6 (0x40286000)
+        libdl.so.2 => /lib/libdl.so.2 (0x40036000)
+        libpthread.so.0 => /lib/libpthread.so.0 (0x400a6000)
+        libc.so.6 => /lib/libc.so.6 (0x402f9000)
+        libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x400fa000)
+        libbz2.so.1 => /usr/lib/libbz2.so.1 (0x400c6000)
+        /lib/ld-2.9.so (0x40065000)
 
 Signed-off-by: Trevor Woerner <twoerner@gmail.com>
 ---
- package/bzip2/bzip2.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/directfb/directfb.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-index d3bb2b0..1bc4449 100644
---- a/package/bzip2/bzip2.mk
-+++ b/package/bzip2/bzip2.mk
-@@ -59,6 +59,7 @@ define BZIP2_INSTALL_TARGET_CMDS
- 	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(TARGET_DIR)/usr/lib/
- 	(cd $(TARGET_DIR)/usr/lib; \
- 		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
-+		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
- 		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
- 	)
- 	(cd $(TARGET_DIR)/usr/bin; \
-@@ -102,4 +103,4 @@ define HOST_BZIP2_INSTALL_CMDS
- endef
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 977d272..8fd8d5e 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -23,7 +23,7 @@ DIRECTFB_CONF_OPT = \
+ 	--disable-video4linux2 \
+ 	--without-tools
  
- $(eval $(call GENTARGETS))
--$(eval $(call GENTARGETS,host))
-\ No newline at end of file
-+$(eval $(call GENTARGETS,host))
+-DIRECTFB_DEPENDENCIES = freetype zlib
++DIRECTFB_DEPENDENCIES = freetype zlib bzip2
+ 
+ ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
+ DIRECTFB_CONF_OPT += --enable-multi --enable-fusion
 -- 
 1.7.9.GIT
