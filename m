@@ -1,54 +1,95 @@
-From: Trevor Woerner <twoerner@gmail.com>
-Date: Thu,  9 Feb 2012 17:25:14 -0500
-Subject: [Buildroot] [PATCH v3 directfb] directfb: font handling requires
-	libbz2
-In-Reply-To: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
-References: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
-Message-ID: <1328826314-30424-2-git-send-email-twoerner@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 9 Feb 2012 23:23:42 +0100
+Subject: [Buildroot] [git commit] docs: Add customizing toolchain section
+Message-ID: <20120209222920.1256D90A44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Trevor Woerner <twoerner@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=2c4de62b14cf5c661ea6f999a031e9a4f115782e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-One of the libraries which is built by directfb, libidirectfbfont_ft2.so,
-requires libbz2:
-
-$ pwd
-/usr/lib/directfb-1.4-6/interfaces/IDirectFBFont
-$ /lib/ld-2.9.so --list ./libidirectfbfont_ft2.so
-        libdirect-1.4.so.6 => /usr/lib/libdirect-1.4.so.6 (0x40155000)
-        libdirectfb-1.4.so.6 => /usr/lib/libdirectfb-1.4.so.6 (0x40171000)
-        libfusion-1.4.so.6 => /usr/lib/libfusion-1.4.so.6 (0x40133000)
-        libz.so.1 => /usr/lib/libz.so.1 (0x4008b000)
-        libfreetype.so.6 => /usr/lib/libfreetype.so.6 (0x40214000)
-        libm.so.6 => /lib/libm.so.6 (0x40286000)
-        libdl.so.2 => /lib/libdl.so.2 (0x40036000)
-        libpthread.so.0 => /lib/libpthread.so.0 (0x400a6000)
-        libc.so.6 => /lib/libc.so.6 (0x402f9000)
-        libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x400fa000)
-        libbz2.so.1 => /usr/lib/libbz2.so.1 (0x400c6000)
-        /lib/ld-2.9.so (0x40065000)
-
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/directfb/directfb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ docs/manual/customize-toolchain.txt |   45 +++++++++++++++++++++++++++++++++++
+ docs/manual/customize.txt           |    2 +
+ docs/manual/external-toolchain.txt  |    1 +
+ 3 files changed, 48 insertions(+), 0 deletions(-)
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 977d272..8fd8d5e 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -23,7 +23,7 @@ DIRECTFB_CONF_OPT = \
- 	--disable-video4linux2 \
- 	--without-tools
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+new file mode 100644
+index 0000000..a54e2e2
+--- /dev/null
++++ b/docs/manual/customize-toolchain.txt
+@@ -0,0 +1,45 @@
++Customizing the toolchain
++-------------------------
++[[toolchain-custom]]
++
++There are three distinct types of toolchain backend supported in Buildroot,
++available under the menu +Toolchain+, invoking +make menuconfig+.
++
++Using the external toolchain backend
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++There is no way of tuning an external toolchain since Buildroot does not
++generate it.
++
++It also requires to set the Buildroot settings according to the toolchain ones
++(see xref:external-toolchain[]).
++
++Using the internal Buildroot toolchain backend
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The internal Buildroot toolchain backend *only* allows to generate
++*http://www.uclibc.org/[uClibc]-based toolchains*.
++
++However, it allows to tune major settings, such as:
++
++* Linux header version
++
++* http://www.uclibc.org/[uClibc] configuration (see xref:uclibc-custom[uClibc])
++
++* Binutils, GCC, Gdb and toolchain options
++
++This is directly avaiblable after selecting the +Buildroot toolchain+ type in
++the menu +Toolchain+.
++
++Using the Crosstool-NG backend
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The http://crosstool-ng.org[crosstool-NG] toolchain backend enables a rather
++limited set of settings under the Buildroot +Toolchain+ menu (ie. when invoking
+++make menuconfig+); mostly:
++
++* The http://crosstool-ng.org[crosstool-NG] configuration file
++
++* Gdb and some toolchain options
++
++Then, the toolchain can be finely tuned invoking +make ctng-menuconfig+.
+diff --git a/docs/manual/customize.txt b/docs/manual/customize.txt
+index c9f4dfd..e8235de 100644
+--- a/docs/manual/customize.txt
++++ b/docs/manual/customize.txt
+@@ -8,3 +8,5 @@ include::customize-busybox-config.txt[]
+ include::customize-uclibc-config.txt[]
  
--DIRECTFB_DEPENDENCIES = freetype zlib
-+DIRECTFB_DEPENDENCIES = freetype zlib bzip2
+ include::customize-kernel-config.txt[]
++
++include::customize-toolchain.txt[]
+diff --git a/docs/manual/external-toolchain.txt b/docs/manual/external-toolchain.txt
+index 20eebdb..62eb0a3 100644
+--- a/docs/manual/external-toolchain.txt
++++ b/docs/manual/external-toolchain.txt
+@@ -1,5 +1,6 @@
+ Using an external toolchain
+ ===========================
++[[external-toolchain]]
  
- ifeq ($(BR2_PACKAGE_DIRECTFB_MULTI),y)
- DIRECTFB_CONF_OPT += --enable-multi --enable-fusion
--- 
-1.7.9.GIT
+ Using an already existing toolchain is useful for different
+ reasons:
