@@ -1,22 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 09 Feb 2012 23:33:58 +0100
-Subject: [Buildroot] [PATCH bzip2] bzip2: add so.1 link
-In-Reply-To: <1328826314-30424-1-git-send-email-twoerner@gmail.com> (Trevor
- Woerner's message of "Thu, 9 Feb 2012 17:25:13 -0500")
-References: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
-Message-ID: <87ehu33acp.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 9 Feb 2012 23:32:02 +0100
+Subject: [Buildroot] [git commit] docs: customize-toolchain: fix typo
+Message-ID: <20120209223422.DDB55909AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trevor" == Trevor Woerner <twoerner@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=731f3dfa21f1560d7d6f52d12d921292f227db91
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Trevor> From: Trevor Woerner <twoerner@gmail.com>
- Trevor> In addition to the .so link add a .so.1 link for the target rootfs.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/manual/customize-toolchain.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/customize-toolchain.txt b/docs/manual/customize-toolchain.txt
+index a54e2e2..08b60a2 100644
+--- a/docs/manual/customize-toolchain.txt
++++ b/docs/manual/customize-toolchain.txt
+@@ -28,7 +28,7 @@ However, it allows to tune major settings, such as:
+ 
+ * Binutils, GCC, Gdb and toolchain options
+ 
+-This is directly avaiblable after selecting the +Buildroot toolchain+ type in
++This is directly available after selecting the +Buildroot toolchain+ type in
+ the menu +Toolchain+.
+ 
+ Using the Crosstool-NG backend
