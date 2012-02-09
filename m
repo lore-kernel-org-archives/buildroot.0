@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 9 Feb 2012 10:03:49 +0100
-Subject: [Buildroot] [PATCH] busybox: add watchdog daemon startup script
-In-Reply-To: <201202090004.34325.arnout@mind.be>
-References: <1328686893-6841-1-git-send-email-fabio.porcedda@telit.com>
- <20120208222639.36359e6a@skate> <201202090004.34325.arnout@mind.be>
-Message-ID: <20120209100349.67730016@skate>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 09 Feb 2012 10:08:50 +0100
+Subject: [Buildroot] [PATCH v2 2/2] udev: bump to 181 and other fixes
+In-Reply-To: <20120209100228.1ad88a30@skate>
+References: <1328694625-17204-1-git-send-email-yegorslists@googlemail.com>
+ <1328694625-17204-2-git-send-email-yegorslists@googlemail.com>
+ <87k43x3ufp.fsf@macbook.be.48ers.dk> <4F33753D.7030002@visionsystems.de>
+ <20120209100228.1ad88a30@skate>
+Message-ID: <4F338D22.5010801@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 9 Feb 2012 00:04:34 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Am 09.02.2012 10:02, schrieb Thomas Petazzoni:
+> Le Thu, 09 Feb 2012 08:26:53 +0100,
+> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+>
+>> O.K. Thanks for reviewing and committing. Due to kernel version
+>> dependency we can almost retire these toolchains in case of udev:
+>>
+>> Sourcery CodeBench ARM 2010q1
+>> Sourcery CodeBench ARM 2009q3
+>> Sourcery CodeBench ARM 2009q1 
+> No everybody needs udev, so I don't think it is valid to remove those
+> toolchains just because they can't work with udev.
 
->  NACK.  Many people will want to use watchdog in a different way.
-> And it may be installed as S<someothernumber>watchdog so the check if
-> it exists already doesn't help.
+I didn't mean to remove them (how would I get my u-boot compiled?).  I just wanted to state this fact.
 
-Many of our packages install a default init script, which can always be
-overridden in the filesystem skeleton or through the post-build script.
-So what shouldn't we do the same here?
+Testing ct-ng right now to determine if u-boot is not allergic against it.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Yegor
