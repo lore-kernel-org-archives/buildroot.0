@@ -1,45 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 9 Feb 2012 23:58:34 +0100
-Subject: [Buildroot] [PATCH 1/8] linux: use the depmod built in HOST_DIR
-In-Reply-To: <28c6a15900cdc487752287f9d20e1ad7af0f992a.1328038759.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
- <28c6a15900cdc487752287f9d20e1ad7af0f992a.1328038759.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <201202092358.34713.arnout@mind.be>
+Date: Fri, 10 Feb 2012 00:12:00 +0100
+Subject: [Buildroot] [PATCH 2/5] Rework of the init system
+In-Reply-To: <1328279247-7277-3-git-send-email-maxime.ripard@free-electrons.com>
+References: <1328279247-7277-1-git-send-email-maxime.ripard@free-electrons.com>
+ <1328279247-7277-3-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <201202100012.00343.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 31 January 2012 20:39:59 Thomas Petazzoni wrote:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  linux/linux.mk |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
+On Friday 03 February 2012 15:27:24 Maxime Ripard wrote:
+> Since we have now two uncompatible init systems, and we want only one of
+> them at the same time in use in the rootfs, we need to select a
+> particular init system. This patch also adds $(PKG)_INSTALL_INIT_SYSTEMD
+> and $(PKG)_INSTALL_INIT_SYSV hooks that are called when the matching
+> init systems are selected to install properly the init scripts of the
+> package.
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 5c5a1d2..dbe1ad7 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -40,7 +40,8 @@ LINUX_MAKE_FLAGS = \
->  	ARCH=$(KERNEL_ARCH) \
->  	INSTALL_MOD_PATH=$(TARGET_DIR) \
->  	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
-> -	LZMA="$(LZMA)"
-> +	LZMA="$(LZMA)" \
-> +	DEPMOD=$(HOST_DIR)/usr/sbin/depmod
->  
->  # Get the real Linux version, which tells us where kernel modules are
->  # going to be installed in the target filesystem.
-> 
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Do you know why this is necessary in the first place?  It should be
-covered by the TARGET_MAKE_ENV with contains the TARGET_PATH, no?
-Or is the problem that igh-ethercat and lttng-modules forget to
-include TARGET_MAKE_ENV?
+[snip]
+> +	$(if $(BR2_INIT_SYSTEMD),\
+> +		$($(PKG)_INSTALL_INIT_SYSTEMD))
+> +	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+> +		$($(PKG)_INSTALL_INIT_SYSV))
+
+ I'm not sure if it really is an improvement, but you replace this with
+$($(PKG)_INSTALL_INIT_$(INIT_SYSTEM))
+
+where
+INIT_SYSTEM = $(call qstrip,$(BR2_INIT_SYSTEM))
+
+and in target/generic/Config.in
+config BR2_INIT_SYSTEM
+	string
+	default "SYSTEMD" if BR2_INIT_SYSTEMD
+	default "SYSV" if BR2_INIT_SYSV || BR2_INIT_BUSYBOX
+
+ It doesn't simplify this patch much, but it may help if other things
+depend on the init system in the future.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
