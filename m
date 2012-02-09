@@ -1,33 +1,41 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Thu, 09 Feb 2012 10:08:50 +0100
-Subject: [Buildroot] [PATCH v2 2/2] udev: bump to 181 and other fixes
-In-Reply-To: <20120209100228.1ad88a30@skate>
-References: <1328694625-17204-1-git-send-email-yegorslists@googlemail.com>
- <1328694625-17204-2-git-send-email-yegorslists@googlemail.com>
- <87k43x3ufp.fsf@macbook.be.48ers.dk> <4F33753D.7030002@visionsystems.de>
- <20120209100228.1ad88a30@skate>
-Message-ID: <4F338D22.5010801@visionsystems.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 9 Feb 2012 11:20:35 +0100
+Subject: [Buildroot] [git commit] libevas: X OpenGL backends needs modular
+	X.org (for mesa)
+Message-ID: <20120209102327.DFBBE90A47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 09.02.2012 10:02, schrieb Thomas Petazzoni:
-> Le Thu, 09 Feb 2012 08:26:53 +0100,
-> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
->
->> O.K. Thanks for reviewing and committing. Due to kernel version
->> dependency we can almost retire these toolchains in case of udev:
->>
->> Sourcery CodeBench ARM 2010q1
->> Sourcery CodeBench ARM 2009q3
->> Sourcery CodeBench ARM 2009q1 
-> No everybody needs udev, so I don't think it is valid to remove those
-> toolchains just because they can't work with udev.
+commit: http://git.buildroot.net/buildroot/commit/?id=0829989046404df89c9603014d0ae54d0d4904c0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I didn't mean to remove them (how would I get my u-boot compiled?).  I just wanted to state this fact.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/efl/libevas/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Testing ct-ng right now to determine if u-boot is not allergic against it.
-
-Yegor
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index f701886..ddac49e 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -98,7 +98,7 @@ config BR2_PACKAGE_LIBEVAS_X11
+ 
+ config BR2_PACKAGE_LIBEVAS_X11_GLX
+ 	bool "libevas X11 GLX backend"
+-	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_XSERVER_xorg # mesa needs big X
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+@@ -120,7 +120,7 @@ config BR2_PACKAGE_LIBEVAS_XCB
+ 
+ config BR2_PACKAGE_LIBEVAS_XCB_GLX
+ 	bool "libevas XCB GLX backend"
+-	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_XSERVER_xorg # mesa needs big X
+ 	select BR2_PACKAGE_LIBXCB
+ 	select BR2_PACKAGE_XCB_UTIL
+ 	select BR2_PACKAGE_XCB_PROTO
