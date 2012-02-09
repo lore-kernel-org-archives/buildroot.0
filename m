@@ -1,56 +1,108 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Feb 2012 00:12:00 +0100
-Subject: [Buildroot] [PATCH 2/5] Rework of the init system
-In-Reply-To: <1328279247-7277-3-git-send-email-maxime.ripard@free-electrons.com>
-References: <1328279247-7277-1-git-send-email-maxime.ripard@free-electrons.com>
- <1328279247-7277-3-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <201202100012.00343.arnout@mind.be>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Thu,  9 Feb 2012 18:42:36 -0500
+Subject: [Buildroot] [PATCH] [PATCH] usb_modeswitch: upgrade to 1.2.3
+Message-ID: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 03 February 2012 15:27:24 Maxime Ripard wrote:
-> Since we have now two uncompatible init systems, and we want only one of
-> them at the same time in use in the rootfs, we need to select a
-> particular init system. This patch also adds $(PKG)_INSTALL_INIT_SYSTEMD
-> and $(PKG)_INSTALL_INIT_SYSV hooks that are called when the matching
-> init systems are selected to install properly the init scripts of the
-> package.
-> 
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+From: "J.C. Woltz" <jwoltz@gmail.com>
 
-[snip]
-> +	$(if $(BR2_INIT_SYSTEMD),\
-> +		$($(PKG)_INSTALL_INIT_SYSTEMD))
-> +	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-> +		$($(PKG)_INSTALL_INIT_SYSV))
+Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+---
+ package/usb_modeswitch/Config.in                   |    1 +
+ .../usb_modeswitch/usb_modeswitch-makefile.patch   |   39 +++++++++-----------
+ package/usb_modeswitch/usb_modeswitch.mk           |   10 +++---
+ 3 files changed, 24 insertions(+), 26 deletions(-)
 
- I'm not sure if it really is an improvement, but you replace this with
-$($(PKG)_INSTALL_INIT_$(INIT_SYSTEM))
-
-where
-INIT_SYSTEM = $(call qstrip,$(BR2_INIT_SYSTEM))
-
-and in target/generic/Config.in
-config BR2_INIT_SYSTEM
-	string
-	default "SYSTEMD" if BR2_INIT_SYSTEMD
-	default "SYSV" if BR2_INIT_SYSV || BR2_INIT_BUSYBOX
-
- It doesn't simplify this patch much, but it may help if other things
-depend on the init system in the future.
-
- Regards,
- Arnout
-
-
+diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
+index ae10a55..1228293 100644
+--- a/package/usb_modeswitch/Config.in
++++ b/package/usb_modeswitch/Config.in
+@@ -7,3 +7,4 @@ config BR2_PACKAGE_USB_MODESWITCH
+ 	  Used to switch mode on multiple-function devices
+ 
+ 	  http://www.draisberghof.de/usb_modeswitch/
++
+diff --git a/package/usb_modeswitch/usb_modeswitch-makefile.patch b/package/usb_modeswitch/usb_modeswitch-makefile.patch
+index 918200b..1c4715c 100644
+--- a/package/usb_modeswitch/usb_modeswitch-makefile.patch
++++ b/package/usb_modeswitch/usb_modeswitch-makefile.patch
+@@ -1,23 +1,20 @@
+-diff -Nura usb-modeswitch-1.1.2.orig/Makefile usb-modeswitch-1.1.2/Makefile
+---- usb-modeswitch-1.1.2.orig/Makefile	2010-04-17 15:27:11.000000000 -0300
+-+++ usb-modeswitch-1.1.2/Makefile	2010-04-22 15:05:32.363471807 -0300
+-@@ -1,6 +1,6 @@
+- PROG        = usb_modeswitch
+- VERS        = 1.1.2
+--CC          = gcc
+-+CC          ?= gcc
+- CFLAGS      += -Wall -l usb
+- RM          = /bin/rm -f
+- OBJS        = usb_modeswitch.c
+-@@ -23,8 +23,9 @@
+- install: all
+- 	install -d $(SBINDIR)
+- 	install --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
+--	install --mode=755 usb_modeswitch.tcl $(UDEVDIR)/usb_modeswitch
+--	install --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
+-+	#install --mode=755 usb_modeswitch.tcl $(UDEVDIR)/usb_modeswitch
+-+	#install --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
+-+	install -d $(MANDIR)
+- 	install --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
++--- usb_modeswitch-1.2.3.orig/Makefile.orig	2012-02-06 14:00:15.000000000 -0500
+++++ usb_modeswitch-1.2.3/Makefile	2012-02-06 14:01:13.000000000 -0500
++@@ -46,7 +46,7 @@
++ 	cd jim && $(MAKE) distclean
+  
++ install-common:
++-	install -D -s --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
+++	install -D --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
++ 	install -D --mode=755 usb_modeswitch.sh $(UDEVDIR)/usb_modeswitch
++ 	install -D --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
++ 	install -D --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
++@@ -65,7 +65,7 @@
++ 	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
++ 
++ install-binary:
++-	install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
+++	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
++ 
++ install: all install-common install-script
+  
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index 7b982d8..3d03888 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,22 +4,22 @@
+ #
+ #############################################################
+ 
+-USB_MODESWITCH_VERSION = 1.1.2
++USB_MODESWITCH_VERSION = 1.2.3
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb-compat
+ 
+ define USB_MODESWITCH_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
+ endef
+ 
+ define USB_MODESWITCH_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+-	$(INSTALL) -D $(@D)/usb_modeswitch.setup -m 0644 \
+-		$(TARGET_DIR)/etc/usb_modeswitch.setup
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
++
+ define USB_MODESWITCH_CLEAN_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
+ 	rm -f $(TARGET_DIR)/usr/sbin/usb_modeswitch
+ 	rm -f $(TARGET_DIR)/etc/usb_modeswitch.setup
+ 	rm -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.5.4
