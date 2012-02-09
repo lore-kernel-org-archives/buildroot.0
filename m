@@ -1,79 +1,33 @@
-From: Poole, Donald R. <drpoole@swri.org>
-Date: Thu, 9 Feb 2012 19:56:56 +0000
-Subject: [Buildroot] Buildroot RFS Login Question
-In-Reply-To: <87vcng3to7.fsf@macbook.be.48ers.dk>
-Message-ID: <CB597E68.2F40%donald.poole@swri.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Thu, 09 Feb 2012 21:09:28 +0100
+Subject: [Buildroot] [PATCH 0 of 2 v3-resend] Add find utility functions /
+ exclude files from strip
+Message-ID: <patchbomb.1328818168@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2/9/12 9:36 AM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
+This patch series adds a few utility functions to Makefile.package.in that
+help in composing find commands, and uses these functions to exclude
+user-configured files and directories from being stripped in target-finalize.
 
+The previous version of this series also modified the Python configuration to
+allow for a 'reduced Python'. These patches were left out for now, as Thomas
+Petazzoni raised some objections regarding the two-faced configuration. I hope
+we can continue the discussion about this topic in that thread.
 
->>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
->
->Hi,
->
-> Donald> Hmm, interestingly I do have that in my .config.  Why would it
-> Donald> have failed to execute the Setuid in this case?
->
->Sorry, no idea. Do you see it in the fakeroot invocation to create the
->tarball? Are the permissions in the tarball correct?
->
->E.G.:
->tar tvf output/images/rootfs.tar | grep '^-.*busybox'
->-rwsr-xr-x root/root    420472 2012-02-09 09:29 ./bin/busybox
->
->-- 
->Bye, Peter Korsgaard
+Thomas, you also had comments on the complexity of the find*clauses functions.
+If you have alternative suggestions, please let me know. Thanks.
 
-This is the my tarball creation output:
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-	>>>   Generating root filesystem image rootfs.tar
-	rm -f 
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	touch 
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/.fakeroot.00000
-	cat /opt/embedded-systems/armv7/buildroot-2011.11/output/build/.fakeroot*
-> /opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	echo "chown -R 0:0
-/opt/embedded-systems/armv7/buildroot-2011.11/output/target" >>
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	cat target/generic/device_table.txt  >
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_device_table.tx
-t
-	echo 
-"/opt/embedded-systems/armv7/buildroot-2011.11/output/host/usr/bin/makedevs
- -d 
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_device_table.tx
-t /opt/embedded-systems/armv7/buildroot-2011.11/output/target" >>
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	echo " tar -c""f 
-/opt/embedded-systems/armv7/buildroot-2011.11/output/images/rootfs.tar -C
-/opt/embedded-systems/armv7/buildroot-2011.11/output/target ." >>
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	chmod a+x 
-/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	/opt/embedded-systems/armv7/buildroot-2011.11/output/host/usr/bin/fakeroot
- -- /opt/embedded-systems/armv7/buildroot-2011.11/output/build/_fakeroot.fs
-	rootdir=/opt/embedded-systems/armv7/buildroot-2011.11/output/target
-	table='/opt/embedded-systems/armv7/buildroot-2011.11/output/build/_device_
-table.txt'
-	bzip2 -9 -c 
-/opt/embedded-systems/armv7/buildroot-2011.11/output/images/rootfs.tar >
-/opt/embedded-systems/armv7/buildroot-2011.11/output/images/rootfs.tar.bz2
+---
+v3: update based on review comments, remove Python changes for now
+v2: simplify find utilities
 
-So, I see it in the fakroot invocation and when I issue the command you
-gave to check the permissions of the busybox binary, it get this output:
-
-	-rwsr-xr-x root/root    621852 2012-02-09 13:43 ./bin/busybox
-
-So, it appears that it's being set correctly too.
-
-Donald R. Poole, Jr.
-Research Engineer
-Voice: 210.522.3131 | Fax: 210.522.4931
-Tactical Networks & Communications (tacticalnetworks.swri.org)
-Southwest Research Institute (SwRI)
+ Config.in                   |  19 +++++++++++++++++++
+ Makefile                    |   9 +++++++--
+ package/Makefile.package.in |  11 +++++++++++
+ 3 files changed, 37 insertions(+), 2 deletions(-)
