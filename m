@@ -1,40 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 9 Feb 2012 23:33:02 +0100
-Subject: [Buildroot] [git commit] bzip2: add so.1 link
-Message-ID: <20120209223422.ECAAC909AB@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 9 Feb 2012 23:36:12 +0100
+Subject: [Buildroot] Ext4 rootfs option
+In-Reply-To: <878vkd3rbo.fsf@macbook.be.48ers.dk>
+References: <4F3220B8.9040604@renta.net> <201202082310.49254.arnout@mind.be>
+ <878vkd3rbo.fsf@macbook.be.48ers.dk>
+Message-ID: <201202092336.12939.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8850ffdd5cd0c70832f73c69749203abfe83e5f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wednesday 08 February 2012 23:15:07 Peter Korsgaard wrote:
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  Arnout>  I currently use genext2fs, followed by tune2fs to add the
+>  Arnout> journal and e2fsck to fix the incorrect FS version number.  But
+>  Arnout> it's extremely inefficient, especially since genext2fs first
+>  Arnout> builds the filesystem in memory before committing to the output
+>  Arnout> image.  Not good when you want to create a 500GB partition :-)
+> 
+> Wow, you're using Buildroot for systems with 500GB rootfs? Must be those
+> binary video codecs / GPU drivers you were talking about ;)
 
-In addition to the .so link add a .so.1 link for the target rootfs.
+ Actually, no.  I wrote the script so it was possible to write the image to
+a block device, and it would determine the required fs size automatically.  
+And then some idiot had the idea of plugging in a USB harddisk instead of 
+the normal 1GB compactflash card...  Serves me right for trying to be too
+generic.
 
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bzip2/bzip2.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-index d3bb2b0..1bc4449 100644
---- a/package/bzip2/bzip2.mk
-+++ b/package/bzip2/bzip2.mk
-@@ -59,6 +59,7 @@ define BZIP2_INSTALL_TARGET_CMDS
- 	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(TARGET_DIR)/usr/lib/
- 	(cd $(TARGET_DIR)/usr/lib; \
- 		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
-+		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
- 		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
- 	)
- 	(cd $(TARGET_DIR)/usr/bin; \
-@@ -102,4 +103,4 @@ define HOST_BZIP2_INSTALL_CMDS
- endef
- 
- $(eval $(call GENTARGETS))
--$(eval $(call GENTARGETS,host))
-\ No newline at end of file
-+$(eval $(call GENTARGETS,host))
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
