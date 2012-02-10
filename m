@@ -1,89 +1,130 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Feb 2012 00:58:01 +0100
-Subject: [Buildroot] [PATCH 1/2] Add support for U-Boot SPL
-In-Reply-To: <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
-References: <1328402147-21404-1-git-send-email-n-dechesne@ti.com>
- <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
-Message-ID: <201202100058.02053.arnout@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 10 Feb 2012 08:29:09 +0100
+Subject: [Buildroot] [PATCH] [PATCH] usb_modeswitch: upgrade to 1.2.3
+In-Reply-To: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
+References: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
+Message-ID: <CAAXf6LV0=icDwrE8doD+TkxJBFMcCfbKnnwLNPH=bNdJ5m5-2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 05 February 2012 01:35:46 Nicolas Dechesne wrote:
-> SPL is a first stage bootloader. On pandaboard it supercedes x-loader,
-> and should now be used.
-> 
-> - this patch ensures that either SPL or xloader can be selected
-> - SPL will load 'u-boot.img' instead of 'u-boot.bin, so the name
->   is updated accordingly
+Hello,
 
- It doesn't work well, but unfortunately I don't know how to solve it.
-MLO and u-boot.img are only created for the omap configs, and only in
-u-boot 2011.12 or later.  Depending on omap in the Config.in is almost
-impossible, and also depending on 2011.12 is difficult because it could
-be a custom git instead.
+On Fri, Feb 10, 2012 at 12:42 AM, J.C. Woltz <jwoltz@gmail.com> wrote:
+> From: "J.C. Woltz" <jwoltz@gmail.com>
+>
+> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
 
- I think the only solution is to add a check in the .mk file if MLO and
-u-boot.img indeed exist, and fall back to the default instead if not.
+You shouldn't include a From: line. The Signed-off-by: is the one that
+should be present.
 
- What is also missing is that the choice between the different image types
-should depend on !BR2_TARGET_UBOOT_SPL.
 
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
 > ---
->  boot/uboot/Config.in |    6 ++++++
->  boot/uboot/uboot.mk  |    4 ++++
->  2 files changed, 10 insertions(+), 0 deletions(-)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index c8db9fb..1b94803 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -137,4 +137,10 @@ config BR2_TARGET_UBOOT_ETH1ADDR
->  
->  endif # BR2_TARGET_UBOOT_NETWORK
->  
-> +config BR2_TARGET_UBOOT_SPL
-> +	bool "U-Boot SPL suport"
-> +	depends on !BR2_TARGET_XLOADER
-> +	help
-> +	  Enable the U-Boot SPL support
+> ?package/usb_modeswitch/Config.in ? ? ? ? ? ? ? ? ? | ? ?1 +
+> ?.../usb_modeswitch/usb_modeswitch-makefile.patch ? | ? 39 +++++++++-----------
+> ?package/usb_modeswitch/usb_modeswitch.mk ? ? ? ? ? | ? 10 +++---
+> ?3 files changed, 24 insertions(+), 26 deletions(-)
+>
+> diff --git a/package/usb_modeswitch/Config.in b/package/usb_modeswitch/Config.in
+> index ae10a55..1228293 100644
+> --- a/package/usb_modeswitch/Config.in
+> +++ b/package/usb_modeswitch/Config.in
+> @@ -7,3 +7,4 @@ config BR2_PACKAGE_USB_MODESWITCH
+> ? ? ? ? ?Used to switch mode on multiple-function devices
+>
+> ? ? ? ? ?http://www.draisberghof.de/usb_modeswitch/
 > +
->  endif # BR2_TARGET_UBOOT
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index db9de8d..b327f4b 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -29,6 +29,8 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
->  UBOOT_BIN          = u-boot.ldr
->  else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
->  UBOOT_BIN          = u-boot-nand.bin
-> +else ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> +UBOOT_BIN          = u-boot.img
->  else
->  UBOOT_BIN          = u-boot.bin
->  endif
-> @@ -88,6 +90,8 @@ endef
->  
->  define UBOOT_INSTALL_IMAGES_CMDS
->  	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
-> +	$(if $(BR2_TARGET_UBOOT_SPL),
-> +		cp -dpf $(@D)/MLO $(BINARIES_DIR)/)
->  endef
->  
->  $(eval $(call GENTARGETS))
-> 
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Why is this change needed? I think it should be removed from the patch.
+
+> diff --git a/package/usb_modeswitch/usb_modeswitch-makefile.patch b/package/usb_modeswitch/usb_modeswitch-makefile.patch
+> index 918200b..1c4715c 100644
+> --- a/package/usb_modeswitch/usb_modeswitch-makefile.patch
+> +++ b/package/usb_modeswitch/usb_modeswitch-makefile.patch
+> @@ -1,23 +1,20 @@
+> -diff -Nura usb-modeswitch-1.1.2.orig/Makefile usb-modeswitch-1.1.2/Makefile
+> ---- usb-modeswitch-1.1.2.orig/Makefile 2010-04-17 15:27:11.000000000 -0300
+> -+++ usb-modeswitch-1.1.2/Makefile ? ? ?2010-04-22 15:05:32.363471807 -0300
+> -@@ -1,6 +1,6 @@
+> - PROG ? ? ? ?= usb_modeswitch
+> - VERS ? ? ? ?= 1.1.2
+> --CC ? ? ? ? ?= gcc
+> -+CC ? ? ? ? ??= gcc
+> - CFLAGS ? ? ?+= -Wall -l usb
+> - RM ? ? ? ? ?= /bin/rm -f
+> - OBJS ? ? ? ?= usb_modeswitch.c
+> -@@ -23,8 +23,9 @@
+> - install: all
+> - ? ? ? install -d $(SBINDIR)
+> - ? ? ? install --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
+> -- ? ? ?install --mode=755 usb_modeswitch.tcl $(UDEVDIR)/usb_modeswitch
+> -- ? ? ?install --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
+> -+ ? ? ?#install --mode=755 usb_modeswitch.tcl $(UDEVDIR)/usb_modeswitch
+> -+ ? ? ?#install --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
+> -+ ? ? ?install -d $(MANDIR)
+> - ? ? ? install --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
+> +--- usb_modeswitch-1.2.3.orig/Makefile.orig ? ?2012-02-06 14:00:15.000000000 -0500
+> ++++ usb_modeswitch-1.2.3/Makefile ? ? ?2012-02-06 14:01:13.000000000 -0500
+> +@@ -46,7 +46,7 @@
+> + ? ? ? cd jim && $(MAKE) distclean
+>
+> + install-common:
+> +- ? ? ?install -D -s --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
+> ++ ? ? ?install -D --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
+> + ? ? ? install -D --mode=755 usb_modeswitch.sh $(UDEVDIR)/usb_modeswitch
+> + ? ? ? install -D --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
+> + ? ? ? install -D --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
+> +@@ -65,7 +65,7 @@
+> + ? ? ? install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
+> +
+> + install-binary:
+> +- ? ? ?install -D -s --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
+> ++ ? ? ?install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
+> +
+> + install: all install-common install-script
+>
+> diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+> index 7b982d8..3d03888 100644
+> --- a/package/usb_modeswitch/usb_modeswitch.mk
+> +++ b/package/usb_modeswitch/usb_modeswitch.mk
+> @@ -4,22 +4,22 @@
+> ?#
+> ?#############################################################
+>
+> -USB_MODESWITCH_VERSION = 1.1.2
+> +USB_MODESWITCH_VERSION = 1.2.3
+> ?USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+> ?USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+> ?USB_MODESWITCH_DEPENDENCIES = libusb-compat
+>
+> ?define USB_MODESWITCH_BUILD_CMDS
+> - ? ? ? $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> + ? ? ? $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
+> ?endef
+
+Is there a particular reason why you changed this?
+
+And to other buildroot developers: what is the policy regarding
+directly specifying CC and LD, instead of using variables like
+TARGET_CONFIGURE_OPTS ?
+
+>
+> ?define USB_MODESWITCH_INSTALL_TARGET_CMDS
+> - ? ? ? $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> - ? ? ? $(INSTALL) -D $(@D)/usb_modeswitch.setup -m 0644 \
+> - ? ? ? ? ? ? ? $(TARGET_DIR)/etc/usb_modeswitch.setup
+> + ? ? ? $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> ?endef
+>
+> +
+> ?define USB_MODESWITCH_CLEAN_CMDS
+> + ? ? ? $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
+> ? ? ? ?rm -f $(TARGET_DIR)/usr/sbin/usb_modeswitch
+> ? ? ? ?rm -f $(TARGET_DIR)/etc/usb_modeswitch.setup
+> ? ? ? ?rm -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
+> --
+
+Best regards,
+Thomas
