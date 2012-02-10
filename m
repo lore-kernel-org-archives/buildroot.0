@@ -1,111 +1,54 @@
-From: Fabio Porcedda <fabio.porcedda@telit.com>
-Date: Fri, 10 Feb 2012 17:52:05 +0100
-Subject: [Buildroot] [PATCH v3] busybox: add watchdog daemon startup script
-Message-ID: <1328892725-25364-1-git-send-email-fabio.porcedda@telit.com>
+From: Dechesne, Nicolas <n-dechesne@ti.com>
+Date: Fri, 10 Feb 2012 19:27:52 +0100
+Subject: [Buildroot] [PATCH 1/2] Add support for U-Boot SPL
+In-Reply-To: <201202100058.02053.arnout@mind.be>
+References: <1328402147-21404-1-git-send-email-n-dechesne@ti.com>
+ <1328402147-21404-2-git-send-email-n-dechesne@ti.com>
+ <201202100058.02053.arnout@mind.be>
+Message-ID: <CALB96Nk748E0taoD_TGpsPyqe098yC6No-xzmLE+2EjHmtaZqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
----
- Changes for v3:
- 	  - Changed the default value in the script,
- 	    as asked by Jean-Christophe.
+On Fri, Feb 10, 2012 at 12:58 AM, Arnout Vandecappelle <arnout@mind.be>wrote:
 
- Changes for v2:
- 	 - Add the option to set the reset frequency,
-	   as asked by Arnout Vandecappelle.
+>  It doesn't work well, but unfortunately I don't know how to solve it.
+> MLO and u-boot.img are only created for the omap configs, and only in
+> u-boot 2011.12 or later.  Depending on omap in the Config.in is almost
+> impossible, and also depending on 2011.12 is difficult because it could
+> be a custom git instead.
+>
+> ouch. thanks for finding this out, as I didn't notice.
 
- package/busybox/Config.in   |   17 +++++++++++++++++
- package/busybox/S15watchdog |   20 ++++++++++++++++++++
- package/busybox/busybox.mk  |   11 +++++++++++
- 3 files changed, 48 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/S15watchdog
+looking at the SPL code, it seems that SPL will parse the uboot file and
+try to determine the format. if it does not find the right signature it
+will assume it's raw, e.g. something a-la u-boot.bin.
+so we could patch SPL to load u-boot.bin (the name used by SPL is
+hardcoded). but that means that we have to carry over 1 patch and keep
+rebasing it...
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index 4176020..a12f9b8 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -62,6 +62,23 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  Show packages in menuconfig that are potentially also provided
- 	  by busybox.
- 
-+config BR2_PACKAGE_BUSYBOX_WATCHDOG
-+	bool "Install the watchdog daemon startup script"
-+	help
-+	  Install the watchdog daemon startup script,
-+	  that just start at the boot the busybox watchdog daemon.
-+
-+if BR2_PACKAGE_BUSYBOX_WATCHDOG
-+
-+config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
-+	int "Delay between reset"
-+	default "5"
-+	help
-+	  Select the number of seconds between each
-+	  reset of the watchdog (default 5)
-+
-+endif
-+
- endif
- 
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
-diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
-new file mode 100644
-index 0000000..7f1110c
---- /dev/null
-+++ b/package/busybox/S15watchdog
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+#
-+# Start watchdog
-+#
-+
-+case "$1" in
-+ start)
-+	echo "Starting watchdog..."
-+	watchdog -t PERIOD /dev/watchdog
-+	;;
-+  stop)
-+	;;
-+  restart|reload)
-+	;;
-+  *)
-+	echo $"Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 59448d5..c77bab5 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -142,6 +142,16 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
- endef
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
-+define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
-+	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
-+		install -D -m 0755 package/busybox/S15watchdog \
-+			$(TARGET_DIR)/etc/init.d/S15watchdog && \
-+		sed -i s/PERIOD/$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD)/ \
-+			$(TARGET_DIR)/etc/init.d/S15watchdog
-+endef
-+endif
-+
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -172,6 +182,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-+	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- endef
- 
- define BUSYBOX_UNINSTALL_TARGET_CMDS
--- 
-1.7.8.3
+i don't have my board with me, atm. so i will make some tests sometimes
+later.
+
+
+>  I think the only solution is to add a check in the .mk file if MLO and
+> u-boot.img indeed exist, and fall back to the default instead if not.
+>
+
+indeed, the u-boot.img does not seem to be created unless it's needed (e.g.
+in OMAP case). so that might work.
+
+would you accept such a solution? if so i can update my patches with that?
+
+
+>
+>  What is also missing is that the choice between the different image types
+> should depend on !BR2_TARGET_UBOOT_SPL.
+>
+
+sorry, i don't get this one. what do you mean?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120210/d92e5cfa/attachment.html>
