@@ -1,92 +1,100 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 10 Feb 2012 15:46:05 +0100
-Subject: [Buildroot] [PATCH] new program: usb_modeswitch_data
- Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-In-Reply-To: <CAC78GpdRuVrqsF5n0Xn5MTBJ7vSPDua1rAAwur5tpdxyfwfrFw@mail.gmail.com>
-References: <1328831497-18455-1-git-send-email-jwoltz@gmail.com>
- <CAAXf6LUeHr4tVnpKHCeHvfTJnO2jdJT=2_O40TLnY_s533S7Jg@mail.gmail.com>
- <CAC78GpdRuVrqsF5n0Xn5MTBJ7vSPDua1rAAwur5tpdxyfwfrFw@mail.gmail.com>
-Message-ID: <CAAXf6LXHDCgVzp+OpHN8BTsdx2X418ABum=PZS172F4dGktiSA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 10 Feb 2012 16:00:07 +0100
+Subject: [Buildroot] [git commit] package: add libvncserver
+Message-ID: <20120210150044.92D5E90A56@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 10, 2012 at 3:21 PM, J.C. Woltz <jwoltz@gmail.com> wrote:
->
->
-> On Fri, Feb 10, 2012 at 2:37 AM, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->>
->> Hi,
->>
->> On Fri, Feb 10, 2012 at 12:51 AM, J.C. Woltz <jwoltz@gmail.com> wrote:
->> > From: "J.C. Woltz" <jwoltz@gmail.com>
->>
->> You don't need the From: line.
->> Instead, the Signed-off-by: should appear here, and not in the Subject
->> line.
->
->
-> I'm sorry, I thought I used the -s switch. I'll look into not getting the
-> from line.
->
->>
->>
->> I think a 'depends on' clause is more appropriate than 'select' here.
->>
->> As a general rule, the help text should contain the URL to the project.
->
->
-> I'll fix the URL. I thought a select was appropriate since
-> usb_modeswitch_data is not vital for usb_modeswitch, but usb_modeswitch_data
-> is nice when using udev.
+commit: http://git.buildroot.net/buildroot/commit/?id=615ba54394649c1a83c6b9d5d06406ac86d7cac5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+config BR2_PACKAGE_USB_MODESWITCH_DATA
-+       select BR2_PACKAGE_USB_MODESWITCH
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in                    |    1 +
+ package/libvncserver/Config.in       |    6 ++++
+ package/libvncserver/libvncserver.mk |   50 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 57 insertions(+), 0 deletions(-)
 
-What you express with a select like this is that when you select
-'usb_modeswitch_data' (which can be always selected), the
-configuration script should automatically select usb_modeswitch for
-you. The problem with this approach is that when usb_modeswitch
-depends on something, it will not enable these dependencies.
-See http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt
-for more information.
-
-Since usb_modeswitch_data only makes sense when usb_modeswitch is
-already enabled (at least that's what I assume), you could better use:
-
-config BR2_PACKAGE_USB_MODESWITCH_DATA
-        depends on BR2_PACKAGE_USB_MODESWITCH
-
-With this expression, usb_modeswitch_data will not be visible unless
-usb_modeswitch has already been enabled. This makes sense. Any
-dependency that usb_modeswitch has will also be met when
-usb_modeswitch_data has been selected.
-
-
->
->>
->> I know that it's not yet the case for many patches in the buildroot
->> tree, but patches should also have a short description at the top, and
->> a Signed-off-by: clause.
->>
->
-> I can add a description. I thought I used -s, but I will make sure I do. Is
-> there any other changes I should make. I am not a programmer or developer,
-> but trying to help where I can.
-
-It's nice to have people like you contribute changes, thanks for that.
-I reviewed your patch and it looks good apart from the things I
-mentioned, but I have not tested it.
-
-I suggest you send it again after fixing my comments. Maybe other
-people have further comments.
-
-By the way, you may be interested in using a version control system
-like git or mercurial for managing your buildroot developments. This
-will make it easier to generate and mail patches.
-
-Best regards,
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index c679652..8a7c9c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -363,6 +363,7 @@ source "package/libosip2/Config.in"
+ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
+ source "package/libupnp/Config.in"
++source "package/libvncserver/Config.in"
+ endmenu
+ 
+ menu "Other"
+diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
+new file mode 100644
+index 0000000..ff83e34
+--- /dev/null
++++ b/package/libvncserver/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBVNCSERVER
++	bool "libvncserver"
++	help
++	  libvncserver is a VNC server/client library.
++
++	  http://libvncserver.sourceforge.net/
+diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
+new file mode 100644
+index 0000000..c98fba3
+--- /dev/null
++++ b/package/libvncserver/libvncserver.mk
+@@ -0,0 +1,50 @@
++#############################################################
++#
++# libvncserver
++#
++#############################################################
++
++LIBVNCSERVER_VERSION = 0.9.8.2
++LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
++LIBVNCSERVER_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libvncserver/$(LIBVNCSERVER_VERSION)
++
++LIBVNCSERVER_INSTALL_STAGING = YES
++
++# only used for examples
++LIBVNCSERVER_CONF_OPT += --with-sdl-config=/bin/false
++
++ifneq ($(BR2_INET_IPV6),y)
++LIBVNCSERVER_CONF_OPT += --without-ipv6
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBVNCSERVER_DEPENDENCIES += openssl
++else
++LIBVNCSERVER_CONF_OPT += --without-crypto
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++LIBVNCSERVER_DEPENDENCIES += libgcrypt
++else
++LIBVNCSERVER_CONF_OPT += --without-gcrypt
++endif
++
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++LIBVNCSERVER_DEPENDENCIES += gnutls host-pkg-config
++else
++LIBVNCSERVER_CONF_OPT += --without-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBVNCSERVER_DEPENDENCIES += jpeg
++else
++LIBVNCSERVER_CONF_OPT += --without-jpeg
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBVNCSERVER_DEPENDENCIES += zlib
++else
++LIBVNCSERVER_CONF_OPT += --without-zlib
++endif
++
++$(eval $(call AUTOTARGETS))
