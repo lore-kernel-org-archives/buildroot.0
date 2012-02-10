@@ -1,128 +1,111 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 10 Feb 2012 17:43:01 +0100
-Subject: [Buildroot] [PATCH v2] new program: usb_modeswitch_data
-In-Reply-To: <1328886361-28209-1-git-send-email-jwoltz@gmail.com>
-References: <1328886361-28209-1-git-send-email-jwoltz@gmail.com>
-Message-ID: <CAAXf6LWBERS=9xF0ZNK0=o+8i5EfTu3nX8YoNPanD5Z5SB4--A@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@telit.com>
+Date: Fri, 10 Feb 2012 17:52:05 +0100
+Subject: [Buildroot] [PATCH v3] busybox: add watchdog daemon startup script
+Message-ID: <1328892725-25364-1-git-send-email-fabio.porcedda@telit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 10, 2012 at 4:06 PM, J.C. Woltz <jwoltz@gmail.com> wrote:
-> usb_modeswitch_data provides udev rules for usb VID/PID combinations to
-> switch usb deices from their default mode into a more useable mode. The
-> default mode usually is a cdrom with installation software that is of
-> little use in linux.
->
-> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-> ---
-> ?package/Config.in ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?| ? ?1 +
-> ?package/usb_modeswitch_data/Config.in ? ? ? ? ? ? ?| ? ?9 +++++++
-> ?.../usb_modeswitch_data-makefile.patch ? ? ? ? ? ? | ? 24 ++++++++++++++++++
-> ?package/usb_modeswitch_data/usb_modeswitch_data.mk | ? 26 ++++++++++++++++++++
-> ?4 files changed, 60 insertions(+), 0 deletions(-)
-> ?create mode 100644 package/usb_modeswitch_data/Config.in
-> ?create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-> ?create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index c679652..ff11cd0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -220,6 +220,7 @@ source "package/uboot-tools/Config.in"
-> ?source "package/udev/Config.in"
-> ?source "package/unionfs/Config.in"
-> ?source "package/usb_modeswitch/Config.in"
-> +source "package/usb_modeswitch_data/Config.in"
-> ?source "package/usbmount/Config.in"
-> ?source "package/usbutils/Config.in"
-> ?source "package/wipe/Config.in"
-> diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
-> new file mode 100644
-> index 0000000..a2a0bf7
-> --- /dev/null
-> +++ b/package/usb_modeswitch_data/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_USB_MODESWITCH_DATA
-> + ? ? ? depends on BR2_PACKAGE_USB_MODESWITCH
-> + ? ? ? bool "usb_modeswitch_data"
-> + ? ? ? select BR2_PACKAGE_USB_MODESWITCH
+Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
+---
+ Changes for v3:
+ 	  - Changed the default value in the script,
+ 	    as asked by Jean-Christophe.
 
-You don't need the select line anymore.
+ Changes for v2:
+ 	 - Add the option to set the reset frequency,
+	   as asked by Arnout Vandecappelle.
 
-> + ? ? ? help
-> + ? ? ? ? USB mode switch data
-> + ? ? ? ? Contains udev rules and other device data
-> +
-> + ? ? ? ? http://www.draisberghof.de/usb_modeswitch/
-> diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-> new file mode 100644
-> index 0000000..024bc76
-> --- /dev/null
-> +++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-> @@ -0,0 +1,24 @@
-> +diff -Nura usb_modeswitch_data-20120120.orig/Makefile usb_modeswitch_data-20120120/Makefile
-> +--- usb_modeswitch_data-20120120.orig/Makefile 2012-01-20 17:25:32.000000000 -0500
-> ++++ usb_modeswitch_data-20120120/Makefile ? ? ?2012-02-06 14:20:47.000000000 -0500
-> +@@ -12,9 +12,9 @@
-> +
-> + clean:
-> +
-> +-install: files-install db-install rules-reload
-> ++install: files-install db-install
-> +
-> +-install-packed: files-install db-install-packed rules-reload
-> ++install-packed: files-install db-install-packed
-> +
-> + files-install:
-> + ? ? ? install -d $(PREFIX)/share/usb_modeswitch
-> +@@ -50,7 +50,7 @@
-> + ? ? ? ? ? ? ? fi \
-> + ? ? ? fi
-> +
-> +-uninstall: files-uninstall rules-reload
-> ++uninstall: files-uninstall
-> +
-> + files-uninstall:
-> + ? ? ? $(RM) $(RULESDIR)/40-usb_modeswitch.rules
-> diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-> new file mode 100644
-> index 0000000..9f1b3ff
-> --- /dev/null
-> +++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-> @@ -0,0 +1,26 @@
-> +#############################################################
-> +#
-> +# usb_modeswitch_data
-> +#
-> +#############################################################
-> +
-> +USB_MODESWITCH_DATA_VERSION = 20120120
-> +USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
-> +USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
-> +USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
-> +
-> +define USB_MODESWITCH_DATA_BUILD_CMDS
-> + ? ? ? $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
-> +endef
-> +
-> +define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
-> + ? ? ? $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +endef
-> +
-> +
-> +define USB_MODESWITCH_DATA_CLEAN_CMDS
-> + ? ? ? $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
-> +endef
-> +
-> +$(eval $(call GENTARGETS))
-> +
-> --
-> 1.7.5.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ package/busybox/Config.in   |   17 +++++++++++++++++
+ package/busybox/S15watchdog |   20 ++++++++++++++++++++
+ package/busybox/busybox.mk  |   11 +++++++++++
+ 3 files changed, 48 insertions(+), 0 deletions(-)
+ create mode 100644 package/busybox/S15watchdog
+
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 4176020..a12f9b8 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -62,6 +62,23 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	  Show packages in menuconfig that are potentially also provided
+ 	  by busybox.
+ 
++config BR2_PACKAGE_BUSYBOX_WATCHDOG
++	bool "Install the watchdog daemon startup script"
++	help
++	  Install the watchdog daemon startup script,
++	  that just start at the boot the busybox watchdog daemon.
++
++if BR2_PACKAGE_BUSYBOX_WATCHDOG
++
++config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
++	int "Delay between reset"
++	default "5"
++	help
++	  Select the number of seconds between each
++	  reset of the watchdog (default 5)
++
++endif
++
+ endif
+ 
+ if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
+diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
+new file mode 100644
+index 0000000..7f1110c
+--- /dev/null
++++ b/package/busybox/S15watchdog
+@@ -0,0 +1,20 @@
++#!/bin/sh
++#
++# Start watchdog
++#
++
++case "$1" in
++ start)
++	echo "Starting watchdog..."
++	watchdog -t PERIOD /dev/watchdog
++	;;
++  stop)
++	;;
++  restart|reload)
++	;;
++  *)
++	echo $"Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 59448d5..c77bab5 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -142,6 +142,16 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
+ endef
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
++define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
++	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
++		install -D -m 0755 package/busybox/S15watchdog \
++			$(TARGET_DIR)/etc/init.d/S15watchdog && \
++		sed -i s/PERIOD/$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD)/ \
++			$(TARGET_DIR)/etc/init.d/S15watchdog
++endef
++endif
++
+ # We do this here to avoid busting a modified .config in configure
+ BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
+ 
+@@ -172,6 +182,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+ 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
++	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ endef
+ 
+ define BUSYBOX_UNINSTALL_TARGET_CMDS
+-- 
+1.7.8.3
