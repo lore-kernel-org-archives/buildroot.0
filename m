@@ -1,82 +1,92 @@
-From: J.C. Woltz <jwoltz@gmail.com>
-Date: Fri, 10 Feb 2012 09:28:09 -0500
-Subject: [Buildroot] [PATCH] [PATCH] usb_modeswitch: upgrade to 1.2.3
-In-Reply-To: <CAAXf6LV0=icDwrE8doD+TkxJBFMcCfbKnnwLNPH=bNdJ5m5-2Q@mail.gmail.com>
-References: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
- <CAAXf6LV0=icDwrE8doD+TkxJBFMcCfbKnnwLNPH=bNdJ5m5-2Q@mail.gmail.com>
-Message-ID: <CAC78GpfLO9XPZh4gU8ShTR9i8vBMaZQ6HQ0Uwfpf6xwPw-aJLA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 10 Feb 2012 15:46:05 +0100
+Subject: [Buildroot] [PATCH] new program: usb_modeswitch_data
+ Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+In-Reply-To: <CAC78GpdRuVrqsF5n0Xn5MTBJ7vSPDua1rAAwur5tpdxyfwfrFw@mail.gmail.com>
+References: <1328831497-18455-1-git-send-email-jwoltz@gmail.com>
+ <CAAXf6LUeHr4tVnpKHCeHvfTJnO2jdJT=2_O40TLnY_s533S7Jg@mail.gmail.com>
+ <CAC78GpdRuVrqsF5n0Xn5MTBJ7vSPDua1rAAwur5tpdxyfwfrFw@mail.gmail.com>
+Message-ID: <CAAXf6LXHDCgVzp+OpHN8BTsdx2X418ABum=PZS172F4dGktiSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 10, 2012 at 2:29 AM, Thomas De Schampheleire <
-patrickdepinguin+buildroot@gmail.com> wrote:
+On Fri, Feb 10, 2012 at 3:21 PM, J.C. Woltz <jwoltz@gmail.com> wrote:
+>
+>
+> On Fri, Feb 10, 2012 at 2:37 AM, Thomas De Schampheleire
+> <patrickdepinguin+buildroot@gmail.com> wrote:
+>>
+>> Hi,
+>>
+>> On Fri, Feb 10, 2012 at 12:51 AM, J.C. Woltz <jwoltz@gmail.com> wrote:
+>> > From: "J.C. Woltz" <jwoltz@gmail.com>
+>>
+>> You don't need the From: line.
+>> Instead, the Signed-off-by: should appear here, and not in the Subject
+>> line.
+>
+>
+> I'm sorry, I thought I used the -s switch. I'll look into not getting the
+> from line.
+>
+>>
+>>
+>> I think a 'depends on' clause is more appropriate than 'select' here.
+>>
+>> As a general rule, the help text should contain the URL to the project.
+>
+>
+> I'll fix the URL. I thought a select was appropriate since
+> usb_modeswitch_data is not vital for usb_modeswitch, but usb_modeswitch_data
+> is nice when using udev.
 
-> Hello,
->
-> On Fri, Feb 10, 2012 at 12:42 AM, J.C. Woltz <jwoltz@gmail.com> wrote:
-> > From: "J.C. Woltz" <jwoltz@gmail.com>
-> >
-> > Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
->
-> You shouldn't include a From: line. The Signed-off-by: is the one that
-> should be present.
->
->
-Will fix.
++config BR2_PACKAGE_USB_MODESWITCH_DATA
++       select BR2_PACKAGE_USB_MODESWITCH
+
+What you express with a select like this is that when you select
+'usb_modeswitch_data' (which can be always selected), the
+configuration script should automatically select usb_modeswitch for
+you. The problem with this approach is that when usb_modeswitch
+depends on something, it will not enable these dependencies.
+See http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt
+for more information.
+
+Since usb_modeswitch_data only makes sense when usb_modeswitch is
+already enabled (at least that's what I assume), you could better use:
+
+config BR2_PACKAGE_USB_MODESWITCH_DATA
+        depends on BR2_PACKAGE_USB_MODESWITCH
+
+With this expression, usb_modeswitch_data will not be visible unless
+usb_modeswitch has already been enabled. This makes sense. Any
+dependency that usb_modeswitch has will also be met when
+usb_modeswitch_data has been selected.
 
 
 >
-> > --- a/package/usb_modeswitch/Config.in
-> > +++ b/package/usb_modeswitch/Config.in
-> > @@ -7,3 +7,4 @@ config BR2_PACKAGE_USB_MODESWITCH
-> >          Used to switch mode on multiple-function devices
-> >
-> >          http://www.draisberghof.de/usb_modeswitch/
-> > +
+>>
+>> I know that it's not yet the case for many patches in the buildroot
+>> tree, but patches should also have a short description at the top, and
+>> a Signed-off-by: clause.
+>>
 >
-> Why is this change needed? I think it should be removed from the patch.
->
-> Will remove, accidental change.
+> I can add a description. I thought I used -s, but I will make sure I do. Is
+> there any other changes I should make. I am not a programmer or developer,
+> but trying to help where I can.
 
+It's nice to have people like you contribute changes, thanks for that.
+I reviewed your patch and it looks good apart from the things I
+mentioned, but I have not tested it.
 
-> > diff --git a/package/usb_modeswitch/usb_modeswitch.mkb/package/usb_modeswitch/
-> usb_modeswitch.mk
-> > index 7b982d8..3d03888 100644
-> > --- a/package/usb_modeswitch/usb_modeswitch.mk
-> > +++ b/package/usb_modeswitch/usb_modeswitch.mk
-> > @@ -4,22 +4,22 @@
-> >  #
-> >  #############################################################
-> >
-> > -USB_MODESWITCH_VERSION = 1.1.2
-> > +USB_MODESWITCH_VERSION = 1.2.3
-> >  USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
-> >  USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
-> >  USB_MODESWITCH_DEPENDENCIES = libusb-compat
-> >
-> >  define USB_MODESWITCH_BUILD_CMDS
-> > -       $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> > +       $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
-> >  endef
->
-> Is there a particular reason why you changed this?
->
-> And to other buildroot developers: what is the policy regarding
-> directly specifying CC and LD, instead of using variables like
-> TARGET_CONFIGURE_OPTS ?
->
->
-Yes, I changed that line since usb_modeswitch would not compile. I was
-following the example from:
-http://buildroot.uclibc.org/buildroot.html#generic-tutorial
+I suggest you send it again after fixing my comments. Maybe other
+people have further comments.
 
-Please let me know how or what you want changed, and I will re-submit.
+By the way, you may be interested in using a version control system
+like git or mercurial for managing your buildroot developments. This
+will make it easier to generate and mail patches.
 
-Thank you,
-J.C. Woltz
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120210/a21eecc3/attachment.html>
+Best regards,
+Thomas
