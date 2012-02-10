@@ -1,26 +1,26 @@
-From: Johannes Teiwes <jteiwes@informatik.uni-bremen.de>
-Date: Fri, 10 Feb 2012 10:01:47 +0100
-Subject: [Buildroot] simple question about dropbear
-Message-ID: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 10 Feb 2012 10:43:46 +0100
+Subject: [Buildroot] [PATCH 1/8] linux: use the depmod built in HOST_DIR
+In-Reply-To: <201202092354.36488.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Thu, 9 Feb 2012 23:54:36 +0100")
+References: <cover.1328038759.git.thomas.petazzoni@free-electrons.com>
+ <20120201091257.636dc684@skate> <87mx92hiyr.fsf@macbook.be.48ers.dk>
+ <201202092354.36488.arnout@mind.be>
+Message-ID: <87aa4r2fcd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good morning!
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-I have dropbear configured to run on my target system. The deamon process shows up in the process list. But as soon as i connect from the outside via ssh the spawned dropbear process takes up 100% cpu and never releases is, even when the external connection request gets canceled.
-I have tried to use the generated rsa/dss keys, login as a regular user (non root) but its not changing anything.
-Have i overlooked something? Does dropbear has a config like the openssh module which can forbid (root-)login per default?
+Hi,
 
-Kind regards, 
-Johannes
---
-Johannes Teiwes - jteiwes at tzi.de
+ Arnout>  So I also think it can be removed.  Anyway, the TARGET_PATH
+ Arnout> will make sure that our host-lzma is used.
 
+Indeed, will remove.
 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120210/c1278c5c/attachment.html>
+-- 
+Bye, Peter Korsgaard
