@@ -1,33 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 10 Feb 2012 11:41:52 +0100
-Subject: [Buildroot] [git commit] freetype: add optional bzip2 dependency
-Message-ID: <20120210104213.4DE5490A51@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 10 Feb 2012 11:44:48 +0100
+Subject: [Buildroot] simple question about dropbear
+In-Reply-To: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
+ (Johannes Teiwes's message of "Fri, 10 Feb 2012 10:01:47 +0100")
+References: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
+Message-ID: <871uq32cin.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e727571cc41a2a20cdea42998ae2739e4cce11b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Johannes" == Johannes Teiwes <jteiwes@informatik.uni-bremen.de> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/freetype/freetype.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ Johannes> Good morning!
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 6eb6b29..32099da 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -9,7 +9,9 @@ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_INSTALL_STAGING = YES
- FREETYPE_MAKE_OPT = CCexe="$(HOSTCC)"
--FREETYPE_DEPENDENCIES = host-pkg-config $(if $(BR2_PACKAGE_ZLIB),zlib)
-+FREETYPE_DEPENDENCIES = host-pkg-config \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib) \
-+	$(if $(BR2_PACKAGE_BZIP2),bzip2)
- 
- HOST_FREETYPE_DEPENDENCIES = host-pkg-config
- 
+ Johannes> I have dropbear configured to run on my target system. The
+ Johannes> deamon process shows up in the process list. But as soon as i
+ Johannes> connect from the outside via ssh the spawned dropbear process
+ Johannes> takes up 100% cpu and never releases is, even when the
+ Johannes> external connection request gets canceled.  I have tried to
+ Johannes> use the generated rsa/dss keys, login as a regular user (non
+ Johannes> root) but its not changing anything.  Have i overlooked
+ Johannes> something? Does dropbear has a config like the openssh module
+ Johannes> which can forbid (root-)login per default?
+
+It works fine here. Could you enable strace and use it to see what the
+dropbear process is doing?
+
+-- 
+Bye, Peter Korsgaard
