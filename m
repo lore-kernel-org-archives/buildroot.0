@@ -1,62 +1,82 @@
 From: J.C. Woltz <jwoltz@gmail.com>
-Date: Fri, 10 Feb 2012 09:21:24 -0500
-Subject: [Buildroot] [PATCH] new program: usb_modeswitch_data
- Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-In-Reply-To: <CAAXf6LUeHr4tVnpKHCeHvfTJnO2jdJT=2_O40TLnY_s533S7Jg@mail.gmail.com>
-References: <1328831497-18455-1-git-send-email-jwoltz@gmail.com>
- <CAAXf6LUeHr4tVnpKHCeHvfTJnO2jdJT=2_O40TLnY_s533S7Jg@mail.gmail.com>
-Message-ID: <CAC78GpdRuVrqsF5n0Xn5MTBJ7vSPDua1rAAwur5tpdxyfwfrFw@mail.gmail.com>
+Date: Fri, 10 Feb 2012 09:28:09 -0500
+Subject: [Buildroot] [PATCH] [PATCH] usb_modeswitch: upgrade to 1.2.3
+In-Reply-To: <CAAXf6LV0=icDwrE8doD+TkxJBFMcCfbKnnwLNPH=bNdJ5m5-2Q@mail.gmail.com>
+References: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
+ <CAAXf6LV0=icDwrE8doD+TkxJBFMcCfbKnnwLNPH=bNdJ5m5-2Q@mail.gmail.com>
+Message-ID: <CAC78GpfLO9XPZh4gU8ShTR9i8vBMaZQ6HQ0Uwfpf6xwPw-aJLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 10, 2012 at 2:37 AM, Thomas De Schampheleire <
+On Fri, Feb 10, 2012 at 2:29 AM, Thomas De Schampheleire <
 patrickdepinguin+buildroot@gmail.com> wrote:
 
-> Hi,
+> Hello,
 >
-> On Fri, Feb 10, 2012 at 12:51 AM, J.C. Woltz <jwoltz@gmail.com> wrote:
+> On Fri, Feb 10, 2012 at 12:42 AM, J.C. Woltz <jwoltz@gmail.com> wrote:
 > > From: "J.C. Woltz" <jwoltz@gmail.com>
+> >
+> > Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
 >
-> You don't need the From: line.
-> Instead, the Signed-off-by: should appear here, and not in the Subject
-> line.
->
-
-I'm sorry, I thought I used the -s switch. I'll look into not getting the
-from line.
-
-
->
-> I think a 'depends on' clause is more appropriate than 'select' here.
->
-> As a general rule, the help text should contain the URL to the project.
->
-
-I'll fix the URL. I thought a select was appropriate since
-usb_modeswitch_data is not vital for usb_modeswitch, but
-usb_modeswitch_data is nice when using udev.
-
-
-> I know that it's not yet the case for many patches in the buildroot
-> tree, but patches should also have a short description at the top, and
-> a Signed-off-by: clause.
+> You shouldn't include a From: line. The Signed-off-by: is the one that
+> should be present.
 >
 >
-I can add a description. I thought I used -s, but I will make sure I do. Is
-there any other changes I should make. I am not a programmer or developer,
-but trying to help where I can.
+Will fix.
 
 
 >
-> Best regards,
-> Thomas
+> > --- a/package/usb_modeswitch/Config.in
+> > +++ b/package/usb_modeswitch/Config.in
+> > @@ -7,3 +7,4 @@ config BR2_PACKAGE_USB_MODESWITCH
+> >          Used to switch mode on multiple-function devices
+> >
+> >          http://www.draisberghof.de/usb_modeswitch/
+> > +
 >
+> Why is this change needed? I think it should be removed from the patch.
+>
+> Will remove, accidental change.
+
+
+> > diff --git a/package/usb_modeswitch/usb_modeswitch.mkb/package/usb_modeswitch/
+> usb_modeswitch.mk
+> > index 7b982d8..3d03888 100644
+> > --- a/package/usb_modeswitch/usb_modeswitch.mk
+> > +++ b/package/usb_modeswitch/usb_modeswitch.mk
+> > @@ -4,22 +4,22 @@
+> >  #
+> >  #############################################################
+> >
+> > -USB_MODESWITCH_VERSION = 1.1.2
+> > +USB_MODESWITCH_VERSION = 1.2.3
+> >  USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+> >  USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+> >  USB_MODESWITCH_DEPENDENCIES = libusb-compat
+> >
+> >  define USB_MODESWITCH_BUILD_CMDS
+> > -       $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> > +       $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
+> >  endef
+>
+> Is there a particular reason why you changed this?
+>
+> And to other buildroot developers: what is the policy regarding
+> directly specifying CC and LD, instead of using variables like
+> TARGET_CONFIGURE_OPTS ?
+>
+>
+Yes, I changed that line since usb_modeswitch would not compile. I was
+following the example from:
+http://buildroot.uclibc.org/buildroot.html#generic-tutorial
+
+Please let me know how or what you want changed, and I will re-submit.
 
 Thank you,
 J.C. Woltz
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120210/4a9d037a/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120210/a21eecc3/attachment.html>
