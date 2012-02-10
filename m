@@ -1,37 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 10 Feb 2012 23:55:55 +0100
-Subject: [Buildroot] [RFC] progress indicator
-In-Reply-To: <CAGm1_kt5qPOB2fpWNRREejgp5jMhsM+o0Dq5Po3LHMpySecEjw@mail.gmail.com>
-References: <CAGm1_kt5qPOB2fpWNRREejgp5jMhsM+o0Dq5Po3LHMpySecEjw@mail.gmail.com>
-Message-ID: <201202102355.55858.arnout@mind.be>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Sat, 11 Feb 2012 01:36:04 +0200
+Subject: [Buildroot] ccache issue with zlib dependency
+Message-ID: <CAMP44s3eoG9jOoG7Gv_CvyKtG5dPbf+mP-_S7=cB-1LcJBM2hQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 09 February 2012 00:32:42 Yegor Yefremov wrote:
-> What about making a progress indicator, so that user always knows how
-> many packages left to be built? Like Android (AOSP) does during repo
-> sync:
-> 
-> Fetching projects:  53% (127/238)  Receiving objects:  22% (290/1289), 195.95 Ki
-> Fetching projects:  54% (129/238)  Receiving objects:  28% (361/1289), 195.95 Ki
-> Fetching projects:  55% (131/238)  Receiving objects:  47% (606/1289), 643.81 Ki
+Hi,
 
- crosstool-NG does it as well.
+I have a newer version of zlib (1.2.6) on my host system than what
+buildroot is using (1.2.5), ultimately the build fails because I have
+enabled ccache, and it uses zlib, and when the older zlib is installed
+there are missing symbols (ZLIB_1.2.5.2), so ccache doesn't work any
+more, and everything else fails.
 
- However, I don't see how you would do it without major surgery to the 
-infrastructure.
+I tried to add the zlib dependency to ccache, but the build also fails
+because apparently host-zlib tries to use ccache.
 
+This is a bit of a chicken and egg problem and I'm not sure how to fix it.
 
- Regards,
- Arnout
+Any ideas?
+
+Cheers.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Felipe Contreras
