@@ -1,45 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 10 Feb 2012 11:00:30 +0100
-Subject: [Buildroot] [PATCH v3 directfb] directfb: font handling
-	requires libbz2
-In-Reply-To: <1328826314-30424-2-git-send-email-twoerner@gmail.com> (Trevor
- Woerner's message of "Thu, 9 Feb 2012 17:25:14 -0500")
-References: <1328826314-30424-1-git-send-email-twoerner@gmail.com>
- <1328826314-30424-2-git-send-email-twoerner@gmail.com>
-Message-ID: <8762ff2ekh.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 10 Feb 2012 10:44:47 +0100
+Subject: [Buildroot] [git commit] linux: drop LZMA environment variable
+Message-ID: <20120210103340.561058C584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Trevor" == Trevor Woerner <twoerner@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=7b911b583ad473cfac19297edd76852338901fec
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Trevor> From: Trevor Woerner <twoerner@gmail.com>
- Trevor> One of the libraries which is built by directfb, libidirectfbfont_ft2.so,
- Trevor> requires libbz2:
+Not used anymore.
 
-That's not true. Freetype might optionally have bzip2 support, but it
-isn't a requirement for directfb.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-E.G. I did a basic build here:
-
-./host/usr/bin/i586-linux-readelf -a \
-  staging/usr/lib/directfb-1.4-6/interfaces/IDirectFBFont/libidirectfbfont_ft2.so
-  | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libdirect-1.4.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libdirectfb-1.4.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libfusion-1.4.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libfreetype.so.6]
- 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libgcc_s.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-
-So the only thing that should be fixed is to ensure bzip2 is built
-before freetype (and zlib as well) if enabled. I'll fix that.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/linux.mk b/linux/linux.mk
+index dbe1ad7..ae236d4 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -40,7 +40,6 @@ LINUX_MAKE_FLAGS = \
+ 	ARCH=$(KERNEL_ARCH) \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+-	LZMA="$(LZMA)" \
+ 	DEPMOD=$(HOST_DIR)/usr/sbin/depmod
+ 
+ # Get the real Linux version, which tells us where kernel modules are
