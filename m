@@ -1,48 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 18:05:55 +0100
-Subject: [Buildroot] [PATCH 2 of 2 v3-resend] build: add option to
-	exclude executables/dirs from being stripped
-In-Reply-To: <e7da4f66d46091f4f0e8.1328818170@beantl019720>
-References: <patchbomb.1328818168@beantl019720>
- <e7da4f66d46091f4f0e8.1328818170@beantl019720>
-Message-ID: <201202111805.55613.arnout@mind.be>
+Date: Sat, 11 Feb 2012 18:13:26 +0100
+Subject: [Buildroot] [PATCH] pkg-stats: update list of packages to be
+	skipped
+In-Reply-To: <1328978469-27669-1-git-send-email-luca@lucaceresoli.net>
+References: <1328978469-27669-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <201202111813.27003.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 09 February 2012 21:09:30 Thomas De Schampheleire wrote:
-> Sometimes it may be desirable to keep debug symbols for some binaries and
-> libraries on the target. This commit introduces the config option
-> BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
-> and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
-> directories excluded from stripping entirely.
-> These exclusions are passed to the find command in the target-finalize step.
-> 
-> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Saturday 11 February 2012 17:41:09 Luca Ceresoli wrote:
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+> ---
+>  support/scripts/pkg-stats |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+> index 8228274..06d9d0d 100755
+> --- a/support/scripts/pkg-stats
+> +++ b/support/scripts/pkg-stats
+> @@ -78,7 +78,7 @@ cnt=0
+>  for i in $(find package/ -name '*.mk') ; do
+>  
+>      if test \
+> -	$i = "package/java/java.mk" -o \
+> +	$i = "package/efl/efl.mk" -o \
+>  	$i = "package/games/games.mk" -o \
+>  	$i = "package/gtk2-themes/gtk2-themes.mk" -o \
+>  	$i = "package/multimedia/multimedia.mk" -o \
 
-[snip]
-> +STRIP_FIND_CMD=find $(TARGET_DIR)
-> +ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-> +STRIP_FIND_CMD+=\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-> +endif
-> +STRIP_FIND_CMD+=-type f -perm +111 -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+ Alternatively, you can just skip mk-files that contain no : and no
+'call [A-Z]*TARGETS'
 
- If for whatever reason this patch has to go through another cycle, I'd
-like the following whitespace changes:
-
-- space before and after the =
-
-- split up the last line in two, e.g.
-
-STRIP_FIND_CMD += -type f -perm +111 
-STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-
- (still 120 columns wide, but better already).
 
  Regards,
  Arnout
