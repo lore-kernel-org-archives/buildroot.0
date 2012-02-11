@@ -1,36 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 16:25:38 +0100
-Subject: [Buildroot] [PATCH v3] busybox: add watchdog daemon startup
-	script
-In-Reply-To: <1328892725-25364-1-git-send-email-fabio.porcedda@telit.com>
-References: <1328892725-25364-1-git-send-email-fabio.porcedda@telit.com>
-Message-ID: <201202111625.38679.arnout@mind.be>
+Date: Sat, 11 Feb 2012 16:47:02 +0100
+Subject: [Buildroot] ccache issue with zlib dependency
+In-Reply-To: <CAMP44s3eoG9jOoG7Gv_CvyKtG5dPbf+mP-_S7=cB-1LcJBM2hQ@mail.gmail.com>
+References: <CAMP44s3eoG9jOoG7Gv_CvyKtG5dPbf+mP-_S7=cB-1LcJBM2hQ@mail.gmail.com>
+Message-ID: <201202111647.03064.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 10 February 2012 17:52:05 Fabio Porcedda wrote:
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Saturday 11 February 2012 00:36:04 Felipe Contreras wrote:
+> Hi,
+> 
+> I have a newer version of zlib (1.2.6) on my host system than what
+> buildroot is using (1.2.5), ultimately the build fails because I have
+> enabled ccache, and it uses zlib, and when the older zlib is installed
+> there are missing symbols (ZLIB_1.2.5.2), so ccache doesn't work any
+> more, and everything else fails.
+> 
+> I tried to add the zlib dependency to ccache, but the build also fails
+> because apparently host-zlib tries to use ccache.
 
- It may be useful to force-enable the watchdog in the buildroot config
-it this option is selected.  For me, that's not necessary though.
+ As a workaround, you can add CC="$(HOSTCC_NOCCACHE)" to the build
+commands of host-zlib.  But I don't particularly like it.
 
- It would look something like this:
+ Another option is to force ccache to use its bundled zlib, by adding
+ccache_cv_zlib_1_2_3=no to HOST_CCACHE_CONF_ENV.
 
-ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
-define BUSYBOX_SET_WATCHDOG
-        $(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
-endef
-endif
-
-and then add BUSYBOX_SET_WATCHDOG to the rest of the config modifiers.
-
+ The best option would be to check in support/dependencies if the
+system has a good zlib, and only build host-zlib if it doesn't.  But
+that's major surgery in the build system again.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
