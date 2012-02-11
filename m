@@ -1,65 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 17:12:10 +0100
-Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
-In-Reply-To: <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
-References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
- <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <201202111712.10582.arnout@mind.be>
+Date: Sat, 11 Feb 2012 17:14:27 +0100
+Subject: [Buildroot] [PATCH] Add gst-av package
+In-Reply-To: <87d39l1hwr.fsf@macbook.be.48ers.dk>
+References: <1328919431-22820-1-git-send-email-felipe.contreras@gmail.com>
+ <87d39l1hwr.fsf@macbook.be.48ers.dk>
+Message-ID: <201202111714.27895.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 11 February 2012 01:04:36 Felipe Contreras wrote:
-> These should go into a personal file, like:
-> core.excludesfile=/home/felipec/.gitignore
->   .*.sw[nop]
+On Saturday 11 February 2012 16:58:12 Peter Korsgaard wrote:
+> >>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
 > 
-> Some people might prefer to see patches, rejects and other files in the
-> output of 'git status' (e.g. me).
+>  Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+> 
+> A more detailed commit message would be good. How does this differ from
+> gst-ffmpeg? I see you depend on ffmpeg and not libav (which we currently
+> don't have in BR).
 
- Agreed on most parts, except for the /*.patch.  It was added because git
-format-patch creates them.  If they are not ignored, than git add -A won't
-work properly anymore.
-
- While we're talking about gitignore: I have two more things I'd like to
-add to it:
-
-/output* (because I often use parallel output dirs within the buildroot
-directory, as it gives me access to git).
-
-/defconfig (since it's a generated file).
-
- What do the others think?
-
+ To be honest, I find it redundant to repeat the help text of Config.in in
+the commit message when adding a new package.  When you look at the project
+history, you will probably already have looked at the package's files first.
 
  Regards,
  Arnout
-
-
-> 
-> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
-> ---
->  .gitignore |    7 -------
->  1 files changed, 0 insertions(+), 7 deletions(-)
-> 
-> diff --git a/.gitignore b/.gitignore
-> index 685a9c2..1a7d636 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -5,10 +5,3 @@
->  /.config.old
->  /..config.tmp
->  /.config
-> -*.depend
-> -*.o
-> -/*.patch
-> -/*.diff
-> -*.orig
-> -*.rej
-> -*~
-> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
