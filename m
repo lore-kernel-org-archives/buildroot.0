@@ -1,50 +1,40 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Sat, 11 Feb 2012 19:27:01 +0200
-Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
-In-Reply-To: <201202111712.10582.arnout@mind.be>
-References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
- <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
- <201202111712.10582.arnout@mind.be>
-Message-ID: <CAMP44s2hmE0J382yH5m82q=E7ZtPCCUDbsH28zBJ0jK5XhMS4g@mail.gmail.com>
+Date: Sat, 11 Feb 2012 19:29:26 +0200
+Subject: [Buildroot] [PATCH] build: add 'file' option for 'make
+	defconfig'
+In-Reply-To: <201202111701.27270.arnout@mind.be>
+References: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
+ <201202111701.27270.arnout@mind.be>
+Message-ID: <CAMP44s3yFDnDnQGEdYmXnVYTBt-jMd=6Cud5e0tzN2NE5fkB4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 11, 2012 at 6:12 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Saturday 11 February 2012 01:04:36 Felipe Contreras wrote:
->> These should go into a personal file, like:
->> core.excludesfile=/home/felipec/.gitignore
->> ? .*.sw[nop]
+On Sat, Feb 11, 2012 at 6:01 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Saturday 11 February 2012 01:03:16 Felipe Contreras wrote:
+>> So that this works:
 >>
->> Some people might prefer to see patches, rejects and other files in the
->> output of 'git status' (e.g. me).
+>> ?% make defconfig file=~/busybox-defconfig
+>>
+>> Right now we have to do:
+>>
+>> ?% make $PWD/output/build/buildroot-config/conf
+>> ?% $PWD/output/build/buildroot-config/conf --defconfig=~/busybox-defconfig Config.in
+>>
+>> And the first command would through an error. Not nice.
 >
-> ?Agreed on most parts, except for the /*.patch. ?It was added because git
-> format-patch creates them. ?If they are not ignored, than git add -A won't
-> work properly anymore.
-
-Well, I usually do 'git status' to see remnants I would like to
-remove, including *.patch.
-
-I wonder why you would want to store those patches in the directory.
-You could specify a specific output directory. Moreover, 'git
-send-email' can generate the patches and send them at the same time...
-So you don't need to call 'git format-patch' directly.
-
-> ?While we're talking about gitignore: I have two more things I'd like to
-> add to it:
+> ?+1! ?And such a graceful solution too!
 >
-> /output* (because I often use parallel output dirs within the buildroot
-> directory, as it gives me access to git).
+> ?One remark, though: we normally use capitals for variables. ?Also I'd make
+> it more clear that the file means the defconfig file, so you can write:
 >
-> /defconfig (since it's a generated file).
->
-> ?What do the others think?
+> make DEFCONFIG=~/my-buildroot.config defconfig world
 
-I agree on those above. And actually, I removed *.o by mistake... I
-think they should be there.
+I find it a bit redundant. Maybe FILE.
+
+Cheers.
 
 -- 
 Felipe Contreras
