@@ -1,40 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 16:47:02 +0100
-Subject: [Buildroot] ccache issue with zlib dependency
-In-Reply-To: <CAMP44s3eoG9jOoG7Gv_CvyKtG5dPbf+mP-_S7=cB-1LcJBM2hQ@mail.gmail.com>
-References: <CAMP44s3eoG9jOoG7Gv_CvyKtG5dPbf+mP-_S7=cB-1LcJBM2hQ@mail.gmail.com>
-Message-ID: <201202111647.03064.arnout@mind.be>
+Date: Sat, 11 Feb 2012 16:48:36 +0100
+Subject: [Buildroot] [PATCH] gst-plugins-base: add missing orc dependency
+In-Reply-To: <1328918565-19264-1-git-send-email-felipe.contreras@gmail.com>
+References: <1328918565-19264-1-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <201202111648.36818.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 11 February 2012 00:36:04 Felipe Contreras wrote:
-> Hi,
+On Saturday 11 February 2012 01:02:45 Felipe Contreras wrote:
+> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  .../gst-plugins-base/gst-plugins-base.mk           |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
 > 
-> I have a newer version of zlib (1.2.6) on my host system than what
-> buildroot is using (1.2.5), ultimately the build fails because I have
-> enabled ccache, and it uses zlib, and when the older zlib is installed
-> there are missing symbols (ZLIB_1.2.5.2), so ccache doesn't work any
-> more, and everything else fails.
+> diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+> index 87ee80d..3b21c27 100644
+> --- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+> +++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+> @@ -26,6 +26,10 @@ GST_PLUGINS_BASE_CONF_OPT = \
+>  
+>  GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
+>  
+> +ifeq ($(BR2_PACKAGE_ORC),y)
+> +GST_PLUGINS_BASE_DEPENDENCIES += orc
+> +endif
+> +
+>  # alsa support needs pcm+mixer support, but configure fails to check for it
+>  ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
+>  GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
 > 
-> I tried to add the zlib dependency to ccache, but the build also fails
-> because apparently host-zlib tries to use ccache.
-
- As a workaround, you can add CC="$(HOSTCC_NOCCACHE)" to the build
-commands of host-zlib.  But I don't particularly like it.
-
- Another option is to force ccache to use its bundled zlib, by adding
-ccache_cv_zlib_1_2_3=no to HOST_CCACHE_CONF_ENV.
-
- The best option would be to check in support/dependencies if the
-system has a good zlib, and only build host-zlib if it doesn't.  But
-that's major surgery in the build system again.
-
- Regards,
- Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
