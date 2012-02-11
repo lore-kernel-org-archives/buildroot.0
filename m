@@ -1,34 +1,50 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Sat, 11 Feb 2012 19:22:44 +0200
-Subject: [Buildroot] [PATCH] Add gst-av package
-In-Reply-To: <87d39l1hwr.fsf@macbook.be.48ers.dk>
-References: <1328919431-22820-1-git-send-email-felipe.contreras@gmail.com>
- <87d39l1hwr.fsf@macbook.be.48ers.dk>
-Message-ID: <CAMP44s2pzn3vZXve8VCsNPM0iX=AVB83cFnxoj0t3KJo5rxqkw@mail.gmail.com>
+Date: Sat, 11 Feb 2012 19:27:01 +0200
+Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
+In-Reply-To: <201202111712.10582.arnout@mind.be>
+References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
+ <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
+ <201202111712.10582.arnout@mind.be>
+Message-ID: <CAMP44s2hmE0J382yH5m82q=E7ZtPCCUDbsH28zBJ0jK5XhMS4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 11, 2012 at 5:58 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
+On Sat, Feb 11, 2012 at 6:12 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Saturday 11 February 2012 01:04:36 Felipe Contreras wrote:
+>> These should go into a personal file, like:
+>> core.excludesfile=/home/felipec/.gitignore
+>> ? .*.sw[nop]
+>>
+>> Some people might prefer to see patches, rejects and other files in the
+>> output of 'git status' (e.g. me).
 >
-> ?Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+> ?Agreed on most parts, except for the /*.patch. ?It was added because git
+> format-patch creates them. ?If they are not ignored, than git add -A won't
+> work properly anymore.
+
+Well, I usually do 'git status' to see remnants I would like to
+remove, including *.patch.
+
+I wonder why you would want to store those patches in the directory.
+You could specify a specific output directory. Moreover, 'git
+send-email' can generate the patches and send them at the same time...
+So you don't need to call 'git format-patch' directly.
+
+> ?While we're talking about gitignore: I have two more things I'd like to
+> add to it:
 >
-> A more detailed commit message would be good. How does this differ from
-> gst-ffmpeg? I see you depend on ffmpeg and not libav (which we currently
-> don't have in BR).
+> /output* (because I often use parallel output dirs within the buildroot
+> directory, as it gives me access to git).
+>
+> /defconfig (since it's a generated file).
+>
+> ?What do the others think?
 
-I thought the help text explained that: gst-ffmpeg disables certain
-codecs, like MP3, Vorbis, Theora, etc. IOW. It has political baggage
-from GStreamer developers; they don't want people to use FFmpeg, they
-want people to use native elements: vorbisdec, theoradec, maddec, etc.
-
-And gst-av works for both libav, and FFmpeg. Obviously, I wrote it for
-libav, but FFmpeg is simply an old version of the same API.
-
-Cheers.
+I agree on those above. And actually, I removed *.o by mistake... I
+think they should be there.
 
 -- 
 Felipe Contreras
