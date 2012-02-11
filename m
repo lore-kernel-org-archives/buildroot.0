@@ -1,74 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 17:01:27 +0100
-Subject: [Buildroot] [PATCH] build: add 'file' option for 'make
-	defconfig'
-In-Reply-To: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
-References: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <201202111701.27270.arnout@mind.be>
+Date: Sat, 11 Feb 2012 17:05:26 +0100
+Subject: [Buildroot] [PATCH 2/3] gst-plugins-base: add option to select
+	'alsa'
+In-Reply-To: <1328918676-19482-3-git-send-email-felipe.contreras@gmail.com>
+References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
+ <1328918676-19482-3-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <201202111705.26348.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 11 February 2012 01:03:16 Felipe Contreras wrote:
-> So that this works:
-> 
->  % make defconfig file=~/busybox-defconfig
-> 
-> Right now we have to do:
-> 
->  % make $PWD/output/build/buildroot-config/conf
->  % $PWD/output/build/buildroot-config/conf --defconfig=~/busybox-defconfig Config.in
-> 
-> And the first command would through an error. Not nice.
-
- +1!  And such a graceful solution too!
-
- One remark, though: we normally use capitals for variables.  Also I'd make
-it more clear that the file means the defconfig file, so you can write:
-
-make DEFCONFIG=~/my-buildroot.config defconfig world
-
- And eventually we can even update the non-BR2_HAVE_DOT_CONFIG targets to
-default to defconfig if DEFCONFIG is defined.
-
-
- Note that the way to do it without this patch would be:
-
-cp ~/busybox-defconfig configs/busybox_defconfig
-make busybox_defconfig
-
-which doesn't error out.  However, it does require a writable buildroot
-directory and it makes it dirty.
-
-
- Oh and another thing, I guess the example should by 'buildroot-defconfig'.
-
-
- Regards,
- Arnout
-
+On Saturday 11 February 2012 01:04:35 Felipe Contreras wrote:
+> It's nice to go straight to GStreamer, and enable all the plug-in
+> elements without having to go back through the menus to select the
+> dependencies.
 > 
 > Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 > ---
->  Makefile |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
+>  package/multimedia/gst-plugins-base/Config.in |    7 ++++++-
+>  1 files changed, 6 insertions(+), 1 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 25da853..5a26961 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -594,7 +594,7 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+> diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
+> index 851337b..a1fa0f1 100644
+> --- a/package/multimedia/gst-plugins-base/Config.in
+> +++ b/package/multimedia/gst-plugins-base/Config.in
+> @@ -94,5 +94,10 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VORBIS
+>  	bool "vorbis (*.ogg audio)"
+>  	select BR2_PACKAGE_LIBVORBIS
 >  
->  defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
-> -	@$(COMMON_CONFIG_ENV) $< --defconfig $(CONFIG_CONFIG_IN)
-> +	@$(COMMON_CONFIG_ENV) $< --defconfig$(addprefix =,$(file)) $(CONFIG_CONFIG_IN)
+> -endif
+> +config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA
+> +	bool "alsa"
+> +	select BR2_PACKAGE_ALSA_LIB
+> +	select BR2_PACKAGE_ALSA_LIB_MIXER
+> +	select BR2_PACKAGE_ALSA_LIB_PCM
 >  
->  %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
->  	@mkdir -p $(BUILD_DIR)/buildroot-config
-> 
+> +endif
+
+ Keep the config options ordered alphabetically, so put it before OGG.
+
+ Also, if the option exists, it should be used in the mk-file.  So add:
+
+ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA),y)
+GST_PLUGINS_BASE_CONF_OPT += --enable-alsa
+else
+GST_PLUGINS_BASE_CONF_OPT += --disable-alsa
+endif
+
+(again alphabetically).
+
+ Regards,
+ Arnout
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
