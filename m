@@ -1,36 +1,25 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 17:15:56 +0100
-Subject: [Buildroot] [PATCH] Add gst-av package
-In-Reply-To: <201202111714.27895.arnout@mind.be>
-References: <1328919431-22820-1-git-send-email-felipe.contreras@gmail.com>
- <87d39l1hwr.fsf@macbook.be.48ers.dk> <201202111714.27895.arnout@mind.be>
-Message-ID: <201202111715.56823.arnout@mind.be>
+Date: Sat, 11 Feb 2012 17:18:56 +0100
+Subject: [Buildroot] [PATCH] Adding Microblaze support to Buildroot
+In-Reply-To: <CA+appbOX4Ehqz=GP_kVy6FQyf0JBSjr0wr6cUx+3HEiwia2dtA@mail.gmail.com>
+References: <4EBC554E.7050605@gmail.com>
+ <20111128052650.GA20297@sapphire.tkos.co.il>
+ <CA+appbOX4Ehqz=GP_kVy6FQyf0JBSjr0wr6cUx+3HEiwia2dtA@mail.gmail.com>
+Message-ID: <201202111718.56322.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 11 February 2012 17:14:27 Arnout Vandecappelle wrote:
-> On Saturday 11 February 2012 16:58:12 Peter Korsgaard wrote:
-> > >>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
-> > 
-> >  Felipe> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
-> > 
-> > A more detailed commit message would be good. How does this differ from
-> > gst-ffmpeg? I see you depend on ffmpeg and not libav (which we currently
-> > don't have in BR).
-> 
->  To be honest, I find it redundant to repeat the help text of Config.in in
-> the commit message when adding a new package.  When you look at the project
-> history, you will probably already have looked at the package's files first.
+On Saturday 11 February 2012 05:58:37 Spenser Gilliland wrote:
+> I'm using this Microblaze patch for my project.  Will it be part of
+> the official release that is coming up soon?
 
- That said, an explanation why it depends on ffmpeg instead of libav would be
-good.  But then in the mk-file, not in the commit message.
+ I'm afraid it got lost between the cracks.  Could you repost it?
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
