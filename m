@@ -1,76 +1,64 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Sat, 11 Feb 2012 02:17:11 +0200
-Subject: [Buildroot] [PATCH] Add gst-av package
-Message-ID: <1328919431-22820-1-git-send-email-felipe.contreras@gmail.com>
+From: Spenser Gilliland <spenser309@gmail.com>
+Date: Fri, 10 Feb 2012 22:58:37 -0600
+Subject: [Buildroot] [PATCH] Adding Microblaze support to Buildroot
+In-Reply-To: <20111128052650.GA20297@sapphire.tkos.co.il>
+References: <4EBC554E.7050605@gmail.com> <4EBC5656.2010103@gmail.com>
+ <4EBD18F1.6020804@relinux.de> <4ECB62C8.6030301@relinux.de>
+ <87sjlgplif.fsf@macbook.be.48ers.dk> <4ECCD481.4030707@relinux.de>
+ <20111123145448.5f5d15b9@skate> <4ED275A5.30903@relinux.de>
+ <20111128052650.GA20297@sapphire.tkos.co.il>
+Message-ID: <CA+appbOX4Ehqz=GP_kVy6FQyf0JBSjr0wr6cUx+3HEiwia2dtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
----
- package/multimedia/Config.in        |    1 +
- package/multimedia/gst-av/Config.in |   12 ++++++++++++
- package/multimedia/gst-av/gst-av.mk |   19 +++++++++++++++++++
- 3 files changed, 32 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/gst-av/Config.in
- create mode 100644 package/multimedia/gst-av/gst-av.mk
+Hey,
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index a05d1d9..b9209da 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -7,6 +7,7 @@ source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
- source "package/multimedia/gstreamer/Config.in"
- source "package/multimedia/gst-ffmpeg/Config.in"
-+source "package/multimedia/gst-av/Config.in"
- source "package/multimedia/gst-dsp/Config.in"
- source "package/multimedia/gst-omapfb/Config.in"
- source "package/multimedia/gst-plugins-base/Config.in"
-diff --git a/package/multimedia/gst-av/Config.in b/package/multimedia/gst-av/Config.in
-new file mode 100644
-index 0000000..d43269e
---- /dev/null
-+++ b/package/multimedia/gst-av/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_GST_AV
-+	bool "gst-av"
-+	depends on BR2_PACKAGE_GSTREAMER
-+	select BR2_PACKAGE_GST_PLUGINS_BASE
-+	select BR2_PACKAGE_FFMPEG
-+	help
-+	  GStreamer plug-in to provide support for libav (fork of FFmpeg), it
-+	  is similar to gst-ffmpeg, but all libav codecs are supported, even if
-+	  there are native GStreamer alternatives; VP8, MP3, Ogg, Vorbis, AAC,
-+	  etc.
-+
-+	  http://code.google.com/p/gst-av/
-diff --git a/package/multimedia/gst-av/gst-av.mk b/package/multimedia/gst-av/gst-av.mk
-new file mode 100644
-index 0000000..cb47ac6
---- /dev/null
-+++ b/package/multimedia/gst-av/gst-av.mk
-@@ -0,0 +1,19 @@
-+GST_AV_VERSION = 0.6.0
-+GST_AV_SOURCE = gst-av-$(GST_AV_VERSION).tar.gz
-+GST_AV_SITE = http://gst-av.googlecode.com/files/
-+
-+define GST_AV_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
-+endef
-+
-+define GST_AV_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+define GST_AV_UNINSTALL_TARGET_CMDS
-+	$(RM) $(TARGET_DIR)/usr/lib/gstreamer-0.10/libgstav.so
-+endef
-+
-+GST_AV_DEPENDENCIES = gstreamer gst-plugins-base ffmpeg host-pkg-config
-+
-+$(eval $(call GENTARGETS))
+I'm using this Microblaze patch for my project.  Will it be part of
+the official release that is coming up soon?
+
+Spenser
+
+On Sun, Nov 27, 2011 at 11:26 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Stephan,
+>
+> On Sun, Nov 27, 2011 at 06:38:45PM +0100, Stephan Hoffmann wrote:
+>> Am 23.11.2011 14:54, schrieb Thomas Petazzoni:
+>> > Excellent. Would be good to have :
+>> >
+>> > ?* A patch adding the general Microblaze support
+>> >
+>> > ?* A patch that adds some defconfig for the Microblaze board you have
+>> >
+>> Hello all,
+>>
+>> here is my patch to introduce MicroBlaze to buildroot. Comments are
+>> highly welcome!
+>
+> [snip]
+>
+>> +This is the buildroot board support for the Avnet Spartan6 LX9 MicroBoard.
+>> +
+>> +The board can be bought from Avnet or from Trenz for a low prize.
+>
+> s/prize/price/
+>
+> baruch
+>
+> --
+> ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ~. .~ ? Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+> ? - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-1.7.9.1.g97f7d
+Spenser Gilliland
+Computer Engineer
+Illinois Institute of Technology
