@@ -1,47 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 17:30:49 +0100
-Subject: [Buildroot] [PATCH] [PATCH] usb_modeswitch: upgrade to 1.2.3
-In-Reply-To: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
-References: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
-Message-ID: <201202111730.50135.arnout@mind.be>
+Date: Sat, 11 Feb 2012 17:41:05 +0100
+Subject: [Buildroot] [PATCH] new program: usb_modeswitch_data
+	Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+In-Reply-To: <CAAXf6LXHDCgVzp+OpHN8BTsdx2X418ABum=PZS172F4dGktiSA@mail.gmail.com>
+References: <1328831497-18455-1-git-send-email-jwoltz@gmail.com>
+ <CAC78GpdRuVrqsF5n0Xn5MTBJ7vSPDua1rAAwur5tpdxyfwfrFw@mail.gmail.com>
+ <CAAXf6LXHDCgVzp+OpHN8BTsdx2X418ABum=PZS172F4dGktiSA@mail.gmail.com>
+Message-ID: <201202111741.05348.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 10 February 2012 00:42:36 J.C. Woltz wrote:
->  define USB_MODESWITCH_BUILD_CMDS
-> -       $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +       $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
->  endef
+On Friday 10 February 2012 15:46:05 Thomas De Schampheleire wrote:
+>  I thought a select was appropriate since
+> > usb_modeswitch_data is not vital for usb_modeswitch, but usb_modeswitch_data
+> > is nice when using udev.
+> 
+> +config BR2_PACKAGE_USB_MODESWITCH_DATA
+> +       select BR2_PACKAGE_USB_MODESWITCH
+> 
+> What you express with a select like this is that when you select
+> 'usb_modeswitch_data' (which can be always selected), the
+> configuration script should automatically select usb_modeswitch for
+> you. The problem with this approach is that when usb_modeswitch
+> depends on something, it will not enable these dependencies.
+> See http://kernel.org/doc/Documentation/kbuild/kconfig-language.txt
+> for more information.
 
- Don't remove TARGET_MAKE_ENV.  The CC= is good, however.
-
->  
->  define USB_MODESWITCH_INSTALL_TARGET_CMDS
-> -       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> -       $(INSTALL) -D $(@D)/usb_modeswitch.setup -m 0644 \
-> -               $(TARGET_DIR)/etc/usb_modeswitch.setup
-> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
->  endef
-
- Same here.
+ That's not entirely true.  select itself is transitive; it just
+doesn't check if the select'd item depends on something.  But it will
+recursively select other packages.  So with the select statement,
+USB_MODESWITCH_DATA will select USB_MODESWITCH, which will select
+LIBUSB_COMPAT, which will select LIBUSB.
 
 
-> +
+> Since usb_modeswitch_data only makes sense when usb_modeswitch is
+> already enabled (at least that's what I assume), you could better use:
+> 
+> config BR2_PACKAGE_USB_MODESWITCH_DATA
+>         depends on BR2_PACKAGE_USB_MODESWITCH
+> 
+> With this expression, usb_modeswitch_data will not be visible unless
+> usb_modeswitch has already been enabled. This makes sense. Any
+> dependency that usb_modeswitch has will also be met when
+> usb_modeswitch_data has been selected.
 
- Redundant whitespace.
+ I think the general trend is to prefer select rather than depends when
+they are separate packages - precisely because this avoids the potential
+inconsistencies you mentioned.  Take libusb-compat, for instance.  It's
+obviously an extension of libusb, but because libusb-compat selects libusb,
+it makes it easy and safe for other packages to select libusb-compat.
 
->  define USB_MODESWITCH_CLEAN_CMDS
-> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
->         rm -f $(TARGET_DIR)/usr/sbin/usb_modeswitch
->         rm -f $(TARGET_DIR)/etc/usb_modeswitch.setup
->         rm -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
-
- Actually, the rm -f lines should be in UNINSTALL_CMDS.  And should use 
-$(RM) instead of rm -f.
-
+ Sorry for the inconsistent feedback, J.C.
 
  Regards,
  Arnout
