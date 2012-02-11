@@ -1,36 +1,56 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 11 Feb 2012 18:00:34 +0100
-Subject: [Buildroot] [git commit] gst-plugins-base: add missing orc
-	dependency
-Message-ID: <20120211170149.D407690A67@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 11 Feb 2012 18:05:55 +0100
+Subject: [Buildroot] [PATCH 2 of 2 v3-resend] build: add option to
+	exclude executables/dirs from being stripped
+In-Reply-To: <e7da4f66d46091f4f0e8.1328818170@beantl019720>
+References: <patchbomb.1328818168@beantl019720>
+ <e7da4f66d46091f4f0e8.1328818170@beantl019720>
+Message-ID: <201202111805.55613.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94f70d581073822012d4124b5076b172098d40c3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+On Thursday 09 February 2012 21:09:30 Thomas De Schampheleire wrote:
+> Sometimes it may be desirable to keep debug symbols for some binaries and
+> libraries on the target. This commit introduces the config option
+> BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
+> and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
+> directories excluded from stripping entirely.
+> These exclusions are passed to the find command in the target-finalize step.
+> 
+> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../gst-plugins-base/gst-plugins-base.mk           |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-index 87ee80d..3b21c27 100644
---- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-+++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
-@@ -26,6 +26,10 @@ GST_PLUGINS_BASE_CONF_OPT = \
- 
- GST_PLUGINS_BASE_DEPENDENCIES = gstreamer
- 
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GST_PLUGINS_BASE_DEPENDENCIES += orc
-+endif
-+
- # alsa support needs pcm+mixer support, but configure fails to check for it
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER)$(BR2_PACKAGE_ALSA_LIB_PCM),yyy)
- GST_PLUGINS_BASE_DEPENDENCIES += alsa-lib
+
+[snip]
+> +STRIP_FIND_CMD=find $(TARGET_DIR)
+> +ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+> +STRIP_FIND_CMD+=\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+> +endif
+> +STRIP_FIND_CMD+=-type f -perm +111 -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+
+ If for whatever reason this patch has to go through another cycle, I'd
+like the following whitespace changes:
+
+- space before and after the =
+
+- split up the last line in two, e.g.
+
+STRIP_FIND_CMD += -type f -perm +111 
+STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+
+ (still 120 columns wide, but better already).
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
