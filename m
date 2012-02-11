@@ -1,49 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 17:24:16 +0100
+Date: Sat, 11 Feb 2012 17:30:49 +0100
 Subject: [Buildroot] [PATCH] [PATCH] usb_modeswitch: upgrade to 1.2.3
-In-Reply-To: <CAAXf6LV1gHy+w2N3T_xz+iETCdANPsJNMefR-XBLM8FqCKA9Lw@mail.gmail.com>
+In-Reply-To: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
 References: <1328830956-11154-1-git-send-email-jwoltz@gmail.com>
- <CAC78GpfLO9XPZh4gU8ShTR9i8vBMaZQ6HQ0Uwfpf6xwPw-aJLA@mail.gmail.com>
- <CAAXf6LV1gHy+w2N3T_xz+iETCdANPsJNMefR-XBLM8FqCKA9Lw@mail.gmail.com>
-Message-ID: <201202111724.16231.arnout@mind.be>
+Message-ID: <201202111730.50135.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 10 February 2012 17:41:04 Thomas De Schampheleire wrote:
-> >> Is there a particular reason why you changed this?
-> >>
-> >> And to other buildroot developers: what is the policy regarding
-> >> directly specifying CC and LD, instead of using variables like
-> >> TARGET_CONFIGURE_OPTS ?
-> >>
-> >
-> > Yes, I changed that line since usb_modeswitch would not compile. I was
-> > following the example from:
-> > http://buildroot.uclibc.org/buildroot.html#generic-tutorial
-> >
-> > Please let me know how or what you want changed, and I will re-submit.
-> 
-> I checked and this is caused because your Makefile patch removed the
-> CC ?= gcc
-> change.
-> 
-> Personally I don't mind your solution, as it is one less change to the
-> Makefile.
-> For me, you don't need to change it.
+On Friday 10 February 2012 00:42:36 J.C. Woltz wrote:
+>  define USB_MODESWITCH_BUILD_CMDS
+> -       $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +       $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
+>  endef
 
- J.C.'s solution is preferred, I would say.
+ Don't remove TARGET_MAKE_ENV.  The CC= is good, however.
 
-- It doesn't require patching.
+>  
+>  define USB_MODESWITCH_INSTALL_TARGET_CMDS
+> -       $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> -       $(INSTALL) -D $(@D)/usb_modeswitch.setup -m 0644 \
+> -               $(TARGET_DIR)/etc/usb_modeswitch.setup
+> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  endef
 
-- It's how it is documented.
+ Same here.
 
-- TARGET_CONFIGURE_OPTIONS is meant for autoconf.
 
-- This will be the way that the MAKETARGETS infrastructure will be 
-implemented.
+> +
+
+ Redundant whitespace.
+
+>  define USB_MODESWITCH_CLEAN_CMDS
+> +       $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
+>         rm -f $(TARGET_DIR)/usr/sbin/usb_modeswitch
+>         rm -f $(TARGET_DIR)/etc/usb_modeswitch.setup
+>         rm -f $(TARGET_DIR)/usr/share/man/man1/usb_modeswitch.1
+
+ Actually, the rm -f lines should be in UNINSTALL_CMDS.  And should use 
+$(RM) instead of rm -f.
 
 
  Regards,
