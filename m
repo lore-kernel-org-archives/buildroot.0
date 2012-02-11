@@ -1,58 +1,65 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 11 Feb 2012 17:05:26 +0100
-Subject: [Buildroot] [PATCH 2/3] gst-plugins-base: add option to select
-	'alsa'
-In-Reply-To: <1328918676-19482-3-git-send-email-felipe.contreras@gmail.com>
+Date: Sat, 11 Feb 2012 17:12:10 +0100
+Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
+In-Reply-To: <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
 References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
- <1328918676-19482-3-git-send-email-felipe.contreras@gmail.com>
-Message-ID: <201202111705.26348.arnout@mind.be>
+ <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
+Message-ID: <201202111712.10582.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 11 February 2012 01:04:35 Felipe Contreras wrote:
-> It's nice to go straight to GStreamer, and enable all the plug-in
-> elements without having to go back through the menus to select the
-> dependencies.
+On Saturday 11 February 2012 01:04:36 Felipe Contreras wrote:
+> These should go into a personal file, like:
+> core.excludesfile=/home/felipec/.gitignore
+>   .*.sw[nop]
 > 
-> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
-> ---
->  package/multimedia/gst-plugins-base/Config.in |    7 ++++++-
->  1 files changed, 6 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/multimedia/gst-plugins-base/Config.in b/package/multimedia/gst-plugins-base/Config.in
-> index 851337b..a1fa0f1 100644
-> --- a/package/multimedia/gst-plugins-base/Config.in
-> +++ b/package/multimedia/gst-plugins-base/Config.in
-> @@ -94,5 +94,10 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_VORBIS
->  	bool "vorbis (*.ogg audio)"
->  	select BR2_PACKAGE_LIBVORBIS
->  
-> -endif
-> +config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA
-> +	bool "alsa"
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_ALSA_LIB_MIXER
-> +	select BR2_PACKAGE_ALSA_LIB_PCM
->  
-> +endif
+> Some people might prefer to see patches, rejects and other files in the
+> output of 'git status' (e.g. me).
 
- Keep the config options ordered alphabetically, so put it before OGG.
+ Agreed on most parts, except for the /*.patch.  It was added because git
+format-patch creates them.  If they are not ignored, than git add -A won't
+work properly anymore.
 
- Also, if the option exists, it should be used in the mk-file.  So add:
+ While we're talking about gitignore: I have two more things I'd like to
+add to it:
 
-ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_ALSA),y)
-GST_PLUGINS_BASE_CONF_OPT += --enable-alsa
-else
-GST_PLUGINS_BASE_CONF_OPT += --disable-alsa
-endif
+/output* (because I often use parallel output dirs within the buildroot
+directory, as it gives me access to git).
 
-(again alphabetically).
+/defconfig (since it's a generated file).
+
+ What do the others think?
+
 
  Regards,
  Arnout
+
+
+> 
+> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+> ---
+>  .gitignore |    7 -------
+>  1 files changed, 0 insertions(+), 7 deletions(-)
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 685a9c2..1a7d636 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -5,10 +5,3 @@
+>  /.config.old
+>  /..config.tmp
+>  /.config
+> -*.depend
+> -*.o
+> -/*.patch
+> -/*.diff
+> -*.orig
+> -*.rej
+> -*~
+> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
