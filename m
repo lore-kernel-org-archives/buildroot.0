@@ -1,50 +1,78 @@
 From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Sun, 12 Feb 2012 00:54:27 +0200
-Subject: [Buildroot] [PATCH] Add gst-av package
-In-Reply-To: <87zkcpz2i1.fsf@macbook.be.48ers.dk>
-References: <1328919431-22820-1-git-send-email-felipe.contreras@gmail.com>
- <87d39l1hwr.fsf@macbook.be.48ers.dk>
- <CAMP44s2pzn3vZXve8VCsNPM0iX=AVB83cFnxoj0t3KJo5rxqkw@mail.gmail.com>
- <87zkcpz2i1.fsf@macbook.be.48ers.dk>
-Message-ID: <CAMP44s0wq2AT0-ayCovzXwxz0qMo=c5xqEc0VXtcjG2rvU9hvw@mail.gmail.com>
+Date: Sun, 12 Feb 2012 01:01:51 +0200
+Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
+In-Reply-To: <CAAXf6LXsQCsdwswHGa=Ei-+DkB7OyJbKnz7MhatTeEgCk5MMWw@mail.gmail.com>
+References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
+ <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
+ <CAAXf6LXsQCsdwswHGa=Ei-+DkB7OyJbKnz7MhatTeEgCk5MMWw@mail.gmail.com>
+Message-ID: <CAMP44s10qfDsyg69vHqsR-Lu3V9uJoJH6AY46xETJ=T-ijhxQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 11, 2012 at 7:47 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
-> ?Felipe> I thought the help text explained that: gst-ffmpeg disables certain
-> ?Felipe> codecs, like MP3, Vorbis, Theora, etc. IOW. It has political baggage
-> ?Felipe> from GStreamer developers; they don't want people to use FFmpeg, they
-> ?Felipe> want people to use native elements: vorbisdec, theoradec, maddec, etc.
+On Sat, Feb 11, 2012 at 10:08 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
 >
-> But how does (more-or-less) reimplementing gst-ffmpeg change this
-> political baggage?
+> Op 11 feb. 2012 01:05 schreef "Felipe Contreras"
+> <felipe.contreras@gmail.com> het volgende:
+>
+>
+>>
+>> These should go into a personal file, like:
+>> core.excludesfile=/home/felipec/.gitignore
+>> ?.*.sw[nop]
+>>
+>> Some people might prefer to see patches, rejects and other files in the
+>> output of 'git status' (e.g. me).
+>>
+>> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+>> ---
+>> ?.gitignore | ? ?7 -------
+>> ?1 files changed, 0 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/.gitignore b/.gitignore
+>> index 685a9c2..1a7d636 100644
+>> --- a/.gitignore
+>> +++ b/.gitignore
+>> @@ -5,10 +5,3 @@
+>> ?/.config.old
+>> ?/..config.tmp
+>> ?/.config
+>> -*.depend
+>> -*.o
+>> -/*.patch
+>> -/*.diff
+>> -*.orig
+>> -*.rej
+>> -*~
+>
+> I personally don't agree. I don't think such ignores can be in a personal
+> gitignore file. Such a personal file will be used for all git repositories,
+> and you simply cannot state that no single project will use files with e.g.
+> a .orig extension. In my opinion this is project specific.
 
-I don't have to convince GStreamer developers--I know many of them,
-and I doubt they would allow such a change.
+You can have personal per-project ignore files as well.
 
-Plus, here's another important part of the description[1]:
+> I'm neutral on the .patch and .diff change, but I think that .depend, .o,
+> .orig, .rej and ~ backups should remain in .gitignore.
 
----
-In addition, it is much simpler (2654 vs 16575 LOC), has better
-performance, and has a bit of extra features (such as less latency),
-and doesn?t use deprecated API?s. In a previous post I measured
-exactly how much improvement compared to gst-ffmpeg there is; it?s not
-much, but it?s some.
----
+*.o and *.depend should be there, as they are the output of the build system.
 
-Yes, I have actually measured the power usage[2].
+*.orig and *.reject and *~ should not, as they depend on the tools.
 
-But the main reason is the complexity of the code. If you quickly skim
-through both code-bases, you would see what I mean :)
+I suspect *~ comes from vim backups, which many people have disabled,
+and many people don't even use vi. Say, I have configured my editor to
+save backups with *.bak, should that be on the list? No, that's
+_personal_. If you want *~, or *.bak, to be ignored, you can put that
+in your global gitignore.
+
+*.orig and *.reject are also not particular to busybox, they can be on
+the global gitignore. And some people, like me, want to be able to see
+then when typing 'git status'. So this is a _personal_ choice.
 
 Cheers.
-
-[1] http://felipec.wordpress.com/2011/05/19/gst-av-0-5-released-now-with-video-encoding-and-decoding-support/
-[2] http://felipec.wordpress.com/2010/09/14/gst-av-0-3-better-performance-for-vorbis-and-mp3/
 
 -- 
 Felipe Contreras
