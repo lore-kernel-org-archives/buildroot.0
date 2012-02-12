@@ -1,37 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 12 Feb 2012 20:29:50 +0100
-Subject: [Buildroot] [git commit] libecore: fix directfb dependency
-Message-ID: <20120212195611.49E6D90A4D@busybox.osuosl.org>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Sun, 12 Feb 2012 22:41:23 +0200
+Subject: [Buildroot] ccache issue with zlib dependency
+In-Reply-To: <201202111647.03064.arnout@mind.be>
+References: <CAMP44s3eoG9jOoG7Gv_CvyKtG5dPbf+mP-_S7=cB-1LcJBM2hQ@mail.gmail.com>
+ <201202111647.03064.arnout@mind.be>
+Message-ID: <CAMP44s0U4LsmWu0bA4YFBUNdYS0kYGXAreVhS1faNJ7DQ5bOGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=718e1ecf5fb8f509c0cf9e7498ce7250470c3456
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, Feb 11, 2012 at 5:47 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Saturday 11 February 2012 00:36:04 Felipe Contreras wrote:
+>> Hi,
+>>
+>> I have a newer version of zlib (1.2.6) on my host system than what
+>> buildroot is using (1.2.5), ultimately the build fails because I have
+>> enabled ccache, and it uses zlib, and when the older zlib is installed
+>> there are missing symbols (ZLIB_1.2.5.2), so ccache doesn't work any
+>> more, and everything else fails.
+>>
+>> I tried to add the zlib dependency to ccache, but the build also fails
+>> because apparently host-zlib tries to use ccache.
+>
+> ?As a workaround, you can add CC="$(HOSTCC_NOCCACHE)" to the build
+> commands of host-zlib. ?But I don't particularly like it.
+>
+> ?Another option is to force ccache to use its bundled zlib, by adding
+> ccache_cv_zlib_1_2_3=no to HOST_CCACHE_CONF_ENV.
+>
+> ?The best option would be to check in support/dependencies if the
+> system has a good zlib, and only build host-zlib if it doesn't. ?But
+> that's major surgery in the build system again.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/efl/libecore/libecore.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+How about a ccache wrapper script that checks if ccache is there, and
+then runs $@ with that, and if not, just run $@?
 
-diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
-index 0088480..5bc6532 100644
---- a/package/efl/libecore/libecore.mk
-+++ b/package/efl/libecore/libecore.mk
-@@ -20,13 +20,13 @@ LIBECORE_CONF_OPT = --disable-simple-x11
- # libecore
- ifeq ($(BR2_PACKAGE_LIBECORE_DIRECTFB),y)
- LIBECORE_CONF_OPT += --enable-ecore-directfb
-+LIBECORE_DEPENDENCIES += directfb
- else
- LIBECORE_CONF_OPT += --disable-ecore-directfb
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBECORE_FB),y)
- LIBECORE_CONF_OPT += --enable-ecore-fb
--LIBECORE_DEPENDENCIES += directfb
- else
- LIBECORE_CONF_OPT += --disable-ecore-fb
- endif
+-- 
+Felipe Contreras
