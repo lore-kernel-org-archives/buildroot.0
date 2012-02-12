@@ -1,45 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 12 Feb 2012 23:29:36 +0100
-Subject: [Buildroot] [PATCH v3-resend 2/2] new program:
-	usb_modeswitch_data
-In-Reply-To: <1329073793-524-2-git-send-email-jwoltz@gmail.com>
-References: <1329073793-524-1-git-send-email-jwoltz@gmail.com>
- <1329073793-524-2-git-send-email-jwoltz@gmail.com>
-Message-ID: <201202122329.36300.arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Feb 2012 23:33:54 +0100
+Subject: [Buildroot] Buildroot 2012.02-rc1 released
+Message-ID: <87hayvznot.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 12 February 2012 20:09:53 J.C. Woltz wrote:
-> usb_modeswitch_data provides udev rules for usb VID/PID combinations to
-> switch usb deices from their default mode into a more useable mode. The
-> default mode usually is a cdrom with installation software that is of
-> little use in an embedded linux situation
-> 
-> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-> 
-> Fix usb_modeswitch_data to depend usb_modeswitch
-> add $(TARGET_CONFIGURE_OPTS) to be consistent with usb_modeswitch
+Hi,
 
- Err...  You just changed it into TARGET_CONFIGURE_ENV in usb_modeswitch...
+Buildroot 2012.02-rc1 is released - Go download it at:
 
-[snip]
-> +++ b/package/usb_modeswitch_data/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_USB_MODESWITCH_DATA
-> +	depends on BR2_PACKAGE_USB_MODESWITCH
+http://buildroot.net/downloads/buildroot-2012.02-rc1.tar.gz
 
- Can we have a third opinion on whether this should be depends or select?
+or
 
- Regards,
- Arnout
+http://buildroot.net/downloads/buildroot-2012.02-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Like usual for the February releases, we're a bit late because of
+FOSDEM, where we had a developer day. Expect a report from the day
+soon.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2011.11..
+
+   170  Peter Korsgaard
+    86  Gustavo Zacarias
+    39  Yegor Yefremov
+    38  Arnout Vandecappelle (Essensium/Mind)
+    33  Thomas Petazzoni
+    18  Will Newton
+    12  Daniel Mack
+    10  Thomas De Schampheleire
+     9  Sven Neumann
+     7  Maxime Ripard
+     5  Alexandre Belloni
+     4  Luca Ceresoli
+     4  Sagaert Johan
+     2  Felipe Contreras
+     2  Frank Hunleth
+     2  Frederik Pasch
+     2  H Hartley Sweeten
+     2  Jean-Christophe PLAGNIOL-VILLARD
+     2  Julien Boibessot
+     1  ANDY KENNEDY
+     1  Bernhard Reutner-Fischer
+     1  Daniele Salvatore Albano
+     1  Henri Bragge
+     1  Lukasz Pulka
+     1  Samuel MARTIN
+     1  Sergio Prado
+     1  Shawn J. Goff
+     1  Trevor Woerner
+     1  Tristan Lelong
+     1  V?ctor Manuel J?quez Leal
+     1  Yann E. MORIN
+
+It's nice to see contributions from lots of new people in addition to
+the "oldtimers". This time I'm again ahead of Gustavo with almost 2x
+commits ;)
+
+It has been a quite busy development cycle, with more than 450
+commits, and a number of large scale changes.
+
+Of noteworthy new features we have:
+
+ - Large number of new packages (50): Connman & NetworkManager, EFL,
+   Jquery related javascript libraries, kmod, lttng and a number of
+   python packages.
+
+ - Default to GCC 4.5.x / Binutils 2.22 / uClibc 0.9.33 for the
+   internal toolchain.
+
+ - Support for SCP and mercurial package sources. Host dependencies
+   are now derived from target ones by default.
+
+ - Packages can now define device table snippets for special
+   permissions / device nodes when static /dev is used.
+
+ - Updated documentation. The generated Asciidoc documenation is now
+   included in tarballs in text/html/pdf format.
+
+ - Additional QEMU defconfigs, at91 defconfigs updated and lpc3250
+   configs added.
+
+ - Host utilities menu with commonly used host tools.
+
+And the usual package version updates and bug fixes. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc1
+
+Just like last cycle, I will now create a next branch and start
+merging in new feature, rather than wait until 2012.02 is released.
+
+Enjoy!
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
