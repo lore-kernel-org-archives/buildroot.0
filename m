@@ -1,51 +1,39 @@
-From: Eial Czerwacki <eial@scalemp.com>
-Date: Sun, 12 Feb 2012 09:14:56 +0200
-Subject: [Buildroot] segfault when running a simple c program on env
- build with buildroot
-In-Reply-To: <20120209165457.2a99305b@skate>
-References: <4F33DCBE.7080606@scalemp.com> <20120209161150.36d6c6d6@skate>
- <4F33E363.5040107@scalemp.com> <20120209165457.2a99305b@skate>
-Message-ID: <4F3766F0.1070006@scalemp.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 12 Feb 2012 08:46:52 +0100
+Subject: [Buildroot] [PATCH] Add gst-av package
+In-Reply-To: <CAMP44s0wq2AT0-ayCovzXwxz0qMo=c5xqEc0VXtcjG2rvU9hvw@mail.gmail.com>
+ (Felipe Contreras's message of "Sun, 12 Feb 2012 00:54:27 +0200")
+References: <1328919431-22820-1-git-send-email-felipe.contreras@gmail.com>
+ <87d39l1hwr.fsf@macbook.be.48ers.dk>
+ <CAMP44s2pzn3vZXve8VCsNPM0iX=AVB83cFnxoj0t3KJo5rxqkw@mail.gmail.com>
+ <87zkcpz2i1.fsf@macbook.be.48ers.dk>
+ <CAMP44s0wq2AT0-ayCovzXwxz0qMo=c5xqEc0VXtcjG2rvU9hvw@mail.gmail.com>
+Message-ID: <87vcncze6r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/09/2012 05:54 PM, Thomas Petazzoni wrote:
+>>>>> "Felipe" == Felipe Contreras <felipe.contreras@gmail.com> writes:
 
-> Le Thu, 09 Feb 2012 17:16:51 +0200,
-> Eial Czerwacki <eial@scalemp.com> a ?crit :
-> 
->>> What is your hardware platform?
->>>
->>> Thomas
->>
->> any generic Intel/AMD cpu
-> 
-> Sorry this does not exist. Your configuration states i686. If your
-> processor is only i486 or i586 compatible, then those segfaults are
-> expected since the generated code might use instructions that do not
-> exist on your processor.
-> 
+Hi,
 
-correction, the cpus are any cpus from the last 4-5 years, my cpu is
-e6600 for the matter.
-all of them are i686
+ Felipe> ---
+ Felipe> In addition, it is much simpler (2654 vs 16575 LOC), has better
+ Felipe> performance, and has a bit of extra features (such as less latency),
+ Felipe> and doesn?t use deprecated API?s. In a previous post I measured
+ Felipe> exactly how much improvement compared to gst-ffmpeg there is; it?s not
+ Felipe> much, but it?s some.
+ Felipe> ---
 
->> I've compiled iasl, dmidecode and biosdecode with same image, you say
->> that I cannot do that?
->> I need the bin linked to uclibc and my desktop doesn't support uclibc
-> 
-> Buildroot generates for you an uClibc cross-compilation toolchain in
-> output/host/usr/bin that you can use to cross-compile applications for
-> the target platform.
-> 
-> Best regards,
-> 
-> Thomas
+ Felipe> Yes, I have actually measured the power usage[2].
 
+ Felipe> But the main reason is the complexity of the code. If you
+ Felipe> quickly skim through both code-bases, you would see what I mean
+ Felipe> :)
 
-that is what I need.
+Ok, I get it now - Thanks.
 
-Eial.
+-- 
+Bye, Peter Korsgaard
