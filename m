@@ -1,115 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 13 Feb 2012 09:48:59 +0100
-Subject: [Buildroot] Buildroot 2012.02-rc1 released
-In-Reply-To: <87hayvznot.fsf@macbook.be.48ers.dk>
-References: <87hayvznot.fsf@macbook.be.48ers.dk>
-Message-ID: <CAAXf6LVdzKaog1OOEOM-uAg90UQz5VvjnsvtLQ_9trHamrkH_Q@mail.gmail.com>
+From: Fabio Porcedda <Fabio.Porcedda@telit.com>
+Date: Mon, 13 Feb 2012 08:45:48 +0000
+Subject: [Buildroot] [PATCH v3] busybox: add watchdog daemon startup
+	script
+In-Reply-To: <201202111625.38679.arnout@mind.be>
+References: <1328892725-25364-1-git-send-email-fabio.porcedda@telit.com>
+ <201202111625.38679.arnout@mind.be>
+Message-ID: <1329122702.1940.3.camel@lvd2036>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 12, 2012 at 11:33 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
-> Hi,
->
-> Buildroot 2012.02-rc1 is released - Go download it at:
->
-> http://buildroot.net/downloads/buildroot-2012.02-rc1.tar.gz
->
-> or
->
-> http://buildroot.net/downloads/buildroot-2012.02-rc1.tar.bz2
->
-> Or get it from Git:
->
-> git://git.buildroot.net/buildroot
->
-> Like usual for the February releases, we're a bit late because of
-> FOSDEM, where we had a developer day. Expect a report from the day
-> soon.
->
-> Please give it a spin and report any problems to the mailing list or
-> bug tracker. Many thanks to the people contributing to this release:
->
-> git shortlog -s -n 2011.11..
->
-> ? 170 ?Peter Korsgaard
-> ? ?86 ?Gustavo Zacarias
-> ? ?39 ?Yegor Yefremov
-> ? ?38 ?Arnout Vandecappelle (Essensium/Mind)
-> ? ?33 ?Thomas Petazzoni
-> ? ?18 ?Will Newton
-> ? ?12 ?Daniel Mack
-> ? ?10 ?Thomas De Schampheleire
-> ? ? 9 ?Sven Neumann
-> ? ? 7 ?Maxime Ripard
-> ? ? 5 ?Alexandre Belloni
-> ? ? 4 ?Luca Ceresoli
-> ? ? 4 ?Sagaert Johan
-> ? ? 2 ?Felipe Contreras
-> ? ? 2 ?Frank Hunleth
-> ? ? 2 ?Frederik Pasch
-> ? ? 2 ?H Hartley Sweeten
-> ? ? 2 ?Jean-Christophe PLAGNIOL-VILLARD
-> ? ? 2 ?Julien Boibessot
-> ? ? 1 ?ANDY KENNEDY
-> ? ? 1 ?Bernhard Reutner-Fischer
-> ? ? 1 ?Daniele Salvatore Albano
-> ? ? 1 ?Henri Bragge
-> ? ? 1 ?Lukasz Pulka
-> ? ? 1 ?Samuel MARTIN
-> ? ? 1 ?Sergio Prado
-> ? ? 1 ?Shawn J. Goff
-> ? ? 1 ?Trevor Woerner
-> ? ? 1 ?Tristan Lelong
-> ? ? 1 ?V?ctor Manuel J?quez Leal
-> ? ? 1 ?Yann E. MORIN
->
-> It's nice to see contributions from lots of new people in addition to
-> the "oldtimers". This time I'm again ahead of Gustavo with almost 2x
-> commits ;)
->
-> It has been a quite busy development cycle, with more than 450
-> commits, and a number of large scale changes.
->
-> Of noteworthy new features we have:
->
-> ?- Large number of new packages (50): Connman & NetworkManager, EFL,
-> ? Jquery related javascript libraries, kmod, lttng and a number of
-> ? python packages.
->
-> ?- Default to GCC 4.5.x / Binutils 2.22 / uClibc 0.9.33 for the
-> ? internal toolchain.
->
-> ?- Support for SCP and mercurial package sources. Host dependencies
-> ? are now derived from target ones by default.
->
-> ?- Packages can now define device table snippets for special
-> ? permissions / device nodes when static /dev is used.
->
-> ?- Updated documentation. The generated Asciidoc documenation is now
-> ? included in tarballs in text/html/pdf format.
->
-> ?- Additional QEMU defconfigs, at91 defconfigs updated and lpc3250
-> ? configs added.
->
-> ?- Host utilities menu with commonly used host tools.
->
-> And the usual package version updates and bug fixes. See the CHANGES
-> file for details:
->
-> http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc1
->
-> Just like last cycle, I will now create a next branch and start
-> merging in new feature, rather than wait until 2012.02 is released.
->
-> Enjoy!
+On Sat, 2012-02-11 at 16:25 +0100, Arnout Vandecappelle wrote:
+> On Friday 10 February 2012 17:52:05 Fabio Porcedda wrote:
+> > Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+>  It may be useful to force-enable the watchdog in the buildroot config
+> it this option is selected.  For me, that's not necessary though.
+> 
+>  It would look something like this:
+> 
+> ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
+> define BUSYBOX_SET_WATCHDOG
+>         $(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
+> endef
+> endif
+> 
+> and then add BUSYBOX_SET_WATCHDOG to the rest of the config modifiers.
 
-One thing I haven't seen was the deprecation of the customize package.
-Maybe we can still do this in 2012.02? I'd submit a patch but since
-you also need to change the CHANGES file I think it makes more sense
-if you do it yourself, no?
+Ok, i'm making an updated patch following this suggestion.
+ 
+> 
+>  Regards,
+>  Arnout
+> 
 
-Best regards,
-Thomas
+-- 
+Fabio Porcedda
+Software Developer - R&D Cagliari
+
+Telit Communications S.p.A.
+Loc. Sa Illetta, SS 195, Km 2.300
+09122 Cagliari - Italy
+Phone: +39 070 4603 247
+Fax:   +39 070 4603 250
+Skype: fabiopo_telit
+http://www.telit.com
