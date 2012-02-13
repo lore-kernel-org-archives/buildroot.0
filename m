@@ -1,38 +1,56 @@
-From: Dechesne, Nicolas <n-dechesne@ti.com>
-Date: Mon, 13 Feb 2012 15:41:12 +0100
-Subject: [Buildroot] pandaboard MLO/u-boot not working
-In-Reply-To: <CAPEB33znr0s2Zka5xjmDfVT4iJTn0rFYCySoj_sWF9n3=_8Uow@mail.gmail.com>
-References: <CAPEB33znr0s2Zka5xjmDfVT4iJTn0rFYCySoj_sWF9n3=_8Uow@mail.gmail.com>
-Message-ID: <CALB96Nna+HV5ZvqsqpNa5-vew_eaNdK1=SRTU4YEGWU2wVZg7g@mail.gmail.com>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Mon, 13 Feb 2012 11:59:46 -0500
+Subject: [Buildroot] [PATCH v3-resend 2/2] new program:
+	usb_modeswitch_data
+In-Reply-To: <CAAXf6LVC7C3mWLhvkFWONt3=4M=29wysdbGiw7nkRdmgSnBGWw@mail.gmail.com>
+References: <1329073793-524-1-git-send-email-jwoltz@gmail.com>
+ <1329073793-524-2-git-send-email-jwoltz@gmail.com>
+ <201202122329.36300.arnout@mind.be>
+ <CAAXf6LVC7C3mWLhvkFWONt3=4M=29wysdbGiw7nkRdmgSnBGWw@mail.gmail.com>
+Message-ID: <CAC78GpeY=K+DFxVn_USw=G3c+jAB_Fa0+MtVGTvsBhQiGt3Mwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 13, 2012 at 3:01 PM, MERCADIER Johann <
-johann.mercadier@imerir.com> wrote:
-
->    using buildroot I create a 1st basic rootfs, toolchain, bootloader
-> using ucLibc.
->    All of this targeted to a Pandaboard Rev A4.
->    Everything works fine and generate all things needed.
->    Trouble are when booting the card with it.  Trying some other
-> MLO/u-boot.bin bootloader help me going a bit further and then stuck once
-> again.
->    Could someone help me?  by giving me some clue like where to look
-> after, or some methods to fix such a problem?
+On Mon, Feb 13, 2012 at 3:03 AM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> On Sun, Feb 12, 2012 at 11:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On Sunday 12 February 2012 20:09:53 J.C. Woltz wrote:
+>>> usb_modeswitch_data provides udev rules for usb VID/PID combinations to
+>>> switch usb deices from their default mode into a more useable mode. The
+>>> default mode usually is a cdrom with installation software that is of
+>>> little use in an embedded linux situation
+>>>
+>>> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+>>>
+[snip]
+>>> +++ b/package/usb_modeswitch_data/Config.in
+>>> @@ -0,0 +1,8 @@
+>>> +config BR2_PACKAGE_USB_MODESWITCH_DATA
+>>> + ? ? depends on BR2_PACKAGE_USB_MODESWITCH
+>>
+>> ?Can we have a third opinion on whether this should be depends or select?
+>>
 >
+> Arnout,
+> Do I understand correctly from this that you prefer 'select'? Could
+> you expand on this?
 
-i had found a bug in OMAP4 SPL in latest u-boot, that was fixed with this:
+I am waiting for an answer on that before resubmitting with the other
+fix. In the mean time I noticed something else. The script that get
+called from udev when it detects a device,
+usr/sbin/usb_modeswitch_dispatcher, uses tclsh. Specifically
+#!/usr/bin/tclsh
 
-http://git.denx.de/?p=u-boot.git;a=commit;h=f59021791b5a09b22c886aa6c1115cd49b730d6c
+Three questions:
+1. Should usb_modeswitch_data depend on tcl? (BR2_PACKAGE_TCL)
+2. The tcl package creates a usr/bin/tclsh8.4 but not a usr/bin/tclsh.
+Should the BR2_PACKAGE_TCL when BR2_PACKAGE_TCL_SHLIB_ONLY is not
+selected, create a symlink?
+3. How do I tell usb_modeswitch_data to depend on BR2_PACKAGE_TCL but
+to exclude BR2_PACKAGE_TCL_SHLIB_ONLY?
 
-it was just merged very recently, so make sure you have this patch when
-rebuilding your bootloaders.
-
-if you use uboot 2011.12 then it should be fine, this is what I had been
-using in the past.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120213/e67d52b7/attachment.html>
+Thank you,
+J.C. Woltz
