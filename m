@@ -1,31 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 08:49:17 +0100
-Subject: [Buildroot] simple question about dropbear
-In-Reply-To: <CA+appbNUZ3AOVJ3FdcxfWg=0-jiXVxGzyij3j8XzntyeBVQQpA@mail.gmail.com>
- (Spenser Gilliland's message of "Mon, 13 Feb 2012 17:56:57 -0600")
-References: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
- <871uq32cin.fsf@macbook.be.48ers.dk>
- <E38CC59C-6BA9-4775-9A90-5D4C13A78902@informatik.uni-bremen.de>
- <CA+appbOjdSO6HqBNCALy_SmfkKycJNV_gHJqxY1aQbfyQbXMdg@mail.gmail.com>
- <87zkcmwjsg.fsf@macbook.be.48ers.dk>
- <47fbadb0-0be9-4cde-a2f0-8cef38742e89@email.android.com>
- <CA+appbPMZ7iB6gXCuA4r7y_7Nj-AOoLghLAo-HEp6zzLavSa9A@mail.gmail.com>
- <87pqdiwhcy.fsf@macbook.be.48ers.dk>
- <CA+appbNUZ3AOVJ3FdcxfWg=0-jiXVxGzyij3j8XzntyeBVQQpA@mail.gmail.com>
-Message-ID: <87ipj9x3b6.fsf@macbook.be.48ers.dk>
+Date: Tue, 14 Feb 2012 00:26:35 +0100
+Subject: [Buildroot] [git commit] linux: bump 3.2.x stable version
+Message-ID: <20120214075235.D2E7C90A9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser309@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6a180a9a1f97e6c71840211603017f1da6ab1adc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Spenser> Added the patch from the other thread but it did not help. The login
- Spenser> timeout after 14min and was stuck on the same point according to ssh
- Spenser> -vv.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Ok :/ Worth a try though.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 86dc32a..26032fd 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_2
+ 
+ config BR2_LINUX_KERNEL_3_2
+-	bool "3.2.5"
++	bool "3.2.6"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.2.5" if BR2_LINUX_KERNEL_3_2
++	default "3.2.6" if BR2_LINUX_KERNEL_3_2
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
