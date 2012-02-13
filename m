@@ -1,38 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 13 Feb 2012 21:38:39 +0100
-Subject: [Buildroot] simple question about dropbear
-In-Reply-To: <CA+appbOjdSO6HqBNCALy_SmfkKycJNV_gHJqxY1aQbfyQbXMdg@mail.gmail.com>
- (Spenser Gilliland's message of "Mon, 13 Feb 2012 12:53:06 -0600")
-References: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
- <871uq32cin.fsf@macbook.be.48ers.dk>
- <E38CC59C-6BA9-4775-9A90-5D4C13A78902@informatik.uni-bremen.de>
- <CA+appbOjdSO6HqBNCALy_SmfkKycJNV_gHJqxY1aQbfyQbXMdg@mail.gmail.com>
-Message-ID: <87zkcmwjsg.fsf@macbook.be.48ers.dk>
+From: universeII at gmx.de <universeII@gmx.de>
+Date: Mon, 13 Feb 2012 22:05:52 +0100
+Subject: [Buildroot] Bug/Typo in ffmpeg.mk
+Message-ID: <20120213210552.192510@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser309@gmail.com> writes:
+Hi buildroot guys,
+I just found the buildroot project due to a magazine article and I'm really impressed how simple cross compiling is using this tool.
 
- Spenser> Johannes,
- Spenser> I'm having a similar issue with dropbear and have switched to the
- Spenser> openssh server for now.  What patches are you using for microblaze
- Spenser> strace?  I'd like to add them to my build.
+I'm trying to create a system for a 7400 power-pc and I think I found a typo in
+/package/multimedia/ffmpeg/ffmpeg.mk
 
-So it might be a microblaze specific issue? This is Microblaze with mmu,
-right?
+line 148 is:
+FFMPEG_CONF_OPT -= --enable-altivec
 
- Spenser> debug1: sending SSH2_MSG_KEXDH_INIT
- Spenser> debug1: expecting SSH2_MSG_KEXDH_REPLY
+but should be:
+FFMPEG_CONF_OPT += --enable-altivec
 
-This is afaik here were it generates the session key. Are you sure it
-isn't just slow? Do you have BR2_PACKAGE_DROPBEAR_SMALL enabled?
+My first step is to try running the new kernel/system in qemu, but I'm not sure which option to parameter -M is the correct one for the 7400 CPU.
 
-There recently was some discussion about it on the dropbear list:
+qemu help gives me the following options:
 
-http://thread.gmane.org/gmane.network.ssh.dropbear/1018
+> qemu-system-ppc -M ?
+Supported machines are:
+virtex-ml507 Xilinx Virtex ML507 reference design
+mpc8544ds  mpc8544ds
+bamboo     bamboo (alias of bamboo-0.13)
+bamboo-0.13 bamboo
+bamboo-0.12 bamboo
+ref405ep   ref405ep
+taihu      taihu
+mac99      Mac99 based PowerMAC
+g3beige    Heathrow based PowerMAC (default)
+prep       PowerPC PREP platform
 
+Can anyone give me a hint?
+
+Regards,
+Andreas
 -- 
-Bye, Peter Korsgaard
+Empfehlen Sie GMX DSL Ihren Freunden und Bekannten und wir
+belohnen Sie mit bis zu 50,- Euro! https://freundschaftswerbung.gmx.de
