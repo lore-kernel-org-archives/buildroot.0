@@ -1,50 +1,25 @@
-From: Fabio Porcedda <Fabio.Porcedda@telit.com>
-Date: Mon, 13 Feb 2012 08:45:48 +0000
-Subject: [Buildroot] [PATCH v3] busybox: add watchdog daemon startup
-	script
-In-Reply-To: <201202111625.38679.arnout@mind.be>
-References: <1328892725-25364-1-git-send-email-fabio.porcedda@telit.com>
- <201202111625.38679.arnout@mind.be>
-Message-ID: <1329122702.1940.3.camel@lvd2036>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Mon, 13 Feb 2012 09:43:03 +0000
+Subject: [Buildroot] [PATCH] libatomic_ops: Remove duplicate targets
+Message-ID: <4F38DB27.5090707@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 2012-02-11 at 16:25 +0100, Arnout Vandecappelle wrote:
-> On Friday 10 February 2012 17:52:05 Fabio Porcedda wrote:
-> > Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  It may be useful to force-enable the watchdog in the buildroot config
-> it this option is selected.  For me, that's not necessary though.
-> 
->  It would look something like this:
-> 
-> ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
-> define BUSYBOX_SET_WATCHDOG
->         $(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
-> endef
-> endif
-> 
-> and then add BUSYBOX_SET_WATCHDOG to the rest of the config modifiers.
+Hi,
 
-Ok, i'm making an updated patch following this suggestion.
- 
-> 
->  Regards,
->  Arnout
-> 
+Please review the attached patch. libatomic_ops refuses to install
+because the build system overwrites newly installed targets. The patch
+removes these targets from the Makefiles and runs autoreconf to
+regenerate the build system. If you need me to send the patch as a
+separate file please let me know. I haven't send this to upstream yet
+but I plan to do so.
 
 -- 
-Fabio Porcedda
-Software Developer - R&D Cagliari
-
-Telit Communications S.p.A.
-Loc. Sa Illetta, SS 195, Km 2.300
-09122 Cagliari - Italy
-Phone: +39 070 4603 247
-Fax:   +39 070 4603 250
-Skype: fabiopo_telit
-http://www.telit.com
+markos
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: 0001-libatomic_ops-Remove-duplicate-targets.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120213/7c2662cc/attachment.ksh>
