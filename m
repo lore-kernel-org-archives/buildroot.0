@@ -1,37 +1,38 @@
-From: MERCADIER Johann <johann.mercadier@imerir.com>
-Date: Mon, 13 Feb 2012 14:01:13 +0000
+From: Dechesne, Nicolas <n-dechesne@ti.com>
+Date: Mon, 13 Feb 2012 15:41:12 +0100
 Subject: [Buildroot] pandaboard MLO/u-boot not working
-Message-ID: <CAPEB33znr0s2Zka5xjmDfVT4iJTn0rFYCySoj_sWF9n3=_8Uow@mail.gmail.com>
+In-Reply-To: <CAPEB33znr0s2Zka5xjmDfVT4iJTn0rFYCySoj_sWF9n3=_8Uow@mail.gmail.com>
+References: <CAPEB33znr0s2Zka5xjmDfVT4iJTn0rFYCySoj_sWF9n3=_8Uow@mail.gmail.com>
+Message-ID: <CALB96Nna+HV5ZvqsqpNa5-vew_eaNdK1=SRTU4YEGWU2wVZg7g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+On Mon, Feb 13, 2012 at 3:01 PM, MERCADIER Johann <
+johann.mercadier@imerir.com> wrote:
 
-   using buildroot I create a 1st basic rootfs, toolchain, bootloader using
-ucLibc.
-   All of this targeted to a Pandaboard Rev A4.
-   Everything works fine and generate all things needed.
-   Trouble are when booting the card with it.  Trying some other
-MLO/u-boot.bin bootloader help me going a bit further and then stuck once
-again.
-   Could someone help me?  by giving me some clue like where to look after,
-or some methods to fix such a problem?
+>    using buildroot I create a 1st basic rootfs, toolchain, bootloader
+> using ucLibc.
+>    All of this targeted to a Pandaboard Rev A4.
+>    Everything works fine and generate all things needed.
+>    Trouble are when booting the card with it.  Trying some other
+> MLO/u-boot.bin bootloader help me going a bit further and then stuck once
+> again.
+>    Could someone help me?  by giving me some clue like where to look
+> after, or some methods to fix such a problem?
+>
 
-  regards.
+i had found a bug in OMAP4 SPL in latest u-boot, that was fixed with this:
 
--- 
-Cordialement.
+http://git.denx.de/?p=u-boot.git;a=commit;h=f59021791b5a09b22c886aa6c1115cd49b730d6c
 
-___Johann MERCADIER___
+it was just merged very recently, so make sure you have this patch when
+rebuilding your bootloaders.
 
-:(){ :|:& };:
-"I am the Unknown lead by the Unknowing.
-I have done so much with so little for so long
-that I am now qualified to do anything with nothing."
-HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
+if you use uboot 2011.12 then it should be fine, this is what I had been
+using in the past.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120213/2b748f1b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120213/e67d52b7/attachment.html>
