@@ -1,44 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 13 Feb 2012 09:03:23 +0100
-Subject: [Buildroot] [PATCH v3-resend 2/2] new program:
-	usb_modeswitch_data
-In-Reply-To: <201202122329.36300.arnout@mind.be>
-References: <1329073793-524-1-git-send-email-jwoltz@gmail.com>
- <1329073793-524-2-git-send-email-jwoltz@gmail.com>
- <201202122329.36300.arnout@mind.be>
-Message-ID: <CAAXf6LVC7C3mWLhvkFWONt3=4M=29wysdbGiw7nkRdmgSnBGWw@mail.gmail.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Mon, 13 Feb 2012 09:06:30 +0100
+Subject: [Buildroot] [RFC] progress indicator
+In-Reply-To: <201202102355.55858.arnout@mind.be>
+References: <CAGm1_kt5qPOB2fpWNRREejgp5jMhsM+o0Dq5Po3LHMpySecEjw@mail.gmail.com>
+ <201202102355.55858.arnout@mind.be>
+Message-ID: <4F38C486.5030208@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 12, 2012 at 11:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Sunday 12 February 2012 20:09:53 J.C. Woltz wrote:
->> usb_modeswitch_data provides udev rules for usb VID/PID combinations to
->> switch usb deices from their default mode into a more useable mode. The
->> default mode usually is a cdrom with installation software that is of
->> little use in an embedded linux situation
+Am 10.02.2012 23:55, schrieb Arnout Vandecappelle:
+> On Thursday 09 February 2012 00:32:42 Yegor Yefremov wrote:
+>> What about making a progress indicator, so that user always knows how
+>> many packages left to be built? Like Android (AOSP) does during repo
+>> sync:
 >>
->> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
->>
->> Fix usb_modeswitch_data to depend usb_modeswitch
->> add $(TARGET_CONFIGURE_OPTS) to be consistent with usb_modeswitch
->
-> ?Err... ?You just changed it into TARGET_CONFIGURE_ENV in usb_modeswitch...
->
-> [snip]
->> +++ b/package/usb_modeswitch_data/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_USB_MODESWITCH_DATA
->> + ? ? depends on BR2_PACKAGE_USB_MODESWITCH
->
-> ?Can we have a third opinion on whether this should be depends or select?
->
+>> Fetching projects:  53% (127/238)  Receiving objects:  22% (290/1289), 195.95 Ki
+>> Fetching projects:  54% (129/238)  Receiving objects:  28% (361/1289), 195.95 Ki
+>> Fetching projects:  55% (131/238)  Receiving objects:  47% (606/1289), 643.81 Ki
+> 
+>  crosstool-NG does it as well.
+> 
+>  However, I don't see how you would do it without major surgery to the 
+> infrastructure.
 
-Arnout,
-Do I understand correctly from this that you prefer 'select'? Could
-you expand on this?
+I fear it is inevitable. But if someone has lots of free time, it would be a nice feature. Especially on slow machines it is very nice to know how long will take to build.
 
-Thanks,
-Thomas
+Yegor
