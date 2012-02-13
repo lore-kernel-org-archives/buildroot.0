@@ -1,48 +1,46 @@
-From: J.C. Woltz <jwoltz@gmail.com>
-Date: Sun, 12 Feb 2012 22:00:15 -0500
-Subject: [Buildroot] [PATCH v3-resend 2/2] new program:
-	usb_modeswitch_data
-In-Reply-To: <201202122329.36300.arnout@mind.be>
-References: <1329073793-524-1-git-send-email-jwoltz@gmail.com>
- <1329073793-524-2-git-send-email-jwoltz@gmail.com>
- <201202122329.36300.arnout@mind.be>
-Message-ID: <CAC78GpcoJxQLh0EBUm2WXX9zOmkjxw0ZVRjPYM2THxnAC5pz8w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 13 Feb 2012 08:59:54 +0100
+Subject: [Buildroot] [PATCH] Adding Microblaze support to Buildroot
+In-Reply-To: <CAM+bi4sKSQ80WXdZscOThUX=t18C+vMWspKWB82NWNx49gsFWw@mail.gmail.com>
+ (Alvaro Gamez's message of "Mon, 13 Feb 2012 00:07:53 +0100")
+References: <CAM+bi4sKSQ80WXdZscOThUX=t18C+vMWspKWB82NWNx49gsFWw@mail.gmail.com>
+Message-ID: <87aa4nyxhh.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 12, 2012 at 5:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Sunday 12 February 2012 20:09:53 J.C. Woltz wrote:
->> usb_modeswitch_data provides udev rules for usb VID/PID combinations to
->> switch usb deices from their default mode into a more useable mode. The
->> default mode usually is a cdrom with installation software that is of
->> little use in an embedded linux situation
->>
->> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
->>
->> Fix usb_modeswitch_data to depend usb_modeswitch
->> add $(TARGET_CONFIGURE_OPTS) to be consistent with usb_modeswitch
->
-> ?Err... ?You just changed it into TARGET_CONFIGURE_ENV in usb_modeswitch...
+>>>>> "Alvaro" == Alvaro Gamez <alvaro.gamez@hazent.com> writes:
 
-Yes, I did. I'm sorry about that mistake. I will fix, but will wait
-for third opinion on below select/depends...
+Hi,
 
->
-> [snip]
->> +++ b/package/usb_modeswitch_data/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_USB_MODESWITCH_DATA
->> + ? ? depends on BR2_PACKAGE_USB_MODESWITCH
->
-> ?Can we have a third opinion on whether this should be depends or select?
->
-> ?Regards,
-> ?Arnout
+ Alvaro> I am also interested on Microblaze support, hence I rescued the
+ Alvaro> old patch from the archives, merged it against latest git
+ Alvaro> revision and published on github.com /agamez/buildroot
 
-Please let me know and I will fix.
+ Alvaro> I attach the new patch, should apply cleanly to latest version
+ Alvaro> on git.
 
-Thank you,
-J.C. Woltz
+Thanks.
+
+ Alvaro> Even though Stephan Hoffmann work is pretty good, I think the
+ Alvaro> path of the new files should be modified from
+ Alvaro> board/relinux/avnet_LX9MicroBoard/ to board/avnet/LX9MicroBoard/
+
+I agree.
+
+ Alvaro> +++ b/configs/spartan6lx9_mb_defconfig
+ Alvaro> @@ -0,0 +1,17 @@
+ Alvaro> +BR2_microblaze=y
+ Alvaro> +BR2_TOOLCHAIN_EXTERNAL=y
+ Alvaro> +BR2_TOOLCHAIN_EXTERNAL_PATH="/opt/microblazeel-unknown-linux-gnu/"
+ Alvaro> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="microblazeel-unknown-linux-gnu"
+
+Is this toolchain available somewhere so I can test this?
+
+Having a defconfig which refers to something locally on a developer
+machine imho doesn't make much sense.
+
+-- 
+Bye, Peter Korsgaard
