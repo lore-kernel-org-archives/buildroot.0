@@ -1,69 +1,59 @@
-From: Johannes Teiwes <jteiwes@informatik.uni-bremen.de>
-Date: Tue, 14 Feb 2012 10:30:45 +0100
-Subject: [Buildroot] simple question about dropbear
-In-Reply-To: <87zkcmwjsg.fsf@macbook.be.48ers.dk>
-References: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
- <871uq32cin.fsf@macbook.be.48ers.dk>
- <E38CC59C-6BA9-4775-9A90-5D4C13A78902@informatik.uni-bremen.de>
- <CA+appbOjdSO6HqBNCALy_SmfkKycJNV_gHJqxY1aQbfyQbXMdg@mail.gmail.com>
- <87zkcmwjsg.fsf@macbook.be.48ers.dk>
-Message-ID: <BAB70BB3-C317-49C7-80E2-016DD9BECAF1@informatik.uni-bremen.de>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 14 Feb 2012 10:46:02 +0100
+Subject: [Buildroot] [PATCH] build: add 'file' option for 'make
+	defconfig'
+In-Reply-To: <201202111701.27270.arnout@mind.be>
+References: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
+ <201202111701.27270.arnout@mind.be>
+Message-ID: <CAAXf6LVPo6hWwJFUm3dzFYPAVvC=_=aBP1B7XSQ26spoyuEYFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi,
 
-Am 13.02.2012 um 21:38 schrieb Peter Korsgaard:
+On Sat, Feb 11, 2012 at 5:01 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Saturday 11 February 2012 01:03:16 Felipe Contreras wrote:
+>> So that this works:
+>>
+>> ?% make defconfig file=~/busybox-defconfig
+>>
+>> Right now we have to do:
+>>
+>> ?% make $PWD/output/build/buildroot-config/conf
+>> ?% $PWD/output/build/buildroot-config/conf --defconfig=~/busybox-defconfig Config.in
+>>
+>> And the first command would through an error. Not nice.
+>
+> ?+1! ?And such a graceful solution too!
+>
+> ?One remark, though: we normally use capitals for variables. ?Also I'd make
+> it more clear that the file means the defconfig file, so you can write:
+>
+> make DEFCONFIG=~/my-buildroot.config defconfig world
+>
+> ?And eventually we can even update the non-BR2_HAVE_DOT_CONFIG targets to
+> default to defconfig if DEFCONFIG is defined.
+>
+>
+> ?Note that the way to do it without this patch would be:
+>
+> cp ~/busybox-defconfig configs/busybox_defconfig
+> make busybox_defconfig
+>
+> which doesn't error out. ?However, it does require a writable buildroot
+> directory and it makes it dirty.
 
->>>>>> "Spenser" == Spenser Gilliland <spenser309@gmail.com> writes:
-> 
-> Spenser> Johannes,
-> Spenser> I'm having a similar issue with dropbear and have switched to the
-> Spenser> openssh server for now.  What patches are you using for microblaze
-> Spenser> strace?  I'd like to add them to my build.
-> 
-> So it might be a microblaze specific issue? This is Microblaze with mmu,
-> right?
+Is this really a problem?
+If one creates a defconfig file, why not store it in 'configs' ?
 
-Yes, you're right. But i have problems investigating what the system is
-actually doing when stalling the ssh-connection.
+Felipe, are you aware of the suggested behavior of placing your
+defconfig file in configs/ and 'enabling' it with:
+make your_defconfig
+?
+Could you explain why you don't think this is sufficient?
 
-> 
-> Spenser> debug1: sending SSH2_MSG_KEXDH_INIT
-> Spenser> debug1: expecting SSH2_MSG_KEXDH_REPLY
-> 
-> This is afaik here were it generates the session key. Are you sure it
-> isn't just slow? Do you have BR2_PACKAGE_DROPBEAR_SMALL enabled?
-
-I have also BR2_PACKAGE_DROPBEAR_SMALL enabled in my configuration.
-The 'slowness' can be the cause since the microblaze machine only runs at about 66MHz.
-
-Is there any way to convince dropbear/ssh to use a small (or precomputed) session key?
-If this is possible one could check, if the system-speed is really the limiting factor.
-
-> 
-> There recently was some discussion about it on the dropbear list:
-> 
-> http://thread.gmane.org/gmane.network.ssh.dropbear/1018
-> 
-> -- 
-> Bye, Peter Korsgaard
-
-Any other ideas? 
-I am using static device tables and the default dev_table as my structure - maybe 
-there are some devices missing or misconfigured for doing ssh right out of the box?
-
-thanks so far,
-Johannes
-
---
-Johannes Teiwes - jteiwes at tzi.de
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120214/2b4e62be/attachment.html>
+Thanks,
+Thomas
