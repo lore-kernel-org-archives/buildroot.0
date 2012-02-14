@@ -1,49 +1,38 @@
-From: Felipe Contreras <felipe.contreras@gmail.com>
-Date: Tue, 14 Feb 2012 18:15:33 +0200
-Subject: [Buildroot] [PATCH] build: add 'file' option for 'make
-	defconfig'
-In-Reply-To: <201202141453.23995.arnout@mind.be>
-References: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
- <CAAXf6LVPo6hWwJFUm3dzFYPAVvC=_=aBP1B7XSQ26spoyuEYFA@mail.gmail.com>
- <CAMP44s2yuoJ38UdeaRbgeLo9QvPDgrv1roPzgjKL-QZdt7W54g@mail.gmail.com>
- <201202141453.23995.arnout@mind.be>
-Message-ID: <CAMP44s1GvXK-9h_Rs2QNL6g4jBQfHnZ2gdYdRn+oTYxgDC4g3A@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 14 Feb 2012 17:18:35 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: use
+	/etc/os-release for version info rather than /etc/br-version
+In-Reply-To: <4F3A86D8.5010605@lucaceresoli.net> (Luca Ceresoli's message of
+ "Tue, 14 Feb 2012 17:07:52 +0100")
+References: <20120214121000.DDC1090A9E@busybox.osuosl.org>
+ <4F3A86D8.5010605@lucaceresoli.net>
+Message-ID: <87obt1v15w.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 14, 2012 at 3:53 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Tuesday 14 February 2012 13:44:03 Felipe Contreras wrote:
->
->> > If one creates a defconfig file, why not store it in 'configs' ?
->
->>
->
->> Because it's personal.
->
->>
->
->> I want to be able to clone buildroot, and 'make defconfig
->
->> file=/media/drive/notes/my-buildroot-config'.
->
->
-> Same here.
->
->
-> BTW, regarding the naming: eventually I'd like to include BR2_DEFCONFIG
->
-> in the .config, which gets qstripped to DEFCONFIG in the Makefile. This can
->
-> be used to be able to store the config again, similar to
-> linux-update-defconfig.
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-That would be nice. I just do 'make savedefconfig' and manually merge
-the changes with gvimdiff (I might not want all of them).
+Hi,
 
-Cheers.
+ >> NAME=Buildroot
+ >> VERSION=2012.02-rc1-00003-g2d10e81
+ >> ID=buildroot
+ >> VERSION_ID=2012.02-rc1
+ >> PRETTY_NAME="Buildroot 2012.02-rc1"
+
+ Luca> Nice.
+ Luca> I just wish PRETTY_NAME had at least a "-dirty" suffix to make it
+ Luca> clear that it is not exactly equal to 2012.02-rc1 (at least when using
+ Luca> a git clone).
+
+We can make it use BR2_VERSION_FULL, but I didn't find that particulary
+"pretty". I normally change the version string to <versionN+1>-git right
+after a release, so it's only between -rc1 and the final release that
+there can be a bit of confusion (and you always have VERSION to figure
+it out).
 
 -- 
-Felipe Contreras
+Bye, Peter Korsgaard
