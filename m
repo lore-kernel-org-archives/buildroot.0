@@ -1,109 +1,123 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 14 Feb 2012 10:50:32 +0100
-Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
-In-Reply-To: <CAMP44s10qfDsyg69vHqsR-Lu3V9uJoJH6AY46xETJ=T-ijhxQA@mail.gmail.com>
-References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
- <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
- <CAAXf6LXsQCsdwswHGa=Ei-+DkB7OyJbKnz7MhatTeEgCk5MMWw@mail.gmail.com>
- <CAMP44s10qfDsyg69vHqsR-Lu3V9uJoJH6AY46xETJ=T-ijhxQA@mail.gmail.com>
-Message-ID: <CAAXf6LWet8=sL9Yv64L=ccL_p3aNprM2iyj5seQOriM8gi9FLw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 14 Feb 2012 10:51:12 +0100
+Subject: [Buildroot] [git commit] busybox: bump 1.19.x stable version
+Message-ID: <20120214095225.B256990A9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[resend correctly to the list]
+commit: http://git.buildroot.net/buildroot/commit/?id=7a7bd4b87390d63532b8cce619d6ed1b00b47128
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Identical to 1.19.3 + patches.
 
-On Sun, Feb 12, 2012 at 12:01 AM, Felipe Contreras
-<felipe.contreras@gmail.com> wrote:
-> On Sat, Feb 11, 2012 at 10:08 PM, Thomas De Schampheleire
-> <patrickdepinguin@gmail.com> wrote:
->>
->> Op 11 feb. 2012 01:05 schreef "Felipe Contreras"
->> <felipe.contreras@gmail.com> het volgende:
->>
->>
->>>
->>> These should go into a personal file, like:
->>> core.excludesfile=/home/felipec/.gitignore
->>> ?.*.sw[nop]
->>>
->>> Some people might prefer to see patches, rejects and other files in the
->>> output of 'git status' (e.g. me).
->>>
->>> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
->>> ---
->>> ?.gitignore | ? ?7 -------
->>> ?1 files changed, 0 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/.gitignore b/.gitignore
->>> index 685a9c2..1a7d636 100644
->>> --- a/.gitignore
->>> +++ b/.gitignore
->>> @@ -5,10 +5,3 @@
->>> ?/.config.old
->>> ?/..config.tmp
->>> ?/.config
->>> -*.depend
->>> -*.o
->>> -/*.patch
->>> -/*.diff
->>> -*.orig
->>> -*.rej
->>> -*~
->>
->> I personally don't agree. I don't think such ignores can be in a personal
->> gitignore file. Such a personal file will be used for all git repositories,
->> and you simply cannot state that no single project will use files with e.g.
->> a .orig extension. In my opinion this is project specific.
->
-> You can have personal per-project ignore files as well.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/busybox/Config.in                          |    2 +-
+ .../busybox-1.19.3/busybox-1.19.3-getty.patch      |   12 --------
+ .../busybox-1.19.3/busybox-1.19.3-mdev.patch       |   11 -------
+ .../busybox-1.19.3/busybox-1.19.3-modinfo.patch    |   10 -------
+ .../busybox-1.19.3/busybox-1.19.3-wget.patch       |   29 --------------------
+ 5 files changed, 1 insertions(+), 63 deletions(-)
 
-Ok, I wasn't aware of that (not using git).
-
->
->> I'm neutral on the .patch and .diff change, but I think that .depend, .o,
->> .orig, .rej and ~ backups should remain in .gitignore.
->
-> *.o and *.depend should be there, as they are the output of the build system.
->
-> *.orig and *.reject and *~ should not, as they depend on the tools.
->
-> I suspect *~ comes from vim backups, which many people have disabled,
-> and many people don't even use vi.
-
-It's difficult to quantify 'many' here. I can just as safely say that
-many people do use vi and many people have not disabled ~ backups.
-
-> Say, I have configured my editor to
-> save backups with *.bak, should that be on the list? No, that's
-> _personal_. If you want *~, or *.bak, to be ignored, you can put that
-> in your global gitignore.
->
-> *.orig and *.reject are also not particular to busybox, they can be on
-> the global gitignore. And some people, like me, want to be able to see
-> then when typing 'git status'. So this is a _personal_ choice.
-
-I'm sure you mean buildroot here.
-
-If you are to remove all these entries from the .gitignore file, you
-are basically forcing people to create such a personal .gitignore
-file. The defaults of the buildroot project are no longer sane.
-
-To be honest, I'm not sure if your use case of seeing all files with
-plain 'git status' is a common one, and thus whether it's worth
-changing the experience for all other people just for that. In my
-opinion, the default should be ok for most people.
-Doesn't git provide an option to git-status to see ignored files? I
-know Mercurial does. One could argue that it'd be better to submit a
-patch to git for such an option.
-Alternatively, you are free the gitignore file on a branch in your repository.
-
-Note that this is just my view on this. I have no authority whatsoever.
-I'm looking forward to input from other developers...
-
-Best regards,
-Thomas
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 4176020..c206509 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -41,7 +41,7 @@ config BR2_BUSYBOX_VERSION
+ 	default "1.16.2"	if BR2_BUSYBOX_VERSION_1_16_X
+ 	default "1.17.4"	if BR2_BUSYBOX_VERSION_1_17_X
+ 	default "1.18.5"	if BR2_BUSYBOX_VERSION_1_18_X
+-	default "1.19.3"	if BR2_BUSYBOX_VERSION_1_19_X
++	default "1.19.4"	if BR2_BUSYBOX_VERSION_1_19_X
+ 
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+diff --git a/package/busybox/busybox-1.19.3/busybox-1.19.3-getty.patch b/package/busybox/busybox-1.19.3/busybox-1.19.3-getty.patch
+deleted file mode 100644
+index 84dad6f..0000000
+--- a/package/busybox/busybox-1.19.3/busybox-1.19.3-getty.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- busybox-1.19.3/loginutils/getty.c
+-+++ busybox-1.19.3-getty/loginutils/getty.c
+-@@ -271,7 +271,9 @@ static void termios_init(int speed)
+- #ifdef CMSPAR
+- 		| CMSPAR  /* mark or space parity */
+- #endif
+-+#ifdef CBAUD
+- 		| CBAUD   /* (output) baud rate */
+-+#endif
+- #ifdef CBAUDEX
+- 		| CBAUDEX /* (output) baud rate */
+- #endif
+diff --git a/package/busybox/busybox-1.19.3/busybox-1.19.3-mdev.patch b/package/busybox/busybox-1.19.3/busybox-1.19.3-mdev.patch
+deleted file mode 100644
+index 653ac35..0000000
+--- a/package/busybox/busybox-1.19.3/busybox-1.19.3-mdev.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- busybox-1.19.3/util-linux/mdev.c
+-+++ busybox-1.19.3-mdev/util-linux/mdev.c
+-@@ -610,7 +610,7 @@ int mdev_main(int argc UNUSED_PARAM, cha
+- 				int seqlen;
+- 				char seqbuf[sizeof(int)*3 + 2];
+- 
+--				seqlen = open_read_close("mdev.seq", seqbuf, sizeof(seqbuf-1));
+-+				seqlen = open_read_close("mdev.seq", seqbuf, sizeof(seqbuf) - 1);
+- 				if (seqlen < 0) {
+- 					seq = NULL;
+- 					break;
+diff --git a/package/busybox/busybox-1.19.3/busybox-1.19.3-modinfo.patch b/package/busybox/busybox-1.19.3/busybox-1.19.3-modinfo.patch
+deleted file mode 100644
+index 9dd5c10..0000000
+--- a/package/busybox/busybox-1.19.3/busybox-1.19.3-modinfo.patch
++++ /dev/null
+@@ -1,10 +0,0 @@
+---- busybox-1.19.3/modutils/modinfo.c
+-+++ busybox-1.19.3-modinfo/modutils/modinfo.c
+-@@ -13,6 +13,7 @@
+- //config:config MODINFO
+- //config:	bool "modinfo"
+- //config:	default y
+-+//config:	select PLATFORM_LINUX
+- //config:	help
+- //config:	  Show information about a Linux Kernel module
+- 
+diff --git a/package/busybox/busybox-1.19.3/busybox-1.19.3-wget.patch b/package/busybox/busybox-1.19.3/busybox-1.19.3-wget.patch
+deleted file mode 100644
+index e98a506..0000000
+--- a/package/busybox/busybox-1.19.3/busybox-1.19.3-wget.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+---- busybox-1.19.3/networking/wget.c
+-+++ busybox-1.19.3-wget/networking/wget.c
+-@@ -552,6 +552,7 @@ static void download_one_url(const char 
+- 	FILE *dfp;                      /* socket to ftp server (data)      */
+- 	char *proxy = NULL;
+- 	char *fname_out_alloc;
+-+	char *redirected_path = NULL;
+- 	struct host_info server;
+- 	struct host_info target;
+- 
+-@@ -794,8 +795,8 @@ However, in real world it was observed t
+- 					bb_error_msg_and_die("too many redirections");
+- 				fclose(sfp);
+- 				if (str[0] == '/') {
+--					free(target.allocated);
+--					target.path = target.allocated = xstrdup(str+1);
+-+					free(redirected_path);
+-+					target.path = redirected_path = xstrdup(str+1);
+- 					/* lsa stays the same: it's on the same server */
+- 				} else {
+- 					parse_url(str, &target);
+-@@ -850,6 +851,7 @@ However, in real world it was observed t
+- 	free(server.allocated);
+- 	free(target.allocated);
+- 	free(fname_out_alloc);
+-+	free(redirected_path);
+- }
+- 
+- int wget_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
