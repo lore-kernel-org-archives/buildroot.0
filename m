@@ -1,39 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 23:30:55 +0100
-Subject: [Buildroot] [git commit] mxml: Use correct paths when installing
-	into staging.
-Message-ID: <20120214223534.42ED290A9E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Feb 2012 23:59:40 +0100
+Subject: [Buildroot] [git commit branch/next] DOWNLOAD_WGET: use -O
+	instead of -P to set output file
+In-Reply-To: <CA+appbOf=yN3pWw_HC12BL3sy=SUbMK2CE7pa6MeaQMvLwO6fg@mail.gmail.com>
+References: <20120214115140.4C70390A99@busybox.osuosl.org>
+ <87k43pv0mi.fsf@macbook.be.48ers.dk>
+ <CA+appbOf=yN3pWw_HC12BL3sy=SUbMK2CE7pa6MeaQMvLwO6fg@mail.gmail.com>
+Message-ID: <201202142359.40902.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d54dc133e19051c24c58b327eda6b9f496f876e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tuesday 14 February 2012 18:54:22 Spenser Gilliland wrote:
+> After greping through the source the enormity of that patch and the
+> potential for out of tree breakage suggest a different course of
+> action.  A possible solution may be to scan the SITE var for a
+> question mark and only change to non-slash mode on that occasion.
+> Would this be reasonable?
 
-The DSTROOT option passed for the staging install would install
-into the target directory, which is not what was intended.
+ Yeah, my patch was too easy :-)
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/mxml/mxml.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ I think it's better to keep the split at the /
 
-diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
-index fb73670..c05c3a7 100644
---- a/package/mxml/mxml.mk
-+++ b/package/mxml/mxml.mk
-@@ -7,9 +7,9 @@ MXML_VERSION = 2.6
- MXML_SITE = http://ftp.easysw.com/pub/mxml/2.6
- MXML_INSTALL_STAGING = YES
- 
--MXML_INSTALL_STAGING_OPT = DSTROOT=$(TARGET_DIR) install
-+MXML_INSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) install
- MXML_INSTALL_TARGET_OPT = DSTROOT=$(TARGET_DIR) install
--MXML_UNINSTALL_STAGING_OPT = DSTROOT=$(TARGET_DIR) uninstall
-+MXML_UNINSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) uninstall
- MXML_UNINSTALL_TARGET_OPT = DSTROOT=$(TARGET_DIR) uninstall
- 
- $(eval $(call AUTOTARGETS))
+ We could use either
+microblaze_v2.0.git;a=blob;f=microblaze-unknown-linux-gnu.tgz
+or
+?p=xldk/microblaze_v2.0.git;a=blob;f=microblaze-unknown-linux-gnu.tgz
+as the _SOURCE.  Of course, that still requires some serious massaging
+to avoid funky filenames that break everything.  So probably not an
+option either.
+
+ I think on the short term it is probably best to use a work-around
+like for the blackfin toolchain: a non-standard download target, that
+doesn't use the DOWNLOAD function but a custom $(WGET) call.
+
+ On the longer term we could try to refactor that into the generic
+DOWNLOAD function.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120214/dc64ecd5/attachment-0001.html>
