@@ -1,59 +1,49 @@
-From: Spenser Gilliland <spenser309@gmail.com>
-Date: Tue, 14 Feb 2012 10:14:52 -0600
-Subject: [Buildroot] [git commit branch/next] DOWNLOAD_WGET: use -O
- instead of -P to set output file
-In-Reply-To: <87sjidv1yx.fsf@macbook.be.48ers.dk>
-References: <20120214115140.4C70390A99@busybox.osuosl.org>
- <CA+appbOppm780+jAe6LKqGR9mendwqdtvfTEB=Cntrz=5RynSQ@mail.gmail.com>
- <CAM+bi4uo_s_xMy-XVfNhSBwwm70jMxmz5UXB71fbV+=pROYdNQ@mail.gmail.com>
- <87sjidv1yx.fsf@macbook.be.48ers.dk>
-Message-ID: <CA+appbNv_c0r_uDZWw=x3WiHtykt3xX9qrQUTA4YMFq-AUgZ4w@mail.gmail.com>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Tue, 14 Feb 2012 18:15:33 +0200
+Subject: [Buildroot] [PATCH] build: add 'file' option for 'make
+	defconfig'
+In-Reply-To: <201202141453.23995.arnout@mind.be>
+References: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
+ <CAAXf6LVPo6hWwJFUm3dzFYPAVvC=_=aBP1B7XSQ26spoyuEYFA@mail.gmail.com>
+ <CAMP44s2yuoJ38UdeaRbgeLo9QvPDgrv1roPzgjKL-QZdt7W54g@mail.gmail.com>
+ <201202141453.23995.arnout@mind.be>
+Message-ID: <CAMP44s1GvXK-9h_Rs2QNL6g4jBQfHnZ2gdYdRn+oTYxgDC4g3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This workaround works; however, the default is to prepend a / to the
-front of the source name.  This leads to the following being
-downloaded.
-
---2012-02-14 10:10:40--
-http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;f=/microblaze-unknown-linux-gnu.tgz
-
-instead of
-
---2012-02-14 10:10:40--
-http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;f=microblaze-unknown-linux-gnu.tgz
-
-Without the slash the download should work. Peter should the patch
-remove the prepended slash as well?
-
-Spenser
-
-On Tue, Feb 14, 2012 at 10:01 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
->>>>>> "Alvaro" == Alvaro Gamez <alvaro.gamez@hazent.com> writes:
+On Tue, Feb 14, 2012 at 3:53 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Tuesday 14 February 2012 13:44:03 Felipe Contreras wrote:
 >
-> ?Alvaro> Maybe it's possible to escape them?
-> ?Alvaro> TOOLCHAIN_EXTERNAL_SITE="http://git.xilinx.com/?p=xldk/microblaze_v2.0.git\;a=
-> ?Alvaro> blob;f="
+>> > If one creates a defconfig file, why not store it in 'configs' ?
 >
-> Yes, or use single quotes (') instead of double quotes (").
+>>
 >
-> ?>> ? ? ? ?test -e $(DL_DIR)/$(2) || \
-> ?>> - ? ? ? $(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
-> ?>> + ? ? ? $(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
+>> Because it's personal.
 >
-> We should probably change it to:
+>>
 >
-> $(WGET) -O $(DL_DIR)/$(2) '$(call qstrip,$(1))/$(2)'
+>> I want to be able to clone buildroot, and 'make defconfig
 >
-> --
-> Bye, Peter Korsgaard
+>> file=/media/drive/notes/my-buildroot-config'.
+>
+>
+> Same here.
+>
+>
+> BTW, regarding the naming: eventually I'd like to include BR2_DEFCONFIG
+>
+> in the .config, which gets qstripped to DEFCONFIG in the Makefile. This can
+>
+> be used to be able to store the config again, similar to
+> linux-update-defconfig.
 
+That would be nice. I just do 'make savedefconfig' and manually merge
+the changes with gvimdiff (I might not want all of them).
 
+Cheers.
 
 -- 
-Spenser Gilliland
-Computer Engineer
-Illinois Institute of Technology
+Felipe Contreras
