@@ -1,52 +1,120 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Feb 2012 00:46:57 +0100
-Subject: [Buildroot] [PATCH v3-resend 2/2] new program:
-	usb_modeswitch_data
-In-Reply-To: <CAC78GpeY=K+DFxVn_USw=G3c+jAB_Fa0+MtVGTvsBhQiGt3Mwg@mail.gmail.com>
-References: <1329073793-524-1-git-send-email-jwoltz@gmail.com>
- <CAAXf6LVC7C3mWLhvkFWONt3=4M=29wysdbGiw7nkRdmgSnBGWw@mail.gmail.com>
- <CAC78GpeY=K+DFxVn_USw=G3c+jAB_Fa0+MtVGTvsBhQiGt3Mwg@mail.gmail.com>
-Message-ID: <201202150046.57364.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 15 Feb 2012 00:48:57 +0100
+Subject: [Buildroot] [PATCH] tcl: replace option to install library only
+	with positive option to install tclsh
+In-Reply-To: <201202150046.57364.arnout@mind.be>
+References: <201202150046.57364.arnout@mind.be>
+Message-ID: <1329263337-14994-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 13 February 2012 17:59:46 J.C. Woltz wrote:
-> The script that get
-> called from udev when it detects a device,
-> usr/sbin/usb_modeswitch_dispatcher, uses tclsh. Specifically
-> #!/usr/bin/tclsh
-> 
-> Three questions:
-> 1. Should usb_modeswitch_data depend on tcl? (BR2_PACKAGE_TCL)
- Certainly.  Or rather, it should select it :-)
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-> 2. The tcl package creates a usr/bin/tclsh8.4 but not a usr/bin/tclsh.
-> Should the BR2_PACKAGE_TCL when BR2_PACKAGE_TCL_SHLIB_ONLY is not
-> selected, create a symlink?
- I guess it should...
+Without this patch, it was impossible for a package that relies on
+the tclsh interpreter to select it.  This patch replaces the
+negative BR2_PACKAGE_TCL_SHLIB_ONLY config with the positive
+BR2_PACKAGE_TCL_TCLSH config.
 
-> 3. How do I tell usb_modeswitch_data to depend on BR2_PACKAGE_TCL but
-> to exclude BR2_PACKAGE_TCL_SHLIB_ONLY?
- Good question...  You can make the usb_modeswitch_data package depend
-on !BR2_PACKAGE_TCL_SHLIB_ONLY.  Or you could define a new 
-BR2_PACKAGE_TCL_TCLSH config, and make BR2_PACKAGE_TCL_SHLIB_ONLY
-depend on !BR2_PACKAGE_TCL_TCLSH.
+Also a few minor fixes to the mk-file:
 
+- Stripping the library didn't work because it was installed read-only.
 
- Regards,
- Arnout
+- Create a symlink tclsh -> tclsh8.4.
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+I didn't think the minor fixes were relevant to send as separate patches.
+If I should split them up, please tell me which one should come first.
 
+Regards,
+Arnout
+---
+ package/tcl/Config.in |   20 ++++++++++----------
+ package/tcl/tcl.mk    |   29 ++++++++++++++++++++---------
+ 2 files changed, 30 insertions(+), 19 deletions(-)
+
+diff --git a/package/tcl/Config.in b/package/tcl/Config.in
+index 7a4d887..e5d377b 100644
+--- a/package/tcl/Config.in
++++ b/package/tcl/Config.in
+@@ -5,10 +5,18 @@ config BR2_PACKAGE_TCL
+ 
+ 	  http://www.tcl.tk
+ 
++if BR2_PACKAGE_TCL
++
++config BR2_PACKAGE_TCL_TCLSH
++	bool "install tclsh"
++	help
++	  Install tclsh, the TCL interpreter.
++
++	  Takes ~14kb on top of the libraries.
++
+ config BR2_PACKAGE_TCL_DEL_ENCODINGS
+ 	bool "delete encodings (saves 1.4Mb)"
+ 	default y
+-	depends on BR2_PACKAGE_TCL
+ 	help
+ 	  Delete encoding files for TCL. If your programs do not use
+ 	  various tcl character recoding functions, you may safely
+@@ -16,12 +24,4 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
+ 
+ 	  It saves approx. 1.4 Mb of space.
+ 
+-config BR2_PACKAGE_TCL_SHLIB_ONLY
+-	bool "install only shared library"
+-	default y
+-	depends on BR2_PACKAGE_TCL
+-	help
+-	  Install only TCL shared library and not binary tcl
+-	  interpreter(tclsh8.4).
+-
+-	  Saves ~14kb.
++endif
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 8ed81ab..6883619 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -19,17 +19,28 @@ HOST_TCL_CONF_OPT = \
+ 		--disable-langinfo \
+ 		--disable-framework
+ 
+-define TCL_POST_INSTALL_CLEANUP
+-	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
+-	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
+-	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
+-	fi
+-	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
+-	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
+-	fi
++# libtcl is installed with mode 444, so correct that first.
++define TCL_POST_INSTALL_STRIP
++	chmod +w $(TARGET_DIR)/usr/lib/libtcl$(TCL_VERSION_MAJOR).so
++	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl$(TCL_VERSION_MAJOR).so
+ endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_STRIP
++
++define TCL_POST_INSTALL_RM_ENCODINGS-y
++	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*
++endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_RM_ENCODINGS-$(BR2_PACKAGE_TCL_DEL_ENCODINGS)
++
++define TCL_POST_INSTALL_RM_TCLSH-
++	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
++endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_RM_TCLSH-$(BR2_PACKAGE_TCL_TCLSH)
++
++define TCL_POST_INSTALL_LN_TCLSH-y
++	ln -snf tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
++endef
++TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_LN_TCLSH-$(BR2_PACKAGE_TCL_TCLSH)
+ 
+-TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
+ 
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120215/24c5e138/attachment.html>
+1.7.8.3
