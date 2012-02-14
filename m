@@ -1,47 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 12:07:27 +0100
-Subject: [Buildroot] [git commit branch/next] DOWNLOAD_WGET: use -O instead
-	of -P to set output file
-Message-ID: <20120214115140.4C70390A99@busybox.osuosl.org>
+Date: Tue, 14 Feb 2012 13:08:23 +0100
+Subject: [Buildroot] [git commit branch/next] Makefile: use /etc/os-release
+	for version info rather than /etc/br-version
+Message-ID: <20120214121000.DDC1090A9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cf2486bf317e4bbf88c801fb96183ba62be78cc8
+commit: http://git.buildroot.net/buildroot/commit/?id=451a887894faddef019e9a0628c21b5f2e9eee56
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Some URLs use url-encoded arguments to specify the file to download.
-Wget will then use an output file name which includes all the ampersands
-and such.  However, this is not what we see from buildroot.
+/etc/os-release is becoming a standard interface for distribution
+name/version info, so let's use that instead of the nonstandard
+/etc/br-version. Format of the file is something like:
 
-E.g.:
-FOO_SITE="http://git.foo.com/?p=foo.git;a=blob;f="
-FOO_SOURCE="foo.tgz"
+NAME=Buildroot
+VERSION=2012.02-rc1-00003-g2d10e81
+ID=buildroot
+VERSION_ID=2012.02-rc1
+PRETTY_NAME="Buildroot 2012.02-rc1"
 
-wget will download this into $(DL_DIR)/index.html?p=foo.git;a=blob;f=foo.tgz
-buildroot thinks it's in $(DL_DIR)/foo.tgz
+For more details, see:
 
-To make sure the view of wget and buildroot are consistent, specify
-the output file explicitly.
+http://0pointer.de/public/systemd-man/os-release.html
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.package.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Makefile |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index 33461b4..ea44c6c 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -238,7 +238,7 @@ endef
+diff --git a/Makefile b/Makefile
+index 7d8dd2e..8a8b676 100644
+--- a/Makefile
++++ b/Makefile
+@@ -477,7 +477,13 @@ endif
+ 	else \
+ 		/sbin/ldconfig -r $(TARGET_DIR); \
+ 	fi
+-	echo $(BR2_VERSION_FULL) > $(TARGET_DIR)/etc/br-version
++	( \
++		echo "NAME=Buildroot"; \
++		echo "VERSION=$(BR2_VERSION_FULL)"; \
++		echo "ID=buildroot"; \
++		echo "VERSION_ID=$(BR2_VERSION)"; \
++		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
++	) >  $(TARGET_DIR)/etc/os-release
  
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
-+	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
- endef
- 
- define SOURCE_CHECK_WGET
+ ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
+ 	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
