@@ -1,33 +1,59 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 14 Feb 2012 17:07:52 +0100
-Subject: [Buildroot] [git commit branch/next] Makefile: use
- /etc/os-release for version info rather than /etc/br-version
-In-Reply-To: <20120214121000.DDC1090A9E@busybox.osuosl.org>
-References: <20120214121000.DDC1090A9E@busybox.osuosl.org>
-Message-ID: <4F3A86D8.5010605@lucaceresoli.net>
+From: Spenser Gilliland <spenser309@gmail.com>
+Date: Tue, 14 Feb 2012 10:14:52 -0600
+Subject: [Buildroot] [git commit branch/next] DOWNLOAD_WGET: use -O
+ instead of -P to set output file
+In-Reply-To: <87sjidv1yx.fsf@macbook.be.48ers.dk>
+References: <20120214115140.4C70390A99@busybox.osuosl.org>
+ <CA+appbOppm780+jAe6LKqGR9mendwqdtvfTEB=Cntrz=5RynSQ@mail.gmail.com>
+ <CAM+bi4uo_s_xMy-XVfNhSBwwm70jMxmz5UXB71fbV+=pROYdNQ@mail.gmail.com>
+ <87sjidv1yx.fsf@macbook.be.48ers.dk>
+Message-ID: <CA+appbNv_c0r_uDZWw=x3WiHtykt3xX9qrQUTA4YMFq-AUgZ4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=451a887894faddef019e9a0628c21b5f2e9eee56
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
->
-> /etc/os-release is becoming a standard interface for distribution
-> name/version info, so let's use that instead of the nonstandard
-> /etc/br-version. Format of the file is something like:
->
-> NAME=Buildroot
-> VERSION=2012.02-rc1-00003-g2d10e81
-> ID=buildroot
-> VERSION_ID=2012.02-rc1
-> PRETTY_NAME="Buildroot 2012.02-rc1"
+This workaround works; however, the default is to prepend a / to the
+front of the source name.  This leads to the following being
+downloaded.
 
-Nice.
-I just wish PRETTY_NAME had at least a "-dirty" suffix to make it
-clear that it is not exactly equal to 2012.02-rc1 (at least when using
-a git clone).
+--2012-02-14 10:10:40--
+http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;f=/microblaze-unknown-linux-gnu.tgz
 
-Luca
+instead of
+
+--2012-02-14 10:10:40--
+http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;f=microblaze-unknown-linux-gnu.tgz
+
+Without the slash the download should work. Peter should the patch
+remove the prepended slash as well?
+
+Spenser
+
+On Tue, Feb 14, 2012 at 10:01 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+>>>>>> "Alvaro" == Alvaro Gamez <alvaro.gamez@hazent.com> writes:
+>
+> ?Alvaro> Maybe it's possible to escape them?
+> ?Alvaro> TOOLCHAIN_EXTERNAL_SITE="http://git.xilinx.com/?p=xldk/microblaze_v2.0.git\;a=
+> ?Alvaro> blob;f="
+>
+> Yes, or use single quotes (') instead of double quotes (").
+>
+> ?>> ? ? ? ?test -e $(DL_DIR)/$(2) || \
+> ?>> - ? ? ? $(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
+> ?>> + ? ? ? $(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
+>
+> We should probably change it to:
+>
+> $(WGET) -O $(DL_DIR)/$(2) '$(call qstrip,$(1))/$(2)'
+>
+> --
+> Bye, Peter Korsgaard
+
+
+
+-- 
+Spenser Gilliland
+Computer Engineer
+Illinois Institute of Technology
