@@ -1,42 +1,51 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 14 Feb 2012 10:55:01 +0100
-Subject: [Buildroot] simple question about dropbear
-In-Reply-To: <BAB70BB3-C317-49C7-80E2-016DD9BECAF1@informatik.uni-bremen.de>
- (Johannes Teiwes's message of "Tue, 14 Feb 2012 10:30:45 +0100")
-References: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
- <871uq32cin.fsf@macbook.be.48ers.dk>
- <E38CC59C-6BA9-4775-9A90-5D4C13A78902@informatik.uni-bremen.de>
- <CA+appbOjdSO6HqBNCALy_SmfkKycJNV_gHJqxY1aQbfyQbXMdg@mail.gmail.com>
- <87zkcmwjsg.fsf@macbook.be.48ers.dk>
- <BAB70BB3-C317-49C7-80E2-016DD9BECAF1@informatik.uni-bremen.de>
-Message-ID: <87aa4lwxhm.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 14 Feb 2012 10:56:52 +0100
+Subject: [Buildroot] [PATCH] DOWNLOAD_WGET: use -O instead of -P to set
+	output file
+In-Reply-To: <CAM+bi4vAuMsH5=YU6_KAuzF6PVdjE4Ay76hqQzaoHp=Wzb0vvg@mail.gmail.com>
+References: <CAM+bi4vAuMsH5=YU6_KAuzF6PVdjE4Ay76hqQzaoHp=Wzb0vvg@mail.gmail.com>
+Message-ID: <1329213412-29918-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Johannes" == Johannes Teiwes <jteiwes@informatik.uni-bremen.de> writes:
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-Hi,
+Some URLs use url-encoded arguments to specify the file to download.
+Wget will then use an output file name which includes all the ampersands
+and such.  However, this is not what we see from buildroot.
 
- Johannes> I have also BR2_PACKAGE_DROPBEAR_SMALL enabled in my
- Johannes> configuration.  The 'slowness' can be the cause since the
- Johannes> microblaze machine only runs at about 66MHz.
+E.g.:
+FOO_SITE="http://git.foo.com/?p=foo.git;a=blob;f="
+FOO_SOURCE="foo.tgz"
 
- Johannes> Is there any way to convince dropbear/ssh to use a small (or
- Johannes> precomputed) session key?  If this is possible one could
- Johannes> check, if the system-speed is really the limiting factor.
+wget will download this into $(DL_DIR)/index.html?p=foo.git;a=blob;f=foo.tgz
+buildroot thinks it's in $(DL_DIR)/foo.tgz
 
-Not afaik. You could try disabling DROPBEAR_SMALL and rebuild dropbear
-(rm -rf output/build/dropbear-*; make)
+To make sure the view of wget and buildroot are consistent, specify
+the output file explicitly.
 
- Johannes> I am using static device tables and the default dev_table as
- Johannes> my structure - maybe there are some devices missing or
- Johannes> misconfigured for doing ssh right out of the box?
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Alvaro, this should fix the download problem in a more generic way.
+---
+ package/Makefile.package.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-No, it should afaik work out of the box. Does it put anything sensible
-in /var/log/messages?
-
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 33461b4..ea44c6c 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -238,7 +238,7 @@ endef
+ 
+ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
++	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
+ endef
+ 
+ define SOURCE_CHECK_WGET
 -- 
-Bye, Peter Korsgaard
+1.7.8.3
