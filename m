@@ -1,66 +1,36 @@
-From: Johannes Teiwes <jteiwes@informatik.uni-bremen.de>
-Date: Tue, 14 Feb 2012 11:59:01 +0100
-Subject: [Buildroot] simple question about dropbear
-In-Reply-To: <87aa4lwxhm.fsf@macbook.be.48ers.dk>
-References: <853BA8D0-AD4E-4B14-A9E7-EC9908AE5C9A@informatik.uni-bremen.de>
- <871uq32cin.fsf@macbook.be.48ers.dk>
- <E38CC59C-6BA9-4775-9A90-5D4C13A78902@informatik.uni-bremen.de>
- <CA+appbOjdSO6HqBNCALy_SmfkKycJNV_gHJqxY1aQbfyQbXMdg@mail.gmail.com>
- <87zkcmwjsg.fsf@macbook.be.48ers.dk>
- <BAB70BB3-C317-49C7-80E2-016DD9BECAF1@informatik.uni-bremen.de>
- <87aa4lwxhm.fsf@macbook.be.48ers.dk>
-Message-ID: <9B35465D-CF0F-4987-9534-A944625D2454@informatik.uni-bremen.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 14 Feb 2012 12:27:29 +0100
+Subject: [Buildroot] [git commit] python: workaround distutils issue
+	with binary extensions
+In-Reply-To: <4F3A3169.9080109@visionsystems.de> (Yegor Yefremov's message of
+ "Tue, 14 Feb 2012 11:03:21 +0100")
+References: <20120214095225.A3DBC90A9D@busybox.osuosl.org>
+ <4F3A3169.9080109@visionsystems.de>
+Message-ID: <8762f9wt7i.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, 
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-Am 14.02.2012 um 10:55 schrieb Peter Korsgaard:
+Hi,
 
->>>>>> "Johannes" == Johannes Teiwes <jteiwes@informatik.uni-bremen.de> writes:
-> 
-> Hi,
-> 
-> Johannes> I have also BR2_PACKAGE_DROPBEAR_SMALL enabled in my
-> Johannes> configuration.  The 'slowness' can be the cause since the
-> Johannes> microblaze machine only runs at about 66MHz.
-> 
-> Johannes> Is there any way to convince dropbear/ssh to use a small (or
-> Johannes> precomputed) session key?  If this is possible one could
-> Johannes> check, if the system-speed is really the limiting factor.
-> 
-> Not afaik. You could try disabling DROPBEAR_SMALL and rebuild dropbear
-> (rm -rf output/build/dropbear-*; make)
+ Yegor> I hope this talk will change the situation in the future: https://us.pycon.org/2012/schedule/presentation/11/.
 
-Disabling the .._SMALL option and rebuilding didn't help either :/ (same behavior)
+Yes, let's hope so.
 
-> 
-> Johannes> I am using static device tables and the default dev_table as
-> Johannes> my structure - maybe there are some devices missing or
-> Johannes> misconfigured for doing ssh right out of the box?
-> 
-> No, it should afaik work out of the box. Does it put anything sensible
-> in /var/log/messages?
+ Yegor> I've tried to raise this issue in distutils mailing list, but no
+ Yegor> one answered:
+ Yegor> http://python.6.n6.nabble.com/RFC-real-cross-compiling-support-for-Distutils2-td4368968.html
 
-Nothing special so far:
+Thanks.
 
-Jan  1 00:01:07 **** authpriv.info dropbear[64]: Child connection from 192.168.xxx.xxx:50429
-Jan  1 00:11:42 **** authpriv.info dropbear[64]: Exit before auth: Timeout before auth
+ Yegor> Peter, have you tried to make the following python patches upstream?
 
-> 
-> -- 
-> Bye, Peter Korsgaard
+No, I haven't. I'm not the author of them (Thomas did - I think he based
+them on patches in openwrt).
 
-I think i go for a test drive with openssh.
-
---
-Johannes Teiwes - jteiwes at tzi.de
-
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120214/8617413d/attachment.html>
+-- 
+Bye, Peter Korsgaard
