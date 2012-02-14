@@ -1,39 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 00:13:09 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.2.x stable
-	versions
-Message-ID: <20120214075235.C512E90A9D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 14 Feb 2012 08:01:54 +0100
+Subject: [Buildroot] [PATCH v4] busybox: add watchdog daemon startup
+	script
+In-Reply-To: <1329126893-6876-1-git-send-email-fabio.porcedda@telit.com>
+References: <1329126893-6876-1-git-send-email-fabio.porcedda@telit.com>
+Message-ID: <201202140801.54405.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74c7b15a90c78098ca170757b11b8068e2d46d52
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Monday 13 February 2012 10:54:53 Fabio Porcedda wrote:
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Nice!
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 3c4b3db..86d6c32 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.19"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.21"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.5"		if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.6"		if BR2_KERNEL_HEADERS_3_2
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.19-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.21-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.19-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.21-headers_install-fix-__packed-in-exported-kernel-head.patch
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120214/1b8f2da2/attachment-0001.html>
