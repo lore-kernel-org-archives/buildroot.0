@@ -1,33 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 23:33:37 +0100
-Subject: [Buildroot] [git commit branch/next] DOWNLOAD_WGET: use -O
-	instead of -P to set output file
-In-Reply-To: <CA+appbOf=yN3pWw_HC12BL3sy=SUbMK2CE7pa6MeaQMvLwO6fg@mail.gmail.com>
- (Spenser Gilliland's message of "Tue, 14 Feb 2012 11:54:22 -0600")
-References: <20120214115140.4C70390A99@busybox.osuosl.org>
- <CA+appbOppm780+jAe6LKqGR9mendwqdtvfTEB=Cntrz=5RynSQ@mail.gmail.com>
- <CAM+bi4uo_s_xMy-XVfNhSBwwm70jMxmz5UXB71fbV+=pROYdNQ@mail.gmail.com>
- <87sjidv1yx.fsf@macbook.be.48ers.dk>
- <CA+appbNv_c0r_uDZWw=x3WiHtykt3xX9qrQUTA4YMFq-AUgZ4w@mail.gmail.com>
- <87k43pv0mi.fsf@macbook.be.48ers.dk>
- <CA+appbOf=yN3pWw_HC12BL3sy=SUbMK2CE7pa6MeaQMvLwO6fg@mail.gmail.com>
-Message-ID: <87y5s5t58e.fsf@macbook.be.48ers.dk>
+Date: Tue, 14 Feb 2012 23:30:55 +0100
+Subject: [Buildroot] [git commit] mxml: Use correct paths when installing
+	into staging.
+Message-ID: <20120214223534.42ED290A9E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Spenser" == Spenser Gilliland <spenser309@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d54dc133e19051c24c58b327eda6b9f496f876e7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Spenser> Peter,
- Spenser> After greping through the source the enormity of that patch and the
- Spenser> potential for out of tree breakage suggest a different course of
- Spenser> action.  A possible solution may be to scan the SITE var for a
- Spenser> question mark and only change to non-slash mode on that occasion.
- Spenser> Would this be reasonable?
+The DSTROOT option passed for the staging install would install
+into the target directory, which is not what was intended.
 
-Hmm, neither solution is really nice. Let me think a bit more about it.
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mxml/mxml.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index fb73670..c05c3a7 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -7,9 +7,9 @@ MXML_VERSION = 2.6
+ MXML_SITE = http://ftp.easysw.com/pub/mxml/2.6
+ MXML_INSTALL_STAGING = YES
+ 
+-MXML_INSTALL_STAGING_OPT = DSTROOT=$(TARGET_DIR) install
++MXML_INSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) install
+ MXML_INSTALL_TARGET_OPT = DSTROOT=$(TARGET_DIR) install
+-MXML_UNINSTALL_STAGING_OPT = DSTROOT=$(TARGET_DIR) uninstall
++MXML_UNINSTALL_STAGING_OPT = DSTROOT=$(STAGING_DIR) uninstall
+ MXML_UNINSTALL_TARGET_OPT = DSTROOT=$(TARGET_DIR) uninstall
+ 
+ $(eval $(call AUTOTARGETS))
