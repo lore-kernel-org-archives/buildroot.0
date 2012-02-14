@@ -1,36 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 12:27:29 +0100
-Subject: [Buildroot] [git commit] python: workaround distutils issue
-	with binary extensions
-In-Reply-To: <4F3A3169.9080109@visionsystems.de> (Yegor Yefremov's message of
- "Tue, 14 Feb 2012 11:03:21 +0100")
-References: <20120214095225.A3DBC90A9D@busybox.osuosl.org>
- <4F3A3169.9080109@visionsystems.de>
-Message-ID: <8762f9wt7i.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 14 Feb 2012 12:51:09 +0100
+Subject: [Buildroot] [PATCH] DOWNLOAD_WGET: use -O instead of -P to set
+	output file
+In-Reply-To: <1329213412-29918-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 14 Feb 2012 10:56:52 +0100")
+References: <CAM+bi4vAuMsH5=YU6_KAuzF6PVdjE4Ay76hqQzaoHp=Wzb0vvg@mail.gmail.com>
+ <1329213412-29918-1-git-send-email-arnout@mind.be>
+Message-ID: <871upxws42.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Hi,
+ Arnout> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+ Arnout> Some URLs use url-encoded arguments to specify the file to download.
+ Arnout> Wget will then use an output file name which includes all the ampersands
+ Arnout> and such.  However, this is not what we see from buildroot.
 
- Yegor> I hope this talk will change the situation in the future: https://us.pycon.org/2012/schedule/presentation/11/.
+ Arnout> E.g.:
+ Arnout> FOO_SITE="http://git.foo.com/?p=foo.git;a=blob;f="
+ Arnout> FOO_SOURCE="foo.tgz"
 
-Yes, let's hope so.
-
- Yegor> I've tried to raise this issue in distutils mailing list, but no
- Yegor> one answered:
- Yegor> http://python.6.n6.nabble.com/RFC-real-cross-compiling-support-for-Distutils2-td4368968.html
-
-Thanks.
-
- Yegor> Peter, have you tried to make the following python patches upstream?
-
-No, I haven't. I'm not the author of them (Thomas did - I think he based
-them on patches in openwrt).
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
