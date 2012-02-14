@@ -1,52 +1,138 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 14 Feb 2012 13:08:23 +0100
-Subject: [Buildroot] [git commit branch/next] Makefile: use /etc/os-release
-	for version info rather than /etc/br-version
-Message-ID: <20120214121000.DDC1090A9E@busybox.osuosl.org>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Tue, 14 Feb 2012 14:37:55 +0200
+Subject: [Buildroot] [PATCH 3/3] .gitignore: remove wrong entries
+In-Reply-To: <CAAXf6LVq7X9-W7syJKUyaz+VyC3+tzGq6A4XMz96ZUqsrR77=w@mail.gmail.com>
+References: <1328918676-19482-1-git-send-email-felipe.contreras@gmail.com>
+ <1328918676-19482-4-git-send-email-felipe.contreras@gmail.com>
+ <CAAXf6LXsQCsdwswHGa=Ei-+DkB7OyJbKnz7MhatTeEgCk5MMWw@mail.gmail.com>
+ <CAMP44s10qfDsyg69vHqsR-Lu3V9uJoJH6AY46xETJ=T-ijhxQA@mail.gmail.com>
+ <CAAXf6LVq7X9-W7syJKUyaz+VyC3+tzGq6A4XMz96ZUqsrR77=w@mail.gmail.com>
+Message-ID: <CAMP44s0iCviFTU6KePbX=Kv+oWbasefCUSSBN977+ROkADhxBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=451a887894faddef019e9a0628c21b5f2e9eee56
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, Feb 14, 2012 at 11:37 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi,
+>
+> On Sun, Feb 12, 2012 at 12:01 AM, Felipe Contreras
+> <felipe.contreras@gmail.com> wrote:
+>> On Sat, Feb 11, 2012 at 10:08 PM, Thomas De Schampheleire
+>> <patrickdepinguin@gmail.com> wrote:
+>>>
+>>> Op 11 feb. 2012 01:05 schreef "Felipe Contreras"
+>>> <felipe.contreras@gmail.com> het volgende:
+>>>
+>>>
+>>>>
+>>>> These should go into a personal file, like:
+>>>> core.excludesfile=/home/felipec/.gitignore
+>>>> ?.*.sw[nop]
+>>>>
+>>>> Some people might prefer to see patches, rejects and other files in the
+>>>> output of 'git status' (e.g. me).
+>>>>
+>>>> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+>>>> ---
+>>>> ?.gitignore | ? ?7 -------
+>>>> ?1 files changed, 0 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/.gitignore b/.gitignore
+>>>> index 685a9c2..1a7d636 100644
+>>>> --- a/.gitignore
+>>>> +++ b/.gitignore
+>>>> @@ -5,10 +5,3 @@
+>>>> ?/.config.old
+>>>> ?/..config.tmp
+>>>> ?/.config
+>>>> -*.depend
+>>>> -*.o
+>>>> -/*.patch
+>>>> -/*.diff
+>>>> -*.orig
+>>>> -*.rej
+>>>> -*~
+>>>
+>>> I personally don't agree. I don't think such ignores can be in a personal
+>>> gitignore file. Such a personal file will be used for all git repositories,
+>>> and you simply cannot state that no single project will use files with e.g.
+>>> a .orig extension. In my opinion this is project specific.
+>>
+>> You can have personal per-project ignore files as well.
+>
+> Ok, I wasn't aware of that (not using git).
+>
+>>
+>>> I'm neutral on the .patch and .diff change, but I think that .depend, .o,
+>>> .orig, .rej and ~ backups should remain in .gitignore.
+>>
+>> *.o and *.depend should be there, as they are the output of the build system.
+>>
+>> *.orig and *.reject and *~ should not, as they depend on the tools.
+>>
+>> I suspect *~ comes from vim backups, which many people have disabled,
+>> and many people don't even use vi.
+>
+> It's difficult to quantify 'many' here. I can just as safely say that
+> many people do use vi and many people have not disabled ~ backups.
 
-/etc/os-release is becoming a standard interface for distribution
-name/version info, so let's use that instead of the nonstandard
-/etc/br-version. Format of the file is something like:
+It doesn't matter, what matters is that they are *personal*.
 
-NAME=Buildroot
-VERSION=2012.02-rc1-00003-g2d10e81
-ID=buildroot
-VERSION_ID=2012.02-rc1
-PRETTY_NAME="Buildroot 2012.02-rc1"
+>> Say, I have configured my editor to
+>> save backups with *.bak, should that be on the list? No, that's
+>> _personal_. If you want *~, or *.bak, to be ignored, you can put that
+>> in your global gitignore.
+>>
+>> *.orig and *.reject are also not particular to busybox, they can be on
+>> the global gitignore. And some people, like me, want to be able to see
+>> then when typing 'git status'. So this is a _personal_ choice.
+>
+> I'm sure you mean buildroot here.
+>
+> If you are to remove all these entries from the .gitignore file, you
+> are basically forcing people to create such a personal .gitignore
+> file. The defaults of the buildroot project are no longer sane.
 
-For more details, see:
+No, they don't have to.
 
-http://0pointer.de/public/systemd-man/os-release.html
+> To be honest, I'm not sure if your use case of seeing all files with
+> plain 'git status' is a common one, and thus whether it's worth
+> changing the experience for all other people just for that. In my
+> opinion, the default should be ok for most people.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+You would be hacking .gitignore for something it wasn't meant to be then:
+
+man gitignore
 ---
- Makefile |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+Which file to place a pattern in depends on how the pattern is meant
+to be used. Patterns which should be version-controlled and
+distributed to other repositories via clone (i.e., files that all
+developers will want to ignore) should go into a .gitignore file.
+---
 
-diff --git a/Makefile b/Makefile
-index 7d8dd2e..8a8b676 100644
---- a/Makefile
-+++ b/Makefile
-@@ -477,7 +477,13 @@ endif
- 	else \
- 		/sbin/ldconfig -r $(TARGET_DIR); \
- 	fi
--	echo $(BR2_VERSION_FULL) > $(TARGET_DIR)/etc/br-version
-+	( \
-+		echo "NAME=Buildroot"; \
-+		echo "VERSION=$(BR2_VERSION_FULL)"; \
-+		echo "ID=buildroot"; \
-+		echo "VERSION_ID=$(BR2_VERSION)"; \
-+		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
-+	) >  $(TARGET_DIR)/etc/os-release
- 
- ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
- 	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
+Notice the phrase *all developers*.
+
+---
+Patterns which are specific to a particular repository but which do
+not need to be shared with other related repositories (e.g., auxiliary
+files that live inside the repository but are specific to one user's
+workflow) should go into the $GIT_DIR/info/exclude file. Patterns
+which a user wants git to ignore in all situations (e.g., backup or
+temporary files generated by the user's editor of choice) generally go
+into a file specified by core.excludesfile in the user's ~/.gitconfig.
+---
+
+Notice the phrase *user's*.
+
+If you contribute to more than one project, you should not be pushing
+for all those projects to have *~ in the project's .gitignore, or
+*.patch, which will affect other users. You should just add it to your
+global gitignore file and be done with it.
+
+Cheers.
+
+-- 
+Felipe Contreras
