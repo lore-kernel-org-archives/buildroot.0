@@ -1,116 +1,46 @@
-From: Dechesne, Nicolas <n-dechesne@ti.com>
-Date: Wed, 15 Feb 2012 22:56:45 +0100
-Subject: [Buildroot] [PATCH 1/2] Add support for U-Boot SPL
-In-Reply-To: <201202102237.57366.arnout@mind.be>
-References: <1328402147-21404-1-git-send-email-n-dechesne@ti.com>
- <201202100058.02053.arnout@mind.be>
- <CALB96Nk748E0taoD_TGpsPyqe098yC6No-xzmLE+2EjHmtaZqw@mail.gmail.com>
- <201202102237.57366.arnout@mind.be>
-Message-ID: <CALB96NnRo1zYJRrKkXWwnJGMTJi0n1Ff4mCWWMXAy6TDYJ5FrA@mail.gmail.com>
+From: Nicolas Dechesne <n-dechesne@ti.com>
+Date: Wed, 15 Feb 2012 23:04:12 +0100
+Subject: [Buildroot] [PATCH 0/3 v2] Initial support for Panda and PandaES
+Message-ID: <1329343455-32714-1-git-send-email-n-dechesne@ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 10, 2012 at 10:37 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
+Here is my 2nd attempt to add support for TI PandaBoard and PandaBoard ES.
 
-> > > I think the only solution is to add a check in the .mk file if MLO and
->
-> > > u-boot.img indeed exist, and fall back to the default instead if not.
->
-> > >
->
-> >
->
-> > indeed, the u-boot.img does not seem to be created unless it's needed
-> (e.g.
->
-> > in OMAP case). so that might work.
->
-> >
->
-> > would you accept such a solution? if so i can update my patches with
-> that?
->
->
->  I don't see why we would not accept that solution.
->
->
->  However, I just saw that my remark applies to all other possible targets
-> as
->
-> well. It looks like the u-boot build produces just one of the possible
-> images
->
-> (kwb, ldr, bin, -nand.bin) so the user is responsible for choosing the
-> right
->
-> one in the config. So I guess you can disregard my original remark.
-> Although
->
-> actually, I'd prefer if the BR2_TARGET_UBOOT_FORMAT_* options would just go
->
-> away. The install commands can copy all of them, as far as they exist. But
->
-> you don't have to worry about that, Nicolas.
->
+v2:
 
-in fact I didn't realize the usage of BR2_TARGET_UBOOT_FORMAT_* until your
-message. so i have prepared a new patch set like this:
+ - typo cleanup as per reviews
+ - introduce BR2_TARGET_UBOOT_FORMAT_IMG to allow use of u-boot.img
+   on platforms that need it, like OMAP. This is better than v1 since
+   u-boot.img is not stricly dependent on SPL, so making 2 parameters
+   makes more sense.
 
-03675f3 configs: add support for PandaBoard and PandaBoard ES
-8872284 uboot: add a new binary format for u-boot.img
-f2157f3 uboot: Add support for U-Boot SPL
+v1:
 
-basically first I add u-boot SPL support which ensure xloader is not used,
-and copy MLO from uboot.
+Because we want to deprecate x-loader in favor of u-boot SPL:
+- my first patch adds support for SPL in BR
+- SPL is enabled by default in my panda config.
 
-then I create a new UBOOT_FORMAT_IMG set to u-boot.img, which can be set
-for the relevant targets.
+Both Panda and PandaES have been tested, detection is done at run time
+in uboot and kernel, so we can have 1 configuration only.
 
-then in the panda config I set the proper configs.
-
-i will resent the serie shortly
+I've used DEVTMPFS by default, as 1) I generally prefer this, and 2) ttyO
+was missing from the generic dev table... 
 
 
-> > > What is also missing is that the choice between the different image
-> types
->
-> > > should depend on !BR2_TARGET_UBOOT_SPL.
->
-> >
->
-> > sorry, i don't get this one. what do you mean?
->
->
->  There is a prompt 'U-Boot binary format' that selects which u-boot.* to
->
-> install. If you select SPL, the binary format must be .img. So you should
->
-> make sure that the Config.in enforces that.
->
->
->  Come to think of it, you can simply make the SPL one of the binary
->
-> formats. It's not exactly the same, of course, because MLO is a separate
->
-> file. But it serves the same purpose: select the binary format appropriate
->
-> for the target. So, move the BR2_TARGET_UBOOT_SPL config up 60 lines
->
-> so it becomes part of the binary format choice.
->
+Nicolas Dechesne (3):
+  uboot: Add support for U-Boot SPL
+  uboot: add a new binary format for u-boot.img
+  configs: add support for PandaBoard and PandaBoard ES
 
-well, SPL is not really the format. SPL is where we load the uboot file, it
-fact it would work with BIN format or IMG format. it's just that the name
-is 'hardcoded' there. if we rename uboot.img uboot.bin, then it works...
-when reading the file SPL will first try to detect if it's a IMG format
-(looking for MAGIC number), if not it would assume a BIN format...
+ boot/uboot/Config.in         |    9 +++++++++
+ boot/uboot/uboot.mk          |    4 ++++
+ configs/pandaboard_defconfig |   25 +++++++++++++++++++++++++
+ 3 files changed, 38 insertions(+), 0 deletions(-)
+ create mode 100644 configs/pandaboard_defconfig
 
-so really I think that adding another FORMAT is the right solution, and
-that would allow other platforms to use SPL with uboot.bin if that's what
-they need/want.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120215/a22b0ff0/attachment.html>
+-- 
+1.7.9
