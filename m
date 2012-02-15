@@ -1,44 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 15 Feb 2012 23:22:23 +0100
-Subject: [Buildroot] [git commit] libecore: tweak makekeys workaround for
-	make 3.82
-Message-ID: <20120215222628.08D9690AAD@busybox.osuosl.org>
+Date: Wed, 15 Feb 2012 08:41:05 +0100
+Subject: [Buildroot] [git commit branch/next] avahi: bump version
+Message-ID: <20120215222628.4E39D90AAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6628bca393f9f01c9b320f2eb60db51519ae54d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It seems that make 3.82 gets confused and considers makekeys
-out of date when there isn't a makekeys.o, so ensure that we
-create both makekeys and makekeys.o before building.
-
-Also move the workaround to the extract step so we can build using
-make's default rules rather than explicitly calling gcc.
+commit: http://git.buildroot.net/buildroot/commit/?id=68f651954705e3f90ede5b3fb647ccdb6c9226bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/efl/libecore/libecore.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/avahi/avahi.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
-index 2b668ab..db14356 100644
---- a/package/efl/libecore/libecore.mk
-+++ b/package/efl/libecore/libecore.mk
-@@ -76,11 +76,10 @@ LIBECORE_DEPENDENCIES += libxcb xlib_libX11 xcb-util
- # teach it about CC_FOR_BUILD, but for now simply build makekeys by
- # hand in advance
- define LIBECORE_BUILD_MAKEKEYS_FOR_HOST
--	cd $(@D)/src/util && $(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
--		-o makekeys makekeys.c
-+	$(HOST_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/src/util makekeys.o makekeys
- endef
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 739c5f2..3392614 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -10,7 +10,7 @@
+ # either version 2.1 of the License, or (at your option) any
+ # later version.
  
--LIBECORE_POST_CONFIGURE_HOOKS += LIBECORE_BUILD_MAKEKEYS_FOR_HOST
-+LIBECORE_POST_EXTRACT_HOOKS += LIBECORE_BUILD_MAKEKEYS_FOR_HOST
- else
- LIBECORE_CONF_OPT += --disable-ecore-x-xcb
- endif
+-AVAHI_VERSION = 0.6.30
++AVAHI_VERSION = 0.6.31
+ AVAHI_SOURCE = avahi-$(AVAHI_VERSION).tar.gz
+ AVAHI_SITE = http://www.avahi.org/download/
+ AVAHI_INSTALL_STAGING = YES
