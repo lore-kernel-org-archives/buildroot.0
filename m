@@ -1,54 +1,32 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Thu, 16 Feb 2012 00:09:59 +0100
-Subject: [Buildroot] [RFC PATCH v2 6/6] apply-patches.sh: change archive
-	management
-In-Reply-To: <20120215165405.GJ4723@ldesroches-Latitude-E6320>
-References: <20120215165405.GJ4723@ldesroches-Latitude-E6320>
-Message-ID: <1329347399-25541-1-git-send-email-ludovic.desroches@atmel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 15 Feb 2012 22:26:03 +0100
+Subject: [Buildroot] opencv with glibc
+In-Reply-To: <CAPeX=+vQJu2j2+auOTr8+q18hNa7q_ZD848Hj7B+DPGSJ8RDxQ@mail.gmail.com>
+References: <CAPeX=+tCiegGOeD2bi9+v8aOVrB=FjHo3XEAvp1b5tNfR85N-w@mail.gmail.com>
+ <CAPeX=+ubBEJeR9s+gH8ACDpUToXLA_rDqDwL4NT44BZ-PsfFsA@mail.gmail.com>
+ <CAHXCMMKLFopuH8ubCnaY2_1oKkXf-wXHmzV_Fvo77NAutCKOcw@mail.gmail.com>
+ <CAPeX=+s407S8aNwEZnKD4UAzJjR15-+juPYrJdXR+T4sEg6wEQ@mail.gmail.com>
+ <CAHXCMM+_TrnpuCA6C_8MbVkd1gyZLBmJ3kihufb-5snLguUs_A@mail.gmail.com>
+ <CAPeX=+vQJu2j2+auOTr8+q18hNa7q_ZD848Hj7B+DPGSJ8RDxQ@mail.gmail.com>
+Message-ID: <20120215222603.6754b8e6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Le Wed, 15 Feb 2012 21:35:25 +0200,
+Ozgun <ozgun.gunay@gmail.com> a ?crit :
 
-The way archives were managed was incorrect because the uncompressed archives
-were sent directly to patch command. It means that alphabetical patch orderwas
-not respected.
+> My br doesn't have output/toolchainfile.cmake file
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- support/scripts/apply-patches.sh |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+Which version of Buildroot are you using? Are you doing out-of-tree
+build (if so, then the toolchainfile.cmake file is in the output
+directory you selected with O=, not in output/).
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index d239943..a075afd 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -41,10 +41,6 @@ function apply_patch {
- 	type="zip"; uncomp="unzip -d"; ;; 
- 	*.Z)
- 	type="compress"; uncomp="uncompress -c"; ;; 
--	*.tgz)
--	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
--	*.tar)
--	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
- 	*)
- 	type="plaintext"; uncomp="cat"; ;; 
-     esac
-@@ -66,6 +62,12 @@ function scan_patchdir {
-     for i in `cd $path; ls -d $patches 2> /dev/null` ; do
-         if [ -d "${path}/$i" ] ; then
- 	    scan_patchdir "${path}/$i"
-+	elif echo "$i" | grep -q -E "\.tar(\..*)?$|\.tbz2?$|\.tgz$" ; then
-+            unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
-+	    rm -rf "$unpackedarchivedir" 2> /dev/null
-+	    mkdir "$unpackedarchivedir"
-+	    tar -C "$unpackedarchivedir" --strip-components=1 -xaf "${path}/$i"
-+	    scan_patchdir "$unpackedarchivedir"
-         else
-             apply_patch "$path" "$i" || exit 1
-         fi
+Thomas
 -- 
-1.7.5.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
