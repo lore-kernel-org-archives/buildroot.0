@@ -1,72 +1,51 @@
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Wed, 15 Feb 2012 17:51:04 +0100
-Subject: [Buildroot] [RFC PATCH 4/6] apply-patches.sh: directories are
- considered as a collection of patches
-In-Reply-To: <201202102340.46608.arnout@mind.be>
+Date: Wed, 15 Feb 2012 17:54:05 +0100
+Subject: [Buildroot] [RFC PATCH 6/6] apply-patches.sh: change archive
+ management
+In-Reply-To: <201202102348.08459.arnout@mind.be>
 References: <1328492839-13657-1-git-send-email-ludovic.desroches@atmel.com>
- <4497cd4c9ca71e3bba7da6b9906319f6c40862be.1328492511.git.ludovic.desroches@atmel.com>
- <201202102340.46608.arnout@mind.be>
-Message-ID: <20120215165104.GI4723@ldesroches-Latitude-E6320>
+ <76267ac6ba3ddac4379b9896f72875dedd455ebd.1328492511.git.ludovic.desroches@atmel.com>
+ <201202102348.08459.arnout@mind.be>
+Message-ID: <20120215165405.GJ4723@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
-
-On Fri, Feb 10, 2012 at 11:40:46PM +0100, Arnout Vandecappelle wrote:
->    On Monday 06 February 2012 02:47:17 ludovic.desroches at atmel.com wrote:
+On Fri, Feb 10, 2012 at 11:48:08PM +0100, Arnout Vandecappelle wrote:
+>    On Monday 06 February 2012 02:47:19 ludovic.desroches at atmel.com wrote:
 > 
->    > From: Ludovic Desroches <ludovic.desroches@atmel.com>
+>    > scan_patchdir "${path}/$i"
 > 
->    >
+>    > + elif echo "$i" | grep -q -E
+>    "tar\.bz$|tbz$|tar.\bz2$|tbz2$|tar\.gz$|tgz$" ; then
 > 
->    > Behaviour of directories is changed: it is no more considered as an
->    overlay,
-> 
->    > but rather a collection of patches. Subdirectories are not supported.
-> 
->    Actually, I think the directory feature could be removed completely.
->    It's
-> 
->    not used anywhere at the moment and I don't see why anyone would want
->    to use it.
+>    Wouldn't '\.tar(\..*)?$|\.tbz2?$|\.tgz$' be a better pattern?
 > 
 
-Even if this feature is not used, I think we have to keep it. For instance,
-into an archive we may have several directories with patches into each of them.
+Of course.
 
->    > -# Check for rejects because if there are some, even if patches are
->    well
+>    > + unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
 > 
->    > -# applied, at the end it will complain about rejects into builddir.
+>    > + rm -rf "$unpackedarchivedir" 2> /dev/null
 > 
->    > -if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')'
->    -print`" ] ; then
+>    > + mkdir "$unpackedarchivedir"
 > 
->    > - echo "There are remaining reject files into ${builddir}, please
->    delete them."
+>    > + if echo "$i" | grep "tar\.bz$|tbz$|tar\.bz2$|.tbz2$" ; then
 > 
->    > -fi
+>    > + tar_options="-xjf"
 > 
->    I still think it's better to keep these checks before the definition
+>    > + else
 > 
->    of the apply_patch function.
+>    > + tar_options="-xzf"
 > 
-
-Unintentional mistake, I will keep these checks.
-
+>    > + fi
 > 
->    > + echo "Applying $patch using ${type}: "
-> 
->    > + echo ${1} >> ${builddir}/.applied_patches_list
-> 
->    Shouldn't this be 'echo $path/$patch' ? Not that it matters that
->    much...
+>    You can also use tar -xaf, which selects compression automatically.
 > 
 
-You're right, I have seen it after sending patches.
+Thanks for the tip.
 
 Regards
 
