@@ -1,120 +1,136 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 15 Feb 2012 00:48:57 +0100
-Subject: [Buildroot] [PATCH] tcl: replace option to install library only
-	with positive option to install tclsh
-In-Reply-To: <201202150046.57364.arnout@mind.be>
-References: <201202150046.57364.arnout@mind.be>
-Message-ID: <1329263337-14994-1-git-send-email-arnout@mind.be>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Tue, 14 Feb 2012 19:33:38 -0500
+Subject: [Buildroot] [PATCH v4-resend 2/2] new program: usb_modeswitch_data
+Message-ID: <1329266018-10392-1-git-send-email-jwoltz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+usb_modeswitch_data provides udev rules for usb VID/PID combinations to
+switch usb deices from their default mode into a more useable mode. The
+default mode usually is a cdrom with installation software that is of
+little use in an embedded linux situation
 
-Without this patch, it was impossible for a package that relies on
-the tclsh interpreter to select it.  This patch replaces the
-negative BR2_PACKAGE_TCL_SHLIB_ONLY config with the positive
-BR2_PACKAGE_TCL_TCLSH config.
+Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
 
-Also a few minor fixes to the mk-file:
-
-- Stripping the library didn't work because it was installed read-only.
-
-- Create a symlink tclsh -> tclsh8.4.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-I didn't think the minor fixes were relevant to send as separate patches.
-If I should split them up, please tell me which one should come first.
 
-Regards,
-Arnout
----
- package/tcl/Config.in |   20 ++++++++++----------
- package/tcl/tcl.mk    |   29 ++++++++++++++++++++---------
- 2 files changed, 30 insertions(+), 19 deletions(-)
+version 3:
+Fix usb_modeswitch_data to depend usb_modeswitch
+add $(TARGET_CONFIGURE_OPTS) to be consistent with usb_modeswitch
 
-diff --git a/package/tcl/Config.in b/package/tcl/Config.in
-index 7a4d887..e5d377b 100644
---- a/package/tcl/Config.in
-+++ b/package/tcl/Config.in
-@@ -5,10 +5,18 @@ config BR2_PACKAGE_TCL
- 
- 	  http://www.tcl.tk
- 
-+if BR2_PACKAGE_TCL
-+
-+config BR2_PACKAGE_TCL_TCLSH
-+	bool "install tclsh"
+version 4:
+fix error. change to $(TARGET_MAKE_ENV) from $(TARGET_CONFIGURE_OPTS)
+
+updated to use "select" instead of "depends on" as recommended by
+Arnout Vandecappelle
+Added a select for TCL and BR2_PACKAGE_TCL_TCLSH
+This depends on the patch submitted by:
+Arnout Vandecappelle
+
+Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
+
+ package/Config.in                                  |    1 +
+ package/usb_modeswitch_data/Config.in              |   11 ++++++++
+ .../usb_modeswitch_data-makefile.patch             |   24 ++++++++++++++++++
+ package/usb_modeswitch_data/usb_modeswitch_data.mk |   26 ++++++++++++++++++++
+ 4 files changed, 62 insertions(+), 0 deletions(-)
+ create mode 100644 package/usb_modeswitch_data/Config.in
+ create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+ create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 8a7c9c4..172f7ab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -220,6 +220,7 @@ source "package/uboot-tools/Config.in"
+ source "package/udev/Config.in"
+ source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
++source "package/usb_modeswitch_data/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
+ source "package/wipe/Config.in"
+diff --git a/package/usb_modeswitch_data/Config.in b/package/usb_modeswitch_data/Config.in
+new file mode 100644
+index 0000000..d15e6e7
+--- /dev/null
++++ b/package/usb_modeswitch_data/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_USB_MODESWITCH_DATA
++	select BR2_PACKAGE_USB_MODESWITCH
++	select BR2_PACKAGE_TCL
++	select BR2_PACKAGE_TCL_TCLSH
++	bool "usb_modeswitch_data"
 +	help
-+	  Install tclsh, the TCL interpreter.
++	  USB mode switch data
++	  Contains udev rules and events to allow usb_modeswitch to
++	  function automatically
++	  
++	  http://www.draisberghof.de/usb_modeswitch/
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+new file mode 100644
+index 0000000..024bc76
+--- /dev/null
++++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+@@ -0,0 +1,24 @@
++diff -Nura usb_modeswitch_data-20120120.orig/Makefile usb_modeswitch_data-20120120/Makefile
++--- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
+++++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
++@@ -12,9 +12,9 @@
++ 
++ clean:
++ 
++-install: files-install db-install rules-reload
+++install: files-install db-install
++ 
++-install-packed: files-install db-install-packed rules-reload
+++install-packed: files-install db-install-packed
++ 
++ files-install:
++ 	install -d $(PREFIX)/share/usb_modeswitch
++@@ -50,7 +50,7 @@
++ 		fi \
++ 	fi
++ 
++-uninstall: files-uninstall rules-reload
+++uninstall: files-uninstall
++ 
++ files-uninstall:
++ 	$(RM) $(RULESDIR)/40-usb_modeswitch.rules
+diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+new file mode 100644
+index 0000000..46f5b45
+--- /dev/null
++++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
+@@ -0,0 +1,26 @@
++#############################################################
++#
++# usb_modeswitch_data
++#
++#############################################################
 +
-+	  Takes ~14kb on top of the libraries.
++USB_MODESWITCH_DATA_VERSION = 20120120
++USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
++USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
++USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
 +
- config BR2_PACKAGE_TCL_DEL_ENCODINGS
- 	bool "delete encodings (saves 1.4Mb)"
- 	default y
--	depends on BR2_PACKAGE_TCL
- 	help
- 	  Delete encoding files for TCL. If your programs do not use
- 	  various tcl character recoding functions, you may safely
-@@ -16,12 +24,4 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
- 
- 	  It saves approx. 1.4 Mb of space.
- 
--config BR2_PACKAGE_TCL_SHLIB_ONLY
--	bool "install only shared library"
--	default y
--	depends on BR2_PACKAGE_TCL
--	help
--	  Install only TCL shared library and not binary tcl
--	  interpreter(tclsh8.4).
--
--	  Saves ~14kb.
-+endif
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index 8ed81ab..6883619 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -19,17 +19,28 @@ HOST_TCL_CONF_OPT = \
- 		--disable-langinfo \
- 		--disable-framework
- 
--define TCL_POST_INSTALL_CLEANUP
--	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
--	-if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
--	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
--	fi
--	-if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
--	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
--	fi
-+# libtcl is installed with mode 444, so correct that first.
-+define TCL_POST_INSTALL_STRIP
-+	chmod +w $(TARGET_DIR)/usr/lib/libtcl$(TCL_VERSION_MAJOR).so
-+	-$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl$(TCL_VERSION_MAJOR).so
- endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_STRIP
-+
-+define TCL_POST_INSTALL_RM_ENCODINGS-y
-+	rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*
++define USB_MODESWITCH_DATA_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)
 +endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_RM_ENCODINGS-$(BR2_PACKAGE_TCL_DEL_ENCODINGS)
 +
-+define TCL_POST_INSTALL_RM_TCLSH-
-+	rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
++define USB_MODESWITCH_DATA_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
 +endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_RM_TCLSH-$(BR2_PACKAGE_TCL_TCLSH)
 +
-+define TCL_POST_INSTALL_LN_TCLSH-y
-+	ln -snf tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
++
++define USB_MODESWITCH_DATA_CLEAN_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) clean
 +endef
-+TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_LN_TCLSH-$(BR2_PACKAGE_TCL_TCLSH)
- 
--TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
- 
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
++
++$(eval $(call GENTARGETS))
++
 -- 
-1.7.8.3
+1.7.5.4
