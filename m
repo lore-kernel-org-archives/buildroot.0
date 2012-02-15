@@ -1,49 +1,73 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 15 Feb 2012 16:26:43 +0000
-Subject: [Buildroot] [PATCH] lite: Remove excess slashes from pkg-config
-	file.
-Message-ID: <CAFbHwiSOquRb-DqUo6-gwbdZguAtYqPt53H6=WWcnKfddyvdyw@mail.gmail.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 15 Feb 2012 17:51:04 +0100
+Subject: [Buildroot] [RFC PATCH 4/6] apply-patches.sh: directories are
+ considered as a collection of patches
+In-Reply-To: <201202102340.46608.arnout@mind.be>
+References: <1328492839-13657-1-git-send-email-ludovic.desroches@atmel.com>
+ <4497cd4c9ca71e3bba7da6b9906319f6c40862be.1328492511.git.ludovic.desroches@atmel.com>
+ <201202102340.46608.arnout@mind.be>
+Message-ID: <20120215165104.GI4723@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Will Newton <will.newton@imgtec.com>
----
- package/lite/lite-pkg-config.patch |   22 ++++++++++++++++++++++
- 1 files changed, 22 insertions(+), 0 deletions(-)
- create mode 100644 package/lite/lite-pkg-config.patch
+Hello Arnout,
 
-diff --git a/package/lite/lite-pkg-config.patch
-b/package/lite/lite-pkg-config.patch
-new file mode 100644
-index 0000000..6f09fd1
---- /dev/null
-+++ b/package/lite/lite-pkg-config.patch
-@@ -0,0 +1,22 @@
-+From 7982cccbb6ad58f3802bb266467290200d130a48 Mon Sep 17 00:00:00 2001
-+From: Ville Syrjala <syrjala@sci.fi>
-+Date: Sat, 27 Nov 2010 01:14:25 +0200
-+Subject: [PATCH] Too many '\' characters in the .pc file
-+
-+---
-+ lite.pc.in |    2 +-
-+ 1 files changed, 1 insertions(+), 1 deletions(-)
-+
-+diff --git a/lite.pc.in b/lite.pc.in
-+index 48eb969..3a21eaa 100644
-+--- a/lite.pc.in
-++++ b/lite.pc.in
-+@@ -9,4 +9,4 @@ Description: "LiTE" is a Toolkit Engine
-+ Requires: directfb >= @DFB_REQUIRED_VERSION@
-+ Version: @VERSION@
-+ Libs: -L${libdir} -llite
-+-Cflags: -I${includedir} -DLITEFONTDIR=\\\"@LITEFONTDIR@\\\"
-++Cflags: -I${includedir} -DLITEFONTDIR=\"@LITEFONTDIR@\"
-+--
-+1.7.1
-+
--- 
-1.7.1
--------------- next part --------------
+On Fri, Feb 10, 2012 at 11:40:46PM +0100, Arnout Vandecappelle wrote:
+>    On Monday 06 February 2012 02:47:17 ludovic.desroches at atmel.com wrote:
+> 
+>    > From: Ludovic Desroches <ludovic.desroches@atmel.com>
+> 
+>    >
+> 
+>    > Behaviour of directories is changed: it is no more considered as an
+>    overlay,
+> 
+>    > but rather a collection of patches. Subdirectories are not supported.
+> 
+>    Actually, I think the directory feature could be removed completely.
+>    It's
+> 
+>    not used anywhere at the moment and I don't see why anyone would want
+>    to use it.
+> 
+
+Even if this feature is not used, I think we have to keep it. For instance,
+into an archive we may have several directories with patches into each of them.
+
+>    > -# Check for rejects because if there are some, even if patches are
+>    well
+> 
+>    > -# applied, at the end it will complain about rejects into builddir.
+> 
+>    > -if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')'
+>    -print`" ] ; then
+> 
+>    > - echo "There are remaining reject files into ${builddir}, please
+>    delete them."
+> 
+>    > -fi
+> 
+>    I still think it's better to keep these checks before the definition
+> 
+>    of the apply_patch function.
+> 
+
+Unintentional mistake, I will keep these checks.
+
+> 
+>    > + echo "Applying $patch using ${type}: "
+> 
+>    > + echo ${1} >> ${builddir}/.applied_patches_list
+> 
+>    Shouldn't this be 'echo $path/$patch' ? Not that it matters that
+>    much...
+> 
+
+You're right, I have seen it after sending patches.
+
+Regards
+
+Ludovic
