@@ -1,10 +1,10 @@
 From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Thu, 16 Feb 2012 00:06:14 +0100
-Subject: [Buildroot] [RFC PATCH v2 4/6] apply-patches.sh: directories are
-	considered as a collection of patches
-In-Reply-To: <20120215165104.GI4723@ldesroches-Latitude-E6320>
-References: <20120215165104.GI4723@ldesroches-Latitude-E6320>
-Message-ID: <1329347174-25471-1-git-send-email-ludovic.desroches@atmel.com>
+Date: Thu, 16 Feb 2012 00:09:59 +0100
+Subject: [Buildroot] [RFC PATCH v2 6/6] apply-patches.sh: change archive
+	management
+In-Reply-To: <20120215165405.GJ4723@ldesroches-Latitude-E6320>
+References: <20120215165405.GJ4723@ldesroches-Latitude-E6320>
+Message-ID: <1329347399-25541-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,42 @@ To: buildroot@busybox.net
 
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-Behaviour of directories is changed: it is no more considered as an overlay,
-but rather a collection of patches. Subdirectories are not supported.
+The way archives were managed was incorrect because the uncompressed archives
+were sent directly to patch command. It means that alphabetical patch orderwas
+not respected.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- support/scripts/apply-patches.sh |   33 +++++++++++++++++++--------------
- 1 files changed, 19 insertions(+), 14 deletions(-)
+ support/scripts/apply-patches.sh |   10 ++++++----
+ 1 files changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 8c38007..3b43e0b 100755
+index d239943..a075afd 100755
 --- a/support/scripts/apply-patches.sh
 +++ b/support/scripts/apply-patches.sh
-@@ -27,15 +27,10 @@ if [ "`find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; th
- 	echo "Remaining reject files in ${buildir} have been removed"
- fi
-     
--for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do 
--    apply="patch -g0 -p1 -E -d"
--    uncomp_parm=""
--    if [ -d "${patchdir}/$i" ] ; then
--	type="directory overlay"
--	uncomp="tar cf - --exclude=.svn --no-anchored -C"
--	uncomp_parm="."
--	apply="tar xvf - -C"
--    else case "$i" in
-+function apply_patch {
-+    path=$1
-+    patch=$2
-+    case "$patch" in
- 	*.gz)
- 	type="gzip"; uncomp="gunzip -dc"; ;; 
- 	*.bz)
-@@ -52,15 +47,25 @@ for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
- 	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
+@@ -41,10 +41,6 @@ function apply_patch {
+ 	type="zip"; uncomp="unzip -d"; ;; 
+ 	*.Z)
+ 	type="compress"; uncomp="uncompress -c"; ;; 
+-	*.tgz)
+-	type="tar gzip"; uncomp="gunzip -dc"; apply="tar xvf - -C"; ;; 
+-	*.tar)
+-	type="tar"; uncomp="cat"; apply="tar xvf - -C"; ;; 
  	*)
  	type="plaintext"; uncomp="cat"; ;; 
--    esac fi
-+    esac
-     echo ""
--    echo "Applying ${i} using ${type}: " 
--	echo ${i} >> ${builddir}/.applied_patches_list
--    ${uncomp} "${patchdir}/${i}" ${uncomp_parm} | ${apply} "${builddir}"
-+    echo "Applying $patch using ${type}: "
-+	echo ${path}/$patch >> ${builddir}/.applied_patches_list
-+    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}"
-     if [ $? != 0 ] ; then
--        echo "Patch failed!  Please fix $i!"
-+        echo "Patch failed!  Please fix $patch!"
- 	exit 1
-     fi
-+}
-+
-+for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
-+    if [ -d "${patchdir}/$i" ] ; then
-+        for p in `ls -d "$i"` ; do
-+	    apply_patch "${patchdir}/${i}" "$p" || exit 1
-+	done
-+    else
-+        apply_patch "$patchdir" "$i" || exit 1
-+    fi
- done
- 
- # Check for rejects...
+     esac
+@@ -66,6 +62,12 @@ function scan_patchdir {
+     for i in `cd $path; ls -d $patches 2> /dev/null` ; do
+         if [ -d "${path}/$i" ] ; then
+ 	    scan_patchdir "${path}/$i"
++	elif echo "$i" | grep -q -E "\.tar(\..*)?$|\.tbz2?$|\.tgz$" ; then
++            unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
++	    rm -rf "$unpackedarchivedir" 2> /dev/null
++	    mkdir "$unpackedarchivedir"
++	    tar -C "$unpackedarchivedir" --strip-components=1 -xaf "${path}/$i"
++	    scan_patchdir "$unpackedarchivedir"
+         else
+             apply_patch "$path" "$i" || exit 1
+         fi
 -- 
 1.7.5.4
