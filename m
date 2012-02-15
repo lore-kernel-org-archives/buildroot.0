@@ -1,89 +1,59 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 15 Feb 2012 09:03:02 +0100
-Subject: [Buildroot] [PATCH 2 of 2 v4] build: add option to exclude
- executables/dirs from being stripped
-In-Reply-To: <patchbomb.1329292980@beantl019720>
-References: <patchbomb.1329292980@beantl019720>
-Message-ID: <a6d1e2701932449cb17e.1329292982@beantl019720>
+Date: Wed, 15 Feb 2012 09:10:10 +0100
+Subject: [Buildroot] [PATCH 1 of 2 v3-resend] Makefile.package.in: add
+ utility functions find*clauses and notfirstword
+In-Reply-To: <201202111757.20786.arnout@mind.be>
+References: <patchbomb.1328818168@beantl019720>
+ <47a9c088ed0bfaeaaef3.1328818169@beantl019720>
+ <201202111757.20786.arnout@mind.be>
+Message-ID: <CAAXf6LWCS7+=9bTnikrkk8RZMvH=+iZGV5JZAYOAORpBMpnYhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes it may be desirable to keep debug symbols for some binaries and
-libraries on the target. This commit introduces the config option
-BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
-and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
-directories excluded from stripping entirely.
-These exclusions are passed to the find command in the target-finalize step.
+Hi Arnout,
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Sat, Feb 11, 2012 at 5:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Thursday 09 February 2012 21:09:29 Thomas De Schampheleire wrote:
+>> +# Utility functions for 'find'
+>> +# findfileclauses: creates "-name 'X' -o -name 'Y'"
+>> +# [1:namelist]
+>> +findfileclauses=-name '$(firstword $(1))' $(patsubst %,-o -name '%',$(call notfirstword,$(1)))
+>> +# finddirclauses: creates "-path 'basedir/dirX' -o -path 'basedir/dirY'"
+>> +# [1:basedir, 2:namelist]
+>> +finddirclauses=-path '$(1)/$(firstword $(2))' $(patsubst %,-o -path '$(1)/%',$(call notfirstword,$(2)))
+>> +
+>> +# Miscellaneous utility functions
+>> +notfirstword=$(wordlist 2,$(words $(1)),$(1))
+>>
+>
+> ?You asked for inspiration on how to simplify this; here are two (untested) ideas:
+>
+> - a function 'join':
+>
+> # join,<joinstr>,<wordlist>: puts <joinstr> between the words of <wordlist>
+> # e.g.: $(call join,+,a b c) -> a + b + c
+> join = $(firstword $(2)) $(addprefix $(1) ,$(call notfirstword,$(2))
+>
+> findfileclauses = $(call join,-o,$(patsubst %,-name '%',$(1))
+>
+> - strip the first -o after joining:
+> findfileclauses = $(call notfirstword,$(patsubst %, -o -name '%',$(1)))
+> finddirclauses = $(call notfirstword,$(patsubst %, -o -path '$(1)/%',$(2)))
 
----
-v4: whitespace changes
-v3: merge with redundant patch 'stripping: use findfileclauses utility function'
-v2: add the possibility to exclude entire directories
+Thanks for these suggestions. I eventually used the second one.
+I tried the first one, because the join function could have been
+useful in other situations. However, there were two issues.
+1. 'join' already is a make function (of course another name would suffice).
+2. Because make uses whitespace to separate words, join cannot be used
+here: the words are in fact groups of words: '-name X'. As a result,
+'firstword $(2)' would be '-name' and 'notfirstword $(2)' would be
+'X'. This conflicts with our purpose.
 
- Config.in |  19 +++++++++++++++++++
- Makefile  |  10 ++++++++--
- 2 files changed, 27 insertions(+), 2 deletions(-)
+The second suggestion is also very nice and easily understandable, so
+I took that as alternative.
 
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -262,6 +262,25 @@ config BR2_STRIP_none
- 	  none    do not strip (only for debugging!)
- endchoice
- 
-+config BR2_STRIP_EXCLUDE_FILES
-+	string "executables that should not be stripped"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of binaries and libraries
-+	  here that should not be stripped on the target.
-+
-+config BR2_STRIP_EXCLUDE_DIRS
-+	string "directories that should be skipped when stripping"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of directories that should
-+	  be skipped when stripping. Binaries and libraries in these
-+	  directories will not be touched.
-+	  The directories should be specified relative to the target directory,
-+	  without leading slash.
-+
- choice
- 	prompt "gcc optimization level"
- 	default BR2_OPTIMIZE_S
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -437,6 +437,13 @@ endif
- erase-fakeroots:
- 	rm -f $(BUILD_DIR)/.fakeroot*
- 
-+STRIP_FIND_CMD = find $(TARGET_DIR)
-+ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-+STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-+endif
-+STRIP_FIND_CMD += -type f -perm +111
-+STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-+
- target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-@@ -461,8 +468,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
--	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
--		xargs $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD) || true
- 
+Best regards,
+Thomas
