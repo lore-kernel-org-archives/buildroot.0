@@ -1,50 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 15 Feb 2012 12:54:57 +0100
-Subject: [Buildroot] [PATCH] build: add 'file' option for 'make
-	defconfig'
-In-Reply-To: <CAMP44s1U7KBFk7zpoU1Kp_1NfsmfQ2VY3qqyxPaPSn=yTp2w1A@mail.gmail.com>
-References: <1328918596-19369-1-git-send-email-felipe.contreras@gmail.com>
- <CAAXf6LVPo6hWwJFUm3dzFYPAVvC=_=aBP1B7XSQ26spoyuEYFA@mail.gmail.com>
- <CAMP44s2yuoJ38UdeaRbgeLo9QvPDgrv1roPzgjKL-QZdt7W54g@mail.gmail.com>
- <201202141453.23995.arnout@mind.be>
- <CAAXf6LWX1GYtHYCQzaaohgDg2NM=cZMoDErcNBv-w4NNC-hrtA@mail.gmail.com>
- <CAMP44s1U7KBFk7zpoU1Kp_1NfsmfQ2VY3qqyxPaPSn=yTp2w1A@mail.gmail.com>
-Message-ID: <CAAXf6LUxVB8J2aJkTacdv-j-7DwBM2BAzu+_8wv+r7Y1dC0mXg@mail.gmail.com>
+From: Poole, Donald R. <drpoole@swri.org>
+Date: Wed, 15 Feb 2012 15:22:23 +0000
+Subject: [Buildroot] Buildroot RFS Login Question
+In-Reply-To: <878vkb4s8h.fsf@macbook.be.48ers.dk>
+Message-ID: <CB612930.303D%donald.poole@swri.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 15, 2012 at 12:53 PM, Felipe Contreras
-<felipe.contreras@gmail.com> wrote:
-> On Wed, Feb 15, 2012 at 8:58 AM, Thomas De Schampheleire
-> <patrickdepinguin+buildroot@gmail.com> wrote:
->> Ok, I see. I have been used to having my own repository for buildroot
->> and didn't think of people who just download a tarball each time.
->
-> Some might, I don't, but I don't want to be carrying patches for the
-> configs on all my branches either =/
->
->>> BTW, regarding the naming: eventually I'd like to include BR2_DEFCONFIG
->>>
->>> in the .config, which gets qstripped to DEFCONFIG in the Makefile. This can
->>>
->>> be used to be able to store the config again, similar to
->>> linux-update-defconfig.
->>
->> I once proposed a patch that did something similar:
->> http://lists.busybox.net/pipermail/buildroot/2011-February/041626.html
->>
->> It would automatically save the last used 'defconfig' instead of
->> requiring an explicit 'file' option.
->
-> Yeah but the defconfig would have to be on the configs dir.
->
-> Also, this saves the .config, not the simplified defconfig.
+On 2/9/12 3:22 PM, "Peter Korsgaard" <jacmet@uclibc.org> wrote:
 
-True. I think at that time the 'savedefconfig' option was not yet in
-buildroot or at least not known to me.
 
-Best regards,
-Thomas
+>>>>>> "Donald" == Poole, Donald R <drpoole@swri.org> writes:
+>
+>Hi,
+>
+> Donald> So, I see it in the fakroot invocation and when I issue the
+>command you
+> Donald> gave to check the permissions of the busybox binary, it get this
+>output:
+>
+> Donald> 	-rwsr-xr-x root/root    621852 2012-02-09 13:43 ./bin/busybox
+>
+> Donald> So, it appears that it's being set correctly too.
+>
+>All good. So where does it get stripped from here on until you execute
+>it on the target?
+>
+>-- 
+>Bye, Peter Korsgaard
+
+I've been trying to see where its getting stripped from, but every time I
+build a new tarball and extract it to a new filesystem, it just works.
+Unless I figure out what happened, I guess my problem is solved.  Thanks a
+lot for your patience and assistance with this issue.
+
+Thanks,
+Donald R. Poole, Jr.
+Research Engineer
+Voice: 210.522.3131 | Fax: 210.522.4931
+Tactical Networks & Communications (tacticalnetworks.swri.org)
+Southwest Research Institute (SwRI)
