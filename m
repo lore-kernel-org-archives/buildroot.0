@@ -1,30 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 15 Feb 2012 16:52:42 +0100
-Subject: [Buildroot] opencv with glibc
-In-Reply-To: <CAPeX=+tCiegGOeD2bi9+v8aOVrB=FjHo3XEAvp1b5tNfR85N-w@mail.gmail.com>
-References: <CAPeX=+tCiegGOeD2bi9+v8aOVrB=FjHo3XEAvp1b5tNfR85N-w@mail.gmail.com>
-Message-ID: <20120215165242.6af85108@skate>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 15 Feb 2012 15:56:42 +0000
+Subject: [Buildroot] [PATCH] lite: Fix pkg-config file by removing excess
+	slashes.
+Message-ID: <CAFbHwiQd02YFDDZ1pzQk=Yv2Zv_OM1aGz8ddb_p3neNOPUq7MQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 15 Feb 2012 17:35:08 +0200,
-Ozgun <ozgun.gunay@gmail.com> a ?crit :
+Signed-off-by: Will Newton <will.newton@imgtec.com>
+---
+ package/lite/lite-pkg-config.patch |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+ create mode 100644 package/lite/lite-pkg-config.patch
 
-> I'm using ct-ng toolchain and glibc library. when compiling opencv
-> gives the following uclibc error;
-
-Can you send your Buildroot .config file? According to your build log,
-you are definitely not using a glibc toolchain, so there is probably a
-problem in your Buildroot configuration.
-
-Best regards,
-
-Thomas
+diff --git a/package/lite/lite-pkg-config.patch
+b/package/lite/lite-pkg-config.patch
+new file mode 100644
+index 0000000..5a6bea0
+--- /dev/null
++++ b/package/lite/lite-pkg-config.patch
+@@ -0,0 +1,11 @@
++Remove excess slashes from the .pc file. This change was made in
++the upstream git repo as 7982cccbb6ad58f3802bb266467290200d130a48.
++
++--- lite-0.8.10/lite.pc.in	2008-06-20 22:34:10.000000000 +0100
+++++ lite-0.8.10.mod/lite.pc.in	2012-02-15 15:42:43.847835643 +0000
++@@ -9,4 +9,4 @@
++ Requires: directfb >= @DFB_REQUIRED_VERSION@
++ Version: @VERSION@
++ Libs: -L${libdir} -llite
++-Cflags: -I${includedir} -DLITEFONTDIR=\\\"@LITEFONTDIR@\\\"
+++Cflags: -I${includedir} -DLITEFONTDIR=\"@LITEFONTDIR@\"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
+-------------- next part --------------
