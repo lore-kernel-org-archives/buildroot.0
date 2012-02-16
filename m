@@ -1,125 +1,54 @@
-From: J.C. Woltz <jwoltz@gmail.com>
-Date: Wed, 15 Feb 2012 19:09:47 -0500
-Subject: [Buildroot] [PATCH] tcl: replace option to install library only
- with positive option to install tclsh
-In-Reply-To: <1329263337-14994-1-git-send-email-arnout@mind.be>
-References: <201202150046.57364.arnout@mind.be>
- <1329263337-14994-1-git-send-email-arnout@mind.be>
-Message-ID: <CAC78Gpd6pgmurY5iLh8CcRHeAJJ7-5m3suwO0aL7GOEN9BVy9g@mail.gmail.com>
+From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+Date: Thu, 16 Feb 2012 00:38:00 -0200
+Subject: [Buildroot] [PATCH] linux-firmware: add support for the atheros
+	ar9271 firmware
+Message-ID: <1329359880-18529-1-git-send-email-aletes.xgr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 14, 2012 at 6:48 PM, Arnout Vandecappelle (Essensium/Mind)
-<arnout@mind.be> wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
->
-> Without this patch, it was impossible for a package that relies on
-> the tclsh interpreter to select it. ?This patch replaces the
-> negative BR2_PACKAGE_TCL_SHLIB_ONLY config with the positive
-> BR2_PACKAGE_TCL_TCLSH config.
->
-> Also a few minor fixes to the mk-file:
->
-> - Stripping the library didn't work because it was installed read-only.
->
-> - Create a symlink tclsh -> tclsh8.4.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: J.C. Woltz <jwoltz@gmail.com>
-> ---
-> I didn't think the minor fixes were relevant to send as separate patches.
-> If I should split them up, please tell me which one should come first.
->
-> Regards,
-> Arnout
-> ---
-> ?package/tcl/Config.in | ? 20 ++++++++++----------
-> ?package/tcl/tcl.mk ? ?| ? 29 ++++++++++++++++++++---------
-> ?2 files changed, 30 insertions(+), 19 deletions(-)
->
-> diff --git a/package/tcl/Config.in b/package/tcl/Config.in
-> index 7a4d887..e5d377b 100644
-> --- a/package/tcl/Config.in
-> +++ b/package/tcl/Config.in
-> @@ -5,10 +5,18 @@ config BR2_PACKAGE_TCL
->
-> ? ? ? ? ?http://www.tcl.tk
->
-> +if BR2_PACKAGE_TCL
-> +
-> +config BR2_PACKAGE_TCL_TCLSH
-> + ? ? ? bool "install tclsh"
-> + ? ? ? help
-> + ? ? ? ? Install tclsh, the TCL interpreter.
-> +
-> + ? ? ? ? Takes ~14kb on top of the libraries.
-> +
-> ?config BR2_PACKAGE_TCL_DEL_ENCODINGS
-> ? ? ? ?bool "delete encodings (saves 1.4Mb)"
-> ? ? ? ?default y
-> - ? ? ? depends on BR2_PACKAGE_TCL
-> ? ? ? ?help
-> ? ? ? ? ?Delete encoding files for TCL. If your programs do not use
-> ? ? ? ? ?various tcl character recoding functions, you may safely
-> @@ -16,12 +24,4 @@ config BR2_PACKAGE_TCL_DEL_ENCODINGS
->
-> ? ? ? ? ?It saves approx. 1.4 Mb of space.
->
-> -config BR2_PACKAGE_TCL_SHLIB_ONLY
-> - ? ? ? bool "install only shared library"
-> - ? ? ? default y
-> - ? ? ? depends on BR2_PACKAGE_TCL
-> - ? ? ? help
-> - ? ? ? ? Install only TCL shared library and not binary tcl
-> - ? ? ? ? interpreter(tclsh8.4).
-> -
-> - ? ? ? ? Saves ~14kb.
-> +endif
-> diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-> index 8ed81ab..6883619 100644
-> --- a/package/tcl/tcl.mk
-> +++ b/package/tcl/tcl.mk
-> @@ -19,17 +19,28 @@ HOST_TCL_CONF_OPT = \
-> ? ? ? ? ? ? ? ?--disable-langinfo \
-> ? ? ? ? ? ? ? ?--disable-framework
->
-> -define TCL_POST_INSTALL_CLEANUP
-> - ? ? ? -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl8.4.so
-> - ? ? ? -if [ "$(BR2_PACKAGE_TCL_DEL_ENCODINGS)" = "y" ]; then \
-> - ? ? ? rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*; \
-> - ? ? ? fi
-> - ? ? ? -if [ "$(BR2_PACKAGE_TCL_SHLIB_ONLY)" = "y" ]; then \
-> - ? ? ? rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR); \
-> - ? ? ? fi
-> +# libtcl is installed with mode 444, so correct that first.
-> +define TCL_POST_INSTALL_STRIP
-> + ? ? ? chmod +w $(TARGET_DIR)/usr/lib/libtcl$(TCL_VERSION_MAJOR).so
-> + ? ? ? -$(STRIPCMD) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/lib/libtcl$(TCL_VERSION_MAJOR).so
-> ?endef
-> +TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_STRIP
-> +
-> +define TCL_POST_INSTALL_RM_ENCODINGS-y
-> + ? ? ? rm -Rf $(TARGET_DIR)/usr/lib/tcl$(TCL_VERSION_MAJOR)/encoding/*
-> +endef
-> +TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_RM_ENCODINGS-$(BR2_PACKAGE_TCL_DEL_ENCODINGS)
-> +
-> +define TCL_POST_INSTALL_RM_TCLSH-
-> + ? ? ? rm -f $(TARGET_DIR)/usr/bin/tclsh$(TCL_VERSION_MAJOR)
-> +endef
-> +TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_RM_TCLSH-$(BR2_PACKAGE_TCL_TCLSH)
-> +
-> +define TCL_POST_INSTALL_LN_TCLSH-y
-> + ? ? ? ln -snf tclsh$(TCL_VERSION_MAJOR) $(TARGET_DIR)/usr/bin/tclsh
-> +endef
-> +TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_LN_TCLSH-$(BR2_PACKAGE_TCL_TCLSH)
->
-> -TCL_POST_INSTALL_TARGET_HOOKS += TCL_POST_INSTALL_CLEANUP
->
-> ?$(eval $(call AUTOTARGETS))
-> ?$(eval $(call AUTOTARGETS,host))
-> --
-> 1.7.8.3
->
+Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+---
+ package/linux-firmware/Config.in         |    9 +++++++++
+ package/linux-firmware/linux-firmware.mk |    4 ++++
+ 2 files changed, 13 insertions(+), 0 deletions(-)
+
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 9ce1a75..b15896c 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -8,6 +8,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE
+ 
+ if BR2_PACKAGE_LINUX_FIRMWARE
+ 
++menu "Atheros"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
++	bool "Atheros 9271"
++	help
++	  Firmware files for the Atheros 9271 module
++
++endmenu
++
+ menu "Ralink"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index d5987ab..eedef2f 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -21,6 +21,10 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
+ 	rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin 	\
+ 	LICENCE.ralink-firmware.txt
+ 
++# ar9271
++LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271) += \
++	LICENCE.atheros_firmware ar9271.fw
++
+ # wl127x
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
+ 	ti-connectivity/wl1271-fw-2.bin				\
+-- 
+1.7.9
