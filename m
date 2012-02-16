@@ -1,54 +1,45 @@
-From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
-Date: Thu, 16 Feb 2012 00:38:00 -0200
-Subject: [Buildroot] [PATCH] linux-firmware: add support for the atheros
-	ar9271 firmware
-Message-ID: <1329359880-18529-1-git-send-email-aletes.xgr@gmail.com>
+From: Ozgun <ozgun.gunay@gmail.com>
+Date: Thu, 16 Feb 2012 08:46:44 +0200
+Subject: [Buildroot] opencv with glibc
+Message-ID: <CAPeX=+s4-ne+AtwxGUxLVqpN2j89ykB1sZfZsa1DovTKPDBkuw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
----
- package/linux-firmware/Config.in         |    9 +++++++++
- package/linux-firmware/linux-firmware.mk |    4 ++++
- 2 files changed, 13 insertions(+), 0 deletions(-)
+I download my BR from standard tree.
+My problem solved using "make distclean" instead of "make clean"
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 9ce1a75..b15896c 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -8,6 +8,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE
- 
- if BR2_PACKAGE_LINUX_FIRMWARE
- 
-+menu "Atheros"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
-+	bool "Atheros 9271"
-+	help
-+	  Firmware files for the Atheros 9271 module
-+
-+endmenu
-+
- menu "Ralink"
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index d5987ab..eedef2f 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -21,6 +21,10 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
- 	rt2860.bin rt2870.bin rt3070.bin rt3071.bin rt3090.bin 	\
- 	LICENCE.ralink-firmware.txt
- 
-+# ar9271
-+LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271) += \
-+	LICENCE.atheros_firmware ar9271.fw
-+
- # wl127x
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
- 	ti-connectivity/wl1271-fw-2.bin				\
--- 
-1.7.9
+thanks
+
+
+
+
+Date: Wed, 15 Feb 2012 22:26:03 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To: Ozgun <ozgun.gunay@gmail.com>
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] opencv with glibc
+Message-ID: <20120215222603.6754b8e6@skate
+>
+Content-Type: text/plain; charset=UTF-8
+
+Le Wed, 15 Feb 2012 21:35:25 +0200,
+Ozgun <ozgun.gunay@gmail.com> a ?crit :
+
+> My br doesn't have output/toolchainfile.cmake file
+
+Which version of Buildroot are you using? Are you doing out-of-tree
+build (if so, then the toolchainfile.cmake file is in the output
+directory you selected with O=, not in output/).
+
+Thomas
+--
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120216/d7f30788/attachment-0001.html>
