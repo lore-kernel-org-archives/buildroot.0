@@ -1,119 +1,242 @@
-From: Will Moore <will.moore@beraninstruments.com>
-Date: Thu, 16 Feb 2012 12:17:51 -0000
-Subject: [Buildroot] Report of the Buildroot Developer Day, February 3,
-	2012 - Legal info
-In-Reply-To: <201202160044.29316.arnout@mind.be>
-References: <201202160044.29316.arnout@mind.be>
-Message-ID: <BE5319E74F9A446BA391A54D7377663E@beraninstruments.com.local>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 16 Feb 2012 12:20:01 +0100
+Subject: [Buildroot] [git commit] uClibc: add upstream 0.9.33 fixes
+Message-ID: <20120216123358.D815690ABE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=7553f043ad7e682e65867e3504f7dbf220b10bd7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> -----Original Message-----
-> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
-> Behalf Of Arnout Vandecappelle
-> Sent: 15 February 2012 23:44
-> 
-> ---------------------------------------------------------------------
-> 
-> Buildroot developer day February 3, 2012
-> 
-> ---------------------------------------------------------------------
+Fixes build on E.G. powerpc.
 
--- snip --
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ ...__err-and-pass-it-to-INTERNAL_SYSCALL_NCS.patch |   30 ++++
+ ...t-stat-fstat-Use-64bit-version-of-syscall.patch |  179 ++++++++++++++++++++
+ 2 files changed, 209 insertions(+), 0 deletions(-)
 
-> ---------------------------------------------------------------------
-> 
-> 6. Legal info
-> 
-> ---------------------------------------------------------------------
-> 
-> Buildroot users are expecting a statement from the buildroot
-> developers explaining how we understand that buildroot can be used to
-> comply to the GPL. Note that this doesn?t need to be minimal
-> compliance, e.g. we can advise to include buildroot itself even if it
-> may not be required.
-> 
-> What do we want to save?
-> 
->   * The non-proprietary packages.
->   * The license text of the packages.
->   * The scripts to create it, i.e. buildroot
->   * The buildroot config file.
->   * The cross-compiler seems to be required too for GPLv2 packages,
->     because it is not normally available on an OS.
-
-Without getting into a lot of IANAL stuff (!) please could somebody explain to
-me why the cross-compiler for GPLv2 packages is included in this list?
-
-> 
-> We will add support for preparing all of this. It is up to the user?s
-> legal office to decide what will actually be released and what not.
-> 
-> License texts. Many packages mix many licenses, so a single license
-> text per package is not sufficient.
-> 
-> Some licenses require to include the copyright holders in the license
-> text, so you can?t have one single BSD license text that applies to
-> all BSD-licensed software.
-> 
-> Buildroot itself. Creating a buildroot tarball is not so simple.
-> You?d need to do a make distclean first, so the output is gone, and
-> then tar the buildroot top directory. However, if there is an O=?
-> output directory within the buildroot directory, this will be
-> included as well? Note also that make distclean will remove the
-> .config. So recommend that make legal-info is done from a clean
-> buildroot checkout. Alternatively, do a tar of the current directory
-> and exclude dl and output.
-> 
-> Toolchain. For external toolchains, also the source needs to be
-> downloaded. For Sourcery there is a separate source tarball. For
-> Linaro this is more difficult, because it distributes its source as a
-> ct-ng tarball without the actual source. We?ll just mention that this
-> is unsupported for this case and other cases we can?t handle.
-> 
-> Implementation
-> 
->   * Add our advise of how to comply to GPL to the documentation.
->   * If something is difficult to do, skip it and mention it to the
->     user.
->   * In the package mk-file, specify the license file(s) from the
->     package source that have to be included. There are some cases
->     where the source doesn?t have a separate license file. In this
->     case, we can include a license file in buildroot?s package
->     directory. We could also point to a source file that contains the
->     license text (not ideal because you add redundant cruft to the
->     legal-info directory).
->   * To avoid duplicating the same license every time, we use a common
->     license file (included only once) for known licenses (GPLv2,
->     LGPLv2, LGPLv2.1, ?). This only applies for licenses for which
->     the text always is identical. In particular, the BSD license is
->     excluded because it explicitly states that the copyright
->     statement above must be retained.
-
-Having just recently gone through doing this for a simple buildroot
-configuration I would note that even when things are e.g. GPLv2 they have
-different license text.  Not only do they often have (a la Linux) a little
-explanation before the text of the GPLv2 but also the GPLv2 text itself can vary
-subtly even when both versions are marked Version 2, June 1991.  In the cases I
-saw just silly things like the address given for FSF and "19yy" changing to
-"year", "St" to "Street", "Lesser" to "Library", and white space changes.  To be
-"clean" I just copied the license verbatim from the source.
- 
-For BSD licenses this could get quite onerous in the .mk file as depending on
-configurations many separately BSD licensed source files in the /dl tarball may
-or may not be included in the build.
-
->   * make legal-info creates a directory with sources, a directory
->     with licenses, and an overview document with the packages and
->     licenses.
->   * Print and save a warning if something doesn?t work (license
->     unknown, no source found because of override or local, ?)
->   * At some point, the toolchains will need to be converted to
->     gentargets too, so they participate in the license stuff.
-> 
-
--- snip --
+diff --git a/toolchain/uClibc/uClibc-0.9.33--Declare-__err-and-pass-it-to-INTERNAL_SYSCALL_NCS.patch b/toolchain/uClibc/uClibc-0.9.33--Declare-__err-and-pass-it-to-INTERNAL_SYSCALL_NCS.patch
+new file mode 100644
+index 0000000..68077f5
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.33--Declare-__err-and-pass-it-to-INTERNAL_SYSCALL_NCS.patch
+@@ -0,0 +1,30 @@
++From ca457af92be7835edf77f34bead94f504fbc2d4b Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 3 Feb 2012 10:57:44 -0800
++Subject: [PATCH 2/4] Declare __err and pass it to INTERNAL_SYSCALL_NCS so
++ subsequent macros can use it
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ libc/sysdeps/linux/common/bits/syscalls-common.h |    4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/libc/sysdeps/linux/common/bits/syscalls-common.h b/libc/sysdeps/linux/common/bits/syscalls-common.h
++index faebd1b..0f5a929 100644
++--- a/libc/sysdeps/linux/common/bits/syscalls-common.h
+++++ b/libc/sysdeps/linux/common/bits/syscalls-common.h
++@@ -59,8 +59,8 @@
++ #ifndef INLINE_SYSCALL_NOERR_NCS
++ # define INLINE_SYSCALL_NOERR_NCS(name, nr, args...)			\
++ ({									\
++-	/*INTERNAL_SYSCALL_DECL(__err);*/					\
++-	long __res = INTERNAL_SYSCALL_NCS(name, /*__err*/, nr, args);	\
+++	INTERNAL_SYSCALL_DECL(__err);					\
+++	long __res = INTERNAL_SYSCALL_NCS(name, __err, nr, args);	\
++ 	__res;								\
++ })
++ #endif
++-- 
++1.7.8.3
++
+diff --git a/toolchain/uClibc/uClibc-0.9.33-lstat-stat-fstat-Use-64bit-version-of-syscall.patch b/toolchain/uClibc/uClibc-0.9.33-lstat-stat-fstat-Use-64bit-version-of-syscall.patch
+new file mode 100644
+index 0000000..a9d1c96
+--- /dev/null
++++ b/toolchain/uClibc/uClibc-0.9.33-lstat-stat-fstat-Use-64bit-version-of-syscall.patch
+@@ -0,0 +1,179 @@
++From b813377f6c746118a9d2625e6b29ffeec4233663 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 3 Feb 2012 20:06:55 -0800
++Subject: [PATCH 3/4] lstat/stat/fstat: Use 64bit version of syscall if
++ available
++
++This is needed for stat'ing loop devices > 255
++since otherwise kernel returns EOVERFLOW becasue
++it needs st_rdev/st_dev to be larger than 16bits but
++in kernel it uses __old_kernel_stat for stat
++syscall which has st_rdev/st_dev as unsigned short
++
++Add a testcase
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ libc/sysdeps/linux/common/fstat.c |   18 ++++++++++++++----
++ libc/sysdeps/linux/common/lstat.c |   19 ++++++++++++++-----
++ libc/sysdeps/linux/common/stat.c  |   18 ++++++++++++++----
++ test/stat/stat-loop256.c          |   32 ++++++++++++++++++++++++++++++++
++ 4 files changed, 74 insertions(+), 13 deletions(-)
++ create mode 100644 test/stat/stat-loop256.c
++
++diff --git a/libc/sysdeps/linux/common/fstat.c b/libc/sysdeps/linux/common/fstat.c
++index acc639b..4726a68 100644
++--- a/libc/sysdeps/linux/common/fstat.c
+++++ b/libc/sysdeps/linux/common/fstat.c
++@@ -12,18 +12,28 @@
++ #include <sys/stat.h>
++ #include "xstatconv.h"
++ 
++-#define __NR___syscall_fstat __NR_fstat
++-static __inline__ _syscall2(int, __syscall_fstat, int, fd, struct kernel_stat *, buf)
++-
++ int fstat(int fd, struct stat *buf)
++ {
++ 	int result;
+++#ifdef __NR_fstat64
+++	/* normal stat call has limited values for various stat elements
+++	 * e.g. uid device major/minor etc.
+++	 * so we use 64 variant if available
+++	 * in order to get newer versions of stat elements
+++	 */
+++	struct kernel_stat64 kbuf;
+++	result = INLINE_SYSCALL(fstat64, 2, fd, &kbuf);
+++	if (result == 0) {
+++		__xstat32_conv(&kbuf, buf);
+++	}
+++#else
++ 	struct kernel_stat kbuf;
++ 
++-	result = __syscall_fstat(fd, &kbuf);
+++	result = INLINE_SYSCALL(fstat, 2, fd, &kbuf);
++ 	if (result == 0) {
++ 		__xstat_conv(&kbuf, buf);
++ 	}
+++#endif
++ 	return result;
++ }
++ libc_hidden_def(fstat)
++diff --git a/libc/sysdeps/linux/common/lstat.c b/libc/sysdeps/linux/common/lstat.c
++index aa77447..db72d1f 100644
++--- a/libc/sysdeps/linux/common/lstat.c
+++++ b/libc/sysdeps/linux/common/lstat.c
++@@ -12,19 +12,28 @@
++ #include <sys/stat.h>
++ #include "xstatconv.h"
++ 
++-#define __NR___syscall_lstat __NR_lstat
++-static __inline__ _syscall2(int, __syscall_lstat,
++-		const char *, file_name, struct kernel_stat *, buf)
++-
++ int lstat(const char *file_name, struct stat *buf)
++ {
++ 	int result;
+++#ifdef __NR_lstat64
+++	/* normal stat call has limited values for various stat elements
+++	 * e.g. uid device major/minor etc.
+++	 * so we use 64 variant if available
+++	 * in order to get newer versions of stat elements
+++	 */
+++	struct kernel_stat64 kbuf;
+++	result = INLINE_SYSCALL(lstat64, 2, file_name, &kbuf);
+++	if (result == 0) {
+++		__xstat32_conv(&kbuf, buf);
+++	}
+++#else
++ 	struct kernel_stat kbuf;
++ 
++-	result = __syscall_lstat(file_name, &kbuf);
+++	result = INLINE_SYSCALL(lstat, 2, file_name, &kbuf);
++ 	if (result == 0) {
++ 		__xstat_conv(&kbuf, buf);
++ 	}
+++#endif
++ 	return result;
++ }
++ libc_hidden_def(lstat)
++diff --git a/libc/sysdeps/linux/common/stat.c b/libc/sysdeps/linux/common/stat.c
++index a6ab291..829f35a 100644
++--- a/libc/sysdeps/linux/common/stat.c
+++++ b/libc/sysdeps/linux/common/stat.c
++@@ -12,20 +12,30 @@
++ #include <sys/stat.h>
++ #include "xstatconv.h"
++ 
++-#define __NR___syscall_stat __NR_stat
++ #undef stat
++-static __inline__ _syscall2(int, __syscall_stat,
++-		const char *, file_name, struct kernel_stat *, buf)
++ 
++ int stat(const char *file_name, struct stat *buf)
++ {
++ 	int result;
+++#ifdef __NR_stat64
+++	/* normal stat call has limited values for various stat elements
+++	 * e.g. uid device major/minor etc.
+++	 * so we use 64 variant if available
+++	 * in order to get newer versions of stat elements
+++	 */
+++	struct kernel_stat64 kbuf;
+++	result = INLINE_SYSCALL(stat64, 2, file_name, &kbuf);
+++	if (result == 0) {
+++		__xstat32_conv(&kbuf, buf);
+++	}
+++#else
++ 	struct kernel_stat kbuf;
++ 
++-	result = __syscall_stat(file_name, &kbuf);
+++	result = INLINE_SYSCALL(stat, 2, file_name, &kbuf);
++ 	if (result == 0) {
++ 		__xstat_conv(&kbuf, buf);
++ 	}
+++#endif
++ 	return result;
++ }
++ libc_hidden_def(stat)
++diff --git a/test/stat/stat-loop256.c b/test/stat/stat-loop256.c
++new file mode 100644
++index 0000000..14284c1
++--- /dev/null
+++++ b/test/stat/stat-loop256.c
++@@ -0,0 +1,32 @@
+++#include <stdio.h>
+++#include <unistd.h>
+++#include <stdlib.h>
+++#include <sys/stat.h>
+++int main()
+++{
+++    struct stat statbuf;
+++    int ret = 0;
+++    char* loop255 = "/dev/loop255";
+++    char* loop256 = "/dev/loop256";
+++    mode_t mode = 0660;
+++    mknod(loop255, mode, 0x7ff);
+++    mknod(loop256, mode, 0x100700);
+++    ret = stat(loop255, &statbuf);
+++    if(ret < 0) {
+++	printf("stat: Cant stat %s\n",loop255);
+++	unlink(loop255);
+++	exit(1);
+++    }
+++    ret = stat(loop256, &statbuf);
+++    if(ret < 0) {
+++        printf("stat: Cant stat %s\n",loop256);
+++	unlink(loop255);
+++	unlink(loop256);
+++        exit(1);
+++    }
+++
+++    unlink(loop255);
+++    unlink(loop256);
+++    exit(0);
+++}
+++
++-- 
++1.7.8.3
++
