@@ -1,27 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 16 Feb 2012 15:38:21 +0100
+Date: Thu, 16 Feb 2012 15:38:45 +0100
 Subject: [Buildroot] [PATCH 1/1] toolchainfile.cmake: fix lifetime
-In-Reply-To: <201202161047.27002.arnout@mind.be>
+In-Reply-To: <1329382425-2288-1-git-send-email-s.martin49@gmail.com>
 References: <1329382425-2288-1-git-send-email-s.martin49@gmail.com>
- <CAHXCMMLsaGQqK6cwB2QW_YziSdmTJz8kv9aC3zRgJr8=NjQCrQ@mail.gmail.com>
- <201202161047.27002.arnout@mind.be>
-Message-ID: <20120216153821.3db68aef@skate>
+Message-ID: <20120216153845.0157e2ae@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 16 Feb 2012 10:47:26 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Le Thu, 16 Feb 2012 09:53:45 +0100,
+Samuel Martin <s.martin49@gmail.com> a ?crit :
 
->  I would prefer that.  I don't like the way it looks now, with
-> the .cmake file lying around in the output directory.
+> This file must be consistent with the toolchain, so manage it lifetime
+> in the same way of the toolchain directory.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-No, not in $(TOOLCHAIN_DIR), because the CMake toolchain file must be
-part of our SDK, so it should be moved somewhere into $(HOST_DIR).
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
