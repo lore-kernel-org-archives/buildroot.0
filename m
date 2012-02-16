@@ -1,45 +1,38 @@
-From: Ozgun <ozgun.gunay@gmail.com>
-Date: Thu, 16 Feb 2012 08:46:44 +0200
-Subject: [Buildroot] opencv with glibc
-Message-ID: <CAPeX=+s4-ne+AtwxGUxLVqpN2j89ykB1sZfZsa1DovTKPDBkuw@mail.gmail.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 16 Feb 2012 08:56:30 +0100
+Subject: [Buildroot] [RFC PATCH v2 4/6] apply-patches.sh: directories
+ are considered as a collection of patches
+In-Reply-To: <201202160049.24485.arnout@mind.be>
+References: <20120215165104.GI4723@ldesroches-Latitude-E6320>
+ <1329347174-25471-1-git-send-email-ludovic.desroches@atmel.com>
+ <201202160049.24485.arnout@mind.be>
+Message-ID: <20120216075630.GA2943@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I download my BR from standard tree.
-My problem solved using "make distclean" instead of "make clean"
+Hello Arnout,
 
-thanks
+On Thu, Feb 16, 2012 at 12:49:24AM +0100, Arnout Vandecappelle wrote:
+> On Thursday 16 February 2012 00:06:14 ludovic.desroches at atmel.com wrote:
+> > Behaviour of directories is changed: it is no more considered as an overlay,
+> > but rather a collection of patches. Subdirectories are not supported.
+> > 
+> > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> 
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> 
+>  BTW, if you update a few patches out of a series, it is usually better
+> to repost the entire series.  Otherwise there's a risk of some patches
+> getting lost.
+> 
 
+Agree, I will try to build more packages in order to see if nothing is broken,
+then I will publish again the whole series without the RFC tag.
 
+Regards
 
-
-Date: Wed, 15 Feb 2012 22:26:03 +0100
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-To: Ozgun <ozgun.gunay@gmail.com>
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] opencv with glibc
-Message-ID: <20120215222603.6754b8e6@skate
->
-Content-Type: text/plain; charset=UTF-8
-
-Le Wed, 15 Feb 2012 21:35:25 +0200,
-Ozgun <ozgun.gunay@gmail.com> a ?crit :
-
-> My br doesn't have output/toolchainfile.cmake file
-
-Which version of Buildroot are you using? Are you doing out-of-tree
-build (if so, then the toolchainfile.cmake file is in the output
-directory you selected with O=, not in output/).
-
-Thomas
---
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120216/d7f30788/attachment-0001.html>
+Ludovic
