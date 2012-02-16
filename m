@@ -1,78 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Feb 2012 23:38:41 +0100
-Subject: [Buildroot] [PATCH] DOWNLOAD: change $1=DIRECTORY_URL,
-	$2=FILE_NAME to $1=FULL_FILE_URL, $2=FILE_NAME
-In-Reply-To: <28274ce277a8bde9abca815749513b2066845497.1329415985.git.alvaro.gamez@hazent.com>
-References: <201202160040.17980.arnout@mind.be>
- <28274ce277a8bde9abca815749513b2066845497.1329415985.git.alvaro.gamez@hazent.com>
-Message-ID: <201202162338.52454.arnout@mind.be>
+Date: Fri, 17 Feb 2012 00:10:31 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchainfile.cmake: fix lifetime
+In-Reply-To: <20120216153821.3db68aef@skate>
+References: <1329382425-2288-1-git-send-email-s.martin49@gmail.com>
+ <201202161047.27002.arnout@mind.be> <20120216153821.3db68aef@skate>
+Message-ID: <201202170010.53333.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 16 February 2012 19:15:07 Alvaro G. M wrote:
-> @@ -290,11 +295,11 @@ define DOWNLOAD
->                         file) $($(DL_MODE)_LOCALFILES) && exit ;; \
->                         scp) $($(DL_MODE)_SCP) && exit ;; \
->                         hg) $($(DL_MODE)_HG) && exit ;; \
-> -                       *) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
-> +                       *) if test -n "$(2)" ; then $(call $(DL_MODE)_WGET,$(1)/$(2),$(2)); else $(call $(DL_MODE)_WGET,$(1)); fi && exit ;; \
->                 esac ; \
->         fi ; \
->         if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
-> -               $(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE),$(2)) && exit ; \
-> +               $(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
->         fi ; \
->         exit 1
+On Thursday 16 February 2012 15:38:21 Thomas Petazzoni wrote:
+> Le Thu, 16 Feb 2012 10:47:26 +0100,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> 
+> >  I would prefer that.  I don't like the way it looks now, with
+> > the .cmake file lying around in the output directory.
+> 
+> No, not in $(TOOLCHAIN_DIR), because the CMake toolchain file must be
+> part of our SDK, so it should be moved somewhere into $(HOST_DIR).
 
- No, I still don't like it I'm afraid.  It feels too complicated.  And I
-don't think it works for the PRIMARY and BACKUP site if $(2) is empty.
-
- How about this:
-
-define DOWNLOAD_WGET
-	test -e $(DL_DIR)/$(2) || \
-	$(WGET) -O $(DL_DIR)/$(2) '$(call qstrip,$(1))'
-endef
-
-...
-
-define DOWNLOAD
-	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
-endef
-
-define DOWNLOAD_INNER
-	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
-			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-		esac ; \
-	fi ; \
-	if test -n "$(1)" ; then \
-		case "$($(PKG)_SITE_METHOD)" in \
-			git) $($(DL_MODE)_GIT) && exit ;; \
-			svn) $($(DL_MODE)_SVN) && exit ;; \
-			bzr) $($(DL_MODE)_BZR) && exit ;; \
-			file) $($(DL_MODE)_LOCALFILES) && exit ;; \
-			scp) $($(DL_MODE)_SCP) && exit ;; \
-			hg) $($(DL_MODE)_HG) && exit ;; \
-			*) $(call $(DL_MODE)_WGET,$(1),$(2)) && exit ;; \
-		esac ; \
-	fi ; \
-	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
-		$(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
-	fi ; \
-	exit 1
-endef
-
+ True.  How about $(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/ (right
+beside the sysroot)?
 
  Regards,
  Arnout
-
- PS. If you do take this over, you probably better add my
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
