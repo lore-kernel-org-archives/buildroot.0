@@ -1,165 +1,119 @@
-From: Jigar SOLANKI <jigar.solanki@labri.fr>
-Date: Thu, 16 Feb 2012 11:45:28 +0100
-Subject: [Buildroot] Illegal instruction Built bcc
-In-Reply-To: <201202152155.08608.arnout@mind.be>
-References: <4F3BF8DC.6080608@labri.fr> <201202152155.08608.arnout@mind.be>
-Message-ID: <4F3CDE48.2030605@labri.fr>
+From: Will Moore <will.moore@beraninstruments.com>
+Date: Thu, 16 Feb 2012 12:17:51 -0000
+Subject: [Buildroot] Report of the Buildroot Developer Day, February 3,
+	2012 - Legal info
+In-Reply-To: <201202160044.29316.arnout@mind.be>
+References: <201202160044.29316.arnout@mind.be>
+Message-ID: <BE5319E74F9A446BA391A54D7377663E@beraninstruments.com.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 15/02/2012 21:55, Arnout Vandecappelle a ?crit :
-> On Wednesday 15 February 2012 19:26:36 Jigar SOLANKI wrote:
-> 
->> Hi all,
-> 
->>
-> 
->> I'm trying to compile and run :
-> 
->>
-> 
->> #include <stdlib.h>
-> 
->>
-> 
->> int main(){
-> 
->> return 0
-> 
->> }
-> 
->>
-> 
->> on a Leon3/Sparc+Linux architecture.
-> 
->>
-> 
->> When I compile it with the toolchains binaries provided by Gaisler, it
-> 
->> works well (sparc-linux-gcc) it works well
-> 
->> Whereas when I compile it with a toolchain that I have built using the
-> 
->> BCC sources, I get an illegal instruction when trying to run it.
-> 
->>
-> 
->>
-> 
->> Where does that come from please ?
-> 
-> 
-Thanks for your answer.
 
-Actually, I use the buildroot package provided by Gaisler on their
-website to build a Linux for the Leon3 architecture.
-They provide toolchains binaries as well and also the bcc sources.
+> -----Original Message-----
+> From: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] On
+> Behalf Of Arnout Vandecappelle
+> Sent: 15 February 2012 23:44
+> 
+> ---------------------------------------------------------------------
+> 
+> Buildroot developer day February 3, 2012
+> 
+> ---------------------------------------------------------------------
 
-So what I have is a working Leon3+Linux architecture on a Virtex5 FPGA card.
-What I'm trying to do is to compile and run a test program on the Linux.
-Then comes the issue : when I compile this test code with the cross
-compiler binary provided, it compiles and runs well on the Linux.
+-- snip --
 
-But, when I try to compile it with a cross compiler that I have built
-using the bcc sources, it fails with the illegal instruction trap.
+> ---------------------------------------------------------------------
+> 
+> 6. Legal info
+> 
+> ---------------------------------------------------------------------
+> 
+> Buildroot users are expecting a statement from the buildroot
+> developers explaining how we understand that buildroot can be used to
+> comply to the GPL. Note that this doesn?t need to be minimal
+> compliance, e.g. we can advise to include buildroot itself even if it
+> may not be required.
+> 
+> What do we want to save?
+> 
+>   * The non-proprietary packages.
+>   * The license text of the packages.
+>   * The scripts to create it, i.e. buildroot
+>   * The buildroot config file.
+>   * The cross-compiler seems to be required too for GPLv2 packages,
+>     because it is not normally available on an OS.
 
-Here is the output of both -v :
+Without getting into a lot of IANAL stuff (!) please could somebody explain to
+me why the cross-compiler for GPLv2 packages is included in this list?
 
+> 
+> We will add support for preparing all of this. It is up to the user?s
+> legal office to decide what will actually be released and what not.
+> 
+> License texts. Many packages mix many licenses, so a single license
+> text per package is not sufficient.
+> 
+> Some licenses require to include the copyright holders in the license
+> text, so you can?t have one single BSD license text that applies to
+> all BSD-licensed software.
+> 
+> Buildroot itself. Creating a buildroot tarball is not so simple.
+> You?d need to do a make distclean first, so the output is gone, and
+> then tar the buildroot top directory. However, if there is an O=?
+> output directory within the buildroot directory, this will be
+> included as well? Note also that make distclean will remove the
+> .config. So recommend that make legal-info is done from a clean
+> buildroot checkout. Alternatively, do a tar of the current directory
+> and exclude dl and output.
+> 
+> Toolchain. For external toolchains, also the source needs to be
+> downloaded. For Sourcery there is a separate source tarball. For
+> Linaro this is more difficult, because it distributes its source as a
+> ct-ng tarball without the actual source. We?ll just mention that this
+> is unsupported for this case and other cases we can?t handle.
+> 
+> Implementation
+> 
+>   * Add our advise of how to comply to GPL to the documentation.
+>   * If something is difficult to do, skip it and mention it to the
+>     user.
+>   * In the package mk-file, specify the license file(s) from the
+>     package source that have to be included. There are some cases
+>     where the source doesn?t have a separate license file. In this
+>     case, we can include a license file in buildroot?s package
+>     directory. We could also point to a source file that contains the
+>     license text (not ideal because you add redundant cruft to the
+>     legal-info directory).
+>   * To avoid duplicating the same license every time, we use a common
+>     license file (included only once) for known licenses (GPLv2,
+>     LGPLv2, LGPLv2.1, ?). This only applies for licenses for which
+>     the text always is identical. In particular, the BSD license is
+>     excluded because it explicitly states that the copyright
+>     statement above must be retained.
 
-Provided cross compiler : sparc-linux-gcc -v
+Having just recently gone through doing this for a simple buildroot
+configuration I would note that even when things are e.g. GPLv2 they have
+different license text.  Not only do they often have (a la Linux) a little
+explanation before the text of the GPLv2 but also the GPLv2 text itself can vary
+subtly even when both versions are marked Version 2, June 1991.  In the cases I
+saw just silly things like the address given for FSF and "19yy" changing to
+"year", "St" to "Street", "Lesser" to "Library", and white space changes.  To be
+"clean" I just copied the license verbatim from the source.
+ 
+For BSD licenses this could get quite onerous in the .mk file as depending on
+configurations many separately BSD licensed source files in the /dl tarball may
+or may not be included in the build.
 
-Using built-in specs.
-Target: sparc-leon-linux-gnu
-Configured with:
-/home/eiselekd/linux-build-dir/linuxbuild/build-ct/ct/leon_multilib_basic/targets/src/gcc-4.4.2/configure
---build=i686-build_pc-linux-gnu --host=i686-build_pc-linux-gnu
---target=sparc-leon-linux-gnu
---prefix=/opt/sparc-linux-4.4.2-toolchains/multilib
---with-sysroot=/opt/sparc-linux-4.4.2-toolchains/multilib/sparc-leon-linux-gnu//sys-root
---enable-languages=c,c++,fortran --enable-multilib --with-cpu=
---with-pkgversion=crosstool-NG- --enable-__cxa_atexit
---disable-libmudflap --with-host-libstdcxx='-static-libgcc
--Wl,-Bstatic,-lstdc++,-Bdynamic -lm'
---with-gmp=/home/eiselekd/linux-build-dir/linuxbuild/build-ct/ct/leon_multilib_basic/targets/sparc-leon-linux-gnu/build/static
---with-mpfr=/home/eiselekd/linux-build-dir/linuxbuild/build-ct/ct/leon_multilib_basic/targets/sparc-leon-linux-gnu/build/static
---with-ppl=/home/eiselekd/linux-build-dir/linuxbuild/build-ct/ct/leon_multilib_basic/targets/sparc-leon-linux-gnu/build/static
---with-cloog=/home/eiselekd/linux-build-dir/linuxbuild/build-ct/ct/leon_multilib_basic/targets/sparc-leon-linux-gnu/build/static
---enable-threads=posix --enable-target-optspace
---with-local-prefix=/opt/sparc-linux-4.4.2-toolchains/multilib/sparc-leon-linux-gnu//sys-root
---disable-nls --enable-symvers=gnu --enable-c99 --enable-long-long
-Thread model: posix
-gcc version 4.4.2 (crosstool-NG-)
-
-
-and Built cross compiler (which is what I do need) sparc-elf-gcc -v :
-sparc-elf-gcc -v
-Reading specs from
-/opt/sparc-elf-3.4.4-1.0.38/bin/../lib/gcc/sparc-elf/3.4.4/specs
-Configured with: ../gcc-3.4.4/configure --target=sparc-elf
---prefix=/opt/sparc-elf-3.4.4 --with-gnu-as --with-gnu-ld --verbose
---enable-languages=c,c++ --disable-shared --disable-nls
---with-pkgversion=BCC 3.4.4 release 1.0.38 --with-newlib --with-cpu=leon
-Thread model: single
-gcc version 3.4.4
-
-
-(I also tried with a 4.4.2 too : same illegal instruction issue).
-
-> Most likely you configured buildroot for a subarchitecture that is not
-> 
-> supported by your platform. You can run the working cross-compiler with
-> 
-> the -v option; in the long list of configure options you'll see something
-> 
-> like '--with-cpu=sparcsfleon'. That is the subarchitecture you should
-> 
-> use for buildroot too.
-> 
-> 
-> Regards,
-> 
-> Arnout
-> 
-> 
-> -- 
-> 
-> Arnout Vandecappelle arnout at mind be
-> 
-> Senior Embedded Software Architect +32-16-286540
-> 
-> Essensium/Mind http://www.mind.be
-> 
-> G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-> 
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> 
-> GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> 
+>   * make legal-info creates a directory with sources, a directory
+>     with licenses, and an overview document with the packages and
+>     licenses.
+>   * Print and save a warning if something doesn?t work (license
+>     unknown, no source found because of override or local, ?)
+>   * At some point, the toolchains will need to be converted to
+>     gentargets too, so they participate in the license stuff.
 > 
 
-
--- 
-Jigar SOLANKI
-
-LaBRI - UMR 5800
-Universit? Bordeaux 1
-351 Cours de la Lib?ration
-F-33405 Talence Cedex
-Phone : (+33) 5 4000 24 87
-Fax   : (+33) 5 4000 66 69
-Web   : http://www.labri.fr/perso/solanki
-
-* Please do not print this e-mail unless it's really necessary *
----
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 554 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120216/cab5a660/attachment.asc>
+-- snip --
