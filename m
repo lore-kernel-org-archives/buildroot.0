@@ -1,48 +1,40 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 17 Feb 2012 14:50:40 +0100
-Subject: [Buildroot] Report of the Buildroot Developer Day, February 3,
- 2012 - Legal info
-In-Reply-To: <BE5319E74F9A446BA391A54D7377663E@beraninstruments.com.local>
-References: <201202160044.29316.arnout@mind.be>
- <BE5319E74F9A446BA391A54D7377663E@beraninstruments.com.local>
-Message-ID: <4F3E5B30.60007@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 17 Feb 2012 16:36:55 +0100
+Subject: [Buildroot] cross compile when crosstool-ng selected
+In-Reply-To: <CAPeX=+tg50C7qu67exCpn+S0zXGnY=5BQTb4QbSc5S0xHga4bw@mail.gmail.com>
+References: <CAPeX=+vkZe-E9_VVG_VGZw3dgcBBNNszC_UWyOU67YVHhSaj8A@mail.gmail.com>
+ <20120217071310.GC3119@tarshish>
+ <CAPeX=+tg50C7qu67exCpn+S0zXGnY=5BQTb4QbSc5S0xHga4bw@mail.gmail.com>
+Message-ID: <20120217163655.6e1206ce@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Will Moore wrote:
-...
-> Implementation
->
->    * Add our advise of how to comply to GPL to the documentation.
->    * If something is difficult to do, skip it and mention it to the
->      user.
->    * In the package mk-file, specify the license file(s) from the
->      package source that have to be included. There are some cases
->      where the source doesn?t have a separate license file. In this
->      case, we can include a license file in buildroot?s package
->      directory. We could also point to a source file that contains the
->      license text (not ideal because you add redundant cruft to the
->      legal-info directory).
->    * To avoid duplicating the same license every time, we use a common
->      license file (included only once) for known licenses (GPLv2,
->      LGPLv2, LGPLv2.1, ?). This only applies for licenses for which
->      the text always is identical. In particular, the BSD license is
->      excluded because it explicitly states that the copyright
->      statement above must be retained.
-> Having just recently gone through doing this for a simple buildroot
-> configuration I would note that even when things are e.g. GPLv2 they have
-> different license text.  Not only do they often have (a la Linux) a little
-> explanation before the text of the GPLv2 but also the GPLv2 text itself can vary
-> subtly even when both versions are marked Version 2, June 1991.  In the cases I
-> saw just silly things like the address given for FSF and "19yy" changing to
-> "year", "St" to "Street", "Lesser" to "Library", and white space changes.  To be
-> "clean" I just copied the license verbatim from the source.
+Le Fri, 17 Feb 2012 11:06:11 +0200,
+Ozgun <ozgun.gunay@gmail.com> a ?crit :
 
-You're right. In fact I noticed this fact when trying to implement the said
-feature. For the moment I chose to leave it out of my next patchset, and
-start a little more discussion about the issue.
+> I guess Crosstol-NG generated cross compiler is located under
+> /output/host/usr
+> I want to compile and install the
+> qtquick3d-tp2-src.tar.gz<ftp://ftp.qt.nokia.com/qt3d/noarch/current/qtquick3d-tp2-src.tar.gz>to
+> the target.
+> How can I do this?
 
-Luca
+Two ways:
+
+ *) Cross-compile it manually using the cross-compiler available in
+    output/host/usr/bin
+
+ *) Or, easier and better, create a Buildroot package for it. Look at
+    the Buildroot documentation for details on how to create a package.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
