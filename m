@@ -1,44 +1,47 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 22:15:51 +0100
-Subject: [Buildroot] [git commit] qt: simplify arch handling
-Message-ID: <20120301130636.5FEFE90BF7@busybox.osuosl.org>
+Date: Fri, 17 Feb 2012 14:48:50 +0100
+Subject: [Buildroot] [git commit] configs: Add Freescale MX53 support
+Message-ID: <20120301130635.3516A90BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbfda06cb9d9aa1708915ec4148d08a0ca36cbc2
+commit: http://git.buildroot.net/buildroot/commit/?id=28df1bc780c17f5fb340665ff89f05c9030b8b6f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Buildroot config and Linux Kernel config.
+Freescale binaries (xf86 video driver and multimedia codecs) not supported yet.
+
+Signed-off-by: Mathieu Briand <mbriand@adeneo-embedded.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    8 ++------
- 1 files changed, 2 insertions(+), 6 deletions(-)
+ configs/mx53loco_defconfig |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index fe85dae..68f9348 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -199,9 +199,7 @@ else
- QT_CONFIGURE_OPTS += -big-endian
- endif
- 
--ifeq ($(BR2_arm),y)
--QT_EMB_PLATFORM = arm
--else ifeq ($(BR2_armeb),y)
-+ifeq ($(BR2_arm)$(BR2_armeb),y)
- QT_EMB_PLATFORM = arm
- else ifeq ($(BR2_avr32),y)
- QT_EMB_PLATFORM = avr32
-@@ -209,9 +207,7 @@ else ifeq ($(BR2_i386),y)
- QT_EMB_PLATFORM = x86
- else ifeq ($(BR2_x86_64),y)
- QT_EMB_PLATFORM = x86_64
--else ifeq ($(BR2_mips),y)
--QT_EMB_PLATFORM = mips
--else ifeq ($(BR2_mipsel),y)
-+else ifeq ($(BR2_mips)$(BR2_mipsel),y)
- QT_EMB_PLATFORM = mips
- else ifeq ($(BR2_powerpc),y)
- QT_EMB_PLATFORM = powerpc
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+new file mode 100644
+index 0000000..eab5b18
+--- /dev/null
++++ b/configs/mx53loco_defconfig
+@@ -0,0 +1,18 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx53_loco"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
++BR2_LINUX_KERNEL_DEFCONFIG="imx5"
