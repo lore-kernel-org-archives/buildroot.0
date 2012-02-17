@@ -1,115 +1,388 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Feb 2012 09:42:09 +0000 (UTC)
-Subject: [Buildroot] [Bug 4634] Bigendian binary is output even if it is
- configured to output little endian
-In-Reply-To: <bug-4634-163@https.bugs.busybox.net/>
-References: <bug-4634-163@https.bugs.busybox.net/>
-Message-ID: <20120217094209.E7A1D90AC1@busybox.osuosl.org>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Fri, 17 Feb 2012 12:10:01 +0100
+Subject: [Buildroot] [PATCH] DOWNLOAD: change $1=DIRECTORY_URL,
+	$2=FILE_NAME to $1=FULL_FILE_URL, $2=FILE_NAME
+In-Reply-To: <201202171014.04114.arnout@mind.be>
+References: <201202171014.04114.arnout@mind.be>
+Message-ID: <6ed41ff2885fccbd8f3fd9d31ea1f647c3e0c6fc.1329476889.git.alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4634
+From: "Alvaro G. M" <alvaro.gamez@hazent.com>
 
---- Comment #3 from Aristotelis Iordanidis <aristotelis.iordanidis@diasemi.com> 2012-02-17 09:42:09 UTC ---
-(In reply to comment #1)
-> Buildroot does not automatically add the needed CFLAGS and LDFLAGS to use the
-> adequate multilib variant, because those CFLAGS and LDFLAGS are very
-> toolchain-specific and architecture-specific. So it is the user's job to add
-> explictly those flags.
-> 
-> I have posted a patch,
-> http://lists.busybox.net/pipermail/buildroot/2012-January/049556.html, which
-> adds some help text on the different external toolchains about their respective
-> multilib variants and how to select between them. Hopefully, this patch should
-> be merged for 2012.02.
+This modifies the definition of DOWNLOAD to receive two arguments:
+the first one is the full URL of the file to download, whereas the second
+(and optional) is the name the file will have once downloaded.
 
-(I'm sorry I posted a patch before the explanation)
+Same thing with the SOURCE_CHECK_WGET and SCP functions.
 
-I don't think this is enough (it didn't work for me).
-The TOOLCHAIN_EXTERNAL_CFLAGS in toolchain/toolchain-external/ext-tool.mk does
-not take into account BR2_TARGET_OPTIMIZATION.
-So, in the end it always copies the big-endian libc/ from multilib.
+All calls to these functions have been changed to the shortest form of
+the new API.
 
-From toolchain/toolchain-external/ext-tool.mk:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+---
+ docs/manual/adding-packages-handwritten.txt |    2 +-
+ linux/linux.mk                              |    2 +-
+ package/Makefile.package.in                 |   18 +++++++++++-------
+ package/cups/cups.mk                        |    2 +-
+ package/fis/fis.mk                          |    2 +-
+ package/games/doom-wad/doom-wads.mk         |    2 +-
+ package/gettext/gettext.mk                  |    2 +-
+ package/microperl/microperl.mk              |    2 +-
+ package/netkitbase/netkitbase.mk            |    2 +-
+ package/netkittelnet/netkittelnet.mk        |    2 +-
+ package/newt/newt.mk                        |    2 +-
+ package/tinyhttpd/tinyhttpd.mk              |    2 +-
+ package/ttcp/ttcp.mk                        |    2 +-
+ package/uemacs/uemacs.mk                    |    2 +-
+ package/vpnc/vpnc.mk                        |    2 +-
+ package/xfsprogs/xfsprogs.mk                |    2 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk             |    2 +-
+ toolchain/gdb/gdb.mk                        |    2 +-
+ toolchain/kernel-headers/kernel-headers.mk  |    2 +-
+ toolchain/toolchain-external/ext-tool.mk    |    6 +++---
+ toolchain/uClibc/uclibc.mk                  |    2 +-
+ 21 files changed, 33 insertions(+), 29 deletions(-)
 
-# march/mtune/floating point mode needs to be passed to the external toolchain
-# to select the right multilib variant
-ifneq ($(CC_TARGET_TUNE_),)
-TOOLCHAIN_EXTERNAL_CFLAGS += -mtune=$(CC_TARGET_TUNE_)
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_TUNE='"$(CC_TARGET_TUNE_)"'
-endif
-ifneq ($(CC_TARGET_ARCH_),)
-TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(CC_TARGET_ARCH_)
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ARCH='"$(CC_TARGET_ARCH_)"'
-endif
-ifneq ($(CC_TARGET_CPU_),)
-TOOLCHAIN_EXTERNAL_CFLAGS += -mcpu=$(CC_TARGET_CPU_)
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_CPU='"$(CC_TARGET_CPU_)"'
-endif
-ifneq ($(CC_TARGET_ABI_),)
-TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
-endif
-
-ifeq ($(BR2_SOFT_FLOAT),y)
-TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
-endif
-
-ifeq ($(BR2_VFP_FLOAT),y)
-TOOLCHAIN_EXTERNAL_CFLAGS += -mfpu=vfp
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_VFPFLOAT=1
-endif
-
-...
-
-        $(Q)SYSROOT_DIR=`$(TOOLCHAIN_EXTERNAL_CC) -print-sysroot 2>/dev/null` ;
-\
-
-...
-
-        ARCH_SUBDIR=`$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)
--print-multi-directory` ; \
-        ARCH_SYSROOT_DIR=$${SYSROOT_DIR}/$${ARCH_SUBDIR} ; \
-
-...
-
-        echo "Copy external toolchain sysroot to staging..." ; \
-        $(call
-copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR}) ;
-\
-
-
-I have selected the following in menuconfig (I've also selected soft-float):
-
-BR2_TARGET_OPTIMIZATION="-pipe -EL -march=m14kc -mmcu"
-BR2_TARGET_LDFLAGS="-EL"
-
-
-I attempted to fix the problem by passing $(TARGET_LDFLAGS) in ARCH_SUBDIR:
-
-        ARCH_SUBDIR=`$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)
-$(TARGET_LDFLAGS) -print-multi-directory` ; \
-
-After this change it seems that the little-endian version of libc is copied in
-buildroot's sysroot, but I still get errors about crt1.o and crti.o (ld can't
-find them).
-
-This happens because in my case ARCH_SUBDIR=soft-float/el .
-copy_toolchain_sysroot doesn't handle the case where ARCH_SUBDIR is not a
-single directory:
-
-ln: failed to create symbolic link
-`/home/iordanidis/src/buildroot/buildroot/output/host/usr/mipsel-unknown-linux-gnu/sysroot/soft-float/el':
-No such file or directory
-
-I corrected this by slightly modifying copy_toolchain_sysroot. After that,
-busybox was built correctly with -EL -soft-float.
-
+diff --git a/docs/manual/adding-packages-handwritten.txt b/docs/manual/adding-packages-handwritten.txt
+index a9d247c..583f303 100644
+--- a/docs/manual/adding-packages-handwritten.txt
++++ b/docs/manual/adding-packages-handwritten.txt
+@@ -22,7 +22,7 @@ existing manual makefiles and to help understand how they work.*
+ 11: LIBFOO_TARGET_BINARY:=usr/bin/foo
+ 12:
+ 13: $(DL_DIR)/$(LIBFOO_SOURCE):
+-14: 	$(call DOWNLOAD,$(LIBFOO_SITE),$(LIBFOO_SOURCE))
++14: 	$(call DOWNLOAD,$(LIBFOO_SITE)/$(LIBFOO_SOURCE))
+ 15:
+ 16: $(LIBFOO_DIR)/.source: $(DL_DIR)/$(LIBFOO_SOURCE)
+ 17: 	$(ZCAT) $(DL_DIR)/$(LIBFOO_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+diff --git a/linux/linux.mk b/linux/linux.mk
+index ae236d4..58cbe8e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -98,7 +98,7 @@ define LINUX_DOWNLOAD_PATCHES
+ 	$(if $(LINUX_PATCHES),
+ 		@$(call MESSAGE,"Download additional patches"))
+ 	$(foreach patch,$(filter ftp://% http://%,$(LINUX_PATCHES)),\
+-		$(call DOWNLOAD,$(dir $(patch)),$(notdir $(patch)))$(sep))
++		$(call DOWNLOAD,$(patch))$(sep))
+ endef
+ 
+ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index 33461b4..a96031e 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -203,11 +203,11 @@ endef
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(SCP) $(call stripurischeme,$(call qstrip,$(1)))/$(2) $(DL_DIR)
++	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
+ endef
+ 
+ define SOURCE_CHECK_SCP
+-	$(SSH) $(call domain,$(1),:) ls $(call notdomain,$(1)/$(2),:) > /dev/null
++	$(SSH) $(call domain,$(1),:) ls $(call notdomain,$(1),:) > /dev/null
+ endef
+ 
+ define SHOW_EXTERNAL_DEPS_SCP
+@@ -238,11 +238,11 @@ endef
+ 
+ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
++	$(WGET) -O $(DL_DIR)/$(2) '$(call qstrip,$(1))'
+ endef
+ 
+ define SOURCE_CHECK_WGET
+-  $(WGET) --spider $(call qstrip,$(1))/$(2)
++  $(WGET) --spider $(call qstrip,$(1))
+ endef
+ 
+ define SHOW_EXTERNAL_DEPS_WGET
+@@ -276,6 +276,10 @@ endef
+ ################################################################################
+ 
+ define DOWNLOAD
++	$(call DOWNLOAD_INNER,$(1),$(if $(2),$(2),$(notdir $(1))))
++endef
++
++define DOWNLOAD_INNER
+ 	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
+ 		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
+ 			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
+@@ -294,7 +298,7 @@ define DOWNLOAD
+ 		esac ; \
+ 	fi ; \
+ 	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
+-		$(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE),$(2)) && exit ; \
++		$(call $(DL_MODE)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
+ 	fi ; \
+ 	exit 1
+ endef
+@@ -318,8 +322,8 @@ ifeq ($(DL_MODE),DOWNLOAD)
+ 		(test -z $($(PKG)_PATCH) || test -e $(DL_DIR)$($(PKG)_PATCH))) || \
+ 		$(call MESSAGE,"Downloading")
+ endif
+-	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_SOURCE)))
+-	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE),$($(PKG)_PATCH)))
++	$(if $($(PKG)_SOURCE),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_SOURCE)))
++	$(if $($(PKG)_PATCH),$(call DOWNLOAD,$($(PKG)_SITE)/$($(PKG)_PATCH)))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ ifeq ($(DL_MODE),DOWNLOAD)
+ 	$(Q)mkdir -p $(@D)
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 4e8db71..9efd6e9 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -65,7 +65,7 @@ else
+ endif
+ 
+ $(DL_DIR)/$(CUPS_SOURCE):
+-	 $(call DOWNLOAD,$(CUPS_SITE),$(CUPS_SOURCE))
++	 $(call DOWNLOAD,$(CUPS_SITE)/$(CUPS_SOURCE))
+ 
+ $(CUPS_DIR)/.unpacked: $(DL_DIR)/$(CUPS_SOURCE)
+ 	$(CUPS_CAT) $(DL_DIR)/$(CUPS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+diff --git a/package/fis/fis.mk b/package/fis/fis.mk
+index 2942449..0975f3f 100644
+--- a/package/fis/fis.mk
++++ b/package/fis/fis.mk
+@@ -11,7 +11,7 @@ FIS_BINARY:=fis
+ FIS_TARGET_BINARY:=sbin/fis
+ 
+ $(DL_DIR)/$(FIS_SOURCE):
+-	 $(call DOWNLOAD,$(FIS_SITE),$(FIS_SOURCE))
++	 $(call DOWNLOAD,$(FIS_SITE)/$(FIS_SOURCE))
+ 
+ fis-source: $(DL_DIR)/$(FIS_SOURCE)
+ 
+diff --git a/package/games/doom-wad/doom-wads.mk b/package/games/doom-wad/doom-wads.mk
+index bae2420..c0bf4fb 100644
+--- a/package/games/doom-wad/doom-wads.mk
++++ b/package/games/doom-wad/doom-wads.mk
+@@ -10,7 +10,7 @@ DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom/
+ DOOM_WAD_DIR=$(BUILD_DIR)/doom-wad-$(DOOM_WAD_VERSION)
+ 
+ $(DL_DIR)/$(DOOM_WAD_SOURCE):
+-	 $(call DOWNLOAD,$(DOOM_WAD_SITE),$(DOOM_WAD_SOURCE))
++	 $(call DOWNLOAD,$(DOOM_WAD_SITE)/$(DOOM_WAD_SOURCE))
+ 
+ doom-wad-source: $(DL_DIR)/$(DOOM_WAD_SOURCE)
+ 
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index f4c8c76..f3605da 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -18,7 +18,7 @@ LIBINTL_TARGET_BINARY:=usr/lib/libintl.so
+ endif
+ 
+ $(DL_DIR)/$(GETTEXT_SOURCE):
+-	 $(call DOWNLOAD,$(GETTEXT_SITE),$(GETTEXT_SOURCE))
++	 $(call DOWNLOAD,$(GETTEXT_SITE)/$(GETTEXT_SOURCE))
+ 
+ gettext-source: $(DL_DIR)/$(GETTEXT_SOURCE)
+ 
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index b68e825..ae442a0 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -18,7 +18,7 @@ MICROPERL_MODS+=File/Basename.pm Errno.pm Config.pm IO/File.pm Symbol.pm \
+ 	DynaLoader.pm AutoLoader.pm Carp/Heavy.pm
+ endif
+ $(DL_DIR)/$(MICROPERL_SOURCE):
+-	$(call DOWNLOAD,$(MICROPERL_SITE),$(MICROPERL_SOURCE))
++	$(call DOWNLOAD,$(MICROPERL_SITE)/$(MICROPERL_SOURCE))
+ 
+ $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ 	$(MICROPERL_CAT) $(DL_DIR)/$(MICROPERL_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+diff --git a/package/netkitbase/netkitbase.mk b/package/netkitbase/netkitbase.mk
+index dde8f9f..83991f2 100644
+--- a/package/netkitbase/netkitbase.mk
++++ b/package/netkitbase/netkitbase.mk
+@@ -12,7 +12,7 @@ NETKITBASE_BINARY:=inetd/inetd
+ NETKITBASE_TARGET_BINARY:=usr/sbin/inetd
+ 
+ $(DL_DIR)/$(NETKITBASE_SOURCE):
+-	 $(call DOWNLOAD,$(NETKITBASE_SITE),$(NETKITBASE_SOURCE))
++	 $(call DOWNLOAD,$(NETKITBASE_SITE)/$(NETKITBASE_SOURCE))
+ 
+ netkitbase-source: $(DL_DIR)/$(NETKITBASE_SOURCE)
+ 
+diff --git a/package/netkittelnet/netkittelnet.mk b/package/netkittelnet/netkittelnet.mk
+index e9f40ca..ff05318 100644
+--- a/package/netkittelnet/netkittelnet.mk
++++ b/package/netkittelnet/netkittelnet.mk
+@@ -12,7 +12,7 @@ NETKITTELNET_BINARY:=telnetd/telnetd
+ NETKITTELNET_TARGET_BINARY:=usr/sbin/telnetd
+ 
+ $(DL_DIR)/$(NETKITTELNET_SOURCE):
+-	 $(call DOWNLOAD,$(NETKITTELNET_SITE),$(NETKITTELNET_SOURCE))
++	 $(call DOWNLOAD,$(NETKITTELNET_SITE)/$(NETKITTELNET_SOURCE))
+ 
+ netkittelnet-source: $(DL_DIR)/$(NETKITTELNET_SOURCE)
+ 
+diff --git a/package/newt/newt.mk b/package/newt/newt.mk
+index eb944a9..ac450e0 100644
+--- a/package/newt/newt.mk
++++ b/package/newt/newt.mk
+@@ -11,7 +11,7 @@ NEWT_VERSION=0.51.0
+ NEWT_CFLAGS=-Os -g -fPIC
+ 
+ $(DL_DIR)/$(NEWT_SOURCE):
+-	$(call DOWNLOAD,$(NEWT_SITE),$(NEWT_SOURCE))
++	$(call DOWNLOAD,$(NEWT_SITE)/$(NEWT_SOURCE))
+ 
+ $(NEWT_DIR)/.source: $(DL_DIR)/$(NEWT_SOURCE)
+ 	$(NEWT_CAT) $(DL_DIR)/$(NEWT_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+index 739849f..0f95d06 100644
+--- a/package/tinyhttpd/tinyhttpd.mk
++++ b/package/tinyhttpd/tinyhttpd.mk
+@@ -12,7 +12,7 @@ TINYHTTPD_BINARY:=httpd
+ TINYHTTPD_TARGET_BINARY:=usr/sbin/tinyhttpd
+ 
+ $(DL_DIR)/$(TINYHTTPD_SOURCE):
+-	 $(call DOWNLOAD,$(TINYHTTPD_SITE),$(TINYHTTPD_SOURCE))
++	 $(call DOWNLOAD,$(TINYHTTPD_SITE)/$(TINYHTTPD_SOURCE))
+ 
+ tinyhttpd-source: $(DL_DIR)/$(TINYHTTPD_SOURCE)
+ 
+diff --git a/package/ttcp/ttcp.mk b/package/ttcp/ttcp.mk
+index 006b74c..1acf120 100644
+--- a/package/ttcp/ttcp.mk
++++ b/package/ttcp/ttcp.mk
+@@ -10,7 +10,7 @@ TTCP_SOURCE=ttcp$(TTCP_VERSION).c
+ TTCP_DIR=$(BUILD_DIR)/ttcp$(TTCP_VERSION)
+ 
+ $(DL_DIR)/$(TTCP_SOURCE):
+-	 $(call DOWNLOAD,$(TTCP_SOURCE_URL),$(TTCP_SOURCE))
++	 $(call DOWNLOAD,$(TTCP_SOURCE_URL)/$(TTCP_SOURCE))
+ 
+ $(TTCP_DIR)/.unpacked: $(DL_DIR)/$(TTCP_SOURCE)
+ 	-mkdir $(TTCP_DIR)
+diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
+index 8355a7f..62b0911 100644
+--- a/package/uemacs/uemacs.mk
++++ b/package/uemacs/uemacs.mk
+@@ -12,7 +12,7 @@ UEMACS_BINARY:=em
+ UEMACS_TARGET_BINARY:=usr/bin/emacs
+ 
+ $(DL_DIR)/$(UEMACS_SOURCE):
+-	 $(call DOWNLOAD,$(UEMACS_SITE),$(UEMACS_SOURCE))
++	 $(call DOWNLOAD,$(UEMACS_SITE)/$(UEMACS_SOURCE))
+ 
+ uemacs-source: $(DL_DIR)/$(UEMACS_SOURCE)
+ 
+diff --git a/package/vpnc/vpnc.mk b/package/vpnc/vpnc.mk
+index 5a8c700..d8d9654 100644
+--- a/package/vpnc/vpnc.mk
++++ b/package/vpnc/vpnc.mk
+@@ -15,7 +15,7 @@ VPNC_TARGET_BINARY:=$(VPNC_DEST_DIR)/vpnc
+ VPNC_TARGET_SCRIPT:=$(TARGET_DIR)/etc/vpnc/default.conf
+ 
+ $(DL_DIR)/$(VPNC_SOURCE):
+-	$(call DOWNLOAD,$(VPNC_SITE),$(VPNC_SOURCE))
++	$(call DOWNLOAD,$(VPNC_SITE)/$(VPNC_SOURCE))
+ 
+ $(VPNC_DIR)/.unpacked: $(DL_DIR)/$(VPNC_SOURCE)
+ 	$(VPNC_CAT) $(DL_DIR)/$(VPNC_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 68db2f7..52fec09 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -18,7 +18,7 @@ XFSPROGS_STRIP_LIBDEP:= \
+ 	repair/xfs_repair quota/xfs_quota
+ 
+ $(DL_DIR)/$(XFSPROGS_SOURCE):
+-	 $(call DOWNLOAD,$(XFSPROGS_SITE),$(XFSPROGS_SOURCE))
++	 $(call DOWNLOAD,$(XFSPROGS_SITE)/$(XFSPROGS_SOURCE))
+ 
+ xfsprogs-source: $(DL_DIR)/$(XFSPROGS_SOURCE)
+ 
+diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
+index 5eb7505..d9547fb 100644
+--- a/toolchain/gcc/gcc-uclibc-4.x.mk
++++ b/toolchain/gcc/gcc-uclibc-4.x.mk
+@@ -172,7 +172,7 @@ endif
+ 
+ $(DL_DIR)/$(GCC_SOURCE):
+ 	mkdir -p $(DL_DIR)
+-	$(call DOWNLOAD,$(GCC_SITE),$(GCC_SOURCE))
++	$(call DOWNLOAD,$(GCC_SITE)/$(GCC_SOURCE))
+ 
+ gcc-unpacked: $(GCC_DIR)/.patched
+ $(GCC_DIR)/.unpacked: $(DL_DIR)/$(GCC_SOURCE)
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index 56faf49..b5c085b 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -24,7 +24,7 @@ endif
+ GDB_DIR:=$(TOOLCHAIN_DIR)/gdb-$(GDB_VERSION)
+ 
+ $(DL_DIR)/$(GDB_SOURCE):
+-	$(call DOWNLOAD,$(GDB_SITE),$(GDB_SOURCE))
++	$(call DOWNLOAD,$(GDB_SITE)/$(GDB_SOURCE))
+ 
+ gdb-unpacked: $(GDB_DIR)/.unpacked
+ $(GDB_DIR)/.unpacked: $(DL_DIR)/$(GDB_SOURCE)
+diff --git a/toolchain/kernel-headers/kernel-headers.mk b/toolchain/kernel-headers/kernel-headers.mk
+index 72c6007..c464c37 100644
+--- a/toolchain/kernel-headers/kernel-headers.mk
++++ b/toolchain/kernel-headers/kernel-headers.mk
+@@ -81,7 +81,7 @@ $(DL_DIR)/$(LINUX_HEADERS_SOURCE):
+ ifeq ($(BR2_KERNEL_HEADERS_SNAP),y)
+ 	$(error No local $@ found, cannot continue. Are you sure you wanted to enable BR2_KERNEL_HEADERS_SNAP?)
+ endif
+-	$(call DOWNLOAD,$(LINUX_HEADERS_SITE),$(LINUX_HEADERS_SOURCE))
++	$(call DOWNLOAD,$(LINUX_HEADERS_SITE)/$(LINUX_HEADERS_SOURCE))
+ 
+ kernel-headers: $(LINUX_HEADERS_DIR)/.configured
+ 
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 2ac4973..8f75fcf 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -225,10 +225,10 @@ endif
+ # components than usual.
+ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
+ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1):
+-	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1),$(TOOLCHAIN_EXTERNAL_SOURCE_1))
++	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_1)/$(TOOLCHAIN_EXTERNAL_SOURCE_1))
+ 
+ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2):
+-	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_2),$(TOOLCHAIN_EXTERNAL_SOURCE_2))
++	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE_2)/$(TOOLCHAIN_EXTERNAL_SOURCE_2))
+ 
+ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_1) $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE_2)
+ 	mkdir -p $(@D)
+@@ -251,7 +251,7 @@ endif
+ else
+ # Download and extraction of a toolchain
+ $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE):
+-	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE),$(TOOLCHAIN_EXTERNAL_SOURCE))
++	$(call DOWNLOAD,$(TOOLCHAIN_EXTERNAL_SITE)/$(TOOLCHAIN_EXTERNAL_SOURCE))
+ 
+ $(TOOLCHAIN_EXTERNAL_DIR)/.extracted: $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE)
+ 	mkdir -p $(@D)
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index ee474bb..32cbe46 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -67,7 +67,7 @@ UCLIBC_ARM_TYPE:=CONFIG_$(call qstrip,$(BR2_ARM_TYPE))
+ UCLIBC_SPARC_TYPE:=CONFIG_SPARC_$(call qstrip,$(BR2_SPARC_TYPE))
+ 
+ $(DL_DIR)/$(UCLIBC_SOURCE):
+-	$(call DOWNLOAD,$(UCLIBC_SITE),$(UCLIBC_SOURCE))
++	$(call DOWNLOAD,$(UCLIBC_SITE)/$(UCLIBC_SOURCE))
+ 
+ uclibc-unpacked: $(UCLIBC_DIR)/.unpacked
+ $(UCLIBC_DIR)/.unpacked: $(DL_DIR)/$(UCLIBC_SOURCE)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9
