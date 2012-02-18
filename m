@@ -1,32 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 18 Feb 2012 16:30:48 -0300
-Subject: [Buildroot] [PATCH 8/8] qemu/sh4-r2d: update to use kernel 3.2.6
-In-Reply-To: <1329593448-9309-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1329593448-9309-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1329593448-9309-8-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 18 Feb 2012 22:51:31 +0100
+Subject: [Buildroot] [PATCH 1/4] website: add target to prepare website
+Message-ID: <1329601894-7691-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/qemu_sh4_r2d_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index a35e2fa..8794b18 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -18,7 +18,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ Makefile       |    7 ++++++-
+ docs/docs.html |    4 ++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 7d8dd2e..6d45142 100644
+--- a/Makefile
++++ b/Makefile
+@@ -762,5 +762,10 @@ endef
+ MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
+ $(eval $(call GENDOC,manual))
+ 
+-.PHONY: $(noconfig_targets)
++website: manual-html
++	mkdir -p $(O)/website
++	cp docs/*.html $(O)/website
++	cp $(O)/docs/manual/manual.html $(O)/website
++
++.PHONY: website $(noconfig_targets)
+ 
+diff --git a/docs/docs.html b/docs/docs.html
+index 851d1d2..c3db8b9 100644
+--- a/docs/docs.html
++++ b/docs/docs.html
+@@ -3,13 +3,13 @@
+ <h3>Documentation</h3>
+ 
+ <p>Our document "Buildroot usage and documentation" is where you want
+-to start reading if you wish to understand how Buildroot work, or wish
++to start reading if you wish to understand how Buildroot works, or wish
+ to change/extend/fix things. If you find any errors (factual,
+ grammatical, whatever) please report them. Choose between:</p>
+ 
+ <ul>
+   <li><a href="/downloads/buildroot.html">Latest stable release</a></li>
+-  <li><a href="buildroot.html">GIT head revision</a></li>
++  <li><a href="manual.html">GIT head revision</a></li>
+ </ul>
+ 
+ <p>If you find that you need help with Buildroot, you can ask for
 -- 
-1.7.3.4
+1.7.9
