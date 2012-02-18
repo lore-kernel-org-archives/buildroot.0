@@ -1,29 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 18 Feb 2012 08:52:06 +0100
-Subject: [Buildroot] Fwd: qemu with buildroot problems
-In-Reply-To: <CA+DALLQeQzds0s7dmogoBwNND3LAPBSG_AWmXwSM8we2cBOcAg@mail.gmail.com>
- (Ali Beddah's message of "Sat, 18 Feb 2012 04:41:07 +0200")
-References: <CA+DALLSKohmgnk8rR35xZSHHf4x=Ky=+kw8nceLdCb9+RWw7sQ@mail.gmail.com>
- <CA+DALLQeQzds0s7dmogoBwNND3LAPBSG_AWmXwSM8we2cBOcAg@mail.gmail.com>
-Message-ID: <874nuo4lzt.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 18 Feb 2012 12:16:41 +0100
+Subject: [Buildroot] [PATCH] Added microblaze patch
+In-Reply-To: <CA+appbNDg4GPmFmETYchXF3Hyf6aG40ufuCjYVxsaL3dQWdbKg@mail.gmail.com>
+References: <CA+appbNdaSajXPdKk4OTyj0WOmeu=9PKr-Sa=cwAZNr76ujLnA@mail.gmail.com>
+ <201202141815.04894.arnout@mind.be>
+ <CA+appbNDg4GPmFmETYchXF3Hyf6aG40ufuCjYVxsaL3dQWdbKg@mail.gmail.com>
+Message-ID: <201202181216.42288.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ali" == Ali Beddah <ali.beddah@gmail.com> writes:
+On Thursday 16 February 2012 22:28:08 Spenser Gilliland wrote:
+> Arnout,
+> 
+> I've tried a make target of both <DTS_NAME>.dtb and
+> $(KERNEL_ARCH_PATH/boot/<DTS_NAME>.dtb with no success.  Are you sure
+> this is correct?  I've tried this both within buildroot and just on a
+> kernel tree directly with the microblaze toolchain.
 
-Hi,
+ I've never tried it myself, I've just looked at
+http://www.denx.de/wiki/DULG/LinuxFDTBlob
 
- Ali> hi after compiling buildroot i got rootfs.tar and zimage when i
- Ali> tried to emulate operating system by qemu i use alot of ways by
- Ali> googling but all failed ?what is the optimum way to do emulation
- Ali> for my operating system
-
-You haven't told us what architecture you are building for, but have a
-look at our configs/qemu_* defconfigs, and the corresponding
-documentation about how to run qemu in board/qemu/*/readme.txt
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120218/4e61b07e/attachment.html>
