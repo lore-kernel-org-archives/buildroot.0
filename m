@@ -1,84 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Feb 2012 12:36:28 +0100
-Subject: [Buildroot] BR 2012.02-rc1 :: WODIM issue (linking stage)
-In-Reply-To: <CAPEB33w1eEb5Efv+15-PG9QT4LRKSASz69tBspHWoASiV-w9hw@mail.gmail.com>
-References: <CAPEB33yG=-ETJSRQZgAAz45Lpu+2XWURiGRGRkzfFfaawt6d+w@mail.gmail.com>
- <CAPEB33w1eEb5Efv+15-PG9QT4LRKSASz69tBspHWoASiV-w9hw@mail.gmail.com>
-Message-ID: <201202181236.28445.arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Feb 2012 11:50:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 4772] Add uClibc configuration file option to
+ crosstool-ng toolchain support
+In-Reply-To: <bug-4772-163@https.bugs.busybox.net/>
+References: <bug-4772-163@https.bugs.busybox.net/>
+Message-ID: <20120218115041.4730190AEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 17 February 2012 21:35:29 MERCADIER Johann wrote:
-> Hi everybody!
-> using the 2012.02-rc1 release of buildroot I felt into the following issue
-> which concern WODIM during the linking stage. It probably miss a file or a
-> directory not set in a good path. How I can find exactly what is missing?
-> 
-> "
-> > Linking C executable wodim
-> > cd
-> > /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/wodim
-> > && /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/bin/cmake -E
-> > cmake_link_script CMakeFiles/wodim.dir/link.txt --verbose=1
-> > /usr/bin/gcc
-> >  -I/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/include
-> >  -L/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/lib
-> > -L/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/lib
-> > -Wl,-rpath,/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/lib
-> > CMakeFiles/wodim.dir/wodim.o CMakeFiles/wodim.dir/audiosize.o
-> > CMakeFiles/wodim.dir/auinfo.o CMakeFiles/wodim.dir/cdr_drv.o
-> > CMakeFiles/wodim.dir/cdtext.o CMakeFiles/wodim.dir/clone.o
-> > CMakeFiles/wodim.dir/crc16.o CMakeFiles/wodim.dir/cue.o
-> > CMakeFiles/wodim.dir/diskid.o CMakeFiles/wodim.dir/drv_7501.o
-> > CMakeFiles/wodim.dir/drv_jvc.o CMakeFiles/wodim.dir/drv_mmc.o
-> > CMakeFiles/wodim.dir/drv_philips.o CMakeFiles/wodim.dir/drv_simul.o
-> > CMakeFiles/wodim.dir/drv_sony.o CMakeFiles/wodim.dir/fifo.o
-> > CMakeFiles/wodim.dir/isosize.o CMakeFiles/wodim.dir/scsi_cdr_mmc4.o
-> > CMakeFiles/wodim.dir/scsi_mmc4.o CMakeFiles/wodim.dir/sector.o
-> > CMakeFiles/wodim.dir/subchan.o CMakeFiles/wodim.dir/wm_packet.o
-> > CMakeFiles/wodim.dir/wm_session.o CMakeFiles/wodim.dir/wm_track.o
-> > CMakeFiles/wodim.dir/xio.o  -o wodim -rdynamic -L../librols -L../libusal
-> > -L../libedc
-> > -L/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/libusal
-> > -L/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/librols
-> > -L/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/wodim
-> > -L/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/libedc
-> > ../libusal/libusal.a ../librols/librols.a -lcap libwodimstuff.a
-> > ../libedc/libedc.a
-> > make[3]: Leaving directory
-> > `/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11'
-> > /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/bin/cmake -E
-> > cmake_progress_report
-> > /media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/CMakeFiles
-> >  85 86 87 88 89 90 91 92 93 94 95 96
-> > [ 87%] Built target wodim
-> > make[2]: Leaving directory
-> > `/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11'
-> > make[1]: *** [all] Error 2
-> > make[1]: Leaving directory
-> > `/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11'
-> > make: ***
-> > [/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/host-cdrkit-1.1.11/.stamp_built]
-> > Error 2
-> > "
+https://bugs.busybox.net/show_bug.cgi?id=4772
 
- There is not error message here...  Could you run again with BR2_JLEVEL=1 ?
+--- Comment #1 from s.martin49 at gmail.com 2012-02-18 11:50:41 UTC ---
+(In reply to comment #0)
+> Currently when selecting a crosstool-ng-uClibc toolchain you cannot specify the
+> uClibc config file as it is always written over by the default. This patch adds
+> an option to the menuconfig to specify an alternative.
 
- And maybe also do a make savedefconfig and post it.
-
- Regards,
- Arnout
+Actually, when selecting a crosstool-NG toolchain in 'make menuconfig', you can
+then run 'make ctng-menuconfig' to customize it, and specify an uclibc
+config-file for uClibc toolchains.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120218/b111e42a/attachment.html>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
