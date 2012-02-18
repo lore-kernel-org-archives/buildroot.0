@@ -1,41 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Feb 2012 12:53:26 +0100
-Subject: [Buildroot] [PATCH v4-resend 2/2] new program:
-	usb_modeswitch_data
-In-Reply-To: <1329266018-10392-1-git-send-email-jwoltz@gmail.com>
-References: <1329266018-10392-1-git-send-email-jwoltz@gmail.com>
-Message-ID: <201202181253.27056.arnout@mind.be>
+Date: Sat, 18 Feb 2012 13:09:35 +0100
+Subject: [Buildroot] [PATCH] DOWNLOAD: change $1=DIRECTORY_URL,
+	$2=FILE_NAME to $1=FULL_FILE_URL, $2=FILE_NAME
+In-Reply-To: <6ed41ff2885fccbd8f3fd9d31ea1f647c3e0c6fc.1329476889.git.alvaro.gamez@hazent.com>
+References: <201202171014.04114.arnout@mind.be>
+ <6ed41ff2885fccbd8f3fd9d31ea1f647c3e0c6fc.1329476889.git.alvaro.gamez@hazent.com>
+Message-ID: <201202181309.35296.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 15 February 2012 01:33:38 J.C. Woltz wrote:
-> usb_modeswitch_data provides udev rules for usb VID/PID combinations to
-> switch usb deices from their default mode into a more useable mode. The
-> default mode usually is a cdrom with installation software that is of
-> little use in an embedded linux situation
-> 
-> Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Sorry, there are still a few things I missed before...
 
-> diff --git a/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-> new file mode 100644
-> index 0000000..024bc76
-> --- /dev/null
-> +++ b/package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
-> @@ -0,0 +1,24 @@
-> +diff -Nura usb_modeswitch_data-20120120.orig/Makefile usb_modeswitch_data-20120120/Makefile
-> +--- usb_modeswitch_data-20120120.orig/Makefile	2012-01-20 17:25:32.000000000 -0500
-> ++++ usb_modeswitch_data-20120120/Makefile	2012-02-06 14:20:47.000000000 -0500
+On Friday 17 February 2012 12:10:01 Alvaro G. M wrote:
 
- Can you add a brief explanation of what the patch does, including a
-Signed-off-by line?  Look at another patch as an example, e.g.
-package/kexec/kexec-fix-linker-options.patch
+[snip]
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> index 33461b4..a96031e 100644
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -203,11 +203,11 @@ endef
+>  # to prepend the path with a slash: scp://[user@]host:/absolutepath
+>  define DOWNLOAD_SCP
+>  	test -e $(DL_DIR)/$(2) || \
+> -	$(SCP) $(call stripurischeme,$(call qstrip,$(1)))/$(2) $(DL_DIR)
+> +	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
+>  endef
+>  
+>  define SOURCE_CHECK_SCP
+> -	$(SSH) $(call domain,$(1),:) ls $(call notdomain,$(1)/$(2),:) > /dev/null
+> +	$(SSH) $(call domain,$(1),:) ls $(call notdomain,$(1),:) > /dev/null
+
+ There should probably be quotes here as well.  Although, when you use
+scp, it's not very likely that the directory name contains evil characters.
+
+>  endef
+>  
+>  define SHOW_EXTERNAL_DEPS_SCP
+> @@ -238,11 +238,11 @@ endef
+>  
+>  define DOWNLOAD_WGET
+>  	test -e $(DL_DIR)/$(2) || \
+> -	$(WGET) -P $(DL_DIR) $(call qstrip,$(1))/$(2)
+> +	$(WGET) -O $(DL_DIR)/$(2) '$(call qstrip,$(1))'
+>  endef
+>  
+>  define SOURCE_CHECK_WGET
+> -  $(WGET) --spider $(call qstrip,$(1))/$(2)
+> +  $(WGET) --spider $(call qstrip,$(1))
+
+ Here quotes are definitely needed or we get in trouble with URLs 
+containing & or ;.
+
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
