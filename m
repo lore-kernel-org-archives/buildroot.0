@@ -1,30 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 18 Feb 2012 12:16:41 +0100
-Subject: [Buildroot] [PATCH] Added microblaze patch
-In-Reply-To: <CA+appbNDg4GPmFmETYchXF3Hyf6aG40ufuCjYVxsaL3dQWdbKg@mail.gmail.com>
-References: <CA+appbNdaSajXPdKk4OTyj0WOmeu=9PKr-Sa=cwAZNr76ujLnA@mail.gmail.com>
- <201202141815.04894.arnout@mind.be>
- <CA+appbNDg4GPmFmETYchXF3Hyf6aG40ufuCjYVxsaL3dQWdbKg@mail.gmail.com>
-Message-ID: <201202181216.42288.arnout@mind.be>
+Date: Sat, 18 Feb 2012 12:20:16 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchainfile.cmake: Fix location
+In-Reply-To: <1329467035-2349-1-git-send-email-s.martin49@gmail.com>
+References: <201202170010.53333.arnout@mind.be>
+ <1329467035-2349-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <201202181220.17044.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 16 February 2012 22:28:08 Spenser Gilliland wrote:
-> Arnout,
+On Friday 17 February 2012 09:23:55 Samuel Martin wrote:
+> This pacth moves the toolchainfile.cmake in the host tree, as well
+       ^^^^^ patch :-)
+> as making it generated after the toolchain generation or import and
+> checks (depending on the backend used).
 > 
-> I've tried a make target of both <DTS_NAME>.dtb and
-> $(KERNEL_ARCH_PATH/boot/<DTS_NAME>.dtb with no success.  Are you sure
-> this is correct?  I've tried this both within buildroot and just on a
-> kernel tree directly with the microblaze toolchain.
+> This ensures the correctness and consistency between the actual
+> toolchain and the toolchainfile.cmake file describing it.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- I've never tried it myself, I've just looked at
-http://www.denx.de/wiki/DULG/LinuxFDTBlob
-
- Regards,
- Arnout
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
@@ -35,4 +33,4 @@ LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120218/4e61b07e/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120218/6a3bf685/attachment-0001.html>
