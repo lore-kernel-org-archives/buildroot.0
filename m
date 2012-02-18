@@ -1,37 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Feb 2012 04:32:39 +0000 (UTC)
-Subject: [Buildroot] [Bug 4772] New: Add uClibc configuration file option to
- crosstool-ng toolchain support
-Message-ID: <bug-4772-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 18 Feb 2012 08:52:06 +0100
+Subject: [Buildroot] Fwd: qemu with buildroot problems
+In-Reply-To: <CA+DALLQeQzds0s7dmogoBwNND3LAPBSG_AWmXwSM8we2cBOcAg@mail.gmail.com>
+ (Ali Beddah's message of "Sat, 18 Feb 2012 04:41:07 +0200")
+References: <CA+DALLSKohmgnk8rR35xZSHHf4x=Ky=+kw8nceLdCb9+RWw7sQ@mail.gmail.com>
+ <CA+DALLQeQzds0s7dmogoBwNND3LAPBSG_AWmXwSM8we2cBOcAg@mail.gmail.com>
+Message-ID: <874nuo4lzt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4772
+>>>>> "Ali" == Ali Beddah <ali.beddah@gmail.com> writes:
 
-           Summary: Add uClibc configuration file option to crosstool-ng
-                    toolchain support
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: andrew at sideramota.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi,
 
+ Ali> hi after compiling buildroot i got rootfs.tar and zimage when i
+ Ali> tried to emulate operating system by qemu i use alot of ways by
+ Ali> googling but all failed ?what is the optimum way to do emulation
+ Ali> for my operating system
 
-Currently when selecting a crosstool-ng-uClibc toolchain you cannot specify the
-uClibc config file as it is always written over by the default. This patch adds
-an option to the menuconfig to specify an alternative.
+You haven't told us what architecture you are building for, but have a
+look at our configs/qemu_* defconfigs, and the corresponding
+documentation about how to run qemu in board/qemu/*/readme.txt
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
