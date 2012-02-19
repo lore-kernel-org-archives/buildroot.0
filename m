@@ -1,26 +1,75 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 19 Feb 2012 02:50:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 4772] Add uClibc configuration file option to
- crosstool-ng toolchain support
-In-Reply-To: <bug-4772-163@https.bugs.busybox.net/>
-References: <bug-4772-163@https.bugs.busybox.net/>
-Message-ID: <20120219025002.81E1590AFA@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sun, 19 Feb 2012 10:08:30 +0100
+Subject: [Buildroot] [PATCH] new package: zeromq
+Message-ID: <f866d381d6e31e8174b7.1329642510@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4772
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
---- Comment #2 from hank <andrew@sideramota.com> 2012-02-19 02:50:02 UTC ---
-Ah ok, I wasn't aware that you could do that. 
-Even though, you can't really support multiple configs using the make
-*_defconfig targets if you have to  manually specify the uclibc library. 
-In that case I guess you can over write the default config in the toolchain
-dir.
+---
+I hope the ? symbol in Config.in is not a problem.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+ package/Config.in        |   1 +
+ package/zeromq/Config.in |  22 ++++++++++++++++++++++
+ package/zeromq/zeromq.mk |  12 ++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -364,6 +364,7 @@ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
+ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
++source "package/zeromq/Config.in"
+ endmenu
+ 
+ menu "Other"
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+new file mode 100644
+--- /dev/null
++++ b/package/zeromq/Config.in
+@@ -0,0 +1,22 @@
++comment "zeromq requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
++
++config BR2_PACKAGE_ZEROMQ
++	bool "zeromq"
++	depends on BR2_USE_WCHAR # util-linux
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  ?MQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking library but
++	  acts like a concurrency framework. It gives you sockets that carry
++	  whole messages across various transports like in-process, inter-
++	  process, TCP, and multicast. You can connect sockets N-to-N with
++	  patterns like fanout, pub-sub, task distribution, and request-reply.
++	  It's fast enough to be the fabric for clustered products. Its
++	  asynchronous I/O model gives you scalable multicore applications,
++	  built as asynchronous message-processing tasks. It has a score of
++	  language APIs and runs on most operating systems.
++
++	  ?MQ is from iMatix and is LGPL open source.
++
++	  http://www.zeromq.org/
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+new file mode 100644
+--- /dev/null
++++ b/package/zeromq/zeromq.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# zeromq
++#
++#############################################################
++
++ZEROMQ_VERSION = 2.1.11
++ZEROMQ_SITE = http://download.zeromq.org/
++
++ZEROMQ_DEPENDENCIES = util-linux
++
++$(eval $(call AUTOTARGETS))
