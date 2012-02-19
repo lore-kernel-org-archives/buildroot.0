@@ -1,20 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Feb 2012 23:06:04 +0100
-Subject: [Buildroot] [PATCH] Print a message before executing the
-	post-build script
-In-Reply-To: <1329495168-4879-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Fri, 17 Feb 2012 17:12:48 +0100")
-References: <1329495168-4879-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87y5ry1nsj.fsf@macbook.be.48ers.dk>
+Date: Sun, 19 Feb 2012 23:07:00 +0100
+Subject: [Buildroot] [PATCH] [Lua] Avoid the warnings about the
+	redefinition of LUA_USE_DLOPEN,
+	when BR2_PACKAGE_LUA_INTERPRETER_READLINE is set.
+In-Reply-To: <1329485943-8066-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 17 Feb 2012 10:39:03 -0300")
+References: <1329485943-8066-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ty2m1nqz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Gustavo> From: Francois Perrad <francois.perrad@gadz.org>
+ Gustavo> See in src/luaconf.h lines 36-40
 
 Committed to next, thanks.
 
