@@ -1,121 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 19 Feb 2012 22:56:30 +0100
-Subject: [Buildroot] [git commit] Add documentation for makedev
-Message-ID: <20120219220756.AE95690AED@busybox.osuosl.org>
+Date: Sun, 19 Feb 2012 22:58:16 +0100
+Subject: [Buildroot] [git commit branch/next] qemu/mipsel-malta: update to
+	use kernel 3.2.6
+Message-ID: <20120219220800.4C3E890AED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=00dbf19c38b3286b848ac885ea28e5233ce692ba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=53238716fcc33b3923b81e23184020503766a510
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-gentargets.txt |    5 ++-
- docs/manual/appendix.txt                   |    4 ++
- docs/manual/makedev-syntax.txt             |   54 ++++++++++++++++++++++++++++
- docs/manual/manual.txt                     |    2 +
- 4 files changed, 64 insertions(+), 1 deletions(-)
+ configs/qemu_mipsel_malta_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
-index 3656a53..cfcee8c 100644
---- a/docs/manual/adding-packages-gentargets.txt
-+++ b/docs/manual/adding-packages-gentargets.txt
-@@ -210,10 +210,13 @@ information is (assuming the package name is +libfoo+) :
- 
- * +LIBFOO_DEVICES+ lists the device files to be created by Buildroot
-   when using the static device table. The syntax to use is the
--  makedevs one.
-+  makedevs one. You can find some documentation for this syntax in the
-+  xref:makedev-syntax[]. This variable is optional.
- 
- * +LIBFOO_PERMISSIONS+ lists the changes of permissions to be done at
-   the end of the build process. The syntax is once again the makedevs one.
-+  You can find some documentation for this syntax in the xref:makedev-syntax[].
-+  This variable is optional.
- 
- The recommended way to define these variables is to use the following
- syntax:
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-new file mode 100644
-index 0000000..f41c82c
---- /dev/null
-+++ b/docs/manual/appendix.txt
-@@ -0,0 +1,4 @@
-+Appendix
-+========
-+
-+include::makedev-syntax.txt[]
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-new file mode 100644
-index 0000000..4728c4b
---- /dev/null
-+++ b/docs/manual/makedev-syntax.txt
-@@ -0,0 +1,54 @@
-+[[makedev-syntax]]
-+Makedev syntax documentation
-+----------------------------
-+
-+The makedev syntax is used across several places in Buildroot to
-+define changes to be made for permissions or which device files to
-+create and how to create them, in order to avoid to call mkdnod every
-+now and then.
-+
-+This syntax is derived from the makedev utility, and a more complete
-+documentation can be found in the +package/makedevs/README+ file.
-+
-+It takes the form of a line for each file, with the following layout:
-+
-+|===========================================================
-+|name |type |mode |uid |gid |major |minor |start |inc |count
-+|===========================================================
-+
-+There is a few non-trivial blocks here:
-+
-+- +name+ is the path to the file you want to create/modify
-+- +type+ is the type of the file, being one of :
-+  * f: a regular file
-+  * d: a directory
-+  * c: a character device file
-+  * b: a block device file
-+  * p: a named pipe
-+- +mode+, +uid+ and +gid+ are the usual permissions stuff
-+- +major+ and +minor+ are here for device files
-+- +start+, +inc+ and +count+ are when you want to create a whole batch
-+  of files, and can be reduced to a loop, beginning at +start+,
-+  incrementing its counter by +inc+ until it reaches +count+
-+
-+Let's say you want to change the permissions of a given file, using
-+this syntax, you will need to put:
-+-------------------------------------------------------------------
-+/usr/bin/foobar	f	644	0	0	-	-	-	-	-
-+-------------------------------------------------------------------
-+
-+On the other hand, if you want to create the device file +/dev/hda+
-+and the corresponding 15 files for the partitions, you will need for
-++/dev/hda+:
-+
-+-------------------------------------------------------------------
-+/dev/hda	b	640	0	0	3	0	0	0	-
-+-------------------------------------------------------------------
-+
-+and then for device files corresponding to the partitions of
-++/dev/hda+, +/dev/hdaX+, +X+ ranging from 1 to 15:
-+
-+-------------------------------------------------------------------
-+/dev/hda	b	640	0	0	3	1	1	1	15
-+-------------------------------------------------------------------
-+
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index 10ce695..732b50c 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -30,3 +30,5 @@ include::ccache-support.txt[]
- include::download-location.txt[]
- 
- include::adding-packages.txt[]
-+
-+include::appendix.txt[]
+diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
+index a46f886..0ccd4e6 100644
+--- a/configs/qemu_mipsel_malta_defconfig
++++ b/configs/qemu_mipsel_malta_defconfig
+@@ -9,7 +9,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.2.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
