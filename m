@@ -1,177 +1,77 @@
-From: Spenser Gilliland <spenser309@gmail.com>
-Date: Sun, 19 Feb 2012 14:41:00 -0600
-Subject: [Buildroot] [PATCH v2] Add Device Tree and simpleImage support
-Message-ID: <1329684060-20751-1-git-send-email-Spenser309@gmail.com>
+From: Sri Ram Vemulpali <sri.ram.gmu06@gmail.com>
+Date: Sun, 19 Feb 2012 16:17:12 -0500
+Subject: [Buildroot] buildroot libnl error
+In-Reply-To: <CALyraeNF1d0BsRu1h+F5L=YBVB8Gt2JgXGu2ebarR1vRrMnkeg@mail.gmail.com>
+References: <CALyraeNF1d0BsRu1h+F5L=YBVB8Gt2JgXGu2ebarR1vRrMnkeg@mail.gmail.com>
+Message-ID: <CALyraeOVWZ=KDRehS=RC6Wq5Z+4W_yaT3T=ROEMinTNxFOmafw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds device tree and simpleImage support to buildroot.  When the simpleImage Kernel binary image type is selected, the user has can select either an in tree device tree source file or an out of tree device tree source file.
+I found solution by doing this.
 
-This triggers the kernel to build the simpleImage.<dt> target and copy the resulting binary to the output/images directory.  Additionally, if the install dtb option is selected the <dt>.dtb file is copied to the output directory.
+I added following lines of code in
+libnl-3.0/lib/route/pktloc_grammer.h
 
-Signed-off-by: Spenser Gilliland <Spenser309@gmail.com>
----
- linux/Config.in |   46 ++++++++++++++++++++++++++++++++++++++++++++++
- linux/linux.mk  |   41 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 87 insertions(+), 0 deletions(-)
+#ifndef YY_BUF_SIZE
+#define YY_BUF_SIZE 16384
+#endif
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 26032fd..1c74f1a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -150,6 +150,10 @@ config BR2_LINUX_KERNEL_VMLINUZ
- 	bool "vmlinuz"
- 	depends on BR2_mips || BR2_mipsel
- 
-+config BR2_LINUX_KERNEL_SIMPLEIMAGE
-+	bool "simpleImage"
-+	depends on BR2_microblaze
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 	bool "custom target"
- 	help
-@@ -163,6 +167,48 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
- 
- endchoice
- 
-+#
-+# Device Tree Support
-+#
-+
-+choice 
-+	prompt "Device Tree Blob"
-+	default BR2_LINUX_KERNEL_USE_DTS
-+	depends on BR2_LINUX_KERNEL_SIMPLEIMAGE 
-+
-+config BR2_LINUX_KERNEL_USE_DTS
-+	bool "Use an in kernel device tree"
-+
-+config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	bool "Use a custom device tree"
-+
-+endchoice
-+
-+config BR2_LINUX_KERNEL_MAKE_DTB
-+	bool
-+	default y if BR2_LINUX_KERNEL_USE_DTS || BR2_LINUX_KERNEL_USE_CUSTOM_DTS	
-+
-+config BR2_LINUX_KERNEL_INSTALL_DTS
-+	bool "Copy device tree blob to the output directory"
-+	depends on BR2_LINUX_KERNEL_MAKE_DTB
-+	help
-+	  This copies the device tree blob to the images
-+	  directory.
-+
-+config BR2_LINUX_KERNEL_DTS
-+	string "Dts Name"
-+	depends on BR2_LINUX_KERNEL_USE_DTS
-+	help
-+	  Name of device tree source file in tree to use
-+	  without the trailing .dts
-+
-+config BR2_LINUX_KERNEL_CUSTOM_DTS
-+	string "Dts file path"
-+	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS 
-+	help
-+	  Path to the custom dts file.
-+
-+
- config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
- 	string "Kernel image target name"
- 	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-diff --git a/linux/linux.mk b/linux/linux.mk
-index ae236d4..1fb4ece 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -67,6 +67,9 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
- LINUX_IMAGE_NAME=vmlinux
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_NAME=vmlinuz
-+else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
-+# Image name is set once the dts is known
-+LINUX_DEPENDENCIES+=host-uboot-tools
- endif
- endif
- 
-@@ -118,6 +121,35 @@ endef
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
- 
- 
-+ifneq ($(BR2_LINUX_KERNEL_CUSTOM_DTS),)
-+LINUX_KERNEL_CUSTOM_DTS = $(call qstrip, $(BR2_LINUX_KERNEL_CUSTOM_DTS))
-+DTS_NAME = $(shell export file=`basename $(LINUX_KERNEL_CUSTOM_DTS)` && echo $${file%.*})
-+define LINUX_COPY_DTS
-+   echo "LINUX_KERNEL_CUSTOM_DTS=$(LINUX_KERNEL_CUSTOM_DTS) and DTS_NAME=$(DTS_NAME)" && \
-+	mkdir -p $(KERNEL_ARCH_PATH)/boot/dts && \
-+	cp $(BR2_LINUX_KERNEL_CUSTOM_DTS) $(KERNEL_ARCH_PATH)/boot/dts/ 
-+endef
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL_USE_DTS),y)
-+DTS_NAME = $(call qstrip, $(BR2_LINUX_KERNEL_DTS))
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL_MAKE_DTB),y)
-+define LINUX_MAKE_DTB
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) scripts/dtc/ && \
-+    scripts/dtc/dtc -O dtb -o $(KERNEL_ARCH_PATH)/boot/$(DTS_NAME).dtb \
-+      -b 0 -p 1024 $(KERNEL_ARCH_PATH)/boot/dts/$(DTS_NAME).dts
-+endef
-+define LINUX_INSTALL_DTB
-+	cp $(KERNEL_ARCH_PATH)/boot/$(DTS_NAME).dtb $(BINARIES_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
-+LINUX_IMAGE_NAME = simpleImage.$(DTS_NAME)
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-@@ -125,6 +157,8 @@ KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
- endif
- 
- define LINUX_CONFIGURE_CMDS
-+	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-+		$(call LINUX_COPY_DTS))
- 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-@@ -158,17 +192,22 @@ define LINUX_BUILD_CMDS
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
- 	fi
-+	$(if $(BR2_LINUX_KERNEL_MAKE_DTB),
-+		$(call LINUX_MAKE_DTB))
- endef
- 
- 
- ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
- define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
- 	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
-+
- endef
- endif
- 
- define LINUX_INSTALL_IMAGES_CMDS
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-+	$(if $(BR2_LINUX_KERNEL_INSTALL_DTB),
-+		$(call LINUX_INSTALL_DTB))
- endef
- 
- define LINUX_INSTALL_TARGET_CMDS
-@@ -215,6 +254,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
- 	# Copy the kernel image to its final destination
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-+	# If there is a .ub file copy it to the final destination
-+	test -f $(LINUX_IMAGE_PATH).ub && cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
- 	$(Q)touch $@
- 
- # The initramfs building code must make sure this target gets called
+#ifndef YY_STATE_BUF_SIZE
+#define YY_STATE_BUF_SIZE ((YY_BUF_SIZE + 2) * sizeof(yy_state_type))
+#endif
+
+Thanks,
+Sri
+
+
+On 2/19/12, Sri Ram Vemulpali <sri.ram.gmu06@gmail.com> wrote:
+> Hello All,
+>
+> I am new to BuildRoot e-mail list. I am using BuildRoot to compile my
+> embedded linux image and tool-chain.
+>
+> In the intermediate compilation step I encountered the following error.
+>
+> make[2]: Entering directory
+> `/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
+> /usr/bin/make  all-am
+> make[3]: Entering directory
+> `/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
+>   CC     route/pktloc.lo
+> route/pktloc.c: In function ?read_pktlocs?:
+> route/pktloc.c:127:34: error: ?YY_BUF_SIZE? undeclared (first use in
+> this function)
+> route/pktloc.c:127:34: note: each undeclared identifier is reported
+> only once for each function it appears in
+> make[3]: *** [route/pktloc.lo] Error 1
+> make[3]: Leaving directory
+> `/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
+> make[2]: *** [all] Error 2
+> make[2]: Leaving directory
+> `/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
+> make[1]: *** [all-recursive] Error 1
+> make[1]: Leaving directory
+> `/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0'
+> make: ***
+> [/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/.stamp_built]
+> Error 2
+>
+>
+> Can anyone point me what this error and what is the resolution. Is
+> this related to not including right header files.
+> Also, how can I enable sysroot option pointing to buildroot output/staging
+>
+> Thanks in advance
+>
+> --
+> Regards,
+> Sri.
+>
+
+
 -- 
-1.7.9
+Regards,
+Sri.
