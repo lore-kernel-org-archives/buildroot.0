@@ -1,68 +1,26 @@
-From: Spenser Gilliland <spenser309@gmail.com>
-Date: Sat, 18 Feb 2012 17:34:43 -0600
-Subject: [Buildroot] [PATCH] Added microblaze patch
-In-Reply-To: <201202181216.42288.arnout@mind.be>
-References: <CA+appbNdaSajXPdKk4OTyj0WOmeu=9PKr-Sa=cwAZNr76ujLnA@mail.gmail.com>
- <201202141815.04894.arnout@mind.be>
- <CA+appbNDg4GPmFmETYchXF3Hyf6aG40ufuCjYVxsaL3dQWdbKg@mail.gmail.com>
- <201202181216.42288.arnout@mind.be>
-Message-ID: <CA+appbN+dcV8AWwShaYm7K2mMC5QQZykkpxfE0vtZi0WaaO-JA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 19 Feb 2012 02:50:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 4772] Add uClibc configuration file option to
+ crosstool-ng toolchain support
+In-Reply-To: <bug-4772-163@https.bugs.busybox.net/>
+References: <bug-4772-163@https.bugs.busybox.net/>
+Message-ID: <20120219025002.81E1590AFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I can use the dtc directly.  This may be the best solution.  As that
-interface appears to be non-uniform across architectures.
+https://bugs.busybox.net/show_bug.cgi?id=4772
 
-Spenser
-
-On Sat, Feb 18, 2012 at 5:16 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Thursday 16 February 2012 22:28:08 Spenser Gilliland wrote:
->
->> Arnout,
->
->>
->
->> I've tried a make target of both <DTS_NAME>.dtb and
->
->> $(KERNEL_ARCH_PATH/boot/<DTS_NAME>.dtb with no success. Are you sure
->
->> this is correct? I've tried this both within buildroot and just on a
->
->> kernel tree directly with the microblaze toolchain.
->
->
-> I've never tried it myself, I've just looked at
->
-> http://www.denx.de/wiki/DULG/LinuxFDTBlob
->
->
-> Regards,
->
-> Arnout
->
->
-> --
->
-> Arnout Vandecappelle arnout at mind be
->
-> Senior Embedded Software Architect +32-16-286540
->
-> Essensium/Mind http://www.mind.be
->
-> G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
->
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
->
-> GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
->
-
-
+--- Comment #2 from hank <andrew@sideramota.com> 2012-02-19 02:50:02 UTC ---
+Ah ok, I wasn't aware that you could do that. 
+Even though, you can't really support multiple configs using the make
+*_defconfig targets if you have to  manually specify the uclibc library. 
+In that case I guess you can over write the default config in the toolchain
+dir.
 
 -- 
-Spenser Gilliland
-Computer Engineer
-Illinois Institute of Technology
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
