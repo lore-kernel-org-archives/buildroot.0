@@ -1,88 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Feb 2012 23:30:00 +0100
-Subject: [Buildroot] [git commit] gamin: fix compilation with glib 2.30
-Message-ID: <20120301130636.9466590BF7@busybox.osuosl.org>
+Date: Sun, 19 Feb 2012 22:54:17 +0100
+Subject: [Buildroot] [git commit] defconfigs: mx53loco_defconfig: misc tweaks
+Message-ID: <20120301130635.4680E90BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=328fc5747279ff00fcc619d1eda81bf139f3221c
+commit: http://git.buildroot.net/buildroot/commit/?id=6fdc1c3b55cbdf04502ca99986c13a0d3c80f6c9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-G_CONST_RETURN is deprecated in glib 2.30 so remove occurences
-to avoid build failures.
+- Use git:// URLs for freescale git trees
+- Enable hard fpu for A8
+- Board uses uSD cards, so enable ext2 filesystem
 
-Patch taken from http://patches.openembedded.org/patch/13079/
-
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Cc: Richard Purdie <richard.purdie@linuxfoundation.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gamin/gamin-0.1.10-no-const-return.patch |   57 ++++++++++++++++++++++
- 1 files changed, 57 insertions(+), 0 deletions(-)
+ configs/mx53loco_defconfig |    9 +++++++--
+ 1 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/gamin/gamin-0.1.10-no-const-return.patch b/package/gamin/gamin-0.1.10-no-const-return.patch
-new file mode 100644
-index 0000000..3e6e905
---- /dev/null
-+++ b/package/gamin/gamin-0.1.10-no-const-return.patch
-@@ -0,0 +1,57 @@
-+G_CONST_RETURN is deprecated in glib 2.30 so remove to to avoid
-+build failures.
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index eab5b18..ff3948b 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -1,18 +1,23 @@
+ # Architecture
+ BR2_arm=y
+ BR2_cortex_a8=y
++# BR2_SOFT_FLOAT is not set
++BR2_VFP_FLOAT=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53_loco"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+ BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
+ 
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
 +
-+Upstream-Status: Pending
-+
-+Index: gamin-0.1.10/server/gam_node.c
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_node.c	2011-10-12 15:25:45.217178314 +0100
-++++ gamin-0.1.10/server/gam_node.c	2011-10-12 15:26:17.807178293 +0100
-+@@ -122,7 +122,7 @@
-+  * it has finished with the string.  If it must keep it longer, it
-+  * should makes its own copy.  The returned string must not be freed.
-+  */
-+-G_CONST_RETURN char *
-++const char *
-+ gam_node_get_path(GamNode * node)
-+ {
-+     g_assert(node);
-+Index: gamin-0.1.10/server/gam_node.h
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_node.h	2011-10-12 15:25:46.857178269 +0100
-++++ gamin-0.1.10/server/gam_node.h	2011-10-12 15:26:28.637178297 +0100
-+@@ -58,7 +58,7 @@
-+ void                  gam_node_set_is_dir          (GamNode         *node,
-+ 						   gboolean        is_dir);
-+ 	
-+-G_CONST_RETURN char  *gam_node_get_path            (GamNode         *node);
-++const char  *gam_node_get_path            (GamNode         *node);
-+ 
-+ GList                *gam_node_get_subscriptions   (GamNode         *node);
-+ 
-+Index: gamin-0.1.10/server/gam_subscription.c
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_subscription.c	2011-10-12 15:25:40.497177525 +0100
-++++ gamin-0.1.10/server/gam_subscription.c	2011-10-12 15:26:39.867178304 +0100
-+@@ -141,7 +141,7 @@
-+  * @param sub the GamSubscription
-+  * @returns The path being monitored.  It should not be freed.
-+  */
-+-G_CONST_RETURN char *
-++const char *
-+ gam_subscription_get_path(GamSubscription * sub)
-+ {
-+     if (sub == NULL)
-+Index: gamin-0.1.10/server/gam_subscription.h
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_subscription.h	2011-10-12 15:25:28.507178266 +0100
-++++ gamin-0.1.10/server/gam_subscription.h	2011-10-12 15:25:58.817178285 +0100
-+@@ -21,7 +21,7 @@
-+ 
-+ int                  gam_subscription_get_reqno    (GamSubscription *sub);
-+ 
-+-G_CONST_RETURN char *gam_subscription_get_path     (GamSubscription *sub);
-++const char *gam_subscription_get_path     (GamSubscription *sub);
-+ 
-+ GamListener         *gam_subscription_get_listener (GamSubscription *sub);
-+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+ BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx5"
