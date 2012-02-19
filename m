@@ -1,46 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 19 Feb 2012 23:06:31 +0100
-Subject: [Buildroot] [git commit branch/next] Avoid the warnings about the
-	redefinition of LUA_USE_DLOPEN,
-	when BR2_PACKAGE_LUA_INTERPRETER_READLINE is set
-Message-ID: <20120219220800.9E7F390AED@busybox.osuosl.org>
+Date: Sun, 19 Feb 2012 22:58:26 +0100
+Subject: [Buildroot] [git commit branch/next] qemu/sparc-ss10: update to use
+	kernel 3.2.6
+Message-ID: <20120219220800.5B23290AED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3175e72e054a9b088903cf625a66ccfe9fd4404e
+commit: http://git.buildroot.net/buildroot/commit/?id=03227980a71a2766d8db729a843b2b4f16a58e51
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See src/luaconf.h lines 36-40
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lua/lua.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ configs/qemu_sparc_ss10_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 1dabedf..30e95b4 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -9,7 +9,7 @@ LUA_SITE = http://www.lua.org/ftp
- LUA_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
--	LUA_MYCFLAGS += -fPIC -DLUA_USE_DLOPEN
-+	LUA_MYCFLAGS += -fPIC
- 	LUA_MYLIBS += -ldl
- endif
- 
-@@ -18,7 +18,7 @@ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
- 	LUA_MYCFLAGS += -DLUA_USE_LINUX
- else
--	LUA_MYCFLAGS += -DLUA_USE_POSIX
-+	LUA_MYCFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
- endif
- 
- HOST_LUA_DEPENDENCIES =
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 834514f..6d69379 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -9,6 +9,6 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
