@@ -1,30 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Feb 2012 23:00:48 +0100
-Subject: [Buildroot] compiling buildroot
-In-Reply-To: <COL102-W54CA9036D81D469C41A8E9CB610@phx.gbl> (sainath eluri's
- message of "Sun, 19 Feb 2012 23:33:23 +0530")
-References: <COL102-W54CA9036D81D469C41A8E9CB610@phx.gbl>
-Message-ID: <87aa4e32lr.fsf@macbook.be.48ers.dk>
+Date: Sun, 19 Feb 2012 23:03:44 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: add support for the atheros
+	ar9271 firmware
+In-Reply-To: <1329359880-18529-1-git-send-email-aletes.xgr@gmail.com>
+ (Alexandre Pereira da Silva's message of "Thu, 16 Feb 2012 00:38:00
+ -0200")
+References: <1329359880-18529-1-git-send-email-aletes.xgr@gmail.com>
+Message-ID: <8739a632gv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "sainath" == sainath eluri <sainath@live.com> writes:
+>>>>> "Alexandre" == Alexandre Pereira da Silva <aletes.xgr@gmail.com> writes:
 
- sainath> Hello All,
- sainath> I am new to BuildRoot e-mail list. I am using BuildRoot to compile my
- sainath> embedded linux image and tool-chain.
+ Alexandre> Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
 
- sainath> my target architecture is ARM.
-
- sainath> while compiling build root i am getting the following errors.
-
- sainath> make[2]: *** [crtbeginS.o] Error 1
-
-Please provide a bit more context. I believe the line just above this
-one contains the error message.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
