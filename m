@@ -1,58 +1,45 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 25 Feb 2012 23:18:03 +0100
-Subject: [Buildroot] [git commit] Makefile: move cmake toolchain file to
-	$HOST_DIR/usr/share/buildroot
-Message-ID: <20120301130636.4D12290BF7@busybox.osuosl.org>
+Date: Sun, 19 Feb 2012 23:06:31 +0100
+Subject: [Buildroot] [git commit] Avoid the warnings about the redefinition
+	of LUA_USE_DLOPEN, when BR2_PACKAGE_LUA_INTERPRETER_READLINE is set
+Message-ID: <20120301130635.F21EF90BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ed7791e2e8cdade564a5f484cdfe62ffe16cb981
+commit: http://git.buildroot.net/buildroot/commit/?id=3175e72e054a9b088903cf625a66ccfe9fd4404e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-To make it part of the SDK installation.
+See src/luaconf.h lines 36-40
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                  |    5 +++--
- package/Makefile.cmake.in |    2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/lua/lua.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d5cd8f0..9a07f9f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -368,7 +368,7 @@ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
- dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 1dabedf..30e95b4 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -9,7 +9,7 @@ LUA_SITE = http://www.lua.org/ftp
+ LUA_INSTALL_STAGING = YES
  
--$(BASE_TARGETS): dirs $(O)/toolchainfile.cmake
-+$(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+ ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
+-	LUA_MYCFLAGS += -fPIC -DLUA_USE_DLOPEN
++	LUA_MYCFLAGS += -fPIC
+ 	LUA_MYLIBS += -ldl
+ endif
  
- $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
- 	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
-@@ -377,7 +377,8 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+@@ -18,7 +18,7 @@ ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
+ 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+ 	LUA_MYCFLAGS += -DLUA_USE_LINUX
+ else
+-	LUA_MYCFLAGS += -DLUA_USE_POSIX
++	LUA_MYCFLAGS += -DLUA_USE_POSIX -DLUA_USE_DLOPEN
+ endif
  
- world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
- 
--$(O)/toolchainfile.cmake:
-+$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
-+	mkdir -p $(@D)
- 	@echo -en "\
- 	set(CMAKE_SYSTEM_NAME Linux)\n\
- 	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
-diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
-index 38e459b..aea1185 100644
---- a/package/Makefile.cmake.in
-+++ b/package/Makefile.cmake.in
-@@ -72,7 +72,7 @@ define $(2)_CONFIGURE_CMDS
- 	(cd $$($$(PKG)_BUILDDIR) && \
- 	rm -f CMakeCache.txt && \
- 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
--		-DCMAKE_TOOLCHAIN_FILE="$$(BASE_DIR)/toolchainfile.cmake" \
-+		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
+ HOST_LUA_DEPENDENCIES =
