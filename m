@@ -1,50 +1,43 @@
-From: Sri Ram Vemulpali <sri.ram.gmu06@gmail.com>
-Date: Sun, 19 Feb 2012 11:44:37 -0500
-Subject: [Buildroot] buildroot libnl error
-Message-ID: <CALyraeNF1d0BsRu1h+F5L=YBVB8Gt2JgXGu2ebarR1vRrMnkeg@mail.gmail.com>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Sun, 19 Feb 2012 12:49:52 -0500
+Subject: [Buildroot] [PATCH v5 0/2] usb_modeswitch update and add data
+Message-ID: <1329673794-17158-1-git-send-email-jwoltz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+These two patches update usb_modeswitch to the latest version and add the data
+files in a separate package. 
 
-I am new to BuildRoot e-mail list. I am using BuildRoot to compile my
-embedded linux image and tool-chain.
+The first patch updates usb_modeswitch to version 1.2.3. usb_modeswitch 
+itself includes bug fixes and a few new device additions.
 
-In the intermediate compilation step I encountered the following error.
+The second patch is an addition for buildroot. It adds the usb_modeswicth_data
+which is very helpful. It contains rules for many devices. On most systems,
+these two programs are installed together. This data package contains udev
+rules to automatically switch the device on detection. 
 
-make[2]: Entering directory
-`/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
-/usr/bin/make  all-am
-make[3]: Entering directory
-`/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
-  CC     route/pktloc.lo
-route/pktloc.c: In function ?read_pktlocs?:
-route/pktloc.c:127:34: error: ?YY_BUF_SIZE? undeclared (first use in
-this function)
-route/pktloc.c:127:34: note: each undeclared identifier is reported
-only once for each function it appears in
-make[3]: *** [route/pktloc.lo] Error 1
-make[3]: Leaving directory
-`/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
-make[2]: *** [all] Error 2
-make[2]: Leaving directory
-`/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/lib'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory
-`/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0'
-make: *** [/home/sriram/buildroot/buildroot-2011.11/output/build/libnl-3.0/.stamp_built]
-Error 2
+The second patch also depends on the tcl patch sent in. This way 
+usb_modeswitch_data can select tclsh in order to get tcl. 
 
+Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
 
-Can anyone point me what this error and what is the resolution. Is
-this related to not including right header files.
-Also, how can I enable sysroot option pointing to buildroot output/staging
+J.C. Woltz (2):
+  usb_modeswitch: update to 1.2.3
+  new program: usb_modeswitch_data
 
-Thanks in advance
+ package/Config.in                                  |    1 +
+ .../usb_modeswitch/usb_modeswitch-makefile.patch   |   43 ++++++++++----------
+ package/usb_modeswitch/usb_modeswitch.mk           |   20 ++++++---
+ package/usb_modeswitch_data/Config.in              |   11 +++++
+ .../usb_modeswitch_data-makefile.patch             |   27 ++++++++++++
+ package/usb_modeswitch_data/usb_modeswitch_data.mk |   26 ++++++++++++
+ 6 files changed, 100 insertions(+), 28 deletions(-)
+ create mode 100644 package/usb_modeswitch_data/Config.in
+ create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+ create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data.mk
 
 -- 
-Regards,
-Sri.
+1.7.5.4
