@@ -1,7 +1,7 @@
 From: Spenser Gilliland <spenser309@gmail.com>
-Date: Sun, 19 Feb 2012 14:34:49 -0600
-Subject: [Buildroot] [PATCH] Add Device Tree and simpleImage support
-Message-ID: <1329683689-20424-1-git-send-email-Spenser309@gmail.com>
+Date: Sun, 19 Feb 2012 14:41:00 -0600
+Subject: [Buildroot] [PATCH v2] Add Device Tree and simpleImage support
+Message-ID: <1329684060-20751-1-git-send-email-Spenser309@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,12 @@ This triggers the kernel to build the simpleImage.<dt> target and copy the resul
 
 Signed-off-by: Spenser Gilliland <Spenser309@gmail.com>
 ---
- linux/Config.in |   39 +++++++++++++++++++++++++++++++++++++++
- linux/linux.mk  |   40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 79 insertions(+), 0 deletions(-)
+ linux/Config.in |   46 ++++++++++++++++++++++++++++++++++++++++++++++
+ linux/linux.mk  |   41 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 87 insertions(+), 0 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index 26032fd..0caf1e5 100644
+index 26032fd..1c74f1a 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -150,6 +150,10 @@ config BR2_LINUX_KERNEL_VMLINUZ
@@ -33,7 +33,7 @@ index 26032fd..0caf1e5 100644
  config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
  	bool "custom target"
  	help
-@@ -163,6 +167,41 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+@@ -163,6 +167,48 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
  
  endchoice
  
@@ -58,6 +58,13 @@ index 26032fd..0caf1e5 100644
 +	bool
 +	default y if BR2_LINUX_KERNEL_USE_DTS || BR2_LINUX_KERNEL_USE_CUSTOM_DTS	
 +
++config BR2_LINUX_KERNEL_INSTALL_DTS
++	bool "Copy device tree blob to the output directory"
++	depends on BR2_LINUX_KERNEL_MAKE_DTB
++	help
++	  This copies the device tree blob to the images
++	  directory.
++
 +config BR2_LINUX_KERNEL_DTS
 +	string "Dts Name"
 +	depends on BR2_LINUX_KERNEL_USE_DTS
@@ -76,7 +83,7 @@ index 26032fd..0caf1e5 100644
  	string "Kernel image target name"
  	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
 diff --git a/linux/linux.mk b/linux/linux.mk
-index ae236d4..490c770 100644
+index ae236d4..1fb4ece 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
 @@ -67,6 +67,9 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
@@ -134,7 +141,7 @@ index ae236d4..490c770 100644
  	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
  	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
  	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-@@ -158,6 +192,8 @@ define LINUX_BUILD_CMDS
+@@ -158,17 +192,22 @@ define LINUX_BUILD_CMDS
  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
  		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
  	fi
@@ -143,16 +150,21 @@ index ae236d4..490c770 100644
  endef
  
  
-@@ -169,6 +205,8 @@ endif
+ ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),y)
+ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+ 	install -m 0644 -D $(LINUX_IMAGE_PATH) $(TARGET_DIR)/boot/$(LINUX_IMAGE_NAME)
++
+ endef
+ endif
  
  define LINUX_INSTALL_IMAGES_CMDS
  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-+	$(if $(BR2_LINUX_KERNEL_MAKE_DTB),
++	$(if $(BR2_LINUX_KERNEL_INSTALL_DTB),
 +		$(call LINUX_INSTALL_DTB))
  endef
  
  define LINUX_INSTALL_TARGET_CMDS
-@@ -215,6 +253,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+@@ -215,6 +254,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
  	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
  	# Copy the kernel image to its final destination
  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
