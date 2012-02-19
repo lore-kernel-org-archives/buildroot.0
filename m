@@ -1,75 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 19 Feb 2012 10:08:30 +0100
-Subject: [Buildroot] [PATCH] new package: zeromq
-Message-ID: <f866d381d6e31e8174b7.1329642510@beantl019720>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Sun, 19 Feb 2012 13:14:47 +0100
+Subject: [Buildroot] [PATCH 0/2] Downloading from esoteric URIs,
+	such as Xilinx toolchain
+Message-ID: <cover.1329651936.git.alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+From: "Alvaro G. M" <alvaro.gamez@hazent.com>
 
----
-I hope the ? symbol in Config.in is not a problem.
+On the last days some of us have been trying to add Microblaze architecture to
+buildroot and specifically LX9 board support.
 
- package/Config.in        |   1 +
- package/zeromq/Config.in |  22 ++++++++++++++++++++++
- package/zeromq/zeromq.mk |  12 ++++++++++++
- 3 files changed, 35 insertions(+), 0 deletions(-)
+The second patch adds the toolchain from Xilinx, but in order to download it,
+it was needed to modify the DOWNLOAD_WGET routine. This is what the first
+patch is for. At the same time, the API was somewhat simplified and it is
+now a little shorter to interface with it in most cases.
 
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -364,6 +364,7 @@ source "package/librsync/Config.in"
- source "package/libsoup/Config.in"
- source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
-+source "package/zeromq/Config.in"
- endmenu
- 
- menu "Other"
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-new file mode 100644
---- /dev/null
-+++ b/package/zeromq/Config.in
-@@ -0,0 +1,22 @@
-+comment "zeromq requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-+
-+config BR2_PACKAGE_ZEROMQ
-+	bool "zeromq"
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  ?MQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking library but
-+	  acts like a concurrency framework. It gives you sockets that carry
-+	  whole messages across various transports like in-process, inter-
-+	  process, TCP, and multicast. You can connect sockets N-to-N with
-+	  patterns like fanout, pub-sub, task distribution, and request-reply.
-+	  It's fast enough to be the fabric for clustered products. Its
-+	  asynchronous I/O model gives you scalable multicore applications,
-+	  built as asynchronous message-processing tasks. It has a score of
-+	  language APIs and runs on most operating systems.
-+
-+	  ?MQ is from iMatix and is LGPL open source.
-+
-+	  http://www.zeromq.org/
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-new file mode 100644
---- /dev/null
-+++ b/package/zeromq/zeromq.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# zeromq
-+#
-+#############################################################
-+
-+ZEROMQ_VERSION = 2.1.11
-+ZEROMQ_SITE = http://download.zeromq.org/
-+
-+ZEROMQ_DEPENDENCIES = util-linux
-+
-+$(eval $(call AUTOTARGETS))
+I think this two patches can be applied with any changes thanks to Arnout's
+recommendations, so I will appreciate it if they can be applied.
+
+The next step, in which I think Spencer is working on, is the DTS support,
+which can the be used for lots of different platforms.
+
+I think I've correctly signed-off both patches, but let me know if I have
+used some ideas from someone and I've forgotten about it.
+
+Alvaro G. M (2):
+  DOWNLOAD: change $1=DIRECTORY_URL, $2=FILE_NAME to $1=FULL_FILE_URL,
+    $2=FILE_NAME
+  Microblaze: added external toolchain from Xilinx
+
+ docs/manual/adding-packages-handwritten.txt |    2 +-
+ linux/linux.mk                              |    2 +-
+ package/Makefile.package.in                 |   18 +++++++++++-------
+ package/cups/cups.mk                        |    2 +-
+ package/fis/fis.mk                          |    2 +-
+ package/games/doom-wad/doom-wads.mk         |    2 +-
+ package/gettext/gettext.mk                  |    2 +-
+ package/microperl/microperl.mk              |    2 +-
+ package/netkitbase/netkitbase.mk            |    2 +-
+ package/netkittelnet/netkittelnet.mk        |    2 +-
+ package/newt/newt.mk                        |    2 +-
+ package/tinyhttpd/tinyhttpd.mk              |    2 +-
+ package/ttcp/ttcp.mk                        |    2 +-
+ package/uemacs/uemacs.mk                    |    2 +-
+ package/vpnc/vpnc.mk                        |    2 +-
+ package/xfsprogs/xfsprogs.mk                |    2 +-
+ toolchain/gcc/gcc-uclibc-4.x.mk             |    2 +-
+ toolchain/gdb/gdb.mk                        |    2 +-
+ toolchain/kernel-headers/kernel-headers.mk  |    2 +-
+ toolchain/toolchain-external/Config.in      |   16 ++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk    |   12 +++++++++---
+ toolchain/uClibc/uclibc.mk                  |    2 +-
+ 22 files changed, 55 insertions(+), 29 deletions(-)
+
+-- 
+1.7.9
