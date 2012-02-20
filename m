@@ -1,44 +1,56 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 20 Feb 2012 09:49:30 +0100
-Subject: [Buildroot] Dynaminc Component System for Buildroot
-In-Reply-To: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
-References: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
-Message-ID: <1329727770.13226.22.camel@bender>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 20 Feb 2012 10:11:37 +0100
+Subject: [Buildroot] opencv with glibc
+In-Reply-To: <CAPeX=+s4-ne+AtwxGUxLVqpN2j89ykB1sZfZsa1DovTKPDBkuw@mail.gmail.com>
+References: <CAPeX=+s4-ne+AtwxGUxLVqpN2j89ykB1sZfZsa1DovTKPDBkuw@mail.gmail.com>
+Message-ID: <CAGm1_kuFQ=kt=XNNyr_4MzVAZb=QP5-M4A1-iakwz5UM64ux2g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Peter, what do you think about removing CMake toolchain file be make clean?
 
-On Mon, 2012-02-20 at 09:45 +0200, Avishay Orpaz wrote:
+Yegor
 
-> I've been using buildroot for about two years for building embedded
-> systems on various platforms. An embedded system usually comprises of
-> a set of standard tool and custom software, scripts etc. Buildroot
-> does great job on the first, but then I have to manually compile the
-> project-specific software and install it in the target system created
-> by buildroot. In order to make workflow smoother, I have an idea of
-> adding a dynamic component support for buildroot. In such a system,
-> buildroot, when invoked, will scan a specific directory for
-> components. Components are directories with some distinguishing
-> feature (a special file or so) which contains buildroot .mk file.
-> Those components will appear on buildroot configuration menu, will use
-> the regular compilation-installation infrastructure it provides and
-> will be installed in the target filesystem as any other,
-> out-of-the-box component.
-
-What we have been doing to solve this is that we maintain a git branch
-of buildroot with our components added as buildroot packages. Our
-applications appear in a dedicated submenu and are built as part of the
-standard buildroot process. This is similar to what you are suggesting
-and it is already very easy to achieve by means of a git branch. Doing
-it this way also has the advantage that it also solves the problem of
-distributing your project files to co-workers as everything is kept
-under version control. Changes from buildroot upstream can easily be
-merged into your branch and are then also easily distributed to
-co-workers and to your build system.
-
-
-Regards, Sven
+On Thu, Feb 16, 2012 at 7:46 AM, Ozgun <ozgun.gunay@gmail.com> wrote:
+>
+> I download my BR from standard tree.
+> My problem solved using "make distclean" instead of "make clean"
+>
+> thanks
+>
+>
+>
+>
+> Date: Wed, 15 Feb 2012 22:26:03 +0100
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: Ozgun <ozgun.gunay@gmail.com>
+> Cc: buildroot at busybox.net
+> Subject: Re: [Buildroot] opencv with glibc
+> Message-ID: <20120215222603.6754b8e6@skate
+>>
+> Content-Type: text/plain; charset=UTF-8
+>
+> Le Wed, 15 Feb 2012 21:35:25 +0200,
+> Ozgun <ozgun.gunay@gmail.com> a ?crit :
+>
+>> My br doesn't have output/toolchainfile.cmake file
+>
+> Which version of Buildroot are you using? Are you doing out-of-tree
+> build (if so, then the toolchainfile.cmake file is in the output
+> directory you selected with O=, not in output/).
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
