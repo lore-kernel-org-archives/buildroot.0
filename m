@@ -1,71 +1,22 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Feb 2012 10:20:55 +0100
-Subject: [Buildroot] Dynaminc Component System for Buildroot
-In-Reply-To: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
-References: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
-Message-ID: <201202201020.55665.arnout@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 20 Feb 2012 10:34:37 +0100
+Subject: [Buildroot] [PATCH] pkg-stats: update list of packages to be
+ skipped
+In-Reply-To: <1328978469-27669-1-git-send-email-luca@lucaceresoli.net>
+References: <1328978469-27669-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <4F4213AD.9060406@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 20 February 2012 08:45:48 Avishay Orpaz wrote:
-> Hi
-> I've been using buildroot for about two years for building embedded systems
-> on various platforms. An embedded system usually comprises of a set of
-> standard tool and custom software, scripts etc. Buildroot does great job on
-> the first, but then I have to manually compile the project-specific
-> software and install it in the target system created by buildroot.
+Luca Ceresoli wrote:
+> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
 
- No you don't.  You have to manually create a Config.in and pkg.mk for
-your project-specific software, using the 'local' SITE_METHOD.  You could
-even skip the Config.in and just add a
-TARGETS += pkg
-at the end of the pkg.mk.
+Bump.
 
-> In order
-> to make workflow smoother, I have an idea of adding a dynamic component
-> support for buildroot. In such a system, buildroot, when invoked, will scan
-> a specific directory for components. Components are directories with some
-> distinguishing feature (a special file or so) which contains buildroot .mk
-> file. Those components will appear on buildroot configuration menu, will
-> use the regular compilation-installation infrastructure it provides and
-> will be installed in the target filesystem as any other, out-of-the-box
-> component.
+Peter, as this is actually a fix I think it should go in the master branch
+before the upcoming release.
 
- We have that system: the packages directory.
-
- I agree that one limitation of the packages directory is that the
-project-specific packages have to be created directly in the buildroot
-tree.  But that can be overcome by adding a line like this to local.mk:
-include <project-path>/*/*.mk
-
-
-> I'm willing to put time and effort into building such an extension, but I
-> would really like to get some feedback before I start, and to estimate the
-> chances it would be merged into the buildroot mainline.
-
- Although my comments above may be a bit negative, I do believe that it
-would be worthwhile to simplify the addition of project-specific packages
-to buildroot.  It will get a lot of comments, though, so you'll probably
-have more work with taking into account the reviews than with the 
-implementation itself.
-
- So I would advise the following:
-- make use of existing infrastructure (_SITE_METHOD=local, local.mk);
-- make sure you post an RFC patch as soon as possible, to get some 
-dicsussion started;
-- don't expect it to be accepted in less than two months or so.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Luca
