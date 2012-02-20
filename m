@@ -1,46 +1,22 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 19 Feb 2012 23:24:14 +0100
-Subject: [Buildroot] Buildroot 2012.02-rc2 released
-Message-ID: <87pqda1my9.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 19 Feb 2012 21:15:00 -0300
+Subject: [Buildroot] [PATCH 1/8] qemu/ppc-g3beige: update readme and use
+	kernel 3.2.6
+In-Reply-To: <87ehtq32op.fsf@macbook.be.48ers.dk>
+References: <1329593448-9309-1-git-send-email-gustavo@zacarias.com.ar>
+ <87ehtq32op.fsf@macbook.be.48ers.dk>
+Message-ID: <620516291f9131a1effe4b931163d30c@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 2012-02-19 18:59, Peter Korsgaard wrote:
 
-Buildroot 2012.02-rc2 is released - Go download it at:
+> Committed entire series to next, thanks.
 
-http://buildroot.net/downloads/buildroot-2012.02-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2012.02-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2012.02_rc1..
-    11  Peter Korsgaard
-     1  Maxime Ripard
-     1  Will Newton
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc2
-
-Unless something big turns up, expect this to be the last release
-candidate before 2012.02, which I plan to release towards the end of the
-month.
-
-Enjoy!
-
--- 
-Bye, Peter Korsgaard
+No chance to make it for 2012.02?
+The intention is to match kernel headers and also fix ppc g3 beige 
+documentation.
+Regards.
