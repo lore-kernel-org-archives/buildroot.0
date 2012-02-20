@@ -1,22 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 19 Feb 2012 21:15:00 -0300
-Subject: [Buildroot] [PATCH 1/8] qemu/ppc-g3beige: update readme and use
-	kernel 3.2.6
-In-Reply-To: <87ehtq32op.fsf@macbook.be.48ers.dk>
-References: <1329593448-9309-1-git-send-email-gustavo@zacarias.com.ar>
- <87ehtq32op.fsf@macbook.be.48ers.dk>
-Message-ID: <620516291f9131a1effe4b931163d30c@zacarias.com.ar>
+From: Avishay Orpaz <avishorp@gmail.com>
+Date: Mon, 20 Feb 2012 09:45:48 +0200
+Subject: [Buildroot] Dynaminc Component System for Buildroot
+Message-ID: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-02-19 18:59, Peter Korsgaard wrote:
+Hi
+I've been using buildroot for about two years for building embedded systems
+on various platforms. An embedded system usually comprises of a set of
+standard tool and custom software, scripts etc. Buildroot does great job on
+the first, but then I have to manually compile the project-specific
+software and install it in the target system created by buildroot. In order
+to make workflow smoother, I have an idea of adding a dynamic component
+support for buildroot. In such a system, buildroot, when invoked, will scan
+a specific directory for components. Components are directories with some
+distinguishing feature (a special file or so) which contains buildroot .mk
+file. Those components will appear on buildroot configuration menu, will
+use the regular compilation-installation infrastructure it provides and
+will be installed in the target filesystem as any other, out-of-the-box
+component.
 
-> Committed entire series to next, thanks.
+I'm willing to put time and effort into building such an extension, but I
+would really like to get some feedback before I start, and to estimate the
+chances it would be merged into the buildroot mainline.
 
-No chance to make it for 2012.02?
-The intention is to match kernel headers and also fix ppc g3 beige 
-documentation.
-Regards.
+Avishay
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120220/5f723e1d/attachment.html>
