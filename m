@@ -1,22 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 20 Feb 2012 09:48:18 +0100
-Subject: [Buildroot] [PATCH 2/2] Microblaze: added external toolchain
-	from Xilinx
-In-Reply-To: <22621d522680079cb3b800f28a03d771a238f875.1329651936.git.alvaro.gamez@hazent.com>
-References: <e00406c0e4c15d77b4d03badf312980cce713c06.1329651936.git.alvaro.gamez@hazent.com>
- <22621d522680079cb3b800f28a03d771a238f875.1329651936.git.alvaro.gamez@hazent.com>
-Message-ID: <201202200948.19050.arnout@mind.be>
+Date: Mon, 20 Feb 2012 09:49:51 +0100
+Subject: [Buildroot] [PATCH] Microblaze: added architecture support for
+	both big endian and low endian
+In-Reply-To: <057435d89e9a9395847932041afc58b7918d63b9.1329654821.git.alvaro.gamez@hazent.com>
+References: <22621d522680079cb3b800f28a03d771a238f875.1329651936.git.alvaro.gamez@hazent.com>
+ <057435d89e9a9395847932041afc58b7918d63b9.1329654821.git.alvaro.gamez@hazent.com>
+Message-ID: <201202200949.51962.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 19 February 2012 13:17:10 Alvaro G. M wrote:
-> +TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0_le.git;a=blob;hb=HEAD;f=
+On Sunday 19 February 2012 13:34:44 Alvaro G. M wrote:
+> From: "Alvaro G. M" <alvaro.gamez@hazent.com>
+> 
+> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- I don't really like the use of HEAD here, because it makes the build
-unreproducible.  Don't they have anything like release tags?
+ Of course, this patch should come before the previous one that adds the 
+Xilinx toolchain.
 
  Regards,
  Arnout
