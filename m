@@ -1,61 +1,43 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Mon, 20 Feb 2012 09:26:49 +0100
-Subject: [Buildroot] Dynaminc Component System for Buildroot
-In-Reply-To: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
-References: <CAMkyJgCC0i5t6j+M2VefDRVx_qjaRTHfOUOgnrSc9U+aHA91XQ@mail.gmail.com>
-Message-ID: <CAM+bi4scx3d9AU4EHM4s3tdx-YXqZ7mC1Q4=Vc56AP89G5fVhw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 20 Feb 2012 09:45:01 +0100
+Subject: [Buildroot] [PATCH 1/2] DOWNLOAD: change $1=DIRECTORY_URL,
+	$2=FILE_NAME to $1=FULL_FILE_URL, $2=FILE_NAME
+In-Reply-To: <e00406c0e4c15d77b4d03badf312980cce713c06.1329651936.git.alvaro.gamez@hazent.com>
+References: <cover.1329651936.git.alvaro.gamez@hazent.com>
+ <e00406c0e4c15d77b4d03badf312980cce713c06.1329651936.git.alvaro.gamez@hazent.com>
+Message-ID: <201202200945.01513.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I know some commercial software very similar to buildroot that works
-somehow similar to your idea.
-It is much simpler, though, because all it forces the embedded developer to
-is to create a Makefile with the clean, distclean, all and install targets.
-The last one just copies whatever it needs to work to the root directory of
-the future root image.
-
-It is pretty straightforward and really simplifies the workflow.
-
-I'd like very much to see that or something like that in buildroot.
-
-Regards
-
-2012/2/20 Avishay Orpaz <avishorp@gmail.com>
-
-> Hi
-> I've been using buildroot for about two years for building embedded
-> systems on various platforms. An embedded system usually comprises of a set
-> of standard tool and custom software, scripts etc. Buildroot does great job
-> on the first, but then I have to manually compile the project-specific
-> software and install it in the target system created by buildroot. In order
-> to make workflow smoother, I have an idea of adding a dynamic component
-> support for buildroot. In such a system, buildroot, when invoked, will scan
-> a specific directory for components. Components are directories with some
-> distinguishing feature (a special file or so) which contains buildroot .mk
-> file. Those components will appear on buildroot configuration menu, will
-> use the regular compilation-installation infrastructure it provides and
-> will be installed in the target filesystem as any other, out-of-the-box
-> component.
->
-> I'm willing to put time and effort into building such an extension, but I
-> would really like to get some feedback before I start, and to estimate the
-> chances it would be merged into the buildroot mainline.
->
-> Avishay
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
+On Sunday 19 February 2012 13:17:09 Alvaro G. M wrote:
+> From: "Alvaro G. M" <alvaro.gamez@hazent.com>
+> 
+> This modifies the definition of DOWNLOAD to receive two arguments:
+> the first one is the full URL of the file to download, whereas the second
+> (and optional) is the name the file will have once downloaded.
+> 
+> Same thing with the SOURCE_CHECK_WGET and SCP functions.
+> 
+> All calls to these functions have been changed to the shortest form of
+> the new API, except for toolchains acquisition. Since there is quite a
+> number of different toolchains this call to DOWNLOAD is better set to the
+> generic one.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 -- 
-?lvaro G?mez Machado
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120220/21bb92b5/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120220/27858d49/attachment-0001.html>
