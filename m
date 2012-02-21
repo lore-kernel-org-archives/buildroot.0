@@ -1,33 +1,39 @@
-From: =?UTF-8?Q?=C3=89ric_ALBER?= <eric.alber@gmail.com>
-Date: Tue, 21 Feb 2012 12:18:47 +0100
-Subject: [Buildroot] Microperl compilation error
-In-Reply-To: <CAGDZK6GbRLiJMT+4dpGWQbQYrc_W5djWR-k-ciK+v-HyG8=q0g@mail.gmail.com>
-References: <CAGDZK6GbRLiJMT+4dpGWQbQYrc_W5djWR-k-ciK+v-HyG8=q0g@mail.gmail.com>
-Message-ID: <CAGDZK6Ey7-GFb=CLmQ2i6Ut4Vdb2TDuihRCiZurGN3fvye9oiw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 21 Feb 2012 10:40:16 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.0.x and 3.2.x stable
+	versions
+Message-ID: <1329831616-27402-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I forgot the buildroot version: 2012.02-rc2
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.21-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.22-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-2012/2/21 ?ric ALBER <eric.alber@gmail.com>
-
-> Hello,
->
-> I'm using buildroot to install a custom linux on a Seagate Dockstar
-> (Marvell Kirkwood based product).
-> I'm facing a compilation error on microperl, it looks like the -lm flag is
-> not passed to the linker and thus all math functions are not found.
-> I'm using buildroot on a Ubuntu 11.10
->
-> I attach the patch that fixed the problem on my side.
->
-> Regards,
->
-> Eric
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120221/693d5b1e/attachment.html>
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 86d6c32..60cebbe 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.21"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.22"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.6"		if BR2_KERNEL_HEADERS_3_2
++	default "3.2.7"		if BR2_KERNEL_HEADERS_3_2
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.21-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.22-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.21-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.22-headers_install-fix-__packed-in-exported-kernel-head.patch
+-- 
+1.7.3.4
