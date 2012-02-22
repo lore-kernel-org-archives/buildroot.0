@@ -1,7 +1,7 @@
 From: Tobias Arp <tobiasarp@web.de>
-Date: Wed, 22 Feb 2012 13:16:24 +0100 (CET)
-Subject: [Buildroot] (no subject)
-Message-ID: <2065772209.2770324.1329912984836.JavaMail.fmail@mwmweb054>
+Date: Wed, 22 Feb 2012 13:17:15 +0100 (CET)
+Subject: [Buildroot] Build udev for arm -> accept4 undefined reference
+Message-ID: <2003448875.2770578.1329913035731.JavaMail.fmail@mwmweb054>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
