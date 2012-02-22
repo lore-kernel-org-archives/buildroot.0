@@ -1,31 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 22 Feb 2012 10:23:33 -0300
-Subject: [Buildroot] [PATCH] libpng: security bump to version 1.4.9
-Message-ID: <1329917013-1504-1-git-send-email-gustavo@zacarias.com.ar>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed, 22 Feb 2012 14:47:57 +0100
+Subject: [Buildroot] [PATCH] Fixes SDL_net tarball name.
+Message-ID: <1329918477-9761-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libpng/libpng.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+From: Julien Boibessot <julien.boibessot@armadeus.com>
 
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index f78b61d..4017871 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -3,7 +3,8 @@
- # libpng (Portable Network Graphic library)
+Bump version & cleanup variables setting while we are at it.
+
+Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+---
+ package/sdl_net/sdl_net.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/sdl_net/sdl_net.mk b/package/sdl_net/sdl_net.mk
+index bc99f6c..4992b8c 100644
+--- a/package/sdl_net/sdl_net.mk
++++ b/package/sdl_net/sdl_net.mk
+@@ -3,8 +3,9 @@
+ # SDL_net: network addon for SDL
  #
  #############################################################
--LIBPNG_VERSION = 1.4.8
-+
-+LIBPNG_VERSION = 1.4.9
- LIBPNG_SERIES = 14
- LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
+-SDL_NET_VERSION:=1.2.7
+-SDL_NET_SITE:=http://www.libsdl.org/projects/SDL_net/release
++SDL_NET_VERSION = 1.2.8
++SDL_NET_SITE = http://www.libsdl.org/projects/SDL_net/release
++SDL_NET_SOURCE = SDL_net-$(SDL_NET_VERSION).tar.gz
+ 
+ SDL_NET_CONF_OPT = --localstatedir=/var \
+ 		--with-sdl-prefix=$(STAGING_DIR)/usr \
 -- 
-1.7.3.4
+1.7.5.4
