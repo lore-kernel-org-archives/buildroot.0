@@ -1,29 +1,21 @@
-From: MERCADIER Johann <johann.mercadier@imerir.com>
-Date: Wed, 22 Feb 2012 20:16:25 +0000
-Subject: [Buildroot] BR 2012.02-rc1 :: WODIM issue (linking stage) [ SOLVED ]
-Message-ID: <CAPEB33xJ_2_y40Kiw8OJ5=Wbz3SziQzeeAX=Hw4XjAZKKSkZTQ@mail.gmail.com>
+From: =?iso-8859-1?Q?Mikael_=C5sberg?= <mikael.asberg@mdh.se>
+Date: Thu, 23 Feb 2012 12:22:09 +0100
+Subject: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
+Message-ID: <63D6870D443E63419AC4A0C97B86C092030FCA15@MBXCLUSTER.mdh.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sam,
-  thanks for your guess, I finally get through of it!
-  My host-system needed to add "libbz2-dev" in its /usr/include
-   Just have to check if everything works fine by now!
+Hello,
 
- Best regards.
--- 
-Cordialement.
+Does anyone have experience with compiling Linux kernels with Buildroot for i.MX28 EVK?
+I'm not sure which board name to be set for u-boot for example...
+Also, which defconfig should be used, imx27ads_defconfig or versatile_defconfig perhaps?
 
-___Johann MERCADIER___
+Any help or pointers would be valueable!
 
-:(){ :|:& };:
-"I am the Unknown lead by the Unknowing.
-I have done so much with so little for so long
-that I am now qualified to do anything with nothing."
-HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120222/ff7faec1/attachment.html>
+Kind Regards
+
+/Mikael
