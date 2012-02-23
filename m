@@ -1,40 +1,37 @@
-From: Fabio Porcedda <Fabio.Porcedda@telit.com>
-Date: Thu, 23 Feb 2012 13:37:11 +0000
-Subject: [Buildroot] [PATCH v4] busybox: add watchdog daemon startup
-	script
-In-Reply-To: <201202140801.54405.arnout@mind.be>
-References: <1329126893-6876-1-git-send-email-fabio.porcedda@telit.com>
- <201202140801.54405.arnout@mind.be>
-Message-ID: <1330004202.1836.4.camel@lvd2036>
+From: Mohamed HAMZAOUI <requinham@gmail.com>
+Date: Thu, 23 Feb 2012 16:30:25 +0100
+Subject: [Buildroot] [buildroot]craneborad and buildroot
+In-Reply-To: <CABMxt4i6k7YMg79fwmxAJ6wW61g9ygyuOOGWPZDCcFEHMNPASQ@mail.gmail.com>
+References: <CABMxt4i6k7YMg79fwmxAJ6wW61g9ygyuOOGWPZDCcFEHMNPASQ@mail.gmail.com>
+Message-ID: <CABMxt4hFuZkVYTYNiRj8RBeX1teg_L=4_vpCEQOMTqFENjdPqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2012-02-14 at 08:01 +0100, Arnout Vandecappelle wrote:
-> On Monday 13 February 2012 10:54:53 Fabio Porcedda wrote:
-> 
-> > Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
-> 
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> 
-> Nice!
+Hi,
 
-Thanks for the review and the acknowledgement.
+I want to use Buildroot for CraneBoard...
+My problem is with configuration files : MLO, u-boot.bin and uImage.
+I installed the last RC buildroot and after I started to configure the build
+ by selecting the desired setting because i dont found a defconfig file for
+Kernel with buildroot ...
+In the configuration of the bootloader I checked xloader and uboot. With
+uboot I found a configuration file to my card "am3517_crane" but, for
+xloader, I haven't found anything and I cannot generate the correspendant
+MLO .
 
-There is some hope that this patch is included in the branch next?
+I copy MLO, which was provided for Angstrom distrib for my card (compiled
+whith openembedded) but I cannot load the u-boot. suddenly, I also tried
+copying uboot that provided with the same distrib of  MLO and then I start but
+I am blocked on: "booting the kernel"!
 
-Best regards
--- 
-Fabio Porcedda
-Software Developer - R&D Cagliari
+Could you tell me why i have this freeze ?
+Could you tell me what I do with buildroot to find the xloader configuration
+file to my card ?
 
-Telit Communications S.p.A.
-Loc. Sa Illetta, SS 195, Km 2.300
-09122 Cagliari - Italy
-Phone: +39 070 4603 247
-Fax:   +39 070 4603 250
-Skype: fabiopo_telit
-http://www.telit.com
+thnx
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120223/84876a75/attachment-0001.html>
