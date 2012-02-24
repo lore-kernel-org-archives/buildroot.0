@@ -1,7 +1,7 @@
-From: =?iso-8859-1?Q?Mikael_=C5sberg?= <mikael.asberg@mdh.se>
-Date: Fri, 24 Feb 2012 16:58:33 +0100
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Fri, 24 Feb 2012 16:40:55 +0100
 Subject: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
-In-Reply-To: <20120224154055.GB6613@game.jcrosoft.org>
+In-Reply-To: <63D6870D443E63419AC4A0C97B86C092030FCA25@MBXCLUSTER.mdh.local>
 References: <20120223123856.GG26667@sapphire.tkos.co.il>
  <63D6870D443E63419AC4A0C97B86C092030FCA18@MBXCLUSTER.mdh.local>
  <20120223171716.GA5622@tarshish>
@@ -11,45 +11,23 @@ References: <20120223123856.GG26667@sapphire.tkos.co.il>
  <CAGm1_ksrQ9Hp6LL4YiETokRf5gvJDpx3hmLqEUdSMg8eFE_xVA@mail.gmail.com>
  <63D6870D443E63419AC4A0C97B86C092030FCA24@MBXCLUSTER.mdh.local>
  <CAGm1_kuoq9uoEPVDUftFeUS9xfrtri_GTf-r9R0fuoZ1=woH3Q@mail.gmail.com>
- <63D6870D443E63419AC4A0C97B86C092030FCA25@MBXCLUSTER.mdh.local>,
- <20120224154055.GB6613@game.jcrosoft.org>
-Message-ID: <63D6870D443E63419AC4A0C97B86C092030FCA26@MBXCLUSTER.mdh.local>
+ <63D6870D443E63419AC4A0C97B86C092030FCA25@MBXCLUSTER.mdh.local>
+Message-ID: <20120224154055.GB6613@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
->in barebox wecan boot a raw image and we did on imx to boot in less than 400ms
-
-Aha, that sounds great! By "raw image" do you mean the vmlinux image?
-
---------------------------------------------------------------
-Mikael ?sberg
-PhD student (Doktorand), Computer Engineering
-School of Innovation, Design and Engineering
-M?lardalen University, V?ster?s Sweden
-Phone: +46(0)21 101502
-Room nr: U1-145
-Mail: mikael.asberg at mdh.se
---------------------------------------------------------------
-________________________________________
-Fr?n: Jean-Christophe PLAGNIOL-VILLARD [plagnioj at jcrosoft.com]
-Skickat: den 24 februari 2012 16:40
-Till: Mikael ?sberg
-Kopia: Yegor Yefremov; buildroot at busybox.net
-?mne: Re: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
-
 On 16:22 Fri 24 Feb     , Mikael ?sberg wrote:
->
+> 
 > This application is for the automotive industry. In a car, the embedded system must be able to boot within maximum ~1 second. I was thinking, can I use mkimage to convert vmlinux to an uImage (uncompressed version)?
 > Or, is there a setting in Buildroot or Barebox where I can specify the builder to not compress the uImage?
 in barebox wecan boot a raw image and we did on imx to boot in less than 400ms
 
 Best Regards,
 J.
->
+> 
 > --------------------------------------------------------------
 > Mikael ?sberg
 > PhD student (Doktorand), Computer Engineering
@@ -65,9 +43,9 @@ J.
 > Till: Mikael ?sberg
 > Kopia: buildroot at busybox.net
 > ?mne: Re: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
->
+> 
 > I don't know, if it is possible to pack vmlinuz in uImage. Why do you need this?
->
+> 
 > On Fri, Feb 24, 2012 at 3:33 PM, Mikael ?sberg <mikael.asberg@mdh.se> wrote:
 > >
 > > Ahh ok. Do you know how to create an uImage which is not compressed?
