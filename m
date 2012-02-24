@@ -1,45 +1,39 @@
-From: Mohamed HAMZAOUI <requinham@gmail.com>
-Date: Fri, 24 Feb 2012 21:08:56 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <20120224150232.GA2346@bill-the-cat>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <20120224150232.GA2346@bill-the-cat>
-Message-ID: <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 24 Feb 2012 21:10:27 +0100
+Subject: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
+In-Reply-To: <201202241110.06277.minimod@morethan.org>
+References: <63D6870D443E63419AC4A0C97B86C092030FCA15@MBXCLUSTER.mdh.local>
+ <CAGm1_kuoq9uoEPVDUftFeUS9xfrtri_GTf-r9R0fuoZ1=woH3Q@mail.gmail.com>
+ <63D6870D443E63419AC4A0C97B86C092030FCA25@MBXCLUSTER.mdh.local>
+ <201202241110.06277.minimod@morethan.org>
+Message-ID: <20120224211027.51454463@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for your help, but i use the 2012.12RC version and in the
-bootloader menu i select the u-boot version 2011.12 and in the uboot binary
-format i only have u-boot.bin, u-boot-nand.bin, u-boot.kwb !
-How to build u-boot.img ?
-when i used a u-boot.bin for my Craneboard i can't boot because it need a
-MLO (xloader) for booting.
+Le Fri, 24 Feb 2012 11:10:04 -0600,
+"Michael S. Zick" <minimod@morethan.org> a ?crit :
 
-thx
+> A better solution -
+> Put your device to sleep (suspend to ram).
+> It can __resume__ in less than 1 sec.
+> It only needs to __re-boot__ after loss of battery power (rare).
 
-On Fri, Feb 24, 2012 at 4:02 PM, Tom Rini <trini@ti.com> wrote:
+While this is a great solution, it may not apply to the automotive
+industry: you may want to reduce the power consumption of the device
+down to 0, so that the car battery doesn't empty itself if the car is
+unused during a long period of time. I guess in terms of boot time
+there is no one-size-fits-all solution, the solution very much depends
+on the environment and constraints (hardware, allowed power
+consumption, etc.).
 
-> On Fri, Feb 24, 2012 at 10:25:21AM +0100, Mohamed HAMZAOUI wrote:
-> > Hi,
-> >
-> > I want to use Buildroot for CraneBoard...
-> >
-> > My problem is with configuration files : MLO, u-boot.bin and uImage.
-> > I installed the last RC buildroot and after I started to configure the
-> build
-> >  by selecting the desired setting because i dont found a defconfig file
-> for
-> > Kernel with buildroot ...
->
-> Starting with v2011.12 you do not need x-loader and you want the MLO and
-> u-boot.img (NOT u-boot.bin) files created by U-Boot.
->
-> --
-> Tom
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120224/a32d27ee/attachment.html>
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
