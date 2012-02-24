@@ -1,112 +1,45 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Fri, 24 Feb 2012 16:38:36 +0100
-Subject: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
-In-Reply-To: <CAGm1_kut30F-BRwP8pwxbonFGJkJATSKBcJpisE0C1=QY9Ld9Q@mail.gmail.com>
-References: <63D6870D443E63419AC4A0C97B86C092030FCA15@MBXCLUSTER.mdh.local>
- <20120223123856.GG26667@sapphire.tkos.co.il>
- <63D6870D443E63419AC4A0C97B86C092030FCA18@MBXCLUSTER.mdh.local>
- <20120223171716.GA5622@tarshish>
- <63D6870D443E63419AC4A0C97B86C092030FCA22@MBXCLUSTER.mdh.local>
- <CAGm1_kut30F-BRwP8pwxbonFGJkJATSKBcJpisE0C1=QY9Ld9Q@mail.gmail.com>
-Message-ID: <20120224153836.GA6613@game.jcrosoft.org>
+From: Mohamed HAMZAOUI <requinham@gmail.com>
+Date: Fri, 24 Feb 2012 21:08:56 +0100
+Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
+In-Reply-To: <20120224150232.GA2346@bill-the-cat>
+References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
+ <20120224150232.GA2346@bill-the-cat>
+Message-ID: <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14:33 Fri 24 Feb     , Yegor Yefremov wrote:
-> AFAIK it is always uImage format for both u-boot and barebox. RedBoot
-> has used zImage.
-barebox can load zimage or uImage
+Thank you for your help, but i use the 2012.12RC version and in the
+bootloader menu i select the u-boot version 2011.12 and in the uboot binary
+format i only have u-boot.bin, u-boot-nand.bin, u-boot.kwb !
+How to build u-boot.img ?
+when i used a u-boot.bin for my Craneboard i can't boot because it need a
+MLO (xloader) for booting.
 
-Best Regrds,
-J.
-> 
-> Yegor
-> 
-> On Fri, Feb 24, 2012 at 2:19 PM, Mikael ?sberg <mikael.asberg@mdh.se> wrote:
-> > Hey,
+thx
+
+On Fri, Feb 24, 2012 at 4:02 PM, Tom Rini <trini@ti.com> wrote:
+
+> On Fri, Feb 24, 2012 at 10:25:21AM +0100, Mohamed HAMZAOUI wrote:
+> > Hi,
 > >
-> > Ok great, thx!
+> > I want to use Buildroot for CraneBoard...
 > >
-> > One last thing, depending on which bootloader that is used, i.e., u-boot, barebox etc., does it matter which kernel image that is used for the boot (zImage, uImage, vmlinux)?
-> > If I use barebox, which image can I use? (I prefer an uncompressed kernel)
-> >
-> > Kind regards
-> >
-> > --------------------------------------------------------------
-> > Mikael ?sberg
-> > PhD student (Doktorand), Computer Engineering
-> > School of Innovation, Design and Engineering
-> > M?lardalen University, V?ster?s Sweden
-> > Phone: +46(0)21 101502
-> > Room nr: U1-145
-> > Mail: mikael.asberg at mdh.se
-> > --------------------------------------------------------------
-> > ________________________________________
-> > Fr?n: Baruch Siach [baruch at tkos.co.il]
-> > Skickat: den 23 februari 2012 18:17
-> > Till: Mikael ?sberg
-> > Kopia: buildroot at busybox.net
-> > ?mne: Re: SV: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
-> >
-> > Hi Mikael,
-> >
-> > Please keep the list in Cc.
-> >
-> > On Thu, Feb 23, 2012 at 02:35:37PM +0100, Mikael ?sberg wrote:
-> >> Hi,
-> >>
-> >> Thanks a lot for the info!
-> >>
-> >> I guess its easier to use Barebox, then you just also specify mxs_defconfig
-> >> when you configure.
-> >
-> > You original question was about the Linux kernel not Barebox.
-> >
-> > Barebox includes support for the TX28 board which is based on i.MX28
-> > (tx28stk5_defconfig).
-> >
-> >> One more thing, since i.MX28 uses the "454MHz ARM926EJ-S" processor, should
-> >> I choose "arm926t" in the config?
-> >
-> > The kernel (and Barebox) defconfig files should include all the relevant
-> > settings, including this one.
-> >
-> > baruch
-> >
-> >> Fr?n: Baruch Siach [baruch at tkos.co.il]
-> >> Skickat: den 23 februari 2012 13:38
-> >> Till: Mikael ?sberg
-> >> Kopia: buildroot at busybox.net
-> >> ?mne: Re: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
-> >>
-> >> Hi Mikael,
-> >>
-> >> On Thu, Feb 23, 2012 at 12:22:09PM +0100, Mikael ?sberg wrote:
-> >> > Does anyone have experience with compiling Linux kernels with Buildroot for
-> >> > i.MX28 EVK?
-> >> > I'm not sure which board name to be set for u-boot for example...
-> >> > Also, which defconfig should be used, imx27ads_defconfig or versatile_defconfig perhaps?
-> >> >
-> >> > Any help or pointers would be valueable!
-> >>
-> >> Although it's named i.MX28, this chip is very different from i.MX27, but is
-> >> similar to i.MX23. Latest kernels (since v3.0) contain mxs_defconfig, which
-> >> should be suitable for i.MX28 (and i.MX23).
-> >>
-> >> baruch
-> >
-> > --
-> > ? ? http://baruch.siach.name/blog/ ? ? ? ? ? ? ? ? ?~. .~ ? Tk Open Systems
-> > =}------------------------------------------------ooO--U--Ooo------------{=
-> > ? - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> > My problem is with configuration files : MLO, u-boot.bin and uImage.
+> > I installed the last RC buildroot and after I started to configure the
+> build
+> >  by selecting the desired setting because i dont found a defconfig file
+> for
+> > Kernel with buildroot ...
+>
+> Starting with v2011.12 you do not need x-loader and you want the MLO and
+> u-boot.img (NOT u-boot.bin) files created by U-Boot.
+>
+> --
+> Tom
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120224/a32d27ee/attachment.html>
