@@ -1,28 +1,37 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 24 Feb 2012 10:10:22 +0100
-Subject: [Buildroot] BR 2012 & pandaboard :: BOOT issue
-In-Reply-To: <CAPEB33y3AJkE7xQPEGYRpx5G2hXz7SZgd_nCHy+Zd8oQQm-yRg@mail.gmail.com>
-References: <CAPEB33zmLTp+95wimobRGVi+Ze4t_7ikSc44goGUpbmmqYZ6Bw@mail.gmail.com>
- <4F473C51.2050500@visionsystems.de>
- <CAPEB33y3AJkE7xQPEGYRpx5G2hXz7SZgd_nCHy+Zd8oQQm-yRg@mail.gmail.com>
-Message-ID: <CAGm1_kuo0GkbKRYs2_mK_hzjgeVC1o6MFKaToFnWHhk4ofs0gQ@mail.gmail.com>
+From: Mohamed HAMZAOUI <requinham@gmail.com>
+Date: Fri, 24 Feb 2012 10:25:21 +0100
+Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
+Message-ID: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 24, 2012 at 9:43 AM, MERCADIER Johann
-<johann.mercadier@imerir.com> wrote:
-> Here are some infos on my toolchain built using BR, I didn't not find much
-> difference with yours Yegor but for the newbie I am, I probably miss
-> something?...
->
-> I will try to compile uboot on its own without using BR and see if the
-> things get better?
-> If you have any other ideaS I will be please to read them!
+Hi,
 
-Just try ct-ng toolchain (BR2_TOOLCHAIN_CTNG) with default settings
-and let us know if it helped.
+I want to use Buildroot for CraneBoard...
 
-Yegor
+My problem is with configuration files : MLO, u-boot.bin and uImage.
+I installed the last RC buildroot and after I started to configure the build
+ by selecting the desired setting because i dont found a defconfig file for
+Kernel with buildroot ...
+
+In the configuration of the bootloader I checked xloader and uboot. With
+uboot I found a configuration file to my card "am3517_crane" but, for
+xloader, I haven't found anything and I cannot generate the correspendant
+MLO .
+
+I copy MLO, which was provided for Angstrom distrib for my card (compiled
+whith openembedded) but I cannot load the u-boot. suddenly, I also tried
+copying uboot that provided with the same distrib of  MLO and then I start but
+I am blocked on: "booting the kernel"!
+
+Could you tell me why i have this freeze ?
+Could you tell me what I do with buildroot to find the xloader configuration
+file to my card ?
+
+thnx
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120224/69c42c32/attachment-0001.html>
