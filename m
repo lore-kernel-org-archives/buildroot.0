@@ -1,47 +1,58 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 17 Feb 2012 14:48:50 +0100
-Subject: [Buildroot] [git commit] configs: Add Freescale MX53 support
-Message-ID: <20120301130635.3516A90BF7@busybox.osuosl.org>
+Date: Sat, 25 Feb 2012 23:18:03 +0100
+Subject: [Buildroot] [git commit] Makefile: move cmake toolchain file to
+	$HOST_DIR/usr/share/buildroot
+Message-ID: <20120301130636.4D12290BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28df1bc780c17f5fb340665ff89f05c9030b8b6f
+commit: http://git.buildroot.net/buildroot/commit/?id=ed7791e2e8cdade564a5f484cdfe62ffe16cb981
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot config and Linux Kernel config.
-Freescale binaries (xf86 video driver and multimedia codecs) not supported yet.
+To make it part of the SDK installation.
 
-Signed-off-by: Mathieu Briand <mbriand@adeneo-embedded.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/mx53loco_defconfig |   18 ++++++++++++++++++
- 1 files changed, 18 insertions(+), 0 deletions(-)
+ Makefile                  |    5 +++--
+ package/Makefile.cmake.in |    2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-new file mode 100644
-index 0000000..eab5b18
---- /dev/null
-+++ b/configs/mx53loco_defconfig
-@@ -0,0 +1,18 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx53_loco"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/uboot-imx.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="http://opensource.freescale.com/pub/scm/imx/linux-2.6-imx.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="rel_imx_2.6.35_11.09.01"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx5"
+diff --git a/Makefile b/Makefile
+index d5cd8f0..9a07f9f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -368,7 +368,7 @@ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
+ dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+ 
+-$(BASE_TARGETS): dirs $(O)/toolchainfile.cmake
++$(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+ 
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
+ 	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+@@ -377,7 +377,8 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+ 
+-$(O)/toolchainfile.cmake:
++$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
++	mkdir -p $(@D)
+ 	@echo -en "\
+ 	set(CMAKE_SYSTEM_NAME Linux)\n\
+ 	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
+index 38e459b..aea1185 100644
+--- a/package/Makefile.cmake.in
++++ b/package/Makefile.cmake.in
+@@ -72,7 +72,7 @@ define $(2)_CONFIGURE_CMDS
+ 	(cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+-		-DCMAKE_TOOLCHAIN_FILE="$$(BASE_DIR)/toolchainfile.cmake" \
++		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
