@@ -1,132 +1,342 @@
-From: Mohamed HAMZAOUI <requinham@gmail.com>
-Date: Sat, 25 Feb 2012 01:01:14 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <20120224150232.GA2346@bill-the-cat>
- <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
- <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
-Message-ID: <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Sat, 25 Feb 2012 04:33:01 +0100
+Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
+ repository and update version
+In-Reply-To: <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
+References: <20120224190112.GB10670@game.jcrosoft.org>
+ <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
+Message-ID: <20120225033301.GC10670@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I tried following your instruction and i have been found the file MLO and
-u-boot.img in the build/uboot directory but when i use them with the
-generated rootfs th craneboard boot from the nand and not from my SD
-although it's configured to booting from SD card and i tested it whith a
-openembedded distribution.
-the first log for starting is :
-U-Boot SPL 2011.12 (Feb 25 2012 - 00:01:51)
-Texas Instruments Revision detection unimplemented
-OMAP SD/MMC: 0
-reading u-boot.img
-reading u-boot.img
+On 19:31 Fri 24 Feb     , Alexandre Pereira da Silva wrote:
+> This overrided the DOWNLOAD_GIT method to also fetch the submodules used
+> by openocd.
+> Removed patches that are not needed anymore by the new version.
+> Updated the gnu99 patch to use configure.ac instead of configure.in.
+> Fix a build problem in the stm32_stlink.c file.
+> 
+> Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+> ---
+again NACK
 
+DO NOT USE GIT in the release
 
-U-Boot 2011.12 (Feb 25 2012 - 00:01:51)
+and did you try to build it for the target as ARM?
 
-AM35XX-GP ES2.0, CPU-OPP2, L3-165MHz, Max CPU Clock 600 Mhz
-CraneBoard + LPDDR/NAND
-I2C:   ready
-DRAM:  256 MiB
-NAND:  256 MiB
-MMC:   OMAP SD/MMC: 0
-In:    serial
-Out:   serial
-Err:   serial
-Die ID #0dc0000100000000015da39614006015
-Hit any key to stop autoboot:  3  2  1  0
-mmc - MMC sub system
-
-Usage:
-mmc read addr blk# cnt
-mmc write addr blk# cnt
-mmc erase blk# cnt
-mmc rescan
-mmc part - lists available partition on current mmc device
-mmc dev [dev] [part] - show or set current mmc device [partition]
-mmc list - lists available devices
-Booting from nand ...
-
-NAND read: device 0 offset 0x480000, size 0x500000
- 5242880 bytes read: OK
-## Booting kernel from Legacy Image at 82000000 ...
-   Image Name:   Linux-2.6.32
-   Image Type:   ARM Linux Kernel Image (uncompressed)
-   Data Size:    2103408 Bytes = 2 MiB
-   Load Address: 80008000
-   Entry Point:  80008000
-   Verifying Checksum ... OK
-   Loading Kernel Image ... OK
-OK
-
-Starting kernel ...
-
-Uncompressing
-Linux....................................................................................................................................
-done, booting the kernel.
-Linux version 2.6.32 (sriharsha at localhost.localdomain) (gcc version 4.3.3
-(Sourcery G++ Lite 2009q1-203) ) #1 Mon Nov 29 23:22:22 IST 2010
-CPU: ARMv7 Processor [411fc087] revision 7 (ARMv7), cr=10c53c7f
-....
-...
-
-
-On Fri, Feb 24, 2012 at 9:20 PM, Tom Rini <trini@ti.com> wrote:
-
-> On Fri, Feb 24, 2012 at 1:08 PM, Mohamed HAMZAOUI <requinham@gmail.com>
-> wrote:
-> > Thank you for your help, but i use the 2012.12RC version and in the
-> > bootloader menu i select the u-boot version 2011.12 and in the uboot
-> binary
-> > format i only have u-boot.bin, u-boot-nand.bin, u-boot.kwb !
-> > How to build u-boot.img ?
-> > when i used a u-boot.bin for my Craneboard i can't boot because it need a
-> > MLO (xloader) for booting.
->
-> That's a buildroot problem.  'make am3517_crane ; make', or however
-> buildroot builds today is producing u-boot.img and MLO, it's just not
-> copying them out to where you're looking for them.
->
-> >
-> > thx
-> >
-> > On Fri, Feb 24, 2012 at 4:02 PM, Tom Rini <trini@ti.com> wrote:
-> >
-> >> On Fri, Feb 24, 2012 at 10:25:21AM +0100, Mohamed HAMZAOUI wrote:
-> >> > Hi,
-> >> >
-> >> > I want to use Buildroot for CraneBoard...
-> >> >
-> >> > My problem is with configuration files : MLO, u-boot.bin and uImage.
-> >> > I installed the last RC buildroot and after I started to configure the
-> >> build
-> >> >  by selecting the desired setting because i dont found a defconfig
-> file
-> >> for
-> >> > Kernel with buildroot ...
-> >>
-> >> Starting with v2011.12 you do not need x-loader and you want the MLO and
-> >> u-boot.img (NOT u-boot.bin) files created by U-Boot.
-> >>
-> >> --
-> >> Tom
-> >>
-> >
-> > _______________________________________________
-> > U-Boot mailing list
-> > U-Boot at lists.denx.de
-> > http://lists.denx.de/mailman/listinfo/u-boot
-> >
->
->
->
+Best Regards,
+J.
+>  ...s-compilation-host-libsub-was-used-before.patch |   33 --------
+>  ...d-0001-stlink-fix-alignment-build-warning.patch |   83 ++++++++++++++++++++
+>  ...002-fix-xscale-uninitialise-breakpoint_pc.patch |   20 -----
+>  package/openocd/openocd-0003-force-gnu99.patch     |   24 ++++---
+>  .../openocd/openocd-0005-dont-force-ldflags.patch  |   37 ---------
+>  package/openocd/openocd.mk                         |   28 ++++++-
+>  6 files changed, 120 insertions(+), 105 deletions(-)
+>  delete mode 100644 package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+>  create mode 100644 package/openocd/openocd-0001-stlink-fix-alignment-build-warning.patch
+>  delete mode 100644 package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
+>  delete mode 100644 package/openocd/openocd-0005-dont-force-ldflags.patch
+> 
+> diff --git a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch b/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+> deleted file mode 100644
+> index caf1a8b..0000000
+> --- a/package/openocd/openocd-0001-fix-cross-compilation-host-libsub-was-used-before.patch
+> +++ /dev/null
+> @@ -1,33 +0,0 @@
+> -From 3728c4af7f6303ccedab56ec220797f8f290580e Mon Sep 17 00:00:00 2001
+> -From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+> -Date: Wed, 10 Aug 2011 00:17:29 +0800
+> -Subject: [PATCH] fix cross compilation: host libsub was used before
+> -
+> -tested in buildroot
+> -
+> -Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+> ----
+> - configure.in |    7 +++++--
+> - 1 files changed, 5 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/configure.in b/configure.in
+> -index dfa1e8f..cfe2218 100644
+> ---- a/configure.in
+> -+++ b/configure.in
+> -@@ -1046,8 +1046,11 @@ build_usb=no
+> - if test $build_jlink = yes -o $build_vsllink = yes -o $build_usbprog = yes -o \
+> -   $build_rlink = yes -o $build_ulink = yes -o $build_armjtagew = yes
+> - then
+> --  AC_CHECK_HEADERS([usb.h],[],
+> --  [AC_MSG_ERROR([usb.h is required to build some OpenOCD driver(s)])])
+> -+  dnl check for libusb
+> -+  PKG_CHECK_MODULES(LIBUSB, libusb >= 0.1.11)
+> -+  CFLAGS="$CFLAGS $LIBUSB_CFLAGS"
+> -+  LDFLAGS="$LDFLAGS $LIBUSB_LDFLAGS"
+> -+  LIBS="$LIBS $LIBUSB_LIBS"
+> -   build_usb=yes
+> - fi
+> - 
+> --- 
+> -1.7.5.4
+> -
+> diff --git a/package/openocd/openocd-0001-stlink-fix-alignment-build-warning.patch b/package/openocd/openocd-0001-stlink-fix-alignment-build-warning.patch
+> new file mode 100644
+> index 0000000..2d8e521
+> --- /dev/null
+> +++ b/package/openocd/openocd-0001-stlink-fix-alignment-build-warning.patch
+> @@ -0,0 +1,83 @@
+> +From 94228f37f54ace3040bea1e5c2ccee895d854859 Mon Sep 17 00:00:00 2001
+> +From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+> +Date: Fri, 24 Feb 2012 18:51:48 -0200
+> +Subject: [PATCH] stlink: fix alignment build warning
+> +
+> +The {read,write}_mem32 interface functions was asking a 32 bits buffer but
+> +they don't need 32 bits alignment.
+> +This will change the interface to a 8 bits buffer to remove the alignment
+> +mismatch warning. This was causing build errors on platforms with strict
+> +aliasing rules.
+> +
+> +Change-Id: I338be8df5686f07a64ddb4f17c1bb494af583999
+> +Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+> +---
+> + src/jtag/drivers/stlink_usb.c   |    4 ++--
+> + src/jtag/stlink/stlink_layout.h |    4 ++--
+> + src/target/stm32_stlink.c       |    4 ++--
+> + 3 files changed, 6 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/src/jtag/drivers/stlink_usb.c b/src/jtag/drivers/stlink_usb.c
+> +index 3cb2434..4604716 100644
+> +--- a/src/jtag/drivers/stlink_usb.c
+> ++++ b/src/jtag/drivers/stlink_usb.c
+> +@@ -968,7 +968,7 @@ static int stlink_usb_write_mem8(void *handle, uint32_t addr, uint16_t len,
+> + 
+> + /** */
+> + static int stlink_usb_read_mem32(void *handle, uint32_t addr, uint16_t len,
+> +-			  uint32_t *buffer)
+> ++			  uint8_t *buffer)
+> + {
+> + 	int res;
+> + 	struct stlink_usb_handle_s *h;
+> +@@ -998,7 +998,7 @@ static int stlink_usb_read_mem32(void *handle, uint32_t addr, uint16_t len,
+> + 
+> + /** */
+> + static int stlink_usb_write_mem32(void *handle, uint32_t addr, uint16_t len,
+> +-			   const uint32_t *buffer)
+> ++			   const uint8_t *buffer)
+> + {
+> + 	int res;
+> + 	struct stlink_usb_handle_s *h;
+> +diff --git a/src/jtag/stlink/stlink_layout.h b/src/jtag/stlink/stlink_layout.h
+> +index c0c89f5..59e6174 100644
+> +--- a/src/jtag/stlink/stlink_layout.h
+> ++++ b/src/jtag/stlink/stlink_layout.h
+> +@@ -56,10 +56,10 @@ struct stlink_layout_api_s {
+> + 			    const uint8_t *buffer);
+> + 	/** */
+> + 	int (*read_mem32) (void *handle, uint32_t addr, uint16_t len,
+> +-			   uint32_t *buffer);
+> ++			   uint8_t *buffer);
+> + 	/** */
+> + 	int (*write_mem32) (void *handle, uint32_t addr, uint16_t len,
+> +-			    const uint32_t *buffer);
+> ++			    const uint8_t *buffer);
+> + 	/** */
+> + 	int (*idcode) (void *fd, uint32_t *idcode);
+> + 	/** */
+> +diff --git a/src/target/stm32_stlink.c b/src/target/stm32_stlink.c
+> +index 32896cc..fc97188 100644
+> +--- a/src/target/stm32_stlink.c
+> ++++ b/src/target/stm32_stlink.c
+> +@@ -651,7 +651,7 @@ static int stm32_stlink_read_memory(struct target *target, uint32_t address,
+> + 					address, c, dst);
+> + 		else
+> + 			res = stlink_if->layout->api->read_mem32(stlink_if->fd,
+> +-					address, c, (uint32_t *)dst);
+> ++					address, c, dst);
+> + 
+> + 		if (res != ERROR_OK)
+> + 			return res;
+> +@@ -700,7 +700,7 @@ static int stm32_stlink_write_memory(struct target *target, uint32_t address,
+> + 					address, c, dst);
+> + 		else
+> + 			res = stlink_if->layout->api->write_mem32(stlink_if->fd,
+> +-					address, c, (uint32_t *)dst);
+> ++					address, c, dst);
+> + 
+> + 		if (res != ERROR_OK)
+> + 			return res;
+> +-- 
+> +1.7.9
+> +
+> diff --git a/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch b/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
+> deleted file mode 100644
+> index 328241e..0000000
+> --- a/package/openocd/openocd-0002-fix-xscale-uninitialise-breakpoint_pc.patch
+> +++ /dev/null
+> @@ -1,20 +0,0 @@
+> -xscale: fix uninitialise breakpoint_pc
+> -
+> -Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+> ----
+> - src/target/xscale.c |    2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -Index: b/src/target/xscale.c
+> -===================================================================
+> ---- a/src/target/xscale.c
+> -+++ b/src/target/xscale.c
+> -@@ -2811,7 +2811,7 @@ static int xscale_analyze_trace(struct t
+> -    struct xscale_common *xscale = target_to_xscale(target);
+> -    struct xscale_trace_data *trace_data = xscale->trace.data;
+> -    int i, retval;
+> --   uint32_t breakpoint_pc;
+> -+   uint32_t breakpoint_pc = 0;
+> -    struct arm_instruction instruction;
+> -    uint32_t current_pc = 0;  /* initialized when address determined */
+> - 	
+> diff --git a/package/openocd/openocd-0003-force-gnu99.patch b/package/openocd/openocd-0003-force-gnu99.patch
+> index 106d112..5511f09 100644
+> --- a/package/openocd/openocd-0003-force-gnu99.patch
+> +++ b/package/openocd/openocd-0003-force-gnu99.patch
+> @@ -1,19 +1,23 @@
+>  force gnu99
+>  
+> -Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+> +Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+>  ---
+> - configure.in |    1 +
+> - 1 file changed, 1 insertion(+)
+> + configure.ac |    2 ++
+> + 1 files changed, 2 insertions(+), 0 deletions(-)
+>  
+> -Index: b/configure.in
+> -===================================================================
+> ---- a/configure.in
+> -+++ b/configure.in
+> -@@ -28,6 +28,7 @@ AC_DISABLE_SHARED
+> +diff --git a/configure.ac b/configure.ac
+> +index ffab637..60fe4ab 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -28,6 +28,8 @@ AC_DISABLE_SHARED
+>   AC_PROG_LIBTOOL
+> - AC_SUBST(LIBTOOL_DEPS)
+> + AC_SUBST([LIBTOOL_DEPS])
+>   
+>  +CFLAGS="$CFLAGS -std=gnu99"
+> - 
+> ++
+>   dnl configure checks required for Jim files (these are obsolete w/ C99)
+>   AC_C_CONST
+> + AC_TYPE_LONG_LONG_INT
+> +-- 
+> +1.7.9
+> +
+> diff --git a/package/openocd/openocd-0005-dont-force-ldflags.patch b/package/openocd/openocd-0005-dont-force-ldflags.patch
+> deleted file mode 100644
+> index 1880e00..0000000
+> --- a/package/openocd/openocd-0005-dont-force-ldflags.patch
+> +++ /dev/null
+> @@ -1,37 +0,0 @@
+> -[PATCH] don't force library search path / rpath settings
+> -
+> -openocd adds -L$exec_prefix/lib -Wl,rpath,$exec_prefix/lib to the compile
+> -LDFLAGS if it isn't installed into /usr/local, which breaks cross compilation
+> -as the compiler ends up using host libraries.
+> ----
+> - configure.in |   17 -----------------
+> - 1 file changed, 17 deletions(-)
+> -
+> -Index: openocd-0.5.0/configure.in
+> -===================================================================
+> ---- openocd-0.5.0.orig/configure.in
+> -+++ openocd-0.5.0/configure.in
+> -@@ -174,23 +174,6 @@
+> - # Let make expand exec_prefix.
+> - test x"$OCDxprefix" = xNONE && OCDxprefix="$OCDprefix"
+> - 
+> --# what matters is the "exec-prefix"
+> --if test "$OCDxprefix" != "$ac_default_prefix"
+> --then
+> --    # We are installing in a non-standard place
+> --    # Nonstandard --prefix and/or --exec-prefix
+> --    # We have an override of some sort.
+> --    # use build specific install library dir
 > --
-> Tom
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120225/b69673ed/attachment-0001.html>
+> --    LDFLAGS="$LDFLAGS -L$OCDxprefix/lib"
+> --    # RPATH becomes an issue on Linux only
+> --    if test $host_os = linux-gnu || test $host_os = linux ; then
+> --      LDFLAGS="$LDFLAGS -Wl,-rpath,$OCDxprefix/lib"
+> --    fi
+> --    # The "INCDIR" is also usable
+> --    CFLAGS="$CFLAGS -I$includedir"
+> --fi
+> --
+> - AC_ARG_WITH(ftd2xx,
+> -    AS_HELP_STRING([--with-ftd2xx=<PATH>],[This option has been removed.]),
+> -   [
+> diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+> index a12ba6c..2796e81 100644
+> --- a/package/openocd/openocd.mk
+> +++ b/package/openocd/openocd.mk
+> @@ -3,16 +3,18 @@
+>  # openocd
+>  #
+>  #############################################################
+> -OPENOCD_VERSION:=0.5.0
+> -OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+> -OPENOCD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/openocd/openocd/$(OPENOCD_VERSION)
+> +#OPENOCD_VERSION = master
+> +OPENOCD_VERSION = dec6b913809bd3f857af31be178ffde65e42dbab
+> +OPENOCD_SITE = git://openocd.git.sourceforge.net/gitroot/openocd/openocd
+> +OPENOCD_SITE_METHOD = git
+>  
+>  OPENOCD_AUTORECONF = YES
+>  OPENOCD_CONF_OPT = \
+>  	--oldincludedir=$(STAGING_DIR)/usr/include \
+>  	--includedir=$(STAGING_DIR)/usr/include \
+>  	--disable-doxygen-html \
+> -	--enable-dummy
+> +	--enable-dummy \
+> +    --enable-maintainer-mode
+>  
+>  OPENOCD_DEPENDENCIES = libusb-compat
+>  
+> @@ -32,12 +34,28 @@ endif
+>  
+>  HOST_OPENOCD_DEPENDENCIES = host-libusb-compat host-libftdi
+>  
+> +HOST_OPENOCD_AUTORECONF = YES
+>  HOST_OPENOCD_CONF_OPT = 	\
+>  	--disable-doxygen-html 	\
+>  	--enable-dummy 		\
+>  	--enable-ft2232_libftdi \
+>  	--enable-jlink 		\
+> -	--enable-vsllink
+> +	--enable-vsllink \
+> +	--enable-maintainer-mode 
+> +
+> +define DOWNLOAD_GIT
+> +	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+> +	(pushd $(DL_DIR) > /dev/null && \
+> +	$(GIT) clone $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+> +	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+> +	$(GIT) checkout $($(PKG)_VERSION) && \
+> +	$(GIT) submodule init && \
+> +	$(GIT) submodule update && \
+> +	$(TAR) czf $(DL_DIR)/$($(PKG)_SOURCE) . &&\
+> +	popd > /dev/null && \
+> +	rm -rf $($(PKG)_DL_DIR) && \
+> +	popd > /dev/null)    
+> +endef
+>  
+>  $(eval $(call AUTOTARGETS))
+>  $(eval $(call AUTOTARGETS,host))
+> -- 
+> 1.7.9
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
