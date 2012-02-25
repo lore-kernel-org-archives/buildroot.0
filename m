@@ -1,57 +1,47 @@
-From: Michael S. Zick <minimod@morethan.org>
-Date: Sat, 25 Feb 2012 09:29:56 -0600
-Subject: [Buildroot] [PATCH v2] Add Device Tree and simpleImage support
-In-Reply-To: <CAM+bi4sPDX9YmVmY+qJxEUkmA5CPT+Gf_cYO=jP64Rw0v3OPUw@mail.gmail.com>
-References: <1329684060-20751-1-git-send-email-Spenser309@gmail.com>
- <201202251604.59577.arnout@mind.be>
- <CAM+bi4sPDX9YmVmY+qJxEUkmA5CPT+Gf_cYO=jP64Rw0v3OPUw@mail.gmail.com>
-Message-ID: <201202250929.59162.minimod@morethan.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 25 Feb 2012 16:31:24 +0100
+Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
+	repository and update version
+In-Reply-To: <20120225033301.GC10670@game.jcrosoft.org>
+References: <20120224190112.GB10670@game.jcrosoft.org>
+ <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
+ <20120225033301.GC10670@game.jcrosoft.org>
+Message-ID: <201202251631.25121.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat February 25 2012, Alvaro Gamez wrote:
-> Alright, thank you. I just didn't know the procedure :)
->
+On Saturday 25 February 2012 04:33:01 Jean-Christophe PLAGNIOL-VILLARD wrote:
+> On 19:31 Fri 24 Feb     , Alexandre Pereira da Silva wrote:
+> > This overrided the DOWNLOAD_GIT method to also fetch the submodules used
+> > by openocd.
+> > Removed patches that are not needed anymore by the new version.
+> > Updated the gnu99 patch to use configure.ac instead of configure.in.
+> > Fix a build problem in the stm32_stlink.c file.
+> > 
+> > Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+> > ---
+> again NACK
+> 
+> DO NOT USE GIT in the release
 
-If I can post a "Buildroot Brag" here -
-The procedures of this project are a bit different than others.
+ Instead of just shouting at Alexandre, perhaps you can explain why it's
+a bad idea to use the git version for openocd...
 
-Other projects, only the "release points" are expected to work.
-With this project, the repository "head" is expected to also work.
+ Alexandre, why do you need a more recent version than the official 
+release?
 
-That goal does make the work flow a bit different at Peter's end.
 
-Mike 
-> Regards
-> 
-> 2012/2/25 Arnout Vandecappelle <arnout@mind.be>
-> 
-> > On Saturday 25 February 2012 10:34:26 Alvaro Gamez wrote:
-> > > BTW, Arnout, I saw you ack'ed my previous patches for wget and xilinx's
-> > > repositories, but I haven't seen them applied to the tree. Is there
-> > > anything I can help with?
-> >
-> >  Peter will get around to committing them eventually - he doesn't often
-> > forget about patches once they're OK.
-> >
-> >  I do expect he'll first finish the 2012.02 release, so don't expect
-> > anything for another week or so.
-> >
-> >  Regards,
-> >  Arnout
-> >
-> > --
-> > Arnout Vandecappelle                               arnout at mind be
-> > Senior Embedded Software Architect                 +32-16-286540
-> > Essensium/Mind                                     http://www.mind.be
-> > G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> > Leuven
-> > LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> > GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> >
-> 
-> 
-> 
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
