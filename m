@@ -1,46 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Feb 2012 20:57:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 4796] New: apply-patches.sh reorders patches given
- on the command line
-Message-ID: <bug-4796-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Feb 2012 22:25:34 +0100
+Subject: [Buildroot] [PATCH 1/3] qt: remove bogus lines
+In-Reply-To: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
+ (Ismael Luceno's message of "Sun, 26 Feb 2012 10:13:06 -0200")
+References: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
+Message-ID: <878vjpi8xd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4796
+>>>>> "Ismael" == Ismael Luceno <ismael.luceno@gmail.com> writes:
 
-           Summary: apply-patches.sh reorders patches given on the command
-                    line
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: develop at kristov.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Ismael> ---
+ Ismael>  package/qt/qt.mk |    8 ++------
+ Ismael>  1 files changed, 2 insertions(+), 6 deletions(-)
 
-
-Created attachment 4052
-  --> https://bugs.busybox.net/attachment.cgi?id=4052
-prevents reordering patches
-
-When support/scripts/apply-patches.sh is given an explicit list of patches
-instead of a template, they are sorted by name before being applied. This is
-bad as sometimes the order of patches is important, e.g. if one patch depends
-on another one. This happens e.g. when applying Debian patches whose order is
-explicitly described in the file debian/patches/series.
-
-The culprit is a "ls -d" which has to be changed to "ls -dU" in order to
-prevent sorting to take place. I have attached a corresponding patch.
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
