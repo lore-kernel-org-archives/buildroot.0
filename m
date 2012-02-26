@@ -1,47 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Feb 2012 22:28:59 +0100
-Subject: [Buildroot] [PATCH 2/3] qt: Install QtDeclarative imports
-In-Reply-To: <1330258388-28391-2-git-send-email-ismael.luceno@gmail.com>
- (Ismael Luceno's message of "Sun, 26 Feb 2012 10:13:07 -0200")
-References: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
- <1330258388-28391-2-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <874nudi8ro.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 26 Feb 2012 22:15:51 +0100
+Subject: [Buildroot] [git commit branch/next] qt: simplify arch handling
+Message-ID: <20120226213202.77A5A90B88@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ismael" == Ismael Luceno <ismael.luceno@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fbfda06cb9d9aa1708915ec4148d08a0ca36cbc2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Please sign off on your patches! (git format-patch -s).
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/qt/qt.mk |    8 ++------
+ 1 files changed, 2 insertions(+), 6 deletions(-)
 
- Ismael> ---
- Ismael>  package/qt/qt.mk |    7 +++++--
- Ismael>  1 files changed, 5 insertions(+), 2 deletions(-)
-
- Ismael> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
- Ismael> index 68f9348..4871538 100644
- Ismael> --- a/package/qt/qt.mk
- Ismael> +++ b/package/qt/qt.mk
- Ismael> @@ -594,9 +594,12 @@ endif
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index fe85dae..68f9348 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -199,9 +199,7 @@ else
+ QT_CONFIGURE_OPTS += -big-endian
+ endif
  
- Ismael>  # Plugin installation
- Ismael>  define QT_INSTALL_TARGET_PLUGINS
- Ismael> +	mkdir -p $(TARGET_DIR)/usr/lib/qt
- Ismael>  	if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/ ] ; then \
- Ismael> -		mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins ; \
- Ismael> -		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins ; \
- Ismael> +		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins $(TARGET_DIR)/usr/lib/qt ; \
- Ismael> +	fi
- Ismael> +	if [ -d $(@D)/imports ] ; then \
- Ismael> +		cp -dpfr $(@D)/imports $(TARGET_DIR)/usr/lib/qt ; \
-
-It would make more sense to add the mkdir -p inside this
-conditional. Is there any reason why you are copying from the source
-directory and not staging like above?
-
-Care to fix that and resend with your signed-off-by?
-
--- 
-Bye, Peter Korsgaard
+-ifeq ($(BR2_arm),y)
+-QT_EMB_PLATFORM = arm
+-else ifeq ($(BR2_armeb),y)
++ifeq ($(BR2_arm)$(BR2_armeb),y)
+ QT_EMB_PLATFORM = arm
+ else ifeq ($(BR2_avr32),y)
+ QT_EMB_PLATFORM = avr32
+@@ -209,9 +207,7 @@ else ifeq ($(BR2_i386),y)
+ QT_EMB_PLATFORM = x86
+ else ifeq ($(BR2_x86_64),y)
+ QT_EMB_PLATFORM = x86_64
+-else ifeq ($(BR2_mips),y)
+-QT_EMB_PLATFORM = mips
+-else ifeq ($(BR2_mipsel),y)
++else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+ QT_EMB_PLATFORM = mips
+ else ifeq ($(BR2_powerpc),y)
+ QT_EMB_PLATFORM = powerpc
