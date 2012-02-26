@@ -1,31 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Feb 2012 21:29:14 +0100
-Subject: [Buildroot] [git commit branch/next] qt: bump version
-In-Reply-To: <20120226095808.775a2b05@gmail.com> (Ismael Luceno's message of
- "Sun, 26 Feb 2012 09:58:08 -0200")
-References: <20120225222047.C951590B6D@busybox.osuosl.org>
- <20120226095808.775a2b05@gmail.com>
-Message-ID: <877gz9z6cl.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 Feb 2012 20:57:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 4796] New: apply-patches.sh reorders patches given
+ on the command line
+Message-ID: <bug-4796-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ismael" == Ismael Luceno <ismael.luceno@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4796
 
- Ismael> Hi.
- Ismael> I've been working on QT4.8, and I found that it fails to compile
- Ismael> with GCC 4.6.2 on ARM, due to -fstrict-volatile-bitfields becoming
- Ismael> default [0].
+           Summary: apply-patches.sh reorders patches given on the command
+                    line
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: develop at kristov.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Ismael> Also, I'm wondering if it should override or append to QMAKE_CFLAGS
- Ismael> and QMAKE_CXXFLAGS...
 
- Ismael> [0] <http://gcc.gnu.org/ml/gcc-patches/2010-11/msg02245.html>
+Created attachment 4052
+  --> https://bugs.busybox.net/attachment.cgi?id=4052
+prevents reordering patches
 
-I think we can just add -fno-strict-volatile-bitfields to QT_CXXFLAGS
-for arm/armeb and gcc 4.6.x.
+When support/scripts/apply-patches.sh is given an explicit list of patches
+instead of a template, they are sorted by name before being applied. This is
+bad as sometimes the order of patches is important, e.g. if one patch depends
+on another one. This happens e.g. when applying Debian patches whose order is
+explicitly described in the file debian/patches/series.
+
+The culprit is a "ls -d" which has to be changed to "ls -dU" in order to
+prevent sorting to take place. I have attached a corresponding patch.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
