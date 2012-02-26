@@ -1,33 +1,31 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 21:17:09 +0100
-Subject: [Buildroot] [git commit] qemu/arm-versatile: update to use kernel
-	3.2.6
-Message-ID: <20120226202430.4F4DD90B91@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Feb 2012 21:29:14 +0100
+Subject: [Buildroot] [git commit branch/next] qt: bump version
+In-Reply-To: <20120226095808.775a2b05@gmail.com> (Ismael Luceno's message of
+ "Sun, 26 Feb 2012 09:58:08 -0200")
+References: <20120225222047.C951590B6D@busybox.osuosl.org>
+ <20120226095808.775a2b05@gmail.com>
+Message-ID: <877gz9z6cl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2befc3a380c5fd41441a4370ea22a7bfd4c109d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ismael" == Ismael Luceno <ismael.luceno@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/qemu_arm_versatile_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Ismael> Hi.
+ Ismael> I've been working on QT4.8, and I found that it fails to compile
+ Ismael> with GCC 4.6.2 on ARM, due to -fstrict-volatile-bitfields becoming
+ Ismael> default [0].
 
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 17aa833..fdc2e72 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ Ismael> Also, I'm wondering if it should override or append to QMAKE_CFLAGS
+ Ismael> and QMAKE_CXXFLAGS...
+
+ Ismael> [0] <http://gcc.gnu.org/ml/gcc-patches/2010-11/msg02245.html>
+
+I think we can just add -fno-strict-volatile-bitfields to QT_CXXFLAGS
+for arm/armeb and gcc 4.6.x.
+
+-- 
+Bye, Peter Korsgaard
