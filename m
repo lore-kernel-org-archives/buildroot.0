@@ -1,57 +1,44 @@
-From: Mohamed HAMZAOUI <requinham@gmail.com>
-Date: Sun, 26 Feb 2012 01:26:42 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <20120224150232.GA2346@bill-the-cat>
- <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
- <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
- <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
- <CA+M6bX=A1Mie8Q093Sa3bp_hSxSRFR6z4-sNBvJP3982e_HPqQ@mail.gmail.com>
- <CABMxt4gYMf_JjfYi_2YttUL2NDNYC4974Kq_--++B2yPgf0xUg@mail.gmail.com>
- <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
-Message-ID: <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
+From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+Date: Sun, 26 Feb 2012 00:06:59 -0300
+Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
+ repository and update version
+In-Reply-To: <201202251631.25121.arnout@mind.be>
+References: <20120224190112.GB10670@game.jcrosoft.org>
+ <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
+ <20120225033301.GC10670@game.jcrosoft.org>
+ <201202251631.25121.arnout@mind.be>
+Message-ID: <CAAAP30E8ijhxYh05evremPG9fpkyySo8fjJv18Wc4J2eKuf8rw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After trying to correct this issue, i have a difficult problem :( the
-booting freeze in "Starting kernel..." and it can't decompressing the
-uImage and starting the kernel.
-for information i choosed the kernel 2.6.39.4 in buildroot configuration
-with am3517_crane_defconfig file (a defconfig for version 2.6.32 that i
-copied manually) that i found in craneboard-kernel gitorious.
-
-Best regards
-Mohamed
-
-On Sat, Feb 25, 2012 at 3:35 PM, Tom Rini <trini@ti.com> wrote:
-
-> On Sat, Feb 25, 2012 at 6:00 AM, Mohamed HAMZAOUI <requinham@gmail.com>
-> wrote:
-> > Hi M Tom,
-> > I checked the file am3517_crane.h and it well use "rescan" instead of
-> "init"
-> >  but the problem is that after compilation, when I check the bootcmd I
-> find
-> > another one with init and not with rescan !
-> > When i tried to change the variable with the setenv command, the system
-> boot
-> >  correctly from the SD card.
-> > Can you tell me how I can fix that and why the compilation or the MLO,
-> > u-boot.img files not have the correct bootcmd ?
+>> again NACK
+>>
+>> DO NOT USE GIT in the release
 >
-> Ah, how about this, you've been using the board previously, yes?  It
-> probably had a saved environment from a previous version written to
-> NAND and was using that.  You might want to try doing 'nand erase
-> 260000 20000' to erase the old environment, then reset the board to
-> get the full, new, default environment.
+> ?Instead of just shouting at Alexandre, perhaps you can explain why it's
+> a bad idea to use the git version for openocd...
 >
-> --
-> Tom
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120226/2e3364f8/attachment-0001.html>
+> ?Alexandre, why do you need a more recent version than the official
+> release?
+
+The openocd release is 6 months old and they made many improvements
+since then. And I don't see any plans for them to release a new
+version any time soon.
+
+Openocd git head is usually more stable than their latest released
+version. Specially if the support for the target you are using is new.
+I have had issues connecting one of my cortex-m3 targets with openocd
+0.5.0.
+
+This is a special package like u-boot and the kernel because in many
+occasions you have to tweak the package to suit your own hardware.
+
+Other option would be to use 0.5.0 version from git, so people who run
+into this kind of issue, can override the version more easily.
+
+Another comment on this issue is about git submodule fetching. Do you
+think that could be useful to other packages? If so, I can prepare a
+new patch to fetch all submodules, if any.
