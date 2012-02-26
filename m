@@ -1,33 +1,44 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 19 Feb 2012 22:57:29 +0100
-Subject: [Buildroot] [git commit] qemu/arm-versatile: update to use kernel
-	3.2.6
-Message-ID: <20120301130635.6896190BF7@busybox.osuosl.org>
+Date: Sun, 26 Feb 2012 22:15:51 +0100
+Subject: [Buildroot] [git commit] qt: simplify arch handling
+Message-ID: <20120301130636.5FEFE90BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e954d1765bdb5f4d156b46e6d5925ebffb0b37b
+commit: http://git.buildroot.net/buildroot/commit/?id=fbfda06cb9d9aa1708915ec4148d08a0ca36cbc2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_arm_versatile_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/qt/qt.mk |    8 ++------
+ 1 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index 17aa833..fdc2e72 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -13,7 +13,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index fe85dae..68f9348 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -199,9 +199,7 @@ else
+ QT_CONFIGURE_OPTS += -big-endian
+ endif
+ 
+-ifeq ($(BR2_arm),y)
+-QT_EMB_PLATFORM = arm
+-else ifeq ($(BR2_armeb),y)
++ifeq ($(BR2_arm)$(BR2_armeb),y)
+ QT_EMB_PLATFORM = arm
+ else ifeq ($(BR2_avr32),y)
+ QT_EMB_PLATFORM = avr32
+@@ -209,9 +207,7 @@ else ifeq ($(BR2_i386),y)
+ QT_EMB_PLATFORM = x86
+ else ifeq ($(BR2_x86_64),y)
+ QT_EMB_PLATFORM = x86_64
+-else ifeq ($(BR2_mips),y)
+-QT_EMB_PLATFORM = mips
+-else ifeq ($(BR2_mipsel),y)
++else ifeq ($(BR2_mips)$(BR2_mipsel),y)
+ QT_EMB_PLATFORM = mips
+ else ifeq ($(BR2_powerpc),y)
+ QT_EMB_PLATFORM = powerpc
