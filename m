@@ -1,32 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 20:52:26 +0100
-Subject: [Buildroot] [git commit] customize: deprecate package
-Message-ID: <20120226202430.3E2BE90B2B@busybox.osuosl.org>
+Date: Sun, 26 Feb 2012 21:17:09 +0100
+Subject: [Buildroot] [git commit] qemu/x86: update to use kernel 3.2.6
+Message-ID: <20120226202430.5D43290B92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a19eea3ec5e4fe9324033958132b93c179d8349
+commit: http://git.buildroot.net/buildroot/commit/?id=3f1832f674a94d124ef8c1794d255d120953d85a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As described in the buildroot dev day report, using a post-build script
-is nowadays the preferred way of adding stuff to the rootfs.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/customize/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ configs/qemu_x86_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/customize/Config.in b/package/customize/Config.in
-index 97f8646..8f8aaa2 100644
---- a/package/customize/Config.in
-+++ b/package/customize/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CUSTOMIZE
- 	bool "customize"
-+	depends on BR2_DEPRECATED
- 	help
- 	  Add custom stuff to your buildroot.
- 
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index 314b124..d20850a 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -13,6 +13,6 @@ BR2_TARGET_ROOTFS_EXT2=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.2.config"
