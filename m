@@ -1,27 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 26 Feb 2012 09:09:27 +0100
-Subject: [Buildroot] BR 2012.02-rc1 :: WODIM issue (linking stage) [
-	SOLVED ]
-In-Reply-To: <CAPEB33xJ_2_y40Kiw8OJ5=Wbz3SziQzeeAX=Hw4XjAZKKSkZTQ@mail.gmail.com>
- (MERCADIER Johann's message of "Wed, 22 Feb 2012 20:16:25 +0000")
-References: <CAPEB33xJ_2_y40Kiw8OJ5=Wbz3SziQzeeAX=Hw4XjAZKKSkZTQ@mail.gmail.com>
-Message-ID: <87obsmyq14.fsf@macbook.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 26 Feb 2012 11:34:24 +0200
+Subject: [Buildroot] Compile Linux with Buildroot for i.MX28 EVK
+In-Reply-To: <63D6870D443E63419AC4A0C97B86C092030FCA29@MBXCLUSTER.mdh.local>
+References: <CAGm1_ksrQ9Hp6LL4YiETokRf5gvJDpx3hmLqEUdSMg8eFE_xVA@mail.gmail.com>
+ <63D6870D443E63419AC4A0C97B86C092030FCA24@MBXCLUSTER.mdh.local>
+ <CAGm1_kuoq9uoEPVDUftFeUS9xfrtri_GTf-r9R0fuoZ1=woH3Q@mail.gmail.com>
+ <63D6870D443E63419AC4A0C97B86C092030FCA25@MBXCLUSTER.mdh.local>
+ <20120224154055.GB6613@game.jcrosoft.org>
+ <63D6870D443E63419AC4A0C97B86C092030FCA26@MBXCLUSTER.mdh.local>
+ <20120224163510.GC6613@game.jcrosoft.org>
+ <63D6870D443E63419AC4A0C97B86C092030FCA28@MBXCLUSTER.mdh.local>
+ <20120224213131.4fe770e2@skate>
+ <63D6870D443E63419AC4A0C97B86C092030FCA29@MBXCLUSTER.mdh.local>
+Message-ID: <20120226093424.GC3257@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "MERCADIER" == MERCADIER Johann <johann.mercadier@imerir.com> writes:
+Hi Mikael,
 
- MERCADIER> Hi Sam,
- MERCADIER> ??thanks for your guess, I finally get through of it!
- MERCADIER> ??My host-system needed to add "libbz2-dev" in its /usr/include
- MERCADIER> ?? Just have to check if everything works fine by now!
+On Sat, Feb 25, 2012 at 09:39:12AM +0100, Mikael ?sberg wrote:
+> I understand that LZO has been mainlined in Linux.
 
-This problem was caused by a bug in our new
-automatic-derrive-host-package-dependencies handling for packages using
-cmake. I've fixed it now in git and it will be included in -rc3.
+ARM supports LZO kernel compression since version 2.6.33.
+
+> How do I compress the kernel with LZO instead of the regular compression 
+> algorithm (LZMA/BZIP2)?
+
+Select "Kernel compression mode" under "General setup" in the kernel 
+configuration.
+
+baruch
 
 -- 
-Bye, Peter Korsgaard
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
