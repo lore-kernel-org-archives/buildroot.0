@@ -1,54 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 23:03:57 +0100
-Subject: [Buildroot] [git commit] qemu/ppc-g3beige: update readme and use
-	kernel 3.2.6
-Message-ID: <20120226220419.0FF8D90B94@busybox.osuosl.org>
+From: Ismael Luceno <ismael.luceno@gmail.com>
+Date: Sun, 26 Feb 2012 21:00:27 -0200
+Subject: [Buildroot] [PATCH] qt: Install QtDeclarative imports
+Message-ID: <1330297227-8459-1-git-send-email-ismael.luceno@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73662a63c662fcefec09533fe03ba28d44dd114e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
 ---
- .../{linux-3.1.config => linux-3.2.config}         |    0
- board/qemu/powerpc-g3beige/readme.txt              |    2 +-
- configs/qemu_ppc_g3beige_defconfig                 |    4 ++--
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/qt/qt.mk |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/board/qemu/powerpc-g3beige/linux-3.1.config b/board/qemu/powerpc-g3beige/linux-3.2.config
-similarity index 100%
-rename from board/qemu/powerpc-g3beige/linux-3.1.config
-rename to board/qemu/powerpc-g3beige/linux-3.2.config
-diff --git a/board/qemu/powerpc-g3beige/readme.txt b/board/qemu/powerpc-g3beige/readme.txt
-index 1006af9..a481b11 100644
---- a/board/qemu/powerpc-g3beige/readme.txt
-+++ b/board/qemu/powerpc-g3beige/readme.txt
-@@ -1,6 +1,6 @@
- Run the emulation with:
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 68f9348..212f9dc 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -595,8 +595,12 @@ endif
+ # Plugin installation
+ define QT_INSTALL_TARGET_PLUGINS
+ 	if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/ ] ; then \
+-		mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins ; \
+-		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins ; \
++		mkdir -p $(TARGET_DIR)/usr/lib/qt
++		cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins $(TARGET_DIR)/usr/lib/qt ; \
++	fi
++	if [ -d $(STAGING_DIR)/usr/imports ] ; then \
++		mkdir -p $(TARGET_DIR)/usr/lib/qt
++		cp -dpfr $(STAGING_DIR)/usr/imports $(TARGET_DIR)/usr/lib/qt ; \
+ 	fi
+ endef
  
--  qemu-system-ppc -M g3beige -kernel vmlinux -hda rootfs.ext2 -append "console=ttyS0 root=/dev/hdc" -serial stdio
-+  qemu-system-ppc -M g3beige -kernel output/images/vmlinux -hda output/images/rootfs.ext2 -append "console=ttyS0 root=/dev/hdc" -serial stdio
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index cf875f0..432a746 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -9,9 +9,9 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.1.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.2.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
+-- 
+1.7.9.1
