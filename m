@@ -1,41 +1,36 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Sun, 26 Feb 2012 05:40:00 +0100
-Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
- repository and update version
-In-Reply-To: <20120226043901.GE10670@game.jcrosoft.org>
-References: <20120224190112.GB10670@game.jcrosoft.org>
- <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
- <20120225033301.GC10670@game.jcrosoft.org>
- <201202251631.25121.arnout@mind.be>
- <20120226043901.GE10670@game.jcrosoft.org>
-Message-ID: <20120226044000.GF10670@game.jcrosoft.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 26 Feb 2012 08:24:23 +0100
+Subject: [Buildroot] [git commit] Makefile.cmake.in: fix automatic host deps
+	calculation
+Message-ID: <20120226074254.C7E5390B6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05:39 Sun 26 Feb     , Jean-Christophe PLAGNIOL-VILLARD wrote:
-> On 16:31 Sat 25 Feb     , Arnout Vandecappelle wrote:
-> > On Saturday 25 February 2012 04:33:01 Jean-Christophe PLAGNIOL-VILLARD wrote:
-> > > On 19:31 Fri 24 Feb     , Alexandre Pereira da Silva wrote:
-> > > > This overrided the DOWNLOAD_GIT method to also fetch the submodules used
-> > > > by openocd.
-> > > > Removed patches that are not needed anymore by the new version.
-> > > > Updated the gnu99 patch to use configure.ac instead of configure.in.
-> > > > Fix a build problem in the stm32_stlink.c file.
-> > > > 
-> > > > Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
-> > > > ---
-> > > again NACK
-> > > 
-> > > DO NOT USE GIT in the release
-> > 
-> >  Instead of just shouting at Alexandre, perhaps you can explain why it's
-> > a bad idea to use the git version for openocd...
-> I known when I'm shuting someeone and why and how to do it
-> so please never resend such comment
-and here it's not the case
+commit: http://git.buildroot.net/buildroot/commit/?id=261cb20a08e9dddb047381aa059c7f9e351e6109
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best Regards,
-J.
+We need similar handling as in autotools because of the host-cmake addition.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.cmake.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.cmake.in b/package/Makefile.cmake.in
+index 38e459b..4a4ad6e 100644
+--- a/package/Makefile.cmake.in
++++ b/package/Makefile.cmake.in
+@@ -96,6 +96,10 @@ endef
+ endif
+ endif
+ 
++# This must be repeated from GENTARGETS_INNER, otherwise we only get
++# host-cmake in _DEPENDENCIES because of the following line
++$(2)_DEPENDENCIES ?= $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES)))
++
+ $(2)_DEPENDENCIES += host-cmake
+ 
+ #
