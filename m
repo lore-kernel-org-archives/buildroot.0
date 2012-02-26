@@ -1,38 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 22:30:12 +0100
-Subject: [Buildroot] [git commit branch/next] qt: fix build with gcc 4.6.x
-	on arm
-Message-ID: <20120226213202.86B4F90B88@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 26 Feb 2012 22:31:47 +0100
+Subject: [Buildroot] [PATCH 1/3] qt: Add optimization flags, GCC 4.6 fix,
+	and impvore QT_MAKE_SET and QT_CONFIGURE_IPV6
+In-Reply-To: <1330258412-28426-1-git-send-email-ismael.luceno@gmail.com>
+ (Ismael Luceno's message of "Sun, 26 Feb 2012 10:13:30 -0200")
+References: <1330258412-28426-1-git-send-email-ismael.luceno@gmail.com>
+Message-ID: <87zkc5gu2k.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=974a0da6e1bf73c5091d21f1e89e08974b078432
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Ismael" == Ismael Luceno <ismael.luceno@gmail.com> writes:
 
-As noted by Ismael Luceno. For details, see:
-http://gcc.gnu.org/ml/gcc-patches/2010-11/msg02245.html
+Please don't mix unrelated changes in the same commit. I already added
+the gcc 4.6 workaround in a seperate commit. What does 'impvore' mean?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+Also please don't forget to add your signed-off-by when you resend,
+thanks.
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 68f9348..776eb63 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -201,6 +201,11 @@ endif
- 
- ifeq ($(BR2_arm)$(BR2_armeb),y)
- QT_EMB_PLATFORM = arm
-+ifeq ($(BR2_GCC_VERSION_4_6_X),y)
-+# workaround for gcc issue
-+# http://gcc.gnu.org/ml/gcc-patches/2010-11/msg02245.html
-+QT_CXXFLAGS += -fno-strict-volatile-bitfields
-+endif
- else ifeq ($(BR2_avr32),y)
- QT_EMB_PLATFORM = avr32
- else ifeq ($(BR2_i386),y)
+-- 
+Bye, Peter Korsgaard
