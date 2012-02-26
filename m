@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 21:17:10 +0100
-Subject: [Buildroot] [git commit] qemu/mips-malta: update to use kernel 3.2.6
-Message-ID: <20120226202430.7D06E90B92@busybox.osuosl.org>
+Date: Sun, 26 Feb 2012 20:52:26 +0100
+Subject: [Buildroot] [git commit] customize: deprecate package
+Message-ID: <20120226202430.3E2BE90B2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c24c2c629ce51db8a6a39a48db8dfca04ebde756
+commit: http://git.buildroot.net/buildroot/commit/?id=0a19eea3ec5e4fe9324033958132b93c179d8349
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+As described in the buildroot dev day report, using a post-build script
+is nowadays the preferred way of adding stuff to the rootfs.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_mips_malta_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/customize/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index d6ab841..db94790 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -9,7 +9,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.2.config"
- BR2_LINUX_KERNEL_VMLINUX=y
+diff --git a/package/customize/Config.in b/package/customize/Config.in
+index 97f8646..8f8aaa2 100644
+--- a/package/customize/Config.in
++++ b/package/customize/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_CUSTOMIZE
+ 	bool "customize"
++	depends on BR2_DEPRECATED
+ 	help
+ 	  Add custom stuff to your buildroot.
+ 
