@@ -1,37 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 26 Feb 2012 22:30:12 +0100
-Subject: [Buildroot] [git commit] qt: fix build with gcc 4.6.x on arm
-Message-ID: <20120301130636.71D1C90BF7@busybox.osuosl.org>
+Date: Mon, 27 Feb 2012 16:32:28 +0100
+Subject: [Buildroot] [git commit] vala: bump version
+Message-ID: <20120301130636.8376B90BF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=974a0da6e1bf73c5091d21f1e89e08974b078432
+commit: http://git.buildroot.net/buildroot/commit/?id=7e4936dfa4c3d2c3192c6c69e9b51f1d4a646fa8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As noted by Ismael Luceno. For details, see:
-http://gcc.gnu.org/ml/gcc-patches/2010-11/msg02245.html
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/qt.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/vala/vala.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 68f9348..776eb63 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -201,6 +201,11 @@ endif
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 52a8510..a3ad037 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ #############################################################
  
- ifeq ($(BR2_arm)$(BR2_armeb),y)
- QT_EMB_PLATFORM = arm
-+ifeq ($(BR2_GCC_VERSION_4_6_X),y)
-+# workaround for gcc issue
-+# http://gcc.gnu.org/ml/gcc-patches/2010-11/msg02245.html
-+QT_CXXFLAGS += -fno-strict-volatile-bitfields
-+endif
- else ifeq ($(BR2_avr32),y)
- QT_EMB_PLATFORM = avr32
- else ifeq ($(BR2_i386),y)
+ VALA_VERSION_MAJOR = 0.15
+-VALA_VERSION_MINOR = 1
++VALA_VERSION_MINOR = 2
+ VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
