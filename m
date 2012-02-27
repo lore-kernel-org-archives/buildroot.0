@@ -1,7 +1,7 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Feb 2012 17:10:08 +0100
-Subject: [Buildroot] Buildroot 2012.02-rc3 released
-Message-ID: <87ehtg2r6n.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 27 Feb 2012 21:37:24 +0100
+Subject: [Buildroot] Failure building udev (version of tar too old)
+Message-ID: <1330375044.2882.8.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,46 @@ To: buildroot@busybox.net
 
 Hi,
 
-Buildroot 2012.02-rc3 is released - Go download it at:
+after updating buildroot to 2012.02-rc3 today, our builds broke with the
+following error:
 
-http://buildroot.net/downloads/buildroot-2012.02-rc3.tar.gz
+ udev 181 Building
+PATH="/var/lib/buildbot/build-geode-1.8/build/output/host/bin:/var/lib/buildbot/build-geode-1.8/build/output/host/usr/bin:/var/lib/buildbot/build-geode-1.8/build/output/host/usr/sbin/:/usr/local/bin:/usr/bin:/bin:/usr/games" PERLLIB="/var/lib/buildbot/build-geode-1.8/build/output/host/usr/lib/perl"  /usr/bin/make -j4  -C /var/lib/buildbot/build-geode-1.8/build/output/build/udev-181/
+make[1]: Entering directory `/var/lib/buildbot/build-geode-1.8/build/output/build/udev-181'
+  GEN    test/sys/kernel/uevent_seqnum
+  GEN    src/extras/keymap/keys.txt
+  GEN    src/extras/keymap/keys-from-name.gperf
+  GEN    src/extras/keymap/keys-to-name.h
+  GEN    src/extras/keymap/keys-from-name.h
+tar: invalid option -- J
+Try `tar --help' or `tar --usage' for more information.
+make[1]: *** [test/sys/kernel/uevent_seqnum] Error 64
+make[1]: *** Waiting for unfinished jobs....
+make[1]: Leaving directory `/var/lib/buildbot/build-geode-1.8/build/output/build/udev-181'
+make: *** [/var/lib/buildbot/build-geode-1.8/build/output/build/udev-181/.stamp_built] Error 2
 
-or
 
-http://buildroot.net/downloads/buildroot-2012.02-rc3.tar.bz2
+Looks like udev requires a version of tar that supports xz compression.
+Our buildbots have tar (GNU tar) 1.20.
 
-Or get it from Git:
+I see several options to fix this. I could update tar on the build
+hosts, but then others are likely to hit the same problem. Then one
+could probably patch udev to skip the particular test that requires
+extracting the xz-compressed archive. Or one could make udev use
+host-tar in case that the version of tar provided by the build host is
+too old.
 
-git://git.buildroot.net/buildroot
+I guess that the latter would be the preferred solution, but I have to
+admit that I don't quite understand how the check-host-tar.mk works and
+what I would have to change to fix this udev problem. Perhaps someone of
+you can hold my hand?
 
-We had a few more fixes, so here's one more release candidate before the
-final.
+Also while trying to understand the check-host-tar script, I found that
+there are at least two packages that are using TAR_STRIP_COMPONENTS with
+tar instead of $(TAR):
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
+toolchain/gdb/gdb.mk:   $(GDB_CAT) $(DL_DIR)/$(GDB_SOURCE) | tar -C $(GDB_DIR) $(TAR_STRIP_COMPONENTS)=1 $(TAR_OPTIONS) -
+toolchain/kernel-headers/kernel-headers.mk:     tar $(TAR_STRIP_COMPONENTS)=1 -C $(@D) $(TAR_OPTIONS) -
 
-git shortlog -s -n 2012.02_rc2..
-    10  Gustavo Zacarias
-     6  Peter Korsgaard
-     1  Luca Ceresoli
 
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
-
--- 
-Bye, Peter Korsgaard
+Regards, Sven
