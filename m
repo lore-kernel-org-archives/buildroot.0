@@ -1,37 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 27 Feb 2012 10:34:08 +0100
-Subject: [Buildroot] [PATCH 1/2] vlc: new package
-In-Reply-To: <4F4B49E3.8000606@lucaceresoli.net> (Luca Ceresoli's message of
- "Mon, 27 Feb 2012 10:16:19 +0100")
-References: <1330256732-26483-1-git-send-email-ismael.luceno@gmail.com>
- <4F4B49E3.8000606@lucaceresoli.net>
-Message-ID: <87r4xghb73.fsf@macbook.be.48ers.dk>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Mon, 27 Feb 2012 13:38:53 +0100
+Subject: [Buildroot] update libglib2 and libsoup
+Message-ID: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- Luca> Hi Ismael,
+This is a patchset that updates libglib2 and libsoup to the latest
+stable versions.
 
- >> diff --git a/package/multimedia/vlc/vlc-uclibc-fixes.patch b/package/multimedia/vlc/vlc-uclibc-fixes.patch
- >> new file mode 100644
- >> index 0000000..3ce60b3
- >> --- /dev/null
- >> +++ b/package/multimedia/vlc/vlc-uclibc-fixes.patch
- >> @@ -0,0 +1,20 @@
- >> +diff -u a/src/posix/linux_specific.c b/src/posix/linux_specific.c
- >> +--- a/src/posix/linux_specific.c	2012-02-08 16:43:30.000000000 -0200
- >> ++++ b/src/posix/linux_specific.c	2012-02-09 03:51:20.925504594 -0200
+SSL/TLS support in libsoup does not any longer use libgcrypt directly
+but relies on GIO modules that are provided by glib-networking. Thus
+a new package "glib-networking" is introduced.
 
- Luca> It's better to add a few lines at the beginning of patches to clarify
- Luca> why it's needed and
- Luca> the source (e.g. the URL of a website or mailng list where it came from).
+Packages using libsoup with SSL support don't need to be changed;
+the BR2_PACKAGE_LIBSOUP_SSL option takes care of selecting the new
+glib-networking package and compiling it with libgcrypt support.
 
-And if you are the author, please add your signed-off-by line here as
-well.
-
--- 
-Bye, Peter Korsgaard
+There's also a patch included for gamin that is needed to make it
+compile with the latest libglib2.
