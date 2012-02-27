@@ -1,31 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Feb 2012 16:32:28 +0100
-Subject: [Buildroot] [git commit branch/next] vala: bump version
-Message-ID: <20120227155011.07A1990BA5@busybox.osuosl.org>
+Date: Mon, 27 Feb 2012 17:10:08 +0100
+Subject: [Buildroot] Buildroot 2012.02-rc3 released
+Message-ID: <87ehtg2r6n.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e4936dfa4c3d2c3192c6c69e9b51f1d4a646fa8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/vala/vala.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Buildroot 2012.02-rc3 is released - Go download it at:
 
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 52a8510..a3ad037 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- #############################################################
- 
- VALA_VERSION_MAJOR = 0.15
--VALA_VERSION_MINOR = 1
-+VALA_VERSION_MINOR = 2
- VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+http://buildroot.net/downloads/buildroot-2012.02-rc3.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2012.02-rc3.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+We had a few more fixes, so here's one more release candidate before the
+final.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2012.02_rc2..
+    10  Gustavo Zacarias
+     6  Peter Korsgaard
+     1  Luca Ceresoli
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
+
+-- 
+Bye, Peter Korsgaard
