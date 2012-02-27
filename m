@@ -1,89 +1,84 @@
 From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Mon, 27 Feb 2012 13:38:54 +0100
-Subject: [Buildroot] [PATCH 1/4] gamin: fix compilation with glib 2.30
+Date: Mon, 27 Feb 2012 13:38:56 +0100
+Subject: [Buildroot] [PATCH 3/4] glib-networking: new package
 In-Reply-To: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com>
 References: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1330346337-27342-2-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <1330346337-27342-4-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-G_CONST_RETURN is deprecated in glib 2.30 so remove occurences
-to avoid build failures.
-
-Patch taken from http://patches.openembedded.org/patch/13079/
+glib-networking provides network-related GIO modules for glib.
+It is used by newer versions of libsoup to implement SSL/TLS
+support.
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Cc: Richard Purdie <richard.purdie@linuxfoundation.org>
 ---
- package/gamin/gamin-0.1.10-no-const-return.patch |   57 ++++++++++++++++++++++
- 1 files changed, 57 insertions(+), 0 deletions(-)
- create mode 100644 package/gamin/gamin-0.1.10-no-const-return.patch
+ package/Config.in                          |    1 +
+ package/glib-networking/Config.in          |   11 +++++++++++
+ package/glib-networking/glib-networking.mk |   22 ++++++++++++++++++++++
+ 3 files changed, 34 insertions(+), 0 deletions(-)
+ create mode 100644 package/glib-networking/Config.in
+ create mode 100644 package/glib-networking/glib-networking.mk
 
-diff --git a/package/gamin/gamin-0.1.10-no-const-return.patch b/package/gamin/gamin-0.1.10-no-const-return.patch
+diff --git a/package/Config.in b/package/Config.in
+index 8a7c9c4..41cbb8c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -344,6 +344,7 @@ source "package/jsmin/Config.in"
+ endmenu
+ 
+ menu "Networking"
++source "package/glib-networking/Config.in"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+ source "package/libcurl/Config.in"
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
 new file mode 100644
-index 0000000..3e6e905
+index 0000000..16f0d4a
 --- /dev/null
-+++ b/package/gamin/gamin-0.1.10-no-const-return.patch
-@@ -0,0 +1,57 @@
-+G_CONST_RETURN is deprecated in glib 2.30 so remove to to avoid
-+build failures.
++++ b/package/glib-networking/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_GLIB_NETWORKING
++	bool "glib-networking"
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
++	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT
++	help
++	  Network-related GIO modules for glib.
 +
-+Upstream-Status: Pending
++comment "glib-networking requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
+new file mode 100644
+index 0000000..b1ad621
+--- /dev/null
++++ b/package/glib-networking/glib-networking.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# glib-networking
++#
++#############################################################
 +
-+Index: gamin-0.1.10/server/gam_node.c
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_node.c	2011-10-12 15:25:45.217178314 +0100
-++++ gamin-0.1.10/server/gam_node.c	2011-10-12 15:26:17.807178293 +0100
-+@@ -122,7 +122,7 @@
-+  * it has finished with the string.  If it must keep it longer, it
-+  * should makes its own copy.  The returned string must not be freed.
-+  */
-+-G_CONST_RETURN char *
-++const char *
-+ gam_node_get_path(GamNode * node)
-+ {
-+     g_assert(node);
-+Index: gamin-0.1.10/server/gam_node.h
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_node.h	2011-10-12 15:25:46.857178269 +0100
-++++ gamin-0.1.10/server/gam_node.h	2011-10-12 15:26:28.637178297 +0100
-+@@ -58,7 +58,7 @@
-+ void                  gam_node_set_is_dir          (GamNode         *node,
-+ 						   gboolean        is_dir);
-+ 	
-+-G_CONST_RETURN char  *gam_node_get_path            (GamNode         *node);
-++const char  *gam_node_get_path            (GamNode         *node);
-+ 
-+ GList                *gam_node_get_subscriptions   (GamNode         *node);
-+ 
-+Index: gamin-0.1.10/server/gam_subscription.c
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_subscription.c	2011-10-12 15:25:40.497177525 +0100
-++++ gamin-0.1.10/server/gam_subscription.c	2011-10-12 15:26:39.867178304 +0100
-+@@ -141,7 +141,7 @@
-+  * @param sub the GamSubscription
-+  * @returns The path being monitored.  It should not be freed.
-+  */
-+-G_CONST_RETURN char *
-++const char *
-+ gam_subscription_get_path(GamSubscription * sub)
-+ {
-+     if (sub == NULL)
-+Index: gamin-0.1.10/server/gam_subscription.h
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_subscription.h	2011-10-12 15:25:28.507178266 +0100
-++++ gamin-0.1.10/server/gam_subscription.h	2011-10-12 15:25:58.817178285 +0100
-+@@ -21,7 +21,7 @@
-+ 
-+ int                  gam_subscription_get_reqno    (GamSubscription *sub);
-+ 
-+-G_CONST_RETURN char *gam_subscription_get_path     (GamSubscription *sub);
-++const char *gam_subscription_get_path     (GamSubscription *sub);
-+ 
-+ GamListener         *gam_subscription_get_listener (GamSubscription *sub);
-+ 
++GLIB_NETWORKING_MAJOR_VERSION = 2.30
++GLIB_NETWORLING_MINOR_VERSION = 2
++GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_MAJOR_VERSION).$(GLIB_NETWORLING_MINOR_VERSION)
++GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_MAJOR_VERSION)
++GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
++
++GLIB_NETWORKING_INSTALL_STAGING = YES
++
++GLIB_NETWORKING_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config libglib2
++
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++GLIB_NETWORKING_DEPENDENCIES += gnutls
++GLIB_NETWORKING_CONF_OPT = --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++endif
++
++$(eval $(call AUTOTARGETS))
 -- 
 1.7.5.4
