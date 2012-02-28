@@ -1,43 +1,30 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 28 Feb 2012 12:22:33 +0100
-Subject: [Buildroot] [PATCH] e2fsprogs: disable build of e4defrag unless
-	explicitly enabled
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 28 Feb 2012 09:11:50 -0300
+Subject: [Buildroot] build of e2fsprogs fails (2012.02-rc3)
 In-Reply-To: <1330427777.2274.27.camel@sven>
 References: <1330427777.2274.27.camel@sven>
-Message-ID: <1330428153-2484-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <3d41058a0f241311e2b0fe5c2e3c9d1c@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The e2fsprogs configure script enables the build of the e4defrag
-utility by default. Disable it unless BR2_PACKAGE_E2FSPROGS_E4DEFRAG
-is selected.
+On 2012-02-28 08:16, Sven Neumann wrote:
 
-Also the --disable-blkid option is not recognized by the configure
-script. Use --disable-libblkid instead.
+> Hi,
+>
+> the build of e2fsprogs fails with 2012.02-rc3:
+>
+> 	CC e4defrag.c
+> e4defrag.c:28:17: fatal error: ftw.h: No such file or directory
+> compilation terminated.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----
- package/e2fsprogs/e2fsprogs.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 912deab..f3d44f6 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -12,9 +12,10 @@ E2FSPROGS_CONF_OPT = \
- 	--enable-elf-shlibs \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
-+	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
- 	--disable-uuidd \
--	--disable-blkid \
-+	--disable-libblkid \
- 	--disable-libuuid \
- 	--enable-fsck \
- 	--disable-e2initrd-helper \
--- 
-1.7.5.4
+What about your uclibc config?
+If you're using a custom uclibc config basically "you're on your own" 
+if packages break.
+Like on bug #4736 you reported.
+Packages are tested to work on buildroot's-shipped default uclibc 
+configurations.
+At least that's my take.
+Regards.
