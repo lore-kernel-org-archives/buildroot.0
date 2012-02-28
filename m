@@ -1,50 +1,25 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 28 Feb 2012 11:27:12 -0800
-Subject: [Buildroot] Buildroot 2012.02-rc3 released
-In-Reply-To: <87ehtg2r6n.fsf@macbook.be.48ers.dk>
-References: <87ehtg2r6n.fsf@macbook.be.48ers.dk>
-Message-ID: <4F4D2A90.1050309@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Feb 2012 20:53:13 +0100
+Subject: [Buildroot] [PATCH] e2fsprogs: disable build of e4defrag unless
+	explicitly enabled
+In-Reply-To: <1330428153-2484-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Tue, 28 Feb 2012 12:22:33 +0100")
+References: <1330427777.2274.27.camel@sven>
+ <1330428153-2484-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <87k436enva.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/27/2012 08:10 AM, Peter Korsgaard wrote:
-> Hi,
->
-> Buildroot 2012.02-rc3 is released - Go download it at:
->
-snip
-> For more details, see the CHANGES file:
->
-> http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
->
-There seems to be something wrong with the servers. I cannot access the 
-url above.
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-I am also having similar problems with git access:
+ Sven> The e2fsprogs configure script enables the build of the e4defrag
+ Sven> utility by default. Disable it unless BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+ Sven> is selected.
 
-me:~/nobu/br/dockstar/tools$ git remote -v
-origin    http://git.buildroot.net/buildroot (fetch)
-origin    http://git.buildroot.net/buildroot (push)
+Committed to next, thanks.
 
-
-
-me:~/nobu/br/dockstar/tools$ git fetch
-error: Couldn't resolve host 'git.buildroot.net' while accessing 
-http://git.buildroot.net/buildroot/info/refs
-
-fatal: HTTP request failed
-
-
-
-me:~/nobu/br/dockstar/tools$ git clone 
-http://git.buildroot.net/git/buildroot.git test
-Cloning into test...
-error: Couldn't resolve host 'git.buildroot.net' while accessing 
-http://git.buildroot.net/git/buildroot.git/info/refs
-
-fatal: HTTP request failed
-
-Regards, Steve
+-- 
+Bye, Peter Korsgaard
