@@ -1,65 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Feb 2012 20:46:40 +0000
-Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
-	repository and update version
-In-Reply-To: <20120226043705.GD10670@game.jcrosoft.org>
-References: <20120224190112.GB10670@game.jcrosoft.org>
- <CAAAP30E8ijhxYh05evremPG9fpkyySo8fjJv18Wc4J2eKuf8rw@mail.gmail.com>
- <20120226043705.GD10670@game.jcrosoft.org>
-Message-ID: <201202282046.41124.arnout@mind.be>
+Date: Tue, 28 Feb 2012 20:38:53 +0000
+Subject: [Buildroot] Where does post-build script belong?
+In-Reply-To: <ji0b7n$2hl$1@dough.gmane.org>
+References: <jhub5r$smv$1@dough.gmane.org> <4F435977.1060001@lucaceresoli.net>
+ <ji0b7n$2hl$1@dough.gmane.org>
+Message-ID: <201202282038.54757.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 26 February 2012 04:37:06 Jean-Christophe PLAGNIOL-VILLARD wrote:
-> On 00:06 Sun 26 Feb     , Alexandre Pereira da Silva wrote:
+On Tuesday 21 February 2012 14:54:47 Grant Edwards wrote:
 [snip]
-> > The openocd release is 6 months old and they made many improvements
-> > since then. And I don't see any plans for them to release a new
-> > version any time soon.
-> I will release a new version of openocd in time, today the current version is
-> not stable enough
-
- That's a good reason to NACK the use of the git commit.  Thank you for
-the explanation, Jean-Christophe.
-
-
-> > This is a special package like u-boot and the kernel because in many
-> > occasions you have to tweak the package to suit your own hardware.
-> The NACK stand
+> I don't want to replace the default skeleton.  I want to add some
+> files to it, and possible modify a few.  The documentation describes
+> two ways to do that:
 > 
-> You can do it for your local but for mainline no, barebox/ u-boot, linux are
-> based on release
-
- Difference being that all of those release quite frequently :-)
-
-> > Other option would be to use 0.5.0 version from git, so people who run
-> > into this kind of issue, can override the version more easily.
-> NACK
+>   1) package/customize
 > 
-> git is very slow to download it's NOT an option at all for default version
+>   2) post-build script
+> 
+> I'm told 1) is now depricated, so I'm switching to 2).
+> 
+> Where under board/mycompany/myproduct do you put "extra" files that
+> will be added to the standard skeleton?
 
- Good point as well.
-
- With the need for local patches and the occasional local need for a git 
-version rather than a release, you could consider adding git and patches
-support to openocd's Config.in, like is the case for U-Boot and linux.
+ I put it in board/mycompany/myproduct/skeleton.  Although 
+rootfs-additions would be a better name than skeleton.
 
 
-> > Another comment on this issue is about git submodule fetching. Do you
-> > think that could be useful to other packages? If so, I can prepare a
-> > new patch to fetch all submodules, if any.
+ I would like to add a feature to buildroot to simplify out-of-tree
+additions (rootfs files, patches, config files, extra packages, ...).
+I'll send out an RFC for that soonish.
 
- I'm not too keen on that.  Although I could be convinced.  Such a
-feature would definitely have to be verified with all current git-based
-packages.
 
  Regards,
  Arnout
 
- 
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
