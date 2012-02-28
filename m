@@ -1,51 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 28 Feb 2012 16:49:19 +0100
-Subject: [Buildroot] [PATCH] Makefile: add help for the *-update-config
- and *-update-defconfig targets
-In-Reply-To: <1330435326-20893-1-git-send-email-aletes.xgr@gmail.com>
-References: <1330435326-20893-1-git-send-email-aletes.xgr@gmail.com>
-Message-ID: <CAAXf6LUA6G2=_S4-vqceuG0AfFzbe26x_8A+GFnnudyXE7RkQQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 28 Feb 2012 15:51:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 4808] New: ccache may build against wrong zlib
+Message-ID: <bug-4808-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 28, 2012 at 2:22 PM, Alexandre Pereira da Silva
-<aletes.xgr@gmail.com> wrote:
-> Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=4808
 
-> ---
-> ?Makefile | ? ?4 ++++
-> ?1 files changed, 4 insertions(+), 0 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index ded7cab..028c98a 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -671,13 +671,17 @@ help:
-> ? ? ? ?@echo ' ?allnopackageconfig ? ? - New config where package options are answered with no'
-> ?ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> ? ? ? ?@echo ' ?busybox-menuconfig ? ? - Run BusyBox menuconfig'
-> + ? ? ? @echo ' ?busybox-update-config ?- Update BusyBox configuration'
-> ?endif
-> ?ifeq ($(BR2_LINUX_KERNEL),y)
-> ? ? ? ?@echo ' ?linux-menuconfig ? ? ? - Run Linux kernel menuconfig'
-> ? ? ? ?@echo ' ?linux-savedefconfig ? ?- Run Linux kernel savedefconfig'
-> + ? ? ? @echo ' ?linux-update-config ? ?- Update Linux kernel configuration'
-> + ? ? ? @echo ' ?linux-update-defconfig - Update Linux kernel defconfig'
-> ?endif
-> ?ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> ? ? ? ?@echo ' ?uclibc-menuconfig ? ? ?- Run uClibc menuconfig'
-> + ? ? ? @echo ' ?uclibc-update-config ? - Update uClibc configuration'
-> ?endif
-> ?ifeq ($(BR2_TOOLCHAIN_CTNG),y)
-> ? ? ? ?@echo ' ?ctng-menuconfig ? ? ? ?- Run crosstool-NG menuconfig'
-> --
-> 1.7.9
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+           Summary: ccache may build against wrong zlib
+           Product: buildroot
+           Version: 2011.08
+          Platform: All
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rsanchezs at infoglobal.es
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+Created attachment 4058
+  --> https://bugs.busybox.net/attachment.cgi?id=4058
+Patch against git head.
+
+Hello:
+
+  In one of my compilations I was startled that host-lzo failed to build. The
+host architecture was incorrectly detected and configuration stage failed. From
+this I found out that ccache was unable to run, due to a mismatch in the zlib
+versions. I found out the reason a little later: buildroot ccache built against
+system zlib, whereas by the moment when ccache failed host-zlib was installed
+in the buildroot host directory.
+
+  The solution I propose is adding host-zlib dependency to ccache, so cacche is
+always build against host-zlib and not against system zlib.
+
+  I'm attaching a patch against current git head.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
