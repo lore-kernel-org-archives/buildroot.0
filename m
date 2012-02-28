@@ -1,33 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Feb 2012 17:30:13 -0300
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.24.0
-Message-ID: <1330461013-4584-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Feb 2012 21:34:18 +0100
+Subject: [Buildroot] [PATCH 2/4] libglib2: update to version 2.30.2
+In-Reply-To: <1330436399.2274.39.camel@sven> (Sven Neumann's message of "Tue, 
+ 28 Feb 2012 14:39:59 +0100")
+References: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com>
+ <1330346337-27342-3-git-send-email-s.neumann@raumfeld.com>
+ <87aa433l77.fsf@macbook.be.48ers.dk> <1330436399.2274.39.camel@sven>
+Message-ID: <87fwduelyt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcurl/libcurl.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index a420466..e094e31 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,9 +4,9 @@
- #
- #############################################################
- 
--LIBCURL_VERSION = 7.21.7
-+LIBCURL_VERSION = 7.24.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
--LIBCURL_SITE = http://curl.haxx.se/download/
-+LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_INSTALL_STAGING = YES
- LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
- 
+Hi,
+
+ Sven> So in the end what is tested is the value of glib_cv_have_qsort_r. With
+ Sven> your fix this is now set even though uclibc does not provide qsort_r.
+
+It does, but only from 0.9.33 and onwards. Sorry, didn't notice that it
+was relatively new. Will fix.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
