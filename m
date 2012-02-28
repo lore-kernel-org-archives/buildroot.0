@@ -1,7 +1,7 @@
 From: Mohamed HAMZAOUI <requinham@gmail.com>
-Date: Tue, 28 Feb 2012 13:29:55 +0100
-Subject: [Buildroot]  Kernel panic with 2012.02 RC1
-Message-ID: <CABMxt4gpiwBspv7nF6edRAYT85XcOH9B=CFD8Bn_6JfBNBzeGw@mail.gmail.com>
+Date: Tue, 28 Feb 2012 13:35:08 +0100
+Subject: [Buildroot]  Craneboard: Kernel panic with 2012.02 RC1
+Message-ID: <CABMxt4hdzJtn8kos11g8x5h33q7v5ydRaS0_dNRhGD-pbpefVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,9 @@ To: buildroot@busybox.net
 
 Hi,
 
-After compiling a new compilation with Buildroot and with kernel 2.6.39.4,
-i have a strange problem in booting the kernel. could you help me please ?
+After compiling a new compilation with Buildroot and with kernel 2.6.39.4
+on Craneboard, i have a strange problem in booting the kernel. could you
+help me please ?
 the booting log is :
 
 reading boot.scr
@@ -481,4 +482,4 @@ Code: e1a09080 e5d56008 e5953004 e2366001 (e7d32080)
 Kernel panic - not syncing: Attempted to kill init!
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120228/554f6404/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120228/64977b23/attachment-0001.html>
