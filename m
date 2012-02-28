@@ -1,31 +1,119 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 23 Feb 2012 23:19:53 +0100
-Subject: [Buildroot] [git commit] libarchive: bump version
-Message-ID: <20120301130636.0E55090BF7@busybox.osuosl.org>
+Date: Tue, 28 Feb 2012 09:22:21 +0100
+Subject: [Buildroot] [git commit] libsoup: update to version 2.36.1
+Message-ID: <20120301130636.C831390BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=457d9c592f1f5c605041e81ced6848b68bf05406
+commit: http://git.buildroot.net/buildroot/commit/?id=8d485749e136ed43b5f1129dee08b7e4200182fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Update to latest stable release. SSL support now depends on
+glib-networking with gnutls support instead of using gnutls
+directly.
+
+Remove libsoup-CVE-2011-2054.patch, this is fixed upstream.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libarchive/libarchive.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libsoup/Config.in                   |    1 +
+ package/libsoup/libsoup-CVE-2011-2054.patch |   32 ---------------------------
+ package/libsoup/libsoup.mk                  |   19 ++++++---------
+ 3 files changed, 9 insertions(+), 43 deletions(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 53b3676..c9e5d07 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -3,7 +3,7 @@
- # libarchive (reusable C library for archive formats)
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 347687c..eee6ade 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBSOUP
+ 
+ config BR2_PACKAGE_LIBSOUP_SSL
+ 	bool "https support"
++	select BR2_PACKAGE_GLIB_NETWORKING
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on BR2_PACKAGE_LIBSOUP
+ 	help
+diff --git a/package/libsoup/libsoup-CVE-2011-2054.patch b/package/libsoup/libsoup-CVE-2011-2054.patch
+deleted file mode 100644
+index 0dc5ecc..0000000
+--- a/package/libsoup/libsoup-CVE-2011-2054.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 4617b6ef6dd21931a0153070c5b5ff7ef21b46f8 Mon Sep 17 00:00:00 2001
+-From: Dan Winship <danw@gnome.org>
+-Date: Wed, 29 Jun 2011 10:04:06 -0400
+-Subject: [PATCH] SoupServer: fix to not allow smuggling ".." into path
+-
+-When SoupServer:raw-paths was set (the default), it was possible to
+-sneak ".." segments into the path passed to the SoupServerHandler,
+-which could then end up tricking some handlers into retrieving
+-arbitrary files from the filesystem. Fix that.
+-
+-https://bugzilla.gnome.org/show_bug.cgi?id=653258
+-
+-diff --git a/libsoup/soup-server.c b/libsoup/soup-server.c
+-index d56efd1..7225337 100644
+---- a/libsoup/soup-server.c
+-+++ b/libsoup/soup-server.c
+-@@ -779,6 +779,15 @@ got_headers (SoupMessage *req, SoupClientContext *client)
+- 
+- 		uri = soup_message_get_uri (req);
+- 		decoded_path = soup_uri_decode (uri->path);
+-+
+-+		if (strstr (decoded_path, "/../") ||
+-+		    g_str_has_suffix (decoded_path, "/..")) {
+-+			/* Introducing new ".." segments is not allowed */
+-+			g_free (decoded_path);
+-+			soup_message_set_status (req, SOUP_STATUS_BAD_REQUEST);
+-+			return;
+-+		}
+-+
+- 		soup_uri_set_path (uri, decoded_path);
+- 		g_free (decoded_path);
+- 	}
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 147b220..6572585 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,10 +4,11 @@
  #
  #############################################################
--LIBARCHIVE_VERSION = 2.8.4
-+LIBARCHIVE_VERSION = 2.8.5
- LIBARCHIVE_SITE = http://libarchive.googlecode.com/files/
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.gz
- LIBARCHIVE_INSTALL_STAGING = YES
+ 
+-LIBSOUP_MAJOR_VERSION:=2.32
+-LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
+-LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
+-LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
++LIBSOUP_MAJOR_VERSION = 2.36
++LIBSOUP_MINOR_VERSION = 1
++LIBSOUP_VERSION = $(LIBSOUP_MAJOR_VERSION).$(LIBSOUP_MINOR_VERSION)
++LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.bz2
++LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
+ LIBSOUP_INSTALL_STAGING = YES
+ 
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+@@ -16,18 +17,14 @@ ifneq ($(BR2_INET_IPV6),y)
+ LIBSOUP_CONF_ENV += soup_cv_ipv6=no
+ endif
+ 
+-LIBSOUP_CONF_OPT = \
+-	--disable-explicit-deps \
+-	--disable-glibtest	\
+-	--without-gnome
++LIBSOUP_CONF_OPT = --disable-glibtest --without-gnome
+ 
+ LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config host-libglib2 libglib2 libxml2
+ 
+ ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
+-LIBSOUP_DEPENDENCIES += gnutls
+-LIBSOUP_CONF_OPT += --enable-ssl --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++LIBSOUP_DEPENDENCIES += glib-networking
+ else
+-LIBSOUP_CONF_OPT += --disable-ssl
++LIBSOUP_CONF_OPT += --disable-tls-check
+ endif
+ 
+ $(eval $(call AUTOTARGETS))
