@@ -1,120 +1,72 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 Feb 2012 09:22:21 +0100
-Subject: [Buildroot] [git commit branch/next] libsoup: update to version
-	2.36.1
-Message-ID: <20120228082317.77C7190BB9@busybox.osuosl.org>
+From: Mohamed HAMZAOUI <requinham@gmail.com>
+Date: Tue, 28 Feb 2012 09:53:17 +0100
+Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
+In-Reply-To: <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
+References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
+ <20120224150232.GA2346@bill-the-cat>
+ <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
+ <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
+ <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
+ <CA+M6bX=A1Mie8Q093Sa3bp_hSxSRFR6z4-sNBvJP3982e_HPqQ@mail.gmail.com>
+ <CABMxt4gYMf_JjfYi_2YttUL2NDNYC4974Kq_--++B2yPgf0xUg@mail.gmail.com>
+ <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
+ <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
+Message-ID: <CABMxt4jZhMcZS=0P9Le3ZHO_NUJJt0Deta_Ybdd-ghdPPuGz2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d485749e136ed43b5f1129dee08b7e4200182fa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi,
 
-Update to latest stable release. SSL support now depends on
-glib-networking with gnutls support instead of using gnutls
-directly.
+Indeed, the problem is caused by selecting the ttyS0, just change it to
+ttyO0 (OMAP) in the buildroot configuration and in the console env vars of
+card.
 
-Remove libsoup-CVE-2011-2054.patch, this is fixed upstream.
+Best regards
+Mohamed
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libsoup/Config.in                   |    1 +
- package/libsoup/libsoup-CVE-2011-2054.patch |   32 ---------------------------
- package/libsoup/libsoup.mk                  |   19 ++++++---------
- 3 files changed, 9 insertions(+), 43 deletions(-)
+On Sun, Feb 26, 2012 at 1:26 AM, Mohamed HAMZAOUI <requinham@gmail.com>wrote:
 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 347687c..eee6ade 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBSOUP
- 
- config BR2_PACKAGE_LIBSOUP_SSL
- 	bool "https support"
-+	select BR2_PACKAGE_GLIB_NETWORKING
- 	select BR2_PACKAGE_GNUTLS
- 	depends on BR2_PACKAGE_LIBSOUP
- 	help
-diff --git a/package/libsoup/libsoup-CVE-2011-2054.patch b/package/libsoup/libsoup-CVE-2011-2054.patch
-deleted file mode 100644
-index 0dc5ecc..0000000
---- a/package/libsoup/libsoup-CVE-2011-2054.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 4617b6ef6dd21931a0153070c5b5ff7ef21b46f8 Mon Sep 17 00:00:00 2001
--From: Dan Winship <danw@gnome.org>
--Date: Wed, 29 Jun 2011 10:04:06 -0400
--Subject: [PATCH] SoupServer: fix to not allow smuggling ".." into path
--
--When SoupServer:raw-paths was set (the default), it was possible to
--sneak ".." segments into the path passed to the SoupServerHandler,
--which could then end up tricking some handlers into retrieving
--arbitrary files from the filesystem. Fix that.
--
--https://bugzilla.gnome.org/show_bug.cgi?id=653258
--
--diff --git a/libsoup/soup-server.c b/libsoup/soup-server.c
--index d56efd1..7225337 100644
----- a/libsoup/soup-server.c
--+++ b/libsoup/soup-server.c
--@@ -779,6 +779,15 @@ got_headers (SoupMessage *req, SoupClientContext *client)
-- 
-- 		uri = soup_message_get_uri (req);
-- 		decoded_path = soup_uri_decode (uri->path);
--+
--+		if (strstr (decoded_path, "/../") ||
--+		    g_str_has_suffix (decoded_path, "/..")) {
--+			/* Introducing new ".." segments is not allowed */
--+			g_free (decoded_path);
--+			soup_message_set_status (req, SOUP_STATUS_BAD_REQUEST);
--+			return;
--+		}
--+
-- 		soup_uri_set_path (uri, decoded_path);
-- 		g_free (decoded_path);
-- 	}
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index 147b220..6572585 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,10 +4,11 @@
- #
- #############################################################
- 
--LIBSOUP_MAJOR_VERSION:=2.32
--LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
--LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
--LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
-+LIBSOUP_MAJOR_VERSION = 2.36
-+LIBSOUP_MINOR_VERSION = 1
-+LIBSOUP_VERSION = $(LIBSOUP_MAJOR_VERSION).$(LIBSOUP_MINOR_VERSION)
-+LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.bz2
-+LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
- LIBSOUP_INSTALL_STAGING = YES
- 
- LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
-@@ -16,18 +17,14 @@ ifneq ($(BR2_INET_IPV6),y)
- LIBSOUP_CONF_ENV += soup_cv_ipv6=no
- endif
- 
--LIBSOUP_CONF_OPT = \
--	--disable-explicit-deps \
--	--disable-glibtest	\
--	--without-gnome
-+LIBSOUP_CONF_OPT = --disable-glibtest --without-gnome
- 
- LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config host-libglib2 libglib2 libxml2
- 
- ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
--LIBSOUP_DEPENDENCIES += gnutls
--LIBSOUP_CONF_OPT += --enable-ssl --with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+LIBSOUP_DEPENDENCIES += glib-networking
- else
--LIBSOUP_CONF_OPT += --disable-ssl
-+LIBSOUP_CONF_OPT += --disable-tls-check
- endif
- 
- $(eval $(call AUTOTARGETS))
+> After trying to correct this issue, i have a difficult problem :( the
+> booting freeze in "Starting kernel..." and it can't decompressing the
+> uImage and starting the kernel.
+> for information i choosed the kernel 2.6.39.4 in buildroot configuration
+> with am3517_crane_defconfig file (a defconfig for version 2.6.32 that i
+> copied manually) that i found in craneboard-kernel gitorious.
+>
+> Best regards
+> Mohamed
+>
+>
+> On Sat, Feb 25, 2012 at 3:35 PM, Tom Rini <trini@ti.com> wrote:
+>
+>> On Sat, Feb 25, 2012 at 6:00 AM, Mohamed HAMZAOUI <requinham@gmail.com>
+>> wrote:
+>> > Hi M Tom,
+>> > I checked the file am3517_crane.h and it well use "rescan" instead of
+>> "init"
+>> >  but the problem is that after compilation, when I check the bootcmd I
+>> find
+>> > another one with init and not with rescan !
+>> > When i tried to change the variable with the setenv command, the system
+>> boot
+>> >  correctly from the SD card.
+>> > Can you tell me how I can fix that and why the compilation or the MLO,
+>> > u-boot.img files not have the correct bootcmd ?
+>>
+>> Ah, how about this, you've been using the board previously, yes?  It
+>> probably had a saved environment from a previous version written to
+>> NAND and was using that.  You might want to try doing 'nand erase
+>> 260000 20000' to erase the old environment, then reset the board to
+>> get the full, new, default environment.
+>>
+>> --
+>> Tom
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120228/600d41c5/attachment.html>
