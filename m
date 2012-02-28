@@ -1,39 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 28 Feb 2012 09:49:04 -0300
-Subject: [Buildroot] build of e2fsprogs fails (2012.02-rc3)
-In-Reply-To: <1330432739.2274.31.camel@sven>
-References: <1330427777.2274.27.camel@sven>
- <3d41058a0f241311e2b0fe5c2e3c9d1c@zacarias.com.ar>
- <1330432739.2274.31.camel@sven>
-Message-ID: <59807857ff1ce335fc4e3042f1db053b@zacarias.com.ar>
+From: Chris Kerios <ckerios@gmail.com>
+Date: Tue, 28 Feb 2012 07:49:28 -0500
+Subject: [Buildroot] RC3 ctng toolchain build failure
+In-Reply-To: <4F4C891F.8070207@lucaceresoli.net>
+References: <CAKyeDQ9trStPDomP37wKGCbgobgWmjt6UkG-amrFLOj_KvPcXA@mail.gmail.com>
+ <4F4C891F.8070207@lucaceresoli.net>
+Message-ID: <CAKyeDQ-TSuNVwD4SOdV4YT5EUyqv28zSdpf0jwB5A-e=iBxjMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-02-28 09:38, Sven Neumann wrote:
+On Tue, Feb 28, 2012 at 2:58 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Hi Chris,
+>
+>
+> Chris Kerios wrote:
+>>
+>> Doing a vanilla build (nothing other than defaults) on Fedora 14 host
+>> for a i386/geode target. ?No packages added, just brought up make
+>> xconfig and set for ctng with uclibc for the library and saved. ?No
+>> other settings ?were used other than defaults for everything. ?Was not
+>> using ccache either. ?Seems it can't find fenv.h for some reason.
+>> Researched news list and didn't see anything on this except something
+>> a few months ago about version conflicts and not using ccache. ?Also,
+>> I didn't select to build C++ either. ?Any ideas? ?Messages below.
+>
+>
+> Could you please send your Buildroot configuration file (.config)?
+> When reporting bugs this makes it much easier for other people
+> to reproduce and investigate the problem.
+>
+> Luca
+>
 
-> Well, this probably used to be a default uclibc configuration three
-> years ago. Since then we have updated buildroot several times and
-> obviously our ubclibc configuration diverged. What would be the best 
-> way
-> to go back to the default uclibc configuration?
->
-> Nevertheless, you should consider the patch I've sent as the
-> BR2_PACKAGE_E2FSPROGS_E4DEFRAG option is currently not correctly
-> handled.
->
->
-> Regards,
-> Sven
 
-It's likely, since then many new packages started using ftw extensively 
-so the default configuration was updated, precisely by Thomas on April 
-2010.
-The option is handled by removing the binary when it is disabled... 
-down in E2FSPROGS_BINTARGETS_$(BR2_PACKAGE_E2FSPROGS_E4DEFRAG) += 
-e4defrag
-However i see no harm in your patch so Acked by me in principle since 
-it also fixes the bklid change.
-Regards.
+Oops sorry....here it is. ?Another piece of info. ?I did the same
+build with eglibc and glibc as selections. ?Eglibc ran clean. ?Glibc
+failed.
+Chris
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: brconfig
+Type: application/octet-stream
+Size: 20960 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120228/23f8fcfd/attachment-0001.obj>
