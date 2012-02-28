@@ -1,45 +1,29 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Feb 2012 20:56:57 +0000
-Subject: [Buildroot] [PATCH 2/3] qt: Install QtDeclarative imports
-In-Reply-To: <874nudi8ro.fsf@macbook.be.48ers.dk>
-References: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
- <1330258388-28391-2-git-send-email-ismael.luceno@gmail.com>
- <874nudi8ro.fsf@macbook.be.48ers.dk>
-Message-ID: <201202282056.57874.arnout@mind.be>
+Date: Tue, 28 Feb 2012 20:49:35 +0000
+Subject: [Buildroot] [PATCH 2/2] vlc: Patch to get it compiling with
+	qt-embedded
+In-Reply-To: <4F4B4C5D.4010409@lucaceresoli.net>
+References: <1330256732-26483-1-git-send-email-ismael.luceno@gmail.com>
+ <1330256732-26483-2-git-send-email-ismael.luceno@gmail.com>
+ <4F4B4C5D.4010409@lucaceresoli.net>
+Message-ID: <201202282049.35908.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 26 February 2012 21:28:59 Peter Korsgaard wrote:
->  Ismael>  # Plugin installation
->  Ismael>  define QT_INSTALL_TARGET_PLUGINS
->  Ismael> +      mkdir -p $(TARGET_DIR)/usr/lib/qt
->  Ismael>        if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/ ] ; then \
->  Ismael> -              mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins ; \
->  Ismael> -              cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins ; \
->  Ismael> +              cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins $(TARGET_DIR)/usr/lib/qt ; \
->  Ismael> +      fi
->  Ismael> +      if [ -d $(@D)/imports ] ; then \
->  Ismael> +              cp -dpfr $(@D)/imports $(TARGET_DIR)/usr/lib/qt ; \
-> 
-> It would make more sense to add the mkdir -p inside this
-> conditional. Is there any reason why you are copying from the source
-> directory and not staging like above?
+On Monday 27 February 2012 09:26:53 Luca Ceresoli wrote:
+> Here as well you should state why the patch is needed and where
+> it comes from.
 
- In fact, it would be simpler if the whole thing was copied from the 
-staging dir, i.e.
-
-if [ -d $(STAGING_DIR)/usr/lib/qt ]; then
-  mkdir -p $(TARGET_DIR)/usr/lib
-  cp -dpfr $(STAGING_DIR)/usr/lib/qt $(TARGET_DIR)/usr/lib
-fi
+ And also send the patches upstream, please!  You may get comments on the
+patches from upstream, which will allow us to improve the patches inside
+buildroot as well.
 
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
