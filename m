@@ -1,42 +1,71 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 28 Feb 2012 21:06:33 +0000 (UTC)
-Subject: [Buildroot] Where does post-build script belong?
-References: <jhub5r$smv$1@dough.gmane.org>
- <4F435977.1060001@lucaceresoli.net> <ji0b7n$2hl$1@dough.gmane.org>
- <201202282038.54757.arnout@mind.be>
-Message-ID: <jijfkp$qv0$1@dough.gmane.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Feb 2012 21:09:49 +0000
+Subject: [Buildroot] [PATCH 3/3] qt: Add option to build and install
+	tools on the target
+In-Reply-To: <1330258388-28391-3-git-send-email-ismael.luceno@gmail.com>
+References: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
+ <1330258388-28391-3-git-send-email-ismael.luceno@gmail.com>
+Message-ID: <201202282109.49513.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-02-28, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Tuesday 21 February 2012 14:54:47 Grant Edwards wrote:
-> [snip]
->> I don't want to replace the default skeleton.  I want to add some
->> files to it, and possible modify a few.  The documentation describes
->> two ways to do that:
->> 
->>   1) package/customize
->> 
->>   2) post-build script
->> 
->> I'm told 1) is now depricated, so I'm switching to 2).
->> 
->> Where under board/mycompany/myproduct do you put "extra" files that
->> will be added to the standard skeleton?
->
-> I put it in board/mycompany/myproduct/skeleton.  Although 
-> rootfs-additions would be a better name than skeleton.
+On Sunday 26 February 2012 12:13:08 Ismael Luceno wrote:
+[snip]
+> +config BR2_PACKAGE_QT_TOOLS
+> +	bool "Compile and install tools"
+> +	depends on BR2_PACKAGE_QT_SQL_MODULE
+> +	help
+> +	  If unsure, say N.
 
-Ah, perhaps I've misunderstood what a custom skeleton was for the past
-several years.  I thought it was the basis for the filesystem.  Is the
-custom skeleton something that's _added_ on top of the default
-skeleton rather than used in place of it?
+ The help should specify which tools are included (and maybe also what
+they do).
+
+[snip]
+> +QT_TARGET_PROGRAMS += qmlviewer
+>  
+>  ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+>  QT_INSTALL_LIBS    += QtGui
+> @@ -577,7 +584,12 @@ endef
+>  define QT_INSTALL_STAGING_CMDS
+>  	$(MAKE) -C $(@D) install
+>  	mkdir -p $(HOST_DIR)/usr/bin
+> -	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
+> +	for i in $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)); do \
+> +		if [ -x "$$i" ]; then cp "$$i" $(HOST_DIR)/usr/bin; fi; \
+> +	done
+> +	for i in $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS)); do \
+> +		if [ -x "$$i" ]; then cp "$$i" $(TARGET_DIR)/usr/bin; fi; \
+> +	done
+
+ I would remove the checks here.  If in some future version these tools 
+disappear, we want to notice it and update the .mk file accordingly.  So
+the original mv command should be OK.  By the way, if you make such an
+additional change (which is unrelated to 'build and install tools on
+the target'), it should be mentioned in the commit message.
+
+ For the qmlviewer, I assume it is not built if BR2_PACKAGE_QT_TOOLS is
+disabled.  To support that, you can set
+
+QT_TARGET_PROGRAMS += $(if $(BR2_PACKAGE_QT_TOOLS),qmlviewer))
+
+Or alternatively:
+
+QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS) += qmlviewer
+
+and use $(QT_TARGET_PROGRAMS-y)
+
+
+
+ Regards,
+ Arnout
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! How many retured
-                                  at               bricklayers from FLORIDA
-                              gmail.com            are out purchasing PENCIL
-                                                   SHARPENERS right NOW??
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
