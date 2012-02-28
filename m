@@ -1,47 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2012 23:35:48 +0100
-Subject: [Buildroot] [PATCH 1/1] libecore: fix build of host-libecore when
-	X11 not available
-In-Reply-To: <cover.1330468539.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1330468539.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0d07a1bdbd78622e222cb06ddfd0a8bb43d63bef.1330468539.git.thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Feb 2012 22:48:14 +0000
+Subject: [Buildroot] buildroot ncurses build problem
+In-Reply-To: <CAAXf6LX=31pR9AXMSvmBZOkJBvWMyrxD76_KptKXsECk+HV5Sg@mail.gmail.com>
+References: <CAAXf6LXn1Tdi9MLjqKEC1cGW+N4kU_YuiJD9xMVru1KVQNWcgA@mail.gmail.com>
+ <749894859.1231630.1330441934340.JavaMail.root@zimbra22-e3.priv.proxad.net>
+ <CAAXf6LX=31pR9AXMSvmBZOkJBvWMyrxD76_KptKXsECk+HV5Sg@mail.gmail.com>
+Message-ID: <201202282248.14809.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The host-libecore build tries to build the X11 backend. This works if
-you have X11 headers/libraries installed on your build machine, but
-fails if you don't, and Buildroot shouldn't depend on such things
-being installed.
+On Tuesday 28 February 2012 15:32:34 Thomas De Schampheleire wrote:
+> On Tue, Feb 28, 2012 at 4:12 PM,  <snarf77@free.fr> wrote:
+> >> /bin/sh: -I../c++: not found
+> >> make: *** [../objects/cursesf.o] Error 127
+> 
+> It seems that the compiler is not correctly filled in (the variable is empty).
 
-Therefore, we force host-libecore to not build any of the graphical
-backends (X, XCB or DirectFB).
+ Search for CXX in output/build/host-ncurses-5.7/config.log and
+output/build/host-ncurses-5.7/c++/Makefile
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/efl/libecore/libecore.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ In output/build/host-ncurses-5.7/config.log you should find:
+ac_cv_env_CXX_set=set
+ac_cv_env_CXX_value='/usr/bin/g++'
 
-diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
-index 0088480..83d1fff 100644
---- a/package/efl/libecore/libecore.mk
-+++ b/package/efl/libecore/libecore.mk
-@@ -12,7 +12,13 @@ LIBECORE_INSTALL_STAGING = YES
- LIBECORE_DEPENDENCIES = host-pkg-config libeina
- 
- HOST_LIBECORE_DEPENDENCIES = host-pkg-config host-libeina host-libevas
--HOST_LIBECORE_CONF_OPT += --enable-ecore-evas
-+HOST_LIBECORE_CONF_OPT += 		\
-+	--enable-ecore-evas 		\
-+	--disable-simple-x11 		\
-+	--disable-ecore-directfb 	\
-+	--disable-ecore-x 		\
-+	--disable-ecore-x-xcb 		\
-+	--disable-ecore-imf-xim
- 
- # default options
- LIBECORE_CONF_OPT = --disable-simple-x11
+ This leads to the following in 
+output/build/host-ncurses-5.7/c++/Makefile:
+CXX             = /usr/bin/g++
+
+
+ By the way, you do have /usr/bin/g++ installed I hope?
+
+
+ If you've changed anything in your environment (e.g. installed g++),
+you have to do a clean build of the package:
+
+make host-ncurses-dirclean
+make
+
+
+
+ Regards,
+ Arnout
+
 -- 
-1.7.4.1
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
