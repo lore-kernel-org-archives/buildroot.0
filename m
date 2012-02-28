@@ -1,35 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Feb 2012 21:44:39 +0100
-Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
-	repository and update version
-In-Reply-To: <20120228143454.6552999a@skate> (Thomas Petazzoni's message of
- "Tue, 28 Feb 2012 14:34:54 +0100")
-References: <20120224190112.GB10670@game.jcrosoft.org>
- <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
- <20120225033301.GC10670@game.jcrosoft.org>
- <201202251631.25121.arnout@mind.be>
- <20120226043901.GE10670@game.jcrosoft.org>
- <20120228143454.6552999a@skate>
-Message-ID: <87booielhk.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 28 Feb 2012 21:53:46 +0100
+Subject: [Buildroot] [git commit branch/next] libglib2: fix build with
+	legacy uClibc versions
+Message-ID: <20120228205411.EB39190BB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=97165f123bd67b8d1a9a0a3bb41f2c4b8475156d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Hi,
+qsort_r was only added in uClibc 0.9.33, so only enable it when we're sure
+it's available. For external/ctng toolchains we cannot easily know, so
+simply disable it there.
 
- Thomas> If you don't like the fact that we, as a community, try to
- Thomas> maintain a nice, welcoming and respectful atmosphere, then it's
- Thomas> up to you to move away. It's definitely not Arnout who should
- Thomas> stop sending comments which aim at maintaining this nice,
- Thomas> welcoming and respectful atmosphere.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libglib2/libglib2.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
- Thomas> Best regards,
-
-I completely agree.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d0d9c5c..d2445a1 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -41,9 +41,16 @@ LIBGLIB2_CONF_ENV = \
+ 		ac_cv_func_working_mktime=yes jm_cv_func_working_re_compile_pattern=yes \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no \
+ 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_DIR)/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
+-		ac_cv_func_posix_getgrgid_r=no glib_cv_have_qsort_r=yes \
++		ac_cv_func_posix_getgrgid_r=no \
+ 		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
+ 
++# old uClibc versions don't provide qsort_r
++ifeq ($(BR2_UCLIBC_VERSION_0_9_31)$(BR2_UCLIBC_VERSION_0_9_32)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
++LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=no
++else
++LIBGLIB2_CONF_ENV += glib_cv_have_qsort_r=yes
++endif
++
+ HOST_LIBGLIB2_CONF_OPT = \
+ 		--disable-gtk-doc \
+ 		--enable-debug=no \
