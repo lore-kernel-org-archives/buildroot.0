@@ -1,24 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 28 Feb 2012 23:52:53 +0100
-Subject: [Buildroot] [PATCH] Makefile: add help for the *-update-config
- and *-update-defconfig targets
-In-Reply-To: <1330435326-20893-1-git-send-email-aletes.xgr@gmail.com>
-References: <1330435326-20893-1-git-send-email-aletes.xgr@gmail.com>
-Message-ID: <20120228235253.793d9af1@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 28 Feb 2012 22:57:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 4808] ccache may build against wrong zlib
+In-Reply-To: <bug-4808-163@https.bugs.busybox.net/>
+References: <bug-4808-163@https.bugs.busybox.net/>
+Message-ID: <20120228225732.C451590BB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 28 Feb 2012 10:22:06 -0300,
-Alexandre Pereira da Silva <aletes.xgr@gmail.com> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=4808
 
-> Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-02-28 22:57:32 UTC ---
+Unfortunately, I don't think the patch works properly: host-zlib will try to
+use ccache before it has been built. If you want to do this, you have to ensure
+that host-zlib is built with HOSTCC_NOCCACHE instead of HOSTCC, just like
+ccache itself.
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
