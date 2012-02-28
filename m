@@ -1,42 +1,46 @@
-From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
-Date: Tue, 28 Feb 2012 10:25:19 -0300
-Subject: [Buildroot] [PATCH] Makefile.package.in: GIT: add support to fetch
-	git submodules
-Message-ID: <1330435519-21011-1-git-send-email-aletes.xgr@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 28 Feb 2012 14:34:54 +0100
+Subject: [Buildroot] [PATCH V2] openocd: fetch package from git
+ repository and update version
+In-Reply-To: <20120226043901.GE10670@game.jcrosoft.org>
+References: <20120224190112.GB10670@game.jcrosoft.org>
+ <1330119073-24810-1-git-send-email-aletes.xgr@gmail.com>
+ <20120225033301.GC10670@game.jcrosoft.org>
+ <201202251631.25121.arnout@mind.be>
+ <20120226043901.GE10670@game.jcrosoft.org>
+Message-ID: <20120228143454.6552999a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
----
- package/Makefile.package.in |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+Le Sun, 26 Feb 2012 05:39:01 +0100,
+Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index ea44c6c..863e866 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -147,13 +147,15 @@ domainseparator=$(if $(1),$(1),/)
- define DOWNLOAD_GIT
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
--	$(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-+	$(GIT) clone -n $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
- 	pushd $($(PKG)_BASE_NAME) > /dev/null && \
--	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
--		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-+	$(GIT) checkout $($(PKG)_VERSION) && \
-+	$(GIT) submodule init && \
-+	$(GIT) submodule update && \
-+	$(TAR) czf $(DL_DIR)/$($(PKG)_SOURCE) . &&\
- 	popd > /dev/null && \
- 	rm -rf $($(PKG)_DL_DIR) && \
--	popd > /dev/null)
-+	popd > /dev/null)    
- endef
- 
- # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> > > DO NOT USE GIT in the release
+> > 
+> >  Instead of just shouting at Alexandre, perhaps you can explain why
+> > it's a bad idea to use the git version for openocd...
+> I known when I'm shuting someeone and why and how to do it
+> so please never resend such comment
+
+Sorry Jean-Christophe, but you're sending really disrespectful comments
+to both Alexandre and Arnout and this is not acceptable.
+
+Arnout's comment asking you to stop shouting at Alexandre was absolutely
+correct, and I fully support Arnout here.
+
+If you don't like the fact that we, as a community, try to maintain a
+nice, welcoming and respectful atmosphere, then it's up to you to move
+away. It's definitely not Arnout who should stop sending comments which
+aim at maintaining this nice, welcoming and respectful atmosphere.
+
+Best regards,
+
+Thomas
 -- 
-1.7.9
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
