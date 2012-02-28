@@ -1,57 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Feb 2012 22:32:28 +0000
-Subject: [Buildroot] [PATCH] Makefile.package.in: GIT: add support to
-	fetch git submodules
-In-Reply-To: <1330435519-21011-1-git-send-email-aletes.xgr@gmail.com>
-References: <1330435519-21011-1-git-send-email-aletes.xgr@gmail.com>
-Message-ID: <201202282232.28362.arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 28 Feb 2012 23:33:58 +0100
+Subject: [Buildroot] ltrace hangings
+In-Reply-To: <4F4D052C.3030608@free-electrons.com>
+References: <4F4D052C.3030608@free-electrons.com>
+Message-ID: <201202282333.58717.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 28 February 2012 13:25:19 Alexandre Pereira da Silva wrote:
-> Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
-> ---
->  package/Makefile.package.in |   10 ++++++----
->  1 files changed, 6 insertions(+), 4 deletions(-)
+Maxime, All,
+
+On Tuesday 28 February 2012 17:47:40 Maxime Ripard wrote:
+> I'm having a hard time here using ltrace with buildroot or crosstool-ng.
 > 
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index ea44c6c..863e866 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -147,13 +147,15 @@ domainseparator=$(if $(1),$(1),/)
->  define DOWNLOAD_GIT
->  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
->  	(pushd $(DL_DIR) > /dev/null && \
-> -	$(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
-> +	$(GIT) clone -n $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
->  	pushd $($(PKG)_BASE_NAME) > /dev/null && \
-> -	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
-> -		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
-> +	$(GIT) checkout $($(PKG)_VERSION) && \
-> +	$(GIT) submodule init && \
-> +	$(GIT) submodule update && \
-> +	$(TAR) czf $(DL_DIR)/$($(PKG)_SOURCE) . &&\
->  	popd > /dev/null && \
->  	rm -rf $($(PKG)_DL_DIR) && \
-> -	popd > /dev/null)
-> +	popd > /dev/null)    
->  endef
->  
->  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> Basically, with a crosstool-NG 1.13.4, with the sample
+> arm-unknown-linux-gnueabi (so uclibc 0.9.30.2), I get :
+> __uClibc_main(52956, 2, 0xbec42db4, 47280, 521292
+> and it hangs.
+> 
+> Same thing with a toolchain built by buildroot and with uclibc 0.9.32.
+> 
+> Finally, I tried still with buildroot, but using the latest codebench
+> glibc toolchain, I get:
+> 
+> # ltrace cat /proc/self/cmdline
+> __libc_start_main(53812, 2, 0xbefeedb4, 518624, 518824
+> 
+> Is it a wild guess to think that ltrace 0.5.3 is buggy, or am I doing
+> something wrong ?
 
- I'm a bit concerned with the impact this will have on performance, e.g.
-when cloning a linux git.  Could you evaluate that?
+0.5.3 is now a bit old (2 years), and there has been a new release
+about four months ago:
+  http://anonscm.debian.org/gitweb/?p=collab-maint/ltrace.git;a=summary
 
- Regards,
- Arnout
+Maybe it's time we upgrade crosstool-NG to this new version...
+
+Also, there seems to be a revamp in the process:
+  http://lists.alioth.debian.org/pipermail/ltrace-devel/2012-January/000540.html
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
