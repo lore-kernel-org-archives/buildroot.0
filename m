@@ -1,62 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Feb 2012 21:09:49 +0000
-Subject: [Buildroot] [PATCH 3/3] qt: Add option to build and install
-	tools on the target
-In-Reply-To: <1330258388-28391-3-git-send-email-ismael.luceno@gmail.com>
-References: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
- <1330258388-28391-3-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <201202282109.49513.arnout@mind.be>
+Date: Tue, 28 Feb 2012 21:19:38 +0000
+Subject: [Buildroot] [Bug 4796] New: apply-patches.sh reorders patches
+	given on the command line
+In-Reply-To: <20120227082616.GJ23707@ldesroches-Latitude-E6320>
+References: <bug-4796-163@https.bugs.busybox.net/>
+ <20120227082616.GJ23707@ldesroches-Latitude-E6320>
+Message-ID: <201202282119.38907.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 26 February 2012 12:13:08 Ismael Luceno wrote:
+On Monday 27 February 2012 08:26:16 Ludovic Desroches wrote:
+> Hello,
+> 
+> Sorry I don't know if it's the good way to answer on the mailing list
+> instead of bugzilla.
+> 
+> Since my goal is to discuss about sorting or not sorting in relation with
+> the patch is sent, I choose the mailing list.
+
+ Good choice; however, you should have included the reported in CC (he may
+not be subscribed to the list).  I've done that now.
+
 [snip]
-> +config BR2_PACKAGE_QT_TOOLS
-> +	bool "Compile and install tools"
-> +	depends on BR2_PACKAGE_QT_SQL_MODULE
-> +	help
-> +	  If unsure, say N.
+> This patch contradicts the patches I have done to manage archive containing
+> several patches in a proper way.
+> 
+> For instance, we have an archive containing patches (from a git branch) whose
+> names should be 0001-patch1, 0002-patch2, etc. If we don't use sorting they
+> would not be applied in the good order.
+> 
+> I was suspecting that we would have some issues with some kind of patches as
+> debian ones.
+> 
+> What should be the good solution? Changing patch naming rules? Managing in a
+> specific way some kind of patch? Don't sort a list of patches but sort the
+> patches extracted into a directory?
 
- The help should specify which tools are included (and maybe also what
-they do).
+ We actually had a very brief discussion about this on the developer day.
+From the report:
 
-[snip]
-> +QT_TARGET_PROGRAMS += qmlviewer
->  
->  ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
->  QT_INSTALL_LIBS    += QtGui
-> @@ -577,7 +584,12 @@ endef
->  define QT_INSTALL_STAGING_CMDS
->  	$(MAKE) -C $(@D) install
->  	mkdir -p $(HOST_DIR)/usr/bin
-> -	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
-> +	for i in $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)); do \
-> +		if [ -x "$$i" ]; then cp "$$i" $(HOST_DIR)/usr/bin; fi; \
-> +	done
-> +	for i in $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS)); do \
-> +		if [ -x "$$i" ]; then cp "$$i" $(TARGET_DIR)/usr/bin; fi; \
-> +	done
+Series files: we don't accept it in our tree, but we would accept support for
+it in apply-patches.sh.  The latter is useful because some board vendors supply
+the kernel patches as an unordered tarball with a series file.
 
- I would remove the checks here.  If in some future version these tools 
-disappear, we want to notice it and update the .mk file accordingly.  So
-the original mv command should be OK.  By the way, if you make such an
-additional change (which is unrelated to 'build and install tools on
-the target'), it should be mentioned in the commit message.
 
- For the qmlviewer, I assume it is not built if BR2_PACKAGE_QT_TOOLS is
-disabled.  To support that, you can set
-
-QT_TARGET_PROGRAMS += $(if $(BR2_PACKAGE_QT_TOOLS),qmlviewer))
-
-Or alternatively:
-
-QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS) += qmlviewer
-
-and use $(QT_TARGET_PROGRAMS-y)
-
+ Bottom line: if there is a series file (in the directory or in the 
+tarball), it should be used to set the ordering.  If there is no series 
+file, use ls for sorting.
 
 
  Regards,
