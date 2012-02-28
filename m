@@ -1,46 +1,40 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 28 Feb 2012 13:54:06 +0100
-Subject: [Buildroot] build of e2fsprogs fails (2012.02-rc3)
-In-Reply-To: <59807857ff1ce335fc4e3042f1db053b@zacarias.com.ar>
-References: <1330427777.2274.27.camel@sven>
- <3d41058a0f241311e2b0fe5c2e3c9d1c@zacarias.com.ar>
- <1330432739.2274.31.camel@sven>
- <59807857ff1ce335fc4e3042f1db053b@zacarias.com.ar>
-Message-ID: <1330433646.2274.34.camel@sven>
+From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+Date: Tue, 28 Feb 2012 10:22:06 -0300
+Subject: [Buildroot] [PATCH] Makefile: add help for the *-update-config and
+	*-update-defconfig targets
+Message-ID: <1330435326-20893-1-git-send-email-aletes.xgr@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+---
+ Makefile |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-On Tue, 2012-02-28 at 09:49 -0300, Gustavo Zacarias wrote:
-> On 2012-02-28 09:38, Sven Neumann wrote:
-> 
-> > Well, this probably used to be a default uclibc configuration three
-> > years ago. Since then we have updated buildroot several times and
-> > obviously our ubclibc configuration diverged. What would be the best 
-> > way
-> > to go back to the default uclibc configuration?
-> >
-> > Nevertheless, you should consider the patch I've sent as the
-> > BR2_PACKAGE_E2FSPROGS_E4DEFRAG option is currently not correctly
-> > handled.
-> >
-> >
-> > Regards,
-> > Sven
-> 
-> It's likely, since then many new packages started using ftw extensively 
-> so the default configuration was updated, precisely by Thomas on April 
-> 2010.
-
-OK, I am now trying builds with the default uclibc configuration. I
-don't remember why exactly we started to use a custom config file some
-years ago. It was probably just because we did not know that this was a
-bad idea that would bite us later.
-
-
-Thanks for your help,
-Sven
+diff --git a/Makefile b/Makefile
+index ded7cab..028c98a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -671,13 +671,17 @@ help:
+ 	@echo '  allnopackageconfig     - New config where package options are answered with no'
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
++	@echo '  busybox-update-config  - Update BusyBox configuration'
+ endif
+ ifeq ($(BR2_LINUX_KERNEL),y)
+ 	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+ 	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
++	@echo '  linux-update-config    - Update Linux kernel configuration'
++	@echo '  linux-update-defconfig - Update Linux kernel defconfig'
+ endif
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ 	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
++	@echo '  uclibc-update-config   - Update uClibc configuration'
+ endif
+ ifeq ($(BR2_TOOLCHAIN_CTNG),y)
+ 	@echo '  ctng-menuconfig        - Run crosstool-NG menuconfig'
+-- 
+1.7.9
