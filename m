@@ -1,64 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Feb 2012 21:19:38 +0000
-Subject: [Buildroot] [Bug 4796] New: apply-patches.sh reorders patches
-	given on the command line
-In-Reply-To: <20120227082616.GJ23707@ldesroches-Latitude-E6320>
-References: <bug-4796-163@https.bugs.busybox.net/>
- <20120227082616.GJ23707@ldesroches-Latitude-E6320>
-Message-ID: <201202282119.38907.arnout@mind.be>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 28 Feb 2012 13:29:53 -0800
+Subject: [Buildroot] Where does post-build script belong?
+In-Reply-To: <jijfkp$qv0$1@dough.gmane.org>
+References: <jhub5r$smv$1@dough.gmane.org> <4F435977.1060001@lucaceresoli.net>
+ <ji0b7n$2hl$1@dough.gmane.org> <201202282038.54757.arnout@mind.be>
+ <jijfkp$qv0$1@dough.gmane.org>
+Message-ID: <4F4D4751.1030906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 27 February 2012 08:26:16 Ludovic Desroches wrote:
-> Hello,
-> 
-> Sorry I don't know if it's the good way to answer on the mailing list
-> instead of bugzilla.
-> 
-> Since my goal is to discuss about sorting or not sorting in relation with
-> the patch is sent, I choose the mailing list.
+On 02/28/2012 01:06 PM, Grant Edwards wrote:
+> On 2012-02-28, Arnout Vandecappelle<arnout@mind.be>  wrote:
+>> On Tuesday 21 February 2012 14:54:47 Grant Edwards wrote:
+>> [snip]
+>>> I don't want to replace the default skeleton.  I want to add some
+>>> files to it, and possible modify a few.  The documentation describes
+>>> two ways to do that:
+>>>
+>>>    1) package/customize
+>>>
+>>>    2) post-build script
+>>>
+>>> I'm told 1) is now depricated, so I'm switching to 2).
+>>>
+>>> Where under board/mycompany/myproduct do you put "extra" files that
+>>> will be added to the standard skeleton?
+>> I put it in board/mycompany/myproduct/skeleton.  Although
+>> rootfs-additions would be a better name than skeleton.
+> Ah, perhaps I've misunderstood what a custom skeleton was for the past
+> several years.  I thought it was the basis for the filesystem.  Is the
+> custom skeleton something that's _added_ on top of the default
+> skeleton rather than used in place of it?
+>
+Perhaps, but it is your script. If you want to completely replace the 
+existing skeleton you can, but I think it makes more sense to just 
+overlay new stuff on top of the default skeleton. This makes your new 
+skeleton much smaller, and since it is run after every build, you don't 
+have to wonder if changes make it to the target filesystem, it always does.
 
- Good choice; however, you should have included the reported in CC (he may
-not be subscribed to the list).  I've done that now.
-
-[snip]
-> This patch contradicts the patches I have done to manage archive containing
-> several patches in a proper way.
-> 
-> For instance, we have an archive containing patches (from a git branch) whose
-> names should be 0001-patch1, 0002-patch2, etc. If we don't use sorting they
-> would not be applied in the good order.
-> 
-> I was suspecting that we would have some issues with some kind of patches as
-> debian ones.
-> 
-> What should be the good solution? Changing patch naming rules? Managing in a
-> specific way some kind of patch? Don't sort a list of patches but sort the
-> patches extracted into a directory?
-
- We actually had a very brief discussion about this on the developer day.
-From the report:
-
-Series files: we don't accept it in our tree, but we would accept support for
-it in apply-patches.sh.  The latter is useful because some board vendors supply
-the kernel patches as an unordered tarball with a series file.
-
-
- Bottom line: if there is a series file (in the directory or in the 
-tarball), it should be used to set the ordering.  If there is no series 
-file, use ls for sorting.
-
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Regards, Steve
