@@ -1,31 +1,43 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Feb 2012 16:32:28 +0100
-Subject: [Buildroot] [git commit] vala: bump version
-Message-ID: <20120301130636.8376B90BF8@busybox.osuosl.org>
+Date: Tue, 28 Feb 2012 20:52:06 +0100
+Subject: [Buildroot] [git commit] e2fsprogs: disable build of e4defrag
+	unless explicitly enabled
+Message-ID: <20120301130636.D7D2F90BF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e4936dfa4c3d2c3192c6c69e9b51f1d4a646fa8
+commit: http://git.buildroot.net/buildroot/commit/?id=e8255618956eb8e4ed259d98aa3865510288b182
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The e2fsprogs configure script enables the build of the e4defrag
+utility by default. Disable it unless BR2_PACKAGE_E2FSPROGS_E4DEFRAG
+is selected.
+
+Also the --disable-blkid option is not recognized by the configure
+script. Use --disable-libblkid instead.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/vala/vala.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 52a8510..a3ad037 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
- #############################################################
- 
- VALA_VERSION_MAJOR = 0.15
--VALA_VERSION_MINOR = 1
-+VALA_VERSION_MINOR = 2
- VALA_VERSION = $(VALA_VERSION_MAJOR).$(VALA_VERSION_MINOR)
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 912deab..f3d44f6 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -12,9 +12,10 @@ E2FSPROGS_CONF_OPT = \
+ 	--enable-elf-shlibs \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
++	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
+ 	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
+ 	--disable-uuidd \
+-	--disable-blkid \
++	--disable-libblkid \
+ 	--disable-libuuid \
+ 	--enable-fsck \
+ 	--disable-e2initrd-helper \
