@@ -1,43 +1,50 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 28 Feb 2012 20:52:06 +0100
-Subject: [Buildroot] [git commit branch/next] e2fsprogs: disable build of
-	e4defrag unless explicitly enabled
-Message-ID: <20120228205411.DB4C590BB7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 Feb 2012 20:56:57 +0000
+Subject: [Buildroot] [PATCH 2/3] qt: Install QtDeclarative imports
+In-Reply-To: <874nudi8ro.fsf@macbook.be.48ers.dk>
+References: <1330258388-28391-1-git-send-email-ismael.luceno@gmail.com>
+ <1330258388-28391-2-git-send-email-ismael.luceno@gmail.com>
+ <874nudi8ro.fsf@macbook.be.48ers.dk>
+Message-ID: <201202282056.57874.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e8255618956eb8e4ed259d98aa3865510288b182
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Sunday 26 February 2012 21:28:59 Peter Korsgaard wrote:
+>  Ismael>  # Plugin installation
+>  Ismael>  define QT_INSTALL_TARGET_PLUGINS
+>  Ismael> +      mkdir -p $(TARGET_DIR)/usr/lib/qt
+>  Ismael>        if [ -d $(STAGING_DIR)/usr/lib/qt/plugins/ ] ; then \
+>  Ismael> -              mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins ; \
+>  Ismael> -              cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins ; \
+>  Ismael> +              cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins $(TARGET_DIR)/usr/lib/qt ; \
+>  Ismael> +      fi
+>  Ismael> +      if [ -d $(@D)/imports ] ; then \
+>  Ismael> +              cp -dpfr $(@D)/imports $(TARGET_DIR)/usr/lib/qt ; \
+> 
+> It would make more sense to add the mkdir -p inside this
+> conditional. Is there any reason why you are copying from the source
+> directory and not staging like above?
 
-The e2fsprogs configure script enables the build of the e4defrag
-utility by default. Disable it unless BR2_PACKAGE_E2FSPROGS_E4DEFRAG
-is selected.
+ In fact, it would be simpler if the whole thing was copied from the 
+staging dir, i.e.
 
-Also the --disable-blkid option is not recognized by the configure
-script. Use --disable-libblkid instead.
+if [ -d $(STAGING_DIR)/usr/lib/qt ]; then
+  mkdir -p $(TARGET_DIR)/usr/lib
+  cp -dpfr $(STAGING_DIR)/usr/lib/qt $(TARGET_DIR)/usr/lib
+fi
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/e2fsprogs/e2fsprogs.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 912deab..f3d44f6 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -12,9 +12,10 @@ E2FSPROGS_CONF_OPT = \
- 	--enable-elf-shlibs \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
-+	$(if $(BR2_PACKAGE_E2FSPROGS_E4DEFRAG),,--disable-defrag) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_RESIZE2FS),,--disable-resizer) \
- 	--disable-uuidd \
--	--disable-blkid \
-+	--disable-libblkid \
- 	--disable-libuuid \
- 	--enable-fsck \
- 	--disable-e2initrd-helper \
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
