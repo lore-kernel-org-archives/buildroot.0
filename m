@@ -1,281 +1,99 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Mon, 27 Feb 2012 22:02:38 -0200
-Subject: [Buildroot] [PATCH] vlc: New package
-Message-ID: <1330387358-17635-1-git-send-email-ismael.luceno@gmail.com>
+From: Chris Kerios <ckerios@gmail.com>
+Date: Mon, 27 Feb 2012 20:31:10 -0500
+Subject: [Buildroot] RC3 ctng toolchain build failure
+Message-ID: <CAKyeDQ9trStPDomP37wKGCbgobgWmjt6UkG-amrFLOj_KvPcXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Doing a vanilla build (nothing other than defaults) on Fedora 14 host
+for a i386/geode target.  No packages added, just brought up make
+xconfig and set for ctng with uclibc for the library and saved.  No
+other settings  were used other than defaults for everything.  Was not
+using ccache either.  Seems it can't find fenv.h for some reason.
+Researched news list and didn't see anything on this except something
+a few months ago about version conflicts and not using ccache.  Also,
+I didn't select to build C++ either.  Any ideas?  Messages below.
 
-Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
----
- package/multimedia/Config.in                  |    1 +
- package/multimedia/vlc/Config.in              |   19 +++
- package/multimedia/vlc/vlc-uclibc-fixes.patch |   25 ++++
- package/multimedia/vlc/vlc.mk                 |  183 +++++++++++++++++++++++++
- 4 files changed, 228 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/vlc/Config.in
- create mode 100644 package/multimedia/vlc/vlc-uclibc-fixes.patch
- create mode 100644 package/multimedia/vlc/vlc.mk
+Regards,
+Chris
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index a05d1d9..fc20d74 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -44,6 +44,7 @@ source "package/multimedia/speex/Config.in"
- source "package/multimedia/tidsp-binaries/Config.in"
- source "package/multimedia/taglib/Config.in"
- source "package/multimedia/tremor/Config.in"
-+source "package/multimedia/vlc/Config.in"
- source "package/multimedia/vorbis-tools/Config.in"
- source "package/multimedia/wavpack/Config.in"
- endmenu
-diff --git a/package/multimedia/vlc/Config.in b/package/multimedia/vlc/Config.in
-new file mode 100644
-index 0000000..56b29f8
---- /dev/null
-+++ b/package/multimedia/vlc/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_VLC
-+	bool "vlc"
-+	help
-+	  VLC is a free and open source cross-platform multimedia player and
-+	  framework that plays most multimedia files as well as DVD, Audio CD,
-+	  VCD, and various streaming protocols.
-+
-+	  http://www.videolan.org/vlc/
-+
-+
-+if BR2_PACKAGE_VLC
-+
-+config BR2_PACKAGE_VLC_FRONTEND
-+	bool "Build and install frontend binary"
-+	default y
-+	help
-+	  This will install the video player.
-+
-+endif
-diff --git a/package/multimedia/vlc/vlc-uclibc-fixes.patch b/package/multimedia/vlc/vlc-uclibc-fixes.patch
-new file mode 100644
-index 0000000..5471b08
---- /dev/null
-+++ b/package/multimedia/vlc/vlc-uclibc-fixes.patch
-@@ -0,0 +1,25 @@
-+Fixes compilation with uClibc, which doesn't provide gnu/libc-version.h nor
-+gnu_get_libc_version.
-+
-+Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
-+
-+diff -u a/src/posix/linux_specific.c b/src/posix/linux_specific.c
-+--- a/src/posix/linux_specific.c	2012-02-08 16:43:30.000000000 -0200
-++++ b/src/posix/linux_specific.c	2012-02-09 03:51:20.925504594 -0200
-+@@ -74,14 +74,14 @@
-+     return (path != NULL) ? path : strdup (PKGLIBDIR);
-+ }
-+ 
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-+ # include <gnu/libc-version.h>
-+ # include <stdlib.h>
-+ #endif
-+ 
-+ void system_Init (void)
-+ {
-+-#ifdef __GLIBC__
-++#if defined(__GLIBC__) && !defined(__UCLIBC__)
-+     const char *glcv = gnu_get_libc_version ();
-+ 
-+     /* gettext in glibc 2.5-2.7 is not thread-safe. LibVLC keeps crashing,
-diff --git a/package/multimedia/vlc/vlc.mk b/package/multimedia/vlc/vlc.mk
-new file mode 100644
-index 0000000..1d45dd9
---- /dev/null
-+++ b/package/multimedia/vlc/vlc.mk
-@@ -0,0 +1,183 @@
-+#############################################################
-+#
-+# vlc
-+#
-+#############################################################
-+VLC_VERSION = 2.0.0
-+VLC_SOURCE= vlc-$(VLC_VERSION).tar.xz
-+VLC_SITE = http://download.videolan.org/pub/videolan/vlc/$(VLC_VERSION)
-+
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+VLC_DEPENDENCIES += alsa-lib
-+VLC_CONF_OPTS    += --enable-alsa
-+else
-+VLC_CONF_OPTS    += --disable-alsa
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DIRECTFB),y)
-+VLC_CONF_OPTS += --enable-directfb
-+VLC_DEPENDENCIES += directfb
-+else
-+VLC_CONF_OPTS += --disable-directfb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL),y)
-+VLC_CONF_OPTS += --enable-sdl
-+VLC_DEPENDENCIES += sdl
-+else
-+VLC_CONF_OPTS += --disable-sdl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
-+VLC_CONF_OPTS += --enable-sdl-image
-+VLC_DEPENDENCIES += sdl_image
-+else
-+VLC_CONF_OPTS += --disable-sdl-image
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VLC_FRONTEND),y)
-+VLC_CONF_OPTS += --enable-vlc
-+else
-+VLC_CONF_OPTS += --disable-vlc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBMAD),y)
-+VLC_CONF_OPTS += --enable-mad
-+VLC_DEPENDENCIES += libmad
-+else
-+VLC_CONF_OPTS += --disable-mad
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TREMOR),y)
-+VLC_DEPENDENCIES += tremor
-+VLC_CONF_OPTS += --enable-tremor
-+else
-+VLC_CONF_OPTS += --disable-tremor
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+VLC_DEPENDENCIES += libpng
-+VLC_CONF_OPTS += --enable-png
-+else
-+VLC_CONF_OPTS += --disable-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG),y)
-+VLC_DEPENDENCIES += ffmpeg
-+VLC_CONF_OPTS += --enable-avcodec
-+else
-+VLC_CONF_OPTS += --disable-avcodec
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
-+VLC_CONF_OPTS += --enable-postproc
-+else
-+VLC_CONF_OPTS += --disable-postproc
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
-+VLC_CONF_OPTS += --enable-swscale
-+else
-+VLC_CONF_OPTS += --disable-swscale
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+VLC_DEPENDENCIES += dbus
-+VLC_CONF_OPTS += --enable-dbus
-+else
-+VLC_CONF_OPTS += --disable-dbus
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+VLC_DEPENDENCIES += libgcrypt
-+VLC_CONF_OPTS += --enable-libgcrypt
-+else
-+VLC_CONF_OPTS += --disable-libgcrypt
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+VLC_DEPENDENCIES += libv4l
-+VLC_CONF_OPTS += --enable-libv4l2
-+else
-+VLC_CONF_OPTS += --disable-libv4l2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+VLC_DEPENDENCIES += lua
-+VLC_CONF_OPTS += --enable-lua
-+else
-+VLC_CONF_OPTS += --disable-lua
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBXCB),y)
-+VLC_DEPENDENCIES += libxcb
-+VLC_CONF_OPTS += --enable-xcb
-+else
-+VLC_CONF_OPTS += --disable-xcb
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIVE555),y)
-+VLC_DEPENDENCIES += live555
-+VLC_CONF_OPTS += --enable-live555
-+else
-+VLC_CONF_OPTS += --disable-live555
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-+VLC_DEPENDENCIES += xlib_libX11
-+VLC_CONF_OPTS += --with-x
-+else
-+VLC_CONF_OPTS += --without-x
-+endif
-+
-+ifeq ($(BR2_PACKAGES_XLIB_LIBX11)$(BR2_PACKAGE_QT),yy)
-+VLC_DEPENDENCIES += qt
-+VLC_CONF_OPTS += --enable-qt4
-+else
-+VLC_CONF_OPTS += --disable-qt4
-+endif
-+
-+VLC_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_FREETYPE),freetype) \
-+	$(if $(BR2_PACKAGE_FLAC),flac) \
-+	$(if $(BR2_PACKAGE_SPEEX),speex) \
-+	$(if $(BR2_PACKAGE_LIBVORBIS),libvorbis) \
-+	$(if $(BR2_PACKAGE_LIBTHEORA),libtheora) \
-+	$(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11) \
-+	$(if $(BR2_PACKAGE_XLIB_LIBXV),xlib_libXv)
-+
-+ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
-+VLC_CONF_OPTS += --enable-neon
-+else
-+VLC_CONF_OPTS += --disable-neon
-+endif
-+
-+# FIXME: features disabled due lack of packages
-+VLC_CONF_OPTS += --disable-a52
-+
-+define VLC_CONFIGURE_CMDS
-+	echo $(VLC_VERSION) > $(@D)/src/revision.txt
-+	(cd $(@D); rm -rf config.cache; \
-+		test -x configure || ./bootstrap; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		./configure \
-+		--prefix=/usr \
-+		--sysconfdir=/etc \
-+		--build=$(GNU_HOST_NAME) \
-+		--host=$(GNU_TARGET_NAME) \
-+		--disable-rpath \
-+		$(VLC_CONF_OPTS) \
-+		CXXFLAGS="$(TARGET_CXXFLAGS)"; \
-+	)
-+	$(SED) '1i#define HAVE_VASPRINTF 1' $(@D)/config.h
-+endef
-+
-+define VLC_INSTALL_TARGET_CMDS
-+	find $(@D) -name '*.la' -exec $(SED) '/^relink_command=/d' '{}' +
-+	touch $(@D)/modules/access/zip/libzip_plugin.la \
-+		$(@D)/modules/misc/liblogger_plugin.la
-+	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
-+endef
-+
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.9.1
+[ALL  ]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/build-cc-core-static/./gcc/xgcc
+-B/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/build-cc-core-static/./gcc/
+-B/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/gcc-core-static/i586-unknown-linux-uclibc/bin/
+-B/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/gcc-core-static/i586-unknown-linux-uclibc/lib/
+-isystem /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/gcc-core-static/i586-unknown-linux-uclibc/include
+-isystem /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/gcc-core-static/i586-unknown-linux-uclibc/sys-include
+-g -Os -O2   -DIN_GCC -DCROSS_DIRECTORY_STRUCTURE  -W -Wall
+-Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wcast-qual
+-Wold-style-definition  -isystem ./include  -fPIC -g  -DIN_LIBGCC2
+-D__GCC_FLOAT_NOT_NEEDED -Dinhibit_libc  -I. -I. -I../.././gcc
+-I/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc
+-I/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/.
+-I/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/../gcc
+-I/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/../include
+-I/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid
+-DENABLE_DECIMAL_BID_FORMAT -DHAVE_CC_TLS -DUSE_TLS -o
+bid_decimal_data.o -MT bid_decimal_data.o -MD -MP -MF
+bid_decimal_data.dep -c
+/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_data.c
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:47:18:
+error: fenv.h: No such file or directory
+[ALL  ]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:
+In function '__dfp_test_except':
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:59:
+error: 'FE_INEXACT' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:59:
+error: (Each undeclared identifier is reported only once
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:59:
+error: for each function it appears in.)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:61:
+error: 'FE_UNDERFLOW' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:63:
+error: 'FE_OVERFLOW' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:65:
+error: 'FE_DIVBYZERO' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:67:
+error: 'FE_INVALID' undeclared (first use in this function)
+[ALL  ]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:
+In function '__dfp_raise_except':
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:76:
+error: 'FE_INEXACT' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:78:
+error: 'FE_UNDERFLOW' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:80:
+error: 'FE_OVERFLOW' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:82:
+error: 'FE_DIVBYZERO' undeclared (first use in this function)
+[ERROR]    /home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/src/gcc-4.4.6/libgcc/config/libbid/bid_decimal_globals.c:84:
+error: 'FE_INVALID' undeclared (first use in this function)
+[ERROR]    make[4]: *** [bid_decimal_globals.o] Error 1
+[ALL  ]    make[4]: *** Waiting for unfinished jobs....
+[ALL  ]    make[4]: Leaving directory
+`/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/build-cc-core-static/i586-unknown-linux-uclibc/libgcc'
+[ERROR]    make[3]: *** [all-target-libgcc] Error 2
+[ALL  ]    make[3]: Leaving directory
+`/home/chris/Embedded/buildroot-2012.02-rc3/output/build/build-toolchain/.build/i586-unknown-linux-uclibc/build/build-cc-core-static'
+[ERROR]
+[ERROR]  >>
+[ERROR]  >>  Build failed in step 'Installing static core C compiler'
+[ERROR]  >>        called in step '(top-level)'
+[ERROR]  >>
+[ERROR]  >>  Error happened in: CT_DoExecLog[scripts/functions at 172]
+[ERROR]  >>        called from: do_cc_core[scripts/build/cc/gcc.sh at 381]
+[ERROR]  >>        called from: do_cc_core_pass_2[scripts/build/cc/gcc.sh at 95]
+[ERROR]  >>        called from: main[scripts/crosstool-NG.sh at 595]
+[ERROR]  >>
+[ERROR]  >>  For more info on this error, look at the file: 'build.log'
+[ERROR]  >>  There is a list of known issues, some with workarounds, in:
+[ERROR]  >>
+'/home/chris/Embedded/buildroot-2012.02-rc3/output/host/usr/share/doc/ct-ng-1.13.4/B
+- Known issues.txt'
+[ERROR]
+[ERROR]  (elapsed: 21:35.18)
+make[2]: *** [build] Error 2
+make[1]: *** [build.2] Error 2
+make: *** [/home/chris/Embedded/buildroot-2012.02-rc3/output/stamps/ct-ng-toolchain-built]
+Error 2
