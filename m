@@ -1,36 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 Feb 2012 22:19:30 +0000
-Subject: [Buildroot] Where does post-build script belong?
-In-Reply-To: <4F4D4FE4.3020506@gmail.com>
-References: <jhub5r$smv$1@dough.gmane.org> <jijhcf$a6d$1@dough.gmane.org>
- <4F4D4FE4.3020506@gmail.com>
-Message-ID: <201202282219.30414.arnout@mind.be>
+Date: Tue, 28 Feb 2012 22:32:28 +0000
+Subject: [Buildroot] [PATCH] Makefile.package.in: GIT: add support to
+	fetch git submodules
+In-Reply-To: <1330435519-21011-1-git-send-email-aletes.xgr@gmail.com>
+References: <1330435519-21011-1-git-send-email-aletes.xgr@gmail.com>
+Message-ID: <201202282232.28362.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 28 February 2012 22:06:28 Steve Calfee wrote:
-> > I seem to be completely lost.  Is board/mycompany/myproduct/skeleton
-> > above a post-build script or a custom skelecton (something you set
-> > BR2_ROOTFS_SKELETON_CUSTOM_PATH to point to)?
-> Hi Grant,
+On Tuesday 28 February 2012 13:25:19 Alexandre Pereira da Silva wrote:
+> Signed-off-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+> ---
+>  package/Makefile.package.in |   10 ++++++----
+>  1 files changed, 6 insertions(+), 4 deletions(-)
 > 
-> I was not aware of that config option. In fact there are no uses of it 
-> in the current /board... stuff. What I and what I think others have done 
-> is create my own mini-skeleton in the board.... directory. I can then 
-> stick in scripts, etc files and maybe even externally built binaries 
-> into /usr/bin/ in my local area. Then when the post build script is 
-> executed I just copy all the files from my skeleton to the target 
-> skeleton. This will overlay the default stuff (that are duplicates in my 
-> area) and add any new stuff. After the post-build script the target 
-> skeleton will get all packaged up as a rootfs for your target system.
-> 
-> Someone else will have to describe what that option is for.
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> index ea44c6c..863e866 100644
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -147,13 +147,15 @@ domainseparator=$(if $(1),$(1),/)
+>  define DOWNLOAD_GIT
+>  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+>  	(pushd $(DL_DIR) > /dev/null && \
+> -	$(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+> +	$(GIT) clone -n $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+>  	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+> -	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ $($(PKG)_DL_VERSION) | \
+> -		gzip -c > $(DL_DIR)/$($(PKG)_SOURCE) && \
+> +	$(GIT) checkout $($(PKG)_VERSION) && \
+> +	$(GIT) submodule init && \
+> +	$(GIT) submodule update && \
+> +	$(TAR) czf $(DL_DIR)/$($(PKG)_SOURCE) . &&\
+>  	popd > /dev/null && \
+>  	rm -rf $($(PKG)_DL_DIR) && \
+> -	popd > /dev/null)
+> +	popd > /dev/null)    
+>  endef
+>  
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
 
- If you ask me, BR2_ROOTFS_SKELETON_CUSTOM_PATH is indeed useless and
-should be deprecated.
+ I'm a bit concerned with the impact this will have on performance, e.g.
+when cloning a linux git.  Could you evaluate that?
 
  Regards,
  Arnout
