@@ -1,89 +1,120 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 27 Feb 2012 23:30:00 +0100
-Subject: [Buildroot] [git commit branch/next] gamin: fix compilation with
-	glib 2.30
-Message-ID: <20120228082317.42DF490BB9@busybox.osuosl.org>
+Date: Tue, 28 Feb 2012 09:22:21 +0100
+Subject: [Buildroot] [git commit branch/next] libsoup: update to version
+	2.36.1
+Message-ID: <20120228082317.77C7190BB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=328fc5747279ff00fcc619d1eda81bf139f3221c
+commit: http://git.buildroot.net/buildroot/commit/?id=8d485749e136ed43b5f1129dee08b7e4200182fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-G_CONST_RETURN is deprecated in glib 2.30 so remove occurences
-to avoid build failures.
+Update to latest stable release. SSL support now depends on
+glib-networking with gnutls support instead of using gnutls
+directly.
 
-Patch taken from http://patches.openembedded.org/patch/13079/
+Remove libsoup-CVE-2011-2054.patch, this is fixed upstream.
 
 Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Cc: Richard Purdie <richard.purdie@linuxfoundation.org>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gamin/gamin-0.1.10-no-const-return.patch |   57 ++++++++++++++++++++++
- 1 files changed, 57 insertions(+), 0 deletions(-)
+ package/libsoup/Config.in                   |    1 +
+ package/libsoup/libsoup-CVE-2011-2054.patch |   32 ---------------------------
+ package/libsoup/libsoup.mk                  |   19 ++++++---------
+ 3 files changed, 9 insertions(+), 43 deletions(-)
 
-diff --git a/package/gamin/gamin-0.1.10-no-const-return.patch b/package/gamin/gamin-0.1.10-no-const-return.patch
-new file mode 100644
-index 0000000..3e6e905
---- /dev/null
-+++ b/package/gamin/gamin-0.1.10-no-const-return.patch
-@@ -0,0 +1,57 @@
-+G_CONST_RETURN is deprecated in glib 2.30 so remove to to avoid
-+build failures.
-+
-+Upstream-Status: Pending
-+
-+Index: gamin-0.1.10/server/gam_node.c
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_node.c	2011-10-12 15:25:45.217178314 +0100
-++++ gamin-0.1.10/server/gam_node.c	2011-10-12 15:26:17.807178293 +0100
-+@@ -122,7 +122,7 @@
-+  * it has finished with the string.  If it must keep it longer, it
-+  * should makes its own copy.  The returned string must not be freed.
-+  */
-+-G_CONST_RETURN char *
-++const char *
-+ gam_node_get_path(GamNode * node)
-+ {
-+     g_assert(node);
-+Index: gamin-0.1.10/server/gam_node.h
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_node.h	2011-10-12 15:25:46.857178269 +0100
-++++ gamin-0.1.10/server/gam_node.h	2011-10-12 15:26:28.637178297 +0100
-+@@ -58,7 +58,7 @@
-+ void                  gam_node_set_is_dir          (GamNode         *node,
-+ 						   gboolean        is_dir);
-+ 	
-+-G_CONST_RETURN char  *gam_node_get_path            (GamNode         *node);
-++const char  *gam_node_get_path            (GamNode         *node);
-+ 
-+ GList                *gam_node_get_subscriptions   (GamNode         *node);
-+ 
-+Index: gamin-0.1.10/server/gam_subscription.c
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_subscription.c	2011-10-12 15:25:40.497177525 +0100
-++++ gamin-0.1.10/server/gam_subscription.c	2011-10-12 15:26:39.867178304 +0100
-+@@ -141,7 +141,7 @@
-+  * @param sub the GamSubscription
-+  * @returns The path being monitored.  It should not be freed.
-+  */
-+-G_CONST_RETURN char *
-++const char *
-+ gam_subscription_get_path(GamSubscription * sub)
-+ {
-+     if (sub == NULL)
-+Index: gamin-0.1.10/server/gam_subscription.h
-+===================================================================
-+--- gamin-0.1.10.orig/server/gam_subscription.h	2011-10-12 15:25:28.507178266 +0100
-++++ gamin-0.1.10/server/gam_subscription.h	2011-10-12 15:25:58.817178285 +0100
-+@@ -21,7 +21,7 @@
-+ 
-+ int                  gam_subscription_get_reqno    (GamSubscription *sub);
-+ 
-+-G_CONST_RETURN char *gam_subscription_get_path     (GamSubscription *sub);
-++const char *gam_subscription_get_path     (GamSubscription *sub);
-+ 
-+ GamListener         *gam_subscription_get_listener (GamSubscription *sub);
-+ 
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 347687c..eee6ade 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_LIBSOUP
+ 
+ config BR2_PACKAGE_LIBSOUP_SSL
+ 	bool "https support"
++	select BR2_PACKAGE_GLIB_NETWORKING
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on BR2_PACKAGE_LIBSOUP
+ 	help
+diff --git a/package/libsoup/libsoup-CVE-2011-2054.patch b/package/libsoup/libsoup-CVE-2011-2054.patch
+deleted file mode 100644
+index 0dc5ecc..0000000
+--- a/package/libsoup/libsoup-CVE-2011-2054.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 4617b6ef6dd21931a0153070c5b5ff7ef21b46f8 Mon Sep 17 00:00:00 2001
+-From: Dan Winship <danw@gnome.org>
+-Date: Wed, 29 Jun 2011 10:04:06 -0400
+-Subject: [PATCH] SoupServer: fix to not allow smuggling ".." into path
+-
+-When SoupServer:raw-paths was set (the default), it was possible to
+-sneak ".." segments into the path passed to the SoupServerHandler,
+-which could then end up tricking some handlers into retrieving
+-arbitrary files from the filesystem. Fix that.
+-
+-https://bugzilla.gnome.org/show_bug.cgi?id=653258
+-
+-diff --git a/libsoup/soup-server.c b/libsoup/soup-server.c
+-index d56efd1..7225337 100644
+---- a/libsoup/soup-server.c
+-+++ b/libsoup/soup-server.c
+-@@ -779,6 +779,15 @@ got_headers (SoupMessage *req, SoupClientContext *client)
+- 
+- 		uri = soup_message_get_uri (req);
+- 		decoded_path = soup_uri_decode (uri->path);
+-+
+-+		if (strstr (decoded_path, "/../") ||
+-+		    g_str_has_suffix (decoded_path, "/..")) {
+-+			/* Introducing new ".." segments is not allowed */
+-+			g_free (decoded_path);
+-+			soup_message_set_status (req, SOUP_STATUS_BAD_REQUEST);
+-+			return;
+-+		}
+-+
+- 		soup_uri_set_path (uri, decoded_path);
+- 		g_free (decoded_path);
+- 	}
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 147b220..6572585 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,10 +4,11 @@
+ #
+ #############################################################
+ 
+-LIBSOUP_MAJOR_VERSION:=2.32
+-LIBSOUP_VERSION:=$(LIBSOUP_MAJOR_VERSION).2
+-LIBSOUP_SOURCE:=libsoup-$(LIBSOUP_VERSION).tar.bz2
+-LIBSOUP_SITE:=http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
++LIBSOUP_MAJOR_VERSION = 2.36
++LIBSOUP_MINOR_VERSION = 1
++LIBSOUP_VERSION = $(LIBSOUP_MAJOR_VERSION).$(LIBSOUP_MINOR_VERSION)
++LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.bz2
++LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_MAJOR_VERSION)
+ LIBSOUP_INSTALL_STAGING = YES
+ 
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+@@ -16,18 +17,14 @@ ifneq ($(BR2_INET_IPV6),y)
+ LIBSOUP_CONF_ENV += soup_cv_ipv6=no
+ endif
+ 
+-LIBSOUP_CONF_OPT = \
+-	--disable-explicit-deps \
+-	--disable-glibtest	\
+-	--without-gnome
++LIBSOUP_CONF_OPT = --disable-glibtest --without-gnome
+ 
+ LIBSOUP_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) host-pkg-config host-libglib2 libglib2 libxml2
+ 
+ ifeq ($(BR2_PACKAGE_LIBSOUP_SSL),y)
+-LIBSOUP_DEPENDENCIES += gnutls
+-LIBSOUP_CONF_OPT += --enable-ssl --with-libgcrypt-prefix=$(STAGING_DIR)/usr
++LIBSOUP_DEPENDENCIES += glib-networking
+ else
+-LIBSOUP_CONF_OPT += --disable-ssl
++LIBSOUP_CONF_OPT += --disable-tls-check
+ endif
+ 
+ $(eval $(call AUTOTARGETS))
