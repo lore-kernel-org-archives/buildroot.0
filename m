@@ -1,30 +1,281 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 28 Feb 2012 00:34:04 +0100
-Subject: [Buildroot] [PATCH 2/4] libglib2: update to version 2.30.2
-In-Reply-To: <1330346337-27342-3-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Mon, 27 Feb 2012 13:38:55 +0100")
-References: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com>
- <1330346337-27342-3-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87aa433l77.fsf@macbook.be.48ers.dk>
+From: Ismael Luceno <ismael.luceno@gmail.com>
+Date: Mon, 27 Feb 2012 22:02:38 -0200
+Subject: [Buildroot] [PATCH] vlc: New package
+Message-ID: <1330387358-17635-1-git-send-email-ismael.luceno@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
- Sven> Update to latest stable release and add a dependency on libffi which
- Sven> is needed by GObject.
+Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
+---
+ package/multimedia/Config.in                  |    1 +
+ package/multimedia/vlc/Config.in              |   19 +++
+ package/multimedia/vlc/vlc-uclibc-fixes.patch |   25 ++++
+ package/multimedia/vlc/vlc.mk                 |  183 +++++++++++++++++++++++++
+ 4 files changed, 228 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/vlc/Config.in
+ create mode 100644 package/multimedia/vlc/vlc-uclibc-fixes.patch
+ create mode 100644 package/multimedia/vlc/vlc.mk
 
-Looks like we'll need to fiddle with _CONF_ENV:
-
-checking for qsort_r... yes
-checking if qsort_r uses glibc compatible argument order... configure: error: in `/home/peko/source/buildroot/output/build/libglib2-2.30.2':
-configure: error: cannot run test program while cross compiling
-See `config.log' for more details
-
-This is default internal toolchain config, ARM A8.
-
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index a05d1d9..fc20d74 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -44,6 +44,7 @@ source "package/multimedia/speex/Config.in"
+ source "package/multimedia/tidsp-binaries/Config.in"
+ source "package/multimedia/taglib/Config.in"
+ source "package/multimedia/tremor/Config.in"
++source "package/multimedia/vlc/Config.in"
+ source "package/multimedia/vorbis-tools/Config.in"
+ source "package/multimedia/wavpack/Config.in"
+ endmenu
+diff --git a/package/multimedia/vlc/Config.in b/package/multimedia/vlc/Config.in
+new file mode 100644
+index 0000000..56b29f8
+--- /dev/null
++++ b/package/multimedia/vlc/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_VLC
++	bool "vlc"
++	help
++	  VLC is a free and open source cross-platform multimedia player and
++	  framework that plays most multimedia files as well as DVD, Audio CD,
++	  VCD, and various streaming protocols.
++
++	  http://www.videolan.org/vlc/
++
++
++if BR2_PACKAGE_VLC
++
++config BR2_PACKAGE_VLC_FRONTEND
++	bool "Build and install frontend binary"
++	default y
++	help
++	  This will install the video player.
++
++endif
+diff --git a/package/multimedia/vlc/vlc-uclibc-fixes.patch b/package/multimedia/vlc/vlc-uclibc-fixes.patch
+new file mode 100644
+index 0000000..5471b08
+--- /dev/null
++++ b/package/multimedia/vlc/vlc-uclibc-fixes.patch
+@@ -0,0 +1,25 @@
++Fixes compilation with uClibc, which doesn't provide gnu/libc-version.h nor
++gnu_get_libc_version.
++
++Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
++
++diff -u a/src/posix/linux_specific.c b/src/posix/linux_specific.c
++--- a/src/posix/linux_specific.c	2012-02-08 16:43:30.000000000 -0200
+++++ b/src/posix/linux_specific.c	2012-02-09 03:51:20.925504594 -0200
++@@ -74,14 +74,14 @@
++     return (path != NULL) ? path : strdup (PKGLIBDIR);
++ }
++ 
++-#ifdef __GLIBC__
+++#if defined(__GLIBC__) && !defined(__UCLIBC__)
++ # include <gnu/libc-version.h>
++ # include <stdlib.h>
++ #endif
++ 
++ void system_Init (void)
++ {
++-#ifdef __GLIBC__
+++#if defined(__GLIBC__) && !defined(__UCLIBC__)
++     const char *glcv = gnu_get_libc_version ();
++ 
++     /* gettext in glibc 2.5-2.7 is not thread-safe. LibVLC keeps crashing,
+diff --git a/package/multimedia/vlc/vlc.mk b/package/multimedia/vlc/vlc.mk
+new file mode 100644
+index 0000000..1d45dd9
+--- /dev/null
++++ b/package/multimedia/vlc/vlc.mk
+@@ -0,0 +1,183 @@
++#############################################################
++#
++# vlc
++#
++#############################################################
++VLC_VERSION = 2.0.0
++VLC_SOURCE= vlc-$(VLC_VERSION).tar.xz
++VLC_SITE = http://download.videolan.org/pub/videolan/vlc/$(VLC_VERSION)
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++VLC_DEPENDENCIES += alsa-lib
++VLC_CONF_OPTS    += --enable-alsa
++else
++VLC_CONF_OPTS    += --disable-alsa
++endif
++
++ifeq ($(BR2_PACKAGE_DIRECTFB),y)
++VLC_CONF_OPTS += --enable-directfb
++VLC_DEPENDENCIES += directfb
++else
++VLC_CONF_OPTS += --disable-directfb
++endif
++
++ifeq ($(BR2_PACKAGE_SDL),y)
++VLC_CONF_OPTS += --enable-sdl
++VLC_DEPENDENCIES += sdl
++else
++VLC_CONF_OPTS += --disable-sdl
++endif
++
++ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
++VLC_CONF_OPTS += --enable-sdl-image
++VLC_DEPENDENCIES += sdl_image
++else
++VLC_CONF_OPTS += --disable-sdl-image
++endif
++
++ifeq ($(BR2_PACKAGE_VLC_FRONTEND),y)
++VLC_CONF_OPTS += --enable-vlc
++else
++VLC_CONF_OPTS += --disable-vlc
++endif
++
++ifeq ($(BR2_PACKAGE_LIBMAD),y)
++VLC_CONF_OPTS += --enable-mad
++VLC_DEPENDENCIES += libmad
++else
++VLC_CONF_OPTS += --disable-mad
++endif
++
++ifeq ($(BR2_PACKAGE_TREMOR),y)
++VLC_DEPENDENCIES += tremor
++VLC_CONF_OPTS += --enable-tremor
++else
++VLC_CONF_OPTS += --disable-tremor
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++VLC_DEPENDENCIES += libpng
++VLC_CONF_OPTS += --enable-png
++else
++VLC_CONF_OPTS += --disable-png
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG),y)
++VLC_DEPENDENCIES += ffmpeg
++VLC_CONF_OPTS += --enable-avcodec
++else
++VLC_CONF_OPTS += --disable-avcodec
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
++VLC_CONF_OPTS += --enable-postproc
++else
++VLC_CONF_OPTS += --disable-postproc
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
++VLC_CONF_OPTS += --enable-swscale
++else
++VLC_CONF_OPTS += --disable-swscale
++endif
++
++ifeq ($(BR2_PACKAGE_DBUS),y)
++VLC_DEPENDENCIES += dbus
++VLC_CONF_OPTS += --enable-dbus
++else
++VLC_CONF_OPTS += --disable-dbus
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++VLC_DEPENDENCIES += libgcrypt
++VLC_CONF_OPTS += --enable-libgcrypt
++else
++VLC_CONF_OPTS += --disable-libgcrypt
++endif
++
++ifeq ($(BR2_PACKAGE_LIBV4L),y)
++VLC_DEPENDENCIES += libv4l
++VLC_CONF_OPTS += --enable-libv4l2
++else
++VLC_CONF_OPTS += --disable-libv4l2
++endif
++
++ifeq ($(BR2_PACKAGE_LUA),y)
++VLC_DEPENDENCIES += lua
++VLC_CONF_OPTS += --enable-lua
++else
++VLC_CONF_OPTS += --disable-lua
++endif
++
++ifeq ($(BR2_PACKAGE_LIBXCB),y)
++VLC_DEPENDENCIES += libxcb
++VLC_CONF_OPTS += --enable-xcb
++else
++VLC_CONF_OPTS += --disable-xcb
++endif
++
++ifeq ($(BR2_PACKAGE_LIVE555),y)
++VLC_DEPENDENCIES += live555
++VLC_CONF_OPTS += --enable-live555
++else
++VLC_CONF_OPTS += --disable-live555
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++VLC_DEPENDENCIES += xlib_libX11
++VLC_CONF_OPTS += --with-x
++else
++VLC_CONF_OPTS += --without-x
++endif
++
++ifeq ($(BR2_PACKAGES_XLIB_LIBX11)$(BR2_PACKAGE_QT),yy)
++VLC_DEPENDENCIES += qt
++VLC_CONF_OPTS += --enable-qt4
++else
++VLC_CONF_OPTS += --disable-qt4
++endif
++
++VLC_DEPENDENCIES += \
++	$(if $(BR2_PACKAGE_FREETYPE),freetype) \
++	$(if $(BR2_PACKAGE_FLAC),flac) \
++	$(if $(BR2_PACKAGE_SPEEX),speex) \
++	$(if $(BR2_PACKAGE_LIBVORBIS),libvorbis) \
++	$(if $(BR2_PACKAGE_LIBTHEORA),libtheora) \
++	$(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11) \
++	$(if $(BR2_PACKAGE_XLIB_LIBXV),xlib_libXv)
++
++ifeq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),armv7-a)
++VLC_CONF_OPTS += --enable-neon
++else
++VLC_CONF_OPTS += --disable-neon
++endif
++
++# FIXME: features disabled due lack of packages
++VLC_CONF_OPTS += --disable-a52
++
++define VLC_CONFIGURE_CMDS
++	echo $(VLC_VERSION) > $(@D)/src/revision.txt
++	(cd $(@D); rm -rf config.cache; \
++		test -x configure || ./bootstrap; \
++		$(TARGET_CONFIGURE_OPTS) \
++		$(TARGET_CONFIGURE_ARGS) \
++		./configure \
++		--prefix=/usr \
++		--sysconfdir=/etc \
++		--build=$(GNU_HOST_NAME) \
++		--host=$(GNU_TARGET_NAME) \
++		--disable-rpath \
++		$(VLC_CONF_OPTS) \
++		CXXFLAGS="$(TARGET_CXXFLAGS)"; \
++	)
++	$(SED) '1i#define HAVE_VASPRINTF 1' $(@D)/config.h
++endef
++
++define VLC_INSTALL_TARGET_CMDS
++	find $(@D) -name '*.la' -exec $(SED) '/^relink_command=/d' '{}' +
++	touch $(@D)/modules/access/zip/libzip_plugin.la \
++		$(@D)/modules/misc/liblogger_plugin.la
++	$(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
++endef
++
++$(eval $(call AUTOTARGETS))
 -- 
-Bye, Peter Korsgaard
+1.7.9.1
