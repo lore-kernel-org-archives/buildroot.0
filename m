@@ -1,29 +1,33 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 28 Feb 2012 08:58:23 +0100
-Subject: [Buildroot] RC3 ctng toolchain build failure
-In-Reply-To: <CAKyeDQ9trStPDomP37wKGCbgobgWmjt6UkG-amrFLOj_KvPcXA@mail.gmail.com>
-References: <CAKyeDQ9trStPDomP37wKGCbgobgWmjt6UkG-amrFLOj_KvPcXA@mail.gmail.com>
-Message-ID: <4F4C891F.8070207@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 28 Feb 2012 09:22:57 +0100
+Subject: [Buildroot] update libglib2 and libsoup
+In-Reply-To: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com> (Sven
+ Neumann's message of "Mon, 27 Feb 2012 13:38:53 +0100")
+References: <1330346337-27342-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <8762er2wpq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Chris,
+>>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
 
-Chris Kerios wrote:
-> Doing a vanilla build (nothing other than defaults) on Fedora 14 host
-> for a i386/geode target.  No packages added, just brought up make
-> xconfig and set for ctng with uclibc for the library and saved.  No
-> other settings  were used other than defaults for everything.  Was not
-> using ccache either.  Seems it can't find fenv.h for some reason.
-> Researched news list and didn't see anything on this except something
-> a few months ago about version conflicts and not using ccache.  Also,
-> I didn't select to build C++ either.  Any ideas?  Messages below.
+ Sven> This is a patchset that updates libglib2 and libsoup to the latest
+ Sven> stable versions.
 
-Could you please send your Buildroot configuration file (.config)?
-When reporting bugs this makes it much easier for other people
-to reproduce and investigate the problem.
+ Sven> SSL/TLS support in libsoup does not any longer use libgcrypt directly
+ Sven> but relies on GIO modules that are provided by glib-networking. Thus
+ Sven> a new package "glib-networking" is introduced.
 
-Luca
+ Sven> Packages using libsoup with SSL support don't need to be changed;
+ Sven> the BR2_PACKAGE_LIBSOUP_SSL option takes care of selecting the new
+ Sven> glib-networking package and compiling it with libgcrypt support.
+
+ Sven> There's also a patch included for gamin that is needed to make it
+ Sven> compile with the latest libglib2.
+
+Committed series to next after fixing up glib build, thanks.
+
+-- 
+Bye, Peter Korsgaard
