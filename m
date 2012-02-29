@@ -1,33 +1,46 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Wed, 29 Feb 2012 21:27:58 -0200
-Subject: [Buildroot] [PATCH 2/2] openssl: Add -march and -mcpu flags
-In-Reply-To: <1330558078-3978-1-git-send-email-ismael.luceno@gmail.com>
-References: <1330558078-3978-1-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <1330558078-3978-2-git-send-email-ismael.luceno@gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 29 Feb 2012 15:48:36 -0800
+Subject: [Buildroot] Buildroot 2012.02-rc3 released
+In-Reply-To: <201203010037.49778.yann.morin.1998@free.fr>
+References: <87ehtg2r6n.fsf@macbook.be.48ers.dk> <4F4D2A90.1050309@gmail.com>
+ <201203010037.49778.yann.morin.1998@free.fr>
+Message-ID: <CAJJ6jxv1JvMsK7pMgQJ85DHDiz=on8zO3Mux0KigJHpq-a3_ZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Feb 29, 2012 at 3:37 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Steve, Chris, All,
+>
+> On Tuesday 28 February 2012 20:27:12 Steve Calfee wrote:
+>> On 02/27/2012 08:10 AM, Peter Korsgaard wrote:
+>> > http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
+>> >
+>> There seems to be something wrong with the servers. I cannot access the
+>> url above.
+>
+> I also experienced those failures (but noticed only tonight).
+>
+> While Peter and I were debugging the issue (basically, Peter asking me to
+> type some commands, and me putting the result on a pastebin! :-) ), the
+> issues resolved themselves as by magic... :-/
+>
+> You may try again to see it also works for you.
+>
+> If it now works, or if it still does not, just drop us a reply.
+> Regards,
+>
+> Yann E. MORIN.
 
-Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
----
- package/openssl/openssl.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Well, I am glad I am not the only one who has this problem. I retry
+several times a day and I cannot get through to that link
+(http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3) from
+2 systems 32 bit ubuntu and 64 bit 11.10 ubuntu on two different
+networks, uverse and some work ISP.
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index fda935a..c228458 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -18,6 +18,8 @@ else
- OPENSSL_CFLAGS = $(TARGET_CFLAGS)
- endif
- 
-+OPENSSL_CFLAGS += -march=$(BR2_GCC_TARGET_ARCH) -mcpu=$(BR2_GCC_TARGET_TUNE)
-+
- ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
- OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
- 
--- 
-1.7.9.1
+Both systems sit on a NAT LAN with 192.168* ip addresses. I don't know
+if that affects things, shouldn't.
+
+Regards, Steve
