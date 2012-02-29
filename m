@@ -1,38 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 29 Feb 2012 23:17:54 +0000
-Subject: [Buildroot] mesa3d fails
-In-Reply-To: <20120229020844.08f20f46@gmail.com>
-References: <20120228200231.7f26116f@gmail.com>
- <201202282304.16308.arnout@mind.be> <20120229020844.08f20f46@gmail.com>
-Message-ID: <201202292317.54748.arnout@mind.be>
+From: Ismael Luceno <ismael.luceno@gmail.com>
+Date: Wed, 29 Feb 2012 21:27:57 -0200
+Subject: [Buildroot] [PATCH 1/2] openssl: Fix build on ARM with GCC 4.6.x
+Message-ID: <1330558078-3978-1-git-send-email-ismael.luceno@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 29 February 2012 04:08:44 Ismael Luceno wrote:
-> >  Works for me...  Does config.log report anything about why it fails?
-> > Is configure called with the correct PKG_CONFIG variable?  Can you do
-> > a host/usr/bin/pkg-config --list-all to see if it finds libdrm?
-> > 
-> 
->   $ ./output/host/usr/bin/pkg-config --modversion libdrm
->   2.4.19
-> 
-> Since mesa3d is using AUTOTARGETS, I guess it's getting the right
-> PKG_CONFIG. I'll check tomorrow, to be sure.
 
- Maybe you can hack mesa3d's configure to print PKG_CONFIG, and the exact 
-pkg-config command used for libdrm.
+Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
+---
+ package/openssl/openssl.mk |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
- Regards,
- Arnout
-
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index cb29fe4..fda935a 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -9,7 +9,14 @@ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_INSTALL_STAGING = YES
+ OPENSSL_DEPENDENCIES = zlib
+ OPENSSL_TARGET_ARCH = generic32
++
++ifeq ($(BR2_GCC_VERSION_4_6_X)-$(ARCH),y-arm)
++# workaround for gcc issue
++# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=48308
++OPENSSL_CFLAGS = $(subst -Os,-O2,$(TARGET_CFLAGS))
++else
+ OPENSSL_CFLAGS = $(TARGET_CFLAGS)
++endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
+ OPENSSL_CFLAGS += -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.1
