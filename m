@@ -1,39 +1,80 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Wed, 29 Feb 2012 14:49:09 +0100
-Subject: [Buildroot] Question about float-abi
-In-Reply-To: <20120229110850.GN23707@ldesroches-Latitude-E6320>
-References: <20120228105550.GM23707@ldesroches-Latitude-E6320>
- <20120229110850.GN23707@ldesroches-Latitude-E6320>
-Message-ID: <20120229134909.GO23707@ldesroches-Latitude-E6320>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Wed, 29 Feb 2012 14:51:34 +0100
+Subject: [Buildroot] [PATCH 1/1] avr32/defconfig: use current stable kernel
+	instead of the old 2.6.35
+Message-ID: <1330523494-20886-1-git-send-email-plagnioj@jcrosoft.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 29, 2012 at 12:08:51PM +0100, Ludovic Desroches wrote:
+Drop the patch for kernel >= 3.3
 
-[snip]
+Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+---
+HI,
 
-> How can I have a hardware floating point support with Buildroot and uclibc?
-> Looking at the BR2_VFP_FLOAT setting, it seems to be only used for external
-> toolchains providing multi-lib support.
-> I added mcpu, mfpu and mfloat-abi flags to BR2_TARGET_OPTIMIZATION and to
-> UCLIBC_EXTRA_FLAGS. I think it really force hardware floating point support
-> since I have this error during the build:
-> 
-> [snip]/arm-unknown-linux-uclibcgnueabi/bin/ld: error: lib/libuClibc-0.9.32.1.so
-> uses VFP register arguments, [snip]/arm-unknown-linux-uclibcgnueabi/4.5.3/libgcc.a(bpabi.o)
-> does not
-> 
-> Do I play with the good settings? Do I miss some settings?
+	Can we have this for this release
 
-Yes there were missing options for gcc: --with-float=hard and --with-fpu=...
+Best Regards,
+J.
+ configs/atngw100_defconfig                         |    4 +--
+ ...1-avr32-select-generic-atomic64_t-support.patch |   33 ++++++++++++++++++++
+ 2 files changed, 34 insertions(+), 3 deletions(-)
+ create mode 100644 linux/linux-3.2.5-0001-avr32-select-generic-atomic64_t-support.patch
 
-Now floating score is correct. I am surprised by the good results of the uclibc.
-I don't know if nbench is an accurate benchmark to test several libc but
-scores obtained by glibc, eglibc and uclibc are very closed.
-
-Regards
-
-Ludovic
+diff --git a/configs/atngw100_defconfig b/configs/atngw100_defconfig
+index 5373b44..57e39bd 100644
+--- a/configs/atngw100_defconfig
++++ b/configs/atngw100_defconfig
+@@ -18,7 +18,5 @@ BR2_TARGET_UBOOT_2010_09=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="2.6.35"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_PATCH="linux/linux-3.2.5-0001-avr32-select-generic-atomic64_t-support.patch"
+ BR2_LINUX_KERNEL_DEFCONFIG="atngw100"
+diff --git a/linux/linux-3.2.5-0001-avr32-select-generic-atomic64_t-support.patch b/linux/linux-3.2.5-0001-avr32-select-generic-atomic64_t-support.patch
+new file mode 100644
+index 0000000..95f2cf9
+--- /dev/null
++++ b/linux/linux-3.2.5-0001-avr32-select-generic-atomic64_t-support.patch
+@@ -0,0 +1,33 @@
++From 31e0017e6f6fb5cfdfaf932c1f98c9bef8d57688 Mon Sep 17 00:00:00 2001
++From: Fabio Baltieri <fabio.baltieri@gmail.com>
++Date: Fri, 3 Feb 2012 15:37:14 -0800
++Subject: [PATCH 1/1] avr32: select generic atomic64_t support
++
++Enable use of the generic atomic64 implementation on AVR32 platforms.
++Without this the kernel fails to build as the architecture does not
++provide its version.
++
++Signed-off-by: Fabio Baltieri <fabio.baltieri@gmail.com>
++Acked-by: Hans-Christian Egtvedt <egtvedt@samfundet.no>
++Cc: Haavard Skinnemoen <hskinnemoen@gmail.com>
++Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
++Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
++---
++ arch/avr32/Kconfig |    1 +
++ 1 files changed, 1 insertions(+), 0 deletions(-)
++
++diff --git a/arch/avr32/Kconfig b/arch/avr32/Kconfig
++index 197e96f..3dea7231 100644
++--- a/arch/avr32/Kconfig
+++++ b/arch/avr32/Kconfig
++@@ -8,6 +8,7 @@ config AVR32
++ 	select HAVE_KPROBES
++ 	select HAVE_GENERIC_HARDIRQS
++ 	select GENERIC_IRQ_PROBE
+++	select GENERIC_ATOMIC64
++ 	select HARDIRQS_SW_RESEND
++ 	select GENERIC_IRQ_SHOW
++ 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
++-- 
++1.7.7
++
+-- 
+1.7.7
