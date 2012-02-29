@@ -1,43 +1,64 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Wed, 29 Feb 2012 02:08:44 -0200
-Subject: [Buildroot] mesa3d fails
-In-Reply-To: <201202282304.16308.arnout@mind.be>
-References: <20120228200231.7f26116f@gmail.com>
- <201202282304.16308.arnout@mind.be>
-Message-ID: <20120229020844.08f20f46@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 29 Feb 2012 08:22:02 +0100
+Subject: [Buildroot] Buildroot 2012.02-rc3 released
+In-Reply-To: <4F4D2A90.1050309@gmail.com> (Steve Calfee's message of "Tue, 28
+ Feb 2012 11:27:12 -0800")
+References: <87ehtg2r6n.fsf@macbook.be.48ers.dk> <4F4D2A90.1050309@gmail.com>
+Message-ID: <877gz6drz9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 28 Feb 2012 23:04:16 +0000
-Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Tuesday 28 February 2012 22:02:31 Ismael Luceno wrote:
-> > I'm getting the following error:
-> > 
-> > > checking for LIBDRM... configure: error: Package requirements
-> > > (libdrm >= 2.4.3) were not met:
-> > >
-> > > No package 'libdrm' found
-> > <...>
-> > 
-> > But libdrm 2.4.19 is installed... anyone ran into this?
-> 
->  Works for me...  Does config.log report anything about why it fails?
-> Is configure called with the correct PKG_CONFIG variable?  Can you do
-> a host/usr/bin/pkg-config --list-all to see if it finds libdrm?
-> 
+>>>>> "Steve" == Steve Calfee <stevecalfee@gmail.com> writes:
 
-  $ ./output/host/usr/bin/pkg-config --modversion libdrm
-  2.4.19
+Hi,
 
-Since mesa3d is using AUTOTARGETS, I guess it's getting the right
-PKG_CONFIG. I'll check tomorrow, to be sure.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 490 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120229/4642a4f5/attachment.asc>
+ >> http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
+ >> 
+ Steve> There seems to be something wrong with the servers. I cannot access
+ Steve> the url above.
+
+ Steve> I am also having similar problems with git access:
+
+ Steve> me:~/nobu/br/dockstar/tools$ git remote -v
+ Steve> origin    http://git.buildroot.net/buildroot (fetch)
+ Steve> origin    http://git.buildroot.net/buildroot (push)
+
+ Steve> me:~/nobu/br/dockstar/tools$ git fetch
+ Steve> error: Couldn't resolve host 'git.buildroot.net' while accessing
+ Steve> http://git.buildroot.net/buildroot/info/refs
+
+ Steve> fatal: HTTP request failed
+
+DNS problems at your side? The *.uclibc.org DNS has recently moved from
+Eriks own machine to the osuosl.org people.
+
+It works here:
+
+host -a git.buildroot.net
+Trying "git.buildroot.net"
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 33511
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;git.buildroot.net.		IN	ANY
+
+;; ANSWER SECTION:
+git.buildroot.net.	5279	IN	CNAME	buildroot.uclibc.org.
+
+wget 'http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3'
+--2012-02-29 08:21:16--  http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
+Resolving git.buildroot.net (git.buildroot.net)... 140.211.167.224
+Connecting to git.buildroot.net (git.buildroot.net)|140.211.167.224|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 55525 (54K) [text/plain]
+Saving to: `CHANGES?id=2012.02_rc3'
+
+100%[======================================>] 55,525       129K/s   in 0.4s
+
+2012-02-29 08:21:23 (129 KB/s) - `CHANGES?id=2012.02_rc3' saved [55525/55525]
+
+-- 
+Bye, Peter Korsgaard
