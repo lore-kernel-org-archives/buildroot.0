@@ -1,33 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Feb 2012 13:40:28 +0000 (UTC)
-Subject: [Buildroot] [Bug 4808] ccache may build against wrong zlib
-In-Reply-To: <bug-4808-163@https.bugs.busybox.net/>
-References: <bug-4808-163@https.bugs.busybox.net/>
-Message-ID: <20120229134028.0E08990BCA@busybox.osuosl.org>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 29 Feb 2012 14:49:09 +0100
+Subject: [Buildroot] Question about float-abi
+In-Reply-To: <20120229110850.GN23707@ldesroches-Latitude-E6320>
+References: <20120228105550.GM23707@ldesroches-Latitude-E6320>
+ <20120229110850.GN23707@ldesroches-Latitude-E6320>
+Message-ID: <20120229134909.GO23707@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4808
+On Wed, Feb 29, 2012 at 12:08:51PM +0100, Ludovic Desroches wrote:
 
---- Comment #2 from Ra?l S?nchez Siles <rsanchezs@infoglobal.es> 2012-02-29 13:40:27 UTC ---
-Thanks for answering, Thomas. You are right. It's not working.
-After a little bit more of research, I've found out the problem is that ccache
-is build using rpath as LDFLAGS. This LDFLAGS are generic for all host packages
-(as stated in package/Makefile.in)
+[snip]
 
-I came accross the issue by chance when my distro upgrade zlib version so it
-didn't match with the one provided by buildroot.
+> How can I have a hardware floating point support with Buildroot and uclibc?
+> Looking at the BR2_VFP_FLOAT setting, it seems to be only used for external
+> toolchains providing multi-lib support.
+> I added mcpu, mfpu and mfloat-abi flags to BR2_TARGET_OPTIMIZATION and to
+> UCLIBC_EXTRA_FLAGS. I think it really force hardware floating point support
+> since I have this error during the build:
+> 
+> [snip]/arm-unknown-linux-uclibcgnueabi/bin/ld: error: lib/libuClibc-0.9.32.1.so
+> uses VFP register arguments, [snip]/arm-unknown-linux-uclibcgnueabi/4.5.3/libgcc.a(bpabi.o)
+> does not
+> 
+> Do I play with the good settings? Do I miss some settings?
 
-The solution could be either voiding/fixing LDFLAGS for host-ccache compilation
-or removing embedded rpath in ccache binary. I think this second is the easier
-way. But what do you think?
+Yes there were missing options for gcc: --with-float=hard and --with-fpu=...
 
-I'll provide a patch for the second.
+Now floating score is correct. I am surprised by the good results of the uclibc.
+I don't know if nbench is an accurate benchmark to test several libc but
+scores obtained by glibc, eglibc and uclibc are very closed.
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Regards
+
+Ludovic
