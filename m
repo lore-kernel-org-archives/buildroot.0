@@ -1,55 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Feb 2012 14:42:12 +0000 (UTC)
-Subject: [Buildroot] [Bug 4808] ccache may build against wrong zlib
-In-Reply-To: <bug-4808-163@https.bugs.busybox.net/>
-References: <bug-4808-163@https.bugs.busybox.net/>
-Message-ID: <20120229144212.5FC6590BC8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 29 Feb 2012 15:47:10 +0100
+Subject: [Buildroot] Question about float-abi
+In-Reply-To: <20120229134909.GO23707@ldesroches-Latitude-E6320>
+References: <20120228105550.GM23707@ldesroches-Latitude-E6320>
+ <20120229110850.GN23707@ldesroches-Latitude-E6320>
+ <20120229134909.GO23707@ldesroches-Latitude-E6320>
+Message-ID: <20120229154710.7729776d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4808
+Hello Ludovic,
 
---- Comment #3 from Ra?l S?nchez Siles <rsanchezs@infoglobal.es> 2012-02-29 14:42:12 UTC ---
-..and now I'm not sure if ccache is exactly to blame. I removed the rpath from
-cache and tried to make again. I had the same error as before. This is the
-result:
-/repos/mcv_buildroot/output/build/host-lzo-2.05$
-PATH=/home/rasasi/repos/mcv_buildroot/output/host/bin:/home/rasasi/repos/mcv_buildroot/output/host/usr/bin:/home/rasasi/bin:/usr/local/bin:/usr/bin:/bin:/usr/games
-AR="/usr/bin/ar" AS="/usr/bin/as" LD="/usr/bin/ld" NM="/usr/bin/nm"
-CC="/home/rasasi/repos/mcv_buildroot/output/host/usr/bin/ccache /usr/bin/gcc"
-GCC="/home/rasasi/repos/mcv_buildroot/output/host/usr/bin/ccache /usr/bin/gcc"
-CXX="/home/rasasi/repos/mcv_buildroot/output/host/usr/bin/ccache /usr/bin/g++"
-CPP="/usr/bin/cpp" CFLAGS="-O2
--I/home/rasasi/repos/mcv_buildroot/output/host/include
--I/home/rasasi/repos/mcv_buildroot/output/host/usr/include"
-CXXFLAGS="-I/home/rasasi/repos/mcv_buildroot/output/host/include
--I/home/rasasi/repos/mcv_buildroot/output/host/usr/include"
-LDFLAGS="-L/home/rasasi/repos/mcv_buildroot/output/host/lib
--L/home/rasasi/repos/mcv_buildroot/output/host/usr/lib
--Wl,-rpath,/home/rasasi/repos/mcv_buildroot/output/host/usr/lib"
-PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-PKG_CONFIG="/home/rasasi/repos/mcv_buildroot/output/host/usr/bin/pkg-config"
-PKG_CONFIG_SYSROOT_DIR="/"
-PKG_CONFIG_LIBDIR="/home/rasasi/repos/mcv_buildroot/output/host/usr/lib/pkgconfig:/home/rasasi/repos/mcv_buildroot/output/host/usr/share/pkgconfig"
-PERLLIB="/home/rasasi/repos/mcv_buildroot/output/host/usr/lib/perl"
-LD_LIBRARY_PATH="/home/rasasi/repos/mcv_buildroot/output/host/usr/lib:"
-CFLAGS="-O2 -I/home/rasasi/repos/mcv_buildroot/output/host/include
--I/home/rasasi/repos/mcv_buildroot/output/host/usr/include"
-LDFLAGS="-L/home/rasasi/repos/mcv_buildroot/output/host/lib
--L/home/rasasi/repos/mcv_buildroot/output/host/usr/lib
--Wl,-rpath,/home/rasasi/repos/mcv_buildroot/output/host/usr/lib"  ./configure
---prefix="/home/rasasi/repos/mcv_buildroot/output/host/usr"
---sysconfdir="/home/rasasi/repos/mcv_buildroot/output/host/etc" --enable-shared
---disable-static
-configure: Configuring LZO 2.05
-checking build system type... Invalid configuration `x86_64-unknown-linux-':
-machine `x86_64-unknown-linux' not recognized
-configure: error: /bin/sh autoconf/config.sub x86_64-unknown-linux- failed
+Le Wed, 29 Feb 2012 14:49:09 +0100,
+Ludovic Desroches <ludovic.desroches@atmel.com> a ?crit :
 
+> Yes there were missing options for gcc: --with-float=hard and
+> --with-fpu=...
+> 
+> Now floating score is correct. I am surprised by the good results of
+> the uclibc. I don't know if nbench is an accurate benchmark to test
+> several libc but scores obtained by glibc, eglibc and uclibc are very
+> closed.
+
+As I told you on IRC, those investigations are really interesting. We
+know that the Buildroot support for floating-point is far from perfect,
+this has been briefly discussed during the last Buildroot Developer
+meeting. If you want to improve this part of Buildroot, do not hesitate
+to send patches, we are definitely interested.
+
+I guess with internal toolchains, it's quite easy to improve things.
+The case of external toolchains is probably a bit more complicated,
+since we do not control how the C library of the external toolchain has
+been built in terms of floating point support.
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
