@@ -1,47 +1,27 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 29 Feb 2012 10:00:24 +0100
-Subject: [Buildroot] [git commit] libecore: fix build of host-libecore when
-	X11 not available
-Message-ID: <20120229090809.03DBB90B39@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 29 Feb 2012 10:08:15 +0100
+Subject: [Buildroot] [PATCH 1/1] libecore: fix build of host-libecore
+	when X11 not available
+In-Reply-To: <0d07a1bdbd78622e222cb06ddfd0a8bb43d63bef.1330468539.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 28 Feb 2012 23:35:48 +0100")
+References: <cover.1330468539.git.thomas.petazzoni@free-electrons.com>
+ <cover.1330468539.git.thomas.petazzoni@free-electrons.com>
+ <0d07a1bdbd78622e222cb06ddfd0a8bb43d63bef.1330468539.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87y5rmc8hs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=def11d79227d42976ae7c918f4a0ba44c94a0813
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The host-libecore build tries to build the X11 backend. This works if
-you have X11 headers/libraries installed on your build machine, but
-fails if you don't, and Buildroot shouldn't depend on such things
-being installed.
+ Thomas> The host-libecore build tries to build the X11 backend. This works if
+ Thomas> you have X11 headers/libraries installed on your build machine, but
+ Thomas> fails if you don't, and Buildroot shouldn't depend on such things
+ Thomas> being installed.
 
-Therefore, we force host-libecore to not build any of the graphical
-backends (X, XCB or DirectFB).
+Committed, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/efl/libecore/libecore.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
-
-diff --git a/package/efl/libecore/libecore.mk b/package/efl/libecore/libecore.mk
-index db14356..c76b3ff 100644
---- a/package/efl/libecore/libecore.mk
-+++ b/package/efl/libecore/libecore.mk
-@@ -12,7 +12,13 @@ LIBECORE_INSTALL_STAGING = YES
- LIBECORE_DEPENDENCIES = host-pkg-config libeina
- 
- HOST_LIBECORE_DEPENDENCIES = host-pkg-config host-libeina host-libevas
--HOST_LIBECORE_CONF_OPT += --enable-ecore-evas
-+HOST_LIBECORE_CONF_OPT += 		\
-+	--enable-ecore-evas 		\
-+	--disable-simple-x11 		\
-+	--disable-ecore-directfb 	\
-+	--disable-ecore-x 		\
-+	--disable-ecore-x-xcb 		\
-+	--disable-ecore-imf-xim
- 
- # default options
- LIBECORE_CONF_OPT = --disable-simple-x11
+-- 
+Bye, Peter Korsgaard
