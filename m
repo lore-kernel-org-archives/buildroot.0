@@ -1,57 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Mar 2012 20:26:38 +0100
-Subject: [Buildroot] [git commit] external-toolchain: run checks even on
-	extracted toolchains
-Message-ID: <20120306223952.1937790D16@busybox.osuosl.org>
+Date: Thu, 1 Mar 2012 20:26:37 +0100
+Subject: [Buildroot] [git commit] Expand external toolchain wrapper to
+	custom flags
+Message-ID: <20120306223951.864E890D18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3367d5ce770ac409e7b3f5bba2c7ed1a819b3ef7
+commit: http://git.buildroot.net/buildroot/commit/?id=b95e436ee0c9e4638dc79766da0d17927c6641ce
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When the mechanism that allows Buildroot to download external
-toolchains automatically was added, all the sanity checks on the
-external toolchains were not performed. This commit re-enables those
-checks that we already do on external toolchains that are not
-downloaded/extracted by Buildroot. This makes the toolchain checks
-more consistent accross various configurations.
+The BR2_TARGET_OPTIMIZATION flags were not used by the external
+toolchain wrapper, which broke the multilib selection logic of
+multilib external toolchains. It also simplifies the compilation of
+external programs since all flags are properly passed automatically by
+the toolchain wrapper.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/ext-tool.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ toolchain/toolchain-external/ext-tool.mk           |    8 ++++++++
+ .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
 diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 132aacd..8132caa 100644
+index eb8ed4f..dde6f22 100644
 --- a/toolchain/toolchain-external/ext-tool.mk
 +++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -170,8 +170,6 @@ endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD),y)
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(TOOLCHAIN_EXTERNAL_DIR)/.extracted
--else
--TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
+@@ -150,6 +150,14 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
  endif
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
-@@ -284,7 +282,7 @@ endif
- # location, check that it supports sysroot, and then verify that it
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # type of C library and all C library features.
--$(STAMP_DIR)/ext-toolchain-checked:
-+$(STAMP_DIR)/ext-toolchain-checked: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
- 	@echo "Checking external toolchain settings"
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
-@@ -343,7 +341,7 @@ $(STAMP_DIR)/ext-toolchain-checked:
- #                       multilib variant compared to the main sysroot.
- #			Ex: mips16/soft-float/el
++ifneq ($(BR2_TARGET_OPTIMIZATION),)
++TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
++# We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each
++# flag is a separate argument when used in execv() by the external
++# toolchain wrapper.
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
++endif
++
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index cc404f3..719f13b 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -40,6 +40,9 @@ static char *predef_args[] = {
+ #ifdef BR_VFPFLOAT
+ 	"-mfpu=vfp",
+ #endif /* BR_VFPFLOAT */
++#ifdef BR_ADDITIONAL_CFLAGS
++	BR_ADDITIONAL_CFLAGS
++#endif
+ };
  
--$(STAMP_DIR)/ext-toolchain-installed: $(TOOLCHAIN_EXTERNAL_DEPENDENCIES)
-+$(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	$(Q)LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) -print-file-name=libc.a)` ; \
- 	SYSROOT_DIR=`echo $${LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/libc\.a::'` ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
+ static const char *get_basename(const char *name)
