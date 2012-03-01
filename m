@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Mar 2012 20:26:38 +0100
-Subject: [Buildroot] [git commit] external-toolchain: fix description of
-	PowerPC 2010.09 from Mentor Graphics
-Message-ID: <20120306223952.38C2C90D18@busybox.osuosl.org>
+Date: Thu, 1 Mar 2012 20:26:37 +0100
+Subject: [Buildroot] [git commit] external-toolchain: bump MIPS 2011.03 from
+	-93 to -110
+Message-ID: <20120306223951.BA40F90D16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ec3e6db46e35ee90bc8eef0d5aedb2891764e8a
+commit: http://git.buildroot.net/buildroot/commit/?id=851508dedda25637767a020f43f75450a477eb4f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/toolchain-external/ext-tool.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index d3b591d..f3f49e9 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -240,7 +240,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	select BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Sourcery CodeBench toolchain for the PowerPC architecture,
--	  from Sourcery CodeBench. It uses gcc 4.5.1, binutils 2.20,
-+	  from Mentor Graphics. It uses gcc 4.5.1, binutils 2.20,
- 	  glibc 2.11, gdb 7.2.50 and kernel headers 2.6.35.2. It has
- 	  support for the following variants:
-             - 603 glibc, 32 bits
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index ab9b0c2..1e8e03e 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -193,8 +193,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103),y)
+-TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package9055/public/mips-linux-gnu/
+-TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-93-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package9469/public/mips-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-110-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
