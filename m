@@ -1,43 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Mar 2012 00:17:12 +0000
-Subject: [Buildroot] Buildroot 2012.02-rc3 released
-In-Reply-To: <CAJJ6jxv1JvMsK7pMgQJ85DHDiz=on8zO3Mux0KigJHpq-a3_ZQ@mail.gmail.com>
-References: <87ehtg2r6n.fsf@macbook.be.48ers.dk>
- <201203010037.49778.yann.morin.1998@free.fr>
- <CAJJ6jxv1JvMsK7pMgQJ85DHDiz=on8zO3Mux0KigJHpq-a3_ZQ@mail.gmail.com>
-Message-ID: <201203010017.12296.arnout@mind.be>
+Date: Thu, 1 Mar 2012 00:27:33 +0000
+Subject: [Buildroot] uClibc missing symbols (undefined reference to
+	`__fini_array_end')
+In-Reply-To: <CAGDZK6Ho6M+p4gpxHTqz8F7Jnwzo3b4KSWavh4DJ_XSb5Dp5fw@mail.gmail.com>
+References: <CAGDZK6Ho6M+p4gpxHTqz8F7Jnwzo3b4KSWavh4DJ_XSb5Dp5fw@mail.gmail.com>
+Message-ID: <201203010027.33790.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 29 February 2012 23:48:36 Steve Calfee wrote:
-> Both systems sit on a NAT LAN with 192.168* ip addresses. I don't know
-> if that affects things, shouldn't.
+On Wednesday 29 February 2012 13:34:38 ?ric ALBER wrote:
+> I'm using buildroot on an ARM9 (Marvel Kirkwood). I have configured
+> buildroot to generate gcc on the target. But if I want to use it (gcc on
+> the target), I get linker errors when I try to link a shared library like
+> libpython2.7.so
+> I guess I have something wrong with my uClibc or gcc setup but I can't
+> figure out what. I use buildroot 2012.02-rc3, uClibc 0.9.32.1, linux 3.2.6
+> 
+> # gcc -shared -lpython2.7 -o test.so test.o
+> /usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.2/../../../libc.a(__uClibc_main.os):
+> In function `__uClibc_fini':
+> __uClibc_main.c:(.text+0x140): undefined reference to `__fini_array_end'
+> __uClibc_main.c:(.text+0x144): undefined reference to `__fini_array_start'
 
- It will.  The DNS on the NAT will cache the authoritive server for 
-uclibc.org.  If the original uclibc.org DNS server still replies to DNS 
-requests, but doesn't give answers for uclibc.org addresses, then the NAT
-will not look further.  You can verify this by issuing
+ These symbols are defined by the linker script, to allow the source code
+to find the addresses of the static constructors/destructors.  So it's
+not surprising that these symbols are undefined when linking a shared
+library, because then you're not using a linker script.
 
-host -v -t SOA uclibc.org
+ What _is_ surprising is that it's trying to link against libc.a.  Since
+you're building a shared library, I'd expect it to link against libc.so...
+So can you run gcc with the -v option to see how the linker is called?
+And with -Wl,-M to make the linker print the libraries it loads.
 
-which should reply
+ You do get 
+/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.2/../../../libc.so
+on your target, right?  It's copied in by target-finalize.
 
-uclibc.org.             86125   IN      SOA     ns1.auth.osuosl.org. hostmaster.osuosl.org. 1330554603 300 900 604800 86400
-
-but will probably reply with the old DNS server.
-
- There is unfortunately no way to force your NAT to forget the cached
-record.  You can try to NOT access any uclibc.org site for 48 hours,
-which may expire the cache.
-
- To fix it, something must be done at the old DNS server.  I don't know
-what needs to be done exactly.
+ (I'm trying to reproduce your build but it takes a while.  And anyway
+I can't run it, unless I set up a qemu for it...)
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
