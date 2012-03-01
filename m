@@ -1,72 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Mar 2012 20:26:37 +0100
-Subject: [Buildroot] [git commit] external-toolchain: remove 2009q1 ARM
-	Sourcery toolchain
-Message-ID: <20120306223951.9829490D16@busybox.osuosl.org>
+Date: Thu, 1 Mar 2012 20:26:36 +0100
+Subject: [Buildroot] [git commit] Support multilib variants in
+	sub-subdirectories
+Message-ID: <20120306223951.774EE90D16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=17b8cc930c2a9d092b4ede12c01ea6200818a343
+commit: http://git.buildroot.net/buildroot/commit/?id=50ac5f9a573d3918cc5257a30a7c85db7841ac42
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We are going to add one more ARM Sourcery toolchain version, so it's
-time to remove the oldest version.
+When an external toolchain has multiple variants organized in
+sub-directories, Buildroot only copies the selected sysroot and not
+all sysroots. In order to make this work, Buildroot creates a symbolic
+link of the name of the original selected sysroot to the main sysroot
+to trick the compiler so that it finds its libraries at the expected
+location.
+
+I.e, if the toolchain as the following organization (example take on
+the ARM CodeSourcery toolchain) :
+
+     .	    	for ARMv5T
+     armv4  	for ARMv4T
+     thumb2 	for ARMv7-A/Thumb
+
+and ARMv4T is selected, then Buildroot will copy the contents of
+armv4t/ from the toolchain into its $(STAGING_DIR) and then create a
+$(STAGING_DIR)/armv4t symbolic link to $(STAGING_DIR).
+
+However, our logic to do so only works when there was one directory
+level for multilib sysroots. But in the MIPS CodeSourcery toolchain
+there are multiple levels. For example, the MIPS16 soft-float
+little-endian sysroot variant is in mips16/soft-float/el/ compared to
+the main sysroot.
+
+This patch improves our logic to support this case. The logic is a bit
+more complicated as we don't want to create a symbolic link to an
+absolute path, but a symbolic link to a relative path, because we want
+the host/ directory to be relocatable.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   15 ---------------
- toolchain/toolchain-external/ext-tool.mk |    5 +----
- 2 files changed, 1 insertions(+), 19 deletions(-)
+ toolchain/helpers.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index eadfe50..f983727 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -59,20 +59,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
-             - ARMv4T, little endian, soft-float, glibc
-             - ARMv7-A, Thumb 2, little endian, soft-float, glibc
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 4c3f240..3f4818f 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -103,7 +103,14 @@ copy_toolchain_sysroot = \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+ 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 		fi ; \
+-		ln -s . $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++		relpath="./" ; \
++		nbslashs=`echo -n $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
++		for slash in `seq 1 $${nbslashs}` ; do \
++			relpath=$${relpath}"../" ; \
++		done ; \
++		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+ 	fi ; \
+ 	find $(STAGING_DIR) -type d | xargs chmod 755
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
--	bool "Sourcery CodeBench ARM 2009q1"
--	depends on BR2_arm
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
--	select BR2_INSTALL_LIBSTDCPP
--	help
--	  Sourcery CodeBench toolchain for the ARM architecture, from
--	  Mentor Graphics. It uses gcc 4.3.3, binutils 2.19, glibc 2.8
--	  and gdb 6.8 and kernel headers 2.6.30. It has support for
--	  the following variants:
--            - ARMv5T, little endian, soft-float, glibc
--            - ARMv4T, little endian, soft-float, glibc
--            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
--
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	bool "Sourcery CodeBench MIPS 2011.03"
- 	depends on BR2_mips || BR2_mipsel
-@@ -262,7 +248,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	string
--	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index dde6f22..883fbdb 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -174,10 +174,7 @@ else
- TOOLCHAIN_EXTERNAL_DEPENDENCIES = $(STAMP_DIR)/ext-toolchain-checked
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q1),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package4571/public/arm-none-linux-gnueabi/
--TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q1-203-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package5383/public/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2009q3-67-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1),y)
