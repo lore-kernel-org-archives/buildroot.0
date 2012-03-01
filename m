@@ -1,35 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  1 Mar 2012 16:58:11 +0000 (UTC)
-Subject: [Buildroot] [Bug 4808] ccache may build against wrong zlib
-In-Reply-To: <bug-4808-163@https.bugs.busybox.net/>
-References: <bug-4808-163@https.bugs.busybox.net/>
-Message-ID: <20120301165811.3B9F690BEF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 Mar 2012 17:59:21 +0100
+Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
+ device (flash drive)
+In-Reply-To: <jio6ql$25v$1@dough.gmane.org>
+References: <jio6ql$25v$1@dough.gmane.org>
+Message-ID: <20120301175921.5811b398@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4808
+Le Thu, 01 Mar 2012 17:06:44 +0100,
+Willy <willy@willygroup.org> a ?crit :
 
-Ra?l S?nchez Siles <rsanchezs@infoglobal.es> changed:
+> I have created my system images (iso and ext2) and I would put one of 
+> them in the flash drive of the target system.
+> 
+> So far I've used unetbootin to create a bootable system which loaded
+> in RAM, now the image is too big for my RAM.
+> 
+> Now I've used dd to put my image in the flash drive:
+> sudo dd if=rootfs.ext2 of=/dev/sdc1
+> 
+> Then when the machine starts I got the error:
+> 
+> Missing operating system
+> DISK BOOT FAILURE, PLEASE INSERT...
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #4058|0                           |1
-        is obsolete|                            |
+Yes, you need a bootloader.
 
---- Comment #7 from Ra?l S?nchez Siles <rsanchezs@infoglobal.es> 2012-03-01 16:58:10 UTC ---
-Created attachment 4064
-  --> https://bugs.busybox.net/attachment.cgi?id=4064
-Patch against git master head.
+> I "think" I've installed grub on my buildroot image
+> ( package BR2_TARGET_GRUB [=y] ).
+> How can I test if grub is properly installed and how can I setup it?
 
-Thanks again, Thomas. It looks it has worked. Find attached a patch against the
-current master head.
+You need to run grub so that it installs itself on your /dev/sdc
+device. Something like:
 
-Once this is applied I'd say this bug report can be closed.
+printf "device (hd0) /dev/sdc\nroot (hd0,0)\nsetup (hd0)\nquit\n" | output/staging/sbin/grub --device-map=/dev/null --no-floppy
 
+Let us know if that works. We should certainly extend the documentation
+with more details about this.
+
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
