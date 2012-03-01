@@ -1,52 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 01 Mar 2012 13:06:42 -0000
-Subject: [Buildroot] [git commit] Makefile: use /etc/os-release for version
-	info rather than /etc/br-version
-Message-ID: <20120301130635.0DDAD90BF7@busybox.osuosl.org>
+Date: Thu, 1 Mar 2012 14:07:29 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.2.x stable
+	versions
+Message-ID: <20120301130747.5124790BE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=451a887894faddef019e9a0628c21b5f2e9eee56
+commit: http://git.buildroot.net/buildroot/commit/?id=dca6e03eac0ec70bb01492e378c694d8dabcedfd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-/etc/os-release is becoming a standard interface for distribution
-name/version info, so let's use that instead of the nonstandard
-/etc/br-version. Format of the file is something like:
-
-NAME=Buildroot
-VERSION=2012.02-rc1-00003-g2d10e81
-ID=buildroot
-VERSION_ID=2012.02-rc1
-PRETTY_NAME="Buildroot 2012.02-rc1"
-
-For more details, see:
-
-http://0pointer.de/public/systemd-man/os-release.html
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 7d8dd2e..8a8b676 100644
---- a/Makefile
-+++ b/Makefile
-@@ -477,7 +477,13 @@ endif
- 	else \
- 		/sbin/ldconfig -r $(TARGET_DIR); \
- 	fi
--	echo $(BR2_VERSION_FULL) > $(TARGET_DIR)/etc/br-version
-+	( \
-+		echo "NAME=Buildroot"; \
-+		echo "VERSION=$(BR2_VERSION_FULL)"; \
-+		echo "ID=buildroot"; \
-+		echo "VERSION_ID=$(BR2_VERSION)"; \
-+		echo "PRETTY_NAME=\"Buildroot $(BR2_VERSION)\"" \
-+	) >  $(TARGET_DIR)/etc/os-release
- 
- ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
- 	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 60cebbe..2ab0fc8 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.22"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.23"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.7"		if BR2_KERNEL_HEADERS_3_2
++	default "3.2.9"		if BR2_KERNEL_HEADERS_3_2
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.22-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.23-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.22-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.23-headers_install-fix-__packed-in-exported-kernel-head.patch
