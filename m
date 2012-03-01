@@ -1,46 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 1 Mar 2012 17:59:21 +0100
-Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
- device (flash drive)
-In-Reply-To: <jio6ql$25v$1@dough.gmane.org>
-References: <jio6ql$25v$1@dough.gmane.org>
-Message-ID: <20120301175921.5811b398@skate>
+Date: Thu, 1 Mar 2012 18:00:35 +0100
+Subject: [Buildroot] Why web search engine wrong for the Buildroot URL
+In-Reply-To: <CABMxt4icro4d6uuV3nZmt2eeRSHQs20fY1gKhZVYvnCV6=b3Bw@mail.gmail.com>
+References: <CABMxt4icro4d6uuV3nZmt2eeRSHQs20fY1gKhZVYvnCV6=b3Bw@mail.gmail.com>
+Message-ID: <20120301180035.159ef8b2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 01 Mar 2012 17:06:44 +0100,
-Willy <willy@willygroup.org> a ?crit :
+Le Thu, 1 Mar 2012 17:17:59 +0100,
+Mohamed HAMZAOUI <requinham@gmail.com> a ?crit :
 
-> I have created my system images (iso and ext2) and I would put one of 
-> them in the flash drive of the target system.
-> 
-> So far I've used unetbootin to create a bootable system which loaded
-> in RAM, now the image is too big for my RAM.
-> 
-> Now I've used dd to put my image in the flash drive:
-> sudo dd if=rootfs.ext2 of=/dev/sdc1
-> 
-> Then when the machine starts I got the error:
-> 
-> Missing operating system
-> DISK BOOT FAILURE, PLEASE INSERT...
+> I noticed that all research results on Google or Bing for Buildroot is
+> based on this URL: http://buildroot.uclibc.org  and it does not work!
+> Using http://buildroot.org it works.
+> Is this normal ?
 
-Yes, you need a bootloader.
-
-> I "think" I've installed grub on my buildroot image
-> ( package BR2_TARGET_GRUB [=y] ).
-> How can I test if grub is properly installed and how can I setup it?
-
-You need to run grub so that it installs itself on your /dev/sdc
-device. Something like:
-
-printf "device (hd0) /dev/sdc\nroot (hd0,0)\nsetup (hd0)\nquit\n" | output/staging/sbin/grub --device-map=/dev/null --no-floppy
-
-Let us know if that works. We should certainly extend the documentation
-with more details about this.
+Both URL works. It's only that the uclibc.org domain name has been
+migrated and therefore people are experiencing issues while trying to
+access it. From here, at the moment of writing this e-mail, both URLs
+give access to the exact same website.
 
 Best regards,
 
