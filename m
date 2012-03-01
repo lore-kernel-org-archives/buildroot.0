@@ -1,49 +1,51 @@
-From: =?UTF-8?Q?=C3=89ric_ALBER?= <eric.alber@gmail.com>
-Date: Thu, 1 Mar 2012 12:12:01 +0100
-Subject: [Buildroot] uClibc missing symbols (undefined reference to
-	`__fini_array_end')
-In-Reply-To: <201203010030.08802.arnout@mind.be>
-References: <CAGDZK6Ho6M+p4gpxHTqz8F7Jnwzo3b4KSWavh4DJ_XSb5Dp5fw@mail.gmail.com>
- <201203010027.33790.arnout@mind.be>
- <201203010030.08802.arnout@mind.be>
-Message-ID: <CAGDZK6HcXVAB+ryabp7sH_-USMNRG9XJR1rw9At7D6is++uTWQ@mail.gmail.com>
+From: bifferos <bifferos@yahoo.co.uk>
+Date: Thu, 1 Mar 2012 11:13:30 +0000 (GMT)
+Subject: [Buildroot] Kernel and buildroot in 1MB
+In-Reply-To: <20120301085010.1cec8907@skate>
+References: <4F4EC83C.7090208@yahoo.co.uk> <20120301085010.1cec8907@skate>
+Message-ID: <1330600410.23056.YahooMailNeo@web132105.mail.ird.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot Arnout !
-I didn't realize gcc was trying to link with /usr/lib/libc.a instead of
-/lib/libc.so.0
-I just tried by creating a symlink /usr/lib/libc.so -> /lib/libc.so.0 and
-everything work now.
 
-Again, thanks for your help :)
 
-2012/3/1 Arnout Vandecappelle <arnout@mind.be>
+----- Original Message -----
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> To: buildroot at busybox.net
+> Cc: 
+> Sent: Thursday, 1 March 2012, 7:50
+> Subject: Re: [Buildroot] Kernel and buildroot in 1MB
+> 
+> Hello,
+> 
+> Le Thu, 01 Mar 2012 00:52:12 +0000,
+> bifferos <bifferos@yahoo.co.uk> a ?crit :
+> 
+>>  So far I have been using buildroot only to extract the busybox binary 
+>>  and use it with my own hand-crafted rootfs, because pretty much any 
+>>  binaries other than busybox put me over the limit.? It would be nice
+>>  to use the buildroot filesystem as generated, so my question is
+>>  this:? If I build a busybox statically linked to uclibc, how can I
+>>  remove *all* the other binaries, e.g. uclibc .so?? Or does the build
+>>  system not support that?
+> 
+> Normally BR2_PREFER_STATIC_LIB=y should give you a system with no
+> shared libraries, and everything linked statically. However, it is not
+> widely, so there might be issues, but we might be interested in fixing
+> them.
 
-> On Thursday 01 March 2012 00:27:33 Arnout Vandecappelle wrote:
-> >  You do get
-> > /usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.2/../../../libc.so
-> > on your target, right?  It's copied in by target-finalize.
->
->  Actually, it's not...  There's your bug!  Give me a minute to prepare
-> a patch.
->
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
-> Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120301/4786e843/attachment-0001.html>
+Thanks, I will play with that and report back.
+
+> That said, it's probably quite difficult these days to build a system
+> for which the kernel+root filesystem fits within 1 MB, as your e-mail
+> topic seems to suggest.
+
+I wouldn't say it's difficult.? I'm using such a system right now to do 
+something useful and, it's actually about 800K (kernel + initrd) system.? 
+I wrote up some notes here: 
+https://sites.google.com/site/bifferboard/Home/boards-with-1mb-flash/buildroot
+regards,
+Biff.
