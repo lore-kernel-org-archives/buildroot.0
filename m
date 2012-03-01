@@ -1,130 +1,49 @@
-From: Fabio Porcedda <fabio.porcedda@telit.com>
-Date: Thu,  1 Mar 2012 11:58:39 +0100
-Subject: [Buildroot] [PATCH v5] busybox: add watchdog daemon startup script
-Message-ID: <1330599519-5205-1-git-send-email-fabio.porcedda@telit.com>
+From: =?UTF-8?Q?=C3=89ric_ALBER?= <eric.alber@gmail.com>
+Date: Thu, 1 Mar 2012 12:12:01 +0100
+Subject: [Buildroot] uClibc missing symbols (undefined reference to
+	`__fini_array_end')
+In-Reply-To: <201203010030.08802.arnout@mind.be>
+References: <CAGDZK6Ho6M+p4gpxHTqz8F7Jnwzo3b4KSWavh4DJ_XSb5Dp5fw@mail.gmail.com>
+ <201203010027.33790.arnout@mind.be>
+ <201203010030.08802.arnout@mind.be>
+Message-ID: <CAGDZK6HcXVAB+ryabp7sH_-USMNRG9XJR1rw9At7D6is++uTWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@telit.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Changes for v5:
-	 - Add the Acked-by: Arnout Vandecappelle
+Thanks a lot Arnout !
+I didn't realize gcc was trying to link with /usr/lib/libc.a instead of
+/lib/libc.so.0
+I just tried by creating a symlink /usr/lib/libc.so -> /lib/libc.so.0 and
+everything work now.
 
-Changes for v4:
- 	 - Add the config modifier to force-enable the watchdog daemon,
-	   as asked by Arnout Vandecappelle.
+Again, thanks for your help :)
 
- Changes for v3:
-         - Changed the default value in the script,
-           as asked by Jean-Christophe.
+2012/3/1 Arnout Vandecappelle <arnout@mind.be>
 
- Changes for v2:
-         - Add the option to set the reset frequency,
-           as asked by Arnout Vandecappelle.
-
- package/busybox/Config.in   |   17 +++++++++++++++++
- package/busybox/S15watchdog |   20 ++++++++++++++++++++
- package/busybox/busybox.mk  |   15 +++++++++++++++
- 3 files changed, 52 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/S15watchdog
-
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index c206509..9d7257b 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -62,6 +62,23 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  Show packages in menuconfig that are potentially also provided
- 	  by busybox.
- 
-+config BR2_PACKAGE_BUSYBOX_WATCHDOG
-+	bool "Install the watchdog daemon startup script"
-+	help
-+	  Install the watchdog daemon startup script,
-+	  that just start at the boot the busybox watchdog daemon.
-+
-+if BR2_PACKAGE_BUSYBOX_WATCHDOG
-+
-+config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
-+	int "Delay between reset"
-+	default "5"
-+	help
-+	  Select the number of seconds between each
-+	  reset of the watchdog (default 5)
-+
-+endif
-+
- endif
- 
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
-diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
-new file mode 100644
-index 0000000..7f1110c
---- /dev/null
-+++ b/package/busybox/S15watchdog
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+#
-+# Start watchdog
-+#
-+
-+case "$1" in
-+ start)
-+	echo "Starting watchdog..."
-+	watchdog -t PERIOD /dev/watchdog
-+	;;
-+  stop)
-+	;;
-+  restart|reload)
-+	;;
-+  *)
-+	echo $"Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 59448d5..1d988f8 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -142,6 +142,19 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
- endef
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
-+define BUSYBOX_SET_WATCHDOG
-+        $(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
-+	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
-+		install -D -m 0755 package/busybox/S15watchdog \
-+			$(TARGET_DIR)/etc/init.d/S15watchdog && \
-+		sed -i s/PERIOD/$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD)/ \
-+			$(TARGET_DIR)/etc/init.d/S15watchdog
-+endef
-+endif
-+
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -155,6 +168,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_NETKITTELNET)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_DISABLE_MMU_APPLETS)
-+	$(BUSYBOX_SET_WATCHDOG)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
-@@ -172,6 +186,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-+	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- endef
- 
- define BUSYBOX_UNINSTALL_TARGET_CMDS
--- 
-1.7.9
+> On Thursday 01 March 2012 00:27:33 Arnout Vandecappelle wrote:
+> >  You do get
+> > /usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.2/../../../libc.so
+> > on your target, right?  It's copied in by target-finalize.
+>
+>  Actually, it's not...  There's your bug!  Give me a minute to prepare
+> a patch.
+>
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120301/4786e843/attachment-0001.html>
