@@ -1,42 +1,39 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 2 Mar 2012 10:16:53 +0100
-Subject: [Buildroot] DL_TOOLS_DEPENDENCIES and PRIMARY_SITE
-Message-ID: <CAAXf6LXfd_w5muFabHEFxYKgCFSsrsCCX0Cqibpfz0o7NZt1wQ@mail.gmail.com>
+Date: Fri, 2 Mar 2012 10:18:04 +0100
+Subject: [Buildroot] Why web search engine wrong for the Buildroot URL
+In-Reply-To: <878vjjjsza.fsf@macbook.be.48ers.dk>
+References: <CABMxt4icro4d6uuV3nZmt2eeRSHQs20fY1gKhZVYvnCV6=b3Bw@mail.gmail.com>
+ <20120301180035.159ef8b2@skate>
+ <877gz46ozq.fsf@macbook.be.48ers.dk>
+ <CAAXf6LUS1GcnxY=+GV9OiofsF-ovXmc8YXoUiVNdU2BFrFoj+Q@mail.gmail.com>
+ <878vjjjsza.fsf@macbook.be.48ers.dk>
+Message-ID: <CAAXf6LXWHDF=aiVSvmbRJuh1rJ7a86tw-Bgbqr1EL+=DpxkygA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, Mar 2, 2012 at 9:40 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>
+> ?>> The buildroot.uclibc.org is a "legacy" address from before we had our
+> ?>> own domain.
+>
+> ?Thomas> It seems we have both a .net and .org address now. The announcements
+> ?Thomas> of 2012.02 use the .net address.
+>
+> Yes. I bought buildroot.net in early 2009, and some time later (mid 2009 I
+> think) the owner of buildroot.org transferred control (not ownership)
+> over to us.
+>
+> I've used .net addresses in the announcements since 2009.
+>
+> ?Thomas> However, personally I would prefer the .org address, which is more
+> ?Thomas> common in open-source projects in my (subjective) experience.
+>
+> The reason for .net is mainly historical, and because of the (slight)
+> risk that Earl Levine (buildroot.org owner) will run away with it. i
+> don't feel strongly about it, but .net atleast matches busybox.net ;)
 
-Suppose you have a PRIMARY_SITE set for direct retrieval of source
-tarballs instead of fetching them from the web, for example because
-you want a self-contained buildroot distribution to give to others.
-
-If you select a package that has git/svn/bzr/... as site method, then
-the dependencies system will check for the availability of the
-git/svn/bzr tools.
-In case all tarballs are present on the PRIMARY_SITE, this check is
-actually not needed and annoying, because you would have to e.g.
-install 'git' even though it will never be used.
-
-For me this is a problem, as the machines on which our builds are made
-do not contain tools like git, and it's difficult to update them all.
-
-Some suggested solutions:
-1. change support/dependencies/dependencies.sh to output a warning
-instead of an error for the DL_TOOLS. If the tool cannot be found when
-used, the shell will throw an error.
-
-2. when PRIMARY_SITE is set, don't fill DL_TOOLS at all (so don't
-check in support/dependencies), and let the shell handle a missing
-tool.
-
-3. Don't check the DL_TOOLS in support/dependencies upfront, but
-rather in the DOWNLOAD function when you actually need a certain tool.
-
-I'm looking forward to your ideas about this.
-
-Thanks,
- Thomas
+while .org matches uclibc.org ;)
