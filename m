@@ -1,40 +1,37 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 02 Mar 2012 18:34:26 +0100
-Subject: [Buildroot] request of help
-In-Reply-To: <14613032.5504381330703169605.JavaMail.defaultUser@defaultHost>
-References: <14613032.5504381330703169605.JavaMail.defaultUser@defaultHost>
-Message-ID: <4F5104A2.1090808@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  2 Mar 2012 15:43:29 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-firmware: update definition for
+	atheros ar9271
+Message-ID: <1330713810-12947-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+ar9271.fw is the old convention for the firmware.
+Starting with kernel 3.0 the new convention is htc_9271.fw which is a
+newer version of the firmware so symlinking won't do it and there are no
+guarantees that the newer firmware will work with the older driver
+either.
 
-the Buildroot site is experiencing some DNS issues. This has been reported by
-a few other users. The problem should be resolved now, and start working again
-in a few hours or so, depending on DNS update times.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-firmware/linux-firmware.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Luca
-
-
-
-luisa.tognon at libero.it wrote:
-> may some one help me:
-> buildroot at busybox.net doesnt work on mi firefox browser;
-> the git give me back this error:
-> git clone git://git.buildroot.net/buildroot
-> Initialized empty Git repository in /home/novello/buildroot/.git/
-> fatal: Unable to look up git.buildroot.net (port 9418) (Name or service not
-> known)
->
-> I have made a check  mi adsl line is working and the firewall is open,
-> best regards
-> Novello G,
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index eedef2f..8d1dd00 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -23,7 +23,7 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
+ 
+ # ar9271
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271) += \
+-	LICENCE.atheros_firmware ar9271.fw
++	LICENCE.atheros_firmware ar9271.fw htc_9271.fw
+ 
+ # wl127x
+ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
+-- 
+1.7.3.4
