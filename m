@@ -1,61 +1,41 @@
-From: Mohamed HAMZAOUI <requinham@gmail.com>
-Date: Fri, 2 Mar 2012 00:56:45 +0100
-Subject: [Buildroot] Why web search engine wrong for the Buildroot URL
-In-Reply-To: <877gz46ozq.fsf@macbook.be.48ers.dk>
-References: <CABMxt4icro4d6uuV3nZmt2eeRSHQs20fY1gKhZVYvnCV6=b3Bw@mail.gmail.com>
- <20120301180035.159ef8b2@skate>
- <877gz46ozq.fsf@macbook.be.48ers.dk>
-Message-ID: <CABMxt4hbMDd0jfBb8cnvoAo+ze2LCU0vOF2wAhoTR2=kqrfO1g@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 02 Mar 2012 07:24:08 +0100
+Subject: [Buildroot] [Uclibc-admins] [support.osuosl.org #18542] DNS for
+	busybox and uclibc
+In-Reply-To: <rt-3.6.3-18415-1330645594-1915.18542-6-0@osuosl.org> (Jordan
+ Evans via's message of "Thu, 01 Mar 2012 23:46:35 +0000")
+References: <RT-Ticket-18542@osuosl.org>
+ <20110223180353.GA12909@mail.codepoet.org>
+ <87k4gqy3l7.fsf@macbook.be.48ers.dk> <1298513604.9591.4.camel@here>
+ <rt-3.6.3-28144-1330131070-1967.18542-6-0@osuosl.org>
+ <rt-3.6.3-4281-1330376278-43.18542-6-0@osuosl.org>
+ <20120228002705.GA4145@mail.codepoet.org>
+ <rt-3.6.3-29186-1330388828-305.18542-6-0@osuosl.org>
+ <20120301152859.GA25060@mail.codepoet.org>
+ <rt-3.6.3-25326-1330615757-951.18542-6-0@osuosl.org>
+ <rt-3.6.3-18415-1330645594-1915.18542-6-0@osuosl.org>
+Message-ID: <87y5rj5xmf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just for information, I'm connected from Paris and when i open the
-http://buildroot.uclibc.org i have an error and when i ping or nmap it, i
-have "failed to resolve the host name" and the problem persist on all my
-hosts (at work, at home...) but we have no problem with buidroot.org.
-If it's a DNS problem, i think it could be resolve after some hours.
-i will inform you when it will be operational.
+>>>>> "Jordan" == Jordan Evans via RT <support@osuosl.org> writes:
 
-Best regards
-Mohamed
+FYI,
 
-On Thu, Mar 1, 2012 at 9:32 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+The DNS issues should now be resolved.
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> writes:
->
->  Thomas> Le Thu, 1 Mar 2012 17:17:59 +0100,
->  Thomas> Mohamed HAMZAOUI <requinham@gmail.com> a ?crit :
->
->  >> I noticed that all research results on Google or Bing for Buildroot is
->  >> based on this URL: http://buildroot.uclibc.org  and it does not work!
->  >> Using http://buildroot.org it works.
->  >> Is this normal ?
->
->  Thomas> Both URL works. It's only that the uclibc.org domain name has
-> been
->  Thomas> migrated and therefore people are experiencing issues while
-> trying to
->  Thomas> access it. From here, at the moment of writing this e-mail, both
-> URLs
->  Thomas> give access to the exact same website.
->
-> FYI, The DNS issues have been reported to the Osuosl.org admins, so I
-> expect it will get resolved soon.
->
-> The buildroot.uclibc.org is a "legacy" address from before we had our
-> own domain.
->
-> --
-> Bye, Peter Korsgaard
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120302/05d383bd/attachment-0001.html>
+ Jordan> Looks like buildroot.uclibc.org had two entries, one a pointer
+ Jordan> and one a cname. I went ahead and removed the cname to match
+ Jordan> the original entries you had before. Sorry about that.
+
+ Jordan> That was caused by the fact that we actually already had most of your 
+ Jordan> dns entries in our system, I only had to add a few by hand the other 
+ Jordan> day.
+
+ Jordan> --Jordan Evans
+
+-- 
+Bye, Peter Korsgaard
