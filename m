@@ -1,34 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Mar 2012 23:00:01 +0000
-Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
-	device (flash drive)
-In-Reply-To: <20120301175921.5811b398@skate>
-References: <jio6ql$25v$1@dough.gmane.org> <20120301175921.5811b398@skate>
-Message-ID: <201203022300.01500.arnout@mind.be>
+Date: Fri, 2 Mar 2012 22:41:55 +0000
+Subject: [Buildroot] adding a new machine configuration
+In-Reply-To: <4F50F97E.3070203@gmail.com>
+References: <4F4F74A4.2060909@gmail.com> <20120301143934.073f50a0@skate>
+ <4F50F97E.3070203@gmail.com>
+Message-ID: <201203022241.55940.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 01 March 2012 16:59:21 Thomas Petazzoni wrote:
-> You need to run grub so that it installs itself on your /dev/sdc
-> device. Something like:
-> 
-> printf "device (hd0) /dev/sdc\nroot (hd0,0)\nsetup (hd0)\nquit\n" | output/staging/sbin/grub --device-map=/dev/null --no-floppy
-> 
-> Let us know if that works. We should certainly extend the documentation
-> with more details about this.
+On Friday 02 March 2012 16:46:54 Roland wrote:
+> Which is better version...   I'm specifically interested in the IF 
+> section where BR2_TARGET_ROOTFS_UBI_ALIGNMENT_DEFINED is used.
 
- It probably won't work if your target is uclibc-based (unless your host
-happens to be uclibc-based as well :-).  You'd need a host-grub to get
-that right.  I tried to do that half a year ago, but it wasn't so easy -
-unfortunately I don't remember why not.  Could be a problem with 32/64 bit.
-Or with ccache.
+ Option 3 :-)
+
+ Remove the vol_alignment=1 from ubinize.cfg, and do the 
+'echo vol_alignment=...' unconditionally.  Make sure that in Config.in,
+the BR2_TARGET_ROOTFS_UBI_ALIGNMENT defaults to 1 and you get exactly
+the same behaviour by default.
+
+ By the way, when you send your patches, please use git send-email
+(see the man page for how to set it up with GMail).  GMail destroys
+the formatting of the patch, so it won't apply.  And we prefer not
+to get them as attachments because that makes them difficult to review.
+
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
