@@ -1,37 +1,72 @@
-From: Stephan Thamm <thammi@chaossource.net>
-Date: Fri, 2 Mar 2012 19:52:03 +0100
-Subject: [Buildroot] [PATCH] boost: Add coment when C++ is missing
-Message-ID: <201203021952.03453.thammi@chaossource.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  2 Mar 2012 16:12:30 -0300
+Subject: [Buildroot] [PATCH] toolchain/gcc: bump 4.6.x series to 4.6.3
+Message-ID: <1330715550-13211-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-a coworker just searched boost in the current release and was not able to find 
-it. He even found out which section it was in but he was missing C++ support 
-so he didn't see anything.
-
-This patch would have saved him much time:
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/boost/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ .../gcc/{4.6.2 => 4.6.3}/100-uclibc-conf.patch     |    0
+ .../{4.6.2 => 4.6.3}/301-missing-execinfo_h.patch  |    0
+ .../gcc/{4.6.2 => 4.6.3}/302-c99-snprintf.patch    |    0
+ .../305-libmudflap-susv3-legacy.patch              |    0
+ .../810-arm-softfloat-libgcc.patch                 |    0
+ .../{4.6.2 => 4.6.3}/820-arm-unbreak-armv4t.patch  |    0
+ .../powerpc-link-with-math-lib.patch.conditional   |    0
+ toolchain/gcc/Config.in                            |    2 +-
+ 8 files changed, 1 insertions(+), 1 deletions(-)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/100-uclibc-conf.patch (100%)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/301-missing-execinfo_h.patch (100%)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/302-c99-snprintf.patch (100%)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/305-libmudflap-susv3-legacy.patch (100%)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/810-arm-softfloat-libgcc.patch (100%)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/820-arm-unbreak-armv4t.patch (100%)
+ rename toolchain/gcc/{4.6.2 => 4.6.3}/powerpc-link-with-math-lib.patch.conditional (100%)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 7598d02..eac91dc 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -8,6 +8,9 @@ config BR2_PACKAGE_BOOST
+diff --git a/toolchain/gcc/4.6.2/100-uclibc-conf.patch b/toolchain/gcc/4.6.3/100-uclibc-conf.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.2/100-uclibc-conf.patch
+rename to toolchain/gcc/4.6.3/100-uclibc-conf.patch
+diff --git a/toolchain/gcc/4.6.2/301-missing-execinfo_h.patch b/toolchain/gcc/4.6.3/301-missing-execinfo_h.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.2/301-missing-execinfo_h.patch
+rename to toolchain/gcc/4.6.3/301-missing-execinfo_h.patch
+diff --git a/toolchain/gcc/4.6.2/302-c99-snprintf.patch b/toolchain/gcc/4.6.3/302-c99-snprintf.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.2/302-c99-snprintf.patch
+rename to toolchain/gcc/4.6.3/302-c99-snprintf.patch
+diff --git a/toolchain/gcc/4.6.2/305-libmudflap-susv3-legacy.patch b/toolchain/gcc/4.6.3/305-libmudflap-susv3-legacy.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.2/305-libmudflap-susv3-legacy.patch
+rename to toolchain/gcc/4.6.3/305-libmudflap-susv3-legacy.patch
+diff --git a/toolchain/gcc/4.6.2/810-arm-softfloat-libgcc.patch b/toolchain/gcc/4.6.3/810-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.2/810-arm-softfloat-libgcc.patch
+rename to toolchain/gcc/4.6.3/810-arm-softfloat-libgcc.patch
+diff --git a/toolchain/gcc/4.6.2/820-arm-unbreak-armv4t.patch b/toolchain/gcc/4.6.3/820-arm-unbreak-armv4t.patch
+similarity index 100%
+rename from toolchain/gcc/4.6.2/820-arm-unbreak-armv4t.patch
+rename to toolchain/gcc/4.6.3/820-arm-unbreak-armv4t.patch
+diff --git a/toolchain/gcc/4.6.2/powerpc-link-with-math-lib.patch.conditional b/toolchain/gcc/4.6.3/powerpc-link-with-math-lib.patch.conditional
+similarity index 100%
+rename from toolchain/gcc/4.6.2/powerpc-link-with-math-lib.patch.conditional
+rename to toolchain/gcc/4.6.3/powerpc-link-with-math-lib.patch.conditional
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index acaa3a8..349d9df 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -59,7 +59,7 @@ config BR2_GCC_VERSION
+ 	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
+ 	default "4.4.6"     if BR2_GCC_VERSION_4_4_X
+ 	default "4.5.3"     if BR2_GCC_VERSION_4_5_X
+-	default "4.6.2"     if BR2_GCC_VERSION_4_6_X
++	default "4.6.3"     if BR2_GCC_VERSION_4_6_X
+ 	default $BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
  
-          http://www.boost.org/
- 
-+comment "boost requires a toolchain with C++ support enabled"
-+       depends on !BR2_INSTALL_LIBSTDCPP
-+
- if BR2_PACKAGE_BOOST
- 
- config BR2_PACKAGE_BOOST_MULTITHREADED
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
 -- 
-1.7.9
+1.7.3.4
