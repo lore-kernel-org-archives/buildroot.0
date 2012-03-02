@@ -1,43 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Mar 2012 15:12:09 +0000
-Subject: [Buildroot] [PATCH] boost: Add coment when C++ is missing
-In-Reply-To: <201203021952.03453.thammi@chaossource.net>
-References: <201203021952.03453.thammi@chaossource.net>
-Message-ID: <201203031512.11130.arnout@mind.be>
+Date: Fri, 2 Mar 2012 23:00:01 +0000
+Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
+	device (flash drive)
+In-Reply-To: <20120301175921.5811b398@skate>
+References: <jio6ql$25v$1@dough.gmane.org> <20120301175921.5811b398@skate>
+Message-ID: <201203022300.01500.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 02 March 2012 18:52:03 Stephan Thamm wrote:
-> Hi,
-> a coworker just searched boost in the current release and was not able to find 
-> it. He even found out which section it was in but he was missing C++ support 
-> so he didn't see anything.
+On Thursday 01 March 2012 16:59:21 Thomas Petazzoni wrote:
+> You need to run grub so that it installs itself on your /dev/sdc
+> device. Something like:
 > 
-> This patch would have saved him much time:
+> printf "device (hd0) /dev/sdc\nroot (hd0,0)\nsetup (hd0)\nquit\n" | output/staging/sbin/grub --device-map=/dev/null --no-floppy
+> 
+> Let us know if that works. We should certainly extend the documentation
+> with more details about this.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Thank you for this patch.  Even small patches like this are much 
-appreciated!
-
- Please add a Signed-off-by tag on your patch, i.e. a line saying
-
-Signed-off-by: Your Name <your@email.address>
-
-This is a short way for you to assert that you are entitled to contribute
-the patch under buildroot's GPL license.  See 
-http://kerneltrap.org/files/Jeremy/DCO.txt for more details.
-
- Also, e-mail conversation that shouldn't be included in the commit
-message (like all your text above) should be preceded by a line 
-containing only three dashes.  This allows us to run your mail
-through 'git am' without any further manual processing required.
+ It probably won't work if your target is uclibc-based (unless your host
+happens to be uclibc-based as well :-).  You'd need a host-grub to get
+that right.  I tried to do that half a year ago, but it wasn't so easy -
+unfortunately I don't remember why not.  Could be a problem with 32/64 bit.
+Or with ccache.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
