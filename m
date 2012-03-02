@@ -1,32 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Mar 2012 22:41:55 +0000
-Subject: [Buildroot] adding a new machine configuration
-In-Reply-To: <4F50F97E.3070203@gmail.com>
-References: <4F4F74A4.2060909@gmail.com> <20120301143934.073f50a0@skate>
- <4F50F97E.3070203@gmail.com>
-Message-ID: <201203022241.55940.arnout@mind.be>
+Date: Fri, 2 Mar 2012 22:29:21 +0000
+Subject: [Buildroot] [git commit] Merge branch 'next'
+In-Reply-To: <20120301130637.442C290BF7@busybox.osuosl.org>
+References: <20120301130637.442C290BF7@busybox.osuosl.org>
+Message-ID: <201203022229.21730.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 02 March 2012 16:46:54 Roland wrote:
-> Which is better version...   I'm specifically interested in the IF 
-> section where BR2_TARGET_ROOTFS_UBI_ALIGNMENT_DEFINED is used.
+On Thursday 01 March 2012 13:05:41 Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=7a58ed7317573f23da2e2ad822003705db85a58f
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Option 3 :-)
-
- Remove the vol_alignment=1 from ubinize.cfg, and do the 
-'echo vol_alignment=...' unconditionally.  Make sure that in Config.in,
-the BR2_TARGET_ROOTFS_UBI_ALIGNMENT defaults to 1 and you get exactly
-the same behaviour by default.
-
- By the way, when you send your patches, please use git send-email
-(see the man page for how to set it up with GMail).  GMail destroys
-the formatting of the patch, so it won't apply.  And we prefer not
-to get them as attachments because that makes them difficult to review.
-
+ It's annoying that all commit mails are resent when you merge next into
+master.  Any chance to avoid that?  E.g. temporarily disabling the commit
+mails when you push the merge?
 
  Regards,
  Arnout
