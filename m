@@ -1,33 +1,23 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Sat, 3 Mar 2012 21:13:38 -0200
-Subject: [Buildroot] [PATCH 1/2] openssl: Fix build on ARM with GCC 4.6.x
-In-Reply-To: <20120301181031.GA3915@tarshish>
-References: <1330558078-3978-1-git-send-email-ismael.luceno@gmail.com>
- <20120301053726.GA4978@sapphire.tkos.co.il>
- <20120301153201.58f81290@gmail.com>
- <20120301181031.GA3915@tarshish>
-Message-ID: <20120303211338.14fe3545@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun,  4 Mar 2012 00:45:05 +0100
+Subject: [Buildroot] Test infrastructure
+Message-ID: <1330818307-22115-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 1 Mar 2012 20:10:32 +0200
-Baruch Siach <baruch@tkos.co.il> wrote:
-<...> 
-> But BR2_GCC_VERSION_4_6_X is only available when selecting internal 
-> toolchains. See toolchain/toolchain-buildroot/Config.in.
+ This patch series adds test infrastructure to buildroot.  On the
+buildroot developer day we had a brief discussion about testing.  The
+main conclusion was that we'd set up a site to log test results (an
+action point for Peter that is still open).  To make it easier for
+people to contribute to those test results, these patches create some
+test infrastructure.
 
-Would setting it (on the command line) produce any side-effect?
+ For the time being, it contains just the defconfigs.  The idea is to
+add more test configurations.  For instance, Peter and ThomasP could
+add the test configurations they already use.
 
-> Doesn't the patch from r183512 fix this bug?
-
-What is "r183512" supposed to mean?
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 490 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120303/0f46aab0/attachment.asc>
+ Regards,
+ Arnout
