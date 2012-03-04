@@ -1,35 +1,22 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun,  4 Mar 2012 22:09:05 +0100
-Subject: [Buildroot] [PATCH] Fix microperl
-Message-ID: <1330895345-16705-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 04 Mar 2012 22:09:43 +0100
+Subject: [Buildroot] [PATCH] lite: Remove excess slashes from pkg-config
+	file.
+In-Reply-To: <CAFbHwiSOquRb-DqUo6-gwbdZguAtYqPt53H6=WWcnKfddyvdyw@mail.gmail.com>
+ (Will Newton's message of "Wed, 15 Feb 2012 16:26:43 +0000")
+References: <CAFbHwiSOquRb-DqUo6-gwbdZguAtYqPt53H6=WWcnKfddyvdyw@mail.gmail.com>
+Message-ID: <87eht8vzs8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It misses -lm when compiling miniperl
+>>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-This is actually a quite old perl version, and it's not even converted
-to GENTARGETS.  Should we deprecate it?
+ Will> Signed-off-by: Will Newton <will.newton@imgtec.com>
 
- package/microperl/microperl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index b68e825..de5ecd6 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -32,7 +32,7 @@ $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
- 
- $(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
- 	# we need to build a perl for the host just for Errno.pm
--	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de  )
-+	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de -A libs='-lm' )
- 	touch $@
- 
- 
 -- 
-tg: (dca6e03..) t/fix-microperl (depends on: master)
+Bye, Peter Korsgaard
