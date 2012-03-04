@@ -1,36 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 4 Mar 2012 20:34:22 +0100
-Subject: [Buildroot] [git commit] glib-networking: fix build without gnutls
-Message-ID: <20120304193501.99DC890CE0@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 4 Mar 2012 21:54:05 +0100
+Subject: [Buildroot] [PATCHv3] qt: Add option to build and install tools
+	on the target
+In-Reply-To: <1330887941-29437-1-git-send-email-ismael.luceno@gmail.com>
+References: <1330887941-29437-1-git-send-email-ismael.luceno@gmail.com>
+Message-ID: <201203042154.05630.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b38f41736e33df75a802828dfc5f6673f6419e8b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sunday 04 March 2012 20:05:41 Ismael Luceno wrote:
+> 
+> Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
 
-configure errors out when it doesn't find gnutls unless explicitly
-disabled.
+ If you make several versions of a patch it's useful to have a changelog
+that specifies what you changed compared to the previous version.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/glib-networking/glib-networking.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+> +menuconfig BR2_PACKAGE_QT_TOOLS
+> +	bool "Compile and install tools"
+> +	depends on BR2_PACKAGE_QT_SQL_MODULE && BR2_PACKAGE_QT_GUI_MODULE
+> +	help
+> +	  SQL module is nedded to build, but only required at run-time by a
+> +	  few tools (assistant, designer, qmlviewer).
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index b1ad621..47415d8 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -16,7 +16,9 @@ GLIB_NETWORKING_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libin
- 
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- GLIB_NETWORKING_DEPENDENCIES += gnutls
--GLIB_NETWORKING_CONF_OPT = --with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+GLIB_NETWORKING_CONF_OPT += --with-libgcrypt-prefix=$(STAGING_DIR)/usr
-+else
-+GLIB_NETWORKING_CONF_OPT += --without-gnutls
- endif
- 
- $(eval $(call AUTOTARGETS))
+ nedded -> needed
+
+ This help text doesn't make much sense here; I meant as part of the
+"Tools need the SQL and GUI modules" comment.  But actually there it
+also doesn't make sense because nobody looks at the help text of a
+comment.
+
+ So maybe just leave it as a #-comment.
+
+[snip]
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
