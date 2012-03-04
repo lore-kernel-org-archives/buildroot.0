@@ -1,88 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Mar 2012 16:13:47 +0100
-Subject: [Buildroot] [PATCHv2] qt: Add option to build and install tools
-	on the target
-In-Reply-To: <1330830287-1502-1-git-send-email-ismael.luceno@gmail.com>
-References: <1330830287-1502-1-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <201203041613.48008.arnout@mind.be>
+Date: Sun, 4 Mar 2012 16:20:53 +0100
+Subject: [Buildroot] core dependencies : xzcat
+In-Reply-To: <F61A9C053A5D4AF8913833CBFF49CED7@JohanW7>
+References: <F61A9C053A5D4AF8913833CBFF49CED7@JohanW7>
+Message-ID: <201203041620.54147.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 04 March 2012 04:04:47 Ismael Luceno wrote:
-> 
-> Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- A few comments below, but nothing critical.
-
-> ---
->  package/qt/Config.in |   23 +++++++++++++++++++++++
->  package/qt/qt.mk     |   10 ++++++++++
->  2 files changed, 33 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index 3a552d0..e2c7400 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -16,6 +16,29 @@ config BR2_PACKAGE_QT_DEBUG
->  	help
->  	  If unsure, say N.
+On Sunday 04 March 2012 14:45:06 Sagaert Johan wrote:
+> While package sourcecode is downloaded automatically , for the core dependencies you are on your own.
 >  
-> +menuconfig BR2_PACKAGE_QT_TOOLS
-> +	bool "Compile and install tools"
-> +	depends on BR2_PACKAGE_QT_SQL_MODULE && BR2_PACKAGE_QT_GUI_MODULE
+> Would be nice if the readme would contain a list of download sites for the core dependencies, or even better download them, 
+> it would of saved me 10 minutes of my life 
 
- This is annoying...  SQL is only needed for assistant and designer, not
-for qtconfig or qmlplugindump.  Is there a possibility to tell qt to just
-build the selected tools?  That probably requires hacking 
-tools/tools.pro...
+ I agree.  For many dependencies, we even have the host-packages already 
+available (e.g. ncurses).
 
- Maybe add to the help text of the comment, that sql isn't actually 
-needed except for building.
-
-
-> +
-> +if BR2_PACKAGE_QT_TOOLS
-> +
-> +config BR2_PACKAGE_QT_TOOLS_QTCONFIG
-> +       bool "qtconfig"
-> +       depends on BR2_PACKAGE_QT_GUI_X11
-
- Doesn't qtconfig work in qws?
-
-
-[snip]
-> @@ -514,6 +520,9 @@ endef
->  
->  QT_INSTALL_LIBS    += QtCore
->  QT_HOST_PROGRAMS   += moc rcc qmake lrelease
-> +QT_TARGET_PROGRAMS += $(if $(BR2_PACKAGE_QT_TOOLS_QTCONFIG),qtconfig) \
-> +		      $(if $(BR2_PACKAGE_QT_TOOLS_QMLVIEWER),qmlviewer) \
-> +		      $(if $(BR2_PACKAGE_QT_TOOLS_QMLPLUGINDUMP),qmlplugindump)
-
- Personally, I prefer the
-QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS_QTCONFIG) += qtconfig
-approach, but that's a matter of taste I guess.
-
->  
->  ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
->  QT_INSTALL_LIBS    += QtGui
-> @@ -583,6 +592,7 @@ define QT_INSTALL_STAGING_CMDS
->  	$(MAKE) -C $(@D) install
->  	mkdir -p $(HOST_DIR)/usr/bin
->  	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
-> +	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS)) $(TARGET_DIR)/usr/bin
-
- (so that would mean putting $(QT_TARGET_PROGRAMS-y) here)
-
->  	rm -rf $(HOST_DIR)/usr/mkspecs
->  	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
->  	$(QT_INSTALL_QT_CONF)
-> 
-
+ With the check-host-x infrastructure in place, it should be easier to
+resolve dependencies automatically.
 
  Regards,
  Arnout
