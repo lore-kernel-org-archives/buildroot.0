@@ -1,26 +1,29 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Mar 2012 11:57:15 +0100
-Subject: [Buildroot] Kconfig: "selects" vs. "depends on"
-In-Reply-To: <CAHXCMMKQjy0Z1Ozn0wu4r14_XQQMWyZTpq3B9kkzJNpj-iUgcw@mail.gmail.com>
-References: <20120304071855.3e6c03b5@gmail.com>
- <CAHXCMMKQjy0Z1Ozn0wu4r14_XQQMWyZTpq3B9kkzJNpj-iUgcw@mail.gmail.com>
-Message-ID: <201203041157.15326.arnout@mind.be>
+Date: Sun, 4 Mar 2012 12:00:21 +0100
+Subject: [Buildroot] Buildroot shared uclibc native compiler only links
+	statically
+In-Reply-To: <CAGmOteOykAc56k3F1w9Km+6FJ5wzM9WKTvyGWSxRCb7yZv2cew@mail.gmail.com>
+References: <CAGmOteOykAc56k3F1w9Km+6FJ5wzM9WKTvyGWSxRCb7yZv2cew@mail.gmail.com>
+Message-ID: <201203041200.21575.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 04 March 2012 11:11:58 Samuel Martin wrote:
-> 2012/3/4 Ismael Luceno <ismael.luceno@gmail.com>:
-> > Which should I use?
-> Afaik, "depends on" is transitive, whereas "select" is not, see [1] as ref.
+On Sunday 04 March 2012 09:03:58 PHilip RUshik wrote:
+> Hello,
+> If I build a buildroot system with uClibc as a shared library and with a
+> native compiler, the resulting native compiler works great most of the
+> time, but it always links with the static libc.a instead of the shared
+> library. Why does this happen, anybody know how to fix that?
 
- Actually, no.  Both of them are transitive, but only with themselves.  So
-a depends-on chain works, and a select chain works, but a mix of depends-on
-and select doesn't.  Bottom line is: if you use select, you should copy the
-depends-on statements of the symbol you select.  Which is one reason why I 
-claim we should use select as much as possible (to avoid mixing them).
+ This has just been solved on the list (but no patch is committed yet).
+Basically, the problem is that the symlink of /usr/lib/libc.so to 
+/lib/libc.so.0 isn't included in the target directory.
+
+ As a workaround, you can create that link manually:
+ln -s /lib/libc.so.0 target/usr/lib/libc.so
 
 
  Regards,
