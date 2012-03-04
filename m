@@ -1,89 +1,101 @@
 From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Sun,  4 Mar 2012 01:04:47 -0200
-Subject: [Buildroot] [PATCHv2] qt: Add option to build and install tools on
-	the target
-Message-ID: <1330830287-1502-1-git-send-email-ismael.luceno@gmail.com>
+Date: Sun,  4 Mar 2012 01:06:41 -0200
+Subject: [Buildroot] [PATCHv2] qt: X11 support
+Message-ID: <1330830401-1736-1-git-send-email-ismael.luceno@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also reworked the QT_QMAKE_SET macro, to make it work on all qmakespecs.
 
 Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
 ---
- package/qt/Config.in |   23 +++++++++++++++++++++++
- package/qt/qt.mk     |   10 ++++++++++
- 2 files changed, 33 insertions(+), 0 deletions(-)
+ package/qt/Config.in |   22 ++++++++++++++++++++++
+ package/qt/qt.mk     |   12 +++++++++---
+ 2 files changed, 31 insertions(+), 3 deletions(-)
 
 diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 3a552d0..e2c7400 100644
+index 3a552d0..ab0fc18 100644
 --- a/package/qt/Config.in
 +++ b/package/qt/Config.in
-@@ -16,6 +16,29 @@ config BR2_PACKAGE_QT_DEBUG
- 	help
- 	  If unsure, say N.
+@@ -85,6 +85,26 @@ config BR2_PACKAGE_QT_GUI_MODULE
+ 	  video output, or you don't require Qt GUI, say n.
  
-+menuconfig BR2_PACKAGE_QT_TOOLS
-+	bool "Compile and install tools"
-+	depends on BR2_PACKAGE_QT_SQL_MODULE && BR2_PACKAGE_QT_GUI_MODULE
+ if BR2_PACKAGE_QT_GUI_MODULE
 +
-+if BR2_PACKAGE_QT_TOOLS
++choice
++	prompt "GUI Backend"
++	help
++	  Select the graphic system, used to arbitrate screen access.
 +
-+config BR2_PACKAGE_QT_TOOLS_QTCONFIG
-+	bool "qtconfig"
-+	depends on BR2_PACKAGE_QT_GUI_X11
++config BR2_PACKAGE_QT_GUI_QWS
++	bool "QWS"
++	default y if !BR2_PACKAGE_XORG7
++	help
++	  QWS is a compact and efficient windowing system. Using it, Qt-based
++	  applications write directly to the Linux framebuffer, eliminating the
++	  need for the X Window System.
 +
-+config BR2_PACKAGE_QT_TOOLS_QMLVIEWER
-+	bool "qmlviewer"
-+	depends on BR2_PACKAGE_QT_DECLARATIVE
++config BR2_PACKAGE_QT_GUI_X11
++	depends on BR2_PACKAGE_XORG7
++	bool "X Window System"
++	default y if BR2_PACKAGE_XORG7
++endchoice
 +
-+config BR2_PACKAGE_QT_TOOLS_QMLPLUGINDUMP
-+	bool "qmlplugindump"
-+	depends on BR2_PACKAGE_QT_DECLARATIVE
-+
-+endif # BR2_PACKAGE_QT_TOOLS
-+
-+comment "Tools need the SQL and GUI modules"
-+	depends on !BR2_PACKAGE_QT_SQL_MODULE || !BR2_PACKAGE_QT_GUI_MODULE
-+
- config BR2_PACKAGE_QT_DEMOS
- 	bool "Compile and install demos and examples (with code)"
- 	help
+ menu "Pixel depths"
+ comment "Deselecting each option leads to Qt's default (8,16,32)"
+ 
+@@ -255,9 +275,11 @@ endchoice
+ 
+ source "package/qt/Config.sql.in"
+ if BR2_PACKAGE_QT_GUI_MODULE
++if BR2_PACKAGE_QT_GUI_QWS
+ source "package/qt/Config.gfx.in"
+ source "package/qt/Config.mouse.in"
+ source "package/qt/Config.keyboard.in"
++endif
+ 
+ config BR2_PACKAGE_QT_PHONON
+ 	bool "Phonon Module"
 diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 776eb63..ee36b8c 100644
+index 776eb63..c6fd292 100644
 --- a/package/qt/qt.mk
 +++ b/package/qt/qt.mk
-@@ -417,6 +417,12 @@ else
- QT_CONFIGURE_OPTS += -no-declarative
+@@ -220,7 +220,14 @@ else
+ QT_EMB_PLATFORM = generic
  endif
  
-+ifeq ($(BR2_PACKAGE_QT_TOOLS),y)
-+QT_CONFIGURE_OPTS += -make tools
++ifeq ($(BR2_PACKAGE_QT_GUI_X11),y)
++QT_SPEC = linux-g++
++QT_CONFIGURE_OPTS += -xplatform linux-g++ -arch $(QT_EMB_PLATFORM)
 +else
-+QT_CONFIGURE_OPTS += -nomake tools
++QT_SPEC = qws/linux-$(QT_EMB_PLATFORM)-g++
+ QT_CONFIGURE_OPTS += -embedded $(QT_EMB_PLATFORM)
 +endif
 +
- # ccache and precompiled headers don't play well together
- ifeq ($(BR2_CCACHE),y)
- QT_CONFIGURE_OPTS += -no-pch
-@@ -514,6 +520,9 @@ endef
  
- QT_INSTALL_LIBS    += QtCore
- QT_HOST_PROGRAMS   += moc rcc qmake lrelease
-+QT_TARGET_PROGRAMS += $(if $(BR2_PACKAGE_QT_TOOLS_QTCONFIG),qtconfig) \
-+		      $(if $(BR2_PACKAGE_QT_TOOLS_QMLVIEWER),qmlviewer) \
-+		      $(if $(BR2_PACKAGE_QT_TOOLS_QMLPLUGINDUMP),qmlplugindump)
+ ifneq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ QT_CONFIGURE_OPTS += -no-gui
+@@ -433,7 +440,7 @@ endif
+ # End of workaround.
  
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- QT_INSTALL_LIBS    += QtGui
-@@ -583,6 +592,7 @@ define QT_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) install
- 	mkdir -p $(HOST_DIR)/usr/bin
- 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
-+	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS)) $(TARGET_DIR)/usr/bin
- 	rm -rf $(HOST_DIR)/usr/mkspecs
- 	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
- 	$(QT_INSTALL_QT_CONF)
+ # Variable for other Qt applications to use
+-QT_QMAKE:=$(HOST_DIR)/usr/bin/qmake -spec qws/linux-$(QT_EMB_PLATFORM)-g++
++QT_QMAKE:=$(HOST_DIR)/usr/bin/qmake -spec $(QT_SPEC)
+ 
+ ################################################################################
+ # QT_QMAKE_SET -- helper macro to set <variable> = <value> in
+@@ -448,8 +455,7 @@ QT_QMAKE:=$(HOST_DIR)/usr/bin/qmake -spec qws/linux-$(QT_EMB_PLATFORM)-g++
+ # $(call QT_QMAKE_SET,variable,value,directory)
+ ################################################################################
+ define QT_QMAKE_SET
+-	$(SED) '/$(1)/d' $(3)/mkspecs/qws/linux-$(QT_EMB_PLATFORM)-g++/qmake.conf
+-	$(SED) '/include.*qws.conf/a$(1) = $(2)' $(3)/mkspecs/qws/linux-$(QT_EMB_PLATFORM)-g++/qmake.conf
++	$(SED) '/$(1)/d;/^load(qt_config)/i$(1) = $(2)' $(3)/mkspecs/$(QT_SPEC)/qmake.conf
+ endef
+ 
+ ifneq ($(BR2_INET_IPV6),y)
 -- 
 1.7.9.1
