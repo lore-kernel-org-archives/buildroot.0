@@ -1,44 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun,  4 Mar 2012 22:10:23 +0100
-Subject: [Buildroot] [PATCH] pkg-infra: Fix wget -O
-Message-ID: <1330895423-14763-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 4 Mar 2012 22:11:47 +0100
+Subject: [Buildroot] [git commit] at91sam9260dfc_defconfig: fix kernel
+	defconfig name
+Message-ID: <20120304211156.9014890CE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wget -O always creates its output file, so we need a different way to
-detect if the download succeeded or not.
+commit: http://git.buildroot.net/buildroot/commit/?id=15fe22062229886848e02bb98ccd8ce62f8a2f34
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+at91sam9260_defconfig contains support for the EVM (since v3.2).
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
-Ideally, wget should have an option to name the downloaded file.
--O <filename> is in fact fully equivalent to -O - > <filename>...
-Maybe we should move to curl after all? :-)
+ configs/at91sam9260dfc_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- package/Makefile.package.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index ea44c6c..da6aee0 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -236,9 +236,13 @@ define SHOW_EXTERNAL_DEPS_HG
- endef
+diff --git a/configs/at91sam9260dfc_defconfig b/configs/at91sam9260dfc_defconfig
+index de7ac42..3cd58ac 100644
+--- a/configs/at91sam9260dfc_defconfig
++++ b/configs/at91sam9260dfc_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_UBOOT_2011_12=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+-BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260ek"
++BR2_LINUX_KERNEL_DEFCONFIG="at91sam9260"
  
- 
-+# wget -O ... creates the output file before downloading it, so
-+# it will essentially always succeed.  As a workaround, test that
-+# it is non-empty both before and after.
- define DOWNLOAD_WGET
--	test -e $(DL_DIR)/$(2) || \
--	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
-+	test -s $(DL_DIR)/$(2) || \
-+	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2) && \
-+	test -s $(DL_DIR)/$(2)
- endef
- 
- define SOURCE_CHECK_WGET
--- 
-tg: (dca6e03..) t/wget (depends on: master)
+ # Filesystem
+ BR2_TARGET_ROOTFS_TAR=y
