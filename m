@@ -1,22 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 Mar 2012 22:09:43 +0100
-Subject: [Buildroot] [PATCH] lite: Remove excess slashes from pkg-config
-	file.
-In-Reply-To: <CAFbHwiSOquRb-DqUo6-gwbdZguAtYqPt53H6=WWcnKfddyvdyw@mail.gmail.com>
- (Will Newton's message of "Wed, 15 Feb 2012 16:26:43 +0000")
-References: <CAFbHwiSOquRb-DqUo6-gwbdZguAtYqPt53H6=WWcnKfddyvdyw@mail.gmail.com>
-Message-ID: <87eht8vzs8.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun,  4 Mar 2012 22:10:23 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: Fix wget -O
+Message-ID: <1330895423-14763-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+wget -O always creates its output file, so we need a different way to
+detect if the download succeeded or not.
 
- Will> Signed-off-by: Will Newton <will.newton@imgtec.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Ideally, wget should have an option to name the downloaded file.
+-O <filename> is in fact fully equivalent to -O - > <filename>...
+Maybe we should move to curl after all? :-)
 
-Committed, thanks.
+ package/Makefile.package.in |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+index ea44c6c..da6aee0 100644
+--- a/package/Makefile.package.in
++++ b/package/Makefile.package.in
+@@ -236,9 +236,13 @@ define SHOW_EXTERNAL_DEPS_HG
+ endef
+ 
+ 
++# wget -O ... creates the output file before downloading it, so
++# it will essentially always succeed.  As a workaround, test that
++# it is non-empty both before and after.
+ define DOWNLOAD_WGET
+-	test -e $(DL_DIR)/$(2) || \
+-	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
++	test -s $(DL_DIR)/$(2) || \
++	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2) && \
++	test -s $(DL_DIR)/$(2)
+ endef
+ 
+ define SOURCE_CHECK_WGET
 -- 
-Bye, Peter Korsgaard
+tg: (dca6e03..) t/wget (depends on: master)
