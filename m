@@ -1,85 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Mar 2012 15:14:10 +0100
-Subject: [Buildroot] [PATCHv2] qt: X11 support
-In-Reply-To: <1330830401-1736-1-git-send-email-ismael.luceno@gmail.com>
-References: <1330830401-1736-1-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <201203041514.10952.arnout@mind.be>
+Date: Sun, 4 Mar 2012 16:13:47 +0100
+Subject: [Buildroot] [PATCHv2] qt: Add option to build and install tools
+	on the target
+In-Reply-To: <1330830287-1502-1-git-send-email-ismael.luceno@gmail.com>
+References: <1330830287-1502-1-git-send-email-ismael.luceno@gmail.com>
+Message-ID: <201203041613.48008.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 04 March 2012 04:06:41 Ismael Luceno wrote:
-> Also reworked the QT_QMAKE_SET macro, to make it work on all qmakespecs.
+On Sunday 04 March 2012 04:04:47 Ismael Luceno wrote:
 > 
 > Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Sorry, I tried your patch and it doesn't work...
+ A few comments below, but nothing critical.
 
-> +choice
-> +	prompt "GUI Backend"
-> +	help
-> +	  Select the graphic system, used to arbitrate screen access.
-> +
-> +config BR2_PACKAGE_QT_GUI_QWS
-> +	bool "QWS"
-> +	default y if !BR2_PACKAGE_XORG7
-> +	help
-> +	  QWS is a compact and efficient windowing system. Using it, Qt-based
-> +	  applications write directly to the Linux framebuffer, eliminating the
-> +	  need for the X Window System.
-> +
-> +config BR2_PACKAGE_QT_GUI_X11
-> +	depends on BR2_PACKAGE_XORG7
-> +	bool "X Window System"
-> +	default y if BR2_PACKAGE_XORG7
-> +endchoice
-
- It looks like this default construct isn't allowed for choices.  So it has
-to become:
-
-choice
-	prompt "GUI Backend"
-	default BR2_PACKAGE_QT_GUI_QWS if !BR2_PACKAGE_XORG7
-	default BR2_PACKAGE_QT_GUI_X11 if BR2_PACKAGE_XORG7
-...
-
- Note that I didn't test this, so please check if it does work (i.e. that
-you see what you expect when you enable resp. disable XORG7).
-
-[snip]
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index 776eb63..c6fd292 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -220,7 +220,14 @@ else
->  QT_EMB_PLATFORM = generic
->  endif
+> ---
+>  package/qt/Config.in |   23 +++++++++++++++++++++++
+>  package/qt/qt.mk     |   10 ++++++++++
+>  2 files changed, 33 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 3a552d0..e2c7400 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -16,6 +16,29 @@ config BR2_PACKAGE_QT_DEBUG
+>  	help
+>  	  If unsure, say N.
 >  
-> +ifeq ($(BR2_PACKAGE_QT_GUI_X11),y)
-> +QT_SPEC = linux-g++
-> +QT_CONFIGURE_OPTS += -xplatform linux-g++ -arch $(QT_EMB_PLATFORM)
+> +menuconfig BR2_PACKAGE_QT_TOOLS
+> +	bool "Compile and install tools"
+> +	depends on BR2_PACKAGE_QT_SQL_MODULE && BR2_PACKAGE_QT_GUI_MODULE
 
- You will need to add dependencies here.  At least libX11 is required, but
-I see a lot more in build/qt-4.8.0/config.tests/x11.
+ This is annoying...  SQL is only needed for assistant and designer, not
+for qtconfig or qmlplugindump.  Is there a possibility to tell qt to just
+build the selected tools?  That probably requires hacking 
+tools/tools.pro...
 
- You have to test this with a clean build of a minimal config, e.g.
+ Maybe add to the help text of the comment, that sql isn't actually 
+needed except for building.
 
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_QT=y
-BR2_PACKAGE_QT_LICENSE_APPROVED=y
-# BR2_PACKAGE_QT_XML is not set
-# BR2_PACKAGE_QT_SCRIPT is not set
-BR2_PACKAGE_XORG7=y
 
-(again, I haven't tested if this config actually works).
+> +
+> +if BR2_PACKAGE_QT_TOOLS
+> +
+> +config BR2_PACKAGE_QT_TOOLS_QTCONFIG
+> +       bool "qtconfig"
+> +       depends on BR2_PACKAGE_QT_GUI_X11
 
- And if you want to be sure you have the dependencies right in the .mk
-file, run 'make qt' rather than plain 'make'.
+ Doesn't qtconfig work in qws?
 
 
 [snip]
+> @@ -514,6 +520,9 @@ endef
+>  
+>  QT_INSTALL_LIBS    += QtCore
+>  QT_HOST_PROGRAMS   += moc rcc qmake lrelease
+> +QT_TARGET_PROGRAMS += $(if $(BR2_PACKAGE_QT_TOOLS_QTCONFIG),qtconfig) \
+> +		      $(if $(BR2_PACKAGE_QT_TOOLS_QMLVIEWER),qmlviewer) \
+> +		      $(if $(BR2_PACKAGE_QT_TOOLS_QMLPLUGINDUMP),qmlplugindump)
+
+ Personally, I prefer the
+QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS_QTCONFIG) += qtconfig
+approach, but that's a matter of taste I guess.
+
+>  
+>  ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+>  QT_INSTALL_LIBS    += QtGui
+> @@ -583,6 +592,7 @@ define QT_INSTALL_STAGING_CMDS
+>  	$(MAKE) -C $(@D) install
+>  	mkdir -p $(HOST_DIR)/usr/bin
+>  	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
+> +	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS)) $(TARGET_DIR)/usr/bin
+
+ (so that would mean putting $(QT_TARGET_PROGRAMS-y) here)
+
+>  	rm -rf $(HOST_DIR)/usr/mkspecs
+>  	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
+>  	$(QT_INSTALL_QT_CONF)
+> 
+
 
  Regards,
  Arnout
