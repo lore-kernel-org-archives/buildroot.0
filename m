@@ -1,64 +1,50 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Sun, 4 Mar 2012 23:50:00 +0100
-Subject: [Buildroot] [PATCH] pkg-infra: Fix wget -O
-In-Reply-To: <1330895423-14763-1-git-send-email-arnout@mind.be>
-References: <1330895423-14763-1-git-send-email-arnout@mind.be>
-Message-ID: <CAM+bi4uvSDFXsH2tMcwE9SE5U_1b68uws_2JErT_CLRompM+Og@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun,  4 Mar 2012 23:50:56 +0100
+Subject: [Buildroot] [PATCH] gpsd: fix build with dbus but no libglib2
+Message-ID: <1330901456-31931-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This should be taken into account when the Microblaze related patches get
-applied, since this function is severely modified by one of those patches.
+gpsd uses dbus-glib as the dbus interface, so it should only be built if
+libglib2 has been selected.
 
-2012/3/4 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Also add the select of dbus-glib.
 
-> wget -O always creates its output file, so we need a different way to
-> detect if the download succeeded or not.
->
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Ideally, wget should have an option to name the downloaded file.
-> -O <filename> is in fact fully equivalent to -O - > <filename>...
-> Maybe we should move to curl after all? :-)
->
->  package/Makefile.package.in |    8 ++++++--
->  1 files changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-> index ea44c6c..da6aee0 100644
-> --- a/package/Makefile.package.in
-> +++ b/package/Makefile.package.in
-> @@ -236,9 +236,13 @@ define SHOW_EXTERNAL_DEPS_HG
->  endef
->
->
-> +# wget -O ... creates the output file before downloading it, so
-> +# it will essentially always succeed.  As a workaround, test that
-> +# it is non-empty both before and after.
->  define DOWNLOAD_WGET
-> -       test -e $(DL_DIR)/$(2) || \
-> -       $(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
-> +       test -s $(DL_DIR)/$(2) || \
-> +       $(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2) && \
-> +       test -s $(DL_DIR)/$(2)
->  endef
->
->  define SOURCE_CHECK_WGET
-> --
-> tg: (dca6e03..) t/wget (depends on: master)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+---
+ package/gpsd/Config.in |    2 ++
+ package/gpsd/gpsd.mk   |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index d387abd..d9f54e2 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_GPSD
+ 	bool "gpsd"
+ 	# Uses fork()
+ 	depends on BR2_USE_MMU
++	# .mk file adds dependency on dbus-glib if dbus and glib are selected
++	select BR2_PACKAGE_DBUS_GLIB if (BR2_PACKAGE_DBUS && BR2_PACKAGE_LIBGLIB2)
+ 	help
+ 	  gpsd is a service daemon that monitors one or more GPSes or AIS
+ 	  receivers attached to a host computer through serial or USB ports,
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index be6daeb..245da1b 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -30,7 +30,7 @@ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ 	GPSD_DEPENDENCIES += libusb
+ endif
+ 
+-ifeq ($(strip $(BR2_PACKAGE_DBUS)),y)
++ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yy)
+ 	GPSD_CONF_OPT += --enable-dbus
+ 	GPSD_DEPENDENCIES += dbus dbus-glib
+ endif
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120304/3c90394b/attachment-0001.html>
+tg: (15fe220..) t/gpsd (depends on: master)
