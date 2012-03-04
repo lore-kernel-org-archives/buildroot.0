@@ -1,46 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 4 Mar 2012 14:01:40 +0100
-Subject: [Buildroot] [PATCH 2/2] Add test infrastructure
-In-Reply-To: <201203040113.27598.yann.morin.1998@free.fr>
-References: <1330818307-22115-1-git-send-email-arnout@mind.be>
- <1330818307-22115-3-git-send-email-arnout@mind.be>
- <201203040113.27598.yann.morin.1998@free.fr>
-Message-ID: <201203041401.40738.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun,  4 Mar 2012 14:03:14 +0100
+Subject: [Buildroot] [PATCH v2 1/3] Add target to print buildroot version
+Message-ID: <1330866196-5360-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 04 March 2012 01:13:27 Yann E. MORIN wrote:
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-[snip]
-> > +testdir=$(dirname $0)
-> > +topdir=$(cd $testdir/..; pwd)
-> 
-> I would highly suggest using ${foo} instead of $foo because it makes
-> it explicit what the variable name is. Also, enclose variable between
-> double-quotes, in case a vicious user uses a dir with a space in it.
+It's convenient to have a target to print the buildroot version, for use
+in external scripts calling buildroot.
 
- Spaces will make 'make' barf, so aren't supported anyway.  But * and
-other ugly stuff would indeed be possible, so I've added quotes
-everywhere.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .topdeps |    1 +
+ .topmsg  |    7 +++++++
+ Makefile |    5 ++++-
+ 3 files changed, 12 insertions(+), 1 deletions(-)
+ create mode 100644 .topdeps
+ create mode 100644 .topmsg
 
-[snip]
-> See the "The Open Group Base Specifications Issue 7", utilities chapter 2,
-> dealing about "Shell Command Language":
->     http://pubs.opengroup.org/onlinepubs/9699919799/toc.htm
->     http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
-
- That's a useful reference!  I'll look at that more often, thanks!
-
- Regards,
- Arnout
-
+diff --git a/.topdeps b/.topdeps
+new file mode 100644
+index 0000000..1f7391f
+--- /dev/null
++++ b/.topdeps
+@@ -0,0 +1 @@
++master
+diff --git a/.topmsg b/.topmsg
+new file mode 100644
+index 0000000..b431fc4
+--- /dev/null
++++ b/.topmsg
+@@ -0,0 +1,7 @@
++From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++Subject: [PATCH] Add target to print buildroot version
++
++It's convenient to have a target to print the buildroot version, for use
++in external scripts calling buildroot.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+diff --git a/Makefile b/Makefile
+index d508888..30099d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setloca
+ noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check
++	source-check print-version
+ 
+ # Strip quotes and then whitespaces
+ qstrip=$(strip $(subst ",,$(1)))
+@@ -721,6 +721,9 @@ release:
+ 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+ 	rm -rf $(OUT) $(OUT).tar
+ 
++print-version:
++	@echo $(BR2_VERSION_FULL)
++
+ ################################################################################
+ # GENDOC -- generates the make targets needed to build a specific type of
+ #           asciidoc documentation.
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.1
