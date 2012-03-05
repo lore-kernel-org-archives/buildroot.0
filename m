@@ -1,32 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Mar 2012 10:45:32 +0100
-Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
- device (flash drive)
-In-Reply-To: <201203022300.01500.arnout@mind.be>
-References: <jio6ql$25v$1@dough.gmane.org> <20120301175921.5811b398@skate>
- <201203022300.01500.arnout@mind.be>
-Message-ID: <20120305104532.69ae133b@skate>
+Date: Mon, 5 Mar 2012 10:47:00 +0100
+Subject: [Buildroot] [git commit] Merge branch 'next'
+In-Reply-To: <201203022229.21730.arnout@mind.be>
+References: <20120301130637.442C290BF7@busybox.osuosl.org>
+ <201203022229.21730.arnout@mind.be>
+Message-ID: <20120305104700.07bcb5b9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 2 Mar 2012 23:00:01 +0000,
+Le Fri, 2 Mar 2012 22:29:21 +0000,
 Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
->  It probably won't work if your target is uclibc-based (unless your host
-> happens to be uclibc-based as well :-).
+>  It's annoying that all commit mails are resent when you merge next into
+> master.  Any chance to avoid that?  E.g. temporarily disabling the commit
+> mails when you push the merge?
 
-Correct. This code was taken from a project that was glibc-based.
+I don't find this really annoying, and it allows to be reminded about
+what was in -next and therefore what go pushed in master. If we had
+thousands of commits, I would call it annoying. With only a few dozens
+commits, I'm happy with the way it is today.
 
-> You'd need a host-grub to get that right.  I tried to do that half a year ago, but it wasn't so easy -
-> unfortunately I don't remember why not.  Could be a problem with 32/64 bit.
-> Or with ccache.
-
-Yeah, I remember you posted some patches about this. Don't remember
-what the outcome was, though. Definitely something that would be nice
-to improve.
+Regards,
 
 Thomas
 -- 
