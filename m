@@ -1,95 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Mar 2012 20:59:55 +0100
-Subject: [Buildroot] [PATCH 02/16] Add the Atom processor in the list of
-	supported x86/x86_64 processors
+Date: Mon,  5 Mar 2012 21:00:02 +0100
+Subject: [Buildroot] [PATCH 09/16] external-toolchain: add Sourcery
+	CodeBench PowerPC 2011.03
 In-Reply-To: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b5bebeaebd873af7ca6899ab2b9088d33a429b19.1330977548.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <22e0698eb8e2d8ebd12cf78c03641850e1a24cfb.1330977548.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows to easily select the corresponding Atom multilib variant
-in the Sourcery CodeBench toolchain.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- target/Config.in.arch |   12 ++++++++++++
- 1 files changed, 12 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in   |   19 +++++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 73cecaf..25c6e50 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -266,6 +266,9 @@ config BR2_x86_nocona
- 	bool "nocona"
- config BR2_x86_core2
- 	bool "core2"
-+config BR2_x86_atom
-+	bool "atom"
-+comment "atom needs gcc >= 4.5.x"
- config BR2_x86_k6
- 	bool "k6"
- config BR2_x86_k6_2
-@@ -311,6 +314,9 @@ config BR2_x86_64_nocona
- 	bool "nocona"
- config BR2_x86_64_core2
- 	bool "core2"
-+config BR2_x86_64_atom
-+	bool "atom"
-+comment "atom needs gcc >= 4.5.x"
- endchoice
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 8e5d53f..fea1565 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -119,6 +119,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+             - MIPS32 big endian soft float uclibc
+             - MIPS32 little endian soft float uclibc
  
- choice
-@@ -500,6 +506,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_pentiumpro
- 	default "i686"		if BR2_x86_nocona
- 	default "i686"		if BR2_x86_core2
-+	default "i686"		if BR2_x86_atom
- 	default "i686"		if BR2_x86_opteron
- 	default "i686"		if BR2_x86_opteron_sse3
- 	default "i686"		if BR2_x86_barcelona
-@@ -525,6 +532,7 @@ config BR2_ARCH
- 	default "x86_64"	if BR2_x86_64_generic
- 	default "x86_64"	if BR2_x86_64_nocona
- 	default "x86_64"	if BR2_x86_64_core2
-+	default "x86_64"	if BR2_x86_64_atom
- 	default "x86_64"	if BR2_x86_64_opteron
- 	default "x86_64"	if BR2_x86_64_opteron_sse3
- 	default "x86_64"	if BR2_x86_64_barcelona
-@@ -554,6 +562,7 @@ config BR2_GCC_TARGET_TUNE
- 	default prescott	if BR2_x86_prescott
- 	default nocona		if BR2_x86_nocona
- 	default core2		if BR2_x86_core2
-+	default atom		if BR2_x86_atom
- 	default k8		if BR2_x86_opteron
- 	default k8-sse3		if BR2_x86_opteron_sse3
- 	default barcelona	if BR2_x86_barcelona
-@@ -569,6 +578,7 @@ config BR2_GCC_TARGET_TUNE
- 	default generic		if BR2_x86_64_generic
- 	default nocona		if BR2_x86_64_nocona
- 	default core2		if BR2_x86_64_core2
-+	default atom		if BR2_x86_64_atom
- 	default k8		if BR2_x86_64_opteron
- 	default k8-sse3		if BR2_x86_64_opteron_sse3
- 	default barcelona	if BR2_x86_64_barcelona
-@@ -669,6 +679,7 @@ config BR2_GCC_TARGET_ARCH
- 	default prescott	if BR2_x86_prescott
- 	default nocona		if BR2_x86_nocona
- 	default core2		if BR2_x86_core2
-+	default atom		if BR2_x86_atom
- 	default k8		if BR2_x86_opteron
- 	default k8-sse3		if BR2_x86_opteron_sse3
- 	default barcelona	if BR2_x86_barcelona
-@@ -680,6 +691,7 @@ config BR2_GCC_TARGET_ARCH
- 	default winchip2	if BR2_x86_winchip2
- 	default nocona		if BR2_x86_64_nocona
- 	default core2		if BR2_x86_64_core2
-+	default atom		if BR2_x86_64_atom
- 	default k8		if BR2_x86_64_opteron
- 	default k8-sse3		if BR2_x86_64_opteron_sse3
- 	default barcelona	if BR2_x86_64_barcelona
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
++	bool "Sourcery CodeBench PowerPC 2011.03"
++	depends on BR2_powerpc
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Sourcery CodeBench toolchain for the PowerPC architecture,
++	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20.51,
++	  glibc 2.13, gdb 7.2.50 and kernel headers 2.6.38. It has
++	  support for the following variants:
++            - 603 glibc, 32 bits
++            - 603 soft float glibc, 32 bits
++            - e600 altivec glibc, 32 bits
++            - e500v1 glibc, 32 bits
++            - e500v2 glibc, 32 bits
++            - e500mc glibc, 32 bits
++            - 970 glibc hard-float, 64 bits
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	bool "Sourcery CodeBench PowerPC 2010.09"
+ 	depends on BR2_powerpc
+@@ -270,6 +288,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
++	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 1e8e03e..409355e 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -198,6 +198,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-110-mips-linux-gnu-i686-pc-linux-gnu.tar.
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103),y)
++TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE=freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201009),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/superh/portal/package7783/public/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2010.09-45-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
 1.7.4.1
