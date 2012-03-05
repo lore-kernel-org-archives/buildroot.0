@@ -1,69 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Mar 2012 21:00:03 +0100
-Subject: [Buildroot] [PATCH 10/16] external-toolchain: add Sourcery
-	CodeBench x86/x86_64 2011.09
-In-Reply-To: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <d00bd2a1f79855cb37db57bea18181683b194302.1330977548.git.thomas.petazzoni@free-electrons.com>
+Date: Mon,  5 Mar 2012 20:59:53 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.05/ext-toolchain-updates
+Message-ID: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in   |   16 ++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 19 insertions(+), 0 deletions(-)
+Hello,
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index fea1565..a552cc2 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -219,6 +219,21 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	  has support for the following variants:
-             - SH2A, uClibc, big endian
- 
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
-+	bool "Sourcery CodeBench x86/x86_64 2011.09"
-+	depends on BR2_i386 || BR2_x86_64
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Sourcery CodeBench toolchain for the x86/x86_64
-+	  architectures, from Mentor Graphics. It uses gcc 4.6.1,
-+	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
-+	  3.0.1. It has support for the following variants:
-+	    - Intel Pentium 4, glibc, 32 bits
-+            - Intel Atom, glibc, 32 bits
-+            - Intel Xeon, glibc, 64 bits
-+            - Intel Core 2, glibc, 64 bits
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	bool "Sourcery CodeBench x86/x86_64 2010.09"
- 	depends on BR2_i386 || BR2_x86_64
-@@ -294,6 +309,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201009
- 	default "sh-uclinux"             if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH2A_201103
- 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
-+	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && !BR2_BFIN_FDPIC
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1 && BR2_BFIN_FDPIC
- 	default $(BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX) \
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 409355e..a6a5028 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -216,6 +216,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=renesas-2011.03-36-sh-uclinux-i686-pc-linux-gnu.tar.bz
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009),y)
- TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/sgpp/lite/ia32/portal/package7682/public/i686-pc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=ia32-2010.09-44-i686-pc-linux-gnu-i386-linux.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109),y)
-+TOOLCHAIN_EXTERNAL_SITE=https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=ia32-2011.09-24-i686-pc-linux-gnu-i386-linux.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1),y)
- TOOLCHAIN_EXTERNAL_SITE_1   = http://blackfin.uclinux.org/gf/download/frsrelease/501/8378/
- TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2010R1-RC4.i386.tar.bz2
+What follows is a set of patches doing various improvements and
+updates to the external toolchain support:
+
+ * Fixes to the x86_64 handling of BR2_GCC_TARGET_ARCH and addition of
+   the Atom processor variant. Those changes are needed to make a
+   better usage of the Sourcery CodeBench x86/x86_64 toolchain (i.e,
+   allow the selection of the available multilib variants).
+
+ * Improve the logic to copy libraries from the toolchain to the
+   staging directory and the target directory to handle the directory
+   organization of the Sourcery CodeBench x86/x86_64 toolchain.
+
+ * Improve the same logic to support multilib toolchains with multilib
+   variants in directories of multiple levels. For example, the MIPS
+   Sourcery CodeBench toolchain has many multilib variants, and some
+   of them are in directories like mips16/soft-float/el/. This
+   requires a small modification of the way we create the symlink that
+   allows to fake the original sysroot location.
+
+ * Expand the external toolchain wrapper to include
+   BR2_TARGET_OPTIMIZATION.
+
+ * Various updates to the available external toolchains: add ARM
+   Sourcery CodeBench 2011.03, update the MIPS Sourcery CodeBench
+   2011.03, add the PowerPC Sourcery CodeBench 2011.03, add the
+   x86/x86_64 Sourcery CodeBench 2011.09, add the Blackfin 2011R1-RC4
+   toolchain.
+
+ * Document how to use the various multilib variants available.
+
+ * Adjust the uClibc detection logic to support static-only
+   toolchains.
+
+ * Adds support for the Linaro 2012.01 toolchain.
+
+Chances since the v2 posted on January 28th 2012:
+
+ - Update to latest master.
+
+Changes since the v1 posted on January 4th 2012:
+
+ - Add comments mentionning that Atom processors are only supported
+   since gcc 4.5 (Peter Korsgaard comment)
+
+ - Re-add $(Q) where appropriate (Thomas De Schampheleire comment)
+
+ - Replaced CodeSourcery by Mentor Graphics where appropriate (Thomas
+   De Schampheleire comment)
+
+ - Add support for the Linaro 2012.01 toolchain
+
+This patchset has been tested by doing a Buildroot build of a simple
+Busybox filesystem, with the following toolchains used as external
+toolchains:
+
+ * ARM CodeSourcery 2010q1, default multilib config (ARMv5)
+ * ARM CodeSourcery 2011.03, ARMv4 multilib config
+ * ARM CodeSourcery 2011.03, default multilib config (ARMv5)
+ * ARM CodeSourcery 2011.09, Thumb2 multilib config
+ * ARM CodeSourcery 2011.09, default multilib config (ARMv5)
+ * Blackfin toolchain, with shared lib support
+ * Blackfin toolchain, without shared lib support
+ * Basic ARM Buildroot external toolchain with C++ support
+ * Basic ARM Buildroot external toolchain without C++ support
+ * ARM Buildroot toolchain with all features enabled (largefile, etc.)
+ * ARM Buildroot toolchain without thread support
+ * Crosstool-NG ARM eglibc toolchain
+ * Crosstool-NG ARM uClibc toolchain
+ * Crosstool-NG mipsel eglibc toolchain
+ * x86 Buildroot toolchain with all features enabled
+ * mipsel o32 Buildroot toolchain with all features enabled
+ * PowerPC e500mc Buildroot toolchain with all features enabled
+ * x86_64 Nocona Buildroot toolchain with all features enabled
+ * Crosstool-NG mips uclibc toolchain
+ * Crosstool-NG powerpc uclibc toolchain
+ * Crosstool-NG x86_64 eglibc toolchain
+ * CodeSourcery PowerPC 2010.09, 603 multilib variant
+ * CodeSourcery PowerPC 2010.09, e500mc multilib variant
+ * CodeSourcery PowerPC 2011.03, e500v2 variant
+ * CodeSourcery PowerPC 2011.03, default multilib variant
+ * CodeSourcery PowerPC 4.4, default multilib variant
+ * CodeSourcery IA32 2010.09 x86_64 Core 2 toolchain
+ * CodeSourcery IA32 2010.09 x86 Pentium 4 toolchain
+ * Linaro ARM 2012.01 toolchain
+ * CodeSourcery MIPS 2011.03, default multilib variant
+ * CodeSourcery MIPS 4.4, default multilib variant
+ * CodeSourcery SuperH 2010.09, noMMU
+ * CodeSourcery Super 2011.03, default multilib variant
+
+Best regards,
+
+Thomas Petazzoni
+
+
+The following changes since commit dca6e03eac0ec70bb01492e378c694d8dabcedfd:
+
+  kernel-headers: bump 3.0.x / 3.2.x stable versions (2012-03-01 14:07:29 +0100)
+
+are available in the git repository at:
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/ext-toolchain-updates
+
+Thomas Petazzoni (16):
+      Add x86_64 variants to BR2_GCC_TARGET_ARCH
+      Add the Atom processor in the list of supported x86/x86_64 processors
+      Improve external toolchain logic to support IA32 Sourcery CodeBench toolchain
+      Support multilib variants in sub-subdirectories
+      Expand external toolchain wrapper to custom flags
+      external-toolchain: remove 2009q1 ARM Sourcery toolchain
+      external-toolchain: add Sourcery CodeBench ARM 2011.09
+      external-toolchain: bump MIPS 2011.03 from -93 to -110
+      external-toolchain: add Sourcery CodeBench PowerPC 2011.03
+      external-toolchain: add Sourcery CodeBench x86/x86_64 2011.09
+      external-toolchain: Blackfin.uclinux.org 2011R1-RC4
+      external-toolchain: details on selecting the multilib variants
+      external-toolchain: run checks even on extracted toolchains
+      external-toolchain: adjust check for uClibc static toolchains
+      external-toolchain: fix description of PowerPC 2010.09 from Mentor Graphics
+      external-toolchain: add support for Linaro 2012.01
+
+ target/Config.in.arch                              |   17 ++
+ toolchain/helpers.mk                               |   55 ++++-
+ toolchain/toolchain-external/Config.in             |  222 ++++++++++++++++++--
+ toolchain/toolchain-external/ext-tool.mk           |  100 +++++++--
+ .../toolchain-external/ext-toolchain-wrapper.c     |    3 +
+ 5 files changed, 345 insertions(+), 52 deletions(-)
+
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
