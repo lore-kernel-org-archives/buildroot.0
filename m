@@ -1,48 +1,34 @@
-From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Mon,  5 Mar 2012 22:04:21 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: enforce toolchainfile.cmake
-	consistency with the actual toolchain
-Message-ID: <1330981461-4377-1-git-send-email-s.martin49@gmail.com>
+From: Felipe Contreras <felipe.contreras@gmail.com>
+Date: Mon, 5 Mar 2012 23:58:04 +0200
+Subject: [Buildroot] [PATCH v2 2/3] config: make it possible to specify
+ which config file to use for 'make defconfig'
+In-Reply-To: <1330866196-5360-2-git-send-email-arnout@mind.be>
+References: <1330866196-5360-1-git-send-email-arnout@mind.be>
+ <1330866196-5360-2-git-send-email-arnout@mind.be>
+Message-ID: <CAMP44s28xPOm540ePAMXSyLxEOBFzKJyJEkA7+44KpNcJPMXxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes the toolchainfile.cmake generated after the toolchain
-generation or import and checks (depending on the backend used).
+On Sun, Mar 4, 2012 at 3:03 PM, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-This ensures the correctness and consistency between the actual
-toolchain and the toolchainfile.cmake file describing it.
+Is this really from you?
 
-This also makes the toolchainfile.cmake generated when building the
-target 'cross'.
+> So that this works:
+>
+> ?% make defconfig DEFCONFIG=~/busybox-defconfig
 
-Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
----
- Makefile |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> - ? ? ? @$(COMMON_CONFIG_ENV) $< --defconfig $(CONFIG_CONFIG_IN)
+> + ? ? ? @$(COMMON_CONFIG_ENV) $< --defconfig$(patsubst %,=%,$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
 
-diff --git a/Makefile b/Makefile
-index d508888..fbc34bc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -362,13 +362,15 @@ HOST_DEPS = $(sort $(foreach dep,\
- 		$($(dep))))
- HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
- 
-+BASE_TARGETS += $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-+
- # all targets depend on the crosscompiler and it's prerequisites
- $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
- 
- dirs: $(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
- 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
- 
--$(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-+$(BASE_TARGETS): dirs
- 
- $(BUILD_DIR)/buildroot-config/auto.conf: $(CONFIG_DIR)/.config
- 	$(MAKE) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+Looks like an inconsistency there. AFAICS, it would be 'make defconfig
+BR2_DEFCONFIG=foo'.
+
+Cheers.
+
 -- 
-1.7.9.2
+Felipe Contreras
