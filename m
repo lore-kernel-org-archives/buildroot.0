@@ -1,61 +1,53 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Mon, 5 Mar 2012 12:55:05 -0200
-Subject: [Buildroot] [PATCHv5 1/1] qt: Add option to build and install
- tools on the target
-In-Reply-To: <20120305135003.71c080ed@skate>
-References: <1330945827-17612-1-git-send-email-ismael.luceno@gmail.com>
- <1330945827-17612-2-git-send-email-ismael.luceno@gmail.com>
- <20120305135003.71c080ed@skate>
-Message-ID: <20120305125505.345b0b09@gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Mon, 5 Mar 2012 15:57:53 +0100
+Subject: [Buildroot] TODO items
+In-Reply-To: <201203031956.44348.arnout@mind.be>
+References: <201203031956.44348.arnout@mind.be>
+Message-ID: <20120305145753.GF21255@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 5 Mar 2012 13:50:03 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-<...>
-> Le Mon,  5 Mar 2012 09:10:27 -0200,
-> Ismael Luceno <ismael.luceno@gmail.com> a ?crit :
+HI,
+
+	Create a TODO file in the the code too
+
+	More people read the code than the wiki
+
+Best Regards,
+J.
+On 19:56 Sat 03 Mar     , Arnout Vandecappelle wrote:
+>    Hoi all,
 > 
-> > @@ -583,6 +592,9 @@ define QT_INSTALL_STAGING_CMDS
-> >  	$(MAKE) -C $(@D) install
-> >  	mkdir -p $(HOST_DIR)/usr/bin
-> >  	mv $(addprefix
-> > $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
-> > +ifneq ($(strip $(QT_TARGET_PROGRAMS-y)),)
-> > +	mv $(addprefix
-> > $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS-y))
-> > $(TARGET_DIR)/usr/bin +endif rm -rf $(HOST_DIR)/usr/mkspecs
-> >  	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
-> >  	$(QT_INSTALL_QT_CONF)
+>    I've updated the Buildroot wiki page [1] with a TODO section. And I've
 > 
-> this will not work. You cannot do ifeq/ifneq tests within
-> define...endef blocks.
-<...>
+>    added the long list of todo items that came out of the developer day a
+> 
+>    month ago. Now start hacking!
+> 
+>    Regards,
+> 
+>    Arnout
+> 
+>    [1] http://elinux.org/Buildroot
+> 
+>    --
+> 
+>    Arnout Vandecappelle arnout at mind be
+> 
+>    Senior Embedded Software Architect +32-16-286540
+> 
+>    Essensium/Mind http://www.mind.be
+> 
+>    G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
+> 
+>    LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> 
+>    GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 
-Oh :/. I gues I'll have to replace it with an $(if ...).
-
-> So it means that *all* tools depend on the GUI module and SQL module,
-<...>
-
-Not exactly. The problem is, there's no way to choose which tools are
-built, so the dependency just serves as a way to predict if the
-tool will be built or not.
-
-We're not telling anything to the build system based on those options.
-IMO, patching the project file is asking for problems.
-
-> I am a bit surprised that the qmlviewer and qmlplugindump tools
-> require the SQL module. Is this correct?
-
-Yes, I tried without the SQL module at first, but it gave an error.
-I guess it's only needed by qmlviewer, but both are built together.
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 490 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120305/b4189aa9/attachment.asc>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
