@@ -1,93 +1,28 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Mon,  5 Mar 2012 07:03:55 -0200
-Subject: [Buildroot] [PATCH] qt: Add option to build and install tools on
-	the target
-In-Reply-To: <201203042154.05630.arnout@mind.be>
-References: <201203042154.05630.arnout@mind.be>
-Message-ID: <1330938235-12713-1-git-send-email-ismael.luceno@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 05 Mar 2012 10:29:29 +0100
+Subject: [Buildroot] [PATCH v2 1/3] Add target to print buildroot version
+In-Reply-To: <201203041405.35332.arnout@mind.be>
+References: <1330866196-5360-1-git-send-email-arnout@mind.be>
+ <201203041405.35332.arnout@mind.be>
+Message-ID: <4F548779.10903@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
-Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
----
- package/qt/Config.in |   25 +++++++++++++++++++++++++
- package/qt/qt.mk     |   10 ++++++++++
- 2 files changed, 35 insertions(+), 0 deletions(-)
+Arnout Vandecappelle wrote:
+> On Sunday 04 March 2012 14:03:14 Arnout Vandecappelle (Essensium/Mind) wrote:
+>> From: "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>
+>   Slightly off-topic: does anyone know how I get rid of this redundant
+> From: line?
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 3a552d0..1c24d1f 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -16,6 +16,31 @@ config BR2_PACKAGE_QT_DEBUG
- 	help
- 	  If unsure, say N.
- 
-+menuconfig BR2_PACKAGE_QT_TOOLS
-+	bool "Compile and install tools"
-+	depends on BR2_PACKAGE_QT_SQL_MODULE && BR2_PACKAGE_QT_GUI_MODULE
-+	# SQL module is needed to build, but only required at run-time by a
-+	# few tools (assistant, designer, qmlviewer).
-+
-+if BR2_PACKAGE_QT_TOOLS
-+
-+config BR2_PACKAGE_QT_TOOLS_QTCONFIG
-+	bool "qtconfig"
-+	depends on BR2_PACKAGE_QT_GUI_X11
-+
-+config BR2_PACKAGE_QT_TOOLS_QMLVIEWER
-+	bool "qmlviewer"
-+	depends on BR2_PACKAGE_QT_DECLARATIVE
-+
-+config BR2_PACKAGE_QT_TOOLS_QMLPLUGINDUMP
-+	bool "qmlplugindump"
-+	depends on BR2_PACKAGE_QT_DECLARATIVE
-+
-+endif # BR2_PACKAGE_QT_TOOLS
-+
-+comment "Tools need the SQL and GUI modules"
-+	depends on !BR2_PACKAGE_QT_SQL_MODULE || !BR2_PACKAGE_QT_GUI_MODULE
-+
- config BR2_PACKAGE_QT_DEMOS
- 	bool "Compile and install demos and examples (with code)"
- 	help
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 776eb63..ac7edda 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -417,6 +417,12 @@ else
- QT_CONFIGURE_OPTS += -no-declarative
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT_TOOLS),y)
-+QT_CONFIGURE_OPTS += -make tools
-+else
-+QT_CONFIGURE_OPTS += -nomake tools
-+endif
-+
- # ccache and precompiled headers don't play well together
- ifeq ($(BR2_CCACHE),y)
- QT_CONFIGURE_OPTS += -no-pch
-@@ -514,6 +520,9 @@ endef
- 
- QT_INSTALL_LIBS    += QtCore
- QT_HOST_PROGRAMS   += moc rcc qmake lrelease
-+QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS_QTCONFIG) += qtconfig
-+QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS_QMLVIEWER) += qmlviewer
-+QT_TARGET_PROGRAMS-$(BR2_PACKAGE_QT_TOOLS_QMLPLUGINDUMP) += qmlplugindump
- 
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- QT_INSTALL_LIBS    += QtGui
-@@ -583,6 +592,7 @@ define QT_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) install
- 	mkdir -p $(HOST_DIR)/usr/bin
- 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
-+	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS-y)) $(TARGET_DIR)/usr/bin
- 	rm -rf $(HOST_DIR)/usr/mkspecs
- 	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
- 	$(QT_INSTALL_QT_CONF)
--- 
-1.7.9.1
+In your patches I also see .topdeps and .topmsg files, so may this
+be is a topgit issue? I'm sorry I don't use it, so I cannot help.
+
+I don't have this problem using plain git format-patch +
+git send-mail.
+
+Luca
