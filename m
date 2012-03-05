@@ -1,42 +1,19 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 05 Mar 2012 17:50:50 +0100
-Subject: [Buildroot] [Patch v1 1/1] Bump to latest 5.1.60 version
-In-Reply-To: <1330964246-20475-1-git-send-email-sagaert.johan@skynet.be>
-References: <1330964246-20475-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <4F54EEEA.6050906@lucaceresoli.net>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon, 5 Mar 2012 18:01:16 +0100
+Subject: [Buildroot] udev build error solved : core dependency tar must be >
+	1.20
+Message-ID: <3727543134DD41C589596DA3C5EC9F5B@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sagaert,
-
-Sagaert Johan wrote:
-> Signed-off-by: Sagaert Johan<sagaert.johan@skynet.be>
-> ---
->   package/mysql_client/mysql_client.mk |    2 +-
->   1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-> index 9addf33..f4dd09e 100644
-> --- a/package/mysql_client/mysql_client.mk
-> +++ b/package/mysql_client/mysql_client.mk
-> @@ -3,7 +3,7 @@
->   # MySQL 5.1 Client
->   #
->   #############################################################
-> -MYSQL_CLIENT_VERSION = 5.1.53
-> +MYSQL_CLIENT_VERSION = 5.1.60
->   MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
->   MYSQL_CLIENT_SITE = http://downloads.mysql.com/archives/mysql-5.1/
->   MYSQL_CLIENT_INSTALL_TARGET = YES
-
-There are patches for this package whose file name reflects the
-current version. These files should be removed if they are not
-needed anymore, renamed otherwise.
-
-Also, in your commit message you should mention the package
-name (mysql_client: bump to.....).
-
-Luca
+Hi
+ 
+It seems the tar -J option was introduced with tar version 1.21 
+I upgraded my host to the latest tar version (1.26) and now it udev 181 builds.
+Maybe this is something to check for in  the core dependencies check.
+My debian lenny had version 1.20 in its package list.
+ 
+Sagaert Johan
