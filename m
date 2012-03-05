@@ -1,49 +1,28 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 05 Mar 2012 10:58:33 +0100
-Subject: [Buildroot] [PATCH v2 2/3] config: make it possible to specify
- which config file to use for 'make defconfig'
-In-Reply-To: <1330866196-5360-2-git-send-email-arnout@mind.be>
-References: <1330866196-5360-1-git-send-email-arnout@mind.be>
- <1330866196-5360-2-git-send-email-arnout@mind.be>
-Message-ID: <4F548E49.2040106@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Mar 2012 11:04:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package: fix WGET download method
+In-Reply-To: <20120305094229.GC28936@sapphire.tkos.co.il>
+References: <cover.1330939857.git.thomas.petazzoni@free-electrons.com>
+ <da800fd2ac3ecc63622314e0b140573b05924d7a.1330939857.git.thomas.petazzoni@free-electrons.com>
+ <20120305094229.GC28936@sapphire.tkos.co.il>
+Message-ID: <20120305110418.1480ce9d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle (Essensium/Mind) wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>
->
-> So that this works:
->
->   % make defconfig DEFCONFIG=~/busybox-defconfig
->
-> Right now we have to do:
->
->   % cp ~/busybox-defconfig configs/busybox_defconfig
->   % make busybox_defconfig
->
-> That would dirty the buildroot tree and requires it to be writable.
->
-> Signed-off-by: Felipe Contreras<felipe.contreras@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
-> ---
->   Makefile |    2 +-
->   1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 30099d9..b450b8f 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -602,7 +602,7 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->
->   defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->   	@mkdir -p $(BUILD_DIR)/buildroot-config
-> -	@$(COMMON_CONFIG_ENV) $<  --defconfig $(CONFIG_CONFIG_IN)
-> +	@$(COMMON_CONFIG_ENV) $<  --defconfig$(patsubst %,=%,$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
->
->   %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
->   	@mkdir -p $(BUILD_DIR)/buildroot-config
+Le Mon, 5 Mar 2012 11:42:29 +0200,
+Baruch Siach <baruch@tkos.co.il> a ?crit :
 
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 'rm -f' may be better here, as wget might error out before creating
+> any file, thus causing a spurious "No such file or directory" message.
+
+Correct, will send a new version.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
