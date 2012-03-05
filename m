@@ -1,35 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Mar 2012 21:00:01 +0100
-Subject: [Buildroot] [PATCH 08/16] external-toolchain: bump MIPS 2011.03
-	from -93 to -110
+Date: Mon,  5 Mar 2012 20:59:57 +0100
+Subject: [Buildroot] [PATCH 04/16] Support multilib variants in
+	sub-subdirectories
 In-Reply-To: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <851508dedda25637767a020f43f75450a477eb4f.1330977548.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <50ac5f9a573d3918cc5257a30a7c85db7841ac42.1330977548.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When an external toolchain has multiple variants organized in
+sub-directories, Buildroot only copies the selected sysroot and not
+all sysroots. In order to make this work, Buildroot creates a symbolic
+link of the name of the original selected sysroot to the main sysroot
+to trick the compiler so that it finds its libraries at the expected
+location.
+
+I.e, if the toolchain as the following organization (example take on
+the ARM CodeSourcery toolchain) :
+
+     .	    	for ARMv5T
+     armv4  	for ARMv4T
+     thumb2 	for ARMv7-A/Thumb
+
+and ARMv4T is selected, then Buildroot will copy the contents of
+armv4t/ from the toolchain into its $(STAGING_DIR) and then create a
+$(STAGING_DIR)/armv4t symbolic link to $(STAGING_DIR).
+
+However, our logic to do so only works when there was one directory
+level for multilib sysroots. But in the MIPS CodeSourcery toolchain
+there are multiple levels. For example, the MIPS16 soft-float
+little-endian sysroot variant is in mips16/soft-float/el/ compared to
+the main sysroot.
+
+This patch improves our logic to support this case. The logic is a bit
+more complicated as we don't want to create a symbolic link to an
+absolute path, but a symbolic link to a relative path, because we want
+the host/ directory to be relocatable.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/ext-tool.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/helpers.mk |    9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index ab9b0c2..1e8e03e 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -193,8 +193,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103),y)
--TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package9055/public/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-93-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package9469/public/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE=mips-2011.03-110-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/power/portal/package7703/public/powerpc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 4c3f240..3f4818f 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -103,7 +103,14 @@ copy_toolchain_sysroot = \
+ 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+ 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+ 		fi ; \
+-		ln -s . $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
++		relpath="./" ; \
++		nbslashs=`echo -n $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
++		for slash in `seq 1 $${nbslashs}` ; do \
++			relpath=$${relpath}"../" ; \
++		done ; \
++		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
++		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+ 	fi ; \
+ 	find $(STAGING_DIR) -type d | xargs chmod 755
+ 
 -- 
 1.7.4.1
