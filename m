@@ -1,23 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Mar 2012 10:32:35 +0100
-Subject: [Buildroot] [PATCH] qt: Add option to build and install tools
- on the target
-In-Reply-To: <1330938235-12713-1-git-send-email-ismael.luceno@gmail.com>
-References: <201203042154.05630.arnout@mind.be>
- <1330938235-12713-1-git-send-email-ismael.luceno@gmail.com>
-Message-ID: <20120305103235.2208a44f@skate>
+Date: Mon, 5 Mar 2012 10:33:52 +0100
+Subject: [Buildroot] [PATCH v2 1/3] Add target to print buildroot version
+In-Reply-To: <1330866196-5360-1-git-send-email-arnout@mind.be>
+References: <1330866196-5360-1-git-send-email-arnout@mind.be>
+Message-ID: <20120305103352.77d27a79@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon,  5 Mar 2012 07:03:55 -0200,
-Ismael Luceno <ismael.luceno@gmail.com> a ?crit :
+Le Sun,  4 Mar 2012 14:03:14 +0100,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-> +	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_TARGET_PROGRAMS-y)) $(TARGET_DIR)/usr/bin
+> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> 
+> It's convenient to have a target to print the buildroot version, for use
+> in external scripts calling buildroot.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  .topdeps |    1 +
+>  .topmsg  |    7 +++++++
 
-Are you sure this works fine if QT_TARGET_PROGRAMS-y is empty?
+Are you sure about these?
 
 Thomas
 -- 
