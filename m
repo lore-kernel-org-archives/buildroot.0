@@ -1,71 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Mar 2012 11:12:46 +0100
-Subject: [Buildroot] [PATCH] ext-toolchain: Automatically set -m64 if
- the architecture is x86_64
-In-Reply-To: <1327169083-15538-1-git-send-email-arnout@mind.be>
-References: <1327169083-15538-1-git-send-email-arnout@mind.be>
-Message-ID: <20120305111246.68ec6324@skate>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 5 Mar 2012 11:42:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package: fix WGET download method
+In-Reply-To: <da800fd2ac3ecc63622314e0b140573b05924d7a.1330939857.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1330939857.git.thomas.petazzoni@free-electrons.com>
+ <da800fd2ac3ecc63622314e0b140573b05924d7a.1330939857.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <20120305094229.GC28936@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hi Thomas,
 
-Coming back to this patch, I had a closer look this week-end as I
-wanted to integrate it, but I have some comments.
+On Mon, Mar 05, 2012 at 10:31:05AM +0100, Thomas Petazzoni wrote:
 
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -341,16 +341,8 @@ config
-> BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109 Sourcery CodeBench
-> toolchain for the x86/x86_64 architectures, from Mentor Graphics. It
-> uses gcc 4.6.1, binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel
-> headers
-> -	  3.0.1. It has support for the following variants:
-> -	    - Intel Pentium 4, glibc, 32 bits
-> -              Default, nothing special to do.
-> -            - Intel Atom, glibc, 32 bits
-> -              Select an Atom core
-> -            - Intel Xeon, glibc, 64 bits
-> -              Set BR2_TARGET_OPTIMIZATION to -m64
-> -            - Intel Core 2, glibc, 64 bits
-> -              Select a Core 2 core
-> -              Set BR2_TARGET_OPTIMIZATION to -m64
-> +	  3.0.1. It has support for all the i386 and x86_64 variants
-> +	  mentioned in the Target Architecture Variant menu.
+[snip]
 
-I disagree with this change. If you select "i386" or "i486" as the
-Target Architecture Variant, then this Sourcery CodeBench toolchain
-will not work: it only has libc variants for Pentium 4, Atom, Xeon and
-Core 2, so if you try to use it on something older than Pentium 4, it
-might use nonexistent instructions.
+> +# Download a file using wget. Only download the file if it doesn't
+> +# already exist in the download directory. If the download fails,
+> +# remove the file (because wget -O creates a 0-byte file even if the
+> +# download fails).
+>  define DOWNLOAD_WGET
+>  	test -e $(DL_DIR)/$(2) || \
+> -	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2)
+> +	$(WGET) -O $(DL_DIR)/$(2) $(call qstrip,$(1))/$(2) || \
+> +	(rm $(DL_DIR)/$(2) ; exit 1)
 
-Can you explain why you made this change, or revert it?
+'rm -f' may be better here, as wget might error out before creating any file, 
+thus causing a spurious "No such file or directory" message.
 
-> +ifeq ($(call qstrip,$(BR2_ARCH_IS_64)),y)
-> +TOOLCHAIN_EXTERNAL_CFLAGS += -m64
-> +TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
-> +endif
+baruch
 
-I don't agree here. -m64 is not an option that exists for all
-64-bits architectures. For example, it does not exist on MIPS. -m64 is
-part of the architecture-specific options of gcc, so your change should
-rather be:
-
-ifeq ($(BR2_x86_64),y)
-TOOLCHAIN_EXTERNAL_CFLAGS += -m64
-TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
-endif
-
-(The 'qstrip' is useless)
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
