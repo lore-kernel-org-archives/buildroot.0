@@ -1,68 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Mar 2012 21:00:00 +0100
-Subject: [Buildroot] [PATCH 07/16] external-toolchain: add Sourcery
-	CodeBench ARM 2011.09
+Date: Mon,  5 Mar 2012 20:59:55 +0100
+Subject: [Buildroot] [PATCH 02/16] Add the Atom processor in the list of
+	supported x86/x86_64 processors
 In-Reply-To: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <102c6b5fa19537985fbd7b24794fa9f77114b9d6.1330977548.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <b5bebeaebd873af7ca6899ab2b9088d33a429b19.1330977548.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This allows to easily select the corresponding Atom multilib variant
+in the Sourcery CodeBench toolchain.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in   |   15 +++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    3 +++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ target/Config.in.arch |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index f983727..8e5d53f 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -3,6 +3,20 @@ if BR2_TOOLCHAIN_EXTERNAL
- choice
- 	prompt "Toolchain"
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 73cecaf..25c6e50 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -266,6 +266,9 @@ config BR2_x86_nocona
+ 	bool "nocona"
+ config BR2_x86_core2
+ 	bool "core2"
++config BR2_x86_atom
++	bool "atom"
++comment "atom needs gcc >= 4.5.x"
+ config BR2_x86_k6
+ 	bool "k6"
+ config BR2_x86_k6_2
+@@ -311,6 +314,9 @@ config BR2_x86_64_nocona
+ 	bool "nocona"
+ config BR2_x86_64_core2
+ 	bool "core2"
++config BR2_x86_64_atom
++	bool "atom"
++comment "atom needs gcc >= 4.5.x"
+ endchoice
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
-+	bool "Sourcery CodeBench ARM 2011.09"
-+	depends on BR2_arm
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Sourcery CodeBench toolchain for the ARM architecture, from
-+	  Mentor Graphics. It uses gcc 4.6.1, binutils 2.21.53, glibc
-+	  2.13 and gdb 7.2.50, kernel headers 3.0.1. It has support
-+	  for the following variants:
-+            - ARMv5TE, little endian, soft-float, glibc
-+            - ARMv4T, little endian, soft-float, glibc
-+            - ARMv7-A, Thumb 2, little endian, soft-float, glibc
-+
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	bool "Sourcery CodeBench ARM 2011.03"
- 	depends on BR2_arm
-@@ -252,6 +266,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
-+	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 883fbdb..ab9b0c2 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -186,6 +186,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=arm-2010.09-50-arm-none-linux-gnueabi-i686-pc-linux-gn
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/arm/portal/package8739/public/arm-none-linux-gnueabi/
- TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.03-41-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/public/gnu_toolchain/arm-none-linux-gnueabi/
-+TOOLCHAIN_EXTERNAL_SOURCE=arm-2011.09-70-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
- TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ choice
+@@ -500,6 +506,7 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_pentiumpro
+ 	default "i686"		if BR2_x86_nocona
+ 	default "i686"		if BR2_x86_core2
++	default "i686"		if BR2_x86_atom
+ 	default "i686"		if BR2_x86_opteron
+ 	default "i686"		if BR2_x86_opteron_sse3
+ 	default "i686"		if BR2_x86_barcelona
+@@ -525,6 +532,7 @@ config BR2_ARCH
+ 	default "x86_64"	if BR2_x86_64_generic
+ 	default "x86_64"	if BR2_x86_64_nocona
+ 	default "x86_64"	if BR2_x86_64_core2
++	default "x86_64"	if BR2_x86_64_atom
+ 	default "x86_64"	if BR2_x86_64_opteron
+ 	default "x86_64"	if BR2_x86_64_opteron_sse3
+ 	default "x86_64"	if BR2_x86_64_barcelona
+@@ -554,6 +562,7 @@ config BR2_GCC_TARGET_TUNE
+ 	default prescott	if BR2_x86_prescott
+ 	default nocona		if BR2_x86_nocona
+ 	default core2		if BR2_x86_core2
++	default atom		if BR2_x86_atom
+ 	default k8		if BR2_x86_opteron
+ 	default k8-sse3		if BR2_x86_opteron_sse3
+ 	default barcelona	if BR2_x86_barcelona
+@@ -569,6 +578,7 @@ config BR2_GCC_TARGET_TUNE
+ 	default generic		if BR2_x86_64_generic
+ 	default nocona		if BR2_x86_64_nocona
+ 	default core2		if BR2_x86_64_core2
++	default atom		if BR2_x86_64_atom
+ 	default k8		if BR2_x86_64_opteron
+ 	default k8-sse3		if BR2_x86_64_opteron_sse3
+ 	default barcelona	if BR2_x86_64_barcelona
+@@ -669,6 +679,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default prescott	if BR2_x86_prescott
+ 	default nocona		if BR2_x86_nocona
+ 	default core2		if BR2_x86_core2
++	default atom		if BR2_x86_atom
+ 	default k8		if BR2_x86_opteron
+ 	default k8-sse3		if BR2_x86_opteron_sse3
+ 	default barcelona	if BR2_x86_barcelona
+@@ -680,6 +691,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default winchip2	if BR2_x86_winchip2
+ 	default nocona		if BR2_x86_64_nocona
+ 	default core2		if BR2_x86_64_core2
++	default atom		if BR2_x86_64_atom
+ 	default k8		if BR2_x86_64_opteron
+ 	default k8-sse3		if BR2_x86_64_opteron_sse3
+ 	default barcelona	if BR2_x86_64_barcelona
 -- 
 1.7.4.1
