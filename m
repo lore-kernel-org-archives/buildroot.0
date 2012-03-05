@@ -1,33 +1,31 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 5 Mar 2012 15:45:10 +0000
-Subject: [Buildroot] [PATCH] backend/pixma_bjnp: Replace index() with
-	strchr()
-Message-ID: <4F54DF86.7000504@imgtec.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Mon,  5 Mar 2012 17:17:26 +0100
+Subject: [Buildroot] [Patch v1 1/1] Bump to latest 5.1.60 version
+Message-ID: <1330964246-20475-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-This patch replaces the obsolete index() function with strchr() in
-sane-backends code. I have also filed a bug upstream
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ package/mysql_client/mysql_client.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-https://alioth.debian.org/tracker/index.php?func=detail&aid=313563&group_id=30186&atid=410366
-
-I don't know if you want to include this patch on buildroot before
-upstream does, but it may be useful for people wondering why
-sane-backend does not build on certain systems. The index() and rindex()
-functions are only exported if uClibc is configured with
-UCLIBC_SUSV3_LEGACY_MACROS. This problem has also been discussed in the
-past:
-
-http://lists.busybox.net/pipermail/buildroot/2007-June/015201.html
-
+diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
+index 9addf33..f4dd09e 100644
+--- a/package/mysql_client/mysql_client.mk
++++ b/package/mysql_client/mysql_client.mk
+@@ -3,7 +3,7 @@
+ # MySQL 5.1 Client
+ #
+ #############################################################
+-MYSQL_CLIENT_VERSION = 5.1.53
++MYSQL_CLIENT_VERSION = 5.1.60
+ MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
+ MYSQL_CLIENT_SITE = http://downloads.mysql.com/archives/mysql-5.1/
+ MYSQL_CLIENT_INSTALL_TARGET = YES
 -- 
-markos
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: sane-backends-1.0.22-index-to-strchr.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120305/7f462654/attachment-0001.ksh>
+1.7.9
