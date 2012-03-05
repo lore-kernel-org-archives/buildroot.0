@@ -1,60 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Mar 2012 20:59:58 +0100
-Subject: [Buildroot] [PATCH 05/16] Expand external toolchain wrapper to
-	custom flags
+Date: Mon,  5 Mar 2012 21:00:07 +0100
+Subject: [Buildroot] [PATCH 14/16] external-toolchain: adjust check for
+	uClibc static toolchains
 In-Reply-To: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b95e436ee0c9e4638dc79766da0d17927c6641ce.1330977548.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <090d486441e6ee1898a6a27f8827076464cf2110.1330977548.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_TARGET_OPTIMIZATION flags were not used by the external
-toolchain wrapper, which broke the multilib selection logic of
-multilib external toolchains. It also simplifies the compilation of
-external programs since all flags are properly passed automatically by
-the toolchain wrapper.
+The current check for uClibc toolchain was verifying that a
+ld-uClibc.so dynamic loader was present. However, with static-only
+uClibc toolchains, this does not work. Instead, we check for an
+uClibc-specific header file in the sysroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/ext-tool.mk           |    8 ++++++++
- .../toolchain-external/ext-toolchain-wrapper.c     |    3 +++
- 2 files changed, 11 insertions(+), 0 deletions(-)
+ toolchain/helpers.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index eb8ed4f..dde6f22 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -150,6 +150,14 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -mabi=$(CC_TARGET_ABI_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ABI='"$(CC_TARGET_ABI_)"'
- endif
- 
-+ifneq ($(BR2_TARGET_OPTIMIZATION),)
-+TOOLCHAIN_EXTERNAL_CFLAGS += $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
-+# We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each
-+# flag is a separate argument when used in execv() by the external
-+# toolchain wrapper.
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)",)'
-+endif
-+
- ifeq ($(BR2_SOFT_FLOAT),y)
- TOOLCHAIN_EXTERNAL_CFLAGS += -msoft-float
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index cc404f3..719f13b 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -40,6 +40,9 @@ static char *predef_args[] = {
- #ifdef BR_VFPFLOAT
- 	"-mfpu=vfp",
- #endif /* BR_VFPFLOAT */
-+#ifdef BR_ADDITIONAL_CFLAGS
-+	BR_ADDITIONAL_CFLAGS
-+#endif
- };
- 
- static const char *get_basename(const char *name)
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 3f4818f..6e7f1f4 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -196,7 +196,7 @@ check_uclibc_feature = \
+ #
+ check_uclibc = \
+ 	SYSROOT_DIR="$(strip $1)"; \
+-	if ! test -f $${SYSROOT_DIR}/lib/ld*-uClibc.so.* ; then \
++	if ! test -f $${SYSROOT_DIR}/usr/include/bits/uClibc_config.h ; then \
+ 		echo "Incorrect selection of the C library"; \
+ 		exit -1; \
+ 	fi; \
 -- 
 1.7.4.1
