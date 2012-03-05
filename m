@@ -1,79 +1,27 @@
-From: Roland Uuesoo <rolandu@gmail.com>
-Date: Mon,  5 Mar 2012 21:14:12 +0200
-Subject: [Buildroot] [PATCH] Ubinize: made UBI volume name and volume
-	alignment configurable
-Message-ID: <1330974852-27696-1-git-send-email-rolandu@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 Mar 2012 20:57:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package: fix WGET download method
+In-Reply-To: <fe086fb24478f0a1b106549e084da96cf7b26da1.1330941923.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 5 Mar 2012 11:06:23 +0100")
+References: <cover.1330941923.git.thomas.petazzoni@free-electrons.com>
+ <cover.1330941923.git.thomas.petazzoni@free-electrons.com>
+ <fe086fb24478f0a1b106549e084da96cf7b26da1.1330941923.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87booaizxg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Roland Uuesoo <roland@martem.eu>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Roland Uuesoo <roland@martem.eu>
----
- fs/ubifs/Config.in   |   14 ++++++++++++++
- fs/ubifs/ubi.mk      |   12 ++++++++----
- fs/ubifs/ubinize.cfg |    2 --
- 3 files changed, 22 insertions(+), 6 deletions(-)
+ Thomas> In cf2486bf317e4bbf88c801fb96183ba62be78cc8, we changed from using the
+ Thomas> -P option of wget (to set the output *directory*) to using the -O
+ Thomas> option (to set the output *file*). Unfortunately, wget -O has a
+ Thomas> strange behaviour: it creates an empty 0-byte file even if the
+ Thomas> download fails (for example when there is no network connection).
 
-diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
-index a5ef5f2..c76fa76 100644
---- a/fs/ubifs/Config.in
-+++ b/fs/ubifs/Config.in
-@@ -98,3 +98,17 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
- 	help
- 	  Tells ubinize that the flash supports sub-pages and the sub-page
- 	  size. Use 0 if subpages are not supported on flash chip.
-+
-+config BR2_TARGET_ROOTFS_UBI_VOL_ALIGNMENT
-+        int "UBI volume alignment"
-+        depends on BR2_TARGET_ROOTFS_UBI
-+        default 1
-+        help
-+          Default volume alignment
-+
-+config BR2_TARGET_ROOTFS_UBI_VOL_NAME
-+        string "UBI volume name"
-+        depends on BR2_TARGET_ROOTFS_UBI
-+        default rootfs
-+        help
-+          UBI volume name
-diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
-index c88e336..7cdbea8 100644
---- a/fs/ubifs/ubi.mk
-+++ b/fs/ubifs/ubi.mk
-@@ -13,11 +13,15 @@ endif
- ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
- 
- define ROOTFS_UBI_CMD
--	cp fs/ubifs/ubinize.cfg . ;\
-+	cp fs/ubifs/ubinize.cfg $(BUILD_DIR)/_ubinize.cfg ;\
-+        echo "vol_name=$(BR2_TARGET_ROOTFS_UBI_VOL_NAME)" \
-+                >> $(BUILD_DIR)/_ubinize.cfg ;\
-+        echo "vol_alignment=$(BR2_TARGET_ROOTFS_UBI_VOL_ALIGNMENT)" \
-+                >> $(BUILD_DIR)/_ubinize.cfg ; \
- 	echo "image=$$@fs" \
--		>> ./ubinize.cfg ;\
--	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS) ubinize.cfg ;\
--	rm ubinize.cfg
-+		>> $(BUILD_DIR)/_ubinize.cfg ;\
-+	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/_ubinize.cfg ;\
-+        rm $(BUILD_DIR)/_ubinize.cfg
- endef
- 
- $(eval $(call ROOTFS_TARGET,ubi))
-diff --git a/fs/ubifs/ubinize.cfg b/fs/ubifs/ubinize.cfg
-index 6515271..d4140ed 100644
---- a/fs/ubifs/ubinize.cfg
-+++ b/fs/ubifs/ubinize.cfg
-@@ -2,6 +2,4 @@
- mode=ubi
- vol_id=0
- vol_type=dynamic
--vol_name=rootfs
--vol_alignment=1
- vol_flags=autoresize
+Committed, thanks.
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
