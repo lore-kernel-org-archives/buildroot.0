@@ -1,69 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 Mar 2012 20:59:57 +0100
-Subject: [Buildroot] [PATCH 04/16] Support multilib variants in
-	sub-subdirectories
-In-Reply-To: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1330977548.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <50ac5f9a573d3918cc5257a30a7c85db7841ac42.1330977548.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 Mar 2012 21:05:24 +0100
+Subject: [Buildroot] [PATCH] Ubinize: made UBI volume name and volume
+ alignment configurable
+In-Reply-To: <1330974852-27696-1-git-send-email-rolandu@gmail.com>
+References: <1330974852-27696-1-git-send-email-rolandu@gmail.com>
+Message-ID: <20120305210524.22346643@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When an external toolchain has multiple variants organized in
-sub-directories, Buildroot only copies the selected sysroot and not
-all sysroots. In order to make this work, Buildroot creates a symbolic
-link of the name of the original selected sysroot to the main sysroot
-to trick the compiler so that it finds its libraries at the expected
-location.
+Hello Roland,
 
-I.e, if the toolchain as the following organization (example take on
-the ARM CodeSourcery toolchain) :
+Thanks, it looks good to me. One comment below.
 
-     .	    	for ARMv5T
-     armv4  	for ARMv4T
-     thumb2 	for ARMv7-A/Thumb
+Le Mon,  5 Mar 2012 21:14:12 +0200,
+Roland Uuesoo <rolandu@gmail.com> a ?crit :
 
-and ARMv4T is selected, then Buildroot will copy the contents of
-armv4t/ from the toolchain into its $(STAGING_DIR) and then create a
-$(STAGING_DIR)/armv4t symbolic link to $(STAGING_DIR).
+> +config BR2_TARGET_ROOTFS_UBI_VOL_ALIGNMENT
+> +        int "UBI volume alignment"
+> +        depends on BR2_TARGET_ROOTFS_UBI
+> +        default 1
+> +        help
+> +          Default volume alignment
 
-However, our logic to do so only works when there was one directory
-level for multilib sysroots. But in the MIPS CodeSourcery toolchain
-there are multiple levels. For example, the MIPS16 soft-float
-little-endian sysroot variant is in mips16/soft-float/el/ compared to
-the main sysroot.
+Could you add a bit more detail on what this 'volume alignment'
+parameter is useful for.
 
-This patch improves our logic to support this case. The logic is a bit
-more complicated as we don't want to create a symbolic link to an
-absolute path, but a symbolic link to a relative path, because we want
-the host/ directory to be relocatable.
+>  define ROOTFS_UBI_CMD
+> -	cp fs/ubifs/ubinize.cfg . ;\
+> +	cp fs/ubifs/ubinize.cfg $(BUILD_DIR)/_ubinize.cfg ;\
+> +        echo "vol_name=$(BR2_TARGET_ROOTFS_UBI_VOL_NAME)" \
+> +                >> $(BUILD_DIR)/_ubinize.cfg ;\
+> +        echo "vol_alignment=$(BR2_TARGET_ROOTFS_UBI_VOL_ALIGNMENT)" \
+> +                >> $(BUILD_DIR)/_ubinize.cfg ; \
+>  	echo "image=$$@fs" \
+> -		>> ./ubinize.cfg ;\
+> -	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS)
+> ubinize.cfg ;\
+> -	rm ubinize.cfg
+> +		>> $(BUILD_DIR)/_ubinize.cfg ;\
+> +	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS)
+> $(BUILD_DIR)/_ubinize.cfg ;\
+> +        rm $(BUILD_DIR)/_ubinize.cfg
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/helpers.mk |    9 ++++++++-
- 1 files changed, 8 insertions(+), 1 deletions(-)
+The indentation is a bit funky here. Can you keep the indentation at
+one tab?
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 4c3f240..3f4818f 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -103,7 +103,14 @@ copy_toolchain_sysroot = \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
- 			cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
- 		fi ; \
--		ln -s . $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-+		mkdir -p `dirname $(STAGING_DIR)/$${ARCH_SUBDIR}` ; \
-+		relpath="./" ; \
-+		nbslashs=`echo -n $${ARCH_SUBDIR} | sed 's%[^/]%%g' | wc -c` ; \
-+		for slash in `seq 1 $${nbslashs}` ; do \
-+			relpath=$${relpath}"../" ; \
-+		done ; \
-+		ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
-+		echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
- 	fi ; \
- 	find $(STAGING_DIR) -type d | xargs chmod 755
- 
+Thanks for your work!
+
+Thomas
 -- 
-1.7.4.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
