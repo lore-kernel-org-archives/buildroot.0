@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 Mar 2012 10:39:58 +0100
-Subject: [Buildroot] [PATCH v2 3/3] Add test infrastructure
-In-Reply-To: <1330866196-5360-3-git-send-email-arnout@mind.be>
-References: <1330866196-5360-1-git-send-email-arnout@mind.be>
- <1330866196-5360-3-git-send-email-arnout@mind.be>
-Message-ID: <20120305103958.11ed7a70@skate>
+Date: Mon, 5 Mar 2012 10:45:32 +0100
+Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
+ device (flash drive)
+In-Reply-To: <201203022300.01500.arnout@mind.be>
+References: <jio6ql$25v$1@dough.gmane.org> <20120301175921.5811b398@skate>
+ <201203022300.01500.arnout@mind.be>
+Message-ID: <20120305104532.69ae133b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun,  4 Mar 2012 14:03:16 +0100,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+Le Fri, 2 Mar 2012 23:00:01 +0000,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-> The test infrastructure is a script and a list of tests to be run.
-> Additional test configurations can be added later to the test directory.
+>  It probably won't work if your target is uclibc-based (unless your host
+> happens to be uclibc-based as well :-).
 
-I know Peter has some test scripts as well, and so I have. Maybe we
-should first share what we have, and see what we can factorize?
+Correct. This code was taken from a project that was glibc-based.
 
-In any case, this test infrastructure discussion should really be part
-of a separate set of patches. While your first two patches can be
-merged without much discussion, this third patch really requires some
-discussion. I don't want this test infrastructure to be the thing used
-only by one person, it needs to be used and usable by others.
+> You'd need a host-grub to get that right.  I tried to do that half a year ago, but it wasn't so easy -
+> unfortunately I don't remember why not.  Could be a problem with 32/64 bit.
+> Or with ccache.
 
-Regards,
+Yeah, I remember you posted some patches about this. Don't remember
+what the outcome was, though. Definitely something that would be nice
+to improve.
 
 Thomas
 -- 
