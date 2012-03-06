@@ -1,26 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Mar 2012 07:59:33 +0100
-Subject: [Buildroot] TODO items
-In-Reply-To: <20120305145753.GF21255@game.jcrosoft.org>
-References: <201203031956.44348.arnout@mind.be>
- <20120305145753.GF21255@game.jcrosoft.org>
-Message-ID: <201203060759.33810.arnout@mind.be>
+Date: Tue, 6 Mar 2012 08:06:03 +0100
+Subject: [Buildroot] [PATCH 2/2] Add test infrastructure
+In-Reply-To: <20120305145625.GE21255@game.jcrosoft.org>
+References: <1330818307-22115-1-git-send-email-arnout@mind.be>
+ <1330818307-22115-3-git-send-email-arnout@mind.be>
+ <20120305145625.GE21255@game.jcrosoft.org>
+Message-ID: <201203060806.03919.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 March 2012 15:57:53 Jean-Christophe PLAGNIOL-VILLARD wrote:
->         Create a TODO file in the the code too
-> 
->         More people read the code than the wiki
+On Monday 05 March 2012 15:56:25 Jean-Christophe PLAGNIOL-VILLARD wrote:
+>         I like the idea of test but what is the target here?
 
- I fully agree, but the others at the buildroot developer day didn't.
+ Good point, I should have explained that.
 
- I guess the problem with the TODO file in the source is that it requires 
-a single person to maintain it - patches to the files are likely to lead
-to conflicts (just like for the Changelog).
+ Currently, ThomasP and Peter are both independently running tests on the 
+buildroot tree.  We would like to have more testing done.  I myself have a
+server available that can do continuous testing.  However, a single 
+buildbot isn't going to cut it, because it takes quite long to build a
+single configuration.  Therefore, I would like to put test infrastructure
+in the buildroot repository so others can easily set up their own buildbot.
+
+ Another part of this evolution will be to set up a webpage where test
+results can be posted and retrieved.  Peter was going to do that (but 
+hasn't had the time yet).
 
  Regards,
  Arnout
