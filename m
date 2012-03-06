@@ -1,34 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 6 Mar 2012 22:21:39 +0100
-Subject: [Buildroot] [git commit] microperl: fix host build
-Message-ID: <20120306215605.26E0490D15@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Mar 2012 23:03:17 +0100
+Subject: [Buildroot] Kconfig: "selects" vs. "depends on"
+In-Reply-To: <201203041157.15326.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sun, 4 Mar 2012 11:57:15 +0100")
+References: <20120304071855.3e6c03b5@gmail.com>
+ <CAHXCMMKQjy0Z1Ozn0wu4r14_XQQMWyZTpq3B9kkzJNpj-iUgcw@mail.gmail.com>
+ <201203041157.15326.arnout@mind.be>
+Message-ID: <87mx7tmlp6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cb9a5877b88787f176215c5addb8c1be225a39d0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-It misses -lm when compiling miniperl
+ Arnout> On Sunday 04 March 2012 11:11:58 Samuel Martin wrote:
+ >> 2012/3/4 Ismael Luceno <ismael.luceno@gmail.com>:
+ >> > Which should I use?
+ >> Afaik, "depends on" is transitive, whereas "select" is not, see [1] as ref.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/microperl/microperl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Arnout>  Actually, no.  Both of them are transitive, but only with
+ Arnout> themselves.  So a depends-on chain works, and a select chain
+ Arnout> works, but a mix of depends-on and select doesn't.  Bottom line
+ Arnout> is: if you use select, you should copy the depends-on
+ Arnout> statements of the symbol you select.  Which is one reason why I
+ Arnout> claim we should use select as much as possible (to avoid mixing
+ Arnout> them).
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index b68e825..de5ecd6 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -32,7 +32,7 @@ $(MICROPERL_DIR)/.source: $(DL_DIR)/$(MICROPERL_SOURCE)
- 
- $(MICROPERL_DIR)/.host_configured: $(MICROPERL_DIR)/.source
- 	# we need to build a perl for the host just for Errno.pm
--	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de  )
-+	(cd $(MICROPERL_DIR); ./Configure -Dcc="$(HOSTCC)" -de -A libs='-lm' )
- 	touch $@
- 
- 
+We use select for normal (library) dependencies, and depends on for "big
+things" like toolchain options, Xorg, ..
+
+-- 
+Bye, Peter Korsgaard
