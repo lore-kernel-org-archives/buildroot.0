@@ -1,47 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Mar 2012 08:09:50 +0100
-Subject: [Buildroot] [PATCH v2 3/3] Add test infrastructure
-In-Reply-To: <20120305103958.11ed7a70@skate>
-References: <1330866196-5360-1-git-send-email-arnout@mind.be>
- <1330866196-5360-3-git-send-email-arnout@mind.be>
- <20120305103958.11ed7a70@skate>
-Message-ID: <201203060809.50641.arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 Mar 2012 09:29:09 +0100
+Subject: [Buildroot] [PATCH 2/2] Add test infrastructure
+In-Reply-To: <201203060806.03919.arnout@mind.be>
+References: <1330818307-22115-1-git-send-email-arnout@mind.be>
+ <1330818307-22115-3-git-send-email-arnout@mind.be>
+ <20120305145625.GE21255@game.jcrosoft.org>
+ <201203060806.03919.arnout@mind.be>
+Message-ID: <20120306092909.18f8c30c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 March 2012 10:39:58 Thomas Petazzoni wrote:
-> Le Sun,  4 Mar 2012 14:03:16 +0100,
-> "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
-> 
-> > The test infrastructure is a script and a list of tests to be run.
-> > Additional test configurations can be added later to the test directory.
-> 
-> I know Peter has some test scripts as well, and so I have. Maybe we
-> should first share what we have, and see what we can factorize?
+Le Tue, 6 Mar 2012 08:06:03 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
- I was hoping that this patch would spur you guys on to do exactly that :-)
+>  Currently, ThomasP and Peter are both independently running tests on
+> the buildroot tree.  We would like to have more testing done.  I
+> myself have a server available that can do continuous testing.
+> However, a single buildbot isn't going to cut it, because it takes
+> quite long to build a single configuration.  Therefore, I would like
+> to put test infrastructure in the buildroot repository so others can
+> easily set up their own buildbot.
 
+I am repeating myself here, but anyway. Buildbot is nice if you always
+rebuild the same configuration over and over again, to verify that
+there are no regressions.
 
-> In any case, this test infrastructure discussion should really be part
-> of a separate set of patches. While your first two patches can be
-> merged without much discussion, this third patch really requires some
-> discussion. I don't want this test infrastructure to be the thing used
-> only by one person, it needs to be used and usable by others.
+However, the tests that we do with Peter are *random* configuration
+builds. And this doesn't really fit within the Buildbot model: you
+can't compare the result of a build (success/failure) to another,
+because each build uses a different configuration.
 
- Agreed.  But the third patch depends on the other two, that's why I send
-it as a single series.  Peter usually does pick up individual patches from
-a series so I don't see a problem with that.
+Buildbot works fine if you test the defconfigs that we have, or some
+other well-known configurations, but I don't really see how it would
+apply to randpackageconfig builds, and this is exactly what Peter and I
+are doing.
 
- Regards,
- Arnout
+Regards,
 
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
