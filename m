@@ -1,35 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Mar 2012 11:48:25 +0100
-Subject: [Buildroot] u-boot .img rootfs
-In-Reply-To: <ADE657CA350FB648AAC2C43247A983F001F41FF555E5@AUSP01VMBX24.collaborationhost.net>
-References: <ADE657CA350FB648AAC2C43247A983F001F41FF555E5@AUSP01VMBX24.collaborationhost.net>
-Message-ID: <20120306114825.353855b8@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 06 Mar 2012 12:44:57 +0100
+Subject: [Buildroot] [Patch v2 1/1] mysql_client : bump to latest 5.1.60
+ version
+In-Reply-To: <1330968419-20379-1-git-send-email-sagaert.johan@skynet.be>
+References: <1330968419-20379-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <4F55F8B9.3090706@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 5 Mar 2012 20:00:57 -0600,
-H Hartley Sweeten <hartleys@visionengravers.com> a ?crit :
+Sagaert,
 
-> I have been using Buildroot to create a rootfs.ext2.gz that works
-> great with RedBoot.
-> 
-> I have a new board that uses U-Boot as the bootloader and it wants
-> some kind of .img file for the rootfs.  Can this be created using
-> Buildroot? Do I need to do something after the rootfs.ext2.gz is
-> created to make the .img file?
+thanks for having submitted a corrected patch.
 
-Do you have more details, because .img is very generic. Do you have a
-pointer to your specific U-Boot configuration? Can you just show why
-you think U-Boot needs such as file?
+Sagaert Johan wrote:
+> Updates mysql_client to the latest 5.1.60 version, the verion 5.1.53 patches have been renamed to 5.1.60
+>
+> Signed-off-by: Sagaert Johan<sagaert.johan@skynet.be>
+> ---
+>   .../mysql_client-5.1.53-ac_cache_check.patch       |  156 --------------------
+>   ...ql_client-5.1.53-configure-ps-cache-check.patch |   39 -----
+>   ...ysql_client-5.1.53-use-new-readline-iface.patch |   21 ---
+>   .../mysql_client-5.1.60-ac_cache_check.patch       |  156 ++++++++++++++++++++
+>   ...ql_client-5.1.60-configure-ps-cache-check.patch |   39 +++++
+>   ...ysql_client-5.1.60-use-new-readline-iface.patch |   21 +++
+>   package/mysql_client/mysql_client.mk               |    2 +-
+>   7 files changed, 217 insertions(+), 217 deletions(-)
+>   delete mode 100644 package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch
+>   delete mode 100644 package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch
+>   delete mode 100644 package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch
+>   create mode 100644 package/mysql_client/mysql_client-5.1.60-ac_cache_check.patch
+>   create mode 100644 package/mysql_client/mysql_client-5.1.60-configure-ps-cache-check.patch
+>   create mode 100644 package/mysql_client/mysql_client-5.1.60-use-new-readline-iface.patch
 
-Thanks,
+The next time you submit a patch that renames or moves files you should
+pass the -M option to git diff / git format-patch / whatever. This will make
+renames and moves appear much less verbose and much more readable
+than this.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Anyway this only changes how the patch is presented, not the actual
+changes to the tree, so I don't think there is any need to submit your patch
+once again.
+
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Luca
