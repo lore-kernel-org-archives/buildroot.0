@@ -1,105 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Mar 2012 11:26:02 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <CABMxt4itAFJLs+qQXf9g5sKGUq7+S-uXJuzfHFiZ+_wRSSwo_g@mail.gmail.com>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
- <CA+M6bX=A1Mie8Q093Sa3bp_hSxSRFR6z4-sNBvJP3982e_HPqQ@mail.gmail.com>
- <CABMxt4gYMf_JjfYi_2YttUL2NDNYC4974Kq_--++B2yPgf0xUg@mail.gmail.com>
- <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
- <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
- <CABMxt4jZhMcZS=0P9Le3ZHO_NUJJt0Deta_Ybdd-ghdPPuGz2A@mail.gmail.com>
- <CA+M6bXnNxFhzQpDOQhuSM7VKEh41dazMmUeEv=VTdVUuNoQhAw@mail.gmail.com>
- <CABMxt4ixVGvV_LvduJSNmWevxiEvFv0GdRHpomK325bKp4T20A@mail.gmail.com>
- <4F550BC3.80601@ti.com>
- <CABMxt4g9Xm6=QPhH1U2oDKVbXNjnPaxq_y71pUS4WF2LUG1RSw@mail.gmail.com>
- <20120306103333.45e7857d@skate>
- <CABMxt4h6GjQD7tWZtNE=vVbNgC1Kx-_uGWviSt9d14A_jAp3ug@mail.gmail.com>
- <20120306110159.3ef15a95@skate>
- <CABMxt4itAFJLs+qQXf9g5sKGUq7+S-uXJuzfHFiZ+_wRSSwo_g@mail.gmail.com>
-Message-ID: <20120306112602.708a7430@skate>
+From: Roland Uuesoo <rolandu@gmail.com>
+Date: Tue,  6 Mar 2012 12:47:59 +0200
+Subject: [Buildroot] [PATCH] Ubinize: made UBI volume name and volume
+	alignment configurable
+Message-ID: <1331030879-13141-1-git-send-email-rolandu@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 6 Mar 2012 11:22:33 +0100,
-Mohamed HAMZAOUI <requinham@gmail.com> a ?crit :
+From: Roland Uuesoo <roland@martem.eu>
 
-> I'm sorry for posting u-boot mailing list.
+Signed-off-by: Roland Uuesoo <roland@martem.eu>
+---
+ fs/ubifs/Config.in   |   39 +++++++++++++++++++++++++++++++++++----
+ fs/ubifs/ubi.mk      |   12 ++++++++----
+ fs/ubifs/ubinize.cfg |    2 --
+ 3 files changed, 43 insertions(+), 10 deletions(-)
 
-But please keep the Buildroot list in copy.
-
-> After compiling a new compilation with Buildroot and with kernel
-> 2.6.39.4 on Craneboard, i have a strange problem in booting the
-> kernel "Kernel panic...".
-
-Typically, your kernel panic below has absolutely nothing to do with
-Buildroot. It's just the kernel that doesn't work properly on your
-hardware platform. So:
-
- *) If your kernel comes from a vendor, contact the vendor for support
-
- *) If your kernel is the mainline kernel, then try with the latest
- stable version (2.9.39.4 is getting old), and if you still have the
- problem, contact the maintainers of your board inside the kernel.
-
-For the Buildroot list subscribers, I'm keeping the kernel panic below.
-
-> Registering the dns_resolver key type
-> VFP support v0.3: implementor 41 architecture 3 part 30 variant c rev
-> 1 Unable to handle kernel NULL pointer dereference at virtual address
-> 0000002a pgd = c0004000
-> [0000002a] *pgd=00000000
-> Internal error: Oops: 5 [#1]
-> last sysfs file:
-> Modules linked in:
-> CPU: 0    Tainted: G        W    (2.6.39.4 #1)
-> PC is at twl_i2c_read+0x38/0x11c
-> LR is at omap3_twl_set_sr_bit+0x34/0x9c
-> pc : [<c01edd94>]    lr : [<c000ff80>]    psr: 00000013
-> sp : cf41df50  ip : 22222222  fp : 00000001
-> r10: 00000000  r9 : 0000002a  r8 : 00000000
-> r7 : 00000000  r6 : 00000001  r5 : c0491b08  r4 : c0482318
-> r3 : 00000000  r2 : 00000006  r1 : cf41df8f  r0 : 00000015
-> Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment kernel
-> Control: 10c5387d  Table: 80004019  DAC: 00000015
-> Process swapper (pid: 1, stack limit = 0xcf41c2e8)
-> Stack: (0xcf41df50 to 0xcf41e000)
-> df40:                                     cf41df8f 00000006 c0446248
-> c0446250
-> df60: cf4203c0 c0482318 00000001 c003fbd0 00000000 00000000 00000000
-> 00000000
-> df80: 00000000 c000ff80 00000001 0000f472 00000000 c0482318 c000f664
-> c0010034
-> dfa0: c0482318 c000f670 c0028a58 c00343a0 c0032fd8 00003539 00000000
-> c0030000
-> dfc0: 00000013 c0028a58 c0028a9c c003fbd0 00000013 00000000 00000000
-> 00000000
-> dfe0: 00000000 c0008550 00000000 c00084c0 c003fbd0 c003fbd0 3b7fcee6
-> f6b9b1b9
-> [<c01edd94>] (twl_i2c_read+0x38/0x11c) from [<c000ff80>]
-> (omap3_twl_set_sr_bit+0x34/0x9c)
-> [<c000ff80>] (omap3_twl_set_sr_bit+0x34/0x9c) from [<c0010034>]
-> (omap3_twl_init+0x4c/0x88)
-> [<c0010034>] (omap3_twl_init+0x4c/0x88) from [<c000f670>]
-> (omap2_common_pm_late_init+0xc/0x50)
-> [<c000f670>] (omap2_common_pm_late_init+0xc/0x50) from [<c00343a0>]
-> (do_one_initcall+0x94/0x164)
-> [<c00343a0>] (do_one_initcall+0x94/0x164) from [<c0008550>]
-> (kernel_init+0x90/0x13c)
-> [<c0008550>] (kernel_init+0x90/0x13c) from [<c003fbd0>]
-> (kernel_thread_exit+0x0/0x8)
-> Code: e1a09080 e5d56008 e5953004 e2366001 (e7d32080)
-> ---[ end trace 1b75b31a2719ed23 ]---
-> Kernel panic - not syncing: Attempted to kill init!
-
-Best regards,
-
-Thomas
+diff --git a/fs/ubifs/Config.in b/fs/ubifs/Config.in
+index a5ef5f2..f887848 100644
+--- a/fs/ubifs/Config.in
++++ b/fs/ubifs/Config.in
+@@ -7,20 +7,37 @@ config BR2_TARGET_ROOTFS_UBIFS_LEBSIZE
+ 	hex "UBI logical erase block size"
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 0x1f800
++	help
++	  In general, logical eraseblock size is a property of the UBI device,
++	  not of the UBI volume. The logical eraseblock size depends on the
++	  physical eraseblock size and on how much bytes UBI headers consume.
++	  But because of the volume alignment, the usable size of logical
++	  eraseblock in a volume may be less.
++	  LEB size = PEB size - (PEB size % alignment)
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE
+ 	hex "UBI minimum I/O size"
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 0x800
+ 	help
+-	  Some comment required here
++	  Minimum input/output unit size. All the I/O may only be done
++	  in fractions of the contained number.
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT
+ 	int "Maximum LEB count"
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	default 2048
+ 	help
+-	  Some comment required here
++	  This option defines the maximum file-system size (maximum UBI volume
++	  size). For example, if you use --max-leb-cnt=200, than it will be
++	  possible to put the resulting image to smaller UBI volume and mount
++	  it. But if the image is put to a larger UBI volume, the file-system
++	  will anyway take only first 200 LEBs, and the rest of the volume will
++	  be wasted.
++	  Note, the --max-leb-cnt option does not affect the size of the
++	  resulting image file, which depends only on the amount of data in the
++	  file-system. mkfs.ubifs just writes the --max-leb-cnt value to the
++	  file-system superblocks.
+ 
+ choice
+ 	prompt "ubifs runtime compression"
+@@ -52,8 +69,7 @@ choice
+ 	default BR2_TARGET_ROOTFS_UBIFS_NONE
+ 	depends on BR2_TARGET_ROOTFS_UBIFS
+ 	help
+-	  Select which compression format to compress the final image
+-	  into.
++	  Select which compression format to compress the final image into.
+ 
+ config BR2_TARGET_ROOTFS_UBIFS_NONE
+ 	bool "no compression"
+@@ -98,3 +114,18 @@ config BR2_TARGET_ROOTFS_UBI_SUBSIZE
+ 	help
+ 	  Tells ubinize that the flash supports sub-pages and the sub-page
+ 	  size. Use 0 if subpages are not supported on flash chip.
++
++config BR2_TARGET_ROOTFS_UBI_VOL_ALIGNMENT
++	int "UBI volume alignment"
++	depends on BR2_TARGET_ROOTFS_UBI
++	default 1
++	help
++	  Alignment is a multiple of the minimal flash input/output unit size.
++	  Volume alignment must not be greater than LEB size.
++
++config BR2_TARGET_ROOTFS_UBI_VOL_NAME
++	string "UBI volume name"
++	depends on BR2_TARGET_ROOTFS_UBI
++	default rootfs
++	help
++	  UBI volume name
+diff --git a/fs/ubifs/ubi.mk b/fs/ubifs/ubi.mk
+index c88e336..b4a8a78 100644
+--- a/fs/ubifs/ubi.mk
++++ b/fs/ubifs/ubi.mk
+@@ -13,11 +13,15 @@ endif
+ ROOTFS_UBI_DEPENDENCIES = rootfs-ubifs
+ 
+ define ROOTFS_UBI_CMD
+-	cp fs/ubifs/ubinize.cfg . ;\
++	cp fs/ubifs/ubinize.cfg $(BUILD_DIR)/_ubinize.cfg ;\
++	echo "vol_name=$(BR2_TARGET_ROOTFS_UBI_VOL_NAME)" \
++		>> $(BUILD_DIR)/_ubinize.cfg ;\
++	echo "vol_alignment=$(BR2_TARGET_ROOTFS_UBI_VOL_ALIGNMENT)" \
++		>> $(BUILD_DIR)/_ubinize.cfg ; \
+ 	echo "image=$$@fs" \
+-		>> ./ubinize.cfg ;\
+-	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS) ubinize.cfg ;\
+-	rm ubinize.cfg
++		>> $(BUILD_DIR)/_ubinize.cfg ;\
++	$(HOST_DIR)/usr/sbin/ubinize -o $$@ $(UBI_UBINIZE_OPTS) $(BUILD_DIR)/_ubinize.cfg ;\
++	rm $(BUILD_DIR)/_ubinize.cfg
+ endef
+ 
+ $(eval $(call ROOTFS_TARGET,ubi))
+diff --git a/fs/ubifs/ubinize.cfg b/fs/ubifs/ubinize.cfg
+index 6515271..d4140ed 100644
+--- a/fs/ubifs/ubinize.cfg
++++ b/fs/ubifs/ubinize.cfg
+@@ -2,6 +2,4 @@
+ mode=ubi
+ vol_id=0
+ vol_type=dynamic
+-vol_name=rootfs
+-vol_alignment=1
+ vol_flags=autoresize
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.5.4
