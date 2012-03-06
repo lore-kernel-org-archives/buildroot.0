@@ -1,59 +1,23 @@
-From: MERCADIER Johann <johann.mercadier@imerir.com>
-Date: Tue, 6 Mar 2012 14:49:21 +0000
-Subject: [Buildroot] BR 2012.rc1 :: XORG compilation issue
-Message-ID: <CAPEB33x3V6aspqT=H96HgoCpB6n-==5NwcRPj0BKcpx8J7PJWQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 06 Mar 2012 16:12:17 +0100
+Subject: [Buildroot] [PATCH] expat: add security patch for CVE-2009-3560
+In-Reply-To: <1331035843-19694-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 6 Mar 2012 09:10:43 -0300")
+References: <1331035843-19694-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k42xojam.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everybody,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-   back with a new problem. I try to add a graphical output to my
-pandaboard.
-   It seems gcc try to compile 'liblua.so' as a static lib the raison why
-it suggest to add the -fPIC option. What I don't understand using a
-all-in-one tool like BR it is where I do that? Do I have to modify manually
-the Makefile? then if it works how I do report that to the community?
-  If someone could help me?
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Bye
-
-___[ OUTPUT
-]_____________________________________________________________________________________________
-/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/bin/arm-unknown-linux-uclibcgnueabi-ranlib
-liblua.a
-/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
--o liblua.so.5.1.4 -shared -Wl,-soname="liblua.so.5.1.4" lapi.o lcode.o
-ldebug.o ldo.o ldump.o lfunc.o lgc.o llex.o lmem.o lobject.o lopcodes.o
-lparser.o lstate.o lstring.o ltable.o ltm.o lundump.o lvm.o lzio.o
-lauxlib.o lbaselib.o ldblib.o liolib.o lmathlib.o loslib.o ltablib.o
-lstrlib.o loadlib.o linit.o -nostdlib -lgcc
-/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/workdone/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.5.3/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld:
-lapi.o: relocation R_ARM_MOVW_ABS_NC against `a local symbol' can not be
-used when making a shared object; recompile with -fPIC
-lapi.o: could not read symbols: Bad value
-collect2: ld returned 1 exit status
-make[1]: *** [liblua.so] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make[1]: Leaving directory
-`/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/lua-5.1.4/src'
-make: ***
-[/media/hddPANDAdev/ARMSTUFF/LTiB/BR/buildroot/output/build/lua-5.1.4/.stamp_built]
-Error 2
-
+I got a bit confused at first, as there's several variants of this patch
+floating around, and reports of some of them breaking stuff - But this
+seems to be the correct one, so committed - Thanks.
 
 -- 
-Cordialement.
-
-___Johann MERCADIER___
-
-:(){ :|:& };:
-"I am the Unknown lead by the Unknowing.
-I have done so much with so little for so long
-that I am now qualified to do anything with nothing."
-HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120306/3581711f/attachment.html>
+Bye, Peter Korsgaard
