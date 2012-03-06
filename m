@@ -1,36 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Mar 2012 08:00:39 +0100
-Subject: [Buildroot] [PATCH] bifferboard: new board
-In-Reply-To: <20120305104929.00b97692@skate>
-References: <201203031529.36487.arnout@mind.be>
- <1330788921-27127-1-git-send-email-arnout@mind.be>
- <20120305104929.00b97692@skate>
-Message-ID: <201203060800.39627.arnout@mind.be>
+Date: Tue, 6 Mar 2012 07:59:33 +0100
+Subject: [Buildroot] TODO items
+In-Reply-To: <20120305145753.GF21255@game.jcrosoft.org>
+References: <201203031956.44348.arnout@mind.be>
+ <20120305145753.GF21255@game.jcrosoft.org>
+Message-ID: <201203060759.33810.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 March 2012 10:49:29 Thomas Petazzoni wrote:
-> Le Sat,  3 Mar 2012 15:35:21 +0000,
-> "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+On Monday 05 March 2012 15:57:53 Jean-Christophe PLAGNIOL-VILLARD wrote:
+>         Create a TODO file in the the code too
 > 
-> >  board/bifferboard/busybox-1.19.x.config | 1013 +++++++++++++++++++++++++++++++
-> 
-> Isn't is possible to store minimal .config for Busybox, as we do for
-> the kernel?
+>         More people read the code than the wiki
 
- Busybox doesn't have a savedefconfig target.  So it would be manual work...
+ I fully agree, but the others at the buildroot developer day didn't.
 
-> >  boot/grub/grub.mk                       |    1 +
-> 
-> Is the change in grub.mk really related to this patch?
-
- Ah, that's where that change went!  (Too many branches and stashes in my repo...)
-
-
- I'll resend later this week.  Or maybe Biff will?
+ I guess the problem with the TODO file in the source is that it requires 
+a single person to maintain it - patches to the files are likely to lead
+to conflicts (just like for the Changelog).
 
  Regards,
  Arnout
