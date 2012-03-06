@@ -1,75 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Mar 2012 11:01:59 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <CABMxt4h6GjQD7tWZtNE=vVbNgC1Kx-_uGWviSt9d14A_jAp3ug@mail.gmail.com>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
- <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
- <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
- <CA+M6bX=A1Mie8Q093Sa3bp_hSxSRFR6z4-sNBvJP3982e_HPqQ@mail.gmail.com>
- <CABMxt4gYMf_JjfYi_2YttUL2NDNYC4974Kq_--++B2yPgf0xUg@mail.gmail.com>
- <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
- <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
- <CABMxt4jZhMcZS=0P9Le3ZHO_NUJJt0Deta_Ybdd-ghdPPuGz2A@mail.gmail.com>
- <CA+M6bXnNxFhzQpDOQhuSM7VKEh41dazMmUeEv=VTdVUuNoQhAw@mail.gmail.com>
- <CABMxt4ixVGvV_LvduJSNmWevxiEvFv0GdRHpomK325bKp4T20A@mail.gmail.com>
- <4F550BC3.80601@ti.com>
- <CABMxt4g9Xm6=QPhH1U2oDKVbXNjnPaxq_y71pUS4WF2LUG1RSw@mail.gmail.com>
- <20120306103333.45e7857d@skate>
- <CABMxt4h6GjQD7tWZtNE=vVbNgC1Kx-_uGWviSt9d14A_jAp3ug@mail.gmail.com>
-Message-ID: <20120306110159.3ef15a95@skate>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Tue, 6 Mar 2012 10:16:37 +0000
+Subject: [Buildroot] [PATCH] backend/pixma_bjnp: Replace index() with
+ strchr()
+In-Reply-To: <4F54DF86.7000504@imgtec.com>
+References: <4F54DF86.7000504@imgtec.com>
+Message-ID: <4F55E405.8040606@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 03/05/2012 03:45 PM, Markos Chandras wrote:
 
-Please do not cross-post this to the U-Boot mailing list, it has no
-relation at all to U-Boot.
-
-Le Tue, 6 Mar 2012 10:58:21 +0100,
-Mohamed HAMZAOUI <requinham@gmail.com> a ?crit :
-
-> The first problem is the lack of informations about Craneboard in the
-> craneboard TI wiki for example the display over DVI informations...
+> Hi,
 > 
-> the other problem is that impossible to use BUILDROOT to create a
-> distribution for Craneboard with any vanilla kernel version (2.6.37;
-> 2.6.39.1,..). the only version that works is that provided by TI and
-> it's based on 2.6.32 vanilla kernel which is an older version for
-> many tools. We need a little description how to adapt Buildroot for
-> compiling any recent kernel version and other things for working on
-> Craneboard ! we need a kernel config file who work with recent
-> version of vanilla kernel and not generate a compile error or a
-> kernel panic when booting !
+> This patch replaces the obsolete index() function with strchr() in
+> sane-backends code. I have also filed a bug upstream
 > 
-> I tested all the possibilities with Buildroot 2012.02 and nothing
-> works.
+> https://alioth.debian.org/tracker/index.php?func=detail&aid=313563&group_id=30186&atid=410366
+> 
+> I don't know if you want to include this patch on buildroot before
+> upstream does, but it may be useful for people wondering why
+> sane-backend does not build on certain systems. The index() and rindex()
+> functions are only exported if uClibc is configured with
+> UCLIBC_SUSV3_LEGACY_MACROS. This problem has also been discussed in the
+> past:
+> 
+> http://lists.busybox.net/pipermail/buildroot/2007-June/015201.html
+> 
 
-Please report specific problems and not things like "nothing works".
+This patch is now in sane-backends git repository
 
-Buildroot is only very loosely related to the kernel version. Buildroot
-simply downloads the kernel source code, extracts it, applies the
-configuration you have choosen and builds it. This procedure is
-completely independent of the kernel version.
+http://anonscm.debian.org/gitweb/?p=sane/sane-backends.git;a=commitdiff;h=66fb96d9ad04a901824a0ab14269b525fbbbf7c4
 
-So, most likely, if one kernel version works and another doesn't work,
-it's not Buildroot's fault, but rather the kernel itself that has
-issues with your particular hardware platform.
-
-Again, please report specific problems, like:
-
- I am using Buildroot 2012.02 with the configuration file visible at
- (put here some URL of pastebin with your Buildroot configuration) and
- I'm having the following problem: ...
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+markos
