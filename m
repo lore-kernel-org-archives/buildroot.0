@@ -1,25 +1,24 @@
-From: Choi, David <David.Choi@Micrel.Com>
-Date: Tue, 6 Mar 2012 00:42:58 +0000
-Subject: [Buildroot] linphone package
-Message-ID: <FD9AD8C5375B924CABC56D982DB3A802078FA5F2@EXMB1.micrel.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Mon, 5 Mar 2012 20:00:57 -0600
+Subject: [Buildroot] u-boot .img rootfs
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F41FF555E5@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everybody,
+Hello all,
 
-After seeing a patch submitted during the August last year, I checked out the latest stable version of buildroot last night.
-But After uncompressed the buildroot source tree, I could not find the patch applied to the package/Config.in for the linphone.
+I have been using Buildroot to create a rootfs.ext2.gz that works great
+with RedBoot.
 
-How can I check out the buildroot source tree including the linphone patch?
+I have a new board that uses U-Boot as the bootloader and it wants some
+kind of .img file for the rootfs.  Can this be created using Buildroot? Do I
+need to do something after the rootfs.ext2.gz is created to make the .img
+file?
 
-Thank you in advance.
+Any pointers?
 
-Regards,
-David J. Choi
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120306/880c9336/attachment.html>
+Thanks,
+Hartley
