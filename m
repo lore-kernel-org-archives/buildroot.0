@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Mar 2012 10:33:33 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <CABMxt4g9Xm6=QPhH1U2oDKVbXNjnPaxq_y71pUS4WF2LUG1RSw@mail.gmail.com>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <20120224150232.GA2346@bill-the-cat>
- <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
- <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
- <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
- <CA+M6bX=A1Mie8Q093Sa3bp_hSxSRFR6z4-sNBvJP3982e_HPqQ@mail.gmail.com>
- <CABMxt4gYMf_JjfYi_2YttUL2NDNYC4974Kq_--++B2yPgf0xUg@mail.gmail.com>
- <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
- <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
- <CABMxt4jZhMcZS=0P9Le3ZHO_NUJJt0Deta_Ybdd-ghdPPuGz2A@mail.gmail.com>
- <CA+M6bXnNxFhzQpDOQhuSM7VKEh41dazMmUeEv=VTdVUuNoQhAw@mail.gmail.com>
- <CABMxt4ixVGvV_LvduJSNmWevxiEvFv0GdRHpomK325bKp4T20A@mail.gmail.com>
- <4F550BC3.80601@ti.com>
- <CABMxt4g9Xm6=QPhH1U2oDKVbXNjnPaxq_y71pUS4WF2LUG1RSw@mail.gmail.com>
-Message-ID: <20120306103333.45e7857d@skate>
+Date: Tue, 6 Mar 2012 10:36:11 +0100
+Subject: [Buildroot] linphone package
+In-Reply-To: <FD9AD8C5375B924CABC56D982DB3A802078FA5F2@EXMB1.micrel.com>
+References: <FD9AD8C5375B924CABC56D982DB3A802078FA5F2@EXMB1.micrel.com>
+Message-ID: <20120306103611.4103fb9d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 6 Mar 2012 10:19:57 +0100,
-Mohamed HAMZAOUI <requinham@gmail.com> a ?crit :
+Hello David,
 
-> So far I have not been able to compile another kernel version other
-> than ( https://github.com/craneboard/craneboard-kernel.git) with
-> buildroot.
+Le Tue, 6 Mar 2012 00:42:58 +0000,
+"Choi, David" <David.Choi@Micrel.Com> a ?crit :
 
-What problems do you have?
+> After seeing a patch submitted during the August last year, I checked
+> out the latest stable version of buildroot last night. But After
+> uncompressed the buildroot source tree, I could not find the patch
+> applied to the package/Config.in for the linphone.
+
+The patch at:
+
+From: Pedro Sanchez <psanchez@fosstel.com>
+To: buildroot at busybox.net
+Subject: [Buildroot] [PATCH 1/1] New Package: Linphone
+Date: Wed, 10 Aug 2011 10:26:34 -0400
+
+has apparently not been applied, even though it looked quite good (but
+the contributor hasn't been persistent enough by re-sending updated
+versions of the patch).
+
+Can you take the patch, update it and push it again so that we can merge
+it?
+
+Thanks,
 
 Thomas
 -- 
