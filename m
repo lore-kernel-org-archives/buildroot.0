@@ -1,32 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Mar 2012 08:06:03 +0100
-Subject: [Buildroot] [PATCH 2/2] Add test infrastructure
-In-Reply-To: <20120305145625.GE21255@game.jcrosoft.org>
-References: <1330818307-22115-1-git-send-email-arnout@mind.be>
- <1330818307-22115-3-git-send-email-arnout@mind.be>
- <20120305145625.GE21255@game.jcrosoft.org>
-Message-ID: <201203060806.03919.arnout@mind.be>
+Date: Tue, 6 Mar 2012 08:11:40 +0100
+Subject: [Buildroot] [PATCH v2 1/3] Add target to print buildroot version
+In-Reply-To: <4F548779.10903@lucaceresoli.net>
+References: <1330866196-5360-1-git-send-email-arnout@mind.be>
+ <201203041405.35332.arnout@mind.be> <4F548779.10903@lucaceresoli.net>
+Message-ID: <201203060811.41050.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 05 March 2012 15:56:25 Jean-Christophe PLAGNIOL-VILLARD wrote:
->         I like the idea of test but what is the target here?
+On Monday 05 March 2012 10:29:29 Luca Ceresoli wrote:
+> Hi Arnout,
+> 
+> Arnout Vandecappelle wrote:
+> > On Sunday 04 March 2012 14:03:14 Arnout Vandecappelle (Essensium/Mind) wrote:
+> >> From: "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>
+> >   Slightly off-topic: does anyone know how I get rid of this redundant
+> > From: line?
+> 
+> In your patches I also see .topdeps and .topmsg files, so may this
+> be is a topgit issue? I'm sorry I don't use it, so I cannot help.
 
- Good point, I should have explained that.
+ I didn't even notice those myself :-)  I just playing with topgit, so
+that's not the cause.
 
- Currently, ThomasP and Peter are both independently running tests on the 
-buildroot tree.  We would like to have more testing done.  I myself have a
-server available that can do continuous testing.  However, a single 
-buildbot isn't going to cut it, because it takes quite long to build a
-single configuration.  Therefore, I would like to put test infrastructure
-in the buildroot repository so others can easily set up their own buildbot.
 
- Another part of this evolution will be to set up a webpage where test
-results can be posted and retrieved.  Peter was going to do that (but 
-hasn't had the time yet).
+> I don't have this problem using plain git format-patch +
+> git send-mail.
+
+ I use git send-mail directly.  Maybe that's it...
 
  Regards,
  Arnout
