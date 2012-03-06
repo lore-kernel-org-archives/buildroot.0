@@ -1,66 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 Mar 2012 18:27:36 +0100
-Subject: [Buildroot] buildroot-reg
-In-Reply-To: <CAOka8SzMY_oqW+wBT5PBUh1+nYhs_aooZaybMPFaNjpK+dDAbw@mail.gmail.com>
-References: <CAOka8SzMY_oqW+wBT5PBUh1+nYhs_aooZaybMPFaNjpK+dDAbw@mail.gmail.com>
-Message-ID: <20120306182736.5f41bcc9@skate>
+Date: Tue, 6 Mar 2012 18:49:33 +0100
+Subject: [Buildroot] [PATCH] Make libmicrohttpd version configurable
+In-Reply-To: <CAG0mjpva6VP1u7EK9oOXUqeYYypCiC2yuE7ag4UtBqCkgc52UA@mail.gmail.com>
+References: <1331054328-6564-1-git-send-email-rolandu@gmail.com>
+ <20120306182046.56f21098@skate>
+ <CAG0mjpva6VP1u7EK9oOXUqeYYypCiC2yuE7ag4UtBqCkgc52UA@mail.gmail.com>
+Message-ID: <20120306184933.5dbaf329@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Roland,
 
-For community support to Buildroot, I'd prefer if you asked the
-Buildroot mailing list instead. Since your e-mail does not contain any
-confidential information specific to your project, I took the freedom
-of directly copying the Buildroot list for this reply. Please keep the
-list in Cc for this discussion.
+Please don't reply just to me: keep the list in Cc.
 
-Le Tue, 6 Mar 2012 22:49:06 +0530,
-saketha rama <ramasaketha@gmail.com> a ?crit :
+Le Tue, 6 Mar 2012 19:38:39 +0200,
+Roland Uuesoo <rolandu@gmail.com> a ?crit :
 
->       I just found your PPT titled  "Using buildroot for real
-> projects" .
+> Version 0.4.6 is 2 years old (13 march 2010).
+> 
+> A lot of bugs/security problems have been fixed.
+> 
+> And there are new features added.
 
-Good. Just a detail: this document is not a PPT. PPT is a proprietary
-file format that works only with the Microsoft Powerpoint proprietary
-software, which I don't use. The document "Using Buildroot for real
-projects" that you have found is a PDF generated with LaTeX.
+Ok.
 
-> I have a great difficulty creating my customised rootfs
-> for beaglebone embedded system using buildroot. It is said in your
-> ppt that the buildroot/fs/skeleton will decide the rootfs structure,
-> but after I change the skeleton also nothing is changed in my rootfs.
+> Made it configurable because someone might need the old version.
 
-The skeleton is copied into the target directory (which will become the
-contents of your root filesystem) at the *beginning* of the Buildroot
-build process. Therefore, if you make changes to the skeleton, you must
-do a "make clean; make" invocation to force Buildroot to restart the
-build from scratch.
+Then just bump the version to whatever more recent version is
+available. We don't support multiple versions per package in Buildroot,
+because it would be a maintenance nightmare. For example: each version
+will need different patches, different configuration options, etc.
 
-Of course, since this is practical at all, I do not recommend using the
-skeleton mechanism to customize the root filesystem contents. I rather
-recommend:
-
- *) Creating Buildroot packages if what you need to add to the root
- filesystem are additional libraries or applications ;
-
- *) Use the post-build script mechanism to add configuration files or
- scripts to the root filesystem. Since this post-build script is
- executed at the end of *every* build, it doesn't carry the same
- problem as the "customize skeleton" solution.
-
-See slides 23 and 24 of the presentation "Using Buildroot for real
-projects".
-
-Do not hesitate to get back to us if you need more details about those
-mechanisms,
+So we have decided to keep things simple and support only one version
+at a time, except for U-Boot, Barebox, kernel, and critical things like
+that. People doing a project with Buildroot are anyway forking a
+particular version of Buildroot to ensure that they are fixed on a
+given version of all the components they are using in their system.
 
 Best regards,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
