@@ -1,72 +1,101 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Tue, 6 Mar 2012 17:05:16 +0100
-Subject: [Buildroot] Q: webkit?
-In-Reply-To: <155f0f0f67543659afeeb1371b8f2585@zacarias.com.ar>
-References: <mailman.63133.1329751235.2942.buildroot@busybox.net>
- <1531E53627F1F749B4FE809BF2A4EB6702FF68AD@WETMEX10.loepfe.com>
- <155f0f0f67543659afeeb1371b8f2585@zacarias.com.ar>
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB67030AB4DB@WETMEX10.loepfe.com>
+From: H Hartley Sweeten <hartleys@visionengravers.com>
+Date: Tue, 6 Mar 2012 10:48:10 -0600
+Subject: [Buildroot] u-boot .img rootfs
+In-Reply-To: <20120306114825.353855b8@skate>
+References: <ADE657CA350FB648AAC2C43247A983F001F41FF555E5@AUSP01VMBX24.collaborationhost.net>
+ <20120306114825.353855b8@skate>
+Message-ID: <ADE657CA350FB648AAC2C43247A983F001F41FF55761@AUSP01VMBX24.collaborationhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo 
-
-You won't believe it or not, but I got it compiled today, was using
-"WebKitGTK+ 1.6.3" and I'm testing for X11.
-
-I'm using an IMX53_loco board to test-drive it.
-I must say it is NOT stable, meaning, that I get segmentation faults
-often (don't have any clue 'at his time' how to trace/find the cause of
-these segmentation faults.. :-( ).
-
-I did have a lot of troubles with uClibc.0.9.32.x, compile-troubles
-(threading, gettext/libintl.h... etc), 
-and finally I switched to uclibc 0.9.33 and this entire strange compile
-errors (unknown types/defines.. etc) disappeared :-)
-
-
-My plan was, to restart-all-over (because I've been changing, in 1001
-places which probably was not necessary) to see if I was able to
-reproduce my success-full compile cycle.
-And, if I was able to reproduce the compile cyle I was going to trow a
-message on the buildroot-list with my findings :-).
-
-NOTE:  I'm only try-ing to build for X11 now, so, did not try for a
-direct-fb version.
-
-Regards 
-Noel
-
-
-
-
-
------Original Message-----
-From: Gustavo Zacarias [mailto:gustavo at zacarias.com.ar] 
-Sent: 6Mar12 16:26
-To: Vellemans, Noel
-Cc: buildroot at busybox.net
-Subject: Re: [Buildroot] Q: webkit?
-
-On 2012-02-20 13:18, Vellemans, Noel wrote:
-
-> Hi all,
+On Tuesday, March 06, 2012 3:48 AM, Thomas Petazzoni wrote:
+> Le Mon, 5 Mar 2012 20:00:57 -0600, H Hartley Sweeten <hartleys@visionengravers.com> a ?crit :
 >
-> Probing for some info.
+>> I have been using Buildroot to create a rootfs.ext2.gz that works
+>> great with RedBoot.
+>> 
+>> I have a new board that uses U-Boot as the bootloader and it wants
+>> some kind of .img file for the rootfs.  Can this be created using
+>> Buildroot? Do I need to do something after the rootfs.ext2.gz is
+>> created to make the .img file?
 >
-> Anyone working on (or succeeded) building a more recent version of 
-> WebKit (>= 1.2.7) on buildroot?
->
->
-> Regards,
-> Noel
+> Do you have more details, because .img is very generic. Do you have a
+> pointer to your specific U-Boot configuration? Can you just show why
+> you think U-Boot needs such as file?
 
-Hi.
-I gave a shot at the 1.6.x series a couple of weeks ago and hit some
-issues when building for a non-X11 (directfb to be precise) target.
-It wanted some X libs even though it was an X-free scenario.
-Did you move forward on your end on webkit?
-Regards.
+This is the first U-Boot system I have worked with so I don't have a lot
+of details.
+
+I know that that this works:
+
+SIM.ONE> tftp c0200000 uImage
+TFTP from server 192.168.0.84; our IP address is 192.168.0.79
+Filename 'uImage'.
+Load address: 0xc0200000
+Loading: #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         ###################################################
+done
+Bytes transferred = 1923792 (1d5ad0 hex)
+SIM.ONE> iminfo
+
+## Checking Image at c0200000 ...
+   Image Name:   Linux-3.2.5
+   Image Type:   ARM Linux Kernel Image (uncompressed)
+   Data Size:    1923728 Bytes =  1.8 MB
+   Load Address: c0008000
+   Entry Point:  c0008000
+   Verifying Checksum ... OK
+
+But, when I try the ramdisk.gz file (rootfs.ext2.gz) I get this:
+
+SIM.ONE> tftp c8000000 ramdisk.gz
+TFTP from server 192.168.0.84; our IP address is 192.168.0.79
+Filename 'ramdisk.gz'.
+Load address: 0xc8000000
+Loading: #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #################################################################
+         #####################################################
+done
+Bytes transferred = 2266236 (22947c hex)
+SIM.ONE> iminfo
+
+## Checking Image at c8000000 ...
+   Bad Magic Number
+
+The only things I have found about the U-Boot image file mentions using 'mkimage' to create
+the file using a command like these examples:
+
+mkimage -T ramdisk -C gzip -n 'Test Ramdisk Image' -d ramdisk.img.gz uRamdisk
+mkimage -A sh -O linux -T ramdisk -a 0x8C800000 -n "ST40 Linux ramdisk" -d initrd.img /export/ramdisk.ub
+
+My guess the uRamdisk file is the same format as the uImage file used for the kernel. But,
+I'm not sure what the format of the ramdisk.img.gz or initrd.img files are.
+
+I do see there is a uboot-mkimage package available in Debian. It says this about it:
+
+---
+
+This package contains the mkimage utility, which encapsulates a compressed "uImage"
+Linux kerel image with header information, CRC32 checksum, etc, for use with the
+U-Boot bootloader.
+ 
+mkimage can also be used to create ramdisk images for use with U-Boot, either separated
+from the Linux kernel image, or combined into one file. mkimage encapsulates the images
+with a 64 byte header containing information about target architecture, operating system,
+image type, compression method, entry points, time stamp, CRC32 checksums, etc.
+
+---
+
+Regards,
+Hartley
