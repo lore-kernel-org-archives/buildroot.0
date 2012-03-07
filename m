@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Mar 2012 20:34:26 +0100
-Subject: [Buildroot] [PATCH 13/13] package: move autotools specific stuff to
-	pkg-autotargets.mk
+Date: Wed,  7 Mar 2012 20:34:23 +0100
+Subject: [Buildroot] [PATCH 10/13] Move the manual build infrastructure to
+	docs/manual/manual.mk
 In-Reply-To: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <91711f9a8cd03a56455ba4516aaf235d90601d53.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ec70344eaa4dc73d4d7fc0ccae8575b8562ef80d.1331148806.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,174 +13,124 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in        |   73 --------------------------------------------
- package/pkg-autotargets.mk |   70 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 70 insertions(+), 73 deletions(-)
+ Makefile              |   49 +------------------------------------------------
+ docs/manual/manual.mk |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 48 deletions(-)
+ create mode 100644 docs/manual/manual.mk
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 29ba497..a008fe7 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -223,79 +223,6 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
- 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+diff --git a/Makefile b/Makefile
+index ab6cee1..1986e33 100644
+--- a/Makefile
++++ b/Makefile
+@@ -679,54 +679,7 @@ release:
+ 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+ 	rm -rf $(OUT) $(OUT).tar
  
+-################################################################################
+-# GENDOC -- generates the make targets needed to build a specific type of
+-#           asciidoc documentation.
+-#
+-#  argument 1 is the name of the document and must be a subdirectory of docs/;
+-#             the top-level asciidoc file must have the same name
+-#  argument 2 is the type of document to generate (-f argument of a2x)
+-#  argument 3 is the document type as used in the make target
+-#  argument 4 is the output file extension for the document type
+-#  argument 5 is the human text for the document type
+-#  argument 6 (optional) are extra arguments for a2x
+-#
+-# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+-################################################################################
+-define GENDOC_INNER
+-$(1): $(1)-$(3)
+-.PHONY: $(1)-$(3)
+-$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
 -
--#######################################################################
--# settings we need to pass to configure
+-$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
+-	@echo "Generating $(5) $(1)..."
+-	$(Q)mkdir -p $$(@D)
+-	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
+-	  -D $$(@D) $$<
+-endef
 -
--# does unaligned access trap?
--BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=yes
--ifeq ($(BR2_i386),y)
--BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
--endif
--ifeq ($(BR2_x86_64),y)
--BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
--endif
--ifeq ($(BR2_m68k),y)
--BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
--endif
--ifeq ($(BR2_powerpc)$(BR2_ENDIAN),yBIG)
--BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
--endif
+-################################################################################
+-# GENDOC -- generates the make targets needed to build asciidoc documentation.
+-#
+-#  argument 1 is the name of the document and must be a subdirectory of docs/;
+-#             the top-level asciidoc file must have the same name
+-#
+-# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+-################################################################################
+-define GENDOC
+-$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
+-$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
+-$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+-$(call GENDOC_INNER,$(1),text,txt,text,Text)
+-$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
+-clean: clean-$(1)
+-clean-$(1):
+-	$(Q)$(RM) -rf $(O)/docs/$(1)
+-.PHONY: $(1) clean-$(1)
+-endef
 -
--ifeq ($(BR2_ENDIAN),"BIG")
--BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=yes
--else
--BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=no
--endif
--
--TARGET_CONFIGURE_ARGS= \
--	$(BR2_AC_CV_TRAP_CHECK) \
--	ac_cv_func_mmap_fixed_mapped=yes \
--	ac_cv_func_memcmp_working=yes \
--	ac_cv_have_decl_malloc=yes \
--	gl_cv_func_malloc_0_nonnull=yes \
--	ac_cv_func_malloc_0_nonnull=yes \
--	ac_cv_func_calloc_0_nonnull=yes \
--	ac_cv_func_realloc_0_nonnull=yes \
--	lt_cv_sys_lib_search_path_spec="" \
--	$(BR2_AC_CV_C_BIGENDIAN)
--
--#######################################################################
--
--ifeq ($(BR2_ENABLE_LOCALE),y)
--DISABLE_NLS:=
--else
--DISABLE_NLS:=--disable-nls
--endif
--
--ifneq ($(BR2_LARGEFILE),y)
--DISABLE_LARGEFILE= --disable-largefile
--endif
--
--ifneq ($(BR2_HAVE_DOCUMENTATION),y)
--DISABLE_DOCUMENTATION=--disable-gtk-doc
--endif
--
--ifneq ($(BR2_INET_IPV6),y)
--DISABLE_IPV6= --disable-ipv6
--endif
--
--ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
--TARGET_CONFIGURE_OPTS+=CXX=false
--endif
--
--ifeq ($(BR2_ENABLE_DEBUG),y)
--ENABLE_DEBUG:=--enable-debug
--else
--ENABLE_DEBUG:=
--endif
--
--ifeq ($(BR2_PREFER_STATIC_LIB),y)
--SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
--else
--SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
--endif
--
- include package/pkg-utils.mk
- include package/pkg-download.mk
- include package/pkg-autotargets.mk
-diff --git a/package/pkg-autotargets.mk b/package/pkg-autotargets.mk
-index c9887c2..a1539bb 100644
---- a/package/pkg-autotargets.mk
-+++ b/package/pkg-autotargets.mk
-@@ -36,6 +36,76 @@ define CONFIG_UPDATE
- 	done
- endef
+-MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
+-$(eval $(call GENDOC,manual))
++include docs/manual/manual.mk
  
+ .PHONY: $(noconfig_targets)
+ 
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+new file mode 100644
+index 0000000..1eaf73a
+--- /dev/null
++++ b/docs/manual/manual.mk
+@@ -0,0 +1,48 @@
++################################################################################
++# GENDOC -- generates the make targets needed to build a specific type of
++#           asciidoc documentation.
 +#
-+# Calculate values of well-known settings for configure scripts
++#  argument 1 is the name of the document and must be a subdirectory of docs/;
++#             the top-level asciidoc file must have the same name
++#  argument 2 is the type of document to generate (-f argument of a2x)
++#  argument 3 is the document type as used in the make target
++#  argument 4 is the output file extension for the document type
++#  argument 5 is the human text for the document type
++#  argument 6 (optional) are extra arguments for a2x
 +#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++################################################################################
++define GENDOC_INNER
++$(1): $(1)-$(3)
++.PHONY: $(1)-$(3)
++$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
 +
-+# does unaligned access trap?
-+BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=yes
-+ifeq ($(BR2_i386),y)
-+BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
-+else ifeq ($(BR2_x86_64),y)
-+BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
-+else ifeq ($(BR2_m68k),y)
-+BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
-+else ifeq ($(BR2_powerpc)$(BR2_ENDIAN),yBIG)
-+BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
-+endif
++$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
++	@echo "Generating $(5) $(1)..."
++	$(Q)mkdir -p $$(@D)
++	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
++	  -D $$(@D) $$<
++endef
 +
-+ifeq ($(BR2_ENDIAN),"BIG")
-+BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=yes
-+else
-+BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=no
-+endif
++################################################################################
++# GENDOC -- generates the make targets needed to build asciidoc documentation.
++#
++#  argument 1 is the name of the document and must be a subdirectory of docs/;
++#             the top-level asciidoc file must have the same name
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++################################################################################
++define GENDOC
++$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
++$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
++$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
++$(call GENDOC_INNER,$(1),text,txt,text,Text)
++$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
++clean: clean-$(1)
++clean-$(1):
++	$(Q)$(RM) -rf $(O)/docs/$(1)
++.PHONY: $(1) clean-$(1)
++endef
 +
-+TARGET_CONFIGURE_ARGS= \
-+	$(BR2_AC_CV_TRAP_CHECK) \
-+	ac_cv_func_mmap_fixed_mapped=yes \
-+	ac_cv_func_memcmp_working=yes \
-+	ac_cv_have_decl_malloc=yes \
-+	gl_cv_func_malloc_0_nonnull=yes \
-+	ac_cv_func_malloc_0_nonnull=yes \
-+	ac_cv_func_calloc_0_nonnull=yes \
-+	ac_cv_func_realloc_0_nonnull=yes \
-+	lt_cv_sys_lib_search_path_spec="" \
-+	$(BR2_AC_CV_C_BIGENDIAN)
-+
-+# Calculate values of well-known configure script options
-+
-+ifeq ($(BR2_ENABLE_LOCALE),y)
-+DISABLE_NLS:=
-+else
-+DISABLE_NLS:=--disable-nls
-+endif
-+
-+ifneq ($(BR2_LARGEFILE),y)
-+DISABLE_LARGEFILE= --disable-largefile
-+endif
-+
-+ifneq ($(BR2_HAVE_DOCUMENTATION),y)
-+DISABLE_DOCUMENTATION=--disable-gtk-doc
-+endif
-+
-+ifneq ($(BR2_INET_IPV6),y)
-+DISABLE_IPV6= --disable-ipv6
-+endif
-+
-+ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-+TARGET_CONFIGURE_OPTS+=CXX=false
-+endif
-+
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+ENABLE_DEBUG:=--enable-debug
-+else
-+ENABLE_DEBUG:=
-+endif
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
-+else
-+SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
-+endif
-+
- ################################################################################
- # AUTOTARGETS_INNER -- defines how the configuration, compilation and
- # installation of an autotools package should be done, implements a
++MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
++$(eval $(call GENDOC,manual))
 -- 
 1.7.4.1
