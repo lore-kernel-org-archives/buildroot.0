@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:20 +0100
-Subject: [Buildroot] [RFC v2 20/31] directfb: define license
+Date: Wed,  7 Mar 2012 21:58:23 +0100
+Subject: [Buildroot] [RFC v2 23/31] lzop: define license
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-21-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-24-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/directfb/directfb.mk |    2 ++
+ package/lzop/lzop.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 977d272..8fb6766 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -7,6 +7,8 @@ DIRECTFB_VERSION_MAJOR = 1.4
- DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).15
- DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
-+DIRECTFB_LICENSE = LGPLv2.1
-+DIRECTFB_LICENSE_FILES = COPYING
- DIRECTFB_AUTORECONF = YES
- DIRECTFB_INSTALL_STAGING = YES
- DIRECTFB_CONF_OPT = \
+diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
+index 6d1d674..6f74d16 100644
+--- a/package/lzop/lzop.mk
++++ b/package/lzop/lzop.mk
+@@ -6,6 +6,8 @@
+ LZOP_VERSION = 1.03
+ LZOP_SOURCE = lzop-$(LZOP_VERSION).tar.gz
+ LZOP_SITE = http://www.lzop.org/download/
++LZOP_LICENSE = GPLv2
++LZOP_LICENSE_FILES = COPYING
+ LZOP_DEPENDENCIES = lzo
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.5.4
