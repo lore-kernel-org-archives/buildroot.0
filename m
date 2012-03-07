@@ -1,11 +1,10 @@
 From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 7 Mar 2012 21:10:45 +0000
-Subject: [Buildroot] New package lcdproc
-In-Reply-To: <20120307202109.30f9c625@skate>
-References: <CAHt8ZCPGCi-3jXKAjnjdbYq97=2se1c3YjDc18V27QEA7Mcq0Q@mail.gmail.com>
- <CAHt8ZCONKjxYVWrGaKwfn-1ruDJMV-yyCTLPyE=JZ946Qo5vfQ@mail.gmail.com>
- <20120307202109.30f9c625@skate>
-Message-ID: <CAHt8ZCPGcj_B-FcS3H+cX5W-FCCjMQe6xa-2_XGLUL3GCk=fuA@mail.gmail.com>
+Date: Wed, 7 Mar 2012 21:14:13 +0000
+Subject: [Buildroot] New package protobuf
+In-Reply-To: <20120307202304.19ec2f11@skate>
+References: <CAHt8ZCM9ZD=VSEc5UJ+98NTiwhYsAz0sGXCt+yNPVMAKCB8qtg@mail.gmail.com>
+ <20120307202304.19ec2f11@skate>
+Message-ID: <CAHt8ZCPFyS15PPKmQtWAaFNpDw4JKNvfFZgWegAJoA8v1GYxQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,79 +15,59 @@ Hi Thomas.
 
 Thanks for your comments; re-worked patch attached below.
 
+> Just curious, what does protobuf installs on the target? Is it a library? A utility?
+
+Both a utility (/usr/bin/protoc, the protocol buffers compiler) and a
+set of libraries (/usr/lib/libproto*.so) are installed on the target.
+
 Simon.
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
 
 diff --git a/package/Config.in b/package/Config.in
-index 41cbb8c..4237e3f 100644
+index 41cbb8c..a2d2006 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -302,6 +302,7 @@ source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
-+source "package/lcdproc/Config.in"
- source "package/libart/Config.in"
- source "package/libdrm/Config.in"
- source "package/libexif/Config.in"
-diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+@@ -387,6 +387,7 @@ source "package/liburcu/Config.in"
+ source "package/lttng-libust/Config.in"
+ source "package/orc/Config.in"
+ source "package/poco/Config.in"
++source "package/protobuf/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
+
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
 new file mode 100644
-index 0000000..be3a1f8
+index 0000000..1b0085b
 --- /dev/null
-+++ b/package/lcdproc/Config.in
++++ b/package/protobuf/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LCDPROC
-+       bool "lcdproc"
-+       select BR2_PACKAGE_NCURSES
-+       help
-+         LCD display driver daemon and clients
++config BR2_PACKAGE_PROTOBUF
++	bool "protobuf"
++	help
++	  Protocol buffers are Google's language-neutral, platform-neutral,
++	  extensible mechanism for serializing structured data.
 +
-+         http://lcdproc.org/
-diff --git a/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-b/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
++	  http://code.google.com/p/protobuf/
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
 new file mode 100644
-index 0000000..4d6e623
+index 0000000..f4d82cb
 --- /dev/null
-+++ b/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-@@ -0,0 +1,18 @@
-+Fix the default LCDd configuration file, so that the DriverPath
-+is set to the correct lcdproc library install path, rather than
-+the dummy/default path.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+---
-+
-+--- lcdproc-0.5.3/LCDd.conf.orig       2009-06-20 14:48:34.000000000 +0100
-++++ lcdproc-0.5.3/LCDd.conf    2010-05-11 10:02:21.000000000 +0100
-+@@ -34,7 +34,7 @@
-+ #            the driver modules and will thus not be able to
-+ #            function properly.
-+ # NOTE: Always place a slash as last character !
-+-DriverPath=server/drivers/
-++DriverPath=/usr/lib/lcdproc/
-+
-+ # Tells the server to load the given drivers. Multiple lines can be given.
-+ # The name of the driver is case sensitive and determines the section
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-new file mode 100644
-index 0000000..3b2b153
---- /dev/null
-+++ b/package/lcdproc/lcdproc.mk
-@@ -0,0 +1,14 @@
++++ b/package/protobuf/protobuf.mk
+@@ -0,0 +1,15 @@
 +#############################################################
 +#
-+# lcdproc
++# protobuf
 +#
 +#############################################################
-+LCDPROC_VERSION := 0.5.5
-+LCDPROC_SOURCE := lcdproc-$(LCDPROC_VERSION).tar.gz
-+LCDPROC_SITE :=
-http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/lcdproc/
++PROTOBUF_VERSION := 2.4.1
++PROTOBUF_SOURCE := protobuf-$(PROTOBUF_VERSION).tar.gz
++PROTOBUF_SITE := http://protobuf.googlecode.com/files/
 +
-+LCDPROC_CONF_OPT := --enable-drivers=all
-+
-+LCDPROC_DEPENDENCIES := ncurses
++# N.B. Need to use host protoc during cross compilation.
++PROTOBUF_DEPENDENCIES := host-protobuf
++PROTOBUF_CONF_OPT := --with-protoc=$(HOST_DIR)/usr/bin/protoc
 +
 +$(eval $(call AUTOTARGETS))
++$(eval $(call AUTOTARGETS,host))
