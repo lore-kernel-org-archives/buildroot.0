@@ -1,42 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Mar 2012 09:06:13 +0100
-Subject: [Buildroot] [PATCH] Fix microperl
-In-Reply-To: <871up5o277.fsf@macbook.be.48ers.dk>
-References: <1330895345-16705-1-git-send-email-arnout@mind.be>
- <871up5o277.fsf@macbook.be.48ers.dk>
-Message-ID: <20120307090613.3b8e4a9a@skate>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Wed, 7 Mar 2012 08:50:42 +0100
+Subject: [Buildroot] TODO items
+In-Reply-To: <201203060759.33810.arnout@mind.be>
+References: <201203031956.44348.arnout@mind.be>
+ <20120305145753.GF21255@game.jcrosoft.org>
+ <201203060759.33810.arnout@mind.be>
+Message-ID: <20120307075041.GJ12248@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 07:59 Tue 06 Mar     , Arnout Vandecappelle wrote:
+> On Monday 05 March 2012 15:57:53 Jean-Christophe PLAGNIOL-VILLARD wrote:
+> >         Create a TODO file in the the code too
+> > 
+> >         More people read the code than the wiki
+> 
+>  I fully agree, but the others at the buildroot developer day didn't.
+> 
+>  I guess the problem with the TODO file in the source is that it requires 
+> a single person to maintain it - patches to the files are likely to lead
+> to conflicts (just like for the Changelog).
+I do insist on this one
 
-Le Tue, 06 Mar 2012 22:21:32 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+People who download the release will have it
 
-> Well, I think getting rid of it would be a pity, but I don't
-> personally use perl so if nobody else is using it? Gustavoz?
-
-Gustavo has a patch that does the conversion to GENTARGETS, he even
-posted it on the list at:
-
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-To: buildroot at busybox.net
-Subject: [Buildroot] [PATCHv3] [RFC] microperl: bump to version 5.12.3 and convert to gentargets
-Date: Tue, 17 May 2011 15:22:39 -0300
-
-There was only one remaining issue: on a Ubuntu 64 bits host, the build
-was failing. But I think it also fails in the current state, so the
-patch that converts to GENTARGETS could be merged, and the building
-problem on Ubuntu 64 bits solved later.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best Regards,
+J.
