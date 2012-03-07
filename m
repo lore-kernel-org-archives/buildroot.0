@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:23 +0100
-Subject: [Buildroot] [RFC v2 23/31] lzop: define license
+Date: Wed,  7 Mar 2012 21:58:26 +0100
+Subject: [Buildroot] [RFC v2 26/31] pcre: define license
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-24-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-27-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/lzop/lzop.mk |    2 ++
+ package/pcre/pcre.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lzop/lzop.mk b/package/lzop/lzop.mk
-index 6d1d674..6f74d16 100644
---- a/package/lzop/lzop.mk
-+++ b/package/lzop/lzop.mk
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index d64106e..eab3c2d 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
 @@ -6,6 +6,8 @@
- LZOP_VERSION = 1.03
- LZOP_SOURCE = lzop-$(LZOP_VERSION).tar.gz
- LZOP_SITE = http://www.lzop.org/download/
-+LZOP_LICENSE = GPLv2
-+LZOP_LICENSE_FILES = COPYING
- LZOP_DEPENDENCIES = lzo
  
- $(eval $(call AUTOTARGETS))
+ PCRE_VERSION = 8.20
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
++PCRE_LICENSE = BSD
++PCRE_LICENSE_FILES = LICENCE
+ PCRE_INSTALL_STAGING = YES
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
 -- 
 1.7.5.4
