@@ -1,10 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:06 +0100
-Subject: [Buildroot] [RFC v2 06/31] microperl: warn that legal-info is not
-	implemented
+Date: Wed,  7 Mar 2012 21:58:17 +0100
+Subject: [Buildroot] [RFC v2 17/31] m4: define license
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-7-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-18-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/microperl/microperl.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/m4/m4.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index de5ecd6..f9c32a9 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -93,6 +93,10 @@ ifneq ($(BR2_STRIP_none),y)
- endif
- 	(cd $(TARGET_DIR)/usr/bin; rm -f perl; ln -s microperl perl;)
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 173bba8..f376ca2 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -7,6 +7,8 @@
+ M4_VERSION = 1.4.16
+ M4_SOURCE = m4-$(M4_VERSION).tar.bz2
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
++M4_LICENSE = GPLv3
++M4_LICENSE_FILES = COPYING
+ M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
  
-+microperl-legal-info:
-+	@echo WARNING: Cannot produce any legal info for package microperl \
-+		>>$(LEGAL_WARNINGS)
-+
- microperl: $(TARGET_DIR)/usr/bin/microperl
- 
- microperl-source: $(DL_DIR)/$(MICROPERL_SOURCE)
+ ifneq ($(BR2_USE_WCHAR),y)
 -- 
 1.7.5.4
