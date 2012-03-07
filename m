@@ -1,32 +1,40 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Wed, 7 Mar 2012 11:39:12 +0100
-Subject: [Buildroot] [git commit] barebox: add 2012.03 release
-In-Reply-To: <20120306215605.34C7E90D15@busybox.osuosl.org>
-References: <20120306215605.34C7E90D15@busybox.osuosl.org>
-Message-ID: <20120307113912.626ff962@eb-e6520>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  7 Mar 2012 10:53:05 +0000 (UTC)
+Subject: [Buildroot] [Bug 4880] New: New package lcdproc
+Message-ID: <bug-4880-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+https://bugs.busybox.net/show_bug.cgi?id=4880
 
-Le Tue, 6 Mar 2012 22:55:30 +0100,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
-> +config BR2_TARGET_BAREBOX_2012_03
-> +	bool "2012.03"
-> +
->  config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
->  	bool "Custom tarball"
->  
-> @@ -42,6 +45,7 @@ config BR2_TARGET_BAREBOX_VERSION
->  	default "2011.12.0"	if BR2_TARGET_BAREBOX_2011_12
->  	default "2012.01.0"	if BR2_TARGET_BAREBOX_2012_01
->  	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
-> +	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_02
-missing change here :                                      ^^
+           Summary: New package lcdproc
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: spdawson at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Eric
+
+Created attachment 4100
+  --> https://bugs.busybox.net/attachment.cgi?id=4100
+Patch to add lcdproc
+
+Patch to add lcdproc package (LCD display driver daemon and clients) to
+buildroot.
+
+http://lcdproc.org/
+
 -- 
-http://eukrea.com/en/news/104-2012
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
