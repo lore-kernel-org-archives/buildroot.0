@@ -1,79 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Mar 2012 20:34:24 +0100
-Subject: [Buildroot] [PATCH 11/13] cmake: move creation of toolchain file to
-	package/pkg-cmaketargets.mk
+Date: Wed,  7 Mar 2012 20:34:22 +0100
+Subject: [Buildroot] [PATCH 09/13] Remove unused .fakeroot.* mechanism
 In-Reply-To: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <e165f3e7d58343c33b295e78c7ec60b0f6bbb839.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <55b004c3fe5be40fb7bfaeeec0b6219aadaac022.1331148806.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There used to be a mechanism using which packages could leave a
+.fakeroot.<something> file which could contain commands to be executed
+within the fakeroot environment. Since this mechanism is no longer
+used by any package, remove it from the common infrastructure.
+
+The latest user was nfs-utils, which used this mechanism to do the
+"make install" as root, since doing otherwise was not supported. But
+since 16e7b8255c82815126a2c502c3787d442d254a86, nfs-utils has been
+upgraded and converted to the package infrastructure, and this hack is
+no longer necessary. Another past user was the ltp-testsuite package,
+for the same reason, and since
+a72a670489547a3ca645ff7c3a0d9c3fb66eab51, the fakeroot hack is no
+longer needed.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                    |   17 -----------------
- package/pkg-cmaketargets.mk |   22 ++++++++++++++++++++++
- 2 files changed, 22 insertions(+), 17 deletions(-)
+ Makefile              |    6 ------
+ fs/common.mk          |    2 --
+ fs/iso9660/iso9660.mk |    2 --
+ 3 files changed, 0 insertions(+), 10 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 1986e33..ab91b10 100644
+index c3ff284..ab6cee1 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -339,23 +339,6 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+@@ -301,8 +301,6 @@ endif
  
- world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+ include fs/common.mk
  
--$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
--	mkdir -p $(@D)
--	@echo -en "\
--	set(CMAKE_SYSTEM_NAME Linux)\n\
--	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
--	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
--	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
--	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
--	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
--	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
--	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
--	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
--	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
--	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
--	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
--	" > $@
+-TARGETS+=erase-fakeroots
 -
- .PHONY: all world dirs clean distclean source outputmakefile \
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
-diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
-index 1cd65e4..371ab11 100644
---- a/package/pkg-cmaketargets.mk
-+++ b/package/pkg-cmaketargets.mk
-@@ -197,3 +197,25 @@ else
- $(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
- endif
- endef
-+
-+################################################################################
-+# Generation of the CMake toolchain file
-+################################################################################
-+
-+$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
-+	@mkdir -p $(@D)
-+	@echo -en "\
-+	set(CMAKE_SYSTEM_NAME Linux)\n\
-+	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
-+	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-+	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-+	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
-+	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
-+	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
-+	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-+	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-+	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
-+	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
-+	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-+	" > $@
-+
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+@@ -391,7 +389,6 @@ $(BUILD_DIR)/.root:
+ 		if [ -d "$(TARGET_SKELETON)" ]; then \
+ 			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
+ 		fi; \
+-		touch $(STAGING_DIR)/.fakeroot.00000; \
+ 	fi
+ 	-find $(TARGET_DIR) -type d -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
+ 	-find $(TARGET_DIR) -type f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
+@@ -399,9 +396,6 @@ $(BUILD_DIR)/.root:
+ 
+ $(TARGET_DIR): $(BUILD_DIR)/.root
+ 
+-erase-fakeroots:
+-	rm -f $(BUILD_DIR)/.fakeroot*
+-
+ target-finalize:
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+diff --git a/fs/common.mk b/fs/common.mk
+index d426f37..debf7db 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -45,8 +45,6 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
+ 	rm -f $(FAKEROOT_SCRIPT)
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+ 	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index afebafc..f51b6ee 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -25,8 +25,6 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-ext2 grub
+ 	cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ 	# Use fakeroot so mkisofs believes the previous fakery
+ 	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
 -- 
 1.7.4.1
