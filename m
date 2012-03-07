@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Mar 2012 09:04:01 +0100
-Subject: [Buildroot] AX.25 Support in Buildroot/Busybox
-In-Reply-To: <CAMPueyyycZdDJVhff2JMqWCE0KjpDDM+SYpBGak6BM=NWUT5zw@mail.gmail.com>
-References: <CAMPueyyycZdDJVhff2JMqWCE0KjpDDM+SYpBGak6BM=NWUT5zw@mail.gmail.com>
-Message-ID: <20120307090401.15998a31@skate>
+Date: Wed, 7 Mar 2012 09:06:13 +0100
+Subject: [Buildroot] [PATCH] Fix microperl
+In-Reply-To: <871up5o277.fsf@macbook.be.48ers.dk>
+References: <1330895345-16705-1-git-send-email-arnout@mind.be>
+ <871up5o277.fsf@macbook.be.48ers.dk>
+Message-ID: <20120307090613.3b8e4a9a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jeff,
+Hello,
 
-Le Wed, 7 Mar 2012 01:09:36 +0000,
-Jeff Renner <d1g1t4lsh4d0w@gmail.com> a ?crit :
+Le Tue, 06 Mar 2012 22:21:32 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> Can someone tell me what is the best way to have all AX.25 support in
-> buildroot using ARM architecture?
+> Well, I think getting rid of it would be a pity, but I don't
+> personally use perl so if nobody else is using it? Gustavoz?
 
-Creating Buildroot packages for the following three elements is
-probably the right way to do this.
+Gustavo has a patch that does the conversion to GENTARGETS, he even
+posted it on the list at:
 
-You can read the documentation, which details how to add packages. We
-can also help by answering your questions about this.
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+To: buildroot at busybox.net
+Subject: [Buildroot] [PATCHv3] [RFC] microperl: bump to version 5.12.3 and convert to gentargets
+Date: Tue, 17 May 2011 15:22:39 -0300
 
-> I mean that software available at http://www.linux-ax25.org :
-> AX.25
-> Apps<http://www.linux-ax25.org/pub/ax25-apps/ax25-apps-0.0.8-rc2.tar.gz>
-> AX.25
-> Tools<http://www.linux-ax25.org/pub/ax25-tools/ax25-tools-0.0.10-rc2.tar.gz>
-> AX.25
-> Library<http://www.linux-ax25.org/pub/libax25/libax25-0.0.12-rc2.tar.gz>
-> 
-> (and net-tools support for ax.25?)
-> 
-> It would be very interesting if it can be automatically enabled, for
-> example, in busybox-menuconfig.
-
-busybox-menuconfig is for configuring *Busybox* itself, so definitely,
-it wouldn't show up there. However, it would show up with all other
-packages in "make menuconfig".
+There was only one remaining issue: on a Ubuntu 64 bits host, the build
+was failing. But I think it also fails in the current state, so the
+patch that converts to GENTARGETS could be merged, and the building
+problem on Ubuntu 64 bits solved later.
 
 Best regards,
 
