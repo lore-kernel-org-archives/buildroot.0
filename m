@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:05 +0100
-Subject: [Buildroot] [RFC v2 05/31] gettext: warn that legal-info is not
+Date: Wed,  7 Mar 2012 21:58:03 +0100
+Subject: [Buildroot] [RFC v2 03/31] fis: warn that legal-info is not
 	implemented
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-6-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/gettext/gettext.mk |    4 ++++
+ package/fis/fis.mk |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index f4c8c76..b5a2099 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -113,6 +113,10 @@ $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY): $(GETTEXT_DIR)/$(GETTEXT_BINARY)
- 		autopoint envsubst gettext.sh gettextize msg* ?gettext)
- 	touch -c $@
+diff --git a/package/fis/fis.mk b/package/fis/fis.mk
+index 2942449..1d22068 100644
+--- a/package/fis/fis.mk
++++ b/package/fis/fis.mk
+@@ -32,6 +32,10 @@ $(TARGET_DIR)/$(FIS_TARGET_BINARY): $(FIS_DIR)/$(FIS_BINARY)
+ 	$(INSTALL) -D -m 0755 $(FIS_DIR)/$(FIS_BINARY) $(TARGET_DIR)/$(FIS_TARGET_BINARY)
+ 	$(STRIPCMD) $(STRIP_STRIP_ALL) $@
  
-+gettext-legal-info:
-+	@echo WARNING: Cannot produce any legal info for package gettext \
++fis-legal-info:
++	@echo WARNING: Cannot produce any legal info for package fis \
 +		>>$(LEGAL_WARNINGS)
 +
- gettext: host-pkg-config $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ fis: $(TARGET_DIR)/$(FIS_TARGET_BINARY)
  
- gettext-unpacked: $(GETTEXT_DIR)/.unpacked
+ fis-clean:
 -- 
 1.7.5.4
