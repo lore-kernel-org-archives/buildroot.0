@@ -1,76 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Mar 2012 20:34:13 +0100
-Subject: [Buildroot] [RFC] Request for comment for branch
-	for-2012.05/misc-cleanups
-Message-ID: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
+Date: Wed,  7 Mar 2012 20:34:17 +0100
+Subject: [Buildroot] [PATCH 04/13] kconfig: do not use HOST_LOADLIBES anymore
+In-Reply-To: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <cea7138d9daf1cd08de1deeab5b321432b7a265d.1331148806.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/kconfig/Makefile.br                      |    4 ++--
+ support/kconfig/patches/10-br-build-system.patch |   12 ++++++------
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-Here is a set of proposal that cleanup/re-organize a few parts of our
-main Makefiles. This is just the beginning of a cleanup of Makefile,
-package/Makefile.in and some other core parts of the
-infrastructure. Before going further, I'd like to see if the direction
-I'm taking is something that is considered to be useful and
-interesting.
-
-This set of patches is at the Request For Comment state, they are not
-yet intended to be committed, I need to do some further testing. The
-purpose is really to get some early feedback about them.
-
-Thanks,
-
-Thomas
-
-The following changes since commit b50f7a832de2801aeee33146ff5a81945f4078c2:
-
-  barebox: fix 2012.03 typo (2012-03-07 16:26:50 +0100)
-
-are available in the git repository at:
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/misc-cleanups
-
-Thomas Petazzoni (13):
-      Remove the DATE variable
-      Remove cc-option: not used anywhere
-      Remove filename extension crap for OS compatibility
-      kconfig: do not use HOST_LOADLIBES anymore
-      Rename Makefile.autotools.in to pkg-autotargets.mk
-      Rename Makefile.cmake.in to pkg-cmaketargets.mk
-      Split Makefile.package.in in pkg-download.mk, pkg-utils.mk and pkg-gentargets.mk
-      pkg-*.mk: add some comments, update some existing comments
-      Remove unused .fakeroot.* mechanism
-      Move the manual build infrastructure to docs/manual/manual.mk
-      cmake: move creation of toolchain file to package/pkg-cmaketargets.mk
-      package: remove unused STRIP_DISCARD_ALL variable
-      package: move autotools specific stuff to pkg-autotargets.mk
-
- Makefile                                           |  108 +---
- boot/uboot/uboot.mk                                |    1 -
- docs/manual/manual.mk                              |   48 ++
- fs/common.mk                                       |    2 -
- fs/iso9660/iso9660.mk                              |    2 -
- package/Makefile.in                                |   83 +--
- package/Makefile.package.in                        |  746 --------------------
- .../{Makefile.autotools.in => pkg-autotargets.mk}  |   74 ++-
- package/{Makefile.cmake.in => pkg-cmaketargets.mk} |   22 +
- package/pkg-download.mk                            |  221 ++++++
- package/pkg-gentargets.mk                          |  456 ++++++++++++
- package/pkg-utils.mk                               |   85 +++
- support/kconfig/Makefile.br                        |    4 +-
- support/kconfig/patches/10-br-build-system.patch   |   12 +-
- 14 files changed, 917 insertions(+), 947 deletions(-)
- create mode 100644 docs/manual/manual.mk
- delete mode 100644 package/Makefile.package.in
- rename package/{Makefile.autotools.in => pkg-autotargets.mk} (85%)
- rename package/{Makefile.cmake.in => pkg-cmaketargets.mk} (86%)
- create mode 100644 package/pkg-download.mk
- create mode 100644 package/pkg-gentargets.mk
- create mode 100644 package/pkg-utils.mk
-
-Thanks,
+diff --git a/support/kconfig/Makefile.br b/support/kconfig/Makefile.br
+index c24b6b5..2f8b6ba 100644
+--- a/support/kconfig/Makefile.br
++++ b/support/kconfig/Makefile.br
+@@ -22,10 +22,10 @@ host-cxxobjs := $(addprefix $(obj)/,$(sort $(foreach m,$(__hostprogs),$($(m)-cxx
+ HOST_EXTRACFLAGS += -I$(obj)
+ 
+ $(host-csingle): %: %.c
+-	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< $(HOST_LOADLIBES) -o $(obj)/$@
++	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< -o $(obj)/$@
+ 
+ $(host-cmulti): %: $(host-cobjs) $(host-cshlib)
+-	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOST_LOADLIBES) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
++	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
+ 
+ $(host-cxxmulti): %: $(host-cxxobjs) $(host-cobjs) $(host-cshlib)
+ 	$(HOSTCXX) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCXXFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs) $($(@F)-cxxobjs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
+diff --git a/support/kconfig/patches/10-br-build-system.patch b/support/kconfig/patches/10-br-build-system.patch
+index 85125e5..c5d9a75 100644
+--- a/support/kconfig/patches/10-br-build-system.patch
++++ b/support/kconfig/patches/10-br-build-system.patch
+@@ -3,10 +3,10 @@
+  foo.h       |   12 ++++++++++++
+  2 files changed, 65 insertions(+)
+ 
+-Index: config/Makefile.br
++Index: kconfig/Makefile.br
+ ===================================================================
+ --- /dev/null
+-+++ config/Makefile.br
+++++ kconfig/Makefile.br
+ @@ -0,0 +1,53 @@
+ +src := .
+ +top_srcdir=../../
+@@ -32,10 +32,10 @@ Index: config/Makefile.br
+ +HOST_EXTRACFLAGS += -I$(obj)
+ +
+ +$(host-csingle): %: %.c
+-+	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< $(HOST_LOADLIBES) -o $(obj)/$@
+++	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< -o $(obj)/$@
+ +
+ +$(host-cmulti): %: $(host-cobjs) $(host-cshlib)
+-+	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOST_LOADLIBES) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
+++	$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
+ +
+ +$(host-cxxmulti): %: $(host-cxxobjs) $(host-cobjs) $(host-cshlib)
+ +	$(HOSTCXX) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCXXFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs) $($(@F)-cxxobjs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
+@@ -61,10 +61,10 @@ Index: config/Makefile.br
+ +
+ +FORCE:
+ +.PHONY: FORCE clean distclean
+-Index: config/foo.h
++Index: kconfig/foo.h
+ ===================================================================
+ --- /dev/null
+-+++ config/foo.h
+++++ kconfig/foo.h
+ @@ -0,0 +1,12 @@
+ +#ifndef __KCONFIG_FOO_H
+ +#define __KCONFIG_FOO_H
 -- 
-Thomas Petazzoni
+1.7.4.1
