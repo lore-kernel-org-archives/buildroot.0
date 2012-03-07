@@ -1,48 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  7 Mar 2012 20:34:14 +0100
-Subject: [Buildroot] [PATCH 01/13] Remove the DATE variable
-In-Reply-To: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <2a7b796c205f29935b6db8cdca0b076e35a42ea7.1331148806.git.thomas.petazzoni@free-electrons.com>
+Date: Wed,  7 Mar 2012 20:34:13 +0100
+Subject: [Buildroot] [RFC] Request for comment for branch
+	for-2012.05/misc-cleanups
+Message-ID: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This variable was only used by uboot.mk to add a #define DATE into the
-U-Boot .h configuration file. But such a definition does not seem to
-be used by the mainline U-Boot, so there's no reason to keep it.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile            |    1 -
- boot/uboot/uboot.mk |    1 -
- 2 files changed, 0 insertions(+), 2 deletions(-)
+Here is a set of proposal that cleanup/re-organize a few parts of our
+main Makefiles. This is just the beginning of a cleanup of Makefile,
+package/Makefile.in and some other core parts of the
+infrastructure. Before going further, I'd like to see if the direction
+I'm taking is something that is considered to be useful and
+interesting.
 
-diff --git a/Makefile b/Makefile
-index d508888..bfa82d2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -39,7 +39,6 @@ endif
- TOPDIR:=$(shell pwd)
- CONFIG_CONFIG_IN=Config.in
- CONFIG=support/kconfig
--DATE:=$(shell date +%Y%m%d)
- 
- # Compute the full local version string so packages can use it as-is
- # Need to export it, so it can be got from environment in children (eg. mconf)
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index db9de8d..83696be 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -69,7 +69,6 @@ define UBOOT_CONFIGURE_CMDS
- 	@echo "/* Add a wrapper around the values Buildroot sets. */" >> $(@D)/include/config.h
- 	@echo "#ifndef __BR2_ADDED_CONFIG_H" >> $(@D)/include/config.h
- 	@echo "#define __BR2_ADDED_CONFIG_H" >> $(@D)/include/config.h
--	$(call insert_define,DATE,$(DATE))
- 	$(call insert_define,CONFIG_LOAD_SCRIPTS,1)
- 	$(call insert_define,CONFIG_IPADDR,$(BR2_TARGET_UBOOT_IPADDR))
- 	$(call insert_define,CONFIG_GATEWAYIP,$(BR2_TARGET_UBOOT_GATEWAY))
+This set of patches is at the Request For Comment state, they are not
+yet intended to be committed, I need to do some further testing. The
+purpose is really to get some early feedback about them.
+
+Thanks,
+
+Thomas
+
+The following changes since commit b50f7a832de2801aeee33146ff5a81945f4078c2:
+
+  barebox: fix 2012.03 typo (2012-03-07 16:26:50 +0100)
+
+are available in the git repository at:
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/misc-cleanups
+
+Thomas Petazzoni (13):
+      Remove the DATE variable
+      Remove cc-option: not used anywhere
+      Remove filename extension crap for OS compatibility
+      kconfig: do not use HOST_LOADLIBES anymore
+      Rename Makefile.autotools.in to pkg-autotargets.mk
+      Rename Makefile.cmake.in to pkg-cmaketargets.mk
+      Split Makefile.package.in in pkg-download.mk, pkg-utils.mk and pkg-gentargets.mk
+      pkg-*.mk: add some comments, update some existing comments
+      Remove unused .fakeroot.* mechanism
+      Move the manual build infrastructure to docs/manual/manual.mk
+      cmake: move creation of toolchain file to package/pkg-cmaketargets.mk
+      package: remove unused STRIP_DISCARD_ALL variable
+      package: move autotools specific stuff to pkg-autotargets.mk
+
+ Makefile                                           |  108 +---
+ boot/uboot/uboot.mk                                |    1 -
+ docs/manual/manual.mk                              |   48 ++
+ fs/common.mk                                       |    2 -
+ fs/iso9660/iso9660.mk                              |    2 -
+ package/Makefile.in                                |   83 +--
+ package/Makefile.package.in                        |  746 --------------------
+ .../{Makefile.autotools.in => pkg-autotargets.mk}  |   74 ++-
+ package/{Makefile.cmake.in => pkg-cmaketargets.mk} |   22 +
+ package/pkg-download.mk                            |  221 ++++++
+ package/pkg-gentargets.mk                          |  456 ++++++++++++
+ package/pkg-utils.mk                               |   85 +++
+ support/kconfig/Makefile.br                        |    4 +-
+ support/kconfig/patches/10-br-build-system.patch   |   12 +-
+ 14 files changed, 917 insertions(+), 947 deletions(-)
+ create mode 100644 docs/manual/manual.mk
+ delete mode 100644 package/Makefile.package.in
+ rename package/{Makefile.autotools.in => pkg-autotargets.mk} (85%)
+ rename package/{Makefile.cmake.in => pkg-cmaketargets.mk} (86%)
+ create mode 100644 package/pkg-download.mk
+ create mode 100644 package/pkg-gentargets.mk
+ create mode 100644 package/pkg-utils.mk
+
+Thanks,
 -- 
-1.7.4.1
+Thomas Petazzoni
