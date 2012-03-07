@@ -1,150 +1,134 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 07 Mar 2012 22:30:28 +0100
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 7 Mar 2012 22:41:00 +0100
 Subject: [Buildroot] [RFC v2 00/31] Automatically produce legal
- compliance info
+	compliance info
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <4F57D374.3040208@lucaceresoli.net>
+Message-ID: <201203072241.00945.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Lucas, All,
 
-for the lazy, here's how the output produced by 'make legal-info' looks 
-like.
-It is the result of the legal_info_test_defconfig supplied in the last 
-patch,
-generated fir an out-of-tree BR build (cool, looks like it works!).
+On Wednesday 07 March 2012 21:58:00 Luca Ceresoli wrote:
+> This second RFC incorporates many of the additions and modifications that have
+> been discussed, as well as many other improvements. Thanks Arnout, ThomasDS and
+> others for their review, and the BDD participants for their suggestions.
 
-$ make legal-info
-...
-WARNING: The Buildroot source code has not be saved
-WARNING: The toolchain has not be saved
-WARNING: freetype: cannot save license (FREETYPE_LICENSE_FILES not defined)
-WARNING: iostat: cannot save license (IOSTAT_LICENSE_FILES not defined)
-WARNING: jpeg: cannot save license (JPEG_LICENSE_FILES not defined)
-...
-WARNING: binutils: cannot save license (BINUTILS_LICENSE_FILES not defined)
-WARNING: autoconf: cannot save license (AUTOCONF_LICENSE_FILES not defined)
-WARNING: automake: cannot save license (AUTOMAKE_LICENSE_FILES not defined)
-...
-Legal info produced in /home/murray/devel/test-legal1/legal-info
+Woohoo, that's impressive! :-)
 
-$ ls -F legal-info/
-buildroot.config  licenses/  licenses.txt  manifest.csv  README  sources/
+>   $ find legal-info/ -type f
+>   legal-info/README            # Lists saved stuff, warns about unsaved
+>   stuff legal-info/licenses.txt      # Text of all licenses
+>   legal-info/buildroot.config  # The buildroot config
+>   legal-info/licenses/buildroot/COPYING       # License files, one dir per
+>   pkg legal-info/licenses/busybox/LICENSE         # ...
+>   legal-info/licenses/...other packages...    # ...
+>   legal-info/manifest.csv                     # CSV table summarizing all
+>   info legal-info/sources/busybox-1.19.4.tar.bz2   # tarballs
+>   legal-info/sources/kmod-5.tar.xz            # ...
+>   legal-info/sources/libtool-2.2.10.tar.gz    # ...
+>   legal-info/sources/...other packages...     # ...
 
-$ cat legal-info/README
-Most of the packages that were used by Buildroot to produce the image files,
-including Buildroot itself, have open-source licenses. It is your
-responsibility to comply to the requirements of these licenses.
-To make this easier for you, Buildroot collected in this directory some
-material you may need to get it done.
+I would expect a one-directory-pre-package layout (personal opinion):
+  legal-info/busybox/LICENSE
+  legal-info/busybox/busybox-1.19.4.tar.bz2
+  legal-info/kmod/COPYING
+  legal-info/kmod/kmod-5.tar.bz2
+  ...
 
-This material is composed of the following items.
-  * The scripts used to control compilation of the packages and the 
-generation
-    of image files, i.e. the Buildroot sources.
-    Note: this has not be saved due to technical limitations, you must 
-collect
-    it manually.
-  * The Buildroot configuration file; this has been saved in 
-buildroot.config.
-  * The toolchain (cross-compiler and related tools) used to generate 
-all the
-    compiled programs.
-    Note: this has not be saved due to technical limitations, you must 
-collect
-    it manually.
-  * The source code for all packages; this has been saved in the sources/
-    subdirectory (except for the proprietary packages, which have not been
-    saved); patches applied to some packages by Buildroot are included 
-in the
-    Buildroot sources and were not duplicated in the sources/ subdirectory.
-  * A manifest file listing the configured packages and related information;
-  * The license text of the packages; they have been saved in the licenses/
-    subdirectory.
+[--SNIP--]
+> ISSUE 2: Packages with multiple licenses
+> ========================================
+> 
+> Some packages (e.g. freetype, qt) allow to choose among different licenses.
+> - Should we add an option in menuconfig for choosing the license? This would
+>   allow to generate "customized" manifest and license files.
+> - Or should we save all licenses and and define the package license as, for
+>   instance:
+>     QT_LICENSE = GPLv3 or LGPLv2.1 or COMMERCIAL?
 
-Due to technical limitations or lack of license definition in the package
-makefile, some of the material listed above could not been saved, as the
-following list details.
+It would probably be possible to do:
+    QT_LICENSE = GPLv3
+    ifeq ($(blabla),y)
+    QT_LICENSE += LGPLv2.1
+    endif
 
-WARNING: The Buildroot source code has not be saved
-WARNING: The toolchain has not be saved
-WARNING: freetype: cannot save license (FREETYPE_LICENSE_FILES not defined)
-WARNING: iostat: cannot save license (IOSTAT_LICENSE_FILES not defined)
-WARNING: jpeg: cannot save license (JPEG_LICENSE_FILES not defined)
-...
-WARNING: Cannot produce any legal info for package ttcp
-WARNING: Cannot produce any legal info for package uemacs
-...
+and so on...
 
-$ cat legal-info/manifest.csv
-package,version,license,license files,source archive
-buildroot,2012.05-git,GPLv2,COPYING,not saved
-berkeleydb,4.4.20,Sleepycat License,LICENSE,db-4.4.20.NC.tar.gz
-busybox,1.19.4,GPLv2-ONLY,LICENSE,busybox-1.19.4.tar.bz2
-bzip2,1.0.5,BSD-like,LICENSE,bzip2-1.0.5.tar.gz
-directfb,1.4.15,LGPLv2.1,COPYING,DirectFB-1.4.15.tar.gz
-foobar,1.2.3.4,PROPRIETARY,not saved,not saved
-freetype,2.4.8,unknown,not saved,freetype-2.4.8.tar.bz2
-...
+> ISSUE 3: packages without a license file
+> ========================================
+> 
+> Some packages (e.g. tslib) do not have a license file. Instead, the license is
+> written in a comment at the top of one or more source files. In such cases we
+> planned that the package maintainer would manually copy this text into a file
+> in the package directory (where the .mk lives) and the teach the infrastructure
+> where it is, so it gets copied from there.
+> 
+> I haven't started working on an implementation of this feature yet, but at
+> first sight it's not totally trivial. The problem is the <PKG>_LICENSE_FILES
+> definition as it is implemented in the present RFC does not easily allow to
+> discriminate between a file in $(O)/build/<pkg>-<ver>/ and a file in
+> packages/<pkg>/.
+> 
+> This is how it works now:
+>         @cp $(addprefix $$($(2)_DIR)/,$$($(3)_LICENSE_FILES)) \
+>                 $(LICENSE_FILES_DIR)/$$($(3)_NAME)/
+> It assumes the files are in the package build dir, $(2)_DIR, which allows a
+> very simple and clean implementation.
+> 
+> In order to support a copy from the package directory, option 1 is to define
+> the full path in <PKG>_LICENSE_FILES, and remove the addprefix from the above
+> code snipped. Example:
+>   FOO_LICENSE_FILES = $(BUILD_DIR)/foo-$(FOO_VERSION)/COPYING
+>   BAR_LICENSE_FILES = packages/bar/COPYING
+> which is not very pleasant to read, and is quite error-prone for the developer
+> adding a package.
+> 
+> Option 2 would be to have two distinct constants for the two cases:
+>   FOO_LICENSE_FILES_IN_BUILD_DIR = COPYING
+>   BAR_LICENSE_FILES_IN_PACKAGE_DIR = COPYING
+> Even with better constant names this would not be extremely beautiful IMHO.
+> 
+> Option 3 is to wait for a smarter idea coming from your reviews! :)
 
-$ cat legal-info/licenses.txt
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-      buildroot: COPYING file
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Proposal:
+  - FOO_LICENSE_FILES = list of license files
+  - FOO_LICENSE_HOOK = macros to call to copy the license files
 
+> TODO in the next patchset before merging into mainline
+> ======================================================
+> 
+> - Add to the documentation:
+>   - some words of advice from Buildroot developers about how to comply to GPL
+>     and other open source licenses;
+>   - brief instructions on using this stuff ('make legal-info');
+>  - instructions in the GENTARGETS section about the _LICENSE and _LICENSE_FILES
+>    constants.
+> 
+> - Write a few lines of explanation in the log message of the first big commit,
+>   the one that implements all the logic.
+> 
+> - Save a defconfig instead of the whole .config for the Buildroot configuration?
+>   Which one would you better like?
 
-             GNU GENERAL PUBLIC LICENSE
-                Version 2, June 1991
+A full .config, from experiemce...
 
-  Copyright (C) 1989, 1991 Free Software Foundation, Inc.,
-  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+And what about the linux, uClibc and busybox .config files? Unless I missed
+something in your email, you did not address these...
 
+Thank you for doing this!
 
-...
+Regards,
+Yann E. MORIN.
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-      binutils: unknown license file(s)
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-      autoconf: unknown license file(s)
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-$ head legal-info/buildroot.config
-#
-# Automatically generated make config: don't edit
-# Buildroot 2012.05-git Configuration
-#
-BR2_HAVE_DOT_CONFIG=y
-# BR2_arm is not set
-# BR2_armeb is not set
-# BR2_avr32 is not set
-# BR2_bfin is not set
-BR2_i386=y
-
-$ ls -F legal-info/sources/
-alsa-lib-1.0.24.1.tar.bz2  libtool-2.2.10.tar.gz
-autoconf-2.65.tar.bz2      libusb-1.0.8.tar.bz2
-automake-1.11.1.tar.bz2    libusb-compat-0.1.3.tar.bz2
-binutils-2.21.1.tar.bz2    linux-3.2.6.tar.bz2
-busybox-1.19.4.tar.bz2     lzo-2.06.tar.gz
-bzip2-1.0.5.tar.gz         lzop-1.03.tar.gz
-...
-
-$ find legal-info/licenses -type f
-legal-info/licenses/tslib/COPYING
-legal-info/licenses/linux/COPYING
-legal-info/licenses/berkeleydb/LICENSE
-legal-info/licenses/libusb/COPYING
-legal-info/licenses/directfb/COPYING
-legal-info/licenses/pcre/LICENCE
-...
-
-Luca
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
