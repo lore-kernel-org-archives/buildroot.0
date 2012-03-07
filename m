@@ -1,59 +1,53 @@
-From: Mohamed HAMZAOUI <requinham@gmail.com>
-Date: Wed, 7 Mar 2012 10:37:44 +0100
-Subject: [Buildroot] [U-Boot] Craneboard with Uboot and xloader
-In-Reply-To: <4F562392.5070606@ti.com>
-References: <CABMxt4ic6cZ_xfrtkouKkw2OWSbOiL95tXrz9XgKyqUAd4U-6A@mail.gmail.com>
- <20120224150232.GA2346@bill-the-cat>
- <CABMxt4hMc3CjnjFEQNTjzsfxyXgBoyO8uMg1xsmaTeZ2pWXRRQ@mail.gmail.com>
- <CA+M6bXk7yKi8VFQRbYT-SQZMwM9eneBzjx2NB9KpHeicxkDb9Q@mail.gmail.com>
- <CABMxt4ja3EmjER5ywn5R+OLxkXy-Ho-cZ89LLuML4qX50ews=w@mail.gmail.com>
- <CA+M6bX=A1Mie8Q093Sa3bp_hSxSRFR6z4-sNBvJP3982e_HPqQ@mail.gmail.com>
- <CABMxt4gYMf_JjfYi_2YttUL2NDNYC4974Kq_--++B2yPgf0xUg@mail.gmail.com>
- <CA+M6bXktYKXisQEiS11CNixozV7KtzwajKsXyTPNXSEOjxz3AA@mail.gmail.com>
- <CABMxt4hoihH2pJk5GZ6hpt0K3Vm_Qzg8eL1ej-bFH67DOSNUqA@mail.gmail.com>
- <CABMxt4jZhMcZS=0P9Le3ZHO_NUJJt0Deta_Ybdd-ghdPPuGz2A@mail.gmail.com>
- <CA+M6bXnNxFhzQpDOQhuSM7VKEh41dazMmUeEv=VTdVUuNoQhAw@mail.gmail.com>
- <CABMxt4ixVGvV_LvduJSNmWevxiEvFv0GdRHpomK325bKp4T20A@mail.gmail.com>
- <4F550BC3.80601@ti.com>
- <CABMxt4g9Xm6=QPhH1U2oDKVbXNjnPaxq_y71pUS4WF2LUG1RSw@mail.gmail.com>
- <20120306103333.45e7857d@skate> <4F562392.5070606@ti.com>
-Message-ID: <CABMxt4iAMzfUmcuu1mr-2LOQH4AGhC=YxvM_9TBBEm9kb7+_Mw@mail.gmail.com>
+From: Luca Ceresoli <luca.ceresoli@comelit.it>
+Date: Wed, 07 Mar 2012 10:56:02 +0100
+Subject: [Buildroot] [git commit] gpsd: dbus interface requires dbus-glib
+In-Reply-To: <20120306223952.6291190D16@busybox.osuosl.org>
+References: <20120306223952.6291190D16@busybox.osuosl.org>
+Message-ID: <4F5730B2.3090302@comelit.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-Please can you give me the URL to this mainline who is this issues
-addressed for testing ?
-
-Thank you
-Mohamed
-
-On Tue, Mar 6, 2012 at 3:47 PM, Tom Rini <trini@ti.com> wrote:
-
-> On 03/06/2012 02:33 AM, Thomas Petazzoni wrote:
+Peter Korsgaard wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=b5410b6a19db7ef75af8df2fa5659c539ad37c47
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
->> Le Tue, 6 Mar 2012 10:19:57 +0100,
->> Mohamed HAMZAOUI<requinham@gmail.com>  a ?crit :
->>
->>  So far I have not been able to compile another kernel version other
->>> than ( https://github.com/craneboard/**craneboard-kernel.git<https://github.com/craneboard/craneboard-kernel.git>)
->>> with
->>> buildroot.
->>>
->>
->> What problems do you have?
->>
+> gpsd uses dbus-glib as the dbus interface, so it should only be built if
+> libglib2 has been selected.  To simplify things, build dbus support only
+> if dbus-glib is selected.
 >
-> Mainline has a number of issues (currently being addressed) on am35xx
-> platforms.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+> Signed-off-by: Peter Korsgaard<jacmet@sunsite.dk>
+> ---
+>   package/gpsd/Config.in |    2 ++
+>   package/gpsd/gpsd.mk   |    4 ++--
+>   2 files changed, 4 insertions(+), 2 deletions(-)
 >
-> --
-> Tom
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120307/8eb4bf6b/attachment.html>
+> Patch is too large, so refusing to show it
+
+Wow.
+This is really weird for a 6-line patch. But it did not happen in subsequent
+commits, so it's probably a random spot?
+
+Luca
+
+
+--------------------------------------------------------------------------
+Luca Ceresoli
+Comelit R&D - Progettazione Software
+
+COMELIT??
+?
+?
+Phone???????
+Fax??????????
+Mail?????????luca.ceresoli at comelit.it
+Web????????http://www.comelitgroup.com/
+YouTube??http://www.youtube.com/comelitgroup
+Prima di stampare pensa all'ambiente / Think about environment before printing
+AVVISO DI CONFIDENZIALIT?
+Questo messaggio ed i suoi eventuali allegati pu? contenere informazioni confidenziali, di propriet?, legalmente protette.? destinato all'utilizzo esclusivo del destinatario sopra indicato; privatezza e confidenzialit? non sono modificati da eventuali errori di trasmissione. Se il messaggio non ? a lei destinato, non deve utilizzarlo, diffonderlo, copiarlo con qualunque mezzo, o intraprendere azioni basandosi su di esso. Se ha ricevuto questo messaggio per errore, la preghiamo di volerlo distruggere (unitamente ad eventuali copie dello stesso) e di volerci cortesemente informare del fatto scrivendo al mittente.
+CONFIDENTIALITY NOTICE
+This message and its attachments (if any) may contain confidential, proprietary or legally privileged information and it is intended only for the use of the addressee named above. No confidentiality or privilege is waived or lost by any erroneous transmission. If you are not the intended recipient of this message you are hereby notified that you must not use, disseminate, copy it in any form or take any action in reliance on it. If you have received this message in error, please, delete it (and any copies of it) and kindly inform the sender.
