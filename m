@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:12 +0100
-Subject: [Buildroot] [RFC v2 12/31] uemacs: warn that legal-info is not
+Date: Wed,  7 Mar 2012 21:58:06 +0100
+Subject: [Buildroot] [RFC v2 06/31] microperl: warn that legal-info is not
 	implemented
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-13-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-7-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/uemacs/uemacs.mk |    4 ++++
+ package/microperl/microperl.mk |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/uemacs/uemacs.mk b/package/uemacs/uemacs.mk
-index 8355a7f..e690eee 100644
---- a/package/uemacs/uemacs.mk
-+++ b/package/uemacs/uemacs.mk
-@@ -29,6 +29,10 @@ $(UEMACS_DIR)/$(UEMACS_BINARY): $(UEMACS_DIR)/.unpacked
- $(TARGET_DIR)/$(UEMACS_TARGET_BINARY): $(UEMACS_DIR)/$(UEMACS_BINARY)
- 	$(INSTALL) -m 0755 -D $(UEMACS_DIR)/$(UEMACS_BINARY) $(TARGET_DIR)/$(UEMACS_TARGET_BINARY)
+diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
+index de5ecd6..f9c32a9 100644
+--- a/package/microperl/microperl.mk
++++ b/package/microperl/microperl.mk
+@@ -93,6 +93,10 @@ ifneq ($(BR2_STRIP_none),y)
+ endif
+ 	(cd $(TARGET_DIR)/usr/bin; rm -f perl; ln -s microperl perl;)
  
-+uemacs-legal-info:
-+	@echo WARNING: Cannot produce any legal info for package uemacs \
++microperl-legal-info:
++	@echo WARNING: Cannot produce any legal info for package microperl \
 +		>>$(LEGAL_WARNINGS)
 +
- uemacs: ncurses $(TARGET_DIR)/$(UEMACS_TARGET_BINARY)
+ microperl: $(TARGET_DIR)/usr/bin/microperl
  
- uemacs-clean:
+ microperl-source: $(DL_DIR)/$(MICROPERL_SOURCE)
 -- 
 1.7.5.4
