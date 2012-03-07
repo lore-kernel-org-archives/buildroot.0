@@ -1,10 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:14 +0100
-Subject: [Buildroot] [RFC v2 14/31] xfsprogs: warn that legal-info is not
-	implemented
+Date: Wed,  7 Mar 2012 21:58:16 +0100
+Subject: [Buildroot] [RFC v2 16/31] linux: define license
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-15-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-17-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/xfsprogs/xfsprogs.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ linux/linux.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 68db2f7..b07ab08 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -77,6 +77,10 @@ $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY): $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
- 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
- 	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+diff --git a/linux/linux.mk b/linux/linux.mk
+index ae236d4..e6f2388 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -4,6 +4,8 @@
+ #
+ ###############################################################################
+ LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++LINUX_LICENSE = GPLv2-ONLY
++LINUX_LICENSE_FILES = COPYING
  
-+xfsprogs-legal-info:
-+	@echo WARNING: Cannot produce any legal info for package xfsprogs \
-+		>>$(LEGAL_WARNINGS)
-+
- xfsprogs: util-linux $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
- 
- xfsprogs-clean:
+ # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+ ifeq ($(LINUX_VERSION),custom)
 -- 
 1.7.5.4
