@@ -1,41 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 Mar 2012 14:15:46 +0100
-Subject: [Buildroot] AX.25 Support in Buildroot/Busybox
-In-Reply-To: <CAMPueyyvbP+YEN_TA1WnbF5rdRJ-bB1kYTVCXOV8vHY21XrfcQ@mail.gmail.com>
-References: <CAMPueyyycZdDJVhff2JMqWCE0KjpDDM+SYpBGak6BM=NWUT5zw@mail.gmail.com>
- <20120307090401.15998a31@skate>
- <CAMPueyyvbP+YEN_TA1WnbF5rdRJ-bB1kYTVCXOV8vHY21XrfcQ@mail.gmail.com>
-Message-ID: <20120307141546.7d196728@skate>
+Date: Wed, 7 Mar 2012 14:19:49 +0100
+Subject: [Buildroot] Building a kernel for i.MX23 (and probably other
+ from the i.MX family)
+In-Reply-To: <20120307114528.0304fc3d8061b683b66c7230@kinali.ch>
+References: <20120307114528.0304fc3d8061b683b66c7230@kinali.ch>
+Message-ID: <20120307141949.1a0e98ef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Attila,
 
-Le Wed, 7 Mar 2012 13:01:41 +0000,
-Jeff Renner <d1g1t4lsh4d0w@gmail.com> a ?crit :
+Le Wed, 7 Mar 2012 11:45:28 +0100,
+Attila Kinali <attila@kinali.ch> a ?crit :
 
-> You are talking about this:
-> http://buildroot.uclibc.org/buildroot.html#add_packages
-> right?
+> After you have build LTIB you have to extract the elftosb2 binary
+> from it (/opt/freescale/ltib/usr/bin/elftosb2) and the imx-bootlets
+> package (/opt/freescale/pkgs/imx-bootlets-src-10.05.02.tar.gz)
 
-Yes, exactly.
+Note that I think the Armadeus people were interested in having tools
+like elftosb2 integrated within Buildroot. It would indeed be
+really nice to have this in Buildroot, so that users of i.MX systems
+can easily build images that can run on their targets.
 
-> That process seems a little complicated to be done by a person who
-> have no experience.
+> Overall i do not suggest using the i.MX processors for linux based
+> systems due to very bad support from freescale.
 
-Yes, it requires a little bit of experience with Makefile, build
-systems and compilation under Linux systems in general. It is not very
-complicated, but certainly requires a bit of initial experience.
-
-Note that you are lucky: your three packages use the autotools, so you
-can use the AUTOTARGETS infrastructure of Buildroot and it should be
-relatively easy to get those packages working.
-
-If you have issues, do not hesitate to ask the mailing-list, and we
-will try to help you.
+I am not very familiar with the i.MX range of processors, but the guys
+from Pengutronix have done an enormous work in getting support for
+those processors into the mainline Linux kernel. Though I don't know if
+their work included support for the i.MX 23.
 
 Best regards,
 
