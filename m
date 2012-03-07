@@ -1,43 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 7 Mar 2012 22:49:40 +0100
-Subject: [Buildroot] [RFC v2 16/31] linux: define license
-In-Reply-To: <1331153911-22277-17-git-send-email-luca@lucaceresoli.net>
+Date: Wed, 7 Mar 2012 22:52:46 +0100
+Subject: [Buildroot] [RFC v2 19/31] bzip2: define license
+In-Reply-To: <1331153911-22277-20-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
- <1331153911-22277-17-git-send-email-luca@lucaceresoli.net>
-Message-ID: <201203072249.40319.yann.morin.1998@free.fr>
+ <1331153911-22277-20-git-send-email-luca@lucaceresoli.net>
+Message-ID: <201203072252.46180.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lucas, All,
-
-On Wednesday 07 March 2012 21:58:16 Luca Ceresoli wrote:
+On Wednesday 07 March 2012 21:58:19 Luca Ceresoli wrote:
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  linux/linux.mk |    2 ++
+>  package/bzip2/bzip2.mk |    2 ++
 >  1 files changed, 2 insertions(+), 0 deletions(-)
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index ae236d4..e6f2388 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -4,6 +4,8 @@
->  #
->  ###############################################################################
->  LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-> +LINUX_LICENSE = GPLv2-ONLY
+> diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+> index 1bc4449..028c2f2 100644
+> --- a/package/bzip2/bzip2.mk
+> +++ b/package/bzip2/bzip2.mk
+> @@ -7,6 +7,8 @@ BZIP2_VERSION:=1.0.5
+>  BZIP2_SONAME=1.0.4
+>  BZIP2_SOURCE:=bzip2-$(BZIP2_VERSION).tar.gz
+>  BZIP2_SITE:=http://www.bzip.org/$(BZIP2_VERSION)
+> +BZIP2_LICENSE = BSD-like
 
-What's the point of giving the version 'v2' and stating 'only'?
-I would rather see:
-  values        meaning
+I think it makes sense to have:
+
+  value         meaning
   -------------------------------
-  GPLv2         GPLv2 only
-  GPLv2+        GPLv2 or later
-  LGPLv2.1      LGPLv2.1 only
-  LGPLv2.1+     LGPLv2.1 or later
-  ...           ...
+  BSD-4c        Original BSD 4-clause
+  BSD           Alias for the above
+  BSD-3c        BSD 3-clause
+  BSD-2c        BSD 2-clause
 
 Regards,
 Yann E. MORIN.
