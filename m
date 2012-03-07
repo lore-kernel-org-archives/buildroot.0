@@ -1,9 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  7 Mar 2012 21:58:19 +0100
-Subject: [Buildroot] [RFC v2 19/31] bzip2: define license
+Date: Wed,  7 Mar 2012 21:58:04 +0100
+Subject: [Buildroot] [RFC v2 04/31] doom-wad: warn that legal-info is not
+	implemented
 In-Reply-To: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331153911-22277-20-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331153911-22277-5-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/bzip2/bzip2.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/games/doom-wad/doom-wads.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-index 1bc4449..028c2f2 100644
---- a/package/bzip2/bzip2.mk
-+++ b/package/bzip2/bzip2.mk
-@@ -7,6 +7,8 @@ BZIP2_VERSION:=1.0.5
- BZIP2_SONAME=1.0.4
- BZIP2_SOURCE:=bzip2-$(BZIP2_VERSION).tar.gz
- BZIP2_SITE:=http://www.bzip.org/$(BZIP2_VERSION)
-+BZIP2_LICENSE = BSD-like
-+BZIP2_LICENSE_FILES = LICENSE
- BZIP2_INSTALL_STAGING=YES
+diff --git a/package/games/doom-wad/doom-wads.mk b/package/games/doom-wad/doom-wads.mk
+index bae2420..832d861 100644
+--- a/package/games/doom-wad/doom-wads.mk
++++ b/package/games/doom-wad/doom-wads.mk
+@@ -23,6 +23,10 @@ $(DOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(DOOM_WAD_SOURCE)
+ $(TARGET_DIR)/usr/share/games/doom/doom1.wad: $(DOOM_WAD_DIR)/.unpacked
+ 	$(INSTALL) -D $(DOOM_WAD_DIR)/doom-$(DOOM_WAD_VERSION).wad $@
  
- define BZIP2_FIX_MAKEFILE
++doom-wad-legal-info:
++	@echo WARNING: Cannot produce any legal info for package doom-wad \
++		>>$(LEGAL_WARNINGS)
++
+ doom-wad: $(TARGET_DIR)/usr/share/games/doom/doom1.wad
+ 
+ #############################################################
 -- 
 1.7.5.4
