@@ -1,38 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 Mar 2012 16:18:10 +0100
-Subject: [Buildroot] [git commit] barebox: add 2012.03 release
-In-Reply-To: <20120307113912.626ff962@eb-e6520> ("Eric =?utf-8?Q?B=C3=A9na?=
- =?utf-8?Q?rd=22's?= message of "Wed, 7 Mar 2012 11:39:12 +0100")
-References: <20120306215605.34C7E90D15@busybox.osuosl.org>
- <20120307113912.626ff962@eb-e6520>
-Message-ID: <8762egfnil.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 7 Mar 2012 16:26:50 +0100
+Subject: [Buildroot] [git commit] barebox: fix 2012.03 typo
+Message-ID: <20120307152723.396B090D18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric B?nard <eric@eukrea.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b50f7a832de2801aeee33146ff5a81945f4078c2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Eric> Hi Peter,
- Eric> Le Tue, 6 Mar 2012 22:55:30 +0100,
- Eric> Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
- >> +config BR2_TARGET_BAREBOX_2012_03
- >> +	bool "2012.03"
- >> +
- >> config BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- >> bool "Custom tarball"
- >> 
- >> @@ -42,6 +45,7 @@ config BR2_TARGET_BAREBOX_VERSION
- >> default "2011.12.0"	if BR2_TARGET_BAREBOX_2011_12
- >> default "2012.01.0"	if BR2_TARGET_BAREBOX_2012_01
- >> default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
- >> +	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_02
- Eric> missing change here :                                      ^^
+Thanks to Eric B??nard for noticing.
 
-Argh, correct - Will fix.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ boot/barebox/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 5cc7dca..4048d97 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -45,7 +45,7 @@ config BR2_TARGET_BAREBOX_VERSION
+ 	default "2011.12.0"	if BR2_TARGET_BAREBOX_2011_12
+ 	default "2012.01.0"	if BR2_TARGET_BAREBOX_2012_01
+ 	default "2012.02.0"	if BR2_TARGET_BAREBOX_2012_02
+-	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_02
++	default "2012.03.0"	if BR2_TARGET_BAREBOX_2012_03
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default $BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+ 
