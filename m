@@ -1,77 +1,60 @@
 From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 7 Mar 2012 18:05:17 +0000
-Subject: [Buildroot] New package lcdproc
-In-Reply-To: <CAHt8ZCPGCi-3jXKAjnjdbYq97=2se1c3YjDc18V27QEA7Mcq0Q@mail.gmail.com>
-References: <CAHt8ZCPGCi-3jXKAjnjdbYq97=2se1c3YjDc18V27QEA7Mcq0Q@mail.gmail.com>
-Message-ID: <CAHt8ZCONKjxYVWrGaKwfn-1ruDJMV-yyCTLPyE=JZ946Qo5vfQ@mail.gmail.com>
+Date: Wed, 7 Mar 2012 18:06:29 +0000
+Subject: [Buildroot] New package protobuf
+Message-ID: <CAHt8ZCM9ZD=VSEc5UJ+98NTiwhYsAz0sGXCt+yNPVMAKCB8qtg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Patch to add protobuf package (Google protocol buffers) to buildroot.
+
+http://code.google.com/p/protobuf/
+
+---
 diff --git a/package/Config.in b/package/Config.in
-index 41cbb8c..4237e3f 100644
+index 41cbb8c..a2d2006 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -302,6 +302,7 @@ source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
-+source "package/lcdproc/Config.in"
- source "package/libart/Config.in"
- source "package/libdrm/Config.in"
- source "package/libexif/Config.in"
-diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
+@@ -387,6 +387,7 @@ source "package/liburcu/Config.in"
+ source "package/lttng-libust/Config.in"
+ source "package/orc/Config.in"
+ source "package/poco/Config.in"
++source "package/protobuf/Config.in"
+ source "package/startup-notification/Config.in"
+ endmenu
+
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
 new file mode 100644
-index 0000000..68dc46c
+index 0000000..6a7447f
 --- /dev/null
-+++ b/package/lcdproc/Config.in
++++ b/package/protobuf/Config.in
 @@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LCDPROC
-+	bool "lcdproc"
-+	select BR2_PACKAGE_NCURSES
++config BR2_PACKAGE_PROTOBUF
++	bool "protobuf"
 +	help
-+	LCD display driver daemon and clients
++	Protocol buffers are Google's language-neutral, platform-neutral,
++	extensible mechanism for serializing structured data.
 +
-+	 http://lcdproc.org/
-diff --git a/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-b/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
++	 http://code.google.com/p/protobuf/
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
 new file mode 100644
-index 0000000..f5702ff
+index 0000000..79a06dd
 --- /dev/null
-+++ b/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-@@ -0,0 +1,11 @@
-+--- lcdproc-0.5.3/LCDd.conf.orig	2009-06-20 14:48:34.000000000 +0100
-++++ lcdproc-0.5.3/LCDd.conf	2010-05-11 10:02:21.000000000 +0100
-+@@ -34,7 +34,7 @@
-+ #            the driver modules and will thus not be able to
-+ #            function properly.
-+ # NOTE: Always place a slash as last character !
-+-DriverPath=server/drivers/
-++DriverPath=/usr/lib/lcdproc/
-+
-+ # Tells the server to load the given drivers. Multiple lines can be given.
-+ # The name of the driver is case sensitive and determines the section
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-new file mode 100644
-index 0000000..20c43ee
---- /dev/null
-+++ b/package/lcdproc/lcdproc.mk
-@@ -0,0 +1,16 @@
++++ b/package/protobuf/protobuf.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# lcdproc
++# protobuf
 +#
 +#############################################################
-+LCDPROC_VERSION = 0.5.5
++PROTOBUF_VERSION = 2.4.1
++PROTOBUF_SITE = http://protobuf.googlecode.com/files/
 +
-+LCDPROC_AUTORECONF = YES
-+LCDPROC_INSTALL_STAGING = NO
-+LCDPROC_INSTALL_TARGET = YES
-+
-+LCDPROC_CONF_OPT = --enable-drivers=all
-+
-+LCDPROC_DEPENDENCIES = uclibc ncurses
++# N.B. Need to use host protoc during cross compilation.
++PROTOBUF_DEPENDENCIES = host-protobuf
++PROTOBUF_CONF_OPT = --with-protoc=$(HOST_DIR)/usr/bin/protoc
 +
 +$(eval $(call AUTOTARGETS))
++$(eval $(call AUTOTARGETS,host))
