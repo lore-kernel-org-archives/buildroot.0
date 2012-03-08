@@ -1,44 +1,45 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Thu, 08 Mar 2012 16:22:28 +0100
-Subject: [Buildroot] Linaro 2012.02 toolchain: pixman build failure
-In-Reply-To: <20120308155700.033c9f81@eb-e6520>
-References: <4F58C7D9.2080205@visionsystems.de>
- <20120308155700.033c9f81@eb-e6520>
-Message-ID: <4F58CEB4.6040908@visionsystems.de>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Thu, 08 Mar 2012 16:31:59 +0100
+Subject: [Buildroot] Building a kernel for i.MX23 (and probably other
+ from the i.MX family)
+In-Reply-To: <20120307141949.1a0e98ef@skate>
+References: <20120307114528.0304fc3d8061b683b66c7230@kinali.ch>
+ <20120307141949.1a0e98ef@skate>
+Message-ID: <4F58D0EF.4090308@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 08.03.2012 15:57, schrieb Eric B?nard:
-> Le Thu, 08 Mar 2012 15:53:13 +0100,
-> Yegor Yefremov <yegor_sub1@visionsystems.de> a ?crit :
+On 03/07/2012 02:19 PM, Thomas Petazzoni wrote:
+> Hello Attila,
 >
->> I was testing the latest Linaro toolchain and it failed building pixman:
->>
->> .../...
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wslldi
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wor'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wunpckilb'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wsrldi'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_waddbus'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_waddhus'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wsrlhi'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wxor'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wpackhus'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wand'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wunpckihb'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wzero'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_walign'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wmulul'
->> ../pixman/.libs/libpixman-1.so: undefined reference to `__builtin_arm_wslldi'
->> ../pixman/.libs/libpixman-collect2: 1.so: ld returned 1 exit status
->>
->> Any idea?
->>
-> try to add : --disable-arm-iwmmxt to configure
+> Le Wed, 7 Mar 2012 11:45:28 +0100,
+> Attila Kinali<attila@kinali.ch>  a ?crit :
+>
+>> After you have build LTIB you have to extract the elftosb2 binary
+>> from it (/opt/freescale/ltib/usr/bin/elftosb2) and the imx-bootlets
+>> package (/opt/freescale/pkgs/imx-bootlets-src-10.05.02.tar.gz)
+> Note that I think the Armadeus people were interested in having tools
+> like elftosb2 integrated within Buildroot. It would indeed be
+> really nice to have this in Buildroot, so that users of i.MX systems
+> can easily build images that can run on their targets.
 
-Thanks. It is working now. Peter, should we make a patch?
+AFAIK, elftosb is only needed for i.MX23x and i.MX28x, which are quite 
+newcomers in the i.MX family.
+Moreover if your i.MX23/28 systems has a FLASH chip onboard, .sb files 
+are only needed to generate an bootable U-Boot image.
+>> Overall i do not suggest using the i.MX processors for linux based
+>> systems due to very bad support from freescale.
+> I am not very familiar with the i.MX range of processors, but the guys
+> from Pengutronix have done an enormous work in getting support for
+> those processors into the mainline Linux kernel. Though I don't know if
+> their work included support for the i.MX 23.
 
-Yegor
++1
+Some Freescale guys are also also doing some hard work to mainline i.MX 
+drivers.
+
+Regards,
+Julien
