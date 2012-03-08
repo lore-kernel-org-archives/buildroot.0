@@ -1,59 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  8 Mar 2012 02:20:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 4892] New: build fails on
- ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest04.c:146: undefined
- reference to `sigset'
-Message-ID: <bug-4892-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 8 Mar 2012 09:17:14 +0100
+Subject: [Buildroot] add option to enable AI_ADDRCONFIG support
+In-Reply-To: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
+References: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
+Message-ID: <20120308091714.5d60b715@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4892
+Hello Sven,
 
-           Summary: build fails on
-                    ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest
-                    04.c:146: undefined reference to `sigset'
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: austinenglish at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Le Wed,  7 Mar 2012 23:38:16 +0100,
+Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
+> This patchset adds a buildroot option to enable AI_ADDRCONFIG support
+> in uClibC. It also changes the mrouted package to select the new option
+> instead of hinting the user in a comment that it depends on it.
 
-Created attachment 4112
-  --> https://bugs.busybox.net/attachment.cgi?id=4112
-.config used
+I don't know if this question has been asked in the past, but do you
+know what is the binary size impact of enabling AI_ADDRCONFIG in
+uClibc? If the impact is rather minimal, then I'd rather have it
+enabled in our default configuration instead of adding yet another
+toolchain config knob.
 
-/home/austin/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc
-  -L../../../../lib  ftest04.o libftest.o   -lltp -o ftest04
-ftest04.o: In function `setup':
-/home/austin/buildroot-2012.02/output/build/ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest04.c:146:
-undefined reference to `sigset'
+Anyway some comments about your patches (but don't work on updating
+them before we decide if a new option is really needed) :
 
-not sure what other info is useful. Running on 32-bit gentoo linux. I've
-attached the .config file.
+ * Your PATCH 1/2 also needs to address the cases of external
+   toolchains and crosstool-ng toolchains ;
 
-Please let me know what other information would be useful:
-austin at aw25 ~/buildroot-2012.02 $ gcc --version
-gcc (Gentoo 4.5.3-r1 p1.0, pie-0.4.5) 4.5.3
-Copyright (C) 2010 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * Your PATCH 2/2 should use a depends on rather than a select. We use
+   depends on for all the dependencies of packages on toolchain
+   options, together with a comment displayed when the toolchain
+   options isn't present, so that the user is aware that mrouted is
+   available, but only if AI_ADDRCONFIG is enabled as a toolchain
+   option.
 
-austin at aw25 ~/buildroot-2012.02 $ uname -a
-Linux aw25 2.6.37 #1 SMP Thu Apr 21 17:36:51 PDT 2011 i686 Intel(R) Core(TM) i7
-CPU 960 @ 3.20GHz GenuineIntel GNU/Linux
+Regards,
 
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
