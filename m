@@ -1,13 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 08 Mar 2012 22:57:04 +0100
-Subject: [Buildroot] [PATCH 1/2] ccache: Force ccache to use its
-	internal zlib.
-In-Reply-To: <17bf5a67401f522c5a6d704c60713087106a4c29.1331148403.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 7 Mar 2012 20:26:49 +0100")
+Date: Thu, 08 Mar 2012 22:57:21 +0100
+Subject: [Buildroot] [PATCH 2/2] ccache: set COMPILERCHECK to 'none'
+In-Reply-To: <351a3eaf5539eda4c54d1f9eb655d3e4d8b9654c.1331148403.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 7 Mar 2012 20:26:50 +0100")
 References: <cover.1331148403.git.thomas.petazzoni@free-electrons.com>
  <cover.1331148403.git.thomas.petazzoni@free-electrons.com>
- <17bf5a67401f522c5a6d704c60713087106a4c29.1331148403.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87aa3qeoy7.fsf@macbook.be.48ers.dk>
+ <351a3eaf5539eda4c54d1f9eb655d3e4d8b9654c.1331148403.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <8762eeeoxq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,15 +15,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> The problem is that without this, ccache would link against the zlib
- Thomas> of the build system, but we might build and install a different
- Thomas> version of zlib in $(O)/host afterwards, which ccache will pick
- Thomas> up. This might break if there is a version mismatch. A solution would
- Thomas> be to add host-zlib has a dependency of ccache, but it would require
- Thomas> tuning the zlib .mk file to use HOSTCC_NOCCACHE as the
- Thomas> compiler. Instead, we take the easy path: tell ccache to use its
- Thomas> internal copy of zlib, so that ccache has zero dependency besides the
- Thomas> C library.
+ Thomas> This allows ccache to re-use its cache contents even if the compiler
+ Thomas> binary mtime has changed. It is the simplest approach to solve this
+ Thomas> problem, and it works for the internal, external and crosstool-ng
+ Thomas> toolchain backends.
+
+ Thomas> Of course, it leaves the user responsible for invalidating the cache
+ Thomas> when necessary, but there doesn't seem to be a real good solution that
+ Thomas> allows both to: 1/ keep the cache contents accross builds and re-use
+ Thomas> it and 2/ invalidate the cache automatically when the compiler chances
+ Thomas> in an incompatible way.
 
 Committed, thanks.
 
