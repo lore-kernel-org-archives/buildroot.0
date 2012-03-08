@@ -1,70 +1,49 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Thu,  8 Mar 2012 13:00:55 +0100
-Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
-	patches in proper order
-In-Reply-To: <1331208055-18533-1-git-send-email-ludovic.desroches@atmel.com>
-References: <201202282119.38907.arnout@mind.be>
- <1331208055-18533-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1331208055-18533-2-git-send-email-ludovic.desroches@atmel.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 8 Mar 2012 11:03:40 +0100
+Subject: [Buildroot] BR 2012.rc1 :: DVI not activated on pandaboard?
+In-Reply-To: <20120308092159.5af7ce23@skate>
+References: <CAPEB33z8LrFWaQdwVA1XdSjKFWam9kTH2FO8CvkWdnj9U_7vzA@mail.gmail.com>
+ <20120308092159.5af7ce23@skate>
+Message-ID: <CAHXCMMJNbfRkLjp8mUOHjaCz9VUUcWuP6tfV8bA+1wn2+U9EgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Hi Johann, all,
 
-If a series file is present use it to determine the proper order to apply
-patches instead of using ls sorting order.
+2012/3/8 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> Le Wed, 7 Mar 2012 23:16:21 +0000,
+> MERCADIER Johann <johann.mercadier@imerir.com> a ?crit :
+>
+>> mmc rescan
+>> fatload mmc 0:1 0x80000000 uImage
+>> setenv bootargs vram=32M console=ttyO2,115200n8
+>> mem=456M at 0x80000000mem=512M at 0xA0000000 omapdss.def_disp=dvi
+>> omapfb.mode=dvi:1280x1024MR-24 at 60smsc95xx.macaddr=76:2F:97:85:4F:56
+>> root=/dev/nfs rw
+>> nfsroot=192.168.1.44:/home/johann/rootfs_TEST,nolock,wsize=1024,rsize=1024
+>> ip=192.168.1.235 rootdelay=4 init=/linuxrc
+>> bootm 0x80000000
+>>
+>> when booting I get there, the pandaboard probably still continue the boot
+>> process but nothing is displayed on the monitor?...
+>> ___[ MINICOM O/P
+>> ]________________________________________________________________________________________
+>> ...
+>> ? ?Verifying Checksum ... OK
+>> ? ?Loading Kernel Image ... OK
+>> OK
+>>
+>> Starting kernel ...
+>>
+>> Uncompressing Linux... done, booting the kernel.
+>
+Last time, i got this kind of log, i was messing up the console
+parameter in kernel args.
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- support/scripts/apply-patches.sh |   32 ++++++++++++++++++++------------
- 1 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 51e6c48..c78e947 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -59,19 +59,27 @@ function scan_patchdir {
-     shift 1
-     patches=${@-*}
- 
--    for i in `cd $path; ls -d $patches 2> /dev/null` ; do
--        if [ -d "${path}/$i" ] ; then
--            echo "${path}/$i skipped"
--        elif echo "$i" | grep -q -E "\.tar(\..*)?$|\.tbz2?$|\.tgz$" ; then
--            unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
--            rm -rf "$unpackedarchivedir" 2> /dev/null
--            mkdir "$unpackedarchivedir"
--            tar -C "$unpackedarchivedir" --strip-components=1 -xaf "${path}/$i"
--            scan_patchdir "$unpackedarchivedir"
--        else
-+    # If there is a series file, use it instead of using ls sort order
-+    # to apply patches.
-+    if [ -e "${path}/series" ] ; then
-+        for i in `cat ${path}/series 2> /dev/null` ; do
-             apply_patch "$path" "$i" || exit 1
--        fi
--    done
-+        done
-+    else
-+        for i in `cd $path; ls -d $patches 2> /dev/null` ; do
-+            if [ -d "${path}/$i" ] ; then
-+                echo "${path}/$i skipped"
-+            elif echo "$i" | grep -q -E "\.tar(\..*)?$|\.tbz2?$|\.tgz$" ; then
-+                unpackedarchivedir="$builddir/.patches-$(basename $i)-unpacked"
-+                rm -rf "$unpackedarchivedir" 2> /dev/null
-+                mkdir "$unpackedarchivedir"
-+                tar -C "$unpackedarchivedir" --strip-components=1 -xaf "${path}/$i"
-+                scan_patchdir "$unpackedarchivedir"
-+            else
-+                apply_patch "$path" "$i" || exit 1
-+            fi
-+        done
-+    fi
- }
- 
- scan_patchdir $patchdir $patchpattern
--- 
-1.7.5.4
+Sam
