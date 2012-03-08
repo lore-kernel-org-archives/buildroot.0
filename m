@@ -1,31 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 8 Mar 2012 22:36:51 +0100
-Subject: [Buildroot] [git commit] kmod: bump version
-Message-ID: <20120308213705.A658A90D08@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 08 Mar 2012 22:51:15 +0100
+Subject: [Buildroot] [PATCH] microperl: bump to version 5.12.4 and
+	convert to gentargets
+In-Reply-To: <1331139162-8851-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 7 Mar 2012 13:52:42 -0300")
+References: <1331139162-8851-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87eht2ep7w.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=de66776330813806aaf2dc6e349044ef71e83f11
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/kmod/kmod.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Gustavo> * Convert microperl to gentargets infrastructure
+ Gustavo> * Bump to a more modern version 5.12.4
+ Gustavo> * Introduce the bundle options to simplify people's lives
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index acf5f0a..028d351 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -1,6 +1,6 @@
--KMOD_VERSION = 5
-+KMOD_VERSION = 6
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
--KMOD_SITE = http://packages.profusion.mobi/kmod/
-+KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
- KMOD_INSTALL_STAGING = YES
- KMOD_DEPENDENCIES = host-pkg-config
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
