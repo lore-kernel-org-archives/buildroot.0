@@ -1,62 +1,59 @@
-From: MERCADIER Johann <johann.mercadier@imerir.com>
-Date: Wed, 7 Mar 2012 23:16:21 +0000
-Subject: [Buildroot] BR 2012.rc1 :: DVI not activated on pandaboard?
-Message-ID: <CAPEB33z8LrFWaQdwVA1XdSjKFWam9kTH2FO8CvkWdnj9U_7vzA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  8 Mar 2012 02:20:58 +0000 (UTC)
+Subject: [Buildroot] [Bug 4892] New: build fails on
+ ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest04.c:146: undefined
+ reference to `sigset'
+Message-ID: <bug-4892-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-  Now that I try to switch to a graphical output. As the uImage generated
-by BR still does work I compile one manually (3.2.7), it works great till
-It's used on console mode then I add all options needed to get DVI
-activated as explained on the following website:
-http://omappedia.org/wiki/Bootargs_for_enabling_display
-http://omappedia.org/wiki/DSS_CONFIG_options
+https://bugs.busybox.net/show_bug.cgi?id=4892
 
-modify the boot script in the following way:
-___[ BOOT.SCRIPT
-]________________________________________________________________________________________
-mmc rescan
-fatload mmc 0:1 0x80000000 uImage
-setenv bootargs vram=32M console=ttyO2,115200n8
-mem=456M at 0x80000000mem=512M at 0xA0000000 omapdss.def_disp=dvi
-omapfb.mode=dvi:1280x1024MR-24 at 60smsc95xx.macaddr=76:2F:97:85:4F:56
-root=/dev/nfs rw
-nfsroot=192.168.1.44:/home/johann/rootfs_TEST,nolock,wsize=1024,rsize=1024
-ip=192.168.1.235 rootdelay=4 init=/linuxrc
-bootm 0x80000000
+           Summary: build fails on
+                    ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest
+                    04.c:146: undefined reference to `sigset'
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: austinenglish at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-when booting I get there, the pandaboard probably still continue the boot
-process but nothing is displayed on the monitor?...
-___[ MINICOM O/P
-]________________________________________________________________________________________
-...
-   Verifying Checksum ... OK
-   Loading Kernel Image ... OK
-OK
 
-Starting kernel ...
+Created attachment 4112
+  --> https://bugs.busybox.net/attachment.cgi?id=4112
+.config used
 
-Uncompressing Linux... done, booting the kernel.
-??????
+/home/austin/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc
+  -L../../../../lib  ftest04.o libftest.o   -lltp -o ftest04
+ftest04.o: In function `setup':
+/home/austin/buildroot-2012.02/output/build/ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest04.c:146:
+undefined reference to `sigset'
 
-If someone can understand why nothing is displayed on monitor, please tell
-me or us (probably not the only stuck with it!)
+not sure what other info is useful. Running on 32-bit gentoo linux. I've
+attached the .config file.
 
-thanks
+Please let me know what other information would be useful:
+austin at aw25 ~/buildroot-2012.02 $ gcc --version
+gcc (Gentoo 4.5.3-r1 p1.0, pie-0.4.5) 4.5.3
+Copyright (C) 2010 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+austin at aw25 ~/buildroot-2012.02 $ uname -a
+Linux aw25 2.6.37 #1 SMP Thu Apr 21 17:36:51 PDT 2011 i686 Intel(R) Core(TM) i7
+CPU 960 @ 3.20GHz GenuineIntel GNU/Linux
+
 -- 
-Cordialement.
-
-___Johann MERCADIER___
-
-:(){ :|:& };:
-"I am the Unknown lead by the Unknowing.
-I have done so much with so little for so long
-that I am now qualified to do anything with nothing."
-HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120307/4a3d0bf6/attachment-0001.html>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
