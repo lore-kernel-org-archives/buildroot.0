@@ -1,58 +1,42 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Thu,  8 Mar 2012 05:47:02 -0800
-Subject: [Buildroot] [PATCH 1/2] uboot: Add support for copying MLO to the
-	images directory for U-boot builds that include it.
-Message-ID: <1331214423-8647-1-git-send-email-fhunleth@troodon-software.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 8 Mar 2012 15:06:24 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
+ patches in proper order
+In-Reply-To: <CAHXCMMJ6_MEK+WSHG1tezuO8_fANwW18dc_=Wq28dwMo1T1a3Q@mail.gmail.com>
+References: <201202282119.38907.arnout@mind.be>
+ <1331208055-18533-1-git-send-email-ludovic.desroches@atmel.com>
+ <1331208055-18533-2-git-send-email-ludovic.desroches@atmel.com>
+ <CAHXCMMJ6_MEK+WSHG1tezuO8_fANwW18dc_=Wq28dwMo1T1a3Q@mail.gmail.com>
+Message-ID: <20120308140624.GC3429@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- boot/uboot/Config.in |    6 ++++++
- boot/uboot/uboot.mk  |    6 +++++-
- 2 files changed, 11 insertions(+), 1 deletions(-)
+Hi Samuel,
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index c8db9fb..0b8db1f 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -137,4 +137,10 @@ config BR2_TARGET_UBOOT_ETH1ADDR
- 
- endif # BR2_TARGET_UBOOT_NETWORK
- 
-+config BR2_TARGET_UBOOT_MLO
-+	bool "MLO"
-+	help
-+	  Copy the X-Loader binary (MLO) to the images directory for 
-+	  U-boot builds that generate it.
-+
- endif # BR2_TARGET_UBOOT
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index db9de8d..ac4d4fe 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -33,6 +33,10 @@ else
- UBOOT_BIN          = u-boot.bin
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_MLO),y)
-+UBOOT_EXTRA_BIN	   = $(@D)/MLO
-+endif
-+
- UBOOT_ARCH=$(KERNEL_ARCH)
- 
- UBOOT_CONFIGURE_OPTS += CONFIG_NOSOFTFLOAT=1
-@@ -87,7 +91,7 @@ define UBOOT_BUILD_CMDS
- endef
- 
- define UBOOT_INSTALL_IMAGES_CMDS
--	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
-+	cp -dpf $(@D)/$(UBOOT_BIN) $(UBOOT_EXTRA_BIN) $(BINARIES_DIR)/
- endef
- 
- $(eval $(call GENTARGETS))
--- 
-1.7.4.1
+On Thu, Mar 08, 2012 at 11:48:07AM +0100, Samuel Martin wrote:
+> Hi Ludovic, all,
+> 
+> > + ? ?# If there is a series file, use it instead of using ls sort order
+> > + ? ?# to apply patches.
+> > + ? ?if [ -e "${path}/series" ] ; then
+> > + ? ? ? ?for i in `cat ${path}/series 2> /dev/null` ; do
+> > ? ? ? ? ? ? apply_patch "$path" "$i" || exit 1
+> 
+> Maybe i miss something,
+
+In fact, no...
+
+> but i don't see how you handle disabled
+> patches in the series file, i means line starting by '#'?
+
+I didn't know that I could face such case so I didn't handle it.
+
+Is simply checking '#' presency at the beginning of the the patch name enough?
+
+
+Regards
+
+Ludovic
