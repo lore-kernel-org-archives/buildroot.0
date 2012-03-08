@@ -1,44 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Mar 2012 09:17:14 +0100
-Subject: [Buildroot] add option to enable AI_ADDRCONFIG support
-In-Reply-To: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
-References: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <20120308091714.5d60b715@skate>
+Date: Thu, 8 Mar 2012 09:21:59 +0100
+Subject: [Buildroot] BR 2012.rc1 :: DVI not activated on pandaboard?
+In-Reply-To: <CAPEB33z8LrFWaQdwVA1XdSjKFWam9kTH2FO8CvkWdnj9U_7vzA@mail.gmail.com>
+References: <CAPEB33z8LrFWaQdwVA1XdSjKFWam9kTH2FO8CvkWdnj9U_7vzA@mail.gmail.com>
+Message-ID: <20120308092159.5af7ce23@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sven,
+Hello,
 
-Le Wed,  7 Mar 2012 23:38:16 +0100,
-Sven Neumann <s.neumann@raumfeld.com> a ?crit :
+Le Wed, 7 Mar 2012 23:16:21 +0000,
+MERCADIER Johann <johann.mercadier@imerir.com> a ?crit :
 
-> This patchset adds a buildroot option to enable AI_ADDRCONFIG support
-> in uClibC. It also changes the mrouted package to select the new option
-> instead of hinting the user in a comment that it depends on it.
+> mmc rescan
+> fatload mmc 0:1 0x80000000 uImage
+> setenv bootargs vram=32M console=ttyO2,115200n8
+> mem=456M at 0x80000000mem=512M at 0xA0000000 omapdss.def_disp=dvi
+> omapfb.mode=dvi:1280x1024MR-24 at 60smsc95xx.macaddr=76:2F:97:85:4F:56
+> root=/dev/nfs rw
+> nfsroot=192.168.1.44:/home/johann/rootfs_TEST,nolock,wsize=1024,rsize=1024
+> ip=192.168.1.235 rootdelay=4 init=/linuxrc
+> bootm 0x80000000
+> 
+> when booting I get there, the pandaboard probably still continue the boot
+> process but nothing is displayed on the monitor?...
+> ___[ MINICOM O/P
+> ]________________________________________________________________________________________
+> ...
+>    Verifying Checksum ... OK
+>    Loading Kernel Image ... OK
+> OK
+> 
+> Starting kernel ...
+> 
+> Uncompressing Linux... done, booting the kernel.
 
-I don't know if this question has been asked in the past, but do you
-know what is the binary size impact of enabling AI_ADDRCONFIG in
-uClibc? If the impact is rather minimal, then I'd rather have it
-enabled in our default configuration instead of adding yet another
-toolchain config knob.
+If you don't have the kernel messages after this, then it means that
+something is wrong in your configuration. Don't expect to see anything
+on the video output before you get your kernel to boot properly, i.e to
+display messages on the serial console after "Uncompressing Linux...
+done, booting the kernel".
 
-Anyway some comments about your patches (but don't work on updating
-them before we decide if a new option is really needed) :
+However, this discussion is really not Buildroot-specific, it is really
+about configuring a kernel for a particular hardware platform, so you
+should probably rather ask in support places (forums, mailing lists,
+etc.) that are related to this particular piece of hardware.
 
- * Your PATCH 1/2 also needs to address the cases of external
-   toolchains and crosstool-ng toolchains ;
-
- * Your PATCH 2/2 should use a depends on rather than a select. We use
-   depends on for all the dependencies of packages on toolchain
-   options, together with a comment displayed when the toolchain
-   options isn't present, so that the user is aware that mrouted is
-   available, but only if AI_ADDRCONFIG is enabled as a toolchain
-   option.
-
-Regards,
+Best regards,
 
 Thomas
 -- 
