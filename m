@@ -1,59 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 8 Mar 2012 09:21:59 +0100
-Subject: [Buildroot] BR 2012.rc1 :: DVI not activated on pandaboard?
-In-Reply-To: <CAPEB33z8LrFWaQdwVA1XdSjKFWam9kTH2FO8CvkWdnj9U_7vzA@mail.gmail.com>
-References: <CAPEB33z8LrFWaQdwVA1XdSjKFWam9kTH2FO8CvkWdnj9U_7vzA@mail.gmail.com>
-Message-ID: <20120308092159.5af7ce23@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  8 Mar 2012 08:24:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 4892] build fails on
+ ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest04.c:146: undefined
+ reference to `sigset'
+In-Reply-To: <bug-4892-163@https.bugs.busybox.net/>
+References: <bug-4892-163@https.bugs.busybox.net/>
+Message-ID: <20120308082459.D811E90D0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=4892
 
-Le Wed, 7 Mar 2012 23:16:21 +0000,
-MERCADIER Johann <johann.mercadier@imerir.com> a ?crit :
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> mmc rescan
-> fatload mmc 0:1 0x80000000 uImage
-> setenv bootargs vram=32M console=ttyO2,115200n8
-> mem=456M at 0x80000000mem=512M at 0xA0000000 omapdss.def_disp=dvi
-> omapfb.mode=dvi:1280x1024MR-24 at 60smsc95xx.macaddr=76:2F:97:85:4F:56
-> root=/dev/nfs rw
-> nfsroot=192.168.1.44:/home/johann/rootfs_TEST,nolock,wsize=1024,rsize=1024
-> ip=192.168.1.235 rootdelay=4 init=/linuxrc
-> bootm 0x80000000
-> 
-> when booting I get there, the pandaboard probably still continue the boot
-> process but nothing is displayed on the monitor?...
-> ___[ MINICOM O/P
-> ]________________________________________________________________________________________
-> ...
->    Verifying Checksum ... OK
->    Loading Kernel Image ... OK
-> OK
-> 
-> Starting kernel ...
-> 
-> Uncompressing Linux... done, booting the kernel.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
 
-If you don't have the kernel messages after this, then it means that
-something is wrong in your configuration. Don't expect to see anything
-on the video output before you get your kernel to boot properly, i.e to
-display messages on the serial console after "Uncompressing Linux...
-done, booting the kernel".
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-03-08 08:24:59 UTC ---
+Thanks for your bug report.
 
-However, this discussion is really not Buildroot-specific, it is really
-about configuring a kernel for a particular hardware platform, so you
-should probably rather ask in support places (forums, mailing lists,
-etc.) that are related to this particular piece of hardware.
+The help text of the ltp-testsuite package says:
 
-Best regards,
+"""
+          The LTP testsuite uses several functions that are considered
+          obsolete, such as sigset() and others. Therefore, the LTP
+          testsuite does not build with Buildroot's default uClibc
+          configuration, and options such as
+          UCLIBC_HAS_OBSOLETE_BSD_SIGNAL are needed.
+"""
 
-Thomas
+So, it is well-known that ltp-testsuite doesn't build with our default uClibc
+configuration. You must add the uCLIBC_HAS_OBSOLETE_BSD_SIGNAL option to it. So
+you should do:
+
+make clean
+make uclibc-menuconfig
+# add the UCLIBC_HAS_OBSOLETE_BSD_SIGNAL option
+make
+
+and then it should work.
+
+A good improvement would be to adapt ltp-testsuite so that if sigset() isn't
+available, it doesn't try to use it.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
