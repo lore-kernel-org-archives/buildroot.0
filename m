@@ -1,54 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  8 Mar 2012 08:24:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 4892] build fails on
- ltp-testsuite-20101031/testcases/kernel/fs/ftest/ftest04.c:146: undefined
- reference to `sigset'
-In-Reply-To: <bug-4892-163@https.bugs.busybox.net/>
-References: <bug-4892-163@https.bugs.busybox.net/>
-Message-ID: <20120308082459.D811E90D0A@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 08 Mar 2012 10:14:38 +0100
+Subject: [Buildroot] [RFC v2 00/31] Automatically produce legal
+ compliance info
+In-Reply-To: <201203072254.30549.yann.morin.1998@free.fr>
+References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
+ <201203072254.30549.yann.morin.1998@free.fr>
+Message-ID: <4F58787E.3060703@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4892
+Yann E. MORIN wrote:
+> Lucas, All,
+>
+> On Wednesday 07 March 2012 21:58:00 Luca Ceresoli wrote:
+>> This second RFC incorporates many of the additions and modifications that have
+>> been discussed, as well as many other improvements. Thanks Arnout, ThomasDS and
+>> others for their review, and the BDD participants for their suggestions.
+> Is there a public git tree we can pull from?
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+No, sorry. But I might set up one on github next time.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WONTFIX
-
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-03-08 08:24:59 UTC ---
-Thanks for your bug report.
-
-The help text of the ltp-testsuite package says:
-
-"""
-          The LTP testsuite uses several functions that are considered
-          obsolete, such as sigset() and others. Therefore, the LTP
-          testsuite does not build with Buildroot's default uClibc
-          configuration, and options such as
-          UCLIBC_HAS_OBSOLETE_BSD_SIGNAL are needed.
-"""
-
-So, it is well-known that ltp-testsuite doesn't build with our default uClibc
-configuration. You must add the uCLIBC_HAS_OBSOLETE_BSD_SIGNAL option to it. So
-you should do:
-
-make clean
-make uclibc-menuconfig
-# add the UCLIBC_HAS_OBSOLETE_BSD_SIGNAL option
-make
-
-and then it should work.
-
-A good improvement would be to adapt ltp-testsuite so that if sigset() isn't
-available, it doesn't try to use it.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Luca
