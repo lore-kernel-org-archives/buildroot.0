@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 9 Mar 2012 07:54:32 +0100
-Subject: [Buildroot] [PATCH 11/13] cmake: move creation of toolchain
- file to package/pkg-cmaketargets.mk
-In-Reply-To: <e165f3e7d58343c33b295e78c7ec60b0f6bbb839.1331148806.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Mar 2012 07:56:04 +0100
+Subject: [Buildroot] [PATCH 12/13] package: remove unused
+ STRIP_DISCARD_ALL variable
+In-Reply-To: <4dd84de28f2f8192657da91d5c07c23330aa52f1.1331148806.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <e165f3e7d58343c33b295e78c7ec60b0f6bbb839.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LW88QiWEWG5qSTQ7Uvh_5hM1r7kQaXQ6Fs7uyimCPCP+Q@mail.gmail.com>
+ <4dd84de28f2f8192657da91d5c07c23330aa52f1.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LXgitTSGui0ec00SQSQz-TNLNzd+r2sx8rxbq2+x9s5Hg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,79 +15,32 @@ To: buildroot@busybox.net
 On Wed, Mar 7, 2012 at 8:34 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 > ---
-> ?Makefile ? ? ? ? ? ? ? ? ? ?| ? 17 -----------------
-> ?package/pkg-cmaketargets.mk | ? 22 ++++++++++++++++++++++
-> ?2 files changed, 22 insertions(+), 17 deletions(-)
+> ?package/Makefile.in | ? ?2 --
+> ?1 files changed, 0 insertions(+), 2 deletions(-)
 >
-> diff --git a/Makefile b/Makefile
-> index 1986e33..ab91b10 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -339,23 +339,6 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->
-> ?world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
->
-> -$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
-> - ? ? ? mkdir -p $(@D)
-> - ? ? ? @echo -en "\
-> - ? ? ? set(CMAKE_SYSTEM_NAME Linux)\n\
-> - ? ? ? set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
-> - ? ? ? set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-> - ? ? ? set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-> - ? ? ? set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
-> - ? ? ? set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
-> - ? ? ? set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
-> - ? ? ? set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-> - ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-> - ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
-> - ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
-> - ? ? ? set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-> - ? ? ? " > $@
-> -
-> ?.PHONY: all world dirs clean distclean source outputmakefile \
-> ? ? ? ?$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
-> ? ? ? ?$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
-> diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
-> index 1cd65e4..371ab11 100644
-> --- a/package/pkg-cmaketargets.mk
-> +++ b/package/pkg-cmaketargets.mk
-> @@ -197,3 +197,25 @@ else
-> ?$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 4f72864..29ba497 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -126,7 +126,6 @@ TARGET_CXX := $(CCACHE) $(TARGET_CXX)
 > ?endif
-> ?endef
-> +
-> +################################################################################
-> +# Generation of the CMake toolchain file
-> +################################################################################
-> +
-> +$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
-> + ? ? ? @mkdir -p $(@D)
-> + ? ? ? @echo -en "\
-> + ? ? ? set(CMAKE_SYSTEM_NAME Linux)\n\
-> + ? ? ? set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
-> + ? ? ? set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-> + ? ? ? set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-> + ? ? ? set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
-> + ? ? ? set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
-> + ? ? ? set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
-> + ? ? ? set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-> + ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-> + ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
-> + ? ? ? set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
-> + ? ? ? set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-> + ? ? ? " > $@
-> +
-
-Currently, BASE_TARGETS is still:
-$(BASE_TARGETS): dirs $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
-
-Now that the recipe for toolchainfile.cmake has moved, I find it a bit
-strange that the 'magic' path to this file still appears here.
-What about creating a nicer name and using that in BASE_TARGETS, and
-let the pkg-cmaketargets.mk file resolve the nice name into the actual
-path?
-
+>
+> ?ifeq ($(BR2_STRIP_strip),y)
+> -STRIP_DISCARD_ALL:=--discard-all
+> ?STRIP_STRIP_UNNEEDED:=--strip-unneeded
+> ?STRIP_STRIP_ALL:=--strip-all
+> ?TARGET_STRIP=$(TARGET_CROSS)strip
+> @@ -134,7 +133,6 @@ STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+> ?KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+> ?endif
+> ?ifeq ($(BR2_STRIP_sstrip),y)
+> -STRIP_DISCARD_ALL:=
+> ?STRIP_STRIP_UNNEEDED:=
+> ?STRIP_STRIP_ALL:=
+> ?TARGET_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
 > --
 > 1.7.4.1
 >
