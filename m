@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 9 Mar 2012 07:56:04 +0100
-Subject: [Buildroot] [PATCH 12/13] package: remove unused
- STRIP_DISCARD_ALL variable
-In-Reply-To: <4dd84de28f2f8192657da91d5c07c23330aa52f1.1331148806.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Mar 2012 08:01:54 +0100
+Subject: [Buildroot] [PATCH 13/13] package: move autotools specific
+ stuff to pkg-autotargets.mk
+In-Reply-To: <91711f9a8cd03a56455ba4516aaf235d90601d53.1331148806.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <4dd84de28f2f8192657da91d5c07c23330aa52f1.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LXgitTSGui0ec00SQSQz-TNLNzd+r2sx8rxbq2+x9s5Hg@mail.gmail.com>
+ <91711f9a8cd03a56455ba4516aaf235d90601d53.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LU8ecs39yEpH7ZoRbtxTS2-Cj+uuow-yexJSYvP1hzOwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,186 @@ To: buildroot@busybox.net
 On Wed, Mar 7, 2012 at 8:34 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
 > ---
-> ?package/Makefile.in | ? ?2 --
-> ?1 files changed, 0 insertions(+), 2 deletions(-)
+> ?package/Makefile.in ? ? ? ?| ? 73 --------------------------------------------
+> ?package/pkg-autotargets.mk | ? 70 ++++++++++++++++++++++++++++++++++++++++++
+> ?2 files changed, 70 insertions(+), 73 deletions(-)
 >
 > diff --git a/package/Makefile.in b/package/Makefile.in
-> index 4f72864..29ba497 100644
+> index 29ba497..a008fe7 100644
 > --- a/package/Makefile.in
 > +++ b/package/Makefile.in
-> @@ -126,7 +126,6 @@ TARGET_CXX := $(CCACHE) $(TARGET_CXX)
-> ?endif
+> @@ -223,79 +223,6 @@ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+> ? ? ? ? ? ? ? ?PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
+> ? ? ? ? ? ? ? ?PERLLIB="$(HOST_DIR)/usr/lib/perl"
 >
-> ?ifeq ($(BR2_STRIP_strip),y)
-> -STRIP_DISCARD_ALL:=--discard-all
-> ?STRIP_STRIP_UNNEEDED:=--strip-unneeded
-> ?STRIP_STRIP_ALL:=--strip-all
-> ?TARGET_STRIP=$(TARGET_CROSS)strip
-> @@ -134,7 +133,6 @@ STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
-> ?KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
-> ?endif
-> ?ifeq ($(BR2_STRIP_sstrip),y)
-> -STRIP_DISCARD_ALL:=
-> ?STRIP_STRIP_UNNEEDED:=
-> ?STRIP_STRIP_ALL:=
-> ?TARGET_STRIP=$(HOST_DIR)/usr/bin/$(REAL_GNU_TARGET_NAME)-sstrip
+> -
+> -#######################################################################
+> -# settings we need to pass to configure
+> -
+> -# does unaligned access trap?
+> -BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=yes
+> -ifeq ($(BR2_i386),y)
+> -BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> -endif
+> -ifeq ($(BR2_x86_64),y)
+> -BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> -endif
+> -ifeq ($(BR2_m68k),y)
+> -BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> -endif
+> -ifeq ($(BR2_powerpc)$(BR2_ENDIAN),yBIG)
+> -BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> -endif
+> -
+> -ifeq ($(BR2_ENDIAN),"BIG")
+> -BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=yes
+> -else
+> -BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=no
+> -endif
+> -
+> -TARGET_CONFIGURE_ARGS= \
+> - ? ? ? $(BR2_AC_CV_TRAP_CHECK) \
+> - ? ? ? ac_cv_func_mmap_fixed_mapped=yes \
+> - ? ? ? ac_cv_func_memcmp_working=yes \
+> - ? ? ? ac_cv_have_decl_malloc=yes \
+> - ? ? ? gl_cv_func_malloc_0_nonnull=yes \
+> - ? ? ? ac_cv_func_malloc_0_nonnull=yes \
+> - ? ? ? ac_cv_func_calloc_0_nonnull=yes \
+> - ? ? ? ac_cv_func_realloc_0_nonnull=yes \
+> - ? ? ? lt_cv_sys_lib_search_path_spec="" \
+> - ? ? ? $(BR2_AC_CV_C_BIGENDIAN)
+> -
+> -#######################################################################
+> -
+> -ifeq ($(BR2_ENABLE_LOCALE),y)
+> -DISABLE_NLS:=
+> -else
+> -DISABLE_NLS:=--disable-nls
+> -endif
+> -
+> -ifneq ($(BR2_LARGEFILE),y)
+> -DISABLE_LARGEFILE= --disable-largefile
+> -endif
+> -
+> -ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+> -DISABLE_DOCUMENTATION=--disable-gtk-doc
+> -endif
+> -
+> -ifneq ($(BR2_INET_IPV6),y)
+> -DISABLE_IPV6= --disable-ipv6
+> -endif
+> -
+> -ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+> -TARGET_CONFIGURE_OPTS+=CXX=false
+> -endif
+> -
+> -ifeq ($(BR2_ENABLE_DEBUG),y)
+> -ENABLE_DEBUG:=--enable-debug
+> -else
+> -ENABLE_DEBUG:=
+> -endif
+> -
+> -ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> -SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+> -else
+> -SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+> -endif
+> -
+> ?include package/pkg-utils.mk
+> ?include package/pkg-download.mk
+> ?include package/pkg-autotargets.mk
+> diff --git a/package/pkg-autotargets.mk b/package/pkg-autotargets.mk
+> index c9887c2..a1539bb 100644
+> --- a/package/pkg-autotargets.mk
+> +++ b/package/pkg-autotargets.mk
+> @@ -36,6 +36,76 @@ define CONFIG_UPDATE
+> ? ? ? ?done
+> ?endef
+>
+> +#
+> +# Calculate values of well-known settings for configure scripts
+> +#
+> +
+> +# does unaligned access trap?
+> +BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=yes
+> +ifeq ($(BR2_i386),y)
+> +BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> +else ifeq ($(BR2_x86_64),y)
+> +BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> +else ifeq ($(BR2_m68k),y)
+> +BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> +else ifeq ($(BR2_powerpc)$(BR2_ENDIAN),yBIG)
+> +BR2_AC_CV_TRAP_CHECK=ac_cv_lbl_unaligned_fail=no
+> +endif
+> +
+> +ifeq ($(BR2_ENDIAN),"BIG")
+> +BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=yes
+> +else
+> +BR2_AC_CV_C_BIGENDIAN=ac_cv_c_bigendian=no
+> +endif
+> +
+> +TARGET_CONFIGURE_ARGS= \
+> + ? ? ? $(BR2_AC_CV_TRAP_CHECK) \
+> + ? ? ? ac_cv_func_mmap_fixed_mapped=yes \
+> + ? ? ? ac_cv_func_memcmp_working=yes \
+> + ? ? ? ac_cv_have_decl_malloc=yes \
+> + ? ? ? gl_cv_func_malloc_0_nonnull=yes \
+> + ? ? ? ac_cv_func_malloc_0_nonnull=yes \
+> + ? ? ? ac_cv_func_calloc_0_nonnull=yes \
+> + ? ? ? ac_cv_func_realloc_0_nonnull=yes \
+> + ? ? ? lt_cv_sys_lib_search_path_spec="" \
+> + ? ? ? $(BR2_AC_CV_C_BIGENDIAN)
+> +
+> +# Calculate values of well-known configure script options
+> +
+> +ifeq ($(BR2_ENABLE_LOCALE),y)
+> +DISABLE_NLS:=
+> +else
+> +DISABLE_NLS:=--disable-nls
+> +endif
+> +
+> +ifneq ($(BR2_LARGEFILE),y)
+> +DISABLE_LARGEFILE= --disable-largefile
+> +endif
+> +
+> +ifneq ($(BR2_HAVE_DOCUMENTATION),y)
+> +DISABLE_DOCUMENTATION=--disable-gtk-doc
+> +endif
+> +
+> +ifneq ($(BR2_INET_IPV6),y)
+> +DISABLE_IPV6= --disable-ipv6
+> +endif
+> +
+> +ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +TARGET_CONFIGURE_OPTS+=CXX=false
+> +endif
+> +
+> +ifeq ($(BR2_ENABLE_DEBUG),y)
+> +ENABLE_DEBUG:=--enable-debug
+> +else
+> +ENABLE_DEBUG:=
+> +endif
+> +
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+> +else
+> +SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+> +endif
+> +
+> ?################################################################################
+> ?# AUTOTARGETS_INNER -- defines how the configuration, compilation and
+> ?# installation of an autotools package should be done, implements a
+
+Ok for the BR2_AC_BV_... move.
+
+The last defines like DISABLE_NLS, DISABLE_LARGEFILES, ... are
+sometimes used outside of autotargets, e.g. in
+./toolchain/gcc/gcc-uclibc-4.x.mk, toolchain/gdb/gdb.mk,
+./package/newt/newt.mk.
+
+I'm not sure if it's a good idea to move them, based on that observation.
+
 > --
 > 1.7.4.1
 >
