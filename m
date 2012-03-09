@@ -1,36 +1,71 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Fri, 9 Mar 2012 17:03:49 +0100
-Subject: [Buildroot] Howto track/trace segfaults on ARM ?
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB67030D4CBD@WETMEX10.loepfe.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 09 Mar 2012 17:23:08 +0100
+Subject: [Buildroot] [RFC v2 16/31] linux: define license
+In-Reply-To: <201203072249.40319.yann.morin.1998@free.fr>
+References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
+ <1331153911-22277-17-git-send-email-luca@lucaceresoli.net>
+ <201203072249.40319.yann.morin.1998@free.fr>
+Message-ID: <4F5A2E6C.9030202@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Yann E. MORIN wrote:
+> Lucas, All,
+>
+> On Wednesday 07 March 2012 21:58:16 Luca Ceresoli wrote:
+>> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
+>> ---
+>>   linux/linux.mk |    2 ++
+>>   1 files changed, 2 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index ae236d4..e6f2388 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -4,6 +4,8 @@
+>>   #
+>>   ###############################################################################
+>>   LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+>> +LINUX_LICENSE = GPLv2-ONLY
+> What's the point of giving the version 'v2' and stating 'only'?
+> I would rather see:
+>    values        meaning
+>    -------------------------------
+>    GPLv2         GPLv2 only
+>    GPLv2+        GPLv2 or later
+>    LGPLv2.1      LGPLv2.1 only
+>    LGPLv2.1+     LGPLv2.1 or later
+>    ...           ...
 
-Probably not the GOOD place to ask for this information, but.. Going to
-give it a shot.
+When a project is GPL-licensed, it usually means it uses "either version X of
+the License, or (at your option) any later version". There are rare cases
+(Linux, Busybox, any other?) chose to use a specific version, no later version.
 
-I'm still working on WebKit-1.6.3 for buildroot (which seems to work ,
-at least , I get in compiled..)
+So the "default" meaning of "GPLvX" is "GPL version X or later". Those rare
+cases that allow no upgrade are distinguished by adding "only".
 
-FYI: I'm cross-compiling for ARM (imx537).
- 
-But, when running the WebKit Code (GtkLauncher, which is a
-mini-WebKit-browser) I get a lot of crashes / segmentation faults /
-aborts.
+This applies for example to:
+- http://en.wikipedia.org/wiki/Linux_kernel
+- http://en.wikipedia.org/wiki/Directfb
+- http://en.wikipedia.org/wiki/Lzop
 
-Is there somebody that can point me in direction on how to find/trace
-these segmentation faults ... ???? 
+I prefer to do the same, and use a concise definition for the most frequent
+case. Of course this is a personal preference.
 
-I would like go go deeper into detail in order to find the crashes.
+If we wanted to stay on the extra-safe side, we might use:
+   values         meaning
+   -------------------------------
+   GPLv2-ONLY     GPLv2 only
+   GPLv2+         GPLv2 or later
+   LGPLv2.1-ONLY  LGPLv2.1 only
+   LGPLv2.1+      LGPLv2.1 or later
+   ...            ...
+so there is no ambiguity whatsoever. Might that "+" sign create doubts in
+dummies reading it ("Hey, what's GPLv2+? a super-GPLv2?")?
 
+Your opinions?
 
-All hints are Welcome,
-Thanks.
-
-
-PS: If I do the same build on a native PC (x86) then it does not
-segfault.
+Luca
