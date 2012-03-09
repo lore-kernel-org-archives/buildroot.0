@@ -1,35 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 9 Mar 2012 10:55:11 +0100
-Subject: [Buildroot] [RFC] Request for comment for branch
-	for-2012.05/misc-cleanups
-In-Reply-To: <20120309085634.4e49ae98@skate>
-References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LWhUefC7igy8nbDLdJT-o4o36QoX_9xcVUri6a=tSryTg@mail.gmail.com>
- <20120309085634.4e49ae98@skate>
-Message-ID: <CAAXf6LU-x2493tRhEi+-YBipEXjDZWdJKBezoVDCCv59bH=pew@mail.gmail.com>
+From: Phil Edworthy <phil.edworthy@renesas.com>
+Date: Fri, 09 Mar 2012 09:43:42 +0000
+Subject: [Buildroot] [PATCH] sh: Add additional ttySCs
+Message-ID: <1331286222-17054-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 9, 2012 at 8:56 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Fri, 9 Mar 2012 08:06:23 +0100,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
->
->> Thanks for this cleanup. I think the reorganization of the *targets
->> infrastructure and the move of its related bits from other files will
->> certainly make the whole cleaner. And I also like the removal of the
->> unneeded variables.
->>
->> I tried validating these patches by grepping/reviewing the code, and I
->> don't really expect surprises related to broken stuff. But of course,
->> it's good that you do some further testing.
->
-> And still: I did test them a bit yesterday, and it seems they were some
-> problems (but I didn't investigate too much, my testing was
-> unintentional: I had forgotten to move to another branch to work on a
-> customer project).
+There are a couple of Renesas SH devices with 8 serial ports used.
 
-Ok, let me know what you find...
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+---
+ fs/skeleton/etc/securetty           |    2 ++
+ target/generic/device_table_dev.txt |    2 +-
+ 2 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/fs/skeleton/etc/securetty b/fs/skeleton/etc/securetty
+index 547ceda..c96f2fb 100644
+--- a/fs/skeleton/etc/securetty
++++ b/fs/skeleton/etc/securetty
+@@ -46,4 +46,6 @@ ttySC2
+ ttySC3
+ ttySC4
+ ttySC5
++ttySC6
++ttySC7
+ ttyGS0
+diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
+index a3d53d4..d1d1e11 100644
+--- a/target/generic/device_table_dev.txt
++++ b/target/generic/device_table_dev.txt
+@@ -32,7 +32,7 @@
+ /dev/ttyCPM	c	666	0	0	204	46	0	1	4
+ /dev/ttyAMA	c	666	0	0	204	64	0	1	4
+ /dev/ttySAC	c	666	0	0	204	64	0	1	4
+-/dev/ttySC	c	666	0	0	204	8	0	1	6
++/dev/ttySC	c	666	0	0	204	8	0	1	8
+ /dev/ttyPSC	c	666	0	0	204	148	0	1	4
+ /dev/ttyUL	c	666	0	0	204	187	0	1	4
+ /dev/ttymxc	c	666	0	0	207	16	0	1	3
+-- 
+1.7.0.4
