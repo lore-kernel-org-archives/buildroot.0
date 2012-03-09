@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Mar 2012 08:53:30 +0100
-Subject: [Buildroot] [PATCH 11/13] cmake: move creation of toolchain
- file to package/pkg-cmaketargets.mk
-In-Reply-To: <CAAXf6LW88QiWEWG5qSTQ7Uvh_5hM1r7kQaXQ6Fs7uyimCPCP+Q@mail.gmail.com>
+Date: Fri, 9 Mar 2012 08:55:38 +0100
+Subject: [Buildroot] [PATCH 13/13] package: move autotools specific
+ stuff to pkg-autotargets.mk
+In-Reply-To: <CAAXf6LU8ecs39yEpH7ZoRbtxTS2-Cj+uuow-yexJSYvP1hzOwA@mail.gmail.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <e165f3e7d58343c33b295e78c7ec60b0f6bbb839.1331148806.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LW88QiWEWG5qSTQ7Uvh_5hM1r7kQaXQ6Fs7uyimCPCP+Q@mail.gmail.com>
-Message-ID: <20120309085330.7c5f901b@skate>
+ <91711f9a8cd03a56455ba4516aaf235d90601d53.1331148806.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LU8ecs39yEpH7ZoRbtxTS2-Cj+uuow-yexJSYvP1hzOwA@mail.gmail.com>
+Message-ID: <20120309085538.36678360@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 9 Mar 2012 07:54:32 +0100,
+Hello,
+
+Le Fri, 9 Mar 2012 08:01:54 +0100,
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-> Currently, BASE_TARGETS is still:
-> $(BASE_TARGETS): dirs
-> $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+> Ok for the BR2_AC_BV_... move.
 > 
-> Now that the recipe for toolchainfile.cmake has moved, I find it a bit
-> strange that the 'magic' path to this file still appears here.
-> What about creating a nicer name and using that in BASE_TARGETS, and
-> let the pkg-cmaketargets.mk file resolve the nice name into the actual
-> path?
+> The last defines like DISABLE_NLS, DISABLE_LARGEFILES, ... are
+> sometimes used outside of autotargets, e.g. in
+> ./toolchain/gcc/gcc-uclibc-4.x.mk, toolchain/gdb/gdb.mk,
+> ./package/newt/newt.mk.
+> 
+> I'm not sure if it's a good idea to move them, based on that
+> observation.
 
-Something like:
+Yes, I agree that this patch can definitely be discussed. I am not
+totally sure myself that it is a good idea.
 
-CMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+In the same way, the TARGET_CONFIGURE_OPTS, HOST_CONFIGURE_OPTS,
+TARGET_MAKE_ENV and HOST_MAKE_ENV are somewhat specific to autotools,
+but in fact used in many other locations as well.
 
-in pkg-cmaketargets.mk
-
-and then in the main Makefile:
-
-$(BASE_TARGETS): dirs $(CMAKE_TOOLCHAIN_FILE)
-
-Is this what you're suggesting?
+In general, my goal is to cut down on the size, complexity and messiness
+of /Makefile and /package/Makefile.in. Suggestions are welcome.
 
 Best regards,
 
