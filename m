@@ -1,28 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Mar 2012 08:51:36 +0100
-Subject: [Buildroot] [PATCH 05/13] Rename Makefile.autotools.in to
- pkg-autotargets.mk
-In-Reply-To: <CAAXf6LWuqeKM-8PFGiEXWQXrmJD9uyAFX_qNUx89tkcQgT_BfQ@mail.gmail.com>
+Date: Fri, 9 Mar 2012 08:53:30 +0100
+Subject: [Buildroot] [PATCH 11/13] cmake: move creation of toolchain
+ file to package/pkg-cmaketargets.mk
+In-Reply-To: <CAAXf6LW88QiWEWG5qSTQ7Uvh_5hM1r7kQaXQ6Fs7uyimCPCP+Q@mail.gmail.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <6f9208d76730dea4602b8bb3cc076bdb9def9539.1331148806.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LWuqeKM-8PFGiEXWQXrmJD9uyAFX_qNUx89tkcQgT_BfQ@mail.gmail.com>
-Message-ID: <20120309085136.636f4dc8@skate>
+ <e165f3e7d58343c33b295e78c7ec60b0f6bbb839.1331148806.git.thomas.petazzoni@free-electrons.com>
+ <CAAXf6LW88QiWEWG5qSTQ7Uvh_5hM1r7kQaXQ6Fs7uyimCPCP+Q@mail.gmail.com>
+Message-ID: <20120309085330.7c5f901b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-Thanks for your review!
-
-Le Fri, 9 Mar 2012 07:35:43 +0100,
+Le Fri, 9 Mar 2012 07:54:32 +0100,
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-> In addition you should fix the comment
+> Currently, BASE_TARGETS is still:
+> $(BASE_TARGETS): dirs
+> $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+> 
+> Now that the recipe for toolchainfile.cmake has moved, I find it a bit
+> strange that the 'magic' path to this file still appears here.
+> What about creating a nicer name and using that in BASE_TARGETS, and
+> let the pkg-cmaketargets.mk file resolve the nice name into the actual
+> path?
 
-Hum, which comment are you talking about here?
+Something like:
+
+CMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+
+in pkg-cmaketargets.mk
+
+and then in the main Makefile:
+
+$(BASE_TARGETS): dirs $(CMAKE_TOOLCHAIN_FILE)
+
+Is this what you're suggesting?
+
+Best regards,
 
 Thomas
 -- 
