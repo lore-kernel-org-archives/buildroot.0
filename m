@@ -1,10 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  9 Mar 2012 15:39:48 +0100
-Subject: [Buildroot] [PATCH 3/5] network-manager: remove double libnl
-	dependency
+Date: Fri,  9 Mar 2012 15:39:49 +0100
+Subject: [Buildroot] [PATCH 4/5] xdriver_xf86-video-fbdev: bump to 0.4.2
 In-Reply-To: <1331303990-13548-1-git-send-email-yegorslists@googlemail.com>
 References: <1331303990-13548-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1331303990-13548-3-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1331303990-13548-4-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +14,21 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/network-manager/Config.in |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ .../xdriver_xf86-video-fbdev.mk                    |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 9708a11..fb0c0e9 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -8,7 +8,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_UDEV
- 	select BR2_PACKAGE_UDEV_ALL_EXTRAS
--	select BR2_PACKAGE_LIBNL
- 	select BR2_PACKAGE_GNUTLS
- 	select BR2_PACKAGE_LIBNL
- 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+index 600335e..7634d92 100644
+--- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
++++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.1
++XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.2
+ XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_FBDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_FBDEV_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
 -- 
 1.7.7
