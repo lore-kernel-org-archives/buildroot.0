@@ -1,10 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 9 Mar 2012 07:49:26 +0100
-Subject: [Buildroot] [PATCH 09/13] Remove unused .fakeroot.* mechanism
-In-Reply-To: <55b004c3fe5be40fb7bfaeeec0b6219aadaac022.1331148806.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Mar 2012 07:50:37 +0100
+Subject: [Buildroot] [PATCH 10/13] Move the manual build infrastructure
+	to docs/manual/manual.mk
+In-Reply-To: <ec70344eaa4dc73d4d7fc0ccae8575b8562ef80d.1331148806.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <55b004c3fe5be40fb7bfaeeec0b6219aadaac022.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LXQH5eCb1ASN3ZdKxSw9L8AC3iabvgOXd5qSCbVpoMDsQ@mail.gmail.com>
+ <ec70344eaa4dc73d4d7fc0ccae8575b8562ef80d.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LVjAcxD8mpvn0hozp13cDr-WhPnEAm=ExQHQ0VucBJKtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,86 +14,129 @@ To: buildroot@busybox.net
 
 On Wed, Mar 7, 2012 at 8:34 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
-> There used to be a mechanism using which packages could leave a
-> .fakeroot.<something> file which could contain commands to be executed
-> within the fakeroot environment. Since this mechanism is no longer
-> used by any package, remove it from the common infrastructure.
->
-> The latest user was nfs-utils, which used this mechanism to do the
-> "make install" as root, since doing otherwise was not supported. But
-> since 16e7b8255c82815126a2c502c3787d442d254a86, nfs-utils has been
-> upgraded and converted to the package infrastructure, and this hack is
-> no longer necessary. Another past user was the ltp-testsuite package,
-> for the same reason, and since
-> a72a670489547a3ca645ff7c3a0d9c3fb66eab51, the fakeroot hack is no
-> longer needed.
->
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 > ---
-> ?Makefile ? ? ? ? ? ? ?| ? ?6 ------
-> ?fs/common.mk ? ? ? ? ?| ? ?2 --
-> ?fs/iso9660/iso9660.mk | ? ?2 --
-> ?3 files changed, 0 insertions(+), 10 deletions(-)
+> ?Makefile ? ? ? ? ? ? ?| ? 49 +------------------------------------------------
+> ?docs/manual/manual.mk | ? 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+> ?2 files changed, 49 insertions(+), 48 deletions(-)
+> ?create mode 100644 docs/manual/manual.mk
 >
 > diff --git a/Makefile b/Makefile
-> index c3ff284..ab6cee1 100644
+> index ab6cee1..1986e33 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -301,8 +301,6 @@ endif
+> @@ -679,54 +679,7 @@ release:
+> ? ? ? ?bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+> ? ? ? ?rm -rf $(OUT) $(OUT).tar
 >
-> ?include fs/common.mk
->
-> -TARGETS+=erase-fakeroots
+> -################################################################################
+> -# GENDOC -- generates the make targets needed to build a specific type of
+> -# ? ? ? ? ? asciidoc documentation.
+> -#
+> -# ?argument 1 is the name of the document and must be a subdirectory of docs/;
+> -# ? ? ? ? ? ? the top-level asciidoc file must have the same name
+> -# ?argument 2 is the type of document to generate (-f argument of a2x)
+> -# ?argument 3 is the document type as used in the make target
+> -# ?argument 4 is the output file extension for the document type
+> -# ?argument 5 is the human text for the document type
+> -# ?argument 6 (optional) are extra arguments for a2x
+> -#
+> -# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+> -################################################################################
+> -define GENDOC_INNER
+> -$(1): $(1)-$(3)
+> -.PHONY: $(1)-$(3)
+> -$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
 > -
-> ?TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
-> ?TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
-> ?TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
-> @@ -391,7 +389,6 @@ $(BUILD_DIR)/.root:
-> ? ? ? ? ? ? ? ?if [ -d "$(TARGET_SKELETON)" ]; then \
-> ? ? ? ? ? ? ? ? ? ? ? ?cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
-> ? ? ? ? ? ? ? ?fi; \
-> - ? ? ? ? ? ? ? touch $(STAGING_DIR)/.fakeroot.00000; \
-> ? ? ? ?fi
-> ? ? ? ?-find $(TARGET_DIR) -type d -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
-> ? ? ? ?-find $(TARGET_DIR) -type f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
-> @@ -399,9 +396,6 @@ $(BUILD_DIR)/.root:
->
-> ?$(TARGET_DIR): $(BUILD_DIR)/.root
->
-> -erase-fakeroots:
-> - ? ? ? rm -f $(BUILD_DIR)/.fakeroot*
+> -$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
+> - ? ? ? @echo "Generating $(5) $(1)..."
+> - ? ? ? $(Q)mkdir -p $$(@D)
+> - ? ? ? $(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
+> - ? ? ? ? -D $$(@D) $$<
+> -endef
 > -
-> ?target-finalize:
-> ?ifeq ($(BR2_HAVE_DEVFILES),y)
-> ? ? ? ?( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-> diff --git a/fs/common.mk b/fs/common.mk
-> index d426f37..debf7db 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -45,8 +45,6 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
-> ? ? ? ?@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-> ? ? ? ?$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
-> ? ? ? ?rm -f $(FAKEROOT_SCRIPT)
-> - ? ? ? touch $(BUILD_DIR)/.fakeroot.00000
-> - ? ? ? cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
-> ? ? ? ?echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-> ?ifneq ($(ROOTFS_DEVICE_TABLES),)
-> ? ? ? ?cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
-> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-> index afebafc..f51b6ee 100644
-> --- a/fs/iso9660/iso9660.mk
-> +++ b/fs/iso9660/iso9660.mk
-> @@ -25,8 +25,6 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-ext2 grub
-> ? ? ? ?cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
-> ? ? ? ?# Use fakeroot to pretend all target binaries are owned by root
-> ? ? ? ?rm -f $(FAKEROOT_SCRIPT)
-> - ? ? ? touch $(BUILD_DIR)/.fakeroot.00000
-> - ? ? ? cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
-> ? ? ? ?echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-> ? ? ? ?# Use fakeroot so mkisofs believes the previous fakery
-> ? ? ? ?echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+> -################################################################################
+> -# GENDOC -- generates the make targets needed to build asciidoc documentation.
+> -#
+> -# ?argument 1 is the name of the document and must be a subdirectory of docs/;
+> -# ? ? ? ? ? ? the top-level asciidoc file must have the same name
+> -#
+> -# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+> -################################################################################
+> -define GENDOC
+> -$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
+> -$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
+> -$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+> -$(call GENDOC_INNER,$(1),text,txt,text,Text)
+> -$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
+> -clean: clean-$(1)
+> -clean-$(1):
+> - ? ? ? $(Q)$(RM) -rf $(O)/docs/$(1)
+> -.PHONY: $(1) clean-$(1)
+> -endef
+> -
+> -MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
+> -$(eval $(call GENDOC,manual))
+> +include docs/manual/manual.mk
+>
+> ?.PHONY: $(noconfig_targets)
+>
+> diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+> new file mode 100644
+> index 0000000..1eaf73a
+> --- /dev/null
+> +++ b/docs/manual/manual.mk
+> @@ -0,0 +1,48 @@
+> +################################################################################
+> +# GENDOC -- generates the make targets needed to build a specific type of
+> +# ? ? ? ? ? asciidoc documentation.
+> +#
+> +# ?argument 1 is the name of the document and must be a subdirectory of docs/;
+> +# ? ? ? ? ? ? the top-level asciidoc file must have the same name
+> +# ?argument 2 is the type of document to generate (-f argument of a2x)
+> +# ?argument 3 is the document type as used in the make target
+> +# ?argument 4 is the output file extension for the document type
+> +# ?argument 5 is the human text for the document type
+> +# ?argument 6 (optional) are extra arguments for a2x
+> +#
+> +# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+> +################################################################################
+> +define GENDOC_INNER
+> +$(1): $(1)-$(3)
+> +.PHONY: $(1)-$(3)
+> +$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
+> +
+> +$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
+> + ? ? ? @echo "Generating $(5) $(1)..."
+> + ? ? ? $(Q)mkdir -p $$(@D)
+> + ? ? ? $(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
+> + ? ? ? ? -D $$(@D) $$<
+> +endef
+> +
+> +################################################################################
+> +# GENDOC -- generates the make targets needed to build asciidoc documentation.
+> +#
+> +# ?argument 1 is the name of the document and must be a subdirectory of docs/;
+> +# ? ? ? ? ? ? the top-level asciidoc file must have the same name
+> +#
+> +# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+> +################################################################################
+> +define GENDOC
+> +$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
+> +$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
+> +$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+> +$(call GENDOC_INNER,$(1),text,txt,text,Text)
+> +$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
+> +clean: clean-$(1)
+> +clean-$(1):
+> + ? ? ? $(Q)$(RM) -rf $(O)/docs/$(1)
+> +.PHONY: $(1) clean-$(1)
+> +endef
+> +
+> +MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
+> +$(eval $(call GENDOC,manual))
 > --
 > 1.7.4.1
 >
