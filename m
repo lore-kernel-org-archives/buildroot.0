@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 9 Mar 2012 14:33:26 +0100
-Subject: [Buildroot] [RFC] Request for comment for branch
- for-2012.05/misc-cleanups
-In-Reply-To: <CAAAP30GZZM5F=f_iHZwUs+rgDGvHUgvFLm_Wdo7DLc4J1yQX3g@mail.gmail.com>
-References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <CAAAP30GZZM5F=f_iHZwUs+rgDGvHUgvFLm_Wdo7DLc4J1yQX3g@mail.gmail.com>
-Message-ID: <20120309143326.24a2b90e@skate>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Fri, 9 Mar 2012 08:58:21 -0500
+Subject: [Buildroot] BeagleBone patches
+In-Reply-To: <20120309091920.71e43eb3@skate>
+References: <CA+-urNQF5PfTt_i1xhtPtOLSfpB=MOjWsvZ3U-FR6LQTRu6iJw@mail.gmail.com>
+ <87ipieeqp2.fsf@macbook.be.48ers.dk>
+ <CA+-urNRqM69S8iWbXW_T2eDpx+sU5kSxocYGuka+3BiiCoGsbg@mail.gmail.com>
+ <20120309091920.71e43eb3@skate>
+Message-ID: <CA+-urNTCaD+wjx61k2GnKjTMAZkVQ-Gz1P3s4nsG+JJ7wcUNUw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Mar 9, 2012 at 3:19 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Thu, 8 Mar 2012 22:53:18 -0500,
+> Frank Hunleth <fhunleth@troodon-software.com> a ?crit :
+>
+>> But given that they don't have any replies, maybe they didn't get
+>> emailed out?
+>
+> No, no, they have been received. I have even marked them as "to
+> review", but haven't had the time yet to do so.
 
-Le Fri, 9 Mar 2012 10:07:29 -0300,
-Alexandre Pereira da Silva <aletes.xgr@gmail.com> a ?crit :
+No worries. I know that you guys are busy. Thanks for letting me know
+that they were received.
 
-> I think the pkg-* makefiles could be moved from the packages directory
-> as they are used by the kernel and bootloaders as well.
-> Maybe move them to the support directory.
-
-Yeah, I was also wondering about this. I don't know if support/ is the
-right place, or if we need yet another top-level directory such as
-include/ or mk/ or whatever. What are others opinion?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Frank
