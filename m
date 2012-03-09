@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 9 Mar 2012 07:29:47 +0100
-Subject: [Buildroot] [PATCH 04/13] kconfig: do not use HOST_LOADLIBES
-	anymore
-In-Reply-To: <cea7138d9daf1cd08de1deeab5b321432b7a265d.1331148806.git.thomas.petazzoni@free-electrons.com>
+Date: Fri, 9 Mar 2012 07:35:43 +0100
+Subject: [Buildroot] [PATCH 05/13] Rename Makefile.autotools.in to
+	pkg-autotargets.mk
+In-Reply-To: <6f9208d76730dea4602b8bb3cc076bdb9def9539.1331148806.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1331148806.git.thomas.petazzoni@free-electrons.com>
- <cea7138d9daf1cd08de1deeab5b321432b7a265d.1331148806.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LWHty6zXge2+gp+5FP=d=GNcXDOOo0B+PL78A4ceQFouw@mail.gmail.com>
+ <6f9208d76730dea4602b8bb3cc076bdb9def9539.1331148806.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LWuqeKM-8PFGiEXWQXrmJD9uyAFX_qNUx89tkcQgT_BfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,70 +18,31 @@ On Wed, Mar 7, 2012 at 8:34 PM, Thomas Petazzoni
 Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 > ---
-> ?support/kconfig/Makefile.br ? ? ? ? ? ? ? ? ? ? ?| ? ?4 ++--
-> ?support/kconfig/patches/10-br-build-system.patch | ? 12 ++++++------
-> ?2 files changed, 8 insertions(+), 8 deletions(-)
+> ?package/Makefile.in ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?| ? ?2 +-
+> ?.../{Makefile.autotools.in => pkg-autotargets.mk} ?| ? ?0
+> ?2 files changed, 1 insertions(+), 1 deletions(-)
+> ?rename package/{Makefile.autotools.in => pkg-autotargets.mk} (100%)
 >
-> diff --git a/support/kconfig/Makefile.br b/support/kconfig/Makefile.br
-> index c24b6b5..2f8b6ba 100644
-> --- a/support/kconfig/Makefile.br
-> +++ b/support/kconfig/Makefile.br
-> @@ -22,10 +22,10 @@ host-cxxobjs := $(addprefix $(obj)/,$(sort $(foreach m,$(__hostprogs),$($(m)-cxx
-> ?HOST_EXTRACFLAGS += -I$(obj)
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index dc8d038..0a0f94d 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -298,6 +298,6 @@ else
+> ?SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+> ?endif
 >
-> ?$(host-csingle): %: %.c
-> - ? ? ? $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< $(HOST_LOADLIBES) -o $(obj)/$@
-> + ? ? ? $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< -o $(obj)/$@
->
-> ?$(host-cmulti): %: $(host-cobjs) $(host-cshlib)
-> - ? ? ? $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOST_LOADLIBES) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
-> + ? ? ? $(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
->
-> ?$(host-cxxmulti): %: $(host-cxxobjs) $(host-cobjs) $(host-cshlib)
-> ? ? ? ?$(HOSTCXX) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCXXFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs) $($(@F)-cxxobjs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
-> diff --git a/support/kconfig/patches/10-br-build-system.patch b/support/kconfig/patches/10-br-build-system.patch
-> index 85125e5..c5d9a75 100644
-> --- a/support/kconfig/patches/10-br-build-system.patch
-> +++ b/support/kconfig/patches/10-br-build-system.patch
-> @@ -3,10 +3,10 @@
-> ?foo.h ? ? ? | ? 12 ++++++++++++
-> ?2 files changed, 65 insertions(+)
->
-> -Index: config/Makefile.br
-> +Index: kconfig/Makefile.br
-> ?===================================================================
-> ?--- /dev/null
-> -+++ config/Makefile.br
-> ++++ kconfig/Makefile.br
-> ?@@ -0,0 +1,53 @@
-> ?+src := .
-> ?+top_srcdir=../../
-> @@ -32,10 +32,10 @@ Index: config/Makefile.br
-> ?+HOST_EXTRACFLAGS += -I$(obj)
-> ?+
-> ?+$(host-csingle): %: %.c
-> -+ ? ? ?$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< $(HOST_LOADLIBES) -o $(obj)/$@
-> ++ ? ? ?$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $< -o $(obj)/$@
-> ?+
-> ?+$(host-cmulti): %: $(host-cobjs) $(host-cshlib)
-> -+ ? ? ?$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOST_LOADLIBES) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
-> ++ ? ? ?$(HOSTCC) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
-> ?+
-> ?+$(host-cxxmulti): %: $(host-cxxobjs) $(host-cobjs) $(host-cshlib)
-> ?+ ? ? ?$(HOSTCXX) $(HOST_EXTRACFLAGS) $(HOSTCFLAGS) $(HOSTCXXFLAGS_$@) $(addprefix $(obj)/,$($(@F)-objs) $($(@F)-cxxobjs)) $(HOSTLOADLIBES_$(@F)) -o $(obj)/$@
-> @@ -61,10 +61,10 @@ Index: config/Makefile.br
-> ?+
-> ?+FORCE:
-> ?+.PHONY: FORCE clean distclean
-> -Index: config/foo.h
-> +Index: kconfig/foo.h
-> ?===================================================================
-> ?--- /dev/null
-> -+++ config/foo.h
-> ++++ kconfig/foo.h
-> ?@@ -0,0 +1,12 @@
-> ?+#ifndef __KCONFIG_FOO_H
-> ?+#define __KCONFIG_FOO_H
+> -include package/Makefile.autotools.in
+> +include package/pkg-autotargets.mk
+> ?include package/Makefile.cmake.in
+> ?include package/Makefile.package.in
+> diff --git a/package/Makefile.autotools.in b/package/pkg-autotargets.mk
+> similarity index 100%
+> rename from package/Makefile.autotools.in
+> rename to package/pkg-autotargets.mk
+
+
+In addition you should fix the comment
+
 > --
 > 1.7.4.1
 >
