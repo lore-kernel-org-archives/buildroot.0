@@ -1,37 +1,26 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 10 Mar 2012 21:26:17 +0200
+From: strake888 at gmail.com <strake888@gmail.com>
+Date: Sat, 10 Mar 2012 18:47:09 -0500
 Subject: [Buildroot] Changed package/Config.in; new packages not built
-In-Reply-To: <CAL3m8eC=eztgUP8aw9+s9HL-9xe=o02sYHsVuDFqys=99PX_wQ@mail.gmail.com>
+In-Reply-To: <20120310192616.GA3704@tarshish>
 References: <CAL3m8eC=eztgUP8aw9+s9HL-9xe=o02sYHsVuDFqys=99PX_wQ@mail.gmail.com>
-Message-ID: <20120310192616.GA3704@tarshish>
+ <20120310192616.GA3704@tarshish>
+Message-ID: <20120310234709.GA18494@mintha.strake.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
-
-On Sat, Mar 10, 2012 at 09:24:57AM -0500, Matthew Farkas-Dyck wrote:
-> I added packages to package/Config.in, and selected them, but the new
-> packages are not built by make.
+On Sat, Mar 10, 2012 at 09:26:17PM +0200, Baruch Siach wrote:
+> Hi Matthew,
 > 
-> If I select packages that were in Config.in before, then they are built by 
-> make.
-
-Please send your changes here in a patch format.
-
-> I can not find this at all in the documentation, nor in the mail list 
-> archives.
+> See the "Adding new packages to Buildroot" section of the  documentation at 
+> http://buildroot.net/downloads/buildroot.html#add_packages.
 > 
-> How can I make make make these new packages?
 
-See the "Adding new packages to Buildroot" section of the  documentation at 
-http://buildroot.net/downloads/buildroot.html#add_packages.
+Well, I'm an idiot. I had read that, but even so forgot to call the AUTOTARGETS macro.
 
-baruch
+Thanks anyhow. Sorry to waste your time.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Cheers,
+MFD
