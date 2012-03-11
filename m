@@ -1,73 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Mar 2012 23:22:32 +0100
-Subject: [Buildroot] [git commit] alsa-utils: bump to version 1.0.25
-Message-ID: <20120311222557.A9FC790D46@busybox.osuosl.org>
+Date: Sun, 11 Mar 2012 23:14:36 +0100
+Subject: [Buildroot] [git commit] libfuse: bump to version 2.8.7
+Message-ID: <20120311222557.4119790D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dd23a8f52ad9da062dcb1a578c071e2131056ac0
+commit: http://git.buildroot.net/buildroot/commit/?id=ce41184f06e5c8afb4f6cc891d430b88e7b9eb2c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../alsa-utils/alsa-utils-exp10-workaround.patch   |   33 --------------------
- package/multimedia/alsa-utils/alsa-utils.mk        |    3 +-
- 2 files changed, 2 insertions(+), 34 deletions(-)
+ package/libfuse/libfuse.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/alsa-utils/alsa-utils-exp10-workaround.patch b/package/multimedia/alsa-utils/alsa-utils-exp10-workaround.patch
-deleted file mode 100644
-index f4a520a..0000000
---- a/package/multimedia/alsa-utils/alsa-utils-exp10-workaround.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From da14c5ab2a6e030c5c56c979b8eb3ca071890876 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <jacmet@sunsite.dk>
--Date: Mon, 14 Mar 2011 09:19:18 +0100
--Subject: [PATCH] alsamixer: fix build on uClibc
--
--exp10 is a glibc extension, which isn't supported on uClibc. Luckily,
--exp10() is trivial to compute based on exp(), so add a wrapper for
--the uClibc case.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- alsamixer/volume_mapping.c |    5 +++++
-- 1 files changed, 5 insertions(+), 0 deletions(-)
--
--diff --git a/alsamixer/volume_mapping.c b/alsamixer/volume_mapping.c
--index 9cacad8..1c0d7c4 100644
----- a/alsamixer/volume_mapping.c
--+++ b/alsamixer/volume_mapping.c
--@@ -37,6 +37,11 @@
-- #include <stdbool.h>
-- #include "volume_mapping.h"
-- 
--+#ifdef __UCLIBC__
--+/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
--+#define exp10(x) (exp((x) * log(10)))
--+#endif /* __UCLIBC__ */
--+
-- #define MAX_LINEAR_DB_SCALE	24
-- 
-- static inline bool use_linear_dB_scale(long dBmin, long dBmax)
---- 
--1.7.2.3
--
-diff --git a/package/multimedia/alsa-utils/alsa-utils.mk b/package/multimedia/alsa-utils/alsa-utils.mk
-index 59579c2..744ec85 100644
---- a/package/multimedia/alsa-utils/alsa-utils.mk
-+++ b/package/multimedia/alsa-utils/alsa-utils.mk
-@@ -3,7 +3,8 @@
- # alsa-utils
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 25cc45f..3616c65 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--ALSA_UTILS_VERSION = 1.0.24.2
-+
-+ALSA_UTILS_VERSION = 1.0.25
- ALSA_UTILS_SOURCE = alsa-utils-$(ALSA_UTILS_VERSION).tar.bz2
- ALSA_UTILS_SITE = ftp://ftp.alsa-project.org/pub/utils
- ALSA_UTILS_INSTALL_STAGING = YES
+ 
+-LIBFUSE_VERSION = 2.8.6
++LIBFUSE_VERSION = 2.8.7
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
+ 
