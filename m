@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 23:03:47 +0100
-Subject: [Buildroot] [PATCH 02/20] gmp: bump to version 5.0.4
-In-Reply-To: <1331502489-5036-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 11 Mar 2012 18:47:51 -0300")
+Date: Sun, 11 Mar 2012 23:06:23 +0100
+Subject: [Buildroot] [PATCH 03/20] mpd: bump to version 0.16.7
+In-Reply-To: <1331502489-5036-3-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 11 Mar 2012 18:47:52 -0300")
 References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- <1331502489-5036-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874ntuztfg.fsf@macbook.be.48ers.dk>
+ <1331502489-5036-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wr6qyeqo.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
