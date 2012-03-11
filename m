@@ -1,25 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 21:30:39 +0100
-Subject: [Buildroot] [PATCH 5/5] bluez_utils: bump to 4.99
-In-Reply-To: <1331303990-13548-5-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 9 Mar 2012 15:39:50
- +0100")
-References: <1331303990-13548-1-git-send-email-yegorslists@googlemail.com>
- <1331303990-13548-5-git-send-email-yegorslists@googlemail.com>
-Message-ID: <8762ea3mog.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 11 Mar 2012 21:27:40 +0100
+Subject: [Buildroot] [git commit] bluez_utils: bump to 4.99
+Message-ID: <20120311203130.8625190D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6ab7f49529d18ac079e595003794806e8b87d156
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> ---
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bluez_utils/bluez_utils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
+index 025f31a..eb42e23 100644
+--- a/package/bluez_utils/bluez_utils.mk
++++ b/package/bluez_utils/bluez_utils.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-BLUEZ_UTILS_VERSION = 4.98
++BLUEZ_UTILS_VERSION = 4.99
+ BLUEZ_UTILS_SOURCE = bluez-$(BLUEZ_UTILS_VERSION).tar.gz
+ BLUEZ_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ_UTILS_INSTALL_STAGING = YES
