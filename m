@@ -1,29 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Mar 2012 21:25:30 +0100
-Subject: [Buildroot] [git commit] feh: bump to 2.4
-Message-ID: <20120311203130.5CB9090D41@busybox.osuosl.org>
+Date: Sun, 11 Mar 2012 21:26:06 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-fbdev: bump to 0.4.2
+Message-ID: <20120311203130.6A0EE90D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27602a43f86b97722046b75806c732e9e992fb73
+commit: http://git.buildroot.net/buildroot/commit/?id=96f8e3db09dfc8290a7259ce3645f5cd17c3ec2b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/feh/feh.mk |    2 +-
+ .../xdriver_xf86-video-fbdev.mk                    |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index f459f8a..c461ac6 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -1,4 +1,4 @@
--FEH_VERSION = 2.3
-+FEH_VERSION = 2.4
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org/
- FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
+diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+index 600335e..7634d92 100644
+--- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
++++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.1
++XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.2
+ XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_FBDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_FBDEV_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
