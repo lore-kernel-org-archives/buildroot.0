@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Mar 2012 23:20:08 +0100
-Subject: [Buildroot] [git commit] sysstat: bump to version 10.0.3
-Message-ID: <20120311222557.704AA90D4E@busybox.osuosl.org>
+Date: Sun, 11 Mar 2012 23:21:02 +0100
+Subject: [Buildroot] [git commit] file: bump to version 5.11
+Message-ID: <20120311222557.8F7C390D46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f2e45599481dfa07df3071c49b9bf6629241396
+commit: http://git.buildroot.net/buildroot/commit/?id=7804b7bda3d977cfb4a9615d3ea1c1cf13ec8718
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sysstat/sysstat.mk |    2 +-
+ package/file/file.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 0a17b4d..55991c4 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
+diff --git a/package/file/file.mk b/package/file/file.mk
+index bb1b6bd..c9846e4 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--SYSSTAT_VERSION = 10.0.2
-+SYSSTAT_VERSION = 10.0.3
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
+-FILE_VERSION = 5.10
++FILE_VERSION = 5.11
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
