@@ -1,45 +1,23 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 11 Mar 2012 19:26:37 +0100
-Subject: [Buildroot] Toolchain for Microblaze
-Message-ID: <4F5CEE5D.30504@relinux.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 Mar 2012 21:25:20 +0100
+Subject: [Buildroot] [PATCH 1/5] tiff: bump to 4.0.1
+In-Reply-To: <1331303990-13548-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 9 Mar 2012 15:39:46
+ +0100")
+References: <1331303990-13548-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87mx7m3mxb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-I just found on the gcc web site (
-http://gcc.gnu.org/gcc-4.6/changes.html ) the following message:
->
->
->       MicroBlaze
->
->     * Support has been added for the Xilinx MicroBlaze softcore
->       processor (microblaze-elf) embedded target. This configurable
->       processor is supported on several Xilinx Spartan and Virtex FPGAs.
->
-This sounds like good news. Maybe we can get rid of the prebuild Xilinx
-Toolchain.
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Unfortunatelly, I don't have any experience in building toolchains. A
-first try building it as internal toolchain with almost standard
-settings ended with an aclocal error;-(
-
-Can anyone try building it?
-
-Kind regards
-
-Stephan
+Committed, thanks.
 
 -- 
-reLinux     -    Stephan Hoffmann
-Am Schmidtgrund 124    50765 K?ln
-Tel. +49.221.95595-19    Fax: -64
-www.reLinux.de     sho at reLinux.de
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120311/b7a633ca/attachment.html>
+Bye, Peter Korsgaard
