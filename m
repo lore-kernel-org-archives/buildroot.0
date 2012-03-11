@@ -1,46 +1,42 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 11 Mar 2012 12:16:39 +0100
-Subject: [Buildroot] [PATCH v2] Add target to print buildroot version
-Message-ID: <1331464599-6283-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 11 Mar 2012 16:33:27 +0100
+Subject: [Buildroot] [PATCH 1/2] uboot: Add support for copying MLO to
+	the images directory for U-boot builds that include it.
+In-Reply-To: <1331214423-8647-1-git-send-email-fhunleth@troodon-software.com>
+References: <1331214423-8647-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <201203111633.27504.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's convenient to have a target to print the buildroot version, for use
-in external scripts calling buildroot.
+On Thursday 08 March 2012 14:47:02 Frank Hunleth wrote:
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
----
-v2: Add Luca's Acked-by
+ Nicolas Dechesne posted patches for adding MLO a while ago.  I don't
+remember if they were ready to be merged or not.  But this one looks
+pretty good.  So:
 
- Makefile |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/Makefile b/Makefile
-index d508888..30099d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setloca
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	source-check
-+	source-check print-version
- 
- # Strip quotes and then whitespaces
- qstrip=$(strip $(subst ",,$(1)))
-@@ -721,6 +721,9 @@ release:
- 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
- 	rm -rf $(OUT) $(OUT).tar
- 
-+print-version:
-+	@echo $(BR2_VERSION_FULL)
-+
- ################################################################################
- # GENDOC -- generates the make targets needed to build a specific type of
- #           asciidoc documentation.
+
+> +config BR2_TARGET_UBOOT_MLO
+> +	bool "MLO"
+> +	help
+> +	  Copy the X-Loader binary (MLO) to the images directory for 
+> +	  U-boot builds that generate it.
+
+ Actually, in U-Boot terminology it's the SPL.  The binary is called
+MLO because the ROM bootloader looks for a file called MLO.
+
+ Regards,
+ Arnout
+
 -- 
-tg: (dca6e03..) t/print-version (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
