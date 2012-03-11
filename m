@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 23:02:55 +0100
-Subject: [Buildroot] [PATCH 01/20] squid: bump to version 3.1.19
-In-Reply-To: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 11 Mar 2012 18:47:50 -0300")
+Date: Sun, 11 Mar 2012 23:03:47 +0100
+Subject: [Buildroot] [PATCH 02/20] gmp: bump to version 5.0.4
+In-Reply-To: <1331502489-5036-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 11 Mar 2012 18:47:51 -0300")
 References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <878vj6ztgw.fsf@macbook.be.48ers.dk>
+ <1331502489-5036-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874ntuztfg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
