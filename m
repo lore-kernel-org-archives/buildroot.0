@@ -1,43 +1,38 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 11 Mar 2012 15:24:56 +0100
-Subject: [Buildroot] [PATCH] lua: fix non-shared library build
-In-Reply-To: <CAPEB33x3V6aspqT=H96HgoCpB6n-==5NwcRPj0BKcpx8J7PJWQ@mail.gmail.com>
-Message-ID: <1331475896-13161-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 11 Mar 2012 14:22:44 +0100
+Subject: [Buildroot] [PATCH] Ubinize: made UBI volume name and volume
+	alignment configurable
+In-Reply-To: <1331030879-13141-1-git-send-email-rolandu@gmail.com>
+References: <1331030879-13141-1-git-send-email-rolandu@gmail.com>
+Message-ID: <201203111422.44384.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building without BR2_PACKAGE_LUA_SHARED_LIBRARY failed because of
-missing -ldl.  dl is used by lua's dynamic module loading.
+On Tuesday 06 March 2012 11:47:59 Roland Uuesoo wrote:
+> From: Roland Uuesoo <roland@martem.eu>
+> 
+> Signed-off-by: Roland Uuesoo <roland@martem.eu>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-On ARM, there's still a warning:
-ld: warning: creating a DT_TEXTREL in object.
+ A better commit message would be:
 
-I haven't checked if lua actually works on the target.  But it certainly
-won't be worse than before :-)
+ubi: make volume name and volume alignment configurable
 
- package/lua/lua.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Also filled in missing help text for other options.
 
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 30e95b4..aa0b4bf 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -10,9 +10,10 @@ LUA_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_LUA_SHARED_LIBRARY),y)
- 	LUA_MYCFLAGS += -fPIC
--	LUA_MYLIBS += -ldl
- endif
- 
-+LUA_MYLIBS += -ldl
-+
- ifeq ($(BR2_PACKAGE_LUA_INTERPRETER_READLINE),y)
- 	LUA_DEPENDENCIES = readline ncurses
- 	LUA_MYLIBS += -lreadline -lhistory -lncurses
+
+[snip]
+
+ Regards,
+ Arnout
+
 -- 
-tg: (15fe220..) t/lua (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
