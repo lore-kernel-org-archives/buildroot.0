@@ -1,83 +1,73 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 11 Mar 2012 17:50:17 +0100
-Subject: [Buildroot] [PATCH 4/5] Microblaze: build kernel with device tree
-Message-ID: <4F5CD7C9.40505@relinux.de>
+Date: Sun, 11 Mar 2012 17:48:35 +0100
+Subject: [Buildroot] [PATCH 2/5] Microblaze: added external toolchain from
+	Xilinx
+Message-ID: <4F5CD763.3020208@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Device Tree and SimpleImage will be handled in buildroot in the
-future. Until then, this patch is needed.
+From: Alvaro G. M <alvaro.gamez@hazent.com>
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 ---
- linux/Config.in |    8 ++++++++
- linux/linux.mk  |   16 ++++++++++++++++
- 2 files changed, 24 insertions(+), 0 deletions(-)
+ toolchain/toolchain-external/Config.in   |   16 ++++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    6 ++++++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 26032fd..7d9f4fb 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,6 +120,14 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 7f57952..b417cb7 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -430,6 +430,20 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
  
-+config BR2_LINUX_KERNEL_DTS_FILE
-+    string "Device Tree dts file location"
-+    depends on BR2_microblaze
-+    help
-+      Path from where the dts file has to be copied
-+      The final "custom target" name depends on the
-+      dts file name:
-+          <name>.dts --> simpleImage.<name>
- #
- # Binary format
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index ae236d4..ade867a 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -117,6 +117,18 @@ endef
- 
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
- 
-+ifeq ($(KERNEL_ARCH),microblaze)
-+# on microblaze, we always want mkimage
-+LINUX_DEPENDENCIES+=host-uboot-tools
++config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
++	bool "Xilinx Little Endian Microblaze GNU Tools"
++	depends on BR2_microblazeel
++	help
++	  Toolchain for the Microblaze architecture, from
++	  http://wiki.xilinx.com/mb-gnu-tools
 +
-+define LINUX_COPY_DTS
-+    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
-+        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
-+    else \
-+        echo "Cannot copy dts file!" ; \
-+    fi
-+endef
-+endif
- 
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
-@@ -131,6 +143,8 @@ define LINUX_CONFIGURE_CMDS
- 	$(if $(BR2_ARM_EABI),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+    $(if $(BR2_microblaze),
-+        $(call LINUX_COPY_DTS))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
-@@ -215,6 +229,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
- 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
- 	# Copy the kernel image to its final destination
- 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-+	# If there is a .ub file copy it to the final destination
-+	test -f $(LINUX_IMAGE_PATH).ub && cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
- 	$(Q)touch $@
- 
- # The initramfs building code must make sure this target gets called
++config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
++	bool "Xilinx Big Endian Microblaze GNU Tools"
++	depends on BR2_microblazebe
++	help
++	  Toolchain for the Microblaze architecture, from
++	  http://wiki.xilinx.com/mb-gnu-tools
++
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+        bool "Custom toolchain"
+        help
+@@ -468,6 +482,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
++	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
++	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 01ab91f..8904542 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -235,6 +235,12 @@ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
+ TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2),y)
++TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0_le.git;a=blob;hb=HEAD;f=
++TOOLCHAIN_EXTERNAL_SOURCE=microblazeel-unknown-linux-gnu.tgz
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
++TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;hb=HEAD;f=
++TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
+ else
+ # A value must be set (even if unused), otherwise the
+ # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
 -- 
 1.7.0.4
 
