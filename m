@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 22:28:09 +0100
-Subject: [Buildroot] [PATCH 2/3] packages: remove redundant
-	INSTALL_STAGING=NO declarations
-In-Reply-To: <1330700369-15033-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 2 Mar 2012 11:59:28 -0300")
-References: <1330700369-15033-1-git-send-email-gustavo@zacarias.com.ar>
- <1330700369-15033-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87boo225g6.fsf@macbook.be.48ers.dk>
+Date: Sun, 11 Mar 2012 22:30:54 +0100
+Subject: [Buildroot] [PATCHv2] packages: remove redundant
+	INSTALL_TARGET=YES declarations
+In-Reply-To: <1331036550-22101-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 6 Mar 2012 09:22:30 -0300")
+References: <1331036550-22101-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877gyq25bl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
