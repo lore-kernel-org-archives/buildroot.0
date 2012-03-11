@@ -1,122 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Mar 2012 22:54:32 +0100
-Subject: [Buildroot] [git commit] libxslt: add multiple security patches
-Message-ID: <20120311220227.9A3CD90D46@busybox.osuosl.org>
+Date: Sun, 11 Mar 2012 23:00:50 +0100
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.24.0
+Message-ID: <20120311220227.BB69B90D49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=584dbc2f0a30bb4011d5e14a69ba3bba99b89613
+commit: http://git.buildroot.net/buildroot/commit/?id=d88a3cc40d070f2fa5ec5e936c9aaf4e3a2e2f55
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add security patches for CVE-2011-1202 and CVE-2011-3970.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...figure.patch => libxslt-1.1.26-configure.patch} |    0
- package/libxslt/libxslt-1.1.26-id-generation.patch |   56 ++++++++++++++++++++
- ...libxslt-1.1.26-pattern-out-of-bounds-read.patch |   27 +++++++++
- 3 files changed, 83 insertions(+), 0 deletions(-)
+ package/libcurl/libcurl.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libxslt/libxslt-configure.patch b/package/libxslt/libxslt-1.1.26-configure.patch
-similarity index 100%
-rename from package/libxslt/libxslt-configure.patch
-rename to package/libxslt/libxslt-1.1.26-configure.patch
-diff --git a/package/libxslt/libxslt-1.1.26-id-generation.patch b/package/libxslt/libxslt-1.1.26-id-generation.patch
-new file mode 100644
-index 0000000..f8f4c2a
---- /dev/null
-+++ b/package/libxslt/libxslt-1.1.26-id-generation.patch
-@@ -0,0 +1,56 @@
-+From ecb6bcb8d1b7e44842edde3929f412d46b40c89f Mon Sep 17 00:00:00 2001
-+From: Daniel Veillard <veillard@redhat.com>
-+Date: Tue, 22 Feb 2011 02:14:23 +0000
-+Subject: Fix generate-id() to not expose object addresses
-+
-+As pointed out by Chris Evans <scarybeasts@gmail.com> it's better
-+security wise to not expose object addresses directly, use a diff
-+w.r.t. the document root own address to avoid this
-+* libxslt/functions.c: fix IDs generation code
-+---
-+diff --git a/libxslt/functions.c b/libxslt/functions.c
-+index 4720c7a..de962f4 100644
-+--- a/libxslt/functions.c
-++++ b/libxslt/functions.c
-+@@ -654,8 +654,9 @@ xsltFormatNumberFunction(xmlXPathParserContextPtr ctxt, int nargs)
-+ void
-+ xsltGenerateIdFunction(xmlXPathParserContextPtr ctxt, int nargs){
-+     xmlNodePtr cur = NULL;
-+-    unsigned long val;
-+-    xmlChar str[20];
-++    long val;
-++    xmlChar str[30];
-++    xmlDocPtr doc;
-+ 
-+     if (nargs == 0) {
-+ 	cur = ctxt->context->node;
-+@@ -694,9 +695,24 @@ xsltGenerateIdFunction(xmlXPathParserContextPtr ctxt, int nargs){
-+      * Okay this is ugly but should work, use the NodePtr address
-+      * to forge the ID
-+      */
-+-    val = (unsigned long)((char *)cur - (char *)0);
-+-    val /= sizeof(xmlNode);
-+-    sprintf((char *)str, "id%ld", val);
-++    if (cur->type != XML_NAMESPACE_DECL)
-++        doc = cur->doc;
-++    else {
-++        xmlNsPtr ns = (xmlNsPtr) cur;
-++
-++        if (ns->context != NULL)
-++            doc = ns->context;
-++        else
-++            doc = ctxt->context->doc;
-++
-++    }
-++
-++    val = (long)((char *)cur - (char *)doc);
-++    if (val >= 0) {
-++      sprintf((char *)str, "idp%ld", val);
-++    } else {
-++      sprintf((char *)str, "idm%ld", -val);
-++    }
-+     valuePush(ctxt, xmlXPathNewString(str));
-+ }
-+ 
-+--
-+cgit v0.8.3.4
-diff --git a/package/libxslt/libxslt-1.1.26-pattern-out-of-bounds-read.patch b/package/libxslt/libxslt-1.1.26-pattern-out-of-bounds-read.patch
-new file mode 100644
-index 0000000..cd2e292
---- /dev/null
-+++ b/package/libxslt/libxslt-1.1.26-pattern-out-of-bounds-read.patch
-@@ -0,0 +1,27 @@
-+From fe5a4fa33eb85bce3253ed3742b1ea6c4b59b41b Mon Sep 17 00:00:00 2001
-+From: Abhishek Arya <inferno@chromium.org>
-+Date: Sun, 22 Jan 2012 17:47:50 +0800
-+Subject: [PATCH] Fix some case of pattern parsing errors
-+
-+We could accidentally hit an off by one string array access
-+due to improper loop exit when parsing patterns
-+---
-+ libxslt/pattern.c |    2 ++
-+ 1 files changed, 2 insertions(+), 0 deletions(-)
-+
-+diff --git a/libxslt/pattern.c b/libxslt/pattern.c
-+index 6161376..1155b54 100644
-+--- a/libxslt/pattern.c
-++++ b/libxslt/pattern.c
-+@@ -1867,6 +1867,8 @@ xsltCompilePatternInternal(const xmlChar *pattern, xmlDocPtr doc,
-+ 		while ((pattern[end] != 0) && (pattern[end] != '"'))
-+ 		    end++;
-+ 	    }
-++	    if (pattern[end] == 0)
-++	        break;
-+ 	    end++;
-+ 	}
-+ 	if (current == end) {
-+-- 
-+1.7.8.4
-+
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index a420466..e094e31 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
+ 
+-LIBCURL_VERSION = 7.21.7
++LIBCURL_VERSION = 7.24.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+-LIBCURL_SITE = http://curl.haxx.se/download/
++LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_INSTALL_STAGING = YES
+ LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
+ 
