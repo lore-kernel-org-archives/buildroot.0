@@ -1,32 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 11 Mar 2012 21:26:06 +0100
-Subject: [Buildroot] [git commit] xdriver_xf86-video-fbdev: bump to 0.4.2
-Message-ID: <20120311203130.6A0EE90D3F@busybox.osuosl.org>
+Date: Sun, 11 Mar 2012 21:25:09 +0100
+Subject: [Buildroot] [git commit] tiff: bump to 4.0.1
+Message-ID: <20120311203130.4C30E90D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96f8e3db09dfc8290a7259ce3645f5cd17c3ec2b
+commit: http://git.buildroot.net/buildroot/commit/?id=7f65decfa7a3dcaa49d63a367a872094167b5edc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../xdriver_xf86-video-fbdev.mk                    |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/tiff/tiff.mk |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-index 600335e..7634d92 100644
---- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-+++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index ed05bf1..3ab0d4f 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -3,11 +3,10 @@
+ # tiff
  #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.1
-+XDRIVER_XF86_VIDEO_FBDEV_VERSION = 0.4.2
- XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_FBDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_FBDEV_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
+ #############################################################
+-TIFF_VERSION:=3.9.4
+-TIFF_SITE:=ftp://ftp.remotesensing.org/pub/libtiff
+-TIFF_SOURCE:=tiff-$(TIFF_VERSION).tar.gz
++TIFF_VERSION = 4.0.1
++TIFF_SITE = ftp://ftp.remotesensing.org/pub/libtiff
++TIFF_SOURCE = tiff-$(TIFF_VERSION).tar.gz
+ TIFF_INSTALL_STAGING = YES
+-TIFF_INSTALL_TARGET = YES
+ TIFF_CONF_OPT = \
+ 	--disable-cxx \
+ 	--without-x \
