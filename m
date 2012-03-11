@@ -1,24 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 Mar 2012 00:05:16 +0100
-Subject: [Buildroot] [PATCH 06/20] usbutils: bump version to 005
-In-Reply-To: <1331502489-5036-6-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 11 Mar 2012 18:47:55 -0300")
-References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- <1331502489-5036-6-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87obs2vivn.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 12 Mar 2012 00:02:49 +0100
+Subject: [Buildroot] [git commit] usbutils: bump version to 005
+Message-ID: <20120311230541.E4F3590D48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3df335ff8c5582771eceecd647323c8da528627b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Bump usbutils version to 005 and also switch to a debian mirror since
- Gustavo> it's still missing upstream.
+Bump usbutils version to 005 and also switch to a debian mirror since
+it's still missing upstream.
 
-Committed, thanks. I added a comment about why we autoreconf and changed
-it to use a stable snapshot.debian.org URL instead.
+[Peter: add comment about autoreconf, use snapshot.debian.org]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/usbutils/usbutils.mk |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index e89f02e..a242f93 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -4,10 +4,13 @@
+ #
+ #############################################################
+ 
+-USBUTILS_VERSION = 004
+-USBUTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/usb/usbutils
++USBUTILS_VERSION = 005
++USBUTILS_SITE = http://snapshot.debian.org/archive/debian/20111211T214105Z/pool/main/u/usbutils/
++USBUTILS_SOURCE = usbutils_$(USBUTILS_VERSION).orig.tar.gz
+ USBUTILS_DEPENDENCIES = host-pkg-config libusb
+ USBUTILS_INSTALL_STAGING = YES
++# no configure in tarball
++USBUTILS_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_USBUTILS_ZLIB),y)
+ 	USBUTILS_DEPENDENCIES += zlib
