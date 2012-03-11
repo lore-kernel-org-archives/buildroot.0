@@ -1,60 +1,76 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 23:25:12 +0100
-Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
-In-Reply-To: <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 11 Mar 2012 18:48:08 -0300")
-References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wr6qvkqf.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 11 Mar 2012 23:09:41 +0100
+Subject: [Buildroot] [git commit] util-linux: bump to version 2.20.1
+Message-ID: <20120311222556.E05DA90D4C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bf6a940a519ea4304b1c8dbde514737ffc837fd4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  ...nline.patch => alsa-lib-avr32-bad-inline.patch} |    0
- Gustavo>  package/multimedia/alsa-lib/alsa-lib.mk            |   12 +++++++++---
- Gustavo>  2 files changed, 9 insertions(+), 3 deletions(-)
- Gustavo>  rename package/multimedia/alsa-lib/{alsa-lib-1.0.18-avr32-bad-inline.patch => alsa-lib-avr32-bad-inline.patch} (100%)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/util-linux/util-linux-script-libintl.patch |   30 --------------------
+ package/util-linux/util-linux.mk                   |    3 +-
+ 2 files changed, 2 insertions(+), 31 deletions(-)
 
- Gustavo> diff --git a/package/multimedia/alsa-lib/alsa-lib-1.0.18-avr32-bad-inline.patch b/package/multimedia/alsa-lib/alsa-lib-avr32-bad-inline.patch
- Gustavo> similarity index 100%
- Gustavo> rename from package/multimedia/alsa-lib/alsa-lib-1.0.18-avr32-bad-inline.patch
- Gustavo> rename to package/multimedia/alsa-lib/alsa-lib-avr32-bad-inline.patch
- Gustavo> diff --git a/package/multimedia/alsa-lib/alsa-lib.mk b/package/multimedia/alsa-lib/alsa-lib.mk
- Gustavo> index aa6ca51..d02bbda 100644
- Gustavo> --- a/package/multimedia/alsa-lib/alsa-lib.mk
- Gustavo> +++ b/package/multimedia/alsa-lib/alsa-lib.mk
- Gustavo> @@ -3,18 +3,24 @@
- Gustavo>  # alsa-lib
- Gustavo>  #
- Gustavo>  #############################################################
- Gustavo> -ALSA_LIB_VERSION = 1.0.24.1
- Gustavo> +
- Gustavo> +ALSA_LIB_VERSION = 1.0.25
- Gustavo>  ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
- Gustavo>  ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
- Gustavo>  ALSA_LIB_INSTALL_STAGING = YES
- Gustavo> -
- Gustavo>  ALSA_LIB_CFLAGS=$(TARGET_CFLAGS)
- Gustavo> -
- Gustavo>  ALSA_LIB_CONF_OPT = --with-alsa-devdir=$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_DEVDIR)) \
- Gustavo>  		    --with-pcm-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_PCM_PLUGINS))" \
- Gustavo>  		    --with-ctl-plugins="$(call qstrip,$(BR2_PACKAGE_ALSA_LIB_CTL_PLUGINS))" \
- Gustavo>  		    --without-versioned
+diff --git a/package/util-linux/util-linux-script-libintl.patch b/package/util-linux/util-linux-script-libintl.patch
+deleted file mode 100644
+index 0700aa4..0000000
+--- a/package/util-linux/util-linux-script-libintl.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 075f251b19509f588d828a81d91b40f47e63e3de Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Mon, 5 Sep 2011 21:46:25 +0200
+-Subject: [PATCH] script.c: drop libintl.h include
+-
+-Commit 8fb810ff26 (script: include-what-you-use header check) added a
+-<libintl.h> #include, which isn't needed as nls.h includes it (if
+-enabled) - But worse, breaks the build for systems without libintl.h
+-(like some uClibc configurations).
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- term-utils/script.c |    1 -
+- 1 files changed, 0 insertions(+), 1 deletions(-)
+-
+-diff --git a/term-utils/script.c b/term-utils/script.c
+-index d96ca2f..f708e91 100644
+---- a/term-utils/script.c
+-+++ b/term-utils/script.c
+-@@ -55,7 +55,6 @@
+- #include <getopt.h>
+- #include <unistd.h>
+- #include <fcntl.h>
+--#include <libintl.h>
+- #include <limits.h>
+- #include <locale.h>
+- #include <stddef.h>
+--- 
+-1.7.5.4
+-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 86d970f..d8a3ac9 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -3,13 +3,14 @@
+ # util-linux
+ #
+ #############################################################
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_VERSION_MAJOR = 2.20
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.bz2
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_AUTORECONF = YES
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = host-pkg-config
++UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no
  
- Gustavo> +# Can't build with static & shared at the same time (1.0.25+)
- Gustavo> +ifneq ($(BR2_PREFER_STATIC),y)
- Gustavo> +ALSA_LIB_CONF_OPT += --enable-static=no
- Gustavo> +else
- Gustavo> +ALSA_LIB_CONF_OPT += --enable-shared=no
- Gustavo> +endif
-
-I swapped this around to use positive logic and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ UTIL_LINUX_CONF_OPT += --disable-rpath --disable-makeinstall-chown
+ 
