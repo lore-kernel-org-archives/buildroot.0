@@ -1,37 +1,46 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 21:53:43 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain: add option to enable
-	AI_ADDRCONFIG support in uclibc
-In-Reply-To: <1331159898-25350-2-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Wed, 7 Mar 2012 23:38:17 +0100")
+Date: Sun, 11 Mar 2012 21:56:22 +0100
+Subject: [Buildroot] add option to enable AI_ADDRCONFIG support
+In-Reply-To: <20120308091714.5d60b715@skate> (Thomas Petazzoni's message of
+ "Thu, 8 Mar 2012 09:17:14 +0100")
 References: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
- <1331159898-25350-2-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <871uoy3lm0.fsf@macbook.be.48ers.dk>
+ <20120308091714.5d60b715@skate>
+Message-ID: <87wr6q26x5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Sven> Some packages need ifaddr.h which is only included in uclibc if
- Sven> UCLIBC_SUPPORT_AI_ADDRCONFIG is selected. Make this configurable
- Sven> as a buildroot option so that those packages can select it.
+Hi,
 
- Sven> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_INET_ADDRCONFIG),y)
- Sven> +	$(SED) 's,^.*UCLIBC_SUPPORT_AI_ADDRCONFIG.*,UCLIBC_SUPPORT_AI_ADDRCONFIG=y,g' $(UCLIBC_DIR)/.oldconfig
- Sven> +else
- Sven> +	$(SED) 's,.*UCLIBC_SUPPORT_AI_ADDRCONFIG.*,UCLIBC_SUPPORT_AI_ADDRCONFIG=n,g' $(UCLIBC_DIR)/.oldconfig
- Sven> +	$(SED) '/.*UCLIBC_SUPPORT_AI_ADDRCONFIG.*/d' $(UCLIBC_DIR)/.oldconfig
- Sven> +	echo "# UCLIBC_SUPPORT_AI_ADDRCONFIG is not set" >> $(UCLIBC_DIR)/.oldconfig
+ Thomas> I don't know if this question has been asked in the past, but do you
+ Thomas> know what is the binary size impact of enabling AI_ADDRCONFIG in
+ Thomas> uClibc? If the impact is rather minimal, then I'd rather have it
+ Thomas> enabled in our default configuration instead of adding yet another
+ Thomas> toolchain config knob.
 
-Why the complication and not just something like:
+I believe it's a fairly small impact, but the problem is external uClibc
+toolchains (made by BR, ct-NG or elsewhere) which most likely won't have
+AI_ADDRCONFIG enabled, so mrouted (and gupnp) will fail at build time.
 
- $(SED) 's,^.*UCLIBC_SUPPORT_AI_ADDRCONFIG.*,#  UCLIBC_SUPPORT_AI_ADDRCONFIG is not set,g' $(UCLIBC_DIR)/.oldconfig
 
-We'll also need to add the option for external toolchains, but I can do
-that, thanks for doing the patch.
+ Thomas> Anyway some comments about your patches (but don't work on updating
+ Thomas> them before we decide if a new option is really needed) :
+
+ Thomas>  * Your PATCH 1/2 also needs to address the cases of external
+ Thomas>    toolchains and crosstool-ng toolchains ;
+
+ Thomas>  * Your PATCH 2/2 should use a depends on rather than a select. We use
+ Thomas>    depends on for all the dependencies of packages on toolchain
+ Thomas>    options, together with a comment displayed when the toolchain
+ Thomas>    options isn't present, so that the user is aware that mrouted is
+ Thomas>    available, but only if AI_ADDRCONFIG is enabled as a toolchain
+ Thomas>    option.
+
+I agree.
 
 -- 
 Bye, Peter Korsgaard
