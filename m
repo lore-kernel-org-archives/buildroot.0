@@ -1,71 +1,83 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Sun, 11 Mar 2012 17:48:08 +0100
-Subject: [Buildroot] [PATCH 1/5] Microblaze: added architecture support for
- both big endian and low endian
-Message-ID: <4F5CD748.8050100@relinux.de>
+Date: Sun, 11 Mar 2012 17:50:17 +0100
+Subject: [Buildroot] [PATCH 4/5] Microblaze: build kernel with device tree
+Message-ID: <4F5CD7C9.40505@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alvaro G. M <alvaro.gamez@hazent.com>
+Device Tree and SimpleImage will be handled in buildroot in the
+future. Until then, this patch is needed.
 
 Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
----
- target/Config.in.arch |   15 +++++++++++++--
- 1 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 25c6e50..83f128f 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -21,6 +21,10 @@ config BR2_i386
- config BR2_m68k
- 	bool "m68k"
- 	depends on BROKEN # ice in uclibc / inet_ntoa_r
-+config BR2_microblazeel
-+	bool "microblazeel"
-+config BR2_microblazebe
-+	bool "microblazebe"
- config BR2_mips
- 	bool "mips"
- config BR2_mipsel
-@@ -40,6 +44,10 @@ config BR2_xtensa
- 	bool "xtensa"
- endchoice
+---
+ linux/Config.in |    8 ++++++++
+ linux/linux.mk  |   16 ++++++++++++++++
+ 2 files changed, 24 insertions(+), 0 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 26032fd..7d9f4fb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,6 +120,14 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
+ 	help
+ 	  Path to the kernel configuration file
  
-+config BR2_microblaze
-+	bool
-+	default y if BR2_microblazeel || BR2_microblazebe
-+
++config BR2_LINUX_KERNEL_DTS_FILE
++    string "Device Tree dts file location"
++    depends on BR2_microblaze
++    help
++      Path from where the dts file has to be copied
++      The final "custom target" name depends on the
++      dts file name:
++          <name>.dts --> simpleImage.<name>
  #
- # Keep the variants separate, there's no need to clutter everything else.
- # sh is fairly "special" in this regard, as virtually everyone else has
-@@ -515,6 +523,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_athlon
- 	default "i686"		if BR2_x86_athlon_4
- 	default "m68k"		if BR2_m68k
-+	default "microblaze"	if BR2_microblaze
- 	default "mips"		if BR2_mips
- 	default "mipsel"	if BR2_mipsel
- 	default "powerpc"	if BR2_powerpc
-@@ -542,10 +551,12 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	string
- 	default "LITTLE" if BR2_arm || BR2_bfin || BR2_i386 || BR2_mipsel || \
--			    BR2_sh3 || BR2_sh4 || BR2_sh4a || BR2_x86_64 || BR2_sh64
-+			    BR2_sh3 || BR2_sh4 || BR2_sh4a || BR2_x86_64 || BR2_sh64 || \
-+			    BR2_microblazeel
- 	default "BIG"    if BR2_armeb || BR2_avr32 || BR2_m68k || BR2_mips || \
- 			    BR2_powerpc || BR2_sh2 || BR2_sh2a || \
--			    BR2_sh3eb || BR2_sh4eb || BR2_sh4aeb || BR2_sparc
-+			    BR2_sh3eb || BR2_sh4eb || BR2_sh4aeb || BR2_sparc || \
-+			    BR2_microblazebe
+ # Binary format
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index ae236d4..ade867a 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -117,6 +117,18 @@ endef
  
- config BR2_GCC_TARGET_TUNE
- 	string
+ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
+ 
++ifeq ($(KERNEL_ARCH),microblaze)
++# on microblaze, we always want mkimage
++LINUX_DEPENDENCIES+=host-uboot-tools
++
++define LINUX_COPY_DTS
++    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
++        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
++    else \
++        echo "Cannot copy dts file!" ; \
++    fi
++endef
++endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+@@ -131,6 +143,8 @@ define LINUX_CONFIGURE_CMDS
+ 	$(if $(BR2_ARM_EABI),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
+ 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
++    $(if $(BR2_microblaze),
++        $(call LINUX_COPY_DTS))
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake cpio file. It'll be
+ 	# replaced later by the real cpio archive, and the kernel will be
+@@ -215,6 +229,8 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LI
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
++	# If there is a .ub file copy it to the final destination
++	test -f $(LINUX_IMAGE_PATH).ub && cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
+ 	$(Q)touch $@
+ 
+ # The initramfs building code must make sure this target gets called
 -- 
 1.7.0.4
 
