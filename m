@@ -1,26 +1,22 @@
-From: strake888 at gmail.com <strake888@gmail.com>
-Date: Sat, 10 Mar 2012 18:47:09 -0500
-Subject: [Buildroot] Changed package/Config.in; new packages not built
-In-Reply-To: <20120310192616.GA3704@tarshish>
-References: <CAL3m8eC=eztgUP8aw9+s9HL-9xe=o02sYHsVuDFqys=99PX_wQ@mail.gmail.com>
- <20120310192616.GA3704@tarshish>
-Message-ID: <20120310234709.GA18494@mintha.strake.name>
+From: PHilip RUshik <prushik@gmail.com>
+Date: Sun, 11 Mar 2012 15:45:22 +0900
+Subject: [Buildroot] gettext versions besides 0.16.1
+Message-ID: <CAGmOteMVn2TCkE5tnAw+oBEM75gcJNwuBVdLkrsfr5Jeqzf1ZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Mar 10, 2012 at 09:26:17PM +0200, Baruch Siach wrote:
-> Hi Matthew,
-> 
-> See the "Adding new packages to Buildroot" section of the  documentation at 
-> http://buildroot.net/downloads/buildroot.html#add_packages.
-> 
+I have tried on a few occasions to get buildroot to build newer versions of
+gnu gettext, but it seems that only 0.16.1 will work (with uClibc). Is
+anyone planning on working on making newer versions of gettext work?
+To be honest, my projects do not depend on newer versions of gettext, so
+0.16.1 is fine with me, I'm not even sure about what changes were made in
+newer versions, I'm just concerned because building gettext is so fragile.
 
-Well, I'm an idiot. I had read that, but even so forgot to call the AUTOTARGETS macro.
 
-Thanks anyhow. Sorry to waste your time.
-
-Cheers,
-MFD
+---PHil
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120311/00d7a393/attachment.html>
