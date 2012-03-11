@@ -1,96 +1,79 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 Mar 2012 15:28:41 +0100
-Subject: [Buildroot] New package minicom
-In-Reply-To: <CAHt8ZCNu6JL+dO4YzucYVtFAoH7rEFu8YRJ08PQ5yTH2HDUU7w@mail.gmail.com>
- (Simon Dawson's message of "Fri, 9 Mar 2012 13:18:03 +0000")
-References: <CAHt8ZCNu6JL+dO4YzucYVtFAoH7rEFu8YRJ08PQ5yTH2HDUU7w@mail.gmail.com>
-Message-ID: <87r4wz2ova.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 11 Mar 2012 15:00:31 +0100
+Subject: [Buildroot] [git commit] New package minicom
+Message-ID: <20120311143002.8937290D3F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=608e6af167bd692611c9f60efe4f57dadc8b7fd7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Simon> Signed-off-by: Simon Dawson<spdawson@gmail.com>
- Simon> ---
- Simon>  package/Config.in          |    1 +
- Simon>  package/minicom/Config.in  |    9 +++++++++
- Simon>  package/minicom/minicom.mk |   12 ++++++++++++
- Simon>  3 files changed, 22 insertions(+), 0 deletions(-)
- Simon>  create mode 100644 package/minicom/Config.in
- Simon>  create mode 100644 package/minicom/minicom.mk
+[Peter: fix whitespace and deps (wchar, ncurses, only iconv if !locale)]
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Config.in          |    1 +
+ package/minicom/Config.in  |   14 ++++++++++++++
+ package/minicom/minicom.mk |   18 ++++++++++++++++++
+ 3 files changed, 33 insertions(+), 0 deletions(-)
 
- Simon> diff --git a/package/Config.in b/package/Config.in
- Simon> index 41cbb8c..c582f8a 100644
- Simon> --- a/package/Config.in
- Simon> +++ b/package/Config.in
- Simon> @@ -197,6 +197,7 @@ source "package/lvm2/Config.in"
- Simon>  source "package/makedevs/Config.in"
- Simon>  source "package/mdadm/Config.in"
- Simon>  source "package/memtester/Config.in"
- Simon> +source "package/minicom/Config.in"
- Simon>  source "package/mtd/Config.in"
- Simon>  source "package/ntfs-3g/Config.in"
- Simon>  source "package/ntfsprogs/Config.in"
- Simon> diff --git a/package/minicom/Config.in b/package/minicom/Config.in
- Simon> new file mode 100644
- Simon> index 0000000..9a69eb1
- Simon> --- /dev/null
- Simon> +++ b/package/minicom/Config.in
- Simon> @@ -0,0 +1,9 @@
- Simon> +config BR2_PACKAGE_MINICOM
- Simon> +       bool "minicom"
-
-These lines should be idented with a <tab> instead of spaces.
-
- Simon> +       select BR2_PACKAGE_LIBICONV
-
-libiconv is only needed if the toolchain doesn't have locale (E.G. has
-iconv support), so this should be
-
-select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-
-It also needs WCHAR support in the toolchain, and uses ncurses, so those
-needs to be depended on / selected as well.
-
- Simon> +       help
- Simon> +         Minicom is a menu driven communications program.
- Simon> +         It emulates ANSI and VT102 terminals. It has a
- Simon> +         dialing directory and auto zmodem download.
-
-And help lines with <tab><space><space>.
-
- Simon> +
- Simon> +         http://alioth.debian.org/projects/minicom
- Simon> diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
- Simon> new file mode 100644
- Simon> index 0000000..f6bcd6c
- Simon> --- /dev/null
- Simon> +++ b/package/minicom/minicom.mk
- Simon> @@ -0,0 +1,12 @@
- Simon> +#############################################################
- Simon> +#
- Simon> +# minicom
- Simon> +#
- Simon> +#############################################################
- Simon> +MINICOM_VERSION = 2.6
- Simon> +MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.gz
- Simon> +MINICOM_SITE = http://alioth.debian.org/frs/download.php/3689/
- Simon> +
-
-The configure script uses pkg-config to detect if liblockdev is
-available, so normally you need to depend on host-pkg-config. We don't
-have liblockdev in BR (yet?), so I instead set PKG_CONFIG to /bin/false
-as it takes a while to build pkg-config.
-
- Simon> +MINICOM_DEPENDENCIES = libiconv
-
-libiconv should only be added for !BR2_ENABLE_LOCALE, and ncurses should
-be added as well.
-
-I've committed it with those fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 41cbb8c..c582f8a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -197,6 +197,7 @@ source "package/lvm2/Config.in"
+ source "package/makedevs/Config.in"
+ source "package/mdadm/Config.in"
+ source "package/memtester/Config.in"
++source "package/minicom/Config.in"
+ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/ntfsprogs/Config.in"
+diff --git a/package/minicom/Config.in b/package/minicom/Config.in
+new file mode 100644
+index 0000000..a8a2635
+--- /dev/null
++++ b/package/minicom/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_MINICOM
++	bool "minicom"
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_NCURSES
++	help
++	  Minicom is a menu driven communications program.
++	  It emulates ANSI and VT102 terminals. It has a
++	  dialing directory and auto zmodem download.
++
++	  http://alioth.debian.org/projects/minicom
++
++comment "minicom requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+new file mode 100644
+index 0000000..cb09b83
+--- /dev/null
++++ b/package/minicom/minicom.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# minicom
++#
++#############################################################
++MINICOM_VERSION = 2.6
++MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.gz
++MINICOM_SITE = http://alioth.debian.org/frs/download.php/3689/
++
++# pkg-config is only used to check for liblockdev, which we don't have
++# in BR, so instead of adding host-pkg-config as a dependency, simply
++# make sure the host version isn't used so we don't end up with problems
++# if people have liblockdev1-dev installed
++MINICOM_CONF_ENV = PKG_CONFIG=/bin/false
++
++MINICOM_DEPENDENCIES = ncurses $(if $(BR2_ENABLE_LOCALE),,libiconv)
++
++$(eval $(call AUTOTARGETS))
