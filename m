@@ -1,34 +1,24 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Mon, 12 Mar 2012 11:58:38 +0100
-Subject: [Buildroot] Added microblaze patch
-In-Reply-To: <4F5CDB0F.50801@relinux.de>
-References: <CA+appbNdaSajXPdKk4OTyj0WOmeu=9PKr-Sa=cwAZNr76ujLnA@mail.gmail.com>
- <1329095038-32117-1-git-send-email-Spenser309@gmail.com>
- <201202132237.18495.arnout@mind.be> <4F5CDB0F.50801@relinux.de>
-Message-ID: <CAM+bi4spRA4CokbDkUPt-whT=35x8CqTKNxfT4EwV5Zk6Y3GCQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 12 Mar 2012 12:15:49 +0100
+Subject: [Buildroot] [PATCH] can-utils: bump version and change download
+	location
+In-Reply-To: <1331549241-21658-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Mon, 12 Mar 2012 11:47:21
+ +0100")
+References: <1331549241-21658-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87aa3m6pei.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-2012/3/11 Stephan Hoffmann <sho@relinux.de>
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> SocketCAN repository moved from Berlios.de to gitorious
 
-> Alvaro's Patch to load the toolchain from Xilinx does not work for me.
-> http://git.xilinx.com always ends up with a timeout leaving an empty
-> tgz-file in the dl folder after the third try. To come further I
-> downloaded the tgz manually.
->
-
-I don't see the reason for this. I've downloaded it several times with no
-problem. Maybe there has been some DNS issues or the server was down for a
-while?
-
+Committed, thanks.
 
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120312/b91478b4/attachment.html>
+Bye, Peter Korsgaard
