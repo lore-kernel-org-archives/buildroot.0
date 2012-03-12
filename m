@@ -1,29 +1,19 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Mon, 12 Mar 2012 13:00:31 +0100
-Subject: [Buildroot] [PATCH v2 0/1] New package : GSL The GNU Scientific
+Date: Mon, 12 Mar 2012 13:00:32 +0100
+Subject: [Buildroot] [PATCH v2 1/1] libgsl : new package The GNU Scientific
 	Library
-Message-ID: <1331553632-509-1-git-send-email-sagaert.johan@skynet.be>
+In-Reply-To: <1331553632-509-1-git-send-email-sagaert.johan@skynet.be>
+References: <1331553632-509-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <1331553632-509-2-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers. It is free software under the GNU General Public License.
 
-The library provides a wide range of mathematical routines such as random number generators, special functions and least-squares fitting. There are over 1000 functions in total with an extensive test suite.
-
-The complete range of subject areas covered by the library includes,
-Complex Numbers 	Roots of Polynomials
-Special Functions 	Vectors and Matrices
-Permutations 		Sorting
-BLAS Support 		Linear Algebra
-Eigensystems 		Fast Fourier Transforms
-etc...
-
-Sagaert Johan (1):
-  libgsl : new package  The GNU Scientific Library
-
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
  package/Config.in        |    1 +
  package/libgsl/Config.in |    5 +++++
  package/libgsl/gsl.mk    |   11 +++++++++++
@@ -31,5 +21,45 @@ Sagaert Johan (1):
  create mode 100644 package/libgsl/Config.in
  create mode 100644 package/libgsl/gsl.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 4838edc..b7255fb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -380,6 +380,7 @@ source "package/libevent/Config.in"
+ source "package/libev/Config.in"
+ source "package/libffi/Config.in"
+ source "package/libglib2/Config.in"
++source "package/libgsl/Config.in"
+ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
+diff --git a/package/libgsl/Config.in b/package/libgsl/Config.in
+new file mode 100644
+index 0000000..4af94bd
+--- /dev/null
++++ b/package/libgsl/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_LIBGSL
++	bool "libgsl"
++	help
++	  The gnu scientific library 
++	  http://www.gnu.org/software/gsl
+diff --git a/package/libgsl/gsl.mk b/package/libgsl/gsl.mk
+new file mode 100644
+index 0000000..53c3ea2
+--- /dev/null
++++ b/package/libgsl/gsl.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# gnu gsl
++#
++#############################################################
++LIBGSL_VERSION = 1.15
++LIBGSL_SOURCE = gsl-$(LIBGSL_VERSION).tar.gz
++LIBGSL_SITE = $(BR2_GNU_MIRROR)/gsl
++LIBGSL_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS))
 -- 
 1.7.9.3
