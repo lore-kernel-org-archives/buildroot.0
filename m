@@ -1,31 +1,37 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 12 Mar 2012 10:19:54 -0400
-Subject: [Buildroot] [PATCH 1/2] uboot: Add support for copying MLO to
- the images directory for U-boot builds that include it.
-In-Reply-To: <201203111633.27504.arnout@mind.be>
-References: <1331214423-8647-1-git-send-email-fhunleth@troodon-software.com>
- <201203111633.27504.arnout@mind.be>
-Message-ID: <CA+-urNQHfKJx7kPqnE0DQKoUdxVRmbfMaOwNbw5FCR_sqh9_qw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Mar 2012 11:23:02 -0300
+Subject: [Buildroot] [PATCH] freetype: security bump to version 2.4.9
+Message-ID: <1331562182-4127-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 11, 2012 at 11:33 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Thursday 08 March 2012 14:47:02 Frank Hunleth wrote:
->> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->
-> ?Nicolas Dechesne posted patches for adding MLO a while ago. ?I don't
-> remember if they were ready to be merged or not. ?But this one looks
-> pretty good. ?So:
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
+Bump freetype to version 2.4.9 to fix:
+CVE-2012-1126, CVE-2012-1127, CVE-2012-1128, CVE-2012-1129,
+CVE-2012-1130, CVE-2012-1131, CVE-2012-1132, CVE-2012-1133,
+CVE-2012-1134, CVE-2012-1135, CVE-2012-1136, CVE-2012-1137,
+CVE-2012-1138, CVE-2012-1139, CVE-2012-1140, CVE-2012-1141,
+CVE-2012-1142, CVE-2012-1143, and CVE 2012-1144.
 
-I just looked at Nicolas's patches in the archives. If they get
-merged, it looks trivial to rebase the beaglebone patch to reference
-his. I'll watch to see what happens.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/freetype/freetype.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks,
-Frank
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 32099da..ded10d2 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-FREETYPE_VERSION = 2.4.8
++FREETYPE_VERSION = 2.4.9
+ FREETYPE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/freetype
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_INSTALL_STAGING = YES
+-- 
+1.7.3.4
