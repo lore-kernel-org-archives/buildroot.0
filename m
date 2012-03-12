@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Mar 2012 08:02:36 +0100
-Subject: [Buildroot] [PATCH v1 1/1] libgsl : new package The GNU
- Scientific Library
-In-Reply-To: <1331518764-27555-2-git-send-email-sagaert.johan@skynet.be>
-References: <1331518764-27555-1-git-send-email-sagaert.johan@skynet.be>
- <1331518764-27555-2-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20120312080236.730d91c5@skate>
+Date: Mon, 12 Mar 2012 08:46:45 +0100
+Subject: [Buildroot] [PATCH 2/3] libxml-parser-perl: add missing dep and
+ drop wrong paths
+In-Reply-To: <1331517531-2291-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
+ <1331517531-2291-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120312084645.17cea210@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 12 Mar 2012 03:19:24 +0100,
-Sagaert Johan <sagaert.johan@skynet.be> a ?crit :
+Hello,
 
-> +LIBGSL_VERSION=1.14
-> +LIBGSL_SOURCE=gsl-$(LIBGSL_VERSION).tar.gz
-> +LIBGSL_SITE=ftp://ftp.gnu.org/gnu/gsl/
+Le Sun, 11 Mar 2012 22:58:50 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Could you please put spaces before and after = ?
+> -LIBXML_PARSER_PERL_DEPENDENCIES = expat
+> +LIBXML_PARSER_PERL_VERSION = 2.36
+> +LIBXML_PARSER_PERL_SOURCE =
+> XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+> +LIBXML_PARSER_PERL_SITE = http://www.cpan.org/modules/by-module/XML/
+> +LIBXML_PARSER_PERL_DEPENDENCIES = expat host-microperl 
+>  define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+>   (cd $(@D) ; \
+> -   perl Makefile.PL \
+> +   $(HOST_DIR)/usr/bin/perl Makefile.PL \
 
-Could you use BR2_GNU_MIRROR ?
+Unless there is a strong reason to do, I would prefer this change not
+to go in. Buildroot has Perl amongst its mandatory dependencies
+(see support/dependencies/dependencies.sh), so I'd prefer if we used
+the Perl interpreter available on the host machine rather than building
+our own. This will add quite a bit of build time, that apparently we
+can avoid since we have been doing that for quite some time now.
 
-> +LIBGSL_INSTALL_STAGING = YES
-> +LIBGSL_INSTALL_TARGET = YES
+Is there a good reason to switch to our own Perl built for the host?
 
-This last line is not needed, it's the default.
-
-> +$(eval $(call AUTOTARGETS,package,libgsl))
-
-This should just be:
-
-$(eval $(call AUTOTARGETS))
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
