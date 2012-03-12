@@ -1,37 +1,34 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 12 Mar 2012 11:47:21 +0100
-Subject: [Buildroot] [PATCH] can-utils: bump version and change download
-	location
-Message-ID: <1331549241-21658-1-git-send-email-yegorslists@googlemail.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Mon, 12 Mar 2012 11:58:38 +0100
+Subject: [Buildroot] Added microblaze patch
+In-Reply-To: <4F5CDB0F.50801@relinux.de>
+References: <CA+appbNdaSajXPdKk4OTyj0WOmeu=9PKr-Sa=cwAZNr76ujLnA@mail.gmail.com>
+ <1329095038-32117-1-git-send-email-Spenser309@gmail.com>
+ <201202132237.18495.arnout@mind.be> <4F5CDB0F.50801@relinux.de>
+Message-ID: <CAM+bi4spRA4CokbDkUPt-whT=35x8CqTKNxfT4EwV5Zk6Y3GCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi
 
-SocketCAN repository moved from Berlios.de to gitorious
+2012/3/11 Stephan Hoffmann <sho@relinux.de>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/can-utils/can-utils.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+> Alvaro's Patch to load the toolchain from Xilinx does not work for me.
+> http://git.xilinx.com always ends up with a timeout leaving an empty
+> tgz-file in the dl folder after the third try. To come further I
+> downloaded the tgz manually.
+>
 
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 198c38d..5039043 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--CAN_UTILS_VERSION = 1235
--CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk/can-utils
-+CAN_UTILS_VERSION = 50775159276d896d8b3102b6dbc658a91a2a1d53
-+CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
- CAN_UTILS_AUTORECONF = YES
- 
- $(eval $(call AUTOTARGETS))
+I don't see the reason for this. I've downloaded it several times with no
+problem. Maybe there has been some DNS issues or the server was down for a
+while?
+
+
 -- 
-1.7.7
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120312/b91478b4/attachment.html>
