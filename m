@@ -1,28 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 11 Mar 2012 22:58:48 -0300
-Subject: [Buildroot] microperl fixes and improvements
-Message-ID: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 11 Mar 2012 22:58:49 -0300
+Subject: [Buildroot] [PATCH 1/3] intltool: no business defining PERLLIB
+In-Reply-To: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1331517531-2291-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As Peter noted on IRC libxml-parser-perl and intltool have issues with
-the microperl package conversion and bump.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/intltool/intltool.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-The first problem is hardcoded PERLLIB paths.
-This is no longer necessary and actually harmful.
-
-Also implemented a new library search path tweak that SHOULD fix building
-on newer ubuntu distributions which use non-conventional library paths.
-
-TODO:
-
-* Rename libxml-parser-perl closer to it's real name XML::Parser
-  We can wait until we do more modules since it's host-only for now.
-
-* Make target microperl optionally a fully-fledged perl
-  Needs an architecture cache implementation.
-
-* Start adding other useful modules from CPAN
+diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
+index 6d13cc1..1e749ea 100644
+--- a/package/intltool/intltool.mk
++++ b/package/intltool/intltool.mk
+@@ -9,8 +9,6 @@ INTLTOOL_SOURCE = intltool-$(INTLTOOL_VERSION).tar.bz2
+ INTLTOOL_SITE = http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
+ 
+ HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
+-HOST_INTLTOOL_CONF_OPT = \
+-  PERLLIB=$(HOST_DIR)/usr/lib/perl
+ 
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
+-- 
+1.7.3.4
