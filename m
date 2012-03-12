@@ -1,19 +1,31 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Mon, 12 Mar 2012 09:55:20 +0100
-Subject: [Buildroot] [PATCH 1/1] avr32/defconfig: use current stable
- kernel instead of the old 2.6.35
-In-Reply-To: <1330523494-20886-1-git-send-email-plagnioj@jcrosoft.com>
-References: <1330523494-20886-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <20120312085520.GA444@game.jcrosoft.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 12 Mar 2012 06:49:58 -0300
+Subject: [Buildroot] [PATCH 2/3] libxml-parser-perl: add missing dep and
+ drop wrong paths
+In-Reply-To: <20120312080129.17b94348@skate>
+References: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
+ <1331517531-2291-3-git-send-email-gustavo@zacarias.com.ar>
+ <20120312080129.17b94348@skate>
+Message-ID: <f8989ce8ae25d6cfd8a392ca0b144c17@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14:51 Wed 29 Feb     , Jean-Christophe PLAGNIOL-VILLARD wrote:
-> Drop the patch for kernel >= 3.3
-ping
+On 2012-03-12 04:01, Thomas Petazzoni wrote:
 
-Best Regards,
-J.
+> Le Sun, 11 Mar 2012 22:58:50 -0300,
+> Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+>
+>>  $(eval $(call GENTARGETS))
+>
+> Same thing here: we don't need this anymore, since we don't support
+> building libxml-parser-perl for the target. And the
+> package/libxml-parser-perl/Config.in could go away as well.
+>
+> Thomas
+
+I was just trying to address the issue Peter found, not clean them up 
+at the same time, but yeah, they could be dropped.
+Regards.
