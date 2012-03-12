@@ -1,32 +1,67 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 11 Mar 2012 22:58:49 -0300
-Subject: [Buildroot] [PATCH 1/3] intltool: no business defining PERLLIB
+Date: Sun, 11 Mar 2012 22:58:50 -0300
+Subject: [Buildroot] [PATCH 2/3] libxml-parser-perl: add missing dep and
+	drop wrong paths
 In-Reply-To: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1331517531-2291-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1331517531-2291-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop incorrect INSTALL* paths, host-microperl knows better.
+Also need host-microperl dependency before building.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/intltool/intltool.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/libxml-parser-perl/libxml-parser-perl.mk |   18 +++++++-----------
+ 1 files changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/package/intltool/intltool.mk b/package/intltool/intltool.mk
-index 6d13cc1..1e749ea 100644
---- a/package/intltool/intltool.mk
-+++ b/package/intltool/intltool.mk
-@@ -9,8 +9,6 @@ INTLTOOL_SOURCE = intltool-$(INTLTOOL_VERSION).tar.bz2
- INTLTOOL_SITE = http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.mk b/package/libxml-parser-perl/libxml-parser-perl.mk
+index 9e6f2ec..0bcda5d 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.mk
++++ b/package/libxml-parser-perl/libxml-parser-perl.mk
+@@ -3,32 +3,28 @@
+ # libxml-parser-perl
+ #
+ #############################################################
+-LIBXML_PARSER_PERL_VERSION:=2.36
+-LIBXML_PARSER_PERL_SOURCE:=XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
+-LIBXML_PARSER_PERL_SITE:=http://www.cpan.org/modules/by-module/XML/
  
- HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
--HOST_INTLTOOL_CONF_OPT = \
--  PERLLIB=$(HOST_DIR)/usr/lib/perl
+-LIBXML_PARSER_PERL_DEPENDENCIES = expat
++LIBXML_PARSER_PERL_VERSION = 2.36
++LIBXML_PARSER_PERL_SOURCE = XML-Parser-$(LIBXML_PARSER_PERL_VERSION).tar.gz
++LIBXML_PARSER_PERL_SITE = http://www.cpan.org/modules/by-module/XML/
++LIBXML_PARSER_PERL_DEPENDENCIES = expat host-microperl
  
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
+ define HOST_LIBXML_PARSER_PERL_CONFIGURE_CMDS
+  (cd $(@D) ; \
+-   perl Makefile.PL \
++   $(HOST_DIR)/usr/bin/perl Makefile.PL \
+         PREFIX=$(HOST_DIR)/usr \
+         EXPATLIBPATH=$(HOST_DIR)/usr/lib \
+         EXPATINCPATH=$(HOST_DIR)/usr/include \
+-        INSTALLDIRS=site \
+-        INSTALLSITELIB=$(HOST_DIR)/usr/lib/perl \
+-        INSTALLSITEARCH=$(HOST_DIR)/usr/lib/perl \
+  )
+ endef
+ 
+ define HOST_LIBXML_PARSER_PERL_BUILD_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+ endef
+ 
+ define HOST_LIBXML_PARSER_PERL_INSTALL_CMDS
+- $(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
+ $(eval $(call GENTARGETS))
+ $(eval $(call GENTARGETS,host))
+-
 -- 
 1.7.3.4
