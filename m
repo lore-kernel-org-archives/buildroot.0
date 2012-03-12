@@ -1,51 +1,57 @@
 From: Nicolas Dechesne <n-dechesne@ti.com>
-Date: Mon, 12 Mar 2012 23:41:09 +0100
-Subject: [Buildroot] [PATCH 0/3 v3] Initial support for Panda and PandaES
-Message-ID: <1331592072-32327-1-git-send-email-n-dechesne@ti.com>
+Date: Mon, 12 Mar 2012 23:41:10 +0100
+Subject: [Buildroot] [PATCH 1/3 v3] uboot: Add support for U-Boot SPL
+In-Reply-To: <1331592072-32327-1-git-send-email-n-dechesne@ti.com>
+References: <1331592072-32327-1-git-send-email-n-dechesne@ti.com>
+Message-ID: <1331592072-32327-2-git-send-email-n-dechesne@ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Here is my 3rd attempt to add support for TI PandaBoard and PandaBoard ES.
+SPL is a first stage bootloader. On pandaboard it supercedes x-loader,
+and should now be used.
 
-v3:
- - added more documentation in uboot/Config.in regarding SPL
- - added 'acked-by' as per review
- - rebased on master branch as of 2012/03/12
+This patch ensures that either SPL or xloader can be selected
 
-v2:
+Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ boot/uboot/Config.in |    9 +++++++++
+ boot/uboot/uboot.mk  |    2 ++
+ 2 files changed, 11 insertions(+), 0 deletions(-)
 
- - typo cleanup as per reviews
- - introduce BR2_TARGET_UBOOT_FORMAT_IMG to allow use of u-boot.img
-   on platforms that need it, like OMAP. This is better than v1 since
-   u-boot.img is not stricly dependent on SPL, so making 2 parameters
-   makes more sense.
-
-v1:
-
-Because we want to deprecate x-loader in favor of u-boot SPL:
-- my first patch adds support for SPL in BR
-- SPL is enabled by default in my panda config.
-
-Both Panda and PandaES have been tested, detection is done at run time
-in uboot and kernel, so we can have 1 configuration only.
-
-I've used DEVTMPFS by default, as 1) I generally prefer this, and 2) ttyO
-was missing from the generic dev table... 
-
-
-Nicolas Dechesne (3):
-  uboot: Add support for U-Boot SPL
-  uboot: add a new binary format for u-boot.img
-  configs: add support for PandaBoard and PandaBoard ES
-
- boot/uboot/Config.in         |   12 ++++++++++++
- boot/uboot/uboot.mk          |    4 ++++
- configs/pandaboard_defconfig |   25 +++++++++++++++++++++++++
- 3 files changed, 41 insertions(+), 0 deletions(-)
- create mode 100644 configs/pandaboard_defconfig
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index c8db9fb..95187f9 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -137,4 +137,13 @@ config BR2_TARGET_UBOOT_ETH1ADDR
+ 
+ endif # BR2_TARGET_UBOOT_NETWORK
+ 
++config BR2_TARGET_UBOOT_SPL
++	bool "U-Boot SPL support"
++	depends on !BR2_TARGET_XLOADER
++	help
++	  Enable the U-Boot SPL support. SPL is a first stage
++	  bootloader loaded into internal memory in charge of 
++	  enabling and configuring the external memory (DDR), 
++	  and load the u-boot program into DDR.
++
+ endif # BR2_TARGET_UBOOT
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index db9de8d..41745c9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -88,6 +88,8 @@ endef
+ 
+ define UBOOT_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
++	$(if $(BR2_TARGET_UBOOT_SPL),
++		cp -dpf $(@D)/MLO $(BINARIES_DIR)/)
+ endef
+ 
+ $(eval $(call GENTARGETS))
 -- 
 1.7.9.1
