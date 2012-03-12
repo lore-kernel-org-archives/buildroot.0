@@ -1,7 +1,8 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 12 Mar 2012 11:24:04 +0100
-Subject: [Buildroot] [PATCH] New package: parted
-Message-ID: <1331547844-23763-1-git-send-email-yegorslists@googlemail.com>
+Date: Mon, 12 Mar 2012 11:47:21 +0100
+Subject: [Buildroot] [PATCH] can-utils: bump version and change download
+	location
+Message-ID: <1331549241-21658-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,61 +11,27 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+SocketCAN repository moved from Berlios.de to gitorious
+
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in        |    1 +
- package/parted/Config.in |    9 +++++++++
- package/parted/parted.mk |   13 +++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/parted/Config.in
- create mode 100644 package/parted/parted.mk
+ package/can-utils/can-utils.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4838edc..36a221c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -202,6 +202,7 @@ source "package/mtd/Config.in"
- source "package/ntfs-3g/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-+source "package/parted/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
- source "package/rng-tools/Config.in"
-diff --git a/package/parted/Config.in b/package/parted/Config.in
-new file mode 100644
-index 0000000..86d6679
---- /dev/null
-+++ b/package/parted/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PARTED
-+	bool "parted"
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	help
-+	  parted, the GNU partition resizing program
-+
-+	  http://www.gnu.org/software/parted/
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-new file mode 100644
-index 0000000..c4107e7
---- /dev/null
-+++ b/package/parted/parted.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# parted
-+#
-+#############################################################
-+
-+PARTED_VERSION = 3.1
-+PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
-+PARTED_SITE = $(BR2_GNU_MIRROR)/parted
-+PARTED_DEPENDENCIES = readline util-linux lvm2
-+PARTED_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
+index 198c38d..5039043 100644
+--- a/package/can-utils/can-utils.mk
++++ b/package/can-utils/can-utils.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ 
+-CAN_UTILS_VERSION = 1235
+-CAN_UTILS_SITE = svn://svn.berlios.de/socketcan/trunk/can-utils
++CAN_UTILS_VERSION = 50775159276d896d8b3102b6dbc658a91a2a1d53
++CAN_UTILS_SITE = git://gitorious.org/linux-can/can-utils.git
+ CAN_UTILS_AUTORECONF = YES
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.7
