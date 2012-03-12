@@ -1,53 +1,55 @@
-From: =?ISO-8859-1?Q?Jo=E3o_Ferreira?= <joaoahf@gmail.com>
-Date: Tue, 13 Mar 2012 00:49:12 +0000
-Subject: [Buildroot] AX25 support packages
-Message-ID: <CACQGsYQZMnE-dHw=1a8QKogQ_GNjwDQOZ+4dXnBHs6d-CiB6UQ@mail.gmail.com>
+From: Eric Jarrige <eric.jarrige@armadeus.org>
+Date: Tue, 13 Mar 2012 00:13:53 +0100
+Subject: [Buildroot] [PATCH] Add (Freescale) elftosb host package
+In-Reply-To: <20120312183241.56f78a30@skate>
+References: <1331560507-12444-1-git-send-email-eric.jarrige@armadeus.org>
+ <20120312183241.56f78a30@skate>
+Message-ID: <73E430A1-7C75-4E82-9A74-5771BC39AB48@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot users and developers,
+Hi Thomas,
 
-I realized that *buildroot* do not have AX.25 *userland* software support.
-Specially the AX25lib and AX25-tools, available at:
+On 12 mars 2012, at 18:32, Thomas Petazzoni wrote:
 
-   - http://www.linux-ax25.org/pub/libax25/libax25-0.0.12-rc2.tar.gz
-   - http://www.linux-ax25.org/pub/ax25-tools/ax25-tools-0.0.10-rc2.tar.gz
+> Hello Eric,
+> 
+> Thanks for this patch. See comments below.
+> 
+> Le Mon, 12 Mar 2012 14:55:07 +0100,
+> Eric Jarrige <eric.jarrige@armadeus.org> a ?crit :
+> 
+>> diff --git a/package/elftosb/elftosb10.12.01-fixes_includes.patch b/package/elftosb/elftosb10.12.01-fixes_includes.patch
+>> new file mode 100644
+>> index 0000000..5e31233
+>> --- /dev/null
+>> +++ b/package/elftosb/elftosb10.12.01-fixes_includes.patch
+> 
+> This patch should include a description and a Signed-off-by line.
+
+Correct, I will fix it.
+
+> 
+> 
+> Moreover, who is using this host-elftosb package at the moment? Do you
+> intend to send some further package to the linux package to make use of
+> it? Or should this package be presented to the user in the "Host
+> utilities" submenu?
+
+I have the plan to send another patch to support the u-boot.sb binary file
+format that will depend on this host tool. 
+The new apf28 board will also use this .sb binary file format and the elftosb
+tool. It also possible to package the linux kernel with this tool for some CPUs
+but for the time being that is not in my plan.
+I do not know if this can be useful to have it in a user submenu.
+
+Thanks for your response.
+
+Best regards,
+Eric
 
 
-So, I made the packages for that software (see attach), and I wonder that
-it might be useful for some *buildroot* users (specially those who are
-radio amateur).
-The packages include one patch, who will bypass the setpgrp() verification
-in configure script.
-
-I test that packages using crosscompile (i386->ARM) and everything works as
-expected.
-
-Fell free to use that packages as you want, and give some comments about it.
-
-Thank you very much for your good work at this project,
-
-Jo?o Ferreira
-MSc student in Communications Networks Engineering
-IST / TULisbon
-AMRAD / AMSAT-CT member
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120313/b742f98e/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: libax25.tar.bz2
-Type: application/x-bzip2
-Size: 1771 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120313/b742f98e/attachment.bz2>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ax25tools.tar.bz2
-Type: application/x-bzip2
-Size: 1785 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120313/b742f98e/attachment-0001.bz2>
+ 
