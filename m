@@ -1,32 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 12 Mar 2012 18:02:20 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.0h
-Message-ID: <1331586140-13015-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 Mar 2012 23:03:31 +0100
+Subject: [Buildroot] [PATCH v2] Add target to print buildroot version
+In-Reply-To: <1331464599-6283-1-git-send-email-arnout@mind.be>
+References: <1331464599-6283-1-git-send-email-arnout@mind.be>
+Message-ID: <20120312230331.27d24591@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 1.0.0h to fix CMS and S/MIME Bleichenbacher attack (CVE-2012-0884)
+Le Sun, 11 Mar 2012 12:16:39 +0100,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> It's convenient to have a target to print the buildroot version, for use
+> in external scripts calling buildroot.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index d638ce1..4ef0b2f 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--OPENSSL_VERSION = 1.0.0g
-+OPENSSL_VERSION = 1.0.0h
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
