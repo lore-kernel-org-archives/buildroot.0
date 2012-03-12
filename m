@@ -1,38 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 Mar 2012 23:12:41 +0100
-Subject: [Buildroot] [PATCH 5/5] Microblaze: Added defconfig for Avnet
- S6LX9 Microboard
-In-Reply-To: <4F5CD806.6040209@relinux.de>
-References: <4F5CD806.6040209@relinux.de>
-Message-ID: <20120312231241.12fa5da5@skate>
+From: Nicolas Dechesne <n-dechesne@ti.com>
+Date: Mon, 12 Mar 2012 23:41:09 +0100
+Subject: [Buildroot] [PATCH 0/3 v3] Initial support for Panda and PandaES
+Message-ID: <1331592072-32327-1-git-send-email-n-dechesne@ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 11 Mar 2012 17:51:18 +0100,
-Stephan Hoffmann <sho@relinux.de> a ?crit :
+Here is my 3rd attempt to add support for TI PandaBoard and PandaBoard ES.
 
-> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-> 
-> ---
->  board/Avnet/Avnet_S6LX9_MicroBoard/README          |   64 +++++
+v3:
+ - added more documentation in uboot/Config.in regarding SPL
+ - added 'acked-by' as per review
+ - rebased on master branch as of 2012/03/12
 
-Please use lowercase everywhere, and don't repeat the manufacturer name
-in the board subdirectory:
+v2:
 
-   board/avnet/s6lx9_microboard
+ - typo cleanup as per reviews
+ - introduce BR2_TARGET_UBOOT_FORMAT_IMG to allow use of u-boot.img
+   on platforms that need it, like OMAP. This is better than v1 since
+   u-boot.img is not stricly dependent on SPL, so making 2 parameters
+   makes more sense.
 
->  board/Avnet/Avnet_S6LX9_MicroBoard/TODO            |   19 ++
+v1:
 
-I'd prefer not to have those "specific" TODO in the code-base. Put it
-on the Buildroot Wiki, or in a global TODO at the root directory if you
-prefer.
+Because we want to deprecate x-loader in favor of u-boot SPL:
+- my first patch adds support for SPL in BR
+- SPL is enabled by default in my panda config.
 
-Thomas
+Both Panda and PandaES have been tested, detection is done at run time
+in uboot and kernel, so we can have 1 configuration only.
+
+I've used DEVTMPFS by default, as 1) I generally prefer this, and 2) ttyO
+was missing from the generic dev table... 
+
+
+Nicolas Dechesne (3):
+  uboot: Add support for U-Boot SPL
+  uboot: add a new binary format for u-boot.img
+  configs: add support for PandaBoard and PandaBoard ES
+
+ boot/uboot/Config.in         |   12 ++++++++++++
+ boot/uboot/uboot.mk          |    4 ++++
+ configs/pandaboard_defconfig |   25 +++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 0 deletions(-)
+ create mode 100644 configs/pandaboard_defconfig
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.1
