@@ -1,74 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 13 Mar 2012 13:59:05 +0100
-Subject: [Buildroot] [git commit] New package: parted
-Message-ID: <20120313130006.2796390D7F@busybox.osuosl.org>
+From: Eric Jarrige <eric.jarrige@armadeus.org>
+Date: Tue, 13 Mar 2012 13:52:09 +0100
+Subject: [Buildroot] [PATCH 0/2] add u-boot.sb file format and elftosb tools
+Message-ID: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa9f6a9b133104b54c1abc0db203c30b6c0ea364
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+These patches add support for the Freescale "Safe Boot" file format:
+- add elftosb host tools to package the .sb binary files 
+- add u-boot.sb binary format in BR menuconfig
 
-[Peter: needs largefile + wchar]
-Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in        |    1 +
- package/parted/Config.in |   14 ++++++++++++++
- package/parted/parted.mk |   13 +++++++++++++
- 3 files changed, 28 insertions(+), 0 deletions(-)
+Eric Jarrige (2):
+  Add (Freescale) elftosb host package
+  u-boot: add support for u-boot.sb file format
 
-diff --git a/package/Config.in b/package/Config.in
-index 4838edc..36a221c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -202,6 +202,7 @@ source "package/mtd/Config.in"
- source "package/ntfs-3g/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-+source "package/parted/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
- source "package/rng-tools/Config.in"
-diff --git a/package/parted/Config.in b/package/parted/Config.in
-new file mode 100644
-index 0000000..610c040
---- /dev/null
-+++ b/package/parted/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PARTED
-+	bool "parted"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_LVM2
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_UTIL_LINUX
-+	help
-+	  parted, the GNU partition resizing program
-+
-+	  http://www.gnu.org/software/parted/
-+
-+comment "parted requires a toolchain with LARGEFILE+WCHAR support"
-+        depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-new file mode 100644
-index 0000000..c4107e7
---- /dev/null
-+++ b/package/parted/parted.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# parted
-+#
-+#############################################################
-+
-+PARTED_VERSION = 3.1
-+PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
-+PARTED_SITE = $(BR2_GNU_MIRROR)/parted
-+PARTED_DEPENDENCIES = readline util-linux lvm2
-+PARTED_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS))
+ boot/uboot/Config.in                               |    3 ++
+ boot/uboot/uboot.mk                                |    4 +++
+ package/elftosb/elftosb.mk                         |   28 ++++++++++++++++++++
+ .../elftosb/elftosb10.12.01-fixes_includes.patch   |   19 +++++++++++++
+ 4 files changed, 54 insertions(+), 0 deletions(-)
+ create mode 100644 package/elftosb/elftosb.mk
+ create mode 100644 package/elftosb/elftosb10.12.01-fixes_includes.patch
+
+-- 
+1.7.2.5
