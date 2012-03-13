@@ -1,131 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 13 Mar 2012 10:20:15 -0300
-Subject: [Buildroot] [PATCH] dnsmasq: bump to version 2.60
-Message-ID: <1331644815-24832-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Tue, 13 Mar 2012 14:19:16 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
+ patches in proper order
+In-Reply-To: <CAAXf6LWp0AXBUCFV_PJoQTr4R=feGQWmKX2TLCmxJ-Zu=S363w@mail.gmail.com>
+References: <CAHXCMMLOGDZ5g30OM+5dryn-5kAgtLeeB4R8UAYBfHW4VUC=MQ@mail.gmail.com>
+ <1331233872-31746-1-git-send-email-ludovic.desroches@atmel.com>
+ <CAHXCMMLWPp81PcHR17pEwEaPoWHLa5PnLZcTu=Lt7uCASXMEiw@mail.gmail.com>
+ <20120312085752.GB444@game.jcrosoft.org>
+ <CAAXf6LWp0AXBUCFV_PJoQTr4R=feGQWmKX2TLCmxJ-Zu=S363w@mail.gmail.com>
+Message-ID: <20120313131916.GH444@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 2.60 of dnsmasq with the new lua scripting option.
-Switch LDFLAGS from MAKE_ENV to MAKE_OPT to make it work properly.
+On 11:08 Tue 13 Mar     , Thomas De Schampheleire wrote:
+> On Mon, Mar 12, 2012 at 9:57 AM, Jean-Christophe PLAGNIOL-VILLARD
+> <plagnioj@jcrosoft.com> wrote:
+> > On 18:29 Thu 08 Mar ? ? , Samuel Martin wrote:
+> >> Hi Ludovic,
+> >>
+> >> > + ? ?# If there is a series file, use it instead of using ls sort order
+> >> > + ? ?# to apply patches. Skip line starting with a dash.
+> >> > + ? ?if [ -e "${path}/series" ] ; then
+> >> > + ? ? ? ?for i in `cat ${path}/series | grep -Ev "^#" 2> /dev/null` ; do
+> >> Or simply:
+> >> for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
+> > why not simply use quilt?
+> >
+> > it will simply also patch series upgrade
+> >
+> > we just have to add quilt to the host tools
+> 
+> Can you use quilt without using git?
+> Note that not every user puts buildroot in an actual repository. And
+> even those who do, may use another version control system than git.
+quilt does need any scm
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dnsmasq/Config.in  |   13 ++++++++++---
- package/dnsmasq/dnsmasq.mk |   30 ++++++++++++++++++++++++------
- 2 files changed, 34 insertions(+), 9 deletions(-)
+it's a patch series management tools
 
-diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
-index e9c4870..f434b8b 100644
---- a/package/dnsmasq/Config.in
-+++ b/package/dnsmasq/Config.in
-@@ -6,26 +6,33 @@ config BR2_PACKAGE_DNSMASQ
- 
- 	  http://www.thekelleys.org.uk/dnsmasq/
- 
-+if BR2_PACKAGE_DNSMASQ
-+
- config BR2_PACKAGE_DNSMASQ_TFTP
- 	bool "tftp support"
- 	default y
--	depends on BR2_PACKAGE_DNSMASQ
- 	help
- 	  Enable TFTP support in dnsmasq.
- 
- config BR2_PACKAGE_DNSMASQ_DHCP
- 	bool "dhcp support"
- 	default y
--	depends on BR2_PACKAGE_DNSMASQ
- 	help
- 	  Enable DHCP server support in dnsmasq.
- 
- config BR2_PACKAGE_DNSMASQ_IDN
- 	bool "IDN support (BIG!)"
--	depends on BR2_PACKAGE_DNSMASQ
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBINTL
- 	select BR2_PACKAGE_LIBIDN
- 	help
- 	  Enable IDN support in dnsmasq.
- 	  This option is a big space taker since is pulls in many libraries.
-+
-+config BR2_PACKAGE_DNSMASQ_LUA
-+	bool "Lua scripting support"
-+	select BR2_PACKAGE_LUA
-+	help
-+	  Enable lua scripting for dnsmasq
-+
-+endif
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index fc43abd..c1995a0 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,11 +4,11 @@
- #
- #############################################################
- 
--DNSMASQ_VERSION = 2.59
-+DNSMASQ_VERSION = 2.60
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
--DNSMASQ_MAKE_ENV = CC="$(TARGET_CC)" LDFLAGS="$(TARGET_LDFLAGS)"
-+DNSMASQ_MAKE_ENV = CC="$(TARGET_CC)"
- DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
--DNSMASQ_MAKE_OPT += DESTDIR=$(TARGET_DIR)
-+DNSMASQ_MAKE_OPT += DESTDIR=$(TARGET_DIR) LDFLAGS="$(TARGET_LDFLAGS)"
- 
- ifneq ($(BR2_INET_IPV6),y)
- 	DNSMASQ_COPTS += -DNO_IPV6
-@@ -25,7 +25,20 @@ endif
- ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
- 	DNSMASQ_MAKE_OPT += all-i18n
- 	DNSMASQ_DEPENDENCIES += libidn libintl
--	DNSMASQ_MAKE_ENV += LDFLAGS+="-lintl -lidn"
-+	DNSMASQ_MAKE_OPT += LDFLAGS+="-lintl -lidn"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
-+	DNSMASQ_DEPENDENCIES += lua
-+	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
-+define DNSMASQ_ENABLE_LUA
-+	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
-+	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
-+		$(DNSMASQ_DIR)/src/config.h
-+endef
- endif
- 
- ifneq ($(BR2_LARGEFILE),y)
-@@ -36,12 +49,15 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 	DNSMASQ_DEPENDENCIES += host-pkg-config dbus
- endif
- 
-+define DNSMASQ_FIX_PKGCONFIG
-+	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
-+		$(DNSMASQ_DIR)/Makefile
-+endef
-+
- ifeq ($(BR2_PACKAGE_DBUS),y)
- define DNSMASQ_ENABLE_DBUS
- 	$(SED) 's^.*#define HAVE_DBUS.*^#define HAVE_DBUS^' \
- 		$(DNSMASQ_DIR)/src/config.h
--	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
--		$(DNSMASQ_DIR)/Makefile
- endef
- else
- define DNSMASQ_ENABLE_DBUS
-@@ -51,7 +67,9 @@ endef
- endif
- 
- define DNSMASQ_BUILD_CMDS
-+	$(DNSMASQ_FIX_PKGCONFIG)
- 	$(DNSMASQ_ENABLE_DBUS)
-+	$(DNSMASQ_ENABLE_LUA)
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPT)
- endef
- 
--- 
-1.7.3.4
+Best Regards,
+J.
