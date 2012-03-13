@@ -1,40 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 Mar 2012 07:53:05 +0100
-Subject: [Buildroot] [PATCH] Add (Freescale) elftosb host package
-In-Reply-To: <73E430A1-7C75-4E82-9A74-5771BC39AB48@armadeus.org>
-References: <1331560507-12444-1-git-send-email-eric.jarrige@armadeus.org>
- <20120312183241.56f78a30@skate>
- <73E430A1-7C75-4E82-9A74-5771BC39AB48@armadeus.org>
-Message-ID: <20120313075305.47f9f00c@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 13 Mar 2012 08:38:00 +0100
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x / 3.2.x stable
+	versions
+Message-ID: <20120313074353.B4F3090D7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 13 Mar 2012 00:13:53 +0100,
-Eric Jarrige <eric.jarrige@armadeus.org> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=8429c5873fe40090668a27c33ca7dc1bdb30ea0c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> I have the plan to send another patch to support the u-boot.sb binary file
-> format that will depend on this host tool. 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Ok, good. Would it be possible to post the patch adding the elftosb
-tool together with a patch adding this u-boot.sb support? Of course,
-this should be two separate patches, but sent together.
-
-> The new apf28 board will also use this .sb binary file format and the elftosb
-> tool. It also possible to package the linux kernel with this tool for some CPUs
-> but for the time being that is not in my plan.
-> I do not know if this can be useful to have it in a user submenu.
-
-As long as it is used somewhere as a dependency for something, then
-it's fine.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 2ab0fc8..75c13cc 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -60,8 +60,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.23"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.24"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.9"		if BR2_KERNEL_HEADERS_3_2
++	default "3.2.10"	if BR2_KERNEL_HEADERS_3_2
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.23-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.23-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
