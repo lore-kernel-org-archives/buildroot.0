@@ -1,27 +1,24 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Mar 2012 01:05:44 +0100
-Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
-In-Reply-To: <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
-References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
- <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
-Message-ID: <201203140105.44719.arnout@mind.be>
+Date: Wed, 14 Mar 2012 00:44:55 +0100
+Subject: [Buildroot] Buildroot] Status of valgrind on powerpc
+In-Reply-To: <1331489806.73314.YahooMailNeo@web122303.mail.ne1.yahoo.com>
+References: <1331489806.73314.YahooMailNeo@web122303.mail.ne1.yahoo.com>
+Message-ID: <201203140044.56336.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 13 March 2012 13:52:10 Eric Jarrige wrote:
-> +define HOST_ELFTOSB_CLEAN_CMDS
-> +       rm -rf $(@D)/bld/linux
-> +       rm -f $(HOST_DIR)/usr/bin/elftosb
-> +       rm -f $(HOST_DIR)/usr/bin/keygen
-> +       rm -f $(HOST_DIR)/usr/bin/sbtool
-> +endef
+On Sunday 11 March 2012 19:16:46 Kristen Eisenberg wrote:
+> It would be good to identify whether Valgrind can be built with
+> uClibc with additional configuration options, or if glibc/eglibc is
+> really needed. In the former case, additional documentation in the
+> Config.in help would be good. In the latter case, some additional
+> "depends on" to hide valgrind when uClibc is used would be nice.
 
- These look like UNINSTALL commands, not CLEAN commands.
-
- Not that it's terribly important.
+ I never noticed there was something wrong with valgrind on uClibc.  I've 
+been using valgrind on an x86 uClibc buildroot system without problems.
 
  Regards,
  Arnout
