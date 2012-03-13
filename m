@@ -1,113 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 13 Mar 2012 23:30:00 +0100
-Subject: [Buildroot] [PATCHv2] ext-toolchain: Automatically set -m64 if the
-	architecture is x86_64
-In-Reply-To: <20120305111246.68ec6324@skate>
-Message-ID: <1331677800-3777-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 13 Mar 2012 23:35:46 +0100
+Subject: [Buildroot] Added microblaze patch
+In-Reply-To: <4F5E3A6A.7010103@relinux.de>
+References: <CA+appbNdaSajXPdKk4OTyj0WOmeu=9PKr-Sa=cwAZNr76ujLnA@mail.gmail.com>
+ <CAM+bi4spRA4CokbDkUPt-whT=35x8CqTKNxfT4EwV5Zk6Y3GCQ@mail.gmail.com>
+ <4F5E3A6A.7010103@relinux.de>
+Message-ID: <201203132335.46833.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without the -m64, choosing the x86_64 architecture with a Sourcery external
-toolchain will result in a 32-bit rootfs.
+On Monday 12 March 2012 19:03:22 Stephan Hoffmann wrote:
+> I see, seems you are right. Now the download seems to work better. But
+> it loads a XML file. The URL wget tries to load is:
+> 
+>  
+> http://git.xilinx.com/?p=xldk/microblaze_v2.0_le.git;a=blob;hb=HEAD;f=/microblazeel-unknown-linux-gnu.tgz
+> 
+> This extra "/" in front of the filename seems to be the problem. In
+> fact, I don't know where it comes from;-(
 
-Also simplified the help text to reflect this change.
+ Alvaro had patches that refactored the DOWNLOAD macro so the / was 
+removed.  Did you apply those patches?
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-v2: Feedback from Thomas
-* Less aggressive modification of the help text.
-* Make -m64 flag specific for x86_64.
+ Regards,
+ Arnout
 
-Build-tested only.
- toolchain/toolchain-external/Config.in             |   35 +++++++++++---------
- toolchain/toolchain-external/ext-tool.mk           |    4 ++
- .../toolchain-external/ext-toolchain-wrapper.c     |    3 ++
- 3 files changed, 26 insertions(+), 16 deletions(-)
-
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 7f57952..8c20661 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -371,14 +371,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- 	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
- 	  3.0.1. It has support for the following variants:
- 	    - Intel Pentium 4, glibc, 32 bits
--              Default, nothing special to do.
--            - Intel Atom, glibc, 32 bits
--              Select an Atom core
--            - Intel Xeon, glibc, 64 bits
--              Set BR2_TARGET_OPTIMIZATION to -m64
--            - Intel Core 2, glibc, 64 bits
--              Select a Core 2 core
--              Set BR2_TARGET_OPTIMIZATION to -m64
-+	      Default for x86, nothing special to do.
-+	    - Intel Atom, glibc, 32 bits
-+	      Select an Atom core
-+	    - Intel Xeon, glibc, 64 bits
-+	      Default for x86_64, nothing special to do.
-+	    - Intel Core 2, glibc, 64 bits
-+	      Select a Core 2 core
-+	  Other architecture variants (beyond Pentium-4/Xeon) are
-+	  supported as well, but glibc is not optimised for it.
-+            
- 
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	bool "Sourcery CodeBench x86/x86_64 2010.09"
-@@ -391,14 +393,15 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
- 	  binutils 2.20, glibc 2.11, gdb 7.2.50 and kernel headers
- 	  2.6.35.2. It has support for the following variants:
- 	    - Intel Pentium 4, glibc, 32 bits
--              Default, nothing special to do.
--            - Intel Atom, glibc, 32 bits
--              Select an Atom core
--            - Intel Xeon, glibc, 64 bits
--              Set BR2_TARGET_OPTIMIZATION to -m64
--            - Intel Core 2, glibc, 64 bits
--              Select a Core 2 core
--              Set BR2_TARGET_OPTIMIZATION to -m64
-+	      Default for x86, nothing special to do.
-+	    - Intel Atom, glibc, 32 bits
-+	      Select an Atom core
-+	    - Intel Xeon, glibc, 64 bits
-+	      Default for x86_64, nothing special to do.
-+	    - Intel Core 2, glibc, 64 bits
-+	      Select a Core 2 core
-+	  Other architecture variants (beyond Pentium-4/Xeon) are
-+	  supported as well, but glibc is not optimised for it.
- 
- config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
- 	bool "Blackfin.uclinux.org 2011R1-RC4"
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 01ab91f..dbd39b0 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -133,6 +133,10 @@ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
- 
- # march/mtune/floating point mode needs to be passed to the external toolchain
- # to select the right multilib variant
-+ifeq ($(BR2_x86_64),y)
-+TOOLCHAIN_EXTERNAL_CFLAGS += -m64
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
-+endif
- ifneq ($(CC_TARGET_TUNE_),)
- TOOLCHAIN_EXTERNAL_CFLAGS += -mtune=$(CC_TARGET_TUNE_)
- TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_TUNE='"$(CC_TARGET_TUNE_)"'
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 719f13b..82595ea 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -40,6 +40,9 @@ static char *predef_args[] = {
- #ifdef BR_VFPFLOAT
- 	"-mfpu=vfp",
- #endif /* BR_VFPFLOAT */
-+#ifdef BR_64
-+	"-m64",
-+#endif
- #ifdef BR_ADDITIONAL_CFLAGS
- 	BR_ADDITIONAL_CFLAGS
- #endif
 -- 
-tg: (e687bb7..) t/sourcery-x86_64 (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
