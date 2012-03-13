@@ -1,27 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 13 Mar 2012 13:59:56 +0100
-Subject: [Buildroot] [PATCH] New package: parted
-In-Reply-To: <1331547844-23763-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 12 Mar 2012 11:24:04
- +0100")
-References: <1331547844-23763-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87k42olkqb.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 13 Mar 2012 13:10:29 +0100
+Subject: [Buildroot] [git commit] Add target to print buildroot version
+Message-ID: <20120313130006.0825090D7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2b91ab7a20cf17db16cf3c8a93ef4e50dfb585b7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+It's convenient to have a target to print the buildroot version, for use
+in external scripts calling buildroot.
 
-Thanks, but it needs to depend on largefile + wchar, as lvm2 /
-util-linux needs those.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ Makefile |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-I've fixed that up and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Makefile b/Makefile
+index d508888..30099d9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setloca
+ noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check
++	source-check print-version
+ 
+ # Strip quotes and then whitespaces
+ qstrip=$(strip $(subst ",,$(1)))
+@@ -721,6 +721,9 @@ release:
+ 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
+ 	rm -rf $(OUT) $(OUT).tar
+ 
++print-version:
++	@echo $(BR2_VERSION_FULL)
++
+ ################################################################################
+ # GENDOC -- generates the make targets needed to build a specific type of
+ #           asciidoc documentation.
