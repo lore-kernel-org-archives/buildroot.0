@@ -1,84 +1,43 @@
-From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Tue, 13 Mar 2012 13:52:10 +0100
-Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
-In-Reply-To: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
-References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
-Message-ID: <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 13 Mar 2012 13:12:02 +0100
+Subject: [Buildroot] [git commit] libethumb: Fix automagic dependencies on
+	libedbus and libexif
+Message-ID: <20120313130006.170B290D7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Elftosb is a Freescale toolset to build binary image files (like U-Boot.sb)
-to be used with CPUs imx23, imx28, stp37xx
+commit: http://git.buildroot.net/buildroot/commit/?id=ce6727f63046c49d5e778af72e7096ff2e3ad82c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
+libethumb will determine during configuration phase whether to build the
+optional libexif and libedbus modules. It will enable this modules if
+libedbus or libexif are present on the target system. Therefore, we need
+to add these packages as optional dependencies to libethumb.
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/elftosb/elftosb.mk                         |   28 ++++++++++++++++++++
- .../elftosb/elftosb10.12.01-fixes_includes.patch   |   19 +++++++++++++
- 2 files changed, 47 insertions(+), 0 deletions(-)
- create mode 100644 package/elftosb/elftosb.mk
- create mode 100644 package/elftosb/elftosb10.12.01-fixes_includes.patch
+ package/efl/libethumb/libethumb.mk |    8 ++++++++
+ 1 files changed, 8 insertions(+), 0 deletions(-)
 
-diff --git a/package/elftosb/elftosb.mk b/package/elftosb/elftosb.mk
-new file mode 100644
-index 0000000..75b95a5
---- /dev/null
-+++ b/package/elftosb/elftosb.mk
-@@ -0,0 +1,28 @@
-+#############################################################
-+#
-+# elftosb
-+#
-+#############################################################
-+ELFTOSB_VERSION = 10.12.01
-+ELFTOSB_SOURCE = elftosb-$(ELFTOSB_VERSION).tar.gz
-+ELFTOSB_SITE = http://repository.timesys.com/buildsources/e/elftosb/elftosb-$(ELFTOSB_VERSION)
+diff --git a/package/efl/libethumb/libethumb.mk b/package/efl/libethumb/libethumb.mk
+index 16b2ba9..617de0d 100644
+--- a/package/efl/libethumb/libethumb.mk
++++ b/package/efl/libethumb/libethumb.mk
+@@ -13,4 +13,12 @@ LIBETHUMB_DEPENDENCIES = libeina libevas libecore libedje host-libedje
+ 
+ LIBETHUMB_CONF_OPT = --with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc
+ 
++ifeq ($(BR2_PACKAGE_LIBEXIF),y)
++LIBETHUMB_DEPENDENCIES += libexif
++endif
 +
-+define HOST_ELFTOSB_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) all
-+endef
++ifeq ($(BR2_PACKAGE_LIBEDBUS),y)
++LIBETHUMB_DEPENDENCIES += libedbus
++endif
 +
-+define HOST_ELFTOSB_INSTALL_CMDS
-+	$(INSTALL) -D $(@D)/bld/linux/elftosb $(HOST_DIR)/usr/bin/elftosb
-+	$(INSTALL) -D $(@D)/bld/linux/keygen $(HOST_DIR)/usr/bin/keygen
-+	$(INSTALL) -D $(@D)/bld/linux/sbtool $(HOST_DIR)/usr/bin/sbtool
-+endef
-+
-+define HOST_ELFTOSB_CLEAN_CMDS
-+	rm -rf $(@D)/bld/linux
-+	rm -f $(HOST_DIR)/usr/bin/elftosb
-+	rm -f $(HOST_DIR)/usr/bin/keygen
-+	rm -f $(HOST_DIR)/usr/bin/sbtool
-+endef
-+
-+$(eval $(call GENTARGETS,host))
-+
-diff --git a/package/elftosb/elftosb10.12.01-fixes_includes.patch b/package/elftosb/elftosb10.12.01-fixes_includes.patch
-new file mode 100644
-index 0000000..eaf8eba
---- /dev/null
-+++ b/package/elftosb/elftosb10.12.01-fixes_includes.patch
-@@ -0,0 +1,19 @@
-+This patch uses system include files instead of a hard coded system path to fixe
-+potential compilation failure on systems that do not populate system header
-+files in /usr/include/..
-+
-+Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
-+---
-+Index: host-elftosb-10.12.01/common/stdafx.h
-+===================================================================
-+--- host-elftosb-10.12.01.orig/common/stdafx.h	2012-01-30 12:43:35.000000000 +0100
-++++ host-elftosb-10.12.01/common/stdafx.h	2012-01-30 12:43:54.000000000 +0100
-+@@ -27,7 +27,7 @@
-+ // For Linux systems only, types.h only defines the signed
-+ // integer types.  This is not professional code.
-+ // Update: They are defined in the header files in the more recent version of redhat enterprise gcc.
-+-#include "/usr/include/sys/types.h"
-++#include <sys/types.h>
-+ #include <stdint.h>
-+ //typedef unsigned long uint32_t;
-+ //typedef unsigned short uint16_t;
--- 
-1.7.2.5
+ $(eval $(call AUTOTARGETS))
