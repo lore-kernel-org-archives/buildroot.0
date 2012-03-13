@@ -1,47 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 13 Mar 2012 13:10:29 +0100
-Subject: [Buildroot] [git commit] Add target to print buildroot version
-Message-ID: <20120313130006.0825090D7E@busybox.osuosl.org>
+Date: Tue, 13 Mar 2012 13:59:05 +0100
+Subject: [Buildroot] [git commit] New package: parted
+Message-ID: <20120313130006.2796390D7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b91ab7a20cf17db16cf3c8a93ef4e50dfb585b7
+commit: http://git.buildroot.net/buildroot/commit/?id=aa9f6a9b133104b54c1abc0db203c30b6c0ea364
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's convenient to have a target to print the buildroot version, for use
-in external scripts calling buildroot.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: needs largefile + wchar]
+Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/Config.in        |    1 +
+ package/parted/Config.in |   14 ++++++++++++++
+ package/parted/parted.mk |   13 +++++++++++++
+ 3 files changed, 28 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index d508888..30099d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setloca
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	source-check
-+	source-check print-version
- 
- # Strip quotes and then whitespaces
- qstrip=$(strip $(subst ",,$(1)))
-@@ -721,6 +721,9 @@ release:
- 	bzip2 -9 -c < $(OUT).tar > $(OUT).tar.bz2
- 	rm -rf $(OUT) $(OUT).tar
- 
-+print-version:
-+	@echo $(BR2_VERSION_FULL)
+diff --git a/package/Config.in b/package/Config.in
+index 4838edc..36a221c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -202,6 +202,7 @@ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
++source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
+ source "package/rng-tools/Config.in"
+diff --git a/package/parted/Config.in b/package/parted/Config.in
+new file mode 100644
+index 0000000..610c040
+--- /dev/null
++++ b/package/parted/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_PARTED
++	bool "parted"
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_LVM2
++	select BR2_PACKAGE_READLINE
++	select BR2_PACKAGE_UTIL_LINUX
++	help
++	  parted, the GNU partition resizing program
 +
- ################################################################################
- # GENDOC -- generates the make targets needed to build a specific type of
- #           asciidoc documentation.
++	  http://www.gnu.org/software/parted/
++
++comment "parted requires a toolchain with LARGEFILE+WCHAR support"
++        depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/parted/parted.mk b/package/parted/parted.mk
+new file mode 100644
+index 0000000..c4107e7
+--- /dev/null
++++ b/package/parted/parted.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# parted
++#
++#############################################################
++
++PARTED_VERSION = 3.1
++PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
++PARTED_SITE = $(BR2_GNU_MIRROR)/parted
++PARTED_DEPENDENCIES = readline util-linux lvm2
++PARTED_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS))
