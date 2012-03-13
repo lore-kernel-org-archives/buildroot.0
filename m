@@ -1,53 +1,84 @@
 From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Tue, 13 Mar 2012 13:52:11 +0100
-Subject: [Buildroot] [PATCH 2/2] u-boot: add support for u-boot.sb file
-	format
+Date: Tue, 13 Mar 2012 13:52:10 +0100
+Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
 In-Reply-To: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
 References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
-Message-ID: <1331643131-31435-3-git-send-email-eric.jarrige@armadeus.org>
+Message-ID: <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add u-boot.sb binary format in BR menuconfig - Safe Boot (.sb) file format
-have to be used with Freescale CPUs like imx23, imx28, stp37xx
+Elftosb is a Freescale toolset to build binary image files (like U-Boot.sb)
+to be used with CPUs imx23, imx28, stp37xx
 
 Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
 ---
- boot/uboot/Config.in |    3 +++
- boot/uboot/uboot.mk  |    4 ++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
+ package/elftosb/elftosb.mk                         |   28 ++++++++++++++++++++
+ .../elftosb/elftosb10.12.01-fixes_includes.patch   |   19 +++++++++++++
+ 2 files changed, 47 insertions(+), 0 deletions(-)
+ create mode 100644 package/elftosb/elftosb.mk
+ create mode 100644 package/elftosb/elftosb10.12.01-fixes_includes.patch
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index c8db9fb..5fd5258 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -90,6 +90,9 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
- 	depends on BR2_bfin
- 	bool "u-boot.ldr"
- 
-+config BR2_TARGET_UBOOT_FORMAT_SB
-+	bool "u-boot.sb"
+diff --git a/package/elftosb/elftosb.mk b/package/elftosb/elftosb.mk
+new file mode 100644
+index 0000000..75b95a5
+--- /dev/null
++++ b/package/elftosb/elftosb.mk
+@@ -0,0 +1,28 @@
++#############################################################
++#
++# elftosb
++#
++#############################################################
++ELFTOSB_VERSION = 10.12.01
++ELFTOSB_SOURCE = elftosb-$(ELFTOSB_VERSION).tar.gz
++ELFTOSB_SITE = http://repository.timesys.com/buildsources/e/elftosb/elftosb-$(ELFTOSB_VERSION)
 +
- endchoice
- 
- menuconfig BR2_TARGET_UBOOT_NETWORK
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index db9de8d..1394400 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -29,6 +29,10 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_LDR),y)
- UBOOT_BIN          = u-boot.ldr
- else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
- UBOOT_BIN          = u-boot-nand.bin
-+else ifeq ($(BR2_TARGET_UBOOT_FORMAT_SB),y)
-+UBOOT_DEPENDENCIES += host-elftosb
-+UBOOT_BIN          = u-boot.sb
-+UBOOT_MAKE_TARGET  = $(UBOOT_BIN)
- else
- UBOOT_BIN          = u-boot.bin
- endif
++define HOST_ELFTOSB_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define HOST_ELFTOSB_INSTALL_CMDS
++	$(INSTALL) -D $(@D)/bld/linux/elftosb $(HOST_DIR)/usr/bin/elftosb
++	$(INSTALL) -D $(@D)/bld/linux/keygen $(HOST_DIR)/usr/bin/keygen
++	$(INSTALL) -D $(@D)/bld/linux/sbtool $(HOST_DIR)/usr/bin/sbtool
++endef
++
++define HOST_ELFTOSB_CLEAN_CMDS
++	rm -rf $(@D)/bld/linux
++	rm -f $(HOST_DIR)/usr/bin/elftosb
++	rm -f $(HOST_DIR)/usr/bin/keygen
++	rm -f $(HOST_DIR)/usr/bin/sbtool
++endef
++
++$(eval $(call GENTARGETS,host))
++
+diff --git a/package/elftosb/elftosb10.12.01-fixes_includes.patch b/package/elftosb/elftosb10.12.01-fixes_includes.patch
+new file mode 100644
+index 0000000..eaf8eba
+--- /dev/null
++++ b/package/elftosb/elftosb10.12.01-fixes_includes.patch
+@@ -0,0 +1,19 @@
++This patch uses system include files instead of a hard coded system path to fixe
++potential compilation failure on systems that do not populate system header
++files in /usr/include/..
++
++Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
++---
++Index: host-elftosb-10.12.01/common/stdafx.h
++===================================================================
++--- host-elftosb-10.12.01.orig/common/stdafx.h	2012-01-30 12:43:35.000000000 +0100
+++++ host-elftosb-10.12.01/common/stdafx.h	2012-01-30 12:43:54.000000000 +0100
++@@ -27,7 +27,7 @@
++ // For Linux systems only, types.h only defines the signed
++ // integer types.  This is not professional code.
++ // Update: They are defined in the header files in the more recent version of redhat enterprise gcc.
++-#include "/usr/include/sys/types.h"
+++#include <sys/types.h>
++ #include <stdint.h>
++ //typedef unsigned long uint32_t;
++ //typedef unsigned short uint16_t;
 -- 
 1.7.2.5
