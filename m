@@ -1,28 +1,39 @@
-From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Tue, 13 Mar 2012 08:55:44 +0100
-Subject: [Buildroot] [PATCH] Add (Freescale) elftosb host package
-In-Reply-To: <20120313075305.47f9f00c@skate>
-References: <1331560507-12444-1-git-send-email-eric.jarrige@armadeus.org>
- <20120312183241.56f78a30@skate>
- <73E430A1-7C75-4E82-9A74-5771BC39AB48@armadeus.org>
- <20120313075305.47f9f00c@skate>
-Message-ID: <341C850B-DAD0-4A9E-9661-54BCAC2F9066@armadeus.org>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 13 Mar 2012 11:08:16 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
+ patches in proper order
+In-Reply-To: <20120312085752.GB444@game.jcrosoft.org>
+References: <CAHXCMMLOGDZ5g30OM+5dryn-5kAgtLeeB4R8UAYBfHW4VUC=MQ@mail.gmail.com>
+ <1331233872-31746-1-git-send-email-ludovic.desroches@atmel.com>
+ <CAHXCMMLWPp81PcHR17pEwEaPoWHLa5PnLZcTu=Lt7uCASXMEiw@mail.gmail.com>
+ <20120312085752.GB444@game.jcrosoft.org>
+Message-ID: <CAAXf6LWp0AXBUCFV_PJoQTr4R=feGQWmKX2TLCmxJ-Zu=S363w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Mon, Mar 12, 2012 at 9:57 AM, Jean-Christophe PLAGNIOL-VILLARD
+<plagnioj@jcrosoft.com> wrote:
+> On 18:29 Thu 08 Mar ? ? , Samuel Martin wrote:
+>> Hi Ludovic,
+>>
+>> > + ? ?# If there is a series file, use it instead of using ls sort order
+>> > + ? ?# to apply patches. Skip line starting with a dash.
+>> > + ? ?if [ -e "${path}/series" ] ; then
+>> > + ? ? ? ?for i in `cat ${path}/series | grep -Ev "^#" 2> /dev/null` ; do
+>> Or simply:
+>> for i in `grep -Ev "^#" ${path}/series 2> /dev/null` ; do
+> why not simply use quilt?
+>
+> it will simply also patch series upgrade
+>
+> we just have to add quilt to the host tools
 
-On 13 mars 2012, at 07:53, Thomas Petazzoni wrote:
-
-> Ok, good. Would it be possible to post the patch adding the elftosb
-> tool together with a patch adding this u-boot.sb support? Of course,
-> this should be two separate patches, but sent together.
-> 
-
-Ok I add the u-boot.sb patch to my next submit.
+Can you use quilt without using git?
+Note that not every user puts buildroot in an actual repository. And
+even those who do, may use another version control system than git.
 
 Best regards,
-Eric
+Thomas
