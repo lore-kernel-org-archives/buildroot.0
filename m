@@ -1,42 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 13 Mar 2012 23:48:20 +0100
-Subject: [Buildroot] [PATCH] libethumb: Fix automagic dependencies on
-	libedbus and libexif
-In-Reply-To: <87obs0lmx2.fsf@macbook.be.48ers.dk>
-References: <4F54C2BC.8090703@imgtec.com>
- <1331471700-17563-1-git-send-email-arnout@mind.be>
- <87obs0lmx2.fsf@macbook.be.48ers.dk>
-Message-ID: <201203132348.21457.arnout@mind.be>
+Date: Wed, 14 Mar 2012 00:11:28 +0100
+Subject: [Buildroot] [PATCH 1/5] Microblaze: added architecture support
+	for both big endian and low endian
+In-Reply-To: <4F5CD748.8050100@relinux.de>
+References: <4F5CD748.8050100@relinux.de>
+Message-ID: <201203140011.29137.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 13 March 2012 13:12:41 Peter Korsgaard wrote:
-> >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+On Sunday 11 March 2012 17:48:08 Stephan Hoffmann wrote:
+> From: Alvaro G. M <alvaro.gamez@hazent.com>
 > 
->  Arnout> From: Markos Chandras <markos.chandras@imgtec.com>
+> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+> ---
+>  target/Config.in.arch |   15 +++++++++++++--
+>  1 files changed, 13 insertions(+), 2 deletions(-)
 > 
->  Arnout> libethumb will determine during configuration phase whether to
->  Arnout> build the optional libexif and libedbus modules. It will enable
->  Arnout> this modules if libedbus or libexif are present on the target
->  Arnout> system. Therefore, we need to add these packages as optional
->  Arnout> dependencies to libethumb.
-> 
->  Arnout> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->  Arnout> ---
->  Arnout> Arnout: Resending as in-line patch for easy review.
->  Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> Committed, thanks - But your signed-off-by should go before the '---'
+> diff --git a/target/Config.in.arch b/target/Config.in.arch
+> index 25c6e50..83f128f 100644
+> --- a/target/Config.in.arch
+> +++ b/target/Config.in.arch
+> @@ -21,6 +21,10 @@ config BR2_i386
+>  config BR2_m68k
+>  	bool "m68k"
+>  	depends on BROKEN # ice in uclibc / inet_ntoa_r
+> +config BR2_microblazeel
+> +	bool "microblazeel"
+> +config BR2_microblazebe
+> +	bool "microblazebe"
 
- The sign-off was an accident (git send-email -s habit).  Since it's 
-purely a resend without any modification, I didn't feel it warranted 
-my signoff line.  DCO isn't entirely clear on this, if you ask me.
+ I would prefer the prompts to be a bit more descriptive, e.g.
+
+config BR2_microblazeel
+	bool "Microblaze (little-endian)"
+
+ I realize that the other architectures all have cryptic names and no 
+help text, but that doesn't mean we should do the same for new 
+architectures.
+
+
+ [snip]
+
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
