@@ -1,61 +1,52 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 13 Mar 2012 18:17:27 +0100
-Subject: [Buildroot] anyone else ?  : curl  Segmentation fault
-Message-ID: <4BD5A99434B24CCFAD6CFE527BE9D595@JohanW7>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue, 13 Mar 2012 18:34:36 +0100
+Subject: [Buildroot] Fwd: Re: [PATCH 4/5] Microblaze: build kernel with
+ device tree
+Message-ID: <4F5F852C.1060903@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
- 
-Just have build the curl lib and curl binary...
-Platform ARM9 , gcc 4.5.3 uclibc 0.9.33
- 
-#  curl
-Segmentation fault
- 
-Tested the 2012.02 and the one currently in git.
- 
-If this can be any help : part of the output of strace curl 
+Sorry, hit the wrong button;-(
 
-open("/lib/libc.so.0", O_RDONLY)        = 3
-fstat(3, {st_mode=S_IFREG|0755, st_size=341800, ...}) = 0
-close(3)                                = 0
-open("/lib/libc.so.0", O_RDONLY)        = 3
-fstat(3, {st_mode=S_IFREG|0755, st_size=341800, ...}) = 0
-close(3)                                = 0
-open("/lib/libc.so.0", O_RDONLY)        = 3
-fstat(3, {st_mode=S_IFREG|0755, st_size=341800, ...}) = 0
-close(3)                                = 0
-mprotect(0x40199000, 4096, PROT_READ)   = 0
-mprotect(0x40015000, 4096, PROT_READ)   = 0
-mprotect(0x4009a000, 4096, PROT_READ)   = 0
-ioctl(0, SNDCTL_TMR_TIMEBASE or TCGETS, {B115200 opost isig icanon echo ...}) =
-0
-ioctl(1, SNDCTL_TMR_TIMEBASE or TCGETS, {B115200 opost isig icanon echo ...}) =
-0
-pipe([3, 4])                            = 0
-close(3)                                = 0
-close(4)                                = 0
-brk(0)                                  = 0x19000
-brk(0x1a000)                            = 0x1a000
-brk(0x1b000)                            = 0x1b000
-brk(0x1c000)                            = 0x1c000
-brk(0x1d000)                            = 0x1d000
-brk(0x1e000)                            = 0x1e000
-brk(0x1f000)                            = 0x1f000
-brk(0x20000)                            = 0x20000
-brk(0x21000)                            = 0x21000
-brk(0x22000)                            = 0x22000
-brk(0x23000)                            = 0x23000
-brk(0x25000)                            = 0x25000
-brk(0x26000)                            = 0x26000
---- SIGSEGV (Segmentation fault) @ 0 (0) ---
-+++ killed by SIGSEGV +++
-Segmentation fault
-# 
+Am 12.03.2012 23:10, schrieb Thomas Petazzoni:
+> Hello,
+>
+> Le Sun, 11 Mar 2012 17:50:17 +0100,
+> Stephan Hoffmann <sho@relinux.de> a ?crit :
+>
+>> Device Tree and SimpleImage will be handled in buildroot in the
+>> future. Until then, this patch is needed.
+>>
+>> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+> I am not yet familiar with how the device tree blob is generated, but I
+> don't like the fact that this patch is Microblaze specific. Other
+Hello,
+
+There is a discussion here on the list regarding this. I submitted this
+patch
+only to be able to build the whole system until DTS support is ready. It
+is not meant
+to go into the main tree.
+
+Kind regards
+
+Stephan
 
 
-Sagaert Johan
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
+
+
+
+
+-- 
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
