@@ -1,39 +1,39 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Tue, 13 Mar 2012 18:34:36 +0100
-Subject: [Buildroot] Fwd: Re: [PATCH 4/5] Microblaze: build kernel with
- device tree
-Message-ID: <4F5F852C.1060903@relinux.de>
+Date: Tue, 13 Mar 2012 18:34:55 +0100
+Subject: [Buildroot] Fwd: Re: [PATCH 3/5] Microblaze: Added Xilinx toolchain
+ options
+Message-ID: <4F5F853F.8040200@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, hit the wrong button;-(
 
-Am 12.03.2012 23:10, schrieb Thomas Petazzoni:
+
+Am 12.03.2012 23:06, schrieb Thomas Petazzoni:
 > Hello,
 >
-> Le Sun, 11 Mar 2012 17:50:17 +0100,
+> Le Sun, 11 Mar 2012 17:49:24 +0100,
 > Stephan Hoffmann <sho@relinux.de> a ?crit :
 >
->> Device Tree and SimpleImage will be handled in buildroot in the
->> future. Until then, this patch is needed.
+>> Signed-off-by: Stephan Hoffmann <sho@relinux.de
 >>
->> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-> I am not yet familiar with how the device tree blob is generated, but I
-> don't like the fact that this patch is Microblaze specific. Other
-Hello,
+>> ---
+>>  toolchain/toolchain-external/Config.in |    5 +++++
+>>  1 files changed, 5 insertions(+), 0 deletions(-)
+>>
+>>
+> This should be squashed into PATCH 2/5, and it should also be done
+> similarly for the big endian MicroBlaze toolchain (unless its uClibc
+> configuration has none of those features).
+You are right. I will fix this and resend the series of patches tonight.
 
-There is a discussion here on the list regarding this. I submitted this
-patch
-only to be able to build the whole system until DTS support is ready. It
-is not meant
-to go into the main tree.
-
-Kind regards
+I do not know anything about the big endian one because I only use the newer
+little endian microblaze.
 
 Stephan
+> Thomas
 
 
 -- 
