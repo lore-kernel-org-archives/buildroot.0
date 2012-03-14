@@ -1,7 +1,7 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Mar 2012 17:57:17 +0100
-Subject: [Buildroot] [PATCH] Add dtc (device tree compiler) as host tool
-Message-ID: <68fbe51c29931a6eecc3.1331744237@beantl019720>
+Date: Wed, 14 Mar 2012 18:00:52 +0100
+Subject: [Buildroot] [PATCH v2] Add dtc (device tree compiler) as host tool
+Message-ID: <7116d9f7fb52cdabaa12.1331744452@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,6 +16,8 @@ boot scenario where the device tree is not embedded in the kernel.
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
+v2: remove old parameters to GENTARGETS call, sorry.
+
  package/Config.in.host |   1 +
  package/dtc/Config.in  |   4 ++++
  package/dtc/dtc.mk     |  15 +++++++++++++++
@@ -44,7 +46,7 @@ diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
 new file mode 100644
 --- /dev/null
 +++ b/package/dtc/dtc.mk
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
 +# dtc
@@ -58,5 +60,4 @@ new file mode 100644
 +    $(INSTALL) -D -m 0755 $(LINUX_DIR)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc
 +endef
 +
-+$(eval $(call GENTARGETS,package,dtc,host))
-+
++$(eval $(call GENTARGETS,host))
