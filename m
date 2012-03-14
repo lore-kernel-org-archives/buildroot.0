@@ -1,38 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 12:55:27 +0100
-Subject: [Buildroot] [PATCH] fbdump: Make fbdump available only to
- x86/x86_64/arm architectures
-In-Reply-To: <4F60859D.3070404@imgtec.com>
-References: <1331719334-12874-1-git-send-email-markos.chandras@imgtec.com>
- <20120314113754.17f75aaf@skate> <4F607645.1030603@imgtec.com>
- <20120314120237.55ed7844@skate> <4F60859D.3070404@imgtec.com>
-Message-ID: <20120314125527.5090807b@skate>
+Date: Wed, 14 Mar 2012 12:57:07 +0100
+Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
+In-Reply-To: <4F607CD9.2080300@lucaceresoli.net>
+References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
+ <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
+ <201203140105.44719.arnout@mind.be> <20120314104146.0e75b488@skate>
+ <4F607CD9.2080300@lucaceresoli.net>
+Message-ID: <20120314125707.65977d3e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Mar 2012 11:48:45 +0000,
-Markos Chandras <Markos.Chandras@imgtec.com> a ?crit :
+Le Wed, 14 Mar 2012 12:11:21 +0100,
+Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
 
-> Actually I don't think glibc supports ARM at all. From glibc's README file
+> IIRC these targets cannot in general work correctly with the Buildroot
+> structure, and making them work would require a massive change, with a
+> big increase in complexity.
 > 
-> "The GNU C Library supports these configurations for using Linux kernels:
+> Moreover, many packages do not implement the CLEAN and UNINSTALL targets:
 > 
->     i[34567]86-*-linux-gnu
->     x86_64-*-linux-gnu
->     powerpc-*-linux-gnu
->     powerpc64-*-linux-gnu
->     s390-*-linux-gnu
->     s390x-*-linux-gnu
->     ia64-*-linux-gnu
->     sparc*-*-linux-gnu
->     sparc64*-*-linux-gnu"
+> $ git grep -l GENTARGETS package/|grep -E '^package/[a-z]'|wc -l
+> 111
+> $ git grep -l GENTARGETS package/|grep -E '^package/[a-z]'| \
+>      xargs grep -l '_CLEAN_CMDS'|wc -l
+> 51
+> $ git grep -l GENTARGETS package/|grep -E '^package/[a-z]'| \
+>      xargs grep -l '_UNINSTALL_.*_CMDS'|wc -l
+> 73
+> 
+> meaning that probably they are not so interesting to everybody out there.
+> 
+> As for me, I have never been relying on them. I prefer to distclean and
+> rebuild when necessary. It's reliable, and not that painful with a
+> reasonably recent build machine and ccache enabled.
+> 
+> So, my vote for dropping them.
+> (Or should there be a specific thread for this topic?)
 
-It might be in glibc-ports, so that's why you don't see it in the main
-glibc README. But definitely, glibc runs on ARM, PowerPC. Millions of
-devices are using it as we are speaking :-)
+I definitely agree with you here. If they exist, then they should be
+reliable. But I'm not sure it's going to be easy to make them fully
+reliable. And then can be dangerous, because they are not recursive:
+you can remove a given library without removing the other libraries or
+applications that depend on it.
+
+So I would also vote for dropping them. But we should then also drop it
+from AUTOTARGETS/CMAKETARGETS packages.
+
+Regards,
 
 Thomas
 -- 
