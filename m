@@ -1,42 +1,47 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Wed, 14 Mar 2012 16:33:54 +0100
-Subject: [Buildroot] [PATCH 3/6] apply-patches.sh: cleanup
-In-Reply-To: <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
-References: <20120314120310.13e0ea3a@skate>
- <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1331739237-29872-4-git-send-email-ludovic.desroches@atmel.com>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Wed, 14 Mar 2012 13:56:56 +0000
+Subject: [Buildroot] [PATCH] fbdump: Make fbdump available only to
+ x86/x86_64/arm architectures
+In-Reply-To: <20120314125527.5090807b@skate>
+References: <1331719334-12874-1-git-send-email-markos.chandras@imgtec.com>
+ <20120314113754.17f75aaf@skate> <4F607645.1030603@imgtec.com>
+ <20120314120237.55ed7844@skate> <4F60859D.3070404@imgtec.com>
+ <20120314125527.5090807b@skate>
+Message-ID: <4F60A3A8.9000201@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
+On 03/14/2012 11:55 AM, Thomas Petazzoni wrote:
 
-Add quoting and remove redundant command.
+> Le Wed, 14 Mar 2012 11:48:45 +0000,
+> Markos Chandras <Markos.Chandras@imgtec.com> a ?crit :
+> 
+>> Actually I don't think glibc supports ARM at all. From glibc's README file
+>>
+>> "The GNU C Library supports these configurations for using Linux kernels:
+>>
+>>     i[34567]86-*-linux-gnu
+>>     x86_64-*-linux-gnu
+>>     powerpc-*-linux-gnu
+>>     powerpc64-*-linux-gnu
+>>     s390-*-linux-gnu
+>>     s390x-*-linux-gnu
+>>     ia64-*-linux-gnu
+>>     sparc*-*-linux-gnu
+>>     sparc64*-*-linux-gnu"
+> 
+> It might be in glibc-ports, so that's why you don't see it in the main
+> glibc README. But definitely, glibc runs on ARM, PowerPC. Millions of
+> devices are using it as we are speaking :-)
+> 
+> Thomas
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-Tested-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-with an armadeus_apf9328_defconfig build
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- support/scripts/apply-patches.sh |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 7cd8abe..8c38007 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -55,8 +55,8 @@ for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
-     esac fi
-     echo ""
-     echo "Applying ${i} using ${type}: " 
--	echo ${i} | cat >> ${builddir}/.applied_patches_list
--    ${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${builddir}
-+	echo ${i} >> ${builddir}/.applied_patches_list
-+    ${uncomp} "${patchdir}/${i}" ${uncomp_parm} | ${apply} "${builddir}"
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix $i!"
- 	exit 1
+Yeah I was talking for the official glibc git tree. I have no idea if
+this function is supported in glibc-ports or not.
+
 -- 
-1.7.5.4
+markos
