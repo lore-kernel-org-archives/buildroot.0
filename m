@@ -1,43 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 10:41:46 +0100
-Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
-In-Reply-To: <201203140105.44719.arnout@mind.be>
-References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
- <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
- <201203140105.44719.arnout@mind.be>
-Message-ID: <20120314104146.0e75b488@skate>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Wed, 14 Mar 2012 10:02:14 +0000
+Subject: [Buildroot] [PATCH] fbdump: Make fbdump available only to
+	x86/x86_64/arm architectures
+Message-ID: <1331719334-12874-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+fbdump uses the ioperm() syscall which is only implemented in
+x86/x86_64. The rest of the architectures map ioperm() to
+sys_ni_syscall which is the default function for the unimplemented
+syscalls. Moreover, ARM has its own ioperm() implementation
+in uClibc.
 
-Le Wed, 14 Mar 2012 01:05:44 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/fbdump/Config.in |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-> On Tuesday 13 March 2012 13:52:10 Eric Jarrige wrote:
-> > +define HOST_ELFTOSB_CLEAN_CMDS
-> > +       rm -rf $(@D)/bld/linux
-> > +       rm -f $(HOST_DIR)/usr/bin/elftosb
-> > +       rm -f $(HOST_DIR)/usr/bin/keygen
-> > +       rm -f $(HOST_DIR)/usr/bin/sbtool
-> > +endef
-> 
->  These look like UNINSTALL commands, not CLEAN commands.
-
-Ah right. Actually the first line should be part of CLEAN commands, and
-the three last lines should be part of the UNINSTALL commands.
-
-Are they people who actually care about those CLEAN and UNINSTALL
-commands? Is it worth keeping support for them?
-
-Regards,
-
-Thomas
+diff --git a/package/fbdump/Config.in b/package/fbdump/Config.in
+index fb4aee6..2f8040f 100644
+--- a/package/fbdump/Config.in
++++ b/package/fbdump/Config.in
+@@ -1,3 +1,4 @@
++if BR2_i386 || BR2_x86_64 || BR2_arm
+ config BR2_PACKAGE_FBDUMP
+ 	bool "fbdump (Framebuffer Capture Tool)"
+ 	help
+@@ -5,4 +6,4 @@ config BR2_PACKAGE_FBDUMP
+ 	  framebuffer  device and write them out as a PPM file. Currently,
+ 	  most packed-pixel framebuffer formats and the vga16 framebuffer
+ 	  are supported.
+-
++endif
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
