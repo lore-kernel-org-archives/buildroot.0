@@ -1,75 +1,63 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Mar 2012 17:38:16 +0100
-Subject: [Buildroot] [PATCH resend] new package: zeromq
-Message-ID: <7cbcbbf3191cf0d5fab5.1331743096@beantl019720>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 14 Mar 2012 11:42:23 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
+ patches in proper order
+In-Reply-To: <20120314110417.1b120452@skate>
+References: <CAHXCMMLOGDZ5g30OM+5dryn-5kAgtLeeB4R8UAYBfHW4VUC=MQ@mail.gmail.com>
+ <1331233872-31746-1-git-send-email-ludovic.desroches@atmel.com>
+ <CAHXCMMLWPp81PcHR17pEwEaPoWHLa5PnLZcTu=Lt7uCASXMEiw@mail.gmail.com>
+ <20120312085752.GB444@game.jcrosoft.org> <4F5F4624.1000607@free.fr>
+ <20120313212337.GE2725@ldesroches-Latitude-E6320>
+ <20120314085935.GK444@game.jcrosoft.org>
+ <4F606AF2.2010400@atmel.com> <20120314110417.1b120452@skate>
+Message-ID: <20120314104223.GG2725@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hi Thomas,
 
----
-I hope the ? symbol in Config.in is not a problem.
+On Wed, Mar 14, 2012 at 11:04:17AM +0100, Thomas Petazzoni wrote:
+> Le Wed, 14 Mar 2012 10:54:58 +0100,
+> Nicolas Ferre <nicolas.ferre@atmel.com> a ?crit :
+> 
+> > I would say: why?
+> > 
+> > This patch series has been discussed for months. Now we have the
+> > discussion about using another external tool. It seems to me that this
+> > discussion can easily go on top of current patch series which
+> > currently does the job.
+> > Please do not delay again a feature that we need and the enhancements
+> > provided by Ludovic's patches. Yes quilt can be good, but it is a new
+> > enhancement that can go on top of this work: provide a patch that adds
+> > this quilt enabled feature and then, we can talk about:
+> > - the relative benefit of your solution
+> > - the opportunity to add another host tool dependency
+> > - the amount of code touched by your enhancement
+> > - etc.
+> 
+> I definitely agree with Nicolas here. Ludovic's set of patches have
+> been around for months and months, and both Atmel and Armadeus need
+> this feature. It would be great if we could make progress on this.
+> Additional improvements can be done later (even though I'm personally
+> not sure we want to depend on quilt).
+> 
 
- package/Config.in        |   1 +
- package/zeromq/Config.in |  22 ++++++++++++++++++++++
- package/zeromq/zeromq.mk |  12 ++++++++++++
- 3 files changed, 35 insertions(+), 0 deletions(-)
+So what can I do to move forward?
 
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -366,6 +366,7 @@ source "package/librsync/Config.in"
- source "package/libsoup/Config.in"
- source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
-+source "package/zeromq/Config.in"
- endmenu
- 
- menu "Other"
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-new file mode 100644
---- /dev/null
-+++ b/package/zeromq/Config.in
-@@ -0,0 +1,22 @@
-+comment "zeromq requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-+
-+config BR2_PACKAGE_ZEROMQ
-+	bool "zeromq"
-+	depends on BR2_USE_WCHAR # util-linux
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  ?MQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking library but
-+	  acts like a concurrency framework. It gives you sockets that carry
-+	  whole messages across various transports like in-process, inter-
-+	  process, TCP, and multicast. You can connect sockets N-to-N with
-+	  patterns like fanout, pub-sub, task distribution, and request-reply.
-+	  It's fast enough to be the fabric for clustered products. Its
-+	  asynchronous I/O model gives you scalable multicore applications,
-+	  built as asynchronous message-processing tasks. It has a score of
-+	  language APIs and runs on most operating systems.
-+
-+	  ?MQ is from iMatix and is LGPL open source.
-+
-+	  http://www.zeromq.org/
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-new file mode 100644
---- /dev/null
-+++ b/package/zeromq/zeromq.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# zeromq
-+#
-+#############################################################
-+
-+ZEROMQ_VERSION = 2.1.11
-+ZEROMQ_SITE = http://download.zeromq.org/
-+
-+ZEROMQ_DEPENDENCIES = util-linux
-+
-+$(eval $(call AUTOTARGETS))
+I have sent my set of patches after having reworked it from Arnout advices.
+
+I will send a new set with the patch discussed here in order to keep the patch
+order of the series file if there is one.
+
+Can I send it with your ack? Do you want me to test it with some specific
+configurations? As I said, I tested my set of patches with an armadeus
+configuration and with an atmel configuration using an archive with many
+patches for the kernel.
+
+
+Regards
+
+Ludovic
