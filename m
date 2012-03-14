@@ -1,48 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 22:51:34 +0100
-Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
- patches in proper order
-In-Reply-To: <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
-References: <20120314120310.13e0ea3a@skate>
- <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <20120314225134.35250051@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 14 Mar 2012 23:08:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libxml2: fix breakage due to
+	unordered patches
+Message-ID: <1331762901-25245-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ludovic,
+Depending on the locale, the patches may get sorted in different order
+because they are not numbered. Also, even with the C locale (LC_ALL=C),
+the second patch that gets applied is error-xpath.patch, but it depends
+on other xpath patches to be applied first.
 
-Le Wed, 14 Mar 2012 16:33:51 +0100,
-ludovic.desroches at atmel.com a ?crit :
+Rename the patches so they are numbered and they get applied in order.
+Even then, some patches apply with offsets.
 
-> Thank you Thomas.
-> 
-> Please find the previous set of patches plus the one about series file.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+CC: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ....8-000-allocation-error-copying-entities.patch} |    0
+ ....patch => libxml2-2.7.8-010-xpath-memory.patch} |    0
+ ...patch => libxml2-2.7.8-020-xpath-freeing.patch} |    0
+ ...atch => libxml2-2.7.8-021-xpath-freeing2.patch} |    0
+ ... libxml2-2.7.8-030-reallocation-failures.patch} |    0
+ ...tch => libxml2-2.7.8-040-hardening-xpath.patch} |    0
+ ...h.patch => libxml2-2.7.8-050-error-xpath.patch} |    0
+ ... => libxml2-2.7.8-060-hash-randomization.patch} |    0
+ 8 files changed, 0 insertions(+), 0 deletions(-)
 
-I did test your patches and found them working as expected. As you have
-probably seen, I have sent a mail to Peter to ask him to pull these
-patches quickly. I hope this will happen soon.
-
-Would it be possible for you to write a little help text/documentation
-in a comment at the beginning of the apply-patches.sh script? The
-semantic of this script has become quite complicated, and some
-documentation has become necessary I think. It would also be good to
-update the help text of the BR2_LINUX_KERNEL_PATCH option? Maybe we
-also need to change the U-Boot BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR so
-that it is capable of using a tarball of patches and not only a
-directory, and ditto for BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR and
-BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR.
-
-Of course, all of those suggestions can be implemented later, and they
-are not an additional condition to the merge of the existing 6 patches.
-
-Thanks for your work and persistence,
-
-Thomas
+diff --git a/package/libxml2/libxml2-2.7.8-allocation-error-copying-entities.patch b/package/libxml2/libxml2-2.7.8-000-allocation-error-copying-entities.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-allocation-error-copying-entities.patch
+rename to package/libxml2/libxml2-2.7.8-000-allocation-error-copying-entities.patch
+diff --git a/package/libxml2/libxml2-2.7.8-xpath-memory.patch b/package/libxml2/libxml2-2.7.8-010-xpath-memory.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-xpath-memory.patch
+rename to package/libxml2/libxml2-2.7.8-010-xpath-memory.patch
+diff --git a/package/libxml2/libxml2-2.7.8-xpath-freeing.patch b/package/libxml2/libxml2-2.7.8-020-xpath-freeing.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-xpath-freeing.patch
+rename to package/libxml2/libxml2-2.7.8-020-xpath-freeing.patch
+diff --git a/package/libxml2/libxml2-2.7.8-xpath-freeing2.patch b/package/libxml2/libxml2-2.7.8-021-xpath-freeing2.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-xpath-freeing2.patch
+rename to package/libxml2/libxml2-2.7.8-021-xpath-freeing2.patch
+diff --git a/package/libxml2/libxml2-2.7.8-reallocation-failures.patch b/package/libxml2/libxml2-2.7.8-030-reallocation-failures.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-reallocation-failures.patch
+rename to package/libxml2/libxml2-2.7.8-030-reallocation-failures.patch
+diff --git a/package/libxml2/libxml2-2.7.8-hardening-xpath.patch b/package/libxml2/libxml2-2.7.8-040-hardening-xpath.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-hardening-xpath.patch
+rename to package/libxml2/libxml2-2.7.8-040-hardening-xpath.patch
+diff --git a/package/libxml2/libxml2-2.7.8-error-xpath.patch b/package/libxml2/libxml2-2.7.8-050-error-xpath.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-error-xpath.patch
+rename to package/libxml2/libxml2-2.7.8-050-error-xpath.patch
+diff --git a/package/libxml2/libxml2-2.7.8-hash-randomization.patch b/package/libxml2/libxml2-2.7.8-060-hash-randomization.patch
+similarity index 100%
+rename from package/libxml2/libxml2-2.7.8-hash-randomization.patch
+rename to package/libxml2/libxml2-2.7.8-060-hash-randomization.patch
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.2.5
