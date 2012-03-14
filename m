@@ -1,27 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Mar 2012 00:44:55 +0100
-Subject: [Buildroot] Buildroot] Status of valgrind on powerpc
-In-Reply-To: <1331489806.73314.YahooMailNeo@web122303.mail.ne1.yahoo.com>
-References: <1331489806.73314.YahooMailNeo@web122303.mail.ne1.yahoo.com>
-Message-ID: <201203140044.56336.arnout@mind.be>
+Date: Wed, 14 Mar 2012 01:00:25 +0100
+Subject: [Buildroot] [PATCH v2 1/1] libgsl : new package The GNU
+	Scientific Library
+In-Reply-To: <1331553632-509-2-git-send-email-sagaert.johan@skynet.be>
+References: <1331553632-509-1-git-send-email-sagaert.johan@skynet.be>
+ <1331553632-509-2-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <201203140100.26024.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 11 March 2012 19:16:46 Kristen Eisenberg wrote:
-> It would be good to identify whether Valgrind can be built with
-> uClibc with additional configuration options, or if glibc/eglibc is
-> really needed. In the former case, additional documentation in the
-> Config.in help would be good. In the latter case, some additional
-> "depends on" to hide valgrind when uClibc is used would be nice.
+On Monday 12 March 2012 13:00:32 Sagaert Johan wrote:
+> +config BR2_PACKAGE_LIBGSL
+> +       bool "libgsl"
+> +       help
+> +         The gnu scientific library 
+> +         http://www.gnu.org/software/gsl
 
- I never noticed there was something wrong with valgrind on uClibc.  I've 
-been using valgrind on an x86 uClibc buildroot system without problems.
+ It would be nice if the long text you wrote for the introductory message 
+was in the help text as well (with proper indentation and line wraps, of
+course).
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
