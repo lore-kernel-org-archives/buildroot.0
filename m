@@ -1,41 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Mar 2012 23:05:53 +0100
-Subject: [Buildroot] [git commit] gst-plugins-good: bump version
-Message-ID: <20120314220942.27DC190D92@busybox.osuosl.org>
+Date: Wed, 14 Mar 2012 23:06:01 +0100
+Subject: [Buildroot] [git commit] gst-plugins-ugly: bump version
+Message-ID: <20120314220942.34FF090D93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf15b5340f0a46d567ed19137d2c565bd13f655f
+commit: http://git.buildroot.net/buildroot/commit/?id=6f6059b9aa9fda0b7d76e5c23b1371a4f9236270
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../gst-plugins-good/gst-plugins-good.mk           |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ .../gst-plugins-ugly/gst-plugins-ugly.mk           |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/gst-plugins-good/gst-plugins-good.mk b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-index c7afed4..4e6b73e 100644
---- a/package/multimedia/gst-plugins-good/gst-plugins-good.mk
-+++ b/package/multimedia/gst-plugins-good/gst-plugins-good.mk
+diff --git a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
+index e46b515..37ed624 100644
+--- a/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
++++ b/package/multimedia/gst-plugins-ugly/gst-plugins-ugly.mk
 @@ -3,7 +3,7 @@
- # gst-plugins-good
+ # gst-plugins-ugly
  #
  #############################################################
--GST_PLUGINS_GOOD_VERSION = 0.10.30
-+GST_PLUGINS_GOOD_VERSION = 0.10.31
- GST_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST_PLUGINS_GOOD_VERSION).tar.bz2
- GST_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
- 
-@@ -21,8 +21,7 @@ GST_PLUGINS_GOOD_CONF_OPT = \
- 		--disable-aalibtest \
- 		--disable-esd \
- 		--disable-esdtest \
--		--disable-shout2 \
--		--disable-shout2test
-+		--disable-shout2
- 
- GST_PLUGINS_GOOD_DEPENDENCIES = gstreamer gst-plugins-base
+-GST_PLUGINS_UGLY_VERSION = 0.10.18
++GST_PLUGINS_UGLY_VERSION = 0.10.19
+ GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.bz2
+ GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
  
