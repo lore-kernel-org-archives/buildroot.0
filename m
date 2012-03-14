@@ -1,41 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 14 Mar 2012 11:24:10 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump 3.2.1 stable version
-In-Reply-To: <1331735050-31813-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1331735050-31813-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1331735050-31813-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 14 Mar 2012 11:27:28 -0300
+Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
+In-Reply-To: <201203140036.06296.arnout@mind.be>
+References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
+ <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
+ <201203140036.06296.arnout@mind.be>
+Message-ID: <8c3170de9fb1bda123918b309ed38fdf@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+On 2012-03-13 20:36, Arnout Vandecappelle wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b89fcdc..d8300e3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_2
- 
- config BR2_LINUX_KERNEL_3_2
--	bool "3.2.10"
-+	bool "3.2.11"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.2.10" if BR2_LINUX_KERNEL_3_2
-+	default "3.2.11" if BR2_LINUX_KERNEL_3_2
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
--- 
-1.7.3.4
+>> +# Can't build with static & shared at the same time (1.0.25+)
+>> +ifneq ($(BR2_PREFER_STATIC),y)
+>> +ALSA_LIB_CONF_OPT += --enable-static=no
+>> +else
+>> +ALSA_LIB_CONF_OPT += --enable-shared=no
+>> +endif
+>
+>  Shouldn't we put this in AUTOTARGETS?  Or at least the
+> --enable-shared=no if BR2_PREFER_STATIC?
+>
+>  Regards,
+>  Arnout
+
+We could try, though i expect some trouble to arise, for example the 
+new dnsmasq with lua support only links against static liblua.
+There are probably others that have a flaky build system.
+Regards.
