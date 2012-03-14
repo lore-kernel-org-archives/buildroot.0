@@ -1,65 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Mar 2012 00:01:46 +0100
-Subject: [Buildroot] [PATCHv2] ext-toolchain: Automatically set -m64 if
-	the architecture is x86_64
-In-Reply-To: <1331677800-3777-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Tue, 13 Mar 2012 23:30:00 +0100")
-References: <1331677800-3777-1-git-send-email-arnout@mind.be>
-Message-ID: <871uoukcrp.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 Mar 2012 23:58:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 4922] New: Please consider introducing host-make
+ for building software packages within the buildroot
+Message-ID: <bug-4922-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=4922
 
- Arnout> Without the -m64, choosing the x86_64 architecture with a Sourcery external
- Arnout> toolchain will result in a 32-bit rootfs.
+           Summary: Please consider introducing host-make for building
+                    software packages within the buildroot
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: develop at kristov.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- Arnout> Also simplified the help text to reflect this change.
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout> v2: Feedback from Thomas
- Arnout> * Less aggressive modification of the help text.
- Arnout> * Make -m64 flag specific for x86_64.
+Created attachment 4136
+  --> https://bugs.busybox.net/attachment.cgi?id=4136
+changes the core build system to correctly include host-make into the build
+process
 
- Arnout> Build-tested only.
- Arnout>  toolchain/toolchain-external/Config.in             |   35 +++++++++++---------
- Arnout>  toolchain/toolchain-external/ext-tool.mk           |    4 ++
- Arnout>  .../toolchain-external/ext-toolchain-wrapper.c     |    3 ++
- Arnout>  3 files changed, 26 insertions(+), 16 deletions(-)
+Currently, the host's 'make' utility is used to build the software packages in
+the buildroot. However, it would be more flexible if -- similar to
+host-autoconf, host-automake etc. -- at the very beginning a buildroot-specific
+host-make would be built (using the host's 'make') which is later used for
+building all the rest.
 
- Arnout> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
- Arnout> index 7f57952..8c20661 100644
- Arnout> --- a/toolchain/toolchain-external/Config.in
- Arnout> +++ b/toolchain/toolchain-external/Config.in
- Arnout> @@ -371,14 +371,16 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
- Arnout>  	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
- Arnout>  	  3.0.1. It has support for the following variants:
- Arnout>  	    - Intel Pentium 4, glibc, 32 bits
- Arnout> -              Default, nothing special to do.
- Arnout> -            - Intel Atom, glibc, 32 bits
- Arnout> -              Select an Atom core
- Arnout> -            - Intel Xeon, glibc, 64 bits
- Arnout> -              Set BR2_TARGET_OPTIMIZATION to -m64
- Arnout> -            - Intel Core 2, glibc, 64 bits
- Arnout> -              Select a Core 2 core
- Arnout> -              Set BR2_TARGET_OPTIMIZATION to -m64
- Arnout> +	      Default for x86, nothing special to do.
- Arnout> +	    - Intel Atom, glibc, 32 bits
- Arnout> +	      Select an Atom core
- Arnout> +	    - Intel Xeon, glibc, 64 bits
- Arnout> +	      Default for x86_64, nothing special to do.
- Arnout> +	    - Intel Core 2, glibc, 64 bits
- Arnout> +	      Select a Core 2 core
- Arnout> +	  Other architecture variants (beyond Pentium-4/Xeon) are
- Arnout> +	  supported as well, but glibc is not optimised for it.
- Arnout> +            
+Why would this be useful? For one, it would allow to be independent of the
+host's 'make' and, consequently, guarantee specific 'make' behaviour.
+Additionally, one would be able to patch 'make'. In my case, I wanted to patch
+make 3.82 such that $(wildcard ...) results are sorted as in previous versions,
+as this is the only way to guarantee that the same binaries are produced each
+time the software packages are built. (Otherwise, the *.o files may be passed
+in different orders to the linker as, due to -j2, the object files may be
+created differently on each build, causing slightly different binaries due to
+symbols being reordered.)
 
-You have some whitespace damage here, but otherwise it looks good -
-Committed, thanks.
+I have attached a simple patch that allows this. I'm afraid the patch is not
+quite complete as it does not change the 'make' version check in
+support/dependencies/dependencies.sh which can probably be weakened as the
+host's 'make' is basically only used for building host-make and some
+configuration programs. But it should definitely provide a good start. With
+this patch, I'm able to successfully using a patched 'make' in the current
+buildroot (2012.02).
+
+Kind regards,
+
+Christoph Schulz
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
