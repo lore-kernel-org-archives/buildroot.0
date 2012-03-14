@@ -1,90 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 23:49:58 +0100
-Subject: [Buildroot] [PATCH 3/3] config: improve help text and prompt for
-	debugging related options
-In-Reply-To: <cover.1331765391.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1331765391.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <39e3959f0f78242130e6b57da2b93da4f7cb1564.1331765391.git.thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 15 Mar 2012 00:00:57 +0100
+Subject: [Buildroot] [git commit] ext-toolchain: Automatically set -m64 if
+	the architecture is x86_64
+Message-ID: <20120314230153.A7FD990D93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The help text for the choice of different stripping levels is removed,
-since it is not displayed by menuconfig. Instead, only the per-option
-help text is visible, so this text is improved.
+commit: http://git.buildroot.net/buildroot/commit/?id=a22dc0f2302c1879ad3bad4dc41348181c5807ef
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Without the -m64, choosing the x86_64 architecture with a Sourcery external
+toolchain will result in a 32-bit rootfs.
+
+Also simplified the help text to reflect this change.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Config.in |   32 ++++++++++++++++++++------------
- 1 files changed, 20 insertions(+), 12 deletions(-)
+ toolchain/toolchain-external/Config.in             |   34 ++++++++++---------
+ toolchain/toolchain-external/ext-tool.mk           |    4 ++
+ .../toolchain-external/ext-toolchain-wrapper.c     |    3 ++
+ 3 files changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index e07e52f..2edeae2 100644
---- a/Config.in
-+++ b/Config.in
-@@ -206,8 +206,12 @@ config BR2_DEPRECATED
- config BR2_ENABLE_DEBUG
- 	bool "build packages with debugging symbols"
- 	help
--	  Build packages with debugging symbols
--	  enabled
-+	  Build packages with debugging symbols enabled. All libraries
-+	  and binaries in the 'staging' directory will have debugging
-+	  symbols, which allows remote debugging even if libraries and
-+	  binaries are stripped on the target. Whether libraries and
-+	  binaries are stripped on the target is controlled by the
-+	  BR2_STRIP_* options below.
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 7f57952..24cad9c 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -371,14 +371,15 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	  binutils 2.21.53, glibc 2.13, gdb 7.2.50 and kernel headers
+ 	  3.0.1. It has support for the following variants:
+ 	    - Intel Pentium 4, glibc, 32 bits
+-              Default, nothing special to do.
+-            - Intel Atom, glibc, 32 bits
+-              Select an Atom core
+-            - Intel Xeon, glibc, 64 bits
+-              Set BR2_TARGET_OPTIMIZATION to -m64
+-            - Intel Core 2, glibc, 64 bits
+-              Select a Core 2 core
+-              Set BR2_TARGET_OPTIMIZATION to -m64
++	      Default for x86, nothing special to do.
++	    - Intel Atom, glibc, 32 bits
++	      Select an Atom core
++	    - Intel Xeon, glibc, 64 bits
++	      Default for x86_64, nothing special to do.
++	    - Intel Core 2, glibc, 64 bits
++	      Select a Core 2 core
++	  Other architecture variants (beyond Pentium-4/Xeon) are
++	  supported as well, but glibc is not optimised for it.
  
- if BR2_ENABLE_DEBUG
- choice
-@@ -240,32 +244,36 @@ endchoice
- endif
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+ 	bool "Sourcery CodeBench x86/x86_64 2010.09"
+@@ -391,14 +392,15 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201009
+ 	  binutils 2.20, glibc 2.11, gdb 7.2.50 and kernel headers
+ 	  2.6.35.2. It has support for the following variants:
+ 	    - Intel Pentium 4, glibc, 32 bits
+-              Default, nothing special to do.
+-            - Intel Atom, glibc, 32 bits
+-              Select an Atom core
+-            - Intel Xeon, glibc, 64 bits
+-              Set BR2_TARGET_OPTIMIZATION to -m64
+-            - Intel Core 2, glibc, 64 bits
+-              Select a Core 2 core
+-              Set BR2_TARGET_OPTIMIZATION to -m64
++	      Default for x86, nothing special to do.
++	    - Intel Atom, glibc, 32 bits
++	      Select an Atom core
++	    - Intel Xeon, glibc, 64 bits
++	      Default for x86_64, nothing special to do.
++	    - Intel Core 2, glibc, 64 bits
++	      Select a Core 2 core
++	  Other architecture variants (beyond Pentium-4/Xeon) are
++	  supported as well, but glibc is not optimised for it.
  
- choice
--	prompt "strip"
-+	prompt "strip command for binaries on target"
- 	default BR2_STRIP_strip
--	help
--	  Select whether to strip binaries and libraries for the target
--	  or not.
--	  strip   is the normal strip command
--	  sstrip  is a strip that discards more than the normal strip
--	  none    do not strip (only for debugging!)
+ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2011R1
+ 	bool "Blackfin.uclinux.org 2011R1-RC4"
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 01ab91f..dbd39b0 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -133,6 +133,10 @@ CC_TARGET_ABI_:=$(call qstrip,$(BR2_GCC_TARGET_ABI))
  
- config BR2_STRIP_strip
- 	bool "strip"
- 	depends on !BR2_ELF2FLT
- 	help
--	  strip   is the normal strip command
-+	  Binaries and libraries in the target filesystem will be
-+	  stripped using the normal 'strip' command. This allows to
-+	  save space, mainly by removing debugging symbols. Debugging
-+	  symbols on the target are unneeded on the target when remote
-+	  debugging is used.
- 
- config BR2_STRIP_sstrip
- 	bool "sstrip"
- 	select BR2_PACKAGE_SSTRIP_HOST
- 	depends on !BR2_ELF2FLT
- 	help
--	  sstrip  is a strip that discards more than the normal strip
-+	  Binaries and libraries in the target filesystem will be
-+	  stripped using the 'sstrip' command, which strips a little
-+	  bit more than the traditional 'strip' command. This allows
-+	  to save space, mainly by removing debugging
-+	  symbols. Debugging symbols on the target are unneeded on the
-+	  target when remote debugging is used.
- 
- config BR2_STRIP_none
- 	bool "none"
- 	help
--	  none    do not strip (only for debugging!)
-+	  Do not strip binaries and libraries in the target
-+	  filesystem.
- endchoice
- 
- choice
--- 
-1.7.4.1
+ # march/mtune/floating point mode needs to be passed to the external toolchain
+ # to select the right multilib variant
++ifeq ($(BR2_x86_64),y)
++TOOLCHAIN_EXTERNAL_CFLAGS += -m64
++TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_64
++endif
+ ifneq ($(CC_TARGET_TUNE_),)
+ TOOLCHAIN_EXTERNAL_CFLAGS += -mtune=$(CC_TARGET_TUNE_)
+ TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += -DBR_TUNE='"$(CC_TARGET_TUNE_)"'
+diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+index 719f13b..82595ea 100644
+--- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
++++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
+@@ -40,6 +40,9 @@ static char *predef_args[] = {
+ #ifdef BR_VFPFLOAT
+ 	"-mfpu=vfp",
+ #endif /* BR_VFPFLOAT */
++#ifdef BR_64
++	"-m64",
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
