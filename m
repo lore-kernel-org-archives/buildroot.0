@@ -1,32 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 20:33:37 +0100
-Subject: [Buildroot] [PATCH] linux.mk: check for y explicitly
-In-Reply-To: <CAAXf6LVXUJ9yLu7p6bP7J-geqF-WFQ2fjpShmLELY=L5280Vbw@mail.gmail.com>
-References: <189747daec208a7d29d7.1331743009@beantl019720>
- <20120314202128.5bf5ded7@skate>
- <CAAXf6LVXUJ9yLu7p6bP7J-geqF-WFQ2fjpShmLELY=L5280Vbw@mail.gmail.com>
-Message-ID: <20120314203337.6cad3142@skate>
+Date: Wed, 14 Mar 2012 22:41:54 +0100
+Subject: [Buildroot] [PATCH 1/6] apply-patches.sh: check if there are
+ rejects before applying patches
+In-Reply-To: <1331739237-29872-2-git-send-email-ludovic.desroches@atmel.com>
+References: <20120314120310.13e0ea3a@skate>
+ <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
+ <1331739237-29872-2-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20120314224154.78c03293@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Mar 2012 20:30:58 +0100,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Le Wed, 14 Mar 2012 16:33:52 +0100,
+ludovic.desroches at atmel.com a ?crit :
 
-> I was giving this on the command-line, but as Arnout hinted I could
-> give BR2_x= instead.
+> From: Ludovic Desroches <ludovic.desroches@atmel.com>
 > 
-> Although I find this behavior counter-intuitive (if you can give =y
-> you should be able to give =n as well) I can understand that you don't
-> like such changes...
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> Tested-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> with an armadeus_apf9328_defconfig build
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Well, kconfig is not done by us, so I think it's much better to stick
-with what the kernel is doing (i.e, unselected options have an empty
-value).
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
