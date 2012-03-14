@@ -1,89 +1,201 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Mar 2012 17:45:07 +0100
-Subject: [Buildroot] [PATCH 2 of 2 v4-resend] build: add option to exclude
- executables/dirs from being stripped
-In-Reply-To: <patchbomb.1331743505@beantl019720>
-References: <patchbomb.1331743505@beantl019720>
-Message-ID: <8f75d831c72b3a3b3a34.1331743507@beantl019720>
+Date: Wed, 14 Mar 2012 17:50:59 +0100
+Subject: [Buildroot] [PATCH] valgrind: allow selecting which tools to install
+Message-ID: <3d26fc988e01a367dd05.1331743859@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes it may be desirable to keep debug symbols for some binaries and
-libraries on the target. This commit introduces the config option
-BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
-and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
-directories excluded from stripping entirely.
-These exclusions are passed to the find command in the target-finalize step.
+The full valgrind installation takes more than 20 MB, while one typically does
+not use all of its tools. This patch adds extra config options to select which
+tools to install.
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
-v4: whitespace changes
-v3: merge with redundant patch 'stripping: use findfileclauses utility function'
-v2: add the possibility to exclude entire directories
+ package/valgrind/Config.in   |  70 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ package/valgrind/valgrind.mk |  95 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 165 insertions(+), 0 deletions(-)
 
- Config.in |  19 +++++++++++++++++++
- Makefile  |  10 ++++++++--
- 2 files changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -269,6 +269,25 @@ config BR2_STRIP_none
- 	  none    do not strip (only for debugging!)
- endchoice
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -6,3 +6,73 @@ config BR2_PACKAGE_VALGRIND
+ 	  Tool for debugging and profiling Linux programs.
  
-+config BR2_STRIP_EXCLUDE_FILES
-+	string "executables that should not be stripped"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of binaries and libraries
-+	  here that should not be stripped on the target.
+ 	  http://valgrind.kde.org/
 +
-+config BR2_STRIP_EXCLUDE_DIRS
-+	string "directories that should be skipped when stripping"
-+	depends on !BR2_STRIP_none
-+	default ""
-+	help
-+	  You may specify a space-separated list of directories that should
-+	  be skipped when stripping. Binaries and libraries in these
-+	  directories will not be touched.
-+	  The directories should be specified relative to the target directory,
-+	  without leading slash.
++if BR2_PACKAGE_VALGRIND
 +
- choice
- 	prompt "gcc optimization level"
- 	default BR2_OPTIMIZE_S
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -438,6 +438,13 @@ endif
- erase-fakeroots:
- 	rm -f $(BUILD_DIR)/.fakeroot*
- 
-+STRIP_FIND_CMD = find $(TARGET_DIR)
-+ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-+STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
++config BR2_PACKAGE_VALGRIND_MEMCHECK
++	bool "Memcheck: a memory error detector"
++	default y
++	help
++	  This option allows to install the Memcheck tool
++
++config BR2_PACKAGE_VALGRIND_CACHEGRIND
++	bool "Cachegrind: a cache and branch-prediction profiler"
++	default y
++	help
++	  This option allows to install the Cachegrind tool
++
++config BR2_PACKAGE_VALGRIND_CALLGRIND
++	bool "Callgrind: a call-graph generating cache and branch prediction profiler"
++	default y
++	help
++	  This option allows to install the Callgrind tool
++
++config BR2_PACKAGE_VALGRIND_HELGRIND
++	bool "Helgrind: a thread error detector"
++	default y
++	help
++	  This option allows to install the Helgrind tool
++
++config BR2_PACKAGE_VALGRIND_DRD
++	bool "DRD: a thread error detector"
++	default y
++	help
++	  This option allows to install the DRD tool
++
++config BR2_PACKAGE_VALGRIND_MASSIF
++	bool "Massif: a heap profiler"
++	default y
++	help
++	  This option allows to install the Massif tool
++
++config BR2_PACKAGE_VALGRIND_DHAT
++	bool "DHAT: a dynamic heap analysis tool"
++	default y
++	help
++	  This option allows to install the DHAT tool
++
++config BR2_PACKAGE_VALGRIND_PTRCHECK
++	bool "Ptrcheck: an experimental head, stack and global array overrun detector"
++	default y
++	help
++	  This option allows to install the Ptrcheck tool
++
++config BR2_PACKAGE_VALGRIND_BBV
++	bool "BBV: an experimental basic block vector generation tool"
++	default y
++	help
++	  This option allows to install the BBV tool
++
++config BR2_PACKAGE_VALGRIND_LACKEY
++	bool "Lackey: an example tool"
++	default y
++	help
++	  This option allows to install the Lackey tool
++
++config BR2_PACKAGE_VALGRIND_NULGRIND
++	bool "Nulgrind: the minimal Valgrind tool"
++	default y
++	help
++	  This option allows to install the Nulgrind tool
++
 +endif
-+STRIP_FIND_CMD += -type f -perm +111
-+STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-+
- target-finalize:
- ifeq ($(BR2_HAVE_DEVFILES),y)
- 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-@@ -462,8 +469,7 @@ endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
--	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
--		xargs $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
- 		xargs -r $(KSTRIPCMD) || true
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -25,4 +25,99 @@ endef
  
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
+ 
++ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
++define VALGRIND_REMOVE_MEMCHECK
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_CACHEGRIND),)
++define VALGRIND_REMOVE_CACHEGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*cachegrind*
++	for i in cg_annotate cg_diff cg_merge; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
++	done
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CACHEGRIND
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_CALLGRIND),)
++define VALGRIND_REMOVE_CALLGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*callgrind*
++	for i in callgrind_annotate callgrind_control ; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
++	done
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CALLGRIND
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_HELGRIND),)
++define VALGRIND_REMOVE_HELGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*helgrind*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_HELGRIND
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_DRD),)
++define VALGRIND_REMOVE_DRD
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*drd*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DRD
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_MASSIF),)
++define VALGRIND_REMOVE_MASSIF
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*massif*
++	rm -f $(TARGET_DIR)/usr/bin/ms_script
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MASSIF
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_DHAT),)
++define VALGRIND_REMOVE_DHAT
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*dhat*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_PTRCHECK),)
++define VALGRIND_REMOVE_PTRCHECK
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*ptrcheck*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_PTRCHECK
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
++define VALGRIND_REMOVE_BBV
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*bbv*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_BBV
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_LACKEY),)
++define VALGRIND_REMOVE_LACKEY
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*lackey*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_LACKEY
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_NULGRIND),)
++define VALGRIND_REMOVE_NULGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*none*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_NULGRIND
++endif
++
+ $(eval $(call AUTOTARGETS))
