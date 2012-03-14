@@ -1,28 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 14 Mar 2012 23:33:25 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libxml2: fix breakage due to
-	unordered patches
-In-Reply-To: <1331762901-25245-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Wed, 14 Mar 2012 23:08:20 +0100")
-References: <1331762901-25245-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <8762e6ke2y.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 Mar 2012 23:49:55 +0100
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2011.11/debugging-improvements
+Message-ID: <cover.1331765391.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+The following changes since commit e687bb71a028303f326aeebfaf94a3ac1c43b4e4:
 
- Yann> Depending on the locale, the patches may get sorted in different order
- Yann> because they are not numbered. Also, even with the C locale (LC_ALL=C),
- Yann> the second patch that gets applied is error-xpath.patch, but it depends
- Yann> on other xpath patches to be applied first.
+  gcc: bump 4.4.x version (2012-03-13 16:27:25 +0100)
 
- Yann> Rename the patches so they are numbered and they get applied in order.
- Yann> Even then, some patches apply with offsets.
+are available in the git repository at:
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2011.11/debugging-improvements
 
-Sorry, I already fixed that locally and pushed - Thanks.
+Thomas Petazzoni (3):
+      debug: do not force installation of gdbserver
+      debug: provide an option to copy the gdbserver to the target
+      config: improve help text and prompt for debugging related options
 
+ Config.in                                |   33 ++++++++++++++++++-----------
+ toolchain/gdb/Config.in                  |    8 +++++++
+ toolchain/toolchain-external/ext-tool.mk |   14 ++++++++++++
+ 3 files changed, 42 insertions(+), 13 deletions(-)
+
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
