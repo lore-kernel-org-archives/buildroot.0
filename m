@@ -1,21 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Mar 2012 01:19:08 +0100
-Subject: [Buildroot] [PATCH v2 2/2] BeagleBone: new board
-In-Reply-To: <1331561609-26989-1-git-send-email-fhunleth@troodon-software.com>
-References: <1331561609-26989-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <201203140119.08639.arnout@mind.be>
+Date: Wed, 14 Mar 2012 01:05:44 +0100
+Subject: [Buildroot] [PATCH 1/2] Add (Freescale) elftosb host package
+In-Reply-To: <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
+References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
+ <1331643131-31435-2-git-send-email-eric.jarrige@armadeus.org>
+Message-ID: <201203140105.44719.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 12 March 2012 15:13:29 Frank Hunleth wrote:
->  board/beaglebone/linux-3.2.9.config                |  820 ++++++++++++++++++++
+On Tuesday 13 March 2012 13:52:10 Eric Jarrige wrote:
+> +define HOST_ELFTOSB_CLEAN_CMDS
+> +       rm -rf $(@D)/bld/linux
+> +       rm -f $(HOST_DIR)/usr/bin/elftosb
+> +       rm -f $(HOST_DIR)/usr/bin/keygen
+> +       rm -f $(HOST_DIR)/usr/bin/sbtool
+> +endef
 
- That kernel config looks a bit bloated.  Is this based on the am33x 
-defconfig?  There are even some modules in there that can't possibly be
-wired to a beaglebone, like a parallel port...
+ These look like UNINSTALL commands, not CLEAN commands.
+
+ Not that it's terribly important.
 
  Regards,
  Arnout
