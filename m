@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 22:46:59 +0100
-Subject: [Buildroot] Applying Ludovic's patches
-Message-ID: <20120314224659.23a5d71c@skate>
+Date: Wed, 14 Mar 2012 22:51:34 +0100
+Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
+ patches in proper order
+In-Reply-To: <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
+References: <20120314120310.13e0ea3a@skate>
+ <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20120314225134.35250051@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Ludovic,
 
-Could you merge soon the patches that Ludovic Desroches from Atmel has
-prepared? He has been working on this and posting regular versions of
-this patch set since may 2011, so it's been a very long time, and both
-Atmel and Armadeus need the capability of using a tarball of patches to
-deliver patches for the Linux kernel or other components (U-Boot, etc.).
+Le Wed, 14 Mar 2012 16:33:51 +0100,
+ludovic.desroches at atmel.com a ?crit :
 
-The time we have taken to react is really not a good invitation for
-Ludovic or other developers from Atmel to contribute further to
-Buildroot, and this is bit sad. I hope we can get this solved quickly
-and get more contributions.
+> Thank you Thomas.
+> 
+> Please find the previous set of patches plus the one about series file.
 
-Here is the list of e-mails to apply:
+I did test your patches and found them working as expected. As you have
+probably seen, I have sent a mail to Peter to ask him to pull these
+patches quickly. I hope this will happen soon.
 
-Subject: [Buildroot] [PATCH 1/6] apply-patches.sh: check if there are rejects before applying patches
-Date: Wed, 14 Mar 2012 16:33:52 +0100
+Would it be possible for you to write a little help text/documentation
+in a comment at the beginning of the apply-patches.sh script? The
+semantic of this script has become quite complicated, and some
+documentation has become necessary I think. It would also be good to
+update the help text of the BR2_LINUX_KERNEL_PATCH option? Maybe we
+also need to change the U-Boot BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR so
+that it is capable of using a tarball of patches and not only a
+directory, and ditto for BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR and
+BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR.
 
-Subject: [Buildroot] [PATCH 2/6] apply-patches.sh: rename targetdir to builddir
-Date: Wed, 14 Mar 2012 16:33:53 +0100
+Of course, all of those suggestions can be implemented later, and they
+are not an additional condition to the merge of the existing 6 patches.
 
-Subject: [Buildroot] [PATCH 3/6] apply-patches.sh: cleanup
-Date: Wed, 14 Mar 2012 16:33:54 +0100
-
-Subject: [Buildroot] [PATCH 4/6] apply-patches.sh: directories are no more considered as overlays
-Date: Wed, 14 Mar 2012 16:33:55 +0100
-
-Subject: [Buildroot] [PATCH 5/6] apply-patches.sh: change archive management
-Date: Wed, 14 Mar 2012 16:33:56 +0100
-
-Subject: [Buildroot] [PATCH 5/6] apply-patches.sh: change archive management
-Date: Wed, 14 Mar 2012 16:33:56 +0100
-
-Thanks!
+Thanks for your work and persistence,
 
 Thomas
 -- 
