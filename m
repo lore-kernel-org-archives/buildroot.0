@@ -1,61 +1,80 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 14 Mar 2012 20:41:24 +0100
-Subject: [Buildroot] [git commit] libxml2: ensure patches are applied in the
-	correct order
-Message-ID: <20120314220941.EE69F90D92@busybox.osuosl.org>
+Date: Wed, 14 Mar 2012 23:05:45 +0100
+Subject: [Buildroot] [git commit] gst-plugins-base: bump version
+Message-ID: <20120314220942.1928990D92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b772b2f417112e6e12ba6a2eb05ebb8250fdc9a
+commit: http://git.buildroot.net/buildroot/commit/?id=841a6dc0a95dcdef91ca222e9c8d3c9121f0124d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Some of the patches depends on eachother, so rename them to ensure they
-get applied in the correct order.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...xml2-0-allocation-error-copying-entities.patch} |    0
- ...patch => libxml2-1-reallocation-failures.patch} |    0
- ...on.patch => libxml2-2-hash-randomization.patch} |    0
- ...h-memory.patch => libxml2-3-xpath-memory.patch} |    0
- ...freeing.patch => libxml2-4-xpath-freeing.patch} |    0
- ...eeing2.patch => libxml2-5-xpath-freeing2.patch} |    0
- ...xpath.patch => libxml2-6-hardening-xpath.patch} |    0
- ...ror-xpath.patch => libxml2-7-error-xpath.patch} |    0
- 8 files changed, 0 insertions(+), 0 deletions(-)
+ ...base-0.10.35-disable-testchannels-example.patch |   26 --------------------
+ ...-tremor.patch => gst-plugins-base-tremor.patch} |    0
+ .../gst-plugins-base/gst-plugins-base.mk           |    8 +++++-
+ 3 files changed, 7 insertions(+), 27 deletions(-)
 
-diff --git a/package/libxml2/libxml2-2.7.8-allocation-error-copying-entities.patch b/package/libxml2/libxml2-0-allocation-error-copying-entities.patch
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-disable-testchannels-example.patch b/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-disable-testchannels-example.patch
+deleted file mode 100644
+index e991c4e..0000000
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-disable-testchannels-example.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-[PATCH] disable testchannels example
+-
+-The testchannels example doesn't build because it forgets to link with
+-libgstinterfaces. Unfortunately testchannels gets built even though
+---disable-examples is used, so instead disable it in Makefile.in
+-(package doesn't autoreconf cleanly, so don't edit Makefile.am)
+-
+-Problem is fixed upstream in 0.11 branch (940291dd38be66fa).
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- gst-libs/gst/audio/Makefile.in |    1 -
+- 1 file changed, 1 deletion(-)
+-
+-Index: gst-plugins-base-0.10.35/gst-libs/gst/audio/Makefile.in
+-===================================================================
+---- gst-plugins-base-0.10.35.orig/gst-libs/gst/audio/Makefile.in
+-+++ gst-plugins-base-0.10.35/gst-libs/gst/audio/Makefile.in
+-@@ -45,7 +45,6 @@
+- POST_UNINSTALL = :
+- build_triplet = @build@
+- host_triplet = @host@
+--noinst_PROGRAMS = testchannels$(EXEEXT)
+- DIST_COMMON = $(libgstaudio_ at GST_MAJORMINOR@include_HEADERS) \
+- 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+- 	$(top_srcdir)/common/gst-glib-gen.mak TODO
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch b/package/multimedia/gst-plugins-base/gst-plugins-base-tremor.patch
 similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-allocation-error-copying-entities.patch
-rename to package/libxml2/libxml2-0-allocation-error-copying-entities.patch
-diff --git a/package/libxml2/libxml2-2.7.8-reallocation-failures.patch b/package/libxml2/libxml2-1-reallocation-failures.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-reallocation-failures.patch
-rename to package/libxml2/libxml2-1-reallocation-failures.patch
-diff --git a/package/libxml2/libxml2-2.7.8-hash-randomization.patch b/package/libxml2/libxml2-2-hash-randomization.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-hash-randomization.patch
-rename to package/libxml2/libxml2-2-hash-randomization.patch
-diff --git a/package/libxml2/libxml2-2.7.8-xpath-memory.patch b/package/libxml2/libxml2-3-xpath-memory.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-xpath-memory.patch
-rename to package/libxml2/libxml2-3-xpath-memory.patch
-diff --git a/package/libxml2/libxml2-2.7.8-xpath-freeing.patch b/package/libxml2/libxml2-4-xpath-freeing.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-xpath-freeing.patch
-rename to package/libxml2/libxml2-4-xpath-freeing.patch
-diff --git a/package/libxml2/libxml2-2.7.8-xpath-freeing2.patch b/package/libxml2/libxml2-5-xpath-freeing2.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-xpath-freeing2.patch
-rename to package/libxml2/libxml2-5-xpath-freeing2.patch
-diff --git a/package/libxml2/libxml2-2.7.8-hardening-xpath.patch b/package/libxml2/libxml2-6-hardening-xpath.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-hardening-xpath.patch
-rename to package/libxml2/libxml2-6-hardening-xpath.patch
-diff --git a/package/libxml2/libxml2-2.7.8-error-xpath.patch b/package/libxml2/libxml2-7-error-xpath.patch
-similarity index 100%
-rename from package/libxml2/libxml2-2.7.8-error-xpath.patch
-rename to package/libxml2/libxml2-7-error-xpath.patch
+rename from package/multimedia/gst-plugins-base/gst-plugins-base-0.10.35-tremor.patch
+rename to package/multimedia/gst-plugins-base/gst-plugins-base-tremor.patch
+diff --git a/package/multimedia/gst-plugins-base/gst-plugins-base.mk b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+index 3b21c27..848eaf2 100644
+--- a/package/multimedia/gst-plugins-base/gst-plugins-base.mk
++++ b/package/multimedia/gst-plugins-base/gst-plugins-base.mk
+@@ -3,7 +3,7 @@
+ # gst-plugins-base
+ #
+ #############################################################
+-GST_PLUGINS_BASE_VERSION = 0.10.35
++GST_PLUGINS_BASE_VERSION = 0.10.36
+ GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.bz2
+ GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST_PLUGINS_BASE_INSTALL_STAGING = YES
+@@ -174,4 +174,10 @@ else
+ GST_PLUGINS_BASE_CONF_OPT += --disable-vorbis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++GST_PLUGINS_BASE_DEPENDENCIES += zlib
++else
++GST_PLUGINS_BASE_CONF_OPT += --disable-zlib
++endif
++
+ $(eval $(call AUTOTARGETS))
