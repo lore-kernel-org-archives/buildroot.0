@@ -1,63 +1,75 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 14 Mar 2012 17:36:49 +0100
-Subject: [Buildroot] [PATCH] linux.mk: check for y explicitly
-Message-ID: <189747daec208a7d29d7.1331743009@beantl019720>
+Date: Wed, 14 Mar 2012 17:38:16 +0100
+Subject: [Buildroot] [PATCH resend] new package: zeromq
+Message-ID: <7cbcbbf3191cf0d5fab5.1331743096@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LINUX_CONFIGURE_CMDS uses the construct
-$(if $(BR2_x), ...
-which don't work as expected when BR2_x=n.
-
-This patch modifies linux.mk to use the construct
-$(if $(filter y,$(BR2_x)), ...
-
-See http://lists.busybox.net/pipermail/buildroot/2012-March/051523.html
-for more information about a specific problem case.
-
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- linux/linux.mk |  8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+I hope the ? symbol in Config.in is not a problem.
 
-Note: the problematic construct seems to be present in many files in buildroot.
-I'd say we need to fix them all, but I'm not sure if you agree. Feedback
-welcome!
+ package/Config.in        |   1 +
+ package/zeromq/Config.in |  22 ++++++++++++++++++++++
+ package/zeromq/zeromq.mk |  12 ++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -128,14 +128,14 @@ define LINUX_CONFIGURE_CMDS
- 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
--	$(if $(BR2_ARM_EABI),
-+	$(if $(filter y,$(BR2_ARM_EABI)),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
- 	# rebuilt using the linux26-rebuild-with-initramfs target.
--	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
-+	$(if $(filter y,$(BR2_TARGET_ROOTFS_INITRAMFS)),
- 		touch $(BINARIES_DIR)/rootfs.cpio
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.cpio\",$(@D)/.config)
-@@ -143,10 +143,10 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config)
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_NONE,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_GZIP,$(@D)/.config))
--	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
-+	$(if $(filter y,$(BR2_ROOTFS_DEVICE_CREATION_STATIC)),,
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
--	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-+	$(if $(filter y,$(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV)),
- 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
- endef
+diff --git a/package/Config.in b/package/Config.in
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -366,6 +366,7 @@ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
+ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
++source "package/zeromq/Config.in"
+ endmenu
+ 
+ menu "Other"
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+new file mode 100644
+--- /dev/null
++++ b/package/zeromq/Config.in
+@@ -0,0 +1,22 @@
++comment "zeromq requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
++
++config BR2_PACKAGE_ZEROMQ
++	bool "zeromq"
++	depends on BR2_USE_WCHAR # util-linux
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  ?MQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking library but
++	  acts like a concurrency framework. It gives you sockets that carry
++	  whole messages across various transports like in-process, inter-
++	  process, TCP, and multicast. You can connect sockets N-to-N with
++	  patterns like fanout, pub-sub, task distribution, and request-reply.
++	  It's fast enough to be the fabric for clustered products. Its
++	  asynchronous I/O model gives you scalable multicore applications,
++	  built as asynchronous message-processing tasks. It has a score of
++	  language APIs and runs on most operating systems.
++
++	  ?MQ is from iMatix and is LGPL open source.
++
++	  http://www.zeromq.org/
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+new file mode 100644
+--- /dev/null
++++ b/package/zeromq/zeromq.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# zeromq
++#
++#############################################################
++
++ZEROMQ_VERSION = 2.1.11
++ZEROMQ_SITE = http://download.zeromq.org/
++
++ZEROMQ_DEPENDENCIES = util-linux
++
++$(eval $(call AUTOTARGETS))
