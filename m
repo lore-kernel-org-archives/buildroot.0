@@ -1,47 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 Mar 2012 11:04:17 +0100
-Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
- patches in proper order
-In-Reply-To: <4F606AF2.2010400@atmel.com>
-References: <CAHXCMMLOGDZ5g30OM+5dryn-5kAgtLeeB4R8UAYBfHW4VUC=MQ@mail.gmail.com>
- <1331233872-31746-1-git-send-email-ludovic.desroches@atmel.com>
- <CAHXCMMLWPp81PcHR17pEwEaPoWHLa5PnLZcTu=Lt7uCASXMEiw@mail.gmail.com>
- <20120312085752.GB444@game.jcrosoft.org> <4F5F4624.1000607@free.fr>
- <20120313212337.GE2725@ldesroches-Latitude-E6320>
- <20120314085935.GK444@game.jcrosoft.org>
- <4F606AF2.2010400@atmel.com>
-Message-ID: <20120314110417.1b120452@skate>
+Date: Wed, 14 Mar 2012 11:37:54 +0100
+Subject: [Buildroot] [PATCH] fbdump: Make fbdump available only to
+ x86/x86_64/arm architectures
+In-Reply-To: <1331719334-12874-1-git-send-email-markos.chandras@imgtec.com>
+References: <1331719334-12874-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20120314113754.17f75aaf@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 14 Mar 2012 10:54:58 +0100,
-Nicolas Ferre <nicolas.ferre@atmel.com> a ?crit :
+Hello,
 
-> I would say: why?
-> 
-> This patch series has been discussed for months. Now we have the
-> discussion about using another external tool. It seems to me that this
-> discussion can easily go on top of current patch series which
-> currently does the job.
-> Please do not delay again a feature that we need and the enhancements
-> provided by Ludovic's patches. Yes quilt can be good, but it is a new
-> enhancement that can go on top of this work: provide a patch that adds
-> this quilt enabled feature and then, we can talk about:
-> - the relative benefit of your solution
-> - the opportunity to add another host tool dependency
-> - the amount of code touched by your enhancement
-> - etc.
+Le Wed, 14 Mar 2012 10:02:14 +0000,
+Markos Chandras <markos.chandras@imgtec.com> a ?crit :
 
-I definitely agree with Nicolas here. Ludovic's set of patches have
-been around for months and months, and both Atmel and Armadeus need
-this feature. It would be great if we could make progress on this.
-Additional improvements can be done later (even though I'm personally
-not sure we want to depend on quilt).
+> fbdump uses the ioperm() syscall which is only implemented in
+> x86/x86_64. The rest of the architectures map ioperm() to
+> sys_ni_syscall which is the default function for the unimplemented
+> syscalls. Moreover, ARM has its own ioperm() implementation
+> in uClibc.
 
-Best regards,
+Is ioperm() on ARM only available if uClibc is used, and not when glibc
+is used?
+
+> diff --git a/package/fbdump/Config.in b/package/fbdump/Config.in
+> index fb4aee6..2f8040f 100644
+> --- a/package/fbdump/Config.in
+> +++ b/package/fbdump/Config.in
+> @@ -1,3 +1,4 @@
+> +if BR2_i386 || BR2_x86_64 || BR2_arm
+>  config BR2_PACKAGE_FBDUMP
+>  	bool "fbdump (Framebuffer Capture Tool)"
+>  	help
+> @@ -5,4 +6,4 @@ config BR2_PACKAGE_FBDUMP
+>  	  framebuffer  device and write them out as a PPM file. Currently,
+>  	  most packed-pixel framebuffer formats and the vga16 framebuffer
+>  	  are supported.
+> -
+> +endif
+
+I would prefer:
+
+config BR2_PACKAGE_FBDUMP
+	bool "fbdump (Framebuffer Capture Tool)"
+	depends on BR_i386 || BR2_x86_64 || BR2_arm
+
+because that's what we do for all other packages.
 
 Thomas
 -- 
