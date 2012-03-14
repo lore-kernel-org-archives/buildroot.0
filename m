@@ -1,34 +1,56 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 Mar 2012 00:36:05 +0100
-Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
-In-Reply-To: <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
-References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201203140036.06296.arnout@mind.be>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 14 Mar 2012 09:07:47 +0100
+Subject: [Buildroot] [PATCH] wpa_supplicant: install basic configuration file
+Message-ID: <1331712467-5216-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 11 March 2012 22:48:08 Gustavo Zacarias wrote:
-> +# Can't build with static & shared at the same time (1.0.25+)
-> +ifneq ($(BR2_PREFER_STATIC),y)
-> +ALSA_LIB_CONF_OPT += --enable-static=no
-> +else
-> +ALSA_LIB_CONF_OPT += --enable-shared=no
-> +endif
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
- Shouldn't we put this in AUTOTARGETS?  Or at least the
---enable-shared=no if BR2_PREFER_STATIC?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/wpa_supplicant/wpa_supplicant.conf |    6 ++++++
+ package/wpa_supplicant/wpa_supplicant.mk   |    8 ++++++++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
+ create mode 100755 package/wpa_supplicant/wpa_supplicant.conf
 
- Regards,
- Arnout
-
+diff --git a/package/wpa_supplicant/wpa_supplicant.conf b/package/wpa_supplicant/wpa_supplicant.conf
+new file mode 100755
+index 0000000..1994a6c
+--- /dev/null
++++ b/package/wpa_supplicant/wpa_supplicant.conf
+@@ -0,0 +1,6 @@
++ctrl_interface=/var/run/wpa_supplicant
++ap_scan=1
++
++network={
++  key_mgmt=NONE
++}
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 0a672ee..4a1baea 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -118,10 +118,18 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ WPA_SUPPLICANT_POST_INSTALL_TARGET_HOOKS += WPA_SUPPLICANT_INSTALL_DBUS
+ endif
+ 
++define WPA_SUPPLICANT_INSTALL_CONFIG
++	$(INSTALL) -m 644 \
++	  package/wpa_supplicant/wpa_supplicant.conf  $(TARGET_DIR)/etc/wpa_supplicant.conf
++endef
++
++WPA_SUPPLICANT_POST_INSTALL_TARGET_HOOKS += WPA_SUPPLICANT_INSTALL_CONFIG
++
+ define WPA_SUPPLICANT_UNINSTALL_TARGET_CMDS
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(WPA_SUPPLICANT_TARGET_BINS))
+ 	rm -f $(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
+ 	rm -f $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
++	rm -f $(TARGET_DIR)/usr/etc/wpa_supplicant.conf
+ endef
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.7
