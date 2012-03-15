@@ -1,41 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Mar 2012 21:53:27 +0100
-Subject: [Buildroot] [PATCH resend] new package: zeromq
-In-Reply-To: <CAAXf6LVtbfbktV6Ke2DN7MxW=rRTbLNQAeJLDz=_YVEdzTXJBQ@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 15 Mar 2012 20:26:56
- +0100")
-References: <7cbcbbf3191cf0d5fab5.1331743096@beantl019720>
- <87k42mrvkq.fsf@macbook.be.48ers.dk>
- <CAAXf6LVtbfbktV6Ke2DN7MxW=rRTbLNQAeJLDz=_YVEdzTXJBQ@mail.gmail.com>
-Message-ID: <8762e5si0o.fsf@macbook.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 15 Mar 2012 21:54:10 +0100
+Subject: [Buildroot] [PATCH v3 0/2] Add omap-u-boot-utils and build .ift
+	OMAP image
+Message-ID: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
-
 Hi,
 
- >> Util-linux also depends on LARGEFILE, so you need that as well.
- >> Zeromq is written in C++, so you also need INSTALL_LIBSTDCPP.
+this is v3 of a small patch series that I sent back in September
+(http://lists.busybox.net/pipermail/buildroot/2011-September/045813.html).
 
- Thomas> Is there somewhere some documentation that explains these rules? The
- Thomas> C++ thing is new to me for example.
+It was not accepted at that time because it introduced a user-visible host
+package, which was not supported in Buildroot.
+This fired up a brief discussion, and the decision was made to allow these
+packages within a suitable infrastructure.
 
-Well, it's pretty simple - There's basically 2 kind of dependencies:
+This infrastructure is now in place (since about commit 6b04b2dda6bf87dc12),
+so here are again my two patches updated to the new scheme and refreshed in
+general.
 
-1: Toolchain configuration options (largefile, wchar, C++, ..)
-2: Libraries
+Luca
 
-For the first type we use 'depends by' and add a comment so people know
-what to change in their toolchain to be able to use the package. For the
-second we automatically enable the dependencies using 'select'.
+Luca Ceresoli (2):
+  omap-u-boot-utils: add new host package
+  u-boot: build signed image for OMAP processors
 
-There's a few special situations that fall outside this (an example is
-when you have multiple backends like X11 and directfb), but this covers
-90%+ of the situations.
+ boot/uboot/Config.in                           |   16 ++++++++++++++++
+ boot/uboot/uboot.mk                            |   24 ++++++++++++++++++++++++
+ package/Config.in.host                         |    1 +
+ package/omap-u-boot-utils/Config.in.host       |    8 ++++++++
+ package/omap-u-boot-utils/omap-u-boot-utils.mk |   22 ++++++++++++++++++++++
+ 5 files changed, 71 insertions(+), 0 deletions(-)
+ create mode 100644 package/omap-u-boot-utils/Config.in.host
+ create mode 100644 package/omap-u-boot-utils/omap-u-boot-utils.mk
 
 -- 
-Bye, Peter Korsgaard
+1.7.5.4
