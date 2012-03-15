@@ -1,59 +1,63 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 15 Mar 2012 22:04:27 +0100
-Subject: [Buildroot] [PATCH] netsnmp: add option to enable debugging code
-Message-ID: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Mar 2012 22:06:34 +0100
+Subject: [Buildroot] Remove clean and uninstall targets [was: Re: [PATCH
+	1/2] Add (Freescale) elftosb host package]
+In-Reply-To: <4F607CD9.2080300@lucaceresoli.net>
+References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
+ <20120314104146.0e75b488@skate> <4F607CD9.2080300@lucaceresoli.net>
+Message-ID: <201203152206.35139.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/netsnmp/Config.in  |    9 +++++++++
- package/netsnmp/netsnmp.mk |    6 +++++-
- 2 files changed, 14 insertions(+), 1 deletions(-)
+On Wednesday 14 March 2012 12:11:21 Luca Ceresoli wrote:
+> Moreover, many packages do not implement the CLEAN and UNINSTALL targets:
+> 
+> $ git grep -l GENTARGETS package/|grep -E '^package/[a-z]'|wc -l
+> 111
+> $ git grep -l GENTARGETS package/|grep -E '^package/[a-z]'| \
+>      xargs grep -l '_CLEAN_CMDS'|wc -l
+> 51
+> $ git grep -l GENTARGETS package/|grep -E '^package/[a-z]'| \
+>      xargs grep -l '_UNINSTALL_.*_CMDS'|wc -l
+> 73
+> 
+> meaning that probably they are not so interesting to everybody out there.
 
-diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
-index 431be2d..108ab83 100644
---- a/package/netsnmp/Config.in
-+++ b/package/netsnmp/Config.in
-@@ -14,3 +14,12 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 	  The net-snmp package contains a selection of MIB files.
- 	  Say yes if you want those MIB files installed on the target
- 	  and enable the code that parses the MIB files.
-+
-+config BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING
-+	bool "Enable debugging code"
-+	depends on BR2_PACKAGE_NETSNMP
-+	help
-+	  By default net-snmp is compiled without debugging support
-+	  (--disable-debugging). Enable this options if you need debugging
-+	  support, including the ability to log with DEBUGMSG(),
-+	  DEBUGMSGTL() and companion macros.
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 959e39f..448e3fd 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -12,7 +12,7 @@ NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
- NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
- 		--with-defaults --enable-mini-agent --without-rpm \
- 		--with-logfile=none --without-kmem-usage $(DISABLE_IPV6) \
--		--enable-as-needed --disable-debugging --without-perl-modules \
-+		--enable-as-needed --without-perl-modules \
- 		--disable-embedded-perl --disable-perl-cc-checks \
- 		--disable-scripts --with-default-snmp-version="1" \
- 		--enable-silent-libtool --enable-mfd-rewrites \
-@@ -55,6 +55,10 @@ define NETSNMP_REMOVE_MIBS_IPV6
- endef
- endif
- 
-+ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
-+	NETSNMP_CONF_OPT += --disable-debugging
-+endif
-+
- define NETSNMP_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR) install
+ Uninstall doesn't really work, as Thomas pointed out, so I'm all for 
+removing it.
+
+ For the clean target I can imagine a use case, but it's not very
+convincing.  Say you're preparing a package patch the painful way 
+(i.e. save a copy the source tree, modify the files of the source tree, 
+and if all is well run a diff).  Then you may have some modifications 
+which are not detected by make (e.g. when you're actually editing the 
+Makefile).  So you want to run a make clean.  make foo-dirclean is not
+possible because then you loose your changes.  This is where a clean
+target could be useful.
+
+ However, it's such a corner case that I don't think it's important.
+And if you're hacking away at a package, you can afford to run
+'make -C output/build/foo-0.1 clean' manually.
+
+
+ Removing the clean and uninstall targets will make tab completion
+slightly faster as well :-)
+
+
+ So let's get rid of them!
+
+
+ Regards,
+ Arnout
+
+
 -- 
-1.7.5.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
