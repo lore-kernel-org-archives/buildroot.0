@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Mar 2012 21:33:37 +0100
-Subject: [Buildroot] add option to enable AI_ADDRCONFIG support
-In-Reply-To: <87wr6q26x5.fsf@macbook.be.48ers.dk>
-References: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
- <20120308091714.5d60b715@skate>
- <87wr6q26x5.fsf@macbook.be.48ers.dk>
-Message-ID: <20120315213337.448d1bfd@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 15 Mar 2012 21:40:11 +0100
+Subject: [Buildroot] vsftpd
+In-Reply-To: <4F6211CF.7030701@visionsystems.de> (Yegor Yefremov's message of
+ "Thu, 15 Mar 2012 16:59:11 +0100")
+References: <CALo-6+jE0XhxMv2xO-EtOLjnrwR8DC9DPH5U0zeV6qst_F-WaQ@mail.gmail.com>
+ <4F6211CF.7030701@visionsystems.de>
+Message-ID: <87ehstsims.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 11 Mar 2012 21:56:22 +0100,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
 
-> I believe it's a fairly small impact, but the problem is external uClibc
-> toolchains (made by BR, ct-NG or elsewhere) which most likely won't have
-> AI_ADDRCONFIG enabled, so mrouted (and gupnp) will fail at build time.
+Hi,
 
-Is it common to have AI_ADDRCONFIG disabled in external toolchains?
-Notice that we have a similar problem with ltp-testsuite at the moment.
+ Yegor> Do we have inetd/xinetd? Can't find
+ Yegor> them. http://en.wikipedia.org/wiki/Xinetd seems to be
+ Yegor> unsupported. What is the modern way of running daemons on
+ Yegor> demand-?
 
-Do we really want to add one more toolchain option just for this small
-feature? Sounds like a big hammer, no?
+Busybox has an inetd applet, but we don't have any of the standalone
+versions, if that's what you mean.
 
-Regards,
+ Yegor> By the way, I have trouble compiling vsftpd at least with the
+ Yegor> latest linaro toolchain (haven't tried other toolchains so far):
 
-Thomas
+It works here with the default internal arm toolchain, but I haven't
+tried with the linaro one.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
