@@ -1,98 +1,46 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 15 Mar 2012 20:26:56 +0100
-Subject: [Buildroot] [PATCH resend] new package: zeromq
-In-Reply-To: <87k42mrvkq.fsf@macbook.be.48ers.dk>
-References: <7cbcbbf3191cf0d5fab5.1331743096@beantl019720>
- <87k42mrvkq.fsf@macbook.be.48ers.dk>
-Message-ID: <CAAXf6LVtbfbktV6Ke2DN7MxW=rRTbLNQAeJLDz=_YVEdzTXJBQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Mar 2012 21:30:41 +0100
+Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
+In-Reply-To: <201203140036.06296.arnout@mind.be>
+References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
+ <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
+ <201203140036.06296.arnout@mind.be>
+Message-ID: <20120315213041.3bda3650@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 15, 2012 at 11:45 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
->
-> ?Thomas> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ?Thomas> ---
-> ?Thomas> I hope the ? symbol in Config.in is not a problem.
->
-> It doesn't render nicely in menuconfig here, but ok.
->
-> ?Thomas> ?package/Config.in ? ? ? ?| ? 1 +
-> ?Thomas> ?package/zeromq/Config.in | ?22 ++++++++++++++++++++++
-> ?Thomas> ?package/zeromq/zeromq.mk | ?12 ++++++++++++
-> ?Thomas> ?3 files changed, 35 insertions(+), 0 deletions(-)
->
-> ?Thomas> diff --git a/package/Config.in b/package/Config.in
-> ?Thomas> --- a/package/Config.in
-> ?Thomas> +++ b/package/Config.in
-> ?Thomas> @@ -366,6 +366,7 @@ source "package/librsync/Config.in"
-> ?Thomas> ?source "package/libsoup/Config.in"
-> ?Thomas> ?source "package/libupnp/Config.in"
-> ?Thomas> ?source "package/libvncserver/Config.in"
-> ?Thomas> +source "package/zeromq/Config.in"
-> ?Thomas> ?endmenu
->
-> ?Thomas> ?menu "Other"
-> ?Thomas> diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-> ?Thomas> new file mode 100644
-> ?Thomas> --- /dev/null
-> ?Thomas> +++ b/package/zeromq/Config.in
-> ?Thomas> @@ -0,0 +1,22 @@
-> ?Thomas> +comment "zeromq requires a toolchain with WCHAR support"
-> ?Thomas> + ? ? ?depends on !BR2_USE_WCHAR
-> ?Thomas> +
-> ?Thomas> +config BR2_PACKAGE_ZEROMQ
-> ?Thomas> + ? ? ?bool "zeromq"
-> ?Thomas> + ? ? ?depends on BR2_USE_WCHAR # util-linux
->
-> Util-linux also depends on LARGEFILE, so you need that as well.
-> Zeromq is written in C++, so you also need INSTALL_LIBSTDCPP.
+Le Wed, 14 Mar 2012 00:36:05 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Is there somewhere some documentation that explains these rules? The
-C++ thing is new to me for example.
-It would make sense to me that this is described.
+> On Sunday 11 March 2012 22:48:08 Gustavo Zacarias wrote:
+> > +# Can't build with static & shared at the same time (1.0.25+)
+> > +ifneq ($(BR2_PREFER_STATIC),y)
+> > +ALSA_LIB_CONF_OPT += --enable-static=no
+> > +else
+> > +ALSA_LIB_CONF_OPT += --enable-shared=no
+> > +endif
+> 
+>  Shouldn't we put this in AUTOTARGETS?  Or at least the
+> --enable-shared=no if BR2_PREFER_STATIC?
 
->
-> ?Thomas> + ? ? ?select BR2_PACKAGE_UTIL_LINUX
-> ?Thomas> + ? ? ?select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> ?Thomas> + ? ? ?help
-> ?Thomas> + ? ? ? ??MQ (ZeroMQ, 0MQ, zmq) looks like an embeddable networking library but
-> ?Thomas> + ? ? ? ?acts like a concurrency framework. It gives you sockets that carry
-> ?Thomas> + ? ? ? ?whole messages across various transports like in-process, inter-
-> ?Thomas> + ? ? ? ?process, TCP, and multicast. You can connect sockets N-to-N with
-> ?Thomas> + ? ? ? ?patterns like fanout, pub-sub, task distribution, and request-reply.
-> ?Thomas> + ? ? ? ?It's fast enough to be the fabric for clustered products. Its
-> ?Thomas> + ? ? ? ?asynchronous I/O model gives you scalable multicore applications,
-> ?Thomas> + ? ? ? ?built as asynchronous message-processing tasks. It has a score of
-> ?Thomas> + ? ? ? ?language APIs and runs on most operating systems.
-> ?Thomas> +
-> ?Thomas> + ? ? ? ??MQ is from iMatix and is LGPL open source.
->
-> I reformatted the help text to fit in menuconfig.
->
-> ?Thomas> +
-> ?Thomas> + ? ? ? ?http://www.zeromq.org/
-> ?Thomas> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-> ?Thomas> new file mode 100644
-> ?Thomas> --- /dev/null
-> ?Thomas> +++ b/package/zeromq/zeromq.mk
-> ?Thomas> @@ -0,0 +1,12 @@
-> ?Thomas> +#############################################################
-> ?Thomas> +#
-> ?Thomas> +# zeromq
-> ?Thomas> +#
-> ?Thomas> +#############################################################
-> ?Thomas> +
-> ?Thomas> +ZEROMQ_VERSION = 2.1.11
-> ?Thomas> +ZEROMQ_SITE = http://download.zeromq.org/
-> ?Thomas> +
->
-> ZEROMQ is a library, so you need to install into staging as well.
->
-> Committed with these fixes, thanks.
+We already have in package/Makefile.in:
 
-Thanks!
+ifeq ($(BR2_PREFER_STATIC_LIB),y)
+SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+else
+SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+endif
+
+And SHARED_STATIC_LIB_OPTS is used in package/Makefile.autotools.in. I
+am not sure why alsa-lib requires those different options than the
+standard ones.
+
 Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
