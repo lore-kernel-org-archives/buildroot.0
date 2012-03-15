@@ -1,42 +1,89 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 15 Mar 2012 21:54:10 +0100
-Subject: [Buildroot] [PATCH v3 0/2] Add omap-u-boot-utils and build .ift
-	OMAP image
-Message-ID: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
+Date: Thu, 15 Mar 2012 21:54:11 +0100
+Subject: [Buildroot] [PATCH v3 1/2] omap-u-boot-utils: add new host package
+In-Reply-To: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
+References: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1331844852-4609-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-this is v3 of a small patch series that I sent back in September
-(http://lists.busybox.net/pipermail/buildroot/2011-September/045813.html).
+---
 
-It was not accepted at that time because it introduced a user-visible host
-package, which was not supported in Buildroot.
-This fired up a brief discussion, and the decision was made to allow these
-packages within a suitable infrastructure.
+New in v3:
+ - update to the user-visible host packages policy discussed in
+   mailing-list (Config.in.host etc) and list in the Host Tools menu
+ - update to current GENTARGETS infrastructure
+ - bump to the latest git snapshot, which fixes compilation with host gcc 4.6.
 
-This infrastructure is now in place (since about commit 6b04b2dda6bf87dc12),
-so here are again my two patches updated to the new scheme and refreshed in
-general.
+New in v2:
+ - xxx_SOURCE is useless with the git download method, remove it;
+ - OMAP_U_BOOT_UTILS_TARGETS is used only once, hardcoded it.
 
-Luca
-
-Luca Ceresoli (2):
-  omap-u-boot-utils: add new host package
-  u-boot: build signed image for OMAP processors
-
- boot/uboot/Config.in                           |   16 ++++++++++++++++
- boot/uboot/uboot.mk                            |   24 ++++++++++++++++++++++++
+---
  package/Config.in.host                         |    1 +
  package/omap-u-boot-utils/Config.in.host       |    8 ++++++++
  package/omap-u-boot-utils/omap-u-boot-utils.mk |   22 ++++++++++++++++++++++
- 5 files changed, 71 insertions(+), 0 deletions(-)
+ 3 files changed, 31 insertions(+), 0 deletions(-)
  create mode 100644 package/omap-u-boot-utils/Config.in.host
  create mode 100644 package/omap-u-boot-utils/omap-u-boot-utils.mk
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1f49e79..184a69b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
+ 
++source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+diff --git a/package/omap-u-boot-utils/Config.in.host b/package/omap-u-boot-utils/Config.in.host
+new file mode 100644
+index 0000000..63fbdf5
+--- /dev/null
++++ b/package/omap-u-boot-utils/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
++	bool "host omap-u-boot-utils"
++	help
++	  U-Boot Utilities for Texas Instrument's OMAP platforms.
++	  This is a set of tools to control U-Boot from scripts, generate
++	  OMAP-specific signed image files and more.
++
++	  https://github.com/nmenon/omap-u-boot-utils
+diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+new file mode 100644
+index 0000000..324544e
+--- /dev/null
++++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+@@ -0,0 +1,22 @@
++#############################################################
++#
++# omap-u-boot-utils
++#
++#############################################################
++
++OMAP_U_BOOT_UTILS_VERSION = 8aff852322
++OMAP_U_BOOT_UTILS_SITE = git://github.com/nmenon/omap-u-boot-utils.git
++OMAP_U_BOOT_UTILS_SITE_METHOD = git
++
++define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
++	for f in gpsign pserial tagger ucmd ukermit ; do \
++		[ -f ${HOST_DIR}/usr/bin/$$f ] || \
++		  install -m 755 -D $(@D)/$$f ${HOST_DIR}/usr/bin/$$f ; \
++	done
++endef
++
++$(eval $(call GENTARGETS,host))
 -- 
 1.7.5.4
