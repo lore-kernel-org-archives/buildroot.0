@@ -1,25 +1,64 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 16 Mar 2012 00:18:44 +0100
-Subject: [Buildroot] [PATCH] User defined configuration file name
-In-Reply-To: <CAMkyJgBx7VKJ9=iDyUYgez_Nc2DHARRz7V5in_8R3BuEfJKbpg@mail.gmail.com>
-References: <CAMkyJgBx7VKJ9=iDyUYgez_Nc2DHARRz7V5in_8R3BuEfJKbpg@mail.gmail.com>
-Message-ID: <201203160018.44486.arnout@mind.be>
+Date: Fri, 16 Mar 2012 00:54:10 +0100
+Subject: [Buildroot] BR2012.rc1 :: problem to build a new package
+In-Reply-To: <CAPEB33x+aVFQoFgN8FXUDWsdqux4Kgf6cPnpMnxN3eRLedGB2g@mail.gmail.com>
+References: <CAPEB33x+aVFQoFgN8FXUDWsdqux4Kgf6cPnpMnxN3eRLedGB2g@mail.gmail.com>
+Message-ID: <201203160054.10741.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 09 March 2012 00:02:57 Avishay Orpaz wrote:
-> Allow using a configuration file other than the default .config by setting
-> the DOTCONFIG variable
+On Thursday 15 March 2012 14:45:58 MERCADIER Johann wrote:
+> Hi all,
+> 
+>    I try to add my 1st package to BR.
+>    I primarily succeed compiling the program manually and once it had been
+> added to the rootfs. I could use it normally wihtout bug til now.
+>    Then as I would like to add this functionality to build root through the
+> menuconfig option. This part seems ok
+>    The next one is to built a .mk file and here start the troubles!
 
- Why would you want to do that?
+ That should be pretty easy with the AUTOTARGETS infrastructure.
 
- If the goal is to switch easily between two configurations, I suggest 
-using two output directories instead.  And if the idea is to store
-several configurations in your version control system, put them in
-the configs directory and use them with 'make xxx_defconfig'.
+>    This program require freetype2 and fontconfig. 
+
+ So you should have the line
+<PKG>_DEPENDENCIES += freetype fontconfig
+in your .mk file.
+
+ Normally configure should pick it up automatically then.
+
+ Make sure that the Config.in also has the lines
+	select BR2_PACKAGE_FREETYPE
+	select BR2_PACKAGE_FONTCONFIG
+
+ 
+>    On my system pkg-config
+> can find it at the following places:
+> ./workdone/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/pkgconfig/freetype2.pc
+> ./output/target/usr/lib/pkgconfig/freetype2.pc
+> ./output/build/freetype-2.4.8/builds/unix/freetype2.pc
+> 
+>   But it cannot find any .pc file for fontconfig and then quit with an
+> error.
+
+ After the fontconfig package is built, you should have a fontconfig.pc
+next to the freetype2.pc.
+
+
+[snip]
+>   I wish to learn to do some good work and not a kind of scrappy job even
+> if it works. So advices are welcome!
+
+ As soon as you have something that works more or less, post it and
+we'll give feedback!SO-0809-Leuven-M.S.G
+
+ Preferably, use git send-email to send the patch.  That makes sure all the
+tabs and line breaks are properly conserved, and that the commit message
+and authorship is correct.  Also add your Signed-off-by line to the commit
+message (see http://kerneltrap.org/files/Jeremy/DCO.txt).
 
  Regards,
  Arnout
