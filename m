@@ -1,78 +1,91 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Mar 2012 23:04:39 +0100
-Subject: [Buildroot] [git commit] debug: provide an option to copy the
-	gdbserver to the target
-Message-ID: <20120315221627.8117290DC5@busybox.osuosl.org>
+Date: Thu, 15 Mar 2012 23:14:36 +0100
+Subject: [Buildroot] [git commit] config: improve help text and prompt for
+	debugging related options
+Message-ID: <20120315221627.8E40F90DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c56b58b4b71a5fd87d6d3d61e08a627c968acda1
+commit: http://git.buildroot.net/buildroot/commit/?id=a9a346768b1f7fe8da8776795b2795f5573b5555
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When an external toolchain is used, it is very likely that it contains
-a pre-built version of a gdbserver that has the same version as the
-cross-gdb included in the external toolchain. So, we now provide an
-option that allows to copy this pre-built gdbserver to the target.
+The help text for the choice of different stripping levels is removed,
+since it is not displayed by menuconfig. Instead, only the per-option
+help text is visible, so this text is improved.
 
-As the location of the gdbserver in the external toolchain is not
-standardized, we only support the CodeSourcery and Crosstool-NG
-layouts for the moment. Other locations can be added later.
-
+[Peter: slightly reworked text]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in                  |    8 ++++++++
- toolchain/toolchain-external/ext-tool.mk |   14 ++++++++++++++
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ Config.in |   32 ++++++++++++++++++++------------
+ 1 files changed, 20 insertions(+), 12 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 8501983..980666b 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -14,10 +14,18 @@ comment "Gdb debugger for the target needs WCHAR support in toolchain"
- 
- config BR2_PACKAGE_GDB_SERVER
- 	bool "Build gdb server for the Target"
-+	depends on !BR2_TOOLCHAIN_EXTERNAL
+diff --git a/Config.in b/Config.in
+index e07e52f..68abb9b 100644
+--- a/Config.in
++++ b/Config.in
+@@ -206,8 +206,12 @@ config BR2_DEPRECATED
+ config BR2_ENABLE_DEBUG
+ 	bool "build packages with debugging symbols"
  	help
- 	    Build the gdbserver stub to run on the target.
- 	    A full gdb is needed to debug the progam.
+-	  Build packages with debugging symbols
+-	  enabled
++	  Build packages with debugging symbols enabled. All libraries
++	  and binaries in the 'staging' directory will have debugging
++	  symbols, which allows remote debugging even if libraries and
++	  binaries are stripped on the target. Whether libraries and
++	  binaries are stripped on the target is controlled by the
++	  BR2_STRIP_* options below.
  
-+config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-+	bool "Copy gdb server to the Target"
-+	depends on BR2_TOOLCHAIN_EXTERNAL
-+	help
-+	  Copy the gdbserver provided by the external toolchain to the
-+	  target.
-+
- config BR2_PACKAGE_GDB_HOST
- 	bool "Build gdb for the Host"
- 	# cross-gdb is supposed to be part of the external
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index dbd39b0..31ba50f 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -375,6 +375,20 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	if [ -L $${ARCH_SYSROOT_DIR}/lib64 ] ; then \
- 		$(call create_lib64_symlinks) ; \
- 	fi ; \
-+	if test x"$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" == x"y"; then \
-+		gdbserver_found=0 ; \
-+		for d in $${ARCH_SYSROOT_DIR} $${ARCH_SYSROOT_DIR}/../debug-root/ ; do \
-+			if test -f $${d}/usr/bin/gdbserver ; then \
-+				install -m 0755 -D $${d}/usr/bin/gdbserver $(TARGET_DIR)/usr/bin/gdbserver ; \
-+				gdbserver_found=1 ; \
-+				break ; \
-+			fi ; \
-+		done ; \
-+		if [ $${gdbserver_found} -eq 0 ] ; then \
-+			echo "Could not find gdbserver in external toolchain" ; \
-+			exit 1 ; \
-+		fi ; \
-+	fi ; \
- 	touch $@
+ if BR2_ENABLE_DEBUG
+ choice
+@@ -240,32 +244,36 @@ endchoice
+ endif
  
- # Build toolchain wrapper for preprocessor, C and C++ compiler, and setup
+ choice
+-	prompt "strip"
++	prompt "strip command for binaries on target"
+ 	default BR2_STRIP_strip
+-	help
+-	  Select whether to strip binaries and libraries for the target
+-	  or not.
+-	  strip   is the normal strip command
+-	  sstrip  is a strip that discards more than the normal strip
+-	  none    do not strip (only for debugging!)
+ 
+ config BR2_STRIP_strip
+ 	bool "strip"
+ 	depends on !BR2_ELF2FLT
+ 	help
+-	  strip   is the normal strip command
++	  Binaries and libraries in the target filesystem will be
++	  stripped using the normal 'strip' command. This allows to
++	  save space, mainly by removing debugging symbols. Debugging
++	  symbols on the target are needed for native debugging, but
++	  not when remote debugging is used.
+ 
+ config BR2_STRIP_sstrip
+ 	bool "sstrip"
+ 	select BR2_PACKAGE_SSTRIP_HOST
+ 	depends on !BR2_ELF2FLT
+ 	help
+-	  sstrip  is a strip that discards more than the normal strip
++	  Binaries and libraries in the target filesystem will be
++	  stripped using the 'sstrip' command, which strips a little
++	  bit more than the traditional 'strip' command. This allows to
++	  save space, mainly by removing debugging symbols. Debugging
++	  symbols on the target are needed for native debugging, but
++	  not when remote debugging is used.
+ 
+ config BR2_STRIP_none
+ 	bool "none"
+ 	help
+-	  none    do not strip (only for debugging!)
++	  Do not strip binaries and libraries in the target
++	  filesystem.
+ endchoice
+ 
+ choice
