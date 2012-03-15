@@ -1,99 +1,37 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 15 Mar 2012 21:54:12 +0100
-Subject: [Buildroot] [PATCH v3 2/2] u-boot: build signed image for OMAP
-	processors
-In-Reply-To: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
-References: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1331844852-4609-3-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 15 Mar 2012 21:56:14 +0100
+Subject: [Buildroot] add option to enable AI_ADDRCONFIG support
+In-Reply-To: <20120315213337.448d1bfd@skate> (Thomas Petazzoni's message of
+ "Thu, 15 Mar 2012 21:33:37 +0100")
+References: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
+ <20120308091714.5d60b715@skate> <87wr6q26x5.fsf@macbook.be.48ers.dk>
+ <20120315213337.448d1bfd@skate>
+Message-ID: <871uotshw1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
----
-New in v3: rebase on current master.
+Hi,
 
-New in v2: add depends on BR2_arm || BR2_armeb.
----
- boot/uboot/Config.in |   16 ++++++++++++++++
- boot/uboot/uboot.mk  |   24 ++++++++++++++++++++++++
- 2 files changed, 40 insertions(+), 0 deletions(-)
+ >> I believe it's a fairly small impact, but the problem is external uClibc
+ >> toolchains (made by BR, ct-NG or elsewhere) which most likely won't have
+ >> AI_ADDRCONFIG enabled, so mrouted (and gupnp) will fail at build time.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index c8db9fb..73e560f 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -92,6 +92,22 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
- 
- endchoice
- 
-+config BR2_TARGET_UBOOT_OMAP_IFT
-+	depends on BR2_TARGET_UBOOT_FORMAT_BIN
-+	depends on BR2_arm || BR2_armeb
-+	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
-+	bool "produce a .ift signed image (OMAP)"
-+	help
-+	  Use gpsign to produce an image of u-boot.bin signed with
-+	  a Configuration Header for booting on OMAP processors.
-+
-+if BR2_TARGET_UBOOT_OMAP_IFT
-+
-+config BR2_TARGET_UBOOT_OMAP_IFT_CONFIG
-+	string "gpsign Configuration Header config file"
-+
-+endif
-+
- menuconfig BR2_TARGET_UBOOT_NETWORK
- 	bool "Custom Network Settings"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index db9de8d..074cbd0 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -31,6 +31,9 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
- UBOOT_BIN          = u-boot-nand.bin
- else
- UBOOT_BIN          = u-boot.bin
-+ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
-+UBOOT_BIN_IFT      = ${UBOOT_BIN}.ift
-+endif
- endif
- 
- UBOOT_ARCH=$(KERNEL_ARCH)
-@@ -86,10 +89,31 @@ define UBOOT_BUILD_CMDS
- 		$(UBOOT_MAKE_TARGET)
- endef
- 
-+define UBOOT_BUILD_OMAP_IFT
-+	${HOST_DIR}/usr/bin/gpsign -f $(@D)/u-boot.bin \
-+		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
-+endef
-+
- define UBOOT_INSTALL_IMAGES_CMDS
- 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
- endef
- 
-+define UBOOT_INSTALL_OMAP_IFT_IMAGE
-+	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
-+endef
-+
-+ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
-+# we NEED a config file unless we're at make source
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
-+$(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
-+endif
-+endif
-+UBOOT_DEPENDENCIES += host-omap-u-boot-utils
-+UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
-+UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
-+endif
-+
- $(eval $(call GENTARGETS))
- 
- ifeq ($(BR2_TARGET_UBOOT),y)
+ Thomas> Is it common to have AI_ADDRCONFIG disabled in external toolchains?
+ Thomas> Notice that we have a similar problem with ltp-testsuite at the moment.
+
+Hard to say, but the config option defaults to 'n' in uClibc - So
+chances are that it is.
+
+ Thomas> Do we really want to add one more toolchain option just for
+ Thomas> this small feature? Sounds like a big hammer, no?
+
+True, but it is the safest approach. I don't feel strongly about it
+though - Anybody?
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
