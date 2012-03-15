@@ -1,34 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Mar 2012 23:33:52 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.0h
-Message-ID: <20120315225951.A087890DD9@busybox.osuosl.org>
+Date: Fri, 16 Mar 2012 00:01:55 +0100
+Subject: [Buildroot] [git commit] libfuse: fix download URL
+In-Reply-To: <201203152350.18988.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Thu, 15 Mar 2012 23:50:18 +0100")
+References: <20120315081313.4521190D8E@busybox.osuosl.org>
+ <201203152350.18988.arnout@mind.be>
+Message-ID: <877gylqxi4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94b3f6064aa3fcaaece826710e8ac0c0e48fc367
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Bump to version 1.0.0h to fix CMS and S/MIME Bleichenbacher attack (CVE-2012-0884)
+ Arnout> On Thursday 15 March 2012 09:12:47 Peter Korsgaard wrote:
+ >> -LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
+ >> +LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Arnout> $ git grep -l dl.sourceforge.net/sourceforge | wc -l
+ Arnout> 71
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index cb29fe4..a304747 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--OPENSSL_VERSION = 1.0.0g
-+OPENSSL_VERSION = 1.0.0h
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_INSTALL_STAGING = YES
- OPENSSL_DEPENDENCIES = zlib
+ Arnout>  Oops, looks like we have a bit of work here...
+
+Indeed. I haven't noticed any official notice from sf.net that they have
+changed the URLs on purpose (and that it will be permanent) though.
+
+-- 
+Bye, Peter Korsgaard
