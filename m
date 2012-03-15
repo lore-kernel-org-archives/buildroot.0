@@ -1,19 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Mar 2012 23:33:30 +0100
-Subject: [Buildroot] [PATCH v1 1/1] libffi : bump version to 3.0.10
-In-Reply-To: <1331555433-25941-1-git-send-email-sagaert.johan@skynet.be>
- (Sagaert Johan's message of "Mon, 12 Mar 2012 13:30:33 +0100")
-References: <1331555433-25941-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <87fwd9qyth.fsf@macbook.be.48ers.dk>
+Date: Thu, 15 Mar 2012 23:36:48 +0100
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.0h
+In-Reply-To: <1331586140-13015-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 12 Mar 2012 18:02:20 -0300")
+References: <1331586140-13015-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bonxqynz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Sagaert> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+ Gustavo> Bump to version 1.0.0h to fix CMS and S/MIME Bleichenbacher attack (CVE-2012-0884)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
