@@ -1,30 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Mar 2012 22:05:38 +0100
-Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
-In-Reply-To: <702f6e09c17e9a072c3e4458c35a83a2@zacarias.com.ar>
-References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
- <201203140036.06296.arnout@mind.be> <20120315213041.3bda3650@skate>
- <702f6e09c17e9a072c3e4458c35a83a2@zacarias.com.ar>
-Message-ID: <20120315220538.678c740b@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 15 Mar 2012 22:04:27 +0100
+Subject: [Buildroot] [PATCH] netsnmp: add option to enable debugging code
+Message-ID: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 15 Mar 2012 17:51:42 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/netsnmp/Config.in  |    9 +++++++++
+ package/netsnmp/netsnmp.mk |    6 +++++-
+ 2 files changed, 14 insertions(+), 1 deletions(-)
 
-> Because it doesn't build with both static & shared set starting with 
-> version 1.0.25, the configure script just errors out complaining about 
-> some libtool issues about building both.
-
-Ok, thanks. This is odd, is it a new libtool behaviour?
-
-Thomas
+diff --git a/package/netsnmp/Config.in b/package/netsnmp/Config.in
+index 431be2d..108ab83 100644
+--- a/package/netsnmp/Config.in
++++ b/package/netsnmp/Config.in
+@@ -14,3 +14,12 @@ config BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+ 	  The net-snmp package contains a selection of MIB files.
+ 	  Say yes if you want those MIB files installed on the target
+ 	  and enable the code that parses the MIB files.
++
++config BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING
++	bool "Enable debugging code"
++	depends on BR2_PACKAGE_NETSNMP
++	help
++	  By default net-snmp is compiled without debugging support
++	  (--disable-debugging). Enable this options if you need debugging
++	  support, including the ability to log with DEBUGMSG(),
++	  DEBUGMSGTL() and companion macros.
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 959e39f..448e3fd 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -12,7 +12,7 @@ NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
+ NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
+ 		--with-defaults --enable-mini-agent --without-rpm \
+ 		--with-logfile=none --without-kmem-usage $(DISABLE_IPV6) \
+-		--enable-as-needed --disable-debugging --without-perl-modules \
++		--enable-as-needed --without-perl-modules \
+ 		--disable-embedded-perl --disable-perl-cc-checks \
+ 		--disable-scripts --with-default-snmp-version="1" \
+ 		--enable-silent-libtool --enable-mfd-rewrites \
+@@ -55,6 +55,10 @@ define NETSNMP_REMOVE_MIBS_IPV6
+ endef
+ endif
+ 
++ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
++	NETSNMP_CONF_OPT += --disable-debugging
++endif
++
+ define NETSNMP_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR) install
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.5.4
