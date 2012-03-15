@@ -1,92 +1,204 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Mar 2012 22:34:30 +0100
-Subject: [Buildroot] [git commit] Added lcdproc package
-Message-ID: <20120315214110.5E44990DC5@busybox.osuosl.org>
+Date: Thu, 15 Mar 2012 22:11:25 +0100
+Subject: [Buildroot] [git commit] Remove stray $ character from a bunch of
+	init scripts
+Message-ID: <20120315214110.4C31690D9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ccb44fd52f76bca3cbd6a89bc9407ada5ab47d65
+commit: http://git.buildroot.net/buildroot/commit/?id=1a994d58afcd401afd1581035f98adede78bcdd1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: fix download URL, move to 'Hardware handling' section]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                             |    1 +
- package/lcdproc/Config.in                     |    7 +++++++
- package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch |   18 ++++++++++++++++++
- package/lcdproc/lcdproc.mk                    |   14 ++++++++++++++
- 4 files changed, 40 insertions(+), 0 deletions(-)
+ fs/skeleton/etc/init.d/S40network |    2 +-
+ package/at/S99at                  |    2 +-
+ package/busybox/S01logging        |    2 +-
+ package/busybox/S10mdev           |    2 +-
+ package/dbus/S30dbus              |    2 +-
+ package/dropbear/S50dropbear      |    2 +-
+ package/gpsd/S50gpsd              |    2 +-
+ package/multimedia/mpd/S95mpd     |    2 +-
+ package/netplug/S29netplug        |    6 +++---
+ package/openssh/S50sshd           |    2 +-
+ package/rsyslog/S01rsyslog        |    2 +-
+ package/stunnel/S50stunnel        |    2 +-
+ 12 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9eef96e..f0ce963 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -190,6 +190,7 @@ source "package/input-tools/Config.in"
- source "package/iostat/Config.in"
- source "package/irda-utils/Config.in"
- source "package/kbd/Config.in"
-+source "package/lcdproc/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/lm-sensors/Config.in"
- source "package/lsuio/Config.in"
-diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
-new file mode 100644
-index 0000000..6c8614d
---- /dev/null
-+++ b/package/lcdproc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LCDPROC
-+       bool "lcdproc"
-+       select BR2_PACKAGE_NCURSES
-+       help
-+         LCD display driver daemon and clients
-+
-+         http://lcdproc.org/
-diff --git a/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch b/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-new file mode 100644
-index 0000000..283ac88
---- /dev/null
-+++ b/package/lcdproc/lcdproc-0.5.5-LCDd.conf.patch
-@@ -0,0 +1,18 @@
-+Fix the default LCDd configuration file, so that the DriverPath
-+is set to the correct lcdproc library install path, rather than
-+the dummy/default path.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+---
-+
-+--- lcdproc-0.5.3/LCDd.conf.orig       2009-06-20 14:48:34.000000000 +0100
-++++ lcdproc-0.5.3/LCDd.conf    2010-05-11 10:02:21.000000000 +0100
-+@@ -34,7 +34,7 @@
-+ #            the driver modules and will thus not be able to
-+ #            function properly.
-+ # NOTE: Always place a slash as last character !
-+-DriverPath=server/drivers/
-++DriverPath=/usr/lib/lcdproc/
-+
-+ # Tells the server to load the given drivers. Multiple lines can be given.
-+ # The name of the driver is case sensitive and determines the section
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-new file mode 100644
-index 0000000..e8919e9
---- /dev/null
-+++ b/package/lcdproc/lcdproc.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# lcdproc
-+#
-+#############################################################
-+LCDPROC_VERSION = 0.5.5
-+LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
-+LCDPROC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
-+
-+LCDPROC_CONF_OPT = --enable-drivers=all
-+
-+LCDPROC_DEPENDENCIES = ncurses
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/fs/skeleton/etc/init.d/S40network b/fs/skeleton/etc/init.d/S40network
+index ad6d250..e69e613 100755
+--- a/fs/skeleton/etc/init.d/S40network
++++ b/fs/skeleton/etc/init.d/S40network
+@@ -17,7 +17,7 @@ case "$1" in
+ 	"$0" start
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/at/S99at b/package/at/S99at
+index c3be80c..accaa31 100755
+--- a/package/at/S99at
++++ b/package/at/S99at
+@@ -31,7 +31,7 @@ case "$1" in
+ 	restart
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+index 581f192..edece39 100644
+--- a/package/busybox/S01logging
++++ b/package/busybox/S01logging
+@@ -19,7 +19,7 @@ case "$1" in
+   restart|reload)
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index d2643d0..c06aa20 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -13,7 +13,7 @@ case "$1" in
+   restart|reload)
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+index d764e29..0d15c73 100755
+--- a/package/dbus/S30dbus
++++ b/package/dbus/S30dbus
+@@ -72,7 +72,7 @@ case "$1" in
+         RETVAL=$?
+         ;;
+     *)
+-        echo $"Usage: $0 {start|stop|status|restart|condrestart|reload}"
++        echo "Usage: $0 {start|stop|status|restart|condrestart|reload}"
+         ;;
+ esac
+ exit $RETVAL
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index 14101d8..991a121 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -48,7 +48,7 @@ case "$1" in
+   	restart
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/gpsd/S50gpsd b/package/gpsd/S50gpsd
+index 31727eb..6e5ce88 100644
+--- a/package/gpsd/S50gpsd
++++ b/package/gpsd/S50gpsd
+@@ -33,7 +33,7 @@ case "$1" in
+         restart
+         ;;
+   *)
+-        echo $"Usage: $0 {start|stop|restart}"
++        echo "Usage: $0 {start|stop|restart}"
+         exit 1
+ esac
+ 
+diff --git a/package/multimedia/mpd/S95mpd b/package/multimedia/mpd/S95mpd
+index 7c242f4..a4f1271 100644
+--- a/package/multimedia/mpd/S95mpd
++++ b/package/multimedia/mpd/S95mpd
+@@ -25,6 +25,6 @@ case "$1" in
+ 		start
+ 		;;
+ 	*)
+-		echo $"Usage: $0 {start|stop|restart}"
++		echo "Usage: $0 {start|stop|restart}"
+ 		exit 1
+ esac
+diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+index e246674..d95554e 100755
+--- a/package/netplug/S29netplug
++++ b/package/netplug/S29netplug
+@@ -39,7 +39,7 @@ fi
+ case "$1" in
+   start)
+ 	# Start daemon.
+-	echo -n $"Starting network plug daemon: "
++	echo -n "Starting network plug daemon: "
+ 	start-stop-daemon -S -q -p /var/run/netplugd.pid -x /sbin/netplugd ${NETPLUGDARGS}
+ 	RETVAL=$?
+ 	echo
+@@ -47,7 +47,7 @@ case "$1" in
+ 	;;
+   stop)
+ 	# Stop daemon.
+-	echo -n $"Shutting down network plug daemon: "
++	echo -n "Shutting down network plug daemon: "
+ 	start-stop-daemon -K -n netplugd
+ 	RETVAL=$?
+ 	echo
+@@ -61,7 +61,7 @@ case "$1" in
+ 	[ -f /var/lock/subsys/netplugd ] && $0 restart || :
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	RETVAL=1
+ 	;;
+ esac
+diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+index f0d2aef..89f1b9a 100644
+--- a/package/openssh/S50sshd
++++ b/package/openssh/S50sshd
+@@ -64,7 +64,7 @@ case "$1" in
+   	restart
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/rsyslog/S01rsyslog b/package/rsyslog/S01rsyslog
+index 8c28e02..0c4bbc7 100644
+--- a/package/rsyslog/S01rsyslog
++++ b/package/rsyslog/S01rsyslog
+@@ -30,7 +30,7 @@ case "$1" in
+ 	restart
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
+diff --git a/package/stunnel/S50stunnel b/package/stunnel/S50stunnel
+index 5033e96..95bb301 100644
+--- a/package/stunnel/S50stunnel
++++ b/package/stunnel/S50stunnel
+@@ -29,7 +29,7 @@ case "$1" in
+ 	restart
+ 	;;
+   *)
+-	echo $"Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart}"
+ 	exit 1
+ esac
+ 
