@@ -1,48 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 Mar 2012 22:28:13 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 15 Mar 2012 22:32:23 +0100
 Subject: [Buildroot] Remove clean and uninstall targets [was: Re: [PATCH
- 1/2] Add (Freescale) elftosb host package]
-In-Reply-To: <201203152206.35139.arnout@mind.be>
+	1/2] Add (Freescale) elftosb host package]
+In-Reply-To: <20120315222813.5d1e5113@skate>
 References: <1331643131-31435-1-git-send-email-eric.jarrige@armadeus.org>
- <20120314104146.0e75b488@skate> <4F607CD9.2080300@lucaceresoli.net>
- <201203152206.35139.arnout@mind.be>
-Message-ID: <20120315222813.5d1e5113@skate>
+ <201203152206.35139.arnout@mind.be> <20120315222813.5d1e5113@skate>
+Message-ID: <201203152232.24114.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 15 Mar 2012 22:06:34 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
-
->  Uninstall doesn't really work, as Thomas pointed out, so I'm all for 
-> removing it.
+On Thursday 15 March 2012 22:28:13 Thomas Petazzoni wrote:
+> Or, better, you can do:
 > 
->  For the clean target I can imagine a use case, but it's not very
-> convincing.  Say you're preparing a package patch the painful way 
-> (i.e. save a copy the source tree, modify the files of the source tree, 
-> and if all is well run a diff).  Then you may have some modifications 
-> which are not detected by make (e.g. when you're actually editing the 
-> Makefile).  So you want to run a make clean.  make foo-dirclean is not
-> possible because then you loose your changes.  This is where a clean
-> target could be useful.
+>         make <pkg>-rebuild
 > 
->  However, it's such a corner case that I don't think it's important.
-> And if you're hacking away at a package, you can afford to run
-> 'make -C output/build/foo-0.1 clean' manually.
+> Why would you need to do a 'make clean'? If you did some changes in the
+> package source code, running 'make' is sufficient to get things
+> rebuilt, unless the package has a broken build system, no?
 
-Or, better, you can do:
+ For instance, modifying a Makefile to add a '-DFOO' to CFLAGS usually
+doesn't force recompilation of all C files.
 
-	make <pkg>-rebuild
+ But as I said, it's really a corner case.
 
-Why would you need to do a 'make clean'? If you did some changes in the
-package source code, running 'make' is sufficient to get things
-rebuilt, unless the package has a broken build system, no?
+ Regards,
+ Arnout
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
