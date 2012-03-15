@@ -1,33 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 15 Mar 2012 09:12:47 +0100
-Subject: [Buildroot] [git commit] libfuse: fix download URL
-Message-ID: <20120315081313.4521190D8E@busybox.osuosl.org>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 15 Mar 2012 09:13:31 +0100
+Subject: [Buildroot] [PATCH 1/6] apply-patches.sh: check if there are
+ rejects before applying patches
+In-Reply-To: <87aa3ike56.fsf@macbook.be.48ers.dk>
+References: <20120314120310.13e0ea3a@skate>
+ <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
+ <1331739237-29872-2-git-send-email-ludovic.desroches@atmel.com>
+ <87aa3ike56.fsf@macbook.be.48ers.dk>
+Message-ID: <20120315081330.GK2725@ldesroches-Latitude-E6320>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d3c0bcfebb7110e28aa7633ed712461b6430bb5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Mar 14, 2012 at 11:32:05PM +0100, Peter Korsgaard wrote:
+> >>>>> "ludovic" == ludovic desroches <ludovic.desroches@atmel.com> writes:
+> 
+>  ludovic> From: Ludovic Desroches <ludovic.desroches@atmel.com>
+>  ludovic> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+>  ludovic> Tested-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+>  ludovic> with an armadeus_apf9328_defconfig build
+>  ludovic> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  ludovic> ---
+>  ludovic>  support/scripts/apply-patches.sh |    7 +++++++
+>  ludovic>  1 files changed, 7 insertions(+), 0 deletions(-)
+> 
+>  ludovic> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+>  ludovic> index 1aef47e..b145b46 100755
+>  ludovic> --- a/support/scripts/apply-patches.sh
+>  ludovic> +++ b/support/scripts/apply-patches.sh
+>  ludovic> @@ -19,6 +19,13 @@ if [ ! -d "${patchdir}" ] ; then
+>  ludovic>      echo "Aborting.  '${patchdir}' is not a directory."
+>  ludovic>      exit 1
+>  ludovic>  fi
+>  ludovic> +
+>  ludovic> +# Check for rejects because if there are some, even if patches are well
+>  ludovic> +# applied, at the end it will complain about rejects into targetdir.
+>  ludovic> +if [ "`find ${targetdir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
+>  ludovic> +	rm -f "${targetdir}/*.rej" 2> /dev/null
+> 
+> This is wrong, as the *.rej files might be in subdirs, so I changed this
+> to just do the find ... | xargs rm -f without notifying the user,
+> similar to how we do it for *.orig files. I also adjusted the comment
+> and commit message to match.
+> 
+> Committed with those changes, thanks.
+> 
 
-The old URL nowadays return a 404.
+Ok, thanks for this improvement.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libfuse/libfuse.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Regards
 
-diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
-index 3616c65..15c63ab 100644
---- a/package/libfuse/libfuse.mk
-+++ b/package/libfuse/libfuse.mk
-@@ -6,7 +6,7 @@
- 
- LIBFUSE_VERSION = 2.8.7
- LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
--LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/fuse/
-+LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
- 
- LIBFUSE_INSTALL_STAGING = YES
- LIBFUSE_CONF_OPT= --disable-nls \
+Ludovic
