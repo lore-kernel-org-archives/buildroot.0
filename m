@@ -1,49 +1,33 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 15 Mar 2012 09:27:53 +0100
-Subject: [Buildroot] [PATCH 5/6] apply-patches.sh: change archive
- management
-In-Reply-To: <20120314224314.0bc538d9@skate>
-References: <20120314120310.13e0ea3a@skate>
- <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
- <1331739237-29872-6-git-send-email-ludovic.desroches@atmel.com>
- <20120314224314.0bc538d9@skate>
-Message-ID: <20120315082753.GL2725@ldesroches-Latitude-E6320>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 15 Mar 2012 09:29:18 +0100
+Subject: [Buildroot] [git commit] dhcp: fix download URL
+Message-ID: <20120315082939.D42DE90DAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 14, 2012 at 10:43:14PM +0100, Thomas Petazzoni wrote:
-> Le Wed, 14 Mar 2012 16:33:56 +0100,
-> ludovic.desroches at atmel.com a ?crit :
-> 
-> > From: Ludovic Desroches <ludovic.desroches@atmel.com>
-> > 
-> > The way archives were managed was incorrect because the uncompressed archives
-> > were sent directly to the patch command. It means that alphabetical patch
-> > order was not respected.
-> > 
-> > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> > Tested-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> > with an armadeus_apf9328_defconfig build
-> 
-> I was initially a bit surprised by the usage of --strip-components=1,
-> which means that the tarball must contain one directory, and this
-> directory should contain all the patches. I kind of excepted the
-> patches to be at the root of the tarball, but I don't feel very
-> strongly about this, so:
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=afc69d8f5a139aedec23b12cf04d59986d500634
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A comment is really missing here to explain why I used it. In fact, it's quite
-old and this set of patches has changed a lot from the first version. I can't
-remember why I used it and if it is still needed.
+Tarball is in a subdir.
 
-I will keep you inform if I remember in which case I need it.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dhcp/dhcp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-Regards
-
-Ludovic
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 10bdc2e..9ec27d3 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ 
+ DHCP_VERSION  = 4.1-ESV-R4
+-DHCP_SITE     = http://ftp.isc.org/isc/dhcp
++DHCP_SITE     = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_CONF_ENV = ac_cv_file__dev_random=yes
+ DHCP_CONF_OPT = \
+ 	--localstatedir=/var/lib/dhcp \
