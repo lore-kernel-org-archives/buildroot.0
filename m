@@ -1,58 +1,33 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 15 Mar 2012 09:33:53 +0100
-Subject: [Buildroot] [PATCH] apply-patches.sh: use series file to apply
- patches in proper order
-In-Reply-To: <20120314225134.35250051@skate>
-References: <20120314120310.13e0ea3a@skate>
- <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
- <20120314225134.35250051@skate>
-Message-ID: <20120315083353.GM2725@ldesroches-Latitude-E6320>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 15 Mar 2012 09:35:03 +0100
+Subject: [Buildroot] [git commit] nbd: fix download URL
+Message-ID: <20120315083521.9168790D92@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 14, 2012 at 10:51:34PM +0100, Thomas Petazzoni wrote:
-> Hello Ludovic,
-> 
-> Le Wed, 14 Mar 2012 16:33:51 +0100,
-> ludovic.desroches at atmel.com a ?crit :
-> 
-> > Thank you Thomas.
-> > 
-> > Please find the previous set of patches plus the one about series file.
-> 
-> I did test your patches and found them working as expected. As you have
-> probably seen, I have sent a mail to Peter to ask him to pull these
-> patches quickly. I hope this will happen soon.
+commit: http://git.buildroot.net/buildroot/commit/?id=6953341b71028294f4e1e818df40f522e730c6f0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's a good news. Thanks for testing it.
+The old URL nowadays return a 404.
 
-> 
-> Would it be possible for you to write a little help text/documentation
-> in a comment at the beginning of the apply-patches.sh script? The
-> semantic of this script has become quite complicated, and some
-> documentation has become necessary I think. 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/nbd/nbd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Ok I will send a new patch for this.
-
-> It would also be good to
-> update the help text of the BR2_LINUX_KERNEL_PATCH option? Maybe we
-> also need to change the U-Boot BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR so
-> that it is capable of using a tarball of patches and not only a
-> directory, and ditto for BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR and
-> BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR.
-> 
-> Of course, all of those suggestions can be implemented later, and they
-> are not an additional condition to the merge of the existing 6 patches.
-> 
-> Thanks for your work and persistence,
-
-No problem, thanks for your help and thanks to Arnout for the first reviews
-and acks.
-
-
-Regards
-
-Ludovic
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 452ed34..62ae9be 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -6,7 +6,7 @@
+ 
+ NBD_VERSION = 3.0
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
+-NBD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/nbd/
++NBD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
+ NBD_DEPENDENCIES = libglib2
+ 
