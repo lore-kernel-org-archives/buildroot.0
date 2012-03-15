@@ -1,37 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 15 Mar 2012 21:56:14 +0100
-Subject: [Buildroot] add option to enable AI_ADDRCONFIG support
-In-Reply-To: <20120315213337.448d1bfd@skate> (Thomas Petazzoni's message of
- "Thu, 15 Mar 2012 21:33:37 +0100")
-References: <1331159898-25350-1-git-send-email-s.neumann@raumfeld.com>
- <20120308091714.5d60b715@skate> <87wr6q26x5.fsf@macbook.be.48ers.dk>
- <20120315213337.448d1bfd@skate>
-Message-ID: <871uotshw1.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 Mar 2012 22:05:38 +0100
+Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
+In-Reply-To: <702f6e09c17e9a072c3e4458c35a83a2@zacarias.com.ar>
+References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
+ <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
+ <201203140036.06296.arnout@mind.be> <20120315213041.3bda3650@skate>
+ <702f6e09c17e9a072c3e4458c35a83a2@zacarias.com.ar>
+Message-ID: <20120315220538.678c740b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Thu, 15 Mar 2012 17:51:42 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Hi,
+> Because it doesn't build with both static & shared set starting with 
+> version 1.0.25, the configure script just errors out complaining about 
+> some libtool issues about building both.
 
- >> I believe it's a fairly small impact, but the problem is external uClibc
- >> toolchains (made by BR, ct-NG or elsewhere) which most likely won't have
- >> AI_ADDRCONFIG enabled, so mrouted (and gupnp) will fail at build time.
+Ok, thanks. This is odd, is it a new libtool behaviour?
 
- Thomas> Is it common to have AI_ADDRCONFIG disabled in external toolchains?
- Thomas> Notice that we have a similar problem with ltp-testsuite at the moment.
-
-Hard to say, but the config option defaults to 'n' in uClibc - So
-chances are that it is.
-
- Thomas> Do we really want to add one more toolchain option just for
- Thomas> this small feature? Sounds like a big hammer, no?
-
-True, but it is the safest approach. I don't feel strongly about it
-though - Anybody?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
