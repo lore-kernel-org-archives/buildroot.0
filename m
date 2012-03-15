@@ -1,33 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 Mar 2012 17:51:42 -0300
-Subject: [Buildroot] [PATCH 19/20] alsa-lib: bump to version 1.0.25
-In-Reply-To: <20120315213041.3bda3650@skate>
-References: <1331502489-5036-1-git-send-email-gustavo@zacarias.com.ar>
- <1331502489-5036-19-git-send-email-gustavo@zacarias.com.ar>
- <201203140036.06296.arnout@mind.be> <20120315213041.3bda3650@skate>
-Message-ID: <702f6e09c17e9a072c3e4458c35a83a2@zacarias.com.ar>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 15 Mar 2012 13:52:54 -0700
+Subject: [Buildroot] vsftpd
+In-Reply-To: <87ehstsims.fsf@macbook.be.48ers.dk>
+References: <CALo-6+jE0XhxMv2xO-EtOLjnrwR8DC9DPH5U0zeV6qst_F-WaQ@mail.gmail.com>
+ <4F6211CF.7030701@visionsystems.de>
+ <87ehstsims.fsf@macbook.be.48ers.dk>
+Message-ID: <CALo-6+h0TX=StG=TWUhg-tAWr-NAmwNR_cUYD2YQyrnd+EqxKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-15 17:30, Thomas Petazzoni wrote:
+Dear Yegor:
 
-> ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
-> else
-> SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
-> endif
->
-> And SHARED_STATIC_LIB_OPTS is used in package/Makefile.autotools.in. 
-> I
-> am not sure why alsa-lib requires those different options than the
-> standard ones.
->
-> Thomas
+I would also suggest trying the default arm toolchain in busybox and
+seeing if it compiles vsftpd. Personally, I am currently using
+CodeSourcery's toolchain for a glibc build this week and recommend
+them for an external toolchain. I also have not used Linaros toolchain
+at all.
 
-Because it doesn't build with both static & shared set starting with 
-version 1.0.25, the configure script just errors out complaining about 
-some libtool issues about building both.
-Regards.
+Charles
+
+On Thu, Mar 15, 2012 at 1:40 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Yegor" == Yegor Yefremov <yegor_sub1@visionsystems.de> writes:
+>
+> Hi,
+>
+> ?Yegor> Do we have inetd/xinetd? Can't find
+> ?Yegor> them. http://en.wikipedia.org/wiki/Xinetd seems to be
+> ?Yegor> unsupported. What is the modern way of running daemons on
+> ?Yegor> demand-?
+>
+> Busybox has an inetd applet, but we don't have any of the standalone
+> versions, if that's what you mean.
+>
+> ?Yegor> By the way, I have trouble compiling vsftpd at least with the
+> ?Yegor> latest linaro toolchain (haven't tried other toolchains so far):
+>
+> It works here with the default internal arm toolchain, but I haven't
+> tried with the linaro one.
+>
+> --
+> Bye, Peter Korsgaard
+
+
+
+-- 
+Charles Krinke
