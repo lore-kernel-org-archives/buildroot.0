@@ -1,58 +1,40 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Fri, 16 Mar 2012 11:36:27 +0100
-Subject: [Buildroot] (no subject)
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB67031019E4@WETMEX10.loepfe.com>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Fri, 16 Mar 2012 10:37:30 +0000
+Subject: [Buildroot] [PATCH] xfsprogs: Add missing timestamp files
+Message-ID: <1331894250-26337-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added a compiled and an installed timestamp files for compilation and
+installation phases respectively.
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/xfsprogs/xfsprogs.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 68db2f7..ba06d4a 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -68,6 +68,7 @@ else
+ 	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/lib*.so.*.*
+ endif
+ 	touch -c $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
++	touch $(XFSPROGS_DIR)/.compiled
  
-Hi all, 
+ $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY): $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
+ 	$(MAKE1) PATH=$(TARGET_PATH) \
+@@ -76,6 +77,7 @@ $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY): $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
+ 	    -C $(XFSPROGS_DIR) install
+ 	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+ 	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
++	touch $(XFSPROGS_DIR)/.installed
  
-I'm struggling some day's now to get Webkit 1.6.3 (and even some later
-versions 1.7.xx.xx ) running on Arm Cortex-A8 (build with GCC 4.5.x, and
-uclibc0.9.33 )
-
-Compiling is not a problem, this works (with some patches, depending on
-the version of weskit I build I build.)
-
-
-BUT: I'm having random crashes (when run the GtkLauncher on the target),
-that I can not explain, or find where it goes wrong.
-
-It must be in one of the libraries, but because I do not have any
-'repetitive' core-dumps, it is hard to figure out what is going on, when
-looking at these core dumps. 
-
-I guess some basic-stuff (like fore example, locking.. or whatever...
-malloc/free... troubles) that is not working, it is to strange what
-happens, in  these core-dumps i never see somthing that is pointing to
-the same crash-reason.
+ xfsprogs: util-linux $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
  
-
-NOTE: When I do compile Weskit-1.2.7 (that was working before) with the
-same set of libraries/uclibc.... (as I use to build 1.6.3 now), I do get
-'RANDOM'-crashes as well.
-
-I've included some core-dumps trace-back's (hope this is not to big for
-the mailing-list) maybe someone gets a idea where I can take a look at.
-
-Regards, and thanks.
-Noel
-
-
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: crash1.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/fdf7e16a/attachment-0003.txt>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: crash2.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/fdf7e16a/attachment-0004.txt>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: crash3.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/fdf7e16a/attachment-0005.txt>
+-- 
+1.7.1
