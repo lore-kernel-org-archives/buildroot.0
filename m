@@ -1,61 +1,38 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Fri, 16 Mar 2012 11:46:48 +0100
-Subject: [Buildroot] WebKit - Random-crashes ?
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB6703101A00@WETMEX10.loepfe.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 Mar 2012 11:56:44 +0100
+Subject: [Buildroot] [PATCH] xfsprogs: Add missing timestamp files
+In-Reply-To: <1331894250-26337-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Fri, 16 Mar 2012 10:37:30 +0000")
+References: <1331894250-26337-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87zkbgq0er.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
-<< Sorry re-post... Forgot the subject >>
+ Markos> Added a compiled and an installed timestamp files for compilation and
+ Markos> installation phases respectively.
 
- 
-Hi all, 
- 
-I'm struggling some day's now to get Webkit 1.6.3 (and even some later
-versions 1.7.xx.xx ) running on Arm Cortex-A8 (build with GCC 4.5.x, and
-uclibc0.9.33 )
+But these files don't do anything if you don't refer to them
+anywhere. I would rather like to see a conversion to AUTOTARGET.
 
-Compiling is not a problem, this works (with some patches, depending on
-the version of weskit I build I build.)
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Markos> ---
+ Markos>  package/xfsprogs/xfsprogs.mk |    2 ++
+ Markos>  1 files changed, 2 insertions(+), 0 deletions(-)
 
+ Markos> diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+ Markos> index 68db2f7..ba06d4a 100644
+ Markos> --- a/package/xfsprogs/xfsprogs.mk
+ Markos> +++ b/package/xfsprogs/xfsprogs.mk
+ Markos> @@ -68,6 +68,7 @@ else
+ Markos>  	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/lib*.so.*.*
+ Markos>  endif
+ Markos>  	touch -c $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
+ Markos> +	touch $(XFSPROGS_DIR)/.compiled
 
-BUT: I'm having random crashes (when run the GtkLauncher on the target),
-that I can not explain, or find where it goes wrong.
-
-It must be in one of the libraries, but because I do not have any
-'repetitive' core-dumps, it is hard to figure out what is going on, when
-looking at these core dumps. 
-
-I guess some basic-stuff (like fore example, locking.. or whatever...
-malloc/free... troubles) that is not working, it is to strange what
-happens, in  these core-dumps i never see somthing that is pointing to
-the same crash-reason.
- 
-
-NOTE: When I do compile Weskit-1.2.7 (that was working before) with the
-same set of libraries/uclibc.... (as I use to build 1.6.3 now), I do get
-'RANDOM'-crashes as well.
-
-I've included some core-dumps trace-back's (hope this is not to big for
-the mailing-list) maybe someone gets a idea where I can take a look at.
-
-Regards, and thanks.
-Noel
-
-
-
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: crash1.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/05d46b09/attachment-0003.txt>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: crash2.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/05d46b09/attachment-0004.txt>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: crash3.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/05d46b09/attachment-0005.txt>
+-- 
+Bye, Peter Korsgaard
