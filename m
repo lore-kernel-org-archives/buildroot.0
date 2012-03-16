@@ -1,40 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Mar 2012 22:35:42 +0100
-Subject: [Buildroot] [git commit] linux-firmware: update definition for
-	atheros ar9271
-Message-ID: <20120316214430.423C190DFF@busybox.osuosl.org>
+Date: Fri, 16 Mar 2012 22:12:15 +0100
+Subject: [Buildroot] [git commit] vsftpd: bump to 2.3.5
+Message-ID: <20120316214430.356E990DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3911c7bc8ebfffe750ee54138f63221530c1865d
+commit: http://git.buildroot.net/buildroot/commit/?id=9ec29c8acc4827d831640f807bb7212072998e0a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ar9271.fw is the old convention for the firmware.
-Starting with kernel 3.0 the new convention is htc_9271.fw which is a
-newer version of the firmware so symlinking won't do it and there are no
-guarantees that the newer firmware will work with the older driver
-either.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/linux-firmware/linux-firmware.mk |    2 +-
+ package/vsftpd/vsftpd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index eedef2f..8d1dd00 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -23,7 +23,7 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX) += \
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index e67ab4a..8d3a01e 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- # ar9271
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271) += \
--	LICENCE.atheros_firmware ar9271.fw
-+	LICENCE.atheros_firmware ar9271.fw htc_9271.fw
+-VSFTPD_VERSION = 2.3.4
++VSFTPD_VERSION = 2.3.5
+ VSFTPD_SITE = https://security.appspot.com/downloads
+ VSFTPD_LIBS = -lcrypt
  
- # wl127x
- LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
