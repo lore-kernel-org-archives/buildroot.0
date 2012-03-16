@@ -1,82 +1,26 @@
-From: Markus Kaindl <markus.kaindl@stusta.mhn.de>
-Date: Fri, 16 Mar 2012 01:29:17 +0100
-Subject: [Buildroot] [PATCH] Downloadsite DHCP changed
-In-Reply-To: <20120315081046.5e88ba0a@skate>
-References: <1331783706-15520-1-git-send-email-markus.kaindl@stusta.mhn.de>
- <20120315081046.5e88ba0a@skate>
-Message-ID: <4F62895D.80704@stusta.mhn.de>
+From: bifferos <bifferos@yahoo.co.uk>
+Date: Fri, 16 Mar 2012 01:58:42 +0000
+Subject: [Buildroot] Debugging /sbin/init startup issues
+In-Reply-To: <4F5D5017.2080908@yahoo.co.uk>
+References: <201203031529.36487.arnout@mind.be>
+ <1330788921-27127-1-git-send-email-arnout@mind.be>
+ <4F5D5017.2080908@yahoo.co.uk>
+Message-ID: <4F629E52.2070608@yahoo.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni schrieb:
-> Hello Markus,
-> 
-> Excellent! You are almost there with your Git patch. You need to fix
-> two final things:
-> 
->  * The short description of the patch should rather describe what the
->    patch does rather than the reason why it does. Something like
->    "dhcp: update HTTP site location" or similar. But that's just a
->    matter of taste.
-> 
->  * Our commit log must include a Markus Kaindl
->    <markus.kaindl@stusta.mhn.de> line. So basically, your commit log
->    should look like:
-> 
-> =====================================================================
-> dhcp: update HTTP site location
-> 
-> Signed-off-by: Markus Kaindl <markus.kaindl@stusta.mhn.de>
-> =====================================================================
-> 
-> And then your patch will be perfect.
-> 
-> I am sorry to be annoying about this, but those are the rules we all
-> follow in the Buildroot community, and I think it is a good idea to
-> explain them to new contributors.
-> 
-> Thanks for your work and persistence!
-> 
-> Thomas
-> 
-> Le Thu, 15 Mar 2012 04:55:06 +0100,
-> Markus Kaindl <markus.kaindl@stusta.mhn.de> a ?crit :
-> 
->> ---
->>  package/dhcp/dhcp.mk |    2 +-
->>  1 files changed, 1 insertions(+), 1 deletions(-)
->>
->> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
->> index 10bdc2e..9ec27d3 100644
->> --- a/package/dhcp/dhcp.mk
->> +++ b/package/dhcp/dhcp.mk
->> @@ -5,7 +5,7 @@
->>  #############################################################
->>  
->>  DHCP_VERSION  = 4.1-ESV-R4
->> -DHCP_SITE     = http://ftp.isc.org/isc/dhcp
->> +DHCP_SITE     = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
->>  DHCP_CONF_ENV = ac_cv_file__dev_random=yes
->>  DHCP_CONF_OPT = \
->>  	--localstatedir=/var/lib/dhcp \
-> 
-> 
-> 
+I have the following error in init:
 
-Hello Thomas,
+init[1]: segfault at 0 ip   (null) sp bf95bf40 error 4 in 
+busybox[8048000+7c000]
+Kernel panic - not syncing: Attempted to kill init!
 
-Peter Korsgaard has fixed it himslef now, so I won't send another one ;)
-But thanks for your advice, I'll try to make it right the next time.
+How do I debug this?  Does it mean the busybox binary can't be 
+executed?  Do I try to tackle this from kernel hacking or can I do it 
+from inside busybox?
 
-Markus
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 900 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/75c7a307/attachment.asc>
+thanks,
+Biff.
