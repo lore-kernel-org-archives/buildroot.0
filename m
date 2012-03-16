@@ -1,44 +1,49 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 Mar 2012 22:23:50 +0100
-Subject: [Buildroot] [PATCH 2/2] vsftpd: fix SSL dependency
-In-Reply-To: <1331906095-18056-2-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 16 Mar 2012 14:54:55
- +0100")
-References: <1331906095-18056-1-git-send-email-yegorslists@googlemail.com>
- <1331906095-18056-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87r4wsp7dl.fsf@macbook.be.48ers.dk>
+Date: Fri, 16 Mar 2012 22:30:41 +0100
+Subject: [Buildroot] Where does post-build script belong?
+In-Reply-To: <jijjsi$tuq$1@dough.gmane.org> (Grant Edwards's message of "Tue, 
+ 28 Feb 2012 22:18:58 +0000 (UTC)")
+References: <jhub5r$smv$1@dough.gmane.org> <4F435977.1060001@lucaceresoli.net>
+ <ji0b7n$2hl$1@dough.gmane.org> <201202282038.54757.arnout@mind.be>
+ <jijfkp$qv0$1@dough.gmane.org> <4F4D4751.1030906@gmail.com>
+ <jijhcf$a6d$1@dough.gmane.org> <4F4D4FE4.3020506@gmail.com>
+ <jijjsi$tuq$1@dough.gmane.org>
+Message-ID: <87ipi4p726.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-Can you be a bit more specific about what this fixes? I just did a test
-with the default BR (arm926t) toolchain and it works here without it:
+ Grant> The doc says one of the options for customizing the filesystem is
 
-/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -o vsftpd
-main.o utility.o prelogin.o ftpcmdio.o postlogin.o privsock.o tunables.o
-ftpdataio.o secbuf.o ls.o postprivparent.o logging.o str.o netstr.o
-sysstr.o strlist.o banner.o filestr.o parseconf.o secutil.o ascii.o
-oneprocess.o twoprocess.o privops.o standalone.o hash.o tcpwrap.o
-ipaddrparse.o access.o features.o readwrite.o opts.o ssl.o sslslave.o
-ptracesandbox.o ftppolicy.o sysutil.o sysdeputil.o -Wl,-s -lcrypt -lssl
+ Grant>  * Create your own target skeleton. You can start with the default
+ Grant>    skeleton available under fs/skeleton and then customize it to suit
+ Grant>    your needs. The BR2_ROOTFS_SKELETON_CUSTOM and
+ Grant>    BR2_ROOTFS_SKELETON_CUSTOM_PATH will allow you to specify the
+ Grant>    location of your custom skeleton. At build time, the contents of
+ Grant>    the skeleton are copied to output/target before any package
+ Grant>    installation.
 
-..
+ Grant> I read that as meaning buildroot will use my own customized target
+ Grant> skeleton instead of the default one.  Previously in the thread when
+ Grant> people mentioned custom skeletons, I thought that option was what they
+ Grant> were talking about.
 
-./output/host/usr/bin/arm-linux-readelf -a output/build/vsftpd-2.3.5/vsftpd |grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libcrypt.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libssl.so.1.0.0]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
- 0x00000001 (NEEDED)                     Shared library: [libcrypto.so.1.0.0]
+We had support for custom target skeletons pretty much forever, and that
+is still supported. What the recent discussion has been about is a
+different approach to pretty much do the same. Stick with the default
+skeleton, but add any customization at the END of the build sequence
+using the post-build script.
 
-So it end up with the libcrypto reference without explicitly linking
-with it.
+Both approaches have advantages and disadvantages, it depends on how
+closely your needs are to the default skeleton, and if you want to
+automatically use any changes to the default skeleton when you upgrade
+your buildroot version.
 
 -- 
 Bye, Peter Korsgaard
