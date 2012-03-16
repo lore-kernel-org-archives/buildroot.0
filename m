@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Mar 2012 22:12:15 +0100
-Subject: [Buildroot] [git commit] vsftpd: bump to 2.3.5
-Message-ID: <20120316214430.356E990DFD@busybox.osuosl.org>
+Date: Fri, 16 Mar 2012 22:41:09 +0100
+Subject: [Buildroot] [git commit] boost: Add comment when C++ is missing
+Message-ID: <20120316214430.61CB690DFD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9ec29c8acc4827d831640f807bb7212072998e0a
+commit: http://git.buildroot.net/buildroot/commit/?id=f43f4f433e422e08d5d00a4bb6c1d93e70b67b89
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Peter: move above boost option so sub options gets indented]
+Signed-off-by: Stephan Thamm <thammi@chaossource.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/vsftpd/vsftpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/boost/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
-index e67ab4a..8d3a01e 100644
---- a/package/vsftpd/vsftpd.mk
-+++ b/package/vsftpd/vsftpd.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--VSFTPD_VERSION = 2.3.4
-+VSFTPD_VERSION = 2.3.5
- VSFTPD_SITE = https://security.appspot.com/downloads
- VSFTPD_LIBS = -lcrypt
- 
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 7598d02..578fced 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -1,3 +1,6 @@
++comment "boost requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
+ config BR2_PACKAGE_BOOST
+ 	bool "boost"
+ 	depends on BR2_INSTALL_LIBSTDCPP
