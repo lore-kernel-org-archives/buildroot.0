@@ -1,23 +1,23 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Fri, 16 Mar 2012 16:55:57 -0400
-Subject: [Buildroot] scons, zxing and buildroot
-Message-ID: <CA+-urNQdQwFYHxL+-ws5PmtNT6rzUtDYynsJmx+7E-wBLGgsFQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 Mar 2012 22:20:25 +0100
+Subject: [Buildroot] [PATCH 1/2] vsftpd: bump to 2.3.5
+In-Reply-To: <1331906095-18056-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Fri, 16 Mar 2012 14:54:54
+ +0100")
+References: <1331906095-18056-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87vcm4p7ja.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I need to get a package integrated with buildroot that uses scons. I
-haven't used scons before, and I'm not quite sure how to get it to
-call the cross-compiler appropriately. Or at least, I haven't figured
-out how to pass the compiler and compiler options on the command line
-to it yet. I did notice that host-scons exists in buildroot, so it
-seems like someone may have gotten a scons-based project to work. So
-far, I haven't found any packages that actually reference it, so I was
-wondering if anyone had an example. The library in question is the C++
-port of the zxing library (http://code.google.com/p/zxing/) in case
-someone already has ported it.
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-Thanks,
-Frank
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
