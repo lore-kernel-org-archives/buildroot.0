@@ -1,40 +1,55 @@
-From: PHilip RUshik <prushik@gmail.com>
-Date: Sat, 17 Mar 2012 12:52:52 +0900
-Subject: [Buildroot] Struggling with buildroot native compiler (or rather,
-	the linker)
-Message-ID: <CAGmOtePuxRAt5L4E-7aM-NQJfoiezfQ0W-1WQmk+11+oZDX3sw@mail.gmail.com>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Fri, 16 Mar 2012 21:03:39 -0700
+Subject: [Buildroot] Debugging /sbin/init startup issues
+In-Reply-To: <4F629E52.2070608@yahoo.co.uk>
+References: <201203031529.36487.arnout@mind.be>
+ <1330788921-27127-1-git-send-email-arnout@mind.be>
+ <4F5D5017.2080908@yahoo.co.uk> <4F629E52.2070608@yahoo.co.uk>
+Message-ID: <CALo-6+j2qx4k6X1t8FLeyd=fXTkmx1GEPqV=c7_U6LSPiXv1OA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've gotten pretty good at using buildroot and adding new packages and all
-that, the one thing which I just can't make work reliably is the native
-compiler (and leafpad, which corrupts all files that it saves).
-First of all, like I mentioned in another email, it always tries to link
-with /usr/lib/libc.a even when not compiling regular dynamically linked
-executables. The suggested fix was to softlink /lib/libc.so.0 to
-/usr/lib/libc.so. Seemed like a good solution to me, and it seems to do
-what its supposed to do, the linker finds that one instead of libc.a and
-tries to link against that, however, the problem is that it always fails,
-complaining about undefined symbols in /usr/lib/libc.so. The ones that I
-remember it mentioning specifically are malloc and calloc, which I thought
-was weird as they should be part of libc, yes?
-Any ideas?
+Step 1: boot with a kernel command line that ends with the word 'single'
+for single user-mode.
 
-The code I was trying to compile looked like this
+Step 2: Back up to a functional kernel image rootfs combination and review
+the changes.
 
-#include <stdio.h>
+Step 3: ensure the string 'debug' is on the kernel command line.
 
-int main()
-{
-      return 0;
-}
+Step 4: review the geometry layout of the flash passed to the kernel.
 
+Basically, what this message is telling you is that the kernel does not
+understand the root file system. The are incompatible, probably something
+like cramfs when it should be jffs2, wrong mtd partition definition or the
+like.
 
+Charles
+On Mar 15, 2012 5:49 PM, "bifferos" <bifferos@yahoo.co.uk> wrote:
 
- ---PHil
+> I have the following error in init:
+>
+> init[1]: segfault at 0 ip   (null) sp bf95bf40 error 4 in
+> busybox[8048000+7c000]
+> Kernel panic - not syncing: Attempted to kill init!
+>
+> How do I debug this?  Does it mean the busybox binary can't be executed?
+>  Do I try to tackle this from kernel hacking or can I do it from inside
+> busybox?
+>
+> thanks,
+> Biff.
+>
+>
+>
+> ______________________________**_________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120317/226929d6/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/fd5e4b00/attachment.html>
