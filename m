@@ -1,55 +1,52 @@
-From: Charles Krinke <charles.krinke@gmail.com>
-Date: Fri, 16 Mar 2012 21:03:39 -0700
-Subject: [Buildroot] Debugging /sbin/init startup issues
-In-Reply-To: <4F629E52.2070608@yahoo.co.uk>
-References: <201203031529.36487.arnout@mind.be>
- <1330788921-27127-1-git-send-email-arnout@mind.be>
- <4F5D5017.2080908@yahoo.co.uk> <4F629E52.2070608@yahoo.co.uk>
-Message-ID: <CALo-6+j2qx4k6X1t8FLeyd=fXTkmx1GEPqV=c7_U6LSPiXv1OA@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 17 Mar 2012 08:18:51 +0100
+Subject: [Buildroot] [PATCH 2/2] vsftpd: fix SSL dependency
+In-Reply-To: <87r4wsp7dl.fsf@macbook.be.48ers.dk>
+References: <1331906095-18056-1-git-send-email-yegorslists@googlemail.com>
+ <1331906095-18056-2-git-send-email-yegorslists@googlemail.com>
+ <87r4wsp7dl.fsf@macbook.be.48ers.dk>
+Message-ID: <CAGm1_kv4_CfMehyG4Y65A+YGxeVg8w7mcrGaf9jwRybrqEBAfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Step 1: boot with a kernel command line that ends with the word 'single'
-for single user-mode.
+On Fri, Mar 16, 2012 at 10:23 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "yegorslists" == yegorslists ?<yegorslists@googlemail.com> writes:
+>
+> ?yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+> ?yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> Can you be a bit more specific about what this fixes? I just did a test
+> with the default BR (arm926t) toolchain and it works here without it:
+>
+> /home/peko/source/buildroot/output/host/usr/bin/arm-linux-gcc -o vsftpd
+> main.o utility.o prelogin.o ftpcmdio.o postlogin.o privsock.o tunables.o
+> ftpdataio.o secbuf.o ls.o postprivparent.o logging.o str.o netstr.o
+> sysstr.o strlist.o banner.o filestr.o parseconf.o secutil.o ascii.o
+> oneprocess.o twoprocess.o privops.o standalone.o hash.o tcpwrap.o
+> ipaddrparse.o access.o features.o readwrite.o opts.o ssl.o sslslave.o
+> ptracesandbox.o ftppolicy.o sysutil.o sysdeputil.o -Wl,-s -lcrypt -lssl
+>
+> ..
+>
+> ./output/host/usr/bin/arm-linux-readelf -a output/build/vsftpd-2.3.5/vsftpd |grep NEEDED
+> ?0x00000001 (NEEDED) ? ? ? ? ? ? ? ? ? ? Shared library: [libcrypt.so.0]
+> ?0x00000001 (NEEDED) ? ? ? ? ? ? ? ? ? ? Shared library: [libssl.so.1.0.0]
+> ?0x00000001 (NEEDED) ? ? ? ? ? ? ? ? ? ? Shared library: [libc.so.0]
+> ?0x00000001 (NEEDED) ? ? ? ? ? ? ? ? ? ? Shared library: [libcrypto.so.1.0.0]
+>
+> So it end up with the libcrypto reference without explicitly linking
+> with it.
 
-Step 2: Back up to a functional kernel image rootfs combination and review
-the changes.
+This is output from pkg-config:
 
-Step 3: ensure the string 'debug' is on the kernel command line.
+pkg-config --libs openssl
+-lssl -lcrypto
 
-Step 4: review the geometry layout of the flash passed to the kernel.
+I don't know what is going on exactly, but could it be that other
+toolchains bring valid lcrypto with them?
+But vsftpd has it's own library finder script and it also defines both libs.
 
-Basically, what this message is telling you is that the kernel does not
-understand the root file system. The are incompatible, probably something
-like cramfs when it should be jffs2, wrong mtd partition definition or the
-like.
-
-Charles
-On Mar 15, 2012 5:49 PM, "bifferos" <bifferos@yahoo.co.uk> wrote:
-
-> I have the following error in init:
->
-> init[1]: segfault at 0 ip   (null) sp bf95bf40 error 4 in
-> busybox[8048000+7c000]
-> Kernel panic - not syncing: Attempted to kill init!
->
-> How do I debug this?  Does it mean the busybox binary can't be executed?
->  Do I try to tackle this from kernel hacking or can I do it from inside
-> busybox?
->
-> thanks,
-> Biff.
->
->
->
-> ______________________________**_________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120316/fd5e4b00/attachment.html>
+Yegor
