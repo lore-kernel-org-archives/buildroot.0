@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 Mar 2012 09:16:01 +0100
-Subject: [Buildroot] [PATCH 2/2] vsftpd: fix SSL dependency
-In-Reply-To: <1331906095-18056-2-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Fri, 16 Mar 2012 14:54:55
- +0100")
-References: <1331906095-18056-1-git-send-email-yegorslists@googlemail.com>
- <1331906095-18056-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87obrvod6m.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 17 Mar 2012 09:15:57 +0100
+Subject: [Buildroot] [git commit] vsftpd: fix SSL dependency
+Message-ID: <20120317081647.5C49E90E36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cfb5fd9e10b1efeed316ed2cce2be1623c1efe65
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/vsftpd/vsftpd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 8d3a01e..3c9aa65 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -14,7 +14,7 @@ endef
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ VSFTPD_DEPENDENCIES += openssl
+-VSFTPD_LIBS += -lssl
++VSFTPD_LIBS += -lssl -lcrypto
+ VSFTPD_POST_CONFIGURE_HOOKS += VSFTPD_ENABLE_SSL
+ endif
+ 
