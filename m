@@ -1,32 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 16 Mar 2012 22:41:09 +0100
-Subject: [Buildroot] [git commit] boost: Add comment when C++ is missing
-Message-ID: <20120316214430.61CB690DFD@busybox.osuosl.org>
+From: PHilip RUshik <prushik@gmail.com>
+Date: Sat, 17 Mar 2012 12:52:52 +0900
+Subject: [Buildroot] Struggling with buildroot native compiler (or rather,
+	the linker)
+Message-ID: <CAGmOtePuxRAt5L4E-7aM-NQJfoiezfQ0W-1WQmk+11+oZDX3sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f43f4f433e422e08d5d00a4bb6c1d93e70b67b89
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I've gotten pretty good at using buildroot and adding new packages and all
+that, the one thing which I just can't make work reliably is the native
+compiler (and leafpad, which corrupts all files that it saves).
+First of all, like I mentioned in another email, it always tries to link
+with /usr/lib/libc.a even when not compiling regular dynamically linked
+executables. The suggested fix was to softlink /lib/libc.so.0 to
+/usr/lib/libc.so. Seemed like a good solution to me, and it seems to do
+what its supposed to do, the linker finds that one instead of libc.a and
+tries to link against that, however, the problem is that it always fails,
+complaining about undefined symbols in /usr/lib/libc.so. The ones that I
+remember it mentioning specifically are malloc and calloc, which I thought
+was weird as they should be part of libc, yes?
+Any ideas?
 
-[Peter: move above boost option so sub options gets indented]
-Signed-off-by: Stephan Thamm <thammi@chaossource.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/boost/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+The code I was trying to compile looked like this
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 7598d02..578fced 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -1,3 +1,6 @@
-+comment "boost requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_BOOST
- 	bool "boost"
- 	depends on BR2_INSTALL_LIBSTDCPP
+#include <stdio.h>
+
+int main()
+{
+      return 0;
+}
+
+
+
+ ---PHil
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120317/226929d6/attachment.html>
