@@ -1,47 +1,47 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 22:05:03 +0100
-Subject: [Buildroot] [git commit] docs/buildroot.html: add new manual
-	location and warning about this page
-Message-ID: <20120318215010.11D2790D89@busybox.osuosl.org>
+Date: Sun, 18 Mar 2012 22:06:34 +0100
+Subject: [Buildroot] [git commit] docs: fix busybox url
+Message-ID: <20120318215010.2552A90D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e06a030e6bc95bc55f4bfcebd5e80a03f48233f
+commit: http://git.buildroot.net/buildroot/commit/?id=d41e115395071fe5c22f0cbd786426935d40d1d5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/buildroot.html |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
+ docs/buildroot.html   |    2 +-
+ docs/manual/using.txt |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/docs/buildroot.html b/docs/buildroot.html
-index 28aefe4..a01e1fc 100644
+index a01e1fc..d178df1 100644
 --- a/docs/buildroot.html
 +++ b/docs/buildroot.html
-@@ -37,6 +37,21 @@
-       <li><a href="#links">Resources</a></li>
-     </ul>
+@@ -154,7 +154,7 @@
+     <p>Buildroot has a nice configuration tool similar to the one you can find
+     in the Linux kernel
+     (<a href="http://www.kernel.org/">http://www.kernel.org/</a>) or in Busybox
+-    (<a href="http://www.busybox.org/">http://www.busybox.org/</a>). Note that
++    (<a href="http://www.busybox.net/">http://www.busybox.net/</a>). Note that
+     you can (and should) build everything as a normal user. There is no need to
+     be root to configure and use Buildroot. The first step is to run the
+     configuration assistant:</p>
+diff --git a/docs/manual/using.txt b/docs/manual/using.txt
+index 8d7f0a7..a5dc9e1 100644
+--- a/docs/manual/using.txt
++++ b/docs/manual/using.txt
+@@ -6,7 +6,7 @@ Configuration and general usage
  
-+    <p><b>WARNING:</b> Since the 2011.11 release, this page is on its way to be
-+    deprecated. Information may be incomplete and out-dated.</p>
-+
-+    <p>To get an up-to-date documentation for
-+    <a href="http://buildroot.net/">Buildroot</a>-2011.11 or a git view, just
-+    run:</p>
-+<pre>
-+  $ make manual
-+</pre>
-+    <p><i>This requires <code>asciidoc</code> installed on the host system.</i></p>
-+
-+    <p>For releases since <a href="http://buildroot.net/">Buildroot</a>-2012.02,
-+    manuals (html, pdf and text) are available in the  <code>docs/manual</code>
-+    directory.</p>
-+
-     <h2 id="about">About Buildroot</h2>
- 
-     <p>Buildroot is a set of Makefiles and patches that allows you to easily
+ Buildroot has a nice configuration tool similar to the one you can
+ find in the http://www.kernel.org/[Linux kernel] or in
+-http://www.busybox.org/[Busybox]. Note that you can (and should) build
++http://www.busybox.net/[Busybox]. Note that you can (and should) build
+ everything as a normal user. There is no need to be root to configure
+ and use Buildroot. The first step is to run the configuration
+ assistant:
