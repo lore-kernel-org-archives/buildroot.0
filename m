@@ -1,75 +1,34 @@
-From: =?iso-8859-1?Q?Mikael_=C5sberg?= <mikael.asberg@mdh.se>
-Date: Sun, 18 Mar 2012 11:52:51 +0100
-Subject: [Buildroot] Create a bootable SD Card
-In-Reply-To: <CAAbSJMVHwjaJTFdS51gLf81kN6qDBMmGPZJUZZatUWd2X2cz1A@mail.gmail.com>
-References: <63D6870D443E63419AC4A0C97B86C0920428BC3017@MBXCLUSTER.mdh.local>,
- <CAAbSJMVHwjaJTFdS51gLf81kN6qDBMmGPZJUZZatUWd2X2cz1A@mail.gmail.com>
-Message-ID: <63D6870D443E63419AC4A0C97B86C0920428BC3019@MBXCLUSTER.mdh.local>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 18 Mar 2012 14:50:43 +0100
+Subject: [Buildroot] [PATCH] bifferboard: new board
+In-Reply-To: <4F5D5017.2080908@yahoo.co.uk>
+References: <201203031529.36487.arnout@mind.be>
+ <1330788921-27127-1-git-send-email-arnout@mind.be>
+ <4F5D5017.2080908@yahoo.co.uk>
+Message-ID: <201203181450.44385.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Monday 12 March 2012 02:23:35 bifferos wrote:
+> Write protecting the kernel text: 1048k
+> Write protecting the kernel read-only data: 164k
+> init[1]: segfault at 0 ip   (null) sp bf95bf40 error 4 in 
+> busybox[8048000+7c000]
 
-I have two issues:
+ Since this segmentation fault is in init, it will be tough to debug.
+Judging from the address, it in fact happens even before init is 
+started.  Is it possible that there isn't enough RAM to run busybox?
 
-1.
+ Regards,
+ Arnout
 
->In this partition header, you may define a partition starting *after*
->the end of the bootloader, up to the end of the card, to put the
->rootfs
-
-How do I know where the bootloader part ends?
-
-2.
-
-Where do I put my "uImage"? From my experience it should be in /boot but my rootfs does not have /boot?
-
-Regards
-
---------------------------------------------------------------
-Mikael ?sberg
-PhD student (Doktorand), Computer Engineering
-School of Innovation, Design and Engineering
-M?lardalen University, V?ster?s Sweden
-Phone: +46(0)21 101502
-Room nr: U1-145
-Mail: mikael.asberg at mdh.se
---------------------------------------------------------------
-________________________________________
-Fr?n: Mickael Chazaux [mickael.chazaux at gmail.com]
-Skickat: den 16 mars 2012 17:57
-Till: Mikael ?sberg
-Kopia: buildroot at busybox.net
-?mne: Re: [Buildroot] Create a bootable SD Card
-
-Hi,
-
->
-> I have generated a file-system, bootloader and image for the platform i.MX28 EVK (using Buildroot).
->
-> How do I create a bootable SD memory card (using these files)?
->
-
-__IIRC__
-
-The bootloader has to be written at address 0x800 on the SD card (dd
-if=myfile of=/dev/mmcbkl0 bs=512 skip=4)
-This leaves room for a standard PC BIOS partition header (Write it with fdisk)
-In this partition header, you may define a partition starting *after*
-the end of the bootloader, up to the end of the card, to put the
-rootfs
-If so, put on it whatever filesystem you like (squashfs, extX, ...)
-with the method you prefer
-    - squashfs example : dd if=mycompressedrootfs.squashfs of=/dev/mmcblk0p1
-    - ext4 example : mkfs.ext4 /dev/mmcblk0p1 && mount /dev/mmcblk0p1
-/mnt && cd  /mnt && tar -zxvpf mycoolrootfs.tar.gz
-
-The bootloader has to be "signed" by a signing tool that can be found
-in LTIB, or written according to the datasheet.
-
-Regards,
-
-Mickael
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
