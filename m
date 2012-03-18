@@ -1,47 +1,86 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 22:06:34 +0100
-Subject: [Buildroot] [git commit] docs: fix busybox url
-Message-ID: <20120318215010.2552A90D89@busybox.osuosl.org>
+Date: Sun, 18 Mar 2012 22:12:45 +0100
+Subject: [Buildroot] [git commit] manual: update Config.in dependency
+	explainations
+Message-ID: <20120318215010.486AD90D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d41e115395071fe5c22f0cbd786426935d40d1d5
+commit: http://git.buildroot.net/buildroot/commit/?id=6372f4e64600335b5ff7d07e3b78baf2fa6cce59
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: adjusted according to Arnout's suggestions]
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/buildroot.html   |    2 +-
- docs/manual/using.txt |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-directory.txt |   53 +++++++++++++++++++++++++++++
+ 1 files changed, 53 insertions(+), 0 deletions(-)
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index a01e1fc..d178df1 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -154,7 +154,7 @@
-     <p>Buildroot has a nice configuration tool similar to the one you can find
-     in the Linux kernel
-     (<a href="http://www.kernel.org/">http://www.kernel.org/</a>) or in Busybox
--    (<a href="http://www.busybox.org/">http://www.busybox.org/</a>). Note that
-+    (<a href="http://www.busybox.net/">http://www.busybox.net/</a>). Note that
-     you can (and should) build everything as a normal user. There is no need to
-     be root to configure and use Buildroot. The first step is to run the
-     configuration assistant:</p>
-diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-index 8d7f0a7..a5dc9e1 100644
---- a/docs/manual/using.txt
-+++ b/docs/manual/using.txt
-@@ -6,7 +6,7 @@ Configuration and general usage
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 04be820..2670f2f 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -87,6 +87,59 @@ comment "acl requires a toolchain with LARGEFILE support"
+ --------------------------
  
- Buildroot has a nice configuration tool similar to the one you can
- find in the http://www.kernel.org/[Linux kernel] or in
--http://www.busybox.org/[Busybox]. Note that you can (and should) build
-+http://www.busybox.net/[Busybox]. Note that you can (and should) build
- everything as a normal user. There is no need to be root to configure
- and use Buildroot. The first step is to run the configuration
- assistant:
+ 
++Note that these two dependency types are only transitive with the
++dependencies of the same kind.
++
++This means, in the following example:
++
++--------------------------
++config BR2_PACKAGE_A
++        bool "Package A"
++
++config BR2_PACKAGE_B
++        bool "Package B"
++        depends on BR2_PACKAGE_A
++
++config BR2_PACKAGE_C
++        bool "Package C"
++        depends on BR2_PACKAGE_B
++
++config BR2_PACKAGE_D
++        bool "Package D"
++        select BR2_PACKAGE_B
++
++config BR2_PACKAGE_E
++        bool "Package E"
++        select BR2_PACKAGE_D
++--------------------------
++
++* Selecting +Package C+ will be visible if +Package B+ has been
++  selected, which in turn is only visible if +Package A+ has been
++  selected.
++
++* Selecting +Package E+ will select +Package D+, which will select
++  +Package B+, it will not check for the dependencies of +Package B+,
++  so it will not select +Package A+.
++
++* Since +Package B+ is selected but +Package A+ is not, this violates
++  the dependency of +Package B+ on +Package A+.  Therefore, in such a
++  situation, the transitive dependency has to be added explicitly:
++
++--------------------------
++config BR2_PACKAGE_D
++	bool "Package D"
++	select BR2_PACKAGE_B
++	depends on BR2_PACKAGE_A
++
++config BR2_PACKAGE_E
++	bool "Package E"
++	select BR2_PACKAGE_D
++	depends on BR2_PACKAGE_A
++--------------------------
++
++Overall, for package library dependencies, +select+ should be
++preferred.
++
+ Note that such dependencies will make sure that the dependency option
+ is also enabled, but not necessarily built before your package. To do
+ so, the dependency also needs to be expressed in the +.mk+ file of the
