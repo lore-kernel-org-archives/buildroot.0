@@ -1,69 +1,73 @@
-From: Nicolas Dechesne <n-dechesne@ti.com>
-Date: Sun, 18 Mar 2012 23:04:52 +0100
-Subject: [Buildroot] [PATCH 3/3 v4] configs: add support for PandaBoard and
-	PandaBoard ES
-In-Reply-To: <1332108292-28094-1-git-send-email-n-dechesne@ti.com>
-References: <1332108292-28094-1-git-send-email-n-dechesne@ti.com>
-Message-ID: <1332108292-28094-4-git-send-email-n-dechesne@ti.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 18 Mar 2012 23:09:48 +0100
+Subject: [Buildroot] BR2012.rc1 :: problem to build a new package
+In-Reply-To: <CAPEB33ygJQjjcT_fj-kPX1NUSr3C1z3kZvE22uH0dU5LF4n_Vg@mail.gmail.com>
+References: <CAPEB33x+aVFQoFgN8FXUDWsdqux4Kgf6cPnpMnxN3eRLedGB2g@mail.gmail.com>
+ <201203160054.10741.arnout@mind.be>
+ <CAPEB33ygJQjjcT_fj-kPX1NUSr3C1z3kZvE22uH0dU5LF4n_Vg@mail.gmail.com>
+Message-ID: <CAHXCMMLkbaQc_rY1vP=yzwaHKDB=0eG1-a-5vdqb93CPt2M31Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a default configuration for Panda and PandaES, tested on both
-platforms.
+Hi Johann, all,
 
-DEVTMPFS is enabled, to use static dev configuration one would need
-to update the generic dev table for ttyO driver.
+2012/3/18 MERCADIER Johann <johann.mercadier@imerir.com>:
+> Hi Arnout,
+>
+> ??Thanks for your suggestions, it helped me. Troubles were caused?by a small
+> mistake:
+>
+>>
+>> ?So you should have the line
+>> <PKG>_DEPENDENCIES += freetype fontconfig
+>> in your .mk file.
+>>
+> => I forgot to remove the 'lib' prefix from the libraries name, that I got
+> with a ldd
+>
+>
+>> ?Normally configure should pick it up automatically then.
+>>
+>> ?Make sure that the Config.in also has the lines
+>> ? ? ? ?select BR2_PACKAGE_FREETYPE
+>> ? ? ? ?select BR2_PACKAGE_FONTCONFIG
+>
+> => this part was already OK
+Glad you successfully find your way out :-)
 
-Panda is well supported in mainline kernel with omap2plus_defconfig,
-so this should be safe.
+> => Now that's work. FbTerm is integrated and I can launch it. No troubles til now.
+> I went to the website and created a signature.
+> Now what I am confused with is the proper way to create a patch, do I have to :
+> ?? * use the a simple 'diff' ?command, with only the files I modified?
+> ?? or
+> ?? * use git + git format + git send-mail?... As it's explain here: http://tutoriels.itaapy.com/wiki/tutoriel-git/#bien-configurer-son-git
+>
+> ??At the end where the signature must be added? Obviously not in the patch All the one I read didn't have such an information on it.
+You will find most of the answers here:
+http://elinux.org/Buildroot_how_to_contribute
 
-U-boot SPL support is enabled by default as x-loader is now
-deprecated.
+Note that if you didn't had the SOB at commit time, git can add it
+when generating patches, just add '-s' option to the git format-patch
+command line.
+To generate them, I usually use:
+$ git format-patch -M -n -s master
 
-With OMAP platforms u-boot,img format is prefered now, so it's enabled
-by default as well. Also, on PandaBoard, the name of SPL target file
-is MLO.
+As usual, man is your friends ;-)
+Have a look at:
+$ man git-format-patch
+$ man git-send-email
 
-Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
----
- configs/pandaboard_defconfig |   26 ++++++++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 configs/pandaboard_defconfig
+>
+> I didn't find relevant relevant information on that part. some infos will be great so as I can finished this part and know it for next time.
+You're right, we are working on make it clearer.
+We are gathering all pieces of doc and put them in such a way it easy
+to find out the relevant information.
+It is a continuous process...
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-new file mode 100644
-index 0000000..9496b7f
---- /dev/null
-+++ b/configs/pandaboard_defconfig
-@@ -0,0 +1,26 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+
-+# GCC
-+BR2_GCC_VERSION_4_6_X=y
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="MLO"
--- 
-1.7.9.1
+
+Regards,
+
+Sam
