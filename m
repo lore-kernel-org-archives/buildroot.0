@@ -1,17 +1,18 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 18 Mar 2012 23:53:38 +0100
-Subject: [Buildroot] [PATCH] Config.in.arch: fix quoting of BR2_microblazebe
-Message-ID: <1332111218-23707-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 18 Mar 2012 23:16:49 +0100
+Subject: [Buildroot] [git commit] Config.in.arch: Fix microblaze-be double
+	quote issue
+Message-ID: <20120318230259.BFC2890E97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Sorry for not noticing before :-)
+commit: http://git.buildroot.net/buildroot/commit/?id=9bf3dc764f76d85de3c2fcb25c5a247289334bfe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  target/Config.in.arch |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
@@ -29,5 +30,3 @@ index 1910ff6..17e0236 100644
  config BR2_mips
  	bool "mips"
  config BR2_mipsel
--- 
-tg: (b6a507c..) t/fix-Config.in.arch (depends on: master)
