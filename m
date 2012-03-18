@@ -1,45 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 16:17:46 +0100
-Subject: [Buildroot] Applying Ludovic's patches
-In-Reply-To: <20120314224659.23a5d71c@skate>
-References: <20120314224659.23a5d71c@skate>
-Message-ID: <201203181617.47024.arnout@mind.be>
+Date: Sun, 18 Mar 2012 16:29:53 +0100
+Subject: [Buildroot] (no subject)
+In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB67031019E4@WETMEX10.loepfe.com>
+References: <1531E53627F1F749B4FE809BF2A4EB67031019E4@WETMEX10.loepfe.com>
+Message-ID: <201203181629.53542.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 14 March 2012 22:46:59 Thomas Petazzoni wrote:
-> Could you merge soon the patches that Ludovic Desroches from Atmel has
-> prepared? He has been working on this and posting regular versions of
-> this patch set since may 2011, so it's been a very long time, and both
-> Atmel and Armadeus need the capability of using a tarball of patches to
-> deliver patches for the Linux kernel or other components (U-Boot, etc.).
+On Friday 16 March 2012 11:36:27 Vellemans, Noel wrote:
 > 
-> The time we have taken to react is really not a good invitation for
-> Ludovic or other developers from Atmel to contribute further to
-> Buildroot, and this is bit sad. I hope we can get this solved quickly
-> and get more contributions.
+> Hi all, 
+>  
+> I'm struggling some day's now to get Webkit 1.6.3 (and even some later
+> versions 1.7.xx.xx ) running on Arm Cortex-A8 (build with GCC 4.5.x, and
+> uclibc0.9.33 )
+> 
+> Compiling is not a problem, this works (with some patches, depending on
+> the version of weskit I build I build.)
+> 
+> 
+> BUT: I'm having random crashes (when run the GtkLauncher on the target),
+> that I can not explain, or find where it goes wrong.
+> 
+> It must be in one of the libraries, but because I do not have any
+> 'repetitive' core-dumps, it is hard to figure out what is going on, when
+> looking at these core dumps. 
+> 
+> I guess some basic-stuff (like fore example, locking.. or whatever...
+> malloc/free... troubles) that is not working, it is to strange what
+> happens, in  these core-dumps i never see somthing that is pointing to
+> the same crash-reason.
+>  
+> 
+> NOTE: When I do compile Weskit-1.2.7 (that was working before) with the
+> same set of libraries/uclibc.... (as I use to build 1.6.3 now), I do get
+> 'RANDOM'-crashes as well.
 
- +1
+ This probably means that Webkit isn't the problem, but one of the many
+libraries it depends upon is.
 
- One of the talks I attended at FOSDEM was about how to build a strong
-community.  Its main message was: give newcomers what they want, and
-they'll become regular contributors.  And what do newcomers want?  They
-want to be recognized for their work, i.e. they want to see their name
-in the git log.
+ Ideally, you should revert everything to the working situation, and then
+upgrade the libraries one by one to find the one that is causing the
+problem.  Looking at the backtraces, if must be one of gdk, glib, or
+uClibc.
 
- Therefore, this guy suggested to commit patches even if they're not yet
-perfect or feature complete.  It's always possible to make further
-modifications.
 
- Now, we should keep up our quality standards.  It's good to have a git
-master that builds.  But it does sometimes take too long for patches to
-be accepted, and sometimes patches are forgotten.
+> I've included some core-dumps trace-back's (hope this is not to big for
+> the mailing-list) maybe someone gets a idea where I can take a look at.
 
- I was hoping that patchwork would help with that.  Is there any
-progress on that front?
+ A segmentation fault in free() generally indicates either a double free
+or freeing unallocated memory (e.g. a stack variable).  valgrind may help
+to pinpoint the problem.
+
 
  Regards,
  Arnout
