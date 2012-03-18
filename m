@@ -1,49 +1,43 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 23:10:19 +0100
-Subject: [Buildroot] [git commit] ttcp: deprecate package
-Message-ID: <20120318221115.9F49290E90@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 Mar 2012 23:30:04 +0100
+Subject: [Buildroot] [PATCH] elf2flt: fix after conversion of binutils
+ to package infrastructure
+In-Reply-To: <87y5qxn131.fsf@macbook.be.48ers.dk>
+References: <CAFm-AyppuS3y-oHUHj_Xz1u+JB2qLDKmHVF4MQV-8=8u9cwwEw@mail.gmail.com>
+ <1332084958-1085-1-git-send-email-arnout@mind.be>
+ <20120318165838.7596efeb@skate>
+ <87y5qxn131.fsf@macbook.be.48ers.dk>
+Message-ID: <20120318233004.0c835fa1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b6a507c71218b797104f5ccc63316634062f22ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Software is ancient, upstream is missing and the package hasn't seen any
-significant changes since it was added in 2003.
+Le Sun, 18 Mar 2012 20:47:14 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Unless someone steps up to update it (E.G. to gentargets), it will
-be removed during the 2012.05 cycle.
+> Great, sounds good. I don't have any experience with skyeye, any
+> specific reasons to use that instead of qemu?
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES                |    2 ++
- package/ttcp/Config.in |    1 +
- 2 files changed, 3 insertions(+), 0 deletions(-)
+I might have missed something, but I haven't found any of the ARM
+platforms emulated by Qemu to be noMMU platforms. I have tried to build
+a kernel for the Versatile platform with MMU disabled, but the build
+fails. It seems that the kernel does not support to be built for any
+platform with MMU disabled, though I might be wrong. If anyone knows
+about one of the ARM platforms supported by Qemu to be supported in a
+noMMU variant by the kernel, that would be nice.
 
-diff --git a/CHANGES b/CHANGES
-index 284707c..44079a5 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -29,6 +29,8 @@
- 	New packages: glib-networking, lcdprog, minicom, parted,
- 	zeromq
- 
-+	Deprecated packages: ttcp
-+
- 	Removed packages: ntfsprogs
- 
- 	Issues resolved (http://bugs.uclibc.org):
-diff --git a/package/ttcp/Config.in b/package/ttcp/Config.in
-index a3f5a71..0262fc9 100644
---- a/package/ttcp/Config.in
-+++ b/package/ttcp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TTCP
- 	bool "ttcp"
-+	depends on BR2_DEPRECATED
- 	help
- 	  Benchmarking tool for determining TCP and UDP performance.
- 
+I have also started to build a m68k kernel. This one starts booting in
+Qemu, but the boot hangs with an "attempted to kill idle" panic.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
