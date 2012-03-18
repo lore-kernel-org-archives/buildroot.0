@@ -1,34 +1,72 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Mar 2012 15:41:26 +0100
-Subject: [Buildroot] [PATCHv2 1/2] Add lpc3250loader to the host tools
-In-Reply-To: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
- (Alexandre Belloni's message of "Tue, 7 Feb 2012 12:01:25 +0100")
-References: <1328612486-7770-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <87bonunf8p.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 18 Mar 2012 15:42:42 +0100
+Subject: [Buildroot] [git commit] Add lpc3250loader to lpc3250 configs
+Message-ID: <20120318144249.3C76190D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@piout.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8991218447dabd885359c3880de205d408e47d6d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
- Alexandre> ---
- Alexandre>  package/Config.in.host                 |    1 +
- Alexandre>  package/lpc3250loader/Config.in.host   |    7 +++++++
- Alexandre>  package/lpc3250loader/lpc3250loader.mk |    9 +++++++++
- Alexandre>  3 files changed, 17 insertions(+), 0 deletions(-)
- Alexandre>  create mode 100644 package/lpc3250loader/Config.in.host
- Alexandre>  create mode 100644 package/lpc3250loader/lpc3250loader.mk
+Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ configs/ea3250_defconfig  |    6 ++++++
+ configs/fdi3250_defconfig |    6 ++++++
+ configs/phy3250_defconfig |    6 ++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
- Alexandre> +define HOST_LPC3250LOADER_INSTALL_CMDS
- Alexandre> +	mkdir -p $(HOST_DIR)/usr/bin/
- Alexandre> +	cp -a $(@D)/* $(HOST_DIR)/usr/bin/
-
-We normally use install -D for installation, so I changed this.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
+index da84c7e..9cd7b34 100644
+--- a/configs/ea3250_defconfig
++++ b/configs/ea3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="ea3250"
+diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
+index 505dc8b..1fd0b05 100644
+--- a/configs/fdi3250_defconfig
++++ b/configs/fdi3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
+diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
+index d46d719..bc17d5c 100644
+--- a/configs/phy3250_defconfig
++++ b/configs/phy3250_defconfig
+@@ -12,6 +12,12 @@ BR2_ARM_EABI=y
+ BR2_GCC_VERSION_4_3_X=y
+ 
+ 
++#
++# Host utilities
++#
++BR2_PACKAGE_HOST_LPC3250LOADER=y
++
++
+ # Bootloaders
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="phy3250"
