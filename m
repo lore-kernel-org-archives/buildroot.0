@@ -1,10 +1,9 @@
 From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Sun, 18 Mar 2012 09:54:03 +0100
-Subject: [Buildroot] [PATCH 5/5] manual: update Config.in dependency
-	explainations
+Date: Sun, 18 Mar 2012 09:54:02 +0100
+Subject: [Buildroot] [PATCH 4/5] manual: fix typo
 In-Reply-To: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
 References: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1332060843-2786-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1332060843-2786-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,58 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 ---
- docs/manual/adding-packages-directory.txt |   39 +++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ docs/manual/adding-packages-directory.txt   |    3 ++-
+ docs/manual/adding-packages-handwritten.txt |   14 +++++++-------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
 diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 04be820..75ef763 100644
+index 0852b04..04be820 100644
 --- a/docs/manual/adding-packages-directory.txt
 +++ b/docs/manual/adding-packages-directory.txt
-@@ -87,6 +87,45 @@ comment "acl requires a toolchain with LARGEFILE support"
- --------------------------
+@@ -8,12 +8,13 @@ Some packages have been grouped by topic in a sub-directory:
+ +multimedia+, +java+, +x11r7+, and +games+. If your package fits in
+ one of these categories, then create your package directory in these.
  
++
+ +Config.in+ file
+ ~~~~~~~~~~~~~~~~
  
-+Note that these two dependency types are only transitive with the
-+dependencies of the same kind.
-+
-+This means, in the following example:
-+
-+--------------------------
-+config PACKAGE_A
-+        bool "Package A"
-+
-+config PACKAGE_B
-+        bool "Package B"
-+        depends on PACKAGE_A
-+
-+config PACKAGE_C
-+        bool "Package C"
-+        depends on PACKAGE_B
-+
-+config PACKAGE_D
-+        bool "Package D"
-+        select PACKAGE_B
-+
-+config PACKAGE_E
-+        bool "Package E"
-+        select PACKAGE_D
-+--------------------------
-+
-+* Selecting +Package C+ will be visible if +Package B+ has been
-+  selected, so if +Package A+ has been selected too.
-+
-+* Selecting +Package E+ will select +Package D+, which will select
-+  +Package B+, it will not check for the dependencies of +Package B+,
-+  so it will not select +Package A+.
-+
-+Overall, for package library dependencies, +select+ should be
-+prefered.
-+
-+One should avoid to mix up these two dependency types, though it
-+should be adapted to each case.
-+
- Note that such dependencies will make sure that the dependency option
- is also enabled, but not necessarily built before your package. To do
- so, the dependency also needs to be expressed in the +.mk+ file of the
+ Then, create a file named +Config.in+. This file will contain the
+ option descriptions related to our +libfoo+ software that will be used
+-and displayed in the configuration tool. It should basically contain :
++and displayed in the configuration tool. It should basically contain:
+ 
+ ---------------------------
+ config BR2_PACKAGE_LIBFOO
+diff --git a/docs/manual/adding-packages-handwritten.txt b/docs/manual/adding-packages-handwritten.txt
+index a9d247c..54ccf65 100644
+--- a/docs/manual/adding-packages-handwritten.txt
++++ b/docs/manual/adding-packages-handwritten.txt
+@@ -14,12 +14,12 @@ existing manual makefiles and to help understand how they work.*
+ 03: # libfoo
+ 04: #
+ 05: #############################################################
+-06: LIBFOO_VERSION:=1.0
+-07: LIBFOO_SOURCE:=libfoo-$(LIBFOO_VERSION).tar.gz
+-08: LIBFOO_SITE:=http://www.foosoftware.org/downloads
+-09: LIBFOO_DIR:=$(BUILD_DIR)/foo-$(FOO_VERSION)
+-10: LIBFOO_BINARY:=foo
+-11: LIBFOO_TARGET_BINARY:=usr/bin/foo
++06: LIBFOO_VERSION = 1.0
++07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
++08: LIBFOO_SITE = http://www.foosoftware.org/downloads
++09: LIBFOO_DIR = $(BUILD_DIR)/foo-$(FOO_VERSION)
++10: LIBFOO_BINARY = foo
++11: LIBFOO_TARGET_BINARY = usr/bin/foo
+ 12:
+ 13: $(DL_DIR)/$(LIBFOO_SOURCE):
+ 14: 	$(call DOWNLOAD,$(LIBFOO_SITE),$(LIBFOO_SOURCE))
+@@ -65,7 +65,7 @@ existing manual makefiles and to help understand how they work.*
+ 54: #
+ 55: #############################################################
+ 56: ifeq ($(BR2_PACKAGE_LIBFOO),y)
+-57: TARGETS+=libfoo
++57: TARGETS += libfoo
+ 58: endif
+ ------------------------
+ 
 -- 
 1.7.9.4
