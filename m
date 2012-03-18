@@ -1,9 +1,10 @@
 From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Sun, 18 Mar 2012 09:54:01 +0100
-Subject: [Buildroot] [PATCH 3/5] docs: fix busybox url
+Date: Sun, 18 Mar 2012 09:54:03 +0100
+Subject: [Buildroot] [PATCH 5/5] manual: update Config.in dependency
+	explainations
 In-Reply-To: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
 References: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1332060843-2786-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1332060843-2786-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +14,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 ---
- docs/buildroot.html   |    2 +-
- docs/manual/using.txt |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-directory.txt |   39 +++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/docs/buildroot.html b/docs/buildroot.html
-index a01e1fc..d178df1 100644
---- a/docs/buildroot.html
-+++ b/docs/buildroot.html
-@@ -154,7 +154,7 @@
-     <p>Buildroot has a nice configuration tool similar to the one you can find
-     in the Linux kernel
-     (<a href="http://www.kernel.org/">http://www.kernel.org/</a>) or in Busybox
--    (<a href="http://www.busybox.org/">http://www.busybox.org/</a>). Note that
-+    (<a href="http://www.busybox.net/">http://www.busybox.net/</a>). Note that
-     you can (and should) build everything as a normal user. There is no need to
-     be root to configure and use Buildroot. The first step is to run the
-     configuration assistant:</p>
-diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-index 8d7f0a7..a5dc9e1 100644
---- a/docs/manual/using.txt
-+++ b/docs/manual/using.txt
-@@ -6,7 +6,7 @@ Configuration and general usage
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 04be820..75ef763 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -87,6 +87,45 @@ comment "acl requires a toolchain with LARGEFILE support"
+ --------------------------
  
- Buildroot has a nice configuration tool similar to the one you can
- find in the http://www.kernel.org/[Linux kernel] or in
--http://www.busybox.org/[Busybox]. Note that you can (and should) build
-+http://www.busybox.net/[Busybox]. Note that you can (and should) build
- everything as a normal user. There is no need to be root to configure
- and use Buildroot. The first step is to run the configuration
- assistant:
+ 
++Note that these two dependency types are only transitive with the
++dependencies of the same kind.
++
++This means, in the following example:
++
++--------------------------
++config PACKAGE_A
++        bool "Package A"
++
++config PACKAGE_B
++        bool "Package B"
++        depends on PACKAGE_A
++
++config PACKAGE_C
++        bool "Package C"
++        depends on PACKAGE_B
++
++config PACKAGE_D
++        bool "Package D"
++        select PACKAGE_B
++
++config PACKAGE_E
++        bool "Package E"
++        select PACKAGE_D
++--------------------------
++
++* Selecting +Package C+ will be visible if +Package B+ has been
++  selected, so if +Package A+ has been selected too.
++
++* Selecting +Package E+ will select +Package D+, which will select
++  +Package B+, it will not check for the dependencies of +Package B+,
++  so it will not select +Package A+.
++
++Overall, for package library dependencies, +select+ should be
++prefered.
++
++One should avoid to mix up these two dependency types, though it
++should be adapted to each case.
++
+ Note that such dependencies will make sure that the dependency option
+ is also enabled, but not necessarily built before your package. To do
+ so, the dependency also needs to be expressed in the +.mk+ file of the
 -- 
 1.7.9.4
