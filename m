@@ -1,31 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 19:30:03 +0100
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 18 Mar 2012 19:58:39 +0100
 Subject: [Buildroot] [PATCH] Microblaze: build kernel with device tree
-In-Reply-To: <1331986405-7332-1-git-send-email-alvaro.gamez@hazent.com>
+In-Reply-To: <201203181930.03681.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Sun, 18 Mar 2012 19:30:03 +0100")
 References: <1331978750-11724-1-git-send-email-sho@relinux.de>
  <1331986405-7332-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <201203181930.03681.arnout@mind.be>
+ <201203181930.03681.arnout@mind.be>
+Message-ID: <873995ohwg.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Saturday 17 March 2012 13:13:25 Alvaro G. M wrote:
-> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-> Tested-by: Alvaro G. M <alvaro.gamez@hazent.com>
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
- Peter, is it convenient for you if patches are reposted to add Tested-by
-and Acked-by tags, or do you prefer the way we do it up to now, just 
-replying to the original post?
+ Arnout> On Saturday 17 March 2012 13:13:25 Alvaro G. M wrote:
+ >> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+ >> Tested-by: Alvaro G. M <alvaro.gamez@hazent.com>
 
- Regards,
- Arnout
+ Arnout>  Peter, is it convenient for you if patches are reposted to add
+ Arnout> Tested-by and Acked-by tags, or do you prefer the way we do it
+ Arnout> up to now, just replying to the original post?
+
+If it's just for acked-by then I prefer people just reply - But if
+there's any fixes to be made and the original submitter doesn't fix it,
+a resend with those fixes is very much appreciated, thanks.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
