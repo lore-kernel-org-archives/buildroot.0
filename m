@@ -1,87 +1,82 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 15:16:21 +0100
-Subject: [Buildroot] [PATCH 1/3 v3] uboot: Add support for U-Boot SPL
-In-Reply-To: <1331592072-32327-2-git-send-email-n-dechesne@ti.com>
-References: <1331592072-32327-1-git-send-email-n-dechesne@ti.com>
- <1331592072-32327-2-git-send-email-n-dechesne@ti.com>
-Message-ID: <201203181516.21974.arnout@mind.be>
+Date: Sun, 18 Mar 2012 15:34:05 +0100
+Subject: [Buildroot] [PATCH v2] Add dtc (device tree compiler) as host
+	tool
+In-Reply-To: <7116d9f7fb52cdabaa12.1331744452@beantl019720>
+References: <7116d9f7fb52cdabaa12.1331744452@beantl019720>
+Message-ID: <201203181534.06235.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 12 March 2012 23:41:10 Nicolas Dechesne wrote:
-> SPL is a first stage bootloader. On pandaboard it supercedes x-loader,
-> and should now be used.
+On Wednesday 14 March 2012 18:00:52 Thomas De Schampheleire wrote:
+> The dtc is taken from the Linux kernel sources and simply copied to the host
+> directory.
+> Having dtc as a separate host tool can be useful for users that have a custom
+> boot scenario where the device tree is not embedded in the kernel.
 > 
-> This patch ensures that either SPL or xloader can be selected
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  boot/uboot/Config.in |    9 +++++++++
->  boot/uboot/uboot.mk  |    2 ++
->  2 files changed, 11 insertions(+), 0 deletions(-)
+> v2: remove old parameters to GENTARGETS call, sorry.
 > 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index c8db9fb..95187f9 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -137,4 +137,13 @@ config BR2_TARGET_UBOOT_ETH1ADDR
+>  package/Config.in.host |   1 +
+>  package/dtc/Config.in  |   4 ++++
+>  package/dtc/dtc.mk     |  15 +++++++++++++++
+>  3 files changed, 20 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -1,5 +1,6 @@
+>  menu "Host utilities"
 >  
->  endif # BR2_TARGET_UBOOT_NETWORK
->  
-> +config BR2_TARGET_UBOOT_SPL
-> +	bool "U-Boot SPL support"
-> +	depends on !BR2_TARGET_XLOADER
+> +source "package/dtc/Config.in"
+>  source "package/openocd/Config.in.host"
+>  source "package/sam-ba/Config.in.host"
+>  source "package/uboot-tools/Config.in.host"
+> diff --git a/package/dtc/Config.in b/package/dtc/Config.in
+
+ The file should be called Config.in.host, like the other host tools.
+
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/dtc/Config.in
+> @@ -0,0 +1,4 @@
+> +config BR2_PACKAGE_HOST_DTC
+> +	bool "Device Tree Compiler (dtc)"
 > +	help
-> +	  Enable the U-Boot SPL support. SPL is a first stage
-> +	  bootloader loaded into internal memory in charge of 
-> +	  enabling and configuring the external memory (DDR), 
-> +	  and load the u-boot program into DDR.
+> +	  Device Tree Compiler for flattened-device trees.
+
+ This should depend on BR2_LINUX_KERNEL, including the appropriate 
+comment.
+
+> diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/dtc/dtc.mk
+> @@ -0,0 +1,14 @@
+> +#############################################################
+> +#
+> +# dtc
+> +#
+> +#############################################################
 > +
->  endif # BR2_TARGET_UBOOT
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index db9de8d..41745c9 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -88,6 +88,8 @@ endef
->  
->  define UBOOT_INSTALL_IMAGES_CMDS
->  	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
-> +	$(if $(BR2_TARGET_UBOOT_SPL),
-> +		cp -dpf $(@D)/MLO $(BINARIES_DIR)/)
-
- I didn't realize before, but it's only on OMAP that the SPL is called
-MLO.  Its normal name is u-boot-spl.bin.
-
- I'm not sure how this could be solved.  The simplest way would be
-something like (untested, as usual):
-
-ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-define UBOOT_INSTALL_IMAGES_SPL
-	if [ -e $(@D)/MLO ]; then \
-		cp -dpf $(@D)/MLO $(BINARIES_DIR)/; \
-	else \
-		cp -dpf $(@D)/u-boot-spl.bin  $(BINARIES_DIR)/; \
-	fi
-endef
-endif
-
-
- The alternative would be to make a separate config entry for MLO and 
-other SPLs.  Which does make some kind of sense, I guess.
+> +HOST_DTC_SOURCE =
+> +HOST_DTC_DEPENDENCIES = linux
+> +
+> +define HOST_DTC_INSTALL_CMDS
+> +    $(INSTALL) -D -m 0755 $(LINUX_DIR)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc
+> +endef
+> +
+> +$(eval $(call GENTARGETS,host))
 
 
  Regards,
  Arnout
 
-
->  endef
->  
->  $(eval $(call GENTARGETS))
-> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
