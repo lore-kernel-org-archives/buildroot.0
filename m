@@ -1,80 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 22:53:24 +0100
-Subject: [Buildroot] [git commit] Microblaze: added external toolchain from
-	Xilinx
-Message-ID: <20120318220025.B8A0E90E97@busybox.osuosl.org>
+From: Nicolas Dechesne <n-dechesne@ti.com>
+Date: Sun, 18 Mar 2012 23:04:49 +0100
+Subject: [Buildroot] [PATCH 0/3 v4] Initial support for Panda and PandaES
+Message-ID: <1332108292-28094-1-git-send-email-n-dechesne@ti.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb7788fd861026e7772bb4f6c096e0c955a4e28e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Here is a new attempt to add support for TI PandaBoard and PandaBoard ES.
 
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
-Tested-by: Stephan Hoffmann <sho@relinux.de>
-Downloading Microblaze LE toolchain works on a clean install
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-external/Config.in   |   21 +++++++++++++++++++++
- toolchain/toolchain-external/ext-tool.mk |    6 ++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
+Many thanks for Arnout for his time reviewing all these versions!
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 24cad9c..014bfc5 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -432,6 +432,25 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2010RC1
- 	  Toolchain for the Blackfin architecture, from
- 	  http://blackfin.uclinux.org.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
-+	bool "Xilinx Little Endian Microblaze GNU Tools"
-+	depends on BR2_microblazeel
-+	select BR2_LARGEFILE
-+	select BR2_INET_IPV6
-+	select BR2_INET_RPC
-+	select BR2_ENABLE_LOCALE
-+	select BR2_USE_WCHAR
-+	help
-+	  Toolchain for the Microblaze architecture, from
-+	  http://wiki.xilinx.com/mb-gnu-tools
-+
-+config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
-+	bool "Xilinx Big Endian Microblaze GNU Tools"
-+	depends on BR2_microblazebe
-+	help
-+	  Toolchain for the Microblaze architecture, from
-+	  http://wiki.xilinx.com/mb-gnu-tools
-+
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-        bool "Custom toolchain"
-        help
-@@ -470,6 +489,8 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201103
- 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201109
-+	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
-+	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201103
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 3c97de1..51bce91 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -239,6 +239,12 @@ TOOLCHAIN_EXTERNAL_SOURCE_1 = blackfin-toolchain-2011R1-RC4.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_SITE_2   = http://blackfin.uclinux.org/gf/download/frsrelease/531/9517/
- TOOLCHAIN_EXTERNAL_SOURCE_2 = blackfin-toolchain-uclibc-full-2011R1-RC4.i386.tar.bz2
- TOOLCHAIN_EXTERNAL_SOURCE   = $(TOOLCHAIN_EXTERNAL_SOURCE_1) $(TOOLCHAIN_EXTERNAL_SOURCE_2)
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0_le.git;a=blob;h=d7b493c5dbcc24ba9cc3be2e4c14d6d9701e6805;hb=00163583b771bb4e937632765dd0c5516b3e31c4;f=
-+TOOLCHAIN_EXTERNAL_SOURCE=microblazeel-unknown-linux-gnu.tgz
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
-+TOOLCHAIN_EXTERNAL_SITE=http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=569081301f0f1d8d3b24335a364e8ff1774190d4;f=
-+TOOLCHAIN_EXTERNAL_SOURCE=microblaze-unknown-linux-gnu.tgz
- else
- # A value must be set (even if unused), otherwise the
- # $(DL_DIR)/$(TOOLCHAIN_EXTERNAL_SOURCE) rule would override the main
+v4:
+ - add a config variable for SPL name since MLO is used on OMAP only
+ - changed the default SPL NAME to MLO in pandaboard config
+ - rebased on master branch as of 2012/03/18 
+
+v3:
+ - added more documentation in uboot/Config.in regarding SPL
+ - added 'acked-by' as per review
+ - rebased on master branch as of 2012/03/12
+
+v2:
+
+ - typo cleanup as per reviews
+ - introduce BR2_TARGET_UBOOT_FORMAT_IMG to allow use of u-boot.img
+   on platforms that need it, like OMAP. This is better than v1 since
+   u-boot.img is not stricly dependent on SPL, so making 2 parameters
+   makes more sense.
+
+v1:
+
+Because we want to deprecate x-loader in favor of u-boot SPL:
+- my first patch adds support for SPL in BR
+- SPL is enabled by default in my panda config.
+
+Both Panda and PandaES have been tested, detection is done at run time
+in uboot and kernel, so we can have 1 configuration only.
+
+I've used DEVTMPFS by default, as 1) I generally prefer this, and 2) ttyO
+was missing from the generic dev table... 
+
+
+*** BLURB HERE ***
+
+Nicolas Dechesne (3):
+  uboot: Add support for U-Boot SPL
+  uboot: add a new binary format for u-boot.img
+  configs: add support for PandaBoard and PandaBoard ES
+
+ boot/uboot/Config.in         |   21 +++++++++++++++++++++
+ boot/uboot/uboot.mk          |    4 ++++
+ configs/pandaboard_defconfig |   26 ++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+), 0 deletions(-)
+ create mode 100644 configs/pandaboard_defconfig
+
+-- 
+1.7.9.1
