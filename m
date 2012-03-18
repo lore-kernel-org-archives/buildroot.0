@@ -1,33 +1,38 @@
-From: bifferos <bifferos@yahoo.co.uk>
-Date: Sun, 18 Mar 2012 20:54:54 +0000
-Subject: [Buildroot] [PATCH] bifferboard: new board
-In-Reply-To: <201203181813.30601.arnout@mind.be>
-References: <201203031529.36487.arnout@mind.be>
- <201203181450.44385.arnout@mind.be> <4F660977.4040806@yahoo.co.uk>
- <201203181813.30601.arnout@mind.be>
-Message-ID: <4F664B9E.7080604@yahoo.co.uk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 18 Mar 2012 20:47:14 +0100
+Subject: [Buildroot] [PATCH] elf2flt: fix after conversion of binutils
+	to package infrastructure
+In-Reply-To: <20120318165838.7596efeb@skate> (Thomas Petazzoni's message of
+ "Sun, 18 Mar 2012 16:58:38 +0100")
+References: <CAFm-AyppuS3y-oHUHj_Xz1u+JB2qLDKmHVF4MQV-8=8u9cwwEw@mail.gmail.com>
+ <1332084958-1085-1-git-send-email-arnout@mind.be>
+ <20120318165838.7596efeb@skate>
+Message-ID: <87y5qxn131.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/18/2012 05:13 PM, Arnout Vandecappelle wrote:
-<snip>
->> Now I'm wondering if there is something that has been activated in
->> busybox, some feature, which requires kernel support, and (since my
->> kernel is minimal) perhaps it doesn't have it, and perhaps init doesn't
->> handle the lack of that support gracefully and crashes.  Nothing comes
->> to mind though.
->   Since init segfaults before any instruction is executed, it seems
-> unlikely.  The binary formats seem OK as well.  You could try to
-> enable CONFIG_BINFMT_AOUT.
->
->   Hang on, I realize something.  CONFIG_BINFMT_MISC wasn't enabled in
-> the config I sent, so /init can't be executed (/init is a shell script
-> that mounts devtmpfs).  Can you enable BINFMT_MISC and try again?
-Ah.  That doesn't work, but it leads me to ask a more basic question:  
-What kernel command-line should this system be using? :)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-thanks,
-Biff.
+Hi,
+
+ >> Probably it should be converted to autotargets as well.  However, I
+ >> don't know how to test if the resulting tool still works.
+
+ Thomas> I have started setting up an environment for a noMMU ARM kernel and
+ Thomas> userspace that runs under the SkyEye emulator. I intend to clean this
+ Thomas> up and make it available as a defconfig so that we have at least one
+ Thomas> noMMU environment we can use for testing.
+
+ Thomas> So far I have something that boots into a Busybox userspace, but it is
+ Thomas> built with the Soucery CodeBench uClinux toolchain. I think I will
+ Thomas> clean it up as is, we can see later if the internal toolchain backend
+ Thomas> works to build a correct toolchain for this usecase.
+
+Great, sounds good. I don't have any experience with skyeye, any
+specific reasons to use that instead of qemu?
+
+-- 
+Bye, Peter Korsgaard
