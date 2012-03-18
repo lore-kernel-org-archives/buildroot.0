@@ -1,114 +1,63 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 17:49:29 +0100
-Subject: [Buildroot] [PATCH 5/5] manual: update Config.in dependency
-	explainations
-In-Reply-To: <1332060843-2786-6-git-send-email-s.martin49@gmail.com>
-References: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
- <1332060843-2786-6-git-send-email-s.martin49@gmail.com>
-Message-ID: <201203181749.29769.arnout@mind.be>
+Date: Sun, 18 Mar 2012 18:13:30 +0100
+Subject: [Buildroot] [PATCH] bifferboard: new board
+In-Reply-To: <4F660977.4040806@yahoo.co.uk>
+References: <201203031529.36487.arnout@mind.be>
+ <201203181450.44385.arnout@mind.be> <4F660977.4040806@yahoo.co.uk>
+Message-ID: <201203181813.30601.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 18 March 2012 09:54:03 Samuel MARTIN wrote:
+On Sunday 18 March 2012 17:12:39 bifferos wrote:
+> On 03/18/2012 01:50 PM, Arnout Vandecappelle wrote:
+> > On Monday 12 March 2012 02:23:35 bifferos wrote:
+> >> Write protecting the kernel text: 1048k
+> >> Write protecting the kernel read-only data: 164k
+> >> init[1]: segfault at 0 ip   (null) sp bf95bf40 error 4 in
+> >> busybox[8048000+7c000]
+> >   Since this segmentation fault is in init, it will be tough to debug.
+> > Judging from the address, it in fact happens even before init is
+> > started.  Is it possible that there isn't enough RAM to run busybox?
+> >
 > 
-> Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
-> ---
->  docs/manual/adding-packages-directory.txt |   39 +++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 04be820..75ef763 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -87,6 +87,45 @@ comment "acl requires a toolchain with LARGEFILE support"
->  --------------------------
->  
->  
-> +Note that these two dependency types are only transitive with the
-> +dependencies of the same kind.
-> +
-> +This means, in the following example:
-> +
-> +--------------------------
-> +config PACKAGE_A
- I would use BR2_PACKAGE_* in the example.
+> I have a hard time believing there is not enough RAM  I have copied the 
+> generated busybox onto the working system and run it there, and it 
+> executes OK, so the same system can execute two instances of the busybox 
+> binary (from two different places on rootfs), and they both run OK.
 
-> +        bool "Package A"
-> +
-> +config PACKAGE_B
-> +        bool "Package B"
-> +        depends on PACKAGE_A
-> +
-> +config PACKAGE_C
-> +        bool "Package C"
-> +        depends on PACKAGE_B
-> +
-> +config PACKAGE_D
-> +        bool "Package D"
-> +        select PACKAGE_B
-> +
-> +config PACKAGE_E
-> +        bool "Package E"
-> +        select PACKAGE_D
-> +--------------------------
-> +
-> +* Selecting +Package C+ will be visible if +Package B+ has been
-> +  selected, so if +Package A+ has been selected too.
-
- Rewrite:
-
-Selecting +Package C+ will be visible if +Package B+ has been
-selected, which in turn is only visible if +Package A+ has been selected.
-
-> +
-> +* Selecting +Package E+ will select +Package D+, which will select
-> +  +Package B+, it will not check for the dependencies of +Package B+,
-> +  so it will not select +Package A+.
-
- Add:
-
-Since +Package B+ is selected but +Package A+ is not, this violates 
-the dependency of +Package B+ on +Package A+.  Therefore, in such a 
-situation, the transitive dependency has to be added explicitly.
-
---------------------------
-config PACKAGE_D
-	bool "Package D"
-	select PACKAGE_B
-	depends on PACKAGE_A
-
-config PACKAGE_E
-	bool "Package E"
-	select PACKAGE_D
-	depends on PACKAGE_A
---------------------------
+ It was just a guess based on the fact that it segfaults before it starts.
 
 
-> +
-> +Overall, for package library dependencies, +select+ should be
-> +prefered.
+> I learnt something new the other day - an initramfs compiled into the 
+> kernel can be compressed, however the kernel compression works ontop of 
+> that.  So if you specify CONFIG_INITRAMFS_SOURCE it is pointless to 
+> specify initramfs compression other than 'None'
 
- My spell checker prefers preferred :-)
+ Hm, good point, we should probably change our initramfs setup to disable
+compression if the kernel image itself is compressed.
 
-> +
-> +One should avoid to mix up these two dependency types, though it
-> +should be adapted to each case.
+[snip]
 
- I think this paragraph makes things more confusing instead of more
-clear.  Perhaps just remove it?
+> Now I'm wondering if there is something that has been activated in 
+> busybox, some feature, which requires kernel support, and (since my 
+> kernel is minimal) perhaps it doesn't have it, and perhaps init doesn't 
+> handle the lack of that support gracefully and crashes.  Nothing comes 
+> to mind though.
 
+ Since init segfaults before any instruction is executed, it seems 
+unlikely.  The binary formats seem OK as well.  You could try to
+enable CONFIG_BINFMT_AOUT.
+
+ Hang on, I realize something.  CONFIG_BINFMT_MISC wasn't enabled in
+the config I sent, so /init can't be executed (/init is a shell script
+that mounts devtmpfs).  Can you enable BINFMT_MISC and try again?
 
  Regards,
  Arnout
 
-> +
->  Note that such dependencies will make sure that the dependency option
->  is also enabled, but not necessarily built before your package. To do
->  so, the dependency also needs to be expressed in the +.mk+ file of the
-> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
