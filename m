@@ -1,86 +1,90 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 22:12:45 +0100
-Subject: [Buildroot] [git commit] manual: update Config.in dependency
-	explainations
-Message-ID: <20120318215010.486AD90D89@busybox.osuosl.org>
+Date: Sun, 18 Mar 2012 22:35:12 +0100
+Subject: [Buildroot] [git commit] doom-wad: convert to gentargets
+Message-ID: <20120318215010.7A20190E98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6372f4e64600335b5ff7d07e3b78baf2fa6cce59
+commit: http://git.buildroot.net/buildroot/commit/?id=c4b6fea3a36697e45acd55935cbc79374eec1d03
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: adjusted according to Arnout's suggestions]
-Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- docs/manual/adding-packages-directory.txt |   53 +++++++++++++++++++++++++++++
- 1 files changed, 53 insertions(+), 0 deletions(-)
+ package/games/doom-wad/doom-wad.mk  |   24 ++++++++++++++++++++++++
+ package/games/doom-wad/doom-wads.mk |   35 -----------------------------------
+ 2 files changed, 24 insertions(+), 35 deletions(-)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 04be820..2670f2f 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -87,6 +87,59 @@ comment "acl requires a toolchain with LARGEFILE support"
- --------------------------
- 
- 
-+Note that these two dependency types are only transitive with the
-+dependencies of the same kind.
+diff --git a/package/games/doom-wad/doom-wad.mk b/package/games/doom-wad/doom-wad.mk
+new file mode 100644
+index 0000000..1143b3d
+--- /dev/null
++++ b/package/games/doom-wad/doom-wad.mk
+@@ -0,0 +1,24 @@
++#############################################################
++#
++# doom-wad
++#
++#############################################################
 +
-+This means, in the following example:
++DOOM_WAD_VERSION = 1.8
++DOOM_WAD_SOURCE = doom-$(DOOM_WAD_VERSION).wad.gz
++DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom/
 +
-+--------------------------
-+config BR2_PACKAGE_A
-+        bool "Package A"
++define DOOM_WAD_EXTRACT_CMDS
++	$(ZCAT) $(DL_DIR)/$($(PKG)_SOURCE) > $(@D)/doom1.wad
++endef
 +
-+config BR2_PACKAGE_B
-+        bool "Package B"
-+        depends on BR2_PACKAGE_A
++define DOOM_WAD_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/doom1.wad \
++		$(TARGET_DIR)/usr/share/games/doom/doom1.wad
++endef
 +
-+config BR2_PACKAGE_C
-+        bool "Package C"
-+        depends on BR2_PACKAGE_B
++define DOOM_WAD_UNINSTALL_TARGET_CMDS
++	rm -f $(TARGET_DIR)/usr/share/games/doom/doom1.wad
++endef
 +
-+config BR2_PACKAGE_D
-+        bool "Package D"
-+        select BR2_PACKAGE_B
-+
-+config BR2_PACKAGE_E
-+        bool "Package E"
-+        select BR2_PACKAGE_D
-+--------------------------
-+
-+* Selecting +Package C+ will be visible if +Package B+ has been
-+  selected, which in turn is only visible if +Package A+ has been
-+  selected.
-+
-+* Selecting +Package E+ will select +Package D+, which will select
-+  +Package B+, it will not check for the dependencies of +Package B+,
-+  so it will not select +Package A+.
-+
-+* Since +Package B+ is selected but +Package A+ is not, this violates
-+  the dependency of +Package B+ on +Package A+.  Therefore, in such a
-+  situation, the transitive dependency has to be added explicitly:
-+
-+--------------------------
-+config BR2_PACKAGE_D
-+	bool "Package D"
-+	select BR2_PACKAGE_B
-+	depends on BR2_PACKAGE_A
-+
-+config BR2_PACKAGE_E
-+	bool "Package E"
-+	select BR2_PACKAGE_D
-+	depends on BR2_PACKAGE_A
-+--------------------------
-+
-+Overall, for package library dependencies, +select+ should be
-+preferred.
-+
- Note that such dependencies will make sure that the dependency option
- is also enabled, but not necessarily built before your package. To do
- so, the dependency also needs to be expressed in the +.mk+ file of the
++$(eval $(call GENTARGETS))
+diff --git a/package/games/doom-wad/doom-wads.mk b/package/games/doom-wad/doom-wads.mk
+deleted file mode 100644
+index c0bf4fb..0000000
+--- a/package/games/doom-wad/doom-wads.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-#############################################################
+-#
+-# doom-wad
+-#
+-#############################################################
+-
+-DOOM_WAD_VERSION = 1.8
+-DOOM_WAD_SOURCE = doom-$(DOOM_WAD_VERSION).wad.gz
+-DOOM_WAD_SITE = ftp://ftp.idsoftware.com/idstuff/doom/
+-DOOM_WAD_DIR=$(BUILD_DIR)/doom-wad-$(DOOM_WAD_VERSION)
+-
+-$(DL_DIR)/$(DOOM_WAD_SOURCE):
+-	 $(call DOWNLOAD,$(DOOM_WAD_SITE)/$(DOOM_WAD_SOURCE))
+-
+-doom-wad-source: $(DL_DIR)/$(DOOM_WAD_SOURCE)
+-
+-$(DOOM_WAD_DIR)/.unpacked: $(DL_DIR)/$(DOOM_WAD_SOURCE)
+-	$(INSTALL) -D $(DL_DIR)/$(DOOM_WAD_SOURCE) $(DOOM_WAD_DIR)/$(DOOM_WAD_SOURCE)
+-	$(ZCAT) $(DOOM_WAD_DIR)/$(DOOM_WAD_SOURCE) > \
+-		$(DOOM_WAD_DIR)/doom-$(DOOM_WAD_VERSION).wad
+-	touch $@
+-
+-$(TARGET_DIR)/usr/share/games/doom/doom1.wad: $(DOOM_WAD_DIR)/.unpacked
+-	$(INSTALL) -D $(DOOM_WAD_DIR)/doom-$(DOOM_WAD_VERSION).wad $@
+-
+-doom-wad: $(TARGET_DIR)/usr/share/games/doom/doom1.wad
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_DOOM_WAD),y)
+-TARGETS+=doom-wad
+-endif
