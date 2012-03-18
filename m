@@ -1,32 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 23:16:49 +0100
-Subject: [Buildroot] [git commit] Config.in.arch: Fix microblaze-be double
-	quote issue
-Message-ID: <20120318230259.BFC2890E97@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Mar 2012 00:07:31 +0100
+Subject: [Buildroot] [PATCH] Config.in.arch: fix quoting of
+	BR2_microblazebe
+In-Reply-To: <1332111218-23707-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 18 Mar 2012 23:53:38 +0100")
+References: <1332111218-23707-1-git-send-email-arnout@mind.be>
+Message-ID: <87haxljyoc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9bf3dc764f76d85de3c2fcb25c5a247289334bfe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Config.in.arch |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> ---
+ Arnout> Sorry for not noticing before :-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 1910ff6..17e0236 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -24,7 +24,7 @@ config BR2_m68k
- config BR2_microblazeel
- 	bool "Microblaze AXI (little-endian)"
- config BR2_microblazebe
--	bool "Microblaze non-AXI (big-endian)""
-+	bool "Microblaze non-AXI (big-endian)"
- config BR2_mips
- 	bool "mips"
- config BR2_mipsel
+No problem, I already noticed and fixed it myself.
+
+-- 
+Bye, Peter Korsgaard
