@@ -1,19 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Mar 2012 21:41:53 +0100
-Subject: [Buildroot] [PATCH] netsnmp: add option to enable debugging code
-In-Reply-To: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Thu, 15 Mar 2012 22:04:27 +0100")
-References: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87limxmyjy.fsf@macbook.be.48ers.dk>
+Date: Sun, 18 Mar 2012 22:03:55 +0100
+Subject: [Buildroot] [PATCH 1/5] docs/buildroot.html: cleanup trailing
+	whitespaces
+In-Reply-To: <1332060843-2786-2-git-send-email-s.martin49@gmail.com> (Samuel
+ MARTIN's message of "Sun, 18 Mar 2012 09:53:59 +0100")
+References: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
+ <1332060843-2786-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <87wr6hliys.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Samuel" == Samuel MARTIN <s.martin49@gmail.com> writes:
 
- Luca> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Samuel> Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 
 Committed, thanks.
 
