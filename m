@@ -1,72 +1,75 @@
-From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Sun, 18 Mar 2012 09:54:02 +0100
-Subject: [Buildroot] [PATCH 4/5] manual: fix typo
-In-Reply-To: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
-References: <1332060843-2786-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1332060843-2786-5-git-send-email-s.martin49@gmail.com>
+From: =?iso-8859-1?Q?Mikael_=C5sberg?= <mikael.asberg@mdh.se>
+Date: Sun, 18 Mar 2012 11:52:51 +0100
+Subject: [Buildroot] Create a bootable SD Card
+In-Reply-To: <CAAbSJMVHwjaJTFdS51gLf81kN6qDBMmGPZJUZZatUWd2X2cz1A@mail.gmail.com>
+References: <63D6870D443E63419AC4A0C97B86C0920428BC3017@MBXCLUSTER.mdh.local>,
+ <CAAbSJMVHwjaJTFdS51gLf81kN6qDBMmGPZJUZZatUWd2X2cz1A@mail.gmail.com>
+Message-ID: <63D6870D443E63419AC4A0C97B86C0920428BC3019@MBXCLUSTER.mdh.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
----
- docs/manual/adding-packages-directory.txt   |    3 ++-
- docs/manual/adding-packages-handwritten.txt |   14 +++++++-------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+I have two issues:
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 0852b04..04be820 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -8,12 +8,13 @@ Some packages have been grouped by topic in a sub-directory:
- +multimedia+, +java+, +x11r7+, and +games+. If your package fits in
- one of these categories, then create your package directory in these.
- 
-+
- +Config.in+ file
- ~~~~~~~~~~~~~~~~
- 
- Then, create a file named +Config.in+. This file will contain the
- option descriptions related to our +libfoo+ software that will be used
--and displayed in the configuration tool. It should basically contain :
-+and displayed in the configuration tool. It should basically contain:
- 
- ---------------------------
- config BR2_PACKAGE_LIBFOO
-diff --git a/docs/manual/adding-packages-handwritten.txt b/docs/manual/adding-packages-handwritten.txt
-index a9d247c..54ccf65 100644
---- a/docs/manual/adding-packages-handwritten.txt
-+++ b/docs/manual/adding-packages-handwritten.txt
-@@ -14,12 +14,12 @@ existing manual makefiles and to help understand how they work.*
- 03: # libfoo
- 04: #
- 05: #############################################################
--06: LIBFOO_VERSION:=1.0
--07: LIBFOO_SOURCE:=libfoo-$(LIBFOO_VERSION).tar.gz
--08: LIBFOO_SITE:=http://www.foosoftware.org/downloads
--09: LIBFOO_DIR:=$(BUILD_DIR)/foo-$(FOO_VERSION)
--10: LIBFOO_BINARY:=foo
--11: LIBFOO_TARGET_BINARY:=usr/bin/foo
-+06: LIBFOO_VERSION = 1.0
-+07: LIBFOO_SOURCE = libfoo-$(LIBFOO_VERSION).tar.gz
-+08: LIBFOO_SITE = http://www.foosoftware.org/downloads
-+09: LIBFOO_DIR = $(BUILD_DIR)/foo-$(FOO_VERSION)
-+10: LIBFOO_BINARY = foo
-+11: LIBFOO_TARGET_BINARY = usr/bin/foo
- 12:
- 13: $(DL_DIR)/$(LIBFOO_SOURCE):
- 14: 	$(call DOWNLOAD,$(LIBFOO_SITE),$(LIBFOO_SOURCE))
-@@ -65,7 +65,7 @@ existing manual makefiles and to help understand how they work.*
- 54: #
- 55: #############################################################
- 56: ifeq ($(BR2_PACKAGE_LIBFOO),y)
--57: TARGETS+=libfoo
-+57: TARGETS += libfoo
- 58: endif
- ------------------------
- 
--- 
-1.7.9.4
+1.
+
+>In this partition header, you may define a partition starting *after*
+>the end of the bootloader, up to the end of the card, to put the
+>rootfs
+
+How do I know where the bootloader part ends?
+
+2.
+
+Where do I put my "uImage"? From my experience it should be in /boot but my rootfs does not have /boot?
+
+Regards
+
+--------------------------------------------------------------
+Mikael ?sberg
+PhD student (Doktorand), Computer Engineering
+School of Innovation, Design and Engineering
+M?lardalen University, V?ster?s Sweden
+Phone: +46(0)21 101502
+Room nr: U1-145
+Mail: mikael.asberg at mdh.se
+--------------------------------------------------------------
+________________________________________
+Fr?n: Mickael Chazaux [mickael.chazaux at gmail.com]
+Skickat: den 16 mars 2012 17:57
+Till: Mikael ?sberg
+Kopia: buildroot at busybox.net
+?mne: Re: [Buildroot] Create a bootable SD Card
+
+Hi,
+
+>
+> I have generated a file-system, bootloader and image for the platform i.MX28 EVK (using Buildroot).
+>
+> How do I create a bootable SD memory card (using these files)?
+>
+
+__IIRC__
+
+The bootloader has to be written at address 0x800 on the SD card (dd
+if=myfile of=/dev/mmcbkl0 bs=512 skip=4)
+This leaves room for a standard PC BIOS partition header (Write it with fdisk)
+In this partition header, you may define a partition starting *after*
+the end of the bootloader, up to the end of the card, to put the
+rootfs
+If so, put on it whatever filesystem you like (squashfs, extX, ...)
+with the method you prefer
+    - squashfs example : dd if=mycompressedrootfs.squashfs of=/dev/mmcblk0p1
+    - ext4 example : mkfs.ext4 /dev/mmcblk0p1 && mount /dev/mmcblk0p1
+/mnt && cd  /mnt && tar -zxvpf mycoolrootfs.tar.gz
+
+The bootloader has to be "signed" by a signing tool that can be found
+in LTIB, or written according to the datasheet.
+
+Regards,
+
+Mickael
