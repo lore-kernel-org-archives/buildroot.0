@@ -1,68 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 16:29:53 +0100
-Subject: [Buildroot] (no subject)
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB67031019E4@WETMEX10.loepfe.com>
-References: <1531E53627F1F749B4FE809BF2A4EB67031019E4@WETMEX10.loepfe.com>
-Message-ID: <201203181629.53542.arnout@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 18 Mar 2012 16:35:58 +0100
+Subject: [Buildroot] [PATCH] elf2flt: fix after conversion of binutils to
+	package infrastructure
+In-Reply-To: <CAFm-AyppuS3y-oHUHj_Xz1u+JB2qLDKmHVF4MQV-8=8u9cwwEw@mail.gmail.com>
+Message-ID: <1332084958-1085-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 16 March 2012 11:36:27 Vellemans, Noel wrote:
-> 
-> Hi all, 
->  
-> I'm struggling some day's now to get Webkit 1.6.3 (and even some later
-> versions 1.7.xx.xx ) running on Arm Cortex-A8 (build with GCC 4.5.x, and
-> uclibc0.9.33 )
-> 
-> Compiling is not a problem, this works (with some patches, depending on
-> the version of weskit I build I build.)
-> 
-> 
-> BUT: I'm having random crashes (when run the GtkLauncher on the target),
-> that I can not explain, or find where it goes wrong.
-> 
-> It must be in one of the libraries, but because I do not have any
-> 'repetitive' core-dumps, it is hard to figure out what is going on, when
-> looking at these core dumps. 
-> 
-> I guess some basic-stuff (like fore example, locking.. or whatever...
-> malloc/free... troubles) that is not working, it is to strange what
-> happens, in  these core-dumps i never see somthing that is pointing to
-> the same crash-reason.
->  
-> 
-> NOTE: When I do compile Weskit-1.2.7 (that was working before) with the
-> same set of libraries/uclibc.... (as I use to build 1.6.3 now), I do get
-> 'RANDOM'-crashes as well.
+When binutils was converted to the package infrastructure (commit
+009407e6b), the variable that elf2flt uses to find the binutils
+libraries disappeared.  So use HOST_BINUTILS_DIR instead of
+BINUTILS_DIR1.
 
- This probably means that Webkit isn't the problem, but one of the many
-libraries it depends upon is.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Note that elf2flt has been broken for one and a half years now before
+anybody has complained about it...
 
- Ideally, you should revert everything to the working situation, and then
-upgrade the libraries one by one to find the one that is causing the
-problem.  Looking at the backtraces, if must be one of gdk, glib, or
-uClibc.
+Probably it should be converted to autotargets as well.  However, I
+don't know how to test if the resulting tool still works.
 
+ toolchain/elf2flt/elf2flt.mk |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-> I've included some core-dumps trace-back's (hope this is not to big for
-> the mailing-list) maybe someone gets a idea where I can take a look at.
-
- A segmentation fault in free() generally indicates either a double free
-or freeing unallocated memory (e.g. a stack variable).  valgrind may help
-to pinpoint the problem.
-
-
- Regards,
- Arnout
-
+diff --git a/toolchain/elf2flt/elf2flt.mk b/toolchain/elf2flt/elf2flt.mk
+index e74a655..84a2c01 100644
+--- a/toolchain/elf2flt/elf2flt.mk
++++ b/toolchain/elf2flt/elf2flt.mk
+@@ -21,12 +21,12 @@ $(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
+ 	(cd $(ELF2FLT_DIR); rm -rf config.cache; \
+ 		LDFLAGS=-lz \
+ 		$(ELF2FLT_DIR)/configure $(QUIET) \
+-		--with-bfd-include-dir=$(BINUTILS_DIR1)/bfd/ \
+-		--with-binutils-include-dir=$(BINUTILS_DIR)/include/ \
++		--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
++		--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
+ 		--target=$(REAL_GNU_TARGET_NAME) \
+-		--with-libbfd=$(BINUTILS_DIR1)/bfd/libbfd.a \
+-		--with-libiberty=$(BINUTILS_DIR1)/libiberty/libiberty.a \
+-		--prefix=$(STAGING_DIR)/usr)
++		--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
++		--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
++		--prefix=$(HOST_DIR)/usr)
+ 	touch $@
+ 
+ $(ELF2FLT_DIR)/$(ELF2FLT_BINARY): $(ELF2FLT_DIR)/.configured
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (ccb44fd..) t/elf2flt (depends on: master)
