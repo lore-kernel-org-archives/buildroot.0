@@ -1,49 +1,43 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 17 Mar 2012 16:42:46 -0400
-Subject: [Buildroot] [PATCH v2 2/2] BeagleBone: new board
-In-Reply-To: <201203140119.08639.arnout@mind.be>
-References: <1331561609-26989-1-git-send-email-fhunleth@troodon-software.com>
- <201203140119.08639.arnout@mind.be>
-Message-ID: <CA+-urNRMBA+7Vwy-a5aeu2JiX+3VotbNj7hEbK7OhLb42fZs0Q@mail.gmail.com>
+From: J.C. Woltz <jwoltz@gmail.com>
+Date: Sat, 17 Mar 2012 21:30:33 -0400
+Subject: [Buildroot] [PATCH v5 0/2] usb_modeswitch update and add data
+Message-ID: <1332034235-17423-1-git-send-email-jwoltz@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+These two patches update usb_modeswitch to the latest version and add the data
+files in a separate package. 
 
-On Tue, Mar 13, 2012 at 8:19 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Monday 12 March 2012 15:13:29 Frank Hunleth wrote:
->> ?board/beaglebone/linux-3.2.9.config ? ? ? ? ? ? ? ?| ?820 ++++++++++++++++++++
->
-> ?That kernel config looks a bit bloated. ?Is this based on the am33x
-> defconfig? ?There are even some modules in there that can't possibly be
-> wired to a beaglebone, like a parallel port...
+The first patch updates usb_modeswitch to version 1.2.3. usb_modeswitch 
+itself includes bug fixes and a few new device additions.
 
-Yes. It is huge. I tried to prepare people for it in a previous email,
-but I suspect this was not a possible task.
+The second patch is an addition for buildroot. It adds the usb_modeswicth_data
+which is very helpful. It contains rules for many devices. On most systems,
+these two programs are installed together. This data package contains udev
+rules to automatically switch the device on detection. 
 
-What I tried to do was make minimal modifications to the defconfig
-that is currently in the Beagleboard's "official" kernel repository.
-Based on who made it, it is either the same as one in the Angstrom
-distribution or heavily inspired by it. Angstrom seems well supported
-by the Beaglebone devs which was why I originally picked to make
-minimal mods to it. There is another defconfig available for the TI's
-AM335x EVM. It looks smaller, but I haven't gone through it in detail
-to see if it's missing anything needed for the Beaglebone.
+The second patch also depends on the tcl patch sent in. This way 
+usb_modeswitch_data can select tclsh in order to get tcl. 
 
-What are your thoughts on the defconfig to use?
+Signed-off-by: J.C. Woltz <jwoltz@gmail.com>
 
-  1. Try to remain close to either the Angstrom or AM335x EVM one
-  2. Create a minimal one
+J.C. Woltz (2):
+  usb_modeswitch: update to 1.2.3
+  new program: usb_modeswitch_data
 
-I have a defconfig that I use for my Beaglebone that is much, much
-smaller and could probably chop out some options that I may only care
-about if #2 is preferred. Also, if there happens to be a
-guide/example/doc somewhere that someone wrote that specifies what a
-good buildroot defconfig looks like, I'll follow that for my next
-patch submission.
+ package/Config.in                                  |    1 +
+ .../usb_modeswitch/usb_modeswitch-makefile.patch   |   43 ++++++++++----------
+ package/usb_modeswitch/usb_modeswitch.mk           |   20 ++++++---
+ package/usb_modeswitch_data/Config.in              |   11 +++++
+ .../usb_modeswitch_data-makefile.patch             |   27 ++++++++++++
+ package/usb_modeswitch_data/usb_modeswitch_data.mk |   26 ++++++++++++
+ 6 files changed, 100 insertions(+), 28 deletions(-)
+ create mode 100644 package/usb_modeswitch_data/Config.in
+ create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data-makefile.patch
+ create mode 100644 package/usb_modeswitch_data/usb_modeswitch_data.mk
 
-Thanks,
-Frank
+-- 
+1.7.5.4
