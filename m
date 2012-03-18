@@ -1,39 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 18:37:30 +0100
-Subject: [Buildroot] [PATCH] netsnmp: add option to enable debugging code
-In-Reply-To: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net>
-References: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <201203181837.30186.arnout@mind.be>
+Date: Sun, 18 Mar 2012 18:54:24 +0100
+Subject: [Buildroot] [PATCH 1/3] DOWNLOAD: change $1=DIRECTORY_URL,
+	$2=FILE_NAME to $1=FULL_FILE_URL, $2=FILE_NAME
+In-Reply-To: <1331905375-9177-1-git-send-email-alvaro.gamez@hazent.com>
+References: <1331905375-9177-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <201203181854.24426.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 15 March 2012 22:04:27 Luca Ceresoli wrote:
-> +ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
-> +       NETSNMP_CONF_OPT += --disable-debugging
-> +endif
+On Friday 16 March 2012 14:42:53 Alvaro G. M wrote:
+> From: "Alvaro G. M" <alvaro.gamez@hazent.com>
+> 
+> This modifies the definition of DOWNLOAD to receive two arguments:
+> the first one is the full URL of the file to download, whereas the second
+> (and optional) is the name the file will have once downloaded.
+> 
+> Same thing with the SOURCE_CHECK_WGET and SCP functions.
+> 
+> All calls to these functions have been changed to the shortest form of
+> the new API, except for toolchains acquisition. Since there is quite a
+> number of different toolchains this call to DOWNLOAD is better set to the
+> generic one.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 
- Peter, is it correct that you prefer to have both the positive and the
-negative option in such a situation?  I.e.
-
-ifeq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
-       NETSNMP_CONF_OPT += --enable-debugging
-else
-       NETSNMP_CONF_OPT += --disable-debugging
-endif
-
-or alternatively
-
-NETSNMP_CONF_OPT += --$(if $(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),en,dis)able-debugging
-
- Otherwise,
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
- Regards,
- Arnout
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
