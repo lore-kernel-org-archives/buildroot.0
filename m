@@ -1,76 +1,47 @@
-From: MERCADIER Johann <johann.mercadier@imerir.com>
-Date: Sun, 18 Mar 2012 21:41:09 +0000
-Subject: [Buildroot] BR2012.rc1 :: problem to build a new package
-In-Reply-To: <201203160054.10741.arnout@mind.be>
-References: <CAPEB33x+aVFQoFgN8FXUDWsdqux4Kgf6cPnpMnxN3eRLedGB2g@mail.gmail.com>
- <201203160054.10741.arnout@mind.be>
-Message-ID: <CAPEB33ygJQjjcT_fj-kPX1NUSr3C1z3kZvE22uH0dU5LF4n_Vg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 18 Mar 2012 20:47:46 +0100
+Subject: [Buildroot] [git commit] elf2flt: fix after conversion of binutils
+	to package infrastructure
+Message-ID: <20120318215009.B4DAB90D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=277bd1ff42504f91fe15de163aa62152784665ac
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Thanks for your suggestions, it helped me. Troubles were caused by a
-small mistake:
+When binutils was converted to the package infrastructure (commit
+009407e6b), the variable that elf2flt uses to find the binutils
+libraries disappeared.  So use HOST_BINUTILS_DIR instead of
+BINUTILS_DIR1.
 
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/elf2flt/elf2flt.mk |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
->  So you should have the line
-> <PKG>_DEPENDENCIES += freetype fontconfig
-> in your .mk file.
->
-> => I forgot to remove the 'lib' prefix from the libraries name, that I got
-with a ldd
-
-
- Normally configure should pick it up automatically then.
->
->  Make sure that the Config.in also has the lines
->        select BR2_PACKAGE_FREETYPE
->        select BR2_PACKAGE_FONTCONFIG
->
-=> this part was already OK
-
-
->  As soon as you have something that works more or less, post it and
-> we'll give feedback!SO-0809-Leuven-M.S.G
->
- Preferably, use git send-email to send the patch.  That makes sure all the
-> tabs and line breaks are properly conserved, and that the commit message
-> and authorship is correct.  Also add your Signed-off-by line to the commit
-> message (see http://kerneltrap.org/files/Jeremy/DCO.txt).
->
-=> Now that's work. FbTerm is integrated and I can launch it. No troubles
-til now.
-I went to the website and created a signature.
-Now what I am confused with is the proper way to create a patch, do I have
-to :
-   * use the a simple 'diff'  command, with only the files I modified?
-   or
-   * use git + git format + git send-mail?... As it's explain here:
-http://tutoriels.itaapy.com/wiki/tutoriel-git/#bien-configurer-son-git
-
-  At the end where the signature must be added? Obviously not in the patch
-All the one I read didn't have such an information on it.
-
-I didn't find relevant relevant informations on that part. some infos will
-be great so as I can finished this part and know it for next time.
-
-Thank you in advance.
-
-Regards.
--- 
-Cordialement.
-
-___Johann MERCADIER___
-
-:(){ :|:& };:
-"I am the Unknown lead by the Unknowing.
-I have done so much with so little for so long
-that I am now qualified to do anything with nothing."
-HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120318/1434eb4e/attachment.html>
+diff --git a/toolchain/elf2flt/elf2flt.mk b/toolchain/elf2flt/elf2flt.mk
+index e74a655..84a2c01 100644
+--- a/toolchain/elf2flt/elf2flt.mk
++++ b/toolchain/elf2flt/elf2flt.mk
+@@ -21,12 +21,12 @@ $(ELF2FLT_DIR)/.configured: $(ELF2FLT_DIR)/.patched
+ 	(cd $(ELF2FLT_DIR); rm -rf config.cache; \
+ 		LDFLAGS=-lz \
+ 		$(ELF2FLT_DIR)/configure $(QUIET) \
+-		--with-bfd-include-dir=$(BINUTILS_DIR1)/bfd/ \
+-		--with-binutils-include-dir=$(BINUTILS_DIR)/include/ \
++		--with-bfd-include-dir=$(HOST_BINUTILS_DIR)/bfd/ \
++		--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
+ 		--target=$(REAL_GNU_TARGET_NAME) \
+-		--with-libbfd=$(BINUTILS_DIR1)/bfd/libbfd.a \
+-		--with-libiberty=$(BINUTILS_DIR1)/libiberty/libiberty.a \
+-		--prefix=$(STAGING_DIR)/usr)
++		--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
++		--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
++		--prefix=$(HOST_DIR)/usr)
+ 	touch $@
+ 
+ $(ELF2FLT_DIR)/$(ELF2FLT_BINARY): $(ELF2FLT_DIR)/.configured
