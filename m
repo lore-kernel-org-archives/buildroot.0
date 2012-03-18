@@ -1,31 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 18 Mar 2012 19:58:39 +0100
-Subject: [Buildroot] [PATCH] Microblaze: build kernel with device tree
-In-Reply-To: <201203181930.03681.arnout@mind.be> (Arnout Vandecappelle's
- message of "Sun, 18 Mar 2012 19:30:03 +0100")
-References: <1331978750-11724-1-git-send-email-sho@relinux.de>
- <1331986405-7332-1-git-send-email-alvaro.gamez@hazent.com>
- <201203181930.03681.arnout@mind.be>
-Message-ID: <873995ohwg.fsf@macbook.be.48ers.dk>
+From: bifferos <bifferos@yahoo.co.uk>
+Date: Sun, 18 Mar 2012 20:54:54 +0000
+Subject: [Buildroot] [PATCH] bifferboard: new board
+In-Reply-To: <201203181813.30601.arnout@mind.be>
+References: <201203031529.36487.arnout@mind.be>
+ <201203181450.44385.arnout@mind.be> <4F660977.4040806@yahoo.co.uk>
+ <201203181813.30601.arnout@mind.be>
+Message-ID: <4F664B9E.7080604@yahoo.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+On 03/18/2012 05:13 PM, Arnout Vandecappelle wrote:
+<snip>
+>> Now I'm wondering if there is something that has been activated in
+>> busybox, some feature, which requires kernel support, and (since my
+>> kernel is minimal) perhaps it doesn't have it, and perhaps init doesn't
+>> handle the lack of that support gracefully and crashes.  Nothing comes
+>> to mind though.
+>   Since init segfaults before any instruction is executed, it seems
+> unlikely.  The binary formats seem OK as well.  You could try to
+> enable CONFIG_BINFMT_AOUT.
+>
+>   Hang on, I realize something.  CONFIG_BINFMT_MISC wasn't enabled in
+> the config I sent, so /init can't be executed (/init is a shell script
+> that mounts devtmpfs).  Can you enable BINFMT_MISC and try again?
+Ah.  That doesn't work, but it leads me to ask a more basic question:  
+What kernel command-line should this system be using? :)
 
- Arnout> On Saturday 17 March 2012 13:13:25 Alvaro G. M wrote:
- >> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
- >> Tested-by: Alvaro G. M <alvaro.gamez@hazent.com>
-
- Arnout>  Peter, is it convenient for you if patches are reposted to add
- Arnout> Tested-by and Acked-by tags, or do you prefer the way we do it
- Arnout> up to now, just replying to the original post?
-
-If it's just for acked-by then I prefer people just reply - But if
-there's any fixes to be made and the original submitter doesn't fix it,
-a resend with those fixes is very much appreciated, thanks.
-
--- 
-Bye, Peter Korsgaard
+thanks,
+Biff.
