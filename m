@@ -1,25 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 Mar 2012 20:47:47 +0100
-Subject: [Buildroot] [PATCH] elf2flt: fix after conversion of binutils
-	to package infrastructure
-In-Reply-To: <1332084958-1085-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sun, 18 Mar 2012 16:35:58 +0100")
-References: <1332084958-1085-1-git-send-email-arnout@mind.be>
-Message-ID: <87ty1ln124.fsf@macbook.be.48ers.dk>
+From: Alexandre Pereira da Silva <aletes.xgr@gmail.com>
+Date: Sun, 18 Mar 2012 16:51:25 -0300
+Subject: [Buildroot] [PATCH] bifferboard: new board
+In-Reply-To: <201203181813.30601.arnout@mind.be>
+References: <201203031529.36487.arnout@mind.be>
+ <201203181450.44385.arnout@mind.be> <4F660977.4040806@yahoo.co.uk>
+ <201203181813.30601.arnout@mind.be>
+Message-ID: <CAAAP30GjEg_an8EZnq=z4JjcDXv_wcSCDgX_0NXk5Ao=7e-rhw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>> I learnt something new the other day - an initramfs compiled into the
+>> kernel can be compressed, however the kernel compression works ontop of
+>> that. ?So if you specify CONFIG_INITRAMFS_SOURCE it is pointless to
+>> specify initramfs compression other than 'None'
+>
+> ?Hm, good point, we should probably change our initramfs setup to disable
+> compression if the kernel image itself is compressed.
 
- Arnout> When binutils was converted to the package infrastructure (commit
- Arnout> 009407e6b), the variable that elf2flt uses to find the binutils
- Arnout> libraries disappeared.  So use HOST_BINUTILS_DIR instead of
- Arnout> BINUTILS_DIR1.
+The compression option is useful anyway. This is from the kernel menuconfig:
 
-Committed, thanks.
+config INITRAMFS_COMPRESSION_NONE
+        bool "None"
+        help
+          Do not compress the built-in initramfs at all. This may
+          sound wasteful in space, but, you should be aware that the
+          built-in initramfs will be compressed at a later stage
+          anyways along with the rest of the kernel, on those
+          architectures that support this.
+          However, not compressing the initramfs may lead to slightly
+          higher memory consumption during a short time at boot, while
+          both the cpio image and the unpacked filesystem image will
+          be present in memory simultaneously
 
--- 
-Bye, Peter Korsgaard
+So in some situations were you have just enough memory, enabling
+compression may get you to go through.
