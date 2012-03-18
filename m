@@ -1,28 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 22:40:17 +0100
-Subject: [Buildroot] [PATCH] bifferboard: new board
-In-Reply-To: <4F664B9E.7080604@yahoo.co.uk>
-References: <201203031529.36487.arnout@mind.be>
- <201203181813.30601.arnout@mind.be> <4F664B9E.7080604@yahoo.co.uk>
-Message-ID: <201203182240.17492.arnout@mind.be>
+From: MERCADIER Johann <johann.mercadier@imerir.com>
+Date: Sun, 18 Mar 2012 21:41:09 +0000
+Subject: [Buildroot] BR2012.rc1 :: problem to build a new package
+In-Reply-To: <201203160054.10741.arnout@mind.be>
+References: <CAPEB33x+aVFQoFgN8FXUDWsdqux4Kgf6cPnpMnxN3eRLedGB2g@mail.gmail.com>
+ <201203160054.10741.arnout@mind.be>
+Message-ID: <CAPEB33ygJQjjcT_fj-kPX1NUSr3C1z3kZvE22uH0dU5LF4n_Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 18 March 2012 21:54:54 bifferos wrote:
-> What kernel command-line should this system be using? 
+Hi Arnout,
 
- I would expect it should work with an empty command line.
+  Thanks for your suggestions, it helped me. Troubles were caused by a
+small mistake:
 
- Regards,
- Arnout
 
+>  So you should have the line
+> <PKG>_DEPENDENCIES += freetype fontconfig
+> in your .mk file.
+>
+> => I forgot to remove the 'lib' prefix from the libraries name, that I got
+with a ldd
+
+
+ Normally configure should pick it up automatically then.
+>
+>  Make sure that the Config.in also has the lines
+>        select BR2_PACKAGE_FREETYPE
+>        select BR2_PACKAGE_FONTCONFIG
+>
+=> this part was already OK
+
+
+>  As soon as you have something that works more or less, post it and
+> we'll give feedback!SO-0809-Leuven-M.S.G
+>
+ Preferably, use git send-email to send the patch.  That makes sure all the
+> tabs and line breaks are properly conserved, and that the commit message
+> and authorship is correct.  Also add your Signed-off-by line to the commit
+> message (see http://kerneltrap.org/files/Jeremy/DCO.txt).
+>
+=> Now that's work. FbTerm is integrated and I can launch it. No troubles
+til now.
+I went to the website and created a signature.
+Now what I am confused with is the proper way to create a patch, do I have
+to :
+   * use the a simple 'diff'  command, with only the files I modified?
+   or
+   * use git + git format + git send-mail?... As it's explain here:
+http://tutoriels.itaapy.com/wiki/tutoriel-git/#bien-configurer-son-git
+
+  At the end where the signature must be added? Obviously not in the patch
+All the one I read didn't have such an information on it.
+
+I didn't find relevant relevant informations on that part. some infos will
+be great so as I can finished this part and know it for next time.
+
+Thank you in advance.
+
+Regards.
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Cordialement.
+
+___Johann MERCADIER___
+
+:(){ :|:& };:
+"I am the Unknown lead by the Unknowing.
+I have done so much with so little for so long
+that I am now qualified to do anything with nothing."
+HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120318/1434eb4e/attachment.html>
