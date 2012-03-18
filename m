@@ -1,63 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 18 Mar 2012 18:13:30 +0100
-Subject: [Buildroot] [PATCH] bifferboard: new board
-In-Reply-To: <4F660977.4040806@yahoo.co.uk>
-References: <201203031529.36487.arnout@mind.be>
- <201203181450.44385.arnout@mind.be> <4F660977.4040806@yahoo.co.uk>
-Message-ID: <201203181813.30601.arnout@mind.be>
+Date: Sun, 18 Mar 2012 18:22:28 +0100
+Subject: [Buildroot] [PATCH v3 1/2] omap-u-boot-utils: add new host
+	package
+In-Reply-To: <1331844852-4609-2-git-send-email-luca@lucaceresoli.net>
+References: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
+ <1331844852-4609-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <201203181822.28975.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 18 March 2012 17:12:39 bifferos wrote:
-> On 03/18/2012 01:50 PM, Arnout Vandecappelle wrote:
-> > On Monday 12 March 2012 02:23:35 bifferos wrote:
-> >> Write protecting the kernel text: 1048k
-> >> Write protecting the kernel read-only data: 164k
-> >> init[1]: segfault at 0 ip   (null) sp bf95bf40 error 4 in
-> >> busybox[8048000+7c000]
-> >   Since this segmentation fault is in init, it will be tough to debug.
-> > Judging from the address, it in fact happens even before init is
-> > started.  Is it possible that there isn't enough RAM to run busybox?
-> >
-> 
-> I have a hard time believing there is not enough RAM  I have copied the 
-> generated busybox onto the working system and run it there, and it 
-> executes OK, so the same system can execute two instances of the busybox 
-> binary (from two different places on rootfs), and they both run OK.
-
- It was just a guess based on the fact that it segfaults before it starts.
-
-
-> I learnt something new the other day - an initramfs compiled into the 
-> kernel can be compressed, however the kernel compression works ontop of 
-> that.  So if you specify CONFIG_INITRAMFS_SOURCE it is pointless to 
-> specify initramfs compression other than 'None'
-
- Hm, good point, we should probably change our initramfs setup to disable
-compression if the kernel image itself is compressed.
-
+On Thursday 15 March 2012 21:54:11 Luca Ceresoli wrote:
 [snip]
+> +#############################################################
+> +#
+> +# omap-u-boot-utils
+> +#
+> +#############################################################
+> +
+> +OMAP_U_BOOT_UTILS_VERSION = 8aff852322
+> +OMAP_U_BOOT_UTILS_SITE = git://github.com/nmenon/omap-u-boot-utils.git
+> +OMAP_U_BOOT_UTILS_SITE_METHOD = git
 
-> Now I'm wondering if there is something that has been activated in 
-> busybox, some feature, which requires kernel support, and (since my 
-> kernel is minimal) perhaps it doesn't have it, and perhaps init doesn't 
-> handle the lack of that support gracefully and crashes.  Nothing comes 
-> to mind though.
+ SITE_METHOD is actually redundant because it is derived from the
+git:// prefix.  Still, I prefer this site method.
 
- Since init segfaults before any instruction is executed, it seems 
-unlikely.  The binary formats seem OK as well.  You could try to
-enable CONFIG_BINFMT_AOUT.
+ OTOH, for the URL, I prefer tu use the http URL.  Many company
+firewalls block git traffic.
 
- Hang on, I realize something.  CONFIG_BINFMT_MISC wasn't enabled in
-the config I sent, so /init can't be executed (/init is a shell script
-that mounts devtmpfs).  Can you enable BINFMT_MISC and try again?
+> +
+> +define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
+> +	$(MAKE) -C $(@D)
+> +endef
+> +
+> +define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
+> +	for f in gpsign pserial tagger ucmd ukermit ; do \
+> +		[ -f ${HOST_DIR}/usr/bin/$$f ] || \
+
+ Why this condition?  The result is that when you bump the version and
+don't do a make clean, the old version will still be installed in the
+host directory.
+
 
  Regards,
  Arnout
 
+> +		  install -m 755 -D $(@D)/$$f ${HOST_DIR}/usr/bin/$$f ; \
+> +	done
+> +endef
+> +
+> +$(eval $(call GENTARGETS,host))
+> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
