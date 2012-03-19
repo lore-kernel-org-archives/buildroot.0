@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 Mar 2012 09:17:48 -0300
-Subject: [Buildroot] [PATCH 1/3] libnfnetlink: new package
-Message-ID: <1332159470-13304-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 19 Mar 2012 09:17:49 -0300
+Subject: [Buildroot] [PATCH 2/3] libnetfilter_conntrack: new package
+In-Reply-To: <1332159470-13304-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1332159470-13304-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1332159470-13304-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,58 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                    |    1 +
- package/libnfnetlink/Config.in       |   11 +++++++++++
- package/libnfnetlink/libnfnetlink.mk |   12 ++++++++++++
- 3 files changed, 24 insertions(+), 0 deletions(-)
- create mode 100644 package/libnfnetlink/Config.in
- create mode 100644 package/libnfnetlink/libnfnetlink.mk
+ package/Config.in                                  |    1 +
+ package/libnetfilter_conntrack/Config.in           |    9 +++++++++
+ .../libnetfilter-conntrack.mk                      |   13 +++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/libnetfilter_conntrack/Config.in
+ create mode 100644 package/libnetfilter_conntrack/libnetfilter-conntrack.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8a29867..e7ee86b 100644
+index e7ee86b..fb0e718 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -362,6 +362,7 @@ source "package/neon/Config.in"
  source "package/libmnl/Config.in"
  source "package/libmodbus/Config.in"
  source "package/libmbus/Config.in"
-+source "package/libnfnetlink/Config.in"
++source "package/libnetfilter_conntrack/Config.in"
+ source "package/libnfnetlink/Config.in"
  source "package/libnl/Config.in"
  source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
-diff --git a/package/libnfnetlink/Config.in b/package/libnfnetlink/Config.in
+diff --git a/package/libnetfilter_conntrack/Config.in b/package/libnetfilter_conntrack/Config.in
 new file mode 100644
-index 0000000..fa247c5
+index 0000000..caf8a8a
 --- /dev/null
-+++ b/package/libnfnetlink/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBNFNETLINK
-+	bool "libnfnetlink"
++++ b/package/libnetfilter_conntrack/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBNETFILTER_CONNTRACK
++	bool "libnetfilter_conntrack"
++	select BR2_PACKAGE_LIBNFNETLINK
 +	help
-+	  libnfnetlink is the low-level library for netfilter related
-+	  kernel/userspace communication.
-+	  It provides a generic messaging infrastructure for in-kernel
-+	  netfilter subsystems (such as nfnetlink_log, nfnetlink_queue,
-+	  nfnetlink_conntrack) and their respective users
-+	  and/or management tools in userspace.
++	  libnetfilter_conntrack is a userspace library providing
++	  a programming interface (API) to the in-kernel
++	  connection tracking state table.
 +
-+	  http://www.netfilter.org/projects/libnfnetlink/
-diff --git a/package/libnfnetlink/libnfnetlink.mk b/package/libnfnetlink/libnfnetlink.mk
++	  http://www.netfilter.org/projects/libnetfilter_conntrack/
+diff --git a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
 new file mode 100644
-index 0000000..67ea266
+index 0000000..66f0f69
 --- /dev/null
-+++ b/package/libnfnetlink/libnfnetlink.mk
-@@ -0,0 +1,12 @@
++++ b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
+@@ -0,0 +1,13 @@
 +#############################################################
 +#
-+# libnfnetlink
++# libnetfilter-conntrack
 +#
 +#############################################################
 +
-+LIBNFNETLINK_VERSION = 1.0.0
-+LIBNFNETLINK_SOURCE = libnfnetlink-$(LIBNFNETLINK_VERSION).tar.bz2
-+LIBNFNETLINK_SITE = http://www.netfilter.org/projects/libnfnetlink/files
-+LIBNFNETLINK_INSTALL_STAGING = YES
++LIBNETFILTER_CONNTRACK_VERSION = 1.0.0
++LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
++LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
++LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
++LIBNETFILTER_CONNTRACK_DEPENDENCIES = host-pkg-config libnfnetlink
 +
 +$(eval $(call AUTOTARGETS))
 -- 
