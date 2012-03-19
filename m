@@ -1,47 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 19 Mar 2012 20:11:57 +0100
-Subject: [Buildroot] [PATCH] package/giblib: fix breakage
-In-Reply-To: <1331852049-12761-1-git-send-email-yann.morin.1998@free.fr>
-References: <1331852049-12761-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <201203192011.58014.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 19 Mar 2012 16:48:24 -0300
+Subject: [Buildroot] [PATCH] toolchain/microblaze: fix up big-endian
+	characteristics
+Message-ID: <1332186504-27410-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All,
+The big-endian microblaze external toolchain is missing vital
+characteristics being set, such as LARGEFILE support, IPV6 and so on.
 
-On Thursday 15 March 2012 23:54:09 Yann E. MORIN wrote:
-> Fix two things in the giblib package:
-> 
-> 1- fix prefix breakage
->    - s/STAGING/STAGING_DIR/ (Thomas)
->    - prefix is .../usr, not .../usr/lib or .../usr/bin
-> 
-> 2- fix the configure.ac/Makefile.am breakage
->    - imlib2 sets IMLIB2_(LIBS|CFLAGS), not IMLIB_(LIBS|CFLAGS)
->    - autoreconf the package, install missing files
->      Note that both configure.ac and configure.in are present in the
->      package, so both are fixed, although only configure.ac is used
->      (configure.in is the legacy name).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/giblib/giblib-fix-imlib2-detection.patch |  127 ++++++++++++++++++++++
->  package/giblib/giblib.mk                         |    6 +-
->  2 files changed, 131 insertions(+), 2 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/toolchain-external/Config.in |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Ping?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 014bfc5..ee79339 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -447,6 +447,11 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+ 	bool "Xilinx Big Endian Microblaze GNU Tools"
+ 	depends on BR2_microblazebe
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_INET_RPC
++	select BR2_ENABLE_LOCALE
++	select BR2_USE_WCHAR
+ 	help
+ 	  Toolchain for the Microblaze architecture, from
+ 	  http://wiki.xilinx.com/mb-gnu-tools
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.3.4
