@@ -1,32 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Mar 2012 13:33:31 +0100
-Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.1
-Message-ID: <20120319123700.0E72D953E8@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Mar 2012 13:54:14 +0100
+Subject: [Buildroot] [PATCH] vnstat: new package
+In-Reply-To: <CAM+bi4uPB2C59UhFp-FSHHzjD5sN1-XZfxeUdAUNbvhJBiKtog@mail.gmail.com>
+References: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
+ <20120319105120.7dcafd10@skate>
+ <CAM+bi4tyqL-zYyb7AC7kRPgGvedUoHok=Vkn-xdHJuZbs-PyGw@mail.gmail.com>
+ <20120319112026.592985ee@skate>
+ <CAM+bi4tg=4ywjQYrWDP7_zQ_fvUzCYFpySjz-siZKFhwNYJwVw@mail.gmail.com>
+ <878viwkgv9.fsf@macbook.be.48ers.dk>
+ <CAM+bi4uPB2C59UhFp-FSHHzjD5sN1-XZfxeUdAUNbvhJBiKtog@mail.gmail.com>
+Message-ID: <20120319135414.67ce5eab@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4f650feb23ae45a6d1e881f032307e01120ca7b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Mon, 19 Mar 2012 11:56:02 +0100,
+Alvaro Gamez <alvaro.gamez@hazent.com> a ?crit :
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/e2fsprogs/e2fsprogs.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> I remember a conversation a few days ago, and I think it was decided to no
+> longer set the clean and uninstall targets, am I right? If that's the case,
+> then the lines from Thomas should be enough, is that right?
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index f3d44f6..fee6f0a 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--E2FSPROGS_VERSION = 1.42
-+E2FSPROGS_VERSION = 1.42.1
- E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
- 
- E2FSPROGS_CONF_OPT = \
+Well, Arnout, Luca and myself agreed on this, but we need to wait for
+Peter's approval on this idea.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
