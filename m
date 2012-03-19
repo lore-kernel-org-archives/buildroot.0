@@ -1,57 +1,66 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 19 Mar 2012 15:56:53 +0100
-Subject: [Buildroot] [PATCH v3 1/2] omap-u-boot-utils: add new host
-	package
-In-Reply-To: <201203181822.28975.arnout@mind.be>
-References: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
- <1331844852-4609-2-git-send-email-luca@lucaceresoli.net>
- <201203181822.28975.arnout@mind.be>
-Message-ID: <4F674935.5070308@lucaceresoli.net>
+From: MERCADIER Johann <johann.mercadier@imerir.com>
+Date: Mon, 19 Mar 2012 15:16:16 +0000
+Subject: [Buildroot] BR2012.rc1 :: problem to build a new package
+In-Reply-To: <CAHXCMMLkbaQc_rY1vP=yzwaHKDB=0eG1-a-5vdqb93CPt2M31Q@mail.gmail.com>
+References: <CAPEB33x+aVFQoFgN8FXUDWsdqux4Kgf6cPnpMnxN3eRLedGB2g@mail.gmail.com>
+ <201203160054.10741.arnout@mind.be>
+ <CAPEB33ygJQjjcT_fj-kPX1NUSr3C1z3kZvE22uH0dU5LF4n_Vg@mail.gmail.com>
+ <CAHXCMMLkbaQc_rY1vP=yzwaHKDB=0eG1-a-5vdqb93CPt2M31Q@mail.gmail.com>
+Message-ID: <CAPEB33wN0tqR5es3EgLpUkc3oUtsNp2yc0RuHic=3eFVG7Mhxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle wrote:
-> On Thursday 15 March 2012 21:54:11 Luca Ceresoli wrote:
-> [snip]
->> +#############################################################
->> +#
->> +# omap-u-boot-utils
->> +#
->> +#############################################################
->> +
->> +OMAP_U_BOOT_UTILS_VERSION = 8aff852322
->> +OMAP_U_BOOT_UTILS_SITE = git://github.com/nmenon/omap-u-boot-utils.git
->> +OMAP_U_BOOT_UTILS_SITE_METHOD = git
->   SITE_METHOD is actually redundant because it is derived from the
-> git:// prefix.  Still, I prefer this site method.
+Hi Sam,
+
+   I succeed in my guest! I just send my patch. Thanks for your support
+guys!
+  I tested it and it should work. Waiting for your feedback...
+
+
+> As usual, man is your friends ;-)
+> Have a look at:
+> $ man git-format-patch
+> $ man git-send-email
 >
->   OTOH, for the URL, I prefer tu use the http URL.  Many company
-> firewalls block git traffic.
+=> I was not asking for someone to give me the better choice to do I
+totally agree with the fact that man or google now can be our better
+friends! and it's real better to read that than: RTFM! :o))
 
-I think you should start a company-wide petition against such a torture! ;)
-
-Anyway... I used to think github only supports https, but now I found out
-also http works, and is is even already used by other BR packages... I'll
-resubmit with an http URL.
-
-
+> I didn't find relevant relevant information on that part. some infos will
+> be great so as I can finished this part and know it for next time.
+> You're right, we are working on make it clearer.
+> We are gathering all pieces of doc and put them in such a way it easy
+> to find out the relevant information.
+> It is a continuous process..
 >
->> +
->> +define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
->> +	$(MAKE) -C $(@D)
->> +endef
->> +
->> +define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
->> +	for f in gpsign pserial tagger ucmd ukermit ; do \
->> +		[ -f ${HOST_DIR}/usr/bin/$$f ] || \
->   Why this condition?  The result is that when you bump the version and
-> don't do a make clean, the old version will still be installed in the
-> host directory.
+=> I finally found 3 others website from the one you gave to me which are
+really good. They use different interresting ways to explain it, but
+merging all of them could make a very good startup for noobs! Here are
+these sites I don't know if it can be useful?
 
-Oops, will fix.
++http://gitref.org/basic/#diff
++http://elinux.org/Git_usage
++http://elinux.org/Buildroot_how_to_contribute
+http://tutoriels.itaapy.com/wiki/tutoriel-git/#bien-configurer-son-git
+http://home.regit.org/technical-articles/git-for-the-newbie/
 
-Thanks,
-Luca
+I am working now on omapfbplay. Coming soon... ;o)
+
+Regards.
+
+-- 
+Cordialement.
+
+___Johann MERCADIER___
+
+:(){ :|:& };:
+"I am the Unknown lead by the Unknowing.
+I have done so much with so little for so long
+that I am now qualified to do anything with nothing."
+HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120319/79403e8b/attachment.html>
