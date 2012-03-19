@@ -1,30 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 19 Mar 2012 16:44:09 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-In-Reply-To: <cover.1332171599.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 19 Mar 2012 16:40:04 +0100")
-References: <cover.1332171599.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87r4woioja.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 19 Mar 2012 16:43:40 +0100
+Subject: [Buildroot] [git commit] at: uses fork(), so requires MMU
+Message-ID: <20120319154430.30F49953F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c45d64a678fe541ff959d3a64ba8478eba041237
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> The following changes since commit e687bb71a028303f326aeebfaf94a3ac1c43b4e4:
- Thomas>   gcc: bump 4.4.x version (2012-03-13 16:27:25 +0100)
+Fixes the following problem:
 
- Thomas> are available in the git repository at:
- Thomas>   git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git misc-fixes
+atd.o: In function `run_file':
+atd.c:(.text+0x35c): undefined reference to `fork'
+atd.c:(.text+0x75c): undefined reference to `fork'
+daemon.o: In function `daemon_setup':
+daemon.c:(.text+0x4bc): undefined reference to `fork'
+collect2: ld returned 1 exit status
+make[1]: *** [atd] Error 1
+make[1]: Leaving directory `/home/test/test/output/build/at-3.1.12'
+make: *** [/home/test/test/output/build/at-3.1.12/.stamp_built] Error 2
 
- Thomas> Thomas Petazzoni (3):
- Thomas>       transmission: add missing host-intltool dependency
- Thomas>       at: uses fork(), so requires MMU
- Thomas>       glib-networking: add missing host-intltool dependency
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/at/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Committed all 3, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/at/Config.in b/package/at/Config.in
+index a5d5ef8..d4ddcb2 100644
+--- a/package/at/Config.in
++++ b/package/at/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_AT
+ 	bool "at"
++	depends on BR2_USE_MMU
+ 	help
+ 	 At and batch read shell commands from standard input and
+ 	 store them as jobs to be scheduled for execution in the
