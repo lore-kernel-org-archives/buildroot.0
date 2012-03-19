@@ -1,30 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Mar 2012 16:40:04 +0100
-Subject: [Buildroot] [pull request] Pull request for branch misc-fixes
-Message-ID: <cover.1332171599.git.thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Mar 2012 16:40:05 +0100
+Subject: [Buildroot] [PATCH 1/3] transmission: add missing host-intltool
+	dependency
+In-Reply-To: <cover.1332171599.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1332171599.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <786d20d636d012cf657b064730b58514bd33a41c.1332171599.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit e687bb71a028303f326aeebfaf94a3ac1c43b4e4:
+Fixes the following build problem:
 
-  gcc: bump 4.4.x version (2012-03-13 16:27:25 +0100)
+checking for intltool >= 0.35.0... ./configure: line 17915: intltool-update: command not found
+ found
+configure: error: Your intltool is too old.  You need intltool 0.35.0 or later.
+make: *** [/home/test/test/output/build/transmission-2.33/.stamp_configured] Error 1
 
-are available in the git repository at:
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git misc-fixes
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/transmission/transmission.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas Petazzoni (3):
-      transmission: add missing host-intltool dependency
-      at: uses fork(), so requires MMU
-      glib-networking: add missing host-intltool dependency
-
- package/at/Config.in                       |    1 +
- package/glib-networking/glib-networking.mk |    6 +++++-
- package/transmission/transmission.mk       |    1 +
- 3 files changed, 7 insertions(+), 1 deletions(-)
-
-Thanks,
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index c0d763b..9ffd432 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -8,6 +8,7 @@ TRANSMISSION_SITE = http://download.transmissionbt.com/files/
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.bz2
+ TRANSMISSION_DEPENDENCIES = \
+ 	host-pkg-config \
++	host-intltool \
+ 	libcurl \
+ 	libevent \
+ 	openssl \
 -- 
-Thomas Petazzoni
+1.7.4.1
