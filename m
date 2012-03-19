@@ -1,122 +1,57 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 19 Mar 2012 16:48:59 +0100
-Subject: [Buildroot] [PATCH v4 2/2] u-boot: build signed image for OMAP
-	processors
-In-Reply-To: <1332172139-22621-1-git-send-email-luca@lucaceresoli.net>
-References: <1332172139-22621-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1332172139-22621-2-git-send-email-luca@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 19 Mar 2012 12:52:04 -0300
+Subject: [Buildroot] [PATCH 1/3] intltool: no business defining PERLLIB
+In-Reply-To: <20120319163011.27d669d2@skate>
+References: <1331517531-2291-1-git-send-email-gustavo@zacarias.com.ar>
+ <1331517531-2291-2-git-send-email-gustavo@zacarias.com.ar>
+ <20120319163011.27d669d2@skate>
+Message-ID: <d393625cf8a0f0af32c086413b19b091@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+On 2012-03-19 12:30, Thomas Petazzoni wrote:
 
----
+> Le Sun, 11 Mar 2012 22:58:49 -0300,
+> Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+>
+>> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>> ---
+>>  package/intltool/intltool.mk |    2 --
+>>  1 files changed, 0 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/intltool/intltool.mk 
+>> b/package/intltool/intltool.mk
+>> index 6d13cc1..1e749ea 100644
+>> --- a/package/intltool/intltool.mk
+>> +++ b/package/intltool/intltool.mk
+>> @@ -9,8 +9,6 @@ INTLTOOL_SOURCE = 
+>> intltool-$(INTLTOOL_VERSION).tar.bz2
+>>  INTLTOOL_SITE = 
+>> http://ftp.acc.umu.se/pub/GNOME/sources/intltool/0.40/
+>>
+>>  HOST_INTLTOOL_DEPENDENCIES = host-libxml-parser-perl
+>> -HOST_INTLTOOL_CONF_OPT = \
+>> -  PERLLIB=$(HOST_DIR)/usr/lib/perl
+> So this commit should be reverted, in my opinion, unless 
+> host-microperl
+> becomes a dependency of host-intltool which I am not really in favor 
+> of.
+>
+> Best regards,
+>
+> Thomas Petazzoni
 
-Changed in v4:
- - more verbose help text for config options;
- - remove unneeded ifeq around the definition for UBOOT_BIN_IFT;
- - produce an error message if the user-specified cfg file does not exist.
-
-New in v3: rebase on current master.
-
-New in v2: add depends on BR2_arm || BR2_armeb.
----
- boot/uboot/Config.in |   32 ++++++++++++++++++++++++++++++++
- boot/uboot/uboot.mk  |   25 +++++++++++++++++++++++++
- 2 files changed, 57 insertions(+), 0 deletions(-)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index c8db9fb..96c0ea3 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -92,6 +92,38 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
- 
- endchoice
- 
-+config BR2_TARGET_UBOOT_OMAP_IFT
-+	depends on BR2_TARGET_UBOOT_FORMAT_BIN
-+	depends on BR2_arm || BR2_armeb
-+	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
-+	bool "produce a .ift signed image (OMAP)"
-+	help
-+	  Use gpsign to produce an image of u-boot.bin signed with
-+	  a Configuration Header for booting on OMAP processors.
-+	  This allows U-Boot to boot without the need for an
-+	  intermediate bootloader (e.g. x-loader) if it is written
-+	  on the first sector of the boot medium.
-+	  This only works for some media, such as NAND. Check your
-+	  chip documentation for details. You might also want to
-+	  read the documentation of gpsign, the tool that generates
-+	  the .ift image, at:
-+	  https://github.com/nmenon/omap-u-boot-utils/blob/master/README
-+
-+if BR2_TARGET_UBOOT_OMAP_IFT
-+
-+config BR2_TARGET_UBOOT_OMAP_IFT_CONFIG
-+	string "gpsign Configuration Header config file"
-+	help
-+	  The Configuration Header (CH) config file defines the
-+	  desired content of the CH for the signed image.
-+	  It usually contains external RAM settings and
-+	  possibly other external devices initialization.
-+	  The omap-u-boot-utils software contains example
-+	  configuration files for some boards:
-+	  https://github.com/nmenon/omap-u-boot-utils/tree/master/configs
-+
-+endif
-+
- menuconfig BR2_TARGET_UBOOT_NETWORK
- 	bool "Custom Network Settings"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index db9de8d..c8dce5b 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -31,6 +31,7 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_NAND_BIN),y)
- UBOOT_BIN          = u-boot-nand.bin
- else
- UBOOT_BIN          = u-boot.bin
-+UBOOT_BIN_IFT      = ${UBOOT_BIN}.ift
- endif
- 
- UBOOT_ARCH=$(KERNEL_ARCH)
-@@ -86,10 +87,34 @@ define UBOOT_BUILD_CMDS
- 		$(UBOOT_MAKE_TARGET)
- endef
- 
-+define UBOOT_BUILD_OMAP_IFT
-+	${HOST_DIR}/usr/bin/gpsign -f $(@D)/u-boot.bin \
-+		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
-+endef
-+
- define UBOOT_INSTALL_IMAGES_CMDS
- 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
- endef
- 
-+define UBOOT_INSTALL_OMAP_IFT_IMAGE
-+	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
-+endef
-+
-+ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
-+# we NEED a config file unless we're at make source
-+ifeq ($(filter source,$(MAKECMDGOALS)),)
-+ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
-+$(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
-+endif
-+ifeq ($(wildcard $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))),)
-+$(error gpsign config file $(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG) not found. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
-+endif
-+endif
-+UBOOT_DEPENDENCIES += host-omap-u-boot-utils
-+UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
-+UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
-+endif
-+
- $(eval $(call GENTARGETS))
- 
- ifeq ($(BR2_TARGET_UBOOT),y)
--- 
-1.7.5.4
+Reverted? It was never applied.
+We've already discussed this on IRC and i stand on my position about 
+it.
+A cold host-microperl build takes roughly 2 minutes on my quite mundane 
+desktop with it's slow hard drive.
+So please someone else(s) fix it as they see fit, i'm not submitting 
+anything else perl-related.
+Future-proof doesn't seem to be the rule which is what i aimed at so 
+i'll just quit doing anything perl-related which was mostly as a favour 
+since i don't use it even though i code in perl for other purposes.
+Regards.
