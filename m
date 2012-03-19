@@ -1,68 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 Mar 2012 09:17:50 -0300
-Subject: [Buildroot] [PATCH 3/3] dnsmasq: add option to support conntrack
-In-Reply-To: <1332159470-13304-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1332159470-13304-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1332159470-13304-3-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 19 Mar 2012 13:30:44 +0100
+Subject: [Buildroot] [git commit] Added the libtpl package
+Message-ID: <20120319123316.C085990AB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to support conntrack marking of DNS packets.
-This allows for more sturdy firewall setups and/or accounting.
+commit: http://git.buildroot.net/buildroot/commit/?id=f21f4d43b325c3cbad126b8f10fd24498c6af285
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Peter: drop _INSTALL_TARGET = NO as it installs a shared lib]
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dnsmasq/Config.in  |    6 ++++++
- package/dnsmasq/dnsmasq.mk |   12 ++++++++++++
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ package/Config.in        |    1 +
+ package/libtpl/Config.in |    6 ++++++
+ package/libtpl/libtpl.mk |   11 +++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
-index f434b8b..fa2499e 100644
---- a/package/dnsmasq/Config.in
-+++ b/package/dnsmasq/Config.in
-@@ -35,4 +35,10 @@ config BR2_PACKAGE_DNSMASQ_LUA
- 	help
- 	  Enable lua scripting for dnsmasq
- 
-+config BR2_PACKAGE_DNSMASQ_CONNTRACK
-+	bool "conntrack marking support"
-+	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
+diff --git a/package/Config.in b/package/Config.in
+index f0ce963..85583c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -386,6 +386,7 @@ source "package/libglib2/Config.in"
+ source "package/libical/Config.in"
+ source "package/libnspr/Config.in"
+ source "package/libsigc/Config.in"
++source "package/libtpl/Config.in"
+ source "package/liburcu/Config.in"
+ source "package/lttng-libust/Config.in"
+ source "package/orc/Config.in"
+diff --git a/package/libtpl/Config.in b/package/libtpl/Config.in
+new file mode 100644
+index 0000000..a2c2c2d
+--- /dev/null
++++ b/package/libtpl/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_LIBTPL
++	bool "libtpl"
 +	help
-+	  Enable DNS query connection marking in netfilter.
++	  Easily store and retrieve binary data in C
 +
- endif
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index c1995a0..205921f 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -28,6 +28,17 @@ ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
- 	DNSMASQ_MAKE_OPT += LDFLAGS+="-lintl -lidn"
- endif
- 
-+ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
-+	DNSMASQ_DEPENDENCIES += host-pkg-config libnetfilter_conntrack
-+endif
++	  http://tpl.sourceforge.net/
+diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
+new file mode 100644
+index 0000000..e565bb9
+--- /dev/null
++++ b/package/libtpl/libtpl.mk
+@@ -0,0 +1,11 @@
++#############################################################
++#
++# libtpl
++#
++#############################################################
++LIBTPL_VERSION = 1.5
++LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
++LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
++LIBTPL_INSTALL_STAGING = YES
 +
-+ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
-+define DNSMASQ_ENABLE_CONNTRACK
-+	$(SED) 's^.*#define HAVE_CONNTRACK.*^#define HAVE_CONNTRACK^' \
-+		$(DNSMASQ_DIR)/src/config.h
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
- 	DNSMASQ_DEPENDENCIES += lua
- 	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
-@@ -70,6 +81,7 @@ define DNSMASQ_BUILD_CMDS
- 	$(DNSMASQ_FIX_PKGCONFIG)
- 	$(DNSMASQ_ENABLE_DBUS)
- 	$(DNSMASQ_ENABLE_LUA)
-+	$(DNSMASQ_ENABLE_CONNTRACK)
- 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPT)
- endef
- 
--- 
-1.7.3.4
++$(eval $(call AUTOTARGETS))
