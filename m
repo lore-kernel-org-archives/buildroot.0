@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Mar 2012 10:51:20 +0100
-Subject: [Buildroot] [PATCH] vnstat: new package
-In-Reply-To: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
-References: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20120319105120.7dcafd10@skate>
+Date: Mon, 19 Mar 2012 10:52:07 +0100
+Subject: [Buildroot] [PATCH] Added the libtpl package
+In-Reply-To: <1332147488-13020-1-git-send-email-spdawson@gmail.com>
+References: <1332147488-13020-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120319105207.3a831fb3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Mon, 19 Mar 2012 08:58:08 +0000,
+spdawson at gmail.com a ?crit :
 
-Le Mon, 19 Mar 2012 10:48:05 +0100,
-"Alvaro G. M" <alvaro.gamez@hazent.com> a ?crit :
+> +LIBTPL_VERSION = 1.5
+> +LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
+> +LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
+> +
+> +LIBTPL_INSTALL_STAGING = YES
+> +LIBTPL_INSTALL_TARGET = NO
 
-> I think this could replace somehow ttcp in the near future. I've used
-> it sometimes with the help of netcat to stablish a TCP connection.
-> I am not sure I made this right, because vnstat doesn't use autotools,
-> so there is no ./configure to do. Please, check it out.
-
-Thanks for this package!
-
-If it doesn't use the autotools, then you should use the GENTARGETS
-infrastructure rather than the AUTOTARGETS one.
+This looks strange. Is it a static-only library? At least a comment
+here in the .mk file before those two lines would be needed to explain
+why we have this unusual case.
 
 Best regards,
 
