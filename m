@@ -1,23 +1,33 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Mar 2012 00:51:48 +0100
-Subject: [Buildroot] [PATCH 5/6] Fix installation for the lighttpd
-	package
-In-Reply-To: <30bfa1684abbd7aabf536fdff545b06f26a70f35.1332172636.git.maxime.ripard@free-electrons.com>
+Date: Tue, 20 Mar 2012 00:55:22 +0100
+Subject: [Buildroot] [PATCH 6/6] Add systemd unit for lighttpd
+In-Reply-To: <b405dff28f234161c91302a003a361dd3e162a11.1332172636.git.maxime.ripard@free-electrons.com>
 References: <cover.1332172636.git.maxime.ripard@free-electrons.com>
- <30bfa1684abbd7aabf536fdff545b06f26a70f35.1332172636.git.maxime.ripard@free-electrons.com>
-Message-ID: <201203200051.48409.arnout@mind.be>
+ <b405dff28f234161c91302a003a361dd3e162a11.1332172636.git.maxime.ripard@free-electrons.com>
+Message-ID: <201203200055.22903.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 19 March 2012 16:59:39 Maxime Ripard wrote:
->  package/lighttpd/lighttpd.conf |  445 ++++++++++++++++++++++++++++++++++++++++
+On Monday 19 March 2012 16:59:40 Maxime Ripard wrote:
+> +define LIGHTTPD_INSTALL_INIT_SYSTEMD
+> +[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
+> +       $(INSTALL) -D -m 755 package/lighttpd/lighttpd.service \
+> +               $(TARGET_DIR)/etc/systemd/system/lighttpd.service
+> +
+> +mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +
+> +ln -fs ../lighttpd.service \
+> +       $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
+> +endef
 
- Same remark as for systemd: wouldn't it be better to patch the upstream
-file instead of copying it?  Also, why did you revert the disabling of
-range requests for pdf documents?
+ This should be indented, no?
+
+ Would it be useful to add this to generic package infrastructure?
+I mean, if systemd is selected and pkgdir/pkgname.service exists,
+install it and enable it in multi-user.
 
  Regards,
  Arnout
