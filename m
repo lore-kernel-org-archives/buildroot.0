@@ -1,40 +1,41 @@
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
-Date: Mon, 19 Mar 2012 11:10:55 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Mar 2012 11:20:26 +0100
 Subject: [Buildroot] [PATCH] vnstat: new package
-In-Reply-To: <20120319105120.7dcafd10@skate>
+In-Reply-To: <CAM+bi4tyqL-zYyb7AC7kRPgGvedUoHok=Vkn-xdHJuZbs-PyGw@mail.gmail.com>
 References: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
  <20120319105120.7dcafd10@skate>
-Message-ID: <CAM+bi4tyqL-zYyb7AC7kRPgGvedUoHok=Vkn-xdHJuZbs-PyGw@mail.gmail.com>
+ <CAM+bi4tyqL-zYyb7AC7kRPgGvedUoHok=Vkn-xdHJuZbs-PyGw@mail.gmail.com>
+Message-ID: <20120319112026.592985ee@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/3/19 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Le Mon, 19 Mar 2012 11:10:55 +0100,
+Alvaro Gamez <alvaro.gamez@hazent.com> a ?crit :
 
-> Thanks for this package!
->
+> I see, but then essentially I would have to copy, paste and reformat the
+> original Makefile into vnstat.mk Isn't that a bit redundant?
 
-No, thanks all of you!
+No, no. You don't have to replicate the project Makefile. You would
+just to something like:
 
+define VNSTAT_BUILD_CMDS
+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+endef
 
-> If it doesn't use the autotools, then you should use the GENTARGETS
-> infrastructure rather than the AUTOTARGETS one.
->
+define VNSTAT_INSTALL_TARGET_CMDS
+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+endef
 
-
-I see, but then essentially I would have to copy, paste and reformat the
-original Makefile into vnstat.mk Isn't that a bit redundant?
-
-AUTOTARGETS expects to find all, install, clean, uninstall targets after
-configuration. If I make it skip the configuration step, wouldn't that be
-easier, rather than having to redo most of the original Makefile?
+You can also see other examples in the Buildroot code.
 
 Regards,
 
+Thomas
 -- 
-?lvaro G?mez Machado
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120319/45a59dbf/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
