@@ -1,24 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 19 Mar 2012 23:24:30 +0100
-Subject: [Buildroot] [PATCH 3/3] dnsmasq: add option to support conntrack
-In-Reply-To: <1332159470-13304-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1332159470-13304-1-git-send-email-gustavo@zacarias.com.ar>
- <1332159470-13304-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201203192324.30291.arnout@mind.be>
+Date: Mon, 19 Mar 2012 23:36:22 +0100
+Subject: [Buildroot] [PATCH] Config.in.arch: add help and less cryptic
+	names to architecture menu
+In-Reply-To: <1332194166-30225-1-git-send-email-alvaro.gamez@hazent.com>
+References: <1332112382-30786-1-git-send-email-alvaro.gamez@hazent.com>
+ <1332194166-30225-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <201203192336.23031.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 19 March 2012 13:17:50 Gustavo Zacarias wrote:
-> Add an option to support conntrack marking of DNS packets.
-> This allows for more sturdy firewall setups and/or accounting.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Monday 19 March 2012 22:56:06 Alvaro G. M wrote:
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (compile tested only)
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
