@@ -1,48 +1,75 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 19 Mar 2012 10:19:02 +0100
-Subject: [Buildroot] [PATCH] netsnmp: add option to enable debugging code
-In-Reply-To: <87pqc9mym5.fsf@macbook.be.48ers.dk>
-References: <1331845467-5100-1-git-send-email-luca@lucaceresoli.net>
- <201203181837.30186.arnout@mind.be> <87pqc9mym5.fsf@macbook.be.48ers.dk>
-Message-ID: <4F66FA06.1070205@lucaceresoli.net>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Mon, 19 Mar 2012 10:48:05 +0100
+Subject: [Buildroot] [PATCH] vnstat: new package
+Message-ID: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle<arnout@mind.be>  writes:
->   Arnout>  On Thursday 15 March 2012 22:04:27 Luca Ceresoli wrote:
->   >>  +ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
->   >>  +       NETSNMP_CONF_OPT += --disable-debugging
->   >>  +endif
->
->   Arnout>   Peter, is it correct that you prefer to have both the positive
->   Arnout>  and the negative option in such a situation?  I.e.
->
->   Arnout>  ifeq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
->   Arnout>         NETSNMP_CONF_OPT += --enable-debugging
->   Arnout>  else
->   Arnout>         NETSNMP_CONF_OPT += --disable-debugging
->   Arnout>  endif
->
-> I don't feel strongly about it, but the 2nd approach means you don't
-> need to look at configure.ac to check if it defaults to --enable (and it
-> won't break if the default is ever changed).
->
+From: "Alvaro G. M" <alvaro.gamez@hazent.com>
 
-Arnout's version is definitely more robust, although less concise and more
-boring to write.
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+---
+I think this could replace somehow ttcp in the near future. I've used
+it sometimes with the help of netcat to stablish a TCP connection.
+I am not sure I made this right, because vnstat doesn't use autotools,
+so there is no ./configure to do. Please, check it out.
+---
+ package/Config.in        |    1 +
+ package/vnstat/Config.in |    8 ++++++++
+ package/vnstat/vnstat.mk |   15 +++++++++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/vnstat/Config.in
+ create mode 100644 package/vnstat/vnstat.mk
 
-But there are many other examples in the current Buildroot code without the
-else part. So I think we should have a guideline to follow coherently.
-
-It would be great to have a macro to generate all of this boilerplate code,
-both robust and concise. I would love to be able to write something like:
-
-   $(call ac-arg-endisable,BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING,debugging)
-
-It's even on my TODO list, which is the first step to many great things!
-
-Luca
+diff --git a/package/Config.in b/package/Config.in
+index f0ce963..dcedcba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -517,6 +517,7 @@ source "package/tn5250/Config.in"
+ source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
++source "package/vnstat/Config.in"
+ source "package/vpnc/Config.in"
+ source "package/vsftpd/Config.in"
+ source "package/vtun/Config.in"
+diff --git a/package/vnstat/Config.in b/package/vnstat/Config.in
+new file mode 100644
+index 0000000..79427ce
+--- /dev/null
++++ b/package/vnstat/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_VNSTAT
++	bool "vnstat"
++	help
++	  vnStat is a console-based network traffic monitor that keeps a log
++	  of network traffic for the selected interface(s).  It uses the
++	  network interface statistics provided by the kernel as information
++	  source.  This means that vnStat won't actually be sniffing any
++	  traffic and also ensures light use of system resources.
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+new file mode 100644
+index 0000000..5ac070a
+--- /dev/null
++++ b/package/vnstat/vnstat.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# vnstat
++#
++#############################################################
++http://humdi.net/vnstat/vnstat-1.11.tar.gz
++VNSTAT_VERSION = 1.11
++VNSTAT_SOURCE = vnstat-$(VNSTAT_VERSION).tar.gz
++VNSTAT_SITE = http://humdi.net/vnstat/
++
++define VNSTAT_CONFIGURE_CMDS
++	touch $@
++endef
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.9.1
