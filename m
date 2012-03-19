@@ -1,34 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 Mar 2012 10:52:07 +0100
-Subject: [Buildroot] [PATCH] Added the libtpl package
-In-Reply-To: <1332147488-13020-1-git-send-email-spdawson@gmail.com>
-References: <1332147488-13020-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120319105207.3a831fb3@skate>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Mon, 19 Mar 2012 11:10:55 +0100
+Subject: [Buildroot] [PATCH] vnstat: new package
+In-Reply-To: <20120319105120.7dcafd10@skate>
+References: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
+ <20120319105120.7dcafd10@skate>
+Message-ID: <CAM+bi4tyqL-zYyb7AC7kRPgGvedUoHok=Vkn-xdHJuZbs-PyGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 19 Mar 2012 08:58:08 +0000,
-spdawson at gmail.com a ?crit :
+2012/3/19 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> +LIBTPL_VERSION = 1.5
-> +LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
-> +LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
-> +
-> +LIBTPL_INSTALL_STAGING = YES
-> +LIBTPL_INSTALL_TARGET = NO
+> Thanks for this package!
+>
 
-This looks strange. Is it a static-only library? At least a comment
-here in the .mk file before those two lines would be needed to explain
-why we have this unusual case.
+No, thanks all of you!
 
-Best regards,
 
-Thomas
+> If it doesn't use the autotools, then you should use the GENTARGETS
+> infrastructure rather than the AUTOTARGETS one.
+>
+
+
+I see, but then essentially I would have to copy, paste and reformat the
+original Makefile into vnstat.mk Isn't that a bit redundant?
+
+AUTOTARGETS expects to find all, install, clean, uninstall targets after
+configuration. If I make it skip the configuration step, wouldn't that be
+easier, rather than having to redo most of the original Makefile?
+
+Regards,
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120319/45a59dbf/attachment.html>
