@@ -1,88 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 Mar 2012 11:00:20 -0300
-Subject: [Buildroot] [PATCH] openswan: new package
-Message-ID: <1332165620-29923-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 19 Mar 2012 15:56:53 +0100
+Subject: [Buildroot] [PATCH v3 1/2] omap-u-boot-utils: add new host
+	package
+In-Reply-To: <201203181822.28975.arnout@mind.be>
+References: <1331844852-4609-1-git-send-email-luca@lucaceresoli.net>
+ <1331844852-4609-2-git-send-email-luca@lucaceresoli.net>
+ <201203181822.28975.arnout@mind.be>
+Message-ID: <4F674935.5070308@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in            |    1 +
- package/openswan/Config.in   |    8 ++++++++
- package/openswan/openswan.mk |   35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 0 deletions(-)
- create mode 100644 package/openswan/Config.in
- create mode 100644 package/openswan/openswan.mk
+Arnout Vandecappelle wrote:
+> On Thursday 15 March 2012 21:54:11 Luca Ceresoli wrote:
+> [snip]
+>> +#############################################################
+>> +#
+>> +# omap-u-boot-utils
+>> +#
+>> +#############################################################
+>> +
+>> +OMAP_U_BOOT_UTILS_VERSION = 8aff852322
+>> +OMAP_U_BOOT_UTILS_SITE = git://github.com/nmenon/omap-u-boot-utils.git
+>> +OMAP_U_BOOT_UTILS_SITE_METHOD = git
+>   SITE_METHOD is actually redundant because it is derived from the
+> git:// prefix.  Still, I prefer this site method.
+>
+>   OTOH, for the URL, I prefer tu use the http URL.  Many company
+> firewalls block git traffic.
 
-diff --git a/package/Config.in b/package/Config.in
-index bb757c4..bc47ab3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -495,6 +495,7 @@ source "package/nuttcp/Config.in"
- source "package/olsr/Config.in"
- source "package/openntpd/Config.in"
- source "package/openssh/Config.in"
-+source "package/openswan/Config.in"
- source "package/openvpn/Config.in"
- source "package/portmap/Config.in"
- source "package/pppd/Config.in"
-diff --git a/package/openswan/Config.in b/package/openswan/Config.in
-new file mode 100644
-index 0000000..3336156
---- /dev/null
-+++ b/package/openswan/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_OPENSWAN
-+	bool "openswan"
-+	select BR2_PACKAGE_GMP
-+	select BR2_PACKAGE_IPROUTE2
-+	help
-+	  Openswan is an implementation of IPsec for Linux
-+
-+	  http://www.openswan.org
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-new file mode 100644
-index 0000000..855a4d6
---- /dev/null
-+++ b/package/openswan/openswan.mk
-@@ -0,0 +1,35 @@
-+#############################################################
-+#
-+# openswan
-+#
-+#############################################################
-+
-+OPENSWAN_VERSION = 2.6.37
-+OPENSWAN_SITE = http://download.openswan.org/openswan
-+OPENSWAN_DEPENDENCIES = host-bison gmp iproute2
-+OPENSWAN_MAKEOPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
-+	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
-+	USE_KLIPS=false USE_MAST=false USE_NM=false
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+	OPENSWAN_DEPENDENCIES += libcurl
-+	OPENSWAN_MAKEOPT += USE_LIBCURL=true
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	OPENSWAN_DEPENDENCIES += openssl
-+	OPENSWAN_MAKEOPT += HAVE_OPENSSL=true
-+ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
-+	OPENSWAN_MAKEOPT += HAVE_OCF=true
-+endif
-+endif
-+
-+define OPENSWAN_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(OPENSWAN_MAKEOPT) programs
-+endef
-+
-+define OPENSWAN_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) $(OPENSWAN_MAKEOPT) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(call GENTARGETS))
--- 
-1.7.3.4
+I think you should start a company-wide petition against such a torture! ;)
+
+Anyway... I used to think github only supports https, but now I found out
+also http works, and is is even already used by other BR packages... I'll
+resubmit with an http URL.
+
+
+>
+>> +
+>> +define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
+>> +	$(MAKE) -C $(@D)
+>> +endef
+>> +
+>> +define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
+>> +	for f in gpsign pserial tagger ucmd ukermit ; do \
+>> +		[ -f ${HOST_DIR}/usr/bin/$$f ] || \
+>   Why this condition?  The result is that when you bump the version and
+> don't do a make clean, the old version will still be installed in the
+> host directory.
+
+Oops, will fix.
+
+Thanks,
+Luca
