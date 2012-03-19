@@ -1,67 +1,59 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 19 Mar 2012 10:23:55 +0000
-Subject: [Buildroot] [PATCH] Added the libtpl package
-Message-ID: <1332152635-26299-1-git-send-email-spdawson@gmail.com>
+From: Alvaro Gamez <alvaro.gamez@hazent.com>
+Date: Mon, 19 Mar 2012 11:32:46 +0100
+Subject: [Buildroot] [PATCH] vnstat: new package
+In-Reply-To: <20120319112026.592985ee@skate>
+References: <1332150485-22293-1-git-send-email-alvaro.gamez@hazent.com>
+ <20120319105120.7dcafd10@skate>
+ <CAM+bi4tyqL-zYyb7AC7kRPgGvedUoHok=Vkn-xdHJuZbs-PyGw@mail.gmail.com>
+ <20120319112026.592985ee@skate>
+Message-ID: <CAM+bi4tg=4ywjQYrWDP7_zQ_fvUzCYFpySjz-siZKFhwNYJwVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Ah, that's better! The package I was looking at as reference is ezxml and
+is much more repetitive.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/Config.in        |    1 +
- package/libtpl/Config.in |    6 ++++++
- package/libtpl/libtpl.mk |   14 ++++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/libtpl/Config.in
- create mode 100644 package/libtpl/libtpl.mk
+Thank you!
 
-diff --git a/package/Config.in b/package/Config.in
-index f0ce963..85583c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -386,6 +386,7 @@ source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
-+source "package/libtpl/Config.in"
- source "package/liburcu/Config.in"
- source "package/lttng-libust/Config.in"
- source "package/orc/Config.in"
-diff --git a/package/libtpl/Config.in b/package/libtpl/Config.in
-new file mode 100644
-index 0000000..a2c2c2d
---- /dev/null
-+++ b/package/libtpl/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBTPL
-+	bool "libtpl"
-+	help
-+	  Easily store and retrieve binary data in C
-+
-+	  http://tpl.sourceforge.net/
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-new file mode 100644
-index 0000000..96a2228
---- /dev/null
-+++ b/package/libtpl/libtpl.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# libtpl
-+#
-+#############################################################
-+LIBTPL_VERSION = 1.5
-+LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
-+LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
-+
-+# N.B. A static library is built, so don't install to target
-+LIBTPL_INSTALL_STAGING = YES
-+LIBTPL_INSTALL_TARGET = NO
-+
-+$(eval $(call AUTOTARGETS))
+2012/3/19 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+> Le Mon, 19 Mar 2012 11:10:55 +0100,
+> Alvaro Gamez <alvaro.gamez@hazent.com> a ?crit :
+>
+> > I see, but then essentially I would have to copy, paste and reformat the
+> > original Makefile into vnstat.mk Isn't that a bit redundant?
+>
+> No, no. You don't have to replicate the project Makefile. You would
+> just to something like:
+>
+> define VNSTAT_BUILD_CMDS
+>        $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> endef
+>
+> define VNSTAT_INSTALL_TARGET_CMDS
+>        $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)
+> install
+> endef
+>
+> You can also see other examples in the Buildroot code.
+>
+> Regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+>
+
+
+
 -- 
-1.7.5.4
+?lvaro G?mez Machado
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120319/11f52a94/attachment-0001.html>
