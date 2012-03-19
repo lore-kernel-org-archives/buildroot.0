@@ -1,63 +1,59 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 19 Mar 2012 13:30:44 +0100
-Subject: [Buildroot] [git commit] Added the libtpl package
-Message-ID: <20120319123316.C085990AB0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 19 Mar 2012 13:33:08 +0100
+Subject: [Buildroot] [PATCH] Added the libtpl package
+In-Reply-To: <1332152635-26299-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Mon, 19 Mar 2012 10:23:55 +0000")
+References: <1332152635-26299-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87zkbcixdn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f21f4d43b325c3cbad126b8f10fd24498c6af285
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-[Peter: drop _INSTALL_TARGET = NO as it installs a shared lib]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in        |    1 +
- package/libtpl/Config.in |    6 ++++++
- package/libtpl/libtpl.mk |   11 +++++++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  package/Config.in        |    1 +
+ spdawson>  package/libtpl/Config.in |    6 ++++++
+ spdawson>  package/libtpl/libtpl.mk |   14 ++++++++++++++
+ spdawson>  3 files changed, 21 insertions(+), 0 deletions(-)
+ spdawson>  create mode 100644 package/libtpl/Config.in
+ spdawson>  create mode 100644 package/libtpl/libtpl.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index f0ce963..85583c6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -386,6 +386,7 @@ source "package/libglib2/Config.in"
- source "package/libical/Config.in"
- source "package/libnspr/Config.in"
- source "package/libsigc/Config.in"
-+source "package/libtpl/Config.in"
- source "package/liburcu/Config.in"
- source "package/lttng-libust/Config.in"
- source "package/orc/Config.in"
-diff --git a/package/libtpl/Config.in b/package/libtpl/Config.in
-new file mode 100644
-index 0000000..a2c2c2d
---- /dev/null
-+++ b/package/libtpl/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_LIBTPL
-+	bool "libtpl"
-+	help
-+	  Easily store and retrieve binary data in C
-+
-+	  http://tpl.sourceforge.net/
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-new file mode 100644
-index 0000000..e565bb9
---- /dev/null
-+++ b/package/libtpl/libtpl.mk
-@@ -0,0 +1,11 @@
-+#############################################################
-+#
-+# libtpl
-+#
-+#############################################################
-+LIBTPL_VERSION = 1.5
-+LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
-+LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
-+LIBTPL_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS))
+ spdawson> +++ b/package/libtpl/libtpl.mk
+ spdawson> @@ -0,0 +1,14 @@
+ spdawson> +#############################################################
+ spdawson> +#
+ spdawson> +# libtpl
+ spdawson> +#
+ spdawson> +#############################################################
+ spdawson> +LIBTPL_VERSION = 1.5
+ spdawson> +LIBTPL_SOURCE = libtpl-$(LIBTPL_VERSION).tar.bz2
+ spdawson> +LIBTPL_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/tpl
+ spdawson> +
+ spdawson> +# N.B. A static library is built, so don't install to target
+ spdawson> +LIBTPL_INSTALL_STAGING = YES
+ spdawson> +LIBTPL_INSTALL_TARGET = NO
+
+Ehh, how did you get that idea?
+
+make -C output/build/libtpl-1.5 DESTDIR=$PWD/out install
+tree out
+out
+??? usr
+    ??? include
+    ??? ??? tpl.h
+    ??? lib
+        ??? libtpl.a
+        ??? libtpl.la
+        ??? libtpl.so -> libtpl.so.0.0.0
+        ??? libtpl.so.0 -> libtpl.so.0.0.0
+        ??? libtpl.so.0.0.0
+
+Committed without the _INSTALL_TARGET = NO, thanks.
+
+-- 
+Bye, Peter Korsgaard
