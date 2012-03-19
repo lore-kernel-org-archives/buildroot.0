@@ -1,66 +1,39 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 19 Mar 2012 00:31:51 +0100
-Subject: [Buildroot] [PATCH] stress: new package
-Message-ID: <1332113511-20889-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 Mar 2012 09:57:47 +0100
+Subject: [Buildroot] [PATCH] pkg-infra: use ?= instead of ifdef
+In-Reply-To: <1332113334-20119-1-git-send-email-arnout@mind.be>
+References: <1332113334-20119-1-git-send-email-arnout@mind.be>
+Message-ID: <20120319095747.4b571e8f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hello,
 
----
- package/Config.in        |    1 +
- package/stress/Config.in |    8 ++++++++
- package/stress/stress.mk |   13 +++++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+Le Mon, 19 Mar 2012 00:28:54 +0100,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-diff --git a/package/Config.in b/package/Config.in
-index f0ce963..857413d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -34,6 +34,7 @@ source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
- source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
-+source "package/stress/Config.in"
- source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
- source "package/pv/Config.in"
-diff --git a/package/stress/Config.in b/package/stress/Config.in
-new file mode 100644
-index 0000000..b092b03
---- /dev/null
-+++ b/package/stress/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_STRESS
-+	bool "stress"
-+	help
-+	  A deliberately simple workload generator for POSIX systems.
-+	  It imposes a configurable amount of CPU, memory, I/O, and
-+	  disk stress on the system.
-+
-+	  http://weather.ou.edu/~apw/projects/stress/
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-new file mode 100644
-index 0000000..a64a0d4
---- /dev/null
-+++ b/package/stress/stress.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# stress - a workload generator
-+#
-+# http://weather.ou.edu/~apw/projects/stress/
-+#
-+#############################################################
-+
-+STRESS_VERSION = 1.0.4
-+STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
-+STRESS_SOURCE  = stress-$(STRESS_VERSION).tar.gz
-+
-+$(eval $(call AUTOTARGETS))
-\ No newline at end of file
+> ifdef considers a variable undefined if it is defined as empty.  In the
+> GENTARGETS/AUTOTARGETS/CMAKETARGETS infrastructure, the ifdef construct
+> is often used to default to the value from the target-variable if the
+> host-variable is not defined.  However, this makes it impossible to
+> override the host-variable as empty.  Therefore, use ?= instead to assign
+> the defaults.
+
+Could you share a specific example on why this would be useful? I'm
+sure there are uses cases, but I'm curious about the one you're having.
+
+> I didn't touch the _VERSION infrastructure because I'm afraid to break it.
+> In fact, I think it already is broken (I don't see how that /-to-_
+> substitution can work for host-packages).
+
+Not sure I understand what is broken here. What does "/-to-_" means?
+
+Thomas
 -- 
-tg: (b6a507c..) t/stress (depends on: master)
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
