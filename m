@@ -1,9 +1,9 @@
 From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Wed, 21 Mar 2012 00:10:00 +0100
-Subject: [Buildroot] [PATCH 10/11] manual: update get-involved.txt
+Date: Wed, 21 Mar 2012 00:10:01 +0100
+Subject: [Buildroot] [PATCH 11/11] manual: update contribute.txt
 In-Reply-To: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
 References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1332285001-12881-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <1332285001-12881-12-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,80 +13,89 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 ---
- docs/manual/get-involved.txt |   65 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ docs/manual/contribute.txt |   61 ++++++++++++++++++++++++++++++++++++++++++++
+ docs/manual/getting.txt    |    1 +
+ 2 files changed, 62 insertions(+)
 
-diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
-index df3b055..9b6e843 100644
---- a/docs/manual/get-involved.txt
-+++ b/docs/manual/get-involved.txt
-@@ -1,2 +1,67 @@
- Getting involved
- ================
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 30ae800..d80e79a 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -1,2 +1,63 @@
+ Contibuting to Buildroot
+ ========================
 +
-+Like any open source projects, Buildroot has different ways to share
-+information in its community and outside.
++If you want to contribute to Buildroot, you will need a git view of
++the project. Refer to xref:getting-buildroot[] to get it.
 +
-+One piece of it is the document you are currently reading ;-).
++Currently, the mailing list is the central place for contribution.
++If you have not already subscribe to it, then refer to
++xref:mailing-list-subscribe[].
 +
-+Each of those ways may interest you if you are look for some help,
-+want to understand Buildroot or contribute to the project.
++Submiting patches
++-----------------
 +
-+Mailing List
-+------------
++When your changes are done, and commited in your local git view,
++_rebase_ your development branch on top of the upstream tree before
++generating the patch set. To do so, run:
 +
-+Buildroot has a mailing list
-+http://lists.busybox.net/pipermail/buildroot[] for discussion and
-+development.
++---------------------
++ $ git fetch --all --tags
++ $ git rebase origin/master
++---------------------
 +
-+[[mailing-list-subscribe]]
++Here, your are ready to generate then submit your patch set.
 +
-+Subscribing to the mailing list
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++To generate it, run:
 +
-+You can subscribe by visiting
-+http://lists.busybox.net/mailman/listinfo/buildroot[].
-+Only subscribers to the Buildroot mailing list are allowed to post to
-+this list.
++---------------------
++ $ git format-patch -M -n -s -o outgoing origin/master
++---------------------
 +
-+The list is also available through _Gmane_ http://gmane.org[], at
-++gmane.comp.lib.uclibc.buildroot+
-+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
++This will generate patch files in the +outgoing+ subdirectory,
++automatically adding the +signed-of-by+ line.
 +
-+Searching the List Archives
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~
++If you want to present the whole patch set in a separate mail, add
+++--cover-letter --summary+ to the previous command line (+man
++git-format-patch+ for further information).
 +
-+Please search the mailing list archives before asking questions on the
-+mailing list, since there is a good chance someone else has asked the
-+same question before. Checking the archives is a great way to avoid
-+annoying everyone on the list with frequently asked questions...
++Once patch files are generated, you can review/edit the commit message
++before submitting them using your favourite text editor.
 +
-+IRC
-+---
++Lastly, send/submit your patch set to the Buildroot mailing list:
 +
-+The Buildroot IRC is irc://freenode.net/#buildroot[].
-+The channel +#buildroot+ is hosted on Freenode
-+http://webchat.freenode.net[].
++---------------------
++ $ git send-email --to buildroot at busybox.net outgoing/*
++---------------------
 +
-+When asking for help on the IRC, share relevant logs or piece of code
-+using a code sharing website (see
-+http://en.wikipedia.org/wiki/Comparison_of_pastebins[], and pick up
-+one).
++Note that +git+ should be configured to use your mail account.
++To configure +git+, see +man git-send-email+ or google it.
 +
-+Bugtracker
-+----------
++Reviewing/Testing patches
++-------------------------
 +
-+The Buildroot bugtracker is at https://bugs.uclibc.org[].
++In the review process, do not hesitate to respond to patch submissions
++for remarks, suggestions or anything that will help everyone to
++understand the patches and make them better.
 +
-+Buildroot wikipage
-+------------------
++Some tags are used to help following the state of any patch posted on
++the mailing-list:
 +
-+Consecutively to the Buildroot developer day February 3, 2012,
-+a page dedicated to Buildroot has been created on
-+http://elinux.org[elinux.org].
++Acked-by:: Indicates that the patch can be committed.
 +
-+This page is reachable at http://elinux.org/Buildroot[].
-+
-+Currently, this page is mainly used as a _todo-list_.
++Tested-by:: Indicates that the patch has been tested. It is useful
++  but not necessary to add a comment about what has been tested.
+diff --git a/docs/manual/getting.txt b/docs/manual/getting.txt
+index 6cfdefb..8ad544a 100644
+--- a/docs/manual/getting.txt
++++ b/docs/manual/getting.txt
+@@ -1,6 +1,7 @@
+ [[getting-buildroot]]
+ Getting Buildroot
+ -----------------
++[[getting-buildroot]]
+ 
+ Buildroot releases are made approximately every 3 months. Direct Git
+ access and daily snapshots are also available, if you want more
 -- 
 1.7.9.4
