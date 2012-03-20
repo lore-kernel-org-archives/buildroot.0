@@ -1,41 +1,52 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Mar 2012 14:15:02 +0100
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.0.x and 3.2.x
-	stable versions
-Message-ID: <20120320132248.1AF80953F8@busybox.osuosl.org>
+Date: Tue, 20 Mar 2012 14:20:18 +0100
+Subject: [Buildroot] [git commit] libatomic_ops: make it available only on
+	supported architectures
+Message-ID: <20120320132248.2AC20953F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d10dddf473b6e2cce9b8a12f67a26d69c22ef747
+commit: http://git.buildroot.net/buildroot/commit/?id=68d2124d332a722422d59988183c20d7b254d0af
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+libatomic_ops build fails on architectures such as MIPS or SuperH that
+are not supported. So we make it possible to select the libatomic_ops
+package only for the architectures that are known to be supported.
+
+[Peter: add armeb as supported arch]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libatomic_ops/Config.in |    1 +
+ package/libdrm/Config.in        |    5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index c9ec72c..8ea037a 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.24"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.25"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.11"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.12"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3"		if BR2_KERNEL_HEADERS_3_3
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
+index b9f14d1..3d5d0a8 100644
+--- a/package/libatomic_ops/Config.in
++++ b/package/libatomic_ops/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_LIBATOMIC_OPS
+ 	bool "libatomic_ops"
++	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
+ 	help
+ 	  Atomic operations library
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index d68f9d5..f3dab9a 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -8,7 +8,10 @@ config BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO
+ 	select BR2_PACKAGE_PTHREAD_STUBS
+-	select BR2_PACKAGE_LIBATOMIC_OPS if BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
++	# libatomic_ops is only available on a subset of the supported
++	# architectures, and we make the assumption that the intel
++	# driver can only be used on x86 and x86_64 machines.
++	select BR2_PACKAGE_LIBATOMIC_OPS if (BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL && (BR2_i386 || BR2_x86_64))
+ 	help
+ 	  Direct Rendering Manager
+ 
