@@ -1,768 +1,97 @@
-From: JoM <johann.mercadier@imerir.com>
-Date: Tue, 20 Mar 2012 22:04:26 +0000
-Subject: [Buildroot] [PATCH 1/1] Add FbTerm package for OMAP4 (targetting
-	pandaboard) Signed-off-by: JoM <johann.mercadier@imerir.com>
-Message-ID: <1332281066-364-1-git-send-email-johann.mercadier@imerir.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 20 Mar 2012 23:29:31 +0100
+Subject: [Buildroot] [PATCH] libupnp: bump to version 1.6.15
+In-Reply-To: <1332255248-12534-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1332255248-12534-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <897F78579A674B10BFE5B9F2437C0F97@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in        |  644 ++++------------------------------------------
- package/fbterm/Config.in |   39 +++
- package/fbterm/fbterm.mk |   47 ++++
- 3 files changed, 133 insertions(+), 597 deletions(-)
- create mode 100644 package/fbterm/Config.in
- create mode 100644 package/fbterm/fbterm.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index c2d02b7..7c60f97 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1,597 +1,47 @@
--menu "Package Selection for the target"
+Hi
+
+I use libupnp without IPV6, so i think its better to create a patch that allows to build upnp for use without IPV6, like many other
+packages. 
+
+In the past i tried other libupnp versions, the building was ok, but they did not work...
+
+
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Gustavo Zacarias
+Verzonden: dinsdag 20 maart 2012 15:54
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] [PATCH] libupnp: bump to version 1.6.15
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libupnp/Config.in                          |    5 +++--
+ .../libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch |   11 -----------
+ package/libupnp/libupnp.mk                         |    9 ++++-----
+ 3 files changed, 7 insertions(+), 18 deletions(-)  delete mode 100644 package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
+
+diff --git a/package/libupnp/Config.in b/package/libupnp/Config.in index 2e6edcd..9f73798 100644
+--- a/package/libupnp/Config.in
++++ b/package/libupnp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBUPNP
+ 	bool "libupnp"
++	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  The portable SDK for UPnP(tm) Devices (libupnp) provides developers @@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBUPNP
+ 
+ 	  http://pupnp.sourceforge.net/
+ 
+-comment "libupnp requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++comment "libupnp requires a toolchain with IPV6 and LARGEFILE support"
++	depends on !(BR2_INET_IPV6 && BR2_LARGEFILE)
+diff --git a/package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch b/package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
+deleted file mode 100644
+index e425392..0000000
+--- a/package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+-diff -urN libupnp-1.6.6-0rig/configure libupnp-1.6.6/configure
+---- libupnp-1.6.6-0rig/configure	2008-04-25 13:47:24.000000000 +0200
+-+++ libupnp-1.6.6/configure	2009-01-14 21:55:16.000000000 +0100
+-@@ -21096,7 +21096,6 @@
+- 	sys/ioctl.h \
+- 	sys/socket.h \
+- 	sys/time.h \
+--	sys/timeb.h \
+- 	syslog.h \
+- 	unistd.h \
 -
--source "package/busybox/Config.in"
--source "package/customize/Config.in"
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk index d5b4ee1..1fa07ca 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -3,12 +3,11 @@
+ # libupnp
+ #
+ #############################################################
+-LIBUPNP_VERSION:=1.6.6
+-LIBUPNP_SOURCE:=libupnp-$(LIBUPNP_VERSION).tar.bz2
+-LIBUPNP_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pupnp
+ 
++LIBUPNP_VERSION = 1.6.15
++LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
++LIBUPNP_SITE = 
++http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pupnp/pupnp
++/libUPnP%20$(LIBUPNP_VERSION)
+ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
 -
--# Audio and video applications
--source "package/multimedia/Config.in"
--
--menu "Compressors and decompressors"
--source "package/bzip2/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/gzip/Config.in"
--endif
--source "package/lzop/Config.in"
--source "package/lzma/Config.in"
--source "package/xz/Config.in"
--endmenu
--
--menu "Debugging, profiling and benchmark"
--source "package/bonnie/Config.in"
--source "package/dhrystone/Config.in"
--source "package/dstat/Config.in"
--source "package/dmalloc/Config.in"
--source "package/kexec/Config.in"
--source "package/lmbench/Config.in"
--source "package/lsof/Config.in"
--source "package/ltp-testsuite/Config.in"
--source "package/lttng-babeltrace/Config.in"
--source "package/lttng-modules/Config.in"
--source "package/lttng-tools/Config.in"
--source "package/ltrace/Config.in"
--source "package/memstat/Config.in"
--source "package/netperf/Config.in"
--source "package/oprofile/Config.in"
--source "package/rt-tests/Config.in"
--source "package/strace/Config.in"
--source "package/whetstone/Config.in"
--source "package/valgrind/Config.in"
--source "package/pv/Config.in"
--endmenu
--
--menu "Development tools"
--source "package/autoconf/Config.in"
--source "package/automake/Config.in"
--source "package/binutils/Config.in"
--source "package/bison/Config.in"
--source "package/bsdiff/Config.in"
--source "package/ccache/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/coreutils/Config.in"
--endif
--source "package/cvs/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/diffutils/Config.in"
--endif
--source "package/distcc/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/findutils/Config.in"
--endif
--source "package/flex/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/gawk/Config.in"
--endif
--source "toolchain/gcc/Config.in.2"
--source "package/gettext/Config.in"
--source "package/gmp/Config.in"
--source "package/gperf/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/grep/Config.in"
--endif
--source "package/intltool/Config.in"
--source "package/make/Config.in"
--source "package/mpc/Config.in"
--source "package/mpfr/Config.in"
--source "package/libtool/Config.in"
--source "package/m4/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/patch/Config.in"
--endif
--source "package/pkg-config/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/sed/Config.in"
--endif
--source "package/sstrip/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/tar/Config.in"
--endif
--endmenu
--
--menu "Games"
--source "package/games/gnuchess/Config.in"
--source "package/games/prboom/Config.in"
--source "package/games/doom-wad/Config.in"
--source "package/games/rubix/Config.in"
--endmenu
--
--menu "Graphic libraries and applications (graphic/text)"
--
--comment "Graphic applications"
--source "package/rrdtool/Config.in"
--
--comment "graphic libraries"
--source "package/directfb/Config.in"
--source "package/directfb-examples/Config.in"
--source "package/divine/Config.in"
--source "package/fbdump/Config.in"
--source "package/fbgrab/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/fbset/Config.in"
--endif
--source "package/fbv/Config.in"
--source "package/fbterm/Config.in"
--source "package/imagemagick/Config.in"
--source "package/linux-fusion/Config.in"
--source "package/lite/Config.in"
--source "package/sawman/Config.in"
--source "package/sdl/Config.in"
--source "package/sdl_image/Config.in"
--source "package/sdl_mixer/Config.in"
--source "package/sdl_sound/Config.in"
--source "package/sdl_net/Config.in"
--source "package/sdl_ttf/Config.in"
--source "package/sdl_gfx/Config.in"
--
--comment "other GUIs"
--source "package/efl/Config.in"
--source "package/qt/Config.in"
--source "package/x11r7/Config.in"
--
--comment "X libraries and helper libraries"
--source "package/liberation/Config.in"
--source "package/libsexy/Config.in"
--
--comment "X Window managers"
--source "package/matchbox/Config.in"
--source "package/metacity/Config.in"
--source "package/blackbox/Config.in"
--source "package/fluxbox/Config.in"
--
--comment "X applications"
--source "package/alsamixergui/Config.in"
--source "package/docker/Config.in"
--source "package/feh/Config.in"
--source "package/gqview/Config.in"
--source "package/gmpc/Config.in"
--source "package/gob2/Config.in"
--source "package/gtkperf/Config.in"
--source "package/leafpad/Config.in"
--source "package/midori/Config.in"
--source "package/pcmanfm/Config.in"
--source "package/rdesktop/Config.in"
--source "package/sylpheed/Config.in"
--source "package/synergy/Config.in"
--source "package/torsmo/Config.in"
--source "package/vala/Config.in"
--source "package/x11vnc/Config.in"
--source "package/xstroke/Config.in"
--source "package/xterm/Config.in"
--source "package/xvkbd/Config.in"
--endmenu
--
--menu "Hardware handling"
--source "package/acpid/Config.in"
--source "package/cdrkit/Config.in"
--source "package/cramfs/Config.in"
--source "package/dbus/Config.in"
--source "package/dbus-glib/Config.in"
--source "package/dbus-python/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/devmem2/Config.in"
--endif
--source "package/dmraid/Config.in"
--source "package/dosfstools/Config.in"
--source "package/e2fsprogs/Config.in"
--source "package/eeprog/Config.in"
--source "package/fconfig/Config.in"
--source "package/fis/Config.in"
--source "package/gadgetfs-test/Config.in"
--source "package/gdisk/Config.in"
--source "package/genext2fs/Config.in"
--source "package/genromfs/Config.in"
--source "package/gpsd/Config.in"
--source "package/gvfs/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/hdparm/Config.in"
--endif
--source "package/hwdata/Config.in"
--source "package/i2c-tools/Config.in"
--source "package/input-event-daemon/Config.in"
--source "package/input-tools/Config.in"
--source "package/iostat/Config.in"
--source "package/irda-utils/Config.in"
--source "package/kbd/Config.in"
--source "package/lcdproc/Config.in"
--source "package/linux-firmware/Config.in"
--source "package/lm-sensors/Config.in"
--source "package/lsuio/Config.in"
--source "package/lvm2/Config.in"
--source "package/makedevs/Config.in"
--source "package/mdadm/Config.in"
--source "package/memtester/Config.in"
--source "package/minicom/Config.in"
--source "package/mtd/Config.in"
--source "package/ntfs-3g/Config.in"
--source "package/open2300/Config.in"
--source "package/openocd/Config.in"
--source "package/parted/Config.in"
--source "package/pciutils/Config.in"
--source "package/picocom/Config.in"
--source "package/rng-tools/Config.in"
--source "package/sane-backends/Config.in"
--source "package/sdparm/Config.in"
--source "package/setserial/Config.in"
--source "package/smartmontools/Config.in"
--source "package/squashfs/Config.in"
--source "package/squashfs3/Config.in"
--source "package/sredird/Config.in"
--source "package/sshfs/Config.in"
--source "package/statserial/Config.in"
--source "package/sysstat/Config.in"
--source "package/ti-utils/Config.in"
--source "package/uboot-tools/Config.in"
--source "package/udev/Config.in"
--source "package/unionfs/Config.in"
--source "package/usb_modeswitch/Config.in"
--source "package/usbmount/Config.in"
--source "package/usbutils/Config.in"
--source "package/wipe/Config.in"
--source "package/xfsprogs/Config.in"
--endmenu
--
--menu "Interpreter languages and scripting"
--source "package/haserl/Config.in"
--source "package/lua/Config.in"
--if BR2_PACKAGE_LUA
--menu "LUA libraries/modules"
--source "package/cgilua/Config.in"
--source "package/copas/Config.in"
--source "package/coxpcall/Config.in"
--source "package/luafilesystem/Config.in"
--source "package/luasocket/Config.in"
--source "package/rings/Config.in"
--source "package/wsapi/Config.in"
--source "package/xavante/Config.in"
--endmenu
--endif
--source "package/microperl/Config.in"
--source "package/php/Config.in"
--source "package/python/Config.in"
--if BR2_PACKAGE_PYTHON
--menu "external python modules"
--source "package/python-dpkt/Config.in"
--source "package/python-mad/Config.in"
--source "package/python-netifaces/Config.in"
--source "package/python-pygame/Config.in"
--source "package/python-serial/Config.in"
--source "package/python-setuptools/Config.in"
--endmenu
--endif
--source "package/ruby/Config.in"
--source "package/tcl/Config.in"
--endmenu
--
--menu "Libraries"
--
--menu "Compression and decompression"
--source "package/libarchive/Config.in"
--source "package/lzo/Config.in"
--source "package/zlib/Config.in"
--endmenu
--
--menu "Crypto"
--source "package/beecrypt/Config.in"
--source "package/gnutls/Config.in"
--source "package/libgcrypt/Config.in"
--source "package/libgpg-error/Config.in"
--source "package/libnss/Config.in"
--source "package/openssl/Config.in"
--endmenu
--
--menu "Database"
--source "package/berkeleydb/Config.in"
--source "package/mysql_client/Config.in"
--source "package/sqlcipher/Config.in"
--source "package/sqlite/Config.in"
--endmenu
--
--menu "Filesystem"
--source "package/gamin/Config.in"
--source "package/libconfig/Config.in"
--source "package/libconfuse/Config.in"
--source "package/libfuse/Config.in"
--source "package/liblockfile/Config.in"
--source "package/libsysfs/Config.in"
--endmenu
--
--menu "Graphics"
--source "package/atk/Config.in"
--source "package/cairo/Config.in"
--source "package/fltk/Config.in"
--source "package/fontconfig/Config.in"
--source "package/freetype/Config.in"
--source "package/giblib/Config.in"
--source "package/gtk2-engines/Config.in"
--source "package/gtk2-themes/Config.in"
--source "package/imlib2/Config.in"
--source "package/jpeg/Config.in"
--source "package/libart/Config.in"
--source "package/libdrm/Config.in"
--source "package/libexif/Config.in"
--source "package/libgail/Config.in"
--source "package/libgeotiff/Config.in"
--source "package/libglade/Config.in"
--source "package/gdk-pixbuf/Config.in"
--source "package/libgtk2/Config.in"
--source "package/libpng/Config.in"
--source "package/libraw/Config.in"
--source "package/librsvg/Config.in"
--source "package/libsvgtiny/Config.in"
--source "package/libungif/Config.in"
--source "package/opencv/Config.in"
--source "package/pango/Config.in"
--source "package/pixman/Config.in"
--source "package/tiff/Config.in"
--source "package/webkit/Config.in"
--endmenu
--
--menu "Hardware handling"
--source "package/libaio/Config.in"
--source "package/libraw1394/Config.in"
--source "package/tslib/Config.in"
--source "package/libftdi/Config.in"
--source "package/libhid/Config.in"
--source "package/libiqrf/Config.in"
--source "package/libusb/Config.in"
--source "package/libusb-compat/Config.in"
--source "package/libv4l/Config.in"
--endmenu
--
--menu "Javascript"
--source "package/explorercanvas/Config.in"
--source "package/flot/Config.in"
--source "package/jquery/Config.in"
--source "package/jquery-sparkline/Config.in"
--source "package/jquery-validation/Config.in"
--source "package/jsmin/Config.in"
--endmenu
--
--menu "Networking"
--source "package/glib-networking/Config.in"
--source "package/libcgi/Config.in"
--source "package/libcgicc/Config.in"
--source "package/libcurl/Config.in"
--source "package/libdnet/Config.in"
--source "package/libesmtp/Config.in"
--source "package/libeXosip2/Config.in"
--source "package/libidn/Config.in"
--source "package/liboauth/Config.in"
--source "package/libmicrohttpd/Config.in"
--source "package/neon/Config.in"
--source "package/libmnl/Config.in"
--source "package/libmodbus/Config.in"
--source "package/libmbus/Config.in"
--source "package/libnl/Config.in"
--source "package/libpcap/Config.in"
--source "package/libosip2/Config.in"
--source "package/librsync/Config.in"
--source "package/libsoup/Config.in"
--source "package/libupnp/Config.in"
--source "package/libvncserver/Config.in"
--source "package/zeromq/Config.in"
--endmenu
--
--menu "Other"
--source "package/fftw/Config.in"
--source "package/libargtable2/Config.in"
--source "package/argp-standalone/Config.in"
--source "package/boost/Config.in"
--source "package/libatomic_ops/Config.in"
--source "package/libcap/Config.in"
--source "package/libdaemon/Config.in"
--source "package/libelf/Config.in"
--source "package/libevent/Config.in"
--source "package/libev/Config.in"
--source "package/libffi/Config.in"
--source "package/libglib2/Config.in"
--source "package/libical/Config.in"
--source "package/libnspr/Config.in"
--source "package/libsigc/Config.in"
--source "package/libtpl/Config.in"
--source "package/liburcu/Config.in"
--source "package/lttng-libust/Config.in"
--source "package/orc/Config.in"
--source "package/poco/Config.in"
--source "package/startup-notification/Config.in"
--endmenu
--
--menu "Text and terminal handling"
--source "package/enchant/Config.in"
--source "package/icu/Config.in"
--source "package/libiconv/Config.in"
--source "package/ncurses/Config.in"
--source "package/newt/Config.in"
--source "package/pcre/Config.in"
--source "package/popt/Config.in"
--source "package/readline/Config.in"
--source "package/slang/Config.in"
--endmenu
--
--menu "JSON/XML"
--source "package/expat/Config.in"
--source "package/ezxml/Config.in"
--source "package/json-c/Config.in"
--source "package/libroxml/Config.in"
--source "package/libxml-parser-perl/Config.in"
--source "package/libxml2/Config.in"
--source "package/libxslt/Config.in"
--source "package/libyaml/Config.in"
--source "package/mxml/Config.in"
--source "package/xerces/Config.in"
--source "package/yajl/Config.in"
--endmenu
--
--endmenu
--
--menu "Miscellaneous"
--source "package/shared-mime-info/Config.in"
--endmenu
--
--menu "Networking applications"
--source "package/argus/Config.in"
--source "package/avahi/Config.in"
--source "package/axel/Config.in"
--source "package/bluez_utils/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/boa/Config.in"
--endif
--source "package/bind/Config.in"
--source "package/bmon/Config.in"
--source "package/bridge-utils/Config.in"
--source "package/bwm-ng/Config.in"
--source "package/can-utils/Config.in"
--source "package/connman/Config.in"
--source "package/ctorrent/Config.in"
--source "package/cifs-utils/Config.in"
--source "package/cups/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/dhcp/Config.in"
--endif
--source "package/dhcpdump/Config.in"
--source "package/dnsmasq/Config.in"
--source "package/dropbear/Config.in"
--source "package/ebtables/Config.in"
--source "package/ethtool/Config.in"
--source "package/hostapd/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/ifplugd/Config.in"
--endif
--source "package/igh-ethercat/Config.in"
--source "package/iperf/Config.in"
--source "package/iproute2/Config.in"
--source "package/ipsec-tools/Config.in"
--source "package/ipset/Config.in"
--source "package/iptables/Config.in"
--source "package/iw/Config.in"
--source "package/kismet/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/lighttpd/Config.in"
--endif
--source "package/links/Config.in"
--source "package/lrzsz/Config.in"
--source "package/mii-diag/Config.in"
--source "package/mrouted/Config.in"
--source "package/mutt/Config.in"
--source "package/nbd/Config.in"
--source "package/ncftp/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/netcat/Config.in"
--source "package/netkitbase/Config.in"
--source "package/netkittelnet/Config.in"
--endif
--source "package/netplug/Config.in"
--source "package/netsnmp/Config.in"
--source "package/netstat-nat/Config.in"
--source "package/network-manager/Config.in"
--source "package/noip/Config.in"
--source "package/nfs-utils/Config.in"
--source "package/ngircd/Config.in"
--source "package/ngrep/Config.in"
--source "package/ntp/Config.in"
--source "package/nuttcp/Config.in"
--source "package/olsr/Config.in"
--source "package/openntpd/Config.in"
--source "package/openssh/Config.in"
--source "package/openvpn/Config.in"
--source "package/portmap/Config.in"
--source "package/pppd/Config.in"
--source "package/pptp-linux/Config.in"
--source "package/proftpd/Config.in"
--source "package/quagga/Config.in"
--source "package/radvd/Config.in"
--source "package/rp-pppoe/Config.in"
--source "package/rsh-redone/Config.in"
--source "package/rsync/Config.in"
--source "package/samba/Config.in"
--source "package/ser2net/Config.in"
--source "package/socat/Config.in"
--source "package/spawn-fcgi/Config.in"
--source "package/squid/Config.in"
--source "package/stunnel/Config.in"
--source "package/tcpdump/Config.in"
--source "package/tcpreplay/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/tftpd/Config.in"
--source "package/thttpd/Config.in"
--source "package/tinyhttpd/Config.in"
--endif
--source "package/tn5250/Config.in"
--source "package/transmission/Config.in"
--source "package/ttcp/Config.in"
--source "package/udpcast/Config.in"
--source "package/vpnc/Config.in"
--source "package/vsftpd/Config.in"
--source "package/vtun/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/wget/Config.in"
--endif
--source "package/wireless_tools/Config.in"
--source "package/wpa_supplicant/Config.in"
--source "package/xl2tp/Config.in"
--
--endmenu
--
--menu "Package managers"
--source "package/ipkg/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/rpm/Config.in"
--endif
--endmenu
--
--menu "Real-Time"
--source "package/xenomai/Config.in"
--source "package/rtai/Config.in"
--endmenu
--
--menu "Shell and utilities"
--source "package/at/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/bash/Config.in"
--source "package/dash/Config.in"
--endif
--source "package/dialog/Config.in"
--source "package/file/Config.in"
--source "package/inotify-tools/Config.in"
--source "package/lockfile-progs/Config.in"
--source "package/logrotate/Config.in"
--source "package/screen/Config.in"
--source "package/sudo/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/which/Config.in"
--endif
--source "package/xmlstarlet/Config.in"
--endmenu
--
--menu "System tools"
--source "package/acl/Config.in"
--source "package/attr/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/bootutils/Config.in"
--endif
--source "package/htop/Config.in"
--source "package/kmod/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/module-init-tools/Config.in"
--source "package/procps/Config.in"
--source "package/psmisc/Config.in"
--source "package/rsyslog/Config.in"
--source "package/sysklogd/Config.in"
--source "package/sysvinit/Config.in"
--endif
--source "package/util-linux/Config.in"
--source "package/dsp-tools/Config.in"
--endmenu
--
--menu "Text editors and viewers"
--source "package/ed/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/less/Config.in"
--endif
--source "package/nano/Config.in"
--source "package/uemacs/Config.in"
--if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--source "package/vim/Config.in"
--endif
--endmenu
--
--endmenu
-+config BR2_PACKAGE_FBTERM
-+	bool "fbterm"
-+	#select BR2_PACKAGE_GPM
-+	#select BR2_PACKAGE_UTIL
-+	#select BR2_PACKAGE_STDC++
-+	#select BR2_PACKAGE_LIBM
-+	#select BR2_PACKAGE_LIBGCC_S
-+	#select BR2_PACKAGE_LIBC
-+	#select BR2_PACKAGE_LIBZ
-+	#select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_ZLIB
-+	
-+	help
-+	FbTerm (Frame buffer terminal emulator) is a fast terminal emulator and a 
-+	standalone replacement of GNU/Linux terminal that can function outside of
-+	Xorg with the frame buffer device or VESA video card.
-+
-+	Features include: 
-+	* mostly as fast as terminal of linux kernel while accelerated scrolling
-+	is enabled.
-+	* internationalization support (UTF-8)
-+	* select font with fontconfig and draw text with freetype2, same as Qt/Gtk+
-+	based GUI apps.
-+	* dynamically create/destroy up to 10 windows initially running default 
-+	shell.
-+	* record scroll-back history for every window.
-+	* auto-detect text encoding with current locale, support double width 
-+	scripts like Chinese, Japanese etc...
-+	* switch between configurable additional text encodings with hot keys on
-+	the fly.
-+	* keyboard bindings such as Shift-Pageup to move the terminal up a page...
-+	* multiple framebuffer "windows," creating new ones with Ctrl-Alt-c and
-+	moving between windows with Shift-Left and Shift-Right.
-+	* jump directly to a specific window with Ctrl-Alt-number. The FbTerm
-+	windows are independent of the multiple getty sessions that are available 
-+	with Alt-function keys.
-+	* copy/past selected text between windows with mouse when gpm server is 
-+	running.
-+	* change the orientation of screen display, i.e screen rotation.
-+	* lightweight input method framework with client-server architecture.
-+	* background image for eye candy.
-+	* you can create up to 10 differents terminals windows on the same 
-+	framebuffer, each window having scrollback history.
-+	  
-+	http://code.google.com/p/fbterm/
-diff --git a/package/fbterm/Config.in b/package/fbterm/Config.in
-new file mode 100644
-index 0000000..aca2462
---- /dev/null
-+++ b/package/fbterm/Config.in
-@@ -0,0 +1,39 @@
-+config BR2_PACKAGE_FBTERM
-+	bool "fbterm"
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_FONTCONFIG
-+	select BR2_PACKAGE_ZLIB
-+	
-+	help
-+	FbTerm (Frame buffer terminal emulator) is a fast terminal emulator and a 
-+	standalone replacement of GNU/Linux terminal that can function outside of
-+	Xorg with the frame buffer device or VESA video card.
-+
-+	Features include: 
-+	* mostly as fast as terminal of linux kernel while accelerated scrolling
-+	is enabled.
-+	* internationalization support (UTF-8)
-+	* select font with fontconfig and draw text with freetype2, same as Qt/Gtk+
-+	based GUI apps.
-+	* dynamically create/destroy up to 10 windows initially running default 
-+	shell.
-+	* record scroll-back history for every window.
-+	* auto-detect text encoding with current locale, support double width 
-+	scripts like Chinese, Japanese etc...
-+	* switch between configurable additional text encodings with hot keys on
-+	the fly.
-+	* keyboard bindings such as Shift-Pageup to move the terminal up a page...
-+	* multiple framebuffer "windows," creating new ones with Ctrl-Alt-c and
-+	moving between windows with Shift-Left and Shift-Right.
-+	* jump directly to a specific window with Ctrl-Alt-number. The FbTerm
-+	windows are independent of the multiple getty sessions that are available 
-+	with Alt-function keys.
-+	* copy/past selected text between windows with mouse when gpm server is 
-+	running.
-+	* change the orientation of screen display, i.e screen rotation.
-+	* lightweight input method framework with client-server architecture.
-+	* background image for eye candy.
-+	* you can create up to 10 differents terminals windows on the same 
-+	framebuffer, each window having scrollback history.
-+	  
-+	http://code.google.com/p/fbterm/
-diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
-new file mode 100644
-index 0000000..96e077a
---- /dev/null
-+++ b/package/fbterm/fbterm.mk
-@@ -0,0 +1,47 @@
-+#############################################################
-+#
-+# fbterm
-+#
-+#############################################################
-+FBTERM_BINARY = fbterm
-+FBTERM_TARGET_BINARY = usr/bin/$(FBTERM_BINARY)
-+FBTERM_VERSION_MAJOR = 1.7
-+FBTERM_VERSION = $(FBTERM_VERSION_MAJOR).0
-+FBTERM_SOURCE = $(FBTERM_BINARY)-$(FBTERM_VERSION_MAJOR).tar.gz
-+FBTERM_SITE = http://fbterm.googlecode.com/files
-+#FBTERM_SITE_METHOD =
-+FBTERM_DIR = $(BUILD_DIR)/$(FBTERM_BINARY)-$(FBTERM_VERSION_MAJOR)
-+#FBTERM_AUTORECONF = NO
-+FBTERM_INSTALL_STAGING = YES
-+FBTERM_INSTALL_TARGET = YES
-+#FBTERM_CONF_OPT = --enable-shared
-+FBTERM_DEPENDENCIES += freetype fontconfig
-+FBTERM_CAT = $(ZCAT)
-+
-+
-+define FBTERM_CONFIGURE_CMDS
-+	(cd $(FBTERM_DIR); rm -f config.cache; \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		$(TARGET_CONFIGURE_ARGS) \
-+		./configure \
-+		--build=arm-linux- --target=arm-linux- --host=i686-pc-linux-gnu \
-+		build_alias=arm-linux- target_alias=arm-linux- \
-+		CXX=arm-linux-g++ \
-+	)
-+endef
-+
-+define FBTERM_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(@D)
-+endef
-+
-+define FBTERM_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/src/$(FBTERM_BINARY) $(TARGET_DIR)/$(FBTERM_TARGET_BINARY)
-+endef
-+
-+define FBTERM_CLEAN_CMDS
-+	rm -f $(TARGET_DIR)/$(FBTERM_TARGET_BINARY)
-+	-$(MAKE) -C $(@D) clean
-+endef
-+
-+
-+$(eval $(call AUTOTARGETS,package,fbterm))
--- 
-1.7.2.5
+-LIBUPNP_INSTALL_STAGING:=YES
++LIBUPNP_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS))
+--
+1.7.3.4
+
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
