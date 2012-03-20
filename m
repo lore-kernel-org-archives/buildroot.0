@@ -1,58 +1,26 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 21 Mar 2012 00:37:11 +0100
-Subject: [Buildroot] [PATCH v2 1/1] mysql_client : bump version from 5.1.53
-	to 5.1.60
-In-Reply-To: <1332286631-4020-1-git-send-email-sagaert.johan@skynet.be>
-References: <1332286631-4020-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <1332286631-4020-2-git-send-email-sagaert.johan@skynet.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 20 Mar 2012 20:49:45 -0300
+Subject: [Buildroot] [PATCH v1 1/1] uClibc 0.9.33 : patches from 0.9.32
+ should be applied to uClibc 0.9.33 too.
+In-Reply-To: <1332284023-32025-2-git-send-email-sagaert.johan@skynet.be>
+References: <1332284023-32025-1-git-send-email-sagaert.johan@skynet.be>
+ <1332284023-32025-2-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <5aeac6a432553d5304da188208c64720@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 2012-03-20 19:53, Sagaert Johan wrote:
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- ...ch => mysql_client-5.1.60-ac_cache_check.patch} |    0
- ...l_client-5.1.60-configure-ps-cache-check.patch} |    0
- ...sql_client-5.1.60-use-new-readline-iface.patch} |    0
- package/mysql_client/mysql_client.mk               |    4 ++--
- 4 files changed, 2 insertions(+), 2 deletions(-)
- rename package/mysql_client/{mysql_client-5.1.53-ac_cache_check.patch => mysql_client-5.1.60-ac_cache_check.patch} (100%)
- rename package/mysql_client/{mysql_client-5.1.53-configure-ps-cache-check.patch => mysql_client-5.1.60-configure-ps-cache-check.patch} (100%)
- rename package/mysql_client/{mysql_client-5.1.53-use-new-readline-iface.patch => mysql_client-5.1.60-use-new-readline-iface.patch} (100%)
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+> ---
+>  ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   34 ++++++++++
 
-diff --git a/package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch b/package/mysql_client/mysql_client-5.1.60-ac_cache_check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.53-ac_cache_check.patch
-rename to package/mysql_client/mysql_client-5.1.60-ac_cache_check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch b/package/mysql_client/mysql_client-5.1.60-configure-ps-cache-check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.53-configure-ps-cache-check.patch
-rename to package/mysql_client/mysql_client-5.1.60-configure-ps-cache-check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch b/package/mysql_client/mysql_client-5.1.60-use-new-readline-iface.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.53-use-new-readline-iface.patch
-rename to package/mysql_client/mysql_client-5.1.60-use-new-readline-iface.patch
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index 7097016..4a8c8fe 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -3,12 +3,12 @@
- # MySQL 5.1 Client
- #
- #############################################################
--MYSQL_CLIENT_VERSION = 5.1.53
-+MYSQL_CLIENT_VERSION = 5.1.60
- MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
- MYSQL_CLIENT_SITE = http://downloads.mysql.com/archives/mysql-5.1/
- MYSQL_CLIENT_INSTALL_STAGING = YES
- MYSQL_CLIENT_DEPENDENCIES = readline ncurses
--MYSQL_CLIENT_AUTORECONF=YES
-+MYSQL_CLIENT_AUTORECONF = YES
- 
- MYSQL_CLIENT_CONF_ENV = \
- 	ac_cv_sys_restartable_syscalls=yes \
--- 
-1.7.9.3
+This one is already fixed in uClibc commit 
+5f1678b1df1153277590b114ccafcf6171923d75 in a different form, that's the 
+reason the patch applies but it does nothing new.
+It can't fix anything related to any target different than powerpc 
+e500.
+Regards.
