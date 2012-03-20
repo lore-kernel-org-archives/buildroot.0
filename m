@@ -1,22 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Mar 2012 14:15:12 +0100
-Subject: [Buildroot] [PATCHv2] kernel-headers: bump 3.0.x and 3.2.x
-	stable versions
-In-Reply-To: <1332240627-13747-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 20 Mar 2012 07:50:27 -0300")
-References: <1332240627-13747-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zkbbjtwf.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Mar 2012 14:15:30 +0100
+Subject: [Buildroot] [PATCH] Config.in.arch: add help and less cryptic
+ names to architecture menu
+In-Reply-To: <1332194166-30225-1-git-send-email-alvaro.gamez@hazent.com>
+References: <1332112382-30786-1-git-send-email-alvaro.gamez@hazent.com>
+ <1332194166-30225-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <20120320141530.4ace4c93@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Le Mon, 19 Mar 2012 22:56:06 +0100,
+"Alvaro G. M" <alvaro.gamez@hazent.com> a ?crit :
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> From: "Alvaro G. M" <alvaro.gamez@hazent.com>
+> 
+> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 
-Committed, thanks.
+Thanks!
 
+One minor nitpick, below.
+
+> +	bool "ARM (little endian)"
+> +	bool "ARM (big endian)"
+> -	bool "Microblaze AXI (little-endian)"
+> +	bool "Microblaze AXI (little endian)"
+
+but:
+
+>  	bool "Microblaze non-AXI (big-endian)"
+
+So I guess you want to change this one to "big endian". Probably not
+needed to send a new version just for this, I guess Peter can fix this
+up will committing.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
