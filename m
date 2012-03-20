@@ -1,9 +1,9 @@
 From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Wed, 21 Mar 2012 00:09:57 +0100
-Subject: [Buildroot] [PATCH 07/11] manual: update troubleshooting.txt
+Date: Wed, 21 Mar 2012 00:09:59 +0100
+Subject: [Buildroot] [PATCH 09/11] manual: update writing-rules.txt
 In-Reply-To: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
 References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1332285001-12881-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <1332285001-12881-10-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,153 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 ---
- docs/manual/troubleshooting.txt |   44 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ docs/manual/adding-packages-directory.txt |    5 ++
+ docs/manual/writing-rules.txt             |  108 +++++++++++++++++++++++++++++
+ 2 files changed, 113 insertions(+)
 
-diff --git a/docs/manual/troubleshooting.txt b/docs/manual/troubleshooting.txt
-index 4eddddd..db9277d 100644
---- a/docs/manual/troubleshooting.txt
-+++ b/docs/manual/troubleshooting.txt
-@@ -1,2 +1,46 @@
- Troubleshooting
- ===============
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 1428f37..e36eafc 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -145,6 +145,9 @@ is also enabled, but not necessarily built before your package. To do
+ so, the dependency also needs to be expressed in the +.mk+ file of the
+ package.
+ 
++Further formating details: see xref:writing-rules-config-in[the
++writing rules].
 +
-+LZO package configuration failure due to incorrect host architecture detection
-+------------------------------------------------------------------------------
+ The +.mk+ file
+ ^^^^^^^^^^^^^^
+ 
+@@ -185,3 +188,5 @@ different way, using different infrastructures:
+   many of them in the tree, we keep them documented in a
+   xref:handwritten-tutorial[tutorial].
+ 
++Further formating details: see xref:writing-rules-mk[the writing
++rules].
+diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+index 284cee2..b18f30b 100644
+--- a/docs/manual/writing-rules.txt
++++ b/docs/manual/writing-rules.txt
+@@ -1,11 +1,119 @@
+ Writing rules
+ -------------
+ 
++Overall, those writing rules are here to help you adding new files in
++Buildroot or refactoring existing ones. In these cases, should be followed.
 +
-+Typical error output
-+~~~~~~~~~~~~~~~~~~~~
++If you slightly modify some existing file, the important thing is
++keeping th consistency of the whole file, so you can:
++* either follow the potentially deprecated rules used all over this
++file
++* or entirely rework it in order to make it comply with those rules.
 +
-+------------------------
-+configure: Configuring LZO 2.03
-+checking build system type... Invalid configuration `x86_64-unknown-linux-': machine `x86_64-unknown-linux' not recognized
-+configure: error: /bin/sh autoconf/config.sub x86_64-unknown-linux- failed
-+------------------------
++[[writing-rules-config-in]]
 +
-+Actually this is a known ccache/zlib issue (see
-+https://bugs.busybox.net/show_bug.cgi?id=4808) that occurs when the
-+zlib version of the host system is more recent that the one provided
-+by Buildroot. This misleads the Buildroot host binary +ccache+.
+ +Config.in+ file
+ ~~~~~~~~~~~~~~~~
+ 
+++Config.in+ files contain entry for almost anything configurable in
++buildroot.
 +
-+This bug has been spotted, then fixed shortly after the Buildroot
-+2012.02 release.
++Entry has the following pattern:
 +
-+If you are using the release 2012.02 or elder and got this issue, then
-+applying this patch
-+http://git.buildroot.net/buildroot/patch/package/ccache/ccache.mk?id=7ea11dafff37c5403432f691cf3c46d1d5566e46
-+should fix it.
++---------------------
++config BR2_PACKAGE_LIBFOO
++	bool "libfoo"
++	depends on BR2_PACKAGE_LIBBAZ
++	select BR2_PACKAGE_LIBBAR
++	help
++	  This is a comment that explains what libfoo is.
 +
-+Solution
-+~~~~~~~~
++	  http://foosoftware.org/libfoo/
++---------------------
 +
-+* Get the upstream patch:
++* The +bool+, +depends on+, +select+ and +help+ lines are indented
++  with one tab.
++
++* The help text itself should be indented with one tab and two
++  spaces.
++
++
++[[writing-rules-mk]]
++
+ The +.mk+ file
+ ~~~~~~~~~~~~~~
+ 
++* Affectation: use +=+ preceeded and followed by one space:
 ++
-+-----------------------
-+ $ wget -O /tmp/ccache-Force-ccache-to-use-its-internal-zlib.patch \
-+    "http://git.buildroot.net/buildroot/patch/package/ccache/ccache.mk?id=7ea11dafff37c5403432f691cf3c46d1d5566e46"
-+------------------------
++---------------------
++LIBFOO_VERSION = 1.0
++LIBFOO_CONF_OPT += --without-python-support
++---------------------
 +
-+* Apply this patch and rebuild ccache:
++* Indentation: use tab only:
 ++
-+------------------------
-+ $ cd buildroot
-+ $ patch -p1 < /tmp/ccache-Force-ccache-to-use-its-internal-zlib.patch
-+ $ make host-ccache-dirclean
-+ $ make
-+------------------------
++---------------------
++define LIBFOO_REMOVE_DOC
++$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
++	$(TARGET_DIR)/usr/share/man/man3/libfoo*
++endef
++---------------------
++
++* Optional dependency:
++
++** Prefer multi-line syntax.
+++
++YES:
+++
++---------------------
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++LIBFOO_CONF_OPT += --with-python-support
++LIBFOO_DEPENDENCIES += python
++else
++LIBFOO_CONF_OPT += --without-python-support
++endif
++---------------------
+++
++NO:
+++
++---------------------
++LIBFOO_CONF_OPT += --with$(if $(BR2_PACKAGE_PYTHON),,out)-python-support
++LIBFOO_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,)
++---------------------
++
++** Keep configure options and dependencies close together.
++
++* Optional hook: Keep hook function definition close hooks variable
++  affection nested in the +if+ block:
+++
++YES:
+++
++---------------------
++ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
++define LIBFOO_REMOVE_DATA
++	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
++endef
++LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
++endif
++---------------------
+++
++NO:
+++
++---------------------
++define LIBFOO_REMOVE_DATA
++	$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
++endef
++
++ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
++LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
++endif
++---------------------
++
+ The documentation
+ ~~~~~~~~~~~~~~~~~
++
++The documentation uses the
++http://www.methods.co.nz/asciidoc/[asciidoc] format.
++
++Further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
++syntax: refer to http://www.methods.co.nz/asciidoc/userguide.html[].
 -- 
 1.7.9.4
