@@ -1,61 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 20 Mar 2012 19:19:39 +0100
-Subject: [Buildroot] [PATCH 2/6] Add the systemd package
-In-Reply-To: <4F68416B.50604@free-electrons.com>
-References: <cover.1332172636.git.maxime.ripard@free-electrons.com>
- <201203200032.19236.arnout@mind.be> <4F68416B.50604@free-electrons.com>
-Message-ID: <201203201919.39532.arnout@mind.be>
+Date: Tue, 20 Mar 2012 21:48:03 +0100
+Subject: [Buildroot] Microblaze - UBoot Bootloader Support
+In-Reply-To: <CAEBucnBJ88bpFaoVvp6fuU1aUZySOp+BFdY1=9Eq3h06tg+BPw@mail.gmail.com>
+References: <CAEBucnBJ88bpFaoVvp6fuU1aUZySOp+BFdY1=9Eq3h06tg+BPw@mail.gmail.com>
+Message-ID: <201203202148.03682.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 20 March 2012 09:35:55 Maxime Ripard wrote:
-[snip]
-> >> diff --git a/package/systemd/getty at .service b/package/systemd/getty at .service
-> > [snip]
-> >> diff --git a/package/systemd/serial-getty at .service b/package/systemd/serial-getty at .service
-> > 
-> >  AFAICS the only difference between these two files and the upstream 
-> > version is that it's getty instead of agetty.  Wouldn't it be simpler
-> > and more future-safe to patch the upstream files?
+On Monday 19 March 2012 22:55:14 Spenser Gilliland wrote:
+> I'm looking into a boot loader and will be testing u-boot over the
+> next few days.  The Xilinx u-boot repo appears stagnant, so I'm going
+> to try to use the upstream u-boot support.  It looks like the
+> following will be necessary to support u-boot in Microblaze.
 > 
-> Probably. I'll send a patch and see how it turns out.
-> In the meantime, maybe I can just put a patch here instead of the whole
-> file.
+> 1. Copy a xparameters.h file.
+> Would be similar to the kernels dts copy routine.
 
- That's what I meant.  I doubt that upstream would accept a patch that
-removes agetty.  Maybe a patch that makes it configurable in the m4
-file, but that's a lot more work to cook.
+ I would prefer to see this as a patch (configured with 
+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) rather than modifications to the
+uboot.mk file.  The dts copy is something that should be useable
+by other architectures as well in the long term.  But copying
+random files into the u-boot source tree isn't.
 
- BTW, I just noticed now that the 'normal' service definition files
-are installed in /lib/systemd/system rather than /etc/systemd/system.
 
-[snip]
-> >> +define SYSTEMD_INSTALL_TTY_HOOK
-> >> +	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
-> >> +	[ -f $(TARGET_DIR)/etc/systemd/system/getty at .service ] || \
-> >> +		$(INSTALL) -D package/systemd/getty at .service \
-> >> +			$(TARGET_DIR)/etc/systemd/system/
-> >> +	[ -f $(TARGET_DIR)/etc/systemd/system/serial-getty at .service ] || \
-> >> +		$(INSTALL) -D package/systemd/serial-getty at .service \
-> >> +			$(TARGET_DIR)/etc/systemd/system/
-> >> +	ln -fs ../serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
-> > 
-> >  This looks strange to me.  Admittedly, I've never used systemd and
-> > don't really know how it works.  But to me, this looks like the
-> > getty at .service is actually not used.
-> 
-> Well, actually, this symlink with weird names is used as the way to pass
-> units some arguments.
+> 2. Update the  CONFIG_SYS_BASE_ADDR variable.
+> Can be pulled from the kernel configuration, based on DTS or manual?
+> (I'll produce a manual patch for now but automating this in the future
+> seems appropriate)
 
- That much I know :-)
+ Up to now, buildroot doesn't do anything to automagically derive
+U-boot configurations from kernel configurations and vice versa.  I
+also don't see a driving reason to do that.  So here as well, I would
+prefer a patch.
 
- My point is: the getty at tty1.service file is removed.  Therefore, there
-is nobody using the getty at .service generic definition.  At least that's
-my understanding of how systemd works.  So why install the 
-getty at .service file?
+ A separate patch file for each 'feature' is probably the best.
+
 
  Regards,
  Arnout
