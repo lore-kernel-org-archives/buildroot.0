@@ -1,25 +1,27 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 Mar 2012 23:52:52 +0100
-Subject: [Buildroot] [PATCH 4/6] apply-patches.sh: directories are no
-	more considered as overlays
-In-Reply-To: <1331739237-29872-5-git-send-email-ludovic.desroches@atmel.com>
- (ludovic desroches's message of "Wed, 14 Mar 2012 16:33:55 +0100")
-References: <20120314120310.13e0ea3a@skate>
- <1331739237-29872-1-git-send-email-ludovic.desroches@atmel.com>
- <1331739237-29872-5-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <87aa3akhq3.fsf@macbook.be.48ers.dk>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 20 Mar 2012 23:53:42 +0100
+Subject: [Buildroot] [PATCH v1 0/1] uClibc 0.9.33 : apply the patches from
+	uClibc 0.9.32
+Message-ID: <1332284023-32025-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ludovic" == ludovic desroches <ludovic.desroches@atmel.com> writes:
+After applying the patches from 0.9.32 to 0.9.33 i no longer have the issue with libsoup/libglib2
+Thanks for the hint of Will Wagner.
 
- ludovic> From: Ludovic Desroches <ludovic.desroches@atmel.com>
- ludovic> When a directory is found in patchdir, it is skipped.
+Sagaert Johan (1):
+  uClibc 0.9.33 : patches from 0.9.32 should be ported to uClibc 0.9.33 too.
 
-Committed, thanks.
+ ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   34 ++++++++++
+ .../uClibc-0.9.33-linuxthreads-errno-fix.patch     |   68 ++++++++++++++++++++
+ .../uClibc/uClibc-0.9.33-sparc-errno-fix.patch     |   11 ++++
+ 3 files changed, 113 insertions(+)
+ create mode 100644 toolchain/uClibc/uClibc-0.9.33-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
+ create mode 100644 toolchain/uClibc/uClibc-0.9.33-linuxthreads-errno-fix.patch
+ create mode 100644 toolchain/uClibc/uClibc-0.9.33-sparc-errno-fix.patch
 
 -- 
-Bye, Peter Korsgaard
+1.7.9.3
