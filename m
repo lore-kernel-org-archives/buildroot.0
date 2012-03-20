@@ -1,166 +1,77 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Mar 2012 14:29:31 +0100
-Subject: [Buildroot] [git commit] Config.in.arch: add help and less cryptic
-	names to architecture menu
-Message-ID: <20120320133054.AEBEA953F2@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 20 Mar 2012 11:54:08 -0300
+Subject: [Buildroot] [PATCH] libupnp: bump to version 1.6.15
+Message-ID: <1332255248-12534-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=579e74b150803a51b36831b9d67ab505104a65bb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-[Peter: fixup s/big-endian/big endian/ as pointed out by Thomas]
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- target/Config.in.arch |  112 +++++++++++++++++++++++++++++++++++++++++++------
- 1 files changed, 99 insertions(+), 13 deletions(-)
+ package/libupnp/Config.in                          |    5 +++--
+ .../libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch |   11 -----------
+ package/libupnp/libupnp.mk                         |    9 ++++-----
+ 3 files changed, 7 insertions(+), 18 deletions(-)
+ delete mode 100644 package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 17e0236..a2c0037 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -8,40 +8,126 @@ choice
- 	  Select the target architecture family to build for.
+diff --git a/package/libupnp/Config.in b/package/libupnp/Config.in
+index 2e6edcd..9f73798 100644
+--- a/package/libupnp/Config.in
++++ b/package/libupnp/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBUPNP
+ 	bool "libupnp"
++	depends on BR2_INET_IPV6
+ 	depends on BR2_LARGEFILE
+ 	help
+ 	  The portable SDK for UPnP(tm) Devices (libupnp) provides developers
+@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBUPNP
  
- config BR2_arm
--	bool "arm"
-+	bool "ARM (little endian)"
-+	help
-+	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
-+	  set architecture (ISA) developed by ARM Holdings. Little endian.
-+	  http://www.arm.com/
-+	  http://en.wikipedia.org/wiki/ARM
-+
- config BR2_armeb
--	bool "armeb"
-+	bool "ARM (big endian)"
-+	help
-+	  ARM is a 32-bit reduced instruction set computer (RISC) instruction
-+	  set architecture (ISA) developed by ARM Holdings. Big endian.
-+	  http://www.arm.com/
-+	  http://en.wikipedia.org/wiki/ARM
-+
- config BR2_avr32
--	bool "avr32"
-+	bool "AVR32"
- 	select BR2_SOFT_FLOAT
-+	help
-+	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
-+	  Atmel.
-+	  http://www.atmel.com/
-+	  http://en.wikipedia.org/wiki/Avr32
-+
- config BR2_bfin
--	bool "bfin"
-+	bool "Blackfin"
-+	help
-+	  The Blackfin is a family of 16 or 32-bit microprocessors developed,
-+	  manufactured and marketed by Analog Devices.
-+	  http://www.analog.com/
-+	  http://en.wikipedia.org/wiki/Blackfin
-+
- config BR2_i386
- 	bool "i386"
-+	help
-+	  Intel i386 architecture compatible microprocessor
-+	  http://en.wikipedia.org/wiki/I386
-+
- config BR2_m68k
- 	bool "m68k"
- 	depends on BROKEN # ice in uclibc / inet_ntoa_r
-+	help
-+	  Motorola 68000 family microprocessor
-+	  http://en.wikipedia.org/wiki/M68k
-+
- config BR2_microblazeel
--	bool "Microblaze AXI (little-endian)"
-+	bool "Microblaze AXI (little endian)"
-+	help
-+	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI bus
-+	  based architecture (little endian)
-+	  http://www.xilinx.com
-+	  http://en.wikipedia.org/wiki/Microblaze
-+
- config BR2_microblazebe
--	bool "Microblaze non-AXI (big-endian)"
-+	bool "Microblaze non-AXI (big endian)"
-+	help
-+	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB bus
-+	  based architecture (non-AXI, big endian)
-+	  http://www.xilinx.com
-+	  http://en.wikipedia.org/wiki/Microblaze
-+
- config BR2_mips
--	bool "mips"
-+	bool "MIPS (big endian)"
-+	help
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Big endian.
-+	  http://www.mips.com/
-+	  http://en.wikipedia.org/wiki/MIPS_Technologies
-+
- config BR2_mipsel
--	bool "mipsel"
-+	bool "MIPS (little endian)"
-+	help
-+	  MIPS is a RISC microprocessor from MIPS Technologies. Little endian.
-+	  http://www.mips.com/
-+	  http://en.wikipedia.org/wiki/MIPS_Technologies
-+
- config BR2_powerpc
--	bool "powerpc"
-+	bool "PowerPC"
-+	help
-+	  PowerPC is a RISC architecture created by Apple-IBM-Motorola alliance.
-+	  http://www.power.org/
-+	  http://en.wikipedia.org/wiki/Powerpc
-+
- config BR2_sh
--	bool "superh"
-+	bool "SuperH"
-+	help
-+	  SuperH (or SH) is a 32-bit reduced instruction set computer (RISC)
-+	  instruction set architecture (ISA) developed by Hitachi.
-+	  http://www.hitachi.com/
-+	  http://en.wikipedia.org/wiki/SuperH
-+
- config BR2_sh64
--	bool "superh64"
-+	bool "SuperH64"
-+	help
-+	  SuperH64 (or SH) is a 64-bit reduced instruction set computer (RISC)
-+	  instruction set architecture (ISA) developed by Hitachi.
-+	  http://www.hitachi.com/
-+	  http://en.wikipedia.org/wiki/SuperH
-+
- config BR2_sparc
--	bool "sparc"
-+	bool "SPARC"
-+	help
-+	  SPARC (from Scalable Processor Architecture) is a RISC instruction
-+	  set architecture (ISA) developed by Sun Microsystems.
-+	  http://www.oracle.com/sun
-+	  http://en.wikipedia.org/wiki/Sparc
-+
- config BR2_x86_64
- 	bool "x86_64"
- 	select BR2_ARCH_IS_64
-+	help
-+	  x86-64 is an extension of the x86 instruction set (Intel i386
-+	  architecture compatible microprocessor).
-+	  http://en.wikipedia.org/wiki/X86_64
-+
- config BR2_xtensa
--	bool "xtensa"
-+	bool "Xtensa"
-+	help
-+	  Xtensa is a Tensilica processor IP architecture.
-+	  http://en.wikipedia.org/wiki/Xtensa
-+	  http://www.tensilica.com/
- endchoice
+ 	  http://pupnp.sourceforge.net/
  
- config BR2_microblaze
+-comment "libupnp requires a toolchain with LARGEFILE support"
+-	depends on !BR2_LARGEFILE
++comment "libupnp requires a toolchain with IPV6 and LARGEFILE support"
++	depends on !(BR2_INET_IPV6 && BR2_LARGEFILE)
+diff --git a/package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch b/package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
+deleted file mode 100644
+index e425392..0000000
+--- a/package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+-diff -urN libupnp-1.6.6-0rig/configure libupnp-1.6.6/configure
+---- libupnp-1.6.6-0rig/configure	2008-04-25 13:47:24.000000000 +0200
+-+++ libupnp-1.6.6/configure	2009-01-14 21:55:16.000000000 +0100
+-@@ -21096,7 +21096,6 @@
+- 	sys/ioctl.h \
+- 	sys/socket.h \
+- 	sys/time.h \
+--	sys/timeb.h \
+- 	syslog.h \
+- 	unistd.h \
+- 
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index d5b4ee1..1fa07ca 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -3,12 +3,11 @@
+ # libupnp
+ #
+ #############################################################
+-LIBUPNP_VERSION:=1.6.6
+-LIBUPNP_SOURCE:=libupnp-$(LIBUPNP_VERSION).tar.bz2
+-LIBUPNP_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pupnp
+ 
++LIBUPNP_VERSION = 1.6.15
++LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
++LIBUPNP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
+ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+-
+-LIBUPNP_INSTALL_STAGING:=YES
++LIBUPNP_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS))
+-- 
+1.7.3.4
