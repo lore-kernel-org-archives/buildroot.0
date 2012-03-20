@@ -1,36 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 00:16:37 +0100
-Subject: [Buildroot] [PATCH 1/1] Add FbTerm package for OMAP4
- (targetting pandaboard) Signed-off-by: JoM <johann.mercadier@imerir.com>
-In-Reply-To: <201203210013.28991.arnout@mind.be>
-References: <1332281066-364-1-git-send-email-johann.mercadier@imerir.com>
- <20120321000525.0e834330@skate> <201203210013.28991.arnout@mind.be>
-Message-ID: <20120321001637.6ac06f89@skate>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 21 Mar 2012 00:16:56 +0100
+Subject: [Buildroot] [PATCH v1 0/1] new package : gsl the GNU Scientific
+	Library.
+Message-ID: <1332285417-2158-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Mar 2012 00:13:28 +0100,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers. It is free software under the GNU General Public License.
 
->  I don't agree.  Although it is a bit long, it's not in the way of
-> anyone and it can be useful.  It's also not making maintenance more
-> difficult.  And Johann has anyway gone through the effort of writing
-> it.
+The library provides a wide range of mathematical routines such as random number generators, special functions and least-squares fitting. There are over 1000 functions in total with an extensive test suite.
 
-It is just a copy/paste from http://code.google.com/p/fbterm/, so the
-effort of writing it has presumably been quite small. I don't think it
-makes much sense to include such an amount of information in the help
-text, but I don't feel very strongly about this, so if you think it's
-better to keep it this way, no problem.
+The complete range of subject areas covered by the library includes,
+Complex Numbers, Roots of Polynomials, Special Functions, Vectors and Matrices,
+Permutations, Sorting, BLAS Support, Linear Algebra, Eigensystems, Fast Fourier Transforms,
+Quadrature, Random Numbers, Quasi-Random Sequences, Random Distributions, Statistics,
+Histograms, N-Tuples, Monte Carlo Integration,Simulated Annealing ,etc...
 
-Best regards!
+Sagaert Johan (1):  new package : gsl the GNU Scientific Library.
 
-Thomas
+ package/Config.in        |    1 +
+ package/libgsl/Config.in |    8 ++++++++
+ package/libgsl/gsl.mk    |   11 +++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/libgsl/Config.in
+ create mode 100644 package/libgsl/gsl.mk
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.3
