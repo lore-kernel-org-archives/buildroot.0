@@ -1,49 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 Mar 2012 00:13:28 +0100
-Subject: [Buildroot] [PATCH 1/1] Add FbTerm package for OMAP4
-	(targetting pandaboard) Signed-off-by: JoM
-	<johann.mercadier@imerir.com>
-In-Reply-To: <20120321000525.0e834330@skate>
-References: <1332281066-364-1-git-send-email-johann.mercadier@imerir.com>
- <20120321000525.0e834330@skate>
-Message-ID: <201203210013.28991.arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Mar 2012 00:13:32 +0100
+Subject: [Buildroot] [BUILDROOT][PATCH] Add bellagio package
+In-Reply-To: <0D107966AF6D79418315B7C5549F4B51032EEA04@lemail1.le.imgtec.org>
+References: <0D107966AF6D79418315B7C5549F4B51032EEA04@lemail1.le.imgtec.org>
+Message-ID: <20120321001332.6112cb72@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 21 March 2012 00:05:25 Thomas Petazzoni wrote:
-> Hello Johann,
-> 
-> Thanks for your contribution!
+Hello Qais,
 
- Yeah, I forgot to say that :-)
+Thanks for your contribution. See my comments below.
 
-> Le Tue, 20 Mar 2012 22:04:26 +0000,
-> JoM <johann.mercadier@imerir.com> a ?crit :
-[snip]
-> > +     FbTerm (Frame buffer terminal emulator) is a fast terminal emulator and a 
-> > +     standalone replacement of GNU/Linux terminal that can function outside of
-> > +     Xorg with the frame buffer device or VESA video card.
-> 
-> The complete help text should be intended by one tab + two spaces.
-> 
-> I think the three lines above + the URL are sufficient as the help
-> text. No need to copy the long list of features.
+Le Tue, 20 Mar 2012 17:04:02 +0000,
+Qais Yousef <Qais.Yousef@imgtec.com> a ?crit :
 
- I don't agree.  Although it is a bit long, it's not in the way of
-anyone and it can be useful.  It's also not making maintenance more
-difficult.  And Johann has anyway gone through the effort of writing
-it.
+> Attached patch adds Bellagio package. Copy pasted below also for
+> convenience.
 
- Regards,
- Arnout
+Your patch is completely word-wrapped, and therefore cannot be applied.
+Of course, you have sent it as an attachment as well, but it would be
+much better if it could be sent inline without being word-wrapped. I'd
+recommend using "git send-email" to do this, since it ensures that your
+patch will be sent correctly.
 
+See http://elinux.org/Buildroot_how_to_contribute for a basic
+introduction to Git for Buildroot contribution.
+
+
+> diff --git a/package/multimedia/bellagio/Config.in
+> b/package/multimedia/bellagio/Config.in
+> new file mode 100644
+> index 0000000..21998e9
+> --- /dev/null
+> +++ b/package/multimedia/bellagio/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_BELLAGIO
+> +	bool "bellagio"
+> +	help
+> +	  Bellagio is an opensource implementation of the OpenMAX IL
+> API.
+
+The help text should be wrapped at ~80 columns.
+
+> +
+> +	  http://omxil.sourceforge.net/
+> diff --git
+> a/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitR
+> esource.patch
+> b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitR
+> esource.patch
+> new file mode 100644
+> index 0000000..0716eeb
+> --- /dev/null
+> +++
+> b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitR
+> esource.patch
+> @@ -0,0 +1,32 @@
+
+Your patch bellagio-0.9.3-segfault-on-removeFromWaitResource.patch must
+include a description + a Signed-off-by line indicating that you are
+the author of the patch.
+
+> +++ b/package/multimedia/bellagio/bellagio.mk
+> @@ -0,0 +1,11 @@
+> +#############################################################
+> +#
+> +# bellagio
+> +#
+> +#############################################################
+> +BELLAGIO_VERSION = 0.9.3
+> +BELLAGIO_SOURCE = libomxil-bellagio-$(BELLAGIO_VERSION).tar.gz
+> +BELLAGIO_SITE =
+> http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/omxil
+> +BELLAGIO_INSTALL_STAGING = YES
+> +
+> +$(eval $(call AUTOTARGETS))
+
+This looks good.
+
+Maybe you could expand a bit the description of the package in the help
+text, to explain in what contexts this package is useful.
+
+Can you repost an updated version with those improvements?
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
