@@ -1,42 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 20 Mar 2012 23:52:29 +0100
-Subject: [Buildroot] [git commit] apply-patches.sh: directories are no more
-	considered as overlays
-Message-ID: <20120320233159.BCD3E953F5@busybox.osuosl.org>
+Date: Tue, 20 Mar 2012 23:51:10 +0100
+Subject: [Buildroot] [git commit] apply-patches.sh: cleanup
+Message-ID: <20120320233159.AE89C95403@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1b58957a9637d3b3d1ae13ec26096d737fdd1a45
+commit: http://git.buildroot.net/buildroot/commit/?id=1b671d477bc3154c1c72e2a770b8a97e4566a359
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a directory is found in patchdir, it is skipped.
+Add quoting and remove redundant command.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 Tested-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 with an armadeus_apf9328_defconfig build
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- support/scripts/apply-patches.sh |    5 +----
- 1 files changed, 1 insertions(+), 4 deletions(-)
+ support/scripts/apply-patches.sh |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index c741a63..3d655f1 100755
+index 908ce22..c741a63 100755
 --- a/support/scripts/apply-patches.sh
 +++ b/support/scripts/apply-patches.sh
-@@ -30,10 +30,7 @@ for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
-     apply="patch -g0 -p1 -E -d"
-     uncomp_parm=""
-     if [ -d "${patchdir}/$i" ] ; then
--	type="directory overlay"
--	uncomp="tar cf - --exclude=.svn --no-anchored -C"
--	uncomp_parm="."
--	apply="tar xvf - -C"
-+	echo "${patchdir}/$i skipped"
-     else case "$i" in
- 	*.gz)
- 	type="gzip"; uncomp="gunzip -dc"; ;; 
+@@ -54,8 +54,8 @@ for i in `cd ${patchdir}; ls -d ${patchpattern} 2> /dev/null` ; do
+     esac fi
+     echo ""
+     echo "Applying ${i} using ${type}: " 
+-	echo ${i} | cat >> ${builddir}/.applied_patches_list
+-    ${uncomp} ${patchdir}/${i} ${uncomp_parm} | ${apply} ${builddir}
++	echo ${i} >> ${builddir}/.applied_patches_list
++    ${uncomp} "${patchdir}/${i}" ${uncomp_parm} | ${apply} "${builddir}"
+     if [ $? != 0 ] ; then
+         echo "Patch failed!  Please fix $i!"
+ 	exit 1
