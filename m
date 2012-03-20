@@ -1,40 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 Mar 2012 07:50:27 -0300
-Subject: [Buildroot] [PATCHv2] kernel-headers: bump 3.0.x and 3.2.x stable
-	versions
-Message-ID: <1332240627-13747-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 Mar 2012 12:11:03 +0100
+Subject: [Buildroot] [pull request] Pull request for branch libatomic-arch
+Message-ID: <cover.1332241780.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename toolchain/kernel-headers/{linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+Hello,
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index c9ec72c..8ea037a 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.24"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.25"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.11"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.12"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3"		if BR2_KERNEL_HEADERS_3_3
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch
+Here is a fix about libatomic_ops. However, it is worth noting that
+according to http://www.hpl.hp.com/research/linux/atomic_ops/, the
+official website of libatomic_ops, this library is no longer
+maintained. It is currently used by libdrm and pulseaudio in
+Buildroot. Does anyone knows what are the up-to-date andmaintained
+alternatives?
+
+Best regards,
+
+Thomas
+
+The following changes since commit b5fd0f2709cab72f48da12a5804dd8670fffbf6e:
+
+  Change the /etc/mtab symlink to use an absolute path (2012-03-19 17:08:13 +0100)
+
+are available in the git repository at:
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git libatomic-arch
+
+Thomas Petazzoni (1):
+      libatomic_ops: make it available only on supported architectures
+
+ package/libatomic_ops/Config.in |    1 +
+ package/libdrm/Config.in        |    5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletions(-)
+
+Thanks,
 -- 
-1.7.3.4
+Thomas Petazzoni
