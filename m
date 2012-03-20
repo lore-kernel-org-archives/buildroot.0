@@ -1,92 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 00:13:32 +0100
-Subject: [Buildroot] [BUILDROOT][PATCH] Add bellagio package
-In-Reply-To: <0D107966AF6D79418315B7C5549F4B51032EEA04@lemail1.le.imgtec.org>
-References: <0D107966AF6D79418315B7C5549F4B51032EEA04@lemail1.le.imgtec.org>
-Message-ID: <20120321001332.6112cb72@skate>
+Date: Wed, 21 Mar 2012 00:16:37 +0100
+Subject: [Buildroot] [PATCH 1/1] Add FbTerm package for OMAP4
+ (targetting pandaboard) Signed-off-by: JoM <johann.mercadier@imerir.com>
+In-Reply-To: <201203210013.28991.arnout@mind.be>
+References: <1332281066-364-1-git-send-email-johann.mercadier@imerir.com>
+ <20120321000525.0e834330@skate> <201203210013.28991.arnout@mind.be>
+Message-ID: <20120321001637.6ac06f89@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Qais,
+Le Wed, 21 Mar 2012 00:13:28 +0100,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Thanks for your contribution. See my comments below.
+>  I don't agree.  Although it is a bit long, it's not in the way of
+> anyone and it can be useful.  It's also not making maintenance more
+> difficult.  And Johann has anyway gone through the effort of writing
+> it.
 
-Le Tue, 20 Mar 2012 17:04:02 +0000,
-Qais Yousef <Qais.Yousef@imgtec.com> a ?crit :
+It is just a copy/paste from http://code.google.com/p/fbterm/, so the
+effort of writing it has presumably been quite small. I don't think it
+makes much sense to include such an amount of information in the help
+text, but I don't feel very strongly about this, so if you think it's
+better to keep it this way, no problem.
 
-> Attached patch adds Bellagio package. Copy pasted below also for
-> convenience.
-
-Your patch is completely word-wrapped, and therefore cannot be applied.
-Of course, you have sent it as an attachment as well, but it would be
-much better if it could be sent inline without being word-wrapped. I'd
-recommend using "git send-email" to do this, since it ensures that your
-patch will be sent correctly.
-
-See http://elinux.org/Buildroot_how_to_contribute for a basic
-introduction to Git for Buildroot contribution.
-
-
-> diff --git a/package/multimedia/bellagio/Config.in
-> b/package/multimedia/bellagio/Config.in
-> new file mode 100644
-> index 0000000..21998e9
-> --- /dev/null
-> +++ b/package/multimedia/bellagio/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_BELLAGIO
-> +	bool "bellagio"
-> +	help
-> +	  Bellagio is an opensource implementation of the OpenMAX IL
-> API.
-
-The help text should be wrapped at ~80 columns.
-
-> +
-> +	  http://omxil.sourceforge.net/
-> diff --git
-> a/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitR
-> esource.patch
-> b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitR
-> esource.patch
-> new file mode 100644
-> index 0000000..0716eeb
-> --- /dev/null
-> +++
-> b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitR
-> esource.patch
-> @@ -0,0 +1,32 @@
-
-Your patch bellagio-0.9.3-segfault-on-removeFromWaitResource.patch must
-include a description + a Signed-off-by line indicating that you are
-the author of the patch.
-
-> +++ b/package/multimedia/bellagio/bellagio.mk
-> @@ -0,0 +1,11 @@
-> +#############################################################
-> +#
-> +# bellagio
-> +#
-> +#############################################################
-> +BELLAGIO_VERSION = 0.9.3
-> +BELLAGIO_SOURCE = libomxil-bellagio-$(BELLAGIO_VERSION).tar.gz
-> +BELLAGIO_SITE =
-> http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/omxil
-> +BELLAGIO_INSTALL_STAGING = YES
-> +
-> +$(eval $(call AUTOTARGETS))
-
-This looks good.
-
-Maybe you could expand a bit the description of the package in the help
-text, to explain in what contexts this package is useful.
-
-Can you repost an updated version with those improvements?
-
-Thanks!
+Best regards!
 
 Thomas
 -- 
