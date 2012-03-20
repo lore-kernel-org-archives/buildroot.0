@@ -1,28 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 00:18:20 +0100
-Subject: [Buildroot] [PATCH v1 1/1] mysql_client : bump version 5.1.53
- to 5.1.60
-In-Reply-To: <1332284413-1192-2-git-send-email-sagaert.johan@skynet.be>
-References: <1332284413-1192-1-git-send-email-sagaert.johan@skynet.be>
- <1332284413-1192-2-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20120321001820.29371448@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Mar 2012 00:20:30 +0100
+Subject: [Buildroot] [PATCH 1/1] parted: make sure to select libuuid in
+	util-linux
+In-Reply-To: <722c7ebc3d803582a621ac1765b63dc51cc55a4a.1332230951.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 20 Mar 2012 09:09:18 +0100")
+References: <cover.1332230951.git.thomas.petazzoni@free-electrons.com>
+ <cover.1332230951.git.thomas.petazzoni@free-electrons.com>
+ <722c7ebc3d803582a621ac1765b63dc51cc55a4a.1332230951.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87sjh2j1vl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Mar 2012 00:00:13 +0100,
-Sagaert Johan <sagaert.johan@skynet.be> a ?crit :
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> +MYSQL_CLIENT_INSTALL_TARGET = YES
+ Thomas> parted correctly depends on util-linux, but fails to select the
+ Thomas> libuuid suboption of util-linux, causing the following build failure
+ Thomas> if libuuid remains unselected:
 
-No. We have removed all instances of xxx_INSTALL_TARGET = YES recently,
-because this is useless: it is the default behaviour.
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
