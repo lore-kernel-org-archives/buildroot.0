@@ -1,9 +1,9 @@
 From: Samuel MARTIN <s.martin49@gmail.com>
-Date: Wed, 21 Mar 2012 00:09:53 +0100
-Subject: [Buildroot] [PATCH 03/11] manual: update prerequisite.txt
+Date: Wed, 21 Mar 2012 00:09:55 +0100
+Subject: [Buildroot] [PATCH 05/11] manual: update make-tips.txt
 In-Reply-To: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
 References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1332285001-12881-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1332285001-12881-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,82 +13,61 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel MARTIN <s.martin49@gmail.com>
 ---
- docs/manual/prerequisite.txt |   67 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ docs/manual/make-tips.txt |   46 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index f50672b..df1e6a8 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -1,2 +1,69 @@
-+[[requirement]]
- System requirements
- -------------------
+diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
+index 646efdf..a512689 100644
+--- a/docs/manual/make-tips.txt
++++ b/docs/manual/make-tips.txt
+@@ -1,2 +1,48 @@
++[[make-tips]]
+ 'make' tips
+ -----------
 +
-+Buildroot is design to run on Linux system.
++Because Buildroot is a set of Makefiles and patches, there are few
++things useful to know, such as:
 +
-+Buildroot needs some software to be already installed on the host
-+system; hereafter the lists of the mandatory and optional packages
-+(packages' name may vary between distribution).
++Display all command executed by make:
 +
-+Take care of _installing both runtime and development data_, especially
-+for the libraries that may be packaged in 2 distinct packages.
++--------------------
++ $ make V=0|1 <target>
++--------------------
 +
++Display all available targets:
 +
-+[[requirement-mandatory]]
++--------------------
++ $ make help
++--------------------
 +
-+Mandatory packages
-+~~~~~~~~~~~~~~~~~~
++Note that, some settings in the +.config+ file may hide some targets
++like:
 +
-+* Build tools:
-+** +build-essential+ (only for Debian based system)
-+** +gcc+
-+** +g+++
-+** +autoconf+
-+** +automake+
-+** +libtool+
-+** +bison+
-+** +flex+
-+** +gettext+
-+** +patch+
-+** +gawk+
++* +busybox-menuconfig+ depends whether +busybox+ is enabled or not in
++  the +Package selection+ menu
++* +linux-menuconfig+ and +linux-savedefconfig+ depends on whether
++  +linux+ is enabled or not
++* +uclibc-menuconfig+ depends on whether the toolchain uses the
++  Buildroot internal toolchain backend or not
++* +ctng-menuconfig+ depends on whether the toolchain uses the
++  crosstool-NG backend or not
++* +barebox-menuconfig+ and +barebox-savedefconfig+ depends on whether
++  +barebox+ bootloader is enabled or not
 +
-+* Source fetching tools:
-+** +curl+
-+** +wget+
-+** +cvs+
-+** +git+
-+** +mercurial+
-+** +subversion+
++Delete all build products (including build directories, host, staging
++and target trees, the images and the toolchain):
 +
-+* Development libraries:
-+** +ncurses5+
-+** +lzo2+
-+** +lzma+
-+** +zlib1+
-+** +acl1+
-+** +uuid+
++--------------------
++ $ make clean
++--------------------
 +
-+* Documentation generation tools:
-+** +asciidoc+
-+** +texinfo+
++Delete all build products as well as the configuration:
 +
-+[[requirement-optional]]
++--------------------
++ $ make distclean
++--------------------
 +
-+Optional packages
-+~~~~~~~~~~~~~~~~~
-+
-+* Interface dependencies (requires development libraries):
-+** +ncurses5+ to use the 'menuconfig' interface
-+** +qt4+ to use the 'xconfig' interface
-+** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
-+
-+* Development libraries:
-+** +glib2+
-+** +netpbm10+ (for +fbtest+)
-+** +python-xcbgen+ (for +Matchbox+ on Debian based system)
-+** +jdk+ and and depending on the host system +gcj-compat+ for Java
-+development (for +java+, +jamvm+ and +gnu-classpath+)
-+
++Note that if +ccache+ is enabled, running +make clean|distclean+ does
++not empty the Buildroot's cache. To delete it, refer to xref:ccache[].
 -- 
 1.7.9.4
