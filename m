@@ -1,71 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 Mar 2012 11:18:17 +0100
-Subject: [Buildroot] WebKit - Random-crashes ?
-In-Reply-To: <1531E53627F1F749B4FE809BF2A4EB6703136751@WETMEX10.loepfe.com>
-References: <1531E53627F1F749B4FE809BF2A4EB6703136751@WETMEX10.loepfe.com>
-Message-ID: <20120320111817.227486ca@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 20 Mar 2012 07:48:50 -0300
+Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_kernel-headers=3A_bump_3=2E0=2E?=
+	=?utf-8?q?x_and_3=2E2=2Ex_stable_versions?=
+Message-ID: <1332240530-13692-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 20 Mar 2012 10:50:13 +0100,
-"Vellemans, Noel" <Noel.Vellemans@visionBMS.com> a ?crit :
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    4 +-
+ ...tall-fix-__packed-in-exported-kernel-head.patch |   46 --------------------
+ 2 files changed, 2 insertions(+), 48 deletions(-)
+ delete mode 100644 toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
 
-> Finally got 'something' running, that is not crashing all the time.
-> What Did I do?
-> A) Reverted back to older-WebKit 1.2.7. : DID NOT HELP (i.o.w
-> WebKit/GtkLauncher still crashes 'random') 
-> A) Reverted back to Uclibc 0.9.32.x     : DID NOT HELP. 
-> B) Reverted back to glib-2.28.8         : DID NOT HELP.
-> C) reverted to an older version of GTK (2.24.4): DID NOT HELP.
-> D) Reverted back to libsoup-2.32.2 (had to remove glib-networking
-> depends): SEEMS to be STABLE!
-
-Ah, interesting. Then maybe contacting the libsoup developers will be a
-good idea.
-
-Another option is to try to upgrade libsoup. We have 2.36.1 in
-Buildroot, the latest one is
-http://ftp.gnome.org/pub/GNOME/sources/libsoup/2.37/libsoup-2.37.92.tar.xz.
-
-> Compiling WebKit (and his depends) takes some time, even on
-> fast-build-machine (some hours in my case).
-> In order to be sure that everything is recompiled/linked correctly, I
-> always wipe the complete 'output' directory.
-> Is there a faster way to do this?
-> {if I do not wipe the output directory I always have leftovers (in /lib,
-> /usr/lib ..... ) ... from previous compile cycle(s).}
-
-If you want to just rebuild *one* component, you can do:
-
-	rm -rf output/build/<component>-<version>
-
-and do 'make'. But note that it doesn't remove the previous
-installation from the target directory, the installation of the new
-component version will overwrite the old one, unless the installed
-files are different, of course.
-
-Another way of speeding up the build is to use an external toolchain if
-you're not already using. You can also enable the ccache feature (be
-sure to have the latest ccache fixes, otherwise ccache is basically
-unused).
-
-> I run Gtklauncher in Val grind as suggested, but I get a Lot of
-> 'console'-output from everywhere. 
-> For example.... "== Invalid write of size 4" and/or "Address 0x97b6e14
-> is not stack'd, malloc'd or (recently) free'd" 
-> Don't know exactly, how valuable this output is ( i.o.w. did not look
-> into the details yet...)
-
-valgrind is a big, big hammer, and for any given large software stack,
-the number of errors is so huge that it's difficult to find out what's
-going on.
-
-Thomas
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index c9ec72c..8ea037a 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.24"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.25"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.11"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.12"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
+deleted file mode 100644
+index 8777b71..0000000
+--- a/toolchain/kernel-headers/linux-3.0.24-headers_install-fix-__packed-in-exported-kernel-head.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From f210735fe2f17a6225432ee3d1239bcf23a8659c Mon Sep 17 00:00:00 2001
+-From: Markus Trippelsdorf <markus@trippelsdorf.de>
+-Date: Fri, 24 Jun 2011 15:51:00 +0200
+-Subject: [PATCH] headers_install: fix __packed in exported kernel headers
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-checkpatch.pl warns about using __attribute__((packed)) in kernel
+-headers: "__packed is preferred over __attribute__((packed))". If one
+-follows that advice it could cause problems in the exported header
+-files, because the outside world doesn't know about this shortcut.
+-
+-For example busybox will fail to compile:
+- CC      miscutils/ubi_attach_detach.o
+- In file included from miscutils/ubi_attach_detach.c:27:0:
+- /usr/include/mtd/ubi-user.h:330:3: error: conflicting types for ?__packed?
+- /usr/include/mtd/ubi-user.h:314:3: note: previous declaration of ?__packed? was here
+-...
+-
+-Fix the problem by substituting __packed with __attribute__((packed)) in
+-the header_install.pl script.
+-
+-Cc: Artem Bityutskiy <Artem.Bityutskiy@nokia.com>
+-CC: Joe Perches <joe@perches.com>
+-Signed-off-by: Markus Trippelsdorf <markus@trippelsdorf.de>
+-Signed-off-by: Michal Marek <mmarek@suse.cz>
+----
+- scripts/headers_install.pl |    1 +
+- 1 files changed, 1 insertions(+), 0 deletions(-)
+-
+-diff --git a/scripts/headers_install.pl b/scripts/headers_install.pl
+-index efb3be1..48462be 100644
+---- a/scripts/headers_install.pl
+-+++ b/scripts/headers_install.pl
+-@@ -35,6 +35,7 @@ foreach my $file (@files) {
+- 		$line =~ s/([\s(])__iomem\s/$1/g;
+- 		$line =~ s/\s__attribute_const__\s/ /g;
+- 		$line =~ s/\s__attribute_const__$//g;
+-+		$line =~ s/\b__packed\b/__attribute__((packed))/g;
+- 		$line =~ s/^#include <linux\/compiler.h>//;
+- 		$line =~ s/(^|\s)(inline)\b/$1__$2__/g;
+- 		$line =~ s/(^|\s)(asm)\b(\s|[(]|$)/$1__$2__$3/g;
+--- 
+-1.7.5.4
+-
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
