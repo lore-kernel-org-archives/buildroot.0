@@ -1,41 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 21 Mar 2012 13:50:13 +0100
-Subject: [Buildroot] [git commit] libupnp: move to version 1.6.14
-Message-ID: <20120321130510.D12F095418@busybox.osuosl.org>
+From: Nikolay Nikolaev <nicknickolaev@gmail.com>
+Date: Wed, 21 Mar 2012 15:10:25 +0200
+Subject: [Buildroot] Random build results now available online
+In-Reply-To: <20120321140013.11af8da2@skate>
+References: <20120321101327.49d34f93@skate>
+ <CAL7hd5KAXfF-0P5oR-RLev42=SZ8XXLxmvUjTCbe7OoyLAWCHA@mail.gmail.com>
+ <20120321140013.11af8da2@skate>
+Message-ID: <CAL7hd5+yVNReHh=waU8E7YvvSM6How7-UaHvKU-V71G4JyjevA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bfd26038c5eeac1483387598be82c4c22f463de9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Mar 21, 2012 at 3:00 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Wed, 21 Mar 2012 13:48:49 +0200,
+> Nikolay Nikolaev <nicknickolaev@gmail.com> a ?crit :
+>
+>> will it be hard to add an RSS feed to the site? I guess other may find
+>> it useful too.
+>
+> It is a bit basic at the moment (suggestions welcome), but it seems to
+> work:
+>
+> ?http://buildroot.humanoidz.org/rss.php
 
-As pointed by Sagaert Johan in the mailing list and further testing version
-1.6.15 has some issues.
-So move to version 1.6.14 which is far more stable and compliant.
+Suggestion: Can you add "Arch" and "Failed reason" to the failed
+items? That way it's clearly visible that
+"liburcu-0.6.7" failed building for "arm".
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...-no-ipv6.patch => libupnp-1.6.14-no-ipv6.patch} |    0
- package/libupnp/libupnp.mk                         |    2 +-
- 2 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/libupnp/libupnp-1.6.15-no-ipv6.patch b/package/libupnp/libupnp-1.6.14-no-ipv6.patch
-similarity index 100%
-rename from package/libupnp/libupnp-1.6.15-no-ipv6.patch
-rename to package/libupnp/libupnp-1.6.14-no-ipv6.patch
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 1fa07ca..5ac68c3 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBUPNP_VERSION = 1.6.15
-+LIBUPNP_VERSION = 1.6.14
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
