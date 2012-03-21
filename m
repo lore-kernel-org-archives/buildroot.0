@@ -1,22 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 Mar 2012 07:58:15 -0300
-Subject: [Buildroot] [PATCHv3] libupnp: bump to version 1.6.15
-In-Reply-To: <8739925j5z.fsf@macbook.be.48ers.dk>
-References: <1332288749-27658-1-git-send-email-gustavo@zacarias.com.ar>
- <8739925j5z.fsf@macbook.be.48ers.dk>
-Message-ID: <99478e127eaf59d9152dc979016cd48d@zacarias.com.ar>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 21 Mar 2012 12:02:36 +0100
+Subject: [Buildroot] [PATCH] libconfig: bump to 1.4.8 and cleanup
+Message-ID: <1332327756-12869-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-21 07:43, Peter Korsgaard wrote:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> Committed, thanks.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libconfig/libconfig.mk |    9 ++++-----
+ 1 files changed, 4 insertions(+), 5 deletions(-)
 
-On a side note, the patch wasn't upstreamed because the IPv6 code 
-changed quite a bit and they're doing things in a different way now.
-Which will probably require A LOT of these kludges unless they test 
-non-ipv6 and fix it before release.
-Regards.
+diff --git a/package/libconfig/libconfig.mk b/package/libconfig/libconfig.mk
+index 03825e1..8ef927b 100644
+--- a/package/libconfig/libconfig.mk
++++ b/package/libconfig/libconfig.mk
+@@ -3,13 +3,12 @@
+ # libconfig
+ #
+ #############################################################
+-LIBCONFIG_VERSION:=1.4.6
+-LIBCONFIG_SOURCE:=libconfig-$(LIBCONFIG_VERSION).tar.gz
+-LIBCONFIG_SITE:=http://www.hyperrealm.com/libconfig/
+-LIBCONFIG_INSTALL_STAGING:=YES
++LIBCONFIG_VERSION = 1.4.8
++LIBCONFIG_SITE = http://www.hyperrealm.com/libconfig/
++LIBCONFIG_INSTALL_STAGING = YES
+ 
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+-LIBCONFIG_CONF_OPT:=--disable-cxx
++LIBCONFIG_CONF_OPT = --disable-cxx
+ endif
+ 
+ $(eval $(call AUTOTARGETS))
+-- 
+1.7.7
