@@ -1,22 +1,27 @@
-From: alex n <alexvm22@gmail.com>
-Date: Wed, 21 Mar 2012 23:23:03 +0300
-Subject: [Buildroot] bluez-utils 4.98 Configuring: error: D-Bus library is
-	required
-Message-ID: <CABpopuEqL7s31pZj9Qfj0v7pp1hYzfxYX8NazSKkOew6JK6NDw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 Mar 2012 23:00:01 +0100
+Subject: [Buildroot] Libcurl : to depend or not to depend ?
+In-Reply-To: <AD9141CB33AC4D019D399FFCCB3E46D3@JohanW7> (Sagaert Johan's
+ message of "Wed, 21 Mar 2012 17:50:26 +0100")
+References: <8E5E9D7D337A4C58AD26215008FACEF4@JohanW7>
+ <20120321162014.6e2fd485@skate>
+ <AD9141CB33AC4D019D399FFCCB3E46D3@JohanW7>
+Message-ID: <8762dx4ntq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-I'm trying to compile bluez-utils but I get "error: D-Bus library is
-required" while it configure. D-Bus checked in menuconfig and compiled
-into /output/build/dbus-1.4.16 succesfully.
-So how can I fix this error?
+ Sagaert> Thomas
 
-Buildroot - 2012.02.
+ Sagaert> I know what to do, but in case you need openssl and you also
+ Sagaert> want libcurl BUT without SSL there is no way to build it like
+ Sagaert> it is now.
 
-Thanks,
-Alex.
+What is the use case for wanting openssl and no ssl support in libcurl?
+
+-- 
+Bye, Peter Korsgaard
