@@ -1,123 +1,63 @@
-From: Qais Yousef <Qais.Yousef@imgtec.com>
-Date: Wed, 21 Mar 2012 10:49:11 +0000
-Subject: [Buildroot] [BUILDROOT][PATCH] Add bellagio package
-In-Reply-To: <20120321001332.6112cb72@skate>
-References: <0D107966AF6D79418315B7C5549F4B51032EEA04@lemail1.le.imgtec.org>
- <20120321001332.6112cb72@skate>
-Message-ID: <0D107966AF6D79418315B7C5549F4B51032EEA49@lemail1.le.imgtec.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 21 Mar 2012 10:54:00 +0000 (UTC)
+Subject: [Buildroot] [Bug 4958] New: Qt 4.7.4 build crashes with Linux 2.6.29
+Message-ID: <bug-4958-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=4958
 
-Thanks for your response. I'll take your comments into account and repost :)
+              Host: x86_64
+            Target: arm
+           Summary: Qt 4.7.4 build crashes with Linux 2.6.29
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: jeremie.scheer at armadeus.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-Cheers,
-Qais
 
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: 20 March 2012 23:14
-> To: Qais Yousef
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] [BUILDROOT][PATCH] Add bellagio package
-> 
-> Hello Qais,
-> 
-> Thanks for your contribution. See my comments below.
-> 
-> Le Tue, 20 Mar 2012 17:04:02 +0000,
-> Qais Yousef <Qais.Yousef@imgtec.com> a ?crit :
-> 
-> > Attached patch adds Bellagio package. Copy pasted below also for
-> > convenience.
-> 
-> Your patch is completely word-wrapped, and therefore cannot be applied.
-> Of course, you have sent it as an attachment as well, but it would be much
-> better if it could be sent inline without being word-wrapped. I'd recommend
-> using "git send-email" to do this, since it ensures that your patch will be sent
-> correctly.
-> 
-> See http://elinux.org/Buildroot_how_to_contribute for a basic introduction
-> to Git for Buildroot contribution.
-> 
-> 
-> > diff --git a/package/multimedia/bellagio/Config.in
-> > b/package/multimedia/bellagio/Config.in
-> > new file mode 100644
-> > index 0000000..21998e9
-> > --- /dev/null
-> > +++ b/package/multimedia/bellagio/Config.in
-> > @@ -0,0 +1,6 @@
-> > +config BR2_PACKAGE_BELLAGIO
-> > +	bool "bellagio"
-> > +	help
-> > +	  Bellagio is an opensource implementation of the OpenMAX IL
-> > API.
-> 
-> The help text should be wrapped at ~80 columns.
-> 
-> > +
-> > +	  http://omxil.sourceforge.net/
-> > diff --git
-> > a/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-
-> removeFromWai
-> > tR
-> > esource.patch
-> > b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-
-> removeFromWai
-> > tR
-> > esource.patch
-> > new file mode 100644
-> > index 0000000..0716eeb
-> > --- /dev/null
-> > +++
-> > b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-
-> removeFromWai
-> > tR
-> > esource.patch
-> > @@ -0,0 +1,32 @@
-> 
-> Your patch bellagio-0.9.3-segfault-on-removeFromWaitResource.patch must
-> include a description + a Signed-off-by line indicating that you are the author
-> of the patch.
-> 
-> > +++ b/package/multimedia/bellagio/bellagio.mk
-> > @@ -0,0 +1,11 @@
-> >
-> +#########################################################
-> ####
-> > +#
-> > +# bellagio
-> > +#
-> >
-> +#########################################################
-> ####
-> > +BELLAGIO_VERSION = 0.9.3
-> > +BELLAGIO_SOURCE = libomxil-bellagio-$(BELLAGIO_VERSION).tar.gz
-> > +BELLAGIO_SITE =
-> >
-> http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/om
-> xil
-> > +BELLAGIO_INSTALL_STAGING = YES
-> > +
-> > +$(eval $(call AUTOTARGETS))
-> 
-> This looks good.
-> 
-> Maybe you could expand a bit the description of the package in the help
-> text, to explain in what contexts this package is useful.
-> 
-> Can you repost an updated version with those improvements?
-> 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux development, consulting,
-> training and support.
-> http://free-electrons.com
+I'm using Linux 2.6.29.6 kernel and headers and I compile rootfs for ARM.
+
+When Qt is being compiled, it crashed on this error:
+
+linking ../../lib/libQtNetwork.so.4.7.4
+.obj/debug-shared-emb-arm/qnativesocketengine_unix.o: In function
+`qt_safe_accept':
+/srv/developpements/armadeus_4-1/buildroot/output/build/qt-4.7.4/src/network/../../include/QtNetwork/private/../../../src/network/socket/qnet_unix_p.h:121:
+undefined reference to `accept4'
+.obj/debug-shared-emb-arm/qlocalserver_unix.o: In function `qt_safe_accept':
+/srv/developpements/armadeus_4-1/buildroot/output/build/qt-4.7.4/src/network/socket/qnet_unix_p.h:121:
+undefined reference to `accept4'
+collect2: ld returned 1 exit status
+make[3]: *** [../../lib/libQtNetwork.so.4.7.4] Error 1
+make[3]: Leaving directory
+`/srv/developpements/armadeus_4-1/buildroot/output/build/qt-4.7.4/src/network'
+make[2]: *** [sub-network-make_default-ordered] Error 2
+make[2]: Leaving directory
+`/srv/developpements/armadeus_4-1/buildroot/output/build/qt-4.7.4'
+make[1]: ***
+[/srv/developpements/armadeus_4-1/buildroot/output/build/qt-4.7.4/.stamp_built]
+Error 2
+make[1]: Leaving directory `/srv/developpements/armadeus_4-1/buildroot'
+make: *** [all] Error 2
+
+The problem is that the function 'accept4' doesn't exist in Linux 2.6.29. It is
+only defined in Linux 2.6.36 or more.
+So when I rebuild all rootfs and Qt against Linux 2.6.38.8, it finished
+successfully.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
