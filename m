@@ -1,40 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 19:15:07 +0100
-Subject: [Buildroot] Using custom kernel headers instead toolchain
- headers
-In-Reply-To: <1332321967.3685.13.camel@localhost>
-References: <1332183352.6228.94.camel@desktop>
- <201203192319.22728.arnout@mind.be>
- <1332321967.3685.13.camel@localhost>
-Message-ID: <20120321191507.487c8270@skate>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 21 Mar 2012 19:27:03 +0100
+Subject: [Buildroot] [PATCH] qemu/microblazebe-mmu: add new sample config
+In-Reply-To: <4F6A16F0.9090304@relinux.de>
+References: <1332192059-19769-1-git-send-email-gustavo@zacarias.com.ar>
+ <4F6A16F0.9090304@relinux.de>
+Message-ID: <4F6A1D77.6060900@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Mar 2012 13:26:07 +0400,
-lexa <lexa@cfotr.com> a ?crit :
+Am 21.03.2012 18:59, schrieb Stephan Hoffmann:
+> Am 19.03.2012 22:20, schrieb Gustavo Zacarias:
+>> Add a new microblazebe_mmu sample configuration for big endian
+>> Microblaze with MMU testing.
+>> Hopefully we can get other variants going soon.
+> That'd great. I did not get it running some months before,
+>  most likely
+> because I tried little endian:-)
+Obviously not, think I should read further before writing;-)
+> Stephan
+>
+>
 
-> I use heavy patched kernel and i need use custom kernel headers. If i
-> choose using
-> buildroot toolchain, can buildroot create kernel-headers from my custom
-> kernel source and use this headers for build buildroot toolchain and
-> other binaries?
 
-Yes, you can put your modified kernel sources named linux-2.6.tar.bz2
-in the dl/ folder, and select the BR2_KERNEL_HEADERS_SNAP. The internal
-Buildroot toolchain build procedure will then use this kernel version
-for the kernel headers of the toolchain.
-
-Note that this isn't used a lot, so it might be possible that things
-are broken, I haven't tested it right now.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
