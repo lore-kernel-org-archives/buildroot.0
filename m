@@ -1,115 +1,302 @@
-From: Qais Yousef <qais.yousef@imgtec.com>
-Date: Wed, 21 Mar 2012 13:11:59 +0000
-Subject: [Buildroot] [PATCH] new package: bellagio
-Message-ID: <1332335519-31492-1-git-send-email-qais.yousef@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 Mar 2012 10:12:18 -0300
+Subject: [Buildroot] [PATCH v2] ushare: new package
+Message-ID: <1332335538-23508-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
----
- package/multimedia/Config.in                       |    1 +
- package/multimedia/bellagio/Config.in              |   14 +++++++
- ...-0.9.3-segfault-on-removeFromWaitResource.patch |   37 ++++++++++++++++++++
- package/multimedia/bellagio/bellagio.mk            |   11 ++++++
- 4 files changed, 63 insertions(+), 0 deletions(-)
- create mode 100644 package/multimedia/bellagio/Config.in
- create mode 100644 package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitResource.patch
- create mode 100644 package/multimedia/bellagio/bellagio.mk
+UPnP media streamer.
 
-diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index a05d1d9..7e18bcb 100644
---- a/package/multimedia/Config.in
-+++ b/package/multimedia/Config.in
-@@ -2,6 +2,7 @@ menu "Audio and video libraries and applications"
- source "package/multimedia/alsa-lib/Config.in"
- source "package/multimedia/alsa-utils/Config.in"
- source "package/multimedia/aumix/Config.in"
-+source "package/multimedia/bellagio/Config.in"
- source "package/multimedia/faad2/Config.in"
- source "package/multimedia/flac/Config.in"
- source "package/multimedia/ffmpeg/Config.in"
-diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+TODO: Add DLNA support (libdlna) if there's interest.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in                         |    1 +
+ package/ushare/Config.in                  |   13 ++
+ package/ushare/ushare-compile-fixes.patch |  206 +++++++++++++++++++++++++++++
+ package/ushare/ushare.mk                  |   26 ++++
+ 4 files changed, 246 insertions(+), 0 deletions(-)
+ create mode 100644 package/ushare/Config.in
+ create mode 100644 package/ushare/ushare-compile-fixes.patch
+ create mode 100644 package/ushare/ushare.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index e4bb0e1..b7516ec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -524,6 +524,7 @@ source "package/tn5250/Config.in"
+ source "package/transmission/Config.in"
+ source "package/ttcp/Config.in"
+ source "package/udpcast/Config.in"
++source "package/ushare/Config.in"
+ source "package/vpnc/Config.in"
+ source "package/vsftpd/Config.in"
+ source "package/vtun/Config.in"
+diff --git a/package/ushare/Config.in b/package/ushare/Config.in
 new file mode 100644
-index 0000000..3be7e55
+index 0000000..a714fa0
 --- /dev/null
-+++ b/package/multimedia/bellagio/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_BELLAGIO
-+	bool "bellagio"
++++ b/package/ushare/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_USHARE
++	bool "ushare"
++	depends on BR2_LARGEFILE
++	select BR2_PACKAGE_LIBUPNP
 +	help
-+	  Bellagio is an opensource implementation of the
-+	  OpenMAX IL API.
++	  uShare is a UPnP (TM) A/V & DLNA Media Server.
++	  It implements the server component that provides UPnP media devices
++	  with information on available multimedia files.
 +
-+	  OpenMAX Integration Layer (IL) is a standard API
-+	  to access Multimedia Components on mobile platforms.
-+	  It has been defined by the Khronos group.
-+	  By means of the OpenMAX IL API, multimedia frameworks
-+	  can access hardware accelerators on platforms that
-+	  provide it.
++	  http://ushare.geexbox.org/
 +
-+	http://omxil.sourceforge.net/
-diff --git a/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitResource.patch b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitResource.patch
++comment "ushare requires a toolchain with LARGEFILE support"
++	depends on !BR2_LARGEFILE
+diff --git a/package/ushare/ushare-compile-fixes.patch b/package/ushare/ushare-compile-fixes.patch
 new file mode 100644
-index 0000000..f52a2c3
+index 0000000..cfdf5e3
 --- /dev/null
-+++ b/package/multimedia/bellagio/bellagio-0.9.3-segfault-on-removeFromWaitResource.patch
-@@ -0,0 +1,37 @@
-+We always access globalComponentList[] at indexComponent=-1 which causes a
-+segfault. Use i as the index instead.
++++ b/package/ushare/ushare-compile-fixes.patch
+@@ -0,0 +1,206 @@
++Patch nixed from OpenWRT svn to fix build breakage.
 +
-+Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+--- bellagio-0.9.3/src/omx_reference_resource_manager.c.old	2012-03-13 10:15:25.743940980 +0000
-++++ bellagio-0.9.3/src/omx_reference_resource_manager.c	2012-03-13 10:18:02.201971009 +0000
-+@@ -485,7 +485,6 @@
-+ OMX_ERRORTYPE RM_removeFromWaitForResource(OMX_COMPONENTTYPE *openmaxStandComp) {
-+ 	omx_base_component_PrivateType* omx_base_component_Private;
-+ 	int i = 0;
-+-	int indexComponent = -1;
++--- a/src/cds.c
+++++ b/src/cds.c
++@@ -20,6 +20,8 @@
++  */
 + 
-+ 	DEBUG(DEB_LEV_FUNCTION_NAME, "In %s\n", __func__);
-+ 	omx_base_component_Private = (omx_base_component_PrivateType*)openmaxStandComp->pComponentPrivate;
-+@@ -493,16 +492,13 @@
-+ 	while(listOfcomponentRegistered[i].component_name != NULL ) {
-+ 		if (!strcmp(listOfcomponentRegistered[i].component_name, omx_base_component_Private->name)) {
-+ 			// found component in the list of the resource manager
-+-			removeElemFromList(&globalComponentList[indexComponent], openmaxStandComp);
-+-			break;
-++			removeElemFromList(&globalComponentList[i], openmaxStandComp);
-++			DEBUG(DEB_LEV_FUNCTION_NAME, "Out of %s\n", __func__);
-++			return OMX_ErrorNone;
-+ 		}
-+ 		i++;
-+ 	}
-+-	if (indexComponent <0) {
-+-		// No resource to be handled
-+-		DEBUG(DEB_LEV_ERR, "In %s No resource to be handled\n", __func__);
-+-		return OMX_ErrorNone;
-+-	}
-+-	DEBUG(DEB_LEV_FUNCTION_NAME, "Out of %s\n", __func__);
-++	// No resource to be handled
-++	DEBUG(DEB_LEV_ERR, "In %s No resource to be handled\n", __func__);
-+ 	return OMX_ErrorNone;
++ #include <stdlib.h>
+++#include <stdio.h>
+++#include <string.h>
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
++--- a/src/http.c
+++++ b/src/http.c
++@@ -25,6 +25,7 @@
++ #include <errno.h>
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <string.h>
++ #include <unistd.h>
++ #include <errno.h>
++ 
++@@ -77,8 +78,7 @@ set_info_file (struct File_Info *info, c
++   info->content_type = ixmlCloneDOMString (content_type);
 + }
-diff --git a/package/multimedia/bellagio/bellagio.mk b/package/multimedia/bellagio/bellagio.mk
++ 
++-static int
++-http_get_info (const char *filename, struct File_Info *info)
+++int http_get_info (const char *filename, struct File_Info *info)
++ {
++   extern struct ushare_t *ut;
++   struct upnp_entry_t *entry = NULL;
++@@ -197,8 +197,7 @@ get_file_memory (const char *fullpath, c
++   return ((UpnpWebFileHandle) file);
++ }
++ 
++-static UpnpWebFileHandle
++-http_open (const char *filename, enum UpnpOpenFileMode mode)
+++UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode)
++ {
++   extern struct ushare_t *ut;
++   struct upnp_entry_t *entry = NULL;
++@@ -251,8 +250,7 @@ http_open (const char *filename, enum Up
++   return ((UpnpWebFileHandle) file);
++ }
++ 
++-static int
++-http_read (UpnpWebFileHandle fh, char *buf, size_t buflen)
+++int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen)
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++   ssize_t len = -1;
++@@ -286,8 +284,7 @@ http_read (UpnpWebFileHandle fh, char *b
++   return len;
++ }
++ 
++-static int
++-http_write (UpnpWebFileHandle fh __attribute__((unused)),
+++int http_write (UpnpWebFileHandle fh __attribute__((unused)),
++             char *buf __attribute__((unused)),
++             size_t buflen __attribute__((unused)))
++ {
++@@ -296,8 +293,7 @@ http_write (UpnpWebFileHandle fh __attri
++   return 0;
++ }
++ 
++-static int
++-http_seek (UpnpWebFileHandle fh, off_t offset, int origin)
+++int http_seek (UpnpWebFileHandle fh, off_t offset, int origin)
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++   off_t newpos = -1;
++@@ -371,8 +367,7 @@ http_seek (UpnpWebFileHandle fh, off_t o
++   return 0;
++ }
++ 
++-static int
++-http_close (UpnpWebFileHandle fh)
+++int http_close (UpnpWebFileHandle fh)
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++ 
++@@ -402,13 +397,3 @@ http_close (UpnpWebFileHandle fh)
++ 
++   return 0;
++ }
++-
++-struct UpnpVirtualDirCallbacks virtual_dir_callbacks =
++-  {
++-    http_get_info,
++-    http_open,
++-    http_read,
++-    http_write,
++-    http_seek,
++-    http_close
++-  };
++--- a/src/http.h
+++++ b/src/http.h
++@@ -25,6 +25,18 @@
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
++-struct UpnpVirtualDirCallbacks virtual_dir_callbacks;
+++int http_get_info (const char *filename, struct File_Info *info);
+++
+++UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode);
+++
+++int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen);
+++
+++int http_seek (UpnpWebFileHandle fh, off_t offset, int origin);
+++
+++int http_write (UpnpWebFileHandle fh __attribute__((unused)),
+++	char *buf __attribute__((unused)),
+++	size_t buflen __attribute__((unused)));
+++
+++int http_close (UpnpWebFileHandle fh);
++ 
++ #endif /* _HTTP_H_ */
++--- a/src/ushare.c
+++++ b/src/ushare.c
++@@ -188,7 +188,7 @@ handle_action_request (struct Upnp_Actio
++   if (strcmp (request->DevUDN + 5, ut->udn))
++     return;
++ 
++-  ip = request->CtrlPtIPAddr.s_addr;
+++  ip = (*(struct sockaddr_in *)&request->CtrlPtIPAddr).sin_addr.s_addr;
++   ip = ntohl (ip);
++   sprintf (val, "%d.%d.%d.%d",
++            (ip >> 24) & 0xFF, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF, ip & 0xFF);
++@@ -348,13 +348,23 @@ init_upnp (struct ushare_t *ut)
++ 
++   UpnpEnableWebserver (TRUE);
++ 
++-  res = UpnpSetVirtualDirCallbacks (&virtual_dir_callbacks);
++-  if (res != UPNP_E_SUCCESS)
++-  {
++-    log_error (_("Cannot set virtual directory callbacks\n"));
++-    free (description);
++-    return -1;
++-  }
+++#define upnp_set_callback(cb, func) \
+++  do {                                                            \
+++    res = UpnpVirtualDir_set_##cb##Callback(func);                \
+++    if (res != UPNP_E_SUCCESS)                                    \
+++    {                                                             \
+++      log_error (_("Cannot set virtual directory callbacks\n"));  \
+++      free (description);                                         \
+++      return -1;                                                  \
+++    }                                                             \
+++  } while(0)
+++
+++  upnp_set_callback(GetInfo, http_get_info);
+++  upnp_set_callback(Open,    http_open);
+++  upnp_set_callback(Read,    http_read);
+++  upnp_set_callback(Seek,    http_seek);
+++  upnp_set_callback(Write,   http_write);
+++  upnp_set_callback(Close,   http_close);
++ 
++   res = UpnpAddVirtualDir (VIRTUAL_DIR);
++   if (res != UPNP_E_SUCCESS)
++--- a/src/cms.c
+++++ b/src/cms.c
++@@ -20,6 +20,8 @@
++  */
++ 
++ #include <stdlib.h>
+++#include <stdio.h>
+++#include <string.h>
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
++--- a/src/mime.c
+++++ b/src/mime.c
++@@ -20,6 +20,7 @@
++  */
++ 
++ #include <stdlib.h>
+++#include <stdio.h>
++ #include <string.h>
++ 
++ #include "mime.h"
++--- a/src/presentation.c
+++++ b/src/presentation.c
++@@ -19,6 +19,8 @@
++  */
++ 
++ #include <stdlib.h>
+++#include <stdio.h>
+++#include <string.h>
++ 
++ #if HAVE_LANGINFO_CODESET
++ # include <langinfo.h>
++--- a/src/services.c
+++++ b/src/services.c
++@@ -20,6 +20,8 @@
++  */
++ 
++ #include <stdlib.h>
+++#include <stdio.h>
+++#include <string.h>
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
+diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
 new file mode 100644
-index 0000000..3987a20
+index 0000000..5909916
 --- /dev/null
-+++ b/package/multimedia/bellagio/bellagio.mk
-@@ -0,0 +1,11 @@
++++ b/package/ushare/ushare.mk
+@@ -0,0 +1,26 @@
 +#############################################################
 +#
-+# bellagio
++# ushare
 +#
 +#############################################################
-+BELLAGIO_VERSION = 0.9.3
-+BELLAGIO_SOURCE = libomxil-bellagio-$(BELLAGIO_VERSION).tar.gz
-+BELLAGIO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/omxil
-+BELLAGIO_INSTALL_STAGING = YES
 +
-+$(eval $(call AUTOTARGETS))
++USHARE_VERSION = 1.1a
++USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
++USHARE_SITE = http://ushare.geexbox.org/releases
++USHARE_DEPENDENCIES = host-pkg-config libupnp
++
++define USHARE_CONFIGURE_CMDS
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS) \
++		./configure --prefix=/usr $(DISABLE_NLS) --cross-compile \
++		--cross-prefix="$(TARGET_CROSS)" --sysconfdir=/etc \
++		--disable-strip --disable-debug \
++	)
++endef
++
++define USHARE_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	rm -f $(TARGET_DIR)/etc/init.d/ushare
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-1.7.1
+1.7.3.4
