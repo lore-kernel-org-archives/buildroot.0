@@ -1,41 +1,47 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Mar 2012 14:02:56 +0100
-Subject: [Buildroot] [PATCH 6/6] apply-patches.sh: use series file to
-	apply patches in proper order
-In-Reply-To: <20120321132607.20647967@skate> (Thomas Petazzoni's message of
- "Wed, 21 Mar 2012 13:26:07 +0100")
-References: <87k42e5nt8.fsf@macbook.be.48ers.dk>
- <1332336387-3434-1-git-send-email-ludovic.desroches@atmel.com>
- <20120321132607.20647967@skate>
-Message-ID: <87ehsm3y4f.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Mar 2012 14:04:52 +0100
+Subject: [Buildroot] [PATCH 2/2] ushare: new package
+In-Reply-To: <1332331352-6072-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 21 Mar 2012 09:02:32 -0300")
+References: <1332331352-6072-1-git-send-email-gustavo@zacarias.com.ar>
+ <1332331352-6072-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87aa3a3y17.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ Gustavo> UPnP media streamer.
+ Gustavo> TODO: Add DLNA support (libdlna) if there's interest.
 
- Thomas> Do we really want to support this use case within apply-patches.sh
- Thomas> directly? Packages such as argus, cvs, input-tools, mii-diag,
- Thomas> setserial, sysklogd, sysvinit and thttpd all handle this by adding a
- Thomas> special xxx_POST_PATCH_HOOK that applies the patches in
- Thomas> debian/patches/. In other words:
+ Gustavo> +#############################################################
+ Gustavo> +
+ Gustavo> +USHARE_VERSION = 1.1a
+ Gustavo> +USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
+ Gustavo> +USHARE_SITE = http://ushare.geexbox.org/releases
+ Gustavo> +USHARE_DEPENDENCIES = host-pkg-config libupnp
+ Gustavo> +
+ Gustavo> +define USHARE_CONFIGURE_CMDS
+ Gustavo> +	(cd $(@D); \
+ Gustavo> +		$(TARGET_CONFIGURE_OPTS) \
+ Gustavo> +		./configure --prefix=/usr $(DISABLE_NLS) --cross-compile \
+ Gustavo> +		--cross-prefix="$(TARGET_CROSS)" --sysconfdir=/etc \
+ Gustavo> +		--disable-strip --disable-debug \
+ Gustavo> +	)
+ Gustavo> +endef
+ Gustavo> +
+ Gustavo> +define USHARE_INSTALL_TARGET_CMDS
+ Gustavo> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ Gustavo> +	rm -f $(TARGET_DIR)/etc/init.d/ushare
+ Gustavo> +endef
 
- Thomas>  * The package infrastructure applies the Debian patch, which creates
- Thomas>    the debian/patches/ directory
+Why the custom configure and install steps?
 
-The difference is that the Debian diff with quilt format is no longer
-distributed as a (compressed) diff, but a tarball extra files, so the
-current <pkg>_PATCH handling doesn't really work for that.
-
-But like I mentioned earlier, I don't have a problem with us dropping
-support for this special case as long as we find a solution for packages
-like liblockfile.
-
-For now I applied the patch so liblockfile builds again.
+ Gustavo> +
+ Gustavo> +$(eval $(call AUTOTARGETS))
 
 -- 
 Bye, Peter Korsgaard
