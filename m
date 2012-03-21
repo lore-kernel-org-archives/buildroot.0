@@ -1,51 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 14:44:52 +0100
-Subject: [Buildroot] [PATCH v2] ushare: new package
-In-Reply-To: <5f0396764c1dc201f01ae3853a534d33@zacarias.com.ar>
-References: <1332335538-23508-1-git-send-email-gustavo@zacarias.com.ar>
- <20120321142102.5c5999a6@skate>
- <5f0396764c1dc201f01ae3853a534d33@zacarias.com.ar>
-Message-ID: <20120321144452.68029160@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 Mar 2012 11:06:21 -0300
+Subject: [Buildroot] [git commit] libupnp: move to version 1.6.14 Not OK
+In-Reply-To: <A6EF940D27964F9AA5B3B3B810E12908@JohanW7>
+References: <20120321130510.D12F095418@busybox.osuosl.org>
+ <A6EF940D27964F9AA5B3B3B810E12908@JohanW7>
+Message-ID: <2c5c9ecebbb72208a14a6f11c44a0fea@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Mar 2012 10:39:35 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+On 2012-03-21 10:32, Sagaert Johan wrote:
 
-> > With GENTARGETS, xxx_BUILD_CMDS is empty by default. Are you sure 
-> > this
-> > builds?
-> 
-> Yes, install triggers build.
+> Hi
+>
+> I have rebuild my small app with the 1.6.15 and also with 1.6.14 : 
+> both fail
+> (compile but does not work)
+>
+> In the past i have tried to use a more recent one and got the same 
+> problem.
+> I am using httpd from busybox as the http server, and i think its
+> related with that.
+> I do not use the internal http server from libupnp since i need httpd
+> to serve static pages and process cgi-bin.
 
-But still, build should be done in the xxx_BUILD_CMDS so that it works
-like all other packages, IMO.
-
-> > Also, can you add a comment just before USHARE_CONFIGURE_CMDS saying
-> > that despite the appearance, autotools are not used. However, I am 
-> > sure
-> > in the future many people will wonder why AUTOTARGETS was not used.
-> 
-> Sure, but should it be for other packages as well?
-
-Yes, I think we should mention explicitly why GENTARGETS is used even
-though the package has a ./configure script.
-
-> Same things applies to ffmpeg and probably others (the ushare configure 
-> is an old/strip version from ffmpeg).
-> Though ffmpeg is using AUTOTARGETS and overriding CONFIGURE_CMDS...
-
-And it is wrong. Not your fault, of course, but I don't think it is an
-argument to make it wrong in other places as well.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Hi.
+Out of curiosity, which toolchain/target architecture are you using?
+Regards.
