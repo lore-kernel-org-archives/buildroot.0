@@ -1,66 +1,131 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 18:05:45 +0100
-Subject: [Buildroot] Libcurl : to depend or not to depend ?
-In-Reply-To: <AD9141CB33AC4D019D399FFCCB3E46D3@JohanW7>
-References: <8E5E9D7D337A4C58AD26215008FACEF4@JohanW7>
- <20120321162014.6e2fd485@skate>
- <AD9141CB33AC4D019D399FFCCB3E46D3@JohanW7>
-Message-ID: <20120321180545.02ab322f@skate>
+From: Markos Chandras <markos.chandras@imgtec.com>
+Date: Wed, 21 Mar 2012 17:07:15 +0000
+Subject: [Buildroot] [PATCH] xfsprogs: Bump to 3.1.7 and convert to
+	AUTOTARGET
+Message-ID: <1332349635-15914-1-git-send-email-markos.chandras@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+---
+ package/xfsprogs/xfsprogs.mk |   98 +++++------------------------------------
+ 1 files changed, 12 insertions(+), 86 deletions(-)
 
-Le Wed, 21 Mar 2012 17:50:26 +0100,
-"Sagaert Johan" <sagaert.johan@skynet.be> a ?crit :
-
-> I know what to do, but in case you need openssl and you also want libcurl BUT without SSL there is no way to build it like it is
-> now.
-
-Correct. Presumably, the size impact of OpenSSL support in libcurl is
-pretty small (OpenSSL itself is huge, but the OpenSSL support in
-libcurl is most likely relatively small), so it is generally not
-necessary.
-
-We might of course add a libcurl suboption to make this configurable,
-but for most packages, the OpenSSL support is automatically enabled if
-OpenSSL is present.
-
-> The trick i use now to build libcurl without ssl is 
-> 	disabling openssl
-> 	build (libcurl gets build without SSL)
-> 	enable openssl
-> 	build (libcurl does'nt change and i also have openssl now.)
-
-Or just modify libcurl.mk so that it always passes --without-ssl
-regardless of whether OpenSSL is selected or not. I think it's much
-easier.
-
-I don't think Buildroot can really adapt to each and every situation
-(and still be maintainable), and some special situations require direct
-modifications of the .mk file. For example, not later than today, I had
-to:
-
- * Change openssl.mk because I wanted to build only the static version
-   (OpenSSL in my case was used only by one application, and linking
-   OpenSSL statically against this application allowed some space
-   savings)
-
- * Change avahi.mk to build the Avahi libraries statically, for the
-   same reasons (only used by Avahi programs themselves, so it allows
-   some space savings)
-
-I just maintain those project-specific tweaks in a Git branch. They are
-simple, so when I need to upgrade Buildroot they are not a big issue.
-
-Regards,
-
-Thomas
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index 52fec09..64e8be6 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -3,96 +3,22 @@
+ # xfsprogs
+ #
+ #############################################################
+-XFSPROGS_VERSION:=3.0.3
++XFSPROGS_VERSION:=3.1.7
+ XFSPROGS_SOURCE=xfsprogs-$(XFSPROGS_VERSION).tar.gz
+ XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
+-XFSPROGS_DIR=$(BUILD_DIR)/xfsprogs-$(XFSPROGS_VERSION)
+-XFSPROGS_CAT:=$(ZCAT)
+-XFSPROGS_BINARY:=mkfs/mkfs.xfs
+-XFSPROGS_TARGET_BINARY:=sbin/mkfs.xfs
+ 
+-XFSPROGS_STRIP:= fsck/fsck.xfs mkfile/xfs_mkfile rtcp/xfs_rtcp
+-XFSPROGS_STRIP_LIBDEP:= \
+-	copy/xfs_copy db/xfs_db growfs/xfs_growfs io/xfs_io \
+-	logprint/xfs_logprint mkfs/fstyp mkfs/mkfs.xfs \
+-	repair/xfs_repair quota/xfs_quota
++XFSPROGS_INSTALL_STAGING = NO
++XFSPROGS_INSTALL_TARGET = YES
+ 
+-$(DL_DIR)/$(XFSPROGS_SOURCE):
+-	 $(call DOWNLOAD,$(XFSPROGS_SITE)/$(XFSPROGS_SOURCE))
++XFSPROGS_DEPENDENCIES = util-linux
+ 
+-xfsprogs-source: $(DL_DIR)/$(XFSPROGS_SOURCE)
++XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
++XFSPROGS_CONF_OPT = --enable-lib64=no \
++					--enable-gettext=no \
++					INSTALL_USER=default \
++					INSTALL_GROUP=default
+ 
+-$(XFSPROGS_DIR)/.unpacked: $(DL_DIR)/$(XFSPROGS_SOURCE)
+-	$(XFSPROGS_CAT) $(DL_DIR)/$(XFSPROGS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+-	support/scripts/apply-patches.sh $(XFSPROGS_DIR) package/xfsprogs/ xfsprogs\*.patch
+-	touch $(XFSPROGS_DIR)/.unpacked
++XFSPROGS_INSTALL_TARGET_OPT = DIST_ROOT=$(TARGET_DIR) install
++XFSPROGS_UNINSTALL_TARGET_OPT = DIST_ROOT=$(TARGET_DIR) uninstall
+ 
+-#XFSPROGS_CONFIG_SHARED:=--disable-shared
+-XFSPROGS_CONFIG_SHARED:=--enable-shared
+-
+-$(XFSPROGS_DIR)/.configured: $(XFSPROGS_DIR)/.unpacked
+-	(cd $(XFSPROGS_DIR); rm -rf config.cache; \
+-		ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes \
+-		$(TARGET_CONFIGURE_OPTS) \
+-		$(TARGET_CONFIGURE_ARGS) \
+-		CPPFLAGS="-I$(E2FSPROGS_DIR)/lib" \
+-		LDFLAGS="-L$(E2FSPROGS_DIR)/lib" \
+-		INSTALL_USER=$(shell whoami) \
+-		INSTALL_GROUP=$(shell groups | cut -d" " -f1) \
+-		./configure $(QUIET) \
+-		--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--exec-prefix=/ \
+-		--enable-gettext=no \
+-		$(XFSPROGS_CONFIG_SHARED) \
+-	)
+-	touch $(XFSPROGS_DIR)/.configured
+-
+-$(XFSPROGS_DIR)/$(XFSPROGS_BINARY): $(XFSPROGS_DIR)/.configured
+-	$(MAKE1) PATH=$(TARGET_PATH) CPPFLAGS="-I$(E2FSPROGS_DIR)/lib" \
+-		LDFLAGS="-L$(E2FSPROGS_DIR)/lib" -C $(XFSPROGS_DIR)
+-ifeq ($(XFSPROGS_CONFIG_SHARED),--enable-shared)
+-	( \
+-		cd $(XFSPROGS_DIR); \
+-		$(STRIPCMD) $(XFSPROGS_STRIP); \
+-		$(STRIPCMD) $(join $(dir $(XFSPROGS_STRIP_LIBDEP)), \
+-				$(addprefix .libs/,$(notdir $(XFSPROGS_STRIP_LIBDEP)))) \
+-	)
+-	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/.libs/lib*.so.*.*
+-else
+-	( \
+-		cd $(XFSPROGS_DIR); \
+-		$(STRIPCMD) $(XFSPROGS_STRIP) $(XFSPROGS_STRIP_LIBDEP) \
+-	)
+-	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/lib*.so.*.*
+-endif
+-	touch -c $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
+-
+-$(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY): $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
+-	$(MAKE1) PATH=$(TARGET_PATH) \
+-	    DIST_ROOT=$(TARGET_DIR) \
+-	    exec-prefix=/ \
+-	    -C $(XFSPROGS_DIR) install
+-	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+-	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+-
+-xfsprogs: util-linux $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
+-
+-xfsprogs-clean:
+-	rm -f $(TARGET_DIR)/bin/xfs_* $(TARGET_DIR)/sbin/xfs_* $(TARGET_DIR)/sbin/*.xfs
+-	rm -f $(TARGET_DIR)/usr/lib/libhandle.so*
+-	rm -f $(TARGET_DIR)/usr/lib/libdisk.so* $(TARGET_DIR)/usr/lib/libxfs.so*
+-	-$(MAKE1) -C $(XFSPROGS_DIR) clean
+-
+-xfsprogs-dirclean:
+-	rm -rf $(XFSPROGS_DIR)
+-
+-#############################################################
+-#
+-# Toplevel Makefile options
+-#
+-#############################################################
+-ifeq ($(BR2_PACKAGE_XFSPROGS),y)
+-TARGETS+=xfsprogs
+-endif
++$(eval $(call AUTOTARGETS))
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.1
