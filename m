@@ -1,25 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 21 Mar 2012 22:16:17 +0000 (UTC)
-Subject: [Buildroot] [Bug 4958] Qt 4.7.4 build crashes with Linux 2.6.29
-In-Reply-To: <bug-4958-163@https.bugs.busybox.net/>
-References: <bug-4958-163@https.bugs.busybox.net/>
-Message-ID: <20120321221617.95F7E96926@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 Mar 2012 23:30:34 +0100
+Subject: [Buildroot] Libcurl : to depend or not to depend ?
+In-Reply-To: <8762dx4ntq.fsf@macbook.be.48ers.dk>
+References: <8E5E9D7D337A4C58AD26215008FACEF4@JohanW7>
+ <20120321162014.6e2fd485@skate>
+ <AD9141CB33AC4D019D399FFCCB3E46D3@JohanW7>
+ <8762dx4ntq.fsf@macbook.be.48ers.dk>
+Message-ID: <20120321233034.618822e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4958
+Le Wed, 21 Mar 2012 23:00:01 +0100,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> 2012-03-21 22:16:17 UTC ---
-(In reply to comment #3)
+>  Sagaert> I know what to do, but in case you need openssl and you also
+>  Sagaert> want libcurl BUT without SSL there is no way to build it like
+>  Sagaert> it is now.
+> 
+> What is the use case for wanting openssl and no ssl support in libcurl?
 
-Do notice that just using new kernel headers is not enough if your kernel
-doesn't handle sys_accept4. Qt is also not the only program using accep4, udev
-is a another well known one.
+Well, you might want OpenSSL for say the web server on the device, but
+you don't necessarily need SSL support in the curl you're using on your
+device to do some misc HTTP downloads.
 
+But again, I think the size impact of the SSL support in curl is most
+likely very limited, so it's probably not very useful to make this
+configurable.
+
+Regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
