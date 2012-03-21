@@ -1,32 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 Mar 2012 13:48:45 +0100
-Subject: [Buildroot] [PATCH] apply-patches.sh: add recursivity when
-	scanning patchdir
-In-Reply-To: <1332336387-3434-2-git-send-email-ludovic.desroches@atmel.com>
- (ludovic desroches's message of "Wed, 21 Mar 2012 14:26:27 +0100")
-References: <87k42e5nt8.fsf@macbook.be.48ers.dk>
- <1332336387-3434-1-git-send-email-ludovic.desroches@atmel.com>
- <1332336387-3434-2-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <87ty1i3ys2.fsf@macbook.be.48ers.dk>
+Date: Wed, 21 Mar 2012 13:50:52 +0100
+Subject: [Buildroot] [PATCH 1/2] libupnp: move to version 1.6.14
+In-Reply-To: <1332331352-6072-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 21 Mar 2012 09:02:31 -0300")
+References: <1332331352-6072-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mx7a3yoj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "ludovic" == ludovic desroches <ludovic.desroches@atmel.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- ludovic> From: Ludovic Desroches <ludovic.desroches@atmel.com>
- ludovic> Recursivity is needed with some tarballs containing debian patches:
- ludovic> .
- ludovic>   debian
- ludovic>     changelog
- ludovic>     control
- ludovic>     patches
- ludovic>       02-COPYRIGHT.patch
- ludovic> [...]
+ Gustavo> As pointed by Sagaert Johan in the mailing list and further testing version
+ Gustavo> 1.6.15 has some issues.
+ Gustavo> So move to version 1.6.14 which is far more stable and compliant.
 
-Committed, thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
