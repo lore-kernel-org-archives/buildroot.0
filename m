@@ -1,48 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 14:17:42 +0100
-Subject: [Buildroot] Random build results now available online
-In-Reply-To: <CAL7hd5+yVNReHh=waU8E7YvvSM6How7-UaHvKU-V71G4JyjevA@mail.gmail.com>
-References: <20120321101327.49d34f93@skate>
- <CAL7hd5KAXfF-0P5oR-RLev42=SZ8XXLxmvUjTCbe7OoyLAWCHA@mail.gmail.com>
- <20120321140013.11af8da2@skate>
- <CAL7hd5+yVNReHh=waU8E7YvvSM6How7-UaHvKU-V71G4JyjevA@mail.gmail.com>
-Message-ID: <20120321141742.3b988cb8@skate>
+Date: Wed, 21 Mar 2012 14:21:02 +0100
+Subject: [Buildroot] [PATCH v2] ushare: new package
+In-Reply-To: <1332335538-23508-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1332335538-23508-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120321142102.5c5999a6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 21 Mar 2012 15:10:25 +0200,
-Nikolay Nikolaev <nicknickolaev@gmail.com> a ?crit :
+Le Wed, 21 Mar 2012 10:12:18 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-> Suggestion: Can you add "Arch" and "Failed reason" to the failed
-> items? That way it's clearly visible that
-> "liburcu-0.6.7" failed building for "arm".
+> --- /dev/null
+> +++ b/package/ushare/ushare.mk
+> @@ -0,0 +1,26 @@
+> +#############################################################
+> +#
+> +# ushare
+> +#
+> +#############################################################
+> +
+> +USHARE_VERSION = 1.1a
+> +USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
+> +USHARE_SITE = http://ushare.geexbox.org/releases
+> +USHARE_DEPENDENCIES = host-pkg-config libupnp
+> +
+> +define USHARE_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		./configure --prefix=/usr $(DISABLE_NLS) --cross-compile \
+> +		--cross-prefix="$(TARGET_CROSS)" --sysconfdir=/etc \
+> +		--disable-strip --disable-debug \
+> +	)
+> +endef
+> +
+> +define USHARE_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	rm -f $(TARGET_DIR)/etc/init.d/ushare
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
 
-It is already the case. Taking one particular build example, the title
-is:
+With GENTARGETS, xxx_BUILD_CMDS is empty by default. Are you sure this
+builds?
 
-"""
-Build failed at 2012-03-21 13:49:06
-"""
+Also, can you add a comment just before USHARE_CONFIGURE_CMDS saying
+that despite the appearance, autotools are not used. However, I am sure
+in the future many people will wonder why AUTOTARGETS was not used.
 
-and the description is
-
-"""
-A Buildroot build result, submitted by Peter Korsgaard (gcc10)
- failed. The reason of the failure is: liblockfile-1.08. The build used
-the Git commit id 832b1ef746e7df252ff42b19f6083f3716f70eb9 and was
-targetting the arm architecture.
-"""
-
-However, the description is only available in the
-<description>...</description> field. Maybe some RSS readers only look
-at the <content:encoded>...</content:encoded> field, which contains an
-HTML version of the description. I will add it later and we'll see if
-it fixes things for your RSS reader.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
