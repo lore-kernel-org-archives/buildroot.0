@@ -1,70 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 Mar 2012 18:46:16 +0100
-Subject: [Buildroot] [PATCH] xfsprogs: Bump to 3.1.7 and convert to
- AUTOTARGET
-In-Reply-To: <1332349635-15914-1-git-send-email-markos.chandras@imgtec.com>
-References: <1332349635-15914-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <20120321184616.19ed7ea2@skate>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 21 Mar 2012 18:59:12 +0100
+Subject: [Buildroot] [PATCH] qemu/microblazebe-mmu: add new sample config
+In-Reply-To: <1332192059-19769-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1332192059-19769-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <4F6A16F0.9090304@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am 19.03.2012 22:20, schrieb Gustavo Zacarias:
+> Add a new microblazebe_mmu sample configuration for big endian
+> Microblaze with MMU testing.
+> Hopefully we can get other variants going soon.
+>
+>
+That'd great. I did not get it running some months before, most likely
+because I tried little endian:-)
 
-Thanks for this work!
+Stephan
 
-Le Wed, 21 Mar 2012 17:07:15 +0000,
-Markos Chandras <markos.chandras@imgtec.com> a ?crit :
 
->  #############################################################
-> -XFSPROGS_VERSION:=3.0.3
-> +XFSPROGS_VERSION:=3.1.7
-
-We prefer '=' instead of ':=', and spaces before and after '=', i.e:
-
-XFSPROGS_VERSION = 3.1.7
-
->  XFSPROGS_SOURCE=xfsprogs-$(XFSPROGS_VERSION).tar.gz
-
-This line is not needed, it's the default.
-
-> +XFSPROGS_INSTALL_STAGING = NO
-> +XFSPROGS_INSTALL_TARGET = YES
-
-Not needed, it's the default.
-
->  
-> -$(DL_DIR)/$(XFSPROGS_SOURCE):
-> -	 $(call DOWNLOAD,$(XFSPROGS_SITE)/$(XFSPROGS_SOURCE))
-> +XFSPROGS_DEPENDENCIES = util-linux
->  
-> -xfsprogs-source: $(DL_DIR)/$(XFSPROGS_SOURCE)
-> +XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
-> +XFSPROGS_CONF_OPT = --enable-lib64=no \
-> +					--enable-gettext=no \
-> +					INSTALL_USER=default \
-> +					INSTALL_GROUP=default
-
-Hum, why default:default and not root:root here? Anyway, our fakeroot
-script is going to chown everything to root:root.
-
-In terms of indentation, something like:
-
-XFSPROGS_CONF_OPT = \
-	--enable-lib64=no \
-	--enable-gettext=no \
-	INSTALL_USER=root \
-	INSTALL_GROUP=root
-
-Would be better, IMO, but I'm nitpicking.
-
-Otherwise, looks good (but untested).
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
