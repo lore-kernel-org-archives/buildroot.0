@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 Mar 2012 21:10:40 -0300
-Subject: [Buildroot] [PATCHv2] libupnp: bump to version 1.6.15
-Message-ID: <1332288640-18267-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 20 Mar 2012 21:12:29 -0300
+Subject: [Buildroot] [PATCHv3] libupnp: bump to version 1.6.15
+Message-ID: <1332288749-27658-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +10,13 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libupnp/Config.in                          |    5 ++-
  package/libupnp/libupnp-1.6.15-no-ipv6.patch       |   23 ++++++++++++++++++++
  .../libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch |   11 ---------
  package/libupnp/libupnp.mk                         |    9 +++----
- 4 files changed, 30 insertions(+), 18 deletions(-)
+ 3 files changed, 27 insertions(+), 16 deletions(-)
  create mode 100644 package/libupnp/libupnp-1.6.15-no-ipv6.patch
  delete mode 100644 package/libupnp/libupnp-1.6.6-remove-sys_timeb.h.patch
 
-diff --git a/package/libupnp/Config.in b/package/libupnp/Config.in
-index 2e6edcd..9f73798 100644
---- a/package/libupnp/Config.in
-+++ b/package/libupnp/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBUPNP
- 	bool "libupnp"
-+	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
- 	help
- 	  The portable SDK for UPnP(tm) Devices (libupnp) provides developers
-@@ -9,5 +10,5 @@ config BR2_PACKAGE_LIBUPNP
- 
- 	  http://pupnp.sourceforge.net/
- 
--comment "libupnp requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "libupnp requires a toolchain with IPV6 and LARGEFILE support"
-+	depends on !(BR2_INET_IPV6 && BR2_LARGEFILE)
 diff --git a/package/libupnp/libupnp-1.6.15-no-ipv6.patch b/package/libupnp/libupnp-1.6.15-no-ipv6.patch
 new file mode 100644
 index 0000000..929c309
