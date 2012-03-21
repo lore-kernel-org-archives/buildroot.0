@@ -1,26 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 Mar 2012 20:49:45 -0300
-Subject: [Buildroot] [PATCH v1 1/1] uClibc 0.9.33 : patches from 0.9.32
- should be applied to uClibc 0.9.33 too.
-In-Reply-To: <1332284023-32025-2-git-send-email-sagaert.johan@skynet.be>
-References: <1332284023-32025-1-git-send-email-sagaert.johan@skynet.be>
- <1332284023-32025-2-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <5aeac6a432553d5304da188208c64720@zacarias.com.ar>
+Date: Tue, 20 Mar 2012 21:00:17 -0300
+Subject: [Buildroot] [PATCH] libupnp: bump to version 1.6.15
+In-Reply-To: <897F78579A674B10BFE5B9F2437C0F97@JohanW7>
+References: <1332255248-12534-1-git-send-email-gustavo@zacarias.com.ar>
+ <897F78579A674B10BFE5B9F2437C0F97@JohanW7>
+Message-ID: <3de5aad31287379839debec851d4a6db@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-20 19:53, Sagaert Johan wrote:
+On 2012-03-20 19:29, Sagaert Johan wrote:
 
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   34 ++++++++++
+> Hi
+>
+> I use libupnp without IPV6, so i think its better to create a patch
+> that allows to build upnp for use without IPV6, like many other
+> packages.
+>
+> In the past i tried other libupnp versions, the building was ok, but
+> they did not work...
 
-This one is already fixed in uClibc commit 
-5f1678b1df1153277590b114ccafcf6171923d75 in a different form, that's the 
-reason the patch applies but it does nothing new.
-It can't fix anything related to any target different than powerpc 
-e500.
+Hi.
+Fair enough to patch it, there's only a minor #ifdef missing in 
+ssdp_device.c
+I've tested with ushare (not yet submitted) and an archos tablet, all 
+seems dandy.
+I'll resubmit a v2, please give it a try with what you link against to 
+see if you have issues.
 Regards.
