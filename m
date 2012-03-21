@@ -1,102 +1,69 @@
-From: lexa <lexa@cfotr.com>
-Date: Wed, 21 Mar 2012 13:26:07 +0400
-Subject: [Buildroot] Using custom kernel headers instead toolchain
- headers
-In-Reply-To: <201203192319.22728.arnout@mind.be>
-References: <1332183352.6228.94.camel@desktop>
- <201203192319.22728.arnout@mind.be>
-Message-ID: <1332321967.3685.13.camel@localhost>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 21 Mar 2012 10:33:11 +0100
+Subject: [Buildroot] [PATCH 2/6] Add the systemd package
+In-Reply-To: <201203201919.39532.arnout@mind.be>
+References: <cover.1332172636.git.maxime.ripard@free-electrons.com>
+ <201203200032.19236.arnout@mind.be> <4F68416B.50604@free-electrons.com>
+ <201203201919.39532.arnout@mind.be>
+Message-ID: <4F69A057.9010905@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2012-03-19 at 23:19 +0100, Arnout Vandecappelle wrote:
-> On Monday 19 March 2012 19:55:52 lexa wrote:
+Le 20/03/2012 19:19, Arnout Vandecappelle a ?crit :
+> On Tuesday 20 March 2012 09:35:55 Maxime Ripard wrote:
+> [snip]
+>>>> diff --git a/package/systemd/getty at .service b/package/systemd/getty at .service
+>>> [snip]
+>>>> diff --git a/package/systemd/serial-getty at .service b/package/systemd/serial-getty at .service
+>>>
+>>>  AFAICS the only difference between these two files and the upstream 
+>>> version is that it's getty instead of agetty.  Wouldn't it be simpler
+>>> and more future-safe to patch the upstream files?
+>>
+>> Probably. I'll send a patch and see how it turns out.
+>> In the meantime, maybe I can just put a patch here instead of the whole
+>> file.
 > 
-> > I use buildroot-2012.02 with external toolchain named "Sourcery
+>  That's what I meant.  I doubt that upstream would accept a patch that
+> removes agetty.  Maybe a patch that makes it configurable in the m4
+> file, but that's a lot more work to cook.
 > 
-> > CodeBench ARM 2011.03". 
+>  BTW, I just noticed now that the 'normal' service definition files
+> are installed in /lib/systemd/system rather than /etc/systemd/system.
 > 
-> > 
+> [snip]
+>>>> +define SYSTEMD_INSTALL_TTY_HOOK
+>>>> +	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
+>>>> +	[ -f $(TARGET_DIR)/etc/systemd/system/getty at .service ] || \
+>>>> +		$(INSTALL) -D package/systemd/getty at .service \
+>>>> +			$(TARGET_DIR)/etc/systemd/system/
+>>>> +	[ -f $(TARGET_DIR)/etc/systemd/system/serial-getty at .service ] || \
+>>>> +		$(INSTALL) -D package/systemd/serial-getty at .service \
+>>>> +			$(TARGET_DIR)/etc/systemd/system/
+>>>> +	ln -fs ../serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+>>>
+>>>  This looks strange to me.  Admittedly, I've never used systemd and
+>>> don't really know how it works.  But to me, this looks like the
+>>> getty at .service is actually not used.
+>>
+>> Well, actually, this symlink with weird names is used as the way to pass
+>> units some arguments.
 > 
-> > This toolchain contain linux headers, but i dont want to use them. I
+>  That much I know :-)
 > 
-> > want to use header compiled from my kernel, is it possible ?
-> 
->  
-> 
-> Short answer: no.
-> 
->  
-> 
-> The kernel headers are used to compile the C library, which needs to
-> 
-> know which system calls exist, how various things are defined, and
-> 
-> sometimes which features exist. So using different kernel headers
-> 
-> for compiling other libraries or programs is a bad idea, because it
-> 
-> may lead to inconsistencies.
-> 
->  
-> 
-> However, the kernel you compile doesn't need to be the same as the
-> 
-> toolchain's kernel headers. It just has to be newer. This is
-> 
-> possible because Linus makes sure that every Linux release is
-> 
-> ABI compatible with previous releases.
-> 
->  
-> 
->  
-> 
-> There is one reason why you may want to use different kernel headers
-> 
-> than the ones of the toolchain, and that's when you have a vendor
-> 
-> kernel that defines additional ioctl's used by device drivers that
-> 
-> are not (yet) upstreamed. In this case, you need access to your
-> 
-> vendor kernel's headers. AFAIK buildroot doesn't really support this
-> 
-> use case.
-> 
->  
-> 
-> Regards,
-> 
-> Arnout
-> 
->  
+>  My point is: the getty at tty1.service file is removed.  Therefore, there
+> is nobody using the getty at .service generic definition.  At least that's
+> my understanding of how systemd works.  So why install the 
+> getty at .service file?
 
-Thank you for this detailed explanation.
+Aaah. I see your point now. Sorry I went a bit off-topic :)
+You're right, of course, I'll remove it.
 
-I use heavy patched kernel and i need use custom kernel headers. If i
-choose using
-buildroot toolchain, can buildroot create kernel-headers from my custom
-kernel source and use this headers for build buildroot toolchain and
-other binaries?
-
-> 
-> -- 
-> 
-> Arnout Vandecappelle arnout at mind be
-> 
-> Senior Embedded Software Architect +32-16-286540
-> 
-> Essensium/Mind http://www.mind.be
-> 
-> G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-> 
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> 
-> GPG fingerprint: 7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> 
->  
-> 
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
