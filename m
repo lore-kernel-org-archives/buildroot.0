@@ -1,39 +1,36 @@
-From: Nikolay Nikolaev <nicknickolaev@gmail.com>
-Date: Wed, 21 Mar 2012 15:10:25 +0200
-Subject: [Buildroot] Random build results now available online
-In-Reply-To: <20120321140013.11af8da2@skate>
-References: <20120321101327.49d34f93@skate>
- <CAL7hd5KAXfF-0P5oR-RLev42=SZ8XXLxmvUjTCbe7OoyLAWCHA@mail.gmail.com>
- <20120321140013.11af8da2@skate>
-Message-ID: <CAL7hd5+yVNReHh=waU8E7YvvSM6How7-UaHvKU-V71G4JyjevA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 Mar 2012 10:11:13 -0300
+Subject: [Buildroot] [PATCH 2/2] ushare: new package
+In-Reply-To: <87aa3a3y17.fsf@macbook.be.48ers.dk>
+References: <1332331352-6072-1-git-send-email-gustavo@zacarias.com.ar>
+ <1332331352-6072-2-git-send-email-gustavo@zacarias.com.ar>
+ <87aa3a3y17.fsf@macbook.be.48ers.dk>
+Message-ID: <a7a94ea908fc11336620babf31b8b40e@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 21, 2012 at 3:00 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 21 Mar 2012 13:48:49 +0200,
-> Nikolay Nikolaev <nicknickolaev@gmail.com> a ?crit :
->
->> will it be hard to add an RSS feed to the site? I guess other may find
->> it useful too.
->
-> It is a bit basic at the moment (suggestions welcome), but it seems to
-> work:
->
-> ?http://buildroot.humanoidz.org/rss.php
+On 2012-03-21 10:04, Peter Korsgaard wrote:
 
-Suggestion: Can you add "Arch" and "Failed reason" to the failed
-items? That way it's clearly visible that
-"liburcu-0.6.7" failed building for "arm".
-
-> Best regards,
+>  Gustavo> +define USHARE_CONFIGURE_CMDS
+>  Gustavo> +	(cd $(@D); \
+>  Gustavo> +		$(TARGET_CONFIGURE_OPTS) \
+>  Gustavo> +		./configure --prefix=/usr $(DISABLE_NLS) --cross-compile 
+> \
+>  Gustavo> +		--cross-prefix="$(TARGET_CROSS)" --sysconfdir=/etc \
+>  Gustavo> +		--disable-strip --disable-debug \
+>  Gustavo> +	)
+>  Gustavo> +endef
+>  Gustavo> +
+>  Gustavo> +define USHARE_INSTALL_TARGET_CMDS
+>  Gustavo> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  Gustavo> +	rm -f $(TARGET_DIR)/etc/init.d/ushare
+>  Gustavo> +endef
 >
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
+> Why the custom configure and install steps?
+
+It's not autoconf and it'll bail out on unknown options.
+So basically s/AUTOTARGETS/GENTARGETS/ :)
+Regards.
