@@ -1,33 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 22 Mar 2012 22:47:59 +0100
-Subject: [Buildroot] [git commit] kmod: only show tools option if
-	BUSYBOX_SHOW_OTHERS
-Message-ID: <20120322214834.89F539693A@busybox.osuosl.org>
+Date: Thu, 22 Mar 2012 22:48:36 +0100
+Subject: [Buildroot] [git commit] kmod: add option to install module
+	utilities
+In-Reply-To: <201203222237.51909.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Thu, 22 Mar 2012 22:37:51 +0100")
+References: <20120322150326.7CEA39693E@busybox.osuosl.org>
+ <201203222237.51909.arnout@mind.be>
+Message-ID: <87r4wk1f4b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5347910b9d60cdd11cf7c4dc7dbfdd4cebacb651
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-As pointed out by Arnout.
+ Arnout> On Thursday 22 March 2012 16:03:12 Peter Korsgaard wrote:
+ >> +config BR2_PACKAGE_KMOD_TOOLS
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/kmod/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ >> +???????bool "kmod utilities"
 
-diff --git a/package/kmod/Config.in b/package/kmod/Config.in
-index 6fdd92c..26c2c6d 100644
---- a/package/kmod/Config.in
-+++ b/package/kmod/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_KMOD
- 
- config BR2_PACKAGE_KMOD_TOOLS
- 	bool "kmod utilities"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	help
- 	  Install kmod module utilities (depmod, insmod, lsmod,
- 	  modinfo, modprobe, rmmod).
+ >> +???????help
+
+ >> +?????????Install kmod module utilities (depmod, insmod, lsmod,
+
+ >> +?????????modinfo, modprobe, rmmod).
+
+ Arnout> Shouldn't this depend on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
+
+Arguably it should (even though I would like us to consider getting rid
+of that option).
+
+-- 
+Bye, Peter Korsgaard
