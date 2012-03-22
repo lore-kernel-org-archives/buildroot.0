@@ -1,28 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 23 Mar 2012 00:02:06 +0100
-Subject: [Buildroot] [PATCH v1 1/1] new package : gsl the GNU Scientific
-	Library.
-In-Reply-To: <1332285417-2158-2-git-send-email-sagaert.johan@skynet.be>
-References: <1332285417-2158-1-git-send-email-sagaert.johan@skynet.be>
- <1332285417-2158-2-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <201203230002.06781.arnout@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 23 Mar 2012 00:20:50 +0100
+Subject: [Buildroot] [git commit] udev: bump to 182
+Message-ID: <20120322232116.C8C219693C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 21 March 2012 00:16:57 Sagaert Johan wrote:
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+commit: http://git.buildroot.net/buildroot/commit/?id=6496d03156784646c501974b4aa2c89a7930f444
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Regards,
- Arnout
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/udev/udev.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/udev/udev.mk b/package/udev/udev.mk
+index d445a2f..85f6254 100644
+--- a/package/udev/udev.mk
++++ b/package/udev/udev.mk
+@@ -3,7 +3,7 @@
+ # udev
+ #
+ #############################################################
+-UDEV_VERSION = 181
++UDEV_VERSION = 182
+ UDEV_SOURCE = udev-$(UDEV_VERSION).tar.bz2
+ UDEV_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/hotplug/
+ UDEV_INSTALL_STAGING = YES
