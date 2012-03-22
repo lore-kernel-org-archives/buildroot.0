@@ -1,34 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 22 Mar 2012 16:47:45 +0100
-Subject: [Buildroot] [git commit] kmod: add option to install module
- utilities
-In-Reply-To: <87fwd03ara.fsf@macbook.be.48ers.dk>
-References: <20120322150326.7CEA39693E@busybox.osuosl.org>
- <4F6B426F.1000509@free-electrons.com>
- <87fwd03ara.fsf@macbook.be.48ers.dk>
-Message-ID: <20120322164745.4c7d20f7@skate>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 22 Mar 2012 16:49:31 +0000 (UTC)
+Subject: [Buildroot] Can I use the toolchain build with buildroot,
+ as an external toolchain ?
+References: <1531E53627F1F749B4FE809BF2A4EB6703136FE8@WETMEX10.loepfe.com>
+Message-ID: <jkfl6r$bev$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 22 Mar 2012 16:39:53 +0100,
-Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
+On 2012-03-22, Vellemans, Noel <Noel.Vellemans@visionBMS.com> wrote:
 
-> Sooner or later we should, but I'm not sure if kmod is mature enough to
-> do it yet. I actually very rarely use kernel modules, perhaps someone
-> else knows more about it?
+> Q: Can I use a toolchain that has been build with buildroot (before)
+> as an external toolchain ?
 
-According to the kmod talk at ELC, kmod is now a complete replacement
-for module-init-tools, and module-init-tools are deprecated, as Maxime
-said. So all distributions are likely to switch to kmod rather soon.
+Yes.  I used to do that.  After a few weeks, I gave up on it and built
+an external toolchain using crosstool-ng.
 
-Regards,
+> Q: Is this explained somewhere, on how to do this?
 
-Thomas
+No, because it's much simpler to just build an external toolchain
+using crosstool-ng, and then configure Buildroot use that.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! I am NOT a nut....
+                                  at               
+                              gmail.com            
