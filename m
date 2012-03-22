@@ -1,85 +1,53 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Thu, 22 Mar 2012 09:17:48 +0000
-Subject: [Buildroot] [PATCH] xfsprogs: Bump to 3.1.7 and convert to
-	AUTOTARGET
-In-Reply-To: <20120321184616.19ed7ea2@skate>
-References: <1332349635-15914-1-git-send-email-markos.chandras@imgtec.com>
- <20120321184616.19ed7ea2@skate>
-Message-ID: <4F6AEE3C.9020108@imgtec.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Thu, 22 Mar 2012 10:27:15 +0100
+Subject: [Buildroot] [pull request v2] Pull request for branch
+	for-2012.05/systemd
+Message-ID: <cover.1332408273.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/21/2012 05:46 PM, Thomas Petazzoni wrote:
+Hi list,
 
-> Hello,
-> 
-> Thanks for this work!
-> 
-> Le Wed, 21 Mar 2012 17:07:15 +0000,
-> Markos Chandras <markos.chandras@imgtec.com> a ?crit :
-> 
->>  #############################################################
->> -XFSPROGS_VERSION:=3.0.3
->> +XFSPROGS_VERSION:=3.1.7
-> 
-> We prefer '=' instead of ':=', and spaces before and after '=', i.e:
-> 
-> XFSPROGS_VERSION = 3.1.7
-> 
->>  XFSPROGS_SOURCE=xfsprogs-$(XFSPROGS_VERSION).tar.gz
-> 
-> This line is not needed, it's the default.
-> 
->> +XFSPROGS_INSTALL_STAGING = NO
->> +XFSPROGS_INSTALL_TARGET = YES
-> 
-> Not needed, it's the default.
-> 
->> 
->> -$(DL_DIR)/$(XFSPROGS_SOURCE):
->> -      $(call DOWNLOAD,$(XFSPROGS_SITE)/$(XFSPROGS_SOURCE))
->> +XFSPROGS_DEPENDENCIES = util-linux
->> 
->> -xfsprogs-source: $(DL_DIR)/$(XFSPROGS_SOURCE)
->> +XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
->> +XFSPROGS_CONF_OPT = --enable-lib64=no \
->> +                                     --enable-gettext=no \
->> +                                     INSTALL_USER=default \
->> +                                     INSTALL_GROUP=default
-> 
-> Hum, why default:default and not root:root here? Anyway, our fakeroot
-> script is going to chown everything to root:root.
-> 
-> In terms of indentation, something like:
-> 
-> XFSPROGS_CONF_OPT = \
->         --enable-lib64=no \
->         --enable-gettext=no \
->         INSTALL_USER=root \
->         INSTALL_GROUP=root
-> 
-> Would be better, IMO, but I'm nitpicking.
-> 
-> Otherwise, looks good (but untested).
-> 
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+This is the updated version of the previous patchset concerning systemd to take
+into account the comments made mostly by Arnout.
 
-Hi Thomas,
+The following changes since commit 5b84ec26c8981c6ab0e119b455e807152ded449a:
 
-Thanks for the review. A new patch is coming soon
+  libconfig: bump to 1.4.8 and cleanup (2012-03-21 23:08:25 +0100)
 
+are available in the git repository at:
+  git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.05/systemd
+
+Maxime Ripard (5):
+      Add the systemd package
+      Enable cgroups in Linux if we use systemd
+      Rework of the init system
+      Fix installation for the lighttpd package
+      Add systemd unit for lighttpd
+
+ linux/linux.mk                                     |    2 +
+ package/Config.in                                  |    1 +
+ package/Makefile.package.in                        |    8 +++
+ package/dbus/dbus.mk                               |    4 +
+ .../lighttpd-1.4.30-Fix-default-config-file.patch  |   64 ++++++++++++++++++++
+ package/lighttpd/lighttpd.mk                       |   43 +++++++++++++
+ package/lighttpd/lighttpd.service                  |   10 +++
+ package/systemd/Config.in                          |   19 ++++++
+ package/systemd/systemd-37-fix-getty-unit.patch    |   26 ++++++++
+ package/systemd/systemd.mk                         |   62 +++++++++++++++++++
+ package/sysvinit/Config.in                         |    1 +
+ package/udev/udev.mk                               |    4 +
+ target/generic/Config.in                           |   28 +++++++++
+ 13 files changed, 272 insertions(+), 0 deletions(-)
+ create mode 100644 package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
+ create mode 100644 package/lighttpd/lighttpd.service
+ create mode 100644 package/systemd/Config.in
+ create mode 100644 package/systemd/systemd-37-fix-getty-unit.patch
+ create mode 100644 package/systemd/systemd.mk
+
+Thanks,
 -- 
-markos
+Maxime Ripard
