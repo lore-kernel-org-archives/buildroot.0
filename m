@@ -1,28 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 22 Mar 2012 16:39:53 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 22 Mar 2012 16:47:45 +0100
 Subject: [Buildroot] [git commit] kmod: add option to install module
-	utilities
-In-Reply-To: <4F6B426F.1000509@free-electrons.com> (Maxime Ripard's message of
- "Thu, 22 Mar 2012 16:17:03 +0100")
+ utilities
+In-Reply-To: <87fwd03ara.fsf@macbook.be.48ers.dk>
 References: <20120322150326.7CEA39693E@busybox.osuosl.org>
  <4F6B426F.1000509@free-electrons.com>
-Message-ID: <87fwd03ara.fsf@macbook.be.48ers.dk>
+ <87fwd03ara.fsf@macbook.be.48ers.dk>
+Message-ID: <20120322164745.4c7d20f7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+Le Thu, 22 Mar 2012 16:39:53 +0100,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
- Maxime> Hi Peter,
- Maxime> Maybe we should also deprecate modules-init-tools, since Jon Masters
- Maxime> announced some time ago that it was no longer maintained and people
- Maxime> should go to kmod utils ?
+> Sooner or later we should, but I'm not sure if kmod is mature enough to
+> do it yet. I actually very rarely use kernel modules, perhaps someone
+> else knows more about it?
 
-Sooner or later we should, but I'm not sure if kmod is mature enough to
-do it yet. I actually very rarely use kernel modules, perhaps someone
-else knows more about it?
+According to the kmod talk at ELC, kmod is now a complete replacement
+for module-init-tools, and module-init-tools are deprecated, as Maxime
+said. So all distributions are likely to switch to kmod rather soon.
 
+Regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
