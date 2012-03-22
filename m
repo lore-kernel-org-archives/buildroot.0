@@ -1,80 +1,68 @@
-From: JoM <johann.mercadier@imerir.com>
-Date: Thu, 22 Mar 2012 14:26:53 +0000
-Subject: [Buildroot] [PATCH 1/1] fix help comment Signed-off-by: JoM
-	<johann.mercadier@imerir.com>
-Message-ID: <1332426413-11634-1-git-send-email-johann.mercadier@imerir.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu, 22 Mar 2012 16:00:59 +0100
+Subject: [Buildroot] [PATCH 1/2] New package: socketcand
+Message-ID: <1332428460-28459-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Yegor Yefremov <yegorslists@googlemail.com>
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in        |    1 +
- package/fbterm/Config.in |   12 ++++++++++++
- package/fbterm/fbterm.mk |   23 +++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 0 deletions(-)
- create mode 100644 package/fbterm/Config.in
- create mode 100644 package/fbterm/fbterm.mk
+ package/Config.in                |    1 +
+ package/socketcand/Config.in     |    9 +++++++++
+ package/socketcand/socketcand.mk |   12 ++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/socketcand/Config.in
+ create mode 100644 package/socketcand/socketcand.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 85583c6..c2d02b7 100644
+index 85583c6..b394f18 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -109,6 +109,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/fbset/Config.in"
- endif
- source "package/fbv/Config.in"
-+source "package/fbterm/Config.in"
- source "package/imagemagick/Config.in"
- source "package/linux-fusion/Config.in"
- source "package/lite/Config.in"
-diff --git a/package/fbterm/Config.in b/package/fbterm/Config.in
+@@ -504,6 +504,7 @@ source "package/rsync/Config.in"
+ source "package/samba/Config.in"
+ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
++source "package/socketcand/Config.in"
+ source "package/spawn-fcgi/Config.in"
+ source "package/squid/Config.in"
+ source "package/stunnel/Config.in"
+diff --git a/package/socketcand/Config.in b/package/socketcand/Config.in
 new file mode 100644
-index 0000000..0a36a9f
+index 0000000..ed973b7
 --- /dev/null
-+++ b/package/fbterm/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FBTERM
-+	bool "fbterm"
-+	  select BR2_PACKAGE_FREETYPE
-+	  select BR2_PACKAGE_FONTCONFIG
-+	  select BR2_PACKAGE_ZLIB
-+	  select BR2_PACKAGE_EXPAT
++++ b/package/socketcand/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SOCKETCAND
++	bool "socketcand"
++	select BR2_PACKAGE_LIBCONFIG
 +	help
-+	  FbTerm (Frame buffer terminal emulator) is a fast terminal emulator and a 
-+	  standalone replacement of GNU/Linux terminal that can function outside of
-+	  Xorg with the frame buffer device or VESA video card.
-+	  
-+	  http://code.google.com/p/fbterm/
-diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
++	  Socketcand is a daemon that provides access to CAN interfaces
++	  on a machine via a network interface.
++
++	  https://github.com/dschanoeh/socketcand
++
+diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
 new file mode 100644
-index 0000000..44f63f1
+index 0000000..8677520
 --- /dev/null
-+++ b/package/fbterm/fbterm.mk
-@@ -0,0 +1,23 @@
++++ b/package/socketcand/socketcand.mk
+@@ -0,0 +1,12 @@
 +#############################################################
 +#
-+# fbterm
++# socketcand
 +#
 +#############################################################
-+FBTERM_BINARY = fbterm
-+FBTERM_TARGET_BINARY = usr/bin/$(FBTERM_BINARY)
-+FBTERM_VERSION = 1.7.0
-+FBTERM_SITE = http://fbterm.googlecode.com/files
-+FBTERM_DEPENDENCIES += freetype fontconfig
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+	FBTERM_DEPENDENCIES += zlib
-+endif
-+
-+FBTERM_DEPENDENCIES += $(if $(BR2_PACKAGE_EXPAT),expat)
-+
-+define FBTERM_UNINSTALL_CMDS
-+	rm -f $(TARGET_DIR)/$(FBTERM_TARGET_BINARY)
-+endef
-+
++SOCKETCAND_VERSION = 7d06986fa4b5fd2c210ec4e248dab41107be1ccd
++SOCKETCAND_SITE = git://github.com/dschanoeh/socketcand.git
++SOCKETCAND_AUTORECONF = YES
++SOCKETCAND_DEPENDENCIES = libconfig
 +
 +$(eval $(call AUTOTARGETS))
++
 -- 
-1.7.2.5
+1.7.7
