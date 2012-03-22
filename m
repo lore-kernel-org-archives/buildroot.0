@@ -1,27 +1,28 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Thu, 22 Mar 2012 16:18:15 +0100
-Subject: [Buildroot] [Bug 4970] udev 181 fails to build if kernel
- version 3.3 is selected
-In-Reply-To: <20120322121641.C6E5B9693A@busybox.osuosl.org>
-References: <bug-4970-163@https.bugs.busybox.net/>
- <20120322121641.C6E5B9693A@busybox.osuosl.org>
-Message-ID: <4F6B42B7.6070201@visionsystems.de>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 22 Mar 2012 16:39:53 +0100
+Subject: [Buildroot] [git commit] kmod: add option to install module
+	utilities
+In-Reply-To: <4F6B426F.1000509@free-electrons.com> (Maxime Ripard's message of
+ "Thu, 22 Mar 2012 16:17:03 +0100")
+References: <20120322150326.7CEA39693E@busybox.osuosl.org>
+ <4F6B426F.1000509@free-electrons.com>
+Message-ID: <87fwd03ara.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 22.03.2012 13:16, schrieb bugzilla at busybox.net:
-> https://bugs.busybox.net/show_bug.cgi?id=4970
-> 
-> --- Comment #1 from Graeme Russ <graeme.russ@gmail.com> 2012-03-22 12:16:41 UTC ---
-> Created attachment 4184
->   --> https://bugs.busybox.net/attachment.cgi?id=4184
-> buildroot config
-> 
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-seems to be x86 related. ARM verson compiles without errors.
+ Maxime> Hi Peter,
+ Maxime> Maybe we should also deprecate modules-init-tools, since Jon Masters
+ Maxime> announced some time ago that it was no longer maintained and people
+ Maxime> should go to kmod utils ?
 
-Best regards,
-Yegor
+Sooner or later we should, but I'm not sure if kmod is mature enough to
+do it yet. I actually very rarely use kernel modules, perhaps someone
+else knows more about it?
+
+-- 
+Bye, Peter Korsgaard
