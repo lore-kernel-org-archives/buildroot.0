@@ -1,23 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 Mar 2012 23:54:34 +0100
-Subject: [Buildroot] [PATCH 1/2] New package: socketcand
-In-Reply-To: <1332428460-28459-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 22 Mar 2012 16:00:59
- +0100")
-References: <1332428460-28459-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87ehsk1c2d.fsf@macbook.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 23 Mar 2012 00:02:06 +0100
+Subject: [Buildroot] [PATCH v1 1/1] new package : gsl the GNU Scientific
+	Library.
+In-Reply-To: <1332285417-2158-2-git-send-email-sagaert.johan@skynet.be>
+References: <1332285417-2158-1-git-send-email-sagaert.johan@skynet.be>
+ <1332285417-2158-2-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <201203230002.06781.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+On Wednesday 21 March 2012 00:16:57 Sagaert Johan wrote:
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-Committed, thanks.
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
