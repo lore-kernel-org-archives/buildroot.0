@@ -1,91 +1,27 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Thu, 22 Mar 2012 16:17:03 +0100
-Subject: [Buildroot] [git commit] kmod: add option to install module
-	utilities
-In-Reply-To: <20120322150326.7CEA39693E@busybox.osuosl.org>
-References: <20120322150326.7CEA39693E@busybox.osuosl.org>
-Message-ID: <4F6B426F.1000509@free-electrons.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 22 Mar 2012 16:18:15 +0100
+Subject: [Buildroot] [Bug 4970] udev 181 fails to build if kernel
+ version 3.3 is selected
+In-Reply-To: <20120322121641.C6E5B9693A@busybox.osuosl.org>
+References: <bug-4970-163@https.bugs.busybox.net/>
+ <20120322121641.C6E5B9693A@busybox.osuosl.org>
+Message-ID: <4F6B42B7.6070201@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-
-Maybe we should also deprecate modules-init-tools, since Jon Masters
-announced some time ago that it was no longer maintained and people
-should go to kmod utils ?
-
-Le 22/03/2012 16:03, Peter Korsgaard a ?crit :
-> commit: http://git.buildroot.net/buildroot/commit/?id=78f5ac2908b30aa6f67583a355e058d6703755ac
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am 22.03.2012 13:16, schrieb bugzilla at busybox.net:
+> https://bugs.busybox.net/show_bug.cgi?id=4970
 > 
-> And ensure optional zlib+xz dependencies gets picked up.
+> --- Comment #1 from Graeme Russ <graeme.russ@gmail.com> 2012-03-22 12:16:41 UTC ---
+> Created attachment 4184
+>   --> https://bugs.busybox.net/attachment.cgi?id=4184
+> buildroot config
 > 
-> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ---
->  package/kmod/Config.in |    6 ++++++
->  package/kmod/kmod.mk   |   26 ++++++++++++++++++++++++++
->  2 files changed, 32 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/kmod/Config.in b/package/kmod/Config.in
-> index c5e8ca8..6fdd92c 100644
-> --- a/package/kmod/Config.in
-> +++ b/package/kmod/Config.in
-> @@ -4,3 +4,9 @@ config BR2_PACKAGE_KMOD
->  	  handle kernel modules
->  
->  	  http://git.kernel.org/?p=utils/kernel/kmod/kmod.git
-> +
-> +config BR2_PACKAGE_KMOD_TOOLS
-> +	bool "kmod utilities"
-> +	help
-> +	  Install kmod module utilities (depmod, insmod, lsmod,
-> +	  modinfo, modprobe, rmmod).
-> diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-> index f71087c..55cbdbb 100644
-> --- a/package/kmod/kmod.mk
-> +++ b/package/kmod/kmod.mk
-> @@ -4,4 +4,30 @@ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
->  KMOD_INSTALL_STAGING = YES
->  KMOD_DEPENDENCIES = host-pkg-config
->  
-> +ifeq ($(BR2_PACKAGE_ZLIB),y)
-> +KMOD_DEPENDENCIES += zlib
-> +KMOD_CONF_OPT += --with-zlib
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_XZ),y)
-> +KMOD_DEPENDENCIES += xz
-> +KMOD_CONF_OPT += --with-xz
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
-> +# take precedence over busybox / module-init-tools implementations
-> +KMOD_DEPENDENCIES += \
-> +	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
-> +	$(if $(BR2_PACKAGE_MODULE_INIT_TOOLS),module-init-tools)
-> +
-> +define KMOD_INSTALL_TOOLS
-> +	for i in depmod insmod lsmod modinfo modprobe rmmod; \
-> +	do ln -sf ../usr/bin/kmod $(TARGET_DIR)/sbin/$$i; done
-> +endef
-> +
-> +KMOD_POST_INSTALL_TARGET_HOOKS += KMOD_INSTALL_TOOLS
-> +else
-> +KMOD_CONF_OPT += --disable-tools
-> +endif
-> +
->  $(eval $(call AUTOTARGETS))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
+seems to be x86 related. ARM verson compiles without errors.
 
--- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best regards,
+Yegor
