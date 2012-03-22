@@ -1,32 +1,27 @@
-From: Vellemans, Noel <Noel.Vellemans@visionBMS.com>
-Date: Thu, 22 Mar 2012 10:54:51 +0100
-Subject: [Buildroot] Can I use the toolchain build with buildroot,
-	as an external toolchain ?
-Message-ID: <1531E53627F1F749B4FE809BF2A4EB6703136FE8@WETMEX10.loepfe.com>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 22 Mar 2012 11:50:19 +0100
+Subject: [Buildroot] bluez-utils 4.98 Configuring: error: D-Bus library
+ is required
+In-Reply-To: <CABpopuEqL7s31pZj9Qfj0v7pp1hYzfxYX8NazSKkOew6JK6NDw@mail.gmail.com>
+References: <CABpopuEqL7s31pZj9Qfj0v7pp1hYzfxYX8NazSKkOew6JK6NDw@mail.gmail.com>
+Message-ID: <4F6B03EB.1010502@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Am 21.03.2012 21:23, schrieb alex n:
+> Hi,
+> 
+> I'm trying to compile bluez-utils but I get "error: D-Bus library is
+> required" while it configure. D-Bus checked in menuconfig and compiled
+> into /output/build/dbus-1.4.16 succesfully.
+> So how can I fix this error?
+> 
+> Buildroot - 2012.02.
 
-Hi all,
+Have no problems with compiling bluez-utils. Have you tried make clean; make? What architecture you're compiling for? What toolchain?
 
-Thomas, gave me a hint on how to make 'full' compiles faster.
-
-<<Thomas Petazzoni>>
->>Another way of speeding up the build is to use an external toolchain
-if you're not 
->>already using. You can also enable the ccache
->>feature (be sure to have the latest ccache fixes, otherwise ccache is
-basically
->>unused).
-
-Q: Can I use a toolchain that has been build with buildroot (before) as
-an external toolchain ?
-
-Q: Is this explained somewhere, on how to do this ?
-
-
-Thanks,
-Noel
+Best regards,
+Yegor
