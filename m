@@ -1,9 +1,9 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Thu, 22 Mar 2012 10:27:17 +0100
-Subject: [Buildroot] [PATCH 2/5] Enable cgroups in Linux if we use systemd
+Date: Thu, 22 Mar 2012 10:27:20 +0100
+Subject: [Buildroot] [PATCH 5/5] Add systemd unit for lighttpd
 In-Reply-To: <cover.1332408273.git.maxime.ripard@free-electrons.com>
 References: <cover.1332408273.git.maxime.ripard@free-electrons.com>
-Message-ID: <b12357fc4c455ffa8b89ac931225dce417870e74.1332408273.git.maxime.ripard@free-electrons.com>
+Message-ID: <2cbbf18cae2ef288c52745ca46fc4ebaa05bf677.1332408273.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- linux/linux.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/lighttpd/lighttpd.mk      |   11 +++++++++++
+ package/lighttpd/lighttpd.service |   10 ++++++++++
+ 2 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/lighttpd/lighttpd.service
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6cb1efc..93dd008 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -163,6 +163,8 @@ define LINUX_CONFIGURE_CMDS
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
- 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
-+	$(if $(BR2_PACKAGE_SYSTEMD),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
- endef
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 8d1f212..1f2f283 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -88,6 +88,17 @@ endef
  
- # Compilation. We make sure the kernel gets rebuilt when the
+ LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
+ 
++define LIGHTTPD_INSTALL_INIT_SYSTEMD
++	[ -f $(TARGET_DIR)/etc/systemd/system/lighttpd.service ] || \
++		$(INSTALL) -D -m 755 package/lighttpd/lighttpd.service \
++			$(TARGET_DIR)/etc/systemd/system/lighttpd.service
++
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++
++	ln -fs ../lighttpd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
++endef
++
+ define LIGHTTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
+diff --git a/package/lighttpd/lighttpd.service b/package/lighttpd/lighttpd.service
+new file mode 100644
+index 0000000..0ca5357
+--- /dev/null
++++ b/package/lighttpd/lighttpd.service
+@@ -0,0 +1,10 @@
++[Unit]
++Description=Lighttpd Web Server
++After=network.target
++
++[Service]
++ExecStart=/usr/sbin/lighttpd-angel -f /etc/lighttpd/lighttpd.conf -D
++ExecReload=/bin/kill -HUP $MAINPID
++
++[Install]
++WantedBy=multi-user.target
 -- 
 1.7.5.4
