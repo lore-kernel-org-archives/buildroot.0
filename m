@@ -1,94 +1,48 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 23 Mar 2012 15:53:38 +0100
-Subject: [Buildroot] [PATCH 2 of 2 v4-resend] build: add option to
- exclude executables/dirs from being stripped
-In-Reply-To: <8f75d831c72b3a3b3a34.1331743507@beantl019720>
-References: <patchbomb.1331743505@beantl019720>
- <8f75d831c72b3a3b3a34.1331743507@beantl019720>
-Message-ID: <CAAXf6LXqEQF8TScyDTZVOYY+ssFTXOKdcJfy+LQWr+0TPTrQxQ@mail.gmail.com>
+Date: Fri, 23 Mar 2012 16:01:16 +0100
+Subject: [Buildroot] [PATCH v3] Add dtc (device tree compiler) as host
+	tool
+In-Reply-To: <20120323155103.54f93fa3@skate>
+References: <0e9c281db61ec6c47a7a.1332513454@beantl019720>
+ <20120323155103.54f93fa3@skate>
+Message-ID: <CAAXf6LX40Or5xSKtDD5M8kb3duhcJ_w4Z7GX8pQo=Vdye9S70A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 14, 2012 at 5:45 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> Sometimes it may be desirable to keep debug symbols for some binaries and
-> libraries on the target. This commit introduces the config option
-> BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
-> and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
-> directories excluded from stripping entirely.
-> These exclusions are passed to the find command in the target-finalize step.
+On Fri, Mar 23, 2012 at 3:51 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Fri, 23 Mar 2012 15:37:34 +0100,
+> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 >
-> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> +HOST_DTC_SOURCE =
+>> +HOST_DTC_DEPENDENCIES = linux
+>> +
+>> +define HOST_DTC_INSTALL_CMDS
+>> + ? ?$(INSTALL) -D -m 0755 $(LINUX_DIR)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc
+>> +endef
 >
-> ---
-> v4: whitespace changes
-> v3: merge with redundant patch 'stripping: use findfileclauses utility function'
-> v2: add the possibility to exclude entire directories
+> The problem is that this DTC binary is only built if CONFIG_DTC is
+> selected in the kernel configuration. So if the selected kernel does
+> not have this option enabled, the installation step of this package is
+> going to fail.
 >
-> ?Config.in | ?19 +++++++++++++++++++
-> ?Makefile ?| ?10 ++++++++--
-> ?2 files changed, 27 insertions(+), 2 deletions(-)
->
-> diff --git a/Config.in b/Config.in
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -269,6 +269,25 @@ config BR2_STRIP_none
-> ? ? ? ? ?none ? ?do not strip (only for debugging!)
-> ?endchoice
->
-> +config BR2_STRIP_EXCLUDE_FILES
-> + ? ? ? string "executables that should not be stripped"
-> + ? ? ? depends on !BR2_STRIP_none
-> + ? ? ? default ""
-> + ? ? ? help
-> + ? ? ? ? You may specify a space-separated list of binaries and libraries
-> + ? ? ? ? here that should not be stripped on the target.
-> +
-> +config BR2_STRIP_EXCLUDE_DIRS
-> + ? ? ? string "directories that should be skipped when stripping"
-> + ? ? ? depends on !BR2_STRIP_none
-> + ? ? ? default ""
-> + ? ? ? help
-> + ? ? ? ? You may specify a space-separated list of directories that should
-> + ? ? ? ? be skipped when stripping. Binaries and libraries in these
-> + ? ? ? ? directories will not be touched.
-> + ? ? ? ? The directories should be specified relative to the target directory,
-> + ? ? ? ? without leading slash.
-> +
-> ?choice
-> ? ? ? ?prompt "gcc optimization level"
-> ? ? ? ?default BR2_OPTIMIZE_S
-> diff --git a/Makefile b/Makefile
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -438,6 +438,13 @@ endif
-> ?erase-fakeroots:
-> ? ? ? ?rm -f $(BUILD_DIR)/.fakeroot*
->
-> +STRIP_FIND_CMD = find $(TARGET_DIR)
-> +ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-> +STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-> +endif
-> +STRIP_FIND_CMD += -type f -perm +111
-> +STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-> +
-> ?target-finalize:
-> ?ifeq ($(BR2_HAVE_DEVFILES),y)
-> ? ? ? ?( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
-> @@ -462,8 +469,7 @@ endif
-> ?ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-> ? ? ? ?find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
-> ?endif
-> - ? ? ? find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
-> - ? ? ? ? ? ? ? xargs $(STRIPCMD) 2>/dev/null || true
-> + ? ? ? $(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
-> ? ? ? ?find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
-> ? ? ? ? ? ? ? ?xargs -r $(KSTRIPCMD) || true
->
+> I am not sure what to do here. Just let the user figure this out? Check
+> the kernel .config to see if CONFIG_DTC is enabled, and if it isn't
+> while this package is selected, error out with a nice explanation for
+> the user? Simply ignore the installation if the dtc binary was not
+> built?
 
-bump
+I hadn't though about this case.
+One could question whether it is a valid case that someone selects dtc
+in buildroot but not in the kernel.
+
+Probably the nicest way is to not use dtc from the linux kernel
+sources but download the dtc sources explicitly. I thought this was a
+bit overkill, and I'm not sure if there can be inconsistencies between
+these sources and the kernel ones.
+
+Best regards,
+Thomas
