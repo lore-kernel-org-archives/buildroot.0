@@ -1,7 +1,9 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Fri, 23 Mar 2012 01:51:34 +0100
-Subject: [Buildroot] [PATCH 1/2] Add libcap-ng package.
-Message-ID: <1332463895-18574-1-git-send-email-marek.belisko@open-nandra.com>
+Date: Fri, 23 Mar 2012 01:51:35 +0100
+Subject: [Buildroot] [PATCH 2/2] Add bluez package.
+In-Reply-To: <1332463895-18574-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1332463895-18574-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <1332463895-18574-2-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,57 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in              |    1 +
- package/libcap-ng/Config.in    |   10 ++++++++++
- package/libcap-ng/libcap-ng.mk |   12 ++++++++++++
+ package/Config.in            |    1 +
+ package/libbluez/Config.in   |    8 ++++++++
+ package/libbluez/libbluez.mk |   14 ++++++++++++++
  3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/libcap-ng/Config.in
- create mode 100644 package/libcap-ng/libcap-ng.mk
+ create mode 100644 package/libbluez/Config.in
+ create mode 100644 package/libbluez/libbluez.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 85583c6..ccc9b34 100644
+index ccc9b34..50ef982 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -377,6 +377,7 @@ source "package/argp-standalone/Config.in"
- source "package/boost/Config.in"
- source "package/libatomic_ops/Config.in"
- source "package/libcap/Config.in"
-+source "package/libcap-ng/Config.in"
- source "package/libdaemon/Config.in"
- source "package/libelf/Config.in"
- source "package/libevent/Config.in"
-diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+@@ -326,6 +326,7 @@ endmenu
+ 
+ menu "Hardware handling"
+ source "package/libaio/Config.in"
++source "package/libbluez/Config.in"
+ source "package/libraw1394/Config.in"
+ source "package/tslib/Config.in"
+ source "package/libftdi/Config.in"
+diff --git a/package/libbluez/Config.in b/package/libbluez/Config.in
 new file mode 100644
-index 0000000..d1663cd
+index 0000000..ac2b4b7
 --- /dev/null
-+++ b/package/libcap-ng/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBCAP_NG
-+	bool "libcap-ng"
++++ b/package/libbluez/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBBLUEZ
++	bool "libbluez"
++	select BR2_PACKAGE_DBUS
 +	help
-+	  The libcap-ng library is intended to make programming with
-+	  posix capabilities much easier than the traditional libcap
-+	  library. It includes utilities that can analyse all currently
-+	  running applications and print out any capabilities and whether
-+	  or not it has an open ended bounding set.
-+
-+	  http://people.redhat.com/sgrubb/libcap-ng/
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
++	  BlueZ provides support for the core Bluetooth layers and protocols.
++	  It is flexible, efficient and uses a modular implementation.
++		
++	  http://www.bluez.org
+diff --git a/package/libbluez/libbluez.mk b/package/libbluez/libbluez.mk
 new file mode 100644
-index 0000000..6ea5de4
+index 0000000..34f22eb
 --- /dev/null
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -0,0 +1,12 @@
++++ b/package/libbluez/libbluez.mk
+@@ -0,0 +1,14 @@
 +#############################################################
 +#
-+# libcap-ng
++# libbluez
 +#
 +#############################################################
 +
-+LIBCAP_NG_VERSION = 0.6.6
-+LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng/
-+LIBCAP_NG_SOURCE = libcap-ng-$(LIBCAP_NG_VERSION).tar.gz
-+LIBCAP_NG_INSTALL_STAGING = YES
++LIBBLUEZ_VERSION = 4.99
++LIBBLUEZ_SITE = http://www.kernel.org/pub/linux/bluetooth/
++LIBBLUEZ_SOURCE = bluez-$(LIBBLUEZ_VERSION).tar.gz
++LIBBLUEZ_INSTALL_STAGING = YES
++
++LIBBLUEZ_DEPENDENCIES = dbus
 +
 +$(eval $(call AUTOTARGETS))
 -- 
