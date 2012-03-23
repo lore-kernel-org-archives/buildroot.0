@@ -1,104 +1,163 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri, 23 Mar 2012 10:26:20 +0100
-Subject: [Buildroot] [PATCH 3/5] Rework of the init system
+Date: Fri, 23 Mar 2012 10:26:21 +0100
+Subject: [Buildroot] [PATCH 4/5] Fix installation for the lighttpd package
 In-Reply-To: <cover.1332494567.git.maxime.ripard@free-electrons.com>
 References: <cover.1332494567.git.maxime.ripard@free-electrons.com>
-Message-ID: <0d1be76af6b3946ebcd13f7601ed051411ccf774.1332494567.git.maxime.ripard@free-electrons.com>
+Message-ID: <632d0697c7c5a649b7ab68a9b9e7978ce0dabac4.1332494567.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we have now two uncompatible init systems, and we want only one of
-them at the same time in use in the rootfs, we need to select a
-particular init system. This patch also adds $(PKG)_INSTALL_INIT_SYSTEMD
-and $(PKG)_INSTALL_INIT_SYSV hooks that are called when the matching
-init systems are selected to install properly the init scripts of the
-package.
-
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.package.in |    8 ++++++++
- package/sysvinit/Config.in  |    1 +
- target/generic/Config.in    |   28 ++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
+ .../lighttpd-1.4.30-Fix-default-config-file.patch  |   92 ++++++++++++++++++++
+ package/lighttpd/lighttpd.mk                       |   32 +++++++
+ 2 files changed, 124 insertions(+), 0 deletions(-)
+ create mode 100644 package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
 
-diff --git a/package/Makefile.package.in b/package/Makefile.package.in
-index f7b6566..3992247 100644
---- a/package/Makefile.package.in
-+++ b/package/Makefile.package.in
-@@ -427,6 +427,10 @@ $(BUILD_DIR)/%/.stamp_images_installed:
- # Install to target dir
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call MESSAGE,"Installing to target")
-+	$(if $(BR2_INIT_SYSTEMD),\
-+		$($(PKG)_INSTALL_INIT_SYSTEMD))
-+	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-+		$($(PKG)_INSTALL_INIT_SYSV))
- 	$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -445,6 +449,10 @@ $(BUILD_DIR)/%/.stamp_uninstalled:
- 	rm -f $($(PKG)_TARGET_INSTALL_TARGET)
- 	$($(PKG)_UNINSTALL_STAGING_CMDS)
- 	$($(PKG)_UNINSTALL_TARGET_CMDS)
-+	$(if $(BR2_INIT_SYSTEMD),\
-+		$($(PKG)_UNINSTALL_INIT_SYSTEMD))
-+	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-+		$($(PKG)_UNINSTALL_INIT_SYSV))
+diff --git a/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch b/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
+new file mode 100644
+index 0000000..59ce907
+--- /dev/null
++++ b/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
+@@ -0,0 +1,92 @@
++Modify the default lighttpd configuration file to have one a starting conf
++
++  * Changed the log path to /var/log and logs filenames
++  * Disable IPv6
++  * Do not setuid to a user that doesn't exist on the system
++  * Disable pdf ranges fix for Adobe Reader since it uses regex and we
++    don't always have pcre support
++  * Change the network backend to writev since linux-sendfile fails on buildroot
++
++Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
++---
++ doc/config/conf.d/access_log.conf |    2 +-
++ doc/config/lighttpd.conf          |   18 +++++++++---------
++ 2 files changed, 10 insertions(+), 10 deletions(-)
++
++Index: lighttpd-1.4.30/doc/config/lighttpd.conf
++===================================================================
++--- lighttpd-1.4.30.orig/doc/config/lighttpd.conf
+++++ lighttpd-1.4.30/doc/config/lighttpd.conf
++@@ -13,7 +13,7 @@
++ ## if you add a variable here. Add the corresponding variable in the
++ ## chroot example aswell.
++ ##
++-var.log_root    = "/var/log/lighttpd"
+++var.log_root    = "/var/log"
++ var.server_root = "/srv/www"
++ var.state_dir   = "/var/run"
++ var.home_dir    = "/var/lib/lighttpd"
++@@ -90,7 +90,7 @@
++ ##
++ ## Use IPv6?
++ ##
++-server.use-ipv6 = "enable"
+++# server.use-ipv6 = "enable"
++ 
++ ##
++ ## bind to a specific IP
++@@ -101,8 +101,8 @@
++ ## Run as a different username/groupname.
++ ## This requires root permissions during startup. 
++ ##
++-server.username  = "lighttpd"
++-server.groupname = "lighttpd"
+++# server.username  = "lighttpd"
+++# server.groupname = "lighttpd"
++ 
++ ## 
++ ## enable core files.
++@@ -138,7 +138,7 @@
++ ##
++ ## Path to the error log file
++ ##
++-server.errorlog             = log_root + "/error.log"
+++server.errorlog             = log_root + "/lighttpd-error.log"
++ 
++ ##
++ ## If you want to log to syslog you have to unset the 
++@@ -188,7 +188,7 @@
++ ## linux-sendfile - is recommended for small files.
++ ## writev         - is recommended for sending many large files
++ ##
++-server.network-backend = "linux-sendfile"
+++server.network-backend = "writev"
++ 
++ ##
++ ## As lighttpd is a single-threaded server, its main resource limit is
++@@ -311,9 +311,9 @@
++ ## disable range requests for pdf files
++ ## workaround for a bug in the Acrobat Reader plugin.
++ ##
++-$HTTP["url"] =~ "\.pdf$" {
++-  server.range-requests = "disable"
++-}
+++# $HTTP["url"] =~ "\.pdf$" {
+++#  server.range-requests = "disable"
+++# }
++ 
++ ##
++ ## url handling modules (rewrite, redirect)
++Index: lighttpd-1.4.30/doc/config/conf.d/access_log.conf
++===================================================================
++--- lighttpd-1.4.30.orig/doc/config/conf.d/access_log.conf
+++++ lighttpd-1.4.30/doc/config/conf.d/access_log.conf
++@@ -9,7 +9,7 @@
++ ##
++ ## Default access log.
++ ##
++-accesslog.filename          = log_root + "/access.log"
+++accesslog.filename          = log_root + "/lighttpd-access.log"
++ 
++ ##
++ ## The default format produces CLF compatible output.
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index b8aa310..8d1f212 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -56,6 +56,38 @@ else
+ LIGHTTPD_CONF_OPT += --without-lua
+ endif
  
- # Remove package sources
- $(BUILD_DIR)/%/.stamp_dircleaned:
-diff --git a/package/sysvinit/Config.in b/package/sysvinit/Config.in
-index 34ec391..d91c643 100644
---- a/package/sysvinit/Config.in
-+++ b/package/sysvinit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SYSVINIT
- 	bool "sysvinit"
-+	depends on BR2_INIT_SYSV
- 	help
- 	  /sbin/init - parent of all processes
- 
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 88f0718..40009bd 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -37,6 +37,34 @@ comment "udev requires a toolchain with LARGEFILE + WCHAR support"
- 
- endchoice
- 
-+choice
-+	prompt "Init system"
-+	default BR2_INIT_BUSYBOX
-+	help
-+	  To select systemd, you first need to have dbus and udev enabled
++define LIGHTTPD_INSTALL_CONFIG
++	mkdir -p $(TARGET_DIR)/etc/lighttpd
++	mkdir -p $(TARGET_DIR)/etc/lighttpd/conf.d
++	mkdir -p $(TARGET_DIR)/srv/www/htdocs
 +
-+config BR2_INIT_BUSYBOX
-+	bool "Busybox init"
-+	select BR2_PACKAGE_BUSYBOX
++	[ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
++		$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
++			$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
 +
-+config BR2_INIT_SYSV
-+	bool "Use systemV init"
-+	select BR2_PACKAGE_SYSVINIT
++	[ -f $(TARGET_DIR)/etc/lighttpd/modules.conf ] || \
++		$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
++			$(TARGET_DIR)/etc/lighttpd/modules.conf
 +
-+config BR2_INIT_SYSTEMD
-+	bool "Use systemd"
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_INET_IPV6
-+	select BR2_PACKAGE_DBUS
-+	select BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
-+	select BR2_PACKAGE_SYSTEMD
++	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf ] || \
++		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
++			$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
 +
-+comment 'systemd requires largefile, wchar and IPv6 support'
-+	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR && BR2_INET_IPV6)
++	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf ] || \
++		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
++			$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
 +
-+endchoice
++	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf ] || \
++		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
++			$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
 +
- config BR2_ROOTFS_DEVICE_TABLE
- 	string "Path to the permission tables"
- 	default "target/generic/device_table.txt"
++	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf ] || \
++		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
++			$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
++endef
++
++LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
++
+ define LIGHTTPD_UNINSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
+ 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
 -- 
 1.7.5.4
