@@ -1,41 +1,67 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 22 Mar 2012 20:36:46 -0300
-Subject: [Buildroot]
- =?utf-8?q?=5Bgit_commit=5D_libupnp=3A_move_to_version?=
- =?utf-8?q?_1=2E6=2E14_Not_OK_=3A_what_about_1=2E8=2Ex_=3F?=
-In-Reply-To: <3A0E0C9320F449BC8EB3C0BC9A1CEF40@JohanW7>
-References: <20120321130510.D12F095418@busybox.osuosl.org>
- <A6EF940D27964F9AA5B3B3B810E12908@JohanW7>
- <9b5ef20685570e5b23f65a27d03a9afb@zacarias.com.ar>
- <3A0E0C9320F449BC8EB3C0BC9A1CEF40@JohanW7>
-Message-ID: <6cbdb6e08635a9c3e9b273a7a95a2a56@zacarias.com.ar>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Fri, 23 Mar 2012 01:51:34 +0100
+Subject: [Buildroot] [PATCH 1/2] Add libcap-ng package.
+Message-ID: <1332463895-18574-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-22 17:45, Sagaert Johan wrote:
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
+---
+ package/Config.in              |    1 +
+ package/libcap-ng/Config.in    |   10 ++++++++++
+ package/libcap-ng/libcap-ng.mk |   12 ++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/libcap-ng/Config.in
+ create mode 100644 package/libcap-ng/libcap-ng.mk
 
-> Hi Gustavo
->
-> I wonder about this one : http://packages.debian.org/squeeze/libupnp4
-> I have no clue what the difference would be between the 1.6.x from
-> sourceforge and the 1.8.x from debian.
->
-> I have a tendency to think that the debian branch would be a more
-> stable one, but thats just a guess...
->
->
-> 
-> http://ftp.de.debian.org/debian/pool/main/libu/libupnp4/libupnp4_1.8.0~svn20100507.orig.tar.gz
->
-> Its the one included in the stable debian packages.
->
-> Johan
-
-Hi.
-Me neither, but there's been a new libupnp release upstream just 
-yesterday (1.6.16).
-I'll give it a spin here to see how it behaves.
-Regards.
+diff --git a/package/Config.in b/package/Config.in
+index 85583c6..ccc9b34 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -377,6 +377,7 @@ source "package/argp-standalone/Config.in"
+ source "package/boost/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libcap/Config.in"
++source "package/libcap-ng/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
+new file mode 100644
+index 0000000..d1663cd
+--- /dev/null
++++ b/package/libcap-ng/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBCAP_NG
++	bool "libcap-ng"
++	help
++	  The libcap-ng library is intended to make programming with
++	  posix capabilities much easier than the traditional libcap
++	  library. It includes utilities that can analyse all currently
++	  running applications and print out any capabilities and whether
++	  or not it has an open ended bounding set.
++
++	  http://people.redhat.com/sgrubb/libcap-ng/
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
+new file mode 100644
+index 0000000..6ea5de4
+--- /dev/null
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# libcap-ng
++#
++#############################################################
++
++LIBCAP_NG_VERSION = 0.6.6
++LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng/
++LIBCAP_NG_SOURCE = libcap-ng-$(LIBCAP_NG_VERSION).tar.gz
++LIBCAP_NG_INSTALL_STAGING = YES
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.5.4
