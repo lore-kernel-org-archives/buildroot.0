@@ -1,111 +1,208 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 23 Mar 2012 15:52:03 +0100
-Subject: [Buildroot] [PATCH] ccache: allow dynamic selection of cache
-	directory
-Message-ID: <3be175a4efe814978ed4.1332514323@beantl019720>
+Date: Fri, 23 Mar 2012 15:52:35 +0100
+Subject: [Buildroot] [PATCH] valgrind: allow selecting which tools to
+	install
+In-Reply-To: <3d26fc988e01a367dd05.1331743859@beantl019720>
+References: <3d26fc988e01a367dd05.1331743859@beantl019720>
+Message-ID: <CAAXf6LUdrwJQMiPTKLsU7Tso26DCVwxN4-hGvv5ePMwjhOkoxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The existing ccache infrastructure set the cache directory hardcoded in the
-ccache binary. As this directory was set to ~/.buildroot-ccache, the cache
-is not necessarily local (e.g. in corporate environments the home directories
-may be mounted over NFS.)
-Previous versions of buildroot did allow to set the cache directory, but this
-was also hardcoded (so you had to rebuild ccache to change it), plus that
-support was removed.
-See http://lists.busybox.net/pipermail/buildroot/2011-July/044511.html for
-a discussion on this.
+On Wed, Mar 14, 2012 at 5:50 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> The full valgrind installation takes more than 20 MB, while one typically does
+> not use all of its tools. This patch adds extra config options to select which
+> tools to install.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+> ?package/valgrind/Config.in ? | ?70 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> ?package/valgrind/valgrind.mk | ?95 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> ?2 files changed, 165 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+> --- a/package/valgrind/Config.in
+> +++ b/package/valgrind/Config.in
+> @@ -6,3 +6,73 @@ config BR2_PACKAGE_VALGRIND
+> ? ? ? ? ?Tool for debugging and profiling Linux programs.
+>
+> ? ? ? ? ?http://valgrind.kde.org/
+> +
+> +if BR2_PACKAGE_VALGRIND
+> +
+> +config BR2_PACKAGE_VALGRIND_MEMCHECK
+> + ? ? ? bool "Memcheck: a memory error detector"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Memcheck tool
+> +
+> +config BR2_PACKAGE_VALGRIND_CACHEGRIND
+> + ? ? ? bool "Cachegrind: a cache and branch-prediction profiler"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Cachegrind tool
+> +
+> +config BR2_PACKAGE_VALGRIND_CALLGRIND
+> + ? ? ? bool "Callgrind: a call-graph generating cache and branch prediction profiler"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Callgrind tool
+> +
+> +config BR2_PACKAGE_VALGRIND_HELGRIND
+> + ? ? ? bool "Helgrind: a thread error detector"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Helgrind tool
+> +
+> +config BR2_PACKAGE_VALGRIND_DRD
+> + ? ? ? bool "DRD: a thread error detector"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the DRD tool
+> +
+> +config BR2_PACKAGE_VALGRIND_MASSIF
+> + ? ? ? bool "Massif: a heap profiler"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Massif tool
+> +
+> +config BR2_PACKAGE_VALGRIND_DHAT
+> + ? ? ? bool "DHAT: a dynamic heap analysis tool"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the DHAT tool
+> +
+> +config BR2_PACKAGE_VALGRIND_PTRCHECK
+> + ? ? ? bool "Ptrcheck: an experimental head, stack and global array overrun detector"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Ptrcheck tool
+> +
+> +config BR2_PACKAGE_VALGRIND_BBV
+> + ? ? ? bool "BBV: an experimental basic block vector generation tool"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the BBV tool
+> +
+> +config BR2_PACKAGE_VALGRIND_LACKEY
+> + ? ? ? bool "Lackey: an example tool"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Lackey tool
+> +
+> +config BR2_PACKAGE_VALGRIND_NULGRIND
+> + ? ? ? bool "Nulgrind: the minimal Valgrind tool"
+> + ? ? ? default y
+> + ? ? ? help
+> + ? ? ? ? This option allows to install the Nulgrind tool
+> +
+> +endif
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -25,4 +25,99 @@ endef
+>
+> ?VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
+>
+> +ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
+> +define VALGRIND_REMOVE_MEMCHECK
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_CACHEGRIND),)
+> +define VALGRIND_REMOVE_CACHEGRIND
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*cachegrind*
+> + ? ? ? for i in cg_annotate cg_diff cg_merge; do \
+> + ? ? ? ? ? ? ? rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+> + ? ? ? done
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CACHEGRIND
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_CALLGRIND),)
+> +define VALGRIND_REMOVE_CALLGRIND
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*callgrind*
+> + ? ? ? for i in callgrind_annotate callgrind_control ; do \
+> + ? ? ? ? ? ? ? rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+> + ? ? ? done
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CALLGRIND
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_HELGRIND),)
+> +define VALGRIND_REMOVE_HELGRIND
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*helgrind*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_HELGRIND
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_DRD),)
+> +define VALGRIND_REMOVE_DRD
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*drd*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DRD
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_MASSIF),)
+> +define VALGRIND_REMOVE_MASSIF
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*massif*
+> + ? ? ? rm -f $(TARGET_DIR)/usr/bin/ms_script
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MASSIF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_DHAT),)
+> +define VALGRIND_REMOVE_DHAT
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*dhat*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_PTRCHECK),)
+> +define VALGRIND_REMOVE_PTRCHECK
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*ptrcheck*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_PTRCHECK
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
+> +define VALGRIND_REMOVE_BBV
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*bbv*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_BBV
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_LACKEY),)
+> +define VALGRIND_REMOVE_LACKEY
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*lackey*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_LACKEY
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_VALGRIND_NULGRIND),)
+> +define VALGRIND_REMOVE_NULGRIND
+> + ? ? ? rm -f $(TARGET_DIR)/usr/lib/valgrind/*none*
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_NULGRIND
+> +endif
+> +
+> ?$(eval $(call AUTOTARGETS))
 
-This patch introduces a ccache wrapper script that uses a shell variable
-(exported from the Makefile and coming from .config) to set the right
-CCACHE_DIR.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
-Note: I'm not sure what to do with the recently added COMPILERCHECK. Should
-it remain hardcoded, or also use the wrapper script for uniformity?
-
-
- Config.in                |   7 +++++++
- Makefile                 |   6 ++++--
- package/ccache/ccache.mk |  21 ++++++++++++++-------
- 3 files changed, 25 insertions(+), 9 deletions(-)
-
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -198,6 +198,13 @@ config BR2_CCACHE
- 	  ccache cache by removing the $HOME/.buildroot-ccache
- 	  directory.
- 
-+config BR2_CCACHE_DIR
-+	string "Compiler cache location"
-+	depends on BR2_CCACHE
-+	default "$(HOME)/.buildroot-ccache"
-+	help
-+	  Where ccache should store cached files.
-+
- config BR2_DEPRECATED
- 	bool "Show packages that are deprecated or obsolete"
- 	help
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -285,8 +285,10 @@ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
- TARGET_SKELETON=$(TOPDIR)/fs/skeleton
- 
- ifeq ($(BR2_CCACHE),y)
--CCACHE:=$(HOST_DIR)/usr/bin/ccache
--CCACHE_CACHE_DIR=$(HOME)/.buildroot-ccache
-+CCACHE:=$(HOST_DIR)/usr/bin/ccache-wrapper
-+CCACHE_BIN:=$(HOST_DIR)/usr/bin/ccache
-+CCACHE_CACHE_DIR:=$(call qstrip,$(BR2_CCACHE_DIR))
-+export CCACHE_CACHE_DIR
- HOSTCC  := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
- endif
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -25,23 +25,30 @@ HOST_CCACHE_CONF_ENV = \
- # has zero dependency besides the C library.
- HOST_CCACHE_CONF_OPT += ccache_cv_zlib_1_2_3=no
- 
--# We directly hardcode configuration into the binary, as it is much
-+# We directly hardcode some configuration into the binary, as it is much
- # easier to handle than passing an environment variable. Our
- # configuration is:
--#  - the cache location
- #  - the fact that ccache shouldn't use the compiler binary mtime to
--#  - detect a change in the compiler, because in the context of
--#  - Buildroot, that completely defeats the purpose of ccache. Of
--#  - course, that leaves the user responsible for purging its cache
--#  - when the compiler changes.
-+#    detect a change in the compiler, because in the context of
-+#    Buildroot, that completely defeats the purpose of ccache. Of
-+#    course, that leaves the user responsible for purging its cache
-+#    when the compiler changes.
- define HOST_CCACHE_FIX_CCACHE_DIR
--	sed -i 's,getenv("CCACHE_DIR"),"$(CCACHE_CACHE_DIR)",' $(@D)/ccache.c
- 	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
- endef
- 
- HOST_CCACHE_POST_CONFIGURE_HOOKS += \
- 	HOST_CCACHE_FIX_CCACHE_DIR
- 
-+define HOST_CCACHE_CREATE_WRAPPER
-+	echo "#!/bin/sh" > $(CCACHE)
-+	echo 'CCACHE_DIR=$$CCACHE_CACHE_DIR $(CCACHE_BIN) "$$@"' >> $(CCACHE)
-+	chmod +x $(CCACHE)
-+endef
-+
-+HOST_CCACHE_POST_INSTALL_HOOKS += \
-+	HOST_CCACHE_CREATE_WRAPPER
-+
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
- 
+bump
