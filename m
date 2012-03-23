@@ -1,34 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 Mar 2012 10:04:48 +0100
-Subject: [Buildroot] [PATCH 1/5] Add the systemd package
-In-Reply-To: <4F6C3993.2080306@free-electrons.com> (Maxime Ripard's message of
- "Fri, 23 Mar 2012 09:51:31 +0100")
-References: <cover.1332408273.git.maxime.ripard@free-electrons.com>
- <cover.1332408273.git.maxime.ripard@free-electrons.com>
- <13349984bf3bf708b18546d37b0761a4890c7bbf.1332408273.git.maxime.ripard@free-electrons.com>
- <87vclw1ibd.fsf@macbook.be.48ers.dk>
- <4F6C3993.2080306@free-electrons.com>
-Message-ID: <87bonnadsf.fsf@macbook.be.48ers.dk>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Fri, 23 Mar 2012 10:06:40 +0100
+Subject: [Buildroot] [PATCH 1/2] New package: socketcand
+In-Reply-To: <20120323095538.5edb8eea@skate>
+References: <1332428460-28459-1-git-send-email-yegorslists@googlemail.com>
+ <87ehsk1c2d.fsf@macbook.be.48ers.dk> <20120323095538.5edb8eea@skate>
+Message-ID: <4F6C3D20.8050304@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+Am 23.03.2012 09:55, schrieb Thomas Petazzoni:
+> Le Thu, 22 Mar 2012 23:54:34 +0100,
+> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+> 
+>>>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com>
+>>>>>>> writes:
+>>
+>>  yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>  yegorslists> Signed-off-by: Yegor Yefremov
+>>  yegorslists> <yegorslists@googlemail.com>
+>>
+>> Committed, thanks.
+> 
+> There are apparently build problems with this package:
+> http://autobuild.buildroot.org/results/d6a79808eae008611a3ed12a0b7d9901a7fc159f/build-end.log
+> 
+> The host system I use is an old Debian Sarge, so the coreutils
+> (including cp) might be quite old. But I think it's a good test to see
+> if we can correctly build on old enterprise distros such as RHEL that
+> some people are forced to use in companies (and I feel sorry for them).
 
-Hi,
- >> As you changed the depend on, this should also say something like:
- >> 
- >> (depends on /dev management with udev)
- >> 
- >> and depend on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+What do you suggest?
+I found following solution here:
 
- Maxime> Of course.
- Maxime> I forgot LARGEFILE and WCHAR as well..
+http://superuser.com/questions/140708/ubuntu-equivalent-of-unix-command-cp-n
 
-That's not needed as BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV already
-depends on those.
+if [ ! -e dest ]; then
+    cp -f src dest
+fi
 
--- 
-Bye, Peter Korsgaard
+Yegor
