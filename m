@@ -1,32 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 23 Mar 2012 10:20:58 +0100
-Subject: [Buildroot] ofono package
-In-Reply-To: <20120323101100.5fa94c86@skate>
-References: <CAAfyv35Rq_ad_obvHC2QZdhBvebLqpsRO7G0B4qpkGZuEYamuA@mail.gmail.com>
- <CAGm1_ks7QkKyFS7wWPMi3ytu4d2QU=k=gVEcnq6ENoA-CM3sKQ@mail.gmail.com>
- <20120323101100.5fa94c86@skate>
-Message-ID: <20120323102058.3a159cc4@skate>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Fri, 23 Mar 2012 10:26:17 +0100
+Subject: [Buildroot] [pull request v3] Pull request for branch
+	for-2012.05/systemd
+Message-ID: <cover.1332494567.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 23 Mar 2012 10:11:00 +0100,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+Changes since v2:
+  * Modified the patches to have description and signed-off-by tags
+  * Change dependencies of systemd package to add IPv6
 
-> If this bootstrap stuff is used to regenerate the configure script and
-> Makefile.am, then use OFONO_AUTORECONF=YES.
+The following changes since commit 5b84ec26c8981c6ab0e119b455e807152ded449a:
 
-Looking at the package source code, setting OFONO_AUTORECONF=YES should
-be sufficient. Just remove your OFONO_CONFIGURE_CMDS and see if it
-works.
+  libconfig: bump to 1.4.8 and cleanup (2012-03-21 23:08:25 +0100)
 
-Regards,
+are available in the git repository at:
+  git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.05/systemd
 
-Thomas
+Maxime Ripard (5):
+      Add the systemd package
+      Enable cgroups in Linux if we use systemd
+      Rework of the init system
+      Fix installation for the lighttpd package
+      Add systemd unit for lighttpd
+
+ linux/linux.mk                                     |    2 +
+ package/Config.in                                  |    1 +
+ package/Makefile.package.in                        |    8 ++
+ package/dbus/dbus.mk                               |    4 +
+ .../lighttpd-1.4.30-Fix-default-config-file.patch  |   92 ++++++++++++++++++++
+ package/lighttpd/lighttpd.mk                       |   43 +++++++++
+ package/lighttpd/lighttpd.service                  |   10 ++
+ package/systemd/Config.in                          |   20 ++++
+ package/systemd/systemd-37-fix-getty-unit.patch    |   34 +++++++
+ package/systemd/systemd.mk                         |   62 +++++++++++++
+ package/sysvinit/Config.in                         |    1 +
+ package/udev/udev.mk                               |    4 +
+ target/generic/Config.in                           |   28 ++++++
+ 13 files changed, 309 insertions(+), 0 deletions(-)
+ create mode 100644 package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
+ create mode 100644 package/lighttpd/lighttpd.service
+ create mode 100644 package/systemd/Config.in
+ create mode 100644 package/systemd/systemd-37-fix-getty-unit.patch
+ create mode 100644 package/systemd/systemd.mk
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Maxime Ripard
