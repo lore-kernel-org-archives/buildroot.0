@@ -1,46 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 23 Mar 2012 09:42:52 -0300
-Subject: [Buildroot]
- =?utf-8?q?=5Bgit_commit=5D_libupnp=3A_move_to_version?=
- =?utf-8?q?_1=2E6=2E14_Not_OK_=3A_what_about_1=2E8=2Ex_=3F?=
-In-Reply-To: <36443DEF86594D9B9A729F56B7FA7973@JohanW7>
-References: <20120321130510.D12F095418@busybox.osuosl.org>
- <A6EF940D27964F9AA5B3B3B810E12908@JohanW7>
- <9b5ef20685570e5b23f65a27d03a9afb@zacarias.com.ar>
- <3A0E0C9320F449BC8EB3C0BC9A1CEF40@JohanW7>
- <6cbdb6e08635a9c3e9b273a7a95a2a56@zacarias.com.ar>
- <36443DEF86594D9B9A729F56B7FA7973@JohanW7>
-Message-ID: <0180fc4aa250d447b1da60b4cecb5d88@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 23 Mar 2012 15:37:34 +0100
+Subject: [Buildroot] [PATCH v3] Add dtc (device tree compiler) as host tool
+Message-ID: <0e9c281db61ec6c47a7a.1332513454@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-23 09:38, Sagaert Johan wrote:
+The dtc is taken from the Linux kernel sources and simply copied to the host
+directory.
+Having dtc as a separate host tool can be useful for users that have a custom
+boot scenario where the device tree is not embedded in the kernel.
 
-> Hi Gustavo
->
-> I have built the 1.8 branch from debian i rebuild my app and it still 
-> works.
-> The 1.6.14 rease however breaks my app.
->
-> UpnpRegisterRootDevice,and UpnpRegisterRootDevice2 (using URL) both
-> return UPNP_E_BAD_HTTPMSG.
->
-> The upnp httpparser seems to disagree on the http headers sent by
-> httpd (busybox 1.19.4).
-> (parser_append returns PARSE_FAILURE.)
-> I did not test another http server.
->
-> So i stay with the debian release (1.8.x).
->
-> Johan
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Hi Johan.
-Just tested 1.6.16 and it's not playing too well with ushare either.
-Can you send your package for Debian's 1.8.x so i can test it?
-I'd rather avoid a fork (which it probably is) but it seems original 
-upstream isn't working that great even though it's still doing new 
-releases.
-Regards.
+---
+v2: remove old parameters to GENTARGETS call, sorry.
+v3: rename Config.in.host and depend on Linux (comments Arnout)
+
+ package/Config.in.host     |   1 +
+ package/dtc/Config.in.host |   8 ++++++++
+ package/dtc/dtc.mk         |  14 ++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in.host b/package/Config.in.host
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,5 +1,6 @@
+ menu "Host utilities"
+ 
++source "package/dtc/Config.in.host"
+ source "package/lpc3250loader/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+diff --git a/package/dtc/Config.in.host b/package/dtc/Config.in.host
+new file mode 100644
+--- /dev/null
++++ b/package/dtc/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_DTC
++	bool "Device Tree Compiler (dtc)"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Device Tree Compiler for flattened-device trees.
++
++comment "The dtc device tree compiler depends on the Linux kernel sources."
++    depends on !BR2_LINUX_KERNEL
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+new file mode 100644
+--- /dev/null
++++ b/package/dtc/dtc.mk
+@@ -0,0 +1,14 @@
++#############################################################
++#
++# dtc
++#
++#############################################################
++
++HOST_DTC_SOURCE =
++HOST_DTC_DEPENDENCIES = linux
++
++define HOST_DTC_INSTALL_CMDS
++    $(INSTALL) -D -m 0755 $(LINUX_DIR)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc
++endef
++
++$(eval $(call GENTARGETS,host))
