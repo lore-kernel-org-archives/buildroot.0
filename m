@@ -1,68 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 23 Mar 2012 15:37:34 +0100
-Subject: [Buildroot] [PATCH v3] Add dtc (device tree compiler) as host tool
-Message-ID: <0e9c281db61ec6c47a7a.1332513454@beantl019720>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 Mar 2012 15:51:03 +0100
+Subject: [Buildroot] [PATCH v3] Add dtc (device tree compiler) as host
+ tool
+In-Reply-To: <0e9c281db61ec6c47a7a.1332513454@beantl019720>
+References: <0e9c281db61ec6c47a7a.1332513454@beantl019720>
+Message-ID: <20120323155103.54f93fa3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dtc is taken from the Linux kernel sources and simply copied to the host
-directory.
-Having dtc as a separate host tool can be useful for users that have a custom
-boot scenario where the device tree is not embedded in the kernel.
+Le Fri, 23 Mar 2012 15:37:34 +0100,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> +HOST_DTC_SOURCE =
+> +HOST_DTC_DEPENDENCIES = linux
+> +
+> +define HOST_DTC_INSTALL_CMDS
+> +    $(INSTALL) -D -m 0755 $(LINUX_DIR)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc
+> +endef
 
----
-v2: remove old parameters to GENTARGETS call, sorry.
-v3: rename Config.in.host and depend on Linux (comments Arnout)
+The problem is that this DTC binary is only built if CONFIG_DTC is
+selected in the kernel configuration. So if the selected kernel does
+not have this option enabled, the installation step of this package is
+going to fail.
 
- package/Config.in.host     |   1 +
- package/dtc/Config.in.host |   8 ++++++++
- package/dtc/dtc.mk         |  14 ++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
+I am not sure what to do here. Just let the user figure this out? Check
+the kernel .config to see if CONFIG_DTC is enabled, and if it isn't
+while this package is selected, error out with a nice explanation for
+the user? Simply ignore the installation if the dtc binary was not
+built?
 
-diff --git a/package/Config.in.host b/package/Config.in.host
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+source "package/dtc/Config.in.host"
- source "package/lpc3250loader/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
-diff --git a/package/dtc/Config.in.host b/package/dtc/Config.in.host
-new file mode 100644
---- /dev/null
-+++ b/package/dtc/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_DTC
-+	bool "Device Tree Compiler (dtc)"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Device Tree Compiler for flattened-device trees.
-+
-+comment "The dtc device tree compiler depends on the Linux kernel sources."
-+    depends on !BR2_LINUX_KERNEL
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-new file mode 100644
---- /dev/null
-+++ b/package/dtc/dtc.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# dtc
-+#
-+#############################################################
-+
-+HOST_DTC_SOURCE =
-+HOST_DTC_DEPENDENCIES = linux
-+
-+define HOST_DTC_INSTALL_CMDS
-+    $(INSTALL) -D -m 0755 $(LINUX_DIR)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc
-+endef
-+
-+$(eval $(call GENTARGETS,host))
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
