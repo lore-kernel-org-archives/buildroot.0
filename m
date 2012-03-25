@@ -1,100 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 25 Mar 2012 20:51:17 +0200
-Subject: [Buildroot] [PATCH] valgrind: allow selecting which tools to
-	install
-In-Reply-To: <3d26fc988e01a367dd05.1331743859@beantl019720>
-References: <3d26fc988e01a367dd05.1331743859@beantl019720>
-Message-ID: <201203252051.17560.arnout@mind.be>
+Date: Sun, 25 Mar 2012 20:55:04 +0200
+Subject: [Buildroot] [PATCH] New package: zxing
+In-Reply-To: <1332205009-31559-1-git-send-email-fhunleth@troodon-software.com>
+References: <1332205009-31559-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <201203252055.04278.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 14 March 2012 17:50:59 Thomas De Schampheleire wrote:
-> The full valgrind installation takes more than 20 MB, while one typically does
-> not use all of its tools. This patch adds extra config options to select which
-> tools to install.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
- Strange that this patch didn't get any feedback before...  I guess we
-all trust Thomas enough to make good patches :-)
-
- I'm a bit at loss as to what to do now.  I believe this patch is useful
-and good enough to go in as it is.  So:
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- On the other hand, I do have some ideas how to make it even better.
-But if I write these down, I'm afraid it will slow down the inclusion
-of a useful and well-implemented feature...  Well, I'll take the risk:
+On Tuesday 20 March 2012 01:56:49 Frank Hunleth wrote:
 
 [snip]
-> +config BR2_PACKAGE_VALGRIND_MEMCHECK
-> +	bool "Memcheck: a memory error detector"
-> +	default y
-> +	help
-> +	  This option allows to install the Memcheck tool
-> +
-> +config BR2_PACKAGE_VALGRIND_CACHEGRIND
-> +	bool "Cachegrind: a cache and branch-prediction profiler"
-> +	default y
-> +	help
-> +	  This option allows to install the Cachegrind tool
+> +diff --git a/cpp/SConscript b/cpp/SConscript
+> +index 51c191d..584ae17 100644
+> +--- a/cpp/SConscript
+> ++++ b/cpp/SConscript
+> +@@ -8,6 +8,12 @@ vars = Variables()
+> + vars.Add(BoolVariable('DEBUG', 'Set to disable optimizations', 1))
+> + vars.Add(BoolVariable('PIC', 'Set to 1 for to always generate PIC code', 0))
+> + env = Environment(variables = vars)
+> ++
+> ++TARGET_CROSS = ARGUMENTS.get('TARGET_CROSS', '')
+> ++env.Replace(CXX = TARGET_CROSS + 'gcc')
+> ++env.Replace(AR = TARGET_CROSS + 'ar')
+> ++env.Replace(RANLIB = TARGET_CROSS + 'ranlib')
 
- Even though this breaks existing configurations, I believe that all
-tools (with the possible exception of memcheck) should default to
-no.  For existing configurations, that's what most people will want
-anyway.  And for new configurations, I think it's usually just one,
-maybe two tools that are needed, so it's a lot of work to disable
-all of them.
+ It's a pity that scons doesn't provide a way to put things in the 
+environment from the command line.  Well, probably it does provide
+a way to do that but I couldn't find it either :-)
 
-[snip]
-> +config BR2_PACKAGE_VALGRIND_PTRCHECK
-> +	bool "Ptrcheck: an experimental head, stack and global array overrun detector"
-> +	default y
-> +	help
-> +	  This option allows to install the Ptrcheck tool
-
- At the very least, the experimental ones should default to no.
-
-[snip]
-> +config BR2_PACKAGE_VALGRIND_NULGRIND
-> +	bool "Nulgrind: the minimal Valgrind tool"
-> +	default y
-> +	help
-> +	  This option allows to install the Nulgrind tool
-
- And this one definitely should default to no.
-
-[snip]
-> +ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
-> +define VALGRIND_REMOVE_MEMCHECK
-> +	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
-> +endef
-> +
-> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
-> +endif
-
- It's probably just personal preference, but I like to see:
-
-define VALGRIND_REMOVE_MEMCHECK
-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
-endef
-
-VALGRIND_POST_INSTALL_TARGET_HOOKS += $(if $(BR2_PACKAGE_VALGRIND_MEMCHECK),,VALGRIND_REMOVE_MEMCHECK)
-
-(although the double comma isn't making things very clear either...)
-
-
- It would actually be better to not build the unneeded tools at all, by 
-setting
-VALGRIND_MAKE_OPT = TOOLS="..." EXP_TOOLS="..."
-
- Unfortunately, Makefile.autotools.in doesn't use PKG_MAKE_OPT for the 
-install targets (which is probably a bug...), so that won't work.
-
-[snip]
+ Would it help to use buildroot's host-scons rather than the
+packaged scons?
 
  Regards,
  Arnout
