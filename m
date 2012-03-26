@@ -1,32 +1,65 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun, 25 Mar 2012 20:27:13 -0400
-Subject: [Buildroot] [PATCH] New package: zxing
-In-Reply-To: <201203252300.45593.arnout@mind.be>
-References: <1332205009-31559-1-git-send-email-fhunleth@troodon-software.com>
- <201203252055.04278.arnout@mind.be>
- <CA+-urNQG9au7Y7MThu0ibXHiCkCU2Uio+vnBC3K9LXCjXtjNTw@mail.gmail.com>
- <201203252300.45593.arnout@mind.be>
-Message-ID: <CA+-urNRehQs7SD3wRs4Z=OhJeb7u7Lo+RKWHV=sxzEZGHvwBUw@mail.gmail.com>
+Date: Sun, 25 Mar 2012 23:52:06 -0400
+Subject: [Buildroot] [PATCH] New package: libdmtx
+Message-ID: <1332733926-32466-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 25, 2012 at 5:00 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> [snip]
->
-> ?I think the packaged version is only there because scons is usually not
-> installed on your system and they don't want to have external dependencies.
-> Only one way to find out: try it! :-)
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/Config.in          |    1 +
+ package/libdmtx/Config.in  |    7 +++++++
+ package/libdmtx/libdmtx.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/libdmtx/Config.in
+ create mode 100644 package/libdmtx/libdmtx.mk
 
-Hint taken. :)
-
-The host-scons version works just as well as the packaged scons. I
-just sent a v2 patch with the host-scons change. Certainly, the
-zxing.mk file looks better now that it doesn't have direct the python
-dependency. Speaking of which, I noticed that scons.mk does not depend
-on host-python and just uses the local system's version of python. Is
-that ok?
-
-Frank
+diff --git a/package/Config.in b/package/Config.in
+index b394f18..6df27a1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -305,6 +305,7 @@ source "package/gtk2-themes/Config.in"
+ source "package/imlib2/Config.in"
+ source "package/jpeg/Config.in"
+ source "package/libart/Config.in"
++source "package/libdmtx/Config.in"
+ source "package/libdrm/Config.in"
+ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+diff --git a/package/libdmtx/Config.in b/package/libdmtx/Config.in
+new file mode 100644
+index 0000000..db4187f
+--- /dev/null
++++ b/package/libdmtx/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBDMTX
++	bool "libdmtx"
++	help
++	  libdmtx is a software library that enables programs to read and write
++	  Data Matrix barcodes of the modern ECC200 variety.
++
++	  http://www.libdmtx.org/
+diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
+new file mode 100644
+index 0000000..3f7dcf2
+--- /dev/null
++++ b/package/libdmtx/libdmtx.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# libdmtx
++#
++#############################################################
++
++LIBDMTX_VERSION = 0.7.4
++LIBDMTX_SOURCE = libdmtx-$(LIBDMTX_VERSION).tar.gz
++LIBDMTX_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libdmtx
++LIBDMTX_INSTALL_STAGING = YES
++LIBDMTX_INSTALL_TARGET = YES
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.0.4
