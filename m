@@ -1,40 +1,135 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 Mar 2012 00:01:53 +0200
-Subject: [Buildroot] [PATCH] package/giblib: fix breakage
-In-Reply-To: <1331852049-12761-1-git-send-email-yann.morin.1998@free.fr>
-References: <1331852049-12761-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <201203260001.53847.yann.morin.1998@free.fr>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 25 Mar 2012 20:15:40 -0400
+Subject: [Buildroot] [PATCH v2] New package: zxing
+Message-ID: <1332720940-28373-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/Config.in                                  |    1 +
+ package/zxing/Config.in                            |   14 +++++++
+ package/zxing/zxing-2.0-crosscompile-support.patch |   30 +++++++++++++++
+ package/zxing/zxing.mk                             |   38 ++++++++++++++++++++
+ 4 files changed, 83 insertions(+), 0 deletions(-)
+ create mode 100644 package/zxing/Config.in
+ create mode 100644 package/zxing/zxing-2.0-crosscompile-support.patch
+ create mode 100644 package/zxing/zxing.mk
 
-On Thursday 15 March 2012 23:54:09 Yann E. MORIN wrote:
-> Fix two things in the giblib package:
-> 
-> 1- fix prefix breakage
->    - s/STAGING/STAGING_DIR/ (Thomas)
->    - prefix is .../usr, not .../usr/lib or .../usr/bin
-> 
-> 2- fix the configure.ac/Makefile.am breakage
->    - imlib2 sets IMLIB2_(LIBS|CFLAGS), not IMLIB_(LIBS|CFLAGS)
->    - autoreconf the package, install missing files
->      Note that both configure.ac and configure.in are present in the
->      package, so both are fixed, although only configure.ac is used
->      (configure.in is the legacy name).
-
-Ping? Any comment?
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index b394f18..8bcf519 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -322,6 +322,7 @@ source "package/pango/Config.in"
+ source "package/pixman/Config.in"
+ source "package/tiff/Config.in"
+ source "package/webkit/Config.in"
++source "package/zxing/Config.in"
+ endmenu
+ 
+ menu "Hardware handling"
+diff --git a/package/zxing/Config.in b/package/zxing/Config.in
+new file mode 100644
+index 0000000..27cdf09
+--- /dev/null
++++ b/package/zxing/Config.in
+@@ -0,0 +1,14 @@
++comment "zxing requires a toolchain with C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++config BR2_PACKAGE_ZXING
++	bool "zxing"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	help
++	  ZXing (pronounced "zebra crossing") is an open-source, 
++	  multi-format 1D/2D barcode image processing library 
++	  implemented in Java, with ports to other languages. This
++	  compiles the C++ port.
++
++	  http://code.google.com/p/zxing/
+diff --git a/package/zxing/zxing-2.0-crosscompile-support.patch b/package/zxing/zxing-2.0-crosscompile-support.patch
+new file mode 100644
+index 0000000..0e863fb
+--- /dev/null
++++ b/package/zxing/zxing-2.0-crosscompile-support.patch
+@@ -0,0 +1,30 @@
++From 20826bfedafcdcddd1dc441c71ace9106bb7f3d9 Mon Sep 17 00:00:00 2001
++From: Frank Hunleth <fhunleth@troodon-software.com>
++Date: Sun, 18 Mar 2012 19:28:13 -0400
++Subject: [PATCH] SConscript: Add commandline parameter to specify crosscompile toolchain
++
++Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
++---
++ cpp/SConscript |    6 ++++++
++ 1 files changed, 6 insertions(+), 0 deletions(-)
++
++diff --git a/cpp/SConscript b/cpp/SConscript
++index 51c191d..584ae17 100644
++--- a/cpp/SConscript
+++++ b/cpp/SConscript
++@@ -8,6 +8,12 @@ vars = Variables()
++ vars.Add(BoolVariable('DEBUG', 'Set to disable optimizations', 1))
++ vars.Add(BoolVariable('PIC', 'Set to 1 for to always generate PIC code', 0))
++ env = Environment(variables = vars)
+++
+++TARGET_CROSS = ARGUMENTS.get('TARGET_CROSS', '')
+++env.Replace(CXX = TARGET_CROSS + 'gcc')
+++env.Replace(AR = TARGET_CROSS + 'ar')
+++env.Replace(RANLIB = TARGET_CROSS + 'ranlib')
+++
++ # env.Replace(CXX = "clang++") 
++ 
++ debug = env['DEBUG']
++-- 
++1.7.0.4
++
+diff --git a/package/zxing/zxing.mk b/package/zxing/zxing.mk
+new file mode 100644
+index 0000000..3a5b635
+--- /dev/null
++++ b/package/zxing/zxing.mk
+@@ -0,0 +1,38 @@
++#############################################################
++#
++# zxing
++#
++#############################################################
++ZXING_VERSION = 2.0
++ZXING_SITE = http://zxing.googlecode.com/files
++ZXING_SOURCE = ZXing-$(ZXING_VERSION).zip
++ZXING_DEPENDENCIES = host-scons
++ZXING_INSTALL_STAGING = YES
++ZXING_INSTALL_TARGET = NO
++
++ifneq ($(BR2_ENABLE_LOCALE),y)
++ZXING_DEPENDENCIES += libiconv
++endif
++
++define ZXING_EXTRACT_CMDS
++	unzip -d $(BUILD_DIR) $(DL_DIR)/$(ZXING_SOURCE)
++endef
++
++define ZXING_BUILD_CMDS
++	(cd $(@D)/cpp; \
++		$(HOST_DIR)/usr/bin/scons TARGET_CROSS=$(TARGET_CROSS) DEBUG=0 lib)
++endef
++
++define ZXING_INSTALL_STAGING_CMDS
++	(cd $(@D)/cpp/build/core/src; \
++		find . -name "*.h" -exec $(INSTALL) -D "{}" "$(STAGING_DIR)/usr/include/{}" ";")
++	$(INSTALL) -D -m 0644 $(@D)/cpp/build/libzxing.a \
++		$(STAGING_DIR)/usr/lib/libzxing.a
++endef
++
++define ZXING_UNINSTALL_STAGING_CMDS
++	rm -f $(STAGING_DIR)/usr/lib/libzxing.a
++	rm -fr $(STAGING_DIR)/usr/include/zxing
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.0.4
