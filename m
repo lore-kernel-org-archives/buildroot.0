@@ -1,65 +1,55 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun, 25 Mar 2012 23:52:06 -0400
-Subject: [Buildroot] [PATCH] New package: libdmtx
-Message-ID: <1332733926-32466-1-git-send-email-fhunleth@troodon-software.com>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Mon, 26 Mar 2012 08:08:38 +0200
+Subject: [Buildroot] [PATCH 2/2] Add bluez package.
+In-Reply-To: <201203252229.44415.arnout@mind.be>
+References: <1332463895-18574-1-git-send-email-marek.belisko@open-nandra.com>
+ <CAGm1_ktDHM+7Z3TPJOWqi6qXKO15KNnzgFQH6=e-c4+qDUhmqw@mail.gmail.com>
+ <CAAfyv35GO71OPa_JhuED+zSgSv+UOjZT258ipPXm-z7VDPnxRw@mail.gmail.com>
+ <201203252229.44415.arnout@mind.be>
+Message-ID: <CAAfyv36u3idaA01j79En-vEqV65hkBN1C=4mBXJVv5nz6jhoKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/Config.in          |    1 +
- package/libdmtx/Config.in  |    7 +++++++
- package/libdmtx/libdmtx.mk |   13 +++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/libdmtx/Config.in
- create mode 100644 package/libdmtx/libdmtx.mk
+On Sun, Mar 25, 2012 at 10:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Friday 23 March 2012 09:28:37 Belisko Marek wrote:
+>> On Fri, Mar 23, 2012 at 8:57 AM, Yegor Yefremov
+>> <yegorslists@googlemail.com> wrote:
+>> > We already have bluez package. package/bluez_utils/bluez_utils.mk and
+>> > libbluetooth will be installed in staging. Am I missing something?
+>> If wanna use just library you can save some space to not compile whole utils.
+>
+> ?But your not doing that AFAICS. ?You're using exactly the same source tar
+> as bluez_utils, and you don't have any config option to disable the utils.
+Arnout you're completely right. I messed it around. Sorry. Will stick
+to bluez_utils.
+>
+> ?Regards,
+> ?Arnout
+>
+>
+> --
+> Arnout Vandecappelle ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? arnout at mind be
+> Senior Embedded Software Architect ? ? ? ? ? ? ? ? +32-16-286540
+> Essensium/Mind ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium ? ? ? ? ? ? ? ?BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint: ?7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
 
-diff --git a/package/Config.in b/package/Config.in
-index b394f18..6df27a1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -305,6 +305,7 @@ source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
- source "package/libart/Config.in"
-+source "package/libdmtx/Config.in"
- source "package/libdrm/Config.in"
- source "package/libexif/Config.in"
- source "package/libgail/Config.in"
-diff --git a/package/libdmtx/Config.in b/package/libdmtx/Config.in
-new file mode 100644
-index 0000000..db4187f
---- /dev/null
-+++ b/package/libdmtx/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBDMTX
-+	bool "libdmtx"
-+	help
-+	  libdmtx is a software library that enables programs to read and write
-+	  Data Matrix barcodes of the modern ECC200 variety.
-+
-+	  http://www.libdmtx.org/
-diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-new file mode 100644
-index 0000000..3f7dcf2
---- /dev/null
-+++ b/package/libdmtx/libdmtx.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# libdmtx
-+#
-+#############################################################
-+
-+LIBDMTX_VERSION = 0.7.4
-+LIBDMTX_SOURCE = libdmtx-$(LIBDMTX_VERSION).tar.gz
-+LIBDMTX_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libdmtx
-+LIBDMTX_INSTALL_STAGING = YES
-+LIBDMTX_INSTALL_TARGET = YES
-+
-+$(eval $(call AUTOTARGETS))
+regards,
+
+marek
+
 -- 
-1.7.0.4
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
