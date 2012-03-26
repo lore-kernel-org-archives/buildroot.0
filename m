@@ -1,103 +1,80 @@
-From: Belisko Marek <marek.belisko@gmail.com>
-Date: Mon, 26 Mar 2012 22:32:23 +0200
-Subject: [Buildroot] [PATCH v2 1/3] Add libcap-ng package.
-In-Reply-To: <CAGm1_kvYMPD7i-mPpQTppP+Fiph4s9fhuESVQXQD2YojhFNS-A@mail.gmail.com>
-References: <1332792756-3381-1-git-send-email-marek.belisko@open-nandra.com>
- <1332792756-3381-2-git-send-email-marek.belisko@open-nandra.com>
- <CAGm1_kuGhp=zneYqKHn2Vu0tb+wtMcfU2ZGSTyg-fzV7vfzUUA@mail.gmail.com>
- <CAAfyv368zLwi-XO384dJLU-9MS6whAbDGgf6w3f4_HwD+5-8eg@mail.gmail.com>
- <CAGm1_kvYMPD7i-mPpQTppP+Fiph4s9fhuESVQXQD2YojhFNS-A@mail.gmail.com>
-Message-ID: <CAAfyv37G4N5jhqmPdgt16mrq-CthowOFEu_dHRQZbZ0FvpKBeg@mail.gmail.com>
+From: JoM <johann.mercadier@imerir.com>
+Date: Mon, 26 Mar 2012 23:21:25 +0100
+Subject: [Buildroot] [PATCH 1/2] fix help comment Signed-off-by: JoM
+	<johann.mercadier@imerir.com>
+Message-ID: <1332800486-11104-1-git-send-email-johann.mercadier@imerir.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 26, 2012 at 10:28 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> On Mon, Mar 26, 2012 at 10:21 PM, Belisko Marek <marek.belisko@gmail.com> wrote:
->> On Mon, Mar 26, 2012 at 10:17 PM, Yegor Yefremov
->> <yegorslists@googlemail.com> wrote:
->>> On Mon, Mar 26, 2012 at 10:12 PM, Marek Belisko
->>> <marek.belisko@open-nandra.com> wrote:
->>>> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
->>>> ---
->>>> ?package/Config.in ? ? ? ? ? ? ?| ? ?1 +
->>>> ?package/libcap-ng/Config.in ? ?| ? 10 ++++++++++
->>>> ?package/libcap-ng/libcap-ng.mk | ? 12 ++++++++++++
->>>> ?3 files changed, 23 insertions(+), 0 deletions(-)
->>>> ?create mode 100644 package/libcap-ng/Config.in
->>>> ?create mode 100644 package/libcap-ng/libcap-ng.mk
->>>>
->>>> diff --git a/package/Config.in b/package/Config.in
->>>> index b394f18..2dc7e1f 100644
->>>> --- a/package/Config.in
->>>> +++ b/package/Config.in
->>>> @@ -377,6 +377,7 @@ source "package/argp-standalone/Config.in"
->>>> ?source "package/boost/Config.in"
->>>> ?source "package/libatomic_ops/Config.in"
->>>> ?source "package/libcap/Config.in"
->>>> +source "package/libcap-ng/Config.in"
->>>> ?source "package/libdaemon/Config.in"
->>>> ?source "package/libelf/Config.in"
->>>> ?source "package/libevent/Config.in"
->>>> diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
->>>> new file mode 100644
->>>> index 0000000..d1663cd
->>>> --- /dev/null
->>>> +++ b/package/libcap-ng/Config.in
->>>> @@ -0,0 +1,10 @@
->>>> +config BR2_PACKAGE_LIBCAP_NG
->>>> + ? ? ? bool "libcap-ng"
->>>> + ? ? ? help
->>>> + ? ? ? ? The libcap-ng library is intended to make programming with
->>>> + ? ? ? ? posix capabilities much easier than the traditional libcap
->>>> + ? ? ? ? library. It includes utilities that can analyse all currently
->>>> + ? ? ? ? running applications and print out any capabilities and whether
->>>> + ? ? ? ? or not it has an open ended bounding set.
->>>> +
->>>> + ? ? ? ? http://people.redhat.com/sgrubb/libcap-ng/
->>>> diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
->>>> new file mode 100644
->>>> index 0000000..6ea5de4
->>>> --- /dev/null
->>>> +++ b/package/libcap-ng/libcap-ng.mk
->>>> @@ -0,0 +1,12 @@
->>>> +#############################################################
->>>> +#
->>>> +# libcap-ng
->>>> +#
->>>> +#############################################################
->>>> +
->>>> +LIBCAP_NG_VERSION = 0.6.6
->>>> +LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng/
->>>> +LIBCAP_NG_SOURCE = libcap-ng-$(LIBCAP_NG_VERSION).tar.gz
->>>> +LIBCAP_NG_INSTALL_STAGING = YES
->>>> +
->>>> +$(eval $(call AUTOTARGETS))
->>>
->>> Have you tried to download the package without LIBCAP_NG_SITE?
->> Guess yes? Why?
->
-> AFAIK if you have package file named like packagename-version.tar.gz,
-> then this will be tried automatically. See vsftpd for example.
-Yes you're right. Will update. Thanks for review.
->
-> Sorry I meant LIBCAP_NG_SOURCE not SITE :-(
->
-> Yegor
+---
+ package/Config.in        |    1 +
+ package/fbterm/Config.in |   12 ++++++++++++
+ package/fbterm/fbterm.mk |   23 +++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/fbterm/Config.in
+ create mode 100644 package/fbterm/fbterm.mk
 
-marek
-
+diff --git a/package/Config.in b/package/Config.in
+index 85583c6..c2d02b7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -109,6 +109,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/fbset/Config.in"
+ endif
+ source "package/fbv/Config.in"
++source "package/fbterm/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+diff --git a/package/fbterm/Config.in b/package/fbterm/Config.in
+new file mode 100644
+index 0000000..0a36a9f
+--- /dev/null
++++ b/package/fbterm/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_FBTERM
++	bool "fbterm"
++	  select BR2_PACKAGE_FREETYPE
++	  select BR2_PACKAGE_FONTCONFIG
++	  select BR2_PACKAGE_ZLIB
++	  select BR2_PACKAGE_EXPAT
++	help
++	  FbTerm (Frame buffer terminal emulator) is a fast terminal emulator and a 
++	  standalone replacement of GNU/Linux terminal that can function outside of
++	  Xorg with the frame buffer device or VESA video card.
++	  
++	  http://code.google.com/p/fbterm/
+diff --git a/package/fbterm/fbterm.mk b/package/fbterm/fbterm.mk
+new file mode 100644
+index 0000000..44f63f1
+--- /dev/null
++++ b/package/fbterm/fbterm.mk
+@@ -0,0 +1,23 @@
++#############################################################
++#
++# fbterm
++#
++#############################################################
++FBTERM_BINARY = fbterm
++FBTERM_TARGET_BINARY = usr/bin/$(FBTERM_BINARY)
++FBTERM_VERSION = 1.7.0
++FBTERM_SITE = http://fbterm.googlecode.com/files
++FBTERM_DEPENDENCIES += freetype fontconfig
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++	FBTERM_DEPENDENCIES += zlib
++endif
++
++FBTERM_DEPENDENCIES += $(if $(BR2_PACKAGE_EXPAT),expat)
++
++define FBTERM_UNINSTALL_CMDS
++	rm -f $(TARGET_DIR)/$(FBTERM_TARGET_BINARY)
++endef
++
++
++$(eval $(call AUTOTARGETS))
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
-
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+1.7.2.5
