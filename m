@@ -1,10 +1,9 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Mon, 26 Mar 2012 22:12:35 +0200
-Subject: [Buildroot] [PATCH v2 2/3] Add mobile-broadband-provider-info
-	package.
+Date: Mon, 26 Mar 2012 22:12:36 +0200
+Subject: [Buildroot] [PATCH v2 3/3] Add ofono package.
 In-Reply-To: <1332792756-3381-1-git-send-email-marek.belisko@open-nandra.com>
 References: <1332792756-3381-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1332792756-3381-3-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <1332792756-3381-4-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +12,79 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in                                  |    1 +
- package/mobile-broadband-provider-info/Config.in   |    6 ++++++
- .../mobile_broadband_provider_info.mk              |   14 ++++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/mobile-broadband-provider-info/Config.in
- create mode 100644 package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+ package/Config.in       |    1 +
+ package/ofono/Config.in |   20 ++++++++++++++++++++
+ package/ofono/ofono.mk  |   25 +++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/ofono/Config.in
+ create mode 100644 package/ofono/ofono.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2dc7e1f..cd41eb9 100644
+index cd41eb9..4dfbce4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -424,6 +424,7 @@ endmenu
- endmenu
- 
- menu "Miscellaneous"
-+source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
- endmenu
- 
-diff --git a/package/mobile-broadband-provider-info/Config.in b/package/mobile-broadband-provider-info/Config.in
+@@ -201,6 +201,7 @@ source "package/memtester/Config.in"
+ source "package/minicom/Config.in"
+ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
++source "package/ofono/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
+ source "package/parted/Config.in"
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
 new file mode 100644
-index 0000000..dda7105
+index 0000000..b10e42d
 --- /dev/null
-+++ b/package/mobile-broadband-provider-info/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
-+	bool "mobile-broadband-provider-info"
++++ b/package/ofono/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_OFONO
++	bool "ofono"
++	select BR2_PACKAGE_LIBCAP_NG
++	select BR2_PACKAGE_DBUS
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
 +	help
-+	  Mobile broadband provider database.
++	  oFono.org is a place to bring developers together around designing an
++	  infrastructure for building mobile telephony (GSM/UMTS) applications.
 +
-+	  http://live.gnome.org/NetworkManager/MobileBroadband/ServiceProviders
-diff --git a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
++if BR2_PACKAGE_OFONO
++
++config BR2_PACKAGE_OFONO_BLUETOOTH
++        bool "ofono with bluetooth support"
++	select BR2_PACKAGE_BLUEZ_UTILS
++        help
++	  Enable bluetooh support.
++endif
++
++
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
 new file mode 100644
-index 0000000..9204bd9
+index 0000000..e408a61
 --- /dev/null
-+++ b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
-@@ -0,0 +1,14 @@
++++ b/package/ofono/ofono.mk
+@@ -0,0 +1,25 @@
 +#############################################################
 +#
-+# mobile broadband provider info
++# ofono
 +#
 +#############################################################
-+MOBILE_BROADBAND_PROVIDER_INFO_VERSION = master
-+MOBILE_BROADBAND_PROVIDER_INFO_SITE = git://git.gnome.org/mobile-broadband-provider-info
-+MOBILE_BROADBAND_PROVIDER_INFO_INSTALL_STAGING = YES
-+MOBILE_BROADBAND_PROVIDER_INFO_DEPENDENCIES = host-pkg-config
++OFONO_VERSION = 1.5
++OFONO_SITE = git://git.kernel.org/pub/scm/network/ofono/ofono.git
 +
-+MOBILE_BROADBAND_PROVIDER_INFO_AUTORECONF=YES
++OFONO_DEPENDENCIES = host-pkg-config libglib2 dbus libcap-ng mobile-broadband-provider-info
++
++OFONO_CONF_OPT = --disable-test --disable-bluetooth
++
++OFONO_AUTORECONF = YES
++
++ifneq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
++	OFONO_CONF_OPT += --disable-udev
++endif
++
++ifeq ($(BR2_PACKAGE_OFONO_BLUETOOTH),y)
++	OFONO_CONF_OPT += --enable-bluetooth
++	OFONO_DEPENDENCIES += bluez_utils
++endif
 +
 +$(eval $(call AUTOTARGETS))
 +
