@@ -1,64 +1,31 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 26 Mar 2012 10:51:52 -0400
-Subject: [Buildroot] [PATCH v2] New package: libdmtx
-Message-ID: <1332773512-32706-1-git-send-email-fhunleth@troodon-software.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 26 Mar 2012 17:02:02 +0200
+Subject: [Buildroot] toolchain choice of thread version to use.
+In-Reply-To: <8DDFBCE319CD4D5687FE5D4BB6B93B25@JohanW7>
+References: <8DDFBCE319CD4D5687FE5D4BB6B93B25@JohanW7>
+Message-ID: <201203261702.05945.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/Config.in          |    1 +
- package/libdmtx/Config.in  |    7 +++++++
- package/libdmtx/libdmtx.mk |   12 ++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/libdmtx/Config.in
- create mode 100644 package/libdmtx/libdmtx.mk
+On Monday 26 March 2012 11:01:19 Sagaert Johan wrote:
+> Is there any difference between selecting the type of threads in the buildroot ->toolchain menuconfig versus selecting the thread
+> lib type in the menuconfig of uClibc ?
 
-diff --git a/package/Config.in b/package/Config.in
-index b394f18..6df27a1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -305,6 +305,7 @@ source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
- source "package/libart/Config.in"
-+source "package/libdmtx/Config.in"
- source "package/libdrm/Config.in"
- source "package/libexif/Config.in"
- source "package/libgail/Config.in"
-diff --git a/package/libdmtx/Config.in b/package/libdmtx/Config.in
-new file mode 100644
-index 0000000..db4187f
---- /dev/null
-+++ b/package/libdmtx/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBDMTX
-+	bool "libdmtx"
-+	help
-+	  libdmtx is a software library that enables programs to read and write
-+	  Data Matrix barcodes of the modern ECC200 variety.
-+
-+	  http://www.libdmtx.org/
-diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-new file mode 100644
-index 0000000..495e59a
---- /dev/null
-+++ b/package/libdmtx/libdmtx.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# libdmtx
-+#
-+#############################################################
-+
-+LIBDMTX_VERSION = 0.7.4
-+LIBDMTX_SOURCE = libdmtx-$(LIBDMTX_VERSION).tar.gz
-+LIBDMTX_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libdmtx
-+LIBDMTX_INSTALL_STAGING = YES
-+
-+$(eval $(call AUTOTARGETS))
+ Buildroot modifies the uClibc .config file with some of the settings
+from the buildroot .config.  One of these settings is the type of
+threads.  So whatever thread setting you make in the uClibc config
+should vanish as soon as you compile uClibc.
+
+ Regards,
+ Arnout
+
 -- 
-1.7.0.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
