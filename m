@@ -1,38 +1,50 @@
-From: MERCADIER Johann <johann.mercadier@imerir.com>
-Date: Mon, 26 Mar 2012 22:35:42 +0100
-Subject: [Buildroot] Need an advice while porting Links with FrameBuffer
-	support
-In-Reply-To: <201203252318.00107.arnout@mind.be>
-References: <CAPEB33zYC=NcZk__9PG3RWJQKwnurkvRCO+3jAzGCpjCO7PTrw@mail.gmail.com>
- <201203252318.00107.arnout@mind.be>
-Message-ID: <CAPEB33z60ALExO=D2XB=bO76ydroz4ZPjEJSL1ZeNZETSFZ-8A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 27 Mar 2012 00:28:21 +0200
+Subject: [Buildroot] select and depends on for libraries
+Message-ID: <20120327002821.5b701e8e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hello,
 
-   thanks for your feedback on fbterm and your point of view.
-   I applied all your advices and sent it back, nevertheless the signature
-is still with "JoM" as I have forgotten to source the .bashrc... Do I need
-to resend it?
+We typically use "select" to mark at the Kconfig level the dependencies
+between a package and its libraries. However, when such a dependency
+has some "depends on" dependencies, they must be replicated at the
+level of all packages that are selecting this dependency, i.e:
 
-   I will read on 'quilt' & 'topgit' as it seems it make it easier to do
-modification on a given patch.
+config FOO
+	bool
 
-Best regards.
+config PACKAGE_A
+	depends on FOO
+
+config PACKAGE_B
+	select PACKAGE_A
+	depends on FOO # we must have this dependency
+
+I now have the case of libffi. libffi cannot be built for various
+architectures, for example Blackfin (see
+http://autobuild.buildroot.org/results/3db2d6c1e77b2c6460bd8187588a3590a4329aaf/build-end.log).
+libffi being inherently architecture-specific, adding support for new
+architectures is not a two-lines fix. So, BR2_PACKAGE_LIBFFI should
+"depends on !BR2_bfin".
+
+Unfortunately, libglib2 depends on libffi. So libglib2 would also have
+to carry the "depends on !BR2_bfin". And also the ~30 packages that
+"select BR2_PACKAGE_LIBGLIB2". And the absolutely enormous number of
+packages that "select BR2_PACKAGE_LIBGLIB2", either directly or
+indirectly.
+
+Do we really want to do this?
+
+Regards,
+
+Thomas
 -- 
-Cordialement.
-
-___Johann MERCADIER___
-
-:(){ :|:& };:
-"I am the Unknown lead by the Unknowing.
-I have done so much with so little for so long
-that I am now qualified to do anything with nothing."
-HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120326/2bb37147/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
