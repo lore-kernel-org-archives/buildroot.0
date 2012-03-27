@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Mar 2012 11:38:52 +0200
-Subject: [Buildroot] DirectFB backend of Gtk?
-In-Reply-To: <1332838194-3638-2-git-send-email-yegorslists@googlemail.com>
-References: <1332838194-3638-1-git-send-email-yegorslists@googlemail.com>
- <1332838194-3638-2-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20120327113852.6801b8f3@skate>
+Date: Tue, 27 Mar 2012 11:39:18 +0200
+Subject: [Buildroot] [PATCH 1/2] New package: socketcand
+In-Reply-To: <CAGm1_ktGv_x0AN2f0kUTzaQjoaiSXFSEfbyOb9n7vU0zjMGtUQ@mail.gmail.com>
+References: <1332428460-28459-1-git-send-email-yegorslists@googlemail.com>
+ <87ehsk1c2d.fsf@macbook.be.48ers.dk>
+ <20120323095538.5edb8eea@skate> <4F6C3D20.8050304@visionsystems.de>
+ <20120323101652.1f1b4b33@skate>
+ <CAGm1_ktGv_x0AN2f0kUTzaQjoaiSXFSEfbyOb9n7vU0zjMGtUQ@mail.gmail.com>
+Message-ID: <20120327113918.006e464b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +16,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-Le Tue, 27 Mar 2012 10:49:54 +0200,
-yegorslists at googlemail.com a ?crit :
+Le Fri, 23 Mar 2012 10:19:55 +0100,
+Yegor Yefremov <yegorslists@googlemail.com> a ?crit :
 
-> diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-> index 977d272..071cdf4 100644
-> --- a/package/directfb/directfb.mk
-> +++ b/package/directfb/directfb.mk
-> @@ -4,7 +4,7 @@
->  #
->  #############################################################
->  DIRECTFB_VERSION_MAJOR = 1.4
-> -DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).15
-> +DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).16
->  DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
->  DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
->  DIRECTFB_AUTORECONF = YES
+> > No 'make install' ever cares about overwriting existing files, I don't
+> > see why the one of socketcand should.
+> >
+> > What do you think about this option?
+> 
+> I agree with you. I'll make a patch and contact the maintainer.
 
-By any chance, are you using the DirectFB backend of Gtk? We have some
-build failures with it:
-http://autobuild.buildroot.org/results/e6e611073582ae59ef9a7cb66415b998e6b815f4/.
-
-If someone could have a look at this, it would be nice.
-
-Best regards,
+Any news from this?
 
 Thomas
 -- 
