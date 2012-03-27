@@ -1,57 +1,88 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 27 Mar 2012 19:58:07 -0300
-Subject: [Buildroot] [PATCH] expat: security bump to version 2.1.0
-Message-ID: <1332889087-26867-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 27 Mar 2012 20:09:39 -0300
+Subject: [Buildroot] [PATCH] openswan: new package
+Message-ID: <1332889779-27193-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes for CVE-2012-1147, CVE-2009-3720, CVE-2009-3560, CVE-2012-1148 and
-CVE-2012-0876.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/expat/expat-2.0.1-CVE-2009-3560.patch |   14 --------------
- package/expat/expat.mk                        |    4 ++--
- 2 files changed, 2 insertions(+), 16 deletions(-)
- delete mode 100644 package/expat/expat-2.0.1-CVE-2009-3560.patch
+ package/Config.in            |    1 +
+ package/openswan/Config.in   |    8 ++++++++
+ package/openswan/openswan.mk |   35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+), 0 deletions(-)
+ create mode 100644 package/openswan/Config.in
+ create mode 100644 package/openswan/openswan.mk
 
-diff --git a/package/expat/expat-2.0.1-CVE-2009-3560.patch b/package/expat/expat-2.0.1-CVE-2009-3560.patch
-deleted file mode 100644
-index 7cadc47..0000000
---- a/package/expat/expat-2.0.1-CVE-2009-3560.patch
-+++ /dev/null
-@@ -1,14 +0,0 @@
--http://nvd.nist.gov/nvd.cfm?cvename=CVE-2009-3560
--
----- a/lib/xmlparse.c
--+++ b/lib/xmlparse.c
--@@ -3703,6 +3703,9 @@ doProlog(XML_Parser parser,
--         return XML_ERROR_UNCLOSED_TOKEN;
--       case XML_TOK_PARTIAL_CHAR:
--         return XML_ERROR_PARTIAL_CHAR;
--+      case -XML_TOK_PROLOG_S:
--+        tok = -tok;
--+        break;
--       case XML_TOK_NONE:
-- #ifdef XML_DTD
--         /* for internal PE NOT referenced between declarations */
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index b179383..ea008db 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--EXPAT_VERSION = 2.0.1
--EXPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/expat
-+EXPAT_VERSION = 2.1.0
-+EXPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_INSTALL_STAGING = YES
- EXPAT_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) installlib
- EXPAT_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) installlib
+diff --git a/package/Config.in b/package/Config.in
+index 274ea7a..d11099e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -496,6 +496,7 @@ source "package/nuttcp/Config.in"
+ source "package/olsr/Config.in"
+ source "package/openntpd/Config.in"
+ source "package/openssh/Config.in"
++source "package/openswan/Config.in"
+ source "package/openvpn/Config.in"
+ source "package/portmap/Config.in"
+ source "package/pppd/Config.in"
+diff --git a/package/openswan/Config.in b/package/openswan/Config.in
+new file mode 100644
+index 0000000..3336156
+--- /dev/null
++++ b/package/openswan/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_OPENSWAN
++	bool "openswan"
++	select BR2_PACKAGE_GMP
++	select BR2_PACKAGE_IPROUTE2
++	help
++	  Openswan is an implementation of IPsec for Linux
++
++	  http://www.openswan.org
+diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
+new file mode 100644
+index 0000000..ca08a4e
+--- /dev/null
++++ b/package/openswan/openswan.mk
+@@ -0,0 +1,35 @@
++#############################################################
++#
++# openswan
++#
++#############################################################
++
++OPENSWAN_VERSION = 2.6.38
++OPENSWAN_SITE = http://download.openswan.org/openswan
++OPENSWAN_DEPENDENCIES = host-bison gmp iproute2
++OPENSWAN_MAKEOPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
++	USERCOMPILE="$(TARGET_CFLAGS)" INC_USRLOCAL=/usr \
++	USE_KLIPS=false USE_MAST=false USE_NM=false
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++	OPENSWAN_DEPENDENCIES += libcurl
++	OPENSWAN_MAKEOPT += USE_LIBCURL=true
++endif
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	OPENSWAN_DEPENDENCIES += openssl
++	OPENSWAN_MAKEOPT += HAVE_OPENSSL=true
++ifeq ($(BR2_PACKAGE_OPENSSL_OCF),y)
++	OPENSWAN_MAKEOPT += HAVE_OCF=true
++endif
++endif
++
++define OPENSWAN_BUILD_CMDS
++	$(MAKE) -C $(@D) $(OPENSWAN_MAKEOPT) programs
++endef
++
++define OPENSWAN_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) $(OPENSWAN_MAKEOPT) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(call GENTARGETS))
 -- 
 1.7.3.4
