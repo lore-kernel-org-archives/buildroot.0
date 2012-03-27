@@ -1,46 +1,62 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 27 Mar 2012 02:18:06 +0200
-Subject: [Buildroot] older/newer pthread ,
-	curl segmentation fault and libupnp segmentation fault NTPL ok for
-	both
-In-Reply-To: <CBC3D1F8BC6646D3936D6D004F84ED85@JohanW7>
-References: <CBC3D1F8BC6646D3936D6D004F84ED85@JohanW7>
-Message-ID: <09E4FCDFAE2842BDAA9553D1181CC13C@JohanW7>
+From: Dimitry Golubovsky <golubovsky@gmail.com>
+Date: Mon, 26 Mar 2012 22:09:12 -0400
+Subject: [Buildroot] Cannot build modular X.org
+Message-ID: <CADiAo4+AHpenrWj69th=3m=1axW4wgrT-Rd20min9=PpxMpNAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Hi,
 
-In addition i tested NTPL, this works for both.
+I cannot build modular X.org with buildroot-2012.02. TinyX built fine.
 
------Oorspronkelijk bericht-----
-Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Sagaert Johan
-Verzonden: zondag 25 maart 2012 21:39
-Aan: buildroot at busybox.net
-Onderwerp: [Buildroot] older/newer pthread ,curl segmentation fault and libupnp segmentation fault
+Build fails on the input driver: xdriver_xf86-input-evdev (this is the
+first driver in the driver section selected)
 
- 
->Hi
- 
->Did some experimental builds :
- 
->uClibc 0.9.33
- 
- 
->older style pthreads                            		newer style pthread
->====================                            		===================
- 
->libupnp : ok						 		libupnp : segmentaation fault
+End of output before the error:
 
->curl : segmenation fault				 		curl	: ok
->(curl does not segfault if openssl is left out)
+============================================================
+checking whether to build static libraries... yes
+checking for i586-linux-gcc... (cached)
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/ccache
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/ccache
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc
+accepts -g... (cached) yes
+checking for /40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/ccache
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc
+option to accept ISO C89... (cached) none needed
+checking dependency style of
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/ccache
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc...
+(cached) gcc3
+checking for /40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/ccache
+/40G2/golubovsky/src/buildroot-2012.02/output/host/usr/bin/i586-unknown-linux-uclibc-gcc
+option to accept ISO C99... -std=gnu99
+checking pkg-config is at least version 0.9.0... yes
+checking for XORG... configure: error: Package requirements
+(xorg-server xproto ) were not met:
 
+No package 'xorg-server' found
 
->There may be more packages sensitive to the pthread style selected.
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
 
->Who to blame for the segfaults, is it the underlying uClibc throwing the segfault or is it in the apps..?
+Alternatively, you may set the environment variables XORG_CFLAGS
+and XORG_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
 
->Regards Johan
+make: *** [/40G2/golubovsky/src/buildroot-2012.02/output/build/xdriver_xf86-input-evdev-2.3.0/.stamp_configured]
+Error 1
+============================================================
+
+Thanks.
+
+-- 
+Dimitry Golubovsky
+
+Anywhere on the Web
