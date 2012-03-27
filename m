@@ -1,46 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Mar 2012 00:24:28 +0200
-Subject: [Buildroot] GIT :: signing issue
-In-Reply-To: <CAPEB33xD5-OZSwNs-uuB1igho1jJHHDJ0i+F=McOn=KqA9P8TA@mail.gmail.com>
-References: <CAPEB33xD5-OZSwNs-uuB1igho1jJHHDJ0i+F=McOn=KqA9P8TA@mail.gmail.com>
-Message-ID: <201203280024.29103.arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Mar 2012 19:41:35 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.0.x and 3.2.x stable
+	versions
+Message-ID: <1332888095-27917-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 27 March 2012 21:24:53 MERCADIER Johann wrote:
->   my signature do not conform with the licence as my full name should be
-> written and not just the initials.
->   So I have modified git config as is:
-> ___[ SHELL
-> ]____________________________________________________________________________
-> $ git repo-config --list
-> user.name=Johann MERCADIER
-> user.email=johann.mercadier at imerir.com
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.26-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
- This information is used on a commit, not on a send-email.  So you have
-to amend your commit(s) first.  A simple
-
-git commit --amend -s
-
-should probably do the trick.  If you have several commits to amend, use
-
-git rebase -i master
-
-and choose 'edit' for all your commits, then amend each of them as above.
-
- Regards,
- Arnout
-
- PS If you would start using quilt or topgit, the above doesn't apply
-anymore because these tools store the commit messages differently.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 8ea037a..0b029ad 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.25"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.26"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.12"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.13"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.26-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.25-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.26-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.3.4
