@@ -1,34 +1,58 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 27 Mar 2012 10:49:54 +0200
-Subject: [Buildroot] [PATCH 2/2] directfb: bump to 1.4.16
-In-Reply-To: <1332838194-3638-1-git-send-email-yegorslists@googlemail.com>
-References: <1332838194-3638-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1332838194-3638-2-git-send-email-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 27 Mar 2012 09:38:06 +0000 (UTC)
+Subject: [Buildroot] [Bug 4988] New: flex and m4 problems
+Message-ID: <bug-4988-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+https://bugs.busybox.net/show_bug.cgi?id=4988
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/directfb/directfb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+           Summary: flex and m4 problems
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: develop at kristov.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 977d272..071cdf4 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- DIRECTFB_VERSION_MAJOR = 1.4
--DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).15
-+DIRECTFB_VERSION = $(DIRECTFB_VERSION_MAJOR).16
- DIRECTFB_SITE = http://www.directfb.org/downloads/Core/DirectFB-$(DIRECTFB_VERSION_MAJOR)
- DIRECTFB_SOURCE = DirectFB-$(DIRECTFB_VERSION).tar.gz
- DIRECTFB_AUTORECONF = YES
+
+Created attachment 4196
+  --> https://bugs.busybox.net/attachment.cgi?id=4196
+adds BR2_PACKAGE_M4 as dependency
+
+Hello,
+
+there is a problem installing flex to the target area. flex ultimatively
+depends on m4 at run-time (see [1]), but this is not accounted for in the
+buildroot's flex.mk. Worse, the flex binary includes a fully qualified path to
+the host area's m4 (see main.c and the use of the M4 define, set in config.h).
+This is wrong for both flex installed to the staging area and flex installed to
+the target area.
+
+I attached three patches to solve these problems. The first patch
+(Config.in.diff) adds BR2_PACKAGE_M4 to flex/Config.in. The second patch
+(flex.mk.diff) uses the M4 environment variable to force the configure script
+not to look for the host's m4 tool but to assume /usr/bin/m4. The last patch
+(flex-2.5.35-fix-cross-compiling.patch) disables checking the features of the
+cross m4 and it prevents the tools from being built as they reference the
+target m4 tool in an incompatible way.
+
+Regards,
+
+Christoph Schulz
+
+[1] http://flex.sourceforge.net/manual/M4-Dependency.html
+
 -- 
-1.7.7
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
