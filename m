@@ -1,29 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 27 Mar 2012 00:33:21 +0200
-Subject: [Buildroot] [PATCH 1/1] lttng-libust: rename patch so that it is
-	taken into account
-In-Reply-To: <cover.1332801197.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1332801197.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <b3435944bbaf51566d808dc51aea2e2715143dbd.1332801197.git.thomas.petazzoni@free-electrons.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 27 Mar 2012 02:18:06 +0200
+Subject: [Buildroot] older/newer pthread ,
+	curl segmentation fault and libupnp segmentation fault NTPL ok for
+	both
+In-Reply-To: <CBC3D1F8BC6646D3936D6D004F84ED85@JohanW7>
+References: <CBC3D1F8BC6646D3936D6D004F84ED85@JohanW7>
+Message-ID: <09E4FCDFAE2842BDAA9553D1181CC13C@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package/lttng-libust/ contains a patch prefixed with
-lttng-libust-1.9.2, so the other patch simply prefixed with
-lttng-libust does not get applied. Rename the second patch properly.
+Hi
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ... lttng-libust-1.9.2-fix-overflow-32-bits.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
- rename package/lttng-libust/{lttng-libust-fix-overflow-32-bits.patch => lttng-libust-1.9.2-fix-overflow-32-bits.patch} (100%)
+In addition i tested NTPL, this works for both.
 
-diff --git a/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch b/package/lttng-libust/lttng-libust-1.9.2-fix-overflow-32-bits.patch
-similarity index 100%
-rename from package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
-rename to package/lttng-libust/lttng-libust-1.9.2-fix-overflow-32-bits.patch
--- 
-1.7.4.1
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Sagaert Johan
+Verzonden: zondag 25 maart 2012 21:39
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] older/newer pthread ,curl segmentation fault and libupnp segmentation fault
+
+ 
+>Hi
+ 
+>Did some experimental builds :
+ 
+>uClibc 0.9.33
+ 
+ 
+>older style pthreads                            		newer style pthread
+>====================                            		===================
+ 
+>libupnp : ok						 		libupnp : segmentaation fault
+
+>curl : segmenation fault				 		curl	: ok
+>(curl does not segfault if openssl is left out)
+
+
+>There may be more packages sensitive to the pthread style selected.
+
+>Who to blame for the segfaults, is it the underlying uClibc throwing the segfault or is it in the apps..?
+
+>Regards Johan
