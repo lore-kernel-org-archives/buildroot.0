@@ -1,57 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 Mar 2012 09:55:32 +0200
-Subject: [Buildroot] [PATCH 2/2] microperl: install host-microperl in
- $(HOST_DIR)/opt/perl
-In-Reply-To: <87fwctb4gn.fsf@macbook.be.48ers.dk>
-References: <cover.1332831974.git.thomas.petazzoni@free-electrons.com>
- <cover.1332831974.git.thomas.petazzoni@free-electrons.com>
- <cb1e211a5de6c88c39cd9890dbf823c0ff1766c3.1332831974.git.thomas.petazzoni@free-electrons.com>
- <87fwctb4gn.fsf@macbook.be.48ers.dk>
-Message-ID: <20120328095532.71abc612@skate>
+From: Belisko Marek <marek.belisko@gmail.com>
+Date: Wed, 28 Mar 2012 10:47:52 +0200
+Subject: [Buildroot] xbmc package
+Message-ID: <CAAfyv35s2iDxa8iWXqvfCMQDoF4kk-+_4zDFY=A6sE59i=sHXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi,
 
-Le Wed, 28 Mar 2012 08:54:32 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+I'm trying to add xbmc package to buildroot and have problem how to
+fix one dependency problem.
+Problem is with mysql_config which is requested by xmbc during config phase.
+I add mysql_client dependency (mysql_config is installed in staging)
+but xbmc config
+still complain. I've check that qt use similar with configure option
+but xbmc don't have such an option.
 
-> Thanks, but I have fixed it a bit differently instead:
-> 
-> commit d0e5eb281f0e3b323ecb3446c1b16baf7f3baa69
-> Author: Peter Korsgaard <jacmet@sunsite.dk>
-> Date:   Tue Mar 27 17:11:36 2012 +0200
+Any ideas how to fix that?
 
-Thanks, yes. As discussed on IRC, I haven't tested your change, but I
-agree on the principle.
+config.log from xmbc attached.
 
-However, I am worried by the case reported by Will Newton in:
+diff --git a/package/Config.in b/package/Config.in
+index b394f18..68d28fa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -120,6 +120,7 @@ source "package/sdl_sound/Config.in"
+ source "package/sdl_net/Config.in"
+ source "package/sdl_ttf/Config.in"
+ source "package/sdl_gfx/Config.in"
++source "package/xbmc/Config.in"
 
-From: Will Newton <will.newton@gmail.com>
-To: buildroot at busybox.net
-Subject: [Buildroot] Host libxml-parser-perl build issue
-Date: Mon, 26 Mar 2012 17:35:29 +0100
+ comment "other GUIs"
+ source "package/efl/Config.in"
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+new file mode 100644
+index 0000000..623e518
+--- /dev/null
++++ b/package/xbmc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_XBMC
++       bool "xbmc"
++       select BR2_PACKAGE_BOOST
++       select BR2_PACKAGE_SDL_GFX
++       select BR2_PACKAGE_MYSQL_CLIENT
++       help
++         XBMC
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+new file mode 100644
+index 0000000..6379ab8
+--- /dev/null
++++ b/package/xbmc/xbmc.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# xbmc
++#
++#############################################################
++XBMC_VERSION = 11.0
++XBMC_SITE = http://mirrors.xbmc.org/releases/source/
++
++XBMC_DEPENDENCIES = host-pkg-config boost sdl_gfx mysql_client
++XBMC_CONF_OPT = --disable-debug --disable-gl
++
++$(eval $(call AUTOTARGETS))
++
 
-In his case, the microperl for the target was not selected, so the
-host-microperl was not built, and still he was having issues.
-Apparently, the problem is that host-libxml-parser-perl didn't pick up
-the libexpat from the $(HOST_DIR). Normally, we build all binaries with
-a rpath set to $(HOST_DIR)/usr/lib, but in the specific case of Perl
-modules that use a native library such as libexpat, I am not sure how
-we are supposed to tell Perl to build such modules with an rpath set.
-The current workaround of Will is to pass the LD_LIBRARY_PATH
-environment variable in TARGET_CONFIGURE_OPTS and TARGET_MAKE_ENV, but
-I don't think this would work for all packages (I remember libtool
-being confused by a LD_LIBRARY_PATH being set).
 
 Regards,
 
-Thomas
+marek
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config.log
+Type: text/x-log
+Size: 129729 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120328/e35072c6/attachment-0001.bin>
