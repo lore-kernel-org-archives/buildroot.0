@@ -1,27 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Mar 2012 23:04:04 +0200
-Subject: [Buildroot] [PATCH] gnutls: security bump to version 2.12.18
-In-Reply-To: <1332966893-28651-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1332966893-28651-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201203282304.05032.arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 28 Mar 2012 18:17:20 -0300
+Subject: [Buildroot] [PATCH v2] gnutls: security bump to version 2.12.18
+Message-ID: <1332969440-31027-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 28 March 2012 22:34:53 Gustavo Zacarias wrote:
-> +GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls
+Fixes CVE-2012-1573
 
- While you're updating this, you could switch to BR2_GNU_MIRROR.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
- Regards,
- Arnout
-
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 4cda997..ce570d5 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,11 +4,12 @@
+ #
+ #############################################################
+ 
+-GNUTLS_VERSION = 2.10.5
++GNUTLS_VERSION = 2.12.18
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
+-GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls/
+-GNUTLS_DEPENDENCIES = libgcrypt
+-GNUTLS_CONF_OPT += --without-libgcrypt-prefix
++GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
++GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt
++GNUTLS_CONF_OPT = --with-libgcrypt --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
++		--without-p11-kit
+ GNUTLS_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.3.4
