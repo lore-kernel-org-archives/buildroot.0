@@ -1,26 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 28 Mar 2012 17:32:22 -0300
-Subject: [Buildroot] [PATCH] openswan: new package
-In-Reply-To: <201203282204.30908.arnout@mind.be>
-References: <1332889779-27193-1-git-send-email-gustavo@zacarias.com.ar>
- <201203282204.30908.arnout@mind.be>
-Message-ID: <cc44511606180b21f748baa2d517feb5@zacarias.com.ar>
+Date: Wed, 28 Mar 2012 17:34:53 -0300
+Subject: [Buildroot] [PATCH] gnutls: security bump to version 2.12.18
+Message-ID: <1332966893-28651-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-28 17:04, Arnout Vandecappelle wrote:
+Fixes CVE-2012-1573
 
-> On Wednesday 28 March 2012 01:09:39 Gustavo Zacarias wrote:
->> +OPENSWAN_MAKEOPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
->
->  Could you name this variable OPENSWAN_MAKE_OPT?  If we ever get a
-> MAKETARGETS infrastructure, that's what the variable will be called.
->
->  Regards,
->  Arnout
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gnutls/gnutls.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
-Sure, respun into V2, thanks.
-Regards.
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 4cda997..c3b8095 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -4,11 +4,12 @@
+ #
+ #############################################################
+ 
+-GNUTLS_VERSION = 2.10.5
++GNUTLS_VERSION = 2.12.18
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
+-GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls/
+-GNUTLS_DEPENDENCIES = libgcrypt
+-GNUTLS_CONF_OPT += --without-libgcrypt-prefix
++GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls
++GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt
++GNUTLS_CONF_OPT = --with-libgcrypt --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
++		--without-p11-kit
+ GNUTLS_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS))
+-- 
+1.7.3.4
