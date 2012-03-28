@@ -1,7 +1,7 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 28 Mar 2012 13:47:58 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 Mar 2012 14:52:11 +0200
 Subject: [Buildroot] [PATCH 2/2] microperl: install host-microperl in
-	$(HOST_DIR)/opt/perl
+ $(HOST_DIR)/opt/perl
 In-Reply-To: <20120328125547.6873d986@skate>
 References: <cover.1332831974.git.thomas.petazzoni@free-electrons.com>
  <cb1e211a5de6c88c39cd9890dbf823c0ff1766c3.1332831974.git.thomas.petazzoni@free-electrons.com>
@@ -10,24 +10,16 @@ References: <cover.1332831974.git.thomas.petazzoni@free-electrons.com>
  <87bonhax4p.fsf@macbook.be.48ers.dk>
  <CAFbHwiQUZKJeD-F2z_EnPC=QE-FhuRDb3bZUenEjmprJE6MPGw@mail.gmail.com>
  <20120328125547.6873d986@skate>
-Message-ID: <CAFbHwiSNFMApHiihk+C1tN+cX1DENBbnZrkoOiPKEMhiHeSOyw@mail.gmail.com>
+Message-ID: <20120328145211.470f0fc3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 28, 2012 at 11:55 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 28 Mar 2012 11:40:00 +0100,
-> Will Newton <will.newton@gmail.com> a ?crit :
->
->> Do you think that setting LD_LIBRARY_PATH in the way I suggested is
->> unsafe? I had some concerns that it might affect the search path for
->> libraries but I believe this is not an issue with a cross linker
->> (according to the ld man page, I haven't checked the code), and it
->> does not break any of the test builds I have done.
->
+Le Wed, 28 Mar 2012 12:55:47 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+
 > In the past, we had the problem that when we were building target
 > packages that required host utilities installed in $(HOST_DIR)/usr/bin,
 > those utilities were not able to find their libraries in
@@ -35,19 +27,91 @@ On Wed, Mar 28, 2012 at 11:55 AM, Thomas Petazzoni
 > it as the search path for libraries when compiling target stuff. So, we
 > decided to hardcode the correct rpath in all binaries built and
 > installed in $(HOST_DIR)/usr/bin.
->
-> So, yes, I believe that adding LD_LIBRARY_PATH is going to cause
-> problems, unless those problems have disappeared for some other reason.
->
-> See:
->
-> ?c1b6242fdcf2cff7ebf09fec4cc1be58963e8427
-> ?0d1830b07db4ebfd14e77a258de6fb391e57e960
-> ?6b939d40f6a29a43277566adc9d4312d49cb3abf
->
-> For a history of what we tried on this topic.
 
-If ld handles this explicitly and correctly then this sounds like a
-libtool bug to me. Do you have a testcase that can reproduce it? I
-have spent some time trying to make libtool break but without success,
-but I am far from an expert in that area...
+I had a quick look at this, and here the Perl dynamic module that
+depends on libexpat.so.1 is built with the correct RPATH:
+
+$ arm-linux-gnueabi-readelf -a host/usr/lib/perl/auto/XML/Parser/Expat/Expat.so | grep RPATH
+ 0x000000000000000f (RPATH)              Library rpath: [/opt/outputs/perl/host/usr/lib]
+
+So normally, when this Expat.so library is dlopen'ed by Perl, it should
+use the RPATH of Expat.so to find where libexpat.so.1 is located. And
+on my system, it does:
+
+$ PERLLIB=/opt/outputs/perl/host/usr/lib/perl/ LD_DEBUG=libs perl -e 'require XML::Parser;'
+      9529:	find library=libperl.so.5.10 [0]; searching
+      9529:	 search cache=/etc/ld.so.cache
+      9529:	  trying file=/usr/lib/libperl.so.5.10
+      9529:	
+      9529:	find library=libdl.so.2 [0]; searching
+      9529:	 search cache=/etc/ld.so.cache
+      9529:	  trying file=/lib/x86_64-linux-gnu/libdl.so.2
+      9529:	
+      9529:	find library=libm.so.6 [0]; searching
+      9529:	 search cache=/etc/ld.so.cache
+      9529:	  trying file=/lib/x86_64-linux-gnu/libm.so.6
+      9529:	
+      9529:	find library=libpthread.so.0 [0]; searching
+      9529:	 search cache=/etc/ld.so.cache
+      9529:	  trying file=/lib/x86_64-linux-gnu/libpthread.so.0
+      9529:	
+      9529:	find library=libc.so.6 [0]; searching
+      9529:	 search cache=/etc/ld.so.cache
+      9529:	  trying file=/lib/x86_64-linux-gnu/libc.so.6
+      9529:	
+      9529:	find library=libcrypt.so.1 [0]; searching
+      9529:	 search cache=/etc/ld.so.cache
+      9529:	  trying file=/lib/x86_64-linux-gnu/libcrypt.so.1
+      9529:	
+      9529:	
+      9529:	calling init: /lib/x86_64-linux-gnu/libpthread.so.0
+      9529:	calling init: /lib/x86_64-linux-gnu/libc.so.6
+      9529:	calling init: /lib/x86_64-linux-gnu/libcrypt.so.1
+      9529:	calling init: /lib/x86_64-linux-gnu/libm.so.6
+      9529:	calling init: /lib/x86_64-linux-gnu/libdl.so.2
+      9529:	calling init: /usr/lib/libperl.so.5.10
+      9529:	
+      9529:	
+      9529:	initialize program: perl
+      9529:	transferring control: perl
+      9529:	
+      9529:	find library=libexpat.so.1 [0]; searching
+      9529:	 search path=/opt/outputs/perl/host/usr/lib/tls/x86_64:/opt/outputs/perl/host/usr/lib/tls:/opt/outputs/perl/host/usr/lib/x86_64:/opt/outputs/perl/host/usr/lib		(RPATH from file /opt/outputs/perl/host/usr/lib/perl//auto/XML/Parser/Expat/Expat.so)
+      9529:	  trying file=/opt/outputs/perl/host/usr/lib/tls/x86_64/libexpat.so.1
+      9529:	  trying file=/opt/outputs/perl/host/usr/lib/tls/libexpat.so.1
+      9529:	  trying file=/opt/outputs/perl/host/usr/lib/x86_64/libexpat.so.1
+      9529:	  trying file=/opt/outputs/perl/host/usr/lib/libexpat.so.1
+      9529:	
+      9529:	calling init: /opt/outputs/perl/host/usr/lib/libexpat.so.1
+      9529:	calling init: /opt/outputs/perl/host/usr/lib/perl//auto/XML/Parser/Expat/Expat.so
+      9529:	calling fini: perl [0]
+      9529:	calling fini: /usr/lib/libperl.so.5.10 [0]
+      9529:	calling fini: /lib/x86_64-linux-gnu/libdl.so.2 [0]
+      9529:	calling fini: /lib/x86_64-linux-gnu/libm.so.6 [0]
+      9529:	calling fini: /lib/x86_64-linux-gnu/libpthread.so.0 [0]
+      9529:	calling fini: /lib/x86_64-linux-gnu/libcrypt.so.1 [0]
+      9529:	calling fini: /opt/outputs/perl/host/usr/lib/perl//auto/XML/Parser/Expat/Expat.so [0]
+      9529:	calling fini: /opt/outputs/perl/host/usr/lib/libexpat.so.1 [0]
+      9529:	calling fini: /lib/x86_64-linux-gnu/libc.so.6 [0]
+
+As you can see here, it clearly looks in the RPATH encoded into
+Expat.so to find where libexpat.so.1 is located. In my
+case /opt/outputs/perl/ in the Buildroot output directory, and it
+clearly uses the libexpat.so.1 from this output directory, and not the
+one from my system.
+
+Are you sure you don't have any value set in your LD_LIBRARY_PATH
+environment variable (outside of Buildroot)? Can you try the commands
+above (check the RPATH of Expat.so and check the resolution of
+libraries when asking Perl to require the XML::Parser module, when
+PERLLIB points to the Perl modules built by Buildroot), and post the
+results?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
