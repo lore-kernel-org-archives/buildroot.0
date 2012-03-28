@@ -1,58 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 27 Mar 2012 10:30:31 +0200
-Subject: [Buildroot] [git commit] microperl: fix
-	MICROPERL_INSTALL_TARGET_CMDS
-Message-ID: <20120328065359.60DB296996@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 Mar 2012 08:54:32 +0200
+Subject: [Buildroot] [PATCH 2/2] microperl: install host-microperl in
+	$(HOST_DIR)/opt/perl
+In-Reply-To: <cb1e211a5de6c88c39cd9890dbf823c0ff1766c3.1332831974.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 27 Mar 2012 09:06:18 +0200")
+References: <cover.1332831974.git.thomas.petazzoni@free-electrons.com>
+ <cover.1332831974.git.thomas.petazzoni@free-electrons.com>
+ <cb1e211a5de6c88c39cd9890dbf823c0ff1766c3.1332831974.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87fwctb4gn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a70788a2207af8ed97bbd26effaf5e461faf8af
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The MICROPERL_INSTALL_TARGET_CMDS used the following construct in a
-for loop:
+ Thomas> This commit is a tentative at fixing some Perl-related build problems
+ Thomas> we are having nowadays, due to the fact that microperl now depends on
+ Thomas> host-microperl. Since the perl binary from host-microperl is installed
+ Thomas> in $(HOST_DIR)/usr/bin, it gets picked up when we run host tools like
+ Thomas> host-intltool, which were normally meant to be used against the
+ Thomas> distribution-provided Perl.
 
-		[ -d $(@D)/lib/$$j ] && cp -af $(@D)/lib/$$j \
-			$(TARGET_DIR)/$(MICROPERL_MODS_DIR) ; \
-		[ -f $(@D)/lib/$$i ] && $(INSTALL) -m 0644 -D $(@D)/lib/$$i \
-			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
+Thanks, but I have fixed it a bit differently instead:
 
-The problem is that when at the last iteration, the second test (-f)
-fails, then the whole loop ends with a non-zero error code, and makes
-aborts the build. This happens for example if the last Perl modules in
-the list is Time::Local, because such modules are taken care of by the
-first condition (that copies a complete directory).
+commit d0e5eb281f0e3b323ecb3446c1b16baf7f3baa69
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Tue Mar 27 17:11:36 2012 +0200
 
-By moving to full if statements, we ensure that the return code is
-zero even if the condition was false.
+    libxml-parser-perl: fix host-intltool breakage when microperl is enabled
+    
+    Microperl will build host-microperl and install it into HOST_DIR/usr/bin,
+    where other packages will pick it up as _CONFIGURE_OPTS / _MAKE_ENV
+    prepends that to the path.
+    
+    libxml-parser-perl didn't though, so it would still be built against
+    the system perl, causing host-intltool to fail when it would use
+    host-microperl together with libxml-parser-perl if the system perl
+    isn't compatible with host-microperl.
+    
+    Fix it by using HOST_CONFIGURE_OPTS and ensuring it is built after
+    (host-)microperl if enabled.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/microperl/microperl.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/package/microperl/microperl.mk b/package/microperl/microperl.mk
-index d5b5a7c..5bf4a2e 100644
---- a/package/microperl/microperl.mk
-+++ b/package/microperl/microperl.mk
-@@ -132,10 +132,12 @@ define MICROPERL_INSTALL_TARGET_CMDS
- 	$(MICROPERL_BUILD_EXTENSIONS)
- 	for i in $(MICROPERL_MODS); do \
- 		j=`echo $$i|cut -d : -f 1` ; \
--		[ -d $(@D)/lib/$$j ] && cp -af $(@D)/lib/$$j \
--			$(TARGET_DIR)/$(MICROPERL_MODS_DIR) ; \
--		[ -f $(@D)/lib/$$i ] && $(INSTALL) -m 0644 -D $(@D)/lib/$$i \
--			$(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
-+		if [ -d $(@D)/lib/$$j ] ; then \
-+			cp -af $(@D)/lib/$$j $(TARGET_DIR)/$(MICROPERL_MODS_DIR) ; \
-+		fi ; \
-+		if [ -f $(@D)/lib/$$i ] ; then \
-+			$(INSTALL) -m 0644 -D $(@D)/lib/$$i $(TARGET_DIR)/$(MICROPERL_MODS_DIR)/$$i; \
-+		fi ; \
- 	done
- 	# Remove test files
- 	find $(TARGET_DIR)/$(MICROPERL_MODS_DIR) -type f -name *.t \
+-- 
+Bye, Peter Korsgaard
