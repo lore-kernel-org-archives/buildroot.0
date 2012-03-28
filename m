@@ -1,77 +1,112 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Mar 2012 23:37:59 +0200
-Subject: [Buildroot] xbmc package
-In-Reply-To: <CAAfyv35s2iDxa8iWXqvfCMQDoF4kk-+_4zDFY=A6sE59i=sHXQ@mail.gmail.com>
-References: <CAAfyv35s2iDxa8iWXqvfCMQDoF4kk-+_4zDFY=A6sE59i=sHXQ@mail.gmail.com>
-Message-ID: <201203282338.00156.arnout@mind.be>
+Date: Wed, 28 Mar 2012 23:48:04 +0200
+Subject: [Buildroot] [PATCH v2 3/3] Add ofono package.
+In-Reply-To: <1332792756-3381-4-git-send-email-marek.belisko@open-nandra.com>
+References: <1332792756-3381-1-git-send-email-marek.belisko@open-nandra.com>
+ <1332792756-3381-4-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <201203282348.05392.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 28 March 2012 10:47:52 Belisko Marek wrote:
-> Hi,
-> 
-> I'm trying to add xbmc package to buildroot and have problem how to
-> fix one dependency problem.
-> Problem is with mysql_config which is requested by xmbc during config phase.
-> I add mysql_client dependency (mysql_config is installed in staging)
-> but xbmc config
-> still complain. I've check that qt use similar with configure option
-> but xbmc don't have such an option.
-> 
-> Any ideas how to fix that?
-
- You'll have to tell the configure script to look for mysql_config in
-the staging directory.  See for instance how fontconfig.mk tells its
-configure to use the freetype-config from the staging directory.
-
- ... except that the xbmc people don't seem to know how to write
-a configure.ac.  You can't properly override the MYSQL_CONFIG
-variable.  You'll have to fix configure.ac :-(
-
- The alternative would be to let mysql_client.mk install mysql_config
-in some new target-config-bin directory that is prepended to the path
-for target builds.  But that's also a lot of work.
-
-
+On Monday 26 March 2012 22:12:36 Marek Belisko wrote:
 [snip]
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> diff --git a/package/ofono/Config.in b/package/ofono/Config.in
 > new file mode 100644
-> index 0000000..6379ab8
+> index 0000000..b10e42d
 > --- /dev/null
-> +++ b/package/xbmc/xbmc.mk
-> @@ -0,0 +1,13 @@
-> +#############################################################
-> +#
-> +# xbmc
-> +#
-> +#############################################################
-> +XBMC_VERSION = 11.0
-> +XBMC_SITE = http://mirrors.xbmc.org/releases/source/
+> +++ b/package/ofono/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_OFONO
+> +	bool "ofono"
+> +	select BR2_PACKAGE_LIBCAP_NG
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_LIBGLIB2
+> +	select BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
+
+ Missing
+	depends on BR2_USE_WCHAR # gettext/libglib2
+
+ which also means you need a comment in case we don't have WCHAR.
+
+> +	helpimplies
+> +	  oFono.org is a place to bring developers together around designing an
+> +	  infrastructure for building mobile telephony (GSM/UMTS) applications.
+
+ This doesn't really explain what the package does.  Also, a link to a
+website is convenient.
+
 > +
-> +XBMC_DEPENDENCIES = host-pkg-config boost sdl_gfx mysql_client
-> +XBMC_CONF_OPT = --disable-debug --disable-gl
+> +if BR2_PACKAGE_OFONO
+> +
+> +config BR2_PACKAGE_OFONO_BLUETOOTH
+> +        bool "ofono with bluetooth support"
+> +	select BR2_PACKAGE_BLUEZ_UTILS
+> +        help
+> +	  Enable bluetooh support.
+> +endif
 
- The --disable-debug should probably be:
+ There's some funky whitespace here.  Also a type: bluetooh -> bluetooth
 
-$(if $(BR2_ENABLE_DEBUG),--enable-debug,--disable-debug)
+> +
+> +
 
- And gl is provided by the mesa3d package - it probably
-should be a configure option, though.  Or you can do
-something like
+ No empty lines at the end of the file please.
 
-ifeq ($(BR2_PACKAGE_MESA3D),y)
-XBMC_DEPENDENCIES += mesa3d
-XBMC_CONF_OPT += --enable-gl
-else
-XBMC_CONF_OPT += --disable-gl
-endif
+> diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+> new file mode 100644
+> index 0000000..e408a61
+> --- /dev/null
+> +++ b/package/ofono/ofono.mk
+> @@ -0,0 +1,25 @@
+> +#############################################################
+> +#
+> +# ofono
+> +#
+> +#############################################################
+> +OFONO_VERSION = 1.5
+> +OFONO_SITE = git://git.kernel.org/pub/scm/network/ofono/ofono.git
+
+ Why not use the tar from $(BR2_KERNEL_MIRROR)/linux/network/ofono ?
+
+> +
+> +OFONO_DEPENDENCIES = host-pkg-config libglib2 dbus libcap-ng mobile-broadband-provider-info
+> +
+> +OFONO_CONF_OPT = --disable-test --disable-bluetooth
+
+ The --disable-bluetooth should be in the else of the OFONO_BLUETOOTH
+option.
+
+> +
+> +OFONO_AUTORECONF = YES
+
+ Not needed if you use the tar.
+
+> +
+> +ifneq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV),y)
+> +	OFONO_CONF_OPT += --disable-udev
+> +endif
+
+ It's better to use --enable-udev explicitly in the positive case, and
+you probably need to add udev to DEPENDENCIES anyway.
+
+ Also it's more logical to check for BR2_PACKAGE_UDEV.
 
 
  Regards,
  Arnout
+
+> +
+> +ifeq ($(BR2_PACKAGE_OFONO_BLUETOOTH),y)
+> +	OFONO_CONF_OPT += --enable-bluetooth
+> +	OFONO_DEPENDENCIES += bluez_utils
+> +endif
+> +
+> +$(eval $(call AUTOTARGETS))
+> +
+> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
