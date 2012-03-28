@@ -1,40 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 28 Mar 2012 18:17:20 -0300
-Subject: [Buildroot] [PATCH v2] gnutls: security bump to version 2.12.18
-Message-ID: <1332969440-31027-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 28 Mar 2012 23:34:02 +0200
+Subject: [Buildroot] [PATCH v2 2/3] Add mobile-broadband-provider-info
+	package.
+In-Reply-To: <1332792756-3381-3-git-send-email-marek.belisko@open-nandra.com>
+References: <1332792756-3381-1-git-send-email-marek.belisko@open-nandra.com>
+ <1332792756-3381-3-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <201203282334.03591.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2012-1573
+On Monday 26 March 2012 22:12:35 Marek Belisko wrote:
+> +MOBILE_BROADBAND_PROVIDER_INFO_VERSION = master
+> +MOBILE_BROADBAND_PROVIDER_INFO_SITE = git://git.gnome.org/mobile-broadband-provider-info
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.mk |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ Please use an explicit commit ID rather than 'master', otherwise the
+build is not reproducible.
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 4cda997..ce570d5 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,11 +4,12 @@
- #
- #############################################################
- 
--GNUTLS_VERSION = 2.10.5
-+GNUTLS_VERSION = 2.12.18
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
--GNUTLS_SITE = http://ftp.gnu.org/gnu/gnutls/
--GNUTLS_DEPENDENCIES = libgcrypt
--GNUTLS_CONF_OPT += --without-libgcrypt-prefix
-+GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
-+GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt
-+GNUTLS_CONF_OPT = --with-libgcrypt --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
-+		--without-p11-kit
- GNUTLS_INSTALL_STAGING = YES
- 
- $(eval $(call AUTOTARGETS))
+ Also, I prefer the http method for git access, because some firewalls
+block git traffic.  (Actually, ideally the git method should be
+updated to try http if the git access method fails...)
+
+ Regards,
+ Arnout
+
 -- 
-1.7.3.4
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
