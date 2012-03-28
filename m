@@ -1,93 +1,72 @@
-From: Ismael Luceno <ismael.luceno@gmail.com>
-Date: Tue, 27 Mar 2012 21:36:10 -0300
-Subject: [Buildroot] [PATCH v5] vlc: New package
-In-Reply-To: <201203252148.58501.arnout@mind.be>
-References: <1332381260-15711-1-git-send-email-ismael.luceno@gmail.com>
- <201203252148.58501.arnout@mind.be>
-Message-ID: <20120327213610.72c77611@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 27 Mar 2012 21:44:54 -0300
+Subject: [Buildroot] [PATCH] iptables: bump to version 1.4.13
+Message-ID: <1332895494-18765-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 25 Mar 2012 21:48:57 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
-> On Thursday 22 March 2012 02:54:20 Ismael Luceno wrote:
-> > Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
-> 
->  Not done yet, unfortunately...  But for a big patch like this that's
-> to be expected.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/iptables/iptables-3.2-headers-fix.patch |   34 -----------------------
+ package/iptables/iptables.mk                    |    2 +-
+ 2 files changed, 1 insertions(+), 35 deletions(-)
+ delete mode 100644 package/iptables/iptables-3.2-headers-fix.patch
 
-I know.
-
->  If you're in a hurry to get this integrated, it may be worthwhile to
-> split the patch into a basic one that includes a minimal feature set,
-> and an extension that adds all the config options for the different
-> components.
-
-I would prefer to get it integrated as a whole. Sooner is better, but I
-would like to get it right once and forever.
-
-<...>
->  udev is a special case, because it depends on the /dev management
-> option BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV.  You can't use a
-> select for that one (it would be too confusing).  So just set a
-> depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV.  The comment
-> is not needed in this case, because it's quite obvious that udev
-> support only makes sense if you have udev.
-
-Hmmm... that sounds a bit confusing... the dependency is actually on
-libudev, but does that necessarily mean
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV?
-
-> > diff --git a/package/multimedia/vlc/vlc-uclibc-fixes.patch
-> > b/package/multimedia/vlc/vlc-uclibc-fixes.patch new file mode 100644
-> > index 0000000..5471b08
-> > --- /dev/null
-> > +++ b/package/multimedia/vlc/vlc-uclibc-fixes.patch
-> > @@ -0,0 +1,25 @@
-> > +Fixes compilation with uClibc, which doesn't provide
-> > gnu/libc-version.h nor +gnu_get_libc_version.
-> > +
-> > +Signed-off-by: Ismael Luceno <ismael.luceno@gmail.com>
-> 
->  Did you send this patch upstream to vlc?  If not, could you do so?
-
-Yes, I sent it but was rejected, they consider it a bug in uClibc. I'll
-add a comment on the patch.
-
-> > +# The following rmoves the relink_command. If not removed, libtool
-> > tries to
->                    ^^^removes
-> > +# relink against the host libraries, instead of the sysroot.
-> > +VLC_POST_BUILD_HOOKS += VLC_FIX_LA_FILES
-> > +define VLC_FIX_LA_FILES
-> > +	find $(@D) -name '*.la' -exec $(SED) '/^relink_command=/d'
-> > '{}' +
-> 
->  For which .la's is this needed?  I've compiled various
-> configurations with several toolchains and I don't see a
-> relink_command in any of the .la files...
-
-Well, in the scm version I was using, for all them, but perhaps that
-somehow changes when compiling from a tarball... strange...
-
-> 
-> > +	touch $(@D)/modules/access/zip/libzip_plugin.la \
-> > +		$(@D)/modules/misc/liblogger_plugin.la
-> 
->  And why is this needed?
-
-Because those depend on other .la files, and otherwise get re-built,
-thus add the relink_command again...
-
-Thanks for the suggestions. I'll try to address the issues and send a
-new patch soon :).
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 490 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120327/6f8843ce/attachment.asc>
+diff --git a/package/iptables/iptables-3.2-headers-fix.patch b/package/iptables/iptables-3.2-headers-fix.patch
+deleted file mode 100644
+index 5ef6539..0000000
+--- a/package/iptables/iptables-3.2-headers-fix.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From dbe77cc974cee656eae37e75039dd1a410a4535b Mon Sep 17 00:00:00 2001
+-From: Jan Engelhardt <jengelh@medozas.de>
+-Date: Sun, 28 Aug 2011 14:19:43 +0200
+-Subject: [PATCH] include: refresh include files from kernel 3.1-rc3
+-
+-[Peter: trimmed to bare essentials for buildroot]
+-Signed-off-by: Jan Engelhardt <jengelh@medozas.de>
+----
+-diff --git a/include/linux/types.h b/include/linux/types.h
+-index 8b483c8..630cd3b 100644
+---- a/include/linux/types.h
+-+++ b/include/linux/types.h
+-@@ -34,5 +34,18 @@ typedef __u64 __bitwise __be64;
+- typedef __u16 __bitwise __sum16;
+- typedef __u32 __bitwise __wsum;
+- 
+-+/*
+-+ * aligned_u64 should be used in defining kernel<->userspace ABIs to avoid
+-+ * common 32/64-bit compat problems.
+-+ * 64-bit values align to 4-byte boundaries on x86_32 (and possibly other
+-+ * architectures) and to 8-byte boundaries on 64-bit architetures.  The new
+-+ * aligned_64 type enforces 8-byte alignment so that structs containing
+-+ * aligned_64 values have the same alignment on 32-bit and 64-bit architectures.
+-+ * No conversions are necessary between 32-bit user-space and a 64-bit kernel.
+-+ */
+-+#define __aligned_u64 __u64 __attribute__((aligned(8)))
+-+#define __aligned_be64 __be64 __attribute__((aligned(8)))
+-+#define __aligned_le64 __le64 __attribute__((aligned(8)))
+-+
+- #endif /*  __ASSEMBLY__ */
+- #endif /* _LINUX_TYPES_H */
+--- 
+-1.7.8.3
+-
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 95134e3..87578d5 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IPTABLES_VERSION = 1.4.12.2
++IPTABLES_VERSION = 1.4.13
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
+ IPTABLES_INSTALL_STAGING = YES
+-- 
+1.7.3.4
