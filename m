@@ -1,20 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 Mar 2012 22:04:29 +0200
-Subject: [Buildroot] [PATCH] openswan: new package
-In-Reply-To: <1332889779-27193-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1332889779-27193-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <201203282204.30908.arnout@mind.be>
+Date: Wed, 28 Mar 2012 22:26:08 +0200
+Subject: [Buildroot] [PATCH 1/1] lttng-libust: rename patch so that it
+	is taken into account
+In-Reply-To: <b3435944bbaf51566d808dc51aea2e2715143dbd.1332801197.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1332801197.git.thomas.petazzoni@free-electrons.com>
+ <b3435944bbaf51566d808dc51aea2e2715143dbd.1332801197.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201203282226.09646.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 28 March 2012 01:09:39 Gustavo Zacarias wrote:
-> +OPENSWAN_MAKEOPT = ARCH=$(BR2_ARCH) CC="$(TARGET_CC)" \
+On Tuesday 27 March 2012 00:33:21 Thomas Petazzoni wrote:
+> The package/lttng-libust/ contains a patch prefixed with
+> lttng-libust-1.9.2, so the other patch simply prefixed with
+> lttng-libust does not get applied. Rename the second patch properly.
 
- Could you name this variable OPENSWAN_MAKE_OPT?  If we ever get a
-MAKETARGETS infrastructure, that's what the variable will be called.
+ I thought we agreed to avoid versioned patches as much as possible, no?
+So this should rather be a rename of 
+lttng-libust-1.9.2-dont-build-cxx-tests-when-not-available.patch
+
 
  Regards,
  Arnout
