@@ -1,32 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Mar 2012 17:43:23 +0200
-Subject: [Buildroot] [git commit] coreutils: bump to version 8.16
-Message-ID: <20120329154644.81BA8969A7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 Mar 2012 18:31:27 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2012-03-28
+In-Reply-To: <87mx6zfm7g.fsf@macbook.be.48ers.dk>
+References: <20120329063012.3B50352C13D@lolut.humanoidz.org>
+ <20120329111216.GW444@game.jcrosoft.org>
+ <20120329152739.4aa1ac55@skate>
+ <87mx6zfm7g.fsf@macbook.be.48ers.dk>
+Message-ID: <20120329183127.559b38e2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94058fc3dbf113fd607ee491dd6cfced83950c63
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le Thu, 29 Mar 2012 17:42:11 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/coreutils/coreutils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>  Thomas> In the near future, I will clean up my own build scripts and
+>  Thomas> integrate them in the Git repository so that we can gradually
+>  Thomas> improve them and make them useful for others as well.
+> 
+> I'll do the same for my (simple) script.
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 0a85586..b2cca39 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--COREUTILS_VERSION = 8.15
-+COREUTILS_VERSION = 8.16
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- 
+I guess the good thing would be to be able to merge our scripts, so
+that we can share all the exceptions that are needed.
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
