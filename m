@@ -1,49 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Mar 2012 17:46:25 +0200
-Subject: [Buildroot] [git commit] sudo: bump to version 1.8.4p4
-Message-ID: <20120329154644.B0407969A7@busybox.osuosl.org>
+Date: Thu, 29 Mar 2012 17:43:15 +0200
+Subject: [Buildroot] [git commit] gawk: bump to version 4.0.1
+Message-ID: <20120329154644.7541696997@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61d3d740dba46f469ea368b9080091ce614455a8
+commit: http://git.buildroot.net/buildroot/commit/?id=11c20ebf77c4320c22ee5b97732fbfd6b5269106
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sudo/sudo.mk |   11 ++++++-----
- 1 files changed, 6 insertions(+), 5 deletions(-)
+ package/gawk/gawk.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index f10d294..71d7a20 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,9 +4,8 @@
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index f1a6472..8f374cb 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--SUDO_VERSION = 1.7.8p1
-+SUDO_VERSION = 1.8.4p4
- SUDO_SITE    = http://www.sudo.ws/sudo/dist
--
- SUDO_CONF_OPT = \
- 		--without-lecture \
- 		--without-sendmail \
-@@ -16,9 +15,11 @@ SUDO_CONF_OPT = \
- 		--without-pam
+-GAWK_VERSION = 4.0.0
++GAWK_VERSION = 4.0.1
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_TARGET_BINS = awk gawk igawk pgawk
  
- define SUDO_INSTALL_TARGET_CMDS
--	install -m 4555 -D $(@D)/sudo $(TARGET_DIR)/usr/bin/sudo
--	install -m 0555 -D $(@D)/visudo $(TARGET_DIR)/usr/sbin/visudo
--	install -m 0440 -D $(@D)/sudoers $(TARGET_DIR)/etc/sudoers
-+	install -m 4555 -D $(@D)/src/sudo $(TARGET_DIR)/usr/bin/sudo
-+	install -m 0555 -D $(@D)/plugins/sudoers/visudo  \
-+		$(TARGET_DIR)/usr/sbin/visudo
-+	install -m 0440 -D $(@D)/plugins/sudoers/sudoers \
-+		$(TARGET_DIR)/etc/sudoers
- endef
- 
- $(eval $(call AUTOTARGETS))
