@@ -1,34 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 Mar 2012 18:31:27 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-03-28
-In-Reply-To: <87mx6zfm7g.fsf@macbook.be.48ers.dk>
-References: <20120329063012.3B50352C13D@lolut.humanoidz.org>
- <20120329111216.GW444@game.jcrosoft.org>
- <20120329152739.4aa1ac55@skate>
- <87mx6zfm7g.fsf@macbook.be.48ers.dk>
-Message-ID: <20120329183127.559b38e2@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Mar 2012 00:01:07 +0200
+Subject: [Buildroot] [PATCH 5/7] psmisc: bump to version 22.16
+In-Reply-To: <1332987903-12378-5-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 28 Mar 2012 23:25:01 -0300")
+References: <1332987903-12378-1-git-send-email-gustavo@zacarias.com.ar>
+ <1332987903-12378-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sjgrdq3g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 29 Mar 2012 17:42:11 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
->  Thomas> In the near future, I will clean up my own build scripts and
->  Thomas> integrate them in the Git repository so that we can gradually
->  Thomas> improve them and make them useful for others as well.
-> 
-> I'll do the same for my (simple) script.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I guess the good thing would be to be able to merge our scripts, so
-that we can share all the exceptions that are needed.
+ Gustavo> +# Don't force -fstack-protector
+ Gustavo> +PSMISC_CONF_OPT = --disable-harden-flags
 
-Thomas
+We have a BR2_TOOLCHAIN_BUILDROOT_USE_SSP, so we shouldn't disable if we
+know the toolchain supports it.
+
+Other than that it looks good - Committed, thanks.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
