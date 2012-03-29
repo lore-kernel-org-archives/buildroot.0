@@ -1,32 +1,28 @@
-From: =?ISO-8859-1?Q?Eldor_R=F8dseth_=28SystemSoft_AS=29?= <er@systemsoft.no>
-Date: Thu, 29 Mar 2012 09:45:06 +0200
-Subject: [Buildroot] Buildroot for Freescale PowerPC (PowerQUICC) MPC875
-Message-ID: <CAM5MTK-jyqiAb3nQQKRRRXtL8HsKw1+rTOj45EeR_ct25o6FVQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 29 Mar 2012 10:47:14 +0200
+Subject: [Buildroot] [PATCH] Fix problem with undefined umode_t type in
+	3.3 kernel headers
+In-Reply-To: <1332580484-4489-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Sat, 24 Mar 2012 09:14:44 +0000")
+References: <1332580484-4489-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87wr63g5f1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-We are currently running kernel version 2.6.25.16 on a Freescale
-PowerPC (PowerQUICC) MPC875.
-and using Redboot as the bootloader. The Toolchain is ELDK version
-4.1. We are considering
-upgrading to a newer kernel version, mainly due to new HW layout with
-some components being
-replaced/upgraded.
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
 
-I have no prior experience using buildroot, but would like to give it
-a try for the Kernel and rootfs image
-(I think I'll keep the bootloader.....).
+ spdawson> The 3.3 kernel headers define the umode_t type within a
+ spdawson> __KERNEL__ preprocessor ifdef region. This results in a
+ spdawson> broken kernel header in the buildroot toolchain.
 
-I would be interested in a how-to for the correct configuration of the
-MPC875. I have had a go at
-"make menuconfig" but I am not comfortable with which choices to make for
-target arch. variant, toolchain, kernel configuration, etc.
+Committed, thanks. It seems socat/syslinux should get updated to not
+include this header, but as there's no upstream releases fixing this it
+makes sense to add it for now.
 
-Appreciate any help - thanks.
-
-Regards, Eldor
+-- 
+Bye, Peter Korsgaard
