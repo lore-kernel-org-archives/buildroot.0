@@ -1,34 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 29 Mar 2012 19:37:09 -0300
-Subject: [Buildroot] [PATCH 5/7] psmisc: bump to version 22.16
-In-Reply-To: <87sjgrdq3g.fsf@macbook.be.48ers.dk>
-References: <1332987903-12378-1-git-send-email-gustavo@zacarias.com.ar>
- <1332987903-12378-5-git-send-email-gustavo@zacarias.com.ar>
- <87sjgrdq3g.fsf@macbook.be.48ers.dk>
-Message-ID: <90ff39765efa093002706980f59b4233@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 Mar 2012 01:15:00 +0200
+Subject: [Buildroot] [git commit] sudo: bump to version 1.8.4p4
+In-Reply-To: <20120329154644.B0407969A7@busybox.osuosl.org>
+References: <20120329154644.B0407969A7@busybox.osuosl.org>
+Message-ID: <20120330011500.07b6e26b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-29 19:01, Peter Korsgaard wrote:
+Le Thu, 29 Mar 2012 17:46:25 +0200,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
->>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
->
->  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->
->  Gustavo> +# Don't force -fstack-protector
->  Gustavo> +PSMISC_CONF_OPT = --disable-harden-flags
->
-> We have a BR2_TOOLCHAIN_BUILDROOT_USE_SSP, so we shouldn't disable if 
-> we
-> know the toolchain supports it.
->
-> Other than that it looks good - Committed, thanks.
+> commit: http://git.buildroot.net/buildroot/commit/?id=61d3d740dba46f469ea368b9080091ce614455a8
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 
-Yes, however the support is incomplete, we aren't copying libssp for 
-external toolchains and we're doing --disable-libssp for the internal 
-too so it's better to disable it altogether until that's fixed (i recall 
-there was a bug or email reporting it).
-Regards.
+I don't know if it is caused by this bump version or if the problem was
+present before, but:
+
+ http://autobuild.buildroot.org/results/d5a7831701e4c3b147451f4f021aa644672005ae/build-end.log
+ http://autobuild.buildroot.org/results/521b2a317fe2464c13e6fecd0c80ee2bac229522/build-end.log
+ http://autobuild.buildroot.org/results/10469a7a62f43200e17d94fcb0460f2e032bac4d/build-end.log
+
+I don't think I have seen sudo build failures before this bump through
+the autobuild tests.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
