@@ -1,99 +1,67 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 29 Mar 2012 23:56:01 +0200
-Subject: [Buildroot] [git commit] psmisc: bump to version 22.16
-Message-ID: <20120329220348.723BB969A8@busybox.osuosl.org>
+Date: Fri, 30 Mar 2012 00:22:47 +0200
+Subject: [Buildroot] [git commit] toolchain: add linaro 2012.03 external ARM
+	toolchain
+Message-ID: <20120329222313.9C126969A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=953b0f4de8ebcb5b42c8da760c025873ce82550d
+commit: http://git.buildroot.net/buildroot/commit/?id=1b7f5285fbf6b03c14d48d614ae3ade91868f954
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: Don't disable stack protection if toolchain has ssp support]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/psmisc/psmisc-link-against-libintl.patch |   38 ++++------------------
- package/psmisc/psmisc.mk                         |    9 ++++-
- 2 files changed, 14 insertions(+), 33 deletions(-)
+ toolchain/toolchain-external/Config.in   |   15 +++++++++++++++
+ toolchain/toolchain-external/ext-tool.mk |    3 +++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
-diff --git a/package/psmisc/psmisc-link-against-libintl.patch b/package/psmisc/psmisc-link-against-libintl.patch
-index fca49c6..907e7e7 100644
---- a/package/psmisc/psmisc-link-against-libintl.patch
-+++ b/package/psmisc/psmisc-link-against-libintl.patch
-@@ -14,44 +14,20 @@ the "autopoint" program, which itself depends on CVS being installed,
- for some strange reasons. That's the reason why we fall back to the
- hacky solution of modifying the Makefile.in file.
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 014bfc5..991684f 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -3,6 +3,20 @@ if BR2_TOOLCHAIN_EXTERNAL
+ choice
+ 	prompt "Toolchain"
  
--Forward-ported Thomas's patch to psmisc 22.14
-+Forward-ported Thomas's patch to psmisc 22.16
- from commit f066ed70cd6939838d4057f66798cbc1d972cc73
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--diff -Nura psmisc-22.14.orig/src/Makefile.in psmisc-22.14/src/Makefile.in
----- psmisc-22.14.orig/src/Makefile.in	2011-10-12 12:12:09.711983726 -0300
--+++ psmisc-22.14/src/Makefile.in	2011-10-12 12:14:01.733350322 -0300
--@@ -70,16 +70,16 @@
-- PROGRAMS = $(bin_PROGRAMS)
-- am_fuser_OBJECTS = fuser.$(OBJEXT) signals.$(OBJEXT)
-- fuser_OBJECTS = $(am_fuser_OBJECTS)
---fuser_LDADD = $(LDADD)
--+fuser_LDADD = $(LDADD) @INTLLIBS@
-- am_killall_OBJECTS = killall.$(OBJEXT) signals.$(OBJEXT)
-- killall_OBJECTS = $(am_killall_OBJECTS)
-+diff -Nura psmisc-22.16.orig/src/Makefile.in psmisc-22.16/src/Makefile.in
-+--- psmisc-22.16.orig/src/Makefile.in	2012-03-28 22:27:33.106660358 -0300
-++++ psmisc-22.16/src/Makefile.in	2012-03-28 22:28:55.752219349 -0300
-+@@ -76,7 +76,7 @@
-  killall_DEPENDENCIES =
-  am_peekfd_OBJECTS = peekfd.$(OBJEXT)
-  peekfd_OBJECTS = $(am_peekfd_OBJECTS)
- -peekfd_LDADD = $(LDADD)
--+peekfd_LDADD = $(LDADD) @INTLLIBS@
-++peekfd_LDADD = $(LDADD) @LIBINTL@
-  am_prtstat_OBJECTS = prtstat.$(OBJEXT)
-  prtstat_OBJECTS = $(am_prtstat_OBJECTS)
---prtstat_LDADD = $(LDADD)
--+prtstat_LDADD = $(LDADD) @INTLLIBS@
-- am_pstree_OBJECTS = pstree.$(OBJEXT)
-- pstree_OBJECTS = $(am_pstree_OBJECTS)
-- pstree_DEPENDENCIES =
--@@ -217,10 +217,10 @@
-- 	$(am__append_10)
-- fuser_SOURCES = fuser.c comm.h signals.c signals.h i18n.h fuser.h lists.h
-- killall_SOURCES = killall.c comm.h signals.c signals.h i18n.h
---killall_LDADD = @SELINUX_LIB@
--+killall_LDADD = @SELINUX_LIB@ @INTLLIBS@
-- peekfd_SOURCES = peekfd.c
-- pstree_SOURCES = pstree.c comm.h i18n.h
---pstree_LDADD = @TERMCAP_LIB@ @SELINUX_LIB@
--+pstree_LDADD = @TERMCAP_LIB@ @SELINUX_LIB@ @INTLLIBS@
-- prtstat_SOURCES = prtstat.c prtstat.h
-- BUILT_SOURCES = signames.h
-- EXTRA_DIST = signames.c 
-+ prtstat_DEPENDENCIES =
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index df116fc..0b0e046 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
-@@ -4,10 +4,15 @@
- #
- #############################################################
- 
--PSMISC_VERSION = 22.14
--PSMISC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/psmisc
-+PSMISC_VERSION = 22.16
-+PSMISC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/psmisc/psmisc
- PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl)
- 
-+ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
-+# Don't force -fstack-protector
-+PSMISC_CONF_OPT = --disable-harden-flags
-+endif
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_03
++	bool "Linaro 2012.03"
++	depends on BR2_arm
++	depends on BR2_cortex_a8 || BR2_cortex_a9
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	help
++	  Linaro toolchain for the ARM architecture. It uses Linaro
++	  GCC 2012.03 (based on gcc 4.6), Linaro GDB 2012.03, eglibc
++	  2.13. It generates code that runs on all Cortex-A profile
++	  devices, but tuned for the Cortex-A9. The code generated is
++	  Thumb 2, with the softfp calling convention, and uses the
++	  VFPv3-D16 FPU instructions.
 +
- # build after busybox, we prefer fat versions while we're at it
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- PSMISC_DEPENDENCIES += busybox
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
+ 	bool "Linaro 2012.02"
+ 	depends on BR2_arm
+@@ -484,6 +498,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	string
+ 	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_01
+ 	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02
++	default "arm-linux-gnueabi"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_03
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2009Q3
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM2010Q1
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201009
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index 51bce91..0a997a5 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -197,6 +197,9 @@ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.01-20120125_linux.ta
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_02),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://launchpad.net/linaro-toolchain-binaries/trunk/2012.02/+download/
+ TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.02-20120222_linux.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_03),y)
++TOOLCHAIN_EXTERNAL_SITE=http://launchpad.net/linaro-toolchain-binaries/trunk/2012.03/+download/
++TOOLCHAIN_EXTERNAL_SOURCE=gcc-linaro-arm-linux-gnueabi-2012.03-20120326_linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS44),y)
+ TOOLCHAIN_EXTERNAL_SITE=http://sourcery.mentor.com/sgpp/lite/mips/portal/package7401/public/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE=mips-4.4-303-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
