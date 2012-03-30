@@ -1,23 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Mar 2012 08:56:22 -0300
-Subject: [Buildroot] [PATCH] sudo: add fix for non-utmpx toolchains
-In-Reply-To: <87bonee29x.fsf@macbook.be.48ers.dk>
-References: <1333103753-29248-1-git-send-email-gustavo@zacarias.com.ar>
- <87bonee29x.fsf@macbook.be.48ers.dk>
-Message-ID: <0104f282ef6978cb6d1ecc984c8bc874@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri, 30 Mar 2012 14:50:26 +0200
+Subject: [Buildroot] [PATCH] pcre: bump to 8.30
+Message-ID: <1333111826-26665-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-03-30 08:50, Peter Korsgaard wrote:
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/pcre/pcre.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-> Committed, thanks.
->
-> Don't forget to send it upsteam as well.
-
-Already did before submitting it here, check inside the patch :)
-I tend to stick the upstream status inside to make it better for 
-tracking.
-Regards.
+diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
+index d64106e..db896fd 100644
+--- a/package/pcre/pcre.mk
++++ b/package/pcre/pcre.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-PCRE_VERSION = 8.20
++PCRE_VERSION = 8.30
+ PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+ PCRE_INSTALL_STAGING = YES
+ 
+-- 
+1.7.5.4
