@@ -1,37 +1,49 @@
-From: Roy van Dam <roy@vandam-innovations.com>
-Date: Fri, 30 Mar 2012 11:54:37 +0200
-Subject: [Buildroot] External configuration files
-Message-ID: <763F580D-226E-4AB7-ADF1-CFEB19B9E91B@vandam-innovations.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 30 Mar 2012 07:35:53 -0300
+Subject: [Buildroot] [PATCH] sudo: add fix for non-utmpx toolchains
+Message-ID: <1333103753-29248-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The utmpx defines for when the target systems lacks utmpx is incomplete,
+resulting in a build failure, so fix it.
+This can be triggered by a uClibc toolchain that lacks UTMPX in the
+configuration, or an older (<= 0.9.31) uClibc which lacks the
+functionality.
 
-For a project I've developed a wrapper around the Buildroot2012.02 package that maintains a some of the additional features we need here internally. This all works fine, except for the fact that Buildroot keeps messing up the configuration files on initial import. The first time the build process is executed the configuration path parameters (see below) are directly passed to buildroot. Buildroot imports them when needed during the build and the build succeeds fine, however some of the configuration settings in uClibc and Busybox are being overwritten with default values. For example I need uClibc to be build with RPC support but Buildroot keeps unchecking the flag upon import of the configuration file.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sudo/sudo-1.8.4p4-utmpx.patch |   19 +++++++++++++++++++
+ 1 files changed, 19 insertions(+), 0 deletions(-)
+ create mode 100644 package/sudo/sudo-1.8.4p4-utmpx.patch
 
-The following parameters are passed to the Buildroot.
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE=/path/to/linux.config
-BR2_PACKAGE_BUSYBOX_CONFIG=/path/to/busybox.config
-BR2_UCLIBC_CONFIG=/path/to/uclibc.config
-BUSYBOX_CONFIG_FILE=/path/to/busybox.config
-UCLIBC_CONFIG_FILE=/path/to/uclibc.config
-
-Any call to make that follows will only be passed the BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE parameter as Buildroot complains about it when it's not there. This way Buildroot can use the normal .config files of the modules. After a `*-menuconfig` of one of the modules the new .config file is copied to the configuration folder outside the Builtroot tree to keep the files in sync. The required flags are set in those external configuration file, so the copy/sync works. I also tried passing the BR2_* parameters on every call to Buildroot but without success, then it just keeps unchecking my flags.
-
-Maybe I just doing something stupid, but it's very annoying that the configuration files are merged with some sort of defconfig and I have no clue where to look any further.
-
-Thanks in advance!
-
-Best regards,
-Roy van Dam
-Van Dam Innovations
-
-T: (+31) (0) 625 20 40 10
-M: roy at vandam-innovations.com
-W: http://www.vandam-innovations.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120330/e2d4a197/attachment.html>
+diff --git a/package/sudo/sudo-1.8.4p4-utmpx.patch b/package/sudo/sudo-1.8.4p4-utmpx.patch
+new file mode 100644
+index 0000000..4e97406
+--- /dev/null
++++ b/package/sudo/sudo-1.8.4p4-utmpx.patch
+@@ -0,0 +1,19 @@
++Fix incomplete setutxent/endutxent defines for when there's no utmpx
++Upstream bug #551
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura sudo-1.8.4p4.orig/src/utmp.c sudo-1.8.4p4/src/utmp.c
++--- sudo-1.8.4p4.orig/src/utmp.c	2012-03-30 07:10:38.381706315 -0300
+++++ sudo-1.8.4p4/src/utmp.c	2012-03-30 07:10:52.605802501 -0300
++@@ -63,8 +63,8 @@
++ #if !defined(HAVE_GETUTXID) && defined(HAVE_GETUTID)
++ # define getutxline(u)	getutline(u)
++ # define pututxline(u)	pututline(u)
++-# define setutxent	setutent(u)
++-# define endutxent	endutent(u)
+++# define setutxent(u)	setutent(u)
+++# define endutxent(u)	endutent(u)
++ #endif /* !HAVE_GETUTXID && HAVE_GETUTID */
++ 
++ #ifdef HAVE_GETUTXID
+-- 
+1.7.3.4
