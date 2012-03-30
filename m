@@ -1,49 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 Mar 2012 07:35:53 -0300
-Subject: [Buildroot] [PATCH] sudo: add fix for non-utmpx toolchains
-Message-ID: <1333103753-29248-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 30 Mar 2012 12:55:21 +0200
+Subject: [Buildroot] [PATCH 5/7] psmisc: bump to version 22.16
+In-Reply-To: <90ff39765efa093002706980f59b4233@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Thu, 29 Mar 2012 19:37:09 -0300")
+References: <1332987903-12378-1-git-send-email-gustavo@zacarias.com.ar>
+ <1332987903-12378-5-git-send-email-gustavo@zacarias.com.ar>
+ <87sjgrdq3g.fsf@macbook.be.48ers.dk>
+ <90ff39765efa093002706980f59b4233@zacarias.com.ar>
+Message-ID: <87fwcqe4ti.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The utmpx defines for when the target systems lacks utmpx is incomplete,
-resulting in a build failure, so fix it.
-This can be triggered by a uClibc toolchain that lacks UTMPX in the
-configuration, or an older (<= 0.9.31) uClibc which lacks the
-functionality.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sudo/sudo-1.8.4p4-utmpx.patch |   19 +++++++++++++++++++
- 1 files changed, 19 insertions(+), 0 deletions(-)
- create mode 100644 package/sudo/sudo-1.8.4p4-utmpx.patch
+Hi,
 
-diff --git a/package/sudo/sudo-1.8.4p4-utmpx.patch b/package/sudo/sudo-1.8.4p4-utmpx.patch
-new file mode 100644
-index 0000000..4e97406
---- /dev/null
-+++ b/package/sudo/sudo-1.8.4p4-utmpx.patch
-@@ -0,0 +1,19 @@
-+Fix incomplete setutxent/endutxent defines for when there's no utmpx
-+Upstream bug #551
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura sudo-1.8.4p4.orig/src/utmp.c sudo-1.8.4p4/src/utmp.c
-+--- sudo-1.8.4p4.orig/src/utmp.c	2012-03-30 07:10:38.381706315 -0300
-++++ sudo-1.8.4p4/src/utmp.c	2012-03-30 07:10:52.605802501 -0300
-+@@ -63,8 +63,8 @@
-+ #if !defined(HAVE_GETUTXID) && defined(HAVE_GETUTID)
-+ # define getutxline(u)	getutline(u)
-+ # define pututxline(u)	pututline(u)
-+-# define setutxent	setutent(u)
-+-# define endutxent	endutent(u)
-++# define setutxent(u)	setutent(u)
-++# define endutxent(u)	endutent(u)
-+ #endif /* !HAVE_GETUTXID && HAVE_GETUTID */
-+ 
-+ #ifdef HAVE_GETUTXID
+ Gustavo> +# Don't force -fstack-protector
+ Gustavo> +PSMISC_CONF_OPT = --disable-harden-flags
+ >> 
+ >> We have a BR2_TOOLCHAIN_BUILDROOT_USE_SSP, so we shouldn't disable
+ >> if we know the toolchain supports it.
+ >> 
+ >> Other than that it looks good - Committed, thanks.
+
+ Gustavo> Yes, however the support is incomplete, we aren't copying
+ Gustavo> libssp for external toolchains and we're doing
+ Gustavo> --disable-libssp for the internal too so it's better to
+ Gustavo> disable it altogether until that's fixed (i recall there was a
+ Gustavo> bug or email reporting it).
+
+It is true that we don't have SSP support in external toolchains, but
+BR2_TOOLCHAIN_BUILDROOT_USE_SSP isn't enabled for those, and for
+internal toolchains we do enable the SSP support in uClibc, so those
+should afaik be OK.
+
+So I think the commit is OK as is.
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
