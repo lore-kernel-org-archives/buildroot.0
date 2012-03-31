@@ -1,58 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 30 Apr 2012 19:43:50 -0300
-Subject: [Buildroot] [PATCH] mysql_client: security bump to version 5.1.62
-Message-ID: <1335825830-14592-1-git-send-email-gustavo@zacarias.com.ar>
+From: Marek Belisko <marek.belisko@open-nandra.com>
+Date: Sun,  1 Apr 2012 00:11:38 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_Add_fmtools_package=2E?=
+Message-ID: <1333231898-20980-1-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2012-0583, CVE-2012-1688, CVE-2012-1690, CVE-2012-1696,
-CVE-2012-1697, CVE-2012-1703.
-
-Switched to skysql mirror since Oracle no longer maintains the 5.1
-branch.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- ...ch => mysql_client-5.1.62-ac_cache_check.patch} |    0
- ...l_client-5.1.62-configure-ps-cache-check.patch} |    0
- ...sql_client-5.1.62-use-new-readline-iface.patch} |    0
- package/mysql_client/mysql_client.mk               |    5 +++--
- 4 files changed, 3 insertions(+), 2 deletions(-)
- rename package/mysql_client/{mysql_client-5.1.61-ac_cache_check.patch => mysql_client-5.1.62-ac_cache_check.patch} (100%)
- rename package/mysql_client/{mysql_client-5.1.61-configure-ps-cache-check.patch => mysql_client-5.1.62-configure-ps-cache-check.patch} (100%)
- rename package/mysql_client/{mysql_client-5.1.61-use-new-readline-iface.patch => mysql_client-5.1.62-use-new-readline-iface.patch} (100%)
+ package/Config.in          |    1 +
+ package/fmtools/Config.in  |    9 +++++++++
+ package/fmtools/fmtools.mk |   19 +++++++++++++++++++
+ 3 files changed, 29 insertions(+), 0 deletions(-)
+ create mode 100644 package/fmtools/Config.in
+ create mode 100644 package/fmtools/fmtools.mk
 
-diff --git a/package/mysql_client/mysql_client-5.1.61-ac_cache_check.patch b/package/mysql_client/mysql_client-5.1.62-ac_cache_check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.61-ac_cache_check.patch
-rename to package/mysql_client/mysql_client-5.1.62-ac_cache_check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.61-configure-ps-cache-check.patch b/package/mysql_client/mysql_client-5.1.62-configure-ps-cache-check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.61-configure-ps-cache-check.patch
-rename to package/mysql_client/mysql_client-5.1.62-configure-ps-cache-check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.61-use-new-readline-iface.patch b/package/mysql_client/mysql_client-5.1.62-use-new-readline-iface.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.61-use-new-readline-iface.patch
-rename to package/mysql_client/mysql_client-5.1.62-use-new-readline-iface.patch
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index 0803d10..a1640c3 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -3,9 +3,10 @@
- # MySQL 5.1 Client
- #
- #############################################################
--MYSQL_CLIENT_VERSION = 5.1.61
+diff --git a/package/Config.in b/package/Config.in
+index 68d28fa..94faf44 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -175,6 +175,7 @@ source "package/e2fsprogs/Config.in"
+ source "package/eeprog/Config.in"
+ source "package/fconfig/Config.in"
+ source "package/fis/Config.in"
++source "package/fmtools/Config.in"
+ source "package/gadgetfs-test/Config.in"
+ source "package/gdisk/Config.in"
+ source "package/genext2fs/Config.in"
+diff --git a/package/fmtools/Config.in b/package/fmtools/Config.in
+new file mode 100644
+index 0000000..41c883c
+--- /dev/null
++++ b/package/fmtools/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FMTOOLS
++	bool "fmtools"
++	help
++	  fmtools is a pair of simple command-line utilities for
++	  ?video4linux? radio tuner cards under Linux. It includes
++	  fm for power control, tuning, and volume and fmscan for
++	  scanning for stations.
 +
-+MYSQL_CLIENT_VERSION = 5.1.62
- MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
--MYSQL_CLIENT_SITE = http://downloads.mysql.com/archives/mysql-5.1/
-+MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
- MYSQL_CLIENT_INSTALL_STAGING = YES
- MYSQL_CLIENT_DEPENDENCIES = readline ncurses
- MYSQL_CLIENT_AUTORECONF=YES
++	  http://www.stanford.edu/~blp/fmtools/
+diff --git a/package/fmtools/fmtools.mk b/package/fmtools/fmtools.mk
+new file mode 100644
+index 0000000..c03afbc
+--- /dev/null
++++ b/package/fmtools/fmtools.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# fmtools
++#
++#############################################################
++
++FMTOOLS_VERSION = 1.0.2
++FMTOOLS_SITE = http://www.stanford.edu/~blp/fmtools/
++
++define FMTOOLS_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++define FMTOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/fm $(TARGET_DIR)/usr/sbin
++	$(INSTALL) -D -m 0755 $(@D)/fmscan $(TARGET_DIR)/usr/sbin
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-1.7.3.4
+1.7.5.4
