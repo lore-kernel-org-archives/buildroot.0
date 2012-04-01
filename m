@@ -1,10 +1,9 @@
 From: Marek Belisko <marek.belisko@open-nandra.com>
-Date: Sun,  1 Apr 2012 15:58:48 +0200
-Subject: [Buildroot] [PATCH v3 2/3] Add mobile-broadband-provider-info
-	package.
+Date: Sun,  1 Apr 2012 15:58:47 +0200
+Subject: [Buildroot] [PATCH v3 1/3] Add libcap-ng package.
 In-Reply-To: <1333288729-22138-1-git-send-email-marek.belisko@open-nandra.com>
 References: <1333288729-22138-1-git-send-email-marek.belisko@open-nandra.com>
-Message-ID: <1333288729-22138-3-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <1333288729-22138-2-git-send-email-marek.belisko@open-nandra.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +12,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 ---
- package/Config.in                                  |    1 +
- package/mobile-broadband-provider-info/Config.in   |    6 ++++++
- .../mobile_broadband_provider_info.mk              |   14 ++++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
- create mode 100644 package/mobile-broadband-provider-info/Config.in
- create mode 100644 package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+ package/Config.in              |    1 +
+ package/libcap-ng/Config.in    |   10 ++++++++++
+ package/libcap-ng/libcap-ng.mk |   11 +++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
+ create mode 100644 package/libcap-ng/Config.in
+ create mode 100644 package/libcap-ng/libcap-ng.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2dc7e1f..cd41eb9 100644
+index b394f18..2dc7e1f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -424,6 +424,7 @@ endmenu
- endmenu
- 
- menu "Miscellaneous"
-+source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
- endmenu
- 
-diff --git a/package/mobile-broadband-provider-info/Config.in b/package/mobile-broadband-provider-info/Config.in
+@@ -377,6 +377,7 @@ source "package/argp-standalone/Config.in"
+ source "package/boost/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libcap/Config.in"
++source "package/libcap-ng/Config.in"
+ source "package/libdaemon/Config.in"
+ source "package/libelf/Config.in"
+ source "package/libevent/Config.in"
+diff --git a/package/libcap-ng/Config.in b/package/libcap-ng/Config.in
 new file mode 100644
-index 0000000..dda7105
+index 0000000..d1663cd
 --- /dev/null
-+++ b/package/mobile-broadband-provider-info/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_MOBILE_BROADBAND_PROVIDER_INFO
-+	bool "mobile-broadband-provider-info"
++++ b/package/libcap-ng/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBCAP_NG
++	bool "libcap-ng"
 +	help
-+	  Mobile broadband provider database.
++	  The libcap-ng library is intended to make programming with
++	  posix capabilities much easier than the traditional libcap
++	  library. It includes utilities that can analyse all currently
++	  running applications and print out any capabilities and whether
++	  or not it has an open ended bounding set.
 +
-+	  http://live.gnome.org/NetworkManager/MobileBroadband/ServiceProviders
-diff --git a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
++	  http://people.redhat.com/sgrubb/libcap-ng/
+diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
 new file mode 100644
-index 0000000..9df3853
+index 0000000..06cd547
 --- /dev/null
-+++ b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
-@@ -0,0 +1,14 @@
++++ b/package/libcap-ng/libcap-ng.mk
+@@ -0,0 +1,11 @@
 +#############################################################
 +#
-+# mobile broadband provider info
++# libcap-ng
 +#
 +#############################################################
-+MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20110511
-+MOBILE_BROADBAND_PROVIDER_INFO_SITE = git://git.gnome.org/mobile-broadband-provider-info
-+MOBILE_BROADBAND_PROVIDER_INFO_INSTALL_STAGING = YES
-+MOBILE_BROADBAND_PROVIDER_INFO_DEPENDENCIES = host-pkg-config
 +
-+MOBILE_BROADBAND_PROVIDER_INFO_AUTORECONF=YES
++LIBCAP_NG_VERSION = 0.6.6
++LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng/
++LIBCAP_NG_INSTALL_STAGING = YES
 +
 +$(eval $(call AUTOTARGETS))
-+
 -- 
 1.7.5.4
