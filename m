@@ -1,41 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Mar 2012 00:37:49 +0100
-Subject: [Buildroot] Buildroot 2012.02-rc3 released
-In-Reply-To: <4F4D2A90.1050309@gmail.com>
-References: <87ehtg2r6n.fsf@macbook.be.48ers.dk> <4F4D2A90.1050309@gmail.com>
-Message-ID: <201203010037.49778.yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 1 Apr 2012 07:53:15 +0300
+Subject: [Buildroot] [PATCH] Add fmtools package.
+In-Reply-To: <1333231898-20980-1-git-send-email-marek.belisko@open-nandra.com>
+References: <1333231898-20980-1-git-send-email-marek.belisko@open-nandra.com>
+Message-ID: <20120401045315.GA22835@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Steve, Chris, All,
+Hi Marek,
 
-On Tuesday 28 February 2012 20:27:12 Steve Calfee wrote:
-> On 02/27/2012 08:10 AM, Peter Korsgaard wrote:
-> > http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.02_rc3
-> >
-> There seems to be something wrong with the servers. I cannot access the 
-> url above.
+On Sun, Apr 01, 2012 at 12:11:38AM +0200, Marek Belisko wrote:
+> Signed-off-by: Marek Belisko <marek.belisko@open-nandra.com>
 
-I also experienced those failures (but noticed only tonight).
+[snip]
 
-While Peter and I were debugging the issue (basically, Peter asking me to
-type some commands, and me putting the result on a pastebin! :-) ), the
-issues resolved themselves as by magic... :-/
+> new file mode 100644
+> index 0000000..c03afbc
+> --- /dev/null
+> +++ b/package/fmtools/fmtools.mk
+> @@ -0,0 +1,19 @@
+> +#############################################################
+> +#
+> +# fmtools
+> +#
+> +#############################################################
+> +
+> +FMTOOLS_VERSION = 1.0.2
+> +FMTOOLS_SITE = http://www.stanford.edu/~blp/fmtools/
+> +
+> +define FMTOOLS_BUILD_CMDS
+> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) all
 
-You may try again to see it also works for you.
+Just use $(TARGET_CONFIGURE_OPTS) instead of setting CC and LD individually.
 
-If it now works, or if it still does not, just drop us a reply.
-Regards,
+> +endef
+> +
+> +define FMTOOLS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/fm $(TARGET_DIR)/usr/sbin
+> +	$(INSTALL) -D -m 0755 $(@D)/fmscan $(TARGET_DIR)/usr/sbin
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
 
-Yann E. MORIN.
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
