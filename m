@@ -1,31 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Apr 2012 23:28:44 +0200
-Subject: [Buildroot] [PATCH] package/giblib: fix breakage
-In-Reply-To: <1331852049-12761-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Thu, 15 Mar 2012 23:54:09 +0100")
-References: <1331852049-12761-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87k41xesc3.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 2 Apr 2012 23:20:07 +0200
+Subject: [Buildroot] [git commit] iw: bump to 3.4
+Message-ID: <20120402212946.8808B969E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=09a1de0fb86f3af35878b26046df02b4620fe7b6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Yann> Fix two things in the giblib package:
- Yann> 1- fix prefix breakage
- Yann>    - s/STAGING/STAGING_DIR/ (Thomas)
- Yann>    - prefix is .../usr, not .../usr/lib or .../usr/bin
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/iw/iw.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Yann> 2- fix the configure.ac/Makefile.am breakage
- Yann>    - imlib2 sets IMLIB2_(LIBS|CFLAGS), not IMLIB_(LIBS|CFLAGS)
- Yann>    - autoreconf the package, install missing files
- Yann>      Note that both configure.ac and configure.in are present in the
- Yann>      package, so both are fixed, although only configure.ac is used
- Yann>      (configure.in is the legacy name).
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iw/iw.mk b/package/iw/iw.mk
+index 38bb125..5cd40a3 100644
+--- a/package/iw/iw.mk
++++ b/package/iw/iw.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IW_VERSION = 3.3
++IW_VERSION = 3.4
+ IW_SOURCE = iw-$(IW_VERSION).tar.bz2
+ IW_SITE = http://wireless.kernel.org/download/iw
+ IW_DEPENDENCIES = host-pkg-config libnl
