@@ -1,19 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Apr 2012 23:13:26 +0200
-Subject: [Buildroot] [PATCH] libpng: bump to version 1.4.10
-In-Reply-To: <1332504868-24119-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 23 Mar 2012 09:14:28 -0300")
-References: <1332504868-24119-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871uo5g7m1.fsf@macbook.be.48ers.dk>
+Date: Mon, 02 Apr 2012 23:14:12 +0200
+Subject: [Buildroot] [PATCH 2/5] Enable cgroups in Linux if we use
+	systemd
+In-Reply-To: <bf3ae28229199695f3d688835a23f34281f3fcc9.1332517725.git.maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Fri, 23 Mar 2012 16:49:53 +0100")
+References: <cover.1332517725.git.maxime.ripard@free-electrons.com>
+ <cover.1332517725.git.maxime.ripard@free-electrons.com>
+ <bf3ae28229199695f3d688835a23f34281f3fcc9.1332517725.git.maxime.ripard@free-electrons.com>
+Message-ID: <87wr5xet0b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 
 Committed, thanks.
 
