@@ -1,35 +1,46 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Mon, 2 Apr 2012 15:15:54 +0100
-Subject: [Buildroot] [PATCH] rt-tests: Make it available only when NPLT is
-	selected
-Message-ID: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Apr 2012 16:25:32 +0200
+Subject: [Buildroot] [PATCH] rt-tests: Make it available only when NPLT
+ is selected
+In-Reply-To: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
+References: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20120402162532.156eed02@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rt-tests package requires some definitions (like PTHREAD_PRIO_INHERIT etc) which
-are only available in Native Posix Linux Thread implementation.
+Le Mon, 2 Apr 2012 15:15:54 +0100,
+Markos Chandras <markos.chandras@imgtec.com> a ?crit :
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/rt-tests/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> rt-tests package requires some definitions (like PTHREAD_PRIO_INHERIT
+> etc) which are only available in Native Posix Linux Thread
+> implementation.
+> 
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index e645266..0043989 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -1,3 +1,4 @@
-+if BR2_PTHREADS_NATIVE
- config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	help
-@@ -11,3 +12,4 @@ config BR2_PACKAGE_RT_TESTS
- 	  Buildroot configuration.
- 
- 	  http://rt.wiki.kernel.org
-+endif
+I agree there is a problem, but unfortunately this solution will break
+external toolchains and crosstool-ng toolchains that use glibc or
+eglibc. Those toolchains have NPTL support, but BR2_PTHREADS_NATIVE is
+not defined when using such toolchains.
+
+I guess the real solution would be something like:
+
+config BR2_TOOLCHAIN_HAS_NPTL
+	bool
+
+and then for internal backend, select this option is
+BR2_PTHREADS_NATIVE is enabled. For external backend, select this
+option when glibc/eglibc is used, and add an option when the uClibc
+library is used. Some similar solution must be found for the
+crosstool-NG backend.
+
+Regards,
+
+Thomas
 -- 
-1.7.1
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
