@@ -1,73 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Apr 2012 23:31:53 +0200
-Subject: [Buildroot] [git commit] iptables: bump to version 1.4.13
-Message-ID: <20120402213357.1AACA969DF@busybox.osuosl.org>
+Date: Mon, 2 Apr 2012 23:46:55 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2,
+	3}.x stable versions
+Message-ID: <20120402221227.6702E969E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=adae2f673d027c14ca294c7f1143f86741da9945
+commit: http://git.buildroot.net/buildroot/commit/?id=e1443db85bc7dc2a863c4bbfdf6fe777f390ad70
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/iptables/iptables-3.2-headers-fix.patch |   34 -----------------------
- package/iptables/iptables.mk                    |    2 +-
- 2 files changed, 1 insertions(+), 35 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ ...umode_t.patch => linux-3.3.1-fix-umode_t.patch} |    0
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iptables/iptables-3.2-headers-fix.patch b/package/iptables/iptables-3.2-headers-fix.patch
-deleted file mode 100644
-index 5ef6539..0000000
---- a/package/iptables/iptables-3.2-headers-fix.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From dbe77cc974cee656eae37e75039dd1a410a4535b Mon Sep 17 00:00:00 2001
--From: Jan Engelhardt <jengelh@medozas.de>
--Date: Sun, 28 Aug 2011 14:19:43 +0200
--Subject: [PATCH] include: refresh include files from kernel 3.1-rc3
--
--[Peter: trimmed to bare essentials for buildroot]
--Signed-off-by: Jan Engelhardt <jengelh@medozas.de>
-----
--diff --git a/include/linux/types.h b/include/linux/types.h
--index 8b483c8..630cd3b 100644
----- a/include/linux/types.h
--+++ b/include/linux/types.h
--@@ -34,5 +34,18 @@ typedef __u64 __bitwise __be64;
-- typedef __u16 __bitwise __sum16;
-- typedef __u32 __bitwise __wsum;
-- 
--+/*
--+ * aligned_u64 should be used in defining kernel<->userspace ABIs to avoid
--+ * common 32/64-bit compat problems.
--+ * 64-bit values align to 4-byte boundaries on x86_32 (and possibly other
--+ * architectures) and to 8-byte boundaries on 64-bit architetures.  The new
--+ * aligned_64 type enforces 8-byte alignment so that structs containing
--+ * aligned_64 values have the same alignment on 32-bit and 64-bit architectures.
--+ * No conversions are necessary between 32-bit user-space and a 64-bit kernel.
--+ */
--+#define __aligned_u64 __u64 __attribute__((aligned(8)))
--+#define __aligned_be64 __be64 __attribute__((aligned(8)))
--+#define __aligned_le64 __le64 __attribute__((aligned(8)))
--+
-- #endif /*  __ASSEMBLY__ */
-- #endif /* _LINUX_TYPES_H */
---- 
--1.7.8.3
--
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 95134e3..87578d5 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPTABLES_VERSION = 1.4.12.2
-+IPTABLES_VERSION = 1.4.13
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = http://ftp.netfilter.org/pub/iptables
- IPTABLES_INSTALL_STAGING = YES
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 0b029ad..2cdd3e3 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.26"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.27"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.13"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3"		if BR2_KERNEL_HEADERS_3_3
++	default "3.2.14"	if BR2_KERNEL_HEADERS_3_2
++	default "3.3.1"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.26-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.27-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.26-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.27-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/toolchain/kernel-headers/linux-3.3-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.1-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.1-fix-umode_t.patch
