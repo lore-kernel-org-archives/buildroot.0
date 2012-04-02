@@ -1,46 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Apr 2012 16:25:32 +0200
-Subject: [Buildroot] [PATCH] rt-tests: Make it available only when NPLT
- is selected
-In-Reply-To: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
-References: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <20120402162532.156eed02@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Apr 2012 23:13:26 +0200
+Subject: [Buildroot] [PATCH] libpng: bump to version 1.4.10
+In-Reply-To: <1332504868-24119-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 23 Mar 2012 09:14:28 -0300")
+References: <1332504868-24119-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871uo5g7m1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 2 Apr 2012 15:15:54 +0100,
-Markos Chandras <markos.chandras@imgtec.com> a ?crit :
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> rt-tests package requires some definitions (like PTHREAD_PRIO_INHERIT
-> etc) which are only available in Native Posix Linux Thread
-> implementation.
-> 
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I agree there is a problem, but unfortunately this solution will break
-external toolchains and crosstool-ng toolchains that use glibc or
-eglibc. Those toolchains have NPTL support, but BR2_PTHREADS_NATIVE is
-not defined when using such toolchains.
+Committed, thanks.
 
-I guess the real solution would be something like:
-
-config BR2_TOOLCHAIN_HAS_NPTL
-	bool
-
-and then for internal backend, select this option is
-BR2_PTHREADS_NATIVE is enabled. For external backend, select this
-option when glibc/eglibc is used, and add an option when the uClibc
-library is used. Some similar solution must be found for the
-crosstool-NG backend.
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
