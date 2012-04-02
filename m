@@ -1,24 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Apr 2012 23:14:12 +0200
-Subject: [Buildroot] [PATCH 2/5] Enable cgroups in Linux if we use
-	systemd
-In-Reply-To: <bf3ae28229199695f3d688835a23f34281f3fcc9.1332517725.git.maxime.ripard@free-electrons.com>
- (Maxime Ripard's message of "Fri, 23 Mar 2012 16:49:53 +0100")
-References: <cover.1332517725.git.maxime.ripard@free-electrons.com>
- <cover.1332517725.git.maxime.ripard@free-electrons.com>
- <bf3ae28229199695f3d688835a23f34281f3fcc9.1332517725.git.maxime.ripard@free-electrons.com>
-Message-ID: <87wr5xet0b.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 2 Apr 2012 23:13:31 +0200
+Subject: [Buildroot] [git commit] libpng: bump to version 1.4.10
+Message-ID: <20120402211515.2D2F6969C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b41fb1507fa2975e09ebcd04f342d1bbd3681623
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libpng/libpng.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 4017871..19d2a71 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
+ 
+-LIBPNG_VERSION = 1.4.9
++LIBPNG_VERSION = 1.4.10
+ LIBPNG_SERIES = 14
+-LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libpng
++LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
+ LIBPNG_INSTALL_STAGING = YES
+ LIBPNG_DEPENDENCIES = host-pkg-config zlib
