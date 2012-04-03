@@ -1,40 +1,19 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Apr 2012 23:39:23 +0200
-Subject: [Buildroot] [git commit] linux: bump default kernel version
-Message-ID: <20120402221227.5AC7D969E2@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 02 Apr 2012 21:20:53 -0300
+Subject: [Buildroot]
+ =?utf-8?q?=5BPATCH_v1_1/1=5D_mysql=5Fclient_=3A_bump_?=
+ =?utf-8?q?to_5=2E1=2E61_=28fixes_some_security_holes=2E=29?=
+In-Reply-To: <1332406366-12454-1-git-send-email-sagaert.johan@skynet.be>
+References: <1332406366-12454-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <9f39ada78679c482591245ee24700a79@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=29f8b8a920d862dcd46549351344d54a951949be
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2012-03-22 05:52, Sagaert Johan wrote:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6510a56..5a2d287 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_3
- 
- config BR2_LINUX_KERNEL_3_3
--	bool "3.3"
-+	bool "3.3.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3" if BR2_LINUX_KERNEL_3_3
-+	default "3.3.1" if BR2_LINUX_KERNEL_3_3
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
