@@ -1,33 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 03 Apr 2012 07:09:53 -0300
-Subject: [Buildroot] [git commit] libpng: bump to version 1.4.10
-In-Reply-To: <20120403102306.5a46d638@skate>
-References: <20120402211515.2D2F6969C3@busybox.osuosl.org>
- <20120403102306.5a46d638@skate>
-Message-ID: <49c17c14e3a4120f08e1ac087d6dcf19@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 3 Apr 2012 16:54:30 +0200
+Subject: [Buildroot] [git commit] libpng: security bump to version 1.4.11
+Message-ID: <20120403150545.F2877969F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-04-03 05:23, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=56ece03c81a792f2dba0c5cbff609a45a13bde59
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This breaks the build:
->
-> 
-> http://autobuild.buildroot.org/results/8aa42940f3fb2c7af5568354c906a3f3c1d5eaab/build-end.log
-> 
-> http://autobuild.buildroot.org/results/470b28f443877094ac22121f9c3ff88541a82f34/build-end.log
-> 
-> http://autobuild.buildroot.org/results/bc174de9d816da26d151513c3eeb6630a3cdbf98/build-end.log
->
-> And many, many other occurrences.
->
-> Thomas
+Fixes CVE-2011-3048
 
-They've just released 1.4.11 because of a security bug fix, proper 
-action would be to bump it.
-It's unfortunate when they archive older versions, though 
-understandable if they are vulnerable to security bugs.
-Regards.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libpng/libpng.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index 19d2a71..56d0377 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBPNG_VERSION = 1.4.10
++LIBPNG_VERSION = 1.4.11
+ LIBPNG_SERIES = 14
+ LIBPNG_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.bz2
