@@ -1,41 +1,52 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Apr 2012 23:29:15 +0200
-Subject: [Buildroot] [PATCH] rpm: Fix automagic dependency on openssl
-In-Reply-To: <1333442128-16629-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Tue, 3 Apr 2012 09:35:28 +0100")
-References: <1333442128-16629-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <87k41wv710.fsf@macbook.be.48ers.dk>
+Date: Tue, 03 Apr 2012 23:33:48 +0200
+Subject: [Buildroot] [PATCH] rt-tests: Make it available only when NPLT
+	is selected
+In-Reply-To: <20120402162532.156eed02@skate> (Thomas Petazzoni's message of
+ "Mon, 2 Apr 2012 16:25:32 +0200")
+References: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
+ <20120402162532.156eed02@skate>
+Message-ID: <87fwckv6tf.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
- Markos> ---
- Markos>  package/rpm/rpm.mk |    7 +++++++
- Markos>  1 files changed, 7 insertions(+), 0 deletions(-)
+ Thomas> Le Mon, 2 Apr 2012 15:15:54 +0100,
+ Thomas> Markos Chandras <markos.chandras@imgtec.com> a ?crit :
 
- Markos> diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
- Markos> index 9f42ee1..47c2ee9 100644
- Markos> --- a/package/rpm/rpm.mk
- Markos> +++ b/package/rpm/rpm.mk
- Markos> @@ -17,6 +17,13 @@ RPM_CONF_OPT = --disable-build-versionscript --disable-rpath \
- Markos>  	--with-libbeecrypt=$(STAGING_DIR) \
- Markos>  	--with-popt=$(STAGING_DIR)
- 
- Markos> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
- Markos> +RPM_DEPENDENCIES += openssl
- Markos> +RPM_CONF_OPT += --with-openssl=external
- Markos> +else
- Markos> +RPM_CONF_OPT += --with-openssl=no
- Markos> +endif
+ >> rt-tests package requires some definitions (like PTHREAD_PRIO_INHERIT
+ >> etc) which are only available in Native Posix Linux Thread
+ >> implementation.
+ >> 
+ >> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
-Hmm, this makes sense but BR2_PACKAGE_RPM selects
-BR2_PACKAGE_OPENSSL. Is openssl optional? If so, please drop the select
-line in Config.in.
+ Thomas> I agree there is a problem, but unfortunately this solution will break
+ Thomas> external toolchains and crosstool-ng toolchains that use glibc or
+ Thomas> eglibc. Those toolchains have NPTL support, but BR2_PTHREADS_NATIVE is
+ Thomas> not defined when using such toolchains.
+
+ Thomas> I guess the real solution would be something like:
+
+ Thomas> config BR2_TOOLCHAIN_HAS_NPTL
+ Thomas> 	bool
+
+ Thomas> and then for internal backend, select this option is
+ Thomas> BR2_PTHREADS_NATIVE is enabled. For external backend, select this
+ Thomas> option when glibc/eglibc is used, and add an option when the uClibc
+ Thomas> library is used. Some similar solution must be found for the
+ Thomas> crosstool-NG backend.
+
+Alternatively you can make it depend on !pthreads (ugly because it is so
+verbose)
+
+depends on !(BR2_TOOLCHAIN_CTNG_THREADS_NONE ||
+         BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS ||
+         BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD ||
+         BR2_PTHREADS_NONE || BR2_PTHREADS || BR2_PTHREADS_OLD)
 
 -- 
 Bye, Peter Korsgaard
