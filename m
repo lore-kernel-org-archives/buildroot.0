@@ -1,52 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Apr 2012 23:33:48 +0200
-Subject: [Buildroot] [PATCH] rt-tests: Make it available only when NPLT
-	is selected
-In-Reply-To: <20120402162532.156eed02@skate> (Thomas Petazzoni's message of
- "Mon, 2 Apr 2012 16:25:32 +0200")
-References: <1333376154-20432-1-git-send-email-markos.chandras@imgtec.com>
- <20120402162532.156eed02@skate>
-Message-ID: <87fwckv6tf.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 3 Apr 2012 23:27:02 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.2
+Message-ID: <20120403213359.22886969EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2e59d1d7ed669fc0a8e563a37b418ea424b6eefe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Le Mon, 2 Apr 2012 15:15:54 +0100,
- Thomas> Markos Chandras <markos.chandras@imgtec.com> a ?crit :
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/e2fsprogs/e2fsprogs-fallocate.patch |   22 ----------------------
+ package/e2fsprogs/e2fsprogs.mk              |    2 +-
+ 2 files changed, 1 insertions(+), 23 deletions(-)
 
- >> rt-tests package requires some definitions (like PTHREAD_PRIO_INHERIT
- >> etc) which are only available in Native Posix Linux Thread
- >> implementation.
- >> 
- >> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-
- Thomas> I agree there is a problem, but unfortunately this solution will break
- Thomas> external toolchains and crosstool-ng toolchains that use glibc or
- Thomas> eglibc. Those toolchains have NPTL support, but BR2_PTHREADS_NATIVE is
- Thomas> not defined when using such toolchains.
-
- Thomas> I guess the real solution would be something like:
-
- Thomas> config BR2_TOOLCHAIN_HAS_NPTL
- Thomas> 	bool
-
- Thomas> and then for internal backend, select this option is
- Thomas> BR2_PTHREADS_NATIVE is enabled. For external backend, select this
- Thomas> option when glibc/eglibc is used, and add an option when the uClibc
- Thomas> library is used. Some similar solution must be found for the
- Thomas> crosstool-NG backend.
-
-Alternatively you can make it depend on !pthreads (ugly because it is so
-verbose)
-
-depends on !(BR2_TOOLCHAIN_CTNG_THREADS_NONE ||
-         BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS ||
-         BR2_TOOLCHAIN_CTNG_THREADS_PTHREADS_OLD ||
-         BR2_PTHREADS_NONE || BR2_PTHREADS || BR2_PTHREADS_OLD)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/e2fsprogs/e2fsprogs-fallocate.patch b/package/e2fsprogs/e2fsprogs-fallocate.patch
+deleted file mode 100644
+index 4d952a5..0000000
+--- a/package/e2fsprogs/e2fsprogs-fallocate.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-We assume that fallocate is supported somehow
+-but we need to check if we have fallocate()
+-this problem shows up on uclibc systems since
+-uclibc does not have fallocate() implemented
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-
+-Upstream-Status: Pending
+-
+-Index: e2fsprogs-1.42/lib/ext2fs/unix_io.c
+-===================================================================
+---- e2fsprogs-1.42.orig/lib/ext2fs/unix_io.c	2012-01-17 17:24:34.290780625 -0800
+-+++ e2fsprogs-1.42/lib/ext2fs/unix_io.c	2012-01-17 17:25:37.338783680 -0800
+-@@ -895,7 +895,7 @@
+- 		goto unimplemented;
+- #endif
+- 	} else {
+--#ifdef FALLOC_FL_PUNCH_HOLE
+-+#if defined FALLOC_FL_PUNCH_HOLE && defined HAVE_FALLOCATE
+- 		/*
+- 		 * If we are not on block device, try to use punch hole
+- 		 * to reclaim free space.
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index fee6f0a..5f87b40 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-E2FSPROGS_VERSION = 1.42.1
++E2FSPROGS_VERSION = 1.42.2
+ E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+ 
+ E2FSPROGS_CONF_OPT = \
