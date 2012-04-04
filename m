@@ -1,31 +1,64 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Apr 2012 22:07:34 +0200
-Subject: [Buildroot] [PATCH 1/1] lttng-libust: rename patch so that it
-	is taken into account
-In-Reply-To: <201203282226.09646.arnout@mind.be> (Arnout Vandecappelle's
- message of "Wed, 28 Mar 2012 22:26:08 +0200")
-References: <cover.1332801197.git.thomas.petazzoni@free-electrons.com>
- <b3435944bbaf51566d808dc51aea2e2715143dbd.1332801197.git.thomas.petazzoni@free-electrons.com>
- <201203282226.09646.arnout@mind.be>
-Message-ID: <87r4w3tg55.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 4 Apr 2012 21:55:04 +0200
+Subject: [Buildroot] [git commit] neon: use select rather than 'depends on'
+	for xml dependencies
+Message-ID: <20120404200933.1EF3496A02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4fbff28b990276c9a37d04b4e1ab947f10b87ea4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> On Tuesday 27 March 2012 00:33:21 Thomas Petazzoni wrote:
- >> The package/lttng-libust/ contains a patch prefixed with
- >> lttng-libust-1.9.2, so the other patch simply prefixed with
- >> lttng-libust does not get applied. Rename the second patch properly.
+Similar to how we recently changed dbus. At the same time also reorder
+options to put 'none' option in front (default).
 
- Arnout>  I thought we agreed to avoid versioned patches as much as possible, no?
- Arnout> So this should rather be a rename of 
- Arnout> lttng-libust-1.9.2-dont-build-cxx-tests-when-not-available.patch
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/neon/Config.in |   20 ++++++++++----------
+ 1 files changed, 10 insertions(+), 10 deletions(-)
 
-I agree. I'll rename it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index 53cc8f5..92af8da 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -24,27 +24,27 @@ choice
+ 	depends on BR2_PACKAGE_NEON
+ 	help
+ 	  Select which XML library to use...
++	  none       do not build with XML support
+ 	  expat      use expat
+ 	  libxml2    use libxml2
+-	  none       do not build with XML support
++
++config BR2_PACKAGE_NEON_NOXML
++	bool "none"
++	help
++	  none       don't use XML, if this is the only option
++	             and you want XML support, you must choose
++		     XML handling below.
+ 
+ config BR2_PACKAGE_NEON_EXPAT
+ 	bool "expat"
+-	depends on BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  expat      use expat, a library for parsing XML.
+ 
+ config BR2_PACKAGE_NEON_LIBXML2
+ 	bool "libxml2"
+-	depends on BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  libxml2    use libxml2, a library to read, modify and
+ 	             write XML and HTML files.
+-
+-config BR2_PACKAGE_NEON_NOXML
+-	bool "none"
+-	help
+-	  none       don't use XML, if this is the only option
+-	             and you want XML support, you must choose
+-		     XML handling below.
+ endchoice
