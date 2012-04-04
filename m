@@ -1,42 +1,34 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed,  4 Apr 2012 14:50:19 +0200
-Subject: [Buildroot] [PATCH] package: set PKG_CONFIG_SYSROOT_DIR in
-	HOST_MAKE_ENV
-Message-ID: <1333543819-27718-1-git-send-email-s.neumann@raumfeld.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed,  4 Apr 2012 16:46:57 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.05/packages-updates
+Message-ID: <cover.1333550801.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A host package that uses AUTORECONF (such as host-libglib2)
-may end up running './config.status --recheck'. This will
-call the configure script with the environment variables
-set in HOST_MAKE_ENV. If PKG_CONFIG_SYSROOT_DIR is missing
-this will cause the hardcoded sysroot dir take effect leading
-to wrong paths.
+The following changes since commit 2e59d1d7ed669fc0a8e563a37b418ea424b6eefe:
 
-See commit 22acade2ec311 which works around this problem by
-fiddling with the generated .pc file. This commit becomes
-obsolete with this fix.
+  e2fsprogs: bump to version 1.42.2 (2012-04-03 23:27:02 +0200)
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-Cc: Daniel Mack <zonque@gmail.com>
----
- package/Makefile.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+are available in the git repository at:
+  git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.05/packages-updates
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dc8d038..c344c6b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -222,6 +222,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
- HOST_MAKE_ENV=PATH=$(HOST_PATH) \
- 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
- 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		PKG_CONFIG_SYSROOT_DIR="/" \
- 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
- 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
- 
+Maxime Ripard (2):
+      Convert gettext to autotargets
+      Bump systemd to version 44
+
+ package/gettext/Config.in                   |   12 --
+ package/gettext/gettext.mk                  |  168 +++------------------------
+ package/gettext/libdir-la.patch             |  154 ------------------------
+ package/systemd/systemd-fix-page-size.patch |   43 +++++++
+ package/systemd/systemd.mk                  |   24 +++--
+ 5 files changed, 72 insertions(+), 329 deletions(-)
+ delete mode 100644 package/gettext/libdir-la.patch
+ create mode 100644 package/systemd/systemd-fix-page-size.patch
+
+Thanks,
 -- 
-1.7.9.1
+Maxime Ripard
