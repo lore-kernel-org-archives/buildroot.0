@@ -1,51 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Apr 2012 09:15:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 5024] New: grub fails to build for x86_64 target
-	architecture
-Message-ID: <bug-5024-163@https.bugs.busybox.net/>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Wed, 4 Apr 2012 10:15:25 +0100
+Subject: [Buildroot] [PATCH] rpm: Fix automagic dependency on openssl
+In-Reply-To: <87k41wv710.fsf@macbook.be.48ers.dk>
+References: <1333442128-16629-1-git-send-email-markos.chandras@imgtec.com>
+ <87k41wv710.fsf@macbook.be.48ers.dk>
+Message-ID: <4F7C112D.7080309@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5024
+On 04/03/2012 10:29 PM, Peter Korsgaard wrote:
 
-           Summary: grub fails to build for x86_64 target architecture
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: zkdigisec at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+>>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+> 
+>  Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>  Markos> ---
+>  Markos>  package/rpm/rpm.mk |    7 +++++++
+>  Markos>  1 files changed, 7 insertions(+), 0 deletions(-)
+> 
+>  Markos> diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+>  Markos> index 9f42ee1..47c2ee9 100644
+>  Markos> --- a/package/rpm/rpm.mk
+>  Markos> +++ b/package/rpm/rpm.mk
+>  Markos> @@ -17,6 +17,13 @@ RPM_CONF_OPT = --disable-build-versionscript
+> --disable-rpath \
+>  Markos>        --with-libbeecrypt=$(STAGING_DIR) \
+>  Markos>        --with-popt=$(STAGING_DIR)
+> 
+>  Markos> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  Markos> +RPM_DEPENDENCIES += openssl
+>  Markos> +RPM_CONF_OPT += --with-openssl=external
+>  Markos> +else
+>  Markos> +RPM_CONF_OPT += --with-openssl=no
+>  Markos> +endif
+> 
+> Hmm, this makes sense but BR2_PACKAGE_RPM selects
+> BR2_PACKAGE_OPENSSL. Is openssl optional? If so, please drop the select
+> line in Config.in.
+> 
+> --
+> Bye, Peter Korsgaard
+> 
 
+Hi Peter,
 
-Created attachment 4232
-  --> https://bugs.busybox.net/attachment.cgi?id=4232
-grub autoconf log file
-
-When buildroot is configured for x86_64 as the target architecture, grub
-configuration fails with the following error message:
-
-checking for x86_64-linux-gcc... (cached)
-/home/user/Downloads/buildroot-2012.02/output/host/usr/bin/x86_64-unknown-linux-uclibc-gcc
-checking for C compiler default output file name... configure: error: C
-compiler cannot create executables
-See `config.log' for more details.
-make: ***
-[/home/user/Downloads/buildroot-2012.02/output/build/grub-0.97/.stamp_configured]
-Error 77
-
-The problem seems to be that the 32-bit libraries are not available (or used)
-in the 64-bit cross-compiler toolchain.
+You are right. All it needs is the --with-openssl=external switch in
+RPM_CONF_OPT. I will send a new patch asap.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+markos
