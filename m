@@ -1,52 +1,42 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed,  4 Apr 2012 14:37:01 +0200
-Subject: [Buildroot] [PATCH] linux-firmware: add new wl12xx firmware
-Message-ID: <1333543021-21002-1-git-send-email-yegorslists@googlemail.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed,  4 Apr 2012 14:50:19 +0200
+Subject: [Buildroot] [PATCH] package: set PKG_CONFIG_SYSROOT_DIR in
+	HOST_MAKE_ENV
+Message-ID: <1333543819-27718-1-git-send-email-s.neumann@raumfeld.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+A host package that uses AUTORECONF (such as host-libglib2)
+may end up running './config.status --recheck'. This will
+call the configure script with the environment variables
+set in HOST_MAKE_ENV. If PKG_CONFIG_SYSROOT_DIR is missing
+this will cause the hardcoded sysroot dir take effect leading
+to wrong paths.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+See commit 22acade2ec311 which works around this problem by
+fiddling with the generated .pc file. This commit becomes
+obsolete with this fix.
+
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Cc: Daniel Mack <zonque@gmail.com>
 ---
- package/linux-firmware/linux-firmware.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ package/Makefile.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index e09f67d..ba33d37 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -3,7 +3,7 @@
- # linux-firmware
- #
- #############################################################
--LINUX_FIRMWARE_VERSION = a2995d38c234e3d767df7223d84a0f33a1a24997
-+LINUX_FIRMWARE_VERSION = 8ccddee5ee23a0e192da38d98bcbbbb41bf385dd
- LINUX_FIRMWARE_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
-@@ -38,6 +38,9 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X) += \
- 	ti-connectivity/wl127x-fw-3.bin				\
- 	ti-connectivity/wl127x-fw-plt-3.bin			\
- 	ti-connectivity/wl127x-nvs.bin				\
-+	ti-connectivity/wl127x-fw-4-mr.bin			\
-+	ti-connectivity/wl127x-fw-4-plt.bin			\
-+	ti-connectivity/wl127x-fw-4-sr.bin			\
- 	ti-connectivity/TIInit_7.2.31.bts 			\
- 	LICENCE.ti-connectivity
- 
-@@ -50,6 +53,9 @@ LINUX_FIRMWARE_FILES_$(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL128X) += \
- 	ti-connectivity/wl1271-nvs.bin				\
- 	ti-connectivity/wl128x-nvs.bin				\
- 	ti-connectivity/wl12xx-nvs.bin				\
-+	ti-connectivity/wl128x-fw-4-mr.bin			\
-+	ti-connectivity/wl128x-fw-4-plt.bin			\
-+	ti-connectivity/wl128x-fw-4-sr.bin			\
- 	ti-connectivity/TIInit_7.2.31.bts 			\
- 	LICENCE.ti-connectivity
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dc8d038..c344c6b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -222,6 +222,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+ 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
+ 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
  
 -- 
-1.7.7
+1.7.9.1
