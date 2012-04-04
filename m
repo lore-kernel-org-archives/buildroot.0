@@ -1,11 +1,11 @@
 From: Stephan Hoffmann <sho@relinux.de>
-Date: Wed, 04 Apr 2012 20:09:07 +0200
-Subject: [Buildroot] [PATCH 2/2] qemu/microblazebe-mmu: add new sample
+Date: Wed, 04 Apr 2012 20:09:36 +0200
+Subject: [Buildroot] [PATCH 1/2] qemu/microblazeel-mmu: add new sample
  config
-In-Reply-To: <1332193479-7415-3-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1332193479-7415-2-git-send-email-gustavo@zacarias.com.ar>
 References: <1332193479-7415-1-git-send-email-gustavo@zacarias.com.ar>
- <1332193479-7415-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <4F7C8E43.402@relinux.de>
+ <1332193479-7415-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <4F7C8E60.6040604@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +17,22 @@ Am 19.03.2012 22:44, schrieb Gustavo Zacarias:
 Tested-by: Stephan Hoffmann <sho@reLinux.de>
 Works with Qemu 1.0.1 default configuration on Ubuntu 10.04
 > ---
->  board/qemu/microblazebe-mmu/kernel-3.3.config |   68 +++++
->  board/qemu/microblazebe-mmu/readme.txt        |    6 +
->  board/qemu/microblazebe-mmu/system.dts        |  367 +++++++++++++++++++++++++
->  configs/qemu_microblazebe_mmu_defconfig       |   16 +
+>  board/qemu/microblazeel-mmu/kernel-3.3.config |   67 +++++
+>  board/qemu/microblazeel-mmu/readme.txt        |    6 +
+>  board/qemu/microblazeel-mmu/system.dts        |  367 +++++++++++++++++++++++++
+>  configs/qemu_microblazeel_mmu_defconfig       |   17 ++
 >  4 files changed, 457 insertions(+), 0 deletions(-)
->  create mode 100644 board/qemu/microblazebe-mmu/kernel-3.3.config
->  create mode 100644 board/qemu/microblazebe-mmu/readme.txt
->  create mode 100644 board/qemu/microblazebe-mmu/system.dts
->  create mode 100644 configs/qemu_microblazebe_mmu_defconfig
+>  create mode 100644 board/qemu/microblazeel-mmu/kernel-3.3.config
+>  create mode 100644 board/qemu/microblazeel-mmu/readme.txt
+>  create mode 100644 board/qemu/microblazeel-mmu/system.dts
+>  create mode 100644 configs/qemu_microblazeel_mmu_defconfig
 >
-> diff --git a/board/qemu/microblazebe-mmu/kernel-3.3.config b/board/qemu/microblazebe-mmu/kernel-3.3.config
+> diff --git a/board/qemu/microblazeel-mmu/kernel-3.3.config b/board/qemu/microblazeel-mmu/kernel-3.3.config
 > new file mode 100644
-> index 0000000..7083cf5
+> index 0000000..cdeb324
 > --- /dev/null
-> +++ b/board/qemu/microblazebe-mmu/kernel-3.3.config
-> @@ -0,0 +1,68 @@
+> +++ b/board/qemu/microblazeel-mmu/kernel-3.3.config
+> @@ -0,0 +1,67 @@
 > +CONFIG_EXPERIMENTAL=y
 > +CONFIG_SYSVIPC=y
 > +CONFIG_IKCONFIG=y
@@ -55,7 +55,6 @@ Works with Qemu 1.0.1 default configuration on Ubuntu 10.04
 > +CONFIG_MODULES=y
 > +CONFIG_MODULE_UNLOAD=y
 > +# CONFIG_BLK_DEV_BSG is not set
-> +CONFIG_OPT_LIB_ASM=y
 > +CONFIG_XILINX_MICROBLAZE0_FAMILY="spartan3adsp"
 > +CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
 > +CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
@@ -101,23 +100,23 @@ Works with Qemu 1.0.1 default configuration on Ubuntu 10.04
 > +# CONFIG_RCU_CPU_STALL_DETECTOR is not set
 > +CONFIG_EARLY_PRINTK=y
 > +# CONFIG_CRYPTO_ANSI_CPRNG is not set
-> diff --git a/board/qemu/microblazebe-mmu/readme.txt b/board/qemu/microblazebe-mmu/readme.txt
+> diff --git a/board/qemu/microblazeel-mmu/readme.txt b/board/qemu/microblazeel-mmu/readme.txt
 > new file mode 100644
-> index 0000000..c59c0bd
+> index 0000000..43a40e8
 > --- /dev/null
-> +++ b/board/qemu/microblazebe-mmu/readme.txt
+> +++ b/board/qemu/microblazeel-mmu/readme.txt
 > @@ -0,0 +1,6 @@
 > +Run the emulation with:
 > +
-> + qemu-system-microblaze -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio
+> + qemu-system-microblazeel -M petalogix-s3adsp1800 -kernel output/images/linux.bin -serial stdio
 > +
 > +The login prompt will appear in the terminal that started Qemu.
 > +
-> diff --git a/board/qemu/microblazebe-mmu/system.dts b/board/qemu/microblazebe-mmu/system.dts
+> diff --git a/board/qemu/microblazeel-mmu/system.dts b/board/qemu/microblazeel-mmu/system.dts
 > new file mode 100644
 > index 0000000..3f85df2
 > --- /dev/null
-> +++ b/board/qemu/microblazebe-mmu/system.dts
+> +++ b/board/qemu/microblazeel-mmu/system.dts
 > @@ -0,0 +1,367 @@
 > +/*
 > + * Device Tree Generator version: 1.1
@@ -486,17 +485,18 @@ Works with Qemu 1.0.1 default configuration on Ubuntu 10.04
 > +		} ;
 > +	} ;
 > +}  ;
-> diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+> diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
 > new file mode 100644
-> index 0000000..378e972
+> index 0000000..61420b4
 > --- /dev/null
-> +++ b/configs/qemu_microblazebe_mmu_defconfig
-> @@ -0,0 +1,16 @@
+> +++ b/configs/qemu_microblazeel_mmu_defconfig
+> @@ -0,0 +1,17 @@
 > +BR2_microblaze=y
-> +BR2_microblazebe=y
+> +BR2_microblazeel=y
 > +BR2_TOOLCHAIN_EXTERNAL=y
-> +BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2=y
+> +BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2=y
 > +BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="microblazeel-unknown-linux-gnu"
 > +BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 > +BR2_TOOLCHAIN_EXTERNAL_CXX=y
 > +BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
@@ -504,8 +504,8 @@ Works with Qemu 1.0.1 default configuration on Ubuntu 10.04
 > +BR2_TARGET_ROOTFS_INITRAMFS=y
 > +BR2_LINUX_KERNEL=y
 > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/kernel-3.3.config"
-> +BR2_LINUX_KERNEL_DTS_FILE="board/qemu/microblazebe-mmu/system.dts"
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/kernel-3.3.config"
+> +BR2_LINUX_KERNEL_DTS_FILE="board/qemu/microblazeel-mmu/system.dts"
 > +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 > +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="linux.bin"
 
