@@ -1,33 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Apr 2012 23:10:36 +0200
-Subject: [Buildroot] udhcpc when link is up
-In-Reply-To: <CALo-6+hDSUFR_awCnm6gHveYLPaQ_Y8HGCQTsJuoTdv8bVqzOw@mail.gmail.com>
- (Charles Krinke's message of "Thu, 5 Apr 2012 13:23:10 -0700")
-References: <CALo-6+g53Ay8J7QNLhfys8Sc7C_U9hd_CQAWm2T1r0vt7KcMdw@mail.gmail.com>
- <874nszuwzl.fsf@macbook.be.48ers.dk>
- <CALo-6+hDSUFR_awCnm6gHveYLPaQ_Y8HGCQTsJuoTdv8bVqzOw@mail.gmail.com>
-Message-ID: <87y5q9rik3.fsf@macbook.be.48ers.dk>
+From: Dechesne, Nicolas <n-dechesne@ti.com>
+Date: Thu, 5 Apr 2012 23:54:03 +0200
+Subject: [Buildroot] customizing xorg package
+Message-ID: <CALB96NmatmTxO=ZuOo_DVkw6bCBs19f9BuDDgWr_cSHn-OgE9g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
+hi there,
 
- Charles> I guess my "noobness hat" must be worn a second day in that I look at
- Charles> ifplugd and dont quite see the issue. Admiteddly the "noobness hat" is
- Charles> worn because I spend most of my time in u-boot and the kernel, but
- Charles> that is only an excuse.
+i am starting to look into building a distro with X and h/w accelerated
+drivers for pandaboard, with buildroot. i never really built Xorg with
+buildroot before. so after looking around, it seems that buildroot has
+packages ready for X11R7.6. however i would need to use 7.6 with some
+customization, like a more recent xserver version. debian/ubuntu allow such
+combination because they build each X component using the 'individual'
+releases, instead of the global X11R7.x release.
 
-Have you read http://0pointer.de/lennart/projects/ifplugd/ ?
+so my questions are:
 
-There isn't much to it. You have to remove the 'auto eth0' line from
-/etc/network/interfaces so /etc/init.d/S40network doesn't try to run
-udhcpc at bootup. With ifplugd running it will execute
-/etc/ifplugd/ifplugd.action <iface> <up|down> whenever it detects a link
-change. By default this script will simply call ifup <iface> / ifdown
-<iface>.
+- has anyone already tried to build a modular X11 with  buildroot with
+similar customization (e.g. from individual packages, not full release)?
+- would that be interesting to get that into buildroot (assuming I or
+someone here can come up with the patches for this...)?
+- if there is an interest, has someone thought about the best way to do
+that? i can try to give this some thinking, but if there is some work i can
+reuse it's always better...
 
--- 
-Bye, Peter Korsgaard
+thx
+
+nico
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120405/b7ede44d/attachment.html>
