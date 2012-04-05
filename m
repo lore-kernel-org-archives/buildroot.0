@@ -1,205 +1,67 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 5 Apr 2012 18:19:54 +0200
-Subject: [Buildroot] [git commit] valgrind: allow selecting which tools to
-	install
-Message-ID: <20120405162117.A9C4B96A0C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 05 Apr 2012 19:50:31 +0200
+Subject: [Buildroot] [PATCH resend] Added protobuf package
+In-Reply-To: <CAHt8ZCMdK6Stia58eSVenoUqJHBDQ0Aptx_yWedvGRD-F8O8XQ@mail.gmail.com>
+ (Simon Dawson's message of "Thu, 15 Mar 2012 08:51:27 +0000")
+References: <CAHt8ZCMdK6Stia58eSVenoUqJHBDQ0Aptx_yWedvGRD-F8O8XQ@mail.gmail.com>
+Message-ID: <878viarrtk.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a996469e270f76e663004c6f448dee08c801ad6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
 
-The full valgrind installation takes more than 20 MB, while one typically does
-not use all of its tools. This patch adds extra config options to select which
-tools to install.
+ Simon> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ Simon> ---
+ Simon>  package/Config.in            |    1 +
+ Simon>  package/protobuf/Config.in   |    7 +++++++
+ Simon>  package/protobuf/protobuf.mk |   17 +++++++++++++++++
+ Simon>  3 files changed, 25 insertions(+), 0 deletions(-)
+ Simon>  create mode 100644 package/protobuf/Config.in
+ Simon>  create mode 100644 package/protobuf/protobuf.mk
 
-[Peter: Don't default experimental tools to 'y' as suggested by Arnout]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/valgrind/Config.in   |   66 +++++++++++++++++++++++++++++
- package/valgrind/valgrind.mk |   95 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 161 insertions(+), 0 deletions(-)
+ Simon> diff --git a/package/Config.in b/package/Config.in
+ Simon> index 36a221c..575373a 100644
+ Simon> --- a/package/Config.in
+ Simon> +++ b/package/Config.in
+ Simon> @@ -388,6 +388,7 @@ source "package/liburcu/Config.in"
+ Simon>  source "package/lttng-libust/Config.in"
+ Simon>  source "package/orc/Config.in"
+ Simon>  source "package/poco/Config.in"
+ Simon> +source "package/protobuf/Config.in"
+ Simon>  source "package/startup-notification/Config.in"
+ Simon>  endmenu
 
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 0f656dc..dacdd86 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -6,3 +6,69 @@ config BR2_PACKAGE_VALGRIND
- 	  Tool for debugging and profiling Linux programs.
- 
- 	  http://valgrind.kde.org/
-+
-+if BR2_PACKAGE_VALGRIND
-+
-+config BR2_PACKAGE_VALGRIND_MEMCHECK
-+	bool "Memcheck: a memory error detector"
-+	default y
-+	help
-+	  This option allows to install the Memcheck tool
-+
-+config BR2_PACKAGE_VALGRIND_CACHEGRIND
-+	bool "Cachegrind: a cache and branch-prediction profiler"
-+	default y
-+	help
-+	  This option allows to install the Cachegrind tool
-+
-+config BR2_PACKAGE_VALGRIND_CALLGRIND
-+	bool "Callgrind: a call-graph generating cache and branch prediction profiler"
-+	default y
-+	help
-+	  This option allows to install the Callgrind tool
-+
-+config BR2_PACKAGE_VALGRIND_HELGRIND
-+	bool "Helgrind: a thread error detector"
-+	default y
-+	help
-+	  This option allows to install the Helgrind tool
-+
-+config BR2_PACKAGE_VALGRIND_DRD
-+	bool "DRD: a thread error detector"
-+	default y
-+	help
-+	  This option allows to install the DRD tool
-+
-+config BR2_PACKAGE_VALGRIND_MASSIF
-+	bool "Massif: a heap profiler"
-+	default y
-+	help
-+	  This option allows to install the Massif tool
-+
-+config BR2_PACKAGE_VALGRIND_DHAT
-+	bool "DHAT: a dynamic heap analysis tool"
-+	default y
-+	help
-+	  This option allows to install the DHAT tool
-+
-+config BR2_PACKAGE_VALGRIND_PTRCHECK
-+	bool "Ptrcheck: an experimental head, stack and global array overrun detector"
-+	help
-+	  This option allows to install the Ptrcheck tool
-+
-+config BR2_PACKAGE_VALGRIND_BBV
-+	bool "BBV: an experimental basic block vector generation tool"
-+	help
-+	  This option allows to install the BBV tool
-+
-+config BR2_PACKAGE_VALGRIND_LACKEY
-+	bool "Lackey: an example tool"
-+	help
-+	  This option allows to install the Lackey tool
-+
-+config BR2_PACKAGE_VALGRIND_NULGRIND
-+	bool "Nulgrind: the minimal Valgrind tool"
-+	help
-+	  This option allows to install the Nulgrind tool
-+
-+endif
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 24523bf..004c1ac 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -25,4 +25,99 @@ endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
- 
-+ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
-+define VALGRIND_REMOVE_MEMCHECK
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_CACHEGRIND),)
-+define VALGRIND_REMOVE_CACHEGRIND
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*cachegrind*
-+	for i in cg_annotate cg_diff cg_merge; do \
-+		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-+	done
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CACHEGRIND
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_CALLGRIND),)
-+define VALGRIND_REMOVE_CALLGRIND
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*callgrind*
-+	for i in callgrind_annotate callgrind_control ; do \
-+		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
-+	done
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CALLGRIND
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_HELGRIND),)
-+define VALGRIND_REMOVE_HELGRIND
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*helgrind*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_HELGRIND
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_DRD),)
-+define VALGRIND_REMOVE_DRD
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*drd*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DRD
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_MASSIF),)
-+define VALGRIND_REMOVE_MASSIF
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*massif*
-+	rm -f $(TARGET_DIR)/usr/bin/ms_script
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MASSIF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_DHAT),)
-+define VALGRIND_REMOVE_DHAT
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*dhat*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_PTRCHECK),)
-+define VALGRIND_REMOVE_PTRCHECK
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*ptrcheck*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_PTRCHECK
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
-+define VALGRIND_REMOVE_BBV
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*bbv*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_BBV
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_LACKEY),)
-+define VALGRIND_REMOVE_LACKEY
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*lackey*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_LACKEY
-+endif
-+
-+ifeq ($(BR2_PACKAGE_VALGRIND_NULGRIND),)
-+define VALGRIND_REMOVE_NULGRIND
-+	rm -f $(TARGET_DIR)/usr/lib/valgrind/*none*
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_NULGRIND
-+endif
-+
- $(eval $(call AUTOTARGETS))
+ Simon> diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+ Simon> new file mode 100644
+ Simon> index 0000000..1b0085b
+ Simon> --- /dev/null
+ Simon> +++ b/package/protobuf/Config.in
+ Simon> @@ -0,0 +1,7 @@
+ Simon> +config BR2_PACKAGE_PROTOBUF
+ Simon> +       bool "protobuf"
+ Simon> +       help
+ Simon> +         Protocol buffers are Google's language-neutral, platform-neutral,
+
+These lines should be indented with <tab> and not spaces (help lines
+with <tab><space><space>)
+
+Protobuf is implemented in C++, so it should depend on
+BR2_INSTALL_LIBSTDCPP.
+
+ Simon> +# N.B. Need to use host protoc during cross compilation.
+ Simon> +PROTOBUF_DEPENDENCIES = host-protobuf
+ Simon> +PROTOBUF_CONF_OPT = --with-protoc=$(HOST_DIR)/usr/bin/protoc
+ Simon> +
+ Simon> +PROTOBUF_INSTALL_STAGING = YES
+ Simon> +
+
+protobuf can use zlib, so we need to ensure it gets built after it if
+enabled.
+
+Committed with those fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
