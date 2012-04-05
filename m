@@ -1,132 +1,205 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 5 Apr 2012 18:20:10 +0200
-Subject: [Buildroot] [git commit] xfsprogs: Bump to 3.1.7 and convert to
-	AUTOTARGET
-Message-ID: <20120405162117.B830396A0C@busybox.osuosl.org>
+Date: Thu, 5 Apr 2012 18:19:54 +0200
+Subject: [Buildroot] [git commit] valgrind: allow selecting which tools to
+	install
+Message-ID: <20120405162117.A9C4B96A0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a41cdcf78f0300909dc5e6acc68abd7d64418bba
+commit: http://git.buildroot.net/buildroot/commit/?id=6a996469e270f76e663004c6f448dee08c801ad6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+The full valgrind installation takes more than 20 MB, while one typically does
+not use all of its tools. This patch adds extra config options to select which
+tools to install.
+
+[Peter: Don't default experimental tools to 'y' as suggested by Arnout]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/xfsprogs/xfsprogs.mk |   99 +++++-------------------------------------
- 1 files changed, 11 insertions(+), 88 deletions(-)
+ package/valgrind/Config.in   |   66 +++++++++++++++++++++++++++++
+ package/valgrind/valgrind.mk |   95 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 161 insertions(+), 0 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 52fec09..c59d4d8 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -3,96 +3,19 @@
- # xfsprogs
- #
- #############################################################
--XFSPROGS_VERSION:=3.0.3
--XFSPROGS_SOURCE=xfsprogs-$(XFSPROGS_VERSION).tar.gz
-+XFSPROGS_VERSION = 3.1.7
- XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
--XFSPROGS_DIR=$(BUILD_DIR)/xfsprogs-$(XFSPROGS_VERSION)
--XFSPROGS_CAT:=$(ZCAT)
--XFSPROGS_BINARY:=mkfs/mkfs.xfs
--XFSPROGS_TARGET_BINARY:=sbin/mkfs.xfs
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 0f656dc..dacdd86 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -6,3 +6,69 @@ config BR2_PACKAGE_VALGRIND
+ 	  Tool for debugging and profiling Linux programs.
  
--XFSPROGS_STRIP:= fsck/fsck.xfs mkfile/xfs_mkfile rtcp/xfs_rtcp
--XFSPROGS_STRIP_LIBDEP:= \
--	copy/xfs_copy db/xfs_db growfs/xfs_growfs io/xfs_io \
--	logprint/xfs_logprint mkfs/fstyp mkfs/mkfs.xfs \
--	repair/xfs_repair quota/xfs_quota
-+XFSPROGS_DEPENDENCIES = util-linux
+ 	  http://valgrind.kde.org/
++
++if BR2_PACKAGE_VALGRIND
++
++config BR2_PACKAGE_VALGRIND_MEMCHECK
++	bool "Memcheck: a memory error detector"
++	default y
++	help
++	  This option allows to install the Memcheck tool
++
++config BR2_PACKAGE_VALGRIND_CACHEGRIND
++	bool "Cachegrind: a cache and branch-prediction profiler"
++	default y
++	help
++	  This option allows to install the Cachegrind tool
++
++config BR2_PACKAGE_VALGRIND_CALLGRIND
++	bool "Callgrind: a call-graph generating cache and branch prediction profiler"
++	default y
++	help
++	  This option allows to install the Callgrind tool
++
++config BR2_PACKAGE_VALGRIND_HELGRIND
++	bool "Helgrind: a thread error detector"
++	default y
++	help
++	  This option allows to install the Helgrind tool
++
++config BR2_PACKAGE_VALGRIND_DRD
++	bool "DRD: a thread error detector"
++	default y
++	help
++	  This option allows to install the DRD tool
++
++config BR2_PACKAGE_VALGRIND_MASSIF
++	bool "Massif: a heap profiler"
++	default y
++	help
++	  This option allows to install the Massif tool
++
++config BR2_PACKAGE_VALGRIND_DHAT
++	bool "DHAT: a dynamic heap analysis tool"
++	default y
++	help
++	  This option allows to install the DHAT tool
++
++config BR2_PACKAGE_VALGRIND_PTRCHECK
++	bool "Ptrcheck: an experimental head, stack and global array overrun detector"
++	help
++	  This option allows to install the Ptrcheck tool
++
++config BR2_PACKAGE_VALGRIND_BBV
++	bool "BBV: an experimental basic block vector generation tool"
++	help
++	  This option allows to install the BBV tool
++
++config BR2_PACKAGE_VALGRIND_LACKEY
++	bool "Lackey: an example tool"
++	help
++	  This option allows to install the Lackey tool
++
++config BR2_PACKAGE_VALGRIND_NULGRIND
++	bool "Nulgrind: the minimal Valgrind tool"
++	help
++	  This option allows to install the Nulgrind tool
++
++endif
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 24523bf..004c1ac 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -25,4 +25,99 @@ endef
  
--$(DL_DIR)/$(XFSPROGS_SOURCE):
--	 $(call DOWNLOAD,$(XFSPROGS_SITE)/$(XFSPROGS_SOURCE))
-+XFSPROGS_CONF_ENV = ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes
-+XFSPROGS_CONF_OPT = \
-+	--enable-lib64=no \
-+	--enable-gettext=no \
-+	INSTALL_USER=root \
-+	INSTALL_GROUP=root
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
  
--xfsprogs-source: $(DL_DIR)/$(XFSPROGS_SOURCE)
-+XFSPROGS_INSTALL_TARGET_OPT = DIST_ROOT=$(TARGET_DIR) install
-+XFSPROGS_UNINSTALL_TARGET_OPT = DIST_ROOT=$(TARGET_DIR) uninstall
- 
--$(XFSPROGS_DIR)/.unpacked: $(DL_DIR)/$(XFSPROGS_SOURCE)
--	$(XFSPROGS_CAT) $(DL_DIR)/$(XFSPROGS_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
--	support/scripts/apply-patches.sh $(XFSPROGS_DIR) package/xfsprogs/ xfsprogs\*.patch
--	touch $(XFSPROGS_DIR)/.unpacked
--
--#XFSPROGS_CONFIG_SHARED:=--disable-shared
--XFSPROGS_CONFIG_SHARED:=--enable-shared
--
--$(XFSPROGS_DIR)/.configured: $(XFSPROGS_DIR)/.unpacked
--	(cd $(XFSPROGS_DIR); rm -rf config.cache; \
--		ac_cv_header_aio_h=yes ac_cv_lib_rt_lio_listio=yes \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		CPPFLAGS="-I$(E2FSPROGS_DIR)/lib" \
--		LDFLAGS="-L$(E2FSPROGS_DIR)/lib" \
--		INSTALL_USER=$(shell whoami) \
--		INSTALL_GROUP=$(shell groups | cut -d" " -f1) \
--		./configure $(QUIET) \
--		--target=$(GNU_TARGET_NAME) \
--		--host=$(GNU_TARGET_NAME) \
--		--build=$(GNU_HOST_NAME) \
--		--exec-prefix=/ \
--		--enable-gettext=no \
--		$(XFSPROGS_CONFIG_SHARED) \
--	)
--	touch $(XFSPROGS_DIR)/.configured
--
--$(XFSPROGS_DIR)/$(XFSPROGS_BINARY): $(XFSPROGS_DIR)/.configured
--	$(MAKE1) PATH=$(TARGET_PATH) CPPFLAGS="-I$(E2FSPROGS_DIR)/lib" \
--		LDFLAGS="-L$(E2FSPROGS_DIR)/lib" -C $(XFSPROGS_DIR)
--ifeq ($(XFSPROGS_CONFIG_SHARED),--enable-shared)
--	( \
--		cd $(XFSPROGS_DIR); \
--		$(STRIPCMD) $(XFSPROGS_STRIP); \
--		$(STRIPCMD) $(join $(dir $(XFSPROGS_STRIP_LIBDEP)), \
--				$(addprefix .libs/,$(notdir $(XFSPROGS_STRIP_LIBDEP)))) \
--	)
--	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/.libs/lib*.so.*.*
--else
--	( \
--		cd $(XFSPROGS_DIR); \
--		$(STRIPCMD) $(XFSPROGS_STRIP) $(XFSPROGS_STRIP_LIBDEP) \
--	)
--	$(STRIPCMD) $(XFSPROGS_DIR)/lib*/lib*.so.*.*
--endif
--	touch -c $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
--
--$(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY): $(XFSPROGS_DIR)/$(XFSPROGS_BINARY)
--	$(MAKE1) PATH=$(TARGET_PATH) \
--	    DIST_ROOT=$(TARGET_DIR) \
--	    exec-prefix=/ \
--	    -C $(XFSPROGS_DIR) install
--	rm -rf $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
--	touch -c $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
--
--xfsprogs: util-linux $(TARGET_DIR)/$(XFSPROGS_TARGET_BINARY)
--
--xfsprogs-clean:
--	rm -f $(TARGET_DIR)/bin/xfs_* $(TARGET_DIR)/sbin/xfs_* $(TARGET_DIR)/sbin/*.xfs
--	rm -f $(TARGET_DIR)/usr/lib/libhandle.so*
--	rm -f $(TARGET_DIR)/usr/lib/libdisk.so* $(TARGET_DIR)/usr/lib/libxfs.so*
--	-$(MAKE1) -C $(XFSPROGS_DIR) clean
--
--xfsprogs-dirclean:
--	rm -rf $(XFSPROGS_DIR)
--
--#############################################################
--#
--# Toplevel Makefile options
--#
--#############################################################
--ifeq ($(BR2_PACKAGE_XFSPROGS),y)
--TARGETS+=xfsprogs
--endif
-+$(eval $(call AUTOTARGETS))
++ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
++define VALGRIND_REMOVE_MEMCHECK
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_CACHEGRIND),)
++define VALGRIND_REMOVE_CACHEGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*cachegrind*
++	for i in cg_annotate cg_diff cg_merge; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
++	done
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CACHEGRIND
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_CALLGRIND),)
++define VALGRIND_REMOVE_CALLGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*callgrind*
++	for i in callgrind_annotate callgrind_control ; do \
++		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
++	done
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_CALLGRIND
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_HELGRIND),)
++define VALGRIND_REMOVE_HELGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*helgrind*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_HELGRIND
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_DRD),)
++define VALGRIND_REMOVE_DRD
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*drd*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DRD
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_MASSIF),)
++define VALGRIND_REMOVE_MASSIF
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*massif*
++	rm -f $(TARGET_DIR)/usr/bin/ms_script
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MASSIF
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_DHAT),)
++define VALGRIND_REMOVE_DHAT
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*dhat*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_PTRCHECK),)
++define VALGRIND_REMOVE_PTRCHECK
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*ptrcheck*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_PTRCHECK
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
++define VALGRIND_REMOVE_BBV
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*bbv*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_BBV
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_LACKEY),)
++define VALGRIND_REMOVE_LACKEY
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*lackey*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_LACKEY
++endif
++
++ifeq ($(BR2_PACKAGE_VALGRIND_NULGRIND),)
++define VALGRIND_REMOVE_NULGRIND
++	rm -f $(TARGET_DIR)/usr/lib/valgrind/*none*
++endef
++
++VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_NULGRIND
++endif
++
+ $(eval $(call AUTOTARGETS))
