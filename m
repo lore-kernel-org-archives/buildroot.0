@@ -1,25 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Apr 2012 16:40:18 +0200
-Subject: [Buildroot] [PATCH] valgrind: allow selecting which tools to
-	install
-In-Reply-To: <3d26fc988e01a367dd05.1331743859@beantl019720> (Thomas De
- Schampheleire's message of "Wed, 14 Mar 2012 17:50:59 +0100")
-References: <3d26fc988e01a367dd05.1331743859@beantl019720>
-Message-ID: <87hawys0ml.fsf@macbook.be.48ers.dk>
+Date: Thu, 05 Apr 2012 17:10:44 +0200
+Subject: [Buildroot] [PATCH] xfsprogs: Bump to 3.1.7 and convert to
+	AUTOTARGET
+In-Reply-To: <1332408896-8059-1-git-send-email-markos.chandras@imgtec.com>
+ (Markos Chandras's message of "Thu, 22 Mar 2012 09:34:56 +0000")
+References: <1332408896-8059-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <87d37mrz7v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
 
- Thomas> The full valgrind installation takes more than 20 MB, while one
- Thomas> typically does not use all of its tools. This patch adds extra
- Thomas> config options to select which tools to install.
+ Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
 
-Committed with Arnout's suggestion to not default the experimental tools
-to 'y' - Thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
