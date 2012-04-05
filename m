@@ -1,34 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Apr 2012 10:04:48 +0200
-Subject: [Buildroot] [git commit] Add libcap-ng package.
-In-Reply-To: <871uo2ty82.fsf@macbook.be.48ers.dk>
-References: <20120404200933.2D85596A01@busybox.osuosl.org>
- <20120405092757.585e48c6@skate>
- <871uo2ty82.fsf@macbook.be.48ers.dk>
-Message-ID: <20120405100448.4c0258a1@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 05 Apr 2012 13:16:39 +0200
+Subject: [Buildroot] [PATCH 2/2] Bump systemd to version 44
+In-Reply-To: <e6e476588d301a1e80595734b13cef70c64fac42.1333550801.git.maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Wed, 4 Apr 2012 16:46:59 +0200")
+References: <cover.1333550801.git.maxime.ripard@free-electrons.com>
+ <cover.1333550801.git.maxime.ripard@free-electrons.com>
+ <e6e476588d301a1e80595734b13cef70c64fac42.1333550801.git.maxime.ripard@free-electrons.com>
+Message-ID: <87wr5usa20.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 05 Apr 2012 09:49:17 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-> Seems like it, but only for the python bindings. The library itself
-> builds fine without largefile support (I tested that).
-> 
-> It should also ensure it builds after python if enabled for the
-> bindings.
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-And disable the build of the Python bindings if Python is not selected
-as a package for the target.
+Committed, thanks. I had to fix up a few things for uClibc though.
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
