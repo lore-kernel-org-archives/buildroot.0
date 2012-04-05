@@ -1,38 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 05 Apr 2012 10:04:38 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-04-04
-In-Reply-To: <1333610578.2444.3.camel@sven>
-References: <20120405063016.2E51252CDF5@lolut.humanoidz.org>
- <1333610578.2444.3.camel@sven>
-Message-ID: <fd665aa863fefe1a5f1a45782d9cdbd3@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 5 Apr 2012 15:22:41 +0200
+Subject: [Buildroot] [git commit] linux-fusion: bump version
+Message-ID: <20120405132623.8DE6A96A13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-04-05 04:22, Sven Neumann wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=eae71e805c57f2cc30291d0680b396a4e5cb9d33
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hi,
->
-> I've seen some build failures for gnutls in your logs. We've had
-> troubles with gnutls as well. Now it works here with the following
-> options:
->
-> GNUTLS_CONF_OPT += --disable-cxx --with-libgcrypt
-> --without-libgcrypt-prefix --without-p11-kit
->
-> You may want to check if that fixes your problems.
->
->
-> Regars,
-> Sven
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/linux-fusion/linux-fusion.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-ACK in principle if it helps.
-Though i haven't hit issues with --with-libgcrypt-prefix in my tests (i 
-actually needed it in a gentoo host since it otherwise leaked the host 
-libgcrypt version and failed) it still works correctly with 
---without-libgcrypt-prefix (doesn't if neither the old or new are 
-present).
-Regards.
+diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+index 2e62dba..a6d15e1 100644
+--- a/package/linux-fusion/linux-fusion.mk
++++ b/package/linux-fusion/linux-fusion.mk
+@@ -3,7 +3,7 @@
+ # linux-fusion
+ #
+ #############################################################
+-LINUX_FUSION_VERSION = 8.7.0
++LINUX_FUSION_VERSION = 8.8.1
+ LINUX_FUSION_SOURCE = linux-fusion-$(LINUX_FUSION_VERSION).tar.gz
+ LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
+ LINUX_FUSION_INSTALL_STAGING = YES
