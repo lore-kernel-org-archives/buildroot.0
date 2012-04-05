@@ -1,33 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 5 Apr 2012 14:48:35 +0200
-Subject: [Buildroot] [git commit] sawman: bump version
-Message-ID: <20120405124913.0636396A13@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 05 Apr 2012 10:04:38 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2012-04-04
+In-Reply-To: <1333610578.2444.3.camel@sven>
+References: <20120405063016.2E51252CDF5@lolut.humanoidz.org>
+ <1333610578.2444.3.camel@sven>
+Message-ID: <fd665aa863fefe1a5f1a45782d9cdbd3@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bc28297ce49f7749f6eab268010d3efe473a1353
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2012-04-05 04:22, Sven Neumann wrote:
 
-Old version was not compatible with dfb 1.4.16.
+> Hi,
+>
+> I've seen some build failures for gnutls in your logs. We've had
+> troubles with gnutls as well. Now it works here with the following
+> options:
+>
+> GNUTLS_CONF_OPT += --disable-cxx --with-libgcrypt
+> --without-libgcrypt-prefix --without-p11-kit
+>
+> You may want to check if that fixes your problems.
+>
+>
+> Regars,
+> Sven
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/sawman/sawman.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/sawman/sawman.mk b/package/sawman/sawman.mk
-index 504cc9e..03bec89 100644
---- a/package/sawman/sawman.mk
-+++ b/package/sawman/sawman.mk
-@@ -3,7 +3,7 @@
- # SAWMAN
- #
- #############################################################
--SAWMAN_VERSION = 1.4.15
-+SAWMAN_VERSION = 1.4.16
- SAWMAN_SOURCE = SaWMan-$(SAWMAN_VERSION).tar.gz
- SAWMAN_SITE = http://www.directfb.org/downloads/Extras
- SAWMAN_INSTALL_STAGING = YES
+ACK in principle if it helps.
+Though i haven't hit issues with --with-libgcrypt-prefix in my tests (i 
+actually needed it in a gentoo host since it otherwise leaked the host 
+libgcrypt version and failed) it still works correctly with 
+--without-libgcrypt-prefix (doesn't if neither the old or new are 
+present).
+Regards.
