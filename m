@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 5 Apr 2012 14:43:59 +0200
-Subject: [Buildroot] [git commit] bind: needs MMU
-Message-ID: <20120405124505.A9C1296A13@busybox.osuosl.org>
+Date: Thu, 5 Apr 2012 14:48:35 +0200
+Subject: [Buildroot] [git commit] sawman: bump version
+Message-ID: <20120405124913.0636396A13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=55c181fd0cb2d93b82564c5f9fcfb9adc13fd41b
+commit: http://git.buildroot.net/buildroot/commit/?id=bc28297ce49f7749f6eab268010d3efe473a1353
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Old version was not compatible with dfb 1.4.16.
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bind/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/sawman/sawman.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bind/Config.in b/package/bind/Config.in
-index 9b9c7ee..2944f1f 100644
---- a/package/bind/Config.in
-+++ b/package/bind/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_BIND
- 	bool "bind"
- 	depends on BR2_INET_IPV6
- 	depends on BR2_LARGEFILE
-+	# fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  BIND (Berkeley Internet Name Domain) is an implementation of
- 	  the Domain Name System (DNS) protocols and provides an openly
+diff --git a/package/sawman/sawman.mk b/package/sawman/sawman.mk
+index 504cc9e..03bec89 100644
+--- a/package/sawman/sawman.mk
++++ b/package/sawman/sawman.mk
+@@ -3,7 +3,7 @@
+ # SAWMAN
+ #
+ #############################################################
+-SAWMAN_VERSION = 1.4.15
++SAWMAN_VERSION = 1.4.16
+ SAWMAN_SOURCE = SaWMan-$(SAWMAN_VERSION).tar.gz
+ SAWMAN_SITE = http://www.directfb.org/downloads/Extras
+ SAWMAN_INSTALL_STAGING = YES
