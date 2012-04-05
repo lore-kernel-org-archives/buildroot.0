@@ -1,22 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Apr 2012 17:10:44 +0200
-Subject: [Buildroot] [PATCH] xfsprogs: Bump to 3.1.7 and convert to
-	AUTOTARGET
-In-Reply-To: <1332408896-8059-1-git-send-email-markos.chandras@imgtec.com>
- (Markos Chandras's message of "Thu, 22 Mar 2012 09:34:56 +0000")
-References: <1332408896-8059-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <87d37mrz7v.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 5 Apr 2012 18:20:10 +0200
+Subject: [Buildroot] [git commit] xfsprogs: bump version
+Message-ID: <20120405162117.C3C4A96A0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=32f5d03a6e80484d65e88914b993995916488ab8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/xfsprogs/xfsprogs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
+index c59d4d8..784f9b6 100644
+--- a/package/xfsprogs/xfsprogs.mk
++++ b/package/xfsprogs/xfsprogs.mk
+@@ -3,7 +3,7 @@
+ # xfsprogs
+ #
+ #############################################################
+-XFSPROGS_VERSION = 3.1.7
++XFSPROGS_VERSION = 3.1.8
+ XFSPROGS_SITE=ftp://oss.sgi.com/projects/xfs/cmd_tars
+ 
+ XFSPROGS_DEPENDENCIES = util-linux
