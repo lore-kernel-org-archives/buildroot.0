@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 5 Apr 2012 22:42:35 +0200
-Subject: [Buildroot] [git commit] libcap-ng: explicit disable python bindings
-Message-ID: <20120405204350.4BDDD90343@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 05 Apr 2012 23:10:36 +0200
+Subject: [Buildroot] udhcpc when link is up
+In-Reply-To: <CALo-6+hDSUFR_awCnm6gHveYLPaQ_Y8HGCQTsJuoTdv8bVqzOw@mail.gmail.com>
+ (Charles Krinke's message of "Thu, 5 Apr 2012 13:23:10 -0700")
+References: <CALo-6+g53Ay8J7QNLhfys8Sc7C_U9hd_CQAWm2T1r0vt7KcMdw@mail.gmail.com>
+ <874nszuwzl.fsf@macbook.be.48ers.dk>
+ <CALo-6+hDSUFR_awCnm6gHveYLPaQ_Y8HGCQTsJuoTdv8bVqzOw@mail.gmail.com>
+Message-ID: <87y5q9rik3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ee4614c4e72dfab4e8f36186fc8ef4ab05fb9a9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Charles" == Charles Krinke <charles.krinke@gmail.com> writes:
 
-The python bindings use swig, which we don't have in buildroot (but might be
-installed on the host), so disable it.
+ Charles> I guess my "noobness hat" must be worn a second day in that I look at
+ Charles> ifplugd and dont quite see the issue. Admiteddly the "noobness hat" is
+ Charles> worn because I spend most of my time in u-boot and the kernel, but
+ Charles> that is only an excuse.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libcap-ng/libcap-ng.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Have you read http://0pointer.de/lennart/projects/ifplugd/ ?
 
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index 6ea5de4..4a52702 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -8,5 +8,7 @@ LIBCAP_NG_VERSION = 0.6.6
- LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng/
- LIBCAP_NG_SOURCE = libcap-ng-$(LIBCAP_NG_VERSION).tar.gz
- LIBCAP_NG_INSTALL_STAGING = YES
-+LIBCAP_NG_CONF_ENV = ac_cv_prog_swig_found=no
-+LIBCAP_NG_CONF_OPT = --without-python
- 
- $(eval $(call AUTOTARGETS))
+There isn't much to it. You have to remove the 'auto eth0' line from
+/etc/network/interfaces so /etc/init.d/S40network doesn't try to run
+udhcpc at bootup. With ifplugd running it will execute
+/etc/ifplugd/ifplugd.action <iface> <up|down> whenever it detects a link
+change. By default this script will simply call ifup <iface> / ifdown
+<iface>.
+
+-- 
+Bye, Peter Korsgaard
