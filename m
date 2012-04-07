@@ -1,53 +1,87 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 7 Apr 2012 19:38:44 +0200
-Subject: [Buildroot] [git commit] Add documentation for <pkg>-rebuild and
-	<pkg>-reconfigure
-Message-ID: <20120407182718.D081E96A35@busybox.osuosl.org>
+Date: Sat, 7 Apr 2012 21:11:30 +0200
+Subject: [Buildroot] [git commit] gnutls: fix build on uClibc with C++
+	support enabled
+Message-ID: <20120407191157.A811C96A35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=040f6a325f7b62c178fb6d17480adbae4e42e745
+commit: http://git.buildroot.net/buildroot/commit/?id=80c4ea47087999e4c13377aa742a8c1d9295aeba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since these two special make targets are very useful but not yet
-mentioned in the documentation I added them to the make help and
-the manual.
+Patch from openembedded:
 
-Signed-off-by: Stephan Hoffmann <sho@reLinux.de>
+http://git.openembedded.org/openembedded-core/plain/meta/recipes-support/gnutls/gnutls-2.12.17/correct_rpl_gettimeofday_signature.patch
+
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                            |    2 ++
- docs/manual/rebuilding-packages.txt |    4 ++++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+ ...gnutls-correct_rpl_gettimeofday_signature.patch |   58 ++++++++++++++++++++
+ 1 files changed, 58 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 30099d9..3a09417 100644
---- a/Makefile
-+++ b/Makefile
-@@ -654,6 +654,8 @@ help:
- 	@echo
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
-+	@echo '  <package>-rebuild      - force recompile <package>'
-+	@echo '  <package>-reconfigure  - force reconfigure <package>'
- 	@echo
- 	@echo 'Configuration:'
- 	@echo '  menuconfig             - interactive curses-based configurator'
-diff --git a/docs/manual/rebuilding-packages.txt b/docs/manual/rebuilding-packages.txt
-index 9a41a88..f247dd0 100644
---- a/docs/manual/rebuilding-packages.txt
-+++ b/docs/manual/rebuilding-packages.txt
-@@ -15,6 +15,10 @@ The easiest way to rebuild a single package from scratch is to remove
- its build directory in +output/build+. Buildroot will then re-extract,
- re-configure, re-compile and re-install this package from scratch.
- 
-+For convenience, most packages support the special make targets
-+<package>-reconfigure and <package>-rebuild to repeat the configure
-+and build steps.
+diff --git a/package/gnutls/gnutls-correct_rpl_gettimeofday_signature.patch b/package/gnutls/gnutls-correct_rpl_gettimeofday_signature.patch
+new file mode 100644
+index 0000000..9188708
+--- /dev/null
++++ b/package/gnutls/gnutls-correct_rpl_gettimeofday_signature.patch
+@@ -0,0 +1,58 @@
++[PATCH] fix build on uClibc
 +
- However, if you don't want to rebuild the package completely from
- scratch, a better understanding of the Buildroot internals is
- needed. Internally, to keep track of which steps have been done and
++Currently we fail on uclibc like below
++
++| In file included from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/sys/procfs.h:32:0,
++|                  from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/sys/ucontext.h:26,
++|                  from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/signal.h:392,
++|                  from ../../gl/signal.h:52,
++|                  from ../../gl/sys/select.h:58,
++|                  from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/sys/types.h:220,
++|                  from ../../gl/sys/types.h:28,
++|                  from ../../lib/includes/gnutls/gnutls.h:46,
++|                  from ex-cxx.cpp:3:
++| ../../gl/sys/time.h:396:66: error: conflicting declaration 'void* restrict'
++| ../../gl/sys/time.h:396:50: error: 'restrict' has a previous declaration as 'timeval* restrict'
++| make[4]: *** [ex-cxx.o] Error 1
++| make[4]: *** Waiting for unfinished jobs....
++
++
++GCC detects that we call 'restrict' as param name in function
++signatures and complains since both params are called 'restrict'
++therefore we use __restrict to denote the C99 keywork
++
++This only happens of uclibc since this code is not excercised with
++eglibc otherwise we will have same issue there too
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++
++Index: gnutls-2.12.14/gl/sys_time.in.h
++===================================================================
++--- gnutls-2.12.14.orig/gl/sys_time.in.h	2012-01-15 10:54:39.517285351 -0800
+++++ gnutls-2.12.14/gl/sys_time.in.h	2012-01-15 10:59:23.773299108 -0800
++@@ -82,20 +82,20 @@
++ #    define gettimeofday rpl_gettimeofday
++ #   endif
++ _GL_FUNCDECL_RPL (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict)
+++                  (struct timeval *__restrict, void *__restrict)
++                   _GL_ARG_NONNULL ((1)));
++ _GL_CXXALIAS_RPL (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict));
+++                  (struct timeval *__restrict, void *__restrict));
++ #  else
++ #   if !@HAVE_GETTIMEOFDAY@
++ _GL_FUNCDECL_SYS (gettimeofday, int,
++-                  (struct timeval *restrict, void *restrict)
+++                  (struct timeval *__restrict, void *__restrict)
++                   _GL_ARG_NONNULL ((1)));
++ #   endif
++ /* Need to cast, because on glibc systems, by default, the second argument is
++                                                   struct timezone *.  */
++ _GL_CXXALIAS_SYS_CAST (gettimeofday, int,
++-                       (struct timeval *restrict, void *restrict));
+++                       (struct timeval *__restrict, void *__restrict));
++ #  endif
++ _GL_CXXALIASWARN (gettimeofday);
++ # elif defined GNULIB_POSIXCHECK
