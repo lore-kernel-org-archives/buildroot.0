@@ -1,87 +1,55 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 7 Apr 2012 21:11:30 +0200
-Subject: [Buildroot] [git commit] gnutls: fix build on uClibc with C++
-	support enabled
-Message-ID: <20120407191157.A811C96A35@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 07 Apr 2012 22:06:32 +0200
+Subject: [Buildroot] Problems when compiling gnutls and gst-plugins-base
+	on arm (panda)
+In-Reply-To: <CAC2kKA9r0gZuP56HwuF_U0ZGyJP9hBBytcY8v5ruhp1jQsqL+A@mail.gmail.com>
+ (Shawn Ferris's message of "Sat, 7 Apr 2012 10:38:37 -0600")
+References: <CAC2kKA9r0gZuP56HwuF_U0ZGyJP9hBBytcY8v5ruhp1jQsqL+A@mail.gmail.com>
+Message-ID: <87ty0vtign.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80c4ea47087999e4c13377aa742a8c1d9295aeba
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Shawn" == Shawn Ferris <shawn.ferris@gmail.com> writes:
 
-Patch from openembedded:
+ Shawn> Hey Guys
+ Shawn> I've checked out '2012.02-268-g5ee4614' of buildroot and I'm having
+ Shawn> two issues. I've included NetworkManager which requires gnutls. gnutls
+ Shawn> fails to find libgcrypt, but I see that it's built when looking in
+ Shawn> output/build. I suspect that it's not finding the pkg-config stuff,
+ Shawn> which I can probably hack around, but I excluded it for now to move
+ Shawn> on. (just thought I'd mention it.. I'll do more investigation and
+ Shawn> report back unless someone already knows the answer)
 
-http://git.openembedded.org/openembedded-core/plain/meta/recipes-support/gnutls/gnutls-2.12.17/correct_rpl_gettimeofday_signature.patch
+Strange, it works here.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- ...gnutls-correct_rpl_gettimeofday_signature.patch |   58 ++++++++++++++++++++
- 1 files changed, 58 insertions(+), 0 deletions(-)
+ Shawn> My bigger issue is that I can't get gst-plugins-base to compile. I get
+ Shawn> the errors:
 
-diff --git a/package/gnutls/gnutls-correct_rpl_gettimeofday_signature.patch b/package/gnutls/gnutls-correct_rpl_gettimeofday_signature.patch
-new file mode 100644
-index 0000000..9188708
---- /dev/null
-+++ b/package/gnutls/gnutls-correct_rpl_gettimeofday_signature.patch
-@@ -0,0 +1,58 @@
-+[PATCH] fix build on uClibc
-+
-+Currently we fail on uclibc like below
-+
-+| In file included from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/sys/procfs.h:32:0,
-+|                  from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/sys/ucontext.h:26,
-+|                  from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/signal.h:392,
-+|                  from ../../gl/signal.h:52,
-+|                  from ../../gl/sys/select.h:58,
-+|                  from /home/kraj/work/angstrom/sources/openembedded-core/build/tmp-uclibc/sysroots/qemuarm/usr/include/sys/types.h:220,
-+|                  from ../../gl/sys/types.h:28,
-+|                  from ../../lib/includes/gnutls/gnutls.h:46,
-+|                  from ex-cxx.cpp:3:
-+| ../../gl/sys/time.h:396:66: error: conflicting declaration 'void* restrict'
-+| ../../gl/sys/time.h:396:50: error: 'restrict' has a previous declaration as 'timeval* restrict'
-+| make[4]: *** [ex-cxx.o] Error 1
-+| make[4]: *** Waiting for unfinished jobs....
-+
-+
-+GCC detects that we call 'restrict' as param name in function
-+signatures and complains since both params are called 'restrict'
-+therefore we use __restrict to denote the C99 keywork
-+
-+This only happens of uclibc since this code is not excercised with
-+eglibc otherwise we will have same issue there too
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+
-+Index: gnutls-2.12.14/gl/sys_time.in.h
-+===================================================================
-+--- gnutls-2.12.14.orig/gl/sys_time.in.h	2012-01-15 10:54:39.517285351 -0800
-++++ gnutls-2.12.14/gl/sys_time.in.h	2012-01-15 10:59:23.773299108 -0800
-+@@ -82,20 +82,20 @@
-+ #    define gettimeofday rpl_gettimeofday
-+ #   endif
-+ _GL_FUNCDECL_RPL (gettimeofday, int,
-+-                  (struct timeval *restrict, void *restrict)
-++                  (struct timeval *__restrict, void *__restrict)
-+                   _GL_ARG_NONNULL ((1)));
-+ _GL_CXXALIAS_RPL (gettimeofday, int,
-+-                  (struct timeval *restrict, void *restrict));
-++                  (struct timeval *__restrict, void *__restrict));
-+ #  else
-+ #   if !@HAVE_GETTIMEOFDAY@
-+ _GL_FUNCDECL_SYS (gettimeofday, int,
-+-                  (struct timeval *restrict, void *restrict)
-++                  (struct timeval *__restrict, void *__restrict)
-+                   _GL_ARG_NONNULL ((1)));
-+ #   endif
-+ /* Need to cast, because on glibc systems, by default, the second argument is
-+                                                   struct timezone *.  */
-+ _GL_CXXALIAS_SYS_CAST (gettimeofday, int,
-+-                       (struct timeval *restrict, void *restrict));
-++                       (struct timeval *__restrict, void *__restrict));
-+ #  endif
-+ _GL_CXXALIASWARN (gettimeofday);
-+ # elif defined GNULIB_POSIXCHECK
+
+ Shawn>   CC     libgstpbutils_0.10_la-pbutils-enumtypes.lo
+ Shawn> {standard input}: Assembler messages:
+ Shawn> {standard input}:1386: Error: immediate value out of range -- `movt ip,-32640'
+ Shawn> {standard input}:1513: Error: immediate value out of range -- `movt ip,-32640'
+ Shawn> make[6]: *** [libgstvideo_0.10_la-tmp-orc.lo] Error 1
+
+Sounds like a compiler bug. What architecture / toolchain is this?
+
+ Shawn> I've tried different toolchains and the linaro-2012.03 works fine, but
+ Shawn> I have other issues when using that one to. (libgcc_s.so doesn't seem
+ Shawn> to be copied to the build and systemd fails on boot) I've also tried
+ Shawn> compiling with big endian and that works, but wont boot. (fails to
+ Shawn> find init, even though it exists)
+
+The linaro toolchain (and systemd) are very recent additions, so there
+might indeed be some issues with it. I had a quick look, and our
+external toolchain expects these libraries to reside inside the sysroot
+(which on linaro is detected as arm-linux-gnueabi/libc), and libstdc++
+is in the lib dir instead.
+
+I'll have a closer look to see how we can fix it.
+
+-- 
+Bye, Peter Korsgaard
