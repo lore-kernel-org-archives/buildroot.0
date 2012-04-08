@@ -1,38 +1,49 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 14 Apr 2012 21:28:31 +0200
-Subject: [Buildroot] [git commit] qt: tweak help text
-Message-ID: <20120414192948.061DC96ABE@busybox.osuosl.org>
+Date: Sun, 8 Apr 2012 21:08:58 +0200
+Subject: [Buildroot] [git commit] gdk-pixbuf: cleanup
+Message-ID: <20120414192947.DC37A96ABE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8eaf4e5281c98f97a453e67547ec740174d9d417
+commit: http://git.buildroot.net/buildroot/commit/?id=9d4d2086351c1e85ad3571380511640426a40206
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream URL of Qt is qt-project.org nowadays, and there's a single Qt
-release for everyone.
+No need for empty line before help text, and AUTOTARGETS handle
+--disable-largefile.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/qt/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/gdk-pixbuf/Config.in     |    1 -
+ package/gdk-pixbuf/gdk-pixbuf.mk |    4 ----
+ 2 files changed, 0 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 3a552d0..1ce6348 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -5,9 +5,10 @@ menuconfig BR2_PACKAGE_QT
- 	bool "Qt"
- 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gdk-pixbuf/Config.in b/package/gdk-pixbuf/Config.in
+index 8b9cc3f..28a0f12 100644
+--- a/package/gdk-pixbuf/Config.in
++++ b/package/gdk-pixbuf/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_GDK_PIXBUF
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
  	help
--	  Qt for Embedded Linux.
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
+-
+ 	  Gdk-Pixbuf is an image loader and scaler. It uses GObject
+ 	  and the GLib, to integrate well with GNOME applications.
  
--	  http://www.qtsoftware.com/products/platform/qt-for-embedded-linux
-+	  http://qt-project.org
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index de80706..8dc1c47 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -16,10 +16,6 @@ GDK_PIXBUF_CONF_ENV = \
  
- if BR2_PACKAGE_QT
+ GDK_PIXBUF_CONF_OPT = --disable-glibtest
  
+-ifneq ($(BR2_LARGEFILE),y)
+-GDK_PIXBUF_CONF_OPT += --disable-largefile
+-endif
+-
+ ifneq ($(BR2_PACKAGE_LIBPNG),y)
+ GDK_PIXBUF_CONF_OPT += --without-libpng
+ else
