@@ -1,41 +1,47 @@
-From: Julian Lunz <git@jlunz.de>
-Date: Sun,  8 Apr 2012 12:32:51 +0200
-Subject: [Buildroot] [PATCH] Fix makedevs to allow longer path names
-Message-ID: <1333881171-3707-1-git-send-email-git@jlunz.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  8 Apr 2012 12:45:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 5054] New: amd64: cannot find init - due to
+ missing /lib64 folder
+Message-ID: <bug-5054-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Makedevs path name is currently limited to 40, changed it to
-PATH_MAX 4096 from linux/include/linux/limits.h
-Signed-off-by: Julian Lunz <git@jlunz.de>
----
- package/makedevs/makedevs.c |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=5054
 
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index 5d5668d..ab90b93 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -410,7 +410,7 @@ int main(int argc, char **argv)
- 		unsigned int count = 0;
- 		unsigned int increment = 0;
- 		unsigned int start = 0;
--		char name[41];
-+		char name[4096];
- 		char user[41];
- 		char group[41];
- 		char *full_name;
-@@ -419,7 +419,7 @@ int main(int argc, char **argv)
- 
- 		linenum++;
- 
--		if ((2 > sscanf(line, "%40s %c %o %40s %40s %u %u %u %u %u", name,
-+		if ((2 > sscanf(line, "%4095s %c %o %40s %40s %u %u %u %u %u", name,
- 						&type, &mode, user, group, &major,
- 						&minor, &start, &increment, &count)) ||
- 				((major | minor | start | count | increment) > 0xfffff))
+           Summary: amd64: cannot find init - due to missing /lib64 folder
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: bos at je-eigen-domein.nl
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+(May have reported it before a couple years back, but cannot find the bug
+report)
+
+
+When selecting architecture amd64, eglibc toolchain, the generated image fails
+to boot with a "cannot find init" error.
+This is caused by busybox being linked to /lib64/ld-linux-x86-64.so.2, while
+there is no lib64 folder.
+
+
+Workaround:
+
+cd output/target
+ln -s lib lib64
+
 -- 
-1.7.2.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
