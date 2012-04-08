@@ -1,47 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  8 Apr 2012 12:45:26 +0000 (UTC)
-Subject: [Buildroot] [Bug 5054] New: amd64: cannot find init - due to
- missing /lib64 folder
-Message-ID: <bug-5054-163@https.bugs.busybox.net/>
+From: Max R. <m.r650200@gmail.com>
+Date: Sun, 8 Apr 2012 12:23:32 -0300
+Subject: [Buildroot] It is not booting
+Message-ID: <CANtrhT1y_E68NqNsLhJ7PiQS75DhjrMvHmF3gDUyMWC_bU45MQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5054
+Hi,
+I'm using Buildroot in order to build a minimal linux version to be
+used as a test environment. The compilation process worked fine, no
+problem occurred  during it. However, the boot process is taking so
+long time. I know it is normal to take some time to generate the keys
+used by dropbear(sshd), but after generating the keys a message about
+hrtimer shows up and nothing happens anymore. What is wrong with my
+version?
+By the way, qemu is used to boot, the target arch is i386 and
+filesystem is ext2.
 
-           Summary: amd64: cannot find init - due to missing /lib64 folder
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: bos at je-eigen-domein.nl
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-(May have reported it before a couple years back, but cannot find the bug
-report)
-
-
-When selecting architecture amd64, eglibc toolchain, the generated image fails
-to boot with a "cannot find init" error.
-This is caused by busybox being linked to /lib64/ld-linux-x86-64.so.2, while
-there is no lib64 folder.
-
-
-Workaround:
-
-cd output/target
-ln -s lib lib64
+Thanks in advance.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Max R.
