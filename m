@@ -1,28 +1,37 @@
-From: Shawn Ferris <shawn.ferris@gmail.com>
-Date: Sat, 7 Apr 2012 17:13:20 -0600
-Subject: [Buildroot] Problems when compiling gnutls and gst-plugins-base
-	on arm (panda)
-In-Reply-To: <CAC2kKA_tiUmNCqfyd=qpV3HCqeFnGjUgm_Cb6jNbifBq4W09Wg@mail.gmail.com>
-References: <CAC2kKA9r0gZuP56HwuF_U0ZGyJP9hBBytcY8v5ruhp1jQsqL+A@mail.gmail.com>
- <87ty0vtign.fsf@macbook.be.48ers.dk>
- <87pqbjtgx3.fsf@macbook.be.48ers.dk>
- <CAC2kKA_tiUmNCqfyd=qpV3HCqeFnGjUgm_Cb6jNbifBq4W09Wg@mail.gmail.com>
-Message-ID: <CAC2kKA9k=08H8hRHn6UYrGX1+qenyf+dSV+2pFU=iAJwO=36cg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 8 Apr 2012 08:24:25 +0200
+Subject: [Buildroot] [git commit] gdk-pixbuf: bump version
+Message-ID: <20120408062543.422A190377@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 7, 2012 at 3:09 PM, Shawn Ferris <shawn.ferris@gmail.com> wrote:
->> This is btw only an issue with 2012.03 as they moved some files. 2012.02
->> is OK, so perhaps you could give that a try?
->
-> Certainly.. I just kicked off the build and I'll let you know..
+commit: http://git.buildroot.net/buildroot/commit/?id=0b9eb5713d971cb9af7c75e92a9647e0fd449a9e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-That was it.. and this time gnutls compiled just fine too.. must've
-had something orphaned from another build on that one!?
+The 2.26 series needs glib >= 2.31.
 
-Thanks again for your help Peter!
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/gdk-pixbuf/gdk-pixbuf.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Shawn
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 65b3dbd..de80706 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
+ 
+-GDK_PIXBUF_MAJOR_VERSION = 2.22
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_MAJOR_VERSION).0
+-GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.bz2
++GDK_PIXBUF_MAJOR_VERSION = 2.24
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_MAJOR_VERSION).1
++GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_MAJOR_VERSION)
+ GDK_PIXBUF_INSTALL_STAGING = YES
+ 
