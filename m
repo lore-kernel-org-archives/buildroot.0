@@ -1,32 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Apr 2012 12:19:56 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.16.8
-Message-ID: <1333984796-30343-1-git-send-email-gustavo@zacarias.com.ar>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 9 Apr 2012 19:27:07 -0400
+Subject: [Buildroot] [PATCH v2 2/2] BeagleBone: new board
+In-Reply-To: <4F803D6E.2020402@relinux.de>
+References: <1331561609-26989-1-git-send-email-fhunleth@troodon-software.com>
+ <4F803D6E.2020402@relinux.de>
+Message-ID: <CA+-urNS5R_3bUY_SjVFFE3nMfdDN60O_-jJALKzo3cpu2my0fw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/multimedia/mpd/mpd.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Hi Stephan,
 
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index e3b5331..095bad6 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--MPD_VERSION = 0.16.7
--MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/musicpd
-+MPD_VERSION = 0.16.8
-+MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/musicpd/mpd/$(MPD_VERSION)
- MPD_DEPENDENCIES = host-pkg-config libglib2
- 
- # Some options need an explicit --disable or --enable
--- 
-1.7.3.4
+On Sat, Apr 7, 2012 at 9:13 AM, Stephan Hoffmann <sho@relinux.de> wrote:
+> Am 12.03.2012 15:13, schrieb Frank Hunleth:
+>> This configuration uses the latest released kernel and u-boot versions
+>> supported by Beagleboard developers. The Linux kernel configuration has
+>> been modified to compile in EXT2 support and use gzip to compress the
+>> kernel.
+>>
+>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> Tested-by: Stephan Hoffmann <sho@relinux.de>
+>
+> CONFIG_EXT3_FS=m has to be changed to "y" to boot with the supplied u-boot configuration.
+
+Thanks a lot for testing the patch and reporting back.
+
+It is interesting that ext3 needs to be turned on. The patch to u-boot
+which *should* have been applied should have changed the ext3 config
+reference to ext2. However, I haven't been paying close attention to
+the BR list for the past couple weeks and my patch could be out of
+date now.
+
+Having said this, I need to update my patch anyway. Nicolas Dechesne
+submitted an SPL bootloader patch that I'd like to base the new patch
+off of once it gets in. Also, the Linux config that I submitted feels
+way too bloated for BR. If you need something sooner, my current
+configs are at:
+
+https://github.com/nerves-project/bbone-erlang-buildroot/blob/master/configs/beaglebone_defconfig
+
+and
+
+https://github.com/nerves-project/bbone-erlang-buildroot/blob/master/board/beaglebone/linux-3.2.9.config
+
+The main change is that no longer compiles many drivers, and hardware
+float is enabled on the compiler. Since I haven't rebased that tree in
+a while, you'll probably need to make the ext3 change again.
+
+Thanks,
+Frank
