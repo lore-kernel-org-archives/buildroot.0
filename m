@@ -1,73 +1,58 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 10 Apr 2012 10:15:34 +0100
-Subject: [Buildroot] [PATCH] Added the empty package
-Message-ID: <1334049334-9276-1-git-send-email-spdawson@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Apr 2012 18:05:27 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.05/polarssl-hiawatha
+Message-ID: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hello,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- Improved patch in response to comments
+Here are two new packages, adding polarssl and hiawatha. The
+combination of both allows to have a SSL-capable Web server in 327 KB
+(212 KB for the polarssl shared library and 115 KB for the Hiawatha
+web server), which is much smaller than the 1.5+ MB needed for
+Lighttpd+OpenSSL. Those packages can therefore be an useful addition
+on devices where space matters, and that also require a SSL-capable
+web server.
 
- package/Config.in       |    1 +
- package/empty/Config.in |    6 ++++++
- package/empty/empty.mk  |   19 +++++++++++++++++++
- 3 files changed, 26 insertions(+), 0 deletions(-)
- create mode 100644 package/empty/Config.in
- create mode 100644 package/empty/empty.mk
+Best regards,
 
-diff --git a/package/Config.in b/package/Config.in
-index 4c6d4d8..205fa8a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -426,6 +426,7 @@ endmenu
- endmenu
- 
- menu "Miscellaneous"
-+source "package/empty/Config.in"
- source "package/shared-mime-info/Config.in"
- endmenu
- 
-diff --git a/package/empty/Config.in b/package/empty/Config.in
-new file mode 100644
-index 0000000..67b09fc
---- /dev/null
-+++ b/package/empty/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_EMPTY
-+	bool "empty"
-+	help
-+	  Run processes and applications under pseudo-terminal (PTY) sessions.
-+
-+	  http://empty.sourceforge.net/
-diff --git a/package/empty/empty.mk b/package/empty/empty.mk
-new file mode 100644
-index 0000000..d15a18f
---- /dev/null
-+++ b/package/empty/empty.mk
-@@ -0,1 +1,18 @@
-+#############################################################
-+#
-+# empty
-+#
-+#############################################################
-+EMPTY_VERSION = 0.6.18b
-+EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
-+EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
-+
-+define EMPTY_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-+endef
-+
-+define EMPTY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/empty $(TARGET_DIR)/usr/bin/empty
-+endef
-+
-+$(eval $(call GENTARGETS))
+Thomas
+
+The following changes since commit 8876b6751e0bc19a3754290061808f0f8420708e:
+
+  Fix makedevs to allow longer path names (2012-04-08 19:46:52 +0200)
+
+are available in the git repository at:
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/polarssl-hiawatha
+
+Thomas Petazzoni (2):
+      polarssl: new package
+      hiawatha: new package
+
+ package/Config.in                                  |    4 +
+ package/hiawatha/Config.in                         |   26 +++++++++
+ .../hiawatha-support-for-external-polarssl.patch   |   60 ++++++++++++++++++++
+ package/hiawatha/hiawatha.mk                       |   13 ++++
+ package/polarssl/Config.in                         |   28 +++++++++
+ package/polarssl/polarssl-no-programs.patch        |   26 +++++++++
+ package/polarssl/polarssl-no-test-suite.patch      |   26 +++++++++
+ .../polarssl-shared-and-static-library.patch       |   52 +++++++++++++++++
+ package/polarssl/polarssl.mk                       |   13 ++++
+ 9 files changed, 248 insertions(+), 0 deletions(-)
+ create mode 100644 package/hiawatha/Config.in
+ create mode 100644 package/hiawatha/hiawatha-support-for-external-polarssl.patch
+ create mode 100644 package/hiawatha/hiawatha.mk
+ create mode 100644 package/polarssl/Config.in
+ create mode 100644 package/polarssl/polarssl-no-programs.patch
+ create mode 100644 package/polarssl/polarssl-no-test-suite.patch
+ create mode 100644 package/polarssl/polarssl-shared-and-static-library.patch
+ create mode 100644 package/polarssl/polarssl.mk
+
+Thanks,
 -- 
-1.7.5.4
+Thomas Petazzoni
