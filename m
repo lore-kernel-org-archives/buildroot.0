@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Apr 2012 18:05:28 +0200
-Subject: [Buildroot] [PATCH 1/2] polarssl: new package
+Date: Tue, 10 Apr 2012 18:05:29 +0200
+Subject: [Buildroot] [PATCH 2/2] hiawatha: new package
 In-Reply-To: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <407c25c7e577f4789b2abe6df04afa8129b9c5b3.1334073813.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <0425724a2bfcb15955fb0e5ea03855b8030da226.1334073813.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,205 +12,145 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    1 +
- package/polarssl/Config.in                         |   28 +++++++++++
- package/polarssl/polarssl-no-programs.patch        |   26 ++++++++++
- package/polarssl/polarssl-no-test-suite.patch      |   26 ++++++++++
- .../polarssl-shared-and-static-library.patch       |   52 ++++++++++++++++++++
- package/polarssl/polarssl.mk                       |   13 +++++
- 6 files changed, 146 insertions(+), 0 deletions(-)
- create mode 100644 package/polarssl/Config.in
- create mode 100644 package/polarssl/polarssl-no-programs.patch
- create mode 100644 package/polarssl/polarssl-no-test-suite.patch
- create mode 100644 package/polarssl/polarssl-shared-and-static-library.patch
- create mode 100644 package/polarssl/polarssl.mk
+ package/Config.in                                  |    3 +
+ package/hiawatha/Config.in                         |   26 +++++++++
+ .../hiawatha-support-for-external-polarssl.patch   |   60 ++++++++++++++++++++
+ package/hiawatha/hiawatha.mk                       |   13 ++++
+ 4 files changed, 102 insertions(+), 0 deletions(-)
+ create mode 100644 package/hiawatha/Config.in
+ create mode 100644 package/hiawatha/hiawatha-support-for-external-polarssl.patch
+ create mode 100644 package/hiawatha/hiawatha.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 4c6d4d8..bcace09 100644
+index bcace09..d703b8c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -276,6 +276,7 @@ source "package/libgcrypt/Config.in"
- source "package/libgpg-error/Config.in"
- source "package/libnss/Config.in"
- source "package/openssl/Config.in"
-+source "package/polarssl/Config.in"
- endmenu
- 
- menu "Database"
-diff --git a/package/polarssl/Config.in b/package/polarssl/Config.in
+@@ -455,6 +455,9 @@ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++source "package/hiawatha/Config.in"
++endif
+ source "package/hostapd/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/ifplugd/Config.in"
+diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
 new file mode 100644
-index 0000000..3414a7f
+index 0000000..431a9fa
 --- /dev/null
-+++ b/package/polarssl/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_POLARSSL
-+	bool "polarssl"
-+	help
-+	  PolarSSL is an SSL library written in ANSI C. PolarSSL makes
-+	  it easy for developers to include cryptographic and SSL/TLS
-+	  capabilities in their (embedded) products with as little
-+	  hassle as possible. It is designed to be readable,
-+	  documented, tested, loosely coupled and portable.
-+
-+	  Warning: PolarSSL is licensed under the GPL. If you want to
-+	  use it in your own proprietary applications, you have to
-+	  purchase a commercial license.
-+
-+	  http://polarssl.org/
-+
-+config BR2_PACKAGE_POLARSSL_PROGRAMS
-+	bool "polarssl programs"
-+	depends on BR2_PACKAGE_POLARSSL
-+	help
-+	  This option enables the installation and the build of
-+	  PolarSSL companion programs: aescrypt2, benchmark, cert_app,
-+	  crl_app, crypt_and_hash, dh_client, dh_genprime, dh_server,
-+	  gen_entropy, generic_sum, gen_random_ctr_drbg,
-+	  gen_random_havege, hello, key_app, md5sum, mpi_demo,
-+	  rsa_decrypt, rsa_encrypt, rsa_genkey, rsa_sign, rsa_verify,
-+	  selftest, sha1sum, sha2sum, ssi-cgi, ssl_cert_test,
-+	  ssl_client1, ssl_client2, ssl_fork_server, ssl_mail_client,
-+	  ssl_server, ssl_test
-diff --git a/package/polarssl/polarssl-no-programs.patch b/package/polarssl/polarssl-no-programs.patch
-new file mode 100644
-index 0000000..f118871
---- /dev/null
-+++ b/package/polarssl/polarssl-no-programs.patch
++++ b/package/hiawatha/Config.in
 @@ -0,0 +1,26 @@
-+Add the BUILD_PROGRAMS option to disable programs build
++config BR2_PACKAGE_HIAWATHA
++	bool "hiawatha"
++	help
++	  Hiawatha is a webserver for Unix and has been built with
++	  security in mind. This resulted in a highly secure
++	  webserver, in both code and features.
 +
-+By default, PolarSSL builds and installs a large set of companions
-+programs, which in some cases are not useful. This patch adds the
-+BUILD_PROGRAMS option which allows to disable the build and
-+installation of such programs when not needed.
++	  This webserver runs on Linux, BSD, MacOS X and
++	  Windows. Although it can run any kind of CGI / FastCGI
++	  application, it has been optimized for usage with PHP. Most
++	  well known PHP frameworks and CMS applications have been
++	  tested with Hiawatha and ran without a problem. Hiawatha
++	  supports many web and HTTP features such as CGI/FastCGI,
++	  HTTP authentication, virtual host support, request
++	  pipelining, keep alive connections, URL rewriting and many
++	  more.
++
++	  http://www.hiawatha-webserver.org/
++
++if BR2_PACKAGE_HIAWATHA
++
++config BR2_PACKAGE_HIAWATHA_SSL
++	bool "hiawatha SSL support"
++	select BR2_PACKAGE_POLARSSL
++
++endif
+diff --git a/package/hiawatha/hiawatha-support-for-external-polarssl.patch b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
+new file mode 100644
+index 0000000..e6033b9
+--- /dev/null
++++ b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
+@@ -0,0 +1,60 @@
++Enable linking against an external PolarSSL
++
++Hiawatha contains its own copy of the PolarSSL source code, and its
++build system builds this private copy of PolarSSL and links to it. In
++the context of Buildroot, we prefer to link against the PolarSSL built
++externally by the polarssl package.
++
++This patch adds a ENABLE_SSL_EXTERNAL option, which, when used in
++addition to ENABLE_SSL, tells Hiawatha's build system to link against
++the already existing PolarSSL library instead of building its own.
 +
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+Index: polarssl-1.1.1/CMakeLists.txt
++Index: hiawatha-8.1/CMakeLists.txt
 +===================================================================
-+--- polarssl-1.1.1.orig/CMakeLists.txt
-++++ polarssl-1.1.1/CMakeLists.txt
-+@@ -33,7 +33,11 @@
-+   add_subdirectory(tests)
-+ endif(CMAKE_COMPILER_IS_GNUCC AND BUILD_TESTS)
++--- hiawatha-8.1.orig/CMakeLists.txt
+++++ hiawatha-8.1/CMakeLists.txt
++@@ -9,6 +9,7 @@
++ option(ENABLE_IPV6    "Enable IPv6 support in Hiawatha." ON)
++ option(ENABLE_MONITOR "Enable support for the Hiawatha Monitor." OFF)
++ option(ENABLE_SSL     "Enable SSL (PolarSSL) support in Hiawatha." ON)
+++option(ENABLE_SSL_EXTERNAL "Enable SSL (PolarSSL) as an external library." OFF)
++ option(ENABLE_TOOLKIT "Enable the URL toolkit in Hiawatha" ON)
++ option(ENABLE_XSLT    "Enable XSLT support in Hiawatha." ON)
 + 
-+-add_subdirectory(programs)
-++option(BUILD_PROGRAMS "Build programs." ON)
++@@ -86,19 +87,23 @@
++ 
++ # PolarSSL
++ if(ENABLE_SSL)
+++ if(NOT ENABLE_SSL_EXTERNAL)
++ 	option(USE_SHARED_POLARSSL_LIBRARY "Build PolarSSL as a shared library." ON)
++ 	set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/hiawatha)
++ 	set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/hiawatha)
+++	include_directories(polarssl/include)
++ 	add_subdirectory(polarssl)
+++ endif()
++ 	set(POLARSSL_LIBRARY "polarssl")
++ endif()
++ 
++ # Hiawatha
++-include_directories(${CMAKE_CURRENT_BINARY_DIR} polarssl/include)
++ if(ENABLE_XSLT)
++ 	include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR})
++ endif()
++ 
+++include_directories(${CMAKE_CURRENT_BINARY_DIR})
 ++
-++if(BUILD_PROGRAMS)
-++  add_subdirectory(programs)
-++endif(BUILD_PROGRAMS)
-+ 
-+ ADD_CUSTOM_TARGET(apidoc
-+                   COMMAND doxygen doxygen/polarssl.doxyfile
-diff --git a/package/polarssl/polarssl-no-test-suite.patch b/package/polarssl/polarssl-no-test-suite.patch
++ # Configure files
++ configure_file(config.h.in config.h)
++ foreach (configfile ${config_files_in})
++@@ -119,7 +124,9 @@
++ target_link_libraries(hiawatha ${CRYPT_LIBRARY} pthread ${Z_LIBRARY})
++ if(ENABLE_SSL)
++ 	target_link_libraries(hiawatha ${POLARSSL_LIBRARY})
+++ if(NOT ENABLE_SSL_EXTERNAL)
++ 	set_target_properties(hiawatha PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR}/hiawatha)
+++ endif()
++ endif()
++ if(ENABLE_XSLT)
++ 	target_link_libraries(hiawatha ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES})
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
 new file mode 100644
-index 0000000..7e07441
+index 0000000..aa245f3
 --- /dev/null
-+++ b/package/polarssl/polarssl-no-test-suite.patch
-@@ -0,0 +1,26 @@
-+Add BUILD_TESTS option to disable test suite
-+
-+By default, PolarSSL builds a fairly extensive test suite to validate
-+the library. In the context of Buildroot, building this test suite is
-+not really useful, so we add a BUILD_TESTS to disable its build.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: polarssl-1.1.1/CMakeLists.txt
-+===================================================================
-+--- polarssl-1.1.1.orig/CMakeLists.txt
-++++ polarssl-1.1.1/CMakeLists.txt
-+@@ -27,9 +27,11 @@
-+ add_subdirectory(library)
-+ add_subdirectory(include)
-+ 
-+-if(CMAKE_COMPILER_IS_GNUCC)
-++option(BUILD_TESTS "Build tests." ON)
-++
-++if(CMAKE_COMPILER_IS_GNUCC AND BUILD_TESTS)
-+   add_subdirectory(tests)
-+-endif(CMAKE_COMPILER_IS_GNUCC)
-++endif(CMAKE_COMPILER_IS_GNUCC AND BUILD_TESTS)
-+ 
-+ add_subdirectory(programs)
-+ 
-diff --git a/package/polarssl/polarssl-shared-and-static-library.patch b/package/polarssl/polarssl-shared-and-static-library.patch
-new file mode 100644
-index 0000000..3ad3334
---- /dev/null
-+++ b/package/polarssl/polarssl-shared-and-static-library.patch
-@@ -0,0 +1,52 @@
-+Allow both shared and static PolarSSL library
-+
-+By default, PolarSSL is built as a static library. If the option
-+USE_SHARED_POLARSSL_LIBRARY is set, then it is build as a shared
-+library. But there is no way of building both the shared and static
-+versions.
-+
-+This patch adds the USE_STATIC_POLARSSL_LIBRARY (which defaults to ON)
-+in addition to the existing USE_SHARED_POLARSSL_LIBRARY (which
-+defaults to OFF). Both options can be manipulated independently.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: polarssl-1.1.1/library/CMakeLists.txt
-+===================================================================
-+--- polarssl-1.1.1.orig/library/CMakeLists.txt
-++++ polarssl-1.1.1/library/CMakeLists.txt
-+@@ -1,4 +1,5 @@
-+ option(USE_SHARED_POLARSSL_LIBRARY "Build PolarSSL as a shared library." OFF)
-++option(USE_STATIC_POLARSSL_LIBRARY "Build PolarSSL as a static library." ON)
-+ 
-+ set(src
-+      aes.c
-+@@ -40,17 +41,21 @@
-+      xtea.c
-+ )
-+ 
-+-if(NOT USE_SHARED_POLARSSL_LIBRARY)
-+-
-+-add_library(polarssl STATIC ${src})
-+-
-+-else(NOT USE_SHARED_POLARSSL_LIBRARY)
-++if(USE_SHARED_POLARSSL_LIBRARY)
-+ 
-+ add_library(polarssl SHARED ${src})
-+ set_target_properties(polarssl PROPERTIES VERSION 1.1.1 SOVERSION 1)
-++set_target_properties(polarssl PROPERTIES OUTPUT_NAME polarssl)
-++
-++endif(USE_SHARED_POLARSSL_LIBRARY)
-++
-++if(USE_STATIC_POLARSSL_LIBRARY)
-++
-++add_library(polarssl-static STATIC ${src})
-++set_target_properties(polarssl-static PROPERTIES OUTPUT_NAME polarssl)
-+ 
-+-endif(NOT USE_SHARED_POLARSSL_LIBRARY)
-++endif(USE_STATIC_POLARSSL_LIBRARY)
-+ 
-+-install(TARGETS polarssl
-++install(TARGETS polarssl polarssl-static
-+         DESTINATION ${LIB_INSTALL_DIR}
-+         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-new file mode 100644
-index 0000000..0d8574c
---- /dev/null
-+++ b/package/polarssl/polarssl.mk
++++ b/package/hiawatha/hiawatha.mk
 @@ -0,0 +1,13 @@
-+POLARSSL_SITE = http://polarssl.org/code/releases/
-+POLARSSL_VERSION = 1.1.1
-+POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
-+POLARSSL_CONF_OPT = \
-+	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
-+	-DUSE_STATIC_POLARSSL_LIBRARY=ON \
-+	-DBUILD_TESTS=OFF \
-+	-DBUILD_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
++HIAWATHA_VERSION = 8.1
++HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
 +
-+POLARSSL_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
++HIAWATHA_CONF_OPT += -DENABLE_SSL_EXTERNAL=ON -DENABLE_SSL=ON
++HIAWATHA_DEPENDENCIES += polarssl
++endif
++
++HIAWATHA_CONF_OPT += \
++	-DENABLE_TOOLKIT=OFF \
++	-DENABLE_XSLT=OFF
 +
 +$(eval $(call CMAKETARGETS))
-+
 -- 
 1.7.4.1
