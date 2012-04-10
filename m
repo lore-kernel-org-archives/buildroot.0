@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 10 Apr 2012 10:07:55 +0100
+Date: Tue, 10 Apr 2012 10:10:59 +0100
 Subject: [Buildroot] [PATCH] Added the empty package
-Message-ID: <1334048875-9028-1-git-send-email-spdawson@gmail.com>
+Message-ID: <1334049059-9148-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +12,7 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- Tweaked initial patch: need to protect spaces in TARGET_CC and TARGET_LD
+ Fixed install command to use full target file name
 
  package/Config.in       |    1 +
  package/empty/Config.in |    6 ++++++
@@ -65,7 +65,7 @@ index 0000000..d15a18f
 +endef
 +
 +define EMPTY_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/empty $(TARGET_DIR)/usr/bin
++	$(INSTALL) -D $(@D)/empty $(TARGET_DIR)/usr/bin/empty
 +	-$(STRIPCMP) $(STRIP_STRIP_UNNEEDED) $(TARGET_DIR)/usr/bin/empty
 +endef
 +
