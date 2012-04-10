@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Apr 2012 18:05:29 +0200
-Subject: [Buildroot] [PATCH 2/2] hiawatha: new package
-In-Reply-To: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <0425724a2bfcb15955fb0e5ea03855b8030da226.1334073813.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Apr 2012 18:10:45 +0200
+Subject: [Buildroot] [PATCH 1/5] arch: re-enable m68k and add a few
+	architecture variants
+In-Reply-To: <cover.1334074065.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1334074065.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <bc2ee4c68e37835c1e9fd0a5d093126444ed967a.1334074065.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,145 +13,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |    3 +
- package/hiawatha/Config.in                         |   26 +++++++++
- .../hiawatha-support-for-external-polarssl.patch   |   60 ++++++++++++++++++++
- package/hiawatha/hiawatha.mk                       |   13 ++++
- 4 files changed, 102 insertions(+), 0 deletions(-)
- create mode 100644 package/hiawatha/Config.in
- create mode 100644 package/hiawatha/hiawatha-support-for-external-polarssl.patch
- create mode 100644 package/hiawatha/hiawatha.mk
+ target/Config.in.arch |   41 ++++++++++++++++++++++++++++++++++++++++-
+ 1 files changed, 40 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bcace09..d703b8c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -455,6 +455,9 @@ source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+source "package/hiawatha/Config.in"
-+endif
- source "package/hostapd/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/ifplugd/Config.in"
-diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
-new file mode 100644
-index 0000000..431a9fa
---- /dev/null
-+++ b/package/hiawatha/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_HIAWATHA
-+	bool "hiawatha"
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index a2c0037..7efd672 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -48,7 +48,6 @@ config BR2_i386
+ 
+ config BR2_m68k
+ 	bool "m68k"
+-	depends on BROKEN # ice in uclibc / inet_ntoa_r
+ 	help
+ 	  Motorola 68000 family microprocessor
+ 	  http://en.wikipedia.org/wiki/M68k
+@@ -577,6 +576,40 @@ config BR2_powerpc_SPE
+ 	depends on BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
+ endchoice
+ 
++choice
++	prompt "Target Architecture Variant"
++	depends on BR2_m68k
++	default BR2_generic_m68k
 +	help
-+	  Hiawatha is a webserver for Unix and has been built with
-+	  security in mind. This resulted in a highly secure
-+	  webserver, in both code and features.
++	  Specific CPU variant to use
++config BR2_generic_m68k
++	bool "generic"
++config BR2_m68k_68000
++	bool "m68k 68000"
++config BR2_m68k_68010
++	bool "m68k 68010"
++config BR2_m68k_68020
++	bool "m68k 68020"
++config BR2_m68k_68030
++	bool "m68k 68030"
++config BR2_m68k_68040
++	bool "m68k 68030"
++config BR2_m68k_68060
++	bool "m68k 68030"
++config BR2_m68k_5206
++        bool "coldfire 5206"
++config BR2_m68k_51qe
++        bool "coldfire 51qe"
++config BR2_m68k_5206e
++        bool "coldfire 5206e"
++config BR2_m68k_5208
++        bool "coldfire 5208"
++config BR2_m68k_5307
++        bool "coldfire 5307"
++config BR2_m68k_5407
++        bool "coldfire 5407"
++endchoice
 +
-+	  This webserver runs on Linux, BSD, MacOS X and
-+	  Windows. Although it can run any kind of CGI / FastCGI
-+	  application, it has been optimized for usage with PHP. Most
-+	  well known PHP frameworks and CMS applications have been
-+	  tested with Hiawatha and ran without a problem. Hiawatha
-+	  supports many web and HTTP features such as CGI/FastCGI,
-+	  HTTP authentication, virtual host support, request
-+	  pipelining, keep alive connections, URL rewriting and many
-+	  more.
-+
-+	  http://www.hiawatha-webserver.org/
-+
-+if BR2_PACKAGE_HIAWATHA
-+
-+config BR2_PACKAGE_HIAWATHA_SSL
-+	bool "hiawatha SSL support"
-+	select BR2_PACKAGE_POLARSSL
-+
-+endif
-diff --git a/package/hiawatha/hiawatha-support-for-external-polarssl.patch b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
-new file mode 100644
-index 0000000..e6033b9
---- /dev/null
-+++ b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
-@@ -0,0 +1,60 @@
-+Enable linking against an external PolarSSL
-+
-+Hiawatha contains its own copy of the PolarSSL source code, and its
-+build system builds this private copy of PolarSSL and links to it. In
-+the context of Buildroot, we prefer to link against the PolarSSL built
-+externally by the polarssl package.
-+
-+This patch adds a ENABLE_SSL_EXTERNAL option, which, when used in
-+addition to ENABLE_SSL, tells Hiawatha's build system to link against
-+the already existing PolarSSL library instead of building its own.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: hiawatha-8.1/CMakeLists.txt
-+===================================================================
-+--- hiawatha-8.1.orig/CMakeLists.txt
-++++ hiawatha-8.1/CMakeLists.txt
-+@@ -9,6 +9,7 @@
-+ option(ENABLE_IPV6    "Enable IPv6 support in Hiawatha." ON)
-+ option(ENABLE_MONITOR "Enable support for the Hiawatha Monitor." OFF)
-+ option(ENABLE_SSL     "Enable SSL (PolarSSL) support in Hiawatha." ON)
-++option(ENABLE_SSL_EXTERNAL "Enable SSL (PolarSSL) as an external library." OFF)
-+ option(ENABLE_TOOLKIT "Enable the URL toolkit in Hiawatha" ON)
-+ option(ENABLE_XSLT    "Enable XSLT support in Hiawatha." ON)
-+ 
-+@@ -86,19 +87,23 @@
-+ 
-+ # PolarSSL
-+ if(ENABLE_SSL)
-++ if(NOT ENABLE_SSL_EXTERNAL)
-+ 	option(USE_SHARED_POLARSSL_LIBRARY "Build PolarSSL as a shared library." ON)
-+ 	set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/hiawatha)
-+ 	set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/hiawatha)
-++	include_directories(polarssl/include)
-+ 	add_subdirectory(polarssl)
-++ endif()
-+ 	set(POLARSSL_LIBRARY "polarssl")
-+ endif()
-+ 
-+ # Hiawatha
-+-include_directories(${CMAKE_CURRENT_BINARY_DIR} polarssl/include)
-+ if(ENABLE_XSLT)
-+ 	include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR})
-+ endif()
-+ 
-++include_directories(${CMAKE_CURRENT_BINARY_DIR})
-++
-+ # Configure files
-+ configure_file(config.h.in config.h)
-+ foreach (configfile ${config_files_in})
-+@@ -119,7 +124,9 @@
-+ target_link_libraries(hiawatha ${CRYPT_LIBRARY} pthread ${Z_LIBRARY})
-+ if(ENABLE_SSL)
-+ 	target_link_libraries(hiawatha ${POLARSSL_LIBRARY})
-++ if(NOT ENABLE_SSL_EXTERNAL)
-+ 	set_target_properties(hiawatha PROPERTIES INSTALL_RPATH ${CMAKE_INSTALL_FULL_LIBDIR}/hiawatha)
-++ endif()
-+ endif()
-+ if(ENABLE_XSLT)
-+ 	target_link_libraries(hiawatha ${LIBXML2_LIBRARIES} ${LIBXSLT_LIBRARIES})
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-new file mode 100644
-index 0000000..aa245f3
---- /dev/null
-+++ b/package/hiawatha/hiawatha.mk
-@@ -0,0 +1,13 @@
-+HIAWATHA_VERSION = 8.1
-+HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
-+
-+ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
-+HIAWATHA_CONF_OPT += -DENABLE_SSL_EXTERNAL=ON -DENABLE_SSL=ON
-+HIAWATHA_DEPENDENCIES += polarssl
-+endif
-+
-+HIAWATHA_CONF_OPT += \
-+	-DENABLE_TOOLKIT=OFF \
-+	-DENABLE_XSLT=OFF
-+
-+$(eval $(call CMAKETARGETS))
+ config BR2_ARCH
+ 	string
+ 	default "arm"		if BR2_arm
+@@ -845,3 +878,9 @@ config BR2_GCC_TARGET_CPU
+ 	default sparchfleonv8	if BR2_sparc_sparchfleonv8
+ 	default sparcsfleon	if BR2_sparc_sparcsfleon
+ 	default sparcsfleonv8	if BR2_sparc_sparcsfleonv8
++	default 5206		if BR2_m68k_5206
++	default 51qe		if BR2_m68k_51qe
++	default 5206e		if BR2_m68k_5206e
++	default 5208		if BR2_m68k_5208
++	default 5307		if BR2_m68k_5307
++	default 5407		if BR2_m68k_5407
 -- 
 1.7.4.1
