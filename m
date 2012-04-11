@@ -1,49 +1,32 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 11 Apr 2012 13:12:30 +0100
-Subject: [Buildroot] [PATCH] Add lcdproc config options, for driver selection
-Message-ID: <1334146350-12841-1-git-send-email-spdawson@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Apr 2012 09:27:04 -0300
+Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.12
+Message-ID: <1334147224-6848-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a configuration menu item to specify a list of lcdproc drivers to
-be built. The list defaults to 'all'.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lcdproc/Config.in  |    7 +++++++
- package/lcdproc/lcdproc.mk |    2 +-
- 2 files changed, 8 insertions(+), 1 deletions(-)
+ package/dosfstools/dosfstools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lcdproc/Config.in b/package/lcdproc/Config.in
-index 6c8614d..7261105 100644
---- a/package/lcdproc/Config.in
-+++ b/package/lcdproc/Config.in
-@@ -5,3 +5,10 @@ config BR2_PACKAGE_LCDPROC
-          LCD display driver daemon and clients
- 
-          http://lcdproc.org/
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index e1b6a33..7a8a7e8 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -3,8 +3,8 @@
+ # dosfstools
+ #
+ #############################################################
+-DOSFSTOOLS_VERSION = 3.0.11
+-DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.gz
 +
-+config BR2_PACKAGE_LCDPROC_DRIVERS
-+	string "List of drivers to build"
-+	default "all"
-+	depends on BR2_PACKAGE_LCDPROC
-+	help
-+	  Specify a comma-separated list of lcdproc drivers to be built
-diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
-index e8919e9..745b386 100644
---- a/package/lcdproc/lcdproc.mk
-+++ b/package/lcdproc/lcdproc.mk
-@@ -7,7 +7,7 @@ LCDPROC_VERSION = 0.5.5
- LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
- LCDPROC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
- 
--LCDPROC_CONF_OPT = --enable-drivers=all
-+LCDPROC_CONF_OPT = --enable-drivers=$(BR2_PACKAGE_LCDPROC_DRIVERS)
- 
- LCDPROC_DEPENDENCIES = ncurses
- 
++DOSFSTOOLS_VERSION = 3.0.12
+ DOSFSTOOLS_SITE = http://www.daniel-baumann.ch/software/dosfstools
+ MKDOSFS_BINARY = mkdosfs
+ DOSFSCK_BINARY = dosfsck
 -- 
-1.7.5.4
+1.7.3.4
