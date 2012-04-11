@@ -1,53 +1,55 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 11 Apr 2012 12:05:30 +0200
-Subject: [Buildroot] [PATCH] package: set PKG_CONFIG_SYSROOT_DIR in
-	HOST_MAKE_ENV
-In-Reply-To: <1333543819-27718-1-git-send-email-s.neumann@raumfeld.com>
-References: <1333543819-27718-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <1334138730.3070.2.camel@sven>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Apr 2012 12:17:41 +0200
+Subject: [Buildroot] [PATCH] Add lcdproc config options,
+ for driver selection
+In-Reply-To: <1334138568-28717-1-git-send-email-spdawson@gmail.com>
+References: <1334138568-28717-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120411121741.173594a3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Simon,
 
-On Wed, 2012-04-04 at 14:50 +0200, Sven Neumann wrote:
-> A host package that uses AUTORECONF (such as host-libglib2)
-> may end up running './config.status --recheck'. This will
-> call the configure script with the environment variables
-> set in HOST_MAKE_ENV. If PKG_CONFIG_SYSROOT_DIR is missing
-> this will cause the hardcoded sysroot dir take effect leading
-> to wrong paths.
+Le Wed, 11 Apr 2012 11:02:48 +0100,
+spdawson at gmail.com a ?crit :
+
+> From: Simon Dawson <spdawson@gmail.com>
 > 
-> See commit 22acade2ec311 which works around this problem by
-> fiddling with the generated .pc file. This commit becomes
-> obsolete with this fix.22acade2ec311
-> 
-> Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
-> Cc: Daniel Mack <zonque@gmail.com>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 > ---
->  package/Makefile.in |    1 +
->  1 files changed, 1 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index dc8d038..c344c6b 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -222,6 +222,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
->  HOST_MAKE_ENV=PATH=$(HOST_PATH) \
->  		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
->  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-> +		PKG_CONFIG_SYSROOT_DIR="/" \
->  		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
->  		PERLLIB="$(HOST_DIR)/usr/lib/perl"
->  
+>  package/lcdproc/Config.in  |  246 ++++++++++++++++++++++++++++++++++++++++++++
+>  package/lcdproc/lcdproc.mk |  151 +++++++++++++++++++++++++++-
+>  2 files changed, 396 insertions(+), 1 deletions(-)
 
-Any feedback on this? This small change fixes an important problem and
-makes the workaround from 22acade2ec311 obsolete. Please consider it for
-inclusion.
+Thanks for this patch. I am wondering whether we should have such a
+long list of drivers as a menu, or whether we should just provide an
+option to give a comma-separated list of drivers. Something like the
+following choice:
 
+ [ ] Build all drivers
+ [ ] Build custom list of drivers
+
+When the second choice is enabled, then it shows:
+
+ () List of drivers to build
+
+But I don't feel really strongly about this, so please wait for
+comments from other Buildroot developers before working on such change.
+
+> +LCDPROC_CONF_OPT = --enable-drivers=$(shell echo $(LCDPROC_DRIVERS) | sed -e 's/ /,/g')
+
+This can be done in pure make:
+
+LCDPROC_CONF_OPT = --enable-drivers=$(subst $(space),$(comma),$(LCDPROC_DRIVERS))
 
 Regards,
-Sven
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
