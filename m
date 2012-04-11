@@ -1,55 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Apr 2012 12:17:41 +0200
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Wed, 11 Apr 2012 11:53:30 +0200
 Subject: [Buildroot] [PATCH] Add lcdproc config options,
  for driver selection
 In-Reply-To: <1334138568-28717-1-git-send-email-spdawson@gmail.com>
 References: <1334138568-28717-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120411121741.173594a3@skate>
+Message-ID: <20120411095330.GP29577@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Simon,
+> +
+> +config BR2_PACKAGE_LCDPROC_DRIVER_ULA200
+> +	bool "ula200"
+> +	help
+> +	  Driver for ula200 devices
+> +
+> +config BR2_PACKAGE_LCDPROC_DRIVER_XOSD
+> +	bool "xosd"
+> +	help
+> +	  Driver for xosd devices
+> +
+> +endmenu
+> diff --git a/package/lcdproc/lcdproc.mk b/package/lcdproc/lcdproc.mk
+> index e8919e9..e0964a5 100644
+> --- a/package/lcdproc/lcdproc.mk
+> +++ b/package/lcdproc/lcdproc.mk
+> @@ -7,7 +7,156 @@ LCDPROC_VERSION = 0.5.5
+>  LCDPROC_SOURCE = lcdproc-$(LCDPROC_VERSION).tar.gz
+>  LCDPROC_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/lcdproc/lcdproc/$(LCDPROC_VERSION)
+>  
+> -LCDPROC_CONF_OPT = --enable-drivers=all
+> +LCDPROC_DRIVERS =
+> +ifeq ($(BR2_PACKAGE_LCDPROC_DRIVER_BAYRAD),y)
+> +	LCDPROC_DRIVERS += bayrad
+> +endif
+LCDPROC_DRIVERS-$(BR2_PACKAGE_LCDPROC_DRIVER_BAYRAD) += bayrad
 
-Le Wed, 11 Apr 2012 11:02:48 +0100,
-spdawson at gmail.com a ?crit :
+and then use
+LCDPROC_DRIVERS-y
 
-> From: Simon Dawson <spdawson@gmail.com>
-> 
-> Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> ---
->  package/lcdproc/Config.in  |  246 ++++++++++++++++++++++++++++++++++++++++++++
->  package/lcdproc/lcdproc.mk |  151 +++++++++++++++++++++++++++-
->  2 files changed, 396 insertions(+), 1 deletions(-)
 
-Thanks for this patch. I am wondering whether we should have such a
-long list of drivers as a menu, or whether we should just provide an
-option to give a comma-separated list of drivers. Something like the
-following choice:
+so we can drop the ifeq blabla
 
- [ ] Build all drivers
- [ ] Build custom list of drivers
-
-When the second choice is enabled, then it shows:
-
- () List of drivers to build
-
-But I don't feel really strongly about this, so please wait for
-comments from other Buildroot developers before working on such change.
-
-> +LCDPROC_CONF_OPT = --enable-drivers=$(shell echo $(LCDPROC_DRIVERS) | sed -e 's/ /,/g')
-
-This can be done in pure make:
-
-LCDPROC_CONF_OPT = --enable-drivers=$(subst $(space),$(comma),$(LCDPROC_DRIVERS))
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Best Regards,
+J.
