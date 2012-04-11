@@ -1,23 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Apr 2012 15:35:29 +0200
-Subject: [Buildroot] [PATCH] Add sam-ba to at91sam926*_defconfig
-In-Reply-To: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
-References: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <20120411153529.73613e03@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Apr 2012 10:40:36 -0300
+Subject: [Buildroot] [PATCH] samba: security bump to version 3.5.14
+Message-ID: <1334151636-16666-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 11 Apr 2012 15:06:50 +0200,
-Alexandre Belloni <alexandre.belloni@piout.net> a ?crit :
+Bump samba to version 3.5.14 to fix CVE-2012-1182
 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index c15efca..48810b9 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SAMBA_VERSION = 3.5.12
++SAMBA_VERSION = 3.5.14
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.3.4
