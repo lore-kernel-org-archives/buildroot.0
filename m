@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Apr 2012 07:56:45 +0000 (UTC)
-Subject: [Buildroot] [Bug 5066] New: New-Package: net-tools
-Message-ID: <bug-5066-163@https.bugs.busybox.net/>
+Date: Wed, 11 Apr 2012 08:03:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 5072] New: ncurses: add ncurses-progs to target
+Message-ID: <bug-5072-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5066
+https://bugs.busybox.net/show_bug.cgi?id=5072
 
-           Summary: New-Package: net-tools
+           Summary: ncurses: add ncurses-progs to target
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -25,17 +25,16 @@ https://bugs.busybox.net/show_bug.cgi?id=5066
    Estimated Hours: 0.0
 
 
-Created attachment 4256
-  --> https://bugs.busybox.net/attachment.cgi?id=4256
+Created attachment 4262
+  --> https://bugs.busybox.net/attachment.cgi?id=4262
 Patch
 
-Added a package for "The NET-3 networking toolkit".
-Adding arp, ifconfig, netstat, rarp, nameif and route to the target system.
+Added support for compiling and installing ncurses-progs to the target.
+Adds clear, tput, tic, toe, tset and infocmp to the target.
+
 Build tested on i686 architecture.
 
-
 Best regards,
-
 Stefan Mei?ner, davengo GmbH, Germany
 
 -- 
