@@ -1,31 +1,43 @@
-From: Attila Kinali <attila@kinali.ch>
-Date: Fri, 13 Apr 2012 09:56:03 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Apr 2012 09:56:17 +0200
 Subject: [Buildroot] Kernel does not boot on I.MX28
 In-Reply-To: <63D6870D443E63419AC4A0C97B86C0920D358F816B@MBXCLUSTER.mdh.local>
 References: <63D6870D443E63419AC4A0C97B86C0920D358F816B@MBXCLUSTER.mdh.local>
-Message-ID: <20120413095603.b65508a9d94d73d3a694c2ed@kinali.ch>
+Message-ID: <20120413095617.0b583ec8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-God morgon!
+Le Fri, 13 Apr 2012 09:38:58 +0200,
+Mikael ?sberg <mikael.asberg@mdh.se> a ?crit :
 
-On Fri, 13 Apr 2012 09:38:58 +0200
-Mikael ?sberg <mikael.asberg@mdh.se> wrote:
+> First I did 'make menuconfig' and set mxs_defconfig, and then 'make'.
+> Then I do 'make linux-menuconfig' (adding as many UART options as possible).
+> I do a 'make menuconfig' again and set Kernel --> Kernel configuration --> Using a custom config file.
+> I change file path to output/build/linux-3.2.6/.config (instead of mxs_defconfig).
 
-> I'm trying to run a kernel on a I.MX28 EVK board.
-> I'm using u-boot (from LTIB) on a SD card to boot my kernel.
+You don't need to do this last step. 'make linux-menuconfig' will edit
+the output/build/linux-3.2.6/.config file, and it will be use at the
+next invocation of make.
+
+However, you will want to save your .config file somewhere else in
+order to not lose it when you'll do a make clean.
+
+> Starting kernel ...
 > 
+> Uncompressing Linux... done, booting the kernel.
 
-Make sure you use /dev/ttyAMA0 as console and not ttyAM0
-as mentioned in the LTIB documentation.
+Build your kernel with CONFIG_EARLYPRINTK and pass the "earlyprintk"
+argument on the kernel command line. It will give some more details on
+what's happening.
 
-			Attila Kinali
+Regards,
 
+Thomas
 -- 
-The trouble with you, Shev, is you don't say anything until you've saved
-up a whole truckload of damned heavy brick arguments and then you dump
-them all out and never look at the bleeding body mangled beneath the heap
-		-- Tirin, The Dispossessed, U. Le Guin
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
