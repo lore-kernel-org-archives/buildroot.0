@@ -1,28 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Apr 2012 21:04:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 5018] dialog broken: exits with assert in uClibc
-In-Reply-To: <bug-5018-163@https.bugs.busybox.net/>
-References: <bug-5018-163@https.bugs.busybox.net/>
-Message-ID: <20120414210450.B108696AC0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 14 Apr 2012 23:07:39 +0200
+Subject: [Buildroot] [PATCH] Bump sam-ba version to 2.11
+In-Reply-To: <1334219114-9988-1-git-send-email-maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Thu, 12 Apr 2012 10:25:14 +0200")
+References: <1334219114-9988-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <87mx6ec99g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5018
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Maxime> ---
+ Maxime>  package/sam-ba/sam-ba.mk |    6 +++---
+ Maxime>  1 files changed, 3 insertions(+), 3 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
-
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2012-04-14 21:04:50 UTC ---
-defconfigs changed to use UCLIBC_HAS_CTYPE_CHECKED in git by Gustavoz
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
