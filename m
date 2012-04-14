@@ -1,34 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 14 Apr 2012 23:54:00 +0200
-Subject: [Buildroot] [git commit] dosfstools: bump to version 3.0.12
-Message-ID: <20120414215737.E6FB996A79@busybox.osuosl.org>
+Date: Sat, 14 Apr 2012 23:53:03 +0200
+Subject: [Buildroot] [git commit] samba: security bump to version 3.5.14
+Message-ID: <20120414215737.DA66296A79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f30971329649add986dcb117668ea755266bba5b
+commit: http://git.buildroot.net/buildroot/commit/?id=b6e0f2fdf2665f67e2bc6400c8479d6fca7e2fe4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bump samba to version 3.5.14 to fix CVE-2012-1182
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/dosfstools/dosfstools.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index e1b6a33..7a8a7e8 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -3,8 +3,8 @@
- # dosfstools
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index c15efca..48810b9 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--DOSFSTOOLS_VERSION = 3.0.11
--DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.gz
-+
-+DOSFSTOOLS_VERSION = 3.0.12
- DOSFSTOOLS_SITE = http://www.daniel-baumann.ch/software/dosfstools
- MKDOSFS_BINARY = mkdosfs
- DOSFSCK_BINARY = dosfsck
+ 
+-SAMBA_VERSION = 3.5.12
++SAMBA_VERSION = 3.5.14
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
