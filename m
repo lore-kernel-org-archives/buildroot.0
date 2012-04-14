@@ -1,65 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 14 Apr 2012 21:26:52 +0200
-Subject: [Buildroot] [git commit] qt: fix build on uClibc without lfs support
-Message-ID: <20120414192947.E829396ABF@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 14 Apr 2012 22:58:37 +0200
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.{0, 2,
+	3}.x stable versions
+In-Reply-To: <1334342745-26370-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 13 Apr 2012 15:45:45 -0300")
+References: <1334342745-26370-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87zkaec9oi.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=650195deb9168dd2e250b8145448ed580ea4601b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/qt/qt-uClibc-lfs-fix.patch |   41 ++++++++++++++++++++++++++++++++++++
- 1 files changed, 41 insertions(+), 0 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/qt/qt-uClibc-lfs-fix.patch b/package/qt/qt-uClibc-lfs-fix.patch
-new file mode 100644
-index 0000000..ea04a60
---- /dev/null
-+++ b/package/qt/qt-uClibc-lfs-fix.patch
-@@ -0,0 +1,41 @@
-+From 6f88b27de256266947a7f6a3e70e18510754aab2 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <jacmet@sunsite.dk>
-+Date: Sat, 14 Apr 2012 20:36:07 +0200
-+Subject: [PATCH] mkspecs/common/posix: fix !largefile builds on uClibc
-+
-+uClibc doesn't even define O_LARGEFILE when not configured with large file
-+support, so ensure this define is only used when Qt is built with
-+-largefile, otherwise the build fails with:
-+
-+io/qtemporaryfile.cpp: In function 'bool createFileFromTemplate(
-+	NativeFileHandle&, QFileSystemEntry::NativePath&, size_t, size_t,
-+	QSystemError&)':
-+io/qtemporaryfile.cpp:197:57: error: 'O_LARGEFILE' was not declared in
-+	this scope
-+
-+Reported-Upstream: https://bugreports.qt-project.org/browse/QTBUG-25321
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ mkspecs/common/posix/qplatformdefs.h |    5 +++++
-+ 1 files changed, 5 insertions(+), 0 deletions(-)
-+
-+diff --git a/mkspecs/common/posix/qplatformdefs.h b/mkspecs/common/posix/qplatformdefs.h
-+index daecc00..8a796cf 100644
-+--- a/mkspecs/common/posix/qplatformdefs.h
-++++ b/mkspecs/common/posix/qplatformdefs.h
-+@@ -123,7 +123,12 @@
-+ #define QT_READ                 ::read
-+ #define QT_WRITE                ::write
-+ 
-++#ifdef QT_LARGEFILE_SUPPORT
-+ #define QT_OPEN_LARGEFILE       O_LARGEFILE
-++#else
-++#define QT_OPEN_LARGEFILE       0
-++#endif
-++
-+ #define QT_OPEN_RDONLY          O_RDONLY
-+ #define QT_OPEN_WRONLY          O_WRONLY
-+ #define QT_OPEN_RDWR            O_RDWR
-+-- 
-+1.7.8.3
-+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
