@@ -1,21 +1,45 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 14 Apr 2012 23:54:13 +0200
-Subject: [Buildroot] [PATCH] dosfstools: bump to version 3.0.12
-In-Reply-To: <1334147224-6848-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 11 Apr 2012 09:27:04 -0300")
-References: <1334147224-6848-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <873986c73u.fsf@macbook.be.48ers.dk>
+Date: Sat, 14 Apr 2012 23:57:22 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-04-07
+In-Reply-To: <20120410085328.21507bc2@skate> (Thomas Petazzoni's message of
+ "Tue, 10 Apr 2012 08:53:28 +0200")
+References: <20120408063022.2FA8252CA55@lolut.humanoidz.org>
+ <87lim6u2an.fsf@macbook.be.48ers.dk> <20120410085328.21507bc2@skate>
+Message-ID: <87y5pyase5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Hi,
 
-Committed, thanks.
+ >> What toolchain is this? Gustavoz added uClibc patches for unshare
+ >> support, so if this is uClibc you'll need to rebuild the toolchain.
+
+ Thomas> Well, according to the defconfig, the toolchain is:
+
+ Thomas> BR2_TOOLCHAIN_CTNG=y
+ Thomas> BR2_TOOLCHAIN_CTNG_uClibc_LARGEFILE=y
+ Thomas> BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6=y
+ Thomas> BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC=y
+ Thomas> BR2_TOOLCHAIN_CTNG_uClibc_LOCALE=y
+ Thomas> BR2_TOOLCHAIN_CTNG_CXX=y
+
+ Thomas> So it's a toolchain generated with our crosstool-NG backend, which
+ Thomas> apparently does not use the uClibc patches we have added for the
+ Thomas> internal backend.
+
+No, it doesn't, and I seems nontrivial to me to make it do so as ctng
+includes it's own patches which may conflict with "ours".
+
+Doubling the safe/extra patches as patches-to-ctng (so
+patches-to-patches) also isn't really nice.
+
+Our ctng version is also still using 0.9.32.
 
 -- 
 Bye, Peter Korsgaard
