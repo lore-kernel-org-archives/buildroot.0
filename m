@@ -1,47 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 14 Apr 2012 22:58:24 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0, 2,
-	3}.x stable versions
-Message-ID: <20120414215233.B49A696ABF@busybox.osuosl.org>
+Date: Sat, 14 Apr 2012 23:06:42 +0200
+Subject: [Buildroot] [git commit] Bump sam-ba version to 2.11
+Message-ID: <20120414215233.DCDCF96AC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f2201e3044384494f6e865c2e5e8aa783a639475
+commit: http://git.buildroot.net/buildroot/commit/?id=11c06f763423dabcf1cfe1c8b41c384a4b884222
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    6 +++---
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- ...umode_t.patch => linux-3.3.2-fix-umode_t.patch} |    0
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/sam-ba/sam-ba.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 2cdd3e3..3430966 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.27"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.28"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.14"	if BR2_KERNEL_HEADERS_3_2
--	default "3.3.1"		if BR2_KERNEL_HEADERS_3_3
-+	default "3.2.15"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.3.2"		if BR2_KERNEL_HEADERS_3_3
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.27-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.28-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.27-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.28-headers_install-fix-__packed-in-exported-kernel-head.patch
-diff --git a/toolchain/kernel-headers/linux-3.3.1-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.2-fix-umode_t.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.3.1-fix-umode_t.patch
-rename to toolchain/kernel-headers/linux-3.3.2-fix-umode_t.patch
+diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
+index d00575c..d5ab9f6 100644
+--- a/package/sam-ba/sam-ba.mk
++++ b/package/sam-ba/sam-ba.mk
+@@ -1,11 +1,11 @@
+ SAM_BA_SITE    = http://www.atmel.com/dyn/resources/prod_documents/
+-SAM_BA_VERSION = 2.10
++SAM_BA_VERSION = 2.11
+ SAM_BA_SOURCE  = sam-ba_$(SAM_BA_VERSION).zip
+ 
+ define HOST_SAM_BA_EXTRACT_CMDS
+         unzip -d $(BUILD_DIR) $(DL_DIR)/$(SAM_BA_SOURCE)
+-        mv $(BUILD_DIR)/sam-ba_cdc_linux/* $(@D)
+-        rmdir $(BUILD_DIR)/sam-ba_cdc_linux/
++        mv $(BUILD_DIR)/sam-ba_cdc_cdc_linux/* $(@D)
++        rmdir $(BUILD_DIR)/sam-ba_cdc_cdc_linux/
+ endef
+ 
+ # Since it's a prebuilt application and it does not conform to the
