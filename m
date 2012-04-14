@@ -1,45 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 14 Apr 2012 23:57:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-04-07
-In-Reply-To: <20120410085328.21507bc2@skate> (Thomas Petazzoni's message of
- "Tue, 10 Apr 2012 08:53:28 +0200")
-References: <20120408063022.2FA8252CA55@lolut.humanoidz.org>
- <87lim6u2an.fsf@macbook.be.48ers.dk> <20120410085328.21507bc2@skate>
-Message-ID: <87y5pyase5.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 14 Apr 2012 23:54:00 +0200
+Subject: [Buildroot] [git commit] dosfstools: bump to version 3.0.12
+Message-ID: <20120414215737.E6FB996A79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f30971329649add986dcb117668ea755266bba5b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/dosfstools/dosfstools.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- >> What toolchain is this? Gustavoz added uClibc patches for unshare
- >> support, so if this is uClibc you'll need to rebuild the toolchain.
-
- Thomas> Well, according to the defconfig, the toolchain is:
-
- Thomas> BR2_TOOLCHAIN_CTNG=y
- Thomas> BR2_TOOLCHAIN_CTNG_uClibc_LARGEFILE=y
- Thomas> BR2_TOOLCHAIN_CTNG_uClibc_INET_IPV6=y
- Thomas> BR2_TOOLCHAIN_CTNG_uClibc_INET_RPC=y
- Thomas> BR2_TOOLCHAIN_CTNG_uClibc_LOCALE=y
- Thomas> BR2_TOOLCHAIN_CTNG_CXX=y
-
- Thomas> So it's a toolchain generated with our crosstool-NG backend, which
- Thomas> apparently does not use the uClibc patches we have added for the
- Thomas> internal backend.
-
-No, it doesn't, and I seems nontrivial to me to make it do so as ctng
-includes it's own patches which may conflict with "ours".
-
-Doubling the safe/extra patches as patches-to-ctng (so
-patches-to-patches) also isn't really nice.
-
-Our ctng version is also still using 0.9.32.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index e1b6a33..7a8a7e8 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -3,8 +3,8 @@
+ # dosfstools
+ #
+ #############################################################
+-DOSFSTOOLS_VERSION = 3.0.11
+-DOSFSTOOLS_SOURCE = dosfstools-$(DOSFSTOOLS_VERSION).tar.gz
++
++DOSFSTOOLS_VERSION = 3.0.12
+ DOSFSTOOLS_SITE = http://www.daniel-baumann.ch/software/dosfstools
+ MKDOSFS_BINARY = mkdosfs
+ DOSFSCK_BINARY = dosfsck
