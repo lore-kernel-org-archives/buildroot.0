@@ -1,43 +1,125 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Apr 2012 11:54:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 5102] New: qt package moc, uic,
-	rcc read from wrong place
-Message-ID: <bug-5102-163@https.bugs.busybox.net/>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 14 Apr 2012 16:08:10 +0200
+Subject: [Buildroot] [PATCH 1/2] libupnp: bump to version 1.6.17
+In-Reply-To: <1334154982-23530-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1334154982-23530-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <23512219F5794B2EB0BBE3E41DFF2621@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5102
 
-           Summary: qt package moc, uic, rcc read from wrong place
-           Product: buildroot
-           Version: 2012.02
-          Platform: Other
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: mehsamadi at yahoo.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Hi
+
+Just have rebuild my app. against the 1.6.17 and it works just fine !
+
+Thanks
 
 
-when cross compiling qt, building application with cross compiled qmake creates
-a wrong location for moc, uic, and rcc in Makefile.
-qmake expect finding moc in host/usr/arm-unknown-linux-uclibcgnueabi/usr/bin/
-while the actual files are located in the host/usr/bin/
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Gustavo Zacarias
+Verzonden: woensdag 11 april 2012 16:36
+Aan: buildroot at busybox.net
+Onderwerp: [Buildroot] [PATCH 1/2] libupnp: bump to version 1.6.17
 
-I compiled this with 2011.11 and it was ok. I guess this is something that is
-introduced in 2012.02.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libupnp/libupnp-1.6.14-no-ipv6.patch |   23 ----------------
+ package/libupnp/libupnp-1.6.17-no-ipv6.patch |   37 ++++++++++++++++++++++++++
+ package/libupnp/libupnp.mk                   |    2 +-
+ 3 files changed, 38 insertions(+), 24 deletions(-)  delete mode 100644 package/libupnp/libupnp-1.6.14-no-ipv6.patch
+ create mode 100644 package/libupnp/libupnp-1.6.17-no-ipv6.patch
 
-Thank you
-sorry for bad english. :-)
+diff --git a/package/libupnp/libupnp-1.6.14-no-ipv6.patch b/package/libupnp/libupnp-1.6.14-no-ipv6.patch
+deleted file mode 100644
+index 929c309..0000000
+--- a/package/libupnp/libupnp-1.6.14-no-ipv6.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-Fix missing knob to properly disable IPv6 support when headers lack it.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura libupnp-1.6.15/upnp/src/ssdp/ssdp_device.c libupnp-1.6.15-noipv6/upnp/src/ssdp/ssdp_device.c
+---- libupnp-1.6.15/upnp/src/ssdp/ssdp_device.c	2011-11-04 19:33:59.000000000 -0300
+-+++ libupnp-1.6.15-noipv6/upnp/src/ssdp/ssdp_device.c	2012-03-20 21:00:26.274098343 -0300
+-@@ -199,6 +199,7 @@
+- 		setsockopt(ReplySock, IPPROTO_IP, IP_MULTICAST_TTL,
+- 			   (char *)&ttl, sizeof(int));
+- 		socklen = sizeof(struct sockaddr_in);
+-+#ifdef UPNP_ENABLE_IPV6
+- 	} else if (DestAddr->sa_family == AF_INET6) {
+- 		inet_ntop(AF_INET6,
+- 			  &((struct sockaddr_in6 *)DestAddr)->sin6_addr,
+-@@ -207,6 +208,7 @@
+- 			   (char *)&gIF_INDEX, sizeof(gIF_INDEX));
+- 		setsockopt(ReplySock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
+- 			   (char *)&hops, sizeof(hops));
+-+#endif
+- 	} else {
+- 		UpnpPrintf(UPNP_CRITICAL, SSDP, __FILE__, __LINE__,
+- 			   "Invalid destination address specified.");
+diff --git a/package/libupnp/libupnp-1.6.17-no-ipv6.patch b/package/libupnp/libupnp-1.6.17-no-ipv6.patch
+new file mode 100644
+index 0000000..67b3895
+--- /dev/null
++++ b/package/libupnp/libupnp-1.6.17-no-ipv6.patch
+@@ -0,0 +1,37 @@
++From 812bdabc2c293173ea943059a577d480884a6cc1 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 11 Apr 2012 11:17:45 -0300
++Subject: [PATCH] ssdp_device: exclude IPv6 stuff when there's no IPv6
++
++Add an additional INET_IPV6 exclusion around IPV6_MULTICAST_HOPS since 
++the definition isn't guaranteed to exist when the toolchain lacks IPv6 
++support.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ upnp/src/ssdp/ssdp_device.c |    2 ++
++ 1 files changed, 2 insertions(+), 0 deletions(-)
++
++diff --git a/upnp/src/ssdp/ssdp_device.c b/upnp/src/ssdp/ssdp_device.c 
++index d3517cc..a439005 100644
++--- a/upnp/src/ssdp/ssdp_device.c
+++++ b/upnp/src/ssdp/ssdp_device.c
++@@ -210,6 +210,7 @@ static int NewRequestHandler(
++ 			   (char *)&ttl, sizeof(int));
++ 		socklen = sizeof(struct sockaddr_in);
++ 		break;
+++#ifdef INET_IPV6
++ 	case AF_INET6:
++ 		inet_ntop(AF_INET6,
++ 			  &((struct sockaddr_in6 *)DestAddr)->sin6_addr, @@ -219,6 +220,7 
++@@ static int NewRequestHandler(
++ 		setsockopt(ReplySock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
++ 			   (char *)&hops, sizeof(hops));
++ 		break;
+++#endif
++ 	default:
++ 		UpnpPrintf(UPNP_CRITICAL, SSDP, __FILE__, __LINE__,
++ 			   "Invalid destination address specified.");
++--
++1.7.3.4
++
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk index 5ac68c3..a6028e1 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBUPNP_VERSION = 1.6.14
++LIBUPNP_VERSION = 1.6.17
+ LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
+ LIBUPNP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
+ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+--
+1.7.3.4
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
