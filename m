@@ -1,29 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Apr 2012 09:53:45 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.05/polarssl-hiawatha
-In-Reply-To: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 10 Apr 2012 18:05:27 +0200")
-References: <cover.1334073813.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87pqb9bfcm.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 15 Apr 2012 09:12:54 +0200
+Subject: [Buildroot] [git commit] mpd: bump to version 0.16.8
+Message-ID: <20120415081618.15B1596AB9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=b163ca39320e54192102218ee137b13b7828695e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Hello,
- Thomas> Here are two new packages, adding polarssl and hiawatha. The
- Thomas> combination of both allows to have a SSL-capable Web server in 327 KB
- Thomas> (212 KB for the polarssl shared library and 115 KB for the Hiawatha
- Thomas> web server), which is much smaller than the 1.5+ MB needed for
- Thomas> Lighttpd+OpenSSL. Those packages can therefore be an useful addition
- Thomas> on devices where space matters, and that also require a SSL-capable
- Thomas> web server.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/multimedia/mpd/mpd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
+index e3b5331..095bad6 100644
+--- a/package/multimedia/mpd/mpd.mk
++++ b/package/multimedia/mpd/mpd.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ 
+-MPD_VERSION = 0.16.7
+-MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/musicpd
++MPD_VERSION = 0.16.8
++MPD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/musicpd/mpd/$(MPD_VERSION)
+ MPD_DEPENDENCIES = host-pkg-config libglib2
+ 
+ # Some options need an explicit --disable or --enable
