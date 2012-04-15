@@ -1,37 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 15 Apr 2012 12:56:58 +0200
-Subject: [Buildroot] [PATCH 00/11] RFC: Manual content reorganization
-In-Reply-To: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
-References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAHXCMM+Z5hRXUjmH3dV9MJ+_sEiAbEih5ArJbaOjdDDKEP9sCw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 15 Apr 2012 14:02:10 +0200
+Subject: [Buildroot] [git commit] screen: fix build when libelf is enabled
+Message-ID: <20120415120358.5291196AC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+commit: http://git.buildroot.net/buildroot/commit/?id=5fadbb58abb54f816f13367c9af4323136f4cf49
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No more comments about this set of patches?
+screen's configure script thinks it is running on a SVR4 system when it
+detects libelf, breaking the build.
 
-Some of you already gave me feedback about it, or told me they will.
+At the same time cleanup the package somewhat, and ensure the correct
+CFLAGS are used.
 
-For anyone who is interested in improving the documentation, hereafter
-is the original patch submission in the ML archive:
-http://lists.busybox.net/pipermail/buildroot/2012-March/051952.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051953.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051954.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051955.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051956.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051957.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051958.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051959.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051960.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051961.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051962.html
-http://lists.busybox.net/pipermail/buildroot/2012-March/051963.html
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/screen/screen.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Cheers,
-
-Sam
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 2dfb8f2..4b3d427 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -7,8 +7,8 @@
+ SCREEN_VERSION = 4.0.3
+ SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
+ SCREEN_DEPENDENCIES = ncurses
+-SCREEN_CONF_ENV = CFLAGS=-DSYSV=1
+-SCREEN_MAKE_OPT = -j1
++SCREEN_CONF_ENV = ac_cv_header_elf_h=no ac_cv_header_dwarf_h=no
++SCREEN_MAKE = $(MAKE1)
+ SCREEN_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+ 
+ $(eval $(call AUTOTARGETS))
