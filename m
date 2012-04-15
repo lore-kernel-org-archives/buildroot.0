@@ -1,26 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Apr 2012 11:23:38 +0200
-Subject: [Buildroot] [PATCH] Add sam-ba to at91sam926*_defconfig
-In-Reply-To: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
- (Alexandre Belloni's message of "Wed, 11 Apr 2012 15:06:50 +0200")
-References: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
-Message-ID: <87d379bb6t.fsf@macbook.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 15 Apr 2012 12:56:58 +0200
+Subject: [Buildroot] [PATCH 00/11] RFC: Manual content reorganization
+In-Reply-To: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
+References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAHXCMM+Z5hRXUjmH3dV9MJ+_sEiAbEih5ArJbaOjdDDKEP9sCw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@piout.net> writes:
+Hi all,
 
- Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
- Alexandre> ---
- Alexandre>  configs/at91sam9260dfc_defconfig |    4 ++++
- Alexandre>  configs/at91sam9261ek_defconfig  |    5 +++++
- Alexandre>  configs/at91sam9263ek_defconfig  |    4 ++++
- Alexandre>  3 files changed, 13 insertions(+), 0 deletions(-)
+No more comments about this set of patches?
 
-You forgot 9g20dfc. I've fixed that and committed, thanks.
+Some of you already gave me feedback about it, or told me they will.
 
--- 
-Bye, Peter Korsgaard
+For anyone who is interested in improving the documentation, hereafter
+is the original patch submission in the ML archive:
+http://lists.busybox.net/pipermail/buildroot/2012-March/051952.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051953.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051954.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051955.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051956.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051957.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051958.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051959.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051960.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051961.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051962.html
+http://lists.busybox.net/pipermail/buildroot/2012-March/051963.html
+
+
+Cheers,
+
+Sam
