@@ -1,31 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Apr 2012 11:19:43 +0200
+Date: Sun, 15 Apr 2012 11:23:38 +0200
 Subject: [Buildroot] [PATCH] Add sam-ba to at91sam926*_defconfig
-In-Reply-To: <20120411135031.GS29577@game.jcrosoft.org> (Jean-Christophe
- PLAGNIOL-VILLARD's message of "Wed, 11 Apr 2012 15:50:31 +0200")
+In-Reply-To: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
+ (Alexandre Belloni's message of "Wed, 11 Apr 2012 15:06:50 +0200")
 References: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
- <20120411153529.73613e03@skate>
- <20120411135031.GS29577@game.jcrosoft.org>
-Message-ID: <87hawlbbdc.fsf@macbook.be.48ers.dk>
+Message-ID: <87d379bb6t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+>>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@piout.net> writes:
 
-Hi,
+ Alexandre> Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+ Alexandre> ---
+ Alexandre>  configs/at91sam9260dfc_defconfig |    4 ++++
+ Alexandre>  configs/at91sam9261ek_defconfig  |    5 +++++
+ Alexandre>  configs/at91sam9263ek_defconfig  |    4 ++++
+ Alexandre>  3 files changed, 13 insertions(+), 0 deletions(-)
 
- Jean-Christophe> this soc config I disagree
-
- Jean-Christophe> I run on ARM and PPC and samba is x86 only
-
-You build buildroot ON ARM/PPC? That's very uncommon (well, gcc110 is
-ppc64 - But still). Nevertheless, nothing breaks by including sam-ba in
-the build, your host dir just gets a little bit bigger. In this case I
-would say the advantage for the common case (build on x86 for at91
-development) outweighs the minor disadvantage for your use case.
+You forgot 9g20dfc. I've fixed that and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
