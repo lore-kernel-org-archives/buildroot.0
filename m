@@ -1,42 +1,36 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Sun, 15 Apr 2012 17:49:46 +0300
-Subject: [Buildroot] Selecting X11R7/xorg-server fails to compile
-In-Reply-To: <CALR4fEKzdOYyqTz7BdH=oDWCPbUn5LBnc6BFX1E19uwYRX80yA@mail.gmail.com>
-References: <CALR4fEKzdOYyqTz7BdH=oDWCPbUn5LBnc6BFX1E19uwYRX80yA@mail.gmail.com>
-Message-ID: <CALR4fE+A2+r_CWp+nGhRnvQBYCk3G6vJVTQ=AHp_mco0-FfPAg@mail.gmail.com>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Sun, 15 Apr 2012 15:56:55 +0200
+Subject: [Buildroot] [PATCH] Add sam-ba to at91sam926*_defconfig
+In-Reply-To: <87hawlbbdc.fsf@macbook.be.48ers.dk>
+References: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
+ <20120411153529.73613e03@skate>
+ <20120411135031.GS29577@game.jcrosoft.org>
+ <87hawlbbdc.fsf@macbook.be.48ers.dk>
+Message-ID: <20120415135655.GN30672@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 11, 2012 at 3:49 PM, Diego Iastrubni <diegoiast@gmail.com>wrote:
+On 11:19 Sun 15 Apr     , Peter Korsgaard wrote:
+> >>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
+> 
+> Hi,
+> 
+>  Jean-Christophe> this soc config I disagree
+> 
+>  Jean-Christophe> I run on ARM and PPC and samba is x86 only
+> 
+> You build buildroot ON ARM/PPC? That's very uncommon (well, gcc110 is
+> ppc64 - But still). Nevertheless, nothing breaks by including sam-ba in
+> the build, your host dir just gets a little bit bigger. In this case I
+> would say the advantage for the common case (build on x86 for at91
+> development) outweighs the minor disadvantage for your use case.
+I've a quad Arm and a quad G4
 
-> Hi all,
->
-> Choosing  "make qemu_x86_defconfig" and the default external toolchain
-> (Sourcery CodeBench x86/x86_64 2011.09) , the selecting X11R7/xorg-server
-> fails to compile here (Ubuntu 12.04, 64bit):
->
->
-Same when I compile for target=x86_64. Still libdrm fails to link with the
-same error. I am working on a patch to disable the "tests", as it seems
-that they are the cause (well, something else is broken, but I will
-workaround it meanwhile).
+except you expect a packet you install to work I expect to detect the HOST
+type and propose it only if it work
 
-/home/diego/src/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.6.1/../../../../i686-pc-linux-gnu/bin/ld:
-> dristat.o: undefined reference to symbol 'clock_gettime@@GLIBC_2.2'
-> /home/diego/src/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/i686-pc-linux-gnu/4.6.1/../../../../i686-pc-linux-gnu/bin/ld:
-> note: 'clock_gettime@@GLIBC_2.2' is defined in DSO
-> /home/diego/src/buildroot/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/librt.so.1
-> so try adding it to the linker command line
-> /home/diego/src/buildroot/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/librt.so.1:
-> could not read symbols: Invalid operation
-> collect2: ld returned 1 exit status
-> make[4]: *** [dristat] Error 1
-> make[4]: Leaving directory
-> `/home/diego/src/buildroot/output/build/libdrm-2.4.19/tests'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120415/6a9f8b6b/attachment.html>
+Best Regards,
+J.
