@@ -1,7 +1,9 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 15 Apr 2012 21:17:54 +0200
-Subject: [Buildroot] [PATCH 1/3] lttng-libust: bump to version 2.0.1
-Message-ID: <1334517476-15258-1-git-send-email-s.martin49@gmail.com>
+Date: Sun, 15 Apr 2012 21:17:56 +0200
+Subject: [Buildroot] [PATCH 3/3] lttng-tools: bump version to 2.0.0
+In-Reply-To: <1334517476-15258-1-git-send-email-s.martin49@gmail.com>
+References: <1334517476-15258-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1334517476-15258-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,61 +13,178 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- .../lttng-libust-fix-overflow-32-bits.patch        |   26 --------------------
- package/lttng-libust/lttng-libust.mk               |   11 ++++++---
- 2 files changed, 8 insertions(+), 29 deletions(-)
- delete mode 100644 package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
+ ...ls-2.0-pre15-no-sync-file-range-in-uclibc.patch |   87 --------------------
+ .../lttng-tools-no-sync-file-range-in-uclibc.patch |   50 +++++++++++
+ package/lttng-tools/lttng-tools.mk                 |    9 +-
+ 3 files changed, 57 insertions(+), 89 deletions(-)
+ delete mode 100644 package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
+ create mode 100644 package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
 
-diff --git a/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch b/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
+diff --git a/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
 deleted file mode 100644
-index c2a4dd2..0000000
---- a/package/lttng-libust/lttng-libust-fix-overflow-32-bits.patch
+index 861686b..0000000
+--- a/package/lttng-tools/lttng-tools-2.0-pre15-no-sync-file-range-in-uclibc.patch
 +++ /dev/null
-@@ -1,26 +0,0 @@
--From dc190cc1f8ddccfa7b0b8323ed157afb29a0ebb7 Mon Sep 17 00:00:00 2001
--From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
--Date: Wed, 21 Dec 2011 16:24:48 -0500
--Subject: [PATCH] Fix clock source overflow on 32-bit archs
+@@ -1,87 +0,0 @@
+-Make sync_file_range() usage optional
 -
--Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-----
-- liblttng-ust/clock.h |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
+-Under uClibc, sync_file_range() is not available under all
+-architectures, so we fall back to fdatasync() in this case.
 -
--diff --git a/liblttng-ust/clock.h b/liblttng-ust/clock.h
--index b5d3e77..23294d2 100644
----- a/liblttng-ust/clock.h
--+++ b/liblttng-ust/clock.h
--@@ -39,7 +39,7 @@ static __inline__ uint64_t trace_clock_read64(void)
-- 	struct timespec ts;
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: lttng-tools-2.0-pre15/configure.ac
+-===================================================================
+---- lttng-tools-2.0-pre15.orig/configure.ac	2012-02-01 16:31:31.140978817 +0100
+-+++ lttng-tools-2.0-pre15/configure.ac	2012-02-01 16:31:42.110783708 +0100
+-@@ -96,7 +96,7 @@
 - 
-- 	clock_gettime(CLOCK_MONOTONIC, &ts);
---	return (ts.tv_sec * 1000000000) + ts.tv_nsec;
--+	return ((uint64_t) ts.tv_sec * 1000000000ULL) + ts.tv_nsec;
-- }
+- AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
 - 
-- static __inline__ uint32_t trace_clock_freq_scale(void)
---- 
--1.7.2.5
--
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index f54999e..de1b145 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -1,6 +1,11 @@
--LTTNG_LIBUST_SITE    = http://lttng.org/files/bundles/20111214/
--LTTNG_LIBUST_VERSION = 1.9.2
--LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.gz
+--AC_CHECK_FUNCS([sched_getcpu sysconf])
+-+AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
+- 
+- # Option to only build the consumer daemon and its libraries
+- AC_ARG_WITH([consumerd-only],
+-Index: lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c
+-===================================================================
+---- lttng-tools-2.0-pre15.orig/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:00.876292596 +0100
+-+++ lttng-tools-2.0-pre15/liblttng-consumer/lttng-consumer.c	2012-02-01 16:36:23.435901163 +0100
+-@@ -527,11 +527,15 @@
+- 	if (orig_offset < stream->chan->max_sb_size) {
+- 		return;
+- 	}
+-+#ifdef HAVE_SYNC_FILE_RANGE
+- 	sync_file_range(outfd, orig_offset - stream->chan->max_sb_size,
+- 			stream->chan->max_sb_size,
+- 			SYNC_FILE_RANGE_WAIT_BEFORE
+- 			| SYNC_FILE_RANGE_WRITE
+- 			| SYNC_FILE_RANGE_WAIT_AFTER);
+-+#else
+-+	fdatasync(outfd);
+-+#endif
+- 	/*
+- 	 * Give hints to the kernel about how we access the file:
+- 	 * POSIX_FADV_DONTNEED : we won't re-access data in a near future after
+-Index: lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c
+-===================================================================
+---- lttng-tools-2.0-pre15.orig/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:36:36.215679416 +0100
+-+++ lttng-tools-2.0-pre15/liblttng-kconsumer/lttng-kconsumer.c	2012-02-01 16:59:08.622203348 +0100
+-@@ -71,8 +71,12 @@
+- 			goto end;
+- 		}
+- 		/* This won't block, but will start writeout asynchronously */
+-+#ifdef HAVE_SYNC_FILE_RANGE
+- 		sync_file_range(outfd, stream->out_fd_offset, ret,
+- 				SYNC_FILE_RANGE_WRITE);
+-+#else
+-+		fdatasync(outfd);
+-+#endif
+- 		stream->out_fd_offset += ret;
+- 	}
+- 
+-@@ -121,8 +125,12 @@
+- 		}
+- 		len -= ret;
+- 		/* This won't block, but will start writeout asynchronously */
+-+#ifdef HAVE_SYNC_FILE_RANGE
+- 		sync_file_range(outfd, stream->out_fd_offset, ret,
+- 				SYNC_FILE_RANGE_WRITE);
+-+#else
+-+		fdatasync(outfd);
+-+#endif
+- 		stream->out_fd_offset += ret;
+- 	}
+- 	lttng_consumer_sync_trace_file(stream, orig_offset);
+-Index: lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c
+-===================================================================
+---- lttng-tools-2.0-pre15.orig/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:11.495067263 +0100
+-+++ lttng-tools-2.0-pre15/liblttng-ustconsumer/lttng-ustconsumer.c	2012-02-01 16:37:31.224724916 +0100
+-@@ -70,8 +70,12 @@
+- 			goto end;
+- 		}
+- 		/* This won't block, but will start writeout asynchronously */
+-+#ifdef HAVE_SYNC_FILE_RANGE
+- 		sync_file_range(outfd, stream->out_fd_offset, ret,
+- 				SYNC_FILE_RANGE_WRITE);
+-+#else
+-+		fdatasync(outfd);
+-+#endif
+- 		stream->out_fd_offset += ret;
+- 	}
+- 
+diff --git a/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch b/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
+new file mode 100644
+index 0000000..cca083b
+--- /dev/null
++++ b/package/lttng-tools/lttng-tools-no-sync-file-range-in-uclibc.patch
+@@ -0,0 +1,50 @@
++Make sync_file_range() usage optional
++
++Under uClibc, sync_file_range() is not available under all
++architectures, so we fall back to fdatasync() in this case.
++
++Inspired by the patch done by Thomas Petazzoni for the
++2.0-pre25 version.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ configure.ac              |    2 +-
++ src/common/compat/fcntl.h |    5 +++++
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 5808c79..065b9cf 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -120,7 +120,7 @@ AS_IF([test "x$lttng_ust_support" = "xyes"], [
++ 
++ AM_CONDITIONAL([HAVE_LIBLTTNG_UST_CTL], [ test "x$ac_cv_lib_lttng_ust_ctl_ustctl_create_session" = "xyes" ])
++ 
++-AC_CHECK_FUNCS([sched_getcpu sysconf])
+++AC_CHECK_FUNCS([sched_getcpu sysconf sync_file_range])
++ 
++ # check for dlopen
++ AC_CHECK_LIB([dl], [dlopen],
++diff --git a/src/common/compat/fcntl.h b/src/common/compat/fcntl.h
++index 58c1579..dafb33e 100644
++--- a/src/common/compat/fcntl.h
+++++ b/src/common/compat/fcntl.h
++@@ -23,10 +23,15 @@
++ 
++ #ifdef __linux__
++ 
+++#if defined(HAVE_SYNC_FILE_RANGE)
++ extern int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
++ 		unsigned int flags);
++ #define lttng_sync_file_range(fd, offset, nbytes, flags) \
++ 	compat_sync_file_range(fd, offset, nbytes, flags)
+++#else
+++#define lttng_sync_file_range(fd, offset, nbytes, flags) \
+++	fdatasync(fd);
+++#endif
++ 
++ #elif defined(__FreeBSD__)
++ 
++-- 
++1.7.10
++
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 8e6fc1a..856d840 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -1,5 +1,10 @@
+-LTTNG_TOOLS_VERSION = 2.0-pre15
+-LTTNG_TOOLS_SITE    = http://lttng.org/files/bundles/20111214/
 +#############################################################
 +#
-+# LTTng-UST: the userspace tracing library
++# LTTng-Tools: the trace control client
 +#
 +#############################################################
-+LTTNG_LIBUST_SITE    = http://lttng.org/files/lttng-ust/
-+LTTNG_LIBUST_VERSION = 2.0.1
-+LTTNG_LIBUST_SOURCE  = lttng-ust-$(LTTNG_LIBUST_VERSION).tar.bz2
++LTTNG_TOOLS_VERSION = 2.0.0
++LTTNG_TOOLS_SITE    = http://lttng.org/files/lttng-tools/
+ LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
  
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES    = liburcu util-linux
+ # The host-lttng-babeltrace technically isn't a required build
 -- 
 1.7.10
