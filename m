@@ -1,60 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Apr 2012 10:21:27 +0200
-Subject: [Buildroot] [PATCH] boost: bump to 1.49.0
-In-Reply-To: <1334241592-3024-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Thu, 12 Apr 2012 16:39:52
- +0200")
-References: <1334241592-3024-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87lilxbe2g.fsf@macbook.be.48ers.dk>
+Date: Sun, 15 Apr 2012 11:19:43 +0200
+Subject: [Buildroot] [PATCH] Add sam-ba to at91sam926*_defconfig
+In-Reply-To: <20120411135031.GS29577@game.jcrosoft.org> (Jean-Christophe
+ PLAGNIOL-VILLARD's message of "Wed, 11 Apr 2012 15:50:31 +0200")
+References: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
+ <20120411153529.73613e03@skate>
+ <20120411135031.GS29577@game.jcrosoft.org>
+Message-ID: <87hawlbbdc.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Jean-Christophe" == Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> ---
- yegorslists>  package/boost/boost.mk |    2 +-
- yegorslists>  1 files changed, 1 insertions(+), 1 deletions(-)
+Hi,
 
- yegorslists> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
- yegorslists> index 4577f2d..e25e24d 100644
- yegorslists> --- a/package/boost/boost.mk
- yegorslists> +++ b/package/boost/boost.mk
- yegorslists> @@ -4,7 +4,7 @@
- yegorslists>  #
- yegorslists>  #############################################################
- 
- yegorslists> -BOOST_VERSION = 1.47.0
- yegorslists> +BOOST_VERSION = 1.49.0
+ Jean-Christophe> this soc config I disagree
 
-This seems to break the autobuild:
+ Jean-Christophe> I run on ARM and PPC and samba is x86 only
 
-http://autobuild.buildroot.org/results/15d71a3b118a7f391a434d3de2ea6a645d3f02e8/build-end.log
-
-Looking at the full log, before 40K cp invocations (!) I see what looks
-like a locale issue:
-
-In file included from libs/locale/src/posix/codecvt.cpp:13:0:
-libs/locale/src/posix/all_generator.hpp:25:59: error: 'locale_t' was not declare
-d in this scope
-libs/locale/src/posix/all_generator.hpp:25:67: error: template argument 1 is inv
-alid
-libs/locale/src/posix/all_generator.hpp:29:59: error: 'locale_t' was not declare
-d in this scope
-libs/locale/src/posix/all_generator.hpp:29:67: error: template argument 1 is inv
-alid
-libs/locale/src/posix/all_generator.hpp:33:63: error: 'locale_t' was not declare
-d in this scope
-libs/locale/src/posix/all_generator.hpp:33:71: error: template argument 1 is invalid
-libs/locale/src/posix/all_generator.hpp:37:59: error: 'locale_t' was not declared in this scope
-libs/locale/src/posix/all_generator.hpp:37:67: error: template argument 1 is invalid
-
-Does it work for you? The 1.47.0 worked without locale support, so it
-would be good to get this working without it.
+You build buildroot ON ARM/PPC? That's very uncommon (well, gcc110 is
+ppc64 - But still). Nevertheless, nothing breaks by including sam-ba in
+the build, your host dir just gets a little bit bigger. In this case I
+would say the advantage for the common case (build on x86 for at91
+development) outweighs the minor disadvantage for your use case.
 
 -- 
 Bye, Peter Korsgaard
