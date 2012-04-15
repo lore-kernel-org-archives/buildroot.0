@@ -1,27 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 15 Apr 2012 23:09:57 +0200
-Subject: [Buildroot] [PATCH] package: set PKG_CONFIG_SYSROOT_DIR in
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 15 Apr 2012 23:08:48 +0200
+Subject: [Buildroot] [git commit] package: set PKG_CONFIG_SYSROOT_DIR in
 	HOST_MAKE_ENV
-In-Reply-To: <1333543819-27718-1-git-send-email-s.neumann@raumfeld.com> (Sven
- Neumann's message of "Wed, 4 Apr 2012 14:50:19 +0200")
-References: <1333543819-27718-1-git-send-email-s.neumann@raumfeld.com>
-Message-ID: <87hawkaehm.fsf@macbook.be.48ers.dk>
+Message-ID: <20120415211018.44BB396AAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sven" == Sven Neumann <s.neumann@raumfeld.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=feba8b1382bfda10bc479f744e4697c868a23dc3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Sven> A host package that uses AUTORECONF (such as host-libglib2)
- Sven> may end up running './config.status --recheck'. This will
- Sven> call the configure script with the environment variables
- Sven> set in HOST_MAKE_ENV. If PKG_CONFIG_SYSROOT_DIR is missing
- Sven> this will cause the hardcoded sysroot dir take effect leading
- Sven> to wrong paths.
+A host package that uses AUTORECONF (such as host-libglib2)
+may end up running './config.status --recheck'. This will
+call the configure script with the environment variables
+set in HOST_MAKE_ENV. If PKG_CONFIG_SYSROOT_DIR is missing
+this will cause the hardcoded sysroot dir take effect leading
+to wrong paths.
 
-Committed, thanks.
+See commit 22acade2ec311 which works around this problem by
+fiddling with the generated .pc file. This commit becomes
+obsolete with this fix.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+Cc: Daniel Mack <zonque@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dc8d038..c344c6b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -222,6 +222,7 @@ HOST_CONFIGURE_OPTS=PATH=$(HOST_PATH) \
+ HOST_MAKE_ENV=PATH=$(HOST_PATH) \
+ 		LD_LIBRARY_PATH="$(HOST_DIR)/usr/lib:$(LD_LIBRARY_PATH)" \
+ 		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig" \
+ 		PERLLIB="$(HOST_DIR)/usr/lib/perl"
+ 
