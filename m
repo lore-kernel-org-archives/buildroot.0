@@ -1,41 +1,78 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Apr 2012 13:00:34 -0300
-Subject: [Buildroot] util-linux builds and installs lots of unwanted
- binaries
-In-Reply-To: <1334589472.13607.15.camel@sven>
-References: <1334589472.13607.15.camel@sven>
-Message-ID: <51a409d383cc64319b438fc9b37c8807@zacarias.com.ar>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Mon, 16 Apr 2012 18:00:36 +0200
+Subject: [Buildroot] Problem with apply-patches.sh
+In-Reply-To: <CAFbHwiQUUsb2XPY_+nw--m1KTutFY_zXVYHaFNAfac_ftg78fA@mail.gmail.com>
+References: <CAFbHwiQUUsb2XPY_+nw--m1KTutFY_zXVYHaFNAfac_ftg78fA@mail.gmail.com>
+Message-ID: <4F8C4224.6040500@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-04-16 12:17, Sven Neumann wrote:
+Hi
 
-> Hi,
+Le 04/16/2012 04:40 PM, Will Newton a ?crit :
+> Hi all,
 >
-> recently udev started to depend on util-linux for libblkid. Since 
-> then
-> there are lots of binaries built and installs that did not asked for.
-> Here's an incomplete list of such binaries:
+> I noticed that in some cases apply-patches.sh will misbehave if you
+> have a file matching the glob '*.patch' in the top-level directory.
+> For example the patching of binutils fails in this case. The problem
+> is at the line:
 >
-> blockdev, fdformat, fsck.minix, isosize, mkfs, mkfs.bfs, mkfs.minix,
-> mkswap, swaplabel, sfdisk, getopt, getopt-parse.bash, 
-> getopt-parse.tcsh,
-> cal logger look mcookie namei whereis
+>      support/scripts/apply-patches.sh $(@D)
+> $($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH)
+> || exit 1;
 >
-> Now I am wondering about the best way to change this so that only the
-> libraries are built and installed unless util-linux is configured
-> otherwise. I am looking for a solution that can be accepted in 
-> buildbot.
-> And if changes to util-linux are needed, then those should have a 
-> chance
-> to be accepted upstream in util-linux. What would you advice?
+> in package/Makefile.package.in. The glob gets expanded prematurely (to
+> e.g. myfile.patch) and then the expanded glob is passed to
+> apply-patches.sh which will fail to find any patches matching the
+> glob. I've had a go at trying to stop this happening but with no
+> success so far. Can anyone think of any creative ways to suppress this
+> expansion?
 >
->
-> Regards,
-> Sven
+> Thanks,
 
-http://lists.busybox.net/pipermail/buildroot/2011-October/046854.html
-Regards.
+I see what you mean but I can't reproduce your issue:
+
+
+diff --git a/support/scripts/apply-patches.sh 
+b/support/scripts/apply-patches.sh
+index e4b98bc..787a297 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -11,6 +11,10 @@ patchdir=${2-../kernel-patches}
+  shift 2
+  patchpattern=${@-*}
+
++echo "====================="
++echo "$patchpattern"
++
+  if [ ! -d "${builddir}" ] ; then
+      echo "Aborting.  '${builddir}' is not a directory."
+      exit 1
+
+
+ >>> binutils 2.21.1 Extracting
+bzcat /home/ldesroches/workspace/buildroot/dl/binutils-2.21.1.tar.bz2 | 
+tar --strip-components=1 -C 
+/home/ldesroches/workspace/buildroot/output/build/binutils-2.21.1  -xf -
+ >>> binutils 2.21.1 Patching package//binutils
+=====================
+binutils*.patch binutils*.patch.arm
+=====================
+*.patch *.patch.arm
+
+On my side the expansion is done only into apply-patches.sh but you are 
+right it is done too early
+
+
+I am going to send a patch to correct this.
+
+
+Thanks to report this bug.
+
+
+Regards
+
+Ludovic
