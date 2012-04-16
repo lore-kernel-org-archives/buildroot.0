@@ -1,36 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 16 Apr 2012 22:33:08 +0200
-Subject: [Buildroot] [git commit] boost: pass -dumpversion to user-config.jam
-Message-ID: <20120416203435.B713396AED@busybox.osuosl.org>
+Date: Mon, 16 Apr 2012 23:12:38 +0200
+Subject: [Buildroot] [git commit] libhid: don't build with -Werror
+Message-ID: <20120416211304.5EFF996AED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5d8af3747afb10094886e282f416fb0221cb1350
+commit: http://git.buildroot.net/buildroot/commit/?id=e530970c28ac1341613cc7a3605960e0373731b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Short version avoids compiling problems with toolchains
-containing long version string like Linaro toolchain.
-
-[Peter: drop head/sed as -dumpversion returns version directly]
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/boost/boost.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libhid/libhid.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 8b8a3cf..9da427a 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -10,7 +10,7 @@ BOOST_SOURCE = boost_$(BOOST_FILE_VERSION).tar.bz2
- BOOST_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/boost
- BOOST_INSTALL_STAGING = YES
+diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
+index 7730af8..8ad9ac1 100644
+--- a/package/libhid/libhid.mk
++++ b/package/libhid/libhid.mk
+@@ -12,6 +12,10 @@ LIBHID_INSTALL_STAGING = YES
+ # configure runs libusb-config for cflags/ldflags. Ensure it picks up
+ # the target version
+ LIBHID_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(TARGET_PATH)
+-LIBHID_CONF_OPT = --disable-swig --without-doxygen --disable-package-config
++LIBHID_CONF_OPT = \
++	--disable-swig \
++	--disable-werror \
++	--without-doxygen \
++	--disable-package-config
  
--TARGET_CC_VERSION = $(shell $(TARGET_CC) --version | head -n 1 | sed -e "s/.*[[:space:]]\([[:digit:].]\+$$\)/\1/g" )
-+TARGET_CC_VERSION = $(shell $(TARGET_CC) -dumpversion)
- 
- BOOST_DEPENDENCIES = bzip2 zlib
- 
+ $(eval $(call AUTOTARGETS))
