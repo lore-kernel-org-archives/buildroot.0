@@ -1,29 +1,33 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Mon, 16 Apr 2012 15:40:30 +0100
-Subject: [Buildroot] Problem with apply-patches.sh
-Message-ID: <CAFbHwiQUUsb2XPY_+nw--m1KTutFY_zXVYHaFNAfac_ftg78fA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Apr 2012 11:53:42 -0300
+Subject: [Buildroot] [PATCH] ffmpeg: security bump to version 0.8.11
+Message-ID: <1334588022-13454-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fixes for CVE-2012-0853, CVE-2012-0858, CVE-2011-3929, CVE-2011-3936,
+CVE-2011-3937, CVE-2011-3940, CVE-2011-3945 and CVE-2011-3947.
 
-I noticed that in some cases apply-patches.sh will misbehave if you
-have a file matching the glob '*.patch' in the top-level directory.
-For example the patching of binutils fails in this case. The problem
-is at the line:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/multimedia/ffmpeg/ffmpeg.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-    support/scripts/apply-patches.sh $(@D)
-$($(PKG)_DIR_PREFIX)/$(RAWNAME)/$(NAMEVER) \*.patch \*.patch.$(ARCH)
-|| exit 1;
-
-in package/Makefile.package.in. The glob gets expanded prematurely (to
-e.g. myfile.patch) and then the expanded glob is passed to
-apply-patches.sh which will fail to find any patches matching the
-glob. I've had a go at trying to stop this happening but with no
-success so far. Can anyone think of any creative ways to suppress this
-expansion?
-
-Thanks,
+diff --git a/package/multimedia/ffmpeg/ffmpeg.mk b/package/multimedia/ffmpeg/ffmpeg.mk
+index 92eb14f..4cc29ee 100644
+--- a/package/multimedia/ffmpeg/ffmpeg.mk
++++ b/package/multimedia/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-FFMPEG_VERSION = 0.8.10
++FFMPEG_VERSION = 0.8.11
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+-- 
+1.7.3.4
