@@ -1,44 +1,118 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Apr 2012 19:45:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 5006] make performs library lookup in the build
- and host library directores and not in the staging area
-In-Reply-To: <bug-5006-163@https.bugs.busybox.net/>
-References: <bug-5006-163@https.bugs.busybox.net/>
-Message-ID: <20120416194529.EDF9096AE8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 16 Apr 2012 21:46:46 +0200
+Subject: [Buildroot] [git commit] boost: fix build with uClibc,
+	add locale/timer modules options
+Message-ID: <20120416200221.6AB0A96AED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5006
+commit: http://git.buildroot.net/buildroot/commit/?id=8b354dac5a414a7e335276a53a32b9dcfd61b379
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Christoph Schulz <develop@kristov.de> changed:
+Boost 1.49 added two new modules, locale and timer - So add sub options
+to control compilation of those. The locale module by default compiles
+the posix backend under Linux, but this needs monetary.h which isn't
+provided by uClibc, so work around that.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|INVALID                     |
+While we're at it, hide the icu option as that is just an internal
+configuration option used by E.G. the locale module.
 
---- Comment #4 from Christoph Schulz <develop@kristov.de> 2012-04-16 19:45:29 UTC ---
-(In reply to comment #3)
-> The way we usually call make, this isn't needed:
-> 
-> $(MAKE) CC="$(TARGET_CC)" ...
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/boost/Config.in |   14 ++++++++++----
+ package/boost/boost.mk  |   15 ++++++++++++++-
+ 2 files changed, 24 insertions(+), 5 deletions(-)
 
-Sorry, but that is plain wrong. You did not fully understand the problem I
-described. The "-lcrypt" target is _not_ looked up in the staging area
-_regardless_ how you specify CC. You may not have encountered this problem so
-far as there are almost no Makefiles using this syntax. If some Makefile uses
-"-l<lib>" as dependency, the Makefile is _not cross-compilable_ unless you
-patch GNU make. The patches I attached solve the issue.
-
-
-Regards,
-
-Christoph Schulz
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 578fced..8798367 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -37,13 +37,16 @@ config BR2_PACKAGE_BOOST_GRAPH
+ config BR2_PACKAGE_BOOST_GRAPH_PARALLEL
+ 	bool "boost-graph_parallel"
+ 
+-config BR2_PACKAGE_BOOST_ICU
+-        select BR2_PACKAGE_ICU
+-	bool "boost-icu"
+-
+ config BR2_PACKAGE_BOOST_IOSTREAMS
+ 	bool "boost-iostreams"
+ 
++config BR2_PACKAGE_BOOST_LOCALE
++	depends on BR2_USE_WCHAR
++	bool "boost-locale"
++
++comment "boost-locale requires a toolchain with wchar support"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
+ 
+@@ -75,6 +78,9 @@ config BR2_PACKAGE_BOOST_THREAD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	bool "boost-thread"
+ 
++config BR2_PACKAGE_BOOST_TIMER
++	bool "boost-timer"
++
+ config BR2_PACKAGE_BOOST_WAVE
+ 	bool "boost-wave"
+ 
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index e25e24d..8864bf9 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -24,6 +24,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_IOSTREAMS),,iostreams)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
+@@ -34,15 +35,25 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SIGNALS),,signals)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_THREAD),,thread)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TIMER),,timer)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
+ 
+-ifeq ($(BR2_PACKAGE_BOOST_ICU),y)
++ifeq ($(BR2_PACKAGE_ICU),y)
+ BOOST_FLAGS += --with-icu
+ BOOST_DEPENDENCIES += icu
+ else
+ BOOST_FLAGS += --without-icu
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BOOST_LOCALE),y)
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)$(BR2_TOOLCHAIN_CTNG_uClibc),y)
++# posix backend needs monetary.h which isn't available on uClibc
++BOOST_OPT += boost.locale.posix=off
++endif
++
++BOOST_DEPENDENCIES += $(if $(BR2_ENABLE_LOCALE),,libiconv)
++endif
++
+ BOOST_LINK = $(if $(BR2_PREFER_STATIC_LIB),static,shared)
+ BOOST_MULTI = $(if $(BR2_PACKAGE_BOOST_MULTITHREADED),multi,single)
+ BOOST_VARIANT = $(if $(BR2_ENABLE_DEBUG),debug,release)
+@@ -64,6 +75,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ 	link=$(BOOST_LINK) \
+ 	threading=$(BOOST_MULTI) \
+ 	runtime-link=$(BOOST_LINK) \
++	$(BOOST_OPT) \
+ 	--prefix=$(TARGET_DIR)/usr \
+ 	--layout=system install )
+ endef
+@@ -75,6 +87,7 @@ define BOOST_INSTALL_STAGING_CMDS
+ 	variant=$(BOOST_VARIANT) \
+ 	link=$(BOOST_LINK) \
+ 	threading=$(BOOST_MULTI) \
++	$(BOOST_OPT) \
+ 	runtime-link=$(BOOST_LINK) \
+ 	--prefix=$(STAGING_DIR)/usr \
+ 	--layout=system install)
