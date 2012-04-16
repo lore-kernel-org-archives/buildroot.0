@@ -1,25 +1,36 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Mon, 16 Apr 2012 15:21:40 +0200
-Subject: [Buildroot] [PATCH] boost: bump to 1.49.0
-In-Reply-To: <87d3789bd2.fsf@macbook.be.48ers.dk>
-References: <1334241592-3024-1-git-send-email-yegorslists@googlemail.com>
- <87lilxbe2g.fsf@macbook.be.48ers.dk> <4F8BCF8A.2090608@visionsystems.de>
- <4F8BFA61.7070703@visionsystems.de> <87d3789bd2.fsf@macbook.be.48ers.dk>
-Message-ID: <4F8C1CE4.6080805@visionsystems.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 16 Apr 2012 15:23:57 +0200
+Subject: [Buildroot] [PATCH] Add sam-ba to at91sam926*_defconfig
+In-Reply-To: <20120416123429.GO16641@game.jcrosoft.org>
+References: <1334149610-989-1-git-send-email-alexandre.belloni@piout.net>
+ <20120411153529.73613e03@skate>
+ <20120411135031.GS29577@game.jcrosoft.org>
+ <87hawlbbdc.fsf@macbook.be.48ers.dk>
+ <20120415135655.GN30672@game.jcrosoft.org>
+ <87ty0l9b9l.fsf@macbook.be.48ers.dk>
+ <20120416123429.GO16641@game.jcrosoft.org>
+Message-ID: <20120416152357.1ad4744b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  Yegor> You're right. After I made git pull it is failing now. I have
->  Yegor> also another issue with Linaro toolchain (both 1.47 and 1.49).
->
-> There seems to be two new boost modules (locale + timer). I believe I've
-> fixed it now, just need to finish a test build to check.
+Le Mon, 16 Apr 2012 14:34:29 +0200,
+Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
 
-As you're fixing the other problem, could you please check my patch concerning gcc version? Linaro toolchain has no problem, but I haven't checked this with Buildroots toolchain, due to build breakage (locale issue).
+> I did it on dtc
+> 
+> HOSTOS := $(shell uname -s | tr '[:upper:]' '[:lower:]' | \
+> 	    sed -e 's/\(cygwin\).*/cygwin/')
+> 
+> this work on unix
 
-Thanks.
+But it does not allow to do Kconfig dependencies.
 
-Yegor
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
