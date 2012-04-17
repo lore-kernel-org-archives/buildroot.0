@@ -1,57 +1,65 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 17 Apr 2012 10:35:10 +0200
-Subject: [Buildroot] util-linux builds and installs lots of unwanted
- binaries
-In-Reply-To: <51a409d383cc64319b438fc9b37c8807@zacarias.com.ar>
-References: <1334589472.13607.15.camel@sven>
- <51a409d383cc64319b438fc9b37c8807@zacarias.com.ar>
-Message-ID: <1334651710.2527.5.camel@sven>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Tue, 17 Apr 2012 12:05:25 +0200
+Subject: [Buildroot] [PATCH] Add libapr-package
+Message-ID: <1334657125-30406-1-git-send-email-bachmann@tofwerk.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+---
+ package/Config.in        |    1 +
+ package/libapr/Config.in |    7 +++++++
+ package/libapr/libapr.mk |   13 +++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+ create mode 100644 package/libapr/Config.in
+ create mode 100644 package/libapr/libapr.mk
 
-On Mon, 2012-04-16 at 13:00 -0300, Gustavo Zacarias wrote:
-
-> > recently udev started to depend on util-linux for libblkid. Since 
-> > then
-> > there are lots of binaries built and installs that did not asked for.
-> > Here's an incomplete list of such binaries:
-> >
-> > blockdev, fdformat, fsck.minix, isosize, mkfs, mkfs.bfs, mkfs.minix,
-> > mkswap, swaplabel, sfdisk, getopt, getopt-parse.bash, 
-> > getopt-parse.tcsh,
-> > cal logger look mcookie namei whereis
-> >
-> > Now I am wondering about the best way to change this so that only the
-> > libraries are built and installed unless util-linux is configured
-> > otherwise. I am looking for a solution that can be accepted in 
-> > buildbot.
-> > And if changes to util-linux are needed, then those should have a 
-> > chance
-> > to be accepted upstream in util-linux. What would you advice?
-> >
-> >
-> > Regards,
-> > Sven
-> 
-> http://lists.busybox.net/pipermail/buildroot/2011-October/046854.html
-
-Thanks. This works for us. But I would like to see such a change to go
-into buildroot and I understand why this patch has not been accepted in
-this form. The general idea of overriding the install command is nice,
-however the newly introduced option BR2_PACKAGE_UTIL_LINUX_BASIC is
-somewhat misleading. It gives the impression that it would select the
-basic utilities and instead no utility will be installed unless it is
-selected. It should probably be renamed and other options like
-BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS would have to depend on it or select
-it.
-
-Nevertheless, thanks a lot for your help with this patch.
-
-
-Regards,
-Sven
+diff --git a/package/Config.in b/package/Config.in
+index 4c6d4d8..ceb5f6d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -376,6 +376,7 @@ source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+ source "package/boost/Config.in"
++source "package/libapr/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libcap/Config.in"
+ source "package/libcap-ng/Config.in"
+diff --git a/package/libapr/Config.in b/package/libapr/Config.in
+new file mode 100644
+index 0000000..51dea91
+--- /dev/null
++++ b/package/libapr/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBAPR
++
++	bool "libapr"
++	help
++	  The mission of the Apache Portable Runtime (APR) project is to create and maintain software libraries that provide a predictable and consistent interface to underlying platform-specific implementations
++
++	  http://apr.apache.org/
+diff --git a/package/libapr/libapr.mk b/package/libapr/libapr.mk
+new file mode 100644
+index 0000000..3bd5eec
+--- /dev/null
++++ b/package/libapr/libapr.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# libapr
++#
++#############################################################
++LIBAPR_VERSION = 1.4.6
++LIBAPR_SOURCE = apr-$(LIBAPR_VERSION).tar.gz
++LIBAPR_SITE = http://mirror.switch.ch/mirror/apache/dist/apr/
++LIBAPR_INSTALL_STAGING = YES
++LIBAPR_INSTALL_TARGET = YES
++LIBAPR_CONF_OPT = ac_cv_file__dev_zero=yes ac_cv_func_setpgrp_void=yes apr_cv_process_shared_works=yes apr_cv_mutex_robust_shared=no apr_cv_tcp_nodelay_with_cork=yes ac_cv_sizeof_struct_iovec=8 apr_cv_mutex_recursive=yes --enable-shared
++
++$(eval $(call AUTOTARGETS,package,LIBAPR))
+-- 
+1.7.2.5
