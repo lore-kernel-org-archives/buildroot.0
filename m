@@ -1,107 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Apr 2012 16:45:12 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.05/misc-cleanups
-Message-ID: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
+Date: Tue, 17 Apr 2012 16:45:23 +0200
+Subject: [Buildroot] [PATCH 11/22] cmake: move creation of toolchain file to
+	package/pkg-cmaketargets.mk
+In-Reply-To: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <ce2f3da881c44f0e66adbb628307413f8bba8058.1334673910.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 2f41adabc5a12fcca1de5b6c296c2206b518abff:
+This also requires moving a few include directives below the "all:"
+target in the main Makefile, otherwise the new target to create the
+toolchain file in pkg-cmaketargets.mk gets used as the default make
+target instead of "all:".
 
-  New package: libdmtx (2012-04-17 00:21:39 +0200)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile                    |   22 ++--------------------
+ package/pkg-cmaketargets.mk |   22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 20 deletions(-)
 
-are available in the git repository at:
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/misc-cleanups
-
-Thomas Petazzoni (22):
-      Remove the DATE variable
-      Remove cc-option: not used anywhere
-      Remove filename extension crap for OS compatibility
-      kconfig: do not use HOST_LOADLIBES anymore
-      Rename Makefile.autotools.in to pkg-autotargets.mk
-      Rename Makefile.cmake.in to pkg-cmaketargets.mk
-      Split Makefile.package.in in pkg-download.mk, pkg-utils.mk and pkg-gentargets.mk
-      pkg-*.mk: add some comments, update some existing comments
-      Remove unused .fakeroot.* mechanism
-      Move the manual build infrastructure to docs/manual/manual.mk
-      cmake: move creation of toolchain file to package/pkg-cmaketargets.mk
-      package: remove unused STRIP_DISCARD_ALL variable
-      Remove unused GNU_TARGET_SUFFIX
-      toolchain: remove useless indirect variables
-      gcc: remove unused EXTRA_GCC2_CONFIG_OPTIONS
-      gcc: remove unused EXTRA_GCC4_CONFIG_OPTIONS
-      gcc: remove unused ARCH_FPU_SUFFIX
-      gcc: move version/snap variables to gcc-uclibc-4.x.mk
-      toolchain: remove toolchain/Makefile.in and toolchain/gcc/Makefile.in
-      gcc: remove unused EXTRA_GCC1_CONFIG_OPTIONS
-      mklibs: remove support
-      xtensa: remove support for this architecture
-
- Makefile                                           |  117 +---
- boot/uboot/uboot.mk                                |    1 -
- docs/manual/manual.mk                              |   48 ++
- fs/common.mk                                       |    2 -
- fs/iso9660/iso9660.mk                              |    2 -
- linux/Config.in                                    |    2 +-
- package/Makefile.in                                |   12 +-
- package/Makefile.package.in                        |  750 --------------------
- package/binutils/binutils.mk                       |    2 +-
- package/ltrace/Config.in                           |    2 +-
- .../{Makefile.autotools.in => pkg-autotargets.mk}  |    4 +-
- package/{Makefile.cmake.in => pkg-cmaketargets.mk} |   22 +
- package/pkg-download.mk                            |  228 ++++++
- package/pkg-gentargets.mk                          |  456 ++++++++++++
- package/pkg-utils.mk                               |   85 +++
- support/kconfig/Makefile.br                        |    4 +-
- support/kconfig/patches/10-br-build-system.patch   |   12 +-
- target/Config.in.arch                              |   40 -
- target/device/xtensa/device_table.txt              |  189 -----
- target/xtensa/.gitignore                           |    1 -
- target/xtensa/Makefile.in                          |    1 -
- target/xtensa/defconfig                            |  129 ----
- target/xtensa/patch.in                             |   33 -
- target/xtensa/setup-config                         |   57 --
- target/xtensa/uClibc-0.9.30.config                 |  245 -------
- target/xtensa/uClibc.config                        |  190 -----
- target/xtensa/xt-buildroot-overlay-install         |  488 -------------
- toolchain/Makefile.in                              |    6 -
- toolchain/gcc/Makefile.in                          |   70 --
- toolchain/gcc/gcc-uclibc-4.x.mk                    |   87 ++-
- toolchain/gdb/gdb.mk                               |    5 -
- toolchain/mklibs/Config.in                         |    6 -
- toolchain/mklibs/mklibs.mk                         |   49 --
- toolchain/mklibs/mklibs.py                         |  597 ----------------
- toolchain/toolchain-buildroot.mk                   |    1 -
- toolchain/toolchain-buildroot/Config.in.2          |    1 -
- toolchain/toolchain-common.in                      |    2 +-
- toolchain/toolchain-crosstool-ng.mk                |    1 -
- toolchain/toolchain-external.mk                    |    1 -
- 39 files changed, 935 insertions(+), 3013 deletions(-)
- create mode 100644 docs/manual/manual.mk
- delete mode 100644 package/Makefile.package.in
- rename package/{Makefile.autotools.in => pkg-autotargets.mk} (98%)
- rename package/{Makefile.cmake.in => pkg-cmaketargets.mk} (86%)
- create mode 100644 package/pkg-download.mk
- create mode 100644 package/pkg-gentargets.mk
- create mode 100644 package/pkg-utils.mk
- delete mode 100644 target/device/xtensa/device_table.txt
- delete mode 100644 target/xtensa/.gitignore
- delete mode 100644 target/xtensa/Makefile.in
- delete mode 100644 target/xtensa/defconfig
- delete mode 100644 target/xtensa/patch.in
- delete mode 100644 target/xtensa/setup-config
- delete mode 100644 target/xtensa/uClibc-0.9.30.config
- delete mode 100644 target/xtensa/uClibc.config
- delete mode 100644 target/xtensa/xt-buildroot-overlay-install
- delete mode 100644 toolchain/Makefile.in
- delete mode 100644 toolchain/gcc/Makefile.in
- delete mode 100644 toolchain/mklibs/Config.in
- delete mode 100644 toolchain/mklibs/mklibs.mk
- delete mode 100644 toolchain/mklibs/mklibs.py
-
-Thanks,
+diff --git a/Makefile b/Makefile
+index 3e7fa22..4f29cba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -255,9 +255,6 @@ HOSTCC  := $(CCACHE) $(HOSTCC)
+ HOSTCXX := $(CCACHE) $(HOSTCXX)
+ endif
+ 
+-include toolchain/Makefile.in
+-include package/Makefile.in
+-
+ #############################################################
+ #
+ # You should probably leave this stuff alone unless you know
+@@ -267,6 +264,8 @@ include package/Makefile.in
+ 
+ all: world
+ 
++include toolchain/Makefile.in
++include package/Makefile.in
+ include support/dependencies/dependencies.mk
+ 
+ # We also need the various per-package makefiles, which also add
+@@ -339,23 +338,6 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+ 
+-$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+-	mkdir -p $(@D)
+-	@echo -en "\
+-	set(CMAKE_SYSTEM_NAME Linux)\n\
+-	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+-	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+-	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+-	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+-	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+-	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
+-	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
+-	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+-	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+-	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
+-	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
+-	" > $@
+-
+ .PHONY: all world dirs clean distclean source outputmakefile \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+ 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
+diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
+index 1cd65e4..371ab11 100644
+--- a/package/pkg-cmaketargets.mk
++++ b/package/pkg-cmaketargets.mk
+@@ -197,3 +197,25 @@ else
+ $(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+ endif
+ endef
++
++################################################################################
++# Generation of the CMake toolchain file
++################################################################################
++
++$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
++	@mkdir -p $(@D)
++	@echo -en "\
++	set(CMAKE_SYSTEM_NAME Linux)\n\
++	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
++	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
++	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
++	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
++	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
++	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
++	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
++	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
++	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
++	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
++	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
++	" > $@
++
 -- 
-Thomas Petazzoni
+1.7.4.1
