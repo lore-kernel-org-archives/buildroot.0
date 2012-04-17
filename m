@@ -1,55 +1,86 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Apr 2012 08:08:36 -0300
-Subject: [Buildroot] util-linux builds and installs lots of unwanted
- binaries
-In-Reply-To: <1334651710.2527.5.camel@sven>
-References: <1334589472.13607.15.camel@sven>
- <51a409d383cc64319b438fc9b37c8807@zacarias.com.ar>
- <1334651710.2527.5.camel@sven>
-Message-ID: <e75db664abe7bb6fc8133d5f41c18f63@zacarias.com.ar>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Tue, 17 Apr 2012 13:36:07 +0200
+Subject: [Buildroot] [PATCH] Add libapr-package
+In-Reply-To: <1334660370-19506-2-git-send-email-bachmann@tofwerk.com>
+References: <Re:[PATCH] Add libapr-package>
+ <1334660370-19506-2-git-send-email-bachmann@tofwerk.com>
+Message-ID: <4F8D55A7.2090909@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-04-17 05:35, Sven Neumann wrote:
+Hi,
 
->> 
->> http://lists.busybox.net/pipermail/buildroot/2011-October/046854.html
->
-> Thanks. This works for us. But I would like to see such a change to 
-> go
-> into buildroot and I understand why this patch has not been accepted 
-> in
-> this form. The general idea of overriding the install command is 
-> nice,
-> however the newly introduced option BR2_PACKAGE_UTIL_LINUX_BASIC is
-> somewhat misleading. It gives the impression that it would select the
-> basic utilities and instead no utility will be installed unless it is
-> selected. It should probably be renamed and other options like
-> BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS would have to depend on it or 
-> select
-> it.
->
-> Nevertheless, thanks a lot for your help with this patch.
->
->
-> Regards,
-> Sven
+Thanks for your patch!
 
-Cool, feedback at last ;)
-Yes, i should make the other options depend on UTIL_LINUX_BASIC.
-However there's a choice in front regarding UTIL_LINUX_BASIC - with all 
-the util-linux options disabled and this one enabled you still get 
-binary stuff installed because they're, well, basic utilities always 
-built by util-linux.
-So the option would be to keep the basic option as is or add more 
-granular options for all those other tiny utilities described in the 
-help and remove/keep them in a post hook.
-I'd rather go for the second option since not many people will want 
-mkfs.bfs, mkfs.minix and those utilities most of the time, even when 
-installing others.
-Regards.
+Le 17/04/2012 12:59, Rico Bachmann a ?crit :
+> Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+> ---
+>  package/Config.in        |    1 +
+>  package/libapr/Config.in |    7 +++++++
+>  package/libapr/libapr.mk |   12 ++++++++++++
+>  3 files changed, 20 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libapr/Config.in
+>  create mode 100644 package/libapr/libapr.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 4c6d4d8..ceb5f6d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -376,6 +376,7 @@ source "package/fftw/Config.in"
+>  source "package/libargtable2/Config.in"
+>  source "package/argp-standalone/Config.in"
+>  source "package/boost/Config.in"
+> +source "package/libapr/Config.in"
+>  source "package/libatomic_ops/Config.in"
+>  source "package/libcap/Config.in"
+>  source "package/libcap-ng/Config.in"
+> diff --git a/package/libapr/Config.in b/package/libapr/Config.in
+> new file mode 100644
+> index 0000000..51dea91
+> --- /dev/null
+> +++ b/package/libapr/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_LIBAPR
+> +
+> +	bool "libapr"
+> +	help
+> +	  The mission of the Apache Portable Runtime (APR) project is to create and maintain software libraries that provide a predictable and consistent interface to underlying platform-specific implementations
 
-Ideas?
+Could you wrap this line to 80 characters ?
+
+> +	  http://apr.apache.org/
+> diff --git a/package/libapr/libapr.mk b/package/libapr/libapr.mk
+> new file mode 100644
+> index 0000000..57da8ef
+> --- /dev/null
+> +++ b/package/libapr/libapr.mk
+> @@ -0,0 +1,12 @@
+> +#############################################################
+> +#
+> +# libapr
+> +#
+> +#############################################################
+> +LIBAPR_VERSION = 1.4.6
+> +LIBAPR_SOURCE = apr-$(LIBAPR_VERSION).tar.gz
+> +LIBAPR_SITE = http://mirror.switch.ch/mirror/apache/dist/apr
+> +LIBAPR_INSTALL_STAGING = YES
+> +LIBAPR_CONF_OPT = ac_cv_file__dev_zero=yes ac_cv_func_setpgrp_void=yes apr_cv_process_shared_works=yes apr_cv_mutex_robust_shared=no apr_cv_tcp_nodelay_with_cork=yes ac_cv_sizeof_struct_iovec=8 apr_cv_mutex_recursive=yes --enable-shared
+
+All the ac_cv_* stuff should go into LIBAPR_CONF_ENV variable.
+You should wrap the line to 80 characters also.
+--enabled-shared is automatically set by buildroot if it needs to when
+the package is built, so you don't need to set it here.
+
+Otherwise, it looks good to me.
+
+Thanks,
+Maxime
+
+-- 
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
