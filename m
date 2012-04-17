@@ -1,38 +1,38 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 17 Apr 2012 19:08:53 +0200
-Subject: [Buildroot] util-linux builds and installs lots of unwanted
- binaries
-In-Reply-To: <e75db664abe7bb6fc8133d5f41c18f63@zacarias.com.ar>
-References: <1334589472.13607.15.camel@sven>
- <51a409d383cc64319b438fc9b37c8807@zacarias.com.ar>
- <1334651710.2527.5.camel@sven>
- <e75db664abe7bb6fc8133d5f41c18f63@zacarias.com.ar>
-Message-ID: <1334682533.8917.2.camel@bender>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 17 Apr 2012 23:29:30 +0200
+Subject: [Buildroot] [PATCH] neon: fix help text for BR2_PACKAGE_NEON_NOXML
+Message-ID: <1334698170-30152-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2012-04-17 at 08:08 -0300, Gustavo Zacarias wrote:
+Commit 4fbff28b removed the 'depends on' statements for the XML choice.
+Therefore, the expat and libxml2 options are always available.  Remove
+the cryptic part of help text that tells you to select something if it
+is not available.
 
-> Yes, i should make the other options depend on UTIL_LINUX_BASIC.
-> However there's a choice in front regarding UTIL_LINUX_BASIC - with all 
-> the util-linux options disabled and this one enabled you still get 
-> binary stuff installed because they're, well, basic utilities always 
-> built by util-linux.
-> So the option would be to keep the basic option as is or add more 
-> granular options for all those other tiny utilities described in the 
-> help and remove/keep them in a post hook.
-> I'd rather go for the second option since not many people will want 
-> mkfs.bfs, mkfs.minix and those utilities most of the time, even when 
-> installing others.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Adding an option for each and every utility would probably be too much.
-But we could introduce options for each of the sub-directories in
-util-linux (disk-utils, misc-utils, etc). Then one could use 'make -D
-(subdir) install' to install all the utilities from a sub-directory.
+---
+ package/neon/Config.in |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-
-Regards,
-Sven
+diff --git a/package/neon/Config.in b/package/neon/Config.in
+index 92af8da..f972dbb 100644
+--- a/package/neon/Config.in
++++ b/package/neon/Config.in
+@@ -31,9 +31,7 @@ choice
+ config BR2_PACKAGE_NEON_NOXML
+ 	bool "none"
+ 	help
+-	  none       don't use XML, if this is the only option
+-	             and you want XML support, you must choose
+-		     XML handling below.
++	  none       do not build with XML support
+ 
+ config BR2_PACKAGE_NEON_EXPAT
+ 	bool "expat"
+-- 
+tg: (39c8e4d..) t/neon-help-text (depends on: master)
