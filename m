@@ -1,14 +1,18 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 17 Apr 2012 12:20:05 +0200
+Date: Tue, 17 Apr 2012 12:25:06 +0200
 Subject: [Buildroot] [PATCH] Add libapr-package
 In-Reply-To: <1334657125-30406-1-git-send-email-bachmann@tofwerk.com>
 References: <1334657125-30406-1-git-send-email-bachmann@tofwerk.com>
-Message-ID: <CAGm1_ksaHTCviGkbFaJhgh-xraHgehAMAzrpOGmho6oLCBOx1A@mail.gmail.com>
+Message-ID: <CAGm1_kuJmt4Z3G-JpODcdZ=UNg7+ZjRN-A30Wq8WvYoQ2eUvFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+Hi Rico,
+
+see comments below.
 
 On Tue, Apr 17, 2012 at 12:05 PM, Rico Bachmann <bachmann@tofwerk.com> wrote:
 > Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
@@ -58,15 +62,22 @@ On Tue, Apr 17, 2012 at 12:05 PM, Rico Bachmann <bachmann@tofwerk.com> wrote:
 > +#############################################################
 > +LIBAPR_VERSION = 1.4.6
 > +LIBAPR_SOURCE = apr-$(LIBAPR_VERSION).tar.gz
+
+remove apr-1.4.6-tar.gz from dl folder and try without LIBAPR_SOURCE macro
+
 > +LIBAPR_SITE = http://mirror.switch.ch/mirror/apache/dist/apr/
 > +LIBAPR_INSTALL_STAGING = YES
 > +LIBAPR_INSTALL_TARGET = YES
+
+remove LIBAPR_INSTALL_TARGET
+
 > +LIBAPR_CONF_OPT = ac_cv_file__dev_zero=yes ac_cv_func_setpgrp_void=yes apr_cv_process_shared_works=yes apr_cv_mutex_robust_shared=no apr_cv_tcp_nodelay_with_cork=yes ac_cv_sizeof_struct_iovec=8 apr_cv_mutex_recursive=yes --enable-shared
 > +
 > +$(eval $(call AUTOTARGETS,package,LIBAPR))
-
-Please replace
-$(eval $(call AUTOTARGETS,package,LIBAPR))
-with $(eval $(call AUTOTARGETS))
-
-Yegor
+> --
+> 1.7.2.5
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
