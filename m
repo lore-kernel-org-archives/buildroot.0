@@ -1,127 +1,38 @@
-From: Qais Yousef <qais.yousef@imgtec.com>
-Date: Tue, 17 Apr 2012 17:28:55 +0100
-Subject: [Buildroot] [PATCH v3] New Package: latencytop
-Message-ID: <1334680135-30458-1-git-send-email-qais.yousef@imgtec.com>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Tue, 17 Apr 2012 19:08:53 +0200
+Subject: [Buildroot] util-linux builds and installs lots of unwanted
+ binaries
+In-Reply-To: <e75db664abe7bb6fc8133d5f41c18f63@zacarias.com.ar>
+References: <1334589472.13607.15.camel@sven>
+ <51a409d383cc64319b438fc9b37c8807@zacarias.com.ar>
+ <1334651710.2527.5.camel@sven>
+ <e75db664abe7bb6fc8133d5f41c18f63@zacarias.com.ar>
+Message-ID: <1334682533.8917.2.camel@bender>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, 2012-04-17 at 08:08 -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
----
- package/Config.in                            |    1 +
- package/latencytop/Config.in                 |   23 ++++++++++++++++++++
- package/latencytop/latencytop-makefile.patch |   29 ++++++++++++++++++++++++++
- package/latencytop/latencytop.mk             |   21 ++++++++++++++++++
- 4 files changed, 74 insertions(+), 0 deletions(-)
- create mode 100644 package/latencytop/Config.in
- create mode 100644 package/latencytop/latencytop-makefile.patch
- create mode 100644 package/latencytop/latencytop.mk
+> Yes, i should make the other options depend on UTIL_LINUX_BASIC.
+> However there's a choice in front regarding UTIL_LINUX_BASIC - with all 
+> the util-linux options disabled and this one enabled you still get 
+> binary stuff installed because they're, well, basic utilities always 
+> built by util-linux.
+> So the option would be to keep the basic option as is or add more 
+> granular options for all those other tiny utilities described in the 
+> help and remove/keep them in a post hook.
+> I'd rather go for the second option since not many people will want 
+> mkfs.bfs, mkfs.minix and those utilities most of the time, even when 
+> installing others.
 
-diff --git a/package/Config.in b/package/Config.in
-index e1629c8..24e43f6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -37,6 +37,7 @@ source "package/strace/Config.in"
- source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
- source "package/pv/Config.in"
-+source "package/latencytop/Config.in"
- endmenu
- 
- menu "Development tools"
-diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
-new file mode 100644
-index 0000000..12176c0
---- /dev/null
-+++ b/package/latencytop/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_LATENCYTOP
-+	bool "latencytop"
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  There are many types and causes of latency. LatencyTOP
-+	  focuses on the type of latency that causes skips in audio,
-+	  stutters in your desktop experience or that overloads your
-+	  server (while you have plenty of CPU power left).
-+
-+	  LatencyTOP focuses on the cases where the applications want
-+	  to run and execute useful code, but there's some resource
-+	  that's not currently available (and the kernel then blocks
-+	  the process). This is done both on a system level and on a
-+	  per process level, so that you can see what's happening to
-+	  the system, and which process is suffering and/or causing
-+	  the delays.
-+
-+	  http://www.latencytop.org
-+
-+comment "latencytop requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/latencytop/latencytop-makefile.patch b/package/latencytop/latencytop-makefile.patch
-new file mode 100644
-index 0000000..3b10baa
---- /dev/null
-+++ b/package/latencytop/latencytop-makefile.patch
-@@ -0,0 +1,29 @@
-+--- latencytop-0.5/Makefile.old	2012-04-17 16:22:25.896083743 +0100
-++++ latencytop-0.5/Makefile	2012-04-17 16:23:01.318057605 +0100
-+@@ -4,11 +4,11 @@
-+ DESTDIR =
-+ SBINDIR = /usr/sbin
-+ XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
-+-LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
-++LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
-+ 
-+ OBJS= latencytop.o text_display.o translate.o fsync.o
-+ 
-+-ifdef HAS_GTK_GUI
-++ifneq ($(HAS_GTK_GUI),0)
-+   XCFLAGS += `pkg-config --cflags gtk+-2.0` -DHAS_GTK_GUI
-+   LDF += `pkg-config --libs gtk+-2.0`
-+   OBJS += gtk_display.o 
-+@@ -26,10 +26,10 @@
-+ 
-+ # We write explicity this "implicit rule"
-+ %.o : %.c
-+-	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
-++	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
-+ 
-+ latencytop:  $(OBJS) latencytop.h Makefile
-+-	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-++	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-+ 
-+ clean:
-+ 	rm -f *~ latencytop DEADJOE *.o
-diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
-new file mode 100644
-index 0000000..6dd7419
---- /dev/null
-+++ b/package/latencytop/latencytop.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# latencytop
-+#
-+#############################################################
-+
-+LATENCYTOP_VERSION = 0.5
-+LATENCYTOP_SITE = http://www.latencytop.org/download/
-+LATENCYTOP_DEPENDENCIES = libglib2 ncurses
-+
-+# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
-+# version only
-+define LATENCYTOP_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=0
-+endef
-+
-+define LATENCYTOP_INSTALL_TARGET_CMDS
-+	$(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=0
-+endef
-+
-+$(eval $(call GENTARGETS))
--- 
-1.7.1
+Adding an option for each and every utility would probably be too much.
+But we could introduce options for each of the sub-directories in
+util-linux (disk-utils, misc-utils, etc). Then one could use 'make -D
+(subdir) install' to install all the utilities from a sub-directory.
+
+
+Regards,
+Sven
