@@ -1,209 +1,127 @@
-From: Qais Yousef <Qais.Yousef@imgtec.com>
-Date: Tue, 17 Apr 2012 17:20:18 +0100
-Subject: [Buildroot] [PATCH v2] New Package: latencytop
-In-Reply-To: <877gxelgk1.fsf@macbook.be.48ers.dk>
-References: <1333538160-14091-1-git-send-email-qais.yousef@imgtec.com>
- <877gxelgk1.fsf@macbook.be.48ers.dk>
-Message-ID: <0D107966AF6D79418315B7C5549F4B51033CC17F@lemail1.le.imgtec.org>
+From: Qais Yousef <qais.yousef@imgtec.com>
+Date: Tue, 17 Apr 2012 17:28:55 +0100
+Subject: [Buildroot] [PATCH v3] New Package: latencytop
+Message-ID: <1334680135-30458-1-git-send-email-qais.yousef@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
->  Qais>  menu "Development tools"
->  Qais> diff --git a/package/latencytop/Config.in
-> b/package/latencytop/Config.in  Qais> new file mode 100644  Qais>
-index
-> 0000000..1c120c6  Qais> --- /dev/null  Qais> +++
-> b/package/latencytop/Config.in  Qais> @@ -0,0 +1,15 @@  Qais> +config
-> BR2_PACKAGE_LATENCYTOP
->  Qais> +	bool "latencytop"
-> 
-> It uses glib2 and ncurses, so it should select those packages. Glib2
-depends
-> on USE_WCHAR, so you need to depend on that as well (and show a
-> comment if not available similar to how glib2 does).
+Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+---
+ package/Config.in                            |    1 +
+ package/latencytop/Config.in                 |   23 ++++++++++++++++++++
+ package/latencytop/latencytop-makefile.patch |   29 ++++++++++++++++++++++++++
+ package/latencytop/latencytop.mk             |   21 ++++++++++++++++++
+ 4 files changed, 74 insertions(+), 0 deletions(-)
+ create mode 100644 package/latencytop/Config.in
+ create mode 100644 package/latencytop/latencytop-makefile.patch
+ create mode 100644 package/latencytop/latencytop.mk
 
-Done.
-
->  Qais> +	help
->  Qais> +	  There are many types and causes of latency. LatencyTOP
->  Qais> +	  focuses on the type of latency that causes skips in
-audio,
->  Qais> +	  stutters in your desktop experience or that overloads
-your
->  Qais> +	  server (while you have plenty of CPU power left).
->  Qais> +
->  Qais> +	  LatencyTOP focuses on the cases where the applications
-> want
->  Qais> +	  to run and execute useful code, but there's some
-resource
->  Qais> +	  that's not currently available (and the kernel then
-blocks
->  Qais> +	  the process). This is done both on a system level and
-on a
->  Qais> +	  per process level, so that you can see what's
-happening to
->  Qais> +	  the system, and which process is suffering and/or
-causing
->  Qais> +	  the delays.
-> 
-> We normally add the upstream URL at the end
-(http://www.latencytop.org)
-
-Done.
-
->  Qais> diff --git a/package/latencytop/latencytop-makefile.patch
-> b/package/latencytop/latencytop-makefile.patch
->  Qais> new file mode 100644
->  Qais> index 0000000..25be244
->  Qais> --- /dev/null
->  Qais> +++ b/package/latencytop/latencytop-makefile.patch
->  Qais> @@ -0,0 +1,46 @@
->  Qais> +pkg-config and gcc are always used, which prevents cross
-compiling.
->  Qais> +Use env variables to override the default behaviour.
->  Qais> +
-> 
-> This patch changes more than needed. I would prefer to keep the patch
-as
-> small as possible to make it easier to upgrade later.
-> 
-> Have you sent this patch upstream?
-
-No I didn't. The last upstream commit was back in 2009 so I didn't think
-anyone would care much. I'll see if I can find a point of contact.
-Latencytop is still a useful package even if it is not actively
-maintained, I think ;-)
-
->  Qais> +Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>  Qais> +
->  Qais> +--- latencytop-0.5/Makefile.old	2012-04-03
-14:42:09.135328435 +0100
->  Qais> ++++ latencytop-0.5/Makefile	2012-04-03 15:05:47.878234542
-+0100
->  Qais> +@@ -1,16 +1,17 @@
->  Qais> + # FIXME: Use autoconf ?
->  Qais> +-HAS_GTK_GUI = 1
->  Qais> ++HAS_GTK_GUI ?= 1
-> 
-> Unneeded. Variables on the make command line overrides settings in the
-> Makefile.
->
->  Qais> +
->  Qais> +-DESTDIR =
->  Qais> +-SBINDIR = /usr/sbin
->  Qais> +-XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -
-> D_FORTIFY_SOURCE=2 -Wno-sign-compare
->  Qais> +-LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`
--lncursesw
-> 
-> TARGET_CONFIGURE_OPTS prepends $(HOST_DIR)/usr/bin to the path, so
-> the right pkg-config should get picked up without all of this.
-
-Yep, you're right. Fixed both.
-
->  Qais> ++DESTDIR ?=
->  Qais> ++SBINDIR ?= /usr/sbin
->  Qais> ++PKG_CONFIG ?= pkg-config
->  Qais> ++XCFLAGS += -W  -g `$(PKG_CONFIG) --cflags glib-2.0` -
-> D_FORTIFY_SOURCE=2 -Wno-sign-compare
->  Qais> ++LDFLAGS += -Wl,--as-needed `$(PKG_CONFIG) --libs glib-2.0`
--
-> lncurses
->  Qais> +
->  Qais> + OBJS= latencytop.o text_display.o translate.o fsync.o  Qais>
-+  Qais>
-> +-ifdef HAS_GTK_GUI  Qais> +-  XCFLAGS += `pkg-config --cflags
-gtk+-2.0` -
-> DHAS_GTK_GUI  Qais> +-  LDF += `pkg-config --libs gtk+-2.0`  Qais>
-++ifeq
-> (HAS_GTK_GUI, 1)
-> 
-> You need to expand HAS_GTK_GUI - E.G.
-> 
-> ifeq ($(HAS_GTK_GUI),1)
-
-I used ifneq ($(HAS_GTK_GUI),0) instead. Logically makes more sense I
-guess.
+diff --git a/package/Config.in b/package/Config.in
+index e1629c8..24e43f6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -37,6 +37,7 @@ source "package/strace/Config.in"
+ source "package/whetstone/Config.in"
+ source "package/valgrind/Config.in"
+ source "package/pv/Config.in"
++source "package/latencytop/Config.in"
+ endmenu
  
->  Qais> ++  XCFLAGS += `$(PKG_CONFIG) --cflags gtk+-2.0` -DHAS_GTK_GUI
-> Qais> ++  LDFLAGS += `$(PKG_CONFIG) --libs gtk+-2.0`
->  Qais> +   OBJS += gtk_display.o
->  Qais> + endif
->  Qais> +
->  Qais> +@@ -26,10 +27,10 @@
->  Qais> +
->  Qais> + # We write explicity this "implicit rule"
->  Qais> + %.o : %.c
->  Qais> +-	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
->  Qais> ++	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
->  Qais> +
->  Qais> + latencytop:  $(OBJS) latencytop.h Makefile
->  Qais> +-	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop
->  Qais> ++	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o latencytop
->  Qais> +
->  Qais> + clean:
->  Qais> + 	rm -f *~ latencytop DEADJOE *.o
-> 
-> 
-> So I think the only things that should get patches are:
-> 
-> s/ifdef HAS_GTK_GUI/ifeq ($(HAS_GTK_GUI),1)/ s/gcc/$(CC)/
-
-Almost. You missed s/lncursesw/lncurses/ otherwise I would get linking
-error.
- 
->  Qais> diff --git a/package/latencytop/latencytop.mk
-> b/package/latencytop/latencytop.mk
->  Qais> new file mode 100644
->  Qais> index 0000000..f55a564
->  Qais> --- /dev/null
->  Qais> +++ b/package/latencytop/latencytop.mk
->  Qais> @@ -0,0 +1,21 @@
->  Qais>
-> +#########################################################
-> ####
->  Qais> +#
->  Qais> +# latencytop
->  Qais> +#
->  Qais>
-> +#########################################################
-> ####
->  Qais> +
->  Qais> +LATENCYTOP_VERSION = 0.5
->  Qais> +LATENCYTOP_SITE = http://www.latencytop.org/download/
->  Qais> +LATENCYTOP_DEPENDENCIES = libglib2 ncurses  Qais> +  Qais> +#
-> NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
-Qais>
-> +# version only
-> 
-> Not a big deal, but we do have libgtk2 in buildroot, so it would be
-nice to build
-> the gtk version if libgtk2 is enabled.
-
-It might be a bit difficult for me to get this tested properly so I
-avoided it altogether.
-
->  Qais> +define LATENCYTOP_BUILD_CMDS
->  Qais> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) HAS_GTK_GUI=0 -C
-> $(@D)
->  Qais> +endef
->  Qais> +
->  Qais> +define LATENCYTOP_INSTALL_TARGET_CMDS
->  Qais> +	$(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR)
->  Qais> +endef
->  Qais> +
->  Qais> +$(eval $(call GENTARGETS))
-> 
-> Care to fix and resend?
-
-Sure, I'll repost the updated patch shortly :-)
-
-Thanks,
-Qais
-
-> --
-> Bye, Peter Korsgaard
+ menu "Development tools"
+diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
+new file mode 100644
+index 0000000..12176c0
+--- /dev/null
++++ b/package/latencytop/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_LATENCYTOP
++	bool "latencytop"
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  There are many types and causes of latency. LatencyTOP
++	  focuses on the type of latency that causes skips in audio,
++	  stutters in your desktop experience or that overloads your
++	  server (while you have plenty of CPU power left).
++
++	  LatencyTOP focuses on the cases where the applications want
++	  to run and execute useful code, but there's some resource
++	  that's not currently available (and the kernel then blocks
++	  the process). This is done both on a system level and on a
++	  per process level, so that you can see what's happening to
++	  the system, and which process is suffering and/or causing
++	  the delays.
++
++	  http://www.latencytop.org
++
++comment "latencytop requires a toolchain with WCHAR support"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/latencytop/latencytop-makefile.patch b/package/latencytop/latencytop-makefile.patch
+new file mode 100644
+index 0000000..3b10baa
+--- /dev/null
++++ b/package/latencytop/latencytop-makefile.patch
+@@ -0,0 +1,29 @@
++--- latencytop-0.5/Makefile.old	2012-04-17 16:22:25.896083743 +0100
+++++ latencytop-0.5/Makefile	2012-04-17 16:23:01.318057605 +0100
++@@ -4,11 +4,11 @@
++ DESTDIR =
++ SBINDIR = /usr/sbin
++ XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
++-LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
+++LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
++ 
++ OBJS= latencytop.o text_display.o translate.o fsync.o
++ 
++-ifdef HAS_GTK_GUI
+++ifneq ($(HAS_GTK_GUI),0)
++   XCFLAGS += `pkg-config --cflags gtk+-2.0` -DHAS_GTK_GUI
++   LDF += `pkg-config --libs gtk+-2.0`
++   OBJS += gtk_display.o 
++@@ -26,10 +26,10 @@
++ 
++ # We write explicity this "implicit rule"
++ %.o : %.c
++-	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
+++	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
++ 
++ latencytop:  $(OBJS) latencytop.h Makefile
++-	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
+++	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
++ 
++ clean:
++ 	rm -f *~ latencytop DEADJOE *.o
+diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
+new file mode 100644
+index 0000000..6dd7419
+--- /dev/null
++++ b/package/latencytop/latencytop.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# latencytop
++#
++#############################################################
++
++LATENCYTOP_VERSION = 0.5
++LATENCYTOP_SITE = http://www.latencytop.org/download/
++LATENCYTOP_DEPENDENCIES = libglib2 ncurses
++
++# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
++# version only
++define LATENCYTOP_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=0
++endef
++
++define LATENCYTOP_INSTALL_TARGET_CMDS
++	$(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=0
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.1
