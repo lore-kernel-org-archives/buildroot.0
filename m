@@ -1,21 +1,23 @@
 From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Tue, 17 Apr 2012 15:29:56 +0200
+Date: Tue, 17 Apr 2012 15:35:26 +0200
 Subject: [Buildroot] [PATCH] Add libapr-package
 References: <1334668612-8220-1-git-send-email-bachmann@tofwerk.com>
- <CAGm1_ks7MUFH8cunX=pKLwRDbf8ZET4X27GuR35DRB1w+WixXA@mail.gmail.com>
-Message-ID: <op.wcwvr6l8705kjs@rico>
+ <4F8D6F39.2080705@free-electrons.com>
+Message-ID: <op.wcwv1cq6705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 17.04.2012, 15:22 Uhr, schrieb Yegor Yefremov  
-<yegorslists@googlemail.com>:
+Am 17.04.2012, 15:25 Uhr, schrieb Maxime Ripard  
+<maxime.ripard@free-electrons.com>:
 
-> On Tue, Apr 17, 2012 at 3:16 PM, Rico Bachmann <bachmann@tofwerk.com>  
-> wrote:
->> Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+> Hi,
+>
+> Le 17/04/2012 15:16, Rico Bachmann a ?crit :
+>> Signed-off-by: Rico Bachmann  
+>> <bachmann@tofwerk.com>
 >> ---
 >>  package/Config.in     |    1 +
 >>  package/apr/Config.in |    7 +++++++
@@ -33,6 +35,10 @@ Am 17.04.2012, 15:22 Uhr, schrieb Yegor Yefremov
 >>  source "package/argp-standalone/Config.in"
 >>  source "package/boost/Config.in"
 >> +source "package/libapr/Config.in"
+>
+> You should change this to "package/apr/Config.in" now that you have
+> changed the location of this file. This won't even work.
+>
 >>  source "package/libatomic_ops/Config.in"
 >>  source "package/libcap/Config.in"
 >>  source "package/libcap-ng/Config.in"
@@ -43,20 +49,23 @@ Am 17.04.2012, 15:22 Uhr, schrieb Yegor Yefremov
 >> +++ b/package/apr/Config.in
 >> @@ -0,0 +1,7 @@
 >> +config BR2_PACKAGE_LIBAPR
->> +       bool "apr"
->> +       help
->> +         The mission of the Apache Portable Runtime (APR) project is  
->> to create
->> +         and maintain software libraries that provide a predictable and
->> +         consistent interface to underlying platform-specific  
->> implementations
 >
-> one blanc line between help text and project site
+> Same thing here, it should be called BR2_PACKAGE_APR.
 
-ok i'll do that
+yeah i should add the namechanges in all the places... I could have seen  
+this if i tested the latest version of my patch -.-
 
 >
->> +         http://apr.apache.org/
+>> +	bool "apr"
+>> +	help
+>> +	  The mission of the Apache Portable Runtime (APR) project is to  
+>> create
+>> +	  and maintain software libraries that provide a predictable and
+>> +	  consistent interface to underlying platform-specific implementations
+>
+> Could you add an extra line here ?
+>
+>> +	  http://apr.apache.org/
 >> diff --git a/package/apr/apr.mk b/package/apr/apr.mk
 >> new file mode 100644
 >> index 0000000..ae91eb1
@@ -70,28 +79,29 @@ ok i'll do that
 >> +#############################################################
 >> +APR_VERSION = 1.4.6
 >> +APR_SITE = archive.apache.org/dist/apr
+>
+> You should put http:// here. We use the URL's scheme to select the
+> appropriate downloading method. I guess it defaults to http if no scheme
+> is set, but hey, explicit is always better than implicit :)
+
+ok i will do that, i was to lazy befor because it worked ^^
+
+>
 >> +APR_INSTALL_STAGING = YES
 >> +APR_CONF_ENV = \
->> +       ac_cv_file__dev_zero=yes \
->> +       ac_cv_func_setpgrp_void=yes \
->> +       apr_cv_process_shared_works=yes \
->> +       apr_cv_mutex_robust_shared=no \
->> +       apr_cv_tcp_nodelay_with_cork=yes \
->> +       ac_cv_sizeof_struct_iovec=8 \
->> +       apr_cv_mutex_recursive=yes
+>> +	ac_cv_file__dev_zero=yes \
+>> +	ac_cv_func_setpgrp_void=yes \
+>> +	apr_cv_process_shared_works=yes \
+>> +	apr_cv_mutex_robust_shared=no \
+>> +	apr_cv_tcp_nodelay_with_cork=yes \
+>> +	ac_cv_sizeof_struct_iovec=8 \
+>> +	apr_cv_mutex_recursive=yes
 >> +
 >> +$(eval $(call AUTOTARGETS))
->> --
->> 1.7.2.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Thanks,
+> Maxime
+>
 
 
 -- 
