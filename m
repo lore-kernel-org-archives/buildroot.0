@@ -1,38 +1,30 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 17 Apr 2012 23:29:30 +0200
-Subject: [Buildroot] [PATCH] neon: fix help text for BR2_PACKAGE_NEON_NOXML
-Message-ID: <1334698170-30152-1-git-send-email-arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 17 Apr 2012 22:03:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 5006] make performs library lookup in the build
+ and host library directores and not in the staging area
+In-Reply-To: <bug-5006-163@https.bugs.busybox.net/>
+References: <bug-5006-163@https.bugs.busybox.net/>
+Message-ID: <20120417220341.B968296AFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4fbff28b removed the 'depends on' statements for the XML choice.
-Therefore, the expat and libxml2 options are always available.  Remove
-the cryptic part of help text that tells you to select something if it
-is not available.
+https://bugs.busybox.net/show_bug.cgi?id=5006
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+--- Comment #5 from Arnout Vandecappelle <arnout@mind.be> 2012-04-17 22:03:41 UTC ---
+My bad, I was confused by the CC=gcc line.
 
----
- package/neon/Config.in |    4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+A Makefile that uses a -lfoo dependency for something it can't rebuild is
+pretty silly, I think.  As a workaround, though, you could pass
+VPATH="$(STAGING_DIR)/lib:$(STAGING_DIR)/usr/lib" - hopefully that Makefile
+doesn't use VPATH itself.
 
-diff --git a/package/neon/Config.in b/package/neon/Config.in
-index 92af8da..f972dbb 100644
---- a/package/neon/Config.in
-+++ b/package/neon/Config.in
-@@ -31,9 +31,7 @@ choice
- config BR2_PACKAGE_NEON_NOXML
- 	bool "none"
- 	help
--	  none       don't use XML, if this is the only option
--	             and you want XML support, you must choose
--		     XML handling below.
-+	  none       do not build with XML support
- 
- config BR2_PACKAGE_NEON_EXPAT
- 	bool "expat"
+BTW it's definitely worthwhile to upstream a patch that gets the libdirs from a
+variable similar to .LIBPATTERNS.
+
 -- 
-tg: (39c8e4d..) t/neon-help-text (depends on: master)
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
