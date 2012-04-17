@@ -1,38 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Apr 2012 00:13:09 +0200
-Subject: [Buildroot] [PATCH v3] New Package: latencytop
-In-Reply-To: <1334680135-30458-1-git-send-email-qais.yousef@imgtec.com>
-References: <1334680135-30458-1-git-send-email-qais.yousef@imgtec.com>
-Message-ID: <201204180013.10481.arnout@mind.be>
+Date: Wed, 18 Apr 2012 00:54:35 +0200
+Subject: [Buildroot] [PATCH 2/5] toolchain: add Coldfire external
+	toolchain from Sourcery CodeBench
+In-Reply-To: <b8f16be0b2356d468d5f3f95bd525fb6d94159fe.1334074065.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1334074065.git.thomas.petazzoni@free-electrons.com>
+ <b8f16be0b2356d468d5f3f95bd525fb6d94159fe.1334074065.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201204180054.35908.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 17 April 2012 18:28:55 Qais Yousef wrote:
-> +--- latencytop-0.5/Makefile.old        2012-04-17 16:22:25.896083743 +0100
-> ++++ latencytop-0.5/Makefile    2012-04-17 16:23:01.318057605 +0100
-> +@@ -4,11 +4,11 @@
-> + DESTDIR =
-> + SBINDIR = /usr/sbin
-> + XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
-> +-LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
-> ++LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
-> + 
-> + OBJS= latencytop.o text_display.o translate.o fsync.o
-> + 
-> +-ifdef HAS_GTK_GUI
-> ++ifneq ($(HAS_GTK_GUI),0)
+On Tuesday 10 April 2012 18:10:46 Thomas Petazzoni wrote:
+> +TOOLCHAIN_EXTERNAL_SITE=???
 
- I think this one is unneeded as well if you use HAS_GTK_GUI= (without 
-the 0).  So:
-
-> +       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=0
-
-would become
-
-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
+ Shouldn't that be
+http://sourcery.mentor.com/sgpp/lite/coldfire/portal/package9494/public/m68k-uclinux/
 
  Regards,
  Arnout
