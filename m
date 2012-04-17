@@ -1,63 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Apr 2012 16:45:15 +0200
-Subject: [Buildroot] [PATCH 03/22] Remove filename extension crap for OS
-	compatibility
+Date: Tue, 17 Apr 2012 16:45:18 +0200
+Subject: [Buildroot] [PATCH 06/22] Rename Makefile.cmake.in to
+	pkg-cmaketargets.mk
 In-Reply-To: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <5cae11523664c212bbb8278fce0d36d79a0a0acc.1334673910.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <9c83dfeb3c8b1fb3a2f5b32e0721939f89d90567.1334673910.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The only variable that is used is HOST_LOADLIBES, defined for the
-cygwin case in the kconfig build. Since we don't support cygwin,
-simply get rid of this.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile |   28 ----------------------------
- 1 files changed, 0 insertions(+), 28 deletions(-)
+ package/Makefile.in                                |    2 +-
+ package/{Makefile.cmake.in => pkg-cmaketargets.mk} |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
+ rename package/{Makefile.cmake.in => pkg-cmaketargets.mk} (100%)
 
-diff --git a/Makefile b/Makefile
-index 90c2086..e03fed5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -194,34 +194,6 @@ unexport CONFIG_SITE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 20fac9a..ab5ea48 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -300,5 +300,5 @@ SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+ endif
  
- GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- 
--#############################################################
--#
--# Setup the proper filename extensions for the host
--#
--##############################################################
--ifneq ($(findstring linux,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=
--HOST_LIBEXT:=.a
--HOST_SHREXT:=.so
--endif
--ifneq ($(findstring apple,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=
--HOST_LIBEXT:=.a
--HOST_SHREXT:=.dylib
--endif
--ifneq ($(findstring cygwin,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=.exe
--HOST_LIBEXT:=.lib
--HOST_SHREXT:=.dll
--HOST_LOADLIBES=-lcurses -lintl
--export HOST_LOADLIBES
--endif
--ifneq ($(findstring mingw,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=.exe
--HOST_LIBEXT:=.lib
--HOST_SHREXT:=.dll
--endif
--
- ##############################################################
- #
- # The list of stuff to build for the target toolchain
+ include package/pkg-autotargets.mk
+-include package/Makefile.cmake.in
++include package/pkg-cmaketargets.mk
+ include package/Makefile.package.in
+diff --git a/package/Makefile.cmake.in b/package/pkg-cmaketargets.mk
+similarity index 100%
+rename from package/Makefile.cmake.in
+rename to package/pkg-cmaketargets.mk
 -- 
 1.7.4.1
