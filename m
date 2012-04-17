@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Apr 2012 16:45:27 +0200
-Subject: [Buildroot] [PATCH 15/22] gcc: remove unused
-	EXTRA_GCC2_CONFIG_OPTIONS
+Date: Tue, 17 Apr 2012 16:45:28 +0200
+Subject: [Buildroot] [PATCH 16/22] gcc: remove unused
+	EXTRA_GCC4_CONFIG_OPTIONS
 In-Reply-To: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <ff41e7b9e11d5c7e2b630d360623c662961e68d9.1334673910.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <781548c126f3c59be4e29edd1196430bc1be84ef.1334673910.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ toolchain/gcc/gcc-uclibc-4.x.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
 diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index 7cdba0e..305270f 100644
+index 305270f..212660c 100644
 --- a/toolchain/gcc/gcc-uclibc-4.x.mk
 +++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -311,7 +311,6 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
- 		$(SOFT_FLOAT_CONFIG_OPTION) \
- 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
- 		$(EXTRA_GCC_CONFIG_OPTIONS) \
--		$(EXTRA_GCC2_CONFIG_OPTIONS) \
- 		$(QUIET) \
- 	)
- 	touch $@
-@@ -390,7 +389,6 @@ $(GCC_BUILD_DIR3)/.configured: $(GCC_SRC_DIR)/.patched $(GCC_STAGING_PREREQ)
- 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
+@@ -525,7 +525,6 @@ $(GCC_BUILD_DIR4)/.configured: $(GCC_BUILD_DIR4)/.prepared
  		$(DISABLE_LARGEFILE) \
  		$(EXTRA_GCC_CONFIG_OPTIONS) \
--		$(EXTRA_GCC2_CONFIG_OPTIONS) \
+ 		$(EXTRA_TARGET_GCC_CONFIG_OPTIONS) \
+-		$(EXTRA_GCC4_CONFIG_OPTIONS) \
  	)
  	touch $@
  
