@@ -1,54 +1,102 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 17 Apr 2012 14:01:29 +0200
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Tue, 17 Apr 2012 14:18:13 +0200
 Subject: [Buildroot] [PATCH] Add libapr-package
-In-Reply-To: <20120417133932.4552d886@skate> (Thomas Petazzoni's message of
- "Tue, 17 Apr 2012 13:39:32 +0200")
-References: <1334660370-19506-2-git-send-email-bachmann@tofwerk.com>
- <20120417133932.4552d886@skate>
-Message-ID: <873982lg86.fsf@macbook.be.48ers.dk>
+References: <Re:[PATCH] Add libapr-package>
+ <1334660370-19506-2-git-send-email-bachmann@tofwerk.com>
+ <4F8D55A7.2090909@free-electrons.com>
+Message-ID: <op.wcwsgnmh705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Am 17.04.2012, 13:36 Uhr, schrieb Maxime Ripard  
+<maxime.ripard@free-electrons.com>:
 
-Hi,
+> Hi,
+>
+> Thanks for your patch!
+>
+> Le 17/04/2012 12:59, Rico Bachmann a ?crit :
+>> Signed-off-by: Rico Bachmann  
+>> <bachmann@tofwerk.com>
+>> ---
+>>  package/Config.in        |    1 +
+>>  package/libapr/Config.in |    7 +++++++
+>>  package/libapr/libapr.mk |   12 ++++++++++++
+>>  3 files changed, 20 insertions(+), 0 deletions(-)
+>>  create mode 100644 package/libapr/Config.in
+>>  create mode 100644 package/libapr/libapr.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 4c6d4d8..ceb5f6d 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -376,6 +376,7 @@ source "package/fftw/Config.in"
+>>  source "package/libargtable2/Config.in"
+>>  source "package/argp-standalone/Config.in"
+>>  source "package/boost/Config.in"
+>> +source "package/libapr/Config.in"
+>>  source "package/libatomic_ops/Config.in"
+>>  source "package/libcap/Config.in"
+>>  source "package/libcap-ng/Config.in"
+>> diff --git a/package/libapr/Config.in b/package/libapr/Config.in
+>> new file mode 100644
+>> index 0000000..51dea91
+>> --- /dev/null
+>> +++ b/package/libapr/Config.in
+>> @@ -0,0 +1,7 @@
+>> +config BR2_PACKAGE_LIBAPR
+>> +
+>> +	bool "libapr"
+>> +	help
+>> +	  The mission of the Apache Portable Runtime (APR) project is to  
+>> create and maintain software libraries that provide a predictable and  
+>> consistent interface to underlying platform-specific implementations
+>
+> Could you wrap this line to 80 characters ?
 
- >> +	bool "libapr"
- >> +	help
- >> +	  The mission of the Apache Portable Runtime (APR) project is to create and maintain software libraries that provide a predictable and consistent interface to underlying platform-specific implementations
+I will wrap this line in my next patch
 
- Thomas> This text should be wrapped at ~80 columns.
+>
+>> +	  http://apr.apache.org/
+>> diff --git a/package/libapr/libapr.mk b/package/libapr/libapr.mk
+>> new file mode 100644
+>> index 0000000..57da8ef
+>> --- /dev/null
+>> +++ b/package/libapr/libapr.mk
+>> @@ -0,0 +1,12 @@
+>> +#############################################################
+>> +#
+>> +# libapr
+>> +#
+>> +#############################################################
+>> +LIBAPR_VERSION = 1.4.6
+>> +LIBAPR_SOURCE = apr-$(LIBAPR_VERSION).tar.gz
+>> +LIBAPR_SITE = http://mirror.switch.ch/mirror/apache/dist/apr
+>> +LIBAPR_INSTALL_STAGING = YES
+>> +LIBAPR_CONF_OPT = ac_cv_file__dev_zero=yes ac_cv_func_setpgrp_void=yes  
+>> apr_cv_process_shared_works=yes apr_cv_mutex_robust_shared=no  
+>> apr_cv_tcp_nodelay_with_cork=yes ac_cv_sizeof_struct_iovec=8  
+>> apr_cv_mutex_recursive=yes --enable-shared
+>
+> All the ac_cv_* stuff should go into LIBAPR_CONF_ENV variable.
+> You should wrap the line to 80 characters also.
+> --enabled-shared is automatically set by buildroot if it needs to when
+> the package is built, so you don't need to set it here.
 
-And the upstream URL should be added below.
+Ok i will add the apr_cv_* stuff to LIBAPR_CONF_ENV instead of  
+LIBAPR_CONF_OPT
+and delete the --enable-shared argument
 
- >> new file mode 100644
- >> index 0000000..57da8ef
- >> --- /dev/null
- >> +++ b/package/libapr/libapr.mk
- >> @@ -0,0 +1,12 @@
- >> +#############################################################
- >> +#
- >> +# libapr
- >> +#
- >> +#############################################################
- >> +LIBAPR_VERSION = 1.4.6
- >> +LIBAPR_SOURCE = apr-$(LIBAPR_VERSION).tar.gz
+>
+> Otherwise, it looks good to me.
+>
+> Thanks,
+> Maxime
+>
 
- Thomas> Yegor's suggestion didn't work because by default we download
- Thomas> <package-name>-<package-version>.tar.gz. However here you decided to
- Thomas> name the Buildroot package "libapr", while the upstream package is
- Thomas> "apr". Maybe we should use the "apr" name like upstream?
-
-Agreed.
-
- >> +LIBAPR_SITE = http://mirror.switch.ch/mirror/apache/dist/apr
-
-I know the apr website directs you to a local mirror, but perhaps it
-would make more sense to use archive.apache.org/dist/apr instead of this
-.ch mirror?
 
 -- 
-Bye, Peter Korsgaard
+Erstellt mit Operas revolution?rem E-Mail-Modul: http://www.opera.com/mail/
