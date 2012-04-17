@@ -1,67 +1,44 @@
 From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Tue, 17 Apr 2012 14:18:13 +0200
+Date: Tue, 17 Apr 2012 14:18:48 +0200
 Subject: [Buildroot] [PATCH] Add libapr-package
 References: <Re:[PATCH] Add libapr-package>
  <1334660370-19506-2-git-send-email-bachmann@tofwerk.com>
- <4F8D55A7.2090909@free-electrons.com>
-Message-ID: <op.wcwsgnmh705kjs@rico>
+ <20120417133932.4552d886@skate>
+Message-ID: <op.wcwshmcu705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 17.04.2012, 13:36 Uhr, schrieb Maxime Ripard  
-<maxime.ripard@free-electrons.com>:
+Am 17.04.2012, 13:39 Uhr, schrieb Thomas Petazzoni  
+<thomas.petazzoni@free-electrons.com>:
 
-> Hi,
+> Hello Rico,
 >
-> Thanks for your patch!
+> Thanks for this contribution!
 >
-> Le 17/04/2012 12:59, Rico Bachmann a ?crit :
->> Signed-off-by: Rico Bachmann  
->> <bachmann@tofwerk.com>
->> ---
->>  package/Config.in        |    1 +
->>  package/libapr/Config.in |    7 +++++++
->>  package/libapr/libapr.mk |   12 ++++++++++++
->>  3 files changed, 20 insertions(+), 0 deletions(-)
->>  create mode 100644 package/libapr/Config.in
->>  create mode 100644 package/libapr/libapr.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 4c6d4d8..ceb5f6d 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -376,6 +376,7 @@ source "package/fftw/Config.in"
->>  source "package/libargtable2/Config.in"
->>  source "package/argp-standalone/Config.in"
->>  source "package/boost/Config.in"
->> +source "package/libapr/Config.in"
->>  source "package/libatomic_ops/Config.in"
->>  source "package/libcap/Config.in"
->>  source "package/libcap-ng/Config.in"
->> diff --git a/package/libapr/Config.in b/package/libapr/Config.in
->> new file mode 100644
->> index 0000000..51dea91
->> --- /dev/null
+> Le Tue, 17 Apr 2012 12:59:30 +0200,
+> Rico Bachmann <bachmann@tofwerk.com> a ?crit :
+>
 >> +++ b/package/libapr/Config.in
 >> @@ -0,0 +1,7 @@
 >> +config BR2_PACKAGE_LIBAPR
 >> +
+>
+> Remove this blank line.
+
+the line will be gone with my next patch :)
+
+>
 >> +	bool "libapr"
 >> +	help
 >> +	  The mission of the Apache Portable Runtime (APR) project is to  
 >> create and maintain software libraries that provide a predictable and  
 >> consistent interface to underlying platform-specific implementations
 >
-> Could you wrap this line to 80 characters ?
-
-I will wrap this line in my next patch
-
+> This text should be wrapped at ~80 columns.
 >
->> +	  http://apr.apache.org/
->> diff --git a/package/libapr/libapr.mk b/package/libapr/libapr.mk
 >> new file mode 100644
 >> index 0000000..57da8ef
 >> --- /dev/null
@@ -74,6 +51,16 @@ I will wrap this line in my next patch
 >> +#############################################################
 >> +LIBAPR_VERSION = 1.4.6
 >> +LIBAPR_SOURCE = apr-$(LIBAPR_VERSION).tar.gz
+>
+> Yegor's suggestion didn't work because by default we download
+> <package-name>-<package-version>.tar.gz. However here you decided to
+> name the Buildroot package "libapr", while the upstream package is
+> "apr". Maybe we should use the "apr" name like upstream?
+
+if it is the preferred way I can change the name of the package to arp
+and delete the LIBAPR_SOURCE line, that's no problem
+
+>
 >> +LIBAPR_SITE = http://mirror.switch.ch/mirror/apache/dist/apr
 >> +LIBAPR_INSTALL_STAGING = YES
 >> +LIBAPR_CONF_OPT = ac_cv_file__dev_zero=yes ac_cv_func_setpgrp_void=yes  
@@ -81,21 +68,19 @@ I will wrap this line in my next patch
 >> apr_cv_tcp_nodelay_with_cork=yes ac_cv_sizeof_struct_iovec=8  
 >> apr_cv_mutex_recursive=yes --enable-shared
 >
-> All the ac_cv_* stuff should go into LIBAPR_CONF_ENV variable.
-> You should wrap the line to 80 characters also.
-> --enabled-shared is automatically set by buildroot if it needs to when
-> the package is built, so you don't need to set it here.
-
-Ok i will add the apr_cv_* stuff to LIBAPR_CONF_ENV instead of  
-LIBAPR_CONF_OPT
-and delete the --enable-shared argument
-
+> Please wrap this this way:
 >
-> Otherwise, it looks good to me.
+> LIBAPR_CONF_OPT = \
+> 	ac_cv_file__dev_zero=yes \
+> 	ac_cv_func_setgrp_void=yes \
+> 	...
 >
-> Thanks,
-> Maxime
+> And remove --enable-shared since it is already passed by default, and
+> tuned when BR2_PREFER_STATIC is used.
 >
+> Regards,
+>
+> Thomas
 
 
 -- 
