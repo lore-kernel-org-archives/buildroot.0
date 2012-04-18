@@ -1,43 +1,37 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 18 Apr 2012 10:19:46 +0200
-Subject: [Buildroot] [PATCH] boost: add an option to run cmds in parallel
-Message-ID: <1334737186-30736-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 18 Apr 2012 10:25:31 +0200
+Subject: [Buildroot] [PATCH 2/5] toolchain: add Coldfire external
+ toolchain from Sourcery CodeBench
+In-Reply-To: <201204180054.35908.arnout@mind.be>
+References: <cover.1334074065.git.thomas.petazzoni@free-electrons.com>
+ <b8f16be0b2356d468d5f3f95bd525fb6d94159fe.1334074065.git.thomas.petazzoni@free-electrons.com>
+ <201204180054.35908.arnout@mind.be>
+Message-ID: <20120418102531.5b4d8425@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Le Wed, 18 Apr 2012 00:54:35 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-Add the same -jN parameter as used for make.
+> On Tuesday 10 April 2012 18:10:46 Thomas Petazzoni wrote:
+> > +TOOLCHAIN_EXTERNAL_SITE=???
+> 
+>  Shouldn't that be
+> http://sourcery.mentor.com/sgpp/lite/coldfire/portal/package9494/public/m68k-uclinux/
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/boost/boost.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+Yes, sorry. I implemented this during a week-end, and I had no Internet
+connection at that time :)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 9da427a..3667964 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -70,7 +70,7 @@ define BOOST_CONFIGURE_CMDS
- endef
- 
- define BOOST_INSTALL_TARGET_CMDS
--	(cd $(@D) && ./b2 -q -d+2 \
-+	(cd $(@D) && ./b2 -j$(BR2_JLEVEL) -q -d+2 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(TARGET_DIR)/usr \
-@@ -78,7 +78,7 @@ define BOOST_INSTALL_TARGET_CMDS
- endef
- 
- define BOOST_INSTALL_STAGING_CMDS
--	(cd $(@D) && ./bjam -d+2 \
-+	(cd $(@D) && ./bjam -j$(BR2_JLEVEL) -d+2 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(STAGING_DIR)/usr \
+I'll fix up and resend.
+
+Best regards,
+
+Thomas
 -- 
-1.7.7
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
