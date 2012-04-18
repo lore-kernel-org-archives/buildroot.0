@@ -1,44 +1,45 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 18 Apr 2012 17:39:06 +0200
+Date: Wed, 18 Apr 2012 17:39:09 +0200
 Subject: [Buildroot] [RFC v2 16/31] linux: define license
-In-Reply-To: <201204162338.49807.yann.morin.1998@free.fr>
+In-Reply-To: <CAAXf6LU=wrhrN2cAV2WcOgvBxjXmXGDGfiKSf4Z1Y3jt_cox=Q@mail.gmail.com>
 References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
  <CAAXf6LX8JkXWzHAkYV8J74sYDhsFPRJ=OdYxiB4+6PxRswx3MA@mail.gmail.com>
  <4F8C8CE2.3000702@lucaceresoli.net>
  <201204162338.49807.yann.morin.1998@free.fr>
-Message-ID: <4F8EE01A.7010006@lucaceresoli.net>
+ <CAAXf6LU=wrhrN2cAV2WcOgvBxjXmXGDGfiKSf4Z1Y3jt_cox=Q@mail.gmail.com>
+Message-ID: <4F8EE01D.3000406@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann E. MORIN:
+Thomas De Schampheleire wrote:
 
->> Another example: busybox.
+>>> I checked four packages in detail, and two of them have an unclear choice of
+>>> GPL version. I can't stand any more headache tonight, and I'm not sure I'll
+>>> have more luck with other packages. This is so frustrating...
+>> Not sure? Use 'unknown'. This can be refined at a later stage, if need be.
 >>
->> This is a messy as well. The LICENSE file carries this heading:
->>>   --- A note on GPL versions
->>>
->>>   BusyBox is distributed under version 2 of the General Public License (included
->>>   in its entirety, below).  Version 2 is the only version of this license which
->>>   this version of BusyBox (or modified versions derived from this one) may be
->>>   distributed under.
->>>
->>>   ------------------------------------------------------------------------
->>>   		GNU GENERAL PUBLIC LICENSE
->>>   		Version 2, June 1991
->> That looks clear, but many source files seem to disagree:
->> $ head coreutils/uname.c
->>>    * Licensed under GPLv2 or later, see file LICENSE in this source tree.
-> What this means is that the work as a whole is available under the GPLv2,
-> but that if you use individual files out-side of busybox, you can use that
-> file under the license that is specified (IANAL!).
->
->  From the buildroot perspective, busybox is GPLv2.
+>> A package with no license specified in the $(PKG)_LICENSE should default
+>> to 'unknown', to draw attention.
+>>
+>> IMNSHO, it is highly preferrable for the buildroot community to be
+>> conservative on this point, and in case there is ambiguity, default to
+>> 'unknown', and let a lawyer do his/her work. ;-)
+> Ideally, we'd try to make sure that the upstream developers clarify
+> their license so as to remove the ambiguity. I think it is of benefit
+> to no-one that such ambiguities exist.
+I agree with both of you. Getting things clarified from upstream is the best
+thing. When this is impossible, a deep legal analysis is far out of the goals
+of Buildroot.
 
-Is this your personal view or did you get such info from upstream?
-I would not code in Buildroot any interpretation (even if from a trustworthy
-expert) that does not come from upstream.
+Still, there are cases of packages whose licensing policy is clear but not
+simple enough to fit into the narrow space of a csv file.
+See the case of tslib: the library and a few examples are LGPL, other examples
+are GPL.
+In this case we might declare TSLIB_LICENSE = GPL + LGPL, but this is not
+totally clear and not totally informative. So as Yann suggests it might be
+better to give up and default to an "unknown" license.
 
 Luca
