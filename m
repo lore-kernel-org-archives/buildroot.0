@@ -1,37 +1,31 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 18 Apr 2012 13:29:21 +0200
-Subject: [Buildroot] [PATCH 1/3] Fix systemd failure with lock files
-In-Reply-To: <cover.1334748542.git.maxime.ripard@free-electrons.com>
-References: <cover.1334748542.git.maxime.ripard@free-electrons.com>
-Message-ID: <acb90f809d4410dd78028afde9e9884bc780f14a.1334748542.git.maxime.ripard@free-electrons.com>
+Date: Wed, 18 Apr 2012 13:29:20 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.05/package-fixes
+Message-ID: <cover.1334748542.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd introduced a new policy described here:
-http://lists.freedesktop.org/archives/systemd-devel/2011-March/001823.html
+The following changes since commit e5ece0d8eebf2f908b952141130664d3a6430f67:
 
-Add the "lock" group to buildroot to allow systemd to set this in place
-at boot time
+  Add apr-package (2012-04-17 16:44:19 +0200)
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- fs/skeleton/etc/group |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+are available in the git repository at:
+  git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.05/package-fixes
 
-diff --git a/fs/skeleton/etc/group b/fs/skeleton/etc/group
-index 311a455..cd4ca79 100644
---- a/fs/skeleton/etc/group
-+++ b/fs/skeleton/etc/group
-@@ -9,6 +9,7 @@ wheel:x:10:root
- audio:x:29:
- utmp:x:43:
- staff:x:50:
-+lock:x:54:
- haldaemon:x:68:
- dbus:x:81:
- netdev:x:82:
+Maxime Ripard (3):
+      Fix systemd failure with lock files
+      Fix systemd failure with media devices
+      Fix qt samples dependency on QtGUI
+
+ fs/skeleton/etc/group      |    1 +
+ package/qt/Config.in       |    1 +
+ package/systemd/systemd.mk |    5 +++++
+ 3 files changed, 7 insertions(+), 0 deletions(-)
+
+Thanks,
 -- 
-1.7.5.4
+Maxime Ripard
