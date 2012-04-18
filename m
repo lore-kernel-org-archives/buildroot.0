@@ -1,9 +1,9 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 18 Apr 2012 13:29:23 +0200
-Subject: [Buildroot] [PATCH 3/3] Fix qt samples dependency on QtGUI
+Date: Wed, 18 Apr 2012 13:29:22 +0200
+Subject: [Buildroot] [PATCH 2/3] Fix systemd failure with media devices
 In-Reply-To: <cover.1334748542.git.maxime.ripard@free-electrons.com>
 References: <cover.1334748542.git.maxime.ripard@free-electrons.com>
-Message-ID: <0e3d23b0b754d6c84b0e3a15653012c0b2d9d5bf.1334748542.git.maxime.ripard@free-electrons.com>
+Message-ID: <81922605e072cb2c80e6b3bbad5ae5f8ab810e31.1334748542.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- package/qt/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/systemd/systemd.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 1ce6348..88855d2 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -19,6 +19,7 @@ config BR2_PACKAGE_QT_DEBUG
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 717bdcc..83800c5 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -64,8 +64,13 @@ define SYSTEMD_INSTALL_TTY_HOOK
+ 	ln -fs ../../../../usr/lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+ endef
  
- config BR2_PACKAGE_QT_DEMOS
- 	bool "Compile and install demos and examples (with code)"
-+	select BR2_PACKAGE_QT_GUI_MODULE
- 	help
- 	  If unsure, say N.
++define SYSTEMD_INSTALL_MISC
++	mkdir -p $(TARGET_DIR)/media
++endef
++
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_TTY_HOOK \
++	SYSTEMD_INSTALL_MISC \
  
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.5.4
