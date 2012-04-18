@@ -1,31 +1,31 @@
 From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 18 Apr 2012 13:29:20 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.05/package-fixes
-Message-ID: <cover.1334748542.git.maxime.ripard@free-electrons.com>
+Date: Wed, 18 Apr 2012 13:29:23 +0200
+Subject: [Buildroot] [PATCH 3/3] Fix qt samples dependency on QtGUI
+In-Reply-To: <cover.1334748542.git.maxime.ripard@free-electrons.com>
+References: <cover.1334748542.git.maxime.ripard@free-electrons.com>
+Message-ID: <0e3d23b0b754d6c84b0e3a15653012c0b2d9d5bf.1334748542.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit e5ece0d8eebf2f908b952141130664d3a6430f67:
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+---
+ package/qt/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-  Add apr-package (2012-04-17 16:44:19 +0200)
-
-are available in the git repository at:
-  git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.05/package-fixes
-
-Maxime Ripard (3):
-      Fix systemd failure with lock files
-      Fix systemd failure with media devices
-      Fix qt samples dependency on QtGUI
-
- fs/skeleton/etc/group      |    1 +
- package/qt/Config.in       |    1 +
- package/systemd/systemd.mk |    5 +++++
- 3 files changed, 7 insertions(+), 0 deletions(-)
-
-Thanks,
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 1ce6348..88855d2 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -19,6 +19,7 @@ config BR2_PACKAGE_QT_DEBUG
+ 
+ config BR2_PACKAGE_QT_DEMOS
+ 	bool "Compile and install demos and examples (with code)"
++	select BR2_PACKAGE_QT_GUI_MODULE
+ 	help
+ 	  If unsure, say N.
+ 
 -- 
-Maxime Ripard
+1.7.5.4
