@@ -1,86 +1,82 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 18 Apr 2012 23:38:19 +0200
-Subject: [Buildroot] [git commit] libedbus: add options for
-	bluez/connman/notify support
-Message-ID: <20120418213909.64CAC96B10@busybox.osuosl.org>
+Date: Thu, 19 Apr 2012 01:01:56 +0200
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20120418230244.6694A96B10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4b02a282089e37bfe134856da5c2e9fd21360ba8
+commit: http://git.buildroot.net/buildroot/commit/?id=e22dd64b32ff08eb71615be5a5ec6430ea77dc41
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/efl/libedbus/Config.in   |   23 ++++++++++++++++++++++-
- package/efl/libedbus/libedbus.mk |   20 ++++++++++++++++++++
- 2 files changed, 42 insertions(+), 1 deletions(-)
+ CHANGES |   48 ++++++++++++++++++++++++++++++++----------------
+ 1 files changed, 32 insertions(+), 16 deletions(-)
 
-diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
-index 3844b52..0914b37 100644
---- a/package/efl/libedbus/Config.in
-+++ b/package/efl/libedbus/Config.in
-@@ -2,10 +2,31 @@ config BR2_PACKAGE_LIBEDBUS
- 	bool "libedbus"
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_LIBECORE
--	depends on BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_DBUS
- 	help
- 	  E_Dbus is a set of wrappers around D-Bus APIs so they can be
- 	  easily used by EFL applications, automatically providing
- 	  Ecore/main loop integration, as well as Eina data types.
+diff --git a/CHANGES b/CHANGES
+index 6ff4004..207cfe2 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -7,27 +7,43 @@
  
- 	  http://trac.enlightenment.org/e/wiki/E_Dbus
-+
-+if BR2_PACKAGE_LIBEDBUS
-+
-+config BR2_PACKAGE_LIBEDBUS_BLUEZ
-+	bool "bluez support"
-+	select BR2_PACKAGE_BLUEZ_UTILS
-+	help
-+	  Bluetooth support.
-+
-+config BR2_PACKAGE_LIBEDBUS_CONNMAN
-+	bool "connman support"
-+	depends on BR2_PACKAGE_CONNMAN
-+	help
-+	  Connection manager support.
-+
-+config BR2_PACKAGE_LIBEDBUS_NOTIFY
-+	bool "notify support"
-+	help
-+	  Notify support.
-+
-+endif
-diff --git a/package/efl/libedbus/libedbus.mk b/package/efl/libedbus/libedbus.mk
-index 34f34a7..c03474d 100644
---- a/package/efl/libedbus/libedbus.mk
-+++ b/package/efl/libedbus/libedbus.mk
-@@ -11,4 +11,24 @@ LIBEDBUS_INSTALL_STAGING = YES
+ 	CMake toolchain file moved to $HOST_DIR/usr/share/buildroot.
  
- LIBEDBUS_DEPENDENCIES = host-pkg-config dbus libeina libecore
+-	Defconfigs: mx53qsb, use 3.2.x for atngw100,
++	Apply-patches.sh: cleanups, archived patches handling fixes,
++	support series files.
  
-+ifeq ($(BR2_PACKAGE_LIBEDBUS_BLUEZ),y)
-+LIBEDBUS_CONF_OPT += --enable-ebluez
-+LIBEDBUS_DEPENDENCIES += bluez_utils
-+else
-+LIBEDBUS_CONF_OPT += --disable-ebluez
-+endif
+-	Atom processor support.
++	Defconfigs: mx53qsb, use 3.2.x for atngw100, use 3.3.x for
++	qemu configs.
+ 
+-	Toolchain: Add GCC 4.4.7, 4.6.3. 64bit fixes for external
++	Atom processor support. Microblaze architecture support (using
++	ext toolchain). Cleanup architecture names.
 +
-+ifeq ($(BR2_PACKAGE_LIBEDBUS_CONNMAN),y)
-+LIBEDBUS_CONF_OPT += --enable-econnman0_7x
-+LIBEDBUS_DEPENDENCIES += connman
-+else
-+LIBEDBUS_CONF_OPT += --disable-econnman0_7x
-+endif
++	Toolchain: Add GCC 4.4.7, 4.6.3, 4.7.0. uClibc 0.9.33.1,
++	default to uClibc 0.9.33.x, 64bit fixes for external
+ 	toolchains, linaro ext toolchains, new sourcery codebench ext
+ 	toolchains.
+ 
+-	Updated/fixed packages: alsa-lib, alsa-utils, atk, avahi,
+-	barebox, bluez_utils, can-utils, ccache, dhcp, dnsmasq,
+-	e2fsprogs, expat, feh, file, freetype, gamin, gmp, gpsd, grep,
+-	gstreamer, gst-plugins-{bad,base,good,ugly}, hdparm,
+-	imagemagick, kmod, libarchive, libcurl, libethumb, libffi,
+-	libfuse, libglib2, libnl, libsoup, libxml2, libxslt,
+-	linux-firmware, lite, lua, microperl, mpd, mpfr, mtd, nbd,
+-	network-manager, ntfs-3g, openssl, pixman, qt, radvd, sdl_net,
+-	smartmontools, squashfs3, squid, sysstat, tiff, usbutils,
+-	util-linux, vala, wipe, xdriver_xf86-video-fbdev, zlib,
+-
+-	New packages: glib-networking, lcdprog, minicom, parted,
+-	protobuf, zeromq
++	Updated/fixed packages: alsa-lib, alsa-utils, at, atk, avahi,
++	barebox, bind, bluez_utils, boost, can-utils, ccache,
++	coreutils, dhcp, directfb, dnsmasq, doom-wad, dosfstools,
++	e2fsprogs, expat, fakeroot, feh, ffmpeg, file, fis, freetype,
++	gamin, gawk, gdk-pixbuf, giblib, glib-networking, gmp, gnutls,
++	gpsd, grep, gstreamer, gst-plugins-{bad,base,good,ugly},
++	haserl, hdparm, imagemagick, iptable, iw, kmod, libarchive,
++	libatomic_ops, libconfig, libcurl, libedbus, libethumb,
++	libffi, libfuse, libglib2, libgtk2, libhid, libnl, libpng,
++	libsigc, libsoup, libupnp, liburcu, libxml2,
++	libxml-parser-perl, libxslt, linux-firmware, linux-fusion,
++	lite, ltrace, lttng-libust, lua, makedevs, microperl, mpd,
++	mpfr, mtd, mysql_client, nbd, neon, netsnmp, network-manager,
++	ntfs-3g, openssl, parted, pango, pcre, pixman, poco, psmisc,
++	pulseaudio, qt, radvd, rpm, samba, sam-ba, sawman, screen,
++	sdl_net, smartmontools, sqlite, squashfs3, squid, sshfs, sudo,
++	syslinux, sysstat, tftp-hpa, transmission, tiff, tinyhttpd,
++	udev, unionfs, usbutils, util-linux, vala, valgrind, vim,
++	vsftpd, wipe, xdriver_xf86-video-fbdev, xfsprogs, zlib,
 +
-+ifeq ($(BR2_PACKAGE_LIBEDBUS_NOTIFY),y)
-+LIBEDBUS_CONF_OPT += --enable-enotify --disable-edbus-notify-test
-+else
-+LIBEDBUS_CONF_OPT += --disable-enotify
-+endif
-+
- $(eval $(call AUTOTARGETS))
++	New packages: apr, fmtools, glib-networking, hiawatha,
++	lcdprog, libcap-ng, libdmtx, libtpl, minicom, parted,
++	polarssl, protobuf, socketcand, systemd, ushare, zeromq
+ 
+ 	Deprecated packages: ttcp
+ 
