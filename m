@@ -1,64 +1,44 @@
-From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Wed, 18 Apr 2012 17:11:28 +0200
-Subject: [Buildroot] Error configure apr-util
-Message-ID: <op.wcyu5ek6705kjs@rico>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 18 Apr 2012 17:39:06 +0200
+Subject: [Buildroot] [RFC v2 16/31] linux: define license
+In-Reply-To: <201204162338.49807.yann.morin.1998@free.fr>
+References: <1331153911-22277-1-git-send-email-luca@lucaceresoli.net>
+ <CAAXf6LX8JkXWzHAkYV8J74sYDhsFPRJ=OdYxiB4+6PxRswx3MA@mail.gmail.com>
+ <4F8C8CE2.3000702@lucaceresoli.net>
+ <201204162338.49807.yann.morin.1998@free.fr>
+Message-ID: <4F8EE01A.7010006@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi @ all
+Yann E. MORIN:
 
-I'm trying to add apr-util to buildroot (after successfully adding apr  
-yesterday)
+>> Another example: busybox.
+>>
+>> This is a messy as well. The LICENSE file carries this heading:
+>>>   --- A note on GPL versions
+>>>
+>>>   BusyBox is distributed under version 2 of the General Public License (included
+>>>   in its entirety, below).  Version 2 is the only version of this license which
+>>>   this version of BusyBox (or modified versions derived from this one) may be
+>>>   distributed under.
+>>>
+>>>   ------------------------------------------------------------------------
+>>>   		GNU GENERAL PUBLIC LICENSE
+>>>   		Version 2, June 1991
+>> That looks clear, but many source files seem to disagree:
+>> $ head coreutils/uname.c
+>>>    * Licensed under GPLv2 or later, see file LICENSE in this source tree.
+> What this means is that the work as a whole is available under the GPLv2,
+> but that if you use individual files out-side of busybox, you can use that
+> file under the license that is specified (IANAL!).
+>
+>  From the buildroot perspective, busybox is GPLv2.
 
-I have a problem while configure apr-util.
-First I build apr, that still works fine.
-But, when I try to link to the apr-1-config from apr when configure  
-apr-util, I've got this error:
+Is this your personal view or did you get such info from upstream?
+I would not code in Buildroot any interpretation (even if from a trustworthy
+expert) that does not come from upstream.
 
-/bin/sh:  
---with-apr=/home/bluefire/buildroot/output/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/bin/apr-1-config:  
-No such file or directory
-
-/bin/sh:  
---with-apr=/home/bluefire/buildroot/output/target/usr/bin/apr-1-config: No  
-such file or directory
-
-I don't understand why it can't see the file!
-
-Here the output from my apr build, that's the place I found the two pathes  
-to the apr-1-config:
-
-http://pastebin.com/04Zn12Tk
-
-and Here the output from my apr-util build (2 versions one linked to  
-/home/bluefire/buildroot/output/host/usr/arm-unknown-linux-gnueabi/sysroot/usr/bin/apr-1-config  
-and one linked to  
-/home/bluefire/buildroot/output/target/usr/bin/apr-1-config):
-
-http://pastebin.com/LnzuUWK8
-
-http://pastebin.com/7Ldz93VF
-
-I don't know what I'm doing wrong, because every webpage I found about  
-cross-compiling apr-util says, I have to link to this file!
-
-I'm happy about every hint you can get me!
-If you need it, here the link to my *.mk and Config.in file:
-
-http://pastebin.com/uukHBeq0
-
-If I try without define --with-apr it throws an error that I have to  
-define it.
-
-I need the apr-util package because subversion not only needs apr, it  
-needs apr and apr-util.
-And my goal is to add subversion in buildroot.
-
-so long
-Rico
-
--- 
-Erstellt mit Operas revolution?rem E-Mail-Modul: http://www.opera.com/mail/
+Luca
