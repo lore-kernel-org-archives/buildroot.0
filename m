@@ -1,63 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 Apr 2012 16:02:48 +0200
-Subject: [Buildroot] [git commit] Remove filename extension crap for OS
-	compatibility
-Message-ID: <20120419194555.3A06296B1E@busybox.osuosl.org>
+Date: Thu, 19 Apr 2012 16:05:53 +0200
+Subject: [Buildroot] [git commit] Rename Makefile.autotools.in to
+	pkg-autotargets.mk
+Message-ID: <20120419194555.5E02496B1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aba915fe2b189ca3efcb512f3d8cc0abd12fc1a3
+commit: http://git.buildroot.net/buildroot/commit/?id=6ff4c584c80b0fe3d7ebb866e388b53859fb2c4e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The only variable that is used is HOST_LOADLIBES, defined for the
-cygwin case in the kconfig build. Since we don't support cygwin,
-simply get rid of this.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |   28 ----------------------------
- 1 files changed, 0 insertions(+), 28 deletions(-)
+ package/Makefile.in                                |    2 +-
+ .../{Makefile.autotools.in => pkg-autotargets.mk}  |    0
+ 2 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 55d552b..bb3a49b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -195,34 +195,6 @@ unexport CONFIG_SITE
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c344c6b..20fac9a 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -299,6 +299,6 @@ else
+ SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+ endif
  
- GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- 
--#############################################################
--#
--# Setup the proper filename extensions for the host
--#
--##############################################################
--ifneq ($(findstring linux,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=
--HOST_LIBEXT:=.a
--HOST_SHREXT:=.so
--endif
--ifneq ($(findstring apple,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=
--HOST_LIBEXT:=.a
--HOST_SHREXT:=.dylib
--endif
--ifneq ($(findstring cygwin,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=.exe
--HOST_LIBEXT:=.lib
--HOST_SHREXT:=.dll
--HOST_LOADLIBES=-lcurses -lintl
--export HOST_LOADLIBES
--endif
--ifneq ($(findstring mingw,$(GNU_HOST_NAME)),)
--HOST_EXEEXT:=.exe
--HOST_LIBEXT:=.lib
--HOST_SHREXT:=.dll
--endif
--
- ##############################################################
- #
- # The list of stuff to build for the target toolchain
+-include package/Makefile.autotools.in
++include package/pkg-autotargets.mk
+ include package/Makefile.cmake.in
+ include package/Makefile.package.in
+diff --git a/package/Makefile.autotools.in b/package/pkg-autotargets.mk
+similarity index 100%
+rename from package/Makefile.autotools.in
+rename to package/pkg-autotargets.mk
