@@ -1,36 +1,92 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 19 Apr 2012 16:06:38 +0200
-Subject: [Buildroot] [git commit] Rename Makefile.cmake.in to
-	pkg-cmaketargets.mk
-Message-ID: <20120419194555.6D8AC96B1D@busybox.osuosl.org>
+Date: Thu, 19 Apr 2012 16:09:30 +0200
+Subject: [Buildroot] [git commit] Remove unused .fakeroot.* mechanism
+Message-ID: <20120419194555.ABB7D96B1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e834da05b0deb0bbd6804afe2aa0ae28a136204f
+commit: http://git.buildroot.net/buildroot/commit/?id=4ef7ec585c904f3c68af391e220534981ded2bab
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+There used to be a mechanism using which packages could leave a
+.fakeroot.<something> file which could contain commands to be executed
+within the fakeroot environment. Since this mechanism is no longer
+used by any package, remove it from the common infrastructure.
+
+The latest user was nfs-utils, which used this mechanism to do the
+"make install" as root, since doing otherwise was not supported. But
+since 16e7b8255c82815126a2c502c3787d442d254a86, nfs-utils has been
+upgraded and converted to the package infrastructure, and this hack is
+no longer necessary. Another past user was the ltp-testsuite package,
+for the same reason, and since
+a72a670489547a3ca645ff7c3a0d9c3fb66eab51, the fakeroot hack is no
+longer needed.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Makefile.in                                |    2 +-
- package/{Makefile.cmake.in => pkg-cmaketargets.mk} |    0
- 2 files changed, 1 insertions(+), 1 deletions(-)
+ Makefile              |    6 ------
+ fs/common.mk          |    2 --
+ fs/iso9660/iso9660.mk |    2 --
+ 3 files changed, 0 insertions(+), 10 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 20fac9a..ab5ea48 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -300,5 +300,5 @@ SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
- endif
+diff --git a/Makefile b/Makefile
+index bb3a49b..8458580 100644
+--- a/Makefile
++++ b/Makefile
+@@ -302,8 +302,6 @@ endif
  
- include package/pkg-autotargets.mk
--include package/Makefile.cmake.in
-+include package/pkg-cmaketargets.mk
- include package/Makefile.package.in
-diff --git a/package/Makefile.cmake.in b/package/pkg-cmaketargets.mk
-similarity index 100%
-rename from package/Makefile.cmake.in
-rename to package/pkg-cmaketargets.mk
+ include fs/common.mk
+ 
+-TARGETS+=erase-fakeroots
+-
+ TARGETS_CLEAN:=$(patsubst %,%-clean,$(TARGETS))
+ TARGETS_SOURCE:=$(patsubst %,%-source,$(TARGETS) $(BASE_TARGETS))
+ TARGETS_DIRCLEAN:=$(patsubst %,%-dirclean,$(TARGETS))
+@@ -392,7 +390,6 @@ $(BUILD_DIR)/.root:
+ 		if [ -d "$(TARGET_SKELETON)" ]; then \
+ 			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
+ 		fi; \
+-		touch $(STAGING_DIR)/.fakeroot.00000; \
+ 	fi
+ 	-find $(TARGET_DIR) -type d -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
+ 	-find $(TARGET_DIR) -type f \( -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
+@@ -400,9 +397,6 @@ $(BUILD_DIR)/.root:
+ 
+ $(TARGET_DIR): $(BUILD_DIR)/.root
+ 
+-erase-fakeroots:
+-	rm -f $(BUILD_DIR)/.fakeroot*
+-
+ target-finalize:
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+diff --git a/fs/common.mk b/fs/common.mk
+index d426f37..debf7db 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -45,8 +45,6 @@ $(BINARIES_DIR)/rootfs.$(1): $(ROOTFS_$(2)_DEPENDENCIES)
+ 	@$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+ 	$(foreach hook,$(ROOTFS_$(2)_PRE_GEN_HOOKS),$(call $(hook))$(sep))
+ 	rm -f $(FAKEROOT_SCRIPT)
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ ifneq ($(ROOTFS_DEVICE_TABLES),)
+ 	cat $(ROOTFS_DEVICE_TABLES) > $(FULL_DEVICE_TABLE)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index afebafc..f51b6ee 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -25,8 +25,6 @@ $(BINARIES_DIR)/rootfs.iso9660: host-cdrkit host-fakeroot linux rootfs-ext2 grub
+ 	cp $(BINARIES_DIR)/rootfs.ext2 $(ISO9660_TARGET_DIR)/initrd
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+-	touch $(BUILD_DIR)/.fakeroot.00000
+-	cat $(BUILD_DIR)/.fakeroot* > $(FAKEROOT_SCRIPT)
+ 	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ 	# Use fakeroot so mkisofs believes the previous fakery
+ 	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
