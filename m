@@ -1,103 +1,135 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 20 Apr 2012 00:01:03 +0200
-Subject: [Buildroot] [git commit] cmake: move creation of toolchain file to
-	package/pkg-cmaketargets.mk
-Message-ID: <20120419220218.2B43896B20@busybox.osuosl.org>
+Date: Fri, 20 Apr 2012 00:00:29 +0200
+Subject: [Buildroot] [git commit] Move the manual build infrastructure to
+	docs/manual/manual.mk
+Message-ID: <20120419220218.1C24996B20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=486253db302d4b277db1d2bff0e175e5950e0d1c
+commit: http://git.buildroot.net/buildroot/commit/?id=b7285d0058978fb88a94985dba150e849e4d9a69
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This also requires moving a few include directives below the "all:"
-target in the main Makefile, otherwise the new target to create the
-toolchain file in pkg-cmaketargets.mk gets used as the default make
-target instead of "all:".
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile                    |   22 ++--------------------
- package/pkg-cmaketargets.mk |   22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 20 deletions(-)
+ Makefile              |   49 +------------------------------------------------
+ docs/manual/manual.mk |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 48 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index bc6670b..eafb654 100644
+index 8458580..bc6670b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -256,9 +256,6 @@ HOSTCC  := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
- endif
+@@ -685,54 +685,7 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
  
--include toolchain/Makefile.in
--include package/Makefile.in
+-################################################################################
+-# GENDOC -- generates the make targets needed to build a specific type of
+-#           asciidoc documentation.
+-#
+-#  argument 1 is the name of the document and must be a subdirectory of docs/;
+-#             the top-level asciidoc file must have the same name
+-#  argument 2 is the type of document to generate (-f argument of a2x)
+-#  argument 3 is the document type as used in the make target
+-#  argument 4 is the output file extension for the document type
+-#  argument 5 is the human text for the document type
+-#  argument 6 (optional) are extra arguments for a2x
+-#
+-# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+-################################################################################
+-define GENDOC_INNER
+-$(1): $(1)-$(3)
+-.PHONY: $(1)-$(3)
+-$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
 -
- #############################################################
- #
- # You should probably leave this stuff alone unless you know
-@@ -268,6 +265,8 @@ include package/Makefile.in
- 
- all: world
- 
-+include toolchain/Makefile.in
-+include package/Makefile.in
- include support/dependencies/dependencies.mk
- 
- # We also need the various per-package makefiles, which also add
-@@ -340,23 +339,6 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- 
- world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
- 
--$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
--	mkdir -p $(@D)
--	@echo -en "\
--	set(CMAKE_SYSTEM_NAME Linux)\n\
--	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
--	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
--	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
--	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
--	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
--	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
--	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
--	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
--	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
--	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
--	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
--	" > $@
+-$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
+-	@echo "Generating $(5) $(1)..."
+-	$(Q)mkdir -p $$(@D)
+-	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
+-	  -D $$(@D) $$<
+-endef
 -
- .PHONY: all world dirs clean distclean source outputmakefile \
- 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
- 	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
-diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
-index 1cd65e4..371ab11 100644
---- a/package/pkg-cmaketargets.mk
-+++ b/package/pkg-cmaketargets.mk
-@@ -197,3 +197,25 @@ else
- $(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
- endif
- endef
+-################################################################################
+-# GENDOC -- generates the make targets needed to build asciidoc documentation.
+-#
+-#  argument 1 is the name of the document and must be a subdirectory of docs/;
+-#             the top-level asciidoc file must have the same name
+-#
+-# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+-################################################################################
+-define GENDOC
+-$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
+-$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
+-$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+-$(call GENDOC_INNER,$(1),text,txt,text,Text)
+-$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
+-clean: clean-$(1)
+-clean-$(1):
+-	$(Q)$(RM) -rf $(O)/docs/$(1)
+-.PHONY: $(1) clean-$(1)
+-endef
+-
+-MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
+-$(eval $(call GENDOC,manual))
++include docs/manual/manual.mk
+ 
+ .PHONY: $(noconfig_targets)
+ 
+diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
+new file mode 100644
+index 0000000..1eaf73a
+--- /dev/null
++++ b/docs/manual/manual.mk
+@@ -0,0 +1,48 @@
++################################################################################
++# GENDOC -- generates the make targets needed to build a specific type of
++#           asciidoc documentation.
++#
++#  argument 1 is the name of the document and must be a subdirectory of docs/;
++#             the top-level asciidoc file must have the same name
++#  argument 2 is the type of document to generate (-f argument of a2x)
++#  argument 3 is the document type as used in the make target
++#  argument 4 is the output file extension for the document type
++#  argument 5 is the human text for the document type
++#  argument 6 (optional) are extra arguments for a2x
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
++################################################################################
++define GENDOC_INNER
++$(1): $(1)-$(3)
++.PHONY: $(1)-$(3)
++$(1)-$(3): $$(O)/docs/$(1)/$(1).$(4)
++
++$$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt $$($(call UPPERCASE,$(1))_SOURCES)
++	@echo "Generating $(5) $(1)..."
++	$(Q)mkdir -p $$(@D)
++	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
++	  -D $$(@D) $$<
++endef
 +
 +################################################################################
-+# Generation of the CMake toolchain file
++# GENDOC -- generates the make targets needed to build asciidoc documentation.
++#
++#  argument 1 is the name of the document and must be a subdirectory of docs/;
++#             the top-level asciidoc file must have the same name
++#
++# The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
 +################################################################################
++define GENDOC
++$(call GENDOC_INNER,$(1),xhtml,html,html,HTML)
++$(call GENDOC_INNER,$(1),chunked,split-html,chunked,Split HTML)
++$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
++$(call GENDOC_INNER,$(1),text,txt,text,Text)
++$(call GENDOC_INNER,$(1),epub,epub,epub,EPUB)
++clean: clean-$(1)
++clean-$(1):
++	$(Q)$(RM) -rf $(O)/docs/$(1)
++.PHONY: $(1) clean-$(1)
++endef
 +
-+$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
-+	@mkdir -p $(@D)
-+	@echo -en "\
-+	set(CMAKE_SYSTEM_NAME Linux)\n\
-+	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
-+	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-+	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
-+	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
-+	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
-+	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
-+	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-+	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
-+	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
-+	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
-+	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-+	" > $@
-+
++MANUAL_SOURCES = $(wildcard docs/manual/*.txt) $(wildcard docs/images/*)
++$(eval $(call GENDOC,manual))
