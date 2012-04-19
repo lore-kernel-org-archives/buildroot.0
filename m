@@ -1,24 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Apr 2012 16:03:06 +0200
-Subject: [Buildroot] [PATCH 03/22] Remove filename extension crap for OS
-	compatibility
-In-Reply-To: <5cae11523664c212bbb8278fce0d36d79a0a0acc.1334673910.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 17 Apr 2012 16:45:15 +0200")
-References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
- <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
- <5cae11523664c212bbb8278fce0d36d79a0a0acc.1334673910.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehrjn7j9.fsf@macbook.be.48ers.dk>
+Date: Thu, 19 Apr 2012 15:49:03 +0200
+Subject: [Buildroot] [PATCH 3/3] Fix qt samples dependency on QtGUI
+In-Reply-To: <0e3d23b0b754d6c84b0e3a15653012c0b2d9d5bf.1334748542.git.maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Wed, 18 Apr 2012 13:29:23 +0200")
+References: <cover.1334748542.git.maxime.ripard@free-electrons.com>
+ <cover.1334748542.git.maxime.ripard@free-electrons.com>
+ <0e3d23b0b754d6c84b0e3a15653012c0b2d9d5bf.1334748542.git.maxime.ripard@free-electrons.com>
+Message-ID: <87mx67n86o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
- Thomas> The only variable that is used is HOST_LOADLIBES, defined for the
- Thomas> cygwin case in the kconfig build. Since we don't support cygwin,
- Thomas> simply get rid of this.
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 
 Committed, thanks.
 
