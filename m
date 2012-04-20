@@ -1,7 +1,7 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 20 Apr 2012 09:17:11 +0200
-Subject: [Buildroot] [PATCH] mpg123: bump to 1.13.8
-Message-ID: <1334906231-11876-1-git-send-email-yegorslists@googlemail.com>
+Date: Fri, 20 Apr 2012 09:25:36 +0200
+Subject: [Buildroot] [PATCH] kmod: bump to 8
+Message-ID: <1334906736-22592-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +10,20 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes build errors for ARM arch using Linaro toolchain.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/multimedia/mpg123/mpg123.mk |    2 +-
+ package/kmod/kmod.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/mpg123/mpg123.mk b/package/multimedia/mpg123/mpg123.mk
-index 8ea05a8..65523f3 100644
---- a/package/multimedia/mpg123/mpg123.mk
-+++ b/package/multimedia/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--MPG123_VERSION = 1.13.4
-+MPG123_VERSION = 1.13.8
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/mpg123
- MPG123_CONF_OPT = --with-optimization=0 --disable-lfs-alias
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 55cbdbb..1382901 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -1,4 +1,4 @@
+-KMOD_VERSION = 7
++KMOD_VERSION = 8
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
+ KMOD_INSTALL_STAGING = YES
 -- 
 1.7.7
