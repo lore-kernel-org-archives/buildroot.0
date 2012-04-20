@@ -1,29 +1,34 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 20 Apr 2012 09:25:36 +0200
-Subject: [Buildroot] [PATCH] kmod: bump to 8
-Message-ID: <1334906736-22592-1-git-send-email-yegorslists@googlemail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Fri, 20 Apr 2012 10:05:15 +0200
+Subject: [Buildroot] Samba breakage on arm
+Message-ID: <4F9118BB.2010300@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/kmod/kmod.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Just for the heads up, as I am not sure we can do anything about it or I
+don't know a proper way to fix this.
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 55cbdbb..1382901 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -1,4 +1,4 @@
--KMOD_VERSION = 7
-+KMOD_VERSION = 8
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
- KMOD_INSTALL_STAGING = YES
+Building samba with any CodeSourcery/Codebench toolchains except the
+2011.09 will trigger either a compiler segfault or an internal compiler
+error.
+
+This is for every case. Just enabling samba will break.
+
+This means that in the latest release, you cannot build samba at least
+with these toolchains.
+
+I've not tested with ct-ng or internal toolchains however, so maybe it's
+not that bad...
+
+Thanks to (another) Maxime for noticing it :)
+
 -- 
-1.7.7
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
