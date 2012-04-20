@@ -1,55 +1,59 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Fri, 20 Apr 2012 16:34:46 +0200
-Subject: [Buildroot] [PATCH] kexec: update to kexec-tools 2.0.3
-Message-ID: <1334932486-6346-1-git-send-email-s.neumann@raumfeld.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 20 Apr 2012 16:36:18 +0200
+Subject: [Buildroot] [git commit] website: announce autobuild.buildroot.org
+Message-ID: <20120420143742.64B9396B2F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop kexec-fix-linker-options.patch as this has been fixed upstream.
+commit: http://git.buildroot.net/buildroot/commit/?id=c5854d2e6f947761302f91de6bcded54fe4f185e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+And add a link to it in the menu.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/kexec/kexec-fix-linker-options.patch |   15 ---------------
- package/kexec/kexec.mk                       |    2 +-
- 2 files changed, 1 insertion(+), 16 deletions(-)
- delete mode 100644 package/kexec/kexec-fix-linker-options.patch
+ docs/header.html |    1 +
+ docs/news.html   |   15 +++++++++++++++
+ 2 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/kexec/kexec-fix-linker-options.patch b/package/kexec/kexec-fix-linker-options.patch
-deleted file mode 100644
-index 7bd5f1d..0000000
---- a/package/kexec/kexec-fix-linker-options.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Fix compilation with gcc 4.6 by correcting the way that linker options
--are passed to gcc.
--
--Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
----- kexec-2.0.2/purgatory/Makefile.orig	2011-09-26 14:16:44.256595912 +0200
--+++ kexec-2.0.2/purgatory/Makefile	2011-09-26 14:17:01.606621357 +0200
--@@ -56,7 +56,7 @@
-- 			-I$(srcdir)/include \
-- 			-I$(shell $(CC) -print-file-name=include)
-- $(PURGATORY): LDFLAGS=$($(ARCH)_PURGATORY_EXTRA_CFLAGS)\
---			--no-undefined -nostartfiles -nostdlib -nodefaultlibs \
--+			-Wl,-no-undefined -nostartfiles -nostdlib -nodefaultlibs \
-- 			-e purgatory_start -r
-- 
-- $(PURGATORY): $(PURGATORY_OBJS)
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index ed01494..ef99dfb 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -3,7 +3,7 @@
- # kexec
- #
- #############################################################
--KEXEC_VERSION = 2.0.2
-+KEXEC_VERSION = 2.0.3
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.bz2
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+diff --git a/docs/header.html b/docs/header.html
+index c9dcf31..a20f235 100644
+--- a/docs/header.html
++++ b/docs/header.html
+@@ -54,6 +54,7 @@
+     <br><a href="https://bugs.uclibc.org/">Bug Tracking</a>
+     <br><a href="/docs.html">Documentation</a>
+     <br><a href="/lists.html">Mailing Lists</a>
++    <br><a href="http://autobuild.buildroot.org">Autobuilder</a>
  
--- 
-1.7.9.5
+     <p><b>Related Sites</b>
+     <br><a href="http://busybox.net/">BusyBox</a>
+diff --git a/docs/news.html b/docs/news.html
+index 26a8ccb..151ad9b 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,21 @@
+ <p>
+ 
+ <ul>
++  <li><b>20 April 2012 -- Autobuilder Results Online</b>
++
++    <p>The status of the autobuilders, which do repeated
++    <code>randpackageconfig</code> builds for continuous integration
++    testing, is now online at <a
++    href='http://autobuild.buildroot.org'>autobuild.buildroot.org</a>. The
++    code behind it can be found in <a
++    href='http://git.buildroot.net/buildroot-test/'>git</a>.</p>
++
++    <p>Thanks to Thomas Pettazoni for running the web interface, and
++    to <a href='http://gcc.gnu.org/wiki/CompileFarm'>The GCC Compile
++    Farm</a> and <a href='http://free-electrons.com/'>Free
++    Electrons</a> for hosting builders. Thomas also sends out a daily
++    summary of the build status to the mailing list.</p>
++
+   <li><b>29 February 2012 -- 2012.02 released</b>
+ 
+     <p>The stable 2012.02 release is out - Thanks to everyone
