@@ -1,37 +1,31 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 20 Apr 2012 07:22:28 -0300
-Subject: [Buildroot] Samba breakage on arm
-In-Reply-To: <87r4viiutw.fsf@macbook.be.48ers.dk>
-References: <4F9118BB.2010300@free-electrons.com>
- <87r4viiutw.fsf@macbook.be.48ers.dk>
-Message-ID: <ca7f66dfcd487e0887c409c3ccb7e443@zacarias.com.ar>
+Date: Fri, 20 Apr 2012 07:24:43 -0300
+Subject: [Buildroot] [PATCH] taglib: bump to version 1.7.1
+Message-ID: <1334917483-16298-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-04-20 07:03, Peter Korsgaard wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/multimedia/taglib/taglib.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-> It built with the internal toolchain on gcc10 recently without 
-> problems:
->
-> 
-> http://autobuild.buildroot.org/results/ce801288dbf24fc394116636d0562effc6b4eace/defconfig
->
-> That's pretty much the problem with these binary toolchains. There's 
-> not
-> much we can do about this compiler bug (besides removing the older
-> versions)
-
-I've gave it some testing runs here on real targets.
-As Peter did, i've tested with an internal toolchain since there's not 
-much we can do to fix internal compiler errors with external ones (other 
-than doing ugly kludges in the packages themselves).
-The only crazy option to fix this would be to roll back to samba 3.5.12 
-and just apply the security patch, but again, 3.5.13 fixes various 
-crashing bugs over 3.5.12 
-(http://www.samba.org/samba/history/security.html for patches/details).
-I wouldn't mainstream that though, just a possible local workaround if 
-someone is interested.
-Regards.
+diff --git a/package/multimedia/taglib/taglib.mk b/package/multimedia/taglib/taglib.mk
+index ce6adeb..da2db0c 100644
+--- a/package/multimedia/taglib/taglib.mk
++++ b/package/multimedia/taglib/taglib.mk
+@@ -3,7 +3,8 @@
+ # taglib
+ #
+ #############################################################
+-TAGLIB_VERSION = 1.7
++
++TAGLIB_VERSION = 1.7.1
+ TAGLIB_SOURCE = taglib-$(TAGLIB_VERSION).tar.gz
+ TAGLIB_SITE = http://developer.kde.org/~wheeler/files/src
+ TAGLIB_INSTALL_STAGING = YES
+-- 
+1.7.3.4
