@@ -1,34 +1,42 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri, 20 Apr 2012 10:05:15 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Apr 2012 12:03:23 +0200
 Subject: [Buildroot] Samba breakage on arm
-Message-ID: <4F9118BB.2010300@free-electrons.com>
+In-Reply-To: <4F9118BB.2010300@free-electrons.com> (Maxime Ripard's message of
+ "Fri, 20 Apr 2012 10:05:15 +0200")
+References: <4F9118BB.2010300@free-electrons.com>
+Message-ID: <87r4viiutw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Just for the heads up, as I am not sure we can do anything about it or I
-don't know a proper way to fix this.
+ Maxime> Hi,
 
-Building samba with any CodeSourcery/Codebench toolchains except the
-2011.09 will trigger either a compiler segfault or an internal compiler
-error.
+ Maxime> Just for the heads up, as I am not sure we can do anything
+ Maxime> about it or I don't know a proper way to fix this.
 
-This is for every case. Just enabling samba will break.
+ Maxime> Building samba with any CodeSourcery/Codebench toolchains except the
+ Maxime> 2011.09 will trigger either a compiler segfault or an internal compiler
+ Maxime> error.
 
-This means that in the latest release, you cannot build samba at least
-with these toolchains.
+ Maxime> This is for every case. Just enabling samba will break.
 
-I've not tested with ct-ng or internal toolchains however, so maybe it's
-not that bad...
+ Maxime> This means that in the latest release, you cannot build samba at least
+ Maxime> with these toolchains.
 
-Thanks to (another) Maxime for noticing it :)
+ Maxime> I've not tested with ct-ng or internal toolchains however, so
+ Maxime> maybe it's not that bad...
+
+It built with the internal toolchain on gcc10 recently without problems:
+
+http://autobuild.buildroot.org/results/ce801288dbf24fc394116636d0562effc6b4eace/defconfig
+
+That's pretty much the problem with these binary toolchains. There's not
+much we can do about this compiler bug (besides removing the older
+versions)
 
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
