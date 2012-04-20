@@ -1,29 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 20 Apr 2012 14:13:55 +0200
-Subject: [Buildroot] [git commit] kmod: bump to 8
-Message-ID: <20120420134204.B3AFB96B2F@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Fri, 20 Apr 2012 16:00:35 +0200
+Subject: [Buildroot] [PATCH] Fix systemd failure with media devices
+In-Reply-To: <874nsfjw8p.fsf@macbook.be.48ers.dk>
+References: <874nsfjw8p.fsf@macbook.be.48ers.dk>
+Message-ID: <1334930435-27331-1-git-send-email-maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b2154ab2b8e8a2b6fe77e2b700b5371770def9a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 ---
- package/kmod/kmod.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ 0 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 fs/skeleton/media/.empty
 
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 55cbdbb..1382901 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -1,4 +1,4 @@
--KMOD_VERSION = 7
-+KMOD_VERSION = 8
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
- KMOD_INSTALL_STAGING = YES
+diff --git a/fs/skeleton/media/.empty b/fs/skeleton/media/.empty
+new file mode 100644
+index 0000000..e69de29
+-- 
+1.7.5.4
