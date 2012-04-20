@@ -1,21 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 20 Apr 2012 17:03:17 +0200
-Subject: [Buildroot] [git commit] Fix systemd failure with media devices
-Message-ID: <20120420150327.9D00896B31@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 20 Apr 2012 17:03:29 +0200
+Subject: [Buildroot] [PATCH] Fix systemd failure with media devices
+In-Reply-To: <1334930435-27331-1-git-send-email-maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Fri, 20 Apr 2012 16:00:35 +0200")
+References: <874nsfjw8p.fsf@macbook.be.48ers.dk>
+ <1334930435-27331-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <87aa26igxq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ba4917f593e17adde3e32e3395439e38c365e034
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- 0 files changed, 0 insertions(+), 0 deletions(-)
+ Maxime> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
 
-diff --git a/fs/skeleton/media/.empty b/fs/skeleton/media/.empty
-new file mode 100644
-index 0000000..e69de29
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
