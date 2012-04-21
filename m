@@ -1,34 +1,20 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Apr 2012 15:54:57 +0200
-Subject: [Buildroot] Samba breakage on arm
-In-Reply-To: <4F9118BB.2010300@free-electrons.com>
-References: <4F9118BB.2010300@free-electrons.com>
-Message-ID: <201204211554.57989.arnout@mind.be>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <elezegarcia@gmail.com>
+Date: Sat, 21 Apr 2012 16:48:38 -0300
+Subject: [Buildroot] where to commit a kernel modification?
+In-Reply-To: <201204211539.42000.arnout@mind.be>
+References: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
+ <201204211539.42000.arnout@mind.be>
+Message-ID: <CALF0-+WVB6xQDb=hAEij=ocQ0imfw-ZssxHbsJcXBQ53p516sQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Friday 20 April 2012 10:05:15 Maxime Ripard wrote:
-> Building samba with any CodeSourcery/Codebench toolchains except the
-> 2011.09 will trigger either a compiler segfault or an internal compiler
-> error.
+On Sat, Apr 21, 2012 at 10:39 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> as not registered when module is loaded. Where should I commit this?
 
- Seems to work for me, with Sourcery G++ 2011.03 on ARM...
+Write and Submit your first Linux kernel Patch:
+http://www.youtube.com/watch?v=LLBrBBImJt4
 
- Which config did you have that doesn't work?
-
- BTW there is something we can do about it: disallow samba if a
-non-working external toolchain is selected...
-
- Regards,
- Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+this should get you started ;)
