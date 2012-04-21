@@ -1,30 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 21 Apr 2012 13:18:44 +0200
-Subject: [Buildroot] [git commit] docs/header.html: Add link to patchwork
-Message-ID: <20120421111926.3558596B3A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Apr 2012 14:58:06 +0200
+Subject: [Buildroot] [PATCH] Add libapr-package
+In-Reply-To: <1334673316-28944-1-git-send-email-bachmann@tofwerk.com>
+References: <1334673316-28944-1-git-send-email-bachmann@tofwerk.com>
+Message-ID: <201204211458.06684.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d629c405f601bdb9aa7f939f274a52a012e6561
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tuesday 17 April 2012 16:35:15 Rico Bachmann wrote:
+> 
+> Add libapr-package
+> rename from libapr to apr
+> rename all values and arguments from libapr into apr
+> change package/Config.in from libapr to apr
+> add the other small changes from mailinglist
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+ Hoi Rico,
+
+ Thanks for your persistence in correcting your patch until it was perfect!
+
+ One last suggestion for next time you make a patch: you can add the log
+of the history of your patch directly in the commit message, below a line
+with three dashes, like this:
+
+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
 ---
- docs/header.html |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+v3: Rename from libapr to apr
+v2: ...
 
-diff --git a/docs/header.html b/docs/header.html
-index a20f235..ce5d555 100644
---- a/docs/header.html
-+++ b/docs/header.html
-@@ -55,6 +55,7 @@
-     <br><a href="/docs.html">Documentation</a>
-     <br><a href="/lists.html">Mailing Lists</a>
-     <br><a href="http://autobuild.buildroot.org">Autobuilder</a>
-+    <br><a href="http://patchwork.buildroot.org">Patchwork</a>
- 
-     <p><b>Related Sites</b>
-     <br><a href="http://busybox.net/">BusyBox</a>
+
+ When the patch is applied to git, the part below the --- will be
+removed, so you can also add other random comments in there.
+
+ And also, you can add the version number when sending the patch
+like this:
+
+git send-email --subject-prefix='PATCH v2' ...
+
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
