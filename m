@@ -1,35 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Apr 2012 15:39:41 +0200
-Subject: [Buildroot] where to commit a kernel modification?
-In-Reply-To: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
-References: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
-Message-ID: <201204211539.42000.arnout@mind.be>
+Date: Sat, 21 Apr 2012 15:54:57 +0200
+Subject: [Buildroot] Samba breakage on arm
+In-Reply-To: <4F9118BB.2010300@free-electrons.com>
+References: <4F9118BB.2010300@free-electrons.com>
+Message-ID: <201204211554.57989.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 18 April 2012 23:16:00 MERCADIER Johann wrote:
->   I would like to brings some modification to the kernel necessary to
-> enable headset o/p to produce sound. Without it the twl6040 is not enabled
-> as not registered when module is loaded. Where should I commit this?
+On Friday 20 April 2012 10:05:15 Maxime Ripard wrote:
+> Building samba with any CodeSourcery/Codebench toolchains except the
+> 2011.09 will trigger either a compiler segfault or an internal compiler
+> error.
 
- Obviously not here :-)
+ Seems to work for me, with Sourcery G++ 2011.03 on ARM...
 
- Where to submit it to depends on where you're making changes.  There
-is a script in the kernel source to help you:
+ Which config did you have that doesn't work?
 
-./scripts/get_maintainer.pl <patchfile>
-
-or
-
-./scripts/get_maintainer.pl -f <sourcefile>
-
-
- Look carefully at the output and consider for each e-mail address if
-it is really appropriate.  Common sense is important here.
-
+ BTW there is something we can do about it: disallow samba if a
+non-working external toolchain is selected...
 
  Regards,
  Arnout
