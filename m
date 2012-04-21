@@ -1,49 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Apr 2012 14:58:06 +0200
-Subject: [Buildroot] [PATCH] Add libapr-package
-In-Reply-To: <1334673316-28944-1-git-send-email-bachmann@tofwerk.com>
-References: <1334673316-28944-1-git-send-email-bachmann@tofwerk.com>
-Message-ID: <201204211458.06684.arnout@mind.be>
+Date: Sat, 21 Apr 2012 15:05:50 +0200
+Subject: [Buildroot] [PATCH 01/22] Remove the DATE variable
+In-Reply-To: <3a993084fda775e7a2c37371225c124fd620a244.1334673910.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
+ <3a993084fda775e7a2c37371225c124fd620a244.1334673910.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <201204211505.51141.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 17 April 2012 16:35:15 Rico Bachmann wrote:
+On Tuesday 17 April 2012 16:45:13 Thomas Petazzoni wrote:
+> This variable was only used by uboot.mk to add a #define DATE into the
+> U-Boot .h configuration file. But such a definition does not seem to
+> be used by the mainline U-Boot, so there's no reason to keep it.
 > 
-> Add libapr-package
-> rename from libapr to apr
-> rename all values and arguments from libapr into apr
-> change package/Config.in from libapr to apr
-> add the other small changes from mailinglist
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- Hoi Rico,
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Thanks for your persistence in correcting your patch until it was perfect!
-
- One last suggestion for next time you make a patch: you can add the log
-of the history of your patch directly in the commit message, below a line
-with three dashes, like this:
-
-Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
----
-v3: Rename from libapr to apr
-v2: ...
-
-
- When the patch is applied to git, the part below the --- will be
-removed, so you can also add other random comments in there.
-
- And also, you can add the version number when sending the patch
-like this:
-
-git send-email --subject-prefix='PATCH v2' ...
-
+ This patch could be considered risky, because the DATE thing may be used
+by some custom U-Boot source.  But then, the only way to find out if it is
+is to commit it and see if anyone complains :-)
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
