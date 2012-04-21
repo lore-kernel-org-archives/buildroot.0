@@ -1,52 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Apr 2012 15:34:23 +0200
-Subject: [Buildroot] libusb-0.1.12
-In-Reply-To: <4417289.Oi5fZHR2oB@desktop-reg>
-References: <op.wcyu5ek6705kjs@rico> <op.wc0jpyoq705kjs@rico>
- <4417289.Oi5fZHR2oB@desktop-reg>
-Message-ID: <201204211534.24156.arnout@mind.be>
+Date: Sat, 21 Apr 2012 15:39:41 +0200
+Subject: [Buildroot] where to commit a kernel modification?
+In-Reply-To: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
+References: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
+Message-ID: <201204211539.42000.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 19 April 2012 19:13:48 Ron Eggler wrote:
-> Hi There,
-> 
-> I'm trying to assemble and compile a buildroot environment with libusb-0.1.12.
-> On the build root server I find this file:
-> http://sources.buildroot.net/libusb_0.1.12.orig.tar.gz
-> but if I insert 0.1.12 and replace tar.bz2 with tar.gz in my 
-> package/libusb/libusb.mk, on compilation the script keeps trying to download
-> http://sources.buildroot.net//libusb-0.1.12.orig.tar.gz
+On Wednesday 18 April 2012 23:16:00 MERCADIER Johann wrote:
+>   I would like to brings some modification to the kernel necessary to
+> enable headset o/p to produce sound. Without it the twl6040 is not enabled
+> as not registered when module is loaded. Where should I commit this?
 
- You have to set the LIBUSB_SOURCE variable to libusb_0.1.12.orig.tar.gz 
-(with underscore instead of dash).
+ Obviously not here :-)
 
- You'll probably also want to add the line
+ Where to submit it to depends on where you're making changes.  There
+is a script in the kernel source to help you:
 
-LIBUSB_PATCH = libusb_0.1.12-10.diff.gz
+./scripts/get_maintainer.pl <patchfile>
+
+or
+
+./scripts/get_maintainer.pl -f <sourcefile>
 
 
- We originally pulled libusb from Debian; in Debian, the tar files are
-always named <pkg>_<version>.orig.tar.gz, and they normally have an
-accompanying <pkg>_<version>-<debversion>.diff.gz file containing the
-Debian fixes.
+ Look carefully at the output and consider for each e-mail address if
+it is really appropriate.  Common sense is important here.
 
 
  Regards,
  Arnout
-
-
-> and apparently fails. I seem not to be able to find where that double slash 
-> behind the domain is coming from.
-> I'm a newbie with buildrootr and this really is my first time trying it out. 
-> Some assistance would be appreciated.
-> 
-> Thank you very much!
-> Ron
-> 
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
