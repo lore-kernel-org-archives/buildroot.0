@@ -1,35 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Apr 2012 17:32:26 +0200
-Subject: [Buildroot] [PATCH 01/22] Remove the DATE variable
-In-Reply-To: <871ungi39o.fsf@macbook.be.48ers.dk>
-References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
- <3a993084fda775e7a2c37371225c124fd620a244.1334673910.git.thomas.petazzoni@free-electrons.com>
- <201204211505.51141.arnout@mind.be>
- <871ungi39o.fsf@macbook.be.48ers.dk>
-Message-ID: <20120422173226.590ca81a@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Apr 2012 16:40:14 +0000 (UTC)
+Subject: [Buildroot] [Bug 4808] ccache may build against wrong zlib
+In-Reply-To: <bug-4808-163@https.bugs.busybox.net/>
+References: <bug-4808-163@https.bugs.busybox.net/>
+Message-ID: <20120422164014.7A6C596B46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 22 Apr 2012 10:23:15 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+https://bugs.busybox.net/show_bug.cgi?id=4808
 
-> I know we have been (are?) using it at work to add some info about the
-> build date and name some files with the date.
-> 
-> Chances are others might have been doing the same, so I'm hessitating
-> about removing it (which is why I didn't commit it right away). It
-> doesn't really cost us much to keep it (single line).
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Well, it's just that I don't very much like to have unused variables
-here and there. One way to make it useful is for example to store the
-build date into some file in the target filesystem.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-Thomas
+--- Comment #9 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-04-22 16:40:13 UTC ---
+This has been fixed by 7ea11dafff37c5403432f691cf3c46d1d5566e46.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
