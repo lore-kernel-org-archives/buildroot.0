@@ -1,62 +1,46 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 22 Apr 2012 20:36:28 +0200
-Subject: [Buildroot] [git commit] libmpeg2: fix ppc altivec.h detection
-Message-ID: <20120422183702.AF4BA96B8C@busybox.osuosl.org>
+Date: Sun, 22 Apr 2012 20:54:19 +0200
+Subject: [Buildroot] [git commit] kexec: fix build without largefile support
+Message-ID: <20120422185443.0B71796B89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=19a19a39971d8c0a436693bf056a84957da3d449
+commit: http://git.buildroot.net/buildroot/commit/?id=56bf500c8b0163510e156fbe2ce5e954176481bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Patch from Gentoo.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../libmpeg2/libmpeg2-0.5.1-altivec.patch          |   23 ++++++++++++++++++++
- package/multimedia/libmpeg2/libmpeg2.mk            |    1 +
- 2 files changed, 24 insertions(+), 0 deletions(-)
+ package/kexec/kexec-largefile.patch |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/libmpeg2/libmpeg2-0.5.1-altivec.patch b/package/multimedia/libmpeg2/libmpeg2-0.5.1-altivec.patch
+diff --git a/package/kexec/kexec-largefile.patch b/package/kexec/kexec-largefile.patch
 new file mode 100644
-index 0000000..4928a62
+index 0000000..74dd8e2
 --- /dev/null
-+++ b/package/multimedia/libmpeg2/libmpeg2-0.5.1-altivec.patch
-@@ -0,0 +1,23 @@
-+[PATCH] fix altivec.h detection
++++ b/package/kexec/kexec-largefile.patch
+@@ -0,0 +1,22 @@
++[PATCH] vmcore-dmesg: don't enforce largefile handling
 +
-+Patch from Gentoo:
++Breaks build on !largefile toolchains.
 +
-+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-libs/libmpeg2/files/libmpeg2-0.5.1-altivec.patch?revision=1.1&view=markup
++Instead simply use whatever mode is selected by toolchain / CFLAGS.
 +
 +Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+--- a/configure.ac.bak	2010-05-25 17:12:14.756245990 +0000
-++++ b/configure.ac	2010-05-25 17:11:51.629581723 +0000
-+@@ -79,11 +79,10 @@
-+ 		 CFLAGS="$OPT_CFLAGS $TRY_CFLAGS $CFLAGS"
-+ 		 AC_MSG_CHECKING([if <altivec.h> is needed])
-+ 		 AC_TRY_COMPILE([],
-+-		    [typedef vector int t;
-+-		     vec_ld(0, (unsigned char *)0);],
-++		    [vector int t; t = vec_add(t,t);],
-+ 		    [have_altivec=yes; AC_MSG_RESULT(no)],
-+ 		    [AC_TRY_COMPILE([#include <altivec.h>],
-+-			[typedef vector int t; vec_ld(0, (unsigned char *)0);],
-++			[vector int t; t = vec_add(t,t);],
-+ 			[AC_DEFINE([HAVE_ALTIVEC_H],,
-+ 			    [Define to 1 if you have the <altivec.h> header.])
-+ 			 have_altivec=yes; AC_MSG_RESULT(yes)],
-diff --git a/package/multimedia/libmpeg2/libmpeg2.mk b/package/multimedia/libmpeg2/libmpeg2.mk
-index 8713c87..5290af1 100644
---- a/package/multimedia/libmpeg2/libmpeg2.mk
-+++ b/package/multimedia/libmpeg2/libmpeg2.mk
-@@ -7,6 +7,7 @@ LIBMPEG2_VERSION = 0.5.1
- LIBMPEG2_SOURCE = libmpeg2-$(LIBMPEG2_VERSION).tar.gz
- LIBMPEG2_SITE = http://libmpeg2.sourceforge.net/files/
- LIBMPEG2_INSTALL_STAGING = YES
-+LIBMPEG2_AUTORECONF = YES
- LIBMPEG2_CONF_OPT = --without-x --disable-directx
- 
- ifeq ($(BR2_PACKAGE_SDL),y)
++---
++ vmcore-dmesg/vmcore-dmesg.c |    2 --
++ 1 file changed, 2 deletions(-)
++
++Index: kexec-tools-2.0.3/vmcore-dmesg/vmcore-dmesg.c
++===================================================================
++--- kexec-tools-2.0.3.orig/vmcore-dmesg/vmcore-dmesg.c
+++++ kexec-tools-2.0.3/vmcore-dmesg/vmcore-dmesg.c
++@@ -1,6 +1,4 @@
++ #define _XOPEN_SOURCE 600
++-#define _LARGEFILE_SOURCE 1
++-#define _FILE_OFFSET_BITS 64
++ #include <endian.h>
++ #include <byteswap.h>
++ #include <stdio.h>
