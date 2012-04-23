@@ -1,56 +1,47 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 23 Apr 2012 14:33:35 +0200
-Subject: [Buildroot] Buildroot SKIPS PATCHES ???
-In-Reply-To: <4F9341C9.8000508@petroprogram.com>
-References: <4F9341C9.8000508@petroprogram.com>
-Message-ID: <CAAXf6LX+De-fWuqb-nZBGyMkoqBdeqYz+qp=hDkUybCE_a-G4Q@mail.gmail.com>
+Date: Mon, 23 Apr 2012 14:46:22 +0200
+Subject: [Buildroot] [git commit] docs/header.html: Add link to patchwork
+In-Reply-To: <20120421111926.3558596B3A@busybox.osuosl.org>
+References: <20120421111926.3558596B3A@busybox.osuosl.org>
+Message-ID: <CAAXf6LU6_NP78OFdjqBqgh-_FqOcHzk14SiOa3Q7G3a9veMHVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+Hi,
 
-On Sun, Apr 22, 2012 at 1:24 AM, Stefan Fr?berg
-<stefan.froberg@petroprogram.com> wrote:
-> Good day
+On Sat, Apr 21, 2012 at 1:18 PM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=3d629c405f601bdb9aa7f939f274a52a012e6561
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+> ?docs/header.html | ? ?1 +
+> ?1 files changed, 1 insertions(+), 0 deletions(-)
 >
-> I have tried adding two new packages to my local copy of buildroot,
-> first one is xplc-package (version 0.3.13) and the second one is
-> wvstreams (version 4.2.2) which needs xplc.
->
-> The first one, xplc, builds nicely.
->
->
-> But for some reason, for wvstreams package the Buildroot does not apply
-> the patches at all.
-> Buildroot just skips all the nine wvstreams patch-files and continues
-> configuring ...
-> :-(
->
-> I have included all files (Config.in, .mk-files and patches) for both
-> packages here.
-> I would be very gratefull if somebody could help to solve this mystery.
->
-> Please contact me at:
-> stefan.froberg at petroprogram.com
->
+> diff --git a/docs/header.html b/docs/header.html
+> index a20f235..ce5d555 100644
+> --- a/docs/header.html
+> +++ b/docs/header.html
+> @@ -55,6 +55,7 @@
+> ? ? <br><a href="/docs.html">Documentation</a>
+> ? ? <br><a href="/lists.html">Mailing Lists</a>
+> ? ? <br><a href="http://autobuild.buildroot.org">Autobuilder</a>
+> + ? ?<br><a href="http://patchwork.buildroot.org">Patchwork</a>
 
-Have you solved this problem already?
+I did not see any other mention about this, and haven't been active on
+IRC for a while, so I was happily surprised to see this link (actually
+it was Yegor's resend of some patches that triggered me, I hadn't seen
+this mail yet).
 
-I have copied your wvstreams .mk file and one of the patches, and did
-not have problems applying the patches.
-Which version of buildroot are you using?
-Have you tried deleting the entire output/build/wvstreams* directory
-(thus removing the stamp files) ?
-What is the output of the wvstreams build? It should print a message
-about each phase (download, extract, patch, configure, ...).
+What is the plan exactly?
+Everyone can change the state of their own patches, e.g. to indicate
+that they intend to send a new version based on feedback. But what
+about delegating? When is it done? Will Peter delegate those patches
+that he intends to accept to himself, or should developers that
+consider their patches as 'final' delegate to Peter ?
 
-Do you have other patches or directories inside package/wvstreams ?
-The current rules for patching are somewhat complicated and can depend
-on such other files. The rules are in package/Makefile.package.in.
-
-Best regards,
+Thanks,
 Thomas
