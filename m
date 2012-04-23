@@ -1,52 +1,27 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 23 Apr 2012 16:24:20 +0000 (UTC)
-Subject: [Buildroot] [OT] How to get rootfs.cpio combined with a kernel?
-Message-ID: <jn3vnk$go5$1@dough.gmane.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 23 Apr 2012 23:45:07 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.05/static-libs
+Message-ID: <cover.1335217505.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've been trying to figure out how to combined the rootfs.cpio created
-by Buildroot with an externally built kernel, and I'm a little
-stumped.  The "standard" way to do it is to set
-CONFIG_INITRAMFS_SOURCE to point to the cpio archive and have the
-kernel build pull in the rootfs cpio archive when the kernel is built.
+The following changes since commit f00424cff00bdabd54350eb82deb908676e86a1d:
 
-That works, but not a very good solution when it comes to
-configuration management for a shipping project.  I need to be able to
-build and manage/version the kernel and rootfs as separate objects --
-then combine the kernel and rootfs together into a single uImage file.
+  uClibc: 0.9.33.1: fix version (soname) number (2012-04-23 09:26:13 +0200)
 
-IOW, I'd like to do two _separate_ builds:
+are available in the git repository at:
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/static-libs
 
- 1) Build rootfs.cpio (using Buildroot).
+Thomas Petazzoni (1):
+      external-toolchain: do not copy shared libraries when BR2_PREFER_STATIC_LIB=y
 
- 2) Build vmlinux.o (not sure if that's the right file).
+ toolchain/toolchain-external/ext-tool.mk |   16 +++++++++-------
+ 1 files changed, 9 insertions(+), 7 deletions(-)
 
-Those would both be controlled and versioned as separate objects.
-
-Then I'd like to link those two files together and create a uImage
-file from them.
-
-I've been browsing around Linux kernel Makefiles and docs, trying to
-figure out what the "pre-rootfs" file is and how to combine it with
-the rootfs to produce the uImage file.  There's plenty of info about
-how to specify or create an initramfs and the actual kernel startup
-works, but all I can find about how to actually link the kernel and
-initramfs together is "set CONFIG_INITRAMFS_SOURCE and do a kernel
-build".
-
-Having to re-compile the kernel when nothing in the kernel or it's
-configuration has changed (only the rootfs changed) just doesn't feel
-like an acceptable engineering practice.
-
-Any pointers to documentation on how one might combine a kernel object
-and a rootfs cpio image to get a uImage file?
-
+Thanks,
 -- 
-Grant Edwards               grant.b.edwards        Yow! ANN JILLIAN'S HAIR
-                                  at               makes LONI ANDERSON'S
-                              gmail.com            HAIR look like RICARDO
-                                                   MONTALBAN'S HAIR!
+Thomas Petazzoni
