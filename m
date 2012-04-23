@@ -1,68 +1,75 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Mon, 23 Apr 2012 15:25:45 +0200
-Subject: [Buildroot] Buildroot SKIPS PATCHES ???
-In-Reply-To: <CAAXf6LX+De-fWuqb-nZBGyMkoqBdeqYz+qp=hDkUybCE_a-G4Q@mail.gmail.com>
-References: <4F9341C9.8000508@petroprogram.com>
- <CAAXf6LX+De-fWuqb-nZBGyMkoqBdeqYz+qp=hDkUybCE_a-G4Q@mail.gmail.com>
-Message-ID: <4F955859.6020401@atmel.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 23 Apr 2012 10:31:36 -0300
+Subject: [Buildroot] [PATCH 1/2] audiofile: new package
+Message-ID: <1335187897-20044-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/multimedia/Config.in              |    1 +
+ package/multimedia/audiofile/Config.in    |   11 +++++++++++
+ package/multimedia/audiofile/audiofile.mk |   19 +++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/audiofile/Config.in
+ create mode 100644 package/multimedia/audiofile/audiofile.mk
 
-Le 04/23/2012 02:33 PM, Thomas De Schampheleire a ?crit :
-> Hi Stefan,
->
-> On Sun, Apr 22, 2012 at 1:24 AM, Stefan Fr?berg
-> <stefan.froberg@petroprogram.com>  wrote:
->> Good day
->>
->>
->> I have tried adding two new packages to my local copy of buildroot,
->> first one is xplc-package (version 0.3.13) and the second one is
->> wvstreams (version 4.2.2) which needs xplc.
->>
->> The first one, xplc, builds nicely.
->>
->>
->> But for some reason, for wvstreams package the Buildroot does not apply
->> the patches at all.
->> Buildroot just skips all the nine wvstreams patch-files and continues
->> configuring ...
->> :-(
->>
->> I have included all files (Config.in, .mk-files and patches) for both
->> packages here.
->> I would be very gratefull if somebody could help to solve this mystery.
->>
->> Please contact me at:
->> stefan.froberg at petroprogram.com
->>
->
-> Have you solved this problem already?
->
-> I have copied your wvstreams .mk file and one of the patches, and did
-> not have problems applying the patches.
-> Which version of buildroot are you using?
-> Have you tried deleting the entire output/build/wvstreams* directory
-> (thus removing the stamp files) ?
-> What is the output of the wvstreams build? It should print a message
-> about each phase (download, extract, patch, configure, ...).
->
-> Do you have other patches or directories inside package/wvstreams ?
-> The current rules for patching are somewhat complicated and can depend
-> on such other files. The rules are in package/Makefile.package.in.
->
-> Best regards,
-> Thomas
-
-Have a look here: http://patchwork.ozlabs.org/patch/152912/
-
-Maybe you have not this patch.
-
-Regards
-
-Ludovic
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index a05d1d9..effec38 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -1,6 +1,7 @@
+ menu "Audio and video libraries and applications"
+ source "package/multimedia/alsa-lib/Config.in"
+ source "package/multimedia/alsa-utils/Config.in"
++source "package/multimedia/audiofile/Config.in"
+ source "package/multimedia/aumix/Config.in"
+ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+diff --git a/package/multimedia/audiofile/Config.in b/package/multimedia/audiofile/Config.in
+new file mode 100644
+index 0000000..fac7f47
+--- /dev/null
++++ b/package/multimedia/audiofile/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_AUDIOFILE
++	bool "audiofile"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  The Audio File Library handles reading and writing audio files
++	  in many common formats. 
++
++	  http://www.68k.org/~michael/audiofile/
++
++comment "audiofile requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/multimedia/audiofile/audiofile.mk b/package/multimedia/audiofile/audiofile.mk
+new file mode 100644
+index 0000000..a49cc3e
+--- /dev/null
++++ b/package/multimedia/audiofile/audiofile.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# audiofile
++#
++#############################################################
++
++AUDIOFILE_VERSION = 0.3.3
++AUDIOFILE_SITE = http://audiofile.68k.org
++AUDIOFILE_INSTALL_STAGING = YES
++AUDIOFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++
++# Useless and needs alsa-lib
++define AUDIOFILE_DISABLE_EXAMPLES
++	$(SED) 's/examples//' $(@D)/Makefile.in
++endef
++
++AUDIOFILE_POST_PATCH_HOOKS += AUDIOFILE_DISABLE_EXAMPLES
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.3.4
