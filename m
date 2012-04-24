@@ -1,7 +1,7 @@
 From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Tue, 24 Apr 2012 12:11:42 +0200
+Date: Tue, 24 Apr 2012 12:22:18 +0200
 Subject: [Buildroot] [PATCH] Add new package apr-util
-Message-ID: <1335262302-31058-1-git-send-email-bachmann@tofwerk.com>
+Message-ID: <1335262938-31434-1-git-send-email-bachmann@tofwerk.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,12 @@ Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
 v1: Add package apr-util
     Add patch to remove check for apr
     because check for apr search for ./apr and not for defined folder
+
+change spaces to tab
+
+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+---
+v2: change spaces in *.mk to tab
 ---
  package/Config.in                                  |    1 +
  package/apr-util/Config.in                         |    7 +++++++
@@ -68,7 +74,7 @@ index 0000000..46cc595
 + dnl even though we use apr_rules.mk for building apr-util, we need
 diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
 new file mode 100644
-index 0000000..8c977fa
+index 0000000..f5f4d80
 --- /dev/null
 +++ b/package/apr-util/apr-util.mk
 @@ -0,0 +1,14 @@
@@ -83,7 +89,7 @@ index 0000000..8c977fa
 +APR_UTIL_DEPENDENCIES = apr
 +APR_UTIL_CONF_OPT = \
 +	--prefix=/usr \
-+        --with-apr=$(BUILD_DIR)/apr-$(APR_VERSION)
++	--with-apr=$(BUILD_DIR)/apr-$(APR_VERSION)
 +
 +$(eval $(call AUTOTARGETS))
 -- 
