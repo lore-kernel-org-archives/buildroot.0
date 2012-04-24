@@ -1,36 +1,50 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <elezegarcia@gmail.com>
-Date: Tue, 24 Apr 2012 14:48:31 -0300
-Subject: [Buildroot] where to commit a kernel modification?
-In-Reply-To: <CAPEB33y5bJi1K=aexVK8m3h_U0_4x+KwamE4mLX6V=Cs2+PA8Q@mail.gmail.com>
-References: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
- <201204211539.42000.arnout@mind.be>
- <CALF0-+WVB6xQDb=hAEij=ocQ0imfw-ZssxHbsJcXBQ53p516sQ@mail.gmail.com>
- <CAPEB33y5bJi1K=aexVK8m3h_U0_4x+KwamE4mLX6V=Cs2+PA8Q@mail.gmail.com>
-Message-ID: <CALF0-+VF0a029edp_A_aNZD+=FfBco4e6s-kbexfjAwHp8U98A@mail.gmail.com>
+From: John X <john.x@virgin.net>
+Date: Tue, 24 Apr 2012 20:46:52 +0100
+Subject: [Buildroot] Help lpr and general package advice
+Message-ID: <05e201cd2252$ffff8190$fffe84b0$@virgin.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Johann,
+Hi,
 
-2012/4/24 MERCADIER Johann <johann.mercadier@imerir.com>:
-> Hi Arnout & Ezequiel,
-> ??and thanks for your reply.
-> ??I wanted to be sure to do the right think. I will commit this patch before
-> the end of this week.
->
+ 
 
-Just a few advises:
-1. Don't forget to run ./script/checkpatch.pl and
-./script/get_maintainers.pl to your patch before submit.
-The latter will tell you who should you send the patch to.
-2. Kernel is divided in subsystems, and you should base your patches
-in a specific git tree,
-according to the subsystem you'll be patching.
-3. Try to avoid top posting in the future, kernel devs don't like it.
-4. Don't get discouraged if you get NACKS at first.
+I'm relatively new to buildroot, so please bear with me, I've just created a
+build, which boots and provides me with most of the functionality I need,
+however, I've just run an application and I've received a message that it
+cannot find lpr
 
-Good luck ;)
-Ezequiel.
+ 
+
+I've checked and as far as I can see it's in the busybox distro, 
+
+ 
+
+I've done a make menuconfig and gone through the options, but cannot see
+where I can select the option so lpr is in my build, so I'm guessing its
+part of a larger package.
+
+ 
+
+Where do I look to see what packages contain ?
+
+ 
+
+Is there anywhere on the website that is searchable, that shows what's where
+so I could search for individual commands and that would show where I enable
+it in the menuconfig?
+
+ 
+
+Thanks in advance
+
+John
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120424/f00745dd/attachment.html>
