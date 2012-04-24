@@ -1,50 +1,31 @@
-From: John X <john.x@virgin.net>
-Date: Tue, 24 Apr 2012 20:46:52 +0100
-Subject: [Buildroot] Help lpr and general package advice
-Message-ID: <05e201cd2252$ffff8190$fffe84b0$@virgin.net>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 24 Apr 2012 21:50:25 +0200
+Subject: [Buildroot] [git commit] libusb-compat: bump to 0.1.4
+Message-ID: <20120424200000.2EF6E96BB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: http://git.buildroot.net/buildroot/commit/?id=da5948fe720d5a074186f973a9effc53cae00de0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libusb-compat/libusb-compat.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-I'm relatively new to buildroot, so please bear with me, I've just created a
-build, which boots and provides me with most of the functionality I need,
-however, I've just run an application and I've received a message that it
-cannot find lpr
-
- 
-
-I've checked and as far as I can see it's in the busybox distro, 
-
- 
-
-I've done a make menuconfig and gone through the options, but cannot see
-where I can select the option so lpr is in my build, so I'm guessing its
-part of a larger package.
-
- 
-
-Where do I look to see what packages contain ?
-
- 
-
-Is there anywhere on the website that is searchable, that shows what's where
-so I could search for individual commands and that would show where I enable
-it in the menuconfig?
-
- 
-
-Thanks in advance
-
-John
-
- 
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120424/f00745dd/attachment.html>
+diff --git a/package/libusb-compat/libusb-compat.mk b/package/libusb-compat/libusb-compat.mk
+index 42a9aae..d44eb27 100644
+--- a/package/libusb-compat/libusb-compat.mk
++++ b/package/libusb-compat/libusb-compat.mk
+@@ -3,7 +3,7 @@
+ # libusb-compat
+ #
+ #############################################################
+-LIBUSB_COMPAT_VERSION = 0.1.3
++LIBUSB_COMPAT_VERSION = 0.1.4
+ LIBUSB_COMPAT_SOURCE = libusb-compat-$(LIBUSB_COMPAT_VERSION).tar.bz2
+ LIBUSB_COMPAT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-compat-0.1/libusb-compat-$(LIBUSB_COMPAT_VERSION)
+ LIBUSB_COMPAT_DEPENDENCIES = host-pkg-config libusb
