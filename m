@@ -1,47 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Apr 2012 22:13:46 +0200
-Subject: [Buildroot] [PATCH v2 1/2] wpa_supplicant: install basic
-	configuration file
-In-Reply-To: <1335164155-20004-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 23 Apr 2012 08:55:54
- +0200")
-References: <1335164155-20004-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87pqawga6d.fsf@macbook.be.48ers.dk>
+Date: Tue, 24 Apr 2012 22:35:13 +0200
+Subject: [Buildroot] [PATCH] libcurl: enabled IPv6 support
+In-Reply-To: <1335163564-1368-1-git-send-email-vsergeev@gmail.com> (Vanya
+ Sergeev's message of "Mon, 23 Apr 2012 02:46:04 -0400")
+References: <1335163564-1368-1-git-send-email-vsergeev@gmail.com>
+Message-ID: <87lilkg96m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Vanya" == Vanya Sergeev <vsergeev@gmail.com> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> ---
- yegorslists>  package/wpa_supplicant/wpa_supplicant.conf |    6 ++++++
- yegorslists>  package/wpa_supplicant/wpa_supplicant.mk   |    8 ++++++++
- yegorslists>  2 files changed, 14 insertions(+), 0 deletions(-)
- yegorslists>  create mode 100755 package/wpa_supplicant/wpa_supplicant.conf
+ Vanya> From: vsergeev <vsergeev@gmail.com>
+ Vanya> Modified libcurl package Makefile to pass the configure option for IPv6 support
+ Vanya> if BR2_INET_IPV6 is set.
 
+ Vanya> Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
+ Vanya> ---
+ Vanya>  package/libcurl/libcurl.mk |    4 ++++
+ Vanya>  1 file changed, 4 insertions(+)
+
+ Vanya> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+ Vanya> index e094e31..127d9ca 100644
+ Vanya> --- a/package/libcurl/libcurl.mk
+ Vanya> +++ b/package/libcurl/libcurl.mk
+ Vanya> @@ -10,6 +10,10 @@ LIBCURL_SITE = http://curl.haxx.se/download
+ Vanya>  LIBCURL_INSTALL_STAGING = YES
+ Vanya>  LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
  
- yegorslists> +define WPA_SUPPLICANT_INSTALL_CONFIG
- yegorslists> +	$(INSTALL) -m 644 \
- yegorslists> +	  package/wpa_supplicant/wpa_supplicant.conf  $(TARGET_DIR)/etc/wpa_supplicant.conf
+ Vanya> +ifeq ($(BR2_INET_IPV6),y)
+ Vanya> +LIBCURL_CONF_OPT += --enable-ipv6
 
-Normally we only install these default files if not already present in
-the rootfs, so people can put their own version in the skeleton if they
-need something else. See ifplugd for an example.
-
- yegorslists> +
- yegorslists>  define WPA_SUPPLICANT_UNINSTALL_TARGET_CMDS
- yegorslists>  	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(WPA_SUPPLICANT_TARGET_BINS))
- yegorslists>  	rm -f $(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
- yegorslists>  	rm -f $(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
- yegorslists> +	rm -f $(TARGET_DIR)/usr/etc/wpa_supplicant.conf
-
-This doesn't work so well when you add the check before installation as
-adding/removing/adding wpasupplicant again would then overwrite the
-skeleton one. I suggest you just skip this.
+Curl might be a bit special in the sense that it is using AC_TRY_RUN
+to detect ipv6 support (which doesn't work when cross compiling), but
+other packages might have the same problem and we already handle ipv6
+disabling on a global level, so I have instead added --enable-ipv6 when
+BR2_INET_IPV6 is enabled on a global level in package/Makefile.in.
 
 -- 
 Bye, Peter Korsgaard
