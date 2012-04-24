@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 25 Apr 2012 00:01:40 +0200
-Subject: [Buildroot] Help lpr and general package advice
-In-Reply-To: <05e201cd2252$ffff8190$fffe84b0$@virgin.net>
-References: <05e201cd2252$ffff8190$fffe84b0$@virgin.net>
-Message-ID: <20120425000140.5e477e75@skate>
+Date: Wed, 25 Apr 2012 00:03:30 +0200
+Subject: [Buildroot] [PATCH v2 1/2] wpa_supplicant: install basic
+ configuration file
+In-Reply-To: <87pqawga6d.fsf@macbook.be.48ers.dk>
+References: <1335164155-20004-1-git-send-email-yegorslists@googlemail.com>
+ <87pqawga6d.fsf@macbook.be.48ers.dk>
+Message-ID: <20120425000330.638f4e37@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello John,
+Hello,
 
-Le Tue, 24 Apr 2012 20:46:52 +0100,
-"John X" <john.x@virgin.net> a ?crit :
+Le Tue, 24 Apr 2012 22:13:46 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> I'm relatively new to buildroot, so please bear with me, I've just created a
-> build, which boots and provides me with most of the functionality I need,
-> however, I've just run an application and I've received a message that it
-> cannot find lpr
+>  yegorslists> +define WPA_SUPPLICANT_INSTALL_CONFIG
+>  yegorslists> +	$(INSTALL) -m 644 \
+>  yegorslists> +	  package/wpa_supplicant/wpa_supplicant.conf  $(TARGET_DIR)/etc/wpa_supplicant.conf
 > 
-> I've checked and as far as I can see it's in the busybox distro, 
-> 
-> I've done a make menuconfig and gone through the options, but cannot see
-> where I can select the option so lpr is in my build, so I'm guessing its
-> part of a larger package.
-> 
-> Where do I look to see what packages contain ?
+> Normally we only install these default files if not already present in
+> the rootfs, so people can put their own version in the skeleton if they
+> need something else. See ifplugd for an example.
 
-A lightweight implementation of lpr is available in Busybox, but is not
-enabled in the default Busybox configuration that Buildroot contains.
-
-Do:
-
-	make busybox-menuconfig
-
-And then in "Print utilities", enable lpr.
-
-Regards,
+I am less and less sure this is a scenario we should support. We have
+been talking for a while of removing the ability of using a custom
+target skeleton, and instead recommend all users to use the post-build
+script capability, which is much more appropriate.
 
 Thomas
 -- 
