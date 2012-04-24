@@ -1,28 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 24 Apr 2012 08:41:31 +0000 (UTC)
-Subject: [Buildroot] [Bug 4970] udev 181 fails to build if kernel version
-	3.3 is selected
-In-Reply-To: <bug-4970-163@https.bugs.busybox.net/>
-References: <bug-4970-163@https.bugs.busybox.net/>
-Message-ID: <20120424084131.BE12896BAD@busybox.osuosl.org>
+From: MERCADIER Johann <johann.mercadier@imerir.com>
+Date: Tue, 24 Apr 2012 10:00:40 +0100
+Subject: [Buildroot] where to commit a kernel modification?
+In-Reply-To: <CALF0-+WVB6xQDb=hAEij=ocQ0imfw-ZssxHbsJcXBQ53p516sQ@mail.gmail.com>
+References: <CAPEB33z4-PhKHiqw7WZohZ5kph_eieUN7v2QjCJ4SLn==JDOHg@mail.gmail.com>
+ <201204211539.42000.arnout@mind.be>
+ <CALF0-+WVB6xQDb=hAEij=ocQ0imfw-ZssxHbsJcXBQ53p516sQ@mail.gmail.com>
+Message-ID: <CAPEB33y5bJi1K=aexVK8m3h_U0_4x+KwamE4mLX6V=Cs2+PA8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4970
+Hi Arnout & Ezequiel,
+  and thanks for your reply.
+  I wanted to be sure to do the right think. I will commit this patch
+before the end of this week.
 
---- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-04-24 08:41:31 UTC ---
-I have taken your exact configuration, and didn't manage to reproduce the bug.
-By any chance, did you make manual modifications to the uClibc configuration by
-running make uclibc-menuconfig? If you've done so and disabled
-UCLIBC_HAS_REALTIME, then mq_getattr would not be available in the C library,
-leading to the error you got.
+  Bye.
 
-Can you get back to us and confirm which uClibc you had? Thanks!
+
+2012/4/21 Ezequiel Garc?a <elezegarcia@gmail.com>
+
+> On Sat, Apr 21, 2012 at 10:39 AM, Arnout Vandecappelle <arnout@mind.be>
+> wrote:
+> >> as not registered when module is loaded. Where should I commit this?
+>
+> Write and Submit your first Linux kernel Patch:
+> http://www.youtube.com/watch?v=LLBrBBImJt4
+>
+> this should get you started ;)
+>
+
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Cordialement.
+
+___Johann MERCADIER___
+
+:(){ :|:& };:
+"I am the Unknown lead by the Unknowing.
+I have done so much with so little for so long
+that I am now qualified to do anything with nothing."
+HOOSEEK (http://www.hooseek.com/) 1?moteur de recherche solidaire!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120424/ad53b4cb/attachment.html>
