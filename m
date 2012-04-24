@@ -1,22 +1,66 @@
-From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Tue, 24 Apr 2012 13:55:24 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 24 Apr 2012 14:05:48 +0200
 Subject: [Buildroot] [PATCH v3] Add new package apr-util
-Message-ID: <1335268524-31735-1-git-send-email-bachmann@tofwerk.com>
+In-Reply-To: <1335268524-31735-1-git-send-email-bachmann@tofwerk.com>
+References: <1335268524-31735-1-git-send-email-bachmann@tofwerk.com>
+Message-ID: <20120424140548.5cf4c706@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+Hello Rico,
+
+Le Tue, 24 Apr 2012 13:55:24 +0200,
+Rico Bachmann <bachmann@tofwerk.com> a ?crit :
+
+> Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+> ---
+> v1: Add package apr-util
+>     Add patch to remove check for apr
+>     because check for apr search for ./apr and not for defined folder
+> v2: Change spaces to tab in *.mk
+> v3: Add Signed-off-by and comments to package-patch
+> ---
+> ---
+
+Those two lines with '---' are useless.
+
+> diff --git a/package/apr-util/apr-util-1.4.1-remove-checkapr.patch b/package/apr-util/apr-util-1.4.1-remove-checkapr.patch
+> new file mode 100644
+> index 0000000..128a1b0
+> --- /dev/null
+> +++ b/package/apr-util/apr-util-1.4.1-remove-checkapr.patch
+> @@ -0,0 +1,17 @@
+> +Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
+> +---
+> +disable the check for APU_FIND_APR because the check only looks into folders
+> +named apr, and our source-tree is called apr-versionnumber (e.g. apr-1.4.6)
+> +---
+
+The description should be *before* the Signed-off-by, and not separated
+by ---.
+
+It seems like you misunderstand what the format of a patch should be.
+Here is an explanation that I hope will clarify things:
+
+------------------------8<-------------------
+This is the title, should be less than ~80 chars
+
+This is a long description that explains what the patch is doing, why,
+how, and all other details that are useful. This description (and the
+title above, and the above Signed-off-by line) will be part of the
+commit log and remain in the Git history. Therefore, it should *not*
+contain any changelog information about the patch, or other "personal"
+messages. The title and the description must be separated by one empty
+line.
+
+Signed-off-by: Foo Bar <foo@bar.com>
 ---
-v1: Add package apr-util
-    Add patch to remove check for apr
-    because check for apr search for ./apr and not for defined folder
-v2: Change spaces to tab in *.mk
-v3: Add Signed-off-by and comments to package-patch
----
----
+This is some text that will *not* be included in the Git history, so it
+is typically used for the changelog.
+
  package/Config.in                                  |    1 +
  package/apr-util/Config.in                         |    7 +++++++
  .../apr-util/apr-util-1.4.1-remove-checkapr.patch  |   17 +++++++++++++++++
@@ -38,61 +82,13 @@ index 5ae1c81..805f56a 100644
  source "package/fftw/Config.in"
  source "package/libargtable2/Config.in"
  source "package/argp-standalone/Config.in"
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-new file mode 100644
-index 0000000..a4411ba
---- /dev/null
-+++ b/package/apr-util/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_APR_UTIL
-+	bool "apr-util"
-+	select BR2_PACKAGE_APR
-+	help
-+	  The utility library for the apache runtime project
-+
-+	  http://apr.apache.org/
-diff --git a/package/apr-util/apr-util-1.4.1-remove-checkapr.patch b/package/apr-util/apr-util-1.4.1-remove-checkapr.patch
-new file mode 100644
-index 0000000..128a1b0
---- /dev/null
-+++ b/package/apr-util/apr-util-1.4.1-remove-checkapr.patch
-@@ -0,0 +1,17 @@
-+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
-+---
-+disable the check for APU_FIND_APR because the check only looks into folders
-+named apr, and our source-tree is called apr-versionnumber (e.g. apr-1.4.6)
-+---
-+diff -rupN apr-util-1.4.1/configure.in apr-util-1.4.1-fix/configure.in
-+--- apr-util-1.4.1/configure.in	2009-12-17 20:15:19.000000000 +0100
-++++ apr-util-1.4.1-fix/configure.in	2012-04-24 10:10:32.000000000 +0200
-+@@ -99,7 +99,7 @@ fi
-+ dnl
-+ dnl Find the APR includes directory and (possibly) the source (base) dir.
-+ dnl
-+-APU_FIND_APR
-++dnl APU_FIND_APR
-+ 
-+ dnl
-+ dnl even though we use apr_rules.mk for building apr-util, we need
-diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
-new file mode 100644
-index 0000000..f5f4d80
---- /dev/null
-+++ b/package/apr-util/apr-util.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# apr-util
-+#
-+#############################################################
-+APR_UTIL_VERSION = 1.4.1
-+APR_UTIL_SITE = http://archive.apache.org/dist/apr
-+APR_UTIL_INSTALL_STAGING = YES
-+APR_UTIL_DEPENDENCIES = apr
-+APR_UTIL_CONF_OPT = \
-+	--prefix=/usr \
-+	--with-apr=$(BUILD_DIR)/apr-$(APR_VERSION)
-+
-+$(eval $(call AUTOTARGETS))
+------------------------8<-------------------
+
+Regards,
+
+Thomas
 -- 
-1.7.2.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
