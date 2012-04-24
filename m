@@ -1,43 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Apr 2012 22:35:13 +0200
-Subject: [Buildroot] [PATCH] libcurl: enabled IPv6 support
-In-Reply-To: <1335163564-1368-1-git-send-email-vsergeev@gmail.com> (Vanya
- Sergeev's message of "Mon, 23 Apr 2012 02:46:04 -0400")
-References: <1335163564-1368-1-git-send-email-vsergeev@gmail.com>
-Message-ID: <87lilkg96m.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 24 Apr 2012 22:08:48 +0200
+Subject: [Buildroot] [git commit] dbus: bump to 1.4.20
+Message-ID: <20120424203537.735BA96BB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vanya" == Vanya Sergeev <vsergeev@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3515019934d1d5d36b2b2189d38b27fb727c25a7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Vanya> From: vsergeev <vsergeev@gmail.com>
- Vanya> Modified libcurl package Makefile to pass the configure option for IPv6 support
- Vanya> if BR2_INET_IPV6 is set.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/dbus/dbus.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
- Vanya> Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
- Vanya> ---
- Vanya>  package/libcurl/libcurl.mk |    4 ++++
- Vanya>  1 file changed, 4 insertions(+)
-
- Vanya> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
- Vanya> index e094e31..127d9ca 100644
- Vanya> --- a/package/libcurl/libcurl.mk
- Vanya> +++ b/package/libcurl/libcurl.mk
- Vanya> @@ -10,6 +10,10 @@ LIBCURL_SITE = http://curl.haxx.se/download
- Vanya>  LIBCURL_INSTALL_STAGING = YES
- Vanya>  LIBCURL_CONF_OPT = --disable-verbose --disable-manual --enable-hidden-symbols
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 0942b33..7e72e3d 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -3,8 +3,7 @@
+ # dbus
+ #
+ #############################################################
+-DBUS_VERSION = 1.4.16
+-DBUS_SOURCE = dbus-$(DBUS_VERSION).tar.gz
++DBUS_VERSION = 1.4.20
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus/
+ DBUS_INSTALL_STAGING = YES
  
- Vanya> +ifeq ($(BR2_INET_IPV6),y)
- Vanya> +LIBCURL_CONF_OPT += --enable-ipv6
-
-Curl might be a bit special in the sense that it is using AC_TRY_RUN
-to detect ipv6 support (which doesn't work when cross compiling), but
-other packages might have the same problem and we already handle ipv6
-disabling on a global level, so I have instead added --enable-ipv6 when
-BR2_INET_IPV6 is enabled on a global level in package/Makefile.in.
-
--- 
-Bye, Peter Korsgaard
