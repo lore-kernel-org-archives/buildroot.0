@@ -1,29 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Apr 2012 23:27:52 +0200
-Subject: [Buildroot] [PATCH v4] New Package: latencytop
-In-Reply-To: <1334747160-7990-1-git-send-email-qais.yousef@imgtec.com> (Qais
- Yousef's message of "Wed, 18 Apr 2012 12:06:00 +0100")
-References: <1334747160-7990-1-git-send-email-qais.yousef@imgtec.com>
-Message-ID: <87d36wg6qv.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Apr 2012 00:01:40 +0200
+Subject: [Buildroot] Help lpr and general package advice
+In-Reply-To: <05e201cd2252$ffff8190$fffe84b0$@virgin.net>
+References: <05e201cd2252$ffff8190$fffe84b0$@virgin.net>
+Message-ID: <20120425000140.5e477e75@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Qais" == Qais Yousef <qais.yousef@imgtec.com> writes:
+Hello John,
 
- Qais> Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+Le Tue, 24 Apr 2012 20:46:52 +0100,
+"John X" <john.x@virgin.net> a ?crit :
 
-Committed, thanks.
+> I'm relatively new to buildroot, so please bear with me, I've just created a
+> build, which boots and provides me with most of the functionality I need,
+> however, I've just run an application and I've received a message that it
+> cannot find lpr
+> 
+> I've checked and as far as I can see it's in the busybox distro, 
+> 
+> I've done a make menuconfig and gone through the options, but cannot see
+> where I can select the option so lpr is in my build, so I'm guessing its
+> part of a larger package.
+> 
+> Where do I look to see what packages contain ?
 
- Qais> @@ -37,6 +37,7 @@ source "package/strace/Config.in"
- Qais>  source "package/whetstone/Config.in"
- Qais>  source "package/valgrind/Config.in"
- Qais>  source "package/pv/Config.in"
- Qais> +source "package/latencytop/Config.in"
+A lightweight implementation of lpr is available in Busybox, but is not
+enabled in the default Busybox configuration that Buildroot contains.
 
-This should be in alphabetical order, but I've fixed that.
+Do:
 
+	make busybox-menuconfig
+
+And then in "Print utilities", enable lpr.
+
+Regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
