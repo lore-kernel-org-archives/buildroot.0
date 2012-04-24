@@ -1,125 +1,29 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 24 Apr 2012 23:26:56 +0200
-Subject: [Buildroot] [git commit] New Package: latencytop
-Message-ID: <20120424212728.7A47396BAE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 24 Apr 2012 23:27:52 +0200
+Subject: [Buildroot] [PATCH v4] New Package: latencytop
+In-Reply-To: <1334747160-7990-1-git-send-email-qais.yousef@imgtec.com> (Qais
+ Yousef's message of "Wed, 18 Apr 2012 12:06:00 +0100")
+References: <1334747160-7990-1-git-send-email-qais.yousef@imgtec.com>
+Message-ID: <87d36wg6qv.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd2f78b1c5af76cfc14ad2227d6627b24367fb50
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Qais" == Qais Yousef <qais.yousef@imgtec.com> writes:
 
-[Peter: fix Config.in location]
-Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                            |    1 +
- package/latencytop/Config.in                 |   23 +++++++++++++++++++++
- package/latencytop/latencytop-makefile.patch |   28 ++++++++++++++++++++++++++
- package/latencytop/latencytop.mk             |   21 +++++++++++++++++++
- 4 files changed, 73 insertions(+), 0 deletions(-)
+ Qais> Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 5ae1c81..28a08d2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -22,6 +22,7 @@ source "package/dhrystone/Config.in"
- source "package/dstat/Config.in"
- source "package/dmalloc/Config.in"
- source "package/kexec/Config.in"
-+source "package/latencytop/Config.in"
- source "package/lmbench/Config.in"
- source "package/lsof/Config.in"
- source "package/ltp-testsuite/Config.in"
-diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
-new file mode 100644
-index 0000000..12176c0
---- /dev/null
-+++ b/package/latencytop/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_LATENCYTOP
-+	bool "latencytop"
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  There are many types and causes of latency. LatencyTOP
-+	  focuses on the type of latency that causes skips in audio,
-+	  stutters in your desktop experience or that overloads your
-+	  server (while you have plenty of CPU power left).
-+
-+	  LatencyTOP focuses on the cases where the applications want
-+	  to run and execute useful code, but there's some resource
-+	  that's not currently available (and the kernel then blocks
-+	  the process). This is done both on a system level and on a
-+	  per process level, so that you can see what's happening to
-+	  the system, and which process is suffering and/or causing
-+	  the delays.
-+
-+	  http://www.latencytop.org
-+
-+comment "latencytop requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/latencytop/latencytop-makefile.patch b/package/latencytop/latencytop-makefile.patch
-new file mode 100644
-index 0000000..fa8c51c
---- /dev/null
-+++ b/package/latencytop/latencytop-makefile.patch
-@@ -0,0 +1,28 @@
-+Usee $(CC) to enable cross compiling and link to the right ncurses library.
-+
-+Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
-+
-+--- latencytop-0.5/Makefile.old	2012-04-18 11:59:39.748084334 +0100
-++++ latencytop-0.5/Makefile	2012-04-18 12:00:08.659112340 +0100
-+@@ -4,7 +4,7 @@
-+ DESTDIR =
-+ SBINDIR = /usr/sbin
-+ XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
-+-LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
-++LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
-+ 
-+ OBJS= latencytop.o text_display.o translate.o fsync.o
-+ 
-+@@ -26,10 +26,10 @@
-+ 
-+ # We write explicity this "implicit rule"
-+ %.o : %.c
-+-	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
-++	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
-+ 
-+ latencytop:  $(OBJS) latencytop.h Makefile
-+-	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-++	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-+ 
-+ clean:
-+ 	rm -f *~ latencytop DEADJOE *.o
-diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
-new file mode 100644
-index 0000000..73d5ba2
---- /dev/null
-+++ b/package/latencytop/latencytop.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# latencytop
-+#
-+#############################################################
-+
-+LATENCYTOP_VERSION = 0.5
-+LATENCYTOP_SITE = http://www.latencytop.org/download/
-+LATENCYTOP_DEPENDENCIES = libglib2 ncurses
-+
-+# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
-+# version only
-+define LATENCYTOP_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
-+endef
-+
-+define LATENCYTOP_INSTALL_TARGET_CMDS
-+	$(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=
-+endef
-+
-+$(eval $(call GENTARGETS))
+Committed, thanks.
+
+ Qais> @@ -37,6 +37,7 @@ source "package/strace/Config.in"
+ Qais>  source "package/whetstone/Config.in"
+ Qais>  source "package/valgrind/Config.in"
+ Qais>  source "package/pv/Config.in"
+ Qais> +source "package/latencytop/Config.in"
+
+This should be in alphabetical order, but I've fixed that.
+
+-- 
+Bye, Peter Korsgaard
