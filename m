@@ -1,23 +1,25 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 25 Apr 2012 14:24:48 +0000 (UTC)
-Subject: [Buildroot] uemacs doesn't clear ixon termios flag?
-Message-ID: <jn91fg$mt2$1@dough.gmane.org>
+From: Sven Neumann <s.neumann@raumfeld.com>
+Date: Wed, 25 Apr 2012 16:26:43 +0200
+Subject: [Buildroot] [PATCH] util-linux: disable installing binaries by
+ default
+In-Reply-To: <1335359709-26898-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1335359709-26898-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1335364003.2428.14.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've enabled the uemacs package. It builds fine, but it doesn't seem
-to work unless you manually clear the termios ixon flag before running
-it.  If you don't do that, the Ctrl-S keystroke isn't seen by uemacs
--- instead it's intercepted by the tty layer and stops terminal
-output until you hit Ctrl-Q.
+On Wed, 2012-04-25 at 10:15 -0300, Gustavo Zacarias wrote:
+> +config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+> +       select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+> +       bool "libblkid and blkid utilities"
+> +       default y
+> 
+Actually it only installs libblkid. If you want the blkid utility you
+also need to select BR2_PACKAGE_UTIL_LINUX_BINARIES.
 
-Has anybody else noticed this?
 
--- 
-Grant Edwards               grant.b.edwards        Yow! My BIOLOGICAL ALARM
-                                  at               CLOCK just went off ... It
-                              gmail.com            has noiseless DOZE FUNCTION
-                                                   and full kitchen!!
+Regards,
+Sven
