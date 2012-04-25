@@ -1,62 +1,66 @@
-From: Nigel Sollars <nsollars@gmail.com>
-Date: Tue, 24 Apr 2012 19:49:44 -0400
-Subject: [Buildroot] Buildroot fails to build when selecting build packages
-Message-ID: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 25 Apr 2012 07:23:37 +0200
+Subject: [Buildroot] How do you add a package subdirectory?
+In-Reply-To: <jn795b$kbq$1@dough.gmane.org>
+References: <jn795b$kbq$1@dough.gmane.org>
+Message-ID: <CAAXf6LU8+LZGYn-BQTkyjzDEQgLDkGeHrsd5WBt7NftnVfCjPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Grant,
 
-I have successfully built a buildroot for my Pandaboard es that uses mdev
-which is nice,  now I want to include the build environment in my install
-packages.
+On Wed, Apr 25, 2012 at 12:23 AM, Grant Edwards
+<grant.b.edwards@gmail.com> wrote:
+> I'm trying to add local packages to 2012.02, and I'd like them to live
+> in a subdirectory underneath "package" (e.g. package/mycompany). I've
+> created the "mycompany" directory which contains a Config.in that
+> declares a submenu that in turn sources the individual package
+> Config.in files: package/mycompany/foo/Config.in,
+> package/mycompany/bar/Config.in, etc.
+>
+> The "mycompany" submenu shows up where it's supposed to, and that menu
+> has the entries for "foo" and "bar" as it should. ?Selecting those
+> entries sets BR2_PACKAGE_FOO in the .config file as expected.
+>
+> But, when I actually do the "make", buildroot won't attempt to build
+> packages "foo" and "bar" unless I create symlinks in the packages
+> directory that point to the corresponding directories in the mycompany
+> subdirectory like this:
+>
+> ? package/foo -> mycompany/foo
+> ? package/bar -> mycompany/bar
+>
+> Inside foo.mk, bar.mk the various settings/commands have the
+> "mycompany" directory in them, and once buildroot _finds_ the .mk
+> files, they build fine.
+>
+> I've searched the existing scripts and .in files for some mechanism
+> that's used by the other packages that live in subdirectories
+> underneat packages, but couldn't find anything. As far as I can tell,
+> I've done everything in my new subdirectory exactly the same way it's
+> done in the other subdirectories, but it just doesn't work.
+>
+> How does buildroot know that when BR2_PACKAGE_AUMIX is set it's
+> supposed to look for package/multimedia/aumix/aumix.mk and not
+> package/aumix/aumix.mk?
+>
+> How do I get buildroot to look in package/mycompany for the foo and
+> bar package directories?
 
-The build fails since as a dependency glib2 is selected this fails with a
-dbus like so:
+Have a look at http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf,
+pages 27-28 where this scenario is described.
 
-gdbus-proxy-threads.c:34:31: fatal error: dbus/dbus-shared.h: No such file
-or directory
-compilation terminated.
-make[7]: *** [gdbus-proxy-threads.o] Error 1
-make[7]: *** Waiting for unfinished jobs....
-make[7]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio/tests'
-make[6]: *** [all-recursive] Error 1
-make[6]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio/tests'
-make[5]: *** [all] Error 2
-make[5]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio/tests'
-make[4]: *** [all-recursive] Error 1
-make[4]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio'
-make[3]: *** [all] Error 2
-make[3]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio'
-make[2]: *** [all-recursive] Error 1
-make[2]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2'
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-`/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2'
-make: ***
-[/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/.stamp_built]
-Error 2
+What I think you are missing is the top-level .mk file in
+/package/company/company.mk which includes all sub-mk files.
 
+In Buildroot, all makefiles are included into one big top-level
+Makefile whenever you type 'make'. For the packages, this is done with
+wildcards: Makefile includes package/*/*.mk
+If you have .mk files in other locations (package/*/*/*.mk), you have
+to include them yourself, inside a .mk file at package/*/*.mk level.
 
-Any help with this one since I have tried a number of things ( google found
-), would be awesome.
-
-Regards
-Nigel Sollars
-
--- 
-?Science is a differential equation. Religion is a boundary condition.?
-
-Alan Turing
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120424/149a56e8/attachment.html>
+Best regards,
+Thomas
