@@ -1,54 +1,75 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Apr 2012 12:07:47 +0200
-Subject: [Buildroot] [git commit] mpd: add audiofile support
-Message-ID: <20120425101023.E715B96BC0@busybox.osuosl.org>
+Date: Wed, 25 Apr 2012 12:07:36 +0200
+Subject: [Buildroot] [git commit] audiofile: new package
+Message-ID: <20120425101023.D67C396BAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9d4d960aab258f8a9df703cda262a6678414ecc
+commit: http://git.buildroot.net/buildroot/commit/?id=a1c9bdd64393078f38f054a6aa6f7c7a84dbc483
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/mpd/Config.in |    7 +++++++
- package/multimedia/mpd/mpd.mk    |    5 +++++
- 2 files changed, 12 insertions(+), 0 deletions(-)
+ package/multimedia/Config.in              |    1 +
+ package/multimedia/audiofile/Config.in    |   11 +++++++++++
+ package/multimedia/audiofile/audiofile.mk |   19 +++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/multimedia/mpd/Config.in b/package/multimedia/mpd/Config.in
-index 27bd309..c7c0cd7 100644
---- a/package/multimedia/mpd/Config.in
-+++ b/package/multimedia/mpd/Config.in
-@@ -30,6 +30,13 @@ config BR2_PACKAGE_MPD_AO
- 	help
- 	  Enable libao output support.
- 
-+config BR2_PACKAGE_MPD_AUDIOFILE
+diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+index a05d1d9..effec38 100644
+--- a/package/multimedia/Config.in
++++ b/package/multimedia/Config.in
+@@ -1,6 +1,7 @@
+ menu "Audio and video libraries and applications"
+ source "package/multimedia/alsa-lib/Config.in"
+ source "package/multimedia/alsa-utils/Config.in"
++source "package/multimedia/audiofile/Config.in"
+ source "package/multimedia/aumix/Config.in"
+ source "package/multimedia/faad2/Config.in"
+ source "package/multimedia/flac/Config.in"
+diff --git a/package/multimedia/audiofile/Config.in b/package/multimedia/audiofile/Config.in
+new file mode 100644
+index 0000000..4f9952c
+--- /dev/null
++++ b/package/multimedia/audiofile/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_AUDIOFILE
 +	bool "audiofile"
-+	select BR2_PACKAGE_AUDIOFILE
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  Enable audiofile input/streaming support.
-+	  Select this if you want to play back WAV files.
++	  The Audio File Library handles reading and writing audio files
++	  in many common formats.
 +
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
- 	select BR2_PACKAGE_PULSEAUDIO
-diff --git a/package/multimedia/mpd/mpd.mk b/package/multimedia/mpd/mpd.mk
-index 095bad6..43d429b 100644
---- a/package/multimedia/mpd/mpd.mk
-+++ b/package/multimedia/mpd/mpd.mk
-@@ -21,6 +21,11 @@ MPD_DEPENDENCIES += libao
- MPD_CONF_OPT += --enable-ao
- endif
- 
-+ifeq ($(BR2_PACKAGE_MPD_AUDIOFILE),y)
-+MPD_DEPENDENCIES += audiofile
-+MPD_CONF_OPT += --enable-audiofile
-+endif
++	  http://www.68k.org/~michael/audiofile/
 +
- ifeq ($(BR2_PACKAGE_MPD_PULSEAUDIO),y)
- MPD_DEPENDENCIES += pulseaudio
- MPD_CONF_OPT += --enable-pulse
++comment "audiofile requires a toolchain with C++ support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/multimedia/audiofile/audiofile.mk b/package/multimedia/audiofile/audiofile.mk
+new file mode 100644
+index 0000000..a49cc3e
+--- /dev/null
++++ b/package/multimedia/audiofile/audiofile.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# audiofile
++#
++#############################################################
++
++AUDIOFILE_VERSION = 0.3.3
++AUDIOFILE_SITE = http://audiofile.68k.org
++AUDIOFILE_INSTALL_STAGING = YES
++AUDIOFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++
++# Useless and needs alsa-lib
++define AUDIOFILE_DISABLE_EXAMPLES
++	$(SED) 's/examples//' $(@D)/Makefile.in
++endef
++
++AUDIOFILE_POST_PATCH_HOOKS += AUDIOFILE_DISABLE_EXAMPLES
++
++$(eval $(call AUTOTARGETS))
