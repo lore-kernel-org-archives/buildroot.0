@@ -1,25 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Apr 2012 15:40:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 5102] qt package moc, uic,
-	rcc read from wrong place
-In-Reply-To: <bug-5102-163@https.bugs.busybox.net/>
-References: <bug-5102-163@https.bugs.busybox.net/>
-Message-ID: <20120425154054.AC27D96BBF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 25 Apr 2012 17:42:38 +0200
+Subject: [Buildroot] [PATCH] xf86-input-vmmouse: Make xf86-input-vmmouse
+ available only to x86/x86_64 architectures
+In-Reply-To: <1335368289-19192-1-git-send-email-markos.chandras@imgtec.com>
+References: <1335368289-19192-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <20120425174238.68b9b354@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5102
+Le Wed, 25 Apr 2012 16:38:09 +0100,
+Markos Chandras <markos.chandras@imgtec.com> a ?crit :
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-04-25 15:40:54 UTC ---
-I think you're using the wrong qmake. You should be executing the qmake from
-output/host/usr/bin/qmake.
+> diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+> index 377e7e4..dc24691 100644
+> --- a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+> +++ b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+> @@ -1,3 +1,4 @@
+> +if BR2_i386 || BR2_x86_64
 
-I'll try to find the source code of your example and build it.
+I would prefer a
 
+	depends on BR2_i386 || BR2_x86_64
+
+below:
+
+config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
+  	bool "xf86-input-vmmouse"
+
+because that's what we do for all other packages.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
