@@ -1,34 +1,44 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Apr 2012 22:29:34 +0200
-Subject: [Buildroot] [git commit] nfs-utils: fix build with ipv6 after
-	2a10c9 (pass --enable-ipv6 to autotargets configure)
-Message-ID: <20120425203046.8E63F96BB3@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 25 Apr 2012 22:52:17 +0200
+Subject: [Buildroot] Buildroot SKIPS PATCHES ???
+In-Reply-To: <4F983762.2090008@petroprogram.com> ("Stefan =?utf-8?Q?Fr?=
+ =?utf-8?Q?=C3=B6berg=22's?= message
+ of "Wed, 25 Apr 2012 20:41:54 +0300")
+References: <4F9341C9.8000508@petroprogram.com>
+ <CAAXf6LX+De-fWuqb-nZBGyMkoqBdeqYz+qp=hDkUybCE_a-G4Q@mail.gmail.com>
+ <4F9586EE.9090600@petroprogram.com>
+ <CAAXf6LX3sUmETGmOcpMh=av4n3jkc18gHBFO3zkfwW=andjjmg@mail.gmail.com>
+ <4F983762.2090008@petroprogram.com>
+Message-ID: <87haw7bkla.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e23be36ab3a110787917db59618d9f5280457938
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Stefan" == Stefan Fr?berg <stefan.froberg@petroprogram.com> writes:
 
-IPv6 support needs the TIRPC library, which we don't have in Buildroot, so
-forcibly disable IPv6 support.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/nfs-utils/nfs-utils.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ Stefan> By the way, what is the normal process of offering new packages
+ Stefan> to buildroot ?  I tried looking from buildroot pages for that
+ Stefan> info but could not find it.
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index bbe25fe..557e7e8 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -14,6 +14,7 @@ NFS_UTILS_CONF_OPT = \
- 		--disable-gss \
- 		--disable-tirpc \
- 		--disable-uuid \
-+		--disable-ipv6 \
- 		--without-tcp-wrappers \
- 		--with-rpcgen=internal
- 
+ Stefan> In addition to this wvstreams package I have wvdial, firefox
+ Stefan> (not really an embedded system browser, but I can't live
+ Stefan> without it), slim and Linux Pam packages under work.
+
+ Stefan> Should I just offer them on buildroot mailing list for
+ Stefan> reviewing or where ?
+
+Yes, please send git-style patches to the mailing list for
+review. Please also sign off on your patches (Linux kernel style) using
+the -s option on git format-patch.
+
+Once reviewed, then I'll commit the patches to git.
+
+This is (very) shortly documented on the website:
+
+http://buildroot.net/git.html
+
+-- 
+Bye, Peter Korsgaard
