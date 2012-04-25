@@ -1,39 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Apr 2012 11:21:56 +0200
-Subject: [Buildroot] [PATCH 22/22] xtensa: remove support for this
-	architecture
-In-Reply-To: <20120425110914.523bffd1@skate> (Thomas Petazzoni's message of
- "Wed, 25 Apr 2012 11:09:14 +0200")
-References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
- <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
- <7fac2ee376eb5542ebd39c2eb063f773f99834a0.1334673910.git.thomas.petazzoni@free-electrons.com>
- <87pqawcia1.fsf@macbook.be.48ers.dk> <20120425110914.523bffd1@skate>
-Message-ID: <87lilkcgjv.fsf@macbook.be.48ers.dk>
+From: Qais Yousef <Qais.Yousef@imgtec.com>
+Date: Wed, 25 Apr 2012 10:30:07 +0100
+Subject: [Buildroot] [PATCH v4] New Package: latencytop
+In-Reply-To: <87d36wg6qv.fsf@macbook.be.48ers.dk>
+References: <1334747160-7990-1-git-send-email-qais.yousef@imgtec.com>
+ <87d36wg6qv.fsf@macbook.be.48ers.dk>
+Message-ID: <0D107966AF6D79418315B7C5549F4B51033CC5BF@lemail1.le.imgtec.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>  Qais> @@ -37,6 +37,7 @@ source "package/strace/Config.in"
+>  Qais>  source "package/whetstone/Config.in"
+>  Qais>  source "package/valgrind/Config.in"
+>  Qais>  source "package/pv/Config.in"
+>  Qais> +source "package/latencytop/Config.in"
+> 
+> This should be in alphabetical order, but I've fixed that.
 
- Thomas> Le Wed, 25 Apr 2012 10:44:38 +0200,
- Thomas> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Noted for the future :-) Thanks for fixing it.
 
- >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
- >> 
- Thomas> The support for Xtensa has been added in July 2009, and no updates
- Thomas> have ever been done to it, and it requires some special handling, in
- Thomas> gcc/gdb, has some special Perl scripts, etc.
- >> 
- >> As discussed on IRC, I would prefer to simply mark Xtensa as deprecated
- >> for now, and then remove in the next cycle if nothing happens.
+Qais
 
- Thomas> I am fine with this decision, and will send a patch that implements it.
- Thomas> My patch removing Xtensa support was mainly to get the discussion
- Thomas> started.
-
-Good. I already added the BR2_DEPRECATED (555c2585b).
-
--- 
-Bye, Peter Korsgaard
+> 
+> --
+> Bye, Peter Korsgaard
