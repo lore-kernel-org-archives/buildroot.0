@@ -1,25 +1,29 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Wed, 25 Apr 2012 16:26:43 +0200
-Subject: [Buildroot] [PATCH] util-linux: disable installing binaries by
- default
-In-Reply-To: <1335359709-26898-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1335359709-26898-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1335364003.2428.14.camel@sven>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 25 Apr 2012 11:30:32 -0300
+Subject: [Buildroot] [PATCH 1/2] berkeleydb: use O_DIRECT
+Message-ID: <1335364233-21057-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2012-04-25 at 10:15 -0300, Gustavo Zacarias wrote:
-> +config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> +       select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +       bool "libblkid and blkid utilities"
-> +       default y
-> 
-Actually it only installs libblkid. If you want the blkid utility you
-also need to select BR2_PACKAGE_UTIL_LINUX_BINARIES.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/berkeleydb/berkeleydb.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-
-Regards,
-Sven
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index bb3fd5d..b2b0a45 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -28,6 +28,7 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 		--disable-compat185 \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		--with-pic \
++		--enable-o_direct \
+ 	)
+ 	$(SED) 's/\.lo/.o/g' $(@D)/build_unix/Makefile
+ endef
+-- 
+1.7.3.4
