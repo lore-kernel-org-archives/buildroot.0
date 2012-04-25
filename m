@@ -1,41 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Apr 2012 13:03:33 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: remove duplicate QUIET
-	entries
-Message-ID: <20120425115811.ED2A496B3C@busybox.osuosl.org>
+Date: Wed, 25 Apr 2012 13:57:15 +0200
+Subject: [Buildroot] [git commit] tcpdump: fix build with ipv6 after 2a10c9
+	(pass --enable-ipv6 to autotargets configure)
+Message-ID: <20120425115812.0663196BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fcafc9575693a77e169202b66f41db2c67ef7363
+commit: http://git.buildroot.net/buildroot/commit/?id=83b064e3afeed94b1a7930795bff08147a5626a9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/gcc-uclibc-4.x.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/tcpdump/tcpdump.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/gcc/gcc-uclibc-4.x.mk b/toolchain/gcc/gcc-uclibc-4.x.mk
-index a4faf4f..a2975dc 100644
---- a/toolchain/gcc/gcc-uclibc-4.x.mk
-+++ b/toolchain/gcc/gcc-uclibc-4.x.mk
-@@ -310,7 +310,6 @@ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
- 		$(SOFT_FLOAT_CONFIG_OPTION) \
- 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
- 		$(EXTRA_GCC_CONFIG_OPTIONS) \
--		$(QUIET) \
- 	)
- 	touch $@
- 
-@@ -376,7 +375,6 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched
- 		$(SOFT_FLOAT_CONFIG_OPTION) \
- 		$(GCC_WITH_ABI) $(GCC_WITH_ARCH) $(GCC_WITH_TUNE) $(GCC_WITH_CPU) \
- 		$(EXTRA_GCC_CONFIG_OPTIONS) \
--		$(QUIET) \
- 	)
- 	touch $@
- 
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index cf23df3..ab9d4f1 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -9,7 +9,7 @@
+ TCPDUMP_VERSION = 4.2.1
+ TCPDUMP_SITE = http://www.tcpdump.org/release
+ TCPDUMP_SOURCE = tcpdump-$(TCPDUMP_VERSION).tar.gz
+-TCPDUMP_CONF_ENV = ac_cv_linux_vers=2
++TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no
+ TCPDUMP_CONF_OPT = --without-crypto \
+ 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ TCPDUMP_DEPENDENCIES = zlib libpcap
