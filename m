@@ -1,32 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Apr 2012 08:52:29 +0200
-Subject: [Buildroot] [git commit] Remove unused GNU_TARGET_SUFFIX
-Message-ID: <20120425065435.599A796BCA@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 25 Apr 2012 08:55:17 +0200
+Subject: [Buildroot] [PATCH 13/22] Remove unused GNU_TARGET_SUFFIX
+In-Reply-To: <60a226b4a2b427209157f962136e1f9cfe09ed93.1334673910.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 17 Apr 2012 16:45:25 +0200")
+References: <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
+ <cover.1334673910.git.thomas.petazzoni@free-electrons.com>
+ <60a226b4a2b427209157f962136e1f9cfe09ed93.1334673910.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87zka0e1wq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad5af7573291e48835d52223642505a2f8d18af2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Makefile |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/Makefile b/Makefile
-index eafb654..44c70cc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -236,8 +236,6 @@ BZCAT:=$(call qstrip,$(BR2_BZCAT))
- XZCAT:=$(call qstrip,$(BR2_XZCAT))
- TAR_OPTIONS=$(call qstrip,$(BR2_TAR_OPTIONS)) -xf
- 
--GNU_TARGET_SUFFIX:=-$(call qstrip,$(BR2_GNU_TARGET_SUFFIX))
--
- # packages compiled for the host go here
- HOST_DIR:=$(call qstrip,$(BR2_HOST_DIR))
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
