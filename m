@@ -1,32 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 25 Apr 2012 13:57:15 +0200
-Subject: [Buildroot] [git commit] tcpdump: fix build with ipv6 after 2a10c9
-	(pass --enable-ipv6 to autotargets configure)
-Message-ID: <20120425115812.0663196BBF@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 25 Apr 2012 14:01:23 +0200
+Subject: [Buildroot] [PATCH 1/2] Bump berkeleydb version
+Message-ID: <1335355284-1347-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=83b064e3afeed94b1a7930795bff08147a5626a9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/tcpdump/tcpdump.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/berkeleydb/berkeleydb.mk |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-index cf23df3..ab9d4f1 100644
---- a/package/tcpdump/tcpdump.mk
-+++ b/package/tcpdump/tcpdump.mk
-@@ -9,7 +9,7 @@
- TCPDUMP_VERSION = 4.2.1
- TCPDUMP_SITE = http://www.tcpdump.org/release
- TCPDUMP_SOURCE = tcpdump-$(TCPDUMP_VERSION).tar.gz
--TCPDUMP_CONF_ENV = ac_cv_linux_vers=2
-+TCPDUMP_CONF_ENV = ac_cv_linux_vers=2 td_cv_buggygetaddrinfo=no
- TCPDUMP_CONF_OPT = --without-crypto \
- 		$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
- TCPDUMP_DEPENDENCIES = zlib libpcap
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index ed70486..3d57852 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -3,7 +3,7 @@
+ # berkeley db
+ #
+ #############################################################
+-BERKELEYDB_VERSION:=4.4.20
++BERKELEYDB_VERSION:=5.3.15
+ BERKELEYDB_SITE:=http://download.oracle.com/berkeley-db
+ BERKELEYDB_SOURCE:=db-$(BERKELEYDB_VERSION).NC.tar.gz
+ BERKELEYDB_SUBDIR=build_unix
+@@ -33,7 +33,6 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 		--with-gnu-ld \
+ 		--disable-cxx \
+ 		--disable-java \
+-		--disable-rpc \
+ 		--disable-tcl \
+ 		--disable-compat185 \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+-- 
+1.7.10
