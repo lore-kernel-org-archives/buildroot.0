@@ -1,32 +1,38 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Wed, 25 Apr 2012 18:41:32 +0100
-Subject: [Buildroot] Problem with host packages
-Message-ID: <4F98374C.7010701@carallon.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 25 Apr 2012 14:45:46 -0300
+Subject: [Buildroot] [PATCH 1/4] package/multimedia: move networking
+ libs out
+In-Reply-To: <20120425193839.3b45570b@skate>
+References: <1335370243-27044-1-git-send-email-gustavo@zacarias.com.ar>
+ <20120425193839.3b45570b@skate>
+Message-ID: <834c1b3a8e44b77b2fa173dba81e2ffc@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 2012-04-25 14:38, Thomas Petazzoni wrote:
 
-I have been working on updating the xorg components and as part of that 
-I need to update mesa3d. Newer version of this require that you have 
-python libxml2 support.
+> Le Wed, 25 Apr 2012 13:10:40 -0300,
+> Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+>
+>> Move networking libraries out of the Audio and Video category into 
+>> the
+>> Libaries/Networking one.
+>
+> I am not quite sure about this one. Even though it's true libmpd or
+> live555 have networking capabilities, I think their core feature is
+> more audio and/or video oriented, so it should be in some
+> Libraries->Audio or Libraries->Audio/Video section rather than
+> Libraries->Networking.
+>
+> Thomas
 
-Currently for host-libxml2 python support is disabled. I can change that 
-so that it builds python support but that then means you have to build 
-host-python any time you want host-libxml2. When building for the target 
-we are able to see what is selected for the target and conditionally 
-change what options are used. Is there an equivalent mechanism for doing 
-this with host packages?
-
-Thanks
-Will
-
--- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+live555 can handle RTSP which can stream video also so it isn't clear 
+cut.
+libmpd as i said on IRC is a big grey thing, it does networking which 
+is the way it controls mpd and it doesn't handle audio per se.
+But mpd is an audio app and the protocol is quite explicit...
+Let's "hear" some other voices and see, this was just a first shot.
+Regards.
