@@ -1,28 +1,83 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 25 Apr 2012 10:22:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 2353] [lua] fix build with 2010.08-rc1
-In-Reply-To: <bug-2353-163@https.bugs.busybox.net/>
-References: <bug-2353-163@https.bugs.busybox.net/>
-Message-ID: <20120425102204.D1AB196BB7@busybox.osuosl.org>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Wed, 25 Apr 2012 12:24:04 +0200
+Subject: [Buildroot] [PATCH v3] package: add libfcgi fast cgi library.
+References: <20111014110808.70e495a8@skate>
+ <1318583794-9897-1-git-send-email-arnout@mind.be>
+Message-ID: <op.wdbgiefp705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=2353
+Ping
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Can this patch be commited?
+Or is there something to do first?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+e.g. rename to fcgi to avoid the LIBFCGI_SOURCE makro?
 
---- Comment #9 from Peter Korsgaard <jacmet@uclibc.org> 2012-04-25 10:22:04 UTC ---
-Fixed in git
+Am 14.10.2011, 11:16 Uhr, schrieb Arnout Vandecappelle (Essensium/Mind)  
+<arnout@mind.be>:
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+> From: Rico Bachmann <bachmann@tofwerk.com>
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind)  
+> <arnout@mind.be>
+> Signed-off-by: Rico Bachmann  
+> <bachmann@tofwerk.com>
+> ---
+> Changes v3: now actually included the changes v2 (forgot the
+> -a to git commit :-)
+>
+> Changes v2: corrected indentation of Config.in, removed redundant
+> arguments of AUTOTARGETS.
+> ---
+>  package/Config.in          |    1 +
+>  package/libfcgi/Config.in  |    5 +++++
+>  package/libfcgi/libfcgi.mk |   12 ++++++++++++
+>  3 files changed, 18 insertions(+), 0 deletions(-)
+>  create mode 100644 package/libfcgi/Config.in
+>  create mode 100644 package/libfcgi/libfcgi.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 7dc8887..76c89c7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -327,6 +327,7 @@ source "package/libcgicc/Config.in"
+>  source "package/libcurl/Config.in"
+>  source "package/libdnet/Config.in"
+>  source "package/libeXosip2/Config.in"
+> +source "package/libfcgi/Config.in"
+>  source "package/libidn/Config.in"
+>  source "package/libmicrohttpd/Config.in"
+>  source "package/neon/Config.in"
+> diff --git a/package/libfcgi/Config.in b/package/libfcgi/Config.in
+> new file mode 100644
+> index 0000000..b31f06b
+> --- /dev/null
+> +++ b/package/libfcgi/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_LIBFCGI
+> +	bool "libfcgi"
+> +	help
+> +	  FCGI, a fastcgi developer library for C/C++
+> +	  http://www.fastcgi.com/
+> diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
+> new file mode 100644
+> index 0000000..4625165
+> --- /dev/null
+> +++ b/package/libfcgi/libfcgi.mk
+> @@ -0,0 +1,12 @@
+> +##############################################################################
+> +#
+> +# libfcgi
+> +#
+> +##############################################################################
+> +LIBFCGI_VERSION = 2.4.0
+> +LIBFCGI_SOURCE = fcgi-$(LIBFCGI_VERSION).tar.gz
+> +LIBFCGI_SITE = http://www.fastcgi.com/dist
+> +LIBFCGI_INSTALL_STAGING = YES
+> +LIBFCGI_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -lm"
+> +
+> +$(eval $(call AUTOTARGETS))
