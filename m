@@ -1,136 +1,97 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 25 Apr 2012 13:10:42 -0300
-Subject: [Buildroot] [PATCH 3/4] package/multimedia: move multimedia libs out
-In-Reply-To: <1335370243-27044-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1335370243-27044-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1335370243-27044-3-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 25 Apr 2012 13:10:40 -0300
+Subject: [Buildroot] [PATCH 1/4] package/multimedia: move networking libs out
+Message-ID: <1335370243-27044-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move multimedia libraries ouf of the Audio and Video category into the
-Libraries/Multimedia one.
+Move networking libraries out of the Audio and Video category into the
+Libaries/Networking one.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                                  |    9 +++++++++
- package/{multimedia => }/libdvdnav/Config.in       |    0
- package/{multimedia => }/libdvdnav/libdvdnav.mk    |    0
- package/{multimedia => }/libdvdread/Config.in      |    0
- package/{multimedia => }/libdvdread/libdvdread.mk  |    0
- package/{multimedia => }/libmpeg2/Config.in        |    0
- .../libmpeg2/libmpeg2-0.5.1-altivec.patch          |    0
- package/{multimedia => }/libmpeg2/libmpeg2.mk      |    0
- package/{multimedia => }/libogg/Config.in          |    0
- package/{multimedia => }/libogg/libogg.mk          |    0
- package/{multimedia => }/libplayer/Config.in       |    0
- package/{multimedia => }/libplayer/libplayer.mk    |    0
- package/{multimedia => }/libtheora/Config.in       |    0
- package/{multimedia => }/libtheora/libtheora.mk    |    0
- package/multimedia/Config.in                       |    6 ------
- 15 files changed, 9 insertions(+), 6 deletions(-)
- rename package/{multimedia => }/libdvdnav/Config.in (100%)
- rename package/{multimedia => }/libdvdnav/libdvdnav.mk (100%)
- rename package/{multimedia => }/libdvdread/Config.in (100%)
- rename package/{multimedia => }/libdvdread/libdvdread.mk (100%)
- rename package/{multimedia => }/libmpeg2/Config.in (100%)
- rename package/{multimedia => }/libmpeg2/libmpeg2-0.5.1-altivec.patch (100%)
- rename package/{multimedia => }/libmpeg2/libmpeg2.mk (100%)
- rename package/{multimedia => }/libogg/Config.in (100%)
- rename package/{multimedia => }/libogg/libogg.mk (100%)
- rename package/{multimedia => }/libplayer/Config.in (100%)
- rename package/{multimedia => }/libplayer/libplayer.mk (100%)
- rename package/{multimedia => }/libtheora/Config.in (100%)
- rename package/{multimedia => }/libtheora/libtheora.mk (100%)
+ package/Config.in                           |    3 +++
+ package/{multimedia => }/libmms/Config.in   |    0
+ package/{multimedia => }/libmms/libmms.mk   |    0
+ package/{multimedia => }/libmpd/Config.in   |    0
+ package/{multimedia => }/libmpd/libmpd.mk   |    0
+ package/{multimedia => }/live555/Config.in  |    0
+ package/{multimedia => }/live555/live555.mk |    0
+ package/multimedia/Config.in                |    3 ---
+ 8 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/{multimedia => }/libmms/Config.in (100%)
+ rename package/{multimedia => }/libmms/libmms.mk (100%)
+ rename package/{multimedia => }/libmpd/Config.in (100%)
+ rename package/{multimedia => }/libmpd/libmpd.mk (100%)
+ rename package/{multimedia => }/live555/Config.in (100%)
+ rename package/{multimedia => }/live555/live555.mk (100%)
 
 diff --git a/package/Config.in b/package/Config.in
-index 22fd38d..3337139 100644
+index 28a08d2..6e03369 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -367,6 +367,15 @@ source "package/jquery-validation/Config.in"
- source "package/jsmin/Config.in"
+@@ -364,6 +364,8 @@ source "package/neon/Config.in"
+ source "package/libmnl/Config.in"
+ source "package/libmodbus/Config.in"
+ source "package/libmbus/Config.in"
++source "package/libmpd/Config.in"
++source "package/libmms/Config.in"
+ source "package/libnl/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+@@ -371,6 +373,7 @@ source "package/librsync/Config.in"
+ source "package/libsoup/Config.in"
+ source "package/libupnp/Config.in"
+ source "package/libvncserver/Config.in"
++source "package/live555/Config.in"
+ source "package/zeromq/Config.in"
  endmenu
  
-+menu "Multimedia"
-+source "package/libdvdread/Config.in"
-+source "package/libdvdnav/Config.in"
-+source "package/libmpeg2/Config.in"
-+source "package/libogg/Config.in"
-+source "package/libplayer/Config.in"
-+source "package/libtheora/Config.in"
-+endmenu
-+
- menu "Networking"
- source "package/glib-networking/Config.in"
- source "package/libcgi/Config.in"
-diff --git a/package/multimedia/libdvdnav/Config.in b/package/libdvdnav/Config.in
+diff --git a/package/multimedia/libmms/Config.in b/package/libmms/Config.in
 similarity index 100%
-rename from package/multimedia/libdvdnav/Config.in
-rename to package/libdvdnav/Config.in
-diff --git a/package/multimedia/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
+rename from package/multimedia/libmms/Config.in
+rename to package/libmms/Config.in
+diff --git a/package/multimedia/libmms/libmms.mk b/package/libmms/libmms.mk
 similarity index 100%
-rename from package/multimedia/libdvdnav/libdvdnav.mk
-rename to package/libdvdnav/libdvdnav.mk
-diff --git a/package/multimedia/libdvdread/Config.in b/package/libdvdread/Config.in
+rename from package/multimedia/libmms/libmms.mk
+rename to package/libmms/libmms.mk
+diff --git a/package/multimedia/libmpd/Config.in b/package/libmpd/Config.in
 similarity index 100%
-rename from package/multimedia/libdvdread/Config.in
-rename to package/libdvdread/Config.in
-diff --git a/package/multimedia/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+rename from package/multimedia/libmpd/Config.in
+rename to package/libmpd/Config.in
+diff --git a/package/multimedia/libmpd/libmpd.mk b/package/libmpd/libmpd.mk
 similarity index 100%
-rename from package/multimedia/libdvdread/libdvdread.mk
-rename to package/libdvdread/libdvdread.mk
-diff --git a/package/multimedia/libmpeg2/Config.in b/package/libmpeg2/Config.in
+rename from package/multimedia/libmpd/libmpd.mk
+rename to package/libmpd/libmpd.mk
+diff --git a/package/multimedia/live555/Config.in b/package/live555/Config.in
 similarity index 100%
-rename from package/multimedia/libmpeg2/Config.in
-rename to package/libmpeg2/Config.in
-diff --git a/package/multimedia/libmpeg2/libmpeg2-0.5.1-altivec.patch b/package/libmpeg2/libmpeg2-0.5.1-altivec.patch
+rename from package/multimedia/live555/Config.in
+rename to package/live555/Config.in
+diff --git a/package/multimedia/live555/live555.mk b/package/live555/live555.mk
 similarity index 100%
-rename from package/multimedia/libmpeg2/libmpeg2-0.5.1-altivec.patch
-rename to package/libmpeg2/libmpeg2-0.5.1-altivec.patch
-diff --git a/package/multimedia/libmpeg2/libmpeg2.mk b/package/libmpeg2/libmpeg2.mk
-similarity index 100%
-rename from package/multimedia/libmpeg2/libmpeg2.mk
-rename to package/libmpeg2/libmpeg2.mk
-diff --git a/package/multimedia/libogg/Config.in b/package/libogg/Config.in
-similarity index 100%
-rename from package/multimedia/libogg/Config.in
-rename to package/libogg/Config.in
-diff --git a/package/multimedia/libogg/libogg.mk b/package/libogg/libogg.mk
-similarity index 100%
-rename from package/multimedia/libogg/libogg.mk
-rename to package/libogg/libogg.mk
-diff --git a/package/multimedia/libplayer/Config.in b/package/libplayer/Config.in
-similarity index 100%
-rename from package/multimedia/libplayer/Config.in
-rename to package/libplayer/Config.in
-diff --git a/package/multimedia/libplayer/libplayer.mk b/package/libplayer/libplayer.mk
-similarity index 100%
-rename from package/multimedia/libplayer/libplayer.mk
-rename to package/libplayer/libplayer.mk
-diff --git a/package/multimedia/libtheora/Config.in b/package/libtheora/Config.in
-similarity index 100%
-rename from package/multimedia/libtheora/Config.in
-rename to package/libtheora/Config.in
-diff --git a/package/multimedia/libtheora/libtheora.mk b/package/libtheora/libtheora.mk
-similarity index 100%
-rename from package/multimedia/libtheora/libtheora.mk
-rename to package/libtheora/libtheora.mk
+rename from package/multimedia/live555/live555.mk
+rename to package/live555/live555.mk
 diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
-index 2871f8b..6188553 100644
+index effec38..7e955c9 100644
 --- a/package/multimedia/Config.in
 +++ b/package/multimedia/Config.in
-@@ -13,12 +13,6 @@ source "package/multimedia/gst-plugins-good/Config.in"
- source "package/multimedia/gst-plugins-bad/Config.in"
- source "package/multimedia/gst-plugins-ugly/Config.in"
- source "package/multimedia/lame/Config.in"
--source "package/multimedia/libdvdread/Config.in"
--source "package/multimedia/libdvdnav/Config.in"
--source "package/multimedia/libmpeg2/Config.in"
--source "package/multimedia/libogg/Config.in"
--source "package/multimedia/libplayer/Config.in"
--source "package/multimedia/libtheora/Config.in"
+@@ -23,8 +23,6 @@ source "package/multimedia/libdvdread/Config.in"
+ source "package/multimedia/libdvdnav/Config.in"
+ source "package/multimedia/libid3tag/Config.in"
+ source "package/multimedia/libmad/Config.in"
+-source "package/multimedia/libmms/Config.in"
+-source "package/multimedia/libmpd/Config.in"
+ source "package/multimedia/libmpeg2/Config.in"
+ source "package/multimedia/libogg/Config.in"
+ source "package/multimedia/libplayer/Config.in"
+@@ -33,7 +31,6 @@ source "package/multimedia/libsamplerate/Config.in"
+ source "package/multimedia/libsndfile/Config.in"
+ source "package/multimedia/libtheora/Config.in"
+ source "package/multimedia/libvorbis/Config.in"
+-source "package/multimedia/live555/Config.in"
  source "package/multimedia/madplay/Config.in"
  source "package/multimedia/mpd/Config.in"
  source "package/multimedia/mpg123/Config.in"
