@@ -1,46 +1,147 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Wed, 25 Apr 2012 13:02:52 +0000 (UTC)
-Subject: [Buildroot] How do you add a package subdirectory?
-References: <jn795b$kbq$1@dough.gmane.org>
- <CAAXf6LU8+LZGYn-BQTkyjzDEQgLDkGeHrsd5WBt7NftnVfCjPg@mail.gmail.com>
-Message-ID: <jn8slr$fpi$1@dough.gmane.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 25 Apr 2012 10:15:09 -0300
+Subject: [Buildroot] [PATCH] util-linux: disable installing binaries by
+	default
+Message-ID: <1335359709-26898-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-04-25, Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> wrote:
-> Hi Grant,
->
-> On Wed, Apr 25, 2012 at 12:23 AM, Grant Edwards
-><grant.b.edwards@gmail.com> wrote:
->> I'm trying to add local packages to 2012.02, and I'd like them to live
->> in a subdirectory underneath "package" (e.g. package/mycompany).
-[...]
->> The "mycompany" submenu shows up where it's supposed to,
-[...]
->> But, when I actually do the "make", buildroot won't attempt to build
->> packages "foo" and "bar" unless I create symlinks in the packages
->> directory that point to the corresponding directories in the mycompany
->> subdirectory
-[...]
+Disable installing binaries by default.
+This is to avoid installing unnecessary bloat when we just need
+libblkid/libuuid for some packages like e2fsprogs.
 
-> Have a look at http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf,
-> pages 27-28 where this scenario is described.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/util-linux/Config.in     |   35 ++++++++++++++++++++++-------------
+ package/util-linux/util-linux.mk |   37 ++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 58 insertions(+), 14 deletions(-)
 
-Cool.  There should be a link to this on the "Documentation" page.
-
-> What I think you are missing is the top-level .mk file in
-> /package/company/company.mk which includes all sub-mk files.
-
-That's it.  I swear I looked for files like that and they weren't
-there yesterday...
-
-Thanks!
-
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 43a8444..65e90fb 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -11,6 +11,26 @@ config BR2_PACKAGE_UTIL_LINUX
+ 
+ if BR2_PACKAGE_UTIL_LINUX
+ 
++config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	bool "libblkid and blkid utilities"
++	default y
++
++config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	bool "libmount"
++
++config BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	bool "libuuid and uuid utilities"
++	default y
++
++config BR2_PACKAGE_UTIL_LINUX_BINARIES
++	bool "install utilities"
++	help
++	  Install util-linux binaries.
++
++if BR2_PACKAGE_UTIL_LINUX_BINARIES
++
+ ############################################
+ # default enabled and should be disabled by
+ #  --disable-foo
+@@ -24,22 +44,9 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	bool "build \"fsck\""
+ 
+-config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+-	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	bool "build libmount"
+-
+-config BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	bool "build libuuid and uuid utilities"
+-	default y
+-
+ config BR2_PACKAGE_UTIL_LINUX_UUIDD
+ 	bool "build \"uuidd\""
+ 
+-config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+-	bool "build libblkid and blkid utilities"
+-	default y
+-
+ config BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	bool "build \"agetty\""
+ 
+@@ -104,5 +111,7 @@ config BR2_PACKAGE_UTIL_LINUX_WRITE
+ 
+ endif
+ 
++endif
++
+ comment "util-linux requires a toolchain with LARGEFILE + WCHAR support"
+ 	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index d8a3ac9..08dbdcd 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -3,6 +3,7 @@
+ # util-linux
+ #
+ #############################################################
++
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_VERSION_MAJOR = 2.20
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.bz2
+@@ -11,7 +12,6 @@ UTIL_LINUX_AUTORECONF = YES
+ UTIL_LINUX_INSTALL_STAGING = YES
+ UTIL_LINUX_DEPENDENCIES = host-pkg-config
+ UTIL_LINUX_CONF_ENV = scanf_cv_type_modifier=no
+-
+ UTIL_LINUX_CONF_OPT += --disable-rpath --disable-makeinstall-chown
+ 
+ # We don't want the host-busybox dependency to be added automatically
+@@ -81,6 +81,41 @@ HOST_UTIL_LINUX_CONF_OPT += \
+ 	--disable-fallocate --disable-unshare --disable-rename \
+ 	--disable-schedutils --disable-wall --disable-partx
+ 
++# Avoid the basic utilities if we just want the libraries
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES),y)
++define UTIL_LINUX_INSTALL_BINARIES
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
++define UTIL_LINUX_INSTALL_LIBBLKID
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libblkid \
++		DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
++define UTIL_LINUX_INSTALL_LIBMOUNT
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libmount \
++		DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++define UTIL_LINUX_INSTALL_LIBUUID
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libuuid \
++		DESTDIR=$(TARGET_DIR) install
++endef
++endif
++
++define UTIL_LINUX_INSTALL_TARGET_CMDS
++	$(UTIL_LINUX_INSTALL_BINARIES)
++	$(UTIL_LINUX_INSTALL_LIBBLKID)
++	$(UTIL_LINUX_INSTALL_LIBMOUNT)
++	$(UTIL_LINUX_INSTALL_LIBUUID)
++endef
++
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
+ 
 -- 
-Grant Edwards               grant.b.edwards        Yow! If elected, Zippy
-                                  at               pledges to each and every
-                              gmail.com            American a 55-year-old
-                                                   houseboy ...
+1.7.3.4
