@@ -1,41 +1,25 @@
-From: Markos Chandras <markos.chandras@imgtec.com>
-Date: Wed, 25 Apr 2012 16:38:09 +0100
-Subject: [Buildroot] [PATCH] xf86-input-vmmouse: Make xf86-input-vmmouse
-	available only to x86/x86_64 architectures
-Message-ID: <1335368289-19192-1-git-send-email-markos.chandras@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 25 Apr 2012 15:40:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 5102] qt package moc, uic,
+	rcc read from wrong place
+In-Reply-To: <bug-5102-163@https.bugs.busybox.net/>
+References: <bug-5102-163@https.bugs.busybox.net/>
+Message-ID: <20120425154054.AC27D96BBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The xf86-input-vmmouse source code fails to compile intentionally on any
-architecture but x86/x86_64. The following error is printed when compiling for a
-different architecture:
+https://bugs.busybox.net/show_bug.cgi?id=5102
 
-vmmouse_proto.h:62:2: error: #error The vmmouse protocol is only supported on
-x86 architectures.
-vmmouse_proto.c:117:2: error: #error "VMMouse is only supported on x86 and
-x86-64.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-04-25 15:40:54 UTC ---
+I think you're using the wrong qmake. You should be executing the qmake from
+output/host/usr/bin/qmake.
 
-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
----
- package/x11r7/xdriver_xf86-input-vmmouse/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+I'll try to find the source code of your example and build it.
 
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-index 377e7e4..dc24691 100644
---- a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-@@ -1,3 +1,4 @@
-+if BR2_i386 || BR2_x86_64
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
- 	bool "xf86-input-vmmouse"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER
-@@ -6,3 +7,4 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
- 	  VMWare mouse input driver
-+endif
 -- 
-1.7.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
