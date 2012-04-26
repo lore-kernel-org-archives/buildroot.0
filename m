@@ -1,60 +1,47 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 26 Apr 2012 11:04:56 +0200
-Subject: [Buildroot] [git commit] lttng-libust: fix build with modern uClibc
-	versions
-Message-ID: <20120426090604.2862696BD7@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Apr 2012 11:06:36 +0200
+Subject: [Buildroot] [PATCH 1/3] lttng-libust: bump to version 2.0.1
+In-Reply-To: <CAHXCMM+98uc8qCuKvmsnt2sGiXheahRMbF0TRvn_DNH+O6aeeA@mail.gmail.com>
+ (Samuel Martin's message of "Thu, 26 Apr 2012 09:52:31 +0200")
+References: <1334517476-15258-1-git-send-email-s.martin49@gmail.com>
+ <874ns7ar7b.fsf@macbook.be.48ers.dk>
+ <CAHXCMM+98uc8qCuKvmsnt2sGiXheahRMbF0TRvn_DNH+O6aeeA@mail.gmail.com>
+Message-ID: <87vckmamle.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04bd5067a2689e86a1928afac0aa3703114cd782
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-uClibc got sched_getcpu in 0.9.33, so the compat workaround should only
-be used for older uClibc versions.
+ Samuel> Hi Peter, all,
+ Samuel> 2012/4/26 Peter Korsgaard <jacmet@uclibc.org>:
+ >>>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+ >> 
+ >> ?Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ >> 
+ >> Thanks. On what toolchain as this been tested?
+ Samuel> I tested it using an "Armdeus-like" toolchain or a qemu_arm_versatile
+ Samuel> + WCHAR + gettext toolchain,
+ Samuel> based on the head of master at the time of the submission.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../lttng-libust-uclibc-sched_getcpu.patch         |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
+Seems you forgot to update the cxx patch:
 
-diff --git a/package/lttng-libust/lttng-libust-uclibc-sched_getcpu.patch b/package/lttng-libust/lttng-libust-uclibc-sched_getcpu.patch
-new file mode 100644
-index 0000000..6536185
---- /dev/null
-+++ b/package/lttng-libust/lttng-libust-uclibc-sched_getcpu.patch
-@@ -0,0 +1,32 @@
-+[PATCH] fix build with modern uClibc
-+
-+uClibc has sched_getcpu since 0.9.33, so the compat workaround should only
-+be used for older uClibc versions.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ liblttng-ust/compat.h |    5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+Index: lttng-ust-1.9.2/liblttng-ust/compat.h
-+===================================================================
-+--- lttng-ust-1.9.2.orig/liblttng-ust/compat.h
-++++ lttng-ust-1.9.2/liblttng-ust/compat.h
-+@@ -17,6 +17,10 @@
-+ #include <sys/syscall.h>
-+ 
-+ #ifdef __UCLIBC__
-++/* old uClibc versions didn't have sched_getcpu */
-++#if __UCLIBC_MAJOR__ == 0 && \
-++	(__UCLIBC_MINOR__ < 9 || \
-++	 (__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ <= 32))
-+ #define __getcpu(cpu, node, cache)	syscall(__NR_getcpu, cpu, node, cache)
-+ static inline
-+ int sched_getcpu(void)
-+@@ -26,5 +30,6 @@
-+ 	s = __getcpu(&c, NULL, NULL);
-+ 	return (s == -1) ? s : c;
-+ }
-++#endif /* <= 0.9.32 */
-+ #endif	/* __UCLIBC__ */
-+ #endif /* _UST_COMPAT_H */
+>>> lttng-libust 2.0.1 Patching package//lttng-libust
+
+Applying lttng-libust-dont-build-cxx-tests-when-not-available.patch using patch: 
+patching file configure.ac
+Hunk #1 succeeded at 45 (offset 7 lines).
+patching file tests/Makefile.am
+Hunk #1 FAILED at 1.
+1 out of 1 hunk FAILED -- saving rejects to file tests/Makefile.am.rej
+Patch failed!  Please fix lttng-libust-dont-build-cxx-tests-when-not-available.patch!
+
+I also added a new patch fixing build with uClibc > 0.9.32 a few minutes
+ago.
+
+Care to fix and resubmit?
+
+-- 
+Bye, Peter Korsgaard
