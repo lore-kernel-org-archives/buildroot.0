@@ -1,38 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 26 Apr 2012 16:45:11 +0200
-Subject: [Buildroot] [PATCH 2/2] lsof: add busybox tweaks
-In-Reply-To: <20120426140840.GJ20601@game.jcrosoft.org>
-References: <1335435324-18792-1-git-send-email-gustavo@zacarias.com.ar>
- <1335435324-18792-2-git-send-email-gustavo@zacarias.com.ar>
- <20120426140840.GJ20601@game.jcrosoft.org>
-Message-ID: <20120426164511.2f6e462d@skate>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 26 Apr 2012 17:42:01 +0000 (UTC)
+Subject: [Buildroot] How do you add to library path?
+Message-ID: <jnc1d9$t1p$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 26 Apr 2012 16:08:40 +0200,
-Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
+What's the right way to permanently add a directory to the search path
+for dynamic libraries?  (Preferably at build-time, rather than at
+run-time.)
 
-> > +if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> >  source "package/lsof/Config.in"
-> put a depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> 
-> in lsof/Config.in
+I've added the directory path to /etc/ld.so.conf using a post-build
+script. But, that file seems to be ignored at boot time (and there is
+no "ldconfig" to run even if I wanted to).
 
-No, that's not what we do for all other packages. Gustavo's patch is
-correct with regard to the current guidelines.
+I suppose I could set LD_LIBRARY_PATH globally, but for performance
+reasons, I'd prefer that the new path went into /etc/ld.so.cache. [I'm
+not sure how one sets a global environment variable anyway.]
 
-Now, whether we should change those guidelines to something else is a
-different story. But if we change the guideline, it should be changed
-for all packages and not just for lsof.
+There have been several threads about this in the past, but none of
+them seemed to offer any answers...
 
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! I want a VEGETARIAN
+                                  at               BURRITO to go ... with
+                              gmail.com            EXTRA MSG!!
