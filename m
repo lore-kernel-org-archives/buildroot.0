@@ -1,33 +1,36 @@
-From: chinna obireddy <chinnaobi@gmail.com>
-Date: Thu, 26 Apr 2012 16:58:09 +0800
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 26 Apr 2012 11:01:22 +0200
 Subject: [Buildroot] error toolchain build for mips-linux-uclibc with
-	BR2_INSTALL_LIBSTDCPP
-Message-ID: <CAAawjsQAg_90wznyQw57NbhERqGDizc89Vx2y6rmRb+9B-hAFA@mail.gmail.com>
+ BR2_INSTALL_LIBSTDCPP
+In-Reply-To: <CAAawjsQAg_90wznyQw57NbhERqGDizc89Vx2y6rmRb+9B-hAFA@mail.gmail.com>
+References: <CAAawjsQAg_90wznyQw57NbhERqGDizc89Vx2y6rmRb+9B-hAFA@mail.gmail.com>
+Message-ID: <20120426110122.2b3e38bd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Thu, 26 Apr 2012 16:58:09 +0800,
+chinna obireddy <chinnaobi@gmail.com> a ?crit :
 
-I have already built the tool chain for mips with gcc 4.3.3 and have been
-using from some time. Now we got a request to build an application which
-needs g++ compiler for same build.
+> *cp: cannot stat
+> `/Reddy/11n_Build/Test/dev_main/build/gcc-4.3.3/build_mips/staging_dir/usr/mips-linux-uclibc/lib*/libstdc++.so*':
+> No such file or directory*
 
-I have enabled BR2_INSTALL_LIBSTDCPP option in .config file and tried to
-build the toolchain I have received the following error:
+I am not sure what you are using, but looking at this path, it seems
+like it is definitely not a recent Buildroot version.
 
-*cp: cannot stat
-`/Reddy/11n_Build/Test/dev_main/build/gcc-4.3.3/build_mips/staging_dir/usr/mips-linux-uclibc/lib*/libstdc++.so*':
-No such file or directory*
-*
-*
-I have seen posts on this issue online but couldn't find any solution.
-*
-*
-Thank you in advance,
-Reddy.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120426/b771f86a/attachment.html>
+Could you please specify which Buildroot version you're using, and
+your .config file? Note that if you're using an ancient Buildroot
+version, it's unlikely that we will do anything besides suggesting you
+to upgrade to a modern version.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
