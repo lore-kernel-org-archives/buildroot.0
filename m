@@ -1,68 +1,96 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Apr 2012 07:34:32 -0300
-Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2012.04
-Message-ID: <1335436472-2085-1-git-send-email-gustavo@zacarias.com.ar>
+From: oreddy <oreddy@rfnetech.com>
+Date: Thu, 26 Apr 2012 18:12:36 +0800
+Subject: [Buildroot] error toolchain build for mips-linux-uclibc with
+	BR2_INSTALL_LIBSTDCPP
+In-Reply-To: <CAAawjsQQ0nc9HYYAegCTs6sRM+rwXhimyV83hB+jwR6bo1B=SA@mail.gmail.com>
+References: <CAAawjsQQ0nc9HYYAegCTs6sRM+rwXhimyV83hB+jwR6bo1B=SA@mail.gmail.com>
+Message-ID: <4F991F94.50608@rfnetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../uboot-tools-2011.03-drop-configh.patch         |   27 --------------------
- ...ot-tools-2012.04-hostcflags-override-fix.patch} |    0
- package/uboot-tools/uboot-tools.mk                 |    2 +-
- 3 files changed, 1 insertions(+), 28 deletions(-)
- delete mode 100644 package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
- rename package/uboot-tools/{uboot-tools-2011.03-hostcflags-override-fix.patch => uboot-tools-2012.04-hostcflags-override-fix.patch} (100%)
 
-diff --git a/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch b/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
-deleted file mode 100644
-index bf524c9..0000000
---- a/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--"make tools-all" should allow building tools such as mkimage and the new
--imximage without any config, but imximage.c currently fails to build
--with:
--imximage.h:27:20: error: config.h: No such file or directory
--
--config.h is not needed in imximage.h nor in imximage.c, and imximage.h
--is only included from imximage.c, so drop this include to fix the build.
--
--Signed-off-by: Lo?c Minier <loic.minier@linaro.org>
-----
-- tools/imximage.h |    2 --
-- 1 files changed, 0 insertions(+), 2 deletions(-)
--
--diff --git a/tools/imximage.h b/tools/imximage.h
--index 38ca6be..d126a46 100644
----- a/tools/imximage.h
--+++ b/tools/imximage.h
--@@ -24,8 +24,6 @@
-- #ifndef _IMXIMAGE_H_
-- #define _IMXIMAGE_H_
-- 
---#include <config.h>
+Forwarded conversation
+Subject: *error toolchain build for mips-linux-uclibc with 
+BR2_INSTALL_LIBSTDCPP*
+------------------------
+
+From: *chinna obireddy* <chinnaobi at gmail.com <mailto:chinnaobi@gmail.com>>
+Date: Thu, Apr 26, 2012 at 4:58 PM
+To: buildroot at busybox.net <mailto:buildroot@busybox.net>
+
+
+Hi,
+
+I have already built the tool chain for mips with gcc 4.3.3 and have 
+been using from some time. Now we got a request to build an application 
+which needs g++ compiler for same build.
+
+I have enabled BR2_INSTALL_LIBSTDCPP option in .config file and tried to 
+build the toolchain I have received the following error:
+
+*cp: cannot stat 
+`/Reddy/11n_Build/Test/dev_main/build/gcc-4.3.3/build_mips/staging_dir/usr/mips-linux-uclibc/lib*/libstdc++.so*': 
+No such file or directory*
+*
+*
+I have seen posts on this issue online but couldn't find any solution.
+*
+*
+Thank you in advance,
+Reddy.
+
+----------
+From: *Thomas Petazzoni* <thomas.petazzoni at free-electrons.com 
+<mailto:thomas.petazzoni@free-electrons.com>>
+Date: Thu, Apr 26, 2012 at 5:01 PM
+To: chinna obireddy <chinnaobi at gmail.com <mailto:chinnaobi@gmail.com>>
+Cc: buildroot at busybox.net <mailto:buildroot@busybox.net>
+
+
+Le Thu, 26 Apr 2012 16:58:09 +0800,
+chinna obireddy <chinnaobi at gmail.com <mailto:chinnaobi@gmail.com>> a ?crit :
+
+ > *cp: cannot stat
+ > 
+`/Reddy/11n_Build/Test/dev_main/build/gcc-4.3.3/build_mips/staging_dir/usr/mips-linux-uclibc/lib*/libstdc++.so*':
+ > No such file or directory*
+
+I am not sure what you are using, but looking at this path, it seems
+like it is definitely not a recent Buildroot version.
+
+Could you please specify which Buildroot version you're using, and
+your .config file? Note that if you're using an ancient Buildroot
+version, it's unlikely that we will do anything besides suggesting you
+to upgrade to a modern version.
+
+Best regards,
+
+Thomas
 --
-- #define MAX_HW_CFG_SIZE_V2 121 /* Max number of registers imx can set for v2 */
-- #define MAX_HW_CFG_SIZE_V1 60  /* Max number of registers imx can set for v1 */
-- #define APP_CODE_BARKER	0xB1
---- 1.7.2.3
-diff --git a/package/uboot-tools/uboot-tools-2011.03-hostcflags-override-fix.patch b/package/uboot-tools/uboot-tools-2012.04-hostcflags-override-fix.patch
-similarity index 100%
-rename from package/uboot-tools/uboot-tools-2011.03-hostcflags-override-fix.patch
-rename to package/uboot-tools/uboot-tools-2012.04-hostcflags-override-fix.patch
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 00592d6..206ae14 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -1,4 +1,4 @@
--UBOOT_TOOLS_VERSION = 2011.03
-+UBOOT_TOOLS_VERSION = 2012.04
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- 
--- 
-1.7.3.4
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
+
+----------
+From: *chinna obireddy* <chinnaobi at gmail.com <mailto:chinnaobi@gmail.com>>
+Date: Thu, Apr 26, 2012 at 5:30 PM
+To: Thomas Petazzoni <thomas.petazzoni at free-electrons.com 
+<mailto:thomas.petazzoni@free-electrons.com>>
+
+
+Build root version 2009.08 and i have attached the config file.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120426/ea4e1a32/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: db12x.config
+Type: application/octet-stream
+Size: 18858 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120426/ea4e1a32/attachment-0001.obj>
