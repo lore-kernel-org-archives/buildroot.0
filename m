@@ -1,39 +1,56 @@
-From: Willy <willy@willygroup.org>
-Date: Fri, 27 Apr 2012 16:23:20 +0200
-Subject: [Buildroot] Using buildroot images (iso/ext2) in real target
- device (flash drive)
-In-Reply-To: <jn68cv$dcc$1@dough.gmane.org>
-References: <jio6ql$25v$1@dough.gmane.org> <jn68cv$dcc$1@dough.gmane.org>
-Message-ID: <jnea4q$6a2$1@dough.gmane.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 27 Apr 2012 16:30:10 +0200
+Subject: [Buildroot] setup.py: issue with python path
+In-Reply-To: <4F9AA263.2060907@atmel.com>
+References: <4F9AA263.2060907@atmel.com>
+Message-ID: <CAGm1_ktsb3D_jPdLO44bXeKU3CMXOEfDM1o2Ham10tecAGxO3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 24/04/2012 15:04, Willy ha scritto:
-> I've still that problem :-(
+On Fri, Apr 27, 2012 at 3:42 PM, Ludovic Desroches
+<ludovic.desroches@atmel.com> wrote:
+> Hello,
+>
+> I want to add a new package to buildroot: lava-test. Installation is done by
+> setup.py.
+> Having a look to what was done for some packages as python setuptools, I did
+> this:
+>
+> LAVA_TEST_VERSION = 0.7
+> LAVA_TEST_SOURCE = lava-test-$(LAVA_TEST_VERSION)-2012.04.tar.gz
+> LAVA_TEST_SITE = https://launchpad.net/lava-test/trunk/2012.04/+download/
+> LAVA_TEST_DEPENDENCIES = python-setuptools
+>
+> define LAVA_TEST_INSTALL_TARGET_CMDS
+> ?(cd $(@D);
+> PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
+> ?$(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+> endef
+>
+> $(eval $(call GENTARGETS))
+>
+> My files are correctly installed on the target but I have this issue:
+>
+> # lava-test reset
+> -sh: lava-test: not found
+> # cat /usr/bin/lava-test
+> #!/home/ldesroches/workspace/buildroot/output/host/usr/bin/python
+> # EASY-INSTALL-ENTRY-SCRIPT: 'lava-test==0.7','console_scripts','lava-test'
+> __requires__ = 'lava-test==0.7'
+> import sys
+> from pkg_resources import load_entry_point
+>
+> sys.exit(
+> ? load_entry_point('lava-test==0.7', 'console_scripts', 'lava-test')()
+> )
+> #
+>
+> Do you know how changing this python path? Is it possible to give the target
+> python path instead of using PYTHON_PATH.
 
-I made some little steps.
+Could you provide the whole patch?
 
-I've installed grub on my usb flash using qemu:
-"qemu -kernel bzimage -hda=/dev/sdc"
-where sdc is my usb flash.
-It tries to boot, but it stops.
-I figured out that it tries to boot the bzImage on RAM (and it's larger 
-than my memory).
-
-So I've deleted the output/ folder, made some modifications and rebuilt 
-all obtaining a smaller kernel and a smaller fs.
-Now it boot, but always using the bzImage (I've only /boot/grub/* and 
-bzImage on my flash usb). Every modifications does not survive to reboot.
-
-So I've built the vmlinux image and tar fs, but I got
-"Grub Error 13: Invalid or unsupported executable format"
-
-There is a way to use a vmlinux image and the fs directly on the flash 
-drive?
-
-Thanks
--- 
-Willy
+Yegor
