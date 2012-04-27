@@ -1,39 +1,55 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Fri, 27 Apr 2012 15:01:28 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2012.04
-In-Reply-To: <1335436472-2085-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1335436472-2085-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120427150128.77d4636b@eb-e6520>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Fri, 27 Apr 2012 15:42:59 +0200
+Subject: [Buildroot] setup.py: issue with python path
+Message-ID: <4F9AA263.2060907@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+Hello,
 
-Le Thu, 26 Apr 2012 07:34:32 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+I want to add a new package to buildroot: lava-test. Installation is 
+done by setup.py.
+Having a look to what was done for some packages as python setuptools, I 
+did this:
 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  .../uboot-tools-2011.03-drop-configh.patch         |   27 --------------------
->  ...ot-tools-2012.04-hostcflags-override-fix.patch} |    0
->  package/uboot-tools/uboot-tools.mk                 |    2 +-
->  3 files changed, 1 insertions(+), 28 deletions(-)
->  delete mode 100644 package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
-> .../...
-> --- a/package/uboot-tools/uboot-tools.mk
-> +++ b/package/uboot-tools/uboot-tools.mk
-> @@ -1,4 +1,4 @@
-> -UBOOT_TOOLS_VERSION = 2011.03
-> +UBOOT_TOOLS_VERSION = 2012.04
->  UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
->  UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
->  
-here is a message from Wolfgang Denk on oe-core's mailing list :
-"Please update and use v2012.04.01 instead.  This is a bug fix release
-which fixes a nasty bug in the command line processing, which can
-cause incorrect execution of commands and scripts."
+LAVA_TEST_VERSION = 0.7
+LAVA_TEST_SOURCE = lava-test-$(LAVA_TEST_VERSION)-2012.04.tar.gz
+LAVA_TEST_SITE = https://launchpad.net/lava-test/trunk/2012.04/+download/
+LAVA_TEST_DEPENDENCIES = python-setuptools
 
-Eric
+define LAVA_TEST_INSTALL_TARGET_CMDS
+   (cd $(@D); 
+PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
+   $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
+endef
+
+$(eval $(call GENTARGETS))
+
+My files are correctly installed on the target but I have this issue:
+
+# lava-test reset
+-sh: lava-test: not found
+# cat /usr/bin/lava-test
+#!/home/ldesroches/workspace/buildroot/output/host/usr/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'lava-test==0.7','console_scripts','lava-test'
+__requires__ = 'lava-test==0.7'
+import sys
+from pkg_resources import load_entry_point
+
+sys.exit(
+    load_entry_point('lava-test==0.7', 'console_scripts', 'lava-test')()
+)
+#
+
+Do you know how changing this python path? Is it possible to give the 
+target python path instead of using PYTHON_PATH.
+
+
+Thanks
+
+Regards
+
+Ludovic
