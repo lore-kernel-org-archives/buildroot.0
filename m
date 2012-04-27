@@ -1,30 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Apr 2012 09:39:01 +0200
-Subject: [Buildroot] [git commit] audiofile: new package
-In-Reply-To: <20120427091956.51519c23@skate> (Thomas Petazzoni's message of
- "Fri, 27 Apr 2012 09:19:56 +0200")
-References: <20120425101023.D67C396BAF@busybox.osuosl.org>
- <20120427091956.51519c23@skate>
-Message-ID: <877gx1aaju.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Apr 2012 07:30:31 -0300
+Subject: [Buildroot] [PATCH 1/2] openssh: bump to version 6.0p1
+Message-ID: <1335522632-12572-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssh/openssh.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Hi,
-
- Thomas> Looks like this new package is causing build issues:
- Thomas> http://autobuild.buildroot.org/results/0898cc3cfe4d17c894b9c94cd0a0a7a6c24bebc1/build-end.log.
- Thomas> I haven't investigated whether it's a package problem or a more general
- Thomas> toolchain problem.
-
-I would say toolchain problem as it built here and E.G. with your
-powerpc config:
-
-http://autobuild.buildroot.org/results/6597fe6dba69672486a5534890010de76155e80d/defconfig
-
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 08bb499..2b93def 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-OPENSSH_VERSION = 5.9p1
++OPENSSH_VERSION = 6.0p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
