@@ -1,35 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Apr 2012 21:26:33 -0300
-Subject: [Buildroot] [PATCH] quagga: security bump to version 0.9.20.1
-Message-ID: <1335486393-17796-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 27 Apr 2012 02:23:26 +0000 (UTC)
+Subject: [Buildroot] [Bug 5144] New: Patch to fix ixon bug in uemacs
+Message-ID: <bug-5144-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 0.9.20.1 to fix CVE-2012-0249, CVE-2012-0250 and
-CVE-2012-0255.
+https://bugs.busybox.net/show_bug.cgi?id=5144
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/quagga/quagga.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+           Summary: Patch to fix ixon bug in uemacs
+           Product: buildroot
+           Version: unspecified
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: enhancement
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: grant.b.edwards at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index bcc3f46..1073852 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -4,9 +4,8 @@
- #
- #############################################################
- 
--QUAGGA_VERSION = 0.99.20
-+QUAGGA_VERSION = 0.99.20.1
- QUAGGA_SITE = http://www.quagga.net/download
--
- QUAGGA_DEPENDENCIES = host-gawk
- QUAGGA_CONF_OPT = --program-transform-name='' --enable-netlink
- 
+
+Created attachment 4298
+  --> https://bugs.busybox.net/attachment.cgi?id=4298
+Patch to buildroot that adds uemacs patch file that fixes ixon bug.
+
+Attached is a patch to fix a long-known bug in uemacs.  
+
+The bug is that uemacs doesn't clear the ixon termios flag when's it's
+initializing it's tty device.  As a result of this, ctrl-S keystrokes
+aren't seen by uemacs -- they're intercepted by the tty layer and
+cause terminal output to stop until the user hits ctrl-Q.
+
 -- 
-1.7.3.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
