@@ -1,68 +1,68 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Fri, 27 Apr 2012 17:04:46 +0200
-Subject: [Buildroot] [PATCH] New: add lava-test package
-In-Reply-To: <CAGm1_ktsb3D_jPdLO44bXeKU3CMXOEfDM1o2Ham10tecAGxO3g@mail.gmail.com>
-References: <CAGm1_ktsb3D_jPdLO44bXeKU3CMXOEfDM1o2Ham10tecAGxO3g@mail.gmail.com>
-Message-ID: <1335539086-10206-1-git-send-email-ludovic.desroches@atmel.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Apr 2012 12:05:08 -0300
+Subject: [Buildroot] [PATCH 1/2] uboot-tools: bump to version 2012.04.01
+Message-ID: <1335539109-6447-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in              |    1 +
- package/lava-test/Config.in    |    8 ++++++++
- package/lava-test/lava-test.mk |   11 +++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
- create mode 100644 package/lava-test/Config.in
- create mode 100644 package/lava-test/lava-test.mk
+ .../uboot-tools-2011.03-drop-configh.patch         |   27 --------------------
+ ...tools-2012.04.01-hostcflags-override-fix.patch} |    0
+ package/uboot-tools/uboot-tools.mk                 |    2 +-
+ 3 files changed, 1 insertions(+), 28 deletions(-)
+ delete mode 100644 package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
+ rename package/uboot-tools/{uboot-tools-2011.03-hostcflags-override-fix.patch => uboot-tools-2012.04.01-hostcflags-override-fix.patch} (100%)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3e5f708..79f9aaf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -22,6 +22,7 @@ source "package/dhrystone/Config.in"
- source "package/dstat/Config.in"
- source "package/dmalloc/Config.in"
- source "package/kexec/Config.in"
-+source "package/lava-test/Config.in"
- source "package/lmbench/Config.in"
- source "package/lsof/Config.in"
- source "package/ltp-testsuite/Config.in"
-diff --git a/package/lava-test/Config.in b/package/lava-test/Config.in
-new file mode 100644
-index 0000000..d13dfd7
---- /dev/null
-+++ b/package/lava-test/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LAVA_TEST
-+       bool "lava-test"
-+       help
-+         LAVA Test is a test execution framework designed to make it easy to
-+	 install and run supported tests. Results from testing can be
-+	 optionally uploaded to a dashboard running lava-dashboard.
-+
-+	 https://launchpad.net/lava-test
-diff --git a/package/lava-test/lava-test.mk b/package/lava-test/lava-test.mk
-new file mode 100644
-index 0000000..f6df4a2
---- /dev/null
-+++ b/package/lava-test/lava-test.mk
-@@ -0,0 +1,11 @@
-+LAVA_TEST_VERSION = 0.7
-+LAVA_TEST_SOURCE = lava-test-$(LAVA_TEST_VERSION)-2012.04.tar.gz
-+LAVA_TEST_SITE = https://launchpad.net/lava-test/trunk/2012.04/+download/
-+LAVA_TEST_DEPENDENCIES = python-setuptools
-+
-+define LAVA_TEST_INSTALL_TARGET_CMDS
-+  (cd $(@D); PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
-+  $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
-+endef
-+
-+$(eval $(call GENTARGETS))
+diff --git a/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch b/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
+deleted file mode 100644
+index bf524c9..0000000
+--- a/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-"make tools-all" should allow building tools such as mkimage and the new
+-imximage without any config, but imximage.c currently fails to build
+-with:
+-imximage.h:27:20: error: config.h: No such file or directory
+-
+-config.h is not needed in imximage.h nor in imximage.c, and imximage.h
+-is only included from imximage.c, so drop this include to fix the build.
+-
+-Signed-off-by: Lo?c Minier <loic.minier@linaro.org>
+----
+- tools/imximage.h |    2 --
+- 1 files changed, 0 insertions(+), 2 deletions(-)
+-
+-diff --git a/tools/imximage.h b/tools/imximage.h
+-index 38ca6be..d126a46 100644
+---- a/tools/imximage.h
+-+++ b/tools/imximage.h
+-@@ -24,8 +24,6 @@
+- #ifndef _IMXIMAGE_H_
+- #define _IMXIMAGE_H_
+- 
+--#include <config.h>
+--
+- #define MAX_HW_CFG_SIZE_V2 121 /* Max number of registers imx can set for v2 */
+- #define MAX_HW_CFG_SIZE_V1 60  /* Max number of registers imx can set for v1 */
+- #define APP_CODE_BARKER	0xB1
+--- 1.7.2.3
+diff --git a/package/uboot-tools/uboot-tools-2011.03-hostcflags-override-fix.patch b/package/uboot-tools/uboot-tools-2012.04.01-hostcflags-override-fix.patch
+similarity index 100%
+rename from package/uboot-tools/uboot-tools-2011.03-hostcflags-override-fix.patch
+rename to package/uboot-tools/uboot-tools-2012.04.01-hostcflags-override-fix.patch
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 00592d6..d757ade 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -1,4 +1,4 @@
+-UBOOT_TOOLS_VERSION = 2011.03
++UBOOT_TOOLS_VERSION = 2012.04.01
+ UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+ 
 -- 
-1.7.5.4
+1.7.3.4
