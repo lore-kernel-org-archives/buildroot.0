@@ -1,41 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Apr 2012 16:31:44 +0200
-Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2012.04
-In-Reply-To: <20120427150128.77d4636b@eb-e6520> ("Eric =?utf-8?Q?B=C3=A9na?=
- =?utf-8?Q?rd=22's?= message of "Fri, 27 Apr 2012 15:01:28 +0200")
-References: <1335436472-2085-1-git-send-email-gustavo@zacarias.com.ar>
- <20120427150128.77d4636b@eb-e6520>
-Message-ID: <87ty058cvj.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Apr 2012 16:35:06 +0200
+Subject: [Buildroot] [Bug 5138] New: Add dropbear config option to allow
+ blank passwords
+In-Reply-To: <jn9jsk$fob$1@dough.gmane.org>
+References: <bug-5138-163@https.bugs.busybox.net/>
+ <20120425141823.GB20601@game.jcrosoft.org>
+ <jn9jsk$fob$1@dough.gmane.org>
+Message-ID: <20120427163506.4e0a7ba2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric B?nard <eric@eukrea.com> writes:
+Le Wed, 25 Apr 2012 19:39:02 +0000 (UTC),
+Grant Edwards <grant.b.edwards@gmail.com> a ?crit :
 
-Hi,
+> > this is a security issue
+> 
+> Only if you set it (it defaults to "n") and the device in question is
+> on an accessible network.
+> 
+> > I prefer to add an option to add a default ssh public key
+> 
+> That doesn't do the same thing.
+> 
+> > I've a patch somewhere
+> 
+> I've no objection to having an option for a default key, but I don't
+> think it's buildroot's place to try to decide and enforce security
+> policies.  Those decisions belong to the person specifying and
+> designing the embedded system.
+> 
+> [Not allowing blank passwords in dropbear seems especially silly when
+> blank passwords are allowed by telnetd, login and openssh.]
 
- >> -UBOOT_TOOLS_VERSION = 2011.03
- >> +UBOOT_TOOLS_VERSION = 2012.04
- >> UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- >> UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- >> 
- Eric> here is a message from Wolfgang Denk on oe-core's mailing list :
- Eric> "Please update and use v2012.04.01 instead.  This is a bug fix release
- Eric> which fixes a nasty bug in the command line processing, which can
- Eric> cause incorrect execution of commands and scripts."
+Agreed. I think both the "Allow blank passwords" option and the "Add
+default ssh public key" options make sense, and they both should be
+added.
 
-Yes, but that doesn't affect the tools:
-
-git diff --stat v2012.04..v2012.04.01
- Makefile                 |    2 +-
- arch/arm/lib/bootm.c     |   12 +++++++++++-
- arch/sandbox/cpu/start.c |    6 ------
- common/main.c            |    3 ++-
- 4 files changed, 14 insertions(+), 9 deletions(-)
-
-But we better update the u-boot package.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
