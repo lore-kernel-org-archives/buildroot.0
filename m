@@ -1,43 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Apr 2012 21:56:39 +0200
-Subject: [Buildroot] Samba breakage on arm
-In-Reply-To: <4F951690.7020604@free-electrons.com>
-References: <4F9118BB.2010300@free-electrons.com>
- <201204211554.57989.arnout@mind.be> <4F951690.7020604@free-electrons.com>
-Message-ID: <201204272156.40163.arnout@mind.be>
+Date: Fri, 27 Apr 2012 22:12:07 +0200
+Subject: [Buildroot] [OT] How to get rootfs.cpio combined with a kernel?
+In-Reply-To: <jn3vnk$go5$1@dough.gmane.org>
+References: <jn3vnk$go5$1@dough.gmane.org>
+Message-ID: <201204272212.07280.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 23 April 2012 10:45:04 Maxime Ripard wrote:
-> Le 21/04/2012 15:54, Arnout Vandecappelle a ?crit :
-> > On Friday 20 April 2012 10:05:15 Maxime Ripard wrote:
-> >> Building samba with any CodeSourcery/Codebench toolchains except the
-> >> 2011.09 will trigger either a compiler segfault or an internal compiler
-> >> error.
-> > 
-> >  Seems to work for me, with Sourcery G++ 2011.03 on ARM...
-> > 
-> >  Which config did you have that doesn't work?
-> > 
-> >  BTW there is something we can do about it: disallow samba if a
-> > non-working external toolchain is selected...
-> > 
-> >  Regards,
-> >  Arnout
-> > 
+On Monday 23 April 2012 18:24:20 Grant Edwards wrote:
+> I've been browsing around Linux kernel Makefiles and docs, trying to
+> figure out what the "pre-rootfs" file is and how to combine it with
+> the rootfs to produce the uImage file.  There's plenty of info about
+> how to specify or create an initramfs and the actual kernel startup
+> works, but all I can find about how to actually link the kernel and
+> initramfs together is "set CONFIG_INITRAMFS_SOURCE and do a kernel
+> build".
 > 
-> I attached the .config.
+> Having to re-compile the kernel when nothing in the kernel or it's
+> configuration has changed (only the rootfs changed) just doesn't feel
+> like an acceptable engineering practice.
+> 
+> Any pointers to documentation on how one might combine a kernel object
+> and a rootfs cpio image to get a uImage file?
 
- Looks like it gives an ICE for generic arm, but it works fine for 
-cortex-a8.  Can't explain why, but maybe you can work around it by 
-selecting a more specific processor architecture.
+ Short answer: the kernel build system doesn't support it.
+
+ Long answer: the initramfs is compiled into one of the many builtin.o
+files that are created all over the place.  This is linked into vmlinux.
+See "Build vmlinux" in the top-level Makefile of the kernel.
+
+ The good thing is that the command to build vmlinux is stored in
+.vmlinux.cmd, so you can use that to re-run the link - but you'd have
+to keep all the individual built-in.o files of course.  The bad
+thing, however, is that this is not the end.  You probably want to
+create a bzImage or similar, which is an additional, architecture-specific
+linking step.
+
+
+ Conclusion: unless you're willing to spend a lot of effort on this,
+you're better off to either keep the compiled kernel tree for linking
+with the rootfs, or using a separate kernel and rootfs image.  If you're
+using U-Boot, you can even combine them in one uImage.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
