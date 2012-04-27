@@ -1,27 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Apr 2012 23:11:52 +0200
-Subject: [Buildroot] [PATCH v3] package: add libfcgi fast cgi library.
-In-Reply-To: <op.wdbgiefp705kjs@rico>
-References: <20111014110808.70e495a8@skate>
- <1318583794-9897-1-git-send-email-arnout@mind.be> <op.wdbgiefp705kjs@rico>
-Message-ID: <201204272311.52743.arnout@mind.be>
+Date: Fri, 27 Apr 2012 23:13:55 +0200
+Subject: [Buildroot] [PATCH] pkg-download.mk: Add missing argument when
+	downloading from primary mirror
+In-Reply-To: <1335354316-11618-1-git-send-email-markos.chandras@imgtec.com>
+References: <1335354316-11618-1-git-send-email-markos.chandras@imgtec.com>
+Message-ID: <201204272313.55829.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 25 April 2012 12:24:04 Rico Bachmann wrote:
-> Ping
-> 
-> Can this patch be commited?
-> Or is there something to do first?
-> 
-> e.g. rename to fcgi to avoid the LIBFCGI_SOURCE makro?
-> 
-> Am 14.10.2011, 11:16 Uhr, schrieb Arnout Vandecappelle (Essensium/Mind)  
+On Wednesday 25 April 2012 13:45:16 Markos Chandras wrote:
+> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Since this is so long ago, it's better to repost the patch.
+ How could I have missed this one...
 
  Regards,
  Arnout
