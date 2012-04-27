@@ -1,26 +1,39 @@
-From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-Date: Fri, 27 Apr 2012 12:19:56 +0200
-Subject: [Buildroot] [PATCH 2/2] sam-ba: only propose it if the host is
- x86 or x86_64
-In-Reply-To: <20120423065000.GL20601@game.jcrosoft.org>
-References: <1334675140-20303-1-git-send-email-plagnioj@jcrosoft.com>
- <1334675140-20303-2-git-send-email-plagnioj@jcrosoft.com>
- <20120423065000.GL20601@game.jcrosoft.org>
-Message-ID: <20120427101956.GA2992@game.jcrosoft.org>
+From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
+Date: Fri, 27 Apr 2012 15:01:28 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: bump to version 2012.04
+In-Reply-To: <1335436472-2085-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1335436472-2085-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120427150128.77d4636b@eb-e6520>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08:50 Mon 23 Apr     , Jean-Christophe PLAGNIOL-VILLARD wrote:
-> On 17:05 Tue 17 Apr     , Jean-Christophe PLAGNIOL-VILLARD wrote:
-> > As sam-ba is deliver as a binary for x86
-> > 
-> > Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-> > ---
-> ping
-ping
+Hi Gustavo,
 
-Best Regards,
-J.
+Le Thu, 26 Apr 2012 07:34:32 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  .../uboot-tools-2011.03-drop-configh.patch         |   27 --------------------
+>  ...ot-tools-2012.04-hostcflags-override-fix.patch} |    0
+>  package/uboot-tools/uboot-tools.mk                 |    2 +-
+>  3 files changed, 1 insertions(+), 28 deletions(-)
+>  delete mode 100644 package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
+> .../...
+> --- a/package/uboot-tools/uboot-tools.mk
+> +++ b/package/uboot-tools/uboot-tools.mk
+> @@ -1,4 +1,4 @@
+> -UBOOT_TOOLS_VERSION = 2011.03
+> +UBOOT_TOOLS_VERSION = 2012.04
+>  UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+>  UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+>  
+here is a message from Wolfgang Denk on oe-core's mailing list :
+"Please update and use v2012.04.01 instead.  This is a bug fix release
+which fixes a nasty bug in the command line processing, which can
+cause incorrect execution of commands and scripts."
+
+Eric
