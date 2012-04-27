@@ -1,32 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 27 Apr 2012 21:12:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 4970] udev 181 fails to build if kernel version
-	3.3 is selected
-In-Reply-To: <bug-4970-163@https.bugs.busybox.net/>
-References: <bug-4970-163@https.bugs.busybox.net/>
-Message-ID: <20120427211202.F16B096BE9@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 27 Apr 2012 23:11:52 +0200
+Subject: [Buildroot] [PATCH v3] package: add libfcgi fast cgi library.
+In-Reply-To: <op.wdbgiefp705kjs@rico>
+References: <20111014110808.70e495a8@skate>
+ <1318583794-9897-1-git-send-email-arnout@mind.be> <op.wdbgiefp705kjs@rico>
+Message-ID: <201204272311.52743.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4970
+On Wednesday 25 April 2012 12:24:04 Rico Bachmann wrote:
+> Ping
+> 
+> Can this patch be commited?
+> Or is there something to do first?
+> 
+> e.g. rename to fcgi to avoid the LIBFCGI_SOURCE makro?
+> 
+> Am 14.10.2011, 11:16 Uhr, schrieb Arnout Vandecappelle (Essensium/Mind)  
 
-James Le Cuirot <chewi@aura-online.co.uk> changed:
+ Since this is so long ago, it's better to repost the patch.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |chewi at aura-online.co.uk
-
---- Comment #3 from James Le Cuirot <chewi@aura-online.co.uk> 2012-04-27 21:12:02 UTC ---
-Actually I've encountered this too but building on Gentoo using Portage rather
-than Buildroot. My target is i586-pc-linux-uclibc and I have definitely enabled
-UCLIBC_HAS_REALTIME. I've checked and mq_getsetattr.c, where this function is
-defined, definitely gets built but for some reason, the symbol is missing from
-librt. I haven't yet managed to work out why.
+ Regards,
+ Arnout
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
