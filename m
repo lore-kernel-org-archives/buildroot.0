@@ -1,33 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 27 Apr 2012 02:28:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 5144] Patch to fix ixon bug in uemacs
-In-Reply-To: <bug-5144-163@https.bugs.busybox.net/>
-References: <bug-5144-163@https.bugs.busybox.net/>
-Message-ID: <20120427022857.D42CA96BE6@busybox.osuosl.org>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Fri, 27 Apr 2012 02:55:58 +0200
+Subject: [Buildroot] [PATCH 2/2] lsof: add busybox tweaks
+In-Reply-To: <20120426164511.2f6e462d@skate>
+References: <1335435324-18792-1-git-send-email-gustavo@zacarias.com.ar>
+ <1335435324-18792-2-git-send-email-gustavo@zacarias.com.ar>
+ <20120426140840.GJ20601@game.jcrosoft.org>
+ <20120426164511.2f6e462d@skate>
+Message-ID: <20120427005558.GA20161@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5144
+On 16:45 Thu 26 Apr     , Thomas Petazzoni wrote:
+> Le Thu, 26 Apr 2012 16:08:40 +0200,
+> Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com> a ?crit :
+> 
+> > > +if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > >  source "package/lsof/Config.in"
+> > put a depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> > 
+> > in lsof/Config.in
+> 
+> No, that's not what we do for all other packages. Gustavo's patch is
+> correct with regard to the current guidelines.
+> 
+> Now, whether we should change those guidelines to something else is a
+> different story. But if we change the guideline, it should be changed
+> for all packages and not just for lsof.
+package/kmod/Config.in is already like this
 
---- Comment #1 from Grant Edwards <grant.b.edwards@gmail.com> 2012-04-27 02:28:57 UTC ---
-Created attachment 4304
-  --> https://bugs.busybox.net/attachment.cgi?id=4304
-The patch file that's added to the uemacs package by the first patch I sent.
+and it's more clean
 
-uemacs-4.0.15lt.03.patch is the new patch file that is added to the
-uemacs package directory by the patch file buildroot-uemacs-ixon-patch.patch.
-
-I wasn't sure if adding a patch file to a package was best done by
-submitting the new patch file itself, or by submitting a patch file
-that adds the patch file -- I don't what the maintainers git workflow
-is like.
-
-So I attached both...
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best Regards,
+J.
