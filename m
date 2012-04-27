@@ -1,25 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 27 Apr 2012 21:49:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 4970] udev 181 fails to build if kernel version
-	3.3 is selected
-In-Reply-To: <bug-4970-163@https.bugs.busybox.net/>
-References: <bug-4970-163@https.bugs.busybox.net/>
-Message-ID: <20120427214913.9D7B196BEA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 27 Apr 2012 23:48:58 +0200
+Subject: [Buildroot] error toolchain build for mips-linux-uclibc with
+	BR2_INSTALL_LIBSTDCPP
+In-Reply-To: <4F991F94.50608@rfnetech.com>
+References: <CAAawjsQQ0nc9HYYAegCTs6sRM+rwXhimyV83hB+jwR6bo1B=SA@mail.gmail.com>
+ <4F991F94.50608@rfnetech.com>
+Message-ID: <201204272348.59110.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4970
+On Thursday 26 April 2012 12:12:36 oreddy wrote:
+> I have enabled BR2_INSTALL_LIBSTDCPP option in .config file and tried to build the toolchain I have received the following error:
+> 
+>  
+> cp: cannot stat `/Reddy/11n_Build/Test/dev_main/build/gcc-4.3.3/build_mips/staging_dir/usr/mips-linux-uclibc/lib*/libstdc++.so*': No such file or directory
 
---- Comment #4 from James Le Cuirot <chewi@aura-online.co.uk> 2012-04-27 21:49:13 UTC ---
-Aha! Found the cause and it turns out this is a Linux bug that has already been
-fixed.
+ Did you do a clean rebuild?
 
-http://kernel.opensuse.org/cgit/kernel/commit/?id=4141a94694efc7d6c58e81bc55717161438d7816
+ Buildroot doesn't detect when you have changed the toolchain options,
+so it may "forget" to perform some build steps (e.g. compiling the C++
+library).
+
+
+ Regards,
+ Arnout
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
