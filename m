@@ -1,21 +1,22 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Apr 2012 23:13:55 +0200
-Subject: [Buildroot] [PATCH] pkg-download.mk: Add missing argument when
-	downloading from primary mirror
-In-Reply-To: <1335354316-11618-1-git-send-email-markos.chandras@imgtec.com>
-References: <1335354316-11618-1-git-send-email-markos.chandras@imgtec.com>
-Message-ID: <201204272313.55829.arnout@mind.be>
+Date: Fri, 27 Apr 2012 23:23:03 +0200
+Subject: [Buildroot] Buildroot fails to build when selecting build
+	packages
+In-Reply-To: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+Message-ID: <201204272323.03890.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 25 April 2012 13:45:16 Markos Chandras wrote:
-> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Wednesday 25 April 2012 01:49:44 Nigel Sollars wrote:
+> The build fails since as a dependency glib2 is selected this fails with a
+> dbus like so:
 
- How could I have missed this one...
+ Works for me.  Can you run a 'make savedefconfig' and send the defconfig
+file?  Does the problem also occur after a clean rebuild?
 
  Regards,
  Arnout
