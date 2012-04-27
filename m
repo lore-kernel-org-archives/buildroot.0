@@ -1,32 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 27 Apr 2012 07:30:32 -0300
-Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.8
-In-Reply-To: <1335522632-12572-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1335522632-12572-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1335522632-12572-2-git-send-email-gustavo@zacarias.com.ar>
+From: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+Date: Fri, 27 Apr 2012 12:19:56 +0200
+Subject: [Buildroot] [PATCH 2/2] sam-ba: only propose it if the host is
+ x86 or x86_64
+In-Reply-To: <20120423065000.GL20601@game.jcrosoft.org>
+References: <1334675140-20303-1-git-send-email-plagnioj@jcrosoft.com>
+ <1334675140-20303-2-git-send-email-plagnioj@jcrosoft.com>
+ <20120423065000.GL20601@game.jcrosoft.org>
+Message-ID: <20120427101956.GA2992@game.jcrosoft.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libnl/libnl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On 08:50 Mon 23 Apr     , Jean-Christophe PLAGNIOL-VILLARD wrote:
+> On 17:05 Tue 17 Apr     , Jean-Christophe PLAGNIOL-VILLARD wrote:
+> > As sam-ba is deliver as a binary for x86
+> > 
+> > Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
+> > ---
+> ping
+ping
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index 661d7f2..40aaf38 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBNL_VERSION = 3.2.7
-+LIBNL_VERSION = 3.2.8
- LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
- LIBNL_INSTALL_STAGING = YES
- LIBNL_DEPENDENCIES = host-bison
--- 
-1.7.3.4
+Best Regards,
+J.
