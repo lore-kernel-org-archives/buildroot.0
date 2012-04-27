@@ -1,29 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Apr 2012 23:48:58 +0200
-Subject: [Buildroot] error toolchain build for mips-linux-uclibc with
-	BR2_INSTALL_LIBSTDCPP
-In-Reply-To: <4F991F94.50608@rfnetech.com>
-References: <CAAawjsQQ0nc9HYYAegCTs6sRM+rwXhimyV83hB+jwR6bo1B=SA@mail.gmail.com>
- <4F991F94.50608@rfnetech.com>
-Message-ID: <201204272348.59110.arnout@mind.be>
+Date: Fri, 27 Apr 2012 23:54:57 +0200
+Subject: [Buildroot] [PATCH 2/2] lsof: add busybox tweaks
+In-Reply-To: <20120427005558.GA20161@game.jcrosoft.org>
+References: <1335435324-18792-1-git-send-email-gustavo@zacarias.com.ar>
+ <20120426164511.2f6e462d@skate> <20120427005558.GA20161@game.jcrosoft.org>
+Message-ID: <201204272354.58069.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 26 April 2012 12:12:36 oreddy wrote:
-> I have enabled BR2_INSTALL_LIBSTDCPP option in .config file and tried to build the toolchain I have received the following error:
+On Friday 27 April 2012 02:55:58 Jean-Christophe PLAGNIOL-VILLARD wrote:
+> > No, that's not what we do for all other packages. Gustavo's patch is
+> > correct with regard to the current guidelines.
+> > 
+> > Now, whether we should change those guidelines to something else is a
+> > different story. But if we change the guideline, it should be changed
+> > for all packages and not just for lsof.
+> package/kmod/Config.in is already like this
 > 
->  
-> cp: cannot stat `/Reddy/11n_Build/Test/dev_main/build/gcc-4.3.3/build_mips/staging_dir/usr/mips-linux-uclibc/lib*/libstdc++.so*': No such file or directory
+> and it's more clean
 
- Did you do a clean rebuild?
+ I agree that it's better to do it in the package's Config.in.
 
- Buildroot doesn't detect when you have changed the toolchain options,
-so it may "forget" to perform some build steps (e.g. compiling the C++
-library).
-
+ And changing the guideline doesn't automatically mean that all
+packages have to change.  Only new packages (or patches) must follow 
+the guideline.
 
  Regards,
  Arnout
