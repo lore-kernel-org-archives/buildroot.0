@@ -1,27 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Apr 2012 21:25:03 -0300
-Subject: [Buildroot] [PATCH] gdb: bump 7.4.x series to 7.4.1
-Message-ID: <1335486303-4475-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 26 Apr 2012 21:26:33 -0300
+Subject: [Buildroot] [PATCH] quagga: security bump to version 0.9.20.1
+Message-ID: <1335486393-17796-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump to version 0.9.20.1 to fix CVE-2012-0249, CVE-2012-0250 and
+CVE-2012-0255.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/gdb/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/quagga/quagga.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 980666b..c9c54b8 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -103,4 +103,4 @@ config BR2_GDB_VERSION
- 	default "7.1a"     if BR2_GDB_VERSION_7_1
- 	default "7.2a"     if BR2_GDB_VERSION_7_2
- 	default "7.3.1"    if BR2_GDB_VERSION_7_3
--	default "7.4"      if BR2_GDB_VERSION_7_4
-+	default "7.4.1"    if BR2_GDB_VERSION_7_4
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index bcc3f46..1073852 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,9 +4,8 @@
+ #
+ #############################################################
+ 
+-QUAGGA_VERSION = 0.99.20
++QUAGGA_VERSION = 0.99.20.1
+ QUAGGA_SITE = http://www.quagga.net/download
+-
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_CONF_OPT = --program-transform-name='' --enable-netlink
+ 
 -- 
 1.7.3.4
