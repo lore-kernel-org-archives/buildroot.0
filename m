@@ -1,25 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Apr 2012 23:23:03 +0200
-Subject: [Buildroot] Buildroot fails to build when selecting build
-	packages
-In-Reply-To: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
-References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
-Message-ID: <201204272323.03890.arnout@mind.be>
+Date: Fri, 27 Apr 2012 23:35:10 +0200
+Subject: [Buildroot] [PATCH 1/4] package/multimedia: move networking
+	libs out
+In-Reply-To: <834c1b3a8e44b77b2fa173dba81e2ffc@zacarias.com.ar>
+References: <1335370243-27044-1-git-send-email-gustavo@zacarias.com.ar>
+ <20120425193839.3b45570b@skate>
+ <834c1b3a8e44b77b2fa173dba81e2ffc@zacarias.com.ar>
+Message-ID: <201204272335.10872.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 25 April 2012 01:49:44 Nigel Sollars wrote:
-> The build fails since as a dependency glib2 is selected this fails with a
-> dbus like so:
+On Wednesday 25 April 2012 19:45:46 Gustavo Zacarias wrote:
+> > I am not quite sure about this one. Even though it's true libmpd or
+> > live555 have networking capabilities, I think their core feature is
+> > more audio and/or video oriented, so it should be in some
+> > Libraries->Audio or Libraries->Audio/Video section rather than
+> > Libraries->Networking.
+> >
+> > Thomas
+> 
+> live555 can handle RTSP which can stream video also so it isn't clear 
+> cut.
 
- Works for me.  Can you run a 'make savedefconfig' and send the defconfig
-file?  Does the problem also occur after a clean rebuild?
+ If I am looking for live555, I would be looking in the Multimedia 
+category.  I see it more as a streaming library than as a network
+library.  Same reasoning is probably true for the others.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
