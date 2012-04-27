@@ -1,39 +1,43 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 27 Apr 2012 21:21:38 +0200
-Subject: [Buildroot] [PATCH] Add libapr-package
-In-Reply-To: <000301cd21fd$3941aba0$abc502e0$@com>
-References: <1334673316-28944-1-git-send-email-bachmann@tofwerk.com>
- <201204211458.06684.arnout@mind.be> <000301cd21fd$3941aba0$abc502e0$@com>
-Message-ID: <201204272121.38840.arnout@mind.be>
+Date: Fri, 27 Apr 2012 21:56:39 +0200
+Subject: [Buildroot] Samba breakage on arm
+In-Reply-To: <4F951690.7020604@free-electrons.com>
+References: <4F9118BB.2010300@free-electrons.com>
+ <201204211554.57989.arnout@mind.be> <4F951690.7020604@free-electrons.com>
+Message-ID: <201204272156.40163.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 24 April 2012 11:32:52 Rico Bachmann wrote:
-> >  One last suggestion for next time you make a patch: you can add the
-> > log of the history of your patch directly in the commit message, below
-> > a line with three dashes, like this:
+On Monday 23 April 2012 10:45:04 Maxime Ripard wrote:
+> Le 21/04/2012 15:54, Arnout Vandecappelle a ?crit :
+> > On Friday 20 April 2012 10:05:15 Maxime Ripard wrote:
+> >> Building samba with any CodeSourcery/Codebench toolchains except the
+> >> 2011.09 will trigger either a compiler segfault or an internal compiler
+> >> error.
 > > 
-> > Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
-> > ---
-> > v3: Rename from libapr to apr
-> > v2: ...
+> >  Seems to work for me, with Sourcery G++ 2011.03 on ARM...
+> > 
+> >  Which config did you have that doesn't work?
+> > 
+> >  BTW there is something we can do about it: disallow samba if a
+> > non-working external toolchain is selected...
+> > 
+> >  Regards,
+> >  Arnout
+> > 
 > 
-> I'll try that with my new patch for apr-util.
-> How can I add my history when I have to do a git rebase -I master?
-> 
-> Because I can't see my history in the patch after a fixup with git rebase.
-> 
-> Do I have to add them manually?
+> I attached the .config.
 
- Indeed, git rebase is the same as applying the patch from a mail...  You
-can either fix up the commit message manually, or use something like 
-topgit to manage your patch queues.
+ Looks like it gives an ICE for generic arm, but it works fine for 
+cortex-a8.  Can't explain why, but maybe you can work around it by 
+selecting a more specific processor architecture.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
