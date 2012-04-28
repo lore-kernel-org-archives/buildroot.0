@@ -1,8 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 28 Apr 2012 18:50:44 +0200
-Subject: [Buildroot] [PATCH resend] directfb: add support for davinci gfx
-	driver
-Message-ID: <1335631844-15681-1-git-send-email-arnout@mind.be>
+Date: Sat, 28 Apr 2012 18:59:25 +0200
+Subject: [Buildroot] [PATCH resend] stress: new package
+Message-ID: <1335632365-12407-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +11,56 @@ To: buildroot@busybox.net
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
- package/directfb/Config.in   |    4 ++++
- package/directfb/directfb.mk |    3 ++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/Config.in        |    1 +
+ package/stress/Config.in |    8 ++++++++
+ package/stress/stress.mk |   13 +++++++++++++
+ 3 files changed, 22 insertions(+)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 47f9fea..26f5091 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -53,6 +53,10 @@ config BR2_PACKAGE_DIRECTFB_EP9X
- 	bool "compile ep9x graphics driver"
- 	depends on BR2_arm
- 
-+config BR2_PACKAGE_DIRECTFB_DAVINCI
-+	bool "compile TI DaVinci graphics driver"
-+	depends on BR2_arm
+diff --git a/package/Config.in b/package/Config.in
+index a310146..9dd2158 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -35,6 +35,7 @@ source "package/netperf/Config.in"
+ source "package/oprofile/Config.in"
+ source "package/rt-tests/Config.in"
+ source "package/strace/Config.in"
++source "package/stress/Config.in"
+ source "package/whetstone/Config.in"
+ source "package/valgrind/Config.in"
+ source "package/pv/Config.in"
+diff --git a/package/stress/Config.in b/package/stress/Config.in
+new file mode 100644
+index 0000000..b092b03
+--- /dev/null
++++ b/package/stress/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_STRESS
++	bool "stress"
++	help
++	  A deliberately simple workload generator for POSIX systems.
++	  It imposes a configurable amount of CPU, memory, I/O, and
++	  disk stress on the system.
 +
- config BR2_PACKAGE_DIRECTFB_UNICHROME
- 	bool "compile unichrome graphics driver"
- 	default y
-diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
-index 071cdf4..7aa0398 100644
---- a/package/directfb/directfb.mk
-+++ b/package/directfb/directfb.mk
-@@ -58,7 +58,8 @@ DIRECTFB_GFX := \
- 	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
- 	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)	\
--	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
-+	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x) \
-+	$(if $(BR2_PACKAGE_DIRECTFB_DAVINCI),davinci)
- 
- ifeq ($(strip $(DIRECTFB_GFX)),)
- DIRECTFB_GFX:=none
++	  http://weather.ou.edu/~apw/projects/stress/
+diff --git a/package/stress/stress.mk b/package/stress/stress.mk
+new file mode 100644
+index 0000000..a64a0d4
+--- /dev/null
++++ b/package/stress/stress.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# stress - a workload generator
++#
++# http://weather.ou.edu/~apw/projects/stress/
++#
++#############################################################
++
++STRESS_VERSION = 1.0.4
++STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
++STRESS_SOURCE  = stress-$(STRESS_VERSION).tar.gz
++
++$(eval $(call AUTOTARGETS))
+\ No newline at end of file
 -- 
-tg: (524a8ab..) t/directfb-davinci (depends on: master)
+tg: (524a8ab..) t/stress (depends on: master)
