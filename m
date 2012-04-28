@@ -1,66 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 28 Apr 2012 18:59:25 +0200
-Subject: [Buildroot] [PATCH resend] stress: new package
-Message-ID: <1335632365-12407-1-git-send-email-arnout@mind.be>
+Date: Sat, 28 Apr 2012 19:14:50 +0200
+Subject: [Buildroot] [PATCH v3 resend] config: make it possible to specify
+	which config file to use for 'make defconfig'
+Message-ID: <1335633290-8734-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+So that this works:
+
+ % make defconfig BR2_DEFCONFIG=~/buildroot-defconfig
+
+Right now we have to do:
+
+ % cp ~/buildroot-defconfig configs/buildroot_defconfig
+ % make buildroot_defconfig
+
+That would dirty the buildroot tree and requires it to be writable.
+
+Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in        |    1 +
- package/stress/Config.in |    8 ++++++++
- package/stress/stress.mk |   13 +++++++++++++
- 3 files changed, 22 insertions(+)
+v3:
+* Acked by ThomasP
 
-diff --git a/package/Config.in b/package/Config.in
-index a310146..9dd2158 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -35,6 +35,7 @@ source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
- source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
-+source "package/stress/Config.in"
- source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
- source "package/pv/Config.in"
-diff --git a/package/stress/Config.in b/package/stress/Config.in
-new file mode 100644
-index 0000000..b092b03
---- /dev/null
-+++ b/package/stress/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_STRESS
-+	bool "stress"
-+	help
-+	  A deliberately simple workload generator for POSIX systems.
-+	  It imposes a configurable amount of CPU, memory, I/O, and
-+	  disk stress on the system.
-+
-+	  http://weather.ou.edu/~apw/projects/stress/
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-new file mode 100644
-index 0000000..a64a0d4
---- /dev/null
-+++ b/package/stress/stress.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# stress - a workload generator
-+#
-+# http://weather.ou.edu/~apw/projects/stress/
-+#
-+#############################################################
-+
-+STRESS_VERSION = 1.0.4
-+STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
-+STRESS_SOURCE  = stress-$(STRESS_VERSION).tar.gz
-+
-+$(eval $(call AUTOTARGETS))
-\ No newline at end of file
+v2:
+* Use $(if...) instead of $(patsubst...)
+* Add help text
+* Fix commit message
+
+ Makefile |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index cc8124a..a7625ba 100644
+--- a/Makefile
++++ b/Makefile
+@@ -540,7 +540,7 @@ silentoldconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 
+ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+-	@$(COMMON_CONFIG_ENV) $< --defconfig $(CONFIG_CONFIG_IN)
++	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(BR2_DEFCONFIG),=$(BR2_DEFCONFIG)) $(CONFIG_CONFIG_IN)
+ 
+ %_defconfig: $(BUILD_DIR)/buildroot-config/conf $(TOPDIR)/configs/%_defconfig outputmakefile
+ 	@mkdir -p $(BUILD_DIR)/buildroot-config
+@@ -603,6 +603,7 @@ help:
+ 	@echo '  oldconfig              - resolve any unresolved symbols in .config'
+ 	@echo '  randconfig             - New config with random answer to all options'
+ 	@echo '  defconfig              - New config with default answer to all options'
++	@echo '                             BR2_DEFCONFIG, if set, is used as input'
+ 	@echo '  savedefconfig          - Save current config as ./defconfig (minimal config)'
+ 	@echo '  allyesconfig           - New config where all options are accepted with yes'
+ 	@echo '  allnoconfig            - New config where all options are answered with no'
 -- 
-tg: (524a8ab..) t/stress (depends on: master)
+tg: (524a8ab..) t/defconfig (depends on: master)
