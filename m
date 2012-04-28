@@ -1,66 +1,42 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 28 Apr 2012 17:38:16 +0200
-Subject: [Buildroot] [PATCH 1/2] add host arch detection and Kconfig
-	(BR2_HOSTARCH)
-In-Reply-To: <1334675140-20303-1-git-send-email-plagnioj@jcrosoft.com>
-References: <1334675140-20303-1-git-send-email-plagnioj@jcrosoft.com>
-Message-ID: <201204281738.17492.arnout@mind.be>
+Date: Sat, 28 Apr 2012 18:01:42 +0200
+Subject: [Buildroot] Buildroot fails to build when selecting build
+	packages
+In-Reply-To: <CAG6aBkVRsBJtcBSf_ZQ84Bf7SffptL7-h9RrJqc8TYLPbef-_A@mail.gmail.com>
+References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+ <CAG6aBkUJAnhhWH1jF2yPLRHrk_+w3xOeSFwxS6K8U4_Pzu26sw@mail.gmail.com>
+ <CAG6aBkVRsBJtcBSf_ZQ84Bf7SffptL7-h9RrJqc8TYLPbef-_A@mail.gmail.com>
+Message-ID: <201204281801.42601.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 17 April 2012 17:05:39 Jean-Christophe PLAGNIOL-VILLARD wrote:
-> This will allow to install binary package only if they are supported by the
-> host. As example Atmel SAM-BA (x86 only).
+On Saturday 28 April 2012 04:56:35 Nigel Sollars wrote:
+> Hello Arnout,
 > 
-> Signed-off-by: Jean-Christophe PLAGNIOL-VILLARD <plagnioj@jcrosoft.com>
-> ---
->  Config.in |    4 ++++
->  Makefile  |   10 ++++++++++
->  2 files changed, 14 insertions(+), 0 deletions(-)
+> It seems my first reply with regards to the make clean may not have been
+> accurate, please see defconfig,
+
+ Please reply to all, to include the list.  I reproduced and minimized your 
+defconfig below.  Also avoid top-posting please.
+
+> The new error is ( from the top error cause ):
 > 
-> diff --git a/Config.in b/Config.in
-> index 68abb9b..be424b7 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -10,6 +10,10 @@ config BR2_VERSION
->  	string
->  	option env="BR2_VERSION_FULL"
->  
-> +config BR2_HOSTARCH
-> +	string
-> +	option env="HOSTARCH"
-> +
->  source "target/Config.in.arch"
->  
->  menu "Build options"
-> diff --git a/Makefile b/Makefile
-> index 3a09417..b14940b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -32,6 +32,16 @@ ifneq ($(firstword $(sort $(MAKE_VERSION) $(MIN_MAKE_VERSION))),$(MIN_MAKE_VERSI
->  $(error You have make '$(MAKE_VERSION)' installed. GNU make >= $(MIN_MAKE_VERSION) is required)
->  endif
->  
-> +export HOSTARCH := $(shell uname -m | \
-> +	sed -e s/i.86/x86/ \
-> +	    -e s/sun4u/sparc64/ \
-> +	    -e s/arm.*/arm/ \
-> +	    -e s/sa110/arm/ \
-> +	    -e s/ppc64/powerpc/ \
-> +	    -e s/ppc/powerpc/ \
-> +	    -e s/macppc/powerpc/\
-> +	    -e s/sh.*/sh/)
+> target/arm-unknown-linux-uclibcgnueabi/libstdc++-v3/include/cfenv:41:0, 
+>    from /usr/local/panda-stuff/buildroot-src/buildroot/output/toolchain/gcc-4.6.3/libstdc++-v3/include/precompiled/stdc++.h:54:
+>    /usr/local/panda-stuff/buildroot-src/buildroot/output/build/gcc-4.6.3-target/arm-unknown-linux-uclibcgnueabi/libstdc++-v3/include/fenv.h:36:24:
+> fatal error: fenv.h: No such file or directory
+> compilation terminated.
+[snip]
 
- If it's going to be any use, I guess we still need to be able to
-distinguish arm/armeb and sh/sh64.  But I don't know how these look
-in the uname. 
-
-> +
->  # This top-level Makefile can *not* be executed in parallel
->  .NOTPARALLEL:
+ I can indeed reproduce this error.  However, after a second (clean) run
+it did come through.  I suspect that this is a ccache problem.  Try clearing
+your ccache (e.g. removing ~/.buildroot-ccache, or disabling ccache in your
+buildroot config) and rebuilding from scratch. Our ccache setup is not 
+resilient to changes in the toolchain.  This was discussed before on the
+list, but we found no good solution.
 
 
  Regards,
@@ -73,3 +49,20 @@ Essensium/Mind                                     http://www.mind.be
 G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+
+
+----------- failing defconfig -------------
+BR2_arm=y
+BR2_cortex_a9=y
+BR2_BINUTILS_VERSION_2_22=y
+BR2_GCC_VERSION_4_6_X=y
+BR2_INSTALL_FORTRAN=y
+BR2_PACKAGE_GDB=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TOOLCHAIN_BUILDROOT_USE_SSP=y
+BR2_PTHREADS_OLD=y
+-------------------------------------------
