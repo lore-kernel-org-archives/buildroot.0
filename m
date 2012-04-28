@@ -1,55 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 28 Apr 2012 16:41:49 +0200
-Subject: [Buildroot] [PATCH 00/11] RFC: Manual content reorganization
-In-Reply-To: <CAHXCMMLufj+W5=xW50u=RgXM7597TcaH34EULOTNc7msuQ3soA@mail.gmail.com>
-References: <1332285001-12881-1-git-send-email-s.martin49@gmail.com>
- <CAHXCMM+Z5hRXUjmH3dV9MJ+_sEiAbEih5ArJbaOjdDDKEP9sCw@mail.gmail.com>
- <CAHXCMMLufj+W5=xW50u=RgXM7597TcaH34EULOTNc7msuQ3soA@mail.gmail.com>
-Message-ID: <201204281641.50698.arnout@mind.be>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Sat, 28 Apr 2012 14:48:27 +0000 (UTC)
+Subject: [Buildroot] [OT] How to get rootfs.cpio combined with a kernel?
+References: <jn3vnk$go5$1@dough.gmane.org> <201204272212.07280.arnout@mind.be>
+Message-ID: <jngvvq$m1a$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wednesday 25 April 2012 22:23:30 Samuel Martin wrote:
-> ping?
-> 
-> 2012/4/15 Samuel Martin <s.martin49@gmail.com>:
-> > Hi all,
-> >
-> > No more comments about this set of patches?
-> >
-> > Some of you already gave me feedback about it, or told me they will.
-> >
-> > For anyone who is interested in improving the documentation, hereafter
-> > is the original patch submission in the ML archive:
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051952.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051953.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051954.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051955.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051956.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051957.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051958.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051959.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051960.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051961.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051962.html
-> > http://lists.busybox.net/pipermail/buildroot/2012-March/051963.html
+On 2012-04-27, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On Monday 23 April 2012 18:24:20 Grant Edwards wrote:
 
- I'm very much in favour of this reorganisation.  I've started a
-review of the documentation based on your final version (but it
-got stalled a bit due to holidays).
+>>[...]
+>> 
+>> Any pointers to documentation on how one might combine a kernel object
+>> and a rootfs cpio image to get a uImage file?
+>
+>  Short answer: the kernel build system doesn't support it.
 
- Peter, would it expedite things if Samuel reposted the patches?
+That's pretty much what I had concluded. 
 
- Regards,
- Arnout
+>  Long answer: the initramfs is compiled into one of the many builtin.o
+> files that are created all over the place.  This is linked into vmlinux.
+> See "Build vmlinux" in the top-level Makefile of the kernel.
+>
+>  The good thing is that the command to build vmlinux is stored in
+> .vmlinux.cmd, so you can use that to re-run the link - but you'd have
+> to keep all the individual built-in.o files of course.  The bad
+> thing, however, is that this is not the end.  You probably want to
+> create a bzImage or similar, which is an additional,
+> architecture-specific linking step.
+>
+>  Conclusion: unless you're willing to spend a lot of effort on this,
+> you're better off to either keep the compiled kernel tree for linking
+> with the rootfs, or using a separate kernel and rootfs image.
+
+I was reluctant to do that because I wanted to distribute them as a
+single uImage and store them in a single flash partition.  But...
+
+> If you're using U-Boot, you can even combine them in one uImage.
+
+That's something I hadn't discovered, and I think that is the right
+answer: build the kernel and rootfs separately, and then combine them
+into a single uImage for installation in flash in booting by U-Boot.
+I'll study the U-Boot docs...
+
+Thanks!
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Grant
