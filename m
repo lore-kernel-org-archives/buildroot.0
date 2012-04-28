@@ -1,50 +1,35 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Sat, 28 Apr 2012 13:15:05 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 28 Apr 2012 16:13:20 +0200
 Subject: [Buildroot] How do you add to library path?
-In-Reply-To: <201204280544.24157.minimod@morethan.org>
-References: <jnc1d9$t1p$1@dough.gmane.org> <201204280018.27254.arnout@mind.be>
+In-Reply-To: <CAC1BbcTQVqrFCwCz4_kSnUtHuKVB4Diw4H7iR+N=XyNFKjg_mA@mail.gmail.com>
+References: <jnc1d9$t1p$1@dough.gmane.org>
  <201204280544.24157.minimod@morethan.org>
-Message-ID: <CAC1BbcTQVqrFCwCz4_kSnUtHuKVB4Diw4H7iR+N=XyNFKjg_mA@mail.gmail.com>
+ <CAC1BbcTQVqrFCwCz4_kSnUtHuKVB4Diw4H7iR+N=XyNFKjg_mA@mail.gmail.com>
+Message-ID: <201204281613.21107.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Saturday 28 April 2012 13:15:05 Bernhard Reutner-Fischer wrote:
+> There is chpath (sp?) to change the rpath later on.
 
-There is chpath (sp?) to change the rpath later on.
-This is something completely different to turning on ld.so.cache support,
-though.
+ Nice one!  It's called chrpath and is part of Debian [1] and Ubuntu.  The upstream seems to have vanished.
 
-HTH,
+ There's also patchelf [2] which has a git repository.
 
-On 28 Apr 2012 12:44, "Michael S. Zick" <minimod@morethan.org> wrote:
+ As to objcopy: I didn't find anything in the man page...
 
-On Fri April 27 2012, Arnout Vandecappelle wrote:
-> On Thursday 26 April 2012 19:42:01 Grant Edwards...
-At a guess (untried by myself), it might be possible to use objcopy to
-add/change the rpath information __after__ the build is otherwise complete.
+ Regards,
+ Arnout
 
-I.E: For the case where the rpath information added is for the target's use,
-rather than the build host's use.
-
-I do not know for certain if objcopy can access or change the rpath
-information field in an object, I have never seen or read about it being
-done.
-
-Mike
-
->  Regards,
->  Arnout
-
->
-
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-ht...
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120428/67fca940/attachment.html>
+[1] http://packages.debian.org/source/sid/chrpath
+[2] http://nixos.org/patchelf.html
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
