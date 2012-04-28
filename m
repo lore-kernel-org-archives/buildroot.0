@@ -1,29 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 28 Apr 2012 20:24:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 5102] qt package moc, uic,
-	rcc read from wrong place
-In-Reply-To: <bug-5102-163@https.bugs.busybox.net/>
-References: <bug-5102-163@https.bugs.busybox.net/>
-Message-ID: <20120428202442.2C1C096BFB@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 28 Apr 2012 23:16:18 +0200
+Subject: [Buildroot] [PATCH 0/3] Add CONF_ENABLE and CONF_PKG_ENABLE helper
+	functions
+Message-ID: <1335647781-16536-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5102
+ Many packages have the following type of construct:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+ifeq ($(BR2_PACKAGE_ACL),y)
+       SYSTEMD_CONF_OPT += --enable-acl
+       SYSTEMD_DEPENDENCIES += acl
+else
+       SYSTEMD_CONF_OPT += --disable-acl
+endif
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |WORKSFORME
+ The first patch in this series abbreviates that to
 
---- Comment #5 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2012-04-28 20:24:42 UTC ---
-Thanks for reporting. Marking the bugs as fixed, worksforme.
+$(eval $(call CONF_PKG_ENABLE,SYSTEMD,acl))
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+ It makes it possible to abbreviate similar constructs as well.
+
+ The main advantage I see is not so much that the .mk files get
+shorter, but more importantly that it's easier to keep things consistent,
+e.g. making sure that --enable and --disable are always given explicitly.
+
+ The second and the third patch are examples of how this can be used in
+practice.  I've chosen two random packages that have a lot of these
+--enable/--disable options.  Once the main implementation is accepted
+I'll probably start to convert some more packages.
+
+
+ Note: I don't particularly like the way the call statement looks, but
+I couldn't find a better way to do it.  Suggestions are definitely
+welcome!
+
+
+ Regards,
+ Arnout
+
+----------------------------------------------------------------
+Arnout Vandecappelle (Essensium/Mind) (3):
+      pkg-infra: add CONF_ENABLE and CONF_PKG_ENABLE helper functions
+      avahi: use CONF_ENABLE and CONF_PKG_ENABLE
+      cairo: use CONF_ENABLE and CONF_PKG_ENABLE
+
+ package/avahi/avahi.mk     |   34 +++++-----------------------------
+ package/cairo/cairo.mk     |   44 ++++++--------------------------------------
+ package/pkg-autotargets.mk |   57 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 68 insertions(+), 67 deletions(-)
