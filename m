@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 28 Apr 2012 23:16:20 +0200
-Subject: [Buildroot] [PATCH 2/3] avahi: use CONF_ENABLE and CONF_PKG_ENABLE
+Date: Sat, 28 Apr 2012 23:16:21 +0200
+Subject: [Buildroot] [PATCH 3/3] cairo: use CONF_ENABLE and CONF_PKG_ENABLE
 In-Reply-To: <1335647781-16536-1-git-send-email-arnout@mind.be>
 References: <1335647781-16536-1-git-send-email-arnout@mind.be>
-Message-ID: <1335647781-16536-3-git-send-email-arnout@mind.be>
+Message-ID: <1335647781-16536-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,61 +14,64 @@ From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/avahi/avahi.mk |   34 +++++-----------------------------
- 1 file changed, 5 insertions(+), 29 deletions(-)
+ package/cairo/cairo.mk |   44 ++++++--------------------------------------
+ 1 file changed, 6 insertions(+), 38 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 32e3df7..64a83db 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -91,31 +91,12 @@ else
- AVAHI_CONF_OPT += --disable-libdaemon
- endif
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 55068dd..5486372 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -36,45 +36,13 @@ CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
  
--ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
--AVAHI_DEPENDENCIES += expat
--AVAHI_CONF_OPT += --with-xml=expat
--else
--AVAHI_CONF_OPT += --with-xml=none
--endif
--
--ifeq ($(BR2_PACKAGE_DBUS),y)
--AVAHI_DEPENDENCIES += dbus
--else
--AVAHI_CONF_OPT += --disable-dbus
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
--AVAHI_DEPENDENCIES += libglib2
--else
--AVAHI_CONF_OPT += --disable-glib --disable-gobject
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGLADE),y)
--AVAHI_DEPENDENCIES += libglade
--else
--AVAHI_CONF_OPT += --disable-gtk
--endif
-+$(eval $(call CONF_ENABLE,AVAHI,$(BR2_PACKAGE_AVAHI_DAEMON),expat,--with-xml=expat,--with-xml=none))
-+$(eval $(call CONF_PKG_ENABLE,AVAHI,dbus))
-+$(eval $(call CONF_PKG_ENABLE,AVAHI,libglib2,--enable-glib --enable-gobject,--disable-glib --disable-gobject))
-+$(eval $(call CONF_PKG_ENABLE,AVAHI,libglade,gtk))
+ CAIRO_DEPENDENCIES = host-pkg-config fontconfig pixman
  
-+$(eval $(call CONF_PKG_ENABLE,AVAHI,python))
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- AVAHI_CONF_ENV += am_cv_pathless_PYTHON=python \
- 		am_cv_path_PYTHON=$(PYTHON_TARGET_BINARY) \
-@@ -124,11 +105,6 @@ AVAHI_CONF_ENV += am_cv_pathless_PYTHON=python \
- 		am_cv_python_pythondir=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 		am_cv_python_pyexecdir=/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages \
- 		py_cv_mod_socket_=yes
--
--AVAHI_DEPENDENCIES += python
--AVAHI_CONF_OPT += --enable-python
+-ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+-	CAIRO_CONF_OPT += --enable-directfb
+-	CAIRO_DEPENDENCIES += directfb
 -else
--AVAHI_CONF_OPT += --disable-python
- endif
+-	CAIRO_CONF_OPT += --disable-directfb
+-endif
++$(eval $(call CONF_PKG_ENABLE,CAIRO,directfb))
  
- ifeq ($(BR2_PACKAGE_LIBINTL),y)
+-ifeq ($(BR2_PACKAGE_XORG7),y)
+-	CAIRO_CONF_OPT += --enable-xlib --with-x
+-	CAIRO_DEPENDENCIES += xserver_xorg-server
+-else
+-	CAIRO_CONF_OPT += --disable-xlib --without-x
+-endif
++$(eval $(call CONF_ENABLE,CAIRO,$(BR2_PACKAGE_XORG7),xserver_xorg-server,--enable-xlib --with-x,--disable-xlib --without-x))
+ 
+-ifeq ($(BR2_PACKAGE_CAIRO_PS),y)
+-	CAIRO_CONF_OPT += --enable-ps
+-	CAIRO_DEPENDENCIES += zlib
+-else
+-	CAIRO_CONF_OPT += --disable-ps
+-endif
+-
+-ifeq ($(BR2_PACKAGE_CAIRO_PDF),y)
+-	CAIRO_CONF_OPT += --enable-pdf
+-	CAIRO_DEPENDENCIES += zlib
+-else
+-	CAIRO_CONF_OPT += --disable-pdf
+-endif
+-
+-ifeq ($(BR2_PACKAGE_CAIRO_PNG),y)
+-	CAIRO_CONF_OPT += --enable-png
+-	CAIRO_DEPENDENCIES += libpng
+-else
+-	CAIRO_CONF_OPT += --disable-png
+-endif
+-
+-ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
+-	CAIRO_CONF_OPT += --enable-svg
+-else
+-	CAIRO_CONF_OPT += --disable-svg
+-endif
++$(eval $(call CONF_ENABLE,CAIRO,$(BR2_PACKAGE_CAIRO_PS),zlib,ps))
++$(eval $(call CONF_ENABLE,CAIRO,$(BR2_PACKAGE_CAIRO_PDF),zlib,pdf))
++$(eval $(call CONF_ENABLE,CAIRO,$(BR2_PACKAGE_CAIRO_PNG),libpng,png))
++$(eval $(call CONF_ENABLE,CAIRO,$(BR2_PACKAGE_CAIRO_SVG),,svg))
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.10
