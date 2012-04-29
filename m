@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Apr 2012 10:59:28 +0200
-Subject: [Buildroot] [PATCH 2/2] libnl: bump to version 3.2.8
-In-Reply-To: <1335522632-12572-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 27 Apr 2012 07:30:32 -0300")
-References: <1335522632-12572-1-git-send-email-gustavo@zacarias.com.ar>
- <1335522632-12572-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87haw27w27.fsf@macbook.be.48ers.dk>
+Date: Sun, 29 Apr 2012 11:00:18 +0200
+Subject: [Buildroot] [PATCH 1/2] uboot-tools: bump to version 2012.04.01
+In-Reply-To: <1335539109-6447-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 27 Apr 2012 12:05:08 -0300")
+References: <1335539109-6447-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d36q7w0t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
