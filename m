@@ -1,22 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Apr 2012 19:39:49 +0200
-Subject: [Buildroot] [PATCH 2/2] busybox 1.20.0: add buildsys patch
-In-Reply-To: <1335704632-23164-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 29 Apr 2012 10:03:52 -0300")
-References: <1335704632-23164-1-git-send-email-gustavo@zacarias.com.ar>
- <1335704632-23164-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehr65tei.fsf@macbook.be.48ers.dk>
+Date: Sun, 29 Apr 2012 20:30:36 +0200
+Subject: [Buildroot] [PATCH 1/2] heirloom-mailx: new package
+In-Reply-To: <892cb61cad940f6b378ebc04e9cc3a216d1d11f0.1334677614.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 17 Apr 2012 17:46:56 +0200")
+References: <cover.1334677614.git.thomas.petazzoni@free-electrons.com>
+ <cover.1334677614.git.thomas.petazzoni@free-electrons.com>
+ <892cb61cad940f6b378ebc04e9cc3a216d1d11f0.1334677614.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <878vhe5r1v.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Sorry, I already committed that locally.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
