@@ -1,35 +1,85 @@
-From: Laurent GONZALEZ <br2@gezedo.com>
-Date: Sun, 29 Apr 2012 21:22:33 +0200
-Subject: [Buildroot] [PATCH] libqwt: new package
-In-Reply-To: <20120429190422.58fc215c@skate>
-References: <1335694051-21922-1-git-send-email-br2@gezedo.com>
- <20120429190422.58fc215c@skate>
-Message-ID: <4F9D94F9.1020600@gezedo.com>
+From: Nigel Sollars <nsollars@gmail.com>
+Date: Sun, 29 Apr 2012 16:28:03 -0400
+Subject: [Buildroot] Globally disable PKG_CONFIG_PATH? [was: Re:
+ Buildroot fails to build when selecting build packages]
+In-Reply-To: <4F9D564A.8000602@mind.be>
+References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+ <201204291144.26712.arnout@mind.be>
+ <CAG6aBkVmLoN-fHkGWUiOfjRM7k2swUvzNQ38p=schi+Y2Ug1hg@mail.gmail.com>
+ <4F9D4BED.4050001@mind.be>
+ <CAG6aBkVUgOkv5kvPZkY+YgysDQ274FdaW+0vtVU-Vk1rBudJZA@mail.gmail.com>
+ <4F9D53B5.50705@mind.be>
+ <CAG6aBkVL0pXYVJNsk7D4OONWM6-B6Uj7aD364j8nW-mH_5ijJA@mail.gmail.com>
+ <4F9D564A.8000602@mind.be>
+Message-ID: <CAG6aBkW0CSaE-WYpku3ujp=0L=DyD9Lsb_H1MCHRinMyzYsdPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/2012 19:04, Thomas Petazzoni wrote:
-> Hello Laurent,
-> 
-> Le Sun, 29 Apr 2012 12:07:31 +0200,
-> Laurent GONZALEZ <br2@gezedo.com> a ?crit :
-> 
->> ---
->>  package/Config.in        |    1 +
->>  package/libqwt/Config.in |   22 +++++++++++++++++++++
->>  package/libqwt/libqwt.mk |   48 ++++++++++++++++++++++++++++++++++++++++++++++
-> 
-> I have taken your patch in one of my branch, with a few additional
-> fixes. I'll be pushing this "new-packages" branch when I'll finish
-> cleaning up another package.
-> 
-> I propose to take Arnout comments into account in my branch, if you
-> agree.
+Hello,
 
-Thanks for your help. Go ahead.
+Confirmed!
 
---
-Laurent
+after exporting PKG_CONFIG_PATH= thus clearing the env var.  build went all
+the way through.
+
+Regards
+Nige
+
+On Sun, Apr 29, 2012 at 10:55 AM, Arnout Vandecappelle <arnout@mind.be>wrote:
+
+> On 04/29/12 16:47, Nigel Sollars wrote:
+>
+>> Hello,
+>>
+>> Yes this one is set by the distro / profile.d scripts here is the
+>> OUTPUT,  the distro I am using is slackware 13.37
+>>
+>> PKG_CONFIG_PATH=/usr/local/**lib/pkgconfig:/usr/lib/**pkgconfig
+>>
+>
+>  Right!
+>
+>  Buildroot devels: should we globally unset PKG_CONFIG_PATH with an
+>
+> PKG_CONFIG_PATH =
+> export PKG_CONFIG_PATH
+>
+> in the top-level Makefile?
+>
+>  Or should we add PKG_CONFIG_PATH="" to TARGET_CONFIGURE_OPTS?
+>
+>  The former has the advantage that it also works for packages that don't
+> use TARGET_CONFIGURE_OPTS.  But I'm not sure if maybe we _want_ host
+> packages to use the system's PKG_CONFIG_PATH...
+>
+>
+>  Nigel, for now just unset PKG_CONFIG_PATH in your environment before
+> calling make.  You don't have to rebuild from scratch, you can just run
+> 'PKG_CONFIG_PATH="" make libglib2-reconfigure'.
+>
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR
+> Leuven
+> LinkedIn profile: http://www.linkedin.com/in/**arnoutvandecappelle<http://www.linkedin.com/in/arnoutvandecappelle>
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+
+
+
+-- 
+?Science is a differential equation. Religion is a boundary condition.?
+
+Alan Turing
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120429/22b80919/attachment.html>
