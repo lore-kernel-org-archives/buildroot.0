@@ -1,35 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 17:06:10 +0200
-Subject: [Buildroot] [git commit] busybox: 1.20.0 buildsys fix
-Message-ID: <20120429171458.975AF96BFE@busybox.osuosl.org>
+Date: Sun, 29 Apr 2012 19:13:46 +0200
+Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.3.4
+Message-ID: <20120429171458.B3C2C96BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=308e476a73771daee0dfb38ae1c918341a0d8955
+commit: http://git.buildroot.net/buildroot/commit/?id=35ee09611d91bc2a73d1de059e9af55d90ba2ffa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../busybox-1.20.0/busybox-1.20.0-buildsys.patch   |   11 +++++++++++
- 1 files changed, 11 insertions(+), 0 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox-1.20.0/busybox-1.20.0-buildsys.patch b/package/busybox/busybox-1.20.0/busybox-1.20.0-buildsys.patch
-new file mode 100644
-index 0000000..b9d2a5e
---- /dev/null
-+++ b/package/busybox/busybox-1.20.0/busybox-1.20.0-buildsys.patch
-@@ -0,0 +1,11 @@
-+--- busybox-1.20.0/archival/libarchive/Kbuild.src
-++++ busybox-1.20.0-buildsys/archival/libarchive/Kbuild.src
-+@@ -60,7 +60,7 @@ lib-$(CONFIG_FEATURE_SEAMLESS_GZ)
-+ lib-$(CONFIG_FEATURE_SEAMLESS_BZ2)      += open_transformer.o decompress_bunzip2.o
-+ lib-$(CONFIG_FEATURE_SEAMLESS_LZMA)     += open_transformer.o decompress_unlzma.o
-+ lib-$(CONFIG_FEATURE_SEAMLESS_XZ)       += open_transformer.o decompress_unxz.o
-+-lib-$(CONFIG_FEATURE_COMPRESS_USAGE)    += decompress_bunzip2.o
-++lib-$(CONFIG_FEATURE_COMPRESS_USAGE)    += open_transformer.o decompress_bunzip2.o
-+ lib-$(CONFIG_FEATURE_COMPRESS_BBCONFIG) += decompress_bunzip2.o
-+ lib-$(CONFIG_FEATURE_TAR_TO_COMMAND)    += data_extract_to_command.o
-+ 
+diff --git a/linux/Config.in b/linux/Config.in
+index 945059d..59ba6d3 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_3
+ 
+ config BR2_LINUX_KERNEL_3_3
+-	bool "3.3.3"
++	bool "3.3.4"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.3.3" if BR2_LINUX_KERNEL_3_3
++	default "3.3.4" if BR2_LINUX_KERNEL_3_3
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
