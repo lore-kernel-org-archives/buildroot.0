@@ -1,68 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 11:00:24 +0200
-Subject: [Buildroot] [git commit] uboot-tools: bump to version 2012.04.01
-Message-ID: <20120429090502.A664496C08@busybox.osuosl.org>
+Date: Sun, 29 Apr 2012 10:58:37 +0200
+Subject: [Buildroot] [git commit] openssh: bump to version 6.0p1
+Message-ID: <20120429090502.8650D96C08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8952fad3ee43dc16f00fc3b5b3584139cbd30385
+commit: http://git.buildroot.net/buildroot/commit/?id=895bb588318962b1a3124110ac9fffab9b4348cb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../uboot-tools-2011.03-drop-configh.patch         |   27 --------------------
- ...tools-2012.04.01-hostcflags-override-fix.patch} |    0
- package/uboot-tools/uboot-tools.mk                 |    2 +-
- 3 files changed, 1 insertions(+), 28 deletions(-)
+ package/openssh/openssh.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch b/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
-deleted file mode 100644
-index bf524c9..0000000
---- a/package/uboot-tools/uboot-tools-2011.03-drop-configh.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--"make tools-all" should allow building tools such as mkimage and the new
--imximage without any config, but imximage.c currently fails to build
--with:
--imximage.h:27:20: error: config.h: No such file or directory
--
--config.h is not needed in imximage.h nor in imximage.c, and imximage.h
--is only included from imximage.c, so drop this include to fix the build.
--
--Signed-off-by: Lo?c Minier <loic.minier@linaro.org>
-----
-- tools/imximage.h |    2 --
-- 1 files changed, 0 insertions(+), 2 deletions(-)
--
--diff --git a/tools/imximage.h b/tools/imximage.h
--index 38ca6be..d126a46 100644
----- a/tools/imximage.h
--+++ b/tools/imximage.h
--@@ -24,8 +24,6 @@
-- #ifndef _IMXIMAGE_H_
-- #define _IMXIMAGE_H_
-- 
---#include <config.h>
---
-- #define MAX_HW_CFG_SIZE_V2 121 /* Max number of registers imx can set for v2 */
-- #define MAX_HW_CFG_SIZE_V1 60  /* Max number of registers imx can set for v1 */
-- #define APP_CODE_BARKER	0xB1
---- 1.7.2.3
-diff --git a/package/uboot-tools/uboot-tools-2011.03-hostcflags-override-fix.patch b/package/uboot-tools/uboot-tools-2012.04.01-hostcflags-override-fix.patch
-similarity index 100%
-rename from package/uboot-tools/uboot-tools-2011.03-hostcflags-override-fix.patch
-rename to package/uboot-tools/uboot-tools-2012.04.01-hostcflags-override-fix.patch
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 00592d6..d757ade 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -1,4 +1,4 @@
--UBOOT_TOOLS_VERSION = 2011.03
-+UBOOT_TOOLS_VERSION = 2012.04.01
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 08bb499..2b93def 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
+-OPENSSH_VERSION = 5.9p1
++OPENSSH_VERSION = 6.0p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
+ OPENSSH_CONF_OPT = --libexecdir=/usr/lib --disable-lastlog --disable-utmp \
