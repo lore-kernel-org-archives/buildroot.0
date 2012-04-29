@@ -1,25 +1,46 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 29 Apr 2012 19:14:29 +0200
-Subject: [Buildroot] [PATCH 1/2] busybox 1.20.x: add if-post-up.d and
-	if-pre-down.d to device table
-In-Reply-To: <1335704632-23164-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 29 Apr 2012 10:03:51 -0300")
-References: <1335704632-23164-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ipgi5ukq.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 29 Apr 2012 19:13:23 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0,
+	3}.x stable versions
+Message-ID: <20120429171458.A611696C01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2e7ffd6c849f0aab66fc886a84576aaa31b5a9bc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Busybox 1.20.0 add functionality to execute scripts from
- Gustavo> if-post-up.d and if-pre-down.d, so add the missing directories
- Gustavo> to the device table to get them created and avoid unnecessary
- Gustavo> warnings if not.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ ...umode_t.patch => linux-3.3.4-fix-umode_t.patch} |    0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 05227cf..aeeebef 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.29"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.30"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.16"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3.3"		if BR2_KERNEL_HEADERS_3_3
++	default "3.3.4"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.29-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.29-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/toolchain/kernel-headers/linux-3.3.3-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.4-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3.3-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.4-fix-umode_t.patch
