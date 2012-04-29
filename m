@@ -1,63 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 29 Apr 2012 11:44:22 +0200
-Subject: [Buildroot] Buildroot fails to build when selecting build
-	packages
-In-Reply-To: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
-References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
-Message-ID: <201204291144.26712.arnout@mind.be>
+Date: Sun, 29 Apr 2012 12:06:35 +0200
+Subject: [Buildroot] [PATCH 2/2] lsof: add busybox tweaks
+In-Reply-To: <87ehr77x56.fsf@macbook.be.48ers.dk>
+References: <1335435324-18792-1-git-send-email-gustavo@zacarias.com.ar>
+ <201204272354.58069.arnout@mind.be> <87ehr77x56.fsf@macbook.be.48ers.dk>
+Message-ID: <201204291206.36021.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hoi Nigel,
+On Sunday 29 April 2012 10:36:05 Peter Korsgaard wrote:
+> True. But the first thing to decide on is if this _SHOW_OTHERS option is
+> really useful. It was afaik introduced long time ago to encourage people
+> to use the busybox applets instead of the full blown versions, but
+> perhaps we should just let people decide for themselves?
 
- I ignored the original error because I got distracted by the fenv issue :-)
+ Admittedly, the first thing I do when a start configuring is to enable
+_SHOW_OTHERS.  However, I think it is very useful for Joe Random User
+to be informed of which packages are redundant because they are already
+provided by busybox.  Still, maybe a better way is to mention that in the
+package's menu entry:
 
-On Wednesday 25 April 2012 01:49:44 Nigel Sollars wrote:
-> The build fails since as a dependency glib2 is selected this fails with a
-> dbus like so:
-> 
-> gdbus-proxy-threads.c:34:31: fatal error: dbus/dbus-shared.h: No such file
-> or directory
-> compilation terminated.
-> make[7]: *** [gdbus-proxy-threads.o] Error 1
-> make[7]: *** Waiting for unfinished jobs....
-> make[7]: Leaving directory
-> `/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio/tests'
-> make[6]: *** [all-recursive] Error 1
-
- Still works for me :-)
-
- The dbus dependency of libglib2 is only there for the tests.  Since you
-don't have dbus selected, the configure script should detect that and
-disable the gio tests...
-
- Can you post the output/build/libglib2-2.30.2/config.log file?  It
-should report in the beginning that the host directory is in the front
-of the path, and near the end you should get this:
-
-configure:28819: checking for DBUS1
-configure:28826: $PKG_CONFIG --exists --print-errors "dbus-1 >= 1.2.14"
-Package dbus-1 was not found in the pkg-config search path.
-Perhaps you should add the directory containing `dbus-1.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'dbus-1' found
-configure:28829: $? = 1
-configure:28842: $PKG_CONFIG --exists --print-errors "dbus-1 >= 1.2.14"
-Package dbus-1 was not found in the pkg-config search path.
-Perhaps you should add the directory containing `dbus-1.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'dbus-1' found
-configure:28845: $? = 1
-configure:28858: result: no
-No package 'dbus-1' found
-
-
- Hang on...  You don't have DBUS1_CFLAGS or DBUS1_LIBS set in your
-environment, do you?  In that case, the configure script would enable
-the gio tests unconditionally...
+diff --git a/package/lsof/Config.in b/package/lsof/Config.in
+index cc7512c..c3a878f 100644
+--- a/package/lsof/Config.in
++++ b/package/lsof/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_LSOF
+-       bool "lsof"
++       bool "lsof (also in busybox)"
+        help
+          lsof (LiSt Open Files)
+          The lsof tool lists information about files opened by
 
 
  Regards,
