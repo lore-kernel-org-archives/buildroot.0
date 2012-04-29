@@ -1,35 +1,43 @@
-From: Shawn Ferris <shawn.ferris@gmail.com>
-Date: Sun, 29 Apr 2012 01:48:49 -0600
-Subject: [Buildroot] Pandaboard Rev. 2 & Pulseaudio...
-Message-ID: <CAC2kKA9gsF3-Cknt1RKf6_gdiH66yBxr7OwY5SqRi3DCOri+yg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 29 Apr 2012 10:36:05 +0200
+Subject: [Buildroot] [PATCH 2/2] lsof: add busybox tweaks
+In-Reply-To: <201204272354.58069.arnout@mind.be> (Arnout Vandecappelle's
+ message of "Fri, 27 Apr 2012 23:54:57 +0200")
+References: <1335435324-18792-1-git-send-email-gustavo@zacarias.com.ar>
+ <20120426164511.2f6e462d@skate>
+ <20120427005558.GA20161@game.jcrosoft.org>
+ <201204272354.58069.arnout@mind.be>
+Message-ID: <87ehr77x56.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All --
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Quite a while ago I could never get pulseaudio to work beyond using
-the audiotestsrc from gstreamer. EG: gst-launch audiotestsrc !
-audioconvert ! pulsesink
+Hi,
 
-Unfortunately,  other priorities came up and I haven't been able to
-work on it since. I actually thought this would be a good thing
-because now that I am able to get back into it (almost 5 months
-later), I decided to rebuild my buildroot environment from scratch for
-it. I figured if I were hitting a bug, it'd been fixed by now.
-Unfortunately, my situation hasn't improved despite all the newer
-versions. Pulseaudio still behaves the same. The audiotestsrc comes
-through loud and clear, another src and I hear nothing. Alsa alone
-plays everything fine.
+ >> > Now, whether we should change those guidelines to something else is a
+ >> > different story. But if we change the guideline, it should be changed
+ >> > for all packages and not just for lsof.
+ >> package/kmod/Config.in is already like this
 
-Anyway.. I will obviously take this (back) to the pulseaudio/panda
-groups, but wanted to check here to see if someone would mind sharing
-their configuration/customizations that are successfully using
-buildroot on panda with pulseaudio. (with or w/o gstreamer.. I can't
-even get paplay to work, so I don't believe it's a gst issue) That way
-I'm not wasting other peoples time if it's something stupid I've done.
+The main reason why it's done like this is that it's only the _TOOLS
+suboption that should depend on the _SHOW_OTHERS option.
 
-Thanks in advance!
-Shawn
+ >> and it's more clean
+
+ Arnout>  I agree that it's better to do it in the package's Config.in.
+
+ Arnout>  And changing the guideline doesn't automatically mean that all
+ Arnout> packages have to change.  Only new packages (or patches) must follow 
+ Arnout> the guideline.
+
+True. But the first thing to decide on is if this _SHOW_OTHERS option is
+really useful. It was afaik introduced long time ago to encourage people
+to use the busybox applets instead of the full blown versions, but
+perhaps we should just let people decide for themselves?
+
+-- 
+Bye, Peter Korsgaard
