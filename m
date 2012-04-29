@@ -1,35 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 20:44:29 +0200
-Subject: [Buildroot] [git commit] qemu/ppc-g3beige: target 750 rather than
-	440fp
-Message-ID: <20120429184454.799C596BFE@busybox.osuosl.org>
+From: Laurent GONZALEZ <br2@gezedo.com>
+Date: Sun, 29 Apr 2012 21:22:33 +0200
+Subject: [Buildroot] [PATCH] libqwt: new package
+In-Reply-To: <20120429190422.58fc215c@skate>
+References: <1335694051-21922-1-git-send-email-br2@gezedo.com>
+ <20120429190422.58fc215c@skate>
+Message-ID: <4F9D94F9.1020600@gezedo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0242ae4c6b7d1daf85a5f0c191394b0a15f95c54
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29/04/2012 19:04, Thomas Petazzoni wrote:
+> Hello Laurent,
+> 
+> Le Sun, 29 Apr 2012 12:07:31 +0200,
+> Laurent GONZALEZ <br2@gezedo.com> a ?crit :
+> 
+>> ---
+>>  package/Config.in        |    1 +
+>>  package/libqwt/Config.in |   22 +++++++++++++++++++++
+>>  package/libqwt/libqwt.mk |   48 ++++++++++++++++++++++++++++++++++++++++++++++
+> 
+> I have taken your patch in one of my branch, with a few additional
+> fixes. I'll be pushing this "new-packages" branch when I'll finish
+> cleaning up another package.
+> 
+> I propose to take Arnout comments into account in my branch, if you
+> agree.
 
-Target a powerpc 750 rather than the incorrect 440fp to avoid issues and
-for correctness.
+Thanks for your help. Go ahead.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/qemu_ppc_g3beige_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index a20d3e4..8f36446 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -1,6 +1,6 @@
- # Architecture
- BR2_powerpc=y
--BR2_powerpc_440fp=y
-+BR2_powerpc_750=y
- 
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
+--
+Laurent
