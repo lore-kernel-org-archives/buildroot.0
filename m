@@ -1,48 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 29 Apr 2012 12:06:35 +0200
-Subject: [Buildroot] [PATCH 2/2] lsof: add busybox tweaks
-In-Reply-To: <87ehr77x56.fsf@macbook.be.48ers.dk>
-References: <1335435324-18792-1-git-send-email-gustavo@zacarias.com.ar>
- <201204272354.58069.arnout@mind.be> <87ehr77x56.fsf@macbook.be.48ers.dk>
-Message-ID: <201204291206.36021.arnout@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 29 Apr 2012 12:42:05 +0200
+Subject: [Buildroot] [PATCH v2] new package: bellagio
+In-Reply-To: <1335286281-8642-1-git-send-email-qais.yousef@imgtec.com> (Qais
+ Yousef's message of "Tue, 24 Apr 2012 17:51:21 +0100")
+References: <1335286281-8642-1-git-send-email-qais.yousef@imgtec.com>
+Message-ID: <87vcki6cqq.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday 29 April 2012 10:36:05 Peter Korsgaard wrote:
-> True. But the first thing to decide on is if this _SHOW_OTHERS option is
-> really useful. It was afaik introduced long time ago to encourage people
-> to use the busybox applets instead of the full blown versions, but
-> perhaps we should just let people decide for themselves?
+>>>>> "Qais" == Qais Yousef <qais.yousef@imgtec.com> writes:
 
- Admittedly, the first thing I do when a start configuring is to enable
-_SHOW_OTHERS.  However, I think it is very useful for Joe Random User
-to be informed of which packages are redundant because they are already
-provided by busybox.  Still, maybe a better way is to mention that in the
-package's menu entry:
+ Qais> Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+ Qais> ---
 
-diff --git a/package/lsof/Config.in b/package/lsof/Config.in
-index cc7512c..c3a878f 100644
---- a/package/lsof/Config.in
-+++ b/package/lsof/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_LSOF
--       bool "lsof"
-+       bool "lsof (also in busybox)"
-        help
-          lsof (LiSt Open Files)
-          The lsof tool lists information about files opened by
+ Qais> I haven't seen the v1 committed, so I am sending v2 here which
+ Qais> includes the following additions:
 
+ Qais> 	- Add a patch to fix a runtime error when using dynamicloader.
+ Qais> 	- Add a patch to fix when building in parallel.
+ Qais> 	- Set AUTORECONF to YES as we modify the Makefile.am
 
- Regards,
- Arnout
+ Qais> All patches have been sent to relevant upstream mailing list.
+
+ Qais> Hope this looks alright! :-)
+
+ Qais> diff --git a/package/multimedia/Config.in b/package/multimedia/Config.in
+ Qais> index a05d1d9..7e18bcb 100644
+ Qais> --- a/package/multimedia/Config.in
+ Qais> +++ b/package/multimedia/Config.in
+ Qais> @@ -2,6 +2,7 @@ menu "Audio and video libraries and applications"
+ Qais>  source "package/multimedia/alsa-lib/Config.in"
+ Qais>  source "package/multimedia/alsa-utils/Config.in"
+ Qais>  source "package/multimedia/aumix/Config.in"
+ Qais> +source "package/multimedia/bellagio/Config.in"
+ Qais>  source "package/multimedia/faad2/Config.in"
+ Qais>  source "package/multimedia/flac/Config.in"
+ Qais>  source "package/multimedia/ffmpeg/Config.in"
+ Qais> diff --git a/package/multimedia/bellagio/Config.in b/package/multimedia/bellagio/Config.in
+ Qais> new file mode 100644
+ Qais> index 0000000..907709f
+ Qais> --- /dev/null
+ Qais> +++ b/package/multimedia/bellagio/Config.in
+ Qais> @@ -0,0 +1,14 @@
+ Qais> +config BR2_PACKAGE_BELLAGIO
+ Qais> +	bool "bellagio"
+ Qais> +	help
+ Qais> +	  Bellagio is an opensource implementation of the
+ Qais> +	  OpenMAX IL API.
+
+Bellagio is implemented in C++, so you need to add 'depends on
+BR2_INSTALL_LIBSTDCPP'. The configure script also unconditionally adds
+-Wall -Werror to CFLAGS, easily breaking the build.
+
+Committed with those fixes, thanks.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
