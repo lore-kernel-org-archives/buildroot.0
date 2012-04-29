@@ -1,41 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 29 Apr 2012 09:34:01 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to kernel version 3.3.4
-In-Reply-To: <1335702841-510-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1335702841-510-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1335702841-510-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun, 29 Apr 2012 10:03:51 -0300
+Subject: [Buildroot] [PATCH 1/2] busybox 1.20.x: add if-post-up.d and
+	if-pre-down.d to device table
+Message-ID: <1335704632-23164-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Busybox 1.20.0 add functionality to execute scripts from if-post-up.d
+and if-pre-down.d, so add the missing directories to the device table to
+get them created and avoid unnecessary warnings if not.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ target/generic/device_table.txt |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 945059d..59ba6d3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_3
- 
- config BR2_LINUX_KERNEL_3_3
--	bool "3.3.3"
-+	bool "3.3.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3.3" if BR2_LINUX_KERNEL_3_3
-+	default "3.3.4" if BR2_LINUX_KERNEL_3_3
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
+index d3e394b..fc397a9 100644
+--- a/target/generic/device_table.txt
++++ b/target/generic/device_table.txt
+@@ -14,7 +14,9 @@
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+ /etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
++/etc/network/if-post-up.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-down.d			d	755	0	0	-	-	-	-	-
++/etc/network/if-pre-down.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
+ # uncomment this to allow starting x as non-root
+ #/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
 -- 
 1.7.3.4
