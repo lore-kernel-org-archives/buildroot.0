@@ -1,29 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 10:57:30 +0200
-Subject: [Buildroot] [git commit] gdb: bump 7.4.x series to 7.4.1
-Message-ID: <20120429090502.5E6F496C08@busybox.osuosl.org>
+Date: Sun, 29 Apr 2012 10:59:18 +0200
+Subject: [Buildroot] [git commit] libnl: bump to version 3.2.8
+Message-ID: <20120429090502.96CD596C0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d459e0d216546dc043a9b876938bacdcdc75fdcc
+commit: http://git.buildroot.net/buildroot/commit/?id=0b385d88689e8089df528a621b92851fb6dead27
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gdb/Config.in |    2 +-
+ package/libnl/libnl.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/gdb/Config.in b/toolchain/gdb/Config.in
-index 980666b..c9c54b8 100644
---- a/toolchain/gdb/Config.in
-+++ b/toolchain/gdb/Config.in
-@@ -103,4 +103,4 @@ config BR2_GDB_VERSION
- 	default "7.1a"     if BR2_GDB_VERSION_7_1
- 	default "7.2a"     if BR2_GDB_VERSION_7_2
- 	default "7.3.1"    if BR2_GDB_VERSION_7_3
--	default "7.4"      if BR2_GDB_VERSION_7_4
-+	default "7.4.1"    if BR2_GDB_VERSION_7_4
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 661d7f2..40aaf38 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBNL_VERSION = 3.2.7
++LIBNL_VERSION = 3.2.8
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison
