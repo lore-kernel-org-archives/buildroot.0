@@ -1,46 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 19:13:23 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.{0,
-	3}.x stable versions
-Message-ID: <20120429171458.A611696C01@busybox.osuosl.org>
+Date: Sun, 29 Apr 2012 17:06:10 +0200
+Subject: [Buildroot] [git commit] busybox: 1.20.0 buildsys fix
+Message-ID: <20120429171458.975AF96BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2e7ffd6c849f0aab66fc886a84576aaa31b5a9bc
+commit: http://git.buildroot.net/buildroot/commit/?id=308e476a73771daee0dfb38ae1c918341a0d8955
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in                 |    4 ++--
- ...all-fix-__packed-in-exported-kernel-head.patch} |    0
- ...umode_t.patch => linux-3.3.4-fix-umode_t.patch} |    0
- 3 files changed, 2 insertions(+), 2 deletions(-)
+ .../busybox-1.20.0/busybox-1.20.0-buildsys.patch   |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 05227cf..aeeebef 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
- 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
--	default "3.0.29"	if BR2_KERNEL_HEADERS_3_0
-+	default "3.0.30"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
- 	default "3.2.16"	if BR2_KERNEL_HEADERS_3_2
--	default "3.3.3"		if BR2_KERNEL_HEADERS_3_3
-+	default "3.3.4"		if BR2_KERNEL_HEADERS_3_3
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
- 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-diff --git a/toolchain/kernel-headers/linux-3.0.29-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.0.29-headers_install-fix-__packed-in-exported-kernel-head.patch
-rename to toolchain/kernel-headers/linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch
-diff --git a/toolchain/kernel-headers/linux-3.3.3-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.4-fix-umode_t.patch
-similarity index 100%
-rename from toolchain/kernel-headers/linux-3.3.3-fix-umode_t.patch
-rename to toolchain/kernel-headers/linux-3.3.4-fix-umode_t.patch
+diff --git a/package/busybox/busybox-1.20.0/busybox-1.20.0-buildsys.patch b/package/busybox/busybox-1.20.0/busybox-1.20.0-buildsys.patch
+new file mode 100644
+index 0000000..b9d2a5e
+--- /dev/null
++++ b/package/busybox/busybox-1.20.0/busybox-1.20.0-buildsys.patch
+@@ -0,0 +1,11 @@
++--- busybox-1.20.0/archival/libarchive/Kbuild.src
+++++ busybox-1.20.0-buildsys/archival/libarchive/Kbuild.src
++@@ -60,7 +60,7 @@ lib-$(CONFIG_FEATURE_SEAMLESS_GZ)
++ lib-$(CONFIG_FEATURE_SEAMLESS_BZ2)      += open_transformer.o decompress_bunzip2.o
++ lib-$(CONFIG_FEATURE_SEAMLESS_LZMA)     += open_transformer.o decompress_unlzma.o
++ lib-$(CONFIG_FEATURE_SEAMLESS_XZ)       += open_transformer.o decompress_unxz.o
++-lib-$(CONFIG_FEATURE_COMPRESS_USAGE)    += decompress_bunzip2.o
+++lib-$(CONFIG_FEATURE_COMPRESS_USAGE)    += open_transformer.o decompress_bunzip2.o
++ lib-$(CONFIG_FEATURE_COMPRESS_BBCONFIG) += decompress_bunzip2.o
++ lib-$(CONFIG_FEATURE_TAR_TO_COMMAND)    += data_extract_to_command.o
++ 
