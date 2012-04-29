@@ -1,41 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 19:13:46 +0200
-Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.3.4
-Message-ID: <20120429171458.B3C2C96BFE@busybox.osuosl.org>
+Date: Sun, 29 Apr 2012 19:14:14 +0200
+Subject: [Buildroot] [git commit] busybox 1.20.x: add if-post-up.d and
+	if-pre-down.d to device table
+Message-ID: <20120429171458.C16E396BFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=35ee09611d91bc2a73d1de059e9af55d90ba2ffa
+commit: http://git.buildroot.net/buildroot/commit/?id=40c20cd40e74c97c8995dbf2ca0d6570b46d9261
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Busybox 1.20.0 add functionality to execute scripts from if-post-up.d
+and if-pre-down.d, so add the missing directories to the device table to
+get them created and avoid unnecessary warnings if not.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ target/generic/device_table.txt |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 945059d..59ba6d3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_3
- 
- config BR2_LINUX_KERNEL_3_3
--	bool "3.3.3"
-+	bool "3.3.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3.3" if BR2_LINUX_KERNEL_3_3
-+	default "3.3.4" if BR2_LINUX_KERNEL_3_3
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
+index d3e394b..fc397a9 100644
+--- a/target/generic/device_table.txt
++++ b/target/generic/device_table.txt
+@@ -14,7 +14,9 @@
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+ /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
+ /etc/network/if-pre-up.d		d	755	0	0	-	-	-	-	-
++/etc/network/if-post-up.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-down.d			d	755	0	0	-	-	-	-	-
++/etc/network/if-pre-down.d		d	755	0	0	-	-	-	-	-
+ /etc/network/if-post-down.d		d	755	0	0	-	-	-	-	-
+ # uncomment this to allow starting x as non-root
+ #/usr/X11R6/bin/Xfbdev		     	f	4755	0	0	-	-	-	-	-
