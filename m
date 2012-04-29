@@ -1,36 +1,72 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 29 Apr 2012 11:03:41 +0200
-Subject: [Buildroot] [git commit] ngrep: removed redundant --enable-ipv6
-Message-ID: <20120429090502.C24B496C08@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 29 Apr 2012 11:44:22 +0200
+Subject: [Buildroot] Buildroot fails to build when selecting build
+	packages
+In-Reply-To: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
+Message-ID: <201204291144.26712.arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11f6d7f82ef40f674386b1fcb2ae8d22f8a29956
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hoi Nigel,
 
-Option --enable-ipv6 now handled globally in autotargets configure.
+ I ignored the original error because I got distracted by the fenv issue :-)
 
-Signed-off-by: Vanya Sergeev <vsergeev@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ngrep/ngrep.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+On Wednesday 25 April 2012 01:49:44 Nigel Sollars wrote:
+> The build fails since as a dependency glib2 is selected this fails with a
+> dbus like so:
+> 
+> gdbus-proxy-threads.c:34:31: fatal error: dbus/dbus-shared.h: No such file
+> or directory
+> compilation terminated.
+> make[7]: *** [gdbus-proxy-threads.o] Error 1
+> make[7]: *** Waiting for unfinished jobs....
+> make[7]: Leaving directory
+> `/usr/local/panda-stuff/buildroot-git/buildroot/output/build/libglib2-2.30.2/gio/tests'
+> make[6]: *** [all-recursive] Error 1
 
-diff --git a/package/ngrep/ngrep.mk b/package/ngrep/ngrep.mk
-index e9c640a..daf7c6f 100644
---- a/package/ngrep/ngrep.mk
-+++ b/package/ngrep/ngrep.mk
-@@ -15,10 +15,6 @@ NGREP_CONF_OPT =  \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-dropprivs
- 
--ifeq ($(BR2_INET_IPV6),y)
--NGREP_CONF_OPT += --enable-ipv6
--endif
--
- NGREP_DEPENDENCIES = libpcap pcre
- 
- $(eval $(call AUTOTARGETS))
+ Still works for me :-)
+
+ The dbus dependency of libglib2 is only there for the tests.  Since you
+don't have dbus selected, the configure script should detect that and
+disable the gio tests...
+
+ Can you post the output/build/libglib2-2.30.2/config.log file?  It
+should report in the beginning that the host directory is in the front
+of the path, and near the end you should get this:
+
+configure:28819: checking for DBUS1
+configure:28826: $PKG_CONFIG --exists --print-errors "dbus-1 >= 1.2.14"
+Package dbus-1 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `dbus-1.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'dbus-1' found
+configure:28829: $? = 1
+configure:28842: $PKG_CONFIG --exists --print-errors "dbus-1 >= 1.2.14"
+Package dbus-1 was not found in the pkg-config search path.
+Perhaps you should add the directory containing `dbus-1.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'dbus-1' found
+configure:28845: $? = 1
+configure:28858: result: no
+No package 'dbus-1' found
+
+
+ Hang on...  You don't have DBUS1_CFLAGS or DBUS1_LIBS set in your
+environment, do you?  In that case, the configure script would enable
+the gio tests unconditionally...
+
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
