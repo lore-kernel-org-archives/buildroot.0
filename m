@@ -1,33 +1,37 @@
-From: Alexander Broekhuis <a.broekhuis@gmail.com>
-Date: Sun, 29 Apr 2012 17:35:06 +0200
-Subject: [Buildroot] Beagleboard
-Message-ID: <CA+T-u8edQJ-EWCNxH_s=8vrOVt37DutWZvK-Cm31Sika+NSwQA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Apr 2012 19:04:22 +0200
+Subject: [Buildroot] [PATCH] libqwt: new package
+In-Reply-To: <1335694051-21922-1-git-send-email-br2@gezedo.com>
+References: <1335694051-21922-1-git-send-email-br2@gezedo.com>
+Message-ID: <20120429190422.58fc215c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello Laurent,
 
-I've been searching the list for a while, but couldn't find any helpful
-answers. I am new to buildroot, and would like to build something for a
-beagleboard. Has anyone any pointers for me? What and how should I
-configure buildroot.
+Le Sun, 29 Apr 2012 12:07:31 +0200,
+Laurent GONZALEZ <br2@gezedo.com> a ?crit :
 
-I've come across [1] but couldn't get any results using that source. So I
-am wondering how to do something similar with a stock buildroot.
+> ---
+>  package/Config.in        |    1 +
+>  package/libqwt/Config.in |   22 +++++++++++++++++++++
+>  package/libqwt/libqwt.mk |   48 ++++++++++++++++++++++++++++++++++++++++++++++
 
-TiA!
+I have taken your patch in one of my branch, with a few additional
+fixes. I'll be pushing this "new-packages" branch when I'll finish
+cleaning up another package.
 
+I propose to take Arnout comments into account in my branch, if you
+agree.
 
-[1]:
-http://blog.galemin.com/2012/03/buildroot-2012-02-for-beagleboard-xm-with-li-5m03-mt9p031-camera-support
+Best regards,
 
+Thomas
 -- 
-Met vriendelijke groet,
-
-Alexander Broekhuis
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120429/eeff1184/attachment.html>
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
