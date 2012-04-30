@@ -1,59 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 30 Apr 2012 19:08:37 +0200
-Subject: [Buildroot] [git commit] uboot-tools: fix build breakage
-Message-ID: <20120430184249.9C5CF96C30@busybox.osuosl.org>
+Date: Mon, 30 Apr 2012 21:38:14 +0200
+Subject: [Buildroot] [git commit] libfcgi: fix build with C++ support and
+	gcc >= 4.4
+Message-ID: <20120430193954.02DA196C2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a389ebb12c256f210c0a82bf594fcd5c0efa096a
+commit: http://git.buildroot.net/buildroot/commit/?id=ae63ca8f4782b91fd9e41316bfb79a43f54f5cd2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix uboot-tools build breakage as reported by Peter Korsgaard.
-Previously config.h was included in imximage.h but not the fw_env tool.
+As reported on the ml by Rico Bachmann.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...-tools-2012.04.01-drop-configh-from-tools.patch |   31 ++++++++++++++++++++
- 1 files changed, 31 insertions(+), 0 deletions(-)
+ package/libfcgi/libfcgi-eof.patch |   24 ++++++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools-2012.04.01-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-2012.04.01-drop-configh-from-tools.patch
+diff --git a/package/libfcgi/libfcgi-eof.patch b/package/libfcgi/libfcgi-eof.patch
 new file mode 100644
-index 0000000..2b3a0e5
+index 0000000..e731426
 --- /dev/null
-+++ b/package/uboot-tools/uboot-tools-2012.04.01-drop-configh-from-tools.patch
-@@ -0,0 +1,31 @@
-+From 39857718f4df9b40a7acf38b73140fd86c628ef0 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 30 Apr 2012 09:07:38 -0300
-+Subject: [PATCH] fw_env: allow it to build without a config
++++ b/package/libfcgi/libfcgi-eof.patch
+@@ -0,0 +1,24 @@
++[PATCH] fix build with C++ support and gcc >= 4.4
 +
-+We need to build u-boot tools without a board configuration for the
-+target packages.
-+fw_env just uses config.h to define the default environment of the
-+created image, so it really isn't mandatory.
++EOF is defined in stdio, so ensure it is included.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Based on similar patch by Markus Rothe:
++http://comments.gmane.org/gmane.comp.web.fastcgi.devel/3205
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 +---
-+ tools/env/fw_env.c |    2 --
-+ 1 files changed, 0 insertions(+), 2 deletions(-)
++ libfcgi/fcgio.cpp |    1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
-+index e292d2b..2bb061a 100644
-+--- a/tools/env/fw_env.c
-++++ b/tools/env/fw_env.c
-+@@ -45,8 +45,6 @@
++Index: fcgi-2.4.0/libfcgi/fcgio.cpp
++===================================================================
++--- fcgi-2.4.0.orig/libfcgi/fcgio.cpp
+++++ fcgi-2.4.0/libfcgi/fcgio.cpp
++@@ -22,6 +22,7 @@
++ #define DLLAPI  __declspec(dllexport)
++ #endif
 + 
-+ #include "fw_env.h"
+++#include <cstdio>
++ #include <limits.h>
++ #include "fcgio.h"
 + 
-+-#include <config.h>
-+-
-+ #define WHITESPACE(c) ((c == '\t') || (c == ' '))
-+ 
-+ #define min(x, y) ({				\
-+-- 
-+1.7.3.4
-+
