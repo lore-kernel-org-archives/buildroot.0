@@ -1,44 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 1 May 2012 21:57:19 +0200
-Subject: [Buildroot] [git commit] boost: add an option to run cmds in
-	parallel
-Message-ID: <20120501195941.7A94096C24@busybox.osuosl.org>
+Date: Tue, 1 May 2012 21:59:07 +0200
+Subject: [Buildroot] [git commit] xf86-input-vmmouse: Make
+	xf86-input-vmmouse available only to x86/x86_64 architectures
+Message-ID: <20120501195941.86F3B96C42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bb0efa0ed4055e95fdf9791a71c7267e90099455
+commit: http://git.buildroot.net/buildroot/commit/?id=07f41187cc8667c92ea5b27d51ddfc0311fcd0f7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the same -jN parameter as used for make.
+The xf86-input-vmmouse source code fails to compile intentionally on any
+architecture but x86/x86_64. The following error is printed when compiling for a
+different architecture:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+vmmouse_proto.h:62:2: error: #error The vmmouse protocol is only supported on
+x86 architectures.
+vmmouse_proto.c:117:2: error: #error "VMMouse is only supported on x86 and
+x86-64.
+
+Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/boost/boost.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xdriver_xf86-input-vmmouse/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 9da427a..3667964 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -70,7 +70,7 @@ define BOOST_CONFIGURE_CMDS
- endef
- 
- define BOOST_INSTALL_TARGET_CMDS
--	(cd $(@D) && ./b2 -q -d+2 \
-+	(cd $(@D) && ./b2 -j$(BR2_JLEVEL) -q -d+2 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(TARGET_DIR)/usr \
-@@ -78,7 +78,7 @@ define BOOST_INSTALL_TARGET_CMDS
- endef
- 
- define BOOST_INSTALL_STAGING_CMDS
--	(cd $(@D) && ./bjam -d+2 \
-+	(cd $(@D) && ./bjam -j$(BR2_JLEVEL) -d+2 \
- 	--user-config=$(@D)/user-config.jam \
- 	$(BOOST_OPT) \
- 	--prefix=$(STAGING_DIR)/usr \
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+index 377e7e4..b2284cd 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
+ 	bool "xf86-input-vmmouse"
++	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
