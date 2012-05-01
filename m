@@ -1,52 +1,44 @@
-From: Alexander Broekhuis <a.broekhuis@gmail.com>
-Date: Tue, 1 May 2012 21:58:01 +0200
-Subject: [Buildroot] Fedora 16: Cannot find -lc
-In-Reply-To: <20120501214510.1171ac79@skate>
-References: <CA+T-u8d3owC=YNJ5O9V6MUaahdSOPo21H+5aLxxnf8xan5GyHQ@mail.gmail.com>
- <4F9F9D01.2090407@mind.be> <20120501214510.1171ac79@skate>
-Message-ID: <CA+T-u8cOPJUw0QqYPARB52fe2hb6VpTzWm7qnnC1Y6Sswaq4pw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 May 2012 21:57:19 +0200
+Subject: [Buildroot] [git commit] boost: add an option to run cmds in
+	parallel
+Message-ID: <20120501195941.7A94096C24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Both thanks for the replies!
+commit: http://git.buildroot.net/buildroot/commit/?id=bb0efa0ed4055e95fdf9791a71c7267e90099455
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I can't understand how I missed it in the FAQ...
+Add the same -jN parameter as used for make.
 
-It now works as expected, thx!
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/boost/boost.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-2012/5/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-> Le Tue, 01 May 2012 10:21:21 +0200,
-> Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
-> >   If that makes the difference, it definitely should be in the
-> > documentation.  (On Debian derivatives, libc.a is a dependency of the
-> > compiler so it will be there.)
->
-> Have a look at the second question in
-> http://buildroot.org/downloads/buildroot.html#faq :-)
->
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
-
--- 
-Met vriendelijke groet,
-
-Alexander Broekhuis
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120501/cef4ed4d/attachment.html>
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 9da427a..3667964 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -70,7 +70,7 @@ define BOOST_CONFIGURE_CMDS
+ endef
+ 
+ define BOOST_INSTALL_TARGET_CMDS
+-	(cd $(@D) && ./b2 -q -d+2 \
++	(cd $(@D) && ./b2 -j$(BR2_JLEVEL) -q -d+2 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(TARGET_DIR)/usr \
+@@ -78,7 +78,7 @@ define BOOST_INSTALL_TARGET_CMDS
+ endef
+ 
+ define BOOST_INSTALL_STAGING_CMDS
+-	(cd $(@D) && ./bjam -d+2 \
++	(cd $(@D) && ./bjam -j$(BR2_JLEVEL) -d+2 \
+ 	--user-config=$(@D)/user-config.jam \
+ 	$(BOOST_OPT) \
+ 	--prefix=$(STAGING_DIR)/usr \
