@@ -1,55 +1,61 @@
 From: Rico Bachmann <bachmann@tofwerk.com>
-Date: Tue, 01 May 2012 10:40:12 +0200
-Subject: [Buildroot] [PATCH v3] package: add libfcgi fast cgi library.
-References: <20111014110808.70e495a8@skate>
- <1318583794-9897-1-git-send-email-arnout@mind.be>
- <87obqa4c5r.fsf@macbook.be.48ers.dk> <000f01cd26db$69039c30$3b0ad490$@com>
- <87sjfl2lhq.fsf@macbook.be.48ers.dk>
-Message-ID: <op.wdmfpbmv705kjs@rico>
+Date: Tue, 01 May 2012 10:41:36 +0200
+Subject: [Buildroot] [git commit] libfcgi: fix build with C++ support
+	and gcc >= 4.4
+References: <20120430193954.02DA196C2A@busybox.osuosl.org>
+Message-ID: <op.wdmfrmfg705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 30.04.2012, 19:11 Uhr, schrieb Peter Korsgaard  
-<jacmet@uclibc.org>:
+Am 30.04.2012, 21:38 Uhr, schrieb Peter Korsgaard  
+<jacmet@sunsite.dk>:
 
->>>>>> "Rico" == Rico Bachmann  
->>>>>> <bachmann@tofwerk.com> writes:
+> commit:  
+> http://git.buildroot.net/buildroot/commit/?id=ae63ca8f4782b91fd9e41316bfb79a43f54f5cd2
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
->  Rico> Hi together
->  Rico> I was using gcc 4.3.X until now... Today I changed to gcc 4.5.3
->  Rico> I had some problems while building libfcgi with gcc 4.5.3!
->  Rico> There was an error: EOF is undefined.
+> As reported on the ml by Rico Bachmann.
 >
-> Ahh, yes - I only tested with a precompiled 4.3.x toolchain.
+> Signed-off-by: Peter Korsgaard  
+> <jacmet@sunsite.dk>
+> ---
+>  package/libfcgi/libfcgi-eof.patch |   24 ++++++++++++++++++++++++
+>  1 files changed, 24 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/libfcgi/libfcgi-eof.patch  
+> b/package/libfcgi/libfcgi-eof.patch
+> new file mode 100644
+> index 0000000..e731426
+> --- /dev/null
+> +++ b/package/libfcgi/libfcgi-eof.patch
+> @@ -0,0 +1,24 @@
+> +[PATCH] fix build with C++ support and gcc >= 4.4
+> +
+> +EOF is defined in stdio, so ensure it is included.
+> +
+> +Based on similar patch by Markus Rothe:
+> +http://comments.gmane.org/gmane.comp.web.fastcgi.devel/3205
+> +
+> +Signed-off-by: Peter Korsgaard  
+> <jacmet@sunsite.dk>
+> +---
+> + libfcgi/fcgio.cpp |    1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +Index: fcgi-2.4.0/libfcgi/fcgio.cpp
+> +===================================================================
+> +--- fcgi-2.4.0.orig/libfcgi/fcgio.cpp
+> ++++ fcgi-2.4.0/libfcgi/fcgio.cpp
+> +@@ -22,6 +22,7 @@
+> + #define DLLAPI  __declspec(dllexport)
+> + #endif
+> +
+> ++#include <cstdio>
+> + #include <limits.h>
+> + #include "fcgio.h"
 
-I've got the same situation, first I've just tested with the precompiled  
-toolchain.
-
->
->  Rico> This issue is already known on the libfcgi mailinglist:
->  Rico>  
-> http://article.gmane.org/gmane.comp.web.fastcgi.devel/3205/match=eof
->
->  Rico> I will add this patch to buildroot asap.
->
->  Rico> Is there in BR a nice possibility to use a patch from a package  
-> only
->  Rico> when gcc >=4.4.X?
->
-> No, but there's no reason to not add it for older toolchains as well.
->
->  Rico> And how do I have to handle the patch because its written by
->  Rico> Markus from the libfcgi mailing list and not by myself?
->
-> Keep his authorship (git-style patch has this in the header), but with
-> your signed-off-by.
->
-
-Thanks for the information.
-I will add the patch this way.
-
-Regards
-Rico
+Thanks for adding the patch.
+I've just want to do it right now.
