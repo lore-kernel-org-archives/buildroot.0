@@ -1,21 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 May 2012 21:10:07 +0200
-Subject: [Buildroot] [PATCH] samba: security bump to version 3.5.15
-In-Reply-To: <1335886312-6946-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 1 May 2012 12:31:52 -0300")
-References: <1335886312-6946-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87vckf1zw0.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 May 2012 21:45:10 +0200
+Subject: [Buildroot] Fedora 16: Cannot find -lc
+In-Reply-To: <4F9F9D01.2090407@mind.be>
+References: <CA+T-u8d3owC=YNJ5O9V6MUaahdSOPo21H+5aLxxnf8xan5GyHQ@mail.gmail.com>
+ <4F9F9D01.2090407@mind.be>
+Message-ID: <20120501214510.1171ac79@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Le Tue, 01 May 2012 10:21:21 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
- Gustavo> Fix for CVE-2012-2111
+>   If that makes the difference, it definitely should be in the 
+> documentation.  (On Debian derivatives, libc.a is a dependency of the 
+> compiler so it will be there.)
 
-Committed, thanks.
+Have a look at the second question in
+http://buildroot.org/downloads/buildroot.html#faq :-)
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
