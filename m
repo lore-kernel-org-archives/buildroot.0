@@ -1,46 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 May 2012 10:21:21 +0200
-Subject: [Buildroot] Fedora 16: Cannot find -lc
-In-Reply-To: <CA+T-u8d3owC=YNJ5O9V6MUaahdSOPo21H+5aLxxnf8xan5GyHQ@mail.gmail.com>
-References: <CA+T-u8d3owC=YNJ5O9V6MUaahdSOPo21H+5aLxxnf8xan5GyHQ@mail.gmail.com>
-Message-ID: <4F9F9D01.2090407@mind.be>
+Date: Tue, 01 May 2012 10:28:46 +0200
+Subject: [Buildroot] enabling libc.a generation
+In-Reply-To: <4F9F819C.80509@scalemp.com>
+References: <4F9F819C.80509@scalemp.com>
+Message-ID: <4F9F9EBE.2070303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/12 08:35, Alexander Broekhuis wrote:
-> Hi all,
->
-> I am trying to use buildroot on a Fedora 16 installation and run into
-> the following error:
->
-> /usr/bin/ld: cannot find -lc
+On 05/01/12 08:24, Eial Czerwacki wrote:
+> I have a little issue, while trying to compile a small file within a
+> buildroot generated env, I get this:
+> /usr/lib/gcc/i686-unknown-linux-uclibc/4.2.4/../../../../i686-unknown-linux-uclibc/bin/ld:
+> cannot find -lc
 > collect2: ld returned 1 exit status
->
-> The last make command before the error:
-> make[2]: Entering directory
-> `/home/alexander/Development/buildroot/output/build/host-module-init-tools-3.15/build'
-> /usr/lib/ccache/gcc  -O2
-> -I/home/alexander/Development/buildroot/output/host/include
-> -I/home/alexander/Development/buildroot/output/host/usr/include -Wunused
-> -Wall -static -L/home/alexander/Development/buildroot/output/host/lib
-> -L/home/alexander/Development/buildroot/output/host/usr/lib
-> -Wl,-rpath,/home/alexander/Development/buildroot/output/host/usr/lib -o
-> insmod.static insmod.o libmodtools.a
 
-  I guess you need /usr/lib/libc.a installed on your build system.  I 
-think it's in the glibc-static package on Fedora.
+  It would help if you at least specified the command you used to start 
+the link.  You can also add the -v option to gcc to see the exact 
+parameters of the call to ld, including the search path.
 
-  If that makes the difference, it definitely should be in the 
-documentation.  (On Debian derivatives, libc.a is a dependency of the 
-compiler so it will be there.)
+  libc.a and libc.so should be present in output/staging/usr/lib.  But I 
+see you're calling a gcc in /usr...  Is this a compiler running on the 
+target?  In that case, you should have libc.so and libc.a in /usr/lib.
 
   Regards,
   Arnout
-
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
