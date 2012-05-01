@@ -1,23 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 May 2012 21:57:53 +0200
-Subject: [Buildroot] [PATCH] boost: add an option to run cmds in parallel
-In-Reply-To: <1334737186-30736-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Wed, 18 Apr 2012 10:19:46
- +0200")
-References: <1334737186-30736-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87obq71xoe.fsf@macbook.be.48ers.dk>
+From: Alexander Broekhuis <a.broekhuis@gmail.com>
+Date: Tue, 1 May 2012 21:58:01 +0200
+Subject: [Buildroot] Fedora 16: Cannot find -lc
+In-Reply-To: <20120501214510.1171ac79@skate>
+References: <CA+T-u8d3owC=YNJ5O9V6MUaahdSOPo21H+5aLxxnf8xan5GyHQ@mail.gmail.com>
+ <4F9F9D01.2090407@mind.be> <20120501214510.1171ac79@skate>
+Message-ID: <CA+T-u8cOPJUw0QqYPARB52fe2hb6VpTzWm7qnnC1Y6Sswaq4pw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+Both thanks for the replies!
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Add the same -jN parameter as used for make.
+I can't understand how I missed it in the FAQ...
 
-Committed, thanks.
+It now works as expected, thx!
+
+2012/5/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+> Le Tue, 01 May 2012 10:21:21 +0200,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+> >   If that makes the difference, it definitely should be in the
+> > documentation.  (On Debian derivatives, libc.a is a dependency of the
+> > compiler so it will be there.)
+>
+> Have a look at the second question in
+> http://buildroot.org/downloads/buildroot.html#faq :-)
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+
 
 -- 
-Bye, Peter Korsgaard
+Met vriendelijke groet,
+
+Alexander Broekhuis
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120501/cef4ed4d/attachment.html>
