@@ -1,66 +1,44 @@
-From: Eial Czerwacki <eial@scalemp.com>
-Date: Tue, 01 May 2012 11:45:19 +0300
-Subject: [Buildroot] enabling libc.a generation
-In-Reply-To: <4F9F9EBE.2070303@mind.be>
-References: <4F9F819C.80509@scalemp.com> <4F9F9EBE.2070303@mind.be>
-Message-ID: <4F9FA29F.90309@scalemp.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 May 2012 10:56:45 +0200
+Subject: [Buildroot] [git commit] cups: fixup php extension build
+Message-ID: <20120501090031.B398696C44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/2012 11:28 AM, Arnout Vandecappelle wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=1069f8276585131cef852603e93b883e16f11058
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On 05/01/12 08:24, Eial Czerwacki wrote:
->> I have a little issue, while trying to compile a small file within a
->> buildroot generated env, I get this:
->> /usr/lib/gcc/i686-unknown-linux-uclibc/4.2.4/../../../../i686-unknown-linux-uclibc/bin/ld:
->>
->> cannot find -lc
->> collect2: ld returned 1 exit status
-> 
->  It would help if you at least specified the command you used to start
-> the link.  You can also add the -v option to gcc to see the exact
-> parameters of the call to ld, including the search path.
-> 
->  libc.a and libc.so should be present in output/staging/usr/lib.  But I
-> see you're calling a gcc in /usr...  Is this a compiler running on the
-> target?  In that case, you should have libc.so and libc.a in /usr/lib.
-> 
->  Regards,
->  Arnout
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/cups/cups.mk |   14 ++++----------
+ 1 files changed, 4 insertions(+), 10 deletions(-)
 
-
-Hello Arnout,
-
-I have chroot which was created using buildroot, I'm chrooting into it
-an run a simple compilation, e.g sh-4.1# gcc test.c -o test
-
-here is the output gcc -v:
-Using built-in specs.
-Target: i686-unknown-linux-uclibc
-Configured with:
-/home/envdev/buildroot/output/toolchain/gcc-4.2.4/configure
---prefix=/usr --build=i686-pc-linux-gnu --host=i686-unknown-linux-uclibc
---target=i686-unknown-linux-uclibc --enable-languages=c
---with-gxx-include-dir=/usr/include/c++ --disable-__cxa_atexit
---enable-target-optspace --disable-libgomp --with-gnu-ld
---disable-libssp --disable-multilib --enable-tls --enable-shared
---disable-nls --enable-threads --with-arch=i686 --with-tune=i686
---disable-largefile
-Thread model: posix
-gcc version 4.2.4
-
-as for libc.so, here is the relevant output:
-sh-4.1# find . -name "libc*"
-./lib/libcrypt.so.0
-./lib/libc.so.0
-./lib/libcrypt-0.9.32.so
-./usr/include/bits/libc-lock.h
-./usr/lib/libcurses.a
-sh-4.1# ls -l ./lib/libc.so.0
-lrwxrwxrwx    1 root     root            19 Apr 30 23:57 ./lib/libc.so.0
--> libuClibc-0.9.32.so
-
-Eial.
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 2357306..c19ae0c 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -28,17 +28,11 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP),y)
+-	CUPS_CFLAGS += 		-I$(STAGING_DIR)/usr/include/php
+-	CUPS_CFLAGS += 		-I$(STAGING_DIR)/usr/include/php/main
+-	CUPS_CFLAGS += 		-I$(STAGING_DIR)/usr/include/php/regex
+-	CUPS_CFLAGS += 		-I$(STAGING_DIR)/usr/include/php/TSRM
+-	CUPS_CFLAGS += 		-I$(STAGING_DIR)/usr/include/php/Zend
+-	CUPS_CFLAGS += 		-I$(STAGING_DIR)/usr/include/php/ext
+-	CUPS_CONF_ENV +=	ac_cv_path_php=$(STAGING_DIR)/usr/bin/php
+-	CUPS_CONF_OPT +=	--with-php
+-	CUPS_DEPENDENCIES +=	php
++	CUPS_CONF_ENV += ac_cv_path_PHPCONFIG=$(STAGING_DIR)/usr/bin/php-config
++	CUPS_CONF_OPT += --with-php
++	CUPS_DEPENDENCIES += php
+ else
+-	CUPS_CONF_OPT +=	--without-php
++	CUPS_CONF_OPT += --without-php
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
