@@ -1,16 +1,20 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 May 2012 12:31:52 -0300
-Subject: [Buildroot] [PATCH] samba: security bump to version 3.5.15
-Message-ID: <1335886312-6946-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 1 May 2012 21:09:47 +0200
+Subject: [Buildroot] [git commit] samba: security bump to version 3.5.15
+Message-ID: <20120501191014.4ECF596B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=9d51770a0c53f1ddd46fb3c10315734c72ecd070
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fix for CVE-2012-2111
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  package/samba/samba.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
@@ -28,5 +32,3 @@ index 48810b9..1203693 100644
  SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
  SAMBA_SUBDIR = source3
  SAMBA_INSTALL_STAGING = YES
--- 
-1.7.3.4
