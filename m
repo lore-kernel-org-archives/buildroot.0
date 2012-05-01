@@ -1,32 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 May 2012 10:30:20 -0300
-Subject: [Buildroot] [PATCH 2/2] libdvdnav: change SITE
-In-Reply-To: <1335879020-4880-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1335879020-4880-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1335879020-4880-2-git-send-email-gustavo@zacarias.com.ar>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue, 01 May 2012 16:13:39 +0200
+Subject: [Buildroot] [PATCH] Microblaze: Improvements in the build system
+In-Reply-To: <201204281817.16635.arnout@mind.be>
+References: <4F918C3D.2010105@relinux.de> <201204281817.16635.arnout@mind.be>
+Message-ID: <4F9FEF93.4020609@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libdvdnav/libdvdnav.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Am 28.04.2012 18:17, schrieb Arnout Vandecappelle:
+>  Even though I made a lot of comments here, it definitely looks like
+> an improvement!
+>
+>  Regards,
+>  Arnout
+>
+Thanks for your constructive comments. I will see when I have time to
+implement them. But that isn't much likely in time for the upcoming
+2012.05 release;-(
 
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index 7f68533..f69f238 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -6,7 +6,7 @@
- 
- LIBDVDNAV_VERSION = 4.1.3
- LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.bz2
--LIBDVDNAV_SITE = http://www.mplayerhq.hu/MPlayer/releases/dvdnav
-+LIBDVDNAV_SITE = http://dvdnav.mplayerhq.hu/releases
- LIBDVDNAV_AUTORECONF = YES
- LIBDVDNAV_INSTALL_STAGING = YES
- 
+Kind regards
+
+Stephan
+
 -- 
-1.7.3.4
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de     sho at reLinux.de
