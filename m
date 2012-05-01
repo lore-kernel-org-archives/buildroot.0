@@ -1,36 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 May 2012 10:28:46 +0200
-Subject: [Buildroot] enabling libc.a generation
-In-Reply-To: <4F9F819C.80509@scalemp.com>
-References: <4F9F819C.80509@scalemp.com>
-Message-ID: <4F9F9EBE.2070303@mind.be>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Tue, 01 May 2012 10:40:12 +0200
+Subject: [Buildroot] [PATCH v3] package: add libfcgi fast cgi library.
+References: <20111014110808.70e495a8@skate>
+ <1318583794-9897-1-git-send-email-arnout@mind.be>
+ <87obqa4c5r.fsf@macbook.be.48ers.dk> <000f01cd26db$69039c30$3b0ad490$@com>
+ <87sjfl2lhq.fsf@macbook.be.48ers.dk>
+Message-ID: <op.wdmfpbmv705kjs@rico>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/12 08:24, Eial Czerwacki wrote:
-> I have a little issue, while trying to compile a small file within a
-> buildroot generated env, I get this:
-> /usr/lib/gcc/i686-unknown-linux-uclibc/4.2.4/../../../../i686-unknown-linux-uclibc/bin/ld:
-> cannot find -lc
-> collect2: ld returned 1 exit status
+Am 30.04.2012, 19:11 Uhr, schrieb Peter Korsgaard  
+<jacmet@uclibc.org>:
 
-  It would help if you at least specified the command you used to start 
-the link.  You can also add the -v option to gcc to see the exact 
-parameters of the call to ld, including the search path.
+>>>>>> "Rico" == Rico Bachmann  
+>>>>>> <bachmann@tofwerk.com> writes:
+>
+>  Rico> Hi together
+>  Rico> I was using gcc 4.3.X until now... Today I changed to gcc 4.5.3
+>  Rico> I had some problems while building libfcgi with gcc 4.5.3!
+>  Rico> There was an error: EOF is undefined.
+>
+> Ahh, yes - I only tested with a precompiled 4.3.x toolchain.
 
-  libc.a and libc.so should be present in output/staging/usr/lib.  But I 
-see you're calling a gcc in /usr...  Is this a compiler running on the 
-target?  In that case, you should have libc.so and libc.a in /usr/lib.
+I've got the same situation, first I've just tested with the precompiled  
+toolchain.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+>  Rico> This issue is already known on the libfcgi mailinglist:
+>  Rico>  
+> http://article.gmane.org/gmane.comp.web.fastcgi.devel/3205/match=eof
+>
+>  Rico> I will add this patch to buildroot asap.
+>
+>  Rico> Is there in BR a nice possibility to use a patch from a package  
+> only
+>  Rico> when gcc >=4.4.X?
+>
+> No, but there's no reason to not add it for older toolchains as well.
+>
+>  Rico> And how do I have to handle the patch because its written by
+>  Rico> Markus from the libfcgi mailing list and not by myself?
+>
+> Keep his authorship (git-style patch has this in the header), but with
+> your signed-off-by.
+>
+
+Thanks for the information.
+I will add the patch this way.
+
+Regards
+Rico
