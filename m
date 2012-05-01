@@ -1,29 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 May 2012 21:45:10 +0200
-Subject: [Buildroot] Fedora 16: Cannot find -lc
-In-Reply-To: <4F9F9D01.2090407@mind.be>
-References: <CA+T-u8d3owC=YNJ5O9V6MUaahdSOPo21H+5aLxxnf8xan5GyHQ@mail.gmail.com>
- <4F9F9D01.2090407@mind.be>
-Message-ID: <20120501214510.1171ac79@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 May 2012 21:57:53 +0200
+Subject: [Buildroot] [PATCH] boost: add an option to run cmds in parallel
+In-Reply-To: <1334737186-30736-1-git-send-email-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Wed, 18 Apr 2012 10:19:46
+ +0200")
+References: <1334737186-30736-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87obq71xoe.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 01 May 2012 10:21:21 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
->   If that makes the difference, it definitely should be in the 
-> documentation.  (On Debian derivatives, libc.a is a dependency of the 
-> compiler so it will be there.)
+ yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
+ yegorslists> Add the same -jN parameter as used for make.
 
-Have a look at the second question in
-http://buildroot.org/downloads/buildroot.html#faq :-)
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
