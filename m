@@ -1,71 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 May 2012 06:51:01 -0300
-Subject: [Buildroot] [PATCHv2 3/4] conntrack-tools: new package
-Message-ID: <1335952261-14747-1-git-send-email-gustavo@zacarias.com.ar>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed,  2 May 2012 12:40:02 +0100
+Subject: [Buildroot] [PATCH] libnfc: new package
+Message-ID: <1335958802-15798-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+From: Simon Dawson <spdawson@gmail.com>
+
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/Config.in                          |    1 +
- package/conntrack-tools/Config.in          |   14 ++++++++++++++
- package/conntrack-tools/conntrack-tools.mk |   12 ++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 package/conntrack-tools/Config.in
- create mode 100644 package/conntrack-tools/conntrack-tools.mk
+ package/Config.in        |    1 +
+ package/libnfc/Config.in |    8 ++++++++
+ package/libnfc/libnfc.mk |   16 ++++++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/libnfc/Config.in
+ create mode 100644 package/libnfc/libnfc.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 1ca180e..a870225 100644
+index ed66c05..a479528 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -456,6 +456,7 @@ source "package/can-utils/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
- source "package/cifs-utils/Config.in"
-+source "package/conntrack-tools/Config.in"
- source "package/cups/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
-diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
+@@ -337,6 +337,7 @@ source "package/tslib/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
++source "package/libnfc/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
 new file mode 100644
-index 0000000..12eb988
+index 0000000..42418e0
 --- /dev/null
-+++ b/package/conntrack-tools/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CONNTRACK_TOOLS
-+	bool "conntrack-tools"
-+	depends on BR2_INET_IPV6
-+	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
++++ b/package/libnfc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBNFC
++	bool "libnfc"
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
 +	help
-+	  The conntrack-tools are a set of tools targeted at
-+	  system administrators.
-+	  They are conntrack, the userspace command line interface,
-+	  and conntrackd, the userspace daemon.
++	  Public platform independent Near Field Communication (NFC) library.
 +
-+	  http://www.netfilter.org/projects/conntrack-tools/
-+
-+comment "conntrack-tools requires a toolchain with IPV6 support"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
++	  http://www.libnfc.org/
+diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
 new file mode 100644
-index 0000000..8b41127
+index 0000000..f1028b1
 --- /dev/null
-+++ b/package/conntrack-tools/conntrack-tools.mk
-@@ -0,0 +1,12 @@
++++ b/package/libnfc/libnfc.mk
+@@ -0,0 +1,16 @@
 +#############################################################
 +#
-+# conntrack-tools
++# libnfc
 +#
 +#############################################################
++LIBNFC_VERSION = 1.5.1
++LIBNFC_SITE = http://libnfc.googlecode.com/files/
++LIBNFC_SOURCE = libnfc-$(LIBNFC_VERSION).tar.gz
++LIBNFC_INSTALL_STAGING = YES
 +
-+CONNTRACK_TOOLS_VERSION = 1.0.1
-+CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
-+CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
-+CONNTRACK_TOOLS_DEPENDENCIES = host-pkg-config libnetfilter_conntrack
++LIBNFC_DEPENDENCIES = host-pkg-config libusb libusb-compat
++
++# N.B. The acr122 driver requires pcsc-lite.
++LIBNFC_CONF_OPT = --with-drivers=arygon,pn53x_usb
 +
 +$(eval $(call AUTOTARGETS))
 -- 
-1.7.3.4
+1.7.9.5
