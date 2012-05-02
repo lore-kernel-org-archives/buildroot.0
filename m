@@ -1,33 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 May 2012 10:33:37 -0300
-Subject: [Buildroot] [PATCH] ruby: security bump to 1.9.2-p320
-Message-ID: <1335965617-11469-1-git-send-email-gustavo@zacarias.com.ar>
+From: Shawn Ferris <shawn.ferris@gmail.com>
+Date: Wed, 2 May 2012 07:33:50 -0600
+Subject: [Buildroot] Enabling debugging symbols in packages..
+In-Reply-To: <20120502052526.GC31267@sapphire.tkos.co.il>
+References: <CAC2kKA8s_8d=u2BDz4Ai0GA_QEru6+76dY3=0_3=s75jjK=QxA@mail.gmail.com>
+ <20120502041303.GA31267@sapphire.tkos.co.il>
+ <CAC2kKA_L9EZt+WWW6Dn4uX2+V_Bj7JxLEYY605pS8GhXDbw3Ag@mail.gmail.com>
+ <20120502052526.GC31267@sapphire.tkos.co.il>
+Message-ID: <CAC2kKA-6va1kzjLcjordMZVHxLMyna29PEDzr7C9DfmtXv2r+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security Fix for RubyGems: SSL server verification failure for remote
-repository.
+On Tue, May 1, 2012 at 11:25 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Debugging is useful even when the target binaries are striped. ?Quoting the
+> help text of BR2_ENABLE_DEBUG:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ruby/ruby.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Ahh.. Makes sense.. ty!
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index c984d67..d89c25b 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--RUBY_VERSION = 1.9.2-p290
-+RUBY_VERSION = 1.9.2-p320
- RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
- RUBY_AUTORECONF = YES
- HOST_RUBY_AUTORECONF = YES
--- 
-1.7.3.4
+Shawn
