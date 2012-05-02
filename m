@@ -1,86 +1,156 @@
-From: Paul Chavent <paul.chavent@fnac.net>
-Date: Tue, 01 May 2012 17:24:48 +0200
-Subject: [Buildroot] Running linux with mmu disabled on arm (AT91).
-Message-ID: <4FA00040.8000207@fnac.net>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 2 May 2012 23:36:39 +0200
+Subject: [Buildroot] [git commit] Add Netatalk
+In-Reply-To: <20120430084131.900AB96C2E@busybox.osuosl.org>
+References: <20120430084131.900AB96C2E@busybox.osuosl.org>
+Message-ID: <CAGduivxUbWv=DcN+yo91ua5Q9xusjgAnE=HpKp4y0MLjCQ8ByQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi.
+Hi,
 
-I'd like to try linux on an AT91SAM9G20 (i have a linuxstamp board), with MMU disabled (the Hyok-Sung Choi & Hee-Chul Yun paper demonstrate that it could be possible).
+Thanks Peter, and also for your fixes on my patch.
 
-All the code seems to be present in the kernel...
-So i would like to share my experience.
-
-(1) I had to make two little changes in the kernel code :
-     - I'm not able to change the REMAP_VECTOR_TO_DRAM. I have submitted the problem to the kbuild mailing list (http://www.spinics.net/lists/linux-kbuild/msg06153.html).
-     - The soc_detect code that init the at91_soc_initdata structure is never called. Later this structure is used unitialized.
-     I'm currently using the joined patch as a workaround. Someone can review it please ?
-
-(2) I used to run the module with a "classic system" based on linux + eglibc, and i needed only one toolchain (arm-xxx-linux-gnueabi) for the kernel and the userspace apps.
-     I found that for the nommu case i wasn't able to build the kernel with the userspace toolchain.
-     So I had to build 2 toolchain, based on binutils 2.22, gcc 4.7, uclibc 0.9.33.1 and linux 3.2.14 :
-       - an arm-xxx-eabi toolchain for the kernel
-       - an arm-xxx-uclinux-uclibceabi for the userspace apps
-     Do you confirm that it is not possible to compile the kernel with arm-xxx-uclinux-uclibceabi ? Or, may i have misconfigured the toolchain (i join the toolchain build procedure) ?
-
-(3) The arm-xxx-uclinux-uclibceabi with elf2flt seems to produce running bins only if it is build with the uClibc DOPIC not set.
-     Is it required to disable DOPIC ?
-     Moreover, i can't run bins produced with a arm-xxx-linux-uclibceabi toolchain and -Wl,-elf2flt (not uclinux one). Is it the expected behavior ?
-
-(4) The elf2flt needs to be updated to be aware of the exidx section, and some reloc types. I join the patch i currently use.
-
-Given these observations, i've been able to run a linux with an hello world as the /init process.
-
-My next tests will be to run threaded programs, c++ programs, then busybox.
-
-
-Thanks for your attention.
-
-Paul.
-
--------------- next part --------------
-diff -abBruN linux-3.2.14.orig/arch/arm/Kconfig-nommu linux-3.2.14.mod/arch/arm/Kconfig-nommu
---- linux-3.2.14.orig/arch/arm/Kconfig-nommu	2012-04-02 18:53:31.000000000 +0200
-+++ linux-3.2.14.mod/arch/arm/Kconfig-nommu	2012-04-15 12:52:05.000000000 +0200
-@@ -34,8 +34,7 @@
- 	  used instead of the auto-probing which utilizes the register.
- 
- config REMAP_VECTORS_TO_RAM
--	bool 'Install vectors to the beginning of RAM' if DRAM_BASE
--	depends on DRAM_BASE
-+	bool 'Install vectors to the beginning of RAM'
- 	help
- 	  The kernel needs to change the hardware exception vectors.
- 	  In nommu mode, the hardware exception vectors are normally
-diff -abBruN linux-3.2.14.orig/arch/arm/mm/nommu.c linux-3.2.14.mod/arch/arm/mm/nommu.c
---- linux-3.2.14.orig/arch/arm/mm/nommu.c	2012-04-02 18:53:31.000000000 +0200
-+++ linux-3.2.14.mod/arch/arm/mm/nommu.c	2012-04-16 15:50:47.000000000 +0200
-@@ -31,12 +31,23 @@
- {
- }
- 
-+static void __init devicemaps_init(struct machine_desc *mdesc)
-+{
-+	/*
-+	 * Ask the machine support to map in the statically mapped devices.
-+	 */
-+	if (mdesc->map_io)
-+		mdesc->map_io();
-+}
-+
- /*
-  * paging_init() sets up the page tables, initialises the zone memory
-  * maps, and sets up the zero page, bad page and bad page tables.
-  */
- void __init paging_init(struct machine_desc *mdesc)
- {
-+	devicemaps_init(mdesc);
-+
- 	bootmem_init();
- }
- 
--------------- next part --------------
+On Mon, Apr 30, 2012 at 10:35 AM, Peter Korsgaard <jacmet@sunsite.dk> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=bd9eba9ce307d0a634737dede8d9b18d981f2f69
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> This patch add the Netatalk package to Buildroot.
+>
+> [Peter: fix download URL, force c99 mode, tweak help text]
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+> ---
+> ?package/Config.in ? ? ? ? ? ?| ? ?1 +
+> ?package/netatalk/Config.in ? | ? 11 ++++++++++
+> ?package/netatalk/S50netatalk | ? 43 ++++++++++++++++++++++++++++++++++++++++++
+> ?package/netatalk/netatalk.mk | ? 36 +++++++++++++++++++++++++++++++++++
+> ?4 files changed, 91 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 2ea334a..ed66c05 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -494,6 +494,7 @@ source "package/netcat/Config.in"
+> ?source "package/netkitbase/Config.in"
+> ?source "package/netkittelnet/Config.in"
+> ?endif
+> +source "package/netatalk/Config.in"
+> ?source "package/netplug/Config.in"
+> ?source "package/netsnmp/Config.in"
+> ?source "package/netstat-nat/Config.in"
+> diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
+> new file mode 100644
+> index 0000000..26f14c3
+> --- /dev/null
+> +++ b/package/netatalk/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_NETATALK
+> + ? ? ? bool "netatalk"
+> + ? ? ? select BR2_PACKAGE_BERKELEYDB
+> + ? ? ? select BR2_PACKAGE_OPENSSL
+> + ? ? ? select BR2_PACKAGE_LIBGCRYPT
+> + ? ? ? select BR2_PACKAGE_LIBGPG_ERROR
+> + ? ? ? help
+> + ? ? ? ? Netatalk can be used to turn a *NIX machine into an extremely
+> + ? ? ? ? high-performance and reliable file server for Macintosh computers.
+> +
+> + ? ? ? ? http://netatalk.sourceforge.net/
+> diff --git a/package/netatalk/S50netatalk b/package/netatalk/S50netatalk
+> new file mode 100755
+> index 0000000..94bb161
+> --- /dev/null
+> +++ b/package/netatalk/S50netatalk
+> @@ -0,0 +1,43 @@
+> +#!/bin/sh
+> +#
+> +# Start netatalk daemon ?(aftpd && cnid_metad)
+> +#
+> +
+> +AFPD_UAMLIST="-U uams_dhx2.so,uams_clrtxt.so"
+> +
+> +start() {
+> + ? ?echo -n "Starting Netatalk services (this will take a while): "
+> + ? ?echo "Starting afpd"
+> + ? ?echo -n " afpd"
+> + ? ?start-stop-daemon -S -q -p /var/run/afpd.pid --exec /usr/sbin/afpd -- $AFPD_UAMLIST -g nobody -c 50
+> + ? ?echo -n " cnid_metad"
+> + ? ?start-stop-daemon -S -q -p /var/run/cnid_metad.pid --exec /usr/sbin/cnid_metad -- -l log_note
+> + ? ?echo "."
+> +}
+> +
+> +stop(){
+> + ? ?echo -n "Stopping Netatalk Daemons:"
+> + ? ?echo -n " afpd"
+> + ? ?start-stop-daemon -K -q -p /var/run/afpd.pid
+> + ? ?echo -n " cnid_metad"
+> + ? ?start-stop-daemon -K -q -p /var/run/cnid_metad.pid
+> +}
+> +
+> +case "$1" in
+> + ? ?start)
+> + ? ? ? ?start
+> + ? ?;;
+> + ? ?stop)
+> + ? ? ? ?stop
+> + ? ?;;
+> + ? ?restart)
+> + ? ? ? ?start
+> + ? ? ? ?stop
+> + ? ?;;
+> + ? ?*)
+> + ? ? ? ?echo $"Usage: $0 {start|stop|restart}"
+> + ? ? ? ?exit 1
+> +esac
+> +
+> +exit $?
+> +
+> diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+> new file mode 100644
+> index 0000000..8544026
+> --- /dev/null
+> +++ b/package/netatalk/netatalk.mk
+> @@ -0,0 +1,36 @@
+> +#############################################################
+> +#
+> +# netatalk
+> +#
+> +#############################################################
+> +NETATALK_VERSION = 2.2.2
+> +NETATALK_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)/
+> +NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+> +
+> +NETATALK_DEPENDENCIES = openssl berkeleydb libgcrypt libgpg-error
+> +NETATALK_CONF_ENV += CC="$(TARGET_CC) -std=gnu99"
+> +NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+> + ? ? ? --with-bdb=$(STAGING_DIR)/usr \
+> + ? ? ? --disable-zeroconf \
+> + ? ? ? --with-ssl-dir=$(STAGING_DIR)/usr \
+> + ? ? ? --with-libgcrypt-dir=$(STAGING_DIR)/usr \
+> + ? ? ? --with-shadow \
+> + ? ? ? --disable-shell-check \
+> + ? ? ? --without-pam
+> +
+> +ifeq ($(BR2_PACKAGE_CUPS),y)
+> + ? ? ? NETATALK_DEPENDENCIES += cups
+> + ? ? ? NETATALK_CONF_OPT += --enable-cups
+> +else
+> + ? ? ? NETATALK_CONF_OPT += --disable-cups
+> +endif
+> +
+> +define NETATALK_INSTALL_EXTRA_FILES
+> + ? ? ? [ -f $(TARGET_DIR)/etc/init.d/S50netatalk ] || \
+> + ? ? ? ? ? ? ? $(INSTALL) -m 0755 -D package/netatalk/S50netatalk \
+> + ? ? ? ? ? ? ? ? ? ? ? $(TARGET_DIR)/etc/init.d/S50netatalk
+> +endef
+> +
+> +NETATALK_POST_INSTALL_TARGET_HOOKS += NETATALK_INSTALL_EXTRA_FILES
+> +
+> +$(eval $(call AUTOTARGETS))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
