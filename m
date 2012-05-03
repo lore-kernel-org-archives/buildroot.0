@@ -1,181 +1,109 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu,  3 May 2012 14:20:28 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_Make_external_toolchain_relocat?=
-	=?utf-8?q?able?=
-Message-ID: <1336047628-416-1-git-send-email-arnout@mind.be>
+From: Rico Bachmann <bachmann@tofwerk.com>
+Date: Thu,  3 May 2012 14:22:36 +0200
+Subject: [Buildroot] [PATCH v4] Add new package apr-util
+In-Reply-To: <201204272309.51623.arnout@mind.be>
+References: <201204272309.51623.arnout@mind.be>
+Message-ID: <1336047756-1893-1-git-send-email-bachmann@tofwerk.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The external toolchain wrapper sets sysroot etc. to an absolute path.
-By changing this to a relative path, it is possible to move the host
-directory to a different location and still have a working build
-system.
+Add new package apr-util
 
-This only works for a downloaded external toolchain.  For a pre-installed
-external toolchain, it is possible to move the host directory to a
-different location, but not the external toolchain directory (it does work
-if the external toolchain directory lies within the host directory).  For
-an internal or crosstool-ng toolchain, there is no wrapper so updating the
-sysroot path should be done in a different way.
-
-See http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html
-for information about others things to do to make the host directory
-relocatable.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Signed-off-by: Rico Bachmann <bachmann@tofwerk.com>
 ---
- package/Makefile.in                                |    3 +-
- toolchain/toolchain-external/ext-tool.mk           |   14 ++++-
- .../toolchain-external/ext-toolchain-wrapper.c     |   64 ++++++++++++++------
- 3 files changed, 60 insertions(+), 21 deletions(-)
+v1: Add package apr-util
+    Add patch to remove check for apr
+    because check for apr search for ./apr and not for defined folder
+v2: Change spaces to tab in *.mk
+v3: Add Signed-off-by and comments to package-patch
+v4: remove prefix, is added by buildroot
+---
+ package/Config.in                                  |    1 +
+ package/apr-util/Config.in                         |   11 ++++++++++
+ .../apr-util/apr-util-1.4.1-remove-checkapr.patch  |   21 ++++++++++++++++++++
+ package/apr-util/apr-util.mk                       |   13 ++++++++++++
+ 4 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/apr-util/Config.in
+ create mode 100644 package/apr-util/apr-util-1.4.1-remove-checkapr.patch
+ create mode 100644 package/apr-util/apr-util.mk
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index df7042c..0e392b6 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -48,7 +48,8 @@ endif
+diff --git a/package/Config.in b/package/Config.in
+index ed66c05..caa618b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -379,6 +379,7 @@ endmenu
  
- REAL_GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
- 
--STAGING_DIR=$(HOST_DIR)/usr/$(REAL_GNU_TARGET_NAME)/sysroot
-+STAGING_SUBDIR = usr/$(REAL_GNU_TARGET_NAME)/sysroot
-+STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
- 
- TARGET_OPTIMIZATION:=$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index 0a997a5..59e538a 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -122,9 +122,17 @@ endif
- TOOLCHAIN_EXTERNAL_CROSS=$(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC=$(TOOLCHAIN_EXTERNAL_CROSS)gcc
- TOOLCHAIN_EXTERNAL_CXX=$(TOOLCHAIN_EXTERNAL_CROSS)g++
--TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = \
--	-DBR_CROSS_PATH='"$(TOOLCHAIN_EXTERNAL_BIN)/"' \
--	-DBR_SYSROOT='"$(STAGING_DIR)"'
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS = -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+ menu "Other"
+ source "package/apr/Config.in"
++source "package/apr-util/Config.in"
+ source "package/fftw/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/argp-standalone/Config.in"
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+new file mode 100644
+index 0000000..45973b2
+--- /dev/null
++++ b/package/apr-util/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_APR_UTIL
++	bool "apr-util"
++	select BR2_PACKAGE_APR
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_LIBNEON
++	select BR2_PACKAGE_NEON_ZLIB
++	select BR2_PACKAGE_ZLIB
++	help
++	  The utility library for the apache runtime project
 +
-+ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-+# TOOLCHAIN_EXTERNAL_BIN points outside HOST_DIR => absolute path
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
-+	-DBR_CROSS_PATH_ABS='"$(TOOLCHAIN_EXTERNAL_BIN)"'
-+else
-+# TOOLCHAIN_EXTERNAL_BIN points inside HOST_DIR => relative path
-+TOOLCHAIN_EXTERNAL_WRAPPER_ARGS += \
-+	-DBR_CROSS_PATH_REL='"$(TOOLCHAIN_EXTERNAL_BIN:$(HOST_DIR)/%=%)"'
-+endif
- 
- CC_TARGET_TUNE_:=$(call qstrip,$(BR2_GCC_TARGET_TUNE))
- CC_TARGET_CPU_:=$(call qstrip,$(BR2_GCC_TARGET_CPU))
-diff --git a/toolchain/toolchain-external/ext-toolchain-wrapper.c b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-index 82595ea..a92bada 100644
---- a/toolchain/toolchain-external/ext-toolchain-wrapper.c
-+++ b/toolchain/toolchain-external/ext-toolchain-wrapper.c
-@@ -2,9 +2,12 @@
-  * Buildroot wrapper for external toolchains. This simply executes the real
-  * toolchain with a number of arguments (sysroot/arch/..) hardcoded,
-  * to ensure the external toolchain uses the correct configuration.
-+ * The hardcoded path arguments are defined relative to the actual location
-+ * of the binary.
-  *
-  * (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
-  * (C) 2011 Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-+ * (C) 2012 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  *
-  * This file is licensed under the terms of the GNU General Public License
-  * version 2.  This program is licensed "as is" without any warranty of any
-@@ -17,11 +20,12 @@
- #include <unistd.h>
- #include <stdlib.h>
- 
--static char path[PATH_MAX] = BR_CROSS_PATH;
-+static char path[PATH_MAX];
-+static char sysroot[PATH_MAX];
- 
- static char *predef_args[] = {
- 	path,
--	"--sysroot", BR_SYSROOT,
-+	"--sysroot", sysroot,
- #ifdef BR_ARCH
- 	"-march=" BR_ARCH,
- #endif /* BR_ARCH */
-@@ -48,22 +52,50 @@ static char *predef_args[] = {
- #endif
- };
- 
--static const char *get_basename(const char *name)
--{
--	const char *base;
--
--	base = strrchr(name, '/');
--	if (base)
--		base++;
--	else
--		base = name;
--
--	return base;
--}
--
- int main(int argc, char **argv)
- {
- 	char **args, **cur;
-+	char *relbasedir, *absbasedir;
-+	char *progpath = argv[0];
-+	char *basename;
-+	int ret;
++	  http://apr.apache.org/
+diff --git a/package/apr-util/apr-util-1.4.1-remove-checkapr.patch b/package/apr-util/apr-util-1.4.1-remove-checkapr.patch
+new file mode 100644
+index 0000000..42ad12f
+--- /dev/null
++++ b/package/apr-util/apr-util-1.4.1-remove-checkapr.patch
+@@ -0,0 +1,21 @@
++remove check apr
 +
-+	/* Calculate the relative paths */
-+	basename = strrchr(progpath, '/');
-+	if (basename) {
-+		*basename = '\0';
-+		basename++;
-+		relbasedir = malloc(strlen(progpath) + 7);
-+		if (relbasedir == NULL) {
-+			perror(__FILE__ ": malloc");
-+			return 2;
-+		}
-+		sprintf(relbasedir, "%s/../..", argv[0]);
-+		absbasedir = realpath(relbasedir, NULL);
-+	} else {
-+		basename = progpath;
-+		absbasedir = realpath("../..", NULL);
-+	}
-+	if (absbasedir == NULL) {
-+		perror(__FILE__ ": realpath");
-+		return 2;
-+	}
++this patch removes the check of apr which fails the build
 +
-+	/* Fill in the relative paths */
-+#ifdef BR_CROSS_PATH_REL
-+	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s", absbasedir, basename);
-+#else /* BR_CROSS_PATH_ABS */
-+	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s", basename);
-+#endif
-+	if (ret >= sizeof(path)) {
-+		perror(__FILE__ ": overflow");
-+		return 3;
-+	}
-+	ret = snprintf(sysroot, sizeof(sysroot), "%s/" BR_SYSROOT, absbasedir);
-+	if (ret >= sizeof(sysroot)) {
-+		perror(__FILE__ ": overflow");
-+		return 3;
-+	}
- 
- 	cur = args = malloc(sizeof(predef_args) + (sizeof(char *) * argc));
- 	if (args == NULL) {
-@@ -82,8 +114,6 @@ int main(int argc, char **argv)
- 	/* finish with NULL termination */
- 	*cur = NULL;
- 
--	strcat(path, get_basename(argv[0]));
--
- 	if (execv(path, args))
- 		perror(path);
- 
++Signed-off-by: Rico Bachmann <bachmann-ahF9wiJNQgNBDgjK7y7TUQ@public.gmane.org>
++---
++v1: disable the check for APU_FIND_APR because the check only looks into folders
++named apr, and our source-tree is called apr-versionnumber (e.g. apr-1.4.6)
++
++diff -rupN apr-util-1.4.1/configure.in apr-util-1.4.1-fix/configure.in
++--- apr-util-1.4.1/configure.in	2009-12-17 20:15:19.000000000 +0100
+++++ apr-util-1.4.1-fix/configure.in	2012-04-24 10:10:32.000000000 +0200
++@@ -99,7 +99,7 @@ fi
++ dnl
++ dnl Find the APR includes directory and (possibly) the source (base) dir.
++ dnl
++-APU_FIND_APR
+++dnl APU_FIND_APR
++ 
++ dnl
++ dnl even though we use apr_rules.mk for building apr-util, we need
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+new file mode 100644
+index 0000000..564b1bb
+--- /dev/null
++++ b/package/apr-util/apr-util.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# apr-util
++#
++#############################################################
++APR_UTIL_VERSION = 1.4.1
++APR_UTIL_SITE = http://archive.apache.org/dist/apr
++APR_UTIL_INSTALL_STAGING = YES
++APR_UTIL_DEPENDENCIES = apr sqlite neon zlib
++APR_UTIL_CONF_OPT = \
++	--with-apr=$(BUILD_DIR)/apr-$(APR_VERSION) \
++
++$(eval $(call AUTOTARGETS))
 -- 
-tg: (524a8ab..) t/relocate-ext-toolchain (depends on: master)
+1.7.2.5
