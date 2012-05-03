@@ -1,56 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 May 2012 10:25:37 -0300
-Subject: [Buildroot] [PATCH] ushare: needs libintl if NLS is enabled
-Message-ID: <1336051537-10676-1-git-send-email-gustavo@zacarias.com.ar>
+From: Dimitry Golubovsky <golubovsky@gmail.com>
+Date: Thu, 3 May 2012 09:27:05 -0400
+Subject: [Buildroot]  read-edid package - clarifications
+Message-ID: <CADiAo4J4T_bcDzospg7e9Hr_HvUJ8qGBegrda6BsUFrnzttx8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ushare/Config.in |    2 ++
- package/ushare/ushare.mk |    7 ++++++-
- 2 files changed, 8 insertions(+), 1 deletions(-)
+Hi,
 
-diff --git a/package/ushare/Config.in b/package/ushare/Config.in
-index a714fa0..acf025f 100644
---- a/package/ushare/Config.in
-+++ b/package/ushare/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_USHARE
- 	bool "ushare"
- 	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
- 	  It implements the server component that provides UPnP media devices
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index ac8cbc3..5421d8a 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -9,6 +9,11 @@ USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
- USHARE_SITE = http://ushare.geexbox.org/releases
- USHARE_DEPENDENCIES = host-pkg-config libupnp
- 
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+USHARE_DEPENDENCIES += gettext libintl
-+USHARE_LDFLAGS += -lintl
-+endif
-+
- define USHARE_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
-@@ -19,7 +24,7 @@ define USHARE_CONFIGURE_CMDS
- endef
- 
- define USHARE_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(MAKE) LDFLAGS="$(TARGET_LDFLAGS) $(USHARE_LDFLAGS)" -C $(@D)
- endef
- 
- define USHARE_INSTALL_TARGET_CMDS
+Thomas Petazzoni wrote:
+
+> On Ubuntu, parse-edid is in usr/bin, get-edid is in usr/sbin. See
+> http://packages.ubuntu.com/quantal/i386/read-edid/filelist
+
+There is another package in my queue for submission which is v86d, and
+this program is about to be used at about the same stage of boot as
+get-edid. Ubuntu has it in /sbin per
+http://packages.ubuntu.com/quantal/i386/v86d/filelist
+
+> I don't feel strongly about this, if you prefer to keep them in bin/, it's
+> fine. On embedded systems, /usr is most likely on the same partition
+> as /, so it doesn't make much difference.
+
+OK, perhaps I'll place all three (get-edid, parse-edid, v86d) in /sbin.
+
+Baruch Siach wrote:
+
+> read-edid seems to work perfectly on my x86_64 laptop. So keeping BR2_x86_64
+> should be safe.
+
+OK, if you tried what I submitted then I'll add x86_64 (I just do not
+have a hardware to test it such way).
+
+> As for PowerPC, I guess the low level code is selected at build time according
+> to the target platform. I haven't looked at the code, though.
+
+Well, this one uses real-mode BIOS call to VBE ROM via lrmi
+(http://lrmi.sf.net - not sure if it supports powerpc). There is
+another version of monitor info dump program in existence which uses
+i2c which may work on something other than PC. Not the one I am
+submitting.
+
+Thanks.
+
 -- 
-1.7.3.4
+Dimitry Golubovsky
+
+Anywhere on the Web
