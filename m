@@ -1,39 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 May 2012 08:59:03 -0300
-Subject: [Buildroot] [PATCH] libmbus: patch out bcopy to fix build breakage
-Message-ID: <1336046343-15336-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegor_sub1@visionsystems.de>
+Date: Thu, 03 May 2012 14:06:04 +0200
+Subject: [Buildroot] Console login root needing a password
+In-Reply-To: <CAG6aBkWE0X1fm9LatHE9V+c_kvqvpkYkxZzE+xzEiVcgX6LGwA@mail.gmail.com>
+References: <CAG6aBkVA-XPByuGaxUdKQAfGrMq_X_DhVdWOfA2Zh+mUt2jq-w@mail.gmail.com>
+ <4FA2298E.5000807@visionsystems.de>
+ <CAG6aBkWE0X1fm9LatHE9V+c_kvqvpkYkxZzE+xzEiVcgX6LGwA@mail.gmail.com>
+Message-ID: <4FA274AC.4030208@visionsystems.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libmbus/libmbus-0.6.1-bcopy.patch |   15 +++++++++++++++
- 1 files changed, 15 insertions(+), 0 deletions(-)
- create mode 100644 package/libmbus/libmbus-0.6.1-bcopy.patch
+Hello Nige,
 
-diff --git a/package/libmbus/libmbus-0.6.1-bcopy.patch b/package/libmbus/libmbus-0.6.1-bcopy.patch
-new file mode 100644
-index 0000000..8b8310c
---- /dev/null
-+++ b/package/libmbus/libmbus-0.6.1-bcopy.patch
-@@ -0,0 +1,15 @@
-+Drop bcopy since it's deprecated.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+diff -Nura libmbus-0.6.1/mbus/mbus-tcp.c libmbus-0.6.1-bcopy/mbus/mbus-tcp.c
-+--- libmbus-0.6.1/mbus/mbus-tcp.c	2011-11-06 02:34:28.000000000 -0300
-++++ libmbus-0.6.1-bcopy/mbus/mbus-tcp.c	2012-05-03 08:11:39.680346347 -0300
-+@@ -78,7 +78,7 @@
-+         return NULL;
-+     }
-+ 
-+-    bcopy((void *)(host_addr->h_addr), (void *)(&s_addr.sin_addr), host_addr->h_length);
-++    memmove((void *)(&s_addr.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
-+ 
-+     if (connect(handle->sock, (struct sockaddr *)&s_addr, sizeof(s_addr)) < 0)
-+     {
--- 
-1.7.3.4
+thy this and let me know if it works:
+
+ttyO2::respawn:-/bin/sh
+
+Yegor
+
+Am 03.05.2012 11:30, schrieb Nigel Sollars:
+> Hello Yegor,
+>
+> The only ttyO2 i have is in inittab and it looks like this:
+>
+> ttyO2::respawn:/sbin/getty -L ttyO2 115200 vt100
+>
+> This works fine ( I am able to log in ) on a previous build I did without a toolchain.
+>
+> Here is the link that i referred to ( from google )
+>
+> http://lists.busybox.net/pipermail/buildroot/2010-May/034546.html
+>
+> Hope this helps
+> Nige
+>
+> On Thu, May 3, 2012 at 2:45 AM, Yegor Yefremov <yegor_sub1 at visionsystems.de <mailto:yegor_sub1@visionsystems.de>> wrote:
+>
+>     Am 03.05.2012 01:38, schrieb Nigel Sollars:
+>     > Hello,
+>     >
+>     > Ive built buildroot with a toolchain successfully,  however trying to login over the console requires a password.  The passwd/shadow is the default.
+>     >
+>     > Looking around google apparently this has to do with wchar is this true?,  if so is there a fix since this is required for gdb on the target.
+>
+>     Have you tried something like this?
+>
+>     ttyS0::respawn:-/bin/sh
+>
+>     Yegor
+>
+>
+>
+>
+> -- 
+> ?Science is a differential equation. Religion is a boundary condition.?
+>                                                                                                              Alan Turing
+>
