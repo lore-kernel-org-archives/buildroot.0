@@ -1,47 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 May 2012 08:52:56 +0200
-Subject: [Buildroot] [PATCH] Package proposed: read-edid
-In-Reply-To: <20120503051820.GA20002@sapphire.tkos.co.il>
-References: <CADiAo4KJqO8oC+x8mwKoYWKiFf7wSdOfNfO3LPQgREvkLQwAvg@mail.gmail.com>
- <20120503051820.GA20002@sapphire.tkos.co.il>
-Message-ID: <20120503085256.5876db5c@skate>
+From: Nigel Sollars <nsollars@gmail.com>
+Date: Thu, 3 May 2012 05:30:23 -0400
+Subject: [Buildroot] Console login root needing a password
+In-Reply-To: <4FA2298E.5000807@visionsystems.de>
+References: <CAG6aBkVA-XPByuGaxUdKQAfGrMq_X_DhVdWOfA2Zh+mUt2jq-w@mail.gmail.com>
+ <4FA2298E.5000807@visionsystems.de>
+Message-ID: <CAG6aBkWE0X1fm9LatHE9V+c_kvqvpkYkxZzE+xzEiVcgX6LGwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dimitry,
+Hello Yegor,
 
-Thanks for your contribution! Baruch has raised valid points in his
-review, I will add one more comment below.
+The only ttyO2 i have is in inittab and it looks like this:
 
-Le Thu, 3 May 2012 08:18:20 +0300,
-Baruch Siach <baruch@tkos.co.il> a ?crit :
+ttyO2::respawn:/sbin/getty -L ttyO2 115200 vt100
 
-> +define READ_EDID_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/bin
-> +	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/bin
-> +endef
+This works fine ( I am able to log in ) on a previous build I did without a
+toolchain.
 
-This should rather be:
+Here is the link that i referred to ( from google )
 
-+define READ_EDID_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/usr/bin/get-edid
-+	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/usr/bin/parse-edid
-+endef
+http://lists.busybox.net/pipermail/buildroot/2010-May/034546.html
 
-I.e, you need to repeat the filename in the second argument, and those
-non-essential binaries should probably live in usr/bin/ rather than bin/.
+Hope this helps
+Nige
 
-Can you take Baruch and my comments into account and post an updated
-version?
+On Thu, May 3, 2012 at 2:45 AM, Yegor Yefremov
+<yegor_sub1@visionsystems.de>wrote:
 
-Thanks!
+> Am 03.05.2012 01:38, schrieb Nigel Sollars:
+> > Hello,
+> >
+> > Ive built buildroot with a toolchain successfully,  however trying to
+> login over the console requires a password.  The passwd/shadow is the
+> default.
+> >
+> > Looking around google apparently this has to do with wchar is this
+> true?,  if so is there a fix since this is required for gdb on the target.
+>
+> Have you tried something like this?
+>
+> ttyS0::respawn:-/bin/sh
+>
+> Yegor
+>
 
-Thomas
+
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+?Science is a differential equation. Religion is a boundary condition.?
+
+Alan Turing
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120503/7d49352a/attachment.html>
