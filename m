@@ -1,36 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 May 2012 23:17:26 +0200
-Subject: [Buildroot] Building For Host as Target
-In-Reply-To: <1654518205551106600@unknownmsgid>
-References: <CADwac6DA5MDVkfZDmAO-s2+rPsebpefJ-paTWLzkk0hC_qAOZg@mail.gmail.com>
- <20120503181423.35715875@skate> <1654518205551106600@unknownmsgid>
-Message-ID: <20120503231726.25b32670@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 3 May 2012 23:29:08 +0200
+Subject: [Buildroot] [git commit] CHANGES: GDB 4.7.1, not GCC
+Message-ID: <20120503212947.0D46696C67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 3 May 2012 23:14:30 +0300,
-Assaf Inbal <shmuelzon@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=aa96b4ea99b362decc524a8632c7a2c1a7586e83
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> While host variants will run, it means that I still need to compile
-> for some target platform. The output in the host directory will also
-> include many other things not needed. Unless someone will come up
-> with a better idea, I'm considering creating a new toolchain type
-> (along side with buildroot and "external"). If I'll be pleased with
-> the result I'll post a patch.
+Thanks to Gustavoz noticing on IRC.
 
-I am really not sure to understand what your use case is. The principle
-of Buildroot is to generate an embedded Linux for a target platform
-that has a different CPU architecture than the build platform, and
-Buildroot uses cross-compilation to achieve this. If you're outside
-this basic principle of Buildroot, I would probably say that Buildroot
-isn't the right tool for the job you're trying to do.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/CHANGES b/CHANGES
+index 0a20bbb..7fd8864 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -21,7 +21,7 @@
+ 	default to uClibc 0.9.33.x, enable
+ 	UCLIBC_SUPPORT_AI_ADDRCONFIG by default, static and 64bit
+ 	fixes for external toolchains, linaro ext toolchains, new
+-	sourcery codebench ext toolchains, GCC 7.4.1.
++	sourcery codebench ext toolchains, GDB 7.4.1.
+ 
+ 	Bootloaders: U-Boot: add 2012.04.01. Barebox: add 2012.04,
+ 	remove 2011.12.
