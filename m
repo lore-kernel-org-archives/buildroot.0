@@ -1,35 +1,22 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 May 2012 15:51:41 +0200
-Subject: [Buildroot] [git commit] ruby: security bump to 1.9.2-p320
-Message-ID: <20120503135217.688C096C68@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 May 2012 15:52:17 +0200
+Subject: [Buildroot] [PATCH] ruby: security bump to 1.9.2-p320
+In-Reply-To: <1335965617-11469-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 2 May 2012 10:33:37 -0300")
+References: <1335965617-11469-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r4v11iem.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=905c301de3faec72e2dea0d16606879eb2fea59c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Security Fix for RubyGems: SSL server verification failure for remote
-repository.
+ Gustavo> Security Fix for RubyGems: SSL server verification failure for
+ Gustavo> remote repository.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ruby/ruby.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index c984d67..d89c25b 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--RUBY_VERSION = 1.9.2-p290
-+RUBY_VERSION = 1.9.2-p320
- RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/1.9
- RUBY_AUTORECONF = YES
- HOST_RUBY_AUTORECONF = YES
+-- 
+Bye, Peter Korsgaard
