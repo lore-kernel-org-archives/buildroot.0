@@ -1,22 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 May 2012 17:15:08 +0200
-Subject: [Buildroot] [PATCH] toolchain/uClibc: enable 0.9.33.1 for sh
-In-Reply-To: <1336008256-12595-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 May 2012 22:24:16 -0300")
-References: <1336008256-12595-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehr11ekj.fsf@macbook.be.48ers.dk>
+From: Assaf Inbal <shmuelzon@gmail.com>
+Date: Thu, 3 May 2012 18:14:49 +0300
+Subject: [Buildroot] Building For Host as Target
+Message-ID: <CADwac6DA5MDVkfZDmAO-s2+rPsebpefJ-paTWLzkk0hC_qAOZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hey,
 
- Gustavo> Enable uClibc 0.9.33.1 for the SH architecture.
- Gustavo> Builds and works fine with the qemu sample config.
+I'm working on a project based on buildroot and I want to have the ability
+to compile my packages for both my MIPS target using an external toolchain
+(which works great) but I also want to be able to compile for my host.
+To be precise, I want to use the local gcc and libraries so I will be able
+to run my packages locally as well.
+I've tried setting an external toolchain path as "/usr" but as a part of
+preparing the target file system everything from my /lib,/etc and others
+are copied to the output directory, which is, well, bad.
 
-Committed, thanks.
+I've also toyed with creating a fake toolchain that was basically links to
+the host's binaries but that also didn't go very well.
 
--- 
-Bye, Peter Korsgaard
+Does anyone have an idea on how I might be able to achieve this?
+
+Thanks,
+Shmuelzon
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120503/f6004519/attachment.html>
