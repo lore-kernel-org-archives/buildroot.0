@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 May 2012 18:14:23 +0200
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 3 May 2012 21:08:57 +0300
 Subject: [Buildroot] Building For Host as Target
 In-Reply-To: <CADwac6DA5MDVkfZDmAO-s2+rPsebpefJ-paTWLzkk0hC_qAOZg@mail.gmail.com>
 References: <CADwac6DA5MDVkfZDmAO-s2+rPsebpefJ-paTWLzkk0hC_qAOZg@mail.gmail.com>
-Message-ID: <20120503181423.35715875@skate>
+Message-ID: <20120503180857.GA2763@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 3 May 2012 18:14:49 +0300,
-Assaf Inbal <shmuelzon@gmail.com> a ?crit :
+Hi Assaf,
 
-> I'm working on a project based on buildroot and I want to have the
-> ability to compile my packages for both my MIPS target using an
-> external toolchain (which works great) but I also want to be able to
-> compile for my host. To be precise, I want to use the local gcc and
-> libraries so I will be able to run my packages locally as well.
-> I've tried setting an external toolchain path as "/usr" but as a part
-> of preparing the target file system everything from my /lib,/etc and
-> others are copied to the output directory, which is, well, bad.
+On Thu, May 03, 2012 at 06:14:49PM +0300, Assaf Inbal wrote:
+> I'm working on a project based on buildroot and I want to have the ability
+> to compile my packages for both my MIPS target using an external toolchain
+> (which works great) but I also want to be able to compile for my host.
+> To be precise, I want to use the local gcc and libraries so I will be able
+> to run my packages locally as well.
+> I've tried setting an external toolchain path as "/usr" but as a part of
+> preparing the target file system everything from my /lib,/etc and others
+> are copied to the output directory, which is, well, bad.
 > 
-> I've also toyed with creating a fake toolchain that was basically
-> links to the host's binaries but that also didn't go very well.
+> I've also toyed with creating a fake toolchain that was basically links to
+> the host's binaries but that also didn't go very well.
 > 
 > Does anyone have an idea on how I might be able to achieve this?
 
-If it's only for a reduced set of packages, you can implement the host
-variant of those packages. They will be built with the native compiler
-of your build machine, and will be installed in output/host.
+It seems to me that the easiest way is to select either i386 or x86_64 as 
+target architecture (assuming that your host is a PC, we have recently 
+discovered that this is not always the case), and run the result in a chroot, 
+or in a virtualized system, on your development host. For a ready made qemu 
+example see board/qemu/x86/readme.txt.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
