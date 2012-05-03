@@ -1,44 +1,56 @@
-From: Dimitry Golubovsky <golubovsky@gmail.com>
-Date: Thu, 3 May 2012 06:32:35 -0400
-Subject: [Buildroot] read-edid package - clarifications
-Message-ID: <CADiAo4K90x6ZANyvQk7SYP=o=YmimOHDn+wfHLSrwE7bumcLKA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 May 2012 08:46:49 -0300
+Subject: [Buildroot] [PATCH] mrouted: fix bcopy patch oops
+Message-ID: <1336045609-29418-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The bcopy patch just changes bcopy for memmove which is incorrect since
+bcopy and memmove use reversed src and dest parameters between them.
+Oops!
 
-Thanks to Baruch and Thomas for the comments. I'll try to implement them.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mrouted/mrouted-3.9.4-bcopy.patch |   15 +++++----------
+ 1 files changed, 5 insertions(+), 10 deletions(-)
 
-Few thoughts though:
-
-Thomas' comment:
-
-> non-essential binaries should probably live in usr/bin/ rather than bin/.
-
-I think such program may be needed rather early in the boot process.
-Basically it is needed when setting up the framebuffer console
-resolution. I have a real case of Via Unichrome and a Dell widescreen
-monitor where the framebuffer driver is unable to sense the monitor
-(X.org driver does fine though), so the only way for me to initialize
-the console was to run read-edid even before I am attempting to load
-the framebuffer drivers and fbcon. That's why I placed it into /bin
-(or maybe it is even better in /sbin).
-
-Baruch's comment:
-
-> read-edid can only run on x86 PCs and PowerPC Macs, so it should depend on
-> (BR2_i386 || BR2_x86_64 || BR2_powerpc).
-
-I only tested it on i386, not sure about x86-64, and definitely not on
-powerpc as it has x86 real-mode stuff in it. So perhaps I'll keep i386
-only.
-
-Thanks.
-
+diff --git a/package/mrouted/mrouted-3.9.4-bcopy.patch b/package/mrouted/mrouted-3.9.4-bcopy.patch
+index 73f8acc..ea8f6db 100644
+--- a/package/mrouted/mrouted-3.9.4-bcopy.patch
++++ b/package/mrouted/mrouted-3.9.4-bcopy.patch
+@@ -1,17 +1,12 @@
+----
+- mtrace.c |    4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-Index: mrouted-3.9.4/mtrace.c
+-===================================================================
+---- mrouted-3.9.4.orig/mtrace.c
+-+++ mrouted-3.9.4/mtrace.c
++diff -Nura mrouted-3.9.4/mtrace.c mrouted-3.9.4-memmove/mtrace.c
++--- mrouted-3.9.4/mtrace.c	2010-11-19 20:53:19.000000000 -0300
+++++ mrouted-3.9.4-memmove/mtrace.c	2012-05-03 08:27:33.895422455 -0300
+ @@ -556,7 +556,7 @@
+  		save->rtime = ((tr.tv_sec + JAN_1970) << 16) +
+  		    (tr.tv_usec << 10) / 15625;
+  		save->len = len;
+ -		bcopy((char *)igmp, (char *)&save->igmp, ipdatalen);
+-+		memmove((char *)igmp, (char *)&save->igmp, ipdatalen);
+++		memmove((char *)&save->igmp, (char *)igmp, ipdatalen);
+  	    }
+  	    return recvlen;
+  	}
+@@ -20,7 +15,7 @@ Index: mrouted-3.9.4/mtrace.c
+  	    (tr.tv_usec << 10) / 15625;
+  	base.len = len;
+ -	bcopy((char *)igmp, (char *)&base.igmp, ipdatalen);
+-+	memmove((char *)igmp, (char *)&base.igmp, ipdatalen);
+++	memmove((char *)&base.igmp, (char *)igmp, ipdatalen);
+  	/*
+  	 * If the user specified which traces to monitor,
+  	 * only accept traces that correspond to the
 -- 
-Dimitry Golubovsky
-
-Anywhere on the Web
+1.7.3.4
