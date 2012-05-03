@@ -1,32 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 May 2012 21:22:45 +0300
-Subject: [Buildroot] read-edid package - clarifications
-In-Reply-To: <CADiAo4J4T_bcDzospg7e9Hr_HvUJ8qGBegrda6BsUFrnzttx8A@mail.gmail.com>
-References: <CADiAo4J4T_bcDzospg7e9Hr_HvUJ8qGBegrda6BsUFrnzttx8A@mail.gmail.com>
-Message-ID: <20120503182245.GB2763@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  3 May 2012 18:36:07 +0000 (UTC)
+Subject: [Buildroot] [Bug 5144] Patch to fix ixon bug in uemacs
+In-Reply-To: <bug-5144-163@https.bugs.busybox.net/>
+References: <bug-5144-163@https.bugs.busybox.net/>
+Message-ID: <20120503183607.0871596C5C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dimitry,
+https://bugs.busybox.net/show_bug.cgi?id=5144
 
-On Thu, May 03, 2012 at 09:27:05AM -0400, Dimitry Golubovsky wrote:
-> Baruch Siach wrote:
-> 
-> > read-edid seems to work perfectly on my x86_64 laptop. So keeping BR2_x86_64
-> > should be safe.
-> 
-> OK, if you tried what I submitted then I'll add x86_64 (I just do not
-> have a hardware to test it such way).
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-No I haven't tested your patch. I just run 'get-edid | parse-edid' from the 
-read-edid package of my distro (Debian).
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-baruch
+--- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> 2012-05-03 18:36:06 UTC ---
+Committed, thanks
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
