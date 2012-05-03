@@ -1,37 +1,28 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 May 2012 21:08:57 +0300
-Subject: [Buildroot] Building For Host as Target
-In-Reply-To: <CADwac6DA5MDVkfZDmAO-s2+rPsebpefJ-paTWLzkk0hC_qAOZg@mail.gmail.com>
-References: <CADwac6DA5MDVkfZDmAO-s2+rPsebpefJ-paTWLzkk0hC_qAOZg@mail.gmail.com>
-Message-ID: <20120503180857.GA2763@tarshish>
+Date: Thu, 3 May 2012 21:22:45 +0300
+Subject: [Buildroot] read-edid package - clarifications
+In-Reply-To: <CADiAo4J4T_bcDzospg7e9Hr_HvUJ8qGBegrda6BsUFrnzttx8A@mail.gmail.com>
+References: <CADiAo4J4T_bcDzospg7e9Hr_HvUJ8qGBegrda6BsUFrnzttx8A@mail.gmail.com>
+Message-ID: <20120503182245.GB2763@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Assaf,
+Hi Dimitry,
 
-On Thu, May 03, 2012 at 06:14:49PM +0300, Assaf Inbal wrote:
-> I'm working on a project based on buildroot and I want to have the ability
-> to compile my packages for both my MIPS target using an external toolchain
-> (which works great) but I also want to be able to compile for my host.
-> To be precise, I want to use the local gcc and libraries so I will be able
-> to run my packages locally as well.
-> I've tried setting an external toolchain path as "/usr" but as a part of
-> preparing the target file system everything from my /lib,/etc and others
-> are copied to the output directory, which is, well, bad.
+On Thu, May 03, 2012 at 09:27:05AM -0400, Dimitry Golubovsky wrote:
+> Baruch Siach wrote:
 > 
-> I've also toyed with creating a fake toolchain that was basically links to
-> the host's binaries but that also didn't go very well.
+> > read-edid seems to work perfectly on my x86_64 laptop. So keeping BR2_x86_64
+> > should be safe.
 > 
-> Does anyone have an idea on how I might be able to achieve this?
+> OK, if you tried what I submitted then I'll add x86_64 (I just do not
+> have a hardware to test it such way).
 
-It seems to me that the easiest way is to select either i386 or x86_64 as 
-target architecture (assuming that your host is a PC, we have recently 
-discovered that this is not always the case), and run the result in a chroot, 
-or in a virtualized system, on your development host. For a ready made qemu 
-example see board/qemu/x86/readme.txt.
+No I haven't tested your patch. I just run 'get-edid | parse-edid' from the 
+read-edid package of my distro (Debian).
 
 baruch
 
