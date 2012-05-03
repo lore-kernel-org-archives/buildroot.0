@@ -1,58 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 3 May 2012 22:02:18 +0200
-Subject: [Buildroot] [git commit] ushare: needs libintl if NLS is enabled
-Message-ID: <20120503200242.5405B96C6A@busybox.osuosl.org>
+Date: Thu, 3 May 2012 22:04:11 +0200
+Subject: [Buildroot] [git commit] libmbus: patch out bcopy to fix build
+	breakage
+Message-ID: <20120503200434.0D56F96C68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7df3db6c90e4d82dada0daf27ac91262e6702dc3
+commit: http://git.buildroot.net/buildroot/commit/?id=c95522860fec2fa66b1b9c69cbf703999ea4233b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ushare/Config.in |    2 ++
- package/ushare/ushare.mk |    7 ++++++-
- 2 files changed, 8 insertions(+), 1 deletions(-)
+ package/libmbus/libmbus-0.6.1-bcopy.patch |   15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/ushare/Config.in b/package/ushare/Config.in
-index a714fa0..acf025f 100644
---- a/package/ushare/Config.in
-+++ b/package/ushare/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_USHARE
- 	bool "ushare"
- 	depends on BR2_LARGEFILE
- 	select BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
- 	  It implements the server component that provides UPnP media devices
-diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
-index ac8cbc3..5421d8a 100644
---- a/package/ushare/ushare.mk
-+++ b/package/ushare/ushare.mk
-@@ -9,6 +9,11 @@ USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
- USHARE_SITE = http://ushare.geexbox.org/releases
- USHARE_DEPENDENCIES = host-pkg-config libupnp
- 
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+USHARE_DEPENDENCIES += gettext libintl
-+USHARE_LDFLAGS += -lintl
-+endif
+diff --git a/package/libmbus/libmbus-0.6.1-bcopy.patch b/package/libmbus/libmbus-0.6.1-bcopy.patch
+new file mode 100644
+index 0000000..8b8310c
+--- /dev/null
++++ b/package/libmbus/libmbus-0.6.1-bcopy.patch
+@@ -0,0 +1,15 @@
++Drop bcopy since it's deprecated.
 +
- define USHARE_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
-@@ -19,7 +24,7 @@ define USHARE_CONFIGURE_CMDS
- endef
- 
- define USHARE_BUILD_CMDS
--	$(MAKE) -C $(@D)
-+	$(MAKE) LDFLAGS="$(TARGET_LDFLAGS) $(USHARE_LDFLAGS)" -C $(@D)
- endef
- 
- define USHARE_INSTALL_TARGET_CMDS
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++diff -Nura libmbus-0.6.1/mbus/mbus-tcp.c libmbus-0.6.1-bcopy/mbus/mbus-tcp.c
++--- libmbus-0.6.1/mbus/mbus-tcp.c	2011-11-06 02:34:28.000000000 -0300
+++++ libmbus-0.6.1-bcopy/mbus/mbus-tcp.c	2012-05-03 08:11:39.680346347 -0300
++@@ -78,7 +78,7 @@
++         return NULL;
++     }
++ 
++-    bcopy((void *)(host_addr->h_addr), (void *)(&s_addr.sin_addr), host_addr->h_length);
+++    memmove((void *)(&s_addr.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
++ 
++     if (connect(handle->sock, (struct sockaddr *)&s_addr, sizeof(s_addr)) < 0)
++     {
