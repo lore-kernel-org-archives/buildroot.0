@@ -1,24 +1,47 @@
-From: Yegor Yefremov <yegor_sub1@visionsystems.de>
-Date: Thu, 03 May 2012 08:45:34 +0200
-Subject: [Buildroot] Console login root needing a password
-In-Reply-To: <CAG6aBkVA-XPByuGaxUdKQAfGrMq_X_DhVdWOfA2Zh+mUt2jq-w@mail.gmail.com>
-References: <CAG6aBkVA-XPByuGaxUdKQAfGrMq_X_DhVdWOfA2Zh+mUt2jq-w@mail.gmail.com>
-Message-ID: <4FA2298E.5000807@visionsystems.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 May 2012 08:52:56 +0200
+Subject: [Buildroot] [PATCH] Package proposed: read-edid
+In-Reply-To: <20120503051820.GA20002@sapphire.tkos.co.il>
+References: <CADiAo4KJqO8oC+x8mwKoYWKiFf7wSdOfNfO3LPQgREvkLQwAvg@mail.gmail.com>
+ <20120503051820.GA20002@sapphire.tkos.co.il>
+Message-ID: <20120503085256.5876db5c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 03.05.2012 01:38, schrieb Nigel Sollars:
-> Hello,
-> 
-> Ive built buildroot with a toolchain successfully,  however trying to login over the console requires a password.  The passwd/shadow is the default.
-> 
-> Looking around google apparently this has to do with wchar is this true?,  if so is there a fix since this is required for gdb on the target.
+Hello Dimitry,
 
-Have you tried something like this?
+Thanks for your contribution! Baruch has raised valid points in his
+review, I will add one more comment below.
 
-ttyS0::respawn:-/bin/sh
+Le Thu, 3 May 2012 08:18:20 +0300,
+Baruch Siach <baruch@tkos.co.il> a ?crit :
 
-Yegor
+> +define READ_EDID_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/bin
+> +	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/bin
+> +endef
+
+This should rather be:
+
++define READ_EDID_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/usr/bin/get-edid
++	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/usr/bin/parse-edid
++endef
+
+I.e, you need to repeat the filename in the second argument, and those
+non-essential binaries should probably live in usr/bin/ rather than bin/.
+
+Can you take Baruch and my comments into account and post an updated
+version?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
