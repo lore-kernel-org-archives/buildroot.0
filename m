@@ -1,36 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 May 2012 15:49:06 +0300
-Subject: [Buildroot] read-edid package - clarifications
-In-Reply-To: <CADiAo4K90x6ZANyvQk7SYP=o=YmimOHDn+wfHLSrwE7bumcLKA@mail.gmail.com>
-References: <CADiAo4K90x6ZANyvQk7SYP=o=YmimOHDn+wfHLSrwE7bumcLKA@mail.gmail.com>
-Message-ID: <20120503124906.GA7331@sapphire.tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 May 2012 10:25:37 -0300
+Subject: [Buildroot] [PATCH] ushare: needs libintl if NLS is enabled
+Message-ID: <1336051537-10676-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dimitry,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ushare/Config.in |    2 ++
+ package/ushare/ushare.mk |    7 ++++++-
+ 2 files changed, 8 insertions(+), 1 deletions(-)
 
-On Thu, May 03, 2012 at 06:32:35AM -0400, Dimitry Golubovsky wrote:
-> Baruch's comment:
-> 
-> > read-edid can only run on x86 PCs and PowerPC Macs, so it should depend on
-> > (BR2_i386 || BR2_x86_64 || BR2_powerpc).
-> 
-> I only tested it on i386, not sure about x86-64, and definitely not on
-> powerpc as it has x86 real-mode stuff in it. So perhaps I'll keep i386
-> only.
-
-read-edid seems to work perfectly on my x86_64 laptop. So keeping BR2_x86_64 
-should be safe.
-
-As for PowerPC, I guess the low level code is selected at build time according 
-to the target platform. I haven't looked at the code, though.
-
-baruch
-
+diff --git a/package/ushare/Config.in b/package/ushare/Config.in
+index a714fa0..acf025f 100644
+--- a/package/ushare/Config.in
++++ b/package/ushare/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_USHARE
+ 	bool "ushare"
+ 	depends on BR2_LARGEFILE
+ 	select BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  uShare is a UPnP (TM) A/V & DLNA Media Server.
+ 	  It implements the server component that provides UPnP media devices
+diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
+index ac8cbc3..5421d8a 100644
+--- a/package/ushare/ushare.mk
++++ b/package/ushare/ushare.mk
+@@ -9,6 +9,11 @@ USHARE_SOURCE = ushare-$(USHARE_VERSION).tar.bz2
+ USHARE_SITE = http://ushare.geexbox.org/releases
+ USHARE_DEPENDENCIES = host-pkg-config libupnp
+ 
++ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
++USHARE_DEPENDENCIES += gettext libintl
++USHARE_LDFLAGS += -lintl
++endif
++
+ define USHARE_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) \
+@@ -19,7 +24,7 @@ define USHARE_CONFIGURE_CMDS
+ endef
+ 
+ define USHARE_BUILD_CMDS
+-	$(MAKE) -C $(@D)
++	$(MAKE) LDFLAGS="$(TARGET_LDFLAGS) $(USHARE_LDFLAGS)" -C $(@D)
+ endef
+ 
+ define USHARE_INSTALL_TARGET_CMDS
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.3.4
