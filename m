@@ -1,58 +1,44 @@
-From: Nigel Sollars <nsollars@gmail.com>
-Date: Thu, 3 May 2012 05:30:23 -0400
-Subject: [Buildroot] Console login root needing a password
-In-Reply-To: <4FA2298E.5000807@visionsystems.de>
-References: <CAG6aBkVA-XPByuGaxUdKQAfGrMq_X_DhVdWOfA2Zh+mUt2jq-w@mail.gmail.com>
- <4FA2298E.5000807@visionsystems.de>
-Message-ID: <CAG6aBkWE0X1fm9LatHE9V+c_kvqvpkYkxZzE+xzEiVcgX6LGwA@mail.gmail.com>
+From: Dimitry Golubovsky <golubovsky@gmail.com>
+Date: Thu, 3 May 2012 06:32:35 -0400
+Subject: [Buildroot] read-edid package - clarifications
+Message-ID: <CADiAo4K90x6ZANyvQk7SYP=o=YmimOHDn+wfHLSrwE7bumcLKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yegor,
+Hi,
 
-The only ttyO2 i have is in inittab and it looks like this:
+Thanks to Baruch and Thomas for the comments. I'll try to implement them.
 
-ttyO2::respawn:/sbin/getty -L ttyO2 115200 vt100
+Few thoughts though:
 
-This works fine ( I am able to log in ) on a previous build I did without a
-toolchain.
+Thomas' comment:
 
-Here is the link that i referred to ( from google )
+> non-essential binaries should probably live in usr/bin/ rather than bin/.
 
-http://lists.busybox.net/pipermail/buildroot/2010-May/034546.html
+I think such program may be needed rather early in the boot process.
+Basically it is needed when setting up the framebuffer console
+resolution. I have a real case of Via Unichrome and a Dell widescreen
+monitor where the framebuffer driver is unable to sense the monitor
+(X.org driver does fine though), so the only way for me to initialize
+the console was to run read-edid even before I am attempting to load
+the framebuffer drivers and fbcon. That's why I placed it into /bin
+(or maybe it is even better in /sbin).
 
-Hope this helps
-Nige
+Baruch's comment:
 
-On Thu, May 3, 2012 at 2:45 AM, Yegor Yefremov
-<yegor_sub1@visionsystems.de>wrote:
+> read-edid can only run on x86 PCs and PowerPC Macs, so it should depend on
+> (BR2_i386 || BR2_x86_64 || BR2_powerpc).
 
-> Am 03.05.2012 01:38, schrieb Nigel Sollars:
-> > Hello,
-> >
-> > Ive built buildroot with a toolchain successfully,  however trying to
-> login over the console requires a password.  The passwd/shadow is the
-> default.
-> >
-> > Looking around google apparently this has to do with wchar is this
-> true?,  if so is there a fix since this is required for gdb on the target.
->
-> Have you tried something like this?
->
-> ttyS0::respawn:-/bin/sh
->
-> Yegor
->
+I only tested it on i386, not sure about x86-64, and definitely not on
+powerpc as it has x86 real-mode stuff in it. So perhaps I'll keep i386
+only.
 
-
+Thanks.
 
 -- 
-?Science is a differential equation. Religion is a boundary condition.?
+Dimitry Golubovsky
 
-Alan Turing
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120503/7d49352a/attachment.html>
+Anywhere on the Web
