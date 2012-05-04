@@ -1,39 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 04 May 2012 21:55:42 +0200
-Subject: [Buildroot] enabling libc.a generation
-In-Reply-To: <4F9FA29F.90309@scalemp.com>
-References: <4F9F819C.80509@scalemp.com> <4F9F9EBE.2070303@mind.be>
- <4F9FA29F.90309@scalemp.com>
-Message-ID: <4FA4343E.1090003@mind.be>
+Date: Fri, 04 May 2012 22:27:57 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v4-resend] Makefile.package.in: add
+ utility functions find*clauses and notfirstword
+In-Reply-To: <CAAXf6LU4n4HRVUN-13NoT8z7L2D5kVhae0xW8Yy3Hw5GmzN5Ow@mail.gmail.com>
+References: <patchbomb.1331743505@beantl019720>
+ <c5374406a7e5dee296f0.1331743506@beantl019720>
+ <CAAXf6LUGcPJ7ReyOugz_ooxPw4ofUtqGR9oW3+q=tw-SwAmRzg@mail.gmail.com>
+ <CAAXf6LU4n4HRVUN-13NoT8z7L2D5kVhae0xW8Yy3Hw5GmzN5Ow@mail.gmail.com>
+Message-ID: <4FA43BCD.8050308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/01/12 10:45, Eial Czerwacki wrote:
-> as for libc.so, here is the relevant output:
-> sh-4.1# find . -name "libc*"
-> ./lib/libcrypt.so.0
-> ./lib/libc.so.0
-> ./lib/libcrypt-0.9.32.so
-> ./usr/include/bits/libc-lock.h
-> ./usr/lib/libcurses.a
+>>> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
 
-  Right, so no libc.so or libc.a...
-
-  These files are copied into or removed from the target fs depending on 
-the status of the BR2_HAVE_DEVFILES option.  This option must be 
-enabled, otherwise it is impossible to select the BR2_PACKAGE_GCC_TARGET 
-option.
-
-  However, the copying of libc.so and libc.a happens at the time the 
-cross-toolchain is built.  If you enable BR2_HAVE_DEVFILES afterwards, 
-it will have no effect.  Perhaps you didn't do a clean build after 
-reconfiguring buildroot?
+  Unfortunately, Makefile.package.in no longer exists...
 
   Regards,
   Arnout
+
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
