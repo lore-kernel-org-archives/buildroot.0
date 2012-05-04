@@ -1,134 +1,20 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri,  4 May 2012 14:02:13 +0200
-Subject: [Buildroot] [PATCH v6 RESEND] busybox: add watchdog daemon startup
-	script
-Message-ID: <1336132933-27720-1-git-send-email-fabio.porcedda@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 04 May 2012 10:04:12 -0300
+Subject: [Buildroot] [PATCH 1/3 v4] uboot: Add support for U-Boot SPL
+In-Reply-To: <1332108292-28094-2-git-send-email-n-dechesne@ti.com>
+References: <1332108292-28094-1-git-send-email-n-dechesne@ti.com>
+ <1332108292-28094-2-git-send-email-n-dechesne@ti.com>
+Message-ID: <d38eda1a6c036d255371aebc1372f046@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Changes for v6:
-        - Change my email address
+On 2012-03-18 19:04, Nicolas Dechesne wrote:
 
-Changes for v5:
-         - Add the Acked-by: Arnout Vandecappelle
 
-Changes for v4:
-         - Add the config modifier to force-enable the watchdog daemon,
-           as asked by Arnout Vandecappelle.
+> Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Changes for v3:
-         - Changed the default value in the script,
-           as asked by Jean-Christophe.
-
- Changes for v2:
-         - Add the option to set the reset frequency,
-           as asked by Arnout Vandecappelle.
-
- package/busybox/Config.in   |   17 +++++++++++++++++
- package/busybox/S15watchdog |   20 ++++++++++++++++++++
- package/busybox/busybox.mk  |   15 +++++++++++++++
- 3 files changed, 52 insertions(+)
- create mode 100644 package/busybox/S15watchdog
-
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index b5770eb..946134d 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -56,6 +56,23 @@ config BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	  Show packages in menuconfig that are potentially also provided
- 	  by busybox.
- 
-+config BR2_PACKAGE_BUSYBOX_WATCHDOG
-+	bool "Install the watchdog daemon startup script"
-+	help
-+	  Install the watchdog daemon startup script,
-+	  that just start at the boot the busybox watchdog daemon.
-+
-+if BR2_PACKAGE_BUSYBOX_WATCHDOG
-+
-+config BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD
-+	int "Delay between reset"
-+	default "5"
-+	help
-+	  Select the number of seconds between each
-+	  reset of the watchdog (default 5)
-+
-+endif
-+
- endif
- 
- if !BR2_PACKAGE_BUSYBOX # kconfig doesn't support else
-diff --git a/package/busybox/S15watchdog b/package/busybox/S15watchdog
-new file mode 100644
-index 0000000..7f1110c
---- /dev/null
-+++ b/package/busybox/S15watchdog
-@@ -0,0 +1,20 @@
-+#!/bin/sh
-+#
-+# Start watchdog
-+#
-+
-+case "$1" in
-+ start)
-+	echo "Starting watchdog..."
-+	watchdog -t PERIOD /dev/watchdog
-+	;;
-+  stop)
-+	;;
-+  restart|reload)
-+	;;
-+  *)
-+	echo $"Usage: $0 {start|stop|restart}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 59448d5..1d988f8 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -142,6 +142,19 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	else rm -f $(TARGET_DIR)/etc/init.d/S01logging; fi
- endef
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_WATCHDOG),y)
-+define BUSYBOX_SET_WATCHDOG
-+        $(call KCONFIG_ENABLE_OPT,CONFIG_WATCHDOG,$(BUSYBOX_BUILD_CONFIG))
-+endef
-+define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
-+	[ -f $(TARGET_DIR)/etc/init.d/S15watchdog ] || \
-+		install -D -m 0755 package/busybox/S15watchdog \
-+			$(TARGET_DIR)/etc/init.d/S15watchdog && \
-+		sed -i s/PERIOD/$(BR2_PACKAGE_BUSYBOX_WATCHDOG_PERIOD)/ \
-+			$(TARGET_DIR)/etc/init.d/S15watchdog
-+endef
-+endif
-+
- # We do this here to avoid busting a modified .config in configure
- BUSYBOX_POST_EXTRACT_HOOKS += BUSYBOX_COPY_CONFIG
- 
-@@ -155,6 +168,7 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_NETKITTELNET)
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_DISABLE_MMU_APPLETS)
-+	$(BUSYBOX_SET_WATCHDOG)
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- endef
-@@ -172,6 +186,7 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
-+	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- endef
- 
- define BUSYBOX_UNINSTALL_TARGET_CMDS
--- 
-1.7.10
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
