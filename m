@@ -1,27 +1,32 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 04 May 2012 22:27:57 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v4-resend] Makefile.package.in: add
- utility functions find*clauses and notfirstword
-In-Reply-To: <CAAXf6LU4n4HRVUN-13NoT8z7L2D5kVhae0xW8Yy3Hw5GmzN5Ow@mail.gmail.com>
-References: <patchbomb.1331743505@beantl019720>
- <c5374406a7e5dee296f0.1331743506@beantl019720>
- <CAAXf6LUGcPJ7ReyOugz_ooxPw4ofUtqGR9oW3+q=tw-SwAmRzg@mail.gmail.com>
- <CAAXf6LU4n4HRVUN-13NoT8z7L2D5kVhae0xW8Yy3Hw5GmzN5Ow@mail.gmail.com>
-Message-ID: <4FA43BCD.8050308@mind.be>
+Date: Fri, 04 May 2012 22:46:10 +0200
+Subject: [Buildroot] [PATCH v2] ccache: allow dynamic selection of cache
+	directory
+In-Reply-To: <962414f85797a188de79.1333738037@beantl019720>
+References: <962414f85797a188de79.1333738037@beantl019720>
+Message-ID: <4FA44012.8040008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+On 04/06/12 20:47, Thomas De Schampheleire wrote:
+> -define HOST_CCACHE_FIX_CCACHE_DIR
+> -	sed -i 's,getenv("CCACHE_DIR"),"$(CCACHE_CACHE_DIR)",' $(@D)/ccache.c
+> -	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
 
-  Unfortunately, Makefile.package.in no longer exists...
+
+  On second review, a better implementation would be to replace the first
+sed by
+
+sed -i 's,getenv("CCACHE_DIR"),getenv("BUILDROOT_CACHE_DIR"),' $(@D)/ccache.c
+
+
+  Then you no longer need the wrapper script at all.
 
   Regards,
   Arnout
-
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
