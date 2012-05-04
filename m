@@ -1,58 +1,84 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 4 May 2012 21:17:42 +0200
-Subject: [Buildroot] [PATCH v4] linux: install dtc (device tree
- compiler) as host tool if selected
-In-Reply-To: <6099ad9232bcbe718d3a.1333743030@beantl019720>
-References: <6099ad9232bcbe718d3a.1333743030@beantl019720>
-Message-ID: <CAAXf6LW3+aPgB9u7ZgLefTG26CcsSVYLOiWYnaoQxRDchxeSbQ@mail.gmail.com>
+Date: Fri, 4 May 2012 21:17:56 +0200
+Subject: [Buildroot] [PATCH] Package downloads: allow restricting to
+	primary site only
+In-Reply-To: <2fcc145e1eef0f8bc468.1333743535@beantl019720>
+References: <2fcc145e1eef0f8bc468.1333743535@beantl019720>
+Message-ID: <CAAXf6LVuopxvpMi9_zGJsXtmMoo1ku20YFsNdJ1OKpwD_P=GWg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 6, 2012 at 10:10 PM, Thomas De Schampheleire
+On Fri, Apr 6, 2012 at 10:18 PM, Thomas De Schampheleire
 <patrickdepinguin+buildroot@gmail.com> wrote:
-> Having dtc as a host tool can be useful for users that have a custom
-> boot scenario where the device tree is not embedded in the kernel.
+> This patch adds a new config option BR2_PRIMARY_SITE_ONLY that, when set,
+> restricts package downloads to the specified BR2_PRIMARY_SITE. If the package
+> is not present on the primary site, the download fails.
+>
+> This is useful for project developers who want to ensure that the project can
+> be built even if the upstream tarball locations disappear.
 >
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >
 > ---
-> v2: remove old parameters to GENTARGETS call, sorry.
-> v3: rename Config.in.host and depend on Linux (comments Arnout)
-> v4: no need for a separate package, just put the logic in linux.mk
-> ? ?(suggestion of Alexandre Pereira da Silva, thanks!)
+> ?Config.in ? ? ? ? ? ? ? ? ? | ?12 ++++++++++++
+> ?package/Makefile.package.in | ? 7 +++++--
+> ?2 files changed, 17 insertions(+), 2 deletions(-)
 >
-> ?linux/linux.mk | ?10 ++++++++++
-> ?1 files changed, 10 insertions(+), 0 deletions(-)
+> diff --git a/Config.in b/Config.in
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -119,6 +119,16 @@ config BR2_PRIMARY_SITE
+> ? ? ? ? ?NOTE: This works for all packages using the central package
+> ? ? ? ? ?infrastructure (generic, autotools, cmake, ...)
 >
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -183,6 +183,15 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TAR
-> ?endef
-> ?endif
->
+> +config BR2_PRIMARY_SITE_ONLY
+> + ? ? ? bool "Only allow downloads from primary download site"
+> + ? ? ? help
+> + ? ? ? ? If this option is enabled, downloads will only be attempted from the
+> + ? ? ? ? primary download site. Other locations, like the package's official
+> + ? ? ? ? download location or the backup download site, will not be
+> + ? ? ? ? considered.
 > +
-> +define LINUX_INSTALL_HOST_TOOLS
-> + ? ? ? # Installing dtc (device tree compiler) as host tool, if selected
-> + ? ? ? if grep -q "CONFIG_DTC=y" $(@D)/.config; then ? \
-> + ? ? ? ? ? ? ? $(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ; ? \
-> + ? ? ? fi
-> +endef
+> +if !BR2_PRIMARY_SITE_ONLY
 > +
-> +
-> ?define LINUX_INSTALL_IMAGES_CMDS
-> ? ? ? ?cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-> ?endef
-> @@ -197,6 +206,7 @@ define LINUX_INSTALL_TARGET_CMDS
-> ? ? ? ? ? ? ? ?rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ; ? ? ? ? \
-> ? ? ? ? ? ? ? ?rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ; ? ? ? ?\
-> ? ? ? ?fi
-> + ? ? ? $(LINUX_INSTALL_HOST_TOOLS)
-> ?endef
+> ?config BR2_BACKUP_SITE
+> ? ? ? ?string "Backup download site"
+> ? ? ? ?default "http://sources.buildroot.net/"
+> @@ -175,6 +185,8 @@ config BR2_DEBIAN_MIRROR
+> ? ? ? ? ?Usually, just add your country code like XX here:
+> ? ? ? ? ?http://ftp.XX.debian.org
 >
-> ?include linux/linux-ext-*.mk
+> +endif
+> +
+> ?endmenu
+>
+> ?config BR2_JLEVEL
+> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+> --- a/package/Makefile.package.in
+> +++ b/package/Makefile.package.in
+> @@ -269,8 +269,8 @@ endef
+> ?################################################################################
+> ?# DOWNLOAD -- Download helper. Will try to download source from:
+> ?# 1) BR2_PRIMARY_SITE if enabled
+> -# 2) Download site
+> -# 3) BR2_BACKUP_SITE if enabled
+> +# 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
+> +# 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+> ?#
+> ?# Argument 1 is the source location
+> ?# Argument 2 is the source filename
+> @@ -290,6 +290,9 @@ define DOWNLOAD_INNER
+> ? ? ? ? ? ? ? ? ? ? ? ?*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
+> ? ? ? ? ? ? ? ?esac ; \
+> ? ? ? ?fi ; \
+> + ? ? ? if test "$(BR2_PRIMARY_SITE_ONLY)" = "y" ; then \
+> + ? ? ? ? ? ? ? exit 1 ; \
+> + ? ? ? fi ; \
+> ? ? ? ?if test -n "$(1)" ; then \
+> ? ? ? ? ? ? ? ?case "$($(PKG)_SITE_METHOD)" in \
+> ? ? ? ? ? ? ? ? ? ? ? ?git) $($(DL_MODE)_GIT) && exit ;; \
 
 bump
