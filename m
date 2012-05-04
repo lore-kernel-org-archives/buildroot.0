@@ -1,37 +1,85 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 May 2012 22:08:39 -0300
-Subject: [Buildroot] [PATCH 8/8] qemu/x86: update to use kernel 3.3.4
-In-Reply-To: <1336093719-20972-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1336093719-20972-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1336093719-20972-8-git-send-email-gustavo@zacarias.com.ar>
+From: Dimitry Golubovsky <golubovsky@gmail.com>
+Date: Thu, 3 May 2012 22:14:53 -0400
+Subject: [Buildroot] [PATCH] package read-edid, corrected patch
+Message-ID: <CADiAo4KA0+q00pCFAXuebB9WtFkJ8WcfkerB0Sv57rtPTnu2RQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/qemu_x86_defconfig |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+Hi,
+Here is the updated patch per comments by Thomas and Baruch.
 
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 5d0e23b..f22fdea 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -10,9 +10,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
-+# Lock to 3.3 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_3=y
+Thanks.
+
+Signed-off-by: Dmitry Golubovsky <golubovsky@gmail.com>
+---
+diff --git a/package/Config.in b/package/Config.in
+index caa618b..e39fccf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -210,6 +210,7 @@ source "package/openocd/Config.in"
+ source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
++source "package/read-edid/Config.in"
+ source "package/rng-tools/Config.in"
+ source "package/sane-backends/Config.in"
+ source "package/sdparm/Config.in"
+diff --git a/package/read-edid/Config.in b/package/read-edid/Config.in
+new file mode 100644
+index 0000000..c66a5e0
+--- /dev/null
++++ b/package/read-edid/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_READ_EDID
++	bool "read-edid"
++	help
++	  Read-edid is a pair of tools (originally by John Fremlin) for
+reading the EDID
++	  from a monitor.  It should work with most monitors made since 1996
+(except for
++	  newer ones with 256-byte EDID's - WiP),  assuming the video card
+supports  the
++	  standard read commands (most do).  Read-edid is a set of two tools
+- get-edid,
++	  which gets  the raw edid  information from the monitor,  and
+parse-edid, which
++	  turns the raw binary information into an XF86Config-compatible
+monitor section.
 +
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.3.config"
--- 
-1.7.3.4
++	  http://polypux.org/projects/read-edid/
++
++depends on (BR2_i386)
++
++
+diff --git a/package/read-edid/read-edid.mk b/package/read-edid/read-edid.mk
+new file mode 100644
+index 0000000..6328def
+--- /dev/null
++++ b/package/read-edid/read-edid.mk
+@@ -0,0 +1,20 @@
++############################################
++#
++# read-edid
++#
++############################################
++
++READ_EDID_VERSION = 1.4.2
++READ_EDID_SITE = http://www.polypux.org/projects/read-edid/
++
++define READ_EDID_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define READ_EDID_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/sbin/get-edid
++	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/sbin/parse-edid
++endef
++
++$(eval $(call AUTOTARGETS))
++
+
+
+--
