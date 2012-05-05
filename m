@@ -1,35 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 May 2012 11:05:03 +0200
-Subject: [Buildroot] [PATCH resend] directfb: add support for davinci
-	gfx driver
-In-Reply-To: <1335631844-15681-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 28 Apr 2012 18:50:44 +0200")
-References: <1335631844-15681-1-git-send-email-arnout@mind.be>
-Message-ID: <87obq3f16o.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  5 May 2012 07:31:38 -0300
+Subject: [Buildroot] [PATCH] libmpeg2: fix build breakage on lower ARM cores
+Message-ID: <1336213898-8517-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../libmpeg2/libmpeg2-0.5.1-armv4l.patch           |   24 ++++++++++++++++++++
+ 1 files changed, 24 insertions(+), 0 deletions(-)
+ create mode 100644 package/multimedia/libmpeg2/libmpeg2-0.5.1-armv4l.patch
 
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- Arnout> ---
- Arnout>  package/directfb/Config.in   |    4 ++++
- Arnout>  package/directfb/directfb.mk |    3 ++-
- Arnout>  2 files changed, 6 insertions(+), 1 deletion(-)
-
-This seems to fail on the autobuilder:
-
-http://autobuild.buildroot.org/results/d5c2cb226757a8bf90dac33bd04f87f325654220/build-end.log
-
-For some odd reason, I don't see the davincifb.h file in the directfb
-tarball, but it IS in git:
-
-http://git.directfb.org/?p=core/DirectFB.git;a=tree;f=gfxdrivers/davinci;h=f0bd9ad6add6164f3a5e953d4eed4056315a2be2;hb=ab0d779e85cec22c7c2e7b8b6b1976049b1ba0f1
-
-Is it working for you? If so, how?
-
+diff --git a/package/multimedia/libmpeg2/libmpeg2-0.5.1-armv4l.patch b/package/multimedia/libmpeg2/libmpeg2-0.5.1-armv4l.patch
+new file mode 100644
+index 0000000..70d45ef
+--- /dev/null
++++ b/package/multimedia/libmpeg2/libmpeg2-0.5.1-armv4l.patch
+@@ -0,0 +1,24 @@
++Patch taken from gentoo.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -urNp libmpeg2.orig/libmpeg2/motion_comp_arm_s.S libmpeg2/libmpeg2/motion_comp_arm_s.S
++--- libmpeg2.orig/libmpeg2/motion_comp_arm_s.S	2008-07-09 21:16:05.000000000 +0200
+++++ libmpeg2/libmpeg2/motion_comp_arm_s.S	2009-11-20 19:55:22.000000000 +0100
++@@ -19,6 +19,16 @@
++ @ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ 
++ 
+++@ Data preload is supported only by ARM V5TE and above
+++
+++#if (defined (__ARM_ARCH_2__) || defined (__ARM_ARCH_3__) \
+++     || defined (__ARM_ARCH_3M__) || defined (__ARM_ARCH_4__) \
+++     || defined (__ARM_ARCH_4T__) || defined (__ARM_ARCH_5__) \
+++     || defined (__ARM_ARCH_5T__))
+++.macro pld reg
+++.endm
+++#endif
+++
++ 	.text
++ 
++ @ ----------------------------------------------------------------
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
