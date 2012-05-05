@@ -1,32 +1,44 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sat, 5 May 2012 09:11:44 +0200
-Subject: [Buildroot] [PATCH 1 of 2 v4-resend] Makefile.package.in: add
- utility functions find*clauses and notfirstword
-In-Reply-To: <4FA43BCD.8050308@mind.be>
-References: <patchbomb.1331743505@beantl019720>
- <c5374406a7e5dee296f0.1331743506@beantl019720>
- <CAAXf6LUGcPJ7ReyOugz_ooxPw4ofUtqGR9oW3+q=tw-SwAmRzg@mail.gmail.com>
- <CAAXf6LU4n4HRVUN-13NoT8z7L2D5kVhae0xW8Yy3Hw5GmzN5Ow@mail.gmail.com>
- <4FA43BCD.8050308@mind.be>
-Message-ID: <CAAXf6LWBAyi4FJw==pc80KR0hiTPE4W2L5GUGoj=Rh_G1LassA@mail.gmail.com>
+Date: Sat, 5 May 2012 09:17:38 +0200
+Subject: [Buildroot] [PATCH v2] ccache: allow dynamic selection of cache
+	directory
+In-Reply-To: <4FA44012.8040008@mind.be>
+References: <962414f85797a188de79.1333738037@beantl019720>
+ <4FA44012.8040008@mind.be>
+Message-ID: <CAAXf6LVUywLA3pOb40xijPsuWW68aj0WaTXMR-DwD7=5n58jcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 4 mei 2012 22:28 schreef "Arnout Vandecappelle" <arnout@mind.be> het
+Op 4 mei 2012 22:46 schreef "Arnout Vandecappelle" <arnout@mind.be> het
 volgende:
->>>>
->>>> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+>
+> On 04/06/12 20:47, Thomas De Schampheleire wrote:
+>>
+>> -define HOST_CCACHE_FIX_CCACHE_DIR
+>> -       sed -i 's,getenv("CCACHE_DIR"),"$(CCACHE_CACHE_DIR)",'
+$(@D)/ccache.c
+>> -       sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
 >
 >
->  Unfortunately, Makefile.package.in no longer exists...
 >
+>  On second review, a better implementation would be to replace the first
+> sed by
+>
+> sed -i 's,getenv("CCACHE_DIR"),getenv("BUILDROOT_CACHE_DIR"),'
+$(@D)/ccache.c
+>
+>
+>  Then you no longer need the wrapper script at all.
 
-Dammit, frickin people that reorganize the code all the time! ;)
+Well, it boils down to the choice between patching the source or using a
+wrapper. I can see benefits for either way.
+Additional input from other developers is welcome here...
 
-I should have checked that, will repost...
+Best regards,
+Thomas
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120505/5efbb6c5/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120505/57505982/attachment.html>
