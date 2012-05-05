@@ -1,41 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 05 May 2012 09:39:21 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 May 2012 14:56:51 +0200
 Subject: [Buildroot] [PATCH 1/2] ocf-linux: new package
-In-Reply-To: <87wr4qde8n.fsf@macbook.be.48ers.dk>
+In-Reply-To: <5e88124f6b69d203ad230db954cd9d4e@zacarias.com.ar> (Gustavo
+ Zacarias's message of "Sat, 05 May 2012 09:39:21 -0300")
 References: <1336159393-17052-1-git-send-email-gustavo@zacarias.com.ar>
  <1336159393-17052-2-git-send-email-gustavo@zacarias.com.ar>
  <87wr4qde8n.fsf@macbook.be.48ers.dk>
-Message-ID: <5e88124f6b69d203ad230db954cd9d4e@zacarias.com.ar>
+ <5e88124f6b69d203ad230db954cd9d4e@zacarias.com.ar>
+Message-ID: <87sjfedbvw.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-05-05 09:06, Peter Korsgaard wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> I would move the 'also' - E.G. 'Some libraries need to also have OCF 
-> enabled'
+Hi,
 
-Ok.
+ Gustavo> Run-tested as low as 2.6.38.x
+ Gustavo> Build-tested as low as 2.6.35.x
+ Gustavo> I can give it a run-test on 2.6.35 maybe, depending on how lucky i am
+ Gustavo> with my hardware crypto enabled test platforms.
 
-> How likely is it that this patch will work for a random kernel 
-> version?
-> From the tarball I see a bunch of patches for different versions, so 
-> we
-> probably need something smarter than just hardcoding 3.2.1 - Perhaps
-> just an option where the user can type the version number of the 
-> patch
-> they want to use?
+So the 3.2.1 patch works with everything from 2.6.35..3.3? If that's the case, then I
+think it's OK to alway use that one, but please add a comment explaining
+why.
 
-Run-tested as low as 2.6.38.x
-Build-tested as low as 2.6.35.x
-I can give it a run-test on 2.6.35 maybe, depending on how lucky i am 
-with my hardware crypto enabled test platforms.
-
-> Trailing spaces (the last empty line).
-
-Fixed.
-Let me know regarding the kernel patch what you prefer given the new 
-information to avoid sending zillions of versions.
-Regards.
+-- 
+Bye, Peter Korsgaard
