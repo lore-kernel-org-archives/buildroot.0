@@ -1,39 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  5 May 2012 18:26:05 +0200
-Subject: [Buildroot] [PATCH 1/2] libaio: make available only on supported
-	architectures
+Date: Sat,  5 May 2012 18:26:06 +0200
+Subject: [Buildroot] [PATCH 2/2] libaio: use alternative upstream URL
 In-Reply-To: <cover.1336235161.git.thomas.petazzoni@free-electrons.com>
 References: <cover.1336235161.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <f91dca9115c62024abe481cbf529baece84f70ec.1336235161.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <7b0e3e05280562b758638a0582516394a3164675.1336235161.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libaio has some architecture-specific code, and isn't available for
-all architectures that Buildroot support.
-
-Fixes
-http://autobuild.buildroot.org/results/b171a6d6243ea021dc52830bc4b9d36fc083a60d/build-end.log.
+Since the kernel.org security problem and reinstallation, libaio is no
+longer available from this site. Use snapshot.debian.net as an
+alternative source.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libaio/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
+ package/libaio/libaio.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index ff6cc13..833009a 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -1,4 +1,8 @@
- config BR2_PACKAGE_LIBAIO
- 	bool "libaio"
-+	depends on \
-+		BR2_arm   || BR2_armeb || BR2_avr32  || BR2_i386    || \
-+		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
-+		BR2_sparc || BR2_x86_64
- 	help
- 	  Library for doing asynchronous I/O
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 3ffc49c..f90ef4d 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
+ LIBAIO_VERSION=0.3.109
+-LIBAIO_SOURCE=libaio-$(LIBAIO_VERSION).tar.bz2
+-LIBAIO_SITE=$(BR2_KERNEL_MIRROR)/linux/libs/aio/
++LIBAIO_SOURCE=libaio_$(LIBAIO_VERSION).orig.tar.gz
++LIBAIO_SITE=http://snapshot.debian.org/archive/debian/20110227T085214Z/pool/main/liba/libaio/
+ LIBAIO_INSTALL_STAGING=YES
+ 
+ define LIBAIO_BUILD_CMDS
 -- 
 1.7.9.5
