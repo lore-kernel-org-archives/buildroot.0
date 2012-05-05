@@ -1,95 +1,66 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 May 2012 08:40:06 +0200
-Subject: [Buildroot] [git commit] stress: new package
-Message-ID: <20120505064758.D11D296A99@busybox.osuosl.org>
+Date: Sat, 5 May 2012 08:49:02 +0200
+Subject: [Buildroot] [git commit] linux: improve the 'make linux-*' special
+	commands
+Message-ID: <20120505064913.ACE1C96A7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a90617b6271c86769a03ea8f7cfc5a58451e02c5
+commit: http://git.buildroot.net/buildroot/commit/?id=f18c51657f4ab038654297ccc8fb8e00314c8b60
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+This patch improves two things:
+
+ * It makes sure that the linux-menuconfig and al. commands can be
+   executed even if the user hasn't executed 'make' before. Until now,
+   the commands were depending on the .configured stamp, which is not
+   sufficient since the linux package has been converted to the
+   GENTARGETS infrastructure. Instead, depend on the linux-configure
+   phony target.
+
+ * It makes sure that those commands are not available when the Linux
+   package is not selected, just like we do for Barebox.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                 |    1 +
- package/stress/Config.in                          |    8 +++++++
- package/stress/stress-0001-Remove-largefile.patch |   22 +++++++++++++++++++++
- package/stress/stress.mk                          |   13 ++++++++++++
- 4 files changed, 44 insertions(+), 0 deletions(-)
+ linux/linux.mk |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index caa618b..b25f31a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -37,6 +37,7 @@ source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
- source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
-+source "package/stress/Config.in"
- source "package/whetstone/Config.in"
- source "package/valgrind/Config.in"
- source "package/pv/Config.in"
-diff --git a/package/stress/Config.in b/package/stress/Config.in
-new file mode 100644
-index 0000000..b092b03
---- /dev/null
-+++ b/package/stress/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_STRESS
-+	bool "stress"
-+	help
-+	  A deliberately simple workload generator for POSIX systems.
-+	  It imposes a configurable amount of CPU, memory, I/O, and
-+	  disk stress on the system.
-+
-+	  http://weather.ou.edu/~apw/projects/stress/
-diff --git a/package/stress/stress-0001-Remove-largefile.patch b/package/stress/stress-0001-Remove-largefile.patch
-new file mode 100644
-index 0000000..bf894bc
---- /dev/null
-+++ b/package/stress/stress-0001-Remove-largefile.patch
-@@ -0,0 +1,22 @@
-+Remove largefile
-+
-+Otherwise it doesn't compile in uClibc without largefile.
-+
-+If the toolchain does support largefile, it will still work on large files
-+anyway.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+Upstream status: mail sent to apw at rossby.metr.ou.edu
-+---
-+diff -rup stress-1.0.4.orig/src/Makefile.am stress-1.0.4/src/Makefile.am
-+--- stress-1.0.4.orig/src/Makefile.am	2009-12-03 02:04:05.000000000 +0100
-++++ stress-1.0.4/src/Makefile.am	2012-05-04 23:09:48.229842463 +0200
-+@@ -1,7 +1,5 @@
-+ MAINTAINERCLEANFILES = Makefile.in
-+ 
-+-AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
-+-
-+ bin_PROGRAMS = stress
-+ stress_SOURCES = stress.c
-+ stress_MANS = stress.1
-diff --git a/package/stress/stress.mk b/package/stress/stress.mk
-new file mode 100644
-index 0000000..8b4f40b
---- /dev/null
-+++ b/package/stress/stress.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# stress - a workload generator
-+#
-+# http://weather.ou.edu/~apw/projects/stress/
-+#
-+#############################################################
-+
-+STRESS_VERSION = 1.0.4
-+STRESS_SITE    = http://weather.ou.edu/~apw/projects/stress
-+STRESS_AUTORECONF = YES
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 16f9916..34f8623 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -203,17 +203,18 @@ include linux/linux-ext-*.mk
+ 
+ $(eval $(call GENTARGETS))
+ 
+-linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs $(LINUX_DIR)/.stamp_configured
++ifeq ($(BR2_LINUX_KERNEL),y)
++linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: dirs linux-configure
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+ 		$(subst linux-,,$(subst linux26-,,$@))
+ 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
+ 
+-linux-savedefconfig linux26-savedefconfig: dirs $(LINUX_DIR)/.stamp_configured
++linux-savedefconfig linux26-savedefconfig: dirs linux-configure
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+ 		$(subst linux-,,$(subst linux26-,,$@))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-linux-update-config linux26-update-config: $(LINUX_DIR)/.config
++linux-update-config linux26-update-config: linux-configure $(LINUX_DIR)/.config
+ 	cp -f $(LINUX_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+ 
+ linux-update-defconfig linux26-update-defconfig: linux-savedefconfig
+@@ -222,6 +223,7 @@ else
+ linux-update-config linux26-update-config: ;
+ linux-update-defconfig linux26-update-defconfig: ;
+ endif
++endif
+ 
+ # Support for rebuilding the kernel after the cpio archive has
+ # been generated in $(BINARIES_DIR)/rootfs.cpio.
