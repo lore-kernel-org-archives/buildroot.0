@@ -1,37 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 May 2012 23:15:58 +0200
-Subject: [Buildroot] [git commit] qemu/x86-64: update to use kernel 3.3.4
-Message-ID: <20120505211718.ED72196BE9@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 May 2012 23:39:53 +0200
+Subject: [Buildroot] [PATCH v3 resend] config: make it possible to
+	specify which config file to use for 'make defconfig'
+In-Reply-To: <1335633290-8734-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 28 Apr 2012 19:14:50 +0200")
+References: <1335633290-8734-1-git-send-email-arnout@mind.be>
+Message-ID: <87397ecno6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ca70ca26478dd999a463bdb99d7dee1c3532e79
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/qemu_x86_64_defconfig |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ Arnout> So that this works:
+ Arnout>  % make defconfig BR2_DEFCONFIG=~/buildroot-defconfig
 
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 3c72b36..c20aaca 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -9,9 +9,12 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
-+# Lock to 3.3 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_3=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.3.config"
+ Arnout> Right now we have to do:
+
+ Arnout>  % cp ~/buildroot-defconfig configs/buildroot_defconfig
+ Arnout>  % make buildroot_defconfig
+
+ Arnout> That would dirty the buildroot tree and requires it to be writable.
+
+ Arnout> Signed-off-by: Felipe Contreras <felipe.contreras@gmail.com>
+ Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Arnout> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Arnout> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
