@@ -1,43 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 May 2012 19:34:49 +0200
-Subject: [Buildroot] [git commit] libaio: use alternative upstream URL
-Message-ID: <20120505173639.BD8D196A7C@busybox.osuosl.org>
+Date: Sat, 5 May 2012 19:33:24 +0200
+Subject: [Buildroot] [git commit] libaio: make available only on supported
+	architectures
+Message-ID: <20120505173639.AD86696A7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73aa143b66437f6796a94dfaa1240044513e337e
+commit: http://git.buildroot.net/buildroot/commit/?id=6c5a33e41ba55f5c156204701d775879ff4fd98f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the kernel.org security problem and reinstallation, libaio is no
-longer available from this site. Use snapshot.debian.net as an
-alternative source.
+libaio has some architecture-specific code, and isn't available for
+all architectures that Buildroot support.
 
-[Peter: Add spaces around '=' while we're at it]
+Fixes
+http://autobuild.buildroot.org/results/b171a6d6243ea021dc52830bc4b9d36fc083a60d/build-end.log.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libaio/libaio.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/libaio/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index 3ffc49c..05a4d5c 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -3,10 +3,10 @@
- # libaio
- #
- #############################################################
--LIBAIO_VERSION=0.3.109
--LIBAIO_SOURCE=libaio-$(LIBAIO_VERSION).tar.bz2
--LIBAIO_SITE=$(BR2_KERNEL_MIRROR)/linux/libs/aio/
--LIBAIO_INSTALL_STAGING=YES
-+LIBAIO_VERSION = 0.3.109
-+LIBAIO_SOURCE = libaio_$(LIBAIO_VERSION).orig.tar.gz
-+LIBAIO_SITE = http://snapshot.debian.org/archive/debian/20110227T085214Z/pool/main/liba/libaio/
-+LIBAIO_INSTALL_STAGING = YES
- 
- define LIBAIO_BUILD_CMDS
-   $(TARGET_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+diff --git a/package/libaio/Config.in b/package/libaio/Config.in
+index ff6cc13..833009a 100644
+--- a/package/libaio/Config.in
++++ b/package/libaio/Config.in
+@@ -1,4 +1,8 @@
+ config BR2_PACKAGE_LIBAIO
+ 	bool "libaio"
++	depends on \
++		BR2_arm   || BR2_armeb || BR2_avr32  || BR2_i386    || \
++		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
++		BR2_sparc || BR2_x86_64
+ 	help
+ 	  Library for doing asynchronous I/O
