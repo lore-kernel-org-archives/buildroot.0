@@ -1,33 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 May 2012 08:49:30 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: improve the 'make linux-*'
-	special commands
-In-Reply-To: <a96a992b96d72989cddf72ce8420d6acf28302c3.1336146047.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 4 May 2012 17:40:53 +0200")
-References: <cover.1336146047.git.thomas.petazzoni@free-electrons.com>
- <cover.1336146047.git.thomas.petazzoni@free-electrons.com>
- <a96a992b96d72989cddf72ce8420d6acf28302c3.1336146047.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bom3yvet.fsf@macbook.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Sat, 5 May 2012 09:11:44 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v4-resend] Makefile.package.in: add
+ utility functions find*clauses and notfirstword
+In-Reply-To: <4FA43BCD.8050308@mind.be>
+References: <patchbomb.1331743505@beantl019720>
+ <c5374406a7e5dee296f0.1331743506@beantl019720>
+ <CAAXf6LUGcPJ7ReyOugz_ooxPw4ofUtqGR9oW3+q=tw-SwAmRzg@mail.gmail.com>
+ <CAAXf6LU4n4HRVUN-13NoT8z7L2D5kVhae0xW8Yy3Hw5GmzN5Ow@mail.gmail.com>
+ <4FA43BCD.8050308@mind.be>
+Message-ID: <CAAXf6LWBAyi4FJw==pc80KR0hiTPE4W2L5GUGoj=Rh_G1LassA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Op 4 mei 2012 22:28 schreef "Arnout Vandecappelle" <arnout@mind.be> het
+volgende:
+>>>>
+>>>> diff --git a/package/Makefile.package.in b/package/Makefile.package.in
+>
+>
+>  Unfortunately, Makefile.package.in no longer exists...
+>
 
- Thomas> This patch improves two things:
- Thomas>  * It makes sure that the linux-menuconfig and al. commands can be
- Thomas>    executed even if the user hasn't executed 'make' before. Until now,
- Thomas>    the commands were depending on the .configured stamp, which is not
- Thomas>    sufficient since the linux package has been converted to the
- Thomas>    GENTARGETS infrastructure. Instead, depend on the linux-configure
- Thomas>    phony target.
+Dammit, frickin people that reorganize the code all the time! ;)
 
- Thomas>  * It makes sure that those commands are not available when the Linux
- Thomas>    package is not selected, just like we do for Barebox.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+I should have checked that, will repost...
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120505/5efbb6c5/attachment.html>
