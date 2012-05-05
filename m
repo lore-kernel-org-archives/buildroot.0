@@ -1,17 +1,17 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  5 May 2012 14:44:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 5180] New: External toolchain path should accept
-	relative paths
-Message-ID: <bug-5180-163@https.bugs.busybox.net/>
+Date: Sat,  5 May 2012 15:13:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 5186] New: initramfs/cpio should support lzo
+	compression
+Message-ID: <bug-5186-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5180
+https://bugs.busybox.net/show_bug.cgi?id=5186
 
-           Summary: External toolchain path should accept relative paths
+           Summary: initramfs/cpio should support lzo compression
            Product: buildroot
            Version: unspecified
           Platform: PC
@@ -26,15 +26,12 @@ https://bugs.busybox.net/show_bug.cgi?id=5180
    Estimated Hours: 0.0
 
 
-Created attachment 4334
-  --> https://bugs.busybox.net/attachment.cgi?id=4334
-Patch for supporting relative toolchain path
+Created attachment 4340
+  --> https://bugs.busybox.net/attachment.cgi?id=4340
+cpio lzo support
 
-It would be nice if it was possible to enter paths relative to the buildroot
-directory for things like the external toolchain path.
-So one could create an archive of toolchain+buildroot+.config file, transfer
-that to a different computer, and have "make" just work without having to
-change settings.
+Linux supports lzo compression for the initramfs image nowadays, so it would be
+nice if buildroot did as well
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
