@@ -1,39 +1,24 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 5 May 2012 19:33:24 +0200
-Subject: [Buildroot] [git commit] libaio: make available only on supported
-	architectures
-Message-ID: <20120505173639.AD86696A7C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 05 May 2012 23:16:07 +0200
+Subject: [Buildroot] [PATCH 1/8] qemu/sh4-r2d: update to use kernel
+	3.2.16
+In-Reply-To: <1336093719-20972-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 3 May 2012 22:08:32 -0300")
+References: <1336093719-20972-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877gwqcors.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c5a33e41ba55f5c156204701d775879ff4fd98f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-libaio has some architecture-specific code, and isn't available for
-all architectures that Buildroot support.
+ Gustavo> Bump to use kernel version 3.2.16
+ Gustavo> Still keep sh4-r2d qemu sample config on 3.2 series since the sh-sci
+ Gustavo> driver from 3.3 uses unimplemented functionality (as of qemu 1.0.1)
 
-Fixes
-http://autobuild.buildroot.org/results/b171a6d6243ea021dc52830bc4b9d36fc083a60d/build-end.log.
+Committed all 8, thanks.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libaio/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
-
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index ff6cc13..833009a 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -1,4 +1,8 @@
- config BR2_PACKAGE_LIBAIO
- 	bool "libaio"
-+	depends on \
-+		BR2_arm   || BR2_armeb || BR2_avr32  || BR2_i386    || \
-+		BR2_m68k  || BR2_mips  || BR2_mipsel || BR2_powerpc || \
-+		BR2_sparc || BR2_x86_64
- 	help
- 	  Library for doing asynchronous I/O
+-- 
+Bye, Peter Korsgaard
