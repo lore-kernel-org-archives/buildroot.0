@@ -1,37 +1,69 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 05 May 2012 23:52:18 +0200
-Subject: [Buildroot] [PATCH 3/3 v4] configs: add support for PandaBoard
-	and PandaBoard ES
-In-Reply-To: <1332108292-28094-4-git-send-email-n-dechesne@ti.com> (Nicolas
- Dechesne's message of "Sun, 18 Mar 2012 23:04:52 +0100")
-References: <1332108292-28094-1-git-send-email-n-dechesne@ti.com>
- <1332108292-28094-4-git-send-email-n-dechesne@ti.com>
-Message-ID: <87k40qb8j1.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 5 May 2012 23:51:34 +0200
+Subject: [Buildroot] [git commit] configs: add support for PandaBoard and
+	PandaBoard ES
+Message-ID: <20120505215402.CB83390BDF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Dechesne <n-dechesne@ti.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a23351e7be18650b54fe33ac1fef014a364a938a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Nicolas> This is a default configuration for Panda and PandaES, tested on both
- Nicolas> platforms.
+This is a default configuration for Panda and PandaES, tested on both
+platforms.
 
- Nicolas> DEVTMPFS is enabled, to use static dev configuration one would need
- Nicolas> to update the generic dev table for ttyO driver.
+DEVTMPFS is enabled, to use static dev configuration one would need
+to update the generic dev table for ttyO driver.
 
- Nicolas> Panda is well supported in mainline kernel with omap2plus_defconfig,
- Nicolas> so this should be safe.
+Panda is well supported in mainline kernel with omap2plus_defconfig,
+so this should be safe.
 
- Nicolas> U-boot SPL support is enabled by default as x-loader is now
- Nicolas> deprecated.
+U-boot SPL support is enabled by default as x-loader is now
+deprecated.
 
- Nicolas> With OMAP platforms u-boot,img format is prefered now, so it's enabled
- Nicolas> by default as well. Also, on PandaBoard, the name of SPL target file
- Nicolas> is MLO.
+With OMAP platforms u-boot,img format is prefered now, so it's enabled
+by default as well. Also, on PandaBoard, the name of SPL target file
+is MLO.
 
-Committed, thanks.
+Signed-off-by: Nicolas Dechesne <n-dechesne@ti.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ configs/pandaboard_defconfig |   26 ++++++++++++++++++++++++++
+ 1 files changed, 26 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
+new file mode 100644
+index 0000000..9496b7f
+--- /dev/null
++++ b/configs/pandaboard_defconfig
+@@ -0,0 +1,26 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a9=y
++
++# system
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
++
++# filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
++
++# GCC
++BR2_GCC_VERSION_4_6_X=y
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="MLO"
