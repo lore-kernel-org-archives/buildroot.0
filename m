@@ -1,64 +1,84 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 May 2012 00:36:18 +0200
-Subject: [Buildroot] [PATCH] Added the empty package
-In-Reply-To: <1334049334-9276-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Tue, 10 Apr 2012 10:15:34 +0100")
-References: <1334049334-9276-1-git-send-email-spdawson@gmail.com>
-Message-ID: <878vh6b6hp.fsf@macbook.be.48ers.dk>
+From: Dmitry <golubovsky@gmail.com>
+Date: Sat,  5 May 2012 22:05:18 -0400
+Subject: [Buildroot] [PATCH] Add the package read-edid which provides a pair
+	of utilities to read and parse the video monitor information
+	block (EDID).
+Message-ID: <1336269918-24339-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+Signed-off-by: Dmitry <golubovsky@gmail.com>
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in              |    1 +
+ package/read-edid/Config.in    |   16 ++++++++++++++++
+ package/read-edid/read-edid.mk |   20 ++++++++++++++++++++
+ 3 files changed, 37 insertions(+), 0 deletions(-)
+ create mode 100644 package/read-edid/Config.in
+ create mode 100644 package/read-edid/read-edid.mk
 
-I was about to commit this, but noticed a few errors. Care to fix and
-resubmit?
-
- spdawson> new file mode 100644
- spdawson> index 0000000..d15a18f
- spdawson> --- /dev/null
- spdawson> +++ b/package/empty/empty.mk
- spdawson> @@ -0,1 +1,18 @@
-
-I don't know where this first 0,1 comes from, but git am andn patch very
-much dislikes it. I had to change it to to 0,0 to get the patch to
-apply.
-
-
- spdawson> +#############################################################
- spdawson> +#
- spdawson> +# empty
- spdawson> +#
- spdawson> +#############################################################
- spdawson> +EMPTY_VERSION = 0.6.18b
- spdawson> +EMPTY_SOURCE = empty-$(EMPTY_VERSION).tgz
- spdawson> +EMPTY_SITE = http://downloads.sourceforge.net/project/empty/empty/empty-$(EMPTY_VERSION)
- spdawson> +
- spdawson> +define EMPTY_BUILD_CMDS
- spdawson> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-
-variables passed in the environment do not override settings in the
-Makefile (unless ?= is used), so it ends up using my host compiler:
-
-make[1]: Entering directory `/home/peko/source/buildroot/output/build/empty-0.6.18b'
-gcc  -pipe -Os  -Wall -lutil -o empty empty.c
-empty.c: In function ?pidbyppid?:
-empty.c:689:9: warning: array subscript is above array bounds [-Warray-bounds]
-make[1]: Leaving directory `/home/peko/source/buildroot/output/build/empty-0.6.18b'
-
-I suggest you add TARGET_CONFIGURE_OPTS as a make argument instead.
-
- spdawson> +endef
- spdawson> +
- spdawson> +define EMPTY_INSTALL_TARGET_CMDS
- spdawson> +	$(INSTALL) -D $(@D)/empty $(TARGET_DIR)/usr/bin/empty
-
-We normally add explicit -m 0755 for installation of binaries.
-
+diff --git a/package/Config.in b/package/Config.in
+index 6caca9d..94d0fb4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -211,6 +211,7 @@ source "package/openocd/Config.in"
+ source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
++source "package/read-edid/Config.in"
+ source "package/rng-tools/Config.in"
+ source "package/sane-backends/Config.in"
+ source "package/sdparm/Config.in"
+diff --git a/package/read-edid/Config.in b/package/read-edid/Config.in
+new file mode 100644
+index 0000000..465a062
+--- /dev/null
++++ b/package/read-edid/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_READ_EDID
++	bool "read-edid"
++	depends on (BR2_i386)
++	help
++	  Read-edid is  a pair of tools  (originally by John Fremlin)  for reading
++	  the EDID from  a monitor.  It should  work with most monitors made since
++	  1996  (except for newer ones with  256-byte EDID's - WiP),  assuming the
++	  video card  supports  the standard  read commands (most do).   Read-edid
++	  is a set of two tools  -  get-edid, which gets  the raw edid information 
++	  from the monitor, and parse-edid, which turns the raw binary information
++	  into an XF86Config-compatible monitor section.
++
++	  http://polypux.org/projects/read-edid/
++
++
++
+diff --git a/package/read-edid/read-edid.mk b/package/read-edid/read-edid.mk
+new file mode 100644
+index 0000000..6328def
+--- /dev/null
++++ b/package/read-edid/read-edid.mk
+@@ -0,0 +1,20 @@
++############################################
++#
++# read-edid
++# 
++############################################
++
++READ_EDID_VERSION = 1.4.2
++READ_EDID_SITE = http://www.polypux.org/projects/read-edid/
++
++define READ_EDID_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define READ_EDID_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/get-edid $(TARGET_DIR)/sbin/get-edid
++	$(INSTALL) -D -m 0755 $(@D)/parse-edid $(TARGET_DIR)/sbin/parse-edid
++endef
++
++$(eval $(call AUTOTARGETS))
++
 -- 
-Bye, Peter Korsgaard
+1.7.2.5
