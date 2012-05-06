@@ -1,21 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 May 2012 20:09:22 +0200
-Subject: [Buildroot] [PATCH 1/6] dhcp: needs MMU
-In-Reply-To: <1333635427-24526-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 5 Apr 2012 11:17:02 -0300")
-References: <1333635427-24526-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874nrt9o6l.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 6 May 2012 20:08:53 +0200
+Subject: [Buildroot] [git commit] rsync: needs MMU
+Message-ID: <20120506180941.BD0258F738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=2daf2de6e1a0a8807cd09b2f85dd1c998d022947
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/rsync/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed all 6, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rsync/Config.in b/package/rsync/Config.in
+index 0f33774..be95a7c 100644
+--- a/package/rsync/Config.in
++++ b/package/rsync/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_RSYNC
+ 	bool "rsync"
++	# fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  File transfer program to keep remote files in sync.
+ 
