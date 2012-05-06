@@ -1,30 +1,27 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 06 May 2012 14:46:37 +0200
-Subject: [Buildroot] [Bug 5186] New: initramfs/cpio should support lzo
- compression
-In-Reply-To: <bug-5186-163@https.bugs.busybox.net/>
-References: <bug-5186-163@https.bugs.busybox.net/>
-Message-ID: <4FA672AD.2030905@mind.be>
+Date: Sun, 06 May 2012 15:00:29 +0200
+Subject: [Buildroot] Add the package read-edid...
+In-Reply-To: <CADiAo4+3-kQ8tLQHAHzaF7ceXfewiyqvQ7o0E6CY1AcYBmVEEg@mail.gmail.com>
+References: <CADiAo4+3-kQ8tLQHAHzaF7ceXfewiyqvQ7o0E6CY1AcYBmVEEg@mail.gmail.com>
+Message-ID: <4FA675ED.7070403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/05/12 17:13, bugzilla at busybox.net wrote:
-> Created attachment 4340
->    -->  https://bugs.busybox.net/attachment.cgi?id=4340
-> cpio lzo support
->
-> Linux supports lzo compression for the initramfs image nowadays, so it would be
-> nice if buildroot did as well
-There should be a variable $(LZOP) and a dependency on host-lzop, just like for lzma.  lzop is not a package that you 
-can expect to be available on the host.
+On 05/06/12 14:43, Dimitry Golubovsky wrote:
+> Which whitespace do you mean? Extra whitespaces as I justified the
+> help text by both edges? Or was this some extra whitespace in header?
+
+  Help text should be wrapped at 75 characters (where the initial tab
+counts as 8 characters).
+
+  Regarding justifying the help text: I'm not sure if it looks good in
+the gconfig and xconfig interfaces.
 
   Regards,
   Arnout
-
-  PS What's the policy for reacting to patches posted on bugzilla?
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
