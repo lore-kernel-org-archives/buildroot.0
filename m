@@ -1,31 +1,23 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 May 2012 20:08:47 +0200
-Subject: [Buildroot] [git commit] dhcp: needs MMU
-Message-ID: <20120506180941.7639F8F738@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 May 2012 22:44:24 +0200
+Subject: [Buildroot] [PATCH v6 RESEND] busybox: add watchdog daemon
+	startup script
+In-Reply-To: <1336132933-27720-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Fri, 4 May 2012 14:02:13 +0200")
+References: <1336132933-27720-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87zk9l82fr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=87657aaabc9d67f642ac668dcd08a20ee3e826f4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dhcp/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ Fabio> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ Fabio> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index 2245839..38cf007 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_DHCP
- 	bool "isc dhcp"
-+	# fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  DHCP relay agent from the ISC DHCP distribution.
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
