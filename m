@@ -1,31 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 May 2012 20:08:51 +0200
-Subject: [Buildroot] [git commit] ncftp: needs MMU
-Message-ID: <20120506180941.A90F38F738@busybox.osuosl.org>
+Date: Sun, 6 May 2012 20:08:49 +0200
+Subject: [Buildroot] [git commit] openntpd: needs MMU
+Message-ID: <20120506180941.83ADD8F738@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3aabcc997d13664da8e0fd4fd41636a82422e8b
+commit: http://git.buildroot.net/buildroot/commit/?id=ddc3aade64bd5f9fc8cf0a02c5f429b805b40954
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ncftp/Config.in |    2 ++
+ package/openntpd/Config.in |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/ncftp/Config.in b/package/ncftp/Config.in
-index 7b6ae64..4aaa62d 100644
---- a/package/ncftp/Config.in
-+++ b/package/ncftp/Config.in
+diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
+index 32d0d8b..4dd9a29 100644
+--- a/package/openntpd/Config.in
++++ b/package/openntpd/Config.in
 @@ -1,5 +1,7 @@
- config BR2_PACKAGE_NCFTP
- 	bool "ncftp"
+ config BR2_PACKAGE_OPENNTPD
+ 	bool "openntpd"
 +	# fork()
 +	depends on BR2_USE_MMU
  	help
- 	  NcFTP Client (also known as just NcFTP) is a set of FREE application
- 	  programs implementing the File Transfer Protocol (FTP).
+ 	  OpenNTPD is an easy to use implementation of the Network Time
+ 	  Protocol. It provides the ability to sync the local clock
