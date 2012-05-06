@@ -1,31 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 May 2012 16:36:10 +0200
-Subject: [Buildroot] Add the package read-edid...
-In-Reply-To: <CADiAo4+3-kQ8tLQHAHzaF7ceXfewiyqvQ7o0E6CY1AcYBmVEEg@mail.gmail.com>
- (Dimitry Golubovsky's message of "Sun, 6 May 2012 08:43:41 -0400")
-References: <CADiAo4+3-kQ8tLQHAHzaF7ceXfewiyqvQ7o0E6CY1AcYBmVEEg@mail.gmail.com>
-Message-ID: <87ipg99y1x.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  6 May 2012 16:56:09 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.05/fix-libfcgi
+Message-ID: <cover.1336316166.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dimitry" == Dimitry Golubovsky <golubovsky@gmail.com> writes:
+The following changes since commit ed7b3362ad6dc33899766c803bba51240111aa43:
 
- Dimitry> Peter,
- Dimitry> On Sun, May 6, 2012 at 4:00 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+  valgrind: fix build on PowerPC/uClibc (2012-05-06 11:49:19 +0200)
 
- >> ?Dmitry> ?package/read-edid/read-edid.mk | ? 20 ++++++++++++++++++++
- Dimitry> ...
- >> 
- >> I've fixed up these whitespace issues and committed, thanks.
+are available in the git repository at:
 
- Dimitry> Which whitespace do you mean? Extra whitespaces as I justified the
- Dimitry> help text by both edges? Or was this some extra whitespace in header?
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/fix-libfcgi
 
-Yes, in the help text and empty lines at the bottom of Config.in /
-read-edid.mk. Please don't justify the help text.
+for you to fetch changes up to 15397c627335fa50a090bd518b07bbf0b37ab47b:
 
+  libfcgi: fix build problem of libfcgi++ (2012-05-06 16:54:35 +0200)
+
+----------------------------------------------------------------
+Thomas Petazzoni (1):
+      libfcgi: fix build problem of libfcgi++
+
+ .../libfcgi/libfcgi-link-against-libfcgi-la.patch  |   20 ++++++
+ package/libfcgi/libfcgi-link-against-math.patch    |   28 ++++++++
+ package/libfcgi/libfcgi-make-autoreconfable.patch  |   67 ++++++++++++++++++++
+ package/libfcgi/libfcgi.mk                         |    2 +-
+ 4 files changed, 116 insertions(+), 1 deletion(-)
+ create mode 100644 package/libfcgi/libfcgi-link-against-libfcgi-la.patch
+ create mode 100644 package/libfcgi/libfcgi-link-against-math.patch
+ create mode 100644 package/libfcgi/libfcgi-make-autoreconfable.patch
+
+Thanks,
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni
