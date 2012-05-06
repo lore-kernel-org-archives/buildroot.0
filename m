@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 06 May 2012 17:39:36 +0200
-Subject: [Buildroot] [PATCH 1/1] libfcgi: fix build problem of libfcgi++
-In-Reply-To: <15397c627335fa50a090bd518b07bbf0b37ab47b.1336316166.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 6 May 2012 16:56:10 +0200")
-References: <cover.1336316166.git.thomas.petazzoni@free-electrons.com>
- <cover.1336316166.git.thomas.petazzoni@free-electrons.com>
- <15397c627335fa50a090bd518b07bbf0b37ab47b.1336316166.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87ehqx9v47.fsf@macbook.be.48ers.dk>
+Date: Sun, 06 May 2012 17:39:52 +0200
+Subject: [Buildroot] [PATCH 1/1] gettext: fix build on !thread toolchains
+In-Reply-To: <045b0f2f0b53edbc30d7f42e157488a5d18f52e8.1336318433.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 May 2012 17:33:56 +0200")
+References: <cover.1336318433.git.thomas.petazzoni@free-electrons.com>
+ <cover.1336318433.git.thomas.petazzoni@free-electrons.com>
+ <045b0f2f0b53edbc30d7f42e157488a5d18f52e8.1336318433.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87aa1l9v3r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +15,8 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Fix the way libfcgi++ is linked against libfcgi to solve the
- Thomas> http://autobuild.buildroot.org/results/f8e88e93f32e4e94ac9aef5a3f3f2826f1970453/build-end.log
- Thomas> build problem.
+ Thomas> Fixes the build visible at
+ Thomas> http://autobuild.buildroot.org/results/0a14bf7c4ae145a9731118d9565e52d0bf70732d/build-end.log.
 
 Committed, thanks.
 
