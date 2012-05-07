@@ -1,96 +1,52 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 7 May 2012 16:08:08 +0200
-Subject: [Buildroot] [PATCH] New: add lava-test package
-In-Reply-To: <4F9ABCD4.4050400@atmel.com>
-References: <CAGm1_ktsb3D_jPdLO44bXeKU3CMXOEfDM1o2Ham10tecAGxO3g@mail.gmail.com>
- <1335539086-10206-1-git-send-email-ludovic.desroches@atmel.com>
- <4F9AB75A.8040607@visionsystems.de> <4F9ABCD4.4050400@atmel.com>
-Message-ID: <CAGm1_kvzhyHAxOxWkj3FtaJ6LqCSR3XgFR1PujbEU1aB_MaWMg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 May 2012 16:21:39 +0200
+Subject: [Buildroot] [PATCH 0/3] Add CONF_ENABLE and CONF_PKG_ENABLE
+ helper functions
+In-Reply-To: <1335647781-16536-1-git-send-email-arnout@mind.be>
+References: <1335647781-16536-1-git-send-email-arnout@mind.be>
+Message-ID: <20120507162139.44a814e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 27, 2012 at 5:35 PM, Ludovic Desroches
-<ludovic.desroches@atmel.com> wrote:
-> Le 04/27/2012 05:12 PM, Yegor Yefremov a ?crit :
->
->> Am 27.04.2012 17:04, schrieb ludovic.desroches at atmel.com:
->>>
->>> From: Ludovic Desroches<ludovic.desroches@atmel.com>
->>>
->>> Signed-off-by: Ludovic Desroches<ludovic.desroches@atmel.com>
->>> ---
->>> ?package/Config.in ? ? ? ? ? ? ?| ? ?1 +
->>> ?package/lava-test/Config.in ? ?| ? ?8 ++++++++
->>> ?package/lava-test/lava-test.mk | ? 11 +++++++++++
->>> ?3 files changed, 20 insertions(+), 0 deletions(-)
->>> ?create mode 100644 package/lava-test/Config.in
->>> ?create mode 100644 package/lava-test/lava-test.mk
->>>
->>> diff --git a/package/Config.in b/package/Config.in
->>> index 3e5f708..79f9aaf 100644
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -22,6 +22,7 @@ source "package/dhrystone/Config.in"
->>> ?source "package/dstat/Config.in"
->>> ?source "package/dmalloc/Config.in"
->>> ?source "package/kexec/Config.in"
->>> +source "package/lava-test/Config.in"
->>> ?source "package/lmbench/Config.in"
->>> ?source "package/lsof/Config.in"
->>> ?source "package/ltp-testsuite/Config.in"
->>> diff --git a/package/lava-test/Config.in b/package/lava-test/Config.in
->>> new file mode 100644
->>> index 0000000..d13dfd7
->>> --- /dev/null
->>> +++ b/package/lava-test/Config.in
->>> @@ -0,0 +1,8 @@
->>> +config BR2_PACKAGE_LAVA_TEST
->>> + ? ? ? bool "lava-test"
->>> + ? ? ? help
->>> + ? ? ? ? LAVA Test is a test execution framework designed to make it
->>> easy to
->>> + ? ? ? ?install and run supported tests. Results from testing can be
->>> + ? ? ? ?optionally uploaded to a dashboard running lava-dashboard.
->>> +
->>> + ? ? ? ?https://launchpad.net/lava-test
->>> diff --git a/package/lava-test/lava-test.mk
->>> b/package/lava-test/lava-test.mk
->>> new file mode 100644
->>> index 0000000..f6df4a2
->>> --- /dev/null
->>> +++ b/package/lava-test/lava-test.mk
->>> @@ -0,0 +1,11 @@
->>> +LAVA_TEST_VERSION = 0.7
->>> +LAVA_TEST_SOURCE = lava-test-$(LAVA_TEST_VERSION)-2012.04.tar.gz
->>> +LAVA_TEST_SITE =
->>> https://launchpad.net/lava-test/trunk/2012.04/+download/
->>> +LAVA_TEST_DEPENDENCIES = python-setuptools
->>> +
->>> +define LAVA_TEST_INSTALL_TARGET_CMDS
->>> + ?(cd $(@D);
->>> PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
->>> + ?$(HOST_DIR)/usr/bin/python setup.py install
->>> --prefix=$(TARGET_DIR)/usr)
->>> +endef
->>> +
->>> +$(eval $(call GENTARGETS))
->>
->>
->> Thank you for the patch. I'll look at it next week.
->>
->> Yegor
->>
->>
->
-> Ok, thanks.
+Hello Arnout,
 
-Unfortunately I found no solution so far. I described our problem
-here: https://groups.google.com/d/topic/comp.lang.python/0rDWl2d8PDY/discussion
-and I hope someone will point to a solution. I looked here, but found
-no mention about python executable path:
-http://docs.python.org/install/index.html.
+Le Sat, 28 Apr 2012 23:16:18 +0200,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-Yegor
+>  Many packages have the following type of construct:
+> 
+> ifeq ($(BR2_PACKAGE_ACL),y)
+>        SYSTEMD_CONF_OPT += --enable-acl
+>        SYSTEMD_DEPENDENCIES += acl
+> else
+>        SYSTEMD_CONF_OPT += --disable-acl
+> endif
+> 
+>  The first patch in this series abbreviates that to
+> 
+> $(eval $(call CONF_PKG_ENABLE,SYSTEMD,acl))
+> 
+>  It makes it possible to abbreviate similar constructs as well.
+
+Thanks for working on this and making a proposal.
+
+However, on my side, I am not yet convinced that this is actually
+making things better than what we have now. What we have now is quite
+obvious for the first-time reader, which is very good. Those
+CONF_PKG_ENABLE and CONF_ENABLE macros make things a bit too cryptic
+from my point of view. This is not an absolutely strong opinion, but I
+have the feeling this is on the "we want to make things smaller/shorter
+and end up making things cryptic" side of the trade-off. Of course,
+others have to comment to share their views on this.
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
