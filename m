@@ -1,350 +1,206 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 May 2012 21:43:16 +0200
-Subject: [Buildroot] [git commit] BeagleBone: new board
-Message-ID: <20120507194543.297A296C5A@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon,  7 May 2012 22:10:21 +0200
+Subject: [Buildroot] [PATCH v3 00/22] Automatically produce legal compliance
+	info
+Message-ID: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ab997142bf97d0050ee9151a6f08135909270d5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This configuration provides a basic setup for using Buildroot
-to create all of the images needed for a BeagleBone.
+here is the third version of the legal-info feature implementation.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- board/beaglebone/linux-3.2.9.config                |  252 ++++++++++++++++++++
- ....h-Specify-ext2-and-ro-for-booting-rootfs.patch |   31 +++
- configs/beaglebone_defconfig                       |   25 ++
- 3 files changed, 308 insertions(+), 0 deletions(-)
+For the records, previous versions are here:
+v1: http://lists.busybox.net/pipermail/buildroot/2012-January/049590.html
+v2: http://lists.busybox.net/pipermail/buildroot/2012-March/051132.html
 
-diff --git a/board/beaglebone/linux-3.2.9.config b/board/beaglebone/linux-3.2.9.config
-new file mode 100644
-index 0000000..4052f6e
---- /dev/null
-+++ b/board/beaglebone/linux-3.2.9.config
-@@ -0,0 +1,252 @@
-+CONFIG_EXPERIMENTAL=y
-+# CONFIG_LOCALVERSION_AUTO is not set
-+CONFIG_DEFAULT_HOSTNAME="beaglebone"
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_BSD_PROCESS_ACCT=y
-+CONFIG_BSD_PROCESS_ACCT_V3=y
-+CONFIG_FHANDLE=y
-+CONFIG_SPARSE_IRQ=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_NAMESPACES=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_SYSCTL_SYSCALL=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_EMBEDDED=y
-+CONFIG_SLAB=y
-+CONFIG_PROFILING=y
-+CONFIG_OPROFILE=m
-+CONFIG_MODULES=y
-+CONFIG_MODULE_FORCE_LOAD=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODULE_FORCE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_BLK_DEV_INTEGRITY=y
-+CONFIG_ARCH_OMAP=y
-+CONFIG_OMAP_MUX_DEBUG=y
-+CONFIG_OMAP_MBOX_FWK=y
-+# CONFIG_OMAP_32K_TIMER is not set
-+# CONFIG_MACH_OMAP_GENERIC is not set
-+# CONFIG_ARCH_OMAP2 is not set
-+# CONFIG_ARCH_OMAP4 is not set
-+# CONFIG_SOC_OMAP3430 is not set
-+# CONFIG_MACH_OMAP3_BEAGLE is not set
-+# CONFIG_MACH_DEVKIT8000 is not set
-+# CONFIG_MACH_OMAP_LDP is not set
-+# CONFIG_MACH_OMAP3530_LV_SOM is not set
-+# CONFIG_MACH_OMAP3_TORPEDO is not set
-+# CONFIG_MACH_ENCORE is not set
-+# CONFIG_MACH_OVERO is not set
-+# CONFIG_MACH_OMAP3EVM is not set
-+# CONFIG_MACH_OMAP3517EVM is not set
-+# CONFIG_MACH_OMAP3_PANDORA is not set
-+# CONFIG_MACH_OMAP3_TOUCHBOOK is not set
-+# CONFIG_MACH_OMAP_3430SDP is not set
-+# CONFIG_MACH_NOKIA_RM680 is not set
-+# CONFIG_MACH_NOKIA_RX51 is not set
-+# CONFIG_MACH_OMAP_ZOOM2 is not set
-+# CONFIG_MACH_OMAP_ZOOM3 is not set
-+# CONFIG_MACH_CM_T35 is not set
-+# CONFIG_MACH_CM_T3517 is not set
-+# CONFIG_MACH_IGEP0020 is not set
-+# CONFIG_MACH_IGEP0030 is not set
-+# CONFIG_MACH_SBC3530 is not set
-+# CONFIG_MACH_OMAP_3630SDP is not set
-+# CONFIG_MACH_TI8168EVM is not set
-+# CONFIG_MACH_TI8148EVM is not set
-+# CONFIG_MACH_AM335XIAEVM is not set
-+CONFIG_OMAP3_EDMA=y
-+CONFIG_ARM_THUMBEE=y
-+CONFIG_ARM_ERRATA_430973=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_THUMB2_KERNEL=y
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+CONFIG_CMDLINE=" debug "
-+CONFIG_AUTO_ZRELADDR=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_STAT_DETAILS=y
-+CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-+CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
-+CONFIG_BINFMT_MISC=y
-+# CONFIG_SUSPEND is not set
-+CONFIG_PM_DEBUG=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_XFRM_USER=y
-+CONFIG_NET_KEY=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_RFKILL_REGULATOR=m
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_CONNECTOR=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_COUNT=2
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+CONFIG_MISC_DEVICES=y
-+CONFIG_BMP085=m
-+CONFIG_EEPROM_AT24=y
-+CONFIG_EEPROM_93CX6=m
-+CONFIG_SENSORS_LIS3_I2C=y
-+CONFIG_NETDEVICES=y
-+CONFIG_MII=y
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CHELSIO is not set
-+# CONFIG_NET_VENDOR_FARADAY is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_STMICRO is not set
-+CONFIG_TI_CPSW=y
-+CONFIG_SMSC_PHY=y
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_MOUSEDEV is not set
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_KEYBOARD_ATKBD is not set
-+CONFIG_KEYBOARD_GPIO=y
-+# CONFIG_MOUSE_PS2 is not set
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_AD714X=m
-+CONFIG_INPUT_BMA150=m
-+CONFIG_INPUT_MMA8450=m
-+CONFIG_INPUT_MPU3050=m
-+CONFIG_INPUT_ATI_REMOTE2=m
-+CONFIG_INPUT_KEYSPAN_REMOTE=m
-+CONFIG_INPUT_KXTJ9=m
-+CONFIG_INPUT_POWERMATE=m
-+CONFIG_INPUT_YEALINK=m
-+CONFIG_INPUT_CM109=m
-+CONFIG_INPUT_TWL4030_PWRBUTTON=y
-+CONFIG_INPUT_TWL4030_VIBRA=m
-+CONFIG_INPUT_TWL6040_VIBRA=m
-+CONFIG_INPUT_UINPUT=m
-+CONFIG_INPUT_PCF8574=m
-+CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
-+CONFIG_INPUT_ADXL34X=m
-+CONFIG_INPUT_CMA3000=m
-+CONFIG_INPUT_CMA3000_I2C=m
-+# CONFIG_SERIO is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+# CONFIG_LEGACY_PTYS is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_NR_UARTS=32
-+CONFIG_SERIAL_8250_EXTENDED=y
-+CONFIG_SERIAL_8250_MANY_PORTS=y
-+CONFIG_SERIAL_8250_SHARE_IRQ=y
-+CONFIG_SERIAL_8250_DETECT_IRQ=y
-+CONFIG_SERIAL_8250_RSA=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_RAW_DRIVER=m
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_SPI=y
-+CONFIG_SPI_GPIO=m
-+CONFIG_SPI_OMAP24XX=y
-+CONFIG_SPI_SPIDEV=m
-+CONFIG_DEBUG_GPIO=y
-+CONFIG_GPIO_SYSFS=y
-+CONFIG_GPIO_TWL4030=y
-+CONFIG_GENERIC_PWM=y
-+CONFIG_DAVINCI_EHRPWM=y
-+CONFIG_ECAP_PWM=y
-+CONFIG_POWER_SUPPLY=y
-+# CONFIG_HWMON is not set
-+CONFIG_WATCHDOG=y
-+CONFIG_OMAP_WATCHDOG=y
-+CONFIG_TWL4030_WATCHDOG=y
-+CONFIG_MFD_TPS65217=y
-+CONFIG_REGULATOR_DUMMY=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_VIRTUAL_CONSUMER=y
-+CONFIG_REGULATOR_USERSPACE_CONSUMER=y
-+CONFIG_REGULATOR_GPIO=y
-+CONFIG_REGULATOR_TWL4030=y
-+CONFIG_REGULATOR_TPS65023=y
-+CONFIG_REGULATOR_TPS6507X=y
-+CONFIG_REGULATOR_TPS65217=y
-+CONFIG_DISPLAY_SUPPORT=y
-+CONFIG_HIDRAW=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_DEVICEFS=y
-+CONFIG_USB_MUSB_HDRC=y
-+CONFIG_USB_MUSB_TI81XX_GLUE=y
-+CONFIG_USB_TI_CPPI41_DMA_HW=y
-+CONFIG_USB_ACM=y
-+CONFIG_USB_LIBUSUAL=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_GADGET_MUSB_HDRC=y
-+CONFIG_USB_ETH=m
-+CONFIG_USB_MASS_STORAGE=m
-+CONFIG_USB_G_SERIAL=m
-+CONFIG_USB_CDC_COMPOSITE=m
-+CONFIG_USB_G_MULTI=m
-+CONFIG_USB_G_HID=m
-+CONFIG_MMC=y
-+CONFIG_MMC_UNSAFE_RESUME=y
-+CONFIG_MMC_OMAP_HS=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_TIMER=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_LEDS_TRIGGER_BACKLIGHT=y
-+CONFIG_LEDS_TRIGGER_GPIO=y
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
-+CONFIG_UIO=m
-+CONFIG_UIO_PDRV=m
-+CONFIG_UIO_PDRV_GENIRQ=m
-+CONFIG_UIO_PRUSS=m
-+CONFIG_STAGING=y
-+CONFIG_IIO=y
-+CONFIG_IIO_BUFFER=y
-+CONFIG_IIO_SW_RING=y
-+CONFIG_IIO_KFIFO_BUF=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_PM_DEVFREQ=y
-+CONFIG_DEVFREQ_GOV_USERSPACE=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_FANOTIFY=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DETECT_HUNG_TASK=y
-+CONFIG_SCHEDSTATS=y
-+CONFIG_TIMER_STATS=y
-+# CONFIG_DEBUG_BUGVERBOSE is not set
-+# CONFIG_FTRACE is not set
-+CONFIG_DEBUG_LL=y
-+CONFIG_EARLY_PRINTK=y
-+CONFIG_DEBUG_JTAG_ENABLE=y
-+# CONFIG_CRYPTO_ANSI_CPRNG is not set
-+# CONFIG_CRYPTO_HW is not set
-diff --git a/board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch b/board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch
-new file mode 100644
-index 0000000..dfbccf5
---- /dev/null
-+++ b/board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch
-@@ -0,0 +1,31 @@
-+From c8aae8c96494132759319b0eab6cd2a51d1d4889 Mon Sep 17 00:00:00 2001
-+From: Frank Hunleth <fhunleth@troodon-software.com>
-+Date: Tue, 6 Mar 2012 07:20:26 -0800
-+Subject: [PATCH] am335x_evm.h: Specify ext2 and ro for booting rootfs
-+
-+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-+---
-+ include/configs/am335x_evm.h |    4 ++--
-+ 1 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/include/configs/am335x_evm.h b/include/configs/am335x_evm.h
-+index e0ac494..b45c306 100755
-+--- a/include/configs/am335x_evm.h
-++++ b/include/configs/am335x_evm.h
-+@@ -53,11 +53,11 @@
-+ 	"script_addr=0x81900000\0" \
-+ 	"console=ttyO0,115200n8\0" \
-+ 	"mmc_dev=0\0" \
-+-	"mmc_root=/dev/mmcblk0p2 rw\0" \
-++	"mmc_root=/dev/mmcblk0p2 ro\0" \
-+ 	"nand_root=ubi0:rootfs rw ubi.mtd=7,2048\0" \
-+ 	"spi_root=/dev/mtdblock4 rw\0" \
-+ 	"nor_root=/dev/mtdblock3 rw\0" \
-+-	"mmc_root_fs_type=ext3 rootwait\0" \
-++	"mmc_root_fs_type=ext2 rootwait\0" \
-+ 	"nand_root_fs_type=ubifs rootwait=1\0" \
-+ 	"spi_root_fs_type=jffs2\0" \
-+ 	"nor_root_fs_type=jffs2\0" \
-+-- 
-+1.7.4.1
-+
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-new file mode 100644
-index 0000000..4670bd4
---- /dev/null
-+++ b/configs/beaglebone_defconfig
-@@ -0,0 +1,25 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
-+# BR2_SOFT_FLOAT is not set
-+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/beaglebone"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://arago-project.org/git/projects/u-boot-am33x.git"
-+BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="v2011.09_AM335xPSP_04.06.00.06"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.2.9.config"
+The approach is based on two per-package constants in eack .mk file, such as:
+  FOO_LICENSE = GPLv2+
+  FOO_LICENSE_FILES = COPYING
+  BAR_LICENSE = LGPLv2.1 + GPLv3
+  BAR_LICENSE_FILES = COPYING.LGPL demo-app/COPYING.GPL3
+  MYAPP_LICENSE = PROPRIETARY
+This is the only effort required to the package creator. If <PKG>_LICENSE is
+not specified it defaults to "unknown".
+
+After running 'make legal-info', the following things will be produced in
+$(O)/legal-info/:
+  $ find legal-info/ -type f
+  legal-info/README            # Lists saved stuff, warns about unsaved stuff
+  legal-info/licenses.txt      # Text of all licenses
+  legal-info/buildroot.config  # The buildroot config
+  legal-info/licenses/buildroot/COPYING       # License files, one dir per pkg
+  legal-info/licenses/busybox/LICENSE
+  legal-info/licenses/...other packages...
+  legal-info/manifest.csv                     # CSV table summarizing all info
+  legal-info/sources/busybox-1.19.4.tar.bz2   # tarballs
+  legal-info/sources/kmod-5.tar.xz
+  legal-info/sources/libtool-2.2.10.tar.gz
+  legal-info/sources/...other packages...
+
+Given the technical difficulties, the toolchain and the BR sources are not
+saved. Warnings are generated to make sure the user is aware of this.
+
+One of the issues raised about the previous patchset was about packages
+without a license file, such as jpeg or fbset. These usually declare their
+license in a comment at the top of one or more source files.
+
+Yann E. Morin suggested to solve this problem in a general way implementing a
+_LICENSE_HOOK that does whatever is needed to copy the license.
+I found the idea good and started implementing it, but I did not reach
+anything decently structured yet. As I don't want to further delay the basic
+work, I chose to postpone this feature to a later step.
+
+
+License compliance advice to users
+==================================
+
+During the latest Buildroot Developer Day in February, a request was made to
+give an advice from Buildroot developers' to Buildroot users about how to
+comply with both Buildroot's and the packages' licenses.
+This is added to the manual in patch 9. Of course this must match as much as
+possible what the developers think, so please read it and give comments!
+
+
+Possible future improvements
+============================
+
+These are left as future enhancemenst, after the merge of the first core
+functionality, in order to keep it as simple as possible for a first step.
+
+- The toolchain is not currently saved (internal, external, ct-NG, no
+  discrimination). Actually, only GENTARGETS-based packages are handled, so the
+  best approach might be to "simply" migrate the toolchains to GENTARGETS.
+
+- Save the Buildroot sources too. If the sources are not a git clone this might
+  be as simple as tar of the current directory and exclude dl and output, but
+  this has never been tested. Also, make sure this works for out-of-tree BR
+  builds.
+
+- Add a hook for a post-legal-info script.
+
+- Add a <PKG>_LICENSE_HOOK for packages without a license file.
+
+
+Changelog
+=========
+
+Changed in v3:
+- moved the $(1)-legal-info target near the end of GENTARGETS_INNER, out of the
+  may of target sequencing where it used to be in the previous patch sets;
+- improved readability by creating a set of functions to produce a warning,
+  to add a line to the csv, etc as suggested by ThomasDS (this made the core
+  code shorter and cleaner);
+- clarified the BSD-like licenses, differentiating 2/3/4 clauses and others;
+- clarified *GPL licenses, and dropped definitions for packages that do not
+  have a clear and simple use of those licenses (tslib, busybox, qt);
+- dropped warning patches for tinyhttpd, xfsprogs, microperl, fis, doom-wads,
+  uemacs and cups which have now been converted to GEN/AUTOTARGETS;
+- updated after the split of Makefile.package.in in pkg-*.mk and related
+  cleanups;
+- added a few lines of explanation in the message of the first big commit that
+  implements all the logic;
+- documented the legal-info stuff in the manual;
+- added (tentative) advice about Buildroot license compliance;
+- various improvements here and there.
+
+Changed in v2:
+- squashed together patches 1-4 from RFC v1; now all the legal-info mechanism
+  is implmented in a unique patch.
+- rebase on top of current master
+- don't clean $(REDIST_SOURCES_DIR): it is a subdir of $(LEGAL_INFO_DIR), so
+  doesn't need to be cleaned twice
+- added legal-info-clean target
+- made legal-info target .PHONY
+- remove the output/legal-info dir before populating it
+- when saving source tarballs, create hardlinks instead of copies if possible
+- add infrastructure to warn the user about info that has not been saved: a
+  .warnings file is filled with such info and displayed to the user at the
+  end of the legal-info processing
+- ensure manual (non-GENTARGETS-based) packages return error, at least; this
+  required to explicitly create a -legal-info target for each of them, or
+  they would have been silently skipped.
+- list also Buildroot in the manifest file! :)
+- save the Buildroot .config
+- save license files listed in <PKG>_LICENSE_FILES, both in a separate
+  directory for each package and all together in a unique file
+- various cleanups.
+
+Patches
+=======
+
+- The implementation is all in the first commit, which is commented on its
+  own.
+- A few patches follow to make non-GENTARGETS packages warn about their
+  dumbness.
+- A couple of patches add documentation about the legal-info stuff.
+- Other commits define licenses for some packages.
+
+The following changes since commit 057c729c2438107b426576121bcf83f792734a6f:
+
+  external-toolchain: add support for Linaro 2012.04 (2012-05-07 17:08:37 +0200)
+
+are available in the git repository at:
+  git://github.com/lucaceresoli/buildroot.git legal-info
+
+Luca Ceresoli (22):
+  legal-info: infrastructure to collect legally-relevant material
+  gettext: warn that legal-info is not implemented
+  netkitbase: warn that legal-info is not implemented
+  netkittelnet: warn that legal-info is not implemented
+  newt: warn that legal-info is not implemented
+  ttcp: warn that legal-info is not implemented
+  vpnc: warn that legal-info is not implemented
+  manual: document usage of the legal-info feature
+  manual: add advice about GPL compliance for Buildroot
+  linux: define license
+  m4: define license
+  mpc: define license
+  fakeroot: define license
+  bzip2: define license
+  directfb: define license
+  iostat: define license
+  lzo: define license
+  lzop: define license
+  libusb: define license
+  pcre: define license
+  netsnmp: define license
+  berkeleydb: define license
+
+ Makefile                                   |   42 +++++++++-
+ docs/manual/adding-packages-gentargets.txt |   18 ++++
+ docs/manual/using.txt                      |  127 ++++++++++++++++++++++++++++
+ linux/linux.mk                             |    2 +
+ package/berkeleydb/berkeleydb.mk           |    2 +
+ package/bzip2/bzip2.mk                     |    2 +
+ package/directfb/directfb.mk               |    2 +
+ package/fakeroot/fakeroot.mk               |    2 +
+ package/gettext/gettext.mk                 |    3 +
+ package/iostat/iostat.mk                   |    2 +
+ package/libusb/libusb.mk                   |    2 +
+ package/lzo/lzo.mk                         |    2 +
+ package/lzop/lzop.mk                       |    2 +
+ package/m4/m4.mk                           |    2 +
+ package/mpc/mpc.mk                         |    2 +
+ package/netkitbase/netkitbase.mk           |    3 +
+ package/netkittelnet/netkittelnet.mk       |    3 +
+ package/netsnmp/netsnmp.mk                 |    2 +
+ package/newt/newt.mk                       |    3 +
+ package/pcre/pcre.mk                       |    2 +
+ package/pkg-gentargets.mk                  |   65 ++++++++++++++
+ package/pkg-utils.mk                       |   25 ++++++
+ package/ttcp/ttcp.mk                       |    3 +
+ package/vpnc/vpnc.mk                       |    3 +
+ support/legal-info/README.header           |   24 +++++
+ support/legal-info/README.warnings-header  |    4 +
+ 26 files changed, 346 insertions(+), 3 deletions(-)
+ create mode 100644 support/legal-info/README.header
+ create mode 100644 support/legal-info/README.warnings-header
+
+Luca
+
+-- 
+1.7.5.4
