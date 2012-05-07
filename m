@@ -1,41 +1,58 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 May 2012 22:17:01 +0200
-Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.3.5
-Message-ID: <20120507201749.25E2D96C5A@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon,  7 May 2012 22:32:02 +0200
+Subject: [Buildroot] [PATCH v5 0/2] u-boot additions for OMAP processors
+Message-ID: <1336422724-7384-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6dbdf34629d0b0b139bf8962ce982fb9dba842c9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+here's a resubmit (plus Arnout's Acked-by tag) of my previously-sent patches.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 59ba6d3..148b858 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_3
- 
- config BR2_LINUX_KERNEL_3_3
--	bool "3.3.4"
-+	bool "3.3.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3.4" if BR2_LINUX_KERNEL_3_3
-+	default "3.3.5" if BR2_LINUX_KERNEL_3_3
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Changed in v5:
+ - Added Arnout's Acked-by tag.
+
+Changed in v4:
+ - more verbose help text for config options;
+ - remove unneeded ifeq around the definition for UBOOT_BIN_IFT;
+ - produce an error message if the user-specified cfg file does not exist;
+ - use http URL, for helping people whose firewalls block git;
+ - do not skip installation if the files are already installed.
+
+New in v3:
+ - update to the user-visible host packages policy discussed in
+   mailing-list (Config.in.host etc) and listed in the Host Tools menu
+ - update to current GENTARGETS infrastructure
+ - bump to the latest git snapshot, which fixes compilation with host gcc 4.6
+
+New in v2:
+ - xxx_SOURCE is useless with the git download method, remove it;
+ - OMAP_U_BOOT_UTILS_TARGETS is used only once, hardcoded it.
+
+Luca
+
+The following changes since commit 057c729c2438107b426576121bcf83f792734a6f:
+
+  external-toolchain: add support for Linaro 2012.04 (2012-05-07 17:08:37 +0200)
+
+are available in the git repository at:
+  git://github.com/lucaceresoli/buildroot.git omap-u-boot-utils
+
+Luca Ceresoli (2):
+  omap-u-boot-utils: add new host package
+  u-boot: build signed image for OMAP processors
+
+ boot/uboot/Config.in                           |   32 ++++++++++++++++++++++++
+ boot/uboot/uboot.mk                            |   25 ++++++++++++++++++
+ package/Config.in.host                         |    1 +
+ package/omap-u-boot-utils/Config.in.host       |    8 ++++++
+ package/omap-u-boot-utils/omap-u-boot-utils.mk |   21 +++++++++++++++
+ 5 files changed, 87 insertions(+), 0 deletions(-)
+ create mode 100644 package/omap-u-boot-utils/Config.in.host
+ create mode 100644 package/omap-u-boot-utils/omap-u-boot-utils.mk
+
+-- 
+1.7.5.4
