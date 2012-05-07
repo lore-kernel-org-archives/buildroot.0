@@ -1,71 +1,81 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 6 May 2012 23:13:46 +0200
-Subject: [Buildroot] [git commit] conntrack-tools: new package
-Message-ID: <20120506212038.EBFC696A44@busybox.osuosl.org>
+From: Dmitry <golubovsky@gmail.com>
+Date: Sun,  6 May 2012 23:29:19 -0400
+Subject: [Buildroot] [PATCH] Added package v86d which provides a real-mode
+	helper for uvesafb driver.
+Message-ID: <1336361359-5468-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b76f7fb749190d7ec90654aa604e7792a1d967ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Dmitry <golubovsky@gmail.com>
 ---
- package/Config.in                          |    1 +
- package/conntrack-tools/Config.in          |   14 ++++++++++++++
- package/conntrack-tools/conntrack-tools.mk |   12 ++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
+ package/Config.in      |    1 +
+ package/v86d/Config.in |    9 +++++++++
+ package/v86d/v86d.mk   |   26 ++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/v86d/Config.in
+ create mode 100644 package/v86d/v86d.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index aecb056..34c0280 100644
+index 34c0280..208e66f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -490,6 +490,7 @@ source "package/can-utils/Config.in"
- source "package/connman/Config.in"
- source "package/ctorrent/Config.in"
- source "package/cifs-utils/Config.in"
-+source "package/conntrack-tools/Config.in"
- source "package/cups/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/dhcp/Config.in"
-diff --git a/package/conntrack-tools/Config.in b/package/conntrack-tools/Config.in
+@@ -230,6 +230,7 @@ source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/v86d/Config.in"
+ source "package/wipe/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/v86d/Config.in b/package/v86d/Config.in
 new file mode 100644
-index 0000000..12eb988
+index 0000000..ba1baca
 --- /dev/null
-+++ b/package/conntrack-tools/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_CONNTRACK_TOOLS
-+	bool "conntrack-tools"
-+	depends on BR2_INET_IPV6
-+	select BR2_PACKAGE_LIBNETFILTER_CONNTRACK
++++ b/package/v86d/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_V86D
++	bool "v86d"
++	depends on (BR2_i386 || BR2_x86_64)
 +	help
-+	  The conntrack-tools are a set of tools targeted at
-+	  system administrators.
-+	  They are conntrack, the userspace command line interface,
-+	  and conntrackd, the userspace daemon.
++	  v86d is the userspace helper that runs x86 code in an emulated
++	  environment. uvesafb will not work without v86d. v86d currently
++	  supports the x86 and amd64 (x86-64) architectures.
 +
-+	  http://www.netfilter.org/projects/conntrack-tools/
-+
-+comment "conntrack-tools requires a toolchain with IPV6 support"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
++	  http://dev.gentoo.org/~spock/projects/uvesafb/
+diff --git a/package/v86d/v86d.mk b/package/v86d/v86d.mk
 new file mode 100644
-index 0000000..8b41127
+index 0000000..035797e
 --- /dev/null
-+++ b/package/conntrack-tools/conntrack-tools.mk
-@@ -0,0 +1,12 @@
-+#############################################################
++++ b/package/v86d/v86d.mk
+@@ -0,0 +1,26 @@
++############################################
 +#
-+# conntrack-tools
-+#
-+#############################################################
++# v86d
++# 
++############################################
 +
-+CONNTRACK_TOOLS_VERSION = 1.0.1
-+CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
-+CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
-+CONNTRACK_TOOLS_DEPENDENCIES = host-pkg-config libnetfilter_conntrack
++V86D_VERSION = v86d-0.1.10
++V86D_SITE = git://repo.or.cz/v86d.git
++
++# It is necessary to define __i386__ explicitly for successful compilation.
++
++define V86D_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++V86D_POST_CONFIGURE_HOOKS += V86D_REALLY_RUN_CONFIGURE
++
++# v86d's configure script is not autoconf-based: parameters
++# supplied by Buildroot cause it to produce no result; explicit
++# invocation is needed.
++
++define V86D_REALLY_RUN_CONFIGURE
++	(cd $(@D) ; ./configure --default)
++endef
 +
 +$(eval $(call AUTOTARGETS))
+-- 
+1.7.2.5
