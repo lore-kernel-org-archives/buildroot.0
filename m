@@ -1,41 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 May 2012 15:39:03 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to kernel version 3.3.5
-In-Reply-To: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1336415943-12139-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 May 2012 21:39:24 +0200
+Subject: [Buildroot] [PATCH] libdvdnav: requires pkg-config
+In-Reply-To: <1336392493-3695-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 7 May 2012 14:08:12 +0200")
+References: <1336392493-3695-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878vh3kcgj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 59ba6d3..148b858 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_3
- 
- config BR2_LINUX_KERNEL_3_3
--	bool "3.3.4"
-+	bool "3.3.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -73,7 +73,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.3.4" if BR2_LINUX_KERNEL_3_3
-+	default "3.3.5" if BR2_LINUX_KERNEL_3_3
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ Thomas> Fixes
+ Thomas> http://autobuild.buildroot.org/results/ababd836c7e7c3e63b3c7825244a56e30462c56d/build-end.log.
+
+Committed, thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
