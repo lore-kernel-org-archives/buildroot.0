@@ -1,62 +1,68 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 7 May 2012 22:51:31 +0200
-Subject: [Buildroot] [git commit] qemu/arm-vexpress: add new sample config
-Message-ID: <20120507205339.95DF696C5A@busybox.osuosl.org>
+From: Stijn Souffriau <stijn.souffriau@essensium.com>
+Date: Mon,  7 May 2012 22:59:41 +0200
+Subject: [Buildroot] [PATCH 1/5] Added the libassuan package.
+Message-ID: <1336424385-8933-1-git-send-email-stijn.souffriau@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9412e3abb5332e1b55b50400ca7b5db60a7dffd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-By popular demand!
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- board/qemu/arm-vexpress/readme.txt  |    6 ++++++
- configs/qemu_arm_vexpress_defconfig |   22 ++++++++++++++++++++++
- 2 files changed, 28 insertions(+), 0 deletions(-)
+ package/Config.in              |    1 +
+ package/libassuan/Config.in    |    6 ++++++
+ package/libassuan/libassuan.mk |   18 ++++++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+ create mode 100644 package/libassuan/Config.in
+ create mode 100644 package/libassuan/libassuan.mk
 
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
+diff --git a/package/Config.in b/package/Config.in
+index b25f31a..4f05b1e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -281,6 +281,7 @@ source "package/libgpg-error/Config.in"
+ source "package/libnss/Config.in"
+ source "package/openssl/Config.in"
+ source "package/polarssl/Config.in"
++source "package/libassuan/Config.in"
+ endmenu
+ 
+ menu "Database"
+diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
 new file mode 100644
-index 0000000..0d3631c
+index 0000000..3b188ec
 --- /dev/null
-+++ b/board/qemu/arm-vexpress/readme.txt
++++ b/package/libassuan/Config.in
 @@ -0,0 +1,6 @@
-+Run the emulation with:
++config BR2_PACKAGE_LIBASSUAN
++	bool "libassuan"
++	help
++	  Libassuan is the IPC library used by some GnuPG related software.
 +
-+  qemu-system-arm -M vexpress-a9 -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=sd -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
-+
-+The login prompt will appear in the terminal that started Qemu. The
-+graphical window is the framebuffer.
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
++	  http://www.gnupg.org/
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
 new file mode 100644
-index 0000000..7388279
+index 0000000..d2a018a
 --- /dev/null
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -0,0 +1,22 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
++++ b/package/libassuan/libassuan.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# libassuan
++#
++#############################################################
 +
-+# system
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++LIBASSUAN_VERSION = 2.0.3
++LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
++LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan/
++LIBASSUAN_INSTALL_STAGING = YES
 +
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
++LIBASSUAN_CONF_OPT = \
++	--disable-optimization \
++	--with-gpg-error-prefix=$(STAGING_DIR)/usr
 +
-+# Lock to 3.3 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_3=y
++LIBASSUAN_DEPENDENCIES = libgpg-error
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+BR2_LINUX_KERNEL_ZIMAGE=y
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.0.4
