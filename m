@@ -1,47 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  7 May 2012 15:28:28 +0200
-Subject: [Buildroot] [PATCH] gdb: fix target gdb build when host-gawk is
-	built before
-Message-ID: <1336397308-7195-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 May 2012 15:45:41 +0200
+Subject: [Buildroot] [PATCH 2/2] Adjust v86d.mk per better source URL
+ and build method.
+In-Reply-To: <CADiAo4KbCYq7YbV7MN3duW+wWXpGhnP77Sk+=PJD5t=71=COYg@mail.gmail.com>
+References: <1336386538-27684-1-git-send-email-golubovsky@gmail.com>
+ <1336386538-27684-2-git-send-email-golubovsky@gmail.com>
+ <20120507110012.GB8916@sapphire.tkos.co.il>
+ <CADiAo4KbCYq7YbV7MN3duW+wWXpGhnP77Sk+=PJD5t=71=COYg@mail.gmail.com>
+Message-ID: <20120507154541.325b298d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the crosstool-ng backend is used, host-gawk is built as a
-dependency of the crosstool-ng package, and therefore an host 'gawk'
-binary is installed in $(HOST_DIR).
+Le Mon, 7 May 2012 08:47:10 -0400,
+Dimitry Golubovsky <golubovsky@gmail.com> a ?crit :
 
-When the target gdb package is also selected, this unfortunately leads
-to a build failure, as reported on
-http://buildroot.humanoidz.org/results/f19c0499d08212d8b5100fa9434e1197092957db/build-end.log.
+> >> +define V86D_BUILD_CMDS
+> >> + ? ? $(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C
+> >> $(@D) all
+> >
+> > You can used $(TARGET_CONFIGURE_OPTS) here as well.
+> 
+> I tried that, and it did not compile. -D__i386__ should be given
+> explicitly to cc.
 
-The problem is that the ./configure of gdb detects gawk in the PATH,
-but at compile time, it gdb fails to find gawk. This is due to the
-fact that the gdb compilation process is started without the correct
-path. This patch fixes this by passing $(TARGET_MAKE_ENV) in the
-environment of the gdb compilation process.
+This -D is rather a CFLAGS, so:
 
-A better fix would be to switch gdb to the AUTOTARGETS infrastructure
-in the future.
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D__i386__" -C $(@D) all
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/gdb/gdb.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
-index b5c085b..0b85180 100644
---- a/toolchain/gdb/gdb.mk
-+++ b/toolchain/gdb/gdb.mk
-@@ -90,6 +90,7 @@ endif
- $(GDB_TARGET_DIR)/gdb/gdb: $(GDB_TARGET_DIR)/.configured
- 	# force ELF support since it fails due to BFD linking problems
- 	gdb_cv_var_elf=yes \
-+	$(TARGET_MAKE_ENV) \
- 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
- 		-C $(GDB_TARGET_DIR)
- 
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
