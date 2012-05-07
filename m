@@ -1,73 +1,351 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 May 2012 16:36:05 +0200
-Subject: [Buildroot] Globally disable PKG_CONFIG_PATH? [was: Re:
- Buildroot fails to build when selecting build packages]
-In-Reply-To: <4F9D564A.8000602@mind.be>
-References: <CAG6aBkV4xjdsXcvq-AssYQ1nOw0XiBiEjTZvi2rowStdfSCJNg@mail.gmail.com>
- <201204291144.26712.arnout@mind.be>
- <CAG6aBkVmLoN-fHkGWUiOfjRM7k2swUvzNQ38p=schi+Y2Ug1hg@mail.gmail.com>
- <4F9D4BED.4050001@mind.be>
- <CAG6aBkVUgOkv5kvPZkY+YgysDQ274FdaW+0vtVU-Vk1rBudJZA@mail.gmail.com>
- <4F9D53B5.50705@mind.be>
- <CAG6aBkVL0pXYVJNsk7D4OONWM6-B6Uj7aD364j8nW-mH_5ijJA@mail.gmail.com>
- <4F9D564A.8000602@mind.be>
-Message-ID: <20120507163605.2b3b5a27@skate>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon,  7 May 2012 11:00:01 -0400
+Subject: [Buildroot] [PATCH v3] BeagleBone: new board
+Message-ID: <1336402801-15097-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 29 Apr 2012 16:55:06 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+This configuration provides a basic setup for using Buildroot
+to create all of the images needed for a BeagleBone.
 
->   Buildroot devels: should we globally unset PKG_CONFIG_PATH with an
-> 
-> PKG_CONFIG_PATH =
-> export PKG_CONFIG_PATH
-> 
-> in the top-level Makefile?
-> 
->   Or should we add PKG_CONFIG_PATH="" to TARGET_CONFIGURE_OPTS?
-> 
->   The former has the advantage that it also works for packages that 
-> don't use TARGET_CONFIGURE_OPTS.  But I'm not sure if maybe we _want_ 
-> host packages to use the system's PKG_CONFIG_PATH...
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ board/beaglebone/linux-3.2.9.config                |  252 ++++++++++++++++++++
+ ....h-Specify-ext2-and-ro-for-booting-rootfs.patch |   31 +++
+ configs/beaglebone_defconfig                       |   25 ++
+ 3 files changed, 308 insertions(+), 0 deletions(-)
+ create mode 100644 board/beaglebone/linux-3.2.9.config
+ create mode 100644 board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch
+ create mode 100644 configs/beaglebone_defconfig
 
-Well, for the moment, what we do is:
-
- (1) For target packages, we don't pass any PKG_CONFIG_PATH variable,
-     because our host-pkg-config is hardcoded to search
-     $(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig.
-     However, having PKG_CONFIG_PATH in the environment will lead to
-     pkg-config also searching in the paths listed in PKG_CONFIG_PATH
-     before searching for the hardcoded paths.
-
- (2) For host packages: we only pass a PKG_CONFIG_LIBDIR variable,
-     which overrides the default list of directories, but still comes
-     in addition to the directories listed in the PKG_CONFIG_PATH
-     variables (from a quick reading of pkg-config-0.25/main.c). Since
-     we used PKG_CONFIG_LIBDIR, I guess our intention was to completely
-     limit the search of .pc to the $(HOST_DIR) and not look inside the
-     ones offered by the distribution. So if we want to preserve this
-     behavior, we have do not something against the PKG_CONFIG_PATH
-     being passed in the environment.
-
-Therefore, in order to workaround environments where PKG_CONFIG_PATH is
-set, we would have to pass PKG_CONFIG_PATH="" in both the host and
-target package cases in order to get the desired effect.
-
-Another solution is to add a check in
-support/dependencies/dependencies.sh to verify that PKG_CONFIG_PATH is
-not set, and otherwise abort and tell the user to do something about
-this. Probably not as nice as the previous solution, though, but we
-already do this for PERL_MM_OPT for example.
-
-Best regards,
-
-Thomas
+diff --git a/board/beaglebone/linux-3.2.9.config b/board/beaglebone/linux-3.2.9.config
+new file mode 100644
+index 0000000..4052f6e
+--- /dev/null
++++ b/board/beaglebone/linux-3.2.9.config
+@@ -0,0 +1,252 @@
++CONFIG_EXPERIMENTAL=y
++# CONFIG_LOCALVERSION_AUTO is not set
++CONFIG_DEFAULT_HOSTNAME="beaglebone"
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_BSD_PROCESS_ACCT=y
++CONFIG_BSD_PROCESS_ACCT_V3=y
++CONFIG_FHANDLE=y
++CONFIG_SPARSE_IRQ=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_NAMESPACES=y
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_CC_OPTIMIZE_FOR_SIZE=y
++CONFIG_SYSCTL_SYSCALL=y
++CONFIG_KALLSYMS_ALL=y
++CONFIG_EMBEDDED=y
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=m
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_BLK_DEV_INTEGRITY=y
++CONFIG_ARCH_OMAP=y
++CONFIG_OMAP_MUX_DEBUG=y
++CONFIG_OMAP_MBOX_FWK=y
++# CONFIG_OMAP_32K_TIMER is not set
++# CONFIG_MACH_OMAP_GENERIC is not set
++# CONFIG_ARCH_OMAP2 is not set
++# CONFIG_ARCH_OMAP4 is not set
++# CONFIG_SOC_OMAP3430 is not set
++# CONFIG_MACH_OMAP3_BEAGLE is not set
++# CONFIG_MACH_DEVKIT8000 is not set
++# CONFIG_MACH_OMAP_LDP is not set
++# CONFIG_MACH_OMAP3530_LV_SOM is not set
++# CONFIG_MACH_OMAP3_TORPEDO is not set
++# CONFIG_MACH_ENCORE is not set
++# CONFIG_MACH_OVERO is not set
++# CONFIG_MACH_OMAP3EVM is not set
++# CONFIG_MACH_OMAP3517EVM is not set
++# CONFIG_MACH_OMAP3_PANDORA is not set
++# CONFIG_MACH_OMAP3_TOUCHBOOK is not set
++# CONFIG_MACH_OMAP_3430SDP is not set
++# CONFIG_MACH_NOKIA_RM680 is not set
++# CONFIG_MACH_NOKIA_RX51 is not set
++# CONFIG_MACH_OMAP_ZOOM2 is not set
++# CONFIG_MACH_OMAP_ZOOM3 is not set
++# CONFIG_MACH_CM_T35 is not set
++# CONFIG_MACH_CM_T3517 is not set
++# CONFIG_MACH_IGEP0020 is not set
++# CONFIG_MACH_IGEP0030 is not set
++# CONFIG_MACH_SBC3530 is not set
++# CONFIG_MACH_OMAP_3630SDP is not set
++# CONFIG_MACH_TI8168EVM is not set
++# CONFIG_MACH_TI8148EVM is not set
++# CONFIG_MACH_AM335XIAEVM is not set
++CONFIG_OMAP3_EDMA=y
++CONFIG_ARM_THUMBEE=y
++CONFIG_ARM_ERRATA_430973=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_THUMB2_KERNEL=y
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_CMDLINE=" debug "
++CONFIG_AUTO_ZRELADDR=y
++CONFIG_CPU_FREQ=y
++CONFIG_CPU_FREQ_STAT_DETAILS=y
++CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE=y
++CONFIG_CPU_FREQ_GOV_POWERSAVE=y
++CONFIG_CPU_FREQ_GOV_ONDEMAND=y
++CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
++CONFIG_BINFMT_MISC=y
++# CONFIG_SUSPEND is not set
++CONFIG_PM_DEBUG=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_XFRM_USER=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_RFKILL_REGULATOR=m
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_CONNECTOR=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_COUNT=2
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_MISC_DEVICES=y
++CONFIG_BMP085=m
++CONFIG_EEPROM_AT24=y
++CONFIG_EEPROM_93CX6=m
++CONFIG_SENSORS_LIS3_I2C=y
++CONFIG_NETDEVICES=y
++CONFIG_MII=y
++# CONFIG_NET_VENDOR_BROADCOM is not set
++# CONFIG_NET_VENDOR_CHELSIO is not set
++# CONFIG_NET_VENDOR_FARADAY is not set
++# CONFIG_NET_VENDOR_INTEL is not set
++# CONFIG_NET_VENDOR_MARVELL is not set
++# CONFIG_NET_VENDOR_MICREL is not set
++# CONFIG_NET_VENDOR_MICROCHIP is not set
++# CONFIG_NET_VENDOR_NATSEMI is not set
++# CONFIG_NET_VENDOR_SEEQ is not set
++# CONFIG_NET_VENDOR_SMSC is not set
++# CONFIG_NET_VENDOR_STMICRO is not set
++CONFIG_TI_CPSW=y
++CONFIG_SMSC_PHY=y
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_MOUSEDEV is not set
++CONFIG_INPUT_EVDEV=y
++# CONFIG_KEYBOARD_ATKBD is not set
++CONFIG_KEYBOARD_GPIO=y
++# CONFIG_MOUSE_PS2 is not set
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_AD714X=m
++CONFIG_INPUT_BMA150=m
++CONFIG_INPUT_MMA8450=m
++CONFIG_INPUT_MPU3050=m
++CONFIG_INPUT_ATI_REMOTE2=m
++CONFIG_INPUT_KEYSPAN_REMOTE=m
++CONFIG_INPUT_KXTJ9=m
++CONFIG_INPUT_POWERMATE=m
++CONFIG_INPUT_YEALINK=m
++CONFIG_INPUT_CM109=m
++CONFIG_INPUT_TWL4030_PWRBUTTON=y
++CONFIG_INPUT_TWL4030_VIBRA=m
++CONFIG_INPUT_TWL6040_VIBRA=m
++CONFIG_INPUT_UINPUT=m
++CONFIG_INPUT_PCF8574=m
++CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
++CONFIG_INPUT_ADXL34X=m
++CONFIG_INPUT_CMA3000=m
++CONFIG_INPUT_CMA3000_I2C=m
++# CONFIG_SERIO is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++# CONFIG_LEGACY_PTYS is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_8250_NR_UARTS=32
++CONFIG_SERIAL_8250_EXTENDED=y
++CONFIG_SERIAL_8250_MANY_PORTS=y
++CONFIG_SERIAL_8250_SHARE_IRQ=y
++CONFIG_SERIAL_8250_DETECT_IRQ=y
++CONFIG_SERIAL_8250_RSA=y
++CONFIG_HW_RANDOM=y
++CONFIG_RAW_DRIVER=m
++CONFIG_I2C_CHARDEV=y
++CONFIG_SPI=y
++CONFIG_SPI_GPIO=m
++CONFIG_SPI_OMAP24XX=y
++CONFIG_SPI_SPIDEV=m
++CONFIG_DEBUG_GPIO=y
++CONFIG_GPIO_SYSFS=y
++CONFIG_GPIO_TWL4030=y
++CONFIG_GENERIC_PWM=y
++CONFIG_DAVINCI_EHRPWM=y
++CONFIG_ECAP_PWM=y
++CONFIG_POWER_SUPPLY=y
++# CONFIG_HWMON is not set
++CONFIG_WATCHDOG=y
++CONFIG_OMAP_WATCHDOG=y
++CONFIG_TWL4030_WATCHDOG=y
++CONFIG_MFD_TPS65217=y
++CONFIG_REGULATOR_DUMMY=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_VIRTUAL_CONSUMER=y
++CONFIG_REGULATOR_USERSPACE_CONSUMER=y
++CONFIG_REGULATOR_GPIO=y
++CONFIG_REGULATOR_TWL4030=y
++CONFIG_REGULATOR_TPS65023=y
++CONFIG_REGULATOR_TPS6507X=y
++CONFIG_REGULATOR_TPS65217=y
++CONFIG_DISPLAY_SUPPORT=y
++CONFIG_HIDRAW=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_DEVICEFS=y
++CONFIG_USB_MUSB_HDRC=y
++CONFIG_USB_MUSB_TI81XX_GLUE=y
++CONFIG_USB_TI_CPPI41_DMA_HW=y
++CONFIG_USB_ACM=y
++CONFIG_USB_LIBUSUAL=y
++CONFIG_USB_GADGET=y
++CONFIG_USB_GADGET_MUSB_HDRC=y
++CONFIG_USB_ETH=m
++CONFIG_USB_MASS_STORAGE=m
++CONFIG_USB_G_SERIAL=m
++CONFIG_USB_CDC_COMPOSITE=m
++CONFIG_USB_G_MULTI=m
++CONFIG_USB_G_HID=m
++CONFIG_MMC=y
++CONFIG_MMC_UNSAFE_RESUME=y
++CONFIG_MMC_OMAP_HS=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_TRIGGERS=y
++CONFIG_LEDS_TRIGGER_TIMER=y
++CONFIG_LEDS_TRIGGER_HEARTBEAT=y
++CONFIG_LEDS_TRIGGER_BACKLIGHT=y
++CONFIG_LEDS_TRIGGER_GPIO=y
++CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
++CONFIG_UIO=m
++CONFIG_UIO_PDRV=m
++CONFIG_UIO_PDRV_GENIRQ=m
++CONFIG_UIO_PRUSS=m
++CONFIG_STAGING=y
++CONFIG_IIO=y
++CONFIG_IIO_BUFFER=y
++CONFIG_IIO_SW_RING=y
++CONFIG_IIO_KFIFO_BUF=y
++# CONFIG_IOMMU_SUPPORT is not set
++CONFIG_PM_DEVFREQ=y
++CONFIG_DEVFREQ_GOV_USERSPACE=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT4_FS=y
++CONFIG_EXT4_FS_POSIX_ACL=y
++CONFIG_FANOTIFY=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++# CONFIG_NETWORK_FILESYSTEMS is not set
++CONFIG_NLS_CODEPAGE_437=y
++CONFIG_NLS_ISO8859_1=y
++CONFIG_NLS_UTF8=y
++CONFIG_PRINTK_TIME=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_DEBUG_FS=y
++CONFIG_DETECT_HUNG_TASK=y
++CONFIG_SCHEDSTATS=y
++CONFIG_TIMER_STATS=y
++# CONFIG_DEBUG_BUGVERBOSE is not set
++# CONFIG_FTRACE is not set
++CONFIG_DEBUG_LL=y
++CONFIG_EARLY_PRINTK=y
++CONFIG_DEBUG_JTAG_ENABLE=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++# CONFIG_CRYPTO_HW is not set
+diff --git a/board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch b/board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch
+new file mode 100644
+index 0000000..dfbccf5
+--- /dev/null
++++ b/board/beaglebone/uboot-v2011.09_AM335xPSP_04.06.00.06-0001-am335x_evm.h-Specify-ext2-and-ro-for-booting-rootfs.patch
+@@ -0,0 +1,31 @@
++From c8aae8c96494132759319b0eab6cd2a51d1d4889 Mon Sep 17 00:00:00 2001
++From: Frank Hunleth <fhunleth@troodon-software.com>
++Date: Tue, 6 Mar 2012 07:20:26 -0800
++Subject: [PATCH] am335x_evm.h: Specify ext2 and ro for booting rootfs
++
++Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
++---
++ include/configs/am335x_evm.h |    4 ++--
++ 1 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/configs/am335x_evm.h b/include/configs/am335x_evm.h
++index e0ac494..b45c306 100755
++--- a/include/configs/am335x_evm.h
+++++ b/include/configs/am335x_evm.h
++@@ -53,11 +53,11 @@
++ 	"script_addr=0x81900000\0" \
++ 	"console=ttyO0,115200n8\0" \
++ 	"mmc_dev=0\0" \
++-	"mmc_root=/dev/mmcblk0p2 rw\0" \
+++	"mmc_root=/dev/mmcblk0p2 ro\0" \
++ 	"nand_root=ubi0:rootfs rw ubi.mtd=7,2048\0" \
++ 	"spi_root=/dev/mtdblock4 rw\0" \
++ 	"nor_root=/dev/mtdblock3 rw\0" \
++-	"mmc_root_fs_type=ext3 rootwait\0" \
+++	"mmc_root_fs_type=ext2 rootwait\0" \
++ 	"nand_root_fs_type=ubifs rootwait=1\0" \
++ 	"spi_root_fs_type=jffs2\0" \
++ 	"nor_root_fs_type=jffs2\0" \
++-- 
++1.7.4.1
++
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+new file mode 100644
+index 0000000..4670bd4
+--- /dev/null
++++ b/configs/beaglebone_defconfig
+@@ -0,0 +1,25 @@
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-fpu=vfpv3 --with-float=hard"
++# BR2_SOFT_FLOAT is not set
++BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
++# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="am335x_evm"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/beaglebone"
++BR2_TARGET_UBOOT_CUSTOM_GIT_REPO_URL="git://arago-project.org/git/projects/u-boot-am33x.git"
++BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION="v2011.09_AM335xPSP_04.06.00.06"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="MLO"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION="linux-ti33x-psp-3.2-r5a+gitr09e9651bcf2ee8d86685f2a8075bc6557b1d3b91"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.2.9.config"
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.0.4
