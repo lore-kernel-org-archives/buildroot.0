@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 May 2012 21:41:47 +0200
-Subject: [Buildroot] [PATCH] gdb: fix target gdb build when host-gawk is
-	built before
-In-Reply-To: <1336397308-7195-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 7 May 2012 15:28:28 +0200")
-References: <1336397308-7195-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874nrrkcck.fsf@macbook.be.48ers.dk>
+Date: Mon, 07 May 2012 21:43:02 +0200
+Subject: [Buildroot] [PATCH] libplayer: add patch to fix build issue
+In-Reply-To: <1336403759-14444-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 7 May 2012 17:15:59 +0200")
+References: <1336403759-14444-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zk9jixq1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> When the crosstool-ng backend is used, host-gawk is built as a
- Thomas> dependency of the crosstool-ng package, and therefore an host 'gawk'
- Thomas> binary is installed in $(HOST_DIR).
+ Thomas> Fixes
+ Thomas> http://autobuild.buildroot.org/results/af5e72c2385896f2bdb5c1b98efd487afb46a502/build-end.log.
 
- Thomas> When the target gdb package is also selected, this unfortunately leads
- Thomas> to a build failure, as reported on
- Thomas> http://buildroot.humanoidz.org/results/f19c0499d08212d8b5100fa9434e1197092957db/build-end.log.
-
- Thomas> The problem is that the ./configure of gdb detects gawk in the PATH,
- Thomas> but at compile time, it gdb fails to find gawk. This is due to the
-
-I've dropped 'gdb' from this line. Committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
