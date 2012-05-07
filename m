@@ -1,34 +1,30 @@
-From: Dimitry Golubovsky <golubovsky@gmail.com>
-Date: Mon, 7 May 2012 09:47:31 -0400
-Subject: [Buildroot] [PATCH 2/2] Adjust v86d.mk per better source URL
- and build method.
-In-Reply-To: <20120507154541.325b298d@skate>
-References: <1336386538-27684-1-git-send-email-golubovsky@gmail.com>
- <1336386538-27684-2-git-send-email-golubovsky@gmail.com>
- <20120507110012.GB8916@sapphire.tkos.co.il>
- <CADiAo4KbCYq7YbV7MN3duW+wWXpGhnP77Sk+=PJD5t=71=COYg@mail.gmail.com>
- <20120507154541.325b298d@skate>
-Message-ID: <CADiAo4JznUbDze-hqyO7AEfN9yW9kP9ueBhcKPU9Kg9mV-hWTg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 May 2012 15:54:04 +0200
+Subject: [Buildroot] [Bug 5186] New: initramfs/cpio should support lzo
+ compression
+In-Reply-To: <4FA672AD.2030905@mind.be>
+References: <bug-5186-163@https.bugs.busybox.net/> <4FA672AD.2030905@mind.be>
+Message-ID: <20120507155404.6abbe051@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK Thanks, I'll try this way.
+Le Sun, 06 May 2012 14:46:37 +0200,
+Arnout Vandecappelle <arnout@mind.be> a ?crit :
 
-On Mon, May 7, 2012 at 9:45 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
+>   PS What's the policy for reacting to patches posted on bugzilla?
 
->> I tried that, and it did not compile. -D__i386__ should be given
->> explicitly to cc.
->
-> This -D is rather a CFLAGS, so:
->
-> ? ? ? ?$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D__i386__" -C $(@D) all
+AFAIK, there's none. Now that we have patchwork in place, I guess we
+should probably tell users to not post patches to the Bugzilla, but to
+the list instead (though that requires users to subscribe to the list).
 
+What do you think?
 
+Thomas
 -- 
-Dimitry Golubovsky
-
-Anywhere on the Web
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
