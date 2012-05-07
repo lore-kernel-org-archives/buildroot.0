@@ -1,11 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 May 2012 22:12:25 +0200
-Subject: [Buildroot] [PATCH v3 04/22] netkittelnet: warn that legal-info is
-	not implemented
+Date: Mon,  7 May 2012 22:12:40 +0200
+Subject: [Buildroot] [PATCH v3 19/22] libusb: define license
 In-Reply-To: <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
 References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
  <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1336421563-5986-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1336421563-5986-19-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/netkittelnet/netkittelnet.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/libusb/libusb.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/netkittelnet/netkittelnet.mk b/package/netkittelnet/netkittelnet.mk
-index ff05318..1ed5fc5 100644
---- a/package/netkittelnet/netkittelnet.mk
-+++ b/package/netkittelnet/netkittelnet.mk
-@@ -48,6 +48,9 @@ $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY): $(NETKITTELNET_DIR)/$(NETKITTELNET_
- 	#rm -rf $(TARGET_DIR)/share/locale $(TARGET_DIR)/usr/info \
- 	# $(TARGET_DIR)/usr/man $(TARGET_DIR)/usr/share/doc
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 9abfcfc..ac0f0d2 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -6,6 +6,8 @@
+ LIBUSB_VERSION = 1.0.9
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
++LIBUSB_LICENSE = LGPLv2.1+
++LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkg-config
+ LIBUSB_INSTALL_STAGING = YES
  
-+netkittelnet-legal-info:
-+	@$(call legal-warning-pkg,netkittelnet,cannot produce any legal info)
-+
- netkittelnet: netkitbase $(TARGET_DIR)/$(NETKITTELNET_TARGET_BINARY)
- 
- netkittelnet-clean:
 -- 
 1.7.5.4
