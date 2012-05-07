@@ -1,206 +1,308 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 May 2012 22:10:21 +0200
-Subject: [Buildroot] [PATCH v3 00/22] Automatically produce legal compliance
-	info
-Message-ID: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
+Date: Mon,  7 May 2012 22:12:22 +0200
+Subject: [Buildroot] [PATCH v3 01/22] legal-info: infrastructure to collect
+	legally-relevant material
+In-Reply-To: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
+References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This allows to automatically collect material that may be needed to comply with
+the license of packages that Buildroot prepares for the target device.
 
-here is the third version of the legal-info feature implementation.
+The core of the implementation is made by the following parts:
+ - in package/pkg-utils.mk some helper functions are defined for common actions
+   such as generating a warning, producing info about a package etc;
+ - in package/pkg-gentargets.mk, within the GENTARGETS framework, a new
+   <PKG>-legal-info target produces all the info for a given package;
+ - Makefile implements the top-level targets:
+   - legal-info-prepare creates the output directory and produces legal info
+     about Buildroot itself and the toolchain, which mostly means just warning
+     the user that this is not implemented;
+   - legal-info, the only target that is supposed to be used directly, depends
+     on all of the above and finishes things by producing the README files from
+     the various pieces.
 
-For the records, previous versions are here:
-v1: http://lists.busybox.net/pipermail/buildroot/2012-January/049590.html
-v2: http://lists.busybox.net/pipermail/buildroot/2012-March/051132.html
-
-The approach is based on two per-package constants in eack .mk file, such as:
-  FOO_LICENSE = GPLv2+
-  FOO_LICENSE_FILES = COPYING
-  BAR_LICENSE = LGPLv2.1 + GPLv3
-  BAR_LICENSE_FILES = COPYING.LGPL demo-app/COPYING.GPL3
-  MYAPP_LICENSE = PROPRIETARY
-This is the only effort required to the package creator. If <PKG>_LICENSE is
-not specified it defaults to "unknown".
-
-After running 'make legal-info', the following things will be produced in
-$(O)/legal-info/:
-  $ find legal-info/ -type f
-  legal-info/README            # Lists saved stuff, warns about unsaved stuff
-  legal-info/licenses.txt      # Text of all licenses
-  legal-info/buildroot.config  # The buildroot config
-  legal-info/licenses/buildroot/COPYING       # License files, one dir per pkg
-  legal-info/licenses/busybox/LICENSE
-  legal-info/licenses/...other packages...
-  legal-info/manifest.csv                     # CSV table summarizing all info
-  legal-info/sources/busybox-1.19.4.tar.bz2   # tarballs
-  legal-info/sources/kmod-5.tar.xz
-  legal-info/sources/libtool-2.2.10.tar.gz
-  legal-info/sources/...other packages...
-
-Given the technical difficulties, the toolchain and the BR sources are not
-saved. Warnings are generated to make sure the user is aware of this.
-
-One of the issues raised about the previous patchset was about packages
-without a license file, such as jpeg or fbset. These usually declare their
-license in a comment at the top of one or more source files.
-
-Yann E. Morin suggested to solve this problem in a general way implementing a
-_LICENSE_HOOK that does whatever is needed to copy the license.
-I found the idea good and started implementing it, but I did not reach
-anything decently structured yet. As I don't want to further delay the basic
-work, I chose to postpone this feature to a later step.
-
-
-License compliance advice to users
-==================================
-
-During the latest Buildroot Developer Day in February, a request was made to
-give an advice from Buildroot developers' to Buildroot users about how to
-comply with both Buildroot's and the packages' licenses.
-This is added to the manual in patch 9. Of course this must match as much as
-possible what the developers think, so please read it and give comments!
-
-
-Possible future improvements
-============================
-
-These are left as future enhancemenst, after the merge of the first core
-functionality, in order to keep it as simple as possible for a first step.
-
-- The toolchain is not currently saved (internal, external, ct-NG, no
-  discrimination). Actually, only GENTARGETS-based packages are handled, so the
-  best approach might be to "simply" migrate the toolchains to GENTARGETS.
-
-- Save the Buildroot sources too. If the sources are not a git clone this might
-  be as simple as tar of the current directory and exclude dl and output, but
-  this has never been tested. Also, make sure this works for out-of-tree BR
-  builds.
-
-- Add a hook for a post-legal-info script.
-
-- Add a <PKG>_LICENSE_HOOK for packages without a license file.
-
-
-Changelog
-=========
-
-Changed in v3:
-- moved the $(1)-legal-info target near the end of GENTARGETS_INNER, out of the
-  may of target sequencing where it used to be in the previous patch sets;
-- improved readability by creating a set of functions to produce a warning,
-  to add a line to the csv, etc as suggested by ThomasDS (this made the core
-  code shorter and cleaner);
-- clarified the BSD-like licenses, differentiating 2/3/4 clauses and others;
-- clarified *GPL licenses, and dropped definitions for packages that do not
-  have a clear and simple use of those licenses (tslib, busybox, qt);
-- dropped warning patches for tinyhttpd, xfsprogs, microperl, fis, doom-wads,
-  uemacs and cups which have now been converted to GEN/AUTOTARGETS;
-- updated after the split of Makefile.package.in in pkg-*.mk and related
-  cleanups;
-- added a few lines of explanation in the message of the first big commit that
-  implements all the logic;
-- documented the legal-info stuff in the manual;
-- added (tentative) advice about Buildroot license compliance;
-- various improvements here and there.
-
-Changed in v2:
-- squashed together patches 1-4 from RFC v1; now all the legal-info mechanism
-  is implmented in a unique patch.
-- rebase on top of current master
-- don't clean $(REDIST_SOURCES_DIR): it is a subdir of $(LEGAL_INFO_DIR), so
-  doesn't need to be cleaned twice
-- added legal-info-clean target
-- made legal-info target .PHONY
-- remove the output/legal-info dir before populating it
-- when saving source tarballs, create hardlinks instead of copies if possible
-- add infrastructure to warn the user about info that has not been saved: a
-  .warnings file is filled with such info and displayed to the user at the
-  end of the legal-info processing
-- ensure manual (non-GENTARGETS-based) packages return error, at least; this
-  required to explicitly create a -legal-info target for each of them, or
-  they would have been silently skipped.
-- list also Buildroot in the manifest file! :)
-- save the Buildroot .config
-- save license files listed in <PKG>_LICENSE_FILES, both in a separate
-  directory for each package and all together in a unique file
-- various cleanups.
-
-Patches
-=======
-
-- The implementation is all in the first commit, which is commented on its
-  own.
-- A few patches follow to make non-GENTARGETS packages warn about their
-  dumbness.
-- A couple of patches add documentation about the legal-info stuff.
-- Other commits define licenses for some packages.
-
-The following changes since commit 057c729c2438107b426576121bcf83f792734a6f:
-
-  external-toolchain: add support for Linaro 2012.04 (2012-05-07 17:08:37 +0200)
-
-are available in the git repository at:
-  git://github.com/lucaceresoli/buildroot.git legal-info
-
-Luca Ceresoli (22):
-  legal-info: infrastructure to collect legally-relevant material
-  gettext: warn that legal-info is not implemented
-  netkitbase: warn that legal-info is not implemented
-  netkittelnet: warn that legal-info is not implemented
-  newt: warn that legal-info is not implemented
-  ttcp: warn that legal-info is not implemented
-  vpnc: warn that legal-info is not implemented
-  manual: document usage of the legal-info feature
-  manual: add advice about GPL compliance for Buildroot
-  linux: define license
-  m4: define license
-  mpc: define license
-  fakeroot: define license
-  bzip2: define license
-  directfb: define license
-  iostat: define license
-  lzo: define license
-  lzop: define license
-  libusb: define license
-  pcre: define license
-  netsnmp: define license
-  berkeleydb: define license
-
- Makefile                                   |   42 +++++++++-
- docs/manual/adding-packages-gentargets.txt |   18 ++++
- docs/manual/using.txt                      |  127 ++++++++++++++++++++++++++++
- linux/linux.mk                             |    2 +
- package/berkeleydb/berkeleydb.mk           |    2 +
- package/bzip2/bzip2.mk                     |    2 +
- package/directfb/directfb.mk               |    2 +
- package/fakeroot/fakeroot.mk               |    2 +
- package/gettext/gettext.mk                 |    3 +
- package/iostat/iostat.mk                   |    2 +
- package/libusb/libusb.mk                   |    2 +
- package/lzo/lzo.mk                         |    2 +
- package/lzop/lzop.mk                       |    2 +
- package/m4/m4.mk                           |    2 +
- package/mpc/mpc.mk                         |    2 +
- package/netkitbase/netkitbase.mk           |    3 +
- package/netkittelnet/netkittelnet.mk       |    3 +
- package/netsnmp/netsnmp.mk                 |    2 +
- package/newt/newt.mk                       |    3 +
- package/pcre/pcre.mk                       |    2 +
- package/pkg-gentargets.mk                  |   65 ++++++++++++++
- package/pkg-utils.mk                       |   25 ++++++
- package/ttcp/ttcp.mk                       |    3 +
- package/vpnc/vpnc.mk                       |    3 +
- support/legal-info/README.header           |   24 +++++
- support/legal-info/README.warnings-header  |    4 +
- 26 files changed, 346 insertions(+), 3 deletions(-)
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ Makefile                                  |   42 +++++++++++++++++-
+ package/pkg-gentargets.mk                 |   65 +++++++++++++++++++++++++++++
+ package/pkg-utils.mk                      |   25 +++++++++++
+ support/legal-info/README.header          |   24 +++++++++++
+ support/legal-info/README.warnings-header |    4 ++
+ 5 files changed, 157 insertions(+), 3 deletions(-)
  create mode 100644 support/legal-info/README.header
  create mode 100644 support/legal-info/README.warnings-header
 
-Luca
-
+diff --git a/Makefile b/Makefile
+index a7625ba..21c30b9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -247,6 +247,14 @@ TARGET_DIR:=$(BASE_DIR)/target
+ TOOLCHAIN_DIR=$(BASE_DIR)/toolchain
+ TARGET_SKELETON=$(TOPDIR)/fs/skeleton
+ 
++LEGAL_INFO_DIR=$(BASE_DIR)/legal-info
++REDIST_SOURCES_DIR=$(LEGAL_INFO_DIR)/sources
++LICENSE_FILES_DIR=$(LEGAL_INFO_DIR)/licenses
++LEGAL_MANIFEST_CSV=$(LEGAL_INFO_DIR)/manifest.csv
++LEGAL_LICENSES_TXT=$(LEGAL_INFO_DIR)/licenses.txt
++LEGAL_WARNINGS=$(LEGAL_INFO_DIR)/.warnings
++LEGAL_REPORT=$(LEGAL_INFO_DIR)/README
++
+ ifeq ($(BR2_CCACHE),y)
+ CCACHE:=$(HOST_DIR)/usr/bin/ccache
+ CCACHE_CACHE_DIR=$(HOME)/.buildroot-ccache
+@@ -321,6 +329,10 @@ HOST_DEPS = $(sort $(foreach dep,\
+ 		$($(dep))))
+ HOST_SOURCE += $(addsuffix -source,$(sort $(TARGETS_HOST_DEPS) $(HOST_DEPS)))
+ 
++TARGETS_LEGAL_INFO:=$(patsubst %,%-legal-info,\
++		$(filter-out host-makedevs,\
++		$(TARGETS) $(BASE_TARGETS) $(TARGETS_HOST_DEPS) $(HOST_DEPS))))
++
+ # all targets depend on the crosscompiler and it's prerequisites
+ $(TARGETS_ALL): __real_tgt_%: $(BASE_TARGETS) %
+ 
+@@ -337,8 +349,9 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+ 
+ .PHONY: all world dirs clean distclean source outputmakefile \
++	legal-info legal-info-prepare legal-info-clean \
+ 	$(BASE_TARGETS) $(TARGETS) $(TARGETS_ALL) \
+-	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) \
++	$(TARGETS_CLEAN) $(TARGETS_DIRCLEAN) $(TARGETS_SOURCE) $(TARGETS_LEGAL_INFO) \
+ 	$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ 	$(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR)
+ 
+@@ -348,7 +361,7 @@ world: prepare dirs dependencies $(BASE_TARGETS) $(TARGETS_ALL)
+ # dependencies anywhere else
+ #
+ #############################################################
+-$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR):
++$(DL_DIR) $(TOOLCHAIN_DIR) $(BUILD_DIR) $(HOST_DIR) $(BINARIES_DIR) $(STAMP_DIR) $(LEGAL_INFO_DIR) $(REDIST_SOURCES_DIR):
+ 	@mkdir -p $@
+ 
+ $(STAGING_DIR):
+@@ -451,6 +464,27 @@ source: dirs $(TARGETS_SOURCE) $(HOST_SOURCE)
+ external-deps:
+ 	@$(MAKE) -Bs DL_MODE=SHOW_EXTERNAL_DEPS $(EXTRAMAKEARGS) source | sort -u
+ 
++legal-info-clean:
++	@rm -fr $(LEGAL_INFO_DIR)
++
++legal-info-prepare: $(LEGAL_INFO_DIR)
++	@$(call legal-license-file,buildroot,COPYING,COPYING)
++	@$(call legal-manifest,package,version,license,license files,source archive)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved)
++	@$(call legal-warning,the Buildroot source code has not been saved)
++	@$(call legal-warning,the toolchain has not been saved)
++	@cp $(CONFIG_DIR)/.config $(LEGAL_INFO_DIR)/buildroot.config
++
++legal-info: legal-info-clean legal-info-prepare $(REDIST_SOURCES_DIR) \
++		$(TARGETS_LEGAL_INFO)
++	@cat support/legal-info/README.header >>$(LEGAL_REPORT)
++	@if [ -r $(LEGAL_WARNINGS) ]; then \
++		cat support/legal-info/README.warnings-header \
++			$(LEGAL_WARNINGS) >>$(LEGAL_REPORT); \
++		cat $(LEGAL_WARNINGS); fi
++	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
++	@rm -f $(LEGAL_WARNINGS)
++
+ show-targets:
+ 	@echo $(TARGETS)
+ 
+@@ -572,7 +606,8 @@ endif
+ 
+ clean:
+ 	rm -rf $(STAGING_DIR) $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
+-		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging
++		$(STAMP_DIR) $(BUILD_DIR) $(TOOLCHAIN_DIR) $(BASE_DIR)/staging \
++		$(LEGAL_INFO_DIR)
+ 
+ distclean: clean
+ ifeq ($(DL_DIR),$(TOPDIR)/dl)
+@@ -640,6 +675,7 @@ endif
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  source-check           - check all packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
++	@echo '  legal-info             - generate info about license compliance'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+diff --git a/package/pkg-gentargets.mk b/package/pkg-gentargets.mk
+index 1c9b458..11d83c4 100644
+--- a/package/pkg-gentargets.mk
++++ b/package/pkg-gentargets.mk
+@@ -180,6 +180,7 @@ define GENTARGETS_INNER
+ 
+ $(2)_TYPE                       =  $(5)
+ $(2)_NAME			=  $(1)
++$(2)_RAWNAME			=  $(patsubst host-%,%,$(1))
+ 
+ # Keep the package version that may contain forward slashes in the _DL_VERSION
+ # variable, then replace all forward slashes ('/') by underscores ('_') to
+@@ -245,6 +246,20 @@ $(2)_OVERRIDE_SRCDIR = $($(2)_SITE)
+ endif
+ endif
+ 
++ifndef $(2)_LICENSE
++ ifdef $(3)_LICENSE
++  $(2)_LICENSE = $($(3)_LICENSE)
++ endif
++endif
++
++ifndef $(2)_LICENSE_FILES
++ ifdef $(3)_LICENSE_FILES
++  $(2)_LICENSE_FILES = $($(3)_LICENSE_FILES)
++ endif
++endif
++
++$(2)_LICENSE			?= unknown
++
+ $(2)_DEPENDENCIES ?= $(patsubst host-host-%,host-%,$(addprefix host-,$($(3)_DEPENDENCIES)))
+ 
+ $(2)_INSTALL_STAGING		?= NO
+@@ -354,6 +369,15 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+ $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+ endif
+ 
++ifneq ($$($(3)_LICENSE),PROPRIETARY)
++ifneq ($$($(3)_SITE_METHOD),local)
++ifneq ($$($(3)_SITE_METHOD),override)
++# Packages that have a tarball need it downloaded and extracted beforehand
++$(1)-legal-info:	$(1)-extract $(REDIST_SOURCES_DIR)
++endif
++endif
++endif
++
+ $(1)-show-depends:
+ 			@echo $$($(2)_DEPENDENCIES)
+ 
+@@ -412,6 +436,47 @@ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+ endif
+ 
++# Set values used later for legal-info manifest
++ifneq ($$($(2)_LICENSE),PROPRIETARY)
++ifneq ($$($(2)_SITE_METHOD),local)
++ifneq ($$($(2)_SITE_METHOD),override)
++$(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
++ifneq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
++$(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
++endif
++endif
++endif
++endif
++# defaults for packages without tarball or license files
++$(2)_MANIFEST_TARBALL ?= not saved
++$(2)_MANIFEST_LICENSE_FILES ?= not saved
++
++# legal-info: produce legally relevant info.
++$(1)-legal-info:
++ifeq ($$($(2)_LICENSE),PROPRIETARY)
++# Proprietary packages: nothing to save
++else ifeq ($$($(2)_SITE_METHOD),local)
++# Packages without a tarball: don't save and warn
++	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
++else ifeq ($$($(2)_SITE_METHOD),override)
++	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
++else
++# Other packages
++# Save license files if defined
++ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
++	@$(call legal-license-nofiles,$$($(2)_RAWNAME))
++	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
++else
++	@for F in $$($(2)_LICENSE_FILES); do \
++		$(call legal-license-file,$$($(2)_RAWNAME),$$$${F},$$($(2)_DIR)/$$$${F}); \
++		done
++endif
++# Copy the source tarball (just hardlink if possible)
++	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR) 2>/dev/null || \
++	   cp $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR)
++endif
++	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL))
++
+ # add package to the general list of targets if requested by the buildroot
+ # configuration
+ ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 953dbc9..43cc76c 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -83,3 +83,28 @@ define sep
+ 
+ 
+ endef
++
++#
++# legal-info helper functions
++#
++LEGAL_INFO_SEPARATOR="::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
++legal-warning=echo "WARNING: $(1)" >>$(LEGAL_WARNINGS)
++legal-warning-pkg=echo "WARNING: $(1): $(2)" >>$(LEGAL_WARNINGS)
++define legal-warning-pkg-savednothing # pkg, {local|override}
++	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
++endef
++legal-manifest=echo "$(1),$(2),$(3),$(4),$(5)" >>$(LEGAL_MANIFEST_CSV)
++define legal-license-header
++	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
++		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT)
++endef
++define legal-license-nofiles
++	$(call legal-license-header,$(1),unknown license file(s))
++endef
++define legal-license-file # pkg, filename, file-fullpath
++	$(call legal-license-header,$(1),$(2) file) && \
++	cat $(3) >>$(LEGAL_LICENSES_TXT) && \
++	echo >>$(LEGAL_LICENSES_TXT) && \
++	mkdir -p $(LICENSE_FILES_DIR)/$(1)/ && \
++	cp $(3) $(LICENSE_FILES_DIR)/$(1)/
++endef
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+new file mode 100644
+index 0000000..3321adb
+--- /dev/null
++++ b/support/legal-info/README.header
+@@ -0,0 +1,24 @@
++Most of the packages that were used by Buildroot to produce the image files,
++including Buildroot itself, have open-source licenses. It is your
++responsibility to comply to the requirements of these licenses.
++To make this easier for you, Buildroot collected in this directory some
++material you may need to get it done.
++
++This material is composed of the following items.
++ * The scripts used to control compilation of the packages and the generation
++   of image files, i.e. the Buildroot sources.
++   Note: this has not been saved due to technical limitations, you must
++   collect it manually.
++ * The Buildroot configuration file; this has been saved in buildroot.config.
++ * The toolchain (cross-compiler and related tools) used to generate all the
++   compiled programs.
++   Note: this has not been saved due to technical limitations, you must
++   collect it manually.
++ * The source code for all packages; this has been saved in the sources/
++   subdirectory (except for the proprietary packages, which have not been
++   saved); patches applied to some packages by Buildroot are included in the
++   Buildroot sources and were not duplicated in the sources/ subdirectory.
++ * A manifest file listing the configured packages and related information.
++ * The license text of the packages; they have been saved in the licenses/
++   subdirectory.
++
+diff --git a/support/legal-info/README.warnings-header b/support/legal-info/README.warnings-header
+new file mode 100644
+index 0000000..cd08290
+--- /dev/null
++++ b/support/legal-info/README.warnings-header
+@@ -0,0 +1,4 @@
++Due to technical limitations or lack of license definition in the package
++makefile, some of the material listed above could not been saved, as the
++following list details.
++
 -- 
 1.7.5.4
