@@ -1,62 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  7 May 2012 15:27:23 -0300
-Subject: [Buildroot] [PATCH] qemu/ppc-mpc8544ds: add new sample config
-Message-ID: <1336415243-14701-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  7 May 2012 15:39:02 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0,
+	3}.x stable versions
+Message-ID: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new powerpc-mpc8544ds sample qemu config.
-Useful for SPE ABI testing.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- board/qemu/powerpc-mpc8544ds/readme.txt |    6 ++++++
- configs/qemu_ppc_mpc8544ds_defconfig    |   21 +++++++++++++++++++++
- 2 files changed, 27 insertions(+), 0 deletions(-)
- create mode 100644 board/qemu/powerpc-mpc8544ds/readme.txt
- create mode 100644 configs/qemu_ppc_mpc8544ds_defconfig
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ ...umode_t.patch => linux-3.3.5-fix-umode_t.patch} |    0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ rename toolchain/kernel-headers/{linux-3.3.4-fix-umode_t.patch => linux-3.3.5-fix-umode_t.patch} (100%)
 
-diff --git a/board/qemu/powerpc-mpc8544ds/readme.txt b/board/qemu/powerpc-mpc8544ds/readme.txt
-new file mode 100644
-index 0000000..6ecdc4b
---- /dev/null
-+++ b/board/qemu/powerpc-mpc8544ds/readme.txt
-@@ -0,0 +1,6 @@
-+Run the emulation with:
-+
-+ qemu-system-ppc -M mpc8544ds -kernel output/images/vmlinux -serial stdio
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-new file mode 100644
-index 0000000..996d6b2
---- /dev/null
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -0,0 +1,21 @@
-+# Architecture
-+BR2_powerpc=y
-+BR2_powerpc_8548=y
-+
-+# filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Lock to 3.3 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_3_3=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index aeeebef..36370b4 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.30"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.31"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.16"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3.4"		if BR2_KERNEL_HEADERS_3_3
++	default "3.3.5"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.30-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/toolchain/kernel-headers/linux-3.3.4-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.5-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3.4-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.5-fix-umode_t.patch
 -- 
 1.7.3.4
