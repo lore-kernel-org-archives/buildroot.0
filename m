@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 May 2012 22:12:41 +0200
-Subject: [Buildroot] [PATCH v3 20/22] pcre: define license
+Date: Mon,  7 May 2012 22:12:31 +0200
+Subject: [Buildroot] [PATCH v3 10/22] linux: define license
 In-Reply-To: <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
 References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
  <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1336421563-5986-20-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1336421563-5986-10-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/pcre/pcre.mk |    2 ++
+ linux/linux.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index db896fd..d01ca84 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -6,6 +6,8 @@
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 34f8623..43e3641 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -4,6 +4,8 @@
+ #
+ ###############################################################################
+ LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++LINUX_LICENSE = GPLv2
++LINUX_LICENSE_FILES = COPYING
  
- PCRE_VERSION = 8.30
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
-+PCRE_LICENSE = BSD-3c
-+PCRE_LICENSE_FILES = LICENCE
- PCRE_INSTALL_STAGING = YES
- 
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+ ifeq ($(LINUX_VERSION),custom)
 -- 
 1.7.5.4
