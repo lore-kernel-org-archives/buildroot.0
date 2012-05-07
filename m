@@ -1,33 +1,22 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 May 2012 22:12:37 +0200
-Subject: [Buildroot] [PATCH v3 16/22] iostat: define license
-In-Reply-To: <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
-References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
- <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1336421563-5986-16-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 May 2012 22:17:24 +0200
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0,
+	3}.x stable versions
+In-Reply-To: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 7 May 2012 15:39:02 -0300")
+References: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87r4uviw4r.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/iostat/iostat.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
-index 83eea07..6f2e8aa 100644
---- a/package/iostat/iostat.mk
-+++ b/package/iostat/iostat.mk
-@@ -6,6 +6,8 @@
- 
- IOSTAT_VERSION = 2.2
- IOSTAT_SITE = http://www.linuxinsight.com/files
-+IOSTAT_LICENSE = GPL
-+IOSTAT_LICENSE_FILES = LICENSE
- 
- iostat-source: $(DL_DIR)/$(IOSTAT_SOURCE)
- 
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.7.5.4
+Bye, Peter Korsgaard
