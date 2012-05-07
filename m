@@ -1,34 +1,29 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon,  7 May 2012 17:14:24 -0400
-Subject: [Buildroot] [PATCH] qt: fix qconfig configure parameter
-Message-ID: <1336425264-29060-1-git-send-email-fhunleth@troodon-software.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 May 2012 21:19:35 +0000 (UTC)
+Subject: [Buildroot] [Bug 5204] Missing terminfo file(s) for GNU screen
+	terminal type
+In-Reply-To: <bug-5204-163@https.bugs.busybox.net/>
+References: <bug-5204-163@https.bugs.busybox.net/>
+Message-ID: <20120507211935.CB23096C5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Qt configure option for specifying a custom qconfig.h
-file changed from -config to -qconfig. This makes the
-corresponding change in qt.mk.
+https://bugs.busybox.net/show_bug.cgi?id=5204
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
----
- package/qt/qt.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 7e6c5dd..2adcd01 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -25,7 +25,7 @@ endif
- QT_CONFIG_FILE=$(call qstrip,$(BR2_PACKAGE_QT_CONFIG_FILE))
- 
- ifneq ($(QT_CONFIG_FILE),)
--QT_CONFIGURE_OPTS += -config buildroot
-+QT_CONFIGURE_OPTS += -qconfig buildroot
- endif
- 
- QT_CFLAGS = $(TARGET_CFLAGS)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2012-05-07 21:19:35 UTC ---
+Fixed by Gustavoz in git
+
 -- 
-1.7.0.4
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
