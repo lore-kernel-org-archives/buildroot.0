@@ -1,51 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 7 May 2012 15:59:38 +0300
-Subject: [Buildroot] [PATCH 2/2] Adjust v86d.mk per better source URL
- and build method.
-In-Reply-To: <CADiAo4KbCYq7YbV7MN3duW+wWXpGhnP77Sk+=PJD5t=71=COYg@mail.gmail.com>
-References: <1336386538-27684-1-git-send-email-golubovsky@gmail.com>
- <1336386538-27684-2-git-send-email-golubovsky@gmail.com>
- <20120507110012.GB8916@sapphire.tkos.co.il>
- <CADiAo4KbCYq7YbV7MN3duW+wWXpGhnP77Sk+=PJD5t=71=COYg@mail.gmail.com>
-Message-ID: <20120507125937.GD8916@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  7 May 2012 15:28:28 +0200
+Subject: [Buildroot] [PATCH] gdb: fix target gdb build when host-gawk is
+	built before
+Message-ID: <1336397308-7195-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Dimitry,
+When the crosstool-ng backend is used, host-gawk is built as a
+dependency of the crosstool-ng package, and therefore an host 'gawk'
+binary is installed in $(HOST_DIR).
 
-On Mon, May 07, 2012 at 08:47:10AM -0400, Dimitry Golubovsky wrote:
-> On Mon, May 7, 2012 at 7:00 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> 
-> >> ?# v86d's configure script is not autoconf-based: parameters
-> >> ?# supplied by Buildroot cause it to produce no result; explicit
-> >> ?# invocation is needed.
-> >
-> > Since you don't use Buildroot's autoconf support, this comment is no longer
-> > relevant.
-> 
-> Well, I thought this would be the explanation why there is a configure
-> script, yet it is a GENTARGET.
+When the target gdb package is also selected, this unfortunately leads
+to a build failure, as reported on
+http://buildroot.humanoidz.org/results/f19c0499d08212d8b5100fa9434e1197092957db/build-end.log.
 
-The comment needs to be reworded, then. Something like: "v86d's configure 
-script is not autoconf-based, so we use GENTARGET".
+The problem is that the ./configure of gdb detects gawk in the PATH,
+but at compile time, it gdb fails to find gawk. This is due to the
+fact that the gdb compilation process is started without the correct
+path. This patch fixes this by passing $(TARGET_MAKE_ENV) in the
+environment of the gdb compilation process.
 
-> >> +
-> >> +define V86D_BUILD_CMDS
-> >> + ? ? $(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
-> >
-> > You can used $(TARGET_CONFIGURE_OPTS) here as well.
-> 
-> I tried that, and it did not compile. -D__i386__ should be given
-> explicitly to cc.
+A better fix would be to switch gdb to the AUTOTARGETS infrastructure
+in the future.
 
-Ah, you're right. I haven't noticed the quotes delimiting the CC variable.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/gdb/gdb.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-baruch
-
+diff --git a/toolchain/gdb/gdb.mk b/toolchain/gdb/gdb.mk
+index b5c085b..0b85180 100644
+--- a/toolchain/gdb/gdb.mk
++++ b/toolchain/gdb/gdb.mk
+@@ -90,6 +90,7 @@ endif
+ $(GDB_TARGET_DIR)/gdb/gdb: $(GDB_TARGET_DIR)/.configured
+ 	# force ELF support since it fails due to BFD linking problems
+ 	gdb_cv_var_elf=yes \
++	$(TARGET_MAKE_ENV) \
+ 	$(MAKE) CC="$(TARGET_CC)" MT_CFLAGS="$(TARGET_CFLAGS)" \
+ 		-C $(GDB_TARGET_DIR)
+ 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.9.5
