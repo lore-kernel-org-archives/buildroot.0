@@ -1,32 +1,81 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  7 May 2012 12:05:53 +0200
-Subject: [Buildroot] [PATCH] mtd: bump to 1.5.0
-Message-ID: <1336385153-12627-1-git-send-email-yegorslists@googlemail.com>
+From: Dmitry <golubovsky@gmail.com>
+Date: Mon,  7 May 2012 06:28:57 -0400
+Subject: [Buildroot] [PATCH 1/2] Added package v86d which provides a
+	real-mode helper for uvesafb driver.
+Message-ID: <1336386538-27684-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Dmitry <golubovsky@gmail.com>
 ---
- package/mtd/mtd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in      |    1 +
+ package/v86d/Config.in |    9 +++++++++
+ package/v86d/v86d.mk   |   26 ++++++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 0 deletions(-)
+ create mode 100644 package/v86d/Config.in
+ create mode 100644 package/v86d/v86d.mk
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 8ccd4dd..3bcefa5 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION = 1.4.9
-+MTD_VERSION = 1.5.0
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+diff --git a/package/Config.in b/package/Config.in
+index 34c0280..208e66f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -230,6 +230,7 @@ source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/v86d/Config.in"
+ source "package/wipe/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/v86d/Config.in b/package/v86d/Config.in
+new file mode 100644
+index 0000000..ba1baca
+--- /dev/null
++++ b/package/v86d/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_V86D
++	bool "v86d"
++	depends on (BR2_i386 || BR2_x86_64)
++	help
++	  v86d is the userspace helper that runs x86 code in an emulated
++	  environment. uvesafb will not work without v86d. v86d currently
++	  supports the x86 and amd64 (x86-64) architectures.
++
++	  http://dev.gentoo.org/~spock/projects/uvesafb/
+diff --git a/package/v86d/v86d.mk b/package/v86d/v86d.mk
+new file mode 100644
+index 0000000..035797e
+--- /dev/null
++++ b/package/v86d/v86d.mk
+@@ -0,0 +1,26 @@
++############################################
++#
++# v86d
++# 
++############################################
++
++V86D_VERSION = v86d-0.1.10
++V86D_SITE = git://repo.or.cz/v86d.git
++
++# It is necessary to define __i386__ explicitly for successful compilation.
++
++define V86D_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++V86D_POST_CONFIGURE_HOOKS += V86D_REALLY_RUN_CONFIGURE
++
++# v86d's configure script is not autoconf-based: parameters
++# supplied by Buildroot cause it to produce no result; explicit
++# invocation is needed.
++
++define V86D_REALLY_RUN_CONFIGURE
++	(cd $(@D) ; ./configure --default)
++endef
++
++$(eval $(call AUTOTARGETS))
 -- 
-1.7.7
+1.7.2.5
