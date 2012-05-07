@@ -1,43 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 May 2012 08:54:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 5204] New: Missing terminfo file(s) for GNU screen
- terminal type
-Message-ID: <bug-5204-163@https.bugs.busybox.net/>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  7 May 2012 12:05:53 +0200
+Subject: [Buildroot] [PATCH] mtd: bump to 1.5.0
+Message-ID: <1336385153-12627-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5204
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-           Summary: Missing terminfo file(s) for GNU screen terminal type
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: zkdigisec at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/mtd/mtd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-When GNU screen is selected for inclusion in Buildroot, none of its terminal
-files (screen*) are installed.
-
-The problem is due to the Buildroot screen makefile only using the
-"install-bin" target of screen, which is a subset of the full installation
-target called "install".
-
-A fix could be to change screen.mk in Buildroot to use "install". Another fix
-could be to export the screen terminfo file(s) from the staging area in the
-build of ncurses.
-
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 8ccd4dd..3bcefa5 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION = 1.4.9
++MTD_VERSION = 1.5.0
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.7
