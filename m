@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 May 2012 22:12:43 +0200
-Subject: [Buildroot] [PATCH v3 22/22] berkeleydb: define license
+Date: Mon,  7 May 2012 22:12:33 +0200
+Subject: [Buildroot] [PATCH v3 12/22] mpc: define license
 In-Reply-To: <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
 References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
  <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1336421563-5986-22-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1336421563-5986-12-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/berkeleydb/berkeleydb.mk |    2 ++
+ package/mpc/mpc.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index d737896..b42c000 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -7,6 +7,8 @@ BERKELEYDB_VERSION = 5.3.15
- BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
- BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
- BERKELEYDB_SUBDIR = build_unix
-+BERKELEYDB_LICENSE = BerkeleyDB License
-+BERKELEYDB_LICENSE_FILES = LICENSE
- BERKELEYDB_INSTALL_STAGING = YES
- BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
- 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index e5ee489..5ad47a9 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
+@@ -6,6 +6,8 @@
+ 
+ MPC_VERSION = 0.9
+ MPC_SITE = http://www.multiprecision.org/mpc/download
++MPC_LICENSE = LGPLv2.1+
++MPC_LICENSE_FILES = COPYING.LIB
+ MPC_INSTALL_STAGING = YES
+ MPC_DEPENDENCIES = gmp mpfr
+ MPC_AUTORECONF = YES
 -- 
 1.7.5.4
