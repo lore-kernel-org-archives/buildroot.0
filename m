@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 May 2012 22:17:24 +0200
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0,
-	3}.x stable versions
-In-Reply-To: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 7 May 2012 15:39:02 -0300")
+Date: Mon, 07 May 2012 22:17:36 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to kernel version
+	3.3.5
+In-Reply-To: <1336415943-12139-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 7 May 2012 15:39:03 -0300")
 References: <1336415943-12139-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87r4uviw4r.fsf@macbook.be.48ers.dk>
+ <1336415943-12139-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mx5jiw4f.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
