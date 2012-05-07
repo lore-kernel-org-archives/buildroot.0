@@ -1,35 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 May 2012 10:35:55 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-05-06
-In-Reply-To: <20120507063119.E5C7852CF94@lolut.humanoidz.org>
-References: <20120507063119.E5C7852CF94@lolut.humanoidz.org>
-Message-ID: <20120507103555.21e7de18@skate>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  7 May 2012 08:45:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 5198] New: Line graphics output is broken in GNU
+	Screen
+Message-ID: <bug-5198-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=5198
 
-Le Mon,  7 May 2012 08:31:19 +0200 (CEST),
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+           Summary: Line graphics output is broken in GNU Screen
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: zkdigisec at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> On 2012-05-06, 412 random build tests have been done and
-> submitted on autobuild.buildroot.net.
->  57 builds have been successful
->  355 builds have failed
 
-As Peter told me, there was on problem with his scripts on gcc10, which
-explains the huge number of failed builds. I have purged those failed
-builds from the database, so tomorrow numbers should be back to normal.
+Line graphics looks garbled when output over a Screen terminal.
 
-Best regards,
+For example:
+$ echo -e "Line: \033(0qqqqqqqq\033(B Normal: qqqqqqqq"
 
-Thomas
+Results in output:
+Line: qqqqqqqq Normal: qqqqqqqqq
+
+When it should result in a horizontal line after "Line:". (Screen terminal type
+is "screen" and underlying terminal type can be for example "vt102" or
+"xterm").
+
+The problem is due to screen being compiled without TERMINFO defined, meaning
+that it uses termcap control codes, while ncurses is built with terminfo
+support only (without termcap backwards compatibility support).
+
+The root of the problem is the termcap/terminfo detection at line 666 in
+configure.in. The detection uses AC_TRY_RUN which always fails when
+cross-compilation is used, and TERMINFO is therefore never defined.
+
+An easy fix could be to force terminfo support in the Buildroot screen
+makefile:
+--- screen.mk    2012-02-29 23:19:47.000000000 +0100
++++ screen-fixed.mk    2012-05-07 10:42:50.938185870 +0200
+@@ -10 +10 @@
+-SCREEN_CONF_ENV = CFLAGS=-DSYSV=1
++SCREEN_CONF_ENV = CFLAGS="-DSYSV=1 -DTERMINFO"
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
