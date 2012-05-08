@@ -1,52 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 May 2012 10:19:08 +0200
-Subject: [Buildroot] [PATCH 3/5] Added the libpth package.
-In-Reply-To: <1336424385-8933-3-git-send-email-stijn.souffriau@essensium.com>
-References: <1336424385-8933-1-git-send-email-stijn.souffriau@essensium.com>
- <1336424385-8933-3-git-send-email-stijn.souffriau@essensium.com>
-Message-ID: <20120508101908.1bf664f9@skate>
+Date: Tue,  8 May 2012 11:27:19 +0200
+Subject: [Buildroot] [PATCH 1/4] blackfin: adjust available ABIs
+Message-ID: <1336469242-1099-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon,  7 May 2012 22:59:43 +0200,
-Stijn Souffriau <stijn.souffriau@essensium.com> a ?crit :
+The FLAT (Separate Data) and FLAT Shared ABIs are rarely used, and the
+FLAT Shared ABI requires the user to manually assign an unique ID to
+each shared library, which we will never support in
+Buildroot. Therefore, restrict ourselves to FLAT and FDPIC.
 
-> @@ -406,6 +406,7 @@ source "package/orc/Config.in"
->  source "package/poco/Config.in"
->  source "package/protobuf/Config.in"
->  source "package/startup-notification/Config.in"
-> +source "package/libpth/Config.in"
+In addition to this, ensure that when FLAT is selected, only static
+libraries are produced, because this is what FLAT supports. It will
+fix problems such as
+http://autobuild.buildroot.org/results/2d756d75162e8737e99df8189bde93ed1a09feef/build-end.log.
 
-Alphabetic sorting.
+Moreover, we make FDPIC the default ABI, since if someone is using
+Buildroot, it's most likely to generate a fairly elaborate embedded
+Linux system, on which shared libraries are probably useful.
 
-> +config BR2_PACKAGE_LIBPTH
-> +	bool "libpth"
-> +	select BR2_PACKAGE_PTH_ERROR
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ target/Config.in.arch |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-I might have missed something, but there is no package named
-BR2_PACKAGE_PTH_ERROR in Buildroot, it seems, and it doesn't appear to
-be in your patchset. Maybe you forgot to send it? Or, as your package
-does not have a _DEPENDENCIES = pth-error, maybe it's just some
-left over of some previous work?
-
-> +++ b/package/libpth/libpth-0003-fixed-install-depedency.patch
-
-                                                 dependency
-
-> @@ -0,0 +1,34 @@
-> +From f2079abd360d2f1c531927e8ff7aa034d51aac66 Mon Sep 17 00:00:00 2001
-> +From: Stijn Souffriau <stijn.souffriau@essensium.com>
-> +Date: Tue, 3 Apr 2012 13:49:38 +0200
-> +Subject: [PATCH] fixed install depedency
-
-                                  dependency
-
-Thomas
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 941cd1b..a42bfd6 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -228,15 +228,12 @@ endchoice
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_bfin
+-	default BR2_BFIN_FLAT
++	default BR2_BFIN_FDPIC
+ config BR2_BFIN_FDPIC
+ 	bool "FDPIC"
+ config BR2_BFIN_FLAT
+ 	bool "FLAT"
+-config BR2_BFIN_FLAT_SEP_DATA
+-	bool "FLAT (Separate data)"
+-config BR2_BFIN_SHARED_FLAT
+-	bool "Shared FLAT"
++	select BR2_PREFER_STATIC_LIB
+ endchoice
+ 
+ choice
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
