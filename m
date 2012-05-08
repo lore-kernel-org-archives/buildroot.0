@@ -1,55 +1,51 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 May 2012 00:27:40 +0200
-Subject: [Buildroot] [git commit] blackfin: adjust available ABIs
-Message-ID: <20120508223206.54CBB96C78@busybox.osuosl.org>
+Date: Wed, 9 May 2012 00:25:58 +0200
+Subject: [Buildroot] [git commit] localedef: new package
+Message-ID: <20120508223206.1C6DB96C7B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=43e77cf53ff96cc18eeaa1e3599a815172380080
+commit: http://git.buildroot.net/buildroot/commit/?id=1db490aae99295c7b74d630b1b2edbf0b5a5516c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The FLAT (Separate Data) and FLAT Shared ABIs are rarely used, and the
-FLAT Shared ABI requires the user to manually assign an unique ID to
-each shared library, which we will never support in
-Buildroot. Therefore, restrict ourselves to FLAT and FDPIC.
-
-In addition to this, ensure that when FLAT is selected, only static
-libraries are produced, because this is what FLAT supports. It will
-fix problems such as
-http://autobuild.buildroot.org/results/2d756d75162e8737e99df8189bde93ed1a09feef/build-end.log.
-
-Moreover, we make FDPIC the default ABI, since if someone is using
-Buildroot, it's most likely to generate a fairly elaborate embedded
-Linux system, on which shared libraries are probably useful.
+This host only package allows to build the localedef program, which is
+needed to generate locale data for (e)glibc-based systems. The source
+code has been extracted from the eglibc sources and put inside a small
+and nice tarball by the PTXdist developers, which makes it easy and
+convenient to build for the host.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/Config.in.arch |    7 ++-----
- 1 files changed, 2 insertions(+), 5 deletions(-)
+ package/localedef/localedef.mk |   20 ++++++++++++++++++++
+ 1 files changed, 20 insertions(+), 0 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 941cd1b..a42bfd6 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -228,15 +228,12 @@ endchoice
- choice
- 	prompt "Target ABI"
- 	depends on BR2_bfin
--	default BR2_BFIN_FLAT
-+	default BR2_BFIN_FDPIC
- config BR2_BFIN_FDPIC
- 	bool "FDPIC"
- config BR2_BFIN_FLAT
- 	bool "FLAT"
--config BR2_BFIN_FLAT_SEP_DATA
--	bool "FLAT (Separate data)"
--config BR2_BFIN_SHARED_FLAT
--	bool "Shared FLAT"
-+	select BR2_PREFER_STATIC_LIB
- endchoice
- 
- choice
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+new file mode 100644
+index 0000000..1a044e3
+--- /dev/null
++++ b/package/localedef/localedef.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# localedef
++#
++#############################################################
++
++LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
++LOCALEDEF_SOURCE  = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
++LOCALEDEF_SITE    = http://www.pengutronix.de/software/ptxdist/temporary-src/
++
++HOST_LOCALEDEF_CONF_OPT += \
++	--prefix=/usr \
++	--with-glibc=./eglibc
++
++# The makefile does not implement an install target
++define HOST_LOCALEDEF_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/usr/bin/localedef
++endef
++
++$(eval $(call AUTOTARGETS,host))
