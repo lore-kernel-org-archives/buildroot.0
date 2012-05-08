@@ -1,28 +1,30 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 8 May 2012 21:22:01 +0200
-Subject: [Buildroot] [PATCH v3] BeagleBone: new board
-In-Reply-To: <1336402801-15097-1-git-send-email-fhunleth@troodon-software.com>
-References: <1336402801-15097-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <CAGm1_kt4SWwUuVH9DkB9TWB_qY3CKQ9DY9wdMczC8dWr2D1GNA@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Tue, 08 May 2012 21:26:16 +0200
+Subject: [Buildroot] [PATCH 0 of 2 v5] Add find utility functions / exclude
+ files from strip
+Message-ID: <patchbomb.1336505176@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank,
+This patch series adds a few utility functions to pkg-utils.mk that
+help in composing find commands, and uses these functions to exclude
+user-configured files and directories from being stripped in target-finalize.
 
-thanks for the patch. I now have a working kernel.
+Thanks to input from Arnout, the find functions are now much simpler and
+should be clearly understandable by everyone.
 
-> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-What about using http instead of git? If I make it in the office the
-whole LAN becomes totally lame and it is also good for proxy protected
-environments.
+---
+v5: line up with latest git
+v4: simplify find functions even further; whitespace changes
+v3: update based on review comments, remove Python changes for now
+v2: simplify find functions
 
-One more issue having nothing to do with the patch itself. I cannot
-compile it with the latest Linaro toolchain. it complains about not
-having some assembly functions. With BR generated toolchain everything
-is working as expected.
-
-Yegor
+ Config.in            |  19 +++++++++++++++++++
+ Makefile             |  10 ++++++++--
+ package/pkg-utils.mk |   9 +++++++++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
