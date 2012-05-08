@@ -1,28 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 May 2012 10:13:11 +0200
-Subject: [Buildroot] [PATCH 0/8] Cleanup VoIP packages and add linphone
-In-Reply-To: <1336423392-8673-1-git-send-email-luca@lucaceresoli.net>
-References: <1336423392-8673-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20120508101311.0a19cccf@skate>
+Date: Tue, 8 May 2012 10:14:55 +0200
+Subject: [Buildroot] [PATCH 1/5] Added the libassuan package.
+In-Reply-To: <1336424385-8933-1-git-send-email-stijn.souffriau@essensium.com>
+References: <1336424385-8933-1-git-send-email-stijn.souffriau@essensium.com>
+Message-ID: <20120508101455.38a759b3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon,  7 May 2012 22:43:04 +0200,
-Luca Ceresoli <luca@lucaceresoli.net> a ?crit :
+Hello Stijn,
 
-> The following changes since commit 057c729c2438107b426576121bcf83f792734a6f:
-> 
->   external-toolchain: add support for Linaro 2012.04 (2012-05-07 17:08:37 +0200)
-> 
-> are available in the git repository at:
->   git://github.com/lucaceresoli/buildroot.git voip
+Thanks, we're making good progress here.
 
-For the complete set of patches:
+Le Mon,  7 May 2012 22:59:41 +0200,
+Stijn Souffriau <stijn.souffriau@essensium.com> a ?crit :
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> @@ -281,6 +281,7 @@ source "package/libgpg-error/Config.in"
+>  source "package/libnss/Config.in"
+>  source "package/openssl/Config.in"
+>  source "package/polarssl/Config.in"
+> +source "package/libassuan/Config.in"
+
+Entries should be ordered alphabetically.
+
+> diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
+> new file mode 100644
+> index 0000000..3b188ec
+> --- /dev/null
+> +++ b/package/libassuan/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_LIBASSUAN
+> +	bool "libassuan"
+
+Since your package depends on libgpg-error, you need a
+
+	select BR2_PACKAGE_LIBGPG_ERROR
+
+here.
+
+Otherwise, looks good.
+
+Thomas
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
