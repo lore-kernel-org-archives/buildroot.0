@@ -1,22 +1,55 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 May 2012 00:30:18 +0200
-Subject: [Buildroot] [PATCH 4/4] m4: not available on noMMU platforms
-In-Reply-To: <1336469242-1099-4-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 8 May 2012 11:27:22 +0200")
-References: <1336469242-1099-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1336469242-1099-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87397axq4l.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 9 May 2012 00:27:40 +0200
+Subject: [Buildroot] [git commit] blackfin: adjust available ABIs
+Message-ID: <20120508223206.54CBB96C78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=43e77cf53ff96cc18eeaa1e3599a815172380080
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The FLAT (Separate Data) and FLAT Shared ABIs are rarely used, and the
+FLAT Shared ABI requires the user to manually assign an unique ID to
+each shared library, which we will never support in
+Buildroot. Therefore, restrict ourselves to FLAT and FDPIC.
 
-Committed, thanks.
+In addition to this, ensure that when FLAT is selected, only static
+libraries are produced, because this is what FLAT supports. It will
+fix problems such as
+http://autobuild.buildroot.org/results/2d756d75162e8737e99df8189bde93ed1a09feef/build-end.log.
 
--- 
-Bye, Peter Korsgaard
+Moreover, we make FDPIC the default ABI, since if someone is using
+Buildroot, it's most likely to generate a fairly elaborate embedded
+Linux system, on which shared libraries are probably useful.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ target/Config.in.arch |    7 ++-----
+ 1 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 941cd1b..a42bfd6 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -228,15 +228,12 @@ endchoice
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_bfin
+-	default BR2_BFIN_FLAT
++	default BR2_BFIN_FDPIC
+ config BR2_BFIN_FDPIC
+ 	bool "FDPIC"
+ config BR2_BFIN_FLAT
+ 	bool "FLAT"
+-config BR2_BFIN_FLAT_SEP_DATA
+-	bool "FLAT (Separate data)"
+-config BR2_BFIN_SHARED_FLAT
+-	bool "Shared FLAT"
++	select BR2_PREFER_STATIC_LIB
+ endchoice
+ 
+ choice
