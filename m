@@ -1,10 +1,10 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue,  8 May 2012 22:45:48 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile.in: add host python2 binary
-	detection
+Date: Tue,  8 May 2012 22:45:49 +0200
+Subject: [Buildroot] [PATCH 2/2] libglib2: fix install even if the host
+	python binary refers to python3
 In-Reply-To: <1336509949-19630-1-git-send-email-s.martin49@gmail.com>
 References: <1336509949-19630-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1336509949-19630-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1336509949-19630-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +14,43 @@ To: buildroot@busybox.net
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index df7042c..84968da 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -151,6 +151,18 @@ FLEX:=$(shell which flex || type -p flex)
- BISON:=$(shell which bison || type -p bison)
- SED:=$(shell which sed || type -p sed) -i -e
- 
-+PYTHON2:=$(shell \
-+	which python &>/dev/null && \
-+		python --version 2>&1 | grep -qE 'Python 2\.[6-7]*' && \
-+		which python || \
-+	which python2 &>/dev/null && \
-+		python2 --version 2>&1 | grep -qE 'Python 2\.[6-7]*' && \
-+		which python2 || \
-+	echo $(HOST_DIR)/usr/bin/python)
-+HOST_PYTHON2:=$(shell \
-+	test $(PYTHON2) != $(HOST_DIR)/usr/bin/python || \
-+	echo host-python)
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d2445a1..4c372d8 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -42,7 +42,10 @@ LIBGLIB2_CONF_ENV = \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no \
+ 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_DIR)/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
+ 		ac_cv_func_posix_getgrgid_r=no \
+-		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
++		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
++		ac_cv_path_PYTHON=$(PYTHON2)
 +
- HOST_CFLAGS   ?= -O2
- HOST_CFLAGS   += -I$(HOST_DIR)/include -I$(HOST_DIR)/usr/include
- HOST_CXXFLAGS += -I$(HOST_DIR)/include -I$(HOST_DIR)/usr/include
++HOST_LIBGLIB2_CONF_ENV += ac_cv_path_PYTHON=$(PYTHON2)
+ 
+ # old uClibc versions don't provide qsort_r
+ ifeq ($(BR2_UCLIBC_VERSION_0_9_31)$(BR2_UCLIBC_VERSION_0_9_32)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+@@ -55,9 +58,19 @@ HOST_LIBGLIB2_CONF_OPT = \
+ 		--disable-gtk-doc \
+ 		--enable-debug=no \
+ 
+-LIBGLIB2_DEPENDENCIES = host-pkg-config host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext libintl)
++LIBGLIB2_DEPENDENCIES = \
++		host-pkg-config \
++		host-libglib2 \
++		$(HOST_PYTHON2) \
++		libffi \
++		zlib \
++		$(if $(BR2_NEEDS_GETTEXT),gettext libintl)
+ 
+-HOST_LIBGLIB2_DEPENDENCIES = host-pkg-config host-libffi host-zlib
++HOST_LIBGLIB2_DEPENDENCIES = \
++		host-pkg-config \
++		host-libffi \
++		host-zlib \
++		$(HOST_PYTHON2)
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
 -- 
 1.7.10.1
