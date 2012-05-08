@@ -1,38 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 May 2012 16:39:20 +0200
-Subject: [Buildroot] [pull request] Pull request for branch
-	for-2012.05/locale-support
-Message-ID: <cover.1336487951.git.thomas.petazzoni@free-electrons.com>
+Date: Tue,  8 May 2012 16:39:21 +0200
+Subject: [Buildroot] [PATCH 1/2] localedef: new package
+In-Reply-To: <cover.1336487951.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1336487951.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <4b1a9726147fec34cbca4237331e43a542f86524.1336487951.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 025eb2fb908cb3c500e69225832b59b5ffb08cf5:
+This host only package allows to build the localedef program, which is
+needed to generate locale data for (e)glibc-based systems. The source
+code has been extracted from the eglibc sources and put inside a small
+and nice tarball by the PTXdist developers, which makes it easy and
+convenient to build for the host.
 
-  dnsmasq: bump to version 2.61 and enhance (2012-05-06 23:18:17 +0200)
-
-are available in the git repository at:
-
-  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.05/locale-support
-
-for you to fetch changes up to 3409d2f9bde0d6aa08fa537d4124db66147d6730:
-
-  Add support to generate locale data (2012-05-08 16:33:04 +0200)
-
-----------------------------------------------------------------
-Thomas Petazzoni (2):
-      localedef: new package
-      Add support to generate locale data
-
- Makefile                       |   33 +++++++++++++++++++++++++++++++++
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
  package/localedef/localedef.mk |   20 ++++++++++++++++++++
- toolchain/toolchain-common.in  |   18 ++++++++++++++++++
- toolchain/uClibc/uclibc.mk     |   11 ++++++++++-
- 4 files changed, 81 insertions(+), 1 deletion(-)
+ 1 file changed, 20 insertions(+)
  create mode 100644 package/localedef/localedef.mk
 
-Thanks,
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+new file mode 100644
+index 0000000..71b9994
+--- /dev/null
++++ b/package/localedef/localedef.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# localedef
++#
++#############################################################
++
++LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
++LOCALEDEF_SOURCE  = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
++LOCALEDEF_SITE    = http://www.pengutronix.de/software/ptxdist/temporary-src/
++
++HOST_LOCALEDEF_CONF_OPT += \
++	--prefix=/usr \
++	--with-glibc=./eglibc
++
++# The makefile does not implement an install target
++define HOST_LOCALEDEF_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/usr/bin/localedef
++endef
++
++$(eval $(call AUTOTARGETS,host))
+\ No newline at end of file
 -- 
-Thomas Petazzoni
+1.7.9.5
