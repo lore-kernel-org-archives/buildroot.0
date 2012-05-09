@@ -1,162 +1,116 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 May 2012 22:45:30 +0200
-Subject: [Buildroot] [git commit] Fix installation for the lighttpd package
-Message-ID: <20120509204616.A16A496C78@busybox.osuosl.org>
+Date: Wed, 9 May 2012 23:17:14 +0200
+Subject: [Buildroot] [git commit] CHANGES: update with recent changes
+Message-ID: <20120509211726.AD64196C81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b52a982c504f40e4cb5a21e0fb36a35ba06e3f67
+commit: http://git.buildroot.net/buildroot/commit/?id=82822efe43711a4b0199837da81c73d7fcae2a46
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- .../lighttpd-1.4.30-Fix-default-config-file.patch  |   92 ++++++++++++++++++++
- package/lighttpd/lighttpd.mk                       |   32 +++++++
- 2 files changed, 124 insertions(+), 0 deletions(-)
+ CHANGES |   72 +++++++++++++++++++++++++++++++++++----------------------------
+ 1 files changed, 40 insertions(+), 32 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch b/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
-new file mode 100644
-index 0000000..59ce907
---- /dev/null
-+++ b/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
-@@ -0,0 +1,92 @@
-+Modify the default lighttpd configuration file to have one a starting conf
-+
-+  * Changed the log path to /var/log and logs filenames
-+  * Disable IPv6
-+  * Do not setuid to a user that doesn't exist on the system
-+  * Disable pdf ranges fix for Adobe Reader since it uses regex and we
-+    don't always have pcre support
-+  * Change the network backend to writev since linux-sendfile fails on buildroot
-+
-+Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-+---
-+ doc/config/conf.d/access_log.conf |    2 +-
-+ doc/config/lighttpd.conf          |   18 +++++++++---------
-+ 2 files changed, 10 insertions(+), 10 deletions(-)
-+
-+Index: lighttpd-1.4.30/doc/config/lighttpd.conf
-+===================================================================
-+--- lighttpd-1.4.30.orig/doc/config/lighttpd.conf
-++++ lighttpd-1.4.30/doc/config/lighttpd.conf
-+@@ -13,7 +13,7 @@
-+ ## if you add a variable here. Add the corresponding variable in the
-+ ## chroot example aswell.
-+ ##
-+-var.log_root    = "/var/log/lighttpd"
-++var.log_root    = "/var/log"
-+ var.server_root = "/srv/www"
-+ var.state_dir   = "/var/run"
-+ var.home_dir    = "/var/lib/lighttpd"
-+@@ -90,7 +90,7 @@
-+ ##
-+ ## Use IPv6?
-+ ##
-+-server.use-ipv6 = "enable"
-++# server.use-ipv6 = "enable"
-+ 
-+ ##
-+ ## bind to a specific IP
-+@@ -101,8 +101,8 @@
-+ ## Run as a different username/groupname.
-+ ## This requires root permissions during startup. 
-+ ##
-+-server.username  = "lighttpd"
-+-server.groupname = "lighttpd"
-++# server.username  = "lighttpd"
-++# server.groupname = "lighttpd"
-+ 
-+ ## 
-+ ## enable core files.
-+@@ -138,7 +138,7 @@
-+ ##
-+ ## Path to the error log file
-+ ##
-+-server.errorlog             = log_root + "/error.log"
-++server.errorlog             = log_root + "/lighttpd-error.log"
-+ 
-+ ##
-+ ## If you want to log to syslog you have to unset the 
-+@@ -188,7 +188,7 @@
-+ ## linux-sendfile - is recommended for small files.
-+ ## writev         - is recommended for sending many large files
-+ ##
-+-server.network-backend = "linux-sendfile"
-++server.network-backend = "writev"
-+ 
-+ ##
-+ ## As lighttpd is a single-threaded server, its main resource limit is
-+@@ -311,9 +311,9 @@
-+ ## disable range requests for pdf files
-+ ## workaround for a bug in the Acrobat Reader plugin.
-+ ##
-+-$HTTP["url"] =~ "\.pdf$" {
-+-  server.range-requests = "disable"
-+-}
-++# $HTTP["url"] =~ "\.pdf$" {
-++#  server.range-requests = "disable"
-++# }
-+ 
-+ ##
-+ ## url handling modules (rewrite, redirect)
-+Index: lighttpd-1.4.30/doc/config/conf.d/access_log.conf
-+===================================================================
-+--- lighttpd-1.4.30.orig/doc/config/conf.d/access_log.conf
-++++ lighttpd-1.4.30/doc/config/conf.d/access_log.conf
-+@@ -9,7 +9,7 @@
-+ ##
-+ ## Default access log.
-+ ##
-+-accesslog.filename          = log_root + "/access.log"
-++accesslog.filename          = log_root + "/lighttpd-access.log"
-+ 
-+ ##
-+ ## The default format produces CLF compatible output.
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index b8aa310..8d1f212 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -56,6 +56,38 @@ else
- LIGHTTPD_CONF_OPT += --without-lua
- endif
+diff --git a/CHANGES b/CHANGES
+index c17e141..1a2b6ed 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -10,52 +10,60 @@
+ 	Apply-patches.sh: cleanups, archived patches handling fixes,
+ 	support series files.
  
-+define LIGHTTPD_INSTALL_CONFIG
-+	mkdir -p $(TARGET_DIR)/etc/lighttpd
-+	mkdir -p $(TARGET_DIR)/etc/lighttpd/conf.d
-+	mkdir -p $(TARGET_DIR)/srv/www/htdocs
+-	Defconfigs: mx53qsb, use 3.2.x for atngw100, use 3.3.x for
+-	qemu configs.
++	Defconfigs: beaglebone, mx53qsb, pandaboard, qemu configs for
++	arm-vexpress/microblaze/ppc-mpc88544ds, use 3.2.x for
++	atngw100, use 3.3.x for qemu configs.
+ 
+-	Atom processor support. Microblaze architecture support (using
+-	ext toolchain). Cleanup architecture names, deprecate Xtensa
+-	support.
++	Menu structure: Libraries moved out of multimedia section
 +
-+	[ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
-+		$(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
-+			$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
++	Atom processor support. Prescott fix, blackfin ABI fix,
++	Microblaze architecture support (using ext toolchain). Cleanup
++	architecture names, deprecate Xtensa support.
+ 
+ 	Toolchain: Add GCC 4.4.7, 4.6.3, 4.7.0. uClibc 0.9.33.1,
+ 	default to uClibc 0.9.33.x, enable
+ 	UCLIBC_SUPPORT_AI_ADDRCONFIG by default, static and 64bit
+ 	fixes for external toolchains, linaro ext toolchains, new
+-	sourcery codebench ext toolchains, GDB 7.4.1.
++	sourcery codebench ext toolchains, GDB 7.4.1, crosstool-ng
++	1.15.2.
+ 
+-	Bootloaders: U-Boot: add 2012.04.01. Barebox: add 2012.04,
+-	remove 2011.12.
++	Bootloaders: U-Boot: add 2012.04.01, SPL and u-boot.img
++	support. Barebox: add 2012.04, remove 2011.12.
+ 
+ 	Updated/fixed packages: alsa-lib, alsa-utils, at, atk, avahi,
+ 	barebox, berkeleydb, bind, bluez_utils, boost, busybox,
+-	can-utils, ccache, coreutils, cups, dbus, dhcp, directfb,
+-	dnsmasq, doom-wad, dosfstools, e2fsprogs, expat, fakeroot,
+-	feh, ffmpeg, file, fis, freetype, gamin, gawk, gdk-pixbuf,
+-	giblib, glib-networking, gmp, gnutls, gpsd, grep, gstreamer,
+-	gst-plugins-{bad,base,good,ugly}, haserl, hdparm, imagemagick,
+-	iproute2, iptable, iw, kexec, kmod, lame, libarchive,
+-	libatomic_ops, libconfig, libcurl, libdvdnav, libdvdread,
+-	libedbus, libethumb, libffi, libfuse, libglib2, libgtk2,
+-	libhid, libmbus, libmpeg2, libnl, libpng, libsigc, libsoup,
+-	libupnp, liburcu, libusb, libusb-compat, libxml2,
+-	libxml-parser-perl, libxslt, linux-firmware, linux-fusion,
+-	lite, lsof, ltrace, lttng-libust, lua, makedevs, microperl,
+-	mpd, mpfr, mpg123, mrouted, mtd, mysql_client, nbd, ncurses,
+-	neon, netsnmp, network-manager, nfs-utils, ngrep, ntfs-3g,
++	can-utils, ccache, cifs-utils, coreutils, cups, dbus, dhcp,
++	directfb, dnsmasq, doom-wad, dosfstools, e2fsprogs, expat,
++	fakeroot, feh, ffmpeg, file, fis, freetype, gamin, gawk,
++	gdk-pixbuf, gettext, giblib, glib-networking, gmp, gnutls,
++	gpsd, grep, gstreamer, gst-plugins-{bad,base,good,ugly},
++	haserl, hdparm, imagemagick, iproute2, iptable, iw, kexec,
++	kmod, lame, libaio, libarchive, libatomic_ops, libconfig,
++	libcurl, libdvdnav, libdvdread, libedbus, libethumb, libffi,
++	libfuse, libglib2, libgtk2, libhid, libmad, libmbus, libmpeg2,
++	libnl, libplayer, libpng, libsigc, libsoup, libupnp, liburcu,
++	libusb, libusb-compat, libxml2, libxml-parser-perl, libxslt,
++	lighttpd, linux-firmware, linux-fusion, lite, lsof, ltrace,
++	lttng-libust, lua, m4, makedevs, microperl, mpd, mpfr, mpg123,
++	mrouted, mtd, mysql_client, nbd, ncftp, ncurses, neon,
++	netsnmp, network-manager, nfs-utils, ngrep, ntfs-3g, openntpd,
+ 	openssh, openssl, parted, pango, pcre, php, pixman, poco,
+-	psmisc, pulseaudio, python, qt, quagga, radvd, rpm, ruby,
+-	samba, sam-ba, sane-backends, sawman, screen, sdl_net,
+-	smartmontools, sqlite, squashfs3, squid, sshfs, sudo,
++	psmisc, pulseaudio, python, qt, quagga, radvd, rpm, rsync,
++	ruby, samba, sam-ba, sane-backends, sawman, screen, sdl_net,
++	smartmontools, speex, sqlite, squashfs3, squid, sshfs, sudo,
+ 	syslinux, sysstat, taglib, tcpdump, tftp-hpa, transmission,
+ 	tiff, tinyhttpd, uboot-tools, udev, uemacs, unionfs, usbutils,
+-	util-linux, vala, valgrind, vim, vsftpd, wipe,
+-	xdriver_xf86-{input-vmmouse,video-fbdev}, xfsprogs, zlib
+-
+-	New packages: apr, audiofile, bellagio, fmtools,
+-	glib-networking, heirloom-mailx, hiawatha, latencytop,
+-	lcdproc, libcap-ng, libdmtx, libfcgi, libtpl, minicom, msmtp,
+-	ndisc6, netatalk, parted, polarssl, protobuf, socketcand,
+-	systemd, ushare, zeromq
++	util-linux, vala, valgrind, vim, vsftpd, wget, wipe,
++	wpa_supplicant, xdriver_xf86-{input-vmmouse,video-fbdev},
++	xfsprogs, zlib
 +
-+	[ -f $(TARGET_DIR)/etc/lighttpd/modules.conf ] || \
-+		$(INSTALL) -D -m 755 $(@D)/doc/config/modules.conf \
-+			$(TARGET_DIR)/etc/lighttpd/modules.conf
-+
-+	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf ] || \
-+		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/access_log.conf \
-+			$(TARGET_DIR)/etc/lighttpd/conf.d/access_log.conf
-+
-+	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf ] || \
-+		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/debug.conf \
-+			$(TARGET_DIR)/etc/lighttpd/conf.d/debug.conf
-+
-+	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf ] || \
-+		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/dirlisting.conf \
-+			$(TARGET_DIR)/etc/lighttpd/conf.d/dirlisting.conf
-+
-+	[ -f $(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf ] || \
-+		$(INSTALL) -D -m 755 $(@D)/doc/config/conf.d/mime.conf \
-+			$(TARGET_DIR)/etc/lighttpd/conf.d/mime.conf
-+endef
-+
-+LIGHTTPD_POST_INSTALL_TARGET_HOOKS += LIGHTTPD_INSTALL_CONFIG
-+
- define LIGHTTPD_UNINSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd
- 	rm -f $(TARGET_DIR)/usr/sbin/lighttpd-angel
++	New packages: apr, apr-util, audiofile, bellagio,
++	conntrack-tools, empty, fmtools, glib-networking,
++	heirloom-mailx, hiawatha, latencytop, lcdproc, libcap-ng,
++	libdmtx, libfcgi, libnetfilter_conntrack, libnfnetlink,
++	libtpl, localedef, minicom, msmtp, ndisc6, netatalk,
++	ocf-linux, openswan, parted, polarssl, protobuf, read-edid,
++	socketcand, stress, systemd, ushare, zeromq
+ 
+ 	Deprecated packages: ttcp
+ 
