@@ -1,142 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 May 2012 13:51:10 +0200
-Subject: [Buildroot] [git commit] qemu/configs: update to use kernel 3.3.5
-Message-ID: <20120509115157.1218196C8A@busybox.osuosl.org>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 9 May 2012 09:28:56 -0400
+Subject: [Buildroot] [PATCH v3] BeagleBone: new board
+In-Reply-To: <CAGm1_kt4SWwUuVH9DkB9TWB_qY3CKQ9DY9wdMczC8dWr2D1GNA@mail.gmail.com>
+References: <1336402801-15097-1-git-send-email-fhunleth@troodon-software.com>
+ <CAGm1_kt4SWwUuVH9DkB9TWB_qY3CKQ9DY9wdMczC8dWr2D1GNA@mail.gmail.com>
+Message-ID: <CA+-urNS=bN=RDasHrFXY6BB-w9XqtfVx3jE186Bw1k+n2dA10Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec4342e825d90e660fc62df808a9186af43af88a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yegor,
 
-Update the qemu samples configs that used kernel 3.3.4 to 3.3.5
+On Tue, May 8, 2012 at 3:22 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hi Frank,
+>
+> thanks for the patch. I now have a working kernel.
+>
+>> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
+>
+> What about using http instead of git? If I make it in the office the
+> whole LAN becomes totally lame and it is also good for proxy protected
+> environments.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- configs/qemu_arm_versatile_defconfig |    2 +-
- configs/qemu_arm_vexpress_defconfig  |    2 +-
- configs/qemu_mips_malta_defconfig    |    2 +-
- configs/qemu_mipsel_malta_defconfig  |    2 +-
- configs/qemu_ppc_g3beige_defconfig   |    2 +-
- configs/qemu_ppc_mpc8544ds_defconfig |    2 +-
- configs/qemu_sparc_ss10_defconfig    |    2 +-
- configs/qemu_x86_64_defconfig        |    2 +-
- configs/qemu_x86_defconfig           |    2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
+Sigh. I actually just had a similar experience yesterday. My only
+issue with http is that it feels sooo slow. Is there any way to
+improve the speed? Other than that, switching all of the git urls to
+http urls seems like a good idea. Maybe it's worthwhile anyway?
 
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index b54b5b6..dc5ca11 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -16,7 +16,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.3.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 7388279..5f355b8 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -17,6 +17,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index 16ffe8f..e36ac56 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.3.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 200b045..8e21f1b 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.3.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index e69a6df..6a673e9 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.3.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index 996d6b2..a1aebf1 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index 62aee75..cc75506 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -12,6 +12,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index c20aaca..93008eb 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -15,6 +15,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.3.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index f22fdea..1aa44b3 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -16,6 +16,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.3.config"
+>
+> One more issue having nothing to do with the patch itself. I cannot
+> compile it with the latest Linaro toolchain. it complains about not
+> having some assembly functions. With BR generated toolchain everything
+> is working as expected.
+
+I haven't tried Linaro yet. I had been trying CodeSourcery toolchains,
+but gave up when none of the kernels that it produced would boot.
+
+Frank
