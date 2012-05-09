@@ -1,44 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 May 2012 01:06:02 +0200
-Subject: [Buildroot] [PATCH] package/crosstool-ng: bump version to
-	1.15.2, update config files
-In-Reply-To: <1336518081-2809-1-git-send-email-yann.morin.1998@free.fr>
-References: <1336518081-2809-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <201205090106.03026.yann.morin.1998@free.fr>
+From: Dmitry <golubovsky@gmail.com>
+Date: Tue,  8 May 2012 21:19:27 -0400
+Subject: [Buildroot] [PATCH] Added package v86d which provides a real-mode
+	helper for uvesafb driver.
+Message-ID: <1336526367-11516-1-git-send-email-golubovsky@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Signed-off-by: Dmitry <golubovsky@gmail.com>
+---
+ package/Config.in      |    1 +
+ package/v86d/Config.in |    9 +++++++++
+ package/v86d/v86d.mk   |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 0 deletions(-)
+ create mode 100644 package/v86d/Config.in
+ create mode 100644 package/v86d/v86d.mk
 
-On Wednesday 09 May 2012 01:01:21 Yann E. MORIN wrote:
-> Update the version of crosstool-Ng used, bump to 1.15.2.
-> Also, update the bundled config files to match the new version.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  .../crosstool-ng-001-wget-instead-of-curl.patch    |   52 -------------
->  package/crosstool-ng/crosstool-ng.mk               |    2 +-
->  .../crosstool-ng.config-eglibc                     |   70 ++++++++++++------
->  .../crosstool-ng.config-glibc                      |   75 +++++++++++++------
->  .../crosstool-ng.config-uClibc                     |   78 +++++++++++++------
-
-Dealing with the bundled config files is a pain, yes.
-
-Thomas convinced me to add the 'savedefconfig' to crosstool-NG, and it will
-be available in the next release, so hopefully it will be easier to manage
-in the future. In the meantime, we have to suffer this limitation of using
-full .config files. Bah, ~220 lines changed in 3 files, that's not that bad...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/Config.in b/package/Config.in
+index 34c0280..208e66f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -230,6 +230,7 @@ source "package/unionfs/Config.in"
+ source "package/usb_modeswitch/Config.in"
+ source "package/usbmount/Config.in"
+ source "package/usbutils/Config.in"
++source "package/v86d/Config.in"
+ source "package/wipe/Config.in"
+ source "package/xfsprogs/Config.in"
+ endmenu
+diff --git a/package/v86d/Config.in b/package/v86d/Config.in
+new file mode 100644
+index 0000000..ba1baca
+--- /dev/null
++++ b/package/v86d/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_V86D
++	bool "v86d"
++	depends on (BR2_i386 || BR2_x86_64)
++	help
++	  v86d is the userspace helper that runs x86 code in an emulated
++	  environment. uvesafb will not work without v86d. v86d currently
++	  supports the x86 and amd64 (x86-64) architectures.
++
++	  http://dev.gentoo.org/~spock/projects/uvesafb/
+diff --git a/package/v86d/v86d.mk b/package/v86d/v86d.mk
+new file mode 100644
+index 0000000..a0d3ed2
+--- /dev/null
++++ b/package/v86d/v86d.mk
+@@ -0,0 +1,36 @@
++############################################
++#
++# v86d
++# 
++############################################
++
++V86D_VERSION = 0.1.10
++V86D_SOURCE = v86d-$(V86D_VERSION).tar.bz2
++V86D_SITE = http://dev.gentoo.org/~spock/projects/uvesafb/archive
++
++# This flag to configure should be per target architecture rather than
++# autodetected (or it will be per host architecture which may be 
++# not the same as target).
++
++ifeq ($(BR2_i386),y)
++	x86emu = n
++endif
++
++ifeq ($(BR2_x86_64),y)
++	x86emu = y
++endif
++
++# v86d's configure script is not autoconf-based.
++# GENTARGETS macro will be used rather than AUTOTARGETS.
++
++define V86D_CONFIGURE_CMDS
++	(cd $(@D) ; ./configure --with-debug=n --with-klibc=n --with-x86emu=$(x86emu))
++endef
++
++# It is necessary to define __i386__ explicitly in CFLAGS for successful compilation.
++
++define V86D_BUILD_CMDS
++	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.2.5
