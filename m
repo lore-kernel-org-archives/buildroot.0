@@ -1,116 +1,69 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 9 May 2012 23:17:14 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20120509211726.AD64196C81@busybox.osuosl.org>
+From: Stijn Souffriau <stijn.souffriau@essensium.com>
+Date: Wed,  9 May 2012 23:29:42 +0200
+Subject: [Buildroot] [PATCH 1/5] Added the libassuan package.
+Message-ID: <1336598986-9518-1-git-send-email-stijn.souffriau@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82822efe43711a4b0199837da81c73d7fcae2a46
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- CHANGES |   72 +++++++++++++++++++++++++++++++++++----------------------------
- 1 files changed, 40 insertions(+), 32 deletions(-)
+ package/Config.in              |    1 +
+ package/libassuan/Config.in    |    7 +++++++
+ package/libassuan/libassuan.mk |   18 ++++++++++++++++++
+ 3 files changed, 26 insertions(+), 0 deletions(-)
+ create mode 100644 package/libassuan/Config.in
+ create mode 100644 package/libassuan/libassuan.mk
 
-diff --git a/CHANGES b/CHANGES
-index c17e141..1a2b6ed 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -10,52 +10,60 @@
- 	Apply-patches.sh: cleanups, archived patches handling fixes,
- 	support series files.
- 
--	Defconfigs: mx53qsb, use 3.2.x for atngw100, use 3.3.x for
--	qemu configs.
-+	Defconfigs: beaglebone, mx53qsb, pandaboard, qemu configs for
-+	arm-vexpress/microblaze/ppc-mpc88544ds, use 3.2.x for
-+	atngw100, use 3.3.x for qemu configs.
- 
--	Atom processor support. Microblaze architecture support (using
--	ext toolchain). Cleanup architecture names, deprecate Xtensa
--	support.
-+	Menu structure: Libraries moved out of multimedia section
+diff --git a/package/Config.in b/package/Config.in
+index b25f31a..58c6624 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -276,6 +276,7 @@ endmenu
+ menu "Crypto"
+ source "package/beecrypt/Config.in"
+ source "package/gnutls/Config.in"
++source "package/libassuan/Config.in"
+ source "package/libgcrypt/Config.in"
+ source "package/libgpg-error/Config.in"
+ source "package/libnss/Config.in"
+diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
+new file mode 100644
+index 0000000..93ab49c
+--- /dev/null
++++ b/package/libassuan/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBASSUAN
++	bool "libassuan"
++	select BR2_PACKAGE_LIBGPG_ERROR
++	help
++	  Libassuan is the IPC library used by some GnuPG related software.
 +
-+	Atom processor support. Prescott fix, blackfin ABI fix,
-+	Microblaze architecture support (using ext toolchain). Cleanup
-+	architecture names, deprecate Xtensa support.
- 
- 	Toolchain: Add GCC 4.4.7, 4.6.3, 4.7.0. uClibc 0.9.33.1,
- 	default to uClibc 0.9.33.x, enable
- 	UCLIBC_SUPPORT_AI_ADDRCONFIG by default, static and 64bit
- 	fixes for external toolchains, linaro ext toolchains, new
--	sourcery codebench ext toolchains, GDB 7.4.1.
-+	sourcery codebench ext toolchains, GDB 7.4.1, crosstool-ng
-+	1.15.2.
- 
--	Bootloaders: U-Boot: add 2012.04.01. Barebox: add 2012.04,
--	remove 2011.12.
-+	Bootloaders: U-Boot: add 2012.04.01, SPL and u-boot.img
-+	support. Barebox: add 2012.04, remove 2011.12.
- 
- 	Updated/fixed packages: alsa-lib, alsa-utils, at, atk, avahi,
- 	barebox, berkeleydb, bind, bluez_utils, boost, busybox,
--	can-utils, ccache, coreutils, cups, dbus, dhcp, directfb,
--	dnsmasq, doom-wad, dosfstools, e2fsprogs, expat, fakeroot,
--	feh, ffmpeg, file, fis, freetype, gamin, gawk, gdk-pixbuf,
--	giblib, glib-networking, gmp, gnutls, gpsd, grep, gstreamer,
--	gst-plugins-{bad,base,good,ugly}, haserl, hdparm, imagemagick,
--	iproute2, iptable, iw, kexec, kmod, lame, libarchive,
--	libatomic_ops, libconfig, libcurl, libdvdnav, libdvdread,
--	libedbus, libethumb, libffi, libfuse, libglib2, libgtk2,
--	libhid, libmbus, libmpeg2, libnl, libpng, libsigc, libsoup,
--	libupnp, liburcu, libusb, libusb-compat, libxml2,
--	libxml-parser-perl, libxslt, linux-firmware, linux-fusion,
--	lite, lsof, ltrace, lttng-libust, lua, makedevs, microperl,
--	mpd, mpfr, mpg123, mrouted, mtd, mysql_client, nbd, ncurses,
--	neon, netsnmp, network-manager, nfs-utils, ngrep, ntfs-3g,
-+	can-utils, ccache, cifs-utils, coreutils, cups, dbus, dhcp,
-+	directfb, dnsmasq, doom-wad, dosfstools, e2fsprogs, expat,
-+	fakeroot, feh, ffmpeg, file, fis, freetype, gamin, gawk,
-+	gdk-pixbuf, gettext, giblib, glib-networking, gmp, gnutls,
-+	gpsd, grep, gstreamer, gst-plugins-{bad,base,good,ugly},
-+	haserl, hdparm, imagemagick, iproute2, iptable, iw, kexec,
-+	kmod, lame, libaio, libarchive, libatomic_ops, libconfig,
-+	libcurl, libdvdnav, libdvdread, libedbus, libethumb, libffi,
-+	libfuse, libglib2, libgtk2, libhid, libmad, libmbus, libmpeg2,
-+	libnl, libplayer, libpng, libsigc, libsoup, libupnp, liburcu,
-+	libusb, libusb-compat, libxml2, libxml-parser-perl, libxslt,
-+	lighttpd, linux-firmware, linux-fusion, lite, lsof, ltrace,
-+	lttng-libust, lua, m4, makedevs, microperl, mpd, mpfr, mpg123,
-+	mrouted, mtd, mysql_client, nbd, ncftp, ncurses, neon,
-+	netsnmp, network-manager, nfs-utils, ngrep, ntfs-3g, openntpd,
- 	openssh, openssl, parted, pango, pcre, php, pixman, poco,
--	psmisc, pulseaudio, python, qt, quagga, radvd, rpm, ruby,
--	samba, sam-ba, sane-backends, sawman, screen, sdl_net,
--	smartmontools, sqlite, squashfs3, squid, sshfs, sudo,
-+	psmisc, pulseaudio, python, qt, quagga, radvd, rpm, rsync,
-+	ruby, samba, sam-ba, sane-backends, sawman, screen, sdl_net,
-+	smartmontools, speex, sqlite, squashfs3, squid, sshfs, sudo,
- 	syslinux, sysstat, taglib, tcpdump, tftp-hpa, transmission,
- 	tiff, tinyhttpd, uboot-tools, udev, uemacs, unionfs, usbutils,
--	util-linux, vala, valgrind, vim, vsftpd, wipe,
--	xdriver_xf86-{input-vmmouse,video-fbdev}, xfsprogs, zlib
--
--	New packages: apr, audiofile, bellagio, fmtools,
--	glib-networking, heirloom-mailx, hiawatha, latencytop,
--	lcdproc, libcap-ng, libdmtx, libfcgi, libtpl, minicom, msmtp,
--	ndisc6, netatalk, parted, polarssl, protobuf, socketcand,
--	systemd, ushare, zeromq
-+	util-linux, vala, valgrind, vim, vsftpd, wget, wipe,
-+	wpa_supplicant, xdriver_xf86-{input-vmmouse,video-fbdev},
-+	xfsprogs, zlib
++	  http://www.gnupg.org/
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+new file mode 100644
+index 0000000..d2a018a
+--- /dev/null
++++ b/package/libassuan/libassuan.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# libassuan
++#
++#############################################################
 +
-+	New packages: apr, apr-util, audiofile, bellagio,
-+	conntrack-tools, empty, fmtools, glib-networking,
-+	heirloom-mailx, hiawatha, latencytop, lcdproc, libcap-ng,
-+	libdmtx, libfcgi, libnetfilter_conntrack, libnfnetlink,
-+	libtpl, localedef, minicom, msmtp, ndisc6, netatalk,
-+	ocf-linux, openswan, parted, polarssl, protobuf, read-edid,
-+	socketcand, stress, systemd, ushare, zeromq
- 
- 	Deprecated packages: ttcp
- 
++LIBASSUAN_VERSION = 2.0.3
++LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
++LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan/
++LIBASSUAN_INSTALL_STAGING = YES
++
++LIBASSUAN_CONF_OPT = \
++	--disable-optimization \
++	--with-gpg-error-prefix=$(STAGING_DIR)/usr
++
++LIBASSUAN_DEPENDENCIES = libgpg-error
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.0.4
