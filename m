@@ -1,31 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 May 2012 08:34:29 +0200
-Subject: [Buildroot] [PATCH v3 02/22] gettext: warn that legal-info is
- not implemented
-In-Reply-To: <CAAXf6LW4v94Z8U8wtfCkdRQZ85qEM4p2GQNvAsDgijSW_ZSvYw@mail.gmail.com>
-References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
- <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
- <1336421563-5986-2-git-send-email-luca@lucaceresoli.net>
- <CAAXf6LW4v94Z8U8wtfCkdRQZ85qEM4p2GQNvAsDgijSW_ZSvYw@mail.gmail.com>
-Message-ID: <20120509083429.3c9f4010@skate>
+Date: Wed, 9 May 2012 08:59:11 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+ for-2012.05/locale-support
+In-Reply-To: <87k40mxqa7.fsf@macbook.be.48ers.dk>
+References: <cover.1336487951.git.thomas.petazzoni@free-electrons.com>
+ <87k40mxqa7.fsf@macbook.be.48ers.dk>
+Message-ID: <20120509085911.55f7b2ff@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Le Wed, 09 May 2012 00:26:56 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Le Wed, 9 May 2012 08:21:25 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+>  Thomas> Thomas Petazzoni (2):
+>  Thomas>       localedef: new package
+>  Thomas>       Add support to generate locale data
+> 
+> Pulled, thanks.
 
-> Moreover, will this be added to each package for which no legal info
-> is provided? What about making this message the default by putting it
-> in pkg-gentargets.mk, if no suitable variables were defined?
-
-It is already the case, but the point is that gettext has not yet been
-converted to gentargets (but Maxime Ripard and Samuel Martin have been
-sending patches about this recently).
+And do you have some opinion on how to organize this new option
+compared to the existing ones related to locales?
 
 Thomas
 -- 
