@@ -1,42 +1,47 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 9 May 2012 09:28:56 -0400
-Subject: [Buildroot] [PATCH v3] BeagleBone: new board
-In-Reply-To: <CAGm1_kt4SWwUuVH9DkB9TWB_qY3CKQ9DY9wdMczC8dWr2D1GNA@mail.gmail.com>
-References: <1336402801-15097-1-git-send-email-fhunleth@troodon-software.com>
- <CAGm1_kt4SWwUuVH9DkB9TWB_qY3CKQ9DY9wdMczC8dWr2D1GNA@mail.gmail.com>
-Message-ID: <CA+-urNS=bN=RDasHrFXY6BB-w9XqtfVx3jE186Bw1k+n2dA10Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 May 2012 18:16:44 +0200
+Subject: [Buildroot] [PATCH] package/crosstool-ng: bump version to
+	1.15.2, update config files
+In-Reply-To: <87y5p1ww2h.fsf@macbook.be.48ers.dk>
+References: <1336518081-2809-1-git-send-email-yann.morin.1998@free.fr>
+ <87y5p1ww2h.fsf@macbook.be.48ers.dk>
+Message-ID: <201205091816.45043.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+Peter, Thomas, All,
 
-On Tue, May 8, 2012 at 3:22 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> Hi Frank,
->
-> thanks for the patch. I now have a working kernel.
->
->> +BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL="git://github.com/koenkooi/linux.git"
->
-> What about using http instead of git? If I make it in the office the
-> whole LAN becomes totally lame and it is also good for proxy protected
-> environments.
+On Wednesday 09 May 2012 11:19:34 Peter Korsgaard wrote:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  Yann> Update the version of crosstool-Ng used, bump to 1.15.2.
+>  Yann> Also, update the bundled config files to match the new version.
+> 
+> Committed, thanks. I had to fixup our ctng handling for changes in the
+> copy_toolchain_lib_root_api by Thomas, but that's unrelated to this
+> version bump.
 
-Sigh. I actually just had a similar experience yesterday. My only
-issue with http is that it feels sooo slow. Is there any way to
-improve the speed? Other than that, switching all of the git urls to
-http urls seems like a good idea. Maybe it's worthwhile anyway?
+Was that related to the new sysroot-layout handling to cope with the
+Linaro toolchains?
 
->
-> One more issue having nothing to do with the patch itself. I cannot
-> compile it with the latest Linaro toolchain. it complains about not
-> having some assembly functions. With BR generated toolchain everything
-> is working as expected.
+> I've also adjusted the default uClibc version/mode to match what we're
+> using for the internal toolchain (0.9.33.1 / NPTL).
 
-I haven't tried Linaro yet. I had been trying CodeSourcery toolchains,
-but gave up when none of the kernels that it produced would boot.
+I pushed the new crosstool-NG version out so you could cut -rc1, and then
+I was about to upgrade the default versions set in the .configs.
 
-Frank
+You beat me to it! ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
