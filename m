@@ -1,124 +1,127 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 10 May 2012 09:39:46 +0200
-Subject: [Buildroot] [PATCH] New: add lava-test package
-In-Reply-To: <4FAB6EAF.8020607@atmel.com>
-References: <CAGm1_ktsb3D_jPdLO44bXeKU3CMXOEfDM1o2Ham10tecAGxO3g@mail.gmail.com>
- <1335539086-10206-1-git-send-email-ludovic.desroches@atmel.com>
- <4F9AB75A.8040607@visionsystems.de> <4F9ABCD4.4050400@atmel.com>
- <CAGm1_kvzhyHAxOxWkj3FtaJ6LqCSR3XgFR1PujbEU1aB_MaWMg@mail.gmail.com>
- <4FAB6EAF.8020607@atmel.com>
-Message-ID: <CAGm1_ku0voiSVZE=QoKyYkJfTQRa-=s=UnfD645pW7gLXfW3XQ@mail.gmail.com>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Thu, 10 May 2012 08:58:14 +0100
+Subject: [Buildroot] [PATCH] owl-linux: new package
+Message-ID: <1336636695-3368-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 10, 2012 at 9:30 AM, ludovic.desroches
-<ludovic.desroches@atmel.com> wrote:
-> Hi Yegor,
->
-> Le 05/07/2012 04:08 PM, Yegor Yefremov a ?crit :
->
->> On Fri, Apr 27, 2012 at 5:35 PM, Ludovic Desroches
->> <ludovic.desroches@atmel.com> ?wrote:
->>>
->>> Le 04/27/2012 05:12 PM, Yegor Yefremov a ?crit :
->>>
->>>> Am 27.04.2012 17:04, schrieb ludovic.desroches at atmel.com:
->>>>>
->>>>>
->>>>> From: Ludovic Desroches<ludovic.desroches@atmel.com>
->>>>>
->>>>> Signed-off-by: Ludovic Desroches<ludovic.desroches@atmel.com>
->>>>> ---
->>>>> ?package/Config.in ? ? ? ? ? ? ?| ? ?1 +
->>>>> ?package/lava-test/Config.in ? ?| ? ?8 ++++++++
->>>>> ?package/lava-test/lava-test.mk | ? 11 +++++++++++
->>>>> ?3 files changed, 20 insertions(+), 0 deletions(-)
->>>>> ?create mode 100644 package/lava-test/Config.in
->>>>> ?create mode 100644 package/lava-test/lava-test.mk
->>>>>
->>>>> diff --git a/package/Config.in b/package/Config.in
->>>>> index 3e5f708..79f9aaf 100644
->>>>> --- a/package/Config.in
->>>>> +++ b/package/Config.in
->>>>> @@ -22,6 +22,7 @@ source "package/dhrystone/Config.in"
->>>>> ?source "package/dstat/Config.in"
->>>>> ?source "package/dmalloc/Config.in"
->>>>> ?source "package/kexec/Config.in"
->>>>> +source "package/lava-test/Config.in"
->>>>> ?source "package/lmbench/Config.in"
->>>>> ?source "package/lsof/Config.in"
->>>>> ?source "package/ltp-testsuite/Config.in"
->>>>> diff --git a/package/lava-test/Config.in b/package/lava-test/Config.in
->>>>> new file mode 100644
->>>>> index 0000000..d13dfd7
->>>>> --- /dev/null
->>>>> +++ b/package/lava-test/Config.in
->>>>> @@ -0,0 +1,8 @@
->>>>> +config BR2_PACKAGE_LAVA_TEST
->>>>> + ? ? ? bool "lava-test"
->>>>> + ? ? ? help
->>>>> + ? ? ? ? LAVA Test is a test execution framework designed to make it
->>>>> easy to
->>>>> + ? ? ? ?install and run supported tests. Results from testing can be
->>>>> + ? ? ? ?optionally uploaded to a dashboard running lava-dashboard.
->>>>> +
->>>>> + ? ? ? ?https://launchpad.net/lava-test
->>>>> diff --git a/package/lava-test/lava-test.mk
->>>>> b/package/lava-test/lava-test.mk
->>>>> new file mode 100644
->>>>> index 0000000..f6df4a2
->>>>> --- /dev/null
->>>>> +++ b/package/lava-test/lava-test.mk
->>>>> @@ -0,0 +1,11 @@
->>>>> +LAVA_TEST_VERSION = 0.7
->>>>> +LAVA_TEST_SOURCE = lava-test-$(LAVA_TEST_VERSION)-2012.04.tar.gz
->>>>> +LAVA_TEST_SITE =
->>>>> https://launchpad.net/lava-test/trunk/2012.04/+download/
->>>>> +LAVA_TEST_DEPENDENCIES = python-setuptools
->>>>> +
->>>>> +define LAVA_TEST_INSTALL_TARGET_CMDS
->>>>> + ?(cd $(@D);
->>>>>
->>>>> PYTHONPATH="$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"\
->>>>> + ?$(HOST_DIR)/usr/bin/python setup.py install
->>>>> --prefix=$(TARGET_DIR)/usr)
->>>>> +endef
->>>>> +
->>>>> +$(eval $(call GENTARGETS))
->>>>
->>>>
->>>>
->>>> Thank you for the patch. I'll look at it next week.
->>>>
->>>> Yegor
->>>>
->>>>
->>>
->>> Ok, thanks.
->>
->>
->> Unfortunately I found no solution so far. I described our problem
->> here:
->> https://groups.google.com/d/topic/comp.lang.python/0rDWl2d8PDY/discussion
->> and I hope someone will point to a solution. I looked here, but found
->> no mention about python executable path:
->> http://docs.python.org/install/index.html.
->>
->> Yegor
->>
->
-> Thanks for your help. In my case I can correct it with a post-build script
-> but it's not a proper solution.
+From: Simon Dawson <spdawson@gmail.com>
 
-Not really. I'm afraid setuptools will have to be changed to support the
-functionality we need to cross-install such scripts. If you could
-contact Chris Lambacher, perhaps he could help (his blog post about
-cross-compiling python extensions
-http://whatschrisdoing.com/blog/2009/10/16/cross-compiling-python-extensions/).
-Unfortunately he is not active on G+  and I don't have his private
-e-mail.
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in                                  |    1 +
+ package/owl-linux/Config.in                        |   10 ++++++++++
+ ...1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch |   15 +++++++++++++++
+ .../owl-linux-1.0.6-fix-for-linux-3.3.x.patch      |   19 +++++++++++++++++++
+ package/owl-linux/owl-linux.mk                     |   20 ++++++++++++++++++++
+ 5 files changed, 65 insertions(+)
+ create mode 100644 package/owl-linux/Config.in
+ create mode 100644 package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
+ create mode 100644 package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
+ create mode 100644 package/owl-linux/owl-linux.mk
 
-Yegor
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..971b106 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -208,6 +208,7 @@ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
++source "package/owl-linux/Config.in"
+ source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
+diff --git a/package/owl-linux/Config.in b/package/owl-linux/Config.in
+new file mode 100644
+index 0000000..6ee0f95
+--- /dev/null
++++ b/package/owl-linux/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_OWL_LINUX
++	bool "H&D Wireless SPB104 SD-card WiFi SIP"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Linux kernel driver for the H&D Wireless SPB104 SD-card WiFi SIP.
++
++	  http://linux.hd-wireless.se/bin/view/Linux/GettingStarted
++
++comment "owl-linux requires a Linux kernel"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch b/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
+new file mode 100644
+index 0000000..a644406
+--- /dev/null
++++ b/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
+@@ -0,0 +1,15 @@
++Fix the owl-linux Makefile so that it protects spaces in the CROSS_COMPILE
++variable. For example, this variable will contain spaces if ccache is used.
++
++diff -Nur a/Makefile b/Makefile
++--- a/Makefile	2011-09-15 12:20:37.000000000 +0100
+++++ b/Makefile	2012-05-10 08:53:55.727706424 +0100
++@@ -35,7 +35,7 @@
++ 	PWD := $(shell pwd)
++ 
++ default:
++-	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) M=$(PWD) MODE=$(MODE) modules
+++	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" M=$(PWD) MODE=$(MODE) modules
++ 
++ clean: 
++ 	-rm -f *.o *.mod.c *.ko modules.order Module.symvers
+diff --git a/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch b/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
+new file mode 100644
+index 0000000..2d4ea48
+--- /dev/null
++++ b/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
+@@ -0,0 +1,19 @@
++Kernel commit b81693d9149c598302e8eb9c20cb20330d922c8e changed the
++net_device_ops structure, removing the ndo_set_multicast_list callback. The
++ndo_set_rx_mode has also been added to this structure.
++
++The upshot of these changes is that owl-linux fails to compile with 3.3.x
++kernels.
++
++diff -Nur a/owl_net.c b/owl_net.c
++--- a/owl_net.c	2011-09-15 12:20:37.000000000 +0100
+++++ b/owl_net.c	2012-05-01 11:39:14.617658349 +0100
++@@ -376,7 +376,7 @@
++ #endif /* OWL_CONFIG_IFUPDOWN */
++         .ndo_start_xmit         = owl_net_tx,
++         .ndo_get_stats          = owl_net_get_stats,
++-        .ndo_set_multicast_list = NULL,
+++        .ndo_set_rx_mode = NULL,
++         .ndo_tx_timeout         = owl_net_tx_timeout,
++         .ndo_set_mac_address    = NULL,
++ };
+diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
+new file mode 100644
+index 0000000..6cf8e96
+--- /dev/null
++++ b/package/owl-linux/owl-linux.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# owl-linux
++#
++#############################################################
++OWL_LINUX_VERSION = 1.0.6
++OWL_LINUX_SITE = http://linux.hd-wireless.se/pub/Linux/DownloadDrivers
++OWL_LINUX_SOURCE = owl-linux-$(OWL_LINUX_VERSION).tar.gz
++
++OWL_LINUX_DEPENDENCIES = linux
++
++define OWL_LINUX_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
++endef
++
++define OWL_LINUX_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.9.5
