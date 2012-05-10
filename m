@@ -1,55 +1,35 @@
-From: Piotr Karbowski <piotr.karbowski@gmail.com>
-Date: Thu, 10 May 2012 16:03:45 +0200
-Subject: [Buildroot] Unable to build x86_64 on x86_64
-In-Reply-To: <87sjf8jt1i.fsf@macbook.be.48ers.dk>
-References: <4FAAF16D.2000005@gmail.com>
- <201205092250.18821.vapier@gentoo.org> <4FAB7AEC.2020608@gmail.com>
- <87sjf8jt1i.fsf@macbook.be.48ers.dk>
-Message-ID: <4FABCAC1.3030000@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 10 May 2012 16:01:32 +0200
+Subject: [Buildroot] [git commit] linux: document and default to sensible
+	value for BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+Message-ID: <20120510142624.0FEA396CA0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/10/2012 11:15 AM, Peter Korsgaard wrote:
->>>>>> "Piotr" == Piotr Karbowski<piotr.karbowski@gmail.com>  writes:
->
-> Hi,
->
-> Buildroot questions belong on the buildroot list, rather than the uclibc
-> one.
->
->   Piotr>    /usr/bin/gcc -c -I. -W -Wall -Wstrict-prototypes
->   Piotr>  -Wmissing-prototypes -Wshadow -O2
->   Piotr>  -I/home/piotr/src/buildroot-2012.02/output/host/include
->   Piotr>  -I/home/piotr/src/buildroot-2012.02/output/host/usr/include  sysinfo.c
->
->   Piotr>  /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/../../../../x86_64-pc-linux-gnu/bin/as:
->   Piotr>  error while loading shared libraries: libc.so.0: cannot open shared
->   Piotr>  object file: No such file or directory
->   Piotr>  make[3]: *** [sysinfo.o] Error 1
->
-> Your host assembler apparently has a problem finding libc. Strangely
-> enough it wants libc.so.0 which is a soname used by uClibc and not
-> glibc. Do you have LD_LIBRARY_PATH set in your environment?
->
-> x86-64 to x86-64 works fine here with buildroot git.
->
+commit: http://git.buildroot.net/buildroot/commit/?id=babd953f5fdd682b6974904562758caf8c8848de
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Nope, I don't. I cloned fresh buildroot from git and to ensure that any 
-weird variables is not passed by I did:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-    env -i PATH=$PATH TERM=$TERM HOME=$HOME make
-
-The result is the same.
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 148b858..7595a4a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -69,7 +69,11 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_REPO_URL
  
-/usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/../../../../x86_64-pc-linux-gnu/bin/as: 
-error while loading shared libraries: libc.so.0: cannot open shared 
-object file: No such file or directory
-
-However after changing binutinls from 2.21.1 which is selected by 
-default to 2.22 it does compile.
-
--- Piotr.
+ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 	string "Custom Git version"
++	default "HEAD"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_GIT
++	help
++	  Git revision to use in the format used by git rev-parse,
++	  E.G. a sha id, a tag, branch, ..
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
