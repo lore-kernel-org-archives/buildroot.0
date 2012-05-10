@@ -1,49 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 May 2012 13:04:44 +0200
-Subject: [Buildroot] [PATCH 5/5] Added host targets to gnupg and its
- prerequisite libraries.
-In-Reply-To: <1336598986-9518-5-git-send-email-stijn.souffriau@essensium.com>
-References: <1336598986-9518-1-git-send-email-stijn.souffriau@essensium.com>
- <1336598986-9518-5-git-send-email-stijn.souffriau@essensium.com>
-Message-ID: <20120510130444.0aef3383@skate>
+From: Piotr Karbowski <piotr.karbowski@gmail.com>
+Date: Thu, 10 May 2012 16:03:45 +0200
+Subject: [Buildroot] Unable to build x86_64 on x86_64
+In-Reply-To: <87sjf8jt1i.fsf@macbook.be.48ers.dk>
+References: <4FAAF16D.2000005@gmail.com>
+ <201205092250.18821.vapier@gentoo.org> <4FAB7AEC.2020608@gmail.com>
+ <87sjf8jt1i.fsf@macbook.be.48ers.dk>
+Message-ID: <4FABCAC1.3030000@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 05/10/2012 11:15 AM, Peter Korsgaard wrote:
+>>>>>> "Piotr" == Piotr Karbowski<piotr.karbowski@gmail.com>  writes:
+>
+> Hi,
+>
+> Buildroot questions belong on the buildroot list, rather than the uclibc
+> one.
+>
+>   Piotr>    /usr/bin/gcc -c -I. -W -Wall -Wstrict-prototypes
+>   Piotr>  -Wmissing-prototypes -Wshadow -O2
+>   Piotr>  -I/home/piotr/src/buildroot-2012.02/output/host/include
+>   Piotr>  -I/home/piotr/src/buildroot-2012.02/output/host/usr/include  sysinfo.c
+>
+>   Piotr>  /usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/../../../../x86_64-pc-linux-gnu/bin/as:
+>   Piotr>  error while loading shared libraries: libc.so.0: cannot open shared
+>   Piotr>  object file: No such file or directory
+>   Piotr>  make[3]: *** [sysinfo.o] Error 1
+>
+> Your host assembler apparently has a problem finding libc. Strangely
+> enough it wants libc.so.0 which is a soname used by uClibc and not
+> glibc. Do you have LD_LIBRARY_PATH set in your environment?
+>
+> x86-64 to x86-64 works fine here with buildroot git.
+>
 
-Le Wed,  9 May 2012 23:29:46 +0200,
-Stijn Souffriau <stijn.souffriau@essensium.com> a ?crit :
+Nope, I don't. I cloned fresh buildroot from git and to ensure that any 
+weird variables is not passed by I did:
 
-> ---
->  package/gnupg/gnupg.mk               |   11 +++++++++++
->  package/libassuan/libassuan.mk       |    5 +++++
->  package/libgcrypt/libgcrypt.mk       |    1 +
->  package/libgpg-error/libgpg-error.mk |    1 +
->  package/libksba/libksba.mk           |    5 +++++
->  package/libpth/libpth.mk             |    5 +++++
->  6 files changed, 28 insertions(+), 0 deletions(-)
+    env -i PATH=$PATH TERM=$TERM HOME=$HOME make
 
-I am not sure we want to support building gnupg for the host. It is not
-needed as a build time dependency of anything, and gnupg is available
-in virtually all GNU/Linux distributions, and as far as I know, there
-are no specific version compatibility problems that would require the
-gnupg version on the host to be exactly the same as the one used on the
-target.
+The result is the same.
 
-I'd like to avoid seeing Buildroot replacing the package management
-system of the host distribution, for tools that are as common as gnupg.
-Things like u-boot-tools, or sam-ba require packages because they are
-typically not available in Linux distros, but it's not the case of
-gnupg.
+ 
+/usr/lib/gcc/x86_64-pc-linux-gnu/4.5.3/../../../../x86_64-pc-linux-gnu/bin/as: 
+error while loading shared libraries: libc.so.0: cannot open shared 
+object file: No such file or directory
 
-Regards,
+However after changing binutinls from 2.21.1 which is selected by 
+default to 2.22 it does compile.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-- Piotr.
