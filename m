@@ -1,93 +1,107 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 10 May 2012 19:07:20 +0200
-Subject: [Buildroot] [git commit] Update for 2012.05-rc1
-Message-ID: <20120510172117.449F096CA0@busybox.osuosl.org>
+Date: Thu, 10 May 2012 19:25:44 +0200
+Subject: [Buildroot] Buildroot 2012.05-rc1 released
+Message-ID: <877gwkc5if.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9f7bf3b63d820616fe8ce2f3fa485c22542f2acb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES            |    2 +-
- Makefile           |    2 +-
- docs/download.html |   10 +++++-----
- docs/news.html     |   13 +++++++++++++
- 4 files changed, 20 insertions(+), 7 deletions(-)
+Buildroot 2012.05-rc1 is released - Go download it at:
 
-diff --git a/CHANGES b/CHANGES
-index 1a2b6ed..6b01c04 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2012.05, Not released yet:
-+2012.05-rc1, Released May 10th, 2012
- 
- 	Fixes all over the tree and new features.
- 
-diff --git a/Makefile b/Makefile
-index 1d7973e..96f9412 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2012.05-git
-+export BR2_VERSION:=2012.05-rc1
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index 2802609..7b22569 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -13,15 +13,15 @@ here:<p>
- or
- <a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
- <p>
--<!--
--The latest release candidate is <b>2012.02-rc3</b>, which can be
-+
-+The latest release candidate is <b>2012.05-rc1</b>, which can be
- downloaded here:<p>
- 
--<a href="/downloads/buildroot-2012.02-rc3.tar.gz">buildroot-2012.02-rc3.tar.gz</a>
-+<a href="/downloads/buildroot-2012.05-rc1.tar.gz">buildroot-2012.05-rc1.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.02-rc3.tar.bz2">buildroot-2012.02-rc3.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.05-rc1.tar.bz2">buildroot-2012.05-rc1.tar.bz2</a>.
- <p>
---->
-+
- This and earlier releases can always be downloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
-diff --git a/docs/news.html b/docs/news.html
-index e6d1b47..8c4871f 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,19 @@
- <p>
- 
- <ul>
-+  <li><b>10 May 2012 -- 2012.05-rc1 released</b>
-+
-+    <p>We have a new release candidate! Lots of changes all over the
-+    tree, see the <a
-+    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc1">CHANGES</a>
-+    file for details</p>
-+
-+    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2012.05-rc1.tar.bz2">2012.05-rc1
-+    release candidate</a>, and report any problems found to the <a
-+    href="lists.html">mailing list</a> or <a
-+    href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+
-   <li><b>20 April 2012 -- Autobuilder Results Online</b>
- 
-     <p>The status of the autobuilders, which do repeated
+http://buildroot.net/downloads/buildroot-2012.05-rc1.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2012.05-rc1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2012.02..
+   158  Gustavo Zacarias
+   129  Peter Korsgaard
+    72  Thomas Petazzoni
+    25  Yegor Yefremov
+    12  Maxime Ripard
+     9  Arnout Vandecappelle (Essensium/Mind)
+     8  Ludovic Desroches
+     8  Simon Dawson
+     7  Sven Neumann
+     6  Markos Chandras
+     5  Samuel MARTIN
+     4  Alvaro G. M
+     4  Luca Ceresoli
+     3  Alexandre Belloni
+     3  Arnout Vandecappelle
+     3  Nicolas Dechesne
+     3  Rico Bachmann
+     3  Stephan Hoffmann
+     2  Frank Hunleth
+     2  Marek Belisko
+     2  Maxime Hadjinlian
+     2  Qais Yousef
+     2  Sagaert Johan
+     2  Thomas De Schampheleire
+     2  Will Newton
+     2  Yann E. MORIN
+     1  Alexandre Pereira da Silva
+     1  Baruch Siach
+     1  Dimitry Golubovsky
+     1  Fabio Porcedda
+     1  Francois Perrad
+     1  Ismael Luceno
+     1  Jean-Christophe PLAGNIOL-VILLARD
+     1  Julian Lunz
+     1  Julien Boibessot
+     1  Kevin Cernekee
+     1  Markus Kaindl
+     1  Mathieu Briand
+     1  Phil Edworthy
+     1  Stephan Thamm
+     1  Vanya Sergeev
+     1  vsergeev
+
+It's nice to see contributions from lots of new people in addition to
+the "oldtimers". This time around Gustavoz took the lead with many many
+package updates / fixes.
+
+It has been a pretty busy development cycle, with almost 500 commits,
+and a number of large scale changes.
+
+Of noteworthy new features we have:
+
+ - Large number of new packages (34): Systemd, polarssl and a number of
+   networking packages.
+
+ - GCC 4.7, uClibc 0.9.33.1 and support for Linaro external ARM
+   toolchains.
+
+ - Microblaze support (using external toolchain). Xtensa support is
+   deprecated.
+
+ - Additional QEMU defconfigs, including Microblaze and e500 PowerPC.
+   Defconfigs for Beaglebone, Pandaboard, Freescale mx53qsb.
+
+ - Patch series support in apply-patches.sh
+
+And the usual package version updates and bug fixes. Thanks to the
+autobuilder setup by Thomas Petazzoni we have been able to fix a lot of
+different build issues. See the CHANGES file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc1
+
+Like usual, I will now create a next branch and start merging in new
+features, rather than wait until 2012.05 is released.
+
+Enjoy!
+
+-- 
+Bye, Peter Korsgaard
