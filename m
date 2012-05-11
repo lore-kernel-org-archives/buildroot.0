@@ -1,41 +1,67 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 12 May 2012 00:18:31 +0200
-Subject: [Buildroot] [PATCH] Globally disable PKG_CONFIG_PATH
-In-Reply-To: <20120507163605.2b3b5a27@skate>
-Message-ID: <1336774711-20504-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 12 May 2012 00:29:15 +0200
+Subject: [Buildroot] [PATCH 0/3] Add CONF_ENABLE and CONF_PKG_ENABLE
+ helper functions
+In-Reply-To: <20120507162139.44a814e9@skate>
+References: <1335647781-16536-1-git-send-email-arnout@mind.be>
+ <20120507162139.44a814e9@skate>
+Message-ID: <4FAD92BB.5040606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
-look for libraries outside of the buildroot tree.  This is a problem
-both for host and target builds.  To avoid it, globally set an empty
-PKG_CONFIG_PATH in the environment.
+On 05/07/12 16:21, Thomas Petazzoni wrote:
+> Le Sat, 28 Apr 2012 23:16:18 +0200,
+> "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>  a ?crit :
+>
+>> >    Many packages have the following type of construct:
+>> >
+>> >  ifeq ($(BR2_PACKAGE_ACL),y)
+>> >          SYSTEMD_CONF_OPT += --enable-acl
+>> >          SYSTEMD_DEPENDENCIES += acl
+>> >  else
+>> >          SYSTEMD_CONF_OPT += --disable-acl
+>> >  endif
+>> >
+>> >    The first patch in this series abbreviates that to
+>> >
+>> >  $(eval $(call CONF_PKG_ENABLE,SYSTEMD,acl))
+>> >
+>> >    It makes it possible to abbreviate similar constructs as well.
+> Thanks for working on this and making a proposal.
+>
+> However, on my side, I am not yet convinced that this is actually
+> making things better than what we have now. What we have now is quite
+> obvious for the first-time reader, which is very good. Those
+> CONF_PKG_ENABLE and CONF_ENABLE macros make things a bit too cryptic
+> from my point of view.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
---
-Tested on Nigel's config.  Without this patch, it breaks when I point
-PKG_CONFIG_PATH to dbus-1.pc; with this patch, it works.
+  I agree that it looks too cryptic.  Certainly with the eval and call things.
+And we should indeed try to keep the package .mk files as intuitive as
+possible.
 
----
- Makefile |    3 +++
- 1 file changed, 3 insertions(+)
+  However, my purpose was not to save a few lines, but rather to make sure
+that package contributors do things the correct way.  Specifically, I want
+to make it easier for package contributors to explicitly specify --enable
+and --disable options.
 
-diff --git a/Makefile b/Makefile
-index 96f9412..99e0a71 100644
---- a/Makefile
-+++ b/Makefile
-@@ -165,6 +165,9 @@ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
- 
-+# Make sure pkg-config doesn't look outside the buildroot tree
-+unexport PKG_CONFIG_PATH
-+
- # bash prints the name of the directory on 'cd <dir>' if CDPATH is
- # set, so unset it here to not cause problems. Notice that the export
- # line doesn't affect the environment of $(shell ..) calls, so
+  I was probably just trying too hard to support all possible use cases.
+What about adding something like:
+
+SYSTEMD_AUTO_CONF_ENABLE_DEPS += acl
+
+which would get expanded to the whole ifeq thing in the AUTOTARGETS call?
+This only works if the buildroot package name is the same as the
+--enable/--disable option, but that already catches many cases.
+
+  Regards,
+  Arnout
 -- 
-tg: (9f7bf3b..) t/pkg-config-path (depends on: master)
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
