@@ -1,51 +1,29 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 May 2012 22:23:48 +0200
-Subject: [Buildroot] [PATCH 1/2] iperf: fix build on !MMU platforms
-In-Reply-To: <87ipg7iurd.fsf@macbook.be.48ers.dk>
-References: <1336408773-27312-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87ipg7iurd.fsf@macbook.be.48ers.dk>
-Message-ID: <4FAD7554.50605@mind.be>
+Date: Fri, 11 May 2012 22:43:57 +0200
+Subject: [Buildroot] [Bug 5186] New: initramfs/cpio should support lzo
+ compression
+In-Reply-To: <20120507155404.6abbe051@skate>
+References: <bug-5186-163@https.bugs.busybox.net/> <4FA672AD.2030905@mind.be>
+ <20120507155404.6abbe051@skate>
+Message-ID: <4FAD7A0D.50200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/07/12 22:47, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  writes:
+On 05/07/12 15:54, Thomas Petazzoni wrote:
+> Le Sun, 06 May 2012 14:46:37 +0200,
+> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
 >
->   Thomas>  Build tested on sh2a and blackfin architectures.
+> >     PS What's the policy for reacting to patches posted on bugzilla?
+> AFAIK, there's none. Now that we have patchwork in place, I guess we
+> should probably tell users to not post patches to the Bugzilla, but to
+> the list instead (though that requires users to subscribe to the list).
 >
-> Thanks. Have you sent these patches upstream?
->
->   Thomas>  ++++ b/src/Listener.cpp
->   Thomas>  +@@ -679,7 +679,11 @@
->   Thomas>  +     pid_t pid;
->   Thomas>  +
->   Thomas>  +     /* Create a child process&  if successful, exit from the parent process */
->   Thomas>  ++#ifndef HAVE_FORK
->   Thomas>  ++    if ( (pid = vfork()) == -1 ) {
->   Thomas>  ++#else
->   Thomas>  +     if ( (pid = fork()) == -1 ) {
->   Thomas>  ++#endif
->   Thomas>  +         fprintf( stderr, "error in first child create\n");
->   Thomas>  +         exit(0);
->
-> I believe you aren't allowed to call exit() after vfork (but should use
-> _exit() instead).
->
-> http://unix.stackexchange.com/questions/5364/why-should-a-child-of-a-vfork-or-fork-call-exit-instead-of-exit
+> What do you think?
 
-  This particular exit is OK, because it is in the error case.
-It's the one below that is not OK.  Or rather, nothing is OK, because
-the child process after a vfork is not supposed to do anything except
-exec() or _exit() - it certainly shouldn't return from the function.
-In fact, on Linux the parent process is suspended until the child either
-_exit()s or exec()s, so it doesn't daemonize at all.
-
-  I'm not sure how you can daemonize in a posixly-correct way on a NOMMU
-target.  But since we're running on Linux, we can just use daemon(),
-right?  Both glibc and uclibc define it AFAIK.
+  I agree.  But how do we tell the users? :-)
 
   Regards,
   Arnout
