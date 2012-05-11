@@ -1,63 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 May 2012 00:15:30 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile.in: add host python2 binary
- detection
-In-Reply-To: <1336509949-19630-2-git-send-email-s.martin49@gmail.com>
-References: <1336509949-19630-1-git-send-email-s.martin49@gmail.com>
- <1336509949-19630-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <4FAD8F82.6010007@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 12 May 2012 00:18:31 +0200
+Subject: [Buildroot] [PATCH] Globally disable PKG_CONFIG_PATH
+In-Reply-To: <20120507163605.2b3b5a27@skate>
+Message-ID: <1336774711-20504-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/08/12 22:45, Samuel Martin wrote:
->
-> Signed-off-by: Samuel Martin<s.martin49@gmail.com>
->
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index df7042c..84968da 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -151,6 +151,18 @@ FLEX:=$(shell which flex || type -p flex)
->   BISON:=$(shell which bison || type -p bison)
->   SED:=$(shell which sed || type -p sed) -i -e
->
-> +PYTHON2:=$(shell \
-> +	which python&>/dev/null&&  \
-> +		python --version 2>&1 | grep -qE 'Python 2\.[6-7]*'&&  \
-> +		which python || \
-> +	which python2&>/dev/null&&  \
-> +		python2 --version 2>&1 | grep -qE 'Python 2\.[6-7]*'&&  \
-> +		which python2 || \
-> +	echo $(HOST_DIR)/usr/bin/python)
-> +HOST_PYTHON2:=$(shell \
-> +	test $(PYTHON2) != $(HOST_DIR)/usr/bin/python || \
-> +	echo host-python)
-> +
+If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
+look for libraries outside of the buildroot tree.  This is a problem
+both for host and target builds.  To avoid it, globally set an empty
+PKG_CONFIG_PATH in the environment.
 
-  This is probably better placed in support/dependencies, using the
-suitable-host-package infrastructure.  Put the PYTHON2 script in
-support/dependencies/check-host-python2.sh, and create a
-support/dependencies/check-host-python2.mk containing:
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+--
+Tested on Nigel's config.  Without this patch, it breaks when I point
+PKG_CONFIG_PATH to dbus-1.pc; with this patch, it works.
 
-PYTHON2 := python python2
-PYTHON2 := $(call suitable-host-package,$(PYTHON2))
-ifeq ($(PYTHON2),$(HOST_DIR)/usr/bin/python)
-   HOST_PYTHON2 = host-python
-endif
+---
+ Makefile |    3 +++
+ 1 file changed, 3 insertions(+)
 
-  Actually, maybe DEP_PYTHON2 is a better name for the dependency.  Or
-NEEDS_PYTHON2.
-
-  Regards,
-  Arnout
-
+diff --git a/Makefile b/Makefile
+index 96f9412..99e0a71 100644
+--- a/Makefile
++++ b/Makefile
+@@ -165,6 +165,9 @@ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+ 
++# Make sure pkg-config doesn't look outside the buildroot tree
++unexport PKG_CONFIG_PATH
++
+ # bash prints the name of the directory on 'cd <dir>' if CDPATH is
+ # set, so unset it here to not cause problems. Notice that the export
+ # line doesn't affect the environment of $(shell ..) calls, so
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (9f7bf3b..) t/pkg-config-path (depends on: master)
