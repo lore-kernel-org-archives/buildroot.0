@@ -1,46 +1,59 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 11 May 2012 22:01:24 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchainfile.cmake: toward a relocatable
-	toolchain
-Message-ID: <1336766484-6348-1-git-send-email-s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 May 2012 22:23:48 +0200
+Subject: [Buildroot] [PATCH 1/2] iperf: fix build on !MMU platforms
+In-Reply-To: <87ipg7iurd.fsf@macbook.be.48ers.dk>
+References: <1336408773-27312-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87ipg7iurd.fsf@macbook.be.48ers.dk>
+Message-ID: <4FAD7554.50605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove all hard-coded pathes.
+On 05/07/12 22:47, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni<thomas.petazzoni@free-electrons.com>  writes:
+>
+>   Thomas>  Build tested on sh2a and blackfin architectures.
+>
+> Thanks. Have you sent these patches upstream?
+>
+>   Thomas>  ++++ b/src/Listener.cpp
+>   Thomas>  +@@ -679,7 +679,11 @@
+>   Thomas>  +     pid_t pid;
+>   Thomas>  +
+>   Thomas>  +     /* Create a child process&  if successful, exit from the parent process */
+>   Thomas>  ++#ifndef HAVE_FORK
+>   Thomas>  ++    if ( (pid = vfork()) == -1 ) {
+>   Thomas>  ++#else
+>   Thomas>  +     if ( (pid = fork()) == -1 ) {
+>   Thomas>  ++#endif
+>   Thomas>  +         fprintf( stderr, "error in first child create\n");
+>   Thomas>  +         exit(0);
+>
+> I believe you aren't allowed to call exit() after vfork (but should use
+> _exit() instead).
+>
+> http://unix.stackexchange.com/questions/5364/why-should-a-child-of-a-vfork-or-fork-call-exit-instead-of-exit
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+  This particular exit is OK, because it is in the error case.
+It's the one below that is not OK.  Or rather, nothing is OK, because
+the child process after a vfork is not supposed to do anything except
+exec() or _exit() - it certainly shouldn't return from the function.
+In fact, on Linux the parent process is suspended until the child either
+_exit()s or exec()s, so it doesn't daemonize at all.
 
-diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
-index 371ab11..6b2d2dc 100644
---- a/package/pkg-cmaketargets.mk
-+++ b/package/pkg-cmaketargets.mk
-@@ -205,17 +205,19 @@ endef
- $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 	@mkdir -p $(@D)
- 	@echo -en "\
-+	get_filename_component(_THIS_DIR \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
-+	set(_HOST_DIR \"\$${_THIS_DIR}/../../..\")\n\
- 	set(CMAKE_SYSTEM_NAME Linux)\n\
--	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
--	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
-+	set(CMAKE_C_COMPILER \"\$${_HOST_DIR}/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc\")\n\
-+	set(CMAKE_CXX_COMPILER \"\$${_HOST_DIR}/usr/bin/$(REAL_GNU_TARGET_NAME)-g++\")\n\
- 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
- 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
- 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
--	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
--	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-+	set(CMAKE_PROGRAM_PATH \"\$${_HOST_DIR}/usr/bin\")\n\
-+	set(CMAKE_FIND_ROOT_PATH \"\$${_HOST_DIR}/usr/$(REAL_GNU_TARGET_NAME)/sysroot\")\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
--	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-+	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"\$${_HOST_DIR}/usr/$(REAL_GNU_TARGET_NAME)/sysroot\")\n\
- 	" > $@
+  I'm not sure how you can daemonize in a posixly-correct way on a NOMMU
+target.  But since we're running on Linux, we can just use daemon(),
+right?  Both glibc and uclibc define it AFAIK.
 
---
-1.7.10.1
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
