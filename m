@@ -1,31 +1,64 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 May 2012 20:41:59 -0300
-Subject: [Buildroot] [PATCH 1/2] libtorrent: new package
-In-Reply-To: <4FADA2BA.3010507@mind.be>
-References: <1336765188-20743-1-git-send-email-gustavo@zacarias.com.ar>
- <4FADA2BA.3010507@mind.be>
-Message-ID: <d72c000db80dab016beb8feec3f3a870@zacarias.com.ar>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Sat, 12 May 2012 01:01:36 -0400
+Subject: [Buildroot] [PATCH] Added package v86d which provides a
+ real-mode helper for uvesafb driver.
+In-Reply-To: <4FAD9523.3020501@mind.be>
+References: <1336560101-29035-1-git-send-email-golubovsky@gmail.com>
+ <4FAD9523.3020501@mind.be>
+Message-ID: <CADiAo4KofjL+kb8RLbWRwHauYpgqtWefLi_4QwV50sMgf-M+VA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-05-11 20:37, Arnout Vandecappelle wrote:
+Arnout,
 
-> On 05/11/12 21:39, Gustavo Zacarias wrote:
->> +LIBTORRENT_DEPENDENCIES = host-pkg-config libsigc openssl
->> +LIBTORRENT_CONF_OPT = --enable-aligned --enable-openssl
+On Fri, May 11, 2012 at 6:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 05/09/12 12:41, Dmitry wrote:
+> [snip]
 >
->  Isn't the openssl dependency optional?
+>> +# This flag to configure should be per target architecture rather than
+>> +# autodetected (or it will be per host architecture which may be
+>> +# not the same as target).
+>> +
+>> +X86EMU = $(if $(BR2_i386),n,y)
 >
->  Regards,
->  Arnout
+>
+> ?This comment was not very clear to me. ?I guess you mean
+> # The configure script autodetects the host architecture, so we must
+> # pass the target architecture explicitly.
 
-Yes for libtorrent, no if you want rtorrent to work (needs libtorrent 
-built with openssl to work - it builds without it but will bail out when 
-running it).
-I can add an openssl Config.in knob but since 99% of the time 
-libtorrent will be used as a dependency of rtorrent it's kind of 
-pointless.
-Regards.
+Thanks for your feedback. Indeed, the configure script calls uname -m
+by default, that is, assumes host architecture is same as target's.
+
+>
+> ?When you use GENTARGETS, you must also specify the install commands.
+
+And if I don't then standard "cd $(@D); make install" or anything
+similar will be used? Somehow it works without explicit install
+command specification.
+
+> However, you can probably keep using AUTOTARGETS. ?Even when you use
+> AUTOTARGETS, it is possible to override the CONFIGURE_CMDS and BUILD_CMDS.
+
+Due to the way v86d configure is written GENTARGETS seems to be more
+proper - I got convinced.
+
+> But you don't even need to override the BUILD_CMDS. ?Instead, you can
+> pass additional options to the MAKE call, by defining
+>
+> V86D_MAKE_OPT += CC="$(TARGET_CC) -D__i386__"
+
+What I have in the patch I provided, was tested build-wise on i386 and
+x86-64 targets (but the program itself was only tested in 32bit mode).
+I tried that Thomas suggested (redefine CFLAGS), it did not work. I
+don't see much sense in changing the working command from what is in
+my patch.
+
+Thanks.
+
+-- 
+Dmitry Golubovsky
+
+Anywhere on the Web
