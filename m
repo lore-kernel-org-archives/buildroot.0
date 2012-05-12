@@ -1,40 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 12 May 2012 16:47:38 +0200
-Subject: [Buildroot] [PATCH 0/3] Add CONF_ENABLE and CONF_PKG_ENABLE
- helper functions
-In-Reply-To: <20120512130504.7ef01d0f@skate>
-References: <1335647781-16536-1-git-send-email-arnout@mind.be>
- <20120507162139.44a814e9@skate> <4FAD92BB.5040606@mind.be>
- <20120512130504.7ef01d0f@skate>
-Message-ID: <4FAE780A.4050709@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 12 May 2012 17:52:44 +0200
+Subject: [Buildroot] [PATCH] crosstool-ng: depend on gperf
+Message-ID: <1336837964-13444-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/12/12 13:05, Thomas Petazzoni wrote:
->> >     I was probably just trying too hard to support all possible use cases.
->> >  What about adding something like:
->> >
->> >  SYSTEMD_AUTO_CONF_ENABLE_DEPS += acl
->> >
->> >  which would get expanded to the whole ifeq thing in the AUTOTARGETS call?
->> >  This only works if the buildroot package name is the same as the
->> >  --enable/--disable option, but that already catches many cases.
-> I am still personally not a big fan of this. What's happening is really
-> too magic.
+Fixes http://autobuild.buildroot.net/results/c9b87123709e1010bae19c6bdfd219661efdbdfb
 
-  Okay, fair enough.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Maybe I should concentrate on the MAKETARGETS instead :-)
+---
+ package/crosstool-ng/crosstool-ng.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Regards,
-  Arnout
+diff --git a/package/crosstool-ng/crosstool-ng.mk b/package/crosstool-ng/crosstool-ng.mk
+index 3540f70..09c57ec 100644
+--- a/package/crosstool-ng/crosstool-ng.mk
++++ b/package/crosstool-ng/crosstool-ng.mk
+@@ -3,6 +3,6 @@ CROSSTOOL_NG_SOURCE            = crosstool-ng-$(CROSSTOOL_NG_VERSION).tar.bz2
+ CROSSTOOL_NG_SITE              = http://crosstool-ng.org/download/crosstool-ng/
+ CROSSTOOL_NG_INSTALL_TARGET    = NO
+ CROSSTOOL_NG_MAKE              = $(MAKE1)
+-HOST_CROSSTOOL_NG_DEPENDENCIES = $(if $(BR2_CCACHE),host-ccache) host-gawk host-automake
++HOST_CROSSTOOL_NG_DEPENDENCIES = $(if $(BR2_CCACHE),host-ccache) host-gawk host-automake host-gperf
+ 
+ $(eval $(call AUTOTARGETS,host))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+tg: (babd953..) t/ctng-gperf (depends on: master)
