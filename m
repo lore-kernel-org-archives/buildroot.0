@@ -1,11 +1,11 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 13 May 2012 14:16:45 +0200
-Subject: [Buildroot] [PATCH v2 11/11] manual: add contribute.txt
-In-Reply-To: <1336905501-9757-12-git-send-email-s.martin49@gmail.com>
+Date: Sun, 13 May 2012 16:12:14 +0200
+Subject: [Buildroot] [PATCH v2 09/11] manual: add writing-rules.txt
+In-Reply-To: <1336905501-9757-10-git-send-email-s.martin49@gmail.com>
 References: <4FAEEFA8.2070005@mind.be>
  <1336905501-9757-1-git-send-email-s.martin49@gmail.com>
- <1336905501-9757-12-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAGm1_ksDD07ozyHmu4=8fx9dvavcRjJ=zu4QwMRtSDFBFKq7Jw@mail.gmail.com>
+ <1336905501-9757-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAGm1_kvjKpisVRVx-ow-hJKTDy3B9qxgqgmTDvAhuGyKsVTb0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,96 +18,172 @@ On Sun, May 13, 2012 at 12:38 PM, Samuel Martin <s.martin49@gmail.com> wrote:
 >
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >
-> ?create mode 100644 docs/manual/contribute.txt
+> ?create mode 100644 docs/manual/writing-rules.txt
 >
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+> index 1428f37..e36eafc 100644
+> --- a/docs/manual/adding-packages-directory.txt
+> +++ b/docs/manual/adding-packages-directory.txt
+> @@ -145,6 +145,9 @@ is also enabled, but not necessarily built before your package. To do
+> ?so, the dependency also needs to be expressed in the +.mk+ file of the
+> ?package.
+>
+> +Further formating details: see xref:writing-rules-config-in[the
+> +writing rules].
+> +
+> ?The +.mk+ file
+> ?^^^^^^^^^^^^^^
+>
+> @@ -185,3 +188,5 @@ different way, using different infrastructures:
+> ? many of them in the tree, we keep them documented in a
+> ? xref:handwritten-tutorial[tutorial].
+>
+> +Further formating details: see xref:writing-rules-mk[the writing
+> +rules].
+> diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
+> index 69f3632..14589c2 100644
+> --- a/docs/manual/developer-guide.txt
+> +++ b/docs/manual/developer-guide.txt
+> @@ -1,6 +1,8 @@
+> ?Developer Guidelines
+> ?====================
+>
+> +include::writing-rules.txt[]
+> +
+> ?include::adding-packages.txt[]
+>
+> ?include::board-support.txt[]
+> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
 > new file mode 100644
-> index 0000000..d80e79a
+> index 0000000..b18f30b
 > --- /dev/null
-> +++ b/docs/manual/contribute.txt
-> @@ -0,0 +1,63 @@
-> +Contibuting to Buildroot
-> +========================
+> +++ b/docs/manual/writing-rules.txt
+> @@ -0,0 +1,119 @@
+> +Writing rules
+> +-------------
 > +
-> +If you want to contribute to Buildroot, you will need a git view of
-> +the project. Refer to xref:getting-buildroot[] to get it.
+> +Overall, those writing rules are here to help you adding new files in
+> +Buildroot or refactoring existing ones. In these cases, should be followed.
 > +
-> +Currently, the mailing list is the central place for contribution.
-> +If you have not already subscribe to it, then refer to
+> +If you slightly modify some existing file, the important thing is
+> +keeping th consistency of the whole file, so you can:
 
-s/subscribe/subscribed
+s/th/the
 
-> +xref:mailing-list-subscribe[].
+> +* either follow the potentially deprecated rules used all over this
+> +file
+> +* or entirely rework it in order to make it comply with those rules.
 > +
-> +Submiting patches
-> +-----------------
+> +[[writing-rules-config-in]]
 > +
-> +When your changes are done, and commited in your local git view,
-> +_rebase_ your development branch on top of the upstream tree before
-> +generating the patch set. To do so, run:
+> ++Config.in+ file
+> +~~~~~~~~~~~~~~~~
 > +
-> +---------------------
-> + $ git fetch --all --tags
-> + $ git rebase origin/master
-> +---------------------
-> +
-> +Here, your are ready to generate then submit your patch set.
+> ++Config.in+ files contain entry for almost anything configurable in
+> +buildroot.
 
-s/your are ready/you are ready
+s/buildroot/Buildroot
 
 > +
-> +To generate it, run:
+> +Entry has the following pattern:
 > +
 > +---------------------
-> + $ git format-patch -M -n -s -o outgoing origin/master
+> +config BR2_PACKAGE_LIBFOO
+> + ? ? ? bool "libfoo"
+> + ? ? ? depends on BR2_PACKAGE_LIBBAZ
+> + ? ? ? select BR2_PACKAGE_LIBBAR
+> + ? ? ? help
+> + ? ? ? ? This is a comment that explains what libfoo is.
+> +
+> + ? ? ? ? http://foosoftware.org/libfoo/
 > +---------------------
 > +
-> +This will generate patch files in the +outgoing+ subdirectory,
-> +automatically adding the +signed-of-by+ line.
+> +* The +bool+, +depends on+, +select+ and +help+ lines are indented
+> + ?with one tab.
 > +
-> +If you want to present the whole patch set in a separate mail, add
-> ++--cover-letter --summary+ to the previous command line (+man
-> +git-format-patch+ for further information).
+> +* The help text itself should be indented with one tab and two
+> + ?spaces.
 > +
-> +Once patch files are generated, you can review/edit the commit message
-> +before submitting them using your favourite text editor.
 > +
-> +Lastly, send/submit your patch set to the Buildroot mailing list:
+> +[[writing-rules-mk]]
 > +
+> +The +.mk+ file
+> +~~~~~~~~~~~~~~
+> +
+> +* Affectation: use +=+ preceeded and followed by one space:
+> ++
 > +---------------------
-> + $ git send-email --to buildroot at busybox.net outgoing/*
+> +LIBFOO_VERSION = 1.0
+> +LIBFOO_CONF_OPT += --without-python-support
 > +---------------------
 > +
-> +Note that +git+ should be configured to use your mail account.
-> +To configure +git+, see +man git-send-email+ or google it.
+> +* Indentation: use tab only:
+> ++
+> +---------------------
+> +define LIBFOO_REMOVE_DOC
+> +$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
+> + ? ? ? $(TARGET_DIR)/usr/share/man/man3/libfoo*
+> +endef
+> +---------------------
 > +
-> +Reviewing/Testing patches
-> +-------------------------
+> +* Optional dependency:
 > +
-> +In the review process, do not hesitate to respond to patch submissions
-> +for remarks, suggestions or anything that will help everyone to
-> +understand the patches and make them better.
+> +** Prefer multi-line syntax.
+> ++
+> +YES:
+> ++
+> +---------------------
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +LIBFOO_CONF_OPT += --with-python-support
+> +LIBFOO_DEPENDENCIES += python
+> +else
+> +LIBFOO_CONF_OPT += --without-python-support
+> +endif
+> +---------------------
+> ++
+> +NO:
+> ++
+> +---------------------
+> +LIBFOO_CONF_OPT += --with$(if $(BR2_PACKAGE_PYTHON),,out)-python-support
+> +LIBFOO_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,)
+> +---------------------
 > +
-> +Some tags are used to help following the state of any patch posted on
-> +the mailing-list:
+> +** Keep configure options and dependencies close together.
 > +
-> +Acked-by:: Indicates that the patch can be committed.
+> +* Optional hook: Keep hook function definition close hooks variable
+> + ?affection nested in the +if+ block:
+> ++
+> +YES:
+> ++
+> +---------------------
+> +ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
+> +define LIBFOO_REMOVE_DATA
+> + ? ? ? $(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
+> +endef
+> +LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
+> +endif
+> +---------------------
+> ++
+> +NO:
+> ++
+> +---------------------
+> +define LIBFOO_REMOVE_DATA
+> + ? ? ? $(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
+> +endef
 > +
-> +Tested-by:: Indicates that the patch has been tested. It is useful
-> + ?but not necessary to add a comment about what has been tested.
-> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-> index b23e9c1..3e7a7ef 100644
-> --- a/docs/manual/manual.txt
-> +++ b/docs/manual/manual.txt
-> @@ -27,6 +27,8 @@ include::developer-guide.txt[]
->
-> ?include::get-involved.txt[]
->
-> +include::contribute.txt[]
+> +ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
+> +LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
+> +endif
+> +---------------------
 > +
-> ?include::legal-notice.txt[]
->
->
+> +The documentation
+> +~~~~~~~~~~~~~~~~~
+> +
+> +The documentation uses the
+> +http://www.methods.co.nz/asciidoc/[asciidoc] format.
+> +
+> +Further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
+> +syntax: refer to http://www.methods.co.nz/asciidoc/userguide.html[].
 > --
 > 1.7.10.2
 >
