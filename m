@@ -1,168 +1,122 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 13 May 2012 08:25:14 -0300
-Subject: [Buildroot] [PATCH 4/4] qemu/configs: update to use kernel 3.3.6
-In-Reply-To: <1336908314-21136-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1336908314-21136-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1336908314-21136-4-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 13 May 2012 13:25:54 +0200
+Subject: [Buildroot] [PATCH v2 10/11] manual: add get-involved.txt
+In-Reply-To: <1336905501-9757-11-git-send-email-s.martin49@gmail.com>
+References: <4FAEEFA8.2070005@mind.be>
+ <1336905501-9757-1-git-send-email-s.martin49@gmail.com>
+ <1336905501-9757-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAGm1_kvteph-c7d3fsb_-vDuSLtL0AWGNsUKxzR=-LEQE-AtQA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- configs/qemu_arm_versatile_defconfig    |    2 +-
- configs/qemu_arm_vexpress_defconfig     |    2 +-
- configs/qemu_microblazebe_mmu_defconfig |    2 +-
- configs/qemu_microblazeel_mmu_defconfig |    2 +-
- configs/qemu_mips_malta_defconfig       |    2 +-
- configs/qemu_mipsel_malta_defconfig     |    2 +-
- configs/qemu_ppc_g3beige_defconfig      |    2 +-
- configs/qemu_ppc_mpc8544ds_defconfig    |    2 +-
- configs/qemu_sparc_ss10_defconfig       |    2 +-
- configs/qemu_x86_64_defconfig           |    2 +-
- configs/qemu_x86_defconfig              |    2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
+On Sun, May 13, 2012 at 12:38 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> From: Samuel MARTIN <s.martin49@gmail.com>
+>
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> ?create mode 100644 docs/manual/get-involved.txt
+>
+> diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
+> new file mode 100644
+> index 0000000..9b6e843
+> --- /dev/null
+> +++ b/docs/manual/get-involved.txt
+> @@ -0,0 +1,67 @@
+> +Getting involved
+> +================
+> +
+> +Like any open source projects, Buildroot has different ways to share
+> +information in its community and outside.
+> +
+> +One piece of it is the document you are currently reading ;-).
+> +
+> +Each of those ways may interest you if you are look for some help,
 
-diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
-index dc5ca11..f346974 100644
---- a/configs/qemu_arm_versatile_defconfig
-+++ b/configs/qemu_arm_versatile_defconfig
-@@ -16,7 +16,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-3.3.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
-index 5f355b8..f103b59 100644
---- a/configs/qemu_arm_vexpress_defconfig
-+++ b/configs/qemu_arm_vexpress_defconfig
-@@ -17,6 +17,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index 156e264..8459633 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/kernel-3.3.config"
- BR2_LINUX_KERNEL_DTS_FILE="board/qemu/microblazebe-mmu/system.dts"
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index 26897b7..c98d4e4 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/kernel-3.3.config"
- BR2_LINUX_KERNEL_DTS_FILE="board/qemu/microblazeel-mmu/system.dts"
-diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
-index e36ac56..9c2cfd3 100644
---- a/configs/qemu_mips_malta_defconfig
-+++ b/configs/qemu_mips_malta_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.3.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index 8e21f1b..fb31616 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.3.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
-index 6a673e9..87df9ca 100644
---- a/configs/qemu_ppc_g3beige_defconfig
-+++ b/configs/qemu_ppc_g3beige_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/powerpc-g3beige/linux-3.3.config"
- BR2_LINUX_KERNEL_VMLINUX=y
-diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
-index a1aebf1..e506c53 100644
---- a/configs/qemu_ppc_mpc8544ds_defconfig
-+++ b/configs/qemu_ppc_mpc8544ds_defconfig
-@@ -12,7 +12,7 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
-diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
-index cc75506..1d99324 100644
---- a/configs/qemu_sparc_ss10_defconfig
-+++ b/configs/qemu_sparc_ss10_defconfig
-@@ -12,6 +12,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
- BR2_LINUX_KERNEL_ZIMAGE=y
-diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
-index 93008eb..66abacf 100644
---- a/configs/qemu_x86_64_defconfig
-+++ b/configs/qemu_x86_64_defconfig
-@@ -15,6 +15,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.3.config"
-diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
-index 1aa44b3..e2928e9 100644
---- a/configs/qemu_x86_defconfig
-+++ b/configs/qemu_x86_defconfig
-@@ -16,6 +16,6 @@ BR2_KERNEL_HEADERS_3_3=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.3.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.3.config"
--- 
-1.7.3.4
+s/look/looking
+
+> +want to understand Buildroot or contribute to the project.
+> +
+> +Mailing List
+> +------------
+> +
+> +Buildroot has a mailing list
+> +http://lists.busybox.net/pipermail/buildroot[] for discussion and
+> +development.
+> +
+> +[[mailing-list-subscribe]]
+> +
+> +Subscribing to the mailing list
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +You can subscribe by visiting
+> +http://lists.busybox.net/mailman/listinfo/buildroot[].
+> +Only subscribers to the Buildroot mailing list are allowed to post to
+> +this list.
+> +
+> +The list is also available through _Gmane_ http://gmane.org[], at
+> ++gmane.comp.lib.uclibc.buildroot+
+> +http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
+> +
+> +Searching the List Archives
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Please search the mailing list archives before asking questions on the
+> +mailing list, since there is a good chance someone else has asked the
+> +same question before. Checking the archives is a great way to avoid
+> +annoying everyone on the list with frequently asked questions...
+> +
+> +IRC
+> +---
+> +
+> +The Buildroot IRC is irc://freenode.net/#buildroot[].
+> +The channel +#buildroot+ is hosted on Freenode
+> +http://webchat.freenode.net[].
+> +
+> +When asking for help on the IRC, share relevant logs or piece of code
+> +using a code sharing website (see
+> +http://en.wikipedia.org/wiki/Comparison_of_pastebins[], and pick up
+> +one).
+> +
+> +Bugtracker
+> +----------
+> +
+> +The Buildroot bugtracker is at https://bugs.uclibc.org[].
+> +
+
+patchwork will be used to keep an eye on patches/bugs, so bugtracker
+can be abandoned (require further discussion)
+
+> +Buildroot wikipage
+> +------------------
+> +
+> +Consecutively to the Buildroot developer day February 3, 2012,
+> +a page dedicated to Buildroot has been created on
+> +http://elinux.org[elinux.org].
+> +
+> +This page is reachable at http://elinux.org/Buildroot[].
+> +
+> +Currently, this page is mainly used as a _todo-list_.
+> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+> index aa0952e..b23e9c1 100644
+> --- a/docs/manual/manual.txt
+> +++ b/docs/manual/manual.txt
+> @@ -25,6 +25,8 @@ include::going-further.txt[]
+>
+> ?include::developer-guide.txt[]
+>
+> +include::get-involved.txt[]
+> +
+> ?include::legal-notice.txt[]
+>
+>
+> --
+> 1.7.10.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
