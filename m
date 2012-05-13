@@ -1,66 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 May 2012 09:02:16 +0200
-Subject: [Buildroot] [PATCH] gnutls: Fix search path for libgcrypt
-In-Reply-To: <4FAEC2F4.1060802@mind.be>
-References: <1336847275-21899-1-git-send-email-arnout@mind.be>
- <20120512210755.672039a4@skate> <4FAEC2F4.1060802@mind.be>
-Message-ID: <20120513090216.215c50bb@skate>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 13 May 2012 11:44:18 +0200
+Subject: [Buildroot] [PATCH] heirloom-mailx: run makeconfig in configure step
+Message-ID: <1336902259-31422-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 12 May 2012 22:07:16 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+The heirloom-mailx Makefile runs makeconfig if this has not been done
+before.  In a parallel build, this means makeconfig may be run several
+times in parallel because there are two targets that depend on makeconfig.
+See for instance
+http://autobuild.buildroot.net/results/d24854be69961f71db189f9d804d4bd2cfa078da
 
-> > Last WE, I started investigating the problem, and found out that just
-> > compiling gnutls wasn't enough to reproduce the problem. The problem
-> > was starting to occur when libintl was built before libgcrypt. In this
-> > case, libgcrypt.la had -lintl in its dependencies, and in turn,
-> > libintl.la had -lc in its dependencies. Then, libtool expands this -lc
-> > into the full path to libc.so.
->   After the patch, that doesn't seem to make a difference for me.
-> I did the following after a successful build:
-> make libgcrypt-dirclean gnutls-dirclean; make
-> 
->   That succeeded.  Then I did
-> rm -f {staging,target}/{usr/,}lib/*intl*
-> rm -rf build/gettext*
-> make libgpg-error-dirclean libgcrypt-dirclean gnutls-dirclean
-> make gnutls; make
-> 
->   That still succeeded.  (It looks like libgpg-error is missing a
-> dependency on gettext/libintl, though.)  And finally, just to
-> be sure:
-> rm -f {staging,target}/{usr/,}lib/*intl*
-> rm -rf build/gettext*
-> make libgpg-error-dirclean libgcrypt-dirclean gnutls-dirclean
-> make libintl; make
-> 
->   Also succeeded. That pretty much covers the libintl dependency,
-> right?
+To avoid this, run makeconfig in the configure step, which is not parallel.
 
-It should yes. I will test your patch and see if it improves the
-situation.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+I couldn't actually reproduce the build failure, but the build log gives
+a good indication that this is what went wrong.
 
->   A heavy-handed approach would be to generate the patched
-> binutils for known-to-be-faulty external toolchains.
-> 
->   A simple approach would be to use the patched binutils on the test
-> machines :-)
+ package/heirloom-mailx/heirloom-mailx.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-None of these approaches are really easy to do, unfortunately :-(
-
->   BTW, how come this problem doesn't manifest itself more often?
-> There are many packages with -lintl in their .la dependencies, so all
-> of them should fail regularly, no?
-
-That's a good question indeed.
-
-Thomas
+diff --git a/package/heirloom-mailx/heirloom-mailx.mk b/package/heirloom-mailx/heirloom-mailx.mk
+index 2b28a3f..b1779c0 100644
+--- a/package/heirloom-mailx/heirloom-mailx.mk
++++ b/package/heirloom-mailx/heirloom-mailx.mk
+@@ -12,6 +12,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ HEIRLOOM_MAILX_DEPENDENCIES += openssl
+ endif
+ 
++define HEIRLOOM_MAILX_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(SHELL) ./makeconfig)
++endef
++
+ define HEIRLOOM_MAILX_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+tg: (9f7bf3b..) t/heirloom (depends on: master)
