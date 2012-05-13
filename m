@@ -1,50 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 13 May 2012 12:43:42 +0200
-Subject: [Buildroot] [PATCH v2 2/2] libglib2: fix install even if the host
-	python binary refers to python3
-In-Reply-To: <1336905822-10021-1-git-send-email-s.martin49@gmail.com>
-References: <4FAD8F82.6010007@mind.be>
- <1336905822-10021-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1336905822-10021-2-git-send-email-s.martin49@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 13 May 2012 08:25:11 -0300
+Subject: [Buildroot] [PATCH 1/4] linux: bump default to kernel version 3.3.6
+Message-ID: <1336908314-21136-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libglib2's build system uses some python2 scripts in the install rules.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-This patch ensures to have a valid host python2 binary and enforces this python2
-binary at configure-time.
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index d2445a1..500f309 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -42,7 +42,10 @@ LIBGLIB2_CONF_ENV = \
- 		ac_use_included_regex=no gl_cv_c_restrict=no \
- 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_DIR)/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
- 		ac_cv_func_posix_getgrgid_r=no \
--		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
-+		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
-+		ac_cv_path_PYTHON=$(PYTHON2)
-+
-+HOST_LIBGLIB2_CONF_ENV += ac_cv_path_PYTHON=$(PYTHON2)
+diff --git a/linux/Config.in b/linux/Config.in
+index 7595a4a..dd34465 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_3
  
- # old uClibc versions don't provide qsort_r
- ifeq ($(BR2_UCLIBC_VERSION_0_9_31)$(BR2_UCLIBC_VERSION_0_9_32)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-@@ -57,7 +60,9 @@ HOST_LIBGLIB2_CONF_OPT = \
+ config BR2_LINUX_KERNEL_3_3
+-	bool "3.3.5"
++	bool "3.3.6"
  
- LIBGLIB2_DEPENDENCIES = host-pkg-config host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext libintl)
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
  
--HOST_LIBGLIB2_DEPENDENCIES = host-pkg-config host-libffi host-zlib
-+HOST_LIBGLIB2_DEPENDENCIES = host-pkg-config host-libffi host-zlib $(NEED_PYTHON2)
-+
-+LIBGLIB2_DEPENDENCIES += $(NEED_PYTHON2)
- 
- ifneq ($(BR2_ENABLE_LOCALE),y)
- LIBGLIB2_DEPENDENCIES += libiconv
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.3.5" if BR2_LINUX_KERNEL_3_3
++	default "3.3.6" if BR2_LINUX_KERNEL_3_3
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 -- 
-1.7.10.2
+1.7.3.4
