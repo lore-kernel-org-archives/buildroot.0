@@ -1,25 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 May 2012 17:56:31 -0300
-Subject: [Buildroot] [PATCH 1/2] libtorrent: new package
-In-Reply-To: <87wr4ey07u.fsf@macbook.be.48ers.dk>
-References: <1336765188-20743-1-git-send-email-gustavo@zacarias.com.ar>
- <4FADA2BA.3010507@mind.be>
- <d72c000db80dab016beb8feec3f3a870@zacarias.com.ar>
- <4FAE710C.4020706@mind.be> <87wr4ey07u.fsf@macbook.be.48ers.dk>
-Message-ID: <1e21a42ccd4362eb749fef94dfe3b30a@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 14 May 2012 22:59:29 +0200
+Subject: [Buildroot] [PATCH 0/8] Cleanup VoIP packages and add linphone
+In-Reply-To: <1336423392-8673-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Mon, 7 May 2012 22:43:04 +0200")
+References: <1336423392-8673-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87vcjywkb2.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-05-14 17:30, Peter Korsgaard wrote:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
-> Still, I would prefer if we do it correctly, E.G. make openssl 
-> optional
-> in libtorrent, and select it by rtorrent.
+ Luca> The following changes since commit 057c729c2438107b426576121bcf83f792734a6f:
+ Luca>   external-toolchain: add support for Linaro 2012.04 (2012-05-07 17:08:37 +0200)
 
-Ok, i dunno who will use libtorrent on his own (specially since it was 
-never added to BR) though.
-Sent V3 set (on V2 i forgot to remove the select from libtorrent).
-Regards.
+ Luca> are available in the git repository at:
+ Luca>   git://github.com/lucaceresoli/buildroot.git voip
+
+ Luca> Luca Ceresoli (8):
+ Luca>   speex: remove redundant SPEEX_SOURCE definition
+ Luca>   libogg: remove redundant LIBOGG_SOURCE definition
+ Luca>   libogg: document project URL and update description in menuconfig
+ Luca>   libosip2: document project URL in menuconfig
+ Luca>   libosip2: remove redundant LIBOSIP2_SOURCE definition
+ Luca>   libeXosip2: fix comment and URL in menuconfig
+ Luca>   libeXosip2: remove redundant LIBOSIP2_SOURCE definition
+ Luca>   linphone: new package
+
+Committed entire series to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
