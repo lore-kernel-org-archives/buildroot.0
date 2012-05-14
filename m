@@ -1,91 +1,58 @@
-From: Dmitry <golubovsky@gmail.com>
-Date: Sun, 13 May 2012 23:50:25 -0400
-Subject: [Buildroot] [PATCH] Added package v86d which provides a real-mode
-	helper for uvesafb driver.
-Message-ID: <1336967425-27449-1-git-send-email-golubovsky@gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Sun, 13 May 2012 23:54:09 -0400
+Subject: [Buildroot] Fwd: [PATCH] Added package v86d which provides a
+ real-mode helper for uvesafb driver.
+In-Reply-To: <CADiAo4KYq_xVcstt8LTK5PtgdyVHfLguqq9Jfpi13aSC7FnATg@mail.gmail.com>
+References: <1336560101-29035-1-git-send-email-golubovsky@gmail.com>
+ <4FAD9523.3020501@mind.be>
+ <CADiAo4KofjL+kb8RLbWRwHauYpgqtWefLi_4QwV50sMgf-M+VA@mail.gmail.com>
+ <4FAE741C.7090104@mind.be>
+ <CADiAo4KYq_xVcstt8LTK5PtgdyVHfLguqq9Jfpi13aSC7FnATg@mail.gmail.com>
+Message-ID: <CADiAo4+zciWdAz-h8DwbrbYrmxiBoRuyYbC0QUSA-8-hHwHMyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Dmitry <golubovsky@gmail.com>
----
- package/Config.in      |    1 +
- package/v86d/Config.in |    9 +++++++++
- package/v86d/v86d.mk   |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
- create mode 100644 package/v86d/Config.in
- create mode 100644 package/v86d/v86d.mk
+Forgot to copy the list.
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..ddb55cf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -230,6 +230,7 @@ source "package/unionfs/Config.in"
- source "package/usb_modeswitch/Config.in"
- source "package/usbmount/Config.in"
- source "package/usbutils/Config.in"
-+source "package/v86d/Config.in"
- source "package/wipe/Config.in"
- source "package/xfsprogs/Config.in"
- endmenu
-diff --git a/package/v86d/Config.in b/package/v86d/Config.in
-new file mode 100644
-index 0000000..ba1baca
---- /dev/null
-+++ b/package/v86d/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_V86D
-+	bool "v86d"
-+	depends on (BR2_i386 || BR2_x86_64)
-+	help
-+	  v86d is the userspace helper that runs x86 code in an emulated
-+	  environment. uvesafb will not work without v86d. v86d currently
-+	  supports the x86 and amd64 (x86-64) architectures.
-+
-+	  http://dev.gentoo.org/~spock/projects/uvesafb/
-diff --git a/package/v86d/v86d.mk b/package/v86d/v86d.mk
-new file mode 100644
-index 0000000..59187fc
---- /dev/null
-+++ b/package/v86d/v86d.mk
-@@ -0,0 +1,36 @@
-+############################################
-+#
-+# v86d
-+# 
-+############################################
-+
-+V86D_VERSION = 0.1.10
-+V86D_SOURCE = v86d-$(V86D_VERSION).tar.bz2
-+V86D_SITE = http://dev.gentoo.org/~spock/projects/uvesafb/archive
-+
-+# The configure script autodetects the host architecture, 
-+# and assumes the target architecture to be the same as the host,
-+# so we must use the target architecture flags provided 
-+# by Buildroot for proper cross-compilation. The x86emu 
-+# configure option should be 'n' for i386, and 'y' for x86-64.
-+
-+X86EMU = $(if $(BR2_i386),n,y)
-+
-+# v86d's configure script is not autoconf-based.
-+# GENTARGETS macro will be used rather than AUTOTARGETS.
-+
-+define V86D_CONFIGURE_CMDS
-+	(cd $(@D) ; ./configure --with-debug=n --with-klibc=n --with-x86emu=$(X86EMU))
-+endef
-+
-+# It is necessary to define __i386__ explicitly for successful compilation.
-+
-+define V86D_BUILD_CMDS
-+	$(MAKE) CC="$(TARGET_CC) -D__i386__" LD="$(TARGET_LD)" -C $(@D) all
-+endef
-+
-+define V86D_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/v86d $(TARGET_DIR)/sbin/v86d	
-+endef
-+
-+$(eval $(call GENTARGETS))
+
+---------- Forwarded message ----------
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Sun, May 13, 2012 at 11:52 PM
+Subject: Re: [Buildroot] [PATCH] Added package v86d which provides a
+real-mode helper for uvesafb driver.
+To: Arnout Vandecappelle <arnout@mind.be>
+
+
+Arnout,
+
+On Sat, May 12, 2012 at 10:30 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> ?I tried it with a clean build and there's no v86d or testvbe in the target
+> dir.
+
+Indeed, my omission. Thanks for pointing me out.
+
+>>> But you don't even need to override the BUILD_CMDS. ?Instead, you can
+>>> pass additional options to the MAKE call, by defining
+>>>
+>>> V86D_MAKE_OPT += CC="$(TARGET_CC) -D__i386__"
+
+> ?Sure, it's OK as it is (except for the install target of course).
+> Merely pointing out an alternative.
+
+Thanks, but I'll stay with what I have.
+
+I am resending the patch - hopefully it is good t go now.
+
+--
+Dmitry Golubovsky
+
+Anywhere on the Web
+
+
 -- 
-1.7.2.5
+Dmitry Golubovsky
+
+Anywhere on the Web
