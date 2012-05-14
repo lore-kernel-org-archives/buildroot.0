@@ -1,33 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 May 2012 22:57:44 +0200
-Subject: [Buildroot] [git commit branch/next] libogg: remove redundant
-	LIBOGG_SOURCE definition
-Message-ID: <20120514210032.E6E2396C9D@busybox.osuosl.org>
+Date: Mon, 14 May 2012 22:57:37 +0200
+Subject: [Buildroot] [git commit branch/next] speex: remove redundant
+	SPEEX_SOURCE definition
+Message-ID: <20120514210032.D9B0D96CEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a3c6cfa01790e78edd229de67ee9161fc3aba5d
+commit: http://git.buildroot.net/buildroot/commit/?id=29e62eeb1ed9fb2a9c1b771e01a3248acd56d69c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Also fix Makefile coding style
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libogg/libogg.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/speex/speex.mk |    5 ++---
+ 1 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
-index c40f04e..c3d4897 100644
---- a/package/libogg/libogg.mk
-+++ b/package/libogg/libogg.mk
-@@ -4,7 +4,6 @@
+diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+index c9d9ed3..2d8a255 100644
+--- a/package/speex/speex.mk
++++ b/package/speex/speex.mk
+@@ -3,9 +3,8 @@
+ # speex
  #
  #############################################################
- LIBOGG_VERSION = 1.3.0
--LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.gz
- LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
- LIBOGG_INSTALL_STAGING = YES
- 
+-SPEEX_VERSION=1.2rc1
+-SPEEX_SOURCE=speex-$(SPEEX_VERSION).tar.gz
+-SPEEX_SITE=http://downloads.us.xiph.org/releases/speex
++SPEEX_VERSION = 1.2rc1
++SPEEX_SITE = http://downloads.us.xiph.org/releases/speex
+ SPEEX_INSTALL_STAGING = YES
+ SPEEX_DEPENDENCIES = libogg
+ SPEEX_CONF_OPT = --with-ogg-libraries=$(STAGING_DIR)/usr/lib \
