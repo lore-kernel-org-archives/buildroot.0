@@ -1,30 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 May 2012 21:16:35 +0200
-Subject: [Buildroot] [PATCH v3 01/22] legal-info: infrastructure to
-	collect legally-relevant material
-In-Reply-To: <4FAEEDD0.6020602@mind.be> (Arnout Vandecappelle's message of
- "Sun, 13 May 2012 01:10:08 +0200")
-References: <1336421443-5871-1-git-send-email-luca@lucaceresoli.net>
- <1336421563-5986-1-git-send-email-luca@lucaceresoli.net>
- <4FAEEDD0.6020602@mind.be>
-Message-ID: <878vgu1sks.fsf@macbook.be.48ers.dk>
+Date: Mon, 14 May 2012 21:19:06 +0200
+Subject: [Buildroot] [PATCH] heirloom-mailx: run makeconfig in configure
+	step
+In-Reply-To: <1336902259-31422-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 13 May 2012 11:44:18 +0200")
+References: <1336902259-31422-1-git-send-email-arnout@mind.be>
+Message-ID: <874nri1sgl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Hi,
+ Arnout> The heirloom-mailx Makefile runs makeconfig if this has not been done
+ Arnout> before.  In a parallel build, this means makeconfig may be run several
+ Arnout> times in parallel because there are two targets that depend on makeconfig.
+ Arnout> See for instance
+ Arnout> http://autobuild.buildroot.net/results/d24854be69961f71db189f9d804d4bd2cfa078da
 
- Arnout>  Looks great!
-
- Arnout>  Any chance that this can still go into the 2012.05 release?  I
- Arnout> have one customer who would be really pleased with that...
-
-Sorry, but I think it's getting too late for that. We can merge it to
--next pretty soon once the remining issues are worked out though.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
