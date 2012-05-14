@@ -1,239 +1,67 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 May 2012 08:22:48 -0300
-Subject: [Buildroot] [PATCH] binutils: add sysroot fix from bug #3049
-Message-ID: <1336994568-29695-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 14 May 2012 09:29:58 -0300
+Subject: [Buildroot] [PATCH 1/3] libnl: bump to version 3.2.9 and enhance
+Message-ID: <1336998600-3373-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add binutils ld sysroot bug fix.
-See http://sourceware.org/bugzilla/show_bug.cgi?id=10340
+Bump to version 3.2.9 and add an option to install the tools.
+Since they're not usually required we default to N to reduce size.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/binutils/binutils-2.20.1/500-sysroot.patch |   36 ++++++++++++++++++++
- package/binutils/binutils-2.20/500-sysroot.patch   |   36 ++++++++++++++++++++
- package/binutils/binutils-2.21.1/500-sysroot.patch |   36 ++++++++++++++++++++
- package/binutils/binutils-2.21/500-sysroot.patch   |   36 ++++++++++++++++++++
- package/binutils/binutils-2.22/500-sysroot.patch   |   36 ++++++++++++++++++++
- 5 files changed, 180 insertions(+), 0 deletions(-)
- create mode 100644 package/binutils/binutils-2.20.1/500-sysroot.patch
- create mode 100644 package/binutils/binutils-2.20/500-sysroot.patch
- create mode 100644 package/binutils/binutils-2.21.1/500-sysroot.patch
- create mode 100644 package/binutils/binutils-2.21/500-sysroot.patch
- create mode 100644 package/binutils/binutils-2.22/500-sysroot.patch
+ package/libnl/Config.in |    6 ++++++
+ package/libnl/libnl.mk  |   13 ++++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
-diff --git a/package/binutils/binutils-2.20.1/500-sysroot.patch b/package/binutils/binutils-2.20.1/500-sysroot.patch
-new file mode 100644
-index 0000000..d21e4cb
---- /dev/null
-+++ b/package/binutils/binutils-2.20.1/500-sysroot.patch
-@@ -0,0 +1,36 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
+diff --git a/package/libnl/Config.in b/package/libnl/Config.in
+index 24e4813..c7d4359 100644
+--- a/package/libnl/Config.in
++++ b/package/libnl/Config.in
+@@ -4,3 +4,9 @@ config BR2_PACKAGE_LIBNL
+ 	  A library for applications dealing with netlink socket.
+ 
+ 	  http://people.suug.ch/~tgr/libnl/
 +
-+Always try to prepend the sysroot prefix to absolute filenames first.
++config BR2_PACKAGE_LIBNL_TOOLS
++	bool "install tools"
++	depends on BR2_PACKAGE_LIBNL
++	help
++	  Install binary tools.
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 40aaf38..a723701 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,15 +4,26 @@
+ #
+ #############################################################
+ 
+-LIBNL_VERSION = 3.2.8
++LIBNL_VERSION = 3.2.9
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison
+ LIBNL_MAKE = $(MAKE1)
++LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
++	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
++	qdisc-list
+ 
+ define LIBNL_UNINSTALL_TARGET_CMDS
+ 	rm -r $(TARGET_DIR)/usr/lib/libnl.* $(TARGET_DIR)/usr/lib/libnl-*.*
+ 	rm -rf $(TARGET_DIR)/usr/lib/libnl
+ endef
+ 
++define LIBNL_REMOVE_TOOLS
++	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/nl-, $(LIBNL_BINARIES))
++endef
 +
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
++ifneq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
++LIBNL_POST_INSTALL_TARGET_HOOKS += LIBNL_REMOVE_TOOLS
++endif
 +
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,24 @@
-+      directory first.  */
-+   if (! entry->is_archive)
-+     {
-+-      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location. */
-++      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
-++      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	{
-+ 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
-+ 	    && is_sysrooted_pathname (entry->filename, TRUE);
-diff --git a/package/binutils/binutils-2.20/500-sysroot.patch b/package/binutils/binutils-2.20/500-sysroot.patch
-new file mode 100644
-index 0000000..d21e4cb
---- /dev/null
-+++ b/package/binutils/binutils-2.20/500-sysroot.patch
-@@ -0,0 +1,36 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
-+
-+Always try to prepend the sysroot prefix to absolute filenames first.
-+
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
-+
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,24 @@
-+      directory first.  */
-+   if (! entry->is_archive)
-+     {
-+-      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location. */
-++      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
-++      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	{
-+ 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
-+ 	    && is_sysrooted_pathname (entry->filename, TRUE);
-diff --git a/package/binutils/binutils-2.21.1/500-sysroot.patch b/package/binutils/binutils-2.21.1/500-sysroot.patch
-new file mode 100644
-index 0000000..d21e4cb
---- /dev/null
-+++ b/package/binutils/binutils-2.21.1/500-sysroot.patch
-@@ -0,0 +1,36 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
-+
-+Always try to prepend the sysroot prefix to absolute filenames first.
-+
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
-+
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,24 @@
-+      directory first.  */
-+   if (! entry->is_archive)
-+     {
-+-      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location. */
-++      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
-++      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	{
-+ 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
-+ 	    && is_sysrooted_pathname (entry->filename, TRUE);
-diff --git a/package/binutils/binutils-2.21/500-sysroot.patch b/package/binutils/binutils-2.21/500-sysroot.patch
-new file mode 100644
-index 0000000..d21e4cb
---- /dev/null
-+++ b/package/binutils/binutils-2.21/500-sysroot.patch
-@@ -0,0 +1,36 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
-+
-+Always try to prepend the sysroot prefix to absolute filenames first.
-+
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
-+
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,24 @@
-+      directory first.  */
-+   if (! entry->is_archive)
-+     {
-+-      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location. */
-++      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
-++      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	{
-+ 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
-+ 	    && is_sysrooted_pathname (entry->filename, TRUE);
-diff --git a/package/binutils/binutils-2.22/500-sysroot.patch b/package/binutils/binutils-2.22/500-sysroot.patch
-new file mode 100644
-index 0000000..d21e4cb
---- /dev/null
-+++ b/package/binutils/binutils-2.22/500-sysroot.patch
-@@ -0,0 +1,36 @@
-+Signed-off-by: Sven Rebhan <odinshorse@googlemail.com>
-+
-+Always try to prepend the sysroot prefix to absolute filenames first.
-+
-+http://bugs.gentoo.org/275666
-+http://sourceware.org/bugzilla/show_bug.cgi?id=10340
-+
-+--- a/ld/ldfile.c
-++++ b/ld/ldfile.c
-+@@ -308,18 +308,24 @@
-+      directory first.  */
-+   if (! entry->is_archive)
-+     {
-+-      if (entry->sysrooted && IS_ABSOLUTE_PATH (entry->filename))
-++      /* For absolute pathnames, try to always open the file in the
-++	 sysroot first. If this fails, try to open the file at the
-++	 given location. */
-++      entry->sysrooted = is_sysrooted_pathname(entry->filename, FALSE);
-++      if (IS_ABSOLUTE_PATH (entry->filename) && ld_sysroot && ! entry->sysrooted)
-+ 	{
-+ 	  char *name = concat (ld_sysroot, entry->filename,
-+ 			       (const char *) NULL);
-+ 	  if (ldfile_try_open_bfd (name, entry))
-+ 	    {
-+ 	      entry->filename = name;
-++	      entry->sysrooted = TRUE;
-+ 	      return TRUE;
-+ 	    }
-+ 	  free (name);
-+ 	}
-+-      else if (ldfile_try_open_bfd (entry->filename, entry))
-++
-++      if (ldfile_try_open_bfd (entry->filename, entry))
-+ 	{
-+ 	  entry->sysrooted = IS_ABSOLUTE_PATH (entry->filename)
-+ 	    && is_sysrooted_pathname (entry->filename, TRUE);
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.3.4
