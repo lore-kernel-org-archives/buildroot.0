@@ -1,51 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 May 2012 09:58:46 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 14 May 2012 10:32:29 +0200
 Subject: [Buildroot] [PATCH] pkg-infra: remove the call from XXXTARGETS
-In-Reply-To: <1336857045-10679-1-git-send-email-arnout@mind.be>
+In-Reply-To: <20120514095846.7d206d16@skate>
 References: <1336857045-10679-1-git-send-email-arnout@mind.be>
-Message-ID: <20120514095846.7d206d16@skate>
+ <20120514095846.7d206d16@skate>
+Message-ID: <4FB0C31D.9080101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 12 May 2012 23:10:44 +0200,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+On 05/14/12 09:58, Thomas Petazzoni wrote:
+>   GENPACKAGE / HOST_GENPACKAGE
+>   GENPKG / HOST_GENPKG
+>   genpackage / host-genpackage
+>   genpkg / host-genpkg
 
-> Replace $(call XXXTARGETS,host) with $(XXXTARGETS_HOST) and
-> $(call XXXTARGETS) with $(XXXTARGETS).
-> 
-> Also includes documentation update, but not for buildroot.html.
-> 
-> This brings the time for 'make -qp' (which is used by bash-completion)
-> down from 1.85s to 1.35s on my laptop.
+  +1 for any of these.
 
-I haven't tested yet, but I'm fine with the principle. I am just
-wondering whether HOST_AUTOTARGETS wouldn't be better than
-AUTOTARGETS_HOST for the name of the macro. Or maybe, since we're
-renaming everything in this patch it's time to think about a better
-name for these macros
+  I think it's a good idea to give functions lowercase names.  I normally don't
+like long lines, but these are anyway always in a $(eval $(...)) line with nothing
+else, so this is one place where it can be a long name.  Therefore I'm voting for
 
- GENPACKAGE / HOST_GENPACKAGE
- GENPKG / HOST_GENPKG
- genpackage / host-genpackage
- genpkg / host-genpkg
 
- autotoolspackage / host-autotoolspackage
- autotoolspkg / host-autotoolspkg
- cmakepkg / host-cmakepkg
- autotools-package / host-autotools-package
- generic-package / host-generic-package
- autotools-pkg / host-autotools-pkg
+  autotools-package / host-autotools-package
+  generic-package / host-generic-package
+  cmake-package / host-cmake-package
 
-Or maybe *TARGETS is just fine, as we have today.
 
-Thoughts?
 
-Thomas
+  Regards,
+  Arnout
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
