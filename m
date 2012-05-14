@@ -1,37 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 May 2012 22:57:49 +0200
-Subject: [Buildroot] [git commit branch/next] libogg: document project URL
-	and update description in menuconfig
-Message-ID: <20120514210033.027D596CEC@busybox.osuosl.org>
+Date: Mon, 14 May 2012 22:57:44 +0200
+Subject: [Buildroot] [git commit branch/next] libogg: remove redundant
+	LIBOGG_SOURCE definition
+Message-ID: <20120514210032.E6E2396C9D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d407a01c9a31f3245ab9d79535d0ea83e6307a8
+commit: http://git.buildroot.net/buildroot/commit/?id=4a3c6cfa01790e78edd229de67ee9161fc3aba5d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libogg/Config.in |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ package/libogg/libogg.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/libogg/Config.in b/package/libogg/Config.in
-index effe74f..bf719ff 100644
---- a/package/libogg/Config.in
-+++ b/package/libogg/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_LIBOGG
- 	bool "libogg"
- 	help
--	  Ogg is the name of Xiph.org's container format for audio,
--	  video, and metadata
-+	  Ogg is a multimedia container format, and the native file
-+	  and stream format for the Xiph.org multimedia codecs. As
-+	  with all Xiph.org technology is it an open format free for
-+	  anyone to use.
-+
-+	  http://xiph.org/ogg/
+diff --git a/package/libogg/libogg.mk b/package/libogg/libogg.mk
+index c40f04e..c3d4897 100644
+--- a/package/libogg/libogg.mk
++++ b/package/libogg/libogg.mk
+@@ -4,7 +4,6 @@
+ #
+ #############################################################
+ LIBOGG_VERSION = 1.3.0
+-LIBOGG_SOURCE = libogg-$(LIBOGG_VERSION).tar.gz
+ LIBOGG_SITE = http://downloads.xiph.org/releases/ogg
+ LIBOGG_INSTALL_STAGING = YES
+ 
