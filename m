@@ -1,32 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 May 2012 21:19:38 +0200
-Subject: [Buildroot] [git commit] qemu/sh4-r2d: update to use kernel 3.2.17
-Message-ID: <20120514192115.11EFE96CEA@busybox.osuosl.org>
+Date: Mon, 14 May 2012 21:19:27 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.{2,
+	3}.x stable versions
+Message-ID: <20120514192115.03BE496CE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73e844fe2944b1c0c2e9942a9b7771158e9b0dad
+commit: http://git.buildroot.net/buildroot/commit/?id=f7f0d137c581ffed2c8d8424faf290812f7fac65
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_sh4_r2d_defconfig |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...umode_t.patch => linux-3.3.6-fix-umode_t.patch} |    0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 58ace03..99db36a 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.17"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 36370b4..d8602f1 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -65,7 +65,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.31"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.16"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3.5"		if BR2_KERNEL_HEADERS_3_3
++	default "3.2.17"	if BR2_KERNEL_HEADERS_3_2
++	default "3.3.6"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.3.5-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.6-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3.5-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.6-fix-umode_t.patch
