@@ -1,20 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 May 2012 14:33:48 +0200
-Subject: [Buildroot] [PATCH] crosstool-ng: depend on gperf
-In-Reply-To: <1336837964-13444-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 12 May 2012 17:52:44 +0200")
-References: <1336837964-13444-1-git-send-email-arnout@mind.be>
-Message-ID: <87pqa70wnn.fsf@macbook.be.48ers.dk>
+Date: Mon, 14 May 2012 14:36:27 +0200
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.0j
+In-Reply-To: <1336751148-28858-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 11 May 2012 12:45:48 -0300")
+References: <1336751148-28858-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87likv0wj8.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Arnout> Fixes http://autobuild.buildroot.net/results/c9b87123709e1010bae19c6bdfd219661efdbdfb
- Arnout> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Gustavo> Bump to version 1.0.0j to fix CVE-2012-2333
 
 Committed, thanks.
 
