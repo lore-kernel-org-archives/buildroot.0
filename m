@@ -1,32 +1,69 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 May 2012 22:24:29 +0200
-Subject: [Buildroot] [git commit branch/next] mtd: bump to 1.5.0
-Message-ID: <20120514202507.3024896CEB@busybox.osuosl.org>
+Date: Mon, 14 May 2012 22:23:47 +0200
+Subject: [Buildroot] [git commit branch/next] libnfc: new package
+Message-ID: <20120514202507.1C87096CD6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c81107265f48619cf91b3913188f81a01c82a9e8
+commit: http://git.buildroot.net/buildroot/commit/?id=2b35574bc097ad8c364c9a09c3095d22b1392b7e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mtd/mtd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in        |    1 +
+ package/libnfc/Config.in |    8 ++++++++
+ package/libnfc/libnfc.mk |   16 ++++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 8ccd4dd..3bcefa5 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -3,7 +3,7 @@
- # mtd provides jffs2 utilities
- #
- #############################################################
--MTD_VERSION = 1.4.9
-+MTD_VERSION = 1.5.0
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..bbb2cd5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -360,6 +360,7 @@ source "package/tslib/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
+ source "package/libiqrf/Config.in"
++source "package/libnfc/Config.in"
+ source "package/libusb/Config.in"
+ source "package/libusb-compat/Config.in"
+ source "package/libv4l/Config.in"
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+new file mode 100644
+index 0000000..42418e0
+--- /dev/null
++++ b/package/libnfc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBNFC
++	bool "libnfc"
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_LIBUSB_COMPAT
++	help
++	  Public platform independent Near Field Communication (NFC) library.
++
++	  http://www.libnfc.org/
+diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
+new file mode 100644
+index 0000000..f1028b1
+--- /dev/null
++++ b/package/libnfc/libnfc.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# libnfc
++#
++#############################################################
++LIBNFC_VERSION = 1.5.1
++LIBNFC_SITE = http://libnfc.googlecode.com/files/
++LIBNFC_SOURCE = libnfc-$(LIBNFC_VERSION).tar.gz
++LIBNFC_INSTALL_STAGING = YES
++
++LIBNFC_DEPENDENCIES = host-pkg-config libusb libusb-compat
++
++# N.B. The acr122 driver requires pcsc-lite.
++LIBNFC_CONF_OPT = --with-drivers=arygon,pn53x_usb
++
++$(eval $(call AUTOTARGETS))
