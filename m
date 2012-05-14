@@ -1,42 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 May 2012 10:32:29 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: remove the call from XXXTARGETS
-In-Reply-To: <20120514095846.7d206d16@skate>
-References: <1336857045-10679-1-git-send-email-arnout@mind.be>
- <20120514095846.7d206d16@skate>
-Message-ID: <4FB0C31D.9080101@mind.be>
+From: Dominik Faessler <faessler@was.ch>
+Date: Mon, 14 May 2012 10:33:33 +0200
+Subject: [Buildroot] [PATCH] python-id3: new package
+Message-ID: <4FB0C35D.2020007@was.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/14/12 09:58, Thomas Petazzoni wrote:
->   GENPACKAGE / HOST_GENPACKAGE
->   GENPKG / HOST_GENPKG
->   genpackage / host-genpackage
->   genpkg / host-genpkg
+---
+ package/Config.in                |    1 +
+ package/python-id3/Config.in     |    9 +++++++++
+ package/python-id3/python-id3.mk |   21 +++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
+ create mode 100644 package/python-id3/Config.in
+ create mode 100644 package/python-id3/python-id3.mk
 
-  +1 for any of these.
-
-  I think it's a good idea to give functions lowercase names.  I normally don't
-like long lines, but these are anyway always in a $(eval $(...)) line with nothing
-else, so this is one place where it can be a long name.  Therefore I'm voting for
-
-
-  autotools-package / host-autotools-package
-  generic-package / host-generic-package
-  cmake-package / host-cmake-package
-
-
-
-  Regards,
-  Arnout
-
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..a89e646 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -255,6 +255,7 @@ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+ source "package/python-dpkt/Config.in"
++source "package/python-id3/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-pygame/Config.in"
+diff --git a/package/python-id3/Config.in b/package/python-id3/Config.in
+new file mode 100644
+index 0000000..6ddfd54
+--- /dev/null
++++ b/package/python-id3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_ID3
++    bool "python-id3"
++    depends on BR2_PACKAGE_PYTHON
++    help
++      This module allows one to read and manipulate so-called ID3
++      informational tags on MP3 files through an object-oriented
++      Python interface.
++
++      http://id3-py.sourceforge.net/
+diff --git a/package/python-id3/python-id3.mk
+b/package/python-id3/python-id3.mk
+new file mode 100644
+index 0000000..907dc63
+--- /dev/null
++++ b/package/python-id3/python-id3.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# python-id3
++#
++#############################################################
++
++PYTHON_ID3_VERSION = 1.2
++PYTHON_ID3_SOURCE = id3-py_$(PYTHON_ID3_VERSION).tar.gz
++PYTHON_ID3_SITE =
+http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/id3-py
++
++PYTHON_ID3_DEPENDENCIES = python
++
++define PYTHON_ID3_BUILD_CMDS
++    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_ID3_INSTALL_TARGET_CMDS
++    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install
+--prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.2.5
