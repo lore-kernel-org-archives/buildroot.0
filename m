@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 May 2012 17:55:28 -0300
-Subject: [Buildroot] [PATCHv3 1/2] libtorrent: new package
-Message-ID: <1337028929-27975-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 14 May 2012 17:55:29 -0300
+Subject: [Buildroot] [PATCHv3 2/2] rtorrent: new package
+In-Reply-To: <1337028929-27975-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1337028929-27975-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1337028929-27975-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,97 +12,98 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                                 |    1 +
- package/libtorrent/Config.in                      |   11 ++++++++
- package/libtorrent/libtorrent-cross_compile.patch |   27 +++++++++++++++++++++
- package/libtorrent/libtorrent.mk                  |   16 ++++++++++++
- 4 files changed, 55 insertions(+), 0 deletions(-)
- create mode 100644 package/libtorrent/Config.in
- create mode 100644 package/libtorrent/libtorrent-cross_compile.patch
- create mode 100644 package/libtorrent/libtorrent.mk
+ package/Config.in                             |    1 +
+ package/rtorrent/Config.in                    |   16 ++++++++++++++
+ package/rtorrent/rtorrent-cross_compile.patch |   27 +++++++++++++++++++++++++
+ package/rtorrent/rtorrent.mk                  |   12 +++++++++++
+ 4 files changed, 56 insertions(+), 0 deletions(-)
+ create mode 100644 package/rtorrent/Config.in
+ create mode 100644 package/rtorrent/rtorrent-cross_compile.patch
+ create mode 100644 package/rtorrent/rtorrent.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 98d550b..5480457 100644
+index 5480457..c7748b2 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -410,6 +410,7 @@ source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
- source "package/librsync/Config.in"
- source "package/libsoup/Config.in"
-+source "package/libtorrent/Config.in"
- source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/zeromq/Config.in"
-diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+@@ -562,6 +562,7 @@ source "package/radvd/Config.in"
+ source "package/rp-pppoe/Config.in"
+ source "package/rsh-redone/Config.in"
+ source "package/rsync/Config.in"
++source "package/rtorrent/Config.in"
+ source "package/samba/Config.in"
+ source "package/ser2net/Config.in"
+ source "package/socat/Config.in"
+diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
 new file mode 100644
-index 0000000..f0315a4
+index 0000000..142ff8b
 --- /dev/null
-+++ b/package/libtorrent/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBTORRENT
-+	bool "libtorrent"
++++ b/package/rtorrent/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_RTORRENT
++	bool "rtorrent"
 +	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_LIBCURL
 +	select BR2_PACKAGE_LIBSIGC
++	select BR2_PACKAGE_LIBTORRENT
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_OPENSSL
 +	help
-+	  BitTorrent library written in C++ for *nix
++	  BitTorrent Client using libtorrent
 +
 +	  http://libtorrent.rakshasa.no/
 +
-+comment "libtorrent requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libtorrent/libtorrent-cross_compile.patch b/package/libtorrent/libtorrent-cross_compile.patch
++comment "rtorrent requires a toolchain with C++ and WCHAR support"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+diff --git a/package/rtorrent/rtorrent-cross_compile.patch b/package/rtorrent/rtorrent-cross_compile.patch
 new file mode 100644
-index 0000000..39fe700
+index 0000000..2be8d06
 --- /dev/null
-+++ b/package/libtorrent/libtorrent-cross_compile.patch
++++ b/package/rtorrent/rtorrent-cross_compile.patch
 @@ -0,0 +1,27 @@
 +Fix cross compilation, based on OpenWRT patch.
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+diff -Nura libtorrent-0.13.2/configure.ac libtorrent-0.13.2-cross/configure.ac
-+--- libtorrent-0.13.2/configure.ac	2012-04-20 03:55:10.000000000 -0300
-++++ libtorrent-0.13.2-cross/configure.ac	2012-05-09 10:57:49.671175421 -0300
-+@@ -17,7 +17,6 @@
++diff -Nura rtorrent-0.9.2/configure.ac rtorrent-0.9.2-cross/configure.ac
++--- rtorrent-0.9.2/configure.ac	2012-04-20 03:55:30.000000000 -0300
+++++ rtorrent-0.9.2-cross/configure.ac	2012-05-09 11:06:49.436474039 -0300
++@@ -4,7 +4,6 @@
 + 
 + AM_INIT_AUTOMAKE
 + AM_CONFIG_HEADER(config.h)
 +-AM_PATH_CPPUNIT(1.9.6)
-+ AC_DISABLE_STATIC
 + 
-+ AM_DISABLE_STATIC
-+diff -Nura libtorrent-0.13.2/scripts/checks.m4 libtorrent-0.13.2-cross/scripts/checks.m4
-+--- libtorrent-0.13.2/scripts/checks.m4	2012-04-12 06:44:23.000000000 -0300
-++++ libtorrent-0.13.2-cross/scripts/checks.m4	2012-05-09 10:42:32.642728917 -0300
-+@@ -96,7 +96,7 @@
-+ AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
-+   AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
++ AC_PROG_CXX
++ AC_PROG_LIBTOOL
++diff -Nura rtorrent-0.9.2/scripts/common.m4 rtorrent-0.9.2-cross/scripts/common.m4
++--- rtorrent-0.9.2/scripts/common.m4	2012-03-13 09:10:49.000000000 -0300
+++++ rtorrent-0.9.2-cross/scripts/common.m4	2012-05-09 11:05:56.620102678 -0300
++@@ -223,7 +223,7 @@
++ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
++   AC_MSG_CHECKING(for execinfo.h)
 + 
 +-  AC_RUN_IFELSE([AC_LANG_SOURCE([
 ++  AC_LINK_IFELSE([AC_LANG_SOURCE([
-+       #include <fcntl.h>
-+       #include <stdlib.h>
-+       #include <unistd.h>
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
++       #include <execinfo.h>
++       int main() { backtrace((void**)0, 0); backtrace_symbols((char**)0, 0); return 0;}
++       ])],
+diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
 new file mode 100644
-index 0000000..100e684
+index 0000000..f60bd40
 --- /dev/null
-+++ b/package/libtorrent/libtorrent.mk
-@@ -0,0 +1,16 @@
++++ b/package/rtorrent/rtorrent.mk
+@@ -0,0 +1,12 @@
 +#############################################################
 +#
-+# libtorrent
++# rtorrent
 +#
 +#############################################################
 +
-+LIBTORRENT_VERSION = 0.13.2
-+LIBTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
-+LIBTORRENT_DEPENDENCIES = host-pkg-config libsigc \
-+	$(if $(BR2_PACKAGE_OPENSSL),openssl)
-+LIBTORRENT_CONF_OPT = --enable-aligned \
-+	$(if $(BR2_PACKAGE_OPENSSL),--enable-openssl,--disable-openssl)
-+LIBTORRENT_INSTALL_STAGING = YES
-+LIBTORRENT_AUTORECONF = YES
++RTORRENT_VERSION = 0.9.2
++RTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
++RTORRENT_DEPENDENCIES = host-pkg-config libcurl libsigc libtorrent ncurses
++RTORRENT_AUTORECONF = YES
 +
 +$(eval $(call AUTOTARGETS))
 -- 
