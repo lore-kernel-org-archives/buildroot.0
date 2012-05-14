@@ -1,69 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 May 2012 22:23:47 +0200
-Subject: [Buildroot] [git commit branch/next] libnfc: new package
-Message-ID: <20120514202507.1C87096CD6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 14 May 2012 22:26:17 +0200
+Subject: [Buildroot] [PATCH 1/2] liboping: new package
+In-Reply-To: <1336742971-3709-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 11 May 2012 10:29:30 -0300")
+References: <1336742971-3709-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8762byzeza.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2b35574bc097ad8c364c9a09c3095d22b1392b7e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in        |    1 +
- package/libnfc/Config.in |    8 ++++++++
- package/libnfc/libnfc.mk |   16 ++++++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..bbb2cd5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -360,6 +360,7 @@ source "package/tslib/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
-+source "package/libnfc/Config.in"
- source "package/libusb/Config.in"
- source "package/libusb-compat/Config.in"
- source "package/libv4l/Config.in"
-diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
-new file mode 100644
-index 0000000..42418e0
---- /dev/null
-+++ b/package/libnfc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LIBNFC
-+	bool "libnfc"
-+	select BR2_PACKAGE_LIBUSB
-+	select BR2_PACKAGE_LIBUSB_COMPAT
-+	help
-+	  Public platform independent Near Field Communication (NFC) library.
-+
-+	  http://www.libnfc.org/
-diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
-new file mode 100644
-index 0000000..f1028b1
---- /dev/null
-+++ b/package/libnfc/libnfc.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# libnfc
-+#
-+#############################################################
-+LIBNFC_VERSION = 1.5.1
-+LIBNFC_SITE = http://libnfc.googlecode.com/files/
-+LIBNFC_SOURCE = libnfc-$(LIBNFC_VERSION).tar.gz
-+LIBNFC_INSTALL_STAGING = YES
-+
-+LIBNFC_DEPENDENCIES = host-pkg-config libusb libusb-compat
-+
-+# N.B. The acr122 driver requires pcsc-lite.
-+LIBNFC_CONF_OPT = --with-drivers=arygon,pn53x_usb
-+
-+$(eval $(call AUTOTARGETS))
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
