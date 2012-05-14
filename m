@@ -1,106 +1,65 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 14 May 2012 23:00:56 +0200
-Subject: [Buildroot] [git commit branch/next] libtorrent: new package
-Message-ID: <20120514210335.8763396CE8@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 May 2012 23:22:44 +0200
+Subject: [Buildroot] autobuild: group similar failures
+Message-ID: <201205142322.44867.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be26c3e760d86dbcc45ce6edd9e266a623c0430d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello All!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                 |    1 +
- package/libtorrent/Config.in                      |   11 ++++++++
- package/libtorrent/libtorrent-cross_compile.patch |   27 +++++++++++++++++++++
- package/libtorrent/libtorrent.mk                  |   16 ++++++++++++
- 4 files changed, 55 insertions(+), 0 deletions(-)
+Today, the autobuild logs are displayed on http://autobuild.buildroot.org/
+and provide access to all the build logs, whether they were a successful
+build, or there was a failure.
 
-diff --git a/package/Config.in b/package/Config.in
-index 9a854f1..c3dc715 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -411,6 +411,7 @@ source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
- source "package/librsync/Config.in"
- source "package/libsoup/Config.in"
-+source "package/libtorrent/Config.in"
- source "package/libupnp/Config.in"
- source "package/libvncserver/Config.in"
- source "package/zeromq/Config.in"
-diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
-new file mode 100644
-index 0000000..f0315a4
---- /dev/null
-+++ b/package/libtorrent/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBTORRENT
-+	bool "libtorrent"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_LIBSIGC
-+	help
-+	  BitTorrent library written in C++ for *nix
-+
-+	  http://libtorrent.rakshasa.no/
-+
-+comment "libtorrent requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libtorrent/libtorrent-cross_compile.patch b/package/libtorrent/libtorrent-cross_compile.patch
-new file mode 100644
-index 0000000..39fe700
---- /dev/null
-+++ b/package/libtorrent/libtorrent-cross_compile.patch
-@@ -0,0 +1,27 @@
-+Fix cross compilation, based on OpenWRT patch.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura libtorrent-0.13.2/configure.ac libtorrent-0.13.2-cross/configure.ac
-+--- libtorrent-0.13.2/configure.ac	2012-04-20 03:55:10.000000000 -0300
-++++ libtorrent-0.13.2-cross/configure.ac	2012-05-09 10:57:49.671175421 -0300
-+@@ -17,7 +17,6 @@
-+ 
-+ AM_INIT_AUTOMAKE
-+ AM_CONFIG_HEADER(config.h)
-+-AM_PATH_CPPUNIT(1.9.6)
-+ AC_DISABLE_STATIC
-+ 
-+ AM_DISABLE_STATIC
-+diff -Nura libtorrent-0.13.2/scripts/checks.m4 libtorrent-0.13.2-cross/scripts/checks.m4
-+--- libtorrent-0.13.2/scripts/checks.m4	2012-04-12 06:44:23.000000000 -0300
-++++ libtorrent-0.13.2-cross/scripts/checks.m4	2012-05-09 10:42:32.642728917 -0300
-+@@ -96,7 +96,7 @@
-+ AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
-+   AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
-+ 
-+-  AC_RUN_IFELSE([AC_LANG_SOURCE([
-++  AC_LINK_IFELSE([AC_LANG_SOURCE([
-+       #include <fcntl.h>
-+       #include <stdlib.h>
-+       #include <unistd.h>
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
-new file mode 100644
-index 0000000..100e684
---- /dev/null
-+++ b/package/libtorrent/libtorrent.mk
-@@ -0,0 +1,16 @@
-+#############################################################
-+#
-+# libtorrent
-+#
-+#############################################################
-+
-+LIBTORRENT_VERSION = 0.13.2
-+LIBTORRENT_SITE = http://libtorrent.rakshasa.no/downloads
-+LIBTORRENT_DEPENDENCIES = host-pkg-config libsigc \
-+	$(if $(BR2_PACKAGE_OPENSSL),openssl)
-+LIBTORRENT_CONF_OPT = --enable-aligned \
-+	$(if $(BR2_PACKAGE_OPENSSL),--enable-openssl,--disable-openssl)
-+LIBTORRENT_INSTALL_STAGING = YES
-+LIBTORRENT_AUTORECONF = YES
-+
-+$(eval $(call AUTOTARGETS))
+Although successful builds are nice, the interesting logs are those that
+relate to build failures. Having the ability to sort and categorise those
+failed logs would hopefully help in solving the most common build failures.
+
+For example, in the recent past, there were two related alsa-libs build
+failures on PowerPC:
+  http://autobuild.buildroot.net/results/a8471598a379e5dbecef539479b968947474ef22/
+  http://autobuild.buildroot.net/results/05b306ee2fa909420e4bc1f9faa7a35d17d786a7/
+
+I did not look in details, but it may well be that there are other similar
+build failures of alsa-libs on PowerPC. Solving the error in one of those
+builds would also solve the other(s).
+
+So, we need a heuristic to detect how similar two failed build logs are, and
+eventually group those failures together. Below is such simple heuristic:
+
+ 1- extract the last 100 lines-or-so from two build logs (already done)
+ 2- sort each extract
+ 3- diffstat the sorted extracts
+ 4- the lower the number of different lines, the higher the similarity
+
+For example, for these two build logs:
+  diff -du a847159-100.sorted 05b306e-100.sorted |diffstat 
+  05b306e-100.sorted |   18 +++++++++---------
+   1 file changed, 9 insertions(+), 9 deletions(-)
+
+Which is 18 changed lines out of 200, for a difference score of 9%. This is
+a really rough and dumb metric, but one that is easy to compute, and we can
+easily refine it a little bit (eg. by using more lines in the extracts, or
+by munging some well-known patterns).
+
+Setting up the scripts that gather all failed logs, and compute that
+similiarity scores would be relatively easy (and I can do it!).
+
+We could of course use other metrics, such as true text similarity as used
+for plagiarism detection, but they would IMHO be much more involved.
+
+Ready to read comments and suggestions! ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
