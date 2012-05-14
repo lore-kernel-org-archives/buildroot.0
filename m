@@ -1,23 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 14 May 2012 22:24:38 +0200
-Subject: [Buildroot] [PATCH] mtd: bump to 1.5.0
-In-Reply-To: <1336385153-12627-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Mon, 7 May 2012 12:05:53
- +0200")
-References: <1336385153-12627-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87aa1azf21.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 14 May 2012 22:24:29 +0200
+Subject: [Buildroot] [git commit branch/next] mtd: bump to 1.5.0
+Message-ID: <20120514202507.3024896CEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c81107265f48619cf91b3913188f81a01c82a9e8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mtd/mtd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 8ccd4dd..3bcefa5 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -3,7 +3,7 @@
+ # mtd provides jffs2 utilities
+ #
+ #############################################################
+-MTD_VERSION = 1.4.9
++MTD_VERSION = 1.5.0
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ ifeq ($(BR2_PACKAGE_MTD_MKFSJFFS2),y)
