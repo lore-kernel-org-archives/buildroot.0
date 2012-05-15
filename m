@@ -1,80 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 May 2012 23:15:50 +0200
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: disable decimal floats
-Message-ID: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 May 2012 23:23:04 +0200
+Subject: [Buildroot] [PATCH] logsurfer: new package
+In-Reply-To: <1337067382-19212-1-git-send-email-faessler@was.ch>
+References: <1337067382-19212-1-git-send-email-faessler@was.ch>
+Message-ID: <4FB2C938.2000706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
-the floating-point environement fenv.h in the C library.
+  Hoi Dominik,
 
-The uClibc .config file used by crosstool-NG to build uClibc is the
-same as used by the internal buildroot mechanism, and explcitly
-disables fenv support.
+  Thank you for your contribution.  You patch looks very good, with a few
+small remarks.
 
-The quick workaround is to simply disable decimal floats in all
-crosstool-NG config files.
+  Please add a Signed-off-by line for yourself.  This is a short way for you to
+assert that you are entitled to contribute the patch under buildroot's
+GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
+details.
 
-In the long run, it might be better to check this situation, and/or
-add code and/or options in crosstool-NG to handle this (but it is
-much more involved, and this workaround is sane).
+On 05/15/12 09:36, Dominik F?ssler wrote:
+[snip]
+> --- /dev/null
+> +++ b/package/logsurfer/logsurfer.mk
+> @@ -0,0 +1,15 @@
+> +#############################################################
+> +#
+> +# logsurfer
+> +#
+> +#############################################################
+> +
+> +LOGSURFER_VERSION = 1.8
+> +LOGSURFER_SOURCE = logsurfer-$(LOGSURFER_VERSION).tar.gz
+> +LOGSURFER_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/logsurfer/logsurfer/logsurfer-${LOGSURFER_VERSION}
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- .../crosstool-ng.config-eglibc                     |    4 ++--
- .../crosstool-ng.config-glibc                      |    4 ++--
- .../crosstool-ng.config-uClibc                     |    4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+  We try to be consistent in using $() to reference variables, rather than
+${}.
 
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-index c1ab679..4488d02 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
-@@ -273,8 +273,8 @@ CT_CC_LANG_CXX=y
- # gcc other options
- #
- CT_CC_ENABLE_CXX_FLAGS=""
--CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
--CT_CC_EXTRA_CONFIG_ARRAY=""
-+CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
-+CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
- CT_CC_STATIC_LIBSTDCXX=y
- 
- #
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-index 4a555c7..46a636b 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
-@@ -273,8 +273,8 @@ CT_CC_LANG_CXX=y
- # gcc other options
- #
- CT_CC_ENABLE_CXX_FLAGS=""
--CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
--CT_CC_EXTRA_CONFIG_ARRAY=""
-+CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
-+CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
- CT_CC_STATIC_LIBSTDCXX=y
- 
- #
-diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-index 0e442f0..437f455 100644
---- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-+++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
-@@ -272,8 +272,8 @@ CT_CC_LANG_CXX=y
- # gcc other options
- #
- CT_CC_ENABLE_CXX_FLAGS=""
--CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
--CT_CC_EXTRA_CONFIG_ARRAY=""
-+CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
-+CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
- CT_CC_STATIC_LIBSTDCXX=y
- 
- #
+> +define LOGSURFER_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/src/logsurfer $(TARGET_DIR)/bin
+> +endef
+> +
+> +$(eval $(call AUTOTARGETS,package,logsurfer))
+
+  The arguments to AUTOTARGETS are no longer necessary.
+
+
+  Regards,
+  Arnout
 -- 
-1.7.2.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
