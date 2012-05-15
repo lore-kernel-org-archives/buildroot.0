@@ -1,49 +1,60 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 May 2012 22:44:17 +0200
-Subject: [Buildroot] [git commit] ext-tool.mk: fix SUPPORT_LIB_DIR
-	calculation for toolchains without libstdc++
-Message-ID: <20120515204902.B9F8796CF7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 15 May 2012 22:51:37 +0200
+Subject: [Buildroot] (newbie question)
+In-Reply-To: <20120515224254.6bff263a@skate>
+References: <CAFC29aU6nfLkHpbs1mKhV13aVdtskqtKtCpURpzi-gQErviriQ@mail.gmail.com>
+ <20120515224254.6bff263a@skate>
+Message-ID: <4FB2C1D9.4030809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8e1ecb8557eb223f12d7d0c989fd799723211aa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/15/12 22:42, Thomas Petazzoni wrote:
+> Hello,
+>
+> Le Tue, 15 May 2012 13:28:02 -0700,
+> Ron Eggler<reggler@semiosbio.com>  a ?crit :
+>
+>> I downloaded a build root archive that compiles for my Synapse E-10
+>> (running ARM9) that works fine. I wanted to add several packages to it, I
+>> added folders in the package/ directory and added Config.in and
+>> package.mkfiles as described on
+>> http://buildroot.uclibc.org/buildroot.html#add_packages (also added it to
+>> package/Config.in but for some reason, I don't seem to get the binaries in
+>> my final build, why would that be?
+>
+> Can you post the patch adding your packages? Without looking at your
+> Config.in and<pkg>.mk file, it is merely impossible to help you in
+> understanding why your binaries aren't installed in the target
+> filesystem.
 
-SUPPORT_LIB_DIR would get resolved to the main buildroot directory for
-external toolchains without C++ support, as:
+  But first some sanity checks:
 
- - gcc -print-file-name=<nonexisting-file> returns <nonexisting-file>
- - readlink -f <nonexisting-file> returns $PWD/<nonexisting-file>
+1. Did you select the new packages in your configuration?
 
-So fix it by ensuring output of gcc -print-file-name actually exists
-before using it.
+2. Did buildroot create a build directory for your packages in
+output/build/<pkgname>-<version>?  If not, the package is somehow not
+selected.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- toolchain/toolchain-external/ext-tool.mk |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+3. Does the build directory contain stamp files, esp. the one called
+.stamp_target_intalled?  If not, it was never installed.
 
-diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
-index b163aee..3f58aad 100644
---- a/toolchain/toolchain-external/ext-tool.mk
-+++ b/toolchain/toolchain-external/ext-tool.mk
-@@ -384,11 +384,12 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
- 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
- 	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
- 	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
-+	SUPPORT_LIB_DIR="" ; \
- 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
--		LIBSTDCPP_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a)` ; \
--		SUPPORT_LIB_DIR=`echo $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
--	else \
--		SUPPORT_LIB_DIR="" ; \
-+		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-+		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
-+			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-+		fi ; \
- 	fi ; \
- 	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
- 	mkdir -p $(TARGET_DIR)/lib ; \
+4. Does the build directory contain the compiled binaries?  If not, your
+build commands are wrong so there are no binaries to install.
+
+5. If you do a 'make <pkg>-dirclean; make <pkg>', what happens?  Do you see
+some commands installing the binaries to the target?
+
+
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
