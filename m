@@ -1,34 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 May 2012 22:45:51 +0200
-Subject: [Buildroot] [PATCH resend] source-check: change behavior to
- check only selected packages / add source-check-all
-In-Reply-To: <cceaa854b98654b39b1f.1337107383@beantl019720>
-References: <cceaa854b98654b39b1f.1337107383@beantl019720>
-Message-ID: <4FB2C07F.2060608@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 May 2012 22:44:17 +0200
+Subject: [Buildroot] [git commit] ext-tool.mk: fix SUPPORT_LIB_DIR
+	calculation for toolchains without libstdc++
+Message-ID: <20120515204902.B9F8796CF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/15/12 20:43, Thomas De Schampheleire wrote:
-> The original 'source-check' target first selects all packages, and then checks
-> whether the package tarballs can be found. This is useful for Buildroot
-> maintainers, but less useful for developers working on a specific project. The
-> latter only care about the packages used in that project.
->
-> This patch removes the allyesconfig dependency to source-check so that only
-> selected packages are checked. The original behavior is moved to a new target
-> 'source-check-all'.
->
-> Signed-off-by: Thomas De Schampheleire<thomas.de.schampheleire@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=d8e1ecb8557eb223f12d7d0c989fd799723211aa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+SUPPORT_LIB_DIR would get resolved to the main buildroot directory for
+external toolchains without C++ support, as:
 
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+ - gcc -print-file-name=<nonexisting-file> returns <nonexisting-file>
+ - readlink -f <nonexisting-file> returns $PWD/<nonexisting-file>
+
+So fix it by ensuring output of gcc -print-file-name actually exists
+before using it.
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/toolchain-external/ext-tool.mk |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/toolchain/toolchain-external/ext-tool.mk b/toolchain/toolchain-external/ext-tool.mk
+index b163aee..3f58aad 100644
+--- a/toolchain/toolchain-external/ext-tool.mk
++++ b/toolchain/toolchain-external/ext-tool.mk
+@@ -384,11 +384,12 @@ $(STAMP_DIR)/ext-toolchain-installed: $(STAMP_DIR)/ext-toolchain-checked
+ 	ARCH_LIBC_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libc.a)` ; \
+ 	ARCH_SYSROOT_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:usr/lib(64)?/(.*/)?libc\.a::'` ; \
+ 	ARCH_LIB_DIR=`echo $${ARCH_LIBC_A_LOCATION} | sed -r -e 's:.*/usr/(lib(64)?)/(.*/)?libc.a:\1:'` ; \
++	SUPPORT_LIB_DIR="" ; \
+ 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+-		LIBSTDCPP_A_LOCATION=`readlink -f $$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a)` ; \
+-		SUPPORT_LIB_DIR=`echo $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+-	else \
+-		SUPPORT_LIB_DIR="" ; \
++		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
++			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++		fi ; \
+ 	fi ; \
+ 	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+ 	mkdir -p $(TARGET_DIR)/lib ; \
