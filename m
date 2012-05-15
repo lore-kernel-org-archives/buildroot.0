@@ -1,25 +1,41 @@
-From: Ron Eggler <reggler@semiosbio.com>
-Date: Tue, 15 May 2012 13:28:02 -0700
-Subject: [Buildroot] (newbie question)
-Message-ID: <CAFC29aU6nfLkHpbs1mKhV13aVdtskqtKtCpURpzi-gQErviriQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 May 2012 22:42:33 +0200
+Subject: [Buildroot] [PATCH v2] ccache: allow dynamic selection of cache
+	directory
+In-Reply-To: <20120515215014.29e93c18@skate> (Thomas Petazzoni's message of
+ "Tue, 15 May 2012 21:50:14 +0200")
+References: <962414f85797a188de79.1333738037@beantl019720>
+ <4FA44012.8040008@mind.be> <20120515202803.0016103e@skate>
+ <CAAXf6LVTXd2AkAJ+F_29v+Aias2aHVGcj4noXnyWHWWdXbmFxg@mail.gmail.com>
+ <20120515205732.71d2310d@skate>
+ <CAAXf6LW4iDFCRoqs-1kyjEg=jw9DvBzgriG+WucCTO_k6r3DGw@mail.gmail.com>
+ <20120515215014.29e93c18@skate>
+Message-ID: <87vcjxqipy.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I downloaded a build root archive that compiles for my Synapse E-10
-(running ARM9) that works fine. I wanted to add several packages to it, I
-added folders in the package/ directory and added Config.in and
-package.mkfiles as described on
-http://buildroot.uclibc.org/buildroot.html#add_packages (also added it to
-package/Config.in but for some reason, I don't seem to get the binaries in
-my final build, why would that be?
+ Thomas> Le Tue, 15 May 2012 21:23:27 +0200,
+ Thomas> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Thank you,
-Ron
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120515/4fbf11af/attachment.html>
+ >> It's not defined directly like that.
+ >> ccache is a package in its own right, using autotools.
+ >> (package/ccache/ccache.mk).
+ >> 
+ >> The variable CCACHE_DIR originates from the following line in
+ >> package/pkg-gentargets.mk:
+ >> $(2)_DIR        =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+
+Ahh yes, I now remember that problem as well.
+
+ Thomas> Aaah, yes. Then yes, we need to adjust ccache source code, as
+ Thomas> suggested by Arnout.
+
+I agree, without the wrapper would be nicest.
+
+-- 
+Bye, Peter Korsgaard
