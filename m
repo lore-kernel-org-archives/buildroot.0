@@ -1,53 +1,44 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 May 2012 11:54:37 +0200
-Subject: [Buildroot] [PATCH] autossh: new package
-In-Reply-To: <1337059661-4008-1-git-send-email-faessler@was.ch> ("Dominik
- =?utf-8?Q?F=C3=A4ssler=22's?= message of "Tue, 15 May 2012 07:27:41 +0200")
-References: <1337059661-4008-1-git-send-email-faessler@was.ch>
-Message-ID: <87sjf1vkf6.fsf@macbook.be.48ers.dk>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 15 May 2012 14:42:04 +0100
+Subject: [Buildroot] [PATCH] jquery-ui: new package
+In-Reply-To: <87wr4dvn7g.fsf@macbook.be.48ers.dk>
+References: <1337071203-5841-1-git-send-email-spdawson@gmail.com>
+ <87wr4dvn7g.fsf@macbook.be.48ers.dk>
+Message-ID: <CAHt8ZCPmMf-3ki6F70W3gJVFrku2Z4F2e=9ysVoJrEg73VGbGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dominik" == Dominik F?ssler <faessler@was.ch> writes:
+> I've looked at adding it myself, but the problem is the theming. How do
+> you expect to handle this?
 
-Hi,
+Hmm. Good question; they don't make it easy with the whole "download
+builder" thing. Any suggestions?
 
- Dominik> +++ b/package/autossh/Config.in
- Dominik> @@ -0,0 +1,8 @@
- Dominik> +config BR2_PACKAGE_AUTOSSH
- Dominik> +	bool "autossh"
- Dominik> +	select BR2_PACKAGE_OPENSSH
+On 15 May 2012 09:54, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "spdawson" == spdawson ?<spdawson@gmail.com> writes:
+>
+> ?spdawson> From: Simon Dawson <spdawson@gmail.com>
+> ?spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+>
+> ?spdawson> +JQUERY_UI_VERSION = 1.8.20
+> ?spdawson> +JQUERY_UI_SITE = http://jqueryui.com/download
+> ?spdawson> +JQUERY_UI_SOURCE = jquery-ui-$(JQUERY_UI_VERSION).custom.zip
+> ?spdawson> +
+> ?spdawson> +JQUERY_UI_THEME = smoothness
+>
+> I've looked at adding it myself, but the problem is the theming. How do
+> you expect to handle this?
+>
+> --
+> Bye, Peter Korsgaard
 
-Doesn't this work with dropbear? Autossh afaik just creates a port
-forward loop and monitors that the connection is alive, which should
-work for dropbear as well.
 
- Dominik> diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
- Dominik> new file mode 100644
- Dominik> index 0000000..d81731a
- Dominik> --- /dev/null
- Dominik> +++ b/package/autossh/autossh.mk
- Dominik> @@ -0,0 +1,16 @@
- Dominik> +#############################################################
- Dominik> +#
- Dominik> +# autossh
- Dominik> +#
- Dominik> +#############################################################
- Dominik> +
- Dominik> +AUTOSSH_VERSION = 1.4c
- Dominik> +AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
- Dominik> +AUTOSSH_SITE = http://www.harding.motd.ca/autossh
- Dominik> +AUTOSSH_DEPENDENCIES = openssh
- Dominik> +
- Dominik> +define AUTOSSH_INSTALL_TARGET_CMDS
- Dominik> +	$(INSTALL) -D -m 0755 $(@D)/autossh $(TARGET_DIR)/bin
-
-On my Debian machine autossh is in /usr/bin, and is just a shell wrapper
-around the real binary in /usr/lib/autossh. Is there any specific reason
-why you don't just use make install?
 
 -- 
-Bye, Peter Korsgaard
+http://www.google.com/profiles/spdawson
+
+Please avoid sending me Word, Excel or PowerPoint attachments.
+See http://www.gnu.org/philosophy/no-word-attachments.html
