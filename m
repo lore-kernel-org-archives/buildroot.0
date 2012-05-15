@@ -1,58 +1,44 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 15 May 2012 20:43:03 +0200
-Subject: [Buildroot] [PATCH resend] source-check: change behavior to check
- only selected packages / add source-check-all
-Message-ID: <cceaa854b98654b39b1f.1337107383@beantl019720>
+Date: Tue, 15 May 2012 20:47:11 +0200
+Subject: [Buildroot] [PATCH 0 of 2 v5] Add find utility functions /
+	exclude files from strip
+In-Reply-To: <patchbomb.1336505176@beantl019720>
+References: <patchbomb.1336505176@beantl019720>
+Message-ID: <CAAXf6LVATttTYPnPVvXt8KVnKpfLAh6xanLdwZ9OfQ9fceod7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original 'source-check' target first selects all packages, and then checks
-whether the package tarballs can be found. This is useful for Buildroot
-maintainers, but less useful for developers working on a specific project. The
-latter only care about the packages used in that project.
+Hi,
 
-This patch removes the allyesconfig dependency to source-check so that only
-selected packages are checked. The original behavior is moved to a new target
-'source-check-all'.
+On Tue, May 8, 2012 at 9:26 PM, Thomas De Schampheleire
+<patrickdepinguin+buildroot@gmail.com> wrote:
+> This patch series adds a few utility functions to pkg-utils.mk that
+> help in composing find commands, and uses these functions to exclude
+> user-configured files and directories from being stripped in target-finalize.
+>
+> Thanks to input from Arnout, the find functions are now much simpler and
+> should be clearly understandable by everyone.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+> v5: line up with latest git
+> v4: simplify find functions even further; whitespace changes
+> v3: update based on review comments, remove Python changes for now
+> v2: simplify find functions
+>
+> ?Config.in ? ? ? ? ? ?| ?19 +++++++++++++++++++
+> ?Makefile ? ? ? ? ? ? | ?10 ++++++++--
+> ?package/pkg-utils.mk | ? 9 +++++++++
+> ?3 files changed, 36 insertions(+), 2 deletions(-)
+>
+>
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Are there any further comments on this patch series? If not, can we
+apply it to master or next?
 
----
- Makefile |  8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	source-check print-version
-+	source-check source-check-all print-version
- 
- # Strip quotes and then whitespaces
- qstrip=$(strip $(subst ",,$(1)))
-@@ -584,7 +584,8 @@ savedefconfig: $(BUILD_DIR)/buildroot-co
- 	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
- 
- # check if download URLs are outdated
--source-check: allyesconfig
-+source-check-all: allyesconfig source-check
-+source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
- 
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-@@ -671,7 +672,8 @@ endif
- 	@echo
- 	@echo 'Miscellaneous:'
- 	@echo '  source                 - download all sources needed for offline-build'
--	@echo '  source-check           - check all packages for valid download URLs'
-+	@echo '  source-check           - check selected packages for valid download URLs'
-+	@echo '  source-check-all       - check all packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+Thanks,
+Thomas
