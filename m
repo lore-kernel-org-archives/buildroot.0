@@ -1,38 +1,26 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 May 2012 22:57:32 +0200
-Subject: [Buildroot] [git commit] dnsmasq: host-pkg-config is needed for lua
-	support as well
-Message-ID: <20120515205824.5156396CF5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 May 2012 23:00:30 +0200
+Subject: [Buildroot] [PATCH v4-resend] linux: install dtc (device tree
+	compiler) as host tool if selected
+In-Reply-To: <ade945be4a66da0c3b80.1337105905@beantl019720> (Thomas De
+ Schampheleire's message of "Tue, 15 May 2012 20:18:25 +0200")
+References: <ade945be4a66da0c3b80.1337105905@beantl019720>
+Message-ID: <87r4ulqhw1.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9950d485cd8c16dc84d2e9eca5f4f586c1b717c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-Fixes http://autobuild.buildroot.org/results/94d67f02c81639e1586d1c21a7e3b183a6ab50a2
+ Thomas> Having dtc as a host tool can be useful for users that have a custom
+ Thomas> boot scenario where the device tree is not embedded in the kernel.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/dnsmasq/dnsmasq.mk |    4 +---
- 1 files changed, 1 insertions(+), 3 deletions(-)
+ Thomas> Signed-off-by: Thomas De Schampheleire
+ Thomas> <thomas.de.schampheleire@gmail.com>
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 2e3575c..4aa7cfb 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -42,11 +42,9 @@ endef
- endif
- 
- ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
--	DNSMASQ_DEPENDENCIES += lua
-+	DNSMASQ_DEPENDENCIES += lua host-pkg-config
- 	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
--endif
- 
--ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
- define DNSMASQ_ENABLE_LUA
- 	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
- 	$(SED) 's^.*#define HAVE_LUASCRIPT.*^#define HAVE_LUASCRIPT^' \
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
