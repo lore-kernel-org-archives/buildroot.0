@@ -1,39 +1,66 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 May 2012 09:02:10 +0200
-Subject: [Buildroot] [PATCH 1/1] opencv: bump to version 2.4.0
-In-Reply-To: <CAHXCMMKcLXdLWySrosjh41WbottHaEz-Y0cZGxrtaJ-hq4Htxw@mail.gmail.com>
- (Samuel Martin's message of "Tue, 15 May 2012 08:19:58 +0200")
-References: <1337035892-29285-1-git-send-email-s.martin49@gmail.com>
- <20120515034259.GA3091@sapphire.tkos.co.il>
- <CAHXCMMKcLXdLWySrosjh41WbottHaEz-Y0cZGxrtaJ-hq4Htxw@mail.gmail.com>
-Message-ID: <8762byvsel.fsf@macbook.be.48ers.dk>
+From: =?UTF-8?q?Dominik=20F=C3=A4ssler?= <faessler@was.ch>
+Date: Tue, 15 May 2012 09:36:22 +0200
+Subject: [Buildroot] [PATCH] logsurfer: new package
+Message-ID: <1337067382-19212-1-git-send-email-faessler@was.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+---
+ package/Config.in              |    1 +
+ package/logsurfer/Config.in    |    7 +++++++
+ package/logsurfer/logsurfer.mk |   15 +++++++++++++++
+ 3 files changed, 23 insertions(+), 0 deletions(-)
+ create mode 100644 package/logsurfer/Config.in
+ create mode 100644 package/logsurfer/logsurfer.mk
 
-Hi,
-
- >> Can we detect the SSE capability of the target automatically using
- >> the various BR2_x86_* config options in target/Config.in.arch?
-
- Samuel> Of course, we could.
- Samuel> But IMHO, this belongs more to the target/Config.in.arch file than to
- Samuel> any packages.
- Samuel> OpenCV may be the first package that can take benefit from such
- Samuel> options, but hope it's not the last one ;-)
-
- Samuel> I'll see how we can handle this. Any objections?
-
-That's also good. E.G. add hidden options for the various instruction
-set extensions (mmx, sse, neon, altivec, ..) and then select those from
-the applicable cpu variant options.
-
-Don't worry if you don't know all the details about the various
-architecture variants, we can always complete it later.
-
+diff --git a/package/Config.in b/package/Config.in
+index 4e3c414..091f8d6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -613,6 +613,7 @@ source "package/file/Config.in"
+ source "package/inotify-tools/Config.in"
+ source "package/lockfile-progs/Config.in"
+ source "package/logrotate/Config.in"
++source "package/logsurfer/Config.in"
+ source "package/screen/Config.in"
+ source "package/sudo/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/logsurfer/Config.in b/package/logsurfer/Config.in
+new file mode 100644
+index 0000000..27d1881
+--- /dev/null
++++ b/package/logsurfer/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LOGSURFER
++	bool "logsurfer"
++	help
++	  Logsurfer is a program for monitoring system logs in real-time,
++	  and reporting on the occurrence of events.
++
++	  http://www.crypt.gen.nz/logsurfer/
+diff --git a/package/logsurfer/logsurfer.mk b/package/logsurfer/logsurfer.mk
+new file mode 100644
+index 0000000..31405ff
+--- /dev/null
++++ b/package/logsurfer/logsurfer.mk
+@@ -0,0 +1,15 @@
++#############################################################
++#
++# logsurfer
++#
++#############################################################
++
++LOGSURFER_VERSION = 1.8
++LOGSURFER_SOURCE = logsurfer-$(LOGSURFER_VERSION).tar.gz
++LOGSURFER_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/logsurfer/logsurfer/logsurfer-${LOGSURFER_VERSION}
++
++define LOGSURFER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/src/logsurfer $(TARGET_DIR)/bin
++endef
++
++$(eval $(call AUTOTARGETS,package,logsurfer))
 -- 
-Bye, Peter Korsgaard
+1.7.2.5
