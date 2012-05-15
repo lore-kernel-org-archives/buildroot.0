@@ -1,34 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 15 May 2012 09:42:44 +0200
-Subject: [Buildroot] [git commit] ndisc6: fix build when libintl is enabled
-Message-ID: <20120515074328.2AA6D96D00@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 15 May 2012 09:44:14 +0200
+Subject: [Buildroot] [PATCH] gnutls: Fix search path for libgcrypt
+In-Reply-To: <4FB1F75F.5050100@mind.be> (Arnout Vandecappelle's message of
+ "Tue, 15 May 2012 08:27:43 +0200")
+References: <1336847275-21899-1-git-send-email-arnout@mind.be>
+ <20120512210755.672039a4@skate> <4FAEC2F4.1060802@mind.be>
+ <87d3661soa.fsf@macbook.be.48ers.dk> <4FB1F75F.5050100@mind.be>
+Message-ID: <871umlx50x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b6f3f2645a50a115c974cdc6dd0e2d8b96837b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ndisc6/ndisc6.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+Hi,
 
-diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
-index 8451e06..7cf4b8a 100644
---- a/package/ndisc6/ndisc6.mk
-+++ b/package/ndisc6/ndisc6.mk
-@@ -10,6 +10,11 @@ NDISC6_SITE = http://www.remlab.net/files/ndisc6/
- NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
- NDISC6_CONF_OPT = --localstatedir=/var --disable-rpath --disable-suid-install
- 
-+ifeq ($(BR2_PACKAGE_LIBINTL),y)
-+NDISC6_DEPENDENCIES += libintl
-+NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+endif
-+
- NDISC6_BIN_ += dnssort # perl script
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
- NDISC6_BIN_$(BR2_PACKAGE_NDISC6_TCPSPRAY) += tcpspray tcpspray6
+ Arnout> This is BTW from one of the broken configs reported in the
+ Arnout> autobuild, from which I also had to remove some more broken
+ Arnout> packages (ltp-testsuite, ndisc6).  It's a generic powerpc
+ Arnout> internal toolchain.
+
+ >> ltp-testsuite is known to be broken with the default uClibc config,
+ >> but I wasn't aware of any ndisc6 issues. What exactly goes wrong?
+
+ Arnout>   It's a gettext issue. I haven't looked at it because I was
+ Arnout> fixing something else, and because gettext anyway had patches
+ Arnout> pending.
+
+Thanks, fixed.
+
+-- 
+Bye, Peter Korsgaard
