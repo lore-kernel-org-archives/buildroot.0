@@ -1,44 +1,47 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 15 May 2012 20:47:11 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v5] Add find utility functions /
-	exclude files from strip
-In-Reply-To: <patchbomb.1336505176@beantl019720>
-References: <patchbomb.1336505176@beantl019720>
-Message-ID: <CAAXf6LVATttTYPnPVvXt8KVnKpfLAh6xanLdwZ9OfQ9fceod7w@mail.gmail.com>
+Date: Tue, 15 May 2012 20:49:35 +0200
+Subject: [Buildroot] [PATCH v2] ccache: allow dynamic selection of cache
+	directory
+In-Reply-To: <20120515202803.0016103e@skate>
+References: <962414f85797a188de79.1333738037@beantl019720>
+ <4FA44012.8040008@mind.be> <20120515202803.0016103e@skate>
+Message-ID: <CAAXf6LVTXd2AkAJ+F_29v+Aias2aHVGcj4noXnyWHWWdXbmFxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Tue, May 15, 2012 at 8:28 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Fri, 04 May 2012 22:46:10 +0200,
+> Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>> ? On second review, a better implementation would be to replace the
+>> first sed by
+>>
+>> sed -i 's,getenv("CCACHE_DIR"),getenv("BUILDROOT_CACHE_DIR"),'
+>> $(@D)/ccache.c
+>
+> Euh? Why wouldn't we use CCACHE_DIR directly? What's the need of
+> renaming this environment variable here?
 
-On Tue, May 8, 2012 at 9:26 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> This patch series adds a few utility functions to pkg-utils.mk that
-> help in composing find commands, and uses these functions to exclude
-> user-configured files and directories from being stripped in target-finalize.
->
-> Thanks to input from Arnout, the find functions are now much simpler and
-> should be clearly understandable by everyone.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> v5: line up with latest git
-> v4: simplify find functions even further; whitespace changes
-> v3: update based on review comments, remove Python changes for now
-> v2: simplify find functions
->
-> ?Config.in ? ? ? ? ? ?| ?19 +++++++++++++++++++
-> ?Makefile ? ? ? ? ? ? | ?10 ++++++++--
-> ?package/pkg-utils.mk | ? 9 +++++++++
-> ?3 files changed, 36 insertions(+), 2 deletions(-)
->
->
+Because CCACHE_DIR is already used by gentargets/autotargets...
 
-Are there any further comments on this patch series? If not, can we
-apply it to master or next?
+>
+> For the record, when I did the rework of ccache, I did hardcode the
+> cache directory into the ccache binary because I had issues passing
+> CCACHE_DIR everywhere. But I was trying to pass it to every gcc
+> invocation, and not globally through an export in the Makefile.
+>
+> In any case, I would definitely prefer a solution that doesn't use a
+> wrapper. With a wrapper we would have:
+>
+> ?-> ccache wrapper
+> ?-> ccache
+> ? -> external toolchain wrapper
+> ? ?-> gcc
+>
+> If we can avoid the additional level of wrapping, it'd be nice.
 
-Thanks,
-Thomas
+Thanks for your input, Thomas.
