@@ -1,50 +1,36 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 15 May 2012 23:23:04 +0200
-Subject: [Buildroot] [PATCH] logsurfer: new package
-In-Reply-To: <1337067382-19212-1-git-send-email-faessler@was.ch>
-References: <1337067382-19212-1-git-send-email-faessler@was.ch>
-Message-ID: <4FB2C938.2000706@mind.be>
+Date: Tue, 15 May 2012 23:30:05 +0200
+Subject: [Buildroot] (newbie question)
+In-Reply-To: <CAFC29aUwvGS-tsbLiCe7=7W1HZ0UZ409BMhf5Y73r289FSuNUA@mail.gmail.com>
+References: <CAFC29aU6nfLkHpbs1mKhV13aVdtskqtKtCpURpzi-gQErviriQ@mail.gmail.com>
+ <20120515224254.6bff263a@skate>
+ <CAFC29aUwvGS-tsbLiCe7=7W1HZ0UZ409BMhf5Y73r289FSuNUA@mail.gmail.com>
+Message-ID: <4FB2CADD.9040001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hoi Dominik,
+On 05/15/12 23:13, Ron Eggler wrote:
+> I've been trying to get some diff going with this commmand but somehow I don't get a good result, why's that?
+> reg at desktop-reg:/usr/local/src/E10-buildroot/br1202-main/package$ diff -r ./ ../../../E10orig_clone/br1202-main/package/
 
-  Thank you for your contribution.  You patch looks very good, with a few
-small remarks.
+  See 'diff --help':
 
-  Please add a Signed-off-by line for yourself.  This is a short way for you to
-assert that you are entitled to contribute the patch under buildroot's
-GPL license.  See  http://kerneltrap.org/files/Jeremy/DCO.txt for more
-details.
+   -N, --new-file                  treat absent files as empty
 
-On 05/15/12 09:36, Dominik F?ssler wrote:
-[snip]
-> --- /dev/null
-> +++ b/package/logsurfer/logsurfer.mk
-> @@ -0,0 +1,15 @@
-> +#############################################################
-> +#
-> +# logsurfer
-> +#
-> +#############################################################
-> +
-> +LOGSURFER_VERSION = 1.8
-> +LOGSURFER_SOURCE = logsurfer-$(LOGSURFER_VERSION).tar.gz
-> +LOGSURFER_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/logsurfer/logsurfer/logsurfer-${LOGSURFER_VERSION}
+  You also want the -u option to diff, that gives much more readable output.
+Also the -p option is very useful: it gives the current 'function' as context.
+In this case it doesn't matter, but it's good to know in general.  So:
 
-  We try to be consistent in using $() to reference variables, rather than
-${}.
+diff -Nrup . ../../....
 
-> +define LOGSURFER_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/src/logsurfer $(TARGET_DIR)/bin
-> +endef
-> +
-> +$(eval $(call AUTOTARGETS,package,logsurfer))
 
-  The arguments to AUTOTARGETS are no longer necessary.
+  Please remove the wview-5.20.2.tar.gz file first, though.
+
+  BTW, is there anything wrong with the readline library and zlib library already
+available in buildroot?
 
 
   Regards,
