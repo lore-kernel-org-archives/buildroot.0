@@ -1,28 +1,18 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 May 2012 15:45:10 +0200
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 15 May 2012 15:07:44 +0100
 Subject: [Buildroot] [PATCH] jquery-ui: new package
-In-Reply-To: <CAHt8ZCPmMf-3ki6F70W3gJVFrku2Z4F2e=9ysVoJrEg73VGbGw@mail.gmail.com>
- (Simon Dawson's message of "Tue, 15 May 2012 14:42:04 +0100")
+In-Reply-To: <87obppv9qx.fsf@macbook.be.48ers.dk>
 References: <1337071203-5841-1-git-send-email-spdawson@gmail.com>
  <87wr4dvn7g.fsf@macbook.be.48ers.dk>
  <CAHt8ZCPmMf-3ki6F70W3gJVFrku2Z4F2e=9ysVoJrEg73VGbGw@mail.gmail.com>
-Message-ID: <87obppv9qx.fsf@macbook.be.48ers.dk>
+ <87obppv9qx.fsf@macbook.be.48ers.dk>
+Message-ID: <CAHt8ZCPJpjOez1PL-FdK+AS2vd1J=Kv5iceG28sYnPj6utLscA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
-
- >> I've looked at adding it myself, but the problem is the theming. How do
- >> you expect to handle this?
-
- Simon> Hmm. Good question; they don't make it easy with the whole "download
- Simon> builder" thing. Any suggestions?
-
-Not really. I gave up and just added a local package with my custom
-downloaded theme.
-
--- 
-Bye, Peter Korsgaard
+I suppose that could be the answer: allow the configuration to specify
+a custom local path/tarball from which to install the user's custom
+theme. Would that be an acceptable compromise?
