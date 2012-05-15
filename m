@@ -1,26 +1,52 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 15 May 2012 23:00:30 +0200
-Subject: [Buildroot] [PATCH v4-resend] linux: install dtc (device tree
-	compiler) as host tool if selected
-In-Reply-To: <ade945be4a66da0c3b80.1337105905@beantl019720> (Thomas De
- Schampheleire's message of "Tue, 15 May 2012 20:18:25 +0200")
-References: <ade945be4a66da0c3b80.1337105905@beantl019720>
-Message-ID: <87r4ulqhw1.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 May 2012 22:59:20 +0200
+Subject: [Buildroot] [git commit branch/next] linux: install dtc (device
+	tree compiler) as host tool if selected
+Message-ID: <20120515210116.92A8D96CFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=707d44d0a28906ebda49584dd5f55985406f0bde
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Thomas> Having dtc as a host tool can be useful for users that have a custom
- Thomas> boot scenario where the device tree is not embedded in the kernel.
+Having dtc as a host tool can be useful for users that have a custom
+boot scenario where the device tree is not embedded in the kernel.
 
- Thomas> Signed-off-by: Thomas De Schampheleire
- Thomas> <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ linux/linux.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 34f8623..f165dda 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -183,6 +183,15 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
+ endef
+ endif
+ 
++
++define LINUX_INSTALL_HOST_TOOLS
++	# Installing dtc (device tree compiler) as host tool, if selected
++	if grep -q "CONFIG_DTC=y" $(@D)/.config; then 	\
++		$(INSTALL) -D -m 0755 $(@D)/scripts/dtc/dtc $(HOST_DIR)/usr/bin/dtc ;	\
++	fi
++endef
++
++
+ define LINUX_INSTALL_IMAGES_CMDS
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+ endef
+@@ -197,6 +206,7 @@ define LINUX_INSTALL_TARGET_CMDS
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/build ;		\
+ 		rm -f $(TARGET_DIR)/lib/modules/$(LINUX_VERSION_PROBED)/source ;	\
+ 	fi
++	$(LINUX_INSTALL_HOST_TOOLS)
+ endef
+ 
+ include linux/linux-ext-*.mk
