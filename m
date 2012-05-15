@@ -1,47 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 May 2012 20:28:03 +0200
-Subject: [Buildroot] [PATCH v2] ccache: allow dynamic selection of cache
- directory
-In-Reply-To: <4FA44012.8040008@mind.be>
-References: <962414f85797a188de79.1333738037@beantl019720>
- <4FA44012.8040008@mind.be>
-Message-ID: <20120515202803.0016103e@skate>
+Date: Tue, 15 May 2012 20:29:11 +0200
+Subject: [Buildroot] [PATCH v4-resend] linux: install dtc (device tree
+ compiler) as host tool if selected
+In-Reply-To: <ade945be4a66da0c3b80.1337105905@beantl019720>
+References: <ade945be4a66da0c3b80.1337105905@beantl019720>
+Message-ID: <20120515202911.63b5e8de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 04 May 2012 22:46:10 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Le Tue, 15 May 2012 20:18:25 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
->   On second review, a better implementation would be to replace the
-> first sed by
+> Having dtc as a host tool can be useful for users that have a custom
+> boot scenario where the device tree is not embedded in the kernel.
 > 
-> sed -i 's,getenv("CCACHE_DIR"),getenv("BUILDROOT_CACHE_DIR"),'
-> $(@D)/ccache.c
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Euh? Why wouldn't we use CCACHE_DIR directly? What's the need of
-renaming this environment variable here?
-
-For the record, when I did the rework of ccache, I did hardcode the
-cache directory into the ccache binary because I had issues passing
-CCACHE_DIR everywhere. But I was trying to pass it to every gcc
-invocation, and not globally through an export in the Makefile.
-
-In any case, I would definitely prefer a solution that doesn't use a
-wrapper. With a wrapper we would have:
-
- -> ccache wrapper
-  -> ccache
-   -> external toolchain wrapper
-    -> gcc
-
-If we can avoid the additional level of wrapping, it'd be nice.
-
-Best regards,
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
