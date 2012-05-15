@@ -1,66 +1,34 @@
-From: =?UTF-8?q?Dominik=20F=C3=A4ssler?= <faessler@was.ch>
-Date: Tue, 15 May 2012 09:36:22 +0200
-Subject: [Buildroot] [PATCH] logsurfer: new package
-Message-ID: <1337067382-19212-1-git-send-email-faessler@was.ch>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 May 2012 09:42:44 +0200
+Subject: [Buildroot] [git commit] ndisc6: fix build when libintl is enabled
+Message-ID: <20120515074328.2AA6D96D00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/Config.in              |    1 +
- package/logsurfer/Config.in    |    7 +++++++
- package/logsurfer/logsurfer.mk |   15 +++++++++++++++
- 3 files changed, 23 insertions(+), 0 deletions(-)
- create mode 100644 package/logsurfer/Config.in
- create mode 100644 package/logsurfer/logsurfer.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=0b6f3f2645a50a115c974cdc6dd0e2d8b96837b2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 4e3c414..091f8d6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -613,6 +613,7 @@ source "package/file/Config.in"
- source "package/inotify-tools/Config.in"
- source "package/lockfile-progs/Config.in"
- source "package/logrotate/Config.in"
-+source "package/logsurfer/Config.in"
- source "package/screen/Config.in"
- source "package/sudo/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/logsurfer/Config.in b/package/logsurfer/Config.in
-new file mode 100644
-index 0000000..27d1881
---- /dev/null
-+++ b/package/logsurfer/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LOGSURFER
-+	bool "logsurfer"
-+	help
-+	  Logsurfer is a program for monitoring system logs in real-time,
-+	  and reporting on the occurrence of events.
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ndisc6/ndisc6.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/ndisc6/ndisc6.mk b/package/ndisc6/ndisc6.mk
+index 8451e06..7cf4b8a 100644
+--- a/package/ndisc6/ndisc6.mk
++++ b/package/ndisc6/ndisc6.mk
+@@ -10,6 +10,11 @@ NDISC6_SITE = http://www.remlab.net/files/ndisc6/
+ NDISC6_CONF_ENV = CC="$(TARGET_CC) -std=gnu99"
+ NDISC6_CONF_OPT = --localstatedir=/var --disable-rpath --disable-suid-install
+ 
++ifeq ($(BR2_PACKAGE_LIBINTL),y)
++NDISC6_DEPENDENCIES += libintl
++NDISC6_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
++endif
 +
-+	  http://www.crypt.gen.nz/logsurfer/
-diff --git a/package/logsurfer/logsurfer.mk b/package/logsurfer/logsurfer.mk
-new file mode 100644
-index 0000000..31405ff
---- /dev/null
-+++ b/package/logsurfer/logsurfer.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# logsurfer
-+#
-+#############################################################
-+
-+LOGSURFER_VERSION = 1.8
-+LOGSURFER_SOURCE = logsurfer-$(LOGSURFER_VERSION).tar.gz
-+LOGSURFER_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/logsurfer/logsurfer/logsurfer-${LOGSURFER_VERSION}
-+
-+define LOGSURFER_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/logsurfer $(TARGET_DIR)/bin
-+endef
-+
-+$(eval $(call AUTOTARGETS,package,logsurfer))
--- 
-1.7.2.5
+ NDISC6_BIN_ += dnssort # perl script
+ NDISC6_BIN_$(BR2_PACKAGE_NDISC6_NAME2ADDR) += name2addr addr2name
+ NDISC6_BIN_$(BR2_PACKAGE_NDISC6_TCPSPRAY) += tcpspray tcpspray6
