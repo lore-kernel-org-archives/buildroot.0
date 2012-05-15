@@ -1,37 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 May 2012 21:50:14 +0200
-Subject: [Buildroot] [PATCH v2] ccache: allow dynamic selection of cache
- directory
-In-Reply-To: <CAAXf6LW4iDFCRoqs-1kyjEg=jw9DvBzgriG+WucCTO_k6r3DGw@mail.gmail.com>
-References: <962414f85797a188de79.1333738037@beantl019720>
- <4FA44012.8040008@mind.be> <20120515202803.0016103e@skate>
- <CAAXf6LVTXd2AkAJ+F_29v+Aias2aHVGcj4noXnyWHWWdXbmFxg@mail.gmail.com>
- <20120515205732.71d2310d@skate>
- <CAAXf6LW4iDFCRoqs-1kyjEg=jw9DvBzgriG+WucCTO_k6r3DGw@mail.gmail.com>
-Message-ID: <20120515215014.29e93c18@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 15 May 2012 21:58:18 +0200
+Subject: [Buildroot] [git commit] Revert "directfb: add support for davinci
+	gfx driver"
+Message-ID: <20120515195835.40DB296CFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 15 May 2012 21:23:27 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=1abaa98d9242799605fc8d91e238fc1e929b6414
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> It's not defined directly like that.
-> ccache is a package in its own right, using autotools.
-> (package/ccache/ccache.mk).
-> 
-> The variable CCACHE_DIR originates from the following line in
-> package/pkg-gentargets.mk:
-> $(2)_DIR        =  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+This reverts commit df39ffe7f437f62d7c0eb6d73bdb86b2d09a8c8a.
 
-Aaah, yes. Then yes, we need to adjust ccache source code, as suggested
-by Arnout.
+It's broken and Arnout no longer has the hardware to fix/test.
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/directfb/Config.in   |    4 ----
+ package/directfb/directfb.mk |    3 +--
+ 2 files changed, 1 insertions(+), 6 deletions(-)
+
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 26f5091..47f9fea 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -53,10 +53,6 @@ config BR2_PACKAGE_DIRECTFB_EP9X
+ 	bool "compile ep9x graphics driver"
+ 	depends on BR2_arm
+ 
+-config BR2_PACKAGE_DIRECTFB_DAVINCI
+-	bool "compile TI DaVinci graphics driver"
+-	depends on BR2_arm
+-
+ config BR2_PACKAGE_DIRECTFB_UNICHROME
+ 	bool "compile unichrome graphics driver"
+ 	default y
+diff --git a/package/directfb/directfb.mk b/package/directfb/directfb.mk
+index 7aa0398..071cdf4 100644
+--- a/package/directfb/directfb.mk
++++ b/package/directfb/directfb.mk
+@@ -58,8 +58,7 @@ DIRECTFB_GFX := \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_PXA3XX),pxa3xx) \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_UNICHROME),unichrome) \
+ 	$(if $(BR2_PACKAGE_DIRECTFB_I830),i830)	\
+-	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x) \
+-	$(if $(BR2_PACKAGE_DIRECTFB_DAVINCI),davinci)
++	$(if $(BR2_PACKAGE_DIRECTFB_EP9X),ep9x)
+ 
+ ifeq ($(strip $(DIRECTFB_GFX)),)
+ DIRECTFB_GFX:=none
