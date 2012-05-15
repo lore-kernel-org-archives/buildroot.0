@@ -1,73 +1,80 @@
-From: Ron Eggler <reggler@semiosbio.com>
-Date: Tue, 15 May 2012 14:13:39 -0700
-Subject: [Buildroot] (newbie question)
-In-Reply-To: <20120515224254.6bff263a@skate>
-References: <CAFC29aU6nfLkHpbs1mKhV13aVdtskqtKtCpURpzi-gQErviriQ@mail.gmail.com>
- <20120515224254.6bff263a@skate>
-Message-ID: <CAFC29aUwvGS-tsbLiCe7=7W1HZ0UZ409BMhf5Y73r289FSuNUA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 May 2012 23:15:50 +0200
+Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: disable decimal floats
+Message-ID: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 15, 2012 at 1:42 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
+the floating-point environement fenv.h in the C library.
 
-> Hello,
->
-> Le Tue, 15 May 2012 13:28:02 -0700,
-> Ron Eggler <reggler@semiosbio.com> a ?crit :
->
-> > I downloaded a build root archive that compiles for my Synapse E-10
-> > (running ARM9) that works fine. I wanted to add several packages to it, I
-> > added folders in the package/ directory and added Config.in and
-> > package.mkfiles as described on
-> > http://buildroot.uclibc.org/buildroot.html#add_packages (also added it
-> to
-> > package/Config.in but for some reason, I don't seem to get the binaries
-> in
-> > my final build, why would that be?
->
-> Can you post the patch adding your packages? Without looking at your
-> Config.in and <pkg>.mk file, it is merely impossible to help you in
-> understanding why your binaries aren't installed in the target
-> filesystem.
->
+The uClibc .config file used by crosstool-NG to build uClibc is the
+same as used by the internal buildroot mechanism, and explcitly
+disables fenv support.
 
-Hi Thomas,
+The quick workaround is to simply disable decimal floats in all
+crosstool-NG config files.
 
-I've been trying to get some diff going with this commmand but somehow I
-don't get a good result, why's that?
-reg at desktop-reg:/usr/local/src/E10-buildroot/br1202-main/package$ diff -r
-./ ../../../E10orig_clone/br1202-main/package/
+In the long run, it might be better to check this situation, and/or
+add code and/or options in crosstool-NG to handle this (but it is
+much more involved, and this workaround is sane).
 
-It looks like:
-diff -r ./Config.in ../../../E10orig_clone/br1202-main/package/Config.in
-9,14d8
-< #WView
-< source "package/radlib/Config.in"
-< source "package/gd/Config.in"
-< source "package/libreadline5/Config.in"
-< source "package/wview/Config.in"
-<
-228,229c222,223
-< source "package/usb_\modeswitch/Config.in"
-< source "package/usb_\modeswitch_data/Config.in"
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-> source "package/usb_modeswitch/Config.in"
-> source "package/usb_modeswitch_data/Config.in"
-Only in ./: gd
-Only in ./: libreadline5
-Only in ./: libz
-Only in ./: radlib
-Only in ./: wview
-Only in ./: wview-5.20.2.tar.gz
+ .../crosstool-ng.config-eglibc                     |    4 ++--
+ .../crosstool-ng.config-glibc                      |    4 ++--
+ .../crosstool-ng.config-uClibc                     |    4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-But doesn't show the changes I made in the .mk files....
-
-Thanks,
-Ron
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120515/7258fcec/attachment-0001.html>
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+index c1ab679..4488d02 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+@@ -273,8 +273,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
+ 
+ #
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index 4a555c7..46a636b 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -273,8 +273,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
+ 
+ #
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+index 0e442f0..437f455 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+@@ -272,8 +272,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
+ 
+ #
+-- 
+1.7.2.5
