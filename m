@@ -1,41 +1,83 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 May 2012 10:38:35 +0200
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: disable decimal
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 16 May 2012 10:39:32 +0200
+Subject: [Buildroot] [git commit] toolchain/crosstool-NG: disable decimal
 	floats
-In-Reply-To: <201205160958.32997.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Wed, 16 May 2012 09:58:32 +0200")
-References: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr>
- <4FB2D9B7.6050705@mind.be> <87ehqkr2tm.fsf@macbook.be.48ers.dk>
- <201205160958.32997.yann.morin.1998@free.fr>
-Message-ID: <8762bwr050.fsf@macbook.be.48ers.dk>
+Message-ID: <20120516083947.0EA2596D0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cb30e130519fcb50e1a2e0d7a02aa628e52ed24c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arnout> Wouldn't it be better to enable FENV in buildroot's uClibc config?
+Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
+the floating-point environement fenv.h in the C library.
 
- Yann> I did not want to impact the internal backend, thus the workaround is
- Yann> limited to the crosstool-NG backend. This limits the impact for the
- Yann> now-woon-to-be-released next version of BR.
+The uClibc .config file used by crosstool-NG to build uClibc is the
+same as used by the internal buildroot mechanism, and explcitly
+disables fenv support.
 
- Yann> Switching to enabling fenv by default can be done in the next cycle.
+The quick workaround is to simply disable decimal floats in all
+crosstool-NG config files.
 
-Agreed, lets keep it simple for now.
+In the long run, it might be better to check this situation, and/or
+add code and/or options in crosstool-NG to handle this (but it is
+much more involved, and this workaround is sane).
 
- >> It's afaik only available for i386, and even then I believe some things
- >> are missing.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../crosstool-ng.config-eglibc                     |    4 ++--
+ .../crosstool-ng.config-glibc                      |    4 ++--
+ .../crosstool-ng.config-uClibc                     |    4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
- Yann> khem told me yesterday on IRC that uClibc had a working fenv for all
- Yann> supported architectures, with no _known_ problems (which does not mean
- Yann> there is none, just that none is known so far):
- Yann>   http://ibot.rikers.org/%23uclibc/20120515.html.gz  @ 20:20:25 - 20:56.17
-
-Yes, I saw that as well, but looking at the uClibc sources I only see .c
-files for i386 and sh4.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+index cbad52a..58cdff2 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-eglibc
+@@ -294,8 +294,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
+ 
+ #
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+index e57a91d..db724ab 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-glibc
+@@ -294,8 +294,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
+ 
+ #
+diff --git a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+index c115096..5f1ee7e 100644
+--- a/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
++++ b/toolchain/toolchain-crosstool-ng/crosstool-ng.config-uClibc
+@@ -293,8 +293,8 @@ CT_CC_LANG_CXX=y
+ # gcc other options
+ #
+ CT_CC_ENABLE_CXX_FLAGS=""
+-CT_CC_CORE_EXTRA_CONFIG_ARRAY=""
+-CT_CC_EXTRA_CONFIG_ARRAY=""
++CT_CC_CORE_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
++CT_CC_EXTRA_CONFIG_ARRAY="--disable-decimal-float"
+ CT_CC_STATIC_LIBSTDCXX=y
+ 
+ #
