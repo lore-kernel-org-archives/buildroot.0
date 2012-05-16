@@ -1,57 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 May 2012 13:52:53 +0200
-Subject: [Buildroot] Buildroot and linux-pam?
-In-Reply-To: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
-References: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
-Message-ID: <20120516135253.48a500b3@skate>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 16 May 2012 13:10:28 +0100
+Subject: [Buildroot] [PATCH 1/2] vala: do not append a -dirty suffix to the
+	valac version number
+Message-ID: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dmitry,
+From: Simon Dawson <spdawson@gmail.com>
 
-Le Wed, 16 May 2012 06:32:14 -0400,
-Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/vala/vala-fix-dirty-version-suffix.patch |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/vala/vala-fix-dirty-version-suffix.patch
 
-> It looks like linux-pam was never included in Buildroot, and there are
-> few packages* where use of pam was explicitly disabled.
-> 
-> I managed to compile it with Buildroot though [1] with a number of
-> hacks and workarounds. I tested it (at least pam_exec) with Qingy as a
-> login program.
-> 
-> If I provide a better quality patch, will linux-pam be accepted? If
-> yes, will there be any objections to (conditionally) enabling pam at
-> least in systemd?
-
-There will at least be no objection on my side, and in general, people
-are fine with adding new features to existing packages.
-
-> I am interested in both for my buildroot-based project which needs an
-> authrntication facility. If for some reason linux-pam cannot be
-> accepted, I'll keep this stuff as part of my project outside the
-> buildroot tree.
-> 
-> Please let me know your opinion, or any suggestions how to improve the
-> Makefile (apart from obvious cleanups).
-
-We would definitely welcome libpam as a package. Your hacks don't look
-really big, and there are probably ways to make them look a bit nicer.
-You're apparently modifying the config.h manually, which is generated
-by ./configure script. Isn't it possible by passing environment
-variables to the ./configure script, to ensure that the problematic
-test gets the appropriate value?
-
-If you give a little bit more details on which problems those hacks are
-solving, I'm sure we can help you to come up with solutions.
-
-Thanks,
-
-Thomas
+diff --git a/package/vala/vala-fix-dirty-version-suffix.patch b/package/vala/vala-fix-dirty-version-suffix.patch
+new file mode 100644
+index 0000000..4b0044d
+--- /dev/null
++++ b/package/vala/vala-fix-dirty-version-suffix.patch
+@@ -0,0 +1,15 @@
++Do not append a -dirty suffix to the valac version number. The presence of
++the suffix can caused problems for packages (e.g. midori) which check the
++valac version number during configuration.
++
++diff -Nur a/build-aux/git-version-gen b/build-aux/git-version-gen
++--- a/build-aux/git-version-gen	2010-08-15 12:49:03.000000000 +0100
+++++ b/build-aux/git-version-gen	2012-05-14 10:17:19.977204570 +0100
++@@ -135,7 +135,6 @@
++     *) # Append the suffix only if there isn't one already.
++ 	case $v in
++ 	  *-dirty) ;;
++-	  *) v="$v-dirty" ;;
++ 	esac ;;
++ esac
++ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
