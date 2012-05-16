@@ -1,31 +1,39 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Wed, 16 May 2012 05:23:45 -0400
-Subject: [Buildroot] v86d? was Re: [PATCH] Added package fbterm
-Message-ID: <CADiAo4LMVSp_72dyeRSo-ArZ03pzKxdy=jsG2Ubu13_UK57AfQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 May 2012 07:07:58 -0300
+Subject: [Buildroot] [PATCH] wpa_supplicant: explicitly disable libnl by
+	default
+Message-ID: <1337162878-28425-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+libnl support is enabled by default since version 1.0, so disable it
+to avoid build breakage when there's no libnl.
 
-On Wed, May 16, 2012 at 3:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->
-> BR2_TOOLCHAIN_BUILDROOT_CXX isn't needed. Otherwise it looks good,
-> committed to next - Thanks.
->
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wpa_supplicant/wpa_supplicant.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-Can you take a look at the v86d patch I re-posted on May 14?
-
-http://lists.busybox.net/pipermail/buildroot/2012-May/053824.html
-http://patchwork.ozlabs.org/patch/158876/
-
-I believe I addressed all findings.
-
-Thanks.
-
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index a4978e0..97210ce 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -15,9 +15,12 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += libnl
+ define WPA_SUPPLICANT_LIBNL_CONFIG
+-	$(SED) "s/^#CONFIG_DRIVER_NL80211/CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
+ 	echo "CONFIG_LIBNL32=y" >>$(WPA_SUPPLICANT_CONFIG)
+ endef
++else
++define WPA_SUPPLICANT_LIBNL_CONFIG
++	$(SED) "s/^CONFIG_DRIVER_NL80211/#CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
++endef
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+1.7.3.4
