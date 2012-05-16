@@ -1,35 +1,32 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 May 2012 09:40:37 +0200
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: disable decimal
-	floats
-In-Reply-To: <4FB2D9B7.6050705@mind.be> (Arnout Vandecappelle's message of
- "Wed, 16 May 2012 00:33:27 +0200")
-References: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr>
- <4FB2D9B7.6050705@mind.be>
-Message-ID: <87ehqkr2tm.fsf@macbook.be.48ers.dk>
+Date: Wed, 16 May 2012 09:41:14 +0200
+Subject: [Buildroot] [PATCH] Added package fbterm: a framebuffer-based
+	terminal emulator.
+In-Reply-To: <20120516090940.0a59337b@skate> (Thomas Petazzoni's message of
+ "Wed, 16 May 2012 09:09:40 +0200")
+References: <1337135766-26862-1-git-send-email-golubovsky@gmail.com>
+ <20120516090940.0a59337b@skate>
+Message-ID: <87aa18r2sl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Arnout> On 05/15/12 23:15, Yann E. MORIN wrote:
- >> Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
- >> the floating-point environement fenv.h in the C library.
- >> 
- >> The uClibc .config file used by crosstool-NG to build uClibc is the
- >> same as used by the internal buildroot mechanism, and explcitly
- >> disables fenv support.
- >> 
- >> The quick workaround is to simply disable decimal floats in all
- >> crosstool-NG config files.
+ Thomas> Le Tue, 15 May 2012 22:36:06 -0400,
+ Thomas> Dmitry <golubovsky@gmail.com> a ?crit :
 
- Arnout>  Wouldn't it be better to enable FENV in buildroot's uClibc config?
+ >> +	depends on (BR2_INSTALL_LIBSTDCPP && BR2_ENABLE_LOCALE && \
+ >> +			BR2_TOOLCHAIN_BUILDROOT_CXX && BR2_USE_WCHAR)
 
-It's afaik only available for i386, and even then I believe some things
-are missing.
+ Thomas> You should replace BR2_TOOLCHAIN_BUILDROOT_CXX by BR2_INSTALL_LIBSTDCPP
+ Thomas> (yes, I know the name of this config option is crappy), otherwise
+ Thomas> users of external toolchains or ct-ng toolchains will not be able to
+ Thomas> select this package.
+
+I fixed that while committing.
 
 -- 
 Bye, Peter Korsgaard
