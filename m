@@ -1,34 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 May 2012 10:39:52 +0200
-Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: disable decimal
-	floats
-In-Reply-To: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 15 May 2012 23:15:50 +0200")
-References: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <871umkr02v.fsf@macbook.be.48ers.dk>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Wed, 16 May 2012 05:23:45 -0400
+Subject: [Buildroot] v86d? was Re: [PATCH] Added package fbterm
+Message-ID: <CADiAo4LMVSp_72dyeRSo-ArZ03pzKxdy=jsG2Ubu13_UK57AfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Peter,
 
- Yann> Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
- Yann> the floating-point environement fenv.h in the C library.
+On Wed, May 16, 2012 at 3:17 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>
+> BR2_TOOLCHAIN_BUILDROOT_CXX isn't needed. Otherwise it looks good,
+> committed to next - Thanks.
+>
 
- Yann> The uClibc .config file used by crosstool-NG to build uClibc is the
- Yann> same as used by the internal buildroot mechanism, and explcitly
- Yann> disables fenv support.
+Can you take a look at the v86d patch I re-posted on May 14?
 
- Yann> The quick workaround is to simply disable decimal floats in all
- Yann> crosstool-NG config files.
+http://lists.busybox.net/pipermail/buildroot/2012-May/053824.html
+http://patchwork.ozlabs.org/patch/158876/
 
- Yann> In the long run, it might be better to check this situation, and/or
- Yann> add code and/or options in crosstool-NG to handle this (but it is
- Yann> much more involved, and this workaround is sane).
+I believe I addressed all findings.
 
-Committed, thanks.
+Thanks.
 
 -- 
-Bye, Peter Korsgaard
+Dmitry Golubovsky
+
+Anywhere on the Web
