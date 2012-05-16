@@ -1,41 +1,35 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 May 2012 09:17:01 +0200
-Subject: [Buildroot] [PATCH] Added package fbterm: a framebuffer-based
-	terminal emulator.
-In-Reply-To: <1337135766-26862-1-git-send-email-golubovsky@gmail.com>
- (Dmitry's message of "Tue, 15 May 2012 22:36:06 -0400")
-References: <1337135766-26862-1-git-send-email-golubovsky@gmail.com>
-Message-ID: <87ipfwr3wy.fsf@macbook.be.48ers.dk>
+Date: Wed, 16 May 2012 09:40:37 +0200
+Subject: [Buildroot] [PATCH] toolchain/crosstool-NG: disable decimal
+	floats
+In-Reply-To: <4FB2D9B7.6050705@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 16 May 2012 00:33:27 +0200")
+References: <1337116550-12175-1-git-send-email-yann.morin.1998@free.fr>
+ <4FB2D9B7.6050705@mind.be>
+Message-ID: <87ehqkr2tm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Dmitry" == Dmitry  <golubovsky@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Hi,
+ Arnout> On 05/15/12 23:15, Yann E. MORIN wrote:
+ >> Decimal floats were introduced circa gcc-4.2 or -4.3, and requires
+ >> the floating-point environement fenv.h in the C library.
+ >> 
+ >> The uClibc .config file used by crosstool-NG to build uClibc is the
+ >> same as used by the internal buildroot mechanism, and explcitly
+ >> disables fenv support.
+ >> 
+ >> The quick workaround is to simply disable decimal floats in all
+ >> crosstool-NG config files.
 
- Dmitry> +++ b/package/fbterm/Config.in
- Dmitry> @@ -0,0 +1,15 @@
- Dmitry> +config BR2_PACKAGE_FBTERM
- Dmitry> +	bool "fbterm"
- Dmitry> +	depends on (BR2_INSTALL_LIBSTDCPP && BR2_ENABLE_LOCALE && \
- Dmitry> +			BR2_TOOLCHAIN_BUILDROOT_CXX && BR2_USE_WCHAR)
- Dmitry> +	select BR2_PACKAGE_FONTCONFIG
- Dmitry> +	select BR2_PACKAGE_LIBERATION
- Dmitry> +	help
- Dmitry> +	  fbterm is a fast terminal emulator for Linux with frame buffer
- Dmitry> +	  device or VESA video card.
- Dmitry> +
- Dmitry> +	  http://code.google.com/p/fbterm/
- Dmitry> +
- Dmitry> +comment "fbterm requires a C++, WCHAR in toolchain and locale support"
- Dmitry> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_ENABLE_LOCALE && \
- Dmitry> +			BR2_TOOLCHAIN_BUILDROOT_CXX && BR2_USE_WCHAR)
+ Arnout>  Wouldn't it be better to enable FENV in buildroot's uClibc config?
 
-BR2_TOOLCHAIN_BUILDROOT_CXX isn't needed. Otherwise it looks good,
-committed to next - Thanks.
+It's afaik only available for i386, and even then I believe some things
+are missing.
 
 -- 
 Bye, Peter Korsgaard
