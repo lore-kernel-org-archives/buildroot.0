@@ -1,123 +1,128 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 16 May 2012 19:24:59 +0200
-Subject: [Buildroot] [PATCH v2 11/11] manual: add contribute.txt
-In-Reply-To: <1336905501-9757-12-git-send-email-s.martin49@gmail.com>
-References: <4FAEEFA8.2070005@mind.be>
- <1336905501-9757-1-git-send-email-s.martin49@gmail.com>
- <1336905501-9757-12-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAAXf6LVjKjCsSCtDQJw8KkrxHobfQpjLiY2Qg2cNs1cj3h_Osw@mail.gmail.com>
+From: Ron Eggler <reggler@semiosbio.com>
+Date: Wed, 16 May 2012 11:33:39 -0700
+Subject: [Buildroot] (newbie question)
+In-Reply-To: <4FB2D92E.9030905@mind.be>
+References: <CAFC29aU6nfLkHpbs1mKhV13aVdtskqtKtCpURpzi-gQErviriQ@mail.gmail.com>
+ <20120515224254.6bff263a@skate>
+ <CAFC29aUwvGS-tsbLiCe7=7W1HZ0UZ409BMhf5Y73r289FSuNUA@mail.gmail.com>
+ <4FB2CADD.9040001@mind.be>
+ <CAFC29aVzYKupB7RKHOL1kiUOC6C=ySGdO9XzGvG5FAvo4pnLkw@mail.gmail.com>
+ <4FB2D92E.9030905@mind.be>
+Message-ID: <CAFC29aXHt7pqDojsYLRHhrwReZOTny84S1zUZo5YNqYSLe3C1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 13, 2012 at 12:38 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> From: Samuel MARTIN <s.martin49@gmail.com>
->
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
-> ?create mode 100644 docs/manual/contribute.txt
->
-> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> new file mode 100644
-> index 0000000..d80e79a
-> --- /dev/null
-> +++ b/docs/manual/contribute.txt
-> @@ -0,0 +1,63 @@
-> +Contibuting to Buildroot
-> +========================
-> +
-> +If you want to contribute to Buildroot, you will need a git view of
-> +the project. Refer to xref:getting-buildroot[] to get it.
-> +
-> +Currently, the mailing list is the central place for contribution.
-> +If you have not already subscribe to it, then refer to
-> +xref:mailing-list-subscribe[].
-> +
-> +Submiting patches
+On Tue, May 15, 2012 at 3:31 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
 
-s/Submiting/Submitting/
-
-> +-----------------
-> +
-> +When your changes are done, and commited in your local git view,
-> +_rebase_ your development branch on top of the upstream tree before
-> +generating the patch set. To do so, run:
-> +
-
-s/commited/committed/
-
-> +---------------------
-> + $ git fetch --all --tags
-> + $ git rebase origin/master
-> +---------------------
-> +
-> +Here, your are ready to generate then submit your patch set.
-> +
-> +To generate it, run:
-> +
-> +---------------------
-> + $ git format-patch -M -n -s -o outgoing origin/master
-> +---------------------
-> +
-> +This will generate patch files in the +outgoing+ subdirectory,
-> +automatically adding the +signed-of-by+ line.
-
-s/of/off/
-
-> +
-> +If you want to present the whole patch set in a separate mail, add
-> ++--cover-letter --summary+ to the previous command line (+man
-> +git-format-patch+ for further information).
-> +
-> +Once patch files are generated, you can review/edit the commit message
-> +before submitting them using your favourite text editor.
-
-s/favourite/favorite/
-
-> +
-> +Lastly, send/submit your patch set to the Buildroot mailing list:
-> +
-> +---------------------
-> + $ git send-email --to buildroot at busybox.net outgoing/*
-> +---------------------
-> +
-> +Note that +git+ should be configured to use your mail account.
-> +To configure +git+, see +man git-send-email+ or google it.
-> +
-> +Reviewing/Testing patches
-> +-------------------------
-> +
-> +In the review process, do not hesitate to respond to patch submissions
-> +for remarks, suggestions or anything that will help everyone to
-> +understand the patches and make them better.
-> +
-> +Some tags are used to help following the state of any patch posted on
-> +the mailing-list:
-> +
-> +Acked-by:: Indicates that the patch can be committed.
-> +
-> +Tested-by:: Indicates that the patch has been tested. It is useful
-> + ?but not necessary to add a comment about what has been tested.
-> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-> index b23e9c1..3e7a7ef 100644
-> --- a/docs/manual/manual.txt
-> +++ b/docs/manual/manual.txt
-> @@ -27,6 +27,8 @@ include::developer-guide.txt[]
+>  Hoi Ron,
 >
-> ?include::get-involved.txt[]
+>  There are a lot of small mistakes here, one of which is deadly :-)
 >
-> +include::contribute.txt[]
-> +
-> ?include::legal-notice.txt[]
+>  If you could fix these mistakes, we could accept your contributions in
+> buildroot.  For that, you need to do a few things:
 >
+> - Create a proper patch, separate for each package.  A proper patch has a
+> commit
+> message, followed by ---, followed by the patch.
 >
-> --
-> 1.7.10.2
+> - The commit message for a new package should be something like 'gd: new
+> package'.
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> - Add a Signed-off-by line for yourself in the commit message.  This is a
+> short
+> way for you to  assert that you are entitled to contribute the patch under
+> buildroot's  GPL license.  See  http://kerneltrap.org/files/**
+> Jeremy/DCO.txt <http://kerneltrap.org/files/Jeremy/DCO.txt> for
+> more  details.
+>
+> - Make sure the patch is sent in-line (not as attachment), tabs are
+> preserved and
+> lines are not split.  The easiest way to make sure of all this is to
+> commit your
+> changes into git and use 'git send-email' to send the patch.
+>
+
+Hi Arnout,
+
+Okay so I retried this, this time with another iteration of my buildroot
+directory.
+I attempted to add the weex driver that depends on
+python-configobj
+python-serial (already present)
+python-cheetah
+python-imaging
+so I added the required files, compiled and guess what, it's not working. I
+suspect that I did the same mistake as at my first try. Here are the diff
+files (see attached). (I hope I did it correctly now, if not, let me know!)
+
+Thank you,
+Ron
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Config.in (python-cheetah)
+Type: application/octet-stream
+Size: 608 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0009.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Config.in (python-configobj)
+Type: application/octet-stream
+Size: 609 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0010.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Config.in (weewx)
+Type: application/octet-stream
+Size: 585 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0011.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Config.in(python-imaging)
+Type: application/octet-stream
+Size: 576 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0012.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: python-cheetah.mk
+Type: application/octet-stream
+Size: 1044 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0013.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: python-configobj.mk
+Type: application/octet-stream
+Size: 1075 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0014.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: python-imaging.mk
+Type: application/octet-stream
+Size: 990 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0015.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: toolchainfile.cmake
+Type: application/octet-stream
+Size: 1352 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0016.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: weewx.mk
+Type: application/octet-stream
+Size: 959 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0017.obj>
