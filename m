@@ -1,23 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 May 2012 15:30:05 +0200
-Subject: [Buildroot] [PATCH] wpa_supplicant: explicitly disable libnl by
-	default
-In-Reply-To: <1337162878-28425-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 16 May 2012 07:07:58 -0300")
-References: <1337162878-28425-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87r4ukp82q.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 16 May 2012 15:26:48 +0200
+Subject: [Buildroot] [git commit branch/next] wpa_supplicant: explicitly
+	disable libnl by default
+Message-ID: <20120516133028.E7E8A96D14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=56901908c63ed7b2aedffaa4b2143ce87a15d837
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Gustavo> libnl support is enabled by default since version 1.0, so disable it
- Gustavo> to avoid build breakage when there's no libnl.
+libnl support is enabled by default since version 1.0, so disable it
+to avoid build breakage when there's no libnl.
 
-Committed to next, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/wpa_supplicant/wpa_supplicant.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index a4978e0..97210ce 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -15,9 +15,12 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ 	WPA_SUPPLICANT_DEPENDENCIES += libnl
+ define WPA_SUPPLICANT_LIBNL_CONFIG
+-	$(SED) "s/^#CONFIG_DRIVER_NL80211/CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
+ 	echo "CONFIG_LIBNL32=y" >>$(WPA_SUPPLICANT_CONFIG)
+ endef
++else
++define WPA_SUPPLICANT_LIBNL_CONFIG
++	$(SED) "s/^CONFIG_DRIVER_NL80211/#CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
++endef
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
