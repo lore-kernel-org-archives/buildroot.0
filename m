@@ -1,210 +1,57 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 16 May 2012 13:50:05 +0200
-Subject: [Buildroot] [PATCH v2 02/11] manual: rework introduction.txt
- and add embedded-basics.txt
-In-Reply-To: <1336905501-9757-3-git-send-email-s.martin49@gmail.com>
-References: <4FAEEFA8.2070005@mind.be>
- <1336905501-9757-1-git-send-email-s.martin49@gmail.com>
- <1336905501-9757-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAAXf6LXr40i74jGN_ALYdCPRcqD8O==W8J2_AuY8Uhmfi5n=ow@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 May 2012 13:52:53 +0200
+Subject: [Buildroot] Buildroot and linux-pam?
+In-Reply-To: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
+References: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
+Message-ID: <20120516135253.48a500b3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 13, 2012 at 12:38 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> From: Samuel MARTIN <s.martin49@gmail.com>
->
-> Split and rephrasing of introduction.txt.
->
-> Cross-toolchain and pro-Buildroot explainations moved from introduction.txt
-> into embedded-basics.txt.
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->
-> ?create mode 100644 docs/manual/embedded-basics.txt
->
-> diff --git a/docs/manual/embedded-basics.txt b/docs/manual/embedded-basics.txt
-> new file mode 100644
-> index 0000000..bf14d7c
-> --- /dev/null
-> +++ b/docs/manual/embedded-basics.txt
-> @@ -0,0 +1,67 @@
-> +Embedded system basics & Reasons to use Buildroot
-> +-------------------------------------------------
-> +
-> +Cross-compilation & cross-toolchain
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +A compilation toolchain is the set of tools that allows you to compile
-> +code for your system. It consists of a compiler (in our case, +gcc+),
-> +binary utils like assembler and linker (in our case, +binutils+) and a
-> +C standard library (for example
-> +http://www.gnu.org/software/libc/libc.html[GNU Libc],
-> +http://www.uclibc.org/[uClibc] or
-> +http://www.fefe.de/dietlibc/[dietlibc]). The system installed on your
-> +development station certainly already has a compilation toolchain that
-> +you can use to compile an application that runs on your system. If
-> +you're using a PC, your compilation toolchain runs on an x86 processor
-> +and generates code for an x86 processor. Under most Linux systems, the
-> +compilation toolchain uses the GNU libc (glibc) as the C standard
-> +library. ?This compilation toolchain is called the "host compilation
-> +toolchain". The machine on which it is running, and on which you're
-> +working, is called the "host system". The compilation toolchain is
-> +provided by your distribution, and Buildroot has nothing to do with it
-> +(other than using it to build a cross-compilation toolchain and other
-> +tools that are run on the development host).
-> +
-> +As said above, the compilation toolchain that comes with your system
-> +runs on and generates code for the processor in your host system. As
-> +your embedded system has a different processor, you need a
-> +cross-compilation toolchain - a compilation toolchain that runs on
-> +your host system but generates code for your target system (and target
-> +processor). For example, if your host system uses x86 and your target
-> +system uses ARM, the regular compilation toolchain on your host runs on
-> +x86 and generates code for x86, while the cross-compilation toolchain
-> +runs on x86 and generates code for ARM.
-> +
-> +[[pros-buildroot]]
-> +
-> +Why choose Buildroot
-> +~~~~~~~~~~~~~~~~~~~~
-> +
-> +Even if your embedded system uses an x86 processor, you might be
-> +interested in Buildroot for two reasons:
-> +
-> +* The compilation toolchain on your host certainly uses the GNU Libc
-> + ?which is a complete but huge C standard library. Instead of using
-> + ?GNU Libc on your target system, you can use uClibc which is a tiny C
-> + ?standard library. If you want to use this C library, then you need a
-> + ?compilation toolchain to generate binaries linked with it. Buildroot
-> + ?can do that for you.
-> +
-> +* Buildroot automates the building of a root filesystem with all
-> + ?needed tools like busybox. That makes it much easier than doing it
-> + ?by hand.
-> +
-> +You might wonder why such a tool is needed when you can compile +gcc+,
-> ++binutils+, +uClibc+ and all the other tools by hand. Of course doing
-> +so is possible but, dealing with all of the configure options and
-> +problems of every +gcc+ or +binutils+ version is very time-consuming
-> +and uninteresting. ?Buildroot automates this process through the use
-> +of Makefiles and has a collection of patches for each +gcc+ and
-> ++binutils+ version to make them work on most architectures.
-> +
-> +Moreover, Buildroot provides an infrastructure for reproducing the
-> +build process of your kernel, cross-toolchain, and embedded root
-> +filesystem. Being able to reproduce the build process will be useful
-> +when a component needs to be patched or updated or when another person
-> +is supposed to take over the project.
-> diff --git a/docs/manual/going-further.txt b/docs/manual/going-further.txt
-> index 6f3cd6e..67162a6 100644
-> --- a/docs/manual/going-further.txt
-> +++ b/docs/manual/going-further.txt
-> @@ -1,6 +1,8 @@
-> ?Going further in Buildroot's innards
-> ?====================================
->
-> +include::embedded-basics.txt[]
-> +
-> ?include::how-buildroot-works.txt[]
->
-> ?include::advanced.txt[]
-> diff --git a/docs/manual/introduction.txt b/docs/manual/introduction.txt
-> index 476ce25..e330674 100644
-> --- a/docs/manual/introduction.txt
-> +++ b/docs/manual/introduction.txt
-> @@ -1,69 +1,21 @@
-> ?About Buildroot
-> ?===============
->
-> -Buildroot is a set of Makefiles and patches that allows you to easily
-> -generate a cross-compilation toolchain, a root filesystem and a Linux
-> -kernel image for your target. Buildroot can be used for one, two or
-> -all of these options, independently.
-> -
-> -Buildroot is useful mainly for people working with embedded systems.
-> +Buildroot provides a full featured environment for cross-development.
-> +Buildroot is able to generate a cross-compilation toolchain, a root
-> +filesystem, a Linux kernel image and a bootloader for your target.
-> +Buildroot can be used for any combinaison of these options,
+Hello Dmitry,
 
-s/combinaison/combination/
+Le Wed, 16 May 2012 06:32:14 -0400,
+Dmitry Golubovsky <golubovsky@gmail.com> a ?crit :
 
-> +independently.
-> +
-> +Buildroot is useful mainly for people working with embedded systems
-> +for a number of good reasons (see xref:pros-buildroot[]).
-> ?Embedded systems often use processors that are not the regular x86
-> ?processors everyone is used to having in his PC. They can be PowerPC
-> ?processors, MIPS processors, ARM processors, etc.
->
-> -A compilation toolchain is the set of tools that allows you to compile
-> -code for your system. It consists of a compiler (in our case, +gcc+),
-> -binary utils like assembler and linker (in our case, +binutils+) and a
-> -C standard library (for example
-> -http://www.gnu.org/software/libc/libc.html[GNU Libc],
-> -http://www.uclibc.org/[uClibc] or
-> -http://www.fefe.de/dietlibc/[dietlibc]). The system installed on your
-> -development station certainly already has a compilation toolchain that
-> -you can use to compile an application that runs on your system. If
-> -you're using a PC, your compilation toolchain runs on an x86 processor
-> -and generates code for an x86 processor. Under most Linux systems, the
-> -compilation toolchain uses the GNU libc (glibc) as the C standard
-> -library. ?This compilation toolchain is called the "host compilation
-> -toolchain". The machine on which it is running, and on which you're
-> -working, is called the "host system". The compilation toolchain is
-> -provided by your distribution, and Buildroot has nothing to do with it
-> -(other than using it to build a cross-compilation toolchain and other
-> -tools that are run on the development host).
-> -
-> -As said above, the compilation toolchain that comes with your system
-> -runs on and generates code for the processor in your host system. As
-> -your embedded system has a different processor, you need a
-> -cross-compilation toolchain - a compilation toolchain that runs on
-> -your host system but generates code for your target system (and target
-> -processor). For example, if your host system uses x86 and your target
-> -system uses ARM, the regular compilation toolchain on your host runs on
-> -x86 and generates code for x86, while the cross-compilation toolchain
-> -runs on x86 and generates code for ARM.
-> -
-> -Even if your embedded system uses an x86 processor, you might be
-> -interested in Buildroot for two reasons:
-> -
-> -* The compilation toolchain on your host certainly uses the GNU Libc
-> - ?which is a complete but huge C standard library. Instead of using
-> - ?GNU Libc on your target system, you can use uClibc which is a tiny C
-> - ?standard library. If you want to use this C library, then you need a
-> - ?compilation toolchain to generate binaries linked with it. Buildroot
-> - ?can do that for you.
-> -
-> -* Buildroot automates the building of a root filesystem with all
-> - ?needed tools like busybox. That makes it much easier than doing it
-> - ?by hand.
-> -
-> -You might wonder why such a tool is needed when you can compile +gcc+,
-> -+binutils+, +uClibc+ and all the other tools by hand. Of course doing
-> -so is possible but, dealing with all of the configure options and
-> -problems of every +gcc+ or +binutils+ version is very time-consuming
-> -and uninteresting. ?Buildroot automates this process through the use
-> -of Makefiles and has a collection of patches for each +gcc+ and
-> -+binutils+ version to make them work on most architectures.
-> +Buildroot supports numerous processors and their variants; it also
-> +comes with default configuration for several boards available
-> +off-the-shelf. Besides, a number of third-party projects are based on
-> +or develop their BSP footnote:[BSP: Board Software Package] or
-> +SDK footnote:[SDK: Standard Development Kit] on top of Buildroot.
->
-> -Moreover, Buildroot provides an infrastructure for reproducing the
-> -build process of your kernel, cross-toolchain, and embedded root
-> -filesystem. Being able to reproduce the build process will be useful
-> -when a component needs to be patched or updated or when another person
-> -is supposed to take over the project.
-> --
-> 1.7.10.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> It looks like linux-pam was never included in Buildroot, and there are
+> few packages* where use of pam was explicitly disabled.
+> 
+> I managed to compile it with Buildroot though [1] with a number of
+> hacks and workarounds. I tested it (at least pam_exec) with Qingy as a
+> login program.
+> 
+> If I provide a better quality patch, will linux-pam be accepted? If
+> yes, will there be any objections to (conditionally) enabling pam at
+> least in systemd?
+
+There will at least be no objection on my side, and in general, people
+are fine with adding new features to existing packages.
+
+> I am interested in both for my buildroot-based project which needs an
+> authrntication facility. If for some reason linux-pam cannot be
+> accepted, I'll keep this stuff as part of my project outside the
+> buildroot tree.
+> 
+> Please let me know your opinion, or any suggestions how to improve the
+> Makefile (apart from obvious cleanups).
+
+We would definitely welcome libpam as a package. Your hacks don't look
+really big, and there are probably ways to make them look a bit nicer.
+You're apparently modifying the config.h manually, which is generated
+by ./configure script. Isn't it possible by passing environment
+variables to the ./configure script, to ensure that the problematic
+test gets the appropriate value?
+
+If you give a little bit more details on which problems those hacks are
+solving, I'm sure we can help you to come up with solutions.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
