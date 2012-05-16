@@ -1,39 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 May 2012 07:07:58 -0300
-Subject: [Buildroot] [PATCH] wpa_supplicant: explicitly disable libnl by
-	default
-Message-ID: <1337162878-28425-1-git-send-email-gustavo@zacarias.com.ar>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Wed, 16 May 2012 06:32:14 -0400
+Subject: [Buildroot] Buildroot and linux-pam?
+Message-ID: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnl support is enabled by default since version 1.0, so disable it
-to avoid build breakage when there's no libnl.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wpa_supplicant/wpa_supplicant.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+It looks like linux-pam was never included in Buildroot, and there are
+few packages* where use of pam was explicitly disabled.
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index a4978e0..97210ce 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,9 +15,12 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) "s/^#CONFIG_DRIVER_NL80211/CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
- 	echo "CONFIG_LIBNL32=y" >>$(WPA_SUPPLICANT_CONFIG)
- endef
-+else
-+define WPA_SUPPLICANT_LIBNL_CONFIG
-+	$(SED) "s/^CONFIG_DRIVER_NL80211/#CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
-+endef
- endif
- 
- ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
+I managed to compile it with Buildroot though [1] with a number of
+hacks and workarounds. I tested it (at least pam_exec) with Qingy as a
+login program.
+
+If I provide a better quality patch, will linux-pam be accepted? If
+yes, will there be any objections to (conditionally) enabling pam at
+least in systemd?
+
+I am interested in both for my buildroot-based project which needs an
+authrntication facility. If for some reason linux-pam cannot be
+accepted, I'll keep this stuff as part of my project outside the
+buildroot tree.
+
+Please let me know your opinion, or any suggestions how to improve the
+Makefile (apart from obvious cleanups).
+
+Thanks.
+
+----------------------------
+* $ egrep -lr '(without|disable)-pam' package/
+package/netatalk/netatalk.mk
+package/systemd/systemd.mk
+package/sudo/sudo.mk
+
+[1] http://pastebin.com/jUWfXCMY (this code has not been cleaned up)
+
 -- 
-1.7.3.4
+Dmitry Golubovsky
+
+Anywhere on the Web
