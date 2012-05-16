@@ -1,43 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 16 May 2012 13:37:42 +0200
-Subject: [Buildroot] [PATCH] midori: bump version to 0.4.6
-In-Reply-To: <1337165713-9950-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Wed, 16 May 2012 11:55:13 +0100")
-References: <1337165713-9950-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87vcjwpda1.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 May 2012 13:41:49 +0200
+Subject: [Buildroot] [PATCH resend] source-check: change behavior to
+ check only selected packages / add source-check-all
+In-Reply-To: <cceaa854b98654b39b1f.1337107383@beantl019720>
+References: <cceaa854b98654b39b1f.1337107383@beantl019720>
+Message-ID: <20120516134149.7f9d9d04@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+Le Tue, 15 May 2012 20:43:03 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
- spdawson> ---
- spdawson>  package/midori/Config.in                         |    6 ++++--
- spdawson>  package/midori/midori.mk                         |    8 ++++----
- spdawson>  package/vala/vala-fix-dirty-version-suffix.patch |   15 +++++++++++++++
+> The original 'source-check' target first selects all packages, and then checks
+> whether the package tarballs can be found. This is useful for Buildroot
+> maintainers, but less useful for developers working on a specific project. The
+> latter only care about the packages used in that project.
+> 
+> This patch removes the allyesconfig dependency to source-check so that only
+> selected packages are checked. The original behavior is moved to a new target
+> 'source-check-all'.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Please put the vala patch in a seperate commit.
-
- spdawson>  3 files changed, 23 insertions(+), 6 deletions(-)
- spdawson>  create mode 100644 package/vala/vala-fix-dirty-version-suffix.patch
-
- spdawson> diff --git a/package/midori/Config.in b/package/midori/Config.in
- spdawson> index 95a0afb..a9315fe 100644
- spdawson> --- a/package/midori/Config.in
- spdawson> +++ b/package/midori/Config.in
- spdawson> @@ -3,6 +3,8 @@ config BR2_PACKAGE_MIDORI
- spdawson>  	select BR2_PACKAGE_WEBKIT
- spdawson>  	select BR2_PACKAGE_LIBSEXY
- spdawson>  	depends on BR2_PACKAGE_LIBGTK2
- spdawson> +	depends on BR2_PACKAGE_LIBINTL
- spdawson> +	depends on BR2_PACKAGE_LIBICONV
-
-Are you sure libintl/iconv is always needed? For most packages it
-depends on if the toolchain has locale support or not.
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
