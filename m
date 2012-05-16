@@ -1,63 +1,42 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 16 May 2012 13:10:29 +0100
-Subject: [Buildroot] [PATCH 2/2] midori: bump version to 0.4.6
-In-Reply-To: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
-References: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
-Message-ID: <1337170229-29684-2-git-send-email-spdawson@gmail.com>
+From: Dmitry Golubovsky <golubovsky@gmail.com>
+Date: Wed, 16 May 2012 08:55:25 -0400
+Subject: [Buildroot]  Buildroot and linux-pam?
+In-Reply-To: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
+References: <CADiAo4+Co31-t+z_Ydraw_LW5Fwup3TtSJ+GQqYdqQSEtWpOzQ@mail.gmail.com>
+Message-ID: <CADiAo4K8TGbzt0Ea1uFXx5vLoSL_TbijL9fofbT33Nm8oHGutg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/midori/Config.in |    3 +++
- package/midori/midori.mk |    8 ++++----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+Thomas Petazzoni wrote:
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 95a0afb..49867e4 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -2,6 +2,9 @@ config BR2_PACKAGE_MIDORI
- 	bool "midori"
- 	select BR2_PACKAGE_WEBKIT
- 	select BR2_PACKAGE_LIBSEXY
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # webkit
- 	depends on BR2_USE_WCHAR	 # webkit
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index 3e46b1a..19bf6dd 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -4,10 +4,10 @@
- #
- #############################################################
- 
--MIDORI_VERSION = 0.3.6
-+MIDORI_VERSION = 0.4.6
- MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
--MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.3/
--MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2
-+MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.4/
-+MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2 host-vala $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- ifneq ($(BR2_PACKAGE_XORG7),y)
- define MIDORI_WITHOUT_X11
-@@ -21,7 +21,7 @@ define MIDORI_CONFIGURE_CMDS
- 		$(TARGET_CONFIGURE_OPTS)	\
- 		./waf configure			\
- 		--prefix=/usr			\
--		--disable-vala			\
-+		--disable-libnotify			\
-        )
- endef
- 
+> You're apparently modifying the config.h manually, which is generated
+> by ./configure script. Isn't it possible by passing environment
+> variables to the ./configure script, to ensure that the problematic
+> test gets the appropriate value?
+
+There are few functions (ruserok_af, innetgr) that uClibc is likely
+missing (or they are excluded per current configuration), and while
+calls to these functions ought to be disabled via configure, per
+existing code they are not. This might be a reportable bug*, but as my
+goal was to find a way to compile it in principle, I used such brute
+force replacing them with dummy macros just to get through. Another
+hack was overwriting makefiles in docs since Buildroot's toolchain may
+be missing some doc generation facilities, and I see little value in
+them anyway at least for Buildroot.
+
+Thanks for your comment.
+
+------------------------
+* But even if reported properly, it may take some time for it to be
+reflected in a realase tarball, so perhaps for current adoption such
+manual mending of config.h can be admitted.
+
 -- 
-1.7.9.5
+Dmitry Golubovsky
+
+Anywhere on the Web
