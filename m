@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 16 May 2012 19:15:33 +0200
-Subject: [Buildroot] [PATCH v2 09/11] manual: add writing-rules.txt
-In-Reply-To: <1336905501-9757-10-git-send-email-s.martin49@gmail.com>
+Date: Wed, 16 May 2012 19:21:45 +0200
+Subject: [Buildroot] [PATCH v2 10/11] manual: add get-involved.txt
+In-Reply-To: <1336905501-9757-11-git-send-email-s.martin49@gmail.com>
 References: <4FAEEFA8.2070005@mind.be>
  <1336905501-9757-1-git-send-email-s.martin49@gmail.com>
- <1336905501-9757-10-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAAXf6LVGQja8gGpwi_EoE=PAqQSgayshw-vBNXArkXoUuRkK0w@mail.gmail.com>
+ <1336905501-9757-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAAXf6LUW52xNUt2vFt56ZP_s3Ug0xRXOJ0mbKPNfKv_AyW0SgA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,203 +18,110 @@ On Sun, May 13, 2012 at 12:38 PM, Samuel Martin <s.martin49@gmail.com> wrote:
 >
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >
-> ?create mode 100644 docs/manual/writing-rules.txt
+> ?create mode 100644 docs/manual/get-involved.txt
 >
-> diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-> index 1428f37..e36eafc 100644
-> --- a/docs/manual/adding-packages-directory.txt
-> +++ b/docs/manual/adding-packages-directory.txt
-> @@ -145,6 +145,9 @@ is also enabled, but not necessarily built before your package. To do
-> ?so, the dependency also needs to be expressed in the +.mk+ file of the
-> ?package.
->
-> +Further formating details: see xref:writing-rules-config-in[the
-> +writing rules].
-
-s/formating/formatting/
-
-> +
-> ?The +.mk+ file
-> ?^^^^^^^^^^^^^^
->
-> @@ -185,3 +188,5 @@ different way, using different infrastructures:
-> ? many of them in the tree, we keep them documented in a
-> ? xref:handwritten-tutorial[tutorial].
->
-> +Further formating details: see xref:writing-rules-mk[the writing
-> +rules].
-
-idem, formatting
-
-> diff --git a/docs/manual/developer-guide.txt b/docs/manual/developer-guide.txt
-> index 69f3632..14589c2 100644
-> --- a/docs/manual/developer-guide.txt
-> +++ b/docs/manual/developer-guide.txt
-> @@ -1,6 +1,8 @@
-> ?Developer Guidelines
-> ?====================
->
-> +include::writing-rules.txt[]
-> +
-> ?include::adding-packages.txt[]
->
-> ?include::board-support.txt[]
-> diff --git a/docs/manual/writing-rules.txt b/docs/manual/writing-rules.txt
+> diff --git a/docs/manual/get-involved.txt b/docs/manual/get-involved.txt
 > new file mode 100644
-> index 0000000..b18f30b
+> index 0000000..9b6e843
 > --- /dev/null
-> +++ b/docs/manual/writing-rules.txt
-> @@ -0,0 +1,119 @@
-> +Writing rules
-> +-------------
+> +++ b/docs/manual/get-involved.txt
+> @@ -0,0 +1,67 @@
+> +Getting involved
+> +================
 > +
-> +Overall, those writing rules are here to help you adding new files in
-> +Buildroot or refactoring existing ones. In these cases, should be followed.
+> +Like any open source projects, Buildroot has different ways to share
+> +information in its community and outside.
 
-Again, I'm not a native English speaker, but I think that you can either say:
-... to help you add new files or refactor existing ones.
-or
-... to help you in adding new files or refactoring existing ones.
-
-There is something missing in the sentence 'In these cases, should be followed.'
+s/projects/project/
 
 > +
-> +If you slightly modify some existing file, the important thing is
-> +keeping th consistency of the whole file, so you can:
-> +* either follow the potentially deprecated rules used all over this
-> +file
-> +* or entirely rework it in order to make it comply with those rules.
+> +One piece of it is the document you are currently reading ;-).
+> +
+> +Each of those ways may interest you if you are look for some help,
+> +want to understand Buildroot or contribute to the project.
+> +
+> +Mailing List
+> +------------
+> +
+> +Buildroot has a mailing list
+> +http://lists.busybox.net/pipermail/buildroot[] for discussion and
+> +development.
+> +
+> +[[mailing-list-subscribe]]
+> +
+> +Subscribing to the mailing list
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +You can subscribe by visiting
+> +http://lists.busybox.net/mailman/listinfo/buildroot[].
+> +Only subscribers to the Buildroot mailing list are allowed to post to
+> +this list.
+> +
+> +The list is also available through _Gmane_ http://gmane.org[], at
+> ++gmane.comp.lib.uclibc.buildroot+
+> +http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
+> +
+> +Searching the List Archives
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Please search the mailing list archives before asking questions on the
+> +mailing list, since there is a good chance someone else has asked the
+> +same question before. Checking the archives is a great way to avoid
+> +annoying everyone on the list with frequently asked questions...
+> +
+> +IRC
+> +---
+> +
+> +The Buildroot IRC is irc://freenode.net/#buildroot[].
+> +The channel +#buildroot+ is hosted on Freenode
+> +http://webchat.freenode.net[].
+> +
+> +When asking for help on the IRC, share relevant logs or piece of code
+> +using a code sharing website (see
+> +http://en.wikipedia.org/wiki/Comparison_of_pastebins[], and pick up
+> +one).
 
-s/th/the/
-
-
-> +
-> +[[writing-rules-config-in]]
-> +
-> ++Config.in+ file
-> +~~~~~~~~~~~~~~~~
-> +
-> ++Config.in+ files contain entry for almost anything configurable in
-> +buildroot.
-
-s/entry/entries/
+s/the IRC/IRC/
+s/piece of code/pieces of code/
+s/pick up/pick/
 
 > +
-> +Entry has the following pattern:
+> +Bugtracker
+> +----------
+> +
+> +The Buildroot bugtracker is at https://bugs.uclibc.org[].
 
-s/Entry/An entry/
+It is also reachable through bugs.buildroot.org, so I think we should
+use that URL in the documentation.
 
 > +
-> +---------------------
-> +config BR2_PACKAGE_LIBFOO
-> + ? ? ? bool "libfoo"
-> + ? ? ? depends on BR2_PACKAGE_LIBBAZ
-> + ? ? ? select BR2_PACKAGE_LIBBAR
-> + ? ? ? help
-> + ? ? ? ? This is a comment that explains what libfoo is.
+> +Buildroot wikipage
+> +------------------
 > +
-> + ? ? ? ? http://foosoftware.org/libfoo/
-> +---------------------
-> +
-> +* The +bool+, +depends on+, +select+ and +help+ lines are indented
-> + ?with one tab.
-> +
-> +* The help text itself should be indented with one tab and two
-> + ?spaces.
+> +Consecutively to the Buildroot developer day February 3, 2012,
+> +a page dedicated to Buildroot has been created on
+> +http://elinux.org[elinux.org].
 
-I'd refer to the fact that this is regular Kconfig, and a reference to
-the syntax description, for example in the Linux kernel documentation.
-> +
-> +
-> +[[writing-rules-mk]]
-> +
-> +The +.mk+ file
-> +~~~~~~~~~~~~~~
-> +
-> +* Affectation: use +=+ preceeded and followed by one space:
+'Consecutively to' feels strange to me. I'd write 'After'
+I think you should put 'on' before February.
 
-What is 'affectation' ? Do you mean assignment?
-s/preceeded/preceded/
-
-
-> ++
-> +---------------------
-> +LIBFOO_VERSION = 1.0
-> +LIBFOO_CONF_OPT += --without-python-support
-> +---------------------
 > +
-> +* Indentation: use tab only:
-> ++
-> +---------------------
-> +define LIBFOO_REMOVE_DOC
-> +$(RM) -fr $(TARGET_DIR)/usr/share/libfoo/doc \
-> + ? ? ? $(TARGET_DIR)/usr/share/man/man3/libfoo*
-> +endef
-> +---------------------
+> +This page is reachable at http://elinux.org/Buildroot[].
 > +
-> +* Optional dependency:
+> +Currently, this page is mainly used as a _todo-list_.
+> diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+> index aa0952e..b23e9c1 100644
+> --- a/docs/manual/manual.txt
+> +++ b/docs/manual/manual.txt
+> @@ -25,6 +25,8 @@ include::going-further.txt[]
+>
+> ?include::developer-guide.txt[]
+>
+> +include::get-involved.txt[]
 > +
-> +** Prefer multi-line syntax.
-> ++
-> +YES:
-> ++
-> +---------------------
-> +ifeq ($(BR2_PACKAGE_PYTHON),y)
-> +LIBFOO_CONF_OPT += --with-python-support
-> +LIBFOO_DEPENDENCIES += python
-> +else
-> +LIBFOO_CONF_OPT += --without-python-support
-> +endif
-> +---------------------
-> ++
-> +NO:
-> ++
-> +---------------------
-> +LIBFOO_CONF_OPT += --with$(if $(BR2_PACKAGE_PYTHON),,out)-python-support
-> +LIBFOO_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,)
-> +---------------------
-> +
-> +** Keep configure options and dependencies close together.
-> +
-> +* Optional hook: Keep hook function definition close hooks variable
-> + ?affection nested in the +if+ block:
-
-Suggestion:
-Optional hooks: keep hook definition and assignment together in one if block.
-
-
-> ++
-> +YES:
-> ++
-> +---------------------
-> +ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
-> +define LIBFOO_REMOVE_DATA
-> + ? ? ? $(RM) -fr $(TARGET_DIR)/usr/share/libfoo/datas/Optional hook/Optional hooks/
-> +endef
-> +LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
-> +endif
-> +---------------------
-> ++
-> +NO:
-> ++
-> +---------------------
-> +define LIBFOO_REMOVE_DATA
-> + ? ? ? $(RM) -fr $(TARGET_DIR)/usr/share/libfoo/data
-> +endef
-> +
-> +ifneq ($(BR2_LIBFOO_INSTALL_DATA),y)
-> +LIBFOO_POST_INSTALL_TARGET_HOOKS += LIBFOO_REMOVE_DATA
-> +endif
-> +---------------------
-> +
-> +The documentation
-> +~~~~~~~~~~~~~~~~~
-> +
-> +The documentation uses the
-> +http://www.methods.co.nz/asciidoc/[asciidoc] format.
-> +
-> +Further details about the http://www.methods.co.nz/asciidoc/[asciidoc]
-> +syntax: refer to http://www.methods.co.nz/asciidoc/userguide.html[].
+> ?include::legal-notice.txt[]
+>
+>
 > --
 > 1.7.10.2
 >
