@@ -1,128 +1,107 @@
-From: Ron Eggler <reggler@semiosbio.com>
-Date: Wed, 16 May 2012 11:33:39 -0700
-Subject: [Buildroot] (newbie question)
-In-Reply-To: <4FB2D92E.9030905@mind.be>
-References: <CAFC29aU6nfLkHpbs1mKhV13aVdtskqtKtCpURpzi-gQErviriQ@mail.gmail.com>
- <20120515224254.6bff263a@skate>
- <CAFC29aUwvGS-tsbLiCe7=7W1HZ0UZ409BMhf5Y73r289FSuNUA@mail.gmail.com>
- <4FB2CADD.9040001@mind.be>
- <CAFC29aVzYKupB7RKHOL1kiUOC6C=ySGdO9XzGvG5FAvo4pnLkw@mail.gmail.com>
- <4FB2D92E.9030905@mind.be>
-Message-ID: <CAFC29aXHt7pqDojsYLRHhrwReZOTny84S1zUZo5YNqYSLe3C1w@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Wed, 16 May 2012 21:39:28 +0200
+Subject: [Buildroot] [PATCH v3] ccache: allow dynamic selection of cache
+	directory
+Message-ID: <8a589c09d8949cf0f59b.1337197168@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 15, 2012 at 3:31 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
+The existing ccache infrastructure sets the cache directory hardcoded in the
+ccache binary. As this directory was set to ~/.buildroot-ccache, the cache
+is not necessarily local (e.g. in corporate environments the home directories
+may be mounted over NFS.)
+Previous versions of buildroot did allow to set the cache directory, but this
+was also hardcoded (so you had to rebuild ccache to change it), plus that
+support was removed.
+See http://lists.busybox.net/pipermail/buildroot/2011-July/044511.html for
+a discussion on this.
 
->  Hoi Ron,
->
->  There are a lot of small mistakes here, one of which is deadly :-)
->
->  If you could fix these mistakes, we could accept your contributions in
-> buildroot.  For that, you need to do a few things:
->
-> - Create a proper patch, separate for each package.  A proper patch has a
-> commit
-> message, followed by ---, followed by the patch.
->
-> - The commit message for a new package should be something like 'gd: new
-> package'.
->
-> - Add a Signed-off-by line for yourself in the commit message.  This is a
-> short
-> way for you to  assert that you are entitled to contribute the patch under
-> buildroot's  GPL license.  See  http://kerneltrap.org/files/**
-> Jeremy/DCO.txt <http://kerneltrap.org/files/Jeremy/DCO.txt> for
-> more  details.
->
-> - Make sure the patch is sent in-line (not as attachment), tabs are
-> preserved and
-> lines are not split.  The easiest way to make sure of all this is to
-> commit your
-> changes into git and use 'git send-email' to send the patch.
->
+This patch modifies ccache to respect a new shell variable (exported from
+the Makefile, based on a configuration option) instead of CCACHE_DIR.
+The name CCACHE_DIR itself is already used by autotargets for the ccache
+package.
 
-Hi Arnout,
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Okay so I retried this, this time with another iteration of my buildroot
-directory.
-I attempted to add the weex driver that depends on
-python-configobj
-python-serial (already present)
-python-cheetah
-python-imaging
-so I added the required files, compiled and guess what, it's not working. I
-suspect that I did the same mistake as at my first try. Here are the diff
-files (see attached). (I hope I did it correctly now, if not, let me know!)
+---
+v3: Revert wrapper script; simply replace the getenv (suggestion Arnout).
+v2: Update based on Arnout's comments: move compilercheck to wrapper, move
+    wrapper to version-controlled file instead of generating it, use exec,
+    rename cache_dir variable, fix whitespace.
 
-Thank you,
-Ron
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Config.in (python-cheetah)
-Type: application/octet-stream
-Size: 608 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0009.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Config.in (python-configobj)
-Type: application/octet-stream
-Size: 609 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0010.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Config.in (weewx)
-Type: application/octet-stream
-Size: 585 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0011.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: Config.in(python-imaging)
-Type: application/octet-stream
-Size: 576 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0012.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: python-cheetah.mk
-Type: application/octet-stream
-Size: 1044 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0013.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: python-configobj.mk
-Type: application/octet-stream
-Size: 1075 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0014.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: python-imaging.mk
-Type: application/octet-stream
-Size: 990 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0015.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: toolchainfile.cmake
-Type: application/octet-stream
-Size: 1352 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0016.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: weewx.mk
-Type: application/octet-stream
-Size: 959 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120516/7d85f3d4/attachment-0017.obj>
+ Config.in                |   7 +++++++
+ Makefile                 |   3 ++-
+ package/ccache/ccache.mk |  24 ++++++++++++------------
+ 3 files changed, 21 insertions(+), 13 deletions(-)
+
+diff --git a/Config.in b/Config.in
+--- a/Config.in
++++ b/Config.in
+@@ -198,6 +198,13 @@ config BR2_CCACHE
+ 	  ccache cache by removing the $HOME/.buildroot-ccache
+ 	  directory.
+ 
++config BR2_CCACHE_DIR
++	string "Compiler cache location"
++	depends on BR2_CCACHE
++	default "$(HOME)/.buildroot-ccache"
++	help
++	  Where ccache should store cached files.
++
+ config BR2_DEPRECATED
+ 	bool "Show packages that are deprecated or obsolete"
+ 	help
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -252,7 +252,8 @@ TARGET_SKELETON=$(TOPDIR)/fs/skeleton
+ 
+ ifeq ($(BR2_CCACHE),y)
+ CCACHE:=$(HOST_DIR)/usr/bin/ccache
+-CCACHE_CACHE_DIR=$(HOME)/.buildroot-ccache
++BUILDROOT_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
++export BUILDROOT_CACHE_DIR
+ HOSTCC  := $(CCACHE) $(HOSTCC)
+ HOSTCXX := $(CCACHE) $(HOSTCXX)
+ endif
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -25,22 +25,22 @@ HOST_CCACHE_CONF_ENV = \
+ # has zero dependency besides the C library.
+ HOST_CCACHE_CONF_OPT += ccache_cv_zlib_1_2_3=no
+ 
+-# We directly hardcode configuration into the binary, as it is much
+-# easier to handle than passing an environment variable. Our
+-# configuration is:
+-#  - the cache location
+-#  - the fact that ccache shouldn't use the compiler binary mtime to
+-#  - detect a change in the compiler, because in the context of
+-#  - Buildroot, that completely defeats the purpose of ccache. Of
+-#  - course, that leaves the user responsible for purging its cache
+-#  - when the compiler changes.
+-define HOST_CCACHE_FIX_CCACHE_DIR
+-	sed -i 's,getenv("CCACHE_DIR"),"$(CCACHE_CACHE_DIR)",' $(@D)/ccache.c
++# Patch host-ccache as follows:
++#  - Use BUILDROOT_CACHE_DIR instead of CCACHE_DIR, because CCACHE_DIR
++#    is already used by autotargets for the ccache package.
++#    BUILDROOT_CACHE_DIR is exported by Makefile based on config option
++#    BR2_CCACHE_DIR.
++#  - ccache shouldn't use the compiler binary mtime to detect a change in
++#    the compiler, because in the context of Buildroot, that completely
++#    defeats the purpose of ccache. Of course, that leaves the user
++#    responsible for purging its cache when the compiler changes.
++define HOST_CCACHE_PATCH_CONFIGURATION
++	sed -i 's,getenv("CCACHE_DIR"),getenv("BUILDROOT_CACHE_DIR"),' $(@D)/ccache.c
+ 	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
+ endef
+ 
+ HOST_CCACHE_POST_CONFIGURE_HOOKS += \
+-	HOST_CCACHE_FIX_CCACHE_DIR
++	HOST_CCACHE_PATCH_CONFIGURATION
+ 
+ $(eval $(call AUTOTARGETS))
+ $(eval $(call AUTOTARGETS,host))
