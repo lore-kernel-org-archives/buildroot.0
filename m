@@ -1,85 +1,28 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 16 May 2012 23:45:53 +0200
-Subject: [Buildroot] [PATCH v2 03/11] manual: add prerequisite.txt
-In-Reply-To: <CAAXf6LUdn0qTrz+hBp0RHSp8eRWkm=99MpexTANYO_DQ4SN9_A@mail.gmail.com>
-References: <4FAEEFA8.2070005@mind.be>
- <1336905501-9757-1-git-send-email-s.martin49@gmail.com>
- <1336905501-9757-4-git-send-email-s.martin49@gmail.com>
- <CAAXf6LUdn0qTrz+hBp0RHSp8eRWkm=99MpexTANYO_DQ4SN9_A@mail.gmail.com>
-Message-ID: <CAHXCMM+E282t46Ug8W1zAr-2QUgb95dy5M09qc4jDOrQO2mgMA@mail.gmail.com>
+From: chrisgriffith at cox.net <chrisgriffith@cox.net>
+Date: Wed, 16 May 2012 16:24:53 -0700
+Subject: [Buildroot] microblazeel_v2 are 64-bit executables
+Message-ID: <20120516192453.7GAXH.715646.imail@fed1rmwml114>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi everyone, I hope this is a good place for this, I did search the archives and the buglist, and I think it's more informational than a bug.
 
-Thx for the review.
+As background, I'm using buildroot-2012.05-rc1 on Ubuntu 11.10 inside VirtualBox on Windows 7, targeting a MicroBlaze AXI system with MMU on a Xilinx ML605 development board.
 
-2012/5/16 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>:
->> +
->> +[[requirement-optional]]
->> +
->> +Optional packages
->> +~~~~~~~~~~~~~~~~~
->> +
->> +* Build tools:
->> +** +gawk+
->> +
->> +* Source fetching tools:
->> +** +cvs+
->> +** +git+
->> +** +mercurial+
->> +** +subversion+
->
-> What's the reasoning behind these 'optional requirements' ?
-Actually, I followed the comments from Thomas P. on the first post, see:
-http://lists.busybox.net/pipermail/buildroot/2012-March/051972.html
+The little endian microblaze toolchain that buildroot auto-downloads from Xilinx's website is the "V2" or version 2, which is a 64-bit build (and therefore didn't work for me at first, you get "cannot execute binary file"). Running (for example) 'file gcc' on the downloaded tools results in
 
-> People that are new to buildroot may simply install all 'requirements'
-> and hence install tools like cvs or one of the other version control
-> systems, while it won't actually be used, unless they select a package
-> that downloads using that method.
-> Moreover, some tools that could fit in this category are missing, like
-> bazaar or scp.
-You're right, I've omitted them and others...
+chris at chris-VirtualBox:~/buildroot/buildroot-2012.05-rc1/output/host/opt/ext-toolchain/microblazeel-unknown-linux-gnu/bin$ file gcc
+gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.15, not stripped
 
->
->> +
->> +* Configuration interface dependencies (requires development libraries):
->> +** +qt4+ to use the 'xconfig' interface
->> +** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
->> +
->> +* Development libraries:
->> +** +zlib1+
->> +** +netpbm10+ (for +fbtest+)
->> +** +python-xcbgen+ (for +Matchbox+ on Debian based system)
->> +// ** +jdk+ and and depending on the host system +gcj-compat+ for Java
->> +// development (for +java+, +jamvm+ and +gnu-classpath+)
->> +
->
-> I would think that the intention of buildroot is that most
-> non-standard dependencies are handled within buildroot.
-So am I.
+In contrast, the "V1" or version 1 builds of the toolchain gives 
 
-> One can safely expect make and gcc to be present, but is it currently
-> so that such things like netpbm10 are needed? If so, shouldn't they be
-> built as host-netpbm10 etc ?
-Sure. A new item on the todo list ;-)
+chris at chris-VirtualBox:~/mblinux/microblaze_v1.0_le/microblazeel-unknown-linux-gnu/microblazeel-unknown-linux-gnu/bin$ file gcc
+gcc: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.9, not stripped
 
-To write this page, I got inspired from:
-http://www.armadeus.com/wiki/index.php?title=Ubuntu/Debian_installation_prerequisites
-BR moves fast and the Armadeus Project is not based on the latest release, so...
+So it's not a dealbreaker to use the external V1 tools and say so in the buildroot config, I just thought you might like to know that the default downloaded MB toolchain doesn't always work from the get-go and maybe put in a warning or something.
 
-> If we can do that, the above section can be removed.
-I agree.
-
-> Otherwise:
-> s/and and/and/
->
-
-
-Cheers,
-
-Sam
+Hope that helps somebody out,
+Chris
