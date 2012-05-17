@@ -1,63 +1,77 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 22:11:29 +0200
-Subject: [Buildroot] [PATCH v6 0/2] u-boot additions for OMAP processors
-Message-ID: <1337285491-3563-1-git-send-email-luca@lucaceresoli.net>
+Date: Thu, 17 May 2012 22:11:30 +0200
+Subject: [Buildroot] [PATCH v6 1/2] omap-u-boot-utils: add new host package
+In-Reply-To: <1337285491-3563-1-git-send-email-luca@lucaceresoli.net>
+References: <1337285491-3563-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337285491-3563-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following changes since commit 56901908c63ed7b2aedffaa4b2143ce87a15d837:
-
-  wpa_supplicant: explicitly disable libnl by default (2012-05-16 15:26:48 +0200)
-
-are available in the git repository at:
-
-  git at github.com:lucaceresoli/buildroot.git tags/omap-u-boot-utils-v6
-
-for you to fetch changes up to 26d59393521b31d18671396f3dc71a6d076fe7da:
-
-  u-boot: build signed image for OMAP processors (2012-05-17 16:11:20 +0200)
-
-----------------------------------------------------------------
-Luca Ceresoli (2):
-      omap-u-boot-utils: add new host package
-      u-boot: build signed image for OMAP processors
-
- boot/uboot/Config.in                           |   32 ++++++++++++++++++++++++
- boot/uboot/uboot.mk                            |   25 ++++++++++++++++++
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
  package/Config.in.host                         |    1 +
- package/omap-u-boot-utils/Config.in.host       |    8 ++++++
- package/omap-u-boot-utils/omap-u-boot-utils.mk |   21 ++++++++++++++++
- 5 files changed, 87 insertions(+)
+ package/omap-u-boot-utils/Config.in.host       |    8 ++++++++
+ package/omap-u-boot-utils/omap-u-boot-utils.mk |   21 +++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
  create mode 100644 package/omap-u-boot-utils/Config.in.host
  create mode 100644 package/omap-u-boot-utils/omap-u-boot-utils.mk
 
-----------------------------------------------------------------
-Changed in v6:
- - use $() instead of ${} for make variables to be consistent with the
-   Buildroot coding style.
-
-Changed in v5:
- - Added Arnout's Acked-by tag.
-
-Changed in v4:
- - more verbose help text for config options;
- - remove unneeded ifeq around the definition for UBOOT_BIN_IFT;
- - produce an error message if the user-specified cfg file does not exist;
- - use http URL, for helping people whose firewalls block git;
- - do not skip installation if the files are already installed.
-
-New in v3:
- - update to the user-visible host packages policy discussed in
-   mailing-list (Config.in.host etc) and listed in the Host Tools menu
- - update to current GENTARGETS infrastructure
- - bump to the latest git snapshot, which fixes compilation with host gcc 4.6
-
-New in v2:
- - xxx_SOURCE is useless with the git download method, remove it;
- - OMAP_U_BOOT_UTILS_TARGETS is used only once, hardcoded it.
-
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 861b736..9fcfede 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -1,6 +1,7 @@
+ menu "Host utilities"
+ 
+ source "package/lpc3250loader/Config.in.host"
++source "package/omap-u-boot-utils/Config.in.host"
+ source "package/openocd/Config.in.host"
+ source "package/sam-ba/Config.in.host"
+ source "package/uboot-tools/Config.in.host"
+diff --git a/package/omap-u-boot-utils/Config.in.host b/package/omap-u-boot-utils/Config.in.host
+new file mode 100644
+index 0000000..63fbdf5
+--- /dev/null
++++ b/package/omap-u-boot-utils/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
++	bool "host omap-u-boot-utils"
++	help
++	  U-Boot Utilities for Texas Instrument's OMAP platforms.
++	  This is a set of tools to control U-Boot from scripts, generate
++	  OMAP-specific signed image files and more.
++
++	  https://github.com/nmenon/omap-u-boot-utils
+diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+new file mode 100644
+index 0000000..e2da9a1
+--- /dev/null
++++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# omap-u-boot-utils
++#
++#############################################################
++
++OMAP_U_BOOT_UTILS_VERSION = 8aff852322
++OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils.git
++OMAP_U_BOOT_UTILS_SITE_METHOD = git
++
++define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
++	$(MAKE) -C $(@D)
++endef
++
++define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
++	for f in gpsign pserial tagger ucmd ukermit ; do \
++		install -m 755 -D $(@D)/$$f $(HOST_DIR)/usr/bin/$$f ; \
++	done
++endef
++
++$(eval $(call GENTARGETS,host))
 -- 
 1.7.9.5
