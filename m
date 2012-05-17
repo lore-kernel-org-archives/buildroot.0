@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:19 +0200
-Subject: [Buildroot] [PATCH v4 20/22] pcre: define license
+Date: Thu, 17 May 2012 19:33:21 +0200
+Subject: [Buildroot] [PATCH v4 22/22] berkeleydb: define license
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-21-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-23-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/pcre/pcre.mk |    2 ++
+ package/berkeleydb/berkeleydb.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index db896fd..d01ca84 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -6,6 +6,8 @@
- 
- PCRE_VERSION = 8.30
- PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
-+PCRE_LICENSE = BSD-3c
-+PCRE_LICENSE_FILES = LICENCE
- PCRE_INSTALL_STAGING = YES
- 
- ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index d737896..b42c000 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -7,6 +7,8 @@ BERKELEYDB_VERSION = 5.3.15
+ BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
+ BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
+ BERKELEYDB_SUBDIR = build_unix
++BERKELEYDB_LICENSE = BerkeleyDB License
++BERKELEYDB_LICENSE_FILES = LICENSE
+ BERKELEYDB_INSTALL_STAGING = YES
+ BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
+ 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
 -- 
 1.7.9.5
