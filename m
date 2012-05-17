@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:15 +0200
-Subject: [Buildroot] [PATCH v4 16/22] iostat: define license
+Date: Thu, 17 May 2012 19:33:10 +0200
+Subject: [Buildroot] [PATCH v4 11/22] m4: define license
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-17-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-12-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/iostat/iostat.mk |    2 ++
+ package/m4/m4.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
-index 83eea07..6f2e8aa 100644
---- a/package/iostat/iostat.mk
-+++ b/package/iostat/iostat.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 173bba8..1e891c5 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -7,6 +7,8 @@
+ M4_VERSION = 1.4.16
+ M4_SOURCE = m4-$(M4_VERSION).tar.bz2
+ M4_SITE = $(BR2_GNU_MIRROR)/m4
++M4_LICENSE = GPLv3+
++M4_LICENSE_FILES = COPYING
+ M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
  
- IOSTAT_VERSION = 2.2
- IOSTAT_SITE = http://www.linuxinsight.com/files
-+IOSTAT_LICENSE = GPL
-+IOSTAT_LICENSE_FILES = LICENSE
- 
- iostat-source: $(DL_DIR)/$(IOSTAT_SOURCE)
- 
+ ifneq ($(BR2_USE_WCHAR),y)
 -- 
 1.7.9.5
