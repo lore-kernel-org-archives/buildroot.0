@@ -1,52 +1,45 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 17 May 2012 23:42:26 +0200
-Subject: [Buildroot] [git commit] apr: requires shared library support
-Message-ID: <20120517214727.7B78B8B7A8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 17 May 2012 23:54:06 +0200
+Subject: [Buildroot] [PATCH] gdb: adjust behavior when thread debug is
+	not available
+In-Reply-To: <1337263520-5865-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 17 May 2012 16:05:20 +0200")
+References: <1337263520-5865-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wr4ao4n5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02b00dc9dfb7216145277a303c7c2f52004f85b2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-The apr library requires shared library support unconditionally, so
-make it depend on !BR2_PREFER_STATIC_LIB, so that architectures that
-support static libraries only do not make this package available.
+ Thomas> When an external toolchain without thread debug is used, the gdb
+ Thomas> package can be selected, but no version can be choosen, since none
+ Thomas> match any of the requirements. This leads Buildroot to try to build
+ Thomas> gdb for the target without a version being defined, as in the
+ Thomas> following build log:
 
-Solves
-http://autobuild.buildroot.org/results/f4cd9751e85e9ee7fde2e9479e0f01ab2be93e84/build-end.log.
+ Thomas>  http://autobuild.buildroot.org/results/84e8fd2df0cc22448052a572c2e9a6e03dd137eb/build-end.log
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/apr-util/Config.in |    2 ++
- package/apr/Config.in      |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ Thomas> To fix this, we adjust the dependencies of the BR2_PACKAGE_GDB option
+ Thomas> so that the package as a whole is not selectable when the required
+ Thomas> conditions are not met. Basically, we have the choice of:
 
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-index 99b32f2..895dbb8 100644
---- a/package/apr-util/Config.in
-+++ b/package/apr-util/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_APR_UTIL
- 	select BR2_PACKAGE_NEON
- 	select BR2_PACKAGE_NEON_ZLIB
- 	select BR2_PACKAGE_ZLIB
-+	# apr really needs shared library support
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  The utility library for the apache runtime project
- 
-diff --git a/package/apr/Config.in b/package/apr/Config.in
-index 292cadb..ed319ed 100644
---- a/package/apr/Config.in
-+++ b/package/apr/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_APR
- 	bool "apr"
-+	# apr really needs shared library support
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  The mission of the Apache Portable Runtime (APR) project is to create
- 	  and maintain software libraries that provide a predictable and
+ Thomas>  * Having a toolchain that supports thread debugging, which is needed
+ Thomas>    for gdb >= 7.x
+
+ Thomas>  * Having BR2_DEPRECATED enabled, which allows gdb 6.8 to be selected,
+ Thomas>    which doesn't require thread debugging
+
+ Thomas>  * Using either avr32 of bfin, since those architectures have special
+ Thomas>    old gdb versions
+
+Thanks, but this conflicts with your recent 'gdb: not available on
+avr32' patch. Looking at that patch it seems you can drop the avr32
+handling.
+
+Care to fix and resend?
+
+-- 
+Bye, Peter Korsgaard
