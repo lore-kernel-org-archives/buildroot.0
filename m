@@ -1,21 +1,33 @@
-From: Michael J. Hammel <buildroot@graphics-muse.org>
-Date: Wed, 16 May 2012 21:23:57 -0600
-Subject: [Buildroot] dbus missing /var/lib/dbus directory
-Message-ID: <1337225037.1496.51.camel@kepler.gfxmuse.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 May 2012 04:04:39 +0000 (UTC)
+Subject: [Buildroot] [Bug 5222] New: pango1.14.x build failed for ARM
+Message-ID: <bug-5222-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I enabled NetworkManager, which got me dbus, but then disabled
-NetworkManager, but dbus remained (that part is okay).  I noticed today
-that the init script for dbus tries to run dbus-uuidgen but fails with a
-message about not being able to open /etc/machine-id.  I dug around and
-then strace'd dbus-uuidgen and found that if /var/lib/dbus is present
-this message goes away.
+https://bugs.busybox.net/show_bug.cgi?id=5222
 
-Should the init script also try to create /var/lib/dbus with "mkdir -p"?
-Of is that something the specific rootfs needs to address on its own?
+           Summary: pango1.14.x build failed for ARM
+           Product: buildroot
+           Version: 2012.02
+          Platform: Other
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: rdghx at 163.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
+
+
+when build gtk for arm, the pango failed
+
 -- 
-Michael J. Hammel <buildroot@graphics-muse.org>
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
