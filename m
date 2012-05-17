@@ -1,28 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 17 May 2012 16:48:25 +0200
-Subject: [Buildroot] packages not available after compilation
-In-Reply-To: <CAFC29aUznWdUQiR_ep6fZ-76=8th5VmLhyAOUwPdbfOtzD-15Q@mail.gmail.com>
-References: <CAFC29aUznWdUQiR_ep6fZ-76=8th5VmLhyAOUwPdbfOtzD-15Q@mail.gmail.com>
-Message-ID: <CAAXf6LVJWf6WekxWABF67hR_TL10V-VcaxBeFcV1P_ZA0U09Lw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 May 2012 17:11:22 +0200
+Subject: [Buildroot] [PATCH] opencv: add zlib dependency
+Message-ID: <1337267482-6849-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[now properly sending to the list]
+The opencv package selects zlib, but it does not depend on it. This
+leads to cases where opencv gets built before zlib, and in this case,
+opencv uses its internal version of zlib, which doesn't build properly
+(it has some conditional code for ARM that is probably broken), see:
 
-On Thu, May 17, 2012 at 1:37 AM, Ron Eggler <reggler@semiosbio.com> wrote:
-> Hi,
->
-> I have added several packages, run make and had to realize that they're not
-> available.
-> Tweakings and multiple recompile attempts later, I still find myself at the
-> same spot. I'm not sure where to go from here. Some assistance would be
-> greatly appreciated!
-> I uploaded my archived and uploaded my package directory
-> to?http://inetgate.ca/public/package.tar.bz2
-> Any suggestions and hints are appreciated!
+  http://autobuild.buildroot.org/results/45f4e195fe0cc5acace10287f5ff33aa953d5430/build-end.log
 
-Did you create proper Config.in files for them and did you enable
-these packages in .config, for example by using 'make menuconfig' ?
+We fix this by properly adding the opencv dependency on zlib.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/opencv/opencv.mk |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index d415e51..ec94715 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -35,6 +35,8 @@ OPENCV_CONF_OPT = \
+ 	-DWITH_UNICAP=OFF \
+ 	-DWITH_XINE=OFF
+ 
++OPENCV_DEPENDENCIES += zlib
++
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_PYTHON),y)
+ OPENCV_CONF_OPT += -DBUILD_NEW_PYTHON_SUPPORT=ON
+ OPENCV_DEPENDENCIES += python
+-- 
+1.7.9.5
