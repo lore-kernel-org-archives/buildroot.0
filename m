@@ -1,21 +1,21 @@
 From: Michael J. Hammel <buildroot@graphics-muse.org>
-Date: Wed, 16 May 2012 21:01:51 -0600
-Subject: [Buildroot] connman requirement for resolver in toolchain
-Message-ID: <1337223711.1915.3.camel@galileo.gfxmuse.org>
+Date: Wed, 16 May 2012 21:23:57 -0600
+Subject: [Buildroot] dbus missing /var/lib/dbus directory
+Message-ID: <1337225037.1496.51.camel@kepler.gfxmuse.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm looking at adding connman to my build. It appears that connman can't
-be enabled unless the toolchain includes resolver support.  
+I enabled NetworkManager, which got me dbus, but then disabled
+NetworkManager, but dbus remained (that part is okay).  I noticed today
+that the init script for dbus tries to run dbus-uuidgen but fails with a
+message about not being able to open /etc/machine-id.  I dug around and
+then strace'd dbus-uuidgen and found that if /var/lib/dbus is present
+this message goes away.
 
-How does the config check for that?  I didn't see any Buildroot config
-options to specify that my external toolchain has that nor is there any
-option in Crosstool-NG (my toolchain) to enable it in the C library.
-
-I'm using Buildroot 2012-02 and Crosstool-NG 1.13.4.
-
+Should the init script also try to create /var/lib/dbus with "mkdir -p"?
+Of is that something the specific rootfs needs to address on its own?
 -- 
 Michael J. Hammel <buildroot@graphics-muse.org>
