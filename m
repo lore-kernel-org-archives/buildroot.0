@@ -1,10 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:01 +0200
-Subject: [Buildroot] [PATCH v4 02/22] gettext: warn that legal-info is not
-	implemented
+Date: Thu, 17 May 2012 19:33:11 +0200
+Subject: [Buildroot] [PATCH v4 12/22] mpc: define license
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-13-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/gettext/gettext.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/mpc/mpc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index f3605da..9778007 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -113,6 +113,9 @@ $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY): $(GETTEXT_DIR)/$(GETTEXT_BINARY)
- 		autopoint envsubst gettext.sh gettextize msg* ?gettext)
- 	touch -c $@
+diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
+index e5ee489..5ad47a9 100644
+--- a/package/mpc/mpc.mk
++++ b/package/mpc/mpc.mk
+@@ -6,6 +6,8 @@
  
-+gettext-legal-info:
-+	@$(call legal-warning-pkg,gettext,legal-info not yet implemented)
-+
- gettext: host-pkg-config $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
- 
- gettext-unpacked: $(GETTEXT_DIR)/.unpacked
+ MPC_VERSION = 0.9
+ MPC_SITE = http://www.multiprecision.org/mpc/download
++MPC_LICENSE = LGPLv2.1+
++MPC_LICENSE_FILES = COPYING.LIB
+ MPC_INSTALL_STAGING = YES
+ MPC_DEPENDENCIES = gmp mpfr
+ MPC_AUTORECONF = YES
 -- 
 1.7.9.5
