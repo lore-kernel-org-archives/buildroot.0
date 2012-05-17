@@ -1,9 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:13 +0200
-Subject: [Buildroot] [PATCH v4 14/22] bzip2: define license
+Date: Thu, 17 May 2012 19:33:05 +0200
+Subject: [Buildroot] [PATCH v4 06/22] ttcp: warn that legal-info is not
+	implemented
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-15-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-7-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/bzip2/bzip2.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/ttcp/ttcp.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-index 1bc4449..611e5a0 100644
---- a/package/bzip2/bzip2.mk
-+++ b/package/bzip2/bzip2.mk
-@@ -7,6 +7,8 @@ BZIP2_VERSION:=1.0.5
- BZIP2_SONAME=1.0.4
- BZIP2_SOURCE:=bzip2-$(BZIP2_VERSION).tar.gz
- BZIP2_SITE:=http://www.bzip.org/$(BZIP2_VERSION)
-+BZIP2_LICENSE = bzip2 license
-+BZIP2_LICENSE_FILES = LICENSE
- BZIP2_INSTALL_STAGING=YES
+diff --git a/package/ttcp/ttcp.mk b/package/ttcp/ttcp.mk
+index 1acf120..080286b 100644
+--- a/package/ttcp/ttcp.mk
++++ b/package/ttcp/ttcp.mk
+@@ -27,6 +27,9 @@ $(TTCP_DIR)/ttcp: $(TTCP_DIR)/.configured
+ $(TARGET_DIR)/usr/bin/ttcp: $(TTCP_DIR)/ttcp
+ 	cp -af $(TTCP_DIR)/ttcp $(TARGET_DIR)/usr/bin/
  
- define BZIP2_FIX_MAKEFILE
++ttcp-legal-info:
++	@$(call legal-warning-pkg,ttcp,legal-info not yet implemented)
++
+ ttcp: $(TARGET_DIR)/usr/bin/ttcp
+ 
+ ttcp-source: $(DL_DIR)/$(TTCP_SOURCE)
 -- 
 1.7.9.5
