@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:21 +0200
-Subject: [Buildroot] [PATCH v4 22/22] berkeleydb: define license
+Date: Thu, 17 May 2012 19:33:18 +0200
+Subject: [Buildroot] [PATCH v4 19/22] libusb: define license
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-23-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-20-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/berkeleydb/berkeleydb.mk |    2 ++
+ package/libusb/libusb.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index d737896..b42c000 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -7,6 +7,8 @@ BERKELEYDB_VERSION = 5.3.15
- BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
- BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
- BERKELEYDB_SUBDIR = build_unix
-+BERKELEYDB_LICENSE = BerkeleyDB License
-+BERKELEYDB_LICENSE_FILES = LICENSE
- BERKELEYDB_INSTALL_STAGING = YES
- BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
- 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 9abfcfc..ac0f0d2 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -6,6 +6,8 @@
+ LIBUSB_VERSION = 1.0.9
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/libusb/libusb-1.0/libusb-$(LIBUSB_VERSION)
++LIBUSB_LICENSE = LGPLv2.1+
++LIBUSB_LICENSE_FILES = COPYING
+ LIBUSB_DEPENDENCIES = host-pkg-config
+ LIBUSB_INSTALL_STAGING = YES
+ 
 -- 
 1.7.9.5
