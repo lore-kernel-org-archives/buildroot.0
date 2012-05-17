@@ -1,32 +1,33 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:20 +0200
-Subject: [Buildroot] [PATCH v4 21/22] netsnmp: define license
-In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-22-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 17 May 2012 20:12:22 +0200
+Subject: [Buildroot] microblazeel_v2 are 64-bit executables
+In-Reply-To: <20120516192453.7GAXH.715646.imail@fed1rmwml114>
+ (chrisgriffith@cox.net's message of "Wed, 16 May 2012 16:24:53 -0700")
+References: <20120516192453.7GAXH.715646.imail@fed1rmwml114>
+Message-ID: <87ipfupth5.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/netsnmp/netsnmp.mk |    2 ++
- 1 file changed, 2 insertions(+)
+>>>>>   <chrisgriffith@cox.net> writes:
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 448e3fd..125782f 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -7,6 +7,8 @@
- NETSNMP_VERSION = 5.7.1
- NETSNMP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/net-snmp
- NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
-+NETSNMP_LICENSE = Various BSD-like
-+NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_INSTALL_STAGING = YES
- NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=yes
- NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
+Hi,
+
+ > Hi everyone, I hope this is a good place for this, I did search the
+ > archives and the buglist, and I think it's more informational than a
+ > bug.  As background, I'm using buildroot-2012.05-rc1 on Ubuntu 11.10
+ > inside VirtualBox on Windows 7, targeting a MicroBlaze AXI system
+ > with MMU on a Xilinx ML605 development board.
+
+ > So it's not a dealbreaker to use the external V1 tools and say so in
+ > the buildroot config, I just thought you might like to know that the
+ > default downloaded MB toolchain doesn't always work from the get-go
+ > and maybe put in a warning or something.
+
+Ahh, interesting. Strange that they did a 64bit build. Is there any
+functional reason to use the v2 toolchain rather than v1?
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
