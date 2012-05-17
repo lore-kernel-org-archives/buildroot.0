@@ -1,9 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:10 +0200
-Subject: [Buildroot] [PATCH v4 11/22] m4: define license
+Date: Thu, 17 May 2012 19:33:01 +0200
+Subject: [Buildroot] [PATCH v4 02/22] gettext: warn that legal-info is not
+	implemented
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-12-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/m4/m4.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/gettext/gettext.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 173bba8..1e891c5 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -7,6 +7,8 @@
- M4_VERSION = 1.4.16
- M4_SOURCE = m4-$(M4_VERSION).tar.bz2
- M4_SITE = $(BR2_GNU_MIRROR)/m4
-+M4_LICENSE = GPLv3+
-+M4_LICENSE_FILES = COPYING
- M4_CONF_ENV = gl_cv_func_gettimeofday_clobber=no
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index f3605da..9778007 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -113,6 +113,9 @@ $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY): $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+ 		autopoint envsubst gettext.sh gettextize msg* ?gettext)
+ 	touch -c $@
  
- ifneq ($(BR2_USE_WCHAR),y)
++gettext-legal-info:
++	@$(call legal-warning-pkg,gettext,legal-info not yet implemented)
++
+ gettext: host-pkg-config $(if $(BR2_PACKAGE_LIBICONV),libiconv) $(STAGING_DIR)/$(GETTEXT_TARGET_BINARY)
+ 
+ gettext-unpacked: $(GETTEXT_DIR)/.unpacked
 -- 
 1.7.9.5
