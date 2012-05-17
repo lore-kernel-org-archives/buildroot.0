@@ -1,9 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 May 2012 19:33:09 +0200
-Subject: [Buildroot] [PATCH v4 10/22] linux: define license
+Date: Thu, 17 May 2012 19:33:15 +0200
+Subject: [Buildroot] [PATCH v4 16/22] iostat: define license
 In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
 References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1337276001-26149-11-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1337276001-26149-17-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- linux/linux.mk |    2 ++
+ package/iostat/iostat.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index f165dda..bd3e23e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -4,6 +4,8 @@
- #
- ###############################################################################
- LINUX_VERSION=$(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+LINUX_LICENSE = GPLv2
-+LINUX_LICENSE_FILES = COPYING
+diff --git a/package/iostat/iostat.mk b/package/iostat/iostat.mk
+index 83eea07..6f2e8aa 100644
+--- a/package/iostat/iostat.mk
++++ b/package/iostat/iostat.mk
+@@ -6,6 +6,8 @@
  
- # Compute LINUX_SOURCE and LINUX_SITE from the configuration
- ifeq ($(LINUX_VERSION),custom)
+ IOSTAT_VERSION = 2.2
+ IOSTAT_SITE = http://www.linuxinsight.com/files
++IOSTAT_LICENSE = GPL
++IOSTAT_LICENSE_FILES = LICENSE
+ 
+ iostat-source: $(DL_DIR)/$(IOSTAT_SOURCE)
+ 
 -- 
 1.7.9.5
