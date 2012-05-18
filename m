@@ -1,60 +1,100 @@
-From: ludovic.desroches at atmel.com <ludovic.desroches@atmel.com>
-Date: Fri, 18 May 2012 22:47:01 +0200
-Subject: [Buildroot] [PATCH] apply-patches.sh: add documentation
-Message-ID: <1337374021-26978-1-git-send-email-ludovic.desroches@atmel.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 18 May 2012 22:50:37 +0200
+Subject: [Buildroot] [git commit] Update for 2012.05-rc2
+Message-ID: <20120518205051.A43E796D17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ludovic Desroches <ludovic.desroches@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=b07ad40c1dc78e61dd71d264b1b30aabfa1033dc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
-Hi,
+ CHANGES            |   14 +++++++++++++-
+ Makefile           |    2 +-
+ docs/download.html |    6 +++---
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 30 insertions(+), 5 deletions(-)
 
-Sorry for the delay, but as promised, some comments about the changes done to
-apply-patches.sh.
-
-Regards
-
- support/scripts/apply-patches.sh |   23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index f82be86..7a6c1fa 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -4,6 +4,29 @@
- # -Erik
- #
- # (c) 2002 Erik Andersen <andersen@codepoet.org>
-+#
-+# Parameters:
-+# - the build directory, optional, default value is '.'. The place where are
-+# the package sources.
-+# - the patch directory, optional, default '../kernel-patches'. The place
-+# where are the scripts you want to apply.
-+# - other parameters are the patch name patterns, optional, default value is
-+# '*'. Pattern(s) describing the patch names you want to apply.
-+#
-+# The script will look recursively for patches from the patch directory. If a
-+# file is named 'series' then only patches mentionned into it will be applied.
-+# If not, the script will look for file names matching pattern(s). If the name
-+# ends with '.tar.*', '.tbz2' or '.tgz', the file is considered as an archive
-+# and will be uncompressed into a directory named
-+# '.patches-name_of_the_archive-unpacked'. It's the turn of this directory to
-+# be scanned with '*' as pattern. Remember that scanning is recursive. Other
-+# files than series file and archives are considered as a patch.
-+#
-+# Once a patch is found, the script will try to apply it. If its name doesn't
-+# end with '.gz', '.bz', '.bz2', '.zip', '.Z', '.diff*' or '.patch*', it will
-+# be skipped. If necessary, the patch will be uncompressed before being
-+# applied. The list of the patches applied is stored in '.applied_patches_list'
-+# file in the build directory.
+diff --git a/CHANGES b/CHANGES
+index 6b01c04..7d17c26 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,16 @@
+-2012.05-rc1, Released May 10th, 2012
++2012.05-rc2, Released May 18th, 2012:
++
++	Fixes all over the tree.
++
++	Toolchain: uClibc: Use 0.9.33.2, Crosstool-ng: fix gperf
++	dependency, disable decimal floats support, Linux 3.2.17 /
++	3.3.6 kernel headers. Fix sysroot copy handling for toolchains
++	without C++ support.
++
++	Updated/fixed packages: apr, apr-util, ccache, dnsmasq,
++	heirloom-mailx, gdb, ndisc6, opencv, openssl, socat, vala
++
++2012.05-rc1, Released May 10th, 2012:
  
- # Set directories from arguments, or use defaults.
- builddir=${1-.}
--- 
-1.7.9.5
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index 4427c40..c0fc8c2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2012.05-rc1
++export BR2_VERSION:=2012.05-rc2
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 7b22569..52d3c18 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -14,12 +14,12 @@ or
+ <a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
+ <p>
+ 
+-The latest release candidate is <b>2012.05-rc1</b>, which can be
++The latest release candidate is <b>2012.05-rc2</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2012.05-rc1.tar.gz">buildroot-2012.05-rc1.tar.gz</a>
++<a href="/downloads/buildroot-2012.05-rc2.tar.gz">buildroot-2012.05-rc2.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2012.05-rc1.tar.bz2">buildroot-2012.05-rc1.tar.bz2</a>.
++<a href="/downloads/buildroot-2012.05-rc2.tar.bz2">buildroot-2012.05-rc2.tar.bz2</a>.
+ <p>
+ 
+ This and earlier releases can always be downloaded from
+diff --git a/docs/news.html b/docs/news.html
+index 0032dfa..c7d276e 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,19 @@
+ <p>
+ 
+ <ul>
++  <li><b>18 May 2012 -- 2012.05-rc2 released</b>
++
++    <p>Another week, another release candidate with more cleanups and
++    build fixes. See the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc2">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2012.05-rc2.tar.bz2">2012.05-rc2
++    release candidate</a>, and report any problems found to the <a
++    href="lists.html">mailing list</a> or <a
++    href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>10 May 2012 -- 2012.05-rc1 released</b>
+ 
+     <p>We have a new release candidate! Lots of changes all over the
