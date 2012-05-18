@@ -1,69 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 31 May 2012 11:33:00 -0000
-Subject: [Buildroot] [git commit] liboping: new package
-Message-ID: <20120531113256.59CAC96E2A@busybox.osuosl.org>
+Date: Fri, 18 May 2012 22:21:33 +0200
+Subject: [Buildroot] [git commit] grep: bump to version 2.12
+Message-ID: <20120531113257.E05C296E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f88b1e963ed843b04041ce6b2bb11d2da5666b9b
+commit: http://git.buildroot.net/buildroot/commit/?id=fa529d101b472ff926f8211b39d9f3280155e371
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in            |    1 +
- package/liboping/Config.in   |   11 +++++++++++
- package/liboping/liboping.mk |   13 +++++++++++++
- 3 files changed, 25 insertions(+), 0 deletions(-)
+ package/grep/grep.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index bbb2cd5..c34e61a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -405,6 +405,7 @@ source "package/libmbus/Config.in"
- source "package/libnetfilter_conntrack/Config.in"
- source "package/libnfnetlink/Config.in"
- source "package/libnl/Config.in"
-+source "package/liboping/Config.in"
- source "package/libpcap/Config.in"
- source "package/libosip2/Config.in"
- source "package/librsync/Config.in"
-diff --git a/package/liboping/Config.in b/package/liboping/Config.in
-new file mode 100644
-index 0000000..04e0e0d
---- /dev/null
-+++ b/package/liboping/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBOPING
-+	bool "liboping"
-+	depends on BR2_INET_IPV6
-+	help
-+	  liboping is a C library to generate ICMP echo requests,
-+	  better known as "ping packets".
-+
-+	  http://verplant.org/liboping/
-+
-+comment "liboping requires a toolchain with IPv6 support enabled"
-+	depends on !BR2_INET_IPV6
-diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
-new file mode 100644
-index 0000000..e0d892b
---- /dev/null
-+++ b/package/liboping/liboping.mk
-@@ -0,0 +1,13 @@
-+#############################################################
-+#
-+# liboping
-+#
-+#############################################################
-+
-+LIBOPING_VERSION = 1.6.2
-+LIBOPING_SITE = http://verplant.org/liboping/files
-+LIBOPING_INSTALL_STAGING = YES
-+LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
-+LIBOPING_CONF_OPT = --without-perl-bindings
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index aa22910..389aa3b 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GREP_VERSION = 2.11
++GREP_VERSION = 2.12
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
