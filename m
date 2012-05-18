@@ -1,47 +1,79 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 May 2012 22:21:58 +0200
-Subject: [Buildroot] [git commit] hiawatha: bump to version 8.2 and define
-	saner default directories
-Message-ID: <20120531113257.F127E96E2B@busybox.osuosl.org>
+Date: Fri, 18 May 2012 22:22:07 +0200
+Subject: [Buildroot] [git commit] libmbus: bump to version 0.7.0
+Message-ID: <20120531113258.0E91D96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c7f14af250a7333f792aaab28b88665df122ff7
+commit: http://git.buildroot.net/buildroot/commit/?id=92c24094240f75b44023f6a2611f66c8d1db9656
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump to version 8.2.
-Define CONFIG_DIR=/etc/hiawatha, LOG_DIR=/var/log, PID_DIR=/var/run and
-WEBROOT_DIR=/var/www/hiawatha which are the same as the defaults but
-without the /usr prefix.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/hiawatha/hiawatha.mk |    8 ++++++--
- 1 files changed, 6 insertions(+), 2 deletions(-)
+ package/libmbus/libmbus-0.6.1-bcopy.patch |   15 ---------------
+ package/libmbus/libmbus-bcopy.patch       |   16 ++++++++++++++++
+ package/libmbus/libmbus.mk                |    4 ++--
+ 3 files changed, 18 insertions(+), 17 deletions(-)
 
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index aa245f3..4600c11 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -1,4 +1,4 @@
--HIAWATHA_VERSION = 8.1
-+HIAWATHA_VERSION = 8.2
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
+diff --git a/package/libmbus/libmbus-0.6.1-bcopy.patch b/package/libmbus/libmbus-0.6.1-bcopy.patch
+deleted file mode 100644
+index 8b8310c..0000000
+--- a/package/libmbus/libmbus-0.6.1-bcopy.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Drop bcopy since it's deprecated.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-diff -Nura libmbus-0.6.1/mbus/mbus-tcp.c libmbus-0.6.1-bcopy/mbus/mbus-tcp.c
+---- libmbus-0.6.1/mbus/mbus-tcp.c	2011-11-06 02:34:28.000000000 -0300
+-+++ libmbus-0.6.1-bcopy/mbus/mbus-tcp.c	2012-05-03 08:11:39.680346347 -0300
+-@@ -78,7 +78,7 @@
+-         return NULL;
+-     }
+- 
+--    bcopy((void *)(host_addr->h_addr), (void *)(&s_addr.sin_addr), host_addr->h_length);
+-+    memmove((void *)(&s_addr.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
+- 
+-     if (connect(handle->sock, (struct sockaddr *)&s_addr, sizeof(s_addr)) < 0)
+-     {
+diff --git a/package/libmbus/libmbus-bcopy.patch b/package/libmbus/libmbus-bcopy.patch
+new file mode 100644
+index 0000000..660cc37
+--- /dev/null
++++ b/package/libmbus/libmbus-bcopy.patch
+@@ -0,0 +1,16 @@
++Drop bcopy since it's deprecated.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura libmbus-0.7.0/mbus/mbus-tcp.c libmbus-0.7.0-bcopy/mbus/mbus-tcp.c
++--- libmbus-0.7.0/mbus/mbus-tcp.c	2011-12-08 13:21:19.000000000 -0300
+++++ libmbus-0.7.0-bcopy/mbus/mbus-tcp.c	2012-05-03 09:08:36.987106612 -0300
++@@ -78,7 +78,7 @@
++         return NULL;
++     }
++ 
++-    bcopy((void *)(host_addr->h_addr), (void *)(&s.sin_addr), host_addr->h_length);
+++    memmove((void *)(&s.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
++ 
++     if (connect(handle->sock, (struct sockaddr *)&s, sizeof(s)) < 0)
++     {
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+index 9abb2bf..17954b9 100644
+--- a/package/libmbus/libmbus.mk
++++ b/package/libmbus/libmbus.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
  
- ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
-@@ -8,6 +8,10 @@ endif
+-LIBMBUS_VERSION = 0.6.1
+-LIBMBUS_SITE = http://www.freescada.com/public-dist/
++LIBMBUS_VERSION = 0.7.0
++LIBMBUS_SITE = http://www.freescada.com/public-dist
+ LIBMBUS_INSTALL_STAGING = YES
  
- HIAWATHA_CONF_OPT += \
- 	-DENABLE_TOOLKIT=OFF \
--	-DENABLE_XSLT=OFF
-+	-DENABLE_XSLT=OFF \
-+	-DCONFIG_DIR=/etc/hiawatha \
-+	-DLOG_DIR=/var/log \
-+	-DPID_DIR=/var/run \
-+	-DWEBROOT_DIR=/var/www/hiawatha
- 
- $(eval $(call CMAKETARGETS))
+ # Without this the build yields an error:
