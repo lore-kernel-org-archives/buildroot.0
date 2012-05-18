@@ -1,33 +1,57 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 May 2012 16:57:44 +0200
-Subject: [Buildroot] [PATCH 1/2] vala: do not append a -dirty suffix to
-	the valac version number
-In-Reply-To: <CAHt8ZCNqGagUPjq4ZvfRBKogfbVfKJnRH7mR6rpL7LPYdvdtuQ@mail.gmail.com>
- (Simon Dawson's message of "Fri, 18 May 2012 14:06:54 +0100")
-References: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
- <87fwaxop2t.fsf@macbook.be.48ers.dk>
- <CAHt8ZCNqGagUPjq4ZvfRBKogfbVfKJnRH7mR6rpL7LPYdvdtuQ@mail.gmail.com>
-Message-ID: <877gw9o7tj.fsf@macbook.be.48ers.dk>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Fri, 18 May 2012 17:15:05 +0100
+Subject: [Buildroot] [PATCH 1/2] vala: do not append a -dirty suffix to the
+	valac version number
+Message-ID: <1337357705-3827-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+From: Simon Dawson <spdawson@gmail.com>
 
-Hi,
+When vala is built inside a Git repository with uncommitted changes, the
+valac version number has -dirty appended. This creates problems for
+packages (e.g. Midori) which require a valac version number without
+the -dirty suffix.
 
- Simon> In essence, I think the patch is necessary in order to prevent the
- Simon> valac build process from falling foul of uncommitted changes in the
- Simon> local Buildroot checkout. Of course, if you've got uncommitted changes
- Simon> in the repository in which you're testing, then my theory goes out of
- Simon> the window...
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ ...la-0.15.2-dont-add-dirty-to-valac-version.patch |   25 ++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch
 
-Ahh, ok. That was not clear to me from your commit message. We have
-something similar for autoconf
-(autoconf-2.65-dont-add-dirty-to-version.patch). Care to adjust patch
-description and commit message and resend?
-
+diff --git a/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch b/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch
+new file mode 100644
+index 0000000..a2a0623
+--- /dev/null
++++ b/package/vala/vala-0.15.2-dont-add-dirty-to-valac-version.patch
+@@ -0,0 +1,25 @@
++valac: don't append -dirty to version
++
++Don't append -dirty to the valac version number if the Buildroot Git
++tree has uncommited changes.
++
++The patched script is meant for the valac developers, but it also
++activates if you build valac in a subdirectory of a Git tree (e.g.
++as is commonly done in Buildroot).
++
++The effect is that valac gets built as being version x.y.z-dirty, which
++breaks programs (such as Midori) that explicitly check for valac-x.y.z.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++diff -Nur a/build-aux/git-version-gen b/build-aux/git-version-gen
++--- a/build-aux/git-version-gen	2010-08-15 12:49:03.000000000 +0100
+++++ b/build-aux/git-version-gen	2012-05-14 10:17:19.977204570 +0100
++@@ -135,7 +135,7 @@
++     *) # Append the suffix only if there isn't one already.
++ 	case $v in
++ 	  *-dirty) ;;
++-	  *) v="$v-dirty" ;;
+++	  #*) v="$v-dirty" ;;
++ 	esac ;;
++ esac
++ 
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
