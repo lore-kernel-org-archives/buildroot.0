@@ -1,41 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 May 2012 10:44:58 +0200
+From: Simon Dawson <spdawson@gmail.com>
+Date: Fri, 18 May 2012 14:06:54 +0100
 Subject: [Buildroot] [PATCH 1/2] vala: do not append a -dirty suffix to
-	the valac version number
-In-Reply-To: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Wed, 16 May 2012 13:10:28 +0100")
+ the valac version number
+In-Reply-To: <87fwaxop2t.fsf@macbook.be.48ers.dk>
 References: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87fwaxop2t.fsf@macbook.be.48ers.dk>
+ <87fwaxop2t.fsf@macbook.be.48ers.dk>
+Message-ID: <CAHt8ZCNqGagUPjq4ZvfRBKogfbVfKJnRH7mR6rpL7LPYdvdtuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+> Why is this needed? We don't apply any patches to vala, and I don't see
+> any "-dirty" suffix in valac --version:
+>
+> ./output/host/usr/bin/valac --version
+> Vala 0.15.2
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
- spdawson> ---
- spdawson>  package/vala/vala-fix-dirty-version-suffix.patch |   15 +++++++++++++++
- spdawson>  1 file changed, 15 insertions(+)
- spdawson>  create mode 100644 package/vala/vala-fix-dirty-version-suffix.patch
+It may be because the Buildroot checkout in which you are testing has
+no uncommitted changes. The valac build process calls
 
- spdawson> diff --git a/package/vala/vala-fix-dirty-version-suffix.patch b/package/vala/vala-fix-dirty-version-suffix.patch
- spdawson> new file mode 100644
- spdawson> index 0000000..4b0044d
- spdawson> --- /dev/null
- spdawson> +++ b/package/vala/vala-fix-dirty-version-suffix.patch
- spdawson> @@ -0,0 +1,15 @@
- spdawson> +Do not append a -dirty suffix to the valac version number. The presence of
- spdawson> +the suffix can caused problems for packages (e.g. midori) which check the
- spdawson> +valac version number during configuration.
+$ git diff-index --name-only HEAD 2>/dev/null
 
-Why is this needed? We don't apply any patches to vala, and I don't see
-any "-dirty" suffix in valac --version:
+and appends the -dirty version suffix if anything is returned. In my
+case --- with uncommitted changes to my Buildroot Git checkout --- the
+-dirty suffix does get applied. Consequently, for me:
 
-./output/host/usr/bin/valac --version
-Vala 0.15.2
+$ ./output/host/usr/bin/valac --version
+Vala 0.15.2-dirty
 
--- 
-Bye, Peter Korsgaard
+In essence, I think the patch is necessary in order to prevent the
+valac build process from falling foul of uncommitted changes in the
+local Buildroot checkout. Of course, if you've got uncommitted changes
+in the repository in which you're testing, then my theory goes out of
+the window...
+
+Simon.
