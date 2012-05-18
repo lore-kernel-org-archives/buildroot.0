@@ -1,108 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 May 2012 10:42:29 +0200
-Subject: [Buildroot] [git commit] ccache: allow dynamic selection of cache
-	directory
-Message-ID: <20120518084401.EBE8496D37@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 18 May 2012 10:44:58 +0200
+Subject: [Buildroot] [PATCH 1/2] vala: do not append a -dirty suffix to
+	the valac version number
+In-Reply-To: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Wed, 16 May 2012 13:10:28 +0100")
+References: <1337170229-29684-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87fwaxop2t.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=433290761fceb476b095548eec10adf72405e050
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
-The existing ccache infrastructure sets the cache directory hardcoded in the
-ccache binary. As this directory was set to ~/.buildroot-ccache, the cache
-is not necessarily local (e.g. in corporate environments the home directories
-may be mounted over NFS.)
-Previous versions of buildroot did allow to set the cache directory, but this
-was also hardcoded (so you had to rebuild ccache to change it), plus that
-support was removed.
-See http://lists.busybox.net/pipermail/buildroot/2011-July/044511.html for
-a discussion on this.
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  package/vala/vala-fix-dirty-version-suffix.patch |   15 +++++++++++++++
+ spdawson>  1 file changed, 15 insertions(+)
+ spdawson>  create mode 100644 package/vala/vala-fix-dirty-version-suffix.patch
 
-This patch modifies ccache to respect a new shell variable (exported from
-the Makefile, based on a configuration option) instead of CCACHE_DIR.
-The name CCACHE_DIR itself is already used by autotargets for the ccache
-package.
+ spdawson> diff --git a/package/vala/vala-fix-dirty-version-suffix.patch b/package/vala/vala-fix-dirty-version-suffix.patch
+ spdawson> new file mode 100644
+ spdawson> index 0000000..4b0044d
+ spdawson> --- /dev/null
+ spdawson> +++ b/package/vala/vala-fix-dirty-version-suffix.patch
+ spdawson> @@ -0,0 +1,15 @@
+ spdawson> +Do not append a -dirty suffix to the valac version number. The presence of
+ spdawson> +the suffix can caused problems for packages (e.g. midori) which check the
+ spdawson> +valac version number during configuration.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in                |    7 +++++++
- Makefile                 |    3 ++-
- package/ccache/ccache.mk |   24 ++++++++++++------------
- 3 files changed, 21 insertions(+), 13 deletions(-)
+Why is this needed? We don't apply any patches to vala, and I don't see
+any "-dirty" suffix in valac --version:
 
-diff --git a/Config.in b/Config.in
-index 68abb9b..95c2e8c 100644
---- a/Config.in
-+++ b/Config.in
-@@ -198,6 +198,13 @@ config BR2_CCACHE
- 	  ccache cache by removing the $HOME/.buildroot-ccache
- 	  directory.
- 
-+config BR2_CCACHE_DIR
-+	string "Compiler cache location"
-+	depends on BR2_CCACHE
-+	default "$(HOME)/.buildroot-ccache"
-+	help
-+	  Where ccache should store cached files.
-+
- config BR2_DEPRECATED
- 	bool "Show packages that are deprecated or obsolete"
- 	help
-diff --git a/Makefile b/Makefile
-index 96f9412..4427c40 100644
---- a/Makefile
-+++ b/Makefile
-@@ -252,7 +252,8 @@ TARGET_SKELETON=$(TOPDIR)/fs/skeleton
- 
- ifeq ($(BR2_CCACHE),y)
- CCACHE:=$(HOST_DIR)/usr/bin/ccache
--CCACHE_CACHE_DIR=$(HOME)/.buildroot-ccache
-+BUILDROOT_CACHE_DIR = $(call qstrip,$(BR2_CCACHE_DIR))
-+export BUILDROOT_CACHE_DIR
- HOSTCC  := $(CCACHE) $(HOSTCC)
- HOSTCXX := $(CCACHE) $(HOSTCXX)
- endif
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index f71376e..d7106ee 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
-@@ -25,22 +25,22 @@ HOST_CCACHE_CONF_ENV = \
- # has zero dependency besides the C library.
- HOST_CCACHE_CONF_OPT += ccache_cv_zlib_1_2_3=no
- 
--# We directly hardcode configuration into the binary, as it is much
--# easier to handle than passing an environment variable. Our
--# configuration is:
--#  - the cache location
--#  - the fact that ccache shouldn't use the compiler binary mtime to
--#  - detect a change in the compiler, because in the context of
--#  - Buildroot, that completely defeats the purpose of ccache. Of
--#  - course, that leaves the user responsible for purging its cache
--#  - when the compiler changes.
--define HOST_CCACHE_FIX_CCACHE_DIR
--	sed -i 's,getenv("CCACHE_DIR"),"$(CCACHE_CACHE_DIR)",' $(@D)/ccache.c
-+# Patch host-ccache as follows:
-+#  - Use BUILDROOT_CACHE_DIR instead of CCACHE_DIR, because CCACHE_DIR
-+#    is already used by autotargets for the ccache package.
-+#    BUILDROOT_CACHE_DIR is exported by Makefile based on config option
-+#    BR2_CCACHE_DIR.
-+#  - ccache shouldn't use the compiler binary mtime to detect a change in
-+#    the compiler, because in the context of Buildroot, that completely
-+#    defeats the purpose of ccache. Of course, that leaves the user
-+#    responsible for purging its cache when the compiler changes.
-+define HOST_CCACHE_PATCH_CONFIGURATION
-+	sed -i 's,getenv("CCACHE_DIR"),getenv("BUILDROOT_CACHE_DIR"),' $(@D)/ccache.c
- 	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
- endef
- 
- HOST_CCACHE_POST_CONFIGURE_HOOKS += \
--	HOST_CCACHE_FIX_CCACHE_DIR
-+	HOST_CCACHE_PATCH_CONFIGURATION
- 
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
+./output/host/usr/bin/valac --version
+Vala 0.15.2
+
+-- 
+Bye, Peter Korsgaard
