@@ -1,32 +1,47 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 May 2012 22:27:51 +0200
-Subject: [Buildroot] [git commit branch/next] gnutls: bump to version 2.12.19
-Message-ID: <20120518202900.E390C96D27@busybox.osuosl.org>
+Date: Fri, 18 May 2012 22:21:58 +0200
+Subject: [Buildroot] [git commit branch/next] hiawatha: bump to version 8.2
+	and define saner default directories
+Message-ID: <20120518202900.5971F96D2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24387627297c5ce1fbe5789f7c660d8d29861a98
+commit: http://git.buildroot.net/buildroot/commit/?id=0c7f14af250a7333f792aaab28b88665df122ff7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Bump to version 8.2.
+Define CONFIG_DIR=/etc/hiawatha, LOG_DIR=/var/log, PID_DIR=/var/run and
+WEBROOT_DIR=/var/www/hiawatha which are the same as the defaults but
+without the /usr prefix.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/hiawatha/hiawatha.mk |    8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index ce570d5..f7238aa 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index aa245f3..4600c11 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -1,4 +1,4 @@
+-HIAWATHA_VERSION = 8.1
++HIAWATHA_VERSION = 8.2
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
  
--GNUTLS_VERSION = 2.12.18
-+GNUTLS_VERSION = 2.12.19
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
- GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
- GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt
+ ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
+@@ -8,6 +8,10 @@ endif
+ 
+ HIAWATHA_CONF_OPT += \
+ 	-DENABLE_TOOLKIT=OFF \
+-	-DENABLE_XSLT=OFF
++	-DENABLE_XSLT=OFF \
++	-DCONFIG_DIR=/etc/hiawatha \
++	-DLOG_DIR=/var/log \
++	-DPID_DIR=/var/run \
++	-DWEBROOT_DIR=/var/www/hiawatha
+ 
+ $(eval $(call CMAKETARGETS))
