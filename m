@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 18 May 2012 22:28:19 +0200
-Subject: [Buildroot] [PATCH 01/10] icu: bump to version 4.8.1.1
-In-Reply-To: <1336765059-20673-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 11 May 2012 16:37:30 -0300")
-References: <1336765059-20673-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y5opmdy4.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 18 May 2012 22:21:33 +0200
+Subject: [Buildroot] [git commit branch/next] grep: bump to version 2.12
+Message-ID: <20120518202900.45F2D96D2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fa529d101b472ff926f8211b39d9f3280155e371
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/grep/grep.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed all 10 to -next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index aa22910..389aa3b 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-GREP_VERSION = 2.11
++GREP_VERSION = 2.12
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_CONF_OPT = --disable-perl-regexp --without-included-regex
