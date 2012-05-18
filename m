@@ -1,92 +1,188 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 May 2012 23:11:11 +0200
-Subject: [Buildroot] [git commit] toolchain/gcc: block unsupported CPUs
-	according to version
-Message-ID: <20120531113258.DDEBF96E2C@busybox.osuosl.org>
+Date: Fri, 18 May 2012 22:21:23 +0200
+Subject: [Buildroot] [git commit] icu: bump to version 4.8.1.1
+Message-ID: <20120531113257.C077A96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3137928f7cd8106013d04c531e42bbeaab7f22bc
+commit: http://git.buildroot.net/buildroot/commit/?id=f39cac370ead43ae40fda1ffb2c283ceedbe3715
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Block unsupported processors according to gcc version.
-Also remove the comments since we now hide them according to this.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/Config.in.arch   |    7 -------
- toolchain/gcc/Config.in |    4 ++--
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ package/icu/icu-arm.patch           |   25 ---------
+ package/icu/icu-double-escape.patch |   17 ------
+ package/icu/icu-overflow.patch      |   93 -----------------------------------
+ package/icu/icu.mk                  |    2 +-
+ 4 files changed, 1 insertions(+), 136 deletions(-)
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 6eaa951..25ff750 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -172,7 +172,6 @@ config BR2_arm1176jz_s
- 	bool "arm1176jz-s"
- config BR2_arm1176jzf_s
- 	bool "arm1176jzf-s"
--comment "cortex-A8/A9 needs gcc >= 4.4.x"
- config BR2_cortex_a8
- 	bool "cortex-A8"
- config BR2_cortex_a9
-@@ -361,7 +360,6 @@ config BR2_x86_core2
- 	bool "core2"
- config BR2_x86_atom
- 	bool "atom"
--comment "atom needs gcc >= 4.5.x"
- config BR2_x86_k6
- 	bool "k6"
- config BR2_x86_k6_2
-@@ -409,7 +407,6 @@ config BR2_x86_64_core2
- 	bool "core2"
- config BR2_x86_64_atom
- 	bool "atom"
--comment "atom needs gcc >= 4.5.x"
- endchoice
+diff --git a/package/icu/icu-arm.patch b/package/icu/icu-arm.patch
+deleted file mode 100644
+index 53070d9..0000000
+--- a/package/icu/icu-arm.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-https://bugs.icu-project.org/trac/ticket/7664
+-https://bugs.icu-project.org/trac/changeset/28107
+-
+---- icu.orig/source/tools/toolutil/pkg_genc.c
+-+++ icu/source/tools/toolutil/pkg_genc.c
+-@@ -1,5 +1,5 @@
+- /******************************************************************************
+-- *   Copyright (C) 2009, International Business Machines
+-+ *   Copyright (C) 2009-2010, International Business Machines
+-  *   Corporation and others.  All Rights Reserved.
+-  *******************************************************************************
+-  */
+-@@ -118,10 +118,10 @@
+- } assemblyHeader[] = {
+-     {"gcc",
+-         ".globl %s\n"
+--        "\t.section .note.GNU-stack,\"\", at progbits\n"
+-+        "\t.section .note.GNU-stack,\"\",%%progbits\n"
+-         "\t.section .rodata\n"
+-         "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+--        "\t.type %s, at object\n"
+-+        "\t.type %s,%%object\n"
+-         "%s:\n\n",
+- 
+-         ".long ","",HEX_0X
+diff --git a/package/icu/icu-double-escape.patch b/package/icu/icu-double-escape.patch
+deleted file mode 100644
+index 06c70cc..0000000
+--- a/package/icu/icu-double-escape.patch
++++ /dev/null
+@@ -1,17 +0,0 @@
+-We need to double-escape CC & CXX since we've got --sysroot and thus a space
+-when cross-compiling.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura icu.orig/source/tools/icuinfo/Makefile.in icu/source/tools/icuinfo/Makefile.in
+---- icu.orig/source/tools/icuinfo/Makefile.in	2010-09-29 15:37:26.000000000 -0300
+-+++ icu/source/tools/icuinfo/Makefile.in	2010-12-21 13:36:45.393439756 -0300
+-@@ -36,7 +36,7 @@
+- 
+- ICUINFO_OPTS=-i ../../data/out/build/$(ICUDATA_PLATFORM_NAME)
+- 
+--CPPFLAGS+=  -DU_PLATFORM=\"@platform@\"  -DU_BUILD=\"@build@\" -DU_HOST=\"@host@\" -DU_CC=\"@CC@\" -DU_CXX=\"@CXX@\"
+-+CPPFLAGS+=  -DU_PLATFORM=\"@platform@\"  -DU_BUILD=\"@build@\" -DU_HOST=\"@host@\" -DU_CC=\""@CC@\"" -DU_CXX=\""@CXX@\""
+- # -DENABLE_RELEASE=@ENABLE_RELEASE@ -DENABLE_DEBUG=@ENABLE_DEBUG@ "
+- 
+- 
+diff --git a/package/icu/icu-overflow.patch b/package/icu/icu-overflow.patch
+deleted file mode 100644
+index 45beaa7..0000000
+--- a/package/icu/icu-overflow.patch
++++ /dev/null
+@@ -1,93 +0,0 @@
+-
+-A combination of issue & patches from...
+-
+-https://bugs.icu-project.org/trac/ticket/7680
+-https://bugs.icu-project.org/trac/changeset/28002
+-https://bugs.icu-project.org/trac/changeset/28124
+-
+-Enlarged buffers more since include files for pkgdata can grow
+-significantly when cross-compiling.
+-This ONLY affects building.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura icu.orig/source/tools/pkgdata/pkgdata.cpp icu/source/tools/pkgdata/pkgdata.cpp
+---- icu.orig/source/tools/pkgdata/pkgdata.cpp	2010-09-29 15:37:28.000000000 -0300
+-+++ icu/source/tools/pkgdata/pkgdata.cpp	2010-12-21 15:53:30.252554924 -0300
+-@@ -97,8 +97,9 @@
+- #define PKGDATA_FILE_SEP_STRING U_FILE_SEP_STRING
+- #endif
+- 
+--#define LARGE_BUFFER_MAX_SIZE 2048
+--#define SMALL_BUFFER_MAX_SIZE 512
+-+#define LARGE_BUFFER_MAX_SIZE 8192
+-+#define MEDIUM_BUFFER_MAX_SIZE 4096
+-+#define SMALL_BUFFER_MAX_SIZE 2048
+- 
+- static void loadLists(UPKGOptions *o, UErrorCode *status);
+- 
+-@@ -472,29 +473,48 @@
+- }
+- 
+- static int runCommand(const char* command, UBool specialHandling) {
+--    char cmd[SMALL_BUFFER_MAX_SIZE];
+-+    char *cmd = NULL;
+-+    char cmdBuffer[SMALL_BUFFER_MAX_SIZE];
+-+    int32_t len = strlen(command);
+-+
+-+    if (len == 0) {
+-+        return 0;
+-+    }
+- 
+-     if (!specialHandling) {
+-+#if defined(USING_CYGWIN) || defined(OS400)
+-+#define CMD_PADDING_SIZE 20
+-+        if ((len + CMD_PADDING_SIZE) >= SMALL_BUFFER_MAX_SIZE) {
+-+            cmd = (char *)uprv_malloc(len + CMD_PADDING_SIZE);
+-+        } else {
+-+            cmd = cmdBuffer;
+-+        }
+- #ifdef USING_CYGWIN
+-         sprintf(cmd, "bash -c \"%s\"", command);
+- 
+- #elif defined(OS400)
+-         sprintf(cmd, "QSH CMD('%s')", command);
+-+#endif
+- #else
+-         goto normal_command_mode;
+- #endif
+-     } else {
+- normal_command_mode:
+--        sprintf(cmd, "%s", command);
+-+        cmd = (char *)command;
+-     }
+--    
+-+
+-     printf("pkgdata: %s\n", cmd);
+-     int result = system(cmd);
+--    if (result != 0) { 
+--        printf("-- return status = %d\n", result); 
+-+    if (result != 0) {
+-+        printf("-- return status = %d\n", result);
+-+    }
+-+
+-+    if (cmd != cmdBuffer && cmd != command) {
+-+        uprv_free(cmd);
+-     }
+--    return result; 
+--} 
+-+
+-+    return result;
+-+}
+- 
+- #define LN_CMD "ln -s"
+- #define RM_CMD "rm -f"
+-@@ -586,7 +606,7 @@
+-             pkgDataFlags = (char**)uprv_malloc(sizeof(char*) * PKGDATA_FLAGS_SIZE);
+-             if (pkgDataFlags != NULL) {
+-                 for (int32_t i = 0; i < PKGDATA_FLAGS_SIZE; i++) {
+--                    pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * SMALL_BUFFER_MAX_SIZE);
+-+                    pkgDataFlags[i] = (char*)uprv_malloc(sizeof(char) * MEDIUM_BUFFER_MAX_SIZE);
+-                     if (pkgDataFlags[i] != NULL) {
+-                         pkgDataFlags[i][0] = 0;
+-                     } else {
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index d4c220b..a2c24ca 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- choice
-@@ -425,7 +422,6 @@ config BR2_sparc_cypress
- 	bool "cypress"
- config BR2_sparc_v8
- 	bool "v8"
--comment "LEON SPARC needs gcc = 4.4.x"
- config BR2_sparc_sparchfleon
- 	bool "hfleon"
- config BR2_sparc_sparchfleonv8
-@@ -549,13 +545,10 @@ config BR2_powerpc_8540
- 	bool "8540 / e500v1"
- config BR2_powerpc_8548
- 	bool "8548 / e500v2"
--comment "e300c2 needs gcc >= 4.4.x"
- config BR2_powerpc_e300c2
- 	bool "e300c2"
--comment "e300c3 needs gcc >= 4.4.x"
- config BR2_powerpc_e300c3
- 	bool "e300c3"
--comment "e500mc needs gcc >= 4.4.x"
- config BR2_powerpc_e500mc
- 	bool "e500mc"
- endchoice
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 0c1243f..eb4d5ea 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -15,11 +15,11 @@ choice
- 	       bool "gcc 4.2.2-avr32-2.1.5"
- 
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_x86_64_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_avr32
-+		depends on !BR2_avr32 && !BR2_x86_atom && !BR2_x86_64_atom
- 		bool "gcc 4.4.x"
- 
- 	config BR2_GCC_VERSION_4_5_X
+-ICU_VERSION = 4.4.2
++ICU_VERSION = 4.8.1.1
+ ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
+ ICU_DEPENDENCIES = host-icu
