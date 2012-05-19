@@ -1,35 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 May 2012 02:06:03 +0200
-Subject: [Buildroot] [git commit] pulseaudio: don't build man pages if not
-	needed
-Message-ID: <20120531113259.198FD96E2D@busybox.osuosl.org>
+Date: Sat, 19 May 2012 23:11:03 +0200
+Subject: [Buildroot] [git commit] toolchain/gcc: bump snapshot version
+Message-ID: <20120531113258.CEE3C96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f2ce003bd7475939d86da07adf51a5aedbadf30
+commit: http://git.buildroot.net/buildroot/commit/?id=0049aa83b91299abbf97b5d06d6c2772e8e6a4b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No sense in building them if they are thrown away by target-finalize anyway.
+Bump default snapshot gcc version to 4.8-20120429 so that it is newer
+than our latest supported version (4.7.0 release).
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/pulseaudio/pulseaudio.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ toolchain/gcc/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index bc5a0ae..a5534da 100644
---- a/package/multimedia/pulseaudio/pulseaudio.mk
-+++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -11,7 +11,8 @@ PULSEAUDIO_CONF_OPT = \
- 	--localstatedir=/var \
- 	--disable-default-build-tests \
- 	--disable-legacy-runtime-dir \
--	--disable-legacy-database-entry-format
-+	--disable-legacy-database-entry-format \
-+	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-manpages)
+diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
+index 4bff885..0c1243f 100644
+--- a/toolchain/gcc/Config.in
++++ b/toolchain/gcc/Config.in
+@@ -45,7 +45,7 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
  
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkg-config libtool json-c libsndfile speex host-intltool \
+ config BR2_GCC_SNAP_DATE
+ 	string "GCC snapshot date"
+-	default "4.7-20110430"
++	default "4.8-20120429"
+ 	depends on BR2_GCC_VERSION_SNAP
+ 	help
+ 	  Enter snapshot date to use for gcc.
