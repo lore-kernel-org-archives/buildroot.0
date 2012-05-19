@@ -1,92 +1,42 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 May 2012 23:11:11 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain/gcc: block
-	unsupported CPUs according to version
-Message-ID: <20120519212856.0BAFF96D3B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 19 May 2012 23:46:17 +0200
+Subject: [Buildroot] [PATCH 1/3] Convert gettext to autotargets
+In-Reply-To: <1336475958-5714-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Tue, 8 May 2012 13:19:16 +0200")
+References: <4F7C6130.102@free-electrons.com>
+ <1336475958-5714-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <87k407lu8m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3137928f7cd8106013d04c531e42bbeaab7f22bc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-Block unsupported processors according to gcc version.
-Also remove the comments since we now hide them according to this.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- target/Config.in.arch   |    7 -------
- toolchain/gcc/Config.in |    4 ++--
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ Samuel> From: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Samuel> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+ Samuel> Acked-by: Samuel Martin <s.martin49@gmail.com>
+ Samuel> ---
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 6eaa951..25ff750 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -172,7 +172,6 @@ config BR2_arm1176jz_s
- 	bool "arm1176jz-s"
- config BR2_arm1176jzf_s
- 	bool "arm1176jzf-s"
--comment "cortex-A8/A9 needs gcc >= 4.4.x"
- config BR2_cortex_a8
- 	bool "cortex-A8"
- config BR2_cortex_a9
-@@ -361,7 +360,6 @@ config BR2_x86_core2
- 	bool "core2"
- config BR2_x86_atom
- 	bool "atom"
--comment "atom needs gcc >= 4.5.x"
- config BR2_x86_k6
- 	bool "k6"
- config BR2_x86_k6_2
-@@ -409,7 +407,6 @@ config BR2_x86_64_core2
- 	bool "core2"
- config BR2_x86_64_atom
- 	bool "atom"
--comment "atom needs gcc >= 4.5.x"
- endchoice
- 
- choice
-@@ -425,7 +422,6 @@ config BR2_sparc_cypress
- 	bool "cypress"
- config BR2_sparc_v8
- 	bool "v8"
--comment "LEON SPARC needs gcc = 4.4.x"
- config BR2_sparc_sparchfleon
- 	bool "hfleon"
- config BR2_sparc_sparchfleonv8
-@@ -549,13 +545,10 @@ config BR2_powerpc_8540
- 	bool "8540 / e500v1"
- config BR2_powerpc_8548
- 	bool "8548 / e500v2"
--comment "e300c2 needs gcc >= 4.4.x"
- config BR2_powerpc_e300c2
- 	bool "e300c2"
--comment "e300c3 needs gcc >= 4.4.x"
- config BR2_powerpc_e300c3
- 	bool "e300c3"
--comment "e500mc needs gcc >= 4.4.x"
- config BR2_powerpc_e500mc
- 	bool "e500mc"
- endchoice
-diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 0c1243f..eb4d5ea 100644
---- a/toolchain/gcc/Config.in
-+++ b/toolchain/gcc/Config.in
-@@ -15,11 +15,11 @@ choice
- 	       bool "gcc 4.2.2-avr32-2.1.5"
- 
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_x86_64_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_avr32
-+		depends on !BR2_avr32 && !BR2_x86_atom && !BR2_x86_64_atom
- 		bool "gcc 4.4.x"
- 
- 	config BR2_GCC_VERSION_4_5_X
+ Samuel> -$(GETTEXT_DIR)/$(GETTEXT_BINARY): $(GETTEXT_DIR)/.configured
+ Samuel> -	$(MAKE) -C $(GETTEXT_DIR)
+ Samuel> -	touch -c $(GETTEXT_DIR)/$(GETTEXT_BINARY)
+ Samuel> +define GETTEXT_REMOVE_BINARIES
+ Samuel> +	rm -f $(TARGET_DIR)/usr/bin/gettext
+ Samuel> +	rm -f $(TARGET_DIR)/usr/bin/gettext.sh
+ Samuel> +	rm -f $(TARGET_DIR)/usr/bin/gettextize
+ Samuel> +endef
+
+ Samuel>  ifeq ($(BR2_PACKAGE_LIBINTL),y)
+ Samuel> +	GETTEXT_POST_INSTALL_TARGET_HOOKS += GETTEXT_REMOVE_BINARIES
+ Samuel>  endif
+ Samuel> +
+
+This seems backwards. Wouldn't you want to keep the binaries if libintl
+is enabled?
+
+-- 
+Bye, Peter Korsgaard
