@@ -1,39 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 May 2012 08:46:28 +0200
-Subject: [Buildroot] [git commit] binutils: fix build with external
-	toolchains on avr32
-Message-ID: <20120519065043.DF65996D4C@busybox.osuosl.org>
+Date: Sat, 19 May 2012 08:55:47 +0200
+Subject: [Buildroot] [git commit] xserver-xorg: fix build when Xtst isn't
+	available
+Message-ID: <20120519065826.7710A96D38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e4fba5865b19163108fbd78ffe037e069ce8c802
+commit: http://git.buildroot.net/buildroot/commit/?id=920544e02b7e050d0160574803167c1c0a36f1cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.org/results/7f0545a7c824bf0523ab3506db83f7f5c930d63d/
+The optional DMX support (Distributed Multihead X) needs Xtst, which
+may or may not be available in the buildroot config. DMX is unlikely
+to be needed for a BR system, so simply disable it rather than
+forcibly requiring Xtst.
+
+Fixes http://autobuild.buildroot.org/results/df990ded6472de62132e3a089634fafe0e029107/
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/binutils/binutils.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 0a5a948..1c8a79d 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -8,8 +8,13 @@
- # If not, we do like other packages
- BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
- ifeq ($(BINUTILS_VERSION),)
-+ifeq ($(BR2_avr32),y)
-+# avr32 uses a special version
-+BINUTILS_VERSION = 2.18-avr32-1.0.1
-+else
- BINUTILS_VERSION = 2.21
- endif
-+endif
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index df7ba9a..29f7c81 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -58,6 +58,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
  
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.bz2
- BINUTILS_SITE = $(BR2_GNU_MIRROR)/binutils
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
+ 		--disable-xnest --disable-xephyr --disable-xvfb \
++		--disable-dmx \
+ 		--with-builder-addr=buildroot at uclibc.org \
+ 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
+ 		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var
