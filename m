@@ -1,20 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 19 May 2012 20:57:06 +0200
-Subject: [Buildroot] [PATCH] busybox: add 1.20.0 patches for find and
-	volume_id
-In-Reply-To: <1337446656-16525-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 19 May 2012 13:57:36 -0300")
-References: <1337446656-16525-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehqgm22l.fsf@macbook.be.48ers.dk>
+Date: Sat, 19 May 2012 20:58:13 +0200
+Subject: [Buildroot] [PATCH] apply-patches.sh: add documentation
+In-Reply-To: <1337374021-26978-1-git-send-email-ludovic.desroches@atmel.com>
+ (ludovic desroches's message of "Fri, 18 May 2012 22:47:01 +0200")
+References: <1337374021-26978-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <87aa14m20q.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>>   <ludovic.desroches@atmel.com> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > From: Ludovic Desroches <ludovic.desroches@gmail.com>
+ > Signed-off-by: Ludovic Desroches <ludovic.desroches@gmail.com>
 
 Committed, thanks.
 
