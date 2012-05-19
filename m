@@ -1,139 +1,76 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 19 May 2012 13:57:36 -0300
-Subject: [Buildroot] [PATCH] busybox: add 1.20.0 patches for find and
-	volume_id
-Message-ID: <1337446656-16525-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 19 May 2012 20:53:18 +0200
+Subject: [Buildroot] [PATCH] logsurfer: new package
+In-Reply-To: <1337067382-19212-1-git-send-email-faessler@was.ch> ("Dominik
+ =?utf-8?Q?F=C3=A4ssler=22's?= message of "Tue, 15 May 2012 09:36:22 +0200")
+References: <1337067382-19212-1-git-send-email-faessler@was.ch>
+Message-ID: <87ipfsm28x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../busybox-1.20.0/busybox-1.20.0-ext4.patch       |   73 ++++++++++++++++++++
- .../busybox-1.20.0/busybox-1.20.0-find.patch       |   33 +++++++++
- 2 files changed, 106 insertions(+), 0 deletions(-)
- create mode 100644 package/busybox/busybox-1.20.0/busybox-1.20.0-ext4.patch
- create mode 100644 package/busybox/busybox-1.20.0/busybox-1.20.0-find.patch
+>>>>> "Dominik" == Dominik F?ssler <faessler@was.ch> writes:
 
-diff --git a/package/busybox/busybox-1.20.0/busybox-1.20.0-ext4.patch b/package/busybox/busybox-1.20.0/busybox-1.20.0-ext4.patch
-new file mode 100644
-index 0000000..d54ccf8
---- /dev/null
-+++ b/package/busybox/busybox-1.20.0/busybox-1.20.0-ext4.patch
-@@ -0,0 +1,73 @@
-+--- busybox-1.20.0/util-linux/volume_id/ext.c
-++++ busybox-1.20.0-ext4/util-linux/volume_id/ext.c
-+@@ -39,10 +39,50 @@ struct ext2_super_block {
-+ 	uint8_t	volume_name[16];
-+ } PACKED;
-+ 
-+-#define EXT3_FEATURE_COMPAT_HAS_JOURNAL		0x00000004
-+-#define EXT3_FEATURE_INCOMPAT_JOURNAL_DEV	0x00000008
-+ #define EXT_SUPERBLOCK_OFFSET			0x400
-+ 
-++/* for s_flags */
-++#define EXT2_FLAGS_TEST_FILESYS			0x0004
-++
-++/* for s_feature_compat */
-++#define EXT3_FEATURE_COMPAT_HAS_JOURNAL		0x0004
-++
-++/* for s_feature_ro_compat */
-++#define EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER	0x0001
-++#define EXT2_FEATURE_RO_COMPAT_LARGE_FILE	0x0002
-++#define EXT2_FEATURE_RO_COMPAT_BTREE_DIR	0x0004
-++#define EXT4_FEATURE_RO_COMPAT_HUGE_FILE	0x0008
-++#define EXT4_FEATURE_RO_COMPAT_GDT_CSUM		0x0010
-++#define EXT4_FEATURE_RO_COMPAT_DIR_NLINK	0x0020
-++#define EXT4_FEATURE_RO_COMPAT_EXTRA_ISIZE	0x0040
-++
-++/* for s_feature_incompat */
-++#define EXT2_FEATURE_INCOMPAT_FILETYPE		0x0002
-++#define EXT3_FEATURE_INCOMPAT_RECOVER		0x0004
-++#define EXT3_FEATURE_INCOMPAT_JOURNAL_DEV	0x0008
-++#define EXT2_FEATURE_INCOMPAT_META_BG		0x0010
-++#define EXT4_FEATURE_INCOMPAT_EXTENTS		0x0040 /* extents support */
-++#define EXT4_FEATURE_INCOMPAT_64BIT		0x0080
-++#define EXT4_FEATURE_INCOMPAT_MMP		0x0100
-++#define EXT4_FEATURE_INCOMPAT_FLEX_BG		0x0200
-++
-++#define EXT2_FEATURE_RO_COMPAT_SUPP	(EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER| \
-++					 EXT2_FEATURE_RO_COMPAT_LARGE_FILE| \
-++					 EXT2_FEATURE_RO_COMPAT_BTREE_DIR)
-++#define EXT2_FEATURE_INCOMPAT_SUPP	(EXT2_FEATURE_INCOMPAT_FILETYPE| \
-++					 EXT2_FEATURE_INCOMPAT_META_BG)
-++#define EXT2_FEATURE_INCOMPAT_UNSUPPORTED	~EXT2_FEATURE_INCOMPAT_SUPP
-++#define EXT2_FEATURE_RO_COMPAT_UNSUPPORTED	~EXT2_FEATURE_RO_COMPAT_SUPP
-++
-++#define EXT3_FEATURE_RO_COMPAT_SUPP	(EXT2_FEATURE_RO_COMPAT_SPARSE_SUPER| \
-++					 EXT2_FEATURE_RO_COMPAT_LARGE_FILE| \
-++					 EXT2_FEATURE_RO_COMPAT_BTREE_DIR)
-++#define EXT3_FEATURE_INCOMPAT_SUPP	(EXT2_FEATURE_INCOMPAT_FILETYPE| \
-++					 EXT3_FEATURE_INCOMPAT_RECOVER| \
-++					 EXT2_FEATURE_INCOMPAT_META_BG)
-++#define EXT3_FEATURE_INCOMPAT_UNSUPPORTED	~EXT3_FEATURE_INCOMPAT_SUPP
-++#define EXT3_FEATURE_RO_COMPAT_UNSUPPORTED	~EXT3_FEATURE_RO_COMPAT_SUPP
-++
-+ int FAST_FUNC volume_id_probe_ext(struct volume_id *id /*,uint64_t off*/)
-+ {
-+ #define off ((uint64_t)0)
-+@@ -66,11 +106,15 @@ int FAST_FUNC volume_id_probe_ext(struct
-+ 	dbg("ext: label '%s' uuid '%s'", id->label, id->uuid);
-+ 
-+ #if ENABLE_FEATURE_BLKID_TYPE
-+-	if ((le32_to_cpu(es->feature_compat) & EXT3_FEATURE_COMPAT_HAS_JOURNAL) != 0)
-++	if ((es->feature_ro_compat & cpu_to_le32(EXT4_FEATURE_RO_COMPAT_HUGE_FILE | EXT4_FEATURE_RO_COMPAT_DIR_NLINK))
-++	 || (es->feature_incompat & cpu_to_le32(EXT4_FEATURE_INCOMPAT_EXTENTS | EXT4_FEATURE_INCOMPAT_64BIT))
-++	) {
-++		id->type = "ext4";
-++	}
-++	else if (es->feature_compat & cpu_to_le32(EXT3_FEATURE_COMPAT_HAS_JOURNAL))
-+ 		id->type = "ext3";
-+ 	else
-+ 		id->type = "ext2";
-+ #endif
-+-
-+ 	return 0;
-+ }
-diff --git a/package/busybox/busybox-1.20.0/busybox-1.20.0-find.patch b/package/busybox/busybox-1.20.0/busybox-1.20.0-find.patch
-new file mode 100644
-index 0000000..f913cda
---- /dev/null
-+++ b/package/busybox/busybox-1.20.0/busybox-1.20.0-find.patch
-@@ -0,0 +1,33 @@
-+--- busybox-1.20.0/findutils/find.c
-++++ busybox-1.20.0-find/findutils/find.c
-+@@ -831,6 +831,11 @@ static action*** parse_params(char **arg
-+ 	                        PARM_name      ,
-+ 	                        PARM_iname     ,
-+ 	IF_FEATURE_FIND_PATH(   PARM_path      ,)
-++#if ENABLE_DESKTOP
-++	/* -wholename is a synonym for -path */
-++	/* We support it because Linux kernel's "make tags" uses it */
-++	IF_FEATURE_FIND_PATH(   PARM_wholename ,)
-++#endif
-+ 	IF_FEATURE_FIND_PATH(   PARM_ipath     ,)
-+ 	IF_FEATURE_FIND_REGEX(  PARM_regex     ,)
-+ 	IF_FEATURE_FIND_TYPE(   PARM_type      ,)
-+@@ -869,6 +874,9 @@ static action*** parse_params(char **arg
-+ 	                         "-name\0"
-+ 	                         "-iname\0"
-+ 	IF_FEATURE_FIND_PATH(   "-path\0"   )
-++#if ENABLE_DESKTOP
-++	IF_FEATURE_FIND_PATH(   "-wholename\0")
-++#endif
-+ 	IF_FEATURE_FIND_PATH(   "-ipath\0"  )
-+ 	IF_FEATURE_FIND_REGEX(  "-regex\0"  )
-+ 	IF_FEATURE_FIND_TYPE(   "-type\0"   )
-+@@ -1076,7 +1084,7 @@ static action*** parse_params(char **arg
-+ 			ap->iname = (parm == PARM_iname);
-+ 		}
-+ #if ENABLE_FEATURE_FIND_PATH
-+-		else if (parm == PARM_path || parm == PARM_ipath) {
-++		else if (parm == PARM_path IF_DESKTOP(|| parm == PARM_wholename) || parm == PARM_ipath) {
-+ 			action_path *ap;
-+ 			dbg("%d", __LINE__);
-+ 			ap = ALLOC_ACTION(path);
+ Dominik> ---
+ Dominik>  package/Config.in              |    1 +
+ Dominik>  package/logsurfer/Config.in    |    7 +++++++
+ Dominik>  package/logsurfer/logsurfer.mk |   15 +++++++++++++++
+ Dominik>  3 files changed, 23 insertions(+), 0 deletions(-)
+ Dominik>  create mode 100644 package/logsurfer/Config.in
+ Dominik>  create mode 100644 package/logsurfer/logsurfer.mk
+
+ Dominik> diff --git a/package/Config.in b/package/Config.in
+ Dominik> index 4e3c414..091f8d6 100644
+ Dominik> --- a/package/Config.in
+ Dominik> +++ b/package/Config.in
+ Dominik> @@ -613,6 +613,7 @@ source "package/file/Config.in"
+ Dominik>  source "package/inotify-tools/Config.in"
+ Dominik>  source "package/lockfile-progs/Config.in"
+ Dominik>  source "package/logrotate/Config.in"
+ Dominik> +source "package/logsurfer/Config.in"
+ Dominik>  source "package/screen/Config.in"
+ Dominik>  source "package/sudo/Config.in"
+ Dominik>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ Dominik> diff --git a/package/logsurfer/Config.in b/package/logsurfer/Config.in
+ Dominik> new file mode 100644
+ Dominik> index 0000000..27d1881
+ Dominik> --- /dev/null
+ Dominik> +++ b/package/logsurfer/Config.in
+ Dominik> @@ -0,0 +1,7 @@
+ Dominik> +config BR2_PACKAGE_LOGSURFER
+ Dominik> +	bool "logsurfer"
+ Dominik> +	help
+ Dominik> +	  Logsurfer is a program for monitoring system logs in real-time,
+ Dominik> +	  and reporting on the occurrence of events.
+ Dominik> +
+ Dominik> +	  http://www.crypt.gen.nz/logsurfer/
+ Dominik> diff --git a/package/logsurfer/logsurfer.mk b/package/logsurfer/logsurfer.mk
+ Dominik> new file mode 100644
+ Dominik> index 0000000..31405ff
+ Dominik> --- /dev/null
+ Dominik> +++ b/package/logsurfer/logsurfer.mk
+ Dominik> @@ -0,0 +1,15 @@
+ Dominik> +#############################################################
+ Dominik> +#
+ Dominik> +# logsurfer
+ Dominik> +#
+ Dominik> +#############################################################
+ Dominik> +
+ Dominik> +LOGSURFER_VERSION = 1.8
+ Dominik> +LOGSURFER_SOURCE = logsurfer-$(LOGSURFER_VERSION).tar.gz
+ Dominik> +LOGSURFER_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/logsurfer/logsurfer/logsurfer-${LOGSURFER_VERSION}
+ Dominik> +
+ Dominik> +define LOGSURFER_INSTALL_TARGET_CMDS
+ Dominik> +	$(INSTALL) -D -m 0755 $(@D)/src/logsurfer $(TARGET_DIR)/bin
+ Dominik> +endef
+
+Next to the feedback Arnout gave you, this line is wrong. With install
+-D you need to provide the destination file name as well, and it would
+be good to install man pages if BR2_HAVE_DOCUMENTATION is enabled.
+
+I've fixed up these things and committed to next, thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
