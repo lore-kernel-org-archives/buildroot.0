@@ -1,36 +1,92 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 May 2012 23:11:03 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain/gcc: bump snapshot
-	version
-Message-ID: <20120519212855.EC45796D3B@busybox.osuosl.org>
+Date: Sat, 19 May 2012 23:11:11 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain/gcc: block
+	unsupported CPUs according to version
+Message-ID: <20120519212856.0BAFF96D3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0049aa83b91299abbf97b5d06d6c2772e8e6a4b5
+commit: http://git.buildroot.net/buildroot/commit/?id=3137928f7cd8106013d04c531e42bbeaab7f22bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump default snapshot gcc version to 4.8-20120429 so that it is newer
-than our latest supported version (4.7.0 release).
+Block unsupported processors according to gcc version.
+Also remove the comments since we now hide them according to this.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/gcc/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ target/Config.in.arch   |    7 -------
+ toolchain/gcc/Config.in |    4 ++--
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 6eaa951..25ff750 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -172,7 +172,6 @@ config BR2_arm1176jz_s
+ 	bool "arm1176jz-s"
+ config BR2_arm1176jzf_s
+ 	bool "arm1176jzf-s"
+-comment "cortex-A8/A9 needs gcc >= 4.4.x"
+ config BR2_cortex_a8
+ 	bool "cortex-A8"
+ config BR2_cortex_a9
+@@ -361,7 +360,6 @@ config BR2_x86_core2
+ 	bool "core2"
+ config BR2_x86_atom
+ 	bool "atom"
+-comment "atom needs gcc >= 4.5.x"
+ config BR2_x86_k6
+ 	bool "k6"
+ config BR2_x86_k6_2
+@@ -409,7 +407,6 @@ config BR2_x86_64_core2
+ 	bool "core2"
+ config BR2_x86_64_atom
+ 	bool "atom"
+-comment "atom needs gcc >= 4.5.x"
+ endchoice
+ 
+ choice
+@@ -425,7 +422,6 @@ config BR2_sparc_cypress
+ 	bool "cypress"
+ config BR2_sparc_v8
+ 	bool "v8"
+-comment "LEON SPARC needs gcc = 4.4.x"
+ config BR2_sparc_sparchfleon
+ 	bool "hfleon"
+ config BR2_sparc_sparchfleonv8
+@@ -549,13 +545,10 @@ config BR2_powerpc_8540
+ 	bool "8540 / e500v1"
+ config BR2_powerpc_8548
+ 	bool "8548 / e500v2"
+-comment "e300c2 needs gcc >= 4.4.x"
+ config BR2_powerpc_e300c2
+ 	bool "e300c2"
+-comment "e300c3 needs gcc >= 4.4.x"
+ config BR2_powerpc_e300c3
+ 	bool "e300c3"
+-comment "e500mc needs gcc >= 4.4.x"
+ config BR2_powerpc_e500mc
+ 	bool "e500mc"
+ endchoice
 diff --git a/toolchain/gcc/Config.in b/toolchain/gcc/Config.in
-index 4bff885..0c1243f 100644
+index 0c1243f..eb4d5ea 100644
 --- a/toolchain/gcc/Config.in
 +++ b/toolchain/gcc/Config.in
-@@ -45,7 +45,7 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
+@@ -15,11 +15,11 @@ choice
+ 	       bool "gcc 4.2.2-avr32-2.1.5"
  
- config BR2_GCC_SNAP_DATE
- 	string "GCC snapshot date"
--	default "4.7-20110430"
-+	default "4.8-20120429"
- 	depends on BR2_GCC_VERSION_SNAP
- 	help
- 	  Enter snapshot date to use for gcc.
+ 	config BR2_GCC_VERSION_4_3_X
+-		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_x86_atom && !BR2_x86_64_atom && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc
+ 		bool "gcc 4.3.x"
+ 
+ 	config BR2_GCC_VERSION_4_4_X
+-		depends on !BR2_avr32
++		depends on !BR2_avr32 && !BR2_x86_atom && !BR2_x86_64_atom
+ 		bool "gcc 4.4.x"
+ 
+ 	config BR2_GCC_VERSION_4_5_X
