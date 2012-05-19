@@ -1,76 +1,113 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 May 2012 22:31:35 +0200
-Subject: [Buildroot] [git commit branch/next] omap-u-boot-utils: add new
-	host package
-Message-ID: <20120519205424.4AE4A96D48@busybox.osuosl.org>
+Date: Sat, 19 May 2012 22:33:48 +0200
+Subject: [Buildroot] [git commit branch/next] u-boot: build signed image for
+	OMAP processors
+Message-ID: <20120519205424.5FFB096A13@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=761dc51bdb39963c0b99bb78ce9733762b42c5d7
+commit: http://git.buildroot.net/buildroot/commit/?id=721247949235d5750fb482cc8bfa791f4957d7be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in.host                         |    1 +
- package/omap-u-boot-utils/Config.in.host       |    8 ++++++++
- package/omap-u-boot-utils/omap-u-boot-utils.mk |   21 +++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ boot/uboot/Config.in |   32 ++++++++++++++++++++++++++++++++
+ boot/uboot/uboot.mk  |   25 +++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 861b736..9fcfede 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f83cf4b..afc2f91 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -99,6 +99,38 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
  
- source "package/lpc3250loader/Config.in.host"
-+source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/omap-u-boot-utils/Config.in.host b/package/omap-u-boot-utils/Config.in.host
-new file mode 100644
-index 0000000..63fbdf5
---- /dev/null
-+++ b/package/omap-u-boot-utils/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
-+	bool "host omap-u-boot-utils"
+ endchoice
+ 
++config BR2_TARGET_UBOOT_OMAP_IFT
++	depends on BR2_TARGET_UBOOT_FORMAT_BIN
++	depends on BR2_arm || BR2_armeb
++	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
++	bool "produce a .ift signed image (OMAP)"
 +	help
-+	  U-Boot Utilities for Texas Instrument's OMAP platforms.
-+	  This is a set of tools to control U-Boot from scripts, generate
-+	  OMAP-specific signed image files and more.
++	  Use gpsign to produce an image of u-boot.bin signed with
++	  a Configuration Header for booting on OMAP processors.
++	  This allows U-Boot to boot without the need for an
++	  intermediate bootloader (e.g. x-loader) if it is written
++	  on the first sector of the boot medium.
++	  This only works for some media, such as NAND. Check your
++	  chip documentation for details. You might also want to
++	  read the documentation of gpsign, the tool that generates
++	  the .ift image, at:
++	  https://github.com/nmenon/omap-u-boot-utils/blob/master/README
 +
-+	  https://github.com/nmenon/omap-u-boot-utils
-diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
-new file mode 100644
-index 0000000..e2da9a1
---- /dev/null
-+++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# omap-u-boot-utils
-+#
-+#############################################################
++if BR2_TARGET_UBOOT_OMAP_IFT
 +
-+OMAP_U_BOOT_UTILS_VERSION = 8aff852322
-+OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils.git
-+OMAP_U_BOOT_UTILS_SITE_METHOD = git
++config BR2_TARGET_UBOOT_OMAP_IFT_CONFIG
++	string "gpsign Configuration Header config file"
++	help
++	  The Configuration Header (CH) config file defines the
++	  desired content of the CH for the signed image.
++	  It usually contains external RAM settings and
++	  possibly other external devices initialization.
++	  The omap-u-boot-utils software contains example
++	  configuration files for some boards:
++	  https://github.com/nmenon/omap-u-boot-utils/tree/master/configs
 +
-+define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D)
++endif
++
+ menuconfig BR2_TARGET_UBOOT_NETWORK
+ 	bool "Custom Network Settings"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3119092..486773a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -33,6 +33,7 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+ UBOOT_BIN          = u-boot.img
+ else
+ UBOOT_BIN          = u-boot.bin
++UBOOT_BIN_IFT      = $(UBOOT_BIN).ift
+ endif
+ 
+ UBOOT_ARCH=$(KERNEL_ARCH)
+@@ -88,12 +89,36 @@ define UBOOT_BUILD_CMDS
+ 		$(UBOOT_MAKE_TARGET)
+ endef
+ 
++define UBOOT_BUILD_OMAP_IFT
++	$(HOST_DIR)/usr/bin/gpsign -f $(@D)/u-boot.bin \
++		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
 +endef
 +
-+define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
-+	for f in gpsign pserial tagger ucmd ukermit ; do \
-+		install -m 755 -D $(@D)/$$f $(HOST_DIR)/usr/bin/$$f ; \
-+	done
+ define UBOOT_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+ 		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
+ endef
+ 
++define UBOOT_INSTALL_OMAP_IFT_IMAGE
++	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
 +endef
 +
-+$(eval $(call GENTARGETS,host))
++ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
++# we NEED a config file unless we're at make source
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
++$(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
++endif
++ifeq ($(wildcard $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))),)
++$(error gpsign config file $(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG) not found. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
++endif
++endif
++UBOOT_DEPENDENCIES += host-omap-u-boot-utils
++UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
++UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
++endif
++
+ $(eval $(call GENTARGETS))
+ 
+ ifeq ($(BR2_TARGET_UBOOT),y)
