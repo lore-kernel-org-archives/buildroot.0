@@ -1,183 +1,113 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 May 2012 22:27:33 +0200
-Subject: [Buildroot] [git commit] mrouted: bump to version 3.9.6
-Message-ID: <20120531113258.55E5696E2B@busybox.osuosl.org>
+Date: Sat, 19 May 2012 22:33:48 +0200
+Subject: [Buildroot] [git commit] u-boot: build signed image for OMAP
+	processors
+Message-ID: <20120531113258.BDE0F96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28fa6f19517847c0d515d97f787cef85736957b0
+commit: http://git.buildroot.net/buildroot/commit/?id=721247949235d5750fb482cc8bfa791f4957d7be
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mrouted/mrouted-3.9.4-bcopy.patch          |   21 -------
- package/mrouted/mrouted-3.9.4-makefile-flags.patch |   64 --------------------
- package/mrouted/mrouted-bcopy.patch                |   39 ++++++++++++
- package/mrouted/mrouted.mk                         |    6 +-
- 4 files changed, 42 insertions(+), 88 deletions(-)
+ boot/uboot/Config.in |   32 ++++++++++++++++++++++++++++++++
+ boot/uboot/uboot.mk  |   25 +++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+), 0 deletions(-)
 
-diff --git a/package/mrouted/mrouted-3.9.4-bcopy.patch b/package/mrouted/mrouted-3.9.4-bcopy.patch
-deleted file mode 100644
-index ea8f6db..0000000
---- a/package/mrouted/mrouted-3.9.4-bcopy.patch
-+++ /dev/null
-@@ -1,21 +0,0 @@
--diff -Nura mrouted-3.9.4/mtrace.c mrouted-3.9.4-memmove/mtrace.c
----- mrouted-3.9.4/mtrace.c	2010-11-19 20:53:19.000000000 -0300
--+++ mrouted-3.9.4-memmove/mtrace.c	2012-05-03 08:27:33.895422455 -0300
--@@ -556,7 +556,7 @@
-- 		save->rtime = ((tr.tv_sec + JAN_1970) << 16) +
-- 		    (tr.tv_usec << 10) / 15625;
-- 		save->len = len;
---		bcopy((char *)igmp, (char *)&save->igmp, ipdatalen);
--+		memmove((char *)&save->igmp, (char *)igmp, ipdatalen);
-- 	    }
-- 	    return recvlen;
-- 	}
--@@ -646,7 +646,7 @@
-- 	base.rtime = ((tr.tv_sec + JAN_1970) << 16) +
-- 	    (tr.tv_usec << 10) / 15625;
-- 	base.len = len;
---	bcopy((char *)igmp, (char *)&base.igmp, ipdatalen);
--+	memmove((char *)&base.igmp, (char *)igmp, ipdatalen);
-- 	/*
-- 	 * If the user specified which traces to monitor,
-- 	 * only accept traces that correspond to the
-diff --git a/package/mrouted/mrouted-3.9.4-makefile-flags.patch b/package/mrouted/mrouted-3.9.4-makefile-flags.patch
-deleted file mode 100644
-index 932bec0..0000000
---- a/package/mrouted/mrouted-3.9.4-makefile-flags.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
-----
-- Makefile |   20 +++++++++-----------
-- 1 file changed, 9 insertions(+), 11 deletions(-)
--
--Index: mrouted-3.9.4/Makefile
--===================================================================
----- mrouted-3.9.4.orig/Makefile
--+++ mrouted-3.9.4/Makefile
--@@ -42,11 +42,9 @@
-- #MSTAT_OBJS    = mstat.o $(EXTRA_OBJS)
-- 
-- ## Common
---CFLAGS        = $(MCAST_INCLUDE) $(SNMPDEF) $(RSRRDEF) $(INCLUDES) $(DEFS) $(USERCOMPILE)
---CFLAGS       += -O2 -W -Wall -Werror
---#CFLAGS       += -O -g
---LDLIBS        = $(SNMPLIBDIR) $(SNMPLIBS) $(EXTRA_LIBS)
---LDFLAGS      += -Wl,-Map,$@.map
--+MROUTED_CFLAGS   = $(MCAST_INCLUDE) $(SNMPDEF) $(RSRRDEF) $(INCLUDES) $(DEFS) $(USERCOMPILE)
--+LDLIBS           = $(SNMPLIBDIR) $(SNMPLIBS) $(EXTRA_LIBS)
--+MROUTED_LDFLAGS += -Wl,-Map,$@.map
-- OBJS          = $(IGMP_OBJS) $(ROUTER_OBJS) $(MAPPER_OBJS) $(MRINFO_OBJS) \
-- 		$(MTRACE_OBJS) $(MSTAT_OBJS)
-- SRCS          = $(OBJS:.o=.c)
--@@ -65,7 +63,7 @@
-- 
-- .c.o:
-- 	@printf "  CC      $@\n"
---	@$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
--+	@$(CC) $(CFLAGS) $(MROUTED_CFLAGS) $(CPPFLAGS) -c -o $@ $<
-- 
-- install: $(EXECS)
-- 	@install -d $(DESTDIR)$(prefix)/sbin
--@@ -95,26 +93,26 @@
-- 
-- mrouted: $(IGMP_OBJS) $(ROUTER_OBJS) $(CMULIBS)
-- 	@printf "  LINK    $@\n"
---	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(IGMP_OBJS) $(ROUTER_OBJS) $(LDLIBS)
--+	@$(CC) $(CFLAGS) $(MROUTED_CFLAGS) $(LDFLAGS) $(MROUTED_LDFLAGS) -o $@ $(IGMP_OBJS) $(ROUTER_OBJS) $(LDLIBS)
-- 
-- vers.c: Makefile
-- 	@echo $(VERSION) | sed -e 's/.*/char todaysversion[]="&";/' > vers.c
-- 
-- map-mbone: $(IGMP_OBJS) $(MAPPER_OBJS)
-- 	@printf "  LINK    $@\n"
---	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(IGMP_OBJS) $(MAPPER_OBJS) $(LDLIBS)
--+	@$(CC) $(CFLAGS) $(MROUTED_CFLAGS) $(LDFLAGS) $(MROUTED_LDFLAGS) -o $@ $(IGMP_OBJS) $(MAPPER_OBJS) $(LDLIBS)
-- 
-- mrinfo: $(IGMP_OBJS) $(MRINFO_OBJS)
-- 	@printf "  LINK    $@\n"
---	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(IGMP_OBJS) $(MRINFO_OBJS) $(LDLIBS)
--+	@$(CC) $(CFLAGS) $(MROUTED_CFLAGS) $(LDFLAGS) $(MROUTED_LDFLAGS) -o $@ $(IGMP_OBJS) $(MRINFO_OBJS) $(LDLIBS)
-- 
-- mtrace: $(IGMP_OBJS) $(MTRACE_OBJS)
-- 	@printf "  LINK    $@\n"
---	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(IGMP_OBJS) $(MTRACE_OBJS) $(LDLIBS)
--+	@$(CC) $(CFLAGS) $(MROUTED_CFLAGS) $(LDFLAGS) $(MROUTED_LDFLAGS) -o $@ $(IGMP_OBJS) $(MTRACE_OBJS) $(LDLIBS)
-- 
-- mstat: $(MSTAT_OBJS) $(CMULIBS)
-- 	@printf "  LINK    $@\n"
---	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(MSTAT_OBJS) $(LDLIBS)
--+	@$(CC) $(CFLAGS) $(MROUTED_CFLAGS) $(LDFLAGS) $(MROUTED_LDFLAGS) -o $@ $(MSTAT_OBJS) $(LDLIBS)
-- 
-- clean: $(SNMPCLEAN)
-- 	-@$(RM) $(OBJS) $(EXECS)
-diff --git a/package/mrouted/mrouted-bcopy.patch b/package/mrouted/mrouted-bcopy.patch
-new file mode 100644
-index 0000000..74af02d
---- /dev/null
-+++ b/package/mrouted/mrouted-bcopy.patch
-@@ -0,0 +1,39 @@
-+From 2d33110ee18fb59a1d6917d598fc1f4eb3c4cf83 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Mon, 7 May 2012 16:32:10 -0300
-+Subject: [PATCH] Switch from bcopy to memmove
-+
-+The bcopy() function is marked as legacy per POSIX.1-2001 and removed by
-+POSIX-1.2008 thus shouldn't be used.
-+So switch over to memmove()
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ mtrace.c |    4 ++--
-+ 1 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/mtrace.c b/mtrace.c
-+index c982a67..64630bf 100644
-+--- a/mtrace.c
-++++ b/mtrace.c
-+@@ -556,7 +556,7 @@ int send_recv(u_int32_t dst, int type, int code, int tries, struct resp_buf *sav
-+ 		save->rtime = ((tr.tv_sec + JAN_1970) << 16) +
-+ 		    (tr.tv_usec << 10) / 15625;
-+ 		save->len = len;
-+-		bcopy((char *)igmp, (char *)&save->igmp, ipdatalen);
-++		memmove((char *)&save->igmp, (char *)igmp, ipdatalen);
-+ 	    }
-+ 	    return recvlen;
-+ 	}
-+@@ -646,7 +646,7 @@ void passive_mode(void)
-+ 	base.rtime = ((tr.tv_sec + JAN_1970) << 16) +
-+ 	    (tr.tv_usec << 10) / 15625;
-+ 	base.len = len;
-+-	bcopy((char *)igmp, (char *)&base.igmp, ipdatalen);
-++	memmove((char *)&base.igmp, (char *)igmp, ipdatalen);
-+ 	/*
-+ 	 * If the user specified which traces to monitor,
-+ 	 * only accept traces that correspond to the
-+-- 
-+1.7.3.4
-+
-diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
-index 99b54bc..7a3203a 100644
---- a/package/mrouted/mrouted.mk
-+++ b/package/mrouted/mrouted.mk
-@@ -2,11 +2,11 @@
- #
- # mrouted
- #
--#
- #############################################################
--MROUTED_VERSION = 3.9.4
-+
-+MROUTED_VERSION = 3.9.6
- MROUTED_SOURCE = mrouted-$(MROUTED_VERSION).tar.bz2
--MROUTED_SITE = http://ftp.vmlinux.org/pub/People/jocke/mrouted
-+MROUTED_SITE = http://cloud.github.com/downloads/troglobit/mrouted
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index f83cf4b..afc2f91 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -99,6 +99,38 @@ config BR2_TARGET_UBOOT_FORMAT_LDR
  
- define MROUTED_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endchoice
+ 
++config BR2_TARGET_UBOOT_OMAP_IFT
++	depends on BR2_TARGET_UBOOT_FORMAT_BIN
++	depends on BR2_arm || BR2_armeb
++	select BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
++	bool "produce a .ift signed image (OMAP)"
++	help
++	  Use gpsign to produce an image of u-boot.bin signed with
++	  a Configuration Header for booting on OMAP processors.
++	  This allows U-Boot to boot without the need for an
++	  intermediate bootloader (e.g. x-loader) if it is written
++	  on the first sector of the boot medium.
++	  This only works for some media, such as NAND. Check your
++	  chip documentation for details. You might also want to
++	  read the documentation of gpsign, the tool that generates
++	  the .ift image, at:
++	  https://github.com/nmenon/omap-u-boot-utils/blob/master/README
++
++if BR2_TARGET_UBOOT_OMAP_IFT
++
++config BR2_TARGET_UBOOT_OMAP_IFT_CONFIG
++	string "gpsign Configuration Header config file"
++	help
++	  The Configuration Header (CH) config file defines the
++	  desired content of the CH for the signed image.
++	  It usually contains external RAM settings and
++	  possibly other external devices initialization.
++	  The omap-u-boot-utils software contains example
++	  configuration files for some boards:
++	  https://github.com/nmenon/omap-u-boot-utils/tree/master/configs
++
++endif
++
+ menuconfig BR2_TARGET_UBOOT_NETWORK
+ 	bool "Custom Network Settings"
+ 	help
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3119092..486773a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -33,6 +33,7 @@ else ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMG),y)
+ UBOOT_BIN          = u-boot.img
+ else
+ UBOOT_BIN          = u-boot.bin
++UBOOT_BIN_IFT      = $(UBOOT_BIN).ift
+ endif
+ 
+ UBOOT_ARCH=$(KERNEL_ARCH)
+@@ -88,12 +89,36 @@ define UBOOT_BUILD_CMDS
+ 		$(UBOOT_MAKE_TARGET)
+ endef
+ 
++define UBOOT_BUILD_OMAP_IFT
++	$(HOST_DIR)/usr/bin/gpsign -f $(@D)/u-boot.bin \
++		-c $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))
++endef
++
+ define UBOOT_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(@D)/$(UBOOT_BIN) $(BINARIES_DIR)/
+ 	$(if $(BR2_TARGET_UBOOT_SPL),
+ 		cp -dpf $(@D)/$(BR2_TARGET_UBOOT_SPL_NAME) $(BINARIES_DIR)/)
+ endef
+ 
++define UBOOT_INSTALL_OMAP_IFT_IMAGE
++	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
++endef
++
++ifeq ($(BR2_TARGET_UBOOT_OMAP_IFT),y)
++# we NEED a config file unless we're at make source
++ifeq ($(filter source,$(MAKECMDGOALS)),)
++ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG)),)
++$(error No gpsign config file. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
++endif
++ifeq ($(wildcard $(call qstrip,$(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG))),)
++$(error gpsign config file $(BR2_TARGET_UBOOT_OMAP_IFT_CONFIG) not found. Check your BR2_TARGET_UBOOT_OMAP_IFT_CONFIG setting)
++endif
++endif
++UBOOT_DEPENDENCIES += host-omap-u-boot-utils
++UBOOT_POST_BUILD_HOOKS += UBOOT_BUILD_OMAP_IFT
++UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_OMAP_IFT_IMAGE
++endif
++
+ $(eval $(call GENTARGETS))
+ 
+ ifeq ($(BR2_TARGET_UBOOT),y)
