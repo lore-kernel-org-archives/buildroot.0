@@ -1,38 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 May 2012 21:47:58 +0200
-Subject: [Buildroot] Problems at booting U-Boot and loading Kernel
-In-Reply-To: <4FB81086.8080609@onlinehome.de>
-References: <4FB81086.8080609@onlinehome.de>
-Message-ID: <4FB94A6E.5000808@mind.be>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 May 2012 00:07:42 +0200
+Subject: [Buildroot] [git commit branch/next] connman: tweak compiler
+	version dependencies
+Message-ID: <20120520220943.94AEE96D47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/19/12 23:28, Tobias Sachs wrote:
-> The second problem is a bit more frustrating. I tried to load a 3.3.5 Kernel after U-Boot boot but it fails with the
-> message "can't open /dev/ttyAMA0 permission denied". At this point I tried everything I could imagine.
-> I used Static device table and entered the permissions to /"target/generic/device_table.txt" and
-> "/target/generic/device/table_dev.txt".
-> I tried to use udev and created a file in output/target/etc/udev/rules.d with the name "50-udev.rules" which contains
-> the following ***KERNEL="tty[A-Z]*", NAME="%k", GROUP="uucp", MODE="666"***
-> In both cases I tried various permissions from 644 to 777. But every time I try to boot these Kernel the error are the
-> same.
+commit: http://git.buildroot.net/buildroot/commit/?id=96b109ad2a4ea0a4575526f0d0353d916b5122dd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-  This type of issue often appears because you attempt to use the output/target
-directory directly (as an nfs-root).  You should always use one of the generated
-filesystems in the output/images directory.
+uClibc 0.9.33+ has resolver support, so we don't need to depend on a
+snapshot uClibc version any more. We're also using 0.9.33 for ctng, so
+we can just disallow the old internal uClibc versions instead.
 
-  Which type of rootfs did you select?
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/connman/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 2801b87..118ad91 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_IPTABLES
+-	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc
++	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+ 	  managing internet connections within embedded devices running
+@@ -44,4 +44,4 @@ config BR2_PACKAGE_CONNMAN_CLIENT
+ endif # BR2_PACKAGE_CONNMAN
+ 
+ comment "connman needs a toolchain with resolver support"
+-	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc)
++	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32
