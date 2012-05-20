@@ -1,34 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 May 2012 14:33:37 +0200
-Subject: [Buildroot] cp210x needed
-In-Reply-To: <CAFC29aUB7tC3dh1U47_aMJ2bT2Twr_s4tTTz=WmbCuSM17Lyfg@mail.gmail.com>
-References: <CAFC29aV9nhzG8_ZAG8j1QCGqY_Qv1tg39sGac-5sTUvQL=uRJw@mail.gmail.com>
- <20120517222149.3c657ce1@skate>
- <CAFC29aX+g8jJXvp=hMXuXX7WKLNXGuAQ9KeQFZ4Hdf822MNpfQ@mail.gmail.com>
- <20120517224505.31267c33@skate>
- <CAFC29aUB7tC3dh1U47_aMJ2bT2Twr_s4tTTz=WmbCuSM17Lyfg@mail.gmail.com>
-Message-ID: <4FB8E4A1.3040508@mind.be>
+Date: Sun, 20 May 2012 21:47:58 +0200
+Subject: [Buildroot] Problems at booting U-Boot and loading Kernel
+In-Reply-To: <4FB81086.8080609@onlinehome.de>
+References: <4FB81086.8080609@onlinehome.de>
+Message-ID: <4FB94A6E.5000808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/12 22:56, Ron Eggler wrote:
-> reg at SemiosDesktop-reg:/usr/local/src/E10-buildroot/br1202-main$ make linux-menuconfig
-[snip]
-> > >> linux 3.2.7 Configuring
-> cp "board/synapse/e10/linux-3.2.6-config"
-> /usr/local/src/E10-buildroot/br1202-main/output/build/linux-3.2.7/arch/arm/configs/buildroot_defconfig
-> cp: cannot create regular file
-> `/usr/local/src/E10-buildroot/br1202-main/output/build/linux-3.2.7/arch/arm/configs/buildroot_defconfig': No such file
-> or directory
+On 05/19/12 23:28, Tobias Sachs wrote:
+> The second problem is a bit more frustrating. I tried to load a 3.3.5 Kernel after U-Boot boot but it fails with the
+> message "can't open /dev/ttyAMA0 permission denied". At this point I tried everything I could imagine.
+> I used Static device table and entered the permissions to /"target/generic/device_table.txt" and
+> "/target/generic/device/table_dev.txt".
+> I tried to use udev and created a file in output/target/etc/udev/rules.d with the name "50-udev.rules" which contains
+> the following ***KERNEL="tty[A-Z]*", NAME="%k", GROUP="uucp", MODE="666"***
+> In both cases I tried various permissions from 644 to 777. But every time I try to boot these Kernel the error are the
+> same.
 
-  Until recently, buildroot was missing a dependency to make this
-work the first time.  For now, just run
+  This type of issue often appears because you attempt to use the output/target
+directory directly (as an nfs-root).  You should always use one of the generated
+filesystems in the output/images directory.
 
-make linux-patch; make linux-menuconfig
-
+  Which type of rootfs did you select?
 
   Regards,
   Arnout
