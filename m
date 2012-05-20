@@ -1,21 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 20 May 2012 20:04:33 +0200
-Subject: [Buildroot] [PATCH 1/2] sudo: bump to version 1.8.5p1
-In-Reply-To: <1337520948-19091-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 20 May 2012 10:35:47 -0300")
-References: <1337520948-19091-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87aa12loem.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 20 May 2012 19:52:35 +0200
+Subject: [Buildroot] [git commit] iperf: needs MMU
+Message-ID: <20120520180450.BD33096D47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8b3f94f9b0a600a103aee739bb274e80298c6151
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/iperf/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed both to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iperf/Config.in b/package/iperf/Config.in
+index c4c25b3..c284bfd 100644
+--- a/package/iperf/Config.in
++++ b/package/iperf/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_IPERF
+ 	bool "iperf"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	# uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  Internet Protocol bandwidth measuring tool for measuring
+ 	  TCP/UDP performance.
