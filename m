@@ -1,58 +1,69 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 May 2012 20:04:18 +0200
-Subject: [Buildroot] [git commit] sudo: bump to version 1.8.5p1
-Message-ID: <20120531113259.4AB5196E2B@busybox.osuosl.org>
+Date: Mon, 21 May 2012 00:04:16 +0200
+Subject: [Buildroot] [git commit] connmann: fix build on uClibc without
+	backtrace support
+Message-ID: <20120531113259.6AB0C96E2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=347cfd60692e74fd89343383d15d1001c1a871e9
+commit: http://git.buildroot.net/buildroot/commit/?id=40de828d3cbf767b4e272eef4eafb0b320bba283
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sudo/sudo-1.8.4p4-utmpx.patch |   19 -------------------
- package/sudo/sudo.mk                  |    2 +-
- 2 files changed, 1 insertions(+), 20 deletions(-)
+ package/connman/connman-uclibc-backtrace.patch |   44 ++++++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/package/sudo/sudo-1.8.4p4-utmpx.patch b/package/sudo/sudo-1.8.4p4-utmpx.patch
-deleted file mode 100644
-index 4e97406..0000000
---- a/package/sudo/sudo-1.8.4p4-utmpx.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Fix incomplete setutxent/endutxent defines for when there's no utmpx
--Upstream bug #551
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura sudo-1.8.4p4.orig/src/utmp.c sudo-1.8.4p4/src/utmp.c
----- sudo-1.8.4p4.orig/src/utmp.c	2012-03-30 07:10:38.381706315 -0300
--+++ sudo-1.8.4p4/src/utmp.c	2012-03-30 07:10:52.605802501 -0300
--@@ -63,8 +63,8 @@
-- #if !defined(HAVE_GETUTXID) && defined(HAVE_GETUTID)
-- # define getutxline(u)	getutline(u)
-- # define pututxline(u)	pututline(u)
---# define setutxent	setutent(u)
---# define endutxent	endutent(u)
--+# define setutxent(u)	setutent(u)
--+# define endutxent(u)	endutent(u)
-- #endif /* !HAVE_GETUTXID && HAVE_GETUTID */
-- 
-- #ifdef HAVE_GETUTXID
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 71d7a20..3629ad1 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--SUDO_VERSION = 1.8.4p4
-+SUDO_VERSION = 1.8.5p1
- SUDO_SITE    = http://www.sudo.ws/sudo/dist
- SUDO_CONF_OPT = \
- 		--without-lecture \
+diff --git a/package/connman/connman-uclibc-backtrace.patch b/package/connman/connman-uclibc-backtrace.patch
+new file mode 100644
+index 0000000..4b806c6
+--- /dev/null
++++ b/package/connman/connman-uclibc-backtrace.patch
+@@ -0,0 +1,44 @@
++[PATCH] fix build on uClibc without UCLIBC_HAS_BACKTRACE
++
++Backtrace support is only used for logging on signal errors, which
++isn't really critical, so simply remove backtrace info if not
++available in uClibc.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ src/log.c |    7 +++++++
++ 1 file changed, 7 insertions(+)
++
++Index: connman-0.78/src/log.c
++===================================================================
++--- connman-0.78.orig/src/log.c
+++++ connman-0.78/src/log.c
++@@ -30,7 +30,12 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <syslog.h>
+++#include <features.h>
+++/* backtrace support is optional on uClibc */
+++#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
+++#define HAVE_BACKTRACE
++ #include <execinfo.h>
+++#endif
++ #include <dlfcn.h>
++ 
++ #include "connman.h"
++@@ -112,6 +117,7 @@
++ 
++ static void print_backtrace(unsigned int offset)
++ {
+++#ifdef HAVE_BACKTRACE
++ 	void *frames[99];
++ 	size_t n_ptrs;
++ 	unsigned int i;
++@@ -210,6 +216,7 @@
++ 
++ 	close(outfd[1]);
++ 	close(infd[0]);
+++#endif /* HAVE_BACKTRACE */
++ }
++ 
++ static void signal_handler(int signo)
