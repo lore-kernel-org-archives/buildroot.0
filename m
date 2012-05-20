@@ -1,60 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 May 2012 14:37:16 +0200
-Subject: [Buildroot] [PATCH v4 09/22] manual: add advice about GPL
- compliance for Buildroot
-In-Reply-To: <1337276001-26149-10-git-send-email-luca@lucaceresoli.net>
-References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
- <1337276001-26149-10-git-send-email-luca@lucaceresoli.net>
-Message-ID: <4FB8E57C.20008@mind.be>
+Date: Sun, 20 May 2012 14:33:37 +0200
+Subject: [Buildroot] cp210x needed
+In-Reply-To: <CAFC29aUB7tC3dh1U47_aMJ2bT2Twr_s4tTTz=WmbCuSM17Lyfg@mail.gmail.com>
+References: <CAFC29aV9nhzG8_ZAG8j1QCGqY_Qv1tg39sGac-5sTUvQL=uRJw@mail.gmail.com>
+ <20120517222149.3c657ce1@skate>
+ <CAFC29aX+g8jJXvp=hMXuXX7WKLNXGuAQ9KeQFZ4Hdf822MNpfQ@mail.gmail.com>
+ <20120517224505.31267c33@skate>
+ <CAFC29aUB7tC3dh1U47_aMJ2bT2Twr_s4tTTz=WmbCuSM17Lyfg@mail.gmail.com>
+Message-ID: <4FB8E4A1.3040508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/17/12 19:33, Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
-> ---
->   docs/manual/using.txt |   27 +++++++++++++++++++++++++++
->   1 file changed, 27 insertions(+)
->
-> diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-> index 42d4061..fcbd24b 100644
-> --- a/docs/manual/using.txt
-> +++ b/docs/manual/using.txt
-> @@ -284,3 +284,30 @@ Buildroot, with the name used in the manifest file:
->   * +BSD-2c+: BSD 2-clause license;
->   * +PROPRIETARY+: marks a non-opensource package;
->     Buildroot does not save any licensing info or source code for these packages.
-> +
-> +Complying with the Buildroot license
-> +------------------------------------
-> +
-> +Buildroot itself is an opensource software, released under the
-> +http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General Public
-> +License, version 2] or (at your option) any later version.
-> +However, being a build system, it is not normally part of the end product:
-> +if you develop the root filesystem, kernel, bootloader or toolchain for a
-> +device, the code of Buildroot is only present on the development machine, not
-> +in the device storage.
-> +
-> +Nevertheless, the general view of the Buildroot developers is that you should
-> +release the Buildroot source code along with the source code of other packages
-> +when releasing a product that contains GPL-licensed software.
-> +This is because the
-> +http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU GPL]
-> +defines the "'complete source code'" for an executable work as "'all the
-> +source code for all modules it contains, plus any associated interface
-> +definition files, plus the scripts used to control compilation and installation
-> +of the executable'".
-> +Buildroot is part of the 'scripts used to control compilation and
-> +installation of the executable', and as such it is considered part of the
-> +material that must be redistributed.
-> +
-> +Keep in mind this is only the Buildroot developers' opinion, and you should
-> +consult your legal department or lawyer in case of any doubt.
+On 05/17/12 22:56, Ron Eggler wrote:
+> reg at SemiosDesktop-reg:/usr/local/src/E10-buildroot/br1202-main$ make linux-menuconfig
+[snip]
+> > >> linux 3.2.7 Configuring
+> cp "board/synapse/e10/linux-3.2.6-config"
+> /usr/local/src/E10-buildroot/br1202-main/output/build/linux-3.2.7/arch/arm/configs/buildroot_defconfig
+> cp: cannot create regular file
+> `/usr/local/src/E10-buildroot/br1202-main/output/build/linux-3.2.7/arch/arm/configs/buildroot_defconfig': No such file
+> or directory
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  Until recently, buildroot was missing a dependency to make this
+work the first time.  For now, just run
+
+make linux-patch; make linux-menuconfig
+
+
+  Regards,
+  Arnout
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
