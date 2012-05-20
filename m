@@ -1,58 +1,145 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 May 2012 20:04:18 +0200
-Subject: [Buildroot] [git commit branch/next] sudo: bump to version 1.8.5p1
-Message-ID: <20120520180451.68E5996D47@busybox.osuosl.org>
+Date: Sun, 20 May 2012 20:04:21 +0200
+Subject: [Buildroot] [git commit branch/next] quagga: bump to version 0.99.21
+Message-ID: <20120520180451.7CB9F96D47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=347cfd60692e74fd89343383d15d1001c1a871e9
+commit: http://git.buildroot.net/buildroot/commit/?id=b20c77321fa87f880ead2f27ecf19fd7c4f436da
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sudo/sudo-1.8.4p4-utmpx.patch |   19 -------------------
- package/sudo/sudo.mk                  |    2 +-
- 2 files changed, 1 insertions(+), 20 deletions(-)
+ package/quagga/Config.in |    5 +++
+ package/quagga/quagga.mk |   89 +++++++++------------------------------------
+ 2 files changed, 23 insertions(+), 71 deletions(-)
 
-diff --git a/package/sudo/sudo-1.8.4p4-utmpx.patch b/package/sudo/sudo-1.8.4p4-utmpx.patch
-deleted file mode 100644
-index 4e97406..0000000
---- a/package/sudo/sudo-1.8.4p4-utmpx.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Fix incomplete setutxent/endutxent defines for when there's no utmpx
--Upstream bug #551
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura sudo-1.8.4p4.orig/src/utmp.c sudo-1.8.4p4/src/utmp.c
----- sudo-1.8.4p4.orig/src/utmp.c	2012-03-30 07:10:38.381706315 -0300
--+++ sudo-1.8.4p4/src/utmp.c	2012-03-30 07:10:52.605802501 -0300
--@@ -63,8 +63,8 @@
-- #if !defined(HAVE_GETUTXID) && defined(HAVE_GETUTID)
-- # define getutxline(u)	getutline(u)
-- # define pututxline(u)	pututline(u)
---# define setutxent	setutent(u)
---# define endutxent	endutent(u)
--+# define setutxent(u)	setutent(u)
--+# define endutxent(u)	endutent(u)
-- #endif /* !HAVE_GETUTXID && HAVE_GETUTID */
-- 
-- #ifdef HAVE_GETUTXID
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 71d7a20..3629ad1 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 9ca2f98..5a01863 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -22,6 +22,11 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	  You'll want this enabled if zebra and the protocol daemon(s) run
+ 	  on different hosts.
+ 
++config BR2_PACKAGE_QUAGGA_BABELD
++	bool "BABEL protocol"
++	help
++	  Build babeld daemon.
++
+ config BR2_PACKAGE_QUAGGA_BGPD
+ 	bool "BPGv4+ protocol"
+ 	help
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 1073852..349e003 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,86 +4,33 @@
  #
  #############################################################
  
--SUDO_VERSION = 1.8.4p4
-+SUDO_VERSION = 1.8.5p1
- SUDO_SITE    = http://www.sudo.ws/sudo/dist
- SUDO_CONF_OPT = \
- 		--without-lecture \
+-QUAGGA_VERSION = 0.99.20.1
+-QUAGGA_SITE = http://www.quagga.net/download
++QUAGGA_VERSION = 0.99.21
++QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+ QUAGGA_CONF_OPT = --program-transform-name='' --enable-netlink
+ 
+-ifeq ($(BR2_PACKAGE_QUAGGA_ZEBRA),y)
+-QUAGGA_CONF_OPT+=--enable-zebra
+-else
+-QUAGGA_CONF_OPT+=--disable-zebra
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_BGPD),y)
+-QUAGGA_CONF_OPT+=--enable-bgpd
+-else
+-QUAGGA_CONF_OPT+=--disable-bgpd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_RIPD),y)
+-QUAGGA_CONF_OPT+=--enable-ripd
+-else
+-QUAGGA_CONF_OPT+=--disable-ripd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_RIPNGD),y)
+-QUAGGA_CONF_OPT+=--enable-ripngd
+-else
+-QUAGGA_CONF_OPT+=--disable-ripngd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_OSPFD),y)
+-QUAGGA_CONF_OPT+=--enable-ospfd
+-else
+-QUAGGA_CONF_OPT+=--disable-ospfd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_OSPF6D),y)
+-QUAGGA_CONF_OPT+=--enable-ospf6d
+-else
+-QUAGGA_CONF_OPT+=--disable-ospf6d
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_WATCHQUAGGA),y)
+-QUAGGA_CONF_OPT+=--enable-watchquagga
+-else
+-QUAGGA_CONF_OPT+=--disable-watchquagga
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_ISISD),y)
+-QUAGGA_CONF_OPT+=--enable-isisd
+-else
+-QUAGGA_CONF_OPT+=--disable-isisd
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),y)
+-QUAGGA_CONF_OPT+=--enable-bgp-announce
+-else
+-QUAGGA_CONF_OPT+=--disable-bgp-announce
+-endif
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_BABELD),--enable-babeld,--disable-babeld)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_BGPD),--enable-bgpd,--disable-bgpd)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_RIPD),--enable-ripd,--disable-ripd)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_RIPNGD),--enable-ripngd,--disable-ripngd)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OSPFD),--enable-ospfd,--disable-ospfd)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OSPF6D),--enable-ospf6d,--disable-ospf6d)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_WATCHQUAGGA),--enable-watchquagga,--disable-watchquagga)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-isisd)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
++QUAGGA_CONF_OPT += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--disable-opaque-lsa)
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+-QUAGGA_CONF_OPT+=--enable-snmp
+-QUAGGA_DEPENDENCIES+=netsnmp
++QUAGGA_CONF_OPT += --enable-snmp
++QUAGGA_DEPENDENCIES += netsnmp
+ # SNMP support tries -lcrypto by default, disable it if we ain't got openssl
+ ifneq ($(BR2_PACKAGE_OPENSSL),y)
+-QUAGGA_CONF_OPT+=--without-crypto
+-endif
+-else
+-QUAGGA_CONF_OPT+=--disable-snmp
++QUAGGA_CONF_OPT +=--without-crypto
+ endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_TCP_ZEBRA),y)
+-QUAGGA_CONF_OPT+=--enable-tcp-zebra
+-else
+-QUAGGA_CONF_OPT+=--disable-tcp-zebra
+-endif
+-
+-ifeq ($(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),y)
+-QUAGGA_CONF_OPT+=--enable-opaque-lsa
+ else
+-QUAGGA_CONF_OPT+=--disable-opaque-lsa
++QUAGGA_CONF_OPT +=--disable-snmp
+ endif
+ 
+ $(eval $(call AUTOTARGETS))
