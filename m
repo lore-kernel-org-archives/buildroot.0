@@ -1,68 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 May 2012 01:57:09 +0200
-Subject: [Buildroot] [git commit branch/next] package: add
-	webrtc-audio-processing library
-Message-ID: <20120520115106.17EE396D2D@busybox.osuosl.org>
+Date: Sun, 20 May 2012 02:06:03 +0200
+Subject: [Buildroot] [git commit branch/next] pulseaudio: don't build man
+	pages if not needed
+Message-ID: <20120520115106.3CD9296D2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8bde151e5c147bf84ed98f54512d50c81e1f1587
+commit: http://git.buildroot.net/buildroot/commit/?id=7f2ce003bd7475939d86da07adf51a5aedbadf30
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Optional dependency to pulseaudio >= 2.0
+No sense in building them if they are thrown away by target-finalize anyway.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                                  |    1 +
- package/webrtc-audio-processing/Config.in          |   11 +++++++++++
- .../webrtc-audio-processing.mk                     |   10 ++++++++++
- 3 files changed, 22 insertions(+), 0 deletions(-)
+ package/multimedia/pulseaudio/pulseaudio.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 359ba47..360f04f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -288,6 +288,7 @@ source "package/portaudio/Config.in"
- source "package/speex/Config.in"
- source "package/taglib/Config.in"
- source "package/tremor/Config.in"
-+source "package/webrtc-audio-processing/Config.in"
- endmenu
+diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
+index bc5a0ae..a5534da 100644
+--- a/package/multimedia/pulseaudio/pulseaudio.mk
++++ b/package/multimedia/pulseaudio/pulseaudio.mk
+@@ -11,7 +11,8 @@ PULSEAUDIO_CONF_OPT = \
+ 	--localstatedir=/var \
+ 	--disable-default-build-tests \
+ 	--disable-legacy-runtime-dir \
+-	--disable-legacy-database-entry-format
++	--disable-legacy-database-entry-format \
++	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-manpages)
  
- menu "Compression and decompression"
-diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
-new file mode 100644
-index 0000000..e33fc57
---- /dev/null
-+++ b/package/webrtc-audio-processing/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
-+	bool "webrtc-audio-processing"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  AudioProcessing library based on Google's implementation of
-+	  WebRTC.
-+
-+	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
-+
-+comment "webrtc-audio-processing requires a toolchain with C++ support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.mk b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-new file mode 100644
-index 0000000..22ade1a
---- /dev/null
-+++ b/package/webrtc-audio-processing/webrtc-audio-processing.mk
-@@ -0,0 +1,10 @@
-+WEBRTC_AUDIO_PROCESSING_VERSION = 0.1
-+WEBRTC_AUDIO_PROCESSING_SOURCE = webrtc-audio-processing-$(WEBRTC_AUDIO_PROCESSING_VERSION).tar.xz
-+WEBRTC_AUDIO_PROCESSING_SITE = http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
-+WEBRTC_AUDIO_PROCESSING_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_SOFT_FLOAT),y)
-+WEBRTC_AUDIO_PROCESSING_CONF_OPT += --with-ns-mode=fixed
-+endif
-+
-+$(eval $(call AUTOTARGETS))
+ PULSEAUDIO_DEPENDENCIES = \
+ 	host-pkg-config libtool json-c libsndfile speex host-intltool \
