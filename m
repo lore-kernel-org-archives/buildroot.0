@@ -1,35 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 May 2012 02:06:03 +0200
-Subject: [Buildroot] [git commit branch/next] pulseaudio: don't build man
-	pages if not needed
-Message-ID: <20120520115106.3CD9296D2D@busybox.osuosl.org>
+Date: Sun, 20 May 2012 02:03:55 +0200
+Subject: [Buildroot] [git commit branch/next] pulseaudio: bump version
+Message-ID: <20120520115106.2A74096D2D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f2ce003bd7475939d86da07adf51a5aedbadf30
+commit: http://git.buildroot.net/buildroot/commit/?id=fd4ee788f8a0b55df50bd691cd3ffde65c1b9b05
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-No sense in building them if they are thrown away by target-finalize anyway.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/multimedia/pulseaudio/pulseaudio.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ package/multimedia/pulseaudio/pulseaudio.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/multimedia/pulseaudio/pulseaudio.mk b/package/multimedia/pulseaudio/pulseaudio.mk
-index bc5a0ae..a5534da 100644
+index eefc497..bc5a0ae 100644
 --- a/package/multimedia/pulseaudio/pulseaudio.mk
 +++ b/package/multimedia/pulseaudio/pulseaudio.mk
-@@ -11,7 +11,8 @@ PULSEAUDIO_CONF_OPT = \
- 	--localstatedir=/var \
- 	--disable-default-build-tests \
- 	--disable-legacy-runtime-dir \
--	--disable-legacy-database-entry-format
-+	--disable-legacy-database-entry-format \
-+	$(if $(BR2_HAVE_DOCUMENTATION),,--disable-manpages)
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkg-config libtool json-c libsndfile speex host-intltool \
+-PULSEAUDIO_VERSION = 1.1
++PULSEAUDIO_VERSION = 2.0
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases/
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_CONF_OPT = \
+@@ -27,7 +27,8 @@ PULSEAUDIO_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_UDEV),udev) \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+ 	$(if $(BR2_PACKAGE_FFTW),fftw) \
+-	$(if $(BR2_PACKAGE_ORC),orc)
++	$(if $(BR2_PACKAGE_ORC),orc) \
++	$(if $(BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING),webrtc-audio-processing)
+ 
+ # pulseaudio alsa backend needs pcm/mixer apis
+ ifneq ($(BR2_PACKAGE_ALSA_LIB_PCM)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
