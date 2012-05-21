@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 May 2012 17:17:04 +0200
-Subject: [Buildroot] [git commit] qemu/sh4-r2d: update to use kernel 3.2.18
-Message-ID: <20120521151746.51CFD96D6D@busybox.osuosl.org>
+Date: Mon, 21 May 2012 17:16:58 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
+Message-ID: <20120521151746.3EBB896D26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e44d5c947d5690645debd0dac18acb29656404a5
+commit: http://git.buildroot.net/buildroot/commit/?id=fce8d0765a1b84b838f1807213724805e13985c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- configs/qemu_sh4_r2d_defconfig |    2 +-
+ toolchain/kernel-headers/Config.in |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
-index 99db36a..a580870 100644
---- a/configs/qemu_sh4_r2d_defconfig
-+++ b/configs/qemu_sh4_r2d_defconfig
-@@ -20,7 +20,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
- # Linux kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.17"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.18"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index d8602f1..cd83270 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -65,7 +65,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.31"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.17"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.18"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.6"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
