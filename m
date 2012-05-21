@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 May 2012 13:18:11 +0200
-Subject: [Buildroot] [PATCH] sqlite: bump to version 3.7.12
-In-Reply-To: <1337598899-22695-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 21 May 2012 08:14:59 -0300")
-References: <1337598899-22695-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mx51kcjw.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 May 2012 13:18:39 +0200
+Subject: [Buildroot] [git commit branch/next] sqlite: bump to version 3.7.12
+Message-ID: <20120521111857.09F9D96D6B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=360f0e40f0725bb1b195737a3f7b0b56ba3087b3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sqlite/sqlite.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 2065ce1..165b991 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION = 3071100
++SQLITE_VERSION = 3071200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_INSTALL_STAGING = YES
