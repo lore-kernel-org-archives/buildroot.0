@@ -1,33 +1,61 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 21 May 2012 10:12:55 +0200
-Subject: [Buildroot] [PATCH 1/3] Convert gettext to autotargets
-In-Reply-To: <CAFbHwiQX5facsOBf3TYDU4m_-u=AP1kJzEabJhWgy5-9c=GVqw@mail.gmail.com>
- (Will Newton's message of "Mon, 21 May 2012 09:08:47 +0100")
-References: <4F7C6130.102@free-electrons.com>
- <1336475958-5714-1-git-send-email-s.martin49@gmail.com>
- <87k407lu8m.fsf@macbook.be.48ers.dk>
- <CAHXCMMJi=GZpyk6Uzc2f=emzVGnRHOOuDo-Q6JQWWhvm9TAinw@mail.gmail.com>
- <8762bqklli.fsf@macbook.be.48ers.dk>
- <CAFbHwiQX5facsOBf3TYDU4m_-u=AP1kJzEabJhWgy5-9c=GVqw@mail.gmail.com>
-Message-ID: <871umekl4o.fsf@macbook.be.48ers.dk>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 21 May 2012 10:29:05 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: bump to 1.42.3
+Message-ID: <1337588945-15562-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Will" == Will Newton <will.newton@gmail.com> writes:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Hi,
+remove e2fsprogs-add-missing-dep-of-tst_uuid-o.patch as
+the changes are already upstream
 
- Will> I would suggest that if we used to remove it then we should keep
- Will> removing it. Otherwise you end up in the situation where you
- Will> update buildroot and your filesystem image gets ever so slightly
- Will> bigger and won't fit in flash any more.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ .../e2fsprogs-add-missing-dep-of-tst_uuid-o.patch  |   18 ------------------
+ package/e2fsprogs/e2fsprogs.mk                     |    2 +-
+ 2 files changed, 1 insertions(+), 19 deletions(-)
+ delete mode 100644 package/e2fsprogs/e2fsprogs-add-missing-dep-of-tst_uuid-o.patch
 
-That can still happen with our version bumps as new versions are
-typically somewhat more bloated than older versions, but OK - Keeping it
-is not a big problem.
-
+diff --git a/package/e2fsprogs/e2fsprogs-add-missing-dep-of-tst_uuid-o.patch b/package/e2fsprogs/e2fsprogs-add-missing-dep-of-tst_uuid-o.patch
+deleted file mode 100644
+index 3a60e89..0000000
+--- a/package/e2fsprogs/e2fsprogs-add-missing-dep-of-tst_uuid-o.patch
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Add missing dependency of tst_uuid.o on uuid.h
+-
+-The missing dependency used to break parallel builds.
+-
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+-diff -Nrup e2fsprogs.orig//lib/uuid/Makefile.in e2fsprogs-1.41.14//lib/uuid/Makefile.in
+---- e2fsprogs.orig//lib/uuid/Makefile.in	2010-06-14 05:07:36.000000000 +0200
+-+++ e2fsprogs-1.41.14//lib/uuid/Makefile.in	2011-07-18 13:44:58.000000000 +0200
+-@@ -76,7 +76,7 @@ uuid.h: $(srcdir)/uuid.h.in
+- $(top_builddir)/lib/uuid/uuid_types.h: $(srcdir)/uuid_types.h.in $(top_builddir)/config.status
+- 	cd $(top_builddir); CONFIG_FILES=$(my_dir)/uuid_types.h ./config.status
+- 
+--tst_uuid.o: $(srcdir)/tst_uuid.c
+-+tst_uuid.o: $(srcdir)/tst_uuid.c uuid.h
+- 	$(E) "	CC $@"
+- 	$(Q) $(CC) $(ALL_CFLAGS) -c $(srcdir)/tst_uuid.c -o tst_uuid.o
+- 
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 5f87b40..db66635 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-E2FSPROGS_VERSION = 1.42.2
++E2FSPROGS_VERSION = 1.42.3
+ E2FSPROGS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/e2fsprogs
+ 
+ E2FSPROGS_CONF_OPT = \
 -- 
-Bye, Peter Korsgaard
+1.7.7
