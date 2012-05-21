@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 20 May 2012 12:52:49 +0200
-Subject: [Buildroot] [git commit] systemd: install into staging
-Message-ID: <20120531113259.2820096E2A@busybox.osuosl.org>
+Date: Mon, 21 May 2012 13:18:39 +0200
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.7.12
+Message-ID: <20120531113259.BCFE496E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=df89af836c1b8c0975917e16e6b3bfcf2fa9a29f
+commit: http://git.buildroot.net/buildroot/commit/?id=360f0e40f0725bb1b195737a3f7b0b56ba3087b3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-systemd provides a number of libraries, so install into staging.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/systemd/systemd.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/sqlite/sqlite.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 717bdcc..696a3a7 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -6,6 +6,7 @@
- SYSTEMD_VERSION = 44
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
-+SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-intltool \
- 	libcap \
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 2065ce1..165b991 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-SQLITE_VERSION = 3071100
++SQLITE_VERSION = 3071200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_INSTALL_STAGING = YES
