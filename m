@@ -1,16 +1,18 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 May 2012 12:03:09 -0300
-Subject: [Buildroot] [PATCH 2/2] qemu/sh4-r2d: update to use kernel 3.2.18
-In-Reply-To: <1337612589-20142-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1337612589-20142-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1337612589-20142-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 21 May 2012 17:17:04 +0200
+Subject: [Buildroot] [git commit] qemu/sh4-r2d: update to use kernel 3.2.18
+Message-ID: <20120521151746.51CFD96D6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: http://git.buildroot.net/buildroot/commit/?id=e44d5c947d5690645debd0dac18acb29656404a5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
  configs/qemu_sh4_r2d_defconfig |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
@@ -28,5 +30,3 @@ index 99db36a..a580870 100644
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
  BR2_LINUX_KERNEL_ZIMAGE=y
--- 
-1.7.3.4
