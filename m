@@ -1,30 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 31 May 2012 13:16:10 +0200
-Subject: [Buildroot] [git commit] nfs-utils: needs pkg-config
-Message-ID: <20120531113302.0AE2F96E2B@busybox.osuosl.org>
+Date: Tue, 22 May 2012 13:36:17 +0200
+Subject: [Buildroot] [git commit] iproute2: bump version
+Message-ID: <20120531113300.1301596E2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54f88ee8eed9d3ae7ab670d14ba77a97a44caaca
+commit: http://git.buildroot.net/buildroot/commit/?id=9001722c79f25e6175e4404b7d0823ca1c6d6660
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/nfs-utils/nfs-utils.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 87c136c..a7c42fb 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -8,6 +8,7 @@ NFS_UTILS_VERSION = 1.2.6
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.bz2
- NFS_UTILS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nfs/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_AUTORECONF = YES
-+NFS_UTILS_DEPENDENCIES = host-pkg-config
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index ee5c04a..e766374 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
+-IPROUTE2_VERSION = 3.3.0
++IPROUTE2_VERSION = 3.4.0
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
  
