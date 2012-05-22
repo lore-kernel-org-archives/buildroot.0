@@ -1,39 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 May 2012 10:11:47 +0200
-Subject: [Buildroot] [git commit] oprofile: fix target-install for archs
-	without performance counters support
-Message-ID: <20120522081315.5C8A096D7F@busybox.osuosl.org>
+Date: Tue, 22 May 2012 15:26:27 +0200
+Subject: [Buildroot] [git commit] bison: m4 needs MMU
+Message-ID: <20120522135644.7874596D7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c73df193c558dfcf8386082548d8bea396960f39
+commit: http://git.buildroot.net/buildroot/commit/?id=ae446b2ea386ddc06644ef15b26bd06f16f3cbc3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These archs can still use the timer mode.
-
-Fixes http://autobuild.buildroot.org/results/2627ee17e1f1a58520e01c52af365998f648bbc5/
+Fixes http://autobuild.buildroot.net/results/0bb659881ed6a01745f596f00da9acbef02a4c31/
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/oprofile/oprofile.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/bison/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 5da794b..fc21928 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -30,7 +30,10 @@ OPROFILE_DEPENDENCIES = popt binutils
- define OPROFILE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/usr/share/oprofile
--	cp -dpfr $(@D)/events/$(OPROFILE_ARCH) $(TARGET_DIR)/usr/share/oprofile
-+	if [ -d $(@D)/events/$(OPROFILE_ARCH) ]; then \
-+		cp -dpfr $(@D)/events/$(OPROFILE_ARCH) \
-+			$(TARGET_DIR)/usr/share/oprofile; \
-+	fi
- 	$(INSTALL) -m 644 $(@D)/libregex/stl.pat $(TARGET_DIR)/usr/share/oprofile
- 	$(INSTALL) -m 755 $(@D)/utils/opcontrol $(TARGET_DIR)/usr/bin
- 	$(INSTALL) -m 755 $(addprefix $(@D)/, $(OPROFILE_BINARIES)) $(TARGET_DIR)/usr/bin
+diff --git a/package/bison/Config.in b/package/bison/Config.in
+index da0ac3f..1a485c4 100644
+--- a/package/bison/Config.in
++++ b/package/bison/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_BISON
+ 	bool "bison"
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_M4
++	# m4 uses fork()
++	depends on BR2_USE_MMU
+ 	help
+ 	  General-purpose parser generator that converts a
+ 	  grammar description for an LALR context-free grammar into a C
