@@ -1,31 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 May 2012 13:36:17 +0200
-Subject: [Buildroot] [git commit branch/next] iproute2: bump version
-Message-ID: <20120522135644.C5A4596D7E@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 May 2012 11:56:29 -0300
+Subject: [Buildroot] [PATCH 1/3] kernel-headers: bump 3.{0,
+	3}.x stable versions
+Message-ID: <1337698591-22898-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9001722c79f25e6175e4404b7d0823ca1c6d6660
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/iproute2/iproute2.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ toolchain/kernel-headers/Config.in                 |    4 ++--
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ ...umode_t.patch => linux-3.3.7-fix-umode_t.patch} |    0
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ rename toolchain/kernel-headers/{linux-3.3.6-fix-umode_t.patch => linux-3.3.7-fix-umode_t.patch} (100%)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index ee5c04a..e766374 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--IPROUTE2_VERSION = 3.3.0
-+IPROUTE2_VERSION = 3.4.0
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
- 
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index cd83270..1253531 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -63,9 +63,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.31"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.32"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+ 	default "3.2.18"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3.6"		if BR2_KERNEL_HEADERS_3_3
++	default "3.3.7"		if BR2_KERNEL_HEADERS_3_3
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.31-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/toolchain/kernel-headers/linux-3.3.6-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.7-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3.6-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.7-fix-umode_t.patch
+-- 
+1.7.3.4
