@@ -1,33 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 May 2012 15:26:27 +0200
-Subject: [Buildroot] [git commit] bison: m4 needs MMU
-Message-ID: <20120522135644.7874596D7E@busybox.osuosl.org>
+Date: Tue, 22 May 2012 13:36:17 +0200
+Subject: [Buildroot] [git commit branch/next] iproute2: bump version
+Message-ID: <20120522135644.C5A4596D7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ae446b2ea386ddc06644ef15b26bd06f16f3cbc3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes http://autobuild.buildroot.net/results/0bb659881ed6a01745f596f00da9acbef02a4c31/
+commit: http://git.buildroot.net/buildroot/commit/?id=9001722c79f25e6175e4404b7d0823ca1c6d6660
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bison/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/iproute2/iproute2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bison/Config.in b/package/bison/Config.in
-index da0ac3f..1a485c4 100644
---- a/package/bison/Config.in
-+++ b/package/bison/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_BISON
- 	bool "bison"
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_M4
-+	# m4 uses fork()
-+	depends on BR2_USE_MMU
- 	help
- 	  General-purpose parser generator that converts a
- 	  grammar description for an LALR context-free grammar into a C
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index ee5c04a..e766374 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-IPROUTE2_VERSION = 3.3.0
++IPROUTE2_VERSION = 3.4.0
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_TARGET_SBINS = ctstat genl ifstat ip lnstat nstat routef routel rtacct rtmon rtpr rtstat ss tc
+ 
