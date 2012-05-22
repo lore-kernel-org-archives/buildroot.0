@@ -1,35 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 22 May 2012 09:11:15 +0200
-Subject: [Buildroot] [git commit] gnuchess: needs threads
-Message-ID: <20120522071207.BFFFF96D78@busybox.osuosl.org>
+Date: Tue, 22 May 2012 09:39:34 +0200
+Subject: [Buildroot] [git commit] ntfs-3g: fix build with encryption support
+Message-ID: <20120522074013.15B3D96D7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c52c9e1fb630a7f44eb8244072eb1aa28c08dff
+commit: http://git.buildroot.net/buildroot/commit/?id=602de0675ef334de9f77a670561f2b1887550305
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.org/results/63a7cf35ecef02f30641a37d602f7cc55d59f543/
+Fixes http://autobuild.buildroot.org/results/4baa45ca1f4804be1a76a69bb8158c6a91d96d6b/
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/games/gnuchess/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/ntfs-3g/ntfs-3g.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/games/gnuchess/Config.in b/package/games/gnuchess/Config.in
-index cae05cb..c79c52d 100644
---- a/package/games/gnuchess/Config.in
-+++ b/package/games/gnuchess/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_GNUCHESS
- 	bool "gnuchess"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  GNU Chess lets most modern computers play a full game of chess.
+diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
+index 8e616cb..748fe1d 100644
+--- a/package/ntfs-3g/ntfs-3g.mk
++++ b/package/ntfs-3g/ntfs-3g.mk
+@@ -21,6 +21,7 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ endif
  
- 	  http://ftp.gnu.org/pub/gnu/chess
-+
-+comment "gnuchess requires a toolchain with thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ ifeq ($(BR2_PACKAGE_NTFS_3G_ENCRYPTED),y)
++	NTFS_3G_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+ 	NTFS_3G_CONF_OPT += --enable-crypto
+ 	NTFS_3G_DEPENDENCIES += gnutls
+ endif
