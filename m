@@ -1,30 +1,52 @@
-From: Andrew Chambers <andrewchamberss@gmail.com>
-Date: Wed, 23 May 2012 10:50:11 +1200
-Subject: [Buildroot] gcc 4.2.4 toolchain
-Message-ID: <CACDP-tcryHMzAjQ2iw+pRcGavZamDSHStABz5NFxfVrK3-iYzw@mail.gmail.com>
+From: David Purdy <david.c.purdy@gmail.com>
+Date: Tue, 22 May 2012 19:44:59 -0500
+Subject: [Buildroot] Buildroot's busybox-lpr + p910nd
+In-Reply-To: <CAPOFwxr1AOxyquC3d_WV4Cf0Yh8y2KQr85Z+3i_fotpqDHg9GQ@mail.gmail.com>
+References: <CAPOFwxr1AOxyquC3d_WV4Cf0Yh8y2KQr85Z+3i_fotpqDHg9GQ@mail.gmail.com>
+Message-ID: <CAPOFwxqSik3gpvmcYi7FiYaLMS6W_Sorwbgkq9wEJS4+5WTywA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, May 22, 2012 at 2:01 PM, David Purdy <david.c.purdy@gmail.com> wrote:
+> Hi Thomas ?et al:
+>
+> I've put together a package/recipe for ?p910nd ?on Buildroot, it
+> compiles fine. ? I will submit it via list for inclusion in one of the
+> upcoming releases.
+>
+> But ... ?it doesn't seem to execute correctly. ? Of course, I've
+> built-in strace in my UBIFS image, so I can post back w/ strace output for
+> perusal and hopefully someone can spot the problem, if I haven't
+> found the problem myself w/i ?few days.
+>
+> Two focused questions:
+>
+> 1. ?Is there anything "socket-related-ish" ?(port 910x ?x=0,1,2) ?that
+> is odd or different in the Busybox implementations of lpr ? ?Is there
+> any crucial capability that it is missing that would prevent it from
+> working w/ ?p910nd (a nonspooling print server that links networked
+> computers to a port 910x on the ?host, and passes the raw feed to the
+> USB Printer).
+>
+> 2. ? I couldn't find anything in the mailing list regarding previous
+> efforts to use p910nd in Buildroot w/ busybox's lpr. ? Maybe its there
+> and I just missed it? ?Does it ring a bell for anyone?
+>
+>
+> thanks,
+>
+> Dave
 
-Recently ive tried to build a custom mips linux kernel version 2.6.28 under
-the buildroot-2012.02. However all gcc versions listed do not support
-some deprecated gcc inline assembly syntax being used extensively.
 
-Is it possible to use gcc 4.2.4 with buildroot-2012.02 . I manually added
-it to the buildroot menu but when attempting a mips build the toolchain i
-recieve the following errors while building the cross compiler ...
+Well, I perhaps spoke too soon.  I have it working : I'd forgotten to
+create a special dir at /var/lock/subsys/  , and without that it
+simply dies and refuses to do anything (not even a reasonable/readable
+error message - just silence).   I will submit the package to git w/ a
+patch that  makes it use /var/lock/   instead, which is already
+present by the time the p910nd daemon starts.  This should simplify
+its implementation by whoever in the community finds it useful.
 
-                 from
-/Users/andrewc/Desktop/buildroot-2012.02/output/toolchain/gcc-4.2.4/gcc/unwind-sjlj.c:36:
-/Users/andrewc/Desktop/buildroot-2012.02/output/toolchain/gcc-4.2.4/gcc/gthr-posix.h:43:21:
-error: pthread.h: No such file or directory
-
-i have tried using linux threads and native posix options , but both
-require pthread which cant be found.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120523/43df9a34/attachment.html>
+Dave
