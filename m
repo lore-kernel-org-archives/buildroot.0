@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 23 May 2012 10:29:34 -0300
-Subject: [Buildroot] [PATCH 2/7] ipset: bump to version 6.12.1
+Date: Wed, 23 May 2012 10:29:35 -0300
+Subject: [Buildroot] [PATCH 3/7] nbd: bump to version 3.1
 In-Reply-To: <1337779779-1783-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1337779779-1783-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1337779779-1783-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1337779779-1783-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/ipset/ipset.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ package/nbd/nbd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 06393f4..3cd1263 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 62ae9be..15997af 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
  
--IPSET_VERSION = 6.11
-+IPSET_VERSION = 6.12.1
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
--IPSET_AUTORECONF = YES
- IPSET_DEPENDENCIES = libmnl host-pkg-config
- IPSET_CONF_OPT = --with-kmod=no
- 
+-NBD_VERSION = 3.0
++NBD_VERSION = 3.1
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
+ NBD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
 -- 
 1.7.3.4
