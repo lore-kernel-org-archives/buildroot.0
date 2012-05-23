@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 23 May 2012 22:26:08 +0200
-Subject: [Buildroot] [PATCH 1/7] libnetfilter-conntrack: bump to version
-	1.0.1
-In-Reply-To: <1337779779-1783-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 23 May 2012 10:29:33 -0300")
-References: <1337779779-1783-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k402prtr.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 23 May 2012 22:25:59 +0200
+Subject: [Buildroot] [git commit branch/next] libidn: bump to version 1.25
+Message-ID: <20120523202635.A2E0696D8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=8fcdb1d212b8e143b713a4e677631c66f2dbf026
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libidn/libidn.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed all 7 to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 935240b..6d2bea6 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-LIBIDN_VERSION = 1.24
++LIBIDN_VERSION = 1.25
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
