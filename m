@@ -1,137 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 May 2012 14:56:49 +0200
-Subject: [Buildroot] [git commit branch/next] wpa_supplicant: enable
-	interworking and enhance
-Message-ID: <20120523125826.77F2096D8B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 23 May 2012 15:03:41 +0200
+Subject: [Buildroot] gcc 4.2.4 toolchain
+In-Reply-To: <CACDP-tcryHMzAjQ2iw+pRcGavZamDSHStABz5NFxfVrK3-iYzw@mail.gmail.com>
+ (Andrew Chambers's message of "Wed, 23 May 2012 10:50:11 +1200")
+References: <CACDP-tcryHMzAjQ2iw+pRcGavZamDSHStABz5NFxfVrK3-iYzw@mail.gmail.com>
+Message-ID: <871umbqcb6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1c64e065762af80ceaaed313b82eed9220ea4707
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Andrew" == Andrew Chambers <andrewchamberss@gmail.com> writes:
 
-Enable IEEE 802.11u (interworking).
-Also enable new supported EAP methods.
-Switch from echo to sed where possible for a cleaner .config output
+ Andrew> Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/wpa_supplicant/wpa_supplicant.mk |   56 +++++++++++++++++-------------
- 1 files changed, 32 insertions(+), 24 deletions(-)
+ Andrew> Recently ive tried to build a custom mips linux kernel version
+ Andrew> 2.6.28 under the buildroot-2012.02. However all gcc versions
+ Andrew> listed do not support some deprecated gcc inline assembly
+ Andrew> syntax being used extensively.
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 97210ce..5ca6de5 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,57 +15,64 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	echo "CONFIG_LIBNL32=y" >>$(WPA_SUPPLICANT_CONFIG)
-+	echo 'CONFIG_LIBNL32=y' >>$(WPA_SUPPLICANT_CONFIG)
- endef
- else
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) "s/^CONFIG_DRIVER_NL80211/#CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/^\(CONFIG_DRIVER_NL80211.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
- endef
- endif
- 
--ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
- define WPA_SUPPLICANT_EAP_CONFIG
--	$(SED) "s/^CONFIG_EAP_*/#CONFIG_EAP_/g" $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_AKA.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_FAST.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_GPSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_IKEV2.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_PAX.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_PSK.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_SAKE.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_SIM.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_TNC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+endef
-+else
-+define WPA_SUPPLICANT_EAP_CONFIG
-+	$(SED) 's/^\(CONFIG_EAP.*\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT),y)
- define WPA_SUPPLICANT_AP_CONFIG
--	echo "CONFIG_AP=y" >>$(WPA_SUPPLICANT_CONFIG)
--endef
--else
--define WPA_SUPPLICANT_AP_CONFIG
--	$(SED) "s/^CONFIG_AP=y//" $(WPA_SUPPLICANT_CONFIG)
-+	echo 'CONFIG_AP=y' >>$(WPA_SUPPLICANT_CONFIG)
- endef
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
- define WPA_SUPPLICANT_WPS_CONFIG
--	echo "CONFIG_WPS=y" >>$(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_WPS.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- endef
- endif
- 
--define WPA_SUPPLICANT_CRYPTO_CONFIG
--	echo "CONFIG_CRYPTO=internal" >>$(WPA_SUPPLICANT_CONFIG)
--	echo "CONFIG_INTERNAL_LIBTOMMATH=y" >>$(WPA_SUPPLICANT_CONFIG)
--	echo "CONFIG_INTERNAL_LIBTOMMATH_FAST=y" >>$(WPA_SUPPLICANT_CONFIG)
-+define WPA_SUPPLICANT_LIBTOMMATH_CONFIG
-+	$(SED) 's/\(#\)\(CONFIG_INTERNAL_LIBTOMMATH.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- endef
- 
- # Try to use openssl or gnutls if it's already available
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += openssl
- define WPA_SUPPLICANT_TLS_CONFIG
--	echo "CONFIG_TLS=openssl" >>$(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_TLS=openssl\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_EAP_PWD.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- endef
- else
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += gnutls
- define WPA_SUPPLICANT_TLS_CONFIG
--	echo "CONFIG_TLS=gnutls" >>$(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2gnutls/' $(WPA_SUPPLICANT_CONFIG)
- endef
- else
- define WPA_SUPPLICANT_TLS_CONFIG
--	echo "CONFIG_TLS=internal" >>$(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_TLS=\).*/\2internal/' $(WPA_SUPPLICANT_CONFIG)
- endef
- endif
- endif
-@@ -76,18 +83,19 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- 		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)"	\
- 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- define WPA_SUPPLICANT_DBUS_CONFIG
--	$(SED) "s/^#CONFIG_CTRL_IFACE_DBUS/CONFIG_CTRL_IFACE_DBUS/" $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_CTRL_IFACE_DBUS=\)/\2/' $(WPA_SUPPLICANT_CONFIG)
- endef
- endif
- 
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
--	$(SED) "s/^#CONFIG_IEEE80211R/CONFIG_IEEE80211R/" $(WPA_SUPPLICANT_CONFIG)
--	$(SED) "s/^#CONFIG_DELAYED_MIC/CONFIG_DELAYED_MIC/" $(WPA_SUPPLICANT_CONFIG)
--	$(SED) "s/^CONFIG_DRIVER_ATMEL/#CONFIG_DRIVER_ATMEL/" $(WPA_SUPPLICANT_CONFIG)
--	$(SED) "s/^CONFIG_SMARTCARD/#CONFIG_SMARTCARD/" $(WPA_SUPPLICANT_CONFIG)
--	$(SED) "s/\/local//" $(@D)/wpa_supplicant/Makefile
--	$(WPA_SUPPLICANT_CRYPTO_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_IEEE80211N.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_IEEE80211R.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_INTERWORKING.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(#\)\(CONFIG_DELAYED_MIC.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(CONFIG_DRIVER_ATMEL\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(SED) 's/\(CONFIG_SMARTCARD\)/#\1/' $(WPA_SUPPLICANT_CONFIG)
-+	$(WPA_SUPPLICANT_LIBTOMMATH_CONFIG)
- 	$(WPA_SUPPLICANT_TLS_CONFIG)
- 	$(WPA_SUPPLICANT_EAP_CONFIG)
- 	$(WPA_SUPPLICANT_WPS_CONFIG)
+ Andrew> Is it possible to use gcc 4.2.4 with buildroot-2012.02 . I
+ Andrew> manually added it to the buildroot menu but when attempting a
+ Andrew> mips build the toolchain i recieve the following errors while
+ Andrew> building the cross compiler ...?
+
+4.2 support got removed back in Dec 2011, so perhaps give
+buildroot-2011.11 a try?
+
+-- 
+Bye, Peter Korsgaard
