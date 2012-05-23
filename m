@@ -1,35 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 May 2012 21:49:40 +0200
-Subject: [Buildroot] [git commit] pkg-download.mk: Add missing argument when
-	downloading from primary mirror (scp)
-Message-ID: <20120523202633.2AD6496D8D@busybox.osuosl.org>
+Date: Wed, 23 May 2012 22:25:56 +0200
+Subject: [Buildroot] [git commit branch/next] ipset: bump to version 6.12.1
+Message-ID: <20120523202635.7A92396D8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ae7d814075095b43e25c8ef11be6a14234241cc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: http://git.buildroot.net/buildroot/commit/?id=a084b8b38641ecafe3db51acdfaa0b6ef48c9afb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This problem was already fixed by Markos Chandras for wget, but not for scp.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-download.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ipset/ipset.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index b833de9..7d1e543 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -206,7 +206,7 @@ endef
- define DOWNLOAD_INNER
- 	$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
- 		case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
--			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
-+			scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
- 			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index 06393f4..3cd1263 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,10 +4,9 @@
+ #
+ #############################################################
+ 
+-IPSET_VERSION = 6.11
++IPSET_VERSION = 6.12.1
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+-IPSET_AUTORECONF = YES
+ IPSET_DEPENDENCIES = libmnl host-pkg-config
+ IPSET_CONF_OPT = --with-kmod=no
+ 
