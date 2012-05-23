@@ -1,124 +1,110 @@
 From: Julian Lunz <git@jlunz.de>
-Date: Wed, 23 May 2012 23:45:09 +0200
+Date: Wed, 23 May 2012 23:49:03 +0200
 Subject: [Buildroot] [PATCH] New package: freerdp
-Message-ID: <1337809509-29526-1-git-send-email-git@jlunz.de>
+In-Reply-To: <87fwaqpq4x.fsf@macbook.be.48ers.dk>
+References: <1337806267-32327-1-git-send-email-git@jlunz.de>
+ <87fwaqpq4x.fsf@macbook.be.48ers.dk>
+Message-ID: <20120523234903.209dc90d@jl-desk-LL>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julian Lunz <git@jlunz.de>
----
- package/Config.in          |    1 +
- package/freerdp/Config.in  |   38 ++++++++++++++++++++++++++++++++++++++
- package/freerdp/freerdp.mk |   41 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 80 insertions(+), 0 deletions(-)
- create mode 100644 package/freerdp/Config.in
- create mode 100644 package/freerdp/freerdp.mk
+Hello Peter,
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..dc683aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -144,6 +144,7 @@ comment "X applications"
- source "package/alsamixergui/Config.in"
- source "package/docker/Config.in"
- source "package/feh/Config.in"
-+source "package/freerdp/Config.in"
- source "package/gqview/Config.in"
- source "package/gmpc/Config.in"
- source "package/gob2/Config.in"
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-new file mode 100644
-index 0000000..b452141
---- /dev/null
-+++ b/package/freerdp/Config.in
-@@ -0,0 +1,38 @@
-+menuconfig BR2_PACKAGE_FREERDP
-+	bool "freerdp"
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXT
-+	select BR2_PACKAGE_ZLIB
-+	depends on BR2_PACKAGE_XORG7
-+	help
-+	  FreeRDPFreeRDP is a free implementation of the 
-+	  Remote Desktop Protocol (RDP), released under the Apache license
-+
-+	  http://www.freerdp.com/
-+	  
-+
-+if BR2_PACKAGE_FREERDP
-+
-+config BR2_PACKAGE_FREERDP_WITHCUPS
-+	bool "CUPS support"
-+	help
-+	  Compile with CUPS support.
-+	  
-+config BR2_PACKAGE_FREERDP_WITHFFMPEG
-+	bool "FFmpeg support"
-+	help
-+	  Compile with FFmpeg support.
-+	  
-+config BR2_PACKAGE_FREERDP_WITHALSA
-+	bool "Alsa support"
-+	help
-+	  Compile with Alsa support.
-+	  
-+config BR2_PACKAGE_FREERDP_WITHXINERAMA
-+	bool "Xinerama support"
-+	help
-+	  Compile with Xinerama support.
-+
-+endif # BR2_PACKAGE_FREERDP
-+
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-new file mode 100644
-index 0000000..b947628
---- /dev/null
-+++ b/package/freerdp/freerdp.mk
-@@ -0,0 +1,41 @@
-+#############################################################
-+#
-+# FreeRDP
-+#
-+#############################################################
-+
-+FREERDP_VERSION = 1.0.1
-+FREERDP_SOURCE = freerdp-$(FREERDP_VERSION).tar.gz
-+FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
-+
-+ifeq ($(BR2_PACKAGE_FREERDP_WITHCUPS),y)
-+FREERDP_CONF_OPT += -DWITH_CUPS=ON
-+FREERDP_DEPENDENCIES += cups
-+else
-+FREERDP_CONF_OPT += -DWITH_CUPS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FREERDP_WITHFFMPEG),y)
-+FREERDP_CONF_OPT += -DWITH_FFMPEG=ON
-+FREERDP_DEPENDENCIES += ffmpeg
-+else
-+FREERDP_CONF_OPT += -DWITH_FFMPEG=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FREERDP_WITHALSA),y)
-+FREERDP_CONF_OPT += -DWITH_ALSA=ON
-+FREERDP_DEPENDENCIES += alsa-utils
-+else
-+FREERDP_CONF_OPT += -DWITH_ALSA=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FREERDP_WITHXINERAMA),y)
-+FREERDP_CONF_OPT += -DWITH_XINERAMA=ON
-+FREERDP_DEPENDENCIES += xlib_libXinerama
-+else
-+FREERDP_CONF_OPT += -DWITH_XINERAMA=OFF
-+endif
-+
-+FREERDP_DEPENDENCIES += openssl xlib_libX11 xlib_libXt zlib
-+
-+$(eval $(call CMAKETARGETS))
--- 
-1.7.0.4
+thanks for your quick reply and comments.
+Fixed the patch according to your proposals.
+
+Other git send-email failed a bit, therefore seperate mails.
+
+Best regards,
+Julian
+
+
+On Wed, 23 May 2012 23:02:38 +0200
+Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+> >>>>> "Julian" == Julian Lunz <git@jlunz.de> writes:
+> 
+> Hi,
+> 
+>  Julian> Signed-off-by: Julian Lunz <git@jlunz.de>
+>  Julian> ---
+>  Julian>  package/Config.in          |    1 +
+>  Julian>  package/freerdp/Config.in  |   11 +++++++++++
+>  Julian>  package/freerdp/freerdp.mk |   13 +++++++++++++
+>  Julian>  3 files changed, 25 insertions(+), 0 deletions(-)
+>  Julian>  create mode 100644 package/freerdp/Config.in
+>  Julian>  create mode 100644 package/freerdp/freerdp.mk
+> 
+>  Julian> diff --git a/package/Config.in b/package/Config.in
+>  Julian> index fb1b08f..2d1f18d 100644
+>  Julian> --- a/package/Config.in
+>  Julian> +++ b/package/Config.in
+>  Julian> @@ -152,6 +152,7 @@ source "package/leafpad/Config.in"
+>  Julian>  source "package/midori/Config.in"
+>  Julian>  source "package/pcmanfm/Config.in"
+>  Julian>  source "package/rdesktop/Config.in"
+>  Julian> +source "package/freerdp/Config.in"
+> 
+> 
+> I know it logically belong with rdesktop, but we normally sort these
+> sort lines alphabetically.
+> 
+> 
+>  Julian>  source "package/sylpheed/Config.in"
+>  Julian>  source "package/synergy/Config.in"
+>  Julian>  source "package/torsmo/Config.in"
+>  Julian> diff --git a/package/freerdp/Config.in
+>  Julian> b/package/freerdp/Config.in new file mode 100644
+>  Julian> index 0000000..1cc49c9
+>  Julian> --- /dev/null
+>  Julian> +++ b/package/freerdp/Config.in
+>  Julian> @@ -0,0 +1,11 @@
+>  Julian> +config BR2_PACKAGE_FREERDP
+>  Julian> +	bool "freerdp"
+>  Julian> +	select BR2_PACKAGE_OPENSSL
+>  Julian> +	select BR2_PACKAGE_XLIB_LIBX11
+>  Julian> +	select BR2_PACKAGE_XLIB_LIBXT
+>  Julian> +	depends on BR2_PACKAGE_XORG7
+>  Julian> +	help
+>  Julian> +	  FreeRDPFreeRDP is a free implementation of the 
+>  Julian> +	  Remote Desktop Protocol (RDP), released under the
+>  Julian> Apache license +
+>  Julian> +	  http://www.freerdp.com/
+>  Julian> diff --git a/package/freerdp/freerdp.mk
+>  Julian> b/package/freerdp/freerdp.mk new file mode 100644
+>  Julian> index 0000000..61b6ca2
+>  Julian> --- /dev/null
+>  Julian> +++ b/package/freerdp/freerdp.mk
+>  Julian> @@ -0,0 +1,13 @@
+>  Julian> +#############################################################
+>  Julian> +#
+>  Julian> +# FreeRDP
+>  Julian> +#
+>  Julian> +#############################################################
+>  Julian> +
+>  Julian> +FREERDP_VERSION = 1.0.1
+>  Julian> +FREERDP_SOURCE = freerdp-$(FREERDP_VERSION).tar.gz
+>  Julian> +FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
+>  Julian> +FREERDP_CONF_OPT = -DWITH_CUPS=OFF -DWITH_FFMPEG=OFF
+>  Julian> -DWITH_ALSA=OFF -DWITH_XINERAMA=OFF
+> 
+> We do have packages for cups, ffmpeg, alsa and libXinerama in
+> buildroot, so it would be good to add optional support for these -
+> E.G.:
+> 
+> ifeq ($(BR2_PACKAGE_CUPS),y)
+> FREERDP_DEPENDENCIES += cups
+> else
+> FREERDP_CONF_OPT += -DWITH_CUPS=OFF
+> endif
+> ..
+> 
+>  Julian> +FREERDP_DEPENDENCIES = openssl xlib_libX11 xlib_libXt zlib
+> 
+> You don't select BR2_PACKAGE_ZLIB in Config.in, but you have it here?
+> 
+> Otherwise it looks good. Care to fix and resend?
+> 
