@@ -1,32 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 23 May 2012 22:25:57 +0200
-Subject: [Buildroot] [git commit branch/next] nbd: bump to version 3.1
-Message-ID: <20120523202635.8F8FD96D8D@busybox.osuosl.org>
+Date: Wed, 23 May 2012 22:26:00 +0200
+Subject: [Buildroot] [git commit branch/next] audiofile: bump to version
+	0.3.4
+Message-ID: <20120523202635.B4DDA96D8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dfe000f00adb600d2777d1dd5f448d25b8897466
+commit: http://git.buildroot.net/buildroot/commit/?id=50ed5342a1a7e9d22b35a30d2a897cd4752930e7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/nbd/nbd.mk |    2 +-
+ package/audiofile/audiofile.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index 62ae9be..15997af 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
+diff --git a/package/audiofile/audiofile.mk b/package/audiofile/audiofile.mk
+index a49cc3e..5f09f95 100644
+--- a/package/audiofile/audiofile.mk
++++ b/package/audiofile/audiofile.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--NBD_VERSION = 3.0
-+NBD_VERSION = 3.1
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
- NBD_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
+-AUDIOFILE_VERSION = 0.3.3
++AUDIOFILE_VERSION = 0.3.4
+ AUDIOFILE_SITE = http://audiofile.68k.org
+ AUDIOFILE_INSTALL_STAGING = YES
+ AUDIOFILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
