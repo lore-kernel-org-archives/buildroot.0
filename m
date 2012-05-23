@@ -1,42 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 21 May 2012 00:07:42 +0200
-Subject: [Buildroot] [git commit] connman: tweak compiler version
-	dependencies
-Message-ID: <20120531113259.7EAE496E2C@busybox.osuosl.org>
+Date: Wed, 23 May 2012 22:25:54 +0200
+Subject: [Buildroot] [git commit] libnetfilter-conntrack: bump to version
+	1.0.1
+Message-ID: <20120531113300.4BAA996E2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96b109ad2a4ea0a4575526f0d0353d916b5122dd
+commit: http://git.buildroot.net/buildroot/commit/?id=cf54176bd1dd1c90a9be0ee18fac3accd4c6f186
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-uClibc 0.9.33+ has resolver support, so we don't need to depend on a
-snapshot uClibc version any more. We're also using 0.9.33 for ctng, so
-we can just disallow the old internal uClibc versions instead.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/connman/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ .../libnetfilter-conntrack.mk                      |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 2801b87..118ad91 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_IPTABLES
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc
-+	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon for
- 	  managing internet connections within embedded devices running
-@@ -44,4 +44,4 @@ config BR2_PACKAGE_CONNMAN_CLIENT
- endif # BR2_PACKAGE_CONNMAN
+diff --git a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
+index 66f0f69..3313e23 100644
+--- a/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
++++ b/package/libnetfilter_conntrack/libnetfilter-conntrack.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- comment "connman needs a toolchain with resolver support"
--	depends on !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc || BR2_TOOLCHAIN_CTNG_eglibc)
-+	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32
+-LIBNETFILTER_CONNTRACK_VERSION = 1.0.0
++LIBNETFILTER_CONNTRACK_VERSION = 1.0.1
+ LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
+ LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
+ LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
