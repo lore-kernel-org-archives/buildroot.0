@@ -1,43 +1,26 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Wed, 23 May 2012 21:41:29 +0200
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 23 May 2012 21:50:16 +0200
 Subject: [Buildroot] [PATCH] pkg-download.mk: Add missing argument when
- downloading from primary mirror (scp)
-In-Reply-To: <51385d7304116ae16504.1337801436@beantl019720>
+	downloading from primary mirror (scp)
+In-Reply-To: <51385d7304116ae16504.1337801436@beantl019720> (Thomas De
+ Schampheleire's message of "Wed, 23 May 2012 21:30:36 +0200")
 References: <51385d7304116ae16504.1337801436@beantl019720>
-Message-ID: <CAAXf6LWBi1n7phRbse165e+Th60HN1UiY86Mac9P0eY+pLU68Q@mail.gmail.com>
+Message-ID: <87sjeqpthj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-On Wed, May 23, 2012 at 9:30 PM, Thomas De Schampheleire
-<patrickdepinguin+buildroot@gmail.com> wrote:
-> This problem was already fixed by Markos Chandras for wget, but not for scp.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
-> ?package/pkg-download.mk | ?2 +-
-> ?1 files changed, 1 insertions(+), 1 deletions(-)
->
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -206,7 +206,7 @@ endef
-> ?define DOWNLOAD_INNER
-> ? ? ? ?$(Q)if test -n "$(call qstrip,$(BR2_PRIMARY_SITE))" ; then \
-> ? ? ? ? ? ? ? ?case "$(call geturischeme,$(BR2_PRIMARY_SITE))" in \
-> - ? ? ? ? ? ? ? ? ? ? ? scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE),$(2)) && exit ;; \
-> + ? ? ? ? ? ? ? ? ? ? ? scp) $(call $(DL_MODE)_SCP,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> ? ? ? ? ? ? ? ? ? ? ? ?*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
-> ? ? ? ? ? ? ? ?esac ; \
-> ? ? ? ?fi ; \
+ Thomas> This problem was already fixed by Markos Chandras for wget, but
+ Thomas> not for scp.
 
-Since this is a regression (worked fine in 2012.02) I think this fix
-should be in 2012.05.
+ Thomas> Signed-off-by: Thomas De Schampheleire
+ Thomas> <thomas.de.schampheleire@gmail.com>
 
-Best regards,
-Thomas
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
