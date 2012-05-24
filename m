@@ -1,75 +1,91 @@
-From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Fri, 25 May 2012 09:33:45 +0300
-Subject: [Buildroot] [PATCH] quota: add package
-Message-ID: <1337927625-18671-1-git-send-email-jarkko.sakkinen@intel.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 24 May 2012 14:32:07 +0200
+Subject: [Buildroot] [git commit branch/next] hiawatha: bump to version 8.3
+Message-ID: <20120525102150.D8F6096DAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
----
- package/Config.in       |    3 +++
- package/quota/Config.in |    9 +++++++++
- package/quota/quota.mk  |   19 +++++++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/quota/Config.in
- create mode 100644 package/quota/quota.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=d287f129c8794a01da02da3e984a1555e00c440b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..eb76e14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
-+endif
-+source "package/quota/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
- source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-new file mode 100644
-index 0000000..d2b7490
---- /dev/null
-+++ b/package/quota/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QUOTA
-+	bool "quota"
-+	depends on BR2_INET_RPC
-+	help
-+		Implementation of the disk quota system.
-+		http://sourceforge.net/projects/linuxquota/
-+
-+comment "quota requires a toolchain with RPC support"
-+	depends on !BR2_INET_RPC
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-new file mode 100644
-index 0000000..90254ba
---- /dev/null
-+++ b/package/quota/quota.mk
-@@ -0,0 +1,19 @@
-+#############################################################
-+#
-+# QUOTA
-+#
-+#############################################################
-+
-+QUOTA_VERSION = 4.00
-+QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
-+QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
-+
-+QUOTA_CONF_OPT = \
-+	--prefix=$(TARGET_DIR) \
-+	--exec-prefix=$(TARGET_DIR)
-+
-+QUOTA_MAKE_OPT = \
-+	CC="$(TARGET_CC)" \
-+	CXX="$(TARGET_CXX)"
-+
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.9.5
+Bump hiawatha to version 8.3 - adds reverse proxy functionality.
+Also define WORK_DIR to /var/lib/hiawatha instead of the uncommon
+/usr/var/lib/hiawatha - missed it in the last path fixes.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ .../hiawatha-support-for-external-polarssl.patch   |   27 ++++++++++---------
+ package/hiawatha/hiawatha.mk                       |    5 ++-
+ 2 files changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/package/hiawatha/hiawatha-support-for-external-polarssl.patch b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
+index e6033b9..edc774b 100644
+--- a/package/hiawatha/hiawatha-support-for-external-polarssl.patch
++++ b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
+@@ -9,21 +9,22 @@ This patch adds a ENABLE_SSL_EXTERNAL option, which, when used in
+ addition to ENABLE_SSL, tells Hiawatha's build system to link against
+ the already existing PolarSSL library instead of building its own.
+ 
++[Gustavo]: Update for version 8.3
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-Index: hiawatha-8.1/CMakeLists.txt
+-===================================================================
+---- hiawatha-8.1.orig/CMakeLists.txt
+-+++ hiawatha-8.1/CMakeLists.txt
+-@@ -9,6 +9,7 @@
+- option(ENABLE_IPV6    "Enable IPv6 support in Hiawatha." ON)
+- option(ENABLE_MONITOR "Enable support for the Hiawatha Monitor." OFF)
+- option(ENABLE_SSL     "Enable SSL (PolarSSL) support in Hiawatha." ON)
+-+option(ENABLE_SSL_EXTERNAL "Enable SSL (PolarSSL) as an external library." OFF)
+- option(ENABLE_TOOLKIT "Enable the URL toolkit in Hiawatha" ON)
+- option(ENABLE_XSLT    "Enable XSLT support in Hiawatha." ON)
++diff -Nura hiawatha-8.3.orig//CMakeLists.txt hiawatha-8.3/CMakeLists.txt
++--- hiawatha-8.3.orig//CMakeLists.txt	2012-05-23 14:22:26.000000000 -0300
+++++ hiawatha-8.3/CMakeLists.txt	2012-05-24 08:13:00.007107500 -0300
++@@ -10,6 +10,7 @@
++ option(ENABLE_MONITOR "Enable support for the Hiawatha Monitor." off)
++ option(ENABLE_RPROXY  "Enable reverse proxy support in Hiawatha." on)
++ option(ENABLE_SSL     "Enable SSL (PolarSSL) support in Hiawatha." on)
+++option(ENABLE_SSL_EXTERNAL "Enable SSL (PolarSSL) as an external library." off)
++ option(ENABLE_TOOLKIT "Enable the URL toolkit in Hiawatha" on)
++ option(ENABLE_XSLT    "Enable XSLT support in Hiawatha." on)
+  
+-@@ -86,19 +87,23 @@
++@@ -85,19 +86,23 @@
+  
+  # PolarSSL
+  if(ENABLE_SSL)
+@@ -48,7 +49,7 @@ Index: hiawatha-8.1/CMakeLists.txt
+  # Configure files
+  configure_file(config.h.in config.h)
+  foreach (configfile ${config_files_in})
+-@@ -119,7 +124,9 @@
++@@ -118,7 +123,9 @@
+  target_link_libraries(hiawatha ${CRYPT_LIBRARY} pthread ${Z_LIBRARY})
+  if(ENABLE_SSL)
+  	target_link_libraries(hiawatha ${POLARSSL_LIBRARY})
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 4600c11..647c1e1 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -1,4 +1,4 @@
+-HIAWATHA_VERSION = 8.2
++HIAWATHA_VERSION = 8.3
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
+ 
+ ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
+@@ -12,6 +12,7 @@ HIAWATHA_CONF_OPT += \
+ 	-DCONFIG_DIR=/etc/hiawatha \
+ 	-DLOG_DIR=/var/log \
+ 	-DPID_DIR=/var/run \
+-	-DWEBROOT_DIR=/var/www/hiawatha
++	-DWEBROOT_DIR=/var/www/hiawatha \
++	-DWORK_DIR=/var/lib/hiawatha
+ 
+ $(eval $(call CMAKETARGETS))
