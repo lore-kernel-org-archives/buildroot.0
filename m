@@ -1,89 +1,86 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 24 May 2012 08:25:18 -0300
-Subject: [Buildroot] [PATCH] hiawatha: bump to version 8.3
-Message-ID: <1337858718-26784-1-git-send-email-gustavo@zacarias.com.ar>
+From: Nigel Sollars <nsollars@gmail.com>
+Date: Thu, 24 May 2012 09:45:23 -0400
+Subject: [Buildroot] GNUTLS
+In-Reply-To: <CAFbHwiQokFq=8c5kyB-RbpPyvwn8tgz8+mzj6K7p8u88fSqL=g@mail.gmail.com>
+References: <CAG6aBkWMBN9uP-pTWo-MoyH7iUBG0mtNgEXdvKff1tDnVf0+VA@mail.gmail.com>
+ <CAFbHwiQJN9RaoNsOhjomvEB8gbsMSqa_GtFxp_MPv=-qcWwBwA@mail.gmail.com>
+ <CAG6aBkVLcuc-_p9WyV12pyVCP9vcn7Kcjy7d4OdzSduqDzOv2w@mail.gmail.com>
+ <CAFbHwiQokFq=8c5kyB-RbpPyvwn8tgz8+mzj6K7p8u88fSqL=g@mail.gmail.com>
+Message-ID: <CAG6aBkV7qYtkkfG+szJwpE1u4JJhKrjyaC-OcJq+hZ8xLghXpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump hiawatha to version 8.3 - adds reverse proxy functionality.
-Also define WORK_DIR to /var/lib/hiawatha instead of the uncommon
-/usr/var/lib/hiawatha - missed it in the last path fixes.
+Hi Will,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../hiawatha-support-for-external-polarssl.patch   |   27 ++++++++++---------
- package/hiawatha/hiawatha.mk                       |    5 ++-
- 2 files changed, 17 insertions(+), 15 deletions(-)
+Since this is panda ( ES ) OMAP 4 ( 2 x A9 ),  I am always wondering if any
+patches for this are included / upstream by default or perhaps this is
+something that still maybe required.
 
-diff --git a/package/hiawatha/hiawatha-support-for-external-polarssl.patch b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
-index e6033b9..edc774b 100644
---- a/package/hiawatha/hiawatha-support-for-external-polarssl.patch
-+++ b/package/hiawatha/hiawatha-support-for-external-polarssl.patch
-@@ -9,21 +9,22 @@ This patch adds a ENABLE_SSL_EXTERNAL option, which, when used in
- addition to ENABLE_SSL, tells Hiawatha's build system to link against
- the already existing PolarSSL library instead of building its own.
- 
-+[Gustavo]: Update for version 8.3
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--Index: hiawatha-8.1/CMakeLists.txt
--===================================================================
----- hiawatha-8.1.orig/CMakeLists.txt
--+++ hiawatha-8.1/CMakeLists.txt
--@@ -9,6 +9,7 @@
-- option(ENABLE_IPV6    "Enable IPv6 support in Hiawatha." ON)
-- option(ENABLE_MONITOR "Enable support for the Hiawatha Monitor." OFF)
-- option(ENABLE_SSL     "Enable SSL (PolarSSL) support in Hiawatha." ON)
--+option(ENABLE_SSL_EXTERNAL "Enable SSL (PolarSSL) as an external library." OFF)
-- option(ENABLE_TOOLKIT "Enable the URL toolkit in Hiawatha" ON)
-- option(ENABLE_XSLT    "Enable XSLT support in Hiawatha." ON)
-+diff -Nura hiawatha-8.3.orig//CMakeLists.txt hiawatha-8.3/CMakeLists.txt
-+--- hiawatha-8.3.orig//CMakeLists.txt	2012-05-23 14:22:26.000000000 -0300
-++++ hiawatha-8.3/CMakeLists.txt	2012-05-24 08:13:00.007107500 -0300
-+@@ -10,6 +10,7 @@
-+ option(ENABLE_MONITOR "Enable support for the Hiawatha Monitor." off)
-+ option(ENABLE_RPROXY  "Enable reverse proxy support in Hiawatha." on)
-+ option(ENABLE_SSL     "Enable SSL (PolarSSL) support in Hiawatha." on)
-++option(ENABLE_SSL_EXTERNAL "Enable SSL (PolarSSL) as an external library." off)
-+ option(ENABLE_TOOLKIT "Enable the URL toolkit in Hiawatha" on)
-+ option(ENABLE_XSLT    "Enable XSLT support in Hiawatha." on)
-  
--@@ -86,19 +87,23 @@
-+@@ -85,19 +86,23 @@
-  
-  # PolarSSL
-  if(ENABLE_SSL)
-@@ -48,7 +49,7 @@ Index: hiawatha-8.1/CMakeLists.txt
-  # Configure files
-  configure_file(config.h.in config.h)
-  foreach (configfile ${config_files_in})
--@@ -119,7 +124,9 @@
-+@@ -118,7 +123,9 @@
-  target_link_libraries(hiawatha ${CRYPT_LIBRARY} pthread ${Z_LIBRARY})
-  if(ENABLE_SSL)
-  	target_link_libraries(hiawatha ${POLARSSL_LIBRARY})
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 4600c11..647c1e1 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -1,4 +1,4 @@
--HIAWATHA_VERSION = 8.2
-+HIAWATHA_VERSION = 8.3
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
- 
- ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
-@@ -12,6 +12,7 @@ HIAWATHA_CONF_OPT += \
- 	-DCONFIG_DIR=/etc/hiawatha \
- 	-DLOG_DIR=/var/log \
- 	-DPID_DIR=/var/run \
--	-DWEBROOT_DIR=/var/www/hiawatha
-+	-DWEBROOT_DIR=/var/www/hiawatha \
-+	-DWORK_DIR=/var/lib/hiawatha
- 
- $(eval $(call CMAKETARGETS))
+Ive been unable to find a definitive answer on my own,
+
+Still I am stoked with buildroot.
+
+Nige
+
+On Thu, May 24, 2012 at 5:48 AM, Will Newton <will.newton@gmail.com> wrote:
+
+> On Thu, May 24, 2012 at 10:28 AM, Nigel Sollars <nsollars@gmail.com>
+> wrote:
+> > Hi will,
+> >
+> > Fair enough, sorry about that.
+> >
+> > Here is the one from the gnutls directory.
+> >
+> > Regards
+> > Nigel
+>
+> Well, this is the error:
+>
+> configure:8648: checking for libgcrypt
+> configure:8670:
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/bin/arm-unknown-linux-uclibcgnueabi-gcc
+> -std=gnu99 -o conftest  -pipe -Os  -D_LARGEFILE_SOURCE
+> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+>
+> -I/usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/include
+>  conftest.c
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libgcrypt.so
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libgpg-error.so
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib/libc.so
+> -Wl,-rpath
+> -Wl,/usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/arm-unknown-linux-uclibcgnueabi/sysroot/usr/lib
+>  >&5
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.3/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld.real:
+> cannot find /lib/libc.so.0
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.3/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld.real:
+> cannot find /usr/lib/uclibc_nonshared.a
+>
+> /usr/local/panda-stuff/buildroot-src/git/buildroot-22052012/output/host/usr/lib/gcc/arm-unknown-linux-uclibcgnueabi/4.6.3/../../../../arm-unknown-linux-uclibcgnueabi/bin/ld.real:
+> cannot find /lib/ld-uClibc.so.0
+> collect2: ld returned 1 exit status
+>
+> Unfortunately I'm not sure what's causing it. It looks like your
+> toolchain may be broken in some way though. Perhaps someone familiar
+> with arm toolchains can shed some light on it?
+>
+
+
+
 -- 
-1.7.3.4
+?Science is a differential equation. Religion is a boundary condition.?
+
+Alan Turing
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120524/48f4b652/attachment.html>
