@@ -1,27 +1,48 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Thu, 24 May 2012 15:18:33 +0100
-Subject: [Buildroot] appreciate S49ntp advice
-In-Reply-To: <CALo-6+ghsnURLrm8ALtkd-snN9WJT+G9=tRHiwzMQ2t8X2owUA@mail.gmail.com>
-References: <CALo-6+ghsnURLrm8ALtkd-snN9WJT+G9=tRHiwzMQ2t8X2owUA@mail.gmail.com>
-Message-ID: <CAFbHwiQGSZfMvxykSao=gh55TtADvbwgbdMMiw413QDx_5YaSw@mail.gmail.com>
+From: Michael J. Hammel <buildroot@graphics-muse.org>
+Date: Thu, 24 May 2012 09:10:51 -0600
+Subject: [Buildroot] connman requirement for resolver in toolchain
+In-Reply-To: <20120517102649.6a6dc5ab@skate>
+References: <1337223711.1915.3.camel@galileo.gfxmuse.org>
+ <20120517102649.6a6dc5ab@skate>
+Message-ID: <1337872251.4288.13.camel@feynman.coloradoengineeringinc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 24, 2012 at 3:11 PM, Charles Krinke
-<charles.krinke@gmail.com> wrote:
-> I have an MPC8321 target and am having a little trouble with one file.
-> We have a modified version of /etc/init.d/S49ntp in SVN and it is in
-> fs/skeleton/etc/init.d no problem.
->
-> But, ... when we do a make clean && make, it seems that the building
-> of the ntp package itself copies the original S49ntp into
-> output/target/etc/init.d/
->
-> The question becomes how to deal with this issue properly.
+On Thu, 2012-05-17 at 10:26 +0200, Thomas Petazzoni wrote:
+> If you are building your uClibc toolchain externally with Crosstool-NG,
+> then it is up to you to adjust the uClibc configuration. You can either:
+> 
+>  *) Choose to make it identical to the uClibc configuration that
+>     Buildroot uses for its internal backend, which gives you a good
+>     certainty that packages will build
+> 
+>  *) Choose to progressively adjust your uClibc configuration to match
+>     the particular requirements of the specific packages you're using.
 
-If you add a post build script (BR2_ROOTFS_POST_BUILD_SCRIPT) then you
-can copy over a replacement file or modify the existing one with e.g.
-sed.
+I'm doing the latter.  I've diffed my uClibc config with the one for the
+matching release in Buildroot and have enabled what I think is relevant
+for resolver support, re: I configured uClibc with the resolver and nsl
+stubs.  However, buildroot still doesn't allow me to configure connman.
+
+I looked at connman's Config.in and it looks like this:
+
+comment "connman needs a toolchain with resolver support"
+    depends on !(BR2_UCLIBC_VERSION_SNAPSHOT ||
+BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc ||
+BR2_TOOLCHAIN_CTNG_eglibc
+
+So if I'm using an external toolchain with uClibc it doesn't allow me to
+configure connman, correct?  Is the uClibc resolver stub considered
+unsufficient for use with connman?  Do I need to switch to glibc?
+
+Also, it appears that BR2_TOOLCHAIN_CTNG_eglibc appears twice in that
+dependency test.  Typo?
+
+This is from the 2012.02 tarball release.  No patches.
+
+Thanks.
+-- 
+Michael J. Hammel <buildroot@graphics-muse.org>
