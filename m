@@ -1,7 +1,7 @@
 From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Fri, 25 May 2012 21:19:23 +0300
+Date: Fri, 25 May 2012 21:32:20 +0300
 Subject: [Buildroot] [PATCH] quota: added linuxquota package
-Message-ID: <1337969963-16988-1-git-send-email-jarkko.sakkinen@intel.com>
+Message-ID: <1337970740-17125-1-git-send-email-jarkko.sakkinen@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,9 @@ depends on BR2_INET_RPC and BR2_UTIL_LINUX_MOUNT.
 
 [Update: I added check for util-linux mount because
 it support usrquota and grpquota mount options.]
+[Update: wrong email]
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.fi>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
 ---
  package/Config.in       |    3 +++
  package/quota/Config.in |    9 +++++++++
