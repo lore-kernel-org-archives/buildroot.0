@@ -1,75 +1,70 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 19 May 2012 22:31:35 +0200
-Subject: [Buildroot] [git commit] omap-u-boot-utils: add new host package
-Message-ID: <20120531113258.A91CC96E2B@busybox.osuosl.org>
+Date: Fri, 25 May 2012 22:01:36 +0200
+Subject: [Buildroot] [git commit] midori: bump version to 0.4.6
+Message-ID: <20120531113300.E93BE96E2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=761dc51bdb39963c0b99bb78ce9733762b42c5d7
+commit: http://git.buildroot.net/buildroot/commit/?id=ece64bf1882dbc34a1170ff19ad44b835a9b9ced
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Peter: sort/indent dependencies]
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in.host                         |    1 +
- package/omap-u-boot-utils/Config.in.host       |    8 ++++++++
- package/omap-u-boot-utils/omap-u-boot-utils.mk |   21 +++++++++++++++++++++
- 3 files changed, 30 insertions(+), 0 deletions(-)
+ package/midori/Config.in |    3 +++
+ package/midori/midori.mk |   16 ++++++++++++----
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 861b736..9fcfede 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,6 +1,7 @@
- menu "Host utilities"
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+index 95a0afb..49867e4 100644
+--- a/package/midori/Config.in
++++ b/package/midori/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_MIDORI
+ 	bool "midori"
+ 	select BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_LIBSEXY
++	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_INSTALL_LIBSTDCPP # webkit
+ 	depends on BR2_USE_WCHAR	 # webkit
+diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+index 3e46b1a..0b3439c 100644
+--- a/package/midori/midori.mk
++++ b/package/midori/midori.mk
+@@ -4,10 +4,18 @@
+ #
+ #############################################################
  
- source "package/lpc3250loader/Config.in.host"
-+source "package/omap-u-boot-utils/Config.in.host"
- source "package/openocd/Config.in.host"
- source "package/sam-ba/Config.in.host"
- source "package/uboot-tools/Config.in.host"
-diff --git a/package/omap-u-boot-utils/Config.in.host b/package/omap-u-boot-utils/Config.in.host
-new file mode 100644
-index 0000000..63fbdf5
---- /dev/null
-+++ b/package/omap-u-boot-utils/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_OMAP_U_BOOT_UTILS
-+	bool "host omap-u-boot-utils"
-+	help
-+	  U-Boot Utilities for Texas Instrument's OMAP platforms.
-+	  This is a set of tools to control U-Boot from scripts, generate
-+	  OMAP-specific signed image files and more.
-+
-+	  https://github.com/nmenon/omap-u-boot-utils
-diff --git a/package/omap-u-boot-utils/omap-u-boot-utils.mk b/package/omap-u-boot-utils/omap-u-boot-utils.mk
-new file mode 100644
-index 0000000..e2da9a1
---- /dev/null
-+++ b/package/omap-u-boot-utils/omap-u-boot-utils.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# omap-u-boot-utils
-+#
-+#############################################################
-+
-+OMAP_U_BOOT_UTILS_VERSION = 8aff852322
-+OMAP_U_BOOT_UTILS_SITE = http://github.com/nmenon/omap-u-boot-utils.git
-+OMAP_U_BOOT_UTILS_SITE_METHOD = git
-+
-+define HOST_OMAP_U_BOOT_UTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D)
-+endef
-+
-+define HOST_OMAP_U_BOOT_UTILS_INSTALL_CMDS
-+	for f in gpsign pserial tagger ucmd ukermit ; do \
-+		install -m 755 -D $(@D)/$$f $(HOST_DIR)/usr/bin/$$f ; \
-+	done
-+endef
-+
-+$(eval $(call GENTARGETS,host))
+-MIDORI_VERSION = 0.3.6
++MIDORI_VERSION = 0.4.6
+ MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
+-MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.3/
+-MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2
++MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.4/
++MIDORI_DEPENDENCIES = \
++	host-intltool \
++	host-pkg-config \
++	host-vala \
++	libgtk2 \
++	libsexy \
++	webkit \
++	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ 
+ ifneq ($(BR2_PACKAGE_XORG7),y)
+ define MIDORI_WITHOUT_X11
+@@ -21,7 +29,7 @@ define MIDORI_CONFIGURE_CMDS
+ 		$(TARGET_CONFIGURE_OPTS)	\
+ 		./waf configure			\
+ 		--prefix=/usr			\
+-		--disable-vala			\
++		--disable-libnotify		\
+        )
+ endef
+ 
