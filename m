@@ -1,50 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 May 2012 19:42:38 +0200
-Subject: [Buildroot] connman requirement for resolver in toolchain
-In-Reply-To: <1337872251.4288.13.camel@feynman.coloradoengineeringinc.com>
- (Michael J. Hammel's message of "Thu, 24 May 2012 09:10:51 -0600")
-References: <1337223711.1915.3.camel@galileo.gfxmuse.org>
- <20120517102649.6a6dc5ab@skate>
- <1337872251.4288.13.camel@feynman.coloradoengineeringinc.com>
-Message-ID: <877gw1bhm9.fsf@macbook.be.48ers.dk>
+From: Charles Krinke <charles.krinke@gmail.com>
+Date: Thu, 24 May 2012 21:14:43 -0700
+Subject: [Buildroot] appreciate S49ntp advice
+In-Reply-To: <CAFbHwiQGSZfMvxykSao=gh55TtADvbwgbdMMiw413QDx_5YaSw@mail.gmail.com>
+References: <CALo-6+ghsnURLrm8ALtkd-snN9WJT+G9=tRHiwzMQ2t8X2owUA@mail.gmail.com>
+ <CAFbHwiQGSZfMvxykSao=gh55TtADvbwgbdMMiw413QDx_5YaSw@mail.gmail.com>
+Message-ID: <CALo-6+hunvSQ-wy700s7UodX_Rbn754ug19kXkPrSkm70L8SrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael J Hammel <buildroot@graphics-muse.org> writes:
+Thank you kindly, Will. Using the post install script worked just fine.
 
-Hi,
+Charles
+On May 24, 2012 7:18 AM, "Will Newton" <will.newton@gmail.com> wrote:
 
- Michael> I'm doing the latter.  I've diffed my uClibc config with the
- Michael> one for the matching release in Buildroot and have enabled
- Michael> what I think is relevant for resolver support, re: I
- Michael> configured uClibc with the resolver and nsl stubs.  However,
- Michael> buildroot still doesn't allow me to configure connman.
-
- Michael> I looked at connman's Config.in and it looks like this:
-
- Michael> comment "connman needs a toolchain with resolver support"
- Michael>     depends on !(BR2_UCLIBC_VERSION_SNAPSHOT ||
- Michael> BR2_TOOLCHAIN_EXTERNAL_GLIBC || BR2_TOOLCHAIN_CTNG_eglibc ||
- Michael> BR2_TOOLCHAIN_CTNG_eglibc
-
- Michael> So if I'm using an external toolchain with uClibc it doesn't
- Michael> allow me to configure connman, correct?  Is the uClibc
- Michael> resolver stub considered unsufficient for use with connman?
- Michael> Do I need to switch to glibc?
-
-You will need atleast uClibc 0.9.33. Connman was added before 0.9.33 was
-released, so at that time you needed a snapshot version of uClibc. I've
-recently updated this check in the next branch (and moved to connman
-1.0) so you can actually select it with uClibc 0.9.33 / ctng toolchains:
-
-http://git.buildroot.net/buildroot/commit/?h=next&id=96b109ad2a4ea0a4575526f0d0353d916b5122dd
-
-Either cherrypick this commit, use the next branch or wait until I merge
-next into the main branch in ~1 weeks time (E.G. right after I release
-2012.05).
-
--- 
-Bye, Peter Korsgaard
+> On Thu, May 24, 2012 at 3:11 PM, Charles Krinke
+> <charles.krinke@gmail.com> wrote:
+> > I have an MPC8321 target and am having a little trouble with one file.
+> > We have a modified version of /etc/init.d/S49ntp in SVN and it is in
+> > fs/skeleton/etc/init.d no problem.
+> >
+> > But, ... when we do a make clean && make, it seems that the building
+> > of the ntp package itself copies the original S49ntp into
+> > output/target/etc/init.d/
+> >
+> > The question becomes how to deal with this issue properly.
+>
+> If you add a post build script (BR2_ROOTFS_POST_BUILD_SCRIPT) then you
+> can copy over a replacement file or modify the existing one with e.g.
+> sed.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120524/0ebaf426/attachment.html>
