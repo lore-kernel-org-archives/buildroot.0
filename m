@@ -1,82 +1,47 @@
-From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Fri, 25 May 2012 21:32:20 +0300
-Subject: [Buildroot] [PATCH] quota: added linuxquota package
-Message-ID: <1337970740-17125-1-git-send-email-jarkko.sakkinen@intel.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Fri, 25 May 2012 21:02:55 +0200
+Subject: [Buildroot] [git commit] mtd: fix build when no sub options are
+	enabled
+Message-ID: <20120525191024.AE29796CBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds linuxquota packaging. The package
-depends on BR2_INET_RPC and BR2_UTIL_LINUX_MOUNT.
+commit: http://git.buildroot.net/buildroot/commit/?id=573a740998f6345317dca1d62f3efcda4d067499
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Update: I added check for util-linux mount because
-it support usrquota and grpquota mount options.]
-[Update: wrong email]
+mtd-utils with no sub options enabled should be a noop, but we end up
+calling make with the default target (E.G. to build everything), breaking
+the build if zlib/lzo aren't available.
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+Fixes http://autobuild.buildroot.net/results/a0781db394792e6d3831c1884fc4bb3525fedb2e/
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in       |    3 +++
- package/quota/Config.in |    9 +++++++++
- package/quota/quota.mk  |   19 +++++++++++++++++++
- 3 files changed, 31 insertions(+)
- create mode 100644 package/quota/Config.in
- create mode 100644 package/quota/quota.mk
+ package/mtd/mtd.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..eb76e14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 8ccd4dd..b4d981d 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -68,12 +68,17 @@ MTD_TARGETS_UBI_$(BR2_PACKAGE_MTD_UBIUPDATEVOL)	+= ubiupdatevol
+ 
+ MTD_TARGETS_y += $(addprefix ubi-utils/,$(MTD_TARGETS_UBI_y))
+ 
++# only call make if atleast a single tool is enabled
++ifneq ($(MTD_TARGETS_y),)
++
+ define MTD_BUILD_CMDS
+ 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) CROSS=$(TARGET_CROSS) \
+ 		BUILDDIR=$(@D) WITHOUT_XATTR=1 WITHOUT_LARGEFILE=1 -C $(@D) \
+ 		$(addprefix $(@D)/,$(MTD_TARGETS_y))
+ endef
+ 
 +endif
-+source "package/quota/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
- source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-new file mode 100644
-index 0000000..fe347c3
---- /dev/null
-+++ b/package/quota/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_QUOTA
-+	bool "quota"
-+	depends on BR2_PACKAGE_UTIL_LINUX_MOUNT && BR2_INET_RPC
-+	help
-+		Implementation of the disk quota system.
-+		http://sourceforge.net/projects/linuxquota/
 +
-+comment "quota requires a toolchain with RPC support and util-linux mount"
-+	depends on !BR2_PACKAGE_UTIL_LINUX_MOUNT || !BR2_INET_RPC
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-new file mode 100644
-index 0000000..90254ba
---- /dev/null
-+++ b/package/quota/quota.mk
-@@ -0,0 +1,19 @@
-+#############################################################
-+#
-+# QUOTA
-+#
-+#############################################################
-+
-+QUOTA_VERSION = 4.00
-+QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
-+QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
-+
-+QUOTA_CONF_OPT = \
-+	--prefix=$(TARGET_DIR) \
-+	--exec-prefix=$(TARGET_DIR)
-+
-+QUOTA_MAKE_OPT = \
-+	CC="$(TARGET_CC)" \
-+	CXX="$(TARGET_CXX)"
-+
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.9.5
+ define MTD_INSTALL_TARGET_CMDS
+  for f in $(MTD_TARGETS_y) ; do \
+   install -D -m 0755 $(@D)/$$f $(TARGET_DIR)/usr/sbin/$${f##*/} ; \
