@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri, 25 May 2012 13:47:31 +0100
-Subject: [Buildroot] [PATCH resend] midori: bump version to 0.4.6
-Message-ID: <1337950052-18644-1-git-send-email-spdawson@gmail.com>
+Date: Fri, 25 May 2012 13:51:59 +0100
+Subject: [Buildroot] [PATCH resend] owl-linux: new package
+Message-ID: <1337950319-19104-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +12,116 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/midori/Config.in |    3 +++
- package/midori/midori.mk |    8 ++++----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/Config.in                                  |    1 +
+ package/owl-linux/Config.in                        |   10 ++++++++++
+ ...1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch |   15 +++++++++++++++
+ .../owl-linux-1.0.6-fix-for-linux-3.3.x.patch      |   19 +++++++++++++++++++
+ package/owl-linux/owl-linux.mk                     |   20 ++++++++++++++++++++
+ 5 files changed, 65 insertions(+)
+ create mode 100644 package/owl-linux/Config.in
+ create mode 100644 package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
+ create mode 100644 package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
+ create mode 100644 package/owl-linux/owl-linux.mk
 
-diff --git a/package/midori/Config.in b/package/midori/Config.in
-index 95a0afb..49867e4 100644
---- a/package/midori/Config.in
-+++ b/package/midori/Config.in
-@@ -2,6 +2,9 @@ config BR2_PACKAGE_MIDORI
- 	bool "midori"
- 	select BR2_PACKAGE_WEBKIT
- 	select BR2_PACKAGE_LIBSEXY
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	depends on BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # webkit
- 	depends on BR2_USE_WCHAR	 # webkit
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index 3e46b1a..19bf6dd 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -4,10 +4,10 @@
- #
- #############################################################
- 
--MIDORI_VERSION = 0.3.6
-+MIDORI_VERSION = 0.4.6
- MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
--MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.3/
--MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2
-+MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.4/
-+MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2 host-vala $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- ifneq ($(BR2_PACKAGE_XORG7),y)
- define MIDORI_WITHOUT_X11
-@@ -21,7 +21,7 @@ define MIDORI_CONFIGURE_CMDS
- 		$(TARGET_CONFIGURE_OPTS)	\
- 		./waf configure			\
- 		--prefix=/usr			\
--		--disable-vala			\
-+		--disable-libnotify			\
-        )
- endef
- 
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..971b106 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -208,6 +208,7 @@ source "package/mtd/Config.in"
+ source "package/ntfs-3g/Config.in"
+ source "package/open2300/Config.in"
+ source "package/openocd/Config.in"
++source "package/owl-linux/Config.in"
+ source "package/parted/Config.in"
+ source "package/pciutils/Config.in"
+ source "package/picocom/Config.in"
+diff --git a/package/owl-linux/Config.in b/package/owl-linux/Config.in
+new file mode 100644
+index 0000000..6ee0f95
+--- /dev/null
++++ b/package/owl-linux/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_OWL_LINUX
++	bool "H&D Wireless SPB104 SD-card WiFi SIP"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Linux kernel driver for the H&D Wireless SPB104 SD-card WiFi SIP.
++
++	  http://linux.hd-wireless.se/bin/view/Linux/GettingStarted
++
++comment "owl-linux requires a Linux kernel"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch b/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
+new file mode 100644
+index 0000000..a644406
+--- /dev/null
++++ b/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
+@@ -0,0 +1,15 @@
++Fix the owl-linux Makefile so that it protects spaces in the CROSS_COMPILE
++variable. For example, this variable will contain spaces if ccache is used.
++
++diff -Nur a/Makefile b/Makefile
++--- a/Makefile	2011-09-15 12:20:37.000000000 +0100
+++++ b/Makefile	2012-05-10 08:53:55.727706424 +0100
++@@ -35,7 +35,7 @@
++ 	PWD := $(shell pwd)
++ 
++ default:
++-	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) M=$(PWD) MODE=$(MODE) modules
+++	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" M=$(PWD) MODE=$(MODE) modules
++ 
++ clean: 
++ 	-rm -f *.o *.mod.c *.ko modules.order Module.symvers
+diff --git a/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch b/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
+new file mode 100644
+index 0000000..2d4ea48
+--- /dev/null
++++ b/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
+@@ -0,0 +1,19 @@
++Kernel commit b81693d9149c598302e8eb9c20cb20330d922c8e changed the
++net_device_ops structure, removing the ndo_set_multicast_list callback. The
++ndo_set_rx_mode has also been added to this structure.
++
++The upshot of these changes is that owl-linux fails to compile with 3.3.x
++kernels.
++
++diff -Nur a/owl_net.c b/owl_net.c
++--- a/owl_net.c	2011-09-15 12:20:37.000000000 +0100
+++++ b/owl_net.c	2012-05-01 11:39:14.617658349 +0100
++@@ -376,7 +376,7 @@
++ #endif /* OWL_CONFIG_IFUPDOWN */
++         .ndo_start_xmit         = owl_net_tx,
++         .ndo_get_stats          = owl_net_get_stats,
++-        .ndo_set_multicast_list = NULL,
+++        .ndo_set_rx_mode = NULL,
++         .ndo_tx_timeout         = owl_net_tx_timeout,
++         .ndo_set_mac_address    = NULL,
++ };
+diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
+new file mode 100644
+index 0000000..6cf8e96
+--- /dev/null
++++ b/package/owl-linux/owl-linux.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# owl-linux
++#
++#############################################################
++OWL_LINUX_VERSION = 1.0.6
++OWL_LINUX_SITE = http://linux.hd-wireless.se/pub/Linux/DownloadDrivers
++OWL_LINUX_SOURCE = owl-linux-$(OWL_LINUX_VERSION).tar.gz
++
++OWL_LINUX_DEPENDENCIES = linux
++
++define OWL_LINUX_BUILD_CMDS
++	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
++endef
++
++define OWL_LINUX_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M=$(@D) modules_install
++endef
++
++$(eval $(call GENTARGETS))
 -- 
 1.7.9.5
