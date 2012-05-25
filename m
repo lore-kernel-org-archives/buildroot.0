@@ -1,46 +1,30 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 25 May 2012 21:18:15 +0200
-Subject: [Buildroot] Buildroot 2012.05-rc3 released
-Message-ID: <87y5og83yg.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 May 2012 22:02:06 +0200
+Subject: [Buildroot] [PATCH resend] midori: bump version to 0.4.6
+In-Reply-To: <1337950052-18644-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Fri, 25 May 2012 13:47:31 +0100")
+References: <1337950052-18644-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87pq9s81xd.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+
 Hi,
+ 
+ spdawson> -MIDORI_VERSION = 0.3.6
+ spdawson> +MIDORI_VERSION = 0.4.6
+ spdawson>  MIDORI_SOURCE = midori-$(MIDORI_VERSION).tar.bz2
+ spdawson> -MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.3/
+ spdawson> -MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2
+ spdawson> +MIDORI_SITE = http://archive.xfce.org/src/apps/midori/0.4/
+ spdawson> +MIDORI_DEPENDENCIES = host-pkg-config host-intltool webkit libsexy libgtk2 host-vala $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext libintl) $(if $(BR2_PACKAGE_LIBICONV),libiconv)
 
-Buildroot 2012.05-rc3 is released - Go download it at:
-
-http://buildroot.net/downloads/buildroot-2012.05-rc3.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2012.05-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2012.05_rc2..
-    10  Peter Korsgaard
-     8  Gustavo Zacarias
-     1  Ludovic Desroches
-     1  Markos Chandras
-     1  Thomas De Schampheleire
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05_rc3
-
-Another week, another release candidate. Things are definately calming
-down, but we had a few too many changes since -rc2, so I decided to make
-another RC. Expect the final 2012.05 release early next week.
-
-Enjoy!
+I've sorted and indented this long _DEPENDENCIES line so it is easier to
+read. Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
