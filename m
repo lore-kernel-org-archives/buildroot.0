@@ -1,35 +1,82 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 27 May 2012 21:10:42 +0200
-Subject: [Buildroot] [git commit] netsnmp: fix build with high BR2_JLEVEL
-	settings
-Message-ID: <20120527191251.8B2B896DCE@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 27 May 2012 23:24:20 +0200
+Subject: [Buildroot] [PATCH 1/2] Rework of the init system
+In-Reply-To: <3516437e82a882bdc06039cc9dbb9cd7b67b14ad.1337947838.git.maxime.ripard@free-electrons.com>
+ (Maxime Ripard's message of "Fri, 25 May 2012 14:11:06 +0200")
+References: <cover.1337947838.git.maxime.ripard@free-electrons.com>
+ <cover.1337947838.git.maxime.ripard@free-electrons.com>
+ <3516437e82a882bdc06039cc9dbb9cd7b67b14ad.1337947838.git.maxime.ripard@free-electrons.com>
+Message-ID: <874nr18ghn.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7643670052a7adc1c2a5f275664774c6d50e6a3d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Maxime" == Maxime Ripard <maxime.ripard@free-electrons.com> writes:
 
-The netsnmp build system is not robust against parallel builds.
+Hi,
 
-Fixes http://autobuild.buildroot.net/results/5bb827425ed07617a47a0c0d942a3c6c423fc02f
+ Maxime> Since we have now two uncompatible init systems, and we want
+ Maxime> only one of them at the same time in use in the rootfs, we need
+ Maxime> to select a particular init system. This patch also adds
+ Maxime> $(PKG)_INSTALL_INIT_SYSTEMD and $(PKG)_INSTALL_INIT_SYSV hooks
+ Maxime> that are called when the matching init systems are selected to
+ Maxime> install properly the init scripts of the package.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/netsnmp/netsnmp.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Looks good, just a small comment:
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 448e3fd..6d67dc5 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -21,6 +21,7 @@ NETSNMP_CONF_OPT = --with-persistent-directory=/var/lib/snmp --disable-static \
- 		--with-mib-modules="host ucd-snmp/dlmod" \
- 		--with-out-mib-modules="disman/event disman/schedule utilities" \
- 		--with-out-transports="Unix"
-+NETSNMP_MAKE = $(MAKE1)
- NETSNMP_BLOAT_MIBS = BRIDGE DISMAN-EVENT DISMAN-SCHEDULE DISMAN-SCRIPT EtherLike RFC-1215 RFC1155-SMI RFC1213 SCTP SMUX
+ Maxime> +++ b/target/generic/Config.in
+ Maxime> @@ -37,6 +37,34 @@ comment "udev requires a toolchain with LARGEFILE + WCHAR support"
  
- ifeq ($(BR2_ENDIAN),"BIG")
+ Maxime>  endchoice
+ 
+ Maxime> +choice
+ Maxime> +	prompt "Init system"
+ Maxime> +	default BR2_INIT_BUSYBOX
+ Maxime> +	help
+ Maxime> +	  To select systemd, you first need to have dbus and udev enabled
+
+That comment seems wrong as you are selecting dbus and DYNAMIC_UDEV
+which ends up selecting udev.
+
+ Maxime> +
+ Maxime> +config BR2_INIT_BUSYBOX
+ Maxime> +	bool "Busybox init"
+ Maxime> +	select BR2_PACKAGE_BUSYBOX
+ Maxime> +
+ Maxime> +config BR2_INIT_SYSV
+ Maxime> +	bool "Use systemV init"
+ Maxime> +	select BR2_PACKAGE_SYSVINIT
+ Maxime> +
+ Maxime> +config BR2_INIT_SYSTEMD
+ Maxime> +	bool "Use systemd"
+
+You added "Use " in front of sysv + systemd, but not busybox - And
+"init" after busybox + sysv. I suggest you drop both so it becomes just
+busybox/systemv/systemd.
+
+
+ Maxime> +	depends on BR2_LARGEFILE
+ Maxime> +	depends on BR2_USE_WCHAR
+ Maxime> +	depends on BR2_INET_IPV6
+ Maxime> +	select BR2_PACKAGE_DBUS
+
+You don't really need to select UDEV as it gets selected by systemd.
+
+ Maxime> +	select BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_UDEV
+ Maxime> +	select BR2_PACKAGE_SYSTEMD
+ Maxime> +
+ Maxime> +comment 'systemd requires largefile, wchar and IPv6 support'
+ Maxime> +	depends on !(BR2_LARGEFILE && BR2_USE_WCHAR && BR2_INET_IPV6)
+ Maxime> +
+ Maxime> +endchoice
+ Maxime> +
+ Maxime>  config BR2_ROOTFS_DEVICE_TABLE
+ Maxime>  	string "Path to the permission tables"
+ Maxime>  	default "target/generic/device_table.txt"
+ Maxime> -- 
+ Maxime> 1.7.9.5
+
+-- 
+Bye, Peter Korsgaard
