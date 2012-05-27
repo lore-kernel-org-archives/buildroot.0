@@ -1,106 +1,72 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 26 May 2012 19:50:24 +0200
-Subject: [Buildroot] Erorr build buildroot-2012.05-rc3 (Microblaze)
-In-Reply-To: <CAE8RAbcT2DCnFOyhJxg=e-50nzq1yTQnGx6MT_bbtH3j5sQkag@mail.gmail.com>
- (=?utf-8?B?ItCU0LzQuNGC0YDQuNC5INCT0YDQuNGG0LDQuSIncw==?= message of "Sat,
- 26 May 2012 18:51:36 +0300")
-References: <CAE8RAbcT2DCnFOyhJxg=e-50nzq1yTQnGx6MT_bbtH3j5sQkag@mail.gmail.com>
-Message-ID: <87hav296hr.fsf@macbook.be.48ers.dk>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sat, 26 May 2012 21:45:52 -0400
+Subject: [Buildroot] [PATCH] sstrip preserve permissions
+Message-ID: <1338083152-2359-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "???????" == ??????? ?????? <dmytriy.grytsay@gmail.com> writes:
+Unlike "strip", the "sstrip" does not preserve the file permissions
+of its target.  So if you have a package that sets special permissions,
+such as the setuid bit, sstrip will remove it.  This patch adds some
+minimal lines to preserve the permissions of stripped files.
 
-Hi,
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ .../sstrip/sstrip-20154-preserve-permissions.patch |   43 ++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/sstrip/sstrip-20154-preserve-permissions.patch
 
-Please use the buildroot list rather than mailing me directly in the
-future, thanks.
-
- ???????> Hello
- ???????> I would like to report a bug in Buildroot.
-
- ???????> When I build?buildroot-2012.05-rc3 for Microblaze
- ???????> architecture, i have the fallowing error:
-
- ???????> kruger at thinkpad:/media/elements/microblaze/buildroot-2012.05-rc3$ make
- ???????> /usr/bin/make -j2 ?HOSTCC="/usr/bin/gcc" HOSTCXX="/usr/bin/g++" silentoldconfig
- ???????> make[1]: Entering directory `/media/elements/microblaze/buildroot-2012.05-rc3'
- ???????> mkdir -p /media/elements/microblaze/buildroot-2012.05-rc3/output/build/
- ???????> buildroot-config/lxdialog
- ???????> /usr/bin/make CC="/usr/bin/gcc" HOSTCC="/usr/bin/gcc" obj=/media/elements/
- ???????> microblaze/buildroot-2012.05-rc3/output/build/buildroot-config -C support/
- ???????> kconfig -f Makefile.br conf
- ???????> make[2]: Entering directory `/media/elements/microblaze/buildroot-2012.05-rc3/
- ???????> support/kconfig'
- ???????> /usr/bin/gcc -DCURSES_LOC="<ncurses.h>" -DLOCALE ?-I/media/elements/microblaze/
- ???????> buildroot-2012.05-rc3/output/build/buildroot-config ? /media/elements/
- ???????> microblaze/buildroot-2012.05-rc3/output/build/buildroot-config/conf.o /media/
- ???????> elements/microblaze/buildroot-2012.05-rc3/output/build/buildroot-config/
- ???????> zconf.tab.o ?-o /media/elements/microblaze/buildroot-2012.05-rc3/output/build/
- ???????> buildroot-config/conf
- ???????> make[2]: Leaving directory `/media/elements/microblaze/buildroot-2012.05-rc3/
- ???????> support/kconfig'
- ???????> KCONFIG_AUTOCONFIG=/media/elements/microblaze/buildroot-2012.05-rc3/output/
- ???????> build/buildroot-config/auto.conf KCONFIG_AUTOHEADER=/media/elements/microblaze/
- ???????> buildroot-2012.05-rc3/output/build/buildroot-config/autoconf.h KCONFIG_TRISTATE
- ???????> =/media/elements/microblaze/buildroot-2012.05-rc3/output/build/buildroot-config
- ???????> /tristate.config BUILDROOT_CONFIG=/media/elements/microblaze/
- ???????> buildroot-2012.05-rc3/.config /media/elements/microblaze/buildroot-2012.05-rc3/
- ???????> output/build/buildroot-config/conf --silentoldconfig Config.in
- ???????> #
- ???????> # configuration written to /media/elements/microblaze/buildroot-2012.05-rc3
- ???????> /.config
- ???????> #
- ???????> make[1]: Leaving directory `/media/elements/microblaze/buildroot-2012.05-rc3'
- ???????> mkdir -p /media/elements/microblaze/buildroot-2012.05-rc3/output/target
- ???????> if ! [ -d "/media/elements/microblaze/buildroot-2012.05-rc3/output/target/bin"
- ???????> ]; then \
- ???????> if [ -d "/media/elements/microblaze/buildroot-2012.05-rc3/fs/skeleton" ]; then
- ???????> \
- ???????> cp -fa /media/elements/microblaze/buildroot-2012.05-rc3/fs/skeleton/* /media/
- ???????> elements/microblaze/buildroot-2012.05-rc3/output/target/; \
- ???????> fi; \
- ???????> fi
- ???????> find /media/elements/microblaze/buildroot-2012.05-rc3/output/target -type d
- ???????> -name CVS -print0 -o -name .svn -print0 | xargs -0 rm -rf
- ???????> find /media/elements/microblaze/buildroot-2012.05-rc3/output/target -type f \(
- ???????> -name .empty -o -name '*~' \) -print0 | xargs -0 rm -rf
- ???????> touch /media/elements/microblaze/buildroot-2012.05-rc3/output/build/.root
- ???????> --2012-05-26 17:20:08-- ?http://git.xilinx.com/?p=xldk/microblaze_v2.0.git;a=
- ???????> blob;h=71e031ae990e063a5718f90d30cf97ad85e2f565;hb=
- ???????> 569081301f0f1d8d3b24335a364e8ff1774190d4;f=microblaze-unknown-linux-gnu.tgz
- ???????> Resolving git.xilinx.com... 149.199.60.191
- ???????> Connecting to git.xilinx.com|149.199.60.191|:80... connected.
- ???????> HTTP request sent, awaiting response... 200 OK
- ???????> Length: unspecified [application/x-gzip]
- ???????> Saving to: `/media/elements/microblaze/buildroot-2012.05-rc3/dl/
- ???????> microblaze-unknown-linux-gnu.tgz'
-
- ???????> ? ? [ ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
- ???????> ? ? ? ? ? ? ? ? ? <=> ? ? ] 62,611,385 ?20.2K/s ? in 48m 27s ?
-
- ???????> 2012-05-26 18:08:40 (21.0 KB/s) - `/media/elements/microblaze/
- ???????> buildroot-2012.05-rc3/dl/microblaze-unknown-linux-gnu.tgz' saved [62611385]
-
- ???????> mkdir -p /media/elements/microblaze/buildroot-2012.05-rc3/output/host/opt/
- ???????> ext-toolchain
- ???????> gzip -d -c /media/elements/microblaze/buildroot-2012.05-rc3/dl/
- ???????> microblaze-unknown-linux-gnu.tgz | \
- ???????> tar --strip-components=1 --exclude='usr/lib/locale/*' -C /media/elements/
- ???????> microblaze/buildroot-2012.05-rc3/output/host/opt/ext-toolchain ?-xf -
- ???????> Checking external toolchain settings
- ???????> Cannot execute cross-compiler '/media/elements/microblaze/buildroot-2012.05-rc3
-
-I guess you're on a 32bit PC? The Xilinx cross compiler is apparently a
-64bit binary. There's not much to do about it exept for either build on
-a 64bit machine or go back to the earlier v1 binary. There was a
-dicussion about it on the list recently:
-
-http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/41555/focus=41600
-
-
+diff --git a/package/sstrip/sstrip-20154-preserve-permissions.patch b/package/sstrip/sstrip-20154-preserve-permissions.patch
+new file mode 100644
+index 0000000..0bd9162
+--- /dev/null
++++ b/package/sstrip/sstrip-20154-preserve-permissions.patch
+@@ -0,0 +1,43 @@
++diff -urN sstrip.ORIG/src/sstrip.c sstrip/src/sstrip.c
++--- sstrip.ORIG/src/sstrip.c	2010-12-11 23:59:51.464374000 -0500
+++++ sstrip/src/sstrip.c	2012-02-21 11:58:56.320295827 -0500
++@@ -60,6 +60,10 @@
++ #include	<fcntl.h>
++ #include	<elf.h>
++ 
+++#include <sys/types.h>
+++#include <sys/stat.h>
+++#include <unistd.h>
+++
++ #ifndef TRUE
++ #define	TRUE		1
++ #define	FALSE		0
++@@ -427,6 +431,7 @@
++ 
++ 	for (arg = argv + 1 ; *arg != NULL ; ++arg) {
++ 		filename = *arg;
+++		struct stat sb;
++ 
++ 		fd = open(*arg, O_RDWR);
++ 		if (fd < 0) {
++@@ -435,6 +440,9 @@
++ 			continue;
++ 		}
++ 
+++		/* Get original file's permissions */
+++		if (fstat(fd, &sb) == -1) { perror("fstat"); sb.st_mode = 0; }
+++
++ 		switch (readelfheaderident(fd, &e.ehdr32)) {
++ 			case ELFCLASS32:
++ 				if (!(readelfheader32(fd, &e.ehdr32)					&&
++@@ -458,6 +466,10 @@
++ 				++failures;
++ 				break;
++ 		}
+++
+++		/* Set original file's permissions, including setuid */
+++		if (sb.st_mode != 0) { fchmod(fd, sb.st_mode & 07777); }
+++
++ 		close(fd);
++ 	}
++ 
 -- 
-Bye, Peter Korsgaard
+1.7.9.5
