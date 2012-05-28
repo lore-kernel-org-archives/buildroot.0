@@ -1,109 +1,46 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 28 May 2012 11:54:19 -0400
-Subject: [Buildroot] [PATCH 1/4] Added the libassuan package.
-In-Reply-To: <4FC39883.7010107@essensium.com>
-References: <1337469304-27821-1-git-send-email-stijn.souffriau@essensium.com>
- <4FC39883.7010107@essensium.com>
-Message-ID: <CANxTyt5VU9GYDpsbN10mXf5v8bXdAsiJo6zHNV7c9mX95=djsg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 28 May 2012 20:08:04 +0200
+Subject: [Buildroot] [PATCH resend] Bump gpsd from version 2.95 to
+	version 3.5
+In-Reply-To: <4FC33624.3000208@imgtec.com> (Markos Chandras's message of "Mon, 
+ 28 May 2012 09:24:04 +0100")
+References: <1338047171-4119-1-git-send-email-spdawson@gmail.com>
+ <4FC33624.3000208@imgtec.com>
+Message-ID: <87zk8s6uwr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The comment header in gnupg.mk is wrong ... it says "libgpg-error" ...
+>>>>> "Markos" == Markos Chandras <Markos.Chandras@imgtec.com> writes:
+
+ Markos> On 05/26/2012 04:46 PM, spdawson at gmail.com wrote:
+ >> From: Simon Dawson <spdawson@gmail.com>
+ >> 
+ >> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ >> ---
+ >> package/gpsd/Config.in                         |   17 +--
+ >> package/gpsd/gpsd-3.5-fix-compile-errors.patch |   14 +++
+ >> package/gpsd/gpsd-fix-libgpsmm.patch           |   23 ----
+ >> package/gpsd/gpsd-navcom.patch                 |   47 -------
+ >> package/gpsd/gpsd.mk                           |  156 +++++++++++++-----------
+ >> 5 files changed, 107 insertions(+), 150 deletions(-)
+ >> create mode 100644 package/gpsd/gpsd-3.5-fix-compile-errors.patch
+ >> delete mode 100644 package/gpsd/gpsd-fix-libgpsmm.patch
+ >> delete mode 100644 package/gpsd/gpsd-navcom.patch
+ >> 
 
 
-On Mon, May 28, 2012 at 11:23 AM, Stijn Souffriau <
-stijn.souffriau@essensium.com> wrote:
+ Markos> Hi Simon,
 
-> Hello all,
->
-> Any feedback on the 4 patches I sent?
->
-> Thanks,
->
-> Stijn
->
-> On 05/20/2012 01:15 AM, Stijn Souffriau wrote:
->
->> ---
->>  package/Config.in              |    1 +
->>  package/libassuan/Config.in    |    7 +++++++
->>  package/libassuan/libassuan.mk |   17 +++++++++++++++++
->>  3 files changed, 25 insertions(+), 0 deletions(-)
->>  create mode 100644 package/libassuan/Config.in
->>  create mode 100644 package/libassuan/libassuan.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index b25f31a..58c6624 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -276,6 +276,7 @@ endmenu
->>  menu "Crypto"
->>  source "package/beecrypt/Config.in"
->>  source "package/gnutls/Config.in"
->> +source "package/libassuan/Config.in"
->>  source "package/libgcrypt/Config.in"
->>  source "package/libgpg-error/Config.**in"
->>  source "package/libnss/Config.in"
->> diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
->> new file mode 100644
->> index 0000000..93ab49c
->> --- /dev/null
->> +++ b/package/libassuan/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_LIBASSUAN
->> +       bool "libassuan"
->> +       select BR2_PACKAGE_LIBGPG_ERROR
->> +       help
->> +         Libassuan is the IPC library used by some GnuPG related
->> software.
->> +
->> +         http://www.gnupg.org/
->> diff --git a/package/libassuan/libassuan.**mk <http://libassuan.mk>b/package/libassuan/
->> libassuan.**mk <http://libassuan.mk>
->> new file mode 100644
->> index 0000000..73c098e
->> --- /dev/null
->> +++ b/package/libassuan/libassuan.**mk <http://libassuan.mk>
->> @@ -0,0 +1,17 @@
->> +#############################**##############################**##
->> +#
->> +# libassuan
->> +#
->> +#############################**##############################**##
->> +
->> +LIBASSUAN_VERSION = 2.0.3
->> +LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION)**.tar.bz2
->> +LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/**libassuan/<ftp://ftp.gnupg.org/gcrypt/libassuan/>
->> +LIBASSUAN_INSTALL_STAGING = YES
->> +
->> +LIBASSUAN_CONF_OPT = \
->> +       --with-gpg-error-prefix=$(**STAGING_DIR)/usr
->> +
->> +LIBASSUAN_DEPENDENCIES = libgpg-error
->> +
->> +$(eval $(call AUTOTARGETS))
->>
->
->
-> --
-> Stijn Souffriau
-> Embedded Software Developer - Mind Embedded Software Division
->
-> ESSENSIUM nv
-> Mind - Embedded Software Division
-> Gaston Geenslaan 9 - B-3001 Leuven
-> email : stijn.souffriau at essensium.com
-> Web: www.essensium.com   /   www.mind.be
-> BE 872 984 063 RPR Leuven
->
-> ______________________________**_________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/**mailman/listinfo/buildroot<http://lists.busybox.net/mailman/listinfo/buildroot>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120528/ca3429fe/attachment-0001.html>
+ Markos> I believe you need to remove the version string from the
+ Markos> "gpsd-3.5-fix-compile-errors.patch". See
+
+ Markos> http://lists.busybox.net/pipermail/buildroot/2012-May/053739.html
+
+Indeed. And as 3.6 has recently been released, it makes more sense to
+use that instead.
+
+-- 
+Bye, Peter Korsgaard
