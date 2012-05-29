@@ -1,37 +1,95 @@
-From: David Purdy <david.c.purdy@gmail.com>
-Date: Tue, 29 May 2012 16:51:01 -0500
-Subject: [Buildroot] merge windows, package submission standards,
-	procedure ... ?
-Message-ID: <CAPOFwxoH3mJX8-tY0KvBiiyeH19VODTz+xgRMz=8-oB7q=154Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 May 2012 19:33:18 -0300
+Subject: [Buildroot] [PATCHv2] ramspeed: new package
+Message-ID: <1338330798-26017-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in            |    1 +
+ package/ramspeed/Config.in   |    7 +++++++
+ package/ramspeed/Makefile    |   14 ++++++++++++++
+ package/ramspeed/ramspeed.mk |   21 +++++++++++++++++++++
+ 4 files changed, 43 insertions(+), 0 deletions(-)
+ create mode 100644 package/ramspeed/Config.in
+ create mode 100644 package/ramspeed/Makefile
+ create mode 100644 package/ramspeed/ramspeed.mk
 
-As I'd not submitted a package/patch to Buildroot before a few days
-ago**, I'm asking if there is:
-
-1.   a specific merge window/timeline that patches need to be in by in
-order to make it into a pending release?
-
-2.   anything more specific coding requirements than what is listed
-here? : http://buildroot.uclibc.org/buildroot.html#add_packages
-[ like checkpatch.pl conformity,  trial build for minimum number of
-targets/archs ]
-
-3.  any one single person that I need to get contact (like a "new
-packages custodian)?
-[at U-Boot for instance they have "custodians" who manage certain
-aspects of the git tree]
-
-4.   a need to open a Bug Report for a new package?
-
-thanks, regards,
-
-Dave
-
-
-**Reference: http://lists.busybox.net/pipermail/buildroot/2012-May/054268.html
+diff --git a/package/Config.in b/package/Config.in
+index a3c92ec..4ddb865 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -35,6 +35,7 @@ source "package/ltrace/Config.in"
+ source "package/memstat/Config.in"
+ source "package/netperf/Config.in"
+ source "package/oprofile/Config.in"
++source "package/ramspeed/Config.in"
+ source "package/rt-tests/Config.in"
+ source "package/strace/Config.in"
+ source "package/stress/Config.in"
+diff --git a/package/ramspeed/Config.in b/package/ramspeed/Config.in
+new file mode 100644
+index 0000000..b236329
+--- /dev/null
++++ b/package/ramspeed/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_RAMSPEED
++	bool "ramspeed"
++	help
++	  RAMspeed is a free open source command line utility
++	  to measure cache and memory performance.
++
++	  http://alasir.com/software/ramspeed/
+diff --git a/package/ramspeed/Makefile b/package/ramspeed/Makefile
+new file mode 100644
+index 0000000..acb8cfd
+--- /dev/null
++++ b/package/ramspeed/Makefile
+@@ -0,0 +1,14 @@
++
++all: generic
++
++generic: ramspeed.c fltmem.c fltmark.c intmem.c intmark.c
++	$(CC) $(CFLAGS) $^ -o ramspeed
++
++i386: ramspeed.c i386/*.s i386/cpuinfo/*.s
++	$(CC) $(CFLAGS) -DI386_ASM $^ -o ramspeed
++
++x86_64: ramspeed.c amd64/*.s
++	$(CC) $(CFLAGS) -DAMD64_ASM $^ -o ramspeed
++
++clean:
++	rm -f *.o ramspeed
+diff --git a/package/ramspeed/ramspeed.mk b/package/ramspeed/ramspeed.mk
+new file mode 100644
+index 0000000..9ac21ad
+--- /dev/null
++++ b/package/ramspeed/ramspeed.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# ramspeed
++#
++#############################################################
++
++RAMSPEED_VERSION = 2.6.0
++RAMSPEED_SITE = http://www.alasir.com/software/ramspeed
++RAMSPEED_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
++
++define RAMSPEED_BUILD_CMDS
++	cp -f package/ramspeed/Makefile $(@D)
++	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		make -C $(@D) $(RAMSPEED_ARCH)
++endef
++
++define RAMSPEED_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/ramspeed $(TARGET_DIR)/usr/bin/ramspeed
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.3.4
