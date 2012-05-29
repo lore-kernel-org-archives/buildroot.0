@@ -1,26 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 May 2012 23:01:23 +0200
-Subject: [Buildroot] [PATCH] quota: new package (v2)
-In-Reply-To: <1338324748-27437-1-git-send-email-jarkko.sakkinen@intel.com>
-References: <1338324748-27437-1-git-send-email-jarkko.sakkinen@intel.com>
-Message-ID: <20120529230123.35f2116f@skate>
+Date: Tue, 29 May 2012 23:02:23 +0200
+Subject: [Buildroot] [PATCH] ramspeed: new package
+In-Reply-To: <1338324518-5281-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1338324518-5281-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20120529230223.4e833059@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue, 29 May 2012 23:52:28 +0300,
-Jarkko Sakkinen <jarkko.sakkinen@intel.com> a ?crit :
+Le Tue, 29 May 2012 17:48:38 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
->  fs/skeleton/etc/network/interfaces |    2 ++
+> +define RAMSPEED_BUILD_CMDS
+> +	cp -f package/ramspeed/Makefile $(@D); \
+> +	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+> +		make -C $(@D) $(RAMSPEED_ARCH)
+> +endef
 
-Why do you need to change this file? The change is specific to the fact
-of having an eth0 interface configured using dhcp, which may not be
-necessarily the case. Can you justify why such a change is needed for
-this new quota package?
+Nitpicking: those two commands do not necessarily need to belong to the
+shell same command. I.e, you can write it as:
 
-Thanks!
++define RAMSPEED_BUILD_CMDS
++	cp -f package/ramspeed/Makefile $(@D)
++	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
++		make -C $(@D) $(RAMSPEED_ARCH)
++endef
 
 Thomas
 -- 
