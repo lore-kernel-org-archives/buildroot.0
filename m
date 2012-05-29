@@ -1,16 +1,31 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 31 May 2012 09:23:23 +0200
-Subject: [Buildroot] [git commit] Merge branch 'next'
-Message-ID: <20120531113301.ED20396E2B@busybox.osuosl.org>
+Date: Tue, 29 May 2012 09:55:13 +0200
+Subject: [Buildroot] [git commit] ofono: bump version
+Message-ID: <20120531113301.883CF96E2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bdb4c3a6dc9efecc4d1e40fabf8cb9b3e0eb3ee2
+commit: http://git.buildroot.net/buildroot/commit/?id=41b2e7d9f9f1dc5c36567dec9aeaff6d0bf04003
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Conflicts:
-Patch is too large, so refusing to show it
-Patch is too large, so refusing to show it
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ofono/ofono.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
+index c49ee29..c6ffb64 100644
+--- a/package/ofono/ofono.mk
++++ b/package/ofono/ofono.mk
+@@ -3,7 +3,7 @@
+ # ofono
+ #
+ #############################################################
+-OFONO_VERSION = 1.5
++OFONO_VERSION = 1.6
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_DEPENDENCIES = \
+ 	host-pkg-config \
