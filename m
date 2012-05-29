@@ -1,29 +1,82 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 May 2012 17:56:55 -0300
-Subject: [Buildroot] [PATCH] quota: new package (v2)
-In-Reply-To: <1338324748-27437-1-git-send-email-jarkko.sakkinen@intel.com>
-References: <1338324748-27437-1-git-send-email-jarkko.sakkinen@intel.com>
-Message-ID: <2003dbf485cd1a69315918348cd65514@zacarias.com.ar>
+From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+Date: Wed, 30 May 2012 00:00:05 +0300
+Subject: [Buildroot] [PATCH] quota: new package (v3)
+Message-ID: <1338325205-28310-1-git-send-email-jarkko.sakkinen@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-05-29 17:52, Jarkko Sakkinen wrote:
+Added linuxquota package.
 
-> --- a/fs/skeleton/etc/network/interfaces
-> +++ b/fs/skeleton/etc/network/interfaces
-> @@ -2,3 +2,5 @@
->  auto lo
->  iface lo inet loopback
->
-> +auto eth0
-> +iface eth0 inet dhcp
+[update: removed invalid change]
 
-Oops? It shouldn't be touching this file.
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+---
+ package/Config.in       |    3 +++
+ package/quota/Config.in |   11 +++++++++++
+ package/quota/quota.mk  |   20 ++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/quota/Config.in
+ create mode 100644 package/quota/quota.mk
 
-> +QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
-
-Not strictly necessary, it's the default, though it's a minor detail.
-Regards.
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..eb76e14 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++endif
++source "package/quota/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/rsyslog/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+new file mode 100644
+index 0000000..a2fa9b6
+--- /dev/null
++++ b/package/quota/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QUOTA
++	bool "quota"
++	depends on BR2_INET_RPC
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
++	help
++		Implementation of the disk quota system.
++		http://sourceforge.net/projects/linuxquota/
++
++comment "quota requires a toolchain with RPC support"
++	depends on !BR2_INET_RPC
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+new file mode 100644
+index 0000000..5fd83c7
+--- /dev/null
++++ b/package/quota/quota.mk
+@@ -0,0 +1,20 @@
++#############################################################
++#
++# QUOTA
++#
++#############################################################
++
++QUOTA_VERSION = 4.00
++QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
++QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
++
++QUOTA_MAKE_OPT = \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)" \
++	LD="$(TARGET_LD)"
++
++QUOTA_INSTALL_TARGET_OPT = \
++	ROOTDIR=$(TARGET_DIR) \
++	install
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.9.5
