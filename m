@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 May 2012 22:08:42 -0300
-Subject: [Buildroot] [PATCH] lshw: new package
-Message-ID: <1338253722-26250-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 28 May 2012 22:11:23 -0300
+Subject: [Buildroot] [PATCHv2] lshw: new package
+Message-ID: <1338253883-26318-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,10 +11,10 @@ To: buildroot@busybox.net
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
  package/Config.in                |    1 +
- package/lshw/Config.in           |   12 ++++++++++++
+ package/lshw/Config.in           |   13 +++++++++++++
  package/lshw/lshw-add-LIBS.patch |   30 ++++++++++++++++++++++++++++++
  package/lshw/lshw.mk             |   23 +++++++++++++++++++++++
- 4 files changed, 66 insertions(+), 0 deletions(-)
+ 4 files changed, 67 insertions(+), 0 deletions(-)
  create mode 100644 package/lshw/Config.in
  create mode 100644 package/lshw/lshw-add-LIBS.patch
  create mode 100644 package/lshw/lshw.mk
@@ -33,13 +33,14 @@ index 338019d..a3c92ec 100644
  source "package/makedevs/Config.in"
 diff --git a/package/lshw/Config.in b/package/lshw/Config.in
 new file mode 100644
-index 0000000..cc29ba6
+index 0000000..4960ac9
 --- /dev/null
 +++ b/package/lshw/Config.in
-@@ -0,0 +1,12 @@
+@@ -0,0 +1,13 @@
 +config BR2_PACKAGE_LSHW
 +	bool "lshw"
 +	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_LARGEFILE
 +	depends on BR2_USE_WCHAR
 +	help
 +	  lshw (Hardware Lister) is a small tool to provide
