@@ -1,222 +1,118 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 28 May 2012 19:36:48 -0400
-Subject: [Buildroot] [PATCH] New package: xinetd
-Message-ID: <1338248208-2763-1-git-send-email-danomimanchego123@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 May 2012 22:08:42 -0300
+Subject: [Buildroot] [PATCH] lshw: new package
+Message-ID: <1338253722-26250-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                              |    1 +
- package/xinetd/Config.in                       |    8 +++
- package/xinetd/xinetd-2.3.15/001-ar.patch      |   74 ++++++++++++++++++++++++
- package/xinetd/xinetd-2.3.15/002-destdir.patch |   35 +++++++++++
- package/xinetd/xinetd-2.3.15/003-rpc_fix.patch |   26 +++++++++
- package/xinetd/xinetd.mk                       |   10 ++++
- 6 files changed, 154 insertions(+)
- create mode 100644 package/xinetd/Config.in
- create mode 100644 package/xinetd/xinetd-2.3.15/001-ar.patch
- create mode 100644 package/xinetd/xinetd-2.3.15/002-destdir.patch
- create mode 100644 package/xinetd/xinetd-2.3.15/003-rpc_fix.patch
- create mode 100644 package/xinetd/xinetd.mk
+ package/Config.in                |    1 +
+ package/lshw/Config.in           |   12 ++++++++++++
+ package/lshw/lshw-add-LIBS.patch |   30 ++++++++++++++++++++++++++++++
+ package/lshw/lshw.mk             |   23 +++++++++++++++++++++++
+ 4 files changed, 66 insertions(+), 0 deletions(-)
+ create mode 100644 package/lshw/Config.in
+ create mode 100644 package/lshw/lshw-add-LIBS.patch
+ create mode 100644 package/lshw/lshw.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..06d09da 100644
+index 338019d..a3c92ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -585,6 +585,7 @@ source "package/wget/Config.in"
- endif
- source "package/wireless_tools/Config.in"
- source "package/wpa_supplicant/Config.in"
-+source "package/xinetd/Config.in"
- source "package/xl2tp/Config.in"
- 
- endmenu
-diff --git a/package/xinetd/Config.in b/package/xinetd/Config.in
+@@ -198,6 +198,7 @@ source "package/kbd/Config.in"
+ source "package/lcdproc/Config.in"
+ source "package/linux-firmware/Config.in"
+ source "package/lm-sensors/Config.in"
++source "package/lshw/Config.in"
+ source "package/lsuio/Config.in"
+ source "package/lvm2/Config.in"
+ source "package/makedevs/Config.in"
+diff --git a/package/lshw/Config.in b/package/lshw/Config.in
 new file mode 100644
-index 0000000..6bfe24c
+index 0000000..cc29ba6
 --- /dev/null
-+++ b/package/xinetd/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_XINETD
-+	bool "xinetd"
-+	depends on BR2_INET_RPC
++++ b/package/lshw/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LSHW
++	bool "lshw"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
 +	help
-+	  xinetd is a secure replacement for inetd. It was originally written by
-+	  panos at cs.colorado.edu.
++	  lshw (Hardware Lister) is a small tool to provide
++	  detailed information on the hardware configuration of the machine.
 +
-+	  http://www.xinetd.org
-diff --git a/package/xinetd/xinetd-2.3.15/001-ar.patch b/package/xinetd/xinetd-2.3.15/001-ar.patch
++	  http://ezix.org/project/wiki/HardwareLiSter
++
++comment "lshw requires a toolchain with C++, LARGEFILE & WCHAR support enabled"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR
+diff --git a/package/lshw/lshw-add-LIBS.patch b/package/lshw/lshw-add-LIBS.patch
 new file mode 100644
-index 0000000..566f2f7
+index 0000000..70b2a5b
 --- /dev/null
-+++ b/package/xinetd/xinetd-2.3.15/001-ar.patch
-@@ -0,0 +1,74 @@
-+This patch changes all of the hard-coded invocations of "ar" to $(AR), to
-+support a cross-compilation toolchain.
++++ b/package/lshw/lshw-add-LIBS.patch
+@@ -0,0 +1,30 @@
++We need to be able to pass extra LIBS when our toolchain lacks NLS support,
++this way we can build libintl and link to it.
++A good example is uClibc with locale support disabled.
 +
-+The content of this patch was copied from the OpenWrt project:
-+https://dev.openwrt.org/browser/packages/net/xinetd/patches/001-ar.patch
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+
-+--- a/libs/src/misc/Makefile.in
-++++ b/libs/src/misc/Makefile.in
-+@@ -62,7 +62,7 @@
-+ 
-+ 
-+ $(LIBNAME): $(OBJECTS)
-+-	ar r $@ $?
-++	$(AR) r $@ $?
-+ 	$(RANLIB) $@
-+ 
-+ install: $(LIBNAME)
-+--- a/libs/src/portable/Makefile.in
-++++ b/libs/src/portable/Makefile.in
-+@@ -57,7 +57,7 @@
-+ 
-+ 
-+ $(LIBNAME): $(OBJECTS)
-+-	ar r $@ $?
-++	$(AR) r $@ $?
-+ 	$(RANLIB) $@
-+ 
-+ install: $(LIBNAME)
-+--- a/libs/src/pset/Makefile.in
-++++ b/libs/src/pset/Makefile.in
-+@@ -53,7 +53,7 @@
-+ 	mv $(LIBNAME) $(LIBDIR)/optimized
-+ 
-+ $(LIBNAME): $(OBJECTS)
-+-	ar r $@ $?
-++	$(AR) r $@ $?
-+ 	$(RANLIB) $@
-+ 
-+ install: $(LIBNAME)
-+--- a/libs/src/sio/Makefile.in
-++++ b/libs/src/sio/Makefile.in
-+@@ -52,7 +52,7 @@
-+ 	$(INSTALL) $(FMODE) $(LIBNAME) $(LIBDIR)/optimized
-+ 
-+ $(LIBNAME): $(OBJECTS)
-+-	ar r $@ $?
-++	$(AR) r $@ $?
-+ 	$(RANLIB) $@
-+ 
-+ install: $(LIBNAME)
-+--- a/libs/src/str/Makefile.in
-++++ b/libs/src/str/Makefile.in
-+@@ -63,7 +63,7 @@
-+ 	$(INSTALL) $(FMODE) $(LIBNAME) $(LIBDIR)-O
-+ 
-+ $(LIBNAME): $(OBJECTS)
-+-	ar r $@ $?
-++	$(AR) r $@ $?
-+ 	$(RANLIB) $@
-+ 
-+ LINT_IGNORE=possible pointer alignment|RCSid unused
-+--- a/libs/src/xlog/Makefile.in
-++++ b/libs/src/xlog/Makefile.in
-+@@ -58,7 +58,7 @@
-+ 	$(INSTALL) $(FMODE) $(LIBNAME) $(LIBDIR)/optimized
-+ 
-+ $(LIBNAME): $(OBJECTS)
-+-	ar r $@ $?
-++	$(AR) r $@ $?
-+ 	$(RANLIB) $@
-+ 
-+ install: $(LIBNAME)
-diff --git a/package/xinetd/xinetd-2.3.15/002-destdir.patch b/package/xinetd/xinetd-2.3.15/002-destdir.patch
++diff -Nura lshw-B.02.16.orig/src/gui/Makefile lshw-B.02.16/src/gui/Makefile
++--- lshw-B.02.16.orig/src/gui/Makefile	2012-05-28 12:32:49.303885759 -0300
+++++ lshw-B.02.16/src/gui/Makefile	2012-05-28 12:33:33.850206001 -0300
++@@ -11,7 +11,7 @@
++ CXXFLAGS=-g -Wall $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
++ CFLAGS=$(CXXFLAGS) $(DEFINES)
++ GTKLIBS=$(shell pkg-config gtk+-2.0 gmodule-2.0 --libs)
++-LIBS=-L../core -llshw -lresolv -lsqlite3 $(GTKLIBS)
+++LIBS+=-L../core -llshw -lresolv -lsqlite3 $(GTKLIBS)
++ LDFLAGS=
++ ifneq ($(shell $(LD) --help 2| grep -- --as-needed), )
++ 	LDFLAGS+= -Wl,--as-needed
++diff -Nura lshw-B.02.16.orig/src/Makefile lshw-B.02.16/src/Makefile
++--- lshw-B.02.16.orig/src/Makefile	2012-05-28 12:32:49.292885680 -0300
+++++ lshw-B.02.16/src/Makefile	2012-05-28 12:33:24.530139060 -0300
++@@ -30,7 +30,7 @@
++ 	LDFLAGS+= -Wl,--as-needed
++ endif
++ LDSTATIC=-static
++-LIBS=-llshw -lresolv
+++LIBS+=-llshw -lresolv
++ ifeq ($(SQLITE), 1)
++ 	LIBS+= $(shell pkg-config --libs sqlite3)
++ endif
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
 new file mode 100644
-index 0000000..15ff4b8
+index 0000000..8b4fcc6
 --- /dev/null
-+++ b/package/xinetd/xinetd-2.3.15/002-destdir.patch
-@@ -0,0 +1,35 @@
-+This patch adds $(DESTDIR) to xinetd's installation paths, to support 
-+installation to a cross-compiled RFS area.
-+
-+The content of this patch was copied from the OpenWrt project:
-+https://dev.openwrt.org/browser/packages/net/xinetd/patches/002-destdir.patch
-+
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -75,15 +75,15 @@ dlibxlog: dlibsio dlibstr
-+ 
-+ install: build
-+ 	for i in $(DAEMONDIR) $(BINDIR) $(MANDIR)/man5 $(MANDIR)/man8 ; do \
-+-	   test -d $$i || mkdir -p $$i ; done
-+-	$(INSTALL_CMD) -m 755 xinetd/xinetd $(DAEMONDIR)
-+-	$(INSTALL_CMD) -m 755 xinetd/itox $(DAEMONDIR)
-+-	$(INSTALL_CMD) -m 755 $(SRCDIR)/xinetd/xconv.pl $(DAEMONDIR)
-+-	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xinetd.conf.man $(MANDIR)/man5/xinetd.conf.5
-+-	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xinetd.log.man $(MANDIR)/man8/xinetd.log.8
-+-	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xinetd.man $(MANDIR)/man8/xinetd.8
-+-	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/itox.8 $(MANDIR)/man8/itox.8
-+-	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xconv.pl.8 $(MANDIR)/man8/xconv.pl.8
-++	   test -d $(DESTDIR)$$i || mkdir -p $(DESTDIR)$$i ; done
-++	$(INSTALL_CMD) -m 755 xinetd/xinetd $(DESTDIR)$(DAEMONDIR)
-++	$(INSTALL_CMD) -m 755 xinetd/itox $(DESTDIR)$(DAEMONDIR)
-++	$(INSTALL_CMD) -m 755 $(SRCDIR)/xinetd/xconv.pl $(DESTDIR)$(DAEMONDIR)
-++	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xinetd.conf.man $(DESTDIR)$(MANDIR)/man5/xinetd.conf.5
-++	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xinetd.log.man $(DESTDIR)$(MANDIR)/man8/xinetd.log.8
-++	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xinetd.man $(DESTDIR)$(MANDIR)/man8/xinetd.8
-++	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/itox.8 $(DESTDIR)$(MANDIR)/man8/itox.8
-++	$(INSTALL_CMD) -m 644 $(SRCDIR)/xinetd/xconv.pl.8 $(DESTDIR)$(MANDIR)/man8/xconv.pl.8
-+ 	@echo "You must put your xinetd.conf in /etc/xinetd.conf"
-+ 	@echo "There is a sample config file in xinetd/sample.conf and you can"
-+ 	@echo "use xconv.pl to convert your old inetd.conf file to an xinetd format"
-diff --git a/package/xinetd/xinetd-2.3.15/003-rpc_fix.patch b/package/xinetd/xinetd-2.3.15/003-rpc_fix.patch
-new file mode 100644
-index 0000000..6c32b72
---- /dev/null
-+++ b/package/xinetd/xinetd-2.3.15/003-rpc_fix.patch
-@@ -0,0 +1,26 @@
-+This patch fixes compiling xinetd without RPC support.
-+
-+The content of this patch was copied from the OpenWrt project:
-+https://dev.openwrt.org/browser/packages/net/xinetd/patches/003-rpc_fix.patch
-+
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+
-+--- a/xinetd/confparse.c
-++++ b/xinetd/confparse.c
-+@@ -745,7 +745,7 @@ static status_e check_entry( struct serv
-+ 	   }
-+    }
-+ 
-+-/* #ifndef NO_RPC */
-++#ifndef NO_RPC
-+ #if defined(HAVE_RPC_RPCENT_H) || defined(HAVE_NETDB_H)
-+    if ( SC_IS_RPC( scp ) && !SC_IS_UNLISTED( scp ) )
-+    {
-+@@ -759,6 +759,7 @@ static status_e check_entry( struct serv
-+       SC_RPCDATA( scp )->rd_program_number = rep->r_number ;
-+    }
-+    else
-++#endif
-+ #endif   /* ! NO_RPC */
-+    {
-+        if ( !SC_IS_UNLISTED( scp ) ) 
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-new file mode 100644
-index 0000000..2ab2546
---- /dev/null
-+++ b/package/xinetd/xinetd.mk
-@@ -0,0 +1,10 @@
++++ b/package/lshw/lshw.mk
+@@ -0,0 +1,23 @@
 +#############################################################
 +#
-+# xinetd
++# lshw
 +#
 +#############################################################
-+XINETD_VERSION = 2.3.15
-+XINETD_SOURCE  = xinetd-$(XINETD_VERSION).tar.gz
-+XINETD_SITE    = http://www.xinetd.org
 +
-+$(eval $(call AUTOTARGETS))
++LSHW_VERSION = B.02.16
++LSHW_SITE = http://ezix.org/software/files
++LSHW_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) AR=$(TARGET_AR) \
++	RPM_OPT_FLAGS="$(TARGET_CFLAGS)" all
++LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT),-lintl)"
++LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),libintl)
++
++define LSHW_BUILD_CMDS
++	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPT)
++endef
++
++define LSHW_INSTALL_TARGET_CMDS
++	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
++		$(LSHW_MAKE_OPT) install
++endef
++
++$(eval $(call GENTARGETS))
 -- 
-1.7.9.5
+1.7.3.4
