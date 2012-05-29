@@ -1,30 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 May 2012 22:09:17 +0200
-Subject: [Buildroot] [git commit branch/next] Add
- mobile-broadband-provider-info package.
-In-Reply-To: <20120529075858.9FB2E96E04@busybox.osuosl.org>
-References: <20120529075858.9FB2E96E04@busybox.osuosl.org>
-Message-ID: <4FC52CED.20402@mind.be>
+From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+Date: Tue, 29 May 2012 23:23:15 +0300
+Subject: [Buildroot] [PATCH] quota: new package
+Message-ID: <1338322995-25082-1-git-send-email-jarkko.sakkinen@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/28/12 22:41, Peter Korsgaard wrote:
-> +MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20110511
-> +MOBILE_BROADBAND_PROVIDER_INFO_SITE = git://git.gnome.org/mobile-broadband-provider-info
+Added linuxquota package.
 
-  Anything wrong with
-http://ftp.gnome.org/pub/GNOME/sources/mobile-broadband-provider-info/20110511/mobile-broadband-provider-info-20110511.tar.bz2
-?
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+---
+ fs/skeleton/etc/network/interfaces |    2 ++
+ package/Config.in                  |    3 +++
+ package/quota/Config.in            |   11 +++++++++++
+ package/quota/quota.mk             |   19 +++++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/quota/Config.in
+ create mode 100644 package/quota/quota.mk
 
-  Regards,
-  Arnout
+diff --git a/fs/skeleton/etc/network/interfaces b/fs/skeleton/etc/network/interfaces
+index 218b82c..e70b502 100644
+--- a/fs/skeleton/etc/network/interfaces
++++ b/fs/skeleton/etc/network/interfaces
+@@ -2,3 +2,5 @@
+ auto lo
+ iface lo inet loopback
+ 
++auto eth0
++iface eth0 inet dhcp
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..eb76e14 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++endif
++source "package/quota/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/rsyslog/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+new file mode 100644
+index 0000000..a2fa9b6
+--- /dev/null
++++ b/package/quota/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QUOTA
++	bool "quota"
++	depends on BR2_INET_RPC
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
++	help
++		Implementation of the disk quota system.
++		http://sourceforge.net/projects/linuxquota/
++
++comment "quota requires a toolchain with RPC support"
++	depends on !BR2_INET_RPC
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+new file mode 100644
+index 0000000..7ed3839
+--- /dev/null
++++ b/package/quota/quota.mk
+@@ -0,0 +1,19 @@
++#############################################################
++#
++# QUOTA
++#
++#############################################################
++
++QUOTA_VERSION = 4.00
++QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
++QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
++
++QUOTA_MAKE_OPT = \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)"
++
++QUOTA_INSTALL_TARGET_OPT = \
++	ROOTDIR=$(TARGET_DIR) \
++	install
++
++$(eval $(call AUTOTARGETS))
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.9.5
