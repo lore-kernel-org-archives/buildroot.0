@@ -1,29 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 May 2012 21:38:35 +0200
-Subject: [Buildroot] [PATCH] quota: add package
-In-Reply-To: <1337927625-18671-1-git-send-email-jarkko.sakkinen@intel.com>
-References: <1337927625-18671-1-git-send-email-jarkko.sakkinen@intel.com>
-Message-ID: <4FC525BB.2030803@mind.be>
+Date: Tue, 29 May 2012 21:12:29 +0200
+Subject: [Buildroot] [PATCH] New package: freerdp
+In-Reply-To: <1337809509-29526-1-git-send-email-git@jlunz.de>
+References: <1337809509-29526-1-git-send-email-git@jlunz.de>
+Message-ID: <4FC51F9D.6000503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/25/12 08:33, Jarkko Sakkinen wrote:
+On 05/23/12 23:45, Julian Lunz wrote:
 [snip]
-> +QUOTA_CONF_OPT = \
-> +	--prefix=$(TARGET_DIR) \
-> +	--exec-prefix=$(TARGET_DIR)
+> +if BR2_PACKAGE_FREERDP
+> +
+> +config BR2_PACKAGE_FREERDP_WITHCUPS
+> +    bool "CUPS support"
+  You need to add 'select BR2_PACKAGE_CUPS'.
 
-  Although this probably works, it's better to use /usr as prefix, and add
-ROOTDIR=$(TARGET_DIR) to QUOTA_MAKE_OPT.  You may want to add the
---enable-rootsbin=yes configure option as well.
+  But in fact, in this case I think it could be turned around: compile with
+cups support if BR2_PACKAGE_CUPS is selected.  I.e., remove these
+config options and in the .mk file:
+[snip]
+> +ifeq ($(BR2_PACKAGE_FREERDP_WITHCUPS),y)
+  replace with
+ifeq ($(BR2_PACKAGE_CUPS),y)
+
+
+  On the other hand, for some of these (particularly alsa and Xinerama) it's
+probably more user-friendly to have a config option like you have now.
+
+> +FREERDP_CONF_OPT += -DWITH_CUPS=ON
+> +FREERDP_DEPENDENCIES += cups
+> +else
+> +FREERDP_CONF_OPT += -DWITH_CUPS=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FREERDP_WITHFFMPEG),y)
+> +FREERDP_CONF_OPT += -DWITH_FFMPEG=ON
+> +FREERDP_DEPENDENCIES += ffmpeg
+> +else
+> +FREERDP_CONF_OPT += -DWITH_FFMPEG=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_FREERDP_WITHALSA),y)
+> +FREERDP_CONF_OPT += -DWITH_ALSA=ON
+> +FREERDP_DEPENDENCIES += alsa-utils
+  Shouldn't this be alsa-lib, rather than alsa-utils?
+
+[snip]
+
 
   Regards,
   Arnout
 
-[snip]
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
