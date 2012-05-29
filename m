@@ -1,35 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 29 May 2012 10:05:04 +0200
-Subject: [Buildroot] [git commit] pptp-linux: fix build with high BR2_JLEVEL
-	settings
-Message-ID: <20120529080549.0788696E04@busybox.osuosl.org>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Tue, 29 May 2012 12:00:20 +0200
+Subject: [Buildroot] [pull request V2] Pull request for branch
+	for-2012.08/systemd
+Message-ID: <cover.1338285613.git.maxime.ripard@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffc4afe084a76e7246bd373c73b706f512a86c2b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The following changes since commit 3ae7d814075095b43e25c8ef11be6a14234241cc:
 
-The pptp-linux build system is not robust against parallel builds.
+  pkg-download.mk: Add missing argument when downloading from primary mirror (scp) (2012-05-23 21:49:40 +0200)
 
-Fixes http://autobuild.buildroot.net/results/a75fab3f04d03cb39cd41a86b6f57307198ba5f1
+are available in the git repository at:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/pptp-linux/pptp-linux.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+  git://git.free-electrons.com/users/maxime-ripard/buildroot.git for-2012.08/systemd
 
-diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
-index 77ae34d..d4c5bc4 100644
---- a/package/pptp-linux/pptp-linux.mk
-+++ b/package/pptp-linux/pptp-linux.mk
-@@ -7,6 +7,7 @@
- PPTP_LINUX_VERSION = 1.7.2
- PPTP_LINUX_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/pptpclient
- PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
-+PPTP_LINUX_MAKE = $(MAKE1)
- 
- define PPTP_LINUX_BUILD_CMDS
- 	$(MAKE) -C $(@D) OPTIMIZE= DEBUG= \
+for you to fetch changes up to 23dac19640ec6f2095e128c8b641ca2d5a0be8a1:
+
+  Add systemd unit for lighttpd (2012-05-29 11:59:34 +0200)
+
+----------------------------------------------------------------
+Maxime Ripard (2):
+      Rework of the init system
+      Add systemd unit for lighttpd
+
+ package/lighttpd/lighttpd.mk      |   11 +++++++++++
+ package/lighttpd/lighttpd.service |   10 ++++++++++
+ package/pkg-gentargets.mk         |    8 ++++++++
+ package/sysvinit/Config.in        |    1 +
+ target/generic/Config.in          |   25 +++++++++++++++++++++++++
+ 5 files changed, 55 insertions(+)
+ create mode 100644 package/lighttpd/lighttpd.service
+
+Thanks,
+-- 
+Maxime Ripard
