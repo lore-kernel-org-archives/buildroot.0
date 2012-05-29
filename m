@@ -1,119 +1,184 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 May 2012 22:11:23 -0300
-Subject: [Buildroot] [PATCHv2] lshw: new package
-Message-ID: <1338253883-26318-1-git-send-email-gustavo@zacarias.com.ar>
+From: Kelvin Cheung <keguang.zhang@gmail.com>
+Date: Tue, 29 May 2012 11:29:42 +0800
+Subject: [Buildroot] [PATCH v2] busybox: Install S41inetd and inetd.conf
+ if inetd is enabled in busybox.
+In-Reply-To: <87ipfg6p0a.fsf@macbook.be.48ers.dk>
+References: <1338190882-4548-1-git-send-email-keguang.zhang@gmail.com>
+ <87ipfg6p0a.fsf@macbook.be.48ers.dk>
+Message-ID: <CAJhJPsVQ+C1c0oy-BNYC6m+PDV5LxbFsfHjRHKs9B_2ivqLwaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                |    1 +
- package/lshw/Config.in           |   13 +++++++++++++
- package/lshw/lshw-add-LIBS.patch |   30 ++++++++++++++++++++++++++++++
- package/lshw/lshw.mk             |   23 +++++++++++++++++++++++
- 4 files changed, 67 insertions(+), 0 deletions(-)
- create mode 100644 package/lshw/Config.in
- create mode 100644 package/lshw/lshw-add-LIBS.patch
- create mode 100644 package/lshw/lshw.mk
+2012/5/29 Peter Korsgaard <jacmet@uclibc.org>
 
-diff --git a/package/Config.in b/package/Config.in
-index 338019d..a3c92ec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -198,6 +198,7 @@ source "package/kbd/Config.in"
- source "package/lcdproc/Config.in"
- source "package/linux-firmware/Config.in"
- source "package/lm-sensors/Config.in"
-+source "package/lshw/Config.in"
- source "package/lsuio/Config.in"
- source "package/lvm2/Config.in"
- source "package/makedevs/Config.in"
-diff --git a/package/lshw/Config.in b/package/lshw/Config.in
-new file mode 100644
-index 0000000..4960ac9
---- /dev/null
-+++ b/package/lshw/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_LSHW
-+	bool "lshw"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	help
-+	  lshw (Hardware Lister) is a small tool to provide
-+	  detailed information on the hardware configuration of the machine.
-+
-+	  http://ezix.org/project/wiki/HardwareLiSter
-+
-+comment "lshw requires a toolchain with C++, LARGEFILE & WCHAR support enabled"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_USE_WCHAR
-diff --git a/package/lshw/lshw-add-LIBS.patch b/package/lshw/lshw-add-LIBS.patch
-new file mode 100644
-index 0000000..70b2a5b
---- /dev/null
-+++ b/package/lshw/lshw-add-LIBS.patch
-@@ -0,0 +1,30 @@
-+We need to be able to pass extra LIBS when our toolchain lacks NLS support,
-+this way we can build libintl and link to it.
-+A good example is uClibc with locale support disabled.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura lshw-B.02.16.orig/src/gui/Makefile lshw-B.02.16/src/gui/Makefile
-+--- lshw-B.02.16.orig/src/gui/Makefile	2012-05-28 12:32:49.303885759 -0300
-++++ lshw-B.02.16/src/gui/Makefile	2012-05-28 12:33:33.850206001 -0300
-+@@ -11,7 +11,7 @@
-+ CXXFLAGS=-g -Wall $(INCLUDES) $(DEFINES) $(RPM_OPT_FLAGS)
-+ CFLAGS=$(CXXFLAGS) $(DEFINES)
-+ GTKLIBS=$(shell pkg-config gtk+-2.0 gmodule-2.0 --libs)
-+-LIBS=-L../core -llshw -lresolv -lsqlite3 $(GTKLIBS)
-++LIBS+=-L../core -llshw -lresolv -lsqlite3 $(GTKLIBS)
-+ LDFLAGS=
-+ ifneq ($(shell $(LD) --help 2| grep -- --as-needed), )
-+ 	LDFLAGS+= -Wl,--as-needed
-+diff -Nura lshw-B.02.16.orig/src/Makefile lshw-B.02.16/src/Makefile
-+--- lshw-B.02.16.orig/src/Makefile	2012-05-28 12:32:49.292885680 -0300
-++++ lshw-B.02.16/src/Makefile	2012-05-28 12:33:24.530139060 -0300
-+@@ -30,7 +30,7 @@
-+ 	LDFLAGS+= -Wl,--as-needed
-+ endif
-+ LDSTATIC=-static
-+-LIBS=-llshw -lresolv
-++LIBS+=-llshw -lresolv
-+ ifeq ($(SQLITE), 1)
-+ 	LIBS+= $(shell pkg-config --libs sqlite3)
-+ endif
-diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
-new file mode 100644
-index 0000000..8b4fcc6
---- /dev/null
-+++ b/package/lshw/lshw.mk
-@@ -0,0 +1,23 @@
-+#############################################################
-+#
-+# lshw
-+#
-+#############################################################
-+
-+LSHW_VERSION = B.02.16
-+LSHW_SITE = http://ezix.org/software/files
-+LSHW_MAKE_OPT = CC=$(TARGET_CC) CXX=$(TARGET_CXX) AR=$(TARGET_AR) \
-+	RPM_OPT_FLAGS="$(TARGET_CFLAGS)" all
-+LSHW_MAKE_ENV = LIBS="$(if $(BR2_NEEDS_GETTEXT),-lintl)"
-+LSHW_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT),libintl)
-+
-+define LSHW_BUILD_CMDS
-+	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src $(LSHW_MAKE_OPT)
-+endef
-+
-+define LSHW_INSTALL_TARGET_CMDS
-+	$(LSHW_MAKE_ENV) $(MAKE) -C $(@D)/src DESTDIR=$(TARGET_DIR) \
-+		$(LSHW_MAKE_OPT) install
-+endef
-+
-+$(eval $(call GENTARGETS))
+> >>>>> "Kelvin" == Kelvin Cheung <keguang.zhang@gmail.com> writes:
+>
+> Hi,
+>
+>  Kelvin> Install S41inetd and inetd.conf if inetd is enabled in busybox.
+>  Kelvin> Add ftpd to /etc/inetd.conf if inetd and ftpd are enabled.
+>  Kelvin> Add telnetd to /etc/inetd.conf if inetd and telnetd are enabled.
+>  Kelvin> Add tftpd to /etc/inetd.conf if inetd and tftpd are enabled.
+>
+>  Kelvin> Changes for v2:
+>  Kelvin>        Update ftpd and tftpd configuration in inetd.conf.
+>
+> These changes should go after the '---' line, otherwise they get
+> included in the commit message.
+>
+>
+This will be fixed in next version.
+
+
+>
+>  Kelvin> Signed-off-by: Kelvin Cheung <keguang.zhang@gmail.com>
+>  Kelvin> ---
+>  Kelvin>  package/busybox/S41inetd   |   28 ++++++++++++++++++++++++++++
+>  Kelvin>  package/busybox/busybox.mk |   32
+> ++++++++++++++++++++++++++++++++
+>  Kelvin>  package/busybox/inetd.conf |    3 +++
+>  Kelvin>  3 files changed, 63 insertions(+), 0 deletions(-)
+>  Kelvin>  create mode 100644 package/busybox/S41inetd
+>  Kelvin>  create mode 100644 package/busybox/inetd.conf
+>
+>  Kelvin> diff --git a/package/busybox/S41inetd b/package/busybox/S41inetd
+>  Kelvin> new file mode 100644
+>  Kelvin> index 0000000..9d7d3cd
+>  Kelvin> --- /dev/null
+>  Kelvin> +++ b/package/busybox/S41inetd
+>  Kelvin> @@ -0,0 +1,28 @@
+>  Kelvin> +#!/bin/sh
+>  Kelvin> +#
+>  Kelvin> +# Starts the inetd daemon.
+>  Kelvin> +#
+>  Kelvin> +
+>  Kelvin> +NAME=inetd
+>  Kelvin> +DAEMON=/usr/sbin/$NAME
+>  Kelvin> +
+>  Kelvin> +case "$1" in
+>  Kelvin> +  start)
+>  Kelvin> +      echo -n "Starting $NAME: "
+>  Kelvin> +      start-stop-daemon -S -q -x $DAEMON && echo "OK" || echo
+> "Failed"
+>
+> Minor nit - We typically use the '-m -p /var/run/$NAME.pid' options to
+> get ssd to create/use a pidfile. If you do that, then you need to stop
+> inetd from forking into the background with -f.
+>
+
+This will be fixed in next version.
+
+
+>
+>  Kelvin> +      ;;
+>  Kelvin> +  stop)
+>  Kelvin> +      echo -n "Stopping $NAME: "
+>  Kelvin> +      start-stop-daemon -K -q -n $NAME && echo "OK" || echo
+> "Failed"
+>  Kelvin> +      ;;
+>  Kelvin> +  restart|reload)
+>  Kelvin> +      $0 stop
+>  Kelvin> +      $0 start
+>  Kelvin> +      ;;
+>  Kelvin> +  *)
+>  Kelvin> +      echo $"Usage: $0 {start|stop|restart}"
+>  Kelvin> +      exit 1
+>  Kelvin> +esac
+>  Kelvin> +
+>  Kelvin> +exit $?
+>  Kelvin> +
+>  Kelvin> diff --git a/package/busybox/busybox.mk b/package/busybox/
+> busybox.mk
+>  Kelvin> index 1d988f8..4ddd552 100644
+>  Kelvin> --- a/package/busybox/busybox.mk
+>  Kelvin> +++ b/package/busybox/busybox.mk
+>  Kelvin> @@ -155,6 +155,36 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+>  Kelvin>  endef
+>  Kelvin>  endif
+>
+>  Kelvin> +define BUSYBOX_INSTALL_INETD_SCRIPT
+>  Kelvin> +      if grep -q CONFIG_INETD=y $(@D)/.config; then \
+>  Kelvin> +              [ -f $(TARGET_DIR)/etc/init.d/S41inetd ] || \
+>  Kelvin> +                      $(INSTALL) -m 0755 -D
+> package/busybox/S41inetd \
+>  Kelvin> +                              $(TARGET_DIR)/etc/init.d/S41inetd;
+> \
+>  Kelvin> +      else rm -f $(TARGET_DIR)/etc/init.d/S41inetd; fi
+>  Kelvin> +endef
+>  Kelvin> +define BUSYBOX_INSTALL_INETD_CONF
+>  Kelvin> +      if grep -q CONFIG_INETD=y $(@D)/.config; then \
+>
+>
+> It would imho be better to merge INETD_SCRIPT and INETD_CONF handling so
+> we don't need to check if inetd is enabled twice.
+>
+
+Maybe it is better to keep them seperately like mdev did.
+
+
+>
+>  Kelvin> +              [ -f $(TARGET_DIR)/etc/inetd.conf ] || \
+>  Kelvin> +                      install -D -m 0644
+> package/busybox/inetd.conf \
+>  Kelvin> +                              $(TARGET_DIR)/etc/inetd.conf; \
+>  Kelvin> +              if grep -q CONFIG_FTPD=y $(@D)/.config; then \
+>  Kelvin> +                      if ! grep -q '^ftp'
+> $(TARGET_DIR)/etc/inetd.conf; then \
+>  Kelvin> +                              echo -e
+> "ftp\tstream\ttcp\tnowait\troot\tftpd\tftpd -w /root" >>
+> $(TARGET_DIR)/etc/inetd.conf; \
+>
+>
+> Giving writable root permissions by default doesn't really sound right
+> to me.
+
+
+>
+>
+>  Kelvin> +                      fi; \
+>  Kelvin> +              else $(SED) '/^ftp/d'
+> $(TARGET_DIR)/etc/inetd.conf; fi; \
+>  Kelvin> +              if grep -q CONFIG_TELNETD=y $(@D)/.config; then \
+>  Kelvin> +                      if ! grep -q '^telnet'
+> $(TARGET_DIR)/etc/inetd.conf; then \
+>  Kelvin> +                              echo -e
+> "telnet\tstream\ttcp\tnowait\troot\ttelnetd\ttelnetd -i" >>
+> $(TARGET_DIR)/etc/inetd.conf; \
+>  Kelvin> +                      fi; \
+>  Kelvin> +              else $(SED) '/^telnet/d'
+> $(TARGET_DIR)/etc/inetd.conf; fi; \
+>  Kelvin> +              if grep -q CONFIG_TFTPD=y $(@D)/.config; then \
+>  Kelvin> +                      if ! grep -q '^tftp'
+> $(TARGET_DIR)/etc/inetd.conf; then \
+>  Kelvin> +                              echo -e
+> "tftp\tdgram\tudp\tnowait\troot\ttftpd\ttftpd -l -c /root" >>
+> $(TARGET_DIR)/etc/inetd.conf; \
+>
+>
+> Same here.
+>
+> Maybe /etc/inetd.conf content is too hard to provide a good default for,
+> and we should just stick to the init script + an empty inetd.conf.
+>
+
+Yes, exactly.
+Maybe we could provide examples instead of configurations.
+And let the users decide how to configure the ftp and tftp service.
+
+
+>
+> --
+> Bye, Peter Korsgaard
+>
+
+
+
 -- 
-1.7.3.4
+Best Regards!
+Kelvin
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120529/d295eb21/attachment.html>
