@@ -1,102 +1,93 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 May 2012 17:48:38 -0300
-Subject: [Buildroot] [PATCH] ramspeed: new package
-Message-ID: <1338324518-5281-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+Date: Tue, 29 May 2012 23:52:28 +0300
+Subject: [Buildroot] [PATCH] quota: new package (v2)
+Message-ID: <1338324748-27437-1-git-send-email-jarkko.sakkinen@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in            |    1 +
- package/ramspeed/Config.in   |    7 +++++++
- package/ramspeed/Makefile    |   14 ++++++++++++++
- package/ramspeed/ramspeed.mk |   28 ++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/ramspeed/Config.in
- create mode 100644 package/ramspeed/Makefile
- create mode 100644 package/ramspeed/ramspeed.mk
+Added linuxquota package.
 
+[update: added target ld]
+
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+---
+ fs/skeleton/etc/network/interfaces |    2 ++
+ package/Config.in                  |    3 +++
+ package/quota/Config.in            |   11 +++++++++++
+ package/quota/quota.mk             |   20 ++++++++++++++++++++
+ 4 files changed, 36 insertions(+)
+ create mode 100644 package/quota/Config.in
+ create mode 100644 package/quota/quota.mk
+
+diff --git a/fs/skeleton/etc/network/interfaces b/fs/skeleton/etc/network/interfaces
+index 218b82c..e70b502 100644
+--- a/fs/skeleton/etc/network/interfaces
++++ b/fs/skeleton/etc/network/interfaces
+@@ -2,3 +2,5 @@
+ auto lo
+ iface lo inet loopback
+ 
++auto eth0
++iface eth0 inet dhcp
 diff --git a/package/Config.in b/package/Config.in
-index a3c92ec..4ddb865 100644
+index fb1b08f..eb76e14 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -35,6 +35,7 @@ source "package/ltrace/Config.in"
- source "package/memstat/Config.in"
- source "package/netperf/Config.in"
- source "package/oprofile/Config.in"
-+source "package/ramspeed/Config.in"
- source "package/rt-tests/Config.in"
- source "package/strace/Config.in"
- source "package/stress/Config.in"
-diff --git a/package/ramspeed/Config.in b/package/ramspeed/Config.in
+@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++endif
++source "package/quota/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/rsyslog/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+diff --git a/package/quota/Config.in b/package/quota/Config.in
 new file mode 100644
-index 0000000..b236329
+index 0000000..a2fa9b6
 --- /dev/null
-+++ b/package/ramspeed/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_RAMSPEED
-+	bool "ramspeed"
++++ b/package/quota/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_QUOTA
++	bool "quota"
++	depends on BR2_INET_RPC
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
 +	help
-+	  RAMspeed is a free open source command line utility
-+	  to measure cache and memory performance.
++		Implementation of the disk quota system.
++		http://sourceforge.net/projects/linuxquota/
 +
-+	  http://alasir.com/software/ramspeed/
-diff --git a/package/ramspeed/Makefile b/package/ramspeed/Makefile
++comment "quota requires a toolchain with RPC support"
++	depends on !BR2_INET_RPC
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
 new file mode 100644
-index 0000000..acb8cfd
+index 0000000..5fd83c7
 --- /dev/null
-+++ b/package/ramspeed/Makefile
-@@ -0,0 +1,14 @@
-+
-+all: generic
-+
-+generic: ramspeed.c fltmem.c fltmark.c intmem.c intmark.c
-+	$(CC) $(CFLAGS) $^ -o ramspeed
-+
-+i386: ramspeed.c i386/*.s i386/cpuinfo/*.s
-+	$(CC) $(CFLAGS) -DI386_ASM $^ -o ramspeed
-+
-+x86_64: ramspeed.c amd64/*.s
-+	$(CC) $(CFLAGS) -DAMD64_ASM $^ -o ramspeed
-+
-+clean:
-+	rm -f *.o ramspeed
-diff --git a/package/ramspeed/ramspeed.mk b/package/ramspeed/ramspeed.mk
-new file mode 100644
-index 0000000..ef48e30
---- /dev/null
-+++ b/package/ramspeed/ramspeed.mk
-@@ -0,0 +1,28 @@
++++ b/package/quota/quota.mk
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# ramspeed
++# QUOTA
 +#
 +#############################################################
 +
-+RAMSPEED_VERSION = 2.6.0
-+RAMSPEED_SITE = http://www.alasir.com/software/ramspeed
++QUOTA_VERSION = 4.00
++QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
++QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
 +
-+ifeq ($(BR2_i386),y)
-+RAMSPEED_ARCH = i386
-+else
-+ifeq ($(BR2_x864_64),y)
-+RAMSPEED_ARCH = x86_64
-+endif
-+endif
++QUOTA_MAKE_OPT = \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)" \
++	LD="$(TARGET_LD)"
 +
-+define RAMSPEED_BUILD_CMDS
-+	cp -f package/ramspeed/Makefile $(@D); \
-+	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+		make -C $(@D) $(RAMSPEED_ARCH)
-+endef
++QUOTA_INSTALL_TARGET_OPT = \
++	ROOTDIR=$(TARGET_DIR) \
++	install
 +
-+define RAMSPEED_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/ramspeed $(TARGET_DIR)/usr/bin/ramspeed
-+endef
-+
-+$(eval $(call GENTARGETS))
++$(eval $(call AUTOTARGETS))
 -- 
-1.7.3.4
+1.7.9.5
