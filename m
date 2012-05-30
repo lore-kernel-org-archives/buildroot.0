@@ -1,71 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 29 May 2012 09:52:55 +0200
-Subject: [Buildroot] [git commit] ofono: fix build on uClibc without
-	backtrace support
-Message-ID: <20120531113301.795E396E2E@busybox.osuosl.org>
+Date: Wed, 30 May 2012 11:04:36 +0200
+Subject: [Buildroot] [git commit] mobile-broadband-provider-info: use
+	release tarball instead of git
+Message-ID: <20120531113301.965B696E2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=749c5b40cdcac1cd5a8d74985d0bf9fdec8447f3
+commit: http://git.buildroot.net/buildroot/commit/?id=103b816fe19e2c007bdcf45b59a7a10cfadcc19f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Identical to connman patch as this code seems to be cut'n'pasted.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/ofono/ofono-uclibc-backtrace.patch |   44 ++++++++++++++++++++++++++++
- 1 files changed, 44 insertions(+), 0 deletions(-)
+ .../mobile_broadband_provider_info.mk              |    4 +---
+ 1 files changed, 1 insertions(+), 3 deletions(-)
 
-diff --git a/package/ofono/ofono-uclibc-backtrace.patch b/package/ofono/ofono-uclibc-backtrace.patch
-new file mode 100644
-index 0000000..8499bcf
---- /dev/null
-+++ b/package/ofono/ofono-uclibc-backtrace.patch
-@@ -0,0 +1,44 @@
-+[PATCH] fix build on uClibc without UCLIBC_HAS_BACKTRACE
-+
-+Backtrace support is only used for logging on signal errors, which
-+isn't really critical, so simply remove backtrace info if not
-+available in uClibc.
-+
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ src/log.c |    7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+Index: ofono-1.5/src/log.c
-+===================================================================
-+--- ofono-1.5.orig/src/log.c
-++++ ofono-1.5/src/log.c
-+@@ -30,7 +30,12 @@
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <syslog.h>
-++#include <features.h>
-++/* backtrace support is optional on uClibc */
-++#if !(defined(__UCLIBC__) && !defined (__UCLIBC_HAS_BACKTRACE__))
-++#define HAVE_BACKTRACE
-+ #include <execinfo.h>
-++#endif
-+ #include <dlfcn.h>
-+ 
-+ #include "ofono.h"
-+@@ -115,6 +120,7 @@
-+ 
-+ static void print_backtrace(unsigned int offset)
-+ {
-++#ifdef HAVE_BACKTRACE
-+ 	void *frames[99];
-+ 	size_t n_ptrs;
-+ 	unsigned int i;
-+@@ -213,6 +219,7 @@
-+ 
-+ 	close(outfd[1]);
-+ 	close(infd[0]);
-++#endif /* HAVE_BACKTRACE */
-+ }
-+ 
-+ static void signal_handler(int signo)
+diff --git a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+index 759d0b8..83f71d3 100644
+--- a/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
++++ b/package/mobile-broadband-provider-info/mobile_broadband_provider_info.mk
+@@ -4,10 +4,8 @@
+ #
+ #############################################################
+ MOBILE_BROADBAND_PROVIDER_INFO_VERSION = 20110511
+-MOBILE_BROADBAND_PROVIDER_INFO_SITE = git://git.gnome.org/mobile-broadband-provider-info
++MOBILE_BROADBAND_PROVIDER_INFO_SITE = http://ftp.gnome.org/pub/GNOME/sources/mobile-broadband-provider-info/$(MOBILE_BROADBAND_PROVIDER_INFO_VERSION)
+ MOBILE_BROADBAND_PROVIDER_INFO_INSTALL_STAGING = YES
+ MOBILE_BROADBAND_PROVIDER_INFO_DEPENDENCIES = host-pkg-config
+ 
+-MOBILE_BROADBAND_PROVIDER_INFO_AUTORECONF = YES
+-
+ $(eval $(call AUTOTARGETS))
