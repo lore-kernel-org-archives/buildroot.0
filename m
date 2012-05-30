@@ -1,60 +1,98 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 30 May 2012 23:06:07 +0200
-Subject: [Buildroot] merge windows, package submission standards,
-	procedure ... ?
-In-Reply-To: <CAPOFwxoH3mJX8-tY0KvBiiyeH19VODTz+xgRMz=8-oB7q=154Q@mail.gmail.com>
- (David Purdy's message of "Tue, 29 May 2012 16:51:01 -0500")
-References: <CAPOFwxoH3mJX8-tY0KvBiiyeH19VODTz+xgRMz=8-oB7q=154Q@mail.gmail.com>
-Message-ID: <87d35lxtts.fsf@macbook.be.48ers.dk>
+Date: Wed, 30 May 2012 23:23:07 +0200
+Subject: [Buildroot] [git commit] Update for 2012.05
+Message-ID: <20120530212405.C293696E14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "David" == David Purdy <david.c.purdy@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=bce34ab199dea7e8430971ae31d743e246049785
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ CHANGES            |    4 ++++
+ Makefile           |    2 +-
+ docs/download.html |   10 +++++-----
+ docs/news.html     |    9 +++++++++
+ 4 files changed, 19 insertions(+), 6 deletions(-)
 
- David> Hi all,
- David> As I'd not submitted a package/patch to Buildroot before a few days
- David> ago**, I'm asking if there is:
-
- David> 1.   a specific merge window/timeline that patches need to be in by in
- David> order to make it into a pending release?
-
-Yes. We do releases every 3 months (I'll most likely release 2012.05
-tonight). After a release has been done, the tree is open for new
-features for the next 2 months, after which I put of release (n+1)-rc1,
-and no longer add any new features to the main (release) branch. At the
-same time I also create a next branch and start adding new feature
-patches for the following release. Once the release is out I'll merge
-next to the the main branch and the cycle restarts.
-
- David> 2.   anything more specific coding requirements than what is listed
- David> here? : http://buildroot.uclibc.org/buildroot.html#add_packages
- David> [ like checkpatch.pl conformity,  trial build for minimum number of
- David> targets/archs ]
-
-Nothing really specific. The kernel/u-boot checkpatch is for C code, not
-the typical makefile / build system fixes we have in buildroot.
-
-The new asciidoc based manual (make manual-html or
-http://buildroot.net/downloads/manual/manual.html has some more details
-than the old buildroot.html).
-
- David> 3.  any one single person that I need to get contact (like a "new
- David> packages custodian)?
- David> [at U-Boot for instance they have "custodians" who manage certain
- David> aspects of the git tree]
-
-Not really. Just post on the mailing list. I'm the maintainer so I will
-be one committing the changes to the official tree, but several people
-review patches besides me.
-
- David> 4.   a need to open a Bug Report for a new package?
-
-No, please just post patches on the list.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 4a8bed0..5043bc9 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,7 @@
++2012.05, Released May 30th, 2012:
++
++	Updated/fixed packages: busybox, netsnmp, pptp-linux
++
+ 2012.05-rc3, Released May 25th, 2012:
+ 
+ 	Minor fixes around the tree.
+diff --git a/Makefile b/Makefile
+index 4945c16..98e1a51 100644
+--- a/Makefile
++++ b/Makefile
+@@ -24,7 +24,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION:=2012.05-rc3
++export BR2_VERSION:=2012.05
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION=3.81
+diff --git a/docs/download.html b/docs/download.html
+index 57c8be5..d23e7e9 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -6,14 +6,14 @@
+ 
+ <p>
+ 
+-The latest stable release is <b>2012.02</b>, which can be downloaded
++The latest stable release is <b>2012.05</b>, which can be downloaded
+ here:<p>
+ 
+-<a href="/downloads/buildroot-2012.02.tar.gz">buildroot-2012.02.tar.gz</a>
++<a href="/downloads/buildroot-2012.05.tar.gz">buildroot-2012.05.tar.gz</a>
+ or
+-<a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
++<a href="/downloads/buildroot-2012.05.tar.bz2">buildroot-2012.05.tar.bz2</a>.
+ <p>
+-
++<!--
+ The latest release candidate is <b>2012.05-rc3</b>, which can be
+ downloaded here:<p>
+ 
+@@ -21,7 +21,7 @@ downloaded here:<p>
+ or
+ <a href="/downloads/buildroot-2012.05-rc3.tar.bz2">buildroot-2012.05-rc3.tar.bz2</a>.
+ <p>
+-
++-->
+ This and earlier releases can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index 94d1d94..8b52650 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -5,6 +5,15 @@
+ <p>
+ 
+ <ul>
++  <li><b>30 May 2012 -- 2012.05 released</b>
++
++    <p>The stable 2012.05 release is out - Thanks to everyone
++    contributing and testing the release candidates. See the
++    <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
++    file for more details
++    and go to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
++
+   <li><b>25 May 2012 -- 2012.05-rc3 released</b>
+ 
+     <p>RC3 is out with more bugfixes - See the <a
