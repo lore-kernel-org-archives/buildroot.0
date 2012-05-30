@@ -1,98 +1,112 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 30 May 2012 23:23:07 +0200
-Subject: [Buildroot] [git commit] Update for 2012.05
-Message-ID: <20120530212405.C293696E14@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 30 May 2012 23:27:29 +0200
+Subject: [Buildroot] Buildroot 2012.05 released
+Message-ID: <878vg9xsu6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bce34ab199dea7e8430971ae31d743e246049785
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- CHANGES            |    4 ++++
- Makefile           |    2 +-
- docs/download.html |   10 +++++-----
- docs/news.html     |    9 +++++++++
- 4 files changed, 19 insertions(+), 6 deletions(-)
+Buildroot is a simple tool for creating complete Embedded Linux systems
+(http://buildroot.net).
 
-diff --git a/CHANGES b/CHANGES
-index 4a8bed0..5043bc9 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,7 @@
-+2012.05, Released May 30th, 2012:
-+
-+	Updated/fixed packages: busybox, netsnmp, pptp-linux
-+
- 2012.05-rc3, Released May 25th, 2012:
- 
- 	Minor fixes around the tree.
-diff --git a/Makefile b/Makefile
-index 4945c16..98e1a51 100644
---- a/Makefile
-+++ b/Makefile
-@@ -24,7 +24,7 @@
- #--------------------------------------------------------------
- 
- # Set and export the version string
--export BR2_VERSION:=2012.05-rc3
-+export BR2_VERSION:=2012.05
- 
- # Check for minimal make version (note: this check will break at make 10.x)
- MIN_MAKE_VERSION=3.81
-diff --git a/docs/download.html b/docs/download.html
-index 57c8be5..d23e7e9 100644
---- a/docs/download.html
-+++ b/docs/download.html
-@@ -6,14 +6,14 @@
- 
- <p>
- 
--The latest stable release is <b>2012.02</b>, which can be downloaded
-+The latest stable release is <b>2012.05</b>, which can be downloaded
- here:<p>
- 
--<a href="/downloads/buildroot-2012.02.tar.gz">buildroot-2012.02.tar.gz</a>
-+<a href="/downloads/buildroot-2012.05.tar.gz">buildroot-2012.05.tar.gz</a>
- or
--<a href="/downloads/buildroot-2012.02.tar.bz2">buildroot-2012.02.tar.bz2</a>.
-+<a href="/downloads/buildroot-2012.05.tar.bz2">buildroot-2012.05.tar.bz2</a>.
- <p>
--
-+<!--
- The latest release candidate is <b>2012.05-rc3</b>, which can be
- downloaded here:<p>
- 
-@@ -21,7 +21,7 @@ downloaded here:<p>
- or
- <a href="/downloads/buildroot-2012.05-rc3.tar.bz2">buildroot-2012.05-rc3.tar.bz2</a>.
- <p>
--
-+-->
- This and earlier releases can always be downloaded from
- <a href="/downloads/">http://buildroot.net/downloads/</a>.
- 
-diff --git a/docs/news.html b/docs/news.html
-index 94d1d94..8b52650 100644
---- a/docs/news.html
-+++ b/docs/news.html
-@@ -5,6 +5,15 @@
- <p>
- 
- <ul>
-+  <li><b>30 May 2012 -- 2012.05 released</b>
-+
-+    <p>The stable 2012.05 release is out - Thanks to everyone
-+    contributing and testing the release candidates. See the
-+    <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
-+    file for more details
-+    and go to the <a href="/downloads/">downloads page</a> to pick up the
-+    <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
-+
-   <li><b>25 May 2012 -- 2012.05-rc3 released</b>
- 
-     <p>RC3 is out with more bugfixes - See the <a
+Buildroot 2012.05 is released - Go download it at:
+
+http://buildroot.net/downloads/buildroot-2012.05.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2012.05.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+After 3 months of development a new stable Buildroot release is
+out. Significant changes are:
+
+ - Large number of new packages (34): Systemd, polarssl and a number of
+   networking packages.
+
+ - GCC 4.7, uClibc 0.9.33.1 and support for Linaro external ARM
+   toolchains.
+
+ - Microblaze support (using external toolchain). Xtensa support is
+   deprecated.
+
+ - Additional QEMU defconfigs, including Microblaze and e500 PowerPC.
+   Defconfigs for Beaglebone, Pandaboard, Freescale mx53qsb.
+
+ - Patch series support in apply-patches.sh
+
+And the usual package version updates and bug fixes. Thanks to the
+http://autobuild.buildroot.net autobuilder setup by Thomas Petazzoni we
+have been able to fix a lot of different build issues. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -s -n 2012.02..
+
+   171  Gustavo Zacarias
+   152  Peter Korsgaard
+    77  Thomas Petazzoni
+    25  Yegor Yefremov
+    12  Maxime Ripard
+     9  Arnout Vandecappelle (Essensium/Mind)
+     9  Ludovic Desroches
+     9  Simon Dawson
+     7  Markos Chandras
+     7  Sven Neumann
+     5  Arnout Vandecappelle
+     5  Samuel MARTIN
+     4  Alvaro G. M
+     4  Luca Ceresoli
+     4  Thomas De Schampheleire
+     3  Alexandre Belloni
+     3  Nicolas Dechesne
+     3  Rico Bachmann
+     3  Stephan Hoffmann
+     3  Yann E. MORIN
+     2  Frank Hunleth
+     2  Marek Belisko
+     2  Maxime Hadjinlian
+     2  Qais Yousef
+     2  Sagaert Johan
+     2  Will Newton
+     1  Alexandre Pereira da Silva
+     1  Baruch Siach
+     1  Dimitry Golubovsky
+     1  Fabio Porcedda
+     1  Francois Perrad
+     1  Ismael Luceno
+     1  Jean-Christophe PLAGNIOL-VILLARD
+     1  Julian Lunz
+     1  Julien Boibessot
+     1  Kevin Cernekee
+     1  Markus Kaindl
+     1  Mathieu Briand
+     1  Phil Edworthy
+     1  Stephan Thamm
+     1  Vanya Sergeev
+     1  vsergeev
+
+It has been a quite busy development cycle, with more than 500 commits,
+lots of new packages and a number of large scale changes. Part of why we
+have been able to handle so many contributions in this cycle is the fact
+that we have started to use Patchwork to track patches:
+
+http://patchwork.buildroot.net
+
+Thanks to Jeremy Kerr for his support with this!
+
+Next release will be 2012.08. Expect the first release candidate early
+August, and the final release towards the end of the month.
+
+-- 
+Bye, Peter Korsgaard
