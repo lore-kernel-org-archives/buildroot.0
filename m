@@ -1,10 +1,10 @@
 From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Wed, 30 May 2012 08:48:27 +0300 (EEST)
-Subject: [Buildroot] [PATCH] quota: add package
-In-Reply-To: <4FC525BB.2030803@mind.be>
-References: <1337927625-18671-1-git-send-email-jarkko.sakkinen@intel.com>
- <4FC525BB.2030803@mind.be>
-Message-ID: <alpine.DEB.2.02.1205300847120.3644@jsakkine-mobl2.(null)>
+Date: Wed, 30 May 2012 08:49:25 +0300 (EEST)
+Subject: [Buildroot] [PATCH] quota: new package (v2)
+In-Reply-To: <2003dbf485cd1a69315918348cd65514@zacarias.com.ar>
+References: <1338324748-27437-1-git-send-email-jarkko.sakkinen@intel.com>
+ <2003dbf485cd1a69315918348cd65514@zacarias.com.ar>
+Message-ID: <alpine.DEB.2.02.1205300848400.3644@jsakkine-mobl2.(null)>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,31 @@ To: buildroot@busybox.net
 
 Hi
 
-On Tue, 29 May 2012, Arnout Vandecappelle wrote:
+On Tue, 29 May 2012, Gustavo Zacarias wrote:
 
-> On 05/25/12 08:33, Jarkko Sakkinen wrote:
-> [snip]
->> +QUOTA_CONF_OPT = \
->> +	--prefix=$(TARGET_DIR) \
->> +	--exec-prefix=$(TARGET_DIR)
+> On 2012-05-29 17:52, Jarkko Sakkinen wrote:
 >
-> Although this probably works, it's better to use /usr as prefix, and add
-> ROOTDIR=$(TARGET_DIR) to QUOTA_MAKE_OPT.  You may want to add the
-> --enable-rootsbin=yes configure option as well.
+>> --- a/fs/skeleton/etc/network/interfaces
+>> +++ b/fs/skeleton/etc/network/interfaces
+>> @@ -2,3 +2,5 @@
+>>  auto lo
+>>  iface lo inet loopback
+>> 
+>> +auto eth0
+>> +iface eth0 inet dhcp
+>
+> Oops? It shouldn't be touching this file.
 
+Sorry about, slipped in by mistake. I revised it soon after
+sending this:
 
-I've now reworked this a bit:
 http://patchwork.ozlabs.org/patch/161803/
 
-Thanks for your comments!
-
 >
-> Regards,
-> Arnout
+>> +QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
 >
-> [snip]
-> -- 
-> Arnout Vandecappelle                               arnout at mind be
-> Senior Embedded Software Architect                 +32-16-286540
-> Essensium/Mind                                     http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> Not strictly necessary, it's the default, though it's a minor detail.
+> Regards.
 >
 
 /Jarkko
