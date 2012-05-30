@@ -1,30 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 May 2012 19:34:29 -0300
-Subject: [Buildroot] [PATCH] ramspeed: new package
-In-Reply-To: <20120529230223.4e833059@skate>
-References: <1338324518-5281-1-git-send-email-gustavo@zacarias.com.ar>
- <20120529230223.4e833059@skate>
-Message-ID: <9fd3cd22786bee23a0f24046f8861301@zacarias.com.ar>
+From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+Date: Wed, 30 May 2012 08:48:27 +0300 (EEST)
+Subject: [Buildroot] [PATCH] quota: add package
+In-Reply-To: <4FC525BB.2030803@mind.be>
+References: <1337927625-18671-1-git-send-email-jarkko.sakkinen@intel.com>
+ <4FC525BB.2030803@mind.be>
+Message-ID: <alpine.DEB.2.02.1205300847120.3644@jsakkine-mobl2.(null)>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-05-29 18:02, Thomas Petazzoni wrote:
+Hi
 
-> Nitpicking: those two commands do not necessarily need to belong to 
-> the
-> shell same command. I.e, you can write it as:
->
-> +define RAMSPEED_BUILD_CMDS
-> +	cp -f package/ramspeed/Makefile $(@D)
-> +	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-> +		make -C $(@D) $(RAMSPEED_ARCH)
-> +endef
->
-> Thomas
+On Tue, 29 May 2012, Arnout Vandecappelle wrote:
 
-Force of habit!
-Sent a V2 with a few additional minor adjustments too.
-Regards.
+> On 05/25/12 08:33, Jarkko Sakkinen wrote:
+> [snip]
+>> +QUOTA_CONF_OPT = \
+>> +	--prefix=$(TARGET_DIR) \
+>> +	--exec-prefix=$(TARGET_DIR)
+>
+> Although this probably works, it's better to use /usr as prefix, and add
+> ROOTDIR=$(TARGET_DIR) to QUOTA_MAKE_OPT.  You may want to add the
+> --enable-rootsbin=yes configure option as well.
+
+
+I've now reworked this a bit:
+http://patchwork.ozlabs.org/patch/161803/
+
+Thanks for your comments!
+
+>
+> Regards,
+> Arnout
+>
+> [snip]
+> -- 
+> Arnout Vandecappelle                               arnout at mind be
+> Senior Embedded Software Architect                 +32-16-286540
+> Essensium/Mind                                     http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+
+/Jarkko
