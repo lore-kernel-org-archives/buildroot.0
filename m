@@ -1,116 +1,82 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 30 May 2012 10:58:52 +0100
-Subject: [Buildroot] [PATCH] nanocom: new package
-Message-ID: <1338371933-10465-1-git-send-email-spdawson@gmail.com>
+From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+Date: Wed, 30 May 2012 17:30:52 +0300
+Subject: [Buildroot] [PATCH] quota: new package (v4)
+Message-ID: <1338388252-2864-1-git-send-email-jarkko.sakkinen@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Added linuxquota package.
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
 ---
- package/Config.in                                  |    1 +
- package/nanocom/Config.in                          |   11 ++++++++
- .../nanocom-dont-clobber-CC-definition.patch       |   23 +++++++++++++++++
- package/nanocom/nanocom.mk                         |   27 ++++++++++++++++++++
- 4 files changed, 62 insertions(+)
- create mode 100644 package/nanocom/Config.in
- create mode 100644 package/nanocom/nanocom-dont-clobber-CC-definition.patch
- create mode 100644 package/nanocom/nanocom.mk
+ package/Config.in       |    3 +++
+ package/quota/Config.in |   13 +++++++++++++
+ package/quota/quota.mk  |   20 ++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/quota/Config.in
+ create mode 100644 package/quota/quota.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..b062210 100644
+index fb1b08f..eb76e14 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -205,6 +205,7 @@ source "package/mdadm/Config.in"
- source "package/memtester/Config.in"
- source "package/minicom/Config.in"
- source "package/mtd/Config.in"
-+source "package/nanocom/Config.in"
- source "package/ntfs-3g/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-diff --git a/package/nanocom/Config.in b/package/nanocom/Config.in
+@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++endif
++source "package/quota/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/rsyslog/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+diff --git a/package/quota/Config.in b/package/quota/Config.in
 new file mode 100644
-index 0000000..51d628a
+index 0000000..5df70d1
 --- /dev/null
-+++ b/package/nanocom/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_NANOCOM
-+	bool "nanocom"
++++ b/package/quota/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_QUOTA
++	bool "quota"
++	depends on BR2_INET_RPC
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
 +	help
-+	  Nanocom is based upon microcom (http://microcom.port5.com/) but
-+	  removes the scripting and logging features while introducing support
-+	  for setting local/remote echo, parity and stop bits. It also follows
-+	  a more standard command line style using the getopt function.
-+	  Internally much of the code has been rewritten and reformatted, the
-+	  menu system in particular is almost entirely different.
++		Implementation of the disk quota system.
++		http://sourceforge.net/projects/linuxquota/
 +
-+	  http://nanocom.sourceforge.net/
-diff --git a/package/nanocom/nanocom-dont-clobber-CC-definition.patch b/package/nanocom/nanocom-dont-clobber-CC-definition.patch
++comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
++	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
 new file mode 100644
-index 0000000..a7bddd1
+index 0000000..5fd83c7
 --- /dev/null
-+++ b/package/nanocom/nanocom-dont-clobber-CC-definition.patch
-@@ -0,0 +1,23 @@
-+Fix the nanocom Makefile so that it doesn't clobber an existing CC definition.
-+
-+Signed-off-by: Simon Dawson <spdawson@gmail.com>
-+
-+diff -Nurp a/Makefile b/Makefile
-+--- a/Makefile	2005-08-05 23:06:48.000000000 +0100
-++++ b/Makefile	2012-05-30 10:46:11.378152722 +0100
-+@@ -12,7 +12,7 @@
-+ #** GNU General Public License for more details at www.gnu.org
-+ #****************************************************************************/
-+ 
-+-CC=gcc
-++CC?=gcc
-+ 
-+ all: clean nanocom
-+ 
-+@@ -21,4 +21,4 @@ nanocom:
-+     
-+ clean:
-+ 	rm -rf *.o nanocom
-+-    
-+\ No newline at end of file
-++    
-diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
-new file mode 100644
-index 0000000..e53f1b4
---- /dev/null
-+++ b/package/nanocom/nanocom.mk
-@@ -0,1 +1,27 @@
++++ b/package/quota/quota.mk
+@@ -0,0 +1,20 @@
 +#############################################################
 +#
-+# nanocom
++# QUOTA
 +#
 +#############################################################
-+NANOCOM_VERSION = 2.6.1
-+NANOCOM_SOURCE = nanocom.tar.gz
-+NANOCOM_SITE = http://prdownloads.sourceforge.net/nanocom/$(NANOCOM_SOURCE)?download
 +
-+# N.B. Don't strip any path components during extraction.
-+define NANOCOM_EXTRACT_CMDS
-+	gzip -d -c $(DL_DIR)/$(NANOCOM_SOURCE) | tar --strip-components=0 -C $(NANOCOM_DIR) -xf -
-+endef
++QUOTA_VERSION = 4.00
++QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
++QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
 +
-+define NANOCOM_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
++QUOTA_MAKE_OPT = \
++	CC="$(TARGET_CC)" \
++	CXX="$(TARGET_CXX)" \
++	LD="$(TARGET_LD)"
 +
-+define NANOCOM_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/nanocom $(TARGET_DIR)/usr/bin/nanocom
-+endef
++QUOTA_INSTALL_TARGET_OPT = \
++	ROOTDIR=$(TARGET_DIR) \
++	install
 +
-+define NANOCOM_UNINSTALL_TARGET_CMDS
-+	$(RM) $(TARGET_DIR)/usr/bin/nanocom
-+endef
-+
-+$(eval $(call GENTARGETS))
++$(eval $(call AUTOTARGETS))
 -- 
 1.7.9.5
