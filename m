@@ -1,122 +1,78 @@
 From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Thu, 31 May 2012 19:46:02 +0300 (EEST)
-Subject: [Buildroot] [PATCH] quota: new package (v3)
-In-Reply-To: <20120531093421.3a037f45@skate>
-References: <1338325205-28310-1-git-send-email-jarkko.sakkinen@intel.com>
- <20120531093421.3a037f45@skate>
-Message-ID: <alpine.DEB.2.02.1205311944310.12499@jsakkine-mobl1.tm.intel.com>
+Date: Thu, 31 May 2012 20:08:10 +0300
+Subject: [Buildroot] [PATCH] quota: new package (v5)
+Message-ID: <1338484090-18434-1-git-send-email-jarkko.sakkinen@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
+---
+ package/Config.in       |    3 +++
+ package/quota/Config.in |   13 +++++++++++++
+ package/quota/quota.mk  |   18 ++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/quota/Config.in
+ create mode 100644 package/quota/quota.mk
 
-On Thu, 31 May 2012, Thomas Petazzoni wrote:
-
-> Hello,
->
-> The (v3) should not be at the end of the title, but inside the [PATCH
-> v3]. The title becomes part of the commit history of the project,
-> except what is between [].
->
-> Le Wed, 30 May 2012 00:00:05 +0300,
-> Jarkko Sakkinen <jarkko.sakkinen@intel.com> a ?crit :
->
->> Added linuxquota package.
->
-> This is useless as it repeats the title.
-
-ACK
-
->
->> [update: removed invalid change]
->
-> This should be below the ---, so that it does not become part of the
-> commit history.
-
-ACK
-
->
->> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
->> ---
->
-> It should be here.
->
->>  package/Config.in       |    3 +++
->>  package/quota/Config.in |   11 +++++++++++
->>  package/quota/quota.mk  |   20 ++++++++++++++++++++
->>  3 files changed, 34 insertions(+)
->>  create mode 100644 package/quota/Config.in
->>  create mode 100644 package/quota/quota.mk
->>
->>  source "package/sysvinit/Config.in"
->> diff --git a/package/quota/Config.in b/package/quota/Config.in
->> new file mode 100644
->> index 0000000..a2fa9b6
->> --- /dev/null
->> +++ b/package/quota/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_QUOTA
->> +	bool "quota"
->> +	depends on BR2_INET_RPC
->> +	select BR2_PACKAGE_UTIL_LINUX
->> +	select BR2_PACKAGE_UTIL_LINUX_MOUNT
->> +	help
->> +		Implementation of the disk quota system.
->> +		http://sourceforge.net/projects/linuxquota/
->
-> Indentation for the help text is one tab + two spaces, and not two tabs.
->
->> index 0000000..5fd83c7
->> --- /dev/null
->> +++ b/package/quota/quota.mk
->> @@ -0,0 +1,20 @@
->> +#############################################################
->> +#
->> +# QUOTA
->> +#
->> +#############################################################
->> +
->> +QUOTA_VERSION = 4.00
->> +QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
->> +QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
->> +
->> +QUOTA_MAKE_OPT = \
->> +	CC="$(TARGET_CC)" \
->> +	CXX="$(TARGET_CXX)" \
->> +	LD="$(TARGET_LD)"
->
-> What about CFLAGS, CXXFLAGS and LDFLAGS? Maybe you should just be doing:
->
-> QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
-
-ACK
-
->
->> +
->> +QUOTA_INSTALL_TARGET_OPT = \
->> +	ROOTDIR=$(TARGET_DIR) \
->> +	install
->
-> Above those two variable definitions, please mention that this is
-> needed because the package uses autoconf but not automake. (Had the
-> package been using automake, those definitions wouldn't have been
-> necessary).
-
-Makes sense, I'll add comment.
-
-Thanks for these comments!
-
->
-> Best regards,
->
-> Thomas
-> -- 
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
->
-
-/Jarkko
+diff --git a/package/Config.in b/package/Config.in
+index fb1b08f..eb76e14 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
++endif
++source "package/quota/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/rsyslog/Config.in"
+ source "package/sysklogd/Config.in"
+ source "package/sysvinit/Config.in"
+diff --git a/package/quota/Config.in b/package/quota/Config.in
+new file mode 100644
+index 0000000..62dcdfb
+--- /dev/null
++++ b/package/quota/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_QUOTA
++	bool "quota"
++	depends on BR2_INET_RPC
++	depends on BR2_LARGEFILE
++	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_MOUNT
++	help
++	  Implementation of the disk quota system.
++	  http://sourceforge.net/projects/linuxquota/
++
++comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
++	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+new file mode 100644
+index 0000000..d84a12e
+--- /dev/null
++++ b/package/quota/quota.mk
+@@ -0,0 +1,18 @@
++#############################################################
++#
++# QUOTA
++#
++#############################################################
++
++QUOTA_VERSION = 4.00
++QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
++QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
++
++QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
++
++# Package uses autoconf but not automake.
++QUOTA_INSTALL_TARGET_OPT = \
++	ROOTDIR=$(TARGET_DIR) \
++	install
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.9.5
