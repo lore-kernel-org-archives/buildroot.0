@@ -1,32 +1,69 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 May 2012 22:26:37 +0200
-Subject: [Buildroot] [git commit] libcurl: bump to version 7.25.0
-Message-ID: <20120531113258.1C62796E2A@busybox.osuosl.org>
+Date: Thu, 31 May 2012 11:33:00 -0000
+Subject: [Buildroot] [git commit] liboping: new package
+Message-ID: <20120531113256.59CAC96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=357322934d91edb2cb2f3ec20dcaa8208608c226
+commit: http://git.buildroot.net/buildroot/commit/?id=f88b1e963ed843b04041ce6b2bb11d2da5666b9b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcurl/libcurl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/Config.in            |    1 +
+ package/liboping/Config.in   |   11 +++++++++++
+ package/liboping/liboping.mk |   13 +++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index e094e31..e8f13bb 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBCURL_VERSION = 7.24.0
-+LIBCURL_VERSION = 7.25.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index bbb2cd5..c34e61a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -405,6 +405,7 @@ source "package/libmbus/Config.in"
+ source "package/libnetfilter_conntrack/Config.in"
+ source "package/libnfnetlink/Config.in"
+ source "package/libnl/Config.in"
++source "package/liboping/Config.in"
+ source "package/libpcap/Config.in"
+ source "package/libosip2/Config.in"
+ source "package/librsync/Config.in"
+diff --git a/package/liboping/Config.in b/package/liboping/Config.in
+new file mode 100644
+index 0000000..04e0e0d
+--- /dev/null
++++ b/package/liboping/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBOPING
++	bool "liboping"
++	depends on BR2_INET_IPV6
++	help
++	  liboping is a C library to generate ICMP echo requests,
++	  better known as "ping packets".
++
++	  http://verplant.org/liboping/
++
++comment "liboping requires a toolchain with IPv6 support enabled"
++	depends on !BR2_INET_IPV6
+diff --git a/package/liboping/liboping.mk b/package/liboping/liboping.mk
+new file mode 100644
+index 0000000..e0d892b
+--- /dev/null
++++ b/package/liboping/liboping.mk
+@@ -0,0 +1,13 @@
++#############################################################
++#
++# liboping
++#
++#############################################################
++
++LIBOPING_VERSION = 1.6.2
++LIBOPING_SITE = http://verplant.org/liboping/files
++LIBOPING_INSTALL_STAGING = YES
++LIBOPING_DEPENDENCIES = $(if $(BR2_PACKAGE_NCURSES),ncurses)
++LIBOPING_CONF_OPT = --without-perl-bindings
++
++$(eval $(call AUTOTARGETS))
