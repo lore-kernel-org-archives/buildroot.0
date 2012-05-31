@@ -1,41 +1,69 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 16 May 2012 15:26:48 +0200
-Subject: [Buildroot] [git commit] wpa_supplicant: explicitly disable libnl
-	by default
-Message-ID: <20120531113257.A5BB996E2A@busybox.osuosl.org>
+Date: Thu, 31 May 2012 11:32:58 -0000
+Subject: [Buildroot] [git commit] libnl: bump to version 3.2.9 and enhance
+Message-ID: <20120531113255.EEAAC96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=56901908c63ed7b2aedffaa4b2143ce87a15d837
+commit: http://git.buildroot.net/buildroot/commit/?id=4b55a9952014b37ce565b46ee6e93018555127fa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libnl support is enabled by default since version 1.0, so disable it
-to avoid build breakage when there's no libnl.
+Bump to version 3.2.9 and add an option to install the tools.
+Since they're not usually required we default to N to reduce size.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/wpa_supplicant/wpa_supplicant.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ package/libnl/Config.in |    6 ++++++
+ package/libnl/libnl.mk  |   13 ++++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index a4978e0..97210ce 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -15,9 +15,12 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- 	WPA_SUPPLICANT_DEPENDENCIES += libnl
- define WPA_SUPPLICANT_LIBNL_CONFIG
--	$(SED) "s/^#CONFIG_DRIVER_NL80211/CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
- 	echo "CONFIG_LIBNL32=y" >>$(WPA_SUPPLICANT_CONFIG)
- endef
-+else
-+define WPA_SUPPLICANT_LIBNL_CONFIG
-+	$(SED) "s/^CONFIG_DRIVER_NL80211/#CONFIG_DRIVER_NL80211/" $(WPA_SUPPLICANT_CONFIG)
-+endef
- endif
+diff --git a/package/libnl/Config.in b/package/libnl/Config.in
+index 24e4813..c7d4359 100644
+--- a/package/libnl/Config.in
++++ b/package/libnl/Config.in
+@@ -4,3 +4,9 @@ config BR2_PACKAGE_LIBNL
+ 	  A library for applications dealing with netlink socket.
  
- ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
+ 	  http://people.suug.ch/~tgr/libnl/
++
++config BR2_PACKAGE_LIBNL_TOOLS
++	bool "install tools"
++	depends on BR2_PACKAGE_LIBNL
++	help
++	  Install binary tools.
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index 40aaf38..a723701 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,15 +4,26 @@
+ #
+ #############################################################
+ 
+-LIBNL_VERSION = 3.2.8
++LIBNL_VERSION = 3.2.9
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
+ LIBNL_INSTALL_STAGING = YES
+ LIBNL_DEPENDENCIES = host-bison
+ LIBNL_MAKE = $(MAKE1)
++LIBNL_BINARIES = class-add class-delete class-list classid-lookup cls-add \
++	cls-delete cls-list link-list pktloc-lookup qdisc-add qdisc-delete \
++	qdisc-list
+ 
+ define LIBNL_UNINSTALL_TARGET_CMDS
+ 	rm -r $(TARGET_DIR)/usr/lib/libnl.* $(TARGET_DIR)/usr/lib/libnl-*.*
+ 	rm -rf $(TARGET_DIR)/usr/lib/libnl
+ endef
+ 
++define LIBNL_REMOVE_TOOLS
++	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/nl-, $(LIBNL_BINARIES))
++endef
++
++ifneq ($(BR2_PACKAGE_LIBNL_TOOLS),y)
++LIBNL_POST_INSTALL_TARGET_HOOKS += LIBNL_REMOVE_TOOLS
++endif
++
+ $(eval $(call AUTOTARGETS))
