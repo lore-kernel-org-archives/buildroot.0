@@ -1,25 +1,30 @@
-From: Vincent de RIBOU <vins_bozo@yahoo.fr>
-Date: Thu, 31 May 2012 14:47:48 +0100 (BST)
-Subject: [Buildroot] Hiawatha webdav
-Message-ID: <1338472068.69082.YahooMailNeo@web28407.mail.ukl.yahoo.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 May 2012 16:13:12 +0200
+Subject: [Buildroot] Why hiawatha is not managing IPV6 strictly
+In-Reply-To: <1338471952.69324.YahooMailNeo@web28411.mail.ukl.yahoo.com>
+References: <1338471952.69324.YahooMailNeo@web28411.mail.ukl.yahoo.com>
+Message-ID: <20120531161312.6c85c244@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Le Thu, 31 May 2012 14:45:52 +0100 (BST),
+Vincent de RIBOU <vins_bozo@yahoo.fr> a ?crit :
 
-I am using last 2012.05 with hiawatha webserver.
+> Cmake config for Hiawatha uses only default IPV6 as activated.
+> 
+> Why not configuring if so through?BR2_INET_IPV6 option??
 
-I didn't find any clear view on Webdav option(s).
-I indeed to use webdav SVN repository. Is it compliant now??
+Because nobody did it. You can probably add something like
+-DENABLE_IPV6=$(if $(BR2_INET_IPV6),ON,OFF) in the HIAWATHA_CONF_OPT.
 
-Regards,
-?
-Vincent de RIBOU
-r?gion Ouest - France
-belzo2005-dolphin at yahoo.fr
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120531/bd0f3e2d/attachment.html>
+Can you send a patch with this?
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
