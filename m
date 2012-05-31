@@ -1,78 +1,33 @@
-From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Thu, 31 May 2012 20:08:10 +0300
-Subject: [Buildroot] [PATCH] quota: new package (v5)
-Message-ID: <1338484090-18434-1-git-send-email-jarkko.sakkinen@intel.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Thu, 31 May 2012 23:27:09 +0200
+Subject: [Buildroot] [git commit] news.html: add 2012.05 announcement mail
+	link
+Message-ID: <20120531212737.BB81C96E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
----
- package/Config.in       |    3 +++
- package/quota/Config.in |   13 +++++++++++++
- package/quota/quota.mk  |   18 ++++++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/quota/Config.in
- create mode 100644 package/quota/quota.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=f809eb20214d7c0c7f552d7009022180f3f690ff
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..eb76e14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
-+endif
-+source "package/quota/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
- source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-new file mode 100644
-index 0000000..62dcdfb
---- /dev/null
-+++ b/package/quota/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_QUOTA
-+	bool "quota"
-+	depends on BR2_INET_RPC
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	help
-+	  Implementation of the disk quota system.
-+	  http://sourceforge.net/projects/linuxquota/
-+
-+comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
-+	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-new file mode 100644
-index 0000000..d84a12e
---- /dev/null
-+++ b/package/quota/quota.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# QUOTA
-+#
-+#############################################################
-+
-+QUOTA_VERSION = 4.00
-+QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
-+QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
-+
-+QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
-+
-+# Package uses autoconf but not automake.
-+QUOTA_INSTALL_TARGET_OPT = \
-+	ROOTDIR=$(TARGET_DIR) \
-+	install
-+
-+$(eval $(call AUTOTARGETS))
--- 
-1.7.9.5
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ docs/news.html |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/docs/news.html b/docs/news.html
+index 8b52650..256d3b9 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -10,7 +10,8 @@
+     <p>The stable 2012.05 release is out - Thanks to everyone
+     contributing and testing the release candidates. See the
+     <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.05">CHANGES</a>
+-    file for more details
++    file for more details, read the
++    <a href="http://lists.busybox.net/pipermail/buildroot/2012-May/054342.html">announcement</a>
+     and go to the <a href="/downloads/">downloads page</a> to pick up the
+     <a href="/downloads/buildroot-2012.05.tar.bz2">2012.05 release</a>.</p>
+ 
