@@ -1,79 +1,74 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 18 May 2012 22:22:07 +0200
-Subject: [Buildroot] [git commit] libmbus: bump to version 0.7.0
-Message-ID: <20120531113258.0E91D96E2A@busybox.osuosl.org>
+Date: Thu, 31 May 2012 11:32:59 -0000
+Subject: [Buildroot] [git commit] python-id3: new package
+Message-ID: <20120531113256.85E4D96E2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=92c24094240f75b44023f6a2611f66c8d1db9656
+commit: http://git.buildroot.net/buildroot/commit/?id=b3e10d197dbd643b0722c918ac5cd4adadfc3310
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libmbus/libmbus-0.6.1-bcopy.patch |   15 ---------------
- package/libmbus/libmbus-bcopy.patch       |   16 ++++++++++++++++
- package/libmbus/libmbus.mk                |    4 ++--
- 3 files changed, 18 insertions(+), 17 deletions(-)
+ package/Config.in                |    1 +
+ package/python-id3/Config.in     |    9 +++++++++
+ package/python-id3/python-id3.mk |   21 +++++++++++++++++++++
+ 3 files changed, 31 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmbus/libmbus-0.6.1-bcopy.patch b/package/libmbus/libmbus-0.6.1-bcopy.patch
-deleted file mode 100644
-index 8b8310c..0000000
---- a/package/libmbus/libmbus-0.6.1-bcopy.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Drop bcopy since it's deprecated.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--diff -Nura libmbus-0.6.1/mbus/mbus-tcp.c libmbus-0.6.1-bcopy/mbus/mbus-tcp.c
----- libmbus-0.6.1/mbus/mbus-tcp.c	2011-11-06 02:34:28.000000000 -0300
--+++ libmbus-0.6.1-bcopy/mbus/mbus-tcp.c	2012-05-03 08:11:39.680346347 -0300
--@@ -78,7 +78,7 @@
--         return NULL;
--     }
-- 
---    bcopy((void *)(host_addr->h_addr), (void *)(&s_addr.sin_addr), host_addr->h_length);
--+    memmove((void *)(&s_addr.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
-- 
--     if (connect(handle->sock, (struct sockaddr *)&s_addr, sizeof(s_addr)) < 0)
--     {
-diff --git a/package/libmbus/libmbus-bcopy.patch b/package/libmbus/libmbus-bcopy.patch
+diff --git a/package/Config.in b/package/Config.in
+index f91a907..ff03178 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -255,6 +255,7 @@ source "package/python/Config.in"
+ if BR2_PACKAGE_PYTHON
+ menu "external python modules"
+ source "package/python-dpkt/Config.in"
++source "package/python-id3/Config.in"
+ source "package/python-mad/Config.in"
+ source "package/python-netifaces/Config.in"
+ source "package/python-pygame/Config.in"
+diff --git a/package/python-id3/Config.in b/package/python-id3/Config.in
 new file mode 100644
-index 0000000..660cc37
+index 0000000..829a657
 --- /dev/null
-+++ b/package/libmbus/libmbus-bcopy.patch
-@@ -0,0 +1,16 @@
-+Drop bcopy since it's deprecated.
++++ b/package/python-id3/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_ID3
++    bool "python-id3"
++    depends on BR2_PACKAGE_PYTHON
++    help
++      This module allows one to read and manipulate so-called ID3
++      informational tags on MP3 files through an object-oriented
++      Python interface.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++      http://id3-py.sourceforge.net/
+diff --git a/package/python-id3/python-id3.mk b/package/python-id3/python-id3.mk
+new file mode 100644
+index 0000000..e1ed1b6
+--- /dev/null
++++ b/package/python-id3/python-id3.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# python-id3
++#
++#############################################################
 +
-+diff -Nura libmbus-0.7.0/mbus/mbus-tcp.c libmbus-0.7.0-bcopy/mbus/mbus-tcp.c
-+--- libmbus-0.7.0/mbus/mbus-tcp.c	2011-12-08 13:21:19.000000000 -0300
-++++ libmbus-0.7.0-bcopy/mbus/mbus-tcp.c	2012-05-03 09:08:36.987106612 -0300
-+@@ -78,7 +78,7 @@
-+         return NULL;
-+     }
-+ 
-+-    bcopy((void *)(host_addr->h_addr), (void *)(&s.sin_addr), host_addr->h_length);
-++    memmove((void *)(&s.sin_addr), (void *)(host_addr->h_addr), host_addr->h_length);
-+ 
-+     if (connect(handle->sock, (struct sockaddr *)&s, sizeof(s)) < 0)
-+     {
-diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
-index 9abb2bf..17954b9 100644
---- a/package/libmbus/libmbus.mk
-+++ b/package/libmbus/libmbus.mk
-@@ -4,8 +4,8 @@
- #
- #############################################################
- 
--LIBMBUS_VERSION = 0.6.1
--LIBMBUS_SITE = http://www.freescada.com/public-dist/
-+LIBMBUS_VERSION = 0.7.0
-+LIBMBUS_SITE = http://www.freescada.com/public-dist
- LIBMBUS_INSTALL_STAGING = YES
- 
- # Without this the build yields an error:
++PYTHON_ID3_VERSION = 1.2
++PYTHON_ID3_SOURCE = id3-py_$(PYTHON_ID3_VERSION).tar.gz
++PYTHON_ID3_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/id3-py
++
++PYTHON_ID3_DEPENDENCIES = python
++
++define PYTHON_ID3_BUILD_CMDS
++    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py build)
++endef
++
++define PYTHON_ID3_INSTALL_TARGET_CMDS
++    (cd $(@D); $(HOST_DIR)/usr/bin/python setup.py install --prefix=$(TARGET_DIR)/usr)
++endef
++
++$(eval $(call GENTARGETS))
