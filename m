@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 May 2012 16:13:12 +0200
-Subject: [Buildroot] Why hiawatha is not managing IPV6 strictly
-In-Reply-To: <1338471952.69324.YahooMailNeo@web28411.mail.ukl.yahoo.com>
-References: <1338471952.69324.YahooMailNeo@web28411.mail.ukl.yahoo.com>
-Message-ID: <20120531161312.6c85c244@skate>
+Date: Thu, 31 May 2012 16:15:54 +0200
+Subject: [Buildroot] Hiawatha webdav
+In-Reply-To: <1338472068.69082.YahooMailNeo@web28407.mail.ukl.yahoo.com>
+References: <1338472068.69082.YahooMailNeo@web28407.mail.ukl.yahoo.com>
+Message-ID: <20120531161554.7c63ce08@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 31 May 2012 14:45:52 +0100 (BST),
+Le Thu, 31 May 2012 14:47:48 +0100 (BST),
 Vincent de RIBOU <vins_bozo@yahoo.fr> a ?crit :
 
-> Cmake config for Hiawatha uses only default IPV6 as activated.
+> I am using last 2012.05 with hiawatha webserver.
 > 
-> Why not configuring if so through?BR2_INET_IPV6 option??
+> I didn't find any clear view on Webdav option(s).
+> I indeed to use webdav SVN repository. Is it compliant now??
 
-Because nobody did it. You can probably add something like
--DENABLE_IPV6=$(if $(BR2_INET_IPV6),ON,OFF) in the HIAWATHA_CONF_OPT.
-
-Can you send a patch with this?
+Apparently, Hiawatha supports WebDAV since version 8.2. In 2012.05,
+only version 8.1 is packaged, but if you look at the current Git
+version, we have version 8.3 available. See
+http://git.buildroot.net/buildroot/tree/package/hiawatha/hiawatha.mk.
 
 Thomas
 -- 
