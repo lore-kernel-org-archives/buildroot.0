@@ -1,32 +1,30 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 28 May 2012 21:45:11 +0200
-Subject: [Buildroot] [git commit] libmnl: bump to version 1.0.3
-Message-ID: <20120531113301.0863096E2A@busybox.osuosl.org>
+Date: Thu, 31 May 2012 13:16:10 +0200
+Subject: [Buildroot] [git commit] nfs-utils: needs pkg-config
+Message-ID: <20120531113302.0AE2F96E2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e6e6101bd552f96e32cf935cf6492864795b5364
+commit: http://git.buildroot.net/buildroot/commit/?id=54f88ee8eed9d3ae7ab670d14ba77a97a44caaca
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libmnl/libmnl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/nfs-utils/nfs-utils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmnl/libmnl.mk b/package/libmnl/libmnl.mk
-index 407ca52..52719cd 100644
---- a/package/libmnl/libmnl.mk
-+++ b/package/libmnl/libmnl.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 87c136c..a7c42fb 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -8,6 +8,7 @@ NFS_UTILS_VERSION = 1.2.6
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.bz2
+ NFS_UTILS_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/nfs/nfs-utils/$(NFS_UTILS_VERSION)
+ NFS_UTILS_AUTORECONF = YES
++NFS_UTILS_DEPENDENCIES = host-pkg-config
  
--LIBMNL_VERSION = 1.0.2
-+LIBMNL_VERSION = 1.0.3
- LIBMNL_SOURCE = libmnl-$(LIBMNL_VERSION).tar.bz2
- LIBMNL_SITE = http://netfilter.org/projects/libmnl/files
- LIBMNL_INSTALL_STAGING = YES
+ NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
+ 
