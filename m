@@ -1,29 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jun 2012 18:21:20 +0200
-Subject: [Buildroot] [PATCH] quota: new package (v7)
-In-Reply-To: <1338566735-12243-1-git-send-email-jarkko.sakkinen@intel.com>
-References: <1338566735-12243-1-git-send-email-jarkko.sakkinen@intel.com>
-Message-ID: <20120601182120.53b33729@skate>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 1 Jun 2012 20:50:35 +0200
+Subject: [Buildroot] [PATCH 2/2] luajit: fix dependencies of Lua modules
+In-Reply-To: <20120601182029.5496758d@skate>
+References: <CAB0FRssu7PT0PFZm32zwsiMRi3ZtFH0V5Pt=BQykiqwrhUQWzw@mail.gmail.com>
+ <20120601182029.5496758d@skate>
+Message-ID: <CAB0FRsuwMKK5LFnhLLY4SVrW5BGyMw4FLwG=17JJ7ExYOF5tkQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri,  1 Jun 2012 19:05:35 +0300,
-Jarkko Sakkinen <jarkko.sakkinen@intel.com> a ?crit :
+2012/6/1 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>:
+> Le Fri, 1 Jun 2012 11:58:27 +0200,
+> Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
+>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>
+> I am not a Lua guy, so maybe I'm missing something obvious, but you
+> could expand the justification for this patch, and include this
+> justification in the commit log?
+>
 
-> + +QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(CFLAGS) -D_GNU_SOURCE"
+luajit is another Lua 5.1 interpreter, API- and ABI-compatible to the
+standard one (lua package).
+A Lua module (luasocket for example) depends on lua OR luajit (only
+one is deployed on the target).
+The dependency against BR2_PACKAGE_LUA_SHARED_LIBRARY must be removed,
+because it's an internal of lua package.
 
-No, it should be
 
-	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+Fran?ois
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
