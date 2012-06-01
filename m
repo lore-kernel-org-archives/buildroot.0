@@ -1,80 +1,29 @@
-From: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
-Date: Fri,  1 Jun 2012 19:05:35 +0300
-Subject: [Buildroot] [PATCH] quota: new package (v7)
-Message-ID: <1338566735-12243-1-git-send-email-jarkko.sakkinen@intel.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Jun 2012 18:20:29 +0200
+Subject: [Buildroot] [PATCH 2/2] luajit: fix dependencies of Lua modules
+In-Reply-To: <CAB0FRssu7PT0PFZm32zwsiMRi3ZtFH0V5Pt=BQykiqwrhUQWzw@mail.gmail.com>
+References: <CAB0FRssu7PT0PFZm32zwsiMRi3ZtFH0V5Pt=BQykiqwrhUQWzw@mail.gmail.com>
+Message-ID: <20120601182029.5496758d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@intel.com>
----
- package/Config.in       |    3 +++
- package/quota/Config.in |   13 +++++++++++++
- package/quota/quota.mk  |   18 ++++++++++++++++++
- 3 files changed, 34 insertions(+)
- create mode 100644 package/quota/Config.in
- create mode 100644 package/quota/quota.mk
+Le Fri, 1 Jun 2012 11:58:27 +0200,
+Fran?ois Perrad <francois.perrad@gadz.org> a ?crit :
 
- [update: -D_GNU_SOURCE}
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..eb76e14 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -632,6 +632,9 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
-+endif
-+source "package/quota/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
- source "package/sysklogd/Config.in"
- source "package/sysvinit/Config.in"
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-new file mode 100644
-index 0000000..62dcdfb
---- /dev/null
-+++ b/package/quota/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_QUOTA
-+	bool "quota"
-+	depends on BR2_INET_RPC
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	help
-+	  Implementation of the disk quota system.
-+	  http://sourceforge.net/projects/linuxquota/
-+
-+comment "quota requires a toolchain with RPC + LARGEFILE + WCHAR support"
-+	depends on !(BR2_INET_RPC && BR2_LARGEFILE && BR2_USE_WCHAR)
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-new file mode 100644
-index 0000000..fb43f42
---- /dev/null
-+++ b/package/quota/quota.mk
-@@ -0,0 +1,18 @@
-+#############################################################
-+#
-+# QUOTA
-+#
-+#############################################################
-+
-+QUOTA_VERSION = 4.00
-+QUOTA_SOURCE = quota-$(QUOTA_VERSION).tar.gz
-+QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
-+
-+QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(CFLAGS) -D_GNU_SOURCE"
-+
-+# Package uses autoconf but not automake.
-+QUOTA_INSTALL_TARGET_OPT = \
-+	ROOTDIR=$(TARGET_DIR) \
-+	install
-+
-+$(eval $(call AUTOTARGETS))
+I am not a Lua guy, so maybe I'm missing something obvious, but you
+could expand the justification for this patch, and include this
+justification in the commit log?
+
+Thanks!
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
