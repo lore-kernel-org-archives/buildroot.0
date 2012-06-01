@@ -1,47 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Jun 2012 16:57:41 +0200
-Subject: [Buildroot] [PATCH] added package sftpserver
-In-Reply-To: <CABJxTWEP8Y3bBzQQ29y3ZYyOUEUXY5jnC45SU2Xx8ZoF0kMgJA@mail.gmail.com>
-References: <CABJxTWEP8Y3bBzQQ29y3ZYyOUEUXY5jnC45SU2Xx8ZoF0kMgJA@mail.gmail.com>
-Message-ID: <20120601165741.04be3924@skate>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 1 Jun 2012 18:00:36 +0200
+Subject: [Buildroot] [PATCH] cgilua: bump version to 5.1.4
+Message-ID: <CAB0FRssJAWfT-UDr941C5c_6Lb7oVjcQR_qyip2QywvyP1Z=3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/cgilua/Config.in |    2 +-
+ package/cgilua/cgilua.mk |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le Fri, 1 Jun 2012 16:35:31 +0200,
-Kiril Maler <kiril.maler@gmail.com> a ?crit :
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index b43ba97..2f9c452 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_CGILUA
+ 	  CGILua is a tool for creating dynamic HTML pages
+ 	  and manipulating input data from Web forms.
 
-> +++ b/package/sftpserver/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_SFTPSERVER
-> +	bool "sftpserver"
-> +	depends on BR2_PACKAGE_DROPBEAR
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  sftp-server only from openssh suite. It allows mounting
-> +	  the rootfs of embedded board through sshfs, for example
-> +	  sshfs root at 192.168.2.1:/ /mnt/board-rootfs
-> +
-> +	  Unmount with 'fusermount -u -z /mnt/board-rootfs'
+-	  http://luaforge.net/projects/cgilua/
++	  http://keplerproject.github.com/cgilua
+diff --git a/package/cgilua/cgilua.mk b/package/cgilua/cgilua.mk
+index d46c2a6..8e5770a 100644
+--- a/package/cgilua/cgilua.mk
++++ b/package/cgilua/cgilua.mk
+@@ -4,8 +4,8 @@
+ #
+ #############################################################
 
-> +OPENSSH_VERSION = 5.9p1
-> +SFTPSERVER_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
-> +SFTPSERVER_SOURCE=openssh-$(OPENSSH_VERSION).tar.gz
-> +SFTPSERVER_VERSION=openssh-$(OPENSSH_VERSION)
+-CGILUA_VERSION = 5.1.3
+-CGILUA_SITE = http://luaforge.net/frs/download.php/3970
++CGILUA_VERSION = 5.1.4
++CGILUA_SITE = http://github.com/downloads/keplerproject/cgilua
+ CGILUA_DEPENDENCIES = luafilesystem
 
-We already have a package for openssh. Since this is also using the
-same source tarball, I think it should rather be integrated as options
-to the openssh package.
-
-Regards,
-
-Thomas
+ define CGILUA_INSTALL_TARGET_CMDS
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.9.5
