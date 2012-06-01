@@ -1,7 +1,7 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 1 Jun 2012 11:57:11 +0200
-Subject: [Buildroot] [PATCH 1/2] luajit: new package
-Message-ID: <CAB0FRstOuaQ2C2cooXfEYsgS6U8ZEuC9AyJDx1T6bxy=oQnLPA@mail.gmail.com>
+Date: Fri, 1 Jun 2012 11:58:27 +0200
+Subject: [Buildroot] [PATCH 2/2] luajit: fix dependencies of Lua modules
+Message-ID: <CAB0FRssu7PT0PFZm32zwsiMRi3ZtFH0V5Pt=BQykiqwrhUQWzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,121 +10,107 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                     |    3 ++-
- package/luajit/Config.in              |    9 +++++++
- package/luajit/luajit-root-path.patch |   16 ++++++++++++
- package/luajit/luajit.mk              |   44 +++++++++++++++++++++++++++++++++
- 4 files changed, 71 insertions(+), 1 deletion(-)
- create mode 100644 package/luajit/Config.in
- create mode 100644 package/luajit/luajit-root-path.patch
- create mode 100644 package/luajit/luajit.mk
+ package/cgilua/Config.in        |    1 -
+ package/copas/Config.in         |    1 -
+ package/lua/Config.in           |    3 +--
+ package/luafilesystem/Config.in |    1 -
+ package/luasocket/Config.in     |    1 -
+ package/rings/Config.in         |    1 -
+ package/xavante/Config.in       |    1 -
+ 7 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fb1b08f..fde30b0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -237,7 +237,8 @@ endmenu
- menu "Interpreter languages and scripting"
- source "package/haserl/Config.in"
- source "package/lua/Config.in"
--if BR2_PACKAGE_LUA
-+source "package/luajit/Config.in"
-+if BR2_PACKAGE_LUA || BR2_PACKAGE_LUAJIT
- menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
- source "package/copas/Config.in"
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-new file mode 100644
-index 0000000..c665b28
---- /dev/null
-+++ b/package/luajit/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_LUAJIT
-+	bool "luajit"
-+	help
-+	  LuaJIT implements the full set of language features defined by Lua 5.1. The
-+	  virtual machine (VM) is API- and ABI-compatible to the standard
-Lua interpreter
-+	  and can be deployed as a drop-in replacement.
-+
-+	  http://luajit.org/
-+
-diff --git a/package/luajit/luajit-root-path.patch
-b/package/luajit/luajit-root-path.patch
-new file mode 100644
-index 0000000..2eb037c
---- /dev/null
-+++ b/package/luajit/luajit-root-path.patch
-@@ -0,0 +1,16 @@
-+diff -Naur LuaJIT-2.0.0-beta10.orig/src/luaconf.h
-LuaJIT-2.0.0-beta10/src/luaconf.h
-+--- LuaJIT-2.0.0-beta10.orig/src/luaconf.h	2012-05-30 20:33:27.989333819 +0200
-++++ LuaJIT-2.0.0-beta10/src/luaconf.h	2012-05-30 20:46:30.581354777 +0200
-+@@ -22,9 +22,9 @@
-+ #define LUA_CPATH_DEFAULT \
-+   ".\\?.dll;" LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
-+ #else
-+-#define LUA_ROOT	"/usr/local/"
-+-#define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
-+-#define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
-++#define LUA_ROOT	"/usr/"
-++#define LUA_LDIR	LUA_ROOT "share/lua/"
-++#define LUA_CDIR	LUA_ROOT "lib/lua/"
-+ #ifdef LUA_XROOT
-+ #define LUA_JDIR	LUA_XROOT "share/luajit-2.0.0-beta10/"
-+ #define LUA_XPATH \
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-new file mode 100644
-index 0000000..14c5c66
---- /dev/null
-+++ b/package/luajit/luajit.mk
-@@ -0,0 +1,44 @@
-+#############################################################
-+#
-+# luajit
-+#
-+#############################################################
-+
-+LUAJIT_VERSION = 2.0.0-beta10
-+LUAJIT_SOURCE:=LuaJIT-$(LUAJIT_VERSION).tar.gz
-+LUAJIT_SITE = http://luajit.org/download
-+LUAJIT_INSTALL_STAGING = YES
-+
-+define LUAJIT_INSTALL_BETA_FIX_MAKEFILE
-+	$(SED) 's/@echo "  $$(SYMLINK) $$(INSTALL_TNAME)
-$$(INSTALL_TSYM)"/$$(SYMLINK) $$(INSTALL_TNAME) $$(INSTALL_TSYM)/'
-$(@D)/Makefile
-+endef
-+
-+ifeq ($(findstring beta,$(LUAJIT_VERSION)),beta)
-+LUAJIT_POST_PATCH_HOOKS += LUAJIT_INSTALL_BETA_FIX_MAKEFILE
-+endif
-+
-+define LUAJIT_NOLARGEFILE_FIX_MAKEFILE
-+	$(SED) 's/TARGET_XCFLAGS= -D_FILE_OFFSET_BITS=64
--D_LARGEFILE_SOURCE/TARGET_XCFLAGS=/' $(@D)/src/Makefile
-+endef
-+
-+ifneq ($(BR2_LARGEFILE),y)
-+LUAJIT_POST_PATCH_HOOKS += LUAJIT_NOLARGEFILE_FIX_MAKEFILE
-+endif
-+
-+define LUAJIT_BUILD_CMDS
-+	$(MAKE) PREFIX="/usr" CROSS="$(TARGET_CROSS)" -C $(@D)
-+endef
-+
-+define LUAJIT_INSTALL_STAGING_CMDS
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(STAGING_DIR)" -C $(@D) install
-+endef
-+
-+define LUAJIT_INSTALL_TARGET_CMDS
-+	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" -C $(@D) install
-+endef
-+
-+define LUAJIT_CLEAN_CMDS
-+	-$(MAKE) -C $(@D) clean
-+endef
-+
-+$(eval $(call GENTARGETS,package,luajit))
+diff --git a/package/cgilua/Config.in b/package/cgilua/Config.in
+index b43ba97..855ff48 100644
+--- a/package/cgilua/Config.in
++++ b/package/cgilua/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_CGILUA
+ 	bool "cgilua"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	select BR2_PACKAGE_LUAFILESYSTEM
+ 	help
+ 	  CGILua is a tool for creating dynamic HTML pages
+diff --git a/package/copas/Config.in b/package/copas/Config.in
+index 36abcc1..9969c8f 100644
+--- a/package/copas/Config.in
++++ b/package/copas/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_COPAS
+ 	bool "copas"
+ 	select BR2_PACKAGE_COXPCALL
+ 	select BR2_PACKAGE_LUASOCKET
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY # for luasocket
+ 	help
+ 	  Copas is a dispatcher based on coroutines that
+ 	  can be used by TCP/IP servers.
+diff --git a/package/lua/Config.in b/package/lua/Config.in
+index 56eba35..b9cde26 100644
+--- a/package/lua/Config.in
++++ b/package/lua/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LUA
+ 	bool "lua"
++	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Lua is a powerful, fast, light-weight, embeddable scripting language.
+
+@@ -8,14 +9,12 @@ config BR2_PACKAGE_LUA
+ config BR2_PACKAGE_LUA_COMPILER
+ 	bool "lua compiler"
+ 	depends on BR2_PACKAGE_LUA
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Install luac binary
+
+ config BR2_PACKAGE_LUA_INTERPRETER
+ 	bool "lua interpreter"
+ 	depends on BR2_PACKAGE_LUA
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Install lua binary
+
+diff --git a/package/luafilesystem/Config.in b/package/luafilesystem/Config.in
+index edcb414..7c130f8 100644
+--- a/package/luafilesystem/Config.in
++++ b/package/luafilesystem/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUAFILESYSTEM
+ 	bool "luafilesystem"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  LuaFileSystem offers a portable way to access
+ 	  the underlying directory structure and file attributes.
+diff --git a/package/luasocket/Config.in b/package/luasocket/Config.in
+index 298db56..4526303 100644
+--- a/package/luasocket/Config.in
++++ b/package/luasocket/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LUASOCKET
+ 	bool "luasocket"
+-	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  LuaSocket is the most comprehensive networking support library
+ 	  for the Lua language.
+diff --git a/package/rings/Config.in b/package/rings/Config.in
+index 2fe14aa..d1f1efe 100644
+--- a/package/rings/Config.in
++++ b/package/rings/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_RINGS
+ 	bool "rings"
+-	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	help
+ 	  Provides a way to create new Lua states from within Lua.
+
+diff --git a/package/xavante/Config.in b/package/xavante/Config.in
+index a7df530..db34d66 100644
+--- a/package/xavante/Config.in
++++ b/package/xavante/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XAVANTE
+ 	bool "xavante"
+-	select BR2_PACKAGE_LUA_SHARED_LIBRARY
+ 	select BR2_PACKAGE_CGILUA
+ 	select BR2_PACKAGE_COPAS
+ 	select BR2_PACKAGE_COXPCALL
 -- 
 1.7.9.5
