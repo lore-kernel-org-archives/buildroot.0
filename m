@@ -1,59 +1,89 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  2 Jun 2012 12:32:40 -0300
-Subject: [Buildroot] [PATCH] php: fix WDDX extension build failure
-Message-ID: <1338651160-22871-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  2 Jun 2012 18:13:51 +0200
+Subject: [Buildroot] [PATCH 01/10] monit: new package
+In-Reply-To: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <76ee26a62979c235a63db61ecf4b631889531f2a.1338653505.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix WDDX extension build failure.
-The documentation and source are conflicting about this, in theory
-libexpat support is deprecated and libxml2 can replace it, but it seems
-not so for WDDX, so pull in expat for it.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/Config.ext |    1 +
- package/php/php.mk     |    6 +++++-
- 2 files changed, 6 insertions(+), 1 deletions(-)
+ package/Config.in       |    3 +++
+ package/monit/Config.in |   10 ++++++++++
+ package/monit/monit.mk  |   30 ++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+ create mode 100644 package/monit/Config.in
+ create mode 100644 package/monit/monit.mk
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 80bab70..2cf71d3 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -310,6 +310,7 @@ config BR2_PACKAGE_PHP_EXT_SIMPLEXML
- 
- config BR2_PACKAGE_PHP_EXT_WDDX
- 	bool "WDDX"
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_PHP_EXT_LIBXML2
- 	help
- 	  WDDX support
-diff --git a/package/php/php.mk b/package/php/php.mk
-index e9bda44..af041c9 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -38,7 +38,6 @@ PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_DOM),--enable-dom) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_SIMPLEXML),--enable-simplexml) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_SOAP),--enable-soap) \
--		$(if $(BR2_PACKAGE_PHP_EXT_WDDX),--enable-wddx) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_XML),--enable-xml) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_XMLREADER),--enable-xmlreader) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_XMLWRITER),--enable-xmlwriter) \
-@@ -68,6 +67,11 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
- 	PHP_DEPENDENCIES += libxml2
- endif
- 
-+ifeq ($(BR2_PACKAGE_PHP_EXT_WDDX),y)
-+	PHP_CONF_OPT += --enable-wddx --with-libexpat-dir=$(STAGING_DIR)/usr
-+	PHP_DEPENDENCIES += expat
+diff --git a/package/Config.in b/package/Config.in
+index ca8fc96..61f3fec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -644,6 +644,9 @@ source "package/htop/Config.in"
+ source "package/kmod/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/module-init-tools/Config.in"
++endif
++source "package/monit/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/procps/Config.in"
+ source "package/psmisc/Config.in"
+ source "package/rsyslog/Config.in"
+diff --git a/package/monit/Config.in b/package/monit/Config.in
+new file mode 100644
+index 0000000..6933aaf
+--- /dev/null
++++ b/package/monit/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_MONIT
++	bool "monit"
++	help
++	  Monit is a free open source utility for managing and
++	  monitoring, processes, programs, files, directories and
++	  filesystems on a UNIX system. Monit conducts automatic
++	  maintenance and repair and can execute meaningful causal
++	  actions in error situations.
++
++	  http://mmonit.com/monit/
+diff --git a/package/monit/monit.mk b/package/monit/monit.mk
+new file mode 100644
+index 0000000..958618d
+--- /dev/null
++++ b/package/monit/monit.mk
+@@ -0,0 +1,30 @@
++#############################################################
++#
++# monit
++#
++#############################################################
++
++MONIT_VERSION = 5.4
++MONIT_SITE = http://mmonit.com/monit/dist/
++
++MONIT_CONF_ENV = \
++	libmonit_cv_setjmp_available=yes \
++	libmonit_cv_vsnprintf_c99_conformant=yes
++
++MONIT_CONF_OPT += \
++	--without-pam
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++MONIT_CONF_OPT += --with-ssl
++MONIT_DEPENDENCIES += openssl
++else
++MONIT_CONF_OPT += --without-ssl
 +endif
 +
- ifeq ($(BR2_PACKAGE_PHP_EXT_XMLRPC),y)
- 	PHP_CONF_OPT += --with-xmlrpc \
- 		$(if $(BR2_PACKAGE_LIBICONV),--with-iconv-dir=$(STAGING_DIR)/usr)
++ifeq ($(BR2_LARGEFILE),y)
++MONIT_CONF_OPT += --with-largefiles
++else
++MONIT_CONF_OPT += --without-largefiles
++endif
++
++$(eval $(call AUTOTARGETS))
 -- 
-1.7.3.4
+1.7.9.5
