@@ -1,89 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Jun 2012 18:13:51 +0200
-Subject: [Buildroot] [PATCH 01/10] monit: new package
-In-Reply-To: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <76ee26a62979c235a63db61ecf4b631889531f2a.1338653505.git.thomas.petazzoni@free-electrons.com>
+Date: Sat,  2 Jun 2012 18:13:50 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.08/new-packages
+Message-ID: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in       |    3 +++
- package/monit/Config.in |   10 ++++++++++
- package/monit/monit.mk  |   30 ++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
+Hello,
+
+Here is a set of new packages that I needed for various projects in
+the past year.
+
+This time, I did test them against uClibc, with minimal
+configurations, so I'm pretty confident that they are correct with
+regard to the dependencies on largefile/C++ and other things.
+
+Regards,
+
+Thomas
+
+The following changes since commit 54f88ee8eed9d3ae7ab670d14ba77a97a44caaca:
+
+  nfs-utils: needs pkg-config (2012-05-31 13:16:10 +0200)
+
+are available in the git repository at:
+
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.08/new-packages
+
+for you to fetch changes up to 655f8a8354c421c2c1147e56e4ed91ae6c12de81:
+
+  libqwt: new package (2012-06-02 15:42:56 +0200)
+
+----------------------------------------------------------------
+Laurent GONZALEZ (1):
+      libqwt: new package
+
+Thomas Petazzoni (9):
+      monit: new package
+      libcurl: fix up prefix in curl-config
+      libxmlrpc: new package
+      llrp-toolkit: new package
+      qextserialport: new package
+      pciutils: install headers and libraries in STAGING_DIR
+      dmidecode: new package
+      flashrom: new package
+      qt: make $(HOST_DIR)/usr/mkspecs a symlink to $(STAGING_DIR)/usr/mkspecs
+
+ package/Config.in                                  |    9 +
+ package/dmidecode/Config.in                        |    9 +
+ .../dmidecode/dmidecode-build-system-fixes.patch   |   35 ++++
+ package/dmidecode/dmidecode.mk                     |   18 ++
+ package/flashrom/Config.in                         |   11 ++
+ package/flashrom/flashrom.mk                       |   20 +++
+ package/libcurl/libcurl.mk                         |    6 +
+ package/libqwt/Config.in                           |   23 +++
+ package/libqwt/libqwt-remove-installed-check.patch |   32 ++++
+ package/libqwt/libqwt.mk                           |   51 ++++++
+ package/libxmlrpc/Config.in                        |   10 ++
+ .../libxmlrpc/libxmlrpc-fix-gennmtab-build.patch   |   25 +++
+ .../libxmlrpc-fix-non-cplusplus-build.patch        |   27 +++
+ .../libxmlrpc/libxmlrpc-fix-non-wchar-build.patch  |   24 +++
+ .../libxmlrpc-remove-curl-types-h-include.patch    |   43 +++++
+ .../libxmlrpc-use-correct-curl-config.patch        |   22 +++
+ package/libxmlrpc/libxmlrpc.mk                     |   44 +++++
+ package/llrp-toolkit/Config.in                     |   11 ++
+ .../llrp-toolkit-01-ltkcpp-fix-headers.patch       |   74 +++++++++
+ ...toolkit-02-ltkcpp-generate-shared-library.patch |   43 +++++
+ ...-toolkit-03-ltkcpp-normalize-build-system.patch |  174 ++++++++++++++++++++
+ .../llrp-toolkit-04-ltkcpp-disable-warning.patch   |   43 +++++
+ .../llrp-toolkit-05-ltkc-shared-library.patch      |   26 +++
+ ...rp-toolkit-06-ltkc-normalize-build-system.patch |  163 ++++++++++++++++++
+ package/llrp-toolkit/llrp-toolkit.mk               |   77 +++++++++
+ package/monit/Config.in                            |   10 ++
+ package/monit/monit.mk                             |   30 ++++
+ package/pciutils/pciutils.mk                       |    8 +
+ package/qextserialport/Config.in                   |    9 +
+ .../qextserialport-main-include.patch              |   15 ++
+ .../qextserialport-no-examples.patch               |   17 ++
+ .../qextserialport/qextserialport-pkgconfig.patch  |   19 +++
+ package/qextserialport/qextserialport.mk           |   35 ++++
+ package/qt/qt.mk                                   |    3 +-
+ 34 files changed, 1164 insertions(+), 2 deletions(-)
+ create mode 100644 package/dmidecode/Config.in
+ create mode 100644 package/dmidecode/dmidecode-build-system-fixes.patch
+ create mode 100644 package/dmidecode/dmidecode.mk
+ create mode 100644 package/flashrom/Config.in
+ create mode 100644 package/flashrom/flashrom.mk
+ create mode 100644 package/libqwt/Config.in
+ create mode 100644 package/libqwt/libqwt-remove-installed-check.patch
+ create mode 100644 package/libqwt/libqwt.mk
+ create mode 100644 package/libxmlrpc/Config.in
+ create mode 100644 package/libxmlrpc/libxmlrpc-fix-gennmtab-build.patch
+ create mode 100644 package/libxmlrpc/libxmlrpc-fix-non-cplusplus-build.patch
+ create mode 100644 package/libxmlrpc/libxmlrpc-fix-non-wchar-build.patch
+ create mode 100644 package/libxmlrpc/libxmlrpc-remove-curl-types-h-include.patch
+ create mode 100644 package/libxmlrpc/libxmlrpc-use-correct-curl-config.patch
+ create mode 100644 package/libxmlrpc/libxmlrpc.mk
+ create mode 100644 package/llrp-toolkit/Config.in
+ create mode 100644 package/llrp-toolkit/llrp-toolkit-01-ltkcpp-fix-headers.patch
+ create mode 100644 package/llrp-toolkit/llrp-toolkit-02-ltkcpp-generate-shared-library.patch
+ create mode 100644 package/llrp-toolkit/llrp-toolkit-03-ltkcpp-normalize-build-system.patch
+ create mode 100644 package/llrp-toolkit/llrp-toolkit-04-ltkcpp-disable-warning.patch
+ create mode 100644 package/llrp-toolkit/llrp-toolkit-05-ltkc-shared-library.patch
+ create mode 100644 package/llrp-toolkit/llrp-toolkit-06-ltkc-normalize-build-system.patch
+ create mode 100644 package/llrp-toolkit/llrp-toolkit.mk
  create mode 100644 package/monit/Config.in
  create mode 100644 package/monit/monit.mk
+ create mode 100644 package/qextserialport/Config.in
+ create mode 100644 package/qextserialport/qextserialport-main-include.patch
+ create mode 100644 package/qextserialport/qextserialport-no-examples.patch
+ create mode 100644 package/qextserialport/qextserialport-pkgconfig.patch
+ create mode 100644 package/qextserialport/qextserialport.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index ca8fc96..61f3fec 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -644,6 +644,9 @@ source "package/htop/Config.in"
- source "package/kmod/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/module-init-tools/Config.in"
-+endif
-+source "package/monit/Config.in"
-+if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/procps/Config.in"
- source "package/psmisc/Config.in"
- source "package/rsyslog/Config.in"
-diff --git a/package/monit/Config.in b/package/monit/Config.in
-new file mode 100644
-index 0000000..6933aaf
---- /dev/null
-+++ b/package/monit/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_MONIT
-+	bool "monit"
-+	help
-+	  Monit is a free open source utility for managing and
-+	  monitoring, processes, programs, files, directories and
-+	  filesystems on a UNIX system. Monit conducts automatic
-+	  maintenance and repair and can execute meaningful causal
-+	  actions in error situations.
-+
-+	  http://mmonit.com/monit/
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-new file mode 100644
-index 0000000..958618d
---- /dev/null
-+++ b/package/monit/monit.mk
-@@ -0,0 +1,30 @@
-+#############################################################
-+#
-+# monit
-+#
-+#############################################################
-+
-+MONIT_VERSION = 5.4
-+MONIT_SITE = http://mmonit.com/monit/dist/
-+
-+MONIT_CONF_ENV = \
-+	libmonit_cv_setjmp_available=yes \
-+	libmonit_cv_vsnprintf_c99_conformant=yes
-+
-+MONIT_CONF_OPT += \
-+	--without-pam
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MONIT_CONF_OPT += --with-ssl
-+MONIT_DEPENDENCIES += openssl
-+else
-+MONIT_CONF_OPT += --without-ssl
-+endif
-+
-+ifeq ($(BR2_LARGEFILE),y)
-+MONIT_CONF_OPT += --with-largefiles
-+else
-+MONIT_CONF_OPT += --without-largefiles
-+endif
-+
-+$(eval $(call AUTOTARGETS))
+Thanks,
 -- 
-1.7.9.5
+Thomas Petazzoni
