@@ -1,7 +1,7 @@
 From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 2 Jun 2012 10:41:35 +0200
-Subject: [Buildroot] [PATCH v2] luajit: new package
-Message-ID: <CAB0FRssEphNA-jeUDk9X0XcA24YQooE5zkY2ZtvT=Vhc+r29DQ@mail.gmail.com>
+Date: Sat, 2 Jun 2012 10:49:14 +0200
+Subject: [Buildroot] [PATCH] luajit: new package (v2)
+Message-ID: <CAB0FRssEYqXNWbALe9HPGOyjkffumkOoDfS_zhj0W1d7F8-7Ow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
