@@ -1,32 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  2 Jun 2012 12:09:03 -0300
-Subject: [Buildroot] [PATCH] php: fix build error for snmp extension
-Message-ID: <1338649743-27044-1-git-send-email-gustavo@zacarias.com.ar>
+From: Stijn Souffriau <stijn.souffriau@essensium.com>
+Date: Sat,  2 Jun 2012 17:09:15 +0200
+Subject: [Buildroot] [PATCH resend 1/4] Added the libassuan package.
+Message-ID: <1338649758-11225-1-git-send-email-stijn.souffriau@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PHP requires that net-snmp be built with the ability to load MIB code,
-so force it on when the extension is enabled.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/php/Config.ext |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/Config.in              |    1 +
+ package/libassuan/Config.in    |    7 +++++++
+ package/libassuan/libassuan.mk |   17 +++++++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/libassuan/Config.in
+ create mode 100644 package/libassuan/libassuan.mk
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index fa73bb4..80bab70 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -219,6 +219,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
- config BR2_PACKAGE_PHP_EXT_SNMP
- 	bool "SNMP"
- 	select BR2_PACKAGE_NETSNMP
-+	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
- 	help
- 	  SNMP support
- 
+diff --git a/package/Config.in b/package/Config.in
+index b25f31a..58c6624 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -276,6 +276,7 @@ endmenu
+ menu "Crypto"
+ source "package/beecrypt/Config.in"
+ source "package/gnutls/Config.in"
++source "package/libassuan/Config.in"
+ source "package/libgcrypt/Config.in"
+ source "package/libgpg-error/Config.in"
+ source "package/libnss/Config.in"
+diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
+new file mode 100644
+index 0000000..93ab49c
+--- /dev/null
++++ b/package/libassuan/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBASSUAN
++	bool "libassuan"
++	select BR2_PACKAGE_LIBGPG_ERROR
++	help
++	  Libassuan is the IPC library used by some GnuPG related software.
++
++	  http://www.gnupg.org/
+diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
+new file mode 100644
+index 0000000..73c098e
+--- /dev/null
++++ b/package/libassuan/libassuan.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# libassuan
++#
++#############################################################
++
++LIBASSUAN_VERSION = 2.0.3
++LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
++LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan/
++LIBASSUAN_INSTALL_STAGING = YES
++
++LIBASSUAN_CONF_OPT = \
++	--with-gpg-error-prefix=$(STAGING_DIR)/usr
++
++LIBASSUAN_DEPENDENCIES = libgpg-error
++
++$(eval $(call AUTOTARGETS))
 -- 
-1.7.3.4
+1.7.9.5
