@@ -1,39 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  2 Jun 2012 19:41:51 +0200
-Subject: [Buildroot] [PATCH] beecrypt: fix build failure of C++ code with
-	g++ 4.7
-Message-ID: <1338658911-4807-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 2 Jun 2012 23:48:24 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchainfile.cmake: toward a
+	relocatable toolchain
+In-Reply-To: <1336766484-6348-1-git-send-email-s.martin49@gmail.com>
+References: <1336766484-6348-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAHXCMM+VSjn2qkQ8ur-hHMaMyXxM3h=WY-Ey9YiF3Xuy0Wu3zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes
-http://autobuild.buildroot.org/results/5c1e904b201676275465c902ba3c09951973755c/build-end.log.
+ping?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/beecrypt/beecrypt.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+2012/5/11 Samuel Martin <s.martin49@gmail.com>:
+> Remove all hard-coded pathes.
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
+> index 371ab11..6b2d2dc 100644
+> --- a/package/pkg-cmaketargets.mk
+> +++ b/package/pkg-cmaketargets.mk
+> @@ -205,17 +205,19 @@ endef
+> ?$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+> ? ? ? ?@mkdir -p $(@D)
+> ? ? ? ?@echo -en "\
+> + ? ? ? get_filename_component(_THIS_DIR \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
+> + ? ? ? set(_HOST_DIR \"\$${_THIS_DIR}/../../..\")\n\
+> ? ? ? ?set(CMAKE_SYSTEM_NAME Linux)\n\
+> - ? ? ? set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+> - ? ? ? set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+> + ? ? ? set(CMAKE_C_COMPILER \"\$${_HOST_DIR}/usr/bin/$(REAL_GNU_TARGET_NAME)-gcc\")\n\
+> + ? ? ? set(CMAKE_CXX_COMPILER \"\$${_HOST_DIR}/usr/bin/$(REAL_GNU_TARGET_NAME)-g++\")\n\
+> ? ? ? ?set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+> ? ? ? ?set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+> ? ? ? ?set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+> - ? ? ? set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
+> - ? ? ? set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
+> + ? ? ? set(CMAKE_PROGRAM_PATH \"\$${_HOST_DIR}/usr/bin\")\n\
+> + ? ? ? set(CMAKE_FIND_ROOT_PATH \"\$${_HOST_DIR}/usr/$(REAL_GNU_TARGET_NAME)/sysroot\")\n\
+> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+> ? ? ? ?set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
+> - ? ? ? set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
+> + ? ? ? set(ENV{PKG_CONFIG_SYSROOT_DIR} \"\$${_HOST_DIR}/usr/$(REAL_GNU_TARGET_NAME)/sysroot\")\n\
+> ? ? ? ?" > $@
+>
+> --
+> 1.7.10.1
+>
 
-diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
-index a0187ce..7642c1b 100644
---- a/package/beecrypt/beecrypt.mk
-+++ b/package/beecrypt/beecrypt.mk
-@@ -7,6 +7,13 @@ BEECRYPT_VERSION = 4.2.1
- BEECRYPT_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/beecrypt
- BEECRYPT_AUTORECONF = YES
- BEECRYPT_INSTALL_STAGING = YES
-+
-+# beecrypt contains C++ code that g++ 4.7 doesn't really
-+# like. Upstream does not seem to be really active, so workaround this
-+# by passing -fpermissive.
-+BEECRYPT_CONF_ENV = \
-+	CXXFLAGS="$(TARGET_CXXFLAGS) -fpermissive"
-+
- BEECRYPT_CONF_OPT = \
- 		--without-java \
- 		--without-python
+
+
 -- 
-1.7.9.5
+Sam
