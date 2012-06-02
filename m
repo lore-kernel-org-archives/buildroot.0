@@ -1,76 +1,49 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  3 Jun 2012 00:08:16 +0200
-Subject: [Buildroot] [PATCH v3 1/2] dependencies: build a host python2 if no
-	suitable one cane be found
-Message-ID: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
+Date: Sun,  3 Jun 2012 00:08:17 +0200
+Subject: [Buildroot] [PATCH v3 2/2] libglib2: fix install even if the host
+	python binary refers to python3
+In-Reply-To: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
+References: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1338674897-1810-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some distros choose to change the /usr/bin/python binary, make it pointed to
-python3 instead of python2.
+The libglib2's build system uses some python2 scripts in the install rules.
 
-This may have some bad consequences for packages that uses some
-non-python3-compliant python scripts in their build system (eg. in install or
-post-install scripts).
-
-This patch checks for a suitable python2 version (2.6 or 2.7) on the host
-system, and declares the following variables:
-- PYTHON2: pointing to the host python2 binary;
-- NEED_PYTHON2: sets to "host-python" if no python2 binary has been found.
-
-This way, a package using some python2 scripts must:
-- adds $(NEED_PYTHON2) to its dependency list;
-- sets $(PYTHON2) as the python binary to be used.
-
-A side effect of this patch is getting rid of any host python. Buildroot can
-runs on a host without python, or with a too old python2 version, or with only
-python3.
-
-Changes since v2:
-- misc. fixes and cleanup
-
-Changes since v1:
-- use support/dependency infrastructure
-- rename some symbols
+This patch ensures to have a valid host python2 binary and enforces this python2
+binary at configure-time.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
- create mode 100644 support/dependencies/check-host-python2.mk
- create mode 100755 support/dependencies/check-host-python2.sh
-
-diff --git a/support/dependencies/check-host-python2.mk b/support/dependencies/check-host-python2.mk
-new file mode 100644
-index 0000000..3b66ffc
---- /dev/null
-+++ b/support/dependencies/check-host-python2.mk
-@@ -0,0 +1,6 @@
-+PYTHON2 = $(call suitable-host-package,python2)
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index d2445a1..500f309 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -42,7 +42,10 @@ LIBGLIB2_CONF_ENV = \
+ 		ac_use_included_regex=no gl_cv_c_restrict=no \
+ 		ac_cv_path_GLIB_GENMARSHAL=$(HOST_DIR)/usr/bin/glib-genmarshal ac_cv_prog_F77=no \
+ 		ac_cv_func_posix_getgrgid_r=no \
+-		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no)
++		gt_cv_c_wchar_t=$(if $(BR2_USE_WCHAR),yes,no) \
++		ac_cv_path_PYTHON=$(PYTHON2)
 +
-+ifeq (,$(PYTHON2))
-+  NEED_PYTHON2 = host-python
-+  PYTHON2 = $(HOST_DIR)/usr/bin/python
-+endif
-diff --git a/support/dependencies/check-host-python2.sh b/support/dependencies/check-host-python2.sh
-new file mode 100755
-index 0000000..6ad4b3a
---- /dev/null
-+++ b/support/dependencies/check-host-python2.sh
-@@ -0,0 +1,13 @@
-+#!/bin/sh
++HOST_LIBGLIB2_CONF_ENV += ac_cv_path_PYTHON=$(PYTHON2)
+ 
+ # old uClibc versions don't provide qsort_r
+ ifeq ($(BR2_UCLIBC_VERSION_0_9_31)$(BR2_UCLIBC_VERSION_0_9_32)$(BR2_TOOLCHAIN_CTNG_uClibc)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
+@@ -57,7 +60,9 @@ HOST_LIBGLIB2_CONF_OPT = \
+ 
+ LIBGLIB2_DEPENDENCIES = host-pkg-config host-libglib2 libffi zlib $(if $(BR2_NEEDS_GETTEXT),gettext libintl)
+ 
+-HOST_LIBGLIB2_DEPENDENCIES = host-pkg-config host-libffi host-zlib
++HOST_LIBGLIB2_DEPENDENCIES = host-pkg-config host-libffi host-zlib $(NEED_PYTHON2)
 +
-+candidates="python python2"
-+
-+for candidate in ${candidates} ; do
-+  which ${candidate} &>/dev/null || continue
-+  # restrict version of python2 to 2.6 or 2.7
-+  if ${candidate} --version 2>&1 | grep -q 'Python 2\.[6-7].*' ; then
-+    # found a valid candidate, so quit now
-+    echo $(which ${candidate})
-+    exit
-+  fi
-+done
---
++LIBGLIB2_DEPENDENCIES += $(NEED_PYTHON2)
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
+ LIBGLIB2_DEPENDENCIES += libiconv
+-- 
 1.7.10.3
