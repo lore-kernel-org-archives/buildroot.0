@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Jun 2012 15:23:51 +0200
-Subject: [Buildroot] [PATCH] gstreamer: add xorg support
-In-Reply-To: <1338726592-3168-1-git-send-email-spdawson@gmail.com>
-References: <1338726592-3168-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120603152351.2faa4341@skate>
+Date: Sun,  3 Jun 2012 16:04:34 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	for-2012.08/ext-toolchain-updates
+Message-ID: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun,  3 Jun 2012 13:29:52 +0100,
-spdawson at gmail.com a ?crit :
+The following changes since commit 54f88ee8eed9d3ae7ab670d14ba77a97a44caaca:
 
-> +ifeq ($(BR2_PACKAGE_XORG7),y)
-> +GST_PLUGINS_BASE_DEPENDENCIES += xserver_xorg-server
-> +GST_PLUGINS_BASE_CONF_OPT += \
-> +	--enable-x \
-> +	--enable-xshm \
-> +	--enable-xvideo
-> +else
-> +GST_PLUGINS_BASE_CONF_OPT += \
-> +	--disable-x \
-> +	--disable-xshm \
-> +	--disable-xvideo
-> +endif
+  nfs-utils: needs pkg-config (2012-05-31 13:16:10 +0200)
 
-Are you sure that the dependency is on xserver_xorg-server? I would
-rather suspect that the real dependency is on a certain set of X11
-client libraries (libX11 for the core protocol, libXv fdor the Xvideo
-extension, etc.).
+are available in the git repository at:
 
-Thomas
+  git://git.free-electrons.com/users/thomas-petazzoni/buildroot.git for-2012.08/ext-toolchain-updates
+
+for you to fetch changes up to 7a2800c2cb33d674a82e1396354225549458a708:
+
+  toolchain-external: on SuperH, use Sourcery CodeBench 2011.09 by default (2012-06-03 16:02:55 +0200)
+
+----------------------------------------------------------------
+Thomas Petazzoni (10):
+      toolchain-external: add Linaro 2012.05
+      toolchain-external: adjust logic to support Linaro 2012.05
+      toolchain-external: add Sourcery CodeBench SuperH 2012.03
+      toolchain-external: add Sourcery CodeBench x86 2012.03
+      toolchain-external: add Blackfin toolchain 2012R1-BETA1
+      toolchain-external: add Sourcery CodeBench MIPS 2011.09
+      toolchain-external: remove Sourcery CodeBench ARM 2009q3
+      toolchain-external: remove Linaro 2012.01
+      toolchain-external: on i386/x86_64, use Sourcery CodeBench 2011.09 by default
+      toolchain-external: on SuperH, use Sourcery CodeBench 2011.09 by default
+
+ toolchain/helpers.mk                     |    4 +-
+ toolchain/toolchain-external/Config.in   |  178 +++++++++++++++++++++++++-----
+ toolchain/toolchain-external/ext-tool.mk |   28 +++--
+ 3 files changed, 170 insertions(+), 40 deletions(-)
+
+Thanks,
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Thomas Petazzoni
