@@ -1,97 +1,91 @@
-From: Murat Demirten <mdemirten@yh.com.tr>
-Date: Sun,  3 Jun 2012 19:32:24 +0300
-Subject: [Buildroot] [PATCH v2] jpeg-turbo: new package
-Message-ID: <1338741144-14029-1-git-send-email-mdemirten@yh.com.tr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  3 Jun 2012 18:35:37 +0200
+Subject: [Buildroot] [PATCH 1/1] libnfc: make example build optional
+Message-ID: <1338741337-12019-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-INSTALL_STAGING = YES added into this version.
+This patch converts libnfc to CMAKETARGET and makes example build
+optional.
 
+Fixes http://autobuild.buildroot.org/results/a963924b15e185d0144809a98feac52dec0d1cc3
 
-Signed-off-by: Murat Demirten <mdemirten@yh.com.tr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/Config.in                |    1 +
- package/jpeg-turbo/Config.in     |   26 ++++++++++++++++++++++++++
- package/jpeg-turbo/jpeg-turbo.mk |   23 +++++++++++++++++++++++
- 3 files changed, 50 insertions(+), 0 deletions(-)
- create mode 100644 package/jpeg-turbo/Config.in
- create mode 100644 package/jpeg-turbo/jpeg-turbo.mk
+ package/libnfc/Config.in                           |    5 +++++
+ package/libnfc/libnfc-make-examples-optional.patch |   22 ++++++++++++++++++++
+ package/libnfc/libnfc.mk                           |   16 ++++++++++++--
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+ create mode 100644 package/libnfc/libnfc-make-examples-optional.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index ca8fc96..5a23f66 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -336,6 +336,7 @@ source "package/gtk2-engines/Config.in"
- source "package/gtk2-themes/Config.in"
- source "package/imlib2/Config.in"
- source "package/jpeg/Config.in"
-+source "package/jpeg-turbo/Config.in"
- source "package/libart/Config.in"
- source "package/libdmtx/Config.in"
- source "package/libdrm/Config.in"
-diff --git a/package/jpeg-turbo/Config.in b/package/jpeg-turbo/Config.in
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+index 42418e0..3d67d58 100644
+--- a/package/libnfc/Config.in
++++ b/package/libnfc/Config.in
+@@ -6,3 +6,8 @@ config BR2_PACKAGE_LIBNFC
+ 	  Public platform independent Near Field Communication (NFC) library.
+ 
+ 	  http://www.libnfc.org/
++
++config BR2_PACKAGE_LIBNFC_EXAMPLES
++	bool "build libnfc examples"
++	depends on BR2_PACKAGE_LIBNFC
++	select BR2_PACKAGE_READLINE
+diff --git a/package/libnfc/libnfc-make-examples-optional.patch b/package/libnfc/libnfc-make-examples-optional.patch
 new file mode 100644
-index 0000000..a398079
+index 0000000..da8bc3f
 --- /dev/null
-+++ b/package/jpeg-turbo/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_JPEG_TURBO
-+	bool "jpeg-turbo"
-+	help
-+	  It is a derivative of libjpeg that uses SIMD instructions
-+	  (MMX, SSE2, NEON) to accelerate baseline JPEG compression
-+	  and decompression on x86, x86-64, and ARM systems.	  
-+
-+	  http://libjpeg-turbo.virtualgl.org
-+
-+choice
-+	prompt "libjpeg api version"
-+	default BR2_PACKAGE_JPEG_TURBO_APIVERSION_80
-+	depends on BR2_PACKAGE_JPEG_TURBO
-+	help
-+	  Selects libjpeg compatible api version.
-+
-+config BR2_PACKAGE_JPEG_TURBO_APIVERSION_62
-+	bool "62"
-+
-+config BR2_PACKAGE_JPEG_TURBO_APIVERSION_70
-+	bool "70"
-+
-+config BR2_PACKAGE_JPEG_TURBO_APIVERSION_80
-+	bool "80"
-+
-+endchoice
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-new file mode 100644
-index 0000000..1aae41c
---- /dev/null
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -0,0 +1,23 @@
-+#############################################################
-+#
-+# jpeg-turbo 
-+#
-+#############################################################
-+JPEG_TURBO_VERSION = 1.2.0
-+JPEG_TURBO_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/libjpeg-turbo
-+JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
-+JPEG_TURBO_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO_APIVERSION_80),y)
-+	JPEG_TURBO_CONF_ENV += JPEG_LIB_VERSION=80
++++ b/package/libnfc/libnfc-make-examples-optional.patch
+@@ -0,0 +1,22 @@
++--- libnfc-1.5.1.orig/CMakeLists.txt	2012-06-03 17:57:20.308085744 +0200
+++++ libnfc-1.5.1/CMakeLists.txt	2012-06-03 18:13:37.502570332 +0200
++@@ -27,6 +27,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOUR
++ SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
++ 
++ # Options
+++SET(BUILD_EXAMPLES OFF CACHE BOOL "Build examples")
++ SET(LIBNFC_DEBUG_OUTPUT OFF CACHE BOOL "Debug output of communication with the NFC chip")
++ IF(LIBNFC_DEBUG_OUTPUT)
++   ADD_DEFINITIONS(-DDEBUG -g3)
++@@ -101,7 +102,10 @@ ENDIF(LIBUSB_INCLUDE_DIRS)
++ ADD_SUBDIRECTORY(libnfc)
++ ADD_SUBDIRECTORY(include)
++ ADD_SUBDIRECTORY(utils)
++-ADD_SUBDIRECTORY(examples)
+++
+++IF(BUILD_EXAMPLES)
+++  ADD_SUBDIRECTORY(examples)
+++ENDIF(BUILD_EXAMPLES)
++ 
++ # Binary Package
++ IF(WIN32)
+diff --git a/package/libnfc/libnfc.mk b/package/libnfc/libnfc.mk
+index f1028b1..54cc5f9 100644
+--- a/package/libnfc/libnfc.mk
++++ b/package/libnfc/libnfc.mk
+@@ -11,6 +11,18 @@ LIBNFC_INSTALL_STAGING = YES
+ LIBNFC_DEPENDENCIES = host-pkg-config libusb libusb-compat
+ 
+ # N.B. The acr122 driver requires pcsc-lite.
+-LIBNFC_CONF_OPT = --with-drivers=arygon,pn53x_usb
++LIBNFC_CONF_OPT += \
++	-DLIBNFC_DRIVER_ACR122=OFF \
++	-DLIBNFC_DRIVER_ARYGON=ON \
++	-DLIBNFC_DRIVER_PN532_UART=OFF \
++	-DLIBNFC_DRIVER_PN532_USB=ON \
++	-DLIBNFC_SERIAL_AUTOPROBE_ENABLED=OFF
+ 
+-$(eval $(call AUTOTARGETS))
++ifeq ($(BR2_PACKAGE_LIBNFC_EXAMPLES),y)
++LIBNFC_CONF_OPT += -DBUILD_EXAMPLES=ON
++LIBNFC_DEPENDENCIES += readline
++else
++LIBNFC_CONF_OPT += -DBUILD_EXAMPLES=OFF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO_APIVERSION_70),y)
-+	JPEG_TURBO_CONF_ENV += JPEG_LIB_VERSION=70
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG_TURBO_APIVERSION_62),y)
-+	JPEG_TURBO_CONF_ENV += JPEG_LIB_VERSION=62
-+endif
-+
-+$(eval $(call AUTOTARGETS))
++$(eval $(call CMAKETARGETS))
 -- 
-1.7.5.4
+1.7.10.3
