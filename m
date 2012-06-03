@@ -1,32 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  3 Jun 2012 17:15:12 +0200
-Subject: [Buildroot] [PATCH 1/1] libcgi: fix cflags
-Message-ID: <1338736512-21375-1-git-send-email-s.martin49@gmail.com>
+From: Murat Demirten <mdemirten@yh.com.tr>
+Date: Sun,  3 Jun 2012 19:17:10 +0300
+Subject: [Buildroot] [PATCH] portaudio: bump to version v19_20111121
+Message-ID: <1338740230-13834-1-git-send-email-mdemirten@yh.com.tr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.org/results/4000a12a9b237bd12618eb22ea793a913fc73b4f
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Murat Demirten <mdemirten@yh.com.tr>
 ---
- package/libcgi/libcgi.patch |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/portaudio/portaudio.mk |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
-index 716d83c..12a7b10 100644
---- a/package/libcgi/libcgi.patch
-+++ b/package/libcgi/libcgi.patch
-@@ -27,7 +27,7 @@
-  exec_prefix = @exec_prefix@
-  
- -SHAREDOPT = -shared
--+SHAREDOPT = -shared -fPIC,-Wl,-soname,libcgi.so.0
-++SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
-  LIBDIR = $(prefix)/lib
- -INCDIR = $(prefix)/include
- +INCDIR = $(prefix)/include/libcgi/
+diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
+index a824735..b0340f7 100644
+--- a/package/portaudio/portaudio.mk
++++ b/package/portaudio/portaudio.mk
+@@ -4,18 +4,18 @@
+ #
+ ################################################################################
+ 
+-PORTAUDIO_VERSION = V19
++PORTAUDIO_VERSION = v19_20111121
+ PORTAUDIO_SITE = http://www.portaudio.com/archives
+-PORTAUDIO_SOURCE = pa_stable_v19_20110326.tgz
++PORTAUDIO_SOURCE = pa_stable_$(PORTAUDIO_VERSION).tgz
+ PORTAUDIO_INSTALL_STAGING = YES
+ PORTAUDIO_MAKE = $(MAKE1)
+ 
+ PORTAUDIO_DEPENDENCIES = \
+-       $(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
++	$(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
+ 
+ PORTAUDIO_CONF_OPT = \
+-       $(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
+-       $(if $(BR2_PACKAGE_PORTAUDIO_OSS),--with-oss,--without-oss) \
+-       $(if $(BR2_PACKAGE_PORTAUDIO_CXX),--enable-cxx,--disable-cxx)
++	$(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
++	$(if $(BR2_PACKAGE_PORTAUDIO_OSS),--with-oss,--without-oss) \
++	$(if $(BR2_PACKAGE_PORTAUDIO_CXX),--enable-cxx,--disable-cxx)
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
-1.7.10.3
+1.7.5.4
