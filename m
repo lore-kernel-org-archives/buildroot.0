@@ -1,39 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Jun 2012 16:04:44 +0200
-Subject: [Buildroot] [PATCH 10/10] toolchain-external: on SuperH,
-	use Sourcery CodeBench 2011.09 by default
-In-Reply-To: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
-References: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <7a2800c2cb33d674a82e1396354225549458a708.1338732273.git.thomas.petazzoni@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun,  3 Jun 2012 17:15:12 +0200
+Subject: [Buildroot] [PATCH 1/1] libcgi: fix cflags
+Message-ID: <1338736512-21375-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 2012.03 version of the x86 toolchain uses glibc 2.15, which
-doesn't provide RPC functions. This breaks most packages for now,
-until we package TI-RPC properly.
+Fixes http://autobuild.buildroot.org/results/4000a12a9b237bd12618eb22ea793a913fc73b4f
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- toolchain/toolchain-external/Config.in |    4 ++++
- 1 file changed, 4 insertions(+)
+ package/libcgi/libcgi.patch |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index f632deb..c8c1f14 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -5,6 +5,10 @@ choice
- 	# Don't use the latest Sourcery CodeBench on x86 by default,
- 	# because it uses glibc 2.15, which lacks RPC functions.
- 	default BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109 if BR2_i386 || BR2_x86_64
-+	# Don't use the latest Sourcery CodeBench on SuperH by
-+	# default, because it uses glibc 2.15, which lacks RPC
-+	# functions.
-+	default BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103 if BR2_sh4a || BR2_sh4aeb
- 
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2012_05
- 	bool "Linaro 2012.05"
+diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
+index 716d83c..12a7b10 100644
+--- a/package/libcgi/libcgi.patch
++++ b/package/libcgi/libcgi.patch
+@@ -27,7 +27,7 @@
+  exec_prefix = @exec_prefix@
+  
+ -SHAREDOPT = -shared
+-+SHAREDOPT = -shared -fPIC,-Wl,-soname,libcgi.so.0
+++SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
+  LIBDIR = $(prefix)/lib
+ -INCDIR = $(prefix)/include
+ +INCDIR = $(prefix)/include/libcgi/
 -- 
-1.7.9.5
+1.7.10.3
