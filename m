@@ -1,34 +1,49 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  4 Jun 2012 20:48:31 +0200
-Subject: [Buildroot] [PATCH 1/1] webrtc-audio-processing: disable
-	unsupported target architectures
-Message-ID: <1338835711-3824-1-git-send-email-s.martin49@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Jun 2012 16:40:34 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2, 3,
+	4}.x stable versions
+Message-ID: <1338838835-6352-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, webrtc-audio-processing only provides support for the following
-architectures (see src/typedefs.h from the source directory):
-- x86_64
-- i*86
-- armel
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    8 ++++----
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ ...umode_t.patch => linux-3.3.8-fix-umode_t.patch} |    0
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.33-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
+ rename toolchain/kernel-headers/{linux-3.3.7-fix-umode_t.patch => linux-3.3.8-fix-umode_t.patch} (100%)
 
-Fixes http://autobuild.buildroot.org/results/ff777bb06eddafa71327015e1d39fe911c1439d8
-
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
-index e33fc57..90341d6 100644
---- a/package/webrtc-audio-processing/Config.in
-+++ b/package/webrtc-audio-processing/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
- 	bool "webrtc-audio-processing"
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  AudioProcessing library based on Google's implementation of
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 17fe797..ea7c99c 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -64,10 +64,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.32"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.33"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.18"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.3.7"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4"		if BR2_KERNEL_HEADERS_3_4
++	default "3.2.19"	if BR2_KERNEL_HEADERS_3_2
++	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
++	default "3.4.1"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.33-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.32-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.33-headers_install-fix-__packed-in-exported-kernel-head.patch
+diff --git a/toolchain/kernel-headers/linux-3.3.7-fix-umode_t.patch b/toolchain/kernel-headers/linux-3.3.8-fix-umode_t.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.3.7-fix-umode_t.patch
+rename to toolchain/kernel-headers/linux-3.3.8-fix-umode_t.patch
 -- 
-1.7.10.3
+1.7.3.4
