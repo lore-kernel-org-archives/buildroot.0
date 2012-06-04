@@ -1,31 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Jun 2012 16:14:43 +0200
-Subject: [Buildroot] [git commit] gnutls: add optional zlib support
-Message-ID: <20120604183404.99F1196E63@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon,  4 Jun 2012 20:48:31 +0200
+Subject: [Buildroot] [PATCH 1/1] webrtc-audio-processing: disable
+	unsupported target architectures
+Message-ID: <1338835711-3824-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3bc0d5be844f41cf58120ffc3d306eeae8868cc9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Currently, webrtc-audio-processing only provides support for the following
+architectures (see src/typedefs.h from the source directory):
+- x86_64
+- i*86
+- armel
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gnutls/gnutls.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Fixes http://autobuild.buildroot.org/results/ff777bb06eddafa71327015e1d39fe911c1439d8
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 45323f2..d8ca16b 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -7,7 +7,7 @@
- GNUTLS_VERSION = 2.12.19
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.bz2
- GNUTLS_SITE = $(BR2_GNU_MIRROR)/gnutls
--GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt
-+GNUTLS_DEPENDENCIES = host-pkg-config libgcrypt $(if $(BR2_PACKAGE_ZLIB),zlib)
- GNUTLS_CONF_OPT = --with-libgcrypt \
- 		--without-p11-kit
- GNUTLS_INSTALL_STAGING = YES
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
+index e33fc57..90341d6 100644
+--- a/package/webrtc-audio-processing/Config.in
++++ b/package/webrtc-audio-processing/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
+ 	bool "webrtc-audio-processing"
++	depends on BR2_arm || BR2_i386 || BR2_x86_64
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  AudioProcessing library based on Google's implementation of
+-- 
+1.7.10.3
