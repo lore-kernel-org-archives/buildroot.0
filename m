@@ -1,34 +1,53 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Jun 2012 23:27:48 +0200
-Subject: [Buildroot] [git commit] php: fix build error for snmp extension
-Message-ID: <20120604213514.172DC96E36@busybox.osuosl.org>
+Date: Mon, 4 Jun 2012 23:34:49 +0200
+Subject: [Buildroot] [git commit] quagga: fix non-IPv6 build failures
+Message-ID: <20120604213514.3CA9596E36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=48189d95001c41969ffddad427aaf73a9b57bc15
+commit: http://git.buildroot.net/buildroot/commit/?id=4991fbbdb4aef7f5a7bf22a62872b8b59163102a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-PHP requires that net-snmp be built with the ability to load MIB code,
-so force it on when the extension is enabled.
+The Zebra daemon now requires IPv6 support so disable it for non-IPv6
+toolchains and add a comment mentioning it.
+The BABEL protocol/daemon also requires IPv6 so just enable it when it's
+available.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/php/Config.ext |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/quagga/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index fa73bb4..80bab70 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -219,6 +219,7 @@ config BR2_PACKAGE_PHP_EXT_FTP
- config BR2_PACKAGE_PHP_EXT_SNMP
- 	bool "SNMP"
- 	select BR2_PACKAGE_NETSNMP
-+	select BR2_PACKAGE_NETSNMP_ENABLE_MIBS
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 5a01863..0834201 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -10,11 +10,16 @@ if BR2_PACKAGE_QUAGGA
+ 
+ config BR2_PACKAGE_QUAGGA_ZEBRA
+ 	bool "zebra daemon"
++	depends on BR2_INET_IPV6
  	help
- 	  SNMP support
+ 	  Build zebra daemon.
+ 
++comment "Zebra daemon requires a toolchain with IPV6 support"
++	depends on BR2_PACKAGE_QUAGGA && !BR2_INET_IPV6
++
+ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	bool "Use TCP sockets between zebra and protocol daemons"
++	depends on BR2_PACKAGE_QUAGGA_ZEBRA
+ 	help
+ 	  Use a TCP socket to communicate between zebra (supervisor) and
+ 	  the different protocol daemons.
+@@ -24,6 +29,7 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 
+ config BR2_PACKAGE_QUAGGA_BABELD
+ 	bool "BABEL protocol"
++	depends on BR2_INET_IPV6
+ 	help
+ 	  Build babeld daemon.
  
