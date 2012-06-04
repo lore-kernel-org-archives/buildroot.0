@@ -1,33 +1,42 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 4 Jun 2012 13:58:41 +0200
-Subject: [Buildroot] [git commit] mediastreamer: fix intltool dependency
-Message-ID: <20120604121133.CAE4496E60@busybox.osuosl.org>
+Date: Mon, 4 Jun 2012 14:10:20 +0200
+Subject: [Buildroot] [git commit] connman: fixup libglib2 (gettext)
+	dependencies
+Message-ID: <20120604121133.F421096E60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f865a2105654f281de1bcc6041b350b131720ace
+commit: http://git.buildroot.net/buildroot/commit/?id=fdba8d85e034d64abec25c791d34f91ac09f92ae
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/c93c1bc01feeea0ff37cb33c81d8712281a01c00
+Connman was missing from commit b730010c90a (package: gettext needs
+WCHAR support).
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mediastreamer/mediastreamer.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/connman/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index bea6fb3..8327a55 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -1,7 +1,7 @@
- MEDIASTREAMER_VERSION = 2.8.2
- MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
- MEDIASTREAMER_INSTALL_STAGING = YES
--MEDIASTREAMER_DEPENDENCIES = host-pkg-config ortp
-+MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkg-config ortp
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 3373ec1..ebe0cee 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_IPTABLES
+ 	select BR2_PACKAGE_GNUTLS
+ 	depends on !(BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32)
++	depends on BR2_USE_WCHAR # libglib2
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon for
+ 	  managing internet connections within embedded devices running
+@@ -44,5 +45,5 @@ config BR2_PACKAGE_CONNMAN_CLIENT
  
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- MEDIASTREAMER_CONF_OPT += --enable-alsa
+ endif # BR2_PACKAGE_CONNMAN
+ 
+-comment "connman needs a toolchain with resolver support"
+-	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32
++comment "connman needs a toolchain with WCHAR and resolver support"
++	depends on BR2_UCLIBC_VERSION_0_9_31 || BR2_UCLIBC_VERSION_0_9_32 || !BR2_USE_WCHAR
