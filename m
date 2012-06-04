@@ -1,103 +1,46 @@
-From: Kiril Maler <kiril.maler@gmail.com>
-Date: Mon, 4 Jun 2012 09:26:39 +0200
-Subject: [Buildroot] [PATCH] added package sftpserver
-Message-ID: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 04 Jun 2012 09:44:25 +0200
+Subject: [Buildroot] [PATCH 03/10] toolchain-external: add Sourcery
+	CodeBench SuperH 2012.03
+In-Reply-To: <b7c10a694ccefce0047adc8e5e6d7ca2954663e3.1338732273.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 Jun 2012 16:04:37 +0200")
+References: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
+ <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
+ <b7c10a694ccefce0047adc8e5e6d7ca2954663e3.1338732273.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87obozsequ.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Date: Fri, 1 Jun 2012 16:57:41 +0200
-> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> To: buildroot at busybox.net
-> Subject: Re: [Buildroot] [PATCH] added package sftpserver
-> Message-ID: <20120601165741.04be3924@skate>
-> Content-Type: text/plain; charset=UTF-8
->
-> Hello,
->
-> Le Fri, 1 Jun 2012 16:35:31 +0200,
-> Kiril Maler <kiril.maler@gmail.com> a ?crit :
->
->> +++ b/package/sftpserver/Config.in
->> @@ -0,0 +1,14 @@
->> +config BR2_PACKAGE_SFTPSERVER
->> + ? ? bool "sftpserver"
->> + ? ? depends on BR2_PACKAGE_DROPBEAR
->> + ? ? select BR2_PACKAGE_ZLIB
->> + ? ? help
->> + ? ? ? sftp-server only from openssh suite. It allows mounting
->> + ? ? ? the rootfs of embedded board through sshfs, for example
->> + ? ? ? sshfs root at 192.168.2.1:/ /mnt/board-rootfs
->> +
->> + ? ? ? Unmount with 'fusermount -u -z /mnt/board-rootfs'
->
->> +OPENSSH_VERSION = 5.9p1
->> +SFTPSERVER_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
->> +SFTPSERVER_SOURCE=openssh-$(OPENSSH_VERSION).tar.gz
->> +SFTPSERVER_VERSION=openssh-$(OPENSSH_VERSION)
->
-> We already have a package for openssh. Since this is also using the
-> same source tarball, I think it should rather be integrated as options
-> to the openssh package.
->
-> Regards,
->
-> Thomas
-> --
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
+ Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Thomas> ---
+ Thomas>  toolchain/toolchain-external/Config.in   |   20 ++++++++++++++++++++
+ Thomas>  toolchain/toolchain-external/ext-tool.mk |    3 +++
+ Thomas>  2 files changed, 23 insertions(+)
 
-Hello,
+ Thomas> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+ Thomas> index 2bf9c3e..be24659 100644
+ Thomas> --- a/toolchain/toolchain-external/Config.in
+ Thomas> +++ b/toolchain/toolchain-external/Config.in
+ Thomas> @@ -332,6 +332,25 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ Thomas>              - 970 glibc hard-float, 64 bits
+ Thomas>                Set BR2_TARGET_OPTIMIZATION to -m64
+ 
+ Thomas> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+ Thomas> +	bool "Sourcery CodeBench SH 2012.03"
+ Thomas> +	depends on BR2_sh4a || BR2_sh4aeb
+ Thomas> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ Thomas> +	select BR2_INSTALL_LIBSTDCPP
+ Thomas> +	help
+ Thomas> +	  Sourcery CodeBench toolchain for the SuperH architecture,
+ Thomas> +	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
+ Thomas> +	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
 
-I see three main reasons for not adding sftpserver as option in openssh package:
+How does this fit with patch 10/10 where you state it uses glibc 2.15?
 
-1. It is more intuitive for a developer configuring a small embedded
-system to see
-the sftp-server under dropbear ssh suite:
- ...
- [ ] dnsmasq
- [*] dropbear
- [*]   disable reverse DNS lookups
- [*]   optimize for size
- [ ]   log dropbear access to wtmp
- [ ]   log dropbear access to lastlog
- [*]   sftpserver               <--------------- ~50k single binary,
-no libs/dependencies
- [ ] ebtables
- [ ] ethtool
- ...
-
-2. My patch changes the openssh source code in such a way, that it
-becomes completely incompatible
-with openssh  - openssl+libcrypt are not compiled/required, a openssl
-.h file is faked with symbol link,
-the only TARGET left in Makefille.in is sftp-server, etc subtle fixes.
-Extracting a binary from openssh without pulling 10's  of *.h files
-and openssl+libcrypt+cyphers is like pulling a tooth ...
-That is why the package is compiled in own directory
-.../output/sftpserver-openssh-5.9p1/
-
-3. I do not see an easy way to apply one patch, but ignore another in buildroot.
-If I add my patch in packages/openssh, then a person compiling openssh
-will get only sftp-server,
-because of changed Configure.ac/Makefile.in rules.
-
-
-Thomas, probably it is possible to build only sftp-server from openssh
-by doing deep changes
-in Confgiure.ac, and adding a flag --sftp-server-only   or something
-similar, but I am not so familiar
-with 'autotools' to do this, and I do not see any added value from
-such an exercise.
-
-I see one (possible) reason to add sftp-server as part of openssh
-configuration and directory -
-if in the future there is any security patch, concerning also
-sftp-server source code file,
-then the security fix patch must be added in .../packages/openssh
-only. Most probably this will be fixed by
-moving to next openssh version.
-
-Best regards,
-Kiril
+-- 
+Bye, Peter Korsgaard
