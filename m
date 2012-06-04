@@ -1,42 +1,21 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 05 Jun 2012 01:38:12 +0200
-Subject: [Buildroot] [PATCH] New package: cJSON
-In-Reply-To: <1338432637-10766-1-git-send-email-danomimanchego123@gmail.com>
-References: <1338432637-10766-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <4FCD46E4.9020102@mind.be>
+Date: Tue, 05 Jun 2012 01:40:11 +0200
+Subject: [Buildroot] [PATCH] quota: new package (v8)
+In-Reply-To: <1338637230-6694-1-git-send-email-jarkko.sakkinen@intel.com>
+References: <1338637230-6694-1-git-send-email-jarkko.sakkinen@intel.com>
+Message-ID: <4FCD475B.6080103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/31/12 04:50, Danomi Manchego wrote:
-> Signed-off-by: Danomi Manchego<danomimanchego123@gmail.com>
-[snip]
-> +CJSON_VERSION         = undefined
-> +CJSON_SOURCE          = cJSONFiles.zip
-> +CJSON_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/cjson/
-> +CJSON_INSTALL_STAGING = YES
-> +CJSON_INSTALL_TARGET  = YES
+On 06/02/12 13:40, Jarkko Sakkinen wrote:
+> Signed-off-by: Jarkko Sakkinen<jarkko.sakkinen@intel.com>
 
-  INSTALL_TARGET = YES is the default so that line can be removed.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-> +
-> +CJSON_ARCHIVE_DIR = cJSON
-
-  I don't really think it's useful to define this as a variable; it doesn't make
-the commands below more readable.
-
-> +
-> +define CJSON_EXTRACT_CMDS
-> +	unzip -o -q -d $(@D) $(DL_DIR)/$(CJSON_SOURCE)
-
-  We don't use the -o and -q options in the other packages using zip.
-
-  Otherwise, looks good.
-
-  Regards,
-  Arnout
+  Nice!
 
 [snip]
 
