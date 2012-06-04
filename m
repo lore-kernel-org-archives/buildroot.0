@@ -1,13 +1,13 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 04 Jun 2012 09:44:25 +0200
-Subject: [Buildroot] [PATCH 03/10] toolchain-external: add Sourcery
-	CodeBench SuperH 2012.03
-In-Reply-To: <b7c10a694ccefce0047adc8e5e6d7ca2954663e3.1338732273.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sun, 3 Jun 2012 16:04:37 +0200")
+Date: Mon, 04 Jun 2012 09:48:38 +0200
+Subject: [Buildroot] [PATCH 10/10] toolchain-external: on SuperH,
+	use Sourcery CodeBench 2011.09 by default
+In-Reply-To: <7a2800c2cb33d674a82e1396354225549458a708.1338732273.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 3 Jun 2012 16:04:44 +0200")
 References: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
  <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
- <b7c10a694ccefce0047adc8e5e6d7ca2954663e3.1338732273.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87obozsequ.fsf@macbook.be.48ers.dk>
+ <7a2800c2cb33d674a82e1396354225549458a708.1338732273.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87ehpvsejt.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +16,24 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Thomas> ---
- Thomas>  toolchain/toolchain-external/Config.in   |   20 ++++++++++++++++++++
- Thomas>  toolchain/toolchain-external/ext-tool.mk |    3 +++
- Thomas>  2 files changed, 23 insertions(+)
+ Thomas> The 2012.03 version of the x86 toolchain uses glibc 2.15, which
+ Thomas> doesn't provide RPC functions. This breaks most packages for now,
+ Thomas> until we package TI-RPC properly.
 
- Thomas> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
- Thomas> index 2bf9c3e..be24659 100644
- Thomas> --- a/toolchain/toolchain-external/Config.in
- Thomas> +++ b/toolchain/toolchain-external/Config.in
- Thomas> @@ -332,6 +332,25 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- Thomas>              - 970 glibc hard-float, 64 bits
- Thomas>                Set BR2_TARGET_OPTIMIZATION to -m64
- 
- Thomas> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- Thomas> +	bool "Sourcery CodeBench SH 2012.03"
- Thomas> +	depends on BR2_sh4a || BR2_sh4aeb
- Thomas> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- Thomas> +	select BR2_INSTALL_LIBSTDCPP
- Thomas> +	help
- Thomas> +	  Sourcery CodeBench toolchain for the SuperH architecture,
- Thomas> +	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
- Thomas> +	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
+Seems like cut'n'paste from patch 9.
 
-How does this fit with patch 10/10 where you state it uses glibc 2.15?
+"Most packages" is probably somewhat exaggerated - We have very few
+packages depending on BR2_INET_RPC:
+
+git grep -l BR2_INET_RPC package/**/Config.in
+package/lmbench/Config.in
+package/netkitbase/Config.in
+package/netkittelnet/Config.in
+package/nfs-utils/Config.in
+package/portmap/Config.in
+
+Or have you found other packages where we're missing the BR2_INET_RPC
+annotation?
 
 -- 
 Bye, Peter Korsgaard
