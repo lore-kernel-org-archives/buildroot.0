@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jun 2012 08:55:41 +0200
-Subject: [Buildroot] [PATCH 1/3] sdl_gfx: fix assignments
-In-Reply-To: <1338674928-1889-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 3 Jun 2012 00:08:46 +0200")
+Date: Tue, 05 Jun 2012 08:55:57 +0200
+Subject: [Buildroot] [PATCH 2/3] sdl_sound: fix assignments
+In-Reply-To: <1338674928-1889-2-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 3 Jun 2012 00:08:47 +0200")
 References: <1338674928-1889-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <874nqqfdsi.fsf@macbook.be.48ers.dk>
+ <1338674928-1889-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <87zk8idz7m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
