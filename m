@@ -1,38 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  5 Jun 2012 14:30:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 5276] New: Hiawatha needs to manage IPV6 if so
-Message-ID: <bug-5276-163@https.bugs.busybox.net/>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 05 Jun 2012 16:36:40 +0200
+Subject: [Buildroot] [PATCH] collectd: fix dependencies for bind plugin
+In-Reply-To: <1338647833-26267-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 2 Jun 2012 11:37:13 -0300")
+References: <1338647833-26267-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ehptq0zr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5276
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-           Summary: Hiawatha needs to manage IPV6 if so
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: belzo2005-dolphin at yahoo.fr
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ Gustavo> The bind plugin requires libcurl and libxml2.
+ Gustavo> These are properly selected but never added to COLLECTD_DEPENDENCIES.
+ Gustavo> Fix that.
 
-
-Hi,
-
-As I ask few days ago on newsletter, Hiawatha is enabling IPV6 by default.
-Activate it if so (BR2_INET_IPV6)
-
-regards
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
