@@ -1,22 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jun 2012 08:55:57 +0200
-Subject: [Buildroot] [PATCH 2/3] sdl_sound: fix assignments
-In-Reply-To: <1338674928-1889-2-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 3 Jun 2012 00:08:47 +0200")
-References: <1338674928-1889-1-git-send-email-s.martin49@gmail.com>
- <1338674928-1889-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <87zk8idz7m.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Jun 2012 08:55:28 +0200
+Subject: [Buildroot] [git commit] sdl_sound: fix assignments
+Message-ID: <20120605065743.05F5396E72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3bb9979ab052787c17cd5f1e507bfa54c7bbdead
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/sdl_sound/sdl_sound.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index f95d6bc..a5d9a26 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -3,10 +3,10 @@
+ # sdl_sound addon for SDL
+ #
+ #############################################################
+-SDL_SOUND_VERSION:=1.0.3
+-SDL_SOUND_SOURCE:=SDL_sound-$(SDL_SOUND_VERSION).tar.gz
+-SDL_SOUND_SITE:=http://icculus.org/SDL_sound/downloads/
+-SDL_SOUND_INSTALL_STAGING:=YES
++SDL_SOUND_VERSION = 1.0.3
++SDL_SOUND_SOURCE = SDL_sound-$(SDL_SOUND_VERSION).tar.gz
++SDL_SOUND_SITE = http://icculus.org/SDL_sound/downloads/
++SDL_SOUND_INSTALL_STAGING = YES
+ SDL_SOUND_DEPENDENCIES = sdl
+ 
+ ifneq ($(BR2_ENABLE_LOCALE),y)
