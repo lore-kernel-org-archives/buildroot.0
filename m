@@ -1,39 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Jun 2012 08:55:28 +0200
-Subject: [Buildroot] [git commit] sdl_sound: fix assignments
-Message-ID: <20120605065743.05F5396E72@busybox.osuosl.org>
+Date: Tue, 5 Jun 2012 08:55:12 +0200
+Subject: [Buildroot] [git commit] sdl_gfx: fix assignments
+Message-ID: <20120605065742.E750596E60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3bb9979ab052787c17cd5f1e507bfa54c7bbdead
+commit: http://git.buildroot.net/buildroot/commit/?id=64d4866257db72f06284a0fcef9a816d4291462a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/sdl_sound/sdl_sound.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/sdl_gfx/sdl_gfx.mk |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index f95d6bc..a5d9a26 100644
---- a/package/sdl_sound/sdl_sound.mk
-+++ b/package/sdl_sound/sdl_sound.mk
-@@ -3,10 +3,10 @@
- # sdl_sound addon for SDL
+diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
+index a25987d..5503bbd 100644
+--- a/package/sdl_gfx/sdl_gfx.mk
++++ b/package/sdl_gfx/sdl_gfx.mk
+@@ -3,11 +3,11 @@
+ # SDL_gfx addon for SDL
  #
  #############################################################
--SDL_SOUND_VERSION:=1.0.3
--SDL_SOUND_SOURCE:=SDL_sound-$(SDL_SOUND_VERSION).tar.gz
--SDL_SOUND_SITE:=http://icculus.org/SDL_sound/downloads/
--SDL_SOUND_INSTALL_STAGING:=YES
-+SDL_SOUND_VERSION = 1.0.3
-+SDL_SOUND_SOURCE = SDL_sound-$(SDL_SOUND_VERSION).tar.gz
-+SDL_SOUND_SITE = http://icculus.org/SDL_sound/downloads/
-+SDL_SOUND_INSTALL_STAGING = YES
- SDL_SOUND_DEPENDENCIES = sdl
- 
- ifneq ($(BR2_ENABLE_LOCALE),y)
+-SDL_GFX_VERSION:=2.0.19
+-SDL_GFX_SOURCE:=SDL_gfx-$(SDL_GFX_VERSION).tar.gz
+-SDL_GFX_SITE:=http://www.ferzkopp.net/Software/SDL_gfx-2.0/
+-SDL_GFX_INSTALL_STAGING:=YES
+-SDL_GFX_DEPENDENCIES:=sdl
++SDL_GFX_VERSION = 2.0.19
++SDL_GFX_SOURCE = SDL_gfx-$(SDL_GFX_VERSION).tar.gz
++SDL_GFX_SITE = http://www.ferzkopp.net/Software/SDL_gfx-2.0/
++SDL_GFX_INSTALL_STAGING = YES
++SDL_GFX_DEPENDENCIES = sdl
+ SDL_GFX_CONF_OPT = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--disable-sdltest \
