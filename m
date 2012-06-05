@@ -1,92 +1,81 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon,  4 Jun 2012 20:45:15 -0400
-Subject: [Buildroot] [PATCH] New package: LuaExpat
-Message-ID: <1338857115-4148-1-git-send-email-danomimanchego123@gmail.com>
+From: Kevin Wilson <wkevils@gmail.com>
+Date: Tue, 5 Jun 2012 08:32:30 +0300
+Subject: [Buildroot] generated shared libraries are not ARM but Intel -
+ why ?
+In-Reply-To: <4FCD3FEF.40001@mind.be>
+References: <CAGXs5wWx3-kTe9T5OQDLqfh80K9hz0OOkkqT+aNKYjQhjRbn3g@mail.gmail.com>
+ <4FCD3FEF.40001@mind.be>
+Message-ID: <CAGXs5wVbNYCBbrpRJAx+ETKsK_amRjZ42gZKK5BhX3Li=F9_uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/Config.in            |    1 +
- package/luaexpat/Config.in   |    8 ++++++++
- package/luaexpat/luaexpat.mk |   39 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 48 insertions(+)
- create mode 100644 package/luaexpat/Config.in
- create mode 100644 package/luaexpat/luaexpat.mk
+Hi,
+Thanks for your quick response !
+I tried again , deleting that tree and untarring the zip file
+again, Now it is ok !
+rgs
+Kevin
 
-diff --git a/package/Config.in b/package/Config.in
-index ca8fc96..2adf311 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -244,6 +244,7 @@ menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
-+source "package/luaexpat/Config.in"
- source "package/luafilesystem/Config.in"
- source "package/luasocket/Config.in"
- source "package/rings/Config.in"
-diff --git a/package/luaexpat/Config.in b/package/luaexpat/Config.in
-new file mode 100644
-index 0000000..dd58aeb
---- /dev/null
-+++ b/package/luaexpat/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LUAEXPAT
-+	bool "luaexpat"
-+	depends on BR2_PACKAGE_LUA_SHARED_LIBRARY
-+	select BR2_PACKAGE_EXPAT
-+	help
-+	  LuaExpat is a SAX XML parser based on the Expat library.
-+
-+	  http://matthewwild.co.uk/projects/luaexpat/
-diff --git a/package/luaexpat/luaexpat.mk b/package/luaexpat/luaexpat.mk
-new file mode 100644
-index 0000000..e23473e
---- /dev/null
-+++ b/package/luaexpat/luaexpat.mk
-@@ -0,0 +1,39 @@
-+#############################################################
-+#
-+# luaexpat
-+#
-+#############################################################
-+
-+LUAEXPAT_VERSION      = 1.2.0
-+LUAEXPAT_SOURCE       = luaexpat-$(LUAEXPAT_VERSION).tar.gz
-+LUAEXPAT_SITE         = http://matthewwild.co.uk/projects/luaexpat
-+LUAEXPAT_DEPENDENCIES = lua expat
-+
-+
-+LUAEXPAT_MFLAGS += LUA_VERSION_NUM=501
-+LUAEXPAT_MFLAGS += LUA_INC=$(STAGING_DIR)/usr/include/lua
-+LUAEXPAT_MFLAGS += EXPAT_INC=$(STAGING_DIR)/usr/include
-+LUAEXPAT_MFLAGS += LIBNAME=lxp.so
-+LUAEXPAT_MFLAGS += LIB_OPTION="-shared -fPIC $(TARGET_CFLAGS)"
-+LUAEXPAT_MFLAGS += CC="$(TARGET_CC) -fPIC $(TARGET_CFLAGS)"
-+
-+
-+define LUAEXPAT_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS)
-+endef
-+
-+define LUAEXPAT_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D $(@D)/src/lxp.so $(TARGET_DIR)/usr/lib/lua/lxp.so
-+	$(INSTALL) -D -m 0644 $(@D)/src/lxp/lom.lua $(TARGET_DIR)/usr/share/lua/lxp/lom.lua
-+endef
-+
-+define LUAEXPAT_UNINSTALL_TARGET_CMDS
-+	rm -f "$(TARGET_DIR)/usr/lib/lua/lxp.so"
-+	rm -f "$(TARGET_DIR)/usr/share/lua/lxp/lom.lua"
-+endef
-+
-+define LUAEXPAT_CLEAN_CMDS
-+	$(MAKE) -C $(@D) $(LUAEXPAT_MFLAGS) clean
-+endef
-+
-+$(eval $(call GENTARGETS))
--- 
-1.7.9.5
+
+
+On Tue, Jun 5, 2012 at 2:08 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/04/12 14:22, Kevin Wilson wrote:
+>>
+>> I want to make a filesystem for Arm running 32 bit V7 arm processor.
+>> My host machine is x86_64 Intel machine
+>> I downloaded buildroot-2012.02.tar.bz2
+>> buildroot-2012.02
+>> I selected
+>> Test architecure - arm
+>> ?Target Architecture Variant - generic arm
+>>
+>> I selected very few packages like gcc
+>>
+>> I ran "make" and a rootfs tar file was generated.
+>>
+>> After extracting it, ?I ?could not boot from it ;
+>> chekling further into the filesystem I created got:
+>>
+>> ?file /lib/libdl-0.9.32.1.so
+>> libdl-0.9.32.1.so: ELF 32-bit LSB shared object, Intel 80386, version
+>> 1 (SYSV), dynamically linked (uses shared libs), stripped
+>> file ?lib/libgcc_s.so.1
+>> lib/libgcc_s.so.1: ELF 32-bit LSB shared object, Intel 80386, version
+>> 1 (SYSV), dynamically linked, stripped
+>>
+>>
+>> It should have been an ARM object library.
+>> What did I do wrong ?
+>
+>
+> ?This is very strange.
+>
+> ?Can you check the top of the .config file to make sure that you indeed
+> have an ARM configuration?
+>
+> ?You didn't, by any chance, compile first and only changed the architecture
+> to ARM afterwards? ?buildroot doesn't automatically detect when the
+> configuration has changed in an incompatible way, and the default
+> architecture
+> is i386. ?So you may still be using a toolchain for i386 even if you
+> reconfigured
+> for ARM. ?To be sure, remove the output directory (or run 'make clean').
+>
+> ?If all that fails, can you post the defconfig? ?Run 'make savedefconfig'
+> and it
+> is saved in the file 'defconfig'.
+>
+>
+> ?Regards,
+> ?Arnout
+>
+> --
+> Arnout Vandecappelle ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? arnout at mind be
+> Senior Embedded Software Architect ? ? ? ? ? ? ? ? +32-16-286540
+> Essensium/Mind ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium ? ? ? ? ? ? ? ?BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint: ?7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
