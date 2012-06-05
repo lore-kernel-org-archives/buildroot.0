@@ -1,50 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Jun 2012 23:26:46 +0200
-Subject: [Buildroot] [PATCH 03/10] libxmlrpc: new package
-In-Reply-To: <4FCD4B6D.3080506@mind.be>
-References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
- <d6e101fca46d16dbd2ebd312240f6b7de6bda48a.1338653505.git.thomas.petazzoni@free-electrons.com>
- <4FCD4B6D.3080506@mind.be>
-Message-ID: <20120605232646.0367dff5@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 06 Jun 2012 00:37:44 +0200
+Subject: [Buildroot] [PATCH v2] freerdp: new package
+In-Reply-To: <1338931193-3764-1-git-send-email-git@jlunz.de> (Julian Lunz's
+ message of "Tue, 5 Jun 2012 23:19:53 +0200")
+References: <1338931193-3764-1-git-send-email-git@jlunz.de>
+Message-ID: <871ultpepz.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Julian" == Julian Lunz <git@jlunz.de> writes:
 
-Le Tue, 05 Jun 2012 01:57:33 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+ Julian>  Signed-off-by: Julian Lunz <git@jlunz.de>
 
-> On 06/02/12 18:13, Thomas Petazzoni wrote:
-> > +LIBXMLRPC_VERSION = 1.18.05
-> > +LIBXMLRPC_SOURCE = xmlrpc-c-$(LIBXMLRPC_VERSION).tgz
-> > +LIBXMLRPC_SITE ="http://xmlrpc-c.svn.sourceforge.net/viewvc/xmlrpc-c/advanced/?view=tar&pathrev=1716"
-> 
->   It's a bit strange to use a three-year-old unstable version...
->  From the website:
-> 
->     Latest Tarballs
-> Series		Number
-> Development	unnumbered
-> Advanced	1.30.06
-> Stable		1.25.16
-> Super Stable	1.16.41
+Thanks, committed with minor fixes (see below).
 
-This package comes from a customer project, and the customer had its
-software running with this version, so that's the version I tested. Of
-course, packaging more recent versions would be better, but I thought
-that having the package would be better than nothing.
+ Julian> ---
+ Julian>  package/Config.in          |    1 +
+ Julian>  package/freerdp/Config.in  |   13 +++++++++++++
+ Julian>  package/freerdp/freerdp.mk |   41 +++++++++++++++++++++++++++++++++++++++++
+ Julian>  3 files changed, 55 insertions(+), 0 deletions(-)
+ Julian>  create mode 100644 package/freerdp/Config.in
+ Julian>  create mode 100644 package/freerdp/freerdp.mk
 
->   A simpler solution would be to just use the svn download method, from
-> https://xmlrpc-c.svn.sourceforge.net/svnroot/xmlrpc-c/stable/
+ Julian> diff --git a/package/Config.in b/package/Config.in
+ Julian> index dde5800..2b69c57 100644
+ Julian> --- a/package/Config.in
+ Julian> +++ b/package/Config.in
+ Julian> @@ -145,6 +145,7 @@ comment "X applications"
+ Julian>  source "package/alsamixergui/Config.in"
+ Julian>  source "package/docker/Config.in"
+ Julian>  source "package/feh/Config.in"
+ Julian> +source "package/freerdp/Config.in"
+ Julian>  source "package/gqview/Config.in"
+ Julian>  source "package/gmpc/Config.in"
+ Julian>  source "package/gob2/Config.in"
+ Julian> diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+ Julian> new file mode 100644
+ Julian> index 0000000..2039c4a
+ Julian> --- /dev/null
+ Julian> +++ b/package/freerdp/Config.in
+ Julian> @@ -0,0 +1,13 @@
+ Julian> +config BR2_PACKAGE_FREERDP
+ Julian> +	bool "freerdp"
+ Julian> +	select BR2_PACKAGE_OPENSSL
+ Julian> +	select BR2_PACKAGE_XLIB_LIBX11
+ Julian> +	select BR2_PACKAGE_XLIB_LIBXT
+ Julian> +	select BR2_PACKAGE_ZLIB
+ Julian> +	depends on BR2_PACKAGE_XORG7
+ Julian> +	help
+ Julian> +	  FreeRDPFreeRDP is a free implementation of the 
+ Julian> +	  Remote Desktop Protocol (RDP), released under the Apache license
+ Julian> +
+ Julian> +	  http://www.freerdp.com/
+ Julian> +	  
 
-Sure, I'll look into that.
+This help text is a bit screwed up and with trailing spaces.
 
-Thomas
+From testing freerdp here, it seems libXext and libXcursor are also
+required dependencies, so I've added them here.
+
+
+ Julian> diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+ Julian> new file mode 100644
+ Julian> index 0000000..97501a1
+ Julian> --- /dev/null
+ Julian> +++ b/package/freerdp/freerdp.mk
+ Julian> @@ -0,0 +1,41 @@
+ Julian> +#############################################################
+ Julian> +#
+ Julian> +# FreeRDP
+ Julian> +#
+ Julian> +#############################################################
+ Julian> +
+ Julian> +FREERDP_VERSION = 1.0.1
+ Julian> +FREERDP_SOURCE = freerdp-$(FREERDP_VERSION).tar.gz
+
+This is the default value of _SOURCE, so this line can be skipped.
+
+ Julian> +FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
+ Julian> +
+ Julian> +ifeq ($(BR2_PACKAGE_CUPS),y)
+ Julian> +FREERDP_CONF_OPT += -DWITH_CUPS=ON
+ Julian> +FREERDP_DEPENDENCIES += cups
+ Julian> +else
+ Julian> +FREERDP_CONF_OPT += -DWITH_CUPS=OFF
+ Julian> +endif
+ Julian> +
+ Julian> +ifeq ($(BR2_PACKAGE_FFMPEG),y)
+ Julian> +FREERDP_CONF_OPT += -DWITH_FFMPEG=ON
+ Julian> +FREERDP_DEPENDENCIES += ffmpeg
+ Julian> +else
+ Julian> +FREERDP_CONF_OPT += -DWITH_FFMPEG=OFF
+ Julian> +endif
+ Julian> +
+ Julian> +ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ Julian> +FREERDP_CONF_OPT += -DWITH_ALSA=ON
+ Julian> +FREERDP_DEPENDENCIES += alsa-lib
+ Julian> +else
+ Julian> +FREERDP_CONF_OPT += -DWITH_ALSA=OFF
+ Julian> +endif
+ Julian> +
+
+From the cmake output I see there's also optional pulseaudio support, so
+I've added a similar snippet for it.
+
+ Julian> +ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
+ Julian> +FREERDP_CONF_OPT += -DWITH_XINERAMA=ON
+ Julian> +FREERDP_DEPENDENCIES += xlib_libXinerama
+ Julian> +else
+ Julian> +FREERDP_CONF_OPT += -DWITH_XINERAMA=OFF
+ Julian> +endif
+
+Likewise for libXkbfile and libXv.
+
+ Julian> +
+ Julian> +FREERDP_DEPENDENCIES += openssl xlib_libX11 xlib_libXt zlib
+
+We normally have the fixed dependencies at the top before the optional
+ones.
+
+ Julian> +
+ Julian> +$(eval $(call CMAKETARGETS))
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
