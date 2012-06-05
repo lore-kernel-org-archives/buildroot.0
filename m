@@ -1,23 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jun 2012 16:36:40 +0200
-Subject: [Buildroot] [PATCH] collectd: fix dependencies for bind plugin
-In-Reply-To: <1338647833-26267-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 2 Jun 2012 11:37:13 -0300")
-References: <1338647833-26267-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ehptq0zr.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Jun 2012 16:36:28 +0200
+Subject: [Buildroot] [git commit] collectd: fix dependencies for bind plugin
+Message-ID: <20120605143657.8D0E596E72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6457adf87b17c597761a503cfbee4923a3772ee8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> The bind plugin requires libcurl and libxml2.
- Gustavo> These are properly selected but never added to COLLECTD_DEPENDENCIES.
- Gustavo> Fix that.
+The bind plugin requires libcurl and libxml2.
+These are properly selected but never added to COLLECTD_DEPENDENCIES.
+Fix that.
 
-Committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/collectd/collectd.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 0109f77..4404509 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -87,6 +87,7 @@ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
+ 
+ COLLECTD_DEPENDENCIES = host-pkg-config \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),libcurl) \
++	$(if $(BR2_PACKAGE_COLLECTD_BIND),libcurl libxml2) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL),libcurl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_JSON),libcurl yajl) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_CURL_XML),libcurl libxml2) \
