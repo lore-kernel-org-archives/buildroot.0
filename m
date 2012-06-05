@@ -1,36 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jun 2012 14:09:16 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-06-04
-In-Reply-To: <4FCDE2F4.4080502@lucaceresoli.net> (Luca Ceresoli's message of
- "Tue, 05 Jun 2012 12:44:04 +0200")
-References: <20120605063154.64FC752CF4D@lolut.humanoidz.org>
- <4FCDE2F4.4080502@lucaceresoli.net>
-Message-ID: <87mx4iot8z.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 5 Jun 2012 14:10:05 +0200
+Subject: [Buildroot] [git commit] mediastreamer: disable test programs
+Message-ID: <20120605121150.2D42C96E72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fefae21c3f5f03d9f57dcd61e151acbebbbfbe1b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Building tests produces an error during the "OBJCLD mediastream" phase with
+some toolchains/architectures.
 
- Luca> I don't have the toolchains to reproduce these exactly, but "OBJCLD"
- Luca> seems a good hint.
+This is supposed to fix:
+ - http://autobuild.buildroot.net/results/7fca436524e5f7ba300d27c615061b0838adb1e2
+ - http://autobuild.buildroot.net/results/bd9027ce94348025f1ca02a77eb81b9200124d9a
+ - http://autobuild.buildroot.net/results/4d9f554fc29901be1a577ca0c39369befee269b5
 
- Luca> However, I bet simply adding --disable-tests is a much simpler
- Luca> solution. I'm sending a
- Luca> patch to do this. Thomas, would you please test with the same config?
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/mediastreamer/mediastreamer.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- Luca> As for me, I checked with the default BR toolchain and no "OBJCLD" is
- Luca> output anymore while
- Luca> building mediastreamer.
-
-Thanks. I guess it is because of the macosx specific (optional) sources,
-similar to the recent problem with pulseaudio. Strangely enough, I
-haven't seen this problem here during testing.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 8327a55..a503490 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -2,6 +2,8 @@ MEDIASTREAMER_VERSION = 2.8.2
+ MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
+ MEDIASTREAMER_INSTALL_STAGING = YES
+ MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkg-config ortp
++# tests fail linking on some architectures, so disable them
++MEDIASTREAMER_CONF_OPT = --disable-tests
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ MEDIASTREAMER_CONF_OPT += --enable-alsa
