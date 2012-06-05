@@ -1,41 +1,34 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 5 Jun 2012 08:55:12 +0200
-Subject: [Buildroot] [git commit] sdl_gfx: fix assignments
-Message-ID: <20120605065742.E750596E60@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  5 Jun 2012 09:02:52 +0200
+Subject: [Buildroot] [PATCH] libmodbus: bump to 3.0.3
+Message-ID: <1338879772-6717-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=64d4866257db72f06284a0fcef9a816d4291462a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/sdl_gfx/sdl_gfx.mk |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/libmodbus/libmodbus.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl_gfx/sdl_gfx.mk b/package/sdl_gfx/sdl_gfx.mk
-index a25987d..5503bbd 100644
---- a/package/sdl_gfx/sdl_gfx.mk
-+++ b/package/sdl_gfx/sdl_gfx.mk
-@@ -3,11 +3,11 @@
- # SDL_gfx addon for SDL
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+index 4dcfe23..d45bc92 100644
+--- a/package/libmodbus/libmodbus.mk
++++ b/package/libmodbus/libmodbus.mk
+@@ -3,9 +3,8 @@
+ # libmodbus
  #
  #############################################################
--SDL_GFX_VERSION:=2.0.19
--SDL_GFX_SOURCE:=SDL_gfx-$(SDL_GFX_VERSION).tar.gz
--SDL_GFX_SITE:=http://www.ferzkopp.net/Software/SDL_gfx-2.0/
--SDL_GFX_INSTALL_STAGING:=YES
--SDL_GFX_DEPENDENCIES:=sdl
-+SDL_GFX_VERSION = 2.0.19
-+SDL_GFX_SOURCE = SDL_gfx-$(SDL_GFX_VERSION).tar.gz
-+SDL_GFX_SITE = http://www.ferzkopp.net/Software/SDL_gfx-2.0/
-+SDL_GFX_INSTALL_STAGING = YES
-+SDL_GFX_DEPENDENCIES = sdl
- SDL_GFX_CONF_OPT = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
- 	--disable-sdltest \
+-LIBMODBUS_VERSION = 3.0.2
++LIBMODBUS_VERSION = 3.0.3
+ LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
+-LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
+ LIBMODBUS_INSTALL_STAGING = YES
+ 
+ $(eval $(call AUTOTARGETS))
+-- 
+1.7.7
