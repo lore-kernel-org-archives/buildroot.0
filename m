@@ -1,81 +1,61 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Tue, 05 Jun 2012 21:29:57 +0200
-Subject: [Buildroot] [PATCH v2-resend] Package downloads: allow restricting
- to primary site only
-Message-ID: <2fae9acd87574bd1e193.1338924597@beantl019720>
+Date: Tue, 05 Jun 2012 21:32:31 +0200
+Subject: [Buildroot] [PATCH resend2] source-check: change behavior to check
+ only selected packages / add source-check-all
+Message-ID: <93a60650611fae1b82e3.1338924751@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a new config option BR2_PRIMARY_SITE_ONLY that, when set,
-restricts package downloads to the specified BR2_PRIMARY_SITE. If the package
-is not present on the primary site, the download fails.
+The original 'source-check' target first selects all packages, and then checks
+whether the package tarballs can be found. This is useful for Buildroot
+maintainers, but less useful for developers working on a specific project. The
+latter only care about the packages used in that project.
 
-This is useful for project developers who want to ensure that the project can
-be built even if the upstream tarball locations disappear.
+This patch removes the allyesconfig dependency to source-check so that only
+selected packages are checked. The original behavior is moved to a new target
+'source-check-all'.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
-v2: update after moving of Makefile.package.in
+ Makefile |  8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
- Config.in               |  12 ++++++++++++
- package/pkg-download.mk |   7 +++++--
- 2 files changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/Config.in b/Config.in
---- a/Config.in
-+++ b/Config.in
-@@ -119,6 +119,16 @@ config BR2_PRIMARY_SITE
- 	  NOTE: This works for all packages using the central package
- 	  infrastructure (generic, autotools, cmake, ...)
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$
+ noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	source-check print-version
++	source-check source-check-all print-version
  
-+config BR2_PRIMARY_SITE_ONLY
-+	bool "Only allow downloads from primary download site"
-+	help
-+	  If this option is enabled, downloads will only be attempted from the
-+	  primary download site. Other locations, like the package's official
-+	  download location or the backup download site, will not be
-+	  considered.
-+
-+if !BR2_PRIMARY_SITE_ONLY
-+
- config BR2_BACKUP_SITE
- 	string "Backup download site"
- 	default "http://sources.buildroot.net/"
-@@ -175,6 +185,8 @@ config BR2_DEBIAN_MIRROR
- 	  Usually, just add your country code like XX here:
- 	  http://ftp.XX.debian.org
+ # Strip quotes and then whitespaces
+ qstrip=$(strip $(subst ",,$(1)))
+@@ -585,7 +585,8 @@ savedefconfig: $(BUILD_DIR)/buildroot-co
+ 	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
  
-+endif
-+
- endmenu
+ # check if download URLs are outdated
+-source-check: allyesconfig
++source-check-all: allyesconfig source-check
++source-check:
+ 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
  
- config BR2_JLEVEL
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -189,8 +189,8 @@ endef
- ################################################################################
- # DOWNLOAD -- Download helper. Will try to download source from:
- # 1) BR2_PRIMARY_SITE if enabled
--# 2) Download site
--# 3) BR2_BACKUP_SITE if enabled
-+# 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
-+# 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
- #
- # Argument 1 is the source location
- # Argument 2 is the source filename
-@@ -210,6 +210,9 @@ define DOWNLOAD_INNER
- 			*) $(call $(DL_MODE)_WGET,$(BR2_PRIMARY_SITE)/$(2),$(2)) && exit ;; \
- 		esac ; \
- 	fi ; \
-+	if test "$(BR2_PRIMARY_SITE_ONLY)" = "y" ; then \
-+		exit 1 ; \
-+	fi ; \
- 	if test -n "$(1)" ; then \
- 		case "$($(PKG)_SITE_METHOD)" in \
- 			git) $($(DL_MODE)_GIT) && exit ;; \
+ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+@@ -672,7 +673,8 @@ endif
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+-	@echo '  source-check           - check all packages for valid download URLs'
++	@echo '  source-check           - check selected packages for valid download URLs'
++	@echo '  source-check-all       - check all packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
