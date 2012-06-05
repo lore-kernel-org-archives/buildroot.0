@@ -1,49 +1,100 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 05 Jun 2012 23:17:52 +0200
-Subject: [Buildroot] [PATCH 1/1] libcgi: fix cflags
-In-Reply-To: <1338736512-21375-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 3 Jun 2012 17:15:12 +0200")
-References: <1338736512-21375-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <87aa0hpif3.fsf@macbook.be.48ers.dk>
+From: Julian Lunz <git@jlunz.de>
+Date: Tue,  5 Jun 2012 23:19:53 +0200
+Subject: [Buildroot] [PATCH v2] freerdp: new package
+Message-ID: <1338931193-3764-1-git-send-email-git@jlunz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+ Signed-off-by: Julian Lunz <git@jlunz.de>
 
- Samuel> Fixes http://autobuild.buildroot.org/results/4000a12a9b237bd12618eb22ea793a913fc73b4f
- Samuel> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Samuel> ---
- Samuel>  package/libcgi/libcgi.patch |    2 +-
- Samuel>  1 file changed, 1 insertion(+), 1 deletion(-)
+---
+ package/Config.in          |    1 +
+ package/freerdp/Config.in  |   13 +++++++++++++
+ package/freerdp/freerdp.mk |   41 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 55 insertions(+), 0 deletions(-)
+ create mode 100644 package/freerdp/Config.in
+ create mode 100644 package/freerdp/freerdp.mk
 
-Thanks, could you please add a git-style header with description and
-your signed-off-by to this patch (and perhaps a more descriptive file
-name)?
-
- Samuel> diff --git a/package/libcgi/libcgi.patch b/package/libcgi/libcgi.patch
- Samuel> index 716d83c..12a7b10 100644
- Samuel> --- a/package/libcgi/libcgi.patch
- Samuel> +++ b/package/libcgi/libcgi.patch
- Samuel> @@ -27,7 +27,7 @@
- Samuel>   exec_prefix = @exec_prefix@
-  
- Samuel>  -SHAREDOPT = -shared
- Samuel> -+SHAREDOPT = -shared -fPIC,-Wl,-soname,libcgi.so.0
- Samuel> ++SHAREDOPT = -shared -fPIC -Wl,-soname,libcgi.so.0
- Samuel>   LIBDIR = $(prefix)/lib
- Samuel>  -INCDIR = $(prefix)/include
- Samuel>  +INCDIR = $(prefix)/include/libcgi/
- Samuel> -- 
- Samuel> 1.7.10.3
-
- Samuel> _______________________________________________
- Samuel> buildroot mailing list
- Samuel> buildroot at busybox.net
- Samuel> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
+diff --git a/package/Config.in b/package/Config.in
+index dde5800..2b69c57 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -145,6 +145,7 @@ comment "X applications"
+ source "package/alsamixergui/Config.in"
+ source "package/docker/Config.in"
+ source "package/feh/Config.in"
++source "package/freerdp/Config.in"
+ source "package/gqview/Config.in"
+ source "package/gmpc/Config.in"
+ source "package/gob2/Config.in"
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+new file mode 100644
+index 0000000..2039c4a
+--- /dev/null
++++ b/package/freerdp/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_FREERDP
++	bool "freerdp"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_ZLIB
++	depends on BR2_PACKAGE_XORG7
++	help
++	  FreeRDPFreeRDP is a free implementation of the 
++	  Remote Desktop Protocol (RDP), released under the Apache license
++
++	  http://www.freerdp.com/
++	  
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+new file mode 100644
+index 0000000..97501a1
+--- /dev/null
++++ b/package/freerdp/freerdp.mk
+@@ -0,0 +1,41 @@
++#############################################################
++#
++# FreeRDP
++#
++#############################################################
++
++FREERDP_VERSION = 1.0.1
++FREERDP_SOURCE = freerdp-$(FREERDP_VERSION).tar.gz
++FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
++
++ifeq ($(BR2_PACKAGE_CUPS),y)
++FREERDP_CONF_OPT += -DWITH_CUPS=ON
++FREERDP_DEPENDENCIES += cups
++else
++FREERDP_CONF_OPT += -DWITH_CUPS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG),y)
++FREERDP_CONF_OPT += -DWITH_FFMPEG=ON
++FREERDP_DEPENDENCIES += ffmpeg
++else
++FREERDP_CONF_OPT += -DWITH_FFMPEG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++FREERDP_CONF_OPT += -DWITH_ALSA=ON
++FREERDP_DEPENDENCIES += alsa-lib
++else
++FREERDP_CONF_OPT += -DWITH_ALSA=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
++FREERDP_CONF_OPT += -DWITH_XINERAMA=ON
++FREERDP_DEPENDENCIES += xlib_libXinerama
++else
++FREERDP_CONF_OPT += -DWITH_XINERAMA=OFF
++endif
++
++FREERDP_DEPENDENCIES += openssl xlib_libX11 xlib_libXt zlib
++
++$(eval $(call CMAKETARGETS))
 -- 
-Bye, Peter Korsgaard
+1.7.0.4
