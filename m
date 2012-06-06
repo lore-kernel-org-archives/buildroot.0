@@ -1,193 +1,108 @@
 From: Justin Maggard <jmaggard10@gmail.com>
-Date: Wed,  6 Jun 2012 11:24:12 -0700
-Subject: [Buildroot] [PATCH] New package: dtach
-Message-ID: <1339007052-13670-1-git-send-email-jmaggard10@gmail.com>
+Date: Wed,  6 Jun 2012 11:57:01 -0700
+Subject: [Buildroot] [PATCH] Update gdisk (gptfdisk) to version 0.8.5.
+Message-ID: <1339009021-14610-1-git-send-email-jmaggard10@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Justin Maggard <jmaggard@netgear.com>
-
-Also included is a scrollback patch from Justin Bogner.
-
-Signed-off-by: Justin Maggard <jmaggard@netgear.com>
+Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
 ---
- package/Config.in                    |    1 +
- package/dtach/Config.in              |    8 +++
- package/dtach/dtach-scrollback.patch |  113 ++++++++++++++++++++++++++++++++++
- package/dtach/dtach.mk               |   15 +++++
- 4 files changed, 137 insertions(+)
- create mode 100644 package/dtach/Config.in
- create mode 100644 package/dtach/dtach-scrollback.patch
- create mode 100644 package/dtach/dtach.mk
+ package/gdisk/gdisk-0.6.14-uuid.h.patch  |   22 ------------------
+ package/gdisk/gdisk-0.8.5-no-utf16.patch |   37 ++++++++++++++++++++++++++++++
+ package/gdisk/gdisk.mk                   |    4 ++--
+ 3 files changed, 39 insertions(+), 24 deletions(-)
+ delete mode 100644 package/gdisk/gdisk-0.6.14-uuid.h.patch
+ create mode 100644 package/gdisk/gdisk-0.8.5-no-utf16.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 2b69c57..c87726f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -624,6 +624,7 @@ source "package/bash/Config.in"
- source "package/dash/Config.in"
- endif
- source "package/dialog/Config.in"
-+source "package/dtach/Config.in"
- source "package/file/Config.in"
- source "package/inotify-tools/Config.in"
- source "package/lockfile-progs/Config.in"
-diff --git a/package/dtach/Config.in b/package/dtach/Config.in
+diff --git a/package/gdisk/gdisk-0.6.14-uuid.h.patch b/package/gdisk/gdisk-0.6.14-uuid.h.patch
+deleted file mode 100644
+index ba447a1..0000000
+--- a/package/gdisk/gdisk-0.6.14-uuid.h.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] Don't hardcode uuid.h location
+-
+-Breaks cross compilation.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- guid.h |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: gdisk-0.6.14/guid.h
+-===================================================================
+---- gdisk-0.6.14.orig/guid.h
+-+++ gdisk-0.6.14/guid.h
+-@@ -22,7 +22,7 @@
+- #ifdef _WIN32
+- typedef unsigned char my_uuid_t[16];
+- #else
+--#include </usr/include/uuid/uuid.h>
+-+#include <uuid/uuid.h>
+- typedef uuid_t my_uuid_t;
+- #endif
+- 
+diff --git a/package/gdisk/gdisk-0.8.5-no-utf16.patch b/package/gdisk/gdisk-0.8.5-no-utf16.patch
 new file mode 100644
-index 0000000..033536b
+index 0000000..54e55f6
 --- /dev/null
-+++ b/package/dtach/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_DTACH
-+	bool "dtach"
-+	help
-+	  dtach is a tiny program that emulates the detach feature of screen,
-+	  allowing you to run a program in an environment that is protected
-+	  from the controlling terminal and attach to it later.
-+
-+	  http://dtach.sourceforge.net/
-diff --git a/package/dtach/dtach-scrollback.patch b/package/dtach/dtach-scrollback.patch
-new file mode 100644
-index 0000000..576d3ff
---- /dev/null
-+++ b/package/dtach/dtach-scrollback.patch
-@@ -0,0 +1,113 @@
-+diff --git a/dtach.h b/dtach.h
-+index f2f4951..ef47d99 100644
-+--- a/dtach.h
-++++ b/dtach.h
-+@@ -124,6 +124,8 @@ struct packet
-+ */
-+ #define BUFSIZE 4096
++++ b/package/gdisk/gdisk-0.8.5-no-utf16.patch
+@@ -0,0 +1,37 @@
++diff -ur gdisk-0.8.5/Makefile gptfdisk-0.8.5/Makefile
++--- gdisk-0.8.5/Makefile	2012-05-30 08:38:43.000000000 -0700
+++++ gptfdisk-0.8.5/Makefile	2012-06-05 11:38:23.710597974 -0700
++@@ -1,8 +1,8 @@
++ CC=gcc
++ CXX=g++
++ CFLAGS+=-D_FILE_OFFSET_BITS=64
++-CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64 -D USE_UTF16
++-#CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64
+++#CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64 -D USE_UTF16
+++CXXFLAGS+=-Wall -D_FILE_OFFSET_BITS=64
++ LDFLAGS+=
++ LIB_NAMES=crc32 support guid gptpart mbrpart basicmbr mbr gpt bsd parttypes attributes diskio diskio-unix
++ MBR_LIBS=support diskio diskio-unix basicmbr mbrpart
++@@ -14,16 +14,16 @@
++ all:	cgdisk gdisk sgdisk fixparts
 + 
-++#define SCROLLSIZE 8192
-++
-+ /* This hopefully moves to the bottom of the screen */
-+ #define EOS "\033[999H"
++ gdisk:	$(LIB_OBJS) gdisk.o gpttext.o
++-#	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
++-	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
+++	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -luuid -o gdisk
+++#	$(CXX) $(LIB_OBJS) gdisk.o gpttext.o $(LDFLAGS) -licuio -licuuc -luuid -o gdisk
 + 
-+diff --git a/master.c b/master.c
-+index 34cd0fa..4ddc255 100644
-+--- a/master.c
-++++ b/master.c
-+@@ -54,6 +54,10 @@ struct client
-+ /* The pseudo-terminal created for the child process. */
-+ static struct pty the_pty;
++ cgdisk: $(LIB_OBJS) cgdisk.o gptcurses.o
++-#	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses -o cgdisk
++-	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
+++	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -luuid -lncurses -o cgdisk
+++#	$(CXX) $(LIB_OBJS) cgdisk.o gptcurses.o $(LDFLAGS) -licuio -licuuc -luuid -lncurses -o cgdisk
 + 
-++/* The scrollback buffer */
-++static unsigned char scrollback[SCROLLSIZE];
-++static int scroll_end, scroll_full;
-++
-+ #ifndef HAVE_FORKPTY
-+ pid_t forkpty(int *amaster, char *name, struct termios *termp,
-+ 	struct winsize *winp);
-+@@ -214,6 +218,66 @@ pid_t forkpty(int *amaster, char *name, struct termios *termp,
-+ 	return s;
-+ }
++ sgdisk: $(LIB_OBJS) sgdisk.o gptcl.o
++-#	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
++-	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
+++	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -luuid -lpopt -o sgdisk
+++#	$(CXX) $(LIB_OBJS) sgdisk.o gptcl.o $(LDFLAGS) -licuio -licuuc -luuid -lpopt -o sgdisk
 + 
-++/* Write the data in *buf into the scrollback buffer */
-++static void
-++write_scrollback(unsigned char *buf, int len)
-++{
-++	int n;
-++	if (len > SCROLLSIZE)
-++	{
-++		buf = buf + (len - SCROLLSIZE);
-++		len = SCROLLSIZE;
-++	}
-++
-++	n = SCROLLSIZE - scroll_end;
-++	if (n >= len)
-++	{
-++		memcpy(scrollback + scroll_end, buf,
-++		       len * sizeof(unsigned char));
-++		scroll_end += len * sizeof(unsigned char);
-++		scroll_full = 1;
-++	}
-++	else
-++	{
-++		memcpy(scrollback + scroll_end, buf,
-++		       n * sizeof(unsigned char));
-++		scroll_end = len - n;
-++		memcpy(scrollback, buf,
-++		       scroll_end * sizeof(unsigned char));
-++	}
-++}
-++
-++/* Send the data in the scrollback buffer to client */
-++static void
-++send_scrollback(struct client *p)
-++{
-++	int written, len;
-++	if (scroll_full)
-++	{
-++		len = SCROLLSIZE - scroll_end;
-++		written = 0;
-++		while (written < len)
-++		{
-++			int n = write(p->fd, scrollback + scroll_end + written,
-++			              len - written);
-++			if (n > 0)
-++				written += n;
-++			else if (n == 0 || errno != EINTR)
-++				break;
-++		}
-++	}
-++	len = scroll_end;
-++	written = 0;
-++	while (written < len)
-++	{
-++		int n = write(p->fd, scrollback + written, len - written);
-++		if (n > 0)
-++			written += n;
-++		else if (n == 0 || errno != EINTR)
-++			break;
-++	}
-++}
-++
-+ /* Process activity on the pty - Input and terminal changes are sent out to
-+ ** the attached clients. If the pty goes away, we die. */
-+ static void
-+@@ -296,6 +360,8 @@ pid_t forkpty(int *amaster, char *name, struct termios *termp,
-+ 	/* Try again if nothing happened. */
-+ 	if (!FD_ISSET(s, &readfds) && nclients == 0)
-+ 		goto top;
-++
-++        write_scrollback( buf, len );
-+ }
-+ 
-+ /* Process activity on the control socket */
-+@@ -324,6 +390,8 @@ pid_t forkpty(int *amaster, char *name, struct termios *termp,
-+ 	if (p->next)
-+ 		p->next->pprev = &p->next;
-+ 	*(p->pprev) = p;
-++
-++        send_scrollback( p );
-+ }
-+ 
-+ /* Process activity from a client. */
-diff --git a/package/dtach/dtach.mk b/package/dtach/dtach.mk
-new file mode 100644
-index 0000000..c35bcba
---- /dev/null
-+++ b/package/dtach/dtach.mk
-@@ -0,0 +1,15 @@
-+#############################################################
-+#
-+# dtach
-+#
-+#############################################################
-+
-+DTACH_VERSION = 0.8
-+DTACH_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/dtach
-+
-+define DTACH_INSTALL_TARGET_CMDS
-+        $(INSTALL) -D $(@D)/dtach -m 0755 \
-+                $(TARGET_DIR)/usr/bin/dtach
-+endef
-+
-+$(eval $(call AUTOTARGETS))
++ fixparts: $(MBR_LIB_OBJS) fixparts.o
++ 	$(CXX) $(MBR_LIB_OBJS) fixparts.o $(LDFLAGS) -o fixparts
+diff --git a/package/gdisk/gdisk.mk b/package/gdisk/gdisk.mk
+index a53ee83..619a32d 100644
+--- a/package/gdisk/gdisk.mk
++++ b/package/gdisk/gdisk.mk
+@@ -4,9 +4,9 @@
+ #
+ #############################################################
+ 
+-GDISK_VERSION = 0.6.14
++GDISK_VERSION = 0.8.5
+ GDISK_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gptfdisk
+-GDISK_SOURCE = gdisk-$(GDISK_VERSION).tgz
++GDISK_SOURCE = gptfdisk-$(GDISK_VERSION).tar.gz
+ 
+ GDISK_TARGETS_$(BR2_PACKAGE_GDISK_GDISK) += gdisk
+ GDISK_TARGETS_$(BR2_PACKAGE_GDISK_SGDISK) += sgdisk
 -- 
 1.7.9.5
