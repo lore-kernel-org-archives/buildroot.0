@@ -1,25 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jun 2012 22:09:39 +0200
-Subject: [Buildroot] [PATCH] Update gdisk (gptfdisk) to version 0.8.5.
-In-Reply-To: <1339009021-14610-1-git-send-email-jmaggard10@gmail.com>
-References: <1339009021-14610-1-git-send-email-jmaggard10@gmail.com>
-Message-ID: <20120606220939.3fb08eb0@skate>
+Date: Wed, 6 Jun 2012 22:11:13 +0200
+Subject: [Buildroot] [PATCH] added package sftpserver
+In-Reply-To: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
+References: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
+Message-ID: <20120606221113.63a66610@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed,  6 Jun 2012 11:57:01 -0700,
-Justin Maggard <jmaggard10@gmail.com> a ?crit :
+Le Mon, 4 Jun 2012 09:26:39 +0200,
+Kiril Maler <kiril.maler@gmail.com> a ?crit :
 
-> Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
-> ---
->  package/gdisk/gdisk-0.6.14-uuid.h.patch  |   22 ------------------
->  package/gdisk/gdisk-0.8.5-no-utf16.patch |   37 ++++++++++++++++++++++++++++++
+> I see one (possible) reason to add sftp-server as part of openssh
+> configuration and directory -
+> if in the future there is any security patch, concerning also
+> sftp-server source code file,
+> then the security fix patch must be added in .../packages/openssh
+> only. Most probably this will be fixed by
+> moving to next openssh version.
 
-Your new patch must include a header with a description + Signed-off-by
-line.
+That's the problem I have with your approach: when we want to upgrade
+openssh, we will have to upgrade in two different places.
+
+I would very much prefer to see a contribution made to openssh to get
+the capability of building / installing only sftp-server, but I'm not
+the Buildroot maintainer, so my opinion is just one amongst many
+others :)
 
 Thomas
 -- 
