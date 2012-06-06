@@ -1,31 +1,40 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 06 Jun 2012 22:13:58 +0200
-Subject: [Buildroot] [PATCH] added package sftpserver
-In-Reply-To: <20120606221113.63a66610@skate> (Thomas Petazzoni's message of
- "Wed, 6 Jun 2012 22:11:13 +0200")
-References: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
- <20120606221113.63a66610@skate>
-Message-ID: <87aa0gi4ft.fsf@macbook.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Jun 2012 22:14:35 +0200
+Subject: [Buildroot] [PATCH 1 of 6] pkg-download.mk: allow using
+ localfiles outside of package infrastructure
+In-Reply-To: <5103c7c0451ff036f611.1338924132@beantl019720>
+References: <patchbomb.1338924131@beantl019720>
+ <5103c7c0451ff036f611.1338924132@beantl019720>
+Message-ID: <20120606221435.3d843ddd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Le Tue, 05 Jun 2012 21:22:12 +0200,
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
 
-Hi,
+> The localfiles download method uses $($(PKG)_SITE))) and
+> $($(PKG)_SOURCE) instead of $(1) and $(2). This means that it can only
+> be used for package downloads (through gentargets, autotargets, ...)
+> and not for other downloads like external toolchains.
+> 
+> This patch changes localfiles to allow this, just as the wget and scp
+> download methods already did.
+> For the version control download methods, nothing changes.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- Thomas> That's the problem I have with your approach: when we want to upgrade
- Thomas> openssh, we will have to upgrade in two different places.
+I generally agree with this, but for consistency sake, it should
+probably done similarly for all other download methods, no? Of course,
+it can be done later as separate patches, the code is already
+inconsistent, so this patch does not make it worse from that
+perspective.
 
- Thomas> I would very much prefer to see a contribution made to openssh to get
- Thomas> the capability of building / installing only sftp-server, but I'm not
- Thomas> the Buildroot maintainer, so my opinion is just one amongst many
- Thomas> others :)
-
-I agree that would be a much nicer long term solution, yes. I haven't
-looked at the patch yet to see how easy that is to do though.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
