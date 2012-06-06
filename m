@@ -1,35 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jun 2012 22:01:28 +0200
-Subject: [Buildroot] [PATCH 03/10] toolchain-external: add Sourcery
- CodeBench SuperH 2012.03
-In-Reply-To: <87obozsequ.fsf@macbook.be.48ers.dk>
-References: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
- <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
- <b7c10a694ccefce0047adc8e5e6d7ca2954663e3.1338732273.git.thomas.petazzoni@free-electrons.com>
- <87obozsequ.fsf@macbook.be.48ers.dk>
-Message-ID: <20120606220128.12053bfc@skate>
+Date: Wed, 6 Jun 2012 22:09:39 +0200
+Subject: [Buildroot] [PATCH] Update gdisk (gptfdisk) to version 0.8.5.
+In-Reply-To: <1339009021-14610-1-git-send-email-jmaggard10@gmail.com>
+References: <1339009021-14610-1-git-send-email-jmaggard10@gmail.com>
+Message-ID: <20120606220939.3fb08eb0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 04 Jun 2012 09:44:25 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Le Wed,  6 Jun 2012 11:57:01 -0700,
+Justin Maggard <jmaggard10@gmail.com> a ?crit :
 
->  Thomas> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
->  Thomas> +	bool "Sourcery CodeBench SH 2012.03"
->  Thomas> +	depends on BR2_sh4a || BR2_sh4aeb
->  Thomas> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->  Thomas> +	select BR2_INSTALL_LIBSTDCPP
->  Thomas> +	help
->  Thomas> +	  Sourcery CodeBench toolchain for the SuperH architecture,
->  Thomas> +	  from Mentor Graphics. It uses gcc 4.5.2, binutils 2.20,
->  Thomas> +	  glibc 2.13, uClibc 0.9.30, gdb 7.2.50 and kernel headers
-> 
-> How does this fit with patch 10/10 where you state it uses glibc 2.15?
+> Signed-off-by: Justin Maggard <jmaggard10@gmail.com>
+> ---
+>  package/gdisk/gdisk-0.6.14-uuid.h.patch  |   22 ------------------
+>  package/gdisk/gdisk-0.8.5-no-utf16.patch |   37 ++++++++++++++++++++++++++++++
 
-It fits with the "too-much-copy-paste" problem :)
+Your new patch must include a header with a description + Signed-off-by
+line.
 
 Thomas
 -- 
