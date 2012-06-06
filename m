@@ -1,53 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Jun 2012 21:36:42 +0200
-Subject: [Buildroot] [PATCH 2/3] debug: provide an option to copy the
- gdbserver to the target
-In-Reply-To: <CAAXf6LXCk=P8o--c9u8Usq4U6Gz9Rmnr9yzh20c3d-3LJj+g1A@mail.gmail.com>
-References: <cover.1331765391.git.thomas.petazzoni@free-electrons.com>
- <a3beb0b2963c6c7ba6ebf90643537380b117a2f4.1331765391.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LXCk=P8o--c9u8Usq4U6Gz9Rmnr9yzh20c3d-3LJj+g1A@mail.gmail.com>
-Message-ID: <20120606213642.062a0bab@skate>
+Date: Wed, 6 Jun 2012 22:00:28 +0200
+Subject: [Buildroot] [PATCH 10/10] toolchain-external: on SuperH,
+ use Sourcery CodeBench 2011.09 by default
+In-Reply-To: <87ehpvsejt.fsf@macbook.be.48ers.dk>
+References: <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
+ <cover.1338732273.git.thomas.petazzoni@free-electrons.com>
+ <7a2800c2cb33d674a82e1396354225549458a708.1338732273.git.thomas.petazzoni@free-electrons.com>
+ <87ehpvsejt.fsf@macbook.be.48ers.dk>
+Message-ID: <20120606220028.478baaf9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 6 Jun 2012 12:16:54 +0200,
-Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+Le Mon, 04 Jun 2012 09:48:38 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-> With this change, buildroot will no longer present the option of
-> building gdbserver itself. If you have an external toolchain, it is
-> now mandatory for it to contain gdbserver (if you want it of course).
-
-Correct.
-
-> I'm not sure if we can always expect this.
-
-I would say it is the case for most external toolchains that exist
-today, so it sounds like (at least to me) like a reasonable solution.
-
-> In my case, gdb was built by the toolchain, and gdbserver by
-> buildroot. For me it makes sense to follow your strategy and have
-> gdbserver built by crosstool-ng instead (and use that as custom
-> external toolchain).
-
-Building gdb and gdbserver separately is, IMO, a recipe for disaster.
-Even though the gdb remote protocol is supposed to be stable, my
-experience is that using a different version for gdb and gdbserver
-often causes problems.
-
-> But maybe there are cases where custom external toolchains do not
-> contain gdbserver already, and the user would like buildroot to build
-> it? In that case, we could consider changing the depend line to:
-> depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM || !BR2_TOOLCHAIN_EXTERNAL
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
-> What do you think? Should we cater for this?
+>  Thomas> The 2012.03 version of the x86 toolchain uses glibc 2.15, which
+>  Thomas> doesn't provide RPC functions. This breaks most packages for now,
+>  Thomas> until we package TI-RPC properly.
+> 
+> Seems like cut'n'paste from patch 9.
 
-Do you have a practical usage for this?
+Yes :)
 
-Generally speaking, I'd prefer if we handle really useful use cases,
-and to not complexify Buildroot with hypothetic and complex use cases.
+> "Most packages" is probably somewhat exaggerated - We have very few
+> packages depending on BR2_INET_RPC:
+> 
+> git grep -l BR2_INET_RPC package/**/Config.in
+> package/lmbench/Config.in
+> package/netkitbase/Config.in
+> package/netkittelnet/Config.in
+> package/nfs-utils/Config.in
+> package/portmap/Config.in
+> 
+> Or have you found other packages where we're missing the BR2_INET_RPC
+> annotation?
+
+There are some packages that do not depend on BR2_INET_RPC, but that
+enable stuff when BR2_INET_RPC is enable. Take for example
+package/busybox :-)
+
+For the moment, the external toolchain code assumes that if the
+external toolchain uses (e)glibc, then it has RPC support, so it always
+enables BR2_INET_RPC. Obviously, this is what is broken, but I'd prefer
+to add proper support for TI-RPC to not leave users using modern
+toolchains with absolutely no solution for RPC support.
+
+For now, if you choose one of those toolchains, even Busybox does not
+build (complains that rpc.h doesn't exist), which explains why I
+preferred to not make those toolchains the default ones, until I find
+the time to work on TI-RPC integration.
 
 Regards,
 
