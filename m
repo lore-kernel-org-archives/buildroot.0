@@ -1,66 +1,45 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 7 Jun 2012 15:49:35 +0200
-Subject: [Buildroot] [PATCH 2/3] debug: provide an option to copy the
- gdbserver to the target
-In-Reply-To: <20120606213642.062a0bab@skate>
-References: <cover.1331765391.git.thomas.petazzoni@free-electrons.com>
- <a3beb0b2963c6c7ba6ebf90643537380b117a2f4.1331765391.git.thomas.petazzoni@free-electrons.com>
- <CAAXf6LXCk=P8o--c9u8Usq4U6Gz9Rmnr9yzh20c3d-3LJj+g1A@mail.gmail.com>
- <20120606213642.062a0bab@skate>
-Message-ID: <CAAXf6LWdwaLvtGnDzawaeuSZ2JGSvLBXdwXq71jCbCJq0OFfdg@mail.gmail.com>
+Date: Thu, 7 Jun 2012 16:16:35 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: remove the call from XXXTARGETS
+In-Reply-To: <1336857045-10679-1-git-send-email-arnout@mind.be>
+References: <1336857045-10679-1-git-send-email-arnout@mind.be>
+Message-ID: <CAAXf6LUC83XoHCMjG8r6kwCQ1kLhcBdwZ5M7e0oWr5biPwrTkw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+[trim message to get it accepted on the list]
 
-On Wed, Jun 6, 2012 at 9:36 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Wed, 6 Jun 2012 12:16:54 +0200,
-> Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> a ?crit :
+On Sat, May 12, 2012 at 11:10 PM, Arnout Vandecappelle
+(Essensium/Mind) <arnout@mind.be> wrote:
+> Replace $(call XXXTARGETS,host) with $(XXXTARGETS_HOST) and
+> $(call XXXTARGETS) with $(XXXTARGETS).
 >
->> With this change, buildroot will no longer present the option of
->> building gdbserver itself. If you have an external toolchain, it is
->> now mandatory for it to contain gdbserver (if you want it of course).
+> Also includes documentation update, but not for buildroot.html.
 >
-> Correct.
+> This brings the time for 'make -qp' (which is used by bash-completion)
+> down from 1.85s to 1.35s on my laptop.
 >
->> I'm not sure if we can always expect this.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+> Although this is a huge patch, not much has changed.
 >
-> I would say it is the case for most external toolchains that exist
-> today, so it sounds like (at least to me) like a reasonable solution.
+> pkg-gentargets, pkg-maketargets and pkg-cmaketargets have manual changes.
+>
+> Documentation is updated.
+>
+> pkg-stats script is updated (brokennes from the pkg-*.mk files remains).
+>
+> All the rest is done with
+> find package linux toolchain boot -name \*.mk | \
+> ?xargs sed -i 's/$(eval $(call GENTARGETS,host))/$(eval $(GENTARGETS_HOST))/;
+> ? ? ? ? ? ? ? ?s/$(eval $(call GENTARGETS))/$(eval $(GENTARGETS))/'
+>
+> I could have split it up into separate patches but I didn't see much point.
+> It wouldn't make the review or integration easier if you ask me. ?And if
+> we ever want to revert, we want to revert all of it.
 
-Ok. If it's the case for most external toolchains, I'm ok with the
-current behavior.
-
->
->> In my case, gdb was built by the toolchain, and gdbserver by
->> buildroot. For me it makes sense to follow your strategy and have
->> gdbserver built by crosstool-ng instead (and use that as custom
->> external toolchain).
->
-> Building gdb and gdbserver separately is, IMO, a recipe for disaster.
-> Even though the gdb remote protocol is supposed to be stable, my
-> experience is that using a different version for gdb and gdbserver
-> often causes problems.
->
->> But maybe there are cases where custom external toolchains do not
->> contain gdbserver already, and the user would like buildroot to build
->> it? In that case, we could consider changing the depend line to:
->> depends on BR2_TOOLCHAIN_EXTERNAL_CUSTOM || !BR2_TOOLCHAIN_EXTERNAL
->>
->> What do you think? Should we cater for this?
->
-> Do you have a practical usage for this?
->
-
-Not now no. I used to build gdbserver in buildroot and ignore the one
-from the toolchain, but I have now changed that behavior. It's more
-logical and sound, as you say.
-
-So let's keep it the way it is.
-
-Best regards,
-Thomas
+Note that I think it would be nice to split it in two: one patch for
+the infrastructure changes, and one for the changes in all packages.
