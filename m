@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Fri,  8 Jun 2012 14:37:25 +0100
-Subject: [Buildroot] [PATCH] libfreefare: new package
-Message-ID: <1339162645-25335-1-git-send-email-spdawson@gmail.com>
+Date: Fri,  8 Jun 2012 14:52:33 +0100
+Subject: [Buildroot] [PATCH] jquery-keyboard: new package
+Message-ID: <1339163553-25844-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,83 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/Config.in                  |    1 +
- package/libfreefare/Config.in      |    7 +++++++
- package/libfreefare/libfreefare.mk |   10 ++++++++++
- 3 files changed, 18 insertions(+)
- create mode 100644 package/libfreefare/Config.in
- create mode 100644 package/libfreefare/libfreefare.mk
+ package/Config.in                          |    1 +
+ package/jquery-keyboard/Config.in          |   20 ++++++++++++++++++++
+ package/jquery-keyboard/jquery-keyboard.mk |   27 +++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/jquery-keyboard/Config.in
+ create mode 100644 package/jquery-keyboard/jquery-keyboard.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2b69c57..039bfce 100644
+index 2b69c57..ad78ced 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -362,6 +362,7 @@ menu "Hardware handling"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
-+source "package/libfreefare/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
-diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+@@ -375,6 +375,7 @@ menu "Javascript"
+ source "package/explorercanvas/Config.in"
+ source "package/flot/Config.in"
+ source "package/jquery/Config.in"
++source "package/jquery-keyboard/Config.in"
+ source "package/jquery-sparkline/Config.in"
+ source "package/jquery-validation/Config.in"
+ source "package/jsmin/Config.in"
+diff --git a/package/jquery-keyboard/Config.in b/package/jquery-keyboard/Config.in
 new file mode 100644
-index 0000000..2e11f7e
+index 0000000..23cb4b6
 --- /dev/null
-+++ b/package/libfreefare/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBFREEFARE
-+	bool "libfreefare"
-+	select BR2_PACKAGE_LIBNFC
++++ b/package/jquery-keyboard/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_JQUERY_KEYBOARD
++	bool "jQuery keyboard"
 +	help
-+	  Library for high level manipulation of MIFARE cards.
++	  Virtual Keyboard using jQuery UI
 +
-+	  http://code.google.com/p/nfc-tools/wiki/libfreefare
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
++	  https://github.com/Mottie/Keyboard
++
++config BR2_PACKAGE_JQUERY_KEYBOARD_JAVASCRIPT_PATH
++	string "Target install path for JavaScript"
++	default "/var/www/javascripts"
++	depends on BR2_PACKAGE_JQUERY_KEYBOARD
++	help
++	  Specify a target install path for JavaScript files
++
++config BR2_PACKAGE_JQUERY_KEYBOARD_CSS_PATH
++	string "Target install path for CSS"
++	default "/var/www/stylesheets"
++	depends on BR2_PACKAGE_JQUERY_KEYBOARD
++	help
++	  Specify a target install path for CSS files
+diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
 new file mode 100644
-index 0000000..0499999
+index 0000000..6070c55
 --- /dev/null
-+++ b/package/libfreefare/libfreefare.mk
-@@ -0,0 +1,10 @@
++++ b/package/jquery-keyboard/jquery-keyboard.mk
+@@ -0,0 +1,27 @@
 +#############################################################
 +#
-+# libfreefare
++# jquery-keyboard
 +#
 +#############################################################
-+LIBFREEFARE_VERSION = 0.3.2
-+LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
-+LIBFREEFARE_DEPENDENCIES = libnfc
++JQUERY_KEYBOARD_VERSION = 1.9.18
++JQUERY_KEYBOARD_SITE = \
++	https://github.com/Mottie/Keyboard/tarball/v$(JQUERY_KEYBOARD_VERSION)
 +
-+$(eval $(call AUTOTARGETS))
++define JQUERY_KEYBOARD_INSTALL_TARGET_CMDS
++	mkdir -p $(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_CSS_PATH)
++	$(INSTALL) -m 0644 -D $(@D)/css/keyboard.css \
++		$(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_CSS_PATH)/keyboard.css
++	mkdir -p $(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_JAVASCRIPT_PATH)
++	$(INSTALL) -m 0644 -D $(@D)/js/jquery.keyboard*.js \
++		$(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_JAVASCRIPT_PATH)
++	$(INSTALL) -m 0644 -D $(@D)/js/jquery.mousewheel.js \
++		$(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_JAVASCRIPT_PATH)
++endef
++
++define JQUERY_KEYBOARD_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_CSS_PATH)/keyboard.css
++	$(RM) $(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_JAVASCRIPT_PATH)/jquery.keyboard*.js
++	$(RM) $(TARGET_DIR)/$(BR2_PACKAGE_JQUERY_KEYBOARD_JAVASCRIPT_PATH)/jquery.mousewheel.js
++endef
++
++$(eval $(call GENTARGETS))
 -- 
 1.7.9.5
