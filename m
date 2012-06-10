@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 10 Jun 2012 21:45:47 +0200
+Date: Sun, 10 Jun 2012 21:46:01 +0200
 Subject: [Buildroot] [PATCH] busybox 1.20.1: add patches for ash,
 	ifupdown, man and tar
-In-Reply-To: <34e45dd779853425c08ff0bece6c9cd9@zacarias.com.ar> (Gustavo
- Zacarias's message of "Sun, 10 Jun 2012 08:09:29 -0300")
+In-Reply-To: <1339267126-25350-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 9 Jun 2012 15:38:46 -0300")
 References: <1339267126-25350-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LUbp3s2S22ADeUrXooMHwc2mhAz1V79r1VoEfTcVCrEqw@mail.gmail.com>
- <34e45dd779853425c08ff0bece6c9cd9@zacarias.com.ar>
-Message-ID: <87mx4bhrx0.fsf@macbook.be.48ers.dk>
+Message-ID: <87ipezhrwm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,14 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- Gustavo> These are upstream patches from
- Gustavo> http://busybox.net/downloads/fixes-1.20.1/ slated for the next
- Gustavo> stable release.  They're historically added as-is though that
- Gustavo> can be changed.
-
-I would prefer to keep them as is. If we could get upstream to document
-them, then that would be good ofcause.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
