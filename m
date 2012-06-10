@@ -1,32 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Jun 2012 21:54:27 +0200
-Subject: [Buildroot] [git commit] bison: bump to version 2.5.1
-Message-ID: <20120610201113.D3C5D96E60@busybox.osuosl.org>
+Date: Sun, 10 Jun 2012 21:53:18 +0200
+Subject: [Buildroot] [git commit] libfuse: bump to version 2.9.0
+Message-ID: <20120610201113.7165D96E60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4628f823ee0f7dcea55d7111bcfdafb664843351
+commit: http://git.buildroot.net/buildroot/commit/?id=202a0ef1a76cd185b5a6382a769946d9cc01df5b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bison/bison.mk |    2 +-
+ package/libfuse/libfuse.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index a1de39a..51325bd 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index 15c63ab..c95ea3e 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
 @@ -4,7 +4,7 @@
  #
  #############################################################
  
--BISON_VERSION = 2.5
-+BISON_VERSION = 2.5.1
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
+-LIBFUSE_VERSION = 2.8.7
++LIBFUSE_VERSION = 2.9.0
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/fuse/fuse-2.X/$(LIBFUSE_VERSION)
  
- BISON_CONF_ENV += ac_cv_path_M4=/usr/bin/m4
