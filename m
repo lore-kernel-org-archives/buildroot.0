@@ -1,32 +1,37 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Jun 2012 22:00:37 +0200
-Subject: [Buildroot] [git commit] berkeleydb: bump to 5.3.21
-Message-ID: <20120610201114.11C5E96E60@busybox.osuosl.org>
+Date: Sun, 10 Jun 2012 21:54:39 +0200
+Subject: [Buildroot] [git commit] lighttpd: bump to version 1.4.31
+Message-ID: <20120610201113.E4A1396E60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6853d1992820df00bf905876be64d7f0e6948eaa
+commit: http://git.buildroot.net/buildroot/commit/?id=5e5dbbad7d1a4a2afc7e23630e3be0fe82c477bd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/berkeleydb/berkeleydb.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...atch => lighttpd-Fix-default-config-file.patch} |    0
+ package/lighttpd/lighttpd.mk                       |    2 +-
+ 2 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index d737896..09f35ef 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -3,7 +3,7 @@
- # berkeley db
+diff --git a/package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch b/package/lighttpd/lighttpd-Fix-default-config-file.patch
+similarity index 100%
+rename from package/lighttpd/lighttpd-1.4.30-Fix-default-config-file.patch
+rename to package/lighttpd/lighttpd-Fix-default-config-file.patch
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 8d1f212..c7fae32 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--BERKELEYDB_VERSION = 5.3.15
-+BERKELEYDB_VERSION = 5.3.21
- BERKELEYDB_SITE = http://download.oracle.com/berkeley-db
- BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
- BERKELEYDB_SUBDIR = build_unix
+ 
+-LIGHTTPD_VERSION = 1.4.30
++LIGHTTPD_VERSION = 1.4.31
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-1.4.x
+ LIGHTTPD_DEPENDENCIES = host-pkg-config
+ LIGHTTPD_CONF_OPT = \
