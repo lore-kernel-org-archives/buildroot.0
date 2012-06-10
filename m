@@ -1,31 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Jun 2012 22:47:44 +0200
-Subject: [Buildroot] [git commit] synergy: fix comment dependencies
-Message-ID: <20120611053107.DBEA596ED0@busybox.osuosl.org>
+Date: Mon, 11 Jun 2012 00:02:20 +0200
+Subject: [Buildroot] [git commit] synergy: fix dependencies
+Message-ID: <20120611053107.EC6FE96ED0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=036377c954e68eb76e31f787074c6ab8c4fd9817
+commit: http://git.buildroot.net/buildroot/commit/?id=e12d78e2bc2d0e36dbdf1ced099ae924f7a82ca2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Show comment if either C++ or wchar isn't available, not only if both
-aren't.
+Synergy can be used without a local X server, and Xinerama is an optional
+dependency.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/synergy/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/synergy/synergy.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/synergy/Config.in b/package/synergy/Config.in
-index 7d8c54e..04351b7 100644
---- a/package/synergy/Config.in
-+++ b/package/synergy/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_SYNERGY
- 	  http://synergy2.sourceforge.net/
+diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+index 5a09359..c86fb8b 100644
+--- a/package/synergy/synergy.mk
++++ b/package/synergy/synergy.mk
+@@ -10,6 +10,7 @@ SYNERGY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/s
+ SYNERGY_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
+                    --x-libraries=$(STAGING_DIR)/usr/lib
  
- comment "synergy requires a toolchain with C++ and WCHAR support enabled"
--	depends on BR2_PACKAGE_XORG7 && !BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
-+	depends on BR2_PACKAGE_XORG7 && !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+-SYNERGY_DEPENDENCIES = xserver_xorg-server xlib_libXtst
++SYNERGY_DEPENDENCIES = xlib_libXtst \
++		$(if $(BR2_PACKAGE_XLIB_LIBXINERAMA),xlib_libXinerama)
+ 
+ $(eval $(call AUTOTARGETS))
