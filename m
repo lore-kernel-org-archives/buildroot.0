@@ -1,66 +1,219 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 10 Jun 2012 13:46:49 +0200
-Subject: [Buildroot] [PATCH v3 2/6] target: add symbols for PowerPC cpu
+Date: Sun, 10 Jun 2012 13:46:48 +0200
+Subject: [Buildroot] [PATCH v3 1/6] target: add symbols for i386/x86_64 cpu
 	features
 In-Reply-To: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
 References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Selecting the target architecture variant automatically selects the
+appropriated set of features.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 49c01e5..02aa931 100644
+index 25ff750..49c01e5 100644
 --- a/target/Config.in.arch
 +++ b/target/Config.in.arch
-@@ -600,6 +600,14 @@ config BR2_xtensa_core_name
- 	default "dc232b"		if BR2_xtensa_dc232b
- #	default "s5000"			if BR2_xtensa_s5000
+@@ -242,7 +242,7 @@ choice
+ 	default BR2_mips_1 if BR2_mipsel
+ 	help
+ 	  Specific CPU variant to use
+-	
++
+ 	  64bit cabable: 3, 4, 64, 64r2
+ 	  non-64bit capable: 1, 2, 32, 32r2
  
-+# PowerPC cpu features
-+config BR2_POWERPC_CPU_G3
+@@ -325,6 +325,31 @@ endchoice
+ # gcc builds libstdc++ differently depending on the
+ # host tuplet given to it, so let people choose
+ #
++
++# i386/x86_64 cpu features
++config BR2_X86_CPU_HAS_MMX
 +	bool
-+config BR2_POWERPC_CPU_G4
++config BR2_X86_CPU_HAS_SSE
 +	bool
-+config BR2_POWERPC_CPU_G5
++config BR2_X86_CPU_HAS_SSE2
++	bool
++config BR2_X86_CPU_HAS_SSE3
++	bool
++config BR2_X86_CPU_HAS_SSSE3
++	bool
++config BR2_X86_CPU_HAS_SSE41
++	bool
++config BR2_X86_CPU_HAS_SSE42
++	bool
++config BR2_X86_CPU_HAS_SSE4
++	bool
++config BR2_X86_CPU_HAS_SSE4A
++	bool
++config BR2_X86_CPU_HAS_3DNOW
++	bool
++config BR2_X86_CPU_HAS_ABM
 +	bool
 +
  choice
  	prompt "Target Architecture Variant"
- 	depends on BR2_powerpc
-@@ -640,12 +648,18 @@ config BR2_powerpc_630
- 	bool "630"
- config BR2_powerpc_740
- 	bool "740"
-+	select BR2_POWERPC_CPU_G3
- config BR2_powerpc_7400
- 	bool "7400"
-+	select BR2_POWERPC_CPU_G3
-+	select BR2_POWERPC_CPU_G4
- config BR2_powerpc_7450
- 	bool "7450"
-+	select BR2_POWERPC_CPU_G3
-+	select BR2_POWERPC_CPU_G4
- config BR2_powerpc_750
- 	bool "750"
-+	select BR2_POWERPC_CPU_G3
- config BR2_powerpc_801
- 	bool "801"
- config BR2_powerpc_821
-@@ -656,6 +670,9 @@ config BR2_powerpc_860
- 	bool "860"
- config BR2_powerpc_970
- 	bool "970"
-+	select BR2_POWERPC_CPU_G3
-+	select BR2_POWERPC_CPU_G4
-+	select BR2_POWERPC_CPU_G5
- config BR2_powerpc_8540
- 	bool "8540 / e500v1"
- config BR2_powerpc_8548
+ 	depends on BR2_i386
+@@ -344,46 +369,106 @@ config BR2_x86_pentiumpro
+ 	bool "pentium pro"
+ config BR2_x86_pentium_mmx
+ 	bool "pentium MMX"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_pentium_m
+ 	bool "pentium mobile"
+ config BR2_x86_pentium2
+ 	bool "pentium2"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_pentium3
+ 	bool "pentium3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
+ config BR2_x86_pentium4
+ 	bool "pentium4"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
+ config BR2_x86_prescott
+ 	bool "prescott"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_nocona
+ 	bool "nocona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_core2
+ 	bool "core2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_atom
+ 	bool "atom"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_k6
+ 	bool "k6"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_k6_2
+ 	bool "k6-2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_athlon
+ 	bool "athlon"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_athlon_4
+ 	bool "athlon-4"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
+ config BR2_x86_opteron
+ 	bool "opteron"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
+ config BR2_x86_opteron_sse3
+ 	bool "opteron w/ SSE3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_barcelona
+ 	bool "barcelona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSE4A
++	select BR2_X86_CPU_HAS_ABM
+ config BR2_x86_geode
+ 	bool "geode"
++	# Don't include MMX support because there several variant of geode
++	# processor, some with MMX support, some without.
++	# See: http://en.wikipedia.org/wiki/Geode_%28processor%29
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_c3
+ 	bool "Via/Cyrix C3 (Samuel/Ezra cores)"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ config BR2_x86_c32
+ 	bool "Via C3-2 (Nehemiah cores)"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
+ config BR2_x86_winchip_c6
+ 	bool "IDT Winchip C6"
++	select BR2_X86_CPU_HAS_MMX
+ config BR2_x86_winchip2
+ 	bool "IDT Winchip 2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
+ endchoice
+ 
+ choice
+@@ -397,16 +482,46 @@ config BR2_x86_64_generic
+ 	bool "generic"
+ config BR2_x86_64_barcelona
+ 	bool "barcelona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSE4A
++	select BR2_X86_CPU_HAS_ABM
+ config BR2_x86_64_opteron_sse3
+ 	bool "opteron w/ sse3"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_64_opteron
+ 	bool "opteron"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_3DNOW
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
+ config BR2_x86_64_nocona
+ 	bool "nocona"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
+ config BR2_x86_64_core2
+ 	bool "core2"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ config BR2_x86_64_atom
+ 	bool "atom"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
+ endchoice
+ 
+ choice
 -- 
 1.7.10.4
