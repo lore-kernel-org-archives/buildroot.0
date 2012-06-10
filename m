@@ -1,50 +1,66 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 10 Jun 2012 13:46:47 +0200
-Subject: [Buildroot] [PATCH v3 0/6] OpenCV update and CPU fetures
+Date: Sun, 10 Jun 2012 13:46:49 +0200
+Subject: [Buildroot] [PATCH v3 2/6] target: add symbols for PowerPC cpu
+	features
 In-Reply-To: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
 References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1339328813-6269-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series add some symbols for some of these features for
-x86/x86_64 and PowerPC architures.
 
-These new symbols are used in this 2nd version of the OpenCV patch, as
-well as in some other packages.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Changes since v2:
-- rename x86/x86_64 cpu feature symbols: BR2_CPU_HAS_* -> BR2_X86_CPU_HAS_*
-- add CPU features symbols for PowerPC
-- opencv: bump to version 2.4.1
-- fix/cleanup menuconfig
-- update opencv configure options
-
-Changes since v1:
-- add CPU features symbols for x86 and x86_64
-- use those symbols in the opencv, sdl_gfx and sdl_sound packages
-- opencv: add missing zlib dependency
-
-Samuel Martin (6):
-  target: add symbols for i386/x86_64 cpu features
-  target: add symbols for PowerPC cpu features
-  libevas: refactor *_CONF_OPT assignment with cpu-feature options
-  sdl_gfx: refactor *_CONF_OPT assignment with cpu-feature options
-  sdl_sound: refactor *_CONF_OPT assignment with cpu-feature options
-  opencv: bump to version 2.4.1
-
- package/efl/libevas/libevas.mk                     |   24 ++--
- package/opencv/Config.in                           |  152 +++++++++++++++++---
- ...pencv-uclibc-optional-long-double-support.patch |   40 ------
- package/opencv/opencv.mk                           |  129 +++++++++++------
- package/sdl_gfx/sdl_gfx.mk                         |   10 +-
- package/sdl_sound/sdl_sound.mk                     |    3 +-
- target/Config.in.arch                              |  134 ++++++++++++++++-
- 7 files changed, 368 insertions(+), 124 deletions(-)
- delete mode 100644 package/opencv/opencv-uclibc-optional-long-double-support.patch
-
---
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 49c01e5..02aa931 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -600,6 +600,14 @@ config BR2_xtensa_core_name
+ 	default "dc232b"		if BR2_xtensa_dc232b
+ #	default "s5000"			if BR2_xtensa_s5000
+ 
++# PowerPC cpu features
++config BR2_POWERPC_CPU_G3
++	bool
++config BR2_POWERPC_CPU_G4
++	bool
++config BR2_POWERPC_CPU_G5
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_powerpc
+@@ -640,12 +648,18 @@ config BR2_powerpc_630
+ 	bool "630"
+ config BR2_powerpc_740
+ 	bool "740"
++	select BR2_POWERPC_CPU_G3
+ config BR2_powerpc_7400
+ 	bool "7400"
++	select BR2_POWERPC_CPU_G3
++	select BR2_POWERPC_CPU_G4
+ config BR2_powerpc_7450
+ 	bool "7450"
++	select BR2_POWERPC_CPU_G3
++	select BR2_POWERPC_CPU_G4
+ config BR2_powerpc_750
+ 	bool "750"
++	select BR2_POWERPC_CPU_G3
+ config BR2_powerpc_801
+ 	bool "801"
+ config BR2_powerpc_821
+@@ -656,6 +670,9 @@ config BR2_powerpc_860
+ 	bool "860"
+ config BR2_powerpc_970
+ 	bool "970"
++	select BR2_POWERPC_CPU_G3
++	select BR2_POWERPC_CPU_G4
++	select BR2_POWERPC_CPU_G5
+ config BR2_powerpc_8540
+ 	bool "8540 / e500v1"
+ config BR2_powerpc_8548
+-- 
 1.7.10.4
