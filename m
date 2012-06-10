@@ -1,88 +1,32 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 10 Jun 2012 21:55:41 +0200
-Subject: [Buildroot] [git commit] bzip2: security bump to version 1.0.6
-Message-ID: <20120610201113.F3AE696E60@busybox.osuosl.org>
+Date: Sun, 10 Jun 2012 21:53:46 +0200
+Subject: [Buildroot] [git commit] sqlite: bump to version 3.7.12.1
+Message-ID: <20120610201113.8321E96E60@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54e03b24848bc79995c7de388f7d79b09f469e3e
+commit: http://git.buildroot.net/buildroot/commit/?id=90448022248356ba3d3380d68a890db722ced85e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump bzip2 to version 1.0.6 to fix CVE-2010-0405
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/bzip2/bzip2.mk |   29 ++++++++++++++---------------
- 1 files changed, 14 insertions(+), 15 deletions(-)
+ package/sqlite/sqlite.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-index 1bc4449..59c993e 100644
---- a/package/bzip2/bzip2.mk
-+++ b/package/bzip2/bzip2.mk
-@@ -3,15 +3,14 @@
- # bzip2
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 165b991..2c23582 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
  #
  #############################################################
--BZIP2_VERSION:=1.0.5
--BZIP2_SONAME=1.0.4
--BZIP2_SOURCE:=bzip2-$(BZIP2_VERSION).tar.gz
--BZIP2_SITE:=http://www.bzip.org/$(BZIP2_VERSION)
--BZIP2_INSTALL_STAGING=YES
-+
-+BZIP2_VERSION = 1.0.6
-+BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
-+BZIP2_INSTALL_STAGING = YES
  
- define BZIP2_FIX_MAKEFILE
- 	$(SED) "s,ln \$$(,ln -snf \$$(,g" $(@D)/Makefile
--	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_SONAME) \
-+	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_VERSION)) \
- 	    libbz2.so,g" $(@D)/Makefile-libbz2_so
- 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(@D)/Makefile
- 	$(SED) "s:-O2:$(TARGET_CFLAGS):" $(@D)/Makefile-libbz2_so
-@@ -42,12 +41,12 @@ define BZIP2_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
- 	$(MAKE) PREFIX=$(STAGING_DIR)/usr -C $(@D) install
- 	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/lib
--	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(STAGING_DIR)/usr/lib/
-+	cp $(@D)/libbz2.so.$(BZIP2_VERSION) $(STAGING_DIR)/usr/lib/
- 	cp $(@D)/libbz2.a $(STAGING_DIR)/usr/lib/
- 	(cd $(STAGING_DIR)/usr/lib/; \
--		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
--		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
--		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
-+		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so; \
-+		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1.0; \
-+		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1; \
- 	)
- endef
- 
-@@ -56,11 +55,11 @@ define BZIP2_INSTALL_TARGET_CMDS
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,bzip2 bunzip2 bzcat)
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
- 	$(MAKE) PREFIX=$(TARGET_DIR)/usr -C $(@D) install
--	cp $(@D)/libbz2.so.$(BZIP2_SONAME) $(TARGET_DIR)/usr/lib/
-+	cp $(@D)/libbz2.so.$(BZIP2_VERSION) $(TARGET_DIR)/usr/lib/
- 	(cd $(TARGET_DIR)/usr/lib; \
--		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1.0; \
--		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so.1; \
--		ln -snf libbz2.so.$(BZIP2_SONAME) libbz2.so; \
-+		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1.0; \
-+		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so.1; \
-+		ln -snf libbz2.so.$(BZIP2_VERSION) libbz2.so; \
- 	)
- 	(cd $(TARGET_DIR)/usr/bin; \
- 		ln -snf bzip2 bunzip2; \
-@@ -84,7 +83,7 @@ endef
- 
- define HOST_BZIP2_FIX_MAKEFILE
- 	$(SED) "s,ln \$$(,ln -snf \$$(,g" $(@D)/Makefile
--	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_SONAME) \
-+	$(SED) "s,ln -s (lib.*),ln -snf \$$1; ln -snf libbz2.so.$(BZIP2_VERSION) \
- 	    libbz2.so,g" $(@D)/Makefile-libbz2_so
- 	$(SED) "s:-O2:$(HOST_CFLAGS):" $(@D)/Makefile
- 	$(SED) "s:-O2:$(HOST_CFLAGS):" $(@D)/Makefile-libbz2_so
+-SQLITE_VERSION = 3071200
++SQLITE_VERSION = 3071201
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org
+ SQLITE_INSTALL_STAGING = YES
