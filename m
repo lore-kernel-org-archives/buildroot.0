@@ -1,37 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Jun 2012 14:20:39 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Jun 2012 21:32:48 +0200
 Subject: [Buildroot] [PATCH] pppd: fix plugin search path
-Message-ID: <1339435239-9581-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1339435239-9581-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 11 Jun 2012 14:20:39 -0300")
+References: <1339435239-9581-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lijtfxun.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the plugin search path by passing a --prefix to configure.
-DESTDIR is used in the source code for the search path of plugins
-(DESTDIR/lib/pppd/VERSION).
-Since DESTDIR defaults to /usr/local we get the search path wrong so the
-'plugin' directive requires a full pathspec to the plugin rather than
-the .so name, which isn't nice or portable.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pppd/pppd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ Gustavo> Fix the plugin search path by passing a --prefix to configure.
+ Gustavo> DESTDIR is used in the source code for the search path of plugins
+ Gustavo> (DESTDIR/lib/pppd/VERSION).
+ Gustavo> Since DESTDIR defaults to /usr/local we get the search path wrong so the
+ Gustavo> 'plugin' directive requires a full pathspec to the plugin rather than
+ Gustavo> the .so name, which isn't nice or portable.
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 2137f6a..a62f495 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -26,7 +26,7 @@ endif
- define PPPD_CONFIGURE_CMDS
- 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
- 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
--	( cd $(@D); ./configure )
-+	( cd $(@D); ./configure --prefix=/usr )
- endef
- 
- define PPPD_BUILD_CMDS
+Committed, thanks.
+
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
