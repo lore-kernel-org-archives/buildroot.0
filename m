@@ -1,41 +1,61 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 11 Jun 2012 09:14:48 +0200
-Subject: [Buildroot] [git commit] squashfs: needs pthreads support in
-	toolchain
-Message-ID: <20120611071550.167B696ECF@busybox.osuosl.org>
+From: Markos Chandras <Markos.Chandras@imgtec.com>
+Date: Mon, 11 Jun 2012 09:08:04 +0100
+Subject: [Buildroot] [PATCH] synergy: Remove -Werror from CXXFLAGS
+In-Reply-To: <87ipeygwlz.fsf@macbook.be.48ers.dk>
+References: <1339063094-25298-1-git-send-email-markos.chandras@imgtec.com>
+ <87ipeygwlz.fsf@macbook.be.48ers.dk>
+Message-ID: <4FD5A764.4040200@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6828e8e072c243ddc266a0946a4a8bc890fc0e1c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/11/2012 08:02 AM, Peter Korsgaard wrote:
 
-Fixes http://autobuild.buildroot.net/results/9afdb3f7141fa361ac2ff3fe24887b0c6eb9342d
+>>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
+> 
+>  Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>  Markos> ---
+>  Markos>  package/synergy/synergy-1.3.1-remove-werror.patch |   29 +++++++++++++++++++++
+>  Markos>  1 files changed, 29 insertions(+), 0 deletions(-)
+>  Markos>  create mode 100644 package/synergy/synergy-1.3.1-remove-werror.patch
+> 
+>  Markos> diff --git a/package/synergy/synergy-1.3.1-remove-werror.patch b/package/synergy/synergy-1.3.1-remove-werror.patch
+>  Markos> new file mode 100644
+>  Markos> index 0000000..fe55778
+>  Markos> --- /dev/null
+>  Markos> +++ b/package/synergy/synergy-1.3.1-remove-werror.patch
+>  Markos> @@ -0,0 +1,29 @@
+>  Markos> +Remove -Werror from CXXFLAGS
+>  Markos> +
+>  Markos> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+>  Markos> +
+>  Markos> +Index: synergy-1.3.1/configure
+>  Markos> +===================================================================
+>  Markos> +--- synergy-1.3.1.orig/configure
+>  Markos> ++++ synergy-1.3.1/configure
+> 
+> Please patch configure.ac (and ass SYNERGY_AUTORECONF = YES in
+> synergy.mk) instead of the generated configure script.
+> 
+> Out of interest, on what configs do you see warnings? I haven't noticed
+> any build errors on the autobuilder.
+> 
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/squashfs/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+Hi Peter,
 
-diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
-index 7d0fc71..93d3594 100644
---- a/package/squashfs/Config.in
-+++ b/package/squashfs/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SQUASHFS
- 	bool "squashfs"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_SQUASHFS_GZIP if !(BR2_PACKAGE_SQUASHFS_LZMA || BR2_PACKAGE_SQUASHFS_LZO)
- 	help
- 	  Tools to generate SquashFS filesystems.
-@@ -36,5 +37,5 @@ config BR2_PACKAGE_SQUASHFS_XZ
- 
- endif
- 
--comment "squashfs requires a toolchain with LARGEFILE support"
--	depends on !BR2_LARGEFILE
-+comment "squashfs requires a toolchain with LARGEFILE and threads support"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+There is no configure.ac in the sources and this is why I patched the
+generated configure file.
+
+As for the errors, I guess it depends on the toolchain and gcc version
+that is being used. I am seeing something like this:
+
+cc1plus: warnings being treated as errors
+CTCPSocket.cpp: In member function 'virtual void CTCPSocket::write(const
+void*, UInt32)':
+CTCPSocket.cpp:143: warning: 'wasEmpty' may be used uninitialized in
+this function
+
+-- 
+markos
