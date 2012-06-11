@@ -1,39 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 11 Jun 2012 10:56:21 +0200
-Subject: [Buildroot] Bug on host-only packages
-Message-ID: <20120611105621.0aacd20c@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 11 Jun 2012 10:59:36 +0200
+Subject: [Buildroot] [git commit] ethtool: bump version
+Message-ID: <20120611085952.C332996E8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=f10913cf8e0790517a552a0a959f501e46b88cae
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have the impression that there is a bug on the download step of
-host-only packages: the tarballs are named host-foobar-xxx.tar.gz
-instead of just foobar-xxx.tar.gz. For example, in my download
-directory, I have:
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ethtool/ethtool.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-host-lpc3250loader-1.0.tar.gz
-host-omap-u-boot-utils-8aff852322.tar.gz
-
-Even though those don't have target variants (so there is no
-problematic consequences to this bug), I think that for consistency
-reasons they should be named:
-
-lpc3250loader-1.0.tar.gz
-omap-u-boot-utils-8aff852322.tar.gz
-
-Most likely a bug in the GENTARGETS infrastructure. I haven't look at
-the code yet, I'm just reporting the issue (don't have the time to dig
-into it right now).
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 101d0a1..b6cbc64 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-ETHTOOL_VERSION = 3.2
++ETHTOOL_VERSION = 3.4
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ 
+ $(eval $(call AUTOTARGETS))
