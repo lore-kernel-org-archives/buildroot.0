@@ -1,33 +1,39 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 11 Jun 2012 09:53:30 +0100
-Subject: [Buildroot] [PATCH] synergy: Remove -Werror from CXXFLAGS
-In-Reply-To: <877gvegrkm.fsf@macbook.be.48ers.dk>
-References: <1339063094-25298-1-git-send-email-markos.chandras@imgtec.com>
- <87ipeygwlz.fsf@macbook.be.48ers.dk> <4FD5A764.4040200@imgtec.com>
- <877gvegrkm.fsf@macbook.be.48ers.dk>
-Message-ID: <4FD5B20A.9020106@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 11 Jun 2012 10:56:21 +0200
+Subject: [Buildroot] Bug on host-only packages
+Message-ID: <20120611105621.0aacd20c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/2012 09:50 AM, Peter Korsgaard wrote:
+Hello,
 
->>>>>> "Markos" == Markos Chandras <Markos.Chandras@imgtec.com> writes:
-> 
-> Hi,
-> 
->  Markos> There is no configure.ac in the sources and this is why I patched the
->  Markos> generated configure file.
-> 
-> True, but there's configure.in (the old name for configure.ac).
-> 
+I have the impression that there is a bug on the download step of
+host-only packages: the tarballs are named host-foobar-xxx.tar.gz
+instead of just foobar-xxx.tar.gz. For example, in my download
+directory, I have:
 
+host-lpc3250loader-1.0.tar.gz
+host-omap-u-boot-utils-8aff852322.tar.gz
 
-Hi Peter,
+Even though those don't have target variants (so there is no
+problematic consequences to this bug), I think that for consistency
+reasons they should be named:
 
-Ok I will prepare a new patch
+lpc3250loader-1.0.tar.gz
+omap-u-boot-utils-8aff852322.tar.gz
 
+Most likely a bug in the GENTARGETS infrastructure. I haven't look at
+the code yet, I'm just reporting the issue (don't have the time to dig
+into it right now).
+
+Regards,
+
+Thomas
 -- 
-markos
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
