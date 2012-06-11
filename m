@@ -1,32 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 11 Jun 2012 11:59:44 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
-Message-ID: <20120611100843.EF4EA96ED0@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 11 Jun 2012 14:20:39 -0300
+Subject: [Buildroot] [PATCH] pppd: fix plugin search path
+Message-ID: <1339435239-9581-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a17f53f64bd183705e50debe81b796bc6cb82e0f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix the plugin search path by passing a --prefix to configure.
+DESTDIR is used in the source code for the search path of plugins
+(DESTDIR/lib/pppd/VERSION).
+Since DESTDIR defaults to /usr/local we get the search path wrong so the
+'plugin' directive requires a full pathspec to the plugin rather than
+the .so name, which isn't nice or portable.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
+ package/pppd/pppd.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 012b436..9978315 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.34"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.19"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.20"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.2"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 2137f6a..a62f495 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -26,7 +26,7 @@ endif
+ define PPPD_CONFIGURE_CMDS
+ 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+ 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
+-	( cd $(@D); ./configure )
++	( cd $(@D); ./configure --prefix=/usr )
+ endef
+ 
+ define PPPD_BUILD_CMDS
+-- 
+1.7.3.4
