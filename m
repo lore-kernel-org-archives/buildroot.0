@@ -1,61 +1,34 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Mon, 11 Jun 2012 09:08:04 +0100
-Subject: [Buildroot] [PATCH] synergy: Remove -Werror from CXXFLAGS
-In-Reply-To: <87ipeygwlz.fsf@macbook.be.48ers.dk>
-References: <1339063094-25298-1-git-send-email-markos.chandras@imgtec.com>
- <87ipeygwlz.fsf@macbook.be.48ers.dk>
-Message-ID: <4FD5A764.4040200@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Mon, 11 Jun 2012 10:44:37 +0200
+Subject: [Buildroot] [PATCH] busybox 1.20.1: add patches for ash,
+	ifupdown, man and tar
+In-Reply-To: <87mx4bhrx0.fsf@macbook.be.48ers.dk>
+References: <1339267126-25350-1-git-send-email-gustavo@zacarias.com.ar>
+ <CAAXf6LUbp3s2S22ADeUrXooMHwc2mhAz1V79r1VoEfTcVCrEqw@mail.gmail.com>
+ <34e45dd779853425c08ff0bece6c9cd9@zacarias.com.ar>
+ <87mx4bhrx0.fsf@macbook.be.48ers.dk>
+Message-ID: <CAAXf6LVpeLr5NUmOtj6b8nXRBXxT2SG5gT62uTy6ia+XNG2ERw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/2012 08:02 AM, Peter Korsgaard wrote:
+On Sun, Jun 10, 2012 at 9:45 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>
+>
+> ?Gustavo> These are upstream patches from
+> ?Gustavo> http://busybox.net/downloads/fixes-1.20.1/ slated for the next
+> ?Gustavo> stable release. ?They're historically added as-is though that
+> ?Gustavo> can be changed.
+>
+> I would prefer to keep them as is. If we could get upstream to document
+> them, then that would be good ofcause.
 
->>>>>> "Markos" == Markos Chandras <markos.chandras@imgtec.com> writes:
-> 
->  Markos> Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->  Markos> ---
->  Markos>  package/synergy/synergy-1.3.1-remove-werror.patch |   29 +++++++++++++++++++++
->  Markos>  1 files changed, 29 insertions(+), 0 deletions(-)
->  Markos>  create mode 100644 package/synergy/synergy-1.3.1-remove-werror.patch
-> 
->  Markos> diff --git a/package/synergy/synergy-1.3.1-remove-werror.patch b/package/synergy/synergy-1.3.1-remove-werror.patch
->  Markos> new file mode 100644
->  Markos> index 0000000..fe55778
->  Markos> --- /dev/null
->  Markos> +++ b/package/synergy/synergy-1.3.1-remove-werror.patch
->  Markos> @@ -0,0 +1,29 @@
->  Markos> +Remove -Werror from CXXFLAGS
->  Markos> +
->  Markos> +Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
->  Markos> +
->  Markos> +Index: synergy-1.3.1/configure
->  Markos> +===================================================================
->  Markos> +--- synergy-1.3.1.orig/configure
->  Markos> ++++ synergy-1.3.1/configure
-> 
-> Please patch configure.ac (and ass SYNERGY_AUTORECONF = YES in
-> synergy.mk) instead of the generated configure script.
-> 
-> Out of interest, on what configs do you see warnings? I haven't noticed
-> any build errors on the autobuilder.
-> 
+Agreed. Do any of you have a good relation with the busybox developers
+which could give the request better chances of success, or shall I
+just ask the question on their mailing list myself?
 
-Hi Peter,
-
-There is no configure.ac in the sources and this is why I patched the
-generated configure file.
-
-As for the errors, I guess it depends on the toolchain and gcc version
-that is being used. I am seeing something like this:
-
-cc1plus: warnings being treated as errors
-CTCPSocket.cpp: In member function 'virtual void CTCPSocket::write(const
-void*, UInt32)':
-CTCPSocket.cpp:143: warning: 'wasEmpty' may be used uninitialized in
-this function
-
--- 
-markos
+Thanks,
+Thomas
