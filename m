@@ -1,67 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jun 2012 12:08:12 +0200
-Subject: [Buildroot] [PATCH] New package: cJSON (v2)
-In-Reply-To: <1338856703-4082-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Mon, 4 Jun 2012 20:38:23 -0400")
-References: <1338856703-4082-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <87txyif9f7.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 11 Jun 2012 11:59:44 +0200
+Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
+Message-ID: <20120611100843.EF4EA96ED0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a17f53f64bd183705e50debe81b796bc6cb82e0f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
- Danomi> ---
- Danomi>  package/Config.in       |    1 +
- Danomi>  package/cjson/Config.in |    7 +++++++
- Danomi>  package/cjson/cjson.mk  |   41 +++++++++++++++++++++++++++++++++++++++++
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Danomi> +++ b/package/cjson/cjson.mk
- Danomi> @@ -0,0 +1,41 @@
- Danomi> +#############################################################
- Danomi> +#
- Danomi> +# cjson
- Danomi> +#
- Danomi> +#############################################################
- Danomi> +CJSON_VERSION         = undefined
- Danomi> +CJSON_SOURCE          = cJSONFiles.zip
- Danomi> +CJSON_SITE            = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/cjson/
- Danomi> +CJSON_INSTALL_STAGING = YES
- Danomi> +
- Danomi> +define CJSON_EXTRACT_CMDS
- Danomi> +	unzip -d $(@D) $(DL_DIR)/$(CJSON_SOURCE)
- Danomi> +endef
- Danomi> +
- Danomi> +define CJSON_BUILD_CMDS
- Danomi> +	cd $(@D)/cJSON && $(TARGET_CC) -Wall -O2 -shared -fpic cJSON.c -o libcJSON.so
-
-I'm not sure it makes sense to build a .so of something as simple (and
-unversioned) as this. How about just doing a static .a like ezxml? You
-also shouldn't hardcode compiler flags like -Wall / -O2 but use
-$(TARGET_CFLAGS) instead - E.G.
-
-cd $(@D)/cJSON && $(TARGET_CC) $(TARGET_CFLAGS) -o cJSON.o cJSON.c
-cd $(@D)/cJSON && $(TARGET_AR) rcs libcJSON.a cJSON.o
-
-
-
- Danomi> +endef
- Danomi> +
- Danomi> +define CJSON_INSTALL_STAGING_CMDS
- Danomi> +	$(INSTALL) -D $(@D)/cJSON/cJSON.h $(STAGING_DIR)/usr/include/cJSON.h
- Danomi> +	$(INSTALL) -D $(@D)/cJSON/libcJSON.so $(STAGING_DIR)/usr/lib/libcJSON.so
- Danomi> +endef
- Danomi> +
- Danomi> +define CJSON_INSTALL_TARGET_CMDS
- Danomi> +	$(INSTALL) -D $(@D)/cJSON/libcJSON.so $(TARGET_DIR)/usr/lib/libcJSON.so
-
-You should also install the header file into TARGET_DIR. It will get
-removed by target-finalize if it isn't needed.
-
-Care to fix and resend?
- 
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 012b436..9978315 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.34"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.19"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.20"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.2"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
