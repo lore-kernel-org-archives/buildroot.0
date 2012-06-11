@@ -1,34 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Mon, 11 Jun 2012 10:44:37 +0200
-Subject: [Buildroot] [PATCH] busybox 1.20.1: add patches for ash,
-	ifupdown, man and tar
-In-Reply-To: <87mx4bhrx0.fsf@macbook.be.48ers.dk>
-References: <1339267126-25350-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LUbp3s2S22ADeUrXooMHwc2mhAz1V79r1VoEfTcVCrEqw@mail.gmail.com>
- <34e45dd779853425c08ff0bece6c9cd9@zacarias.com.ar>
- <87mx4bhrx0.fsf@macbook.be.48ers.dk>
-Message-ID: <CAAXf6LVpeLr5NUmOtj6b8nXRBXxT2SG5gT62uTy6ia+XNG2ERw@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Jun 2012 10:50:49 +0200
+Subject: [Buildroot] [PATCH] synergy: Remove -Werror from CXXFLAGS
+In-Reply-To: <4FD5A764.4040200@imgtec.com> (Markos Chandras's message of "Mon, 
+ 11 Jun 2012 09:08:04 +0100")
+References: <1339063094-25298-1-git-send-email-markos.chandras@imgtec.com>
+ <87ipeygwlz.fsf@macbook.be.48ers.dk> <4FD5A764.4040200@imgtec.com>
+Message-ID: <877gvegrkm.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 10, 2012 at 9:45 PM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
->
->
-> ?Gustavo> These are upstream patches from
-> ?Gustavo> http://busybox.net/downloads/fixes-1.20.1/ slated for the next
-> ?Gustavo> stable release. ?They're historically added as-is though that
-> ?Gustavo> can be changed.
->
-> I would prefer to keep them as is. If we could get upstream to document
-> them, then that would be good ofcause.
+>>>>> "Markos" == Markos Chandras <Markos.Chandras@imgtec.com> writes:
 
-Agreed. Do any of you have a good relation with the busybox developers
-which could give the request better chances of success, or shall I
-just ask the question on their mailing list myself?
+Hi,
 
-Thanks,
-Thomas
+ Markos> There is no configure.ac in the sources and this is why I patched the
+ Markos> generated configure file.
+
+True, but there's configure.in (the old name for configure.ac).
+
+ Markos> As for the errors, I guess it depends on the toolchain and gcc
+ Markos> version that is being used. I am seeing something like this:
+
+ Markos> cc1plus: warnings being treated as errors CTCPSocket.cpp: In
+ Markos> member function 'virtual void CTCPSocket::write(const void*,
+ Markos> UInt32)': CTCPSocket.cpp:143: warning: 'wasEmpty' may be used
+ Markos> uninitialized in this function
+
+Ok, thanks.
+
+-- 
+Bye, Peter Korsgaard
