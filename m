@@ -1,32 +1,47 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Jun 2012 17:40:46 -0300
-Subject: [Buildroot] [PATCH 1/2] polarssl: bump to version 1.1.4
-Message-ID: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 11 Jun 2012 17:40:47 -0300
+Subject: [Buildroot] [PATCH 2/2] hiawatha: fix bug #5276 and bump to version
+	8.4
+In-Reply-To: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1339447247-7801-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Correctly handle empty SSL/TLS packets (Found by James Yonan)
-* Fixed potential heap corruption in x509_name allocation
-* Fixed single RSA test that failed on Big Endian systems
+Fix bug #5276 by disabling IPv6 when the toolchain lacks it.
+It builds fine even if it's enabled but it probably doesn't work fine.
+
+Also bump to version 8.4:
+* MaxServerLoad option added.
+* Bugfix: invalid reverse proxy request when URL parameters are present.
+* PolarSSL updated to version 1.1.4.
+* Small bugfixes and improvements.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/polarssl/polarssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/hiawatha/hiawatha.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
-index d07cdc6..e12f08d 100644
---- a/package/polarssl/polarssl.mk
-+++ b/package/polarssl/polarssl.mk
-@@ -1,5 +1,5 @@
- POLARSSL_SITE = http://polarssl.org/code/releases/
--POLARSSL_VERSION = 1.1.3
-+POLARSSL_VERSION = 1.1.4
- POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
- POLARSSL_CONF_OPT = \
- 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 647c1e1..941ee8d 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -1,4 +1,4 @@
+-HIAWATHA_VERSION = 8.3
++HIAWATHA_VERSION = 8.4
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
+ 
+ ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
+@@ -7,6 +7,7 @@ HIAWATHA_DEPENDENCIES += polarssl
+ endif
+ 
+ HIAWATHA_CONF_OPT += \
++	$(if $(BR2_INET_IPV6),,-DENABLE_IPV6=OFF) \
+ 	-DENABLE_TOOLKIT=OFF \
+ 	-DENABLE_XSLT=OFF \
+ 	-DCONFIG_DIR=/etc/hiawatha \
 -- 
 1.7.3.4
