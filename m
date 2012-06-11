@@ -1,39 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 11 Jun 2012 21:32:31 +0200
-Subject: [Buildroot] [git commit] pppd: fix plugin search path
-Message-ID: <20120611202841.A493596E84@busybox.osuosl.org>
+Date: Mon, 11 Jun 2012 22:16:20 +0200
+Subject: [Buildroot] [git commit] libmodbus: bump to 3.0.3
+Message-ID: <20120611202841.B2F1896E8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9910f1906dc8dab6ba65fcb464ee4095c6c944a
+commit: http://git.buildroot.net/buildroot/commit/?id=aae26bb872384559df1b211ef0a96ea50c7a1fe8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the plugin search path by passing a --prefix to configure.
-DESTDIR is used in the source code for the search path of plugins
-(DESTDIR/lib/pppd/VERSION).
-Since DESTDIR defaults to /usr/local we get the search path wrong so the
-'plugin' directive requires a full pathspec to the plugin rather than
-the .so name, which isn't nice or portable.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pppd/pppd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libmodbus/libmodbus.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 2137f6a..a62f495 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -26,7 +26,7 @@ endif
- define PPPD_CONFIGURE_CMDS
- 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
- 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
--	( cd $(@D); ./configure )
-+	( cd $(@D); ./configure --prefix=/usr )
- endef
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+index 4dcfe23..d45bc92 100644
+--- a/package/libmodbus/libmodbus.mk
++++ b/package/libmodbus/libmodbus.mk
+@@ -3,9 +3,8 @@
+ # libmodbus
+ #
+ #############################################################
+-LIBMODBUS_VERSION = 3.0.2
++LIBMODBUS_VERSION = 3.0.3
+ LIBMODBUS_SITE = http://github.com/downloads/stephane/libmodbus
+-LIBMODBUS_SOURCE = libmodbus-$(LIBMODBUS_VERSION).tar.gz
+ LIBMODBUS_INSTALL_STAGING = YES
  
- define PPPD_BUILD_CMDS
+ $(eval $(call AUTOTARGETS))
