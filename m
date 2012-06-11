@@ -1,33 +1,26 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jun 2012 08:15:01 +0200
-Subject: [Buildroot] [PATCH v3 2/6] target: add symbols for PowerPC cpu
- features
-In-Reply-To: <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
-References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
- <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <4FD6DE65.8080103@mind.be>
+Date: Mon, 11 Jun 2012 23:22:58 +0200
+Subject: [Buildroot] [PATCH] added package sftpserver
+In-Reply-To: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
+References: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
+Message-ID: <4FD661B2.7050404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/10/12 13:46, Samuel Martin wrote:
-> +# PowerPC cpu features
-> +config BR2_POWERPC_CPU_G3
-> +	bool
-> +config BR2_POWERPC_CPU_G4
-> +	bool
-> +config BR2_POWERPC_CPU_G5
-> +	bool
+On 06/04/12 09:26, Kiril Maler wrote:
+> 1. It is more intuitive for a developer configuring a small embedded
+> system to see
+> the sftp-server under dropbear ssh suite:
 
-  I was expecting Altivec here, not the PowerPC CPU generations...  These CPU
-features are relevant mostly to allow libraries to select optimized assembly
-code, and I don't see much use of G5-specific assembly.  And anyway, the
--mcpu options for a particular CPU are already passed by buildroot.
+  Wouldn't it be even better to add the sftpserver feature to buildroot, reusing the
+openssh implementation?  Or would there be a license issue?
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
