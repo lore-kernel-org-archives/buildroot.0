@@ -1,42 +1,40 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 11 Jun 2012 22:35:45 +0200
-Subject: [Buildroot] [git commit] libcurl: fix up prefix in curl-config
-Message-ID: <20120611205424.2FD8396D5F@busybox.osuosl.org>
+Date: Mon, 11 Jun 2012 22:50:26 +0200
+Subject: [Buildroot] [git commit] qt: make $(HOST_DIR)/usr/mkspecs a symlink
+	to $(STAGING_DIR)/usr/mkspecs
+Message-ID: <20120611205424.878D996ED1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f83cd598907c5b8ac3a2b1bbb70c071d1ae929d8
+commit: http://git.buildroot.net/buildroot/commit/?id=755a51f327d7d18f31e6b352cdd7032d2d01e35f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While most packages that rely on libcurl use pkg-config, a few
-packages (such as libxmlrpc) still use curl-config. So we need to fix
-up the prefix locations in the curl-config script installed in
-STAGING_DIR.
+In fact, not only qt can install stuff in $(STAGING_DIR)/usr/mkspecs,
+but also libraries that wish to integrate with qmake, such as
+qwt. However, qmake and al. will look inside $(HOST_DIR)/usr/mkspecs,
+so the easiest solution is to have a symbolic link between the two
+directories, instead of copying things around.
 
-[Peter: only fixup if prefix=/usr]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/libcurl/libcurl.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/qt/qt.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index e8f13bb..50a55b4 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -30,6 +30,12 @@ endef
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 7e6c5dd..b751696 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -583,8 +583,7 @@ define QT_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) install
+ 	mkdir -p $(HOST_DIR)/usr/bin
+ 	mv $(addprefix $(STAGING_DIR)/usr/bin/,$(QT_HOST_PROGRAMS)) $(HOST_DIR)/usr/bin
+-	rm -rf $(HOST_DIR)/usr/mkspecs
+-	mv $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr
++	ln -sf $(STAGING_DIR)/usr/mkspecs $(HOST_DIR)/usr/mkspecs
+ 	$(QT_INSTALL_QT_CONF)
+ endef
  
- LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
- 
-+define LIBCURL_STAGING_FIXUP_CURL_CONFIG
-+	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
-+endef
-+
-+LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
-+
- $(eval $(call AUTOTARGETS))
- 
- curl: libcurl
