@@ -1,32 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Jun 2012 22:50:22 +0200
-Subject: [Buildroot] [PATCH 09/10] qt: make $(HOST_DIR)/usr/mkspecs a
-	symlink to $(STAGING_DIR)/usr/mkspecs
-In-Reply-To: <6e3c4b7bdba8afe3d9d50b2e6af7144f9606a6e0.1338653505.git.thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 2 Jun 2012 18:13:59 +0200")
-References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
- <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
- <6e3c4b7bdba8afe3d9d50b2e6af7144f9606a6e0.1338653505.git.thomas.petazzoni@free-electrons.com>
-Message-ID: <87bokpefox.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 11 Jun 2012 22:35:45 +0200
+Subject: [Buildroot] [git commit] libcurl: fix up prefix in curl-config
+Message-ID: <20120611205424.2FD8396D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=f83cd598907c5b8ac3a2b1bbb70c071d1ae929d8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> In fact, not only qt can install stuff in $(STAGING_DIR)/usr/mkspecs,
- Thomas> but also libraries that which to integrate with qmake, such as
+While most packages that rely on libcurl use pkg-config, a few
+packages (such as libxmlrpc) still use curl-config. So we need to fix
+up the prefix locations in the curl-config script installed in
+STAGING_DIR.
 
-s/which/wish/
+[Peter: only fixup if prefix=/usr]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/libcurl/libcurl.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
- Thomas> qwt. However, qmake and al. will look inside $(HOST_DIR)/usr/mkspecs,
- Thomas> so the easiest solution is to have a symbolic between the two
-
-s/symbolic/symbolic link/
-
-Committed with these fixes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e8f13bb..50a55b4 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -30,6 +30,12 @@ endef
+ 
+ LIBCURL_POST_INSTALL_TARGET_HOOKS += LIBCURL_TARGET_CLEANUP
+ 
++define LIBCURL_STAGING_FIXUP_CURL_CONFIG
++	$(SED) "s,prefix=/usr,prefix=$(STAGING_DIR)/usr," $(STAGING_DIR)/usr/bin/curl-config
++endef
++
++LIBCURL_POST_INSTALL_STAGING_HOOKS += LIBCURL_STAGING_FIXUP_CURL_CONFIG
++
+ $(eval $(call AUTOTARGETS))
+ 
+ curl: libcurl
