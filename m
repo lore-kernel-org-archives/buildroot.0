@@ -1,47 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Jun 2012 17:40:47 -0300
-Subject: [Buildroot] [PATCH 2/2] hiawatha: fix bug #5276 and bump to version
-	8.4
-In-Reply-To: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1339447247-7801-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Jun 2012 22:43:09 +0200
+Subject: [Buildroot] [PATCH 06/10] pciutils: install headers and
+	libraries in STAGING_DIR
+In-Reply-To: <51fc4647a457271fe2e6103b69108c3e1aafd24c.1338653505.git.thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 2 Jun 2012 18:13:56 +0200")
+References: <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+ <cover.1338653505.git.thomas.petazzoni@free-electrons.com>
+ <51fc4647a457271fe2e6103b69108c3e1aafd24c.1338653505.git.thomas.petazzoni@free-electrons.com>
+Message-ID: <87obopeg0y.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix bug #5276 by disabling IPv6 when the toolchain lacks it.
-It builds fine even if it's enabled but it probably doesn't work fine.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Also bump to version 8.4:
-* MaxServerLoad option added.
-* Bugfix: invalid reverse proxy request when URL parameters are present.
-* PolarSSL updated to version 1.1.4.
-* Small bugfixes and improvements.
+ Thomas> There are some tools, like flashrom, that build against libraries of
+ Thomas> pciutils.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/hiawatha/hiawatha.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+Committed, thanks.
 
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 647c1e1..941ee8d 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -1,4 +1,4 @@
--HIAWATHA_VERSION = 8.3
-+HIAWATHA_VERSION = 8.4
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
- 
- ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
-@@ -7,6 +7,7 @@ HIAWATHA_DEPENDENCIES += polarssl
- endif
- 
- HIAWATHA_CONF_OPT += \
-+	$(if $(BR2_INET_IPV6),,-DENABLE_IPV6=OFF) \
- 	-DENABLE_TOOLKIT=OFF \
- 	-DENABLE_XSLT=OFF \
- 	-DCONFIG_DIR=/etc/hiawatha \
 -- 
-1.7.3.4
+Bye, Peter Korsgaard
