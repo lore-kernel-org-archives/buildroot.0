@@ -1,48 +1,39 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 11 Jun 2012 22:18:41 +0200
-Subject: [Buildroot] [git commit] portaudio: bump to version v19_20111121
-Message-ID: <20120611202841.C5D1B96E84@busybox.osuosl.org>
+Date: Mon, 11 Jun 2012 21:32:31 +0200
+Subject: [Buildroot] [git commit] pppd: fix plugin search path
+Message-ID: <20120611202841.A493596E84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=922fdbcdda7a71447307f648e3c51f42232ddbbe
+commit: http://git.buildroot.net/buildroot/commit/?id=b9910f1906dc8dab6ba65fcb464ee4095c6c944a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Murat Demirten <mdemirten@yh.com.tr>
+Fix the plugin search path by passing a --prefix to configure.
+DESTDIR is used in the source code for the search path of plugins
+(DESTDIR/lib/pppd/VERSION).
+Since DESTDIR defaults to /usr/local we get the search path wrong so the
+'plugin' directive requires a full pathspec to the plugin rather than
+the .so name, which isn't nice or portable.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/portaudio/portaudio.mk |   12 ++++++------
- 1 files changed, 6 insertions(+), 6 deletions(-)
+ package/pppd/pppd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/portaudio/portaudio.mk b/package/portaudio/portaudio.mk
-index a824735..b0340f7 100644
---- a/package/portaudio/portaudio.mk
-+++ b/package/portaudio/portaudio.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
+diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
+index 2137f6a..a62f495 100644
+--- a/package/pppd/pppd.mk
++++ b/package/pppd/pppd.mk
+@@ -26,7 +26,7 @@ endif
+ define PPPD_CONFIGURE_CMDS
+ 	$(SED) 's/FILTER=y/#FILTER=y/' $(PPPD_DIR)/pppd/Makefile.linux
+ 	$(SED) 's/ifneq ($$(wildcard \/usr\/include\/pcap-bpf.h),)/ifdef FILTER/' $(PPPD_DIR)/*/Makefile.linux
+-	( cd $(@D); ./configure )
++	( cd $(@D); ./configure --prefix=/usr )
+ endef
  
--PORTAUDIO_VERSION = V19
-+PORTAUDIO_VERSION = v19_20111121
- PORTAUDIO_SITE = http://www.portaudio.com/archives
--PORTAUDIO_SOURCE = pa_stable_v19_20110326.tgz
-+PORTAUDIO_SOURCE = pa_stable_$(PORTAUDIO_VERSION).tgz
- PORTAUDIO_INSTALL_STAGING = YES
- PORTAUDIO_MAKE = $(MAKE1)
- 
- PORTAUDIO_DEPENDENCIES = \
--       $(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
-+	$(if $(BR2_PACKAGE_PORTAUDIO_WITH_ALSA),alsa-lib)
- 
- PORTAUDIO_CONF_OPT = \
--       $(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
--       $(if $(BR2_PACKAGE_PORTAUDIO_OSS),--with-oss,--without-oss) \
--       $(if $(BR2_PACKAGE_PORTAUDIO_CXX),--enable-cxx,--disable-cxx)
-+	$(if $(BR2_PACKAGE_PORTAUDIO_ALSA),--with-alsa,--without-alsa) \
-+	$(if $(BR2_PACKAGE_PORTAUDIO_OSS),--with-oss,--without-oss) \
-+	$(if $(BR2_PACKAGE_PORTAUDIO_CXX),--enable-cxx,--disable-cxx)
- 
- $(eval $(call AUTOTARGETS))
+ define PPPD_BUILD_CMDS
