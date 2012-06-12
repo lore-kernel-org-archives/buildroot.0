@@ -1,30 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 11 Jun 2012 23:22:58 +0200
-Subject: [Buildroot] [PATCH] added package sftpserver
-In-Reply-To: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
-References: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
-Message-ID: <4FD661B2.7050404@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 12 Jun 2012 06:48:24 -0300
+Subject: [Buildroot] [PATCH v3 2/6] target: add symbols for PowerPC cpu
+ features
+In-Reply-To: <4FD6DE65.8080103@mind.be>
+References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
+ <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
+ <4FD6DE65.8080103@mind.be>
+Message-ID: <21f5fa71e486cd00a487bb6b6d201344@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/12 09:26, Kiril Maler wrote:
-> 1. It is more intuitive for a developer configuring a small embedded
-> system to see
-> the sftp-server under dropbear ssh suite:
+On 2012-06-12 03:15, Arnout Vandecappelle wrote:
 
-  Wouldn't it be even better to add the sftpserver feature to buildroot, reusing the
-openssh implementation?  Or would there be a license issue?
+> On 06/10/12 13:46, Samuel Martin wrote:
+>> +# PowerPC cpu features
+>> +config BR2_POWERPC_CPU_G3
+>> +	bool
+>> +config BR2_POWERPC_CPU_G4
+>> +	bool
+>> +config BR2_POWERPC_CPU_G5
+>> +	bool
+>
+>  I was expecting Altivec here, not the PowerPC CPU generations...  
+> These CPU
+> features are relevant mostly to allow libraries to select optimized 
+> assembly
+> code, and I don't see much use of G5-specific assembly.  And anyway, 
+> the
+> -mcpu options for a particular CPU are already passed by buildroot.
+>
+>  Regards,
+>  Arnout
 
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Also the G5 is 64-bit capable so one might expect some issues down the 
+line since we're not ppc64-capable at the moment.
+Regards.
