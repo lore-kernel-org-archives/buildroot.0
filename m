@@ -1,26 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 12 Jun 2012 22:42:01 +0200
-Subject: [Buildroot] [PATCH] libroxml: bump version to 2.2.0
-In-Reply-To: <1339503451-11487-1-git-send-email-blunderer@blunderer.org>
- (blunderer@blunderer.org's message of "Tue, 12 Jun 2012 14:17:31
- +0200")
-References: <1339503451-11487-1-git-send-email-blunderer@blunderer.org>
-Message-ID: <87wr3cxnxi.fsf@macbook.be.48ers.dk>
+Date: Tue, 12 Jun 2012 23:40:12 +0200
+Subject: [Buildroot] [PATCH] nanocom: new package
+In-Reply-To: <1338877935-1156-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Tue, 5 Jun 2012 07:32:15 +0100")
+References: <1338877935-1156-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87obooxl8j.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "blunderer" == blunderer  <blunderer@blunderer.org> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- blunderer> From: Tristan Lelong <tristan.lelong@blunderer.org>
- blunderer> ---
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-Please don't forget your signed-off-by (-s option on git commit /
-format-patch).
-
-Could you fix that and resend please?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
