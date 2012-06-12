@@ -1,42 +1,29 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 12 Jun 2012 09:27:15 +0100
-Subject: [Buildroot] [PATCH] monit: fix configuration error
-Message-ID: <1339489635-11299-1-git-send-email-spdawson@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Jun 2012 08:02:35 +0200
+Subject: [Buildroot] [PATCH v3 1/6] target: add symbols for i386/x86_64
+ cpu features
+In-Reply-To: <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
+References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
+ <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <4FD6DB7B.3040502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 06/10/12 13:46, Samuel Martin wrote:
+> Selecting the target architecture variant automatically selects the
+> appropriated set of features.
+>
+> Signed-off-by: Samuel Martin<s.martin49@gmail.com>
 
-Configuration fails for the monit package, with the following error.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  checking for SSL library directory... Not found
-
-  Couldn't find your SSL library files.
-  Use --with-ssl-lib-dir option to fix this problem or disable the
-  SSL support with --without-ssl
-
-Tweak the monit configuration command line so that openssl is found.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/monit/monit.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index 958618d..11bc7e1 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -15,7 +15,7 @@ MONIT_CONF_OPT += \
- 	--without-pam
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--MONIT_CONF_OPT += --with-ssl
-+MONIT_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr
- MONIT_DEPENDENCIES += openssl
- else
- MONIT_CONF_OPT += --without-ssl
 -- 
-1.7.9.5
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
