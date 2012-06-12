@@ -1,41 +1,23 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 12 Jun 2012 21:27:41 +0200
-Subject: [Buildroot] [PATCH v2 1/1] libplayer: fix cflags
-In-Reply-To: <87wr3ehq6p.fsf@macbook.be.48ers.dk>
-References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
- <1339328813-6269-2-git-send-email-s.martin49@gmail.com>
- <87wr3ehq6p.fsf@macbook.be.48ers.dk>
-Message-ID: <CAHXCMMJmA3AzTyMmzB26EM5gnA-xMpwAhTNxoehsgNTbrr5+bA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 12 Jun 2012 22:27:19 +0200
+Subject: [Buildroot] [PATCH 1/2] polarssl: bump to version 1.1.4
+In-Reply-To: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 11 Jun 2012 17:40:46 -0300")
+References: <1339447247-7801-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8762awz36g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2012/6/10 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
->
-> ?Samuel> Explicitly run pkg-config to add some include directories to the cflags
-> ?Samuel> when gstreamer support is enabled.
->
-> ?Samuel> This patch fixes the following unfound headers:
-> ?Samuel> - glib.h
-> ?Samuel> - glibconfig.h
-> ?Samuel> - gst/gst.h
->
-> What problem is this solving exactly? I don't recall seeing any failures
-> on the autobuilders, and host-pkg-config + libglib2 are already
-> dependencies of gstreamer, so it shouldn't be needed to list them
-> explicitly.
-hum... the problem was not found headers (the 3 mentioned above), but
-actually this seems to be caused by a dirty work tree/build and
-staging directories...
-A git clean -fdx and a build from scratch fix it.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-So, forget about this patch.
+ Gustavo> * Correctly handle empty SSL/TLS packets (Found by James Yonan)
+ Gustavo> * Fixed potential heap corruption in x509_name allocation
+ Gustavo> * Fixed single RSA test that failed on Big Endian systems
 
-Apologize for the noise.
-
+Committed, thanks.
 
 -- 
-Sam
+Bye, Peter Korsgaard
