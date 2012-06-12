@@ -1,91 +1,33 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 11 Jun 2012 21:19:41 -0400
-Subject: [Buildroot] [PATCH] New package: lua-cjson
-Message-ID: <1339463981-11070-1-git-send-email-danomimanchego123@gmail.com>
+From: Nathan Lynch <ntl@pobox.com>
+Date: Mon, 11 Jun 2012 21:09:39 -0500
+Subject: [Buildroot] [PATCH 3/7] cmake: change use of BR2_JLEVEL to
+	PARALLEL_JOBS
+In-Reply-To: <1339466983-19786-1-git-send-email-ntl@pobox.com>
+References: <1339466983-19786-1-git-send-email-ntl@pobox.com>
+Message-ID: <1339466983-19786-4-git-send-email-ntl@pobox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
 ---
- package/Config.in              |    1 +
- package/lua-cjson/Config.in    |   14 ++++++++++++++
- package/lua-cjson/lua-cjson.mk |   32 ++++++++++++++++++++++++++++++++
- 3 files changed, 47 insertions(+)
- create mode 100644 package/lua-cjson/Config.in
- create mode 100644 package/lua-cjson/lua-cjson.mk
+ package/cmake/cmake.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ca8fc96..39a88e2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -244,6 +244,7 @@ menu "LUA libraries/modules"
- source "package/cgilua/Config.in"
- source "package/copas/Config.in"
- source "package/coxpcall/Config.in"
-+source "package/lua-cjson/Config.in"
- source "package/luafilesystem/Config.in"
- source "package/luasocket/Config.in"
- source "package/rings/Config.in"
-diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
-new file mode 100644
-index 0000000..c0690c7
---- /dev/null
-+++ b/package/lua-cjson/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LUA_CJSON
-+	depends on BR2_PACKAGE_LUA
-+	bool "lua_cjson"
-+	help
-+	  The Lua CJSON module provides JSON support for Lua. It features:
-+	  - Fast, standards compliant encoding/parsing routines
-+	  - Full support for JSON with UTF-8, including decoding surrogate pairs
-+	  - Optional run-time support for common exceptions to the JSON
-+	    specification (infinity, NaN, ...)
-+	  - No dependencies on other libraries
-+
-+	  (C-module)
-+
-+	  http://www.kyne.com.au/~mark/software/lua-cjson.php
-diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
-new file mode 100644
-index 0000000..05087ea
---- /dev/null
-+++ b/package/lua-cjson/lua-cjson.mk
-@@ -0,0 +1,32 @@
-+#############################################################
-+#
-+# lua-cjson
-+#
-+#############################################################
-+LUA_CJSON_VERSION      = 2.1.0
-+LUA_CJSON_SOURCE       = lua-cjson-$(LUA_CJSON_VERSION).tar.gz
-+LUA_CJSON_SITE         = http://www.kyne.com.au/~mark/software/download
-+LUA_CJSON_DEPENDENCIES = lua
-+
-+define LUA_CJSON_BUILD_CMDS
-+	$(MAKE) -C $(@D) \
-+		CFLAGS="$(TARGET_CFLAGS)"   \
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		CC="$(TARGET_CC)"           \
-+		LD="$(TARGET_LD)"           \
-+		PREFIX=$(STAGING_DIR)/usr
-+endef
-+
-+define LUA_CJSON_INSTALL_TARGET_CMDS
-+	install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
-+endef
-+
-+define LUA_CJSON_CLEAN_CMDS
-+	$(MAKE) -C $(@D) clean
-+endef
-+
-+define LUA_CJSON_UNINSTALL_TARGET_CMDS
-+	rm -f "$(TARGET_DIR)/usr/lib/lua/cjson.so"
-+endef
-+
-+$(eval $(call GENTARGETS))
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index af88eea..af6c53c 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+  (cd $(@D); \
+ 	LDFLAGS="$(HOST_LDFLAGS)" \
+ 	CFLAGS="$(HOST_CFLAGS)" \
+-	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(BR2_JLEVEL) \
++	./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
+  )
+ endef
+ 
 -- 
-1.7.9.5
+1.7.6.5
