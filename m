@@ -1,38 +1,49 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 13 Jun 2012 09:20:09 +0200
-Subject: [Buildroot] [git commit] ethtool: bump version
-Message-ID: <20120613073406.0B8A796F13@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Jun 2012 18:24:01 +0200
+Subject: [Buildroot] [PATCH] added package sftpserver
+In-Reply-To: <20120612141231.33c4ccb8@skate>
+References: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
+ <4FD661B2.7050404@mind.be> <20120612141231.33c4ccb8@skate>
+Message-ID: <4FD76D21.3060906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e4eb73c5337203b9228c08a90f19510dafee2c20
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/12/12 14:12, Thomas Petazzoni wrote:
+> Hello,
+>
+> Le Mon, 11 Jun 2012 23:22:58 +0200,
+> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
+>
+>> On 06/04/12 09:26, Kiril Maler wrote:
+>>> 1. It is more intuitive for a developer configuring a small embedded
+>>> system to see
+>>> the sftp-server under dropbear ssh suite:
+>>
+>>    Wouldn't it be even better to add the sftpserver feature to buildroot, reusing the
+>> openssh implementation?  Or would there be a license issue?
+>
+> What do you mean exactly? Adding sftpserver as a suboption of openssh?
+> Something else?
 
-Bugfix release:
-* Fix: Work around failure of ETHTOOL_GSSET_INFO for unprivileged
-  users (-k option)
-* Fix: Report any unexpected error code from ETHTOOL_GSSET_INFO
-  (-k and -K options)
-* Doc: Fix the date of the man page to match the last update
+  Sorry I wasn't very clear.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/ethtool/ethtool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+  If I understand correctly, the intention is to be able to use sftp with
+dropbear.  Rather than hacking the compilation of openssh, it makes more
+sense to extend dropbear with the sftp feature (by stealing code from
+openssh).  So this isn't really a buildroot thing, but rather a dropbear
+thing.  Given that dropbear already reuses some code from openssh, I don't
+think it would be much of a problem for the dropbear developers.
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index b6cbc64..bbbcf1e 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--ETHTOOL_VERSION = 3.4
-+ETHTOOL_VERSION = 3.4.1
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- 
- $(eval $(call AUTOTARGETS))
+  Regards,
+  Arnout
+
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
