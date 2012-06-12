@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jun 2012 08:05:22 +0200
-Subject: [Buildroot] [PATCH v3 1/6] target: add symbols for i386/x86_64
- cpu features
-In-Reply-To: <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
+Date: Tue, 12 Jun 2012 08:15:01 +0200
+Subject: [Buildroot] [PATCH v3 2/6] target: add symbols for PowerPC cpu
+ features
+In-Reply-To: <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
 References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
- <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <4FD6DC22.8050900@mind.be>
+ <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <4FD6DE65.8080103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,18 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 06/10/12 13:46, Samuel Martin wrote:
->   config BR2_x86_geode
->   	bool "geode"
-> +	# Don't include MMX support because there several variant of geode
-> +	# processor, some with MMX support, some without.
-> +	# See:http://en.wikipedia.org/wiki/Geode_%28processor%29
-> +	select BR2_X86_CPU_HAS_3DNOW
+> +# PowerPC cpu features
+> +config BR2_POWERPC_CPU_G3
+> +	bool
+> +config BR2_POWERPC_CPU_G4
+> +	bool
+> +config BR2_POWERPC_CPU_G5
+> +	bool
 
-  Maybe it makes sense to have a config BR2_x86_geode_mmx ?
+  I was expecting Altivec here, not the PowerPC CPU generations...  These CPU
+features are relevant mostly to allow libraries to select optimized assembly
+code, and I don't see much use of G5-specific assembly.  And anyway, the
+-mcpu options for a particular CPU are already passed by buildroot.
 
   Regards,
   Arnout
