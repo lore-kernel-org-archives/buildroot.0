@@ -1,62 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 12 Jun 2012 22:35:06 +0200
-Subject: [Buildroot] [git commit] libfreefare: new package
-Message-ID: <20120612203626.BA76096EE9@busybox.osuosl.org>
+Date: Tue, 12 Jun 2012 22:22:11 +0200
+Subject: [Buildroot] [git commit] polarssl: bump to version 1.1.4
+Message-ID: <20120612203626.A981D96EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e2b296ad7f01bbc3dd073afd3e9fbb140244bed0
+commit: http://git.buildroot.net/buildroot/commit/?id=6b7a7a028c47b546390b5f591e560a1f0f586e1b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+* Correctly handle empty SSL/TLS packets (Found by James Yonan)
+* Fixed potential heap corruption in x509_name allocation
+* Fixed single RSA test that failed on Big Endian systems
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/Config.in                  |    1 +
- package/libfreefare/Config.in      |    7 +++++++
- package/libfreefare/libfreefare.mk |   10 ++++++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
+ package/polarssl/polarssl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index fecc336..13310b2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -364,6 +364,7 @@ menu "Hardware handling"
- source "package/libaio/Config.in"
- source "package/libraw1394/Config.in"
- source "package/tslib/Config.in"
-+source "package/libfreefare/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
- source "package/libiqrf/Config.in"
-diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
-new file mode 100644
-index 0000000..2e11f7e
---- /dev/null
-+++ b/package/libfreefare/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBFREEFARE
-+	bool "libfreefare"
-+	select BR2_PACKAGE_LIBNFC
-+	help
-+	  Library for high level manipulation of MIFARE cards.
-+
-+	  http://code.google.com/p/nfc-tools/wiki/libfreefare
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-new file mode 100644
-index 0000000..0499999
---- /dev/null
-+++ b/package/libfreefare/libfreefare.mk
-@@ -0,0 +1,10 @@
-+#############################################################
-+#
-+# libfreefare
-+#
-+#############################################################
-+LIBFREEFARE_VERSION = 0.3.2
-+LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
-+LIBFREEFARE_DEPENDENCIES = libnfc
-+
-+$(eval $(call AUTOTARGETS))
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index d07cdc6..e12f08d 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -1,5 +1,5 @@
+ POLARSSL_SITE = http://polarssl.org/code/releases/
+-POLARSSL_VERSION = 1.1.3
++POLARSSL_VERSION = 1.1.4
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+ 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
