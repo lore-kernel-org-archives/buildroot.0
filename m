@@ -1,41 +1,91 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 11 Jun 2012 20:03:38 -0400
-Subject: [Buildroot] [PATCH] New package: cJSON (v2)
-In-Reply-To: <87txyif9f7.fsf@macbook.be.48ers.dk>
-References: <1338856703-4082-1-git-send-email-danomimanchego123@gmail.com>
- <87txyif9f7.fsf@macbook.be.48ers.dk>
-Message-ID: <CANxTyt7PWShWW=7KcysmHxNAQUogw=8fb=+JRDfZuiVAwrQ_Dg@mail.gmail.com>
+Date: Mon, 11 Jun 2012 21:19:41 -0400
+Subject: [Buildroot] [PATCH] New package: lua-cjson
+Message-ID: <1339463981-11070-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/Config.in              |    1 +
+ package/lua-cjson/Config.in    |   14 ++++++++++++++
+ package/lua-cjson/lua-cjson.mk |   32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+)
+ create mode 100644 package/lua-cjson/Config.in
+ create mode 100644 package/lua-cjson/lua-cjson.mk
 
-> I'm not sure it makes sense to build a .so of something as simple (and
-> unversioned) as this. How about just doing a static .a like ezxml?
-
-We use cJSON in about half a dozen apps in our project, so a .so seemed
-like the way to go.  If you feel strongly about this, would you be open to
-having an option to make a shared object?  (Maybe something like the
-logic in zlib.mk or qt.mk.)
-
-> You also shouldn't hardcode compiler flags like -Wall / -O2 but use
-> $(TARGET_CFLAGS) instead - E.G.
-
-Understood, will adjust.
-
-> You should also install the header file into TARGET_DIR. It will get
-> removed by target-finalize if it isn't needed.
-
-Ah, I didn't know that.  Nice!
-
-> Care to fix and resend?
-
-Certainly - after hearing your feedback on the .so/.a question.
-
-Danomi -
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120611/9411f836/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index ca8fc96..39a88e2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -244,6 +244,7 @@ menu "LUA libraries/modules"
+ source "package/cgilua/Config.in"
+ source "package/copas/Config.in"
+ source "package/coxpcall/Config.in"
++source "package/lua-cjson/Config.in"
+ source "package/luafilesystem/Config.in"
+ source "package/luasocket/Config.in"
+ source "package/rings/Config.in"
+diff --git a/package/lua-cjson/Config.in b/package/lua-cjson/Config.in
+new file mode 100644
+index 0000000..c0690c7
+--- /dev/null
++++ b/package/lua-cjson/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LUA_CJSON
++	depends on BR2_PACKAGE_LUA
++	bool "lua_cjson"
++	help
++	  The Lua CJSON module provides JSON support for Lua. It features:
++	  - Fast, standards compliant encoding/parsing routines
++	  - Full support for JSON with UTF-8, including decoding surrogate pairs
++	  - Optional run-time support for common exceptions to the JSON
++	    specification (infinity, NaN, ...)
++	  - No dependencies on other libraries
++
++	  (C-module)
++
++	  http://www.kyne.com.au/~mark/software/lua-cjson.php
+diff --git a/package/lua-cjson/lua-cjson.mk b/package/lua-cjson/lua-cjson.mk
+new file mode 100644
+index 0000000..05087ea
+--- /dev/null
++++ b/package/lua-cjson/lua-cjson.mk
+@@ -0,0 +1,32 @@
++#############################################################
++#
++# lua-cjson
++#
++#############################################################
++LUA_CJSON_VERSION      = 2.1.0
++LUA_CJSON_SOURCE       = lua-cjson-$(LUA_CJSON_VERSION).tar.gz
++LUA_CJSON_SITE         = http://www.kyne.com.au/~mark/software/download
++LUA_CJSON_DEPENDENCIES = lua
++
++define LUA_CJSON_BUILD_CMDS
++	$(MAKE) -C $(@D) \
++		CFLAGS="$(TARGET_CFLAGS)"   \
++		LDFLAGS="$(TARGET_LDFLAGS)" \
++		CC="$(TARGET_CC)"           \
++		LD="$(TARGET_LD)"           \
++		PREFIX=$(STAGING_DIR)/usr
++endef
++
++define LUA_CJSON_INSTALL_TARGET_CMDS
++	install -D -m 0644 $(@D)/cjson.so $(TARGET_DIR)/usr/lib/lua/cjson.so
++endef
++
++define LUA_CJSON_CLEAN_CMDS
++	$(MAKE) -C $(@D) clean
++endef
++
++define LUA_CJSON_UNINSTALL_TARGET_CMDS
++	rm -f "$(TARGET_DIR)/usr/lib/lua/cjson.so"
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.9.5
