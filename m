@@ -1,49 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jun 2012 18:24:01 +0200
-Subject: [Buildroot] [PATCH] added package sftpserver
-In-Reply-To: <20120612141231.33c4ccb8@skate>
-References: <CABJxTWFdYodgaKy3vG03aJrxnerCrxTsjRPWm1q8U_XkQukz0w@mail.gmail.com>
- <4FD661B2.7050404@mind.be> <20120612141231.33c4ccb8@skate>
-Message-ID: <4FD76D21.3060906@mind.be>
+From: blunderer at blunderer.org <blunderer@blunderer.org>
+Date: Wed, 13 Jun 2012 11:06:05 +0200
+Subject: [Buildroot] [PATCHv2] libroxml: bump version to 2.2.0
+Message-ID: <1339578366-7053-1-git-send-email-blunderer@blunderer.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/12 14:12, Thomas Petazzoni wrote:
-> Hello,
->
-> Le Mon, 11 Jun 2012 23:22:58 +0200,
-> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
->
->> On 06/04/12 09:26, Kiril Maler wrote:
->>> 1. It is more intuitive for a developer configuring a small embedded
->>> system to see
->>> the sftp-server under dropbear ssh suite:
->>
->>    Wouldn't it be even better to add the sftpserver feature to buildroot, reusing the
->> openssh implementation?  Or would there be a license issue?
->
-> What do you mean exactly? Adding sftpserver as a suboption of openssh?
-> Something else?
+From: Tristan Lelong <tristan.lelong@blunderer.org>
 
-  Sorry I wasn't very clear.
+Signed-off-by: Tristan Lelong <tristan.lelong@blunderer.org>
+---
+ package/libroxml/libroxml-2.1.2-werror.patch |   22 ----------------------
+ package/libroxml/libroxml-2.2.0-werror.patch |   22 ++++++++++++++++++++++
+ package/libroxml/libroxml.mk                 |    2 +-
+ 3 files changed, 23 insertions(+), 23 deletions(-)
+ delete mode 100644 package/libroxml/libroxml-2.1.2-werror.patch
+ create mode 100644 package/libroxml/libroxml-2.2.0-werror.patch
 
-  If I understand correctly, the intention is to be able to use sftp with
-dropbear.  Rather than hacking the compilation of openssh, it makes more
-sense to extend dropbear with the sftp feature (by stealing code from
-openssh).  So this isn't really a buildroot thing, but rather a dropbear
-thing.  Given that dropbear already reuses some code from openssh, I don't
-think it would be much of a problem for the dropbear developers.
-
-  Regards,
-  Arnout
-
+diff --git a/package/libroxml/libroxml-2.1.2-werror.patch b/package/libroxml/libroxml-2.1.2-werror.patch
+deleted file mode 100644
+index a72f2a7..0000000
+--- a/package/libroxml/libroxml-2.1.2-werror.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] remove -Werror from CFLAGS
+-
+--Werror should only be used during development, not in released SW.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- Makefile |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: libroxml-2.1.0/Makefile
+-===================================================================
+---- libroxml-2.1.0.orig/Makefile
+-+++ libroxml-2.1.0/Makefile
+-@@ -41,7 +41,7 @@
+- 
+- # options
+- override CPPFLAGS += -Iinc/
+--override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
+-+override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
+- override LDFLAGS += 
+- 
+- ifeq ("$(OS)", "Darwin")
+diff --git a/package/libroxml/libroxml-2.2.0-werror.patch b/package/libroxml/libroxml-2.2.0-werror.patch
+new file mode 100644
+index 0000000..a72f2a7
+--- /dev/null
++++ b/package/libroxml/libroxml-2.2.0-werror.patch
+@@ -0,0 +1,22 @@
++[PATCH] remove -Werror from CFLAGS
++
++-Werror should only be used during development, not in released SW.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ Makefile |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: libroxml-2.1.0/Makefile
++===================================================================
++--- libroxml-2.1.0.orig/Makefile
+++++ libroxml-2.1.0/Makefile
++@@ -41,7 +41,7 @@
++ 
++ # options
++ override CPPFLAGS += -Iinc/
++-override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Werror -Iinc/ $(DEFINES)
+++override CFLAGS += $(OPTIM) -fPIC -Wall -Wextra -Wno-unused -Iinc/ $(DEFINES)
++ override LDFLAGS += 
++ 
++ ifeq ("$(OS)", "Darwin")
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index 5c0bf01..228a0df 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -2,7 +2,7 @@
+ # libroxml
+ #
+ 
+-LIBROXML_VERSION = 2.1.2
++LIBROXML_VERSION = 2.2.0
+ LIBROXML_SITE = http://libroxml.googlecode.com/files
+ LIBROXML_INSTALL_STAGING = YES
+ 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.10
