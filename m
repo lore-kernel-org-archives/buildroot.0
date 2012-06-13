@@ -1,41 +1,60 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 14 Jun 2012 00:38:23 +0200
-Subject: [Buildroot] [PATCH v3 1/6] target: add symbols for i386/x86_64
- cpu features
-In-Reply-To: <4FD6DC22.8050900@mind.be>
+Date: Thu, 14 Jun 2012 00:44:29 +0200
+Subject: [Buildroot] [PATCH v3 2/6] target: add symbols for PowerPC cpu
+	features
+In-Reply-To: <21f5fa71e486cd00a487bb6b6d201344@zacarias.com.ar>
 References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
- <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
- <4FD6DC22.8050900@mind.be>
-Message-ID: <CAHXCMM+vaYp=9Kf4T9qAOXdXOB80Gzzc0FHCS3w-iK0DyMGo1Q@mail.gmail.com>
+ <1339328813-6269-5-git-send-email-s.martin49@gmail.com>
+ <4FD6DE65.8080103@mind.be>
+ <21f5fa71e486cd00a487bb6b6d201344@zacarias.com.ar>
+Message-ID: <CAHXCMM+QDPv=oQ+Sqky04VQM_4xJn_AG55L3f2dTT0dnXTAHDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Arnout, Gustavoz,
 
-2012/6/12 Arnout Vandecappelle <arnout@mind.be>:
-> On 06/10/12 13:46, Samuel Martin wrote:
+2012/6/12 Gustavo Zacarias <gustavo@zacarias.com.ar>:
+> On 2012-06-12 03:15, Arnout Vandecappelle wrote:
+>
+>> On 06/10/12 13:46, Samuel Martin wrote:
+>>>
+>>> +# PowerPC cpu features
+>>> +config BR2_POWERPC_CPU_G3
+>>> + ? ? ? bool
+>>> +config BR2_POWERPC_CPU_G4
+>>> + ? ? ? bool
+>>> +config BR2_POWERPC_CPU_G5
+>>> + ? ? ? bool
 >>
->> ?config BR2_x86_geode
->> ? ? ? ?bool "geode"
->> + ? ? ? # Don't include MMX support because there several variant of geode
->> + ? ? ? # processor, some with MMX support, some without.
->> + ? ? ? # See:http://en.wikipedia.org/wiki/Geode_%28processor%29
->> + ? ? ? select BR2_X86_CPU_HAS_3DNOW
+>>
+>> ?I was expecting Altivec here, not the PowerPC CPU generations... ?These
+>> CPU
+>> features are relevant mostly to allow libraries to select optimized
+>> assembly
+>> code, and I don't see much use of G5-specific assembly. ?And anyway, the
+>> -mcpu options for a particular CPU are already passed by buildroot.
+I would expect nothing less ;-)
+
+>>
+>> ?Regards,
+>> ?Arnout
 >
 >
-> ?Maybe it makes sense to have a config BR2_x86_geode_mmx ?
-Actually, I made this choice after talking about it with Peter and
-ThomasP on IRC (that's Peter who gave me the link).
+> Also the G5 is 64-bit capable so one might expect some issues down the line
+> since we're not ppc64-capable at the moment.
+> Regards.
+>
 
-BTW, packages that may take benefit from MMX features (like libevas or
-sdl_{gfx,sounds}) did not turn it on before, neither after this patch
-series.
+So, to sum up and make the relation with the question I asked on the
+pacth 6/6 of the serie, you suggest I always turn off the
+ENABLE_POWERPC option in the opencv package. That's it?
 
-IMHO, I prefer keeping things in a safe shape like this.
-
+BTW, I can add an Altivec symbol, and let you (or others) use it in
+packages that may take benefit from such optimization.
+Let me know...
 
 Regards,
 
