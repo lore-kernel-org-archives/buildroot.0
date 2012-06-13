@@ -1,40 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Jun 2012 00:36:59 +0200
-Subject: [Buildroot] Passing compile flags to every component
-In-Reply-To: <4FD8FFB1.2010702@cats-muvva.net>
-References: <4FD8FFB1.2010702@cats-muvva.net>
-Message-ID: <4FD9160B.9010306@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 14 Jun 2012 00:38:23 +0200
+Subject: [Buildroot] [PATCH v3 1/6] target: add symbols for i386/x86_64
+ cpu features
+In-Reply-To: <4FD6DC22.8050900@mind.be>
+References: <1339328813-6269-1-git-send-email-s.martin49@gmail.com>
+ <1339328813-6269-4-git-send-email-s.martin49@gmail.com>
+ <4FD6DC22.8050900@mind.be>
+Message-ID: <CAHXCMM+vaYp=9Kf4T9qAOXdXOB80Gzzc0FHCS3w-iK0DyMGo1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/13/12 23:01, Nicole wrote:
-> Sorry if this is a newbie question. Can anyone give me some directions about how to to pass a set of {C{,XX,PP},LD}FLAGS
-> to the build of each and every application that will be put on the disk image?
+Hi Arnout,
+
+2012/6/12 Arnout Vandecappelle <arnout@mind.be>:
+> On 06/10/12 13:46, Samuel Martin wrote:
+>>
+>> ?config BR2_x86_geode
+>> ? ? ? ?bool "geode"
+>> + ? ? ? # Don't include MMX support because there several variant of geode
+>> + ? ? ? # processor, some with MMX support, some without.
+>> + ? ? ? # See:http://en.wikipedia.org/wiki/Geode_%28processor%29
+>> + ? ? ? select BR2_X86_CPU_HAS_3DNOW
 >
-[snip]
-> BR2_TARGET_OPTIMIZATION="-pipe"
-> BR2_TARGET_LDFLAGS=""
+>
+> ?Maybe it makes sense to have a config BR2_x86_geode_mmx ?
+Actually, I made this choice after talking about it with Peter and
+ThomasP on IRC (that's Peter who gave me the link).
 
-  Those are the buildroot config options you want to modify.
+BTW, packages that may take benefit from MMX features (like libevas or
+sdl_{gfx,sounds}) did not turn it on before, neither after this patch
+series.
 
-  It's not 100% guaranteed to work for all packages (some packages do explicit
-massaging of the CFLAGS passed to them; the Linux kernel is one of them).
+IMHO, I prefer keeping things in a safe shape like this.
 
-  For the -mtune=geode flag, specifically, that should be selected automatically
-if you choose geode as the sub-architecture.
 
-  PS: Please avoid posting a full config - do a 'make savedefconfig' and post the
-resulting defconfig file.
+Regards,
 
-  Regards,
-  Arnout
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Sam
