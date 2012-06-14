@@ -1,43 +1,23 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 14 Jun 2012 21:09:18 +0300
-Subject: [Buildroot] [PATCHv2 7/7] automatically set PARALLEL_JOBS when
- BR2_JLEVEL is 0
-In-Reply-To: <1339686165-10145-1-git-send-email-ntl@pobox.com>
-References: <1339466983-19786-8-git-send-email-ntl@pobox.com>
- <1339686165-10145-1-git-send-email-ntl@pobox.com>
-Message-ID: <20120614180918.GA8258@tarshish>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 14 Jun 2012 18:23:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 5276] Hiawatha needs to manage IPV6 if so
+In-Reply-To: <bug-5276-163@https.bugs.busybox.net/>
+References: <bug-5276-163@https.bugs.busybox.net/>
+Message-ID: <20120614182309.28F4896F24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nathan,
+https://bugs.busybox.net/show_bug.cgi?id=5276
 
-On Thu, Jun 14, 2012 at 10:02:45AM -0500, Nathan Lynch wrote:
-> When BR2_JLEVEL is 0, set PARALLEL_JOBS to double the number of CPUs
-> detected.  This allows one to more or less fully utilize the host
-> system without manually tuning the configuration.
-> 
-> Also make 0 the default value for BR2_JLEVEL.
-> 
-> Signed-off-by: Nathan Lynch <ntl@pobox.com>
-> ---
-
-[snip]
-
-> +ifeq ($(BR2_JLEVEL),0)
-> +PARALLEL_JOBS:=$(shell echo \
-> +	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
-> +else
->  PARALLEL_JOBS:=$(BR2_JLEVEL)
-> +endif
-
-IMO, there should be a comment here explaining the magic (2*CPUs) number.
-
-baruch
+--- Comment #1 from Vincent de RIBOU <belzo2005-dolphin@yahoo.fr> 2012-06-14 18:23:08 UTC ---
+Created attachment 4382
+  --> https://bugs.busybox.net/attachment.cgi?id=4382
+manage IPV6 patch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
