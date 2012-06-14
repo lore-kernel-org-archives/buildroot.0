@@ -1,55 +1,58 @@
-From: Nicole <nicole@cats-muvva.net>
-Date: Thu, 14 Jun 2012 08:19:38 +0100
-Subject: [Buildroot] Passing compile flags to every component
-In-Reply-To: <4FD9160B.9010306@mind.be>
-References: <4FD8FFB1.2010702@cats-muvva.net> <4FD9160B.9010306@mind.be>
-Message-ID: <4FD9908A.3040603@cats-muvva.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 14 Jun 2012 09:22:21 +0200
+Subject: [Buildroot] [PATCH v2] Update gdisk (gptfdisk) to version 0.8.5.
+In-Reply-To: <20120614090408.18178089@skate>
+References: <1339626043-11946-1-git-send-email-jmaggard10@gmail.com>
+ <4FD91F63.5030806@mind.be> <20120614090408.18178089@skate>
+Message-ID: <4FD9912D.9060403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you very much, Arnout.
+On 06/14/12 09:04, Thomas Petazzoni wrote:
+> Le Thu, 14 Jun 2012 01:16:51 +0200,
+> Arnout Vandecappelle<arnout@mind.be>  a ?crit :
+>
+> >> >  >  -GDISK_VERSION = 0.6.14
+> >> >  >  +GDISK_VERSION = 0.8.5
+> >> >  >     GDISK_SITE =
+> >> >  >  http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/gptfdisk
+> >> >  >  -GDISK_SOURCE = gdisk-$(GDISK_VERSION).tgz +GDISK_SOURCE =
+> >> >  >  gptfdisk-$(GDISK_VERSION).tar.gz
+> >> >  >
+> >> >  >     GDISK_TARGETS_$(BR2_PACKAGE_GDISK_GDISK) += gdisk
+> >> >  >     GDISK_TARGETS_$(BR2_PACKAGE_GDISK_SGDISK) += sgdisk
+> > >
+> > >     Since the upstream name has changed, I would change the buildroot
+> > >  package name as well.  Again, it's a bit more work though.  Also it
+> > >  would make existing config files that select gdisk invalid - I'm not
+> > >  sure if Peter allows that.
+> You can rename the package, and do something like:
+>
+> config BR2_PACKAGE_NEW_NAME
+>     bool "new-name"
+>     help
+>       Blabla
+>
+> # This is a transitional option kept for compatibility
+> # reasons with the old name of this package. It can be removed
+> # in 2013.05
+> config BR2_PACKAGE_OLD_NAME
+>     bool
+>     select BR2_PACKAGE_NEW_NAME
+>
+> So that existing configurations continue to work for one year.
 
-I shall also bear in mind your instructions for posting configs ... I 
-didn't know the etiquette. Perhaps this could be added to the e-mail 
-that welcomes you to the list.
+  I thought so too, but I tried it yesterday and it didn't seem to work...
 
-Nicole
-
-On 06/13/2012 11:36 PM, Arnout Vandecappelle wrote:
-> On 06/13/12 23:01, Nicole wrote:
->> Sorry if this is a newbie question. Can anyone give me some directions
->> about how to to pass a set of {C{,XX,PP},LD}FLAGS
->> to the build of each and every application that will be put on the
->> disk image?
->>
-> [snip]
->> BR2_TARGET_OPTIMIZATION="-pipe"
->> BR2_TARGET_LDFLAGS=""
->
-> Those are the buildroot config options you want to modify.
->
-> It's not 100% guaranteed to work for all packages (some packages do
-> explicit
-> massaging of the CFLAGS passed to them; the Linux kernel is one of them).
->
-> For the -mtune=geode flag, specifically, that should be selected
-> automatically
-> if you choose geode as the sub-architecture.
->
-> PS: Please avoid posting a full config - do a 'make savedefconfig' and
-> post the
-> resulting defconfig file.
->
-> Regards,
-> Arnout
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/pkcs7-signature
-Size: 2332 bytes
-Desc: S/MIME Cryptographic Signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120614/767a6fcb/attachment.p7s>
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
