@@ -1,38 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jun 2012 10:19:17 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2012-06-13
-In-Reply-To: <CAPNngRMBN95AdPLA8LrOwUhSVEM1p_VRtTUyf_wbO9T5JHfeFw@mail.gmail.com>
-References: <20120614063146.7563852CEB3@lolut.humanoidz.org>
- <CAPNngRMBN95AdPLA8LrOwUhSVEM1p_VRtTUyf_wbO9T5JHfeFw@mail.gmail.com>
-Message-ID: <20120615101917.2c757be3@skate>
+From: Nicole <nicole@cats-muvva.net>
+Date: Fri, 15 Jun 2012 10:36:09 +0100
+Subject: [Buildroot] gettext patch
+Message-ID: <4FDB0209.4040204@cats-muvva.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Ciao Thomas,
 
-Le Fri, 15 Jun 2012 01:16:03 -0300,
-Milton Soares Filho <milton.soares.filho@gmail.com> a ?crit :
+Here's the fix I located for gettext. I do not claim this as my own 
+work. It gets round an error where the compile complains that the type 
+of a field called __sp is not completely defined.
 
-> Could we dispose of more info (extra field) so it's easier to
-> filter-out failed builds using custom external toolchains? Found them
-> too noisy when randomly bug-hunting.
+--- gnulib-lib/spawn.in.h       2010-11-18 19:49:42.424350565 +0300
++++ gnulib-lib/spawn.in.h       2010-11-18 19:49:10.392349526 +0300
+@@ -37,6 +37,10 @@
+  # include <signal.h>
+  #endif
 
-Yes, I'm thinking of adding a 'toolchain-description.txt' file to every
-build, that would describe the toolchain that has been used (Buildroot
-config used to build the toolchain, CT-NG config used to build the
-toolchain, etc.).
++#ifdef __UCLIBC__
++# include <sched.h>
++#endif
++
+  #include <sys/types.h>
 
-Would this be good for you?
+  #ifndef __THROW
 
-Regards,
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/pkcs7-signature
+Size: 2332 bytes
+Desc: S/MIME Cryptographic Signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120615/fcccc2a2/attachment.p7s>
