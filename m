@@ -1,45 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Jun 2012 17:02:03 +0200
+Date: Fri, 15 Jun 2012 17:28:50 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2012-06-13
-In-Reply-To: <CAPNngRN=e2BaOgMutb-xiDuy-mxs-sO_6YpJ1sb8ezGr+ZXjLA@mail.gmail.com>
+In-Reply-To: <CAPNngRPqsXQScLZm3xTwaL9umNKxytpVDUh2TmP_Zy7uBeS6Mg@mail.gmail.com>
 References: <20120614063146.7563852CEB3@lolut.humanoidz.org>
  <CAPNngRMBN95AdPLA8LrOwUhSVEM1p_VRtTUyf_wbO9T5JHfeFw@mail.gmail.com>
  <20120615101917.2c757be3@skate>
  <CAPNngRN=e2BaOgMutb-xiDuy-mxs-sO_6YpJ1sb8ezGr+ZXjLA@mail.gmail.com>
-Message-ID: <20120615170203.6bc1e19a@skate>
+ <20120615170203.6bc1e19a@skate>
+ <CAPNngRPqsXQScLZm3xTwaL9umNKxytpVDUh2TmP_Zy7uBeS6Mg@mail.gmail.com>
+Message-ID: <20120615172850.5831d685@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 15 Jun 2012 11:57:42 -0300,
+Le Fri, 15 Jun 2012 12:21:29 -0300,
 Milton Soares Filho <milton.soares.filho@gmail.com> a ?crit :
 
-> Perhaps including another field at the summary just to tell the type
-> of the toolchain would be enough. The use-case is filter-out
-> configurations where other users can not easily reproduce the
-> conditions whether the build has failed, such as custom external
-> toolchains provided by third-parties or paid-for development kits.
+> On 15 June 2012 12:02, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > None of the toolchains that are currently being used for the autobuild
+> > tests are private toolchains. They are either:
+> > ?* Publicly available CodeSourcery toolchains
+> > ?* Publicly available Linaro toolchains
+> > ?* Toolchains built with Crosstool-NG
+> > ?* Toolchains built with Buildroot
+> 
+> Sorry, I assumed by the info available that it was a private
+> toolchain, not easily reproducible. The separate toolchain
+> specification file you mentioned would be indeed enough.
 
-None of the toolchains that are currently being used for the autobuild
-tests are private toolchains. They are either:
- * Publicly available CodeSourcery toolchains
- * Publicly available Linaro toolchains
- * Toolchains built with Crosstool-NG
- * Toolchains built with Buildroot
-
-I think we should rather document how to get or build those toolchains,
-or even make them available (easy for CodeSourcery, Linaro and
-Crosstool-NG, more complicated for Buildroot toolchains since those
-toolchains are not relocatable as of today).
-
-Since about 90% of the builds are done with external toolchains, simply
-filtering out all test cases done with external toolchains will just
-leave you with only a few test builds.
-
-Regards,
+Excellent, thanks!
 
 Thomas
 -- 
