@@ -1,107 +1,21 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 16 Jun 2012 22:34:56 +0200
-Subject: [Buildroot] [git commit] fbv: Allow selection of supported image
-	formats.
-Message-ID: <20120616203821.D97DE96F46@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 16 Jun 2012 22:45:40 +0200
+Subject: [Buildroot] [PATCHv2] lshw: new package
+In-Reply-To: <1338253883-26318-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 28 May 2012 22:11:23 -0300")
+References: <1338253883-26318-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87aa03gf4b.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0e41f5628b98f9827236a8499e45aefd40282623
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-This removes fbv's compulsory dependency on either libpng and/or libjpeg and/or libungif.
-The user can choose which compressed image format's fbv should support.
-By default PNG, JPEG and GIF are selected.
-Note that BMP format support will still always be included.
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-[Peter: Drop (unneeded) png specific libs]
-Signed-off-by: Arn R <arnerro@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/fbv/Config.in |   28 +++++++++++++++++++++++++---
- package/fbv/fbv.mk    |   21 +++++++++++++++++++--
- 2 files changed, 44 insertions(+), 5 deletions(-)
+Committed, thanks.
 
-diff --git a/package/fbv/Config.in b/package/fbv/Config.in
-index ea54401..b8a9fe4 100644
---- a/package/fbv/Config.in
-+++ b/package/fbv/Config.in
-@@ -1,11 +1,33 @@
- config BR2_PACKAGE_FBV
- 	bool "fbv"
--	select BR2_PACKAGE_LIBPNG
--	select BR2_PACKAGE_JPEG
--	select BR2_PACKAGE_LIBUNGIF
- 	help
- 	  fbv is a very simple graphic file viewer for the framebuffer console,
- 	  capable of displaying GIF, JPEG, PNG and BMP files using libungif,
- 	  libjpeg and libpng.
- 
- 	  http://freshmeat.net/projects/fbv/
-+
-+if BR2_PACKAGE_FBV
-+
-+config BR2_PACKAGE_FBV_PNG
-+	bool "PNG support"
-+	default y
-+	select BR2_PACKAGE_LIBPNG
-+	help
-+	  Enable support for PNG using libpng.
-+
-+config BR2_PACKAGE_FBV_JPEG
-+	bool "JPEG support"
-+	default y
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  Enable support for JPEG using IJG's libjpeg.
-+
-+config BR2_PACKAGE_FBV_GIF
-+	bool "GIF support"
-+	default y
-+	select BR2_PACKAGE_LIBUNGIF
-+	help
-+	  Enable support for GIF using libungif.
-+
-+endif # BR2_PACKAGE_FBV
-diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-index 855a0d4..7db6802 100644
---- a/package/fbv/fbv.mk
-+++ b/package/fbv/fbv.mk
-@@ -7,7 +7,24 @@ FBV_VERSION:=1.0b
- FBV_SOURCE:=fbv-$(FBV_VERSION).tar.gz
- FBV_SITE:=http://s-tech.elsat.net.pl/fbv
- 
--FBV_DEPENDENCIES = libpng jpeg libungif
-+### image format dependencies and configure options
-+FBV_DEPENDENCIES = # empty
-+FBV_CONFIGURE_OPTS = # empty
-+ifeq ($(BR2_PACKAGE_FBV_PNG),y)
-+FBV_DEPENDENCIES += libpng
-+else
-+FBV_CONFIGURE_OPTS += --without-libpng
-+endif
-+ifeq ($(BR2_PACKAGE_FBV_JPEG),y)
-+FBV_DEPENDENCIES += jpeg
-+else
-+FBV_CONFIGURE_OPTS += --without-libjpeg
-+endif
-+ifeq ($(BR2_PACKAGE_FBV_GIF),y)
-+FBV_DEPENDENCIES += libungif
-+else
-+FBV_CONFIGURE_OPTS += --without-libungif
-+endif
- 
- #fbv donesn't support cross-compilation
- define FBV_CONFIGURE_CMDS
-@@ -16,7 +33,7 @@ define FBV_CONFIGURE_CMDS
- 		$(TARGET_CONFIGURE_ARGS) \
- 		./configure \
- 		--prefix=/usr \
--		--libs="-lz -lm" \
-+		$(FBV_CONFIGURE_OPTS) \
- 	)
- endef
- 
+-- 
+Bye, Peter Korsgaard
