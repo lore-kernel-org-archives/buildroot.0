@@ -1,38 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Jun 2012 22:35:38 +0200
-Subject: [Buildroot] [PATCH] fbv: Allow selection of supported image
-	formats.
-In-Reply-To: <1339747818-5118-1-git-send-email-arnerro@gmail.com> (Arn R.'s
- message of "Fri, 15 Jun 2012 18:10:18 +1000")
-References: <1339747818-5118-1-git-send-email-arnerro@gmail.com>
-Message-ID: <87ehpfgfl1.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 16 Jun 2012 22:14:56 +0200
+Subject: [Buildroot] [git commit] hiawatha: fix bug #5276 and bump to
+	version 8.4
+Message-ID: <20120616203821.9F59896F46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arn" == Arn R <arnerro@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=0c1ad3099242bb4ddc5ade87e6a8e4239d68f5cc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Arn> This removes fbv's compulsory dependency on either libpng and/or
- Arn> libjpeg and/or libungif.  The user can choose which compressed
- Arn> image format's fbv should support.  By default PNG, JPEG and GIF
- Arn> are selected.  Note that BMP format support will still always be
- Arn> included.
+Fix bug #5276 by disabling IPv6 when the toolchain lacks it.
+It builds fine even if it's enabled but it probably doesn't work fine.
 
-..
+Also bump to version 8.4:
+* MaxServerLoad option added.
+* Bugfix: invalid reverse proxy request when URL parameters are present.
+* PolarSSL updated to version 1.1.4.
+* Small bugfixes and improvements.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/hiawatha/hiawatha.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 647c1e1..941ee8d 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -1,4 +1,4 @@
+-HIAWATHA_VERSION = 8.3
++HIAWATHA_VERSION = 8.4
+ HIAWATHA_SITE = http://www.hiawatha-webserver.org/files/
  
- Arn>  #fbv donesn't support cross-compilation
- Arn>  define FBV_CONFIGURE_CMDS
- Arn> @@ -17,6 +34,7 @@ define FBV_CONFIGURE_CMDS
- Arn>  		./configure \
- Arn>  		--prefix=/usr \
- Arn>  		--libs="-lz -lm" \
- Arn> +		$(FBV_CONFIGURE_OPTS) \
-
-This would fail because of the --libs line if PNG (which pulls in zlib)
-wasn't enabled. Looking closer at it, it doesn't seem to be needed, so I
-removed that line and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ ifeq ($(BR2_PACKAGE_HIAWATHA_SSL),y)
+@@ -7,6 +7,7 @@ HIAWATHA_DEPENDENCIES += polarssl
+ endif
+ 
+ HIAWATHA_CONF_OPT += \
++	$(if $(BR2_INET_IPV6),,-DENABLE_IPV6=OFF) \
+ 	-DENABLE_TOOLKIT=OFF \
+ 	-DENABLE_XSLT=OFF \
+ 	-DCONFIG_DIR=/etc/hiawatha \
