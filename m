@@ -1,21 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Jun 2012 22:58:08 +0200
-Subject: [Buildroot] [PATCH] New package: xinetd
-In-Reply-To: <1338248208-2763-1-git-send-email-danomimanchego123@gmail.com>
- (Danomi Manchego's message of "Mon, 28 May 2012 19:36:48 -0400")
-References: <1338248208-2763-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <8762argejj.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 16 Jun 2012 22:58:26 +0200
+Subject: [Buildroot] [git commit] xinetd: fix build without RPC support
+Message-ID: <20120616205908.A0E9596F46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=1a4b482776db83e331ff787d01512f6d52610f2a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Danomi> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/xinetd/Config.in |    1 -
+ package/xinetd/xinetd.mk |    4 ++++
+ 2 files changed, 4 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xinetd/Config.in b/package/xinetd/Config.in
+index 6bfe24c..76fe603 100644
+--- a/package/xinetd/Config.in
++++ b/package/xinetd/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XINETD
+ 	bool "xinetd"
+-	depends on BR2_INET_RPC
+ 	help
+ 	  xinetd is a secure replacement for inetd. It was originally written by
+ 	  panos at cs.colorado.edu.
+diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
+index 2ab2546..6a69a55 100644
+--- a/package/xinetd/xinetd.mk
++++ b/package/xinetd/xinetd.mk
+@@ -7,4 +7,8 @@ XINETD_VERSION = 2.3.15
+ XINETD_SOURCE  = xinetd-$(XINETD_VERSION).tar.gz
+ XINETD_SITE    = http://www.xinetd.org
+ 
++ifneq ($(BR2_INET_RPC),y)
++XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
++endif
++
+ $(eval $(call AUTOTARGETS))
