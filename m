@@ -1,30 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 16 Jun 2012 22:04:25 +0200
-Subject: [Buildroot] [PATCH] monit: fix configuration error
-In-Reply-To: <1339489635-11299-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Tue, 12 Jun 2012 09:27:15 +0100")
-References: <1339489635-11299-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87vcirgh12.fsf@macbook.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 16 Jun 2012 20:16:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 5276] Hiawatha needs to manage IPV6 if so
+In-Reply-To: <bug-5276-163@https.bugs.busybox.net/>
+References: <bug-5276-163@https.bugs.busybox.net/>
+Message-ID: <20120616201619.4871496F3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=5276
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Configuration fails for the monit package, with the following error.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
- spdawson>   checking for SSL library directory... Not found
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|                            |FIXED
 
- spdawson>   Couldn't find your SSL library files.
- spdawson>   Use --with-ssl-lib-dir option to fix this problem or disable the
- spdawson>   SSL support with --without-ssl
-
- spdawson> Tweak the monit configuration command line so that openssl is found.
-
-Committed, thanks.
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> 2012-06-16 20:16:18 UTC ---
+Fixed by Gustavoz in git (0c1ad3099242b), thanks.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
