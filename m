@@ -1,29 +1,37 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sun, 17 Jun 2012 19:15:17 +0100
-Subject: [Buildroot] [PATCH] jquery: allow custom install location
-In-Reply-To: <87bokhg7a7.fsf@macbook.be.48ers.dk>
-References: <1339681388-13133-1-git-send-email-spdawson@gmail.com>
- <87bokhg7a7.fsf@macbook.be.48ers.dk>
-Message-ID: <CAHt8ZCNh0hPr8MwDU3W997uFfaN-26o2HEU2Vz9vVpp+2Qzk6A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Jun 2012 21:15:44 +0200
+Subject: [Buildroot] [Buildroot patch] Add package nss-mdns.
+In-Reply-To: <87fw9tg7d3.fsf@macbook.be.48ers.dk>
+References: <1338927777-10637-1-git-send-email-marek.belisko@gmail.com>
+ <87fw9tg7d3.fsf@macbook.be.48ers.dk>
+Message-ID: <20120617211544.01133d76@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> What's the use case for this? If we need it, wouldn't it then make more
-> sense to have a BR-wide setting for this instead of for each webrelated
-> package?
+Le Sun, 17 Jun 2012 19:45:28 +0200,
+Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-Installing JavaScript files into the hard-coded /var/www directory
-isn't always appropriate. For example, I am working on a project at
-the moment where /var is mounted as tmpfs, and I don't want any
-persistent data there. It's also not uncommon to structure things so
-that JavaScript files are in a subdirectory of the main /www or
-/var/www "web root" directory.
+> Minor nit, we normally use ' = ' rather than ':='.
+> 
+> Care to fix this and resubmit?
 
-Does that make sense?
+I think it should also install a simple /etc/nsswitch.conf, which makes
+use of the mdns resolving mechanism.
 
-I totally agree with you about adding a Buildroot-wide configuration
-item for this, and probably also a similar configuration item to allow
-for a custom css install path.
+Something like:
+
+==
+hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4
+==
+
+Regards,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
