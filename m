@@ -1,55 +1,34 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Sun, 17 Jun 2012 10:07:40 +0100
-Subject: [Buildroot] [PATCH] libfreefare: add missing openssl dependency
-Message-ID: <1339924060-4250-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 17 Jun 2012 11:09:43 +0200
+Subject: [Buildroot] [PATCH] ffmpeg: bump to 0.11.1
+In-Reply-To: <4FDB2E46.8090705@elvees.com> (Anton Leontiev's message of "Fri, 
+ 15 Jun 2012 16:44:54 +0400")
+References: <4FDB2E46.8090705@elvees.com>
+Message-ID: <871ulegv8o.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+>>>>> "Anton" == Anton Leontiev <aleontiev@elvees.com> writes:
 
-If openssl is not selected, configuration fails for the libfreefare package
-as follows.
+ Anton> Signed-off-by: Anton Leontiev <aleontiev@elvees.com>
 
-  configure: error: Cannot find libcrypto.
+Thanks, but I cannot commit it as it is now. First of all, Thunderbird
+had corrupted your patch by word wrapping and stripping trailing
+spaces. Please use git send-email and/or test patches by sending them to
+yourself and see if they still applies for next time.
 
-This patch adds the missing dependency on openssl.
+Secondly, we have a number of other packages using ffmpeg, and the 0.11
+version seems to change the APi in a number of ways. From a quick build
+test I see that:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/libfreefare/Config.in      |    4 ++++
- package/libfreefare/libfreefare.mk |    2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+- gst-ffmpeg
+- mediastreamer
+- opencv
 
-diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
-index 2e11f7e..438bcbf 100644
---- a/package/libfreefare/Config.in
-+++ b/package/libfreefare/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_LIBFREEFARE
- 	bool "libfreefare"
-+	depends on BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBNFC
- 	help
- 	  Library for high level manipulation of MIFARE cards.
- 
- 	  http://code.google.com/p/nfc-tools/wiki/libfreefare
-+
-+comment "libfreefare requires openssl"
-+	depends on !BR2_PACKAGE_OPENSSL
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 0499999..16ef8fb 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -5,6 +5,6 @@
- #############################################################
- LIBFREEFARE_VERSION = 0.3.2
- LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
--LIBFREEFARE_DEPENDENCIES = libnfc
-+LIBFREEFARE_DEPENDENCIES = libnfc openssl
- 
- $(eval $(call AUTOTARGETS))
+Are broken, so those packages would need to be upgraded / fixed before.
+
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
