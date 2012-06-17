@@ -1,51 +1,52 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 17 Jun 2012 12:19:02 +0200
-Subject: [Buildroot] [git commit] libfreefare: add missing openssl dependency
-Message-ID: <20120617102014.331D996F39@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 17 Jun 2012 13:30:35 +0300
+Subject: [Buildroot] [PATCH] libfreefare: add missing openssl dependency
+In-Reply-To: <87wr36fdf0.fsf@macbook.be.48ers.dk>
+References: <1339924060-4250-1-git-send-email-spdawson@gmail.com>
+ <87wr36fdf0.fsf@macbook.be.48ers.dk>
+Message-ID: <20120617103034.GA5839@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=929c3e89a6715ecfdc8055ec82025cee5e8e23a1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-If openssl is not selected, configuration fails for the libfreefare package
-as follows.
+On Sun, Jun 17, 2012 at 12:20:03PM +0200, Peter Korsgaard wrote:
+> >>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+> 
+>  spdawson> From: Simon Dawson <spdawson@gmail.com>
+>  spdawson> If openssl is not selected, configuration fails for the libfreefare package
+>  spdawson> as follows.
+> 
+>  spdawson>   configure: error: Cannot find libcrypto.
+> 
+>  spdawson> This patch adds the missing dependency on openssl.
+> 
+>  spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+>  spdawson> ---
+>  spdawson>  package/libfreefare/Config.in      |    4 ++++
+>  spdawson>  package/libfreefare/libfreefare.mk |    2 +-
+>  spdawson>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+>  spdawson> diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+>  spdawson> index 2e11f7e..438bcbf 100644
+>  spdawson> --- a/package/libfreefare/Config.in
+>  spdawson> +++ b/package/libfreefare/Config.in
+>  spdawson> @@ -1,7 +1,11 @@
+>  spdawson>  config BR2_PACKAGE_LIBFREEFARE
+>  spdawson>  	bool "libfreefare"
+>  spdawson> +	depends on BR2_PACKAGE_OPENSSL
+> 
+> We normally use 'depends on' for library dependencies (like libnfc), so
+> I've changed that and committed, thanks.
 
-  configure: error: Cannot find libcrypto.
+s/depends on/select/
 
-This patch adds the missing dependency on openssl.
+baruch
 
-[Peter: use select instead of depends on]
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/libfreefare/Config.in      |    1 +
- package/libfreefare/libfreefare.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
-index 2e11f7e..13a8630 100644
---- a/package/libfreefare/Config.in
-+++ b/package/libfreefare/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBFREEFARE
- 	bool "libfreefare"
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LIBNFC
- 	help
- 	  Library for high level manipulation of MIFARE cards.
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 0499999..16ef8fb 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -5,6 +5,6 @@
- #############################################################
- LIBFREEFARE_VERSION = 0.3.2
- LIBFREEFARE_SITE = http://nfc-tools.googlecode.com/files
--LIBFREEFARE_DEPENDENCIES = libnfc
-+LIBFREEFARE_DEPENDENCIES = libnfc openssl
- 
- $(eval $(call AUTOTARGETS))
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
