@@ -1,37 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Jun 2012 21:15:44 +0200
-Subject: [Buildroot] [Buildroot patch] Add package nss-mdns.
-In-Reply-To: <87fw9tg7d3.fsf@macbook.be.48ers.dk>
-References: <1338927777-10637-1-git-send-email-marek.belisko@gmail.com>
- <87fw9tg7d3.fsf@macbook.be.48ers.dk>
-Message-ID: <20120617211544.01133d76@skate>
+From: Nathan Lynch <ntl@pobox.com>
+Date: Sun, 17 Jun 2012 16:53:58 -0500
+Subject: [Buildroot] [PATCH 0/3] Document use of local sources for packages
+Message-ID: <1339970041-17398-1-git-send-email-ntl@pobox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 17 Jun 2012 19:45:28 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+Since the 2011.11 release Buildroot has supported building packages
+from local sources, but the manual has not reflected this well.  This
+series is an attempt to address that.  I relied on Thomas Petazzoni's
+description of the "file" and "local" methods here:
 
-> Minor nit, we normally use ' = ' rather than ':='.
-> 
-> Care to fix this and resubmit?
+http://free-electrons.com/blog/buildroot-2011-11/
 
-I think it should also install a simple /etc/nsswitch.conf, which makes
-use of the mdns resolving mechanism.
+Nathan Lynch (3):
+  docs: update LIBFOO_SITE to describe use of filesystem paths
+  docs: rework LIBFOO_SITE_METHOD documentation
+  docs: describe "file" and "local" methods in LIBFOO_SITE_METHOD
 
-Something like:
+ docs/manual/adding-packages-gentargets.txt |   77 +++++++++++++++++++---------
+ 1 file changed, 52 insertions(+), 25 deletions(-)
 
-==
-hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4
-==
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.2
