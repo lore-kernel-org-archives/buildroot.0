@@ -1,34 +1,43 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Jun 2012 11:09:43 +0200
-Subject: [Buildroot] [PATCH] ffmpeg: bump to 0.11.1
-In-Reply-To: <4FDB2E46.8090705@elvees.com> (Anton Leontiev's message of "Fri, 
- 15 Jun 2012 16:44:54 +0400")
-References: <4FDB2E46.8090705@elvees.com>
-Message-ID: <871ulegv8o.fsf@macbook.be.48ers.dk>
+Date: Sun, 17 Jun 2012 12:20:03 +0200
+Subject: [Buildroot] [PATCH] libfreefare: add missing openssl dependency
+In-Reply-To: <1339924060-4250-1-git-send-email-spdawson@gmail.com>
+ (spdawson@gmail.com's message of "Sun, 17 Jun 2012 10:07:40 +0100")
+References: <1339924060-4250-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87wr36fdf0.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Anton" == Anton Leontiev <aleontiev@elvees.com> writes:
+>>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
 
- Anton> Signed-off-by: Anton Leontiev <aleontiev@elvees.com>
+ spdawson> From: Simon Dawson <spdawson@gmail.com>
+ spdawson> If openssl is not selected, configuration fails for the libfreefare package
+ spdawson> as follows.
 
-Thanks, but I cannot commit it as it is now. First of all, Thunderbird
-had corrupted your patch by word wrapping and stripping trailing
-spaces. Please use git send-email and/or test patches by sending them to
-yourself and see if they still applies for next time.
+ spdawson>   configure: error: Cannot find libcrypto.
 
-Secondly, we have a number of other packages using ffmpeg, and the 0.11
-version seems to change the APi in a number of ways. From a quick build
-test I see that:
+ spdawson> This patch adds the missing dependency on openssl.
 
-- gst-ffmpeg
-- mediastreamer
-- opencv
+ spdawson> Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ spdawson> ---
+ spdawson>  package/libfreefare/Config.in      |    4 ++++
+ spdawson>  package/libfreefare/libfreefare.mk |    2 +-
+ spdawson>  2 files changed, 5 insertions(+), 1 deletion(-)
 
-Are broken, so those packages would need to be upgraded / fixed before.
+ spdawson> diff --git a/package/libfreefare/Config.in b/package/libfreefare/Config.in
+ spdawson> index 2e11f7e..438bcbf 100644
+ spdawson> --- a/package/libfreefare/Config.in
+ spdawson> +++ b/package/libfreefare/Config.in
+ spdawson> @@ -1,7 +1,11 @@
+ spdawson>  config BR2_PACKAGE_LIBFREEFARE
+ spdawson>  	bool "libfreefare"
+ spdawson> +	depends on BR2_PACKAGE_OPENSSL
+
+We normally use 'depends on' for library dependencies (like libnfc), so
+I've changed that and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
