@@ -1,29 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Jun 2012 14:10:14 +0200
-Subject: [Buildroot] [PATCH] libfreefare: add missing openssl dependency
-In-Reply-To: <20120617103034.GA5839@tarshish> (Baruch Siach's message of "Sun, 
- 17 Jun 2012 13:30:35 +0300")
-References: <1339924060-4250-1-git-send-email-spdawson@gmail.com>
- <87wr36fdf0.fsf@macbook.be.48ers.dk> <20120617103034.GA5839@tarshish>
-Message-ID: <87sjduf8bd.fsf@macbook.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 17 Jun 2012 11:06:03 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.3.14
+Message-ID: <1339941963-30572-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Bump php to version 5.3.14 to fix CVE-2012-2143 and other assorted bugs.
 
- spdawson> config BR2_PACKAGE_LIBFREEFARE
- spdawson> bool "libfreefare"
- spdawson> +	depends on BR2_PACKAGE_OPENSSL
- >> 
- >> We normally use 'depends on' for library dependencies (like libnfc), so
- >> I've changed that and committed, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/php/php.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Baruch> s/depends on/select/
-
-Yes ;)
-
+diff --git a/package/php/php.mk b/package/php/php.mk
+index af041c9..fee2c92 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-PHP_VERSION = 5.3.13
++PHP_VERSION = 5.3.14
+ PHP_SOURCE = php-$(PHP_VERSION).tar.bz2
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+1.7.3.4
