@@ -1,27 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 17 Jun 2012 19:47:12 +0200
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sun, 17 Jun 2012 19:15:17 +0100
 Subject: [Buildroot] [PATCH] jquery: allow custom install location
-In-Reply-To: <1339681388-13133-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Thu, 14 Jun 2012 14:43:08 +0100")
+In-Reply-To: <87bokhg7a7.fsf@macbook.be.48ers.dk>
 References: <1339681388-13133-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87bokhg7a7.fsf@macbook.be.48ers.dk>
+ <87bokhg7a7.fsf@macbook.be.48ers.dk>
+Message-ID: <CAHt8ZCNh0hPr8MwDU3W997uFfaN-26o2HEU2Vz9vVpp+2Qzk6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+> What's the use case for this? If we need it, wouldn't it then make more
+> sense to have a BR-wide setting for this instead of for each webrelated
+> package?
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
+Installing JavaScript files into the hard-coded /var/www directory
+isn't always appropriate. For example, I am working on a project at
+the moment where /var is mounted as tmpfs, and I don't want any
+persistent data there. It's also not uncommon to structure things so
+that JavaScript files are in a subdirectory of the main /www or
+/var/www "web root" directory.
 
- spdawson> Allow the JavaScript install path to be customised. By
- spdawson> default, JavaScript files are installed to /var/www under the
- spdawson> target root directory.
+Does that make sense?
 
-What's the use case for this? If we need it, wouldn't it then make more
-sense to have a BR-wide setting for this instead of for each webrelated
-package?
-
--- 
-Bye, Peter Korsgaard
+I totally agree with you about adding a Buildroot-wide configuration
+item for this, and probably also a similar configuration item to allow
+for a custom css install path.
