@@ -1,54 +1,38 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Mon, 18 Jun 2012 08:46:36 -0400
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 18 Jun 2012 14:53:54 +0200
 Subject: [Buildroot] Has anybody got systemd to work?
-In-Reply-To: <20120618091508.a0fd469d78e12fcca7fdf4c0@kinali.ch>
+In-Reply-To: <CADiAo4LRnawMEEYcES31KLQKBR7KSYi3wxE0=kt7Pc9aMq64EQ@mail.gmail.com>
 References: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
  <20120618091508.a0fd469d78e12fcca7fdf4c0@kinali.ch>
-Message-ID: <CADiAo4LRnawMEEYcES31KLQKBR7KSYi3wxE0=kt7Pc9aMq64EQ@mail.gmail.com>
+ <CADiAo4LRnawMEEYcES31KLQKBR7KSYi3wxE0=kt7Pc9aMq64EQ@mail.gmail.com>
+Message-ID: <4FDF24E2.6020603@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Attila,
+Hi Dmitry,
 
-On Mon, Jun 18, 2012 at 3:15 AM, Attila Kinali <attila@kinali.ch> wrote:
+I was just replying to your previous mail.
 
->> I am trying to boot a root FS built with systemd acting as init.
->
-> Out of curiosity: Is there any reason why you'd want to use
-> systemd in an embedded system? What does it provide that a normal init
-> cannot?
+Le 18/06/2012 14:46, Dmitry Golubovsky a ?crit :
+> Maxime: do you use an alternative toolchain with systemd?
 
-I am not targeting an embedded system; rather portable to desktop
-range (laptops, small desktops, and those new pocket-size boxes that
-can be hooked to a TV/monitor and worked with - I need to build a
-compact initial root FS).
+After a bit of testing, it seems indeed that the bug is uclibc-only, and
+didn't encountered it as I do most of my testing using glibc.
 
-Systemd provides asynchronous dependency-based booting (something I
-liked in Android init), and some level of containerization (LXC would
-be too much for my purpose, but I'd rather use systemd than some
-clumsy shell scripts which I tried to achieve the same with).
+Anyway, if it is only the %ms thing that is breaking systemd on uclibc,
+it shouldn't be such a big problem. Quickly grepping the systemd source
+code returns 17 occurences of such case, so a patch is definitely doable.
 
-I use Buildroot because it is a mature toolkit being many years in
-active use, with convenient menu configuration.
+I won't have much time, do you mind doing so and sending us the patch so
+that it could get included ?
 
-OTOH I see other developers suggesting more systemd patches (like one
-by Maxime Ripard [1] that showed up in the list recently)
-
-Maxime: do you use an alternative toolchain with systemd?
-
-Per my postings some time ago where I suggested adding PAM
-capabilities to systemd: I was able to compile systemd with PAM but
-was unable to test it because of the parsing problem I ran into (see
-the OP).
-
-Thanks.
-
-[1]  http://lists.busybox.net/pipermail/buildroot/2012-June/054903.html
+Maxime
 
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
