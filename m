@@ -1,56 +1,37 @@
-From: Ming-Ching Tiew <mctiew@yahoo.com>
-Date: Sun, 17 Jun 2012 20:35:15 -0700 (PDT)
-Subject: [Buildroot] Various problem using buildroot-2012.05
-Message-ID: <1339990515.26331.YahooMailClassic@web161404.mail.bf1.yahoo.com>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Mon, 18 Jun 2012 11:50:08 +0800
+Subject: [Buildroot] [PATCH 1/1] ccache: expose control interface via 'make
+	ccache-options'
+Message-ID: <1339991408-25620-1-git-send-email-tjlee@ambarella.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+usage:
+	# set cache limit size
+	make CCACHE_OPTIONS="--max-size=5G" ccache-options
 
-I encountered various problems using buildroot-2012.05, all to do with using buildroot as a chroot build environment.
+	# zero statistics counters
+	make CCACHE_OPTIONS="--zero-stats" ccache-options
 
-1. Seem "Copying development files to target did not copy libc.so.
+Change-Id: I0162a2612a9aa4afd49f6d93c9c36dce3e0c8228
+---
+ package/ccache/ccache.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-   Seems this was reported sometime ago, a fix was provided but somehow it's not propagated to support/scripts/copy.sh.
-
-   The fix is to add this line to copy.sh
-
- cp -af $(STAGING_DIR)/usr/lib/libc.so $(TARGET_DIR)/usr/lib
-
-2. I wrote a test program in the chroot environment, 
-
-#include <stdio.h>
-#include <dlfcn.h>
-#include <stdlib.h>
-
-int main(int argc, char **argv) 
-{
-   void *lib_handle;
-   double (*fn)(int *);
-   int x;
-   char *error;
-
-   lib_handle = dlopen("libctest.so", RTLD_NOW);
-   if (!lib_handle) 
-   {
-      fprintf(stderr, "1: RTLD_NOW: %s\n", dlerror());
-      exit(1);
-   }
-   return 0;
-}
-
-    # cc -rdynamic  mytest.c -ldl
-/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../libdl.a(libdl.os): In function `_dl_find_hash':
-libdl.c:(.text+0x9fa): undefined reference to `_dl_allocate_static_tls'
-libdl.c:(.text+0xa1a): undefined reference to `_dl_allocate_static_tls'
-/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../libdl.a(libdl.os): In function `_dl_load_elf_shared_library':
-libdl.c:(.text+0x1e51): undefined reference to `_dl_next_tls_modid'
-/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../../i686-unknown-linux-uclibc/bin/ld: a.out: hidden symbol `_dl_allocate_static_tls' isn't defined
-/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../../i686-unknown-linux-uclibc/bin/ld: final link failed: Bad value
-collect2: ld returned 1 exit status
-
-Is there any other libraries which are missing also in the coying ?
-
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index d7106ee..d46fbb9 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -50,3 +50,7 @@ ccache-stats: host-ccache
+ 	$(Q)$(CCACHE) -s
+ endif
  
++ifeq ($(BR2_CCACHE),y)
++ccache-options: host-ccache
++	$(Q)$(CCACHE) $(CCACHE_OPTIONS)
++endif
+-- 
+1.7.8.6
