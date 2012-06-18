@@ -1,40 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jun 2012 08:57:54 +0200
-Subject: [Buildroot] New package
-In-Reply-To: <CAFYZmWjqLdemKVbdGQ=s2WGNGjtpVF1hvfpmqFeaQShyUokRzA@mail.gmail.com>
-References: <CAFYZmWjqLdemKVbdGQ=s2WGNGjtpVF1hvfpmqFeaQShyUokRzA@mail.gmail.com>
-Message-ID: <20120618085754.5a6fb1b8@skate>
+From: Attila Kinali <attila@kinali.ch>
+Date: Mon, 18 Jun 2012 09:15:08 +0200
+Subject: [Buildroot] Has anybody got systemd to work?
+In-Reply-To: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
+References: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
+Message-ID: <20120618091508.a0fd469d78e12fcca7fdf4c0@kinali.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 17 Jun 2012 22:51:59 -0300,
-"djames.suhanko" <djames.suhanko@gmail.com> a ?crit :
+On Sun, 17 Jun 2012 22:45:20 -0400
+Dmitry Golubovsky <golubovsky@gmail.com> wrote:
 
-> BAR_SITE =
-> http://sourceforge.net/projects/clpbar/files/clpbar/bar-1.10.9/bar_1.10.9.tar.gz/download
+> 
+> I am trying to boot a root FS built with systemd acting as init.
 
-> The compilation is OK, but the automatic download from sourceforge isn't
-> working. How can I do the automatic download from sourceforge?
+Out of curiosity: Is there any reason why you'd want to use
+systemd in an embedded system? What does it provide that a normal init
+cannot?
 
-This BAR_SITE will not work. Getting the correct URLs from SourceForge
-is a bit funky. Tip: download from Firefox, and in the downloads
-window, right click on the file, and ask Firefox for the original
-location of the file. It will be:
+			Attila Kinali
 
-http://kent.dl.sourceforge.net/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
-
-So, you should use:
-
-BAR_SITE = http://$(BR2_SOURCEFORGE_MIRROR)/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
-
-Regards,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+It is upon moral qualities that a society is ultimately founded. All 
+the prosperity and technological sophistication in the world is of no 
+use without that foundation.
+                 -- Miss Matheson, The Diamond Age, Neil Stephenson
