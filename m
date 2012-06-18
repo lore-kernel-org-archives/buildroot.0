@@ -1,55 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jun 2012 16:21:56 +0200
-Subject: [Buildroot] RFC: x11r7.7 patch series
-In-Reply-To: <4FDF2526.70901@carallon.com>
-References: <4FDF2526.70901@carallon.com>
-Message-ID: <20120618162156.23914f96@skate>
+From: Nathan Lynch <ntl@pobox.com>
+Date: Mon, 18 Jun 2012 10:02:20 -0500
+Subject: [Buildroot] [RFC/PATCH 1/4] uClibc: ensure .oldconfig is writable
+In-Reply-To: <1340031743-29694-1-git-send-email-ntl@pobox.com>
+References: <1340031743-29694-1-git-send-email-ntl@pobox.com>
+Message-ID: <1340031743-29694-2-git-send-email-ntl@pobox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 18 Jun 2012 13:55:02 +0100,
-Will Wagner <will_wagner@carallon.com> a ?crit :
+If $(UCLIBC_CONFIG_FILE) is read-only, the sed fixups to .oldconfig
+fail.
 
-> You can find my work on updating to x11r7.7 on gitorious at 
-> https://gitorious.org/willw-buildroot/willw-buildroot/commits/remotes/gitorious/x11r7.7
-> 
-> There are a few parts to the patch series I am not sure about:
-> - I have deleted all packages not in the 7.7 release, this may remove 
-> things people still use and feel should still be in buildroot
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
+---
+ toolchain/uClibc/uclibc.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Most likely if they have been removed upstream, they are unmaintained,
-and we should remove them as well.
-
-I've seen that a fair amount of packages are removed, but I haven't
-seen any new package. Is this normal? No new components in 7.7 compared
-to the older release we have in BR?
-
-> - I had a problem updating mesa3d. The newer versions rely on host 
-> libxml2 with python support. There are a couple of patches to do this 
-> but I don't particularly like these. If someone can come up with 
-> something better then great.
-
-Erk. I've seen what you've done, and even though is certainly the
-easiest solution, I don't like it a lot. Until now, we have tried to
-avoid the need for options on host packages...
-
-Do you have some details on why the mesa3d package needs libxml2 with
-python support?
-
-> - There was one package I couldn't compile
-> xdriver_xf86-input-synaptics. Didn't spend any time on trying to fix
-> it though (I suspect broken in current buildroot as well).
-
-Ok.
-
-Regards,
-
-Thomas
+diff --git a/toolchain/uClibc/uclibc.mk b/toolchain/uClibc/uclibc.mk
+index 0728135..f41e6b9 100644
+--- a/toolchain/uClibc/uclibc.mk
++++ b/toolchain/uClibc/uclibc.mk
+@@ -101,6 +101,7 @@ endif
+ # Some targets may wish to provide their own UCLIBC_CONFIG_FILE...
+ $(UCLIBC_DIR)/.oldconfig: $(UCLIBC_DIR)/.patched $(UCLIBC_CONFIG_FILE)
+ 	cp -f $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.oldconfig
++	chmod u+w $(UCLIBC_DIR)/.oldconfig
+ 	$(SED) 's,^CROSS_COMPILER_PREFIX=.*,CROSS_COMPILER_PREFIX="$(TARGET_CROSS)",g' \
+ 		-e 's,# TARGET_$(UCLIBC_TARGET_ARCH) is not set,TARGET_$(UCLIBC_TARGET_ARCH)=y,g' \
+ 		-e 's,^TARGET_ARCH=".*",TARGET_ARCH=\"$(UCLIBC_TARGET_ARCH)\",g' \
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.10.2
