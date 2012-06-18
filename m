@@ -1,36 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 17 Jun 2012 20:20:26 +0200
-Subject: [Buildroot] [git commit] lttng-modules: bump to version 2.0.3
-Message-ID: <20120618191207.B20D896F69@busybox.osuosl.org>
+Date: Mon, 18 Jun 2012 21:09:06 +0200
+Subject: [Buildroot] [git commit] pthread-stubs: fix incorrect indentation
+Message-ID: <20120618191207.F19F096F69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f9b64903005bf1f45a0e1a2d6d67696c7368c7c
+commit: http://git.buildroot.net/buildroot/commit/?id=7c96b50aac61bcfbfbd7e2ef56396303a856d785
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/lttng-modules/lttng-modules.mk |    9 +++++++--
- 1 files changed, 7 insertions(+), 2 deletions(-)
+ package/x11r7/pthread-stubs/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 1820c8f..b31caa1 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -1,5 +1,10 @@
--LTTNG_MODULES_VERSION = 2.0-pre11
--LTTNG_MODULES_SITE    = http://lttng.org/files/bundles/20111214/
-+#############################################################
-+#
-+# LTTng-modules: the kernel modules (requires at least Linux 2.6.38)
-+#
-+#############################################################
-+LTTNG_MODULES_VERSION = 2.0.3
-+LTTNG_MODULES_SITE    = http://lttng.org/files/lttng-modules/
- LTTNG_MODULES_SOURCE  = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+diff --git a/package/x11r7/pthread-stubs/Config.in b/package/x11r7/pthread-stubs/Config.in
+index de13e87..c17f7da 100644
+--- a/package/x11r7/pthread-stubs/Config.in
++++ b/package/x11r7/pthread-stubs/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_PTHREAD_STUBS
+ 	bool "pthread-stubs"
+ 	help
+-		This library provides weak aliases for pthread functions not
+-		provided in libc or otherwise available by default.
+-
+-		http://xcb.freedesktop.org/
++	  This library provides weak aliases for pthread functions not
++	  provided in libc or otherwise available by default.
  
- LTTNG_MODULES_DEPENDENCIES = linux
++	  http://xcb.freedesktop.org/
