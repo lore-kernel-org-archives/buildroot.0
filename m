@@ -1,32 +1,45 @@
-From: Will Wagner <will_wagner@carallon.com>
-Date: Mon, 18 Jun 2012 13:55:02 +0100
-Subject: [Buildroot] RFC: x11r7.7 patch series
-Message-ID: <4FDF2526.70901@carallon.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Mon, 18 Jun 2012 14:58:06 +0200
+Subject: [Buildroot] Has anybody got systemd to work?
+In-Reply-To: <4FDF24E2.6020603@free-electrons.com>
+References: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
+ <20120618091508.a0fd469d78e12fcca7fdf4c0@kinali.ch>
+ <CADiAo4LRnawMEEYcES31KLQKBR7KSYi3wxE0=kt7Pc9aMq64EQ@mail.gmail.com>
+ <4FDF24E2.6020603@free-electrons.com>
+Message-ID: <4FDF25DE.20507@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-You can find my work on updating to x11r7.7 on gitorious at 
-https://gitorious.org/willw-buildroot/willw-buildroot/commits/remotes/gitorious/x11r7.7
+Le 18/06/2012 14:53, Maxime Ripard a ?crit :
+> Hi Dmitry,
+> 
+> I was just replying to your previous mail.
+> 
+> Le 18/06/2012 14:46, Dmitry Golubovsky a ?crit :
+>> Maxime: do you use an alternative toolchain with systemd?
+> 
+> After a bit of testing, it seems indeed that the bug is uclibc-only, and
+> didn't encountered it as I do most of my testing using glibc.
+> 
+> Anyway, if it is only the %ms thing that is breaking systemd on uclibc,
+> it shouldn't be such a big problem. Quickly grepping the systemd source
+> code returns 17 occurences of such case, so a patch is definitely doable.
+> 
+> I won't have much time, do you mind doing so and sending us the patch so
+> that it could get included ?
 
-There are a few parts to the patch series I am not sure about:
-- I have deleted all packages not in the 7.7 release, this may remove 
-things people still use and feel should still be in buildroot
-- I had a problem updating mesa3d. The newer versions rely on host 
-libxml2 with python support. There are a couple of patches to do this 
-but I don't particularly like these. If someone can come up with 
-something better then great.
-- There was one package I couldn't compile xdriver_xf86-input-synaptics. 
-Didn't spend any time on trying to fix it though (I suspect broken in 
-current buildroot as well).
+Also, it seems that the %m modifier support has been merged 3 weeks ago
+in uclibc:
 
-Regards
-Will
+http://git.uclibc.org/uClibc/commit/libc/stdio/_scanf.c?id=8cfb43de636faa401634340d1a18404844f9ba5a
+
+Looks like we will definitely need a patch :)
+
 -- 
-------------------------------------------------------------------------
-Will Wagner                                     will_wagner at carallon.com
-Development Manager                      Office Tel: +44 (0)20 7371 2032
-Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-------------------------------------------------------------------------
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
