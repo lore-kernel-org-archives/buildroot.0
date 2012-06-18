@@ -1,39 +1,79 @@
-From: Nathan Lynch <ntl@pobox.com>
-Date: Mon, 18 Jun 2012 10:02:23 -0500
-Subject: [Buildroot] [RFC/PATCH 4/4] linux: ensure buildroot_defconfig is
-	writable
-In-Reply-To: <1340031743-29694-1-git-send-email-ntl@pobox.com>
-References: <1340031743-29694-1-git-send-email-ntl@pobox.com>
-Message-ID: <1340031743-29694-5-git-send-email-ntl@pobox.com>
+From: djames.suhanko <djames.suhanko@gmail.com>
+Date: Mon, 18 Jun 2012 14:05:10 -0300
+Subject: [Buildroot] New package
+In-Reply-To: <CAFYZmWiBGNB2as7ehL2EBW5-0MPpxdz6kUtCnoeUvxWe2XwqoA@mail.gmail.com>
+References: <CAFYZmWjqLdemKVbdGQ=s2WGNGjtpVF1hvfpmqFeaQShyUokRzA@mail.gmail.com>
+ <20120618085754.5a6fb1b8@skate>
+ <CAFYZmWiBGNB2as7ehL2EBW5-0MPpxdz6kUtCnoeUvxWe2XwqoA@mail.gmail.com>
+Message-ID: <CAFYZmWiazPSWC=ENFGmgfZTTnfqNaW9x2FCoQ7X1wmZdOBjiaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If $(KERNEL_SOURCE_CONFIG) is read-only, the rm of
-$(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will prompt the user.
-Make it writable and use rm -f for good measure.
+Thomas, I forgot to say that I'm using the 1.10.9 version because the newer
+is crashing here.
+And thank you again!
 
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
----
- linux/linux.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Jun 18, 2012 at 10:59 AM, djames.suhanko
+<djames.suhanko@gmail.com>wrote:
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index f165dda..211d054 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -138,8 +138,9 @@ endif
- 
- define LINUX_CONFIGURE_CMDS
- 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-+	chmod u+w $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
--	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-+	rm -f $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(if $(BR2_ARM_EABI),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+> Thanks, Thomas!
+>
+>
+> On Mon, Jun 18, 2012 at 3:57 AM, Thomas Petazzoni <
+> thomas.petazzoni at free-electrons.com> wrote:
+>
+>> Le Sun, 17 Jun 2012 22:51:59 -0300,
+>> "djames.suhanko" <djames.suhanko@gmail.com> a ?crit :
+>>
+>> > BAR_SITE =
+>> >
+>> http://sourceforge.net/projects/clpbar/files/clpbar/bar-1.10.9/bar_1.10.9.tar.gz/download
+>>
+>> > The compilation is OK, but the automatic download from sourceforge isn't
+>> > working. How can I do the automatic download from sourceforge?
+>>
+>> This BAR_SITE will not work. Getting the correct URLs from SourceForge
+>> is a bit funky. Tip: download from Firefox, and in the downloads
+>> window, right click on the file, and ask Firefox for the original
+>> location of the file. It will be:
+>>
+>>
+>> http://kent.dl.sourceforge.net/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+>>
+>> So, you should use:
+>>
+>> BAR_SITE = http://
+>> $(BR2_SOURCEFORGE_MIRROR)/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+>>
+>> Regards,
+>>
+>> Thomas
+>> --
+>> Thomas Petazzoni, Free Electrons
+>> Kernel, drivers, real-time and embedded Linux
+>> development, consulting, training and support.
+>> http://free-electrons.com
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+>
+> --
+> Djames Suhanko
+> LinuxUser 158.760
+>
+>
+
+
 -- 
-1.7.10.2
+Djames Suhanko
+LinuxUser 158.760
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120618/d9cdba1c/attachment.html>
