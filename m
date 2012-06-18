@@ -1,37 +1,39 @@
 From: Nathan Lynch <ntl@pobox.com>
-Date: Mon, 18 Jun 2012 10:02:22 -0500
-Subject: [Buildroot] [RFC/PATCH 3/4] busybox: ensure $(BUSYBOX_BUILD_CONFIG)
-	is writable
+Date: Mon, 18 Jun 2012 10:02:23 -0500
+Subject: [Buildroot] [RFC/PATCH 4/4] linux: ensure buildroot_defconfig is
+	writable
 In-Reply-To: <1340031743-29694-1-git-send-email-ntl@pobox.com>
 References: <1340031743-29694-1-git-send-email-ntl@pobox.com>
-Message-ID: <1340031743-29694-4-git-send-email-ntl@pobox.com>
+Message-ID: <1340031743-29694-5-git-send-email-ntl@pobox.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If $(BUSYBOX_CONFIG_FILE) is read-only, the sed fixups to
-$(BUSYBOX_BUILD_CONFIG) fail.
+If $(KERNEL_SOURCE_CONFIG) is read-only, the rm of
+$(KERNEL_ARCH_PATH)/configs/buildroot_defconfig will prompt the user.
+Make it writable and use rm -f for good measure.
 
 Signed-off-by: Nathan Lynch <ntl@pobox.com>
 ---
- package/busybox/busybox.mk |    3 ++-
+ linux/linux.mk |    3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 1d988f8..50a612f 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -115,7 +115,8 @@ endef
- endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f165dda..211d054 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -138,8 +138,9 @@ endif
  
- define BUSYBOX_COPY_CONFIG
--	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
-+	cp -f $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG) && \
-+		chmod u+w $(BUSYBOX_BUILD_CONFIG)
- endef
- 
- # Disable shadow passwords support if unsupported by the C library
+ define LINUX_CONFIGURE_CMDS
+ 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++	chmod u+w $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+-	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
++	rm -f $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+ 	$(if $(BR2_ARM_EABI),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
+ 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
 -- 
 1.7.10.2
