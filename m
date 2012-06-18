@@ -1,41 +1,63 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Mon, 18 Jun 2012 09:32:55 -0400
-Subject: [Buildroot] Has anybody got systemd to work?
-In-Reply-To: <20120618152138.056695e303d6688dd90bba87@kinali.ch>
-References: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
- <20120618091508.a0fd469d78e12fcca7fdf4c0@kinali.ch>
- <CADiAo4LRnawMEEYcES31KLQKBR7KSYi3wxE0=kt7Pc9aMq64EQ@mail.gmail.com>
- <4FDF24E2.6020603@free-electrons.com>
- <20120618152138.056695e303d6688dd90bba87@kinali.ch>
-Message-ID: <CADiAo4K46d1ztgeg-6k-mZaj7oohsT5MdPZLEfiQC++r6yC2dw@mail.gmail.com>
+From: djames.suhanko <djames.suhanko@gmail.com>
+Date: Mon, 18 Jun 2012 10:59:04 -0300
+Subject: [Buildroot] New package
+In-Reply-To: <20120618085754.5a6fb1b8@skate>
+References: <CAFYZmWjqLdemKVbdGQ=s2WGNGjtpVF1hvfpmqFeaQShyUokRzA@mail.gmail.com>
+ <20120618085754.5a6fb1b8@skate>
+Message-ID: <CAFYZmWiBGNB2as7ehL2EBW5-0MPpxdz6kUtCnoeUvxWe2XwqoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Thanks, Thomas!
 
-On Mon, Jun 18, 2012 at 9:21 AM, Attila Kinali <attila@kinali.ch> wrote:
+On Mon, Jun 18, 2012 at 3:57 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-> Actually no: The bug is in systemd.
-> The m modifier is a gnu extension of the scanf format and is not
-> in the C99 standard. Because systemd silently assume that you are building
-> in a gnu environment (ie with glibc gcc etc) it fails at this point.
+> Le Sun, 17 Jun 2012 22:51:59 -0300,
+> "djames.suhanko" <djames.suhanko@gmail.com> a ?crit :
+>
+> > BAR_SITE =
+> >
+> http://sourceforge.net/projects/clpbar/files/clpbar/bar-1.10.9/bar_1.10.9.tar.gz/download
+>
+> > The compilation is OK, but the automatic download from sourceforge isn't
+> > working. How can I do the automatic download from sourceforge?
+>
+> This BAR_SITE will not work. Getting the correct URLs from SourceForge
+> is a bit funky. Tip: download from Firefox, and in the downloads
+> window, right click on the file, and ask Firefox for the original
+> location of the file. It will be:
+>
+>
+> http://kent.dl.sourceforge.net/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+>
+> So, you should use:
+>
+> BAR_SITE = http://
+> $(BR2_SOURCEFORGE_MIRROR)/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+>
+> Regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-From the portability standpoint, it is..
 
-They likely did not provide testing and fallback for %ms support in
-their autoconf scripts.
 
-I'll try to look into their source tree as well to see if this has
-been addressed there, and maybe will try to propose a fix for
-upstream, however local patching might be a faster solution
-(unfortunately).
-
-Thanks.
 
 -- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+Djames Suhanko
+LinuxUser 158.760
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120618/108decdf/attachment.html>
