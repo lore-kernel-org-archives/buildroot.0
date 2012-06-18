@@ -1,40 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Jun 2012 08:45:48 +0200
-Subject: [Buildroot] Various problem using buildroot-2012.05
-In-Reply-To: <1339990515.26331.YahooMailClassic@web161404.mail.bf1.yahoo.com>
-References: <1339990515.26331.YahooMailClassic@web161404.mail.bf1.yahoo.com>
-Message-ID: <20120618084548.76c4bed8@skate>
+Date: Mon, 18 Jun 2012 08:50:33 +0200
+Subject: [Buildroot] [PATCH 0/3] Document use of local sources for
+ packages
+In-Reply-To: <1339970041-17398-1-git-send-email-ntl@pobox.com>
+References: <1339970041-17398-1-git-send-email-ntl@pobox.com>
+Message-ID: <20120618085033.6d612d8a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sun, 17 Jun 2012 20:35:15 -0700 (PDT),
-Ming-Ching Tiew <mctiew@yahoo.com> a ?crit :
+Le Sun, 17 Jun 2012 16:53:58 -0500,
+Nathan Lynch <ntl@pobox.com> a ?crit :
 
-> I encountered various problems using buildroot-2012.05, all to do
-> with using buildroot as a chroot build environment.
+> Since the 2011.11 release Buildroot has supported building packages
+> from local sources, but the manual has not reflected this well.  This
+> series is an attempt to address that.  I relied on Thomas Petazzoni's
+> description of the "file" and "local" methods here:
+> 
+> http://free-electrons.com/blog/buildroot-2011-11/
+> 
+> Nathan Lynch (3):
+>   docs: update LIBFOO_SITE to describe use of filesystem paths
+>   docs: rework LIBFOO_SITE_METHOD documentation
+>   docs: describe "file" and "local" methods in LIBFOO_SITE_METHOD
+> 
+>  docs/manual/adding-packages-gentargets.txt |   77 +++++++++++++++++++---------
+>  1 file changed, 52 insertions(+), 25 deletions(-)
 
-Why would you do this?
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Buildroot is here to cross-compile your libraries and applications, it
-really doesn't make much sense to use it to generate a chrooted
-environment in which you compile your applications. At least, that's
-not how Buildroot developers/users typically use Buildroot, so it's an
-area (using a native compiler on the target, with development files)
-that doesn't receive a lot of attention, hence the problems you are
-facing.
-
-To the community: there seem to be an increasing number of people who
-misunderstand how to use Buildroot properly. Should we simply get rid
-of the "toolchain on target" option? Should we write a FAQ question
-about this? Generally speaking, I don't think Buildroot is the good
-tool to build a full-featured system that includes a compiler and all
-related development tools to build stuff on the target. What do others
-think about this?
-
-Best regards,
+for the three patches.
 
 Thomas
 -- 
