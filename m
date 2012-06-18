@@ -1,29 +1,30 @@
-From: Attila Kinali <attila@kinali.ch>
-Date: Mon, 18 Jun 2012 09:15:08 +0200
-Subject: [Buildroot] Has anybody got systemd to work?
-In-Reply-To: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
-References: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
-Message-ID: <20120618091508.a0fd469d78e12fcca7fdf4c0@kinali.ch>
+From: Ming-Ching Tiew <mctiew@yahoo.com>
+Date: Mon, 18 Jun 2012 00:46:05 -0700 (PDT)
+Subject: [Buildroot] Various problem using buildroot-2012.05
+Message-ID: <1340005565.16617.YahooMailClassic@web161402.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Jun 2012 22:45:20 -0400
-Dmitry Golubovsky <golubovsky@gmail.com> wrote:
 
+--- On Mon, 6/18/12, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Subject: Re: [Buildroot] Various problem using buildroot-2012.05
+> To: buildroot at busybox.net
+> Date: Monday, June 18, 2012, 6:45 AM
+> Le Sun, 17 Jun 2012 20:35:15 -0700
+> (PDT),
+> Ming-Ching Tiew <mctiew@yahoo.com>
+> a ?crit :
 > 
-> I am trying to boot a root FS built with systemd acting as init.
+> > I encountered various problems using buildroot-2012.05,
+> all to do
+> > with using buildroot as a chroot build environment.
+> 
+> Why would you do this?
+> 
 
-Out of curiosity: Is there any reason why you'd want to use
-systemd in an embedded system? What does it provide that a normal init
-cannot?
-
-			Attila Kinali
-
--- 
-It is upon moral qualities that a society is ultimately founded. All 
-the prosperity and technological sophistication in the world is of no 
-use without that foundation.
-                 -- Miss Matheson, The Diamond Age, Neil Stephenson
+Because there are many packages are not made to compile in a cross environment. For many, it's not a trial task to adapt those packages for cross compiling. 
