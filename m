@@ -1,21 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 18 Jun 2012 21:09:13 +0200
-Subject: [Buildroot] [PATCH] pthread-stubs: fix incorrect indentation
-In-Reply-To: <1340007792-7548-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 18 Jun 2012 10:23:12 +0200")
-References: <1340007792-7548-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87pq8we8ti.fsf@macbook.be.48ers.dk>
+Date: Mon, 18 Jun 2012 21:10:24 +0200
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0,
+	4}.x stable versions
+In-Reply-To: <1340018198-2905-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 18 Jun 2012 08:16:37 -0300")
+References: <1340018198-2905-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ipeoe8rj.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Thomas> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>t log|less
+ Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Fixed up this cutnpaste and committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
