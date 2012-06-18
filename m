@@ -1,72 +1,144 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 18 Jun 2012 23:33:18 +0200
-Subject: [Buildroot] [git commit] radvd: fix bashism in configure.ac
-Message-ID: <20120618213341.9DB4C96F3B@busybox.osuosl.org>
+From: Dave Purdy <david.c.purdy@gmail.com>
+Date: Mon, 18 Jun 2012 16:59:29 -0500
+Subject: [Buildroot] [PATCH] inadyn: new package for inadyn DDNS
+	client-updater
+Message-ID: <1340056769-19014-1-git-send-email-david.c.purdy@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e73f03d579aeb194ded0f9951571553a8422dd23
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+inadyn is a DynamicDNS client/updater which works with dyndns.com, noip.com
+and many other DDNS providers.  It is minimal in footprint and requirements,
+supports IP caching, multiple providers, multiple domain names, and 
+a variety of other situations.
 
-Fixes http://autobuild.buildroot.net/results/c3d0d04f8b3df63b3206cecf54dfdd67a4c7ccfb/build-end.log
 
-Patch sent upstream.
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Dave Purdy <david.c.purdy@gmail.com>
 ---
- package/radvd/radvd-configure.ac-fix-bashism.patch |   31 ++++++++++++++++++++
- package/radvd/radvd.mk                             |    1 +
- 2 files changed, 32 insertions(+), 0 deletions(-)
+ package/Config.in                  |    1 +
+ package/inadyn/Config.in           |    8 ++++++++
+ package/inadyn/S70inadyn.etc.initd |   35 +++++++++++++++++++++++++++++++++++
+ package/inadyn/inadyn.conf         |   12 ++++++++++++
+ package/inadyn/inadyn.mk           |   21 +++++++++++++++++++++
+ 5 files changed, 77 insertions(+), 0 deletions(-)
+ create mode 100644 package/inadyn/Config.in
+ create mode 100644 package/inadyn/S70inadyn.etc.initd
+ create mode 100644 package/inadyn/inadyn.conf
+ create mode 100644 package/inadyn/inadyn.mk
 
-diff --git a/package/radvd/radvd-configure.ac-fix-bashism.patch b/package/radvd/radvd-configure.ac-fix-bashism.patch
+diff --git a/package/Config.in b/package/Config.in
+index 1044e9f..d489b6a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -529,6 +529,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/ifplugd/Config.in"
+ endif
+ source "package/igh-ethercat/Config.in"
++source "package/inadyn/Config.in"
+ source "package/iperf/Config.in"
+ source "package/iproute2/Config.in"
+ source "package/ipsec-tools/Config.in"
+diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
 new file mode 100644
-index 0000000..a635cf8
+index 0000000..e8e241b
 --- /dev/null
-+++ b/package/radvd/radvd-configure.ac-fix-bashism.patch
-@@ -0,0 +1,31 @@
-+From ce34738107678cb76e3da34cd16dc9a34d8dd242 Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <jacmet@sunsite.dk>
-+Date: Mon, 18 Jun 2012 23:12:05 +0200
-+Subject: [PATCH] configure.ac: fix bashism
++++ b/package/inadyn/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_INADYN
++	bool "inadyn"
++	help
++	  INADYN is a free DynDNS client. It gives the possibility
++	  to have your own fixed hostname registered on the internet, 
++	  although your IP might be changing. 
 +
-+'==' is a bashism, breaking configure on systems where /bin/sh isn't bash
-+(E.G. Ubuntu).  Fixes:
++	  https://github.com/troglobit/inadyn
+diff --git a/package/inadyn/S70inadyn.etc.initd b/package/inadyn/S70inadyn.etc.initd
+new file mode 100644
+index 0000000..27dc040
+--- /dev/null
++++ b/package/inadyn/S70inadyn.etc.initd
+@@ -0,0 +1,35 @@
++#!/bin/sh
++#
++# Start & stop the inadyn client
++#
 +
-+http://autobuild.buildroot.net/results/c3d0d04f8b3df63b3206cecf54dfdd67a4c7ccfb/build-end.log
++CONFIG=/etc/inadyn.conf
++VR_INADYN=/var/run/inadyn
 +
-+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-+---
-+ configure.ac |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++# check if CONFIG exists, print message & exit if it doesn't
++[ ! -f $CONFIG ] && ( echo "The config file "$CONFIG" is missing...exiting now." && exit 2 )
 +
-+diff --git a/configure.ac b/configure.ac
-+index 3ab6667..c3b907b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -176,7 +176,7 @@ dnl Checks for library functions.
-+ AC_CHECK_FUNCS(getopt_long)
-+ 
-+ CONDITIONAL_SOURCES="device-${arch}.${OBJEXT} ${CONDITIONAL_SOURCES}"
-+-if test x${arch} == xlinux ; then
-++if test x${arch} = xlinux ; then
-+ 	CONDITIONAL_SOURCES="privsep-${arch}.${OBJEXT} ${CONDITIONAL_SOURCES}"
-+ 	AC_DEFINE(USE_PRIVSEP, 1, [Use privsep])
-+ fi
-+-- 
-+1.7.10
++# check if VR_INADYN exists, create it if not
++[ ! -d $VR_INADYN ] && mkdir -p $VR_INADYN
 +
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index e63e8e0..474a299 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -7,6 +7,7 @@
- RADVD_VERSION = 1.8.5
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = flex host-flex
-+RADVD_AUTORECONF = YES
- 
- define RADVD_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
++case "$1" in
++        start)
++                echo "Starting inadyn."
++                start-stop-daemon -S -x /usr/sbin/inadyn
++                ;;
++        stop)
++                echo  "Stopping inadyn."
++                start-stop-daemon -q -K -x /usr/sbin/inadyn
++                rm -f /var/run/inadyn/inadyn.pid 
++                ;;
++        restart)
++                "$0" stop
++                "$0" start
++                ;;
++        *)
++                echo $"Usage: $0 {start|stop|restart}"
++                exit 1
++esac
++
++exit $?
++
+diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
+new file mode 100644
+index 0000000..7d2b915
+--- /dev/null
++++ b/package/inadyn/inadyn.conf
+@@ -0,0 +1,12 @@
++# Basic configuration file for inadyn
++#
++# /etc/inadyn.conf
++background
++update_period_sec 600 # Check for a new IP every 600 seconds
++username test		# replace 'test' with your username
++password test		# replace 'test' with your password
++dyndns_system dyndns at dyndns.org   # replace w/ your provider
++
++#  uncomment the alias statement below to test it on your system
++alias test.homeip.net	
++# replace 'test.homeip.net' with yourdomainname for actual (non-test) use
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+new file mode 100644
+index 0000000..583d1b2
+--- /dev/null
++++ b/package/inadyn/inadyn.mk
+@@ -0,0 +1,21 @@
++#############################################################
++#
++# inadyn
++#
++#############################################################
++
++INADYN_VERSION = 1.98.1
++INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.bz2
++INADYN_SITE = https://github.com/downloads/troglobit/inadyn
++
++define INADYN_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define INADYN_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
++	$(INSTALL) -D -m 0644 	package/inadyn/inadyn.conf $(TARGET_DIR)/etc/inadyn.conf
++	$(INSTALL) -D -m 0755   package/inadyn/S70inadyn.etc.initd $(TARGET_DIR)/etc/init.d/S70inadyn
++endef
++
++$(eval $(call GENTARGETS))
+-- 
+1.7.0.4
