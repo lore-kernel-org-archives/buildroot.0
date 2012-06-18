@@ -1,46 +1,56 @@
-From: Dmitry Golubovsky <golubovsky@gmail.com>
-Date: Sun, 17 Jun 2012 22:45:20 -0400
-Subject: [Buildroot] Has anybody got systemd to work?
-Message-ID: <CADiAo4JeiZT7foLgagzuO+Xjb6uFX-TFms_+e0TcuF4DBpcrcg@mail.gmail.com>
+From: Ming-Ching Tiew <mctiew@yahoo.com>
+Date: Sun, 17 Jun 2012 20:35:15 -0700 (PDT)
+Subject: [Buildroot] Various problem using buildroot-2012.05
+Message-ID: <1339990515.26331.YahooMailClassic@web161404.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-I am trying to boot a root FS built with systemd acting as init.
+I encountered various problems using buildroot-2012.05, all to do with using buildroot as a chroot build environment.
 
-Looks like it fails in src/mount-setup.c, function
-mount-group-controllers, ca. line 193.
+1. Seem "Copying development files to target did not copy libc.so.
 
-I get an error message
+   Seems this was reported sometime ago, a fix was provided but somehow it's not propagated to support/scripts/copy.sh.
 
-Failed to parse /proc/cgroups.
+   The fix is to add this line to copy.sh
 
-as a result of
+ cp -af $(STAGING_DIR)/usr/lib/libc.so $(TARGET_DIR)/usr/lib
 
-if (fscanf(f, "%ms %*i %*i %i", &controller, &enabled) != 2)
+2. I wrote a test program in the chroot environment, 
 
-failing to parse /proc/cgroups.
+#include <stdio.h>
+#include <dlfcn.h>
+#include <stdlib.h>
 
-I changed %ms to %s and added explicit malloc right before (only in
-that file, mount-setup.c). I was able to get a bit further, but failed
-on another instance of fscanf with %ms (anf there seem to be more
-files with %ms
+int main(int argc, char **argv) 
+{
+   void *lib_handle;
+   double (*fn)(int *);
+   int x;
+   char *error;
 
-Is %ms format (pre-malloc a value buffer) or %as format supported in
-uClibc in principle, or can it be enabled via specific configutration,
-or expected in future versions?
+   lib_handle = dlopen("libctest.so", RTLD_NOW);
+   if (!lib_handle) 
+   {
+      fprintf(stderr, "1: RTLD_NOW: %s\n", dlerror());
+      exit(1);
+   }
+   return 0;
+}
 
-I use uClibc 0.9.33
+    # cc -rdynamic  mytest.c -ldl
+/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../libdl.a(libdl.os): In function `_dl_find_hash':
+libdl.c:(.text+0x9fa): undefined reference to `_dl_allocate_static_tls'
+libdl.c:(.text+0xa1a): undefined reference to `_dl_allocate_static_tls'
+/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../libdl.a(libdl.os): In function `_dl_load_elf_shared_library':
+libdl.c:(.text+0x1e51): undefined reference to `_dl_next_tls_modid'
+/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../../i686-unknown-linux-uclibc/bin/ld: a.out: hidden symbol `_dl_allocate_static_tls' isn't defined
+/usr/lib/gcc/i686-unknown-linux-uclibc/4.6.3/../../../../i686-unknown-linux-uclibc/bin/ld: final link failed: Bad value
+collect2: ld returned 1 exit status
 
-Has anybody seen this?
+Is there any other libraries which are missing also in the coying ?
 
-Thanks.
-
--- 
-Dmitry Golubovsky
-
-Anywhere on the Web
+ 
