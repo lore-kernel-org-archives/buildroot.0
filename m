@@ -1,37 +1,48 @@
-From: =?ISO-8859-1?Q?Daniel_Nystr=F6m?= <daniel.nystrom@timeterminal.se>
-Date: Tue, 19 Jun 2012 14:20:16 +0200
-Subject: [Buildroot] New package
-In-Reply-To: <20120618085754.5a6fb1b8@skate>
-References: <CAFYZmWjqLdemKVbdGQ=s2WGNGjtpVF1hvfpmqFeaQShyUokRzA@mail.gmail.com>
- <20120618085754.5a6fb1b8@skate>
-Message-ID: <CAHQn0kiM__pOsi3MXC58JW0hFQHX-rj-P-1LZ05o3fRBrGL70A@mail.gmail.com>
+From: Tzu-Jung Lee <roylee17@gmail.com>
+Date: Tue, 19 Jun 2012 20:51:46 +0800
+Subject: [Buildroot] [PATCH 1/1] ccache: expose control interface via
+	'make ccache-options'
+In-Reply-To: <1339991408-25620-1-git-send-email-tjlee@ambarella.com>
+References: <1339991408-25620-1-git-send-email-tjlee@ambarella.com>
+Message-ID: <CAEvN+1hkWMdTRvKmjFmjD-Fy03MVdSKH9EUWvWx00Mr_naXLBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 18, 2012 at 8:57 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Sun, 17 Jun 2012 22:51:59 -0300,
-> "djames.suhanko" <djames.suhanko@gmail.com> a ?crit :
+On Mon, Jun 18, 2012 at 11:50 AM, Tzu-Jung Lee <roylee17@gmail.com> wrote:
+> usage:
+> ? ? ? ?# set cache limit size
+> ? ? ? ?make CCACHE_OPTIONS="--max-size=5G" ccache-options
 >
->> BAR_SITE =
->> http://sourceforge.net/projects/clpbar/files/clpbar/bar-1.10.9/bar_1.10.9.tar.gz/download
+> ? ? ? ?# zero statistics counters
+> ? ? ? ?make CCACHE_OPTIONS="--zero-stats" ccache-options
 >
->> The compilation is OK, but the automatic download from sourceforge isn't
->> working. How can I do the automatic download from sourceforge?
+> Change-Id: I0162a2612a9aa4afd49f6d93c9c36dce3e0c8228
+> ---
+> ?package/ccache/ccache.mk | ? ?4 ++++
+> ?1 files changed, 4 insertions(+), 0 deletions(-)
 >
-> This BAR_SITE will not work. Getting the correct URLs from SourceForge
-> is a bit funky. Tip: download from Firefox, and in the downloads
-> window, right click on the file, and ask Firefox for the original
-> location of the file. It will be:
+> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+> index d7106ee..d46fbb9 100644
+> --- a/package/ccache/ccache.mk
+> +++ b/package/ccache/ccache.mk
+> @@ -50,3 +50,7 @@ ccache-stats: host-ccache
+> ? ? ? ?$(Q)$(CCACHE) -s
+> ?endif
 >
-> http://kent.dl.sourceforge.net/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+> +ifeq ($(BR2_CCACHE),y)
+> +ccache-options: host-ccache
+> + ? ? ? $(Q)$(CCACHE) $(CCACHE_OPTIONS)
+> +endif
+> --
+> 1.7.8.6
 >
-> So, you should use:
->
-> BAR_SITE = http://$(BR2_SOURCEFORGE_MIRROR)/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
 
-I think it's even:
-BAR_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+Hi Guys,
+
+Any comment on this?
+
+Regards,
+Roy
