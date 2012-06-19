@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Jun 2012 22:48:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 5318] New: Grub requires package rxvt to configure
-Message-ID: <bug-5318-163@https.bugs.busybox.net/>
+Date: Tue, 19 Jun 2012 22:51:09 +0000 (UTC)
+Subject: [Buildroot] [Bug 5318] Grub requires package rxvt to configure
+In-Reply-To: <bug-5318-163@https.bugs.busybox.net/>
+References: <bug-5318-163@https.bugs.busybox.net/>
+Message-ID: <20120619225109.6E0FE827F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,12 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=5318
 
-           Summary: Grub requires package rxvt to configure
-           Product: buildroot
-           Version: 2012.02
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: noel.roberts at brisbane.qld.gov.au
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+ATeamDev <noel.roberts@brisbane.qld.gov.au> changed:
 
-
-It seems package rxvt is required, however the rxvt package has been removed
-from Buildroot (according to a one-liner in the CHANGELIST).
-
-Buildroot build completes and doesn't return an error.
-However, when attempting to run grub, grub returns:
-
-#grub
-Probing device to guess BIOS drives. This may take a long time.
-Error opening terminal: rxvt.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+              Build|                            |buildroot-2012.05
+             Target|                            |i386 / 486
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
