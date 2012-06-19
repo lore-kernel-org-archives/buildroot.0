@@ -1,55 +1,75 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 19 Jun 2012 11:15:10 +0200
-Subject: [Buildroot] Bug on host-only packages
-In-Reply-To: <20120611105621.0aacd20c@skate>
-References: <20120611105621.0aacd20c@skate>
-Message-ID: <4FE0431E.9080909@lucaceresoli.net>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Tue, 19 Jun 2012 11:35:53 +0100
+Subject: [Buildroot] [PATCH] sudo: fix install
+Message-ID: <1340102153-22387-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Simon Dawson <spdawson@gmail.com>
 
-Thomas Petazzoni wrote:
-> Hello,
->
-> I have the impression that there is a bug on the download step of
-> host-only packages: the tarballs are named host-foobar-xxx.tar.gz
-> instead of just foobar-xxx.tar.gz. For example, in my download
-> directory, I have:
->
-> host-lpc3250loader-1.0.tar.gz
-> host-omap-u-boot-utils-8aff852322.tar.gz
->
-> Even though those don't have target variants (so there is no
-> problematic consequences to this bug), I think that for consistency
-> reasons they should be named:
->
-> lpc3250loader-1.0.tar.gz
-> omap-u-boot-utils-8aff852322.tar.gz
->
-> Most likely a bug in the GENTARGETS infrastructure. I haven't look at
-> the code yet, I'm just reporting the issue (don't have the time to dig
-> into it right now).
+Running sudo on the target fails with the following errors.
 
-I noticed this problem as well. It seems to be caused by the fact that
-DOWNLOAD_INNER passes $(1) and $(2) to the DOWNLOAD_WGET, which contain the
-correct info, while it passes nothing to other downloaders, which have to
-do on their own based on $($(PKG)_SOURCE). The latter is in turn undefined
-for git (and other) methods, so it defaults to $(2)_BASE_NAME, which has the
-"host-" prefix.
+  sudo: /usr/libexec/sudoers.so: No such file or directory
+  sudo: fatal error, unable to load plugins
 
-I had no time to go on and fix the issue properly.
+The problem is that the installation of the sudo package is broken. This patch
+replaces the hand-crafted install rule with the default AUTOTARGETS install.
 
-Slightly off topic, I think we should consider having an extra argument to
-GENTARGETS_INNER holding the lowercase package name, without the 
-host-prefix,
-as we do for the uppercase package name.
-This would ease further operations and, ultimately, fixing the bug in 
-discussion.
+Unfortunately, the default install fails because it includes a step that invokes
+the cross-compiled visudo binary. A patch is provided here to disable this
+visudo invocation, which is for sanity checking only.
 
-All of these are in my todo list (obviously unscheduled).
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/sudo/sudo-fix-sudoers-plugin-install.patch |   19 +++++++++++++++++++
+ package/sudo/sudo.mk                               |    8 --------
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+ create mode 100644 package/sudo/sudo-fix-sudoers-plugin-install.patch
 
-Luca
+diff --git a/package/sudo/sudo-fix-sudoers-plugin-install.patch b/package/sudo/sudo-fix-sudoers-plugin-install.patch
+new file mode 100644
+index 0000000..e85e5d8
+--- /dev/null
++++ b/package/sudo/sudo-fix-sudoers-plugin-install.patch
+@@ -0,0 +1,19 @@
++The installation of the sudoers plugin fails when cross compiling, because it
++tries to run the cross-compiled visudo, rather than that of the host.
++
++The visudo invocation is only required in order to sanity check any existing
++sudoers file in the target directory; this can safely be dispensed with.
++
++Signed-off-by: Simon Dawson <spdawson@gmail.com>
++diff -Nurp a/plugins/sudoers/Makefile.in b/plugins/sudoers/Makefile.in
++--- a/plugins/sudoers/Makefile.in	2012-05-15 17:22:02.000000000 +0100
+++++ b/plugins/sudoers/Makefile.in	2012-06-19 11:24:00.322449438 +0100
++@@ -239,7 +239,7 @@ sudoers: $(srcdir)/sudoers.in
++ pre-install:
++ 	@if test -r $(DESTDIR)$(sudoersdir)/sudoers; then \
++ 	    echo "Checking existing sudoers file for syntax errors."; \
++-	    ./visudo -c -f $(DESTDIR)$(sudoersdir)/sudoers; \
+++	    (echo "SKIPPED" || ./visudo -c -f $(DESTDIR)$(sudoersdir)/sudoers); \
++ 	fi
++ 
++ install: install-plugin install-binaries install-sudoers install-doc
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 3629ad1..f1efc54 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -14,12 +14,4 @@ SUDO_CONF_OPT = \
+ 		--without-interfaces \
+ 		--without-pam
+ 
+-define SUDO_INSTALL_TARGET_CMDS
+-	install -m 4555 -D $(@D)/src/sudo $(TARGET_DIR)/usr/bin/sudo
+-	install -m 0555 -D $(@D)/plugins/sudoers/visudo  \
+-		$(TARGET_DIR)/usr/sbin/visudo
+-	install -m 0440 -D $(@D)/plugins/sudoers/sudoers \
+-		$(TARGET_DIR)/etc/sudoers
+-endef
+-
+ $(eval $(call AUTOTARGETS))
+-- 
+1.7.9.5
