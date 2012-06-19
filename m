@@ -1,37 +1,41 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 19 Jun 2012 18:59:03 +0200
-Subject: [Buildroot] [PATCH 2/2] qt: bump to 4.8.2
-In-Reply-To: <1340125143-8683-1-git-send-email-luca@lucaceresoli.net>
-References: <1340125143-8683-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1340125143-8683-2-git-send-email-luca@lucaceresoli.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Jun 2012 22:48:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 5318] New: Grub requires package rxvt to configure
+Message-ID: <bug-5318-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also switch to the new upstream URL.
+https://bugs.busybox.net/show_bug.cgi?id=5318
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/qt/qt.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+           Summary: Grub requires package rxvt to configure
+           Product: buildroot
+           Version: 2012.02
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: noel.roberts at brisbane.qld.gov.au
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index ff9f4ca..6b1be83 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -11,9 +11,9 @@
- #
- ######################################################################
- 
--QT_VERSION = 4.8.1
-+QT_VERSION = 4.8.2
- QT_SOURCE  = qt-everywhere-opensource-src-$(QT_VERSION).tar.gz
--QT_SITE    = http://get.qt.nokia.com/qt/source
-+QT_SITE    = http://releases.qt-project.org/qt4/source
- QT_DEPENDENCIES = host-pkg-config
- QT_INSTALL_STAGING = YES
- 
+
+It seems package rxvt is required, however the rxvt package has been removed
+from Buildroot (according to a one-liner in the CHANGELIST).
+
+Buildroot build completes and doesn't return an error.
+However, when attempting to run grub, grub returns:
+
+#grub
+Probing device to guess BIOS drives. This may take a long time.
+Error opening terminal: rxvt.
+
 -- 
-1.7.9.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
