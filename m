@@ -1,69 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jun 2012 09:22:45 +0200
-Subject: [Buildroot] [PATCH] inadyn: new package for inadyn DDNS
- client-updater
-In-Reply-To: <1340056769-19014-1-git-send-email-david.c.purdy@gmail.com>
-References: <1340056769-19014-1-git-send-email-david.c.purdy@gmail.com>
-Message-ID: <20120619092245.4d145587@skate>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 19 Jun 2012 11:15:10 +0200
+Subject: [Buildroot] Bug on host-only packages
+In-Reply-To: <20120611105621.0aacd20c@skate>
+References: <20120611105621.0aacd20c@skate>
+Message-ID: <4FE0431E.9080909@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-Le Mon, 18 Jun 2012 16:59:29 -0500,
-Dave Purdy <david.c.purdy@gmail.com> a ?crit :
+Thomas Petazzoni wrote:
+> Hello,
+>
+> I have the impression that there is a bug on the download step of
+> host-only packages: the tarballs are named host-foobar-xxx.tar.gz
+> instead of just foobar-xxx.tar.gz. For example, in my download
+> directory, I have:
+>
+> host-lpc3250loader-1.0.tar.gz
+> host-omap-u-boot-utils-8aff852322.tar.gz
+>
+> Even though those don't have target variants (so there is no
+> problematic consequences to this bug), I think that for consistency
+> reasons they should be named:
+>
+> lpc3250loader-1.0.tar.gz
+> omap-u-boot-utils-8aff852322.tar.gz
+>
+> Most likely a bug in the GENTARGETS infrastructure. I haven't look at
+> the code yet, I'm just reporting the issue (don't have the time to dig
+> into it right now).
 
-> inadyn is a DynamicDNS client/updater which works with dyndns.com, noip.com
-> and many other DDNS providers.  It is minimal in footprint and requirements,
-> supports IP caching, multiple providers, multiple domain names, and 
-> a variety of other situations.
-> 
-> 
-> Signed-off-by: Dave Purdy <david.c.purdy@gmail.com>
+I noticed this problem as well. It seems to be caused by the fact that
+DOWNLOAD_INNER passes $(1) and $(2) to the DOWNLOAD_WGET, which contain the
+correct info, while it passes nothing to other downloaders, which have to
+do on their own based on $($(PKG)_SOURCE). The latter is in turn undefined
+for git (and other) methods, so it defaults to $(2)_BASE_NAME, which has the
+"host-" prefix.
 
-Looks good, a minor comment below.
+I had no time to go on and fix the issue properly.
 
-Have you checked that it builds properly with a toolchain without IPv6.
-From a 2 minutes look, I don't see any IPv6 specificities in the code,
-but it might be worth checking this.
+Slightly off topic, I think we should consider having an extra argument to
+GENTARGETS_INNER holding the lowercase package name, without the 
+host-prefix,
+as we do for the uppercase package name.
+This would ease further operations and, ultimately, fixing the bug in 
+discussion.
 
-> diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-> new file mode 100644
-> index 0000000..583d1b2
-> --- /dev/null
-> +++ b/package/inadyn/inadyn.mk
-> @@ -0,0 +1,21 @@
-> +#############################################################
-> +#
-> +# inadyn
-> +#
-> +#############################################################
-> +
-> +INADYN_VERSION = 1.98.1
-> +INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.bz2
-> +INADYN_SITE = https://github.com/downloads/troglobit/inadyn
-> +
-> +define INADYN_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define INADYN_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
-> +	$(INSTALL) -D -m 0644 	package/inadyn/inadyn.conf $(TARGET_DIR)/etc/inadyn.conf
-> +	$(INSTALL) -D -m 0755   package/inadyn/S70inadyn.etc.initd $(TARGET_DIR)/etc/init.d/S70inadyn
+All of these are in my todo list (obviously unscheduled).
 
-For consistency reasons, You should just name the init script
-package/inadyn/S70inadyn, so need to use S70.inadyn.etc.initd since we
-don't do this anywhere in Buildroot.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Luca
