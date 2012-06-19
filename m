@@ -1,117 +1,38 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Tue, 19 Jun 2012 07:56:04 +0100
-Subject: [Buildroot] [PATCH RFC 2/2] Use JavaScript install path from
-	configuration during package installation
-In-Reply-To: <1340088964-10630-1-git-send-email-spdawson@gmail.com>
-References: <1340088964-10630-1-git-send-email-spdawson@gmail.com>
-Message-ID: <1340088964-10630-3-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Tue, 19 Jun 2012 08:57:35 +0200
+Subject: [Buildroot] [git commit] mediastreamer: portaudio backend needs
+	speex
+Message-ID: <20120619065922.F1C1C829FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=e9345f85822635291016f0b6e7cf855e07dbb028
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Fixes http://autobuild.buildroot.net/results/27996b33a6e3080f8d96204f5c1c421b17a86d6e
+
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/explorercanvas/explorercanvas.mk       |    4 ++--
- package/flot/flot.mk                           |    4 ++--
- package/jquery-sparkline/jquery-sparkline.mk   |    4 ++--
- package/jquery-validation/jquery-validation.mk |    4 ++--
- package/jquery/jquery.mk                       |    4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ package/mediastreamer/mediastreamer.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
-index 93dcb1f..e099faa 100644
---- a/package/explorercanvas/explorercanvas.mk
-+++ b/package/explorercanvas/explorercanvas.mk
-@@ -8,11 +8,11 @@ endef
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index be91c44..716a733 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -12,9 +12,10 @@ else
+ MEDIASTREAMER_CONF_OPT += --disable-alsa
+ endif
  
- define EXPLORERCANVAS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/excanvas.compiled.js \
--		$(TARGET_DIR)/var/www/excanvas.js
-+		$(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/excanvas.js
- endef
- 
- define EXPLORERCANVAS_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/var/www/excanvas.js
-+	rm -f $(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/excanvas.js
- endef
- 
- $(eval $(call GENTARGETS))
-diff --git a/package/flot/flot.mk b/package/flot/flot.mk
-index 8b51b55..3d6987e 100644
---- a/package/flot/flot.mk
-+++ b/package/flot/flot.mk
-@@ -12,12 +12,12 @@ FLOT_FILES = jquery.flot $(addprefix jquery.flot.,\
- 
- define FLOT_INSTALL_TARGET_CMDS
- 	for i in $(FLOT_FILES); do \
--		$(INSTALL) -m 0644 -D $(@D)/$$i.min.js $(TARGET_DIR)/var/www/$$i.js; \
-+		$(INSTALL) -m 0644 -D $(@D)/$$i.min.js $(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/$$i.js; \
- 	done
- endef
- 
- define FLOT_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/var/www/jquery.flot*
-+	rm -f $(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.flot*
- endef
- 
- $(eval $(call GENTARGETS))
-diff --git a/package/jquery-sparkline/jquery-sparkline.mk b/package/jquery-sparkline/jquery-sparkline.mk
-index d0b478a..3ef1dc7 100644
---- a/package/jquery-sparkline/jquery-sparkline.mk
-+++ b/package/jquery-sparkline/jquery-sparkline.mk
-@@ -8,11 +8,11 @@ endef
- 
- define JQUERY_SPARKLINE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/$(JQUERY_SPARKLINE_SOURCE) \
--		$(TARGET_DIR)/var/www/jquery.sparkline.js
-+		$(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.sparkline.js
- endef
- 
- define JQUERY_SPARKLINE_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/var/www/jquery.sparkline.js
-+	rm -f $(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.sparkline.js
- endef
- 
- $(eval $(call GENTARGETS))
-diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index 5fee4c1..ccf1155 100644
---- a/package/jquery-validation/jquery-validation.mk
-+++ b/package/jquery-validation/jquery-validation.mk
-@@ -8,11 +8,11 @@ endef
- 
- define JQUERY_VALIDATION_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/jquery.validate.min.js \
--		$(TARGET_DIR)/var/www/jquery.validate.js
-+		$(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.validate.js
- endef
- 
- define JQUERY_VALIDATION_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/var/www/jquery.validate.js
-+	rm -f $(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.validate.js
- endef
- 
- $(eval $(call GENTARGETS))
-diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
-index 08dd4a3..93d8eab 100644
---- a/package/jquery/jquery.mk
-+++ b/package/jquery/jquery.mk
-@@ -8,11 +8,11 @@ endef
- 
- define JQUERY_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/$(JQUERY_SOURCE) \
--		$(TARGET_DIR)/var/www/jquery.js
-+		$(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.js
- endef
- 
- define JQUERY_UNINSTALL_TARGET_CMDS
--	rm -f $(TARGET_DIR)/var/www/jquery.js
-+	rm -f $(TARGET_DIR)/$(BR2_JAVASCRIPT_INSTALL_PATH)/jquery.js
- endef
- 
- $(eval $(call GENTARGETS))
--- 
-1.7.9.5
+-ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++# portaudio backend needs speex as well
++ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX),yy)
+ MEDIASTREAMER_CONF_OPT += --enable-portaudio
+-MEDIASTREAMER_DEPENDENCIES += portaudio
++MEDIASTREAMER_DEPENDENCIES += portaudio speex
+ else
+ MEDIASTREAMER_CONF_OPT += --disable-portaudio
+ endif
