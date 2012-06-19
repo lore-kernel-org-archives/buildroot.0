@@ -1,32 +1,29 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Mon, 18 Jun 2012 21:18:32 -0400
-Subject: [Buildroot] [PATCH] xinetd: explicitly specify AR in build step
-Message-ID: <1340068712-10822-1-git-send-email-danomimanchego123@gmail.com>
+From: Phil Edworthy <phil.edworthy@renesas.com>
+Date: Tue, 19 Jun 2012 07:05:53 +0100
+Subject: [Buildroot] [PATCH] Add /dev/video static device nodes
+Message-ID: <1340085953-24986-1-git-send-email-phil.edworthy@renesas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xinetd's configure does not set up an AR variable, and there
-are no libtool files to autoreconfigure.  So instead, lets
-pass in AR during the build.
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
 ---
- package/xinetd/xinetd.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ target/generic/device_table_dev.txt |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/xinetd/xinetd.mk b/package/xinetd/xinetd.mk
-index 6a69a55..e8fc037 100644
---- a/package/xinetd/xinetd.mk
-+++ b/package/xinetd/xinetd.mk
-@@ -11,4 +11,6 @@ ifneq ($(BR2_INET_RPC),y)
- XINETD_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -DNO_RPC"
- endif
+diff --git a/target/generic/device_table_dev.txt b/target/generic/device_table_dev.txt
+index d1d1e11..a93a2c8 100644
+--- a/target/generic/device_table_dev.txt
++++ b/target/generic/device_table_dev.txt
+@@ -141,3 +141,6 @@
  
-+XINETD_MAKE_OPT = AR="$(TARGET_AR)"
+ # I2C device nodes
+ /dev/i2c-	c	666	0	0	89	0	0	1	4
 +
- $(eval $(call AUTOTARGETS))
++# v4l device nodes
++/dev/video	c	666	0	0	81	0	0	1	4
 -- 
-1.7.9.5
+1.7.5.4
