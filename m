@@ -1,144 +1,68 @@
-From: Dave Purdy <david.c.purdy@gmail.com>
-Date: Mon, 18 Jun 2012 16:59:29 -0500
-Subject: [Buildroot] [PATCH] inadyn: new package for inadyn DDNS
-	client-updater
-Message-ID: <1340056769-19014-1-git-send-email-david.c.purdy@gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 18 Jun 2012 21:01:44 -0400
+Subject: [Buildroot] [PATCH] xinetd: expand DESTDIR patch to fix uninstall
+	target
+Message-ID: <1340067704-7095-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-inadyn is a DynamicDNS client/updater which works with dyndns.com, noip.com
-and many other DDNS providers.  It is minimal in footprint and requirements,
-supports IP caching, multiple providers, multiple domain names, and 
-a variety of other situations.
+Expand the openWRT patch to fix xinetd's "uninstall" target,
+so that buildroot's "xinetd-clean" removes the correct files.
 
-
-Signed-off-by: Dave Purdy <david.c.purdy@gmail.com>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/Config.in                  |    1 +
- package/inadyn/Config.in           |    8 ++++++++
- package/inadyn/S70inadyn.etc.initd |   35 +++++++++++++++++++++++++++++++++++
- package/inadyn/inadyn.conf         |   12 ++++++++++++
- package/inadyn/inadyn.mk           |   21 +++++++++++++++++++++
- 5 files changed, 77 insertions(+), 0 deletions(-)
- create mode 100644 package/inadyn/Config.in
- create mode 100644 package/inadyn/S70inadyn.etc.initd
- create mode 100644 package/inadyn/inadyn.conf
- create mode 100644 package/inadyn/inadyn.mk
+ package/xinetd/xinetd-2.3.15/002-destdir.patch |   28 ++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1044e9f..d489b6a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -529,6 +529,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/ifplugd/Config.in"
- endif
- source "package/igh-ethercat/Config.in"
-+source "package/inadyn/Config.in"
- source "package/iperf/Config.in"
- source "package/iproute2/Config.in"
- source "package/ipsec-tools/Config.in"
-diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
-new file mode 100644
-index 0000000..e8e241b
---- /dev/null
-+++ b/package/inadyn/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_INADYN
-+	bool "inadyn"
-+	help
-+	  INADYN is a free DynDNS client. It gives the possibility
-+	  to have your own fixed hostname registered on the internet, 
-+	  although your IP might be changing. 
-+
-+	  https://github.com/troglobit/inadyn
-diff --git a/package/inadyn/S70inadyn.etc.initd b/package/inadyn/S70inadyn.etc.initd
-new file mode 100644
-index 0000000..27dc040
---- /dev/null
-+++ b/package/inadyn/S70inadyn.etc.initd
-@@ -0,0 +1,35 @@
-+#!/bin/sh
-+#
-+# Start & stop the inadyn client
-+#
-+
-+CONFIG=/etc/inadyn.conf
-+VR_INADYN=/var/run/inadyn
-+
-+# check if CONFIG exists, print message & exit if it doesn't
-+[ ! -f $CONFIG ] && ( echo "The config file "$CONFIG" is missing...exiting now." && exit 2 )
-+
-+# check if VR_INADYN exists, create it if not
-+[ ! -d $VR_INADYN ] && mkdir -p $VR_INADYN
-+
-+case "$1" in
-+        start)
-+                echo "Starting inadyn."
-+                start-stop-daemon -S -x /usr/sbin/inadyn
-+                ;;
-+        stop)
-+                echo  "Stopping inadyn."
-+                start-stop-daemon -q -K -x /usr/sbin/inadyn
-+                rm -f /var/run/inadyn/inadyn.pid 
-+                ;;
-+        restart)
-+                "$0" stop
-+                "$0" start
-+                ;;
-+        *)
-+                echo $"Usage: $0 {start|stop|restart}"
-+                exit 1
-+esac
-+
-+exit $?
-+
-diff --git a/package/inadyn/inadyn.conf b/package/inadyn/inadyn.conf
-new file mode 100644
-index 0000000..7d2b915
---- /dev/null
-+++ b/package/inadyn/inadyn.conf
-@@ -0,0 +1,12 @@
-+# Basic configuration file for inadyn
-+#
-+# /etc/inadyn.conf
-+background
-+update_period_sec 600 # Check for a new IP every 600 seconds
-+username test		# replace 'test' with your username
-+password test		# replace 'test' with your password
-+dyndns_system dyndns at dyndns.org   # replace w/ your provider
-+
-+#  uncomment the alias statement below to test it on your system
-+alias test.homeip.net	
-+# replace 'test.homeip.net' with yourdomainname for actual (non-test) use
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-new file mode 100644
-index 0000000..583d1b2
---- /dev/null
-+++ b/package/inadyn/inadyn.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# inadyn
-+#
-+#############################################################
-+
-+INADYN_VERSION = 1.98.1
-+INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.bz2
-+INADYN_SITE = https://github.com/downloads/troglobit/inadyn
-+
-+define INADYN_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+define INADYN_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
-+	$(INSTALL) -D -m 0644 	package/inadyn/inadyn.conf $(TARGET_DIR)/etc/inadyn.conf
-+	$(INSTALL) -D -m 0755   package/inadyn/S70inadyn.etc.initd $(TARGET_DIR)/etc/init.d/S70inadyn
-+endef
-+
-+$(eval $(call GENTARGETS))
+diff --git a/package/xinetd/xinetd-2.3.15/002-destdir.patch b/package/xinetd/xinetd-2.3.15/002-destdir.patch
+index 15ff4b8..7a323eb 100644
+--- a/package/xinetd/xinetd-2.3.15/002-destdir.patch
++++ b/package/xinetd/xinetd-2.3.15/002-destdir.patch
+@@ -1,14 +1,15 @@
+ This patch adds $(DESTDIR) to xinetd's installation paths, to support 
+ installation to a cross-compiled RFS area.
+ 
+-The content of this patch was copied from the OpenWrt project:
++The content of this patch was inspired by the OpenWrt project:
+ https://dev.openwrt.org/browser/packages/net/xinetd/patches/002-destdir.patch
+ 
+ Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+ 
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -75,15 +75,15 @@ dlibxlog: dlibsio dlibstr
++diff -urN xinetd-2.3.15.ORIG/Makefile.in xinetd-2.3.15/Makefile.in
++--- xinetd-2.3.15.ORIG/Makefile.in	2007-09-20 13:01:52.000000000 -0400
+++++ xinetd-2.3.15/Makefile.in	2012-06-18 10:20:00.540864388 -0400
++@@ -75,27 +75,27 @@
+  
+  install: build
+  	for i in $(DAEMONDIR) $(BINDIR) $(MANDIR)/man5 $(MANDIR)/man8 ; do \
+@@ -33,3 +34,22 @@ Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+  	@echo "You must put your xinetd.conf in /etc/xinetd.conf"
+  	@echo "There is a sample config file in xinetd/sample.conf and you can"
+  	@echo "use xconv.pl to convert your old inetd.conf file to an xinetd format"
++ 
++ uninstall:
++-	rm -f $(DAEMONDIR)/xinetd
++-	rm -f $(DAEMONDIR)/itox
++-	rm -f $(DAEMONDIR)/xconv.pl
++-	rm -f $(MANDIR)/man5/xinetd.conf.5
++-	rm -f $(MANDIR)/man8/xinetd.log.8
++-	rm -f $(MANDIR)/man8/xinetd.8
++-	rm -f $(MANDIR)/man8/itox.8
+++	rm -f $(DESTDIR)$(DAEMONDIR)/xinetd
+++	rm -f $(DESTDIR)$(DAEMONDIR)/itox
+++	rm -f $(DESTDIR)$(DAEMONDIR)/xconv.pl
+++	rm -f $(DESTDIR)$(MANDIR)/man5/xinetd.conf.5
+++	rm -f $(DESTDIR)$(MANDIR)/man8/xinetd.log.8
+++	rm -f $(DESTDIR)$(MANDIR)/man8/xinetd.8
+++	rm -f $(DESTDIR)$(MANDIR)/man8/itox.8
++  
++ distclean: clean
++ 	rm -f config.cache config.log Makefile config.status xinetd/itox
 -- 
-1.7.0.4
+1.7.9.5
