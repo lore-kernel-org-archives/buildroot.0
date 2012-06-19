@@ -1,25 +1,33 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Tue, 19 Jun 2012 12:19:41 +0100
-Subject: [Buildroot] [PATCH] sudo: fix install
-In-Reply-To: <20120619125137.3513cfee@skate>
-References: <1340102153-22387-1-git-send-email-spdawson@gmail.com>
- <20120619125137.3513cfee@skate>
-Message-ID: <CAHt8ZCOFvA4dyv6iNSimgzfykOWEWDU1KZWFW2Z9AGuWJN-y1w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Jun 2012 14:25:16 +0200
+Subject: [Buildroot] New package
+In-Reply-To: <CAHQn0kiM__pOsi3MXC58JW0hFQHX-rj-P-1LZ05o3fRBrGL70A@mail.gmail.com>
+References: <CAFYZmWjqLdemKVbdGQ=s2WGNGjtpVF1hvfpmqFeaQShyUokRzA@mail.gmail.com>
+ <20120618085754.5a6fb1b8@skate>
+ <CAHQn0kiM__pOsi3MXC58JW0hFQHX-rj-P-1LZ05o3fRBrGL70A@mail.gmail.com>
+Message-ID: <20120619142516.22f158c8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Do you think you can turn this into a patch that can be submitted
-> upstream? I.e, if autoconf has detected that we're cross-compiling,
-> skip this install check?
+Le Tue, 19 Jun 2012 14:20:16 +0200,
+Daniel Nystr?m <daniel.nystrom@timeterminal.se> a ?crit :
 
-I've submitted a bug report to the sudo Bugzilla:
+> > BAR_SITE = http://$(BR2_SOURCEFORGE_MIRROR)/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
+> 
+> I think it's even:
+> BAR_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/clpbar/clpbar/bar-1.11.1/bar_1.11.1.tar.gz
 
-  http://www.gratisoft.us/bugzilla/show_bug.cgi?id=560
+Oops, indeed, sorry. I did the $(BR2_SOURCEFORGE_MIRROR) replacement
+manually... and did it incorrectly.
 
-To be honest, my knowledge of autoconf/automake is not sufficient to
-be able to fix this properly; specifically, I don't know how or if the
-cross-compile can be detected in the Makefiles. If someone can point
-me in the right direction I'm quite happy to send a patch upstream...
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
