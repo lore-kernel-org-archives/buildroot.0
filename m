@@ -1,53 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Jun 2012 12:51:37 +0200
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 19 Jun 2012 12:19:41 +0100
 Subject: [Buildroot] [PATCH] sudo: fix install
-In-Reply-To: <1340102153-22387-1-git-send-email-spdawson@gmail.com>
+In-Reply-To: <20120619125137.3513cfee@skate>
 References: <1340102153-22387-1-git-send-email-spdawson@gmail.com>
-Message-ID: <20120619125137.3513cfee@skate>
+ <20120619125137.3513cfee@skate>
+Message-ID: <CAHt8ZCOFvA4dyv6iNSimgzfykOWEWDU1KZWFW2Z9AGuWJN-y1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> Do you think you can turn this into a patch that can be submitted
+> upstream? I.e, if autoconf has detected that we're cross-compiling,
+> skip this install check?
 
-Le Tue, 19 Jun 2012 11:35:53 +0100,
-spdawson at gmail.com a ?crit :
+I've submitted a bug report to the sudo Bugzilla:
 
-> diff --git a/package/sudo/sudo-fix-sudoers-plugin-install.patch b/package/sudo/sudo-fix-sudoers-plugin-install.patch
-> new file mode 100644
-> index 0000000..e85e5d8
-> --- /dev/null
-> +++ b/package/sudo/sudo-fix-sudoers-plugin-install.patch
-> @@ -0,0 +1,19 @@
-> +The installation of the sudoers plugin fails when cross compiling, because it
-> +tries to run the cross-compiled visudo, rather than that of the host.
-> +
-> +The visudo invocation is only required in order to sanity check any existing
-> +sudoers file in the target directory; this can safely be dispensed with.
-> +
-> +Signed-off-by: Simon Dawson <spdawson@gmail.com>
-> +diff -Nurp a/plugins/sudoers/Makefile.in b/plugins/sudoers/Makefile.in
-> +--- a/plugins/sudoers/Makefile.in	2012-05-15 17:22:02.000000000 +0100
-> ++++ b/plugins/sudoers/Makefile.in	2012-06-19 11:24:00.322449438 +0100
-> +@@ -239,7 +239,7 @@ sudoers: $(srcdir)/sudoers.in
-> + pre-install:
-> + 	@if test -r $(DESTDIR)$(sudoersdir)/sudoers; then \
-> + 	    echo "Checking existing sudoers file for syntax errors."; \
-> +-	    ./visudo -c -f $(DESTDIR)$(sudoersdir)/sudoers; \
-> ++	    (echo "SKIPPED" || ./visudo -c -f $(DESTDIR)$(sudoersdir)/sudoers); \
-> + 	fi
-> + 
-> + install: install-plugin install-binaries install-sudoers install-doc
+  http://www.gratisoft.us/bugzilla/show_bug.cgi?id=560
 
-Do you think you can turn this into a patch that can be submitted
-upstream? I.e, if autoconf has detected that we're cross-compiling,
-skip this install check?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+To be honest, my knowledge of autoconf/automake is not sufficient to
+be able to fix this properly; specifically, I don't know how or if the
+cross-compile can be detected in the Makefiles. If someone can point
+me in the right direction I'm quite happy to send a patch upstream...
