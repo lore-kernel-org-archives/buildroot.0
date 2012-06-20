@@ -1,42 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2012 01:12:30 +0200
-Subject: [Buildroot] [RFC/PATCH 2/4] ensure target fs is writable
-In-Reply-To: <1340031743-29694-3-git-send-email-ntl@pobox.com>
-References: <1340031743-29694-1-git-send-email-ntl@pobox.com>
- <1340031743-29694-3-git-send-email-ntl@pobox.com>
-Message-ID: <4FE258DE.1030702@mind.be>
+Date: Thu, 21 Jun 2012 01:38:47 +0200
+Subject: [Buildroot] [PATCH RFC 1/2] Add configuration item for custom
+ JavaScript install path
+In-Reply-To: <1340088964-10630-2-git-send-email-spdawson@gmail.com>
+References: <1340088964-10630-1-git-send-email-spdawson@gmail.com>
+ <1340088964-10630-2-git-send-email-spdawson@gmail.com>
+Message-ID: <4FE25F07.6020103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/18/12 17:02, Nathan Lynch wrote:
-> If the source target skeleton is read-only, modifications to the
-> output target (such as creating /etc/hostname and /etc/issue) fail.
+On 06/19/12 08:56, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
 >
-> Signed-off-by: Nathan Lynch<ntl@pobox.com>
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
 > ---
->   Makefile |    1 +
->   1 file changed, 1 insertion(+)
+>   package/Config.in            |    1 +
+>   package/javascript/Config.in |    5 +++++
+>   2 files changed, 6 insertions(+)
+>   create mode 100644 package/javascript/Config.in
 >
-> diff --git a/Makefile b/Makefile
-> index 9a9634d..38276cd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -378,6 +378,7 @@ endif
->   	if ! [ -d "$(TARGET_DIR)/bin" ]; then \
->   		if [ -d "$(TARGET_SKELETON)" ]; then \
->   			cp -fa $(TARGET_SKELETON)/* $(TARGET_DIR)/; \
-> +			chmod -R u+w $(TARGET_DIR)/; \
+> diff --git a/package/Config.in b/package/Config.in
+> index 1044e9f..b60ba2b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -378,6 +378,7 @@ source "package/libv4l/Config.in"
+>   endmenu
+>
+>   menu "Javascript"
+> +source "package/javascript/Config.in"
+>   source "package/explorercanvas/Config.in"
+>   source "package/flot/Config.in"
+>   source "package/jquery/Config.in"
+> diff --git a/package/javascript/Config.in b/package/javascript/Config.in
+> new file mode 100644
+> index 0000000..c837e9e
+> --- /dev/null
+> +++ b/package/javascript/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_JAVASCRIPT_INSTALL_PATH
+> +	string "Target install path for JavaScript"
+> +	default "/var/www"
+> +	help
+> +	  Specify a target install path for JavaScript files
 
-  Maybe it's safer to do this only on directories, e.g. with
-rsync -a --chmod=Du+w $(TARGET_SKELETON)/ $(TARGET_DIR)/
-(untested)
+  I would instead define a WWW_INSTALL_PATH, which can also be used to set the
+wwwroot of the various http servers.  We could still have a javascript path
+to point to a subdirectory of the wwwroot, but I don't think there's much point.
+
+  Question is where this config option should go then.  We could put it next to
+the webservers, but it is possible that you use some javascript libraries without
+webserver (e.g. because it's custom-written in another application).  We could
+also put it in target/generic/Config.in, but there's currently nothing similar
+there...
+
+  BTW personally, I'm in favour of defaulting to /www for this path instead of
+/var/www.  However, the Linux Foundation's draft Filesystem Hierarchy Standard [1]
+puts it at /srv/www.  Sounds even better to me, but it's a big change from our
+current layout.
 
 
   Regards,
   Arnout
+
+[1] http://bzr.linuxfoundation.org/loggerhead/lsb/devel/fhs-spec/annotate/head:/root-filesystem.xml#L1700
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
