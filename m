@@ -1,48 +1,55 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Wed, 20 Jun 2012 14:30:15 +0200
-Subject: [Buildroot] [PATCH 1/2] Rework of the init system
-In-Reply-To: <4FE174BC.8090904@mind.be>
-References: <cover.1338285613.git.maxime.ripard@free-electrons.com>
- <1cbed22cb8b47ae0241f8ab981acb1662eca1f46.1338285613.git.maxime.ripard@free-electrons.com>
- <4FCD449E.9030700@mind.be> <4FDEE7B2.1060502@free-electrons.com>
- <4FE174BC.8090904@mind.be>
-Message-ID: <4FE1C257.1020500@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 20 Jun 2012 15:07:29 +0200
+Subject: [Buildroot] [PATCH v4 00/22] Automatically produce legal
+ compliance info
+In-Reply-To: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
+References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <4FE1CB11.7030508@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Peter,
 
-Le 20/06/2012 08:59, Arnout Vandecappelle a ?crit :
-> On 06/18/12 10:32, Maxime Ripard wrote:
->>>> >>  +choice
->>>> >>  +    prompt "Init system"
->>>> >>  +    default BR2_INIT_BUSYBOX
->>>> >>  +
->>>> >>  +config BR2_INIT_BUSYBOX
->>>> >>  +    bool "Busybox"
->>>> >>  +    select BR2_PACKAGE_BUSYBOX
->>> >
->>> >    Ideally, the busybox.mk should make sure init is selected in the
->>> >  busybox config
->>> >  if this option is chosen.
->>
->> I actually did so at first, and you asked me back then to remove it:)
->> (http://lists.busybox.net/pipermail/buildroot/2011-December/048541.html)
-> 
->  You misunderstood my comment back then: I'm against _disabling_ the
-> busybox init.  The _enable_ should be kept.
+Luca Ceresoli wrote:
+> Hi,
+>
+> here is the third version of the legal-info feature implementation.
 
-Yes, that's what I understood a bit later.
-This is what is implemented in the third version of the pull request.
+Meaning the fourth, of course.
 
-Maxime
+>
+> Links to discussion of previous versions:
+> v1: http://lists.busybox.net/pipermail/buildroot/2012-January/049590.html
+> v2: http://lists.busybox.net/pipermail/buildroot/2012-March/051132.html
+> v3: http://lists.busybox.net/pipermail/buildroot/2012-May/053574.html
+>
+> This version is only a minor update to fix various issues reported by other
+> developers. There are not changes to the general structure, so please see
+> the link above for v3 for a detailed presentation.
+>
+> Let me repeat only my plea to all Buildroot developers to read and give
+> feedback on patch 9.
+> It gives an advice from Buildroot developers to Buildroot users about how to
+> comply with both Buildroot's and the packages' licenses.
+> Of course this must match as much as possible what the developers think, so
+> please read it and give either your different views or your ack (preferably
+> with a formal Acked-by tag).
+>
+> Thanks.
 
+Peter, are you considering to merge this patchset into mainline Buildroot?
 
--- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+If you are, I'll submit a rebased version in the next few days, with the 
+addition
+of the Signed-off-by tags received so far. There is no further change 
+required
+AFAIK, and only a trivial conflict.
+
+I also think your opinion about patch 9 is very important, since you're the
+maintainer.
+
+Thanks,
+Luca
