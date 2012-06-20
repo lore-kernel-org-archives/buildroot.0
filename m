@@ -1,71 +1,136 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2012 01:38:47 +0200
-Subject: [Buildroot] [PATCH RFC 1/2] Add configuration item for custom
- JavaScript install path
-In-Reply-To: <1340088964-10630-2-git-send-email-spdawson@gmail.com>
-References: <1340088964-10630-1-git-send-email-spdawson@gmail.com>
- <1340088964-10630-2-git-send-email-spdawson@gmail.com>
-Message-ID: <4FE25F07.6020103@mind.be>
+Date: Thu, 21 Jun 2012 00:48:32 +0200
+Subject: [Buildroot] [PATCH V2] p910nd: Add p910nd lightweight
+	printserver
+In-Reply-To: <1340040989-19507-1-git-send-email-david.c.purdy@gmail.com>
+References: <1340040989-19507-1-git-send-email-david.c.purdy@gmail.com>
+Message-ID: <4FE25340.20202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/19/12 08:56, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
+On 06/18/12 19:36, Dave Purdy wrote:
+> Changes since V1:
+> 	-p910nd.mk : Fixed source/site, removed need for patch, decrufted.
+> 	-S55p910nd initscript: Reworked for start-stop-daemon usage,
+> 	 added some basic sanity checks for config-file, lock-dir&  run-dir,
+> 	 cleaned up structure and readability, removed cruft,
+> 	 changed do_stop so that it scans run-dir for pid-files instead of
+> 	 looking at the config file, reworked do_start to ensure that each
+> 	 instance of p910nd has its correct/unique process-name and pid-file,
+> 	 and added a restart option.
+> 	-p910nd.conf : Added clarifying documentation RE format of args/options
+> 	-RETESTED: with a fresh rootfs build, with different daemon instances
+> 	 (e.g. p9102d), on various devices (e.g. /dev/usb/lp3) - all successful
+
+  Patch changelog is normally put after the Signed-off-by, separated by --- (like
+the diffstat).  This way, it is not included when the patch is committed to git.
+
 >
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
-> ---
->   package/Config.in            |    1 +
->   package/javascript/Config.in |    5 +++++
->   2 files changed, 6 insertions(+)
->   create mode 100644 package/javascript/Config.in
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 1044e9f..b60ba2b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -378,6 +378,7 @@ source "package/libv4l/Config.in"
->   endmenu
->
->   menu "Javascript"
-> +source "package/javascript/Config.in"
->   source "package/explorercanvas/Config.in"
->   source "package/flot/Config.in"
->   source "package/jquery/Config.in"
-> diff --git a/package/javascript/Config.in b/package/javascript/Config.in
-> new file mode 100644
-> index 0000000..c837e9e
+> Signed-off-by: Dave Purdy<david.c.purdy@gmail.com>
+[snip]
 > --- /dev/null
-> +++ b/package/javascript/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_JAVASCRIPT_INSTALL_PATH
-> +	string "Target install path for JavaScript"
-> +	default "/var/www"
-> +	help
-> +	  Specify a target install path for JavaScript files
+> +++ b/package/p910nd/S55p910nd
+> @@ -0,0 +1,76 @@
+> +#!/bin/sh
+> +#
+> +#   /etc/init.d/[S55]p910nd
+> +#   initscript to start p910nd printer daemon, with match pid-files and process-names
+> +
+> +
+> +CONFIG=/etc/p910nd.conf
+> +RUN_D=/var/run
+> +P910ND=/usr/sbin/p910nd
+> +SUBSYS=/var/lock/subsys
 
-  I would instead define a WWW_INSTALL_PATH, which can also be used to set the
-wwwroot of the various http servers.  We could still have a javascript path
-to point to a subdirectory of the wwwroot, but I don't think there's much point.
+  I guess this means that the -DLOCKFILE_DIR=... in CFLAGS didn't work?
+That's a pity, because I don't really like adding a /tmp/subsys directory...
+BTW, the variable is better called LOCK_D similar to RUN_D.
 
-  Question is where this config option should go then.  We could put it next to
-the webservers, but it is possible that you use some javascript libraries without
-webserver (e.g. because it's custom-written in another application).  We could
-also put it in target/generic/Config.in, but there's currently nothing similar
-there...
+> +
+> +# check if /etc/p910nd.conf exists, print message&  exit if it doesn't
+> +[ ! -f $CONFIG ]&&  ( echo "The config file /etc/p910nd.conf is missing... exiting now."&&  exit 0 )
 
-  BTW personally, I'm in favour of defaulting to /www for this path instead of
-/var/www.  However, the Linux Foundation's draft Filesystem Hierarchy Standard [1]
-puts it at /srv/www.  Sounds even better to me, but it's a big change from our
-current layout.
+  I would remove this test.  stop is still relevant if the config file is missing,
+and the test is anyway repeated in do_start.
 
+> +
+> +#  description of config line format for /etc/p910nd.conf
+> +#  each configuration line must have form
+> +#  N  [-b]  -f<printer_device>  , where N is the port number [0|1|2], -b enables bidirectional traffic,
+> +#                                 and -f specifies a printer device
+> +#
+> +#  examples:
+> +#  0 -b -f /dev/usb/lp0
+> +# (listen on port 9100, with bidirectional traffic, use /dev/usb/lp0, pid-file p9100d.pid)
+> +#
+> +#  2  -f /dev/usb/lp3
+> +# (listen on port 9102, use /dev/usb/lp3, pid-file p9102d.pid)
+> +
+> +
+> +# check if /var/run exists, create it if not
+> +[ ! -d $RUN_D ]&&  mkdir -p $RUN_D
 
-  Regards,
-  Arnout
+  Not really needed; /var/run is in the skeleton (and a symlink to /tmp instead of directory).
+Other init scripts (e.g. S01logging) don't have this check.
 
-[1] http://bzr.linuxfoundation.org/loggerhead/lsb/devel/fhs-spec/annotate/head:/root-filesystem.xml#L1700
+> +
+> +# check if /var/lock/subsys exists, create it if not
+> +[ ! -d $SUBSYS ]&&  mkdir -p $SUBSYS
+> +
+> +do_start() {
+> +	[ -f $CONFIG ]&&  ( while read PORT OPTIONS; do
+> +   		case "$PORT" in
+> +    			""|\#*)
+> +     			continue;
+> +   		esac
+> +		P910XD_PID="p910"$PORT"d.pid"	# create the correct pid-filename, e.g. p9102d.pid
+> +		P910ND_ARGS=" $OPTIONS $PORT"
+> +		start-stop-daemon -m -p  $RUN_D/$P910XD_PID -S -x $P910ND -- $P910ND_ARGS
+> +		echo "starting p910nd with options" $OPTIONS "on port" $PORT "with pid-file" $P910XD_PID
+
+  You don't have to stop the quotes around the variables:
+echo "starting p910nd with options $OPTIONS on port $PORT with pid-file $P910XD_PID"
+
+> +   		if [ $? -ne 0 ]; then
+> +    			exit 1
+> +		fi
+> +  	done
+> +	)<  $CONFIG
+> + 	exit 0
+> +}
+> +
+> +do_stop() {
+> +        for PID_F in $RUN_D/p910?d.pid; do
+> +                start-stop-daemon -q -K -p $PID_F
+> +		rm $PID_F&&  echo "stopping p910nd instance with pid-file" $PID_F
+
+  I would do the echo before sending the kill.  Also it shouldn't depend on
+the success of the rm.  BTW, doesn't start-stop-daemon remove the pid file?
+
+> +        done
+> +}
+[snip]
+> +define P910ND_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/p910nd $(TARGET_DIR)/usr/sbin/p910nd
+> +	$(INSTALL) -m 0644 -D package/p910nd/p910nd.conf $(TARGET_DIR)/etc/p910nd.conf
+
+  Installation of the configuration file should not be done if it already exists.  In all
+likelihood, the user will override the default configuration file with another one that
+comes from a custom skeleton, a configuration package, or a post-build script.  In the
+first two cases, a rebuild of the p910nd package would remove the user's configuration
+file.
+
+  Also, it would be nicer if the order of -D and -m was the same in all install lines.
+-m 0644 -D is the order that is usually used.
+
+> +	$(INSTALL) -m 0755 -D package/p910nd/S55p910nd $(TARGET_DIR)/etc/init.d/S55p910nd
+> +endef
+> +
+> +$(eval $(call GENTARGETS))
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
