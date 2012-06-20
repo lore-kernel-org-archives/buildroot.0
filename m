@@ -1,21 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 20 Jun 2012 22:57:27 +0200
-Subject: [Buildroot] [PATCH] kmod: bump to 9
-In-Reply-To: <1340181862-23944-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Wed, 20 Jun 2012 10:44:22
- +0200")
-References: <1340181862-23944-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87r4t9r9ag.fsf@macbook.be.48ers.dk>
+Date: Wed, 20 Jun 2012 22:58:10 +0200
+Subject: [Buildroot] [PATCH] libnspr: fix build issue on ARM with
+	certain toolchains
+In-Reply-To: <1340185707-6285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 20 Jun 2012 11:48:27 +0200")
+References: <1340185707-6285-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mx3xr999.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- yegorslists> From: Yegor Yefremov <yegorslists@googlemail.com>
- yegorslists> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Thomas> Fixes issues like
+ Thomas> http://autobuild.buildroot.org/results/aed444bf37b9e289866a9b6c754ed74a3cc0f3b2/build-end.log.
 
 Committed, thanks.
 
