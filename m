@@ -1,24 +1,65 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Wed, 20 Jun 2012 12:49:53 +0100
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 20 Jun 2012 12:50:04 +0100
 Subject: [Buildroot] [PATCH] sound-theme-freedesktop: new package
-In-Reply-To: <4FE1AD31.3010600@lucaceresoli.net>
-References: <1340187652-8209-1-git-send-email-spdawson@gmail.com>
- <4FE1AD31.3010600@lucaceresoli.net>
-Message-ID: <CAHt8ZCN6pe_44MR+q6TXujRivD2ux6tda33Hf5Eex7SxUQkRQQ@mail.gmail.com>
+Message-ID: <1340193004-11192-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> I would link to a web page, rather than to a cgit which is much less
-> informative.
+From: Simon Dawson <spdawson@gmail.com>
 
-> Why downloading via git? They have a tarball at
-> http://freedesktop.org/wiki/Specifications/sound-theme-spec, which would
-> download faster and most probably would not require autoreconf (and thus
-> build more quickly).
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
+---
+ package/Config.in                                  |    1 +
+ package/sound-theme-freedesktop/Config.in          |    6 ++++++
+ .../sound-theme-freedesktop.mk                     |   12 ++++++++++++
+ 3 files changed, 19 insertions(+)
+ create mode 100644 package/sound-theme-freedesktop/Config.in
+ create mode 100644 package/sound-theme-freedesktop/sound-theme-freedesktop.mk
 
-Thanks for the suggestions Luca; I'll submit an improved patch.
-
-Simon
+diff --git a/package/Config.in b/package/Config.in
+index 1044e9f..c79c6a6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -492,6 +492,7 @@ source "package/collectd/Config.in"
+ source "package/empty/Config.in"
+ source "package/mobile-broadband-provider-info/Config.in"
+ source "package/shared-mime-info/Config.in"
++source "package/sound-theme-freedesktop/Config.in"
+ endmenu
+ 
+ menu "Networking applications"
+diff --git a/package/sound-theme-freedesktop/Config.in b/package/sound-theme-freedesktop/Config.in
+new file mode 100644
+index 0000000..8b48015
+--- /dev/null
++++ b/package/sound-theme-freedesktop/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_SOUND_THEME_FREEDESKTOP
++	bool "sound-theme-freedesktop"
++	help
++	  Default theme for the XDG Sound Theme Specification.
++
++	  http://freedesktop.org/wiki/Specifications/sound-theme-spec
+diff --git a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+new file mode 100644
+index 0000000..d81c207
+--- /dev/null
++++ b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+@@ -0,0 +1,12 @@
++#############################################################
++#
++# sound-theme-freedesktop
++#
++#############################################################
++SOUND_THEME_FREEDESKTOP_VERSION = 0.7
++SOUND_THEME_FREEDESKTOP_SITE = \
++	http://people.freedesktop.org/~mccann/dist
++SOUND_THEME_FREEDESKTOP_SOURCE = \
++	sound-theme-freedesktop-$(SOUND_THEME_FREEDESKTOP_VERSION).tar.bz2
++
++$(eval $(call AUTOTARGETS))
+-- 
+1.7.9.5
