@@ -1,65 +1,48 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 20 Jun 2012 12:50:04 +0100
-Subject: [Buildroot] [PATCH] sound-theme-freedesktop: new package
-Message-ID: <1340193004-11192-1-git-send-email-spdawson@gmail.com>
+From: Maxime Ripard <maxime.ripard@free-electrons.com>
+Date: Wed, 20 Jun 2012 14:30:15 +0200
+Subject: [Buildroot] [PATCH 1/2] Rework of the init system
+In-Reply-To: <4FE174BC.8090904@mind.be>
+References: <cover.1338285613.git.maxime.ripard@free-electrons.com>
+ <1cbed22cb8b47ae0241f8ab981acb1662eca1f46.1338285613.git.maxime.ripard@free-electrons.com>
+ <4FCD449E.9030700@mind.be> <4FDEE7B2.1060502@free-electrons.com>
+ <4FE174BC.8090904@mind.be>
+Message-ID: <4FE1C257.1020500@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+Hi Arnout,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/Config.in                                  |    1 +
- package/sound-theme-freedesktop/Config.in          |    6 ++++++
- .../sound-theme-freedesktop.mk                     |   12 ++++++++++++
- 3 files changed, 19 insertions(+)
- create mode 100644 package/sound-theme-freedesktop/Config.in
- create mode 100644 package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+Le 20/06/2012 08:59, Arnout Vandecappelle a ?crit :
+> On 06/18/12 10:32, Maxime Ripard wrote:
+>>>> >>  +choice
+>>>> >>  +    prompt "Init system"
+>>>> >>  +    default BR2_INIT_BUSYBOX
+>>>> >>  +
+>>>> >>  +config BR2_INIT_BUSYBOX
+>>>> >>  +    bool "Busybox"
+>>>> >>  +    select BR2_PACKAGE_BUSYBOX
+>>> >
+>>> >    Ideally, the busybox.mk should make sure init is selected in the
+>>> >  busybox config
+>>> >  if this option is chosen.
+>>
+>> I actually did so at first, and you asked me back then to remove it:)
+>> (http://lists.busybox.net/pipermail/buildroot/2011-December/048541.html)
+> 
+>  You misunderstood my comment back then: I'm against _disabling_ the
+> busybox init.  The _enable_ should be kept.
 
-diff --git a/package/Config.in b/package/Config.in
-index 1044e9f..c79c6a6 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -492,6 +492,7 @@ source "package/collectd/Config.in"
- source "package/empty/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
-+source "package/sound-theme-freedesktop/Config.in"
- endmenu
- 
- menu "Networking applications"
-diff --git a/package/sound-theme-freedesktop/Config.in b/package/sound-theme-freedesktop/Config.in
-new file mode 100644
-index 0000000..8b48015
---- /dev/null
-+++ b/package/sound-theme-freedesktop/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_SOUND_THEME_FREEDESKTOP
-+	bool "sound-theme-freedesktop"
-+	help
-+	  Default theme for the XDG Sound Theme Specification.
-+
-+	  http://freedesktop.org/wiki/Specifications/sound-theme-spec
-diff --git a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
-new file mode 100644
-index 0000000..d81c207
---- /dev/null
-+++ b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# sound-theme-freedesktop
-+#
-+#############################################################
-+SOUND_THEME_FREEDESKTOP_VERSION = 0.7
-+SOUND_THEME_FREEDESKTOP_SITE = \
-+	http://people.freedesktop.org/~mccann/dist
-+SOUND_THEME_FREEDESKTOP_SOURCE = \
-+	sound-theme-freedesktop-$(SOUND_THEME_FREEDESKTOP_VERSION).tar.bz2
-+
-+$(eval $(call AUTOTARGETS))
+Yes, that's what I understood a bit later.
+This is what is implemented in the third version of the pull request.
+
+Maxime
+
+
 -- 
-1.7.9.5
+Maxime Ripard, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
