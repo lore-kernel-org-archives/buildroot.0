@@ -1,31 +1,37 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 21 Jun 2012 16:56:33 +0200
-Subject: [Buildroot] [git commit] collectd: uses fork(),
-	so mark it as mmu only
-Message-ID: <20120621145705.1134D85758@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 21 Jun 2012 17:01:20 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-06-20
+In-Reply-To: <20120621113207.616a649e@skate> (Thomas Petazzoni's message of
+ "Thu, 21 Jun 2012 11:32:07 +0200")
+References: <20120621063115.B05E852CEBE@lolut.humanoidz.org>
+ <87ipelqccc.fsf@macbook.be.48ers.dk> <20120621113207.616a649e@skate>
+Message-ID: <87zk7whfpb.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=27c9d826ffca35ddec8355095d3b3682ed7d04c3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/collectd/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Hi,
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 96438c0..4fae6d5 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_COLLECTD
- 	bool "collectd"
-+	# Uses fork()
-+	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  collectd is a daemon which collects system performance
+ >> Too old / misconfigured uClibc. Resolver support was only added in
+ >> 0.9.33, but not easy to handle this on kconfig level for external
+ >> toolchains.
+
+ Thomas> Well, our uClibc Config.in says that 0.9.32 and 0.9.33 do not
+ Thomas> work on AVR32. So the latest uClibc version available is
+ Thomas> 0.9.31, which does not have resolver support.
+
+ Thomas> Should I just blacklist it? Mark avr32 as deprecated, and get
+ Thomas> rid of the avr32 toolchain from my automated builds?
+
+Yes, avr32 is in pretty bad shape (and doesn't seem very active upstream
+- E.G. I don't see a single commit from any avr32 people in Linux since
+3.4) - But completely dropping it is probably a bit extreme so far, so I
+suggest you just blacklist it in your script.
+
+-- 
+Bye, Peter Korsgaard
