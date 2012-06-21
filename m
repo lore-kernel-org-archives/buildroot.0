@@ -1,38 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2012 22:32:21 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-06-20
-In-Reply-To: <87ipelqccc.fsf@macbook.be.48ers.dk>
-References: <20120621063115.B05E852CEBE@lolut.humanoidz.org>
- <87ipelqccc.fsf@macbook.be.48ers.dk>
-Message-ID: <4FE384D5.2050204@mind.be>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 21 Jun 2012 21:24:31 +0000 (UTC)
+Subject: [Buildroot] preparing rootfs with gcc in buildroot
+References: <CAGXs5wVgC+e_BUAOPgvL-vGqo4pusF3iTLFz_7Fb_Jfvrvv+Hg@mail.gmail.com>
+ <20120621142848.4caafde0@skate>
+ <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
+ <jrvjm2$sls$1@dough.gmane.org> <4FE38489.8060803@mind.be>
+Message-ID: <js03ef$2qm$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/21/12 10:49, Peter Korsgaard wrote:
->   Thomas>  Status         : NOK
->   Thomas>  Failure reason : ffmpeg-0.8.11
->   Thomas>  Architecture   : arm
->   Thomas>  Submitted by   : Thomas Petazzoni (Free Electrons build server)
->   Thomas>  Submitted at   : 2012-06-20 20:57:51
->   Thomas>  Git commit ID  :http://git.buildroot.net/buildroot/commit/?id=e9345f85822635291016f0b6e7cf855e07dbb028
->   Thomas>  End of log     :http://autobuild.buildroot.net/results/3270ce7b816f7d141327a09e9c4273fd001827fb/build-end.log
+On 2012-06-21, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 06/21/12 18:55, Grant Edwards wrote:
+>> If you want to build things that use libraries that were built as part
+>> of buildroot, then you have to add a couple more command line options
+>> to tell the compiler/linker where to find the include and library
+>> files created by buildroot (e.g.<wherever>/output/target.
 >
-> ARM/thumb mismatch?
+> And even that is not necessary if you use output/host/usr/bin/xxx-gcc
+> as the cross-compiler - that one has the sysroot hard-coded.
 
-  Wild guess: toolchain is compiled to support fpa only, not vfp.
-I don't know how you can create such a toolchain though...
+Right -- if you have buildroot build your compiler.  If you're using
+an external compiler (e.g. one built separately with crosstool-ng),
+you need to tell it where buildroot's libraries and include files are.
 
-  Regards,
-  Arnout
+> By the way, you should point to <wherever>/output/staging, not
+><wherever>/output/target.  target doesn't normally contain header
+> files or static libraries.
+
+Yup, my mistake.
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Grant
