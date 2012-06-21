@@ -1,30 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Jun 2012 05:44:10 -0300
-Subject: [Buildroot] [PATCH] kernel-headers: bump 3.2.x stable version
-Message-ID: <1340268250-5687-1-git-send-email-gustavo@zacarias.com.ar>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Thu, 21 Jun 2012 09:44:46 +0100
+Subject: [Buildroot] [PATCH] sudo: fix install
+In-Reply-To: <CAHt8ZCOFvA4dyv6iNSimgzfykOWEWDU1KZWFW2Z9AGuWJN-y1w@mail.gmail.com>
+References: <1340102153-22387-1-git-send-email-spdawson@gmail.com>
+ <20120619125137.3513cfee@skate>
+ <CAHt8ZCOFvA4dyv6iNSimgzfykOWEWDU1KZWFW2Z9AGuWJN-y1w@mail.gmail.com>
+Message-ID: <CAHt8ZCM8p239waMO9pb+oqa4w1_2VmOhBNYgnFGQWJLB9Ps6DQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> I've submitted a bug report to the sudo Bugzilla:
+>
+> ?http://www.gratisoft.us/bugzilla/show_bug.cgi?id=560
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index b6bb53a..be4d9e1 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.35"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.20"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.21"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.3"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
--- 
-1.7.3.4
+The bug has now been fixed upstream (not by me) in commit 8209:0c4e3f68b2f5
+
+Unfortunately, the fix will not appear until sudo 1.8.6 is released,
+so we've still got a broken sudo package in Buildroot. I'm going to
+submit an updated patch that backports the upstream fix, as an interim
+solution until the release of sudo 1.8.6.
