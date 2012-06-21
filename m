@@ -1,37 +1,80 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 21 Jun 2012 17:01:20 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2012-06-20
-In-Reply-To: <20120621113207.616a649e@skate> (Thomas Petazzoni's message of
- "Thu, 21 Jun 2012 11:32:07 +0200")
-References: <20120621063115.B05E852CEBE@lolut.humanoidz.org>
- <87ipelqccc.fsf@macbook.be.48ers.dk> <20120621113207.616a649e@skate>
-Message-ID: <87zk7whfpb.fsf@macbook.be.48ers.dk>
+From: Kevin Wilson <wkevils@gmail.com>
+Date: Thu, 21 Jun 2012 19:38:28 +0300
+Subject: [Buildroot] preparing rootfs with gcc in buildroot
+In-Reply-To: <20120621142848.4caafde0@skate>
+References: <CAGXs5wVgC+e_BUAOPgvL-vGqo4pusF3iTLFz_7Fb_Jfvrvv+Hg@mail.gmail.com>
+ <20120621142848.4caafde0@skate>
+Message-ID: <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi, Thomas
+Thanks for your quick answer!
 
-Hi,
+I do admit that I am a bit of (heavy) hacker and
+I am intending to use buildroot  a bit beyond its usual usage.
 
- >> Too old / misconfigured uClibc. Resolver support was only added in
- >> 0.9.33, but not easy to handle this on kconfig level for external
- >> toolchains.
+I though of things like -
+  1) Adding tests programs of my own
+   2) Adding some code to packages (let's say, iptables, openswan)
+Partly for hacking, partly for adding code for my own development needs.
 
- Thomas> Well, our uClibc Config.in says that 0.9.32 and 0.9.33 do not
- Thomas> work on AVR32. So the latest uClibc version available is
- Thomas> 0.9.31, which does not have resolver support.
+It seems to mt that though it is possible to do it in buildroot cross
+compiling,  in the end , for each and every change in
+iptables/openswan, I will have to
+install all the rootfs.tar; I don't think there is a way to prepare something
+like a package.
+(unless there is a way to tell
+buildroot that my target rootfs is located in , lets say, /home/....)
+And for each change in iptables/openswan I will
+need to repeat this.
+copying manually only the binaries (libs, executable, config file) can
+be quite a task, especially when you work with bigger and bigger
+packages, where these files can be scattered over many places.
 
- Thomas> Should I just blacklist it? Mark avr32 as deprecated, and get
- Thomas> rid of the avr32 toolchain from my automated builds?
+ (It could be that there some other way, something
+which uses DEST_DIR, I don't know and I will be happy to hear).
 
-Yes, avr32 is in pretty bad shape (and doesn't seem very active upstream
-- E.G. I don't see a single commit from any avr32 people in Linux since
-3.4) - But completely dropping it is probably a bit extreme so far, so I
-suggest you just blacklist it in your script.
+KV
 
--- 
-Bye, Peter Korsgaard
+
+
+
+
+
+
+On Thu, Jun 21, 2012 at 3:28 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Le Thu, 21 Jun 2012 15:16:14 +0300,
+> Kevin Wilson <wkevils@gmail.com> a ?crit :
+>
+>> I run:
+>> make menuconfig
+>> ? Package selection for target
+>> ? ? ?Development tools
+>> ? ? ? ? "gcc needs development files in target filesystems"
+>
+> Yes, you have to enable BR2_HAVE_DEVFILES (in Build options).
+>
+> However, beware that the usage of the native toolchain on the target is
+> rarely used and tested by Buildroot developers. Buildroot is here to
+> cross-compile all your applications and libraries, so it generally
+> doesn't make much sense to have a native toolchain on the target, so we
+> don't pay too much attention to this.
+>
+> What would you like to build on your target? Why don't you
+> cross-compile it?
+>
+> Thomas
+> --
+> Thomas Petazzoni, Free Electrons
+> Kernel, drivers, real-time and embedded Linux
+> development, consulting, training and support.
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
