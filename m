@@ -1,80 +1,60 @@
-From: Kevin Wilson <wkevils@gmail.com>
-Date: Thu, 21 Jun 2012 19:38:28 +0300
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 21 Jun 2012 16:55:30 +0000 (UTC)
 Subject: [Buildroot] preparing rootfs with gcc in buildroot
-In-Reply-To: <20120621142848.4caafde0@skate>
 References: <CAGXs5wVgC+e_BUAOPgvL-vGqo4pusF3iTLFz_7Fb_Jfvrvv+Hg@mail.gmail.com>
  <20120621142848.4caafde0@skate>
-Message-ID: <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
+ <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
+Message-ID: <jrvjm2$sls$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Thomas
-Thanks for your quick answer!
+On 2012-06-21, Kevin Wilson <wkevils@gmail.com> wrote:
 
-I do admit that I am a bit of (heavy) hacker and
-I am intending to use buildroot  a bit beyond its usual usage.
-
-I though of things like -
-  1) Adding tests programs of my own
-   2) Adding some code to packages (let's say, iptables, openswan)
-Partly for hacking, partly for adding code for my own development needs.
-
-It seems to mt that though it is possible to do it in buildroot cross
-compiling,  in the end , for each and every change in
-iptables/openswan, I will have to
-install all the rootfs.tar; I don't think there is a way to prepare something
-like a package.
-(unless there is a way to tell
-buildroot that my target rootfs is located in , lets say, /home/....)
-And for each change in iptables/openswan I will
-need to repeat this.
-copying manually only the binaries (libs, executable, config file) can
-be quite a task, especially when you work with bigger and bigger
-packages, where these files can be scattered over many places.
-
- (It could be that there some other way, something
-which uses DEST_DIR, I don't know and I will be happy to hear).
-
-KV
-
-
-
-
-
-
-
-On Thu, Jun 21, 2012 at 3:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Le Thu, 21 Jun 2012 15:16:14 +0300,
-> Kevin Wilson <wkevils@gmail.com> a ?crit :
+> Thanks for your quick answer!
 >
->> I run:
->> make menuconfig
->> ? Package selection for target
->> ? ? ?Development tools
->> ? ? ? ? "gcc needs development files in target filesystems"
+> I do admit that I am a bit of (heavy) hacker and I am intending to
+> use buildroot a bit beyond its usual usage.
 >
-> Yes, you have to enable BR2_HAVE_DEVFILES (in Build options).
+> I though of things like -
 >
-> However, beware that the usage of the native toolchain on the target is
-> rarely used and tested by Buildroot developers. Buildroot is here to
-> cross-compile all your applications and libraries, so it generally
-> doesn't make much sense to have a native toolchain on the target, so we
-> don't pay too much attention to this.
+>   1) Adding tests programs of my own
 >
-> What would you like to build on your target? Why don't you
-> cross-compile it?
+>   2) Adding some code to packages (let's say, iptables, openswan)
+>      Partly for hacking, partly for adding code for my own development
+>      needs.
 >
-> Thomas
-> --
-> Thomas Petazzoni, Free Electrons
-> Kernel, drivers, real-time and embedded Linux
-> development, consulting, training and support.
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> It seems to mt that though it is possible to do it in buildroot cross
+> compiling, in the end, for each and every change in
+> iptables/openswan, I will have to install all the rootfs.tar; I don't
+> think there is a way to prepare something like a package.
+
+It was suggested that its easier to cross-compile your application. 
+That doesn't mean you have to do it inside the buildroot framework.
+It's trivial to cross-compile simple applications outside of
+buildroot.  If all you're using is libc, then all you have to do is
+
+   arm-linux-gcc -o foo file1.c file2.c file3.c
+
+Building something that uses libc and autoconf stuff is almost as
+easy.
+   
+Then you can 'scp foo target:' and run it.  Or you can NFS mount the
+host directory where you do the edit/build and it's even simpler.
+
+If you want to build things that use libraries that were built as part
+of buildroot, then you have to add a couple more command line options
+to tell the compiler/linker where to find the include and library
+files created by buildroot (e.g. <wherever>/output/target.
+
+In my project, the stuff I cross-compile outside of buildroot is
+eventually packaged as .ipk files (sort of a stripped-down version of
+Debian's .deb packages), and then I use ipkg-cl on the target to
+install and update the "non-buildroot" applications.
+
+-- 
+Grant Edwards               grant.b.edwards        Yow! Don't hit me!!  I'm in
+                                  at               the Twilight Zone!!!
+                              gmail.com            
