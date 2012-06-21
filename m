@@ -1,60 +1,50 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Thu, 21 Jun 2012 16:55:30 +0000 (UTC)
-Subject: [Buildroot] preparing rootfs with gcc in buildroot
-References: <CAGXs5wVgC+e_BUAOPgvL-vGqo4pusF3iTLFz_7Fb_Jfvrvv+Hg@mail.gmail.com>
- <20120621142848.4caafde0@skate>
- <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
-Message-ID: <jrvjm2$sls$1@dough.gmane.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Jun 2012 22:11:44 +0200
+Subject: [Buildroot] [PATCH] sudo: fix install
+In-Reply-To: <1340268304-26103-1-git-send-email-spdawson@gmail.com>
+References: <1340268304-26103-1-git-send-email-spdawson@gmail.com>
+Message-ID: <4FE38000.4000107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2012-06-21, Kevin Wilson <wkevils@gmail.com> wrote:
-
-> Thanks for your quick answer!
+On 06/21/12 10:45, spdawson at gmail.com wrote:
+> From: Simon Dawson<spdawson@gmail.com>
 >
-> I do admit that I am a bit of (heavy) hacker and I am intending to
-> use buildroot a bit beyond its usual usage.
+> Running sudo on the target fails with the following errors.
 >
-> I though of things like -
+>    sudo: /usr/libexec/sudoers.so: No such file or directory
+>    sudo: fatal error, unable to load plugins
 >
->   1) Adding tests programs of my own
+> The problem is that the installation of the sudo package is broken. This patch
+> replaces the hand-crafted install rule with the default AUTOTARGETS install.
 >
->   2) Adding some code to packages (let's say, iptables, openswan)
->      Partly for hacking, partly for adding code for my own development
->      needs.
+> Unfortunately, the default install fails because it includes a step that
+> invokes the cross-compiled visudo binary. A patch is provided here to disable
+> this visudo invocation, which is for sanity checking only. This local patch is
+> a backport of upstream commit 8209:0c4e3f68b2f5; the real fix will be in the
+> 1.8.6 release of sudo.
 >
-> It seems to mt that though it is possible to do it in buildroot cross
-> compiling, in the end, for each and every change in
-> iptables/openswan, I will have to install all the rootfs.tar; I don't
-> think there is a way to prepare something like a package.
+> Signed-off-by: Simon Dawson<spdawson@gmail.com>
 
-It was suggested that its easier to cross-compile your application. 
-That doesn't mean you have to do it inside the buildroot framework.
-It's trivial to cross-compile simple applications outside of
-buildroot.  If all you're using is libc, then all you have to do is
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-   arm-linux-gcc -o foo file1.c file2.c file3.c
+  Nice work, Simon!  I especially like the very extensive comment in the
+patch header.
 
-Building something that uses libc and autoconf stuff is almost as
-easy.
-   
-Then you can 'scp foo target:' and run it.  Or you can NFS mount the
-host directory where you do the edit/build and it's even simpler.
+  It's a pity that upstream decided to add the cross_compiling assignment to
+all these Makefile.in where it isn't actually used, but that's their choice...
 
-If you want to build things that use libraries that were built as part
-of buildroot, then you have to add a couple more command line options
-to tell the compiler/linker where to find the include and library
-files created by buildroot (e.g. <wherever>/output/target.
 
-In my project, the stuff I cross-compile outside of buildroot is
-eventually packaged as .ipk files (sort of a stripped-down version of
-Debian's .deb packages), and then I use ipkg-cl on the target to
-install and update the "non-buildroot" applications.
+  Regards,
+  Arnout
 
 -- 
-Grant Edwards               grant.b.edwards        Yow! Don't hit me!!  I'm in
-                                  at               the Twilight Zone!!!
-                              gmail.com            
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
