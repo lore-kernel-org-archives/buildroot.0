@@ -1,46 +1,33 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2012 22:11:44 +0200
-Subject: [Buildroot] [PATCH] sudo: fix install
-In-Reply-To: <1340268304-26103-1-git-send-email-spdawson@gmail.com>
-References: <1340268304-26103-1-git-send-email-spdawson@gmail.com>
-Message-ID: <4FE38000.4000107@mind.be>
+Date: Thu, 21 Jun 2012 22:31:05 +0200
+Subject: [Buildroot] preparing rootfs with gcc in buildroot
+In-Reply-To: <jrvjm2$sls$1@dough.gmane.org>
+References: <CAGXs5wVgC+e_BUAOPgvL-vGqo4pusF3iTLFz_7Fb_Jfvrvv+Hg@mail.gmail.com>
+ <20120621142848.4caafde0@skate>
+ <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
+ <jrvjm2$sls$1@dough.gmane.org>
+Message-ID: <4FE38489.8060803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/21/12 10:45, spdawson at gmail.com wrote:
-> From: Simon Dawson<spdawson@gmail.com>
->
-> Running sudo on the target fails with the following errors.
->
->    sudo: /usr/libexec/sudoers.so: No such file or directory
->    sudo: fatal error, unable to load plugins
->
-> The problem is that the installation of the sudo package is broken. This patch
-> replaces the hand-crafted install rule with the default AUTOTARGETS install.
->
-> Unfortunately, the default install fails because it includes a step that
-> invokes the cross-compiled visudo binary. A patch is provided here to disable
-> this visudo invocation, which is for sanity checking only. This local patch is
-> a backport of upstream commit 8209:0c4e3f68b2f5; the real fix will be in the
-> 1.8.6 release of sudo.
->
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
+On 06/21/12 18:55, Grant Edwards wrote:
+> If you want to build things that use libraries that were built as part
+> of buildroot, then you have to add a couple more command line options
+> to tell the compiler/linker where to find the include and library
+> files created by buildroot (e.g.<wherever>/output/target.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  And even that is not necessary if you use output/host/usr/bin/xxx-gcc
+as the cross-compiler - that one has the sysroot hard-coded.
 
-  Nice work, Simon!  I especially like the very extensive comment in the
-patch header.
-
-  It's a pity that upstream decided to add the cross_compiling assignment to
-all these Makefile.in where it isn't actually used, but that's their choice...
-
+  By the way, you should point to <wherever>/output/staging, not
+<wherever>/output/target.  target doesn't normally contain header
+files or static libraries.
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
