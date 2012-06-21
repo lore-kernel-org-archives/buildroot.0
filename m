@@ -1,33 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2012 22:31:05 +0200
-Subject: [Buildroot] preparing rootfs with gcc in buildroot
-In-Reply-To: <jrvjm2$sls$1@dough.gmane.org>
-References: <CAGXs5wVgC+e_BUAOPgvL-vGqo4pusF3iTLFz_7Fb_Jfvrvv+Hg@mail.gmail.com>
- <20120621142848.4caafde0@skate>
- <CAGXs5wXPo4wtWY9H0Ec761e0zEUCa_3u3-YH04jzZcW_m=ju+Q@mail.gmail.com>
- <jrvjm2$sls$1@dough.gmane.org>
-Message-ID: <4FE38489.8060803@mind.be>
+Date: Thu, 21 Jun 2012 22:32:21 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2012-06-20
+In-Reply-To: <87ipelqccc.fsf@macbook.be.48ers.dk>
+References: <20120621063115.B05E852CEBE@lolut.humanoidz.org>
+ <87ipelqccc.fsf@macbook.be.48ers.dk>
+Message-ID: <4FE384D5.2050204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/21/12 18:55, Grant Edwards wrote:
-> If you want to build things that use libraries that were built as part
-> of buildroot, then you have to add a couple more command line options
-> to tell the compiler/linker where to find the include and library
-> files created by buildroot (e.g.<wherever>/output/target.
+On 06/21/12 10:49, Peter Korsgaard wrote:
+>   Thomas>  Status         : NOK
+>   Thomas>  Failure reason : ffmpeg-0.8.11
+>   Thomas>  Architecture   : arm
+>   Thomas>  Submitted by   : Thomas Petazzoni (Free Electrons build server)
+>   Thomas>  Submitted at   : 2012-06-20 20:57:51
+>   Thomas>  Git commit ID  :http://git.buildroot.net/buildroot/commit/?id=e9345f85822635291016f0b6e7cf855e07dbb028
+>   Thomas>  End of log     :http://autobuild.buildroot.net/results/3270ce7b816f7d141327a09e9c4273fd001827fb/build-end.log
+>
+> ARM/thumb mismatch?
 
-  And even that is not necessary if you use output/host/usr/bin/xxx-gcc
-as the cross-compiler - that one has the sysroot hard-coded.
-
-  By the way, you should point to <wherever>/output/staging, not
-<wherever>/output/target.  target doesn't normally contain header
-files or static libraries.
+  Wild guess: toolchain is compiled to support fpa only, not vfp.
+I don't know how you can create such a toolchain though...
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
