@@ -1,227 +1,139 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Fri, 22 Jun 2012 14:42:07 +0200
-Subject: [Buildroot] [PATCH] Add some support for device tree kernels with
-	appended trees
-Message-ID: <1340368927-31968-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
+Date: Fri, 22 Jun 2012 16:28:28 +0200
+Subject: [Buildroot] Can I use the toolchain build with buildroot,
+ as an external toolchain ?
+In-Reply-To: <4F6B677E.4020706@gmail.com>
+References: <1531E53627F1F749B4FE809BF2A4EB6703136FE8@WETMEX10.loepfe.com>
+ <jkfl6r$bev$1@dough.gmane.org> <20120322175530.1f14a73a@skate>
+ <4F6B677E.4020706@gmail.com>
+Message-ID: <js1vea$ns$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
----
- linux/Config.in |   55 ++++++++++++++++++++++++++++++++++++++++++-------
- linux/linux.mk  |   61 ++++++++++++++++++++++++++++++++++++++++---------------
- 2 files changed, 93 insertions(+), 23 deletions(-)
+On 22/03/2012 18:55, Steve Calfee wrote:
+> On 03/22/2012 09:55 AM, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>>
+>> Yes, I agree.
+>>
+>> If you want to do that anyway, here are the steps. From a pristine
+>> Buildroot configuration:
+>>
+>> * Select your architecture
+>> * Select your architecture variant
+>> * In Build options, set the host dir to /opt/your-toolchain-name where
+>> your-toolchain-name would typically be arm-linux-uclibcgnueabi or
+>> something like that (but it can also be anything else)
+>> * In Toolchain, use the Buildroot internal backend, and configure
+>> everything (gcc version, binutils version, etc.)
+>> * In Packages, disable Busybox (i.e no packages at all should be
+>> selected)
+>> * In target filesystems, disable the tarball (i.e no filesystems at
+>> all should be selected)
+>>
+>> Then, build with make. You have your toolchain
+>> in /opt/your-toolchain-name. You can erase your Buildroot build and
+>> configuration now.
+>>
+>> Now, you can do a second Buildroot to build your system itself,
+>> re-using the toolchain you have created.
+>>
+>> In the toolchain menu, select external toolchain, and then Custom
+>> external toolchain. In the toolchain path,
+>> set /opt/your-toolchain-name/usr/, and adjust the
+>> IPv6/RPC/locale/wide-char options to the ones you have used when
+>> building your toolchain. Don't worry if you're not sure here: Buildroot
+>> will check at the beginning of the build all those options and will
+>> abort if anything is incorrect.
+>>
+>> Regards,
+>>
+>> Thomas Petazzoni
+>
+> I do it slightly differently. I go through most of your steps above,
+> except I leave the toolchain in the default buildroot directory. (I
+> think it is in output/host...). Then I check out another buildroot tree
+> and select external toolchain in that tree to point to the other
+> buildroot tree with just the compiler.
+>
+> This way if I forgot a needed toolchain option, I can go back to the
+> original tools tree, make clean, configure to what I need and rebuild
+> just the toolchain. Also I can easily upgrade to the latest buildroot
+> tools when needed.
+>
+> You should always use an external toolchain, otherwise the development
+> tree is just too painful to do a "make clean" in. But in my use case the
+> external toolchain is an external buildroot toolchain.
+>
+> Regards, Steve
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4562b1b..5618629 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -124,24 +124,53 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
- 
-+config BR2_LINUX_KERNEL_DTS_SUPPORT
-+       bool "Device Tree Support"
-+
-+config BR2_LINUX_KERNEL_APPENDED_DTB
-+       bool "Append the Device Tree binary to the kernel"
-+       depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-+
-+choice
-+	prompt "Device Tree choice"
-+	depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-+	default BR2_LINUX_KERNEL_USE_DEFAULT_DTS
-+
-+config BR2_LINUX_KERNEL_USE_DEFAULT_DTS
-+	bool "Using a device tree present in the kernel"
-+
-+config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	bool "Using a custom device tree file"
-+
-+endchoice
-+
- config BR2_LINUX_KERNEL_DTS_FILE
--    string "Device Tree dts file location"
--    depends on BR2_microblaze
--    help
--      Path from where the dts file has to be copied
--      The final "custom target" name depends on the
--      dts file name:
--          <name>.dts --> simpleImage.<name>
-+	string "DTS name"
-+	depends on BR2_LINUX_KERNEL_USE_DEFAULT_DTS
-+	help
-+	 Name of the default device tree, without the
-+	 trailing .dts
-+
-+config BR2_LINUX_KERNEL_CUSTOM_DTS_FILE
-+	string "Device tree file path"
-+	depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-+	help
-+	  Path to the kernel configuration file
-+
- #
- # Binary format
- #
- 
-+config BR2_LINUX_KERNEL_UBOOT_IMAGE
-+       bool
-+
- choice
- 	prompt "Kernel binary format"
- 
- config BR2_LINUX_KERNEL_UIMAGE
- 	bool "uImage"
- 	depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
- 
- config BR2_LINUX_KERNEL_BZIMAGE
- 	bool "bzImage"
-@@ -151,6 +180,18 @@ config BR2_LINUX_KERNEL_ZIMAGE
- 	bool "zImage"
- 	depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc || BR2_sh || BR2_sh64 || BR2_xtensa
- 
-+config BR2_LINUX_KERNEL_CUIMAGE
-+	bool "cuImage"
-+	depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-+	depends on BR2_powerpc
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-+
-+config BR2_LINUX_KERNEL_SIMPLEIMAGE
-+	bool "simpleImage"
-+	depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-+	depends on BR2_microblaze
-+	select BR2_LINUX_KERNEL_UBOOT_IMAGE
-+
- config BR2_LINUX_KERNEL_VMLINUX_BIN
- 	bool "vmlinux.bin"
- 	depends on BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 34f8623..b3b60bc 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -34,6 +34,10 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- LINUX_INSTALL_IMAGES = YES
- LINUX_DEPENDENCIES  += host-module-init-tools
- 
-+ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
-+	LINUX_DEPENDENCIES+=host-uboot-tools
-+endif
-+
- LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)" \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
-@@ -46,6 +50,12 @@ LINUX_MAKE_FLAGS = \
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease)
- 
-+ifeq ($(BR2_LINUX_KERNEL_USE_DEFAULT_DTS),y)
-+KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_DTS_FILE)
-+else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
-+KERNEL_DTS_NAME = $(basename $(notdir $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE)))
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
- LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
- else
-@@ -56,11 +66,14 @@ LINUX_IMAGE_NAME=vmImage
- else
- LINUX_IMAGE_NAME=uImage
- endif
--LINUX_DEPENDENCIES+=host-uboot-tools
- else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
- LINUX_IMAGE_NAME=bzImage
- else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
- LINUX_IMAGE_NAME=zImage
-+else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
-+LINUX_IMAGE_NAME=cuImage.$(KERNEL_DTS_NAME)
-+else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
-+LINUX_IMAGE_NAME=simpleImage.$(KERNEL_DTS_NAME)
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
- LINUX_IMAGE_NAME=vmlinux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
-@@ -117,19 +130,6 @@ endef
- 
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
- 
--ifeq ($(KERNEL_ARCH),microblaze)
--# on microblaze, we always want mkimage
--LINUX_DEPENDENCIES+=host-uboot-tools
--
--define LINUX_COPY_DTS
--    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
--        cp $(BR2_LINUX_KERNEL_DTS_FILE) $(@D)/arch/microblaze/boot/dts ; \
--    else \
--        echo "Cannot copy dts file!" ; \
--    fi
--endef
--endif
--
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-@@ -140,11 +140,12 @@ define LINUX_CONFIGURE_CMDS
- 	cp $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
-+	$(if $(BR2_LINUX_KERNEL_DTS_SUPPORT),
-+		$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-+			cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE) $(KERNEL_ARCH_PATH)/boot/dts/))
- 	$(if $(BR2_ARM_EABI),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
--    $(if $(BR2_microblaze),
--        $(call LINUX_COPY_DTS))
- 	# As the kernel gets compiled before root filesystems are
- 	# built, we create a fake cpio file. It'll be
- 	# replaced later by the real cpio archive, and the kernel will be
-@@ -164,9 +165,34 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
-+	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
- endef
- 
-+ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-+define LINUX_BUILD_DTB
-+	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(KERNEL_DTS_NAME).dtb
-+endef
-+endif
-+
-+ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
-+ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE), y)
-+define LINUX_APPEND_DTB
-+	cat $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb > $(KERNEL_ARCH_PATH)/boot/zImage_dtb
-+	mv $(KERNEL_ARCH_PATH)/boot/zImage_dtb $(KERNEL_ARCH_PATH)/boot/zImage
-+	LOAD=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) | sed -n 's/Load Address: \([0-9]*\)/\1/p'`; \
-+	ENTRY=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) | sed -n 's/Entry Point: \([0-9]*\)/\1/p'`; \
-+	$(MKIMAGE) -A $(KERNEL_ARCH) -O linux -T kernel -C none -a $${LOAD} -e $${ENTRY} -n 'Linux Buildroot' \
-+		-d $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(KERNEL_IMAGE_NAME)
-+endef
-+else
-+define LINUX_APPEND_DTB
-+	cat $(KERNEL_ARCH_PATH)/boot/zImage $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb > $(KERNEL_ARCH_PATH)/boot/zImage_dtb
-+	mv $(KERNEL_ARCH_PATH)/boot/zImage_dtb $(KERNEL_ARCH_PATH)/boot/zImage
-+endef
-+endif
-+
- # Compilation. We make sure the kernel gets rebuilt when the
- # configuration has changed.
- define LINUX_BUILD_CMDS
-@@ -174,6 +200,9 @@ define LINUX_BUILD_CMDS
- 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
- 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
- 	fi
-+	$(if $(BR2_LINUX_KERNEL_DTS_SUPPORT),
-+		$(LINUX_BUILD_DTB)
-+		$(LINUX_APPEND_DTB))
- endef
- 
- 
--- 
-1.7.9.5
+Hi all,
+
+I'm also trying to speed-up my build by saving already built toolchain 
+to different place and use it as external toolchain in second build. 
+Most of the build goes well but I get stuck at webkit build where it 
+complains that sysroot libraries are not on the place they are 
+originally built. I would say this is question for webkit package but I 
+noticed that at beginning Buildroot will make symbolic links from my 
+ext-toolchain to its output/host/usr/bin directory with following command:
+
+Checking external toolchain settings
+Copy external toolchain libraries to target...
+Copy external toolchain sysroot to staging...
+mkdir -p 
+/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/bin; 
+cd 
+/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/bin; 
+\
+	for i in 
+/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/../host/usr/bin/i686-linux-*; 
+do \
+		case "$i" in \
+		*cc|*cc-*|*++|*++-*|*cpp) \
+			base=${i##*/}; \
+			ln -sf ext-toolchain-wrapper $base; \
+			;; \
+		*) \
+			ln -sf $i .; \
+			;; \
+		esac; \
+	done ;
+
+I was wondering can this be solved without making symbolic links but 
+with providing original ext-toolchain path during package configure 
+procedure? Also not sure if this is true cause for webkit issue but it's 
+worth trying this if not complicated.
+
+For reference here is log that I get before build stops:
+   CXXLD  Programs/jsc
+   CCLD   Programs/minidom
+   CXXLD  libwebkit-1.0.la
+libtool: link: warning: library
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/libstdc++.la'
+was moved.
+libtool: link: warning: library
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/libstdc++.la'
+was moved.
+libtool: link: warning: library
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/libstdc++.la'
+was moved.
+libtool: link: warning: library
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/libstdc++.la'
+was moved.
+libtool: link: warning: library
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/libstdc++.la'
+was moved.
+libtool: link: warning: library
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/host/usr/i686-unknown-linux-gnu/sysroot/lib/libstdc++.la'
+was moved.
+Too many arguments
+make[2]: *** [libwebkit-1.0.la] Error 1
+make[2]: Leaving directory
+`/var/lib/hudson/jobs/DevBuildroot_2011-05_x86/workspace/buildroot-2011.05/output/build/webkit-1.2.7'
+
+Regards,
+Aleksandar
