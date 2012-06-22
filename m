@@ -1,61 +1,32 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 22 Jun 2012 07:38:42 +0200
-Subject: [Buildroot] [PATCH resend3] source-check: change behavior to check
- only selected packages / add source-check-all
-Message-ID: <fef39461f25270f81f06.1340343522@beantl019720>
+Date: Fri, 22 Jun 2012 07:42:33 +0200
+Subject: [Buildroot] [PATCH 0 of 6 resend] Improve support for custom
+ external toolchains (and related changes)
+Message-ID: <patchbomb.1340343753@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The original 'source-check' target first selects all packages, and then checks
-whether the package tarballs can be found. This is useful for Buildroot
-maintainers, but less useful for developers working on a specific project. The
-latter only care about the packages used in that project.
+The main intention for this patch series is to allow downloading a custom
+external toolchain. I had previously added this functionality to buildroot
+(did not make it to mainstream, I should have followed it up better) and
+have been using it for about a year now.
+I have now lined it up with current buildroot, updated based on the
+comments of ThomasP, and fixed some related problems I found along the
+way.
 
-This patch removes the allyesconfig dependency to source-check so that only
-selected packages are checked. The original behavior is moved to a new target
-'source-check-all'.
+Thomas De Schampheleire (6):
+       pkg-download.mk: allow using localfiles outside of package infrastructure
+       pkg-download.mk: use stripurischeme function in localfiles download method
+       pkg-download.mk: support detection of URI schemes in DOWNLOAD
+       toolchain-external/Config.in: fix indentation
+       toolchain-external: allow downloading a custom toolchain
+       toolchain-external: line up comments with reality
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
----
- Makefile |  8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
---- a/Makefile
-+++ b/Makefile
-@@ -48,7 +48,7 @@ export BR2_VERSION_FULL:=$(BR2_VERSION)$
- noconfig_targets:=menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig savedefconfig allyesconfig allnoconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	source-check print-version
-+	source-check source-check-all print-version
- 
- # Strip quotes and then whitespaces
- qstrip=$(strip $(subst ",,$(1)))
-@@ -585,7 +585,8 @@ savedefconfig: $(BUILD_DIR)/buildroot-co
- 	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
- 
- # check if download URLs are outdated
--source-check: allyesconfig
-+source-check-all: allyesconfig source-check
-+source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
- 
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-@@ -672,7 +673,8 @@ endif
- 	@echo
- 	@echo 'Miscellaneous:'
- 	@echo '  source                 - download all sources needed for offline-build'
--	@echo '  source-check           - check all packages for valid download URLs'
-+	@echo '  source-check           - check selected packages for valid download URLs'
-+	@echo '  source-check-all       - check all packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ package/pkg-download.mk                  |   15 +++-
+ toolchain/toolchain-external/Config.in   |  371 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------------------------------------
+ toolchain/toolchain-external/ext-tool.mk |   19 ++++--
+ 3 files changed, 215 insertions(+), 190 deletions(-)
