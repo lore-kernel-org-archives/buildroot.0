@@ -1,52 +1,48 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 22 Jun 2012 07:42:34 +0200
-Subject: [Buildroot] [PATCH 1 of 6 resend] pkg-download.mk: allow using
- localfiles outside of package infrastructure
+Date: Fri, 22 Jun 2012 07:42:36 +0200
+Subject: [Buildroot] [PATCH 3 of 6 resend] pkg-download.mk: support
+ detection of URI schemes in DOWNLOAD
 In-Reply-To: <patchbomb.1340343753@beantl019720>
 References: <patchbomb.1340343753@beantl019720>
-Message-ID: <1dcdff3e9437fc63cd4b.1340343754@beantl019720>
+Message-ID: <8cbde66c4041f84f6c45.1340343756@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The localfiles download method uses $($(PKG)_SITE))) and
-$($(PKG)_SOURCE) instead of $(1) and $(2). This means that it can only
-be used for package downloads (through gentargets, autotargets, ...)
-and not for other downloads like external toolchains.
+When using one of the package infrastructures, the DOWNLOAD function
+uses $(PKG)_SITE_METHOD to determine the appropriate download method,
+which is autodetected based on the URI if none was explicitly set.
 
-This patch changes localfiles to allow this, just as the wget and scp
-download methods already did.
-For the version control download methods, nothing changes.
+When the DOWNLOAD function is called directly, for example when
+downloading a toolchain, or from a package that does not use one of
+the package infrastructures, the SITE_METHOD is not autodetected,
+and thus the download defaults to wget.
+
+This patch adds URI scheme detection directly to the DOWNLOAD method,
+in case no SITE_METHOD was detected yet.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/pkg-download.mk |  8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/pkg-download.mk |  7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -174,16 +174,16 @@ define SHOW_EXTERNAL_DEPS_WGET
- endef
- 
- define DOWNLOAD_LOCALFILES
--	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--		$(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
-+	test -e $(DL_DIR)/$(2) || \
-+		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
- endef
- 
- define SOURCE_CHECK_LOCALFILES
--  test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
-+  test -e $(call qstrip,$(subst file://,,$(1)))
- endef
- 
- define SHOW_EXTERNAL_DEPS_LOCALFILES
--  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
-+  echo $(2)
- endef
- 
- ################################################################################
+@@ -211,7 +211,12 @@ define DOWNLOAD_INNER
+ 		esac ; \
+ 	fi ; \
+ 	if test -n "$(1)" ; then \
+-		case "$($(PKG)_SITE_METHOD)" in \
++		if test -z "$($(PKG)_SITE_METHOD)" ; then \
++			scheme="$(call geturischeme,$(1))" ; \
++		else \
++			scheme="$($(PKG)_SITE_METHOD)" ; \
++		fi ; \
++		case "$$scheme" in \
+ 			git) $($(DL_MODE)_GIT) && exit ;; \
+ 			svn) $($(DL_MODE)_SVN) && exit ;; \
+ 			bzr) $($(DL_MODE)_BZR) && exit ;; \
