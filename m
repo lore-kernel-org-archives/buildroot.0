@@ -1,32 +1,52 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 22 Jun 2012 07:42:33 +0200
-Subject: [Buildroot] [PATCH 0 of 6 resend] Improve support for custom
- external toolchains (and related changes)
-Message-ID: <patchbomb.1340343753@beantl019720>
+Date: Fri, 22 Jun 2012 07:42:34 +0200
+Subject: [Buildroot] [PATCH 1 of 6 resend] pkg-download.mk: allow using
+ localfiles outside of package infrastructure
+In-Reply-To: <patchbomb.1340343753@beantl019720>
+References: <patchbomb.1340343753@beantl019720>
+Message-ID: <1dcdff3e9437fc63cd4b.1340343754@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The main intention for this patch series is to allow downloading a custom
-external toolchain. I had previously added this functionality to buildroot
-(did not make it to mainstream, I should have followed it up better) and
-have been using it for about a year now.
-I have now lined it up with current buildroot, updated based on the
-comments of ThomasP, and fixed some related problems I found along the
-way.
+The localfiles download method uses $($(PKG)_SITE))) and
+$($(PKG)_SOURCE) instead of $(1) and $(2). This means that it can only
+be used for package downloads (through gentargets, autotargets, ...)
+and not for other downloads like external toolchains.
 
-Thomas De Schampheleire (6):
-       pkg-download.mk: allow using localfiles outside of package infrastructure
-       pkg-download.mk: use stripurischeme function in localfiles download method
-       pkg-download.mk: support detection of URI schemes in DOWNLOAD
-       toolchain-external/Config.in: fix indentation
-       toolchain-external: allow downloading a custom toolchain
-       toolchain-external: line up comments with reality
+This patch changes localfiles to allow this, just as the wget and scp
+download methods already did.
+For the version control download methods, nothing changes.
 
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- package/pkg-download.mk                  |   15 +++-
- toolchain/toolchain-external/Config.in   |  371 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------------------------------------
- toolchain/toolchain-external/ext-tool.mk |   19 ++++--
- 3 files changed, 215 insertions(+), 190 deletions(-)
+---
+ package/pkg-download.mk |  8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -174,16 +174,16 @@ define SHOW_EXTERNAL_DEPS_WGET
+ endef
+ 
+ define DOWNLOAD_LOCALFILES
+-	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-		$(LOCALFILES) $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE) $(DL_DIR)
++	test -e $(DL_DIR)/$(2) || \
++		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
+-  test -e $(call qstrip,$(subst file://,,$($(PKG)_SITE)))/$($(PKG)_SOURCE)
++  test -e $(call qstrip,$(subst file://,,$(1)))
+ endef
+ 
+ define SHOW_EXTERNAL_DEPS_LOCALFILES
+-  echo $($(PKG)_SITE)/$($(PKG)_SOURCE)
++  echo $(2)
+ endef
+ 
+ ################################################################################
