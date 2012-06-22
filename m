@@ -1,48 +1,36 @@
 From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Fri, 22 Jun 2012 07:42:36 +0200
-Subject: [Buildroot] [PATCH 3 of 6 resend] pkg-download.mk: support
- detection of URI schemes in DOWNLOAD
+Date: Fri, 22 Jun 2012 07:42:35 +0200
+Subject: [Buildroot] [PATCH 2 of 6 resend] pkg-download.mk: use
+ stripurischeme function in localfiles download method
 In-Reply-To: <patchbomb.1340343753@beantl019720>
 References: <patchbomb.1340343753@beantl019720>
-Message-ID: <8cbde66c4041f84f6c45.1340343756@beantl019720>
+Message-ID: <b387bac066924704f2cc.1340343755@beantl019720>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using one of the package infrastructures, the DOWNLOAD function
-uses $(PKG)_SITE_METHOD to determine the appropriate download method,
-which is autodetected based on the URI if none was explicitly set.
-
-When the DOWNLOAD function is called directly, for example when
-downloading a toolchain, or from a package that does not use one of
-the package infrastructures, the SITE_METHOD is not autodetected,
-and thus the download defaults to wget.
-
-This patch adds URI scheme detection directly to the DOWNLOAD method,
-in case no SITE_METHOD was detected yet.
-
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/pkg-download.mk |  7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ package/pkg-download.mk |  4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -211,7 +211,12 @@ define DOWNLOAD_INNER
- 		esac ; \
- 	fi ; \
- 	if test -n "$(1)" ; then \
--		case "$($(PKG)_SITE_METHOD)" in \
-+		if test -z "$($(PKG)_SITE_METHOD)" ; then \
-+			scheme="$(call geturischeme,$(1))" ; \
-+		else \
-+			scheme="$($(PKG)_SITE_METHOD)" ; \
-+		fi ; \
-+		case "$$scheme" in \
- 			git) $($(DL_MODE)_GIT) && exit ;; \
- 			svn) $($(DL_MODE)_SVN) && exit ;; \
- 			bzr) $($(DL_MODE)_BZR) && exit ;; \
+@@ -175,11 +175,11 @@ endef
+ 
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-		$(LOCALFILES) $(call qstrip,$(subst file://,,$(1))) $(DL_DIR)
++		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
+-  test -e $(call qstrip,$(subst file://,,$(1)))
++  test -e $(call stripurischeme,$(call qstrip,$(1)))
+ endef
+ 
+ define SHOW_EXTERNAL_DEPS_LOCALFILES
