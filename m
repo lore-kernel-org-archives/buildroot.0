@@ -1,53 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jun 2012 08:30:01 -0300
-Subject: [Buildroot] [PATCH 5/5] mysql_client: security bump to version
-	5.1.63
-In-Reply-To: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1340451001-7111-5-git-send-email-gustavo@zacarias.com.ar>
+From: Philippe Reynes <tremyfr@yahoo.fr>
+Date: Sat, 23 Jun 2012 14:11:30 +0200
+Subject: [Buildroot] [PATCH] [ARM] Add dtb image generation
+Message-ID: <1340453490-10005-1-git-send-email-tremyfr@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 5.1.63 to fix CVE-2012-2122
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
 ---
- ...eck.patch => mysql_client-ac_cache_check.patch} |    0
- ...=> mysql_client-configure-ps-cache-check.patch} |    0
- ...h => mysql_client-use-new-readline-iface.patch} |    0
- package/mysql_client/mysql_client.mk               |    2 +-
- 4 files changed, 1 insertions(+), 1 deletions(-)
- rename package/mysql_client/{mysql_client-5.1.62-ac_cache_check.patch => mysql_client-ac_cache_check.patch} (100%)
- rename package/mysql_client/{mysql_client-5.1.62-configure-ps-cache-check.patch => mysql_client-configure-ps-cache-check.patch} (100%)
- rename package/mysql_client/{mysql_client-5.1.62-use-new-readline-iface.patch => mysql_client-use-new-readline-iface.patch} (100%)
+ linux/Config.in |    6 ++++++
+ linux/linux.mk  |    3 +++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/package/mysql_client/mysql_client-5.1.62-ac_cache_check.patch b/package/mysql_client/mysql_client-ac_cache_check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.62-ac_cache_check.patch
-rename to package/mysql_client/mysql_client-ac_cache_check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.62-configure-ps-cache-check.patch b/package/mysql_client/mysql_client-configure-ps-cache-check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.62-configure-ps-cache-check.patch
-rename to package/mysql_client/mysql_client-configure-ps-cache-check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.62-use-new-readline-iface.patch b/package/mysql_client/mysql_client-use-new-readline-iface.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.62-use-new-readline-iface.patch
-rename to package/mysql_client/mysql_client-use-new-readline-iface.patch
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index a1640c3..ad330ae 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -4,7 +4,7 @@
+diff --git a/linux/Config.in b/linux/Config.in
+index 1cd05ae..a3c4385 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -132,6 +132,12 @@ config BR2_LINUX_KERNEL_DTS_FILE
+       The final "custom target" name depends on the
+       dts file name:
+           <name>.dts --> simpleImage.<name>
++
++config BR2_LINUX_KERNEL_DTB_FILE
++    string "Device Tree dtb file expected"
++    depends on BR2_arm
++    help
++      Name of the dtb file to produce
  #
- #############################################################
+ # Binary format
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index f165dda..3837c57 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -174,6 +174,8 @@ define LINUX_BUILD_CMDS
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
++	$(if $(BR2_LINUX_KERNEL_DTB_FILE),
++		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(BR2_LINUX_KERNEL_DTB_FILE))
+ endef
  
--MYSQL_CLIENT_VERSION = 5.1.62
-+MYSQL_CLIENT_VERSION = 5.1.63
- MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
- MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
- MYSQL_CLIENT_INSTALL_STAGING = YES
+ 
+@@ -194,6 +196,7 @@ endef
+ 
+ define LINUX_INSTALL_IMAGES_CMDS
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
++	cp $(KERNEL_ARCH_PATH)/boot/$(BR2_LINUX_KERNEL_DTB_FILE) $(BINARIES_DIR)
+ endef
+ 
+ define LINUX_INSTALL_TARGET_CMDS
 -- 
-1.7.3.4
+1.7.4.4
