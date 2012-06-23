@@ -1,51 +1,55 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 23 Jun 2012 23:14:56 +0200
-Subject: [Buildroot] [git commit] pkg-utils.mk: add utility functions
-	find*clauses and notfirstword
-Message-ID: <20120623213308.B42DF828A6@busybox.osuosl.org>
+Date: Sat, 23 Jun 2012 23:18:39 +0200
+Subject: [Buildroot] [git commit] source-check: change behavior to check
+	only selected packages / add source-check-all
+Message-ID: <20120623213308.D5E0D828A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=75f18de67e7bc7f1feb360eb4201a3c6d6773698
+commit: http://git.buildroot.net/buildroot/commit/?id=07bae75635ebc0b2b3a2df8aca2f5022debacddb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch adds a few utility functions to pkg-utils.mk.
+The original 'source-check' target first selects all packages, and then checks
+whether the package tarballs can be found. This is useful for Buildroot
+maintainers, but less useful for developers working on a specific project. The
+latter only care about the packages used in that project.
 
-Functions finddirclauses and findfileclauses help in building a find command
-that skips a set of directories and performs operations on a set of files.
-This pattern can for example be used to keep certain files or directories from
-being stripped, or to remove certain files from a package installation.
+This patch removes the allyesconfig dependency to source-check so that only
+selected packages are checked. The original behavior is moved to a new target
+'source-check-all'.
 
-The notfirstword function is the inverse of the 'firstword' function in make:
-it returns all but the first word.
-
+[Peter: removed source-check-all, people can just make allyesconfig before]
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-utils.mk |    9 +++++++++
- 1 files changed, 9 insertions(+), 0 deletions(-)
+ Makefile |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 953dbc9..0c55a9d 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -76,6 +76,15 @@ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESE
- TERM_BOLD := $(shell tput smso)
- TERM_RESET := $(shell tput rmso)
+diff --git a/Makefile b/Makefile
+index c691767..7a66897 100644
+--- a/Makefile
++++ b/Makefile
+@@ -591,7 +591,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
  
-+# Utility functions for 'find'
-+# findfileclauses(filelist) => -name 'X' -o -name 'Y'
-+findfileclauses = $(call notfirstword,$(patsubst %,-o -name '%',$(1)))
-+# finddirclauses(base, dirlist) => -path 'base/dirX' -o -path 'base/dirY'
-+finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
-+
-+# Miscellaneous utility functions
-+# notfirstword(wordlist): returns all but the first word in wordlist
-+notfirstword = $(wordlist 2,$(words $(1)),$(1))
+ # check if download URLs are outdated
+-source-check: allyesconfig
++source-check:
+ 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
  
- # Needed for the foreach loops to loop over the list of hooks, so that
- # each hook call is properly separated by a newline.
+ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+@@ -678,7 +678,7 @@ endif
+ 	@echo
+ 	@echo 'Miscellaneous:'
+ 	@echo '  source                 - download all sources needed for offline-build'
+-	@echo '  source-check           - check all packages for valid download URLs'
++	@echo '  source-check           - check selected packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
