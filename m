@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 23 Jun 2012 14:19:36 +0200
-Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2,
-	4}.x stable versions
-In-Reply-To: <1340450441-6982-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sat, 23 Jun 2012 08:20:40 -0300")
-References: <1340450441-6982-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wr2ycjaf.fsf@macbook.be.48ers.dk>
+Date: Sat, 23 Jun 2012 14:20:02 +0200
+Subject: [Buildroot] [PATCH 1/5] squid: bump to version 3.1.20
+In-Reply-To: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 23 Jun 2012 08:29:57 -0300")
+References: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sjdmcj9p.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,7 +15,7 @@ To: buildroot@busybox.net
 
  Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed both, thanks.
+Committed entire series, thanks.
 
 -- 
 Bye, Peter Korsgaard
