@@ -1,29 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 23 Jun 2012 16:26:09 +0200
-Subject: [Buildroot] [PATCH] [ARM] Add dtb image generation
-In-Reply-To: <1340453490-10005-1-git-send-email-tremyfr@yahoo.fr>
-References: <1340453490-10005-1-git-send-email-tremyfr@yahoo.fr>
-Message-ID: <20120623162609.7bdc23d9@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 23 Jun 2012 21:34:28 +0200
+Subject: [Buildroot] [PATCH] Remove REAL_GNU_TARGET_NAME
+In-Reply-To: <1339156336-20778-1-git-send-email-rbraun@sceen.net> (Richard
+ Braun's message of "Fri, 8 Jun 2012 13:52:16 +0200")
+References: <1339156336-20778-1-git-send-email-rbraun@sceen.net>
+Message-ID: <87fw9lddq3.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Sat, 23 Jun 2012 14:11:30 +0200,
-Philippe Reynes <tremyfr@yahoo.fr> a ?crit :
+>>>>> "Richard" == Richard Braun <rbraun@sceen.net> writes:
 
-> Signed-off-by: Philippe Reynes <tremyfr@yahoo.fr>
+ Richard> Instead of providing two variables, make GNU_TARGET_NAME give
+ Richard> the real target name, and remove REAL_GNU_TARGET_NAME
+ Richard> altogether.
 
-My colleague Maxime has posted yesterday something, which, even though
-not fully complete, provides more possibilities than this proposal (for
-example it supports generating kernel images that directly include the
-DTB, as is used these days on ARM when the platform does not have a DT
-capable bootloader). Would you mind testing his proposal?
+Committed, thanks.
 
-Thomas
+I have reinstated the host/usr/bin/$arch-linux-* symlinks for the
+gcc/gdb binaries though, as people might be using them in local scripts
+and so on.
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
