@@ -1,55 +1,88 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 23 Jun 2012 23:18:39 +0200
-Subject: [Buildroot] [git commit] source-check: change behavior to check
-	only selected packages / add source-check-all
-Message-ID: <20120623213308.D5E0D828A6@busybox.osuosl.org>
+Date: Sat, 23 Jun 2012 23:14:59 +0200
+Subject: [Buildroot] [git commit] build: add option to exclude
+	executables/dirs from being stripped
+Message-ID: <20120623213308.C4EEC828A6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07bae75635ebc0b2b3a2df8aca2f5022debacddb
+commit: http://git.buildroot.net/buildroot/commit/?id=2a97045d5daeb7cb7222f1ffe0532930d5b3140d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The original 'source-check' target first selects all packages, and then checks
-whether the package tarballs can be found. This is useful for Buildroot
-maintainers, but less useful for developers working on a specific project. The
-latter only care about the packages used in that project.
+Sometimes it may be desirable to keep debug symbols for some binaries and
+libraries on the target. This commit introduces the config option
+BR2_STRIP_EXCLUDE_FILES, which is interpreted as a list of such binaries
+and libraries, and the option BR2_STRIP_EXCLUDE_DIRS, which indicates
+directories excluded from stripping entirely.
+These exclusions are passed to the find command in the target-finalize step.
 
-This patch removes the allyesconfig dependency to source-check so that only
-selected packages are checked. The original behavior is moved to a new target
-'source-check-all'.
-
-[Peter: removed source-check-all, people can just make allyesconfig before]
+Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- Makefile |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in |   19 +++++++++++++++++++
+ Makefile  |   10 ++++++++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
+diff --git a/Config.in b/Config.in
+index 95c2e8c..83f64bb 100644
+--- a/Config.in
++++ b/Config.in
+@@ -283,6 +283,25 @@ config BR2_STRIP_none
+ 	  filesystem.
+ endchoice
+ 
++config BR2_STRIP_EXCLUDE_FILES
++	string "executables that should not be stripped"
++	depends on !BR2_STRIP_none
++	default ""
++	help
++	  You may specify a space-separated list of binaries and libraries
++	  here that should not be stripped on the target.
++
++config BR2_STRIP_EXCLUDE_DIRS
++	string "directories that should be skipped when stripping"
++	depends on !BR2_STRIP_none
++	default ""
++	help
++	  You may specify a space-separated list of directories that should
++	  be skipped when stripping. Binaries and libraries in these
++	  directories will not be touched.
++	  The directories should be specified relative to the target directory,
++	  without leading slash.
++
+ choice
+ 	prompt "gcc optimization level"
+ 	default BR2_OPTIMIZE_S
 diff --git a/Makefile b/Makefile
-index c691767..7a66897 100644
+index 9a9634d..c691767 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -591,7 +591,7 @@ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< --savedefconfig=$(CONFIG_DIR)/defconfig $(CONFIG_CONFIG_IN)
+@@ -386,6 +386,13 @@ $(BUILD_DIR)/.root:
  
- # check if download URLs are outdated
--source-check: allyesconfig
-+source-check:
- 	$(MAKE) DL_MODE=SOURCE_CHECK $(EXTRAMAKEARGS) source
+ $(TARGET_DIR): $(BUILD_DIR)/.root
  
- endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
-@@ -678,7 +678,7 @@ endif
- 	@echo
- 	@echo 'Miscellaneous:'
- 	@echo '  source                 - download all sources needed for offline-build'
--	@echo '  source-check           - check all packages for valid download URLs'
-+	@echo '  source-check           - check selected packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
++STRIP_FIND_CMD = find $(TARGET_DIR)
++ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
++STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
++endif
++STRIP_FIND_CMD += -type f -perm +111
++STRIP_FIND_CMD += -not \( $(call findfileclauses,libthread_db*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
++
+ target-finalize:
+ ifeq ($(BR2_HAVE_DEVFILES),y)
+ 	( support/scripts/copy.sh $(STAGING_DIR) $(TARGET_DIR) )
+@@ -410,8 +417,7 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+ endif
+-	find $(TARGET_DIR) -type f -perm +111 '!' -name 'libthread_db*.so*' | \
+-		xargs $(STRIPCMD) 2>/dev/null || true
++	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+ 	find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ 		xargs -r $(KSTRIPCMD) || true
+ 
