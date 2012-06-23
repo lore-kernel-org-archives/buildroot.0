@@ -1,23 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 23 Jun 2012 21:55:17 +0200
-Subject: [Buildroot] [PATCH] Add /dev/video static device nodes
-In-Reply-To: <1340085953-24986-1-git-send-email-phil.edworthy@renesas.com>
- (Phil Edworthy's message of "Tue, 19 Jun 2012 07:05:53 +0100")
-References: <1340085953-24986-1-git-send-email-phil.edworthy@renesas.com>
-Message-ID: <87395ldcre.fsf@macbook.be.48ers.dk>
+Date: Sat, 23 Jun 2012 22:11:06 +0200
+Subject: [Buildroot] [PATCH] php: force cross-compilation
+In-Reply-To: <1340317344-22807-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 22 Jun 2012 00:22:24 +0200")
+References: <1340317344-22807-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87y5ndbxgl.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Phil" == Phil Edworthy <phil.edworthy@renesas.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- Phil> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+ Thomas> This fixes build problems like
+ Thomas> http://autobuild.buildroot.org/results/e3c5815766fdcf3f13b06fa0758ec418618ac4be/build-end.log.
 
-Committed, thanks.
-
-Please consider using devtmpfs instead though.
+Thanks, committed. It would be good to add cache support to
+ac_cv_prog_cc_cross, so we could just pass ac_cv_prog_cc_cross=yes in
+PHP_CONF_ENV, but ok.
 
 -- 
 Bye, Peter Korsgaard
