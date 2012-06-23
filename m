@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jun 2012 08:29:58 -0300
-Subject: [Buildroot] [PATCH 2/5] libnl: bump to version 3.2.11
+Date: Sat, 23 Jun 2012 08:29:59 -0300
+Subject: [Buildroot] [PATCH 3/5] gzip: bump to version 1.5
 In-Reply-To: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1340451001-7111-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1340451001-7111-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libnl/libnl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gzip/gzip.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
-index a723701..82d9b76 100644
---- a/package/libnl/libnl.mk
-+++ b/package/libnl/libnl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index f712f98..5fad001 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -3,8 +3,8 @@
+ # gzip
  #
  #############################################################
+-GZIP_VERSION:=1.4
+-GZIP_SOURCE:=gzip-$(GZIP_VERSION).tar.gz
+-GZIP_SITE:=$(BR2_GNU_MIRROR)/gzip
++
++GZIP_VERSION = 1.5
++GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
  
--LIBNL_VERSION = 3.2.9
-+LIBNL_VERSION = 3.2.11
- LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
- LIBNL_INSTALL_STAGING = YES
- LIBNL_DEPENDENCIES = host-bison
+ $(eval $(call AUTOTARGETS))
 -- 
 1.7.3.4
