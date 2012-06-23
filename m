@@ -1,24 +1,42 @@
-From: Richard Braun <rbraun@sceen.net>
-Date: Sat, 23 Jun 2012 11:57:04 +0200
-Subject: [Buildroot] modify kernel source code
-In-Reply-To: <CAFC29aWY59_7+WhjEGx9_3BJm10dCNrj8rkUPSG1LbqfgU+n0g@mail.gmail.com>
-References: <CAFC29aWY59_7+WhjEGx9_3BJm10dCNrj8rkUPSG1LbqfgU+n0g@mail.gmail.com>
-Message-ID: <20120623095704.GA22422@mail.sceen.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 23 Jun 2012 08:20:40 -0300
+Subject: [Buildroot] [PATCH 1/2] kernel-headers: bump 3.{0, 2,
+	4}.x stable versions
+Message-ID: <1340450441-6982-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 22, 2012 at 05:22:24PM -0700, Ron Eggler wrote:
-> I want to modify the kernel source code after it's been downloaded
-> according to these instructions in order to get a driver for my Novatel
-> MC679 compiled. How can I interrupt the buildroot process once the kernel
-> sources have been downloaded or how else can I/should I do this?
-> 
-> Thank you for any suggestions!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in                 |    6 +++---
+ ...all-fix-__packed-in-exported-kernel-head.patch} |    0
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename toolchain/kernel-headers/{linux-3.0.35-headers_install-fix-__packed-in-exported-kernel-head.patch => linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch} (100%)
 
-See the BR2_LINUX_KERNEL_PATCH configuration parameter.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index b6bb53a..5e66b67 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -64,10 +64,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.37.6"	if BR2_KERNEL_HEADERS_2_6_37
+ 	default "2.6.38.8"	if BR2_KERNEL_HEADERS_2_6_38
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+-	default "3.0.35"	if BR2_KERNEL_HEADERS_3_0
++	default "3.0.36"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.20"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.21"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+-	default "3.4.3"		if BR2_KERNEL_HEADERS_3_4
++	default "3.4.4"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+ 	default $BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/kernel-headers/linux-3.0.35-headers_install-fix-__packed-in-exported-kernel-head.patch b/toolchain/kernel-headers/linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch
+similarity index 100%
+rename from toolchain/kernel-headers/linux-3.0.35-headers_install-fix-__packed-in-exported-kernel-head.patch
+rename to toolchain/kernel-headers/linux-3.0.36-headers_install-fix-__packed-in-exported-kernel-head.patch
 -- 
-Richard Braun
+1.7.3.4
