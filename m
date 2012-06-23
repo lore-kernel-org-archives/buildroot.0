@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 23 Jun 2012 08:20:41 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to kernel version 3.4.4
-In-Reply-To: <1340450441-6982-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1340450441-6982-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1340450441-6982-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Sat, 23 Jun 2012 08:29:57 -0300
+Subject: [Buildroot] [PATCH 1/5] squid: bump to version 3.1.20
+Message-ID: <1340451001-7111-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1cd05ae..9c26439 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -22,7 +22,7 @@ choice
- 	default BR2_LINUX_KERNEL_3_4
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 9cdbeb5..9db2197 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
- config BR2_LINUX_KERNEL_3_4
--	bool "3.4.3"
-+	bool "3.4.4"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.4.3" if BR2_LINUX_KERNEL_3_4
-+	default "3.4.4" if BR2_LINUX_KERNEL_3_4
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-SQUID_VERSION = 3.1.19
++SQUID_VERSION = 3.1.20
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/3.1
+ SQUID_DEPENDENCIES = libcap host-libcap
+ SQUID_CONF_ENV =	ac_cv_epoll_works=yes ac_cv_func_setresuid=yes \
 -- 
 1.7.3.4
