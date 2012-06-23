@@ -1,63 +1,24 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 23 Jun 2012 22:52:06 +0200
-Subject: [Buildroot] [git commit] sound-theme-freedesktop: new package
-Message-ID: <20120623205313.0AD158A2E9@busybox.osuosl.org>
+Date: Sat, 23 Jun 2012 23:16:09 +0200
+Subject: [Buildroot] [PATCH 0 of 2 v5-resend2] Add find utility
+	functions / exclude files from strip
+In-Reply-To: <patchbomb.1340343288@beantl019720> (Thomas De Schampheleire's
+ message of "Fri, 22 Jun 2012 07:34:48 +0200")
+References: <patchbomb.1340343288@beantl019720>
+Message-ID: <87d34pbug6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f86391fc07731c26d96acec5f1d082378f9e494d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/Config.in                                  |    1 +
- package/sound-theme-freedesktop/Config.in          |    6 ++++++
- .../sound-theme-freedesktop.mk                     |   12 ++++++++++++
- 3 files changed, 19 insertions(+), 0 deletions(-)
+ Thomas> This patch series adds a few utility functions to pkg-utils.mk that
+ Thomas> help in composing find commands, and uses these functions to exclude
+ Thomas> user-configured files and directories from being stripped in target-finalize.
 
-diff --git a/package/Config.in b/package/Config.in
-index c9b5e1a..b257c0f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -493,6 +493,7 @@ source "package/collectd/Config.in"
- source "package/empty/Config.in"
- source "package/mobile-broadband-provider-info/Config.in"
- source "package/shared-mime-info/Config.in"
-+source "package/sound-theme-freedesktop/Config.in"
- endmenu
- 
- menu "Networking applications"
-diff --git a/package/sound-theme-freedesktop/Config.in b/package/sound-theme-freedesktop/Config.in
-new file mode 100644
-index 0000000..8b48015
---- /dev/null
-+++ b/package/sound-theme-freedesktop/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_SOUND_THEME_FREEDESKTOP
-+	bool "sound-theme-freedesktop"
-+	help
-+	  Default theme for the XDG Sound Theme Specification.
-+
-+	  http://freedesktop.org/wiki/Specifications/sound-theme-spec
-diff --git a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
-new file mode 100644
-index 0000000..d81c207
---- /dev/null
-+++ b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
-@@ -0,0 +1,12 @@
-+#############################################################
-+#
-+# sound-theme-freedesktop
-+#
-+#############################################################
-+SOUND_THEME_FREEDESKTOP_VERSION = 0.7
-+SOUND_THEME_FREEDESKTOP_SITE = \
-+	http://people.freedesktop.org/~mccann/dist
-+SOUND_THEME_FREEDESKTOP_SOURCE = \
-+	sound-theme-freedesktop-$(SOUND_THEME_FREEDESKTOP_VERSION).tar.bz2
-+
-+$(eval $(call AUTOTARGETS))
+Committed both, thanks.
+
+-- 
+Bye, Peter Korsgaard
