@@ -1,50 +1,41 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 23 Jun 2012 14:16:17 +0200
-Subject: [Buildroot] [git commit] mysql_client: security bump to version
-	5.1.63
-Message-ID: <20120623122030.CC0528A30D@busybox.osuosl.org>
+Date: Sat, 23 Jun 2012 14:15:51 +0200
+Subject: [Buildroot] [git commit] linux: bump default to kernel version 3.4.4
+Message-ID: <20120623122030.64DDF8A2C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d9c38d615af90782d62839a7b7836a24698b6416
+commit: http://git.buildroot.net/buildroot/commit/?id=9e0addad6ceb8bc03cb888827b3571856663bf4e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump to version 5.1.63 to fix CVE-2012-2122
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- ...eck.patch => mysql_client-ac_cache_check.patch} |    0
- ...=> mysql_client-configure-ps-cache-check.patch} |    0
- ...h => mysql_client-use-new-readline-iface.patch} |    0
- package/mysql_client/mysql_client.mk               |    2 +-
- 4 files changed, 1 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mysql_client/mysql_client-5.1.62-ac_cache_check.patch b/package/mysql_client/mysql_client-ac_cache_check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.62-ac_cache_check.patch
-rename to package/mysql_client/mysql_client-ac_cache_check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.62-configure-ps-cache-check.patch b/package/mysql_client/mysql_client-configure-ps-cache-check.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.62-configure-ps-cache-check.patch
-rename to package/mysql_client/mysql_client-configure-ps-cache-check.patch
-diff --git a/package/mysql_client/mysql_client-5.1.62-use-new-readline-iface.patch b/package/mysql_client/mysql_client-use-new-readline-iface.patch
-similarity index 100%
-rename from package/mysql_client/mysql_client-5.1.62-use-new-readline-iface.patch
-rename to package/mysql_client/mysql_client-use-new-readline-iface.patch
-diff --git a/package/mysql_client/mysql_client.mk b/package/mysql_client/mysql_client.mk
-index a1640c3..ad330ae 100644
---- a/package/mysql_client/mysql_client.mk
-+++ b/package/mysql_client/mysql_client.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 1cd05ae..9c26439 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -22,7 +22,7 @@ choice
+ 	default BR2_LINUX_KERNEL_3_4
  
--MYSQL_CLIENT_VERSION = 5.1.62
-+MYSQL_CLIENT_VERSION = 5.1.63
- MYSQL_CLIENT_SOURCE = mysql-$(MYSQL_CLIENT_VERSION).tar.gz
- MYSQL_CLIENT_SITE = http://downloads.skysql.com/archives/mysql-5.1
- MYSQL_CLIENT_INSTALL_STAGING = YES
+ config BR2_LINUX_KERNEL_3_4
+-	bool "3.4.3"
++	bool "3.4.4"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -77,7 +77,7 @@ config BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.4.3" if BR2_LINUX_KERNEL_3_4
++	default "3.4.4" if BR2_LINUX_KERNEL_3_4
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
