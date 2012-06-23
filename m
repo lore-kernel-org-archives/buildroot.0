@@ -1,25 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 23 Jun 2012 09:36:12 +0200
-Subject: [Buildroot] [PATCH] sudo: fix install
-In-Reply-To: <1340268304-26103-1-git-send-email-spdawson@gmail.com>
- (spdawson@gmail.com's message of "Thu, 21 Jun 2012 09:45:04 +0100")
-References: <1340268304-26103-1-git-send-email-spdawson@gmail.com>
-Message-ID: <871ul6eaz7.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 23 Jun 2012 10:00:50 +0200
+Subject: [Buildroot] [git commit] axel: needs thread support
+Message-ID: <20120623080115.DAED8800DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "spdawson" == spdawson  <spdawson@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=da76330445f1aa044702f08afd8d57d164b6df07
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- spdawson> From: Simon Dawson <spdawson@gmail.com>
- spdawson> Running sudo on the target fails with the following errors.
+Fixes http://autobuild.buildroot.net/results/28d84d05e1a52a9ddec5956c946d99e8cd8c8fd7/build-end.log
 
- spdawson>   sudo: /usr/libexec/sudoers.so: No such file or directory
- spdawson>   sudo: fatal error, unable to load plugins
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/axel/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/axel/Config.in b/package/axel/Config.in
+index cb9af32..98f4941 100644
+--- a/package/axel/Config.in
++++ b/package/axel/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_AXEL
+ 	bool "axel"
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  HTTP/FTP download accelerator.
+ 
+ 	  http://axel.alioth.debian.org/
++
++comment "axel needs a toolchain with thread support"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
