@@ -1,34 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 24 Jun 2012 11:15:09 +0200
-Subject: [Buildroot] [PATCH] busybox 1.20.1: add patches for ash,
-	ifupdown, man and tar
-In-Reply-To: <CAAXf6LVpeLr5NUmOtj6b8nXRBXxT2SG5gT62uTy6ia+XNG2ERw@mail.gmail.com>
- (Thomas De Schampheleire's message of "Mon, 11 Jun 2012 10:44:37
- +0200")
-References: <1339267126-25350-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LUbp3s2S22ADeUrXooMHwc2mhAz1V79r1VoEfTcVCrEqw@mail.gmail.com>
- <34e45dd779853425c08ff0bece6c9cd9@zacarias.com.ar>
- <87mx4bhrx0.fsf@macbook.be.48ers.dk>
- <CAAXf6LVpeLr5NUmOtj6b8nXRBXxT2SG5gT62uTy6ia+XNG2ERw@mail.gmail.com>
-Message-ID: <87hau19ile.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 Jun 2012 11:09:21 +0200
+Subject: [Buildroot] [git commit] introduce PARALLEL_JOBS build system
+	variable
+Message-ID: <20120624095658.0B09988E1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a72aed3a7434ed35599674a8405b1baee0f3df75
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+BR2_JLEVEL currently is expanded directly in $(MAKE), and used in
+invocations of other build software (e.g. ct-ng).  However, we are
+going to allow "0" to be a meaningful value for BR2_JLEVEL, which
+won't work for these uses.  Given that it is not permissible to modify
+BR2_-prefixed variables in Makefiles, we need an intermediate
+variable.
 
- >> I would prefer to keep them as is. If we could get upstream to document
- >> them, then that would be good ofcause.
+Define PARALLEL_JOBS to $(BR2_JLEVEL), and use the former in MAKE's
+definition.  Uses of BR2_JLEVEL throughout the rest of the tree to be
+adjusted similarly in follow-up patches.
 
- Thomas> Agreed. Do any of you have a good relation with the busybox developers
- Thomas> which could give the request better chances of success, or shall I
- Thomas> just ask the question on their mailing list myself?
+Signed-off-by: Nathan Lynch <ntl@pobox.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/Makefile.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-I suggest you just ask.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 57599c5..be83ada 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -6,8 +6,10 @@ HOSTMAKE=$(MAKE)
+ endif
+ HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
+ 
++PARALLEL_JOBS:=$(BR2_JLEVEL)
++
+ MAKE1:=$(HOSTMAKE) -j1
+-MAKE:=$(HOSTMAKE) -j$(BR2_JLEVEL)
++MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ 
+ # Compute GNU_TARGET_NAME
+ GNU_TARGET_NAME=$(ARCH)-unknown-linux-$(LIBC)$(ABI)
