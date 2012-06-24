@@ -1,45 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sun, 24 Jun 2012 10:12:53 +0200
-Subject: [Buildroot] [PATCH resend3] source-check: change behavior to
- check only selected packages / add source-check-all
-In-Reply-To: <878vfdbtot.fsf@macbook.be.48ers.dk>
-References: <fef39461f25270f81f06.1340343522@beantl019720>
- <878vfdbtot.fsf@macbook.be.48ers.dk>
-Message-ID: <CAAXf6LX4O2Knkvt1UamUeHp++5nB4kEJRJZ8pi7TBjxoqyDfyg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sun, 24 Jun 2012 10:59:37 +0200
+Subject: [Buildroot] [git commit] ltrace: unbreak build on uClibc after
+	REAL_GNU_TARGET_NAME removal
+Message-ID: <20120624090100.575828A2E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Op 23 jun. 2012 23:32 schreef "Peter Korsgaard" <jacmet@sunsite.dk> het
-volgende:
->
-> >>>>> "Thomas" == Thomas De Schampheleire <
-patrickdepinguin+buildroot@gmail.com> writes:
->
->  Thomas> The original 'source-check' target first selects all packages,
->  Thomas> and then checks whether the package tarballs can be found. This
->  Thomas> is useful for Buildroot maintainers, but less useful for
->  Thomas> developers working on a specific project. The latter only care
->  Thomas> about the packages used in that project.
->
->  Thomas> This patch removes the allyesconfig dependency to source-check
->  Thomas> so that only selected packages are checked. The original
->  Thomas> behavior is moved to a new target 'source-check-all'.
->
-> Committed, thanks - But as we don't have the 'select-all-packages'
-> functionality for 'make source' which is the parallel of 'make
-> source-check', I decided to just get rid of source-check-all
-> completely.
->
-> People can always do make allyesconfig; make source-check if they want
-> the old behaviour.
+commit: http://git.buildroot.net/buildroot/commit/?id=3cd8183f875a56ccffd0adf951ae6caed4b8b0a5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Ok, no problem, thanks.
+Fixes http://autobuild.buildroot.net/results/b7456bb91a89f866f91e8c21a8ed5de98f25e6be
 
-Best regards,
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120624/d5bd2f16/attachment.html>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/ltrace/ltrace-0.6.0-uclibc.patch |   22 ++++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
+
+diff --git a/package/ltrace/ltrace-0.6.0-uclibc.patch b/package/ltrace/ltrace-0.6.0-uclibc.patch
+new file mode 100644
+index 0000000..8bec2ae
+--- /dev/null
++++ b/package/ltrace/ltrace-0.6.0-uclibc.patch
+@@ -0,0 +1,22 @@
++[PATCH] configure.ac: Recognize linux-uclibc as well
++
++Ltrace works on uClibc as well as on glibc, so accept it.
++
++Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
++---
++ configure.ac |    2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++Index: ltrace-0.6.0/configure.ac
++===================================================================
++--- ltrace-0.6.0.orig/configure.ac
+++++ ltrace-0.6.0/configure.ac
++@@ -11,7 +11,7 @@
++ AC_CANONICAL_HOST
++ 
++ case "${host_os}" in
++-    linux-gnu*)	HOST_OS="linux-gnu" ;;
+++    linux-gnu* | linux-uclibc*)	HOST_OS="linux-gnu" ;;
++     *)		AC_MSG_ERROR([unkown host-os ${host_osx}]) ;;
++ esac
++ AC_SUBST(HOST_OS)
