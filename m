@@ -1,54 +1,32 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Jun 2012 22:45:30 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20120624204553.AD7E48B427@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 24 Jun 2012 23:16:34 +0200
+Subject: [Buildroot] [PATCH] sound-theme-freedesktop: add host-intltool
+	dependency
+Message-ID: <1340572594-29547-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ea857452a45672f5a0dc7d3322db4de017e3ca6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes
+http://autobuild.buildroot.org/results/c4e5cad3e4bf08440cea081789b8d58b238d9683/build-end.log.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- CHANGES |   26 ++++++++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
+ .../sound-theme-freedesktop.mk                     |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/CHANGES b/CHANGES
-index b526c58..f8ab319 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,5 +1,31 @@
- 2012.08, Not released yet:
+diff --git a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+index d81c207..3a1a162 100644
+--- a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
++++ b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+@@ -8,5 +8,6 @@ SOUND_THEME_FREEDESKTOP_SITE = \
+ 	http://people.freedesktop.org/~mccann/dist
+ SOUND_THEME_FREEDESKTOP_SOURCE = \
+ 	sound-theme-freedesktop-$(SOUND_THEME_FREEDESKTOP_VERSION).tar.bz2
++SOUND_THEME_FREEDESKTOP_DEPENDENCIES = host-intltool
  
-+	Fixes all over the tree and new features.
-+
-+	Updated/fixed packages: audiofile, autoconf, automake, axel,
-+	beecrypt, berkeleydb, bind, bison, boost, busybox, bzip2,
-+	cmake, connman, conntrack-tools, cups, dnsmasq, e2fsprogs,
-+	ethtool, fbv, gmp, gnutls, grep, gst-plugins-base,
-+	gst-plugins-good, gzip, hiawatha, hostapd, icu, imagemagick,
-+	iproute2, ipset, iptables, kmod, libgci, libconfig, libcurl,
-+	libeXosip2, libfuse, libidn, libmbus, libmnl,
-+	libnetfilter-conntrack, libnl, libnspr, libogg, libosip2,
-+	libpcap, libroxml, liburcu, libxml2, lighttpd, ltrace,
-+	lttng-libust, lttng-modules, lttng-tools, module-init-tools,
-+	mpg123, midori, mrouted, mtd, mxml, mysql_client, nbd,
-+	nfs-utils, openocd, pciutils, php, polarssl, portaudio, pppd,
-+	pthread-stubs, pulseaudio, qt, quagga, radvd, rrdtool, samba,
-+	sdl_gfx, sdl_sound, speex, sqlite, squashfs, squid, sudo,
-+	synergy, systemd, wpa_supplicant, zlib
-+
-+	New packages: cjson, collectd, dmidecode, fbterm, flashrom,
-+	freerdp, inadyn, libfreefare, libnetfilter_cttimeout, libnfc,
-+	liboping, libtorrent, linphone, logsurfer, lshw,
-+	mediastreamer, mobile-broadband-provider-info, monit, nanocom,
-+	nss-mdns, ofone, omap-u-boot-utils, opkg, ortp, python-id3,
-+	quota, ramspeed, rtorrent, sound-theme-freedesktop,
-+	webrtc-audio-processing, xinetd, zxing
-+
- 2012.05, Released May 30th, 2012:
- 
- 	Updated/fixed packages: busybox, netsnmp, pptp-linux
+ $(eval $(call AUTOTARGETS))
+-- 
+1.7.9.5
