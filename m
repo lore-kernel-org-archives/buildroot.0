@@ -1,48 +1,65 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Jun 2012 19:49:03 +0200
-Subject: [Buildroot] [git commit] rrdtool: fix breakage with newer autotools
-Message-ID: <20120624180619.6D04083506@busybox.osuosl.org>
+Date: Sun, 24 Jun 2012 19:49:13 +0200
+Subject: [Buildroot] [git commit] openocd: fix breakage with newer autotools
+Message-ID: <20120624180619.9724283506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18771deb3d21d44a766347d1485244dbeb8c7f22
+commit: http://git.buildroot.net/buildroot/commit/?id=ff3cf356802b9b2447d510d361f6c1cf3e5308b2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/rrdtool/rrdtool-automake-compat.patch      |   18 ++++++++++++++++++
- ...ool-configure-dont-hardcode-include-dirs.patch} |    0
- 2 files changed, 18 insertions(+), 0 deletions(-)
+ package/openocd/openocd-0006-automake-compat.patch |   40 ++++++++++++++++++++
+ 1 files changed, 40 insertions(+), 0 deletions(-)
 
-diff --git a/package/rrdtool/rrdtool-automake-compat.patch b/package/rrdtool/rrdtool-automake-compat.patch
+diff --git a/package/openocd/openocd-0006-automake-compat.patch b/package/openocd/openocd-0006-automake-compat.patch
 new file mode 100644
-index 0000000..92b753d
+index 0000000..cdc6c92
 --- /dev/null
-+++ b/package/rrdtool/rrdtool-automake-compat.patch
-@@ -0,0 +1,18 @@
-+Make it compatible with newer autoconf/automake.
-+Patch from OpenWRT.
++++ b/package/openocd/openocd-0006-automake-compat.patch
+@@ -0,0 +1,40 @@
++Backport from openocd commit 737a52d7b22b1774acc5d20f9bd25000a70ac116
++Fix for automake 1.11.2+
 +
 +Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+--- a/bindings/tcl/Makefile.am
-++++ b/bindings/tcl/Makefile.am
-+@@ -26,8 +26,8 @@ tclpkgdir = @TCL_PACKAGE_DIR@
-+ tclpkg_DATA = pkgIndex.tcl
-+ tclpkg_SCRIPTS = ifOctets.tcl
-+ else
-+-pkglib_DATA = pkgIndex.tcl
-+-pkglib_SCRIPTS = ifOctets.tcl
-++pkgdata_DATA = pkgIndex.tcl
-++pkgdata_SCRIPTS = ifOctets.tcl
-+ endif
++diff -Nura openocd-0.5.0/src/jtag/drivers/Makefile.am openocd-0.5.0.automake/src/jtag/drivers/Makefile.am
++--- openocd-0.5.0/src/jtag/drivers/Makefile.am	2011-08-09 02:34:19.000000000 -0300
+++++ openocd-0.5.0.automake/src/jtag/drivers/Makefile.am	2012-05-01 13:57:01.007561480 -0300
++@@ -5,7 +5,8 @@
++ libocdjtagdrivers_la_SOURCES = \
++ 	$(DRIVERFILES)
 + 
-+ # Automake doen't like `tclrrd$(VERSION)$(TCL_SHLIB_SUFFIX)' as
-diff --git a/package/rrdtool/rrdtool-1.2.30-configure-dont-hardcode-include-dirs.patch b/package/rrdtool/rrdtool-configure-dont-hardcode-include-dirs.patch
-similarity index 100%
-rename from package/rrdtool/rrdtool-1.2.30-configure-dont-hardcode-include-dirs.patch
-rename to package/rrdtool/rrdtool-configure-dont-hardcode-include-dirs.patch
++-nobase_dist_pkglib_DATA =
+++ocddatadir = $(pkglibdir)
+++nobase_dist_ocddata_DATA =
++ 
++ ULINK_FIRMWARE = $(srcdir)/OpenULINK
++ 
++@@ -64,7 +65,7 @@
++ endif
++ if ULINK
++ DRIVERFILES += ulink.c
++-nobase_dist_pkglib_DATA += $(ULINK_FIRMWARE)/ulink_firmware.hex
+++nobase_dist_ocddata_DATA += $(ULINK_FIRMWARE)/ulink_firmware.hex
++ endif
++ if VSLLINK
++ DRIVERFILES += vsllink.c
++diff -Nura openocd-0.5.0/src/target/Makefile.am openocd-0.5.0.automake/src/target/Makefile.am
++--- openocd-0.5.0/src/target/Makefile.am	2011-08-09 02:34:19.000000000 -0300
+++++ openocd-0.5.0.automake/src/target/Makefile.am	2012-05-01 13:57:01.934567076 -0300
++@@ -165,7 +165,7 @@
++ 	avr32_mem.h \
++ 	avr32_regs.h
++ 
++-nobase_dist_pkglib_DATA =
++-nobase_dist_pkglib_DATA += ecos/at91eb40a.elf
+++ocddatadir = $(pkglibdir)
+++nobase_dist_ocddata_DATA = ecos/at91eb40a.elf
++ 
++ MAINTAINERCLEANFILES = $(srcdir)/Makefile.in
