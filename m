@@ -1,35 +1,275 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Jun 2012 20:03:30 +0200
-Subject: [Buildroot] [git commit] module-init-tools: don't build static
-	tools for host
-Message-ID: <20120624180619.A8A3483506@busybox.osuosl.org>
+Date: Sun, 24 Jun 2012 19:49:07 +0200
+Subject: [Buildroot] [git commit] imagemagick: security bump to version
+	6.7.6-9
+Message-ID: <20120624180619.857CC83506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c460cc8161a0738873351d990a522cee90173231
+commit: http://git.buildroot.net/buildroot/commit/?id=f701305b48f34758dfe757c45cbeb545a27d806b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As pointed out on IRC, the static tools causes problems on distributions
-without glibc-static, and we don't need them - So just disable them like
-we do for the target build.
+Fixes CVE-2012-1610, CVE-2012-17987, CVE-2012-0260, CVE-2012-0259,
+CVE-2012-0247 and CVE-2012-0248.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/module-init-tools/module-init-tools.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/imagemagick/imagemagick-zlib-fix.patch |  227 ------------------------
+ package/imagemagick/imagemagick.mk             |    6 +-
+ 2 files changed, 3 insertions(+), 230 deletions(-)
 
-diff --git a/package/module-init-tools/module-init-tools.mk b/package/module-init-tools/module-init-tools.mk
-index ad92a1a..96c8378 100644
---- a/package/module-init-tools/module-init-tools.mk
-+++ b/package/module-init-tools/module-init-tools.mk
-@@ -18,6 +18,7 @@ MODULE_INIT_TOOLS_CONF_OPT = \
- MODULE_INIT_TOOLS_AUTORECONF = YES
- HOST_MODULE_INIT_TOOLS_AUTORECONF = YES
- HOST_MODULE_INIT_TOOLS_CONF_ENV = ac_cv_prog_DOCBOOKTOMAN=''
-+HOST_MODULE_INIT_TOOLS_CONF_OPT = --disable-static-utils
+diff --git a/package/imagemagick/imagemagick-zlib-fix.patch b/package/imagemagick/imagemagick-zlib-fix.patch
+deleted file mode 100644
+index 1a147af..0000000
+--- a/package/imagemagick/imagemagick-zlib-fix.patch
++++ /dev/null
+@@ -1,227 +0,0 @@
+-[PATCH] Fix build with recent versions of zlib
+-
+-From upstream:
+-r6633 + r6636 @ https://www.imagemagick.org/subversion/ImageMagick
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- magick/blob.c |   68 ++++++++++++++++++++++++++++++++++------------------------
+- 1 file changed, 40 insertions(+), 28 deletions(-)
+-
+-Index: ImageMagick-6.7.2-10/magick/blob.c
+-===================================================================
+---- ImageMagick-6.7.2-10.orig/magick/blob.c
+-+++ ImageMagick-6.7.2-10/magick/blob.c
+-@@ -120,8 +120,20 @@
+-   StreamType
+-     type;
+- 
+--  FILE
+--    *file;
+-+  union {
+-+    FILE
+-+      *file;
+-+
+-+#if defined(MAGICKCORE_ZLIB_DELEGATE)
+-+    gzFile
+-+      gzfile;
+-+#endif
+-+
+-+#if defined(MAGICKCORE_BZLIB_DELEGATE)
+-+    BZFILE
+-+      *bzfile;
+-+#endif
+-+  };
+- 
+-   struct stat
+-     properties;
+-@@ -505,14 +517,14 @@
+-     case ZipStream:
+-     {
+- #if defined(MAGICKCORE_ZLIB_DELEGATE)
+--      (void) gzerror(image->blob->file,&status);
+-+      (void) gzerror(image->blob->gzfile,&status);
+- #endif
+-       break;
+-     }
+-     case BZipStream:
+-     {
+- #if defined(MAGICKCORE_BZLIB_DELEGATE)
+--      (void) BZ2_bzerror((BZFILE *) image->blob->file,&status);
+-+      (void) BZ2_bzerror(image->blob->bzfile,&status);
+- #endif
+-       break;
+-     }
+-@@ -546,14 +558,14 @@
+-     case ZipStream:
+-     {
+- #if defined(MAGICKCORE_ZLIB_DELEGATE)
+--      status=gzclose(image->blob->file);
+-+      status=gzclose(image->blob->gzfile);
+- #endif
+-       break;
+-     }
+-     case BZipStream:
+-     {
+- #if defined(MAGICKCORE_BZLIB_DELEGATE)
+--      BZ2_bzclose((BZFILE *) image->blob->file);
+-+      BZ2_bzclose(image->blob->bzfile);
+- #endif
+-       break;
+-     }
+-@@ -843,7 +855,7 @@
+-         status;
+- 
+-       status=0;
+--      (void) BZ2_bzerror((BZFILE *) image->blob->file,&status);
+-+      (void) BZ2_bzerror(image->blob->bzfile,&status);
+-       image->blob->eof=status == BZ_UNEXPECTED_EOF ? MagickTrue : MagickFalse;
+- #endif
+-       break;
+-@@ -2486,8 +2498,8 @@
+-                 ((int) magick[2] == 0x08))
+-               {
+-                 (void) fclose(image->blob->file);
+--                image->blob->file=(FILE *) gzopen(filename,type);
+--                if (image->blob->file != (FILE *) NULL)
+-+                image->blob->gzfile=gzopen(filename,type);
+-+                if (image->blob->gzfile != (gzFile) NULL)
+-                   image->blob->type=ZipStream;
+-                }
+- #endif
+-@@ -2495,8 +2507,8 @@
+-             if (strncmp((char *) magick,"BZh",3) == 0)
+-               {
+-                 (void) fclose(image->blob->file);
+--                image->blob->file=(FILE *) BZ2_bzopen(filename,type);
+--                if (image->blob->file != (FILE *) NULL)
+-+                image->blob->bzfile=BZ2_bzopen(filename,type);
+-+                if (image->blob->bzfile != (BZFILE *) NULL)
+-                   image->blob->type=BZipStream;
+-               }
+- #endif
+-@@ -2555,8 +2567,8 @@
+-           {
+-             if (mode == WriteBinaryBlobMode)
+-               type="wb";
+--            image->blob->file=(FILE *) gzopen(filename,type);
+--            if (image->blob->file != (FILE *) NULL)
+-+            image->blob->gzfile=gzopen(filename,type);
+-+            if (image->blob->gzfile != (gzFile) NULL)
+-               image->blob->type=ZipStream;
+-           }
+-         else
+-@@ -2564,8 +2576,8 @@
+- #if defined(MAGICKCORE_BZLIB_DELEGATE)
+-           if (LocaleCompare(extension,".bz2") == 0)
+-             {
+--              image->blob->file=(FILE *) BZ2_bzopen(filename,type);
+--              if (image->blob->file != (FILE *) NULL)
+-+              image->blob->bzfile=BZ2_bzopen(filename,type);
+-+              if (image->blob->bzfile != (BZFILE *) NULL)
+-                 image->blob->type=BZipStream;
+-             }
+-           else
+-@@ -2771,12 +2783,12 @@
+-       {
+-         default:
+-         {
+--          count=(ssize_t) gzread(image->blob->file,q,(unsigned int) length);
+-+          count=(ssize_t) gzread(image->blob->gzfile,q,(unsigned int) length);
+-           break;
+-         }
+-         case 2:
+-         {
+--          c=gzgetc(image->blob->file);
+-+          c=gzgetc(image->blob->gzfile);
+-           if (c == EOF)
+-             break;
+-           *q++=(unsigned char) c;
+-@@ -2784,7 +2796,7 @@
+-         }
+-         case 1:
+-         {
+--          c=gzgetc(image->blob->file);
+-+          c=gzgetc(image->blob->gzfile);
+-           if (c == EOF)
+-             break;
+-           *q++=(unsigned char) c;
+-@@ -2799,7 +2811,7 @@
+-     case BZipStream:
+-     {
+- #if defined(MAGICKCORE_BZLIB_DELEGATE)
+--      count=(ssize_t) BZ2_bzread((BZFILE *) image->blob->file,q,(int) length);
+-+      count=(ssize_t) BZ2_bzread(image->blob->bzfile,q,(int) length);
+- #endif
+-       break;
+-     }
+-@@ -3527,7 +3539,7 @@
+-     case ZipStream:
+-     {
+- #if defined(MAGICKCORE_ZLIB_DELEGATE)
+--      if (gzseek(image->blob->file,(off_t) offset,whence) < 0)
+-+      if (gzseek(image->blob->gzfile,(off_t) offset,whence) < 0)
+-         return(-1);
+- #endif
+-       image->blob->offset=TellBlob(image);
+-@@ -3791,14 +3803,14 @@
+-     case ZipStream:
+-     {
+- #if defined(MAGICKCORE_ZLIB_DELEGATE)
+--      status=gzflush(image->blob->file,Z_SYNC_FLUSH);
+-+      status=gzflush(image->blob->gzfile,Z_SYNC_FLUSH);
+- #endif
+-       break;
+-     }
+-     case BZipStream:
+-     {
+- #if defined(MAGICKCORE_BZLIB_DELEGATE)
+--      status=BZ2_bzflush((BZFILE *) image->blob->file);
+-+      status=BZ2_bzflush(image->blob->bzfile);
+- #endif
+-       break;
+-     }
+-@@ -3865,7 +3877,7 @@
+-     case ZipStream:
+-     {
+- #if defined(MAGICKCORE_ZLIB_DELEGATE)
+--      offset=(MagickOffsetType) gztell(image->blob->file);
+-+      offset=(MagickOffsetType) gztell(image->blob->gzfile);
+- #endif
+-       break;
+-     }
+-@@ -4014,20 +4026,20 @@
+-       {
+-         default:
+-         {
+--          count=(ssize_t) gzwrite(image->blob->file,(void *) data,
+-+          count=(ssize_t) gzwrite(image->blob->gzfile,(void *) data,
+-             (unsigned int) length);
+-           break;
+-         }
+-         case 2:
+-         {
+--          c=gzputc(image->blob->file,(int) *p++);
+-+          c=gzputc(image->blob->gzfile,(int) *p++);
+-           if (c == EOF)
+-             break;
+-           count++;
+-         }
+-         case 1:
+-         {
+--          c=gzputc(image->blob->file,(int) *p++);
+-+          c=gzputc(image->blob->gzfile,(int) *p++);
+-           if (c == EOF)
+-             break;
+-           count++;
+-@@ -4041,8 +4053,8 @@
+-     case BZipStream:
+-     {
+- #if defined(MAGICKCORE_BZLIB_DELEGATE)
+--      count=(ssize_t) BZ2_bzwrite((BZFILE *) image->blob->file,(void *) data,
+--        (int) length);
+-+      count=(ssize_t) BZ2_bzwrite(image->blob->bzfile,(void *) data,(int)
+-+        length);
+- #endif
+-       break;
+-     }
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 602b7a5..32eb371 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,10 +4,10 @@
+ #
+ #############################################################
  
- $(eval $(call AUTOTARGETS))
- $(eval $(call AUTOTARGETS,host))
+-IMAGEMAGICK_MAJOR = 6.7.2
+-IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-10
++IMAGEMAGICK_MAJOR = 6.7.6
++IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-9
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
+-IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick/legacy
++IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick
+ IMAGEMAGICK_INSTALL_STAGING = YES
+ IMAGEMAGICK_AUTORECONF = YES
+ 
