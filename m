@@ -1,67 +1,54 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 24 Jun 2012 11:11:07 +0200
-Subject: [Buildroot] [git commit] automatically set PARALLEL_JOBS when
-	BR2_JLEVEL is 0
-Message-ID: <20120624095658.69F3F88F3C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 24 Jun 2012 19:24:09 +0200
+Subject: [Buildroot] [PATCH v2] New package: zxing
+In-Reply-To: <1332720940-28373-1-git-send-email-fhunleth@troodon-software.com>
+ (Frank Hunleth's message of "Sun, 25 Mar 2012 20:15:40 -0400")
+References: <1332720940-28373-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <8762agaaiu.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5016aa02fb51dbd73461f65ed8c7d9b52539a988
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Frank" == Frank Hunleth <fhunleth@troodon-software.com> writes:
 
-When BR2_JLEVEL is 0, set PARALLEL_JOBS to double the number of CPUs
-detected.  This allows one to more or less fully utilize the host
-system without manually tuning the configuration.
+ Frank> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 
-Also make 0 the default value for BR2_JLEVEL.
+Thanks, committed. I ended up reworking it to use a simple makefile
+instead of scons, both because of the dos/unix newline issue you pointed
+out yourself, and also because scons hardcoded compiler flags.
 
-Signed-off-by: Nathan Lynch <ntl@pobox.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- Config.in           |    8 +++++---
- package/Makefile.in |    8 ++++++++
- 2 files changed, 13 insertions(+), 3 deletions(-)
+See below for a few other minor issues.
 
-diff --git a/Config.in b/Config.in
-index 83f64bb..925c247 100644
---- a/Config.in
-+++ b/Config.in
-@@ -178,10 +178,12 @@ config BR2_DEBIAN_MIRROR
- endmenu
- 
- config BR2_JLEVEL
--	int "Number of jobs to run simultaneously"
--	default "2"
-+	int "Number of jobs to run simultaneously (0 for auto)"
-+	default "0"
- 	help
--	  Number of jobs to run simultaneously
-+	  Number of jobs to run simultaneously.  If 0, determine
-+	  automatically according to number of CPUs on the host
-+	  system.
- 
- config BR2_CCACHE
- 	bool "Enable compiler cache"
-diff --git a/package/Makefile.in b/package/Makefile.in
-index be83ada..1d43aef 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -6,7 +6,15 @@ HOSTMAKE=$(MAKE)
- endif
- HOSTMAKE :=$(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
- 
-+# If BR2_LEVEL is 0, scale the maximum concurrency with the number of
-+# CPUs.  A coefficient of 2 is used in order to keep processors busy
-+# while waiting on I/O.
-+ifeq ($(BR2_JLEVEL),0)
-+PARALLEL_JOBS:=$(shell echo \
-+	$$((2 * `getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1`)))
-+else
- PARALLEL_JOBS:=$(BR2_JLEVEL)
-+endif
- 
- MAKE1:=$(HOSTMAKE) -j1
- MAKE:=$(HOSTMAKE) -j$(PARALLEL_JOBS)
+ Frank> +config BR2_PACKAGE_ZXING
+ Frank> +	bool "zxing"
+ Frank> +	depends on BR2_INSTALL_LIBSTDCPP
+ Frank> +	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ Frank> +	help
+ Frank> +	  ZXing (pronounced "zebra crossing") is an open-source, 
+ Frank> +	  multi-format 1D/2D barcode image processing library 
+
+These two lines have trailing spaces.
+
+ Frank> +++ b/package/zxing/zxing.mk
+ Frank> @@ -0,0 +1,38 @@
+ Frank> +#############################################################
+ Frank> +#
+ Frank> +# zxing
+ Frank> +#
+ Frank> +#############################################################
+ Frank> +ZXING_VERSION = 2.0
+ Frank> +ZXING_SITE = http://zxing.googlecode.com/files
+ Frank> +ZXING_SOURCE = ZXing-$(ZXING_VERSION).zip
+ Frank> +ZXING_DEPENDENCIES = host-scons
+ Frank> +ZXING_INSTALL_STAGING = YES
+ Frank> +ZXING_INSTALL_TARGET = NO
+
+Buildroot can be used to build a native compiler and development
+environment, so we also install into target. If BR2_HAVE_DEVFILES is
+disabled, then the target filesystem is cleaned up of usr/lib/lib*.a /
+usr/include before the filesystem images are created.
+
+-- 
+Bye, Peter Korsgaard
