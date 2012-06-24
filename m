@@ -1,44 +1,34 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Jun 2012 00:13:29 +0200
-Subject: [Buildroot] [git commit] imagemagick: use alternate download
-	location
-Message-ID: <20120624221345.1D7008B35D@busybox.osuosl.org>
+Date: Mon, 25 Jun 2012 00:12:45 +0200
+Subject: [Buildroot] [git commit] sound-theme-freedesktop: add host-intltool
+	dependency
+Message-ID: <20120624221345.1131D8B35D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d044199e74d6dae0285f4739adc76c1b10c0b9b8
+commit: http://git.buildroot.net/buildroot/commit/?id=ea6c1b9f12b932dc373b3b58459bc676e17f0e54
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The official ImageMagick site only keeps the latest versions. Even in
-the legacy/ directory, they only keep the last version of each
-'branch'. Therefore, to avoid problems, we use an alternate download
-site.
-
 Fixes
-http://autobuild.buildroot.org/results/2269aa42a0a21730ff0ec28af89cd4973ec28751/build-end.log.
+http://autobuild.buildroot.org/results/c4e5cad3e4bf08440cea081789b8d58b238d9683/build-end.log.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/imagemagick/imagemagick.mk |    5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+ .../sound-theme-freedesktop.mk                     |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 32eb371..a8b69c7 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -7,7 +7,10 @@
- IMAGEMAGICK_MAJOR = 6.7.6
- IMAGEMAGICK_VERSION = $(IMAGEMAGICK_MAJOR)-9
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.bz2
--IMAGEMAGICK_SITE = ftp://ftp.imagemagick.org/pub/ImageMagick
-+# The official ImageMagick site only keeps the latest versions
-+# available, which is annoying. Use an alternate site that keeps all
-+# older versions.
-+IMAGEMAGICK_SITE = ftp://ftp.nluug.nl/pub/ImageMagick/
- IMAGEMAGICK_INSTALL_STAGING = YES
- IMAGEMAGICK_AUTORECONF = YES
+diff --git a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+index d81c207..3a1a162 100644
+--- a/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
++++ b/package/sound-theme-freedesktop/sound-theme-freedesktop.mk
+@@ -8,5 +8,6 @@ SOUND_THEME_FREEDESKTOP_SITE = \
+ 	http://people.freedesktop.org/~mccann/dist
+ SOUND_THEME_FREEDESKTOP_SOURCE = \
+ 	sound-theme-freedesktop-$(SOUND_THEME_FREEDESKTOP_VERSION).tar.bz2
++SOUND_THEME_FREEDESKTOP_DEPENDENCIES = host-intltool
  
+ $(eval $(call AUTOTARGETS))
