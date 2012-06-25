@@ -1,32 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Jun 2012 11:52:56 +0200
-Subject: [Buildroot] [git commit] bluez_utils: bump to 4.101
-Message-ID: <20120625095410.58DA08B7A6@busybox.osuosl.org>
+From: Aras Vaichas <aras.vaichas@gmail.com>
+Date: Mon, 25 Jun 2012 12:46:50 +0100
+Subject: [Buildroot] how to repopulate /output/target/lib?
+Message-ID: <CAJkQPOnh+SqhaV5eZ1YQhVzK2cfmzK=StTVSGZ=P1V0Oxgdi3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b731806dd1d7e6a5a18e6160817e097296a18660
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bluez_utils/bluez_utils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+I'm currently moving a project to Buildroot. So I'm configuring
+Buildroot to create an identical fs tree to my existing tree.
 
-diff --git a/package/bluez_utils/bluez_utils.mk b/package/bluez_utils/bluez_utils.mk
-index eb42e23..33d2987 100644
---- a/package/bluez_utils/bluez_utils.mk
-+++ b/package/bluez_utils/bluez_utils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--BLUEZ_UTILS_VERSION = 4.99
-+BLUEZ_UTILS_VERSION = 4.101
- BLUEZ_UTILS_SOURCE = bluez-$(BLUEZ_UTILS_VERSION).tar.gz
- BLUEZ_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
- BLUEZ_UTILS_INSTALL_STAGING = YES
+My workflow is:
+
+* run make
+* compare output/target against my original fs (using xxdiff)
+* adjust Buildroot settings. e.g. skeleton, post build script, etc
+* clear out output/target
+* repeat
+
+I have a helper script that does some of the dirty work:
+
+#!/bin/sh
+find -name .stamp_target_installed | xargs rm
+rm -rf output/target
+rm output/build/.root
+echo now run make
+
+My problem is that "make" no longer populates output/target/lib or
+output/target/usr/lib at this stage of the build and I don't know why.
+
+I understand that output/staging holds all the libraries, but how do
+the correct libraries get copied to output/target? How can I trigger
+this action without having to do a "make clean; make"?
+
+Thanks in advance,
+
+Aras Vaichas
