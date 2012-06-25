@@ -1,7 +1,7 @@
 From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 25 Jun 2012 20:09:49 +0100
-Subject: [Buildroot] [PATCH resend] owl-linux: new package
-Message-ID: <1340651389-7856-1-git-send-email-spdawson@gmail.com>
+Date: Mon, 25 Jun 2012 20:49:02 +0100
+Subject: [Buildroot] [PATCH v2] jquery-keyboard: new package
+Message-ID: <1340653742-9890-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,125 +12,68 @@ From: Simon Dawson <spdawson@gmail.com>
 
 Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/Config.in                                  |    1 +
- package/owl-linux/Config.in                        |   18 ++++++++++++++++
- ...1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch |   15 +++++++++++++
- .../owl-linux-1.0.6-fix-for-linux-3.3.x.patch      |   22 ++++++++++++++++++++
- package/owl-linux/owl-linux.mk                     |   20 ++++++++++++++++++
- 5 files changed, 76 insertions(+)
- create mode 100644 package/owl-linux/Config.in
- create mode 100644 package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
- create mode 100644 package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
- create mode 100644 package/owl-linux/owl-linux.mk
+
+ v2: Removed configuration items for JavaScript and CSS install paths.
+
+ package/Config.in                          |    1 +
+ package/jquery-keyboard/Config.in          |    6 ++++++
+ package/jquery-keyboard/jquery-keyboard.mk |   25 +++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/jquery-keyboard/Config.in
+ create mode 100644 package/jquery-keyboard/jquery-keyboard.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 99257b4..cb8771d 100644
+index 99257b4..1d6f971 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -216,6 +216,7 @@ source "package/ntfs-3g/Config.in"
- source "package/ofono/Config.in"
- source "package/open2300/Config.in"
- source "package/openocd/Config.in"
-+source "package/owl-linux/Config.in"
- source "package/parted/Config.in"
- source "package/pciutils/Config.in"
- source "package/picocom/Config.in"
-diff --git a/package/owl-linux/Config.in b/package/owl-linux/Config.in
+@@ -382,6 +382,7 @@ menu "Javascript"
+ source "package/explorercanvas/Config.in"
+ source "package/flot/Config.in"
+ source "package/jquery/Config.in"
++source "package/jquery-keyboard/Config.in"
+ source "package/jquery-sparkline/Config.in"
+ source "package/jquery-validation/Config.in"
+ source "package/jsmin/Config.in"
+diff --git a/package/jquery-keyboard/Config.in b/package/jquery-keyboard/Config.in
 new file mode 100644
-index 0000000..a5ab8e8
+index 0000000..e900b51
 --- /dev/null
-+++ b/package/owl-linux/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_OWL_LINUX
-+	bool "H&D Wireless SPB104 SD-card WiFi SIP"
-+	depends on BR2_LINUX_KERNEL
-+	depends on (BR2_arm920t || BR2_arm922t || BR2_arm926t)
-+	depends on BR2_ARM_EABI
++++ b/package/jquery-keyboard/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_JQUERY_KEYBOARD
++	bool "jQuery keyboard"
 +	help
-+	  Linux kernel driver for the H&D Wireless SPB104 SD-card WiFi SIP.
++	  Virtual Keyboard using jQuery UI
 +
-+	  http://linux.hd-wireless.se/bin/view/Linux/GettingStarted
-+
-+comment "owl-linux requires a Linux kernel"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "owl-linux is only supported on the ARM9 architecture"
-+	depends on !(BR2_arm920t || BR2_arm922t || BR2_arm926t)
-+
-+comment "owl-linux requires the ARM EABI"
-+	depends on !BR2_ARM_EABI
-diff --git a/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch b/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
++	  https://github.com/Mottie/Keyboard
+diff --git a/package/jquery-keyboard/jquery-keyboard.mk b/package/jquery-keyboard/jquery-keyboard.mk
 new file mode 100644
-index 0000000..a644406
+index 0000000..60b6f3a
 --- /dev/null
-+++ b/package/owl-linux/owl-linux-1.0.6-fix-CROSS_COMPILE-usage-in-Makefile.patch
-@@ -0,0 +1,15 @@
-+Fix the owl-linux Makefile so that it protects spaces in the CROSS_COMPILE
-+variable. For example, this variable will contain spaces if ccache is used.
-+
-+diff -Nur a/Makefile b/Makefile
-+--- a/Makefile	2011-09-15 12:20:37.000000000 +0100
-++++ b/Makefile	2012-05-10 08:53:55.727706424 +0100
-+@@ -35,7 +35,7 @@
-+ 	PWD := $(shell pwd)
-+ 
-+ default:
-+-	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) M=$(PWD) MODE=$(MODE) modules
-++	$(MAKE) -C $(KERNELDIR) ARCH=$(ARCH) CROSS_COMPILE="$(CROSS_COMPILE)" M=$(PWD) MODE=$(MODE) modules
-+ 
-+ clean: 
-+ 	-rm -f *.o *.mod.c *.ko modules.order Module.symvers
-diff --git a/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch b/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
-new file mode 100644
-index 0000000..a474d4f
---- /dev/null
-+++ b/package/owl-linux/owl-linux-1.0.6-fix-for-linux-3.3.x.patch
-@@ -0,0 +1,22 @@
-+Kernel commit b81693d9149c598302e8eb9c20cb20330d922c8e changed the
-+net_device_ops structure, removing the ndo_set_multicast_list callback. The
-+ndo_set_rx_mode has also been added to this structure.
-+
-+The upshot of these changes is that owl-linux fails to compile with 3.3.x
-+and later kernels.
-+
-+diff -Nurp a/owl_net.c b/owl_net.c
-+--- a/owl_net.c	2011-09-15 12:20:37.000000000 +0100
-++++ b/owl_net.c	2012-06-05 07:42:47.839807834 +0100
-+@@ -376,7 +376,11 @@ static const struct net_device_ops netde
-+ #endif /* OWL_CONFIG_IFUPDOWN */
-+         .ndo_start_xmit         = owl_net_tx,
-+         .ndo_get_stats          = owl_net_get_stats,
-++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)
-+         .ndo_set_multicast_list = NULL,
-++#else
-++        .ndo_set_rx_mode = NULL,
-++#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0) */
-+         .ndo_tx_timeout         = owl_net_tx_timeout,
-+         .ndo_set_mac_address    = NULL,
-+ };
-diff --git a/package/owl-linux/owl-linux.mk b/package/owl-linux/owl-linux.mk
-new file mode 100644
-index 0000000..8aa8709
---- /dev/null
-+++ b/package/owl-linux/owl-linux.mk
-@@ -0,0 +1,20 @@
++++ b/package/jquery-keyboard/jquery-keyboard.mk
+@@ -0,0 +1,25 @@
 +#############################################################
 +#
-+# owl-linux
++# jquery-keyboard
 +#
 +#############################################################
-+OWL_LINUX_VERSION = 1.0.6
-+OWL_LINUX_SITE = http://linux.hd-wireless.se/pub/Linux/DownloadDrivers
-+OWL_LINUX_SOURCE = owl-linux-$(OWL_LINUX_VERSION).tar.gz
++JQUERY_KEYBOARD_VERSION = 1.9.18
++JQUERY_KEYBOARD_SITE = \
++	https://github.com/Mottie/Keyboard/tarball/v$(JQUERY_KEYBOARD_VERSION)
 +
-+OWL_LINUX_DEPENDENCIES = linux
-+
-+define OWL_LINUX_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNELDIR=$(LINUX_DIR)
++define JQUERY_KEYBOARD_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/css/keyboard.css \
++		$(TARGET_DIR)/var/www/keyboard.css
++	$(INSTALL) -m 0644 -D $(@D)/js/jquery.keyboard*.js \
++		$(TARGET_DIR)/var/www
++	$(INSTALL) -m 0644 -D $(@D)/js/jquery.mousewheel.js \
++		$(TARGET_DIR)/var/www/jquery.mousewheel.js
 +endef
 +
-+define OWL_LINUX_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
++define JQUERY_KEYBOARD_UNINSTALL_TARGET_CMDS
++	$(RM) $(TARGET_DIR)/var/www/keyboard.css
++	$(RM) $(TARGET_DIR)/var/www/jquery.keyboard*.js
++	$(RM) $(TARGET_DIR)/var/www/jquery.mousewheel.js
 +endef
 +
 +$(eval $(call GENTARGETS))
