@@ -1,33 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jun 2012 10:06:41 +0200
-Subject: [Buildroot] [PATCH] php: force cross-compilation
-In-Reply-To: <87k3yv95r9.fsf@macbook.be.48ers.dk>
-References: <1340317344-22807-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87y5ndbxgl.fsf@macbook.be.48ers.dk>
- <20120625091219.539a3740@skate>
- <87k3yv95r9.fsf@macbook.be.48ers.dk>
-Message-ID: <20120625100641.7850a1a2@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Jun 2012 10:18:41 +0200
+Subject: [Buildroot] [PATCHv2] libpcap: bump to version 1.3.0
+In-Reply-To: <4cb520504e0c57eb586091cd4c9de83f6c005fe7.1340607805.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 25 Jun 2012 10:07:35 +0300")
+References: <4cb520504e0c57eb586091cd4c9de83f6c005fe7.1340607805.git.baruch@tkos.co.il>
+Message-ID: <87fw9j953x.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 25 Jun 2012 10:04:42 +0200,
-Peter Korsgaard <jacmet@uclibc.org> a ?crit :
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-> True. Looking at the autobuilder results it seems htop has a similar
-> problem (I don't quite understand why it cannot find /proc/stat on your
-> builder though):
-> 
-> http://autobuild.buildroot.net/results/7d670efa247dfcbcbf6cd088d1157779af441333/build-end.log
+ Baruch> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ Baruch> ---
+ Baruch> v2: remove patch applied upstream.
 
-I'm building in a chroot, and I don't have /proc mounted. I'm not sure
-it's a useful scenario to support?
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Bye, Peter Korsgaard
