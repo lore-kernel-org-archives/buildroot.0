@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jun 2012 13:55:06 +0200
+Date: Mon, 25 Jun 2012 15:10:15 +0200
 Subject: [Buildroot] how to repopulate /output/target/lib?
-In-Reply-To: <CAJkQPOnh+SqhaV5eZ1YQhVzK2cfmzK=StTVSGZ=P1V0Oxgdi3g@mail.gmail.com>
+In-Reply-To: <CAJkQPOm=27BykDt-jkfFExR6bSKJhtgK-TUFQbZ=bDkyOi38pA@mail.gmail.com>
 References: <CAJkQPOnh+SqhaV5eZ1YQhVzK2cfmzK=StTVSGZ=P1V0Oxgdi3g@mail.gmail.com>
-Message-ID: <20120625135506.29fcf6c9@skate>
+ <20120625135506.29fcf6c9@skate>
+ <CAJkQPOm=27BykDt-jkfFExR6bSKJhtgK-TUFQbZ=bDkyOi38pA@mail.gmail.com>
+Message-ID: <20120625151015.14bd842b@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,49 +14,57 @@ To: buildroot@busybox.net
 
 Hello Aras,
 
-Le Mon, 25 Jun 2012 12:46:50 +0100,
+Please keep the list Cc'ed for replies.
+
+Le Mon, 25 Jun 2012 13:55:03 +0100,
 Aras Vaichas <aras.vaichas@gmail.com> a ?crit :
 
-> I understand that output/staging holds all the libraries, but how do
-> the correct libraries get copied to output/target? How can I trigger
-> this action without having to do a "make clean; make"?
+> > ?* The toolchain installation procedure. This one depends on whether
+> > ? you're using the internal, external or crosstool-ng backend for your
+> > ? toolchain. This part installs the C library and related basic
+> > ? libraries (thread, math, rt, etc.).
+> 
+> Thank you for this hint. I found the Makefile responsible and I am now
+> able to repopulate the entire output/target directory. I had to remove
+> output/stamps/ct-ng-toolchain-installed in order to trigger the
+> library copying code. I wasn't sure if removing this file would
+> retrigger the entire toolchain build so I was wary of removing it.
+> 
+> To summarise, this is what I do to recreate output/target (reinstall
+> all packages) from scratch:
+> 
+> # find -name .stamp_target_installed | xargs rm
+> # rm -rf output/target
+> # rm output/build/.root
+> # rm output/stamps/ct-ng-toolchain-installed
+> # make
+> 
+> As you mentioned before, Buildroot doesn't support partial rebuilds so
+> I don't guarantee what I did will work in 100% of cases, but it
+> certainly does make life a little easier. :)
 
-So far, we have no supported mechanism other than "make clean; make" to
-rebuild the target root filesystem. That's part of the Buildroot
-simplicity: we don't try to support partial rebuilds, because it is
-very complicated to get 100% right, and we don't want to support
-something that is right 90% of the time, but is known to have an
-incorrect behavior 10% of the time.
+Sure. The thing is that such a workflow might generate an inconsistent
+target root filesystem: you reinstall into the target only the
+libraries that are enabled now, but if some libraries previously
+selected are installed in the staging/ directory, but have been removed
+from menuconfig in the mean time, they are no longer installed in the
+target, giving you an inconsistent target root filesystem.
+> 
+> > ?* Ensure you have a fast enough build machine (i.e, not a slow Windows
+> > ? laptop that runs Linux inside a VMWare)
+> 
+> Unfortunately that is what I have been given for my development, so
+> building the toolchain is a day lost.
 
-To answer your question, the libraries are installed in
-output/target/{usr/,}lib by:
+You should request a more powerful machine.
 
- * The toolchain installation procedure. This one depends on whether
-   you're using the internal, external or crosstool-ng backend for your
-   toolchain. This part installs the C library and related basic
-   libraries (thread, math, rt, etc.).
+> I have seen some previous posts about building two copies of Buildroot -
+> one for the toolchain, the other for development. I think I will re-read
+> them and implement an external toolchain.
 
- * The package installation steps, which should be replayed if you
-   remove .stamp_target_installed files, as you did.
-
-Basically, my suggestions to do what you're trying to do is:
-
- * Don't use a custom skeleton, do your customization in a post-build
-   script, because it gets re-run at every build, while the skeleton
-   copy is only done once at the beginning of a clean build;
-
- * When you make a change to a package, just remove this package build
-   directory (rm -rf output/build/<pkg>-<version>). This is generally
-   enough to check that the new installation results are correct.
-
- * Use an external toolchain so that doing "make clean; make" is not
-   too painful.
-
- * Ensure you have a fast enough build machine (i.e, not a slow Windows
-   laptop that runs Linux inside a VMWare)
-
-I'm applying all those suggestions, and I'm a fairly happy Buildroot
-user :)
+If you use the ct-ng backend, then just use Crosstool-NG outside of
+Buildroot to generate your toolchain, and import it into Buildroot
+using the external toolchain backend.
 
 Regards,
 
