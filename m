@@ -1,37 +1,34 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Mon, 25 Jun 2012 21:02:21 +0100
-Subject: [Buildroot] [PATCH] Add /var/www to device table
-Message-ID: <1340654541-10427-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 25 Jun 2012 23:25:44 +0200
+Subject: [Buildroot] [git commit] imagemagick: ensure cross freetype-config
+	is used
+Message-ID: <20120625212622.C25738A403@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+commit: http://git.buildroot.net/buildroot/commit/?id=c8490742fb4937f5550127d6482b006fd88bd746
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The /var/www directory is listed in /etc/passwd in the skeleton target
-filesystem as the home directory of the www-data user (uid 33).
+Fixes http://autobuild.buildroot.net/results/fd6fd5b55b1e2fc5a70537f548bbcafab9773e4c/
 
-In the final target filesystem, /var/www should be owned by www-data. This
-is important for the lighttpd package, for example.
-
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- target/generic/device_table.txt |    1 +
- 1 file changed, 1 insertion(+)
+ package/imagemagick/imagemagick.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/target/generic/device_table.txt b/target/generic/device_table.txt
-index fc397a9..421b357 100644
---- a/target/generic/device_table.txt
-+++ b/target/generic/device_table.txt
-@@ -10,6 +10,7 @@
- /tmp					d	1777	0	0	-	-	-	-	-
- /etc					d	755	0	0	-	-	-	-	-
- /home/default				d	2755	1000	1000	-	-	-	-	-
-+/var/www					d	755	33	33	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
- /etc/network/if-up.d			d	755	0	0	-	-	-	-	-
--- 
-1.7.9.5
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a8b69c7..5cbb147 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -44,6 +44,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ IMAGEMAGICK_CONF_OPT += --with-freetype
++IMAGEMAGICK_CONF_ENV += \
++	ac_cv_path_freetype_config=$(STAGING_DIR)/usr/bin/freetype-config
+ IMAGEMAGICK_DEPENDENCIES += freetype
+ else
+ IMAGEMAGICK_CONF_OPT += --without-freetype
