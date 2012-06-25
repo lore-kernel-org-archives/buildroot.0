@@ -1,69 +1,36 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 25 Jun 2012 10:06:45 +0200
-Subject: [Buildroot] [git commit] libpcap: bump to version 1.3.0
-Message-ID: <20120625081956.B86F68B4FC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Jun 2012 10:50:21 +0200
+Subject: [Buildroot] [PATCH] php: force cross-compilation
+In-Reply-To: <20120625100641.7850a1a2@skate> (Thomas Petazzoni's message of
+ "Mon, 25 Jun 2012 10:06:41 +0200")
+References: <1340317344-22807-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87y5ndbxgl.fsf@macbook.be.48ers.dk> <20120625091219.539a3740@skate>
+ <87k3yv95r9.fsf@macbook.be.48ers.dk> <20120625100641.7850a1a2@skate>
+Message-ID: <877guv93n6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=843d934165910488acb3ec360a8eab7a9581b02f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- .../libpcap-dont-fail-on-missing-netfilter.patch   |   30 --------------------
- package/libpcap/libpcap.mk                         |    2 +-
- 2 files changed, 1 insertions(+), 31 deletions(-)
+ Thomas> Le Mon, 25 Jun 2012 10:04:42 +0200,
+ Thomas> Peter Korsgaard <jacmet@uclibc.org> a ?crit :
 
-diff --git a/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch b/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch
-deleted file mode 100644
-index b0efbc7..0000000
---- a/package/libpcap/libpcap-dont-fail-on-missing-netfilter.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From d55b6f4f1b2bfab96ad57e0239b0b2b57785df77 Mon Sep 17 00:00:00 2001
--From: Jiri Slaby <jirislaby@gmail.com>
--Date: Wed, 29 Feb 2012 01:19:18 -0800
--Subject: [PATCH] Don't fail if netfilter isn't enabled in the kernel.
--
--Check for EPROTONOSUPPORT as well as EAFNOSUPPORT.
--
--Reviewed-By: Guy Harris <guy@alum.mit.edu>
-----
-- pcap-netfilter-linux.c |    4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/pcap-netfilter-linux.c b/pcap-netfilter-linux.c
--index 225e49f..f9c6bef 100644
----- a/pcap-netfilter-linux.c
--+++ b/pcap-netfilter-linux.c
--@@ -452,8 +452,8 @@ netfilter_platform_finddevs(pcap_if_t **alldevsp, char *err_str)
-- 	
-- 	sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_NETFILTER);
-- 	if (sock < 0) {
---		/* if netlink is not supported this this is not fatal */
---		if (errno == EAFNOSUPPORT)
--+		/* if netlink is not supported this is not fatal */
--+		if (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT)
-- 			return 0;
-- 		snprintf(err_str, PCAP_ERRBUF_SIZE, "Can't open netlink socket %d:%s",
-- 			errno, pcap_strerror(errno));
---- 
--1.7.10
--
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 0b88a42..51e1106 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--LIBPCAP_VERSION = 1.2.1
-+LIBPCAP_VERSION = 1.3.0
- LIBPCAP_SITE = http://www.tcpdump.org/release
- LIBPCAP_INSTALL_STAGING = YES
- # doesn't have an install-strip
+ >> True. Looking at the autobuilder results it seems htop has a similar
+ >> problem (I don't quite understand why it cannot find /proc/stat on your
+ >> builder though):
+ >> 
+ >> http://autobuild.buildroot.net/results/7d670efa247dfcbcbf6cd088d1157779af441333/build-end.log
+
+ Thomas> I'm building in a chroot, and I don't have /proc mounted. I'm
+ Thomas> not sure it's a useful scenario to support?
+
+Hmm, we could fix this particular problem similar to how you did for
+php, but chances are other native tools would want to poke in /proc. Any
+specific reason you cannot mount /proc to get a more representative
+setup?
+
+-- 
+Bye, Peter Korsgaard
