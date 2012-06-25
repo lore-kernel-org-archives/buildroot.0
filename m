@@ -1,36 +1,32 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 25 Jun 2012 09:51:52 +0200
-Subject: [Buildroot] Compiling grub on x86_64
-Message-ID: <4FE81898.4020606@mind.be>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 25 Jun 2012 10:04:42 +0200
+Subject: [Buildroot] [PATCH] php: force cross-compilation
+In-Reply-To: <20120625091219.539a3740@skate> (Thomas Petazzoni's message of
+ "Mon, 25 Jun 2012 09:12:19 +0200")
+References: <1340317344-22807-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87y5ndbxgl.fsf@macbook.be.48ers.dk> <20120625091219.539a3740@skate>
+Message-ID: <87k3yv95r9.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hoi all,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  I have an x86 project using and internal toolchain and grub as the boot loader.  We recently switched to x86_64 (for 
-syscall performance reasons).  Unfortunately, grub fails to even configure: the compiler can't generate executables.  
-It's missing -lgcc_s.  I guess this is because the toolchain is built without multilib support and grub uses the -m32 
-switch.
+Hi,
 
-  I'm unusually stumped at this point.  Building a toolchain with multilib support seems the easy way out, but that's a 
-bit heavy just to be able to compile grub.  A 64-bit build of grub will probably not work because BIOSes don't 
-understand 64-bit.  So the best thing I can come up with is to have a separate buildroot config just to build grub.  
-Does anyone have better ideas?
+ Thomas> Well, since we can't easily change the configure.in file and
+ Thomas> regenerate the configure script (due to the very old version of
+ Thomas> autoconf that PHP developers use), I'm not sure it's really
+ Thomas> worth the effort. But on the other hand, it's true that it
+ Thomas> would potentially make it possible to have the patch upstream.
 
-  With this in mind, it's probably best to remove the BR2_x86_64 option from the grub config, or at least limit it to 
-external toolchains that may work (i.e. Sourcery).  BTW, Thomas & Peter, am I correct in assuming that grub is not 
-included in the autobuilds?
+True. Looking at the autobuilder results it seems htop has a similar
+problem (I don't quite understand why it cannot find /proc/stat on your
+builder though):
 
-  Regards,
-  Arnout
+http://autobuild.buildroot.net/results/7d670efa247dfcbcbf6cd088d1157779af441333/build-end.log
 
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Bye, Peter Korsgaard
