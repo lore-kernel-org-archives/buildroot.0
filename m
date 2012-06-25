@@ -1,65 +1,45 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 25 Jun 2012 16:09:27 +0200
-Subject: [Buildroot] how to repopulate /output/target/lib?
-In-Reply-To: <20120625135506.29fcf6c9@skate>
-References: <CAJkQPOnh+SqhaV5eZ1YQhVzK2cfmzK=StTVSGZ=P1V0Oxgdi3g@mail.gmail.com>
- <20120625135506.29fcf6c9@skate>
-Message-ID: <4FE87117.10003@lucaceresoli.net>
+From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
+Date: Mon, 25 Jun 2012 16:16:29 +0200
+Subject: [Buildroot] Can I use the toolchain build with buildroot,
+ as an external toolchain ?
+In-Reply-To: <20120623104553.6a1cd9d6@skate>
+References: <1531E53627F1F749B4FE809BF2A4EB6703136FE8@WETMEX10.loepfe.com>
+ <jkfl6r$bev$1@dough.gmane.org> <20120322175530.1f14a73a@skate>
+ <4F6B677E.4020706@gmail.com> <js1vea$ns$1@dough.gmane.org>
+ <20120623104553.6a1cd9d6@skate>
+Message-ID: <js9rrs$seg$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni wrote:
-> Hello Aras,
+On 23/06/2012 10:45, Thomas Petazzoni wrote:
+> Le Fri, 22 Jun 2012 16:28:28 +0200,
+> Aleksandar Zivkovic<Aleksandar.Zivkovic@rt-rk.com>  a ?crit :
 >
-> Le Mon, 25 Jun 2012 12:46:50 +0100,
-> Aras Vaichas <aras.vaichas@gmail.com> a ?crit :
+>> Too many arguments
 >
->> I understand that output/staging holds all the libraries, but how do
->> the correct libraries get copied to output/target? How can I trigger
->> this action without having to do a "make clean; make"?
+> You're using Buildroot 2011.05, and the problem you're facing is a
+> limitation in the external toolchain wrapper, which has been fixed
+> since then.
 >
-> So far, we have no supported mechanism other than "make clean; make" to
-> rebuild the target root filesystem. That's part of the Buildroot
-> simplicity: we don't try to support partial rebuilds, because it is
-> very complicated to get 100% right, and we don't want to support
-> something that is right 90% of the time, but is known to have an
-> incorrect behavior 10% of the time.
+> For reference, this problem has been fixed by
+> e8c46b118b011c766511c44fa9232e074ad6bcbc. So either you need to upgrade
+> your Buildroot version, or you need to backport this patch in 2011.05
+> (which should be relatively easy since this change has been made no
+> long after the 2011.05 release).
 >
-> To answer your question, the libraries are installed in
-> output/target/{usr/,}lib by:
+> Best regards,
 >
->   * The toolchain installation procedure. This one depends on whether
->     you're using the internal, external or crosstool-ng backend for your
->     toolchain. This part installs the C library and related basic
->     libraries (thread, math, rt, etc.).
 >
->   * The package installation steps, which should be replayed if you
->     remove .stamp_target_installed files, as you did.
->
-> Basically, my suggestions to do what you're trying to do is:
->
->   * Don't use a custom skeleton, do your customization in a post-build
->     script, because it gets re-run at every build, while the skeleton
->     copy is only done once at the beginning of a clean build;
->
->   * When you make a change to a package, just remove this package build
->     directory (rm -rf output/build/<pkg>-<version>). This is generally
->     enough to check that the new installation results are correct.
+> Thomas
 
-Instead of `rm -rf output/build/<pkg>-<version>`, you can just do
-`make <pkg>-dirclean`, which is equivalent but a bit cleaner IMHO.
+Dear Thomas,
 
->
->   * Use an external toolchain so that doing "make clean; make" is not
->     too painful.
->
->   * Ensure you have a fast enough build machine (i.e, not a slow Windows
->     laptop that runs Linux inside a VMWare)
+thank you for quick and precise answer! I have applied improvements done 
+at my Buildroot 2011.05 and now am able to enjoy in 50 minutes faster 
+build after toolchain is built once.
 
-To speed up recompilations, also enable ccache ("Enable compiler cache" in
-the "Build options" menu).
-
-Luca
+Regards,
+Aleksandar
