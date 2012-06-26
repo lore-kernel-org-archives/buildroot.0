@@ -1,36 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 26 Jun 2012 09:58:38 +0200
-Subject: [Buildroot] [git commit] gzip: 1.5+ needs wchar support
-Message-ID: <20120626082357.137BD8282E@busybox.osuosl.org>
+Date: Tue, 26 Jun 2012 10:23:26 +0200
+Subject: [Buildroot] [git commit] wget: requires wchar support
+Message-ID: <20120626082357.20CA08282E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c18532766f65ea19b29000ccbb56a5aa7777f698
+commit: http://git.buildroot.net/buildroot/commit/?id=8d8343a9ac81f3566ca3a093f3699d21bfce67cd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/267404bccd9582d3b85b99b16b47b580bf239eb9/
+Fixes http://autobuild.buildroot.net/results/431853a9fda593fba41c1176ecee0bdfe38ce441
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/gzip/Config.in |    4 ++++
+ package/wget/Config.in |    4 ++++
  1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/gzip/Config.in b/package/gzip/Config.in
-index dc9d50b..f501d5c 100644
---- a/package/gzip/Config.in
-+++ b/package/gzip/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_GZIP
- 	bool "gzip"
+diff --git a/package/wget/Config.in b/package/wget/Config.in
+index 3f79a64..354b48f 100644
+--- a/package/wget/Config.in
++++ b/package/wget/Config.in
+@@ -2,7 +2,11 @@ config BR2_PACKAGE_WGET
+ 	bool "wget"
+ 	# fork()
+ 	depends on BR2_USE_MMU
 +	depends on BR2_USE_WCHAR
  	help
- 	  Standard GNU compressor.  Provides things like gzip,
- 	  gunzip, gzcat, etc...
+ 	  Network utility to retrieve files from http, https and ftp.
  
- 	  http://www.gnu.org/software/gzip/gzip.html
+ 	  http://www.gnu.org/software/wget/
 +
-+comment "gzip requires a toolchain with WCHAR support"
++comment "wget requires a toolchain with WCHAR support"
 +	depends on !BR2_USE_WCHAR
