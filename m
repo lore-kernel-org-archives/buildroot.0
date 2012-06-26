@@ -1,35 +1,35 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Jun 2012 09:42:33 +0200
-Subject: [Buildroot] [git commit] tcpreplay: fix linking when libpcap is
-	built with canusb support
-Message-ID: <20120627074356.7E8DC80E63@busybox.osuosl.org>
+Date: Tue, 26 Jun 2012 23:03:40 +0200
+Subject: [Buildroot] [git commit] samba: bump to version 3.6.6
+Message-ID: <20120627074356.23CB08B497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a795e2a491c7a99530c79fc3f23a39b6a85ebce5
+commit: http://git.buildroot.net/buildroot/commit/?id=335ffd1c64281b939314d5fe707408eacca02c02
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/f3cee3df639a8ecf0f7f81ca33efee4e040c76ff
+Bump samba to version 3.6.6
+Lots of bugfixes.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tcpreplay/tcpreplay.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/samba/samba.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 72abade..4a72266 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -11,5 +11,9 @@ TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
- TCPREPLAY_AUTORECONF = YES
- TCPREPLAY_DEPENDENCIES = libpcap
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index d7a15b3..c968435 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
  
-+# libpcap may depend on symbols in libusb as well
-+TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
-+TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)'
-+
- $(eval $(call AUTOTARGETS))
- 
+-SAMBA_VERSION = 3.6.5
++SAMBA_VERSION = 3.6.6
+ SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA_SUBDIR = source3
+ SAMBA_INSTALL_STAGING = YES
