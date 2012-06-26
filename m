@@ -1,36 +1,35 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Tue, 26 Jun 2012 10:23:26 +0200
-Subject: [Buildroot] [git commit] wget: requires wchar support
-Message-ID: <20120626082357.20CA08282E@busybox.osuosl.org>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Tue, 26 Jun 2012 09:32:02 +0100
+Subject: [Buildroot] [PATCH RFC 1/2] Add configuration item for custom
+ JavaScript install path
+In-Reply-To: <4FE25F07.6020103@mind.be>
+References: <1340088964-10630-1-git-send-email-spdawson@gmail.com>
+ <1340088964-10630-2-git-send-email-spdawson@gmail.com>
+ <4FE25F07.6020103@mind.be>
+Message-ID: <CAHt8ZCPKVG8VNUhYbzTV+u6VZgFnHCw5+8_--_+xE0XV7gnutw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8d8343a9ac81f3566ca3a093f3699d21bfce67cd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thanks for the feedback Arnout.
 
-Fixes http://autobuild.buildroot.net/results/431853a9fda593fba41c1176ecee0bdfe38ce441
+On 21 June 2012 00:38, Arnout Vandecappelle <arnout@mind.be> wrote:
+> ?I would instead define a WWW_INSTALL_PATH, which can also be used to set
+> the wwwroot of the various http servers.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/wget/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+It's a good idea, but I don't know quite how it would be achieved
+cleanly. A quick grep through Buildroot reveals the following
+potential problem files.
 
-diff --git a/package/wget/Config.in b/package/wget/Config.in
-index 3f79a64..354b48f 100644
---- a/package/wget/Config.in
-+++ b/package/wget/Config.in
-@@ -2,7 +2,11 @@ config BR2_PACKAGE_WGET
- 	bool "wget"
- 	# fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_USE_WCHAR
- 	help
- 	  Network utility to retrieve files from http, https and ftp.
- 
- 	  http://www.gnu.org/software/wget/
-+
-+comment "wget requires a toolchain with WCHAR support"
-+	depends on !BR2_USE_WCHAR
+* package/boa/boa.conf
+* package/tinyhttpd/S85tinyhttpd
+* package/tinyhttpd/tinyhttpd.patch
+
+The configuration files could be fixed up during installation of the
+relevant packages, but the httpd patch is more of a problem.
+
+Does anyone have a suggestion for how to deal with this?
+
+Simon.
