@@ -1,61 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Jun 2012 05:42:41 +0200
-Subject: [Buildroot] [PATCH] lighttpd: use standard web root directory
-In-Reply-To: <1340634705-20022-1-git-send-email-spdawson@gmail.com>
-References: <1340634705-20022-1-git-send-email-spdawson@gmail.com>
-Message-ID: <4FE92FB1.4080508@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 26 Jun 2012 09:35:57 +0200
+Subject: [Buildroot] [PATCH resend] owl-linux: new package
+In-Reply-To: <1340651389-7856-1-git-send-email-spdawson@gmail.com>
+References: <1340651389-7856-1-git-send-email-spdawson@gmail.com>
+Message-ID: <20120626093557.2de31adb@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/25/12 16:31, spdawson at gmail.com wrote:
-> The lighttpd package uses /srv/www as its web root directory; this sets it
-> apart from other web-related packages in Buildroot, which all use /var/www
-> as their web root directory.
->
-> Signed-off-by: Simon Dawson<spdawson@gmail.com>
-[snip]
-> -Index: lighttpd-1.4.30/doc/config/conf.d/access_log.conf
-> -===================================================================
-> ---- lighttpd-1.4.30.orig/doc/config/conf.d/access_log.conf
-> -+++ lighttpd-1.4.30/doc/config/conf.d/access_log.conf
-> -@@ -9,7 +9,7 @@
-> - ##
-> - ## Default access log.
-> - ##
-> --accesslog.filename          = log_root + "/access.log"
-> -+accesslog.filename          = log_root + "/lighttpd-access.log"
-  Why is this removed?
-> -
-> - ##
-> - ## The default format produces CLF compatible output.
-> diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-> index c7fae32..0b75185 100644
-> --- a/package/lighttpd/lighttpd.mk
-> +++ b/package/lighttpd/lighttpd.mk
-> @@ -59,7 +59,7 @@ endif
->   define LIGHTTPD_INSTALL_CONFIG
->       mkdir -p $(TARGET_DIR)/etc/lighttpd
->       mkdir -p $(TARGET_DIR)/etc/lighttpd/conf.d
-> -    mkdir -p $(TARGET_DIR)/srv/www/htdocs
-> +    mkdir -p $(TARGET_DIR)/var/www/htdocs
-  This seems to imply that the actual server root (i.e. what http://hostname/ is
-pointing to) is /var/www/htdocs, not /var/www.  So that's still different from
-the other packages. But I'm not familiar enough with lighttpd config to be sure.
+Le Mon, 25 Jun 2012 20:09:49 +0100,
+spdawson at gmail.com a ?crit :
 
-  Regards,
-  Arnout
->
->       [ -f $(TARGET_DIR)/etc/lighttpd/lighttpd.conf ] || \
->           $(INSTALL) -D -m 755 $(@D)/doc/config/lighttpd.conf \
+> From: Simon Dawson <spdawson@gmail.com>
+> 
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
+This looks pretty good. The patches of the package should have a
+Signed-off-by line, but otherwise, I'm not seeing any other issue.
 
+I am also a bit worried about all the comment "owl-linux is only
+supported blabla", because those warnings will also appear for anyone
+not even doing something for ARM, and there will be two of such
+warnings.
+
+Maybe group the ARM9 and EABI checks into one comment? And maybe make
+it visible only on ARM?
+
+comment "owl-linux is only supported on ARM9 architecture with EABI"
+	depends on !(BR2_arm920t || BR2_arm922t || BR2_arm926t)	|| !BR2_ARM_EABI
+	depends on BR2_arm
+
+or something like that.
+
+> +define OWL_LINUX_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(LINUX_DIR) $(LINUX_MAKE_FLAGS) M="$(@D)" modules_install
+> +endef
+
+At some point in the discussion, it was mentioned that this driver
+might only work with one particular CodeSourcery toolchain, which would
+suggest that it uses the C library, and therefore contain userspace
+code. But here you're only installing the kernel module itself. Could
+you clarify this point, just for our (my?) knowledge?
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                               arnout at mind be
-Senior Embedded Software Architect                 +32-16-286540
-Essensium/Mind                                     http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
