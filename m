@@ -1,82 +1,78 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 27 Jun 2012 22:19:09 +0200
-Subject: [Buildroot] [PATCH] libusb: needs thread support
-In-Reply-To: <1340728321-24139-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 26 Jun 2012 13:32:01 -0300")
-References: <1340728321-24139-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k3ys5wzm.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Jun 2012 22:13:59 +0200
+Subject: [Buildroot] [git commit] igh-ethercat: use release tarball instead
+	of mercurial branch
+Message-ID: <20120627202421.A86138DA3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5f7879e02479818fac17c0c281511b492da904ee
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Gustavo> libusb needs thread support, hence libusb-compat too and a whole other
- Gustavo> bunch of packages or optionals too.
+The Mercurial branch may change, which leads to non-reproducible builds.
+So download a released version instead.
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/bluez_utils/Config.in    |    1 +
- Gustavo>  package/efl/libedbus/Config.in   |    1 +
- Gustavo>  package/libfreefare/Config.in    |    4 ++++
- Gustavo>  package/libftdi/Config.in        |    4 ++++
- Gustavo>  package/libhid/Config.in         |    4 ++++
- Gustavo>  package/libiqrf/Config.in        |    4 ++++
- Gustavo>  package/libnfc/Config.in         |    4 ++++
- Gustavo>  package/libusb-compat/Config.in  |    4 ++++
- Gustavo>  package/libusb/Config.in         |    4 ++++
- Gustavo>  package/openocd/Config.in        |    4 ++++
- Gustavo>  package/usb_modeswitch/Config.in |    4 ++++
- Gustavo>  package/usbutils/Config.in       |    4 ++++
- Gustavo>  12 files changed, 42 insertions(+), 0 deletions(-)
+Also add configure option for e1000e.
 
- Gustavo> diff --git a/package/bluez_utils/Config.in b/package/bluez_utils/Config.in
- Gustavo> index 3517407..15ffd37 100644
- Gustavo> --- a/package/bluez_utils/Config.in
- Gustavo> +++ b/package/bluez_utils/Config.in
- Gustavo> @@ -24,6 +24,7 @@ config BR2_PACKAGE_BLUEZ_UTILS_AUDIO
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/igh-ethercat/Config.in       |    3 +++
+ package/igh-ethercat/igh-ethercat.mk |   20 ++++----------------
+ 2 files changed, 7 insertions(+), 16 deletions(-)
+
+diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
+index 764a021..890bb12 100644
+--- a/package/igh-ethercat/Config.in
++++ b/package/igh-ethercat/Config.in
+@@ -17,6 +17,9 @@ config BR2_PACKAGE_IGH_ETHERCAT_E100
+ config BR2_PACKAGE_IGH_ETHERCAT_E1000
+ 	bool "e1000 driver"
  
- Gustavo>  config BR2_PACKAGE_BLUEZ_UTILS_USB
- Gustavo>  	bool "USB support"
- Gustavo> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- Gustavo>  	select BR2_PACKAGE_LIBUSB
- Gustavo>  	help
- Gustavo>  	  USB support
- Gustavo> diff --git a/package/efl/libedbus/Config.in b/package/efl/libedbus/Config.in
- Gustavo> index 0914b37..e695589 100644
- Gustavo> --- a/package/efl/libedbus/Config.in
- Gustavo> +++ b/package/efl/libedbus/Config.in
- Gustavo> @@ -14,6 +14,7 @@ if BR2_PACKAGE_LIBEDBUS
++config BR2_PACKAGE_IGH_ETHERCAT_E1000E
++	bool "e1000e driver"
++
+ config BR2_PACKAGE_IGH_ETHERCAT_R8169
+ 	bool "r8169 driver"
  
- Gustavo>  config BR2_PACKAGE_LIBEDBUS_BLUEZ
- Gustavo>  	bool "bluez support"
- Gustavo> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- Gustavo>  	select BR2_PACKAGE_BLUEZ_UTILS
-
-Why? It's only the BLUEZ_UTILS_USB option that depends on threads,
-right?
-
-
- Gustavo> index f6f49ca..f44aa93 100644
- Gustavo> --- a/package/libusb-compat/Config.in
- Gustavo> +++ b/package/libusb-compat/Config.in
- Gustavo> @@ -1,7 +1,11 @@
- Gustavo>  config BR2_PACKAGE_LIBUSB_COMPAT
- Gustavo>  	bool "libusb-compat"
- Gustavo>  	depends on BR2_PACKAGE_LIBUSB
- Gustavo> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- Gustavo>  	help
- Gustavo>  	  libusb-0.1 compatibility layer for libusb-1.0.
+diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
+index b6ac5b8..f04eb57 100644
+--- a/package/igh-ethercat/igh-ethercat.mk
++++ b/package/igh-ethercat/igh-ethercat.mk
+@@ -1,8 +1,7 @@
+-IGH_ETHERCAT_VERSION = stable-1.5
+-IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
+-IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
++IGH_ETHERCAT_VERSION = 1.5.1
++IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
++IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
  
- Gustavo>  	  http://libusb.sourceforge.net/
- Gustavo> +
- Gustavo> +comment "libusb-compat needs a toolchain with thread support"
- Gustavo> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-
-
-This hunk is not strictly needed as it depends on libusb.
-
--- 
-Bye, Peter Korsgaard
+-IGH_ETHERCAT_AUTORECONF      = YES
+ IGH_ETHERCAT_DEPENDENCIES    = linux
+ IGH_ETHERCAT_INSTALL_STAGING = YES
+ 
+@@ -12,20 +11,9 @@ IGH_ETHERCAT_CONF_OPT = \
+ IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
+ IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
+ IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
++IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
+ IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
+ 
+-# Since we download ethercat from source control, we have to emulate
+-# the bootstrap script that creates the ChangeLog file before running
+-# autoreconf.  We don't want to run that script directly, since we
+-# leave to the autotargets infrastructure the responsability of
+-# running 'autoreconf' so that the dependencies on host-automake,
+-# host-autoconf and al. are correct.
+-define IGH_ETHERCAT_CREATE_CHANGELOG
+-	touch $(@D)/ChangeLog
+-endef
+-
+-IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
+-
+ define IGH_ETHERCAT_BUILD_MODULES
+ 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
+ endef
