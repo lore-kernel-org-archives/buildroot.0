@@ -1,36 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jun 2012 09:33:27 +0200
-Subject: [Buildroot] fails to build host-ncurses
-In-Reply-To: <CAAfyv36C+UBq9aNMEWCu06ozEpP7LY+cirhY5s6c365v_JXdRg@mail.gmail.com>
-References: <CAAfyv37nm-iTr78FzpDoNfrG9u7ARE7hnKWQV4vSgMXMN6BdQA@mail.gmail.com>
- <20120627092033.614b647c@skate>
- <CAAfyv36C+UBq9aNMEWCu06ozEpP7LY+cirhY5s6c365v_JXdRg@mail.gmail.com>
-Message-ID: <20120627093327.0e2234e4@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Wed, 27 Jun 2012 09:42:33 +0200
+Subject: [Buildroot] [git commit] tcpreplay: fix linking when libpcap is
+	built with canusb support
+Message-ID: <20120627074356.7E8DC80E63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 27 Jun 2012 09:31:26 +0200,
-Belisko Marek <marek.belisko@gmail.com> a ?crit :
+commit: http://git.buildroot.net/buildroot/commit/?id=a795e2a491c7a99530c79fc3f23a39b6a85ebce5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Thanks. I have Fedora 17. I was going through BR documentation but
-> cannot find something
-> about distro preinstalled packages. IMO this could be added to
-> documentation to avoid email like mine ;)
+Fixes http://autobuild.buildroot.net/results/f3cee3df639a8ecf0f7f81ca33efee4e040c76ff
 
-Actually, it was part of the FAQ at
-http://buildroot.org/downloads/buildroot.html#faq, in the old
-documentation. But for some reason, this FAQ has not been added to the
-new documentation. I guess I am the one to blame since I'm the one who
-did the conversion of the documentation :-)
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/tcpreplay/tcpreplay.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 72abade..4a72266 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -11,5 +11,9 @@ TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
+ TCPREPLAY_AUTORECONF = YES
+ TCPREPLAY_DEPENDENCIES = libpcap
+ 
++# libpcap may depend on symbols in libusb as well
++TCPREPLAY_LIBS = -lpcap $(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
++TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)'
++
+ $(eval $(call AUTOTARGETS))
+ 
