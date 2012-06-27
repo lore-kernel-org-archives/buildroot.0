@@ -1,38 +1,39 @@
-From: spdawson at gmail.com <spdawson@gmail.com>
-Date: Wed, 27 Jun 2012 21:52:24 +0100
-Subject: [Buildroot] [PATCH] memtester: bump to version 4.3.0
-Message-ID: <1340830344-7705-1-git-send-email-spdawson@gmail.com>
+From: Aleksandar Zivkovic <Aleksandar.Zivkovic@rt-rk.com>
+Date: Thu, 28 Jun 2012 00:03:21 +0200
+Subject: [Buildroot] Using Buildroot generated toolchain on different
+ machine without Buildroot environment
+In-Reply-To: <20120626175810.5725388e@skate>
+References: <jscj4m$j2p$1@dough.gmane.org> <20120626171906.5ea51e6a@skate>
+ <jsclju$7qc$1@dough.gmane.org> <20120626175810.5725388e@skate>
+Message-ID: <jsfvv6$6l2$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Simon Dawson <spdawson@gmail.com>
+On 26/06/2012 17:58, Thomas Petazzoni wrote:
+> Le Tue, 26 Jun 2012 15:48:14 +0000 (UTC),
+> Grant Edwards<grant.b.edwards@gmail.com>  a ?crit :
+>
+>> Toolchains built with crosstool-ng can be moved anywhere, but all you
+>> end up with is the basic "libc" libraries.  You'll have to copy the
+>> libraries built by buildroot manually if you want to use them on the
+>> other hosts.
+>
+> Correct, but many things besides the toolchain contain hardcoded paths:
+> the pkg-config binary, the external toolchain wrapper, the .la files,
+> etc. See the report I mentioned for details.
+>
+> Thomas
+Hi all,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- ...file-fix.patch => memtester-makefile-fix.patch} |    0
- package/memtester/memtester.mk                     |    2 +-
- 2 files changed, 1 insertion(+), 1 deletion(-)
- rename package/memtester/{memtester-4.2.1-makefile-fix.patch => memtester-makefile-fix.patch} (100%)
+@Thomas: when I used the same path on other machine build works 
+correctly. Thanks again for quick response!
 
-diff --git a/package/memtester/memtester-4.2.1-makefile-fix.patch b/package/memtester/memtester-makefile-fix.patch
-similarity index 100%
-rename from package/memtester/memtester-4.2.1-makefile-fix.patch
-rename to package/memtester/memtester-makefile-fix.patch
-diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
-index 00e3124..a8b4f84 100644
---- a/package/memtester/memtester.mk
-+++ b/package/memtester/memtester.mk
-@@ -3,7 +3,7 @@
- # memtester
- #
- #############################################################
--MEMTESTER_VERSION = 4.2.1
-+MEMTESTER_VERSION = 4.3.0
- MEMTESTER_SOURCE = memtester-$(MEMTESTER_VERSION).tar.gz
- MEMTESTER_SITE = http://pyropus.ca/software/memtester/old-versions/
- 
--- 
-1.7.9.5
+@Grant: I agree, besides libc I'm using complete generated host 
+directory which holds other libraries that might be needed. Thanks for 
+hint!
+
+Regards,
+Aleksandar
