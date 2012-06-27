@@ -1,45 +1,41 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Jun 2012 22:03:59 +0200
-Subject: [Buildroot] [git commit] mii-diag: link statically if configured to
-	do so
-Message-ID: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 27 Jun 2012 22:08:37 +0200
+Subject: [Buildroot] mii-diag static problem
+In-Reply-To: <CAL0cBcqPeAwdWO57QLxo0-bRrSckxkvWECer0aGkiEDdQxEQDA@mail.gmail.com>
+ (Jonas Keidel's message of "Wed, 27 Jun 2012 16:23:48 +0200")
+References: <fb9da18885b4c307d8cc1c677e4e544e@jonas-keidel.de>
+ <CAL0cBcqPeAwdWO57QLxo0-bRrSckxkvWECer0aGkiEDdQxEQDA@mail.gmail.com>
+Message-ID: <87sjdg5xh6.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0f965dda8365c538c2a868a48675265522c70c5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Jonas" == Jonas Keidel <jonas@jonas-keidel.de> writes:
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/mii-diag/mii-diag.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ Jonas> Hey baruch,
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index 0731bf7..f74fa3d 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -8,6 +8,12 @@ MII_DIAG_SOURCE  = mii-diag_$(MII_DIAG_VERSION).orig.tar.gz
- MII_DIAG_PATCH   = mii-diag_$(MII_DIAG_VERSION)-3.diff.gz
- MII_DIAG_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
- 
-+MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+MII_DIAG_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -static"
-+endif
-+
- define MII_DIAG_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
- 		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
-@@ -17,7 +23,7 @@ endef
- MII_DIAG_POST_PATCH_HOOKS = MII_DIAG_DEBIAN_PATCHES
- 
- define MII_DIAG_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(MAKE) $(MII_DIAG_MAKE_OPT) -C $(@D)
- endef
- 
- define MII_DIAG_INSTALL_TARGET_CMDS
+ Jonas> There is noch error message, i just need to get mii-diag (or
+ Jonas> even better mii-tool) compiled the static way, so that it will
+ Jonas> work with busybox and my configuration. Is that possible?
+
+We have the 'Build options->prefer static libraries' option, but
+mii-diag wasn't following it until a few minutes ago when I committed a
+fix (a0f965d).
+
+With that fixed, it works:
+
+file output/target/usr/sbin/mii-diag
+output/target/usr/sbin/mii-diag: ELF 32-bit LSB executable, ARM, version 1 (SYSV), statically linked, stripped
+
+cat defconfig
+BR2_arm=y
+BR2_arm926t=y
+BR2_PREFER_STATIC_LIB=y
+BR2_PACKAGE_MII_DIAG=y
+
+So with latest git it is possible.
+
+-- 
+Bye, Peter Korsgaard
