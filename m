@@ -1,10 +1,8 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jun 2012 14:53:40 +0200
-Subject: [Buildroot] RPC support for modern (e)glibc toolchains
-In-Reply-To: <359dafd382a8aa5ccaaa5ebbde9b38ff@zacarias.com.ar>
-References: <20120627000701.506f534e@skate>
- <359dafd382a8aa5ccaaa5ebbde9b38ff@zacarias.com.ar>
-Message-ID: <20120627145340.34895a74@skate>
+From: Joerg Rebenstorf <Joerg.Rebenstorf@GiN.de>
+Date: Wed, 27 Jun 2012 14:41:27 +0200
+Subject: [Buildroot] Avahi build failed with BR2_STRIP_none=y and
+	BR2_ENABLE_DEBUG=n
+Message-ID: <1340800887.3122.113.camel@jr-ThinkCentre-A57>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,117 +11,71 @@ To: buildroot@busybox.net
 
 Hello,
 
-Le Wed, 27 Jun 2012 08:00:40 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+I just want to let the community know that I've found a bug and fixed it
+in buildroot-2009.11.
 
-> > So I've created a package for libtirpc, which after a few fixes, 
-> > seems
-> > to work fine. But now, the hard part is how to handle this new 
-> > package
-> > in terms of dependencies, and this is where I'd like to have your
-> > opinion.
-> 
-> How big is libtirpc in the target? Curiosity :)
+Bugfix: Fix avahi build breakage with BR2_STRIP_none=y and
+BR2_ENABLE_DEBUG=n 
+The fix works like this:
+Look at BR2_STRIP_none to decide whether to strip avahi binaries.
+This avoids bad quoting in avahi Makefile.in when $STRIP is set to:
+true Not_stripping
 
-127 KB when compiled against glibc, 99 KB when compiled against uClibc.
-Not sure why there's a size difference here, maybe it's related to
-other things (different compiler version, etc.). But roughly, we're
-talking about 100 KB stripped.
+Index: /usr/cross/GL4200/buildroot-2009.11/package/avahi/avahi.mk
+===================================================================
+--- /usr/cross/GL4200/buildroot-2009.11/package/avahi/avahi.mk	(revision
+7)
++++ /usr/cross/GL4200/buildroot-2009.11/package/avahi/avahi.mk	(working
+copy)
+@@ -16,6 +16,12 @@
+ AVAHI_INSTALL_STAGING = YES
+ AVAHI_INSTALL_TARGET = YES
+ 
++ifeq ($(BR2_STRIP_none),y)
++AVAHI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-exec
++else
++AVAHI_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install-strip
++endif
++
+ AVAHI_CONF_ENV = ac_cv_func_strtod=yes \
+ 		ac_fsusage_space=yes \
+ 		fu_cv_sys_stat_statfs2_bsize=yes \
 
-> > I have essentially two problems:
-> >
-> >  *) Should we consider libtirpc just an add-on for (e)glibc, and
-> >     therefore make it visible/available/used only when a (e)glibc
-> >     toolchain lacking RPC support is used, or instead, should we 
-> > offer
-> >     libtirpc as soon as the toolchain lacks RPC support (which would
-> >     also be the case for uClibc toolchain with no RPC support from 
-> > the
-> >     C library) ?
-> 
-> I'd say while we're working at it we could do it for uClibc as well 
-> since it provides benefits which (probably) also apply to uClibc's
-> RPC.
+Without this fix you get the following output:
 
-Ok, so we want to allow cases like "uClibc without RPC + libtirpc". I
-also agree that it's a good idea.
+>>> libdaemon 0.13 Installing to target
+/usr/bin/make -j8
+DESTDIR=/usr/cross/GL4200/buildroot-2009.11/output/target  install-strip
+-C /usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13/
+make[1]: Entering directory
+`/usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13'
+/usr/bin/make
+INSTALL_PROGRAM="/bin/bash /usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13/install-sh -c -s" \
 
-> >  *) Should we make the dependency from packages on libtirpc a
-> >     "select", like all other library dependencies, or a "depends
-> > on", to
-> >     mimic what we currently do for RPC support (packages "depends on
-> >     BR2_INET_RPC", and they show a comment if BR2_INET_RPC isn't
-> >     available) ?
-> 
-> Probably keep it as a "depends on", in some cases you'll already have 
-> the toolchain providing RPC.
-> Maybe even block libtirpc if the origin toolchain has RPC support? Or 
-> can they be used at the same time? (Not that anyone would want too i 
-> think...)
-
-Yes, as I was mentionning in my initial e-mail, I was thinking of
-having something like:
-
-config BR2_RPC_AVAILABLE
-	bool
-
-config BR2_TOOLCHAIN_HAS_NATIVE_RPC
-	select BR2_RPC_AVAILABLE
-	bool
+install_sh_PROGRAM="/bin/bash /usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13/install-sh -c -s" INSTALL_STRIP_FLAG=-s \
+	  `test -z 'true Not_stripping' || \
+	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='true Not_stripping'"` install
+make[2]: *** make[2]: Entering directory
+`/usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13'
+No rule to make target `Not_stripping''.  Stop.
+make[2]: Leaving directory
+`/usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13'
+make[1]: *** [install-strip] Error 2
+make[1]: Leaving directory
+`/usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13'
+make: ***
+[/usr/cross/GL4200/buildroot-2009.11/output/build/libdaemon-0.13/.stamp_target_installed] Error 2
 
 
-Toolchains having native RPC support (i.e uClibc with RPC support, or
-glibc < 2.14) would select BR2_TOOLCHAIN_HAS_NATIVE_RPC Then, the
-libtirpc package would:
+Any comments are welcome.
 
-config BR2_PACKAGE_LIBTIRPC
-	bool "libtirpc"
-	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-	select BR2_RPC_AVAILABLE
-	select
+Cheers,
+J?rg
 
-But now, the question is for packages that need RPC support. We have
-two choices. First, like today, the user has to manually enable RPC
-support in the toolchain *OR* manually enable libtirpc.
-
-config BR2_PACKAGE_FOO
-	depends on BR2_RPC_AVAILABLE
-
-comment "foo needs RPC support, either in toolchain or through libtirpc"
-	depends on !BR2_RPC_AVAILABLE
-
-Or, we can automatically select libtirpc if needed:
-
-config BR2_PACKAGE_FOO
-	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-
-and no comment is needed, because if the toolchain has no RPC support,
-it would automatically be handled by libtirpc.
-
-Which one do you prefer?
-
-> >  *) How to handle the case of the Crosstool-NG backend? With the
-> >     current Crosstool-NG backend, we have no idea which version of
-> >     (e)glibc is being built, so we have no idea whether RPC support
-> >     will be provided by the toolchain. Should we add a config option
-> >     saying "My toolchain will have RPC support", which we will then
-> >     check after the toolchain build, like we do with external
-> >     toolchains? Other suggestions?
-> 
-> BR2_TOOLCHAIN_I_WANT_RPC ?
-> After the toolchain is done we do an RPC check with readelf, if it's 
-> not there we build libtirpc, otherwise we leave it be.
-
-Hardly doable: we need to know at menuconfig time if we need libtirpc
-in order to keep the .config selection consistent. If you don't, things
-like "make source" or "make external-deps" will not work any more (they
-will not know that libtirpc is needed).
-
-Regards,
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: This is a digitally signed message part
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120627/e8ae1e5c/attachment.asc>
