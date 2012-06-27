@@ -1,34 +1,28 @@
-From: Diego Iastrubni <diegoiast@gmail.com>
-Date: Wed, 27 Jun 2012 17:06:13 +0300
-Subject: [Buildroot] xbmc available in (for Rpi)
-In-Reply-To: <87wr2t5gq4.fsf@macbook.be.48ers.dk>
-References: <CAAfyv34srnfYZqxjQCxV-k0CPYVqwXK-zPBmB0UkoqrqGidShg@mail.gmail.com>
- <87wr2t5gq4.fsf@macbook.be.48ers.dk>
-Message-ID: <CALR4fEJQjcH7HVc-Hiq8YpgUPms+oyv=O4JwHqzR0PoLcKwZ2w@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 27 Jun 2012 17:12:49 +0300
+Subject: [Buildroot] mii-diag static problem
+In-Reply-To: <fb9da18885b4c307d8cc1c677e4e544e@jonas-keidel.de>
+References: <fb9da18885b4c307d8cc1c677e4e544e@jonas-keidel.de>
+Message-ID: <20120627141248.GC5881@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 27, 2012 at 10:58 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+Hi Jonas,
 
-> >>>>> "Belisko" == Belisko Marek <marek.belisko@gmail.com> writes:
->
->  Belisko> Today during browsing found this:
->  Belisko> https://github.com/huceke/buildroot-rbp.
->
->  Belisko> Seems xbmc with dependency libraries are added and even
->  Belisko> compiling in BR!
->
-> Nice! My Rpi work has been put on hold as I'm still waiting for the
-> foundation to ship me a device :/
->
->
-I have one of those here. XBMC locks up pretty bad after several minutes of
-usage.
+On Wed, Jun 27, 2012 at 03:50:49PM +0200, jonas at jonas-keidel.de wrote:
+> i've got some troubles to get mii-diag compiled with static
+> libraries for my busybox enviroment. Is there any usable patch to
+> get this work or what shall i change in the buildroot config?
 
-I will try this buildroot fork. I am interested in it as well :)
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120627/f74fcbd0/attachment.html>
+Please post your .config file, and the error message you see in your build 
+attempt.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
