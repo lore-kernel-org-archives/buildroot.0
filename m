@@ -1,78 +1,38 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Jun 2012 22:13:59 +0200
-Subject: [Buildroot] [git commit] igh-ethercat: use release tarball instead
-	of mercurial branch
-Message-ID: <20120627202421.A86138DA3D@busybox.osuosl.org>
+From: spdawson at gmail.com <spdawson@gmail.com>
+Date: Wed, 27 Jun 2012 21:52:24 +0100
+Subject: [Buildroot] [PATCH] memtester: bump to version 4.3.0
+Message-ID: <1340830344-7705-1-git-send-email-spdawson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f7879e02479818fac17c0c281511b492da904ee
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Simon Dawson <spdawson@gmail.com>
 
-The Mercurial branch may change, which leads to non-reproducible builds.
-So download a released version instead.
-
-Also add configure option for e1000e.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+Signed-off-by: Simon Dawson <spdawson@gmail.com>
 ---
- package/igh-ethercat/Config.in       |    3 +++
- package/igh-ethercat/igh-ethercat.mk |   20 ++++----------------
- 2 files changed, 7 insertions(+), 16 deletions(-)
+ ...file-fix.patch => memtester-makefile-fix.patch} |    0
+ package/memtester/memtester.mk                     |    2 +-
+ 2 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/memtester/{memtester-4.2.1-makefile-fix.patch => memtester-makefile-fix.patch} (100%)
 
-diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
-index 764a021..890bb12 100644
---- a/package/igh-ethercat/Config.in
-+++ b/package/igh-ethercat/Config.in
-@@ -17,6 +17,9 @@ config BR2_PACKAGE_IGH_ETHERCAT_E100
- config BR2_PACKAGE_IGH_ETHERCAT_E1000
- 	bool "e1000 driver"
+diff --git a/package/memtester/memtester-4.2.1-makefile-fix.patch b/package/memtester/memtester-makefile-fix.patch
+similarity index 100%
+rename from package/memtester/memtester-4.2.1-makefile-fix.patch
+rename to package/memtester/memtester-makefile-fix.patch
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index 00e3124..a8b4f84 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -3,7 +3,7 @@
+ # memtester
+ #
+ #############################################################
+-MEMTESTER_VERSION = 4.2.1
++MEMTESTER_VERSION = 4.3.0
+ MEMTESTER_SOURCE = memtester-$(MEMTESTER_VERSION).tar.gz
+ MEMTESTER_SITE = http://pyropus.ca/software/memtester/old-versions/
  
-+config BR2_PACKAGE_IGH_ETHERCAT_E1000E
-+	bool "e1000e driver"
-+
- config BR2_PACKAGE_IGH_ETHERCAT_R8169
- 	bool "r8169 driver"
- 
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b6ac5b8..f04eb57 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -1,8 +1,7 @@
--IGH_ETHERCAT_VERSION = stable-1.5
--IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
--IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
-+IGH_ETHERCAT_VERSION = 1.5.1
-+IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
-+IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
- 
--IGH_ETHERCAT_AUTORECONF      = YES
- IGH_ETHERCAT_DEPENDENCIES    = linux
- IGH_ETHERCAT_INSTALL_STAGING = YES
- 
-@@ -12,20 +11,9 @@ IGH_ETHERCAT_CONF_OPT = \
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
--# Since we download ethercat from source control, we have to emulate
--# the bootstrap script that creates the ChangeLog file before running
--# autoreconf.  We don't want to run that script directly, since we
--# leave to the autotargets infrastructure the responsability of
--# running 'autoreconf' so that the dependencies on host-automake,
--# host-autoconf and al. are correct.
--define IGH_ETHERCAT_CREATE_CHANGELOG
--	touch $(@D)/ChangeLog
--endef
--
--IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
--
- define IGH_ETHERCAT_BUILD_MODULES
- 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
- endef
+-- 
+1.7.9.5
