@@ -1,29 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jun 2012 09:20:33 +0200
-Subject: [Buildroot] fails to build host-ncurses
-In-Reply-To: <CAAfyv37nm-iTr78FzpDoNfrG9u7ARE7hnKWQV4vSgMXMN6BdQA@mail.gmail.com>
-References: <CAAfyv37nm-iTr78FzpDoNfrG9u7ARE7hnKWQV4vSgMXMN6BdQA@mail.gmail.com>
-Message-ID: <20120627092033.614b647c@skate>
+Date: Wed, 27 Jun 2012 09:20:55 +0200
+Subject: [Buildroot] xbmc available in (for Rpi)
+In-Reply-To: <CAAfyv34srnfYZqxjQCxV-k0CPYVqwXK-zPBmB0UkoqrqGidShg@mail.gmail.com>
+References: <CAAfyv34srnfYZqxjQCxV-k0CPYVqwXK-zPBmB0UkoqrqGidShg@mail.gmail.com>
+Message-ID: <20120627092055.17f5a1c0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 27 Jun 2012 00:06:41 +0200,
+Le Tue, 26 Jun 2012 23:26:09 +0200,
 Belisko Marek <marek.belisko@gmail.com> a ?crit :
 
-> Am I missing some host libs?
+> Today during browsing found this:
+> https://github.com/huceke/buildroot-rbp.
+> 
+> Seems xbmc with dependency libraries are added and even compiling in
+> BR!
 
-You're missing the static version of libc. Depending on your distro, it
-might be installed through the libc6-dev package (Debian/Ubuntu), or
-through the glibc-static package (or something similar on
-Fedora/Redhat distros).
+This looks really interesting. Can you contact the developer and
+encourage him to submit his work upstream?
 
-Basically, search for the package in your distro that will install the
-libc.a file.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
