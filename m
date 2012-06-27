@@ -1,32 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jun 2012 16:35:16 +0200
-Subject: [Buildroot] Avahi build failed with BR2_STRIP_none=y and
- BR2_ENABLE_DEBUG=n
-In-Reply-To: <1340807345.3122.117.camel@jr-ThinkCentre-A57>
-References: <1340800887.3122.113.camel@jr-ThinkCentre-A57>
- <1340807345.3122.117.camel@jr-ThinkCentre-A57>
-Message-ID: <20120627163516.57518869@skate>
+From: Diego Iastrubni <diegoiast@gmail.com>
+Date: Wed, 27 Jun 2012 22:36:43 +0300
+Subject: [Buildroot] xbmc available in (for Rpi)
+In-Reply-To: <CALR4fEJQjcH7HVc-Hiq8YpgUPms+oyv=O4JwHqzR0PoLcKwZ2w@mail.gmail.com>
+References: <CAAfyv34srnfYZqxjQCxV-k0CPYVqwXK-zPBmB0UkoqrqGidShg@mail.gmail.com>
+ <87wr2t5gq4.fsf@macbook.be.48ers.dk>
+ <CALR4fEJQjcH7HVc-Hiq8YpgUPms+oyv=O4JwHqzR0PoLcKwZ2w@mail.gmail.com>
+Message-ID: <CALR4fE+d=y4ANugDpWYo+eK1Vy+esN+UhfA1N-Lcfm4QiWifsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed, 27 Jun 2012 16:29:05 +0200,
-Joerg Rebenstorf <Joerg.Rebenstorf@GiN.de> a ?crit :
+On Wed, Jun 27, 2012 at 5:06 PM, Diego Iastrubni <diegoiast@gmail.com> wrote:
+>
+> On Wed, Jun 27, 2012 at 10:58 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>
+>> >>>>> "Belisko" == Belisko Marek <marek.belisko@gmail.com> writes:
+>>
+>> ?Belisko> Today during browsing found this:
+>> ?Belisko> https://github.com/huceke/buildroot-rbp.
+>>
+>> ?Belisko> Seems xbmc with dependency libraries are added and even
+>> ?Belisko> compiling in BR!
+>>
 
-> If anybody knows an even more buildroot compliant way to fix the bug in
-> this specific buildroot release I certainly would be interested to know.
+I am missing something out here in git:
 
-The Buildroot compliant way would be to upgrade to a newer version. We
-no longer use 'install-strip' since commit
-55ade5c7964e15f9b1eba061ab840cc4c25e4e37 (September 2010).
+cd ~/src/buildroot [where my buildroot clone is)
+git remote add rbp git://github.com/huceke/buildroot-rbp.git
+git fetch rbp
 
-Best regards,
+Git is pulling now the whole remote repository. I was thinking it will
+only pull the "diff" between builroot and buildroot-rbp ... as they
+share a lot... no?
 
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+What am I doing wrong?
