@@ -1,80 +1,129 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 27 Jun 2012 14:46:31 +0200
-Subject: [Buildroot] [PATCH] igh-ethercat: use release tarball instead of
-	mercurial branch
-Message-ID: <1340801191-8162-1-git-send-email-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 27 Jun 2012 14:53:40 +0200
+Subject: [Buildroot] RPC support for modern (e)glibc toolchains
+In-Reply-To: <359dafd382a8aa5ccaaa5ebbde9b38ff@zacarias.com.ar>
+References: <20120627000701.506f534e@skate>
+ <359dafd382a8aa5ccaaa5ebbde9b38ff@zacarias.com.ar>
+Message-ID: <20120627145340.34895a74@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Mercurial branch may change, which leads to non-reproducible builds.
-So download a released version instead.
+Hello,
 
-Also add configure option for e1000e.
+Le Wed, 27 Jun 2012 08:00:40 -0300,
+Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
---
-Tested on i386 with Xenomai
+> > So I've created a package for libtirpc, which after a few fixes, 
+> > seems
+> > to work fine. But now, the hard part is how to handle this new 
+> > package
+> > in terms of dependencies, and this is where I'd like to have your
+> > opinion.
+> 
+> How big is libtirpc in the target? Curiosity :)
+
+127 KB when compiled against glibc, 99 KB when compiled against uClibc.
+Not sure why there's a size difference here, maybe it's related to
+other things (different compiler version, etc.). But roughly, we're
+talking about 100 KB stripped.
+
+> > I have essentially two problems:
+> >
+> >  *) Should we consider libtirpc just an add-on for (e)glibc, and
+> >     therefore make it visible/available/used only when a (e)glibc
+> >     toolchain lacking RPC support is used, or instead, should we 
+> > offer
+> >     libtirpc as soon as the toolchain lacks RPC support (which would
+> >     also be the case for uClibc toolchain with no RPC support from 
+> > the
+> >     C library) ?
+> 
+> I'd say while we're working at it we could do it for uClibc as well 
+> since it provides benefits which (probably) also apply to uClibc's
+> RPC.
+
+Ok, so we want to allow cases like "uClibc without RPC + libtirpc". I
+also agree that it's a good idea.
+
+> >  *) Should we make the dependency from packages on libtirpc a
+> >     "select", like all other library dependencies, or a "depends
+> > on", to
+> >     mimic what we currently do for RPC support (packages "depends on
+> >     BR2_INET_RPC", and they show a comment if BR2_INET_RPC isn't
+> >     available) ?
+> 
+> Probably keep it as a "depends on", in some cases you'll already have 
+> the toolchain providing RPC.
+> Maybe even block libtirpc if the origin toolchain has RPC support? Or 
+> can they be used at the same time? (Not that anyone would want too i 
+> think...)
+
+Yes, as I was mentionning in my initial e-mail, I was thinking of
+having something like:
+
+config BR2_RPC_AVAILABLE
+	bool
+
+config BR2_TOOLCHAIN_HAS_NATIVE_RPC
+	select BR2_RPC_AVAILABLE
+	bool
 
 
----
- package/igh-ethercat/Config.in       |    3 +++
- package/igh-ethercat/igh-ethercat.mk |   20 ++++----------------
- 2 files changed, 7 insertions(+), 16 deletions(-)
+Toolchains having native RPC support (i.e uClibc with RPC support, or
+glibc < 2.14) would select BR2_TOOLCHAIN_HAS_NATIVE_RPC Then, the
+libtirpc package would:
 
-diff --git a/package/igh-ethercat/Config.in b/package/igh-ethercat/Config.in
-index 764a021..890bb12 100644
---- a/package/igh-ethercat/Config.in
-+++ b/package/igh-ethercat/Config.in
-@@ -17,6 +17,9 @@ config BR2_PACKAGE_IGH_ETHERCAT_E100
- config BR2_PACKAGE_IGH_ETHERCAT_E1000
- 	bool "e1000 driver"
- 
-+config BR2_PACKAGE_IGH_ETHERCAT_E1000E
-+	bool "e1000e driver"
-+
- config BR2_PACKAGE_IGH_ETHERCAT_R8169
- 	bool "r8169 driver"
- 
-diff --git a/package/igh-ethercat/igh-ethercat.mk b/package/igh-ethercat/igh-ethercat.mk
-index b6ac5b8..f04eb57 100644
---- a/package/igh-ethercat/igh-ethercat.mk
-+++ b/package/igh-ethercat/igh-ethercat.mk
-@@ -1,8 +1,7 @@
--IGH_ETHERCAT_VERSION = stable-1.5
--IGH_ETHERCAT_SITE    = http://etherlabmaster.hg.sourceforge.net/hgweb/etherlabmaster/etherlabmaster/archive/
--IGH_ETHERCAT_SOURCE  = $(IGH_ETHERCAT_VERSION).tar.bz2
-+IGH_ETHERCAT_VERSION = 1.5.1
-+IGH_ETHERCAT_SITE    = http://etherlab.org/download/ethercat/
-+IGH_ETHERCAT_SOURCE  = ethercat-$(IGH_ETHERCAT_VERSION).tar.bz2
- 
--IGH_ETHERCAT_AUTORECONF      = YES
- IGH_ETHERCAT_DEPENDENCIES    = linux
- IGH_ETHERCAT_INSTALL_STAGING = YES
- 
-@@ -12,20 +11,9 @@ IGH_ETHERCAT_CONF_OPT = \
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_8139TOO),--enable-8139too,--disable-8139too)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E100),--enable-e100,--disable-e100)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000),--enable-e1000,--disable-e1000)
-+IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_E1000E),--enable-e1000e,--disable-e1000e)
- IGH_ETHERCAT_CONF_OPT += $(if $(BR2_PACKAGE_IGH_ETHERCAT_R8169),--enable-r8169,--disable-r8169)
- 
--# Since we download ethercat from source control, we have to emulate
--# the bootstrap script that creates the ChangeLog file before running
--# autoreconf.  We don't want to run that script directly, since we
--# leave to the autotargets infrastructure the responsability of
--# running 'autoreconf' so that the dependencies on host-automake,
--# host-autoconf and al. are correct.
--define IGH_ETHERCAT_CREATE_CHANGELOG
--	touch $(@D)/ChangeLog
--endef
--
--IGH_ETHERCAT_POST_PATCH_HOOKS += IGH_ETHERCAT_CREATE_CHANGELOG
--
- define IGH_ETHERCAT_BUILD_MODULES
- 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) modules
- endef
+config BR2_PACKAGE_LIBTIRPC
+	bool "libtirpc"
+	depends on !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+	select BR2_RPC_AVAILABLE
+	select
+
+But now, the question is for packages that need RPC support. We have
+two choices. First, like today, the user has to manually enable RPC
+support in the toolchain *OR* manually enable libtirpc.
+
+config BR2_PACKAGE_FOO
+	depends on BR2_RPC_AVAILABLE
+
+comment "foo needs RPC support, either in toolchain or through libtirpc"
+	depends on !BR2_RPC_AVAILABLE
+
+Or, we can automatically select libtirpc if needed:
+
+config BR2_PACKAGE_FOO
+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+
+and no comment is needed, because if the toolchain has no RPC support,
+it would automatically be handled by libtirpc.
+
+Which one do you prefer?
+
+> >  *) How to handle the case of the Crosstool-NG backend? With the
+> >     current Crosstool-NG backend, we have no idea which version of
+> >     (e)glibc is being built, so we have no idea whether RPC support
+> >     will be provided by the toolchain. Should we add a config option
+> >     saying "My toolchain will have RPC support", which we will then
+> >     check after the toolchain build, like we do with external
+> >     toolchains? Other suggestions?
+> 
+> BR2_TOOLCHAIN_I_WANT_RPC ?
+> After the toolchain is done we do an RPC check with readelf, if it's 
+> not there we build libtirpc, otherwise we leave it be.
+
+Hardly doable: we need to know at menuconfig time if we need libtirpc
+in order to keep the .config selection consistent. If you don't, things
+like "make source" or "make external-deps" will not work any more (they
+will not know that libtirpc is needed).
+
+Regards,
+
+Thomas
 -- 
-tg: (929c3e8..) t/ethercat-version-bump (depends on: master)
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
