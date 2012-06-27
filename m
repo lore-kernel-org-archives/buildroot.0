@@ -1,36 +1,33 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Wed, 27 Jun 2012 00:03:14 +0200
-Subject: [Buildroot] [git commit] tcpreplay: cleanup
-Message-ID: <20120627074356.672CD8E0E8@busybox.osuosl.org>
+Date: Wed, 27 Jun 2012 09:55:04 +0200
+Subject: [Buildroot] [git commit] faad2: fix frontend/faad linking
+Message-ID: <20120627075543.56A918D49F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a2ddfdb11a2c28c511a2a4d5bf0060217c93d140
+commit: http://git.buildroot.net/buildroot/commit/?id=56168c215595e4b7bc6222fcee3d1021e327051d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop unneeded uclibc dependency and autoreconf as patch changes
-configure.ac.
+Fixes http://autobuild.buildroot.net/results/84db857a6fc8e73483493e484f2cc5f4bf64f3d0
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/tcpreplay/tcpreplay.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/multimedia/faad2/faad2.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 3a526a7..72abade 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -8,8 +8,8 @@ TCPREPLAY_VERSION = 3.4.3
- TCPREPLAY_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/tcpreplay
- TCPREPLAY_CONF_ENV = tr_cv_libpcap_version=">= 0.7.0"
- TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
--
--TCPREPLAY_DEPENDENCIES = uclibc libpcap
-+TCPREPLAY_AUTORECONF = YES
-+TCPREPLAY_DEPENDENCIES = libpcap
+diff --git a/package/multimedia/faad2/faad2.mk b/package/multimedia/faad2/faad2.mk
+index 366515c..567875a 100644
+--- a/package/multimedia/faad2/faad2.mk
++++ b/package/multimedia/faad2/faad2.mk
+@@ -6,6 +6,8 @@
+ 
+ FAAD2_VERSION = 2.7
+ FAAD2_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/faac
++# frontend/faad calls frexp()
++FAAD2_CONF_ENV = LIBS=-lm
+ FAAD2_INSTALL_STAGING = YES
  
  $(eval $(call AUTOTARGETS))
- 
