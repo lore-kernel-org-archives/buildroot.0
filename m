@@ -1,51 +1,17 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Thu, 28 Jun 2012 16:56:45 +0200
-Subject: [Buildroot] [git commit] quota: fix build on uClibc with locale
-	support
-Message-ID: <20120628150012.149B38E97E@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 28 Jun 2012 22:58:39 +0200
+Subject: [Buildroot] [PATCH v3 1/2] dependencies: build a host python2
+ if no suitable one cane be found
+In-Reply-To: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
+References: <1338674897-1810-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <CAHXCMMK9h86igHZf36MweZGSz9+AT4BW_vvUJLu4ErMCOVnHSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=62fe33317bd1001de61dfe4df4c8159ecd1f5be0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ping?
 
-Fixes http://autobuild.buildroot.net/results/508f2ee3f97dfdf782eb1c0b03c2fffb87c4953f
-
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/quota/Config.in |    2 ++
- package/quota/quota.mk  |    5 +++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
-
-diff --git a/package/quota/Config.in b/package/quota/Config.in
-index dfefb8a..6c2beff 100644
---- a/package/quota/Config.in
-+++ b/package/quota/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_QUOTA
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_MOUNT
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
-+	select BR2_PACKAGE_LIBINTL if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Implementation of the disk quota system.
- 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 845eefb..9715230 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -10,6 +10,11 @@ QUOTA_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/linuxqu
- 
- QUOTA_MAKE_OPT = $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
-+ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-+QUOTA_DEPENDENCIES = gettext libintl
-+QUOTA_MAKE_OPT += LDFLAGS="$(TARGET_LDFLAGS) -lintl"
-+endif
-+
- # Package uses autoconf but not automake.
- QUOTA_INSTALL_TARGET_OPT = \
- 	ROOTDIR=$(TARGET_DIR) \
+-- 
+Sam
