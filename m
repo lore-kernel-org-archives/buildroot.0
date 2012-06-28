@@ -1,50 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 28 Jun 2012 11:46:31 +0200
+Date: Thu, 28 Jun 2012 11:56:13 +0200
 Subject: [Buildroot] Compiling grub on x86_64
-In-Reply-To: <4FEC1155.4020008@mind.be>
+In-Reply-To: <20120628114631.25da4786@skate>
 References: <4FE81898.4020606@mind.be> <20120625100458.4a3e62c8@skate>
- <4FEC1155.4020008@mind.be>
-Message-ID: <20120628114631.25da4786@skate>
+ <4FEC1155.4020008@mind.be> <20120628114631.25da4786@skate>
+Message-ID: <20120628115613.7b4f26ad@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Thu, 28 Jun 2012 10:09:57 +0200,
-Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Le Thu, 28 Jun 2012 11:46:31 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-> > No, it's a difficult problem. And the issue came up several times on
-> > the list already. How much effort would it be to also generate a
-> > multilib 32bits/64bits toolchain when x86_64 is used?
+> Agreed. It's however a shame that it's not possible to build a complete
+> bootloader+kernel+rootfs for x86_64 with a single Buildroot
+> configuration :-(
 > 
->   It's certainly not trivial...  Here's a list of issues I can come up with:
-> 
-> * It requires a different implementation for internal, crosstool-NG and
-> external toolchains.
-> * For external toolchains, there should be a check if it is multilib or not.
-> * For external toolchains, the wrapper has to change a lot because
-> the -m32 may imply a different -march and -mtune.
-> * crosstool-NG itself has no support for multilib AFAICS.  Support would
-> have to be added.
-> * For internal toolchains, uClibc has to be built twice.
-> * Final gcc stage should be configured with the multilib paths.
-> * Are the multilib libraries installed to the target?  For grub this isn't
-> really needed, but if something else compiles with -m32...
-> * Are other libraries compiled with multilib variants?
+> How other build systems handle this?
 
-Quite a few issues :-)
+Other questions:
 
->   Turns out that it currently also doesn't work with multilib external toolchains.
-> The wrapper sets --sysroot to a path which doesn't contain the 32-bit libs.
-> 
->   For the time being, I guess grub should be disabled for all 64-bit configurations.
+ * What about using the host compiler to build Grub? I know it sounds a
+   bit funky, but in practice, most Buildroot users will work on
+   x86/x86_64 machines. If they are on x86, then it just works, if they
+   work on x86_64, then most likely they have a multilib 32/64
+   toolchain installed on their host. This would at least enable, for
+   most users, the possibility of building Grub as part of a x86_64
+   target system configuration.
 
-Agreed. It's however a shame that it's not possible to build a complete
-bootloader+kernel+rootfs for x86_64 with a single Buildroot
-configuration :-(
-
-How other build systems handle this?
+ * What does Grub really require from gcc_s? Is it impossible to rework
+   Grub to make independent from the compiler companion libraries?
 
 Regards,
 
