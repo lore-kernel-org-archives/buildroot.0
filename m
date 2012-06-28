@@ -1,25 +1,30 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Thu, 28 Jun 2012 13:34:39 +0100
-Subject: [Buildroot] Buildroot and top-level parallel make
-Message-ID: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 28 Jun 2012 14:44:06 +0200
+Subject: [Buildroot] Compiling grub on x86_64
+In-Reply-To: <20120628115613.7b4f26ad@skate>
+References: <4FE81898.4020606@mind.be> <20120625100458.4a3e62c8@skate>
+ <4FEC1155.4020008@mind.be> <20120628114631.25da4786@skate>
+ <20120628115613.7b4f26ad@skate>
+Message-ID: <4FEC5196.5070900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As I understand it, buildroot will allow parallelism while building
-individual packages yet does not support "top-level parallel make".
-i.e. it is not possible to build multiple packages in parallel. I
-found a reference to this problem at http://lwn.net/Articles/416916/
-and it was also listed as a WIP in the "cross build systems: present
-and future" slides from 2010.
+On 06/28/12 11:56, Thomas Petazzoni wrote:
+>   * What does Grub really require from gcc_s? Is it impossible to rework
+>     Grub to make independent from the compiler companion libraries?
 
-I was wondering what the outcome of experiments to allow top-level
-parallelism were? What are the major barriers to allowing this? Is it
-still something seen as feasible to add to buildroot, or is it looking
-like it would add too much complexity?
+  I was thinking along those lines as well.  I'll take a look at it but it may
+take some time.
 
-Thanks,
-
-Alex
+  Regards,
+  Arnout
+-- 
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
