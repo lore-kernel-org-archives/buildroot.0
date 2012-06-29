@@ -1,36 +1,54 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Fri, 29 Jun 2012 16:40:04 +0200
-Subject: [Buildroot] [git commit] mii-diag: remove unneded explicit static
-	linking handling
-Message-ID: <20120629144806.915228EE2B@busybox.osuosl.org>
+Date: Fri, 29 Jun 2012 15:09:10 +0200
+Subject: [Buildroot] [git commit] ramspeed: use provided linker flags as well
+Message-ID: <20120629144806.098EE8EE23@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc1d20acb78a979ed03f03143db3900d972c3714
+commit: http://git.buildroot.net/buildroot/commit/?id=5e6ec6e319f87c3f3e97d314ea88a181096c451e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now that it is done globally instead.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/mii-diag/mii-diag.mk |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/ramspeed/Makefile    |    6 +++---
+ package/ramspeed/ramspeed.mk |    3 +--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
-index f74fa3d..5adb270 100644
---- a/package/mii-diag/mii-diag.mk
-+++ b/package/mii-diag/mii-diag.mk
-@@ -10,10 +10,6 @@ MII_DIAG_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/mii-diag
+diff --git a/package/ramspeed/Makefile b/package/ramspeed/Makefile
+index acb8cfd..f4a4de6 100644
+--- a/package/ramspeed/Makefile
++++ b/package/ramspeed/Makefile
+@@ -2,13 +2,13 @@
+ all: generic
  
- MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
+ generic: ramspeed.c fltmem.c fltmark.c intmem.c intmark.c
+-	$(CC) $(CFLAGS) $^ -o ramspeed
++	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o ramspeed
  
--ifeq ($(BR2_PREFER_STATIC_LIB),y)
--MII_DIAG_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -static"
--endif
--
- define MII_DIAG_DEBIAN_PATCHES
- 	if [ -d $(@D)/debian/patches ]; then \
- 		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
+ i386: ramspeed.c i386/*.s i386/cpuinfo/*.s
+-	$(CC) $(CFLAGS) -DI386_ASM $^ -o ramspeed
++	$(CC) $(CFLAGS) -DI386_ASM $(LDFLAGS) $^ -o ramspeed
+ 
+ x86_64: ramspeed.c amd64/*.s
+-	$(CC) $(CFLAGS) -DAMD64_ASM $^ -o ramspeed
++	$(CC) $(CFLAGS) -DAMD64_ASM $(LDFLAGS) $^ -o ramspeed
+ 
+ clean:
+ 	rm -f *.o ramspeed
+diff --git a/package/ramspeed/ramspeed.mk b/package/ramspeed/ramspeed.mk
+index 9ac21ad..478c2fb 100644
+--- a/package/ramspeed/ramspeed.mk
++++ b/package/ramspeed/ramspeed.mk
+@@ -10,8 +10,7 @@ RAMSPEED_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
+ 
+ define RAMSPEED_BUILD_CMDS
+ 	cp -f package/ramspeed/Makefile $(@D)
+-	CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+-		make -C $(@D) $(RAMSPEED_ARCH)
++	$(TARGET_CONFIGURE_OPTS) make -C $(@D) $(RAMSPEED_ARCH)
+ endef
+ 
+ define RAMSPEED_INSTALL_TARGET_CMDS
