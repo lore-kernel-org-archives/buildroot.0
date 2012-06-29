@@ -1,30 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 29 Jun 2012 07:43:00 -0300
-Subject: [Buildroot] [PATCH] pciutils: bump to version 3.1.10
-Message-ID: <1340966580-21356-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jonas Keidel <jonas@jonas-keidel.de>
+Date: Fri, 29 Jun 2012 13:23:07 +0200
+Subject: [Buildroot] [git commit] mii-diag: link statically if
+	configured to do so
+In-Reply-To: <20120629121602.1b0fecd6@skate>
+References: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
+ <20120629121602.1b0fecd6@skate>
+Message-ID: <e29221888928059fc500d696902bc763@jonas-keidel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/pciutils/pciutils.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+>> +MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
+>> +
+>> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>> +MII_DIAG_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -static"
+>> +endif
+>
+> I am not fully sure I like this. Do we want to have the same stuff in
+> all packages, or should we think about doing this globally in some 
+> way?
 
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index d1c8db5..a43fb95 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -4,7 +4,7 @@
- #
- #############################################################
- 
--PCIUTILS_VERSION = 3.1.9
-+PCIUTILS_VERSION = 3.1.10
- PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
- PCIUTILS_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_ZLIB),y)
--- 
-1.7.8.6
+I think the best way is to do it globally because I noticed that many 
+packages don't build statically if it is set in the global config.
