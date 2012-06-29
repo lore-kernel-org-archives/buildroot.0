@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Jun 2012 12:14:56 +0200
-Subject: [Buildroot] [PATCH] dependencies: ensure that DESTDIR isn't set
-	when running Buildroot
-Message-ID: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Jun 2012 12:16:02 +0200
+Subject: [Buildroot] [git commit] mii-diag: link statically if
+ configured to do so
+In-Reply-To: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
+References: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
+Message-ID: <20120629121602.1b0fecd6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Having DESTDIR set in the environment before running Buildroot creates
-some funky problems in the build process. Prevent users from running
-into this kind of troubles.
+Hello,
 
-Cc: Michael Opdenacker <michael.opdenacker@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/dependencies/dependencies.sh |    6 ++++++
- 1 file changed, 6 insertions(+)
+Le Wed, 27 Jun 2012 22:03:59 +0200,
+Peter Korsgaard <jacmet@sunsite.dk> a ?crit :
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index c47ffcf..43ec3cc 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -48,6 +48,12 @@ if test -n "$PERL_MM_OPT" ; then
-     exit 1
- fi
- 
-+if test -n "$DESTDIR" ; then
-+    /bin/echo -e "\nYou have the DESTDIR environment variable set. Please"
-+    /bin/echo -e "unset it so that Buildroot can work properly."
-+    exit 1
-+fi
-+
- # Verify that which is installed
- if ! which which > /dev/null ; then
- 	/bin/echo -e "\nYou must install 'which' on your build machine\n";
+> +MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
+> +
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +MII_DIAG_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -static"
+> +endif
+
+I am not fully sure I like this. Do we want to have the same stuff in
+all packages, or should we think about doing this globally in some way?
+
+Thomas
 -- 
-1.7.9.5
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
