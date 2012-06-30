@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jul 2012 00:26:53 +0200
-Subject: [Buildroot] [PATCH] pkg-download: handle interrupted wget
-	downloads
-In-Reply-To: <1341092583-14212-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 30 Jun 2012 23:43:03 +0200")
-References: <1341092583-14212-1-git-send-email-arnout@mind.be>
-Message-ID: <87zk7k307m.fsf@macbook.be.48ers.dk>
+Date: Sun, 01 Jul 2012 00:27:57 +0200
+Subject: [Buildroot] [PATCH resend] Globally disable PKG_CONFIG_PATH
+In-Reply-To: <1341088162-16689-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 30 Jun 2012 22:29:22 +0200")
+References: <1341088162-16689-1-git-send-email-arnout@mind.be>
+Message-ID: <87vci8305u.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- Arnout> When a wget download is interrupted, the downloaded file is
- Arnout> still created.  It will therefore not be re-downloaded in the
- Arnout> next build, and the extraction will fail.
-
- Arnout> To avoid this, download to a temporary file first and rename
- Arnout> when the download is successful.
-
- Arnout> The existing mechanism doesn't work for interrupted downloads
- Arnout> because the whole sub-shell is interrupted, so the rm-part
- Arnout> never gets executed.
+ Arnout> If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
+ Arnout> look for libraries outside of the buildroot tree.  This is a problem
+ Arnout> both for host and target builds.  To avoid it, globally set an empty
+ Arnout> PKG_CONFIG_PATH in the environment.
 
 Committed, thanks.
 
