@@ -1,38 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Jun 2012 14:48:34 +0200
-Subject: [Buildroot] Buildroot and top-level parallel make
-In-Reply-To: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
-References: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
-Message-ID: <4FEEF5A2.7060506@mind.be>
+Date: Sat, 30 Jun 2012 14:53:42 +0200
+Subject: [Buildroot] [PATCH] dependencies: ensure that DESTDIR isn't set
+ when running Buildroot
+In-Reply-To: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <4FEEF6D6.6030701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/28/12 14:34, Alex Bradbury wrote:
-> As I understand it, buildroot will allow parallelism while building
-> individual packages yet does not support "top-level parallel make".
-> i.e. it is not possible to build multiple packages in parallel. I
-> found a reference to this problem at http://lwn.net/Articles/416916/
-> and it was also listed as a WIP in the "cross build systems: present
-> and future" slides from 2010.
+On 06/29/12 12:14, Thomas Petazzoni wrote:
+> Having DESTDIR set in the environment before running Buildroot creates
+> some funky problems in the build process. Prevent users from running
+> into this kind of troubles.
 >
-> I was wondering what the outcome of experiments to allow top-level
-> parallelism were? What are the major barriers to allowing this? Is it
-> still something seen as feasible to add to buildroot, or is it looking
-> like it would add too much complexity?
+> Cc: Michael Opdenacker<michael.opdenacker@free-electrons.com>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> ---
+>   support/dependencies/dependencies.sh |    6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index c47ffcf..43ec3cc 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -48,6 +48,12 @@ if test -n "$PERL_MM_OPT" ; then
+>       exit 1
+>   fi
+>
+> +if test -n "$DESTDIR" ; then
+> +    /bin/echo -e "\nYou have the DESTDIR environment variable set. Please"
+> +    /bin/echo -e "unset it so that Buildroot can work properly."
+> +    exit 1
+> +fi
 
-  AFAIK nobody is actually working on this.  Myself I have had a little
-thought about it before, and the main problem seems that there are a few
-targets in the top-level Makefile that depend on the left-to-right
-evaluation order of dependencies.
-
-  It would of course be difficult to verify that a top-level parallel make
-works, but now we have the autobuild system it can be done...
+  Why not just override and export DESTDIR from the top-level Makefile?
 
   Regards,
   Arnout
+
+> +
+>   # Verify that which is installed
+>   if ! which which>  /dev/null ; then
+>   	/bin/echo -e "\nYou must install 'which' on your build machine\n";
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
