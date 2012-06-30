@@ -1,50 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Jun 2012 21:07:58 +0200
-Subject: [Buildroot] [PATCH 0/3] Document use of local sources for
-	packages
-In-Reply-To: <20120618085033.6d612d8a@skate>
-References: <1339970041-17398-1-git-send-email-ntl@pobox.com>
- <20120618085033.6d612d8a@skate>
-Message-ID: <4FEF4E8E.8030800@mind.be>
+Date: Sat, 30 Jun 2012 21:38:30 +0200
+Subject: [Buildroot] [PATCH] New package: dtach
+In-Reply-To: <1339007052-13670-1-git-send-email-jmaggard10@gmail.com>
+References: <1339007052-13670-1-git-send-email-jmaggard10@gmail.com>
+Message-ID: <4FEF55B6.6040001@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/18/12 08:50, Thomas Petazzoni wrote:
-> Le Sun, 17 Jun 2012 16:53:58 -0500,
-> Nathan Lynch<ntl@pobox.com>  a ?crit :
+On 06/06/12 20:24, Justin Maggard wrote:
+> From: Justin Maggard<jmaggard@netgear.com>
 >
->> Since the 2011.11 release Buildroot has supported building packages
->> from local sources, but the manual has not reflected this well.  This
->> series is an attempt to address that.  I relied on Thomas Petazzoni's
->> description of the "file" and "local" methods here:
->>
->> http://free-electrons.com/blog/buildroot-2011-11/
->>
->> Nathan Lynch (3):
->>    docs: update LIBFOO_SITE to describe use of filesystem paths
->>    docs: rework LIBFOO_SITE_METHOD documentation
->>    docs: describe "file" and "local" methods in LIBFOO_SITE_METHOD
->>
->>   docs/manual/adding-packages-gentargets.txt |   77 +++++++++++++++++++---------
->>   1 file changed, 52 insertions(+), 25 deletions(-)
+> Also included is a scrollback patch from Justin Bogner.
 >
-> Acked-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
->
-> for the three patches.
+> Signed-off-by: Justin Maggard<jmaggard@netgear.com>
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-for the three patches.
+  We avoid feature patches in buildroot: patches should be limited to those that
+fix cross-compilation issues.
 
-  I would like to see documentation updates get merged more easily. It's likely
-they create conflicts with other documentation updates, so other documentation
-updates are basically stalled until they are merged.  And the risk of breaking
-things is rather small.
+[snip]
+
+> +define DTACH_INSTALL_TARGET_CMDS
+> +        $(INSTALL) -D $(@D)/dtach -m 0755 \
+> +                $(TARGET_DIR)/usr/bin/dtach
+> +endef
+
+  If the default install commands don't work, please include a comment why not.
 
   Regards,
   Arnout
+
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
