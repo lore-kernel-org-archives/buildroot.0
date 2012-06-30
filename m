@@ -1,50 +1,41 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Jun 2012 14:53:42 +0200
-Subject: [Buildroot] [PATCH] dependencies: ensure that DESTDIR isn't set
- when running Buildroot
-In-Reply-To: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <4FEEF6D6.6030701@mind.be>
+Date: Sat, 30 Jun 2012 15:02:12 +0200
+Subject: [Buildroot] [git commit] mii-diag: link statically if
+ configured to do so
+In-Reply-To: <20120630105559.7e57508a@skate>
+References: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
+ <20120629121602.1b0fecd6@skate> <87txxt42up.fsf@macbook.be.48ers.dk>
+ <20120630105559.7e57508a@skate>
+Message-ID: <4FEEF8D4.4080702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/29/12 12:14, Thomas Petazzoni wrote:
-> Having DESTDIR set in the environment before running Buildroot creates
-> some funky problems in the build process. Prevent users from running
-> into this kind of troubles.
+On 06/30/12 10:55, Thomas Petazzoni wrote:
+> Le Sat, 30 Jun 2012 10:32:14 +0200,
+> Peter Korsgaard<jacmet@uclibc.org>  a ?crit :
 >
-> Cc: Michael Opdenacker<michael.opdenacker@free-electrons.com>
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
-> ---
->   support/dependencies/dependencies.sh |    6 ++++++
->   1 file changed, 6 insertions(+)
+>>   Thomas>  I am not fully sure I like this. Do we want to have the same
+>>   Thomas>  stuff in all packages, or should we think about doing this
+>>   Thomas>  globally in some way?
+>>
+>> Agree, I've added it globally now.
 >
-> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-> index c47ffcf..43ec3cc 100755
-> --- a/support/dependencies/dependencies.sh
-> +++ b/support/dependencies/dependencies.sh
-> @@ -48,6 +48,12 @@ if test -n "$PERL_MM_OPT" ; then
->       exit 1
->   fi
->
-> +if test -n "$DESTDIR" ; then
-> +    /bin/echo -e "\nYou have the DESTDIR environment variable set. Please"
-> +    /bin/echo -e "unset it so that Buildroot can work properly."
-> +    exit 1
-> +fi
+> Yes, seen that, great. Does this addition of -static to TARGET_LDFLAGS
+> play well with --enable-static for AUTOTARGETS packages?
 
-  Why not just override and export DESTDIR from the top-level Makefile?
+  --enable-static should mean that static libraries should be built,
+while -static says that the executable should only be linked with
+static libraries.  But of course, with all the non-standard autotools
+stuff out there, you never know...
+
+  I expect that adding -static to LDFLAGS will break quite a few packages.
+Would it be possible to add a BR2_PREFER_STATIC_LIB test to the autobuilds?
 
   Regards,
   Arnout
-
-> +
->   # Verify that which is installed
->   if ! which which>  /dev/null ; then
->   	/bin/echo -e "\nYou must install 'which' on your build machine\n";
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
