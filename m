@@ -1,36 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jul 2012 00:01:32 +0200
-Subject: [Buildroot] [git commit] mii-diag: link statically if
-	configured to do so
-In-Reply-To: <4FEEF8D4.4080702@mind.be> (Arnout Vandecappelle's message of
- "Sat, 30 Jun 2012 15:02:12 +0200")
-References: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
- <20120629121602.1b0fecd6@skate> <87txxt42up.fsf@macbook.be.48ers.dk>
- <20120630105559.7e57508a@skate> <4FEEF8D4.4080702@mind.be>
-Message-ID: <874nps4fyb.fsf@macbook.be.48ers.dk>
+Date: Sun, 01 Jul 2012 00:26:53 +0200
+Subject: [Buildroot] [PATCH] pkg-download: handle interrupted wget
+	downloads
+In-Reply-To: <1341092583-14212-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Sat, 30 Jun 2012 23:43:03 +0200")
+References: <1341092583-14212-1-git-send-email-arnout@mind.be>
+Message-ID: <87zk7k307m.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Hi,
+ Arnout> When a wget download is interrupted, the downloaded file is
+ Arnout> still created.  It will therefore not be re-downloaded in the
+ Arnout> next build, and the extraction will fail.
 
- Arnout>  --enable-static should mean that static libraries should be built,
- Arnout> while -static says that the executable should only be linked with
- Arnout> static libraries.  But of course, with all the non-standard autotools
- Arnout> stuff out there, you never know...
+ Arnout> To avoid this, download to a temporary file first and rename
+ Arnout> when the download is successful.
 
- Arnout>  I expect that adding -static to LDFLAGS will break quite a few
- Arnout> packages.  Would it be possible to add a BR2_PREFER_STATIC_LIB
- Arnout> test to the autobuilds?
+ Arnout> The existing mechanism doesn't work for interrupted downloads
+ Arnout> because the whole sub-shell is interrupted, so the rm-part
+ Arnout> never gets executed.
 
-I haven't seen any breakage in my (admitted fairly limited) testing, but
-it it certainly possible.
-
-I'll add a static builder to the autobuilders now.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
