@@ -1,24 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Jun 2012 23:53:46 +0200
-Subject: [Buildroot] [PATCH] dependencies: ensure that DESTDIR isn't set
-	when running Buildroot
-In-Reply-To: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Fri, 29 Jun 2012 12:14:56 +0200")
-References: <1340964896-12899-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878vf44gb9.fsf@macbook.be.48ers.dk>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Sat, 30 Jun 2012 23:33:29 +0200
+Subject: [Buildroot] [git commit] pciutils: bump to version 3.1.10
+Message-ID: <20120630215452.C3E278F313@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=edd37ca20583e3ae49f386b03ca213c9ae2cb065
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Thomas> Having DESTDIR set in the environment before running Buildroot creates
- Thomas> some funky problems in the build process. Prevent users from running
- Thomas> into this kind of troubles.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/pciutils/pciutils.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index d1c8db5..a43fb95 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -4,7 +4,7 @@
+ #
+ #############################################################
+ 
+-PCIUTILS_VERSION = 3.1.9
++PCIUTILS_VERSION = 3.1.10
+ PCIUTILS_SITE = ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci
+ PCIUTILS_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
