@@ -1,22 +1,20 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Jun 2012 23:33:11 +0200
-Subject: [Buildroot] [PATCH] pciutils: bump to version 3.1.10
-In-Reply-To: <1340966580-21356-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 29 Jun 2012 07:43:00 -0300")
-References: <1340966580-21356-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pq8g4h9k.fsf@macbook.be.48ers.dk>
+Date: Sat, 30 Jun 2012 23:40:52 +0200
+Subject: [Buildroot] [PATCH] cgilua: bump version to 5.1.4
+In-Reply-To: <CAB0FRssJAWfT-UDr941C5c_6Lb7oVjcQR_qyip2QywvyP1Z=3A@mail.gmail.com>
+ (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Fri, 1 Jun 2012
+ 18:00:36 +0200")
+References: <CAB0FRssJAWfT-UDr941C5c_6Lb7oVjcQR_qyip2QywvyP1Z=3A@mail.gmail.com>
+Message-ID: <87lij44gwr.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
 
- Gustavo> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Gustavo> ---
- Gustavo>  package/pciutils/pciutils.mk |    2 +-
- Gustavo>  1 files changed, 1 insertions(+), 1 deletions(-)
+ Fran?ois> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed, thanks.
 
