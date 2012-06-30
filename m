@@ -1,42 +1,28 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Jun 2012 15:02:12 +0200
-Subject: [Buildroot] [git commit] mii-diag: link statically if
- configured to do so
-In-Reply-To: <20120630105559.7e57508a@skate>
-References: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
- <20120629121602.1b0fecd6@skate> <87txxt42up.fsf@macbook.be.48ers.dk>
- <20120630105559.7e57508a@skate>
-Message-ID: <4FEEF8D4.4080702@mind.be>
+Date: Sat, 30 Jun 2012 15:04:49 +0200
+Subject: [Buildroot] Buildroot Udev Compiling
+In-Reply-To: <19f6cb67d4b8fd0957ffd1ec1c9c4a2f@jonas-keidel.de>
+References: <19f6cb67d4b8fd0957ffd1ec1c9c4a2f@jonas-keidel.de>
+Message-ID: <4FEEF971.2000802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/30/12 10:55, Thomas Petazzoni wrote:
-> Le Sat, 30 Jun 2012 10:32:14 +0200,
-> Peter Korsgaard<jacmet@uclibc.org>  a ?crit :
+On 06/29/12 07:52, Jonas Keidel wrote:
+> it's me again. I have problems with udev compuiling in builroot...It stops with the following error message. I use the
+> current git version of buildroot.
 >
->>   Thomas>  I am not fully sure I like this. Do we want to have the same
->>   Thomas>  stuff in all packages, or should we think about doing this
->>   Thomas>  globally in some way?
->>
->> Agree, I've added it globally now.
->
-> Yes, seen that, great. Does this addition of -static to TARGET_LDFLAGS
-> play well with --enable-static for AUTOTARGETS packages?
+> Here ist my config file:
+> http://pastebin.com/UU3HedKC
 
-  --enable-static should mean that static libraries should be built,
-while -static says that the executable should only be linked with
-static libraries.  But of course, with all the non-standard autotools
-stuff out there, you never know...
-
-  I expect that adding -static to LDFLAGS will break quite a few packages.
-Would it be possible to add a BR2_PREFER_STATIC_LIB test to the autobuilds?
+  I can't find the root cause of the problem (in fact, in my case it already
+fails when compiling attr), but my guess is that BR2_PREFER_STATIC_LIB is
+causing trouble.  Do you really need it?
 
   Regards,
   Arnout
-
 -- 
 Arnout Vandecappelle                               arnout at mind be
 Senior Embedded Software Architect                 +32-16-286540
