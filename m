@@ -1,37 +1,248 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 30 Jun 2012 22:29:22 +0200
-Subject: [Buildroot] [PATCH resend] Globally disable PKG_CONFIG_PATH
-Message-ID: <1341088162-16689-1-git-send-email-arnout@mind.be>
+Date: Sat, 30 Jun 2012 23:14:32 +0200
+Subject: [Buildroot] [PATCH v2 1/3] pkg-infra: add XXXTARGETS_HOST macro
+Message-ID: <1341090872-12266-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
-look for libraries outside of the buildroot tree.  This is a problem
-both for host and target builds.  To avoid it, globally set an empty
-PKG_CONFIG_PATH in the environment.
+Create GENTARGETS_HOST, AUTOTARGETS_HOST and CMAKETARGETS_HOST
+macro.  Such a macro is more intuitive to use than the
+$(call ...,host) construct.  Also it speeds things up by having
+one less $(call ...) evaluation.
+
+Also includes documentation update, but not for buildroot.html.
+
+This brings the time for 'make -qp' (which is used by bash-completion)
+down from 1.85s to 1.35s on my laptop.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 ---
- Makefile |    3 +++
- 1 file changed, 3 insertions(+)
+Note: this patch by itself breaks the build because the .mk files have
+not been converted to the AUTOTARGETS_HOST scheme.
 
-diff --git a/Makefile b/Makefile
-index 7a66897..bcbe9fc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -165,6 +165,9 @@ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
+v2:
+- split infrastructure update and update of .mk files into separate
+  patches.
+- Simplified documentation (removed some irrelevant or wrong comments).
+
+ docs/manual/adding-packages-autotargets.txt  |   10 ++++------
+ docs/manual/adding-packages-cmaketargets.txt |    9 ++++-----
+ docs/manual/adding-packages-gentargets.txt   |   25 +++++++++++--------------
+ package/pkg-autotargets.mk                   |    9 ++-------
+ package/pkg-cmaketargets.mk                  |    9 ++-------
+ package/pkg-gentargets.mk                    |    9 ++-------
+ support/scripts/pkg-stats                    |   12 ++++++------
+ 7 files changed, 31 insertions(+), 52 deletions(-)
+
+diff --git a/docs/manual/adding-packages-autotargets.txt b/docs/manual/adding-packages-autotargets.txt
+index 428a182..4765e82 100644
+--- a/docs/manual/adding-packages-autotargets.txt
++++ b/docs/manual/adding-packages-autotargets.txt
+@@ -23,7 +23,7 @@ package, with an example :
+ 11: LIBFOO_CONF_OPT = --enable-shared
+ 12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
+ 13:
+-14: $(eval $(call AUTOTARGETS))
++14: $(eval $(AUTOTARGETS))
+ ------------------------
  
-+# Make sure pkg-config doesn't look outside the buildroot tree
-+unexport PKG_CONFIG_PATH
-+
- # bash prints the name of the directory on 'cd <dir>' if CDPATH is
- # set, so unset it here to not cause problems. Notice that the export
- # line doesn't affect the environment of $(shell ..) calls, so
+ On line 6, we declare the version of the package.
+@@ -67,11 +67,9 @@ package to be built.
+ ~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ The main macro of the autotools package infrastructure is
+-+AUTOTARGETS+. It has the same number of arguments and the
+-same semantic as the +GENTARGETS+ macro, which is the main
+-macro of the generic package infrastructure. For autotools packages, the
+-ability to have target and host packages is also available (and is
+-actually widely used).
+++AUTOTARGETS+. It is similar to the +GENTARGETS+ macro. The ability to
++have target and host packages is also available, with the
+++AUTOTARGETS_HOST+ macro.
+ 
+ Just like the generic infrastructure, the autotools infrastructure
+ works by defining a number of variables before calling the
+diff --git a/docs/manual/adding-packages-cmaketargets.txt b/docs/manual/adding-packages-cmaketargets.txt
+index 3e400ec..eab03bc 100644
+--- a/docs/manual/adding-packages-cmaketargets.txt
++++ b/docs/manual/adding-packages-cmaketargets.txt
+@@ -23,7 +23,7 @@ with an example :
+ 11: LIBFOO_CONF_OPT = -DBUILD_DEMOS=ON
+ 12: LIBFOO_DEPENDENCIES = libglib2 host-pkg-config
+ 13:
+-14: $(eval $(call CMAKETARGETS))
++14: $(eval $(CMAKETARGETS))
+ ------------------------
+ 
+ On line 6, we declare the version of the package.
+@@ -66,10 +66,9 @@ package to be built.
+ ~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+ The main macro of the CMake package infrastructure is
+-+CMAKETARGETS+. It has the same number of arguments and the same
+-semantic as the +GENTARGETS+ macro, which is the main macro of the
+-generic package infrastructure. For CMake packages, the ability to
+-have target and host packages is also available.
+++CMAKETARGETS+. It is similar to the +GENTARGETS+ macro. The ability to
++have target and host packages is also available, with the
+++CMAKETARGETS_HOST+ macro.
+ 
+ Just like the generic infrastructure, the CMake infrastructure works
+ by defining a number of variables before calling the +CMAKETARGETS+
+diff --git a/docs/manual/adding-packages-gentargets.txt b/docs/manual/adding-packages-gentargets.txt
+index cfcee8c..b1b1355 100644
+--- a/docs/manual/adding-packages-gentargets.txt
++++ b/docs/manual/adding-packages-gentargets.txt
+@@ -46,7 +46,7 @@ system is based on hand-written Makefiles or shell scripts.
+ 32: 	/bin/foo  f  4755  0  0  -  -  -  -  -
+ 33: endef
+ 34:
+-35: $(eval $(call GENTARGETS))
++35: $(eval $(GENTARGETS))
+ --------------------------------
+ 
+ The Makefile begins on line 6 to 8 with metadata information: the
+@@ -92,19 +92,16 @@ Makefile code necessary to make your package working.
+ +GENTARGETS+ Reference
+ ~~~~~~~~~~~~~~~~~~~~~~
+ 
+-The +GENTARGETS+ macro takes one optional argument. This argument can
+-be used to tell if the package is a target package (cross-compiled for
+-the target) or a host package (natively compiled for the host). If
+-unspecified, it is assumed that it is a target package. See below for
+-details.
+-
+-For a given package, in a single +.mk+ file, it is possible to call
+-GENTARGETS twice, once to create the rules to generate a target
++There are two variants of the generic target. The +GENTARGETS+ macro is
++used for packages to be cross-compiled for the target.  The
+++GENTARGETS_HOST+ macro is used for host packages, natively compiled
++for the host.  It is possible to call both of them in a single +.mk+
++file: once to create the rules to generate a target
+ package and once to create the rules to generate a host package:
+ 
+ ----------------------
+-$(eval $(call GENTARGETS))
+-$(eval $(call GENTARGETS,host))
++$(eval $(GENTARGETS))
++$(eval $(GENTARGETS_HOST))
+ ----------------------
+ 
+ This might be useful if the compilation of the target package requires
+@@ -115,12 +112,12 @@ some tools to be installed on the host. If the package name is
+ variables of other packages, if they depend on +libfoo+ or
+ +host-libfoo+.
+ 
+-The call to the +GENTARGETS+ macro *must* be at the end of the +.mk+
+-file, after all variable definitions.
++The call to the +GENTARGETS+ and/or +GENTARGETS_HOST+ macro *must* be
++at the end of the +.mk+ file, after all variable definitions.
+ 
+ For the target package, the +GENTARGETS+ uses the variables defined by
+ the .mk file and prefixed by the uppercased package name:
+-+LIBFOO_*+. For the host package, it uses the +HOST_LIBFOO_*+. For
+++LIBFOO_*+. +GENTARGETS_HOST+ uses the +HOST_LIBFOO_*+ variables. For
+ 'some' variables, if the +HOST_LIBFOO_+ prefixed variable doesn't
+ exist, the package infrastructure uses the corresponding variable
+ prefixed by +LIBFOO_+. This is done for variables that are likely to
+diff --git a/package/pkg-autotargets.mk b/package/pkg-autotargets.mk
+index c9887c2..ff022f3 100644
+--- a/package/pkg-autotargets.mk
++++ b/package/pkg-autotargets.mk
+@@ -305,10 +305,5 @@ endef
+ # Argument 1 is "target" or "host"           [optional, default: "target"]
+ ################################################################################
+ 
+-define AUTOTARGETS
+-ifeq ($(1),host)
+-$(call AUTOTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+-else
+-$(call AUTOTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+-endif
+-endef
++AUTOTARGETS = $(call AUTOTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
++AUTOTARGETS_HOST = $(call AUTOTARGETS_INNER,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+diff --git a/package/pkg-cmaketargets.mk b/package/pkg-cmaketargets.mk
+index 371ab11..a627375 100644
+--- a/package/pkg-cmaketargets.mk
++++ b/package/pkg-cmaketargets.mk
+@@ -190,13 +190,8 @@ endef
+ # Argument 1 is "target" or "host"           [optional, default: "target"]
+ ################################################################################
+ 
+-define CMAKETARGETS
+-ifeq ($(1),host)
+-$(call CMAKETARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+-else
+-$(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+-endif
+-endef
++CMAKETARGETS_HOST = $(call CMAKETARGETS_INNER,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
++CMAKETARGETS = $(call CMAKETARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+ 
+ ################################################################################
+ # Generation of the CMake toolchain file
+diff --git a/package/pkg-gentargets.mk b/package/pkg-gentargets.mk
+index 1c9b458..98c5547 100644
+--- a/package/pkg-gentargets.mk
++++ b/package/pkg-gentargets.mk
+@@ -443,14 +443,9 @@ endef # GENTARGETS_INNER
+ # Argument 1 is "target" or "host"           [optional, default: "target"]
+ ################################################################################
+ 
+-define GENTARGETS
+-ifeq ($(1),host)
+ # In the case of host packages, turn the package name "pkg" into "host-pkg"
+-$(call GENTARGETS_INNER,$(1)-$(call pkgname),$(call UPPERCASE,$(1)-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+-else
++GENTARGETS_HOST = $(call GENTARGETS_INNER,host-$(call pkgname),$(call UPPERCASE,host-$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),host)
+ # In the case of target packages, keep the package name "pkg"
+-$(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+-endif
+-endef
++GENTARGETS = $(call GENTARGETS_INNER,$(call pkgname),$(call UPPERCASE,$(call pkgname)),$(call UPPERCASE,$(call pkgname)),$(call pkgparentdir),target)
+ 
+ # :mode=makefile:
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 06d9d0d..a3511ef 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -100,27 +100,27 @@ for i in $(find package/ -name '*.mk') ; do
+     is_manual_target=0
+     is_manual_host=0
+ 
+-    if grep -E "\(call AUTOTARGETS,host\)" $i > /dev/null ; then
++    if grep -E "\(AUTOTARGETS_HOST\)" $i > /dev/null ; then
+ 	is_auto_host=1
+     fi
+ 
+-    if grep -E "\(call AUTOTARGETS\)" $i > /dev/null ; then
++    if grep -E "\(AUTOTARGETS\)" $i > /dev/null ; then
+ 	is_auto_target=1
+     fi
+ 
+-    if grep -E "\(call GENTARGETS,host\)" $i > /dev/null ; then
++    if grep -E "\(GENTARGETS_HOST\)" $i > /dev/null ; then
+ 	is_pkg_host=1
+     fi
+ 
+-    if grep -E "\(call GENTARGETS\)" $i > /dev/null ; then
++    if grep -E "\(GENTARGETS\)" $i > /dev/null ; then
+ 	is_pkg_target=1
+     fi
+ 
+-    if grep -E "\(call CMAKETARGETS,host\)" $i > /dev/null ; then
++    if grep -E "\(CMAKETARGETS_HOST\)" $i > /dev/null ; then
+ 	is_cmake_host=1
+     fi
+ 
+-    if grep -E "\(call CMAKETARGETS\)" $i > /dev/null ; then
++    if grep -E "\(CMAKETARGETS\)" $i > /dev/null ; then
+ 	is_cmake_target=1
+     fi
+ 
 -- 
-tg: (dc1d20a..) t/pkg-config-path (depends on: master)
+tg: (dc1d20a..) t/gentargets_host (depends on: master)
