@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 30 Jun 2012 23:51:24 +0200
-Subject: [Buildroot] [PATCH] wsapi: bump version to 1.5
-In-Reply-To: <CAB0FRss-T+_-3zm7RrDyUTF-bqV_KvURC9pPgTQDEeT_Pam-8w@mail.gmail.com>
+Date: Sat, 30 Jun 2012 23:51:36 +0200
+Subject: [Buildroot] [PATCH] xavante: bump version to 2.2.1
+In-Reply-To: <CAB0FRsvEUUa-1XiddiPvjC8qibeg6Tzk=+LAa2F3N6Sym4_3-Q@mail.gmail.com>
  (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Fri, 1 Jun 2012
- 18:01:21 +0200")
-References: <CAB0FRss-T+_-3zm7RrDyUTF-bqV_KvURC9pPgTQDEeT_Pam-8w@mail.gmail.com>
-Message-ID: <87hats4gf7.fsf@macbook.be.48ers.dk>
+ 18:02:07 +0200")
+References: <CAB0FRsvEUUa-1XiddiPvjC8qibeg6Tzk=+LAa2F3N6Sym4_3-Q@mail.gmail.com>
+Message-ID: <87d34g4gev.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
