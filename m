@@ -1,52 +1,38 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 1 Jul 2012 00:26:37 +0200
-Subject: [Buildroot] [git commit] pkg-download: handle interrupted wget
-	downloads
-Message-ID: <20120630222816.DB93D80136@busybox.osuosl.org>
+Date: Sun, 1 Jul 2012 00:27:39 +0200
+Subject: [Buildroot] [git commit] Globally disable PKG_CONFIG_PATH
+Message-ID: <20120630222816.F27BA8F39F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=96885ca7eb4a05e65986334d6138e1fe6afa46fc
+commit: http://git.buildroot.net/buildroot/commit/?id=670cb306704d76b4c3b717931cc7abef8c693099
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a wget download is interrupted, the downloaded file is still created.
-It will therefore not be re-downloaded in the next build, and the
-extraction will fail.
-
-To avoid this, download to a temporary file first and rename when the
-download is successful.
-
-The existing mechanism doesn't work for interrupted downloads because the
-whole sub-shell is interrupted, so the rm-part never gets executed.
+If PKG_CONFIG_PATH is set in the environment, it allows pkg-config to
+look for libraries outside of the buildroot tree.  This is a problem
+both for host and target builds.  To avoid it, globally set an empty
+PKG_CONFIG_PATH in the environment.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/pkg-download.mk |    9 ++++++---
- 1 files changed, 6 insertions(+), 3 deletions(-)
+ Makefile |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7d1e543..7983706 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -158,11 +158,14 @@ endef
- # Download a file using wget. Only download the file if it doesn't
- # already exist in the download directory. If the download fails,
- # remove the file (because wget -O creates a 0-byte file even if the
--# download fails).
-+# download fails).  To handle an interrupted download as well, download
-+# to a temporary file first.  The temporary file will be overwritten
-+# the next time the download is tried.
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	$(WGET) -O $(DL_DIR)/$(2) '$(call qstrip,$(1))' || \
--	(rm -f $(DL_DIR)/$(2) ; exit 1)
-+	($(WGET) -O $(DL_DIR)/$(2).tmp '$(call qstrip,$(1))' && \
-+	 mv $(DL_DIR)/$(2).tmp $(DL_DIR)/$(2)) || \
-+	(rm -f $(DL_DIR)/$(2).tmp ; exit 1)
- endef
+diff --git a/Makefile b/Makefile
+index 7a66897..bcbe9fc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -165,6 +165,9 @@ HOSTNM:=$(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
+ export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTFC HOSTLD
+ export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
  
- define SOURCE_CHECK_WGET
++# Make sure pkg-config doesn't look outside the buildroot tree
++unexport PKG_CONFIG_PATH
++
+ # bash prints the name of the directory on 'cd <dir>' if CDPATH is
+ # set, so unset it here to not cause problems. Notice that the export
+ # line doesn't affect the environment of $(shell ..) calls, so
