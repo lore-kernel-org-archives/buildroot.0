@@ -1,64 +1,36 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sun, 1 Jul 2012 23:59:29 +0200
-Subject: [Buildroot] [git commit] openssl: fix static build
-Message-ID: <20120701220033.1C9468EE3E@busybox.osuosl.org>
+Date: Sun, 1 Jul 2012 23:59:44 +0200
+Subject: [Buildroot] [git commit] msmtp: fix static linking with openssl
+Message-ID: <20120701220033.302A0807B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d8c630d5390226bf4d46c1af43448630a7cd1a0c
+commit: http://git.buildroot.net/buildroot/commit/?id=468bbc1538aaea87beaf455a2ad6ea5a255d5f58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Openssl depends on zlib, so we need to explicitly link with
+zlib as well when statically linking.
 
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- package/openssl/openssl.mk |   18 ++++++++++++++----
- 1 files changed, 14 insertions(+), 4 deletions(-)
+ package/msmtp/msmtp.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 62861c5..9ef79e1 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -48,13 +48,14 @@ define OPENSSL_CONFIGURE_CMDS
- 			--openssldir=/etc/ssl \
- 			--libdir=/lib \
- 			threads \
--			shared \
-+			$(if $(BR2_PREFER_STATIC_LIB),no-shared,shared) \
- 			no-idea \
- 			no-rc5 \
- 			enable-camellia \
- 			enable-mdc2 \
- 			enable-tlsext \
--			zlib-dynamic \
-+			$(if $(BR2_PREFER_STATIC_LIB),zlib,zlib-dynamic) \
-+			$(if $(BR2_PREFER_STATIC_LIB),no-dso) \
- 	)
- 	$(SED) "s:-march=[-a-z0-9] ::" -e "s:-mcpu=[-a-z0-9] ::g" $(@D)/Makefile
- 	$(SED) "s:-O[0-9]:$(OPENSSL_CFLAGS):" $(@D)/Makefile
-@@ -91,13 +92,22 @@ endif
- 
- define OPENSSL_INSTALL_FIXUPS
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
--	# libraries gets installed read only, so strip fails
-+endef
-+
-+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS
-+
-+ifneq ($(BR2_PREFER_STATIC_LIB),y)
-+
-+# libraries gets installed read only, so strip fails
-+define OPENSSL_INSTALL_FIXUPS_SHARED
- 	chmod +w $(TARGET_DIR)/usr/lib/engines/lib*.so
- 	for i in $(addprefix $(TARGET_DIR)/usr/lib/,libcrypto.so.* libssl.so.*); \
- 	do chmod +w $$i; done
- endef
- 
--OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS
-+OPENSSL_POST_INSTALL_TARGET_HOOKS += OPENSSL_INSTALL_FIXUPS_SHARED
-+
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 2c71229..d5e6a31 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -13,6 +13,10 @@ MSMTP_DEPENDENCIES += host-pkg-config
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MSMTP_CONF_OPT += --with-ssl=openssl
+ MSMTP_DEPENDENCIES += openssl
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++# openssl uses zlib, so we need to explicitly link with it when static
++MSMTP_CONF_ENV += LIBS=-lz
 +endif
- 
- define OPENSSL_REMOVE_OPENSSL_ENGINES
- 	rm -rf $(TARGET_DIR)/usr/lib/engines
+ else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ MSMTP_CONF_OPT += --with-ssl=gnutls
+ MSMTP_DEPENDENCIES += gnutls
