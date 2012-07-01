@@ -1,32 +1,39 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Sat, 30 Jun 2012 23:22:03 +0100
-Subject: [Buildroot] Buildroot and top-level parallel make
-In-Reply-To: <4FEEF5A2.7060506@mind.be>
-References: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
- <4FEEF5A2.7060506@mind.be>
-Message-ID: <CA+wH295gMd7ZP9LQzDyV25hNnU0VFZWTpLsd271aHxU=vULcDg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 1 Jul 2012 07:10:23 +0300
+Subject: [Buildroot] Buildroot Udev Compiling
+In-Reply-To: <006601cd56c2$0004c850$000e58f0$@jonas-keidel.de>
+References: <19f6cb67d4b8fd0957ffd1ec1c9c4a2f@jonas-keidel.de>
+ <4FEEF971.2000802@mind.be>
+ <006601cd56c2$0004c850$000e58f0$@jonas-keidel.de>
+Message-ID: <20120701041022.GA25705@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30 June 2012 13:48, Arnout Vandecappelle <arnout@mind.be> wrote:
-> ?AFAIK nobody is actually working on this. ?Myself I have had a little
-> thought about it before, and the main problem seems that there are a few
-> targets in the top-level Makefile that depend on the left-to-right
-> evaluation order of dependencies.
->
-> ?It would of course be difficult to verify that a top-level parallel make
-> works, but now we have the autobuild system it can be done...
+Hi Jonas,
 
-redo has the rather nice --shuffle option to help shake out issues
-with parallel builds:
-https://github.com/apenwarr/redo/#dependency-problems-that-only-show-up-during-parallel-builds
+On Sat, Jun 30, 2012 at 03:12:27PM +0200, Jonas Keidel wrote:
+> >  I can't find the root cause of the problem (in fact, in my case it
+> already fails when compiling attr), but my guess is that
+> BR2_PREFER_STATIC_LIB is causing trouble.  Do you really need it?
+> 
+> Yes I really need it, because i build an special initramfs booting script
+> and for that I need udev static build.
+> But maybe it is possible to use it in another way. How can I do it? How can
+> I implement udev in my busybox environment?
 
-Admittedly I only had a quick look, but it doesn't look like GNU make
-has something similar which is a shame. OpenBSD make does as one of
-its debug options though:
-http://www.openbsd.org/cgi-bin/man.cgi?query=make
+Busybox includes mdev which is a simplified udev. Note, however, that mdev 
+relies on the old hotplug mechanism to get device information from the kernel 
+at run-time. This hostplug mechanism is inherently racy. For the initramfs use 
+case this should be enough, though.
 
-Alex
+You may also consider using devtmpfs.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
