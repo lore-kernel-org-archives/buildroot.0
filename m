@@ -1,40 +1,28 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jul 2012 11:10:59 +0200
-Subject: [Buildroot] [git commit] bsdiff: libraries should go after source
-	files using them in linker invocation
-Message-ID: <20120702091204.BB53D8EBBD@busybox.osuosl.org>
+From: Jonas Keidel <jonas@jonas-keidel.de>
+Date: Mon, 02 Jul 2012 11:32:13 +0200
+Subject: [Buildroot] Buildroot Udev Compiling
+In-Reply-To: <20120701041022.GA25705@sapphire.tkos.co.il>
+References: <19f6cb67d4b8fd0957ffd1ec1c9c4a2f@jonas-keidel.de>
+ <4FEEF971.2000802@mind.be> <006601cd56c2$0004c850$000e58f0$@jonas-keidel.de>
+ <20120701041022.GA25705@sapphire.tkos.co.il>
+Message-ID: <49efc9af561960c01d21e4e2047e9de0@jonas-keidel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=68b2218cb5b3758e60b8cff399ca17c5153663cd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hey Baruch,
 
-Fixes http://autobuild.buildroot.net/results/2a6e213997c06136e18b25a1b0e91d8782acbfc4/
+> Busybox includes mdev which is a simplified udev. Note, however, that 
+> mdev
+> relies on the old hotplug mechanism to get device information from
+> the kernel
+> at run-time. This hostplug mechanism is inherently racy. For the
+> initramfs use
+> case this should be enough, though.
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/bsdiff/bsdiff.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
-index 66a7722..e8d9ec0 100644
---- a/package/bsdiff/bsdiff.mk
-+++ b/package/bsdiff/bsdiff.mk
-@@ -9,10 +9,10 @@ BSDIFF_SITE = http://www.daemonology.net/bsdiff
- BSDIFF_DEPENDENCIES = bzip2
- 
- define BSDIFF_BUILD_CMDS
--	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lbz2 \
--		$(@D)/bsdiff.c -o $(@D)/bsdiff
--	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lbz2 \
--		$(@D)/bspatch.c -o $(@D)/bspatch
-+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		$(@D)/bsdiff.c -lbz2 -o $(@D)/bsdiff
-+	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-+		$(@D)/bspatch.c -lbz2 -o $(@D)/bspatch
- endef
- 
- define BSDIFF_INSTALL_TARGET_CMDS
+I know that it is implemented and I already tested that in my script. 
+But I also want to try the udev variant because it is more flexible.
+I've tested buildig today again and i got the same error as on the days 
+before. Nothing changed. What can I do?
