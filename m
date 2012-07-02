@@ -1,46 +1,39 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Mon, 2 Jul 2012 10:37:42 +0200
-Subject: [Buildroot] [git commit] iw: fix static linking
-Message-ID: <20120702083803.934C581EE0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Jul 2012 10:39:41 +0200
+Subject: [Buildroot] [PATCH v2 1/3] pkg-infra: add XXXTARGETS_HOST macro
+In-Reply-To: <1341090872-12266-1-git-send-email-arnout@mind.be>
+References: <1341090872-12266-1-git-send-email-arnout@mind.be>
+Message-ID: <20120702103941.2fbdf947@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7ffd15029fbe4f1223e1604653672f0f313e6017
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Libnl needs explicit -lpthread / -lm when statically linking.
+Le Sat, 30 Jun 2012 23:14:32 +0200,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/iw/iw.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+> Create GENTARGETS_HOST, AUTOTARGETS_HOST and CMAKETARGETS_HOST
+> macro.  Such a macro is more intuitive to use than the
+> $(call ...,host) construct.  Also it speeds things up by having
+> one less $(call ...) evaluation.
+> 
+> Also includes documentation update, but not for buildroot.html.
+> 
+> This brings the time for 'make -qp' (which is used by bash-completion)
+> down from 1.85s to 1.35s on my laptop.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/iw/iw.mk b/package/iw/iw.mk
-index 5cd40a3..2b322f6 100644
---- a/package/iw/iw.mk
-+++ b/package/iw/iw.mk
-@@ -13,6 +13,12 @@ IW_MAKE_ENV = PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
- 	PKG_CONFIG="$(HOST_DIR)/usr/bin/pkg-config" \
- 	GIT_DIR=$(IW_DIR)
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+# libnl needs pthread/m, so we need to explicitly with them when static
-+# these need to added AFTER libnl, so we have to override LIBS completely
-+IW_MAKE_OPT = LIBS='-lnl-genl-3 -lnl-3 -lpthread -lm'
-+endif
-+
- define IW_CONFIGURE_CMDS
- 	echo "CC = $(TARGET_CC)" >$(IW_CONFIG)
- 	echo "CFLAGS = $(TARGET_CFLAGS)" >>$(IW_CONFIG)
-@@ -20,7 +26,7 @@ define IW_CONFIGURE_CMDS
- endef
- 
- define IW_BUILD_CMDS
--	$(IW_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(IW_MAKE_ENV) $(MAKE) $(IW_MAKE_OPT) -C $(@D)
- endef
- 
- define IW_INSTALL_TARGET_CMDS
+Sounds good, but didn't we agree on a different name for the package
+macros? Or maybe your intention is to first get this cleanup done, and
+then do the renaming?
+
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
