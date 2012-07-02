@@ -1,471 +1,352 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Mon, 02 Jul 2012 17:30:18 +0200
-Subject: [Buildroot] [PATCH] Add some support for device tree kernels
- with appended trees
-In-Reply-To: <4FEF4A9C.7020901@mind.be>
-References: <1340615122-6006-1-git-send-email-maxime.ripard@free-electrons.com>
- <4FEF4A9C.7020901@mind.be>
-Message-ID: <4FF1BE8A.1090208@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  2 Jul 2012 14:04:44 -0300
+Subject: [Buildroot] [PATCH] busybox: bump 1.20.x series to 1.20.2
+Message-ID: <1341248684-18265-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/busybox/Config.in                          |    2 +-
+ .../busybox-1.20.1/busybox-1.20.1-ash.patch        |   12 ---
+ .../busybox-1.20.1/busybox-1.20.1-ifupdown.patch   |   75 -----------------
+ .../busybox-1.20.1/busybox-1.20.1-man.patch        |   34 --------
+ .../busybox-1.20.1/busybox-1.20.1-mke2fs.patch     |   58 --------------
+ .../busybox/busybox-1.20.1/busybox-1.20.1-ps.patch |   84 --------------------
+ .../busybox-1.20.1/busybox-1.20.1-tar.patch        |   11 ---
+ 7 files changed, 1 insertions(+), 275 deletions(-)
+ delete mode 100644 package/busybox/busybox-1.20.1/busybox-1.20.1-ash.patch
+ delete mode 100644 package/busybox/busybox-1.20.1/busybox-1.20.1-ifupdown.patch
+ delete mode 100644 package/busybox/busybox-1.20.1/busybox-1.20.1-man.patch
+ delete mode 100644 package/busybox/busybox-1.20.1/busybox-1.20.1-mke2fs.patch
+ delete mode 100644 package/busybox/busybox-1.20.1/busybox-1.20.1-ps.patch
+ delete mode 100644 package/busybox/busybox-1.20.1/busybox-1.20.1-tar.patch
 
-Thanks for the review!
-
-Le 30/06/2012 20:51, Arnout Vandecappelle a ?crit :
-> On 06/25/12 11:05, Maxime Ripard wrote:
->> This is a refactoring of the previous basic device tree
->> options available for microblaze.
->>
->> The previous option only made it possible for microblaze targets
->> to give a path to an external device tree, and build a simpleImage
->> with it. This involved using a custom target name as simpleImages
->> are built with the simpleImage.dt_name.
->>
->> This is also the case on powerpc with cuImages.
->>
->> This patch extends the previous mechanism by adding simpleImage
->> and cuImage to the image name list and no longer rely on custom
->> image name. A field is also added to specify either the device tree
->> name if it is already present in the kernel or a path to a custom
->> one.
->>
->> Finally, this patch also support generating kernel images with
->> appended device trees, including regenerating uboot images to
->> update the header. If the appending feature is not used, the
->> generated dtb file is copied into output/images.
->>
->> Signed-off-by: Maxime Ripard<maxime.ripard@free-electrons.com>
->>
->> Cc: Stephan Hoffmann<sho@relinux.de>
-> 
->  That's a big feature list!  It may be worthwhile to split into two
-> or three patches to expedite acceptance.  Especially with the competing
-> 'Add dtb image generation' patch by Philippe Reynes still floating around.
-
-You're right. I will split them into smaller commits.
-
->> ---
->>   linux/Config.in |   55 ++++++++++++++++++++++++++++++++++++------
->>   linux/linux.mk  |   71
->> ++++++++++++++++++++++++++++++++++++++++++-------------
->>   2 files changed, 103 insertions(+), 23 deletions(-)
->>
->> diff --git a/linux/Config.in b/linux/Config.in
->> index 4562b1b..5618629 100644
->> --- a/linux/Config.in
->> +++ b/linux/Config.in
->> @@ -124,24 +124,53 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
->>       help
->>         Path to the kernel configuration file
->>
->> +config BR2_LINUX_KERNEL_DTS_SUPPORT
->> +       bool "Device Tree Support"
-> 
->  I'm not sure if this capitalization is appropriate.  I would call it
->  "Device tree support"
-> 
->  Missing help text.  E.g.:
->       Compile a device tree source into a device tree blob.
->       Select the dts file to compile in the options below.
-> 
->  I prefer to put a 'if BR2_LINUX_KERNEL_DTS_SUPPORT' here
-> rather than all the depends on statements below.
-
-Ok
-
->> +
->> +config BR2_LINUX_KERNEL_APPENDED_DTB
->> +       bool "Append the Device Tree binary to the kernel"
->> +       depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-> 
->     help
->       In addition to generating a dtb file, append it to
->       the kernel image. This is used in simpleImage on
->       microblaze and in cuImage on PowerPC.
-> 
-
-This is also an option for ARM images. Actually, this feature is mostly
-for ARM images, since the kernel build system abstracts this from the
-user for simpleImage and cuImage, while on ARM, this is really something
-the user has to do (append the dtb to the zImage and if necessary
-generate a uImage from that new zImage). But I get your point.
-
->> +
->> +choice
->> +    prompt "Device Tree choice"
-> 
->  "Device tree source"
-> 
->> +    depends on BR2_LINUX_KERNEL_DTS_SUPPORT
->> +    default BR2_LINUX_KERNEL_USE_DEFAULT_DTS
->> +
->> +config BR2_LINUX_KERNEL_USE_DEFAULT_DTS
->> +    bool "Using a device tree present in the kernel"
-> 
->  Using -> Use
-> 
->     help
->       Use a device tree source that is distributed with
->       the kernel source.  The dts file is found in
->       arch/<arch>/boot/dts.
-> 
->> +
->> +config BR2_LINUX_KERNEL_USE_CUSTOM_DTS
->> +    bool "Using a custom device tree file"
-> 
->     help
->       Use a custom device tree file.
-> 
->> +
->> +endchoice
->> +
->>   config BR2_LINUX_KERNEL_DTS_FILE
->> -    string "Device Tree dts file location"
->> -    depends on BR2_microblaze
->> -    help
->> -      Path from where the dts file has to be copied
->> -      The final "custom target" name depends on the
->> -      dts file name:
->> -<name>.dts -->  simpleImage.<name>
->> +    string "DTS name"
->> +    depends on BR2_LINUX_KERNEL_USE_DEFAULT_DTS
->> +    help
->> +     Name of the default device tree, without the
->> +     trailing .dts
->> +
->> +config BR2_LINUX_KERNEL_CUSTOM_DTS_FILE
->> +    string "Device tree file path"
->> +    depends on BR2_LINUX_KERNEL_USE_CUSTOM_DTS
->> +    help
->> +      Path to the kernel configuration file
-> 
->       (relative to the buildroot directory).
-> 
->  I have a use case where I want several dtb's to be generated
-> in a single buildroot config.  Now I do it by calling dtc outside
-> of buildroot, but it would be nice if this use case were supported
-> as well.  Of course, that would be impossible to combine with the
-> BR2_LINUX_KERNEL_APPENDED_DTB option.
-
-How would you integrate it ? Through a "additionnal device tree sources"
-options ? or in these same options?
-
-Anyway, maybe we can get this merge and build on top of that later?
-
-
->> +
->>   #
->>   # Binary format
->>   #
->>
->> +config BR2_LINUX_KERNEL_UBOOT_IMAGE
->> +       bool
->> +
->>   choice
->>       prompt "Kernel binary format"
->>
->>   config BR2_LINUX_KERNEL_UIMAGE
->>       bool "uImage"
->>       depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc ||
->> BR2_avr32 || BR2_sh || BR2_sh64
->> +    select BR2_LINUX_KERNEL_UBOOT_IMAGE
->>
->>   config BR2_LINUX_KERNEL_BZIMAGE
->>       bool "bzImage"
->> @@ -151,6 +180,18 @@ config BR2_LINUX_KERNEL_ZIMAGE
->>       bool "zImage"
->>       depends on BR2_arm || BR2_armeb || BR2_powerpc || BR2_sparc ||
->> BR2_sh || BR2_sh64 || BR2_xtensa
->>
->> +config BR2_LINUX_KERNEL_CUIMAGE
->> +    bool "cuImage"
->> +    depends on BR2_LINUX_KERNEL_DTS_SUPPORT
-> 
->  Does it make sense to change this into a select?  In that case, the
-> DTS support part should go below the image name, otherwise it's less
-> intuitive for the user.
-
-Definitely.
-
->> +    depends on BR2_powerpc
->> +    select BR2_LINUX_KERNEL_UBOOT_IMAGE
->> +
->> +config BR2_LINUX_KERNEL_SIMPLEIMAGE
->> +    bool "simpleImage"
->> +    depends on BR2_LINUX_KERNEL_DTS_SUPPORT
->> +    depends on BR2_microblaze
->> +    select BR2_LINUX_KERNEL_UBOOT_IMAGE
->> +
->>   config BR2_LINUX_KERNEL_VMLINUX_BIN
->>       bool "vmlinux.bin"
->>       depends on BR2_mips || BR2_mipsel || BR2_sh || BR2_sh64
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index 34f8623..3eb5e6d 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -34,6 +34,10 @@ LINUX_PATCHES = $(call
->> qstrip,$(BR2_LINUX_KERNEL_PATCH))
->>   LINUX_INSTALL_IMAGES = YES
->>   LINUX_DEPENDENCIES  += host-module-init-tools
->>
->> +ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
->> +    LINUX_DEPENDENCIES+=host-uboot-tools
->> +endif
->> +
->>   LINUX_MAKE_FLAGS = \
->>       HOSTCC="$(HOSTCC)" \
->>       HOSTCFLAGS="$(HOSTCFLAGS)" \
->> @@ -46,6 +50,12 @@ LINUX_MAKE_FLAGS = \
->>   # going to be installed in the target filesystem.
->>   LINUX_VERSION_PROBED = $(shell $(MAKE) $(LINUX_MAKE_FLAGS) -C
->> $(LINUX_DIR) --no-print-directory -s kernelrelease)
->>
->> +ifeq ($(BR2_LINUX_KERNEL_USE_DEFAULT_DTS),y)
->> +KERNEL_DTS_NAME = $(BR2_LINUX_KERNEL_DTS_FILE)
->> +else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),y)
->> +KERNEL_DTS_NAME = $(basename $(notdir
->> $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE)))
->> +endif
->> +
-> 
->  Additional check (esp. if we want to support multiple DTSes):
-> 
-> ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
-> ifneq ($(words $(KERNEL_DTS_NAME)),1)
-> $(error Kernel with appended device tree needs exactly one DTS source.\
->   Check BR2_LINUX_KERNEL_DTS_FILE or BR2_LINUX_KERNEL_CUSTOM_DTS_FILE.)
-> endif
-> endif
-
-Ok
->>   ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
->>   LINUX_IMAGE_NAME=$(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
->>   else
->> @@ -56,11 +66,14 @@ LINUX_IMAGE_NAME=vmImage
->>   else
->>   LINUX_IMAGE_NAME=uImage
->>   endif
->> -LINUX_DEPENDENCIES+=host-uboot-tools
->>   else ifeq ($(BR2_LINUX_KERNEL_BZIMAGE),y)
->>   LINUX_IMAGE_NAME=bzImage
->>   else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
->>   LINUX_IMAGE_NAME=zImage
->> +else ifeq ($(BR2_LINUX_KERNEL_CUIMAGE),y)
->> +LINUX_IMAGE_NAME=cuImage.$(KERNEL_DTS_NAME)
->> +else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
->> +LINUX_IMAGE_NAME=simpleImage.$(KERNEL_DTS_NAME)
->>   else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
->>   LINUX_IMAGE_NAME=vmlinux.bin
->>   else ifeq ($(BR2_LINUX_KERNEL_VMLINUX),y)
->> @@ -117,19 +130,6 @@ endef
->>
->>   LINUX_POST_PATCH_HOOKS += LINUX_APPLY_PATCHES
->>
->> -ifeq ($(KERNEL_ARCH),microblaze)
->> -# on microblaze, we always want mkimage
->> -LINUX_DEPENDENCIES+=host-uboot-tools
->> -
->> -define LINUX_COPY_DTS
->> -    if test -f "$(BR2_LINUX_KERNEL_DTS_FILE)" ; then \
->> -        cp $(BR2_LINUX_KERNEL_DTS_FILE)
->> $(@D)/arch/microblaze/boot/dts ; \
->> -    else \
->> -        echo "Cannot copy dts file!" ; \
->> -    fi
->> -endef
->> -endif
->> -
->>   ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
->>   KERNEL_SOURCE_CONFIG = $(KERNEL_ARCH_PATH)/configs/$(call
->> qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
->>   else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
->> @@ -140,11 +140,12 @@ define LINUX_CONFIGURE_CMDS
->>       cp $(KERNEL_SOURCE_CONFIG)
->> $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
->>       $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D)
->> buildroot_defconfig
->>       rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
->> +    $(if $(BR2_LINUX_KERNEL_DTS_SUPPORT),
->> +        $(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
-> 
->  The first if is redundant, because the second one can't be true if the
-> first one isn't.
-
-True :)
-
->> +            cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_FILE)
->> $(KERNEL_ARCH_PATH)/boot/dts/))
-> 
->  In 3.0, the boot/dts directory only exists for microblaze and powerpc,
-> while
-> some OF support does exist already for arm.  It's a bit far-fetched, but to
-> be on the safe side I'd do an mkdir first.
-
-Ok, will do
-
->  Also, I don't think this belongs in the configure commands.  At the
-> beginning
-> of the build commands seems more appropriate, so the copy is re-done
-> when you
-> run 'make linux-rebuild'.
-
-Ok
-
->>       $(if $(BR2_ARM_EABI),
->>           $(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config),
->>           $(call KCONFIG_DISABLE_OPT,CONFIG_AEABI,$(@D)/.config))
->> -    $(if $(BR2_microblaze),
->> -        $(call LINUX_COPY_DTS))
->>       # As the kernel gets compiled before root filesystems are
->>       # built, we create a fake cpio file. It'll be
->>       # replaced later by the real cpio archive, and the kernel will be
->> @@ -164,9 +165,35 @@ define LINUX_CONFIGURE_CMDS
->>           $(call
->> KCONFIG_SET_OPT,CONFIG_UEVENT_HELPER_PATH,\"/sbin/mdev\",$(@D)/.config))
->>       $(if $(BR2_PACKAGE_SYSTEMD),
->>           $(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config))
->> +    $(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
->> +        $(call
->> KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
->>       yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C
->> $(@D) oldconfig
->>   endef
->>
->> +ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
->> +define LINUX_BUILD_DTB
-> 
->  I've had at least one kernel where I had to build dtc explicitly:
-> 
->     $(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) ./scripts/dtc/
-
-Hmmm, I'm pretty sure that it is built when the device tree is enabled.
-Do you remember in what case you had to do this ?
-
->> +    $(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D)
->> $(KERNEL_DTS_NAME).dtb
->> +endef
->> +endif
->> +
->> +ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB),y)
->> +ifeq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
->> +define LINUX_APPEND_DTB
->> +    cat $(KERNEL_ARCH_PATH)/boot/zImage
->> $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb> 
->> $(KERNEL_ARCH_PATH)/boot/zImage_dtb
-> 
->  A space before the > would make things more readable.
-
-Hmmm, it's there in the patch. Maybe some weird wrapping on your side ?
-
->> +    mv $(KERNEL_ARCH_PATH)/boot/zImage_dtb
->> $(KERNEL_ARCH_PATH)/boot/zImage
->> +    LOAD=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) | sed -n 's/Load Address:
->> \([0-9]*\)/\1/p'`; \
->> +    ENTRY=`$(MKIMAGE) -l $(LINUX_IMAGE_PATH) | sed -n 's/Entry Point:
->> \([0-9]*\)/\1/p'`; \
->> +    $(MKIMAGE) -A $(KERNEL_ARCH) -O linux -T kernel -C none -a
->> $${LOAD} -e $${ENTRY} -n 'Linux Buildroot' \
->> +        -d $(KERNEL_ARCH_PATH)/boot/zImage
->> $(KERNEL_ARCH_PATH)/boot/$(KERNEL_IMAGE_NAME)
-> 
->  Since we're anyway running mkimage manually here, it doesn't make much
-> sense
-> to build a uImage in the first place.  So perhaps there should be an
-> additional
-> LINUX_IMAGE_TARGET variable that is set to zImage for the appended images.
-
-True.
-
->  BTW, is KERNEL_IMAGE_NAME defined anywhere?
-
-Oops, typo...
-
-> 
->> +endef
->> +else
->> +define LINUX_APPEND_DTB
->> +    cat $(KERNEL_ARCH_PATH)/boot/zImage
->> $(KERNEL_ARCH_PATH)/boot/$(KERNEL_DTS_NAME).dtb> 
->> $(KERNEL_ARCH_PATH)/boot/zImage_dtb
->> +    mv $(KERNEL_ARCH_PATH)/boot/zImage_dtb
->> $(KERNEL_ARCH_PATH)/boot/zImage
-> 
->  Assuming that it's a zImage if it's not a u-boot image is perhaps a bit
-> optimistic...  How about
-> 
-> else ifeq ($(BR2_LINUX_KERNEL_ZIMAGE),y)
-> ...
-> else
-> $(error Appending DTB to the kernel image is only possible for u-boot
-> images and zImage.)
-> 
-
-Right
->> +endef
->> +endif
->> +endif
->> +
->>   # Compilation. We make sure the kernel gets rebuilt when the
->>   # configuration has changed.
->>   define LINUX_BUILD_CMDS
->> @@ -174,6 +201,9 @@ define LINUX_BUILD_CMDS
->>       @if grep -q "CONFIG_MODULES=y" $(@D)/.config; then     \
->>           $(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D)
->> modules ;    \
->>       fi
->> +    $(if $(BR2_LINUX_KERNEL_DTS_SUPPORT),
->> +        $(LINUX_BUILD_DTB)
->> +        $(LINUX_APPEND_DTB))
-> 
->  if is redundant, the variables will be empty if it's not configured
-> like that.
-
-True
-
->>   endef
->>
->>
->> @@ -183,12 +213,21 @@ define LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET
->>   endef
->>   endif
->>
->> +ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
->> +ifneq ($(BR2_LINUX_KERNEL_UBOOT_IMAGE),y)
->> +define LINUX_INSTALL_DTB
->> +    cp $(KERNEL_ARCH_PATH/boot/$(KERNEL_DTS_NAME).dtb $(BINARIES_DIR)/
-> 
->  I would install the DTB even if it's a u-boot image.  It should
-> definitely be installed if it's a non-appended uImage...
-
-Ooooh, you're obviously right here.
-
-> 
->> +endef
->> +endif
->> +endif
->> +
->>   define LINUX_INSTALL_IMAGES_CMDS
->>       cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
->>   endef
->>
->>   define LINUX_INSTALL_TARGET_CMDS
->>       $(LINUX_INSTALL_KERNEL_IMAGE_TO_TARGET)
->> +    $(LINUX_INSTALL_DTB)
->>       # Install modules and remove symbolic links pointing to build
->>       # directories, not relevant on the target
->>       @if grep -q "CONFIG_MODULES=y" $(@D)/.config; then     \
-
-Thanks!
-
-Maxime
-
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index a078644..dedcf18 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -36,7 +36,7 @@ config BR2_BUSYBOX_VERSION
+ 	string
+ 	default "1.18.5"	if BR2_BUSYBOX_VERSION_1_18_X
+ 	default "1.19.4"	if BR2_BUSYBOX_VERSION_1_19_X
+-	default "1.20.1"	if BR2_BUSYBOX_VERSION_1_20_X
++	default "1.20.2"	if BR2_BUSYBOX_VERSION_1_20_X
+ 
+ config BR2_PACKAGE_BUSYBOX_CONFIG
+ 	string "BusyBox configuration file to use?"
+diff --git a/package/busybox/busybox-1.20.1/busybox-1.20.1-ash.patch b/package/busybox/busybox-1.20.1/busybox-1.20.1-ash.patch
+deleted file mode 100644
+index a012a70..0000000
+--- a/package/busybox/busybox-1.20.1/busybox-1.20.1-ash.patch
++++ /dev/null
+@@ -1,12 +0,0 @@
+---- busybox-1.20.1/shell/ash.c
+-+++ busybox-1.20.1-ash/shell/ash.c
+-@@ -6846,8 +6846,7 @@ evalvar(char *p, int flags, struct strli
+- 		patloc = expdest - (char *)stackblock();
+- 		if (NULL == subevalvar(p, /* varname: */ NULL, patloc, subtype,
+- 				startloc, varflags,
+--//TODO: | EXP_REDIR too? All other such places do it too
+--				/* quotes: */ flags & (EXP_FULL | EXP_CASE),
+-+				/* quotes: */ flags & (EXP_FULL | EXP_CASE | EXP_REDIR),
+- 				var_str_list)
+- 		) {
+- 			int amount = expdest - (
+diff --git a/package/busybox/busybox-1.20.1/busybox-1.20.1-ifupdown.patch b/package/busybox/busybox-1.20.1/busybox-1.20.1-ifupdown.patch
+deleted file mode 100644
+index b2a9456..0000000
+--- a/package/busybox/busybox-1.20.1/busybox-1.20.1-ifupdown.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+---- busybox-1.20.1/networking/ifupdown.c
+-+++ busybox-1.20.1-ifupdown/networking/ifupdown.c
+-@@ -140,8 +140,6 @@ static const char keywords_up_down[] ALI
+- 	"up\0"
+- 	"down\0"
+- 	"pre-up\0"
+--	"pre-down\0"
+--	"post-up\0"
+- 	"post-down\0"
+- ;
+- 
+-@@ -895,6 +893,11 @@ static struct interfaces_file_t *read_in
+- 				if (rest_of_line[0] == '\0')
+- 					bb_error_msg_and_die("option with empty value \"%s\"", buf);
+- 
+-+				if (strcmp(first_word, "post-up") == 0)
+-+					first_word += 5; /* "up" */
+-+				else if (strcmp(first_word, "pre-down") == 0)
+-+					first_word += 4; /* "down" */
+-+
+- 				/* If not one of "up", "down",... words... */
+- 				if (index_in_strings(keywords_up_down, first_word) < 0) {
+- 					int i;
+-@@ -963,7 +966,7 @@ static char *setlocalenv(const char *for
+- 	return result;
+- }
+- 
+--static void set_environ(struct interface_defn_t *iface, const char *mode)
+-+static void set_environ(struct interface_defn_t *iface, const char *mode, const char *opt)
+- {
+- 	int i;
+- 	char **pp;
+-@@ -976,7 +979,7 @@ static void set_environ(struct interface
+- 	}
+- 
+- 	/* note: last element will stay NULL: */
+--	G.my_environ = xzalloc(sizeof(char *) * (iface->n_options + 6));
+-+	G.my_environ = xzalloc(sizeof(char *) * (iface->n_options + 7));
+- 	pp = G.my_environ;
+- 
+- 	for (i = 0; i < iface->n_options; i++) {
+-@@ -990,6 +993,7 @@ static void set_environ(struct interface
+- 	*pp++ = setlocalenv("%s=%s", "ADDRFAM", iface->address_family->name);
+- 	*pp++ = setlocalenv("%s=%s", "METHOD", iface->method->name);
+- 	*pp++ = setlocalenv("%s=%s", "MODE", mode);
+-+	*pp++ = setlocalenv("%s=%s", "PHASE", opt);
+- 	if (G.startup_PATH)
+- 		*pp++ = setlocalenv("%s=%s", "PATH", G.startup_PATH);
+- }
+-@@ -1044,21 +1048,21 @@ static int check(char *str)
+- static int iface_up(struct interface_defn_t *iface)
+- {
+- 	if (!iface->method->up(iface, check)) return -1;
+--	set_environ(iface, "start");
+-+	set_environ(iface, "start", "pre-up");
+- 	if (!execute_all(iface, "pre-up")) return 0;
+- 	if (!iface->method->up(iface, doit)) return 0;
+-+	set_environ(iface, "start", "post-up");
+- 	if (!execute_all(iface, "up")) return 0;
+--	if (!execute_all(iface, "post-up")) return 0;
+- 	return 1;
+- }
+- 
+- static int iface_down(struct interface_defn_t *iface)
+- {
+- 	if (!iface->method->down(iface,check)) return -1;
+--	set_environ(iface, "stop");
+--	if (!execute_all(iface, "pre-down")) return 0;
+-+	set_environ(iface, "stop", "pre-down");
+- 	if (!execute_all(iface, "down")) return 0;
+- 	if (!iface->method->down(iface, doit)) return 0;
+-+	set_environ(iface, "stop", "post-down");
+- 	if (!execute_all(iface, "post-down")) return 0;
+- 	return 1;
+- }
+diff --git a/package/busybox/busybox-1.20.1/busybox-1.20.1-man.patch b/package/busybox/busybox-1.20.1/busybox-1.20.1-man.patch
+deleted file mode 100644
+index f382e07..0000000
+--- a/package/busybox/busybox-1.20.1/busybox-1.20.1-man.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+---- busybox-1.20.1/miscutils/man.c
+-+++ busybox-1.20.1-man/miscutils/man.c
+-@@ -129,27 +129,21 @@ static int show_manpage(const char *page
+- #endif
+- #if ENABLE_FEATURE_SEAMLESS_XZ
+- 	strcpy(ext, "xz");
+--	if (run_pipe(pager, man_filename, man, level))
+-+	if (run_pipe(pager, filename_with_zext, man, level))
+- 		return 1;
+- #endif
+- #if ENABLE_FEATURE_SEAMLESS_BZ2
+- 	strcpy(ext, "bz2");
+--	if (run_pipe(pager, man_filename, man, level))
+-+	if (run_pipe(pager, filename_with_zext, man, level))
+- 		return 1;
+- #endif
+- #if ENABLE_FEATURE_SEAMLESS_GZ
+- 	strcpy(ext, "gz");
+--	if (run_pipe(pager, man_filename, man, level))
+-+	if (run_pipe(pager, filename_with_zext, man, level))
+- 		return 1;
+- #endif
+- 
+--#if SEAMLESS_COMPRESSION
+--	ext[-1] = '\0';
+--#endif
+--	if (run_pipe(pager, man_filename, man, level))
+--		return 1;
+--
+--	return 0;
+-+	return run_pipe(pager, man_filename, man, level);
+- }
+- 
+- int man_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
+diff --git a/package/busybox/busybox-1.20.1/busybox-1.20.1-mke2fs.patch b/package/busybox/busybox-1.20.1/busybox-1.20.1-mke2fs.patch
+deleted file mode 100644
+index 659ae2d..0000000
+--- a/package/busybox/busybox-1.20.1/busybox-1.20.1-mke2fs.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+---- busybox-1.20.1/include/bb_e2fs_defs.h
+-+++ busybox-1.20.1-mke2fs/include/bb_e2fs_defs.h
+-@@ -422,9 +422,27 @@ struct ext2_super_block {
+- 	uint16_t	s_reserved_word_pad;
+- 	uint32_t	s_default_mount_opts;
+- 	uint32_t	s_first_meta_bg;	/* First metablock group */
+-+	/* ext3 additions */
+- 	uint32_t	s_mkfs_time;		/* When the filesystem was created */
+- 	uint32_t	s_jnl_blocks[17];	/* Backup of the journal inode */
+--	uint32_t	s_reserved[172];	/* Padding to the end of the block */
+-+	/* 64bit support valid if EXT4_FEATURE_COMPAT_64BIT */
+-+/*150*/	uint32_t	s_blocks_count_hi;	/* Blocks count */
+-+	uint32_t	s_r_blocks_count_hi;	/* Reserved blocks count */
+-+	uint32_t	s_free_blocks_count_hi;	/* Free blocks count */
+-+	uint16_t	s_min_extra_isize;	/* All inodes have at least # bytes */
+-+	uint16_t	s_want_extra_isize; 	/* New inodes should reserve # bytes */
+-+	uint32_t	s_flags;		/* Miscellaneous flags */
+-+	uint16_t	s_raid_stride;		/* RAID stride */
+-+	uint16_t	s_mmp_interval;		/* # seconds to wait in MMP checking */
+-+	uint64_t	s_mmp_block;		/* Block for multi-mount protection */
+-+	uint32_t	s_raid_stripe_width;	/* blocks on all data disks (N*stride)*/
+-+	uint8_t		s_log_groups_per_flex;	/* FLEX_BG group size */
+-+	uint8_t		s_reserved_char_pad2;
+-+	uint16_t	s_reserved_pad;
+-+	uint32_t	s_reserved[162];	/* Padding to the end of the block */
+-+};
+-+struct BUG_ext2_super_block {
+-+        char bug[sizeof(struct ext2_super_block) == 1024 ? 1 : -1];
+- };
+- 
+- /*
+---- busybox-1.20.1/util-linux/mkfs_ext2.c
+-+++ busybox-1.20.1-mke2fs/util-linux/mkfs_ext2.c
+-@@ -53,11 +53,6 @@
+- #define ENABLE_FEATURE_MKFS_EXT2_RESERVED_GDT 0
+- #define ENABLE_FEATURE_MKFS_EXT2_DIR_INDEX    1
+- 
+--// from e2fsprogs
+--#define s_reserved_gdt_blocks s_padding1
+--#define s_mkfs_time           s_reserved[0]
+--#define s_flags               s_reserved[22]
+--
+- #define EXT2_HASH_HALF_MD4       1
+- #define EXT2_FLAGS_SIGNED_HASH   0x0001
+- #define EXT2_FLAGS_UNSIGNED_HASH 0x0002
+-@@ -482,8 +477,10 @@ int mkfs_ext2_main(int argc UNUSED_PARAM
+- 	STORE_LE(sb->s_magic, EXT2_SUPER_MAGIC);
+- 	STORE_LE(sb->s_inode_size, inodesize);
+- 	// set "Required extra isize" and "Desired extra isize" fields to 28
+--	if (inodesize != sizeof(*inode))
+--		STORE_LE(sb->s_reserved[21], 0x001C001C);
+-+	if (inodesize != sizeof(*inode)) {
+-+		STORE_LE(sb->s_min_extra_isize, 0x001c);
+-+		STORE_LE(sb->s_want_extra_isize, 0x001c);
+-+	}
+- 	STORE_LE(sb->s_first_ino, EXT2_GOOD_OLD_FIRST_INO);
+- 	STORE_LE(sb->s_log_block_size, blocksize_log2 - EXT2_MIN_BLOCK_LOG_SIZE);
+- 	STORE_LE(sb->s_log_frag_size, blocksize_log2 - EXT2_MIN_BLOCK_LOG_SIZE);
+diff --git a/package/busybox/busybox-1.20.1/busybox-1.20.1-ps.patch b/package/busybox/busybox-1.20.1/busybox-1.20.1-ps.patch
+deleted file mode 100644
+index c8e329e..0000000
+--- a/package/busybox/busybox-1.20.1/busybox-1.20.1-ps.patch
++++ /dev/null
+@@ -1,84 +0,0 @@
+---- busybox-1.20.1/procps/ps.c
+-+++ busybox-1.20.1-ps/procps/ps.c
+-@@ -69,6 +69,31 @@
+- /* Absolute maximum on output line length */
+- enum { MAX_WIDTH = 2*1024 };
+- 
+-+#if ENABLE_FEATURE_PS_TIME || ENABLE_FEATURE_PS_LONG
+-+static long get_uptime(void)
+-+{
+-+#ifdef __linux__
+-+	struct sysinfo info;
+-+	if (sysinfo(&info) < 0)
+-+		return 0;
+-+	return info.uptime;
+-+#elif 1
+-+	char buf[64];
+-+	long uptime;
+-+	if (open_read_close("/proc/uptime", buf, sizeof(buf)) <= 0)
+-+		bb_perror_msg_and_die("can't read %s", "/proc/uptime");
+-+	buf[sizeof(buf)-1] = '\0';
+-+	sscanf(buf, "%l", &uptime);
+-+	return uptime;
+-+#else
+-+	struct timespec ts;
+-+	if (clock_gettime(CLOCK_MONOTONIC, &ts) < 0)
+-+		return 0;
+-+	return ts.tv_sec;
+-+#endif
+-+}
+-+#endif
+-+
+- #if ENABLE_DESKTOP
+- 
+- #include <sys/times.h> /* for times() */
+-@@ -197,8 +222,6 @@ static inline unsigned get_HZ_by_waiting
+- 
+- static unsigned get_kernel_HZ(void)
+- {
+--	//char buf[64];
+--	struct sysinfo info;
+- 
+- 	if (kernel_HZ)
+- 		return kernel_HZ;
+-@@ -208,12 +231,7 @@ static unsigned get_kernel_HZ(void)
+- 	if (kernel_HZ == (unsigned)-1)
+- 		kernel_HZ = get_HZ_by_waiting();
+- 
+--	//if (open_read_close("/proc/uptime", buf, sizeof(buf)) <= 0)
+--	//	bb_perror_msg_and_die("can't read %s", "/proc/uptime");
+--	//buf[sizeof(buf)-1] = '\0';
+--	///sscanf(buf, "%llu", &seconds_since_boot);
+--	sysinfo(&info);
+--	seconds_since_boot = info.uptime;
+-+	seconds_since_boot = get_uptime();
+- 
+- 	return kernel_HZ;
+- }
+-@@ -635,7 +653,7 @@ int ps_main(int argc UNUSED_PARAM, char 
+- 	};
+- #if ENABLE_FEATURE_PS_LONG
+- 	time_t now = now;
+--	struct sysinfo info;
+-+	long uptime;
+- #endif
+- 	int opts = 0;
+- 	/* If we support any options, parse argv */
+-@@ -695,7 +713,7 @@ int ps_main(int argc UNUSED_PARAM, char 
+- 		puts("S   UID   PID  PPID   VSZ   RSS TTY   STIME TIME     CMD");
+- #if ENABLE_FEATURE_PS_LONG
+- 		now = time(NULL);
+--		sysinfo(&info);
+-+		uptime = get_uptime();
+- #endif
+- 	}
+- 	else {
+-@@ -727,7 +745,7 @@ int ps_main(int argc UNUSED_PARAM, char 
+- 				char tty[2 * sizeof(int)*3 + 2];
+- 				char *endp;
+- 				unsigned sut = (p->stime + p->utime) / 100;
+--				unsigned elapsed = info.uptime - (p->start_time / 100);
+-+				unsigned elapsed = uptime - (p->start_time / 100);
+- 				time_t start = now - elapsed;
+- 				struct tm *tm = localtime(&start);
+- 
+diff --git a/package/busybox/busybox-1.20.1/busybox-1.20.1-tar.patch b/package/busybox/busybox-1.20.1/busybox-1.20.1-tar.patch
+deleted file mode 100644
+index 4129b65..0000000
+--- a/package/busybox/busybox-1.20.1/busybox-1.20.1-tar.patch
++++ /dev/null
+@@ -1,11 +0,0 @@
+---- busybox-1.20.1/archival/libarchive/get_header_tar.c
+-+++ busybox-1.20.1-tar/archival/libarchive/get_header_tar.c
+-@@ -84,7 +84,7 @@ static unsigned long long getOctal(char 
+- 		first >>= 1; /* now 7th bit = 6th bit */
+- 		v = first;   /* sign-extend 8 bits to 64 */
+- 		while (--len != 0)
+--			v = (v << 8) + (unsigned char) *str++;
+-+			v = (v << 8) + (uint8_t) *++str;
+- 	}
+- 	return v;
+- }
 -- 
-Maxime Ripard, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
