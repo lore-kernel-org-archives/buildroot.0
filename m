@@ -1,44 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Jul 2012 09:33:48 +0200
-Subject: [Buildroot] [PATCH v3 5/5] Clean up naming of old GENTARGETS
- infrastructure
-In-Reply-To: <1341266873-18680-1-git-send-email-arnout@mind.be>
-References: <1341266746-15301-1-git-send-email-arnout@mind.be>
- <1341266873-18680-1-git-send-email-arnout@mind.be>
-Message-ID: <20120703093348.6c078602@skate>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Mon, 2 Jul 2012 08:33:24 +0000 (UTC)
+Subject: [Buildroot] [PATCH] Add /var/www to device table
+References: <1340654541-10427-1-git-send-email-spdawson@gmail.com>
+Message-ID: <jsrmck$gt1$1@dough.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Tue,  3 Jul 2012 00:07:53 +0200,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+On 2012-06-25, spdawson at gmail.com <spdawson@gmail.com> wrote:
+> From: Simon Dawson <spdawson@gmail.com>
+>
+> The /var/www directory is listed in /etc/passwd in the skeleton target
+> filesystem as the home directory of the www-data user (uid 33).
+>
+> In the final target filesystem, /var/www should be owned by www-data. This
+> is important for the lighttpd package, for example.
+>
+> Signed-off-by: Simon Dawson <spdawson@gmail.com>
 
-> With the renaming of XXXTARGETS to xxx-package, the names of the
-> pkg-xxx.mk files is inconsistent, as well as some internal names in
-> the documentation.  These inconsistencies are cleaned up here.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> ---
->  docs/manual/adding-packages-autotools.txt |  169 +++++++++++
->  docs/manual/adding-packages-cmake.txt     |  141 +++++++++
->  docs/manual/adding-packages-directory.txt |   12 +-
->  docs/manual/adding-packages-generic.txt   |  348 ++++++++++++++++++++++
->  docs/manual/adding-packages.txt           |    6 +-
->  package/Makefile.in                       |    6 +-
->  package/pkg-autotools.mk                  |  307 ++++++++++++++++++++
->  package/pkg-cmake.mk                      |  214 ++++++++++++++
->  package/pkg-generic.mk                    |  449 +++++++++++++++++++++++++++++
->  9 files changed, 1640 insertions(+), 12 deletions(-)
+Shouldn't it be changed by using a LIGHTTPD_PERMISSIONS variable,
+instead of modifying the common device table ? This makes the
+relationship more evident.
 
-I would have expected to see some file deletions (or renames) here. Why
-isn't it so?
+See the following example:
+---
 
-Thomas
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index b8aa310..34f59b2 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -62,4 +62,9 @@ define LIGHTTPD_UNINSTALL_TARGET_CMDS
+ 	rm -rf $(TARGET_DIR)/usr/lib/lighttpd
+ endef
+ 
++#<name>		<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
++define LIGHTTPD_PERMISSIONS
++var/www		d	755	33	33	-	-	-	-	-
++endef
++
+ $(eval $(call AUTOTARGETS))
+
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Romain Izard
