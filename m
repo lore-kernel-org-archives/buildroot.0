@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 2 Jul 2012 10:39:41 +0200
-Subject: [Buildroot] [PATCH v2 1/3] pkg-infra: add XXXTARGETS_HOST macro
-In-Reply-To: <1341090872-12266-1-git-send-email-arnout@mind.be>
-References: <1341090872-12266-1-git-send-email-arnout@mind.be>
-Message-ID: <20120702103941.2fbdf947@skate>
+From: Peter Korsgaard <jacmet@sunsite.dk>
+Date: Mon, 2 Jul 2012 11:10:59 +0200
+Subject: [Buildroot] [git commit] bsdiff: libraries should go after source
+	files using them in linker invocation
+Message-ID: <20120702091204.BB53D8EBBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=68b2218cb5b3758e60b8cff399ca17c5153663cd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le Sat, 30 Jun 2012 23:14:32 +0200,
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
+Fixes http://autobuild.buildroot.net/results/2a6e213997c06136e18b25a1b0e91d8782acbfc4/
 
-> Create GENTARGETS_HOST, AUTOTARGETS_HOST and CMAKETARGETS_HOST
-> macro.  Such a macro is more intuitive to use than the
-> $(call ...,host) construct.  Also it speeds things up by having
-> one less $(call ...) evaluation.
-> 
-> Also includes documentation update, but not for buildroot.html.
-> 
-> This brings the time for 'make -qp' (which is used by bash-completion)
-> down from 1.85s to 1.35s on my laptop.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---
+ package/bsdiff/bsdiff.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-Sounds good, but didn't we agree on a different name for the package
-macros? Or maybe your intention is to first get this cleanup done, and
-then do the renaming?
-
-Thomas
--- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index 66a7722..e8d9ec0 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
+@@ -9,10 +9,10 @@ BSDIFF_SITE = http://www.daemonology.net/bsdiff
+ BSDIFF_DEPENDENCIES = bzip2
+ 
+ define BSDIFF_BUILD_CMDS
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lbz2 \
+-		$(@D)/bsdiff.c -o $(@D)/bsdiff
+-	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) -lbz2 \
+-		$(@D)/bspatch.c -o $(@D)/bspatch
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		$(@D)/bsdiff.c -lbz2 -o $(@D)/bsdiff
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
++		$(@D)/bspatch.c -lbz2 -o $(@D)/bspatch
+ endef
+ 
+ define BSDIFF_INSTALL_TARGET_CMDS
