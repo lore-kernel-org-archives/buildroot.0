@@ -1,41 +1,45 @@
-From: Sven Neumann <s.neumann@raumfeld.com>
-Date: Tue, 03 Jul 2012 17:28:37 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Jul 2012 17:59:21 +0200
 Subject: [Buildroot] gtk+
-In-Reply-To: <20120703111106.7f544276@skate>
+In-Reply-To: <1341329317.31903.16.camel@sven>
 References: <1341046722.72419.YahooMailNeo@web160706.mail.bf1.yahoo.com>
- <20120703111106.7f544276@skate>
-Message-ID: <1341329317.31903.16.camel@sven>
+ <20120703111106.7f544276@skate> <1341329317.31903.16.camel@sven>
+Message-ID: <20120703175921.508fc6fc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2012-07-03 at 11:11 +0200, Thomas Petazzoni wrote:
+Le Tue, 03 Jul 2012 17:28:37 +0200,
+Sven Neumann <s.neumann@raumfeld.com> a ?crit :
 
-> gtk+ requires:
-
->  * A toolchain with wide char support and C++ support.
+> I don't quite understand why pango needs C++ support though. As far as I
+> know it is written in plain C. The pango Config.in file refers to
+> freetype:
 > 
-> These dependencies can be found by reading package/libgtk2/Config.in:
+>         depends on BR2_INSTALL_LIBSTDCPP # freetype support
 > 
-> config BR2_PACKAGE_LIBGTK2
->         bool "libgtk2"
-> 	[...]
->         depends on BR2_PACKAGE_XORG7||BR2_PACKAGE_DIRECTFB
->         depends on BR2_USE_WCHAR # glib2
->         depends on BR2_INSTALL_LIBSTDCPP # pango
->         help
->           The GTK+ version 2 graphical user interface library
+> But freetype itself doesn't depend on C++ support.
 
-I don't quite understand why pango needs C++ support though. As far as I
-know it is written in plain C. The pango Config.in file refers to
-freetype:
+I haven't looked in details, but:
 
-        depends on BR2_INSTALL_LIBSTDCPP # freetype support
+commit 1c4dbb5fa7df89731e5d59f680e9dc34f24f8835
+Author: Peter Korsgaard <jacmet@sunsite.dk>
+Date:   Mon Aug 30 10:02:39 2010 +0200
 
-But freetype itself doesn't depend on C++ support.
+    pango: needs C++ for freetype handling
+    
+    Pango was recently updated to v1.28 as a dependency of webkit, but its
+    freetype support has unfortunately been rewritten with parts in C++
+    (since pango 1.25), so adjust dependencies of pango and users of it to
+    require C++ support.
 
+Regards,    
 
-Regards,
-Sven
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
