@@ -1,12 +1,15 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Jul 2012 21:07:12 +0200
-Subject: [Buildroot] gtk+
-In-Reply-To: <20120703175921.508fc6fc@skate> (Thomas Petazzoni's message of
- "Tue, 3 Jul 2012 17:59:21 +0200")
-References: <1341046722.72419.YahooMailNeo@web160706.mail.bf1.yahoo.com>
- <20120703111106.7f544276@skate> <1341329317.31903.16.camel@sven>
- <20120703175921.508fc6fc@skate>
-Message-ID: <87mx3g1x5r.fsf@macbook.be.48ers.dk>
+Date: Tue, 03 Jul 2012 21:08:35 +0200
+Subject: [Buildroot] [git commit] mii-diag: link statically if
+	configured to do so
+In-Reply-To: <20120703195647.078ad47c@skate> (Thomas Petazzoni's message of
+ "Tue, 3 Jul 2012 19:56:47 +0200")
+References: <20120627200833.E3F7C8E0E8@busybox.osuosl.org>
+ <20120629121602.1b0fecd6@skate> <87txxt42up.fsf@macbook.be.48ers.dk>
+ <20120630105559.7e57508a@skate> <4FEEF8D4.4080702@mind.be>
+ <CA+wH294UjT4T2a7_SNziD+VLeLAvzMNZxZmbyg+hz9CW+pg=zg@mail.gmail.com>
+ <20120703195647.078ad47c@skate>
+Message-ID: <87ipe41x3g.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,38 +18,28 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ Thomas> Hello,
+ Thomas> Le Sat, 30 Jun 2012 18:09:38 +0100,
+ Thomas> Alex Bradbury <asb@asbradbury.org> a ?crit :
 
- >> I don't quite understand why pango needs C++ support though. As far as I
- >> know it is written in plain C. The pango Config.in file refers to
- >> freetype:
- >> 
- >> depends on BR2_INSTALL_LIBSTDCPP # freetype support
- >> 
- >> But freetype itself doesn't depend on C++ support.
+ >> That would be neat. Is there a list of currently tested configurations
+ >> somewhere?
 
- Thomas> I haven't looked in details, but:
+ Thomas> Basically, the way the autobuilds work is that Peter and I have a set
+ Thomas> of base configurations, that define the architecture and the toolchain,
+ Thomas> and then we do a "make randpackageconfig" to generate a random
+ Thomas> selection of packages.
 
- Thomas> commit 1c4dbb5fa7df89731e5d59f680e9dc34f24f8835
- Thomas> Author: Peter Korsgaard <jacmet@sunsite.dk>
- Thomas> Date:   Mon Aug 30 10:02:39 2010 +0200
+ Thomas> Peter has a few base configurations, and if I understand correctly, on
+ Thomas> a given build machine, he always uses the same base configuration.
 
- Thomas>     pango: needs C++ for freetype handling
+Indeed. I have a defconfig defining the toolchain configuration and my
+script basically does:
 
- Thomas>     Pango was recently updated to v1.28 as a dependency of
- Thomas>     webkit, but its freetype support has unfortunately been
- Thomas>     rewritten with parts in C++ (since pango 1.25), so adjust
- Thomas>     dependencies of pango and users of it to require C++
- Thomas>     support.
-
-Ahh yes, the harfbuzz text shaping engine:
-
-find -name \*.cc
-./pango/opentype/hb-font.cc
-./pango/opentype/hb-ot-layout.cc
-./pango/opentype/main.cc
-
-http://www.freedesktop.org/wiki/Software/HarfBuzz
+cp defconfig .config
+yes '' | make oldconfig
+make randpackageconfig
+make
 
 -- 
 Bye, Peter Korsgaard
