@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Jul 2012 09:31:03 +0200
-Subject: [Buildroot] Linux throwing "uncompression error" on
- rootfs.ext2.gz ?
-In-Reply-To: <4FF24364.7010303@powerstandards.com>
-References: <4FF24364.7010303@powerstandards.com>
-Message-ID: <20120703093103.563a1876@skate>
+Date: Tue, 3 Jul 2012 09:33:48 +0200
+Subject: [Buildroot] [PATCH v3 5/5] Clean up naming of old GENTARGETS
+ infrastructure
+In-Reply-To: <1341266873-18680-1-git-send-email-arnout@mind.be>
+References: <1341266746-15301-1-git-send-email-arnout@mind.be>
+ <1341266873-18680-1-git-send-email-arnout@mind.be>
+Message-ID: <20120703093348.6c078602@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 02 Jul 2012 17:57:08 -0700,
-Judson Wilson <judson@powerstandards.com> a ?crit :
+Le Tue,  3 Jul 2012 00:07:53 +0200,
+"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> a ?crit :
 
-> Curious if anyone has run into an issue where their ext2.gz image causes 
-> linux boot to say "uncompression error", like this:
+> With the renaming of XXXTARGETS to xxx-package, the names of the
+> pkg-xxx.mk files is inconsistent, as well as some internal names in
+> the documentation.  These inconsistencies are cleaned up here.
 > 
-> ...
-> RAMDISK: gzip image found at block 0
-> uncompression error
-> VFS: Mounted root (ext2 filesystem) on device 1:0.
-> ...
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> ---
+>  docs/manual/adding-packages-autotools.txt |  169 +++++++++++
+>  docs/manual/adding-packages-cmake.txt     |  141 +++++++++
+>  docs/manual/adding-packages-directory.txt |   12 +-
+>  docs/manual/adding-packages-generic.txt   |  348 ++++++++++++++++++++++
+>  docs/manual/adding-packages.txt           |    6 +-
+>  package/Makefile.in                       |    6 +-
+>  package/pkg-autotools.mk                  |  307 ++++++++++++++++++++
+>  package/pkg-cmake.mk                      |  214 ++++++++++++++
+>  package/pkg-generic.mk                    |  449 +++++++++++++++++++++++++++++
+>  9 files changed, 1640 insertions(+), 12 deletions(-)
 
-Are you using this file as an initrd, or as the real root filesystem?
-Could you share some details about your setup (where do you put the
-ext2.gz image, what is your kernel command line, kernel configuration,
-etc.).
+I would have expected to see some file deletions (or renames) here. Why
+isn't it so?
 
 Thomas
 -- 
