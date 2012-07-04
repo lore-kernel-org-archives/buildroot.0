@@ -1,24 +1,41 @@
-From: Alex Bradbury <asb@asbradbury.org>
-Date: Wed, 4 Jul 2012 13:20:22 +0100
-Subject: [Buildroot] Buildroot and top-level parallel make
-In-Reply-To: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
-References: <CA+wH296drhV6yie5+79Y38qLmo_5cE1=3qaOrw5jbyCJ5mEMog@mail.gmail.com>
-Message-ID: <CA+wH296VRn4UY+cLAZUPjcprVcuZY9AHNw5QsEscvJ0oSszunw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  4 Jul 2012 09:35:51 -0300
+Subject: [Buildroot] [PATCH] toolchain/powerpc: SPE ABI is not available for
+	e500mc
+Message-ID: <1341405351-11946-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28 June 2012 13:34, Alex Bradbury <asb@asbradbury.org> wrote:
-> I was wondering what the outcome of experiments to allow top-level
-> parallelism were? What are the major barriers to allowing this? Is it
-> still something seen as feasible to add to buildroot, or is it looking
-> like it would add too much complexity?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ target/Config.in.arch |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas, I was wondering if you'd been able to recall what issues your
-initial experiments with top-level parallel make faced?
-
-Thanks,
-
-Alex
+diff --git a/target/Config.in.arch b/target/Config.in.arch
+index 25ff750..c9bbc12 100644
+--- a/target/Config.in.arch
++++ b/target/Config.in.arch
+@@ -556,8 +556,8 @@ endchoice
+ choice
+ 	prompt "Target ABI"
+ 	depends on BR2_powerpc
+-	default BR2_powerpc_CLASSIC if BR2_powerpc_e500mc
+ 	default BR2_powerpc_SPE if BR2_powerpc_8540 || BR2_powerpc_8548
++	default BR2_powerpc_CLASSIC
+ 	help
+ 	  Application Binary Interface to use
+ 
+@@ -566,7 +566,7 @@ config BR2_powerpc_CLASSIC
+ 	depends on !(BR2_powerpc_8540 || BR2_powerpc_8548)
+ config BR2_powerpc_SPE
+ 	bool "SPE"
+-	depends on BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
++	depends on BR2_powerpc_8540 || BR2_powerpc_8548
+ endchoice
+ 
+ config BR2_ARCH
+-- 
+1.7.8.6
