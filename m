@@ -1,27 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Jul 2012 13:31:20 +0200
-Subject: [Buildroot] [PATCH] lshw: fix build failure
-In-Reply-To: <1341401380-27266-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1341401380-27266-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20120704133120.294f2965@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  4 Jul 2012 08:34:54 -0300
+Subject: [Buildroot] [PATCH] bonnie: needs MMU
+Message-ID: <1341401694-28043-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Wed,  4 Jul 2012 08:29:40 -0300,
-Gustavo Zacarias <gustavo@zacarias.com.ar> a ?crit :
+Fixes
+http://autobuild.buildroot.net/results/08cc7fdf21f8e51b793c0cf7a51b3f190ea7668c/build-end.log
 
-> Fix space-unfriendly CC/CXX/AR argument passing.
-> Fixes build failure
-> http://autobuild.buildroot.net/results/d8c7b5ef4056a197bb8085b0fcdd09d931aec876/build-end.log
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bonnie/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+diff --git a/package/bonnie/Config.in b/package/bonnie/Config.in
+index 9dda4b6..91b1e96 100644
+--- a/package/bonnie/Config.in
++++ b/package/bonnie/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BONNIE
+ 	bool "bonnie++"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Filesystem tester
+ 
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+1.7.8.6
