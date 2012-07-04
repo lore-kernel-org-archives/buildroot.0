@@ -1,41 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  4 Jul 2012 09:35:51 -0300
-Subject: [Buildroot] [PATCH] toolchain/powerpc: SPE ABI is not available for
-	e500mc
-Message-ID: <1341405351-11946-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Jul 2012 14:52:15 +0200
+Subject: [Buildroot] [PATCH] lshw: fix build failure
+In-Reply-To: <1341401380-27266-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 4 Jul 2012 08:29:40 -0300")
+References: <1341401380-27266-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877guj1yf4.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- target/Config.in.arch |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/target/Config.in.arch b/target/Config.in.arch
-index 25ff750..c9bbc12 100644
---- a/target/Config.in.arch
-+++ b/target/Config.in.arch
-@@ -556,8 +556,8 @@ endchoice
- choice
- 	prompt "Target ABI"
- 	depends on BR2_powerpc
--	default BR2_powerpc_CLASSIC if BR2_powerpc_e500mc
- 	default BR2_powerpc_SPE if BR2_powerpc_8540 || BR2_powerpc_8548
-+	default BR2_powerpc_CLASSIC
- 	help
- 	  Application Binary Interface to use
- 
-@@ -566,7 +566,7 @@ config BR2_powerpc_CLASSIC
- 	depends on !(BR2_powerpc_8540 || BR2_powerpc_8548)
- config BR2_powerpc_SPE
- 	bool "SPE"
--	depends on BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc
-+	depends on BR2_powerpc_8540 || BR2_powerpc_8548
- endchoice
- 
- config BR2_ARCH
+ Gustavo> Fix space-unfriendly CC/CXX/AR argument passing.
+ Gustavo> Fixes build failure
+ Gustavo> http://autobuild.buildroot.net/results/d8c7b5ef4056a197bb8085b0fcdd09d931aec876/build-end.log
+
+Committed, thanks.
+
 -- 
-1.7.8.6
+Bye, Peter Korsgaard
