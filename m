@@ -1,94 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 05 Jul 2012 22:23:24 +0200
-Subject: [Buildroot] [PATCH v4 09/22] manual: add advice about GPL
- compliance for Buildroot
-In-Reply-To: <4FF59C1F.4000908@lucaceresoli.net>
-References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
- <1337276001-26149-10-git-send-email-luca@lucaceresoli.net>
- <4FF59C1F.4000908@lucaceresoli.net>
-Message-ID: <4FF5F7BC.8000208@mind.be>
+Date: Fri, 06 Jul 2012 00:06:13 +0200
+Subject: [Buildroot] [PATCH v3 5/5] Clean up naming of old GENTARGETS
+ infrastructure
+In-Reply-To: <20120703093348.6c078602@skate>
+References: <1341266746-15301-1-git-send-email-arnout@mind.be>
+ <1341266873-18680-1-git-send-email-arnout@mind.be>
+ <20120703093348.6c078602@skate>
+Message-ID: <4FF60FD5.2070909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/05/12 15:52, Luca Ceresoli wrote:
-> The above text has been Acked-By two Buildroot developers and had no negative
-> comments after ~6 weeks, which is good.
+On 07/03/12 09:33, Thomas Petazzoni wrote:
+> Le Tue,  3 Jul 2012 00:07:53 +0200,
+> "Arnout Vandecappelle (Essensium/Mind)"<arnout@mind.be>  a ?crit :
 >
-> Nevertheless, I think it lacks some parts that I would like to be clarified.
+> > With the renaming of XXXTARGETS to xxx-package, the names of the
+> > pkg-xxx.mk files is inconsistent, as well as some internal names in
+> > the documentation.  These inconsistencies are cleaned up here.
+> >
+> > Signed-off-by: Arnout Vandecappelle (Essensium/Mind)<arnout@mind.be>
+> >
+> > ---
+> >   docs/manual/adding-packages-autotools.txt |  169 +++++++++++
+> >   docs/manual/adding-packages-cmake.txt     |  141 +++++++++
+> >   docs/manual/adding-packages-directory.txt |   12 +-
+> >   docs/manual/adding-packages-generic.txt   |  348 ++++++++++++++++++++++
+> >   docs/manual/adding-packages.txt           |    6 +-
+> >   package/Makefile.in                       |    6 +-
+> >   package/pkg-autotools.mk                  |  307 ++++++++++++++++++++
+> >   package/pkg-cmake.mk                      |  214 ++++++++++++++
+> >   package/pkg-generic.mk                    |  449 +++++++++++++++++++++++++++++
+> >   9 files changed, 1640 insertions(+), 12 deletions(-)
 >
-> A Buildroot tree is made up of the following parts:
->   1. the various makefiles and scripts that build the toolchain, handle
->      package compilation and generate a root filesystem, which is the heart
->      of Buildroot;
->   2. patches to packages;
->   3. small, proprietary, project-specific applications or libraries whose
->      source code resides in the Buildroot tree (not present in mainline).
+> I would have expected to see some file deletions (or renames) here. Why
+> isn't it so?
 >
-> The above clarification text, as well as the COPYING text, obviously applies
-> to point 1, but IMO points 2 and 3 need a different policy.
->
-> Patches to packages are modifications to externally-developed code, so I
-> think they fall under the same license as the package.
+> Thomas
 
-  Good point.  Without clarification, the patches would carry buildroot's
-GPL and hence spread into the package's they're applied to.  OTOH the
-Signed-off-by lines in the patches could be construed to imply that the
-patch follows the license of the files that it's applied to (cfr. DCO).
-
-
-> If this is correct, a clarification should be added to the above text and,
-> more important, to COPYING, much like the note at the beginning of the
-> Linux COPYING file.
-
-  Ack.
-
-
-> Point 3 refers to the method described by Thomas Petazzoni in
-> http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf, page 30.
-> The idea is that small "project-specific applications or libraries" can be
-> kept inside the Buildroot tree to simplify its integration.
->
-> Technically, it's how makedevs works in Buildroot. Is makedevs considered "a
-> part of Buildroot"? It think it is.
-> But one may want to develop another small utility in the same way inside the
-> Buildroot tree, but keeping it proprietary. As such, it should be clear
-> whether or not it is allowed to keep such code inside the Buildroot tree
-> without it falling under the Buildroot license.
-
-  I would say that this falls under the 'mere aggregation' clause.  Whether
-the source code of a proprietary program is in package/foo or in ../foo
-really makes no difference at all.
-
-  That said, it would be good to clarify that point.
-
-
-> My personal feeling is that Buildroot should allow to keep such proprietary
-> code in the tree, but with a clear way to determine that they are not
-> considered a derived work of Buildroot.
-> The discrimination could be: whatever is a package (in the Buildroot
-> meaning) *and* has <PKG>_LICENSE = PROPRIETARY in its .mk is considered not
-> to be a part of Buildroot and can have a different license.
-
-  *Very* good point.  The GPL itself is too vague to really be sure of what
-constitutes a derived work of buildroot.
-
-  What about the finalize script?  Is that part of the derived work?  For sure,
-whether it is or not should not depend on whether the file is within or
-outside of the tree...
-
-
-> This clause should be part of COPYING and documented in the manual too.
-> The legal-info code does not currently save the Buildroot tree, but when it
-> will be able to do so it should also be able to skip such packages.
->
-> Of course this would allow a more flexible usage of Buildroot in real life,
-> but at the cost of making the licensing policy more complex.
-
-  The licensing of buildroot _is_ complex.  For the moment, it looks simple
-because it is fuzzy, all the complexity is hidden.
+  Yikes! Looks like a bug in topgit...  I'll resend manually.
 
   Regards,
   Arnout
