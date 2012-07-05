@@ -1,110 +1,55 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 05 Jul 2012 15:52:31 +0200
-Subject: [Buildroot] [PATCH v4 09/22] manual: add advice about GPL
- compliance for Buildroot
-In-Reply-To: <1337276001-26149-10-git-send-email-luca@lucaceresoli.net>
-References: <1337276001-26149-1-git-send-email-luca@lucaceresoli.net>
- <1337276001-26149-10-git-send-email-luca@lucaceresoli.net>
-Message-ID: <4FF59C1F.4000908@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 5 Jul 2012 18:00:10 +0200
+Subject: [Buildroot] Survey for the next Buildroot Developer Day(s)
+In-Reply-To: <20120629103156.28bdd18b@skate>
+References: <20120629103156.28bdd18b@skate>
+Message-ID: <20120705180010.2823fa87@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Le Fri, 29 Jun 2012 10:31:56 +0200,
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
 
-Luca Ceresoli wrote:
-> Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
-> ---
->   docs/manual/using.txt |   27 +++++++++++++++++++++++++++
->   1 file changed, 27 insertions(+)
->
-> diff --git a/docs/manual/using.txt b/docs/manual/using.txt
-> index 42d4061..fcbd24b 100644
-> --- a/docs/manual/using.txt
-> +++ b/docs/manual/using.txt
-> @@ -284,3 +284,30 @@ Buildroot, with the name used in the manifest file:
->   * +BSD-2c+: BSD 2-clause license;
->   * +PROPRIETARY+: marks a non-opensource package;
->     Buildroot does not save any licensing info or source code for these packages.
-> +
-> +Complying with the Buildroot license
-> +------------------------------------
-> +
-> +Buildroot itself is an opensource software, released under the
-> +http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General Public
-> +License, version 2] or (at your option) any later version.
-> +However, being a build system, it is not normally part of the end product:
-> +if you develop the root filesystem, kernel, bootloader or toolchain for a
-> +device, the code of Buildroot is only present on the development machine, not
-> +in the device storage.
-> +
-> +Nevertheless, the general view of the Buildroot developers is that you should
-> +release the Buildroot source code along with the source code of other packages
-> +when releasing a product that contains GPL-licensed software.
-> +This is because the
-> +http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU GPL]
-> +defines the "'complete source code'" for an executable work as "'all the
-> +source code for all modules it contains, plus any associated interface
-> +definition files, plus the scripts used to control compilation and installation
-> +of the executable'".
-> +Buildroot is part of the 'scripts used to control compilation and
-> +installation of the executable', and as such it is considered part of the
-> +material that must be redistributed.
-> +
-> +Keep in mind this is only the Buildroot developers' opinion, and you should
-> +consult your legal department or lawyer in case of any doubt.
+> In order to decide whether this Buildroot Developer Day should take
+> place before or after ELCE and whether it should be one day or two
+> days, we would like to invite interested parties to put their choices
+> at
+> 
+>  http://www.doodle.com/fng2c8gw6r77xfbc
+> 
+> Valid choices are:
+> 
+>  * Sunday
+>  * Saturday/Sunday
+>  * Thursday
+>  * Thursday/Friday
 
-The above text has been Acked-By two Buildroot developers and had no 
-negative
-comments after ~6 weeks, which is good.
+So far, four people have replied, and it seems that the majority was in
+favor of the Saturday/Sunday solution.  I know my colleague Maxime
+can in fact come on Saturday/Sunday, it's just a little bit less
+convenient, and Peter can't attend on Thursday/Friday due to the
+KVM/oVirt conference.
 
-Nevertheless, I think it lacks some parts that I would like to be clarified.
+So, let's settle on Saturday/Sunday, and make the announcement official:
 
-A Buildroot tree is made up of the following parts:
-  1. the various makefiles and scripts that build the toolchain, handle
-     package compilation and generate a root filesystem, which is the heart
-     of Buildroot;
-  2. patches to packages;
-  3. small, proprietary, project-specific applications or libraries whose
-     source code resides in the Buildroot tree (not present in mainline).
+   The next Buildroot Developers Days will take place on Saturday 3rd
+   and Sunday 4th November in Barcelona, Spain, prior to the Embedded
+   Linux Conference Europe.
 
-The above clarification text, as well as the COPYING text, obviously applies
-to point 1, but IMO points 2 and 3 need a different policy.
+Other people interested in coming, please register to the Doodle
+survey. Knowing the number of people, we will organize the necessary
+logistics (i.e for just 4-5 people, we can just organize the meeting in
+an hotel room, if we happen to be 7-8 people, then we'll have to find
+some larger place).
 
-Patches to packages are modifications to externally-developed code, so I
-think they fall under the same license as the package.
-If this is correct, a clarification should be added to the above text and,
-more important, to COPYING, much like the note at the beginning of the
-Linux COPYING file.
+Thanks for your participation,
 
-Point 3 refers to the method described by Thomas Petazzoni in
-http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf, page 30.
-The idea is that small "project-specific applications or libraries" can be
-kept inside the Buildroot tree to simplify its integration.
-
-Technically, it's how makedevs works in Buildroot. Is makedevs considered "a
-part of Buildroot"? It think it is.
-But one may want to develop another small utility in the same way inside the
-Buildroot tree, but keeping it proprietary. As such, it should be clear
-whether or not it is allowed to keep such code inside the Buildroot tree
-without it falling under the Buildroot license.
-
-My personal feeling is that Buildroot should allow to keep such proprietary
-code in the tree, but with a clear way to determine that they are not
-considered a derived work of Buildroot.
-The discrimination could be: whatever is a package (in the Buildroot
-meaning) *and* has <PKG>_LICENSE = PROPRIETARY in its .mk is considered not
-to be a part of Buildroot and can have a different license.
-This clause should be part of COPYING and documented in the manual too.
-The legal-info code does not currently save the Buildroot tree, but when it
-will be able to do so it should also be able to skip such packages.
-
-Of course this would allow a more flexible usage of Buildroot in real life,
-but at the cost of making the licensing policy more complex.
-
-What areyour opinions?
-
-Thanks,
-Luca
+Thomas
+-- 
+Thomas Petazzoni, Free Electrons
+Kernel, drivers, real-time and embedded Linux
+development, consulting, training and support.
+http://free-electrons.com
