@@ -1,55 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Jul 2012 18:00:10 +0200
-Subject: [Buildroot] Survey for the next Buildroot Developer Day(s)
-In-Reply-To: <20120629103156.28bdd18b@skate>
-References: <20120629103156.28bdd18b@skate>
-Message-ID: <20120705180010.2823fa87@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Jul 2012 20:59:39 +0200
+Subject: [Buildroot] syslinux fails to build
+In-Reply-To: <20120704131306.46f9e3bd@skate>
+References: <CAJkQPOmE5CcY=sAp-+TmuYEov_QTSe1-qsqj8fRjtOQNvDoWnA@mail.gmail.com>
+ <20120704131306.46f9e3bd@skate>
+Message-ID: <4FF5E41B.2070105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Fri, 29 Jun 2012 10:31:56 +0200,
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> a ?crit :
+On 07/04/12 13:13, Thomas Petazzoni wrote:
+> Le Wed, 4 Jul 2012 11:53:30 +0100,
+> Aras Vaichas<aras.vaichas@gmail.com>  a ?crit :
+>
+> > make[3]: Entering directory
+> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04/diag/geodsp'
+> > ./mk-lba-img lba.img
+> > ./mk-lba-img: 1: ./mk-lba-img: Syntax error: "(" unexpected
+> > make[3]: *** [lba.img] Error 2
+> > make[3]: Leaving directory
+> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04/diag/geodsp'
+> > make[2]: *** [all] Error 2
+> > make[2]: Leaving directory
+> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04/diag'
+> > make[1]: *** [all] Error 2
+> > make[1]: Leaving directory
+> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04'
+> > make: *** [/home/aras/buildroot/buildroot/output/build/syslinux-4.04/.stamp_built]
+> > Error 2
+> >
+> > Is this a known problem?
+>
+> Not to my knowledge, but I don't use syslinux myself. The bump to 4.04
+> was done by Arnout Vandecappelle in January this year, so maybe he will
+> comment on this.
 
-> In order to decide whether this Buildroot Developer Day should take
-> place before or after ELCE and whether it should be one day or two
-> days, we would like to invite interested parties to put their choices
-> at
-> 
->  http://www.doodle.com/fng2c8gw6r77xfbc
-> 
-> Valid choices are:
-> 
->  * Sunday
->  * Saturday/Sunday
->  * Thursday
->  * Thursday/Friday
+   mk-lba-img is a host binary.  However, the tar file already contains a 64-bit binary,
+so it will not be rebuilt...  And I guess you try to build it on a 32-bit PC.  I only tried
+it on a 64-bit PC myself.
 
-So far, four people have replied, and it seems that the majority was in
-favor of the Saturday/Sunday solution.  I know my colleague Maxime
-can in fact come on Saturday/Sunday, it's just a little bit less
-convenient, and Peter can't attend on Thursday/Friday due to the
-KVM/oVirt conference.
+  syslinux is full of this kind of crap :-(
 
-So, let's settle on Saturday/Sunday, and make the announcement official:
+  You can try running a 'make -C output/build/syslinux-4.04 clean', but if I remember
+correctly that failed for other reasons.
 
-   The next Buildroot Developers Days will take place on Saturday 3rd
-   and Sunday 4th November in Barcelona, Spain, prior to the Embedded
-   Linux Conference Europe.
+  So the problem is fixed with syslinux-4.05?  That's nice!  Please do submit a patch.
 
-Other people interested in coming, please register to the Doodle
-survey. Knowing the number of people, we will organize the necessary
-logistics (i.e for just 4-5 people, we can just organize the meeting in
-an hotel room, if we happen to be 7-8 people, then we'll have to find
-some larger place).
+  Regards,
+  Arnout
 
-Thanks for your participation,
-
-Thomas
 -- 
-Thomas Petazzoni, Free Electrons
-Kernel, drivers, real-time and embedded Linux
-development, consulting, training and support.
-http://free-electrons.com
+Arnout Vandecappelle                               arnout at mind be
+Senior Embedded Software Architect                 +32-16-286540
+Essensium/Mind                                     http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium                BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
