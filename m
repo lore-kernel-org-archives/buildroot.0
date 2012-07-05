@@ -1,55 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 05 Jul 2012 20:59:39 +0200
-Subject: [Buildroot] syslinux fails to build
-In-Reply-To: <20120704131306.46f9e3bd@skate>
-References: <CAJkQPOmE5CcY=sAp-+TmuYEov_QTSe1-qsqj8fRjtOQNvDoWnA@mail.gmail.com>
- <20120704131306.46f9e3bd@skate>
-Message-ID: <4FF5E41B.2070105@mind.be>
+Date: Thu, 05 Jul 2012 21:57:05 +0200
+Subject: [Buildroot] [PATCH] syslinux: bump to 4.05
+In-Reply-To: <CAJkQPOm7x8898X-bjDhN+LRN_EY8wR46WWj7hZmFOD0Q8YiASA@mail.gmail.com>
+References: <CAJkQPOm7x8898X-bjDhN+LRN_EY8wR46WWj7hZmFOD0Q8YiASA@mail.gmail.com>
+Message-ID: <4FF5F191.4050404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/04/12 13:13, Thomas Petazzoni wrote:
-> Le Wed, 4 Jul 2012 11:53:30 +0100,
-> Aras Vaichas<aras.vaichas@gmail.com>  a ?crit :
+On 07/04/12 15:04, Aras Vaichas wrote:
+> * bump syslinux from 4.04 to 4.05
+> * add patch to fix build problem with 4.05, see
+> http://old.nabble.com/syslinux-fails-to-build-td34112447.html
 >
-> > make[3]: Entering directory
-> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04/diag/geodsp'
-> > ./mk-lba-img lba.img
-> > ./mk-lba-img: 1: ./mk-lba-img: Syntax error: "(" unexpected
-> > make[3]: *** [lba.img] Error 2
-> > make[3]: Leaving directory
-> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04/diag/geodsp'
-> > make[2]: *** [all] Error 2
-> > make[2]: Leaving directory
-> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04/diag'
-> > make[1]: *** [all] Error 2
-> > make[1]: Leaving directory
-> > `/home/aras/buildroot/buildroot/output/build/syslinux-4.04'
-> > make: *** [/home/aras/buildroot/buildroot/output/build/syslinux-4.04/.stamp_built]
-> > Error 2
-> >
-> > Is this a known problem?
->
-> Not to my knowledge, but I don't use syslinux myself. The bump to 4.04
-> was done by Arnout Vandecappelle in January this year, so maybe he will
-> comment on this.
+> Signed-off-by: Aras Vaichas<aras.vaichas@gmail.com>
+> ---
+>   syslinux-build-fix-for-uuid.patch |   15 +++++++++++++++
+>   syslinux.mk                         |    2 +-
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+> diff -Naur a/boot/syslinux/syslinux-build-fix-for-uuid.patch
+> b/boot/syslinux/syslinux-build-fix-for-uuid.patch
+> --- a/boot/syslinux/syslinux-build-fix-for-uuid.patch   1970-01-01
+> 01:00:00.000000000 +0100
+> +++ b/boot/syslinux/syslinux-build-fix-for-uuid.patch   2012-07-04
+> 13:19:05.263191733 +0100
 
-   mk-lba-img is a host binary.  However, the tar file already contains a 64-bit binary,
-so it will not be rebuilt...  And I guess you try to build it on a 32-bit PC.  I only tried
-it on a 64-bit PC myself.
+  Looks like your patch is wordwrapped.  You can't send patches through the
+GMail web interface.  The best option is to use git send-email - its help
+page explains how to set it up for use with GMail.
 
-  syslinux is full of this kind of crap :-(
+> @@ -0,0 +1,15 @@
+> +Author: Micah Gersten<micahg@ubuntu.com>
+> +Description: Fix build failure with --as-needed (Closes: #654838).
+> +
+> +diff -Naurp syslinux.orig/utils/Makefile syslinux/utils/Makefile
+> +--- syslinux.orig/utils/Makefile       2011-12-23 14:53:26.653571511 +0100
+> ++++ syslinux/utils/Makefile    2012-01-22 18:55:03.849466924 +0100
+> +@@ -51,7 +51,7 @@ isohdpfx.c: $(ISOHDPFX) isohdpfxarray.pl
+> +       $(PERL) isohdpfxarray.pl $(ISOHDPFX)>  $@
+> +
+> + isohybrid: isohybrid.o isohdpfx.o
+> +-      $(CC) $(LDFLAGS) -luuid -o $@ $^
+> ++      $(CC) $(LDFLAGS) -o $@ $^ -luuid
 
-  You can try running a 'make -C output/build/syslinux-4.04 clean', but if I remember
-correctly that failed for other reasons.
+  Unfortunately, this isn't enough.  You need host-util-linux as well, and
+some additional arguments have to be passed to the build command to make
+sure uuid/uuid.h and libuuid.so are found.
 
-  So the problem is fixed with syslinux-4.05?  That's nice!  Please do submit a patch.
+  It looks like the syslinux build system is as broken as the one of grub;
+we currently don't actually cross-compile, but use the host compiler in
+the assumption that it's an x86 multilib compiler...
+
+  I'll fix it (still using the host compiler for the time being) and
+resend your patch.
+
 
   Regards,
   Arnout
+
+[snip]
 
 -- 
 Arnout Vandecappelle                               arnout at mind be
