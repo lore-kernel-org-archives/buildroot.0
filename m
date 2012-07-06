@@ -1,30 +1,42 @@
-From: Willy <willy@willygroup.org>
-Date: Fri, 06 Jul 2012 13:17:38 +0200
-Subject: [Buildroot] Barcode reader (rs232 + usb device) on buildroot
-Message-ID: <jt6hgi$394$1@dough.gmane.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  6 Jul 2012 08:50:27 -0300
+Subject: [Buildroot] [PATCH] htop: bump to version 1.0.1 and fix build
+	failure
+Message-ID: <1341575427-24731-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I've a barcode reader with RS232 and USB interfaces.
-In my host pc with Ubuntu 10.04 64bit I use it in both way without 
-problems.
-in serial mode I retrieve the device at /dev/ttyS0
-In USB mode (directly with USB or whit RS232/USB adaptor) I retrieve the 
-device at /dev/ttyUSB0
+Bump to version 1.0.1
+Also fix build failure:
+http://autobuild.buildroot.net/results/5f95c4fbb62b7b8cb451f6525731eae4ce6bcdbf/build-end.log
 
-With buildroot in serial mode I read the code (and some error strings, 
-[probably a configuration error])
-in USB mode I can't read anything: I don't have /dev/ttyUSB*
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/htop/htop.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-I think something is missing, but in buildroot and kernel configuration 
-I can't figured out what is it... :(
-
-Someone can give me an hint?
-
-Thanks
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index 07b750c..3535697 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,11 +4,11 @@
+ #
+ #############################################################
+ 
+-HTOP_VERSION = 1.0
+-HTOP_SOURCE = htop-$(HTOP_VERSION).tar.gz
+-HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/htop/$(HTOP_VERSION)
++HTOP_VERSION = 1.0.1
++HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/htop/htop/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
+ HTOP_AUTORECONF = YES
+-HTOP_CONF_OPT += --disable-unicode
++HTOP_CONF_OPT = --disable-unicode
++HTOP_CONF_ENV = ac_cv_file__proc_stat=yes ac_cv_file__proc_meminfo=yes
+ 
+ $(eval $(call AUTOTARGETS))
 -- 
-Willy
+1.7.8.6
