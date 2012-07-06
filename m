@@ -1,53 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Jul 2012 14:30:08 +0200
-Subject: [Buildroot] [PATCH] Add support for the Calao-systems USB-A9263
-In-Reply-To: <4FF6BA67.3070207@calao-systems.com>
-References: <4FF6BA67.3070207@calao-systems.com>
-Message-ID: <20120706143008.64d0e023@skate>
+Date: Fri, 6 Jul 2012 14:32:12 +0200
+Subject: [Buildroot] Barcode reader (rs232 + usb device) on buildroot
+In-Reply-To: <jt6hgi$394$1@dough.gmane.org>
+References: <jt6hgi$394$1@dough.gmane.org>
+Message-ID: <20120706143212.13cf26e8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gr?gory,
+Le Fri, 06 Jul 2012 13:17:38 +0200,
+Willy <willy@willygroup.org> a ?crit :
 
-Le Fri, 06 Jul 2012 12:13:59 +0200,
-gregory hermant <gregory.hermant@calao-systems.com> a ?crit :
-
-> Hi,
-> Attached a patch for the USB-A9263.
-> More info at <http://www.calao-systems.com>. 
+> I've a barcode reader with RS232 and USB interfaces.
+> In my host pc with Ubuntu 10.04 64bit I use it in both way without 
+> problems.
+> in serial mode I retrieve the device at /dev/ttyS0
+> In USB mode (directly with USB or whit RS232/USB adaptor) I retrieve the 
+> device at /dev/ttyUSB0
 > 
+> With buildroot in serial mode I read the code (and some error strings, 
+> [probably a configuration error])
+> in USB mode I can't read anything: I don't have /dev/ttyUSB*
 > 
-> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-> ---
->  .../usb-a9263/at91bootstrap-1.16-usb-a9263.patch   |  851 ++++++++++
->  board/calao/usb-a9263/usb-a9263_defconfig          | 1662 ++++++++++++++++++++
->  configs/usb_a9263_defconfig                        | 1247 +++++++++++++++
->  3 files changed, 3760 insertions(+), 0 deletions(-)
->  create mode 100644 board/calao/usb-a9263/at91bootstrap-1.16-usb-a9263.patch
->  create mode 100644 board/calao/usb-a9263/usb-a9263_defconfig
->  create mode 100644 configs/usb_a9263_defconfig
+> I think something is missing, but in buildroot and kernel configuration 
+> I can't figured out what is it... :(
+> 
+> Someone can give me an hint?
 
-Thanks for this contribution.
-
-Both the kernel configuration and the bootloader configuration, we
-prefer to use defconfig files, which are smaller.
-
-To generate the Buildroot defconfig file:
-
-	make savedefconfig
-
-To generate the Linux defconfig file:
-
-	make linux-savedefconfig
-
-Also, do you know if at some point Atmel will create an upstream for
-at91bootstrap? I've seen they have created some Github repository with
-at91bootstrap sources. I'm a bit worried about integrating a patch that
-has no upstream to be submitted, which means that we will have to carry
-it around forever.
+You probably lack the usbserial driver, and maybe some other underlying
+usb serial driver. Depends on what your hardware is exactly. The
+problem is definitely not Buildroot related, but kernel configuration
+related.
 
 Best regards,
 
