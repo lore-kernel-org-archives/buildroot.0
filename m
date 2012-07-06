@@ -1,36 +1,30 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Fri, 6 Jul 2012 13:49:00 +0100
-Subject: [Buildroot] microperl-5.12.4 fails with parallel make
-Message-ID: <4FF6DEBC.1060301@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  6 Jul 2012 09:57:33 -0300
+Subject: [Buildroot] [PATCH] kernel-headers: bump 3.2.x stable version
+Message-ID: <1341579453-19344-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ toolchain/kernel-headers/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-host-microperl-5.12.4 fails to build when parallel make is used (-j32)
-on a 16-core processor. BR2_JLEVEL is set to 32. The build log is along
-these lines:
-
-make[2]: Entering directory
-`/home/testuser/buildroot/output/build/host-microperl-5.12.4/cpan/IPC-SysV'
-make[2]: Entering directory
-`/home/testuser/buildroot/output/build/host-microperl-5.12.4/ext/Hash-Util-FieldHash'
-Writing Makefile for I18N::Langinfo
-Can't locate Cwd.pm in @INC (@INC contains: ../../lib) at
-../../lib/File/Path.pm line 6.
-BEGIN failed--compilation aborted at ../../lib/File/Path.pm line 6.
-Compilation failed in require at ../../lib/ExtUtils/MakeMaker.pm line 11.
-BEGIN failed--compilation aborted at ../../lib/ExtUtils/MakeMaker.pm
-line 11.
-Compilation failed in require at Makefile.PL line 5.
-BEGIN failed--compilation aborted at Makefile.PL line 5.
-512 from ext/POSIX's Makefile.PL at make_ext.pl line 390.
-Warning: No Makefile!
-
-It builds fine with -j1.
-
+diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
+index 5e66b67..c14717f 100644
+--- a/toolchain/kernel-headers/Config.in
++++ b/toolchain/kernel-headers/Config.in
+@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
+ 	default "3.0.36"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
+-	default "3.2.21"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.22"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
+ 	default "3.4.4"		if BR2_KERNEL_HEADERS_3_4
+ 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
 -- 
-markos
+1.7.8.6
