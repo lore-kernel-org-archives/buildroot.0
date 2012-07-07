@@ -1,36 +1,46 @@
-From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 7 Jul 2012 12:54:56 +0200
-Subject: [Buildroot] [git commit] gob2: needs MMU
-Message-ID: <20120707174457.70A999031C@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 7 Jul 2012 23:18:34 +0200
+Subject: [Buildroot] [PATCH v2] Make external toolchain relocatable
+In-Reply-To: <1341087767-20528-1-git-send-email-arnout@mind.be>
+References: <1341087767-20528-1-git-send-email-arnout@mind.be>
+Message-ID: <CAHXCMMKEWFS82V0wGLGD4Le66zKzGHs2UHd2bzxEvwU7bPbo3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9741fd7031c648352b6acabfac4066f5482499fe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Arnout, all,
 
-m4 needs MMU, so does bison, and so does gob2 which uses bison.
-Fixes build failure:
-http://autobuild.buildroot.net/results/f942b4ac770f3c7b27c42214af5bcec49f687da1/build-end.log
+2012/6/30 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>:
+> The external toolchain wrapper sets sysroot etc. to an absolute path.
+> By changing this to a relative path, it is possible to move the host
+> directory to a different location and still have a working build
+> system.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----
- package/gob2/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+I've just tested your patch on top of my branch, it seems working well
+but doesn't do all the job.
+You have probably focused on the wrapper code and forgot to update
+target of the symlinks of all other tools, pointing to the relative
+location of them instead of the absolute one.
 
-diff --git a/package/gob2/Config.in b/package/gob2/Config.in
-index 562ac31..cbe30d6 100644
---- a/package/gob2/Config.in
-+++ b/package/gob2/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_GOB2
- 	bool "gob2"
- 	depends on BR2_USE_WCHAR # glib2
-+	# m4 uses fork(), so does bison then
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_FLEX
- 	select BR2_PACKAGE_FLEX_LIBFL
+
+> This only works for a downloaded external toolchain.  For a pre-installed
+> external toolchain, it is possible to move the host directory to a
+> different location, but not the external toolchain directory (it does work
+> if the external toolchain directory lies within the host directory).  For
+> an internal or crosstool-ng toolchain, there is no wrapper so updating the
+> sysroot path should be done in a different way.
+
+For internal and crosstool-ng toolchains, I think if we want to ensure
+the tools are called with the correct sysroot argument, tehn we should
+use  the wrapper too.
+Unless someone is confident enough to patch gcc sources to compute
+sysroot path in the same way the wrapper does; it looks like, even
+CodeSourcery guys didn't! ;-)
+
+
+Cheers,
+
+-- 
+Sam
