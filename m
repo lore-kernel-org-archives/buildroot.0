@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 07 Jul 2012 12:59:03 +0200
-Subject: [Buildroot] [PATCH] htop: bump to version 1.0.1 and fix build
-	failure
-In-Reply-To: <1341575427-24731-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 6 Jul 2012 08:50:27 -0300")
-References: <1341575427-24731-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pq87zvk8.fsf@macbook.be.48ers.dk>
+Date: Sat, 07 Jul 2012 12:59:19 +0200
+Subject: [Buildroot] [PATCH] gob2: needs MMU
+In-Reply-To: <1341575738-28876-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 6 Jul 2012 08:55:38 -0300")
+References: <1341575738-28876-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87liivzvjs.fsf@macbook.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- Gustavo> Bump to version 1.0.1
- Gustavo> Also fix build failure:
- Gustavo> http://autobuild.buildroot.net/results/5f95c4fbb62b7b8cb451f6525731eae4ce6bcdbf/build-end.log
+ Gustavo> m4 needs MMU, so does bison, and so does gob2 which uses bison.
+ Gustavo> Fixes build failure:
+ Gustavo> http://autobuild.buildroot.net/results/f942b4ac770f3c7b27c42214af5bcec49f687da1/build-end.log
 
 Committed, thanks.
 
