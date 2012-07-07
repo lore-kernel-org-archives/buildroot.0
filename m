@@ -1,18 +1,31 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Sat, 7 Jul 2012 14:15:32 +0100
-Subject: [Buildroot] msgpack-python (0.1.10) and libmsgpack (0.5.7)
-	packaged for buildroot-2011.11
-In-Reply-To: <CAMduVEc6PwEARbD7ABkEamjzJ5MyDM_wfn_mBJXhqTiqMwMmCg@mail.gmail.com>
-References: <CAMduVEc6PwEARbD7ABkEamjzJ5MyDM_wfn_mBJXhqTiqMwMmCg@mail.gmail.com>
-Message-ID: <CAMduVEfeHywetQ5Fe4j8i5mf1jm8_HOss4OWPh+wsww=thLj1w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  7 Jul 2012 17:51:17 +0200
+Subject: [Buildroot] [PATCH] graph-depends: ignore a few more uninteresting
+	targets
+Message-ID: <1341676277-5506-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ooops, I've generated the reversed patch.
-Of course it should be applied with:
-patch -p 0 -R < libmsgpack_and_msgpack-python.patch
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/graph-depends |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Wojtek
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 4d82282..da050da 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -128,6 +128,8 @@ if mode == FULL_MODE:
+     for tg in targets:
+         # Skip uninteresting targets
+         if tg == 'target-generic-issue' or \
++                tg == 'target-generic-getty-busybox' or \
++                tg == 'target-generic-do-remount-rw' or \
+                 tg == 'target-finalize' or \
+                 tg == 'erase-fakeroots' or \
+                 tg == 'target-generic-hostname':
+-- 
+1.7.9.5
