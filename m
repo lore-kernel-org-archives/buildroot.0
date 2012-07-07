@@ -1,32 +1,44 @@
 From: Peter Korsgaard <jacmet@sunsite.dk>
-Date: Sat, 7 Jul 2012 12:59:46 +0200
-Subject: [Buildroot] [git commit] kernel-headers: bump 3.2.x stable version
-Message-ID: <20120707174457.877088C5BD@busybox.osuosl.org>
+Date: Sat, 7 Jul 2012 12:54:39 +0200
+Subject: [Buildroot] [git commit] htop: bump to version 1.0.1 and fix build
+	failure
+Message-ID: <20120707174457.6173E8C5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b8b57bb683283e68436de16cd1cc590b34d2d666
+commit: http://git.buildroot.net/buildroot/commit/?id=283ab42cbed787402be7fccb259267d7646970c9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bump to version 1.0.1
+Also fix build failure:
+http://autobuild.buildroot.net/results/5f95c4fbb62b7b8cb451f6525731eae4ce6bcdbf/build-end.log
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ---
- toolchain/kernel-headers/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/htop/htop.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/kernel-headers/Config.in b/toolchain/kernel-headers/Config.in
-index 5e66b67..c14717f 100644
---- a/toolchain/kernel-headers/Config.in
-+++ b/toolchain/kernel-headers/Config.in
-@@ -66,7 +66,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "2.6.39.4"	if BR2_KERNEL_HEADERS_2_6_39
- 	default "3.0.36"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.1.10"	if BR2_KERNEL_HEADERS_3_1
--	default "3.2.21"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.22"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.3.8"		if BR2_KERNEL_HEADERS_3_3
- 	default "3.4.4"		if BR2_KERNEL_HEADERS_3_4
- 	default "2.6"		if BR2_KERNEL_HEADERS_SNAP
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index 07b750c..3535697 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,11 +4,11 @@
+ #
+ #############################################################
+ 
+-HTOP_VERSION = 1.0
+-HTOP_SOURCE = htop-$(HTOP_VERSION).tar.gz
+-HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/htop/$(HTOP_VERSION)
++HTOP_VERSION = 1.0.1
++HTOP_SITE = http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/project/htop/htop/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
+ HTOP_AUTORECONF = YES
+-HTOP_CONF_OPT += --disable-unicode
++HTOP_CONF_OPT = --disable-unicode
++HTOP_CONF_ENV = ac_cv_file__proc_stat=yes ac_cv_file__proc_meminfo=yes
+ 
+ $(eval $(call AUTOTARGETS))
