@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jul 2012 09:20:16 +0200
-Subject: [Buildroot] [PATCH v2] Add support for the Calao-systems
- USB-A9263
-In-Reply-To: <4FFA7C89.4010505@calao-systems.com>
-References: <4FFA7C89.4010505@calao-systems.com>
-Message-ID: <20120709092016.3a2a1a4b@skate>
+Date: Mon, 9 Jul 2012 09:23:53 +0200
+Subject: [Buildroot] [PATCH] Allow to run severals post build scripts
+ instead of only one
+In-Reply-To: <12576_1341818407_4FFA8627_12576_5085_3_1341818407-21478-1-git-send-email-philippe.reynes@sagemcom.com>
+References: <12576_1341818407_4FFA8627_12576_5085_3_1341818407-21478-1-git-send-email-philippe.reynes@sagemcom.com>
+Message-ID: <20120709092353.4bc9e9c3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le Mon, 09 Jul 2012 08:39:05 +0200,
-gregory hermant <gregory.hermant@calao-systems.com> a ?crit :
+Le Mon, 9 Jul 2012 09:20:07 +0200,
+Philippe Reynes <philippe.reynes@sagemcom.com> a ?crit :
 
-> Hi,
-> Attached a new patch for the USB-A9263.
-> More info at <http://www.calao-systems.com>. 
+> Using severals post build scripts is usefull to share
+> script between severals boards/projects.
 > 
-> Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
+> Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I'm fine with this, but I'd like the help text of the
+BR2_ROOTFS_POST_BUILD_SCRIPT configuration option to be updated.
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, Free Electrons
 Kernel, drivers, real-time and embedded Linux
