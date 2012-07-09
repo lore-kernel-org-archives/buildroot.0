@@ -1,84 +1,68 @@
-From: Philippe Reynes <philippe.reynes@sagemcom.com>
-Date: Mon, 9 Jul 2012 10:30:15 +0200
-Subject: [Buildroot] [PATCH] [v2] Allow to run severals post build scripts
-	instead of only one
-Message-ID: <5239_1341822603_4FFA968B_5239_239_2_1341822615-22895-1-git-send-email-philippe.reynes@sagemcom.com>
+From: =?UTF-8?Q?Mihajlo_Jovanovi=C4=87?= <jovanovic.mihajlo@gmail.com>
+Date: Mon, 9 Jul 2012 10:31:49 +0200
+Subject: [Buildroot] /dev/ttyS0 in filesystem created by Buildroot can't be
+	opened in Qemu
+Message-ID: <CAM1vXnbUXsTaCbtRnS5z8SdqKTTY-EV3=o79vcGbwnSjukYmNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using severals post build scripts is usefull to share
-script between severals boards/projects.
+Hi everyone,
 
-Signed-off-by: Philippe Reynes <philippe.reynes@sagemcom.com>
----
- Makefile                 |    3 ++-
- target/generic/Config.in |   11 ++++++-----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+I am working with QEMU 1.1.0, emulating Versatile Express board with ARM
+Cortex-A9. I have managed to launch simple "Hello World" example following
+this instructions:
 
-diff --git a/Makefile b/Makefile
-index b80477f..56833da 100644
---- a/Makefile
-+++ b/Makefile
-@@ -449,7 +449,8 @@ endif
- 
- ifneq ($(BR2_ROOTFS_POST_BUILD_SCRIPT),"")
- 	@$(call MESSAGE,"Executing post-build script")
--	$(BR2_ROOTFS_POST_BUILD_SCRIPT) $(TARGET_DIR)
-+	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
-+		$(s) $(TARGET_DIR);)
- endif
- 
- ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-diff --git a/target/generic/Config.in b/target/generic/Config.in
-index 88f0718..b987331 100644
---- a/target/generic/Config.in
-+++ b/target/generic/Config.in
-@@ -138,15 +138,16 @@ config BR2_ROOTFS_POST_BUILD_SCRIPT
- 	string "Custom script to run before creating filesystem images"
- 	default ""
- 	help
--	  Specify a script to be run after the build has finished and before
--	  Buildroot starts packing the files into selected filesystem images.
-+	  Specify a space-separated list of scripts to be run after the build
-+	  has finished and before Buildroot starts packing the files into 
-+	  selected filesystem images.
- 
- 	  This gives users the oportunity to do board-specific cleanups,
- 	  add-ons and the like, so the generated files can be used directly
- 	  without further processing.
- 
--	  The script is called with the target directory name as first and
--	  only argument. Make sure the exit code of that script is 0,
--	  otherwise make will stop after calling it.
-+	  These scripts are called with the target directory name as first and
-+	  only argument. Make sure the exit code of those scripts are 0,
-+	  otherwise make will stop after calling them.
- 
- endmenu
--- 
-1.7.1
+http://balau82.wordpress.com/2012/03/31/compile-linux-kernel-3-2-for-arm-and-emulate-with-qemu/
 
+but now I want to create filesystem by myself.
 
-#
-" Ce courriel et les documents qui lui sont joints peuvent contenir des
-informations confidentielles ou ayant un caract?re priv?. S'ils ne vous sont
-pas destin?s, nous vous signalons qu'il est strictement interdit de les
-divulguer, de les reproduire ou d'en utiliser de quelque mani?re que ce
-soit le contenu. Si ce message vous a ?t? transmis par erreur, merci d'en
-informer l'exp?diteur et de supprimer imm?diatement de votre syst?me
-informatique ce courriel ainsi que tous les documents qui y sont attach?s."
+I decided to use buildroot, version 2012.05. and I've configured it to
+create toolchain, kernel and filesystem image for ARM Cortex-A9 target.
 
+Kernel is of version 3.3.7 and for the filesystem I've selected to be cpio,
+non-compressed. The initrd argument in call to qemu-system-arm is pointing
+to
 
-                               ******
+*/output/images/rootfs.cpio*
 
-" This e-mail and any attached documents may contain confidential or
-proprietary information. If you are not the intended recipient, you are
-notified that any dissemination, copying of this e-mail and any attachments
-thereto or use of their contents by any means whatsoever is strictly
-prohibited. If you have received this e-mail in error, please advise the
-sender immediately and delete this e-mail and all attached documents
-from your computer system."
-#
+When I launch QEMU kernel boots, but then I get this message:
+
+*Initializing random number generator... done.*
+
+*Starting network...*
+
+*can't open /dev/ttyS0: No such device or address*
+
+*can't open /dev/ttyS0: No such device or address*
+
+*can't open /dev/ttyS0: No such device or address*
+
+*...*
+
+All I can do is to terminate QEMU.
+
+I have checked the contents of rootfs.cpio like this:
+
+cpio -t < rootfs.cpio
+
+and saw that there is /dev/ttyS0.
+
+Have I missed something in configuring the filesystem? Or should I use
+filesystem in
+
+*/output/target*
+
+to somehow create device(s) there (Buildroot does not do that), and then
+rebuild the filesystem?
+
+I'm new to Buildroot, so any hint or suggestion is more than welcome.
+
+Thanks a lot in advance,
+
+Mihajlo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20120709/8ecdc8c1/attachment.html>
